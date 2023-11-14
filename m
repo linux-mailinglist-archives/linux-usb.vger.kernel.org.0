@@ -1,201 +1,267 @@
-Return-Path: <linux-usb+bounces-2885-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2886-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F127E7EB801
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 21:55:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EE477EB822
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 22:04:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73437B20B64
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 20:55:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8183E1C20B38
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 21:04:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22FF22C1B6;
-	Tue, 14 Nov 2023 20:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498842FC29;
+	Tue, 14 Nov 2023 21:04:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GqaQhgUM"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E931179A4;
-	Tue, 14 Nov 2023 20:55:23 +0000 (UTC)
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAD8F7;
-	Tue, 14 Nov 2023 12:55:21 -0800 (PST)
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3b3ec45d6e9so3762484b6e.0;
-        Tue, 14 Nov 2023 12:55:21 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456AC2C196
+	for <linux-usb@vger.kernel.org>; Tue, 14 Nov 2023 21:04:08 +0000 (UTC)
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B2297
+	for <linux-usb@vger.kernel.org>; Tue, 14 Nov 2023 13:04:06 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6b20577ef7bso5271599b3a.3
+        for <linux-usb@vger.kernel.org>; Tue, 14 Nov 2023 13:04:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699995846; x=1700600646; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VjmcNeZhrefNUyVY1em5QbCLnop7PtKaN2GsNSSWYA4=;
+        b=GqaQhgUMl0p3IygitTYtHmY3xiORWRVlPIzsYKh5jovWXrzE3zMTnhWP3vsUgOFqP+
+         17VJtFAUdYg+X6zPyB8WvQ33g8/CgFCqyFtdJFvn8JtQ8gTPMGKKfaBYqBA4YzQxeThC
+         vLU5/JvI585pea2FZBee86mz7dUCwa/g4z8d/q3DJKz+vb6d9JkO8wQodt7SsfrKChRM
+         U6Z3AVwH2rVbdRIqz64xhSwtqcPEdjJHda8OTItOCavyT2uF7dQ5ehUz+62C6NH6PrdH
+         QsCLjugqLvP8oM3SfD1WqJgL1pkEfhuZ94vA4IzkgdSUgmDUeIXvRKAfLmnYVHfPbL0a
+         VHrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699995321; x=1700600121;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DIyZacgk6S1OCcTjtB2x/jGVvrFkkIc75HS1ohr9rw0=;
-        b=Wec5m83lmYzxMsSiaMcZfqeJEvVZac2TspXV7Y0DN0CnWCZ4CftGGZqeFgc8m0rmIZ
-         revnkdbNPPxebMlo05qRFMJYa8cEtu+4+Y6PA+ZuFOmKsNDt362eIJ2RLTSxxRJZIuF6
-         cniuOV32r9UHlnoOxBTe/Lpk5Q5NNsenZxuLIaYZBQF11RpQtVD8iZHZGb1fGZIsWN9e
-         LTXqzbkN4OKA5d5n4uXCtEDvQp24FWO2yLo0mOOjRLCAeS4pfaZQpmh5wbQuCWJeS/4v
-         GL879TIfQGFCJA4cIL2gpLzRIWJ8W2bVqF6jUvKAUDuy3DhIPhfi9QiDBvJb4rbBQfqC
-         LWMQ==
-X-Gm-Message-State: AOJu0Yy5o4x8q0NY/BekTqtwND25PHaEW+2sZVbZOTf7aenpxKnMPP6h
-	yq0dB+MeQiUd9kaQv8Ew1A==
-X-Google-Smtp-Source: AGHT+IF9EMTXnsDP4dXbwjDX/QcXqA94zVtNWHFss6ofE8jc8Tax5KLxSNIdI2pqtqUMn7Pg3tau6w==
-X-Received: by 2002:a05:6808:3193:b0:3af:6634:49b9 with SMTP id cd19-20020a056808319300b003af663449b9mr15358533oib.30.1699995321077;
-        Tue, 14 Nov 2023 12:55:21 -0800 (PST)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y15-20020a056808060f00b003b3ec15d8ebsm1258644oih.5.2023.11.14.12.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Nov 2023 12:55:20 -0800 (PST)
-Received: (nullmailer pid 496725 invoked by uid 1000);
-	Tue, 14 Nov 2023 20:55:19 -0000
-Date: Tue, 14 Nov 2023 14:55:19 -0600
-From: Rob Herring <robh@kernel.org>
-To: Kyle Tso <kyletso@google.com>
-Cc: krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, linux@roeck-us.net, heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, badhri@google.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: connector: Add child nodes for
- multiple PD capabilities
-Message-ID: <20231114205519.GA472975-robh@kernel.org>
-References: <20231030171348.600621-1-kyletso@google.com>
- <20231030171348.600621-2-kyletso@google.com>
+        d=1e100.net; s=20230601; t=1699995846; x=1700600646;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VjmcNeZhrefNUyVY1em5QbCLnop7PtKaN2GsNSSWYA4=;
+        b=Fs/Ov9GP0+NltvuPGExAqF0w3C3D34R9pBLt19KLsKEiIHBAwpkpUaT0s5caQogaO0
+         3ijil27RGCykx1y7u9fN5oCMkjjLgOunA/fyo8g9aftydzTbCKrX4LH9MxsLV6fNAjUW
+         34TEx5U0+FZm3I693e4rmJO8YMdDmWHRquMSuiBojdNVESieXZHhcyb1be4JJbXNWnk4
+         bU9Q7Z9ArFCEL36Tsezfk2jD4gUqy7kKFOkdsQRkAPnOriipUvBqe58HGuYFviFoVHEy
+         Oyfry1DW+FVq4i7ixvsvmQ4rTfl19uZ69YTa/KBl9M4CUOZNJqzykXGoPOLpyQc7A7g9
+         iC8g==
+X-Gm-Message-State: AOJu0YzZObHOYGxk0UVxaa8J98wnXSvwHA9vXGfiNBA0+VxhIt/tdeD4
+	k7mZOSvvF3QYbUee0CqlS7djLA==
+X-Google-Smtp-Source: AGHT+IF+/ubiFsFk/ps5IuxtuTf+htTpjU57D2zMenSQiIigtpnBq4IN+0vtUNNscpMJHjlPjbhE9Q==
+X-Received: by 2002:a05:6a00:3907:b0:6be:43f8:4e0b with SMTP id fh7-20020a056a00390700b006be43f84e0bmr9762580pfb.24.1699995845983;
+        Tue, 14 Nov 2023 13:04:05 -0800 (PST)
+Received: from [192.168.60.239] (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
+        by smtp.gmail.com with ESMTPSA id i30-20020a056a00005e00b0068ffb8da107sm1564892pfk.212.2023.11.14.13.04.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Nov 2023 13:04:05 -0800 (PST)
+Message-ID: <444878d9-be44-4f52-91c7-f593a24cd930@google.com>
+Date: Tue, 14 Nov 2023 13:04:04 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231030171348.600621-2-kyletso@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v12 1/4] usb: gadget: uvc: prevent use of disabled
+ endpoint
+Content-Language: en-US
+To: gregkh@linuxfoundation.org
+Cc: etalvala@google.com, jchowdhary@google.com,
+ laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, m.grzeschik@pengutronix.de,
+ dan.scally@ideasonboard.com
+References: <73309396-3856-43a2-9a6f-81a40ed594db@google.com>
+ <20231109004104.3467968-1-arakesh@google.com>
+From: Avichal Rakesh <arakesh@google.com>
+In-Reply-To: <20231109004104.3467968-1-arakesh@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 31, 2023 at 01:13:47AM +0800, Kyle Tso wrote:
-> Commit 662a60102c12 ("usb: typec: Separate USB Power Delivery from USB
-> Type-C") allows userspace to configure the PD of a port by selecting
-> different set of predefined PD capabilities. Define the PD capability
-> sets in DT for better configurability in device modules.
+Hey Greg, I think this patchset is ready for submission. 
+Let me know if I am missing something and something else
+needs to be done.
 
-What Linux userspace does is irrelevant to bindings. Explain this in 
-terms of the h/w having multiple capabilities. I'm still not clear how 
-this is tied to the h/w rather than just multiple configurations within 
-the limits of what the h/w can support.
+Thank you!
+- Avi
 
+On 11/8/23 16:41, Avichal Rakesh wrote:
+> Currently the set_alt callback immediately disables the endpoint and queues
+> the v4l2 streamoff event. However, as the streamoff event is processed
+> asynchronously, it is possible that the video_pump thread attempts to queue
+> requests to an already disabled endpoint.
 > 
-> Define a child node "capabilities" to contain multiple USB Power
-> Delivery capabilities.
+> This change moves disabling usb endpoint to the end of streamoff event
+> callback. As the endpoint's state can no longer be used, video_pump is
+> now guarded by uvc->state as well. To be consistent with the actual
+> streaming state, uvc->state is now toggled between CONNECTED and STREAMING
+> from the v4l2 event callback only.
 > 
-> Define a child node with pattern (e.g. caps-0, caps-1) under
-> "capabilities". Each node contains PDO data of a selectable Power
-> Delivery capability.
-> 
-> Also define common properties for source-pdos, sink-pdos, and
-> op-sink-microwatt that can be referenced.
-> 
-> Signed-off-by: Kyle Tso <kyletso@google.com>
+> Link: https://lore.kernel.org/20230615171558.GK741@pendragon.ideasonboard.com/
+> Link: https://lore.kernel.org/20230531085544.253363-1-dan.scally@ideasonboard.com/
+> Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+> Reviewed-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Signed-off-by: Avichal Rakesh <arakesh@google.com>
 > ---
-> v2 -> v3
-> - Updated the commit message
-> - Remain unchanged for the comments about the property/node refactor
+> v1  -> v2  : Rebased to ToT and reworded commit message.
+> v2  -> v3  : Fix email threading goof-up
+> v3  -> v4  : Address review comments & re-rebase to ToT
+> v4  -> v5  : Add Reviewed-by & Tested-by
+> v5  -> v6  : No change
+> v6  -> v7  : No change
+> v7  -> v8  : No change. Getting back in review queue
+> v8  -> v9  : Fix typo. No functional change.
+> v9  -> v10 : Rebase to ToT (usb-next)
+> v10 -> v11 : No change
+> v11 -> v12 : Rebase to ToT (usb-next)
 > 
-> .../bindings/connector/usb-connector.yaml     | 80 +++++++++++++------
->  1 file changed, 57 insertions(+), 23 deletions(-)
+>  drivers/usb/gadget/function/f_uvc.c     | 11 +++++------
+>  drivers/usb/gadget/function/f_uvc.h     |  2 +-
+>  drivers/usb/gadget/function/uvc.h       |  2 +-
+>  drivers/usb/gadget/function/uvc_v4l2.c  | 20 +++++++++++++++++---
+>  drivers/usb/gadget/function/uvc_video.c |  3 ++-
+>  5 files changed, 26 insertions(+), 12 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> index 7c8a3e8430d3..d7ece063cb2c 100644
-> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> @@ -120,28 +120,10 @@ properties:
->    # The following are optional properties for "usb-c-connector" with power
->    # delivery support.
->    source-pdos:
-> -    description: An array of u32 with each entry providing supported power
-> -      source data object(PDO), the detailed bit definitions of PDO can be found
-> -      in "Universal Serial Bus Power Delivery Specification" chapter 6.4.1.2
-> -      Source_Capabilities Message, the order of each entry(PDO) should follow
-> -      the PD spec chapter 6.4.1. Required for power source and power dual role.
-> -      User can specify the source PDO array via PDO_FIXED/BATT/VAR/PPS_APDO()
-> -      defined in dt-bindings/usb/pd.h.
-> -    minItems: 1
-> -    maxItems: 7
-> -    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    $ref: "#/$defs/source-pdos"
->  
->    sink-pdos:
-> -    description: An array of u32 with each entry providing supported power sink
-> -      data object(PDO), the detailed bit definitions of PDO can be found in
-> -      "Universal Serial Bus Power Delivery Specification" chapter 6.4.1.3
-> -      Sink Capabilities Message, the order of each entry(PDO) should follow the
-> -      PD spec chapter 6.4.1. Required for power sink and power dual role. User
-> -      can specify the sink PDO array via PDO_FIXED/BATT/VAR/PPS_APDO() defined
-> -      in dt-bindings/usb/pd.h.
-> -    minItems: 1
-> -    maxItems: 7
-> -    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    $ref: "#/$defs/sink-pdos"
->  
->    sink-vdos:
->      description: An array of u32 with each entry, a Vendor Defined Message Object (VDO),
-> @@ -167,9 +149,7 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/uint32-array
->  
->    op-sink-microwatt:
-> -    description: Sink required operating power in microwatt, if source can't
-> -      offer the power, Capability Mismatch is set. Required for power sink and
-> -      power dual role.
-> +    $ref: "#/$defs/op-sink-microwatt"
->  
->    port:
->      $ref: /schemas/graph.yaml#/properties/port
-> @@ -231,6 +211,30 @@ properties:
->        SNK_READY for non-pd link.
->      type: boolean
->  
-> +  capabilities:
-> +    description: A child node to contain all the selectable USB Power Delivery capabilities.
-> +    type: object
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> index 786379f1b7b7..77999ed53d33 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -263,10 +263,13 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
+>  	return 0;
+>  }
+> 
+> -void uvc_function_setup_continue(struct uvc_device *uvc)
+> +void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep)
+>  {
+>  	struct usb_composite_dev *cdev = uvc->func.config->cdev;
+> 
+> +	if (disable_ep && uvc->video.ep)
+> +		usb_ep_disable(uvc->video.ep);
 > +
-> +    patternProperties:
-> +      "^caps-[0-9]+$":
-> +        description: Child nodes under "capabilities" node. Each node contains a selectable USB
-> +          Power Delivery capability.
-> +        type: object
+>  	usb_composite_setup_continue(cdev);
+>  }
+> 
+> @@ -337,15 +340,11 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
+>  		if (uvc->state != UVC_STATE_STREAMING)
+>  			return 0;
+> 
+> -		if (uvc->video.ep)
+> -			usb_ep_disable(uvc->video.ep);
+> -
+>  		memset(&v4l2_event, 0, sizeof(v4l2_event));
+>  		v4l2_event.type = UVC_EVENT_STREAMOFF;
+>  		v4l2_event_queue(&uvc->vdev, &v4l2_event);
+> 
+> -		uvc->state = UVC_STATE_CONNECTED;
+> -		return 0;
+> +		return USB_GADGET_DELAYED_STATUS;
+> 
+>  	case 1:
+>  		if (uvc->state != UVC_STATE_CONNECTED)
+> diff --git a/drivers/usb/gadget/function/f_uvc.h b/drivers/usb/gadget/function/f_uvc.h
+> index 1db972d4beeb..083aef0c65c6 100644
+> --- a/drivers/usb/gadget/function/f_uvc.h
+> +++ b/drivers/usb/gadget/function/f_uvc.h
+> @@ -11,7 +11,7 @@
+> 
+>  struct uvc_device;
+> 
+> -void uvc_function_setup_continue(struct uvc_device *uvc);
+> +void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep);
+> 
+>  void uvc_function_connect(struct uvc_device *uvc);
+> 
+> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+> index 6751de8b63ad..989bc6b4e93d 100644
+> --- a/drivers/usb/gadget/function/uvc.h
+> +++ b/drivers/usb/gadget/function/uvc.h
+> @@ -177,7 +177,7 @@ struct uvc_file_handle {
+>   * Functions
+>   */
+> 
+> -extern void uvc_function_setup_continue(struct uvc_device *uvc);
+> +extern void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep);
+>  extern void uvc_function_connect(struct uvc_device *uvc);
+>  extern void uvc_function_disconnect(struct uvc_device *uvc);
+> 
+> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+> index 3f0a9795c0d4..7cb8d027ff0c 100644
+> --- a/drivers/usb/gadget/function/uvc_v4l2.c
+> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
+> @@ -451,7 +451,7 @@ uvc_v4l2_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
+>  	 * Complete the alternate setting selection setup phase now that
+>  	 * userspace is ready to provide video frames.
+>  	 */
+> -	uvc_function_setup_continue(uvc);
+> +	uvc_function_setup_continue(uvc, 0);
+>  	uvc->state = UVC_STATE_STREAMING;
+> 
+>  	return 0;
+> @@ -463,11 +463,18 @@ uvc_v4l2_streamoff(struct file *file, void *fh, enum v4l2_buf_type type)
+>  	struct video_device *vdev = video_devdata(file);
+>  	struct uvc_device *uvc = video_get_drvdata(vdev);
+>  	struct uvc_video *video = &uvc->video;
+> +	int ret = 0;
+> 
+>  	if (type != video->queue.queue.type)
+>  		return -EINVAL;
+> 
+> -	return uvcg_video_enable(video, 0);
+> +	uvc->state = UVC_STATE_CONNECTED;
+> +	ret = uvcg_video_enable(video, 0);
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +        properties:
-> +          source-pdos:
-> +            $ref: "#/$defs/source-pdos"
+> +	uvc_function_setup_continue(uvc, 1);
+> +	return 0;
+>  }
+> 
+>  static int
+> @@ -500,6 +507,14 @@ uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
+>  static void uvc_v4l2_disable(struct uvc_device *uvc)
+>  {
+>  	uvc_function_disconnect(uvc);
+> +	/*
+> +	 * Drop uvc->state to CONNECTED if it was streaming before.
+> +	 * This ensures that the usb_requests are no longer queued
+> +	 * to the controller.
+> +	 */
+> +	if (uvc->state == UVC_STATE_STREAMING)
+> +		uvc->state = UVC_STATE_CONNECTED;
 > +
-> +          sink-pdos:
-> +            $ref: "#/$defs/sink-pdos"
-> +
-> +          op-sink-microwatt:
-> +            $ref: "#/$defs/op-sink-microwatt"
-> +
-> +        additionalProperties: false
-> +
-> +    additionalProperties: false
-> +
->  dependencies:
->    sink-vdos-v1: [ sink-vdos ]
->    sink-vdos: [ sink-vdos-v1 ]
-> @@ -238,6 +242,36 @@ dependencies:
->  required:
->    - compatible
->  
-> +$defs:
-> +  source-pdos:
-
-Rather than a bunch a $refs to per property definitions, define the 
-collection of properties and then reference that collection:
-
-$defs:
-  capabilities:
-    type: object
-
-    properties:
-      source-pdos: ...
-
-And then at the node level, make the reference:
-
-"^caps-[0-9]+$":
-  $ref: "#/$defs/capabilities"
-  unevaluatedProperties: false
-
-Rob
+>  	uvcg_video_enable(&uvc->video, 0);
+>  	uvcg_free_buffers(&uvc->video.queue);
+>  	uvc->func_connected = false;
+> @@ -647,4 +662,3 @@ const struct v4l2_file_operations uvc_v4l2_fops = {
+>  	.get_unmapped_area = uvcg_v4l2_get_unmapped_area,
+>  #endif
+>  };
+> -
+> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+> index 91af3b1ef0d4..c334802ac0a4 100644
+> --- a/drivers/usb/gadget/function/uvc_video.c
+> +++ b/drivers/usb/gadget/function/uvc_video.c
+> @@ -384,13 +384,14 @@ static void uvcg_video_pump(struct work_struct *work)
+>  	struct uvc_video_queue *queue = &video->queue;
+>  	/* video->max_payload_size is only set when using bulk transfer */
+>  	bool is_bulk = video->max_payload_size;
+> +	struct uvc_device *uvc = video->uvc;
+>  	struct usb_request *req = NULL;
+>  	struct uvc_buffer *buf;
+>  	unsigned long flags;
+>  	bool buf_done;
+>  	int ret;
+> 
+> -	while (video->ep->enabled) {
+> +	while (uvc->state == UVC_STATE_STREAMING && video->ep->enabled) {
+>  		/*
+>  		 * Retrieve the first available USB request, protected by the
+>  		 * request lock.
+> --
+> 2.42.0.869.gea05f2083d-goog
 
