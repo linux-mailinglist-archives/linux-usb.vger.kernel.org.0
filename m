@@ -1,115 +1,136 @@
-Return-Path: <linux-usb+bounces-2856-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2858-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CCF57EAAC4
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 08:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E06AF7EAAE5
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 08:28:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8466AB20A80
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 07:08:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64ABFB20A99
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 07:28:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20A811718;
-	Tue, 14 Nov 2023 07:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4483F11C8C;
+	Tue, 14 Nov 2023 07:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A4d+5Abs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kv+cJ6uY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F75BE4D
-	for <linux-usb@vger.kernel.org>; Tue, 14 Nov 2023 07:08:28 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D55195
-	for <linux-usb@vger.kernel.org>; Mon, 13 Nov 2023 23:08:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699945707; x=1731481707;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=EI+f6fYrzaOyYoTNSy0nR2nSThyevAe6RYlrAD9I2OQ=;
-  b=A4d+5Abs7M0h615azJ/klurGeL11ohSJHsZuq0I3kwaJy6KHBlTaH6I1
-   wSUadDsZDCYtyMmItXh2ctmY9Upf4s0nh7tXW8i2xHKqJjLRcfAB3PP1L
-   lNmlPMWjM0sZ8Q7eMQSSndmC0IKEaBxNIIhbX+FtM1JFeGrV75Requ4ZA
-   GQbG1Erozn8ER5rfCpvQswNkQPnHXz/zyXo9dY8xrwKyMW9Cibf239kwD
-   +b6yWkI6q/Rk2NWuatZEMLr4DFjVSgyhranMcn18szg+3eE/s60rZlAkT
-   Cmsm/+N2hjOUspOD9D7J/XqH9wENv2swjDppe1niXEZVUm2MNIWLUYpFD
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="454891843"
-X-IronPort-AV: E=Sophos;i="6.03,301,1694761200"; 
-   d="scan'208";a="454891843"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2023 23:08:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="741008561"
-X-IronPort-AV: E=Sophos;i="6.03,301,1694761200"; 
-   d="scan'208";a="741008561"
-Received: from wentongw-optiplex-8070.sh.intel.com ([10.239.154.12])
-  by orsmga006.jf.intel.com with ESMTP; 13 Nov 2023 23:08:25 -0800
-From: Wentong Wu <wentong.wu@intel.com>
-To: andriy.shevchenko@linux.intel.com,
-	hdegoede@redhat.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	Wentong Wu <wentong.wu@intel.com>
-Subject: [PATCH] usb: misc: ljca: Drop _ADR support to get ljca children devices
-Date: Tue, 14 Nov 2023 15:25:31 +0800
-Message-Id: <20231114072531.1366753-1-wentong.wu@intel.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E1C11733
+	for <linux-usb@vger.kernel.org>; Tue, 14 Nov 2023 07:28:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEEF1C433CA;
+	Tue, 14 Nov 2023 07:28:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699946888;
+	bh=+KjAg3oyDvkQWJep1sTAthLSg9NWkezMM9RV7V11nPM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kv+cJ6uY7xzWexH3qjNoqOd19GCvow+4H3pIlSYFhjiZZNqlKCNGtK/Rb+KlrhYVw
+	 gRSZ9G3VMOXJAtTrLHUxLFu0Bpa9OUjXXny59w1ZmoTMVKLzQTf7gqIGce/NL8rwWb
+	 PEU0lmGJp3vo1XPuMuPcXTPUtlzMFvExnOz8suMBR1Wlo+Hw1jiXRgibErPDyMPOsj
+	 c+zPO7tuG9h3k7p/v3A8l8PtF3dqoJydguhpn7do46D/bOqVX3LlVLawTmDBgyyioM
+	 KJT50OE3RVC5aOGhtrytsfS9pNRLlkZwKDn6QjQ87wnmw+Eyu6O2NfVen871P5vfQG
+	 wP1MDDSjsQAQA==
+Date: Tue, 14 Nov 2023 15:27:57 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] initialize struct otg_fsm earlier
+Message-ID: <20231114072757.GB64573@nchen-desktop>
+References: <20231113173125.23696-1-oneukum@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231113173125.23696-1-oneukum@suse.com>
 
-Currently the shipped platforms use only _HID to distinguish
-ljca children devices. The _ADR support here is for future HW.
-This patch is to drop _ADR support and we can then re-introduce
-it (revert this patch) if future HW actually starts using _ADR
-to distinguish children devices.
+On 23-11-13 18:31:20, Oliver Neukum wrote:
+> The earlier fix bf88fef0b6f1 ("usb: otg-fsm: Fix hrtimer list
+> corruption") in effect hid an issue with intialization.
 
-Signed-off-by: Wentong Wu <wentong.wu@intel.com>
----
- drivers/usb/misc/usb-ljca.c | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+Typo, hit an issue with initialization.
 
-diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
-index c9decd0396d4..7f0deebebc13 100644
---- a/drivers/usb/misc/usb-ljca.c
-+++ b/drivers/usb/misc/usb-ljca.c
-@@ -457,8 +457,8 @@ static void ljca_auxdev_acpi_bind(struct ljca_adapter *adap,
- 				  u64 adr, u8 id)
- {
- 	struct ljca_match_ids_walk_data wd = { 0 };
--	struct acpi_device *parent, *adev;
- 	struct device *dev = adap->dev;
-+	struct acpi_device *parent;
- 	char uid[4];
- 
- 	parent = ACPI_COMPANION(dev);
-@@ -466,17 +466,7 @@ static void ljca_auxdev_acpi_bind(struct ljca_adapter *adap,
- 		return;
- 
- 	/*
--	 * get auxdev ACPI handle from the ACPI device directly
--	 * under the parent that matches _ADR.
--	 */
--	adev = acpi_find_child_device(parent, adr, false);
--	if (adev) {
--		ACPI_COMPANION_SET(&auxdev->dev, adev);
--		return;
--	}
--
--	/*
--	 * _ADR is a grey area in the ACPI specification, some
-+	 * Currently LJCA hw doesn't use _ADR instead the shipped
- 	 * platforms use _HID to distinguish children devices.
- 	 */
- 	switch (adr) {
+> In effect it replaces the racy continous reinitialization
+> of fsm->hnp_polling_work with a delayed one-time
+> initialization.
+> 
+> This just makes no sense. As a single initialization
+> is sufficient, the clean solution is just to do it once
+> and do it early enough.
+
+The phy-fsl-usb is not the only user, there are other users, eg,
+chipidea.
+
+Peter
+> 
+> Fixes: bf88fef0b6f1 ("usb: otg-fsm: Fix hrtimer list corruption")
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> ---
+>  drivers/usb/common/usb-otg-fsm.c | 7 +------
+>  drivers/usb/phy/phy-fsl-usb.c    | 1 +
+>  include/linux/usb/otg-fsm.h      | 1 -
+>  3 files changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/common/usb-otg-fsm.c b/drivers/usb/common/usb-otg-fsm.c
+> index 0697fde51d00..0aa2eb7396ce 100644
+> --- a/drivers/usb/common/usb-otg-fsm.c
+> +++ b/drivers/usb/common/usb-otg-fsm.c
+> @@ -117,7 +117,7 @@ static void otg_leave_state(struct otg_fsm *fsm, enum usb_otg_state old_state)
+>  	}
+>  }
+>  
+> -static void otg_hnp_polling_work(struct work_struct *work)
+> +void otg_hnp_polling_work(struct work_struct *work)
+>  {
+>  	struct otg_fsm *fsm = container_of(to_delayed_work(work),
+>  				struct otg_fsm, hnp_polling_work);
+> @@ -193,11 +193,6 @@ static void otg_start_hnp_polling(struct otg_fsm *fsm)
+>  	if (!fsm->host_req_flag)
+>  		return;
+>  
+> -	if (!fsm->hnp_work_inited) {
+> -		INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
+> -		fsm->hnp_work_inited = true;
+> -	}
+> -
+>  	schedule_delayed_work(&fsm->hnp_polling_work,
+>  					msecs_to_jiffies(T_HOST_REQ_POLL));
+>  }
+> diff --git a/drivers/usb/phy/phy-fsl-usb.c b/drivers/usb/phy/phy-fsl-usb.c
+> index 79617bb0a70e..4553aaab3761 100644
+> --- a/drivers/usb/phy/phy-fsl-usb.c
+> +++ b/drivers/usb/phy/phy-fsl-usb.c
+> @@ -844,6 +844,7 @@ int usb_otg_start(struct platform_device *pdev)
+>  
+>  	/* Initialize the state machine structure with default values */
+>  	SET_OTG_STATE(otg_trans, OTG_STATE_UNDEFINED);
+> +	INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
+>  	fsm->otg = p_otg->phy.otg;
+>  
+>  	/* We don't require predefined MEM/IRQ resource index */
+> diff --git a/include/linux/usb/otg-fsm.h b/include/linux/usb/otg-fsm.h
+> index 6135d076c53d..cc0bc4edf227 100644
+> --- a/include/linux/usb/otg-fsm.h
+> +++ b/include/linux/usb/otg-fsm.h
+> @@ -183,7 +183,6 @@ struct otg_fsm {
+>  	struct mutex lock;
+>  	u8 *host_req_flag;
+>  	struct delayed_work hnp_polling_work;
+> -	bool hnp_work_inited;
+>  	bool state_changed;
+>  };
+>  
+> -- 
+> 2.42.0
+> 
+
 -- 
-2.34.1
 
+Thanks,
+Peter Chen
 
