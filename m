@@ -1,118 +1,81 @@
-Return-Path: <linux-usb+bounces-2875-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2876-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4C367EAFAC
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 13:12:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D355F7EAFC1
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 13:22:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E3992811A1
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 12:12:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63404B20A84
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 12:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 891A03D984;
-	Tue, 14 Nov 2023 12:12:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C8443FB0A;
+	Tue, 14 Nov 2023 12:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O5RVN4dg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k0cFwMG9"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58613E476
-	for <linux-usb@vger.kernel.org>; Tue, 14 Nov 2023 12:12:10 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778D6184
-	for <linux-usb@vger.kernel.org>; Tue, 14 Nov 2023 04:12:09 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E793E47D;
+	Tue, 14 Nov 2023 12:22:21 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C157C130;
+	Tue, 14 Nov 2023 04:22:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699963929; x=1731499929;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=p/0zQaq2B5Ejy364nV20zrd8ckkQZEyY4NKv4xvdtqQ=;
-  b=O5RVN4dg6zsbjAU93Jx/tTN53mIsbzcPMg4IrNPXahKyOicYgZBZvnzC
-   OMrHVD0e/I7SvXPUsy1jKJxjEmaLTahv8/Z8PXZXRjX6W/IvWRK13qRk9
-   +kxU3Fpxag6DQJYHmLuYB7BvrxG1uyHSXq25o5/Oj5SoBh27D8d4ExKBe
-   US5G/X4qhnXZA03z4gsypbv3KltEIv91ZQZcMuEvrdbUfm94uuarZCCl5
-   GngITa3xML2I/es1uGM13C+PepVaIwGId/v4vYzpcnrcYJ4fgzcHmYxIv
-   LJPuyFqMoG4F1odpYzu0xVSS/KmBIHojdZeddqaJvgLHWs7vinP/+WtGD
+  t=1699964540; x=1731500540;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=83oVHOMWmo585ZtLA1OZ4XOOSq7Vg/fHO3TUuPuK0GU=;
+  b=k0cFwMG97mv084oKamncnPK9pEm4cTpTxAiidTzJEkZuVRwLbrdr2nHY
+   rQabH8EDlgzMWMUEj4Eml+ZBE+9S1PYSr8Cg47c5tNN6Iif2fB31MF8aF
+   xjsAtRr53Kh8flQKl3tIMcbquOPk9JJSF4LqeAlo5q9fL1oiDp4T/OQ8I
+   +zgD5GrfZ1nZsr2Y4u70zKugKrKJVZ5JPLoJz9THHZi7tGrlEHCgUfZ8m
+   pgm/xfTp/yiKZ2nlQibT4LnD5wPZUBIzWOA6FrSnEb4/jriFQ9gvuEL7S
+   zQqLg2jAabWtC+bnjG4Y7HsTJ03BNSZLimVyq5DFHZ2WnfT0jEX1aDhit
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="390436940"
+X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="9283010"
 X-IronPort-AV: E=Sophos;i="6.03,302,1694761200"; 
-   d="scan'208";a="390436940"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 04:12:07 -0800
+   d="scan'208";a="9283010"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 04:22:19 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="799508553"
+X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="938075811"
 X-IronPort-AV: E=Sophos;i="6.03,302,1694761200"; 
-   d="scan'208";a="799508553"
+   d="scan'208";a="938075811"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 14 Nov 2023 04:12:05 -0800
+  by orsmga005.jf.intel.com with ESMTP; 14 Nov 2023 04:22:17 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id BCAC45E2; Tue, 14 Nov 2023 14:12:03 +0200 (EET)
+	id 0B0AF5E2; Tue, 14 Nov 2023 14:22:15 +0200 (EET)
+Date: Tue, 14 Nov 2023 14:22:15 +0200
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Yehezkel Bernat <YehezkelShB@gmail.com>,
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: Andreas Noever <andreas.noever@gmail.com>,
 	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>
-Cc: linux-usb@vger.kernel.org,
-	Gil Fine <gil.fine@linux.intel.com>,
-	Pengfei Xu <pengfei.xu@intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 3/3] thunderbolt: Only add device router DP IN to the head of the DP resource list
-Date: Tue, 14 Nov 2023 14:12:03 +0200
-Message-ID: <20231114121203.203762-3-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231114121203.203762-1-mika.westerberg@linux.intel.com>
-References: <20231114121203.203762-1-mika.westerberg@linux.intel.com>
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
+	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] thunderbolt: remove duplicated re-assignment of
+ pointer 'out'
+Message-ID: <20231114122215.GX17433@black.fi.intel.com>
+References: <20231111201543.338893-1-colin.i.king@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231111201543.338893-1-colin.i.king@gmail.com>
 
-When pairing DP IN and DP OUT adapters for DisplayPort tunneling, we
-should prioritize the possible external GPU DP IN adapters to take
-advantage of the its capabilities. However the commit in question did
-this for host router DP IN adapters too and that changes ordering of the
-initial DP IN resources in such way that resuming from suspend may end
-up using different resource and that may confuse the user.
+On Sat, Nov 11, 2023 at 08:15:43PM +0000, Colin Ian King wrote:
+> The pointer 'out' is initialized and then a few statments later being
+> re-assigned the same value. The second re-assignment is redundant and
+> can be removed.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Fix this so that we only put DP IN adapters of device routers to the top
-of the resource list and leave host routers as is.
-
-Fixes: 274baf695b08 ("thunderbolt: Add DP IN added last in the head of the list of DP resources")
-Reported-by: Pengfei Xu <pengfei.xu@intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/thunderbolt/tb.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 5acdeb766860..fd49f86e0353 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -213,7 +213,17 @@ static void tb_add_dp_resources(struct tb_switch *sw)
- 		if (!tb_switch_query_dp_resource(sw, port))
- 			continue;
- 
--		list_add(&port->list, &tcm->dp_resources);
-+		/*
-+		 * If DP IN on device router exist, position it at the
-+		 * beginning of the DP resources list, so that it is used
-+		 * before DP IN of the host router. This way external GPU(s)
-+		 * will be prioritized when pairing DP IN to a DP OUT.
-+		 */
-+		if (tb_route(sw))
-+			list_add(&port->list, &tcm->dp_resources);
-+		else
-+			list_add_tail(&port->list, &tcm->dp_resources);
-+
- 		tb_port_dbg(port, "DP IN resource available\n");
- 	}
- }
--- 
-2.42.0
-
+Applied to thunderbolt.git/next, thanks!
 
