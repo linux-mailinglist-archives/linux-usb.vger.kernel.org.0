@@ -1,109 +1,90 @@
-Return-Path: <linux-usb+bounces-2867-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2868-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 434507EAE9E
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 12:10:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 708527EAEA3
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 12:12:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF094281134
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 11:10:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 118281F24527
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 11:12:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E37F224D4;
-	Tue, 14 Nov 2023 11:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bbntZNgU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B514224D3;
+	Tue, 14 Nov 2023 11:12:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1665E19BAB;
-	Tue, 14 Nov 2023 11:10:23 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CE8187;
-	Tue, 14 Nov 2023 03:10:21 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EEDEE1C0005;
-	Tue, 14 Nov 2023 11:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1699960220;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UZk2NG7LMF4weSGGvdqw6ZXKkgHMu8ga7kKv8OtqZLM=;
-	b=bbntZNgUvrYTXujYXIPpbH9Qpd8qEzus+iOoYJzgOWMbiWXsGHdPzV8d+fWi2Z69Eu6i8s
-	/iFV+vezys8YOQWFpGwTvq0RmuNmugyYopXkVhJXCs2y4+it7g9d4SWVFR397LSmA6zY3g
-	ci45ynp9fRVauFc6nzm8QK9JVcYX7u2YdKooNCjo8sDI0iQCoafndVNT5rwPQUNYrpmaar
-	CNDKcUdfumwvgDLBfIUkhm6Q+2PXSBER5rYWZlVyhvEBzO67xHwBWtQSOTA86keHYnS6V3
-	+amL+d1/HM9Q4J9u5HasCznEUScCm9F0srD7h/iYzaz7nsOUzOV7uazUHHtlkg==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AF0C8C8
+	for <linux-usb@vger.kernel.org>; Tue, 14 Nov 2023 11:12:21 +0000 (UTC)
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A72E18C;
+	Tue, 14 Nov 2023 03:12:19 -0800 (PST)
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3AEBC2hxC876665, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3AEBC2hxC876665
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 14 Nov 2023 19:12:02 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 14 Nov 2023 19:12:02 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 14 Nov 2023 19:12:01 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
+ RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
+ 15.01.2375.007; Tue, 14 Nov 2023 19:12:01 +0800
+From: =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= <stanley_chang@realtek.com>
+To: Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>
+CC: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] usb: dwc3: add missing of_node_put and platform_device_put
+Thread-Topic: [PATCH v2] usb: dwc3: add missing of_node_put and
+ platform_device_put
+Thread-Index: AQHaFuOsQKeGinqqjkaAFJG885kOeLB5GLOAgACPhzA=
+Date: Tue, 14 Nov 2023 11:12:01 +0000
+Message-ID: <c528787cd608476980a9c07123366c92@realtek.com>
+References: <20231114101645.20065-1-stanley_chang@realtek.com>
+ <e1686031-aa5a-5692-50c3-0382d32641e6@omp.ru>
+In-Reply-To: <e1686031-aa5a-5692-50c3-0382d32641e6@omp.ru>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 14 Nov 2023 12:10:18 +0100
-Message-Id: <CWYHLRBFE1X1.15330WETL2R7U@tleb-bootlin-xps13-01>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH 4/6] usb: cdns3: support power-off of controller when in
- host role
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Roger Quadros" <rogerq@kernel.org>, "Pawel Laszczak" <pawell@cadence.com>,
- "Nishanth Menon" <nm@ti.com>, "Vignesh Raghavendra" <vigneshr@ti.com>,
- "Tero Kristo" <kristo@kernel.org>, <linux-usb@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>
-To: "Peter Chen" <peter.chen@kernel.org>
-X-Mailer: aerc 0.15.2
-References: <20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com>
- <20231113-j7200-usb-suspend-v1-4-ad1ee714835c@bootlin.com>
- <20231114083838.GC64573@nchen-desktop>
-In-Reply-To: <20231114083838.GC64573@nchen-desktop>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
-Hello,
-
-On Tue Nov 14, 2023 at 9:38 AM CET, Peter Chen wrote:
-> On 23-11-13 15:26:59, Th=C3=A9o Lebrun wrote:
-> > The controller is not being reconfigured at resume. Change resume to
-> > redo hardware config if quirk CDNS3_RESET_ON_RESUME is active.
->
-> Current logic has power off judgement, see cdns3_controller_resume for
-> detail.
-
-Indeed! Thanks for the pointer. I had not noticed that, those patches
-come from an older kernel which didn't have it. That'll make for less
-changes; patches 4 & 5 can go away.
-
-> > +	if (cdns->pdata && cdns->pdata->quirks & CDNS3_RESET_ON_RESUME)
-> > +		cdns->xhci_plat_data->quirks |=3D XHCI_RESET_ON_RESUME | XHCI_SUSPEN=
-D_RESUME_CLKS;
-> > +
->
-> If you set this flag, how could you support the USB remote wakeup
-> request? In that case, the USB bus does not expect re-enumeration.
-
-We didn't support remote USB wakeup. Only S2R mattered in our case and
-USB remote wakeup wasn't a possibility.
-
-> > +static int cdns_host_resume(struct cdns *cdns, bool hibernated)
-> > +{
-> > +	return cdns_drd_host_on(cdns);
->
-> This one will redo if controller's power is off, please consider both
-> on and power situation.
-
-Clearly. Can see that at runtime.
-
-Thanks for the review!
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+SGkgU2VyZ2V5LA0KDQo+IE9uIDExLzE0LzIzIDE6MTYgUE0sIFN0YW5sZXkgQ2hhbmcgd3JvdGU6
+DQo+IA0KPiA+IG9mX2dldF9jb21wYXRpYmxlX2NoaWxkIHBlcmZvcm1zIGFuIG9mX25vZGVfZ2V0
+LCBzbyBhbiBvZl9ub2RlX2dldCBpcw0KPiANCj4gICAgWW91IG1lYW4gb2Zfbm9kZV9wdXQgaXMg
+cmVxdWlyZWQ/DQoNClJpZ2h0LCBpdCBpcyBvZl9ub2RlX3B1dC4NCkknbSBzb3JyeSBmb3IgdGhl
+IHR5cG8uDQoNClRoYW5rcywNClN0YW5sZXkNCg0KPiA+IHJlcXVpcmVkLiBBZGQgcGxhdGZvcm1f
+ZGV2aWNlX3B1dCB0byBtYXRjaCB3aXRoIG9mX2ZpbmRfZGV2aWNlX2J5X25vZGUuDQo+ID4NCj4g
+PiBGaXhlczogMzRjMjAwNDgzNTY5ICgidXNiOiBkd2MzOiBhZGQgUmVhbHRlayBESEMgUlREIFNv
+QyBkd2MzIGdsdWUgbGF5ZXINCj4gZHJpdmVyIikNCj4gPiBTaWduZWQtb2ZmLWJ5OiBTdGFubGV5
+IENoYW5nIDxzdGFubGV5X2NoYW5nQHJlYWx0ZWsuY29tPg0KPiA+IEFja2VkLWJ5OiBUaGluaCBO
+Z3V5ZW4gPFRoaW5oLk5ndXllbkBzeW5vcHN5cy5jb20+DQo+ID4gLS0tDQo+ID4gdjEgdG8gdjIg
+Y2hhbmdlOg0KPiA+ICAgICAxLiBNb2RpZnkgdGhlIGNvbW1pdCBtZXNzYWdlLg0KPiA+ICAgICAy
+LiBBZGQgb2Zfbm9kZV9nZXQgaW4gdGhlIG9mX3Byb3BlcnR5X3JlYWRfc3RyaW5nKCkgZXJyb3Ig
+cGF0aC4NCj4gWy4uLl0NCj4gDQo+IE1CUiwgU2VyZ2V5DQo=
 
