@@ -1,107 +1,109 @@
-Return-Path: <linux-usb+bounces-2866-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2867-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF5867EAE23
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 11:35:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 434507EAE9E
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 12:10:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5BD01C20839
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 10:35:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF094281134
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Nov 2023 11:10:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 852F91863F;
-	Tue, 14 Nov 2023 10:35:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E37F224D4;
+	Tue, 14 Nov 2023 11:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bbntZNgU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0B525119
-	for <linux-usb@vger.kernel.org>; Tue, 14 Nov 2023 10:35:46 +0000 (UTC)
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2D311F;
-	Tue, 14 Nov 2023 02:35:44 -0800 (PST)
-Received: from [192.168.1.103] (178.176.75.241) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Tue, 14 Nov
- 2023 13:35:34 +0300
-Subject: Re: [PATCH v2] usb: dwc3: add missing of_node_put and
- platform_device_put
-To: Stanley Chang <stanley_chang@realtek.com>, Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>
-CC: Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-References: <20231114101645.20065-1-stanley_chang@realtek.com>
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <e1686031-aa5a-5692-50c3-0382d32641e6@omp.ru>
-Date: Tue, 14 Nov 2023 13:35:33 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1665E19BAB;
+	Tue, 14 Nov 2023 11:10:23 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CE8187;
+	Tue, 14 Nov 2023 03:10:21 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EEDEE1C0005;
+	Tue, 14 Nov 2023 11:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1699960220;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UZk2NG7LMF4weSGGvdqw6ZXKkgHMu8ga7kKv8OtqZLM=;
+	b=bbntZNgUvrYTXujYXIPpbH9Qpd8qEzus+iOoYJzgOWMbiWXsGHdPzV8d+fWi2Z69Eu6i8s
+	/iFV+vezys8YOQWFpGwTvq0RmuNmugyYopXkVhJXCs2y4+it7g9d4SWVFR397LSmA6zY3g
+	ci45ynp9fRVauFc6nzm8QK9JVcYX7u2YdKooNCjo8sDI0iQCoafndVNT5rwPQUNYrpmaar
+	CNDKcUdfumwvgDLBfIUkhm6Q+2PXSBER5rYWZlVyhvEBzO67xHwBWtQSOTA86keHYnS6V3
+	+amL+d1/HM9Q4J9u5HasCznEUScCm9F0srD7h/iYzaz7nsOUzOV7uazUHHtlkg==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <20231114101645.20065-1-stanley_chang@realtek.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.75.241]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.0.0, Database issued on: 11/14/2023 10:25:05
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 181339 [Nov 14 2023]
-X-KSE-AntiSpam-Info: Version: 6.0.0.2
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 543 543 1e3516af5cdd92079dfeb0e292c8747a62cb1ee4
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info:
-	d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;omp.ru:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.75.241
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 11/14/2023 10:30:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 11/14/2023 9:07:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 14 Nov 2023 12:10:18 +0100
+Message-Id: <CWYHLRBFE1X1.15330WETL2R7U@tleb-bootlin-xps13-01>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH 4/6] usb: cdns3: support power-off of controller when in
+ host role
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rob Herring"
+ <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Roger Quadros" <rogerq@kernel.org>, "Pawel Laszczak" <pawell@cadence.com>,
+ "Nishanth Menon" <nm@ti.com>, "Vignesh Raghavendra" <vigneshr@ti.com>,
+ "Tero Kristo" <kristo@kernel.org>, <linux-usb@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>
+To: "Peter Chen" <peter.chen@kernel.org>
+X-Mailer: aerc 0.15.2
+References: <20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com>
+ <20231113-j7200-usb-suspend-v1-4-ad1ee714835c@bootlin.com>
+ <20231114083838.GC64573@nchen-desktop>
+In-Reply-To: <20231114083838.GC64573@nchen-desktop>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On 11/14/23 1:16 PM, Stanley Chang wrote:
+Hello,
 
-> of_get_compatible_child performs an of_node_get, so an of_node_get is
+On Tue Nov 14, 2023 at 9:38 AM CET, Peter Chen wrote:
+> On 23-11-13 15:26:59, Th=C3=A9o Lebrun wrote:
+> > The controller is not being reconfigured at resume. Change resume to
+> > redo hardware config if quirk CDNS3_RESET_ON_RESUME is active.
+>
+> Current logic has power off judgement, see cdns3_controller_resume for
+> detail.
 
-   You mean of_node_put is required?
+Indeed! Thanks for the pointer. I had not noticed that, those patches
+come from an older kernel which didn't have it. That'll make for less
+changes; patches 4 & 5 can go away.
 
-> required. Add platform_device_put to match with of_find_device_by_node.
-> 
-> Fixes: 34c200483569 ("usb: dwc3: add Realtek DHC RTD SoC dwc3 glue layer driver")
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> ---
-> v1 to v2 change:
->     1. Modify the commit message.
->     2. Add of_node_get in the of_property_read_string() error path.
-[...]
+> > +	if (cdns->pdata && cdns->pdata->quirks & CDNS3_RESET_ON_RESUME)
+> > +		cdns->xhci_plat_data->quirks |=3D XHCI_RESET_ON_RESUME | XHCI_SUSPEN=
+D_RESUME_CLKS;
+> > +
+>
+> If you set this flag, how could you support the USB remote wakeup
+> request? In that case, the USB bus does not expect re-enumeration.
 
-MBR, Sergey
+We didn't support remote USB wakeup. Only S2R mattered in our case and
+USB remote wakeup wasn't a possibility.
+
+> > +static int cdns_host_resume(struct cdns *cdns, bool hibernated)
+> > +{
+> > +	return cdns_drd_host_on(cdns);
+>
+> This one will redo if controller's power is off, please consider both
+> on and power situation.
+
+Clearly. Can see that at runtime.
+
+Thanks for the review!
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
