@@ -1,202 +1,209 @@
-Return-Path: <linux-usb+bounces-2894-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2895-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 481FA7EC133
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 12:21:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF7187EC153
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 12:34:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 423551C20840
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 11:21:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AE061C208DF
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 11:34:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E8F4156F4;
-	Wed, 15 Nov 2023 11:20:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A57CB171A3;
+	Wed, 15 Nov 2023 11:34:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="lKIihRZ4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERSiHHhl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6445C14F8B
-	for <linux-usb@vger.kernel.org>; Wed, 15 Nov 2023 11:20:54 +0000 (UTC)
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2046.outbound.protection.outlook.com [40.107.223.46])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62889F5;
-	Wed, 15 Nov 2023 03:20:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IW5AwpzwbMi1K4kdKvX4t/JMkPRkljv+eF2rhB/Iw7wklhRr/wRURle9pZ3sYOL7xN4Gk12qvh57IpOrUjkkpR1O8W94WPq2X5cBo9A7NgLE9c6m19Kis7yR1SptAiCT2bvVd+a5hp6A3tDarkHtfqASK+RNICacKO+aJkh0wpzLXWjqJteNalTk3LKt2O2+xooCGTkQB+G4WJQX1kvN1+JO1vNmp1LhrNclK6Q0Wn2rDCoaFKR5+QtYW4kMPSmOSjNfR0qqMCextFOjl2lTlkf18iWHFwgKPffOJBxKWfT02d1ohbkvvDZ/gezYpRjSZpfHXD0Rsgy0bxWgaefVlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CLTHiGeEFxEwAMCvbwFF9C8+lG6HTFka5B7xGY01LuQ=;
- b=ZAyFos2wvCkco9Tk72RJ7fOwu65ohZnzNbSzHVjuI2rthsI694HxPlnFroClCp1Qvkp9UPoh8vG+JlLZbFaYfwFtjSU8ngNYzdripW7/j8zwEsKyn3O7aXz7VDDhEknabOqlBLZLdniFr4Hselt16/VKg85uOWe84Cf2vgTL7Snge5LjlXnCARsx1zjjgPNe2MvBcW5Tfp8QfOR9woMzHhv+7A1zArDji/ztoX7S8KFPCe6l3tMI/eacsLmzokrtOHvp0nT9VKZhMTQLExjHHFtZROgJ0a3NTT6cfiZV0UJN22c1sfwnP4EOA8DDPiQbZgQMMvEs1bJ6uE4Aw/wL+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CLTHiGeEFxEwAMCvbwFF9C8+lG6HTFka5B7xGY01LuQ=;
- b=lKIihRZ4kJlM4izM9aHTp1iQtLLdABau0YDZTcy4330RV05JyHVD8QjjQtc2+dC/lH/WqNuhJ2np1zKz8evfHDn1u3XmW6pK7Buog8vsmz1Wdiz+EgSCRk8/SdIkuSIBP0KFpYelDkVKARGXYUu1m5zQULP1U/rG1EsQq8i/2IQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
- by SA1PR12MB7412.namprd12.prod.outlook.com (2603:10b6:806:2b2::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6977.31; Wed, 15 Nov
- 2023 11:20:50 +0000
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::39a2:42da:ea20:3349]) by BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::39a2:42da:ea20:3349%4]) with mapi id 15.20.6977.029; Wed, 15 Nov 2023
- 11:20:49 +0000
-Message-ID: <c8e52587-5ad2-46ac-a5a8-71738b9f5ac7@amd.com>
-Date: Wed, 15 Nov 2023 12:20:35 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/2] usb: misc: onboard-hub: add support for Microchip
- USB5744
-Content-Language: en-US
-To: Francesco Dolcini <francesco@dolcini.it>,
- Matthias Kaehlcke <mka@chromium.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Stefan Eichenberger <stefan.eichenberger@toradex.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- Francesco Dolcini <francesco.dolcini@toradex.com>,
- Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-References: <20231113145921.30104-1-francesco@dolcini.it>
- <20231113145921.30104-3-francesco@dolcini.it>
-From: Michal Simek <michal.simek@amd.com>
-Autocrypt: addr=michal.simek@amd.com; keydata=
- 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
- 3i3l5DA=
-In-Reply-To: <20231113145921.30104-3-francesco@dolcini.it>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR06CA0119.eurprd06.prod.outlook.com
- (2603:10a6:803:8c::48) To BYAPR12MB4758.namprd12.prod.outlook.com
- (2603:10b6:a03:a5::28)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1822C168A3;
+	Wed, 15 Nov 2023 11:34:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B64FC433C7;
+	Wed, 15 Nov 2023 11:34:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700048043;
+	bh=KVbTcjfjQMnTlb2mNWMfytXNOgiaVQnoIdzsAhE3uy8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ERSiHHhl8j2yVkH6aaroMxdbCJZPizh7yYkDyfB+l9YgtLpz3pbkB9FWIFVKOmXC/
+	 5IIFu4aAl78/OER5mGGNTYcANLLg/IaBhDeq+jTPLCHwxmpJY1HEdssTN7jSJU5++g
+	 Bzl5W2VzrwVaytmqYM9Cw3Oky8hxBhYlBzF0WMHJ/i8EuKCVy+FMVV7lx6qH3qb7Xr
+	 OMofWH1qPv1QcKSAheR7TVfXG7FAPBvLmr5ds7QSpXyG3BWOy3tkJmB6LfQGXLgeUf
+	 TzDFOsLL1RCcB1/v639WGSVQ7BPnxEQJMc0LklkIuP9B8YV4OlPTzHLF4Fmo+ku3FJ
+	 jrQ3pVlML7I5g==
+Message-ID: <aabf618e-9352-4555-9059-f213cb16c84f@kernel.org>
+Date: Wed, 15 Nov 2023 13:33:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|SA1PR12MB7412:EE_
-X-MS-Office365-Filtering-Correlation-Id: af396b7d-eee5-4326-9fc7-08dbe5cceb6e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Ev69C5N3At+Q0eXZKgEJVOHJ1OKfFoiDTlnPq4Gy8q3JRlNAuLa28XLWQSouFuAoYOJUpv0u/HtaZ7347Iqcj0wSRUGaxYE0skwz8HaQ2ifoznMUvSfOJrH5HKQYKofwRsJVNAQQLOSukatDFDUj2PWKisY/MB/LwG+ynIFYmf3Nl0uFDMHEj62orEArLNMkFBRk3KwvdWJjjib/YfK/c6Winey3mfgpBa5hKxme+hgWEfODPi4umx3+Tj9rMWKa4/9vydb36Tu9Y1xR8InScwh2n3M4NddowiOYrnHT9NFQUkHiDC2J2HjHglrr3vpECj4WHdU/6t65PHP00tdC8R+zBzt1vqLE5J7dlFQ6xtPFM91+Ooc+QbmhJ3tLZaWbhLTdJ2FY48BjaTh/t7qiArHQYPycVIJ/uNJLQeoR5QsinPzvwuyVdls4dmqcgRKdrc+GrkkQO8BAxDYz/EfucFQxdVmQdvSe9S8hHd9hhmAVr0EJf923hX77qjDCoG4u+0roZOj6pbkzfO1+x+88kTMmLkGkQ3+u0c0GMbQGFozeOGlkzZSTeDigrTxa1iPGS/SByuaGSvXWcP09f07l/IUDDssE6xqgJ9V2qv+bLZU4nqDXJfgm+kogoKbz8sKaoAzOwtduOpdjLJANtpYVPg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(366004)(376002)(396003)(39860400002)(346002)(230922051799003)(64100799003)(451199024)(186009)(1800799009)(2906002)(8936002)(54906003)(66946007)(316002)(4326008)(8676002)(66476007)(66556008)(110136005)(41300700001)(44832011)(4744005)(86362001)(5660300002)(2616005)(26005)(38100700002)(478600001)(31696002)(6486002)(36756003)(6666004)(6512007)(6506007)(31686004)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cG9NZDhGaUFqa1RDMjhYd2htdnpEODFybE01c2xLZzF0dHpYSkhhYU92Mmto?=
- =?utf-8?B?RERnRzVCWW1WSm15aVFmWDBCdUJNeFRSdWkwR2U4SUJYRzlJZUJMM0RETERz?=
- =?utf-8?B?eUhHa1Q3bG81cmFXN3NOOXpnTFpHOEJOY2FiQ3I3QWZxUVg0ZkRHQWxrZVhZ?=
- =?utf-8?B?b0g4dlBxQ3E4aW45OUlzSllLQll6WXhVOVVHdFRtUVJrSkVtcFN3Y1lVSVF4?=
- =?utf-8?B?UFR6N09DQ0NSdklLKzRQbkNwcWYvTHFMVHZyN1pQNmZIWHJ5NXordjdwdEFM?=
- =?utf-8?B?bzE5QURmS0laZDc2aC8wRnIvMzBQZ2dXUGJ6WVZhbFRYOW9Sd3BiNDkvNDZ3?=
- =?utf-8?B?MlFkSEQ2TkZTUExwaTh3U0xiQnE5SElOaGxIaEJBWUx2RDQ4U0dhMEQrdmpn?=
- =?utf-8?B?VmFPNk1sSDlxMFl2RldHd3BvNGJ0Wi9wZy90cExDQUFkZVQ2eXNRbk8xTGRo?=
- =?utf-8?B?QlpNVmlHK3lCWFJDRHZFc1JJWjBPSVpvbmhuVExWZzFkODdDY3JzQy9TY0tO?=
- =?utf-8?B?S1pYcGVCR3FGUW01MDlUSkxmR1BFVE8rZW1JQ0hva0s0UzNOZi83MkZIT0NW?=
- =?utf-8?B?YjRabWZTNDhXZXdSbmhDYWhGRlllNDlBWHlEb2kraHhpRlJmMklSTFNVdXdW?=
- =?utf-8?B?YjNWYWV1cnJZeEtOczhQVHZSa1g5MmFyRVQ1VnBUbytIZklwbW50ZlYrWCs3?=
- =?utf-8?B?OTVabnF1WWhIYU5Yb2JUNmhkZWVlRVhFc0M0YzhTUVFpY3FBRTBJemppR2kv?=
- =?utf-8?B?VUZrYzM3SFRBS1gzTm1KUUs5K3hLa3NjbTV3aEtFc1BGVTliKy9EN0JmaE5T?=
- =?utf-8?B?ajdXWTdQcm5HZ2w0L253UnNWRlBwdFB0ZXZUdERzdDlyVFYrNFh5VEFIKzFF?=
- =?utf-8?B?VTBpeTI4Tjk0RVhYWWkyWmhvbitrcG5HNlBvYjZEbzE3dENMakFRZ1VIZU9j?=
- =?utf-8?B?ZDgvMzc5aEVlZWZ4T0o3d0h2TGdlZnBDbG5va0FkeFQ2NFJtd2llRVlrbEJZ?=
- =?utf-8?B?Ykwvc0tLZWxCU2h3ZElMRE9OZmd2dTVvV0ZJU1lVSlhZTFZlYjIzNWN1S25B?=
- =?utf-8?B?cVlJdWE0emRPcWpadW4yVm9wNW1sN3VUYTFWMkN0VStFdkZiYlRIc0hQSU45?=
- =?utf-8?B?dW1JdVU1TEt3Z0ZEb0xqUnRHVS9qVkNvUC93d212aUZmNmRDckY5MENKZUlh?=
- =?utf-8?B?UXo1bGEzY3hCc1RDUUhSTXAwN0RRM1BSWU1wcGIvV0xGc3h2WDQxWTg5emk1?=
- =?utf-8?B?QVg0MUU2U290Ymk4M3J3RytKTTB3anpNWDZaTGpRYzFjYk5oK2dIMHpRYVBt?=
- =?utf-8?B?MExLc2QzUmxnbmY2NnFNU0QyaFE3L0hQb09wWUpMblE3dEJNUnpyNzc1NWsw?=
- =?utf-8?B?UlJOeVBDQjVZVVcrS2hFRUdXbWgrcXBuTjhxU2tKNWkzc1hnZkxYM2E1YnFk?=
- =?utf-8?B?ZE1tRnY2WmpKdjVLMzVDbUEzb0Z3RGRLdWpZOVcxcEJ6VHM1UERVVVFGZ3dZ?=
- =?utf-8?B?aklDU3UwZFF2N1N6TFI1SkxHOFlUSnN4RCtQVmpKek8wdGVZYkE4L0RkOWFm?=
- =?utf-8?B?THVXSE15SFpXS0VEcTBGUWFGRVVqOG9TdFpkVXJwb1hwZ3VsOUtIazAwNHdK?=
- =?utf-8?B?VExZWnk2eUtlYlUzWTNuQktIdUdXR3RyUVZVbEhYdUJjQy9uUGs3VHJZQmFv?=
- =?utf-8?B?V2NnZjlZYmVGWTNGY2FIcHgxUDBDUElXeEVrd1Z5YmY1THl1UExqTkN5bDBv?=
- =?utf-8?B?alI3ZFNqWGdpQXFWdDY5NE94bmIrTkY3L2hxRXJRYWRVYXdLSkYzaFpPeDVK?=
- =?utf-8?B?K25XRjhFZFpLR0d2dThTVkFGSHpoVnN6dzloaGIxcG5GTjFqQzVxcVdJeFdT?=
- =?utf-8?B?YnhOcUowT251T3RRQzZlbldpdmRINFNUVlJBalNNRXhTSjZBTGI5MFRKem12?=
- =?utf-8?B?VG41NXBMZVlhTUVWYnFoc1prRFFhbm9FSmFwYWk1Q29GcG1xZFZOaGFjWGsz?=
- =?utf-8?B?d2NscUhSUFRNS2Q0eE42S2dJc3VLeVRqUTNVRFBvYXBZenl1YSsyOE5uN1hz?=
- =?utf-8?B?TlJNK1BPUi93dWtKck01Sm14WVVaTUpIYmV6cXNWNmxXa0VDVml3MWw3QXJz?=
- =?utf-8?Q?PYKAQocxhE7em4ayjJ7rmlvRu?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: af396b7d-eee5-4326-9fc7-08dbe5cceb6e
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2023 11:20:49.2054
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 16pCNGPXcMPyyo6/zkTJrT15UP/SMHaO0Q0CkPlNjsdF//o4gQ6tVKuaEtu3u0tX
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7412
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/6] usb: cdns3-ti: move reg writes from probe into an
+ init_hw helper
+Content-Language: en-US
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Peter Chen <peter.chen@kernel.org>,
+ Pawel Laszczak <pawell@cadence.com>, Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com>
+ <20231113-j7200-usb-suspend-v1-2-ad1ee714835c@bootlin.com>
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20231113-j7200-usb-suspend-v1-2-ad1ee714835c@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Hi Théo,
 
-
-On 11/13/23 15:59, Francesco Dolcini wrote:
-> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+On 13/11/2023 16:26, Théo Lebrun wrote:
+> The hardware initialisation register write sequence is only used at
+> probe. To support suspend/resume with a controller losing power, we
+> must redo this sequence of writes.
 > 
-> Add support for the Microchip USB5744 USB3.0 and USB2.0 Hub.
+> Extract the register write sequence to a new cdns_ti_init_hw function to
+> reuse it later down the road, at resume.
 > 
-> The Microchip USB5744 supports two power supplies, one for 1V2 and one
-> for 3V3. According to the datasheet there is no need for a delay between
-> power on and reset, so this value is set to 0.
+> We keep the devicetree-parsing aspect of the sequence in probe & add a
+> new field in the private struct to remember the USB2 refclk rate code
+> computation result.
 > 
-> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  drivers/usb/cdns3/cdns3-ti.c | 76 ++++++++++++++++++++++++--------------------
+>  1 file changed, 41 insertions(+), 35 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
+> index 5945c4b1e11f..c331bcd2faeb 100644
+> --- a/drivers/usb/cdns3/cdns3-ti.c
+> +++ b/drivers/usb/cdns3/cdns3-ti.c
+> @@ -57,6 +57,7 @@ struct cdns_ti {
+>  	unsigned vbus_divider:1;
+>  	struct clk *usb2_refclk;
+>  	struct clk *lpm_clk;
+> +	int usb2_refclk_rate_code;
+>  };
+>  
+>  static const int cdns_ti_rate_table[] = {	/* in KHZ */
+> @@ -85,15 +86,50 @@ static inline void cdns_ti_writel(struct cdns_ti *data, u32 offset, u32 value)
+>  	writel(value, data->usbss + offset);
+>  }
+>  
+> +static void cdns_ti_init_hw(struct cdns_ti *data)
+> +{
+> +	u32 reg;
+> +
+> +	/* assert RESET */
+> +	reg = cdns_ti_readl(data, USBSS_W1);
+> +	reg &= ~USBSS_W1_PWRUP_RST;
+> +	cdns_ti_writel(data, USBSS_W1, reg);
+> +
+> +	/* set static config */
+> +	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+> +	reg &= ~USBSS1_STATIC_PLL_REF_SEL_MASK;
+> +	reg |= data->usb2_refclk_rate_code << USBSS1_STATIC_PLL_REF_SEL_SHIFT;
+> +
+> +	reg &= ~USBSS1_STATIC_VBUS_SEL_MASK;
+> +	if (data->vbus_divider)
+> +		reg |= 1 << USBSS1_STATIC_VBUS_SEL_SHIFT;
+> +
+> +	cdns_ti_writel(data, USBSS_STATIC_CONFIG, reg);
+> +	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+> +
+> +	/* set USB2_ONLY mode if requested */
+> +	reg = cdns_ti_readl(data, USBSS_W1);
+> +	if (data->usb2_only)
+> +		reg |= USBSS_W1_USB2_ONLY;
+> +
+> +	/* set default modestrap */
+> +	reg |= USBSS_W1_MODESTRAP_SEL;
+> +	reg &= ~USBSS_W1_MODESTRAP_MASK;
+> +	reg |= USBSS_MODESTRAP_MODE_NONE << USBSS_W1_MODESTRAP_SHIFT;
+> +	cdns_ti_writel(data, USBSS_W1, reg);
+> +
+> +	/* de-assert RESET */
+> +	reg |= USBSS_W1_PWRUP_RST;
+> +	cdns_ti_writel(data, USBSS_W1, reg);
+> +}
+> +
+>  static int cdns_ti_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct device_node *node = pdev->dev.of_node;
+>  	struct cdns_ti *data;
+> -	int error;
+> -	u32 reg;
+> -	int rate_code, i;
+>  	unsigned long rate;
+> +	int error, i;
 
-The patch is correct based on functionality you want to add. Would be good to 
-also add support for initialization over i2c which will change couple of things.
+Should we leave rate_code and get rid of i?
 
-Thanks,
-Michal
+>  
+>  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>  	if (!data)
+> @@ -133,8 +169,6 @@ static int cdns_ti_probe(struct platform_device *pdev)
+>  		return -EINVAL;
+>  	}
+>  
+> -	rate_code = i;
+> -
+>  	pm_runtime_enable(dev);
+>  	error = pm_runtime_get_sync(dev)>  	if (error < 0) {
+> @@ -142,39 +176,11 @@ static int cdns_ti_probe(struct platform_device *pdev)
+>  		goto err;
+>  	}
+>  
+> -	/* assert RESET */
+> -	reg = cdns_ti_readl(data, USBSS_W1);
+> -	reg &= ~USBSS_W1_PWRUP_RST;
+> -	cdns_ti_writel(data, USBSS_W1, reg);
+> -
+> -	/* set static config */
+> -	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+> -	reg &= ~USBSS1_STATIC_PLL_REF_SEL_MASK;
+> -	reg |= rate_code << USBSS1_STATIC_PLL_REF_SEL_SHIFT;
+> -
+> -	reg &= ~USBSS1_STATIC_VBUS_SEL_MASK;
+>  	data->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
+> -	if (data->vbus_divider)
+> -		reg |= 1 << USBSS1_STATIC_VBUS_SEL_SHIFT;
+> -
+> -	cdns_ti_writel(data, USBSS_STATIC_CONFIG, reg);
+> -	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+> -
+> -	/* set USB2_ONLY mode if requested */
+> -	reg = cdns_ti_readl(data, USBSS_W1);
+>  	data->usb2_only = device_property_read_bool(dev, "ti,usb2-only");
+> -	if (data->usb2_only)
+> -		reg |= USBSS_W1_USB2_ONLY;
+> -
+> -	/* set default modestrap */
+> -	reg |= USBSS_W1_MODESTRAP_SEL;
+> -	reg &= ~USBSS_W1_MODESTRAP_MASK;
+> -	reg |= USBSS_MODESTRAP_MODE_NONE << USBSS_W1_MODESTRAP_SHIFT;
+> -	cdns_ti_writel(data, USBSS_W1, reg);
+> +	data->usb2_refclk_rate_code = i;
+
+because 'i' seems temporary.
+
+>  
+> -	/* de-assert RESET */
+> -	reg |= USBSS_W1_PWRUP_RST;
+> -	cdns_ti_writel(data, USBSS_W1, reg);
+> +	cdns_ti_init_hw(data);
+>  
+>  	error = of_platform_populate(node, NULL, NULL, dev);
+>  	if (error) {
+> 
+
+-- 
+cheers,
+-roger
 
