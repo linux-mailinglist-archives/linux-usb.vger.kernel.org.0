@@ -1,159 +1,137 @@
-Return-Path: <linux-usb+bounces-2891-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2892-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C6C27EBD5A
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 08:08:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 701B67EBE19
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 08:27:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF99CB20BEF
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 07:08:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A062D1C204F9
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 07:27:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16FA13D9F;
-	Wed, 15 Nov 2023 07:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9E664683;
+	Wed, 15 Nov 2023 07:27:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PWFchHxO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MC/G7xp5"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2F52E84B
-	for <linux-usb@vger.kernel.org>; Wed, 15 Nov 2023 07:08:17 +0000 (UTC)
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F09F3
-	for <linux-usb@vger.kernel.org>; Tue, 14 Nov 2023 23:08:14 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-54744e66d27so9998a12.0
-        for <linux-usb@vger.kernel.org>; Tue, 14 Nov 2023 23:08:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700032092; x=1700636892; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sjgDYCiVZoQHvB83kALIeM9OtG/SOdaCJiN+nH0BdL0=;
-        b=PWFchHxOLnIDxyxQOW7xkwrUL4GrQYkU7STtHNvjjtK24qbbpOBVd6RqWcdQeOXWmk
-         b/XrC2McPwJpyuC2lH0eDdK/NSd2Tx5lpY51GgWlNwZDIevaZADJp7saj2I3noNTkE/N
-         bEczc7939AoxqKnpzqTF4wyrVrBX8z5OJ8wQZMYzc/ZyV75tX1WIdZ0f1URKw3v4XyF1
-         73MZaarDAWBW2PWioeAB7lWGNSxB0r6d2rWvJKZZRBe/RbWk0h6RBbKPEv35qFPTccoR
-         RM4HhthEvGjHhwnebUjwuSAuoOGAJNqOkRkaKkOK5HV7IZdlLtfuAoGg/dLexRdgIWMP
-         11iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700032092; x=1700636892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sjgDYCiVZoQHvB83kALIeM9OtG/SOdaCJiN+nH0BdL0=;
-        b=j3dQ2Bd5nyyPuBJjqv4AZj97UihtFqhmV5toKfGtE5803moUgCF3pvH9ZE/iOCAZ8m
-         l6PBWyO09h57lvpmSgkDQSOofUmXO5tU/oaJirVaKsiFFEXSX0HYIzxPLRTJ0pe20V1O
-         d0GQZxJEcW+7Kz8MEXQRTCNVF97AV6nm0LEogTXunUCCCj5aponE8/KKNkbQG4wXO3QW
-         9jgBuAqnGMOGjMIy0A1TpBlzdA5zbTqETvBjxooJrPLnvbfR0GADt0V6MaGrRpT4RbkC
-         GqhR+7SAIukSHiZMa0KNeuJbie2ji3aNRj0Lf3Uj0V/VlsgpuS7lBFxlwbxg0pPCX2eW
-         L7PA==
-X-Gm-Message-State: AOJu0YzzP34BhH0M5lwgmT0YNNGZFAk4FX6l2icTOpcmfsrnGHqiqk8G
-	vJOCuPUavVVcxj1JaP1ZIeDcb0IZG/a11Y728NaM1QJIoNoc2TzLgaGXoGG2
-X-Google-Smtp-Source: AGHT+IEe/GNSXejvYayQJoBdKOorcpj9IYPMyfVBFxUm3h3zM4PXIN9nobRvzoCrHFQpIYokeDhIZ64IC16bT6CHdfw=
-X-Received: by 2002:a05:6402:1948:b0:546:d479:9c90 with SMTP id
- f8-20020a056402194800b00546d4799c90mr69953edz.5.1700032092427; Tue, 14 Nov
- 2023 23:08:12 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905ACFBE9;
+	Wed, 15 Nov 2023 07:27:26 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F418E;
+	Tue, 14 Nov 2023 23:27:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700033243; x=1731569243;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CVjv4ZrpGDJbz1IrUPzrrK9YuYaL0aZL0iiRA1BpOhQ=;
+  b=MC/G7xp5dXyn/r1I/bX8hWEJMe8OCrmnf8fCf44PqgNoRwBwTx/45u7r
+   39au94ODFUdIVHvofCB55hMEaiuve9rb5XlPJTnxkP1AvjIV3JqQCboDf
+   UQ3h2ZkQ52O2gVUlhC9vq+RkPxNAM+8nPcZTLbpgx4V0yMxohu/9KOvIC
+   xrZFx5WGLeO3CdQXS3BOdyiyHXFM1qFc1Yn2OW65AlNBv782/GP9ITh/T
+   4u8uOf6qMzphbI3u+z2wtZnZ20Cq2iEsYF9o33BaG5ExXOUzv1NrIKig0
+   r3IGtVy7k/Sg4qPzWAHCXgqWmPzfyiMUm5jFxnOChVplrEF1PkSSp9tHs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10894"; a="390624057"
+X-IronPort-AV: E=Sophos;i="6.03,304,1694761200"; 
+   d="scan'208";a="390624057"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 23:27:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10894"; a="714800758"
+X-IronPort-AV: E=Sophos;i="6.03,304,1694761200"; 
+   d="scan'208";a="714800758"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga003.jf.intel.com with SMTP; 14 Nov 2023 23:27:17 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 15 Nov 2023 09:27:16 +0200
+Date: Wed, 15 Nov 2023 09:27:16 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Mark Gross <markgross@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] usb: typec: change altmode SVID to u16 entry
+Message-ID: <ZVRy1L5JEN3Nda81@kuha.fi.intel.com>
+References: <20231113221528.749481-1-dmitry.baryshkov@linaro.org>
+ <20231113221528.749481-3-dmitry.baryshkov@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231031093921.755204-1-guanyulin@google.com> <f75d6cd2-fa9f-4820-969f-2a8839d78c9e@rowland.harvard.edu>
- <CAOuDEK0NcijUKAL3fGtO=Ks+Y38TRhJcVx+ff-QUyUA0LcQ1Bw@mail.gmail.com> <3fe5414a-570f-4bfa-aa2f-909d7799551b@rowland.harvard.edu>
-In-Reply-To: <3fe5414a-570f-4bfa-aa2f-909d7799551b@rowland.harvard.edu>
-From: Guan-Yu Lin <guanyulin@google.com>
-Date: Wed, 15 Nov 2023 15:08:01 +0800
-Message-ID: <CAOuDEK3UuVGgP63NG9HtuJ0D2ERZsFGBwF5+GNynk=P7zSVUhg@mail.gmail.com>
-Subject: Re: [PATCH] rpm: pm: enable PM_RPM_EXCEPTION config flag
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, gregkh@linuxfoundation.org, len.brown@intel.com, 
-	pavel@ucw.cz, heikki.krogerus@linux.intel.com, mkl@pengutronix.de, 
-	hadess@hadess.net, mailhol.vincent@wanadoo.fr, ivan.orlov0322@gmail.com, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, pumahsu@google.com, raychi@google.com, 
-	albertccwang@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231113221528.749481-3-dmitry.baryshkov@linaro.org>
 
-On Wed, Nov 8, 2023 at 11:56=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Wed, Nov 08, 2023 at 04:45:43PM +0800, Guan-Yu Lin wrote:
-> > Thanks for the questions. Let me first introduce my motivation for
-> > proposing this feature. We can discuss the implementation details later=
-.
-> >
-> > Motivation:
-> > Currently, system PM operations always override runtime PM operations.
-> > As runtime PM reflects the power status of devices, there is a
-> > possibility that runtime PM states that a device is in use, but system
-> > PM decides to suspend it. Up to now, we have assumed that a device can'=
-t
-> > function without resources from the system, so the device should acquir=
-e
-> > a wakelock to prevent this from happening. However, what if the device
->
-> [From the fact that you mention wakelocks, I assume that you're trying
-> to implement something for Android systems rather than Linux systems
-> in general.]
->
-> > does not need the system's support to function? Or only needs limited
-> > resources (e.g., only limited power source or clock) to function? In th=
-is
-> > situation, we would like to keep the device on but allow the system to
-> > suspend. This is an example where we would like devices to follow runti=
-me
-> > PM rather than system PM.
->
-> To put it more simply, you want a way to leave some devices in an active
-> state while the rest of the system is suspended.  It's not clear why you
-> have dragged runtime PM into the discussion (apart from the obvious fact
-> that you won't want to keep a device active if it isn't active already).
->
+On Tue, Nov 14, 2023 at 12:13:28AM +0200, Dmitry Baryshkov wrote:
+> As stated in the changelog for the commit 7b458a4c5d73 ("usb: typec: Add
+> typec_port_register_altmodes()"), the code should be adjusted according
+> to the AltMode bindings. As the SVID is 16 bits wide (according to the
+> USB PD Spec), use fwnode_property_read_u16() to read it.
+> 
+> Acked-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-The determination of which device should remain active when the system
-suspends can be based on various factors. One straightforward approach
-is to consider the device's runtime pm state. Alternatively, we could
-explore more elaborate techniques that consider additional criteria.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> This sounds like a major change, not something to be done with a simple
-> override.  You should discuss it with Rafael Wysocki and the linux-pm
-> mailing list before trying to implement anything.
->
-> > Feature Supported:
-> > 1. Devices could control the priority of system PM and runtime PM durin=
-g
-> >    runtime.
->
-> This seems like a totally unnecessary side issue.  Forget about runtime
-> PM for the time being and concentrate instead on which devices you want
-> to keep active.
->
-> > 2. The control should be at the device level, meaning that different
-> >    devices should control their own priorities.
-> >
-> > Goal of This Patch:
-> > 1. Design a framework to support features above.
-> > 2. Apply it into usb for demonstration.
->
-> You may find that it is easier (and less work in the long run) to design
-> the general framework and get it working than to concentrate on one
-> particular subsystem.
->
-> Alan Stern
+> ---
+>  drivers/platform/x86/intel/chtwc_int33fe.c | 2 +-
+>  drivers/usb/typec/class.c                  | 5 +++--
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/intel/chtwc_int33fe.c b/drivers/platform/x86/intel/chtwc_int33fe.c
+> index 848baecc1bb0..93f75ba1dafd 100644
+> --- a/drivers/platform/x86/intel/chtwc_int33fe.c
+> +++ b/drivers/platform/x86/intel/chtwc_int33fe.c
+> @@ -136,7 +136,7 @@ static const struct software_node altmodes_node = {
+>  };
+>  
+>  static const struct property_entry dp_altmode_properties[] = {
+> -	PROPERTY_ENTRY_U32("svid", 0xff01),
+> +	PROPERTY_ENTRY_U16("svid", 0xff01),
+>  	PROPERTY_ENTRY_U32("vdo", 0x0c0086),
+>  	{ }
+>  };
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 6ec2a94e6fad..4251d44137b6 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -2238,7 +2238,8 @@ void typec_port_register_altmodes(struct typec_port *port,
+>  	struct typec_altmode_desc desc;
+>  	struct typec_altmode *alt;
+>  	size_t index = 0;
+> -	u32 svid, vdo;
+> +	u16 svid;
+> +	u32 vdo;
+>  	int ret;
+>  
+>  	altmodes_node = device_get_named_child_node(&port->dev, "altmodes");
+> @@ -2246,7 +2247,7 @@ void typec_port_register_altmodes(struct typec_port *port,
+>  		return; /* No altmodes specified */
+>  
+>  	fwnode_for_each_child_node(altmodes_node, child) {
+> -		ret = fwnode_property_read_u32(child, "svid", &svid);
+> +		ret = fwnode_property_read_u16(child, "svid", &svid);
+>  		if (ret) {
+>  			dev_err(&port->dev, "Error reading svid for altmode %s\n",
+>  				fwnode_get_name(child));
+> -- 
+> 2.42.0
 
-The big picture is "a way to leave some devices in an active state
-while the rest of the system is suspended", I think it could be
-separated into:
-(1) Each system should be able to choose which device(s) is included
-    in this feature.
-(2) For devices chosen in (1), each of them should have the flexibility
-    to determine when it will not suspend with the system, not just
-    always being active when the system suspends.
-
-Regards,
-Guan-Yu
+-- 
+heikki
 
