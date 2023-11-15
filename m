@@ -1,176 +1,108 @@
-Return-Path: <linux-usb+bounces-2903-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2904-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BD697EC784
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 16:38:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 357FF7EC848
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 17:17:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E39C1C20B70
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 15:38:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3745281440
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 16:17:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CA603BB27;
-	Wed, 15 Nov 2023 15:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6361033CD8;
+	Wed, 15 Nov 2023 16:17:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CuxKxtnH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tyUzCfXU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F342FE2A
-	for <linux-usb@vger.kernel.org>; Wed, 15 Nov 2023 15:38:32 +0000 (UTC)
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB38A1A3
-	for <linux-usb@vger.kernel.org>; Wed, 15 Nov 2023 07:38:29 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5afbdbf3a19so78966547b3.2
-        for <linux-usb@vger.kernel.org>; Wed, 15 Nov 2023 07:38:29 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E37333CCE
+	for <linux-usb@vger.kernel.org>; Wed, 15 Nov 2023 16:17:21 +0000 (UTC)
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D083CC
+	for <linux-usb@vger.kernel.org>; Wed, 15 Nov 2023 08:17:20 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-507962561adso10772104e87.0
+        for <linux-usb@vger.kernel.org>; Wed, 15 Nov 2023 08:17:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700062709; x=1700667509; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DrqmeQ1b3jWvPwiKhEDKttHMvlM+GcVpLzujKePYQsk=;
-        b=CuxKxtnH4kzYw+M0xHyaxgP5+GGYXJ70eWVH8/FRkTEnTsxVm22mn6BbJP9uUi03lY
-         0tAwykSybKQkXS90Wv/4gw0D4VBWZ/e9Ka9Wc9cG9q7jF7d/q79P4Y2gZ2nl/m2dZpbi
-         VK+ROHI9Za+s/gCknoD7RxhFNCR957NT1tlARx9LTG8Y9ROPFo0NXLggv++9mTpPg/1i
-         jlkWFnlgKKWCFFjjGmxu6z79kJpvOkEWm2Rc31aB5VyCe0E6M+ThHd+muRI5k+j4ThYG
-         zOd7zCSNhrHCMIielG9tp4KAMxKWW3z3z7aO+t6wPig1gOFM4cZsVrccaTidEy3jpI42
-         LbnA==
+        d=linaro.org; s=google; t=1700065038; x=1700669838; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3qRdRIQB+SyLD/2SSSnhRbTBC1T+kT3kqoQQAJb6ZGk=;
+        b=tyUzCfXUfjuyWxENabaWJnV2OSyvqNR7EAWA0zT2WntfZHI3s6xG04BXO/R8sk/+YD
+         MXsDRtoBW2LdtRzcmpIk/h/N9xBOCTRkC6sdyqv+pcMpwCWHI8RpfNKosESC9/ca/q1T
+         /mV5SXOA5FvbpJ7WCnt74/AjFRRi1SGDG3deh979EwjPtLFfjpVWCDj3vdD3F6bNhZE8
+         Y+yBlGGVcPbx3gEjSH2NvfnM1WQF5W6jm/9FdhGandDK5j7w1DNn1xFx3okl1Thzft/7
+         XAXqHup/En7RKolTYnwn328dVHmm+2BK/1oHwFX3Z9qqr/bV/yWaUAAruY3OgnZ0LCIB
+         nZhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700062709; x=1700667509;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DrqmeQ1b3jWvPwiKhEDKttHMvlM+GcVpLzujKePYQsk=;
-        b=uB2RRS3vNHQtL04LWWNS2ZWF5Bj8FGg0aocffenuS1xg5YVA/J+3BlOK2NEJslAt6k
-         ZYcH4J8UJt2OSvyPkDSsP280MVpbzPg6f7PBk+1PE5BgEMF+WnnU7JeHC46TQPUI3QCB
-         K4TAulaJaoUqfG9OwWLkfMS8R3Qsk8l63Ksc9ihLsLAgogawUT8B/O8nXkKicbQDXusw
-         fXeVvVEZyTeE/i5dQyFno+6JqATgtvrAeK92AJgSDjFtBu2t1MZOQ4gTkW2MoU74H+AE
-         NY9tO8BuFTGxTEuLuo69u+vyVoYaIrKaeTPzLMhILQXYMDeEjkrQEGhx7Khk48RPHmeZ
-         RVpg==
-X-Gm-Message-State: AOJu0YzC4iz70EHdMhlKr0NH5rudj3pCelx7LsuhsHhUGiygCtjCXhEi
-	uiOwf8pE92Xi6mm9ggOQnfg/nFWJERRXg8yAD6cQ+g==
-X-Google-Smtp-Source: AGHT+IHle69HGMM73axSbTrxTEchdRM11aGWeB2nuHgAcv5unqlb5d7O8Uri7BhbV0Cqu/PwgfL+Pytmev0WUwA2OgM=
-X-Received: by 2002:a0d:e855:0:b0:5a7:f002:4fe4 with SMTP id
- r82-20020a0de855000000b005a7f0024fe4mr14385322ywe.23.1700062709022; Wed, 15
- Nov 2023 07:38:29 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700065038; x=1700669838;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3qRdRIQB+SyLD/2SSSnhRbTBC1T+kT3kqoQQAJb6ZGk=;
+        b=oLscovPlD5VmnoxOWFSs+bQ/5Wptcphxz2S7yWN8LKi8yh9ddZBe1Za16tmSB68joR
+         TWXlxQ289POuoOGJc+iwPb3wbrj7dDXzjCL2obU+EN0z4m6sZOzzFJumM18+U79ioBBf
+         P2fCkH0MF84M8Y/X0rubE+joOy02so58KkmDx/hEUJ8NdhcB+O0IggCLKbejdoETZh06
+         Khc0LfbM/r+fTTt/C4L4W3FK/2sLON29kyrX+9sMkqUGShFjjj9F1E6qlc08zCqfYf7x
+         A3lnTPjKMWL6pFZJ5Zg6nwBN7M4zpw15etJHtRVLfOIFMr2QHTmp9c7NntC8LMVdKuxe
+         kikw==
+X-Gm-Message-State: AOJu0YyCV35PozIms6aO2HBaSOokcRA0wjemkPe2nZ/rZCH1KxCcH9fD
+	6fYXo+7FI8nqxhf72FysOJzNaw==
+X-Google-Smtp-Source: AGHT+IGDqUKQj8i4ksmCvgTifMSpJYI6UUhnm2dFhWerlnxd1hBxKHSzpcMr+i8toBc2SR9Oy0cD/w==
+X-Received: by 2002:ac2:43a3:0:b0:509:3bba:e8a with SMTP id t3-20020ac243a3000000b005093bba0e8amr8552355lfl.39.1700065038548;
+        Wed, 15 Nov 2023 08:17:18 -0800 (PST)
+Received: from [172.30.204.150] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id x17-20020ac24891000000b00507962dd2aesm1692517lfc.207.2023.11.15.08.17.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Nov 2023 08:17:18 -0800 (PST)
+Message-ID: <1df726c4-745c-4b41-be04-d3081525210d@linaro.org>
+Date: Wed, 15 Nov 2023 17:17:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231113111249.3982461-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20231113111249.3982461-1-andriy.shevchenko@linux.intel.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 15 Nov 2023 16:37:52 +0100
-Message-ID: <CAPDyKFrZdHseZ6udjNSdOG7hwK82G1wT30j39A1KwKBAaY_cMg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] treewide, spi: Get rid of SPI_MASTER_HALF_DUPLEX
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>, Yang Yingliang <yangyingliang@huawei.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Mark Brown <broonie@kernel.org>, 
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-spi@vger.kernel.org, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: qrb5165-rb5: use u16 for DP
+ altmode svid
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Mark Gross <markgross@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20231113221528.749481-1-dmitry.baryshkov@linaro.org>
+ <20231113221528.749481-4-dmitry.baryshkov@linaro.org>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20231113221528.749481-4-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: *
 
-On Mon, 13 Nov 2023 at 12:15, Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> The SPI_MASTER_HALF_DUPLEX is the legacy name of a definition
-> for a half duplex flag. Since all others had been replaced with
-> the respective SPI_CONTROLLER prefix get rid of the last one
-> as well. There is no functional change intended.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
 
+On 11/13/23 23:13, Dmitry Baryshkov wrote:
+> Follow the bindings and use 16-bit value for AltMode SVID instead of
+> using the full u32.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->  drivers/input/rmi4/rmi_spi.c             | 2 +-
->  drivers/mmc/host/mmc_spi.c               | 2 +-
->  drivers/net/ethernet/micrel/ks8851_spi.c | 4 ++--
->  drivers/usb/gadget/udc/max3420_udc.c     | 2 +-
->  include/linux/spi/spi.h                  | 2 --
->  5 files changed, 5 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/input/rmi4/rmi_spi.c b/drivers/input/rmi4/rmi_spi.c
-> index 852aeb0b2c07..07c866f42296 100644
-> --- a/drivers/input/rmi4/rmi_spi.c
-> +++ b/drivers/input/rmi4/rmi_spi.c
-> @@ -375,7 +375,7 @@ static int rmi_spi_probe(struct spi_device *spi)
->         struct rmi_device_platform_data *spi_pdata = spi->dev.platform_data;
->         int error;
->
-> -       if (spi->master->flags & SPI_MASTER_HALF_DUPLEX)
-> +       if (spi->master->flags & SPI_CONTROLLER_HALF_DUPLEX)
->                 return -EINVAL;
->
->         rmi_spi = devm_kzalloc(&spi->dev, sizeof(struct rmi_spi_xport),
-> diff --git a/drivers/mmc/host/mmc_spi.c b/drivers/mmc/host/mmc_spi.c
-> index cc333ad67cac..b0cccef4cfbf 100644
-> --- a/drivers/mmc/host/mmc_spi.c
-> +++ b/drivers/mmc/host/mmc_spi.c
-> @@ -1322,7 +1322,7 @@ static int mmc_spi_probe(struct spi_device *spi)
->         /* We rely on full duplex transfers, mostly to reduce
->          * per-transfer overheads (by making fewer transfers).
->          */
-> -       if (spi->master->flags & SPI_MASTER_HALF_DUPLEX)
-> +       if (spi->master->flags & SPI_CONTROLLER_HALF_DUPLEX)
->                 return -EINVAL;
->
->         /* MMC and SD specs only seem to care that sampling is on the
-> diff --git a/drivers/net/ethernet/micrel/ks8851_spi.c b/drivers/net/ethernet/micrel/ks8851_spi.c
-> index 70bc7253454f..7c41623dac90 100644
-> --- a/drivers/net/ethernet/micrel/ks8851_spi.c
-> +++ b/drivers/net/ethernet/micrel/ks8851_spi.c
-> @@ -156,7 +156,7 @@ static void ks8851_rdreg(struct ks8851_net *ks, unsigned int op,
->
->         txb[0] = cpu_to_le16(op | KS_SPIOP_RD);
->
-> -       if (kss->spidev->master->flags & SPI_MASTER_HALF_DUPLEX) {
-> +       if (kss->spidev->master->flags & SPI_CONTROLLER_HALF_DUPLEX) {
->                 msg = &kss->spi_msg2;
->                 xfer = kss->spi_xfer2;
->
-> @@ -180,7 +180,7 @@ static void ks8851_rdreg(struct ks8851_net *ks, unsigned int op,
->         ret = spi_sync(kss->spidev, msg);
->         if (ret < 0)
->                 netdev_err(ks->netdev, "read: spi_sync() failed\n");
-> -       else if (kss->spidev->master->flags & SPI_MASTER_HALF_DUPLEX)
-> +       else if (kss->spidev->master->flags & SPI_CONTROLLER_HALF_DUPLEX)
->                 memcpy(rxb, trx, rxl);
->         else
->                 memcpy(rxb, trx + 2, rxl);
-> diff --git a/drivers/usb/gadget/udc/max3420_udc.c b/drivers/usb/gadget/udc/max3420_udc.c
-> index 2d57786d3db7..89e8cf2a2a7d 100644
-> --- a/drivers/usb/gadget/udc/max3420_udc.c
-> +++ b/drivers/usb/gadget/udc/max3420_udc.c
-> @@ -1201,7 +1201,7 @@ static int max3420_probe(struct spi_device *spi)
->         int err, irq;
->         u8 reg[8];
->
-> -       if (spi->master->flags & SPI_MASTER_HALF_DUPLEX) {
-> +       if (spi->master->flags & SPI_CONTROLLER_HALF_DUPLEX) {
->                 dev_err(&spi->dev, "UDC needs full duplex to work\n");
->                 return -EINVAL;
->         }
-> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> index 255a0562aea5..7b4baff63c5c 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -1638,8 +1638,6 @@ spi_transfer_is_last(struct spi_controller *ctlr, struct spi_transfer *xfer)
->  /* Compatibility layer */
->  #define spi_master                     spi_controller
->
-> -#define SPI_MASTER_HALF_DUPLEX         SPI_CONTROLLER_HALF_DUPLEX
-> -
->  #define spi_master_get_devdata(_ctlr)  spi_controller_get_devdata(_ctlr)
->  #define spi_master_set_devdata(_ctlr, _data)   \
->         spi_controller_set_devdata(_ctlr, _data)
-> --
-> 2.43.0.rc1.1.gbec44491f096
->
+Fixes: b3dea914127e ("arm64: dts: qcom: qrb5165-rb5: enable DP altmode")
+
+(because it was previously not compliant with bindings)
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
 
