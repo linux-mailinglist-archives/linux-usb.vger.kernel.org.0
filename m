@@ -1,100 +1,139 @@
-Return-Path: <linux-usb+bounces-2906-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2907-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83ED07EC891
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 17:29:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0006A7EC9DA
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 18:43:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12E06B20BC7
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 16:29:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CC16B20BDF
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Nov 2023 17:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 692F93BB45;
-	Wed, 15 Nov 2023 16:29:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086E241238;
+	Wed, 15 Nov 2023 17:43:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VlZd5o+L"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Di5VZkLO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90AAEA930;
-	Wed, 15 Nov 2023 16:29:02 +0000 (UTC)
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EB0E6;
-	Wed, 15 Nov 2023 08:29:01 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-7781b176131so367239585a.1;
-        Wed, 15 Nov 2023 08:29:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700065740; x=1700670540; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qx3vpjTb9V9uPnz9xtV/2168OTukcHSXztsVSOdsyO0=;
-        b=VlZd5o+LjeCp8ta8ah8fxWow8Zry7xnqCfAcYu7GkUypmoMP/1VzJ+tYPkj5d2X5ra
-         qLh+ZV1SUOTnQ3YCRyUMHXuJekYIWrpp3n7HuOy5A9T73K2YxGlRl9mKMXJbULZ+XHv1
-         mfwrcBBRaR5d7LoN+6yUWl+md49LF3lY2e7kj+TqLS0igdkB3sHeqITrbPLwBpAJotoA
-         k+arGp3ENjWBFzVycke9P+z89646WRGcdw+aD3gRE8oKuHlPhuJFoGBBetK0Kol9S3Bi
-         s4p0M0nIEd3QPOIgLW+9Uie6Yl1NYSebQFwWbIDWgpMTzs7c0wUYgcw7l+hA9EZU1eNe
-         iQpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700065740; x=1700670540;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qx3vpjTb9V9uPnz9xtV/2168OTukcHSXztsVSOdsyO0=;
-        b=TeY7IyN08jenKfTsO151sQV2dTW+JxLLqNbN2s3eSVgBmWmgqxY62Y0PXff5Lpzf2+
-         AsOTtHpCnQ5TJHtkRUdiOdGs3aTULZ2KujrhRrLP4QfPwdn2BdibQ21jMcahrphAIVJL
-         F3jCu2bjlGhuFlSR5q/SPSChbxkZyZFva6YI26E1feGGxBfCyNgwM4DeNxvtPk+WN5XH
-         soBUCKiCAjP8LkTpipMjrsom4N+R4eOGJ128HuR694Hzk4s8NHIHWCjkNe+xtQTJARU6
-         2XY6qiKwRRDJHjQYF9KFDfBKt/55Km5MIzaOsI//BGX2HovQdRKOrW8i4FVisMhVl0gb
-         Y08Q==
-X-Gm-Message-State: AOJu0Yw4GyiHUdZCCu7p0IhYey4B7XJqnMA4odXPzhGMiw7Hv1EkNf/J
-	dIA+C5DvDWyhES+deXUH00U=
-X-Google-Smtp-Source: AGHT+IF5NKClhj+lvUnav8OhyXMsa/XqFEZyXxK2HRXBTeJq9vJesW4uPM1z3QXPUZ+PqbfFyQPXLQ==
-X-Received: by 2002:a05:620a:24ca:b0:776:f5bb:f2fc with SMTP id m10-20020a05620a24ca00b00776f5bbf2fcmr7066286qkn.9.1700065740456;
-        Wed, 15 Nov 2023 08:29:00 -0800 (PST)
-Received: from google.com ([12.186.190.2])
-        by smtp.gmail.com with ESMTPSA id x3-20020a05620a0b4300b0076cda7eab11sm3550801qkg.133.2023.11.15.08.28.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Nov 2023 08:28:59 -0800 (PST)
-Date: Wed, 15 Nov 2023 16:28:54 +0000
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Yang Yingliang <yangyingliang@huawei.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mark Brown <broonie@kernel.org>, linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-spi@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH v1 1/1] treewide, spi: Get rid of SPI_MASTER_HALF_DUPLEX
-Message-ID: <ZVTxxrBgR708zC03@google.com>
-References: <20231113111249.3982461-1-andriy.shevchenko@linux.intel.com>
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D02E0;
+	Wed, 15 Nov 2023 09:43:05 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AFFvdph011122;
+	Wed, 15 Nov 2023 17:42:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=UOYPIh1LCyb4tgGeTSqamCZ1AYWTX2DwLwuQtmS3xnM=;
+ b=Di5VZkLOiNUNShnK0+kkio45XMtR+l6mKWIB+GPlkMV7aTP5D7rdYFraL/qEvTvRcTx6
+ EJ9p8yq6PpF+AJFaVmQoS4SW1ixX4WIuza4b5lLoNkehShvf9u7gKN9GZv8tQe4I8M0Y
+ uSwdsLxUJ/k7NgK0CI+rc4MIwJ7JCAslTjGb2XzvcIQI+zi/kaQZopUhRxMXKWvZfKCy
+ SRrKWyy+TzkHAZYpVmKUXifISRQuBl+5Ymdw1k3fn6/s0IK60i7Mw9e6d/XggMiMkOaq
+ LvMBbtYamfQhAxjGZsngc7aiB1ioMrOUbRSKRl3W/jVXhEBqrnY9BUsyMN3LqKj2bjuX KA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ucfkaakv2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 Nov 2023 17:42:37 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AFHgaT9000825
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 Nov 2023 17:42:36 GMT
+Received: from [10.216.42.195] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Wed, 15 Nov
+ 2023 09:42:30 -0800
+Message-ID: <6d4d959c-b155-471b-b13d-f6fda557cfe0@quicinc.com>
+Date: Wed, 15 Nov 2023 23:12:16 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231113111249.3982461-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 05/10] usb: dwc3: qcom: Refactor IRQ handling in QCOM
+ Glue driver
+To: Johan Hovold <johan@kernel.org>
+CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy
+ Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad
+ Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi
+	<balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
+References: <20231007154806.605-1-quic_kriskura@quicinc.com>
+ <20231007154806.605-6-quic_kriskura@quicinc.com>
+ <ZTJ_T1UL8-s2cgNz@hovoldconsulting.com>
+ <14fc724c-bc99-4b5d-9893-3e5eff8895f7@quicinc.com>
+ <ZTY7Lwjd3_8NlfEi@hovoldconsulting.com>
+ <cabf24d0-8eea-4eb5-8205-bf7fe6017ec2@quicinc.com>
+ <ZTZ-EvvbuA6HpycT@hovoldconsulting.com>
+ <fb5e5e1d-520c-4cbc-adde-f30e853421a1@quicinc.com>
+ <ZTdqnSHq_Jo8AuPW@hovoldconsulting.com>
+ <04615205-e380-4719-aff1-f32c26004b14@quicinc.com>
+ <ZUz4RD3MjnLlPn6V@hovoldconsulting.com>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZUz4RD3MjnLlPn6V@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: cdzl9_JGs7djGz1RV66vjjiOiNGOwtwV
+X-Proofpoint-GUID: cdzl9_JGs7djGz1RV66vjjiOiNGOwtwV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-15_17,2023-11-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1015 spamscore=0 bulkscore=0
+ phishscore=0 mlxscore=0 mlxlogscore=365 priorityscore=1501 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311150137
 
-On Mon, Nov 13, 2023 at 01:12:49PM +0200, Andy Shevchenko wrote:
-> The SPI_MASTER_HALF_DUPLEX is the legacy name of a definition
-> for a half duplex flag. Since all others had been replaced with
-> the respective SPI_CONTROLLER prefix get rid of the last one
-> as well. There is no functional change intended.
+
+Hi Johan,
+
+> Are you sure there's no support for hs_phy_irq also in the "femto" PHYs
+> and that it's just that there is currently no driver support for using
+> them?
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> And why is it defined if there is truly no use for it?
+> 
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com> # for input
+We had an internal sync up with HW folks and here is some baseline 
+suggestions we received:
 
-Thanks.
+If DP/DM interrupts are defined, then that is the preferred path to 
+used, irrespective if HS Phy irq is defined or not / or whether it is 
+Femto / QUSB2 target. There is no target that has femto phy but misses 
+DP/DM today.
 
--- 
-Dmitry
+For cases like sdm660/msm8998/msm8953/msm8956, these targets use 
+hs_phy_irq only and don't rely on DP/DM. So we cannot remove the binding 
+in entirety.
+
+> Also, if hs_phy_irq and dp/dm_phy_irq were mutually exclusive, why does
+> the following Qualcomm SoCs define all three?
+> 
+
+HS Phy Irq is redundant or functionality is mutually exclusive in this 
+case. If there are targets that define all three, then we need to update 
+those to only utilize DP/DM interrupts.
+
+Regards,
+Krishna,
 
