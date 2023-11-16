@@ -1,206 +1,175 @@
-Return-Path: <linux-usb+bounces-2913-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2914-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D28F17EDB20
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 06:20:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 094137EDB5E
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 06:59:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C93A281018
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 05:20:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 804F11F2391F
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 05:59:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5DD2C2F0;
-	Thu, 16 Nov 2023 05:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64967D530;
+	Thu, 16 Nov 2023 05:59:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xHj/ry9q"
+	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="lyf972i9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4279318D
-	for <linux-usb@vger.kernel.org>; Wed, 15 Nov 2023 21:19:59 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-54744e66d27so8291a12.0
-        for <linux-usb@vger.kernel.org>; Wed, 15 Nov 2023 21:19:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700111997; x=1700716797; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sGYprdScTqWADbZjmkaUNZP95viu5EuGZmBuv/KDyEs=;
-        b=xHj/ry9quiFe7fFr7/dcD75iH42lyO22uCdiMwK7cJc4K4eYTyNdgSo66xyf7lB4u/
-         ukGQSUvVNki35wS8gH+P2SwTYjyPxAsnm8YbBgFIo2sfeIPlozbLM+IwR2/r82saYhme
-         nYRaGvFg9Xm9aLI1nIxRzk3LBf7Fnoc1j1+X+qiHZ6YLn9bNfJ+v4QlDA3Ic+AiGH/XU
-         bq4BsWTMLZe0xrtPCpbULcKmoJ5pDqP9pZ75br2pA+0ukXGRPqt6CiY64hwAfEtVoos9
-         AGSW1LfkpwARMLIYQIRNJnH9rL20I7X66jQhXC/kfaFP/B99da4hrLWB4RFgjcHSYP/C
-         STTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700111997; x=1700716797;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sGYprdScTqWADbZjmkaUNZP95viu5EuGZmBuv/KDyEs=;
-        b=EiuyTUsq00KifJmnihoGGHHiFXUjRiLDqzSXgfa+0prIHke+upSyxkTuQe65HZPAa8
-         7sad0wzI8XwaTbI0EviqVDX/Rz2ixuiTyRbuZBd3xThb1eaiFg6A2wQ016rVceNoNWjF
-         y2bhqvHbQxTuI+lSdLT8vwha0wqcxum0RAsOoJ74prFKp0G1Amwb/DnVGQ1hYRku7YfE
-         MQs0cH+lAVYPFXAPb4+sgbFO7+by5S0f39iaKNrEJhrO81R445c9cw6SPKsNnUcEvc0Y
-         zmSAzFAxfxC0bKLl7ki6oKWtccYG3QQW9oGHgbXi7nw5L5iUUd9YGwlxFvp/y6tUrX0u
-         2g8w==
-X-Gm-Message-State: AOJu0YzEy4FRPby+6N0yromzhXPpAtg4cHRls1E7npDnlKLqtFL2rt4c
-	A77VfdEDP3Ck8WsSSrSUjdAZ5QUjNhXSo7zmXSSp20gw/o25X/T6D2BNBQ==
-X-Google-Smtp-Source: AGHT+IE0jGwich417SoKNosePdtNllvU6BPMZJ2AvjLtmwsojkI2cUVJSxChDYvpfOsmQdGRjaRt0sjFc65ofzF6pdU=
-X-Received: by 2002:aa7:c592:0:b0:545:2921:d217 with SMTP id
- g18-20020aa7c592000000b005452921d217mr68226edq.6.1700111997441; Wed, 15 Nov
- 2023 21:19:57 -0800 (PST)
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2105.outbound.protection.outlook.com [40.107.114.105])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2B01A3;
+	Wed, 15 Nov 2023 21:59:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nsAv1fAEYSTpGWGnNo0AZvnNo/13H2JtRbIsmHFfsQVV4BK2O2YlcfJndP5lZbFOAYekUi1/BCyzsrPnqnalVBxwh4/alUoQ9gk1enAgPM7zJKDG7K92hYQE5+IOHtkUojZLd6IvBuTer4wYLjECliy6F0xuF8fn3J/bapkoQbxAj1JBGQdFzkUcCrhkQchLd8CzsOLDRHmRdbMZGMGoqSVsB2dAP3afwac83MJMK61hzAxNfxl7BBcgPoF5LlROr2q4Wg8ZTIYwzDQ7NwJoqZT1MRLCJrQTTXBuy4WEOBn4XQ0ffVGNVgvlP0Y3YozWACpj7AXZUUKuVeeVH71oCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uogyPzWN4W6sR+6B+N74xRy2B1LJ3cOFGzBPI8LhAjs=;
+ b=YwScFpT4wzXesKnS7AjHAq+HCRvGZILDM9B9qCT6nFLUQAG/MJsvAnp1njMUXRCSdmiq8MuGIypKFy0Ix4oMNbSPG3rNRCDXwNSXGXkqNQKvk06JS+AoEAjddZWCzeOgDBZypkNuSQgEezlAPTL4MHt5x0JUgRMAbqSxOhblcarrTBZCVxRt5ByW1x+iv6jVIIXiYAGiR1oWunqQ69WOyNe+755OxViV9kC+vOy6tNCoOuz4lhE3gPueUUjYFOy+opoSmgFcWvgYW14iz/nb11t1wD0r/Q9RbXhRZhGq5BPBwmD9OnsjsomxGGw/4Ltb0aHUe9CxERKW2KcVNmSfww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uogyPzWN4W6sR+6B+N74xRy2B1LJ3cOFGzBPI8LhAjs=;
+ b=lyf972i9Xl0m+Xl1Ilkoh3dno49MlGyE5pZ0bRAHd8v2/+0FjL0TFppb29lG6cXuypk82aT4c9LHp5cPMKcic9BghVaWOcIYpCSP8J/EPkBNdpVshO8bKTwIjod376L9ZoUHpS05wFSiLq2pfTfAkxlGHnwZJK76AlDaLW9HLoo=
+Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
+ (2603:1096:404:8028::13) by OS3PR01MB8089.jpnprd01.prod.outlook.com
+ (2603:1096:604:1bf::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.21; Thu, 16 Nov
+ 2023 05:59:42 +0000
+Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
+ ([fe80::50f5:eb2b:710a:b7c7]) by TYBPR01MB5341.jpnprd01.prod.outlook.com
+ ([fe80::50f5:eb2b:710a:b7c7%7]) with mapi id 15.20.7002.021; Thu, 16 Nov 2023
+ 05:59:42 +0000
+From: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To: Prabhakar <prabhakar.csengg@gmail.com>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+	<conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>
+CC: Magnus Damm <magnus.damm@gmail.com>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-renesas-soc@vger.kernel.org"
+	<linux-renesas-soc@vger.kernel.org>, Biju Das <biju.das.jz@bp.renesas.com>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: RE: [PATCH] dt-bindings: usb: renesas,usbhs: Document RZ/Five SoC
+Thread-Topic: [PATCH] dt-bindings: usb: renesas,usbhs: Document RZ/Five SoC
+Thread-Index: AQHaGAi5pfcoPaHtXU2I31nKTqUDy7B8c8Lg
+Date: Thu, 16 Nov 2023 05:59:42 +0000
+Message-ID:
+ <TYBPR01MB534131675F2857FC72E1143ED8B0A@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+References: <20231115211407.32067-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20231115211407.32067-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYBPR01MB5341:EE_|OS3PR01MB8089:EE_
+x-ms-office365-filtering-correlation-id: 81bfd528-0120-478e-4253-08dbe6693a4a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ RcwKYrMp3CgoWe+FmraAJeFOW0NA+A1WUN9I+vNazEkISTVBFpuhDap3fkv+dle0H41gkaA9AKR0w2JOFMaYdP1hOIJKApph5aVfzUdjT3PmVxYM6nbZMSrslo/9xN37Q+QeYMO/1CCqhz1w8cGrpdPW2JMv3tZJJqeCZpom4pdb3PGwnzJWRKCo9yoimmtwGZjUKOTbuGPkKWvzP2DLntwcCdl6jmDt+Jay8rRdG2674sYHqKXOULsnfUMLTrP+pq1919weNazi6hAY3zml7hnV3tGOwPAMUOe9pM+V0lS6V1wHFMqN25k5+Tlr8jciTQaGyqhRP2x99dnbj3v4kNXNa97+7Zdwo5d2y7YNrAkkE61a3uqX4hVSd+/YqD/7UhI7Bd1hedCW96nYX+1KyEFZwOWKvCG38CP0Okt1mJD8aVgjCjudCpvAyumbffTZk6F/W54GrEqAwOOUNmgod3IphtvzBg7qPidEqEJPhTiUSCr/jDD8ysgZAQKq3GEa9EgZD6lv2MQmSF80Iv17+jfWtfWhXYTicAdutwvZzzsfMIfbnDkw2ON+lQoXaB+SiGL2qe8Ov/qnRboWYJ66KRJWJnsH7np/1EBUEDhFiMO89RZbIqrtHEcj8W807wab
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYBPR01MB5341.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(346002)(136003)(396003)(376002)(230922051799003)(64100799003)(451199024)(186009)(1800799009)(55016003)(86362001)(33656002)(478600001)(66946007)(66556008)(110136005)(38070700009)(76116006)(66446008)(66476007)(54906003)(64756008)(316002)(7696005)(6506007)(9686003)(4326008)(8676002)(8936002)(71200400001)(107886003)(52536014)(122000001)(83380400001)(7416002)(5660300002)(2906002)(41300700001)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?dBUt0ZJMl3903WZ0euySh5VGaad8UdxwuT44vrm6TARIvunkwPgOUeyx1Sh+?=
+ =?us-ascii?Q?7JuxxodfBiAc0UOQiKPBsrpSCBcukHIEz4Kvp45wHb3mFrTqeDy34xTmp0B6?=
+ =?us-ascii?Q?aWL3u/7mLTiomdYvKmfZeDoaL4Q7TctrGZQxzUntcSv3xF2h86BjjTliYgi3?=
+ =?us-ascii?Q?XHe9oFm9dFYwdLnA5An1B8NQbtz6967OvMIkVYHKSndjhYyw+4eemUpGhnbw?=
+ =?us-ascii?Q?rkScOHOS5RnCFXp28xN6zDI5PqvwmKQ5brddw5XACPX00oOeC1FY2v5ud2NL?=
+ =?us-ascii?Q?rjRTdl/Sh+qr8PYGdNnK5XqEC2FPcWtA0XM+S8UOZ88Jk1gvW70WtEiePoqb?=
+ =?us-ascii?Q?6w1V4hFs1GHI4erNsd4+aQ80luM0BiaJq8/4QYVTBiT1EcQE0ZNzxOIkh19C?=
+ =?us-ascii?Q?zNY1rOSwsGoPmV7sXmjauK9DVxQx5s9eQtnEIxVNH22hmiyBMlEfh3c81Odf?=
+ =?us-ascii?Q?zX6Xyxtplplm0FQr8cBCqLhhn6nbnhs5uXMxXwMCGrQkuzz+HcbncDDt3MKo?=
+ =?us-ascii?Q?bE9JupsReGAkK5JdB32EgOYB14TB/RgzOUtkxrUEZsSadmS+LMp8GLMpRKDR?=
+ =?us-ascii?Q?P7XVqC1raFRn7X5vmtANaF9xcpVeS8kLY1OIoVPVFEpL3ujVd/n2HSh+m9Xl?=
+ =?us-ascii?Q?mpVuD3esoiLjg20rI9N1Ubk/PL3+tKkR5dbyKjacsQTI4LTpHCxzwWPQ5msu?=
+ =?us-ascii?Q?wtiI3MjE1RG9PuK8w7ENPIJKNOjPBAchBbVoJCW8pF9FFqr85PkMO+aEpyLJ?=
+ =?us-ascii?Q?VILIpK0X+UumMW9M1lGq7Dle3yY06zYi5ezAAvNTUsMP4eQvSVdmqWnaGoE9?=
+ =?us-ascii?Q?d0UIXgRAjcDSnqeseAdGGTMM1b2Z1SsPweG7IEK6VtCdgAZnLTEkqdYpGeZC?=
+ =?us-ascii?Q?VU98hlvYFLvyj7K2pdydbCB4vB/F3eIfbDpiel3qTbW/owUOz9CAPKQVA2Gy?=
+ =?us-ascii?Q?e/hgFctCm2DsoUrZLwpdevUHJExdf4alEsJjdTeIpYXE7EKfw/hPEVKqpFHI?=
+ =?us-ascii?Q?LkiIXRFOjPbPvEj60rz2Ng+NwnoU9vNpqW7N+6Z2YLxf4NpBJyLlRtIQ0GVX?=
+ =?us-ascii?Q?um0xysz2VyOQAVBFnq6pLDDrAMhrWhhWxf7WGhVg391PH+rFpnawFQjkuG/d?=
+ =?us-ascii?Q?vvR4HP8Wv6eCznegQW++YZec7creFjtmRE6/WnbVAPF3i5nAIOeCH4JaBcnj?=
+ =?us-ascii?Q?P63mP7ihJGFrLc1ddJ4gHJLGbo2IMWtS73cGwRsb0AqDvLEeDJwqy9S5d6c0?=
+ =?us-ascii?Q?ec+keqjdSeFZWAgPg1WAW3MuT4W+JnYZ4Nqsvyep5KKh8JVP2ZtisA5XzOpR?=
+ =?us-ascii?Q?I8Lt8evmGcmHrbJlQ56cKqJF7UEBirrcyBvjHi1YWeBRtfG9x7KAbryF7kHf?=
+ =?us-ascii?Q?Q0n/W83CIOhJtQH6G5xVdZrZ61khKAhoShHCBkNXwrNZYo9KhrlEhvgCvWsu?=
+ =?us-ascii?Q?SgaserKqCeaQ56iuqpofSkJ9iqKawnW4PgDgDGTqyXd3GWPZZXqq0ll8M+Sa?=
+ =?us-ascii?Q?zWoffo9YA8cGd8+WyoEcWbj/UyZDK70LVAtb/bgPdz9XgAmxdN4luVcR86bn?=
+ =?us-ascii?Q?ccwcnR+5vmaHcSXBQkZHExJ52cmkXNsC62UBv2gmzUCZBD7Zb4fBw22kSI95?=
+ =?us-ascii?Q?fSR7fiUTkaSxy6CL7HwgP5KwbzOPemax4ZPl4Xfnv5d82jKSl9ynZn88QQgN?=
+ =?us-ascii?Q?hssnYw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231102073840.1579540-1-maurora@google.com> <20231110230837.b5q5dsvsqlxfz5xu@synopsys.com>
-In-Reply-To: <20231110230837.b5q5dsvsqlxfz5xu@synopsys.com>
-From: Manan Aurora <maurora@google.com>
-Date: Thu, 16 Nov 2023 10:49:44 +0530
-Message-ID: <CAJnM4-wew9b=Ge8QHLRiReNJAqgA0ngOW8WTVk4frta+y+9jYw@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: Support EBC feature of DWC_usb31
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"manugautam@google.com" <manugautam@google.com>, "badhri@google.com" <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYBPR01MB5341.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81bfd528-0120-478e-4253-08dbe6693a4a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2023 05:59:42.6818
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iVqrfNg9CiTfRFD50rZa9zX3wOo2KNaQsVIKasbsHDrxINi0v1sHV/LcSrq4E61Dq71LEFUWEHPFmwaJrulb1Y/4XaXAuFh46pjGRAJ+EPJTSm3w78IceQnfPs+xWCPM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB8089
 
-On Sat, Nov 11, 2023 at 4:39=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsys=
-.com> wrote:
->
-> On Thu, Nov 02, 2023, Manan Aurora wrote:
-> > Support configuration and use of bulk endpoints in the so-called EBC
-> > mode described in the DBC_usb31 databook (appendix E)
-> >
-> > Added a bit fifo_mode to usb_ep to indicate to the UDC driver that a
-> > specific endpoint is to operate in the EBC (or equivalent) mode when
-> > enabled
->
-> This should be unique to dwc3, and it's only for bulk. I don't think
-> usb_ep or the user of usb_ep should know this.
+Hi Prabhakar-san,
 
-In our use case we have a function driver that configures an allocated bulk
-endpoint to operate as an EBC EP. So the function driver already depends on=
- the
-feature.
+> From: Prabhakar, Sent: Thursday, November 16, 2023 6:14 AM
+>=20
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>=20
+> The USBHS IP block on the RZ/Five SoC is identical to one found on the
+> RZ/G2UL SoC. "renesas,usbhs-r9a07g043" compatible string will be used on
+> the RZ/Five SoC so to make this clear and to keep this file consistent,
+> update the comment to include RZ/Five SoC.
+>=20
+> No driver changes are required as generic compatible string
+> "renesas,rza2-usbhs" will be used as a fallback on RZ/Five SoC.
+>=20
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-dwc3_ep seems like the correct place to put this field but a function
-driver that allocates
-EPs and configures them for this use case would need to include dwc3 header=
-s.
-If other vendors offer an equivalent feature this dependency would
-become an issue.
+Thank you for the patch!
 
-Exporting a symbol from dwc3 is an easy option but dwc3 doesn't
-currently export symbols
-hence I tried to avoid that
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-> Also since DWC3_DEPCFG_EBC_HWO_NOWB must be set, the controller does not
-> write back to the TRB. Did you handle how the driver would update the
-> usb request on completion? (e.g. how much was transferred).
+Best regards,
+Yoshihiro Shimoda
 
-In our use case, we intend to have a link TRB and issue a startXfer
-command. Completion
-handling and continuing the transfer will be offloaded to dedicated
-FIFO hardware.
-But we can definitely rework this to disable no-writeback mode by
-default and allow this to
-be separately enabled
+> ---
+>  Documentation/devicetree/bindings/usb/renesas,usbhs.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+> b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+> index bad55dfb2fa0..40ada78f2328 100644
+> --- a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+> +++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+> @@ -19,7 +19,7 @@ properties:
+>        - items:
+>            - enum:
+>                - renesas,usbhs-r7s9210   # RZ/A2
+> -              - renesas,usbhs-r9a07g043 # RZ/G2UL
+> +              - renesas,usbhs-r9a07g043 # RZ/G2UL and RZ/Five
+>                - renesas,usbhs-r9a07g044 # RZ/G2{L,LC}
+>                - renesas,usbhs-r9a07g054 # RZ/V2L
+>            - const: renesas,rza2-usbhs
+> --
+> 2.34.1
 
->
-> BR,
-> Thinh
->
-> >
-> > Added macros for bits 15 and 14 of DEPCFG parameter 1 to indicate EBC
-> > mode and write back behaviour. These bits will be set to 1 when
-> > configuring an EBC endpoint as described in the programming guide
-> >
-> > Signed-off-by: Manan Aurora <maurora@google.com>
-> > ---
-> >  drivers/usb/dwc3/core.h    | 1 +
-> >  drivers/usb/dwc3/gadget.c  | 6 ++++++
-> >  drivers/usb/dwc3/gadget.h  | 2 ++
-> >  include/linux/usb/gadget.h | 4 ++++
-> >  4 files changed, 13 insertions(+)
-> >
-> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> > index efe6caf4d0e8..c5b578188cd3 100644
-> > --- a/drivers/usb/dwc3/core.h
-> > +++ b/drivers/usb/dwc3/core.h
-> > @@ -374,6 +374,7 @@
-> >  /* Global HWPARAMS4 Register */
-> >  #define DWC3_GHWPARAMS4_HIBER_SCRATCHBUFS(n) (((n) & (0x0f << 13)) >> =
-13)
-> >  #define DWC3_MAX_HIBER_SCRATCHBUFS           15
-> > +#define DWC3_EXT_BUFF_CONTROL                BIT(21)
-> >
-> >  /* Global HWPARAMS6 Register */
-> >  #define DWC3_GHWPARAMS6_BCSUPPORT            BIT(14)
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index 858fe4c299b7..47d2737d528b 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -673,6 +673,12 @@ static int dwc3_gadget_set_ep_config(struct dwc3_e=
-p *dep, unsigned int action)
-> >               params.param1 |=3D DWC3_DEPCFG_BINTERVAL_M1(bInterval_m1)=
-;
-> >       }
-> >
-> > +     if (dep->endpoint.fifo_mode) {
-> > +             if (!(dwc->hwparams.hwparams4 & DWC3_EXT_BUFF_CONTROL))
-> > +                     return -EINVAL;
-> > +             params.param1 |=3D DWC3_DEPCFG_EBC_HWO_NOWB | DWC3_DEPCFG=
-_USE_EBC;
-> > +     }
-> > +
-> >       return dwc3_send_gadget_ep_cmd(dep, DWC3_DEPCMD_SETEPCONFIG, &par=
-ams);
-> >  }
-> >
-> > diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
-> > index 55a56cf67d73..fd7a4e94397e 100644
-> > --- a/drivers/usb/dwc3/gadget.h
-> > +++ b/drivers/usb/dwc3/gadget.h
-> > @@ -26,6 +26,8 @@ struct dwc3;
-> >  #define DWC3_DEPCFG_XFER_NOT_READY_EN        BIT(10)
-> >  #define DWC3_DEPCFG_FIFO_ERROR_EN    BIT(11)
-> >  #define DWC3_DEPCFG_STREAM_EVENT_EN  BIT(13)
-> > +#define DWC3_DEPCFG_EBC_HWO_NOWB     BIT(14)
-> > +#define DWC3_DEPCFG_USE_EBC          BIT(15)
-> >  #define DWC3_DEPCFG_BINTERVAL_M1(n)  (((n) & 0xff) << 16)
-> >  #define DWC3_DEPCFG_STREAM_CAPABLE   BIT(24)
-> >  #define DWC3_DEPCFG_EP_NUMBER(n)     (((n) & 0x1f) << 25)
-> > diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-> > index 6532beb587b1..c526ae09bcee 100644
-> > --- a/include/linux/usb/gadget.h
-> > +++ b/include/linux/usb/gadget.h
-> > @@ -209,6 +209,9 @@ struct usb_ep_caps {
-> >   *   by this EP (0 - 16, actual number is 2^n)
-> >   * @mult: multiplier, 'mult' value for SS Isoc EPs
-> >   * @maxburst: the maximum number of bursts supported by this EP (for u=
-sb3)
-> > + * @fifo_mode: indicates that the control of this EP is handed off to =
-an
-> > + *   hardware fifo device. Depends on hardware support eg. EBC feature
-> > + *   of DWC usb3.1 device or equivalent. Set before enabling the EP
-> >   * @driver_data:for use by the gadget driver.
-> >   * @address: used to identify the endpoint when finding descriptor tha=
-t
-> >   *   matches connection speed
-> > @@ -236,6 +239,7 @@ struct usb_ep {
-> >       unsigned                max_streams:16;
-> >       unsigned                mult:2;
-> >       unsigned                maxburst:5;
-> > +     unsigned                fifo_mode:1;
-> >       u8                      address;
-> >       const struct usb_endpoint_descriptor    *desc;
-> >       const struct usb_ss_ep_comp_descriptor  *comp_desc;
-> > --
-> > 2.42.0.820.g83a721a137-goog
-> >
 
