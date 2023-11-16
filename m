@@ -1,193 +1,140 @@
-Return-Path: <linux-usb+bounces-2926-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2927-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DE027EE0D3
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 13:42:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94E837EE102
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 14:03:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E5C71C20A3A
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 12:41:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE042B20CBA
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 13:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F18C529428;
-	Thu, 16 Nov 2023 12:41:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28FD30646;
+	Thu, 16 Nov 2023 13:03:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="naPC5FlE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d9BbamjX"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D40FBE8;
-	Thu, 16 Nov 2023 12:41:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47BD7C433C8;
-	Thu, 16 Nov 2023 12:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0EA2E419;
+	Thu, 16 Nov 2023 13:03:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F53C433C7;
+	Thu, 16 Nov 2023 13:03:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700138513;
-	bh=vLGyRyE7xZ4srKu6DV6MaEhKkGUc+EK7JixMRPPZLu8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=naPC5FlEcHUpIG7KPTqcFrWgDAQBrCPlZNLUlBMx+SgTqAoTsIt+Ie6lwGNcVw8HT
-	 mO48U9xc+J7nkmTCu+PPbnnSdK4v98ieT4m16G1gEhQQw6F5YmbnNZ+JBznpqzLLh5
-	 3NtPrgxClTTHbd0JbVdhToJwnyfv/KOO7bLAchKCNmcd+nUA0rDctkb0L3jkNvcRDJ
-	 AfHz6Ps0lUxXCMpzwQ68hlSZcfnXOPM97yEuP/w8qXyaMfSn415m3amGbkANCNTEqp
-	 vqn6KzXtjjj8gXOySCTcw/qFJEU2fc3Quu30FGy95JSgr/OSEcgW/TGCzu4rNhUML7
-	 clsYg4Cr/Jf5w==
-Message-ID: <dad980f3-e032-41e4-a1e4-a16a7f45ff95@kernel.org>
-Date: Thu, 16 Nov 2023 14:40:55 +0200
+	s=k20201202; t=1700139799;
+	bh=H7q0Wr5l0JMqXvnR6UaqS3RUHwhyrxsJfVtztg2F/+c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=d9BbamjXFqHpFD69Bz+JK5yHAzRg3YQZp0q2nkYoiM3hkzHjACM2j7w0bklyXX3b8
+	 fjTDjqP6jqxBJrx1R19QnJPh/jnNbtyXYzwLrrGSqTaLoaq5FdOJmsuojmG5pWJ5tb
+	 MAgAo1zKfOVH6q/paVgZG1r4xOfgZ+jfVVBqGMiNs9Qv8WhGu98f91psBO5iU9sfrw
+	 qtxJ8czRSj/ztZf46PK4dwUOamW95CRMAo3Wqp8jKw4LNhY6xmWmkGGqSIobeo8Qa1
+	 DXiJChDlv2LQ93mp+wkEcBryIld+GILsy29gT5KF69zn/nFYKY5IDy1K+bBDniyEQS
+	 236D9Hu6bSmAQ==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1r3c1e-0003Y8-30;
+	Thu, 16 Nov 2023 14:03:18 +0100
+Date: Thu, 16 Nov 2023 14:03:18 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Felipe Balbi <balbi@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+	ahalaney@redhat.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v13 05/10] usb: dwc3: qcom: Refactor IRQ handling in QCOM
+ Glue driver
+Message-ID: <ZVYTFi3Jnnljl48L@hovoldconsulting.com>
+References: <ZTJ_T1UL8-s2cgNz@hovoldconsulting.com>
+ <14fc724c-bc99-4b5d-9893-3e5eff8895f7@quicinc.com>
+ <ZTY7Lwjd3_8NlfEi@hovoldconsulting.com>
+ <cabf24d0-8eea-4eb5-8205-bf7fe6017ec2@quicinc.com>
+ <ZTZ-EvvbuA6HpycT@hovoldconsulting.com>
+ <fb5e5e1d-520c-4cbc-adde-f30e853421a1@quicinc.com>
+ <ZTdqnSHq_Jo8AuPW@hovoldconsulting.com>
+ <04615205-e380-4719-aff1-f32c26004b14@quicinc.com>
+ <ZUz4RD3MjnLlPn6V@hovoldconsulting.com>
+ <6d4d959c-b155-471b-b13d-f6fda557cfe0@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/6] usb: cdns3-ti: add suspend/resume procedures for
- J7200
-Content-Language: en-US
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Peter Chen <peter.chen@kernel.org>,
- Pawel Laszczak <pawell@cadence.com>, Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com>
- <20231113-j7200-usb-suspend-v1-3-ad1ee714835c@bootlin.com>
- <5080372b-1f48-4cbc-a6c4-8689c28983cb@kernel.org>
- <CWZH66HQZNYM.T623ZOEEE0BK@tleb-bootlin-xps13-01>
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <CWZH66HQZNYM.T623ZOEEE0BK@tleb-bootlin-xps13-01>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6d4d959c-b155-471b-b13d-f6fda557cfe0@quicinc.com>
 
+On Wed, Nov 15, 2023 at 11:12:16PM +0530, Krishna Kurapati PSSNV wrote:
 
+> > Are you sure there's no support for hs_phy_irq also in the "femto" PHYs
+> > and that it's just that there is currently no driver support for using
+> > them?
+> > 
+> > And why is it defined if there is truly no use for it?
 
-On 15/11/2023 17:02, Théo Lebrun wrote:
-> Hi Roger,
+> We had an internal sync up with HW folks and here is some baseline 
+> suggestions we received:
 > 
-> On Wed Nov 15, 2023 at 12:37 PM CET, Roger Quadros wrote:
->> On 13/11/2023 16:26, Théo Lebrun wrote:
->>> Hardware initialisation is only done at probe. The J7200 USB controller
->>> is reset at resume because of power-domains toggling off & on. We
->>> therefore (1) toggle PM runtime at suspend/resume & (2) reconfigure the
->>> hardware at resume.
->>
->> at probe we are doing a pm_runtime_get() and never doing a put thus
->> preventing any runtime PM.
-> 
-> Indeed. The get() from probe/resume are in symmetry with the put() from
-> suspend. Is this wrong in some manner?
-> 
->>> index c331bcd2faeb..50b38c4b9c87 100644
->>> --- a/drivers/usb/cdns3/cdns3-ti.c
->>> +++ b/drivers/usb/cdns3/cdns3-ti.c
->>> @@ -197,6 +197,50 @@ static int cdns_ti_probe(struct platform_device *pdev)
->>>  	return error;
->>>  }
->>>  
->>> +#ifdef CONFIG_PM
->>> +
->>> +static int cdns_ti_suspend(struct device *dev)
->>> +{
->>> +	struct cdns_ti *data = dev_get_drvdata(dev);
->>> +
->>> +	if (!of_device_is_compatible(dev_of_node(dev), "ti,j7200-usb"))
->>> +		return 0;
->>> +
->>> +	pm_runtime_put_sync(data->dev);
->>> +
->>> +	return 0;
->>
->> You might want to check suspend/resume ops in cdns3-plat and
->> do something similar here.
-> 
-> I'm unsure what you are referring to specifically in cdns3-plat?
+> If DP/DM interrupts are defined, then that is the preferred path to 
+> used, irrespective if HS Phy irq is defined or not / or whether it is 
+> Femto / QUSB2 target. There is no target that has femto phy but misses 
+> DP/DM today.
 
-What I meant is, calling pm_runtime_get/put() from system suspend/resume
-hooks doesn't seem right.
+Ok, but just knowing that it is "preferred" does not in itself mean that
+it should be removed from the binding.
 
-How about using something like pm_runtime_forbid(dev) on devices which
-loose USB context on runtime suspend e.g. J7200.
-So at probe we can get rid of the pm_runtime_get_sync() call.
-e.g.
+We need to know that it's effectively useless (i.e. that the interrupts
+are defined but cannot be triggered) for that.
 
-        pm_runtime_set_active(dev);
-        pm_runtime_enable(dev);
-        if (cnds_ti->can_loose_context)
-                pm_runtime_forbid(dev);
+We can still use the DP/DM interrupts in favour of HS in the driver
+however.
 
-        pm_runtime_set_autosuspend_delay(dev, CNDS_TI_AUTOSUSPEND_DELAY);	/* could be 20ms? */
-        pm_runtime_mark_last_busy(dev);
-        pm_runtime_use_autosuspend(dev);
+> For cases like sdm660/msm8998/msm8953/msm8956, these targets use 
+> hs_phy_irq only and don't rely on DP/DM. So we cannot remove the binding 
+> in entirety.
 
-You will need to modify the suspend/resume handlers accordingly.
-https://docs.kernel.org/power/runtime_pm.html#runtime-pm-and-system-sleep
+I fixed the binding for those specific platforms last year:
 
-What I'm not sure of is if there are any TI platforms that retain USB context
-on power domain off. Let me get back on this. Till then we can assume that
-all platforms loose USB context on power domain off.
+	dd566faebe9f ("dt-bindings: usb: qcom,dwc3: refine interrupt requirements")
 
-One comment below.
+But as I mentioned in that commit message the following platforms do not
+have any wakeup interrupts specified in mainline currently:
 
-> +	return ret;
-> +}
+      - qcom,ipq4019-dwc3
+      - qcom,ipq6018-dwc3
+      - qcom,ipq8064-dwc3
+      - qcom,ipq8074-dwc3
+      - qcom,msm8994-dwc3
+      - qcom,qcs404-dwc3
 
+It would be good to get that cleaned up too (i.e. add the missing
+interrupt definitions and update the binding to match).
 
-> 
->  - Using pm_runtime_status_suspended() to get the current PM runtime
->    state & act on it? I don't see why because we know the pm_runtime
->    state is a single put() at probe.
-> 
->  - Having a `in_lpm` flag to track low-power mode state? I wouldn't see
->    why we'd want that as we don't register runtime_suspend &
->    runtime_resume callbacks and system syspend/resume can be assumed to
->    be called in the right order.
-> 
->  - Checking the `device_may_wakeup()`? That doesn't apply to this driver
->    which cannot be a wakeup source.
-> 
-> Thanks for your review!
-> Regards,
-> 
-> --> +static int cdns_ti_resume(struct device *dev)
-> +{
-> +	struct cdns_ti *data = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	if (!of_device_is_compatible(dev_of_node(dev), "ti,j7200-usb"))
-> +		return 0;
-> +
-> +	ret = pm_runtime_get_sync(dev);
-> +	if (ret < 0) {
-> +		dev_err(dev, "pm_runtime_get_sync failed: %d\n", ret);
-> +		goto err;
-> +	}
-> +
-> +	cdns_ti_init_hw(data);
-> +
-> +	return 0;
-> +
-> +err:
-> +	pm_runtime_put_sync(data->dev);
-> +	pm_runtime_disable(data->dev);
+> > Also, if hs_phy_irq and dp/dm_phy_irq were mutually exclusive, why does
+> > the following Qualcomm SoCs define all three?
 
-Why do you do a pm_runtime_disable() here?
+> HS Phy Irq is redundant or functionality is mutually exclusive in this 
+> case. If there are targets that define all three, then we need to update 
+> those to only utilize DP/DM interrupts.
 
-> +	return ret;
-> +}
+No, as I wrote above that depends on if the HS interrupt is truly
+useless. Otherwise it still belongs in the binding, even if the driver
+uses DP/DM in place of it.
 
+Again, the binding should describe the hardware, not what a particular
+OS chooses to use.
 
-> Théo Lebrun, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
-> ------------------------------------------------------------------------
-> 
-> 
-
--- 
-cheers,
--roger
+Johan
 
