@@ -1,154 +1,182 @@
-Return-Path: <linux-usb+bounces-2935-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2936-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8246C7EE6DC
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 19:38:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF24B7EE70E
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 19:56:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B25C81C20A4B
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 18:38:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3472A281126
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 18:56:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC834DDA3;
-	Thu, 16 Nov 2023 18:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57A53328B6;
+	Thu, 16 Nov 2023 18:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Axli57Y0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2C61A7;
-	Thu, 16 Nov 2023 10:38:05 -0800 (PST)
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3b52360cdf0so651420b6e.2;
-        Thu, 16 Nov 2023 10:38:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700159884; x=1700764684;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aeho3h+HAVBDv9G/PSHYV2/zarFxMGTF3N0k4i66FJg=;
-        b=c4BVwWFg8o4R8EwD8RU6uwf56L5lIDCUgu2tC2VHvC82wgyLrFJgLETdEoKQvadplH
-         sD0FHmSINrMoUPxCTL4bheQnNcjYJtOMPcnQ01JsBgtbhW8hXyAsO+nnmUgoAWHNH/7t
-         IipC3q0R9x3ZvGi1eeWGJgtcF+Bgqmpav0o///itYx+B4WDtOYxCVETc//mUhP1T5rv8
-         vabSvh24m8yMFi2WWx+o7acRd/ad4dWxUA4y4Es3GTz5ruNlJALM07Hylh8G4ghh+JZB
-         5f3XrXFUHuSZ+DAQl90rZOpVWAw90dNxMySVnLENZMutd8jXLR4Ig8OeKXirH6zJVfqE
-         lRLQ==
-X-Gm-Message-State: AOJu0Yz0MaqTrmoSxLCDMOJonqSgd1m9UI0t/yi5MLRz5lnnADI/IM9l
-	R0MVpi39oRAo9elE1ECBzA==
-X-Google-Smtp-Source: AGHT+IFixWKD6eA44iq3pJ68KHhYiVVqCXKE3HIsaW5USb5QYRL930s1NmETTIDeBzkVl65jrL8GGw==
-X-Received: by 2002:a05:6808:2a66:b0:3b2:dfa0:aea3 with SMTP id fu6-20020a0568082a6600b003b2dfa0aea3mr16712816oib.3.1700159884517;
-        Thu, 16 Nov 2023 10:38:04 -0800 (PST)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n7-20020a0568080a0700b003ae540759a0sm1905305oij.40.2023.11.16.10.38.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Nov 2023 10:38:03 -0800 (PST)
-Received: (nullmailer pid 2816950 invoked by uid 1000);
-	Thu, 16 Nov 2023 18:38:02 -0000
-Date: Thu, 16 Nov 2023 12:38:02 -0600
-From: Rob Herring <robh@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Hans de Goede <hdegoede@redhat.com>, Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, Mark Gross <markgross@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: connector: usb: add altmodes
- description
-Message-ID: <20231116183802.GB2742530-robh@kernel.org>
-References: <20231113221528.749481-1-dmitry.baryshkov@linaro.org>
- <20231113221528.749481-2-dmitry.baryshkov@linaro.org>
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464FC181;
+	Thu, 16 Nov 2023 10:56:25 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 92CCA240005;
+	Thu, 16 Nov 2023 18:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1700160983;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dvolxHvO6BKwJ4vR7RsyEZFAGupNxMo4pjITWoD7r7g=;
+	b=Axli57Y07qsWySxQZfDgCSL2+rNtRWyQKDEm1hAO+S4sliiRJ5TPONqbGzf3kyCHxbxkrZ
+	1mE4LRhSJDU58pHTuVLcZdcysj7ISVbrgCvWKyM0RxHpK8QYxDnJ5SOh0msW/o4Yqmq67x
+	RSsKZyjUi6XHn/wYrNafnrZjvI0HvbZrXSFsqRlzh63pS0ELzV0ii2Iojy4FZM3ltO63At
+	DIteCQfycWL+Ifhs89M8pojMdTqGdo1fXGgrzIFhDTUjYs2072KM97xkx7Fqj+AAZScTuO
+	7rekoehYzNV6v9fMgYZmwlCdEJ99T9ExywvHNy9FkZPl6yKZz40QaF8lyxIdVg==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231113221528.749481-2-dmitry.baryshkov@linaro.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 16 Nov 2023 19:56:22 +0100
+Subject: Re: [PATCH 3/6] usb: cdns3-ti: add suspend/resume procedures for
+ J7200
+Cc: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>
+To: "Roger Quadros" <rogerq@kernel.org>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Peter Chen" <peter.chen@kernel.org>, "Pawel
+ Laszczak" <pawell@cadence.com>, "Nishanth Menon" <nm@ti.com>, "Vignesh
+ Raghavendra" <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Message-Id: <CX0GOP07I40N.198G7LJ0HYDBG@tleb-bootlin-xps13-01>
+X-Mailer: aerc 0.15.2
+References: <20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com>
+ <20231113-j7200-usb-suspend-v1-3-ad1ee714835c@bootlin.com>
+ <5080372b-1f48-4cbc-a6c4-8689c28983cb@kernel.org>
+ <CWZH66HQZNYM.T623ZOEEE0BK@tleb-bootlin-xps13-01>
+ <dad980f3-e032-41e4-a1e4-a16a7f45ff95@kernel.org>
+In-Reply-To: <dad980f3-e032-41e4-a1e4-a16a7f45ff95@kernel.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Tue, Nov 14, 2023 at 12:13:27AM +0200, Dmitry Baryshkov wrote:
-> Add description of the USB-C AltModes supported on the particular USB-C
-> connector. This is required for devices like Qualcomm Robotics RB5,
-> which have no other way to express alternative modes supported by the
-> hardware platform.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  .../bindings/connector/usb-connector.yaml     | 36 +++++++++++++++++++
->  1 file changed, 36 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> index 7c8a3e8430d3..1bd51b86906f 100644
-> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> @@ -14,6 +14,31 @@ description:
->    of a USB interface controller or a separate node when it is attached to both
->    MUX and USB interface controller.
->  
-> +$defs:
+Hello Roger,
 
-I fail to see why we need to use $defs here.
+On Thu Nov 16, 2023 at 1:40 PM CET, Roger Quadros wrote:
+> On 15/11/2023 17:02, Th=C3=A9o Lebrun wrote:
+> > On Wed Nov 15, 2023 at 12:37 PM CET, Roger Quadros wrote:
+> >> On 13/11/2023 16:26, Th=C3=A9o Lebrun wrote:
+> >>> Hardware initialisation is only done at probe. The J7200 USB controll=
+er
+> >>> is reset at resume because of power-domains toggling off & on. We
+> >>> therefore (1) toggle PM runtime at suspend/resume & (2) reconfigure t=
+he
+> >>> hardware at resume.
+> >>
+> >> at probe we are doing a pm_runtime_get() and never doing a put thus
+> >> preventing any runtime PM.
+> >=20
+> > Indeed. The get() from probe/resume are in symmetry with the put() from
+> > suspend. Is this wrong in some manner?
+> >=20
+> >>> index c331bcd2faeb..50b38c4b9c87 100644
+> >>> --- a/drivers/usb/cdns3/cdns3-ti.c
+> >>> +++ b/drivers/usb/cdns3/cdns3-ti.c
+> >>> @@ -197,6 +197,50 @@ static int cdns_ti_probe(struct platform_device =
+*pdev)
+> >>>  	return error;
+> >>>  }
+> >>> =20
+> >>> +#ifdef CONFIG_PM
+> >>> +
+> >>> +static int cdns_ti_suspend(struct device *dev)
+> >>> +{
+> >>> +	struct cdns_ti *data =3D dev_get_drvdata(dev);
+> >>> +
+> >>> +	if (!of_device_is_compatible(dev_of_node(dev), "ti,j7200-usb"))
+> >>> +		return 0;
+> >>> +
+> >>> +	pm_runtime_put_sync(data->dev);
+> >>> +
+> >>> +	return 0;
+> >>
+> >> You might want to check suspend/resume ops in cdns3-plat and
+> >> do something similar here.
+> >=20
+> > I'm unsure what you are referring to specifically in cdns3-plat?
+>
+> What I meant is, calling pm_runtime_get/put() from system suspend/resume
+> hooks doesn't seem right.
+>
+> How about using something like pm_runtime_forbid(dev) on devices which
+> loose USB context on runtime suspend e.g. J7200.
+> So at probe we can get rid of the pm_runtime_get_sync() call.
 
-> +  altmode-desc:
-> +    type: object
-> +    description:
-> +      A single USB-C Alternative Mode as supported by the USB-C connector logic.
-> +    properties:
-> +      svid:
-> +        $ref: /schemas/types.yaml#/definitions/uint16
-> +        description: Unique value assigned by USB-IF to the Vendor / AltMode.
-> +      vdo:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        description: VDO returned by Discover Modes USB PD command.
+What is the goal of enabling PM runtime to then block (ie forbid) it in
+its enabled state until system suspend?
 
-What's VDO?
+Thinking some more about it and having read parts of the genpd source,
+it's unclear to me why there even is some PM runtime calls in this
+driver. No runtime_suspend/runtime_resume callbacks are registered.
+Also, power-domains work as expected without any PM runtime calls.
 
-These names are a bit short. Types for property names are global 
-(mostly). Though this patch doesn't make it clear these were already in 
-use.
+The power domain is turned on when attached to a device
+(see genpd_dev_pm_attach). It gets turned off automatically at
+suspend_noirq (taking into account the many things that make genpd
+complex: multiple devices per PD, subdomains, flags to customise the
+behavior, etc.). Removing calls to PM runtime at probe keeps the driver
+working.
 
-> +
-> +  altmodes-list:
-> +    type: object
-> +    description: List of Alternative Modes supported by the schematics on the
-> +      particular device. This is only necessary if there are no other means to
-> +      discover supported alternative modes (e.g. through the UCSI firmware
-> +      interface).
-> +
-> +    patternProperties:
-> +      "^[a-z][a-z0-9]*$":
+So my new proposal would be: remove all all PM runtime calls from this
+driver. Anything wrong with this approach?
 
-Are there standard id's and names? Should we define some so we don't get 
-'dp', 'displayport', etc.
+Only possible reason I see for having PM runtime in this wrapper driver
+would be cut the full power-domain when USB isn't used, with some PM
+runtime interaction with the children node. But that cannot work
+currently as we don't register a runtime_resume to init the hardware,
+so this cannot be the current expected behavior.
 
+> e.g.
+>
+>         pm_runtime_set_active(dev);
+>         pm_runtime_enable(dev);
+>         if (cnds_ti->can_loose_context)
+>                 pm_runtime_forbid(dev);
+>
+>         pm_runtime_set_autosuspend_delay(dev, CNDS_TI_AUTOSUSPEND_DELAY);=
+	/* could be 20ms? */
 
-> +        $ref: "#/$defs/altmode-desc"
-> +        unevaluatedProperties: false
-> +
->  properties:
->    compatible:
->      oneOf:
-> @@ -171,6 +196,10 @@ properties:
->        offer the power, Capability Mismatch is set. Required for power sink and
->        power dual role.
->  
-> +  altmodes:
-> +    $ref: "#/$defs/altmodes-list"
-> +    unevaluatedProperties: false
-> +
->    port:
->      $ref: /schemas/graph.yaml#/properties/port
->      description: OF graph bindings modeling a data bus to the connector, e.g.
-> @@ -289,6 +318,13 @@ examples:
->              compatible = "usb-c-connector";
->              label = "USB-C";
->  
-> +            altmodes {
-> +                displayport {
-> +                    svid = /bits/ 16 <0xff01>;
-> +                    vdo = <0x00001c46>;
-> +                };
-> +            };
-> +
->              ports {
->                  #address-cells = <1>;
->                  #size-cells = <0>;
-> -- 
-> 2.42.0
-> 
+Why mention autosuspend in this driver? This will turn the device off in
+CNDS_TI_AUTOSUSPEND_DELAY then nothing enables it back using
+pm_runtime_get. We have nothing to reconfigure the device, ie no
+runtime_resume, so we must not go into runtime suspend.
+
+>         pm_runtime_mark_last_busy(dev);
+>         pm_runtime_use_autosuspend(dev);
+>
+> You will need to modify the suspend/resume handlers accordingly.
+> https://docs.kernel.org/power/runtime_pm.html#runtime-pm-and-system-sleep
+>
+> What I'm not sure of is if there are any TI platforms that retain USB con=
+text
+> on power domain off. Let me get back on this. Till then we can assume tha=
+t
+> all platforms loose USB context on power domain off.
+
+Good question indeed! Thanks for looking into it. From what I see all 5
+DT nodes which use this driver in upstream devicetrees have a
+power-domain configured. So if the behavior is the same on all three TI
+platforms (which would be the logical thing to assume) it would make
+sense that all controllers lose power at suspend.
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
