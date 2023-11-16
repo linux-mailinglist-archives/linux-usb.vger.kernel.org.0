@@ -1,112 +1,102 @@
-Return-Path: <linux-usb+bounces-2923-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2924-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CCCE7EE014
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 12:46:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81FF37EE04D
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 13:01:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A64AA1C20A3C
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 11:46:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1151EB20A15
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 12:01:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F002F503;
-	Thu, 16 Nov 2023 11:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A1262F862;
+	Thu, 16 Nov 2023 12:01:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="FVPfc51v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SuKBqNHs"
 X-Original-To: linux-usb@vger.kernel.org
-X-Greylist: delayed 821 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Nov 2023 03:45:53 PST
-Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5A0B0
-	for <linux-usb@vger.kernel.org>; Thu, 16 Nov 2023 03:45:53 -0800 (PST)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10da:6900:0:0:0:1])
-	(authenticated bits=0)
-	by dilbert.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 3AGBVmSE3632276
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Thu, 16 Nov 2023 11:31:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-	t=1700134303; bh=x4l0ZCBUiGQBhM2oFX0ut6jp9gWfv6PJjV8vzL/P6iE=;
-	h=From:To:Cc:Subject:References:Date:Message-ID:From;
-	b=FVPfc51vG0i9GVNElXq73WzRhDbctfQgLVFclOrGBtvvhuCB8gC6HePDvT3TV2BUw
-	 5AfnnBRcjN4njt4EBHloKcU8plzCpiIAB25syda2iNsj6HZueMva2xsFuyn7WPQxRX
-	 vCq/mS5ldBx3Szs08dsLwLZd7jcUQ2srFPFd/YH4=
-Received: from miraculix.mork.no ([IPv6:2a01:799:10da:690a:d43d:737:5289:b66f])
-	(authenticated bits=0)
-	by canardo.dyn.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 3AGBVh4M3933896
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Thu, 16 Nov 2023 12:31:43 +0100
-Received: (nullmailer pid 2274955 invoked by uid 1000);
-	Thu, 16 Nov 2023 11:31:43 -0000
-From: =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: question on random MAC in usbnet
-Organization: m
-References: <53b66aee-c4ad-4aec-b59f-94649323bcd6@suse.com>
-Date: Thu, 16 Nov 2023 12:31:43 +0100
-In-Reply-To: <53b66aee-c4ad-4aec-b59f-94649323bcd6@suse.com> (Oliver Neukum's
-	message of "Thu, 16 Nov 2023 11:14:49 +0100")
-Message-ID: <87zfzeexy8.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778C52EAFE;
+	Thu, 16 Nov 2023 12:01:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005A4C433C8;
+	Thu, 16 Nov 2023 12:01:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700136076;
+	bh=c7gMUttZFyHHQ9COrEEKH4SS+vncMf6Y8hrZnTRxLYg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=SuKBqNHsU+fNNgXSXPII1Osj2l1CDoO4VvhdYjyiNcPr/CKLB8/IgHL+sH2Zi5Vd3
+	 OF9GVwgC+Iz1tDkjBPH05TP8xf9cUZvJP27FLs6guK6hcXe+QitVEfeRxycjlrlUHC
+	 bB0J7i4JVzw0lbczlYUP1gxsDzeA4QFkt0zl2iuQr1J21UAka2f35Gl0hUARiLxa8d
+	 LRMyXZY1B/HP7oyspTrzBF36zEYurikArcAf6C6+ObpTdJRrqhbO5h4zkkhfRV5Xri
+	 asFvYLhnhuQaawuRRVLPA38RvdGCETNY6o1wTdnNgYHD8D/fYTKPAmFnROS/p3Z/iZ
+	 Rt8ZgxgcGVmMg==
+Message-ID: <79f3beef-1afe-4b97-8f6e-435c0419b513@kernel.org>
+Date: Thu, 16 Nov 2023 14:00:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 1.0.3 at canardo
-X-Virus-Status: Clean
-
-Oliver Neukum <oneukum@suse.com> writes:
-
-> I am wondering about the MAC address usbnet is handing
-> out. In particular why that is a singular address.
-
-This has been the case since long long before I ever looked at usbnet.c.
-The variable declaration is in fact still attributed to the initial git
-commit:
-
- ^1da177e4c3f4 drivers/usb/net/usbnet.c (Linus Torvalds              2005-0=
-4-16 15:20:36 -0700   64) // randomly generated ethernet address
- ^1da177e4c3f4 drivers/usb/net/usbnet.c (Linus Torvalds              2005-0=
-4-16 15:20:36 -0700   65) static u8   node_id [ETH_ALEN];
-
-Pretty impressive given the churn we've had since then :)
-
-If I were to guess why it ended up like that, I'd say that it probably
-was because it was considered an exceptional fallback only.
-
-If you wrote a driver with the USB-IF communication class spec in mind,
-then it was reasonable to expect a functional decriptor pointing to a
-string descriptor with a globally unique mac address, assigned by the
-device manufacturer.
-
-A host using more than one usbnet device was also unlikely 20 years
-ago.  So host unique was good enough in any case.
-
-These factors have change a lot since then, obviously.
-
-> Frankly that seems plainly wrong. A MAC is supposed
-> to be unique, which is just fundamentally incompatible
-> to using the same MAC for multiple devices, as usbnet
-> currently potentially does.
-
-Agreed.
-
-> Do you think that behavior should be changed to using
-> a separate random MAC for each device that requires it?
-
-I'm in favour.
-
-I could be wrong, but I don't expect anything to break if we did that.
-The current static address comes from eth_random_addr() in any case, so
-the end result as seen from the mini drivers should be identical.  The
-difference will be seen in userspace and surrounding equipment, And
-those should be for the better.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/6] usb: cdns3-ti: move reg writes from probe into an
+ init_hw helper
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Peter Chen <peter.chen@kernel.org>,
+ Pawel Laszczak <pawell@cadence.com>, Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com>
+ <20231113-j7200-usb-suspend-v1-2-ad1ee714835c@bootlin.com>
+ <aabf618e-9352-4555-9059-f213cb16c84f@kernel.org>
+ <CWZGC158AQK7.2XQXIEEH6WO2J@tleb-bootlin-xps13-01>
+Content-Language: en-US
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <CWZGC158AQK7.2XQXIEEH6WO2J@tleb-bootlin-xps13-01>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
-Bj=C3=B8rn
+
+On 15/11/2023 16:23, Théo Lebrun wrote:
+> Hello,
+> 
+> On Wed Nov 15, 2023 at 12:33 PM CET, Roger Quadros wrote:
+>>> --- a/drivers/usb/cdns3/cdns3-ti.c
+>>> +++ b/drivers/usb/cdns3/cdns3-ti.c
+> 
+> [...]
+> 
+>>>  static int cdns_ti_probe(struct platform_device *pdev)
+>>>  {
+>>>  	struct device *dev = &pdev->dev;
+>>>  	struct device_node *node = pdev->dev.of_node;
+>>>  	struct cdns_ti *data;
+>>> -	int error;
+>>> -	u32 reg;
+>>> -	int rate_code, i;
+>>>  	unsigned long rate;
+>>> +	int error, i;
+>>
+>> Should we leave rate_code and get rid of i?
+> 
+> I see your point about i being usually a temp variable. Using rate_code
+> instead of i means the for-loop becomes rather long (column 87) &
+> should ideally be split.
+> 
+> How about moving the data->usb2_refclk_rate_code assignment up, closer
+> to the computation of i? That way we don't reference i three blocks
+> down the road, seemingly out of nowhere.
+
+That is much better. Thanks!
+
+-- 
+cheers,
+-roger
 
