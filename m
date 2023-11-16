@@ -1,101 +1,113 @@
-Return-Path: <linux-usb+bounces-2929-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2930-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15FED7EE243
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 15:03:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71DD37EE293
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 15:18:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE3491F2629A
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 14:03:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 664BC1C209EC
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 14:18:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB0D0315BF;
-	Thu, 16 Nov 2023 14:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E26B731A9A;
+	Thu, 16 Nov 2023 14:18:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="daSBYZXm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C32D5D;
-	Thu, 16 Nov 2023 06:02:12 -0800 (PST)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-5afabb23900so9349287b3.2;
-        Thu, 16 Nov 2023 06:02:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700143331; x=1700748131;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ab9TuKeTeOe6Tu419AbiqmgHmcWN5UW8aVt812inTFM=;
-        b=hKcXApGjRam3UpWHZsqmk3Xh6lg+8DCNFhNEKqwpFAPutwM6kECfINzKs/JBKp01oO
-         G9/thaIVyrq9u9P3fJlsaknovvL5/hpk4O0Ckvmq44DeSfRWvpZR7k4LtmbXHWnRQNpU
-         s+BmCLWhN9gbDSgEzZ6Wcj5FE7m2KJSkesavQlz1fsaD4RrjdGibdZaSpHOnHXl2dx4y
-         nscpuyJ0BsiKIchZGyCLiPLgEsdODF1stgPuKI714UdPW/1xUQRE9w9vQbfJ+t/gNMBc
-         dzRQie09GwhioKMIooWH/pd08j0nihepuMSmT/eFm/RlW931y2qQUosLfF86GkDHWynJ
-         Re7A==
-X-Gm-Message-State: AOJu0Yz6tD+FgskDtCLDzfTuW/J5x5obPl0OHrDxah6Y9IV+NAzhkeIk
-	S9n563rGvsOcTvq+xsj5ZNGSMvOCKuygEQ==
-X-Google-Smtp-Source: AGHT+IGXitV1/KEj9/oj/owEHj+5Er3SQ5zz/Mbf3W4OUN8GJJ6vy/a65gwm+mJIeXhlqd6eBNHWUg==
-X-Received: by 2002:a0d:ed06:0:b0:59f:5361:d18c with SMTP id w6-20020a0ded06000000b0059f5361d18cmr17263354ywe.41.1700143325529;
-        Thu, 16 Nov 2023 06:02:05 -0800 (PST)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id f125-20020a0ddc83000000b005a7bbd713ddsm990344ywe.108.2023.11.16.06.02.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Nov 2023 06:02:05 -0800 (PST)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5afabb23900so9347237b3.2;
-        Thu, 16 Nov 2023 06:02:05 -0800 (PST)
-X-Received: by 2002:a05:690c:2c08:b0:5c1:25f:5674 with SMTP id
- eo8-20020a05690c2c0800b005c1025f5674mr14330375ywb.32.1700143324843; Thu, 16
- Nov 2023 06:02:04 -0800 (PST)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51B3B7
+	for <linux-usb@vger.kernel.org>; Thu, 16 Nov 2023 06:18:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700144304;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=greVKMKfr76MqoUq6gz6BvckYAphWjbfLaTerpqXr4c=;
+	b=daSBYZXmz5F9RLls8F2NFpB5EZXfQU3YryFEZYfEatSbxDEH8nrBFQ3i1JWwihMsYbF8Ua
+	z5yFUgduVMchPDPdPGlqoFvzPqKCHdtaJ8L0y6pic/ViQ4bnNNxuIF8DMgrn+JZsr77EYD
+	EN/YJhOMAxh0zZueclNeGx2jGmEKgMw=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-85-C0cl4XhrPL2OSimzHsOHDw-1; Thu,
+ 16 Nov 2023 09:18:20 -0500
+X-MC-Unique: C0cl4XhrPL2OSimzHsOHDw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 20E9D1C06909;
+	Thu, 16 Nov 2023 14:18:20 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.39])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A12A81121306;
+	Thu, 16 Nov 2023 14:18:17 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: pabeni@redhat.com
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	jtornosm@redhat.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	weihao.bj@ieisystem.com
+Subject: Re: [PATCH 2/2] net: usb: ax88179_178a: avoid two consecutive device resets
+Date: Thu, 16 Nov 2023 15:18:15 +0100
+Message-ID: <20231116141816.21950-1-jtornosm@redhat.com>
+In-Reply-To: <020ff11184bb22909287ef68d97c00f7d2c73bd6.camel@redhat.com>
+References: <020ff11184bb22909287ef68d97c00f7d2c73bd6.camel@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231115211407.32067-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20231115211407.32067-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 16 Nov 2023 15:01:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXrepNfzdjpsQnKMB9XZa_AgfuTD2hbSq23HD6v9w8jXw@mail.gmail.com>
-Message-ID: <CAMuHMdXrepNfzdjpsQnKMB9XZa_AgfuTD2hbSq23HD6v9w8jXw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: renesas,usbhs: Document RZ/Five SoC
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, Magnus Damm <magnus.damm@gmail.com>, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
-On Wed, Nov 15, 2023 at 10:14=E2=80=AFPM Prabhakar <prabhakar.csengg@gmail.=
-com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Thu, Nov 16, 2023 at 10:42 AM Paolo Abeni <pabeni@redhat.com> wrote:
+> We need a suitable Fixes tag even here ;)
+Ok, I will add it in my next version.
+
+> > ---
+> >  drivers/net/usb/ax88179_178a.c | 13 -------------
+> >  1 file changed, 13 deletions(-)
+> >
+> > diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+> > index 4ea0e155bb0d..864c6fc2db33 100644
+> > --- a/drivers/net/usb/ax88179_178a.c
+> > +++ b/drivers/net/usb/ax88179_178a.c
+> > @@ -1678,7 +1678,6 @@ static const struct driver_info ax88179_info = {
+> >       .unbind = ax88179_unbind,
+> >       .status = ax88179_status,
+> >       .link_reset = ax88179_link_reset,
+> > -     .reset = ax88179_reset,
+> >       .stop = ax88179_stop,
+> >       .flags = FLAG_ETHER | FLAG_FRAMING_AX,
+> >       .rx_fixup = ax88179_rx_fixup,
 >
-> The USBHS IP block on the RZ/Five SoC is identical to one found on the
-> RZ/G2UL SoC. "renesas,usbhs-r9a07g043" compatible string will be used on
-> the RZ/Five SoC so to make this clear and to keep this file consistent,
-> update the comment to include RZ/Five SoC.
->
-> No driver changes are required as generic compatible string
-> "renesas,rza2-usbhs" will be used as a fallback on RZ/Five SoC.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> This looks potentially dangerous, as the device will not get a reset in
+> down/up cycles; *possibly* dropping the reset call from ax88179_bind()
+> would be safer.
+Ok, I had the doubt about which reset would be the best, because it seemed 
+to me that reset would be better as soon as possible.
+I will try what you say to avoid down/up cycles.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> In both cases touching so many H/W variant with testing available on a
+> single one sounds dangerous. Is the unneeded 2nd reset causing any
+> specific issue?
+Actually, this double reboot somewhat masked the first problem, because the
+probability of getting a successful initialization, if there is a previous
+problem seems to be higher. So, it is not strictly needed but I think it is 
+better to avoid a second unnecessary reset.
+Ok, if I modify the call from ax88179_bind() I will be respecting the reset
+operation of all devices.
 
-Gr{oetje,eeting}s,
+Thanks
 
-                        Geert
+Best regards
+José Ignacio
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
