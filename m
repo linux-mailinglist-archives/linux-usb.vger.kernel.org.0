@@ -1,140 +1,85 @@
-Return-Path: <linux-usb+bounces-2927-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2928-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94E837EE102
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 14:03:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E76297EE1EB
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 14:51:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE042B20CBA
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 13:03:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66D0428109E
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 13:51:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28FD30646;
-	Thu, 16 Nov 2023 13:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 289432F3D;
+	Thu, 16 Nov 2023 13:51:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d9BbamjX"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="adGXIAbZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EEB1BC1
+	for <linux-usb@vger.kernel.org>; Thu, 16 Nov 2023 05:50:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700142646;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TRYUXNkoJkqjfiq94gnRR2tpyfMacneqCdIvg/D2QqA=;
+	b=adGXIAbZvcWZtZaiU48L3N0tUciD8x0LfUtahKF7B/H07UgTBwNshPiYa6P703haNGn0IF
+	fCL9LjahAke1/GZTlWzgfpzkCnw0czkcbkJ+ofHLUqy7EKiZRXC0PJ27CXsQoQfFN873e8
+	YvHXdGjNVu1OXBMZKwuzo9xaZTqfRf8=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-182-A5A73WdPOM-nbQzROePm0Q-1; Thu,
+ 16 Nov 2023 08:50:42 -0500
+X-MC-Unique: A5A73WdPOM-nbQzROePm0Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0EA2E419;
-	Thu, 16 Nov 2023 13:03:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F53C433C7;
-	Thu, 16 Nov 2023 13:03:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700139799;
-	bh=H7q0Wr5l0JMqXvnR6UaqS3RUHwhyrxsJfVtztg2F/+c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d9BbamjXFqHpFD69Bz+JK5yHAzRg3YQZp0q2nkYoiM3hkzHjACM2j7w0bklyXX3b8
-	 fjTDjqP6jqxBJrx1R19QnJPh/jnNbtyXYzwLrrGSqTaLoaq5FdOJmsuojmG5pWJ5tb
-	 MAgAo1zKfOVH6q/paVgZG1r4xOfgZ+jfVVBqGMiNs9Qv8WhGu98f91psBO5iU9sfrw
-	 qtxJ8czRSj/ztZf46PK4dwUOamW95CRMAo3Wqp8jKw4LNhY6xmWmkGGqSIobeo8Qa1
-	 DXiJChDlv2LQ93mp+wkEcBryIld+GILsy29gT5KF69zn/nFYKY5IDy1K+bBDniyEQS
-	 236D9Hu6bSmAQ==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1r3c1e-0003Y8-30;
-	Thu, 16 Nov 2023 14:03:18 +0100
-Date: Thu, 16 Nov 2023 14:03:18 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Felipe Balbi <balbi@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
-	ahalaney@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v13 05/10] usb: dwc3: qcom: Refactor IRQ handling in QCOM
- Glue driver
-Message-ID: <ZVYTFi3Jnnljl48L@hovoldconsulting.com>
-References: <ZTJ_T1UL8-s2cgNz@hovoldconsulting.com>
- <14fc724c-bc99-4b5d-9893-3e5eff8895f7@quicinc.com>
- <ZTY7Lwjd3_8NlfEi@hovoldconsulting.com>
- <cabf24d0-8eea-4eb5-8205-bf7fe6017ec2@quicinc.com>
- <ZTZ-EvvbuA6HpycT@hovoldconsulting.com>
- <fb5e5e1d-520c-4cbc-adde-f30e853421a1@quicinc.com>
- <ZTdqnSHq_Jo8AuPW@hovoldconsulting.com>
- <04615205-e380-4719-aff1-f32c26004b14@quicinc.com>
- <ZUz4RD3MjnLlPn6V@hovoldconsulting.com>
- <6d4d959c-b155-471b-b13d-f6fda557cfe0@quicinc.com>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 307223C1476C;
+	Thu, 16 Nov 2023 13:50:40 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.39])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id AB6B31C060AE;
+	Thu, 16 Nov 2023 13:50:36 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: pabeni@redhat.com
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	jtornosm@redhat.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	weihao.bj@ieisystem.com
+Subject: Re: [PATCH 1/2] net: usb: ax88179_178a: fix failed operations during ax88179_reset
+Date: Thu, 16 Nov 2023 14:50:33 +0100
+Message-ID: <20231116135035.21504-1-jtornosm@redhat.com>
+In-Reply-To: <d17b696c81a57fb857b54a8c05e121be1cfc47fa.camel@redhat.com>
+References: <d17b696c81a57fb857b54a8c05e121be1cfc47fa.camel@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6d4d959c-b155-471b-b13d-f6fda557cfe0@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
 
-On Wed, Nov 15, 2023 at 11:12:16PM +0530, Krishna Kurapati PSSNV wrote:
+On Thu, Nov 16, 2023 at 10:38 AM Paolo Abeni <pabeni@redhat.com> wrote:
+> We need at least a suitable Fixes tag
+Ok, I will add it in my next version.
 
-> > Are you sure there's no support for hs_phy_irq also in the "femto" PHYs
-> > and that it's just that there is currently no driver support for using
-> > them?
-> > 
-> > And why is it defined if there is truly no use for it?
+> Do you know if there is some status register you can query for 'reset
+> completed'? or some official documentation you can quote for the above
+> delay?
+I have only continued the previous way.
+But, you are right, maybe it can be done better, let me try if possible.
 
-> We had an internal sync up with HW folks and here is some baseline 
-> suggestions we received:
-> 
-> If DP/DM interrupts are defined, then that is the preferred path to 
-> used, irrespective if HS Phy irq is defined or not / or whether it is 
-> Femto / QUSB2 target. There is no target that has femto phy but misses 
-> DP/DM today.
+Thank you
 
-Ok, but just knowing that it is "preferred" does not in itself mean that
-it should be removed from the binding.
+Best regards
+José Ignacio
 
-We need to know that it's effectively useless (i.e. that the interrupts
-are defined but cannot be triggered) for that.
-
-We can still use the DP/DM interrupts in favour of HS in the driver
-however.
-
-> For cases like sdm660/msm8998/msm8953/msm8956, these targets use 
-> hs_phy_irq only and don't rely on DP/DM. So we cannot remove the binding 
-> in entirety.
-
-I fixed the binding for those specific platforms last year:
-
-	dd566faebe9f ("dt-bindings: usb: qcom,dwc3: refine interrupt requirements")
-
-But as I mentioned in that commit message the following platforms do not
-have any wakeup interrupts specified in mainline currently:
-
-      - qcom,ipq4019-dwc3
-      - qcom,ipq6018-dwc3
-      - qcom,ipq8064-dwc3
-      - qcom,ipq8074-dwc3
-      - qcom,msm8994-dwc3
-      - qcom,qcs404-dwc3
-
-It would be good to get that cleaned up too (i.e. add the missing
-interrupt definitions and update the binding to match).
-
-> > Also, if hs_phy_irq and dp/dm_phy_irq were mutually exclusive, why does
-> > the following Qualcomm SoCs define all three?
-
-> HS Phy Irq is redundant or functionality is mutually exclusive in this 
-> case. If there are targets that define all three, then we need to update 
-> those to only utilize DP/DM interrupts.
-
-No, as I wrote above that depends on if the HS interrupt is truly
-useless. Otherwise it still belongs in the binding, even if the driver
-uses DP/DM in place of it.
-
-Again, the binding should describe the hardware, not what a particular
-OS chooses to use.
-
-Johan
 
