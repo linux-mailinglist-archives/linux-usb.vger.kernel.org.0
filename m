@@ -1,175 +1,115 @@
-Return-Path: <linux-usb+bounces-2914-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2915-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 094137EDB5E
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 06:59:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6042D7EDCF3
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 09:32:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 804F11F2391F
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 05:59:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13633281012
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Nov 2023 08:32:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64967D530;
-	Thu, 16 Nov 2023 05:59:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8FE411704;
+	Thu, 16 Nov 2023 08:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="lyf972i9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xz4ssHLT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2105.outbound.protection.outlook.com [40.107.114.105])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2B01A3;
-	Wed, 15 Nov 2023 21:59:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nsAv1fAEYSTpGWGnNo0AZvnNo/13H2JtRbIsmHFfsQVV4BK2O2YlcfJndP5lZbFOAYekUi1/BCyzsrPnqnalVBxwh4/alUoQ9gk1enAgPM7zJKDG7K92hYQE5+IOHtkUojZLd6IvBuTer4wYLjECliy6F0xuF8fn3J/bapkoQbxAj1JBGQdFzkUcCrhkQchLd8CzsOLDRHmRdbMZGMGoqSVsB2dAP3afwac83MJMK61hzAxNfxl7BBcgPoF5LlROr2q4Wg8ZTIYwzDQ7NwJoqZT1MRLCJrQTTXBuy4WEOBn4XQ0ffVGNVgvlP0Y3YozWACpj7AXZUUKuVeeVH71oCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uogyPzWN4W6sR+6B+N74xRy2B1LJ3cOFGzBPI8LhAjs=;
- b=YwScFpT4wzXesKnS7AjHAq+HCRvGZILDM9B9qCT6nFLUQAG/MJsvAnp1njMUXRCSdmiq8MuGIypKFy0Ix4oMNbSPG3rNRCDXwNSXGXkqNQKvk06JS+AoEAjddZWCzeOgDBZypkNuSQgEezlAPTL4MHt5x0JUgRMAbqSxOhblcarrTBZCVxRt5ByW1x+iv6jVIIXiYAGiR1oWunqQ69WOyNe+755OxViV9kC+vOy6tNCoOuz4lhE3gPueUUjYFOy+opoSmgFcWvgYW14iz/nb11t1wD0r/Q9RbXhRZhGq5BPBwmD9OnsjsomxGGw/4Ltb0aHUe9CxERKW2KcVNmSfww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uogyPzWN4W6sR+6B+N74xRy2B1LJ3cOFGzBPI8LhAjs=;
- b=lyf972i9Xl0m+Xl1Ilkoh3dno49MlGyE5pZ0bRAHd8v2/+0FjL0TFppb29lG6cXuypk82aT4c9LHp5cPMKcic9BghVaWOcIYpCSP8J/EPkBNdpVshO8bKTwIjod376L9ZoUHpS05wFSiLq2pfTfAkxlGHnwZJK76AlDaLW9HLoo=
-Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
- (2603:1096:404:8028::13) by OS3PR01MB8089.jpnprd01.prod.outlook.com
- (2603:1096:604:1bf::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.21; Thu, 16 Nov
- 2023 05:59:42 +0000
-Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
- ([fe80::50f5:eb2b:710a:b7c7]) by TYBPR01MB5341.jpnprd01.prod.outlook.com
- ([fe80::50f5:eb2b:710a:b7c7%7]) with mapi id 15.20.7002.021; Thu, 16 Nov 2023
- 05:59:42 +0000
-From: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To: Prabhakar <prabhakar.csengg@gmail.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
-	<conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>
-CC: Magnus Damm <magnus.damm@gmail.com>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-renesas-soc@vger.kernel.org"
-	<linux-renesas-soc@vger.kernel.org>, Biju Das <biju.das.jz@bp.renesas.com>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: RE: [PATCH] dt-bindings: usb: renesas,usbhs: Document RZ/Five SoC
-Thread-Topic: [PATCH] dt-bindings: usb: renesas,usbhs: Document RZ/Five SoC
-Thread-Index: AQHaGAi5pfcoPaHtXU2I31nKTqUDy7B8c8Lg
-Date: Thu, 16 Nov 2023 05:59:42 +0000
-Message-ID:
- <TYBPR01MB534131675F2857FC72E1143ED8B0A@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-References: <20231115211407.32067-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20231115211407.32067-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYBPR01MB5341:EE_|OS3PR01MB8089:EE_
-x-ms-office365-filtering-correlation-id: 81bfd528-0120-478e-4253-08dbe6693a4a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- RcwKYrMp3CgoWe+FmraAJeFOW0NA+A1WUN9I+vNazEkISTVBFpuhDap3fkv+dle0H41gkaA9AKR0w2JOFMaYdP1hOIJKApph5aVfzUdjT3PmVxYM6nbZMSrslo/9xN37Q+QeYMO/1CCqhz1w8cGrpdPW2JMv3tZJJqeCZpom4pdb3PGwnzJWRKCo9yoimmtwGZjUKOTbuGPkKWvzP2DLntwcCdl6jmDt+Jay8rRdG2674sYHqKXOULsnfUMLTrP+pq1919weNazi6hAY3zml7hnV3tGOwPAMUOe9pM+V0lS6V1wHFMqN25k5+Tlr8jciTQaGyqhRP2x99dnbj3v4kNXNa97+7Zdwo5d2y7YNrAkkE61a3uqX4hVSd+/YqD/7UhI7Bd1hedCW96nYX+1KyEFZwOWKvCG38CP0Okt1mJD8aVgjCjudCpvAyumbffTZk6F/W54GrEqAwOOUNmgod3IphtvzBg7qPidEqEJPhTiUSCr/jDD8ysgZAQKq3GEa9EgZD6lv2MQmSF80Iv17+jfWtfWhXYTicAdutwvZzzsfMIfbnDkw2ON+lQoXaB+SiGL2qe8Ov/qnRboWYJ66KRJWJnsH7np/1EBUEDhFiMO89RZbIqrtHEcj8W807wab
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYBPR01MB5341.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(346002)(136003)(396003)(376002)(230922051799003)(64100799003)(451199024)(186009)(1800799009)(55016003)(86362001)(33656002)(478600001)(66946007)(66556008)(110136005)(38070700009)(76116006)(66446008)(66476007)(54906003)(64756008)(316002)(7696005)(6506007)(9686003)(4326008)(8676002)(8936002)(71200400001)(107886003)(52536014)(122000001)(83380400001)(7416002)(5660300002)(2906002)(41300700001)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?dBUt0ZJMl3903WZ0euySh5VGaad8UdxwuT44vrm6TARIvunkwPgOUeyx1Sh+?=
- =?us-ascii?Q?7JuxxodfBiAc0UOQiKPBsrpSCBcukHIEz4Kvp45wHb3mFrTqeDy34xTmp0B6?=
- =?us-ascii?Q?aWL3u/7mLTiomdYvKmfZeDoaL4Q7TctrGZQxzUntcSv3xF2h86BjjTliYgi3?=
- =?us-ascii?Q?XHe9oFm9dFYwdLnA5An1B8NQbtz6967OvMIkVYHKSndjhYyw+4eemUpGhnbw?=
- =?us-ascii?Q?rkScOHOS5RnCFXp28xN6zDI5PqvwmKQ5brddw5XACPX00oOeC1FY2v5ud2NL?=
- =?us-ascii?Q?rjRTdl/Sh+qr8PYGdNnK5XqEC2FPcWtA0XM+S8UOZ88Jk1gvW70WtEiePoqb?=
- =?us-ascii?Q?6w1V4hFs1GHI4erNsd4+aQ80luM0BiaJq8/4QYVTBiT1EcQE0ZNzxOIkh19C?=
- =?us-ascii?Q?zNY1rOSwsGoPmV7sXmjauK9DVxQx5s9eQtnEIxVNH22hmiyBMlEfh3c81Odf?=
- =?us-ascii?Q?zX6Xyxtplplm0FQr8cBCqLhhn6nbnhs5uXMxXwMCGrQkuzz+HcbncDDt3MKo?=
- =?us-ascii?Q?bE9JupsReGAkK5JdB32EgOYB14TB/RgzOUtkxrUEZsSadmS+LMp8GLMpRKDR?=
- =?us-ascii?Q?P7XVqC1raFRn7X5vmtANaF9xcpVeS8kLY1OIoVPVFEpL3ujVd/n2HSh+m9Xl?=
- =?us-ascii?Q?mpVuD3esoiLjg20rI9N1Ubk/PL3+tKkR5dbyKjacsQTI4LTpHCxzwWPQ5msu?=
- =?us-ascii?Q?wtiI3MjE1RG9PuK8w7ENPIJKNOjPBAchBbVoJCW8pF9FFqr85PkMO+aEpyLJ?=
- =?us-ascii?Q?VILIpK0X+UumMW9M1lGq7Dle3yY06zYi5ezAAvNTUsMP4eQvSVdmqWnaGoE9?=
- =?us-ascii?Q?d0UIXgRAjcDSnqeseAdGGTMM1b2Z1SsPweG7IEK6VtCdgAZnLTEkqdYpGeZC?=
- =?us-ascii?Q?VU98hlvYFLvyj7K2pdydbCB4vB/F3eIfbDpiel3qTbW/owUOz9CAPKQVA2Gy?=
- =?us-ascii?Q?e/hgFctCm2DsoUrZLwpdevUHJExdf4alEsJjdTeIpYXE7EKfw/hPEVKqpFHI?=
- =?us-ascii?Q?LkiIXRFOjPbPvEj60rz2Ng+NwnoU9vNpqW7N+6Z2YLxf4NpBJyLlRtIQ0GVX?=
- =?us-ascii?Q?um0xysz2VyOQAVBFnq6pLDDrAMhrWhhWxf7WGhVg391PH+rFpnawFQjkuG/d?=
- =?us-ascii?Q?vvR4HP8Wv6eCznegQW++YZec7creFjtmRE6/WnbVAPF3i5nAIOeCH4JaBcnj?=
- =?us-ascii?Q?P63mP7ihJGFrLc1ddJ4gHJLGbo2IMWtS73cGwRsb0AqDvLEeDJwqy9S5d6c0?=
- =?us-ascii?Q?ec+keqjdSeFZWAgPg1WAW3MuT4W+JnYZ4Nqsvyep5KKh8JVP2ZtisA5XzOpR?=
- =?us-ascii?Q?I8Lt8evmGcmHrbJlQ56cKqJF7UEBirrcyBvjHi1YWeBRtfG9x7KAbryF7kHf?=
- =?us-ascii?Q?Q0n/W83CIOhJtQH6G5xVdZrZ61khKAhoShHCBkNXwrNZYo9KhrlEhvgCvWsu?=
- =?us-ascii?Q?SgaserKqCeaQ56iuqpofSkJ9iqKawnW4PgDgDGTqyXd3GWPZZXqq0ll8M+Sa?=
- =?us-ascii?Q?zWoffo9YA8cGd8+WyoEcWbj/UyZDK70LVAtb/bgPdz9XgAmxdN4luVcR86bn?=
- =?us-ascii?Q?ccwcnR+5vmaHcSXBQkZHExJ52cmkXNsC62UBv2gmzUCZBD7Zb4fBw22kSI95?=
- =?us-ascii?Q?fSR7fiUTkaSxy6CL7HwgP5KwbzOPemax4ZPl4Xfnv5d82jKSl9ynZn88QQgN?=
- =?us-ascii?Q?hssnYw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E6F19B
+	for <linux-usb@vger.kernel.org>; Thu, 16 Nov 2023 00:32:47 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-280465be3c9so635756a91.1
+        for <linux-usb@vger.kernel.org>; Thu, 16 Nov 2023 00:32:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1700123567; x=1700728367; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=31bn3B5X8I0gch6WfMuHeSex2F8MyGxZRscHzn524C8=;
+        b=Xz4ssHLTUhOVFxm8GT+WxnZh2sFM3LwE91GD+RtCGakdgX7qGmpqvhbLAo0dlWnmnU
+         HP6uV5kTqR0NwmbtGDm2ZhhPRi5rMyf++bGwn9hATh41ILDdlyQYZtOAMm6h1HWT1d8S
+         IEnKoZfoL0ED10jgvlRYZ8q9G1XSC4+Ju89VpgGWGaJm8IcnZzFDKBJe2g+iB06S7LUy
+         aWScEL7LOEZ/J85E+8CZQAt53wtsBhs9t9O4oGSd2J3csxjX1LIGm/x5PDmWJcG+8jtf
+         5C7TeJyF+toucHvTQ0fw3Spm3mfBxJADAQWx3KGaGfyYXGOlVxkgtbJ1CYrHlqy2Z5DU
+         WpGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700123567; x=1700728367;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=31bn3B5X8I0gch6WfMuHeSex2F8MyGxZRscHzn524C8=;
+        b=OKWqunlPtvXRKXpU9v5a/eyNYtP+I5wzdBXeBiR2TaCQX/21w90xT3gi8wYcf4jN1W
+         O13t3PBKcdxVtPdZoR6loMCWEknd3Z4QhP0ByDwS6som0+6z4hcROmKI5SV5N3xItIfA
+         V4i6uJ9m+2CteDiKHnoXilQVgkMn6IPQx1MS+TyOWoMPL6ToBrLMHc+awT0IakwJf6wg
+         P/W/v+1sHxm69Nj7EcLgnSWyzletaKVHW19RW4jY4Q38TjrKBkCaTcVxzvoOuhSvGjoy
+         mBxT9+p/KWRgEnYAepB4MqBuX9dn6A7pmMP4w6EIISnY1OFnRi8hfLY/n3Gt2cF0ge1f
+         MpeA==
+X-Gm-Message-State: AOJu0YziaiEjT6iAB82jgSTZ2CeJNHzOglkvb78bLBu8WmgeJuE501l+
+	nCFuK9S4EvE3vlXyYE/rDhDY4tZFObGXWcY=
+X-Google-Smtp-Source: AGHT+IGF3a0V8XXgRSu/fRueRhaUTO2mo/G8zpcGV7+ayUWSjR7I8sWOE7UrZNwXXcnavubN3aWnRnTKC0SSOOg=
+X-Received: from guanyulin-p620linsp01.ntc.corp.google.com ([2401:fa00:fc:202:86b7:16db:b4e1:f67a])
+ (user=guanyulin job=sendgmr) by 2002:a17:90b:2d8c:b0:280:32d5:8904 with SMTP
+ id sj12-20020a17090b2d8c00b0028032d58904mr287071pjb.1.1700123567158; Thu, 16
+ Nov 2023 00:32:47 -0800 (PST)
+Date: Thu, 16 Nov 2023 16:32:16 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYBPR01MB5341.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81bfd528-0120-478e-4253-08dbe6693a4a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2023 05:59:42.6818
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iVqrfNg9CiTfRFD50rZa9zX3wOo2KNaQsVIKasbsHDrxINi0v1sHV/LcSrq4E61Dq71LEFUWEHPFmwaJrulb1Y/4XaXAuFh46pjGRAJ+EPJTSm3w78IceQnfPs+xWCPM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB8089
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0.rc0.421.g78406f8d94-goog
+Message-ID: <20231116083221.1201892-1-guanyulin@google.com>
+Subject: [PATCH] usb: typec: tcpm: skip checking port->send_discover in PD3.0
+From: Guan-Yu Lin <guanyulin@google.com>
+To: linux@roeck-us.net, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, badhri@google.com, 
+	kyletso@google.com, albertccwang@google.com, 
+	Guan-Yu Lin <guanyulin@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Prabhakar-san,
+The original Collison Avoidance mechanism, port->send_discover, avoids
+the conflict when port partners start AMS almost the same time. However,
+this mechanism is replaced by SINK_TX_OK and SINK_TX_NG. Skip the check
+in PD3.0 to avoid the deadlock when source is requesting DR_SWAP where
+sink is requesting DISCOVER_IDENTITY.
 
-> From: Prabhakar, Sent: Thursday, November 16, 2023 6:14 AM
->=20
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->=20
-> The USBHS IP block on the RZ/Five SoC is identical to one found on the
-> RZ/G2UL SoC. "renesas,usbhs-r9a07g043" compatible string will be used on
-> the RZ/Five SoC so to make this clear and to keep this file consistent,
-> update the comment to include RZ/Five SoC.
->=20
-> No driver changes are required as generic compatible string
-> "renesas,rza2-usbhs" will be used as a fallback on RZ/Five SoC.
->=20
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thank you for the patch!
-
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-
-Best regards,
-Yoshihiro Shimoda
-
-> ---
->  Documentation/devicetree/bindings/usb/renesas,usbhs.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-> b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-> index bad55dfb2fa0..40ada78f2328 100644
-> --- a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-> +++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-> @@ -19,7 +19,7 @@ properties:
->        - items:
->            - enum:
->                - renesas,usbhs-r7s9210   # RZ/A2
-> -              - renesas,usbhs-r9a07g043 # RZ/G2UL
-> +              - renesas,usbhs-r9a07g043 # RZ/G2UL and RZ/Five
->                - renesas,usbhs-r9a07g044 # RZ/G2{L,LC}
->                - renesas,usbhs-r9a07g054 # RZ/V2L
->            - const: renesas,rza2-usbhs
-> --
-> 2.34.1
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 058d5b853b57..ff3c171a3a75 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -2847,7 +2847,7 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+ 					   PD_MSG_CTRL_NOT_SUPP,
+ 					   NONE_AMS);
+ 		} else {
+-			if (port->send_discover) {
++			if (port->send_discover && port->negotiated_rev < PD_REV30) {
+ 				tcpm_queue_message(port, PD_MSG_CTRL_WAIT);
+ 				break;
+ 			}
+@@ -2863,7 +2863,7 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+ 					   PD_MSG_CTRL_NOT_SUPP,
+ 					   NONE_AMS);
+ 		} else {
+-			if (port->send_discover) {
++			if (port->send_discover && port->negotiated_rev < PD_REV30) {
+ 				tcpm_queue_message(port, PD_MSG_CTRL_WAIT);
+ 				break;
+ 			}
+@@ -2872,7 +2872,7 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+ 		}
+ 		break;
+ 	case PD_CTRL_VCONN_SWAP:
+-		if (port->send_discover) {
++		if (port->send_discover && port->negotiated_rev < PD_REV30) {
+ 			tcpm_queue_message(port, PD_MSG_CTRL_WAIT);
+ 			break;
+ 		}
+-- 
+2.43.0.rc0.421.g78406f8d94-goog
 
 
