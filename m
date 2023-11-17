@@ -1,129 +1,139 @@
-Return-Path: <linux-usb+bounces-2979-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2980-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A07277EFC14
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Nov 2023 00:19:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F379B7EFC3C
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Nov 2023 00:47:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AEA928135F
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 23:19:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 763ECB20B94
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 23:47:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 420E34777E;
-	Fri, 17 Nov 2023 23:19:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B7D4655F;
+	Fri, 17 Nov 2023 23:47:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b60qmXZr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YITZQTWl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5873D7A;
-	Fri, 17 Nov 2023 15:19:37 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-5099184f8a3so3684266e87.2;
-        Fri, 17 Nov 2023 15:19:37 -0800 (PST)
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B27C10CE
+	for <linux-usb@vger.kernel.org>; Fri, 17 Nov 2023 15:47:34 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2c50906f941so35707311fa.2
+        for <linux-usb@vger.kernel.org>; Fri, 17 Nov 2023 15:47:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700263176; x=1700867976; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y6GsLzHscU8yXDN6TiLq2nBefNDUx6j1mcmIXFk/Jmw=;
-        b=b60qmXZrXpcnsvhqMBqdWZ7LdNGxsOsukBJjpyQrsrDqUq2yGsTiX8FtekSJqq7DHV
-         45Hr2s58RyGVuJm6tdrkxfPw1jqMDnlChc2ZnocoqLaev7HU9ZhSVgjQgY2GsT4mFcS4
-         11NsONJK6Md2VhFNDZougnjbUvxHS31vL0VTDD6n5sc5xGVDPUPBkGM0XJ3q2WB5s4OB
-         0CFuh2GMVX0TFv59q/Y3lkGZnhEe/79o5S4eNHpu+aCV9dvACeH7YqhX0m014xjsIjBl
-         NPDdpkCbo1IFDMGHvpfCJCxRgzKlT1pm+rjt0njJh4IXLGF8JFHqsR2G1M7gHzWZkddG
-         akEQ==
+        d=linaro.org; s=google; t=1700264852; x=1700869652; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8wM1V3uKaxmMfTVNrngWaOySMlzElI42CeEpsG+l1pg=;
+        b=YITZQTWlANVnWGW8Ochntl6IgCfSOeYbxCZulV+blBKr664tkfZV75r/n513c231Mc
+         XUqsfW3fnH3ormjillLoept7DhRXOLKjoOlSA1Fbbm1IlSRW12D5pBMRMkVTKs8JEFrs
+         gnYALStXuc+pGf+lr1JqvUpExmmAZv99VZ7f6Dx0moXBIJHlvkTDGT/iAxw/+QJo2ssW
+         1ZmlXOGFLj4MJ/x8t0VaQ0slm8xgdyXi3i7DNmVPXuQvaYh1A6ZpWLRS7ZZJRjqVys/G
+         GVaDXIdghcadJ/fsr+Q6Tl5ONiJ+jHxTrja5VH34TwhNuzjaaRY+Og54nrpqIuq6zpMG
+         T9Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700263176; x=1700867976;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y6GsLzHscU8yXDN6TiLq2nBefNDUx6j1mcmIXFk/Jmw=;
-        b=SbfK4CgFqpkrl12wkidNzbTSETv85TRr4ntrxQyqxvHw0Ubfs7NrCxzgT0mMbPaS9h
-         484lqRu+r2TbGpNwocYjW6cb5LCRAzeadFupBGW742aOSN6D9W+bVyqN87IhRYAY8F6s
-         za5+YImsbEDlFx87LgByVRWUyE3bJDm8h5OPoV5ysgJ7+lERgprFPDdKk3CqBHAP+4nv
-         8sOxeRtzwGy7lcaVBIn0Aep/y+XlLXPbq9aorWt91rCdkFgWH2oc3enzUYo06UP9XrZI
-         tnlxgdBgp4wSqQ1+PRxt8R9A/w/v1/e00d267KXpD8cRFdxUCQvxrghx/BemAfNyfP/O
-         JNxw==
-X-Gm-Message-State: AOJu0YyWSJIf/xCWOYcvLaB/6RldVd0IMa0CNp/SiHUpvRTKk+S0nGfM
-	ln8S18JpgNnhx5CmzBBrRW7oho1DsgIugQ==
-X-Google-Smtp-Source: AGHT+IG3QG4N7rbjOQNMHrLbf+ywamuEF8t0YgMdoAQcoq91DxVQQpucUmkjl2psV+qgzE+4JdKgKA==
-X-Received: by 2002:a05:6512:3d2a:b0:507:ae8b:a573 with SMTP id d42-20020a0565123d2a00b00507ae8ba573mr1018067lfv.51.1700263175940;
-        Fri, 17 Nov 2023 15:19:35 -0800 (PST)
-Received: from rafiki.local ([89.35.145.100])
-        by smtp.gmail.com with ESMTPSA id q22-20020ac246f6000000b005095881dc1asm377788lfo.87.2023.11.17.15.19.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Nov 2023 15:19:35 -0800 (PST)
-From: Lech Perczak <lech.perczak@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: Lech Perczak <lech.perczak@gmail.com>,
-	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-Subject: [PATCH 2/2] net: usb: qmi_wwan: claim interface 4 for ZTE MF290
-Date: Sat, 18 Nov 2023 00:19:18 +0100
-Message-Id: <20231117231918.100278-3-lech.perczak@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231117231918.100278-1-lech.perczak@gmail.com>
-References: <20231117231918.100278-1-lech.perczak@gmail.com>
+        d=1e100.net; s=20230601; t=1700264852; x=1700869652;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8wM1V3uKaxmMfTVNrngWaOySMlzElI42CeEpsG+l1pg=;
+        b=RhEb8NIvWLd5FtDAMyQeAsnMKAgfnGzV01Eaquooe8sMhbQlfHbFR4MSO9HIkHEMGF
+         OpD+DGos/lNi0bL1+43oyVT9Je+3RVMqzmMxtGjJggA5PAO2WT5+wBux14xbOwvBIbHu
+         /Hrw8Oxrl1uAC/yVyDB7UgQ1lqVVP+mp5m1NKj4LCSf8CQB+3XRZEMgTZGnjcqceqdcM
+         YFIDfCTT9FgvxamqnoOPCBT5OJH+tJZdJnpAoqDx4OaqlnmvRcSMbPc6C4qJMfhv158h
+         +c8xSMeK0lxZK65+4hVrKEbBQ3GkilLsYV6mipuz2QcB81p4XGpm+9iIlOGliv28X6Sb
+         bD1Q==
+X-Gm-Message-State: AOJu0YwOO/o7kBmatkBYeNzaXnrm/ceowP/NFZUODnDen7iCDctTWVQL
+	gxZ3kvECGknNGoAnI8SguZnTFg==
+X-Google-Smtp-Source: AGHT+IGIKfxOtqgZs5izGy55HN7ISDuZsGjfLyFS5WhsxYavC1F0ubnkuOIXAgsoQLeJG7M7YVnV6Q==
+X-Received: by 2002:ac2:54a4:0:b0:507:9a49:2d3d with SMTP id w4-20020ac254a4000000b005079a492d3dmr766293lfk.31.1700264852473;
+        Fri, 17 Nov 2023 15:47:32 -0800 (PST)
+Received: from [192.168.201.100] (178235187040.dynamic-4-waw-k-2-3-0.vectranet.pl. [178.235.187.40])
+        by smtp.gmail.com with ESMTPSA id s16-20020aa7cb10000000b00544f8271b5fsm1168871edt.8.2023.11.17.15.47.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Nov 2023 15:47:31 -0800 (PST)
+Message-ID: <041f239f-7b40-4681-8c6c-2268f9c2c684@linaro.org>
+Date: Sat, 18 Nov 2023 00:47:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] USB: dwc3: qcom: fix resource leaks on probe deferral
+Content-Language: en-US
+To: Johan Hovold <johan+linaro@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+ linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231117173650.21161-1-johan+linaro@kernel.org>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20231117173650.21161-1-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Interface 4 is used by for QMI interface in stock firmware of MF28D, the
-router which uses MF290 modem. Rebind it to qmi_wwan after freeing it up
-from option driver.
-The proper configuration is:
+On 17.11.2023 18:36, Johan Hovold wrote:
+> When reviewing the recently submitted series which reworks the dwc3 qcom
+> glue implementation [1], I noticed that the driver's tear down handling
+> is currently broken, something which can lead to memory leaks and
+> potentially use-after-free issues on probe deferral and on driver
+> unbind.
+> 
+> Let's get this sorted before reworking driver.
+> 
+> Note that the last patch has only been compile tested as I don't have
+> access to a sdm845 device.
+> 
+> Johan
+I'll sound like a broken record, but:
 
-Interface mapping is:
-0: QCDM, 1: (unknown), 2: AT (PCUI), 2: AT (Modem), 4: QMI
+is there anyone in the world that is actively benefiting from this failed
+experiment of using the ACPI tables that were shipped with these SoCs?
 
-T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#=  4 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=19d2 ProdID=0189 Rev= 0.00
-S:  Manufacturer=ZTE, Incorporated
-S:  Product=ZTE LTE Technologies MSM
-C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=4ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=4ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=4ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=84(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=4ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=86(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=4ms
+There are so so so many shortcomings associated with it due to how Windows
+drivers on these platforms know waaaay too much and largely use ACPI to
+"bind driver x" and I simply think it doesn't make sense to continue
+carrying this code forward given little use and no testing.
 
-Cc: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: Lech Perczak <lech.perczak@gmail.com>
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 344af3c5c836..e2e181378f41 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1289,6 +1289,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x19d2, 0x0168, 4)},
- 	{QMI_FIXED_INTF(0x19d2, 0x0176, 3)},
- 	{QMI_FIXED_INTF(0x19d2, 0x0178, 3)},
-+	{QMI_FIXED_INTF(0x19d2, 0x0189, 4)},    /* ZTE MF290 */
- 	{QMI_FIXED_INTF(0x19d2, 0x0191, 4)},	/* ZTE EuFi890 */
- 	{QMI_FIXED_INTF(0x19d2, 0x0199, 1)},	/* ZTE MF820S */
- 	{QMI_FIXED_INTF(0x19d2, 0x0200, 1)},
--- 
-2.39.2
-
+Konrad
 
