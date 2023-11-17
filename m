@@ -1,111 +1,110 @@
-Return-Path: <linux-usb+bounces-2954-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2955-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30ADD7EEE62
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 10:22:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E9847EEF82
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 10:58:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 627791C20992
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 09:22:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 272B7B20B85
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 09:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC0AE12E4F;
-	Fri, 17 Nov 2023 09:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16EC017999;
+	Fri, 17 Nov 2023 09:58:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oDXdhePa"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EVJLxhTO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6450D4F;
-	Fri, 17 Nov 2023 01:22:11 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 65A161BF204;
-	Fri, 17 Nov 2023 09:22:09 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42986CE;
+	Fri, 17 Nov 2023 01:58:14 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8D1311C000C;
+	Fri, 17 Nov 2023 09:58:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1700212929;
+	t=1700215093;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wcSMTVB65o0CxA6LAXq51wxe965CmzOoRMyEDRoNDwc=;
-	b=oDXdhePaO7wWX8F93nJ220tXSO0PAnWJjCQXdgsljT6UenIxwl0SCHqosxQk1iqgDoajfk
-	9hr9TMOK0OP/aoIFj0H1vNVPBf1g+StIMk8UEAVg8EHDy21D1l2cJt7fMUuFU3+yMFYiTz
-	33dZxDzu13Dg8X/hjDFJFhJF3B7FeeB0nirLAZQ9v0L4QwDHBQxRHcaglAqOSR2dDUdll1
-	iEqgkBpelCoCeVpUAuRGnkt3YPGDvO0hM75voX3OA9+BOSxw8yN8Hml2f+ERbltwJq3RXu
-	Hfm8BXklFg1Rzgf2Oop0Pn9knC6cPfpbPBmUc98JyaSjBdcptOK1Tu9jRxJSRw==
-Date: Fri, 17 Nov 2023 10:22:08 +0100
-From: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Jisheng Zhang <jszhang@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Lu jicong <jiconglu58@gmail.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH] usb: dwc3: don't reset device side if dwc3 was
- configured as host-only
-Message-ID: <20231117102125.44995ad7@kmaincent-XPS-13-7390>
-In-Reply-To: <20231117015527.jqoh6i3n4ywg7qui@synopsys.com>
-References: <20231116174206.1a823aa3@kmaincent-XPS-13-7390>
-	<20231116175959.71f5d060@kmaincent-XPS-13-7390>
-	<20231117014038.kbcfnpiefferqomk@synopsys.com>
-	<20231117015527.jqoh6i3n4ywg7qui@synopsys.com>
-Organization: bootlin
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	bh=P4oNQfBYlP0AUFjj519pmqm6CCbxiBl1lNX7nXCCgt0=;
+	b=EVJLxhTOOVfvd33Q80JnB+XnSjByT68Q3jMleNJjJUxeIFxwaMM7KtWiP3rhrh17K7hJjl
+	sCvVVbITb/hJeupyFUxjrBmn7Xn5shTxVixdaOAQYsm024OTXLKACmyT4/v3eeBoEQOGWz
+	jDOUZlj/HXfFA6g3o+wz299a0RVrjBoAIrPXiqAzpTsRkS1e0vjhkmot05yXW43PhSclBr
+	qSc2HZ0daoGKLuTZ7371FKP5/6qFozzliywTaE3KPTLI/NvIJ8wK2LQywM8W9k1AXLJ7bD
+	EnGKye/pSQG8peGAvI9WQSCJGBiUXsZGcOs6E6WQNwWUOICxwo9fxfK2LMOxdA==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: kory.maincent@bootlin.com
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 17 Nov 2023 10:58:12 +0100
+Message-Id: <CX0ZY6JPH6HP.3JWUAN8KZ2SZB@tleb-bootlin-xps13-01>
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rob Herring"
+ <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Roger Quadros" <rogerq@kernel.org>, "Pawel Laszczak" <pawell@cadence.com>,
+ "Nishanth Menon" <nm@ti.com>, "Vignesh Raghavendra" <vigneshr@ti.com>,
+ "Tero Kristo" <kristo@kernel.org>, <linux-usb@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>
+To: "Peter Chen" <peter.chen@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH 4/6] usb: cdns3: support power-off of controller when in
+ host role
+X-Mailer: aerc 0.15.2
+References: <20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com>
+ <20231113-j7200-usb-suspend-v1-4-ad1ee714835c@bootlin.com>
+ <20231114083838.GC64573@nchen-desktop>
+ <CWYHLRBFE1X1.15330WETL2R7U@tleb-bootlin-xps13-01>
+ <20231117033814.GA485583@nchen-desktop>
+In-Reply-To: <20231117033814.GA485583@nchen-desktop>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hello Thinh,
+Hello,
 
-On Fri, 17 Nov 2023 01:55:30 +0000
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
-
-> Hi,
->=20
-> Sorry, email client issue with your email. Attempt to resend:
-
-Thanks for your quick reply.
-
->=20
-> On Fri, Nov 17, 2023, Thinh Nguyen wrote:
-> > Hi,
+On Fri Nov 17, 2023 at 4:38 AM CET, Peter Chen wrote:
+> On 23-11-14 12:10:18, Th=C3=A9o Lebrun wrote:
+> > Hello,
 > >=20
-> > On Thu, Nov 16, 2023, K=C3=B6ry Maincent wrote: =20
-> > > On Thu, 16 Nov 2023 17:42:06 +0100
-> > > K=C3=B6ry Maincent <kory.maincent@bootlin.com> wrote:
-> > >  =20
-> > > > Hello,
-> > > >=20
-> > > > Similar issue with ZynqMP board related to that patch:
-> > > >=20
-> > > > xilinx-psgtr fd400000.phy: lane 3 (type 1, protocol 3): PLL lock ti=
-meout
-> > > > phy phy-fd400000.phy.3: phy poweron failed --> -110
-> > > > dwc3 fe300000.usb: error -ETIMEDOUT: failed to initialize core
-> > > >=20
-> > > > With CONFIG_USB_DWC3_DUAL_ROLE and dr_mode =3D "host";
-> > > >=20
-> > > > It may not be the correct fix. =20
-> > >=20
-> > > Just figured out there was a patch (357191036889 usb: dwc3: Soft reset
-> > > phy on probe for host) from Thinh aimed to fix it but the issue is st=
-ill
-> > > here on ZynqMP.
-> > >  =20
+> > On Tue Nov 14, 2023 at 9:38 AM CET, Peter Chen wrote:
+> > > > +	if (cdns->pdata && cdns->pdata->quirks & CDNS3_RESET_ON_RESUME)
+> > > > +		cdns->xhci_plat_data->quirks |=3D XHCI_RESET_ON_RESUME | XHCI_SU=
+SPEND_RESUME_CLKS;
+> > > > +
+> > >
+> > > If you set this flag, how could you support the USB remote wakeup
+> > > request? In that case, the USB bus does not expect re-enumeration.
 > >=20
-> > How many ports do you use? Can you try this:
+> > We didn't support remote USB wakeup. Only S2R mattered in our case and
+> > USB remote wakeup wasn't a possibility.
+>
+> Without this patch, will below be hit for your platform:
+>
+> 	/* re-initialize the HC on Restore Error, or Host Controller Error */
+> 	if (temp & (STS_SRE | STS_HCE)) {
+> 		reinit_xhc =3D true;
+> 		if (!xhci->broken_suspend)
+> 			xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
+> 	}
 
-I am using 2 ports.
-I will test it out next week as I don't have access to the board until then.
+Yes it hits. The warning as well. How big of an issue is that?
+
+My understanding is that this is the expected behavior with reset on
+resume if we don't explicitely pass the flag XHCI_RESET_ON_RESUME. I
+don't think we should be having the broken_suspend bit set as its
+mentioning some specific quirk on AMD hardware.
+
+Is the only expected difference inbetween having CDNS3_RESET_ON_RESUME &
+not having it is resume time? For reference, the status read is 0x411
+ie STS_HALT | STS_PCD | STS_SRE. xhc_state is zero.
 
 Regards,
---=20
-K=C3=B6ry Maincent, Bootlin
-Embedded Linux and kernel engineering
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 
