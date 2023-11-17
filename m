@@ -1,131 +1,134 @@
-Return-Path: <linux-usb+bounces-2962-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2963-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 752F37EF3E2
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 14:53:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CB847EF455
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 15:21:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08B9428141C
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 13:53:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B11371F2634B
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 14:21:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ADE931A92;
-	Fri, 17 Nov 2023 13:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DB48321B8;
+	Fri, 17 Nov 2023 14:20:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LxAEQO1u"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AY3jmh9h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAC734541
-	for <linux-usb@vger.kernel.org>; Fri, 17 Nov 2023 13:53:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A35C433C8;
-	Fri, 17 Nov 2023 13:53:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700229200;
-	bh=K/JjWna5WH0BIy6eoXxUf5f8W17a1PwItdoPzNiEMcA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LxAEQO1uVK5dvP4fuKInNcZIi88TLaCoVVDVRJccvUd0P6VN76Yr/5vczr24lAcjY
-	 Pdp/ZsmUHDAK4FNuN61EC6unlf0BkRibSczsUzWlzq9zWNfVLBySQXh5Bq4QoFYPg6
-	 FLcaC8OgLl+Gee+D48+S1yA7RJLvYQ7XoMJvXmKQ=
-Date: Fri, 17 Nov 2023 08:53:18 -0500
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Kuen-Han Tsai <khtsai@google.com>
-Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xhci: fix null pointer deref for xhci_urb_enqueue
-Message-ID: <2023111705-showroom-consonant-7a7b@gregkh>
-References: <20231117072131.2886406-1-khtsai@google.com>
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1935DD63;
+	Fri, 17 Nov 2023 06:20:47 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 45106C0005;
+	Fri, 17 Nov 2023 14:20:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1700230846;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=A7DGBR0dkS+OrVfnBIKiOX0inpfDHFx2Yamqr04yBT8=;
+	b=AY3jmh9h98qwoUR+Hqo7x9nmLegoG7h9iwphY783CZ6nJnE0zvCSGVp3HL1s5aNewLRO6+
+	EsB72lNlzT7C5GDQXUcwyGk6tc8gibBCQDmcnYXBnMpatGc1q3h2sk70PafLsPdUgF6FvB
+	rQa7JYrfm7P4b135D8rQCS8HwarDOQXLpECUfW/ID72q6pL3p1kJdf30yNyMo0eI+SyOa2
+	3UNCNyxlK8eCkIQWMG909DcAMTqQLLHGj8xZP1yYoNq+yTko5I0NL+BHgZnTTaWrN4rW9B
+	CDcD9OTEdqm9JH1E5X6WO5oo+ZTGF+ss7VGaCSVvOQ8HrdUHGpnBLBKKY+hSFg==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231117072131.2886406-1-khtsai@google.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 17 Nov 2023 15:20:44 +0100
+Message-Id: <CX15J7B8F8HH.1WZ10OOW31X1H@tleb-bootlin-xps13-01>
+Subject: Re: [PATCH 3/6] usb: cdns3-ti: add suspend/resume procedures for
+ J7200
+Cc: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>
+To: "Roger Quadros" <rogerq@kernel.org>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Peter Chen" <peter.chen@kernel.org>, "Pawel
+ Laszczak" <pawell@cadence.com>, "Nishanth Menon" <nm@ti.com>, "Vignesh
+ Raghavendra" <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>,
+ "Vardhan, Vibhore" <vibhore@ti.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.15.2
+References: <20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com>
+ <20231113-j7200-usb-suspend-v1-3-ad1ee714835c@bootlin.com>
+ <5080372b-1f48-4cbc-a6c4-8689c28983cb@kernel.org>
+ <CWZH66HQZNYM.T623ZOEEE0BK@tleb-bootlin-xps13-01>
+ <dad980f3-e032-41e4-a1e4-a16a7f45ff95@kernel.org>
+ <CX0GOP07I40N.198G7LJ0HYDBG@tleb-bootlin-xps13-01>
+ <bdea68ad-7523-4738-8fa1-b670d81a6b93@kernel.org>
+ <CX10D9YX1O1C.30PF317AG065N@tleb-bootlin-xps13-01>
+ <3e00b2ad-b58f-4b09-9230-683c58d3bb92@kernel.org>
+In-Reply-To: <3e00b2ad-b58f-4b09-9230-683c58d3bb92@kernel.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Fri, Nov 17, 2023 at 03:21:28PM +0800, Kuen-Han Tsai wrote:
-> The null pointer dereference happens when xhci_free_dev() frees the
-> xhci->devs[slot_id] virtual device while xhci_urb_enqueue() is
-> processing a urb and checking the max packet size.
-> 
-> [106913.850735][ T2068] usb 2-1: USB disconnect, device number 2
-> [106913.856999][ T4618] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
-> [106913.857488][ T4618] Call trace:
-> [106913.857491][ T4618]  xhci_check_maxpacket+0x30/0x2dc
-> [106913.857494][ T4618]  xhci_urb_enqueue+0x24c/0x47c
-> [106913.857498][ T4618]  usb_hcd_submit_urb+0x1f4/0xf34
-> [106913.857501][ T4618]  usb_submit_urb+0x4b8/0x4fc
-> [106913.857503][ T4618]  usb_control_msg+0x144/0x238
-> [106913.857507][ T4618]  do_proc_control+0x1f0/0x5bc
-> [106913.857509][ T4618]  usbdev_ioctl+0xdd8/0x15a8
-> 
-> This patch adds a spinlock to the xhci_urb_enqueue function to make sure
-> xhci_free_dev() and xhci_urb_enqueue() do not race and cause null
-> pointer dereference.
+Hi Roger,
 
-I thought we had a lock for this already, what changed to cause this to
-start triggering now, all these years later?
+On Fri Nov 17, 2023 at 12:51 PM CET, Roger Quadros wrote:
+> On 17/11/2023 12:17, Th=C3=A9o Lebrun wrote:
+> > On Thu Nov 16, 2023 at 10:44 PM CET, Roger Quadros wrote:
+> >> On 16/11/2023 20:56, Th=C3=A9o Lebrun wrote:
+> >>> On Thu Nov 16, 2023 at 1:40 PM CET, Roger Quadros wrote:
+> >>>> On 15/11/2023 17:02, Th=C3=A9o Lebrun wrote:
+> >>>>> On Wed Nov 15, 2023 at 12:37 PM CET, Roger Quadros wrote:
+> >>>>>> You might want to check suspend/resume ops in cdns3-plat and
+> >>>>>> do something similar here.
+> >>>>>
+> >>>>> I'm unsure what you are referring to specifically in cdns3-plat?
+> >>>>
+> >>>> What I meant is, calling pm_runtime_get/put() from system suspend/re=
+sume
+> >>>> hooks doesn't seem right.
+> >>>>
+> >>>> How about using something like pm_runtime_forbid(dev) on devices whi=
+ch
+> >>>> loose USB context on runtime suspend e.g. J7200.
+> >>>> So at probe we can get rid of the pm_runtime_get_sync() call.
+> >>>
+> >>> What is the goal of enabling PM runtime to then block (ie forbid) it =
+in
+> >>> its enabled state until system suspend?
+> >>
+> >> If USB controller retains context on runtime_suspend on some platforms
+> >> then we don't want to forbid PM runtime.
+> >=20
+> > What's the point of runtime PM if nothing is done based on it? This is
+> > the current behavior of the driver.
+>
+> Even if driver doesn't have runtime_suspend/resume hooks, wouldn't=20
+> the USB Power domain turn off if we enable runtime PM and allow runtime
+> autosuspend and all children have runtime suspended?
 
-> 
-> Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
+That cannot be the currently desired behavior as it would require a
+runtime_resume implementation that restores this wrapper to its desired
+state.
 
-What commit id does this fix?
+It could however be something that could be implemented. It would be a
+matter of enabling PM runtime and that is it in the probe. No need to
+even init the hardware in the probe. Then the runtime_resume
+implementation would call the new cdns_ti_init_hw.
 
+This is what the cdns3-imx wrapper is doing in a way, though what they
+need is clocks rather than some registers to be written.
 
-> ---
->  drivers/usb/host/xhci.c | 38 ++++++++++++++++++++++++--------------
->  1 file changed, 24 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 884b0898d9c9..e0766ebeff0e 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -1522,23 +1522,32 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
->  	struct urb_priv	*urb_priv;
->  	int num_tds;
->  
-> -	if (!urb)
-> -		return -EINVAL;
-> -	ret = xhci_check_args(hcd, urb->dev, urb->ep,
-> -					true, true, __func__);
-> -	if (ret <= 0)
-> -		return ret ? ret : -EINVAL;
-> +	spin_lock_irqsave(&xhci->lock, flags);
-> +
-> +	if (!urb) {
-> +		ret = -EINVAL;
-> +		goto done;
-> +	}
+That all feels like outside the scope of the current patch series
+though.
 
-Why does this have to be inside the lock?  The urb can't change here,
-can it?
+My suggestion for V2 would still therefore be to remove all PM runtime
+as it has no impact. It could be added later down the road if cutting
+the power-domain is a goal of yours.
 
-> +
-> +	ret = xhci_check_args(hcd, urb->dev, urb->ep, true, true, __func__);
-> +	if (ret <= 0) {
-> +		ret = ret ? ret : -EINVAL;
-> +		goto done;
-> +	}
->  
->  	slot_id = urb->dev->slot_id;
->  	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
->  	ep_state = &xhci->devs[slot_id]->eps[ep_index].ep_state;
->  
-> -	if (!HCD_HW_ACCESSIBLE(hcd))
-> -		return -ESHUTDOWN;
-> +	if (!HCD_HW_ACCESSIBLE(hcd)) {
-> +		ret = -ESHUTDOWN;
-> +		goto done;
+Thanks,
 
-Note, we now have completions, so all of this "goto done" doesn't need
-to happen anymore.  Not a complaint, just a suggestion for future
-changes or this one, your choice.
-
-thanks,
-
-greg k-h
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
