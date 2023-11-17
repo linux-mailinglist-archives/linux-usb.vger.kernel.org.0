@@ -1,89 +1,131 @@
-Return-Path: <linux-usb+bounces-2961-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2962-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81AC37EF3D8
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 14:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 752F37EF3E2
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 14:53:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3598D2813D7
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 13:49:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08B9428141C
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Nov 2023 13:53:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDC00328D1;
-	Fri, 17 Nov 2023 13:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ADE931A92;
+	Fri, 17 Nov 2023 13:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YL2s4nt9"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LxAEQO1u"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4EE120;
-	Fri, 17 Nov 2023 05:49:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700228977; x=1731764977;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=MOj61IwibiRbGMi9xm3ZBK45QtdUny1wu/WcJXN0C/0=;
-  b=YL2s4nt9Sb1aAwVJ12LzpF6qRjNaiwv52GIzQTtpE7bXO3x4YlEaEl5o
-   42kuXZUGbIkhpyvaL9PaVs5HUOjAIYE/LMvZ0u728fW7+C0uCLVzrMit7
-   2KgQtkbgib+EgkYLCbeP1MxlhcFeq71yFF31NXaWo8AcXxTzluXnX1AZz
-   gyVLicZhug9M1J4u0uQpg/E0uqjdSGc3NUduJch7LJBmT8jW3/VaSjPsV
-   Tk2WfAeMWWdLQIpgW5GYqw2GlkzrMIoTM0FSZ8TvbYzYuIhLk8F/f5unU
-   DFXuEDPdeX2nI9lcQJNR0NJS7aEPyxtCPA0ExDXnYqmzqGOmaLZsC3xYc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="371480585"
-X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="371480585"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 05:49:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="831617001"
-X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="831617001"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Nov 2023 05:49:35 -0800
-Message-ID: <c77909fd-18d3-4d5f-834c-a696e2abc9c8@linux.intel.com>
-Date: Fri, 17 Nov 2023 15:50:50 +0200
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAC734541
+	for <linux-usb@vger.kernel.org>; Fri, 17 Nov 2023 13:53:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A35C433C8;
+	Fri, 17 Nov 2023 13:53:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1700229200;
+	bh=K/JjWna5WH0BIy6eoXxUf5f8W17a1PwItdoPzNiEMcA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LxAEQO1uVK5dvP4fuKInNcZIi88TLaCoVVDVRJccvUd0P6VN76Yr/5vczr24lAcjY
+	 Pdp/ZsmUHDAK4FNuN61EC6unlf0BkRibSczsUzWlzq9zWNfVLBySQXh5Bq4QoFYPg6
+	 FLcaC8OgLl+Gee+D48+S1yA7RJLvYQ7XoMJvXmKQ=
+Date: Fri, 17 Nov 2023 08:53:18 -0500
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Kuen-Han Tsai <khtsai@google.com>
+Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] xhci: fix null pointer deref for xhci_urb_enqueue
+Message-ID: <2023111705-showroom-consonant-7a7b@gregkh>
+References: <20231117072131.2886406-1-khtsai@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Niklas Neronin <niklas.neronin@linux.intel.com>,
- linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
- gregkh@linuxfoundation.org
-Cc: stable@vger.kernel.org
-References: <20231115121325.471454-1-niklas.neronin@linux.intel.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] usb: config: fix iteration issue in
- 'usb_get_bos_descriptor()'
-In-Reply-To: <20231115121325.471454-1-niklas.neronin@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231117072131.2886406-1-khtsai@google.com>
 
-On 15.11.2023 14.13, Niklas Neronin wrote:
-> The BOS descriptor defines a root descriptor and is the base descriptor for
-> accessing a family of related descriptors.
+On Fri, Nov 17, 2023 at 03:21:28PM +0800, Kuen-Han Tsai wrote:
+> The null pointer dereference happens when xhci_free_dev() frees the
+> xhci->devs[slot_id] virtual device while xhci_urb_enqueue() is
+> processing a urb and checking the max packet size.
 > 
-> Function 'usb_get_bos_descriptor()' encounters an iteration issue when
-> skipping the 'USB_DT_DEVICE_CAPABILITY' descriptor type. This results in
-> the same descriptor being read repeatedly.
+> [106913.850735][ T2068] usb 2-1: USB disconnect, device number 2
+> [106913.856999][ T4618] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+> [106913.857488][ T4618] Call trace:
+> [106913.857491][ T4618]  xhci_check_maxpacket+0x30/0x2dc
+> [106913.857494][ T4618]  xhci_urb_enqueue+0x24c/0x47c
+> [106913.857498][ T4618]  usb_hcd_submit_urb+0x1f4/0xf34
+> [106913.857501][ T4618]  usb_submit_urb+0x4b8/0x4fc
+> [106913.857503][ T4618]  usb_control_msg+0x144/0x238
+> [106913.857507][ T4618]  do_proc_control+0x1f0/0x5bc
+> [106913.857509][ T4618]  usbdev_ioctl+0xdd8/0x15a8
 > 
-> To address this issue, a 'goto' statement is introduced to ensure that the
-> pointer and the amount read is updated correctly. This ensures that the
-> function iterates to the next descriptor instead of reading the same
-> descriptor repeatedly.
+> This patch adds a spinlock to the xhci_urb_enqueue function to make sure
+> xhci_free_dev() and xhci_urb_enqueue() do not race and cause null
+> pointer dereference.
+
+I thought we had a lock for this already, what changed to cause this to
+start triggering now, all these years later?
+
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 3dd550a2d365 ("USB: usbcore: Fix slab-out-of-bounds bug during device reset")
-> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+> Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
+
+What commit id does this fix?
+
+
 > ---
+>  drivers/usb/host/xhci.c | 38 ++++++++++++++++++++++++--------------
+>  1 file changed, 24 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 884b0898d9c9..e0766ebeff0e 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -1522,23 +1522,32 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+>  	struct urb_priv	*urb_priv;
+>  	int num_tds;
+>  
+> -	if (!urb)
+> -		return -EINVAL;
+> -	ret = xhci_check_args(hcd, urb->dev, urb->ep,
+> -					true, true, __func__);
+> -	if (ret <= 0)
+> -		return ret ? ret : -EINVAL;
+> +	spin_lock_irqsave(&xhci->lock, flags);
+> +
+> +	if (!urb) {
+> +		ret = -EINVAL;
+> +		goto done;
+> +	}
 
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Why does this have to be inside the lock?  The urb can't change here,
+can it?
 
+> +
+> +	ret = xhci_check_args(hcd, urb->dev, urb->ep, true, true, __func__);
+> +	if (ret <= 0) {
+> +		ret = ret ? ret : -EINVAL;
+> +		goto done;
+> +	}
+>  
+>  	slot_id = urb->dev->slot_id;
+>  	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
+>  	ep_state = &xhci->devs[slot_id]->eps[ep_index].ep_state;
+>  
+> -	if (!HCD_HW_ACCESSIBLE(hcd))
+> -		return -ESHUTDOWN;
+> +	if (!HCD_HW_ACCESSIBLE(hcd)) {
+> +		ret = -ESHUTDOWN;
+> +		goto done;
 
+Note, we now have completions, so all of this "goto done" doesn't need
+to happen anymore.  Not a complaint, just a suggestion for future
+changes or this one, your choice.
+
+thanks,
+
+greg k-h
 
