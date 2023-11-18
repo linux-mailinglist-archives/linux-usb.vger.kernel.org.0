@@ -1,211 +1,135 @@
-Return-Path: <linux-usb+bounces-2982-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2983-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4B1C7EFEDF
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Nov 2023 11:20:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13FC07EFEF3
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Nov 2023 11:41:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D2B1281012
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Nov 2023 10:20:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF5291F235CE
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Nov 2023 10:41:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D2910966;
-	Sat, 18 Nov 2023 10:19:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83D6B1095B;
+	Sat, 18 Nov 2023 10:41:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="13kYD18p"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eJpfNqUS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC8DD4F
-	for <linux-usb@vger.kernel.org>; Sat, 18 Nov 2023 02:19:55 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-357d0d15b29so47255ab.1
-        for <linux-usb@vger.kernel.org>; Sat, 18 Nov 2023 02:19:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700302794; x=1700907594; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DxblnkQg074qRnXIllEP3rVSdxYfm+CIeaGy3+CxEd4=;
-        b=13kYD18pCotFCymY5ciNlJrfR2NnsoQRCzSfT0qa8hXdMt61nKdJlMBEsG9cJ3aUqc
-         F3S+Ye7Spo0SnkDzxI2VSXQ2rNYG/AC0ncMBA7AkrIjcRt5N1XJX6Pf7i0kYIzm41OCk
-         9NVpeeIxK9I9jYw5Udjq1hnXfmik31b7376GpCndiB52Rgqlul7/zDcwLyoQ3VwNzSdm
-         +xeEab9eCeQxnJPrTFyG3ltPlA1FL4TDtti8IgcECA5Gz5xNcTFBXoEmQjcjByJRJE4j
-         pR8mN7PDrHVrOBMIDdPCa0myiOHA//j1o7nSgKet8yx4tMOqHO+w3OJZAmKfPgXKYqNO
-         K81w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700302794; x=1700907594;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DxblnkQg074qRnXIllEP3rVSdxYfm+CIeaGy3+CxEd4=;
-        b=K74O683xb6dG1Gs+QYqI6oGSNeFHnH7WXcdkVJ5JV5dgACxjvcXbuJO72gTVSCodyK
-         pvpY/qAnlS1k05g0nDRRyG0lPEk3FLGZZRe21mEbewRBigMyU+qhrapHe9X58+2aqFNA
-         EnBvsR63eDk7ZNGUtMeYxLf1VHXJuBKvs/zWO3T6/Pu7i5l7yQRifSjVZRdq+fZtLrsJ
-         u7Ks54N96iUkDj4MjkaTHDJs5G0Ohd4NDByla3C5HnMlwwhXpILFANpyeg1l0y8pl/or
-         V9gOt5U2WMWdbrV3wSP9qB1x57zy582br+SFzDN03H2IP2t5AVjWUuxbobMEK6wb2A5x
-         hvjg==
-X-Gm-Message-State: AOJu0YyfOeXCzP05anXGIlqDNHraukN3+0UWSztbXMLQyQhR8c7rNZjE
-	VnaAYq/VJaAT3XNYyfs/iNi18mDQ1Yh59oRPZNVw1Q==
-X-Google-Smtp-Source: AGHT+IH+CWzXykJbLLYBrLvbwyLv4S+qvTrGOJzfTbuj0Hr2e5ztbyburZcmhE+DhP4EPnAPH+m5iTbn44vC6gV/Nkg=
-X-Received: by 2002:a05:6e02:160f:b0:34f:7cd2:b6fd with SMTP id
- t15-20020a056e02160f00b0034f7cd2b6fdmr403464ilu.3.1700302794198; Sat, 18 Nov
- 2023 02:19:54 -0800 (PST)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04FC107A5;
+	Sat, 18 Nov 2023 10:41:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C91C433C8;
+	Sat, 18 Nov 2023 10:41:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700304074;
+	bh=IbhrKQIHbt867NOmvlXVQQ/KhWWhW4WnEbDhXB0zfMc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=eJpfNqUS/ufprXVU1rWDyuPlonh5+Ts3e9BtwgX66m32maoUHUJu3smuB7zBHdfe1
+	 d9SloI8FOsAAlx6nuDUi73c9w5lQSH5lbwYb2HQeFVRkS12sL9y6NyCB/uKm5ERIt2
+	 CtgrMt0Zc72Q/veFUMGfYyJGjRACEVOZ/oEWLvLoqhqLIwTZElQ4Uh0SbzeOC06jxA
+	 dkjlVqfjXCqwY+YFNgagFDD0YPQ21XbPbtT7/VHOdhCfYsXGOzqS/+HApU0NdB6p5K
+	 rqpuoTSxuStU93Vi/lLuW8x3KXfcITBuF3Ii1A1aoD3ALpwRuHKc+mzI3TcOVi/CgY
+	 1qVkxjuRGNZKQ==
+Message-ID: <6a8c44e1-d3a3-49ee-bfbc-8a994a6d4ff8@kernel.org>
+Date: Sat, 18 Nov 2023 12:41:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231117072131.2886406-1-khtsai@google.com> <a4a129a3-e271-acbb-949c-534a8e1627ee@linux.intel.com>
-In-Reply-To: <a4a129a3-e271-acbb-949c-534a8e1627ee@linux.intel.com>
-From: Kuen-Han Tsai <khtsai@google.com>
-Date: Sat, 18 Nov 2023 18:19:27 +0800
-Message-ID: <CAKzKK0rnx+tSFAj6N-U_vcAZ_5P=Hx_Kb97NFkdPMHs8dR3Ukw@mail.gmail.com>
-Subject: Re: [PATCH] xhci: fix null pointer deref for xhci_urb_enqueue
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/6] usb: cdns3-ti: add suspend/resume procedures for
+ J7200
+Content-Language: en-US
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Peter Chen <peter.chen@kernel.org>,
+ Pawel Laszczak <pawell@cadence.com>, Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
+ "Vardhan, Vibhore" <vibhore@ti.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com>
+ <20231113-j7200-usb-suspend-v1-3-ad1ee714835c@bootlin.com>
+ <5080372b-1f48-4cbc-a6c4-8689c28983cb@kernel.org>
+ <CWZH66HQZNYM.T623ZOEEE0BK@tleb-bootlin-xps13-01>
+ <dad980f3-e032-41e4-a1e4-a16a7f45ff95@kernel.org>
+ <CX0GOP07I40N.198G7LJ0HYDBG@tleb-bootlin-xps13-01>
+ <bdea68ad-7523-4738-8fa1-b670d81a6b93@kernel.org>
+ <CX10D9YX1O1C.30PF317AG065N@tleb-bootlin-xps13-01>
+ <3e00b2ad-b58f-4b09-9230-683c58d3bb92@kernel.org>
+ <CX15J7B8F8HH.1WZ10OOW31X1H@tleb-bootlin-xps13-01>
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <CX15J7B8F8HH.1WZ10OOW31X1H@tleb-bootlin-xps13-01>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Mathias
 
->>       if (usb_endpoint_xfer_isoc(&urb->ep->desc))
->> @@ -1552,8 +1561,10 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, =
-struct urb *urb, gfp_t mem_flag
->>               num_tds =3D 1;
+
+On 17/11/2023 16:20, Théo Lebrun wrote:
+> Hi Roger,
+> 
+> On Fri Nov 17, 2023 at 12:51 PM CET, Roger Quadros wrote:
+>> On 17/11/2023 12:17, Théo Lebrun wrote:
+>>> On Thu Nov 16, 2023 at 10:44 PM CET, Roger Quadros wrote:
+>>>> On 16/11/2023 20:56, Théo Lebrun wrote:
+>>>>> On Thu Nov 16, 2023 at 1:40 PM CET, Roger Quadros wrote:
+>>>>>> On 15/11/2023 17:02, Théo Lebrun wrote:
+>>>>>>> On Wed Nov 15, 2023 at 12:37 PM CET, Roger Quadros wrote:
+>>>>>>>> You might want to check suspend/resume ops in cdns3-plat and
+>>>>>>>> do something similar here.
+>>>>>>>
+>>>>>>> I'm unsure what you are referring to specifically in cdns3-plat?
+>>>>>>
+>>>>>> What I meant is, calling pm_runtime_get/put() from system suspend/resume
+>>>>>> hooks doesn't seem right.
+>>>>>>
+>>>>>> How about using something like pm_runtime_forbid(dev) on devices which
+>>>>>> loose USB context on runtime suspend e.g. J7200.
+>>>>>> So at probe we can get rid of the pm_runtime_get_sync() call.
+>>>>>
+>>>>> What is the goal of enabling PM runtime to then block (ie forbid) it in
+>>>>> its enabled state until system suspend?
+>>>>
+>>>> If USB controller retains context on runtime_suspend on some platforms
+>>>> then we don't want to forbid PM runtime.
+>>>
+>>> What's the point of runtime PM if nothing is done based on it? This is
+>>> the current behavior of the driver.
 >>
->>       urb_priv =3D kzalloc(struct_size(urb_priv, td, num_tds), mem_flags=
-);
-> kzalloc with spinlock held, should preferably be moved outside lock, othe=
-rwise should use GFP_ATOMIC
+>> Even if driver doesn't have runtime_suspend/resume hooks, wouldn't 
+>> the USB Power domain turn off if we enable runtime PM and allow runtime
+>> autosuspend and all children have runtime suspended?
+> 
+> That cannot be the currently desired behavior as it would require a
+> runtime_resume implementation that restores this wrapper to its desired
+> state.
+> 
+> It could however be something that could be implemented. It would be a
+> matter of enabling PM runtime and that is it in the probe. No need to
+> even init the hardware in the probe. Then the runtime_resume
+> implementation would call the new cdns_ti_init_hw.
+> 
+> This is what the cdns3-imx wrapper is doing in a way, though what they
+> need is clocks rather than some registers to be written.
+> 
+> That all feels like outside the scope of the current patch series
+> though.
+> 
+> My suggestion for V2 would still therefore be to remove all PM runtime
+> as it has no impact. It could be added later down the road if cutting
+> the power-domain is a goal of yours.
 
-Thanks for pointing this out. I realize this patch is incorrect and it
-is non-ideal to include many codes unrelated to xhci->devs[slot_id]
-within the lock.
+OK let's do this.
 
-> xhci_check_maxpacket() called here can't be called with spinlock held
-
-It appears that xhci_check_maxpacket() might potentially lead to a
-deadlock later if a spinlock is held. Is this the concern you were
-referring to? If not, please let me know if there are any other
-potential issues that I may have missed, thanks!
-
-
-On Fri, Nov 17, 2023 at 9:31=E2=80=AFPM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 17.11.2023 9.21, Kuen-Han Tsai wrote:
-> > The null pointer dereference happens when xhci_free_dev() frees the
-> > xhci->devs[slot_id] virtual device while xhci_urb_enqueue() is
-> > processing a urb and checking the max packet size.
-> >
-> > [106913.850735][ T2068] usb 2-1: USB disconnect, device number 2
-> > [106913.856999][ T4618] Unable to handle kernel NULL pointer dereferenc=
-e at virtual address 0000000000000010
-> > [106913.857488][ T4618] Call trace:
-> > [106913.857491][ T4618]  xhci_check_maxpacket+0x30/0x2dc
-> > [106913.857494][ T4618]  xhci_urb_enqueue+0x24c/0x47c
-> > [106913.857498][ T4618]  usb_hcd_submit_urb+0x1f4/0xf34
-> > [106913.857501][ T4618]  usb_submit_urb+0x4b8/0x4fc
-> > [106913.857503][ T4618]  usb_control_msg+0x144/0x238
-> > [106913.857507][ T4618]  do_proc_control+0x1f0/0x5bc
-> > [106913.857509][ T4618]  usbdev_ioctl+0xdd8/0x15a8
-> >
-> > This patch adds a spinlock to the xhci_urb_enqueue function to make sur=
-e
-> > xhci_free_dev() and xhci_urb_enqueue() do not race and cause null
-> > pointer dereference.
->
-> Thanks, nice catch
->
-> This patch does however need some additional tuning
->
-> >
-> > Signed-off-by: Kuen-Han Tsai <khtsai@google.com>
-> > ---
-> >   drivers/usb/host/xhci.c | 38 ++++++++++++++++++++++++--------------
-> >   1 file changed, 24 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> > index 884b0898d9c9..e0766ebeff0e 100644
-> > --- a/drivers/usb/host/xhci.c
-> > +++ b/drivers/usb/host/xhci.c
-> > @@ -1522,23 +1522,32 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd=
-, struct urb *urb, gfp_t mem_flag
-> >       struct urb_priv *urb_priv;
-> >       int num_tds;
-> >
-> > -     if (!urb)
-> > -             return -EINVAL;
-> > -     ret =3D xhci_check_args(hcd, urb->dev, urb->ep,
-> > -                                     true, true, __func__);
-> > -     if (ret <=3D 0)
-> > -             return ret ? ret : -EINVAL;
-> > +     spin_lock_irqsave(&xhci->lock, flags);
-> > +
-> > +     if (!urb) {
-> > +             ret =3D -EINVAL;
-> > +             goto done;
-> > +     }
-> > +
-> > +     ret =3D xhci_check_args(hcd, urb->dev, urb->ep, true, true, __fun=
-c__);
-> > +     if (ret <=3D 0) {
-> > +             ret =3D ret ? ret : -EINVAL;
-> > +             goto done;
-> > +     }
-> >
-> >       slot_id =3D urb->dev->slot_id;
-> >       ep_index =3D xhci_get_endpoint_index(&urb->ep->desc);
-> >       ep_state =3D &xhci->devs[slot_id]->eps[ep_index].ep_state;
-> >
-> > -     if (!HCD_HW_ACCESSIBLE(hcd))
-> > -             return -ESHUTDOWN;
-> > +     if (!HCD_HW_ACCESSIBLE(hcd)) {
-> > +             ret =3D -ESHUTDOWN;
-> > +             goto done;
-> > +     }
-> >
-> >       if (xhci->devs[slot_id]->flags & VDEV_PORT_ERROR) {
-> >               xhci_dbg(xhci, "Can't queue urb, port error, link inactiv=
-e\n");
-> > -             return -ENODEV;
-> > +             ret =3D -ENODEV;
-> > +             goto done;
-> >       }
-> >
-> >       if (usb_endpoint_xfer_isoc(&urb->ep->desc))
-> > @@ -1552,8 +1561,10 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd,=
- struct urb *urb, gfp_t mem_flag
-> >               num_tds =3D 1;
-> >
-> >       urb_priv =3D kzalloc(struct_size(urb_priv, td, num_tds), mem_flag=
-s);
->
-> kzalloc with spinlock held, should preferably be moved outside lock, othe=
-rwise should use GFP_ATOMIC
->
-> > -     if (!urb_priv)
-> > -             return -ENOMEM;
-> > +     if (!urb_priv) {
-> > +             ret =3D -ENOMEM;
-> > +             goto done;
-> > +     }
-> >
-> >       urb_priv->num_tds =3D num_tds;
-> >       urb_priv->num_tds_done =3D 0;
-> > @@ -1571,13 +1582,11 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd=
-, struct urb *urb, gfp_t mem_flag
->
-> xhci_check_maxpacket() called here can't be called with spinlock held
->
-> >                       if (ret < 0) {
-> >                               xhci_urb_free_priv(urb_priv);
-> >                               urb->hcpriv =3D NULL;
-> > -                             return ret;
-> > +                             goto done;
->
-> Thanks
-> Mathias
+-- 
+cheers,
+-roger
 
