@@ -1,102 +1,180 @@
-Return-Path: <linux-usb+bounces-3001-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3002-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E83E47F0915
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 22:12:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47F277F094C
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 23:10:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78E231F21C0E
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 21:12:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D199280D3A
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 22:10:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D68E14297;
-	Sun, 19 Nov 2023 21:12:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eBpZQAhD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D8C018E15;
+	Sun, 19 Nov 2023 22:09:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B45136;
+	Sun, 19 Nov 2023 14:09:48 -0800 (PST)
+Received: from [192.168.0.183] (ip5f5af02c.dynamic.kabel-deutschland.de [95.90.240.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC3421428D
-	for <linux-usb@vger.kernel.org>; Sun, 19 Nov 2023 21:12:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6364FC433CB
-	for <linux-usb@vger.kernel.org>; Sun, 19 Nov 2023 21:12:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700428359;
-	bh=NVnt5Ngk2mvMjlxjzfNI/y0M9mHbMbTdsqNqo+ZNQp8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=eBpZQAhDhwCBbSfHUi6QunzNYQBlCKY9eg5H35uMFZJPu7trx5l/FyZwW38Ad9TFD
-	 faUtBFTRUkt7QXc5GwPB/VIILSvmlhumxwMqH8zySu7nxx34YFTV5dKr1Sh61P1tRv
-	 y6AK75HAwAGy0anNzwQC8vhRTPt4E3UvPgHPXo/HBaUqzJ0mW14YshyaHldzzzEVHG
-	 6xFoCE+xVZC3o7aMLYIyNbv6uKDLfC53TK7E32YcPBx5n/a8HLvefRbHEg7WHtkavG
-	 VzrGMqnrRsKleGU70DB7yOE6BNOlYrXZ/l2OYprCG8XrDTVr8Tp6BeNxIiM/ImkeLm
-	 /H1E0GKJbiMYg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 51583C53BD5; Sun, 19 Nov 2023 21:12:39 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 215740] kernel warning: DMA-API: xhci_hcd: cacheline tracking
- EEXIST, overlapping mappings aren't supported
-Date: Sun, 19 Nov 2023 21:12:38 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ferry.toth@elsinga.info
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-215740-208809-7bX2hRGm0d@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215740-208809@https.bugzilla.kernel.org/>
-References: <bug-215740-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 49BFE61E5FE01;
+	Sun, 19 Nov 2023 23:09:33 +0100 (CET)
+Message-ID: <d63ebc5f-9b72-4457-949b-3e90883bd3c0@molgen.mpg.de>
+Date: Sun, 19 Nov 2023 23:09:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: Qualcomm Atheros QCA61x4 keeps drawing 0.85 W despite Bluetooth
+ being disable in GNOME
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Marcel Holtmann <marcel@holtmann.org>,
+ Johan Hedberg <johan.hedberg@gmail.com>,
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+ linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+ Hans de Goede <hdegoede@redhat.com>
+References: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
+ <22494842-a785-4151-915d-6f3a677d96cb@molgen.mpg.de>
+ <1f3cb0cc-4bb0-471f-a785-a5d237cd46a3@rowland.harvard.edu>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <1f3cb0cc-4bb0-471f-a785-a5d237cd46a3@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
+Dear Alan,
 
---- Comment #16 from Ferry Toth (ferry.toth@elsinga.info) ---
-Created attachment 305426
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305426&action=3Dedit
-ftrace, hub plugged at 131, mouse plugged into hub at 141
 
-Sure. And added a ftrace see attachment trace_hub.txt.
+Thank you very much for your quick response.
 
-In journal I got:
-...
-Nov 19 20:57:45 yuna kernel: ---[ end trace 0000000000000000 ]---
-Nov 19 20:57:45 yuna kernel: DMA-API: Mapped at:
-Nov 19 20:57:45 yuna kernel:  debug_dma_map_page+0x6d/0x100
-Nov 19 20:57:45 yuna kernel:  dma_map_page_attrs+0x10a/0x280
-Nov 19 20:57:45 yuna kernel:  usb_hcd_map_urb_for_dma+0x419/0x5c0
-Nov 19 20:57:45 yuna kernel:  usb_hcd_submit_urb+0xa0/0xaa0
-Nov 19 20:57:45 yuna kernel:  usb_start_wait_urb+0x65/0x100
-Nov 19 20:57:45 yuna kernel: Map error: ffffd221000e02c0 ffff916fc336b4a0
-Nov 19 20:57:45 yuna kernel: Map error: ffffd221000e02c0 ffff916fc336b4a0
-Nov 19 20:57:45 yuna kernel: usb 1-1.1: new low-speed USB device number 3 u=
-sing
-xhci-hcd
-Nov 19 20:57:45 yuna kernel: Map error: ffffd221000e02c0 ffff916fc336b4a0
-...
+Am 19.11.23 um 16:43 schrieb Alan Stern:
+> On Sun, Nov 19, 2023 at 02:42:58PM +0100, Paul Menzel wrote:
 
---=20
-You may reply to this email to add a comment.
+>> On the Dell XPS 13 9360 from 2016, BIOS 2.21.0 06/02/2022, with Debian
+>> sid/unstable and Debian’s Linux 6.5.10 kernel, I am trying to extend the
+>> run-time with battery, at under 50 % of it’s original capacity, and I am
+>> using PowerTOP 2.15.
+> 
+>> Although radio/wireless devices are turned off in GNOME, PowerTOP shows the
+>> Bluetooth device drawing 0.85 W of energy:
+>>
+>>      848 mW    100.0%   Device         USB device: usb-device-0cf3-e300
+>>
+>>      $ lsusb -d 0cf3:e300
+>>      Bus 001 Device 002: ID 0cf3:e300 Qualcomm Atheros Communications QCA61x4 Bluetooth 4.0
+> 
+>> After unloading the module `btusb`, the entry disappears from the PowerTOP
+>> list after a while.
+>>
+>>      usbcore: deregistering interface driver btusb
+>>
+>> Auto-suspend was enabled for the device. (Though it shouldn’t have mattered
+>> as it was disabled in GNOME?)
+> 
+> Enabling autosuspend means that the device _may_ go into runtime suspend
+> when it's not being used.  Whether it _will_ do so depends on the driver
+> (btusb in this case).
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thank you for the clarification.
+
+>> Anyways, have you heard of such an issue? Can I provide more information, to
+>> get it to not use any energy while being disable in GNOME?
+> 
+> What is the output from
+> 
+> 	grep . /sys/bus/usb/devices/1-3/power/*
+> 
+> both with and without the btusb module loaded?
+
+```
+$ sudo modprobe btusb
+$ sudo dmesg | tail -10
+[313699.136637] wlp58s0: Limiting TX power to 17 dBm as advertised by 
+00:f6:63:af:fa:4f
+[314037.905400] WARNING! power/level is deprecated; use power/control 
+instead
+[314065.418431] usbcore: registered new interface driver btusb
+[314065.421509] bluetooth hci0: firmware: direct-loading firmware 
+qca/rampatch_usb_00000302.bin
+[314065.423852] Bluetooth: hci0: using rampatch file: 
+qca/rampatch_usb_00000302.bin
+[314065.423865] Bluetooth: hci0: QCA: patch rome 0x302 build 0x3e8, 
+firmware rome 0x302 build 0x111
+[314065.791131] bluetooth hci0: firmware: direct-loading firmware 
+qca/nvm_usb_00000302.bin
+[314065.791228] Bluetooth: hci0: using NVM file: qca/nvm_usb_00000302.bin
+[314065.823499] Bluetooth: hci0: HCI Enhanced Setup Synchronous 
+Connection command is advertised, but not supported.
+[314066.117644] Bluetooth: MGMT ver 1.22
+$ grep . /sys/bus/usb/devices/1-3/power/*
+/sys/bus/usb/devices/1-3/power/active_duration:119053224
+/sys/bus/usb/devices/1-3/power/async:enabled
+/sys/bus/usb/devices/1-3/power/autosuspend:2
+/sys/bus/usb/devices/1-3/power/autosuspend_delay_ms:2000
+/sys/bus/usb/devices/1-3/power/connected_duration:148065372
+/sys/bus/usb/devices/1-3/power/control:auto
+/sys/bus/usb/devices/1-3/power/level:auto
+/sys/bus/usb/devices/1-3/power/persist:1
+/sys/bus/usb/devices/1-3/power/runtime_active_kids:0
+/sys/bus/usb/devices/1-3/power/runtime_active_time:119060567
+/sys/bus/usb/devices/1-3/power/runtime_enabled:enabled
+/sys/bus/usb/devices/1-3/power/runtime_status:active
+/sys/bus/usb/devices/1-3/power/runtime_suspended_time:28831453
+/sys/bus/usb/devices/1-3/power/runtime_usage:0
+/sys/bus/usb/devices/1-3/power/wakeup:disabled
+```
+
+```
+$ sudo modprobe -r btusb
+$ sudo dmesg | tail -1
+[314106.155163] usbcore: deregistering interface driver btusb
+$ grep . /sys/bus/usb/devices/1-3/power/*
+/sys/bus/usb/devices/1-3/power/active_duration:119072176
+/sys/bus/usb/devices/1-3/power/async:enabled
+/sys/bus/usb/devices/1-3/power/autosuspend:2
+/sys/bus/usb/devices/1-3/power/autosuspend_delay_ms:2000
+/sys/bus/usb/devices/1-3/power/connected_duration:148320980
+/sys/bus/usb/devices/1-3/power/control:auto
+/sys/bus/usb/devices/1-3/power/level:auto
+/sys/bus/usb/devices/1-3/power/persist:1
+/sys/bus/usb/devices/1-3/power/runtime_active_kids:0
+/sys/bus/usb/devices/1-3/power/runtime_active_time:119079518
+/sys/bus/usb/devices/1-3/power/runtime_enabled:enabled
+/sys/bus/usb/devices/1-3/power/runtime_status:suspended
+/sys/bus/usb/devices/1-3/power/runtime_suspended_time:29068110
+/sys/bus/usb/devices/1-3/power/runtime_usage:0
+/sys/bus/usb/devices/1-3/power/wakeup:disabled
+```
+
+
+Kind regards,
+
+Paul
+
+
+>> $ lsusb -t
+>> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 10000M
+>>      |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 10000M
+>>          |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+>> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
+>>      |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/5p, 480M
+>>          |__ Port 1: Dev 3, If 0, Class=Human Interface Device,
+>> Driver=usbhid, 12M
+>> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+>> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
+>>      |__ Port 3: Dev 2, If 0, Class=Wireless, Driver=, 12M
+>>      |__ Port 3: Dev 2, If 1, Class=Wireless, Driver=, 12M
+>>      |__ Port 4: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+>>      |__ Port 5: Dev 4, If 0, Class=Video, Driver=uvcvideo, 480M
+>>      |__ Port 5: Dev 4, If 1, Class=Video, Driver=uvcvideo, 480M
+>> ```
 
