@@ -1,73 +1,91 @@
-Return-Path: <linux-usb+bounces-2999-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3000-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D87417F0764
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 17:13:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EEB37F0796
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 17:47:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7AE6280E02
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 16:13:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4438C1F22397
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 16:47:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3582E14012;
-	Sun, 19 Nov 2023 16:13:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F85D1427B;
+	Sun, 19 Nov 2023 16:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="3GZN/Kj6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U3wgarXX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA083128;
-	Sun, 19 Nov 2023 08:13:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=NxAx9i/mT0ieuvpN0I81e9ihNgtBEyUhPumkp+2OoDA=; b=3GZN/Kj64dPIRCV6DXAM6TWSIO
-	v2c9K54yv/AWiXQTjquHsfhqhfC3G0XjXLe1F7iToGaB6jV9iHcOu7H4VlqOyD/e+mLfGWPzLlCSM
-	U6OO768MECXWfFbpMN9H2uG47xCishW2V+PJcHiXH04/5fYbUQpCF1ICNB9G9UlMZXuQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1r4kQA-000ZUg-MX; Sun, 19 Nov 2023 17:13:18 +0100
-Date: Sun, 19 Nov 2023 17:13:18 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: David Laight <David.Laight@aculab.com>
-Cc: =?iso-8859-1?Q?'Bj=F8rn?= Mork' <bjorn@mork.no>,
-	Oliver Neukum <oneukum@suse.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	USB list <linux-usb@vger.kernel.org>
-Subject: Re: question on random MAC in usbnet
-Message-ID: <20891d0a-6ec0-4865-bf61-406f29f2ac6a@lunn.ch>
-References: <53b66aee-c4ad-4aec-b59f-94649323bcd6@suse.com>
- <87zfzeexy8.fsf@miraculix.mork.no>
- <64dfec9e75a744cf8e7f50807140ba9a@AcuMS.aculab.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A319A13FEE
+	for <linux-usb@vger.kernel.org>; Sun, 19 Nov 2023 16:47:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 27877C433CC
+	for <linux-usb@vger.kernel.org>; Sun, 19 Nov 2023 16:47:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700412471;
+	bh=phxqc9rlDWHzLk6JWsDp58afweCaV4Yq1gIiT9alI7o=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=U3wgarXXGX8vVGxkOFyM+RvWnIbh3xBBxWOh2y+j9dXmcD8/5I1jBO3fFb6t26Sp0
+	 tSX3MIt8GcAeZgAVWjmfmzUEkYAtHNwb6/W+75cX2quTKxBoB2KnSPMz8rTir9TBPl
+	 JREjofiAnEPhjpGnsCdNofYf5K1owmedhzuMMZ50qIKs/03xh0PEM8q1GIQkFao3nz
+	 OmNdwRjqIF+8ziQCe0fB4nbnvKLhbmLBKbTn+0MvLu0OoociKkMuMgXGzCBmz0YwnU
+	 hqrp3swERVAcFSQ0KncdVuDRXYhGb8Z6l7mkTAkxadov+VAlDxTPHBCUxyHLTjfzqP
+	 PUnBcssdw1D8g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 10A89C53BC6; Sun, 19 Nov 2023 16:47:51 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 215740] kernel warning: DMA-API: xhci_hcd: cacheline tracking
+ EEXIST, overlapping mappings aren't supported
+Date: Sun, 19 Nov 2023 16:47:50 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-215740-208809-Rt8Q0wthC7@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215740-208809@https.bugzilla.kernel.org/>
+References: <bug-215740-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64dfec9e75a744cf8e7f50807140ba9a@AcuMS.aculab.com>
 
-> So you might want to save the MAC on device removal and
-> re-use it on the next insert.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
 
-That gets interesting when you have multiple USB-Ethernet dongles.
+--- Comment #15 from Alan Stern (stern@rowland.harvard.edu) ---
+Created attachment 305425
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305425&action=3Dedit
+Diagnostics for overlapped DMA mapping
 
-I have a machine with 20 of them, which i use for functional testing
-of Ethernet switches. Luckily for me, they all have a vendor assigned
-MAC address.
+I just tried booting a kernel with CONFIG_DMA_API_DEBUG enabled.  When I
+plugged in a hub and then plugged some devices into that hub, nothing went
+wrong.
 
-> 
-> [1] We ended up putting the USB interface inside a 'bond'
-> in order to stop the interface everything was using
-> randomly disappearing due to common-mode noise on the
-> USB data lines causing a disconnect.
+So since I can't do any useful testing here, maybe one of you can test the
+attached patch.  It won't fix anything but it should help confirm what's
+happening and provide a starting point for further debugging.
 
-Maybe you should of just thrown the hardware away since it seems
-broken.
+--=20
+You may reply to this email to add a comment.
 
-	Andrew
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
