@@ -1,199 +1,200 @@
-Return-Path: <linux-usb+bounces-2994-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2995-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76CF27F0686
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 14:43:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 644CB7F06A2
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 14:58:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D7631F21EB8
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 13:43:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 950901C2090B
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 13:58:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 788EC11CAA;
-	Sun, 19 Nov 2023 13:43:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F64710A06;
+	Sun, 19 Nov 2023 13:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NEQu5GXI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7109E8F;
-	Sun, 19 Nov 2023 05:43:09 -0800 (PST)
-Received: from [192.168.0.183] (ip5f5af668.dynamic.kabel-deutschland.de [95.90.246.104])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 24A9961E5FE01;
-	Sun, 19 Nov 2023 14:42:59 +0100 (CET)
-Message-ID: <22494842-a785-4151-915d-6f3a677d96cb@molgen.mpg.de>
-Date: Sun, 19 Nov 2023 14:42:58 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6911D525;
+	Sun, 19 Nov 2023 13:58:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C24E4C433C8;
+	Sun, 19 Nov 2023 13:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700402284;
+	bh=GA3KZwIDCb9kgmSAqn+rUvlw/BkjxhX9ULd5EqH49ro=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NEQu5GXIBH0dQxohxznCAQzyPcolkxa3kh62fMGO81WQ+qcG3Voqug/ZCrcLVaZUs
+	 K8/4UZdV8X5JfbgJHgiNc43KCxXPYOMlf35L97GHwo4hx0GCFEyJE6K7ZXS0yXhoLu
+	 bQmVYUV+CrLg2rEP7Dp08JWJsEZQCnfHmaSRtYZjhk0blu9s5AoCPN6XjsXoatPrD6
+	 nc9u8r7AOR6JeUrClFUTqDRYorsaZvpCpKaHtxmVlNtRQYMZvRg1dZ6W49GlyO8xmm
+	 qpiXeeWm7UpDGlf5/J6Kpxw+NdFnq5IUk9oYhaJPxTprkkMWSrjhzrVA4Xhp6kFDL9
+	 HiPjuMUbqxNfA==
+Date: Sun, 19 Nov 2023 13:58:00 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Anand Moon <linux.amoon@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: Add the binding example for the
+ Genesys Logic GL3523 hub
+Message-ID: <20231119-phrasing-reverse-bbc1fde515d5@spud>
+References: <20231119023454.1591-1-linux.amoon@gmail.com>
+ <20231119023454.1591-2-linux.amoon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Qualcomm Atheros QCA61x4 keeps drawing 0.85 W despite Bluetooth
- being disable in GNOME
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-To: Marcel Holtmann <marcel@holtmann.org>,
- Johan Hedberg <johan.hedberg@gmail.com>,
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc: linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
- Hans de Goede <hdegoede@redhat.com>
-References: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
-In-Reply-To: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
-[Fix typo in subject line]
-
-Dear Linux folks,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="MdiojqQRKNqEOCzn"
+Content-Disposition: inline
+In-Reply-To: <20231119023454.1591-2-linux.amoon@gmail.com>
 
 
-On the Dell XPS 13 9360 from 2016, BIOS 2.21.0 06/02/2022, with Debian 
-sid/unstable and Debian’s Linux 6.5.10 kernel, I am trying to extend the 
-run-time with battery, at under 50 % of it’s original capacity, and I am 
-using PowerTOP 2.15.
+--MdiojqQRKNqEOCzn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-     [    0.000000] microcode: updated early: 0xf0 -> 0xf4, date = 
-2023-02-22
-     [    0.000000] Linux version 6.5.0-4-amd64 
-(debian-kernel@lists.debian.org) (gcc-13 (Debian 13.2.0-6) 13.2.0, GNU 
-ld (GNU Binutils for Debian) 2.41) #1 SMP PREEMPT_DYNAMIC Debian 
-6.5.10-1 (2023-11-03)
-     […]
-     [    0.000000] DMI: Dell Inc. XPS 13 9360/0596KF, BIOS 2.21.0 
-06/02/2022
-     […]
-     [   15.646414] usbcore: registered new interface driver btusb
-     [   15.648188] ath10k_pci 0000:3a:00.0: pci irq msi oper_irq_mode 2 
-irq_mode 0 reset_mode 0
-     [   15.649555] bluetooth hci0: firmware: direct-loading firmware 
-qca/rampatch_usb_00000302.bin
-     [   15.650018] Bluetooth: hci0: using rampatch file: 
-qca/rampatch_usb_00000302.bin
-     [   15.650020] Bluetooth: hci0: QCA: patch rome 0x302 build 0x3e8, 
-firmware rome 0x302 build 0x111
+On Sun, Nov 19, 2023 at 08:04:50AM +0530, Anand Moon wrote:
+> Add the binding example for the USB3.1 Genesys Logic GL3523
+> integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
+> hub.
 
-Although radio/wireless devices are turned off in GNOME, PowerTOP shows 
-the Bluetooth device drawing 0.85 W of energy:
+But no comment in the commit message about the new property for the
+"peer hub". $subject saying "dt-bindings: usb: Add the binding example
+for the Genesys Logic GL3523 hub" is misleading when the meaningful
+parts of the patch are unrelated to the example.
 
-     848 mW    100.0%   Device         USB device: usb-device-0cf3-e300
+>=20
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+> V3: fix the dt_binding_check error, added new example for Genesys GL3523
+> v2: added Genesys GL3523 binding
+> v1: none
+> ---
+>  .../bindings/usb/genesys,gl850g.yaml          | 63 +++++++++++++++++--
+>  1 file changed, 59 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/=
+Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> index ee08b9c3721f..f8e88477fa11 100644
+> --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> @@ -9,9 +9,6 @@ title: Genesys Logic USB hub controller
+>  maintainers:
+>    - Icenowy Zheng <uwu@icenowy.me>
+> =20
+> -allOf:
+> -  - $ref: usb-device.yaml#
+> -
+>  properties:
+>    compatible:
+>      enum:
+> @@ -27,12 +24,44 @@ properties:
+> =20
+>    vdd-supply:
+>      description:
+> -      the regulator that provides 3.3V core power to the hub.
+> +      phandle to the regulator that provides power to the hub.
+> +
+> +  peer-hub:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      phandle to the peer hub on the controller.
 
-     $ lsusb -d 0cf3:e300
-     Bus 001 Device 002: ID 0cf3:e300 Qualcomm Atheros Communications 
-QCA61x4 Bluetooth 4.0
+What is this, why is it needed? Please explain it in your commit
+message.
 
-     $ lspci -nn -s 3a:00.0
-     3a:00.0 Network controller [0280]: Qualcomm Atheros QCA6174 
-802.11ac Wireless Network Adapter [168c:003e] (rev 32)
+Thanks,
+Conor.
 
-After unloading the module `btusb`, the entry disappears from the 
-PowerTOP list after a while.
+> =20
+>  required:
+>    - compatible
+>    - reg
+> =20
+> +allOf:
+> +  - $ref: usb-device.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - usb5e3,608
+> +    then:
+> +      properties:
+> +        peer-hub: false
+> +        vdd-supply: false
+> +        reset-gpios: true
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - usb5e3,610
+> +              - usb5e3,620
+> +    then:
+> +      properties:
+> +        peer-hub: true
+> +        vdd-supply: true
+> +        reset-gpios: true
+> +
+>  additionalProperties: false
+> =20
+>  examples:
+> @@ -49,3 +78,29 @@ examples:
+>              reset-gpios =3D <&pio 7 2 GPIO_ACTIVE_LOW>;
+>          };
+>      };
+> +
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    usb {
+> +        dr_mode =3D "host";
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        /* 2.0 hub on port 1 */
+> +        hub_2_0: hub@1 {
+> +            compatible =3D "usb5e3,610";
+> +            reg =3D <1>;
+> +            peer-hub =3D <&hub_3_0>;
+> +            reset-gpios =3D <&gpio 20 GPIO_ACTIVE_LOW>;
+> +            vdd-supply =3D <&vcc_5v>;
+> +        };
+> +
+> +        /* 3.1 hub on port 4 */
+> +        hub_3_0: hub@2 {
+> +            compatible =3D "usb5e3,620";
+> +            reg =3D <2>;
+> +            peer-hub =3D <&hub_2_0>;
+> +            reset-gpios =3D <&gpio 20 GPIO_ACTIVE_LOW>;
+> +            vdd-supply =3D <&vcc_5v>;
+> +        };
+> +    };
+> --=20
+> 2.42.0
+>=20
 
-     usbcore: deregistering interface driver btusb
+--MdiojqQRKNqEOCzn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Auto-suspend was enabled for the device. (Though it shouldn’t have 
-mattered as it was disabled in GNOME?)
+-----BEGIN PGP SIGNATURE-----
 
-Anyways, have you heard of such an issue? Can I provide more 
-information, to get it to not use any energy while being disable in GNOME?
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZVoUaAAKCRB4tDGHoIJi
+0iqHAQCKhkBZCos0AsQrxs71ZfT1KMhFwjJGUUoqz02mNG1qhQEAoj2QVsdOyjw1
+wLv5XvOw4ZLu8eTGH5Q9fvXJoThMsA4=
+=EJLk
+-----END PGP SIGNATURE-----
 
-
-Kind regards,
-
-Paul
-
-
-```
-$ lspci -nn
-00:00.0 Host bridge [0600]: Intel Corporation Xeon E3-1200 v6/7th Gen 
-Core Processor Host Bridge/DRAM Registers [8086:5904] (rev 02)
-00:02.0 VGA compatible controller [0300]: Intel Corporation HD Graphics 
-620 [8086:5916] (rev 02)
-00:04.0 Signal processing controller [1180]: Intel Corporation Xeon 
-E3-1200 v5/E3-1500 v5/6th Gen Core Processor Thermal Subsystem 
-[8086:1903] (rev 02)
-00:14.0 USB controller [0c03]: Intel Corporation Sunrise Point-LP USB 
-3.0 xHCI Controller [8086:9d2f] (rev 21)
-00:14.2 Signal processing controller [1180]: Intel Corporation Sunrise 
-Point-LP Thermal subsystem [8086:9d31] (rev 21)
-00:15.0 Signal processing controller [1180]: Intel Corporation Sunrise 
-Point-LP Serial IO I2C Controller #0 [8086:9d60] (rev 21)
-00:15.1 Signal processing controller [1180]: Intel Corporation Sunrise 
-Point-LP Serial IO I2C Controller #1 [8086:9d61] (rev 21)
-00:16.0 Communication controller [0780]: Intel Corporation Sunrise 
-Point-LP CSME HECI #1 [8086:9d3a] (rev 21)
-00:1c.0 PCI bridge [0604]: Intel Corporation Sunrise Point-LP PCI 
-Express Root Port #1 [8086:9d10] (rev f1)
-00:1c.4 PCI bridge [0604]: Intel Corporation Sunrise Point-LP PCI 
-Express Root Port #5 [8086:9d14] (rev f1)
-00:1c.5 PCI bridge [0604]: Intel Corporation Sunrise Point-LP PCI 
-Express Root Port #6 [8086:9d15] (rev f1)
-00:1d.0 PCI bridge [0604]: Intel Corporation Sunrise Point-LP PCI 
-Express Root Port #9 [8086:9d18] (rev f1)
-00:1f.0 ISA bridge [0601]: Intel Corporation Sunrise Point-LP LPC 
-Controller [8086:9d58] (rev 21)
-00:1f.2 Memory controller [0580]: Intel Corporation Sunrise Point-LP PMC 
-[8086:9d21] (rev 21)
-00:1f.3 Audio device [0403]: Intel Corporation Sunrise Point-LP HD Audio 
-[8086:9d71] (rev 21)
-00:1f.4 SMBus [0c05]: Intel Corporation Sunrise Point-LP SMBus 
-[8086:9d23] (rev 21)
-01:00.0 PCI bridge [0604]: Intel Corporation DSL6340 Thunderbolt 3 
-Bridge [Alpine Ridge 2C 2015] [8086:1576]
-02:00.0 PCI bridge [0604]: Intel Corporation DSL6340 Thunderbolt 3 
-Bridge [Alpine Ridge 2C 2015] [8086:1576]
-02:01.0 PCI bridge [0604]: Intel Corporation DSL6340 Thunderbolt 3 
-Bridge [Alpine Ridge 2C 2015] [8086:1576]
-02:02.0 PCI bridge [0604]: Intel Corporation DSL6340 Thunderbolt 3 
-Bridge [Alpine Ridge 2C 2015] [8086:1576]
-39:00.0 USB controller [0c03]: Intel Corporation DSL6340 USB 3.1 
-Controller [Alpine Ridge] [8086:15b5]
-3a:00.0 Network controller [0280]: Qualcomm Atheros QCA6174 802.11ac 
-Wireless Network Adapter [168c:003e] (rev 32)
-3b:00.0 Unassigned class [ff00]: Realtek Semiconductor Co., Ltd. RTS525A 
-PCI Express Card Reader [10ec:525a] (rev 01)
-3c:00.0 Non-Volatile memory controller [0108]: SK hynix PC300 NVMe Solid 
-State Drive 512GB [1c5c:1284]
-$ lspci -t
--[0000:00]-+-00.0
-            +-02.0
-            +-04.0
-            +-14.0
-            +-14.2
-            +-15.0
-            +-15.1
-            +-16.0
-            +-1c.0-[01-39]----00.0-[02-39]--+-00.0-[03]--
-            |                               +-01.0-[04-38]--
-            |                               \-02.0-[39]----00.0
-            +-1c.4-[3a]----00.0
-            +-1c.5-[3b]----00.0
-            +-1d.0-[3c]----00.0
-            +-1f.0
-            +-1f.2
-            +-1f.3
-            \-1f.4
-$ lsusb -t
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 10000M
-     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 10000M
-         |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, 
-Driver=r8152, 5000M
-/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
-     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/5p, 480M
-         |__ Port 1: Dev 3, If 0, Class=Human Interface Device, 
-Driver=usbhid, 12M
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
-     |__ Port 3: Dev 2, If 0, Class=Wireless, Driver=, 12M
-     |__ Port 3: Dev 2, If 1, Class=Wireless, Driver=, 12M
-     |__ Port 4: Dev 3, If 0, Class=Human Interface Device, 
-Driver=usbhid, 12M
-     |__ Port 5: Dev 4, If 0, Class=Video, Driver=uvcvideo, 480M
-     |__ Port 5: Dev 4, If 1, Class=Video, Driver=uvcvideo, 480M
-```
+--MdiojqQRKNqEOCzn--
 
