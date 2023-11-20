@@ -1,180 +1,192 @@
-Return-Path: <linux-usb+bounces-3002-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3003-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47F277F094C
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 23:10:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D7347F09F2
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 01:09:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D199280D3A
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Nov 2023 22:10:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58A64280CA1
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 00:09:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D8C018E15;
-	Sun, 19 Nov 2023 22:09:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B51610E7;
+	Mon, 20 Nov 2023 00:09:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B45136;
-	Sun, 19 Nov 2023 14:09:48 -0800 (PST)
-Received: from [192.168.0.183] (ip5f5af02c.dynamic.kabel-deutschland.de [95.90.240.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 49BFE61E5FE01;
-	Sun, 19 Nov 2023 23:09:33 +0100 (CET)
-Message-ID: <d63ebc5f-9b72-4457-949b-3e90883bd3c0@molgen.mpg.de>
-Date: Sun, 19 Nov 2023 23:09:32 +0100
+Received: from mail-pl1-f207.google.com (mail-pl1-f207.google.com [209.85.214.207])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0660F9E
+	for <linux-usb@vger.kernel.org>; Sun, 19 Nov 2023 16:09:26 -0800 (PST)
+Received: by mail-pl1-f207.google.com with SMTP id d9443c01a7336-1cc5ac304e8so47964485ad.1
+        for <linux-usb@vger.kernel.org>; Sun, 19 Nov 2023 16:09:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700438965; x=1701043765;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bm9eGPc0RwqPbRbgp3iTFtDeXXeqtjeXeTQl0nd1FoI=;
+        b=unaZNTl6K1CNckzjSyilhg1vR2FMTlzwHFa/u/cax/ao1isSDSBVvmL0BUQTxc2TKP
+         34Gv5Yb50V9/ayF3rTrozRTmz7CXLztq8HdyvwEnfKpXp25rrRj0vaB0yBLfpLARn7T8
+         XYfKHpglc0/O46AZBbZJf4INMkBL4gu74u0m4+y3XUK0ly9pp+Ux6+TaKsROOTJTIyBT
+         qfBuhEIWv8xo3mLpAi1IgtJfznzZLhhJydZg8DOfgDsrjVNGrVxnIA1OXqfhFRjTNtP4
+         pDnuyo/h03JeR+f1Q6omUOHflfxiooHDxjlw7anzF7ci5Q54rHXiPWnePHEybpEkksks
+         TzyQ==
+X-Gm-Message-State: AOJu0YyyGqLeXQgM9uPml2mF621wDM/gPR9brrQYQqQynDA7d3/v7Vp4
+	hI8xwgsOB3fI7ISmi2ZjSUi2CD21sH2x9wqM2tuEJzKEc+pH
+X-Google-Smtp-Source: AGHT+IE+tfsFbkR7yz8cn8gaIyXCEYM3FadsbSsqz2LGgiXDKBu6dN0M+i8azKecC/7TiH14onfmFR9HmffSM7xYWD7i5/LM1Qca
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Qualcomm Atheros QCA61x4 keeps drawing 0.85 W despite Bluetooth
- being disable in GNOME
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Marcel Holtmann <marcel@holtmann.org>,
- Johan Hedberg <johan.hedberg@gmail.com>,
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
- linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
- Hans de Goede <hdegoede@redhat.com>
-References: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
- <22494842-a785-4151-915d-6f3a677d96cb@molgen.mpg.de>
- <1f3cb0cc-4bb0-471f-a785-a5d237cd46a3@rowland.harvard.edu>
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <1f3cb0cc-4bb0-471f-a785-a5d237cd46a3@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a17:902:7792:b0:1cc:4327:8bbc with SMTP id
+ o18-20020a170902779200b001cc43278bbcmr1559454pll.10.1700438965521; Sun, 19
+ Nov 2023 16:09:25 -0800 (PST)
+Date: Sun, 19 Nov 2023 16:09:25 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000809328060a8a4c1c@google.com>
+Subject: [syzbot] [staging?] [usb?] memory leak in _r8712_init_xmit_priv (2)
+From: syzbot <syzbot+83763e624cfec6b462cb@syzkaller.appspotmail.com>
+To: Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com, 
+	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-staging@lists.linux.dev, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Dear Alan,
+Hello,
 
+syzbot found the following issue on:
 
-Thank you very much for your quick response.
+HEAD commit:    c42d9eeef8e5 Merge tag 'hardening-v6.7-rc2' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13bff22f680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e71d284dd6560ca8
+dashboard link: https://syzkaller.appspot.com/bug?extid=83763e624cfec6b462cb
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1564223f680000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17a7c024e80000
 
-Am 19.11.23 um 16:43 schrieb Alan Stern:
-> On Sun, Nov 19, 2023 at 02:42:58PM +0100, Paul Menzel wrote:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/026cc0fc446f/disk-c42d9eee.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c4b4d6d092c1/vmlinux-c42d9eee.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1865f885e9d6/bzImage-c42d9eee.xz
 
->> On the Dell XPS 13 9360 from 2016, BIOS 2.21.0 06/02/2022, with Debian
->> sid/unstable and Debian’s Linux 6.5.10 kernel, I am trying to extend the
->> run-time with battery, at under 50 % of it’s original capacity, and I am
->> using PowerTOP 2.15.
-> 
->> Although radio/wireless devices are turned off in GNOME, PowerTOP shows the
->> Bluetooth device drawing 0.85 W of energy:
->>
->>      848 mW    100.0%   Device         USB device: usb-device-0cf3-e300
->>
->>      $ lsusb -d 0cf3:e300
->>      Bus 001 Device 002: ID 0cf3:e300 Qualcomm Atheros Communications QCA61x4 Bluetooth 4.0
-> 
->> After unloading the module `btusb`, the entry disappears from the PowerTOP
->> list after a while.
->>
->>      usbcore: deregistering interface driver btusb
->>
->> Auto-suspend was enabled for the device. (Though it shouldn’t have mattered
->> as it was disabled in GNOME?)
-> 
-> Enabling autosuspend means that the device _may_ go into runtime suspend
-> when it's not being used.  Whether it _will_ do so depends on the driver
-> (btusb in this case).
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+83763e624cfec6b462cb@syzkaller.appspotmail.com
 
-Thank you for the clarification.
+executing program
+BUG: memory leak
+unreferenced object 0xffff888107a5c000 (size 4096):
+  comm "kworker/1:0", pid 22, jiffies 4294943134 (age 18.720s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff816337cd>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
+    [<ffffffff816337cd>] slab_post_alloc_hook mm/slab.h:766 [inline]
+    [<ffffffff816337cd>] slab_alloc_node mm/slub.c:3478 [inline]
+    [<ffffffff816337cd>] __kmem_cache_alloc_node+0x2dd/0x3f0 mm/slub.c:3517
+    [<ffffffff8157e625>] kmalloc_trace+0x25/0x90 mm/slab_common.c:1098
+    [<ffffffff83cee442>] kmalloc include/linux/slab.h:600 [inline]
+    [<ffffffff83cee442>] _r8712_init_xmit_priv+0x2b2/0x6e0 drivers/staging/rtl8712/rtl871x_xmit.c:130
+    [<ffffffff83ce9033>] r8712_init_drv_sw+0xc3/0x290 drivers/staging/rtl8712/os_intfs.c:311
+    [<ffffffff83ce7ce6>] r871xu_drv_init+0x1c6/0x920 drivers/staging/rtl8712/usb_intf.c:386
+    [<ffffffff832d0f0b>] usb_probe_interface+0x16b/0x3a0 drivers/usb/core/driver.c:396
+    [<ffffffff82c3bb06>] call_driver_probe drivers/base/dd.c:579 [inline]
+    [<ffffffff82c3bb06>] really_probe+0x126/0x440 drivers/base/dd.c:658
+    [<ffffffff82c3bee3>] __driver_probe_device+0xc3/0x190 drivers/base/dd.c:800
+    [<ffffffff82c3bfda>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
+    [<ffffffff82c3c1d4>] __device_attach_driver+0x104/0x160 drivers/base/dd.c:958
+    [<ffffffff82c38f5d>] bus_for_each_drv+0xcd/0x120 drivers/base/bus.c:457
+    [<ffffffff82c3c6fa>] __device_attach+0xfa/0x290 drivers/base/dd.c:1030
+    [<ffffffff82c3a6ca>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
+    [<ffffffff82c36b7e>] device_add+0x9be/0xc90 drivers/base/core.c:3625
+    [<ffffffff832cdfd7>] usb_set_configuration+0x967/0xc70 drivers/usb/core/message.c:2207
+    [<ffffffff832e0cac>] usb_generic_driver_probe+0x9c/0xf0 drivers/usb/core/generic.c:238
 
->> Anyways, have you heard of such an issue? Can I provide more information, to
->> get it to not use any energy while being disable in GNOME?
-> 
-> What is the output from
-> 
-> 	grep . /sys/bus/usb/devices/1-3/power/*
-> 
-> both with and without the btusb module loaded?
+BUG: memory leak
+unreferenced object 0xffff888107a59000 (size 4096):
+  comm "kworker/1:0", pid 22, jiffies 4294943134 (age 18.720s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff816337cd>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
+    [<ffffffff816337cd>] slab_post_alloc_hook mm/slab.h:766 [inline]
+    [<ffffffff816337cd>] slab_alloc_node mm/slub.c:3478 [inline]
+    [<ffffffff816337cd>] __kmem_cache_alloc_node+0x2dd/0x3f0 mm/slub.c:3517
+    [<ffffffff8157e625>] kmalloc_trace+0x25/0x90 mm/slab_common.c:1098
+    [<ffffffff83cee442>] kmalloc include/linux/slab.h:600 [inline]
+    [<ffffffff83cee442>] _r8712_init_xmit_priv+0x2b2/0x6e0 drivers/staging/rtl8712/rtl871x_xmit.c:130
+    [<ffffffff83ce9033>] r8712_init_drv_sw+0xc3/0x290 drivers/staging/rtl8712/os_intfs.c:311
+    [<ffffffff83ce7ce6>] r871xu_drv_init+0x1c6/0x920 drivers/staging/rtl8712/usb_intf.c:386
+    [<ffffffff832d0f0b>] usb_probe_interface+0x16b/0x3a0 drivers/usb/core/driver.c:396
+    [<ffffffff82c3bb06>] call_driver_probe drivers/base/dd.c:579 [inline]
+    [<ffffffff82c3bb06>] really_probe+0x126/0x440 drivers/base/dd.c:658
+    [<ffffffff82c3bee3>] __driver_probe_device+0xc3/0x190 drivers/base/dd.c:800
+    [<ffffffff82c3bfda>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
+    [<ffffffff82c3c1d4>] __device_attach_driver+0x104/0x160 drivers/base/dd.c:958
+    [<ffffffff82c38f5d>] bus_for_each_drv+0xcd/0x120 drivers/base/bus.c:457
+    [<ffffffff82c3c6fa>] __device_attach+0xfa/0x290 drivers/base/dd.c:1030
+    [<ffffffff82c3a6ca>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
+    [<ffffffff82c36b7e>] device_add+0x9be/0xc90 drivers/base/core.c:3625
+    [<ffffffff832cdfd7>] usb_set_configuration+0x967/0xc70 drivers/usb/core/message.c:2207
+    [<ffffffff832e0cac>] usb_generic_driver_probe+0x9c/0xf0 drivers/usb/core/generic.c:238
 
-```
-$ sudo modprobe btusb
-$ sudo dmesg | tail -10
-[313699.136637] wlp58s0: Limiting TX power to 17 dBm as advertised by 
-00:f6:63:af:fa:4f
-[314037.905400] WARNING! power/level is deprecated; use power/control 
-instead
-[314065.418431] usbcore: registered new interface driver btusb
-[314065.421509] bluetooth hci0: firmware: direct-loading firmware 
-qca/rampatch_usb_00000302.bin
-[314065.423852] Bluetooth: hci0: using rampatch file: 
-qca/rampatch_usb_00000302.bin
-[314065.423865] Bluetooth: hci0: QCA: patch rome 0x302 build 0x3e8, 
-firmware rome 0x302 build 0x111
-[314065.791131] bluetooth hci0: firmware: direct-loading firmware 
-qca/nvm_usb_00000302.bin
-[314065.791228] Bluetooth: hci0: using NVM file: qca/nvm_usb_00000302.bin
-[314065.823499] Bluetooth: hci0: HCI Enhanced Setup Synchronous 
-Connection command is advertised, but not supported.
-[314066.117644] Bluetooth: MGMT ver 1.22
-$ grep . /sys/bus/usb/devices/1-3/power/*
-/sys/bus/usb/devices/1-3/power/active_duration:119053224
-/sys/bus/usb/devices/1-3/power/async:enabled
-/sys/bus/usb/devices/1-3/power/autosuspend:2
-/sys/bus/usb/devices/1-3/power/autosuspend_delay_ms:2000
-/sys/bus/usb/devices/1-3/power/connected_duration:148065372
-/sys/bus/usb/devices/1-3/power/control:auto
-/sys/bus/usb/devices/1-3/power/level:auto
-/sys/bus/usb/devices/1-3/power/persist:1
-/sys/bus/usb/devices/1-3/power/runtime_active_kids:0
-/sys/bus/usb/devices/1-3/power/runtime_active_time:119060567
-/sys/bus/usb/devices/1-3/power/runtime_enabled:enabled
-/sys/bus/usb/devices/1-3/power/runtime_status:active
-/sys/bus/usb/devices/1-3/power/runtime_suspended_time:28831453
-/sys/bus/usb/devices/1-3/power/runtime_usage:0
-/sys/bus/usb/devices/1-3/power/wakeup:disabled
-```
-
-```
-$ sudo modprobe -r btusb
-$ sudo dmesg | tail -1
-[314106.155163] usbcore: deregistering interface driver btusb
-$ grep . /sys/bus/usb/devices/1-3/power/*
-/sys/bus/usb/devices/1-3/power/active_duration:119072176
-/sys/bus/usb/devices/1-3/power/async:enabled
-/sys/bus/usb/devices/1-3/power/autosuspend:2
-/sys/bus/usb/devices/1-3/power/autosuspend_delay_ms:2000
-/sys/bus/usb/devices/1-3/power/connected_duration:148320980
-/sys/bus/usb/devices/1-3/power/control:auto
-/sys/bus/usb/devices/1-3/power/level:auto
-/sys/bus/usb/devices/1-3/power/persist:1
-/sys/bus/usb/devices/1-3/power/runtime_active_kids:0
-/sys/bus/usb/devices/1-3/power/runtime_active_time:119079518
-/sys/bus/usb/devices/1-3/power/runtime_enabled:enabled
-/sys/bus/usb/devices/1-3/power/runtime_status:suspended
-/sys/bus/usb/devices/1-3/power/runtime_suspended_time:29068110
-/sys/bus/usb/devices/1-3/power/runtime_usage:0
-/sys/bus/usb/devices/1-3/power/wakeup:disabled
-```
-
-
-Kind regards,
-
-Paul
+BUG: memory leak
+unreferenced object 0xffff888108475000 (size 4096):
+  comm "kworker/1:0", pid 22, jiffies 4294943134 (age 18.720s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff816337cd>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
+    [<ffffffff816337cd>] slab_post_alloc_hook mm/slab.h:766 [inline]
+    [<ffffffff816337cd>] slab_alloc_node mm/slub.c:3478 [inline]
+    [<ffffffff816337cd>] __kmem_cache_alloc_node+0x2dd/0x3f0 mm/slub.c:3517
+    [<ffffffff8157e625>] kmalloc_trace+0x25/0x90 mm/slab_common.c:1098
+    [<ffffffff83cee442>] kmalloc include/linux/slab.h:600 [inline]
+    [<ffffffff83cee442>] _r8712_init_xmit_priv+0x2b2/0x6e0 drivers/staging/rtl8712/rtl871x_xmit.c:130
+    [<ffffffff83ce9033>] r8712_init_drv_sw+0xc3/0x290 drivers/staging/rtl8712/os_intfs.c:311
+    [<ffffffff83ce7ce6>] r871xu_drv_init+0x1c6/0x920 drivers/staging/rtl8712/usb_intf.c:386
+    [<ffffffff832d0f0b>] usb_probe_interface+0x16b/0x3a0 drivers/usb/core/driver.c:396
+    [<ffffffff82c3bb06>] call_driver_probe drivers/base/dd.c:579 [inline]
+    [<ffffffff82c3bb06>] really_probe+0x126/0x440 drivers/base/dd.c:658
+    [<ffffffff82c3bee3>] __driver_probe_device+0xc3/0x190 drivers/base/dd.c:800
+    [<ffffffff82c3bfda>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
+    [<ffffffff82c3c1d4>] __device_attach_driver+0x104/0x160 drivers/base/dd.c:958
+    [<ffffffff82c38f5d>] bus_for_each_drv+0xcd/0x120 drivers/base/bus.c:457
+    [<ffffffff82c3c6fa>] __device_attach+0xfa/0x290 drivers/base/dd.c:1030
+    [<ffffffff82c3a6ca>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
+    [<ffffffff82c36b7e>] device_add+0x9be/0xc90 drivers/base/core.c:3625
+    [<ffffffff832cdfd7>] usb_set_configuration+0x967/0xc70 drivers/usb/core/message.c:2207
+    [<ffffffff832e0cac>] usb_generic_driver_probe+0x9c/0xf0 drivers/usb/core/generic.c:238
 
 
->> $ lsusb -t
->> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 10000M
->>      |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 10000M
->>          |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
->> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
->>      |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/5p, 480M
->>          |__ Port 1: Dev 3, If 0, Class=Human Interface Device,
->> Driver=usbhid, 12M
->> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
->> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
->>      |__ Port 3: Dev 2, If 0, Class=Wireless, Driver=, 12M
->>      |__ Port 3: Dev 2, If 1, Class=Wireless, Driver=, 12M
->>      |__ Port 4: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 12M
->>      |__ Port 5: Dev 4, If 0, Class=Video, Driver=uvcvideo, 480M
->>      |__ Port 5: Dev 4, If 1, Class=Video, Driver=uvcvideo, 480M
->> ```
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
