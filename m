@@ -1,44 +1,46 @@
-Return-Path: <linux-usb+bounces-3048-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3049-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA2737F1FD6
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 23:00:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB1A17F1FD8
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 23:00:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8638E28237F
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 22:00:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 285C1B21B2B
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 22:00:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25FDE3985F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7338439863;
 	Mon, 20 Nov 2023 21:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A06CA
-	for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 13:59:52 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B59D2
+	for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 13:59:54 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r5CJ4-0003rn-MK; Mon, 20 Nov 2023 22:59:50 +0100
+	id 1r5CJ5-0003rr-5i; Mon, 20 Nov 2023 22:59:51 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r5CJ4-00ARFH-44; Mon, 20 Nov 2023 22:59:50 +0100
+	id 1r5CJ4-00ARFL-AN; Mon, 20 Nov 2023 22:59:50 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1r5CJ3-004fD9-R5; Mon, 20 Nov 2023 22:59:49 +0100
+	id 1r5CJ4-004fDD-1K; Mon, 20 Nov 2023 22:59:50 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Vladimir Zapolskiy <vz@mleia.com>,
-	linux-usb@vger.kernel.org,
+Cc: Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
 	linux-arm-kernel@lists.infradead.org,
+	linux-usb@vger.kernel.org,
 	kernel@pengutronix.de
-Subject: [PATCH 4/5] usb: gadget: lpc32xx_udc: Convert to platform remove callback returning void
-Date: Mon, 20 Nov 2023 22:58:35 +0100
-Message-ID: <20231120215830.71071-5-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 5/5] usb: gadget: pxa25x_udc: Convert to platform remove callback returning void
+Date: Mon, 20 Nov 2023 22:58:36 +0100
+Message-ID: <20231120215830.71071-6-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0.586.gbc5204569f7d.dirty
 In-Reply-To: <20231120215830.71071-1-u.kleine-koenig@pengutronix.de>
 References: <20231120215830.71071-1-u.kleine-koenig@pengutronix.de>
@@ -49,7 +51,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2232; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=3SdjmLgJICEsEXALoysm7lgD+64vKlenp6vBy0cQ/YM=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlW9aKvUuMMkSuuNYETCdGXHvGW0WMp9Dp/+V+L ZU+ymHaxd6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZVvWigAKCRCPgPtYfRL+ TlqFCACmYfAoAs1ZHUMoYiXnlbRZ4zHiUYFI47y9B57KYSvplbC8Dblpx8fd3UgYbRNYdTthzwN klpn2YrDuREVOxW89kG2cCkU161QccqvbLMVgxytwq9kY4jG+Rw2Kwvuc1ogbZHwzG5mxmtGkOA OVNKMY/FQW6UT2f710g2G5dkb/VLbFyDOP96IhhSs78kQ6V+mxMgdc4VYmgt1sbnEKh3PRsEdxM ReZPkmC4ojy97FTbsoPeWnjWB41rN4mTHRcF/IYnS7buBTPFY3r5/ZOUTph0el7XFaLy+b2E4sk raRH83XItLJEMe64G6fcczYWBBXlWIiUatl30tI93POxsMZS
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2234; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=ogZo9r07S2IqZjbF99sFoydnhxg6c4XaTH9AnS4DFrU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlW9aLuec/NEu6mslnSQcR+/A2cAlAWA6khhOyy fQoojD3cxCJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZVvWiwAKCRCPgPtYfRL+ TuiNB/9TCYqYW7N8LnUAV51Opma7TR7tSD6SwEMn9qEUG/uog4pPGgEF1CCsw8FVBf5jckY6HH3 /49oVYsZyvrlEJK28iG5VzrduMUNsiIg7gulI3ZetMtPJ+AUZHJ3CRKhXeivVjRkHZ0nrUnO+Oq 6ROrmAu8piQGNSNEz6Em3KfM1fVMQhqy3m7mR1b45N6lHQMQB0XnwD4MfWTrLiH00CE9tdpK5U/ 1oR5a3HQihdIWXMSPodlUfJD1iahvzw8mEhWmgtojKLq8rAnz1YYwM+k9ooVXua4ENJ4a+8DzWH rtEmNR59aKrRZWwhKiaXj26zvAQzzOdu2n7Hp7VN2fb//H1U
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -73,51 +75,49 @@ change in behaviour.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/usb/gadget/udc/lpc32xx_udc.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/usb/gadget/udc/pxa25x_udc.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
-index a917cc9a32ab..d5f29f8fe481 100644
---- a/drivers/usb/gadget/udc/lpc32xx_udc.c
-+++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
-@@ -3174,13 +3174,16 @@ static int lpc32xx_udc_probe(struct platform_device *pdev)
- 	return retval;
+diff --git a/drivers/usb/gadget/udc/pxa25x_udc.c b/drivers/usb/gadget/udc/pxa25x_udc.c
+index df0551ecc810..1ac26cb49ecf 100644
+--- a/drivers/usb/gadget/udc/pxa25x_udc.c
++++ b/drivers/usb/gadget/udc/pxa25x_udc.c
+@@ -2397,12 +2397,15 @@ static void pxa25x_udc_shutdown(struct platform_device *_dev)
+ 	pullup_off();
  }
  
--static int lpc32xx_udc_remove(struct platform_device *pdev)
-+static void lpc32xx_udc_remove(struct platform_device *pdev)
+-static int pxa25x_udc_remove(struct platform_device *pdev)
++static void pxa25x_udc_remove(struct platform_device *pdev)
  {
- 	struct lpc32xx_udc *udc = platform_get_drvdata(pdev);
+ 	struct pxa25x_udc *dev = platform_get_drvdata(pdev);
  
- 	usb_del_gadget_udc(&udc->gadget);
--	if (udc->driver)
+-	if (dev->driver)
 -		return -EBUSY;
-+	if (udc->driver) {
++	if (dev->driver) {
 +		dev_err(&pdev->dev,
 +			"Driver still in use but removing anyhow\n");
 +		return;
 +	}
  
- 	udc_clk_set(udc, 1);
- 	udc_disable(udc);
-@@ -3194,8 +3197,6 @@ static int lpc32xx_udc_remove(struct platform_device *pdev)
- 			  udc->udca_v_base, udc->udca_p_base);
+ 	usb_del_gadget_udc(&dev->gadget);
+ 	dev->pullup = 0;
+@@ -2414,7 +2417,6 @@ static int pxa25x_udc_remove(struct platform_device *pdev)
+ 		dev->transceiver = NULL;
  
- 	clk_disable_unprepare(udc->usb_slv_clk);
--
+ 	the_controller = NULL;
 -	return 0;
  }
  
- #ifdef CONFIG_PM
-@@ -3255,7 +3256,7 @@ MODULE_DEVICE_TABLE(of, lpc32xx_udc_of_match);
- 
- static struct platform_driver lpc32xx_udc_driver = {
- 	.probe		= lpc32xx_udc_probe,
--	.remove		= lpc32xx_udc_remove,
-+	.remove_new	= lpc32xx_udc_remove,
- 	.shutdown	= lpc32xx_udc_shutdown,
- 	.suspend	= lpc32xx_udc_suspend,
- 	.resume		= lpc32xx_udc_resume,
+ /*-------------------------------------------------------------------------*/
+@@ -2472,7 +2474,7 @@ static int pxa25x_udc_resume(struct platform_device *dev)
+ static struct platform_driver udc_driver = {
+ 	.shutdown	= pxa25x_udc_shutdown,
+ 	.probe		= pxa25x_udc_probe,
+-	.remove		= pxa25x_udc_remove,
++	.remove_new	= pxa25x_udc_remove,
+ 	.suspend	= pxa25x_udc_suspend,
+ 	.resume		= pxa25x_udc_resume,
+ 	.driver		= {
 -- 
 2.42.0
 
