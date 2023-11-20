@@ -1,122 +1,101 @@
-Return-Path: <linux-usb+bounces-3019-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3020-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A8177F172C
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 16:23:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1A1E7F175C
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 16:32:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05ABBB218D4
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 15:23:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6ADAE282783
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 15:32:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B751D528;
-	Mon, 20 Nov 2023 15:23:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4923F1DA24;
+	Mon, 20 Nov 2023 15:32:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C4nROWAr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WuYOW1vF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF3DCB
-	for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 07:22:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700493778;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZxbmrPGylWswXo8aLH4U/JNxik/OiDDURPN0WtCCdCc=;
-	b=C4nROWAr2KGnlJPp9FMUz20XjlBa8u2li08DX94FBwrF8RXvlTlJV06zeDzkDlfopm1iqH
-	qAOtz+VedgNtQUcyP/VIjCm8Uk5P0sCpUcLZ/hSWfOO91JfHzZk4NmstYUp3KVuMqJc+26
-	TPynsKI4X9RnO99EKHbrBcZ5TM7v3D4=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-43-ZC9JUwLoMnej6vNpI6yc4g-1; Mon, 20 Nov 2023 10:22:57 -0500
-X-MC-Unique: ZC9JUwLoMnej6vNpI6yc4g-1
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-41cb47713f7so51066261cf.1
-        for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 07:22:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700493777; x=1701098577;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZxbmrPGylWswXo8aLH4U/JNxik/OiDDURPN0WtCCdCc=;
-        b=hEkvec7foKKakfIGZApGeu4ycbRbeMj3/9joPXn9RXJno+ok4zBnOxdytKdw/abvxU
-         se7uEl+tgJZguqbSl42YAMxrtLB4v9Du6/LuTgH2kZqrOu1OdEUk3LA45Tfi5q2d2ef2
-         p51PV1eISAOUSODQJO6kfhVGt/aTLrDb2EhN8lLMVH4m+EFW1YxA7yAztNafdtWsuMdI
-         LkqYuTek1GLvUdOX/AqefDrTZrtjpcr5HKHWLPqGiwuHFU2KsFrXAxjnDa+ACLHpeGZA
-         3EaOr7PEBADQV7xW+jPVByn1EUs+ZSpbrVuOQAkr0zzB52QmOpbQ+z9IN2g1jgZrOSXW
-         TPmg==
-X-Gm-Message-State: AOJu0YzXg5puRXSRxGkegLG8xboIhNsE4vORzEY/m76c1Zg/TgbXmbhE
-	3Qt9JhwodoVY3+/l9dTN7NQwfFXngj+1JVxpFwWfk53obQBj3cNAffcaXIuNzejMkguKnSrsk7p
-	Z0M9MSH5XAjV8A/68dWe5FBybcXsD
-X-Received: by 2002:ac8:5b84:0:b0:41e:1cd3:2ae9 with SMTP id a4-20020ac85b84000000b0041e1cd32ae9mr8941098qta.64.1700493776775;
-        Mon, 20 Nov 2023 07:22:56 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFywBJRydhvu1dXvc1nv2EDgslOpX/xHYvPFOD5M1Uz1taB2jzWvRwaRdsYzsY10DnCgAtv1A==
-X-Received: by 2002:ac8:5b84:0:b0:41e:1cd3:2ae9 with SMTP id a4-20020ac85b84000000b0041e1cd32ae9mr8941086qta.64.1700493776436;
-        Mon, 20 Nov 2023 07:22:56 -0800 (PST)
-Received: from fedora ([2600:1700:1ff0:d0e0::37])
-        by smtp.gmail.com with ESMTPSA id jr44-20020a05622a802c00b0041519614354sm2730324qtb.7.2023.11.20.07.22.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Nov 2023 07:22:56 -0800 (PST)
-Date: Mon, 20 Nov 2023 09:22:54 -0600
-From: Andrew Halaney <ahalaney@redhat.com>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Johan Hovold <johan+linaro@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andy Gross <agross@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] USB: dwc3: qcom: fix resource leaks on probe deferral
-Message-ID: <74cswe5tivcctmnty3gfavzsxdvjz5m4rktyj5auzwvrndninm@dah4h2fdj3zv>
-References: <20231117173650.21161-1-johan+linaro@kernel.org>
- <041f239f-7b40-4681-8c6c-2268f9c2c684@linaro.org>
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9495DC8;
+	Mon, 20 Nov 2023 07:32:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700494330; x=1732030330;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=yzidrUEMCUcbFArGAxx+rdrshE4gppTFAhlR8SrrLjA=;
+  b=WuYOW1vF4qVKdsSZjGzkvpRblDOvmfnXcqQ+1UkGPpqkyEByuConDx+0
+   TF3oDQmGijhPLKd15tejBVH8cIV7F1LgPmjLZ8rnNkqD5QlkjTD0jvpnI
+   XYMOa8w9jQMf2Jrbuh8NgcgxLcEK56660NY+sL55twSBqgg9tkUoOeua1
+   DjdiSonQV52VCzbpLw1VeNlaUlTNCYujoVnOVk2VG5ETSLHL+fGO4Yjbd
+   pR+aGNxLau5AEKZktP7cbHS1foZMIvPq/ssZZ6BcQW/6/sG9t9I0kZ7Uh
+   q1woaSffJhe4R4x6eEqxmluuWWrub+mXvb8MKuJN+wvJYMzGQPdxhMD8A
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="371815232"
+X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
+   d="scan'208";a="371815232"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 07:32:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="836760404"
+X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
+   d="scan'208";a="836760404"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga004.fm.intel.com with ESMTP; 20 Nov 2023 07:32:08 -0800
+Message-ID: <a970f296-da67-9a80-ab2f-a94fd16e0fd9@linux.intel.com>
+Date: Mon, 20 Nov 2023 17:33:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <041f239f-7b40-4681-8c6c-2268f9c2c684@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Kuen-Han Tsai <khtsai@google.com>
+Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ alan Stern <stern@rowland.harvard.edu>
+References: <20231117072131.2886406-1-khtsai@google.com>
+ <a4a129a3-e271-acbb-949c-534a8e1627ee@linux.intel.com>
+ <CAKzKK0rnx+tSFAj6N-U_vcAZ_5P=Hx_Kb97NFkdPMHs8dR3Ukw@mail.gmail.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] xhci: fix null pointer deref for xhci_urb_enqueue
+In-Reply-To: <CAKzKK0rnx+tSFAj6N-U_vcAZ_5P=Hx_Kb97NFkdPMHs8dR3Ukw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, Nov 18, 2023 at 12:47:30AM +0100, Konrad Dybcio wrote:
-> On 17.11.2023 18:36, Johan Hovold wrote:
-> > When reviewing the recently submitted series which reworks the dwc3 qcom
-> > glue implementation [1], I noticed that the driver's tear down handling
-> > is currently broken, something which can lead to memory leaks and
-> > potentially use-after-free issues on probe deferral and on driver
-> > unbind.
-> > 
-> > Let's get this sorted before reworking driver.
-> > 
-> > Note that the last patch has only been compile tested as I don't have
-> > access to a sdm845 device.
-> > 
-> > Johan
-> I'll sound like a broken record, but:
+On 18.11.2023 12.19, Kuen-Han Tsai wrote:
+> Hi Mathias
 > 
-> is there anyone in the world that is actively benefiting from this failed
-> experiment of using the ACPI tables that were shipped with these SoCs?
+>>>        if (usb_endpoint_xfer_isoc(&urb->ep->desc))
+>>> @@ -1552,8 +1561,10 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+>>>                num_tds = 1;
+>>>
+>>>        urb_priv = kzalloc(struct_size(urb_priv, td, num_tds), mem_flags);
+>> kzalloc with spinlock held, should preferably be moved outside lock, otherwise should use GFP_ATOMIC
 > 
-> There are so so so many shortcomings associated with it due to how Windows
-> drivers on these platforms know waaaay too much and largely use ACPI to
-> "bind driver x" and I simply think it doesn't make sense to continue
-> carrying this code forward given little use and no testing.
+> Thanks for pointing this out. I realize this patch is incorrect and it
+> is non-ideal to include many codes unrelated to xhci->devs[slot_id]
+> within the lock.
 > 
-> Konrad
+>> xhci_check_maxpacket() called here can't be called with spinlock held
 > 
+> It appears that xhci_check_maxpacket() might potentially lead to a
+> deadlock later if a spinlock is held. Is this the concern you were
+> referring to? If not, please let me know if there are any other
+> potential issues that I may have missed, thanks!
 
-For what it is worth, I have agreed with your opinion on this every time
-I've read it. I am not the target audience of the question, but I'll at
-least give my personal (interpreted: uneducated? undesired?) opinion
-that the ACPI support in here adds little value and extra burden.
+xhci_check_maxpacket() will allocate memory, wait for completion, and use the same lock,
+so there are several issues here.
 
-Of course that topic is a bit independent of this series, but I'd be
-curious if a patchset removing the support would be welcomed or not by
-maintainers, so I'm stirring the pot by replying here :)
+I actually think we shouldn't call xhci_check_maxpacket() at all while queuing urbs.
 
-Thanks,
-Andrew
+usb core knows when there was max packet size mismatch during enumeration.
+I think we should add a hook to the hcd that usb core can call in these cases
+
+Thanks
+Mathias
 
 
