@@ -1,112 +1,136 @@
-Return-Path: <linux-usb+bounces-3027-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3029-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EDF17F1925
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 17:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA2D07F194F
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 18:06:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FF7B1C20D47
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 16:53:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15ED91C21805
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 17:06:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C19AA1E537;
-	Mon, 20 Nov 2023 16:53:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89C5F200DD;
+	Mon, 20 Nov 2023 17:06:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J3IyRYIj"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mhjkzIXR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E991DFDC;
-	Mon, 20 Nov 2023 16:53:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A55CDC433C7;
-	Mon, 20 Nov 2023 16:53:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700499181;
-	bh=0Ltci87TG8iej+bFg5HVGpZD7dydE73T+Xze/XK8NW4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=J3IyRYIjl5nbe0JjSWG/SnQsghzoMD1vpyTCHWlo9a+u4Kmdc4tshhqNZtSoOhfEW
-	 OgBx1DR41+Ta6nGT9qkG3HZGM2JqXC/xSGLMEhW4OunYNZQERumukoZsIkd6U+8teY
-	 lgfCi17hUo+f0/5qNQPpAFbTInadrahL8vAvsduEX3He84O4m0PJ27z2BNVsXEUkG4
-	 zxsx+ULMm0OD4hMry37SwY7KJqRUEltkCQBCceFixmR/tnWkhvhhGhjaI6CL8BK3I9
-	 tM4dLNlJtbWzRZanqcFVPcXOGW++nHHSlETOG1mnxacnNwOT4G66SrQnyL7SvjbDMP
-	 /dey0Vu/2+B7Q==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1r57WI-0002Az-2C;
-	Mon, 20 Nov 2023 17:53:11 +0100
-Date: Mon, 20 Nov 2023 17:53:10 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Andrew Halaney <ahalaney@redhat.com>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] USB: dwc3: qcom: fix resource leaks on probe deferral
-Message-ID: <ZVuO9qj3SRHAS4qm@hovoldconsulting.com>
-References: <20231117173650.21161-1-johan+linaro@kernel.org>
- <041f239f-7b40-4681-8c6c-2268f9c2c684@linaro.org>
- <74cswe5tivcctmnty3gfavzsxdvjz5m4rktyj5auzwvrndninm@dah4h2fdj3zv>
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22683C3;
+	Mon, 20 Nov 2023 09:06:08 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B7F42E0007;
+	Mon, 20 Nov 2023 17:06:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1700499967;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=aKjAeW6DFp7B02nd83OisjeUbLjvY1HO12GAUJiKoCc=;
+	b=mhjkzIXRM+/4c0nyFl3tUVBQkpArc5FyhYwkOrbRepu/A8owBF2XNSnMPFRLnSSXUFUMhK
+	sHmRIBfJhxcEPJhDXviq0VQ7/FvzR4i0EEDY/LKPDl1pY29y4X62DxnqF/4Hm1udF8S/Jy
+	Zq/jFFiufLwWBjMAMM5idBAVi/Ru0SjciIrgONgEbIW25r6BCqhxbYq5tcRpE4qXEhmg76
+	oufBkLMLh5b9NyA4Mfw4bLURXnYI6gLezUvf982Ei1gIelKEKnUQMnciiCbB2Cxl/fL5uL
+	fA2q6Tfg1G9RgVjOTKeHJis1qVpo1vsb/xyQiXv4uVAVb1mD5c8C/MX1J7oWyA==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v2 0/7] usb: cdns: fix suspend on J7200 by assuming
+ reset-on-resume
+Date: Mon, 20 Nov 2023 18:06:00 +0100
+Message-Id: <20231120-j7200-usb-suspend-v2-0-038c7e4a3df4@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <74cswe5tivcctmnty3gfavzsxdvjz5m4rktyj5auzwvrndninm@dah4h2fdj3zv>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAPiRW2UC/32NTQ6CQAxGr0K6tmZaMBBX3sOw4KdIjc6QKRAN4
+ e6OHsDle8n3vg1MoorBOdsgyqqmwSfgQwbd2PiboPaJgR3nRJTjvWTncLEWbbFJfI/cFOXAXJG
+ 4AtJuijLo69e81olHtTnE9+9ipa/9V1sJHTY9iZRUVPmpu7QhzA/1xy48od73/QN14EZztAAAA
+ A==
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Roger Quadros <rogerq@kernel.org>, 
+ Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, 
+ Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Tero Kristo <kristo@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ "Thomas Petazzoni thomas.petazzoni"@bootlin.com, 
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.12.3
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Mon, Nov 20, 2023 at 09:22:54AM -0600, Andrew Halaney wrote:
-> On Sat, Nov 18, 2023 at 12:47:30AM +0100, Konrad Dybcio wrote:
-> > On 17.11.2023 18:36, Johan Hovold wrote:
-> > > When reviewing the recently submitted series which reworks the dwc3 qcom
-> > > glue implementation [1], I noticed that the driver's tear down handling
-> > > is currently broken, something which can lead to memory leaks and
-> > > potentially use-after-free issues on probe deferral and on driver
-> > > unbind.
-> > > 
-> > > Let's get this sorted before reworking driver.
-> > > 
-> > > Note that the last patch has only been compile tested as I don't have
-> > > access to a sdm845 device.
+Hi,
 
-> > I'll sound like a broken record, but:
-> > 
-> > is there anyone in the world that is actively benefiting from this failed
-> > experiment of using the ACPI tables that were shipped with these SoCs?
-> > 
-> > There are so so so many shortcomings associated with it due to how Windows
-> > drivers on these platforms know waaaay too much and largely use ACPI to
-> > "bind driver x" and I simply think it doesn't make sense to continue
-> > carrying this code forward given little use and no testing.
+Suspend on the TI J7200 platform is broken currently. There are two
+components that need to be patched so that they assume reset on
+resume: (1) the TI wrapper cdns3-ti & (2) the HOST role of the
+controller.
 
-> For what it is worth, I have agreed with your opinion on this every time
-> I've read it. I am not the target audience of the question, but I'll at
-> least give my personal (interpreted: uneducated? undesired?) opinion
-> that the ACPI support in here adds little value and extra burden.
-> 
-> Of course that topic is a bit independent of this series, but I'd be
-> curious if a patchset removing the support would be welcomed or not by
-> maintainers, so I'm stirring the pot by replying here :)
+About (1): the TI wrapper only did its hardware configuration at probe
+time. Update so that it is done at resume on J7200 SoC.
 
-I agree that if we can remove the ACPI hacks in here, we should try do
-so (e.g. given that no one really uses it anymore).
+About (2): signal from cdns3-ti to cdns3 host to xHCI that the
+controller resets on resume. This way we avoid the following warning:
 
-As Andrew already mentioned, that is a separate issue not directly
-related to this series, though.
+   xhci-hcd xhci-hcd.1.auto: xHC error in resume, USBSTS 0x401, Reinit
 
-Removing it before reworking the dwc3 binding [1] and adding multiport
-support [2] should simplify both of those series quite a bit, however.
+Strictly speaking (2) is not required to have working suspend on J7200;
+its only goal is to silence this warning.
 
-Johan
+Those patches have been tested on the TI J7200 EVM GP. No need to
+mention that other patches are required for S2R to work, but those will
+be sent later down the road. Those USB patches are rather standalone.
 
-[1] https://lore.kernel.org/all/20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com/
-[2] https://lore.kernel.org/all/20231007154806.605-1-quic_kriskura@quicinc.com/
+Thanks,
+Théo
+
+--
+Théo Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+---
+Changes in v2:
+- Remove runtime PM from cdns3-ti; it brings nothing. That means our
+  cdns3-ti suspend/resume patch is simpler; there is no need to handle
+  runtime PM at suspend/resume.
+- Do not add cdns3 host role suspend/resume callbacks; they are not
+  needed as core detects reset on resume & calls cdns_drd_host_on when
+  needed.
+- cdns3-ti: Move usb2_refclk_rate_code assignment closer to the value
+  computation.
+- cdns3/host.c: do not pass XHCI_SUSPEND_RESUME_CLKS quirk to xHCI; it
+  is unneeded on our platform.
+- Link to v1: https://lore.kernel.org/r/20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com
+
+---
+Théo Lebrun (7):
+      dt-bindings: usb: ti,j721e-usb: add ti,j7200-usb compatible
+      usb: cdns3-ti: remove runtime PM
+      usb: cdns3-ti: move reg writes from probe into an init_hw helper
+      usb: cdns3-ti: add suspend/resume procedures for J7200
+      usb: cdns3: add quirk to platform data for reset-on-resume
+      usb: cdns3-ti: signal reset-on-resume to xHCI for J7200 platform
+      arm64: dts: ti: k3-j7200: use J7200-specific USB compatible
+
+ .../devicetree/bindings/usb/ti,j721e-usb.yaml      |   4 +
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi          |   2 +-
+ drivers/usb/cdns3/cdns3-ti.c                       | 134 +++++++++++++--------
+ drivers/usb/cdns3/core.h                           |   1 +
+ drivers/usb/cdns3/host.c                           |   3 +
+ 5 files changed, 90 insertions(+), 54 deletions(-)
+---
+base-commit: 1d42d5c8f1ca11106579dcaadef4161fee03419e
+change-id: 20231113-j7200-usb-suspend-2a47f2281e04
+
+Best regards,
+-- 
+Théo Lebrun <theo.lebrun@bootlin.com>
+
 
