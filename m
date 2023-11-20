@@ -1,113 +1,112 @@
-Return-Path: <linux-usb+bounces-3026-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3027-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE0007F1913
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 17:48:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EDF17F1925
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 17:53:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7595F2824A7
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 16:48:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FF7B1C20D47
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 16:53:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D48341E53C;
-	Mon, 20 Nov 2023 16:48:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C19AA1E537;
+	Mon, 20 Nov 2023 16:53:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DXWTzBkd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J3IyRYIj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637EFC3
-	for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 08:48:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700498910;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KLPyDiGqLeECXSStH2gVuJse65gqtB6W1htx28GfPLs=;
-	b=DXWTzBkd+Ul092R6I592sXHKSdTWMqUXSahwmBQI+BLv1f8J2uUTKznvRupDRGWm/RRSoI
-	dEq+vPzRMkDigs+shhjnki1KoyVjCiDbQ4eDYlTEZdnFKojZ/q87BG3eVGFVrj+N/Brzar
-	KvXy6Ha8hGJhSF2eiUq4hI7YEKCcgYw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-83-kmT4iM4UOkGrFmLDW2ZkSQ-1; Mon, 20 Nov 2023 11:48:25 -0500
-X-MC-Unique: kmT4iM4UOkGrFmLDW2ZkSQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C3E3C811E7D;
-	Mon, 20 Nov 2023 16:48:24 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-0-7.rdu2.redhat.com [10.22.0.7])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 75E622026D68;
-	Mon, 20 Nov 2023 16:48:23 +0000 (UTC)
-Message-ID: <d089926c25a2c5e4593dbe6db9250843badc9771.camel@redhat.com>
-Subject: Re: question on random MAC in usbnet
-From: Dan Williams <dcbw@redhat.com>
-To: David Laight <David.Laight@ACULAB.COM>, =?ISO-8859-1?Q?=27Bj=F8rn?=
- Mork' <bjorn@mork.no>, Oliver Neukum <oneukum@suse.com>
-Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>, USB list
-	 <linux-usb@vger.kernel.org>
-Date: Mon, 20 Nov 2023 10:48:22 -0600
-In-Reply-To: <64dfec9e75a744cf8e7f50807140ba9a@AcuMS.aculab.com>
-References: <53b66aee-c4ad-4aec-b59f-94649323bcd6@suse.com>
-	 <87zfzeexy8.fsf@miraculix.mork.no>
-	 <64dfec9e75a744cf8e7f50807140ba9a@AcuMS.aculab.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E991DFDC;
+	Mon, 20 Nov 2023 16:53:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A55CDC433C7;
+	Mon, 20 Nov 2023 16:53:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700499181;
+	bh=0Ltci87TG8iej+bFg5HVGpZD7dydE73T+Xze/XK8NW4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J3IyRYIjl5nbe0JjSWG/SnQsghzoMD1vpyTCHWlo9a+u4Kmdc4tshhqNZtSoOhfEW
+	 OgBx1DR41+Ta6nGT9qkG3HZGM2JqXC/xSGLMEhW4OunYNZQERumukoZsIkd6U+8teY
+	 lgfCi17hUo+f0/5qNQPpAFbTInadrahL8vAvsduEX3He84O4m0PJ27z2BNVsXEUkG4
+	 zxsx+ULMm0OD4hMry37SwY7KJqRUEltkCQBCceFixmR/tnWkhvhhGhjaI6CL8BK3I9
+	 tM4dLNlJtbWzRZanqcFVPcXOGW++nHHSlETOG1mnxacnNwOT4G66SrQnyL7SvjbDMP
+	 /dey0Vu/2+B7Q==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1r57WI-0002Az-2C;
+	Mon, 20 Nov 2023 17:53:11 +0100
+Date: Mon, 20 Nov 2023 17:53:10 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Andrew Halaney <ahalaney@redhat.com>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] USB: dwc3: qcom: fix resource leaks on probe deferral
+Message-ID: <ZVuO9qj3SRHAS4qm@hovoldconsulting.com>
+References: <20231117173650.21161-1-johan+linaro@kernel.org>
+ <041f239f-7b40-4681-8c6c-2268f9c2c684@linaro.org>
+ <74cswe5tivcctmnty3gfavzsxdvjz5m4rktyj5auzwvrndninm@dah4h2fdj3zv>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <74cswe5tivcctmnty3gfavzsxdvjz5m4rktyj5auzwvrndninm@dah4h2fdj3zv>
 
-On Sun, 2023-11-19 at 11:09 +0000, David Laight wrote:
-> From: Bj=C3=B8rn Mork
-> > Sent: 16 November 2023 11:32
-> ...
-> > > Do you think that behavior should be changed to using
-> > > a separate random MAC for each device that requires it?
-> >=20
-> > I'm in favour.
-> >=20
-> > I could be wrong, but I don't expect anything to break if we did
-> > that.
-> > The current static address comes from eth_random_addr() in any
-> > case, so
-> > the end result as seen from the mini drivers should be identical.=C2=A0
-> > The
-> > difference will be seen in userspace and surrounding equipment, And
-> > those should be for the better.
->=20
-> It might cause grief when a USB device 'bounces' [1].
-> At the moment it will pick up the same 'random' MAC address.
-> But afterwards it will change.
+On Mon, Nov 20, 2023 at 09:22:54AM -0600, Andrew Halaney wrote:
+> On Sat, Nov 18, 2023 at 12:47:30AM +0100, Konrad Dybcio wrote:
+> > On 17.11.2023 18:36, Johan Hovold wrote:
+> > > When reviewing the recently submitted series which reworks the dwc3 qcom
+> > > glue implementation [1], I noticed that the driver's tear down handling
+> > > is currently broken, something which can lead to memory leaks and
+> > > potentially use-after-free issues on probe deferral and on driver
+> > > unbind.
+> > > 
+> > > Let's get this sorted before reworking driver.
+> > > 
+> > > Note that the last patch has only been compile tested as I don't have
+> > > access to a sdm845 device.
 
-Can that be achieved with userspace helpers too? They can match against
-USB device details (or just use a static MAC for everything like the
-driver does today) and set that on the device before anything else in
-userspace starts using it.
+> > I'll sound like a broken record, but:
+> > 
+> > is there anyone in the world that is actively benefiting from this failed
+> > experiment of using the ACPI tables that were shipped with these SoCs?
+> > 
+> > There are so so so many shortcomings associated with it due to how Windows
+> > drivers on these platforms know waaaay too much and largely use ACPI to
+> > "bind driver x" and I simply think it doesn't make sense to continue
+> > carrying this code forward given little use and no testing.
 
-Dan
+> For what it is worth, I have agreed with your opinion on this every time
+> I've read it. I am not the target audience of the question, but I'll at
+> least give my personal (interpreted: uneducated? undesired?) opinion
+> that the ACPI support in here adds little value and extra burden.
+> 
+> Of course that topic is a bit independent of this series, but I'd be
+> curious if a patchset removing the support would be welcomed or not by
+> maintainers, so I'm stirring the pot by replying here :)
 
->=20
-> So you might want to save the MAC on device removal and
-> re-use it on the next insert.
->=20
-> [1] We ended up putting the USB interface inside a 'bond'
-> in order to stop the interface everything was using
-> randomly disappearing due to common-mode noise on the
-> USB data lines causing a disconnect.
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0David
->=20
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes,
-> MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+I agree that if we can remove the ACPI hacks in here, we should try do
+so (e.g. given that no one really uses it anymore).
 
+As Andrew already mentioned, that is a separate issue not directly
+related to this series, though.
+
+Removing it before reworking the dwc3 binding [1] and adding multiport
+support [2] should simplify both of those series quite a bit, however.
+
+Johan
+
+[1] https://lore.kernel.org/all/20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com/
+[2] https://lore.kernel.org/all/20231007154806.605-1-quic_kriskura@quicinc.com/
 
