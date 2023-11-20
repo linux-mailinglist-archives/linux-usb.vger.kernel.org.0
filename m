@@ -1,134 +1,113 @@
-Return-Path: <linux-usb+bounces-3022-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3026-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9883B7F184E
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 17:16:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE0007F1913
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 17:48:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A278F1C2186D
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 16:16:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7595F2824A7
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 16:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CC5E1E514;
-	Mon, 20 Nov 2023 16:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D48341E53C;
+	Mon, 20 Nov 2023 16:48:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pOZXQteg"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DXWTzBkd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637EFC3
+	for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 08:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700498910;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KLPyDiGqLeECXSStH2gVuJse65gqtB6W1htx28GfPLs=;
+	b=DXWTzBkd+Ul092R6I592sXHKSdTWMqUXSahwmBQI+BLv1f8J2uUTKznvRupDRGWm/RRSoI
+	dEq+vPzRMkDigs+shhjnki1KoyVjCiDbQ4eDYlTEZdnFKojZ/q87BG3eVGFVrj+N/Brzar
+	KvXy6Ha8hGJhSF2eiUq4hI7YEKCcgYw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-83-kmT4iM4UOkGrFmLDW2ZkSQ-1; Mon, 20 Nov 2023 11:48:25 -0500
+X-MC-Unique: kmT4iM4UOkGrFmLDW2ZkSQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBF501DFC4;
-	Mon, 20 Nov 2023 16:16:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CC8FC433C8;
-	Mon, 20 Nov 2023 16:16:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700496979;
-	bh=cp9VBVhfKB1W6Ax326oY4P4qaJJhzvjhHmBuHx1mN3s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pOZXQtegp1iz8hawwcJUqLwUvss7v0jB4bYt2liRYvbs73NbGkLN7lGl7ot2Hx0xz
-	 YGfdqVAZ4QNU8a08GLx6DHxUd1nbYkmNjaaXhc2vWfZefNx3cGkVFSNa/PtEk8vkTR
-	 keCxY8TrkyjVCt3rlhTkyyIubDu9n6eGDrNKZynJYMHvdtbt3O4NTQsHkFauyb9egy
-	 ErbMrqLb8xiBUhBT8w9+EVdJ7HVtT5vvd6eKJ5fs0FuTCq2P3Zf6XOlyZkZ7oihlHD
-	 KcgK+2wCpKwRv7BdeQ4Yga3zbBt8LIcClKUQi0lJPgUIK6icBwnLt5t+IJcLlPzBTY
-	 9gvfh/VboAHxA==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan+linaro@kernel.org>)
-	id 1r56wm-0001vq-2D;
-	Mon, 20 Nov 2023 17:16:28 +0100
-From: Johan Hovold <johan+linaro@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-	linux-arm-msm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 3/3] USB: dwc3: qcom: simplify wakeup interrupt setup
-Date: Mon, 20 Nov 2023 17:16:07 +0100
-Message-ID: <20231120161607.7405-4-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231120161607.7405-1-johan+linaro@kernel.org>
-References: <20231120161607.7405-1-johan+linaro@kernel.org>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C3E3C811E7D;
+	Mon, 20 Nov 2023 16:48:24 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-0-7.rdu2.redhat.com [10.22.0.7])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 75E622026D68;
+	Mon, 20 Nov 2023 16:48:23 +0000 (UTC)
+Message-ID: <d089926c25a2c5e4593dbe6db9250843badc9771.camel@redhat.com>
+Subject: Re: question on random MAC in usbnet
+From: Dan Williams <dcbw@redhat.com>
+To: David Laight <David.Laight@ACULAB.COM>, =?ISO-8859-1?Q?=27Bj=F8rn?=
+ Mork' <bjorn@mork.no>, Oliver Neukum <oneukum@suse.com>
+Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>, USB list
+	 <linux-usb@vger.kernel.org>
+Date: Mon, 20 Nov 2023 10:48:22 -0600
+In-Reply-To: <64dfec9e75a744cf8e7f50807140ba9a@AcuMS.aculab.com>
+References: <53b66aee-c4ad-4aec-b59f-94649323bcd6@suse.com>
+	 <87zfzeexy8.fsf@miraculix.mork.no>
+	 <64dfec9e75a744cf8e7f50807140ba9a@AcuMS.aculab.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
 
-Use the IRQF_NO_AUTOEN irq flag when requesting the wakeup interrupts
-instead of setting it separately.
+On Sun, 2023-11-19 at 11:09 +0000, David Laight wrote:
+> From: Bj=C3=B8rn Mork
+> > Sent: 16 November 2023 11:32
+> ...
+> > > Do you think that behavior should be changed to using
+> > > a separate random MAC for each device that requires it?
+> >=20
+> > I'm in favour.
+> >=20
+> > I could be wrong, but I don't expect anything to break if we did
+> > that.
+> > The current static address comes from eth_random_addr() in any
+> > case, so
+> > the end result as seen from the mini drivers should be identical.=C2=A0
+> > The
+> > difference will be seen in userspace and surrounding equipment, And
+> > those should be for the better.
+>=20
+> It might cause grief when a USB device 'bounces' [1].
+> At the moment it will pick up the same 'random' MAC address.
+> But afterwards it will change.
 
-No functional change intended.
+Can that be achieved with userspace helpers too? They can match against
+USB device details (or just use a static MAC for everything like the
+driver does today) and set that on the device before anything else in
+userspace starts using it.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/usb/dwc3/dwc3-qcom.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+Dan
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 82544374110b..fdf6d5d3c2ad 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -546,10 +546,9 @@ static int dwc3_qcom_setup_irq(struct platform_device *pdev)
- 				pdata ? pdata->hs_phy_irq_index : -1);
- 	if (irq > 0) {
- 		/* Keep wakeup interrupts disabled until suspend */
--		irq_set_status_flags(irq, IRQ_NOAUTOEN);
- 		ret = devm_request_threaded_irq(qcom->dev, irq, NULL,
- 					qcom_dwc3_resume_irq,
--					IRQF_ONESHOT,
-+					IRQF_ONESHOT | IRQF_NO_AUTOEN,
- 					"qcom_dwc3 HS", qcom);
- 		if (ret) {
- 			dev_err(qcom->dev, "hs_phy_irq failed: %d\n", ret);
-@@ -561,10 +560,9 @@ static int dwc3_qcom_setup_irq(struct platform_device *pdev)
- 	irq = dwc3_qcom_get_irq(pdev, "dp_hs_phy_irq",
- 				pdata ? pdata->dp_hs_phy_irq_index : -1);
- 	if (irq > 0) {
--		irq_set_status_flags(irq, IRQ_NOAUTOEN);
- 		ret = devm_request_threaded_irq(qcom->dev, irq, NULL,
- 					qcom_dwc3_resume_irq,
--					IRQF_ONESHOT,
-+					IRQF_ONESHOT | IRQF_NO_AUTOEN,
- 					"qcom_dwc3 DP_HS", qcom);
- 		if (ret) {
- 			dev_err(qcom->dev, "dp_hs_phy_irq failed: %d\n", ret);
-@@ -576,10 +574,9 @@ static int dwc3_qcom_setup_irq(struct platform_device *pdev)
- 	irq = dwc3_qcom_get_irq(pdev, "dm_hs_phy_irq",
- 				pdata ? pdata->dm_hs_phy_irq_index : -1);
- 	if (irq > 0) {
--		irq_set_status_flags(irq, IRQ_NOAUTOEN);
- 		ret = devm_request_threaded_irq(qcom->dev, irq, NULL,
- 					qcom_dwc3_resume_irq,
--					IRQF_ONESHOT,
-+					IRQF_ONESHOT | IRQF_NO_AUTOEN,
- 					"qcom_dwc3 DM_HS", qcom);
- 		if (ret) {
- 			dev_err(qcom->dev, "dm_hs_phy_irq failed: %d\n", ret);
-@@ -591,10 +588,9 @@ static int dwc3_qcom_setup_irq(struct platform_device *pdev)
- 	irq = dwc3_qcom_get_irq(pdev, "ss_phy_irq",
- 				pdata ? pdata->ss_phy_irq_index : -1);
- 	if (irq > 0) {
--		irq_set_status_flags(irq, IRQ_NOAUTOEN);
- 		ret = devm_request_threaded_irq(qcom->dev, irq, NULL,
- 					qcom_dwc3_resume_irq,
--					IRQF_ONESHOT,
-+					IRQF_ONESHOT | IRQF_NO_AUTOEN,
- 					"qcom_dwc3 SS", qcom);
- 		if (ret) {
- 			dev_err(qcom->dev, "ss_phy_irq failed: %d\n", ret);
--- 
-2.41.0
+>=20
+> So you might want to save the MAC on device removal and
+> re-use it on the next insert.
+>=20
+> [1] We ended up putting the USB interface inside a 'bond'
+> in order to stop the interface everything was using
+> randomly disappearing due to common-mode noise on the
+> USB data lines causing a disconnect.
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0David
+>=20
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes,
+> MK1 1PT, UK
+> Registration No: 1397386 (Wales)
 
 
