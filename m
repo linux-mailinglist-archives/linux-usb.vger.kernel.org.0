@@ -1,148 +1,128 @@
-Return-Path: <linux-usb+bounces-3014-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3015-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 411207F1241
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 12:39:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FCA07F12BF
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 13:07:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5CABB2191F
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 11:39:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3FF33B210AC
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 12:07:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34A0215ACB;
-	Mon, 20 Nov 2023 11:39:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F32718E13;
+	Mon, 20 Nov 2023 12:07:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="1D5aZyUW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="feyk5uCz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2085.outbound.protection.outlook.com [40.107.22.85])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B746A83;
-	Mon, 20 Nov 2023 03:39:35 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nGAuWT2Uw40ABSfoww6CiJeqWZtiu72rZwDa1YdcXBEiUZur0MwraQYWEX5HmY3k1dfsGX5444ekX4d12ahWuxrizWoNJdvE0Lx6p8VqCh8zNRjU+gHeVHYALIVGsPaKi4G+GwaSM9fyYoChtjBnQcGDTSFmeZefLUvH5QxlukwxH+IFhnNFzssJ7B4YB8Zp5YzvlEA5bAvRRxQmrZ/bYV8Mm3I/p7Y+9G6PS/22pZifyWIf3112hbrbdBPCR+7MpzRh/dVNfcnoqB8l34nvlqOAQ+fB0+wg6/kAAWEXdwQUAMGR3N3sdQphu89tEiF8Yxjt6BRuLrDHEMoHYS5D0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lWkwbJe+vYA1KAV/944AjibrjuuiFaYRn64iuPKQPDU=;
- b=MYRlJUDUelGtC/OZSM9OGjUUK0Kn4AP6Lg6kjkYUHmi5INpes3228NVl/CH3qAEFXP2/GRm+egPPCxDmNf6gSx+7ep27dCKrexMwpbOJIBriX3BuHetFHpF1dorrpsj17eG0THWrYJ3JwDrhUZqINcMa5lUjthnR0AoB4fkZSj7yHtOGGoKVmXiPh12tFunmAp2T3ubDA98/PUpCqW47d5Gq2yPt1GytN3obR4QEH7YedgjidDZWuDmnssX9GKL7bh0QJzG1q/fk9eYkDMZPJwhrcv/JE7D2Bxr2BQpR7+nocSyFBJcClUaY0JqXd6whiiaGEysJ4gP3z3Y/Za44/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lWkwbJe+vYA1KAV/944AjibrjuuiFaYRn64iuPKQPDU=;
- b=1D5aZyUWpxVrH7xPeuwlHzTE2p3zZm6Buu10FuH3+PgQKdlZweSOTAcn4ae9t9NKl3EmgH4RJUip3qmw0GTfxeyjGQIFnqP6vyGzi7mu9YaIRcwM4rML4rctmyncbP5OoYf1s339xkZcJKG6nO4I4UJACeCRxkTOqmnYb2xOjBicimOX4BFDg/kYgfsJzUYYnPU6u/pX2Gx59voJopWm/vdFXjDdMAWBSrAcryiiuMV90FjPQATFaFrfJ+csXPD8kBCAY6uLdEFri0nv2YR5HkHedSmcNlW7C1/O/hiMu3fXI6uvjpG/UoTo52bCA07briWzQJSd93NIKWa0slk7HA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM0PR04MB6467.eurprd04.prod.outlook.com (2603:10a6:208:16c::20)
- by DB9PR04MB8477.eurprd04.prod.outlook.com (2603:10a6:10:2c3::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.16; Mon, 20 Nov
- 2023 11:39:32 +0000
-Received: from AM0PR04MB6467.eurprd04.prod.outlook.com
- ([fe80::5c46:ada1:fcf3:68e6]) by AM0PR04MB6467.eurprd04.prod.outlook.com
- ([fe80::5c46:ada1:fcf3:68e6%7]) with mapi id 15.20.7025.015; Mon, 20 Nov 2023
- 11:39:32 +0000
-Message-ID: <618e3f85-10a5-4e65-a91f-20e0cd5f4c0f@suse.com>
-Date: Mon, 20 Nov 2023 12:39:29 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 21/34] usb: cdc-acm: optimize acm_softint()
-Content-Language: en-US
-To: Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
- Oliver Neukum <oneukum@suse.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Cc: Jan Kara <jack@suse.cz>, Mirsad Todorovac
- <mirsad.todorovac@alu.unizg.hr>, Matthew Wilcox <willy@infradead.org>,
- Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
- Alexey Klimov <klimov.linux@gmail.com>
-References: <20231118155105.25678-1-yury.norov@gmail.com>
- <20231118155105.25678-22-yury.norov@gmail.com>
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20231118155105.25678-22-yury.norov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0051.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:92::8) To AM0PR04MB6467.eurprd04.prod.outlook.com
- (2603:10a6:208:16c::20)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6245BF1
+	for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 04:07:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700482019;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E4L8bVjqEkvHhs/ZW+HMgpg1xC58k9+Ym9UYgqEjP94=;
+	b=feyk5uCzI4TRmZyPvjH9O8HoDGRnLCHdwVzn2RspNpIksTgyIVcdJBFUkwwNnNBYffv8Q0
+	RUQg6SW0/vmpLlO9O22CuwlTJ5tb9LoOOv1GZeLb7pVLv9/R3b1yWR238nCnh1MazhbPL6
+	M7iuWBaXwOy+ptfPFxseR14M7QgpsEo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-596-U29Fn8xzOjKBHZFCT7zRzw-1; Mon, 20 Nov 2023 07:06:56 -0500
+X-MC-Unique: U29Fn8xzOjKBHZFCT7zRzw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA174185A782;
+	Mon, 20 Nov 2023 12:06:55 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.193.97])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 79E8E2166B26;
+	Mon, 20 Nov 2023 12:06:52 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: pabeni@redhat.com
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	jtornosm@redhat.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	weihao.bj@ieisystem.com
+Subject: [PATCH v2 1/2] net: usb: ax88179_178a: fix failed operations during ax88179_reset
+Date: Mon, 20 Nov 2023 13:06:29 +0100
+Message-ID: <20231120120642.54334-1-jtornosm@redhat.com>
+In-Reply-To: <020ff11184bb22909287ef68d97c00f7d2c73bd6.camel@redhat.com>
+References: <020ff11184bb22909287ef68d97c00f7d2c73bd6.camel@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6467:EE_|DB9PR04MB8477:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4bff1d2-895e-4362-30fe-08dbe9bd5cd4
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	6w+7ynpv4EV4A96Sb5RyeQf2rk51HuBqmT++jLZSP64MmfWJyHh0pJ8YtsZBb16/qJAma0CD6oBc//VDjK8Bd5BERulaum0sy+kfWW7qXa0CILC2W3BeAcJ9vc5J+7HPLbpQCbkMlMw8H3ecfI2WSUBZrAHKDhXiWWEYAXNQeja01XMGMvJe17e2EPh0Tjqedf1hZyZAMXH3/jxZ39DKTKi1Z/Cc45YCiQyVX1UXnu+5IVgVYvOJMqNKIZ2Pn/jE9zEMSHZ8XLDI9/xnV2HvSftP0wkpZWPCp4r5Dqpxe0jzHNiYGtp/FkKiyFX6zEWgS1/G71nVpcWeLvZG/+KyC/fxdOH7hdZKufecpi9naTgwRVjP/3FP/oATRdoswDYCIPdqnjBHCiTCFc1RB5EfyypPdnRq0TJOE6LiMIAKxNoSDvBhGaJe8x9rZySQLaoO12qjaO7+0PtlRdX1YaRlNeC3GMIlsZlKdMqGb03SXVGt+wiVQY1q1xxxubaQzqdwOBzGRwjAUcsWj775dPlb2fkRC4Nnv79fZJMtK2onH4JJF33A1rGPnaXWv8kzC5EXH8SHIHRyUQAXwcncUlqJvDnQWxaxyH6u6D26GSh3kQ0RcVjWjVAc2bXMpx/Pc2rfLMDp699zcU/srsA2U1kJ4Q==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6467.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(376002)(136003)(396003)(346002)(39860400002)(230922051799003)(451199024)(186009)(64100799003)(1800799012)(41300700001)(36756003)(31696002)(4744005)(5660300002)(7416002)(86362001)(2906002)(31686004)(53546011)(6506007)(6512007)(2616005)(478600001)(6486002)(6666004)(38100700002)(110136005)(66556008)(66946007)(4326008)(8936002)(66476007)(8676002)(316002)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?KzFnbE1FaTh0b2hJZ1F4OWpLQjJSWURqMmNLa2ZyNDczVkJpcUdtQzQwbUQ2?=
- =?utf-8?B?RGNRQ2NiYTUyLzVyM1BVUnZMa21rT0hWTy91Z3pJb0Q3ZjZkekVPTkJqNVhX?=
- =?utf-8?B?Vm5ZTXM0ZThLRXg4VkNSc0RkMEJqeitjclphYkh1NVVLL0JKcnBzNnZGTzRr?=
- =?utf-8?B?c3hodE9IcW12elh1dTFzbXZkRy9vZG5FTVlBczBMTkw5RTIreTJDMG5LRXdp?=
- =?utf-8?B?T0NldTFteFVVOU9TTTloOFlTWlBBUDB6UkdQVnIxZ0plVit4U3FjWDNOL2Vx?=
- =?utf-8?B?S3NFSk44MzBEU05YUmo3NGR3NGhSa3dXZUlwajllTGx5NHdGcGkyMzMvRlRz?=
- =?utf-8?B?TzNHNWN3R05qOHJVUUFZTE5pYkN2QjBNVHR0S2psNXlaNnJZMWloVlVhb1dC?=
- =?utf-8?B?WEtrRGpPN0tQandHWnZBVTJHYTFaYkM3UkRiS05taXhjemtuZ0wwRUY5aXoz?=
- =?utf-8?B?OFNWeUJUdEdCMXYvb1hsdVU5NFNqb1lvM3AvdXdkZmc2ejdTbUN4aDNubS9T?=
- =?utf-8?B?cDJVTFpXSmVyUkRtRk5GcjhjRjNobEJjVFY0S05obmFiYjVlQmhMN2p1Q1Ro?=
- =?utf-8?B?T0poR2FzT2RIMVVsWSs1eHNZUWxsK2hNclJGKy9McFM0NnEwbGZyWTBVWVBo?=
- =?utf-8?B?QlR6Uk9qNEptL2tEdVlNOHhmSkdwamNIbUEwNjRGTlpXcmZvS3MrSUFocWdY?=
- =?utf-8?B?Q1JNOUVyY0ptMW03ZDhBOUQ3Njdublc5Q0tqY3dqWDhKVStUajJ1THNNSVFP?=
- =?utf-8?B?aTR4YzFlT3FLNjVYSjBGRTlFQ245NnM0MkhOcHd4YVJMa2dERkRibmJsMmFh?=
- =?utf-8?B?akl2ZkNQZnJIS0tvZGxBVXpyby9sQWoxNHhJMTJyMDFxY2FBVFhIa3ExRFFr?=
- =?utf-8?B?QmxidDZ6QlZrb0o4SHJEb0tnMHpLNEhoZUJNM0NVL3BqLzhSeWF2MkVVb1NQ?=
- =?utf-8?B?QkVNU2F2OEl2S3Q1am9LWmlYVWlzcFpURTc2U29CN24wSHpER0sxTkJiOE5M?=
- =?utf-8?B?b1hBbGFrcFVkUVZIS2J4aWc3NE5GcUMzUEtQVEp3bGZ3TmpOT3IwREZIWWR4?=
- =?utf-8?B?ek1DbWlrVjloUHBiQk5qWlRKaEI4N1llM1p1ZUpiQ2M4UmRTZ3BJV1lZa3Vy?=
- =?utf-8?B?dlMrbjJLTlZUcExzVXpzZDF0Q0pJRW9tWDZlSjR2eXhQOUI3VEcyV3dTNkxF?=
- =?utf-8?B?RFh0TjNLK2JEOHBySkU4UFE3ZnNnc1R5OUVtRGFzVnpRZ1FWcWlUNXZqaFVV?=
- =?utf-8?B?aW9aSzMzT1RrN05EeW1vVXRpL0FTenNtS1ZuK0J2UExVb2ZkMmpQWC8zdzgz?=
- =?utf-8?B?R3Z1SFhDa3B0KzNyVHk0OUJEaHBnbnZiaHVFOFlSVVA0QWIrVGYreUx2S1py?=
- =?utf-8?B?VGRYNlZXem15Qjl0SjRGaHoySDRtcnZoOE9uWlZHQzUweldhWFZCL1NLQUpv?=
- =?utf-8?B?OGtDWldSeTR1eisyRVFWN3lsUCs3bmpVZGNmNXEvSXZBUUFMZFFQMHB5Q2s2?=
- =?utf-8?B?SHg3T3MwcXlmeGRxK1VnWFo1dko5Y1dHTXpaa296bEd3V3NsOHNpMTBhRzNH?=
- =?utf-8?B?M0JHdmppVUp2cmVpcEp4eDMvQ3M2dmJNc3dwSjNyUmNHSFFIcGFvRXlpNW9T?=
- =?utf-8?B?dEYyVWpaQU5Fa2VXM1ozTlJ2L1U1Z2c0bW5oMC9VbkJBUStjeUJMMEdOSjZH?=
- =?utf-8?B?bEdXazN5QzRzeUVYb1h0RHF0RGVKU0pjSEtrZGhtaENZSjZkcU53TldFMysy?=
- =?utf-8?B?YUROWUJ2OEs3SVZVZ2tmVXlYTUVRSXpsbGh4MUhJNW5EVHlxbEFxTUdON21Y?=
- =?utf-8?B?TE9GaWVBQURER1NYaWc0Y1hZVThra3UzVmszaHJLWFc1TjZNc012NHpxL0I4?=
- =?utf-8?B?enJJdGRTV1JqWjdMNDRtVDcyc0tDN3BQWWpONjZ6bmFpUS85bmg1TDU5b3ZV?=
- =?utf-8?B?eVQwNmNYcmp1VXNzM1JFNklSKzNPRDBkcmJXWkl3bmxYcS9VdzBKQVI3eU5C?=
- =?utf-8?B?YzdBTFN0RG9jdWYyT0o5c1U0YUhPMmx2RWJrSkRiR0JWVEVDQnEwTkxVSnNO?=
- =?utf-8?B?STIxd3JHeHoyWU93WU1kTEFLbFZGMEFaYlZPNVBnVjliU1hyQUVpUVZlYXha?=
- =?utf-8?B?SUE2anhBcnI0dWlmVCtLbTNoUHNQOGhmMmdjOHQ1WVFLOEgxaGxrNnNTdVI2?=
- =?utf-8?Q?gcyaEBNqIuYzPc/EerWqFrp+92LYSY/Uu5u75Ow7HKbB?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4bff1d2-895e-4362-30fe-08dbe9bd5cd4
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6467.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2023 11:39:32.1362
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +70KCHE5Pa9kxFbT2GhDQDbik/O6K8kq84iYchYuqxeZm98uQszOhhetek9YPofYDxaXqTvGSGQavCrguTTgxA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8477
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
 
+Using generic ASIX Electronics Corp. AX88179 Gigabit Ethernet device,
+the following test cycle has been implemented:
+    - power on
+    - check logs
+    - shutdown
+    - after detecting the system shutdown, disconnect power
+    - after approximately 60 seconds of sleep, power is restored
+Running some cycles, sometimes error logs like this appear:
+    kernel: ax88179_178a 2-9:1.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0001: -19
+    kernel: ax88179_178a 2-9:1.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0001: -19
+    ...
+These failed operation are happening during ax88179_reset execution, so
+the initialization could not be correct.
 
+In order to avoid this, we need to increase the delay after reset and
+clock initial operations. By using these larger values, many cycles
+have been run and no failed operations appear.
 
-On 18.11.23 16:50, Yury Norov wrote:
-> acm_softint(), uses for-loop to traverse urbs_in_error_delay bitmap
-> bit by bit to find and clear set bits.
-> 
-> We can do it better by using for_each_test_and_clear_bit(), because it
-> doesn't test already clear bits.
-> 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Acked-by: Oliver Neukum <oneukum@suse.com>
+It would be better to check some status register to verify when the
+operation has finished, but I do not have found any available information
+(neither in the public datasheets nor in the manufacturer's driver). The
+only available information for the necessary delays is the maufacturer's
+driver (original values) but the proposed values are not enough for the
+tested devices.
+
+Fixes: e2ca90c276e1f ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
+Reported-by: Herb Wei <weihao.bj@ieisystem.com>
+Tested-by: Herb Wei <weihao.bj@ieisystem.com>
+Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+---
+V1 -> V2:
+- Add Fixes tag.
+- Comments about the available information and manufacturer's driver
+  reference to complete why the new values are needed.
+
+ drivers/net/usb/ax88179_178a.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index aff39bf3161d..4ea0e155bb0d 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1583,11 +1583,11 @@ static int ax88179_reset(struct usbnet *dev)
+ 
+ 	*tmp16 = AX_PHYPWR_RSTCTL_IPRL;
+ 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL, 2, 2, tmp16);
+-	msleep(200);
++	msleep(500);
+ 
+ 	*tmp = AX_CLK_SELECT_ACS | AX_CLK_SELECT_BCS;
+ 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_CLK_SELECT, 1, 1, tmp);
+-	msleep(100);
++	msleep(200);
+ 
+ 	/* Ethernet PHY Auto Detach*/
+ 	ax88179_auto_detach(dev);
+-- 
+2.42.0
+
 
