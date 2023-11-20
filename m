@@ -1,70 +1,97 @@
-Return-Path: <linux-usb+bounces-3036-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3025-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 317C57F1984
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 18:15:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 505187F1854
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 17:16:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 631F01C21178
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 17:15:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09E9A2827AD
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 16:16:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BCD9200DC;
-	Mon, 20 Nov 2023 17:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2B31E53A;
+	Mon, 20 Nov 2023 16:16:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PQgenOGj"
 X-Original-To: linux-usb@vger.kernel.org
-X-Greylist: delayed 4255 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Nov 2023 09:15:17 PST
-Received: from GHMG01.great-harvest.local (mail.great-harvest.com.hk [202.82.82.2])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10902E3
-	for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 09:15:16 -0800 (PST)
-X-AuditID: c0a80a26-927612400000462b-37-655b7f416048
-Received: from [45.154.98.249] (Unknown_Domain [45.154.98.249])
-	(using TLS with cipher DHE-RSA-AES256-SHA (256/256 bits))
-	(Client did not present a certificate)
-	by GHMG01.great-harvest.local (Symantec Messaging Gateway) with SMTP id 67.F0.17963.14F7B556; Mon, 20 Nov 2023 23:46:10 +0800 (HKT)
-Content-Type: text/plain; charset="iso-8859-1"
-Message-ID: <67.F0.17963.14F7B556@GHMG01.great-harvest.local>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C121E527;
+	Mon, 20 Nov 2023 16:16:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33359C433CD;
+	Mon, 20 Nov 2023 16:16:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700496979;
+	bh=RqLtxq3JS2WZJO5Z7BQnNMc6WxYyQfEIqiv4EGNlGr0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=PQgenOGjN8Ejyic2TC8oSdPje9uSLE+ChZmT2IojOrV2JVwM4LY1pDg295rZaApGa
+	 SzQ8Sefrjlq8VNBv7cqNkR9BKfMkIEEuk8ij6oA/TCUv6Ol1EqZmmS9CfgyOkXqUBr
+	 ZXEEwuglqN7jLhqZwIKJO5YZWaKMTjiDe51JVoJR42gpqCGRG2OSMACDkVMBYU6RzU
+	 S14zyWE7s6d5v9MSwHIZuoWSuxa19ZcD4ABx07HqqnlRErdk9ZtwMrnORFyI1JGhQ9
+	 +lcO22aHCMjuOY27UG6Ek2JZZcse6tweWwcN/pWf+HAedtU3tN19QTeJ+wo/pcx8V/
+	 as+OyRmrB3XJQ==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan+linaro@kernel.org>)
+	id 1r56wm-0001vk-1I;
+	Mon, 20 Nov 2023 17:16:28 +0100
+From: Johan Hovold <johan+linaro@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+	linux-arm-msm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 0/3] USB: dwc3: qcom: fix wakeup after probe deferral
+Date: Mon, 20 Nov 2023 17:16:04 +0100
+Message-ID: <20231120161607.7405-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Investment Expression of Interest (IEOI)
-To: linux-usb@vger.kernel.org
-From: "Ramadan Ahmad" <Ahmadramcfacffa3@pobox.com>
-Date: Mon, 20 Nov 2023 16:46:08 +0100
-Reply-To: finance@almnadrinvestment.com
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFJMWRmVeSWpSXmKPExsWiOyvpp65TfXSqwdVmEYtFy1qZHRg9Pm+S
-	C2CM4rJJSc3JLEst0rdL4Mr4+f45S8EB5oodm5UaGN8xdTFyckgImEg8nLyEuYuRi0NIYBWT
-	xJyOw4wgCWYBPYkbU6ewgdi8ArYSE+/eYYewBSVOznzCAlGjLbFs4WugZg4gW03ia1cJSFhY
-	wFDi6ZGrYGNEBGQlDl/5zQxiswkYSbRPPwvWyiKgKrF900WwGiEBdYnzU68wTWDkmYVk8ywk
-	22Yh2TYLYdsCRpZVjFLuHr7uBoZ66UWpiSW6GYlFZanFJXo5+cmJOZsYgcFzYAWX2g7Gj5M+
-	6h1iZOJgPMQowcGsJML7TSgiVYg3JbGyKrUoP76oNCe1+BCjNAeLkjhvQIBUvJBAemJJanZq
-	akFqEUyWiYNTqoGJ5yyD2usJD9fp2ul+vagttEZFffLDn9O27g9Krq4pENjExCf190CQdurF
-	Q4nVl4+/1+M/f34nR1Tv+xdXmJweV/8JevLz2ORsU/XrXy82+xYmik4uib555mFUwLpJASmb
-	uBgK/yVZHfBraHU9mJIduO5o8lPBrqOJJ/8zCLsdSF9yXn3C1kDr2TIdnRZGYb7vBB6u/G8l
-	8tTmmcauqpS/FSYuLk5/3Qu8FU/XJ2z5FPor1X3SssIFr6cKX7+04IPhXcXzelr3p1kV/vAy
-	CWwUkau7f+VlvceF16W7/Q01X37QUN1dciw2VGZO3Dq/zoSXT26/6bNNDpzNOE9YbeL2ic1h
-	qlOqNy348lZXNum5EktxRqKhFnNRcSIAfhbXlo0CAAA=
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
 
-Attn: linux-usb@vger.kernel.org
-Date: 20-11-2023
-Subject: Investment Expression of Interest (IEOI)
+When testing a recent series that addresses resource leaks on probe
+deferral [1] I realised that probe deferral can break wakeup from
+suspend due to how the wakeup interrupts are currently requested.
 
-Dear Sir,
+I'll send a separate series for the Qualcomm devicetrees that used
+incorrect trigger types for the wakeup interrupts. Included here is just
+a patch fixing the binding example which hopefully will make it less
+likely that more of these gets introduced. Fortunately, there should be
+no dependency between this series and the devicetree one.
 
-Having been referred to your investment by my team, we would be honored to =
-review your available investment projects for onward referral to my princip=
-al investors who can allocate capital for the financing of it.
+Note also that I decided to include a related trivial cleanup patch.
 
-kindly advise at your convenience
+Johan
 
-Best Regards,
-Ramadan Ahmad CFA
-Chartered Finance Investment Analyst
+
+[1] https://lore.kernel.org/lkml/20231117173650.21161-1-johan+linaro@kernel.org/
+
+
+Johan Hovold (3):
+  dt-bindings: usb: qcom,dwc3: fix example wakeup interrupt types
+  USB: dwc3: qcom: fix wakeup after probe deferral
+  USB: dwc3: qcom: simplify wakeup interrupt setup
+
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml |  4 ++--
+ drivers/usb/dwc3/dwc3-qcom.c                         | 12 ++++--------
+ 2 files changed, 6 insertions(+), 10 deletions(-)
+
+-- 
+2.41.0
+
 
