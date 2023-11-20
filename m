@@ -1,60 +1,60 @@
-Return-Path: <linux-usb+bounces-3039-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3040-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B93657F1A16
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 18:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D3B337F1A1C
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 18:33:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8BC41C210BA
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 17:32:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02ED11C2113A
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 17:33:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37BBC2136B;
-	Mon, 20 Nov 2023 17:32:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 838CA21A12;
+	Mon, 20 Nov 2023 17:33:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mrQ5AwCk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J4Y3GyCb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E88412A
-	for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 09:32:44 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-a00a9d677fcso65999766b.0
-        for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 09:32:44 -0800 (PST)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63512BE
+	for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 09:33:35 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9c773ac9b15so628498666b.2
+        for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 09:33:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700501562; x=1701106362; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1700501614; x=1701106414; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PH6N+RwMraA/g7VALKyP1+uYAIpjpf6qJIw3+QWh+3o=;
-        b=mrQ5AwCkLa0tQCoN9MbANvYzG2MDaJRbAVC9nxbECGV+MaBXc0lwLUIkaUxjQQr5aK
-         YmskNC8wZTDV2mMthGk1Ub7nzSSIQ3Zmkvbw/Vf+NxWBS9GBC9H9rGgyOLeEK9ZDq7ix
-         7p095lRcBpDRpsE4hIcWULP0kKN13aIqjfgm+HMDCTxQ+DVStBGkO8bgnvCcCIkPjtqC
-         OTYVacTcGSCB26m/Xkq2m2xcagnhvdE1wDBfdAc5LCNboUfwFtjig8BD0KUfDNhSWa1L
-         cKQZH4Ari69pxK4KPhDZOHUeE9qVFoKVJvXtklFYnQk4yOWcMeBqtdVNbroU/evDJPht
-         SnPg==
+        bh=XpcT3rTKnIdGUAR9IGdwX67v7CmPFqW3w0pJLRLO2ls=;
+        b=J4Y3GyCbkckoSeaOT4EdN+n81TBYIAJdmHJF2cdT50TkM3VZ1HqhiihXvvkakyJMj1
+         is+7LbK7yL1jqF9hU5FLK7tk+LIKbGZcGLju8awuo20cKMsrdJZzcUp8/cekTqInnvzO
+         P9eBv/ZdFtFaWhdCS9WxEMyPqZ9HT+RsFYyoOhEMmB2YF9PR/XjTPIkv7j1w3Mmu3zLG
+         EGt++0f9mwWnyEf8CcLOdvzMQ7IUtQ+edtFN7vzFSJO7YkU3OUFy7+f5MDv8blnzih6L
+         xIbeXajZxz21kEQVGYJiZGtYIWZnXz9B+kQnYiVd6WT+QFs+HYUjXiB+aoxMEUn7Q2ds
+         dT/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700501562; x=1701106362;
+        d=1e100.net; s=20230601; t=1700501614; x=1701106414;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PH6N+RwMraA/g7VALKyP1+uYAIpjpf6qJIw3+QWh+3o=;
-        b=QQ9GG+7dxiAiAzJh731u+0j6oIV7vxGulo69NI/YfBWmHM1bf3dL0ookol57OCXT5m
-         zC55txP43ozsxy+l0HAeML3iFqI8HuOvlnlWiYJTtLo4dfUDMKosMWTAghsXxcfen1al
-         oAJ9GXyPonCD7Tr1RRQWPfggmyTbetfCO2E9Q53iRJyB5la/264YBnYCprTNYd0STPvj
-         YEN77YTtBXmY5jpZ+a71qT5xCjf5qw54eX+qQw+siltYoenBOpIpO/+EIc4qk8FZMNmS
-         ZuU3jgTbzn0Q4e/MqnxiRlA70aP0gc1duzu3DXJWrkEJQLAW7zAe0p5fDSUqDDUpw9TD
-         iRXw==
-X-Gm-Message-State: AOJu0Yy7C+9R7xxBRr5yyFGUj+iJy7nqJ1BR5WwyaYX4MkIBGjt+MT9H
-	VvneBJgWxYSxKP4bvFL/0cLL8g==
-X-Google-Smtp-Source: AGHT+IHt/twyDntaMruyyo90XFGzYRdZ5yGQkI8Yx/fVxUZQ0cTU/jvXqy4jj8b7Lzwpg6d0RroOpA==
-X-Received: by 2002:a17:906:739d:b0:9c3:8242:e665 with SMTP id f29-20020a170906739d00b009c38242e665mr6269445ejl.8.1700501562561;
-        Mon, 20 Nov 2023 09:32:42 -0800 (PST)
+        bh=XpcT3rTKnIdGUAR9IGdwX67v7CmPFqW3w0pJLRLO2ls=;
+        b=qatVf080X9UKzo8fL0LhRfryWDWhl/pNLu4XZTj1wG6L+DsljYcRCKXLcTaxKyz+Ym
+         7NpVXLWlO32f33lm+E5GKlfhyoBFZYhC1URuHDCVehjk5upkOy0Og0eUg5PR2d+ToCRb
+         OWSMJw+Ohzu5/Iymfg30mUYtn8xm7mnO5mA0jOwYjcHRhxYejgYmh8zyHQlHrOSXbGOK
+         rK/4j4z13xPkI5SUCmS9+XU8zo6F1hGl0DD+y9NK6O71XC6iQZ8/uUDZXfmu53MKtbKj
+         UcwVucj1SabkG4Qf6bF3z+PYE52PEqZFiQpm2TOQDAX6TjaDQZ9gz+i6NX7l1qKZjKub
+         Z3zg==
+X-Gm-Message-State: AOJu0YzxNjA6uo4pmU7orRUGRPa0JwbzQpOrSkzyefKPm2ZzmoZdg3PA
+	EhxXvvSVIq4ELqscXG66FrnocZ+S5KlDqu6NlXw=
+X-Google-Smtp-Source: AGHT+IFWdqimD/A6KMEHbSpDkd0skBa431YLo19fqJYYl6I2tPmV4rxCw4bblhc9h6dwAKJn0La2UA==
+X-Received: by 2002:a17:906:208f:b0:9be:ab38:a361 with SMTP id 15-20020a170906208f00b009beab38a361mr5837654ejq.8.1700501613761;
+        Mon, 20 Nov 2023 09:33:33 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.222.11])
-        by smtp.gmail.com with ESMTPSA id lz13-20020a170906fb0d00b009fcbb9162e9sm1965740ejb.174.2023.11.20.09.32.40
+        by smtp.gmail.com with ESMTPSA id lz13-20020a170906fb0d00b009fcbb9162e9sm1965740ejb.174.2023.11.20.09.33.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Nov 2023 09:32:42 -0800 (PST)
-Message-ID: <a930a6c6-897c-4eab-b485-51c4062e13a5@linaro.org>
-Date: Mon, 20 Nov 2023 18:32:40 +0100
+        Mon, 20 Nov 2023 09:33:33 -0800 (PST)
+Message-ID: <ee832442-064e-4f58-a963-5c008f6da455@linaro.org>
+Date: Mon, 20 Nov 2023 18:33:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,8 +62,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 7/7] arm64: dts: ti: k3-j7200: use J7200-specific USB
- compatible
+Subject: Re: [PATCH v2 0/7] usb: cdns: fix suspend on J7200 by assuming
+ reset-on-resume
 Content-Language: en-US
 To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -75,9 +75,9 @@ To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
  Tero Kristo <kristo@kernel.org>
 Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>
+ =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
+ Conor Dooley <conor.dooley@microchip.com>
 References: <20231120-j7200-usb-suspend-v2-0-038c7e4a3df4@bootlin.com>
- <20231120-j7200-usb-suspend-v2-7-038c7e4a3df4@bootlin.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -123,35 +123,34 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231120-j7200-usb-suspend-v2-7-038c7e4a3df4@bootlin.com>
+In-Reply-To: <20231120-j7200-usb-suspend-v2-0-038c7e4a3df4@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 20/11/2023 18:06, Théo Lebrun wrote:
-> On our platform, suspend-to-idle or suspend-to-RAM turn the controller
-> off. This compatible triggers reset on resume behavior to reconfigure
-> the hardware.
+> Hi,
 > 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-
-Fix your addressee list...
-
-> ---
->  arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Suspend on the TI J7200 platform is broken currently. There are two
+> components that need to be patched so that they assume reset on
+> resume: (1) the TI wrapper cdns3-ti & (2) the HOST role of the
+> controller.
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-> index 709081cd1e7f..52c4ee0fa334 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-> @@ -788,7 +788,7 @@ pcie1_ep: pcie-ep@2910000 {
->  	};
->  
->  	usbss0: cdns-usb@4104000 {
-> -		compatible = "ti,j721e-usb";
-> +		compatible = "ti,j7200-usb", "ti,j721e-usb";
+> About (1): the TI wrapper only did its hardware configuration at probe
+> time. Update so that it is done at resume on J7200 SoC.
+> 
+> About (2): signal from cdns3-ti to cdns3 host to xHCI that the
+> controller resets on resume. This way we avoid the following warning:
+> 
+>    xhci-hcd xhci-hcd.1.auto: xHC error in resume, USBSTS 0x401, Reinit
+> 
+> Strictly speaking (2) is not required to have working suspend on J7200;
+> its only goal is to silence this warning.
+> 
+> Those patches have been tested on the TI J7200 EVM GP. No need to
 
-It does not match your bindings. Bindings say something entirely else.
+Yeah, but you forgot about dtbs_check testing. It's a step before
+testing on the device. It does not make sense to test a code if it
+causes build-time warnings.
 
 Best regards,
 Krzysztof
