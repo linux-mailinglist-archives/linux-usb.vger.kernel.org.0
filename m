@@ -1,60 +1,60 @@
-Return-Path: <linux-usb+bounces-3038-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3039-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE39F7F1A08
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 18:32:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B93657F1A16
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 18:32:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E584B210B1
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 17:32:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8BC41C210BA
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 17:32:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C95D210F9;
-	Mon, 20 Nov 2023 17:32:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37BBC2136B;
+	Mon, 20 Nov 2023 17:32:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Sb35I2lS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mrQ5AwCk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E7F185
-	for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 09:32:12 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-a00cbb83c82so59080966b.2
-        for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 09:32:12 -0800 (PST)
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E88412A
+	for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 09:32:44 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-a00a9d677fcso65999766b.0
+        for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 09:32:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700501531; x=1701106331; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1700501562; x=1701106362; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GDgsmQLBT5rQ4HpNZnN0ciu0ZjbXj48vwcFVvWRaR80=;
-        b=Sb35I2lSE0rUiNAPIFWIrEccE7pUQEfm/Vg4r5MbNDoMKwRXc9/gNu7LimsN8RGRso
-         NFgPAscHLYNWz7FzXwrP5byjs75bzp1vy33hWGyZRXLJGYDsgSgJseeYYouimk48KHWE
-         rbqWQQEadhUEBzjGioueV/pDlyXHDKr07dUu5VV/3dSSTAelw9O4IgiQHn3PxsrffrNt
-         ptD2RI6TR1Id1FHMditW7fwkG3ykiECX0LRbfEVTWDB3BLvhyTuSmS31LJP6gzoQzaTi
-         XH4Nh8YqHqAj2050C7by84/5dkWUeIeTCPAF+IXQJ+E9d98kYCBC6q49Z3lqDlox+Wvl
-         USdw==
+        bh=PH6N+RwMraA/g7VALKyP1+uYAIpjpf6qJIw3+QWh+3o=;
+        b=mrQ5AwCkLa0tQCoN9MbANvYzG2MDaJRbAVC9nxbECGV+MaBXc0lwLUIkaUxjQQr5aK
+         YmskNC8wZTDV2mMthGk1Ub7nzSSIQ3Zmkvbw/Vf+NxWBS9GBC9H9rGgyOLeEK9ZDq7ix
+         7p095lRcBpDRpsE4hIcWULP0kKN13aIqjfgm+HMDCTxQ+DVStBGkO8bgnvCcCIkPjtqC
+         OTYVacTcGSCB26m/Xkq2m2xcagnhvdE1wDBfdAc5LCNboUfwFtjig8BD0KUfDNhSWa1L
+         cKQZH4Ari69pxK4KPhDZOHUeE9qVFoKVJvXtklFYnQk4yOWcMeBqtdVNbroU/evDJPht
+         SnPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700501531; x=1701106331;
+        d=1e100.net; s=20230601; t=1700501562; x=1701106362;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GDgsmQLBT5rQ4HpNZnN0ciu0ZjbXj48vwcFVvWRaR80=;
-        b=w+z5KU/fBGsgncz2pedfgbIyhf38ZFXDxm407jzJ6Fe9AZFH0QP5nkfy2YlVS4FCsc
-         r7pn1Mo6WW7LIM6/F1BiF76guUqgMwhvEC7YtVsoyvPjtKJsW7XFWgic7vVbBDwe6aH1
-         lvv1v/qQUqZqM4JsPS02ze+G4VFjAYNbfogLWcI6YQL3jNMQspP1ValXQ4+wi1qNpR6V
-         oUytlkIjfi9Gccti0dGiF1WOOlI1Yr6u1dg4LmOkUgkAxLxygT5oIWPAqL2eSdhg4iUC
-         nAEPu0bhiDK6BXLxm1+ugSZHD68jJGDAJlIgEFLV/NbWUCzVeCv+Flq0j9Ld9q5sAa7+
-         UroA==
-X-Gm-Message-State: AOJu0YzYNKGEQhekRnunZ3282gIzwSRF84CWA0EgP9T/I1sypU5rAYga
-	5I0mvuOfVA2D7gVyBMMSdHdSVA==
-X-Google-Smtp-Source: AGHT+IFa3ZXuU5jtCAYq0jKzGexWbijpVgnOgGhxfTjUJyMIFfKwPmfhLSWOQ6HIcqSPBHp6N2IGwg==
-X-Received: by 2002:a17:907:d046:b0:9e2:b87d:9c5c with SMTP id vb6-20020a170907d04600b009e2b87d9c5cmr7951532ejc.36.1700501530750;
-        Mon, 20 Nov 2023 09:32:10 -0800 (PST)
+        bh=PH6N+RwMraA/g7VALKyP1+uYAIpjpf6qJIw3+QWh+3o=;
+        b=QQ9GG+7dxiAiAzJh731u+0j6oIV7vxGulo69NI/YfBWmHM1bf3dL0ookol57OCXT5m
+         zC55txP43ozsxy+l0HAeML3iFqI8HuOvlnlWiYJTtLo4dfUDMKosMWTAghsXxcfen1al
+         oAJ9GXyPonCD7Tr1RRQWPfggmyTbetfCO2E9Q53iRJyB5la/264YBnYCprTNYd0STPvj
+         YEN77YTtBXmY5jpZ+a71qT5xCjf5qw54eX+qQw+siltYoenBOpIpO/+EIc4qk8FZMNmS
+         ZuU3jgTbzn0Q4e/MqnxiRlA70aP0gc1duzu3DXJWrkEJQLAW7zAe0p5fDSUqDDUpw9TD
+         iRXw==
+X-Gm-Message-State: AOJu0Yy7C+9R7xxBRr5yyFGUj+iJy7nqJ1BR5WwyaYX4MkIBGjt+MT9H
+	VvneBJgWxYSxKP4bvFL/0cLL8g==
+X-Google-Smtp-Source: AGHT+IHt/twyDntaMruyyo90XFGzYRdZ5yGQkI8Yx/fVxUZQ0cTU/jvXqy4jj8b7Lzwpg6d0RroOpA==
+X-Received: by 2002:a17:906:739d:b0:9c3:8242:e665 with SMTP id f29-20020a170906739d00b009c38242e665mr6269445ejl.8.1700501562561;
+        Mon, 20 Nov 2023 09:32:42 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.222.11])
-        by smtp.gmail.com with ESMTPSA id lz13-20020a170906fb0d00b009fcbb9162e9sm1965740ejb.174.2023.11.20.09.32.08
+        by smtp.gmail.com with ESMTPSA id lz13-20020a170906fb0d00b009fcbb9162e9sm1965740ejb.174.2023.11.20.09.32.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Nov 2023 09:32:10 -0800 (PST)
-Message-ID: <6f0da181-717c-4b14-ba3f-d287efe4105b@linaro.org>
-Date: Mon, 20 Nov 2023 18:32:07 +0100
+        Mon, 20 Nov 2023 09:32:42 -0800 (PST)
+Message-ID: <a930a6c6-897c-4eab-b485-51c4062e13a5@linaro.org>
+Date: Mon, 20 Nov 2023 18:32:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/7] dt-bindings: usb: ti,j721e-usb: add ti,j7200-usb
+Subject: Re: [PATCH v2 7/7] arm64: dts: ti: k3-j7200: use J7200-specific USB
  compatible
 Content-Language: en-US
 To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
@@ -75,10 +75,9 @@ To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
  Tero Kristo <kristo@kernel.org>
 Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
- Conor Dooley <conor.dooley@microchip.com>
+ =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>
 References: <20231120-j7200-usb-suspend-v2-0-038c7e4a3df4@bootlin.com>
- <20231120-j7200-usb-suspend-v2-1-038c7e4a3df4@bootlin.com>
+ <20231120-j7200-usb-suspend-v2-7-038c7e4a3df4@bootlin.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -124,50 +123,35 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231120-j7200-usb-suspend-v2-1-038c7e4a3df4@bootlin.com>
+In-Reply-To: <20231120-j7200-usb-suspend-v2-7-038c7e4a3df4@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 20/11/2023 18:06, Théo Lebrun wrote:
-> On this platform, the controller & its wrapper are reset on resume. This
-> makes it have a different behavior from other platforms.
+> On our platform, suspend-to-idle or suspend-to-RAM turn the controller
+> off. This compatible triggers reset on resume behavior to reconfigure
+> the hardware.
 > 
-> We allow using the new compatible with a fallback onto the original
-> ti,j721e-usb compatible. We therefore allow using an older kernel with
-
-Where is fallback ti,j721e-usb used? Please point me to the code.
-
-
-> a more recent devicetree.
-> 
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 > Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+
+Fix your addressee list...
+
 > ---
->  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+>  arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> index 95ff9791baea..69a222dfd9ff 100644
-> --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> @@ -12,11 +12,15 @@ maintainers:
->  properties:
->    compatible:
->      oneOf:
-> +      - const: ti,j7200-usb
->        - const: ti,j721e-usb
->        - const: ti,am64-usb
->        - items:
->            - const: ti,j721e-usb
->            - const: ti,am64-usb
-> +      - items:
-> +          - const: ti,j721e-usb
+> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+> index 709081cd1e7f..52c4ee0fa334 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+> @@ -788,7 +788,7 @@ pcie1_ep: pcie-ep@2910000 {
+>  	};
+>  
+>  	usbss0: cdns-usb@4104000 {
+> -		compatible = "ti,j721e-usb";
+> +		compatible = "ti,j7200-usb", "ti,j721e-usb";
 
-This makes little sense. It's already on the list. Twice! Don't add it
-third time.
-
-I am sorry, but this binding makes no sense. I mean, existing binding
-makes no sense, but your change is not making it anyhow better.
+It does not match your bindings. Bindings say something entirely else.
 
 Best regards,
 Krzysztof
