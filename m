@@ -1,192 +1,163 @@
-Return-Path: <linux-usb+bounces-3003-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3004-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D7347F09F2
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 01:09:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15B3E7F0A81
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 03:19:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58A64280CA1
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 00:09:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD3301F2165A
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 02:19:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B51610E7;
-	Mon, 20 Nov 2023 00:09:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3821C02;
+	Mon, 20 Nov 2023 02:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f207.google.com (mail-pl1-f207.google.com [209.85.214.207])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0660F9E
-	for <linux-usb@vger.kernel.org>; Sun, 19 Nov 2023 16:09:26 -0800 (PST)
-Received: by mail-pl1-f207.google.com with SMTP id d9443c01a7336-1cc5ac304e8so47964485ad.1
-        for <linux-usb@vger.kernel.org>; Sun, 19 Nov 2023 16:09:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700438965; x=1701043765;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bm9eGPc0RwqPbRbgp3iTFtDeXXeqtjeXeTQl0nd1FoI=;
-        b=unaZNTl6K1CNckzjSyilhg1vR2FMTlzwHFa/u/cax/ao1isSDSBVvmL0BUQTxc2TKP
-         34Gv5Yb50V9/ayF3rTrozRTmz7CXLztq8HdyvwEnfKpXp25rrRj0vaB0yBLfpLARn7T8
-         XYfKHpglc0/O46AZBbZJf4INMkBL4gu74u0m4+y3XUK0ly9pp+Ux6+TaKsROOTJTIyBT
-         qfBuhEIWv8xo3mLpAi1IgtJfznzZLhhJydZg8DOfgDsrjVNGrVxnIA1OXqfhFRjTNtP4
-         pDnuyo/h03JeR+f1Q6omUOHflfxiooHDxjlw7anzF7ci5Q54rHXiPWnePHEybpEkksks
-         TzyQ==
-X-Gm-Message-State: AOJu0YyyGqLeXQgM9uPml2mF621wDM/gPR9brrQYQqQynDA7d3/v7Vp4
-	hI8xwgsOB3fI7ISmi2ZjSUi2CD21sH2x9wqM2tuEJzKEc+pH
-X-Google-Smtp-Source: AGHT+IE+tfsFbkR7yz8cn8gaIyXCEYM3FadsbSsqz2LGgiXDKBu6dN0M+i8azKecC/7TiH14onfmFR9HmffSM7xYWD7i5/LM1Qca
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520ED133;
+	Sun, 19 Nov 2023 18:19:14 -0800 (PST)
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3AK2GuFP2401014, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3AK2GuFP2401014
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 20 Nov 2023 10:16:56 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Mon, 20 Nov 2023 10:16:56 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 20 Nov 2023 10:16:55 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
+ RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
+ 15.01.2375.007; Mon, 20 Nov 2023 10:16:55 +0800
+From: =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= <stanley_chang@realtek.com>
+To: =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= <stanley_chang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Vinod Koul <vkoul@kernel.org>, Johan Hovold <johan@kernel.org>,
+        "Kishon
+ Vijay Abraham I" <kishon@kernel.org>,
+        Geert Uytterhoeven
+	<geert+renesas@glider.be>,
+        Jinjie Ruan <ruanjinjie@huawei.com>, Rob Herring
+	<robh@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Yang Yingliang
+	<yangyingliang@huawei.com>,
+        Flavio Suligoi <f.suligoi@asem.it>, Roy Luo
+	<royluo@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        =?utf-8?B?UmljYXJkbyBDYcOxdWVsbw==?= <ricardo.canuelo@collabora.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v3 1/4] phy: core: add notify_connect and notify_disconnect callback
+Thread-Topic: [PATCH v3 1/4] phy: core: add notify_connect and
+ notify_disconnect callback
+Thread-Index: AQHaE5lppIbVtDBYMkuRe6XIgfyuz7CChzHg
+Date: Mon, 20 Nov 2023 02:16:55 +0000
+Message-ID: <8216e62cf2e646a6bdc8dd6629c88f41@realtek.com>
+References: <20231110054738.23515-1-stanley_chang@realtek.com>
+In-Reply-To: <20231110054738.23515-1-stanley_chang@realtek.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:7792:b0:1cc:4327:8bbc with SMTP id
- o18-20020a170902779200b001cc43278bbcmr1559454pll.10.1700438965521; Sun, 19
- Nov 2023 16:09:25 -0800 (PST)
-Date: Sun, 19 Nov 2023 16:09:25 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000809328060a8a4c1c@google.com>
-Subject: [syzbot] [staging?] [usb?] memory leak in _r8712_init_xmit_priv (2)
-From: syzbot <syzbot+83763e624cfec6b462cb@syzkaller.appspotmail.com>
-To: Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com, 
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-staging@lists.linux.dev, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    c42d9eeef8e5 Merge tag 'hardening-v6.7-rc2' of git://git.k..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13bff22f680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e71d284dd6560ca8
-dashboard link: https://syzkaller.appspot.com/bug?extid=83763e624cfec6b462cb
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1564223f680000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17a7c024e80000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/026cc0fc446f/disk-c42d9eee.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c4b4d6d092c1/vmlinux-c42d9eee.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1865f885e9d6/bzImage-c42d9eee.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+83763e624cfec6b462cb@syzkaller.appspotmail.com
-
-executing program
-BUG: memory leak
-unreferenced object 0xffff888107a5c000 (size 4096):
-  comm "kworker/1:0", pid 22, jiffies 4294943134 (age 18.720s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff816337cd>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
-    [<ffffffff816337cd>] slab_post_alloc_hook mm/slab.h:766 [inline]
-    [<ffffffff816337cd>] slab_alloc_node mm/slub.c:3478 [inline]
-    [<ffffffff816337cd>] __kmem_cache_alloc_node+0x2dd/0x3f0 mm/slub.c:3517
-    [<ffffffff8157e625>] kmalloc_trace+0x25/0x90 mm/slab_common.c:1098
-    [<ffffffff83cee442>] kmalloc include/linux/slab.h:600 [inline]
-    [<ffffffff83cee442>] _r8712_init_xmit_priv+0x2b2/0x6e0 drivers/staging/rtl8712/rtl871x_xmit.c:130
-    [<ffffffff83ce9033>] r8712_init_drv_sw+0xc3/0x290 drivers/staging/rtl8712/os_intfs.c:311
-    [<ffffffff83ce7ce6>] r871xu_drv_init+0x1c6/0x920 drivers/staging/rtl8712/usb_intf.c:386
-    [<ffffffff832d0f0b>] usb_probe_interface+0x16b/0x3a0 drivers/usb/core/driver.c:396
-    [<ffffffff82c3bb06>] call_driver_probe drivers/base/dd.c:579 [inline]
-    [<ffffffff82c3bb06>] really_probe+0x126/0x440 drivers/base/dd.c:658
-    [<ffffffff82c3bee3>] __driver_probe_device+0xc3/0x190 drivers/base/dd.c:800
-    [<ffffffff82c3bfda>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
-    [<ffffffff82c3c1d4>] __device_attach_driver+0x104/0x160 drivers/base/dd.c:958
-    [<ffffffff82c38f5d>] bus_for_each_drv+0xcd/0x120 drivers/base/bus.c:457
-    [<ffffffff82c3c6fa>] __device_attach+0xfa/0x290 drivers/base/dd.c:1030
-    [<ffffffff82c3a6ca>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
-    [<ffffffff82c36b7e>] device_add+0x9be/0xc90 drivers/base/core.c:3625
-    [<ffffffff832cdfd7>] usb_set_configuration+0x967/0xc70 drivers/usb/core/message.c:2207
-    [<ffffffff832e0cac>] usb_generic_driver_probe+0x9c/0xf0 drivers/usb/core/generic.c:238
-
-BUG: memory leak
-unreferenced object 0xffff888107a59000 (size 4096):
-  comm "kworker/1:0", pid 22, jiffies 4294943134 (age 18.720s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff816337cd>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
-    [<ffffffff816337cd>] slab_post_alloc_hook mm/slab.h:766 [inline]
-    [<ffffffff816337cd>] slab_alloc_node mm/slub.c:3478 [inline]
-    [<ffffffff816337cd>] __kmem_cache_alloc_node+0x2dd/0x3f0 mm/slub.c:3517
-    [<ffffffff8157e625>] kmalloc_trace+0x25/0x90 mm/slab_common.c:1098
-    [<ffffffff83cee442>] kmalloc include/linux/slab.h:600 [inline]
-    [<ffffffff83cee442>] _r8712_init_xmit_priv+0x2b2/0x6e0 drivers/staging/rtl8712/rtl871x_xmit.c:130
-    [<ffffffff83ce9033>] r8712_init_drv_sw+0xc3/0x290 drivers/staging/rtl8712/os_intfs.c:311
-    [<ffffffff83ce7ce6>] r871xu_drv_init+0x1c6/0x920 drivers/staging/rtl8712/usb_intf.c:386
-    [<ffffffff832d0f0b>] usb_probe_interface+0x16b/0x3a0 drivers/usb/core/driver.c:396
-    [<ffffffff82c3bb06>] call_driver_probe drivers/base/dd.c:579 [inline]
-    [<ffffffff82c3bb06>] really_probe+0x126/0x440 drivers/base/dd.c:658
-    [<ffffffff82c3bee3>] __driver_probe_device+0xc3/0x190 drivers/base/dd.c:800
-    [<ffffffff82c3bfda>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
-    [<ffffffff82c3c1d4>] __device_attach_driver+0x104/0x160 drivers/base/dd.c:958
-    [<ffffffff82c38f5d>] bus_for_each_drv+0xcd/0x120 drivers/base/bus.c:457
-    [<ffffffff82c3c6fa>] __device_attach+0xfa/0x290 drivers/base/dd.c:1030
-    [<ffffffff82c3a6ca>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
-    [<ffffffff82c36b7e>] device_add+0x9be/0xc90 drivers/base/core.c:3625
-    [<ffffffff832cdfd7>] usb_set_configuration+0x967/0xc70 drivers/usb/core/message.c:2207
-    [<ffffffff832e0cac>] usb_generic_driver_probe+0x9c/0xf0 drivers/usb/core/generic.c:238
-
-BUG: memory leak
-unreferenced object 0xffff888108475000 (size 4096):
-  comm "kworker/1:0", pid 22, jiffies 4294943134 (age 18.720s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff816337cd>] kmemleak_alloc_recursive include/linux/kmemleak.h:42 [inline]
-    [<ffffffff816337cd>] slab_post_alloc_hook mm/slab.h:766 [inline]
-    [<ffffffff816337cd>] slab_alloc_node mm/slub.c:3478 [inline]
-    [<ffffffff816337cd>] __kmem_cache_alloc_node+0x2dd/0x3f0 mm/slub.c:3517
-    [<ffffffff8157e625>] kmalloc_trace+0x25/0x90 mm/slab_common.c:1098
-    [<ffffffff83cee442>] kmalloc include/linux/slab.h:600 [inline]
-    [<ffffffff83cee442>] _r8712_init_xmit_priv+0x2b2/0x6e0 drivers/staging/rtl8712/rtl871x_xmit.c:130
-    [<ffffffff83ce9033>] r8712_init_drv_sw+0xc3/0x290 drivers/staging/rtl8712/os_intfs.c:311
-    [<ffffffff83ce7ce6>] r871xu_drv_init+0x1c6/0x920 drivers/staging/rtl8712/usb_intf.c:386
-    [<ffffffff832d0f0b>] usb_probe_interface+0x16b/0x3a0 drivers/usb/core/driver.c:396
-    [<ffffffff82c3bb06>] call_driver_probe drivers/base/dd.c:579 [inline]
-    [<ffffffff82c3bb06>] really_probe+0x126/0x440 drivers/base/dd.c:658
-    [<ffffffff82c3bee3>] __driver_probe_device+0xc3/0x190 drivers/base/dd.c:800
-    [<ffffffff82c3bfda>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
-    [<ffffffff82c3c1d4>] __device_attach_driver+0x104/0x160 drivers/base/dd.c:958
-    [<ffffffff82c38f5d>] bus_for_each_drv+0xcd/0x120 drivers/base/bus.c:457
-    [<ffffffff82c3c6fa>] __device_attach+0xfa/0x290 drivers/base/dd.c:1030
-    [<ffffffff82c3a6ca>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
-    [<ffffffff82c36b7e>] device_add+0x9be/0xc90 drivers/base/core.c:3625
-    [<ffffffff832cdfd7>] usb_set_configuration+0x967/0xc70 drivers/usb/core/message.c:2207
-    [<ffffffff832e0cac>] usb_generic_driver_probe+0x9c/0xf0 drivers/usb/core/generic.c:238
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+SGkgVmlub2QsDQoNClBsZWFzZSBoZWxwIHJldmlldyB0aGlzIHBhdGNoLg0KDQpUaGFua3MsDQpT
+dGFubGV5DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU3RhbmxleSBD
+aGFuZyA8c3RhbmxleV9jaGFuZ0ByZWFsdGVrLmNvbT4NCj4gU2VudDogRnJpZGF5LCBOb3ZlbWJl
+ciAxMCwgMjAyMyAxOjQ1IFBNDQo+IFRvOiBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdraEBsaW51
+eGZvdW5kYXRpb24ub3JnPg0KPiBDYzogU3RhbmxleSBDaGFuZ1vmmIzogrLlvrddIDxzdGFubGV5
+X2NoYW5nQHJlYWx0ZWsuY29tPjsgVmlub2QgS291bA0KPiA8dmtvdWxAa2VybmVsLm9yZz47IEpv
+aGFuIEhvdm9sZCA8am9oYW5Aa2VybmVsLm9yZz47IEtpc2hvbiBWaWpheSBBYnJhaGFtDQo+IEkg
+PGtpc2hvbkBrZXJuZWwub3JnPjsgR2VlcnQgVXl0dGVyaG9ldmVuIDxnZWVydCtyZW5lc2FzQGds
+aWRlci5iZT47IEppbmppZQ0KPiBSdWFuIDxydWFuamluamllQGh1YXdlaS5jb20+OyBSb2IgSGVy
+cmluZyA8cm9iaEBrZXJuZWwub3JnPjsgQWxhbiBTdGVybg0KPiA8c3Rlcm5Acm93bGFuZC5oYXJ2
+YXJkLmVkdT47IFlhbmcgWWluZ2xpYW5nIDx5YW5neWluZ2xpYW5nQGh1YXdlaS5jb20+Ow0KPiBG
+bGF2aW8gU3VsaWdvaSA8Zi5zdWxpZ29pQGFzZW0uaXQ+OyBSb3kgTHVvIDxyb3lsdW9AZ29vZ2xl
+LmNvbT47IEhlaWtraQ0KPiBLcm9nZXJ1cyA8aGVpa2tpLmtyb2dlcnVzQGxpbnV4LmludGVsLmNv
+bT47IFJpY2FyZG8gQ2HDsXVlbG8NCj4gPHJpY2FyZG8uY2FudWVsb0Bjb2xsYWJvcmEuY29tPjsg
+bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsNCj4gbGludXgtcGh5QGxpc3RzLmluZnJhZGVh
+ZC5vcmc7IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogW1BBVENIIHYzIDEv
+NF0gcGh5OiBjb3JlOiBhZGQgbm90aWZ5X2Nvbm5lY3QgYW5kIG5vdGlmeV9kaXNjb25uZWN0DQo+
+IGNhbGxiYWNrDQo+IA0KPiBJbiBSZWFsdGVrIFNvQywgdGhlIHBhcmFtZXRlciBvZiB1c2IgcGh5
+IGlzIGRlc2lnbmVkIHRvIGNhbiBkeW5hbWljIHR1bmluZw0KPiBiYXNlIG9uIHBvcnQgc3RhdHVz
+LiBUaGVyZWZvcmUsIGFkZCBhIG5vdGlmeSBjYWxsYmFjayBvZiBwaHkgZHJpdmVyIHdoZW4gdXNi
+DQo+IGNvbm5lY3Rpb24vZGlzY29ubmVjdGlvbiBjaGFuZ2UuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5
+OiBTdGFubGV5IENoYW5nIDxzdGFubGV5X2NoYW5nQHJlYWx0ZWsuY29tPg0KPiAtLS0NCj4gdjEg
+dG8gdjI6DQo+ICAgICBObyBjaGFuZ2UNCj4gdjIgdG8gdjM6DQo+ICAgICBObyBjaGFuZ2UNCj4g
+LS0tDQo+ICBkcml2ZXJzL3BoeS9waHktY29yZS5jICB8IDQ3DQo+ICsrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrDQo+ICBpbmNsdWRlL2xpbnV4L3BoeS9waHkuaCB8IDE4
+ICsrKysrKysrKysrKysrKysNCj4gIDIgZmlsZXMgY2hhbmdlZCwgNjUgaW5zZXJ0aW9ucygrKQ0K
+PiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGh5L3BoeS1jb3JlLmMgYi9kcml2ZXJzL3BoeS9w
+aHktY29yZS5jIGluZGV4DQo+IDk2YTBiMWUxMTFmMy4uYTg0YWQ0ODk2YjdmIDEwMDY0NA0KPiAt
+LS0gYS9kcml2ZXJzL3BoeS9waHktY29yZS5jDQo+ICsrKyBiL2RyaXZlcnMvcGh5L3BoeS1jb3Jl
+LmMNCj4gQEAgLTQ4OSw2ICs0ODksNTMgQEAgaW50IHBoeV9jYWxpYnJhdGUoc3RydWN0IHBoeSAq
+cGh5KSAgfQ0KPiBFWFBPUlRfU1lNQk9MX0dQTChwaHlfY2FsaWJyYXRlKTsNCj4gDQo+ICsvKioN
+Cj4gKyAqIHBoeV9ub3RpZnlfY29ubmVjdCgpIC0gcGh5IGNvbm5lY3Qgbm90aWZ5DQo+ICsgKiBA
+cGh5OiB0aGUgcGh5IHJldHVybmVkIGJ5IHBoeV9nZXQoKQ0KPiArICogQHBvcnQ6IHRoZSBwb3J0
+IGluZGV4IGZvciBjb25uZWN0DQo+ICsgKg0KPiArICogSWYgcGh5IG5lZWQgdGhlIGdldCBjb25u
+ZWN0aW9uIHN0YXR1cywgdGhlIGNhbGxiYWNrIGNhbiBiZSB1c2VkLg0KPiArICogUmV0dXJuczog
+JTAgaWYgc3VjY2Vzc2Z1bCwgYSBuZWdhdGl2ZSBlcnJvciBjb2RlIG90aGVyd2lzZSAgKi8gaW50
+DQo+ICtwaHlfbm90aWZ5X2Nvbm5lY3Qoc3RydWN0IHBoeSAqcGh5LCBpbnQgcG9ydCkgew0KPiAr
+CWludCByZXQ7DQo+ICsNCj4gKwlpZiAoIXBoeSB8fCAhcGh5LT5vcHMtPmNvbm5lY3QpDQo+ICsJ
+CXJldHVybiAwOw0KPiArDQo+ICsJbXV0ZXhfbG9jaygmcGh5LT5tdXRleCk7DQo+ICsJcmV0ID0g
+cGh5LT5vcHMtPmNvbm5lY3QocGh5LCBwb3J0KTsNCj4gKwltdXRleF91bmxvY2soJnBoeS0+bXV0
+ZXgpOw0KPiArDQo+ICsJcmV0dXJuIHJldDsNCj4gK30NCj4gK0VYUE9SVF9TWU1CT0xfR1BMKHBo
+eV9ub3RpZnlfY29ubmVjdCk7DQo+ICsNCj4gKy8qKg0KPiArICogcGh5X25vdGlmeV9kaXNjb25u
+ZWN0KCkgLSBwaHkgZGlzY29ubmVjdCBub3RpZnkNCj4gKyAqIEBwaHk6IHRoZSBwaHkgcmV0dXJu
+ZWQgYnkgcGh5X2dldCgpDQo+ICsgKiBAcG9ydDogdGhlIHBvcnQgaW5kZXggZm9yIGRpc2Nvbm5l
+Y3QNCj4gKyAqDQo+ICsgKiBJZiBwaHkgbmVlZCB0aGUgZ2V0IGRpc2Nvbm5lY3Rpb24gc3RhdHVz
+LCB0aGUgY2FsbGJhY2sgY2FuIGJlIHVzZWQuDQo+ICsgKg0KPiArICogUmV0dXJuczogJTAgaWYg
+c3VjY2Vzc2Z1bCwgYSBuZWdhdGl2ZSBlcnJvciBjb2RlIG90aGVyd2lzZSAgKi8gaW50DQo+ICtw
+aHlfbm90aWZ5X2Rpc2Nvbm5lY3Qoc3RydWN0IHBoeSAqcGh5LCBpbnQgcG9ydCkgew0KPiArCWlu
+dCByZXQ7DQo+ICsNCj4gKwlpZiAoIXBoeSB8fCAhcGh5LT5vcHMtPmRpc2Nvbm5lY3QpDQo+ICsJ
+CXJldHVybiAwOw0KPiArDQo+ICsJbXV0ZXhfbG9jaygmcGh5LT5tdXRleCk7DQo+ICsJcmV0ID0g
+cGh5LT5vcHMtPmRpc2Nvbm5lY3QocGh5LCBwb3J0KTsNCj4gKwltdXRleF91bmxvY2soJnBoeS0+
+bXV0ZXgpOw0KPiArDQo+ICsJcmV0dXJuIHJldDsNCj4gK30NCj4gK0VYUE9SVF9TWU1CT0xfR1BM
+KHBoeV9ub3RpZnlfZGlzY29ubmVjdCk7DQo+ICsNCj4gIC8qKg0KPiAgICogcGh5X2NvbmZpZ3Vy
+ZSgpIC0gQ2hhbmdlcyB0aGUgcGh5IHBhcmFtZXRlcnMNCj4gICAqIEBwaHk6IHRoZSBwaHkgcmV0
+dXJuZWQgYnkgcGh5X2dldCgpDQo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3BoeS9waHku
+aCBiL2luY2x1ZGUvbGludXgvcGh5L3BoeS5oIGluZGV4DQo+IGY2ZDYwN2VmMGU4MC4uY2Y5OGNi
+MjlkZGFhIDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2xpbnV4L3BoeS9waHkuaA0KPiArKysgYi9p
+bmNsdWRlL2xpbnV4L3BoeS9waHkuaA0KPiBAQCAtMTIyLDYgKzEyMiw4IEBAIHN0cnVjdCBwaHlf
+b3BzIHsNCj4gIAkJCSAgICB1bmlvbiBwaHlfY29uZmlndXJlX29wdHMgKm9wdHMpOw0KPiAgCWlu
+dAkoKnJlc2V0KShzdHJ1Y3QgcGh5ICpwaHkpOw0KPiAgCWludAkoKmNhbGlicmF0ZSkoc3RydWN0
+IHBoeSAqcGh5KTsNCj4gKwlpbnQJKCpjb25uZWN0KShzdHJ1Y3QgcGh5ICpwaHksIGludCBwb3J0
+KTsNCj4gKwlpbnQJKCpkaXNjb25uZWN0KShzdHJ1Y3QgcGh5ICpwaHksIGludCBwb3J0KTsNCj4g
+IAl2b2lkCSgqcmVsZWFzZSkoc3RydWN0IHBoeSAqcGh5KTsNCj4gIAlzdHJ1Y3QgbW9kdWxlICpv
+d25lcjsNCj4gIH07DQo+IEBAIC0yNDMsNiArMjQ1LDggQEAgc3RhdGljIGlubGluZSBlbnVtIHBo
+eV9tb2RlIHBoeV9nZXRfbW9kZShzdHJ1Y3QNCj4gcGh5ICpwaHkpICB9ICBpbnQgcGh5X3Jlc2V0
+KHN0cnVjdCBwaHkgKnBoeSk7ICBpbnQgcGh5X2NhbGlicmF0ZShzdHJ1Y3QgcGh5DQo+ICpwaHkp
+Ow0KPiAraW50IHBoeV9ub3RpZnlfY29ubmVjdChzdHJ1Y3QgcGh5ICpwaHksIGludCBwb3J0KTsg
+aW50DQo+ICtwaHlfbm90aWZ5X2Rpc2Nvbm5lY3Qoc3RydWN0IHBoeSAqcGh5LCBpbnQgcG9ydCk7
+DQo+ICBzdGF0aWMgaW5saW5lIGludCBwaHlfZ2V0X2J1c193aWR0aChzdHJ1Y3QgcGh5ICpwaHkp
+ICB7DQo+ICAJcmV0dXJuIHBoeS0+YXR0cnMuYnVzX3dpZHRoOw0KPiBAQCAtMzk2LDYgKzQwMCwy
+MCBAQCBzdGF0aWMgaW5saW5lIGludCBwaHlfY2FsaWJyYXRlKHN0cnVjdCBwaHkgKnBoeSkNCj4g
+IAlyZXR1cm4gLUVOT1NZUzsNCj4gIH0NCj4gDQo+ICtzdGF0aWMgaW5saW5lIGludCBwaHlfbm90
+aWZ5X2Nvbm5lY3Qoc3RydWN0IHBoeSAqcGh5LCBpbnQgaW5kZXgpIHsNCj4gKwlpZiAoIXBoeSkN
+Cj4gKwkJcmV0dXJuIDA7DQo+ICsJcmV0dXJuIC1FTk9TWVM7DQo+ICt9DQo+ICsNCj4gK3N0YXRp
+YyBpbmxpbmUgaW50IHBoeV9ub3RpZnlfZGlzY29ubmVjdChzdHJ1Y3QgcGh5ICpwaHksIGludCBp
+bmRleCkgew0KPiArCWlmICghcGh5KQ0KPiArCQlyZXR1cm4gMDsNCj4gKwlyZXR1cm4gLUVOT1NZ
+UzsNCj4gK30NCj4gKw0KPiAgc3RhdGljIGlubGluZSBpbnQgcGh5X2NvbmZpZ3VyZShzdHJ1Y3Qg
+cGh5ICpwaHksDQo+ICAJCQkJdW5pb24gcGh5X2NvbmZpZ3VyZV9vcHRzICpvcHRzKQ0KPiAgew0K
+PiAtLQ0KPiAyLjM0LjENCg0K
 
