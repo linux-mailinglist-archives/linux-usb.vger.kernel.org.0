@@ -1,60 +1,31 @@
-Return-Path: <linux-usb+bounces-3009-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3010-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D50A57F0BDA
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 07:31:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4906B7F0D08
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 08:52:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90782280C78
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 06:31:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5FEC1F2172E
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Nov 2023 07:52:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69BEA33E7;
-	Mon, 20 Nov 2023 06:30:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CODOTiwO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A99BC8F3;
+	Mon, 20 Nov 2023 07:52:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD25E4
-	for <linux-usb@vger.kernel.org>; Sun, 19 Nov 2023 22:30:51 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-5bd099e3d3cso2130722a12.1
-        for <linux-usb@vger.kernel.org>; Sun, 19 Nov 2023 22:30:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700461851; x=1701066651; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UgbYm7C9NcGHbE7dhV4gaQ9NcBAFiICH/NxULjDdXk8=;
-        b=CODOTiwOOwYQf27PHjLW8zyxeenPlKqkeFbF3rfQOJ3ZAMbV8Hm6Kl2GMX1PHPZW4Q
-         JomM4beA1tXADw0EYSGK0yqVuv8TL3gqv5J87NtKUkyJuEZAUwG4uODw1UrlBttrL2ES
-         +MZzjJIZCiLGyY0Rv364PEf4MznAV9nHjJCWSZOzxKS4fyNtlRqlh8zYXQxx982OoWIc
-         CnBZeFPA4WhXJAIBqcT87mIhbHExhn2pWPTSW+P8koAsjvF0IIEqgoNgeSMx8OWjGRky
-         Qc4d2HgJ3TNzm8Q3U/FWo1o89SUbqvtf64cxsnJbV92hdBppST263zGQ6kg7h/ncBxap
-         JaAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700461851; x=1701066651;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UgbYm7C9NcGHbE7dhV4gaQ9NcBAFiICH/NxULjDdXk8=;
-        b=clnyDkyfeeCQl2a40Mwm2pdFeWtwMEcF7e+Wgqy3JLD4Jd/KKytfu/W6/3fxL6Dfy+
-         upOrLgEwXnoFTE3xUuMoSDrJ6bL/hR1/gDio8upct461PagZ98T6Ar6co7dMIlSFZ1Qu
-         MPFKndPr6LsxJO58JOiI0A9FOf/BQR3WdfpDvKzLyFkK10ebZhCCxnwnuTNgYbIv4QUX
-         czOZH2JnzBV4HUNmkv3Rrjg1nLYxQ1VDh4SpgqD1c5qBDsxTX9TAzAcgL1JLEGFSSwx+
-         QHtYqs7a6ar+EyjYASIvHvyV/v1hunWm/Qp+PGy3q18stvjHTvvV5q9MG6waElsIZ6DR
-         pq8Q==
-X-Gm-Message-State: AOJu0YxvAWjFGazEhUqqKwM4JCKjor3qQcK3c9BFA0IXJB1t7KNq0Omm
-	WxBBxHJczjMf9iWo+EbGRPaKYA==
-X-Google-Smtp-Source: AGHT+IG3Ak00lhnbQquEjERb4Bfi1zvmaHLO7+reUa4dZ874WCHSQOj/qZ1aD5sBgLqGW6kH3PT0Ig==
-X-Received: by 2002:a05:6a20:6a10:b0:187:f152:3dfe with SMTP id p16-20020a056a206a1000b00187f1523dfemr4665615pzk.44.1700461850504;
-        Sun, 19 Nov 2023 22:30:50 -0800 (PST)
-Received: from ?IPV6:2601:645:8100:1350:19c1:be6c:b339:6609? ([2601:645:8100:1350:19c1:be6c:b339:6609])
-        by smtp.gmail.com with ESMTPSA id ei5-20020a056a0080c500b006cb9e60704esm975346pfb.166.2023.11.19.22.30.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Nov 2023 22:30:50 -0800 (PST)
-Message-ID: <e304ccd9-67a2-43ff-b2aa-dd3d3587d805@google.com>
-Date: Sun, 19 Nov 2023 22:30:48 -0800
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2479EB5;
+	Sun, 19 Nov 2023 23:52:38 -0800 (PST)
+Received: from [192.168.0.183] (ip5f5af683.dynamic.kabel-deutschland.de [95.90.246.131])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7D62961E5FE01;
+	Mon, 20 Nov 2023 08:52:20 +0100 (CET)
+Message-ID: <de236c7d-e265-452a-a60e-b10293a5b944@molgen.mpg.de>
+Date: Mon, 20 Nov 2023 08:52:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,355 +33,147 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6] usb:gadget:uvc Do not use worker thread to pump isoc
- usb requests
+Subject: Re: Qualcomm Atheros QCA61x4 keeps drawing 0.85 W despite Bluetooth
+ being disable in GNOME
 Content-Language: en-US
-To: Dan Scally <dan.scally@ideasonboard.com>, stern@rowland.harvard.edu,
- laurent.pinchart@ideasonboard.com, m.grzeschik@pengutronix.de,
- gregkh@linuxfoundation.org
-Cc: Thinh.Nguyen@synopsys.com, arakesh@google.com, etalvala@google.com,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20231109021251.542558-1-jchowdhary@google.com>
- <20231109073453.751860-1-jchowdhary@google.com>
- <908009f0-e2b5-4330-a9f7-48b13f6ed528@ideasonboard.com>
-From: Jayant Chowdhary <jchowdhary@google.com>
-In-Reply-To: <908009f0-e2b5-4330-a9f7-48b13f6ed528@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Marcel Holtmann <marcel@holtmann.org>,
+ Johan Hedberg <johan.hedberg@gmail.com>,
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+ linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+ Hans de Goede <hdegoede@redhat.com>, Mike Jones <mike@mjones.io>
+References: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
+ <22494842-a785-4151-915d-6f3a677d96cb@molgen.mpg.de>
+ <1f3cb0cc-4bb0-471f-a785-a5d237cd46a3@rowland.harvard.edu>
+ <d63ebc5f-9b72-4457-949b-3e90883bd3c0@molgen.mpg.de>
+ <d61ae9a8-2228-4af1-a5f0-912e7763fbd1@rowland.harvard.edu>
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <d61ae9a8-2228-4af1-a5f0-912e7763fbd1@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Dan,
-Thanks for the comments. I've uploaded a new patch at https://lore.kernel.org/linux-usb/20231120062026.3759463-1-jchowdhary@google.com/T/#u.
+Dear Alan,
 
-On 11/16/23 02:09, Dan Scally wrote:
-> Hi Jayant, thanks for the update. I just have a couple of styling comments.
->
-> On 09/11/2023 07:34, Jayant Chowdhary wrote:
->> When we use an async work queue to perform the function of pumping
->> usb requests to the usb controller, it is possible that amongst other
->> factors, thread scheduling affects at what cadence we're able to pump
->> requests. This could mean isoc usb requests miss their uframes - resulting
->> in video stream flickers on the host device.
->>
->> To avoid this, we make the async_wq thread only produce isoc usb_requests
->> with uvc buffers encoded into them. The process of queueing to the
->> endpoint is done by the uvc_video_complete() handler. In case no
->> usb_requests are ready with encoded information, we just queue a zero
->> length request to the endpoint from the complete handler.
->>
->> For bulk endpoints the async_wq thread still queues usb requests to the
->> endpoint.
->>
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> Signed-off-by: Jayant Chowdhary <jchowdhary@google.com>
->> Suggested-by: Avichal Rakesh <arakesh@google.com>
->> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
->> ---
->>   Based on top of
->>   https://lore.kernel.org/linux-usb/20230930184821.310143-1-arakesh@google.com/T/#t:
->>   v1->v2: Added self Signed-Off-by and addressed review comments
->>   v2->v3: Encode to usb requests in async_wq; queue to ep in complete handler
->>      for isoc transfers.
->>   v3->v4: Address review comments around code style.
->>   v4->v5: Update comments. Remove 0 length request queueing from async_wq
->>      thread since it is already done by the complete handler.
->>   v5->v6: Fix checkpatch.pl suggestions.
->>
->>   drivers/usb/gadget/function/uvc.h       |   8 +
->>   drivers/usb/gadget/function/uvc_video.c | 204 ++++++++++++++++++------
->>   2 files changed, 166 insertions(+), 46 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
->> index e8d4c87f1e09..5ff454528bd8 100644
->> --- a/drivers/usb/gadget/function/uvc.h
->> +++ b/drivers/usb/gadget/function/uvc.h
->> @@ -105,7 +105,15 @@ struct uvc_video {
->>       bool is_enabled; /* tracks whether video stream is enabled */
->>       unsigned int req_size;
->>       struct list_head ureqs; /* all uvc_requests allocated by uvc_video */
->> +
->> +    /* USB requests that the video pump thread can encode into */
->>       struct list_head req_free;
->> +
->> +    /*
->> +     * USB requests video pump thread has already encoded into. These are
->> +     * ready to be queued to the endpoint.
->> +     */
->> +    struct list_head req_ready;
->>       spinlock_t req_lock;
->>         unsigned int req_int_count;
->> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
->> index 53feb790a4c3..d5311456fa8a 100644
->> --- a/drivers/usb/gadget/function/uvc_video.c
->> +++ b/drivers/usb/gadget/function/uvc_video.c
->> @@ -268,6 +268,100 @@ static int uvcg_video_ep_queue(struct uvc_video *video, struct usb_request *req)
->>       return ret;
->>   }
->>   +/* This function must be called with video->req_lock held. */
->> +static int uvcg_video_usb_req_queue(struct uvc_video *video,
->> +    struct usb_request *req, bool queue_to_ep)
->> +{
->> +    bool is_bulk = video->max_payload_size;
->> +    struct list_head *list = NULL;
->> +
->> +    if (!video->is_enabled) {
->> +        uvc_video_free_request(req->context, video->ep);
->> +        return -ENODEV;
->> +    }
->> +    if (queue_to_ep) {
->> +        struct uvc_request *ureq = req->context;
->> +        /*
->> +         * With USB3 handling more requests at a higher speed, we can't
->> +         * afford to generate an interrupt for every request. Decide to
->> +         * interrupt:
->> +         *
->> +         * - When no more requests are available in the free queue, as
->> +         *   this may be our last chance to refill the endpoint's
->> +         *   request queue.
->> +         *
->> +         * - When this is request is the last request for the video
->> +         *   buffer, as we want to start sending the next video buffer
->> +         *   ASAP in case it doesn't get started already in the next
->> +         *   iteration of this loop.
->> +         *
->> +         * - Four times over the length of the requests queue (as
->> +         *   indicated by video->uvc_num_requests), as a trade-off
->> +         *   between latency and interrupt load.
->> +         */
->> +        if (list_empty(&video->req_free) || ureq->last_buf ||
->> +            !(video->req_int_count %
->> +            DIV_ROUND_UP(video->uvc_num_requests, 4))) {
->> +            video->req_int_count = 0;
->> +            req->no_interrupt = 0;
->> +        } else {
->> +            req->no_interrupt = 1;
->> +        }
->> +        video->req_int_count++;
->> +        return uvcg_video_ep_queue(video, req);
->> +    }
->> +    /*
->> +     * If we're not queuing to the ep, for isoc we're queuing
->> +     * to the req_ready list, otherwise req_free.
->> +     */
->> +    list = is_bulk ? &video->req_free : &video->req_ready;
->> +    list_add_tail(&req->list, list);
->> +    return 0;
->> +}
->> +
->> +/*
->> + * Must only be called from uvcg_video_enable - since after that we only want to
->> + * queue requests to the endpoint from the uvc_video_complete complete handler.
->> + * This function is needed in order to 'kick start' the flow of requests from
->> + * gadget driver to the usb controller.
->> + */
->> +static void uvc_video_ep_queue_initial_requests(struct uvc_video *video)
->> +{
->> +    struct usb_request *req = NULL;
->> +    unsigned long flags = 0;
->> +    unsigned int count = 0;
->> +    int ret = 0;
-> Add an empty line here please
 
-Done.
+Than you again for your quick reply.
 
->> +    /*
->> +     * We only queue half of the free list since we still want to have
->> +     * some free usb_requests in the free list for the video_pump async_wq
->> +     * thread to encode uvc buffers into. Otherwise we could get into a
->> +     * situation where the free list does not have any usb requests to
->> +     * encode into - we always end up queueing 0 length requests to the
->> +     * end point.
->> +     */
->> +    unsigned int half_list_size = video->uvc_num_requests / 2;
->> +
->> +    spin_lock_irqsave(&video->req_lock, flags);
->> +    /*
->> +     * Take these requests off the free list and queue them all to the
->> +     * endpoint. Since we queue 0 length requests with the req_lock held,
->> +     * there isn't any 'data' race involved here with the complete handler.
->> +     */
->> +    while (count < half_list_size) {
->> +        req = list_first_entry(&video->req_free, struct usb_request,
->> +                    list);
->> +        list_del(&req->list);
->> +        req->length = 0;
->> +        ret = uvcg_video_ep_queue(video, req);
->> +        if (ret < 0) {
->> +            uvcg_queue_cancel(&video->queue, /*disconnect*/0);
->
->
-> Drop the /*disconnect*/ comment please
+Am 20.11.23 um 03:26 schrieb Alan Stern:
+> On Sun, Nov 19, 2023 at 11:09:32PM +0100, Paul Menzel wrote:
+>> $ sudo modprobe btusb
+> 
+>> $ grep . /sys/bus/usb/devices/1-3/power/*
+>> /sys/bus/usb/devices/1-3/power/active_duration:119053224
+>> /sys/bus/usb/devices/1-3/power/async:enabled
+>> /sys/bus/usb/devices/1-3/power/autosuspend:2
+>> /sys/bus/usb/devices/1-3/power/autosuspend_delay_ms:2000
+>> /sys/bus/usb/devices/1-3/power/connected_duration:148065372
+>> /sys/bus/usb/devices/1-3/power/control:auto
+>> /sys/bus/usb/devices/1-3/power/level:auto
+>> /sys/bus/usb/devices/1-3/power/persist:1
+>> /sys/bus/usb/devices/1-3/power/runtime_active_kids:0
+>> /sys/bus/usb/devices/1-3/power/runtime_active_time:119060567
+>> /sys/bus/usb/devices/1-3/power/runtime_enabled:enabled
+>> /sys/bus/usb/devices/1-3/power/runtime_status:active
+>> /sys/bus/usb/devices/1-3/power/runtime_suspended_time:28831453
+>> /sys/bus/usb/devices/1-3/power/runtime_usage:0
+>> /sys/bus/usb/devices/1-3/power/wakeup:disabled
+>> ```
+> 
+> Hmmm.  It's not immediately clear why the device isn't being suspended.
+> The btusb driver does support autosuspend.
+> 
+> Can you also post the output from
+> 
+> 	grep . /sys/bus/usb/devices/1-3:*/power/*
+> 
+> with the driver module loaded?  I should have asked for it before.
 
-Done.
+```
+$ sudo modprobe btusb
+$ sudo dmesg | tail -9
+[319747.390712] r8152 4-1.2:1.0 enx18dbf22dccf3: carrier on
+[320256.946094] bluetooth hci0: firmware: direct-loading firmware 
+qca/rampatch_usb_00000302.bin
+[320256.949333] Bluetooth: hci0: using rampatch file: 
+qca/rampatch_usb_00000302.bin
+[320256.949349] Bluetooth: hci0: QCA: patch rome 0x302 build 0x3e8, 
+firmware rome 0x302 build 0x111
+[320256.949643] usbcore: registered new interface driver btusb
+[320257.308935] bluetooth hci0: firmware: direct-loading firmware 
+qca/nvm_usb_00000302.bin
+[320257.309043] Bluetooth: hci0: using NVM file: qca/nvm_usb_00000302.bin
+[320257.336220] Bluetooth: hci0: HCI Enhanced Setup Synchronous 
+Connection command is advertised, but not supported.
+[320257.638188] Bluetooth: MGMT ver 1.22
+$ /sbin/rfkill
+ID TYPE      DEVICE    SOFT      HARD
+  1 wlan      phy0   blocked unblocked
+28 bluetooth hci0   blocked unblocked
+$ grep . /sys/bus/usb/devices/1-3:*/power/*
+/sys/bus/usb/devices/1-3:1.0/power/async:enabled
+/sys/bus/usb/devices/1-3:1.0/power/runtime_active_kids:0
+/sys/bus/usb/devices/1-3:1.0/power/runtime_enabled:enabled
+/sys/bus/usb/devices/1-3:1.0/power/runtime_status:suspended
+/sys/bus/usb/devices/1-3:1.0/power/runtime_usage:0
+/sys/bus/usb/devices/1-3:1.1/power/async:enabled
+/sys/bus/usb/devices/1-3:1.1/power/runtime_active_kids:0
+/sys/bus/usb/devices/1-3:1.1/power/runtime_enabled:enabled
+/sys/bus/usb/devices/1-3:1.1/power/runtime_status:suspended
+/sys/bus/usb/devices/1-3:1.1/power/runtime_usage:0
+```
 
->
->> +            break;
->> +        }
->> +        count++;
->> +    }
->> +    spin_unlock_irqrestore(&video->req_lock, flags);
->> +}
->> +
->>   static void
->>   uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
->>   {
->> @@ -276,6 +370,8 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
->>       struct uvc_video_queue *queue = &video->queue;
->>       struct uvc_buffer *last_buf = NULL;
->>       unsigned long flags;
->> +    bool is_bulk = video->max_payload_size;
->> +    int ret = 0;
->>         spin_lock_irqsave(&video->req_lock, flags);
->>       if (!video->is_enabled) {
->> @@ -329,8 +425,46 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
->>        * back to req_free
->>        */
->>       if (video->is_enabled) {
->> -        list_add_tail(&req->list, &video->req_free);
->> -        queue_work(video->async_wq, &video->pump);
->> +        /*
->> +         * Here we check whether any request is available in the ready
->> +         * list. If it is, queue it to the ep and add the current
->> +         * usb_request to the req_free list - for video_pump to fill in.
->> +         * Otherwise, just use the current usb_request to queue a 0
->> +         * length request to the ep. Since we always add to the req_free
->> +         * list if we dequeue from the ready list, there will never
->> +         * be a situation where the req_free list is completely out of
->> +         * requests and cannot recover.
->> +         */
->> +        struct usb_request *to_queue = req;
->> +
->> +        to_queue->length = 0;
->> +        if (!list_empty(&video->req_ready)) {
->> +            to_queue = list_first_entry(&video->req_ready,
->> +                struct usb_request, list);
->> +            list_del(&to_queue->list);
->> +            /* Add it to the free list. */
-> I would drop the "Add it to the free list" comment; the code is clear already.
+For completeness:
 
-Done.
+```
+$ grep . /sys/bus/usb/devices/1-3/power/*
+/sys/bus/usb/devices/1-3/power/active_duration:120462288
+/sys/bus/usb/devices/1-3/power/async:enabled
+/sys/bus/usb/devices/1-3/power/autosuspend:2
+/sys/bus/usb/devices/1-3/power/autosuspend_delay_ms:2000
+/sys/bus/usb/devices/1-3/power/connected_duration:155617216
+/sys/bus/usb/devices/1-3/power/control:auto
+/sys/bus/usb/devices/1-3/power/level:auto
+/sys/bus/usb/devices/1-3/power/persist:1
+/sys/bus/usb/devices/1-3/power/runtime_active_kids:0
+/sys/bus/usb/devices/1-3/power/runtime_active_time:120468920
+/sys/bus/usb/devices/1-3/power/runtime_enabled:enabled
+/sys/bus/usb/devices/1-3/power/runtime_status:active
+/sys/bus/usb/devices/1-3/power/runtime_suspended_time:34969407
+/sys/bus/usb/devices/1-3/power/runtime_usage:0
+/sys/bus/usb/devices/1-3/power/wakeup:disabled
+```
 
->> +            list_add_tail(&req->list, &video->req_free);
->> +            /*
->> +             * Queue work to the wq as well since it is possible that a
->> +             * buffer may not have been completely encoded with the set of
->> +             * in-flight usb requests for whih the complete callbacks are
->> +             * firing.
->> +             * In that case, if we do not queue work to the worker thread,
->> +             * the buffer will never be marked as complete - and therefore
->> +             * not be returned to userpsace. As a result,
->> +             * dequeue -> queue -> dequeue flow of uvc buffers will not
->> +             * happen.
->> +             */
->> +            queue_work(video->async_wq, &video->pump);
->> +        }
->> +        /*
->> +         * Queue to the endpoint. The actual queueing to ep will
->> +         * only happen on one thread - the async_wq for bulk endpoints
->> +         * and this thread for isoc endpoints.
->> +         */
->> +        ret = uvcg_video_usb_req_queue(video, to_queue, !is_bulk);
->> +        if (ret < 0)
->> +            uvcg_queue_cancel(queue, 0);
->>       } else {
->>           uvc_video_free_request(ureq, ep);
->>       }
->> @@ -347,6 +481,7 @@ uvc_video_free_requests(struct uvc_video *video)
->>         INIT_LIST_HEAD(&video->ureqs);
->>       INIT_LIST_HEAD(&video->req_free);
->> +    INIT_LIST_HEAD(&video->req_ready);
->>       video->req_size = 0;
->>       return 0;
->>   }
->> @@ -424,8 +559,7 @@ static void uvcg_video_pump(struct work_struct *work)
->>       struct usb_request *req = NULL;
->>       struct uvc_buffer *buf;
->>       unsigned long flags;
->> -    bool buf_done;
->> -    int ret;
->> +    int ret = 0;
->>         while (true) {
->>           if (!video->ep->enabled)
->> @@ -454,15 +588,6 @@ static void uvcg_video_pump(struct work_struct *work)
->>             if (buf != NULL) {
->>               video->encode(req, video, buf);
->> -            buf_done = buf->state == UVC_BUF_STATE_DONE;
->> -        } else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) && !is_bulk) {
->> -            /*
->> -             * No video buffer available; the queue is still connected and
->> -             * we're transferring over ISOC. Queue a 0 length request to
->> -             * prevent missed ISOC transfers.
->> -             */
->> -            req->length = 0;
->> -            buf_done = false;
->>           } else {
->>               /*
->>                * Either the queue has been disconnected or no video buffer
->> @@ -473,45 +598,25 @@ static void uvcg_video_pump(struct work_struct *work)
->>               break;
->>           }
->>   -        /*
->> -         * With USB3 handling more requests at a higher speed, we can't
->> -         * afford to generate an interrupt for every request. Decide to
->> -         * interrupt:
->> -         *
->> -         * - When no more requests are available in the free queue, as
->> -         *   this may be our last chance to refill the endpoint's
->> -         *   request queue.
->> -         *
->> -         * - When this is request is the last request for the video
->> -         *   buffer, as we want to start sending the next video buffer
->> -         *   ASAP in case it doesn't get started already in the next
->> -         *   iteration of this loop.
->> -         *
->> -         * - Four times over the length of the requests queue (as
->> -         *   indicated by video->uvc_num_requests), as a trade-off
->> -         *   between latency and interrupt load.
->> -         */
->> -        if (list_empty(&video->req_free) || buf_done ||
->> -            !(video->req_int_count %
->> -               DIV_ROUND_UP(video->uvc_num_requests, 4))) {
->> -            video->req_int_count = 0;
->> -            req->no_interrupt = 0;
->> -        } else {
->> -            req->no_interrupt = 1;
->> -        }
->> -
->> -        /* Queue the USB request */
->> -        ret = uvcg_video_ep_queue(video, req);
->>           spin_unlock_irqrestore(&queue->irqlock, flags);
->>   +        spin_lock_irqsave(&video->req_lock, flags);
->> +        /* For bulk end points we queue from the worker thread
->> +         * since we would preferably not want to wait on requests
->> +         * to be ready, in the uvcg_video_complete() handler.
->> +         * For isoc endpoints we add the request to the ready list
->> +         * and only queue it to the endpoint from the complete handler.
->> +         */
->> +        ret = uvcg_video_usb_req_queue(video, req, is_bulk);
->> +        spin_unlock_irqrestore(&video->req_lock, flags);
->> +
->>           if (ret < 0) {
->>               uvcg_queue_cancel(queue, 0);
->>               break;
->>           }
->>   -        /* Endpoint now owns the request */
->> +        /* The request is owned by  the endpoint / ready list. */
->>           req = NULL;
->> -        video->req_int_count++;
->>       }
->>         if (!req)
->> @@ -567,7 +672,7 @@ uvcg_video_disable(struct uvc_video *video)
->>         spin_lock_irqsave(&video->req_lock, flags);
->>       /*
->> -     * Remove all uvc_reqeusts from ureqs with list_del_init
->> +    * Remove all uvc_requests from ureqs with list_del_init
->
-> Did the alignment of the * get messed up here as well as the typo fix or is it just my mail client being weird?
->
+>> ```
+>> $ sudo modprobe -r btusb
+>> $ sudo dmesg | tail -1
+>> [314106.155163] usbcore: deregistering interface driver btusb
+>> $ grep . /sys/bus/usb/devices/1-3/power/*
+>> /sys/bus/usb/devices/1-3/power/active_duration:119072176
+>> /sys/bus/usb/devices/1-3/power/async:enabled
+>> /sys/bus/usb/devices/1-3/power/autosuspend:2
+>> /sys/bus/usb/devices/1-3/power/autosuspend_delay_ms:2000
+>> /sys/bus/usb/devices/1-3/power/connected_duration:148320980
+>> /sys/bus/usb/devices/1-3/power/control:auto
+>> /sys/bus/usb/devices/1-3/power/level:auto
+>> /sys/bus/usb/devices/1-3/power/persist:1
+>> /sys/bus/usb/devices/1-3/power/runtime_active_kids:0
+>> /sys/bus/usb/devices/1-3/power/runtime_active_time:119079518
+>> /sys/bus/usb/devices/1-3/power/runtime_enabled:enabled
+>> /sys/bus/usb/devices/1-3/power/runtime_status:suspended
+>> /sys/bus/usb/devices/1-3/power/runtime_suspended_time:29068110
+>> /sys/bus/usb/devices/1-3/power/runtime_usage:0
+>> /sys/bus/usb/devices/1-3/power/wakeup:disabled
+>> ```
+> 
+> Okay, and here we see that without the driver, the device does get
+> suspended.
 
-I think the alignment did indeed get messed up. Fixed.
+Indeed. Thank you for pointing at `runtime_status:suspended` compared to 
+`runtime_status:active`.
 
-Thank you,
 
-Jayant
+Kind regards,
 
+Paul
 
