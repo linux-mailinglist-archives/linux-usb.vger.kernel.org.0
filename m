@@ -1,105 +1,131 @@
-Return-Path: <linux-usb+bounces-3085-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3086-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 918AF7F2B6D
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 12:06:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 800FF7F2B8D
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 12:16:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C144E1C218B9
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 11:06:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38D152826C7
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 11:16:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFBD9482F3;
-	Tue, 21 Nov 2023 11:06:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 550C948788;
+	Tue, 21 Nov 2023 11:16:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mRhYC6aq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TNCRwgkH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4028895
-	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 03:06:16 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5ca164bc0bbso23451927b3.3
-        for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 03:06:16 -0800 (PST)
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4BC9C;
+	Tue, 21 Nov 2023 03:16:33 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6cb9dd2ab56so1729799b3a.3;
+        Tue, 21 Nov 2023 03:16:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700564775; x=1701169575; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qAu9KNb55Wcsj1U43w2gm+QY+xIrGUFw9sDuy2hVAqQ=;
-        b=mRhYC6aqbxkYdk4dOfqcLDwDebKKZi+TFKwLgMfTkvkJddRPVw6a8hjEO/aU8ukzsD
-         yxSUUMJV27161l7r3PHyQfs+K/3QgxX0yJtCKigRg9Cbm2jgh0Pz/DF9VrYofDzXUI31
-         YNM0v1RAR40cwA3W/zd0xsokjvEiOJsSI3wY0doQMgvk2mnnJjOv2LPbGl43cnK1GicM
-         2dhujC5b+RUM7s3AD+s9qVokdwBfPc+bDT+Aj6ynSaoVKE+23eMbiwU6r+ZworzimalP
-         T0N1mYjMZOO9dcmzyc5Rb9Qunv9up7eaFoaIjkHB0+sL94Gd8fC6URSl+VD8bvBZAwtP
-         8FmQ==
+        d=gmail.com; s=20230601; t=1700565393; x=1701170193; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hsq5OvLrZNHPYavKIdE/h8XiIMaboUBjfZph7IRTKJI=;
+        b=TNCRwgkHsJgLsNwepbmht1FrvwTvPV1uwbPzZSfYfr4WyXY+E/z+JmLDBKRiVg1bJT
+         JySCQdwsaqbsuFei7IliMqMttwa93SfwTcM9mwVvHdLlzTzGHkVshJtmsxRYtxyi2Qnw
+         4vHBtcenYRPdnm+N2iflElGtK1TSUuQ8aqhOEDPGfsQyeNyepPpkzocdeof/kEcPp/0H
+         qUgLaLTkARviY82AjICYoJPCYw0QliSrLBti36+oAizPSPRCR3cJ5V9UrVoJ4Stl9taY
+         zb4+Rg47tkBM6YQj6ky82YAgod5Pam0R0VBC+bsU8iXBYRKuFuJPmPUWR02DeF2IjfTy
+         4PBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700564775; x=1701169575;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1700565393; x=1701170193;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qAu9KNb55Wcsj1U43w2gm+QY+xIrGUFw9sDuy2hVAqQ=;
-        b=cuN3gDbbmkc2VzVX1zDSfdbFGigtoBbnxkyxIXXlS2jBBGQ72BjzzSCbyRAuNb5dQD
-         x7B52RFhH9TxWWitZ4wInU+GFZwuW5d1zvDy1ksutsMFNKm043/EBL9J4L9QX+tDbt7x
-         bQtW4Mzb0MF5m+PX9FiyWo0/PcA5nZ9ID2ep2hqf6NAaTPe0QYqDsyKL2yXBLxazaFeT
-         llxmy+McySI242fAywGatnG8x7Wfp/woUHMjqSWKila2G2Jrzm0SsPA8j4QDPdQERKYX
-         /VDHIUmOOpSyFiJSiaALy89XG8PeXb3iCTIczroqWKE0Kum5JueoaiaT00V3Xrpy9xKR
-         +bgw==
-X-Gm-Message-State: AOJu0YzSCSDYZHOphPa4ccmiAjbQRs+F0JxYgB8KdfyzapTuDY1v4eN7
-	/1bu5LIKR5MfGy5iN4wnadoPDW4bpyelLFvKfR3nnw==
-X-Google-Smtp-Source: AGHT+IFXmK6c+goSlc6gqDw81wwgNpcvs80rWrjqvbbbomRseLWccYA6j1JiQT06FrnHqj4stB6xqOa2n/1zntHjuNI=
-X-Received: by 2002:a0d:d3c6:0:b0:5c4:3896:7763 with SMTP id
- v189-20020a0dd3c6000000b005c438967763mr10518180ywd.44.1700564775367; Tue, 21
- Nov 2023 03:06:15 -0800 (PST)
+        bh=Hsq5OvLrZNHPYavKIdE/h8XiIMaboUBjfZph7IRTKJI=;
+        b=mTvmxjOVxsFlnrCrXcCdD3aDesaB+9D82KbmrUXJXQBFiMJDUXo80Pf+w+0CVcwXm7
+         GWBISd3FixZdMjafIlFhXp87SXi8/+o/90blTOoRZLS4qCrqJ5PrjFwi3ybjd+8R9ro/
+         AHeYwkPF4cgd/y9n0evVn2S7dJPZ3HLriWUjIyscnceFRPRKUJ52YgWBEneYWWMfears
+         Bj3OplQy+MoGCCY+Oae8f3oVPwuYN2aJS/UBqf1CtpPfJPgLM0XyRSCZPUjeWPW6Bj/J
+         FpB08W9M/y+pgXs6DAMbM27NYzWjNU4F3QsGhIR4LDJulGA55TlCky0f84fxN0tXUvDu
+         ewlw==
+X-Gm-Message-State: AOJu0Yxvki6gW0+wgX0qAmIu1IZxpAr6+FAWxyWqkP4PeM4Y2d+dUpO/
+	mXqNo78jwcR8AiZrDe3NAjc=
+X-Google-Smtp-Source: AGHT+IErAOYYG6G8Kknk4ECT0hdmEc8VjQWQLW5b9EReFJBubzM/EM4lpJ6qP/UyCIDZxbb7BrZklg==
+X-Received: by 2002:a05:6a21:a593:b0:187:6dab:578 with SMTP id gd19-20020a056a21a59300b001876dab0578mr9167334pzc.40.1700565392772;
+        Tue, 21 Nov 2023 03:16:32 -0800 (PST)
+Received: from localhost.localdomain ([156.251.180.79])
+        by smtp.gmail.com with ESMTPSA id q22-20020a170902bd9600b001c736746d33sm7620522pls.217.2023.11.21.03.16.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Nov 2023 03:16:32 -0800 (PST)
+From: Sprite <spriteovo@gmail.com>
+X-Google-Original-From: Sprite <SpriteOvO@gmail.com>
+To: johan@kernel.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sprite <SpriteOvO@gmail.com>,
+	Yangyu Chen <cyy@cyyself.name>
+Subject: [PATCH] USB: serial: option: add Luat Air72*U series products
+Date: Tue, 21 Nov 2023 19:16:26 +0800
+Message-ID: <20231121111626.64804-1-SpriteOvO@gmail.com>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231103230414.1483428-1-dmitry.baryshkov@linaro.org>
- <20231103230414.1483428-7-dmitry.baryshkov@linaro.org> <e67c00fd-37f2-4ede-983f-c8c46bf847f1@linaro.org>
-In-Reply-To: <e67c00fd-37f2-4ede-983f-c8c46bf847f1@linaro.org>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Tue, 21 Nov 2023 13:06:04 +0200
-Message-ID: <CAA8EJprC_9MXyzBETaHO=HcKU+vREvdJewXafqk8+R6bL3vDtw@mail.gmail.com>
-Subject: Re: [PATCH v6 6/6] usb: typec: qcom-pmic-typec: switch to DRM_AUX_HPD_BRIDGE
-To: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, dri-devel@lists.freedesktop.org, 
-	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
-	linux-usb@vger.kernel.org, freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, 21 Nov 2023 at 12:46, Bryan O'Donoghue
-<bryan.odonoghue@linaro.org> wrote:
->
-> On 03/11/2023 23:03, Dmitry Baryshkov wrote:
-> > Use the freshly defined DRM_AUX_HPD_BRIDGE instead of open-coding the
-> > same functionality for the DRM bridge chain termination.
-> >
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->
-> > +     bridge_dev = drm_dp_hpd_bridge_register(tcpm->dev, to_of_node(tcpm->tcpc.fwnode));
-> > +     if (IS_ERR(bridge_dev))
-> > +             return PTR_ERR(bridge_dev);
-> > +
->
-> What is the effect if we never attach any bridged devices ?
->
-> We make an aux device that just hangs around and eventually get cleaned
-> up on release ? That's the way I read this code anyway.
+Update the USB serial option driver support for Luat Air72*U series
+products.
 
-Yes. That's the point, to untangle the USB code and the DRM bridge.
+ID 1782:4e00 Spreadtrum Communications Inc. UNISOC-8910
 
-> Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 13 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1782 ProdID=4e00 Rev=00.00
+S:  Manufacturer=UNISOC
+S:  Product=UNISOC-8910
+C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=400mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=4096ms
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
+Co-developed-by: Yangyu Chen <cyy@cyyself.name>
+Signed-off-by: Yangyu Chen <cyy@cyyself.name>
+Signed-off-by: Sprite <SpriteOvO@gmail.com>
+---
+ drivers/usb/serial/option.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 45dcfaadaf98..b76cb9a096f7 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -609,6 +609,8 @@ static void option_instat_callback(struct urb *urb);
+ #define UNISOC_VENDOR_ID			0x1782
+ /* TOZED LT70-C based on UNISOC SL8563 uses UNISOC's vendor ID */
+ #define TOZED_PRODUCT_LT70C			0x4055
++/* Luat Air72*U series based on UNISOC UIS8910 uses UNISOC's vendor ID */
++#define LUAT_PRODUCT_AIR720U			0x4e00
+ 
+ /* Device flags */
+ 
+@@ -2271,6 +2273,7 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x40) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C, 0xff, 0, 0) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, LUAT_PRODUCT_AIR720U, 0xff, 0, 0) },
+ 	{ } /* Terminating entry */
+ };
+ MODULE_DEVICE_TABLE(usb, option_ids);
 -- 
-With best wishes
-Dmitry
+2.42.1
+
 
