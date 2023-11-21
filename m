@@ -1,117 +1,170 @@
-Return-Path: <linux-usb+bounces-3105-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3106-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 859977F3158
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 15:43:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 570097F3185
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 15:47:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 147DEB21F63
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:43:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08D36282F97
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:47:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2042255C3C;
-	Tue, 21 Nov 2023 14:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 300D046A5;
+	Tue, 21 Nov 2023 14:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="NtFiZII5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KFIyGPHV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8B59E;
-	Tue, 21 Nov 2023 06:43:33 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 983381F8BE;
-	Tue, 21 Nov 2023 14:43:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1700577812; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=r1KLwe8MGM96o13Ok+O9c+C4gQMeo0VhFaSjyUzeaBg=;
-	b=NtFiZII5Zf55NJyMe21wYPn7sG5uX6xJHM0DLzG3RZcHHCqBKk0wCTerkYzp0JdNipNyue
-	2yumb1+E1laJMU7rOo7jRR3x4NPnfRGOsZh0BPdeVAk+PPcWreTJhB3Q9/6kgwqLYMtNQa
-	sdq8uOTuU9+CVWWyI46yakW5515Alf0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 68F69138E3;
-	Tue, 21 Nov 2023 14:43:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id MmLuFxTCXGUbXAAAMHmgww
-	(envelope-from <oneukum@suse.com>); Tue, 21 Nov 2023 14:43:32 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: forst@pen.gy,
-	diego@giagio.com,
-	netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [RFC] USB: ipeth: race between ipeth_close and error handling
-Date: Tue, 21 Nov 2023 15:43:11 +0100
-Message-ID: <20231121144330.3990-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.42.1
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE33DD78;
+	Tue, 21 Nov 2023 06:47:45 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1cf59c07faeso15972805ad.2;
+        Tue, 21 Nov 2023 06:47:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700578065; x=1701182865; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=hrIUaw040Q28vJ46MBku7kVoIioJDZQRuS5eLTGR9T8=;
+        b=KFIyGPHVxWfgW4N9vo/fV6cpx+L8pfCdILAB3RZ/AmBauvV56tBhjUWV8eiCe0W+1a
+         rLQce6Mi3iMkakJZA5bBXjHsPC2aOA+B77LNfL/7qDT0xYkdxqz7W03IWtwqphOSK50B
+         MLWolTWHZ9pLOF8x8aBUA2g/6u6SFbKeQZppUxB8uPzHuZ+LLwngAT+0ad8R47TfqUn2
+         y3F6E3caqtnFSw9dOaR2AW0berx6SNFDO7Btb8kRluyDku7G76LhtwfHqzt64BzLh4VK
+         dhjLpeNrFDctY8rAFG48Ydr3H3jZQkoHB9h2VYFdpRknlSECVhr0QYt0p0sq9DpXbuTk
+         8edA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700578065; x=1701182865;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hrIUaw040Q28vJ46MBku7kVoIioJDZQRuS5eLTGR9T8=;
+        b=ttKmuSLEJrhUv8Yu3irwctEjnSH5cV+eM2FsnSvNaJNNyZNkb16+YR+HdwuM+Chd3b
+         2NhPv7oyyJa6PQaPexJ3x5W0NdzmrjKGkoWU8rZcCs2r+XLosRWZ2fpz3FGq4pH/ONgK
+         YDo0Ecei7Z2IwMvtRjqrriDHk7eDbTHFUq2UR8WH4dW1RbsxfHhjRzTm1qcl3Dms8oZe
+         rZEWAACVnOXQjY8SLp/P99Aic3gvpM/YDBnE0YLUBj5V3IhSz5NYlja1F01t/ggtXWc8
+         nQyQuc8epvha10YBMPaGTFTY77162yIv0XDTIuG2cAj+L/PrEHT2H2eRD8Z2QmfOtzNs
+         7CBA==
+X-Gm-Message-State: AOJu0YyBFQP9fQzcxiiSiSI2ZJI4tN78klgIHoWUjGf57lWfu6WjWHrd
+	U9nIxUg8I1xfUwtAgGFA5aI=
+X-Google-Smtp-Source: AGHT+IHSZFG4gzmlU6l9uvJ41jk6kx9e8yC2g3mSPO8zD4YmhAZSZiutJzOwnmtaTKmKiPDr7nRdfw==
+X-Received: by 2002:a17:90b:3812:b0:281:3a9b:156 with SMTP id mq18-20020a17090b381200b002813a9b0156mr8922356pjb.1.1700578065007;
+        Tue, 21 Nov 2023 06:47:45 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z10-20020a17090a1fca00b0028010142010sm10389086pjz.21.2023.11.21.06.47.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Nov 2023 06:47:43 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3c3fcc73-107f-4d88-977a-90a5465174b6@roeck-us.net>
+Date: Tue, 21 Nov 2023 06:47:42 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spam-Score: 3.69
-X-Spamd-Result: default: False [3.69 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 R_MISSING_CHARSET(2.50)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 CLAM_VIRUS_FAIL(0.00)[failed to scan and retransmits exceed];
-	 RCPT_COUNT_FIVE(0.00)[5];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 MID_CONTAINS_FROM(1.00)[];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_COUNT_TWO(0.00)[2];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-0.01)[48.59%]
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: typec: tcpm: skip checking port->send_discover in
+ PD3.0
+Content-Language: en-US
+To: Guan-Yu Lin <guanyulin@google.com>, heikki.krogerus@linux.intel.com,
+ gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ badhri@google.com, kyletso@google.com, albertccwang@google.com
+References: <20231116083221.1201892-1-guanyulin@google.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20231116083221.1201892-1-guanyulin@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-ipheth_sndbulk_callback() can submit carrier_work
-as a part of its error handling. That means that
-the driver must make sure that the work is cancelled
-after it has made sure that no more URB can terminate
-with an error condition.
+On 11/16/23 00:32, Guan-Yu Lin wrote:
+> The original Collison Avoidance mechanism, port->send_discover, avoids
+> the conflict when port partners start AMS almost the same time. However,
+> this mechanism is replaced by SINK_TX_OK and SINK_TX_NG. Skip the check
+> in PD3.0 to avoid the deadlock when source is requesting DR_SWAP where
+> sink is requesting DISCOVER_IDENTITY.
+> 
+> Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
 
-Hence the order of actions in ipeth_close() needs
-to be inverted.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/net/usb/ipheth.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index 687d70cfc556..6eeef10edada 100644
---- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -475,8 +475,8 @@ static int ipheth_close(struct net_device *net)
- {
- 	struct ipheth_device *dev = netdev_priv(net);
- 
--	cancel_delayed_work_sync(&dev->carrier_work);
- 	netif_stop_queue(net);
-+	cancel_delayed_work_sync(&dev->carrier_work);
- 	return 0;
- }
- 
--- 
-2.42.1
+> ---
+>   drivers/usb/typec/tcpm/tcpm.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 058d5b853b57..ff3c171a3a75 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -2847,7 +2847,7 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+>   					   PD_MSG_CTRL_NOT_SUPP,
+>   					   NONE_AMS);
+>   		} else {
+> -			if (port->send_discover) {
+> +			if (port->send_discover && port->negotiated_rev < PD_REV30) {
+>   				tcpm_queue_message(port, PD_MSG_CTRL_WAIT);
+>   				break;
+>   			}
+> @@ -2863,7 +2863,7 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+>   					   PD_MSG_CTRL_NOT_SUPP,
+>   					   NONE_AMS);
+>   		} else {
+> -			if (port->send_discover) {
+> +			if (port->send_discover && port->negotiated_rev < PD_REV30) {
+>   				tcpm_queue_message(port, PD_MSG_CTRL_WAIT);
+>   				break;
+>   			}
+> @@ -2872,7 +2872,7 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+>   		}
+>   		break;
+>   	case PD_CTRL_VCONN_SWAP:
+> -		if (port->send_discover) {
+> +		if (port->send_discover && port->negotiated_rev < PD_REV30) {
+>   			tcpm_queue_message(port, PD_MSG_CTRL_WAIT);
+>   			break;
+>   		}
 
 
