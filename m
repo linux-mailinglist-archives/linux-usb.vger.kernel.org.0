@@ -1,161 +1,216 @@
-Return-Path: <linux-usb+bounces-3063-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3064-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A85907F24C3
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 05:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C52207F257E
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 06:47:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3016CB21B00
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 04:07:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51CEFB21C77
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 05:47:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 351B31802D;
-	Tue, 21 Nov 2023 04:06:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 146B419BD6;
+	Tue, 21 Nov 2023 05:47:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l2/3XXJ6"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Q/EGeIJj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8640EA2;
-	Mon, 20 Nov 2023 20:06:55 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id 006d021491bc7-58ceab7daddso60477eaf.3;
-        Mon, 20 Nov 2023 20:06:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700539615; x=1701144415; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uED9ZdQGQxPCqmEiK0LJztM4vTL2jEnpVnm0DVEe5EM=;
-        b=l2/3XXJ6VOobGKLNZyAqFc3XQsgLYSvfTZFx43HWGXd0qtJjaXFAWyCNTdINb5/z/Z
-         GVgzhBfju1KDyQ1bnbSqLy2BX1lZzXPFxHLkToQFXhYqvZIOHglWYugV9SNml+8o9Ln7
-         DoMVsVZZvfwX0sJpE8225IFZYwQ3SnXB/qh7i2AHWiJSjuao6BjcNNuvbm7Z2l3HEvcw
-         cGQAlhltcY85XjE813lGZY7emnALapCsyPxUv4+ZDRC9n/cNXdj5tCHFG8pc52QaH0oI
-         0oBwdtKaRwI9TUS6DY7U7OJOwcdCSBMfKp3EMeDwQJFsM4nqiOoJ1kCT/UXo+Uegz809
-         WaOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700539615; x=1701144415;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uED9ZdQGQxPCqmEiK0LJztM4vTL2jEnpVnm0DVEe5EM=;
-        b=b6PUwn1obWB4GGu9KZ2rC2w9g4fhigqvlfUW/wAxwyt8dORdbS4UQtc6+/ItmWRbve
-         UnjG8ye8jXlBEDYZSSLjYrhxstQJNTg3SbmOEcpYj2UUaX1jbkrZYLfu1FVpcYCw3rTe
-         oojF+jP9LvOk2bK0S14xWLstafqtH1oYQwWl5ABk/aqGF+8mfhIzsKyBtslRH0i50doQ
-         /TK/FL81oGvEKJszNZ0DsJDlv0BJfJ+971EzzKldFPRriomY5gGxy4DnT1tlzMVZHwqx
-         qYfTzsIE3G4Vap13BLHf5+8Dsr38dVneInfrA11Gpqthb8lDgLVmNuimGxT4ypsuW8aU
-         Mz4Q==
-X-Gm-Message-State: AOJu0YzRWO937j1JiRDWy5B6sFVSNAGzr8Yuav/eu4buhxAV6EGvrufr
-	SBFuRIYIpc5h47dqdSsacQoZ83XcDsg7IcmKjwfOIOTzFtk=
-X-Google-Smtp-Source: AGHT+IGEd1ffV8b215+cvSBI4uGIXsdv+yw5uXnbrjp5GMhPt/B05vpdrYE051i9meuJRhoqbKeBVz4MuD9yHsOXuDk=
-X-Received: by 2002:a05:6820:1c85:b0:57b:86f5:701c with SMTP id
- ct5-20020a0568201c8500b0057b86f5701cmr8776555oob.4.1700539614644; Mon, 20 Nov
- 2023 20:06:54 -0800 (PST)
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2067.outbound.protection.outlook.com [40.107.243.67])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5358BA0;
+	Mon, 20 Nov 2023 21:47:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZbSCfrXfj86y0U6KchffjEYp5z9sBoE8pDL2LUQ0xHxcxHPdImH0wTaZxYvkn+MLIrOL55HtfbYsdwmnSAPsR6mKQWiRClQO1hCO3+nEbDR3mB1vkIsESYeaQoNdMjusuJhFcEawXHPlje0WXe6o4iwACzId6cG327KxLz3VGtBH24sTtlXhbXTas7F6jTeSjvortucHUFcAg3Hl8lWNN+CNEno61dJesAW3kVOWEkb+rGLDjr6XEsJcZ5WPKbvAfJXT4GoM2Y0xNjeILQQiBz0tljDAdwV6pLvS902Yi8N88V1JjvzZyJXvmDKj7j8CrswZ5DX/w5gBbSZeMD/Jug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OLYECJIn+OMMlktkYLP+kbnvCTuoK4OJLmIjJKn4zrQ=;
+ b=JoWXHMAIzwOnayUzETN1x23Awhv0Z6fG7e+A3Fz3pceSZL0Ee/fJbSIO1DKNvQtt4b0MoAsNANvBF4EARexocJLOou3nnVELRy7H5al0VdpgkNEOSIIqFI9wjTazdHy2RWgd/o4mSoWUHFOlbpVHlrJPHRjP3pyPJxql9YhTaQd+5AZ4GY5c7CuQfzJ+jBgFkFwbT2vGaLupmI7u6pLKiNUuG0fdqjgXUSI94cihPq8FV6Sg0EU/yjYxOLp4VUzv9hQ8Mk86V5Tqurb+tvjubFeYmC7p/rxa7zh6/4CjOiznn9NcrmsPFNaqh9OBwClysGlJXz1GQSfbOnmNPCIvgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OLYECJIn+OMMlktkYLP+kbnvCTuoK4OJLmIjJKn4zrQ=;
+ b=Q/EGeIJj1C/Gm5zDkUNsKO0KcemQ25rj4VUFx8zFKtDO3i6A9ObilKQZjm/t6NTCwqJA1CDx+y0ZKi71w4zdXO2f914XN+ZiBaShxKfaUNhLAR5IeNew3XT0j5iniiXR6Uw3ZjiRy+gB1vgklw73VKn3mIcogetJLyJTk8RmFdo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5827.namprd12.prod.outlook.com (2603:10b6:208:396::19)
+ by CY8PR12MB8242.namprd12.prod.outlook.com (2603:10b6:930:77::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.27; Tue, 21 Nov
+ 2023 05:47:38 +0000
+Received: from BL1PR12MB5827.namprd12.prod.outlook.com
+ ([fe80::83bc:6ff8:d40e:a7fc]) by BL1PR12MB5827.namprd12.prod.outlook.com
+ ([fe80::83bc:6ff8:d40e:a7fc%5]) with mapi id 15.20.7002.028; Tue, 21 Nov 2023
+ 05:47:32 +0000
+Message-ID: <2d234d31-3045-72f2-57db-db03515eebcf@amd.com>
+Date: Tue, 21 Nov 2023 11:17:21 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/4] phy: core: add notify_connect and
+ notify_disconnect callback
+To: Stanley Chang <stanley_chang@realtek.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Vinod Koul <vkoul@kernel.org>, Johan Hovold <johan@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Jinjie Ruan <ruanjinjie@huawei.com>, Rob Herring <robh@kernel.org>,
+ Alan Stern <stern@rowland.harvard.edu>,
+ Yang Yingliang <yangyingliang@huawei.com>, Flavio Suligoi
+ <f.suligoi@asem.it>, Roy Luo <royluo@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-usb@vger.kernel.org
+References: <20231110054738.23515-1-stanley_chang@realtek.com>
+Content-Language: en-US
+From: Kishon Vijay Abraham I <kvijayab@amd.com>
+In-Reply-To: <20231110054738.23515-1-stanley_chang@realtek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0111.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:96::10) To BL1PR12MB5827.namprd12.prod.outlook.com
+ (2603:10b6:208:396::19)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231119023454.1591-1-linux.amoon@gmail.com> <20231119023454.1591-2-linux.amoon@gmail.com>
- <20231119-phrasing-reverse-bbc1fde515d5@spud> <CANAwSgQ6H9FUEBKz7sCf4kUZSMnCfyXG-cpGTMZoT15W9187Kg@mail.gmail.com>
- <20231120-grinch-upbeat-05f7a32a99fa@spud>
-In-Reply-To: <20231120-grinch-upbeat-05f7a32a99fa@spud>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Tue, 21 Nov 2023 09:36:37 +0530
-Message-ID: <CANAwSgQGhDMeHLFpe8gnM2c26CjqX8QHOL1GdHrZJSvnBj39bA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: usb: Add the binding example for the
- Genesys Logic GL3523 hub
-To: Conor Dooley <conor@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Icenowy Zheng <uwu@icenowy.me>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5827:EE_|CY8PR12MB8242:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9d7405ea-32e9-42f4-0876-08dbea555aac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	sJlOzhk84k36T8qPPZos+8yaIZ6UAge1RWTMANxo8+XXIgJpiiD2ftWJhr4fe4hWbT017OnvIq3NpkbA3/O6q0ikkONpTQ/Ixgw2p9ZzsacDyb6JcL8lISy3XVsEiPA4hNuPyv0s694HF2LnxBUfwxWbbwnmakB5kGNvUBq9GJa/J8mZqcxWT55Nebe5Li3Y9y/FlA1tCzeauGdBXL6dOlHzCJW6lRvu8jfn7hE1FMZH8I/o0HvyssDKNlh8292OUoRZFhaWpRbFjvvbAj2LBFvmNHh/laNdRrEOW7zaDto/N6eQtvGiEXVH1p6e1McUF7xmOQh9O0kMdNCIzyK2sH2egxjicAb6wvWw8/DAIjv6p71FJRJm5NtfVtmS0xkpDB3PT8a4RTPEaTOkNmq5OAXmQy4TX4nwDHWeGgomiqMpexcgm5Fxcfic8arqf1vMXGfiOnKee+q+h5/DaVrsEZCoeQn0p1sL3j6D3VAiGNLPsKRO52xXZq/MdMAIQmzhjFhsimjkn+Rn5sVlDAyHevGmY7MebXBzaKcJ2GGFO5HoCrbZPPecxT7AqF0qixaERuYFzw1np7ql/dwkRmjzElRkXahxVoLktijkbeUynG+YUsWzNRC4hGDNPHazecLmSeK9CYrPxN02Gc3UdVmOgw==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5827.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(376002)(366004)(136003)(396003)(230922051799003)(186009)(64100799003)(1800799012)(451199024)(2616005)(31696002)(31686004)(110136005)(6486002)(6666004)(6506007)(66476007)(66556008)(316002)(54906003)(66946007)(36756003)(53546011)(6512007)(26005)(83380400001)(7416002)(2906002)(5660300002)(478600001)(41300700001)(38100700002)(8936002)(4326008)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Y0dMQ3oxUU1pQ0hBOHRva01lbTI3ZmdLaWJjUVNxcVd0MHhvc1JrTm02VEYr?=
+ =?utf-8?B?QWtqOUNreXlaN0Eyb0ladnZSTXVKWTY4blVJUFBZZ0NMeSttdVVHc0NsTXdn?=
+ =?utf-8?B?NGVYa1ptSk5ZYkhRdEVIcjdZZUdrdTFNejJSNGs1bEhKbzZxV0NXRmZYVVpN?=
+ =?utf-8?B?STd3aXVWcjJrbHo4N0E2UDZEa3BkWDdwZjR2SENwS3RCYXVOME1PQ21oR3A5?=
+ =?utf-8?B?NXdPektINXFJdzdCU3JMejU4ZmNvVGg2SWl3Lzc4L0YxNG54NmhPMEwzR005?=
+ =?utf-8?B?VjZ3NklFWUpYTUNNL2Z2dmw4aDJNNElBdGxPOHh4Q1dLbXYwaFFYZ1hrZVNR?=
+ =?utf-8?B?bWw0b1pQNlFxZlRwNms3VHcrdzlGSTlCdGRvUzFObGw5Z0dLbk5tWEdsMm95?=
+ =?utf-8?B?aCsxY2JsQzMrWXYvdWFXdWtnY2J5eXdVNXNlcTdhSkhUeXduaG5TVCs3TEhz?=
+ =?utf-8?B?WEFFdDN2WGhtdlFxclhTYldSallpcFJIQXdOQzdnRWpkdDVLZVRNNUY0SkY2?=
+ =?utf-8?B?amszZXl2dkRnTkdxWk9EZm1xSXc2R2xCa1pnVlhnQmxiTkdVYm52ekZCdlkr?=
+ =?utf-8?B?N3NnNTN3ZjVteVRyLzlBamYzRGY4QkpTT0ZhOVhCYmlqZmo0M1l4a3dwYmgz?=
+ =?utf-8?B?dTZvcllhRmJvSk9oZzhNblhtZXk3dHJyWE9xcnBSc2x2LzVLb2VMMG9mUkx6?=
+ =?utf-8?B?dU9rRDJFTHFQQWE0eXBub2M2bDRzMVFza1l4c0lPbTNCVklBc2Vxb3VWNFlF?=
+ =?utf-8?B?elpaYXI3cHY0c0dvZEpzd25iTFE3SXNHQWU4T1h6OGZ6UlR2NFBweUhBMC9x?=
+ =?utf-8?B?SXA1NlUwSVE5WFB5QWNRR0dpTWhqVjNxMXFWN2JlYk5BdXdwNGJGbks3RGFk?=
+ =?utf-8?B?aUkxYnpweTZySmlET3UzcmRwUml2UFJYN3F2SnBsNzAwc1pMZXR3dFdGRk9p?=
+ =?utf-8?B?d2JheGZLSzdyNnlQeDVhcllvN21YUjkwc3ZQVmpka1lDZGR3WENvNFNMZ0NI?=
+ =?utf-8?B?MyswYVgvN1FMTFRPYmFnamdXaXh4VmpGdDcwbDVUUEhmbFEyNHczTWZEQSt2?=
+ =?utf-8?B?NFIxc3ZRcmZDMHZKUk53Y1N6cHRMdXR1WDNKcHErZzlra0dJeElpQWRnV2Fs?=
+ =?utf-8?B?SGZNcHRxcm1sU2QxeXBqY0RBL1JQRDRGbjI4L0lYS3kvcGtBRjdCZHpVN3o3?=
+ =?utf-8?B?TUVPcHZXVmJLRks4RzI2UWVEZm9NV0tIeHB5eWdmMmRqTS9tc2ZadnJrUW1i?=
+ =?utf-8?B?WjJYcXdaM3hRWllqSnVEbCsvZU9BNDBPTUFEekpSUmw2VCt1T0VPMEQxRlhm?=
+ =?utf-8?B?TThlTU9rdzQ4czdsbjlGMUxYKzRpOSs4R0Y3dHk4YWRzVnVpM0syNXgzM0JI?=
+ =?utf-8?B?YXF5WUhFZHFuQ3hsUG1zTU9JaXpkemFvN2VUWGpXblJxS1BHeWhZMm1wVURp?=
+ =?utf-8?B?TmhTSVZIRmxldXZLTGdiRFhRUVkxWUhERG5Ld04zRVNZcHc1R0hiQnl4Yzdz?=
+ =?utf-8?B?L1NiK0FmcW54eUNLb2IwbTYwTHZVQ3lsaDBjSUlTTndpUzh5cDB2c1Y4c3VY?=
+ =?utf-8?B?MWRUdnZxYmZhTm50cmxFb2hMMHVsRjloMnRNaW5iZmc2U3A2djVUa3h3R1U0?=
+ =?utf-8?B?Q2ZRbUhySEtIUG8wZHQzNllwQldmSUpnQk5aVUJqcGxYTXAzT0FMUWw3U3Y1?=
+ =?utf-8?B?SFViRCtTN3VXNVZ6TUw3ZHNOQzliMkJpcG51bkxBRG1pSll3N2g3Y2lzVTQ5?=
+ =?utf-8?B?N094ZVpVa0Z6RmZPbno2N3VUTXN3VDcwMjFsSGFFT012K1JYVnM4b21OUlhR?=
+ =?utf-8?B?VDQzcVFlNWNvMFREM1gxV3FQaWw5R1FSZWRxSk5Wc2ZuSlhUeFd4Z09TeHg3?=
+ =?utf-8?B?c3QvbWhhbkZsQjhYSXdISXdpZXVJaXBDcmZIdlREZnVjcFg0L2pVejBIWE4z?=
+ =?utf-8?B?TExjMXB2R1ZPVGFPMjRIZmRtaEI5RDVpbExwU1FtY2pHblkyWE1kb2p1cUlH?=
+ =?utf-8?B?UW9qK0IwcWlrdmFleHorM0ZtVUlISWxTK3ZZanN1SHlFY1ltSDQ3MlNFUU4x?=
+ =?utf-8?B?Z0w4b2RnQWU1RWl1MmlUa3QxVmxFd2dheHJsWS9rWXRNSGxBUTlvNWEwaDVo?=
+ =?utf-8?Q?Lep9QGK6POfS806/p42umzjbB?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d7405ea-32e9-42f4-0876-08dbea555aac
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5827.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2023 05:47:32.0710
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gxt7LMdrZurohbs3mvPrmPmK6nbsBJm0+MahIoVpW/tPDHV4ARHSsY547nzaGo5wbOwvqD/ybYXTxx7jQ970Tg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8242
 
-Hi Conor,
+Hi Stanley,
 
-On Mon, 20 Nov 2023 at 21:15, Conor Dooley <conor@kernel.org> wrote:
->
-> On Sun, Nov 19, 2023 at 08:57:28PM +0530, Anand Moon wrote:
-> > Hi Conor,
-> >
-> > On Sun, 19 Nov 2023 at 19:28, Conor Dooley <conor@kernel.org> wrote:
-> > >
-> > > On Sun, Nov 19, 2023 at 08:04:50AM +0530, Anand Moon wrote:
-> > > > Add the binding example for the USB3.1 Genesys Logic GL3523
-> > > > integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
-> > > > hub.
-> > >
-> > > But no comment in the commit message about the new property for the
-> > > "peer hub". $subject saying "dt-bindings: usb: Add the binding example
-> > > for the Genesys Logic GL3523 hub" is misleading when the meaningful
-> > > parts of the patch are unrelated to the example.
-> > >
-> > > >
-> > > > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > > > ---
-> > > > V3: fix the dt_binding_check error, added new example for Genesys GL3523
-> > > > v2: added Genesys GL3523 binding
-> > > > v1: none
-> > > > ---
-> > > >  .../bindings/usb/genesys,gl850g.yaml          | 63 +++++++++++++++++--
-> > > >  1 file changed, 59 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > > > index ee08b9c3721f..f8e88477fa11 100644
-> > > > --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > > > +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > > > @@ -9,9 +9,6 @@ title: Genesys Logic USB hub controller
-> > > >  maintainers:
-> > > >    - Icenowy Zheng <uwu@icenowy.me>
-> > > >
-> > > > -allOf:
-> > > > -  - $ref: usb-device.yaml#
-> > > > -
-> > > >  properties:
-> > > >    compatible:
-> > > >      enum:
-> > > > @@ -27,12 +24,44 @@ properties:
-> > > >
-> > > >    vdd-supply:
-> > > >      description:
-> > > > -      the regulator that provides 3.3V core power to the hub.
-> > > > +      phandle to the regulator that provides power to the hub.
-> > > > +
-> > > > +  peer-hub:
-> > > > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > > > +    description:
-> > > > +      phandle to the peer hub on the controller.
-> > >
-> > > What is this, why is it needed? Please explain it in your commit
-> > > message.
-> > >
-> > Ok, GL3523 integrates Genesys Logic self-developed USB 3.1 Gen 1
-> > Super Speed transmitter/receiver physical layer (PHY) and USB 2.0
-> > High-Speed PHY
-> >
-> > peer-hub is used to cross-connect those phy nodes so that it can help
-> > hub power on/off simultaneously.
->
-> I said please explain it in your commit message, but on reflection I
-> think that would be insufficient. Extending the description to explain
-> what the peer-hub is would be great too. "peer hub on the controller"
-> doesn't seem to make sense to me either, as the peer hub phandle is to
-> another phy, not to the controller. I think that would probably also be
-> resolved by explaining what the peer hub is in a more detailed manner.
->
-> If this is purely a genesys thing, the property should grow a genesys,
-> prefix also.
->
-No, some USB Hub have combined phy for USB 3.x and USB 2.0 and have common
-reset-gpios and power supply, peer-hub node helps connect the USB controller and
-bring up the USB hub.
+On 11/10/2023 11:15 AM, Stanley Chang wrote:
+> In Realtek SoC, the parameter of usb phy is designed to can dynamic
+> tuning base on port status. Therefore, add a notify callback of phy
+> driver when usb connection/disconnection change.
+> 
+> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+> ---
+> v1 to v2:
+>      No change
+> v2 to v3:
+>      No change
+> ---
+>   drivers/phy/phy-core.c  | 47 +++++++++++++++++++++++++++++++++++++++++
+>   include/linux/phy/phy.h | 18 ++++++++++++++++
+>   2 files changed, 65 insertions(+)
+> 
+> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+> index 96a0b1e111f3..a84ad4896b7f 100644
+> --- a/drivers/phy/phy-core.c
+> +++ b/drivers/phy/phy-core.c
+> @@ -489,6 +489,53 @@ int phy_calibrate(struct phy *phy)
+>   }
+>   EXPORT_SYMBOL_GPL(phy_calibrate);
+>   
+> +/**
+> + * phy_notify_connect() - phy connect notify
+> + * @phy: the phy returned by phy_get()
+> + * @port: the port index for connect
+> + *
+> + * If phy need the get connection status, the callback can be used.
+> + * Returns: %0 if successful, a negative error code otherwise
+> + */
+> +int phy_notify_connect(struct phy *phy, int port)
+> +{
+> +	int ret;
+> +
+> +	if (!phy || !phy->ops->connect)
+> +		return 0;
+> +
+> +	mutex_lock(&phy->mutex);
+> +	ret = phy->ops->connect(phy, port);
+> +	mutex_unlock(&phy->mutex);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(phy_notify_connect);
+> +
+> +/**
+> + * phy_notify_disconnect() - phy disconnect notify
+> + * @phy: the phy returned by phy_get()
+> + * @port: the port index for disconnect
+> + *
+> + * If phy need the get disconnection status, the callback can be used.
+> + *
+> + * Returns: %0 if successful, a negative error code otherwise
+> + */
+> +int phy_notify_disconnect(struct phy *phy, int port)
+> +{
+> +	int ret;
+> +
+> +	if (!phy || !phy->ops->disconnect)
+> +		return 0;
+> +
+> +	mutex_lock(&phy->mutex);
+> +	ret = phy->ops->disconnect(phy, port);
+> +	mutex_unlock(&phy->mutex);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(phy_notify_disconnect);
 
-I was waiting for more feedback on these changes.
-Once it's ok I will update with proper the commit message in v4.
+Please use EXTCON framework for notifying connect/disconnect.
 
-Thanks
--Anand
-
-> Cheers,
-> Conor.
+Thanks,
+Kishon
 
