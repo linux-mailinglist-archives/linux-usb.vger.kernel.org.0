@@ -1,93 +1,94 @@
-Return-Path: <linux-usb+bounces-3147-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3148-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4577B7F3848
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 22:26:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD5F07F387B
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 22:45:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26EDB1C20D89
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 21:26:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAF391C20E7A
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 21:45:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E2AC6FCE;
-	Tue, 21 Nov 2023 21:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1322BB643;
+	Tue, 21 Nov 2023 21:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="IUljsrzz"
 X-Original-To: linux-usb@vger.kernel.org
-X-Greylist: delayed 362 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Nov 2023 13:26:41 PST
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F7519E
-	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 13:26:41 -0800 (PST)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 5D14720053;
-	Tue, 21 Nov 2023 22:20:35 +0100 (CET)
-Date: Tue, 21 Nov 2023 22:20:33 +0100
-From: Marijn Suijten <marijn.suijten@somainline.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: adjust number of interrupts
- on SM6125
-Message-ID: <igbswtmfpwadvb6gbjbrkub5bsntcfvf6eh7hluzgnxtzhpmwi@3ucuaji2os3t>
-References: <20231111141953.51841-1-krzysztof.kozlowski@linaro.org>
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8317B110;
+	Tue, 21 Nov 2023 13:45:37 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4D0019CE;
+	Tue, 21 Nov 2023 22:45:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1700603104;
+	bh=MpP8CV1iBMHLxuQWJsETis3k/Ho3yC5d0656Sw3fEh0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IUljsrzzMjoGIPMnywfrgsx7LOi3Q7TUTNHUSeyz73+3J/iFlze5ZemIyYjHma6Ho
+	 fMkNUPB7vH10psxXNqDlbaRiyHFxlCtLkZxqv5HQowXd+5PjS0ZLYAkesdfl9YPZSe
+	 PyVtP7uq+sL2gpXwlj9rv0PlryVfb+SAf6A8RQ5U=
+Date: Tue, 21 Nov 2023 23:45:41 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: syzbot <syzbot+0b0095300dfeb8a83dc8@syzkaller.appspotmail.com>
+Cc: andreyknvl@google.com, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+	mchehab@kernel.org, nogikh@google.com, sakari.ailus@linux.intel.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in
+ __media_entity_remove_links
+Message-ID: <20231121214541.GB3909@pendragon.ideasonboard.com>
+References: <0000000000003ee3610599d20096@google.com>
+ <0000000000002a1fec060ab0120c@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231111141953.51841-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0000000000002a1fec060ab0120c@google.com>
 
-On 2023-11-11 15:19:53, Krzysztof Kozlowski wrote:
-> Qualcomm SM6125 DWC3 USB controller comes with two interrupts (verified
-> with downstream/vendor code of Trinket DTSI from Xiaomi Laurel device).
-> Move the qcom,sm6125-dwc3 to appropriate place in allOf:if:then blocks
-> constraining interrupts.
+On Tue, Nov 21, 2023 at 01:13:15PM -0800, syzbot wrote:
+> This bug is marked as fixed by commit:
+> media: uvcvideo: Avoid cyclic entity chains due to malformed USB descriptors
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> But I can't find it in the tested trees[1] for more than 90 days.
+> Is it a correct commit? Please update it by replying:
+> 
+> #syz fix: exact-commit-title
 
-Agreed.  I believe this is what I got stuck on when trying to address the
-warning over a year ago [1].  It makes sense to drop the dm_hs_phy_irq and
-dp_hs_phy_irq interrupts entirely.
+What logic does syzbot use to try and find the commit upstream ? There's
+a commit with the exact same subject, what was missing to find it
+automatically ?
 
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-
-[1]: https://github.com/somainline/linux/commit/b57f7fa80cb3f5cd2db3db2d79548cbf063056d9
-
+> Until then the bug is still considered open and new crashes with
+> the same signature are ignored.
+> 
+> Kernel: Linux
+> Dashboard link: https://syzkaller.appspot.com/bug?extid=0b0095300dfeb8a83dc8
+> 
 > ---
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> [1] I expect the commit to be present in:
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> index 64043b91ffb9..3f41362b2a91 100644
-> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> @@ -375,7 +375,6 @@ allOf:
->                - qcom,sdx65-dwc3
->                - qcom,sdx75-dwc3
->                - qcom,sm4250-dwc3
-> -              - qcom,sm6125-dwc3
->                - qcom,sm6350-dwc3
->                - qcom,sm8150-dwc3
->                - qcom,sm8250-dwc3
-> @@ -408,6 +407,7 @@ allOf:
->                - qcom,msm8996-dwc3
->                - qcom,msm8998-dwc3
->                - qcom,sm6115-dwc3
-> +              - qcom,sm6125-dwc3
->      then:
->        properties:
->          interrupts:
-> -- 
-> 2.34.1
+> 1. for-kernelci branch of
+> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
 > 
+> 2. master branch of
+> git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+> 
+> 3. master branch of
+> git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+> 
+> 4. main branch of
+> git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+> 
+> The full list of 9 trees can be found at
+> https://syzkaller.appspot.com/upstream/repos
+
+-- 
+Regards,
+
+Laurent Pinchart
 
