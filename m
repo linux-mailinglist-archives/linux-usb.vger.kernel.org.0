@@ -1,336 +1,164 @@
-Return-Path: <linux-usb+bounces-3071-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3072-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B8BA7F2825
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 09:55:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34B207F288B
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 10:17:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B7E1B21BF5
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 08:55:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B34E2B21927
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 09:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBA93200D8;
-	Tue, 21 Nov 2023 08:55:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C16DD38DCE;
+	Tue, 21 Nov 2023 09:17:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H/Uam4bX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EY9G3e//"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F9C112
-	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 00:55:07 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-4083f613275so24109045e9.2
-        for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 00:55:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700556906; x=1701161706; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QAcQVITg0Zl8tFyEndfjZeJGgM310lpjnFd95gDjvak=;
-        b=H/Uam4bX7EgbAujxl+tatRPq+3Jvvtx6GQZ/Q8BPDBqlGXEQw3TXpFod4b/DHSTKpz
-         ZWmo15MEnUW2iMQ2BKNhOAx3GxGE/H9BV2ZFTCQbn/ryYddMHcoMEjYIxaLX7R9DhAzN
-         a9l9vyd+nkLM4COrTVZflFzeVskh7bobI2vMcrFVGR8pNgVMjJ5Zv39YhzjvlATKV2hd
-         tz+vPaDl9H93lxZlr5uwVcH3qmRiRiVJ4Um/huEqgokWxq9jF+7ley71f/01fJZEe4oO
-         FEHrxtREVsK5ALD9JCkTwRiKyxIxXQmRnZciSRQLQGxu4PtPjoLYkA1RBtt2VAFujjhT
-         MAGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700556906; x=1701161706;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=QAcQVITg0Zl8tFyEndfjZeJGgM310lpjnFd95gDjvak=;
-        b=cK93ItjJO6uG8zUUiYCaNpmJxbq4wJ/jFtzuax9B08kn7VhYR11VhmeruVfp3ONb6d
-         0Ta6tw4mfbvPsk1kWx/hGuUUugIxc1cIXm8+9qCctPVuwHsag0VN0yQg4/hQsBG7xdJ9
-         OjYMJbPciCWASkhtTvIAibj94S8dS9fYdFzcNnxHrJ/rd43cuRej9H6aIdpQ+3KjkwJF
-         NPlSi3qhlPHA43iq43WMI67FgN+GexdAUOdFfhRb88HEoJ0P4jSAUawwyfU3ueT0E4VU
-         FurP+FdRYhFpmnPIcJJgVCHHfgWERn2hjd59DTn8t+e6diaCdT55LZKUwtof6ZwZQsjl
-         EIrQ==
-X-Gm-Message-State: AOJu0Yy+7HO6AECoGe4laogIFSGbUx3k3TGidjuaAO6hMpyEAIsa06ZJ
-	VhLzNao77YWIJmOU1Xlz79krrA==
-X-Google-Smtp-Source: AGHT+IHcSFZ6GZPsHUqaxwV+RjlJ0xBvB5nEL73Y+wS4cj1O2PrMhxBa3FGQeKfNsPR9A+mZjfc7Uw==
-X-Received: by 2002:a05:600c:4453:b0:409:5c2b:43d1 with SMTP id v19-20020a05600c445300b004095c2b43d1mr8088110wmn.20.1700556905827;
-        Tue, 21 Nov 2023 00:55:05 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:2a39:bc19:20b6:16a? ([2a01:e0a:982:cbb0:2a39:bc19:20b6:16a])
-        by smtp.gmail.com with ESMTPSA id m10-20020a7bca4a000000b00407b93d8085sm20147567wml.27.2023.11.21.00.55.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Nov 2023 00:55:05 -0800 (PST)
-Message-ID: <d29a2733-9bc3-4737-b8e2-81b6edb0bca7@linaro.org>
-Date: Tue, 21 Nov 2023 09:55:04 +0100
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE3930FA5;
+	Tue, 21 Nov 2023 09:17:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96403C433C7;
+	Tue, 21 Nov 2023 09:17:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700558262;
+	bh=KiJ/ru65Ua8lo4s4fh4OjLQfr8e6MLSoBb/RDxWensY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EY9G3e//vJF7k13VmW76Yg4tqo4bYwC2YfDojOjvxuSr9VIw4idRrZhBvYcNt5EFP
+	 SHaFaNcHn3iQA/LpGwavpXPMJMW19y14mBeHfC8DLz/r8WAZBA3w6hBwEMwd3H3qVh
+	 9ZKHx6kkjJ81fj5Dj5azu2nLiIaxaSeFlZWd9KFEosC8kjJPW6B3C9xuKYC8b3ETnh
+	 VcyG/gcTVUImvNkZpZx881dhtUmhnH6cnWL+a5f/U4Q6n0otk6WOinYAZyvLu79cqT
+	 +NdLMfiSgo7tuW7fllRQflnxVNvgMN2UX85GgfSolv6r7erH4kW+9Bux8cWc3ECHPp
+	 SjA5WXIvgy4LQ==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1r5MtF-00047b-1C;
+	Tue, 21 Nov 2023 10:17:53 +0100
+Date: Tue, 21 Nov 2023 10:17:53 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Andrew Halaney <ahalaney@redhat.com>
+Cc: Johan Hovold <johan+linaro@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 2/3] USB: dwc3: qcom: fix wakeup after probe deferral
+Message-ID: <ZVx1wRefjNaN0byk@hovoldconsulting.com>
+References: <20231120161607.7405-1-johan+linaro@kernel.org>
+ <20231120161607.7405-3-johan+linaro@kernel.org>
+ <pgmtla6j3dshuq5zdxstszbkkssxcthtzelv2etcbrlstdw4nu@wixz6v5dfpum>
+ <3ff65t36p6n3k7faw2z75t2vfi6rb5p64x7wqosetsksbhhwli@5xaxnm7zz4tu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v6 1/6] drm/bridge: add transparent bridge helper
-Content-Language: en-US, fr
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
- freedreno@lists.freedesktop.org
-References: <20231103230414.1483428-1-dmitry.baryshkov@linaro.org>
- <20231103230414.1483428-2-dmitry.baryshkov@linaro.org>
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro Developer Services
-In-Reply-To: <20231103230414.1483428-2-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3ff65t36p6n3k7faw2z75t2vfi6rb5p64x7wqosetsksbhhwli@5xaxnm7zz4tu>
 
-On 04/11/2023 00:03, Dmitry Baryshkov wrote:
-> Define a helper for creating simple transparent bridges which serve the
-> only purpose of linking devices into the bridge chain up to the last
-> bridge representing the connector. This is especially useful for
-> DP/USB-C bridge chains, which can span across several devices, but do
-> not require any additional functionality from the intermediate bridges.
+On Mon, Nov 20, 2023 at 02:50:52PM -0600, Andrew Halaney wrote:
+> On Mon, Nov 20, 2023 at 11:39:07AM -0600, Andrew Halaney wrote:
+> > On Mon, Nov 20, 2023 at 05:16:06PM +0100, Johan Hovold wrote:
+> > > The Qualcomm glue driver is overriding the interrupt trigger types
+> > > defined by firmware when requesting the wakeup interrupts during probe.
+> > > 
+> > > This can lead to a failure to map the DP/DM wakeup interrupts after a
+> > > probe deferral as the firmware defined trigger types do not match the
+> > > type used for the initial mapping:
+> > > 
+> > > 	irq: type mismatch, failed to map hwirq-14 for interrupt-controller@b220000!
+> > > 	irq: type mismatch, failed to map hwirq-15 for interrupt-controller@b220000!
+> > > 
+> > > Fix this by not overriding the firmware provided trigger types when
+> > > requesting the wakeup interrupts.
+> > 
+> > This series looks good to me and makes sense except for one point that
+> > I'm struggling to understand. What exactly is the relationship with this
+> > failure and probe deferral?
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->   drivers/gpu/drm/bridge/Kconfig      |   9 ++
->   drivers/gpu/drm/bridge/Makefile     |   1 +
->   drivers/gpu/drm/bridge/aux-bridge.c | 140 ++++++++++++++++++++++++++++
->   include/drm/bridge/aux-bridge.h     |  19 ++++
->   4 files changed, 169 insertions(+)
->   create mode 100644 drivers/gpu/drm/bridge/aux-bridge.c
->   create mode 100644 include/drm/bridge/aux-bridge.h
+> Eric Chanudet pointed out to me (thanks!) offlist that if you:
 > 
-> diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
-> index ba82a1142adf..f12eab62799f 100644
-> --- a/drivers/gpu/drm/bridge/Kconfig
-> +++ b/drivers/gpu/drm/bridge/Kconfig
-> @@ -12,6 +12,15 @@ config DRM_PANEL_BRIDGE
->   	help
->   	  DRM bridge wrapper of DRM panels
->   
-> +config DRM_AUX_BRIDGE
-> +	tristate
-> +	depends on DRM_BRIDGE && OF
-> +	select AUXILIARY_BUS
-> +	select DRM_PANEL_BRIDGE
-> +	help
-> +	  Simple transparent bridge that is used by several non-DRM drivers to
-> +	  build bridges chain.
-> +
->   menu "Display Interface Bridges"
->   	depends on DRM && DRM_BRIDGE
->   
-> diff --git a/drivers/gpu/drm/bridge/Makefile b/drivers/gpu/drm/bridge/Makefile
-> index 2b892b7ed59e..918e3bfff079 100644
-> --- a/drivers/gpu/drm/bridge/Makefile
-> +++ b/drivers/gpu/drm/bridge/Makefile
-> @@ -1,4 +1,5 @@
->   # SPDX-License-Identifier: GPL-2.0
-> +obj-$(CONFIG_DRM_AUX_BRIDGE) += aux-bridge.o
->   obj-$(CONFIG_DRM_CHIPONE_ICN6211) += chipone-icn6211.o
->   obj-$(CONFIG_DRM_CHRONTEL_CH7033) += chrontel-ch7033.o
->   obj-$(CONFIG_DRM_CROS_EC_ANX7688) += cros-ec-anx7688.o
-> diff --git a/drivers/gpu/drm/bridge/aux-bridge.c b/drivers/gpu/drm/bridge/aux-bridge.c
-> new file mode 100644
-> index 000000000000..6245976b8fef
-> --- /dev/null
-> +++ b/drivers/gpu/drm/bridge/aux-bridge.c
-> @@ -0,0 +1,140 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Copyright (C) 2023 Linaro Ltd.
-> + *
-> + * Author: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> + */
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/module.h>
-> +
-> +#include <drm/drm_bridge.h>
-> +#include <drm/bridge/aux-bridge.h>
-> +
-> +static DEFINE_IDA(drm_aux_bridge_ida);
-> +
-> +static void drm_aux_bridge_release(struct device *dev)
-> +{
-> +	struct auxiliary_device *adev = to_auxiliary_dev(dev);
-> +
-> +	ida_free(&drm_aux_bridge_ida, adev->id);
-> +
-> +	kfree(adev);
-> +}
-> +
-> +static void drm_aux_bridge_unregister_adev(void *_adev)
-> +{
-> +	struct auxiliary_device *adev = _adev;
-> +
-> +	auxiliary_device_delete(adev);
-> +	auxiliary_device_uninit(adev);
-> +}
-> +
-> +/**
-> + * drm_aux_bridge_register - Create a simple bridge device to link the chain
-> + * @parent: device instance providing this bridge
-> + *
-> + * Creates a simple DRM bridge that doesn't implement any drm_bridge
-> + * operations. Such bridges merely fill a place in the bridge chain linking
-> + * surrounding DRM bridges.
-> + *
-> + * Return: zero on success, negative error code on failure
-> + */
-> +int drm_aux_bridge_register(struct device *parent)
-> +{
-> +	struct auxiliary_device *adev;
-> +	int ret;
-> +
-> +	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
-> +	if (!adev)
-> +		return -ENOMEM;
-> +
-> +	ret = ida_alloc(&drm_aux_bridge_ida, GFP_KERNEL);
-> +	if (ret < 0) {
-> +		kfree(adev);
-> +		return ret;
-> +	}
-> +
-> +	adev->id = ret;
-> +	adev->name = "aux_bridge";
-> +	adev->dev.parent = parent;
-> +	adev->dev.of_node = parent->of_node;
-> +	adev->dev.release = drm_aux_bridge_release;
-> +
-> +	ret = auxiliary_device_init(adev);
-> +	if (ret) {
-> +		ida_free(&drm_aux_bridge_ida, adev->id);
-> +		kfree(adev);
-> +		return ret;
-> +	}
-> +
-> +	ret = auxiliary_device_add(adev);
-> +	if (ret) {
-> +		auxiliary_device_uninit(adev);
-> +		return ret;
-> +	}
-> +
-> +	return devm_add_action_or_reset(parent, drm_aux_bridge_unregister_adev, adev);
-> +}
-> +EXPORT_SYMBOL_GPL(drm_aux_bridge_register);
-> +
-> +struct drm_aux_bridge_data {
-> +	struct drm_bridge bridge;
-> +	struct drm_bridge *next_bridge;
-> +	struct device *dev;
-> +};
-> +
-> +static int drm_aux_bridge_attach(struct drm_bridge *bridge,
-> +				    enum drm_bridge_attach_flags flags)
-> +{
-> +	struct drm_aux_bridge_data *data;
-> +
-> +	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
-> +		return -EINVAL;
-> +
-> +	data = container_of(bridge, struct drm_aux_bridge_data, bridge);
-> +
-> +	return drm_bridge_attach(bridge->encoder, data->next_bridge, bridge,
-> +				 DRM_BRIDGE_ATTACH_NO_CONNECTOR);
-> +}
-> +
-> +static const struct drm_bridge_funcs drm_aux_bridge_funcs = {
-> +	.attach	= drm_aux_bridge_attach,
-> +};
-> +
-> +static int drm_aux_bridge_probe(struct auxiliary_device *auxdev,
-> +				   const struct auxiliary_device_id *id)
-> +{
-> +	struct drm_aux_bridge_data *data;
-> +
-> +	data = devm_kzalloc(&auxdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->dev = &auxdev->dev;
-> +	data->next_bridge = devm_drm_of_get_bridge(&auxdev->dev, auxdev->dev.of_node, 0, 0);
-> +	if (IS_ERR(data->next_bridge))
-> +		return dev_err_probe(&auxdev->dev, PTR_ERR(data->next_bridge),
-> +				     "failed to acquire drm_bridge\n");
-> +
-> +	data->bridge.funcs = &drm_aux_bridge_funcs;
-> +	data->bridge.of_node = data->dev->of_node;
-> +
-> +	return devm_drm_bridge_add(data->dev, &data->bridge);
-> +}
-> +
-> +static const struct auxiliary_device_id drm_aux_bridge_table[] = {
-> +	{ .name = KBUILD_MODNAME ".aux_bridge" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(auxiliary, drm_aux_bridge_table);
-> +
-> +static struct auxiliary_driver drm_aux_bridge_drv = {
-> +	.name = "aux_bridge",
-> +	.id_table = drm_aux_bridge_table,
-> +	.probe = drm_aux_bridge_probe,
-> +};
-> +module_auxiliary_driver(drm_aux_bridge_drv);
-> +
-> +MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
-> +MODULE_DESCRIPTION("DRM transparent bridge");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/drm/bridge/aux-bridge.h b/include/drm/bridge/aux-bridge.h
-> new file mode 100644
-> index 000000000000..441ab3f0e920
-> --- /dev/null
-> +++ b/include/drm/bridge/aux-bridge.h
-> @@ -0,0 +1,19 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Copyright (C) 2023 Linaro Ltd.
-> + *
-> + * Author: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> + */
-> +#ifndef DRM_AUX_BRIDGE_H
-> +#define DRM_AUX_BRIDGE_H
-> +
-> +#if IS_ENABLED(CONFIG_DRM_AUX_BRIDGE)
-> +int drm_aux_bridge_register(struct device *parent);
-> +#else
-> +static inline int drm_aux_bridge_register(struct device *parent)
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +
-> +#endif
+>     1. Probe
+>     2. Grab the IRQ
+>     3. Request it (and muck with the trigger from the firmware default)
+>     4. Defer out
+>     5. Reprobe
+>     6. Grab the IRQ again
+> 
+> You get that error, which I played with some this afternoon...
+> and can confirm.
+> 
+> It really seems like maybe we should consider reworking messing with the
+> trigger type at all (which is done later for runtime/system suspend)
+> in a follow-up series?
+> 
+> As far as I can tell if you were to remove the driver and reprobe after
+> a suspend you'd hit similar.
 
-LGTM:
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Correct, but people don't go around unloading modules (unlike probe
+deferral which anyone can hit). It's a development (debugging) feature
+so there being some corner cases are not that big of a deal.
+
+> I've been sitting here scratching my head a
+> bit trying to reason out why keeping it as IRQ_TYPE_EDGE_BOTH isn't
+> acceptable in dwc3_qcom_enable_interrupts()... Correct me if you think
+> that playing with the trigger there is really ok, but it seems like you
+> run the same risks if you do that and then modprobe -r dwc3-qcom.
+
+Changing the trigger type during runtime depending on use-case should be
+fine. It just doesn't play well with the kernel's interrupt mapping
+code, which assumes that if an interrupt already has a mapping then it
+is a shared interrupt.
+
+I considered addressing that in the core code, but yeah, I don't want
+too much time since the remaining issue only affects module unload and
+there are other ways to avoid that issue too.
+
+> I get that dwc3_qcom_enable_interrupts() limits the scope of what wakes us
+> up to what we expect given the current device (or lack thereof), but it
+> doesn't seem like you're really meant to play with the IRQ triggers,
+> or at least the warning you shared makes me think it is not a great idea
+> if you plan to probe the device ever again in the future.
+> 
+> I'll post the current comment in dwc3_qcom_enable_interrupts() to
+> explain the "limits the scope of what wakes us up" a bit more clearly:
+> 
+> 	/*
+> 	 * Configure DP/DM line interrupts based on the USB2 device attached to
+> 	 * the root hub port. When HS/FS device is connected, configure the DP line
+> 	 * as falling edge to detect both disconnect and remote wakeup scenarios. When
+> 	 * LS device is connected, configure DM line as falling edge to detect both
+> 	 * disconnect and remote wakeup. When no device is connected, configure both
+> 	 * DP and DM lines as rising edge to detect HS/HS/LS device connect scenario.
+> 	 */
+
+Yes, that is how it is currently implemented and I intend to change that
+shortly. I just wanted to get the fixes out first.
+
+Specifically, I consider the current implementation to be broken in that
+it generates wakeup events on disconnect which is generally not want you
+want. Consider closing the lid of your laptop and disconnecting a USB
+mouse before putting it in your backpack. Now it's no longer suspended
+as you would expect it to be.
+
+With the devictrees soon fixed, we could also do away with changing the
+trigger type, but since this is how it was implemented initially we now
+need to consider backward compatibility with the broken DTs. We've dealt
+with that before, but yeah, getting things right from the start would
+have been so much better.
+
+Johan
 
