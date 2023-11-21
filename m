@@ -1,57 +1,95 @@
-Return-Path: <linux-usb+bounces-3100-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3110-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25E5C7F3055
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 15:09:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9281B7F31A6
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 15:52:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58A441C21B11
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:09:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F2B9282FE4
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:52:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1918D54F9C;
-	Tue, 21 Nov 2023 14:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1615155C28;
+	Tue, 21 Nov 2023 14:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VOS1oT+A"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="poue5VPW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438EA10C1;
-	Tue, 21 Nov 2023 06:09:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700575740; x=1732111740;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=S7FWmcXN79Vx+j4cixX7ygbYhrBJf1bmjbAASxLRWaA=;
-  b=VOS1oT+AvYN/oyzLTQ65zmwmD7T4jnfU6j1oqG49nU2SEeUhiHwQ1xqT
-   Kd/0cKMt8HVt0ccs1uJu1qi1D9h+DnHmoNKiq24kjZcRN/rdTGT1xtl6V
-   Ew9K8oevx+nWo6EEtVoP/24ewcPHbvmFYSwG6oyRiqIuQPAoxvi6x6yC+
-   Q9gAMyIOcNDoKthF4/mvAuHWeHGSGXTH6dGRlWuzr0vQkzqjvZTtbLb1X
-   bpstuLXAw1zXzyhjKmy7LHvm2vXQG3NXu3MTy/OBArTGVdeKuxY8ej3aM
-   UwHTQnw1teMFTGrUqPeSZ95BFczekpjJEv83KxxVc+y2ROsamxcxGocNK
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="382242013"
-X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
-   d="scan'208";a="382242013"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 06:08:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="766660042"
-X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
-   d="scan'208";a="766660042"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga002.jf.intel.com with SMTP; 21 Nov 2023 06:08:57 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Nov 2023 16:08:56 +0200
-Date: Tue, 21 Nov 2023 16:08:56 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>
-Subject: Re: Unplugging USB-C charger cable causes `ucsi_acpi USBC000:00:
- ucsi_handle_connector_change: ACK failed (-110)`
-Message-ID: <ZVy5+AxnOZNmUZ15@kuha.fi.intel.com>
-References: <b2466bc2-b62c-4328-94a4-b60af4135ba7@molgen.mpg.de>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D197136C;
+	Tue, 21 Nov 2023 14:52:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 580D7C433C7;
+	Tue, 21 Nov 2023 14:52:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1700578360;
+	bh=dGYz6IxNOUY4NpvhlMLeIB3Xxc/hARJYIHJyki7wDHE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=poue5VPWyYd+HrTAPC2kL1JwV02FvsHlUJ1z3W9FXk/U2czUqklkcawHdmmtSEsoY
+	 IlPddu/gpJsZ1UpOPQIgrM7BkkvyXf2F3hIfHrb2U18/fsMMvTR4wCzYJDyNBuBtzP
+	 SpQfWPT1cgV1qEShQyzt0KdJxLEsOUDx610rqzSQ=
+Date: Tue, 21 Nov 2023 15:12:23 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, Guo Ren <guoren@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Greg Ungerer <gerg@linux-m68k.org>, Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Geoff Levand <geoff@infradead.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+	Helge Deller <deller@gmx.de>,
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	Timur Tabi <timur@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	David Woodhouse <dwmw2@infradead.org>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	netdev@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-bcachefs@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 20/22] usb: fsl-mph-dr-of: mark fsl_usb2_mpc5121_init()
+ static
+Message-ID: <2023112114-cried-ramble-b3f9@gregkh>
+References: <20231108125843.3806765-1-arnd@kernel.org>
+ <20231108125843.3806765-21-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,32 +98,17 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b2466bc2-b62c-4328-94a4-b60af4135ba7@molgen.mpg.de>
+In-Reply-To: <20231108125843.3806765-21-arnd@kernel.org>
 
-On Tue, Nov 21, 2023 at 12:50:43PM +0100, Paul Menzel wrote:
-> Dear Linux folks,
+On Wed, Nov 08, 2023 at 01:58:41PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
+> This function is only called locally and should always have been static:
 > 
-> On the Dell XPS 13, BIOS 2.21.0 06/02/2022, with Debian sid/unstable and
-> Linux 6.5.10, when unplugging the (Dell) USB Type-C charger cable, Linux
-> logs the error below:
+> drivers/usb/host/fsl-mph-dr-of.c:291:5: error: no previous prototype for 'fsl_usb2_mpc5121_init' [-Werror=missing-prototypes]
 > 
->     ucsi_acpi USBC000:00: ucsi_handle_connector_change: ACK failed (-110)
-> 
-> As this is logged with level error, can this be somehow fixed?
-> 
->     drivers/usb/typec/ucsi/ucsi.c: dev_err(ucsi->dev, "%s: ACK failed (%d)",
-> __func__, ret);
-> 
-> Please find the output of `dmesg` attached.
+> Fixes: 230f7ede6c2f ("USB: add USB EHCI support for MPC5121 SoC")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thanks. The firmware not reacting to the ACK command is weird, but I'm
-not sure if it's critical. Does the interface continue working after
-that? Do you see the partner devices appearing under /sys/class/typec/
-when you plug them, and disappearing when you unplug them?
-
-thanks,
-
--- 
-heikki
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
