@@ -1,136 +1,340 @@
-Return-Path: <linux-usb+bounces-3119-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3120-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F6F67F3461
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 18:00:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 736F77F347E
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 18:06:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC819B210CF
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 17:00:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D4222828E2
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 17:06:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C123F56759;
-	Tue, 21 Nov 2023 17:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3107556762;
+	Tue, 21 Nov 2023 17:06:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LmtlI5Q9"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="W+ZDKXrS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F4B7469;
-	Tue, 21 Nov 2023 17:00:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 043EAC433C8;
-	Tue, 21 Nov 2023 16:59:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700586001;
-	bh=OrMmN4aABkmc7mVV4jQIdj8KovDI4fIKhccVEgfoejk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LmtlI5Q9xMShTeJ6ggtOMtfC+xVWvdAv5jkPVtKZ24GmwLMdZfDckSX2BPuH9JRuW
-	 UU+DkoQakzyrWIPDwgkqzGKVkE8A7BprdWXO/86zIa8kOFCacGzlmb3tvYgs41JqIU
-	 iL0OCH19efzNE5ZzX1E7u4AKp7/YrIu6i16tM6/PfNrrD1ETJ2B2HOv/eYnKZM43Pm
-	 r4gGpSjvUGLfxJ8qN5FZ1LuCMax4rAMphf+O5+aIEqStVmTeW/HoGSx4tGIbmMMjne
-	 qwJtnh2sTJdsYdhVZhrbnB0LOn2NRJq3yAyMRgT6KsagSEQZ6uBZDmX+RRDecp7oZS
-	 AB6bAaow1qHyA==
-Date: Tue, 21 Nov 2023 16:59:57 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Anand Moon <linux.amoon@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: usb: Add the binding example for the
- Genesys Logic GL3523 hub
-Message-ID: <20231121-defendant-hemstitch-a728c39b4e7d@spud>
-References: <20231119023454.1591-1-linux.amoon@gmail.com>
- <20231119023454.1591-2-linux.amoon@gmail.com>
- <20231119-phrasing-reverse-bbc1fde515d5@spud>
- <CANAwSgQ6H9FUEBKz7sCf4kUZSMnCfyXG-cpGTMZoT15W9187Kg@mail.gmail.com>
- <20231120-grinch-upbeat-05f7a32a99fa@spud>
- <CANAwSgQGhDMeHLFpe8gnM2c26CjqX8QHOL1GdHrZJSvnBj39bA@mail.gmail.com>
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD64510E;
+	Tue, 21 Nov 2023 09:06:04 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C440BFF81A;
+	Tue, 21 Nov 2023 17:06:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1700586363;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9OlDSO/6KbnGCD41BC35yjBL1rC+a7EqniQWve6Dfd8=;
+	b=W+ZDKXrSmia4ht5KtC8bLOg0gZ67cnEIeiRrysNdOHASGu3yrD1W8ZcbeiBa30t9Yfm3yW
+	Uu3sCwQAQuGwffWLP2aG1tDAu7cyZZ0UkuqDG+JTsiI7/8gg5hA7zAoMOF1pJzXDqQId7Z
+	zkVUi/N0NVzhZyJcay7o2Wta5QF0dAnxWz1iTk4oanU67TZwX2TzMI7yJnFSzhrVaJlDfa
+	6xFBH3ddxTQ8uiA+p5pgK83B1SwiwOHkmLjC2H9XoKk3BRNJ/D1ezvTnbJ56hkNg5bNXvM
+	aPjFXxwPaX3ZN3ZhdSOQpsEVnmwoE8fSXy/a0KTbWR2IhWojaJ6Etdok1X0yMA==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 21 Nov 2023 18:06:01 +0100
+Subject: Re: [PATCH v2 6/7] usb: cdns3-ti: signal reset-on-resume to xHCI
+ for J7200 platform
+Cc: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>
+To: "Roger Quadros" <rogerq@kernel.org>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Peter Chen" <peter.chen@kernel.org>, "Pawel
+ Laszczak" <pawell@cadence.com>, "Nishanth Menon" <nm@ti.com>, "Vignesh
+ Raghavendra" <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Message-Id: <CX4NJXCYMSJ1.AF8FQLHU77RU@tleb-bootlin-xps13-01>
+X-Mailer: aerc 0.15.2
+References: <20231120-j7200-usb-suspend-v2-0-038c7e4a3df4@bootlin.com>
+ <20231120-j7200-usb-suspend-v2-6-038c7e4a3df4@bootlin.com>
+ <d2bd89f1-a86b-4fe4-a7ad-20c7e8caf9b6@kernel.org>
+In-Reply-To: <d2bd89f1-a86b-4fe4-a7ad-20c7e8caf9b6@kernel.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
+
+Hello,
+
+On Tue Nov 21, 2023 at 5:53 PM CET, Roger Quadros wrote:
+> On 20/11/2023 19:06, Th=C3=A9o Lebrun wrote:
+> > Pass CDNS3_RESET_ON_RESUME as platform data to cdns3 host role. It will
+> > in turn pass it down to xHCI platform data as XHCI_RESET_ON_RESUME.
+> >=20
+> > Avoid this warning on resume:
+> >=20
+> >   [   16.017462] xhci-hcd xhci-hcd.1.auto: xHC error in resume, USBSTS =
+0x401, Reinit
+> >=20
+> > When used, remote wakeup is not expected to work.
+> >=20
+> > Only focus J7200 as other SoC are untested.
+> >=20
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> >  drivers/usb/cdns3/cdns3-ti.c | 19 +++++++++++++++++--
+> >  1 file changed, 17 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.=
+c
+> > index 84f93c2fcd5c..7d56a1acbc54 100644
+> > --- a/drivers/usb/cdns3/cdns3-ti.c
+> > +++ b/drivers/usb/cdns3/cdns3-ti.c
+> > @@ -16,6 +16,7 @@
+> >  #include <linux/of_platform.h>
+> >  #include <linux/pm_runtime.h>
+> >  #include <linux/property.h>
+> > +#include "core.h"
+> > =20
+> >  /* USB Wrapper register offsets */
+> >  #define USBSS_PID		0x0
+> > @@ -128,6 +129,7 @@ static int cdns_ti_probe(struct platform_device *pd=
+ev)
+> >  {
+> >  	struct device *dev =3D &pdev->dev;
+> >  	struct device_node *node =3D pdev->dev.of_node;
+> > +	const struct of_dev_auxdata *auxdata;
+> >  	struct cdns_ti *data;
+> >  	unsigned long rate;
+> >  	int error, i;
+> > @@ -177,7 +179,8 @@ static int cdns_ti_probe(struct platform_device *pd=
+ev)
+> > =20
+> >  	cdns_ti_init_hw(data);
+> > =20
+> > -	error =3D of_platform_populate(node, NULL, NULL, dev);
+> > +	auxdata =3D of_device_get_match_data(dev);
+> > +	error =3D of_platform_populate(node, NULL, auxdata, dev);
+> >  	if (error) {
+> >  		dev_err(dev, "failed to create children: %d\n", error);
+> >  		return error;
+> > @@ -222,8 +225,20 @@ static const struct dev_pm_ops cdns_ti_pm_ops =3D =
+{
+> > =20
+> >  #endif /* CONFIG_PM */
+> > =20
+> > +static struct cdns3_platform_data cdns_ti_j7200_pdata =3D {
+> > +	.quirks =3D CDNS3_RESET_ON_RESUME,
+> > +};
+>
+> We will need to introduce a new data structure "struct cdns_ti_platform_d=
+ata"
+> and add platform specific details like "reset_on_resume" to it.
+> This is to address what Krzysztof pointed to in patch 4.
+
+Yes I've got it locally following Krzysztof's review. Below my signature
+is a sneak peak as I'll wait a bit more before a V3. First we implement
+resume behavior in the wrapper driver using match data then we add
+auxdata passed to the subdevices.
+
+Regards,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+
+------------------------------------------------------------------------
+
+
+From 69a59e3408668dfa06d3790cb20948961708791d Mon Sep 17 00:00:00 2001
+From: =3D?UTF-8?q?Th=3DC3=3DA9o=3D20Lebrun?=3D <theo.lebrun@bootlin.com>
+Date: Mon, 20 Nov 2023 16:47:29 +0100
+Subject: [PATCH 05/13] usb: cdns3-ti: add suspend/resume procedures for J72=
+00
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="FOgsZlX/pgPygzA3"
-Content-Disposition: inline
-In-Reply-To: <CANAwSgQGhDMeHLFpe8gnM2c26CjqX8QHOL1GdHrZJSvnBj39bA@mail.gmail.com>
+Content-Type: text/plain; charset=3DUTF-8
+Content-Transfer-Encoding: 8bit
+
+Hardware initialisation is only done at probe. The J7200 USB controller
+is reset at resume because of power-domains toggling off & on. We
+therefore reconfigure the hardware at resume.
+
+Reuse the newly extracted cdns_ti_init_hw() function that contains the
+register write sequence.
+
+Only focus J7200 as other SoC are untested. If the controller does not
+reset we do not want to redo reg writes.
+
+Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+---
+ drivers/usb/cdns3/cdns3-ti.c | 32 +++++++++++++++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
+index d4232b440e4e..7530b6b5159d 100644
+--- a/drivers/usb/cdns3/cdns3-ti.c
++++ b/drivers/usb/cdns3/cdns3-ti.c
+@@ -58,6 +58,11 @@ struct cdns_ti {
+   struct clk *usb2_refclk;
+   struct clk *lpm_clk;
+   int usb2_refclk_rate_code;
++  const struct cdns_ti_match_data *match_data;
++};
++
++struct cdns_ti_match_data {
++  bool reset_on_resume;
+ };
+
+ static const int cdns_ti_rate_table[] =3D {   /* in KHZ */
+@@ -138,6 +143,7 @@ static int cdns_ti_probe(struct platform_device *pdev)
+   platform_set_drvdata(pdev, data);
+
+   data->dev =3D dev;
++  data->match_data =3D of_device_get_match_data(dev);
+
+   data->usbss =3D devm_platform_ioremap_resource(pdev, 0);
+   if (IS_ERR(data->usbss)) {
+@@ -202,7 +208,30 @@ static void cdns_ti_remove(struct platform_device *pde=
+v)
+   platform_set_drvdata(pdev, NULL);
+ }
+
++#ifdef CONFIG_PM
++
++static int cdns_ti_resume(struct device *dev)
++{
++  struct cdns_ti *data =3D dev_get_drvdata(dev);
++
++  if (data->match_data && data->match_data->reset_on_resume)
++     cdns_ti_init_hw(data);
++
++  return 0;
++}
++
++static const struct dev_pm_ops cdns_ti_pm_ops =3D {
++  SET_SYSTEM_SLEEP_PM_OPS(NULL, cdns_ti_resume)
++};
++
++#endif /* CONFIG_PM */
++
++static const struct cdns_ti_match_data cdns_ti_j7200_match_data =3D {
++  .reset_on_resume =3D true,
++};
++
+ static const struct of_device_id cdns_ti_of_match[] =3D {
++  { .compatible =3D "ti,j7200-usb", .data =3D &cdns_ti_j7200_match_data, }=
+,
+   { .compatible =3D "ti,j721e-usb", },
+   { .compatible =3D "ti,am64-usb", },
+   {},
+@@ -213,8 +242,9 @@ static struct platform_driver cdns_ti_driver =3D {
+   .probe      =3D cdns_ti_probe,
+   .remove_new =3D cdns_ti_remove,
+   .driver     =3D {
+-     .name =3D "cdns3-ti",
++     .name    =3D "cdns3-ti",
+      .of_match_table   =3D cdns_ti_of_match,
++     .pm      =3D pm_ptr(&cdns_ti_pm_ops),
+   },
+ };
+
+--
+2.42.0
 
 
---FOgsZlX/pgPygzA3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+------------------------------------------------------------------------
 
-On Tue, Nov 21, 2023 at 09:36:37AM +0530, Anand Moon wrote:
-> On Mon, 20 Nov 2023 at 21:15, Conor Dooley <conor@kernel.org> wrote:
-> > On Sun, Nov 19, 2023 at 08:57:28PM +0530, Anand Moon wrote:
-> > > On Sun, 19 Nov 2023 at 19:28, Conor Dooley <conor@kernel.org> wrote:
-> > > > On Sun, Nov 19, 2023 at 08:04:50AM +0530, Anand Moon wrote:
-> > > > > Add the binding example for the USB3.1 Genesys Logic GL3523
-> > > > > integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
-> > > > > hub.
-> > > >
-> > > > But no comment in the commit message about the new property for the
-> > > > "peer hub". $subject saying "dt-bindings: usb: Add the binding example
-> > > > for the Genesys Logic GL3523 hub" is misleading when the meaningful
-> > > > parts of the patch are unrelated to the example.
-> > > >
 
-> > > > > +  peer-hub:
-> > > > > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > > > > +    description:
-> > > > > +      phandle to the peer hub on the controller.
-> > > >
-> > > > What is this, why is it needed? Please explain it in your commit
-> > > > message.
-> > > >
-> > > Ok, GL3523 integrates Genesys Logic self-developed USB 3.1 Gen 1
-> > > Super Speed transmitter/receiver physical layer (PHY) and USB 2.0
-> > > High-Speed PHY
-> > >
-> > > peer-hub is used to cross-connect those phy nodes so that it can help
-> > > hub power on/off simultaneously.
-> >
-> > I said please explain it in your commit message, but on reflection I
-> > think that would be insufficient. Extending the description to explain
-> > what the peer-hub is would be great too. "peer hub on the controller"
-> > doesn't seem to make sense to me either, as the peer hub phandle is to
-> > another phy, not to the controller. I think that would probably also be
-> > resolved by explaining what the peer hub is in a more detailed manner.
-> >
-> > If this is purely a genesys thing, the property should grow a genesys,
-> > prefix also.
-> >
-> No, some USB Hub have combined phy for USB 3.x and USB 2.0 and have common
-> reset-gpios and power supply, peer-hub node helps connect the USB controller and
-> bring up the USB hub.
+From 4ff91a036da297e9e8585980c6133bee9c45d9a6 Mon Sep 17 00:00:00 2001
+From: =3D?UTF-8?q?Th=3DC3=3DA9o=3D20Lebrun?=3D <theo.lebrun@bootlin.com>
+Date: Mon, 20 Nov 2023 17:02:44 +0100
+Subject: [PATCH 07/13] usb: cdns3-ti: signal reset-on-resume to xHCI for J7=
+200
+ platform
+MIME-Version: 1.0
+Content-Type: text/plain; charset=3DUTF-8
+Content-Transfer-Encoding: 8bit
 
-I don't know what this is a response to.
+Pass CDNS3_RESET_ON_RESUME as platform data to cdns3 host role. It will
+in turn pass it down to xHCI platform data as XHCI_RESET_ON_RESUME.
 
-> I was waiting for more feedback on these changes.
-> Once it's ok I will update with proper the commit message in v4.
+Avoid this warning on resume:
 
-And the property description too, so that a reader can understand how to
-implement it.
+  [   16.017462] xhci-hcd xhci-hcd.1.auto: xHC error in resume, USBSTS 0x40=
+1, Reinit
 
-Cheers,
-Conor.
+When used, remote wakeup is not expected to work.
 
---FOgsZlX/pgPygzA3
-Content-Type: application/pgp-signature; name="signature.asc"
+Only focus J7200 as other SoC are untested.
 
------BEGIN PGP SIGNATURE-----
+Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+---
+ drivers/usb/cdns3/cdns3-ti.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZVziDQAKCRB4tDGHoIJi
-0uLyAP0XacgZ4YIqCPBG2yQQt0anbyYpcMvqyLcwj+XJbNqzogD/fU7dUFH+dWnN
-K1As/KVRhQar29x35Q7tsbiDGctVfQI=
-=ozYs
------END PGP SIGNATURE-----
+diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
+index 7530b6b5159d..da2648ebc179 100644
+--- a/drivers/usb/cdns3/cdns3-ti.c
++++ b/drivers/usb/cdns3/cdns3-ti.c
+@@ -16,6 +16,7 @@
+ #include <linux/of_platform.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/property.h>
++#include "core.h"
 
---FOgsZlX/pgPygzA3--
+ /* USB Wrapper register offsets */
+ #define USBSS_PID      0x0
+@@ -62,7 +63,8 @@ struct cdns_ti {
+ };
+
+ struct cdns_ti_match_data {
+-  bool reset_on_resume;
++  bool           reset_on_resume;
++  const struct of_dev_auxdata   *auxdata;
+ };
+
+ static const int cdns_ti_rate_table[] =3D {   /* in KHZ */
+@@ -132,6 +134,7 @@ static int cdns_ti_probe(struct platform_device *pdev)
+ {
+   struct device *dev =3D &pdev->dev;
+   struct device_node *node =3D pdev->dev.of_node;
++  const struct of_dev_auxdata *auxdata =3D NULL;
+   struct cdns_ti *data;
+   unsigned long rate;
+   int error, i;
+@@ -181,7 +184,9 @@ static int cdns_ti_probe(struct platform_device *pdev)
+
+   cdns_ti_init_hw(data);
+
+-  error =3D of_platform_populate(node, NULL, NULL, dev);
++  if (data->match_data)
++     auxdata =3D data->match_data->auxdata;
++  error =3D of_platform_populate(node, NULL, auxdata, dev);
+   if (error) {
+      dev_err(dev, "failed to create children: %d\n", error);
+      return error;
+@@ -226,8 +231,21 @@ static const struct dev_pm_ops cdns_ti_pm_ops =3D {
+
+ #endif /* CONFIG_PM */
+
++static struct cdns3_platform_data cdns_ti_j7200_pdata =3D {
++  .quirks =3D CDNS3_RESET_ON_RESUME,
++};
++
++static const struct of_dev_auxdata cdns_ti_j7200_auxdata[] =3D {
++  {
++     .compatible =3D "cdns,usb3",
++     .platform_data =3D &cdns_ti_j7200_pdata,
++  },
++  {},
++};
++
+ static const struct cdns_ti_match_data cdns_ti_j7200_match_data =3D {
+   .reset_on_resume =3D true,
++  .auxdata =3D cdns_ti_j7200_auxdata,
+ };
+
+ static const struct of_device_id cdns_ti_of_match[] =3D {
+--
+2.42.0
+
 
