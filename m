@@ -1,66 +1,93 @@
-Return-Path: <linux-usb+bounces-3150-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3152-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA77F7F392C
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 23:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EDF087F395F
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 23:40:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 064C31C20C5E
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 22:30:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2AF0D1C20FD0
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 22:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5E22209F;
-	Tue, 21 Nov 2023 22:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1BBD55779;
+	Tue, 21 Nov 2023 22:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J0O/QUcw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aIjUgw63"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C486F5647D;
-	Tue, 21 Nov 2023 22:30:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 210E2C433C7;
-	Tue, 21 Nov 2023 22:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243A513FED;
+	Tue, 21 Nov 2023 22:40:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 85C1BC433C9;
+	Tue, 21 Nov 2023 22:40:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700605809;
-	bh=E/bj/1FVapv7EKfhI42/zUXrmVv/I6HbzaDjwjJln44=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=J0O/QUcwf+hJ+9u9th7dU4ofixzovumMaQmyel928dNYI3hDAJCkcNaTDY1YmSPSY
-	 k4JEXGgkPh6+2HD0yj3ygvLKntXV+4Tm7RJc8gv8cB45K2aA93QUPbdxgrZW+Bmino
-	 9zX/6yfoT0Q66adsWy5pqbzUZROQLvIzs3aXRDrdnySIdjnXW0jVo39VHRA4WbT15p
-	 dij3w0gQdCj4D7jnuEasrt64GCxI7XA9h8wX45W1J/xG5/QYDT0XMbMmdgg/dgYLBs
-	 oculAlRo7XNFCoKGLeEguIrSPGRw6zvAciYRVBJddP01oVEsSOQEffzrbkFGmMwy7M
-	 mSCzyhHpnt5kA==
-Date: Tue, 21 Nov 2023 14:30:08 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
- linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 10/17] tty: hso: don't initialize global serial_table
-Message-ID: <20231121143008.576f4ca9@kernel.org>
-In-Reply-To: <20231121092258.9334-11-jirislaby@kernel.org>
-References: <20231121092258.9334-1-jirislaby@kernel.org>
-	<20231121092258.9334-11-jirislaby@kernel.org>
+	s=k20201202; t=1700606424;
+	bh=JgXzXBcdw/xxhUYx9RjTOgLiSSE5qUg3lb9e/+H8kE4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=aIjUgw63PfLKleuS/Pocr7mtZX2ua9oQ7TCQltUJXJ/qIOZTg2GLsJZ0t+yhMPAPt
+	 NfaOHRJrl7t91JkmJKkgxygCtSjvTWx6HdXk7j6IFH1XIsQjVLbDBqG9IELYarN/EA
+	 T3jaO31ej1enDGbRGFguA3ETFltmn2hk8htuGyuZRqSNGqw/GNtbhm3OgHGyYM900/
+	 cgbvjB4cAyDH0sM+wAhXw5mGbfuJbA7jrjn2NAelKKSzieklW1tDi5Ngwpj1m6pOD+
+	 Z5K9RStgFCf/FSvC9BW97nDEF3+LNmnaw2Ih//BRub6PGBeLPqYXN8gLBiUjc6CWGn
+	 wVgG33bYDq4Ew==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6964CC595D0;
+	Tue, 21 Nov 2023 22:40:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 1/2] net: usb: ax88179_178a: fix failed operations during
+ ax88179_reset
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170060642442.8112.7703368423240582165.git-patchwork-notify@kernel.org>
+Date: Tue, 21 Nov 2023 22:40:24 +0000
+References: <20231120120642.54334-1-jtornosm@redhat.com>
+In-Reply-To: <20231120120642.54334-1-jtornosm@redhat.com>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: pabeni@redhat.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, weihao.bj@ieisystem.com
 
-On Tue, 21 Nov 2023 10:22:51 +0100 Jiri Slaby (SUSE) wrote:
-> 'serial_table' is global, so there is no need to initialize it to NULLs
-> at the module load. Drop this unneeded for loop.
+Hello:
+
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon, 20 Nov 2023 13:06:29 +0100 you wrote:
+> Using generic ASIX Electronics Corp. AX88179 Gigabit Ethernet device,
+> the following test cycle has been implemented:
+>     - power on
+>     - check logs
+>     - shutdown
+>     - after detecting the system shutdown, disconnect power
+>     - after approximately 60 seconds of sleep, power is restored
+> Running some cycles, sometimes error logs like this appear:
+>     kernel: ax88179_178a 2-9:1.0 (unnamed net_device) (uninitialized): Failed to write reg index 0x0001: -19
+>     kernel: ax88179_178a 2-9:1.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0001: -19
+>     ...
+> These failed operation are happening during ax88179_reset execution, so
+> the initialization could not be correct.
 > 
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
+> [...]
 
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+Here is the summary with links:
+  - [v2,1/2] net: usb: ax88179_178a: fix failed operations during ax88179_reset
+    https://git.kernel.org/netdev/net/c/0739af07d1d9
+  - [v2,2/2] net: usb: ax88179_178a: avoid two consecutive device resets
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
