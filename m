@@ -1,127 +1,126 @@
-Return-Path: <linux-usb+bounces-3077-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3078-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB5F47F28DA
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 10:24:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25D057F294F
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 10:49:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6122B1F24BCA
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 09:24:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EA4BB217DE
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 09:49:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22BBB3B79D;
-	Tue, 21 Nov 2023 09:24:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 352233C07E;
+	Tue, 21 Nov 2023 09:49:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E/Alva4C"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JmBUpE9u"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BE32D79;
-	Tue, 21 Nov 2023 01:24:32 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-507bd644a96so7497654e87.3;
-        Tue, 21 Nov 2023 01:24:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700558670; x=1701163470; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lQ6DLGxkIkFU3HRsA7T5dzcptPhq9KaRwLqwuRCVi+Q=;
-        b=E/Alva4CwFKMvAWUp/f1lLb5d8v7JiFjfA9hD31zzV2Q/1vIwHLBojW5RVQfnQisL2
-         eN2E732R7ie/fL6+fVairMOQp1iuAxxq0MDmEKk9uxDKkjuP4bR/yjIz4wlgzNPjTDp4
-         nD+/0uE20UXNrb7ptWocQOuqrycXnc2/F/A5NSJNBn6dVlrn1BgmNLQht6UWURVP3ox+
-         gvhRVa1zgaGVHwfU5gdIoKgQ7t1ctJFe5qOnQhRhXUvAekhy9H//2sWt5b7KgwLrX+T1
-         4OH/Hddr1Rb5dczAi0hRrAZZxDbDTWGlpdTcSBRtuj0JmylygPY4JUotoPP+tbECld9n
-         f/Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700558670; x=1701163470;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lQ6DLGxkIkFU3HRsA7T5dzcptPhq9KaRwLqwuRCVi+Q=;
-        b=bBLNIJvdwTvDQYUP7qHKvVE8fcRX2IDRbz4PH51FJH/2kiCX/JMlAh1FgHrHWb+nSd
-         HQXL6lH+4a4DhPTc/U3UXi+VfGU3tbmnQnjFuO99PN6E+PdZNrINsnjZjkh3my9qgyRy
-         pAhSH/mpDKJHME8/DIIhDI97d7nqGoXP9sQHomIrPC/7hGP9TfEP/5ioV3ntxo9hJujx
-         vcsAzcmtGu8mwOUZOxvZSypL3AWCJxrLXmLQMrxdRhMs2Sl5tNo4SGJnke+7MAehe0Mc
-         7g6moUhQ4MYghAcG/ks51ecMLNRcaZisdvCj9qP5I+DfpmoFXJ6T1c4CY/BPxeBqnAme
-         jpwg==
-X-Gm-Message-State: AOJu0Yy+YmipjX/nifkpeuiy/0n1Cz9eov4fk0LGhMwati7dwIIvK2pp
-	1NHPoDCCO0ACsTVJGKSyv8wcJbKZRYH4Nw==
-X-Google-Smtp-Source: AGHT+IH3NsigeAnMIUBIcoWP9F71idnAemVeO7dDHXF12jSgtDL5pYx+JievGI704BmzgB/y3zDLqA==
-X-Received: by 2002:a19:c217:0:b0:507:aa44:28fa with SMTP id l23-20020a19c217000000b00507aa4428famr7202181lfc.26.1700558670135;
-        Tue, 21 Nov 2023 01:24:30 -0800 (PST)
-Received: from [192.168.1.103] ([31.173.81.93])
-        by smtp.gmail.com with ESMTPSA id p20-20020ac24ed4000000b00507b869b068sm1466248lfr.302.2023.11.21.01.24.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Nov 2023 01:24:29 -0800 (PST)
-Subject: Re: [PATCH 2/2] usb: typec: tcpm: Parse Accessory Mode information
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Hans de Goede
- <hdegoede@redhat.com>, =?UTF-8?Q?Ilpo_J=c3=a4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, Mark Gross <markgross@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20231120231757.2309482-1-dmitry.baryshkov@linaro.org>
- <20231120231757.2309482-3-dmitry.baryshkov@linaro.org>
-From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <1421f23b-20c5-dbdd-8964-4c4cb37b1a96@gmail.com>
-Date: Tue, 21 Nov 2023 12:24:27 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E1210FA;
+	Tue, 21 Nov 2023 01:49:19 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EBD971C0018;
+	Tue, 21 Nov 2023 09:49:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1700560158;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VVEkp3Bfnnrh5RJDI1Xlb1Qdj4wYUKQF4xGHxqUM4cQ=;
+	b=JmBUpE9uq6PZ+X/WdiEJxaNOlOT8Fqf1XyntNBFDTBO7n8bYWBZVQ9NmcCr9dcUNnlzU3y
+	lM5xsFAHAi/WN7P//bc7ThdqCIJDrAaOJR7N4p7FzT01P7hJrU0gw7jyz8OyK/ALnBVvOC
+	8tLbZxeMID73FdYMAG55Ps5UERQgLPzQPbiDMa22dScue550yU1zAapvMgsuD7Buofw5FN
+	kwV+8N/JOjcUutaNpe+2JCgSR3m7BPX6zO+Rvk7r+vbnUgYB9BChLCdmagG4o8IKiD9aOZ
+	Ik1HIxwRxiumBRKQAve8v1CHCdKXsRRVCZlAMHWOEHXYlM2n1RrrZicYg8L6jg==
+Date: Tue, 21 Nov 2023 10:49:17 +0100
+From: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Jisheng Zhang <jszhang@kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Lu jicong <jiconglu58@gmail.com>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH] usb: dwc3: don't reset device side if dwc3 was
+ configured as host-only
+Message-ID: <20231121104917.0fd67952@kmaincent-XPS-13-7390>
+In-Reply-To: <20231117015527.jqoh6i3n4ywg7qui@synopsys.com>
+References: <20231116174206.1a823aa3@kmaincent-XPS-13-7390>
+	<20231116175959.71f5d060@kmaincent-XPS-13-7390>
+	<20231117014038.kbcfnpiefferqomk@synopsys.com>
+	<20231117015527.jqoh6i3n4ywg7qui@synopsys.com>
+Organization: bootlin
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20231120231757.2309482-3-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: kory.maincent@bootlin.com
 
-On 11/21/23 2:11 AM, Dmitry Baryshkov wrote:
+Hello Thinh,
 
-> Some of the boards supported by the TCPM drivers can support USB-C
-> Accessory Modes (Analog Audio, Debug). Parse information about supported
-> modes from the device tree.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 6e843c511b85..6297f803de53 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -6114,6 +6114,7 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
->  {
->  	const char *opmode_str;
->  	int ret;
-> +	int mode;
->  	u32 mw, frs_current;
->  
->  	if (!fwnode)
-> @@ -6132,6 +6133,12 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
->  	if (ret < 0)
->  		return ret;
->  
-> +	if (fwnode_property_read_bool(fwnode, "accessory-mode-audio"))
-> +		port->typec_caps.accessory[mode++] = TYPEC_ACCESSORY_AUDIO;
-> +
-> +	if (fwnode_property_read_bool(fwnode, "accessory-mode-debug"))
-> +		port->typec_caps.accessory[mode++] = TYPEC_ACCESSORY_DEBUG;
-> +
+On Fri, 17 Nov 2023 01:55:30 +0000
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
 
-   Hm, I don't see where that mode variable is initialized?
+> > How many ports do you use? Can you try this:
+> >=20
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 0328c86ef806..9921c2737829 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -296,23 +296,28 @@ int dwc3_core_soft_reset(struct dwc3 *dwc)
+> >  	if (dwc->dr_mode =3D=3D USB_DR_MODE_HOST) {
+> >  		u32 usb3_port;
+> >  		u32 usb2_port;
+> > +		int i;
+> > =20
+> > -		usb3_port =3D dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
+> > -		usb3_port |=3D DWC3_GUSB3PIPECTL_PHYSOFTRST;
+> > -		dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), usb3_port);
+> > +		for (i =3D 0; i < 16; i++) {
+> > +			usb3_port =3D dwc3_readl(dwc->regs,
+> > DWC3_GUSB3PIPECTL(i));
+> > +			usb3_port |=3D DWC3_GUSB3PIPECTL_PHYSOFTRST;
+> > +			dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(i),
+> > usb3_port);=20
+> > -		usb2_port =3D dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+> > -		usb2_port |=3D DWC3_GUSB2PHYCFG_PHYSOFTRST;
+> > -		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), usb2_port);
+> > +			usb2_port =3D dwc3_readl(dwc->regs,
+> > DWC3_GUSB2PHYCFG(i));
+> > +			usb2_port |=3D DWC3_GUSB2PHYCFG_PHYSOFTRST;
+> > +			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i),
+> > usb2_port);
+> > +		}
+> > =20
+> >  		/* Small delay for phy reset assertion */
+> >  		usleep_range(1000, 2000);
+> > =20
+> > -		usb3_port &=3D ~DWC3_GUSB3PIPECTL_PHYSOFTRST;
+> > -		dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), usb3_port);
+> > +		for (i =3D 0; i < 16; i++) {
+> > +			usb3_port &=3D ~DWC3_GUSB3PIPECTL_PHYSOFTRST;
+> > +			dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(i),
+> > usb3_port);=20
+> > -		usb2_port &=3D ~DWC3_GUSB2PHYCFG_PHYSOFTRST;
+> > -		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), usb2_port);
+> > +			usb2_port &=3D ~DWC3_GUSB2PHYCFG_PHYSOFTRST;
+> > +			dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(i),
+> > usb2_port);
+> > +		}
+> > =20
+> >  		/* Wait for clock synchronization */
+> >  		msleep(50);
+> > -- =20
 
-[...]
+Still not working on my side.
 
-MBR, Sergey
+Regards,
+--=20
+K=C3=B6ry Maincent, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
 
