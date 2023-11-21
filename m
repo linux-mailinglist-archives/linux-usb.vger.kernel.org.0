@@ -1,95 +1,127 @@
-Return-Path: <linux-usb+bounces-3076-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3077-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61FD77F28C2
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 10:23:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB5F47F28DA
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 10:24:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6960B21713
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 09:23:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6122B1F24BCA
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 09:24:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A73193AC3A;
-	Tue, 21 Nov 2023 09:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22BBB3B79D;
+	Tue, 21 Nov 2023 09:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="joL4lNee"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E/Alva4C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130213B7B7;
-	Tue, 21 Nov 2023 09:23:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEBE8C433CD;
-	Tue, 21 Nov 2023 09:23:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700558601;
-	bh=J9+0GAdeqi0Ihu8k/yKWMGuJLA+L/8D5q4AyXvnWFUU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=joL4lNeeXdT8sgymVjfPxJdGEgdmJMXdx1lxwxLRpzs9JPGNAmnht0AnabfVbu479
-	 1k/dvSQKu37gIQKySa8+yCQv4AO5mmQhV5b4sb6aSxTgWlDMoJwGSUUwUU1dN/kVGe
-	 wrRTKvMy8ZwK2sDFLF7bdedr8jBGVSU5t/USoo+hTzaDcVOraZJ2mSPXKio9X6Ksbz
-	 M/5DphpvnwANBpsAoI3OZoTNVz1kbiPX/Apb+tQP+cTpipXiCpTySfnOeAmTIc5qAE
-	 FOrggxWRY9i/kzp+EHW6TuOWdKfcWDxeQlgaKpBpfiERpVNGqxt+liG/CtpuSLRrq5
-	 FRaTfyApDjMVQ==
-From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To: gregkh@linuxfoundation.org
-Cc: linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH 10/17] tty: hso: don't initialize global serial_table
-Date: Tue, 21 Nov 2023 10:22:51 +0100
-Message-ID: <20231121092258.9334-11-jirislaby@kernel.org>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231121092258.9334-1-jirislaby@kernel.org>
-References: <20231121092258.9334-1-jirislaby@kernel.org>
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BE32D79;
+	Tue, 21 Nov 2023 01:24:32 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-507bd644a96so7497654e87.3;
+        Tue, 21 Nov 2023 01:24:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700558670; x=1701163470; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lQ6DLGxkIkFU3HRsA7T5dzcptPhq9KaRwLqwuRCVi+Q=;
+        b=E/Alva4CwFKMvAWUp/f1lLb5d8v7JiFjfA9hD31zzV2Q/1vIwHLBojW5RVQfnQisL2
+         eN2E732R7ie/fL6+fVairMOQp1iuAxxq0MDmEKk9uxDKkjuP4bR/yjIz4wlgzNPjTDp4
+         nD+/0uE20UXNrb7ptWocQOuqrycXnc2/F/A5NSJNBn6dVlrn1BgmNLQht6UWURVP3ox+
+         gvhRVa1zgaGVHwfU5gdIoKgQ7t1ctJFe5qOnQhRhXUvAekhy9H//2sWt5b7KgwLrX+T1
+         4OH/Hddr1Rb5dczAi0hRrAZZxDbDTWGlpdTcSBRtuj0JmylygPY4JUotoPP+tbECld9n
+         f/Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700558670; x=1701163470;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lQ6DLGxkIkFU3HRsA7T5dzcptPhq9KaRwLqwuRCVi+Q=;
+        b=bBLNIJvdwTvDQYUP7qHKvVE8fcRX2IDRbz4PH51FJH/2kiCX/JMlAh1FgHrHWb+nSd
+         HQXL6lH+4a4DhPTc/U3UXi+VfGU3tbmnQnjFuO99PN6E+PdZNrINsnjZjkh3my9qgyRy
+         pAhSH/mpDKJHME8/DIIhDI97d7nqGoXP9sQHomIrPC/7hGP9TfEP/5ioV3ntxo9hJujx
+         vcsAzcmtGu8mwOUZOxvZSypL3AWCJxrLXmLQMrxdRhMs2Sl5tNo4SGJnke+7MAehe0Mc
+         7g6moUhQ4MYghAcG/ks51ecMLNRcaZisdvCj9qP5I+DfpmoFXJ6T1c4CY/BPxeBqnAme
+         jpwg==
+X-Gm-Message-State: AOJu0Yy+YmipjX/nifkpeuiy/0n1Cz9eov4fk0LGhMwati7dwIIvK2pp
+	1NHPoDCCO0ACsTVJGKSyv8wcJbKZRYH4Nw==
+X-Google-Smtp-Source: AGHT+IH3NsigeAnMIUBIcoWP9F71idnAemVeO7dDHXF12jSgtDL5pYx+JievGI704BmzgB/y3zDLqA==
+X-Received: by 2002:a19:c217:0:b0:507:aa44:28fa with SMTP id l23-20020a19c217000000b00507aa4428famr7202181lfc.26.1700558670135;
+        Tue, 21 Nov 2023 01:24:30 -0800 (PST)
+Received: from [192.168.1.103] ([31.173.81.93])
+        by smtp.gmail.com with ESMTPSA id p20-20020ac24ed4000000b00507b869b068sm1466248lfr.302.2023.11.21.01.24.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Nov 2023 01:24:29 -0800 (PST)
+Subject: Re: [PATCH 2/2] usb: typec: tcpm: Parse Accessory Mode information
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Hans de Goede
+ <hdegoede@redhat.com>, =?UTF-8?Q?Ilpo_J=c3=a4rvinen?=
+ <ilpo.jarvinen@linux.intel.com>, Mark Gross <markgross@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20231120231757.2309482-1-dmitry.baryshkov@linaro.org>
+ <20231120231757.2309482-3-dmitry.baryshkov@linaro.org>
+From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <1421f23b-20c5-dbdd-8964-4c4cb37b1a96@gmail.com>
+Date: Tue, 21 Nov 2023 12:24:27 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231120231757.2309482-3-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-'serial_table' is global, so there is no need to initialize it to NULLs
-at the module load. Drop this unneeded for loop.
+On 11/21/23 2:11 AM, Dmitry Baryshkov wrote:
 
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: linux-usb@vger.kernel.org
-Cc: netdev@vger.kernel.org
----
- drivers/net/usb/hso.c | 5 -----
- 1 file changed, 5 deletions(-)
+> Some of the boards supported by the TCPM drivers can support USB-C
+> Accessory Modes (Analog Audio, Debug). Parse information about supported
+> modes from the device tree.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 6e843c511b85..6297f803de53 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -6114,6 +6114,7 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  {
+>  	const char *opmode_str;
+>  	int ret;
+> +	int mode;
+>  	u32 mw, frs_current;
+>  
+>  	if (!fwnode)
+> @@ -6132,6 +6133,12 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	if (fwnode_property_read_bool(fwnode, "accessory-mode-audio"))
+> +		port->typec_caps.accessory[mode++] = TYPEC_ACCESSORY_AUDIO;
+> +
+> +	if (fwnode_property_read_bool(fwnode, "accessory-mode-debug"))
+> +		port->typec_caps.accessory[mode++] = TYPEC_ACCESSORY_DEBUG;
+> +
 
-diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-index 48450fe861ad..f088ea2ba6f3 100644
---- a/drivers/net/usb/hso.c
-+++ b/drivers/net/usb/hso.c
-@@ -3227,13 +3227,8 @@ static struct usb_driver hso_driver = {
- 
- static int __init hso_init(void)
- {
--	int i;
- 	int result;
- 
--	/* Initialise the serial table semaphore and table */
--	for (i = 0; i < HSO_SERIAL_TTY_MINORS; i++)
--		serial_table[i] = NULL;
--
- 	/* allocate our driver using the proper amount of supported minors */
- 	tty_drv = tty_alloc_driver(HSO_SERIAL_TTY_MINORS, TTY_DRIVER_REAL_RAW |
- 			TTY_DRIVER_DYNAMIC_DEV);
--- 
-2.42.1
+   Hm, I don't see where that mode variable is initialized?
 
+[...]
+
+MBR, Sergey
 
