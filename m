@@ -1,153 +1,111 @@
-Return-Path: <linux-usb+bounces-3134-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3135-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF4767F370B
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 21:03:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FDB67F376B
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 21:30:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69489282A6B
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 20:03:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D12451C20E78
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 20:30:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 153154207C;
-	Tue, 21 Nov 2023 20:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D5355576D;
+	Tue, 21 Nov 2023 20:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ps59Aw4+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B179D191;
-	Tue, 21 Nov 2023 12:03:22 -0800 (PST)
-Received: from [10.0.3.168] (unknown [93.240.169.83])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id A02FA61E5FE01;
-	Tue, 21 Nov 2023 21:02:54 +0100 (CET)
-Message-ID: <e679745a-6498-496c-8e0a-0d83cafbca27@molgen.mpg.de>
-Date: Tue, 21 Nov 2023 21:02:53 +0100
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB7F1BFD
+	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 12:29:29 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id 2adb3069b0e04-507bd19eac8so7903235e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 12:29:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1700598567; x=1701203367; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d/YPc2+7OX5cSuooAWCFK/zXbyQQcMjUtmvaEdzyH0I=;
+        b=Ps59Aw4+pnOcsZnMWAupwEZBkEGtOXOiqJs7dXAa0Xypq1i2WYq5D5dTNEV2ruU6Zb
+         TjdhhYjxAih+QC5k1G74Z+aBFVXE+0ZG1HpigJN4sTGg3ME9cbX/bV8ex7QTP6d4OfSI
+         OfIrvgvr39fH0A9tNv5wzLXgPlRh1OymF2XC7DVajXY2+0fPQnT6+z0b+J1hp9Pe5RWV
+         qG+kFdoP2rL/oMXCL0LGGOSKMgPfwT1KTJqp/B3VMB6AnsnEuNXkjXUy/R+ZmtPEf/0I
+         8lwee+yJjKHYmdWn3TbSI2qSYWU9arIN5AY9DeXbeyr+AN/QlGLfI0pL0cs0uGilEH+s
+         EJxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700598567; x=1701203367;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d/YPc2+7OX5cSuooAWCFK/zXbyQQcMjUtmvaEdzyH0I=;
+        b=i25YLWJrTvxNvJCKfO14thphBu1vY7PBe45lgei0LJpPyxi3yIVwnEJUKiDS1W670b
+         BSOAI/SrUt7CSkApkF4PomVfTj6NOgFr1bXnrqcLJ0cZz3X6bxN5Xj1vNBqBhxlM793T
+         rkGBjHy0W0EK3uM7iGxXL5BDcDOd2mso07jj0Jub3WCZ1nrrxj858AHYXf7rr5DdBuaU
+         O6lqfu8JOrL0UU4Z54UfTZr6BVcBeDPqbti7mrQ10sSQmnHNf2FbbVl410cdz5peXEnw
+         A5gWtZ7kj8kWilfcmo8tmCgcvV/yA5Im8i25NMjbbu6ddY0UZSTHqXuUDAKEvyyrtH7f
+         hWiw==
+X-Gm-Message-State: AOJu0YzMYdRPm5yylVo+XfOPgp3UKHTCNYoOQorNnKxiXde4v6SqOWuI
+	oS7eqgZsw8DuOvhV4CXDFJ5q7KXu2eo2ol6Sgp+a17aJQR0=
+X-Google-Smtp-Source: AGHT+IH+lx0/QyDiMn/bUpTX/WV0RizOFIs7Tn8KJMsGYobLA7HMgbfKSNb2zVaPAad4qhxkMJIPVQ==
+X-Received: by 2002:ac2:5e73:0:b0:507:a383:fe18 with SMTP id a19-20020ac25e73000000b00507a383fe18mr190070lfr.40.1700598566624;
+        Tue, 21 Nov 2023 12:29:26 -0800 (PST)
+Received: from eriador.lan (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id h4-20020a056512350400b0050ab6112af2sm286287lfs.65.2023.11.21.12.29.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Nov 2023 12:29:26 -0800 (PST)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Mark Gross <markgross@kernel.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v2 0/2] usb: typec: tcpm: Handle Accessory Modes
+Date: Tue, 21 Nov 2023 22:26:58 +0200
+Message-ID: <20231121202925.2481471-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Qualcomm Atheros QCA61x4 keeps drawing 0.85 W despite Bluetooth
- being disable in GNOME
-Content-Language: en-US
-To: Alan Stern <stern@rowland.harvard.edu>,
- Hans de Goede <hdegoede@redhat.com>
-Cc: Marcel Holtmann <marcel@holtmann.org>,
- Johan Hedberg <johan.hedberg@gmail.com>,
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
- linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
- Mike Jones <mike@mjones.io>, Rocky Liao <quic_rjliao@quicinc.com>
-References: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
- <22494842-a785-4151-915d-6f3a677d96cb@molgen.mpg.de>
- <1f3cb0cc-4bb0-471f-a785-a5d237cd46a3@rowland.harvard.edu>
- <d63ebc5f-9b72-4457-949b-3e90883bd3c0@molgen.mpg.de>
- <d61ae9a8-2228-4af1-a5f0-912e7763fbd1@rowland.harvard.edu>
- <de236c7d-e265-452a-a60e-b10293a5b944@molgen.mpg.de>
- <41253614-764e-4e95-b052-a46bf5587c29@rowland.harvard.edu>
- <3489df64-0f8f-43e1-a05f-ccb145ff6d59@molgen.mpg.de>
- <fd84c14a-1866-4643-8ce9-0d6da5c4b82e@rowland.harvard.edu>
- <d8fba4f9-f868-4ef3-938b-f202e5bcc4ad@molgen.mpg.de>
- <b6c77dc7-04e6-424c-b3b6-f51f437a1671@rowland.harvard.edu>
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-Disposition-Notification-To: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <b6c77dc7-04e6-424c-b3b6-f51f437a1671@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Dear Alan, dear Hans,
+In addition to Alternative Modes (see [1]), some of the TCPM-backed
+boards (e.g. Qualcomm SM8150-HDK) can support USB-C Accessory Modes
+(e.g. the Analog Audio). Add bindings and driver support for parsing
+this kind of information.
 
+Note, while it might make sense to put accessory-mode-audio and -debug
+handling to typec_get_fw_cap(), I decided against it. Several existing
+drivers use this function, while providing AccMode caps based on some
+internal logic.
 
-Am 21.11.23 um 18:40 schrieb Alan Stern:
-> On Tue, Nov 21, 2023 at 06:12:30PM +0100, Paul Menzel wrote:
+[1] https://lore.kernel.org/linux-usb/20231120224919.2293730-1-dmitry.baryshkov@linaro.org/
 
->> Am 21.11.23 um 17:23 schrieb Alan Stern:
->>>> [340560.441957] usb 1-3: finish reset-resume
->>>> [340560.570940] usb 1-3: reset full-speed USB device number 2 using xhci_hcd
->>>
->>> Those two lines are unexpected.  Why does the device need to be reset?
->>> While the btusb module is loaded, does anything show up in
->>> /sys/bus/usb/devices/1-3/quirks?
->>
->>      $ more /sys/bus/usb/devices/1-3/quirks
->>      0x2
-> 
-> Ah.  0x2 is the RESET_RESUME quirk bit.  The fact that it is on explains
-> why the device gets reset when it is resumed.
-> 
-> It also explains why the device isn't getting suspended.  The USB core
-> will not autosuspend a device that has the RESET_RESUME quirk if its
-> driver wants remote-wakeup or does not support reset-resume.  The btusb
-> driver is like that.
-> 
-> Apparently the RESET_RESUME quirk bit is set by the btusb driver itself
-> (see the btusb_check_needs_reset_resume() routine in btusb.c), based on
-> the computing platform rather than on the Bluetooth device.  The
-> btusb_needs_reset_resume_table[] contains three entries: Dell OptiPlex
-> 3060, Dell XPS 9360, and Dell Inspiron 5565.
-> 
-> Since your system is an XPS 9360, it has this problem with suspending
-> the onboard Bluetooth device.  The only way the kernel can deal with it
-> is to avoid putting the device into runtime suspend while the driver
-> module is loaded.
-> 
-> So there's your answer.  If you rebuild the btusb driver after removing
-> the XPS 9360 entry from btusb_needs_reset_resume_table[], you should
-> find that the device does get runtime suspended.  (But then it might not
-> operate properly if you try to turn it on again after it has been
-> suspended.)
+Changes since v1:
 
-Thank you for finding this. This is commit 596b07a9a226 (Bluetooth: 
-btusb: Add Dell XPS 13 9360 to btusb_needs_reset_resume_table) from 
-April 2018 [1]. Hans, was it ever confirmed to be a platform limitation? 
-Does the Microsoft Windows driver do the same? Did the Dell engineers 
-verify it with the schematics? I was unable to see this in the bug 
-report [2].
+- Initialised the `mode' variable to 0 (Sergei Shtylyov)
 
-Also, it would be nice, if Linux logged, if quirks are applied that 
-affect power usage.
+Dmitry Baryshkov (2):
+  dt-bindings: connector: usb: add accessory mode description
+  usb: typec: tcpm: Parse Accessory Mode information
 
-As Alan wrote, that I’d need to rebuild the module to deactivate the 
-behavior, there is no switch to override the quirk table, right?
+ .../devicetree/bindings/connector/usb-connector.yaml | 12 ++++++++++++
+ drivers/usb/typec/tcpm/tcpm.c                        |  9 +++++++++
+ 2 files changed, 21 insertions(+)
 
->>>>       bmAttributes         0xe0
->>>>         Self Powered
->>>>         Remote Wakeup
->>>
->>> That's what I was interested in.  The device does support remote wakeup.
->>
->> That would make sense so it can be resumed? (It does not necessarily mean
->> something like Wake-On-LAN, right?
-> 
-> It _does_ mean something like Wake-On-LAN: The device is capable of
-> asking the system to wake it up under some conditions while it or the
-> system is suspended.
-> 
->> Also, for this device it’s disabled?
->>
->>      $ grep . /sys/bus/usb/devices/1-3/power/wakeup
->>      disabled
-> 
-> Yes.  You can change that setting by writing "enabled" to the sysfs
-> file.  But I don't think this will make any difference to your runtime
-> suspend problem; the power/wakeup setting affects only system suspend,
-> not runtime suspend.
+-- 
+2.42.0
 
-Thank you again for the clarification.
-
-
-Kind regards,
-
-Paul
-
-
-[1]: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=596b07a9a22656493726edf1739569102bd3e136
-[2]: https://bugzilla.redhat.com/show_bug.cgi?id=1514836
 
