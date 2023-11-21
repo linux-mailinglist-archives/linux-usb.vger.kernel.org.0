@@ -1,126 +1,108 @@
-Return-Path: <linux-usb+bounces-3112-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3113-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 605A37F31C4
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 15:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 789617F31D9
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 16:04:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0022CB21F88
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:58:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07F17B21FBB
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 15:03:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3275F55C01;
-	Tue, 21 Nov 2023 14:58:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C9A56742;
+	Tue, 21 Nov 2023 15:03:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="CyTZ1Yz8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oGnUEJcG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EF6114;
-	Tue, 21 Nov 2023 06:58:47 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 81EB82B6;
-	Tue, 21 Nov 2023 15:58:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1700578695;
-	bh=cPauisPigRpxa0FO37PrDzLUfkeCnUkdFhL6WThKnEU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CyTZ1Yz8FOWVokZZlZTvOFirYDnPwtcUUkoulUegoiOwqn5yJ8adjhqMAj+1m4Vq+
-	 nHYdAKmy2nXR0LSw2tRNPQ3Oc0ZL18po1DAjb1HODl3Dbzys6bgcZEDoOUnptLAnVY
-	 lVU/szlX97XFWgMjQK6jPUX5p6PopL3Kua1ZT7kE=
-Message-ID: <c2af763b-787e-43bf-ae42-f600dcfca25e@ideasonboard.com>
-Date: Tue, 21 Nov 2023 14:58:41 +0000
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D49A94A9A4;
+	Tue, 21 Nov 2023 15:03:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47AD6C433C8;
+	Tue, 21 Nov 2023 15:03:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700579031;
+	bh=ybjDzxPZW5g+QhZul9Du8UCGPjKVYHmIO/KEc0Aw7YQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oGnUEJcGjCJUadWNW4WUkZSR3cMzcCee54zegnUDA8ilcTUNmGunCdv+Q9IDr4+Mw
+	 iACpM2DWBIvBGGHfC//8xFf0Mqq7wLY198e8tWfMB5VxPqYg3iKKmGqjWDAmDm+R+A
+	 JJs27it0sDCvJQJ6EWHm1gdt3kX2qCkXB4SWd06ox8GubkZ1FMC0/hqK1ttsjVLnUZ
+	 ki975Q/Qp7qFubmCb3G4lLk4jUogBtOezEN0QV0+IDrXwfNDUlFs9B8axkBpN+Nb8u
+	 4pAK3DJLq+/1sUwFzqnvDTf/JwilcTCFwrJwSP1ZFzbNRPC4w7yVApZpPRmr6ujn3l
+	 cHVxaXqno7+mg==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1r5SIF-0007xS-2C;
+	Tue, 21 Nov 2023 16:04:03 +0100
+Date: Tue, 21 Nov 2023 16:04:03 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Andrew Halaney <ahalaney@redhat.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] USB: dwc3: qcom: fix resource leaks on probe deferral
+Message-ID: <ZVzG4-U_y2q_EBrp@hovoldconsulting.com>
+References: <20231117173650.21161-1-johan+linaro@kernel.org>
+ <041f239f-7b40-4681-8c6c-2268f9c2c684@linaro.org>
+ <74cswe5tivcctmnty3gfavzsxdvjz5m4rktyj5auzwvrndninm@dah4h2fdj3zv>
+ <ZVuO9qj3SRHAS4qm@hovoldconsulting.com>
+ <2023112124-duckling-absinthe-2167@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: uvc: Add framebased frame format support
-Content-Language: en-US
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Akash Kumar <quic_akakum@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Jing Leng
- <jleng@ambarella.com>, Felipe Balbi <balbi@kernel.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Pratham Pratap <quic_ppratap@quicinc.com>, Jack Pham
- <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231114112516.2723-1-quic_akakum@quicinc.com>
- <2023112123-setting-waking-7896@gregkh>
-From: Dan Scally <dan.scally@ideasonboard.com>
-Autocrypt: addr=dan.scally@ideasonboard.com; keydata=
- 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
-In-Reply-To: <2023112123-setting-waking-7896@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023112124-duckling-absinthe-2167@gregkh>
 
-Hello
+On Tue, Nov 21, 2023 at 03:21:34PM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Nov 20, 2023 at 05:53:10PM +0100, Johan Hovold wrote:
+> > On Mon, Nov 20, 2023 at 09:22:54AM -0600, Andrew Halaney wrote:
+> > > On Sat, Nov 18, 2023 at 12:47:30AM +0100, Konrad Dybcio wrote:
+> > > > On 17.11.2023 18:36, Johan Hovold wrote:
+> > > > > When reviewing the recently submitted series which reworks the dwc3 qcom
+> > > > > glue implementation [1], I noticed that the driver's tear down handling
+> > > > > is currently broken, something which can lead to memory leaks and
+> > > > > potentially use-after-free issues on probe deferral and on driver
+> > > > > unbind.
+> > > > > 
+> > > > > Let's get this sorted before reworking driver.
+> > > > > 
+> > > > > Note that the last patch has only been compile tested as I don't have
+> > > > > access to a sdm845 device.
+> > 
+> > > > I'll sound like a broken record, but:
+> > > > 
+> > > > is there anyone in the world that is actively benefiting from this failed
+> > > > experiment of using the ACPI tables that were shipped with these SoCs?
 
-On 21/11/2023 13:58, Greg Kroah-Hartman wrote:
-> On Tue, Nov 14, 2023 at 04:55:16PM +0530, Akash Kumar wrote:
->> Add support for framebased frame format which can be used to support
->> multiple formats like H264 or H265 other than mjpeg and YUV frames.
->>
->> Framebased format is set to H264 by default, which can be updated to
->> other formats by updating the GUID through guid configfs attribute.
->>
->> Also,add UVC 1.5 extension to support H264 format and different camera
->> controls, adding support for Exposure, Zoom, Pan, tilt.
-> When you say "also" or list different things that are done in a single
-> change, that's a huge hint to divide this up into smaller patches and
-> make it a patch series.
->
-> Please do that here.
+> > I agree that if we can remove the ACPI hacks in here, we should try do
+> > so (e.g. given that no one really uses it anymore).
+> > 
+> > As Andrew already mentioned, that is a separate issue not directly
+> > related to this series, though.
+> > 
+> > Removing it before reworking the dwc3 binding [1] and adding multiport
+> > support [2] should simplify both of those series quite a bit, however.
 
+> > [1] https://lore.kernel.org/all/20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com/
+> > [2] https://lore.kernel.org/all/20231007154806.605-1-quic_kriskura@quicinc.com/
+> > 
+> 
+> So should I apply this series now or not?
 
-Could you also CC me on the series when you post it please?
+Please do. Removing ACPI support should be done later if that's at all
+possible.
 
->
-> thanks,
->
-> greg k-h
->
+Johan
 
