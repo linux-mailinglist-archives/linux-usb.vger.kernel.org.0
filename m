@@ -1,89 +1,119 @@
-Return-Path: <linux-usb+bounces-3093-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3094-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2599C7F2E33
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:25:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A73C67F2E9B
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:43:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2F66281B25
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 13:25:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 487EEB21867
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 13:43:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 076704A9BE;
-	Tue, 21 Nov 2023 13:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55C851C47;
+	Tue, 21 Nov 2023 13:43:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mb6XfF2A"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="DvLx8PPa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0FD194;
+	Tue, 21 Nov 2023 05:43:21 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3604A9A7
-	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 13:25:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1E16C433C8;
-	Tue, 21 Nov 2023 13:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700573115;
-	bh=5h1dRKlWyHsnS2iAX+ZBjDivjot+UuM0uKEgmm27lSs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mb6XfF2Au4nWSAJGBsxKS/vMcj+cqXxZ/8Xau5tFbJUk54vS5AHF5pdMlnBHdjJK0
-	 FOhcdSvbpwK3y7lfPGWA4fyp+/SHtW5M4eV3eAwpDQyGBYzfZS7zF5t78cRw7HKGMs
-	 MwKk794GUPEOTmemKRUE3bd6p3wVxAto/VFBFW31qPZN2Zgdr8lhXsD1fCtH7486of
-	 EtJGrTL3onmt/tZ4jW6Uty6talm+6Wj5EcOMT0jbCB+NTWQ2VWQpWr4EtJLJlJuj0p
-	 00YVYBlaol8ec2holPUtIDPLpPCI5kmTuvyLQl4+k6D8p/0y60fLZ5RdH4nNysYsXS
-	 WJdbJToZ/i7KQ==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1r5Qkn-0000u4-1j;
-	Tue, 21 Nov 2023 14:25:26 +0100
-Date: Tue, 21 Nov 2023 14:25:25 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Puliang Lu <puliang.lu@fibocom.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: modify Fibocom to DELL custom modem
- FM101R-GL
-Message-ID: <ZVyvxbrCxSos0B6W@hovoldconsulting.com>
-References: <20231026123506.26453-1-puliang.lu@fibocom.com>
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 2FB181F8B4;
+	Tue, 21 Nov 2023 13:43:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1700574200; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=0pnnsaCagmVeVOPbeelzrThd66fcAXAiseFRzraRvKo=;
+	b=DvLx8PPafiN+eloIRTUS3w/qOkbdxAlxkB9q7a5zpOFo/LxI81NQn8ZxBUYaOQ2G2QnzNH
+	QdEmxmE42YNHfiJQFoZjjsRoaT+jU/jjL7tiwn3hq6MdgijhIavfwYnwFNxnqSANY69t5/
+	/te8lNliKx21Tx/zTGSeTfPuepHLgoI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E2998139FD;
+	Tue, 21 Nov 2023 13:43:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id ljuhNfezXGWlOQAAMHmgww
+	(envelope-from <oneukum@suse.com>); Tue, 21 Nov 2023 13:43:19 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] USB: gl620a: check for rx buffer overflow
+Date: Tue, 21 Nov 2023 14:43:15 +0100
+Message-ID: <20231121134315.18721-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231026123506.26453-1-puliang.lu@fibocom.com>
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp-out2.suse.de;
+	none
+X-Spam-Score: 3.70
+X-Spamd-Result: default: False [3.70 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 R_MISSING_CHARSET(2.50)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 BROKEN_CONTENT_TYPE(1.50)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCPT_COUNT_SEVEN(0.00)[7];
+	 MID_CONTAINS_FROM(1.00)[];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_COUNT_TWO(0.00)[2];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-0.00)[15.17%]
 
-On Thu, Oct 26, 2023 at 08:35:06PM +0800, Puliang Lu wrote:
-> Modify the definition of Fibocom USB serial option driver
-> FM101R-GL different variants
-> 
-> - VID:PID 413C:8213, FM101R-GL ESIM are laptop M.2 cards (with
->   MBIM interfaces for Linux)
-> 
-> - VID:PID 413C:8215, FM101R-GL are laptop M.2 cards (with
->   MBIM interface for Linux)
-> 
-> 0x8213: mbim, tty
-> 0x8215: mbim, tty
-> 
-> Signed-off-by: Puliang Lu <puliang.lu@fibocom.com>
+The driver checks for a single package overflowing
+maximum size. That needs to be done, but it is not
+enough. As a single transmission can contain a high
+number of packets, we also need to check whether
+the aggregate of messages in itself short enough
+overflow the buffer.
+That is easiest done by checking that the current
+packet does not overflow the buffer.
+
+Signed-off-ny: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/net/usb/gl620a.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/net/usb/gl620a.c b/drivers/net/usb/gl620a.c
+index 46af78caf457..d33ae15abdc1 100644
+--- a/drivers/net/usb/gl620a.c
++++ b/drivers/net/usb/gl620a.c
+@@ -104,6 +104,10 @@ static int genelink_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 			return 0;
+ 		}
  
-> -#define DELL_PRODUCT_FM101R			0x8213
-> -#define DELL_PRODUCT_FM101R_ESIM		0x8215
-> +#define DELL_PRODUCT_FM101R_ESIM		0x8213
-> +#define DELL_PRODUCT_FM101R				0x8215
++		/* we also need to check for overflowing the buffer */
++		if (size > skb->len)
++			return 0;
++
+ 		// allocate the skb for the individual packet
+ 		gl_skb = alloc_skb(size, GFP_ATOMIC);
+ 		if (gl_skb) {
+-- 
+2.42.1
 
-You have an extra tab here so that the values are no longer aligned.
-
->  
->  #define KYOCERA_VENDOR_ID			0x0c88
->  #define KYOCERA_PRODUCT_KPC650			0x17da
-
-Now applied with a slightly updated commit message:
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-linus&id=a1092619dd28ac0fcf23016160a2fdccd98ef935
-
-Johan
 
