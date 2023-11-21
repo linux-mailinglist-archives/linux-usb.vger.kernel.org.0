@@ -1,110 +1,99 @@
-Return-Path: <linux-usb+bounces-3138-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3139-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 567A97F377D
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 21:32:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A3707F379B
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 21:38:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10D032825B4
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 20:32:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D865F2826EE
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 20:38:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F295C55764;
-	Tue, 21 Nov 2023 20:32:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCABD2207B;
+	Tue, 21 Nov 2023 20:38:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M+hB1zia"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ep9jzMG0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A87ED60
-	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 12:32:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700598734;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=g1AURt+ugmGBatqXZg8O5FjY9vBm0Sv0TBJTfoMcWtY=;
-	b=M+hB1ziapNXWtsv7OynI3uxa8VAY0YsqsZT2Fd90siMdigOjnmyiClEQh+CtX5WqXfpTD7
-	sxh7UwD1yQc+0llI6eCtcs76Nu6WZrCy1AtAp4G+Vnhv2DWQtjBS0ttTPom5dhsL4drot2
-	pDQ2qyZxz2bChLM1EuP26GABBfEJopU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-140-lmxUKTilNO2zJfpMJYHgLA-1; Tue, 21 Nov 2023 15:32:11 -0500
-X-MC-Unique: lmxUKTilNO2zJfpMJYHgLA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6FCF485A58A;
-	Tue, 21 Nov 2023 20:32:10 +0000 (UTC)
-Received: from x1.nl (unknown [10.39.192.79])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 73E352166B26;
-	Tue, 21 Nov 2023 20:32:07 +0000 (UTC)
-From: Hans de Goede <hdegoede@redhat.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	Wentong Wu <wentong.wu@intel.com>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Oliver Neukum <oneukum@suse.com>,
-	linux-usb@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v3] usb: misc: ljca: Fix enumeration error on Dell Latitude 9420
-Date: Tue, 21 Nov 2023 21:32:05 +0100
-Message-ID: <20231121203205.223047-1-hdegoede@redhat.com>
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C581A1
+	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 12:38:51 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5c9e6c37bc4so42137927b3.2
+        for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 12:38:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1700599130; x=1701203930; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=o5WQccnjZgaS7AdFyMCtckY+Ntl4rQUUFl7+OMDJuQI=;
+        b=ep9jzMG0t2pztHoCG1p/gQT/Ou6OVGTYlhil29P+77lhphqXcj4Z4Ur38hYQxze0ZV
+         t7lulJt7bR5hoZ9h0xlmAXKBIAgHam3HL00dya861MqrK44lrH4TmNJs4ySkaPtgUuBP
+         sEe4lbZdn6o5AWuZCmVnh6npMNx4zEdyrjBKGigCvzWIbnwVm1ibj8APi5IWq37q+5IR
+         9QtIeJbInaZ2Ck6n7wcYXOFQRzd6Yy6CGljqnucI0HH40pwvnDmEMKCapHqr64qEL9M+
+         SWO3U0xSHMmJTcQEP4bBdw3jfXA1KX6tPuRWAuFTWteBJgEQiO955U50zuVNdXrtUGqQ
+         1FNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700599130; x=1701203930;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o5WQccnjZgaS7AdFyMCtckY+Ntl4rQUUFl7+OMDJuQI=;
+        b=wGmHoz3grFShM2RJrBhvCskCQFL2tnIHaFy8QCuPxKa0MXCkhKZ6NfyfVKQV9x99yf
+         HccEQIXDtXN9j6caHv2FtA2E6Flk0Q5Bgf5FpUGTn01yN9sEwixOWu7q+ixqvRmEZQjp
+         htS9P+A3dj/SWBMFx+VNH3ACgXDjXvdm5780RlOPxHlTA5MRAp63Dw65IMobffKZ/n/n
+         tkyNAD0g1lTPFu47AbNDmCJQazVTtPbmEskiauK6Iepug4ozwTlC+9CddVZM0RHgeMGv
+         hHPZx1ZN3jmHpG/voi+9XuPDKI9W4ad/uKl6iSEcUJC/orfQIibwQiPE0anENfqjEbfX
+         fpSw==
+X-Gm-Message-State: AOJu0YygY0kBIe1Ircr8SYAX8qnwhwP9ZiDWOHlNQ47w5ucdjtf8CWBj
+	gCXS/HIT5cQA0oWYpZ5ak+L5slzEsRkBHC0=
+X-Google-Smtp-Source: AGHT+IHCTQTIAMoy10E+nvzy7nHVvGzyzQV56a5uGSOpbDPWo9CwIH27+2EkbE2yhxm9W4XjY44lbDYDgKxz7cE=
+X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
+ (user=rdbabiera job=sendgmr) by 2002:a25:8741:0:b0:d9b:e3f6:c8c6 with SMTP id
+ e1-20020a258741000000b00d9be3f6c8c6mr2166ybn.4.1700599130296; Tue, 21 Nov
+ 2023 12:38:50 -0800 (PST)
+Date: Tue, 21 Nov 2023 20:38:46 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
+Mime-Version: 1.0
+X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=977; i=rdbabiera@google.com;
+ h=from:subject; bh=ZYsgqVxALhhygiFNzzMFz0Ybgo3pXY9d4YO+IaLS/I8=;
+ b=owGbwMvMwCFW0bfok0KS4TbG02pJDKmxoqFP41Kf3b0/dd1cpoSr2iu81Q/d771b+Hb7Q/0yx
+ qklMkybO0pZGMQ4GGTFFFl0/fMMblxJ3TKHs8YYZg4rE8gQBi5OAZjI+YkM/1Sjb1tNkLcWsrda
+ 1nlTTG27RtreHR3bJzmfdw7ivlGsm8jwP2mBh7jW+h/aj2L/6GWIsvudsvx0wMkidRXrjiMbEvV y2AA=
+X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
+Message-ID: <20231121203845.170234-4-rdbabiera@google.com>
+Subject: [PATCH v1 0/2] usb: typec: handle tcpc vconn oc fault by triggering
+ tcpm error recovery
+From: RD Babiera <rdbabiera@google.com>
+To: linux@roeck-us.net, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, badhri@google.com, 
+	RD Babiera <rdbabiera@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Not all LJCA chips implement SPI and on chips without SPI reading
-the SPI descriptors will timeout.
+When a Vconn swap results in a Vconn over current fault, typec port
+interoperability is affected and cannot be recovered unless the connection
+is reset and restablished.
 
-On laptop models like the Dell Latitude 9420, this is expected behavior
-and not an error.
+The tcpm currently does not have an export symbol to set the port to the
+error recovery state in the event of tcpc faults. This patch set adds
+tcpm_port_error_recovery for tcpci drivers to use when a fault should
+result in a connection reset. Vconn over current fault handling is added
+to the maxim tcpci driver.
 
-Modify the driver to continue without instantiating a SPI auxbus child,
-instead of failing to probe() the whole LJCA chip.
+RD Babiera (2):
+  usb: typec: tcpm: add tcpm_port_error_recovery symbol
+  usb: typec: tcpci: add vconn over current fault handling to maxim_core
 
-Fixes: acd6199f195d ("usb: Add support for Intel LJCA device")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Wentong Wu <wentong.wu@intel.com>
-Link: https://lore.kernel.org/r/20231104175104.38786-1-hdegoede@redhat.com
----
-Changes in v3:
-- Fix commit-id in fixes tag
+ drivers/usb/typec/tcpm/tcpci_maxim_core.c | 20 +++++++++++++++++++-
+ drivers/usb/typec/tcpm/tcpm.c             | 14 ++++++++++++++
+ include/linux/usb/tcpci.h                 |  5 ++++-
+ include/linux/usb/tcpm.h                  |  1 +
+ 4 files changed, 38 insertions(+), 2 deletions(-)
 
-Changes in v2:
-- Small commit msg + comment fixes
-- Add Fixes tag + Cc: stable
----
- drivers/usb/misc/usb-ljca.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
-index c9decd0396d4..a280d3a54b18 100644
---- a/drivers/usb/misc/usb-ljca.c
-+++ b/drivers/usb/misc/usb-ljca.c
-@@ -656,10 +656,11 @@ static int ljca_enumerate_spi(struct ljca_adapter *adap)
- 	unsigned int i;
- 	int ret;
- 
-+	/* Not all LJCA chips implement SPI, a timeout reading the descriptors is normal */
- 	ret = ljca_send(adap, LJCA_CLIENT_MNG, LJCA_MNG_ENUM_SPI, NULL, 0, buf,
- 			sizeof(buf), true, LJCA_ENUM_CLIENT_TIMEOUT_MS);
- 	if (ret < 0)
--		return ret;
-+		return (ret == -ETIMEDOUT) ? 0 : ret;
- 
- 	/* check firmware response */
- 	desc = (struct ljca_spi_descriptor *)buf;
 -- 
-2.41.0
+2.43.0.rc1.413.gea7ed67945-goog
 
 
