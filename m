@@ -1,150 +1,105 @@
-Return-Path: <linux-usb+bounces-3142-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3143-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A19D17F37A5
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 21:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B58E87F37BD
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 21:51:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C4542826FE
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 20:40:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C11628286B
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 20:51:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7010738DC2;
-	Tue, 21 Nov 2023 20:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B04E35101A;
+	Tue, 21 Nov 2023 20:51:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aOCGaQgV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZB/RDzim"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14A5D47
-	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 12:39:58 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5cbab2450c5so16649517b3.3
-        for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 12:39:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700599198; x=1701203998; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gX/jHSjVMvQMuoAzLeVpINA8vcf/XXhZAAMF7Dr1Htw=;
-        b=aOCGaQgVUQo1071NiL6+IclGxNl0CzP6bVNYSy4hLK8RetBCFFhT472KqD5kyB05VX
-         teqbiboqAbslRIkKRe+R67k/7raJQBzgGb+tZYP0W2v8xTpsTpHNhtBDTtcovBhdsac/
-         +tc2iJ1hGq6k+7iVNorThplXqANAJfJmI7a7PpUMHdeLQtqI9sm6cOhAYk9tu6JvklMT
-         LH2n/Hc5yfyHQakYqNgMKHkxDR/z7B1Z7IBgUAsHftg8G9Pft3ESmAb4M1rjUbMgoKuS
-         ZZYYdOKZzvx8OVAkVnnde8A/7YnKt4AuhgUKHeTU3bpTqyhyjdN08S5QsNkQqEMV2IkL
-         6MQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700599198; x=1701203998;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gX/jHSjVMvQMuoAzLeVpINA8vcf/XXhZAAMF7Dr1Htw=;
-        b=AXNAlQnRRrI5TLCoHKY9LrK1HjAO4mTQsZiTTZCkuQPRXR2EaJBoNOFSUh8DQwufh7
-         orevqhFLb/NXXhJftLotBkp8Qld+AGIE6jffdO89qHi4y59RoFk+BZJInprxaXEtLO0n
-         Cx999fzB04VwChBrwiDaigT1phnOteceCIjzgQqkPBYabRo7eFxOqOgN011TFQ8RtJC3
-         QGpd8Wj/6Ljh5BohighiYMtjbFfRfPWQIca184qwcmZfEtn842IHdXLfe7a/996HJQOW
-         KMQ+U487jNkHL7ghC/7ixKnsjDtoZcfiv1yppdX7ivPsF0qNSx3z8FkzhDT3rJSSb9wS
-         kocA==
-X-Gm-Message-State: AOJu0YxCd7nCsMciAff1xaMgXs7PLiEA+/Zglv8BPGv7boBz/JkiQUk9
-	SFbkwXsZUAmUTbF8bK9LvHq6zyyAJHmQt2Y=
-X-Google-Smtp-Source: AGHT+IELPIuKhD/YAdrhnQZvEYt7QZu6NUG23WB70IGl5qV4jBVbzdeQNxFjRT6VdyJMnCt2MVuVZg50EBBOzjE=
-X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
- (user=rdbabiera job=sendgmr) by 2002:a81:4f84:0:b0:5ca:4a99:7008 with SMTP id
- d126-20020a814f84000000b005ca4a997008mr2821ywb.10.1700599198097; Tue, 21 Nov
- 2023 12:39:58 -0800 (PST)
-Date: Tue, 21 Nov 2023 20:39:55 +0000
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B7338DC6
+	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 20:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 93FF4C433CB
+	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 20:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700599901;
+	bh=fS8Lgca3rk1wObymmCCXmK+O9lQlVIWukZzU++uHKgg=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ZB/RDzimI7tNyVRHaHu+s4Z8y6VuL/YNvld+eIcX1GJJX6lEfftCYmPYbXuhtSjIS
+	 mGFMUT88jlNBTG/wR33hL0jYLj/w/0wIbTcaDAn3ljuo7M8PGaa1wUJNZPN1qusKE8
+	 +b4gr+NU25vokqugkFzYlQDa2an1Pas1hDxONybFlzZk9nqTegpR/hovXgVHimf8kW
+	 8N7NytXarMthjl10PQvNofvw5mKe3YARGPvk6sCVaL2Mz6xH2dHwBM1EsM8DKdReNd
+	 ZQXV/+GgoJxRDhjiWm8xS8PkaEpVdRi+8xl0jBNd5GqIBcN6A/hIoQ3JsUMXKkE9db
+	 u3UzNdMw76i+w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 7EA94C53BD5; Tue, 21 Nov 2023 20:51:41 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 215740] kernel warning: DMA-API: xhci_hcd: cacheline tracking
+ EEXIST, overlapping mappings aren't supported
+Date: Tue, 21 Nov 2023 20:51:41 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-215740-208809-73z3fnqdMO@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215740-208809@https.bugzilla.kernel.org/>
+References: <bug-215740-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2637; i=rdbabiera@google.com;
- h=from:subject; bh=g3cATdDr31eccLe03DHQgAdZzg53ANBo3tzI1LoDz8E=;
- b=owGbwMvMwCFW0bfok0KS4TbG02pJDKmxorMqPUL6W6ov9tm+8mlYddhft0n+7cGy60HTA+QE7
- 85IsPjYUcrCIMbBICumyKLrn2dw40rqljmcNcYwc1iZQIYwcHEKwETihRkZei2t3rbxzJb1zuep
- fqkQnLblpNvN43v2m3JyJufs+BmwnJHh796Q47Xak7i22gczPVD9yffhSs+uPzFrvBLtF3Lyzc1 iBQA=
-X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
-Message-ID: <20231121203954.173364-2-rdbabiera@google.com>
-Subject: [PATCH v1] usb: typec: class: fix typec_altmode_put_partner to put plugs
-From: RD Babiera <rdbabiera@google.com>
-To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, badhri@google.com, 
-	RD Babiera <rdbabiera@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
 
-When releasing an Alt Mode, typec_altmode_release called by a plug device
-will not release the plug Alt Mode, meaning that a port will hold a
-reference to a plug Alt Mode even if the port partner is unregistered.
-As a result, typec_altmode_get_plug() can return an old plug altmode.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
 
-Currently, typec_altmode_put_partner does not raise issues
-when unregistering a partner altmode. Looking at the current
-implementation:
+--- Comment #19 from Alan Stern (stern@rowland.harvard.edu) ---
+Created attachment 305456
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305456&action=3Dedit
+Diagnostic to find DMA overlap
 
-> static void typec_altmode_put_partner(struct altmode *altmode)
-> {
->	struct altmode *partner = altmode->partner;
+The patches are prepared against a 6.6-rc3 tree (it hasn't been updated sin=
+ce
+then), so they might not match 6.6 exactly.
 
-When called by the partner Alt Mode, then partner evaluates to the port's
-Alt Mode. When called by the plug Alt Mode, this also evaluates to the
-port's Alt Mode.
+At least we're getting some good data from the patch:
 
->	struct typec_altmode *adev;
->
->	if (!partner)
->		return;
->
->	adev = &partner->adev;
+> DMA-API: dwc3 dwc3.0.auto: cacheline tracking EEXIST, overlapping mappings
+> aren't supported, len 4
+...
+> Map error: 128857248 128857248 len 4
 
-This always evaluates to the port's typec_altmode
+The fact that the addresses and lengths agree indicate that the patch works
+right, and len =3D 4 means that the mapping error is indeed for the buffer
+containing the hub status data.
 
->	if (is_typec_plug(adev->dev.parent)) {
->		struct typec_plug *plug = to_typec_plug(adev->dev.parent);
->
->		partner->plug[plug->index] = NULL;
+By the way, do you have any USB hubs besides this one on your system?
 
-If the routine is called to put the plug's Alt mode and altmode refers to
-the plug, then adev referring to the port can never be a typec_plug. If
-altmode refers to the port, adev will always refer to the port partner,
-which runs the block below.
+The next question is what other mapping already exists for that buffer?  Th=
+is
+next patch may be able to tell us.  It's supposed to produce a second stack
+dump when the overlap occurs, for the call that created the first mapping.
 
->	} else {
->		partner->partner = NULL;
->	}
->	put_device(&adev->dev);
-> }
+--=20
+You may reply to this email to add a comment.
 
-When calling typec_altmode_set_partner, a registration always calls
-get_device() on the port partner or the plug being registered, therefore
-typec_altmode_put_partner should put_device() the same device. By changing
-adev to altmode->adev, we make sure to put the correct device and properly
-unregister plugs. The reason port partners are always properly
-unregistered is because even when adev refers to the port, the port
-partner gets nullified in the else block. The port device currently gets
-put().
-
-Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
-Cc: stable@vger.kernel.org
-Signed-off-by: RD Babiera <rdbabiera@google.com>
----
- drivers/usb/typec/class.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 2e0451bd336e..803be1943445 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -267,7 +267,7 @@ static void typec_altmode_put_partner(struct altmode *altmode)
- 	if (!partner)
- 		return;
- 
--	adev = &partner->adev;
-+	adev = &altmode->adev;
- 
- 	if (is_typec_plug(adev->dev.parent)) {
- 		struct typec_plug *plug = to_typec_plug(adev->dev.parent);
-
-base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
--- 
-2.43.0.rc1.413.gea7ed67945-goog
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
