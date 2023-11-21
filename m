@@ -1,177 +1,161 @@
-Return-Path: <linux-usb+bounces-3062-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3063-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 151147F249A
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 04:26:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A85907F24C3
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 05:07:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 754FEB2169B
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 03:26:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3016CB21B00
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 04:07:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286571641F;
-	Tue, 21 Nov 2023 03:26:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 351B31802D;
+	Tue, 21 Nov 2023 04:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IY8XEzmS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l2/3XXJ6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F52DC
-	for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 19:26:21 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1ce5b72e743so67685ad.1
-        for <linux-usb@vger.kernel.org>; Mon, 20 Nov 2023 19:26:21 -0800 (PST)
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8640EA2;
+	Mon, 20 Nov 2023 20:06:55 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id 006d021491bc7-58ceab7daddso60477eaf.3;
+        Mon, 20 Nov 2023 20:06:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1700537181; x=1701141981; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SDqHkFfcJHn3oaEi3V9nfZPghbl+qBf+g18uag6L/K0=;
-        b=IY8XEzmS+9ksm3kcpzS2mQag9ICVOBAhw1MnBV67Ca+WQFr/TezG5W+vXfhffPmTGA
-         rbei5iikZyqR+V2ethD9iYOztXcbvhYIHkWjhg61mn1CgFhNr79RAN/HuXlAkBnrDM6z
-         4M1JrsvFaXV+AmyrvXHaBXN1MGnS8ppajIRhM=
+        d=gmail.com; s=20230601; t=1700539615; x=1701144415; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uED9ZdQGQxPCqmEiK0LJztM4vTL2jEnpVnm0DVEe5EM=;
+        b=l2/3XXJ6VOobGKLNZyAqFc3XQsgLYSvfTZFx43HWGXd0qtJjaXFAWyCNTdINb5/z/Z
+         GVgzhBfju1KDyQ1bnbSqLy2BX1lZzXPFxHLkToQFXhYqvZIOHglWYugV9SNml+8o9Ln7
+         DoMVsVZZvfwX0sJpE8225IFZYwQ3SnXB/qh7i2AHWiJSjuao6BjcNNuvbm7Z2l3HEvcw
+         cGQAlhltcY85XjE813lGZY7emnALapCsyPxUv4+ZDRC9n/cNXdj5tCHFG8pc52QaH0oI
+         0oBwdtKaRwI9TUS6DY7U7OJOwcdCSBMfKp3EMeDwQJFsM4nqiOoJ1kCT/UXo+Uegz809
+         WaOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700537181; x=1701141981;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SDqHkFfcJHn3oaEi3V9nfZPghbl+qBf+g18uag6L/K0=;
-        b=nHw9+N5lsHTdG/sSeTNND+OC/nz8bFONC5PQR74e5jeLG/tsbZozblyDVAF9Yt7rYL
-         qw6qhlff7uHIzYS7ZHQOnvT8pkfBCAS7w99Zy1UaH6Us7CIVOCXyKsWuEGqe3ngkarK0
-         U8BtNo0+QsJO5ZABK400V49mTVuJ7XUmC/BcnUINkRwc8dVXaHRU/N10x744AwymaS2S
-         qufBfQluyul6y9Uw9aU52rKvVtOpyqOF4BuuX1o/xPKc7JHh1H6nT357QY7VZGYyHSip
-         A0Ut9j8RWrmfmjPi3af4sAC4zuR8dzQngAj65Kw/uKJIv7u+z9FbJBL4BVsqoK4dYqcB
-         rMkw==
-X-Gm-Message-State: AOJu0YxNAAXiinO7k81wO94lA55G2+dyaiem84BcG2G+6hUadajLTXPg
-	a1+xSoRN+WayNNuxrGcD9pEwoheuWobu3mFkgaTFoQ==
-X-Google-Smtp-Source: AGHT+IFMmnulfcKAR9a+hLgTra7C1d3J7eiroPT/NIW1TBY9eFiMyBHCjiwLmAWOaX8RInlhfGzBwzczb+7897HnLh0=
-X-Received: by 2002:a17:902:ceca:b0:1cf:669b:6176 with SMTP id
- d10-20020a170902ceca00b001cf669b6176mr287186plg.16.1700537180719; Mon, 20 Nov
- 2023 19:26:20 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700539615; x=1701144415;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uED9ZdQGQxPCqmEiK0LJztM4vTL2jEnpVnm0DVEe5EM=;
+        b=b6PUwn1obWB4GGu9KZ2rC2w9g4fhigqvlfUW/wAxwyt8dORdbS4UQtc6+/ItmWRbve
+         UnjG8ye8jXlBEDYZSSLjYrhxstQJNTg3SbmOEcpYj2UUaX1jbkrZYLfu1FVpcYCw3rTe
+         oojF+jP9LvOk2bK0S14xWLstafqtH1oYQwWl5ABk/aqGF+8mfhIzsKyBtslRH0i50doQ
+         /TK/FL81oGvEKJszNZ0DsJDlv0BJfJ+971EzzKldFPRriomY5gGxy4DnT1tlzMVZHwqx
+         qYfTzsIE3G4Vap13BLHf5+8Dsr38dVneInfrA11Gpqthb8lDgLVmNuimGxT4ypsuW8aU
+         Mz4Q==
+X-Gm-Message-State: AOJu0YzRWO937j1JiRDWy5B6sFVSNAGzr8Yuav/eu4buhxAV6EGvrufr
+	SBFuRIYIpc5h47dqdSsacQoZ83XcDsg7IcmKjwfOIOTzFtk=
+X-Google-Smtp-Source: AGHT+IGEd1ffV8b215+cvSBI4uGIXsdv+yw5uXnbrjp5GMhPt/B05vpdrYE051i9meuJRhoqbKeBVz4MuD9yHsOXuDk=
+X-Received: by 2002:a05:6820:1c85:b0:57b:86f5:701c with SMTP id
+ ct5-20020a0568201c8500b0057b86f5701cmr8776555oob.4.1700539614644; Mon, 20 Nov
+ 2023 20:06:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231117130836.1.I77097aa9ec01aeca1b3c75fde4ba5007a17fdf76@changeid>
- <20231117130836.2.I79c8a6c8cafd89979af5407d77a6eda589833dca@changeid>
-In-Reply-To: <20231117130836.2.I79c8a6c8cafd89979af5407d77a6eda589833dca@changeid>
-From: Grant Grundler <grundler@chromium.org>
-Date: Mon, 20 Nov 2023 19:26:09 -0800
-Message-ID: <CANEJEGsDwvUQZsowJwVkE9qHSoYt3x26bN4yo0y7C-zheY3zsw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] r8152: Add RTL8152_INACCESSIBLE checks to more loops
-To: Douglas Anderson <dianders@chromium.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, Hayes Wang <hayeswang@realtek.com>, 
-	"David S . Miller" <davem@davemloft.net>, Grant Grundler <grundler@chromium.org>, 
-	Simon Horman <horms@kernel.org>, Edward Hill <ecgh@chromium.org>, linux-usb@vger.kernel.org, 
-	Laura Nao <laura.nao@collabora.com>, Alan Stern <stern@rowland.harvard.edu>, 
-	=?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org
+References: <20231119023454.1591-1-linux.amoon@gmail.com> <20231119023454.1591-2-linux.amoon@gmail.com>
+ <20231119-phrasing-reverse-bbc1fde515d5@spud> <CANAwSgQ6H9FUEBKz7sCf4kUZSMnCfyXG-cpGTMZoT15W9187Kg@mail.gmail.com>
+ <20231120-grinch-upbeat-05f7a32a99fa@spud>
+In-Reply-To: <20231120-grinch-upbeat-05f7a32a99fa@spud>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Tue, 21 Nov 2023 09:36:37 +0530
+Message-ID: <CANAwSgQGhDMeHLFpe8gnM2c26CjqX8QHOL1GdHrZJSvnBj39bA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: Add the binding example for the
+ Genesys Logic GL3523 hub
+To: Conor Dooley <conor@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Icenowy Zheng <uwu@icenowy.me>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 17, 2023 at 1:10=E2=80=AFPM Douglas Anderson <dianders@chromium=
-.org> wrote:
->
-> Previous commits added checks for RTL8152_INACCESSIBLE in the loops in
-> the driver. There are still a few more that keep tripping the driver
-> up in error cases and make things take longer than they should. Add
-> those in.
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Hi Conor,
 
-Reviewed-by: Grant Grundler <grundler@chromium.org>
+On Mon, 20 Nov 2023 at 21:15, Conor Dooley <conor@kernel.org> wrote:
+>
+> On Sun, Nov 19, 2023 at 08:57:28PM +0530, Anand Moon wrote:
+> > Hi Conor,
+> >
+> > On Sun, 19 Nov 2023 at 19:28, Conor Dooley <conor@kernel.org> wrote:
+> > >
+> > > On Sun, Nov 19, 2023 at 08:04:50AM +0530, Anand Moon wrote:
+> > > > Add the binding example for the USB3.1 Genesys Logic GL3523
+> > > > integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
+> > > > hub.
+> > >
+> > > But no comment in the commit message about the new property for the
+> > > "peer hub". $subject saying "dt-bindings: usb: Add the binding example
+> > > for the Genesys Logic GL3523 hub" is misleading when the meaningful
+> > > parts of the patch are unrelated to the example.
+> > >
+> > > >
+> > > > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > > > ---
+> > > > V3: fix the dt_binding_check error, added new example for Genesys GL3523
+> > > > v2: added Genesys GL3523 binding
+> > > > v1: none
+> > > > ---
+> > > >  .../bindings/usb/genesys,gl850g.yaml          | 63 +++++++++++++++++--
+> > > >  1 file changed, 59 insertions(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > > > index ee08b9c3721f..f8e88477fa11 100644
+> > > > --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > > > +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > > > @@ -9,9 +9,6 @@ title: Genesys Logic USB hub controller
+> > > >  maintainers:
+> > > >    - Icenowy Zheng <uwu@icenowy.me>
+> > > >
+> > > > -allOf:
+> > > > -  - $ref: usb-device.yaml#
+> > > > -
+> > > >  properties:
+> > > >    compatible:
+> > > >      enum:
+> > > > @@ -27,12 +24,44 @@ properties:
+> > > >
+> > > >    vdd-supply:
+> > > >      description:
+> > > > -      the regulator that provides 3.3V core power to the hub.
+> > > > +      phandle to the regulator that provides power to the hub.
+> > > > +
+> > > > +  peer-hub:
+> > > > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > > > +    description:
+> > > > +      phandle to the peer hub on the controller.
+> > >
+> > > What is this, why is it needed? Please explain it in your commit
+> > > message.
+> > >
+> > Ok, GL3523 integrates Genesys Logic self-developed USB 3.1 Gen 1
+> > Super Speed transmitter/receiver physical layer (PHY) and USB 2.0
+> > High-Speed PHY
+> >
+> > peer-hub is used to cross-connect those phy nodes so that it can help
+> > hub power on/off simultaneously.
+>
+> I said please explain it in your commit message, but on reflection I
+> think that would be insufficient. Extending the description to explain
+> what the peer-hub is would be great too. "peer hub on the controller"
+> doesn't seem to make sense to me either, as the peer hub phandle is to
+> another phy, not to the controller. I think that would probably also be
+> resolved by explaining what the peer hub is in a more detailed manner.
+>
+> If this is purely a genesys thing, the property should grow a genesys,
+> prefix also.
+>
+No, some USB Hub have combined phy for USB 3.x and USB 2.0 and have common
+reset-gpios and power supply, peer-hub node helps connect the USB controller and
+bring up the USB hub.
 
-I've checked all the return paths and believe these changes don't
-break any of them.
+I was waiting for more feedback on these changes.
+Once it's ok I will update with proper the commit message in v4.
 
-cheers,
-grant
+Thanks
+-Anand
 
-> ---
->
->  drivers/net/usb/r8152.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index d6edf0254599..aca7dd7b4090 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -3000,6 +3000,8 @@ static void rtl8152_nic_reset(struct r8152 *tp)
->                 ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CR, CR_RST);
->
->                 for (i =3D 0; i < 1000; i++) {
-> +                       if (test_bit(RTL8152_INACCESSIBLE, &tp->flags))
-> +                               return;
->                         if (!(ocp_read_byte(tp, MCU_TYPE_PLA, PLA_CR) & C=
-R_RST))
->                                 break;
->                         usleep_range(100, 400);
-> @@ -3329,6 +3331,8 @@ static void rtl_disable(struct r8152 *tp)
->         rxdy_gated_en(tp, true);
->
->         for (i =3D 0; i < 1000; i++) {
-> +               if (test_bit(RTL8152_INACCESSIBLE, &tp->flags))
-> +                       return;
->                 ocp_data =3D ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL=
-);
->                 if ((ocp_data & FIFO_EMPTY) =3D=3D FIFO_EMPTY)
->                         break;
-> @@ -3336,6 +3340,8 @@ static void rtl_disable(struct r8152 *tp)
->         }
->
->         for (i =3D 0; i < 1000; i++) {
-> +               if (test_bit(RTL8152_INACCESSIBLE, &tp->flags))
-> +                       return;
->                 if (ocp_read_word(tp, MCU_TYPE_PLA, PLA_TCR0) & TCR0_TX_E=
-MPTY)
->                         break;
->                 usleep_range(1000, 2000);
-> @@ -5499,6 +5505,8 @@ static void wait_oob_link_list_ready(struct r8152 *=
-tp)
->         int i;
->
->         for (i =3D 0; i < 1000; i++) {
-> +               if (test_bit(RTL8152_INACCESSIBLE, &tp->flags))
-> +                       return;
->                 ocp_data =3D ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL=
-);
->                 if (ocp_data & LINK_LIST_READY)
->                         break;
-> @@ -5513,6 +5521,8 @@ static void r8156b_wait_loading_flash(struct r8152 =
-*tp)
->                 int i;
->
->                 for (i =3D 0; i < 100; i++) {
-> +                       if (test_bit(RTL8152_INACCESSIBLE, &tp->flags))
-> +                               return;
->                         if (ocp_read_word(tp, MCU_TYPE_USB, USB_GPHY_CTRL=
-) & GPHY_PATCH_DONE)
->                                 break;
->                         usleep_range(1000, 2000);
-> @@ -5635,6 +5645,8 @@ static int r8153_pre_firmware_1(struct r8152 *tp)
->         for (i =3D 0; i < 104; i++) {
->                 u32 ocp_data =3D ocp_read_byte(tp, MCU_TYPE_USB, USB_WDT1=
-_CTRL);
->
-> +               if (test_bit(RTL8152_INACCESSIBLE, &tp->flags))
-> +                       return -ENODEV;
->                 if (!(ocp_data & WTD1_EN))
->                         break;
->                 usleep_range(1000, 2000);
-> @@ -5791,6 +5803,8 @@ static void r8153_aldps_en(struct r8152 *tp, bool e=
-nable)
->                 data &=3D ~EN_ALDPS;
->                 ocp_reg_write(tp, OCP_POWER_CFG, data);
->                 for (i =3D 0; i < 20; i++) {
-> +                       if (test_bit(RTL8152_INACCESSIBLE, &tp->flags))
-> +                               return;
->                         usleep_range(1000, 2000);
->                         if (ocp_read_word(tp, MCU_TYPE_PLA, 0xe000) & 0x0=
-100)
->                                 break;
-> --
-> 2.43.0.rc0.421.g78406f8d94-goog
->
+> Cheers,
+> Conor.
 
