@@ -1,119 +1,106 @@
-Return-Path: <linux-usb+bounces-3094-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3095-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A73C67F2E9B
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:43:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E56D17F2F37
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:50:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 487EEB21867
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 13:43:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0193280EB0
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 13:50:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55C851C47;
-	Tue, 21 Nov 2023 13:43:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16AD7537FD;
+	Tue, 21 Nov 2023 13:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="DvLx8PPa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Clrx6vhz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0FD194;
-	Tue, 21 Nov 2023 05:43:21 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 2FB181F8B4;
-	Tue, 21 Nov 2023 13:43:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1700574200; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=0pnnsaCagmVeVOPbeelzrThd66fcAXAiseFRzraRvKo=;
-	b=DvLx8PPafiN+eloIRTUS3w/qOkbdxAlxkB9q7a5zpOFo/LxI81NQn8ZxBUYaOQ2G2QnzNH
-	QdEmxmE42YNHfiJQFoZjjsRoaT+jU/jjL7tiwn3hq6MdgijhIavfwYnwFNxnqSANY69t5/
-	/te8lNliKx21Tx/zTGSeTfPuepHLgoI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E2998139FD;
-	Tue, 21 Nov 2023 13:43:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id ljuhNfezXGWlOQAAMHmgww
-	(envelope-from <oneukum@suse.com>); Tue, 21 Nov 2023 13:43:19 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] USB: gl620a: check for rx buffer overflow
-Date: Tue, 21 Nov 2023 14:43:15 +0100
-Message-ID: <20231121134315.18721-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.42.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F19524CD;
+	Tue, 21 Nov 2023 13:49:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE9A7C433C9;
+	Tue, 21 Nov 2023 13:49:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700574596;
+	bh=vF4LkQLYcuqRQJyYUrQVjvPfs/5O3qig6tC9j8drZog=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Clrx6vhzFPyv2yohZc47Qd06hxwulyJMXR0zF8G9mAcsExaH8j4bz0DLhcFG1fY46
+	 h7G5U5C5rx1d3pE3of9XMYTBQAyoIBodIfiakp1AYhJGa+DSnJC+86JgjLmP0qmT8v
+	 2QLaWXUwtfguQs4vf/7TMEt+cZBL+A7BEE5ROpl5seJ/9/x7xn0E8w0elP4pStnTar
+	 G4iDjBKIl0lBh3K15cykqYtWH+xjDv01/F+GxJN4Hl2HuaIEtsn4zBs02BMikWMMkf
+	 MsMUYD1FEeYJXX0/2lPrQ39Um2EYCL+YBp3pIYrw81TomowSnX1QJYszstRjcKySai
+	 6IguUM2/CCpDw==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1r5R8i-0004sr-2u;
+	Tue, 21 Nov 2023 14:50:08 +0100
+Date: Tue, 21 Nov 2023 14:50:08 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc: Andrew Halaney <ahalaney@redhat.com>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 2/3] USB: dwc3: qcom: fix wakeup after probe deferral
+Message-ID: <ZVy1kAslWYOQ6n9q@hovoldconsulting.com>
+References: <20231120161607.7405-1-johan+linaro@kernel.org>
+ <20231120161607.7405-3-johan+linaro@kernel.org>
+ <pgmtla6j3dshuq5zdxstszbkkssxcthtzelv2etcbrlstdw4nu@wixz6v5dfpum>
+ <3ff65t36p6n3k7faw2z75t2vfi6rb5p64x7wqosetsksbhhwli@5xaxnm7zz4tu>
+ <ZVx1wRefjNaN0byk@hovoldconsulting.com>
+ <0b627853-78fb-4320-84e4-f88695ac6a9e@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spam-Score: 3.70
-X-Spamd-Result: default: False [3.70 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 R_MISSING_CHARSET(2.50)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 RCPT_COUNT_SEVEN(0.00)[7];
-	 MID_CONTAINS_FROM(1.00)[];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_COUNT_TWO(0.00)[2];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-0.00)[15.17%]
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b627853-78fb-4320-84e4-f88695ac6a9e@quicinc.com>
 
-The driver checks for a single package overflowing
-maximum size. That needs to be done, but it is not
-enough. As a single transmission can contain a high
-number of packets, we also need to check whether
-the aggregate of messages in itself short enough
-overflow the buffer.
-That is easiest done by checking that the current
-packet does not overflow the buffer.
+On Tue, Nov 21, 2023 at 06:25:37PM +0530, Krishna Kurapati PSSNV wrote:
 
-Signed-off-ny: Oliver Neukum <oneukum@suse.com>
----
- drivers/net/usb/gl620a.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> > Specifically, I consider the current implementation to be broken in that
+> > it generates wakeup events on disconnect which is generally not want you
+> > want. Consider closing the lid of your laptop and disconnecting a USB
+> > mouse before putting it in your backpack. Now it's no longer suspended
+> > as you would expect it to be.
 
-diff --git a/drivers/net/usb/gl620a.c b/drivers/net/usb/gl620a.c
-index 46af78caf457..d33ae15abdc1 100644
---- a/drivers/net/usb/gl620a.c
-+++ b/drivers/net/usb/gl620a.c
-@@ -104,6 +104,10 @@ static int genelink_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- 			return 0;
- 		}
- 
-+		/* we also need to check for overflowing the buffer */
-+		if (size > skb->len)
-+			return 0;
-+
- 		// allocate the skb for the individual packet
- 		gl_skb = alloc_skb(size, GFP_ATOMIC);
- 		if (gl_skb) {
--- 
-2.42.1
+>   Just one query. Even if it wakes up after closing the lid and removing 
+> the mouse, wouldn't pm suspend be triggered again later by the system 
+> once it sees that usb is also good to be suspended again ? I presume a 
+> laptop form factor would be having this facility of re-trigerring 
+> suspend. Let me know if this is not the case.
 
+No, we generally don't use opportunistic suspend (e.g. unlike android)
+so the laptop will not suspend again.
+
+So this is an actual bug affecting, for example, the Lenovo ThinkPad
+X13s.
+
+> Also, the warning you are mentioning in [1] comes because this is a 
+> laptop form factor and we have some firmware running (I don't know much 
+> about ACPI and stuff) ?
+
+No, the "firmware" in this case is just the devicetree which has the
+DP/DM interrupts defined as edge-triggered while the driver requests
+them as level triggered.
+
+(It would look similar with ACPI firmware which also has these declared
+as edge triggered.)
+
+Johan
 
