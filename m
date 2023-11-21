@@ -1,97 +1,117 @@
-Return-Path: <linux-usb+bounces-3104-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3105-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B899D7F3105
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 15:35:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 859977F3158
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 15:43:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E92D01C21CD9
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:35:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 147DEB21F63
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:43:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4BE354F91;
-	Tue, 21 Nov 2023 14:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2042255C3C;
+	Tue, 21 Nov 2023 14:43:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GXydgTaE"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="NtFiZII5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8B59E;
+	Tue, 21 Nov 2023 06:43:33 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4333C3B;
-	Tue, 21 Nov 2023 14:35:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9156CC433C7;
-	Tue, 21 Nov 2023 14:35:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700577323;
-	bh=lzjdq+xR1tjd5//XRTySWMSukAT4qx2YCGmo6ZbzhGQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GXydgTaEmXbfaj7JDcggt+Bmu+BXvOM6FORELUn5GgCT9o2pfn+AgeulbjOZoVnC+
-	 7hZGdDBsd8q5EUCHWfWm7ZB8NSSRRr1qDELwQCSkXRDQvVP6Efa3cjQCFm92hYXJEL
-	 zPqzyaIU+kCTMnauyAQ0P2qfld2mFrXTi7z32RJQGyC9zxQHx60mKxQN2rDM0FoCCH
-	 tZZJDLv/+fSH71lA58r14TXL5FG1I7N+5kjD6KRub3cEUsl2fmPmaC6NI9fdtW1Vmd
-	 gdsaoIqqARCGnpLNH+7rjCdmx9JO6gLvZulebdC1IG5HvnYDUxH2NvP7Krg6g+kwPS
-	 6XRUtHBa09OTQ==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1r5Rqh-0005lu-0x;
-	Tue, 21 Nov 2023 15:35:35 +0100
-Date: Tue, 21 Nov 2023 15:35:35 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc: Andrew Halaney <ahalaney@redhat.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 2/3] USB: dwc3: qcom: fix wakeup after probe deferral
-Message-ID: <ZVzANwndkuzhBOiO@hovoldconsulting.com>
-References: <20231120161607.7405-1-johan+linaro@kernel.org>
- <20231120161607.7405-3-johan+linaro@kernel.org>
- <pgmtla6j3dshuq5zdxstszbkkssxcthtzelv2etcbrlstdw4nu@wixz6v5dfpum>
- <3ff65t36p6n3k7faw2z75t2vfi6rb5p64x7wqosetsksbhhwli@5xaxnm7zz4tu>
- <ZVx1wRefjNaN0byk@hovoldconsulting.com>
- <0b627853-78fb-4320-84e4-f88695ac6a9e@quicinc.com>
- <ZVy1kAslWYOQ6n9q@hovoldconsulting.com>
- <ac838113-501a-4f2b-b858-c59f586a9f35@quicinc.com>
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 983381F8BE;
+	Tue, 21 Nov 2023 14:43:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1700577812; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=r1KLwe8MGM96o13Ok+O9c+C4gQMeo0VhFaSjyUzeaBg=;
+	b=NtFiZII5Zf55NJyMe21wYPn7sG5uX6xJHM0DLzG3RZcHHCqBKk0wCTerkYzp0JdNipNyue
+	2yumb1+E1laJMU7rOo7jRR3x4NPnfRGOsZh0BPdeVAk+PPcWreTJhB3Q9/6kgwqLYMtNQa
+	sdq8uOTuU9+CVWWyI46yakW5515Alf0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 68F69138E3;
+	Tue, 21 Nov 2023 14:43:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id MmLuFxTCXGUbXAAAMHmgww
+	(envelope-from <oneukum@suse.com>); Tue, 21 Nov 2023 14:43:32 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: forst@pen.gy,
+	diego@giagio.com,
+	netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [RFC] USB: ipeth: race between ipeth_close and error handling
+Date: Tue, 21 Nov 2023 15:43:11 +0100
+Message-ID: <20231121144330.3990-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ac838113-501a-4f2b-b858-c59f586a9f35@quicinc.com>
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp-out2.suse.de;
+	none
+X-Spam-Score: 3.69
+X-Spamd-Result: default: False [3.69 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 R_MISSING_CHARSET(2.50)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 BROKEN_CONTENT_TYPE(1.50)[];
+	 CLAM_VIRUS_FAIL(0.00)[failed to scan and retransmits exceed];
+	 RCPT_COUNT_FIVE(0.00)[5];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 MID_CONTAINS_FROM(1.00)[];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_COUNT_TWO(0.00)[2];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-0.01)[48.59%]
 
-On Tue, Nov 21, 2023 at 07:38:18PM +0530, Krishna Kurapati PSSNV wrote:
-> >>    Just one query. Even if it wakes up after closing the lid and removing
-> >> the mouse, wouldn't pm suspend be triggered again later by the system
-> >> once it sees that usb is also good to be suspended again ? I presume a
-> >> laptop form factor would be having this facility of re-trigerring
-> >> suspend. Let me know if this is not the case.
-> > 
-> > No, we generally don't use opportunistic suspend (e.g. unlike android)
-> > so the laptop will not suspend again.
-> > 
-> > So this is an actual bug affecting, for example, the Lenovo ThinkPad
-> > X13s.
+ipheth_sndbulk_callback() can submit carrier_work
+as a part of its error handling. That means that
+the driver must make sure that the work is cancelled
+after it has made sure that no more URB can terminate
+with an error condition.
 
-> Thanks for the clarification. I was thinking in android perspective 
-> only. But if we don't wake up the system upon disconnect, wouldn't the 
-> controller still be under the assumption that device is connected when 
-> it is actually not and only realise this when we resume later ?
+Hence the order of actions in ipeth_close() needs
+to be inverted.
 
-Correct.
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/net/usb/ipheth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Johan
+diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+index 687d70cfc556..6eeef10edada 100644
+--- a/drivers/net/usb/ipheth.c
++++ b/drivers/net/usb/ipheth.c
+@@ -475,8 +475,8 @@ static int ipheth_close(struct net_device *net)
+ {
+ 	struct ipheth_device *dev = netdev_priv(net);
+ 
+-	cancel_delayed_work_sync(&dev->carrier_work);
+ 	netif_stop_queue(net);
++	cancel_delayed_work_sync(&dev->carrier_work);
+ 	return 0;
+ }
+ 
+-- 
+2.42.1
+
 
