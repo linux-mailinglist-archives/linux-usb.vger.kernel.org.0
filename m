@@ -1,112 +1,153 @@
-Return-Path: <linux-usb+bounces-3131-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3132-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 446647F35E5
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 19:29:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 283877F3601
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 19:34:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51B01B21913
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 18:29:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01A7A1F22EBD
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 18:34:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D222955C30;
-	Tue, 21 Nov 2023 18:29:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFD0B51008;
+	Tue, 21 Nov 2023 18:34:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L0mOpnKr"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="r/ezeevH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEF318C
-	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 10:29:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700591349;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E2kgZUqh4YN3kuh9w9quInDBCqas/0qHNpCsiDxrgHo=;
-	b=L0mOpnKrIWG9CzNUmuQxs+lDp5Uqp062frh9vwwNIrgNhHRdPr7KIGEZweAyMdPD/ZxI4j
-	kgphHZYPUyEp5kRisxWhLIfIwjFGnXK4oqr0Vu0nHOXafsOi2a0qhZhC58DGhk5TbbRBgo
-	vE3tteHmUBL73rifFjFnPGPUx8wP5FE=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-101-bfDih28dMyuSRE0J0fnhYQ-1; Tue, 21 Nov 2023 13:29:07 -0500
-X-MC-Unique: bfDih28dMyuSRE0J0fnhYQ-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a02aa8a129fso51353766b.3
-        for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 10:29:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700591346; x=1701196146;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E2kgZUqh4YN3kuh9w9quInDBCqas/0qHNpCsiDxrgHo=;
-        b=U9xyqLDFPndIap0cz0gP9pIfZVcHRh1cz+xa+RylpqzWAyZKxjjUPLG7h61v3/GEMi
-         5EjBwomFLnQISjgP6t329dz/jbvVJm/IOmypH9V0zEUEerm1vKTlA02J4JyD9gbAAU2u
-         ZqG1eQwGRakp5kP4MiueiqxlfHVCE2YhLZOkM5P8R6SKLBbSgOi6T0YvBZx4VgnHOUYn
-         2w5i2J0HTN8EfCESZXw2BKSMdxV2cBqSbDmAT3OLqGS/DZVdq7uppgsSmaHxF3rraozZ
-         FhQLAvvnI2U8tt+PhRFX0X9XyFZHz7SyKD1Sw0OAzyLuRSKyat+VG7GgUh3kfwtT1MW+
-         c1Ow==
-X-Gm-Message-State: AOJu0Yx3hi1PkScn/Ifa3K1WpYb0wGte6et89ex1G/TrYHhNvhKLD7Je
-	4K1YR/NTfA9v+/KzGa5klzPhwjrmiRxgaRb0pq1/45FWo7Z7HtBK4Uu4hNO9znuOnnqeB/s9kVu
-	iQCE9BSvw+ySN87RJkYFb
-X-Received: by 2002:a17:906:fc13:b0:9e2:af47:54c9 with SMTP id ov19-20020a170906fc1300b009e2af4754c9mr7743221ejb.19.1700591346692;
-        Tue, 21 Nov 2023 10:29:06 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG7G0BKFAOnN2k+98sPYUhbWMvtHiRwspjkltuVgDU201IS1z9jEoZ1ovFS9khQ0vuCB/4xRA==
-X-Received: by 2002:a17:906:fc13:b0:9e2:af47:54c9 with SMTP id ov19-20020a170906fc1300b009e2af4754c9mr7743204ejb.19.1700591346355;
-        Tue, 21 Nov 2023 10:29:06 -0800 (PST)
-Received: from ?IPV6:2001:1c00:2a07:3a01:6c4:9fb2:fbc:7029? (2001-1c00-2a07-3a01-06c4-9fb2-0fbc-7029.cable.dynamic.v6.ziggo.nl. [2001:1c00:2a07:3a01:6c4:9fb2:fbc:7029])
-        by smtp.gmail.com with ESMTPSA id l18-20020a170906645200b009ad89697c86sm5606991ejn.144.2023.11.21.10.29.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Nov 2023 10:29:05 -0800 (PST)
-Message-ID: <4eff7cff-3136-44d0-bf83-0d803122f9da@redhat.com>
-Date: Tue, 21 Nov 2023 19:29:04 +0100
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2063.outbound.protection.outlook.com [40.107.220.63])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D5BCB;
+	Tue, 21 Nov 2023 10:34:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HBXPerE+gAi0cGARAIMTWW7IlbkT8WSSE6CIf28qZKTHM91QpefAQYhBBFsf5QRXZU+vVztdCs+61splstvmd12HYXlaqfPwMDyzeZFSwXiLFPjoGeti6JvGlhQbizCIAbrW9XM4eOoun63kZT/P6sxdqjj9mJgN4Pyu59DcRIVzfA8EsbHyVnAR1j/4c+9wH/RgTjLpgkknsO39KQlYGLYbP2ErJjPvN1T3HLdq7Hw1FsILGPkBaCYHreHNrf77szeP/1FuHTlZTEG4uMMLsyORo3sfDwgyVQWx0elNkZ9CgqEEW37ucUruq4mhOeDuRbm1/fpRs9OtptzK0nmljQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sgVramYVHNXHg+P/aTYoHolJg3xDYfAB/e/aLi5bvO0=;
+ b=gsErkT+tub5WuVD5YkZBiYeXWRMsg4cW+AZnj4qB+OFTlTAmyYTbX4Moe1kQY1mh0lTstx0pSThYdOMJM2+7DxFg0uC+RrP1LDhE3zvoYk1hhfa86GVmG7C+KTlV3ukWJo9xvb/Iae7hGYfGIZQSgAJC5wWE9rN72csDkha8hxBQDHuW9JzLjM4ydJFNhoP2ZeEPEhFX64W0fc+XCX5yjWGaaBfCotikE8J53pF9n7jEKzkwJN08Rme1zp52z3cAdyMA4tyRDJMMIuceuqp5tVrwCG+iuuFdrPg0CCMoXikdOXrmll/SzEMcnhFoNMQO+7De8mUdvjW4amfpli19AA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sgVramYVHNXHg+P/aTYoHolJg3xDYfAB/e/aLi5bvO0=;
+ b=r/ezeevHAbeTm+rvNvNIVUSsoSY+0ppJ6vRetllZ9go9Sd2k5Wozx6YmyH3aRVsHX3ZO4yR/7mtDYcJfy83XBOBLGrxjYVaGZl/23XDUplcKUTnw+VPEBRakW3UZyLlOP+zkFP9GS8uKKllYzKs5d0xWjx4Qga621isrcZ+wj2c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW4PR12MB7016.namprd12.prod.outlook.com (2603:10b6:303:218::14)
+ by PH7PR12MB5758.namprd12.prod.outlook.com (2603:10b6:510:1d1::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.26; Tue, 21 Nov
+ 2023 18:33:57 +0000
+Received: from MW4PR12MB7016.namprd12.prod.outlook.com
+ ([fe80::54bf:1f5c:daa8:e1f1]) by MW4PR12MB7016.namprd12.prod.outlook.com
+ ([fe80::54bf:1f5c:daa8:e1f1%2]) with mapi id 15.20.7025.017; Tue, 21 Nov 2023
+ 18:33:57 +0000
+Message-ID: <5636c840-5385-8d30-0b23-fdee91e90136@amd.com>
+Date: Wed, 22 Nov 2023 00:03:47 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [Patch] thunderbolt: Add quirk to reset downstream port
+Content-Language: en-US
+To: Greg KH <gregkh@linuxfoundation.org>, Sanath S <Sanath.S@amd.com>
+Cc: andreas.noever@gmail.com, michael.jamet@intel.com,
+ mika.westerberg@linux.intel.com, YehezkelShB@gmail.com,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Mario Limonciello <mario.limonciello@amd.com>, stable@vger.kernel.org
+References: <20231121174701.3922587-1-Sanath.S@amd.com>
+ <2023112111-shelf-deeply-6a03@gregkh>
+From: Sanath S <sanaths2@amd.com>
+In-Reply-To: <2023112111-shelf-deeply-6a03@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BMXP287CA0020.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:b00:2c::28) To MW4PR12MB7016.namprd12.prod.outlook.com
+ (2603:10b6:303:218::14)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: misc: ljca: Fix enumeration error on Dell
- Latitude 9420
-Content-Language: en-US
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Andi Shyti <andi.shyti@linux.intel.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Wentong Wu <wentong.wu@intel.com>, Oliver Neukum <oneukum@suse.com>,
- linux-usb@vger.kernel.org, stable@vger.kernel.org
-References: <20231104175104.38786-1-hdegoede@redhat.com>
- <2023112109-talon-atrocious-ad46@gregkh>
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <2023112109-talon-atrocious-ad46@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW4PR12MB7016:EE_|PH7PR12MB5758:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35aca5bd-eee6-4e5b-0191-08dbeac06c07
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	agJV+0OHSITmzURNfvVUUXZBCG/cFu9V0HCH05FldJj5EjAo+grOtoauYWW+NyTtLA+ZlVXIWkfk4I3Wn2dlShWZ+np7eDrjryUDuKRmRdQMreGbXyGIT4A3BPXNqGx9ZA7dlWk9OCwRYBdfaKgKnca54MJMmzvkUaLgGtB1MCUTMcYCw8sDKmAYbLtMm+7MLiI4jNNYynl1ehQuzpF82G8Y4OOhKdxtnfLzdwR3gWz4ygDeEZGv4zgRunPZKcQTEQoIdQIMJQJcUhw43hZs2oA1YXih42dqhJjl4J+9bEhH1Aqr0e7mOGV2uq7fT36zoRYRzGhRxZZeHD2/Nedvm3BioN/0I2kwwMJT8md+gkWA+612QDqOcr2QgF1xSRBgvzqfMmujPUt+e89Lt7NbXLPoFYsND4D2W9Do4REjXMPCC8kEi7frJyP6UmKP0eyPR8YsgbTVJIjo19QBApntzRDyxEDY7rFWs4cvWzDOCuUhe7sxLlKOQSh3YwS646Pw3goSGBcYuN22FYgojSkHgtxB2v5FAEKvY1pkaO8qgg+QGbLkbNn/HdhDNlp5xqVxmDSSbCfrLYCMNbJjtlUmGKgh2LpQBflrur/ct6Eq3rqoWne4iHrzqRqPC79nITx3ZJkx8mhRq6g0tL6BogY9Og==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB7016.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(136003)(396003)(39860400002)(376002)(346002)(230922051799003)(186009)(451199024)(64100799003)(1800799012)(2616005)(53546011)(6506007)(6512007)(41300700001)(83380400001)(26005)(36756003)(8936002)(8676002)(4326008)(4744005)(5660300002)(478600001)(6486002)(31696002)(2906002)(31686004)(66946007)(38100700002)(6666004)(6636002)(110136005)(66556008)(316002)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?R3VJY1NDYmx4MUREaWtyMlhRRHRTR0NQRHhIWm41bWlxZmpoeGtubldEZFd3?=
+ =?utf-8?B?M2hHd0p5elNpdFNiaEhITFpHZHRWQlpZV0J4NDJCWWQ5OVI3Z1RvWkxnUk9K?=
+ =?utf-8?B?MG9wZW1ZWEdUNTN5eXNSOURFR2FxbEZWT01vckczNHNiSEhoaDRxUFYxTFh3?=
+ =?utf-8?B?RUgzdmNTZVB4SzA0RkdHRXZYVHlIWVAxYzZ2ekVCMUx5NzdmenVNWEJEanhN?=
+ =?utf-8?B?bEFGaGt4Z3BjMW9FU0EwY29YS2U3K1ZjTDNZeGkxTk1hcHpRS2U0aHVVME56?=
+ =?utf-8?B?YlBpRWJmYUJwN2VYRFRwWUxKSSs4Qnl1RUtVUEFyRWJSOFRqVkkzdllxZU1R?=
+ =?utf-8?B?T0ZpaGY4ZEF5NHF2OE9EUTB5WHM3cFlTNE9wREFObmxESnU5ZklFRWpheG9n?=
+ =?utf-8?B?OTd0U3NpWC95RFQyUkJ0UG5qTTVFbjMyNmZVRU1wQmFZbWJMS29pQnZRNjRx?=
+ =?utf-8?B?U0w5dzE0YzhRcVg1TlRvZDUyMkIvZG95c2Nxd1lTWXE0T2g0REdmeHVUZzdm?=
+ =?utf-8?B?RDRReC8yYXV0aGxPWlFweWYyaTRnczNKZjd6THpwSk1tYnJoeXEyc0NVdXZk?=
+ =?utf-8?B?ZVM5MC9Zd2xnQ3NiTEF2UHA0aFJQRW1nUHBhQllqT1JSTEJLZitmRy9iSDNY?=
+ =?utf-8?B?TnRpRnpuLzhTUk5BMktIY29KOXVPRXpYSTQ0bmE2YnhtWG5ITDREdUtVYS9Z?=
+ =?utf-8?B?c3NHMUpacmZaR3V2aHR6elcvc2lQb1VHbjUrZnJOU2xKa3FEZE9SWGFZRTJm?=
+ =?utf-8?B?bnFNVStUTU5JNzN6T0dXYmhHcjlMbUQyUzJxVGRkV3VreWFzT2xNVExmaGpq?=
+ =?utf-8?B?TUNQKzBPVGRGVkxqaklsRjh3cFNXeXJzeCsrQTlRc2hTM0JRRXRVR2VQRUNX?=
+ =?utf-8?B?bGNPQ3FLRlJTeWFnb25ZeFRmNk9oQkx0M1hRMk8vUEwyK3dvUVNMTXF4WHBw?=
+ =?utf-8?B?UXlJZmZ1Vk1EV25YVlp6U0RnRGFUTE1Ca1JmcFNLSm0zNjVFRDFORlUzRDVM?=
+ =?utf-8?B?a1FLTTIyTGtPOXlYT0ppUndGai9kQ21wSzBWZ3JzVWJhOXcyWUwrTkZhVmxY?=
+ =?utf-8?B?MDlsYnRHNFM1dXRNeHBnelNvZE5wZnA3OEJxbXh5ZndyaTNiSlNnUVFyVFJv?=
+ =?utf-8?B?MEFUenlVUm1HTmF4QUxCODlGMTJZRW5MY2xzd3lGQmtsU05jV3ZMMmhvUFc4?=
+ =?utf-8?B?YXl1QXdWWFpoeEVGUVMrSW14NEhrV3hLUlltc2NwbTg5dTVpMnlSNXJONEt0?=
+ =?utf-8?B?b1ZiL3JDeFkyRERCdzZLMWFXK21yL05neUJQWDhkV0w4NUpUMWl5LzF6QWhE?=
+ =?utf-8?B?UWI3NlRtWlNtRVZWQ09jU1R1bk5sY1NibWl1UUZKQ2RtdFBRcmx4dWxpUGpl?=
+ =?utf-8?B?N1RzT2VNWlRvZ0E0N0NUckJQdmdQQjZXRlJwaXlCRWdvVWZOYWtUNkF4Ni96?=
+ =?utf-8?B?Q3E4ekpPbHpXaUNPbTRpRW5FejFGcUwrQmpIc1VXc2RZMy9tUWlUMW9aLy9u?=
+ =?utf-8?B?WWpkcGtnaGVBVTIyYVVTMW11VUFzV3VpeU1wQzB5d21pdHB5QkN4bUtydXhQ?=
+ =?utf-8?B?VGk2Nm42QjZaN1FZcWZ4TXBId2pGazd5bTZ6YnZnMTY0aWhqTWpkOVNDS1E5?=
+ =?utf-8?B?RnZIK292RjYxR09KT1d0WERUTUd0NXZpQStOZEtKV3B6aTZIYS9tRFRVa0xI?=
+ =?utf-8?B?eHJsNTFvbzlkZ2I5a2lEWk1KbmlxeDdEVFRESzJJdm16MkxScEcrdFlhSlRL?=
+ =?utf-8?B?SUluRW5DWmNrdENpYUZFQ1V6c00yNkYvK2YrK0x5RTJNenpzYXhreGpwSTIw?=
+ =?utf-8?B?dVZ2M1pEeHVnWE5tRjI4bFJ2V2J1SXpnZDJybHEveHdENmlLWnZ2OTc1NGhN?=
+ =?utf-8?B?RitjYW9xZDdjeHE1MUo4ZWxrWjlRTW0vZ0JPTGk2ZUdLN3VEcTdiaU5XZ05i?=
+ =?utf-8?B?akdvNW9pUW9DS2I2ZklvYU56SGhRdithbDdlYkJ2MlNDa0FwWndrKzcxYjk0?=
+ =?utf-8?B?dWhYeTdRWlMwazRWdG42TnVNYVBXbm9VU016ZGZUUlN1bGJ0N3EzWG1RNWpw?=
+ =?utf-8?B?Rnp4MlRiZ2JBbzFEcWxEY21NRWZSdFhlQVpPckV0aHZpOENtalNvcHkycDVJ?=
+ =?utf-8?Q?QzI9B33CcPPPSmfNcTPkDKZOY?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35aca5bd-eee6-4e5b-0191-08dbeac06c07
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB7016.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2023 18:33:57.1625
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rv+FeblfqEmP+TQRXHqBgu58h3+bRU0EMWr84MtVWBzcDzjGOWQB4Z7G0EpzXGGEbdTDBjMHOysBw55Qt/BtDw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5758
 
-Hi,
 
-On 11/21/23 15:05, Greg Kroah-Hartman wrote:
-> On Sat, Nov 04, 2023 at 06:51:04PM +0100, Hans de Goede wrote:
->> Not all LJCA chips implement SPI and on chips without SPI reading
->> the SPI descriptors will timeout.
+On 11/21/2023 11:34 PM, Greg KH wrote:
+> On Tue, Nov 21, 2023 at 11:17:01PM +0530, Sanath S wrote:
+>> Boot firmware on AMD's Yellow Carp and Pink Sardine allocates
+>> very minimal buses for PCIe downstream ports. This results in
+>> failure to extend the daisy chain.
 >>
->> On laptop models like the Dell Latitude 9420, this is expected behavior
->> and not an error.
+>> Add quirk to reset the downstream port to help reset the topology
+>> created by boot firmware.
 >>
->> Modify the driver to continue without instantiating a SPI auxbus child,
->> instead of failing to probe() the whole LJCA chip.
->>
->> Fixes: 54f225fa5b58 ("usb: Add support for Intel LJCA device")
-> 
-> That commit id isn't in Linus's tree, are you sure it's correct?
-
-Sorry no idea where I got that commit-id from, probably from when
-I was carrying the patch in my personal tree for testing it.
-
-I'll send a v3 with the correct commit-id.
-
-Regards,
-
-Hans
-
+>> Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+>> Signed-off-by: Sanath S <Sanath.S@amd.com>
+Fixes: e390909ac763("thunderbolt: Add vendor specific NHI quirk for 
+auto-clearing interrupt status")
+>> Cc: <stable@vger.kernel.org>
+> What commit id does this fix?
+>
+> thanks,
+>
+> greg k-h
+>
 
