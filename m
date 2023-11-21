@@ -1,60 +1,31 @@
-Return-Path: <linux-usb+bounces-3121-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3122-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1B8C7F3490
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 18:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F6857F34A5
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 18:13:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D50FB211ED
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 17:11:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B58E5B20FF1
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 17:13:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4476251C4A;
-	Tue, 21 Nov 2023 17:11:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TsRWEsu3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F9F5A0E1;
+	Tue, 21 Nov 2023 17:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8FCD1
-	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 09:11:32 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3316d3d11e1so2483316f8f.0
-        for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 09:11:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700586690; x=1701191490; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WgFbKfkjpZtFOV10mbTUGv9+qoi/gwRWnXzscISkKgY=;
-        b=TsRWEsu3ET6JsXtWYWgk11DFXnUgotdStnas9z74PlP1Oei4nHHWuXhhU4vpSxw6pR
-         fh9du5L9Bg+r+pSQrO8MIub5Jo4NY41S5+I5Tjucfmch3O8qK0z1yDrzp74KRLbPcK4d
-         CtlRTon093FdUpQ1a8bQdPiZnOa6XOwzf50rejsUtzWEZbabM9xQfGBoRvIO8+dcrOx9
-         ev7zqYCL0N18RD1AZXwtHRXNsVt3OPI1SqUhuCgzVdrvK2lREbe/7uInOTlc39rjoYyV
-         o0TXB6xVgOMrPstZQWgHQsdN5UjMq0idOKkd8p2Pbk5DBQrccoA0rTg6lXysumXAhSeL
-         ZTRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700586690; x=1701191490;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WgFbKfkjpZtFOV10mbTUGv9+qoi/gwRWnXzscISkKgY=;
-        b=pw69azACSolxOFBqgvARj+2UlbN6XT0PdHkvQ/m7Jr5+tbqDMgcAIddXpkPaNGUYCx
-         JE5Ss3aUDwiqWvYBFgxwQmQxqSQvLsWhJoCmnzjqVQJ9SU0DsG7N+jTlZ/2HGABRbWjC
-         E9zHE68cbo3x3UwiqEhJlIlPGR9t5zjKDz4gSv0wXytSCcMVL3JYjOMlZL+1zRccM52A
-         8LOW+PG7NLjq/Fa9d5Os+REkuUp3jhV2xRGwShaZ7d/eL79QHNvarOmqDiNRreHckJYu
-         3F3ZnrDarao7DE2Ha5CMs+eXaqGribhw5HI0EpYS04OOedk2w7Jg72Ca7GxLqHX/GhG7
-         iztg==
-X-Gm-Message-State: AOJu0Yzrn7RqEnqtJguQS0IRnBBmVOtW+x4dCh8ke1a8n1YAM+oLOtYe
-	VlDBjywxlHi8EsYBMoUiicskcQ==
-X-Google-Smtp-Source: AGHT+IFEF+2UvblgUygMu/dhxGgzchedTSnMGRy5blKYbvReq+NnknB4FLE+rv18GRO7oNfUYrKrjQ==
-X-Received: by 2002:a05:6000:2c5:b0:332:c377:aeb7 with SMTP id o5-20020a05600002c500b00332c377aeb7mr2891487wry.5.1700586690518;
-        Tue, 21 Nov 2023 09:11:30 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.11])
-        by smtp.gmail.com with ESMTPSA id s13-20020a5d6a8d000000b0032fbe5b1e45sm14719065wru.61.2023.11.21.09.11.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Nov 2023 09:11:29 -0800 (PST)
-Message-ID: <d0cc33d4-2b1a-43cd-8cd9-6b58d6c71c85@linaro.org>
-Date: Tue, 21 Nov 2023 18:11:28 +0100
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4ACD4B;
+	Tue, 21 Nov 2023 09:12:59 -0800 (PST)
+Received: from [10.0.3.168] (unknown [93.240.169.83])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id AEB2561E5FE01;
+	Tue, 21 Nov 2023 18:12:33 +0100 (CET)
+Message-ID: <d8fba4f9-f868-4ef3-938b-f202e5bcc4ad@molgen.mpg.de>
+Date: Tue, 21 Nov 2023 18:12:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,146 +33,153 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/7] dt-bindings: usb: ti,j721e-usb: add ti,j7200-usb
- compatible
+Subject: Re: Qualcomm Atheros QCA61x4 keeps drawing 0.85 W despite Bluetooth
+ being disable in GNOME
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Marcel Holtmann <marcel@holtmann.org>,
+ Johan Hedberg <johan.hedberg@gmail.com>,
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+ linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+ Hans de Goede <hdegoede@redhat.com>, Mike Jones <mike@mjones.io>,
+ Rocky Liao <quic_rjliao@quicinc.com>
+References: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
+ <22494842-a785-4151-915d-6f3a677d96cb@molgen.mpg.de>
+ <1f3cb0cc-4bb0-471f-a785-a5d237cd46a3@rowland.harvard.edu>
+ <d63ebc5f-9b72-4457-949b-3e90883bd3c0@molgen.mpg.de>
+ <d61ae9a8-2228-4af1-a5f0-912e7763fbd1@rowland.harvard.edu>
+ <de236c7d-e265-452a-a60e-b10293a5b944@molgen.mpg.de>
+ <41253614-764e-4e95-b052-a46bf5587c29@rowland.harvard.edu>
+ <3489df64-0f8f-43e1-a05f-ccb145ff6d59@molgen.mpg.de>
+ <fd84c14a-1866-4643-8ce9-0d6da5c4b82e@rowland.harvard.edu>
 Content-Language: en-US
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Roger Quadros <rogerq@kernel.org>,
- Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
- Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
- Tero Kristo <kristo@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
- Conor Dooley <conor.dooley@microchip.com>
-References: <20231120-j7200-usb-suspend-v2-0-038c7e4a3df4@bootlin.com>
- <20231120-j7200-usb-suspend-v2-1-038c7e4a3df4@bootlin.com>
- <6f0da181-717c-4b14-ba3f-d287efe4105b@linaro.org>
- <CX4NADEZZEO1.3TXPVNOONKBCF@tleb-bootlin-xps13-01>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <CX4NADEZZEO1.3TXPVNOONKBCF@tleb-bootlin-xps13-01>
-Content-Type: text/plain; charset=UTF-8
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <fd84c14a-1866-4643-8ce9-0d6da5c4b82e@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 21/11/2023 17:53, Théo Lebrun wrote:
-> Hello,
+Dear Alan,
+
+
+Thank you for your reply.
+
+Am 21.11.23 um 17:23 schrieb Alan Stern:
+> On Mon, Nov 20, 2023 at 11:05:04PM +0100, Paul Menzel wrote:
+>> [Cc: +Rocky Liao as Qualcomm developer]
 > 
-> On Mon Nov 20, 2023 at 6:32 PM CET, Krzysztof Kozlowski wrote:
->> On 20/11/2023 18:06, Théo Lebrun wrote:
->>> On this platform, the controller & its wrapper are reset on resume. This
->>> makes it have a different behavior from other platforms.
+>> Am 20.11.23 um 19:10 schrieb Alan Stern:
+>>> Again, nothing out of the ordinary.  Maybe dynamic debugging will give
+>>> us a clue.  Try doing this:
 >>>
->>> We allow using the new compatible with a fallback onto the original
->>> ti,j721e-usb compatible. We therefore allow using an older kernel with
+>>> 	Unload the btusb module.
+>>>
+>>> 	echo module usbcore +p >/sys/kernel/debug/dynamic_debug/control
+>>>
+>>> 	Load the btusb module
+>>>
+>>> 	Make sure that Bluetooth is turned off in Gnome
+>>>
+>>> 	Wait a few seconds
+>>>
+>>> 	echo module usbcore -p >/sys/kernel/debug/dynamic_debug/control
+>>>
+>>> Then let's see what the dmesg log contains for that time period.
 >>
->> Where is fallback ti,j721e-usb used? Please point me to the code.
+>> ```
+>> $ sudo modprobe -r btusb
+>> $ sudo dmesg | tail -1
+>> [340309.272439] usbcore: deregistering interface driver btusb
+>> $ echo module usbcore +p | sudo tee /sys/kernel/debug/dynamic_debug/control
+>> module usbcore +p
+>> $ sudo modprobe btusb
+>> $ /sbin/rfkill
+>> ID TYPE      DEVICE      SOFT      HARD
+>>   1 wlan      phy0   unblocked unblocked
+>> 36 bluetooth hci0     blocked unblocked
+>> $ echo module usbcore -p | sudo tee /sys/kernel/debug/dynamic_debug/control
+>> module usbcore -p
+>> $ sudo modprobe -r btusb
+>> $ sudo dmesg | tail -1
+>> [340608.761313] usbcore: deregistering interface driver btusb
+>> $ sudo dmesg
+>> […]
+>> [340309.272439] usbcore: deregistering interface driver btusb
+>> [340560.326182] xhci_hcd 0000:00:14.0: hcd_pci_runtime_resume: 0
+>> [340560.326214] usb usb1: usb auto-resume
+>> [340560.326258] hub 1-0:1.0: hub_resume
+>> [340560.326381] usb usb1-port3: status 0107 change 0000
+>> [340560.326418] usb usb1-port4: status 0107 change 0000
+>> [340560.326451] usb usb1-port5: status 0507 change 0000
+>> [340560.326650] hub 1-0:1.0: state 7 ports 12 chg 0000 evt 0000
+>> [340560.326807] hub 1-0:1.0: state 7 ports 12 chg 0000 evt 0000
+>> [340560.373988] usb 1-3: usb auto-resume
+>> [340560.373998] hub 1-0:1.0: state 7 ports 12 chg 0000 evt 0008
+>> [340560.441936] usb 1-3: Waited 0ms for CONNECT
+>> [340560.441957] usb 1-3: finish reset-resume
+>> [340560.570940] usb 1-3: reset full-speed USB device number 2 using xhci_hcd
 > 
-> No fallback is implemented in code. Using a kernel that doesn't have
-> this patch series but a more recent devicetree: DT has both
-> devicetrees & the kernel will know which driver to use.
+> Those two lines are unexpected.  Why does the device need to be reset?
+> While the btusb module is loaded, does anything show up in
+> /sys/bus/usb/devices/1-3/quirks?
 
-I meant your bindings. You said - with fallback to ti,j721e-usb. I do
-not see it. To me the commit description is not accurate.
+     $ more /sys/bus/usb/devices/1-3/quirks
+     0x2
 
-> 
-> That is opposed to having only compatible = "ti,j7200-usb". If using an
-> old kernel, it would not know what driver to match it to.
-> 
-> [...]
-> 
->>> --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
->>> @@ -12,11 +12,15 @@ maintainers:
->>>  properties:
->>>    compatible:
->>>      oneOf:
->>> +      - const: ti,j7200-usb
->>>        - const: ti,j721e-usb
->>>        - const: ti,am64-usb
->>>        - items:
->>>            - const: ti,j721e-usb
->>>            - const: ti,am64-usb
->>> +      - items:
->>> +          - const: ti,j721e-usb
+>>> Also, please post the output from "lsusb -v" for the Bluetooth device.
 >>
->> This makes little sense. It's already on the list. Twice! Don't add it
->> third time.
+>> ```
+>> $ sudo lsusb -d 0cf3:e300 -v
 >>
->> I am sorry, but this binding makes no sense. I mean, existing binding
->> makes no sense, but your change is not making it anyhow better.
+>> Bus 001 Device 002: ID 0cf3:e300 Qualcomm Atheros Communications QCA61x4
+>> Bluetooth 4.0
+>> Device Descriptor:
+>>    bLength                18
+>>    bDescriptorType         1
+>>    bcdUSB               2.01
+>>    bDeviceClass          224 Wireless
+>>    bDeviceSubClass         1 Radio Frequency
+>>    bDeviceProtocol         1 Bluetooth
+>>    bMaxPacketSize0        64
+>>    idVendor           0x0cf3 Qualcomm Atheros Communications
+>>    idProduct          0xe300 QCA61x4 Bluetooth 4.0
+>>    bcdDevice            0.01
+>>    iManufacturer           0
+>>    iProduct                0
+>>    iSerial                 0
+>>    bNumConfigurations      1
+>>    Configuration Descriptor:
+>>      bLength                 9
+>>      bDescriptorType         2
+>>      wTotalLength       0x00b1
+>>      bNumInterfaces          2
+>>      bConfigurationValue     1
+>>      iConfiguration          0
+>>      bmAttributes         0xe0
+>>        Self Powered
+>>        Remote Wakeup
 > 
-> The goal of the DT schema pre-patch was to allow all three:
+> That's what I was interested in.  The device does support remote wakeup.
+
+That would make sense so it can be resumed? (It does not necessarily 
+mean something like Wake-On-LAN, right?
+
+Also, for this device it’s disabled?
+
+     $ grep . /sys/bus/usb/devices/1-3/power/wakeup
+     disabled
+
+>> PPS: Looking through the commit log/history for `drivers/bluetooth/btusb.c`,
+>> I found commit 7ecacafc2406 (Bluetooth: btusb: Disable runtime suspend on
+>> Realtek devices) [1] authored on December 5th, 2019. This is for Realtek
+>> devices though, and not Qualcomm.
 > 
->    compatible = "ti,j721e-usb";
->    compatible = "ti,am64-usb";
->    compatible = "ti,j721e-usb", "ti,am64-usb";
+> Furthermore the driver has changed considerably since 2019.  See
+> commits 8274db0776d1, 895915226a59, 7bd9fb058d77, and 34ec58b9fd1c.
 
-Which does not make sense.
+Thank you for the references.
 
-How ti,j721e-usb can be and cannot be compatible with am64 in the same time?
 
-> 
-> I've followed the same scheme & added both of those:
-> 
->    compatible = "ti,j7200-usb";
->    compatible = "ti,j7200-usb", "ti,j721e-usb";
-> 
-> I messed up the ordering in the added 'items' options, but the logic
-> seems right to me. And dtbs_check agrees. Am I missing something?
-> 
+Kind regards,
 
-Logic is wrong. Device either is or is not compatible with something. At
-least usually. We have some exceptions like SMMU for Adreno. Is this the
-case? Why the device is and is not compatible with some other variant?
-
-Best regards,
-Krzysztof
-
+Paul
 
