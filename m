@@ -1,132 +1,91 @@
-Return-Path: <linux-usb+bounces-3099-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3100-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 662B07F3053
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 15:08:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25E5C7F3055
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 15:09:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A950D281E4F
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:08:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58A441C21B11
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 14:09:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020F254FA1;
-	Tue, 21 Nov 2023 14:08:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1918D54F9C;
+	Tue, 21 Nov 2023 14:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Qp7XNg9Y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VOS1oT+A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BA5122;
-	Tue, 21 Nov 2023 06:08:41 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALE3BQd003689;
-	Tue, 21 Nov 2023 14:08:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=POpR3zBeE/oq6Awlmfos35Xeq30KeghiCZoFjDFpWoc=;
- b=Qp7XNg9YBUTHvs9EeaEW6fccrXMgVNjjYNF+a3pepF2PSuGb+F6NZTwzRu8Ppxf6O4db
- pYeLMrw86Ow62TMPrh4SAs827vvv0iXO23hr5AlCUklN2KWbLHk9bzCNyT9J7ypp2o5C
- eMel6jEYBfr3xS1o4eqT4nqwFZ+J52NC7L/3jGViNpUMrRBGyuVadke8msuC3VxRrma8
- TUIDhNAaumgE/EeL/FfaDfyin3zmUMNr9Uuwp37LlpZkCxS8N3sWN70Nf7Jwm/BHN8gD
- ySaiI5jqY9tL50rYroQTVQAju+DKUkkNnf+4Zn4YG8KOEEUeFSAjn9SHpMZGi/jiEF3I Eg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ugcqs2qtr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 21 Nov 2023 14:08:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3ALE8R0q012819
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 21 Nov 2023 14:08:27 GMT
-Received: from [10.216.58.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 21 Nov
- 2023 06:08:22 -0800
-Message-ID: <ac838113-501a-4f2b-b858-c59f586a9f35@quicinc.com>
-Date: Tue, 21 Nov 2023 19:38:18 +0530
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438EA10C1;
+	Tue, 21 Nov 2023 06:09:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700575740; x=1732111740;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S7FWmcXN79Vx+j4cixX7ygbYhrBJf1bmjbAASxLRWaA=;
+  b=VOS1oT+AvYN/oyzLTQ65zmwmD7T4jnfU6j1oqG49nU2SEeUhiHwQ1xqT
+   Kd/0cKMt8HVt0ccs1uJu1qi1D9h+DnHmoNKiq24kjZcRN/rdTGT1xtl6V
+   Ew9K8oevx+nWo6EEtVoP/24ewcPHbvmFYSwG6oyRiqIuQPAoxvi6x6yC+
+   Q9gAMyIOcNDoKthF4/mvAuHWeHGSGXTH6dGRlWuzr0vQkzqjvZTtbLb1X
+   bpstuLXAw1zXzyhjKmy7LHvm2vXQG3NXu3MTy/OBArTGVdeKuxY8ej3aM
+   UwHTQnw1teMFTGrUqPeSZ95BFczekpjJEv83KxxVc+y2ROsamxcxGocNK
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="382242013"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="382242013"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 06:08:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="766660042"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="766660042"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga002.jf.intel.com with SMTP; 21 Nov 2023 06:08:57 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Nov 2023 16:08:56 +0200
+Date: Tue, 21 Nov 2023 16:08:56 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>
+Subject: Re: Unplugging USB-C charger cable causes `ucsi_acpi USBC000:00:
+ ucsi_handle_connector_change: ACK failed (-110)`
+Message-ID: <ZVy5+AxnOZNmUZ15@kuha.fi.intel.com>
+References: <b2466bc2-b62c-4328-94a4-b60af4135ba7@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] USB: dwc3: qcom: fix wakeup after probe deferral
-To: Johan Hovold <johan@kernel.org>
-CC: Andrew Halaney <ahalaney@redhat.com>,
-        Johan Hovold
-	<johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-References: <20231120161607.7405-1-johan+linaro@kernel.org>
- <20231120161607.7405-3-johan+linaro@kernel.org>
- <pgmtla6j3dshuq5zdxstszbkkssxcthtzelv2etcbrlstdw4nu@wixz6v5dfpum>
- <3ff65t36p6n3k7faw2z75t2vfi6rb5p64x7wqosetsksbhhwli@5xaxnm7zz4tu>
- <ZVx1wRefjNaN0byk@hovoldconsulting.com>
- <0b627853-78fb-4320-84e4-f88695ac6a9e@quicinc.com>
- <ZVy1kAslWYOQ6n9q@hovoldconsulting.com>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZVy1kAslWYOQ6n9q@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: YeSi6sONWbW_gTpRreo2ZTUy8U9Np8im
-X-Proofpoint-GUID: YeSi6sONWbW_gTpRreo2ZTUy8U9Np8im
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-21_05,2023-11-21_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 phishscore=0 bulkscore=0 clxscore=1015 mlxlogscore=420
- mlxscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311210110
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b2466bc2-b62c-4328-94a4-b60af4135ba7@molgen.mpg.de>
 
->>    Just one query. Even if it wakes up after closing the lid and removing
->> the mouse, wouldn't pm suspend be triggered again later by the system
->> once it sees that usb is also good to be suspended again ? I presume a
->> laptop form factor would be having this facility of re-trigerring
->> suspend. Let me know if this is not the case.
+On Tue, Nov 21, 2023 at 12:50:43PM +0100, Paul Menzel wrote:
+> Dear Linux folks,
 > 
-> No, we generally don't use opportunistic suspend (e.g. unlike android)
-> so the laptop will not suspend again.
 > 
-> So this is an actual bug affecting, for example, the Lenovo ThinkPad
-> X13s.
+> On the Dell XPS 13, BIOS 2.21.0 06/02/2022, with Debian sid/unstable and
+> Linux 6.5.10, when unplugging the (Dell) USB Type-C charger cable, Linux
+> logs the error below:
 > 
-Thanks for the clarification. I was thinking in android perspective 
-only. But if we don't wake up the system upon disconnect, wouldn't the 
-controller still be under the assumption that device is connected when 
-it is actually not and only realise this when we resume later ?
+>     ucsi_acpi USBC000:00: ucsi_handle_connector_change: ACK failed (-110)
+> 
+> As this is logged with level error, can this be somehow fixed?
+> 
+>     drivers/usb/typec/ucsi/ucsi.c: dev_err(ucsi->dev, "%s: ACK failed (%d)",
+> __func__, ret);
+> 
+> Please find the output of `dmesg` attached.
 
->> Also, the warning you are mentioning in [1] comes because this is a
->> laptop form factor and we have some firmware running (I don't know much
->> about ACPI and stuff) ?
-> 
-> No, the "firmware" in this case is just the devicetree which has the
-> DP/DM interrupts defined as edge-triggered while the driver requests
-> them as level triggered.
-> 
-> (It would look similar with ACPI firmware which also has these declared
-> as edge triggered.)
-> 
-Got it. Thanks for the clarification.
+Thanks. The firmware not reacting to the ACK command is weird, but I'm
+not sure if it's critical. Does the interface continue working after
+that? Do you see the partner devices appearing under /sys/class/typec/
+when you plug them, and disappearing when you unplug them?
 
-Regards,
-Krishna,
+thanks,
+
+-- 
+heikki
 
