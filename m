@@ -1,153 +1,112 @@
-Return-Path: <linux-usb+bounces-3130-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3131-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8EB67F35DA
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 19:21:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 446647F35E5
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 19:29:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9222A282B91
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 18:21:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51B01B21913
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 18:29:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73ADC2209A;
-	Tue, 21 Nov 2023 18:21:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D222955C30;
+	Tue, 21 Nov 2023 18:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="wtI1vq13"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L0mOpnKr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2050.outbound.protection.outlook.com [40.107.223.50])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE6A9A;
-	Tue, 21 Nov 2023 10:21:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BQR/mUF6zey9lUBLBa594nGjttrQHL/24x67XGqykP+A6w9DojX2GC2LqJH+0sxs1236EIt1LQEzd6BFZulxnR7197EZw0I9itOOvSeT+BpziG+hys8JddWC6XZ2MQufxlnOKonCwcKVfVf//Ue1iNhWpXfxMFomlgIgHISElQxu52sPs+7Qjb00OAUVu9ywuFHokSz7eg24QSg7WKNgHT0mXCXbTpf8mbDcXSrFKYBYmD83UUymHY/P3QUFb86UB86JhLhXPHsqasnNM+fAMiCZAwjwt4xcXg3xZbUJUKk2latvxI5btp71uYw+O2kQ5/17n9ih3CPtyedAWfgzdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4iP0bt97eaOILFMSS2XOKS+XoGvGd9J/aozCsIw+dng=;
- b=BcE7OswSsRpJgdQx8TlGNJ7R9m01hKYXwGjeg2ga/XUua7ZSz7jHuRki/rAQNPDl9SLGpIL/Yqmzr4H2oyx0QgcLmjbFbhOOJzMygkD0J2G7SwqySnza57Nd8fU/6HK9Hj7iQpC8g2LNvmWUhL2x/iD/GJaeByWkQXbJ+8hipU12O0ZcD86mL7IL+SstmTAtf4eccWnXMFqlpmpjQYxgnUC4roZwdXNI1QOXBoA9Va8bIa8nMxMoClcQOnHQq8VHvJVQfV7x6BUW4p+7rHT4h+47rLEiKagpLpaiIxmr4zAUYyZn9VR4FlSiBr4rIAWs0Y8HN4QHC+tRYOUjTdTL/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=synopsys.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4iP0bt97eaOILFMSS2XOKS+XoGvGd9J/aozCsIw+dng=;
- b=wtI1vq13fQlRX5dPqR/Ox/OwUaPNrC3xMFkrkheqYZhs5lA9P8XWEwKp0lPaUYLAuIPvbsTWCfAqo4nUl68BvIHaTnp/Zo6gpAnlGos2AZGg7X6HgSPkQxCjTAAthe3E6nlDoCdIug6l4mAEcv312htMwkzP9QC5hmkRPSZeRR0=
-Received: from BL1PR13CA0192.namprd13.prod.outlook.com (2603:10b6:208:2be::17)
- by DM6PR12MB4108.namprd12.prod.outlook.com (2603:10b6:5:220::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.18; Tue, 21 Nov
- 2023 18:21:30 +0000
-Received: from MN1PEPF0000ECD8.namprd02.prod.outlook.com
- (2603:10b6:208:2be:cafe::1) by BL1PR13CA0192.outlook.office365.com
- (2603:10b6:208:2be::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.16 via Frontend
- Transport; Tue, 21 Nov 2023 18:21:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- MN1PEPF0000ECD8.mail.protection.outlook.com (10.167.242.137) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7025.12 via Frontend Transport; Tue, 21 Nov 2023 18:21:29 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Tue, 21 Nov
- 2023 12:21:28 -0600
-Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.34 via Frontend
- Transport; Tue, 21 Nov 2023 12:21:26 -0600
-From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-To: <Thinh.Nguyen@synopsys.com>, <gregkh@linuxfoundation.org>,
-	<michal.simek@amd.com>
-CC: <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <git@amd.com>, Piyush Mehta
-	<piyush.mehta@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [PATCH v2] usb: dwc3: xilinx: improve error handling for PM APIs
-Date: Tue, 21 Nov 2023 23:51:18 +0530
-Message-ID: <1700590878-124335-1-git-send-email-radhey.shyam.pandey@amd.com>
-X-Mailer: git-send-email 2.1.1
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEF318C
+	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 10:29:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700591349;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E2kgZUqh4YN3kuh9w9quInDBCqas/0qHNpCsiDxrgHo=;
+	b=L0mOpnKrIWG9CzNUmuQxs+lDp5Uqp062frh9vwwNIrgNhHRdPr7KIGEZweAyMdPD/ZxI4j
+	kgphHZYPUyEp5kRisxWhLIfIwjFGnXK4oqr0Vu0nHOXafsOi2a0qhZhC58DGhk5TbbRBgo
+	vE3tteHmUBL73rifFjFnPGPUx8wP5FE=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-101-bfDih28dMyuSRE0J0fnhYQ-1; Tue, 21 Nov 2023 13:29:07 -0500
+X-MC-Unique: bfDih28dMyuSRE0J0fnhYQ-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a02aa8a129fso51353766b.3
+        for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 10:29:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700591346; x=1701196146;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E2kgZUqh4YN3kuh9w9quInDBCqas/0qHNpCsiDxrgHo=;
+        b=U9xyqLDFPndIap0cz0gP9pIfZVcHRh1cz+xa+RylpqzWAyZKxjjUPLG7h61v3/GEMi
+         5EjBwomFLnQISjgP6t329dz/jbvVJm/IOmypH9V0zEUEerm1vKTlA02J4JyD9gbAAU2u
+         ZqG1eQwGRakp5kP4MiueiqxlfHVCE2YhLZOkM5P8R6SKLBbSgOi6T0YvBZx4VgnHOUYn
+         2w5i2J0HTN8EfCESZXw2BKSMdxV2cBqSbDmAT3OLqGS/DZVdq7uppgsSmaHxF3rraozZ
+         FhQLAvvnI2U8tt+PhRFX0X9XyFZHz7SyKD1Sw0OAzyLuRSKyat+VG7GgUh3kfwtT1MW+
+         c1Ow==
+X-Gm-Message-State: AOJu0Yx3hi1PkScn/Ifa3K1WpYb0wGte6et89ex1G/TrYHhNvhKLD7Je
+	4K1YR/NTfA9v+/KzGa5klzPhwjrmiRxgaRb0pq1/45FWo7Z7HtBK4Uu4hNO9znuOnnqeB/s9kVu
+	iQCE9BSvw+ySN87RJkYFb
+X-Received: by 2002:a17:906:fc13:b0:9e2:af47:54c9 with SMTP id ov19-20020a170906fc1300b009e2af4754c9mr7743221ejb.19.1700591346692;
+        Tue, 21 Nov 2023 10:29:06 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IG7G0BKFAOnN2k+98sPYUhbWMvtHiRwspjkltuVgDU201IS1z9jEoZ1ovFS9khQ0vuCB/4xRA==
+X-Received: by 2002:a17:906:fc13:b0:9e2:af47:54c9 with SMTP id ov19-20020a170906fc1300b009e2af4754c9mr7743204ejb.19.1700591346355;
+        Tue, 21 Nov 2023 10:29:06 -0800 (PST)
+Received: from ?IPV6:2001:1c00:2a07:3a01:6c4:9fb2:fbc:7029? (2001-1c00-2a07-3a01-06c4-9fb2-0fbc-7029.cable.dynamic.v6.ziggo.nl. [2001:1c00:2a07:3a01:6c4:9fb2:fbc:7029])
+        by smtp.gmail.com with ESMTPSA id l18-20020a170906645200b009ad89697c86sm5606991ejn.144.2023.11.21.10.29.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Nov 2023 10:29:05 -0800 (PST)
+Message-ID: <4eff7cff-3136-44d0-bf83-0d803122f9da@redhat.com>
+Date: Tue, 21 Nov 2023 19:29:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD8:EE_|DM6PR12MB4108:EE_
-X-MS-Office365-Filtering-Correlation-Id: 988f77f0-bec4-4a6d-ddf5-08dbeabeae8d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	QcMYnkrroMA/FlW//r1EeJjTpcvgEBPYwfkuruj0k6twWlXjPSG9i2WnqT93eLTjCZK3uvTu8dNRJaRUz5t4wU6NJBa49BrFYxbDBZbFOOA4QDeoDBRSzVYRj7dh8Rsyz+IISpBDoeSyui/97iUEn3689A9qpJ6LZ3EUkJXR7H2pi65x8J6Plnrijv43YeMhR3o9gFwM/3j1eTi2tqZTV1oiSqkee+ZS9Tbl8sGsmmv/kYpPcSLPWw6ekC0dR4iQSgUqD643ZENTbP9U/n7efcSQMPXp9u3a1OtuyBCDdWzwFufpUNhNMm3hyXS15WjnlGLWG56zyfDvC5cYKdNw64mrLJ7VVa7O8slMeXaU2etecv2aGK3hXkdRjAa4bDp8tiyhcLNDYg6UHmK9kWHoUUAMSRm8YTtYOaLcsoOc6dvZGDcUMpNUrnqap0WjfkpoeH7LPrPLwzGgznQCD5khU+GR48tnnm4LyHGimvw/0lvkTh6F5AAbmbJ71uyHfMSXtxB+Vech9i2eVcp5EBItFe8IMYe+RrCGt83FHf0AHX6XOf1kvjWtc7+kOXurTwJAVMawEGYaOnOSk2NEAoqP8XO73PwzcF0MPEQGITtF/aCC8YyZEEPHa6wUNYlJ+xpau3LeePiIQ8aXWF0Vq/IQghdqgXPFVwP8OQS1knHqMiLbLKZ9PT7dZDm/NldggHEZRMKuyZ6/tAgtngyfC2/ABQE1CpYSVkCMZU4XFCMocE10uy3+wraaj8C3vYKTJokMexRn1pEaKPIAu5JuVGJrUA==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(396003)(376002)(346002)(136003)(230922051799003)(82310400011)(1800799012)(64100799003)(186009)(451199024)(36840700001)(46966006)(40470700004)(5660300002)(40480700001)(8676002)(4326008)(41300700001)(8936002)(2906002)(70586007)(70206006)(316002)(54906003)(110136005)(6636002)(40460700003)(86362001)(47076005)(26005)(478600001)(6666004)(36756003)(2616005)(336012)(426003)(356005)(81166007)(36860700001)(83380400001)(82740400003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2023 18:21:29.5807
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 988f77f0-bec4-4a6d-ddf5-08dbeabeae8d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000ECD8.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4108
-X-Spam-Level: *
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: misc: ljca: Fix enumeration error on Dell
+ Latitude 9420
+Content-Language: en-US
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Andi Shyti <andi.shyti@linux.intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Wentong Wu <wentong.wu@intel.com>, Oliver Neukum <oneukum@suse.com>,
+ linux-usb@vger.kernel.org, stable@vger.kernel.org
+References: <20231104175104.38786-1-hdegoede@redhat.com>
+ <2023112109-talon-atrocious-ad46@gregkh>
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <2023112109-talon-atrocious-ad46@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Piyush Mehta <piyush.mehta@amd.com>
+Hi,
 
-Improve error handling for PM APIs in the dwc3_xlnx_probe function by
-introducing devm_pm_runtime_enable and error label. Removed unnecessary
-API pm_runtime_disable call in dwc3_xlnx_remove.
+On 11/21/23 15:05, Greg Kroah-Hartman wrote:
+> On Sat, Nov 04, 2023 at 06:51:04PM +0100, Hans de Goede wrote:
+>> Not all LJCA chips implement SPI and on chips without SPI reading
+>> the SPI descriptors will timeout.
+>>
+>> On laptop models like the Dell Latitude 9420, this is expected behavior
+>> and not an error.
+>>
+>> Modify the driver to continue without instantiating a SPI auxbus child,
+>> instead of failing to probe() the whole LJCA chip.
+>>
+>> Fixes: 54f225fa5b58 ("usb: Add support for Intel LJCA device")
+> 
+> That commit id isn't in Linus's tree, are you sure it's correct?
 
-Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
----
-Changes for v2:
-- Remove pm_runtime_enable() call.
----
- drivers/usb/dwc3/dwc3-xilinx.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Sorry no idea where I got that commit-id from, probably from when
+I was carrying the patch in my personal tree for testing it.
 
-diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
-index 5b7e92f476de..6095f4dee6ce 100644
---- a/drivers/usb/dwc3/dwc3-xilinx.c
-+++ b/drivers/usb/dwc3/dwc3-xilinx.c
-@@ -293,11 +293,15 @@ static int dwc3_xlnx_probe(struct platform_device *pdev)
- 		goto err_clk_put;
- 
- 	pm_runtime_set_active(dev);
--	pm_runtime_enable(dev);
-+	ret = devm_pm_runtime_enable(dev);
-+	if (ret < 0)
-+		goto err_pm_set_suspended;
-+
- 	pm_suspend_ignore_children(dev, false);
--	pm_runtime_get_sync(dev);
-+	return pm_runtime_resume_and_get(dev);
- 
--	return 0;
-+err_pm_set_suspended:
-+	pm_runtime_set_suspended(dev);
- 
- err_clk_put:
- 	clk_bulk_disable_unprepare(priv_data->num_clocks, priv_data->clks);
-@@ -315,7 +319,6 @@ static void dwc3_xlnx_remove(struct platform_device *pdev)
- 	clk_bulk_disable_unprepare(priv_data->num_clocks, priv_data->clks);
- 	priv_data->num_clocks = 0;
- 
--	pm_runtime_disable(dev);
- 	pm_runtime_put_noidle(dev);
- 	pm_runtime_set_suspended(dev);
- }
--- 
-2.34.1
+I'll send a v3 with the correct commit-id.
+
+Regards,
+
+Hans
 
 
