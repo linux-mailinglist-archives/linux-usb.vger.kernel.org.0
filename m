@@ -1,127 +1,118 @@
-Return-Path: <linux-usb+bounces-3073-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3074-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C63E47F2893
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 10:20:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26D5A7F28A9
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 10:23:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65207B20ED5
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 09:20:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57BEF1C218BD
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 09:23:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 450C638DC5;
-	Tue, 21 Nov 2023 09:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2C23A29D;
+	Tue, 21 Nov 2023 09:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JCKgJlqf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwSgrfyt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BF3F5
-	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 01:20:03 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-d9caf5cc948so4983096276.0
-        for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 01:20:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700558402; x=1701163202; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e0GnsYSjmMnnlfj2CWEXFz1CqUs2uGzKvSRcvkw5bjs=;
-        b=JCKgJlqfNrr/Kd0IbU4DXNllY54+Wjs3TBNKIPViw27VRn7QzfehGURVE/BCq6khIH
-         SRFGCXovd0ZCX5fdajIY4jn2R6KVA2Yx193y33q8+SX8Iw7mv5yK/Y47Iu4Ybdi1yG0R
-         pL9ySpMhZLFXOtY8CaqreGe9URFLWEKvUmQlsB7/OXAR8nOQtyp5H96H4lg7XfnDlbEG
-         h9LoMTmNnROteLbb/WjWYHDRpOjYq+nTt4yRyB+ljOP0SCfBvO29CC+nyAhX6hGNlDu0
-         VOARcusWCH3R6sdUGQ2na0xqZOItV+Y9E3deHI94trQ3mYYOsvdXFAv31d0ORwlxGzRT
-         7nFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700558402; x=1701163202;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e0GnsYSjmMnnlfj2CWEXFz1CqUs2uGzKvSRcvkw5bjs=;
-        b=tkPsOS6RFdI7wOM4+Y2ygswUcybIFLCEOUbe3dduMtyswMlLw5lFkL6K3z3cFUoSOn
-         jt1HebvdKpa/hBHk/HXxDtGIjoQiQ7qIo+mpM4OsAY01JdruFSiaOt7S3vpj0UE/qcFE
-         kd0dPxrbMUDhu/hic1fiTXwN67gs/R2/mZfAYNBMhv2c42dtncS6pqW5w/YPlyMMIaZy
-         oiNH/U9PD/XmiGSuPFP2cUGr7YVIYJCsVlvWLxZHDCh4lY3SXpG2ZqFmilE1edMqDIuo
-         8KDpsJFFtkCB5EVN2GplTgX3r0Mwb5PHkoxzP4fJ3x2HurjT88Ixd3a70ZNw3tEgAtTr
-         QI+Q==
-X-Gm-Message-State: AOJu0YweCruUB+YR5qL5umFaCs1pAvxn4aJrAb7XlOqkrHzOZvI1cL+a
-	JkMD/DRUsfi0qH2SH1mAPNu1Y311ncON1DTXXpAhEA==
-X-Google-Smtp-Source: AGHT+IGGKp46rrXxTxtTOtiXmo2Li35FgNeYDd8e5HO6aCQZjqPditR2ptVz6cb2AzXxBDV7hw/hT+XOKdph+CuSf5Y=
-X-Received: by 2002:a25:ae03:0:b0:db0:2161:5950 with SMTP id
- a3-20020a25ae03000000b00db021615950mr10361703ybj.63.1700558402174; Tue, 21
- Nov 2023 01:20:02 -0800 (PST)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7631FA7;
+	Tue, 21 Nov 2023 09:23:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 508DAC433C9;
+	Tue, 21 Nov 2023 09:23:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700558583;
+	bh=2JJEl9qZRNXTp7V/aOBIfQzLTFERSRdjiQ6fUrNoPtw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iwSgrfytuw8hnUaoDVzv7qtXXWU4WyVhfAxblRHJchTAK2tSuyagK2rZEAi4gBIQJ
+	 JdocksuBYkgUph7bj/c+wEoFOHcc3mx5yv0ulIMutaTqvd69qDJ3ls8ETbky0PqU0E
+	 27lnClMCcoXqMRGdTmqr4DFb3ohg3WPkH6aRY6j8dwwx2B9S6AnrQROeGShCw+RJLR
+	 w55DkZMcZvy3rNVUXblSJBJX8OSJQ2yYlqaOtr9ZzqAQ5LmSVsO/3Vpw2l8IpAxzOc
+	 2qy0KjAcwBxe+38uvGAZom6klSDhE7z+KWs85WHzIboLzUobKTeQsMSkOkMehbqfmj
+	 0+91yF/EkPigg==
+From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To: gregkh@linuxfoundation.org
+Cc: linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jan Kara <jack@suse.com>,
+	Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+	linux-alpha@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-usb@vger.kernel.org,
+	Matt Turner <mattst88@gmail.com>,
+	netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Richard Henderson <richard.henderson@linaro.org>
+Subject: [PATCH 00/17] tty: small cleanups and fixes
+Date: Tue, 21 Nov 2023 10:22:41 +0100
+Message-ID: <20231121092258.9334-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231120224919.2293730-1-dmitry.baryshkov@linaro.org>
- <20231120224919.2293730-2-dmitry.baryshkov@linaro.org> <ac3f3304-6dcd-470a-907c-32a63d3c39cf@linaro.org>
-In-Reply-To: <ac3f3304-6dcd-470a-907c-32a63d3c39cf@linaro.org>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Tue, 21 Nov 2023 11:19:50 +0200
-Message-ID: <CAA8EJppOGsc1+iw-YB9FBEm2UPpyAB_4cQg94Ob4swPzXheQ7A@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] dt-bindings: connector: usb: add altmodes description
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Hans de Goede <hdegoede@redhat.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Mark Gross <markgross@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, 21 Nov 2023 at 10:31, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 20/11/2023 23:00, Dmitry Baryshkov wrote:
-> > Add description of the USB-C AltModes supported on the particular USB-C
-> > connector. This is required for devices like Qualcomm Robotics RB5,
-> > which have no other way to express alternative modes supported by the
-> > hardware platform.
-> >
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> >  .../bindings/connector/usb-connector.yaml     | 29 +++++++++++++++++++
-> >  1 file changed, 29 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > index 7c8a3e8430d3..c1aaac861d9d 100644
-> > --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > @@ -171,6 +171,28 @@ properties:
-> >        offer the power, Capability Mismatch is set. Required for power sink and
-> >        power dual role.
-> >
-> > +  altmodes:
-> > +    type: object
-> > +    description: List of Alternative Modes supported by the schematics on the
-> > +      particular device. This is only necessary if there are no other means to
-> > +      discover supported alternative modes (e.g. through the UCSI firmware
-> > +      interface).
-> > +
-> > +    patternProperties:
-> > +      "^(displayport)$":
->
-> This is just a property, so should be under "properties:".
+This is a series to fix/clean up some obvious issues I revealed during
+u8+size_t conversions (to be posted later).
 
-Having it under properties would make adding new altmodes harder.
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Jan Kara <jack@suse.com>
+Cc: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Cc: linux-alpha@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-usb@vger.kernel.org
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: netdev@vger.kernel.org
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Richard Henderson <richard.henderson@linaro.org>
 
-Inherently it should become something like
-"^(displayport|virtuallink|thunderbolt)$".
+Jiri Slaby (SUSE) (17):
+  tty: deprecate tty_write_message()
+  tty: remove unneeded mbz from tiocsti()
+  tty: fix tty_operations types in documentation
+  tty: move locking docs out of Returns for functions in tty.h
+  tty: amiserial: return from receive_chars() without goto
+  tty: amiserial: use bool and rename overrun flag in receive_chars()
+  tty: ehv_bytecha: use memcpy_and_pad() in local_ev_byte_channel_send()
+  tty: goldfish: drop unneeded temporary variables
+  tty: hso: don't emit load/unload info to the log
+  tty: hso: don't initialize global serial_table
+  tty: hvc_console: use flexible array for outbuf
+  tty: nozomi: remove unused debugging DUMP()
+  tty: srmcons: use 'buf' directly in srmcons_do_write()
+  tty: srmcons: use 'count' directly in srmcons_do_write()
+  tty: srmcons: make srmcons_do_write() return void
+  tty: srmcons: switch need_cr to bool
+  tty: srmcons: make 'str_cr' const and non-array
 
->
-> The rest looks good to me, but I don't know USB that much to judge.
->
-> Best regards,
-> Krzysztof
->
-
+ arch/alpha/kernel/srmcons.c   | 29 +++++++++++++----------------
+ drivers/net/usb/hso.c         | 11 -----------
+ drivers/tty/amiserial.c       | 10 ++++------
+ drivers/tty/ehv_bytechan.c    |  7 +++++--
+ drivers/tty/goldfish.c        |  7 ++-----
+ drivers/tty/hvc/hvc_console.c |  4 +---
+ drivers/tty/hvc/hvc_console.h |  2 +-
+ drivers/tty/nozomi.c          | 18 ------------------
+ drivers/tty/tty_io.c          |  8 ++++++--
+ include/linux/tty.h           | 12 +++++++-----
+ include/linux/tty_driver.h    |  5 ++---
+ 11 files changed, 41 insertions(+), 72 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.42.1
+
 
