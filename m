@@ -1,156 +1,96 @@
-Return-Path: <linux-usb+bounces-3115-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3116-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A20A7F3393
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 17:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EE98D7F3431
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 17:48:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15069283018
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 16:23:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6A6D28309C
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 16:48:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B6495A108;
-	Tue, 21 Nov 2023 16:23:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B4544A9AD;
+	Tue, 21 Nov 2023 16:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="O3iE6ZPm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 21CDB197
-	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 08:23:09 -0800 (PST)
-Received: (qmail 1493358 invoked by uid 1000); 21 Nov 2023 11:23:08 -0500
-Date: Tue, 21 Nov 2023 11:23:07 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Marcel Holtmann <marcel@holtmann.org>,
-  Johan Hedberg <johan.hedberg@gmail.com>,
-  Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-  linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-  linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
-  Hans de Goede <hdegoede@redhat.com>, Mike Jones <mike@mjones.io>,
-  Rocky Liao <quic_rjliao@quicinc.com>
-Subject: Re: Qualcomm Atheros QCA61x4 keeps drawing 0.85 W despite Bluetooth
- being disable in GNOME
-Message-ID: <fd84c14a-1866-4643-8ce9-0d6da5c4b82e@rowland.harvard.edu>
-References: <d994bd71-8d8b-4b6a-855e-8ea5bfede3ca@molgen.mpg.de>
- <22494842-a785-4151-915d-6f3a677d96cb@molgen.mpg.de>
- <1f3cb0cc-4bb0-471f-a785-a5d237cd46a3@rowland.harvard.edu>
- <d63ebc5f-9b72-4457-949b-3e90883bd3c0@molgen.mpg.de>
- <d61ae9a8-2228-4af1-a5f0-912e7763fbd1@rowland.harvard.edu>
- <de236c7d-e265-452a-a60e-b10293a5b944@molgen.mpg.de>
- <41253614-764e-4e95-b052-a46bf5587c29@rowland.harvard.edu>
- <3489df64-0f8f-43e1-a05f-ccb145ff6d59@molgen.mpg.de>
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B34100;
+	Tue, 21 Nov 2023 08:48:41 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BC225FF813;
+	Tue, 21 Nov 2023 16:48:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1700585319;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kwcznJ/vPm0Lhw3csLKCSrYXPx6N2BEOWXzBNGHl0I4=;
+	b=O3iE6ZPmaJ2IpxNqOoT0BjRwsjcxXbZ5NbZpO+2SeAMwF+upyoqld23ZXBSeKAeoKh5y9j
+	0xaldUXNvRdZIB7ZqCfS3DTGL3uHOhIg0AXTSgWVZXIyEk846QIDFFI0DhKWl9uCCoyDFM
+	a85kWPb7JpptfNaA9slX5xKeMwite5+GaLwXkbkZD62ZPMYxLX0+V7k60Pgm3IE6amys2q
+	TqPB2sk4g0NjzDPv4Y8+t5VSVNu7RNbUO/wFHZwT7tMnBz/JDGbGu5qB1lDFQgHb6qmKVk
+	J63PaP2/SVU/FQdcLTB5Zspn8gKA7FMiccQjpTxmBS2sFHaihX/uXOHI8si+0w==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3489df64-0f8f-43e1-a05f-ccb145ff6d59@molgen.mpg.de>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 21 Nov 2023 17:48:37 +0100
+Message-Id: <CX4N6LOJQUR0.791161Y74MP8@tleb-bootlin-xps13-01>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v2 4/7] usb: cdns3-ti: add suspend/resume procedures for
+ J7200
+Cc: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rob Herring"
+ <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Roger Quadros" <rogerq@kernel.org>, "Peter Chen" <peter.chen@kernel.org>,
+ "Pawel Laszczak" <pawell@cadence.com>, "Nishanth Menon" <nm@ti.com>,
+ "Vignesh Raghavendra" <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>
+X-Mailer: aerc 0.15.2
+References: <20231120-j7200-usb-suspend-v2-0-038c7e4a3df4@bootlin.com>
+ <20231120-j7200-usb-suspend-v2-4-038c7e4a3df4@bootlin.com>
+ <d84e400d-7f76-4b4d-8960-f1338f37b8ac@linaro.org>
+In-Reply-To: <d84e400d-7f76-4b4d-8960-f1338f37b8ac@linaro.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Mon, Nov 20, 2023 at 11:05:04PM +0100, Paul Menzel wrote:
-> [Cc: +Rocky Liao as Qualcomm developer]
+Hello Krzysztof,
 
-> Am 20.11.23 um 19:10 schrieb Alan Stern:
-> > Again, nothing out of the ordinary.  Maybe dynamic debugging will give
-> > us a clue.  Try doing this:
-> > 
-> > 	Unload the btusb module.
-> > 
-> > 	echo module usbcore +p >/sys/kernel/debug/dynamic_debug/control
-> > 
-> > 	Load the btusb module
-> > 
-> > 	Make sure that Bluetooth is turned off in Gnome
-> > 
-> > 	Wait a few seconds
-> > 
-> > 	echo module usbcore -p >/sys/kernel/debug/dynamic_debug/control
-> > 
-> > Then let's see what the dmesg log contains for that time period.
-> 
-> 
-> ```
-> $ sudo modprobe -r btusb
-> $ sudo dmesg | tail -1
-> [340309.272439] usbcore: deregistering interface driver btusb
-> $ echo module usbcore +p | sudo tee /sys/kernel/debug/dynamic_debug/control
-> module usbcore +p
-> $ sudo modprobe btusb
-> $ /sbin/rfkill
-> ID TYPE      DEVICE      SOFT      HARD
->  1 wlan      phy0   unblocked unblocked
-> 36 bluetooth hci0     blocked unblocked
-> $ echo module usbcore -p | sudo tee /sys/kernel/debug/dynamic_debug/control
-> module usbcore -p
-> $ sudo modprobe -r btusb
-> $ sudo dmesg | tail -1
-> [340608.761313] usbcore: deregistering interface driver btusb
-> $ sudo dmesg
-> […]
-> [340309.272439] usbcore: deregistering interface driver btusb
-> [340560.326182] xhci_hcd 0000:00:14.0: hcd_pci_runtime_resume: 0
-> [340560.326214] usb usb1: usb auto-resume
-> [340560.326258] hub 1-0:1.0: hub_resume
-> [340560.326381] usb usb1-port3: status 0107 change 0000
-> [340560.326418] usb usb1-port4: status 0107 change 0000
-> [340560.326451] usb usb1-port5: status 0507 change 0000
-> [340560.326650] hub 1-0:1.0: state 7 ports 12 chg 0000 evt 0000
-> [340560.326807] hub 1-0:1.0: state 7 ports 12 chg 0000 evt 0000
-> [340560.373988] usb 1-3: usb auto-resume
-> [340560.373998] hub 1-0:1.0: state 7 ports 12 chg 0000 evt 0008
-> [340560.441936] usb 1-3: Waited 0ms for CONNECT
-> [340560.441957] usb 1-3: finish reset-resume
-> [340560.570940] usb 1-3: reset full-speed USB device number 2 using xhci_hcd
+On Mon Nov 20, 2023 at 6:31 PM CET, Krzysztof Kozlowski wrote:
+> On 20/11/2023 18:06, Th=C3=A9o Lebrun wrote:
 
-Those two lines are unexpected.  Why does the device need to be reset?
-While the btusb module is loaded, does anything show up in
-/sys/bus/usb/devices/1-3/quirks?
+[...]
 
-> > Also, please post the output from "lsusb -v" for the Bluetooth device.
-> 
-> ```
-> $ sudo lsusb -d 0cf3:e300 -v
-> 
-> Bus 001 Device 002: ID 0cf3:e300 Qualcomm Atheros Communications QCA61x4
-> Bluetooth 4.0
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.01
->   bDeviceClass          224 Wireless
->   bDeviceSubClass         1 Radio Frequency
->   bDeviceProtocol         1 Bluetooth
->   bMaxPacketSize0        64
->   idVendor           0x0cf3 Qualcomm Atheros Communications
->   idProduct          0xe300 QCA61x4 Bluetooth 4.0
->   bcdDevice            0.01
->   iManufacturer           0
->   iProduct                0
->   iSerial                 0
->   bNumConfigurations      1
->   Configuration Descriptor:
->     bLength                 9
->     bDescriptorType         2
->     wTotalLength       0x00b1
->     bNumInterfaces          2
->     bConfigurationValue     1
->     iConfiguration          0
->     bmAttributes         0xe0
->       Self Powered
->       Remote Wakeup
+> > --- a/drivers/usb/cdns3/cdns3-ti.c
+> > +++ b/drivers/usb/cdns3/cdns3-ti.c
+> >  static const int cdns_ti_rate_table[] =3D {	/* in KHZ */
+> > @@ -172,6 +173,7 @@ static int cdns_ti_probe(struct platform_device *pd=
+ev)
+> >  	data->usb2_refclk_rate_code =3D i;
+> >  	data->vbus_divider =3D device_property_read_bool(dev, "ti,vbus-divide=
+r");
+> >  	data->usb2_only =3D device_property_read_bool(dev, "ti,usb2-only");
+> > +	data->reset_on_resume =3D of_device_is_compatible(node, "ti,j7200-usb=
+");
+>
+> No, use driver data for this. Don't put compatibles in the code. It
+> makes it unmanageable soon.
 
-That's what I was interested in.  The device does support remote wakeup.
+Fixed for next revision. I hesitated on this patch but I'll know for
+next time.
 
-> PPS: Looking through the commit log/history for `drivers/bluetooth/btusb.c`,
-> I found commit 7ecacafc2406 (Bluetooth: btusb: Disable runtime suspend on
-> Realtek devices) [1] authored on December 5th, 2019. This is for Realtek
-> devices though, and not Qualcomm.
+Thanks,
 
-Furthermore the driver has changed considerably since 2019.  See
-commits 8274db0776d1, 895915226a59, 7bd9fb058d77, and 34ec58b9fd1c.
-
-Alan Stern
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
