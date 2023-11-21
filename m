@@ -1,106 +1,99 @@
-Return-Path: <linux-usb+bounces-3082-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3083-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD9737F2AED
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 11:46:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 371DD7F2AF7
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 11:49:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8590528264C
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 10:46:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6652C1C20D06
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 10:49:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC5AA47790;
-	Tue, 21 Nov 2023 10:46:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B72FD47794;
+	Tue, 21 Nov 2023 10:49:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q9aSLNdw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YhLbzar5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E78BA
-	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 02:46:12 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-332ce3fa438so225701f8f.1
-        for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 02:46:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700563571; x=1701168371; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9YQ9oHc/Z7VmSRjGiVHn+TQLl6XB6fBGVSa6lAReK2Q=;
-        b=Q9aSLNdw6yAfSioECxmYigf43Sqf8Qf3gce0gwoIcA/Yk29mEoHTP5K89hbYxqdOYu
-         9VPW42ZBNB8nmGuO1ZiuhGvvihXI5zXrNqcre6UZQJ7cAwmZTPLOHEuSOItWSHgN8N7r
-         OKq8I7nEqIo4xXSx3uC6iT9WZNrbVnXAiFKf9NFyRgBkTQG3nvikyMAA7+E5Azczc3R0
-         FwpMogbCuGDiC9pna/ktT36F4U46dSQnkP9A3dhxwXbkfDT7yN8TrdJjrz2KLVKvMVXz
-         wW4/QMywFPvX9ZTmATEi7JdSAZktYBIysTLr75FZ/V4mIPWYlesov/udsHkvJsrCwMf6
-         8KZQ==
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A772FCA
+	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 02:49:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700563744;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UiDMghG+Flxsy1/Ts+2LH0I9Mj0dh63yWYboQjw4BX4=;
+	b=YhLbzar5U0RM6/rDkx2Ycj2h7cJKf7GRlbjT63IJimI0ZD8r6VsE/5p11ZTvK/NTd9Mvmd
+	ixfeol0Meh7HY0aNZ0LXl612ML0AlAQj1UCuHl11YX1Jn65vFzSEVLEBYONV4Tl7m2sdiJ
+	OK9QNj1yFOH8UQW0GLuuj/npHAEmFWI=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-515-PnNlMmLgOh2S9_nqYB_2pQ-1; Tue, 21 Nov 2023 05:49:03 -0500
+X-MC-Unique: PnNlMmLgOh2S9_nqYB_2pQ-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-9c37ff224b9so59120966b.0
+        for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 02:49:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700563571; x=1701168371;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9YQ9oHc/Z7VmSRjGiVHn+TQLl6XB6fBGVSa6lAReK2Q=;
-        b=Usk1GdzE2PIYTCzzOt9HLKlaSVOcVkcQaVIfu1LPtCinkBYB1QNBHVBtWY1cRmck+w
-         ia6OfXtO+YCvqbHWhHNYpj7T0GfSOn8PnLDz20/LlWz9f1WSEMVLfwDIsurfVlYZEyte
-         FkD2DFO0evt5DO2YXLHkl3UVoTS965L2pI3b7t9Ey5n8ArTU2pBqwrCgd4epdPHLGnY/
-         qf1xj/kbal37Ld7eHjPGaiuAxt8qzpdufjMk6Y1fH7vN0LNFuxmMr1VsRfn8ARcDsba2
-         ptwD5ehhYHwbQzDnpkGOqXvT1L9QUwdx173A5Oj2PBpMJKMdhX/pbLIepyejCIDMZ9J0
-         Yskw==
-X-Gm-Message-State: AOJu0YyOBWljiiQ4K+82V+bpRiLmdyOddTciuLZOKNhOM9JUgMoIw7b4
-	wuEDiVajCUSg1gi59O7U1/KqZA==
-X-Google-Smtp-Source: AGHT+IEeZ8W+Q8V/otGe4qIWbM9OBl6X7yXc7iTRxrT4SgTPAzPVtLB58IlgIl50TaKNv0wMDaLYNA==
-X-Received: by 2002:a05:6000:18ae:b0:332:c789:4bed with SMTP id b14-20020a05600018ae00b00332c7894bedmr1937246wri.23.1700563571319;
-        Tue, 21 Nov 2023 02:46:11 -0800 (PST)
-Received: from [192.168.100.102] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id q15-20020adff94f000000b0033169676e83sm14261662wrr.13.2023.11.21.02.46.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Nov 2023 02:46:10 -0800 (PST)
-Message-ID: <e67c00fd-37f2-4ede-983f-c8c46bf847f1@linaro.org>
-Date: Tue, 21 Nov 2023 10:46:08 +0000
+        d=1e100.net; s=20230601; t=1700563742; x=1701168542;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UiDMghG+Flxsy1/Ts+2LH0I9Mj0dh63yWYboQjw4BX4=;
+        b=sbsfWCJLl/A+yZd0F8223QLHOAZGa/4mEUVGH0HgqoeNiw1XKWZvhOewkiWtfgooGF
+         InFlz7wJ6lnbO7K0k1K2XS0pB0TYFuRwpo4GOrti7ei5oWhIOxFQl194RO74IRhwbsA7
+         wkETW4c0J4Rkt5E8z4yyhv1FrDGv9R1NmmbwbZxgWNhF6S+tYZCsslS50lKmFBmWNraD
+         1wDO18UY3NFRAaO9xkv6/jiUbDuLp9eihrJwMo1XfAvMArxmQCc40O2zVoDGt3ehApyL
+         HQ1DEJLZn0Lj48lpytofK4lhn1fAcdRqyqkMx6V8yF90QotUF8AxzDbviqp01xuh8FGx
+         AmjQ==
+X-Gm-Message-State: AOJu0YxJx3r0ITdh3UiMQPGF6UUyNKAu9GQ2KmuUl2ZNCvvHKlNPRGLZ
+	Tb4lE7ipJUfGXO6tw/k2FyOZYjzLVFZbC3/Fz164SRllUa+pb6FXIz47IO3m2e3T+L620ofbWPf
+	xTNnlWRtD4WbIkcBPiMLT
+X-Received: by 2002:a17:906:3089:b0:a01:ae7b:d19b with SMTP id 9-20020a170906308900b00a01ae7bd19bmr979118ejv.7.1700563741977;
+        Tue, 21 Nov 2023 02:49:01 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGd+7Qdpd47XJ0PbtYqHKtcRMfbM2Cg5As0yatVia19icpDdakWkj/5dSH7l6+nS0prVP7g7w==
+X-Received: by 2002:a17:906:3089:b0:a01:ae7b:d19b with SMTP id 9-20020a170906308900b00a01ae7bd19bmr979113ejv.7.1700563741649;
+        Tue, 21 Nov 2023 02:49:01 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-234-2.dyn.eolo.it. [146.241.234.2])
+        by smtp.gmail.com with ESMTPSA id lh3-20020a170906f8c300b009dd7097ca22sm5123883ejb.194.2023.11.21.02.49.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Nov 2023 02:49:01 -0800 (PST)
+Message-ID: <08e17879fe0c0be1f82da31fdb39931ed38f7155.camel@redhat.com>
+Subject: Re: [PATCH 0/2] usb: fix port mapping for ZTE MF290 modem
+From: Paolo Abeni <pabeni@redhat.com>
+To: Lech Perczak <lech.perczak@gmail.com>, netdev@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Date: Tue, 21 Nov 2023 11:49:00 +0100
+In-Reply-To: <20231117231918.100278-1-lech.perczak@gmail.com>
+References: <20231117231918.100278-1-lech.perczak@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 6/6] usb: typec: qcom-pmic-typec: switch to
- DRM_AUX_HPD_BRIDGE
-Content-Language: en-US
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
- freedreno@lists.freedesktop.org
-References: <20231103230414.1483428-1-dmitry.baryshkov@linaro.org>
- <20231103230414.1483428-7-dmitry.baryshkov@linaro.org>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20231103230414.1483428-7-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 03/11/2023 23:03, Dmitry Baryshkov wrote:
-> Use the freshly defined DRM_AUX_HPD_BRIDGE instead of open-coding the
-> same functionality for the DRM bridge chain termination.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+On Sat, 2023-11-18 at 00:19 +0100, Lech Perczak wrote:
+> This modem is used iside ZTE MF28D LTE CPE router. It can already
+> establish PPP connections. This series attempts to adjust its
+> configuration to properly support QMI interface which is available and
+> preferred over that. This is a part of effort to get the device
+> supported b OpenWrt.
+>=20
+> Lech Perczak (2):
+>   usb: serial: option: don't claim interface 4 for ZTE MF290
+>   net: usb: qmi_wwan: claim interface 4 for ZTE MF290
 
-> +	bridge_dev = drm_dp_hpd_bridge_register(tcpm->dev, to_of_node(tcpm->tcpc.fwnode));
-> +	if (IS_ERR(bridge_dev))
-> +		return PTR_ERR(bridge_dev);
-> +
+It looks like patch 1 targets the usb-serial tree, patch 2 targets the
+netdev tree and there no dependencies between them.
 
-What is the effect if we never attach any bridged devices ?
+I think it would be cleaner if you re-submit the patches separately,
+thanks!
 
-We make an aux device that just hangs around and eventually get cleaned 
-up on release ? That's the way I read this code anyway.
+Paolo
 
-Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
