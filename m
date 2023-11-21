@@ -1,89 +1,93 @@
-Return-Path: <linux-usb+bounces-3146-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3147-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80B9A7F37E5
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 22:13:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4577B7F3848
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 22:26:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 459472829ED
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 21:13:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26EDB1C20D89
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 21:26:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 893435B1FA;
-	Tue, 21 Nov 2023 21:13:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E2AC6FCE;
+	Tue, 21 Nov 2023 21:26:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052E0D40
-	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 13:13:16 -0800 (PST)
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-1ce66b44deaso56108345ad.1
-        for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 13:13:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700601195; x=1701205995;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DZWvcvFWT3P94ESec92OyEYUrt6Ss1wkXtTKq4rDYxM=;
-        b=pL8929/mobH5sxZ3UrteBimUoV13anYReHu9x/fymsZAoFIX8tUgXBFvNaSL3PiuSf
-         Epl7H/58GMAfBIidylXazsPSEaGNyD9weVV4kkM4h3gbNNo7znkL4ECJblsM24p6rEPy
-         cDF8OLVkcmYs3TFlRDI5ggMUnckglDbA2/KQ75MWorZ9mvd6fD1NAnSV6qm2ggXYtmpk
-         8fp7R8gc6HAB8KhmawVoCxZA6Q2IxOKhe50e5QWhaF9gxDyv7q+TSGKKF4r/ThPGdNBZ
-         tvctSKp0qSZL8wu9V/mA2BamMCnV35HAph5eOCTPNi5IjSkH4vIDnG+cECKGkUKLIeT4
-         /u7g==
-X-Gm-Message-State: AOJu0YzfpkhEYd5fk4ByvDAyRZzbS2L6RxLEq9ubT7lrMg5n+9UVM9yP
-	C0tuY9YUZTOS12v9O4SEoOH3rGrh+GtKpWTbrzGiU4tj4fVK
-X-Google-Smtp-Source: AGHT+IHM9W+C7Oq0Uv4PwRYXwS33JJ9uK/HjdaAoEujXz7jU6ukhsoO+N83LgpXYrU44Q8AnLhnEdLDIby2oGWjGRHsGykut9M7s
+X-Greylist: delayed 362 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Nov 2023 13:26:41 PST
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F7519E
+	for <linux-usb@vger.kernel.org>; Tue, 21 Nov 2023 13:26:41 -0800 (PST)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 5D14720053;
+	Tue, 21 Nov 2023 22:20:35 +0100 (CET)
+Date: Tue, 21 Nov 2023 22:20:33 +0100
+From: Marijn Suijten <marijn.suijten@somainline.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: adjust number of interrupts
+ on SM6125
+Message-ID: <igbswtmfpwadvb6gbjbrkub5bsntcfvf6eh7hluzgnxtzhpmwi@3ucuaji2os3t>
+References: <20231111141953.51841-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:f688:b0:1cc:fd93:ab34 with SMTP id
- l8-20020a170902f68800b001ccfd93ab34mr79222plg.1.1700601195534; Tue, 21 Nov
- 2023 13:13:15 -0800 (PST)
-Date: Tue, 21 Nov 2023 13:13:15 -0800
-In-Reply-To: <0000000000003ee3610599d20096@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002a1fec060ab0120c@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in __media_entity_remove_links
-From: syzbot <syzbot+0b0095300dfeb8a83dc8@syzkaller.appspotmail.com>
-To: andreyknvl@google.com, laurent.pinchart@ideasonboard.com, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, nogikh@google.com, 
-	sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231111141953.51841-1-krzysztof.kozlowski@linaro.org>
 
-This bug is marked as fixed by commit:
-media: uvcvideo: Avoid cyclic entity chains due to malformed USB descriptors
+On 2023-11-11 15:19:53, Krzysztof Kozlowski wrote:
+> Qualcomm SM6125 DWC3 USB controller comes with two interrupts (verified
+> with downstream/vendor code of Trinket DTSI from Xiaomi Laurel device).
+> Move the qcom,sm6125-dwc3 to appropriate place in allOf:if:then blocks
+> constraining interrupts.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+Agreed.  I believe this is what I got stuck on when trying to address the
+warning over a year ago [1].  It makes sense to drop the dm_hs_phy_irq and
+dp_hs_phy_irq interrupts entirely.
 
-#syz fix: exact-commit-title
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+[1]: https://github.com/somainline/linux/commit/b57f7fa80cb3f5cd2db3db2d79548cbf063056d9
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=0b0095300dfeb8a83dc8
-
----
-[1] I expect the commit to be present in:
-
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 9 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index 64043b91ffb9..3f41362b2a91 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -375,7 +375,6 @@ allOf:
+>                - qcom,sdx65-dwc3
+>                - qcom,sdx75-dwc3
+>                - qcom,sm4250-dwc3
+> -              - qcom,sm6125-dwc3
+>                - qcom,sm6350-dwc3
+>                - qcom,sm8150-dwc3
+>                - qcom,sm8250-dwc3
+> @@ -408,6 +407,7 @@ allOf:
+>                - qcom,msm8996-dwc3
+>                - qcom,msm8998-dwc3
+>                - qcom,sm6115-dwc3
+> +              - qcom,sm6125-dwc3
+>      then:
+>        properties:
+>          interrupts:
+> -- 
+> 2.34.1
+> 
 
