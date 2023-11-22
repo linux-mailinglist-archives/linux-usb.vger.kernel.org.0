@@ -1,136 +1,175 @@
-Return-Path: <linux-usb+bounces-3191-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3192-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3608A7F48CC
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 15:22:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C67D07F4960
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 15:52:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B1FFFB2112B
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 14:22:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8243E2815B1
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 14:51:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A6A74E1B0;
-	Wed, 22 Nov 2023 14:22:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AF585646A;
+	Wed, 22 Nov 2023 14:51:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ItX6HUKM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RFZTJARF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EFC112;
-	Wed, 22 Nov 2023 06:22:00 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6be0277c05bso6114973b3a.0;
-        Wed, 22 Nov 2023 06:22:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700662919; x=1701267719; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=T42V6TPt3HJK5qPeCR0290v9Ba+EJxYb7HZYLNMMVVo=;
-        b=ItX6HUKMUyJO0KAy7//+rqRRNu3mW23Jckc9jO0iHL28Guvd/vw8oW+CcRmZyxe/Fp
-         YpdsqKeP5UZ99iJmi9cnyWwAvCCqtd246Zz3E82v65Pkd/HhrvkCRTRctlkwh+UHX9Aq
-         u+dbnFG0CYp6Isfyvsco9SfWkfattN8IdRWhryuXXR7o53NMFsVe0feCGsGjtAaddF/g
-         tw33L3IqzTCZSLiZ7nlQ7SJw1crzqUykpJgS5vd0xaf/siFk6ZAg9YT+AJlZe+9++5j3
-         ywZdG+ayiJEy/QDSg1SI8b5IfDVLEFnjDZoD2JogZyzp73RZ01mCyleYYws6aViXmbrI
-         P4kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700662919; x=1701267719;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T42V6TPt3HJK5qPeCR0290v9Ba+EJxYb7HZYLNMMVVo=;
-        b=h50cjlm8buzjiWnTbn9ioaphxfH7XvkTkOUZ9QVhhG6VFjd0zDx4S16SOAAK0htP/g
-         tBvHVI5VKnwMkdsafus2OVkWkcEWRJ1gRyqBnuOJ/gk5j2mOlgO+k3ugcvITzuUKkDkC
-         qHwgsCQ50L+VPQiOxR+imt60giloIg+BpUvti9/Zjwr/+GkfMhxBk8+QKh5z4tC2oggY
-         ok5jRvqtazz88Wag98hIk5qGdRK0m8J4D1wjIwfzraxNeekUUgKyTtTOW5K0xcEN2DUv
-         3jKOQtb1wiwMpsDStr4jfvNeEyDWBFmutdmidoxP8Gj0H0h/VzCzAztbszzn3Ut+h9dO
-         D5Bw==
-X-Gm-Message-State: AOJu0Yw9fXfqqStg9BcjdAOf/zqT3/AtBbBPTs+/qrDs47HT9y575L6/
-	pdAhFvO/zih4GHFL2kWDzzs=
-X-Google-Smtp-Source: AGHT+IGhy7rUh4lvpP3hDQ6ITe1G5hUYfdvFh1qdeVgpH7HmQ0lPxilhk01NWpzFV+FY9G4JyNbItQ==
-X-Received: by 2002:a17:90b:4f84:b0:27c:f016:49a2 with SMTP id qe4-20020a17090b4f8400b0027cf01649a2mr2861039pjb.7.1700662919039;
-        Wed, 22 Nov 2023 06:21:59 -0800 (PST)
-Received: from [172.24.5.154] ([119.8.44.69])
-        by smtp.gmail.com with ESMTPSA id 29-20020a17090a035d00b00280c285f878sm1536495pjf.55.2023.11.22.06.21.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Nov 2023 06:21:58 -0800 (PST)
-From: Asuna Yang <spriteovo@gmail.com>
-X-Google-Original-From: Asuna Yang <SpriteOvO@gmail.com>
-Message-ID: <4aadd8ba-d566-411a-830e-242fb101b220@gmail.com>
-Date: Wed, 22 Nov 2023 22:21:55 +0800
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EBE19E;
+	Wed, 22 Nov 2023 06:51:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700664701; x=1732200701;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3Lp3IDM3ar4jYOzHbknAigUjAPfa74EA/HlhJuCNIfU=;
+  b=RFZTJARF7G0F4/0tmBnfccuZRtbRAgC9sUNRAVYBjn5Gy0GYQbXTH7Fl
+   AU4IGs1YEAxciute8I3PlHvJMcZs2hgTNMSNKrkAFc0LxImmN1OmVtm+X
+   qV7wVscQSNX3PSaqk5jF6KYb/mluYTiVh6aOW9rlx0CwH4JwmO7BOFMEP
+   9m55363ih+vtjNxuYg3dprwR3LRvG6K8VRnA/T9nUSt8AZ/Pb9gG25z22
+   re2zR5E3zUT3WDbCaDcYXg0IV0pwo3vtYzdkxtD7WdvUmfLWqYgAVvPcd
+   BwYJ+8vBN5/YwDNswBFnUYes4TJB1tqMMmb44i+UDAkp9SFRJZw8/dd8c
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="10729190"
+X-IronPort-AV: E=Sophos;i="6.04,219,1695711600"; 
+   d="scan'208";a="10729190"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 06:51:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,219,1695711600"; 
+   d="scan'208";a="14944713"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa001.jf.intel.com with ESMTP; 22 Nov 2023 06:51:20 -0800
+Date: Wed, 22 Nov 2023 22:49:27 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+	Jan Kara <jack@suse.cz>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>,
+	Oded Gabbay <ogabbay@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Zhenyu Wang <zhenyuw@linux.intel.com>,
+	Zhi Wang <zhi.a.wang@intel.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Leon Romanovsky <leon@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Frederic Barrat <fbarrat@linux.ibm.com>,
+	Andrew Donnellan <ajd@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Eric Farman <farman@linux.ibm.com>,
+	Matthew Rosato <mjrosato@linux.ibm.com>,
+	Halil Pasic <pasic@linux.ibm.com>,
+	Vineeth Vijayan <vneethv@linux.ibm.com>,
+	Peter Oberparleiter <oberpar@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Tony Krowiak <akrowiak@linux.ibm.com>,
+	Jason Herne <jjherne@linux.ibm.com>,
+	Harald Freudenberger <freude@linux.ibm.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Diana Craciun <diana.craciun@oss.nxp.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Eric Auger <eric.auger@redhat.com>, Fei Li <fei1.li@intel.com>,
+	Benjamin LaHaise <bcrl@kvack.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeelb@google.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Kirti Wankhede <kwankhede@nvidia.com>, kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-fpga@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+	linux-aio@kvack.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] eventfd: simplify eventfd_signal()
+Message-ID: <ZV4U96z12KSi4GGw@yilunxu-OptiPlex-7050>
+References: <20231122-vfs-eventfd-signal-v2-0-bd549b14ce0c@kernel.org>
+ <20231122-vfs-eventfd-signal-v2-2-bd549b14ce0c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] USB: serial: option: add Luat Air72*U series products
-To: johan@kernel.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- Yangyu Chen <cyy@cyyself.name>
-References: <20231122141803.82844-1-SpriteOvO@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20231122141803.82844-1-SpriteOvO@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231122-vfs-eventfd-signal-v2-2-bd549b14ce0c@kernel.org>
 
-Compared to v1, the v2 patch only changed the git name.
-
-Thanks,
-
-On 11/22/23 22:18, Asuna Yang wrote:
-> Update the USB serial option driver support for Luat Air72*U series
-> products.
->
-> ID 1782:4e00 Spreadtrum Communications Inc. UNISOC-8910
->
-> T: Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 13 Spd=480 MxCh= 0
-> D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
-> P: Vendor=1782 ProdID=4e00 Rev=00.00
-> S: Manufacturer=UNISOC
-> S: Product=UNISOC-8910
-> C: #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=400mA
-> I: If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
-> E: Ad=82(I) Atr=03(Int.) MxPS= 8 Ivl=4096ms
-> I: If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-> E: Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I: If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I: If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I: If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
->
-> Co-developed-by: Yangyu Chen <cyy@cyyself.name>
-> Signed-off-by: Yangyu Chen <cyy@cyyself.name>
-> Signed-off-by: Asuna Yang <SpriteOvO@gmail.com>
+On Wed, Nov 22, 2023 at 01:48:23PM +0100, Christian Brauner wrote:
+> Ever since the evenfd type was introduced back in 2007 in commit
+> e1ad7468c77d ("signal/timer/event: eventfd core") the eventfd_signal()
+> function only ever passed 1 as a value for @n. There's no point in
+> keeping that additional argument.
+> 
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
 > ---
->   drivers/usb/serial/option.c | 3 +++
->   1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 45dcfaadaf98..b76cb9a096f7 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -609,6 +609,8 @@ static void option_instat_callback(struct urb *urb);
->   #define UNISOC_VENDOR_ID			0x1782
->   /* TOZED LT70-C based on UNISOC SL8563 uses UNISOC's vendor ID */
->   #define TOZED_PRODUCT_LT70C			0x4055
-> +/* Luat Air72*U series based on UNISOC UIS8910 uses UNISOC's vendor ID */
-> +#define LUAT_PRODUCT_AIR720U			0x4e00
->   
->   /* Device flags */
->   
-> @@ -2271,6 +2273,7 @@ static const struct usb_device_id option_ids[] = {
->   	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x40) },
->   	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
->   	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C, 0xff, 0, 0) },
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, LUAT_PRODUCT_AIR720U, 0xff, 0, 0) },
->   	{ } /* Terminating entry */
->   };
->   MODULE_DEVICE_TABLE(usb, option_ids);
+>  arch/x86/kvm/hyperv.c                     |  2 +-
+>  arch/x86/kvm/xen.c                        |  2 +-
+>  drivers/accel/habanalabs/common/device.c  |  2 +-
+>  drivers/fpga/dfl.c                        |  2 +-
+>  drivers/gpu/drm/drm_syncobj.c             |  6 +++---
+>  drivers/gpu/drm/i915/gvt/interrupt.c      |  2 +-
+>  drivers/infiniband/hw/mlx5/devx.c         |  2 +-
+>  drivers/misc/ocxl/file.c                  |  2 +-
+>  drivers/s390/cio/vfio_ccw_chp.c           |  2 +-
+>  drivers/s390/cio/vfio_ccw_drv.c           |  4 ++--
+>  drivers/s390/cio/vfio_ccw_ops.c           |  6 +++---
+>  drivers/s390/crypto/vfio_ap_ops.c         |  2 +-
+>  drivers/usb/gadget/function/f_fs.c        |  4 ++--
+>  drivers/vdpa/vdpa_user/vduse_dev.c        |  6 +++---
+>  drivers/vfio/fsl-mc/vfio_fsl_mc_intr.c    |  2 +-
+>  drivers/vfio/pci/vfio_pci_core.c          |  6 +++---
+>  drivers/vfio/pci/vfio_pci_intrs.c         | 12 ++++++------
+>  drivers/vfio/platform/vfio_platform_irq.c |  4 ++--
+>  drivers/vhost/vdpa.c                      |  4 ++--
+>  drivers/vhost/vhost.c                     | 10 +++++-----
+>  drivers/vhost/vhost.h                     |  2 +-
+>  drivers/virt/acrn/ioeventfd.c             |  2 +-
+>  drivers/xen/privcmd.c                     |  2 +-
+>  fs/aio.c                                  |  2 +-
+>  fs/eventfd.c                              |  9 +++------
+>  include/linux/eventfd.h                   |  4 ++--
+>  mm/memcontrol.c                           | 10 +++++-----
+>  mm/vmpressure.c                           |  2 +-
+>  samples/vfio-mdev/mtty.c                  |  4 ++--
+>  virt/kvm/eventfd.c                        |  4 ++--
+>  30 files changed, 60 insertions(+), 63 deletions(-)
+> 
+> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> index dd7a783d53b5..e73f88050f08 100644
+> --- a/drivers/fpga/dfl.c
+> +++ b/drivers/fpga/dfl.c
+> @@ -1872,7 +1872,7 @@ static irqreturn_t dfl_irq_handler(int irq, void *arg)
+>  {
+>  	struct eventfd_ctx *trigger = arg;
+>  
+> -	eventfd_signal(trigger, 1);
+> +	eventfd_signal(trigger);
+
+For FPGA part,
+
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+
+>  	return IRQ_HANDLED;
+>  }
 
