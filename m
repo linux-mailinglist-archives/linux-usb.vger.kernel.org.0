@@ -1,131 +1,148 @@
-Return-Path: <linux-usb+bounces-3157-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3158-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52E237F3B8D
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 03:02:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E12A87F3BB8
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 03:21:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 161211C21010
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 02:02:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2FFFB21926
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 02:21:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB5C96D3F;
-	Wed, 22 Nov 2023 02:01:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 974CC8493;
+	Wed, 22 Nov 2023 02:21:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b="OapWnM4h"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AQBZdBC6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2069.outbound.protection.outlook.com [40.107.117.69])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941E3DD;
-	Tue, 21 Nov 2023 18:01:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bUFcl0msdoJjHXFdE8Ll1sqV6ssPZdPe7tuy+FzgAqH7LMLhSdwnw90uAJWpU4Fe6JTChzqZk930kEDnsjjJC4Pq1dBYzBD900iB20ZyM/HaumGusQNQnZgbXJO1RV9KiB7SsVfxBs+IAjcX7Ch6iByP9X3K9r6JIYVnMfLIZuZe3ToldIFfVJmcg9p0zG2JlB4RSj2CRv289Sv3xM1G51jxDcvKl1BsFoqCAdk0bn4Ax3KdfswnDaIHnEDQo051DOQ4/8eVfTpMx8GFLlRD4kDnsOtYjxx4lvtCtNM0qbhpV+8Gd6s+jR9KISjBFADCxAsHBpMvOf6CAaRdX4u4tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v4mMQRsfDom1vtINLow1rcwNUGNPOqtO3EwaszgaU/0=;
- b=KdGt6l4WZ+7Xqfcx6lHOHnOt5es3R+nF5EV8jXGs88uufn7BoE9vEeceDih6irUsGXvCJKioFo3Ulo1KpH8hSGCvwrxCzWHmXJtXsmfzlhZXrkHGVddzpC9UJwlyvnvrNsOsD1wz1a3Uu6+FBWkeZdKGwSnyi/fKyWP4tiyIV2vGYzLVGGGpiNeFb0XqnlErIVJtV5THlgX5vIJ5WUV8xBFpW1UupKFGDzpAcwvdZxT2+icFrOsLQZuIDh8EQ2nFPYig1nGhS33pqSuz8zvXdocYIx1/f+DdRDspUBRFOUhEqMey/Hux31yX267IBznXeO33O5NIx6J9AL2Lv8jAfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fibocom.com; dmarc=pass action=none header.from=fibocom.com;
- dkim=pass header.d=fibocom.com; arc=none
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EA3181;
+	Tue, 21 Nov 2023 18:21:23 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6ce2cf67be2so3333324a34.2;
+        Tue, 21 Nov 2023 18:21:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fibocomcorp.onmicrosoft.com; s=selector1-fibocomcorp-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v4mMQRsfDom1vtINLow1rcwNUGNPOqtO3EwaszgaU/0=;
- b=OapWnM4hEaIZ7bWJe1srZ4/VmnAN8jMqwRE/d9qKJ7NT1+c2/Ntyt1hVpIaFmCUooAk3rEQKR2v86zi4QM+3zwEdaqVMh8zVQ7yO2osbpBzimk5Hc85oa4eMfnsS45iTl/AROdY5qJ6UKiNOLnQCYgF1aJmiv4PRFrBIdGAfjs8=
-Received: from TYZPR02MB5088.apcprd02.prod.outlook.com (2603:1096:400:71::13)
- by TYZPR02MB4957.apcprd02.prod.outlook.com (2603:1096:400:8f::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.18; Wed, 22 Nov
- 2023 02:01:46 +0000
-Received: from TYZPR02MB5088.apcprd02.prod.outlook.com
- ([fe80::e6c0:ad44:ccaa:789]) by TYZPR02MB5088.apcprd02.prod.outlook.com
- ([fe80::e6c0:ad44:ccaa:789%6]) with mapi id 15.20.7002.028; Wed, 22 Nov 2023
- 02:01:45 +0000
-From: "Puliang Lu(Puliang)" <puliang.lu@fibocom.com>
-To: Johan Hovold <johan@kernel.org>
-CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: serial: option: modify Fibocom to DELL custom modem
- FM101R-GL
-Thread-Topic: [PATCH] USB: serial: option: modify Fibocom to DELL custom modem
- FM101R-GL
-Thread-Index: Adoc59aTjxxtKq9cRWaHZUODs9wnvQ==
-Date: Wed, 22 Nov 2023 02:01:45 +0000
-Message-ID:
- <TYZPR02MB5088F10A6C02CF08C1A02B0189BAA@TYZPR02MB5088.apcprd02.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fibocom.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYZPR02MB5088:EE_|TYZPR02MB4957:EE_
-x-ms-office365-filtering-correlation-id: 580d218f-2aa8-4c79-f456-08dbeafefae1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- D8V+R5AzIvcUazbqJdIItf+Yk0TM8wwet77HkS1WooZGSTpRTVTRWydC99Zi1Mzdy4HUnxSCjWKIn/F4BSZVXySyp7gxfWUxxfgrGP7TSsJmDvQ3Ogv32PSTJzRGooebuurqs6anrK0NgHnHZRwjPHaB4+ySfCb1mFgUNGt24EZHAvdNFoNmPbV3I0aBd4Vf/dwoLDNS1GY0T4FgFxo6DTQdr3dj8i9h5EGfpVtrCe9vY5Nyb7KztFsybLLrxhEV9lVGmicnJL8E3TZWUmf7hUH82aXpmhCmx54E0pPZkNqguGd+C2v73cD9zP9lwOIfLnrJli+83NvmoQfShyVtm6FlK8LGQvubZzjoSf2MDear6aPlJSSR0ikmPHOUcYolsjC3dqSDIuRzqCdMEtuwOBixlMDPCCuHds3DWeBjHtRF/2REt1+Np7ltHX7Jrui08SyihluZsm7o23U1MAKDkd4pqtwrQLJJgz1tLdZTA3aZ68dlmFPbkxS9im3DEYA26C/X43gI0VP0tsMnS/KY6wqhUYzqoaG2QX2h0p9FSoi3GDZUtAARmu8A4PUd6hcW4TaRJNHHs3HcxS7VltmdAtzpbVJY+RqXAaQfqu+u6Z4=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR02MB5088.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(39850400004)(376002)(346002)(136003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(2906002)(55016003)(8936002)(41300700001)(4326008)(8676002)(52536014)(5660300002)(316002)(6916009)(64756008)(66556008)(66946007)(54906003)(66446008)(76116006)(66476007)(86362001)(966005)(26005)(71200400001)(9686003)(38070700009)(6506007)(122000001)(33656002)(558084003)(478600001)(83380400001)(38100700002)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?o5hkUVq5tQYGSY9Ab17qP4FIkrbGLPfm5TgWpCGeFDjxwsa9LRyp3cNQOMHp?=
- =?us-ascii?Q?qi+j5qxXBokdNvQGYWStSKo9XWzZ2Evs44RQUvlaLc5jWymZrStB9VM8vqfH?=
- =?us-ascii?Q?qynDwLfrZ5gekZ+dJuPy8DFioFy5pD07ELgT6tmpyXIsnGSn7BBM/3qDZcfh?=
- =?us-ascii?Q?/n++v5tA+zyUCRmb5+mNoKI9ebx6V/oDp155j3L7zboyd4cEAgA2ILr5iubY?=
- =?us-ascii?Q?MHIeJxutWIQlAQGnpO4ElUgiPx88Wc60XUa4gphGxohG6ODPPTlfVYJrYYF4?=
- =?us-ascii?Q?OfdNLdXWmsvQjmGhN+o4lAk37Pd+iSzOgPoH3H2AdhScyCT0FPytzW+36ZuS?=
- =?us-ascii?Q?msy0hgnnXi+zFYXxtWss2cCDJ6lsOkwTXBWLZtLe1XAXECXYMGZWbEgKFkEu?=
- =?us-ascii?Q?MWygPsbSoqdA4qzzMOFKDxXdTfAqyxDsCwJQgfrNs/aXZJZ1JFaVDmH3Ywuc?=
- =?us-ascii?Q?dCfP2fU3G6GT4GfcJCuuFaTH+/wryDs/0eTrzbUzGrT+RhCUl5UZPZ0+nn+F?=
- =?us-ascii?Q?8ecU1Cz8csY2ihDt7dTqaRSesZQjRk0nA6bRS9/DW27Nehz07v7Un4O4BD2D?=
- =?us-ascii?Q?9FHMWwO2iXjl8hTBlkIjb06bEKfz25U3qHY6CkSue+alsPP2QFPT+kgouDzz?=
- =?us-ascii?Q?2/PV4w53yRvit4AMZwtIGu/bUzhs/kf1sba5vQ42KWz3swFDsRmYRnRx2gFb?=
- =?us-ascii?Q?dvEVzY8fWz2+IJV7kMFAvH104GeKWk4Dmo0qVFscMphlVC4FzezdwYk7J2V/?=
- =?us-ascii?Q?DDB1IrOnVZb0y2EJvM5Dqw8J34UAqdzgKtqKBxW5Neru3/0nHkPd8DpCQoUM?=
- =?us-ascii?Q?kyrDVm836BXrIVUXkXTSjBIgLBaXxfkJ6U71EEox/7JSSkRhzv7TZDDi3HxR?=
- =?us-ascii?Q?tOXy1o/y54EVQ1DEGgXfYx37uS2PwqDxwoFz8eYc2E1Hfzs+IgTG7pDsXO2B?=
- =?us-ascii?Q?+TjqwSX7LrB7r0YLMkkmfoY0hlL7SYkA+LFSD/jFRRAu6lvXMzlNtjuPGblB?=
- =?us-ascii?Q?m71H1srVg/bTSbfURpfyYHM3R5m8ichwkHG0qgxBaaNZgG3eKWUjqJ+9EIWv?=
- =?us-ascii?Q?PrLqBLUTmiecjb1VsP9zbas8fWynqHZeeUnVhXeYgwMIGwl7RwnjTLlnC7+T?=
- =?us-ascii?Q?XT737iKuSWvcpyypDe7AuZ0X/odjTL8eUsq51970oqO0Y/lmyRpdvwHQvbol?=
- =?us-ascii?Q?JNR9MY1fmQ1EfPuO52jBDTukxMBvRpBRbnZ1GYolDT6JxIQNrRIbJJSoXsm/?=
- =?us-ascii?Q?DuuYrAihJ2sOlNh7z28uN0gla4NU7eE+inAZLlKT1AV0Fu4yTIcEiMbY8Mtp?=
- =?us-ascii?Q?Yn/Uiu3gaQZam+AcxAEYXlUjYeKVnmbuSbci1vxgwKMrGhuxi2GA8lV8rz9g?=
- =?us-ascii?Q?UzqDMBAwXLboQhFwgxSMj0PpXs/Wlm+BNqXVCPUDlH00T0K8nwDS3sfSq0WL?=
- =?us-ascii?Q?wkmDxstaRhjMAzByyg4OSmgHkiLY6oFN3U69saV4hXJuNcrreSNss8enELq0?=
- =?us-ascii?Q?YA4YNc06vIyAod9IEW2B10KBHOCagVQqQD57PFjYO73SD92oCG+2wAKZMhlk?=
- =?us-ascii?Q?gAVibZX3P8DcUsozFbeDOQWS0b1A+gjtssa98d37?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20230601; t=1700619683; x=1701224483; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jeGm3fxGNWvBQCvQzvUQ2JuG11fQHIZo42Sf8MQg8+w=;
+        b=AQBZdBC68Qv94nZTZ/he7carL4QxdgpBvR4yHjeOwfWiJMJsJ38QRn0SygHdPo7xXY
+         xEUL6+onwt2ndGKO10CxtkGkuQwd3i5T2I7CzT5XEz5sUDmJYTWy8TD6ct5V6r6vmBH8
+         2LuNXcZlgB2cqz6PW35tAMXn/2ACDNhbLqiSnik66VfWN2YMaEGP55cM7K0xA7Sam8iH
+         suFoPqKQITgCMx5BKtqNAuJ6blpEAixb4Y7XqFCk2TRUms3zALdIL2LNhG/BJnZfuqjm
+         Tfvw72XfMN0THpwELEUAIWFjedRM4mPEzaxU+62GhjhxYoIaN35aiEuNeoWJhyNtAXAN
+         aBPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700619683; x=1701224483;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jeGm3fxGNWvBQCvQzvUQ2JuG11fQHIZo42Sf8MQg8+w=;
+        b=mVWtaBj9kXfsB3lLrUIFtwkaqMbVzb6Zixufg3h2xm6DPjKBEqt+i+bJw8uvMdwMu0
+         OS0lJSkvZD7444XSb23LYh0ibPTpYo9qIErq0I/ZWkLb8cCiK1L3JnDaU4StyGJmuo9a
+         MiiPeh+6Cj2g1RxyFjNTjB+1nehkUZs6XwqFTpRDJjRsxkZVwEP7pBkPnCH1uy+5+gES
+         7aFOeRZsRWIRm3C4pblVQDE2sXdPiIDhSqmCnRtz7M/ZSftjmn7Utv7KE4O6wlwGukGv
+         ss1ElOf8K3P3nRPJZulaGlcxXVuUMpiwE8VrjcOGAqEe8MeAezWuPZEsdCd3d4wRBcRo
+         TtLg==
+X-Gm-Message-State: AOJu0Yw4JWOK3ZtyBwmACC4zNCcr4Cz6sfv+KFDEJINSB85MQeWJTV8a
+	sKA4DNJ+YI3coht8P/89IqnGnbuSd8RpinFLFvBMjkyuAW40uA==
+X-Google-Smtp-Source: AGHT+IEEJhLoFe3a49x0x2186Fm334AW4JVqeWUeOrtc50QYUPXDENPUCh0JwIH9qhxtqwrrVcl52q0iUOXECMNpgac=
+X-Received: by 2002:a9d:6d04:0:b0:6c4:a65c:f7bb with SMTP id
+ o4-20020a9d6d04000000b006c4a65cf7bbmr1333897otp.33.1700619682728; Tue, 21 Nov
+ 2023 18:21:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: fibocom.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR02MB5088.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 580d218f-2aa8-4c79-f456-08dbeafefae1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2023 02:01:45.4478
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 889bfe61-8c21-436b-bc07-3908050c8236
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MkCdhUm/RS8U+KFkRLfYbmAXgFZtwc6hYzJj8ZDePFk9GanM/+nfurtNZeZo3pAPdkI5oOENH9BR4vXOyUF2MQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR02MB4957
+References: <20231119023454.1591-1-linux.amoon@gmail.com> <20231119023454.1591-2-linux.amoon@gmail.com>
+ <20231119-phrasing-reverse-bbc1fde515d5@spud> <CANAwSgQ6H9FUEBKz7sCf4kUZSMnCfyXG-cpGTMZoT15W9187Kg@mail.gmail.com>
+ <20231120-grinch-upbeat-05f7a32a99fa@spud> <CANAwSgQGhDMeHLFpe8gnM2c26CjqX8QHOL1GdHrZJSvnBj39bA@mail.gmail.com>
+ <20231121-defendant-hemstitch-a728c39b4e7d@spud>
+In-Reply-To: <20231121-defendant-hemstitch-a728c39b4e7d@spud>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Wed, 22 Nov 2023 07:51:07 +0530
+Message-ID: <CANAwSgS638Giuha+Kv0Vkunw3NqfahhbZfMYLc3AUrRoiXpDxg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: Add the binding example for the
+ Genesys Logic GL3523 hub
+To: Conor Dooley <conor@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Icenowy Zheng <uwu@icenowy.me>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Conor
 
-> Now applied with a slightly updated commit message:
->=20
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/com=
-mit/?h=3Dusb-linus&id=3Da1092619dd28ac0fcf23016160a2fdccd98ef935
+On Tue, 21 Nov 2023 at 22:30, Conor Dooley <conor@kernel.org> wrote:
+>
+> On Tue, Nov 21, 2023 at 09:36:37AM +0530, Anand Moon wrote:
+> > On Mon, 20 Nov 2023 at 21:15, Conor Dooley <conor@kernel.org> wrote:
+> > > On Sun, Nov 19, 2023 at 08:57:28PM +0530, Anand Moon wrote:
+> > > > On Sun, 19 Nov 2023 at 19:28, Conor Dooley <conor@kernel.org> wrote:
+> > > > > On Sun, Nov 19, 2023 at 08:04:50AM +0530, Anand Moon wrote:
+> > > > > > Add the binding example for the USB3.1 Genesys Logic GL3523
+> > > > > > integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
+> > > > > > hub.
+> > > > >
+> > > > > But no comment in the commit message about the new property for the
+> > > > > "peer hub". $subject saying "dt-bindings: usb: Add the binding example
+> > > > > for the Genesys Logic GL3523 hub" is misleading when the meaningful
+> > > > > parts of the patch are unrelated to the example.
+> > > > >
+>
+> > > > > > +  peer-hub:
+> > > > > > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > > > > > +    description:
+> > > > > > +      phandle to the peer hub on the controller.
+> > > > >
+> > > > > What is this, why is it needed? Please explain it in your commit
+> > > > > message.
+> > > > >
+> > > > Ok, GL3523 integrates Genesys Logic self-developed USB 3.1 Gen 1
+> > > > Super Speed transmitter/receiver physical layer (PHY) and USB 2.0
+> > > > High-Speed PHY
+> > > >
+> > > > peer-hub is used to cross-connect those phy nodes so that it can help
+> > > > hub power on/off simultaneously.
+> > >
+> > > I said please explain it in your commit message, but on reflection I
+> > > think that would be insufficient. Extending the description to explain
+> > > what the peer-hub is would be great too. "peer hub on the controller"
+> > > doesn't seem to make sense to me either, as the peer hub phandle is to
+> > > another phy, not to the controller. I think that would probably also be
+> > > resolved by explaining what the peer hub is in a more detailed manner.
+> > >
+> > > If this is purely a genesys thing, the property should grow a genesys,
+> > > prefix also.
+> > >
+> > No, some USB Hub have combined phy for USB 3.x and USB 2.0 and have common
+> > reset-gpios and power supply, peer-hub node helps connect the USB controller and
+> > bring up the USB hub.
+>
+> I don't know what this is a response to.
+>
 
-Thank you very much.
+This was the response to your comment, it is a generic property
+"If this is purely a genesys thing, the property should grow a genesys,"
 
+Please find the link to the schematic of the board which shares the
+details of the binding example. USB_HUB_GL3523.
+
+https://dn.odroid.com/S922X/ODROID-N2/Schematic/odroid-n2_rev0.6_20210121.pdf
+
+> > I was waiting for more feedback on these changes.
+> > Once it's ok I will update with proper the commit message in v4.
+>
+> And the property description too, so that a reader can understand how to
+> implement it.
+
+Yes, I will do that.
+
+>
+> Cheers,
+> Conor.
+
+Thanks
+-Anand
 
