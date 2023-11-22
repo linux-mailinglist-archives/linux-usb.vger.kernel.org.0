@@ -1,95 +1,126 @@
-Return-Path: <linux-usb+bounces-3166-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3167-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22A7C7F42B2
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 10:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 844ED7F42E1
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 10:53:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0D59281950
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 09:48:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F3932819BD
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 09:53:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C245676A;
-	Wed, 22 Nov 2023 09:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 966CE584FC;
+	Wed, 22 Nov 2023 09:53:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o2r1HKah"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="lKuq8ARl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E97D54;
+	Wed, 22 Nov 2023 01:53:11 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E109F5647E;
-	Wed, 22 Nov 2023 09:48:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60B70C433C9;
-	Wed, 22 Nov 2023 09:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700646516;
-	bh=VC9h/SiN8Zx5aGSBZR6crUirZJCFXIk5eN7BP4+P6I8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=o2r1HKahm9VWVd8qhtRV5/TA0RzVd6l+Ek0VSBN3s1RHZ4h7noyswlQcQ/YYLC0bk
-	 S8X2LCkTa9Cn0lqoVsO7YeEWzqDDF9S00dbajvfkp/V/Nkf6RbrOv60lm2Tu2jKhzH
-	 hJHZR8n8AoXCmbsVVJ4HS9/AW6Dt7b2D46VblcZMz174wt5kA9wh4fSSKIjgNyL93o
-	 Vh0BPCbwpKejYEmFtM3PBxYReBmcH7yZKTkqkAthHqusQZrsvy/TIyXYFaJRwJzhJL
-	 E5WBfi2inJ1LBiPwSpwzZkes9BfR8RHQ7hzLdlH71Y2L2f9A6BHxmwdiPcB7qM765H
-	 4tEAIETsNmApQ==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1r5jqk-0008B5-1g;
-	Wed, 22 Nov 2023 10:48:50 +0100
-Date: Wed, 22 Nov 2023 10:48:50 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Subject: Re: [PATCH 00/12] usb: dwc3: qcom: Flatten dwc3 structure
-Message-ID: <ZV3OgorG4G4mwvv1@hovoldconsulting.com>
-References: <20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com>
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 4B03D1F8D5;
+	Wed, 22 Nov 2023 09:53:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1700646790; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=rm8efB2h0EFnzH7RsJ3ZTEZxJII9oswUgWhpjX9sfK8=;
+	b=lKuq8ARlpZKsRWzZkvMUc9uj6EAtjV9LraR6K8GAfwsQUMnor2Bsg0Dsj+7eK/Vrz6pfBv
+	HYBYLEdHWzYCqtbeALZ1QEe1jp243kmOEG5/xSQNmS2u4k1Q0omO4TO2TyvU7bxqeQJp6/
+	WTg9uUGQZ5V43gWLS/dutlh8jJ9efC8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E869313461;
+	Wed, 22 Nov 2023 09:53:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id pYwFN4XPXWUBBQAAMHmgww
+	(envelope-from <oneukum@suse.com>); Wed, 22 Nov 2023 09:53:09 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: dmitry.bezrukov@aquantia.com,
+	marcinguy@gmail.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCHv2] USB: gl620a: check for rx buffer overflow
+Date: Wed, 22 Nov 2023 10:52:22 +0100
+Message-ID: <20231122095306.15175-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com>
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp-out2.suse.de;
+	none
+X-Spam-Score: 6.90
+X-Spamd-Result: default: False [6.90 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 R_MISSING_CHARSET(2.50)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 BROKEN_CONTENT_TYPE(1.50)[];
+	 NEURAL_SPAM_SHORT(3.00)[1.000];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 RCPT_COUNT_SEVEN(0.00)[9];
+	 MID_CONTAINS_FROM(1.00)[];
+	 FREEMAIL_TO(0.00)[aquantia.com,gmail.com,davemloft.net,google.com,kernel.org,redhat.com,vger.kernel.org];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_COUNT_TWO(0.00)[2];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-0.00)[28.19%]
 
-On Mon, Oct 16, 2023 at 08:11:08PM -0700, Bjorn Andersson wrote:
-> The USB IP-block found in most Qualcomm platforms is modelled in the
-> Linux kernel as 3 different independent device drivers, but as shown by
-> the already existing layering violations in the Qualcomm glue driver
-> they can not be operated independently.
-> 
-> With the current implementation, the glue driver registers the core and
-> has no way to know when this is done. As a result, e.g. the suspend
-> callbacks needs to guard against NULL pointer dereferences when trying
-> to peek into the struct dwc3 found in the drvdata of the child.
-> 
-> Missing from the upstream Qualcomm USB support is handling of role
-> switching, in which the glue needs to be notified upon DRD mode changes.
-> Several attempts has been made through the years to register callbacks
-> etc, but they always fall short when it comes to handling of the core's
-> probe deferral on resources etc.
+The driver checks for a single package overflowing
+maximum size. That needs to be done, but it is not
+enough. As a single transmission can contain a high
+number of packets, we also need to check whether
+the aggregate of messages in itself short enough
+overflow the buffer.
+That is easiest done by checking that the current
+packet does not overflow the buffer.
 
-Nice to see this finally being worked on. It's not clear why mode-change
-notifications would be a problem though, as if you get such a
-notification, you know that core has been probed.
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+
+v2: corrected typo in commit message
  
-> Furhtermore, the DeviceTree binding is a direct representation of the
-> Linux driver model, and doesn't necessarily describe "the USB IP-block".
+ drivers/net/usb/gl620a.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-True.
+diff --git a/drivers/net/usb/gl620a.c b/drivers/net/usb/gl620a.c
+index 46af78caf457..d33ae15abdc1 100644
+--- a/drivers/net/usb/gl620a.c
++++ b/drivers/net/usb/gl620a.c
+@@ -104,6 +104,10 @@ static int genelink_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 			return 0;
+ 		}
+ 
++		/* we also need to check for overflowing the buffer */
++		if (size > skb->len)
++			return 0;
++
+ 		// allocate the skb for the individual packet
+ 		gl_skb = alloc_skb(size, GFP_ATOMIC);
+ 		if (gl_skb) {
+-- 
+2.42.1
 
-Johan
 
