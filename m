@@ -1,99 +1,87 @@
-Return-Path: <linux-usb+bounces-3218-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3219-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D11E97F5459
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 00:14:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 112427F54EA
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 00:43:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BA851F20DD2
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 23:14:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7B8A2816B9
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 23:43:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB5141EB4E;
-	Wed, 22 Nov 2023 23:14:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qXoDABKJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48878219E0;
+	Wed, 22 Nov 2023 23:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984CC191
-	for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 15:13:58 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-40b2b3da41eso1741025e9.3
-        for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 15:13:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700694837; x=1701299637; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wYxuH70oHfA52gNLRhhX4vP0LV6BSVurLPFK41qssdc=;
-        b=qXoDABKJPDvyFk8Y5rtY0iwUYcq0FuBuk73Mze7YE0P9UawC8+xeXOmQ11mSDezZjB
-         IYxHI/wR1I+lK9FlnJrE1PucqjwBMCbgonFJYibWciHI0rzTZuwEh9OF5jGY6qlAkI8e
-         DtNnlRiD0+Bq+nW7sbr8Rs9ytxLfS19gKPWZDRCLfoPQqW9QVDNxALHcKySA87/FYZqE
-         u1gGZxN4IEZ63m0SyYjX5IQuGH1cngwoq5oEgAjtEQyKMAjprDCGHRSvrX0kP7d8yti/
-         YtzWnBe3h/Qj1dDdc/v4nrdAa5NrCeRrFefBGOB03+UvtuodLi6eok1+w7nzgPCLaSKB
-         dt+Q==
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F905110
+	for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 15:43:04 -0800 (PST)
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3b2df2fb611so260581b6e.0
+        for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 15:43:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700694837; x=1701299637;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1700696583; x=1701301383;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wYxuH70oHfA52gNLRhhX4vP0LV6BSVurLPFK41qssdc=;
-        b=KNtequE6t23gRqzH0BignIHSGppwcxJ6gWBlJ914n41BXLQLbq47AaGHVeoQPSKD4B
-         eT2tun22FTV9yuDdjCQa/Uy385r3HQrvtZPWMPnFl23bozi/xm970xkAfC4hAih0xk59
-         UW0CgC7tBmQ4dMcZMKvtPt5350wbNurCUgJIx7bXUJW4FZDVTXU9u18u/xpJ1AYSvnLq
-         VvXbZ8eO3UbstJZfT8yTylDuWg8IqnLYHym3UNfpo91sIz/TgtXgnPDRmq/gFtquVZGz
-         uwysZBNcgT5rHXgYZhD7b/Rd7UXQZdhHIx8iNl55GJlJ56fs7YUtawr88YN67twXVCGU
-         BEew==
-X-Gm-Message-State: AOJu0YyQ4AtUlNLZUjuVHO4HItq1ua4XcDWxuHBbuff2SOgyUaj9y4O0
-	QBuVt8jjxrq7+T/xtabfwOcWI2w3q9VjHAGw2PI7Tg==
-X-Google-Smtp-Source: AGHT+IFYi3BMn47KFjWgU73vrNPlY6rfEO7NJN6Pofc8xagO7DFbxSOaj7+w9+p5tuiCSj5HFYsfXanKI/Bqc/lCa5s=
-X-Received: by 2002:a5d:6d0d:0:b0:332:c5ff:1ba5 with SMTP id
- e13-20020a5d6d0d000000b00332c5ff1ba5mr3509274wrq.13.1700694836803; Wed, 22
- Nov 2023 15:13:56 -0800 (PST)
+        bh=eYvKtH0uC1Xw+emGBJHmqRIg3ESjCNY6W647Zk5nRmU=;
+        b=OwwrcrJzsWRmo6IxwZ0bLPAJZ6wO9SL+BTnWIXTWW2ZFnrkerRZjddJMIqExbEMR22
+         k4LhZ1sTYp3BpM3ysfLNpPhdW2vmfQM/MGdxEWV3Dxvl/Gvgj8YGK6hfiWyEv6WQKZHq
+         MpZ1mvY5MyktRRqKEFp4SyASG9zaRU7iTkqbBkrPSxmyAo+M2y3f4TmzBHXP+jymzCQl
+         n0sQOYX+FpB1cNgqiZdSerjPLn8rKQ7hcwOcleIV046bXYQ/li0XnkQibWNJf1RLvVr1
+         61FajN/GXArro89mkmB//bRULlhbvy3D05mOX+kpS85NIimRQYf0bLhkPzTh4YLRKYx/
+         d13w==
+X-Gm-Message-State: AOJu0Yz7nXtiANuYeXlyfhiTSns81rFxjKcvCBk3V/S3ILKQrcobUpe8
+	9bsq0Fv6oX9D+eHisr6FPUeCwQ==
+X-Google-Smtp-Source: AGHT+IFB3fqlojOjhH+0cBIGDS2/UI/yhNL9SP/079Zuyp5ruQ//yt4GEIYrBmTBUBkVuIaRfwE67A==
+X-Received: by 2002:a05:6808:1514:b0:3a6:fbe3:45cf with SMTP id u20-20020a056808151400b003a6fbe345cfmr4863766oiw.35.1700696582784;
+        Wed, 22 Nov 2023 15:43:02 -0800 (PST)
+Received: from localhost (75-172-121-199.tukw.qwest.net. [75.172.121.199])
+        by smtp.gmail.com with ESMTPSA id cm12-20020a056a020a0c00b0058c1383fa8bsm62497pgb.0.2023.11.22.15.43.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Nov 2023 15:43:02 -0800 (PST)
+From: Kevin Hilman <khilman@kernel.org>
+To: =?utf-8?Q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>, Greg
+ Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+ <conor+dt@kernel.org>, Roger Quadros <rogerq@kernel.org>, Peter Chen
+ <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, Nishanth
+ Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo
+ <kristo@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>, =?utf-8?Q?Gr=C3=A9gory?= Clement
+ <gregory.clement@bootlin.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
+ <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v2 2/7] usb: cdns3-ti: remove runtime PM
+In-Reply-To: <20231120-j7200-usb-suspend-v2-2-038c7e4a3df4@bootlin.com>
+References: <20231120-j7200-usb-suspend-v2-0-038c7e4a3df4@bootlin.com>
+ <20231120-j7200-usb-suspend-v2-2-038c7e4a3df4@bootlin.com>
+Date: Wed, 22 Nov 2023 15:42:56 -0800
+Message-ID: <7hsf4xe4n3.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231122220001.539770-1-royluo@google.com> <2023112253-fresh-blazing-baae@gregkh>
-In-Reply-To: <2023112253-fresh-blazing-baae@gregkh>
-From: Roy Luo <royluo@google.com>
-Date: Wed, 22 Nov 2023 15:13:20 -0800
-Message-ID: <CA+zupgzWqhOhAR0_ybxTQVL928dgAqbm5eqJ6gd-0qrNK7VZng@mail.gmail.com>
-Subject: Re: [PATCH v1] USB: gadget: core: adjust uevent timing on gadget unbind
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: stern@rowland.harvard.edu, badhri@google.com, quic_kriskura@quicinc.com, 
-	francesco.dolcini@toradex.com, quic_eserrao@quicinc.com, 
-	ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-The logic is there since day 1 of udc in Commit
-2ccea03a8f7ec93641791f2760d7cdc6cab6205f (usb: gadget: introduce UDC
-Class). Do you still want me to put on a fix tag?
+Th=C3=A9o Lebrun <theo.lebrun@bootlin.com> writes:
 
-(Sorry for the spam, forgot to switch to plain text mode..)
+> The driver does not use RPM. It enables it & gets a reference at probe.
+> It then undoes that on probe error or at remove.
 
-On Wed, Nov 22, 2023 at 2:07=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Wed, Nov 22, 2023 at 10:00:01PM +0000, Roy Luo wrote:
-> > The KOBJ_CHANGE uevent is sent before gadget unbind is actually
-> > executed, resulting in inaccurate uevent emitted at incorrect timing
-> > (the uevent would have USB_UDC_DRIVER variable set while it would
-> > soon be removed).
-> > Move the KOBJ_CHANGE uevent to the end of the unbind function so that
-> > uevent is sent only after the change has been made.
-> >
-> > Signed-off-by: Roy Luo <royluo@google.com>
-> > ---
-> >  drivers/usb/gadget/udc/core.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
->
-> What commit does this fix?
->
->
+...which is a fairly standard thing to do for a rudimentary runtime PM
+support on platforms that use power domains.
+
+This will likely (almost surely) break other platforms.
+
+Without a runtime PM get call, the power domain that this device is in
+could be powered off without this driver ever knowing about it, causing
+a crash as soon as the driver is used after the domain is turned off.
+
+Kevin
 
