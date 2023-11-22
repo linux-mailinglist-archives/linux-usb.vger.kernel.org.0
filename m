@@ -1,84 +1,108 @@
-Return-Path: <linux-usb+bounces-3206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3202-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 404D77F4FA7
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 19:34:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D40E07F4DFD
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 18:15:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 707891C20AA3
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 18:34:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47974B20E62
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 17:15:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694E75ABB7;
-	Wed, 22 Nov 2023 18:34:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0262957888;
+	Wed, 22 Nov 2023 17:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VpkuOZ0u"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YPVFJTVF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E61D7D;
-	Wed, 22 Nov 2023 10:34:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700678055; x=1732214055;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y1RQ+f1Q5efZzIZfRLadFxuw8IiQKXJxuGko9Zmlt9s=;
-  b=VpkuOZ0ul6O19xFzfCE0Rn+dWZAUA7bjbjYbTWxBrT+7MnRZ0ZiM/TBG
-   5/ks7tfvOUEp4mQaqM3he1/7VOiF6SsOloTsQrgkL/mDjcO/4Y+bn6x5r
-   59YyRycVX6ghsSKgXkQQwRYbvQB/Ok/gHT9MhSNt1jRmmOx0EUAMB+02V
-   VQL61i+7quuo1b5SjzqK83ljiXrTZUvtv6BMzkO7de7Cu4uxwdMGI88oM
-   S9kEg78mrNT0Oj2KZoPeE835ZlXMV/qgBehL2PVXB+3eFupTddXr4Yxas
-   HxqMG2MX7fU42jvS0HYC3QxQyQwHgo7yMPqJzS2IkTOVFKKxVNojuUcqL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="13672024"
-X-IronPort-AV: E=Sophos;i="6.04,219,1695711600"; 
-   d="scan'208";a="13672024"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmvoesa101.fm.intel.com with ESMTP; 22 Nov 2023 10:33:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="743344455"
-X-IronPort-AV: E=Sophos;i="6.04,218,1695711600"; 
-   d="scan'208";a="743344455"
-Received: from unknown (HELO smile.fi.intel.com) ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 02:51:16 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1r5kmC-0000000G49b-3FaF;
-	Wed, 22 Nov 2023 12:48:12 +0200
-Date: Wed, 22 Nov 2023 12:48:12 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Kunwu Chan <chentao@kylinos.cn>
-Cc: gregkh@linuxfoundation.org, joel@jms.id.au, andrew@codeconstruct.com.au,
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kunwu.chan@hotmail.com, linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: aspeed: Check return value of kasprintf in
- ast_vhub_alloc_epn
-Message-ID: <ZV3cbH-i09AQelaB@smile.fi.intel.com>
-References: <20231122014212.304254-1-chentao@kylinos.cn>
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E92583;
+	Wed, 22 Nov 2023 09:15:01 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B547B40002;
+	Wed, 22 Nov 2023 17:14:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1700673299;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AkVswiJ7VPVtZX+F/mFSJMy4cTc8YcymiMChgnVRYnw=;
+	b=YPVFJTVFZnnaVhBQtagXSCU0uOltCQ8PaBP/vpt0JIu2EA3Uh7BbmzW4752uw5vV6z0TFz
+	GPFuSXlnqFvHwTnUkGwF6GvkuVYCUkimS6hJXQyvgW51IApN8GrG4qbc1qEsPbnNYHgDzT
+	fC/ZhiN9fhu7k0o8ySDkh7StR8RvYOpsdZQYHpz1Bb+bE3+n5tqMa+9WOnYAYxqG4WaEow
+	oqq4vaW1FpXnNmXUk+j/1h2NdTYKvyu07xycfVkhZiKZ4TjTaJw0to5AhUyDFNBXzYaOHU
+	M+eVf7eoIgIEG1FErKH7Rb6n9jyj6QKr6euF3ha9qu/kUquevZlUKchwnhvXCw==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231122014212.304254-1-chentao@kylinos.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 22 Nov 2023 18:14:57 +0100
+Message-Id: <CX5IDB4IPK92.31F1ICOWQSL84@tleb-bootlin-xps13-01>
+Subject: Re: [PATCH v2 1/7] dt-bindings: usb: ti,j721e-usb: add ti,j7200-usb
+ compatible
+Cc: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Conor
+ Dooley" <conor.dooley@microchip.com>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rob Herring"
+ <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Roger Quadros" <rogerq@kernel.org>, "Peter Chen" <peter.chen@kernel.org>,
+ "Pawel Laszczak" <pawell@cadence.com>, "Nishanth Menon" <nm@ti.com>,
+ "Vignesh Raghavendra" <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.15.2
+References: <20231120-j7200-usb-suspend-v2-0-038c7e4a3df4@bootlin.com>
+ <20231120-j7200-usb-suspend-v2-1-038c7e4a3df4@bootlin.com>
+ <6f0da181-717c-4b14-ba3f-d287efe4105b@linaro.org>
+ <CX4NADEZZEO1.3TXPVNOONKBCF@tleb-bootlin-xps13-01>
+ <d0cc33d4-2b1a-43cd-8cd9-6b58d6c71c85@linaro.org>
+ <CX5A3OSPKM1Q.1CPN17KI0PD7A@tleb-bootlin-xps13-01>
+ <e91c2fa3-2cb4-44be-953f-2bfa26db2b4f@linaro.org>
+In-Reply-To: <e91c2fa3-2cb4-44be-953f-2bfa26db2b4f@linaro.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Wed, Nov 22, 2023 at 09:42:12AM +0800, Kunwu Chan wrote:
-> kasprintf() returns a pointer to dynamically allocated memory
-> which can be NULL upon failure. Ensure the allocation was successful
-> by checking the pointer validity.
+Hello,
 
-OK.
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Wed Nov 22, 2023 at 1:00 PM CET, Krzysztof Kozlowski wrote:
+> On 22/11/2023 11:46, Th=C3=A9o Lebrun wrote:
+> >  - properties:
+> >    compatible:
+> >      oneOf:
+> >        - const: ti,j7200-usb
+> >        - items:
+> >            - const: ti,j721e-usb
+> >            - const: ti,am64-usb
+> >=20
+> >    J721E & AM64 are compatible, express that & update devicetrees.
+> >=20
+> > Option one is simpler & doesn't change devicetrees so I'd lean in that
+> > direction. What's your opinion?
+>
+> This one should be for am64.
+>
+> For your j7200, it depends whether the fallback to j721e makes sense,
+> IOW, if the Linux can use j721e compatible solely to use j7200 device.
 
--- 
-With Best Regards,
-Andy Shevchenko
+All compatibles might be equivalent if the reset-on-resume behavior is
+observed on all three platforms. I don't have access to J721E or AM64
+to test that.
 
+@Roger Quadros: do you have any news if USB suspend/resume works on
+J721E and/or AM64? My testing on the J7200 EVM is (1) boot, (2) put
+the "USB2.0_MUX_SEL" GPIO high to have USB devices connected without
+plugging anything, then (3) trigger a s2idle. I get a memory bus
+exception on resume without my patches.
 
+Regards,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
