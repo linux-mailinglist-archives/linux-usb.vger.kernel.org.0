@@ -1,124 +1,101 @@
-Return-Path: <linux-usb+bounces-3213-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3214-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C9587F52C3
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 22:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C03457F52C6
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 22:44:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA49128155F
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 21:41:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B95C2816C7
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 21:44:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3755A1CA92;
-	Wed, 22 Nov 2023 21:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 560B31CFA8;
+	Wed, 22 Nov 2023 21:44:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BgPjsObQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lat7p4OH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBD51BD;
-	Wed, 22 Nov 2023 13:41:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700689264; x=1732225264;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=f5PkBGL11tZGIvpj3qwyLcC5fB7oIFYd3edPJQK15Q0=;
-  b=BgPjsObQa0/MHJzWsAHO7dnGV+NIMER8dJPXkn+1FVVihQiV9VZZc6XT
-   qkHlXigvlmcRORW9gPGwKjWkfsVsZf38gmScGmn47thYsbWe0mN3RiFru
-   fgRfmhZYBHLJHq9yJCZIdN0D/nBfJiLvTvY+tiEnU8lTK/BBVynLoPMaa
-   +P17odxh9ZXKhBLfKRP9v8qo18G/gTT7O0SMfJwQDMv1GBrF21YYbHQ11
-   5f5uC8ondbocL0dTxUtK6GQpe1wvbpagIpu98DggxkzjHr1dzMwgX2R3N
-   14P+J/XH02GsZaEnkn4gxMwADRfgx7sp511v7aYvkAReWDtQNaid0MevN
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="10828381"
-X-IronPort-AV: E=Sophos;i="6.04,219,1695711600"; 
-   d="scan'208";a="10828381"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 13:41:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="940409322"
-X-IronPort-AV: E=Sophos;i="6.04,219,1695711600"; 
-   d="scan'208";a="940409322"
-Received: from aconradi-mobl.ger.corp.intel.com (HELO intel.com) ([10.251.221.156])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 13:41:01 -0800
-Date: Wed, 22 Nov 2023 22:40:58 +0100
-From: Andi Shyti <andi.shyti@linux.intel.com>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	Wentong Wu <wentong.wu@intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v3] usb: misc: ljca: Fix enumeration error on Dell
- Latitude 9420
-Message-ID: <ZV51apY7Bk5NIZqh@ashyti-mobl2.lan>
-References: <20231121203205.223047-1-hdegoede@redhat.com>
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CBDDA;
+	Wed, 22 Nov 2023 13:44:20 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-543c3756521so331337a12.2;
+        Wed, 22 Nov 2023 13:44:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700689459; x=1701294259; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xtanoWGCY7h+4tm6qQcmMOcUxKcUNh5lJMouYq8Ssrc=;
+        b=lat7p4OH63n6qdxPc+6ykgrfcBC1Qq/R7mi0mjfm2BbRgSQIRmsdLxiIkQiuGHPP/w
+         RIPBvkiECCfu6DjeGcEirUxeYIG+daLHwcF+tG9nStRs/+KRWLmk5DnN5sRXafD4uZu+
+         jeoyc9ImaC5d1TlZRtQWEjQQGNKjQNc2fV8aCh1JayaklEv9a8I7mH2i7gRodXLafHP5
+         MngX6tz59P8Z+lMiPWV2ToR6thz9fZICcJ8f2yEmNwYCQqlUse0RwSjJ+F0bPh7am55j
+         BOk9Jkm8+yFmb2h92MQzY2XGJB+hzHbxykTQLczfeHvY4u8bfnzl64WfRje8snrWjTWm
+         UMTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700689459; x=1701294259;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xtanoWGCY7h+4tm6qQcmMOcUxKcUNh5lJMouYq8Ssrc=;
+        b=sCWi3hHvoiHNz6gUYSYwj4DRlLYuiMWf+PsFpZXE5iYD7MUb/JAQXa9+yht7CSY93n
+         5Ojxs+I1YrGYjmVun7qPOWaRQekLU+gxgECdFG1pAcHGos9pri5DWCGJIi5H/YEFYmWg
+         rUtjPLu4CFUCQqV4nFM0o0U3szwN8rWMxG7J0g2xcmfs4lycP7F7xGCCzziISVyFXvJW
+         FIt0i+EX3RtN60N6khhLSHK2691EO6qQq16rtRKRxKJEhneT8Z/6VCXfWKUdff4tdKti
+         YMwZbTqXjMJwTLHNcZ7U8rGKqGEMUsSJPPBYZ+ATSWPm8vGNLwU2mjZr0LunLoCwWuPV
+         o7BA==
+X-Gm-Message-State: AOJu0YyJyRXZbDc7ZRpAuRZWFn18cb6XkX3SsW0ps2RJM6EceCA/Hpxo
+	D95mFlHZLZZGgbalSoM1ApJDkGvWqY6KgQ==
+X-Google-Smtp-Source: AGHT+IFoLjbOpmkIEULy5gbxKooTudQDxiArLI8S7wXYkZ1p88cJRrIDvnnjd2TG4kAGIdT+hiYc1A==
+X-Received: by 2002:aa7:c715:0:b0:548:657c:9110 with SMTP id i21-20020aa7c715000000b00548657c9110mr2624490edq.38.1700689458596;
+        Wed, 22 Nov 2023 13:44:18 -0800 (PST)
+Received: from [192.168.50.20] (077222239035.warszawa.vectranet.pl. [77.222.239.35])
+        by smtp.gmail.com with ESMTPSA id b9-20020aa7c6c9000000b005484c7e30d8sm224480eds.1.2023.11.22.13.44.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Nov 2023 13:44:18 -0800 (PST)
+Message-ID: <381e90eb-a744-450b-967d-bc67afb0aa9c@gmail.com>
+Date: Wed, 22 Nov 2023 22:44:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231121203205.223047-1-hdegoede@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: possible proble with skb_pull() in smsc75xx_rx_fixup()
+To: Oliver Neukum <oneukum@suse.com>
+Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ USB list <linux-usb@vger.kernel.org>
+References: <7f704401-8fe8-487f-8d45-397e3a88417f@suse.com>
+ <EB9ACA9B-78ED-48C3-99D6-86E886557FBC@gmail.com>
+ <73f614e6-796e-415d-9954-8a94105f5e1c@suse.com>
+Content-Language: en-US
+From: Szymon Heidrich <szymon.heidrich@gmail.com>
+In-Reply-To: <73f614e6-796e-415d-9954-8a94105f5e1c@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Hans,
-
-On Tue, Nov 21, 2023 at 09:32:05PM +0100, Hans de Goede wrote:
-> Not all LJCA chips implement SPI and on chips without SPI reading
-> the SPI descriptors will timeout.
+On 20/11/2023 13:35, Oliver Neukum wrote:
+> On 16.11.23 21:09, Szymon Heidrich wrote:
+>> Hello Oliver,
+>>
+>> Could you please give me some hints how this could be practically exploited to cause mischief?
 > 
-> On laptop models like the Dell Latitude 9420, this is expected behavior
-> and not an error.
+> Hi,
 > 
-> Modify the driver to continue without instantiating a SPI auxbus child,
-> instead of failing to probe() the whole LJCA chip.
+> it seems to me like you can easily feed stuff that is not
+> part of a packet into the network layer, but you cannot overflow the buffer.
+> In other words, the issue exists, but using it to do harm is hard.
 > 
-> Fixes: acd6199f195d ("usb: Add support for Intel LJCA device")
-> Cc: stable@vger.kernel.org
-
-did this already make it to stable? I think it is not needed.
-
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> Reviewed-by: Wentong Wu <wentong.wu@intel.com>
-> Link: https://lore.kernel.org/r/20231104175104.38786-1-hdegoede@redhat.com
-
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-
-Thanks,
-Andi
-
-> ---
-> Changes in v3:
-> - Fix commit-id in fixes tag
+>     Regards
+>         Oliver
 > 
-> Changes in v2:
-> - Small commit msg + comment fixes
-> - Add Fixes tag + Cc: stable
-> ---
->  drivers/usb/misc/usb-ljca.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
-> index c9decd0396d4..a280d3a54b18 100644
-> --- a/drivers/usb/misc/usb-ljca.c
-> +++ b/drivers/usb/misc/usb-ljca.c
-> @@ -656,10 +656,11 @@ static int ljca_enumerate_spi(struct ljca_adapter *adap)
->  	unsigned int i;
->  	int ret;
->  
-> +	/* Not all LJCA chips implement SPI, a timeout reading the descriptors is normal */
->  	ret = ljca_send(adap, LJCA_CLIENT_MNG, LJCA_MNG_ENUM_SPI, NULL, 0, buf,
->  			sizeof(buf), true, LJCA_ENUM_CLIENT_TIMEOUT_MS);
->  	if (ret < 0)
-> -		return ret;
-> +		return (ret == -ETIMEDOUT) ? 0 : ret;
->  
->  	/* check firmware response */
->  	desc = (struct ljca_spi_descriptor *)buf;
-> -- 
-> 2.41.0
+
+Hello Olivier,
+
+Perhaps I'm missing something but as far as I can tell I can't do here anything special compared
+to crafting the packet itself. Please let me know in case I'm wrong.
+
+Best regards,
+Szymon
 
