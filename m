@@ -1,130 +1,143 @@
-Return-Path: <linux-usb+bounces-3153-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3154-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4985C7F3A36
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 00:20:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF01D7F3B3C
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 02:25:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C685E280F33
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Nov 2023 23:20:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B9311C20F6E
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 01:25:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C25455779;
-	Tue, 21 Nov 2023 23:20:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C13C17CE;
+	Wed, 22 Nov 2023 01:25:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SdVIPhr7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gb0fzyw1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ACA97;
-	Tue, 21 Nov 2023 15:20:17 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALNGh4H028441;
-	Tue, 21 Nov 2023 23:20:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=HR1ipvsa7G04GTzspcQtmQ+QQIIk/Ylg1FpxgPOHEM8=;
- b=SdVIPhr7XonlvHMvjJQGnWlmAh75SI0WSC6HBWB8Hz4iiVxL8UE/xL2+Eec0yjJr1AY3
- HwIiH68gfBbdtuNTgSSpJFI4wAJyLAB0jT0Cn/7KW13xCEFL5CJ77OeMTb4wADBzctGJ
- x4StgTnAo0oSdGIomLxSvGC0hTW8GS+U+fWLyV1aehaxQzK2u7s+NcjmMBufpeNpyP+f
- Bkpbz9cb9WIV1kbaB9nhqsfnN/jT+RCZ1viZ2XU3q2oJQ52Euq+ac++mot9xC54jPNwX
- asfMxqb/0QesPHLlr57ijz3YQAC3n6I6GpeKnDhShjIZsc7x1sCzXAU8auOkUmw0kWJq EQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ugr85tgxc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 21 Nov 2023 23:20:15 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3ALNKEJa023412
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 21 Nov 2023 23:20:14 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 21 Nov 2023 15:20:13 -0800
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: <Thinh.Nguyen@synopsys.com>, <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>
-Subject: [PATCH] usb: dwc3: gadget: Handle EP0 request dequeuing properly
-Date: Tue, 21 Nov 2023 15:20:03 -0800
-Message-ID: <20231121232003.20249-1-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D351A3;
+	Tue, 21 Nov 2023 17:25:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700616331; x=1732152331;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=t8oT6RUsi73gqqA7YznCIrpliumT0ylzF6sXsPx7xLk=;
+  b=gb0fzyw1SpfYez0a5WJQtg2x6KTxCkaUiE9YLB5IhJ/jsq8M1r8Lql4s
+   cV7X1sY24EoxBtKnQbT1L0mNlNYq7FoxR1R3P4LN4EULb5DI5XNtLis4A
+   l5c17LBfhtcNhlorL6JmhRhRL57HAVcd2NOw5CSRfu59kBSxM/0Mugmbz
+   gXIzIcner2p8k+zgtqAt3LOxuWekVGTzPOKk8TbsHu6r+bMGY2Z0cv+in
+   URnmWn38M0aVaQNEMj7p9t2iRau2b5ALFwCsCmSy5P94qw7cnrlQK8nLN
+   pkNUN55bwmHYjObvRXlo6QzQesBxHRi4Au8RlJ35E3a0wbdO0V3fsehv0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="382354354"
+X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
+   d="scan'208";a="382354354"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 17:25:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="766827289"
+X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
+   d="scan'208";a="766827289"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 21 Nov 2023 17:25:27 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5bzH-0008UM-0y;
+	Wed, 22 Nov 2023 01:25:24 +0000
+Date: Wed, 22 Nov 2023 09:24:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sanath S <Sanath.S@amd.com>, andreas.noever@gmail.com,
+	michael.jamet@intel.com, mika.westerberg@linux.intel.com,
+	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sanath S <Sanath.S@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	stable@vger.kernel.org
+Subject: Re: [Patch] thunderbolt: Add quirk to reset downstream port
+Message-ID: <202311220931.2IqiKNXr-lkp@intel.com>
+References: <20231121174701.3922587-1-Sanath.S@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ibZNR1KeItaHz7_1rrjnBra_zPJvoloq
-X-Proofpoint-ORIG-GUID: ibZNR1KeItaHz7_1rrjnBra_zPJvoloq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-21_13,2023-11-21_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- phishscore=0 suspectscore=0 adultscore=0 malwarescore=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 clxscore=1015
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311210182
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231121174701.3922587-1-Sanath.S@amd.com>
 
-Current EP0 dequeue path will share the same as other EPs.  However, there
-are some special considerations that need to be made for EP0 transfers:
+Hi Sanath,
 
-  - EP0 transfers never transition into the started_list
-  - EP0 only has one active request at a time
+kernel test robot noticed the following build warnings:
 
-In case there is a vendor specific control message for a function over USB
-FFS, then there is no guarantee on the timeline which the DATA/STATUS stage
-is responded to.  While this occurs, any attempt to end transfers on
-non-control EPs will end up having the DWC3_EP_DELAY_STOP flag set, and
-defer issuing of the end transfer command.  If the USB FFS application
-decides to timeout the control transfer, or if USB FFS AIO path exits, the
-USB FFS driver will issue a call to usb_ep_dequeue() for the ep0 request.
+[auto build test WARNING on westeri-thunderbolt/next]
+[also build test WARNING on linus/master v6.7-rc2 next-20231121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-In case of the AIO exit path, the AIO FS blocks until all pending USB
-requests utilizing the AIO path is completed.  However, since the dequeue
-of ep0 req does not happen properly, all non-control EPs with the
-DWC3_EP_DELAY_STOP flag set will not be handled, and the AIO exit path will
-be stuck waiting for the USB FFS data endpoints to receive a completion
-callback.
+url:    https://github.com/intel-lab-lkp/linux/commits/Sanath-S/thunderbolt-Add-quirk-to-reset-downstream-port/20231122-014913
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+patch link:    https://lore.kernel.org/r/20231121174701.3922587-1-Sanath.S%40amd.com
+patch subject: [Patch] thunderbolt: Add quirk to reset downstream port
+config: x86_64-buildonly-randconfig-003-20231122 (https://download.01.org/0day-ci/archive/20231122/202311220931.2IqiKNXr-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311220931.2IqiKNXr-lkp@intel.com/reproduce)
 
-Fix is to utilize dwc3_ep0_reset_state() in the dequeue API to ensure EP0
-is brought back to the SETUP state, and ensures that any deferred end
-transfer commands are handled.  This also will end any active transfers
-on EP0, compared to the previous implementation which directly called
-giveback only.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311220931.2IqiKNXr-lkp@intel.com/
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- drivers/usb/dwc3/gadget.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 858fe4c299b7..88d8d589f014 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2103,7 +2103,17 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
- 
- 	list_for_each_entry(r, &dep->pending_list, list) {
- 		if (r == req) {
--			dwc3_gadget_giveback(dep, req, -ECONNRESET);
-+			/*
-+			 * Explicitly check for EP0/1 as dequeue for those
-+			 * EPs need to be handled differently.  Control EP
-+			 * only deals with one USB req, and giveback will
-+			 * occur during dwc3_ep0_stall_and_restart().  EP0
-+			 * requests are never added to started_list.
-+			 */
-+			if (dep->number > 1)
-+				dwc3_gadget_giveback(dep, req, -ECONNRESET);
-+			else
-+				dwc3_ep0_reset_state(dwc);
- 			goto out;
- 		}
- 	}
+>> drivers/thunderbolt/switch.c:1556:2: warning: variable 'ret' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
+           tb_switch_for_each_port(sw, port) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thunderbolt/tb.h:821:7: note: expanded from macro 'tb_switch_for_each_port'
+                (p) <= &(sw)->ports[(sw)->config.max_port_number]; (p)++)
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thunderbolt/switch.c:1564:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/thunderbolt/switch.c:1556:2: note: remove the condition if it is always true
+           tb_switch_for_each_port(sw, port) {
+           ^
+   drivers/thunderbolt/tb.h:821:7: note: expanded from macro 'tb_switch_for_each_port'
+                (p) <= &(sw)->ports[(sw)->config.max_port_number]; (p)++)
+                ^
+   drivers/thunderbolt/switch.c:1554:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +1556 drivers/thunderbolt/switch.c
+
+  1549	
+  1550	static int tb_switch_reset_downstream_port(struct tb_switch *sw)
+  1551	{
+  1552		struct tb_port *port;
+  1553		uint32_t val = 0;
+  1554		int ret;
+  1555	
+> 1556		tb_switch_for_each_port(sw, port) {
+  1557			if (port->config.type == TB_TYPE_PORT) {
+  1558				val = val | PORT_CS_19_DPR;
+  1559				ret = tb_port_write(port, &val, TB_CFG_PORT,
+  1560						port->cap_usb4 + PORT_CS_19, 1);
+  1561				break;
+  1562			}
+  1563		}
+  1564		return ret;
+  1565	}
+  1566	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
