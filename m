@@ -1,144 +1,185 @@
-Return-Path: <linux-usb+bounces-3201-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2FF27F4DA3
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 18:00:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AC6F7F4FBB
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 19:39:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B8A2B20E52
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 17:00:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E6961C20B34
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 18:39:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF0EF53800;
-	Wed, 22 Nov 2023 16:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 947575CD06;
+	Wed, 22 Nov 2023 18:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="LHmoin3O"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bV6hj1in"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A465A197
-	for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 08:59:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=/bJqIzfxepuo8pcthWwbNE6bC6bMqHGe4jagmbBtvHE=; b=LHmoin3O94/Q15jCtrO7KqkaLO
-	ZlcrBx3SCqNNweRa+9SkTkNhty3O8e89HwdkgaJ0yJZHNUu3LGLrZo1sxZTj2Wh3kWj+o/KLSq6PR
-	878xCeEjIJdur39SBiR2Rw4JwVmdp7yyD9uClIm8oiW+KwUupOHIO3f9/Ub2TZQbvyS29dSGzAIl3
-	Z6klwiasJBpToXEDSWYeLuGs8hbx0eH3+Q1eDFPYp6ytcLV49zFjN43ZYZR7rGBEIF72wadzp76Vm
-	CfKPKhUbyazgNqiBX9ONJcrv/dPXS0/9fjMtXjC4lJTR2Ef4ec32JPcVMPPN0ec4A4Y1oPm2kRB4q
-	+Ha/DGKg==;
-Received: from 201-92-23-2.dsl.telesp.net.br ([201.92.23.2] helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1r5qZg-0062Us-6l; Wed, 22 Nov 2023 17:59:40 +0100
-From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To: linux-usb@vger.kernel.org,
-	Thinh.Nguyen@synopsys.com
-Cc: balbi@kernel.org,
-	gregkh@linuxfoundation.org,
-	johan@kernel.org,
-	quic_wcheng@quicinc.com,
-	kernel@gpiccoli.net,
-	kernel-dev@igalia.com,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Andrey Smirnov <andrew.smirnov@gmail.com>,
-	Vivek Dasmohapatra <vivek@collabora.com>
-Subject: [PATCH] usb: dwc3: Fix spurious wakeup when port is on device mode
-Date: Wed, 22 Nov 2023 13:51:06 -0300
-Message-ID: <20231122165931.443845-1-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.42.0
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC24B10D3;
+	Wed, 22 Nov 2023 10:38:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700678336; x=1732214336;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wIyOP0aG9TPi3lc0G7IvCLuDzn6Yv0SkV0fEgpSBYKo=;
+  b=bV6hj1in5Zb0bFOANItNzeFrYzNN+GnRFFnPvw70icAxK93CKBMHoQJt
+   rhA+vss888F8cU1eiFODPDCFsfvMiWDxJThO/syRt9VAEDnvpxWekRiQQ
+   MWFVvB4wRFGxZ/fxJCcen0+oxfG8gBc8LX59MwgKbrwTKX4tLEpuxyNYT
+   sfPc/QpSdvFFxc6TW/1U3IqC05LKWz5WvWPPv8F1mMIpCcqS3RzqOB1EQ
+   2A+NuU0QbxekDopafFdXYzz2xu6kofJQWBla2jRjXmMmpd7UZDcLjw4Tf
+   Qzr5cqdIjfJyYLRhV9pZwt+J6Ykhy+8MWOZ447bMyc66dgeJ4QkOiJ1+x
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="377150106"
+X-IronPort-AV: E=Sophos;i="6.04,219,1695711600"; 
+   d="scan'208";a="377150106"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP; 22 Nov 2023 10:38:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="801829392"
+X-IronPort-AV: E=Sophos;i="6.04,218,1695711600"; 
+   d="scan'208";a="801829392"
+Received: from unknown (HELO kuha.fi.intel.com) ([10.237.72.185])
+  by orsmga001.jf.intel.com with SMTP; 22 Nov 2023 00:59:47 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 22 Nov 2023 10:56:46 +0200
+Date: Wed, 22 Nov 2023 10:56:46 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>
+Subject: Re: Unplugging USB-C charger cable causes `ucsi_acpi USBC000:00:
+ ucsi_handle_connector_change: ACK failed (-110)`
+Message-ID: <ZV3CTg03IPnZTVL0@kuha.fi.intel.com>
+References: <b2466bc2-b62c-4328-94a4-b60af4135ba7@molgen.mpg.de>
+ <ZVy5+AxnOZNmUZ15@kuha.fi.intel.com>
+ <2bfe2311-27a6-46b5-8662-ba3cbb409f81@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2bfe2311-27a6-46b5-8662-ba3cbb409f81@molgen.mpg.de>
 
-It was noticed that on plugging a low-power USB source on Steam
-Deck USB-C port (handled by dwc3), if such port is on device role,
-the HW somehow keep asseting the PCIe PME line and triggering a
-wakeup event on S3/deep suspend (that manifests as a PME wakeup
-interrupt, failing the suspend path). That doesn't happen when the USB
-port is on host mode or if the USB device connected is not a low-power
-type (for example, a connected keyboard doesn't reproduce that).
+On Tue, Nov 21, 2023 at 03:25:59PM +0100, Paul Menzel wrote:
+> Dear Heikki,
+> 
+> 
+> Thank you for your prompt reply.
+> 
+> Am 21.11.23 um 15:08 schrieb Heikki Krogerus:
+> > On Tue, Nov 21, 2023 at 12:50:43PM +0100, Paul Menzel wrote:
+> 
+> > > On the Dell XPS 13, BIOS 2.21.0 06/02/2022, with Debian sid/unstable and
+> > > Linux 6.5.10, when unplugging the (Dell) USB Type-C charger cable, Linux
+> > > logs the error below:
+> > > 
+> > >      ucsi_acpi USBC000:00: ucsi_handle_connector_change: ACK failed (-110)
+> > > 
+> > > As this is logged with level error, can this be somehow fixed?
+> > > 
+> > >      drivers/usb/typec/ucsi/ucsi.c: dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
+> > > 
+> > > Please find the output of `dmesg` attached.
+> > 
+> > Thanks. The firmware not reacting to the ACK command is weird, but I'm
+> > not sure if it's critical. Does the interface continue working after
+> > that? Do you see the partner devices appearing under /sys/class/typec/
+> > when you plug them, and disappearing when you unplug them?
+> 
+> ```
+> $ LANG= grep .
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000\:001/*
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/current_max:0
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/current_now:0
+> grep: /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/device:
+> Is a directory
+> grep: /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/hwmon7:
+> Is a directory
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/online:0
+> grep:
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/power:
+> Is a directory
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/scope:System
+> grep: /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/subsystem:
+> Is a directory
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/type:USB
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_NAME=ucsi-source-psy-USBC000:001
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_TYPE=USB
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_USB_TYPE=[C]
+> PD PD_PPS
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_ONLINE=0
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_VOLTAGE_MIN=5000000
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_VOLTAGE_MAX=5000000
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_VOLTAGE_NOW=5000000
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_CURRENT_MAX=0
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_CURRENT_NOW=0
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_SCOPE=System
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/usb_type:[C]
+> PD PD_PPS
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/voltage_max:5000000
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/voltage_min:5000000
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/voltage_now:5000000
+> grep: /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/wakeup49:
+> Is a directory
+> ```
+> 
+> Now I unplugged the device, and the error is *not* logged. (I had a USB
+> Type-C port replicator plugged in during the day before.)
+> 
+> The directory is still there:
+> 
+> ```
+> $ LANG= grep .
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000\:001/*
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/current_max:0
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/current_now:0
+> grep: /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/device:
+> Is a directory
+> grep: /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/hwmon7:
+> Is a directory
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/online:0
+> grep:
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/power:
+> Is a directory
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/scope:System
+> grep: /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/subsystem:
+> Is a directory
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/type:USB
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_NAME=ucsi-source-psy-USBC000:001
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_TYPE=USB
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_USB_TYPE=[C]
+> PD PD_PPS
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_ONLINE=0
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_VOLTAGE_MIN=5000000
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_VOLTAGE_MAX=5000000
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_VOLTAGE_NOW=5000000
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_CURRENT_MAX=0
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_CURRENT_NOW=0
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/uevent:POWER_SUPPLY_SCOPE=System
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/usb_type:[C]
+> PD PD_PPS
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/voltage_max:5000000
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/voltage_min:5000000
+> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/voltage_now:5000000
+> grep: /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/wakeup49:
+> Is a directory
+> ```
+> 
+> I guess, that is the wrong directory I look at though?
+> 
+> (I am going to monitor the logs over the next days.)
 
-Even by masking all maskable ACPI GPEs, the problem still reproduces; also
-by having the PCIe PME mechanism using non-MSI interrupts, the symptom is
-observed as the HW succeeding to S3/suspend but waking up right after.
+Just list what you have in /sys/class/typec/ before and after plugging
+a device to the port:
 
-By changing the PRTCAP mode to DWC3_GCTL_PRTCAP_HOST in the controller
-(as one of the latest steps on gadget common suspend), we managed to
-circumvent the issue. The mode restore is already done in the common
-resume function. Notice that this patch does not change the in-driver
-port state on suspend, or else the resume path "thinks" the port was
-in host mode prior to suspend and resume it on a wrong fashion.
+        ls /sys/class/typec/
 
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc: Vivek Dasmohapatra <vivek@collabora.com>
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
----
+thanks,
 
-
-Hi folks, first of all thanks in advance for reviews/feedback on this one.
-
-This patch is the result of a debug approach with no datasheet access.
-With that said, I'm not 100% sure writing to this register is free of
-undesired side-effects; one thing I'm considering is the following scenario:
-imagine a device A with the USB port on device/peripheral mode, and a device B
-connected to it, acting as host. What if we want device B be able to wakeup
-device A? Would this patch prevent that for all cases, always?
-
-I appreciate ideas in case this is not the best approach to fix the
-problem. We could also gate this approach to the HW board as a first step,
-for example.
-
-Thanks,
-
-
-Guilherme
-
-
- drivers/usb/dwc3/core.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 0328c86ef806..5801d3ebbbcb 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -104,7 +104,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
- 	return 0;
- }
- 
--void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
-+static void __dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
- {
- 	u32 reg;
- 
-@@ -112,7 +112,11 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
- 	reg &= ~(DWC3_GCTL_PRTCAPDIR(DWC3_GCTL_PRTCAP_OTG));
- 	reg |= DWC3_GCTL_PRTCAPDIR(mode);
- 	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
-+}
- 
-+void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
-+{
-+	__dwc3_set_prtcap(dwc, mode);
- 	dwc->current_dr_role = mode;
- }
- 
-@@ -2128,6 +2132,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
- 			break;
- 		dwc3_gadget_suspend(dwc);
- 		synchronize_irq(dwc->irq_gadget);
-+		__dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
- 		dwc3_core_exit(dwc);
- 		break;
- 	case DWC3_GCTL_PRTCAP_HOST:
 -- 
-2.42.0
-
+heikki
 
