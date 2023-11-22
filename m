@@ -1,45 +1,46 @@
-Return-Path: <linux-usb+bounces-3178-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3179-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1776E7F456C
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 13:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5554F7F4579
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 13:11:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E4FAB2113C
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 12:10:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9293B2114D
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 12:11:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45C871BDD6;
-	Wed, 22 Nov 2023 12:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87AC918E1F;
+	Wed, 22 Nov 2023 12:11:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="L8PF9xHL"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fGM/+aX9"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB574BABA
-	for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 12:10:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A65E0C433C9;
-	Wed, 22 Nov 2023 12:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84754BA95
+	for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 12:11:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E38FC433C7;
+	Wed, 22 Nov 2023 12:11:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700655038;
-	bh=wl0JFYvB32NP7y30q+NX9TJJbF3cXUAoYsHbwutxyDw=;
+	s=korg; t=1700655103;
+	bh=sMXBeQjJa1nV4FIPkndlU8+ax8tszfpfgx7UkTZwhDc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L8PF9xHLNQicGYNp8JtaNyx/n8NDLkfwt2tBPdzukJLzsRucicY7f/SIUft+4P54x
-	 7RuPTI8ETjaKi9ABpt5831/IdepwzgPfvCET6UsbhBN2/ZpPgdnZEt/TGd5IkwUPgW
-	 mRsQpX+OmnWmBwBINOlxM69RtI6EUvVlshgHQMhs=
-Date: Wed, 22 Nov 2023 12:10:34 +0000
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Kunwu Chan <chentao@kylinos.cn>
-Cc: joel@jms.id.au, andrew@codeconstruct.com.au,
-	andriy.shevchenko@linux.intel.com, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kunwu.chan@hotmail.com,
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: aspeed: Check return value of kasprintf in
- ast_vhub_alloc_epn
-Message-ID: <2023112236-bullseye-pranker-491e@gregkh>
-References: <20231122014212.304254-1-chentao@kylinos.cn>
+	b=fGM/+aX9Y7vyAhG9pGPSbIgrWaIcBx8fWQVOddFz+HzCSCz4gPdYzObYgNP0VPJLr
+	 VYHXZEy4LF+cGt/0LCGZJ9EQ9E9XqshwmFmkQLZS+TRGr6IDJOTNjuO3P1NIzx8ZTN
+	 3frYBETZp6NbpBPBdrfjiT06yntHvge44/Gl9SyY=
+Date: Wed, 22 Nov 2023 12:11:39 +0000
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: Andi Shyti <andi.shyti@linux.intel.com>,
+	Wentong Wu <wentong.wu@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v3] usb: misc: ljca: Fix enumeration error on Dell
+ Latitude 9420
+Message-ID: <2023112217-audacious-eccentric-3522@gregkh>
+References: <20231121203205.223047-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -48,37 +49,23 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231122014212.304254-1-chentao@kylinos.cn>
+In-Reply-To: <20231121203205.223047-1-hdegoede@redhat.com>
 
-On Wed, Nov 22, 2023 at 09:42:12AM +0800, Kunwu Chan wrote:
-> kasprintf() returns a pointer to dynamically allocated memory
-> which can be NULL upon failure. Ensure the allocation was successful
-> by checking the pointer validity.
+On Tue, Nov 21, 2023 at 09:32:05PM +0100, Hans de Goede wrote:
+> Not all LJCA chips implement SPI and on chips without SPI reading
+> the SPI descriptors will timeout.
 > 
-> Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
-> ---
->  drivers/usb/gadget/udc/aspeed-vhub/epn.c | 2 ++
->  1 file changed, 2 insertions(+)
+> On laptop models like the Dell Latitude 9420, this is expected behavior
+> and not an error.
 > 
-> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/epn.c b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
-> index 148d7ec3ebf4..e0854e878411 100644
-> --- a/drivers/usb/gadget/udc/aspeed-vhub/epn.c
-> +++ b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
-> @@ -826,6 +826,8 @@ struct ast_vhub_ep *ast_vhub_alloc_epn(struct ast_vhub_dev *d, u8 addr)
->  	ep->vhub = vhub;
->  	ep->ep.ops = &ast_vhub_epn_ops;
->  	ep->ep.name = kasprintf(GFP_KERNEL, "ep%d", addr);
-> +	if (!ep->ep.name)
-> +		return NULL;
+> Modify the driver to continue without instantiating a SPI auxbus child,
+> instead of failing to probe() the whole LJCA chip.
+> 
+> Fixes: acd6199f195d ("usb: Add support for Intel LJCA device")
+> Cc: stable@vger.kernel.org
 
-This will break things if this ever triggers.  How was this tested?  The
-"slot" for this device will still be seen as used and so the resources
-never freed and then you can run out of space for real devices, right?
-
-Looks like the other error handling in this function below this call is
-also broken, can you fix that up too?
-
-thanks,
+Nit, stable is not needed as the above commit only ended up in 6.7-rc1,
+nothing older.  I'll drop it when I queue this up, thanks!
 
 greg k-h
 
