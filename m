@@ -1,200 +1,156 @@
-Return-Path: <linux-usb+bounces-3205-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3208-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9E667F4F9A
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 19:33:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 830CF7F5051
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 20:13:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA5101C20B26
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 18:33:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C7B2281557
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 19:13:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7FC858AB5;
-	Wed, 22 Nov 2023 18:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1271F5C917;
+	Wed, 22 Nov 2023 19:13:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e4c0/WPH"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TxmCctUm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A432D47
-	for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 10:32:55 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5ca11922cedso490777b3.2
-        for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 10:32:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700677974; x=1701282774; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9evLgerhPexVHQkBogiwmvf7m2BOF4vHI4aXwGPPVJ4=;
-        b=e4c0/WPHhHx2qk/e0qrW7JxnvxGiVMuQqy3J9XJQ2dFhrl+rnkFNggaPrHacb/iE0x
-         PO5hdzFfVbl3ZENEK2jrnV0ABP+ZrA0eKMnj30PPc4OD2C/ZjXB0LyJ+oFik+PP0Aqld
-         ecVRx2uek9QTzA32qUQuF1U37Rzz7nJm9NMRdynvlaDr4RktqLsqzVVQ88U2R+lNZgM9
-         CA4CvFd0KWSp2Udo5QNzN4wxRMtbsG1p/mbi/Dx/7rURAI+tMKWoMUE6JbjuxxkT0nfW
-         topLBDAK4h0dPg+/M8nsmBhOLEWXIib0lS+f7gIZ52jTVueweDC2cYCv1qdsQcfvryNY
-         TkSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700677974; x=1701282774;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9evLgerhPexVHQkBogiwmvf7m2BOF4vHI4aXwGPPVJ4=;
-        b=PIyJgdYuLxz9bTqvzz0Bz/2QF+Hr1Pi2EXtbPdWr9rwdMm4zN3uyQ9ox8p0OU8R8vG
-         XBqrckTHhip4+mCXy5dOTocAKUES7N7W473NE7XYkBOyZV2l2PFTV4KZFiZSLUfFz5cb
-         0HKTRrIKvxWUMcvL+ED0GwMe9Q7G9LC70bHbVMdyc8Yf17Ahu6/NVs/Bi+njQ6l6XA77
-         x3h/qZ2EQzGBaaiYUjLLtiMQaMQHR9OAfpozqbjj2Xj0iigSdoQGO/hrz9LgVd10obU5
-         gulDmYnxY9UOCzQsQh6MKll763jFA5ODzThfuvEMKvztezuvpNZJG2Ni/ghoOOinbaXQ
-         KLVg==
-X-Gm-Message-State: AOJu0YxvpWt8q/tkCdPCpNRQWmYIJJuo+ei4H0nr94Ata5kRfZKgMjj9
-	hQtnW0EDoLqkyXRxyrbk3mnOMTIjlsKTamXSKxre9Q==
-X-Google-Smtp-Source: AGHT+IHyhJSWiia3K3sWSqzs9R4jjq04Y+WIUYIc2Ttxdvr+Ys8bPby4u0SJWAcMZONs2xz0YHXI4buzX0cWSLoaSkQ=
-X-Received: by 2002:a0d:f245:0:b0:5c9:d64e:68c7 with SMTP id
- b66-20020a0df245000000b005c9d64e68c7mr3050822ywf.35.1700677974461; Wed, 22
- Nov 2023 10:32:54 -0800 (PST)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99E7A9;
+	Wed, 22 Nov 2023 11:13:21 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AMJ0Lob004602;
+	Wed, 22 Nov 2023 19:13:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=7CG5oCnjWDSSBAJpAL91Z7Kealbavj8SFwKnO5GlXBI=;
+ b=TxmCctUmd2i0qy5mdgT56hPZs525Ofm2jggrLSBGfIu3RYQDfxdsUQ0h25+mVWU9gcbt
+ Ruc/S8akfJHirPRQ1bnke4I2T+7PLdbZLD0mdDqjJZeat4lBdJgz2nE5jaa1iMHgmdqF
+ Lm7Nwq+NHKSX0re9zCuEC89guazXL9KAL+uKTgRBLnJyoa6FJn9sgRrOHlcB6EIBS95Y
+ 8FUPlhbyigxV1AzGu9sqCPVLfL1NRaWPRw9QeyX42EgiJid0OHO/n7oumZIf4GxbbLXP
+ N7ZaYcDWA752miN/U7g9tTZNp8st8BehreIy9Q+3mF4u9hgcHZftoJ8Lp7TjN6cxGvMY Tw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uh477jvrd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 22 Nov 2023 19:13:16 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AMJDFRj030752
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 22 Nov 2023 19:13:15 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 22 Nov 2023 11:13:11 -0800
+From: Krishna Kurapati <quic_kriskura@quicinc.com>
+To: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, <quic_wcheng@quicinc.com>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        Krishna Kurapati
+	<quic_kriskura@quicinc.com>
+Subject: [PATCH 0/6] Refine USB interrupt vectors on Qualcomm platforms
+Date: Thu, 23 Nov 2023 00:42:59 +0530
+Message-ID: <20231122191259.3021-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231103230414.1483428-1-dmitry.baryshkov@linaro.org> <7a4a6698-0954-4225-82ff-02dd13bd64bb@linux.dev>
-In-Reply-To: <7a4a6698-0954-4225-82ff-02dd13bd64bb@linux.dev>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Wed, 22 Nov 2023 20:32:45 +0200
-Message-ID: <CAA8EJpoqfwyVYQy17QAOtrGr1AGzFkpKrOM5_F58=A95PoYncQ@mail.gmail.com>
-Subject: Re: [PATCH v6 0/6] drm: simplify support for transparent DRM bridges
-To: Sui Jingfeng <sui.jingfeng@linux.dev>
-Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-phy@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
-	freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: TrW7wXycGNg_qUwLiUmOqvCyjNg1SQgZ
+X-Proofpoint-GUID: TrW7wXycGNg_qUwLiUmOqvCyjNg1SQgZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-22_13,2023-11-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ impostorscore=0 malwarescore=0 mlxlogscore=673 clxscore=1015
+ suspectscore=0 spamscore=0 bulkscore=0 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311220139
 
-On Wed, 22 Nov 2023 at 18:03, Sui Jingfeng <sui.jingfeng@linux.dev> wrote:
->
-> Hi,
->
->
-> On 2023/11/4 07:03, Dmitry Baryshkov wrote:
-> > Supporting DP/USB-C can result in a chain of several transparent
-> > bridges (PHY, redrivers, mux, etc). All attempts to implement DP support
-> > in a different way resulted either in series of hacks or in device tree
-> > not reflecting the actual hardware design. This results in drivers
-> > having similar boilerplate code for such bridges.
->
-> Please improve the written,  "resulted" -> "yield" ?
->
-> > Next, these drivers are susceptible to -EPROBE_DEFER loops: the next
-> > bridge can either be probed from the bridge->attach callback, when it is
-> > too late to return -EPROBE_DEFER, or from the probe() callback, when the
-> > next bridge might not yet be available, because it depends on the
-> > resources provided by the probing device. Device links can not fully
-> > solve this problem since there are mutual dependencies between adjancent
-> > devices.
-> >
-> > Last, but not least, this results in the the internal knowledge of DRM
->
-> There is a duplicated "the" word in this sentence.
->
-> As far as I can understand, nearly all of those troubles are because the display bridges
-> drivers are designed as a kernel module(.ko) instead of making them as static link-able
-> helpers. I means that a display bridge device can not work standalone, as it have to be
-> used with a display controller. So a display bridge is just a slave device or a auxiliary
-> device. My question is: if it can't works by itself, we probably shouldn't design them as
-> kernel modules style. Am I correct?
+Qualcomm targets define the following interrupts for usb wakeup:
+{dp/dm}_hs_phy_irq, hs_phy_irq, pwr_event, ss_phy_irq.
 
-No. This has nothing to do with the driver being a kernel module or built-in.
+But QUSB2 Phy based targets have another interrupt which gets triggered
+in response to J/K states on dp/dm pads. Its functionality is replaced
+by dp/dm interrupts on Femto/m31/eusb2 phy based targets for wakeup
+purposes. Exceptions are some targets like SDM845/SDM670/SM6350 where
+dp/dm irq's are used although they are qusb2 phy targets.
 
->
-> > subsystem slowly diffusing into other subsystems, like PHY or USB/TYPEC.
->
-> Yeah, this indeed a problem.
->
-> > To solve all these issues, define a separate DRM helper, which creates
-> > separate aux device just for the bridge.
->
-> I'm supporting you if want to solve all these problems, this is fine and thanks a lot.
-> But I want to ask a question, now that you are solving these problems by creating separate
-> devices, does this manner match the hardware design perfectly? which is the hardware units
-> you newly created device is corresponding to?
+Currently in QUSB2 Phy based DT's, te qusb2_phy interrupt is named and
+used as "hs_phy_irq" when in fact it is a different interrupt (used by
+HW validation folks for debug purposes and not used on any downstream
+target qusb/non-qusb).
 
-Aux devices do not always follow the actual hardware internals. For
-example, see the TI sn65dsi86 driver, which also uses aux devices to
-split dependency and probing chains.
+On some non-QUSB2 targets (like sm8450/sm8550), the pwr_event IRQ was
+named as hs_phy_irq and actual pwr_event_irq was skipped.
 
-> > During probe such aux device
-> > doesn't result in the EPROBE_DEFER loops. Instead it allows the device
-> > drivers to probe properly, according to the actual resource
-> > dependencies. The bridge auxdevs are then probed when the next bridge
-> > becomes available, sparing drivers from drm_bridge_attach() returning
-> > -EPROBE_DEFER.
->
-> OK, as far as I can understand,  in order to solve the mentioned problem
-> you are also retire the defer probe mechanism.
+This series tries to address the discrepancies in the interrupt numbering
+adding the missing interrupts and correcting the existing ones.
 
-No, I'm not retiring the probe deferral mechanism. Instead I'm
-splitting it into two chains. One going from the controller to the
-usb-c connector for the signal flow, another going from the connector
-back to the drm_encoder for the drm_bridge dependencies.
+This series has been compared with downstream counter part and hw specifics
+to ensure the numbering is right. Since there is not functionality change
+the code has been only compile tested.
 
->
->
-> > Changes since v5:
-> >   - Removed extra semicolon in !DRM_AUX_HPD_BRIDGE stubs definition.
-> >
-> > Changes since v4:
-> >   - Added documentation for new API (Sima)
-> >   - Added generic code to handle "last mile" DP bridges implementing just
-> >     the HPD functionality.
-> >   - Rebased on top of linux-next to be able to drop #ifdef's around
-> >     drm_bridge->of_node
-> >
-> > Changes since v3:
-> >   - Moved bridge driver to gpu/drm/bridge (Neil Armstrong)
-> >   - Renamed it to aux-bridge (since there is already a simple_bridge driver)
-> >   - Made CONFIG_OF mandatory for this driver (Neil Armstrong)
-> >   - Added missing kfree and ida_free (Dan Carpenter)
-> >
-> > Changes since v2:
-> >   - ifdef'ed bridge->of_node access (LKP)
-> >
-> > Changes since v1:
-> >   - Added EXPORT_SYMBOL_GPL / MODULE_LICENSE / etc. to drm_simple_bridge
-> >
-> > Dmitry Baryshkov (6):
-> >    drm/bridge: add transparent bridge helper
-> >    phy: qcom: qmp-combo: switch to DRM_AUX_BRIDGE
-> >    usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE
-> >    drm/bridge: implement generic DP HPD bridge
-> >    soc: qcom: pmic-glink: switch to DRM_AUX_HPD_BRIDGE
-> >    usb: typec: qcom-pmic-typec: switch to DRM_AUX_HPD_BRIDGE
-> >
-> >   drivers/gpu/drm/bridge/Kconfig                |  17 ++
-> >   drivers/gpu/drm/bridge/Makefile               |   2 +
-> >   drivers/gpu/drm/bridge/aux-bridge.c           | 140 +++++++++++++++
-> >   drivers/gpu/drm/bridge/aux-hpd-bridge.c       | 164 ++++++++++++++++++
-> >   drivers/phy/qualcomm/Kconfig                  |   2 +-
-> >   drivers/phy/qualcomm/phy-qcom-qmp-combo.c     |  44 +----
-> >   drivers/soc/qcom/Kconfig                      |   1 +
-> >   drivers/soc/qcom/pmic_glink_altmode.c         |  33 +---
-> >   drivers/usb/typec/mux/Kconfig                 |   2 +-
-> >   drivers/usb/typec/mux/nb7vpq904m.c            |  44 +----
-> >   drivers/usb/typec/tcpm/Kconfig                |   1 +
-> >   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c |  41 +----
-> >   include/drm/bridge/aux-bridge.h               |  37 ++++
-> >   13 files changed, 383 insertions(+), 145 deletions(-)
-> >   create mode 100644 drivers/gpu/drm/bridge/aux-bridge.c
-> >   create mode 100644 drivers/gpu/drm/bridge/aux-hpd-bridge.c
-> >   create mode 100644 include/drm/bridge/aux-bridge.h
-> >
+However SC8280 is left unchanged. Its primary and secondary controllers
+also have hs_phy_irq but they are not added in this series because of
+one mismatch with hw specifics which needs to clarified. The control IRQ
+added and the interrupts added work fine today. Only the hs_phy_irq needs
+to be cleaned up which will be done later.
 
+Krishna Kurapati (6):
+  dt-bindings: usb: dwc3: Clean up hs_phy_irq in bindings
+  usb: dwc3: qcom: Rename hs_phy_irq to qusb2_phy_irq
+  arm64: dts: qcom: Fix hs_phy_irq for QUSB2 targets
+  arm64: dts: qcom: Fix hs_phy_irq for non-QUSB2 targets
+  arm64: dts: qcom: Fix hs_phy_irq for SDM670/SDM845/SM6350
+  arm64: dts: qcom: Add missing interrupts for qcs404/ipq5332
 
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    | 126 ++++++++++--------
+ arch/arm/boot/dts/qcom/qcom-sdx55.dtsi        |   5 +-
+ arch/arm/boot/dts/qcom/qcom-sdx65.dtsi        |   2 +
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi         |   8 +-
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi         |  15 ++-
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi         |  14 ++
+ arch/arm64/boot/dts/qcom/msm8953.dtsi         |   7 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  19 ++-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi         |   7 +-
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |  16 +++
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi         |  20 ++-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi          |   3 +-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi          |   6 +-
+ arch/arm64/boot/dts/qcom/sdm630.dtsi          |  19 ++-
+ arch/arm64/boot/dts/qcom/sdm670.dtsi          |   5 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  10 +-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          |   9 +-
+ arch/arm64/boot/dts/qcom/sm6125.dtsi          |   9 ++
+ arch/arm64/boot/dts/qcom/sm6350.dtsi          |   7 +-
+ arch/arm64/boot/dts/qcom/sm6375.dtsi          |   4 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |  10 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |   4 +
+ arch/arm64/boot/dts/qcom/sm8350.dtsi          |   4 +
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          |   4 +-
+ arch/arm64/boot/dts/qcom/sm8550.dtsi          |   4 +-
+ drivers/usb/dwc3/dwc3-qcom.c                  |  22 +--
+ 26 files changed, 252 insertions(+), 107 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.42.0
+
 
