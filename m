@@ -1,59 +1,131 @@
-Return-Path: <linux-usb+bounces-3156-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3157-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C67F7F3B64
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 02:43:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52E237F3B8D
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 03:02:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A37A11C210A3
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 01:43:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 161211C21010
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 02:02:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF57C5C97;
-	Wed, 22 Nov 2023 01:43:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB5C96D3F;
+	Wed, 22 Nov 2023 02:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pk6ZT7NR"
+	dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b="OapWnM4h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E9EE46A6;
-	Wed, 22 Nov 2023 01:43:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EC4FC433C9;
-	Wed, 22 Nov 2023 01:43:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700617380;
-	bh=YCYSa/A3qGr3xygl+kOwHA+qN3D8bBICw2GWRrWzZmA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=pk6ZT7NRdKj3r39HnJeyqmOsqwjj8HGrXerZ4Dnr9puFEcaBrh2p4gwNk9Jkn6ooX
-	 yyazQOcCfRtocQ3POjfe8GxmcAQZ8FlMwZ4rvs4fFE9rT/3zSbAKf4FjvRJuBzft85
-	 mX5DW88vHVHJJfDwIfXARirDFMfbTTHpMNrrJ0e7PbYMwlQpq5K2Fxj4XLhXmQLwTK
-	 HAHFuSnXrXQt352o9PSm5rrkkzsU1+Yr91hftrmt4KDEezUhEvnKmptAm/c6Ok/ycd
-	 pTQkRUtxT571tvVH2hT4m/7YZEhiKCFue8CCUxlRCCcPVawryBtvg9RqAptuZBGIjs
-	 M5URt2NNm2qMw==
-Date: Tue, 21 Nov 2023 17:42:59 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] USB: gl620a: check for rx buffer overflow
-Message-ID: <20231121174259.54f11073@kernel.org>
-In-Reply-To: <20231121134315.18721-1-oneukum@suse.com>
-References: <20231121134315.18721-1-oneukum@suse.com>
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2069.outbound.protection.outlook.com [40.107.117.69])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941E3DD;
+	Tue, 21 Nov 2023 18:01:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bUFcl0msdoJjHXFdE8Ll1sqV6ssPZdPe7tuy+FzgAqH7LMLhSdwnw90uAJWpU4Fe6JTChzqZk930kEDnsjjJC4Pq1dBYzBD900iB20ZyM/HaumGusQNQnZgbXJO1RV9KiB7SsVfxBs+IAjcX7Ch6iByP9X3K9r6JIYVnMfLIZuZe3ToldIFfVJmcg9p0zG2JlB4RSj2CRv289Sv3xM1G51jxDcvKl1BsFoqCAdk0bn4Ax3KdfswnDaIHnEDQo051DOQ4/8eVfTpMx8GFLlRD4kDnsOtYjxx4lvtCtNM0qbhpV+8Gd6s+jR9KISjBFADCxAsHBpMvOf6CAaRdX4u4tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v4mMQRsfDom1vtINLow1rcwNUGNPOqtO3EwaszgaU/0=;
+ b=KdGt6l4WZ+7Xqfcx6lHOHnOt5es3R+nF5EV8jXGs88uufn7BoE9vEeceDih6irUsGXvCJKioFo3Ulo1KpH8hSGCvwrxCzWHmXJtXsmfzlhZXrkHGVddzpC9UJwlyvnvrNsOsD1wz1a3Uu6+FBWkeZdKGwSnyi/fKyWP4tiyIV2vGYzLVGGGpiNeFb0XqnlErIVJtV5THlgX5vIJ5WUV8xBFpW1UupKFGDzpAcwvdZxT2+icFrOsLQZuIDh8EQ2nFPYig1nGhS33pqSuz8zvXdocYIx1/f+DdRDspUBRFOUhEqMey/Hux31yX267IBznXeO33O5NIx6J9AL2Lv8jAfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fibocom.com; dmarc=pass action=none header.from=fibocom.com;
+ dkim=pass header.d=fibocom.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fibocomcorp.onmicrosoft.com; s=selector1-fibocomcorp-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v4mMQRsfDom1vtINLow1rcwNUGNPOqtO3EwaszgaU/0=;
+ b=OapWnM4hEaIZ7bWJe1srZ4/VmnAN8jMqwRE/d9qKJ7NT1+c2/Ntyt1hVpIaFmCUooAk3rEQKR2v86zi4QM+3zwEdaqVMh8zVQ7yO2osbpBzimk5Hc85oa4eMfnsS45iTl/AROdY5qJ6UKiNOLnQCYgF1aJmiv4PRFrBIdGAfjs8=
+Received: from TYZPR02MB5088.apcprd02.prod.outlook.com (2603:1096:400:71::13)
+ by TYZPR02MB4957.apcprd02.prod.outlook.com (2603:1096:400:8f::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.18; Wed, 22 Nov
+ 2023 02:01:46 +0000
+Received: from TYZPR02MB5088.apcprd02.prod.outlook.com
+ ([fe80::e6c0:ad44:ccaa:789]) by TYZPR02MB5088.apcprd02.prod.outlook.com
+ ([fe80::e6c0:ad44:ccaa:789%6]) with mapi id 15.20.7002.028; Wed, 22 Nov 2023
+ 02:01:45 +0000
+From: "Puliang Lu(Puliang)" <puliang.lu@fibocom.com>
+To: Johan Hovold <johan@kernel.org>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB: serial: option: modify Fibocom to DELL custom modem
+ FM101R-GL
+Thread-Topic: [PATCH] USB: serial: option: modify Fibocom to DELL custom modem
+ FM101R-GL
+Thread-Index: Adoc59aTjxxtKq9cRWaHZUODs9wnvQ==
+Date: Wed, 22 Nov 2023 02:01:45 +0000
+Message-ID:
+ <TYZPR02MB5088F10A6C02CF08C1A02B0189BAA@TYZPR02MB5088.apcprd02.prod.outlook.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fibocom.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR02MB5088:EE_|TYZPR02MB4957:EE_
+x-ms-office365-filtering-correlation-id: 580d218f-2aa8-4c79-f456-08dbeafefae1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ D8V+R5AzIvcUazbqJdIItf+Yk0TM8wwet77HkS1WooZGSTpRTVTRWydC99Zi1Mzdy4HUnxSCjWKIn/F4BSZVXySyp7gxfWUxxfgrGP7TSsJmDvQ3Ogv32PSTJzRGooebuurqs6anrK0NgHnHZRwjPHaB4+ySfCb1mFgUNGt24EZHAvdNFoNmPbV3I0aBd4Vf/dwoLDNS1GY0T4FgFxo6DTQdr3dj8i9h5EGfpVtrCe9vY5Nyb7KztFsybLLrxhEV9lVGmicnJL8E3TZWUmf7hUH82aXpmhCmx54E0pPZkNqguGd+C2v73cD9zP9lwOIfLnrJli+83NvmoQfShyVtm6FlK8LGQvubZzjoSf2MDear6aPlJSSR0ikmPHOUcYolsjC3dqSDIuRzqCdMEtuwOBixlMDPCCuHds3DWeBjHtRF/2REt1+Np7ltHX7Jrui08SyihluZsm7o23U1MAKDkd4pqtwrQLJJgz1tLdZTA3aZ68dlmFPbkxS9im3DEYA26C/X43gI0VP0tsMnS/KY6wqhUYzqoaG2QX2h0p9FSoi3GDZUtAARmu8A4PUd6hcW4TaRJNHHs3HcxS7VltmdAtzpbVJY+RqXAaQfqu+u6Z4=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR02MB5088.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(39850400004)(376002)(346002)(136003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(2906002)(55016003)(8936002)(41300700001)(4326008)(8676002)(52536014)(5660300002)(316002)(6916009)(64756008)(66556008)(66946007)(54906003)(66446008)(76116006)(66476007)(86362001)(966005)(26005)(71200400001)(9686003)(38070700009)(6506007)(122000001)(33656002)(558084003)(478600001)(83380400001)(38100700002)(7696005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?o5hkUVq5tQYGSY9Ab17qP4FIkrbGLPfm5TgWpCGeFDjxwsa9LRyp3cNQOMHp?=
+ =?us-ascii?Q?qi+j5qxXBokdNvQGYWStSKo9XWzZ2Evs44RQUvlaLc5jWymZrStB9VM8vqfH?=
+ =?us-ascii?Q?qynDwLfrZ5gekZ+dJuPy8DFioFy5pD07ELgT6tmpyXIsnGSn7BBM/3qDZcfh?=
+ =?us-ascii?Q?/n++v5tA+zyUCRmb5+mNoKI9ebx6V/oDp155j3L7zboyd4cEAgA2ILr5iubY?=
+ =?us-ascii?Q?MHIeJxutWIQlAQGnpO4ElUgiPx88Wc60XUa4gphGxohG6ODPPTlfVYJrYYF4?=
+ =?us-ascii?Q?OfdNLdXWmsvQjmGhN+o4lAk37Pd+iSzOgPoH3H2AdhScyCT0FPytzW+36ZuS?=
+ =?us-ascii?Q?msy0hgnnXi+zFYXxtWss2cCDJ6lsOkwTXBWLZtLe1XAXECXYMGZWbEgKFkEu?=
+ =?us-ascii?Q?MWygPsbSoqdA4qzzMOFKDxXdTfAqyxDsCwJQgfrNs/aXZJZ1JFaVDmH3Ywuc?=
+ =?us-ascii?Q?dCfP2fU3G6GT4GfcJCuuFaTH+/wryDs/0eTrzbUzGrT+RhCUl5UZPZ0+nn+F?=
+ =?us-ascii?Q?8ecU1Cz8csY2ihDt7dTqaRSesZQjRk0nA6bRS9/DW27Nehz07v7Un4O4BD2D?=
+ =?us-ascii?Q?9FHMWwO2iXjl8hTBlkIjb06bEKfz25U3qHY6CkSue+alsPP2QFPT+kgouDzz?=
+ =?us-ascii?Q?2/PV4w53yRvit4AMZwtIGu/bUzhs/kf1sba5vQ42KWz3swFDsRmYRnRx2gFb?=
+ =?us-ascii?Q?dvEVzY8fWz2+IJV7kMFAvH104GeKWk4Dmo0qVFscMphlVC4FzezdwYk7J2V/?=
+ =?us-ascii?Q?DDB1IrOnVZb0y2EJvM5Dqw8J34UAqdzgKtqKBxW5Neru3/0nHkPd8DpCQoUM?=
+ =?us-ascii?Q?kyrDVm836BXrIVUXkXTSjBIgLBaXxfkJ6U71EEox/7JSSkRhzv7TZDDi3HxR?=
+ =?us-ascii?Q?tOXy1o/y54EVQ1DEGgXfYx37uS2PwqDxwoFz8eYc2E1Hfzs+IgTG7pDsXO2B?=
+ =?us-ascii?Q?+TjqwSX7LrB7r0YLMkkmfoY0hlL7SYkA+LFSD/jFRRAu6lvXMzlNtjuPGblB?=
+ =?us-ascii?Q?m71H1srVg/bTSbfURpfyYHM3R5m8ichwkHG0qgxBaaNZgG3eKWUjqJ+9EIWv?=
+ =?us-ascii?Q?PrLqBLUTmiecjb1VsP9zbas8fWynqHZeeUnVhXeYgwMIGwl7RwnjTLlnC7+T?=
+ =?us-ascii?Q?XT737iKuSWvcpyypDe7AuZ0X/odjTL8eUsq51970oqO0Y/lmyRpdvwHQvbol?=
+ =?us-ascii?Q?JNR9MY1fmQ1EfPuO52jBDTukxMBvRpBRbnZ1GYolDT6JxIQNrRIbJJSoXsm/?=
+ =?us-ascii?Q?DuuYrAihJ2sOlNh7z28uN0gla4NU7eE+inAZLlKT1AV0Fu4yTIcEiMbY8Mtp?=
+ =?us-ascii?Q?Yn/Uiu3gaQZam+AcxAEYXlUjYeKVnmbuSbci1vxgwKMrGhuxi2GA8lV8rz9g?=
+ =?us-ascii?Q?UzqDMBAwXLboQhFwgxSMj0PpXs/Wlm+BNqXVCPUDlH00T0K8nwDS3sfSq0WL?=
+ =?us-ascii?Q?wkmDxstaRhjMAzByyg4OSmgHkiLY6oFN3U69saV4hXJuNcrreSNss8enELq0?=
+ =?us-ascii?Q?YA4YNc06vIyAod9IEW2B10KBHOCagVQqQD57PFjYO73SD92oCG+2wAKZMhlk?=
+ =?us-ascii?Q?gAVibZX3P8DcUsozFbeDOQWS0b1A+gjtssa98d37?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: fibocom.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR02MB5088.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 580d218f-2aa8-4c79-f456-08dbeafefae1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2023 02:01:45.4478
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 889bfe61-8c21-436b-bc07-3908050c8236
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MkCdhUm/RS8U+KFkRLfYbmAXgFZtwc6hYzJj8ZDePFk9GanM/+nfurtNZeZo3pAPdkI5oOENH9BR4vXOyUF2MQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR02MB4957
 
-On Tue, 21 Nov 2023 14:43:15 +0100 Oliver Neukum wrote:
-> Signed-off-ny: Oliver Neukum <oneukum@suse.com>
 
-s/-ny/-by/ ?
--- 
-pw-bot: cr
+> Now applied with a slightly updated commit message:
+>=20
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/com=
+mit/?h=3Dusb-linus&id=3Da1092619dd28ac0fcf23016160a2fdccd98ef935
+
+Thank you very much.
+
 
