@@ -1,101 +1,108 @@
-Return-Path: <linux-usb+bounces-3214-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3215-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C03457F52C6
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 22:44:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A9797F52E6
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 23:00:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B95C2816C7
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 21:44:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59DB41C20B76
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 22:00:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 560B31CFA8;
-	Wed, 22 Nov 2023 21:44:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 875731D6B0;
+	Wed, 22 Nov 2023 22:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lat7p4OH"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HUXhGEt3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CBDDA;
-	Wed, 22 Nov 2023 13:44:20 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-543c3756521so331337a12.2;
-        Wed, 22 Nov 2023 13:44:20 -0800 (PST)
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2778ED41
+	for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 14:00:34 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-db084a0a2e9so290637276.2
+        for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 14:00:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700689459; x=1701294259; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xtanoWGCY7h+4tm6qQcmMOcUxKcUNh5lJMouYq8Ssrc=;
-        b=lat7p4OH63n6qdxPc+6ykgrfcBC1Qq/R7mi0mjfm2BbRgSQIRmsdLxiIkQiuGHPP/w
-         RIPBvkiECCfu6DjeGcEirUxeYIG+daLHwcF+tG9nStRs/+KRWLmk5DnN5sRXafD4uZu+
-         jeoyc9ImaC5d1TlZRtQWEjQQGNKjQNc2fV8aCh1JayaklEv9a8I7mH2i7gRodXLafHP5
-         MngX6tz59P8Z+lMiPWV2ToR6thz9fZICcJ8f2yEmNwYCQqlUse0RwSjJ+F0bPh7am55j
-         BOk9Jkm8+yFmb2h92MQzY2XGJB+hzHbxykTQLczfeHvY4u8bfnzl64WfRje8snrWjTWm
-         UMTw==
+        d=google.com; s=20230601; t=1700690433; x=1701295233; darn=vger.kernel.org;
+        h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VwCvT/dsp9D8lLZGUBpN5q/USmNxw15gs9X4QsQc4Fw=;
+        b=HUXhGEt3+RyaICITA+kxA/raWwRmc84BK8ty5mBc3fNNOW2GzaMqPO6h6rW9fn1Y3S
+         SowvS6i7ASfOU3lrCeMzESaQ5US0M8fpzPyEKMQkho8Z3kYYuOcLIcBsGzq9m2QFkYhC
+         5uxo5ueuWka/ZHy8xsUkGMjgRwJBnAPKWO5OmXvICbdKwMomLRsRCLjxK6+azNwh4aoO
+         nMRrExoegLVwg8hh85csq5HP1T0U+Kj2PCbGg4SQ9bs5XLSu5uOPPDqet5y4YxYSoDOT
+         PSEEf2Kt46AIT8iX6wTFemfcuCm5pXwFqgQEA1U3jvv+uAtbBzS2tQOYmA/yqZfjsGun
+         TwaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700689459; x=1701294259;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xtanoWGCY7h+4tm6qQcmMOcUxKcUNh5lJMouYq8Ssrc=;
-        b=sCWi3hHvoiHNz6gUYSYwj4DRlLYuiMWf+PsFpZXE5iYD7MUb/JAQXa9+yht7CSY93n
-         5Ojxs+I1YrGYjmVun7qPOWaRQekLU+gxgECdFG1pAcHGos9pri5DWCGJIi5H/YEFYmWg
-         rUtjPLu4CFUCQqV4nFM0o0U3szwN8rWMxG7J0g2xcmfs4lycP7F7xGCCzziISVyFXvJW
-         FIt0i+EX3RtN60N6khhLSHK2691EO6qQq16rtRKRxKJEhneT8Z/6VCXfWKUdff4tdKti
-         YMwZbTqXjMJwTLHNcZ7U8rGKqGEMUsSJPPBYZ+ATSWPm8vGNLwU2mjZr0LunLoCwWuPV
-         o7BA==
-X-Gm-Message-State: AOJu0YyJyRXZbDc7ZRpAuRZWFn18cb6XkX3SsW0ps2RJM6EceCA/Hpxo
-	D95mFlHZLZZGgbalSoM1ApJDkGvWqY6KgQ==
-X-Google-Smtp-Source: AGHT+IFoLjbOpmkIEULy5gbxKooTudQDxiArLI8S7wXYkZ1p88cJRrIDvnnjd2TG4kAGIdT+hiYc1A==
-X-Received: by 2002:aa7:c715:0:b0:548:657c:9110 with SMTP id i21-20020aa7c715000000b00548657c9110mr2624490edq.38.1700689458596;
-        Wed, 22 Nov 2023 13:44:18 -0800 (PST)
-Received: from [192.168.50.20] (077222239035.warszawa.vectranet.pl. [77.222.239.35])
-        by smtp.gmail.com with ESMTPSA id b9-20020aa7c6c9000000b005484c7e30d8sm224480eds.1.2023.11.22.13.44.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Nov 2023 13:44:18 -0800 (PST)
-Message-ID: <381e90eb-a744-450b-967d-bc67afb0aa9c@gmail.com>
-Date: Wed, 22 Nov 2023 22:44:16 +0100
+        d=1e100.net; s=20230601; t=1700690433; x=1701295233;
+        h=to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VwCvT/dsp9D8lLZGUBpN5q/USmNxw15gs9X4QsQc4Fw=;
+        b=ERu8VW3sncdYRprOxCJB87Tpli0bKgSi/R5bvSwYQ63jSsbA1BcRu9BvcVDQVDvCHh
+         oSC+dXTb5z/zDYDQsRgzh5n64oaNk1QAgzll1SdUWvjgD0fdanJjUMpuLY5S0RHzzREY
+         4lcR0WYLmZxA+gVPe3rsdvWJEVfy/Rl3PEAW4+KEpSnEs9BWnecVZfj6FEgLqyqcf+gf
+         I8f4+a1AQG1urY/PFh+rGEGM47xvY9z/DT7Iay8GCIEuj1zeLGZkMTKb3ma6wq67Rif1
+         WoANQ7gAuL6Fxk7bKH4AHO6azxfH12rQ7ptxGtP0SCBowFI7/gRZ3WkV7AT2h0Jl38+x
+         RCOw==
+X-Gm-Message-State: AOJu0YzF2KeYsf42xQE7yXFrJFwkoMwHj/8OrrwDECXupfn9/tp5XD5F
+	Bx3aR9NCQosxa/tdqHfjXqBTRAjZpwU=
+X-Google-Smtp-Source: AGHT+IEL/pnocvmHrn/XYSGAEzDzJqnyX/9eKAwjY8bggLVmf7lFsaiKZ+3bWBDNgqFZD6COkVyjYJ51Afg=
+X-Received: from royluo-cloudtop0.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:bb8])
+ (user=royluo job=sendgmr) by 2002:a25:2d1:0:b0:da3:b4ef:29fe with SMTP id
+ 200-20020a2502d1000000b00da3b4ef29femr100305ybc.13.1700690433222; Wed, 22 Nov
+ 2023 14:00:33 -0800 (PST)
+Date: Wed, 22 Nov 2023 22:00:01 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: possible proble with skb_pull() in smsc75xx_rx_fixup()
-To: Oliver Neukum <oneukum@suse.com>
-Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- USB list <linux-usb@vger.kernel.org>
-References: <7f704401-8fe8-487f-8d45-397e3a88417f@suse.com>
- <EB9ACA9B-78ED-48C3-99D6-86E886557FBC@gmail.com>
- <73f614e6-796e-415d-9954-8a94105f5e1c@suse.com>
-Content-Language: en-US
-From: Szymon Heidrich <szymon.heidrich@gmail.com>
-In-Reply-To: <73f614e6-796e-415d-9954-8a94105f5e1c@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
+Message-ID: <20231122220001.539770-1-royluo@google.com>
+Subject: [PATCH v1] USB: gadget: core: adjust uevent timing on gadget unbind
+From: Roy Luo <royluo@google.com>
+To: royluo@google.com, gregkh@linuxfoundation.org, stern@rowland.harvard.edu, 
+	badhri@google.com, quic_kriskura@quicinc.com, francesco.dolcini@toradex.com, 
+	quic_eserrao@quicinc.com, ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 20/11/2023 13:35, Oliver Neukum wrote:
-> On 16.11.23 21:09, Szymon Heidrich wrote:
->> Hello Oliver,
->>
->> Could you please give me some hints how this could be practically exploited to cause mischief?
-> 
-> Hi,
-> 
-> it seems to me like you can easily feed stuff that is not
-> part of a packet into the network layer, but you cannot overflow the buffer.
-> In other words, the issue exists, but using it to do harm is hard.
-> 
->     Regards
->         Oliver
-> 
+The KOBJ_CHANGE uevent is sent before gadget unbind is actually
+executed, resulting in inaccurate uevent emitted at incorrect timing
+(the uevent would have USB_UDC_DRIVER variable set while it would
+soon be removed).
+Move the KOBJ_CHANGE uevent to the end of the unbind function so that
+uevent is sent only after the change has been made.
 
-Hello Olivier,
+Signed-off-by: Roy Luo <royluo@google.com>
+---
+ drivers/usb/gadget/udc/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Perhaps I'm missing something but as far as I can tell I can't do here anything special compared
-to crafting the packet itself. Please let me know in case I'm wrong.
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index ded9531f141b..d59f94464b87 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1646,8 +1646,6 @@ static void gadget_unbind_driver(struct device *dev)
+ 
+ 	dev_dbg(&udc->dev, "unbinding gadget driver [%s]\n", driver->function);
+ 
+-	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+-
+ 	udc->allow_connect = false;
+ 	cancel_work_sync(&udc->vbus_work);
+ 	mutex_lock(&udc->connect_lock);
+@@ -1667,6 +1665,8 @@ static void gadget_unbind_driver(struct device *dev)
+ 	driver->is_bound = false;
+ 	udc->driver = NULL;
+ 	mutex_unlock(&udc_lock);
++
++	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+ }
+ 
+ /* ------------------------------------------------------------------------- */
 
-Best regards,
-Szymon
+base-commit: 9b6de136b5f0158c60844f85286a593cb70fb364
+-- 
+2.43.0.rc1.413.gea7ed67945-goog
+
 
