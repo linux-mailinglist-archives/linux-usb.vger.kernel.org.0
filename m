@@ -1,101 +1,116 @@
-Return-Path: <linux-usb+bounces-3168-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3169-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C53B67F42F1
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 10:55:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32FE67F4300
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 10:58:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80D712818EC
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 09:55:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4F89B20AAD
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 09:58:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 222C525549;
-	Wed, 22 Nov 2023 09:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C18025549;
+	Wed, 22 Nov 2023 09:58:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wf1mV/Pk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86A01BFA;
-	Wed, 22 Nov 2023 01:55:17 -0800 (PST)
-Received: from [192.168.1.103] (178.176.79.58) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Wed, 22 Nov
- 2023 12:55:08 +0300
-Subject: Re: [PATCHv2] USB: gl620a: check for rx buffer overflow
-To: Oliver Neukum <oneukum@suse.com>, <dmitry.bezrukov@aquantia.com>,
-	<marcinguy@gmail.com>, <davem@davemloft.net>, <edumazet@google.com>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <linux-usb@vger.kernel.org>,
-	<netdev@vger.kernel.org>
-References: <20231122095306.15175-1-oneukum@suse.com>
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <2c1a8d3e-fac1-d728-1c8d-509cd21f7b4d@omp.ru>
-Date: Wed, 22 Nov 2023 12:55:07 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9993D992;
+	Wed, 22 Nov 2023 09:58:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 149E8C433C8;
+	Wed, 22 Nov 2023 09:58:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700647115;
+	bh=wFOz84X6JQkAzM3R0/wXegUEVDcHqoOwN9/NQtwtvm8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Wf1mV/PkVmEWBKYQSBG9vYSivTRFJ852ePt/q6LjCA0663fSVUQoEc8MSIKQYHi9j
+	 9GQoEiUCuYB0jtaKMyhiCLXyA+HaXSUe5SLGzyyBC4uT6rSV6nav0M4q19s6zEJa1Q
+	 zw4Z3zL1QxYPUIWaX7StTBczTpZGjAGP4/jPmiXOkVLPsUc0CDcc6t2L0e2mv1BMcu
+	 J9YrxCqsGS5I6pUxcX8j5HG13sVGFDJpwmUMrJM9mK4w/Edn0Qdnhyg0+jFYOchkc4
+	 6Kl5aTIT5sgpgBMxPV42UFSGMc0422tlVAZLrg8oXZ9sawdJYHBt2HmJ9efgbfdy3P
+	 YMASud1Mubkcg==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1r5k0O-0008Co-2n;
+	Wed, 22 Nov 2023 10:58:49 +0100
+Date: Wed, 22 Nov 2023 10:58:48 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Subject: Re: [PATCH 02/12] usb: dwc3: qcom: Rename dwc3 platform_device
+ reference
+Message-ID: <ZV3Q2Fa4KL-0hBE8@hovoldconsulting.com>
+References: <20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com>
+ <20231016-dwc3-refactor-v1-2-ab4a84165470@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20231122095306.15175-1-oneukum@suse.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.0.0, Database issued on: 11/21/2023 23:48:29
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 181514 [Nov 21 2023]
-X-KSE-AntiSpam-Info: Version: 6.0.0.2
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 3 0.3.3 e5c6a18a9a9bff0226d530c5b790210c0bd117c8
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.58 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.58 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.79.58
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 11/21/2023 23:54:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 11/21/2023 8:06:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231016-dwc3-refactor-v1-2-ab4a84165470@quicinc.com>
 
-On 11/22/23 12:52 PM, Oliver Neukum wrote:
-
-> The driver checks for a single package overflowing
-
-   Maybe packet?
-
-> maximum size. That needs to be done, but it is not
-> enough. As a single transmission can contain a high
-> number of packets, we also need to check whether
-> the aggregate of messages in itself short enough
-> overflow the buffer.
-> That is easiest done by checking that the current
-> packet does not overflow the buffer.
+On Mon, Oct 16, 2023 at 08:11:10PM -0700, Bjorn Andersson wrote:
+> In preparation for the introduction of a direct reference to the struct
+> dwc3 in the dwc3_qcom struct, rename the generically named "dwc3" to
+> reduce the risk for confusion.
 > 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-[...]
+> No functional change.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 46 ++++++++++++++++++++++----------------------
+>  1 file changed, 23 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 3de43df6bbe8..a31c3bc1f56e 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -67,7 +67,7 @@ struct dwc3_acpi_pdata {
+>  struct dwc3_qcom {
+>  	struct device		*dev;
+>  	void __iomem		*qscratch_base;
+> -	struct platform_device	*dwc3;
+> +	struct platform_device	*dwc_dev;
 
-MBR, Sergey
+Since "dev" is so overloaded, please name this one "dwc_pdev" instead.
+
+>  	struct platform_device	*urs_usb;
+>  	struct clk		**clks;
+>  	int			num_clocks;
+ 
+>  static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+>  {
+> -	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc_dev);
+>  	struct usb_device *udev;
+>  	struct usb_hcd __maybe_unused *hcd;
+>  
+> @@ -486,7 +486,7 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom, bool wakeup)
+>  static irqreturn_t qcom_dwc3_resume_irq(int irq, void *data)
+>  {
+>  	struct dwc3_qcom *qcom = data;
+> -	struct dwc3	*dwc = platform_get_drvdata(qcom->dwc3);
+> +	struct dwc3	*dwc = platform_get_drvdata(qcom->dwc_dev);
+
+Perhaps you can drop the tab while changing this line.
+
+Johan
 
