@@ -1,204 +1,132 @@
-Return-Path: <linux-usb+bounces-3174-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3175-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 132F07F4443
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 11:46:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 375077F4500
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 12:40:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9F2728149C
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 10:46:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63FF01C209FF
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Nov 2023 11:40:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F2B94AF71;
-	Wed, 22 Nov 2023 10:46:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCB0B584D6;
+	Wed, 22 Nov 2023 11:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="p3kX9wa7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V2TadWeB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49784198;
-	Wed, 22 Nov 2023 02:46:21 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E266360006;
-	Wed, 22 Nov 2023 10:46:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1700649980;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wsLp5fNBZJG71eNfXxaG4gNoXfOWnqSgaEfLQGOpsAc=;
-	b=p3kX9wa7/tIpef5pLKlwC0v7uuLxigBoxCHcCocVKJbwnNnYmdVta1zjtahXDNpH5JwEa0
-	IbhMKmgT/20IyKNZZrTttEPhDmjjKjzOo/WrzehtlJsXyr+6B3kIiwQfbuMUXsJMPEq494
-	NEa54Gs0SxZWB1htKRCC2SlDXimQ0XpPlrik887YAEr5yP4W3fi8rN2zaZ5n2ciEW+11Af
-	vNqXerTqkB/LbdGhjTbYnhF0E5wMfjcz+7In3bA9vmOzc9IOLUlID1Ish3AM4wgMDZXprH
-	GN+46dEC/0GtdiQdB0kYCEZjuSou1yYkAZ3zmGt/szQXZudKCU8lZG6JB1K8Qg==
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BEC1AC
+	for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 03:40:11 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1cc79f73e58so159155ad.1
+        for <linux-usb@vger.kernel.org>; Wed, 22 Nov 2023 03:40:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1700653211; x=1701258011; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3Lluk3sxaDufWvRRHog2K6boAXw3L6t6DxADVDkrIhI=;
+        b=V2TadWeB3dFTClHliXaf/QTxmNpe00DBBFLjWe9rNTX+1PxBv3ECQZ22Hqf3ojF8Mb
+         /oqydbjbLsM8YX5uM/alPM4xrb0QIE/rRwmd6gKqLkkQcdk7QnEw5IFyfy1LdAFNUUDH
+         NY3x7a/BDIaRsJgPhdDjTbANsCWSkarfMlgi0TzdTjHrFVivyp0WOHZstJ6422Mf82BE
+         WghhsifdXHcKyLi9HpzJMeH7wc62RIJ4b32IokBoycAQbmP6SEhfk573t8xsJzXza5mz
+         8LzLIpR0q28/UBRd3TaxOITYiYR4IXssjNQLyr/A9sWesqafX+SnNhODmTRTE9Mlc7L8
+         pj8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700653211; x=1701258011;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3Lluk3sxaDufWvRRHog2K6boAXw3L6t6DxADVDkrIhI=;
+        b=cnjU5vRsZ90y8sjX5HhWrrz1MmptxvHVZ/zsrfn+XPIRjnp53RUM/TmdLgGN8m+htV
+         cOE9/SIjbJ/41yp8VaVjz8x8MhMVehdsOeKpipONd0PfLA51NdlwDfh//XRNQsVTU/Ef
+         SSGonZ+LDzdFg8cP/YDDF+YX+IJCXW28VTXnxgE1pkr3YgggUk1lgeBVelGpZ6zZhIzf
+         wqt+fNh017Ydcy+zWtj/jBYyTH152buc8HrgWQc3bjMWrShoaZYtUtdHzWNX65ZaiCAw
+         j2JC4rifYPEVU+9uxStTlmb7usuKDGq93ygPdF4iaCCefFDzmN6Brpf9OzYFO/wpvZYu
+         e/jQ==
+X-Gm-Message-State: AOJu0YyAzksl1OUUNH031ZuV0IEqhemsB1WpzQ7IifjhG+rIiZoTohwY
+	hBoQHowWJ8nn6VPStl9amHA0MMCmHJdgHUozZhYwfw==
+X-Google-Smtp-Source: AGHT+IHJxduaYetIEC6/naZ4h7Q74HCwny7yIKJCmAYpFQsBgE3tvaa7aw/0dNY9WbXigs0npyfK6618r1P9K4U7GnI=
+X-Received: by 2002:a17:902:f7c6:b0:1cf:5c9b:bb69 with SMTP id
+ h6-20020a170902f7c600b001cf5c9bbb69mr173637plw.11.1700653210859; Wed, 22 Nov
+ 2023 03:40:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <0000000000003ee3610599d20096@google.com> <0000000000002a1fec060ab0120c@google.com>
+ <20231121214541.GB3909@pendragon.ideasonboard.com>
+In-Reply-To: <20231121214541.GB3909@pendragon.ideasonboard.com>
+From: Aleksandr Nogikh <nogikh@google.com>
+Date: Wed, 22 Nov 2023 12:39:58 +0100
+Message-ID: <CANp29Y5DNhTA8Oi1B2Kdmog-6tbuSL8mz66P7=dHR0hEgGAZnQ@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in __media_entity_remove_links
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: syzbot <syzbot+0b0095300dfeb8a83dc8@syzkaller.appspotmail.com>, 
+	andreyknvl@google.com, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-usb@vger.kernel.org, mchehab@kernel.org, 
+	sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 22 Nov 2023 11:46:14 +0100
-Message-Id: <CX5A3OSPKM1Q.1CPN17KI0PD7A@tleb-bootlin-xps13-01>
-Subject: Re: [PATCH v2 1/7] dt-bindings: usb: ti,j721e-usb: add ti,j7200-usb
- compatible
-Cc: <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Conor
- Dooley" <conor.dooley@microchip.com>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Roger Quadros" <rogerq@kernel.org>, "Peter Chen" <peter.chen@kernel.org>,
- "Pawel Laszczak" <pawell@cadence.com>, "Nishanth Menon" <nm@ti.com>,
- "Vignesh Raghavendra" <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20231120-j7200-usb-suspend-v2-0-038c7e4a3df4@bootlin.com>
- <20231120-j7200-usb-suspend-v2-1-038c7e4a3df4@bootlin.com>
- <6f0da181-717c-4b14-ba3f-d287efe4105b@linaro.org>
- <CX4NADEZZEO1.3TXPVNOONKBCF@tleb-bootlin-xps13-01>
- <d0cc33d4-2b1a-43cd-8cd9-6b58d6c71c85@linaro.org>
-In-Reply-To: <d0cc33d4-2b1a-43cd-8cd9-6b58d6c71c85@linaro.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hello,
+Thanks for reporting the problem!
 
-On Tue Nov 21, 2023 at 6:11 PM CET, Krzysztof Kozlowski wrote:
-> On 21/11/2023 17:53, Th=C3=A9o Lebrun wrote:
-> > On Mon Nov 20, 2023 at 6:32 PM CET, Krzysztof Kozlowski wrote:
-> >> On 20/11/2023 18:06, Th=C3=A9o Lebrun wrote:
-> >>> On this platform, the controller & its wrapper are reset on resume. T=
-his
-> >>> makes it have a different behavior from other platforms.
-> >>>
-> >>> We allow using the new compatible with a fallback onto the original
-> >>> ti,j721e-usb compatible. We therefore allow using an older kernel wit=
-h
-> >>
-> >> Where is fallback ti,j721e-usb used? Please point me to the code.
-> >=20
-> > No fallback is implemented in code. Using a kernel that doesn't have
-> > this patch series but a more recent devicetree: DT has both
-> > devicetrees & the kernel will know which driver to use.
+Syzbot looked at the last ~1.5 years of commit history to find the
+commit, which is almost always enough, but not in this particular
+case.
+
+I've filed https://github.com/google/syzkaller/issues/4347 to fix the
+syzbot code.
+
+--=20
+Aleksandr
+
+On Tue, Nov 21, 2023 at 10:45=E2=80=AFPM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
 >
-> I meant your bindings. You said - with fallback to ti,j721e-usb. I do
-> not see it. To me the commit description is not accurate.
-
-I see your point, I'll remove that aspect.
-
-> > That is opposed to having only compatible =3D "ti,j7200-usb". If using =
-an
-> > old kernel, it would not know what driver to match it to.
-> >=20
-> > [...]
-> >=20
-> >>> --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> >>> +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> >>> @@ -12,11 +12,15 @@ maintainers:
-> >>>  properties:
-> >>>    compatible:
-> >>>      oneOf:
-> >>> +      - const: ti,j7200-usb
-> >>>        - const: ti,j721e-usb
-> >>>        - const: ti,am64-usb
-> >>>        - items:
-> >>>            - const: ti,j721e-usb
-> >>>            - const: ti,am64-usb
-> >>> +      - items:
-> >>> +          - const: ti,j721e-usb
-> >>
-> >> This makes little sense. It's already on the list. Twice! Don't add it
-> >> third time.
-> >>
-> >> I am sorry, but this binding makes no sense. I mean, existing binding
-> >> makes no sense, but your change is not making it anyhow better.
-> >=20
-> > The goal of the DT schema pre-patch was to allow all three:
-> >=20
-> >    compatible =3D "ti,j721e-usb";
-> >    compatible =3D "ti,am64-usb";
-> >    compatible =3D "ti,j721e-usb", "ti,am64-usb";
+> On Tue, Nov 21, 2023 at 01:13:15PM -0800, syzbot wrote:
+> > This bug is marked as fixed by commit:
+> > media: uvcvideo: Avoid cyclic entity chains due to malformed USB descri=
+ptors
+> >
+> > But I can't find it in the tested trees[1] for more than 90 days.
+> > Is it a correct commit? Please update it by replying:
+> >
+> > #syz fix: exact-commit-title
 >
-> Which does not make sense.
+> What logic does syzbot use to try and find the commit upstream ? There's
+> a commit with the exact same subject, what was missing to find it
+> automatically ?
 >
-> How ti,j721e-usb can be and cannot be compatible with am64 in the same ti=
-me?
-
-The code tells us that there is no difference between ti,j721e-usb &
-ti,am64-usb. And the commit adding the of_device_id entry agrees, see
-4f30b9d2315f (usb: cdns3: Add support for TI's AM64 SoC, 2021-01-19).
-Here is the entire patch because it is so small:
-
-   diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
-   index 90e246601537..eccb1c766bba 100644
-   --- a/drivers/usb/cdns3/cdns3-ti.c
-   +++ b/drivers/usb/cdns3/cdns3-ti.c
-   @@ -214,6 +214,7 @@ static int cdns_ti_remove(struct platform_device *pd=
-ev)
-
-    static const struct of_device_id cdns_ti_of_match[] =3D {
-      { .compatible =3D "ti,j721e-usb", },
-   +  { .compatible =3D "ti,am64-usb", },
-      {},
-    };
-    MODULE_DEVICE_TABLE(of, cdns_ti_of_match);
-
-> > I've followed the same scheme & added both of those:
-> >=20
-> >    compatible =3D "ti,j7200-usb";
-> >    compatible =3D "ti,j7200-usb", "ti,j721e-usb";
-> >=20
-> > I messed up the ordering in the added 'items' options, but the logic
-> > seems right to me. And dtbs_check agrees. Am I missing something?
+> > Until then the bug is still considered open and new crashes with
+> > the same signature are ignored.
+> >
+> > Kernel: Linux
+> > Dashboard link: https://syzkaller.appspot.com/bug?extid=3D0b0095300dfeb=
+8a83dc8
+> >
+> > ---
+> > [1] I expect the commit to be present in:
+> >
+> > 1. for-kernelci branch of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+> >
+> > 2. master branch of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+> >
+> > 3. master branch of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+> >
+> > 4. main branch of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+> >
+> > The full list of 9 trees can be found at
+> > https://syzkaller.appspot.com/upstream/repos
 >
-> Logic is wrong. Device either is or is not compatible with something. At
-> least usually. We have some exceptions like SMMU for Adreno. Is this the
-> case? Why the device is and is not compatible with some other variant?
-
-My understanding is this: j721e & am64 are strictly equivalent. On our
-j7200 we know we reset on resume. I see three ways forward:
-
- - properties:
-     compatible:
-       oneOf:
-         - const: ti,j7200-usb
-         - const: ti,j721e-usb
-         - const: ti,am64-usb
-
-   We keep both ti,j721e-usb & ti,am64-usb separate even though they are
-   compatible. It makes for simpler changes & it avoids touching
-   devicetrees.
-
- - properties:
-   compatible:
-     oneOf:
-       - const: ti,j7200-usb
-       - const: ti,j721e-usb
-
-   AM64 is a duplicate of J721E. Remove it and update upstream
-   devicetrees.
-
- - properties:
-   compatible:
-     oneOf:
-       - const: ti,j7200-usb
-       - items:
-           - const: ti,j721e-usb
-           - const: ti,am64-usb
-
-   J721E & AM64 are compatible, express that & update devicetrees.
-
-Option one is simpler & doesn't change devicetrees so I'd lean in that
-direction. What's your opinion?
-
-Regards,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> --
+> Regards,
+>
+> Laurent Pinchart
 
