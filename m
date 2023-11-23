@@ -1,119 +1,152 @@
-Return-Path: <linux-usb+bounces-3236-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3237-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C13CA7F59D8
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 09:15:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABEC07F59E9
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 09:20:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7578B28158A
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 08:15:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC9051C209CE
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 08:20:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 531E7199D1;
-	Thu, 23 Nov 2023 08:15:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="akEYf748"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4DFE1946F;
+	Thu, 23 Nov 2023 08:20:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADD91BF
-	for <linux-usb@vger.kernel.org>; Thu, 23 Nov 2023 00:15:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700727311;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MBAKRF8F4hdJoWFT1ZCdxP7Mt7QGWlcBr9oSbKx0zlk=;
-	b=akEYf748CM0SqfZhIv83LL1BIBx8jXnV96LigYkQhwLirvN1YZey8swOjMJa/saC9EC9pF
-	NqMFNZVJDpuITLRlCcdSGyHsJ0K04bIesZKFL550BYddXk/i7OrvzVxljpyFfGCR38lkfN
-	p84oyERLczH6TadSvNELGGpe6GHJIHY=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-531-3oy1WTmEO4CMY6Q3g7m9vQ-1; Thu, 23 Nov 2023 03:15:09 -0500
-X-MC-Unique: 3oy1WTmEO4CMY6Q3g7m9vQ-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a030a495526so7373066b.0
-        for <linux-usb@vger.kernel.org>; Thu, 23 Nov 2023 00:15:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700727308; x=1701332108;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MBAKRF8F4hdJoWFT1ZCdxP7Mt7QGWlcBr9oSbKx0zlk=;
-        b=PQxknRUHKcDyb319PW/AqCrzDGXEA82a3hrD1EeKydWgZrDOWqoIim/XXy2cQBRhCz
-         gyM/0MyDdq3xIyFcIFiEk2O82FkQo4/5S4dYgmpe8l7kPiHGIxlyaEqWR4KBR4ccQFpF
-         oY+T1X2gTf8iRI8Jsl3ToYsnqaIj9NrPqXJZccOcDFVfXkM67OpxdPhw16TAndgPlvZA
-         iLhmCU/5y2lZnfkxeI5OMjCi3EjuQ36uBolZpsbgkBmC6o9wI6zIi5k+ubVJZZ2GJjHT
-         P/m/XdiMbC93RaThajISGaN8kq3JbBbmLT3lG2R4LZOwcL3OJ1XXVPQlllbW/B889e3M
-         RigA==
-X-Gm-Message-State: AOJu0YxJmY/+sXRW1m9ghLzaPo7iMLc2G7B9GgAJWST3XpJ4WWKIofpQ
-	g1dn9dRxPlHNCUB5zUzPa7rqNVNhxChdJPGAPL4XC4Qor/6sgfyCnpv9F6MFF/RaznmFpWSOA49
-	4v18sZEsSF3DPUra54cMu
-X-Received: by 2002:a17:906:105d:b0:a01:ee03:37ec with SMTP id j29-20020a170906105d00b00a01ee0337ecmr2869521ejj.3.1700727308268;
-        Thu, 23 Nov 2023 00:15:08 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGgNH6UN/jv3ZxGigxzLsNo43TaP68LOcaLWAYmnEbhQEbVhDZMQRe/9kG6J/6FwCTaF1P2Xg==
-X-Received: by 2002:a17:906:105d:b0:a01:ee03:37ec with SMTP id j29-20020a170906105d00b00a01ee0337ecmr2869509ejj.3.1700727307865;
-        Thu, 23 Nov 2023 00:15:07 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-241-213.dyn.eolo.it. [146.241.241.213])
-        by smtp.gmail.com with ESMTPSA id t24-20020a17090616d800b009ffb4af0505sm458101ejd.104.2023.11.23.00.15.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Nov 2023 00:15:07 -0800 (PST)
-Message-ID: <70fa0bcd10a8ef67d186da27a7c6a327b0b3e2cd.camel@redhat.com>
-Subject: Re: [PATCH 0/2] usb: fix port mapping for ZTE MF290 modem
-From: Paolo Abeni <pabeni@redhat.com>
-To: Johan Hovold <johan@kernel.org>
-Cc: Lech Perczak <lech.perczak@gmail.com>, netdev@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Date: Thu, 23 Nov 2023 09:15:06 +0100
-In-Reply-To: <ZVyrZ1Bq5UooD5xq@hovoldconsulting.com>
-References: <20231117231918.100278-1-lech.perczak@gmail.com>
-	 <08e17879fe0c0be1f82da31fdb39931ed38f7155.camel@redhat.com>
-	 <4b534e6aab6e4cf461f07680466f146e65b3fb25.camel@redhat.com>
-	 <ZVyrZ1Bq5UooD5xq@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DC9B9;
+	Thu, 23 Nov 2023 00:20:07 -0800 (PST)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 825C2520165;
+	Thu, 23 Nov 2023 09:20:05 +0100 (CET)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.34; Thu, 23 Nov
+ 2023 09:20:05 +0100
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
+	<corbet@lwn.net>
+CC: <tj@kernel.org>, <rdunlap@infradead.org>, <paulmck@kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <erosca@de.adit-jv.com>,
+	<hgajjar@de.adit-jv.com>, <Martin.Mueller5@de.bosch.com>
+Subject: [PATCH] usb: hubs: Decrease IN-endpoint poll interval for Microchip USB491x hub
+Date: Thu, 23 Nov 2023 09:19:48 +0100
+Message-ID: <20231123081948.58776-1-hgajjar@de.adit-jv.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
 
-On Tue, 2023-11-21 at 14:06 +0100, Johan Hovold wrote:
-> On Tue, Nov 21, 2023 at 11:58:56AM +0100, Paolo Abeni wrote:
-> > On Tue, 2023-11-21 at 11:49 +0100, Paolo Abeni wrote:
-> > > On Sat, 2023-11-18 at 00:19 +0100, Lech Perczak wrote:
-> > > > This modem is used iside ZTE MF28D LTE CPE router. It can already
-> > > > establish PPP connections. This series attempts to adjust its
-> > > > configuration to properly support QMI interface which is available =
-and
-> > > > preferred over that. This is a part of effort to get the device
-> > > > supported b OpenWrt.
-> > > >=20
-> > > > Lech Perczak (2):
-> > > >   usb: serial: option: don't claim interface 4 for ZTE MF290
-> > > >   net: usb: qmi_wwan: claim interface 4 for ZTE MF290
-> > >=20
-> > > It looks like patch 1 targets the usb-serial tree, patch 2 targets th=
-e
-> > > netdev tree and there no dependencies between them.
-> >=20
-> > Sorry, ENOCOFFEE here. I see the inter-dependency now. I guess it's
-> > better to pull both patches via the same tree.
-> >=20
-> > @Johan: do you have any preferences? We don't see changes on=20
-> > qmi_wwan.c too often, hopefully we should not hit conflicts up to the
-> > next RC.
->=20
-> It should be fine to take these through the two trees, respectively, as
-> we usually do.
+There is a potential delay in announcing downstream USB bus activity to
+Linux USB drivers due to the default interrupt endpoint having a poll
+interval of 256ms.
 
-Fine by me: I'll take patch 2/2 only.
+Microchip has recommended ignoring the device descriptor and reducing
+that value to 32ms, as it was too late to modify it in silicon.
 
-Cheers,
+This patch aims to speed up the USB enumeration process, facilitating
+the successful completion of Apple CarPlay certifications and enhancing
+user experience when utilizing USB devices through the Microchip Multihost
+Hub.
 
-Paolo
+A new quirk, USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL, accelerates the
+notification process by changing the Endpoint interrupt poll interval
+from 256ms to 32ms.
+
+Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+---
+ Documentation/admin-guide/kernel-parameters.txt |  4 ++++
+ drivers/usb/core/config.c                       |  8 ++++++++
+ drivers/usb/core/quirks.c                       | 11 +++++++++++
+ include/linux/usb/quirks.h                      |  5 +++++
+ 4 files changed, 28 insertions(+)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 65731b060e3f..6b0a66f0e6bf 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6908,6 +6908,10 @@
+ 					pause after every control message);
+ 				o = USB_QUIRK_HUB_SLOW_RESET (Hub needs extra
+ 					delay after resetting its port);
++				p = USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL (Set
++					bInterval to a Maximum of 9 to Reduce
++					default Poll Rate from 256 ms to
++					32 ms);
+ 			Example: quirks=0781:5580:bk,0a5c:5834:gij
+ 
+ 	usbhid.mousepoll=
+diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+index b19e38d5fd10..4edbb5922872 100644
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -355,6 +355,14 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
+ 				n = clamp(fls(d->bInterval), i, j);
+ 				i = j = n;
+ 			}
++
++			/*
++			 * This quirk limits bInterval to 9 (32 ms).
++			 */
++			if (udev->quirks & USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL) {
++				n = clamp(fls(d->bInterval), i, min(j, 9));
++				i = j = n;
++			}
+ 			break;
+ 		default:		/* USB_SPEED_FULL or _LOW */
+ 			/*
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 15e9bd180a1d..243ae5981cc8 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -138,6 +138,9 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
+ 			case 'o':
+ 				flags |= USB_QUIRK_HUB_SLOW_RESET;
+ 				break;
++			case 'p':
++				flags |= USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL;
++				break;
+ 			/* Ignore unrecognized flag characters */
+ 			}
+ 		}
+@@ -211,6 +214,14 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	/* USB3503 */
+ 	{ USB_DEVICE(0x0424, 0x3503), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
++	/* USB491x hubs need 32ms instead of 256ms bInterval */
++	{ USB_DEVICE(0x0424, 0x4913), .driver_info =
++			USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL},
++	{ USB_DEVICE(0x0424, 0x4914), .driver_info =
++			USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL},
++	{ USB_DEVICE(0x0424, 0x4915), .driver_info =
++			USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL},
++
+ 	/* Microsoft Wireless Laser Mouse 6000 Receiver */
+ 	{ USB_DEVICE(0x045e, 0x00e1), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
+diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
+index eeb7c2157c72..8fbcca4432bf 100644
+--- a/include/linux/usb/quirks.h
++++ b/include/linux/usb/quirks.h
+@@ -72,4 +72,9 @@
+ /* device has endpoints that should be ignored */
+ #define USB_QUIRK_ENDPOINT_IGNORE		BIT(15)
+ 
++/*
++ * Limits the bInterval value to 9 instead of default value 16
++ */
++#define USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL	BIT(16)
++
+ #endif /* __LINUX_USB_QUIRKS_H */
+-- 
+2.17.1
 
 
