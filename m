@@ -1,152 +1,77 @@
-Return-Path: <linux-usb+bounces-3237-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3238-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABEC07F59E9
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 09:20:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94B937F5A88
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 09:52:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC9051C209CE
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 08:20:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BEDCCB20ECB
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 08:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4DFE1946F;
-	Thu, 23 Nov 2023 08:20:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6510D1C2AD;
+	Thu, 23 Nov 2023 08:52:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VJMrc7/d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DC9B9;
-	Thu, 23 Nov 2023 00:20:07 -0800 (PST)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 825C2520165;
-	Thu, 23 Nov 2023 09:20:05 +0100 (CET)
-Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
- (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.34; Thu, 23 Nov
- 2023 09:20:05 +0100
-From: Hardik Gajjar <hgajjar@de.adit-jv.com>
-To: <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-	<corbet@lwn.net>
-CC: <tj@kernel.org>, <rdunlap@infradead.org>, <paulmck@kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <erosca@de.adit-jv.com>,
-	<hgajjar@de.adit-jv.com>, <Martin.Mueller5@de.bosch.com>
-Subject: [PATCH] usb: hubs: Decrease IN-endpoint poll interval for Microchip USB491x hub
-Date: Thu, 23 Nov 2023 09:19:48 +0100
-Message-ID: <20231123081948.58776-1-hgajjar@de.adit-jv.com>
-X-Mailer: git-send-email 2.17.1
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832DB168D9
+	for <linux-usb@vger.kernel.org>; Thu, 23 Nov 2023 08:52:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8895BC433C7;
+	Thu, 23 Nov 2023 08:52:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1700729526;
+	bh=DBtWK3+4bTYvqhR6xwdSm2zuTXXKyTcaPF4a3vAo4Ig=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VJMrc7/dELHegU6ys8Q9xNaHPwau7uBCLn6rsF+qCD+JTomT6cSouvQ5Lk2OamqAF
+	 s5YDFYEvpMJgFwTo7i9tx8F8ZknIk6vZK4F2a9BsDAqa8UcELizInMXzMByX5uAXR5
+	 79bPHk+oJqaxd3H1FVY5Y9mnEPbYnDy3Xk9kRLZY=
+Date: Thu, 23 Nov 2023 08:52:02 +0000
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Roy Luo <royluo@google.com>
+Cc: stern@rowland.harvard.edu, badhri@google.com, quic_kriskura@quicinc.com,
+	francesco.dolcini@toradex.com, quic_eserrao@quicinc.com,
+	ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] USB: gadget: core: adjust uevent timing on gadget
+ unbind
+Message-ID: <2023112339-deeply-curve-034f@gregkh>
+References: <20231122220001.539770-1-royluo@google.com>
+ <2023112253-fresh-blazing-baae@gregkh>
+ <CA+zupgzWqhOhAR0_ybxTQVL928dgAqbm5eqJ6gd-0qrNK7VZng@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+zupgzWqhOhAR0_ybxTQVL928dgAqbm5eqJ6gd-0qrNK7VZng@mail.gmail.com>
 
-There is a potential delay in announcing downstream USB bus activity to
-Linux USB drivers due to the default interrupt endpoint having a poll
-interval of 256ms.
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-Microchip has recommended ignoring the device descriptor and reducing
-that value to 32ms, as it was too late to modify it in silicon.
+A: No.
+Q: Should I include quotations after my reply?
 
-This patch aims to speed up the USB enumeration process, facilitating
-the successful completion of Apple CarPlay certifications and enhancing
-user experience when utilizing USB devices through the Microchip Multihost
-Hub.
+http://daringfireball.net/2007/07/on_top
 
-A new quirk, USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL, accelerates the
-notification process by changing the Endpoint interrupt poll interval
-from 256ms to 32ms.
+On Wed, Nov 22, 2023 at 03:13:20PM -0800, Roy Luo wrote:
+> The logic is there since day 1 of udc in Commit
+> 2ccea03a8f7ec93641791f2760d7cdc6cab6205f (usb: gadget: introduce UDC
+> Class). Do you still want me to put on a fix tag?
 
-Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
----
- Documentation/admin-guide/kernel-parameters.txt |  4 ++++
- drivers/usb/core/config.c                       |  8 ++++++++
- drivers/usb/core/quirks.c                       | 11 +++++++++++
- include/linux/usb/quirks.h                      |  5 +++++
- 4 files changed, 28 insertions(+)
+Yes please, and do you want this backported to all older stable kernels?
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 65731b060e3f..6b0a66f0e6bf 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6908,6 +6908,10 @@
- 					pause after every control message);
- 				o = USB_QUIRK_HUB_SLOW_RESET (Hub needs extra
- 					delay after resetting its port);
-+				p = USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL (Set
-+					bInterval to a Maximum of 9 to Reduce
-+					default Poll Rate from 256 ms to
-+					32 ms);
- 			Example: quirks=0781:5580:bk,0a5c:5834:gij
- 
- 	usbhid.mousepoll=
-diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-index b19e38d5fd10..4edbb5922872 100644
---- a/drivers/usb/core/config.c
-+++ b/drivers/usb/core/config.c
-@@ -355,6 +355,14 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
- 				n = clamp(fls(d->bInterval), i, j);
- 				i = j = n;
- 			}
-+
-+			/*
-+			 * This quirk limits bInterval to 9 (32 ms).
-+			 */
-+			if (udev->quirks & USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL) {
-+				n = clamp(fls(d->bInterval), i, min(j, 9));
-+				i = j = n;
-+			}
- 			break;
- 		default:		/* USB_SPEED_FULL or _LOW */
- 			/*
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 15e9bd180a1d..243ae5981cc8 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -138,6 +138,9 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
- 			case 'o':
- 				flags |= USB_QUIRK_HUB_SLOW_RESET;
- 				break;
-+			case 'p':
-+				flags |= USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL;
-+				break;
- 			/* Ignore unrecognized flag characters */
- 			}
- 		}
-@@ -211,6 +214,14 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	/* USB3503 */
- 	{ USB_DEVICE(0x0424, 0x3503), .driver_info = USB_QUIRK_RESET_RESUME },
- 
-+	/* USB491x hubs need 32ms instead of 256ms bInterval */
-+	{ USB_DEVICE(0x0424, 0x4913), .driver_info =
-+			USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL},
-+	{ USB_DEVICE(0x0424, 0x4914), .driver_info =
-+			USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL},
-+	{ USB_DEVICE(0x0424, 0x4915), .driver_info =
-+			USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL},
-+
- 	/* Microsoft Wireless Laser Mouse 6000 Receiver */
- 	{ USB_DEVICE(0x045e, 0x00e1), .driver_info = USB_QUIRK_RESET_RESUME },
- 
-diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
-index eeb7c2157c72..8fbcca4432bf 100644
---- a/include/linux/usb/quirks.h
-+++ b/include/linux/usb/quirks.h
-@@ -72,4 +72,9 @@
- /* device has endpoints that should be ignored */
- #define USB_QUIRK_ENDPOINT_IGNORE		BIT(15)
- 
-+/*
-+ * Limits the bInterval value to 9 instead of default value 16
-+ */
-+#define USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL	BIT(16)
-+
- #endif /* __LINUX_USB_QUIRKS_H */
--- 
-2.17.1
+thanks,
 
+greg k-h
 
