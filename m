@@ -1,173 +1,119 @@
-Return-Path: <linux-usb+bounces-3235-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3236-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86FA97F59A8
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 08:57:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C13CA7F59D8
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 09:15:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A94F01C20BFF
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 07:57:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7578B28158A
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 08:15:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9BB818C0D;
-	Thu, 23 Nov 2023 07:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 531E7199D1;
+	Thu, 23 Nov 2023 08:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UyGLY6re"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="akEYf748"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3694AA2;
-	Wed, 22 Nov 2023 23:57:32 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AN4OuvR006167;
-	Thu, 23 Nov 2023 07:57:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xT9mC5lx0ErBSkckehHdh13wVtvWEQZryXxBATcTRJw=;
- b=UyGLY6reJYmK290YvCkxpr1vZxz2DimypKIOWWXKXPKwHR5/c58jNds9REsqq8cvKKvg
- LGUAYkyHpv0WgXjC13s/E8k/mS7pzg6JMDGfix8C+fV9wcQ7Rsv1LkCF7x/Yu1ZbUUqW
- 2r4tmR4Bo9BWCS9UnIKR1sYT4p3UvwVkpX1d7wevPFzL269+ItnNX3Yc+rTACHuG1jnn
- R+GgpwcKyDqWRHdwO01uF7HnJUPwcQMLnIp7Ybkjwj04SIhTYgiumzCD559AL5pw4Hr0
- tLfAxoaICpcVOvbxyW0G6GjdNljgVLl0OQi2IFHFXobAyceRgq2S03iqWQkSRpfHeVzX 0A== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uhr5psac8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Nov 2023 07:57:27 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AN7vQZd023540
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Nov 2023 07:57:26 GMT
-Received: from [10.216.59.116] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 22 Nov
- 2023 23:57:20 -0800
-Message-ID: <f7bc0564-8260-4254-b66b-b472ef73225e@quicinc.com>
-Date: Thu, 23 Nov 2023 13:27:20 +0530
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADD91BF
+	for <linux-usb@vger.kernel.org>; Thu, 23 Nov 2023 00:15:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700727311;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MBAKRF8F4hdJoWFT1ZCdxP7Mt7QGWlcBr9oSbKx0zlk=;
+	b=akEYf748CM0SqfZhIv83LL1BIBx8jXnV96LigYkQhwLirvN1YZey8swOjMJa/saC9EC9pF
+	NqMFNZVJDpuITLRlCcdSGyHsJ0K04bIesZKFL550BYddXk/i7OrvzVxljpyFfGCR38lkfN
+	p84oyERLczH6TadSvNELGGpe6GHJIHY=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-531-3oy1WTmEO4CMY6Q3g7m9vQ-1; Thu, 23 Nov 2023 03:15:09 -0500
+X-MC-Unique: 3oy1WTmEO4CMY6Q3g7m9vQ-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a030a495526so7373066b.0
+        for <linux-usb@vger.kernel.org>; Thu, 23 Nov 2023 00:15:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700727308; x=1701332108;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MBAKRF8F4hdJoWFT1ZCdxP7Mt7QGWlcBr9oSbKx0zlk=;
+        b=PQxknRUHKcDyb319PW/AqCrzDGXEA82a3hrD1EeKydWgZrDOWqoIim/XXy2cQBRhCz
+         gyM/0MyDdq3xIyFcIFiEk2O82FkQo4/5S4dYgmpe8l7kPiHGIxlyaEqWR4KBR4ccQFpF
+         oY+T1X2gTf8iRI8Jsl3ToYsnqaIj9NrPqXJZccOcDFVfXkM67OpxdPhw16TAndgPlvZA
+         iLhmCU/5y2lZnfkxeI5OMjCi3EjuQ36uBolZpsbgkBmC6o9wI6zIi5k+ubVJZZ2GJjHT
+         P/m/XdiMbC93RaThajISGaN8kq3JbBbmLT3lG2R4LZOwcL3OJ1XXVPQlllbW/B889e3M
+         RigA==
+X-Gm-Message-State: AOJu0YxJmY/+sXRW1m9ghLzaPo7iMLc2G7B9GgAJWST3XpJ4WWKIofpQ
+	g1dn9dRxPlHNCUB5zUzPa7rqNVNhxChdJPGAPL4XC4Qor/6sgfyCnpv9F6MFF/RaznmFpWSOA49
+	4v18sZEsSF3DPUra54cMu
+X-Received: by 2002:a17:906:105d:b0:a01:ee03:37ec with SMTP id j29-20020a170906105d00b00a01ee0337ecmr2869521ejj.3.1700727308268;
+        Thu, 23 Nov 2023 00:15:08 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGgNH6UN/jv3ZxGigxzLsNo43TaP68LOcaLWAYmnEbhQEbVhDZMQRe/9kG6J/6FwCTaF1P2Xg==
+X-Received: by 2002:a17:906:105d:b0:a01:ee03:37ec with SMTP id j29-20020a170906105d00b00a01ee0337ecmr2869509ejj.3.1700727307865;
+        Thu, 23 Nov 2023 00:15:07 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-241-213.dyn.eolo.it. [146.241.241.213])
+        by smtp.gmail.com with ESMTPSA id t24-20020a17090616d800b009ffb4af0505sm458101ejd.104.2023.11.23.00.15.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Nov 2023 00:15:07 -0800 (PST)
+Message-ID: <70fa0bcd10a8ef67d186da27a7c6a327b0b3e2cd.camel@redhat.com>
+Subject: Re: [PATCH 0/2] usb: fix port mapping for ZTE MF290 modem
+From: Paolo Abeni <pabeni@redhat.com>
+To: Johan Hovold <johan@kernel.org>
+Cc: Lech Perczak <lech.perczak@gmail.com>, netdev@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Date: Thu, 23 Nov 2023 09:15:06 +0100
+In-Reply-To: <ZVyrZ1Bq5UooD5xq@hovoldconsulting.com>
+References: <20231117231918.100278-1-lech.perczak@gmail.com>
+	 <08e17879fe0c0be1f82da31fdb39931ed38f7155.camel@redhat.com>
+	 <4b534e6aab6e4cf461f07680466f146e65b3fb25.camel@redhat.com>
+	 <ZVyrZ1Bq5UooD5xq@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
- bindings
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Andy Gross
-	<agross@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>, <quic_wcheng@quicinc.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20231122191335.3058-1-quic_kriskura@quicinc.com>
- <4c323ab5-579f-41f5-ab77-c087136e4058@linaro.org>
- <ab2952ea-1917-4b58-a0cf-64f3eba0b7c9@quicinc.com>
- <7f4d20fd-b975-47ab-8dfb-2a0eb3db04fc@linaro.org>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <7f4d20fd-b975-47ab-8dfb-2a0eb3db04fc@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rdU-o8uxm5bjbM06Njdx5lEv1Sg8bAZv
-X-Proofpoint-ORIG-GUID: rdU-o8uxm5bjbM06Njdx5lEv1Sg8bAZv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-23_05,2023-11-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- phishscore=0 mlxscore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 adultscore=0 clxscore=1015 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311230055
 
+On Tue, 2023-11-21 at 14:06 +0100, Johan Hovold wrote:
+> On Tue, Nov 21, 2023 at 11:58:56AM +0100, Paolo Abeni wrote:
+> > On Tue, 2023-11-21 at 11:49 +0100, Paolo Abeni wrote:
+> > > On Sat, 2023-11-18 at 00:19 +0100, Lech Perczak wrote:
+> > > > This modem is used iside ZTE MF28D LTE CPE router. It can already
+> > > > establish PPP connections. This series attempts to adjust its
+> > > > configuration to properly support QMI interface which is available =
+and
+> > > > preferred over that. This is a part of effort to get the device
+> > > > supported b OpenWrt.
+> > > >=20
+> > > > Lech Perczak (2):
+> > > >   usb: serial: option: don't claim interface 4 for ZTE MF290
+> > > >   net: usb: qmi_wwan: claim interface 4 for ZTE MF290
+> > >=20
+> > > It looks like patch 1 targets the usb-serial tree, patch 2 targets th=
+e
+> > > netdev tree and there no dependencies between them.
+> >=20
+> > Sorry, ENOCOFFEE here. I see the inter-dependency now. I guess it's
+> > better to pull both patches via the same tree.
+> >=20
+> > @Johan: do you have any preferences? We don't see changes on=20
+> > qmi_wwan.c too often, hopefully we should not hit conflicts up to the
+> > next RC.
+>=20
+> It should be fine to take these through the two trees, respectively, as
+> we usually do.
 
+Fine by me: I'll take patch 2/2 only.
 
-On 11/23/2023 1:20 PM, Krzysztof Kozlowski wrote:
-> On 23/11/2023 08:44, Krishna Kurapati PSSNV wrote:
->>
->>
->> On 11/23/2023 1:11 PM, Krzysztof Kozlowski wrote:
->>> On 22/11/2023 20:13, Krishna Kurapati wrote:
->>>> The high speed related interrupts present on QC targets are as follows:
->>>>
->>>> dp/dm Irq's
->>>> These IRQ's directly reflect changes on the DP/DM pads of the SoC. These
->>>> are used as wakeup interrupts only on SoCs with non-QUSBb2 targets with
->>>> exception of SDM670/SDM845/SM6350.
->>>>
->>>> qusb2_phy irq
->>>> SoCs with QUSB2 PHY do not have separate DP/DM IRQs and expose only a
->>>> single IRQ whose behavior can be modified by the QUSB2PHY_INTR_CTRL
->>>> register. The required DPSE/DMSE configuration is done in
->>>> QUSB2PHY_INTR_CTRL register of phy address space.
->>>>
->>>> hs_phy_irq
->>>> This is completely different from the above two and is present on all
->>>> targets with exception of a few IPQ ones. The interrupt is not enabled by
->>>> default and its functionality is mutually exclusive of qusb2_phy on QUSB
->>>> targets and DP/DM on femto phy targets.
->>>>
->>>> The DTs of several QUSB2 PHY based SoCs incorrectly define "hs_phy_irq"
->>>> when they should have been "qusb2_phy_irq". On Femto phy targets, the
->>>> "hs_phy_irq" mentioned is either the actual "hs_phy_irq" or "pwr_event",
->>>> neither of which would never be triggered directly are non-functional
->>>> currently. The implementation tries to clean up this issue by addressing
->>>> the discrepencies involved and fixing the hs_phy_irq's in respective DT's.
->>>>
->>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>>> ---
->>>>    .../devicetree/bindings/usb/qcom,dwc3.yaml    | 125 ++++++++++--------
->>>>    1 file changed, 69 insertions(+), 56 deletions(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->>>> index e889158ca205..4a46346e2ead 100644
->>>> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->>>> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->>>> @@ -17,20 +17,25 @@ properties:
->>>>              - qcom,ipq5018-dwc3
->>>>              - qcom,ipq5332-dwc3
->>>>              - qcom,ipq6018-dwc3
->>>> +          - qcom,ipq6018-dwc3-sec
->>>
->>> I could not understand from commit msg why you are adding new compatible
->>> and what it is supposed to fix.
->>>
->>> The entire diff is huge thus difficult to review. Why fixing hs_phy_irq
->>> causes three new interrupts being added?
->>
->> Some targets have two controllers where the second one is only HS
->> capable and doesn't have ss_phy_irq. In such cases to make it clear in
->> bindings, I added a suffix "-sec" and accordingly changed in DT as well.
->> Should've put this in commit text.
-> 
-> Where did you explain it in the commit msg? Why adding new compatibles
-> is squashed to this patch?
-> 
-Apologies. I meant I should've put the explanation in commit text which 
-I missed. Will do it while revising this patch.
+Cheers,
 
-> You need separate commit with its own justification. I am not sure if
-> calling things secondary and tertiary scales. Please describe all the
-> differences and come with some reason for the naming.
-> 
-> 
-
-Sure, will separate out the new compatible additions and then make 
-different commits.
-
-Regards,
-Krishna,
-
+Paolo
 
 
