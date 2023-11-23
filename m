@@ -1,135 +1,124 @@
-Return-Path: <linux-usb+bounces-3253-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3254-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D29C67F60A3
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 14:44:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC35C7F60E1
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 14:53:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D1AF281E11
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 13:44:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 929C5281FA6
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 13:53:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B0D12574B;
-	Thu, 23 Nov 2023 13:44:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FE9A2E83A;
+	Thu, 23 Nov 2023 13:53:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O0iR60nv"
+	dkim=pass (2048-bit key) header.d=fris.de header.i=@fris.de header.b="N8Dg/nEY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EEB725561;
-	Thu, 23 Nov 2023 13:44:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A349C433C8;
-	Thu, 23 Nov 2023 13:44:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700747068;
-	bh=trYkMaqpWLmDB4oJKoY1+CJr1bJOUKmTS9Un+OPmKFg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=O0iR60nvxcY0qV3BXuSd3E3+kk2rlD00vl2QflXaT3x8kIjB3SH99q8WMPevw7P5E
-	 bNTm+mpm2pxNjC9xPQbuB3x/IKG4XnGufxHxD0iPOVHnVf1qPad2Bt1F4ESuWukMIH
-	 zvQ8zPwGph1R53DSx9un/SlNOkzSAXkKp0xh0xk6rUGb65WCyv0z/P0dTdiq7zRwAb
-	 CTKBQ6oHAsCAFRSnhDdYtR8O5uU9e48wZ4zgyJezTH+vV3idEiozG5qFRTMOHj5wNQ
-	 G3Uu/R1HLqXLaR9+ZOOtCtOfDY5XW7AyRE0PCrCuk3pXAsCguNnFb4gx19DVMiSclI
-	 YxGgbMmcx8fpQ==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1r6A0b-0004vo-0K;
-	Thu, 23 Nov 2023 14:44:45 +0100
-Date: Thu, 23 Nov 2023 14:44:45 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Felipe Balbi <balbi@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
-	ahalaney@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v13 05/10] usb: dwc3: qcom: Refactor IRQ handling in QCOM
- Glue driver
-Message-ID: <ZV9XTU-q038BaWn3@hovoldconsulting.com>
-References: <ZTY7Lwjd3_8NlfEi@hovoldconsulting.com>
- <cabf24d0-8eea-4eb5-8205-bf7fe6017ec2@quicinc.com>
- <ZTZ-EvvbuA6HpycT@hovoldconsulting.com>
- <fb5e5e1d-520c-4cbc-adde-f30e853421a1@quicinc.com>
- <ZTdqnSHq_Jo8AuPW@hovoldconsulting.com>
- <04615205-e380-4719-aff1-f32c26004b14@quicinc.com>
- <ZUz4RD3MjnLlPn6V@hovoldconsulting.com>
- <6d4d959c-b155-471b-b13d-f6fda557cfe0@quicinc.com>
- <ZVYTFi3Jnnljl48L@hovoldconsulting.com>
- <e0789695-43ee-4285-95e9-4cdee24d6ffe@quicinc.com>
+X-Greylist: delayed 351 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 23 Nov 2023 05:53:37 PST
+Received: from mail.fris.de (unknown [IPv6:2a01:4f8:c2c:390b::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22B1B9
+	for <linux-usb@vger.kernel.org>; Thu, 23 Nov 2023 05:53:37 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 54028BFC26;
+	Thu, 23 Nov 2023 14:47:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
+	t=1700747259; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=P+qJkp9/x0LF6AlZcKBVhLb5rg5xcRwmC1heMFnS1dA=;
+	b=N8Dg/nEYgbKV1lxtWHHDD4991rt98n2eXNnl2jtHjw39cN+6imtMRTEbxsWR8oxQkgwfNl
+	MUDWm+qqaXJ+SYIl2SvdJ5nL13uAQTjDicZzI1X+gFQIwN05SJMipPTE7tpYdA0UFxPevh
+	z0vC9g2v6+BcApw3ZxYZPohpyWbjea4lj6Phoe5btvVmQ9vKhoYGbfSPCeCnJY9dvLXKw0
+	EBvdpkD1zZne/P8F1othz9D13GEzX6Ysok6lnMOyxAyMySv2lgHlDrnHyIYVB48EtAStCm
+	wWwU+SH1O/lVsdvHc41lKjRYpWV7Lz4CYAVR8Mi6x/P+GuUtADMPf4S8nxy/kA==
+From: Frieder Schrempf <frieder@fris.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Matthias Kaehlcke <mka@chromium.org>
+Cc: Frieder Schrempf <frieder.schrempf@kontron.de>,
+	Anand Moon <linux.amoon@gmail.com>,
+	Benjamin Bara <benjamin.bara@skidata.com>,
+	Icenowy Zheng <uwu@icenowy.me>,
+	Rob Herring <robh@kernel.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 1/2] usb: misc: onboard_usb_hub: Add support for clock input
+Date: Thu, 23 Nov 2023 14:47:20 +0100
+Message-ID: <20231123134728.709533-1-frieder@fris.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e0789695-43ee-4285-95e9-4cdee24d6ffe@quicinc.com>
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu, Nov 23, 2023 at 01:02:24AM +0530, Krishna Kurapati PSSNV wrote:
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
->   Pushed [1] to address all the queries and comments. I was initially 
-> looking at only Femto phy targets, but when I looked at all targets in 
-> general, seems there is one irq not defined in bindings. It is qubs2_phy 
-> irq which is named as "hs_phy_irq" on QUSB target DT's (both downstream 
-> and upstream).
->
-> There is one actual "hs_phy_irq" as well but it is not used either by hs 
-> validation team or sw team on any target. It was put in for debug 
-> purpose only and doesn't have code to trigger it (even downstream never 
-> implemented it I suppose) Atleast 4.4 onwards I saw the code but I 
-> didn't see the actual hs_phy_irq being used. It was the qusb2_phy irq 
-> named as hs_phy_irq.
-> 
-> Even hw folks used it under the same name which is why they recommended 
-> using it on qusb2 targets and dp/dm on femto targets.
+Most onboard USB hubs have a dedicated crystal oscillator but on some
+boards the clock signal for the hub is provided by the SoC.
 
-Ah, thanks for getting to the bottom of this.
+In order to support this, we add the possibility of specifying a
+clock in the devicetree that gets enabled/disabled when the hub
+is powered up/down.
 
-> On some targets the hs_phy_irq was given vector number of pwr_event irq 
-> also like sm8550/sm8450 etc., I tried to address those as well in the 
-> series.
+Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+---
+ drivers/usb/misc/onboard_usb_hub.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-I can imagine that we have a number of such issues.
-
-> Also, per your question as to there are some qusb2 targets having dp/dm 
-> interrupts defined... It is only for SDM845/SDM670/SM6350 which were 
-> last in line of using qusb2 phy's and they started incorporating dp/dm 
-> interrupts.
-
-Ok.
-
-> Also added missing interrupts for qcs404/ipq5332.
-
-Thanks.
-
-> I didn't add missing interrupts on sc8280xp because I see that current 
-> interrupts present are working fine (I see ADB working and wakeup 
-> working as well), but the interrupt vector numbers are off by "1" 
-> between hs specifics and DT (both upstream and downstream). Will sort it 
-> out and clean that target up later.
-
-Which interrupt numbers are off by one here?
+diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+index a341b2fbb7b44..e710e3c82ba9b 100644
+--- a/drivers/usb/misc/onboard_usb_hub.c
++++ b/drivers/usb/misc/onboard_usb_hub.c
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2022, Google LLC
+  */
  
-> [1]: https://patchwork.kernel.org/project/linux-arm-msm/list/?series=803412
++#include <linux/clk.h>
+ #include <linux/device.h>
+ #include <linux/export.h>
+ #include <linux/gpio/consumer.h>
+@@ -60,12 +61,19 @@ struct onboard_hub {
+ 	bool going_away;
+ 	struct list_head udev_list;
+ 	struct mutex lock;
++	struct clk *clk;
+ };
+ 
+ static int onboard_hub_power_on(struct onboard_hub *hub)
+ {
+ 	int err;
+ 
++	err = clk_prepare_enable(hub->clk);
++	if (err) {
++		dev_err(hub->dev, "failed to enable clock: %d\n", err);
++		return err;
++	}
++
+ 	err = regulator_bulk_enable(hub->pdata->num_supplies, hub->supplies);
+ 	if (err) {
+ 		dev_err(hub->dev, "failed to enable supplies: %d\n", err);
+@@ -92,6 +100,8 @@ static int onboard_hub_power_off(struct onboard_hub *hub)
+ 		return err;
+ 	}
+ 
++	clk_disable_unprepare(hub->clk);
++
+ 	hub->is_powered_on = false;
+ 
+ 	return 0;
+@@ -266,6 +276,10 @@ static int onboard_hub_probe(struct platform_device *pdev)
+ 		return err;
+ 	}
+ 
++	hub->clk = devm_clk_get_optional(dev, NULL);
++	if (IS_ERR(hub->clk))
++		return dev_err_probe(dev, PTR_ERR(hub->clk), "failed to get clock\n");
++
+ 	hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+ 						  GPIOD_OUT_HIGH);
+ 	if (IS_ERR(hub->reset_gpio))
+-- 
+2.42.1
 
-I took a quick look at the series, and it looks like this will
-eventually clean things up a lot. We should probably define a generic
-order for the interrupts with the sometimes optional SS interrupts last.
-
-Side note: It looks like the threading in that series is broken.
-Consider using git-send-email for sending series as it takes care of
-things like that.
-
-Johan
 
