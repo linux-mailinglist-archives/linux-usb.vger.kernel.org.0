@@ -1,94 +1,137 @@
-Return-Path: <linux-usb+bounces-3249-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3250-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CF7D7F5EC7
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 13:11:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 414907F5EF6
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 13:22:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B79DA1C20FB3
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 12:11:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 728BE1C20F2B
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 12:22:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A230124219;
-	Thu, 23 Nov 2023 12:11:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZwYb4L6L"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE6824A0E;
+	Thu, 23 Nov 2023 12:22:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B051BE;
+	Thu, 23 Nov 2023 04:22:39 -0800 (PST)
+Received: from [10.0.3.168] (unknown [93.240.169.83])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD72224E7
-	for <linux-usb@vger.kernel.org>; Thu, 23 Nov 2023 12:11:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 840CEC433C7;
-	Thu, 23 Nov 2023 12:11:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700741463;
-	bh=qnasH8UWNMPUtgjQEvW2eT8JgdXzZT3PCcSdRHKQ5FM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZwYb4L6L98d49s5xNvMsX7zGFPCoBYTo1wQG0I8euS89JMXzN+8gRPehOFOIn4+lz
-	 ZJbnjK8ldOQJhpK1D6p4eR92PBW0vlEe39JypbhneDPtG6idrh43EDztMXlJgIAS1j
-	 5U+lQVL/OhR5HM176K/leiM2vchDv5vaRL2Ccph0YumHY83vFYpdZobhLBbBBypPJT
-	 RqUFC2xEK3lkvoPM32d+SiaAcWb/hpd3YWjKgzVME/V2QUtFCosQSVD3grdh0oG7Pq
-	 GGAMS2O+41+yjWkDF70N282fimA3fd/7oIAmMRD8g7RYKNpxfUG3nEsGmRFfCeZna/
-	 f46nRHPHbhRtw==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1r68YC-0004Cf-1m;
-	Thu, 23 Nov 2023 13:11:21 +0100
-Date: Thu, 23 Nov 2023 13:11:20 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Asuna Yang <spriteovo@gmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Yangyu Chen <cyy@cyyself.name>
-Subject: Re: [PATCH v2] USB: serial: option: add Luat Air72*U series products
-Message-ID: <ZV9BaBBrn78i0x64@hovoldconsulting.com>
-References: <20231122141803.82844-1-SpriteOvO@gmail.com>
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id B520561E5FE04;
+	Thu, 23 Nov 2023 13:22:16 +0100 (CET)
+Message-ID: <6288389c-59cb-4eb4-bbe6-163413db7b7e@molgen.mpg.de>
+Date: Thu, 23 Nov 2023 13:22:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231122141803.82844-1-SpriteOvO@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: Unplugging USB-C charger cable causes `ucsi_acpi USBC000:00:
+ ucsi_handle_connector_change: ACK failed (-110)`
+Content-Language: en-US
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Hans de Goede <hdegoede@redhat.com>
+References: <b2466bc2-b62c-4328-94a4-b60af4135ba7@molgen.mpg.de>
+ <ZVy5+AxnOZNmUZ15@kuha.fi.intel.com>
+ <2bfe2311-27a6-46b5-8662-ba3cbb409f81@molgen.mpg.de>
+ <ZV3CTg03IPnZTVL0@kuha.fi.intel.com>
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <ZV3CTg03IPnZTVL0@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 22, 2023 at 10:18:03PM +0800, Asuna Yang wrote:
-> Update the USB serial option driver support for Luat Air72*U series
-> products.
+Dear Heikki,
+
+
+Am 22.11.23 um 09:56 schrieb Heikki Krogerus:
+> On Tue, Nov 21, 2023 at 03:25:59PM +0100, Paul Menzel wrote:
+
+>> Am 21.11.23 um 15:08 schrieb Heikki Krogerus:
+>>> On Tue, Nov 21, 2023 at 12:50:43PM +0100, Paul Menzel wrote:
+>>
+>>>> On the Dell XPS 13, BIOS 2.21.0 06/02/2022, with Debian sid/unstable and
+>>>> Linux 6.5.10, when unplugging the (Dell) USB Type-C charger cable, Linux
+>>>> logs the error below:
+>>>>
+>>>>       ucsi_acpi USBC000:00: ucsi_handle_connector_change: ACK failed (-110)
+>>>>
+>>>> As this is logged with level error, can this be somehow fixed?
+>>>>
+>>>>       drivers/usb/typec/ucsi/ucsi.c: dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
+>>>>
+>>>> Please find the output of `dmesg` attached.
+>>>
+>>> Thanks. The firmware not reacting to the ACK command is weird, but I'm
+>>> not sure if it's critical. Does the interface continue working after
+>>> that? Do you see the partner devices appearing under /sys/class/typec/
+>>> when you plug them, and disappearing when you unplug them?
+>>
+>> ```
+>> $ LANG= grep . /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000\:001/*
+>> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/current_max:0
+>> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/current_now:0
+
+[…]
+
+>> ```
+>>
+>> Now I unplugged the device, and the error is *not* logged. (I had a USB
+>> Type-C port replicator plugged in during the day before.)
+>>
+>> The directory is still there:
+>>
+>> ```
+>> $ LANG= grep . /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000\:001/*
+>> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/current_max:0
+>> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/current_now:0
+
+[…]
+
+>> ```
+>>
+>> I guess, that is the wrong directory I look at though?
+>>
+>> (I am going to monitor the logs over the next days.)
 > 
-> ID 1782:4e00 Spreadtrum Communications Inc. UNISOC-8910
+> Just list what you have in /sys/class/typec/ before and after plugging
+> a device to the port:
 > 
-> T: Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 13 Spd=480 MxCh= 0
-> D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
-> P: Vendor=1782 ProdID=4e00 Rev=00.00
-> S: Manufacturer=UNISOC
-> S: Product=UNISOC-8910
-> C: #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=400mA
-> I: If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
-> E: Ad=82(I) Atr=03(Int.) MxPS= 8 Ivl=4096ms
-> I: If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-> E: Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I: If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I: If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I: If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E: Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E: Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Co-developed-by: Yangyu Chen <cyy@cyyself.name>
-> Signed-off-by: Yangyu Chen <cyy@cyyself.name>
-> Signed-off-by: Asuna Yang <SpriteOvO@gmail.com>
+>          ls /sys/class/typec/
 
-Thanks for the v2.
+Sorry, here you go:
 
-Can you say something about what the three serial interfaces are used
-for (and which is which)?
+With charger:
 
-Johan
+     $ ls /sys/class/typec/
+     port0  port0-partner
+
+After unplugging the charger:
+
+     $ LANG= ls /sys/class/typec/
+     port0
+
+By the way, Linux logs the ucsi_handle_connector_change line around five 
+second after unplugging the USB Type-C charger cable.
+
+
+Kind regards,
+
+Paul
+
+
+PS: In the logs since October 30th, I see the three distinct lines below:
+
+1.  ucsi_acpi USBC000:00: failed to re-enable notifications (-110)
+2.  ucsi_acpi USBC000:00: GET_CONNECTOR_STATUS failed (-110)
+3.  ucsi_acpi USBC000:00: ucsi_handle_connector_change: ACK failed (-110)
+
+Is it documented somewhere what -100 means?
 
