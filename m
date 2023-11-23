@@ -1,77 +1,86 @@
-Return-Path: <linux-usb+bounces-3238-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3239-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94B937F5A88
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 09:52:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AD2A7F5AEE
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 10:20:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BEDCCB20ECB
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 08:52:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C1281C209DE
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 09:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6510D1C2AD;
-	Thu, 23 Nov 2023 08:52:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE49B21352;
+	Thu, 23 Nov 2023 09:20:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VJMrc7/d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="goCwzSna"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832DB168D9
-	for <linux-usb@vger.kernel.org>; Thu, 23 Nov 2023 08:52:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8895BC433C7;
-	Thu, 23 Nov 2023 08:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700729526;
-	bh=DBtWK3+4bTYvqhR6xwdSm2zuTXXKyTcaPF4a3vAo4Ig=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VJMrc7/dELHegU6ys8Q9xNaHPwau7uBCLn6rsF+qCD+JTomT6cSouvQ5Lk2OamqAF
-	 s5YDFYEvpMJgFwTo7i9tx8F8ZknIk6vZK4F2a9BsDAqa8UcELizInMXzMByX5uAXR5
-	 79bPHk+oJqaxd3H1FVY5Y9mnEPbYnDy3Xk9kRLZY=
-Date: Thu, 23 Nov 2023 08:52:02 +0000
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Roy Luo <royluo@google.com>
-Cc: stern@rowland.harvard.edu, badhri@google.com, quic_kriskura@quicinc.com,
-	francesco.dolcini@toradex.com, quic_eserrao@quicinc.com,
-	ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] USB: gadget: core: adjust uevent timing on gadget
- unbind
-Message-ID: <2023112339-deeply-curve-034f@gregkh>
-References: <20231122220001.539770-1-royluo@google.com>
- <2023112253-fresh-blazing-baae@gregkh>
- <CA+zupgzWqhOhAR0_ybxTQVL928dgAqbm5eqJ6gd-0qrNK7VZng@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3698A200D9;
+	Thu, 23 Nov 2023 09:20:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0A423C433C9;
+	Thu, 23 Nov 2023 09:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700731224;
+	bh=8IGKCYsnSETnn3Su/i4LyUDmYpj8U4of5nf7hwILPZY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=goCwzSnawoCJHWsTdYaMuROCmDofS5EZPgmrjnQ7gMbcYGurvvdYAlbZmtIxFuwFD
+	 CIqQt5AAcXhuXhOMSaXpV2tm/X8Qn0pOhjYus4e4FA85Egpr5QMiEU6cK030MmSSUH
+	 ovLlfc8sCWJ9bodarOzflHFjWA56VruXhvQZbv+f6y09JK4iACRPGub487JWrP1aFj
+	 G2gk7cPphOUryPF3qcOWGu6yTMnEtYlib+wQpbUxF08sWN7mMF/ccXaejcVE/1jF5d
+	 mPKJiJYnx8vMWbEp8K8kOjF5YZplAyLjV8MnoqFQY6P73R5zkfkc1NlszNB5IF3koq
+	 /9aL5of2rkXlA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E7946C3959E;
+	Thu, 23 Nov 2023 09:20:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+zupgzWqhOhAR0_ybxTQVL928dgAqbm5eqJ6gd-0qrNK7VZng@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/2] usb: fix port mapping for ZTE MF290 modem
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170073122394.3388.4958521926651372286.git-patchwork-notify@kernel.org>
+Date: Thu, 23 Nov 2023 09:20:23 +0000
+References: <20231117231918.100278-1-lech.perczak@gmail.com>
+In-Reply-To: <20231117231918.100278-1-lech.perczak@gmail.com>
+To: Lech Perczak <lech.perczak@gmail.com>
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
+Hello:
 
-A: No.
-Q: Should I include quotations after my reply?
+This series was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-http://daringfireball.net/2007/07/on_top
+On Sat, 18 Nov 2023 00:19:16 +0100 you wrote:
+> This modem is used iside ZTE MF28D LTE CPE router. It can already
+> establish PPP connections. This series attempts to adjust its
+> configuration to properly support QMI interface which is available and
+> preferred over that. This is a part of effort to get the device
+> supported b OpenWrt.
+> 
+> Lech Perczak (2):
+>   usb: serial: option: don't claim interface 4 for ZTE MF290
+>   net: usb: qmi_wwan: claim interface 4 for ZTE MF290
+> 
+> [...]
 
-On Wed, Nov 22, 2023 at 03:13:20PM -0800, Roy Luo wrote:
-> The logic is there since day 1 of udc in Commit
-> 2ccea03a8f7ec93641791f2760d7cdc6cab6205f (usb: gadget: introduce UDC
-> Class). Do you still want me to put on a fix tag?
+Here is the summary with links:
+  - [1/2] usb: serial: option: don't claim interface 4 for ZTE MF290
+    (no matching commit)
+  - [2/2] net: usb: qmi_wwan: claim interface 4 for ZTE MF290
+    https://git.kernel.org/netdev/net/c/99360d9620f0
 
-Yes please, and do you want this backported to all older stable kernels?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-thanks,
 
-greg k-h
 
