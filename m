@@ -1,103 +1,183 @@
-Return-Path: <linux-usb+bounces-3257-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3259-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB0A97F6157
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 15:24:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E363C7F6326
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 16:38:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B8DA1F20F55
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 14:24:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1993F1C21020
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 15:38:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E8552FC50;
-	Thu, 23 Nov 2023 14:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2333D38C;
+	Thu, 23 Nov 2023 15:38:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="myCexJJ1"
+	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="DnpwOjRd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD892FC3B;
-	Thu, 23 Nov 2023 14:24:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46714C433C8;
-	Thu, 23 Nov 2023 14:24:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700749481;
-	bh=J/LtgofwEQkoiVQZqoNXaJ9BMFsu3JjYY9qmjaMQE74=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=myCexJJ1T1cKOvaXEHq4wweMQTiZAHJaQIpqITF2nz0OF3uoL1iwYojYKJkw4PYVR
-	 QfcDimY0ygH2HZrSIyCxQrHtsuFSlRQPO8OTFSPPOPD7jiDp1jBKsun38Rr4JNnKp/
-	 BmWkp+sMWRtw61zy6k1ytLqHhl3Q4c0zvaTAIWfuyGnDaFrnmulhvIfl/FxaSg01uJ
-	 vrKGenvAmwgayiPxnrogPgWdPV/BSA74uwa6+96sgKUQMzWHo9r/72hHKGaYMFypuP
-	 Tziu/KwbkQbvBfy4JH+YRTGybdW4tL5tlgZkmLy3GB1lSUmdmnybhceCeyVupWJV6p
-	 pdxhlPoo5kacQ==
-Date: Thu, 23 Nov 2023 14:24:35 +0000
-From: Simon Horman <horms@kernel.org>
-To: Doug Anderson <dianders@chromium.org>
-Cc: Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-	Hayes Wang <hayeswang@realtek.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Grant Grundler <grundler@chromium.org>,
-	Edward Hill <ecgh@chromium.org>, linux-usb@vger.kernel.org,
-	Laura Nao <laura.nao@collabora.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	=?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
-	Eric Dumazet <edumazet@google.com>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 2/2] r8152: Add RTL8152_INACCESSIBLE checks to more loops
-Message-ID: <20231123142435.GG6339@kernel.org>
-References: <20231117130836.1.I77097aa9ec01aeca1b3c75fde4ba5007a17fdf76@changeid>
- <20231117130836.2.I79c8a6c8cafd89979af5407d77a6eda589833dca@changeid>
- <4fa33b0938031d7339dbc89a415864b6d041d0c3.camel@redhat.com>
- <CAD=FV=VALvcLr+HbdvEen109qT3Z5EL0u4tiefTs3AH8EHXFnA@mail.gmail.com>
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2074.outbound.protection.outlook.com [40.107.15.74])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC44D5C;
+	Thu, 23 Nov 2023 07:37:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=btQRfktGYIydjd9iyvWgPGViA8w/6OQGnrWamkG9c0mJAZklPZlmbk7kxQCpvsps3gf/iieRJSv8inN1dkkRh9XKFnW58Id1tTR0WEocPMPAfHJVGw2vX0+Fk2TWjayhXM3MLkYg5kuQple+Ejj01OYdMX3nV/xn/bququNzAEIUdZ2/U5TP2e9stgVAvFPrJUgXdxBOCNWA8wjIXBsnpO/e/Gdt6SoEnutMY6kaOROKRi4HPRIXQXcGmbhMIOU183yVO7yVVCQSopnHNJ7BvST0/vEWwMlJCinUmVubt9/xk7HJlkRrWm/D1xls6+xRXQ4naCc8Ra6/z885vOo0QA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/O1E0BPBEC1ZHg2m5TDbwK2fzyCXbIheULNNnxOFhzM=;
+ b=IeIV2vIrh4Qaw9nJ9v6YmsdcCq4cjI2AcxpaVWks3AuD+dIu9C7zP+VMNofD0yFrNMgzwlAHh7r+ekPotLlFBprHqOomEz5FZUSpL3jysd4kYpoCE3GPUDXL8uwyJT32Jx3/i5StbUjZ6mMQvbeLfGf+c5dv54NZu+ssFCWZuM1aS0bdWm5AE5Om+oXbLDn964pYzI1nUyn77OSqadgVef1eht7fhDV+XT3iw0dDJn4UAgvp+8FBPQg+SC36m1M6vLMWeJuuEDD4srHCLMo17tzggT7eoV5vxqkrZkaicoBkmySLeFO8RfwMp+0NPBY7z04PVX2jVuJzest+wTPuoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/O1E0BPBEC1ZHg2m5TDbwK2fzyCXbIheULNNnxOFhzM=;
+ b=DnpwOjRdjB1kK0uS0UdebgB9M15vntgW9GofyVlpG6wxWzDNpK/AvDyOugt3dP8eFVpU/3Bm7ZJ3GTrZmqDk+b1VKjivdKNUWA+hwO8vLHMoyxMQJwF8qDLdngksG0oW92QR59lbZZVLcgGiiyd+9gxdtolwCMXPIWymP6kMHs0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
+ by VE1PR08MB5599.eurprd08.prod.outlook.com (2603:10a6:800:1a1::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.20; Thu, 23 Nov
+ 2023 15:37:23 +0000
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::6b40:1e6f:7c94:71dc]) by VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::6b40:1e6f:7c94:71dc%4]) with mapi id 15.20.7025.020; Thu, 23 Nov 2023
+ 15:37:23 +0000
+From: Javier Carrasco <javier.carrasco@wolfvision.net>
+Subject: [PATCH v3 0/2] usb: typec: tps6598x: add reset gpio support
+Date: Thu, 23 Nov 2023 16:37:00 +0100
+Message-Id: <20230912-topic-tps6598x_reset-v3-0-0c2873070a77@wolfvision.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJxxX2UC/42Oyw7CIBREf6VhLQZun7jyP4wxlN5akgYaQKxp+
+ u/SunShy5lkzpmFeHQaPTllC3EYtdfWpJAfMqIGae5IdZcyAQY5ExxosJNWNEy+KkUz3xx6DLQ
+ sURSiwKYqBEnTVnqkrZNGDWlsHuOYyslhr+fddbmmPGgfrHvt6si39oclcspo3XSKtX3Fa8HOT
+ zv2n89Hg4Fs1Aj/kCCRGEgOCKhKJr9I67q+Ad3m0rkcAQAA
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco@wolfvision.net>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1700753842; l=1454;
+ i=javier.carrasco@wolfvision.net; s=20230509; h=from:subject:message-id;
+ bh=maSGGdCBegLJdGyRin2n6My+ZRfJxyU4BRrlYBoJEGc=;
+ b=jNQgIV/li+8ahuupsTT5v2CTxE920xOhbLzZvzMJLL2ofwFpS9WtmeALRzZBQL6hen9Vu60wC
+ GSt+39JlLJRB5v+EOtYpXkKn8kh50pbGekt986J55VzfCRZScP4o7Bq
+X-Developer-Key: i=javier.carrasco@wolfvision.net; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
+X-ClientProxiedBy: VI1PR09CA0156.eurprd09.prod.outlook.com
+ (2603:10a6:803:12c::40) To VE1PR08MB4974.eurprd08.prod.outlook.com
+ (2603:10a6:803:111::15)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=VALvcLr+HbdvEen109qT3Z5EL0u4tiefTs3AH8EHXFnA@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|VE1PR08MB5599:EE_
+X-MS-Office365-Filtering-Correlation-Id: ecd4e5ae-6e19-45ac-28da-08dbec3a1663
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Up5CaTX9mBcWwzAG6JrviLrpx1Rz5dflUKLsDXMJUcwooDhN4m5pM89N2m9ccNKPXqN7BWtCzgk9yJ8YYjWsuHpWqAjXZlqhJgrD6JQeAQKfdK0cJRi5qWzaKDlUHZL529MxxFkTEf4k755NkEKdzJrWIVE7RaXqBtJw6oUN293va0BRpdRLh2v9P01zCzpqTh/c3Gcdh48TohxOZXD0CA+ncKsxcXLyWhTCeJwz2YSmXdqsne4Xged0uA/WPH4Tas04UXv/S4i4xwcZkHza+z5o0MvoKIOyOB97dq/Cc04cha54747I1f8D+PMd6qRjd2FCREYkPufTj4HmoJyyxepYp6sNGzXWtKW5X3C3FKfYegcCPecOurP2T6t4WVZVRoeDkCHtXbG1V3LSSmI/rt02eJXbtK3XakbocJaimEHBNbUsl8ixrG02ZmXl+hq6/nOVq6YxXeg8QFgGMVy+XC2IIf3K6xiXAic4E/OcJknv1SKS7GUEBXvzPx9WDUFnrl4pGm2TDMSj+0PDmflwP0co/srUitt+O9s4R6av9kNkNds3dpiCkPIz3SliOFNGMEFFfFEXoLoCXLEXrEm17LmOl87ciWdSgXcctAqRxaY=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39840400004)(376002)(136003)(366004)(396003)(230922051799003)(186009)(1800799012)(64100799003)(451199024)(86362001)(44832011)(5660300002)(7416002)(38100700002)(26005)(83380400001)(6666004)(316002)(110136005)(6506007)(54906003)(52116002)(6512007)(2616005)(4326008)(66476007)(66556008)(66946007)(8676002)(8936002)(41300700001)(6486002)(38350700005)(478600001)(966005)(2906002)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MG9Yd3ZST0dTRnRieTVMR0M3eDlnak1qb2ZYV0NibEFPamJCUncvLzZUYTBt?=
+ =?utf-8?B?d2xrOGx5QndndzlLbWlLV1pFSk1wQWFHOTBjRkMvUlJGeGQ1a3E5bjhyVHA2?=
+ =?utf-8?B?WjFDQkpzU2RxZlo5cGxxZExZUzFoOXlLRi9iQ1gzbFdiK2RNc21nVFA1MjRi?=
+ =?utf-8?B?S3ZocjUrcW1hSGpXajM0djZ6MUc0Tm8rNHBwWDNDY2toQW5WV2g3NUxENmtl?=
+ =?utf-8?B?RjFqb2hKVnFyL0t5R2pZb2N5Vk1ENjdwamcyYzlucEtqZ2xoUVJhcUFabzlG?=
+ =?utf-8?B?ZWU2VU56bzZ0cUdIQjNRaFVaaTIvRDlkUnZURmNneGh2cW9kRHZFWnc4MW8w?=
+ =?utf-8?B?Z0hEQktEZk0wSENpYmdiV2lBSFdoZFA0dllUTlZyNHlWa3RhemlYL1BwMWZO?=
+ =?utf-8?B?R0QvdkNmVTZXZVdwMGFTWU9rRGlIZFk4M2E5SzVWZVJVQ2RDQy9RNWRXMEZm?=
+ =?utf-8?B?bS9HcWY0dDRZeGJFMnV2ZHh3aTgzTXZWVTNWVG9rYzJhVkxPcVdiY3FIL09G?=
+ =?utf-8?B?SnpVYlVCc1k5YmRDT3FnVEtHVksrU0VVZ0dDT25TSXBoRVNwYmtvZmNhYnoy?=
+ =?utf-8?B?Mm1jbUMrZXJ5T0JCQ1MvZHg3T2xDZVF4SEhqdnNtdzZpbWtFbUNxenI5dy9W?=
+ =?utf-8?B?bC9nYURZc1dLdDFtYTRDUXVwRzUzWWlZVmY2M1oxa05Vd2JKS05GM0hVemlj?=
+ =?utf-8?B?dGFUOHVTT01EN0xlckk2UHhiMFdJdmlTUDl6VTlOVHREM0V0QVBNTkw5ckVN?=
+ =?utf-8?B?NjliQUNNRHNaU1NYWDVzVlErZ21OUjhYdkMyb0Q1RFhYTUtvUWh1TzhGME5k?=
+ =?utf-8?B?YUgyRHYrM013bmJZYnhZQUhnclpidVRDYnJydStLajl5WXA2TnRNejlxUTRR?=
+ =?utf-8?B?MnhueExZbmhhcHVHSm5ENm94V3g4U2tXYXVEQ05KUWlDaXpLN2Rvd2lqUFB4?=
+ =?utf-8?B?blQwNmI3T01Ma3gwczkzK0xNYm0wbGdtdUREMVJVTG02R0hVZm16MEVwQzFx?=
+ =?utf-8?B?bmxvV202eWcveG5pUEdqdjBHT1hpL0ZjcnFqeTNpTmlwNkt3em51OEc0di9w?=
+ =?utf-8?B?V2p6M1RZdWgrVzVnT3YxamZ6THdpdUJPUTV2cEVqR3Qwc2xjS21KZnlFQ1FM?=
+ =?utf-8?B?aDkyRXlXdDBSQkVKMGNKUmRFNEo1Q2JhMTlKaFJoSDVPQWtNQUZSQ09iUFRY?=
+ =?utf-8?B?SXVEN3RuTHhMS09Ydm15TDFTcEtrVmRoUG9CV0lXN2gvdDZROGpsbHAvcVlE?=
+ =?utf-8?B?NTNiUzVNM3M0VFBiWHZmZG04c3d4RDhQOFpvSkVSRFBNb21ic1JHaWdoUzhq?=
+ =?utf-8?B?K1FaMmcwaDIydE1Eay9yM2JneXZxNWxhQ3V5amcyMUdYVEd1eGN2UkE3TzFN?=
+ =?utf-8?B?ZW5OTlZpUXdqZ3p5MUhXZHpicUNOYTk2QUFlbE01a3JrcS8wY3N5SEVXRkd6?=
+ =?utf-8?B?NVRXRlY2U0dIb0VleUN1elZqYVZWMXF3MzBjWTh2WFRjbmRtZmw4b283ajMw?=
+ =?utf-8?B?NDFxMlVTK1kzUlRhRDZTU0ltTkcvdWRTYW5YSEw1b3BQZERqbURrd3ZBQ1Rv?=
+ =?utf-8?B?QmJjZmJOMGZRWVp2SW0zaGRHWmw1VE9EdFNXOTlnZHIvWHF0NHBzdWpIYTJJ?=
+ =?utf-8?B?blhIRGQxMTZ5VUNyZVczeG11S3M0dmtJaGRmc2dnTmVMOWpDOG9aZHJnbTJy?=
+ =?utf-8?B?dmk1SFM5cm5LcGhJYnpWNWpOSTdPS3Z6ZlBOaEhiSUcwdHRCVVZpREttRlVJ?=
+ =?utf-8?B?V25FdW51cVlHMnV6OGNzQ05kdmNLVXBkSEdsSkQ5S1YxL1hTQ0F3YXlheFFV?=
+ =?utf-8?B?NGFZOWVhanV1WklQT2xJWUIyakh5RDZjY0FUWUQwWUpkOGxGZEd4bmt6NG45?=
+ =?utf-8?B?R2NKY2pxQWV0YXBmbTlCeFNKV21xbGl5M05OVFJleEdZMGNGdm9ia0tONVlz?=
+ =?utf-8?B?NVNDQW5uMDZkdEJIR0VyNzVkUVNFL00vRkpHV2VFSnA2aFRUZGFJc3Y5WGkr?=
+ =?utf-8?B?clVObXB2QjhJZkZwWUNoU2pFTHRKdlloQm42ckVkMlhwUytPN2t3ZlhzUlpQ?=
+ =?utf-8?B?Ti9WRDFueitGcHBvdENNZlZLMHFHQmFzVG1Wb1c4UzZLVWdZUnN4Tldad2lE?=
+ =?utf-8?B?WTFWZmJhc1BGZVRuaEpJTGN4NVJYVkk3ZFhJekkvWDN3ZXpPaHhLb0V0Wkxt?=
+ =?utf-8?Q?6B2OI7llP53PlATymh8uoIA=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: ecd4e5ae-6e19-45ac-28da-08dbec3a1663
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2023 15:37:23.2710
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KlnLeQqEqGYRFVFwEVsngvo5KH0xI7bEvhKSNX6ChPj5JrZ2P8t2WkaE8lcQ6IVOjwuK7vWC2WHB85i6uvWuBwub9/AYHC9Co4YYnUwRon4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR08MB5599
 
-On Tue, Nov 21, 2023 at 09:55:46AM -0800, Doug Anderson wrote:
-> Hi,
-> 
-> On Tue, Nov 21, 2023 at 2:28 AM Paolo Abeni <pabeni@redhat.com> wrote:
-> >
-> > On Fri, 2023-11-17 at 13:08 -0800, Douglas Anderson wrote:
-> > > Previous commits added checks for RTL8152_INACCESSIBLE in the loops in
-> > > the driver. There are still a few more that keep tripping the driver
-> > > up in error cases and make things take longer than they should. Add
-> > > those in.
-> > >
-> > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> >
-> > I think this deserves a 'Fixes' tag. Please add it.
-> 
-> Sure, I can add it. It didn't feel worth it to me since there's no
-> real functional issue--just that it takes a little longer for these
-> loops to exit out, but it shouldn't hurt. I guess that means breaking
-> this commit into several depending on when the offending loop was
-> added.
-> 
-> 
-> > Additionally please insert the target tree in the subj prefix when re-
-> > postin (in this case 'net')
-> 
-> Funny, I just followed the tags for other commits to this file and the
-> "net:" prefix isn't common. I guess this should be "net: usb: r8152".
-> I can add it when I post v2.
+The TPS6598x PD controller provides an active-high hardware reset input
+that reinitializes all device settings. If it is not grounded by
+design, the driver must be able to de-assert it in order to initialize
+the device.
 
-Hi Doug,
+This series adds and documents the reset signal management. It also
+includes the basic reset management for initialization and
+suspend/resume control.
 
-unfortunately prefix can have more than one meaning here.
-The target tree, often either net or net-next, should go
-in the [] part of the subject.
+Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+---
+Changes in v3:
+- core.c: added TPS_ prefix to the setup time definition for code
+  consistency.
+- Link to v2: https://lore.kernel.org/r/20230912-topic-tps6598x_reset-v2-0-02a12e2ec50a@wolfvision.net
 
-In this case I think what you want is:
+Changes in v2:
+- core.c: minor coding style correction ({} in 'else' after 'if {}')
+- ti,tps6598x.yaml: reference to the device instead of the driver in
+  the commit message.
+- Link to v1: https://lore.kernel.org/r/20230912-topic-tps6598x_reset-v1-0-78dc0bf61790@wolfvision.net
 
-	[PATCH net n/m v2] Add RTL8152_INACCESSIBLE checks to more loops
+---
+Javier Carrasco (2):
+      usb: typec: tps6598x: add reset gpio support
+      dt-bindings: usb: tps6598x: add reset-gpios property
+
+ .../devicetree/bindings/usb/ti,tps6598x.yaml         |  6 ++++++
+ drivers/usb/typec/tipd/core.c                        | 20 ++++++++++++++++++++
+ 2 files changed, 26 insertions(+)
+---
+base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
+change-id: 20230912-topic-tps6598x_reset-55e9494e8649
+
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco@wolfvision.net>
+
 
