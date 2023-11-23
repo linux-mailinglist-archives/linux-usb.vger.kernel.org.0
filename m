@@ -1,137 +1,118 @@
-Return-Path: <linux-usb+bounces-3250-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3251-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 414907F5EF6
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 13:22:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 970A37F5FC8
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 14:12:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 728BE1C20F2B
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 12:22:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 00CA8B214EE
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 13:12:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE6824A0E;
-	Thu, 23 Nov 2023 12:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E76724B5D;
+	Thu, 23 Nov 2023 13:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nSfg5H2P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B051BE;
-	Thu, 23 Nov 2023 04:22:39 -0800 (PST)
-Received: from [10.0.3.168] (unknown [93.240.169.83])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id B520561E5FE04;
-	Thu, 23 Nov 2023 13:22:16 +0100 (CET)
-Message-ID: <6288389c-59cb-4eb4-bbe6-163413db7b7e@molgen.mpg.de>
-Date: Thu, 23 Nov 2023 13:22:14 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454CB24A05;
+	Thu, 23 Nov 2023 13:12:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B246C433C7;
+	Thu, 23 Nov 2023 13:11:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700745135;
+	bh=VBAn7FZcvw1drif9KzTmaabLPVAYO4zX2eeQPqBTwFw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nSfg5H2PW95uhmCyWswaCk18HBzNnUr8lrZC9/jswVOaVEk9Necoc/3PSsg/eWI+c
+	 nUSNVQiBVNuTkdJG4ZroseK0fKTuKodiCnTfp5VBFncFM3thhaeXbqdq7/1OyUlFkh
+	 hvhoTdxdxKP2qiIgsXRrtgQ8aW/glFRtrG5pk0o8niH7Far3mtrppzle/A5KWCQFN1
+	 0J9D7XnhqZQWKtQ8+7lAsz1DeizPazr+k6Se4xCbJkyOxPi+pXbCyvcnpPCySfoTu/
+	 nxY4zeQuXLH9O0FYHNYyhAuFpYV+0VZCYLV3awl8R2o5zjol3Qy1blkTCXoR/k3lKT
+	 V10Lsp2N5sNOQ==
+Date: Thu, 23 Nov 2023 14:11:56 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Zhenyu Wang <zhenyuw@linux.intel.com>
+Cc: linux-fsdevel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+	Jan Kara <jack@suse.cz>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>,
+	Oded Gabbay <ogabbay@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+	Xu Yilun <yilun.xu@intel.com>, Zhi Wang <zhi.a.wang@intel.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Leon Romanovsky <leon@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Frederic Barrat <fbarrat@linux.ibm.com>,
+	Andrew Donnellan <ajd@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Eric Farman <farman@linux.ibm.com>,
+	Matthew Rosato <mjrosato@linux.ibm.com>,
+	Halil Pasic <pasic@linux.ibm.com>,
+	Vineeth Vijayan <vneethv@linux.ibm.com>,
+	Peter Oberparleiter <oberpar@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Tony Krowiak <akrowiak@linux.ibm.com>,
+	Jason Herne <jjherne@linux.ibm.com>,
+	Harald Freudenberger <freude@linux.ibm.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Diana Craciun <diana.craciun@oss.nxp.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Eric Auger <eric.auger@redhat.com>, Fei Li <fei1.li@intel.com>,
+	Benjamin LaHaise <bcrl@kvack.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeelb@google.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Kirti Wankhede <kwankhede@nvidia.com>, kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-fpga@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+	linux-aio@kvack.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] i915: make inject_virtual_interrupt() void
+Message-ID: <20231123-randlage-instinkt-e458628d2d7c@brauner>
+References: <20231122-vfs-eventfd-signal-v2-0-bd549b14ce0c@kernel.org>
+ <20231122-vfs-eventfd-signal-v2-1-bd549b14ce0c@kernel.org>
+ <ZV6buHrQy2+CJ7xX@debian-scheme>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Unplugging USB-C charger cable causes `ucsi_acpi USBC000:00:
- ucsi_handle_connector_change: ACK failed (-110)`
-Content-Language: en-US
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Hans de Goede <hdegoede@redhat.com>
-References: <b2466bc2-b62c-4328-94a4-b60af4135ba7@molgen.mpg.de>
- <ZVy5+AxnOZNmUZ15@kuha.fi.intel.com>
- <2bfe2311-27a6-46b5-8662-ba3cbb409f81@molgen.mpg.de>
- <ZV3CTg03IPnZTVL0@kuha.fi.intel.com>
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <ZV3CTg03IPnZTVL0@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZV6buHrQy2+CJ7xX@debian-scheme>
 
-Dear Heikki,
-
-
-Am 22.11.23 um 09:56 schrieb Heikki Krogerus:
-> On Tue, Nov 21, 2023 at 03:25:59PM +0100, Paul Menzel wrote:
-
->> Am 21.11.23 um 15:08 schrieb Heikki Krogerus:
->>> On Tue, Nov 21, 2023 at 12:50:43PM +0100, Paul Menzel wrote:
->>
->>>> On the Dell XPS 13, BIOS 2.21.0 06/02/2022, with Debian sid/unstable and
->>>> Linux 6.5.10, when unplugging the (Dell) USB Type-C charger cable, Linux
->>>> logs the error below:
->>>>
->>>>       ucsi_acpi USBC000:00: ucsi_handle_connector_change: ACK failed (-110)
->>>>
->>>> As this is logged with level error, can this be somehow fixed?
->>>>
->>>>       drivers/usb/typec/ucsi/ucsi.c: dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
->>>>
->>>> Please find the output of `dmesg` attached.
->>>
->>> Thanks. The firmware not reacting to the ACK command is weird, but I'm
->>> not sure if it's critical. Does the interface continue working after
->>> that? Do you see the partner devices appearing under /sys/class/typec/
->>> when you plug them, and disappearing when you unplug them?
->>
->> ```
->> $ LANG= grep . /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000\:001/*
->> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/current_max:0
->> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/current_now:0
-
-[…]
-
->> ```
->>
->> Now I unplugged the device, and the error is *not* logged. (I had a USB
->> Type-C port replicator plugged in during the day before.)
->>
->> The directory is still there:
->>
->> ```
->> $ LANG= grep . /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000\:001/*
->> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/current_max:0
->> /sys/class/typec/port0/device/power_supply/ucsi-source-psy-USBC000:001/current_now:0
-
-[…]
-
->> ```
->>
->> I guess, that is the wrong directory I look at though?
->>
->> (I am going to monitor the logs over the next days.)
+> > +	if (!vgpu->msi_trigger)
+> > +		return;
+> > +	eventfd_signal(vgpu->msi_trigger, 1);
+> >  }
 > 
-> Just list what you have in /sys/class/typec/ before and after plugging
-> a device to the port:
-> 
->          ls /sys/class/typec/
+> I think it's a little simpler to write as
+>     if (vgpu->msi_trigger)
+>             eventfd_signal(vgpu->msi_trigger, 1);
 
-Sorry, here you go:
-
-With charger:
-
-     $ ls /sys/class/typec/
-     port0  port0-partner
-
-After unplugging the charger:
-
-     $ LANG= ls /sys/class/typec/
-     port0
-
-By the way, Linux logs the ucsi_handle_connector_change line around five 
-second after unplugging the USB Type-C charger cable.
-
-
-Kind regards,
-
-Paul
-
-
-PS: In the logs since October 30th, I see the three distinct lines below:
-
-1.  ucsi_acpi USBC000:00: failed to re-enable notifications (-110)
-2.  ucsi_acpi USBC000:00: GET_CONNECTOR_STATUS failed (-110)
-3.  ucsi_acpi USBC000:00: ucsi_handle_connector_change: ACK failed (-110)
-
-Is it documented somewhere what -100 means?
+Good point. I folded that suggestion into the patch.
 
