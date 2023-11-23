@@ -1,114 +1,160 @@
-Return-Path: <linux-usb+bounces-3255-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3256-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F3877F60F5
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 15:03:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 257727F611D
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 15:10:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3B24B21516
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 14:03:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EC29B215AA
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 14:10:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 542B42E83E;
-	Thu, 23 Nov 2023 14:03:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26CB82FC37;
+	Thu, 23 Nov 2023 14:10:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fris.de header.i=@fris.de header.b="DjSml9xe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmJclWsN"
 X-Original-To: linux-usb@vger.kernel.org
-X-Greylist: delayed 955 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 23 Nov 2023 06:03:37 PST
-Received: from mail.fris.de (mail.fris.de [116.203.77.234])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882411A8
-	for <linux-usb@vger.kernel.org>; Thu, 23 Nov 2023 06:03:37 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 18DBAC00AE;
-	Thu, 23 Nov 2023 14:47:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-	t=1700747263; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=Pi1atu12zkAcY/0bmm6zXxbZy+hVAt8zjD1oA7GM5ps=;
-	b=DjSml9xeT0BDWxXcWv3y8oXbTULW96QVQjWzGnwMfFpNWivzdsiVT/uBAlv1k5+4moGrdC
-	sRang3SAPExGwUQtYXPYVrLtf82cNCbGPQSrUR3Nq858jJtW2QDpRFgbk+1Wx74pEl9IH7
-	iI0j1/kx7OhA0VeQKrfS2Gb2kcNi9Ko+ZwFX4HiBN/D+g1ZLV1JkDz/E8yLbw9g1jMtO7g
-	6rgydz+EUzbmK93ooyqdGeRKEvNxHSxyaoSFa4pc0o9PO56+CH/YQoGZqqpl9Nm8eQdxZT
-	FR85dQXw8PxFojCUf1vURgBgXf+DmnO+X05IEQHDVm6iX5b2yGVNt+msGcxWLw==
-From: Frieder Schrempf <frieder@fris.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Matthias Kaehlcke <mka@chromium.org>
-Cc: Frieder Schrempf <frieder.schrempf@kontron.de>,
-	Anand Moon <linux.amoon@gmail.com>,
-	Benjamin Bara <benjamin.bara@skidata.com>,
-	Icenowy Zheng <uwu@icenowy.me>,
-	Javier Carrasco <javier.carrasco@wolfvision.net>,
-	Rob Herring <robh@kernel.org>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Subject: [PATCH 2/2] usb: misc: onboard_usb_hub: Add support for Cypress CY7C6563x
-Date: Thu, 23 Nov 2023 14:47:21 +0100
-Message-ID: <20231123134728.709533-2-frieder@fris.de>
-In-Reply-To: <20231123134728.709533-1-frieder@fris.de>
-References: <20231123134728.709533-1-frieder@fris.de>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2AE25574;
+	Thu, 23 Nov 2023 14:10:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB586C433C8;
+	Thu, 23 Nov 2023 14:10:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700748624;
+	bh=/bWFQ4N/SZVD3lkJ8hFU61wZaZzFy0Eh+DF7PZpyN60=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jmJclWsNN8+MbXNXEpB/y3Ja7MjWIPlJnhva92TOcXsIjY5RXgFUIFpSu0rk5/wxx
+	 zSVWMn9rOuDzq5VNDFoP+AMh4wPYnAUD1AYyqKyL8UeRhPECBB3Iy0UfB8xUEY0BGq
+	 hXf4U1selniFGco61iHTJM+Q784IIjXFQ4RjHmKXqQc6TV52mi/7N3zH9+AQDRg7YZ
+	 M+4wfkiGwoEeSZdIxcgQsJw50nelrsEqIQJqL68f7rbnJSoTH5iEoq2n1msiZFOCd7
+	 3Ug3diljOuFHP0Bz4nwqhA725R6t29m2pc1KKv57dfloIDzyneT8j1JttmAyu3NWNL
+	 CVjRoQ4+yhs8Q==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1r6APi-000555-0P;
+	Thu, 23 Nov 2023 15:10:42 +0100
+Date: Thu, 23 Nov 2023 15:10:42 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, quic_wcheng@quicinc.com,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	quic_ppratap@quicinc.com, quic_jackp@quicinc.com
+Subject: Re: [PATCH 1/6] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
+ bindings
+Message-ID: <ZV9dYpTYRXn63tXe@hovoldconsulting.com>
+References: <20231122191335.3058-1-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231122191335.3058-1-quic_kriskura@quicinc.com>
 
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
+On Thu, Nov 23, 2023 at 12:43:35AM +0530, Krishna Kurapati wrote:
+> The high speed related interrupts present on QC targets are as follows:
+> 
+> dp/dm Irq's
+> These IRQ's directly reflect changes on the DP/DM pads of the SoC. These
+> are used as wakeup interrupts only on SoCs with non-QUSBb2 targets with
+> exception of SDM670/SDM845/SM6350.
+> 
+> qusb2_phy irq
+> SoCs with QUSB2 PHY do not have separate DP/DM IRQs and expose only a
+> single IRQ whose behavior can be modified by the QUSB2PHY_INTR_CTRL
+> register. The required DPSE/DMSE configuration is done in
+> QUSB2PHY_INTR_CTRL register of phy address space.
+> 
+> hs_phy_irq
+> This is completely different from the above two and is present on all
+> targets with exception of a few IPQ ones. The interrupt is not enabled by
+> default and its functionality is mutually exclusive of qusb2_phy on QUSB
+> targets and DP/DM on femto phy targets.
+> 
+> The DTs of several QUSB2 PHY based SoCs incorrectly define "hs_phy_irq"
+> when they should have been "qusb2_phy_irq". On Femto phy targets, the
+> "hs_phy_irq" mentioned is either the actual "hs_phy_irq" or "pwr_event",
+> neither of which would never be triggered directly are non-functional
+> currently. The implementation tries to clean up this issue by addressing
+> the discrepencies involved and fixing the hs_phy_irq's in respective DT's.
 
-The Cypress CY7C6563x is a 2/4-port USB 2.0 hub. Add support for
-this hub in the driver in order to bring up reset, supply or clock
-dependencies.
+Thanks for sorting this out.
 
-There is no reset pulse width given in the datasheet so we expect
-a minimal value of 1us to be enough. This hasn't been tested though
-due to lack of hardware which has the reset connected to a GPIO.
+It seems like we have a few combinations of these interrupts and we
+should probably try to define the order for these once and for all and
+update the current devicetrees to match (even if it means adding new
+interrupts in the middle).
 
-Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
----
- drivers/usb/misc/onboard_usb_hub.c | 1 +
- drivers/usb/misc/onboard_usb_hub.h | 6 ++++++
- 2 files changed, 7 insertions(+)
+Instead of adding separate compatibles for the controllers without SS
+support, I suggest keeping that interrupt last as an optional one.
 
-diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index e710e3c82ba9b..e2e011036d359 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -440,6 +440,7 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
- static const struct usb_device_id onboard_hub_id_table[] = {
- 	{ USB_DEVICE(VENDOR_ID_CYPRESS, 0x6504) }, /* CYUSB33{0,1,2}x/CYUSB230x 3.0 */
- 	{ USB_DEVICE(VENDOR_ID_CYPRESS, 0x6506) }, /* CYUSB33{0,1,2}x/CYUSB230x 2.0 */
-+	{ USB_DEVICE(VENDOR_ID_CYPRESS, 0x6570) }, /* CY7C6563x 2.0 */
- 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
- 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 */
- 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0620) }, /* Genesys Logic GL3523 USB 3.1 */
-diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-index c4e24a7b92904..67b2cc1e15e67 100644
---- a/drivers/usb/misc/onboard_usb_hub.h
-+++ b/drivers/usb/misc/onboard_usb_hub.h
-@@ -31,6 +31,11 @@ static const struct onboard_hub_pdata cypress_hx3_data = {
- 	.num_supplies = 2,
- };
- 
-+static const struct onboard_hub_pdata cypress_hx2vl_data = {
-+	.reset_us = 1,
-+	.num_supplies = 1,
-+};
-+
- static const struct onboard_hub_pdata genesys_gl850g_data = {
- 	.reset_us = 3,
- 	.num_supplies = 1,
-@@ -54,6 +59,7 @@ static const struct of_device_id onboard_hub_match[] = {
- 	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
- 	{ .compatible = "usb4b4,6504", .data = &cypress_hx3_data, },
- 	{ .compatible = "usb4b4,6506", .data = &cypress_hx3_data, },
-+	{ .compatible = "usb4b4,6570", .data = &cypress_hx2vl_data, },
- 	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
- 	{ .compatible = "usb5e3,610", .data = &genesys_gl852g_data, },
- 	{ .compatible = "usb5e3,620", .data = &genesys_gl852g_data, },
--- 
-2.42.1
+But IIUC we essentially have something like:
 
+qusb2-:
+
+	- const: qusb2_phy
+	- const: pwr_event
+	- const: ss_phy_irq	(optional)
+
+qusb2:
+
+	- const: hs_phy_irq
+	- const: qusb2_phy
+	- const: pwr_event
+	- const: ss_phy_irq	(optional)
+
+qusb2+:
+
+	- const: hs_phy_irq
+	- const: qusb2_phy
+	- const: dp_hs_phy_irq
+	- const: dm_hs_phy_irq
+	- const: pwr_event
+	- const: ss_phy_irq	(optional)
+
+femto-:
+	- const: dp_hs_phy_irq
+	- const: dm_hs_phy_irq
+	- const: pwr_event
+	- const: ss_phy_irq	(optional)
+
+femto:
+	- const: hs_phy_irq
+	- const: dp_hs_phy_irq
+	- const: dm_hs_phy_irq
+	- const: pwr_event
+	- const: ss_phy_irq	(optional)
+
+Does this look like it would cover all of our currents SoCs?
+
+Do all of them have the pwr_event interrupt?
+
+Note that DP comes before DM above as that seems like the natural order
+of these (plus before minus).
+
+Now if the HS interrupt is truly unusable, I guess we can consider
+dropping it throughout and the above becomes just three permutations
+instead, which can even be expressed along the lines of:
+
+	- anyOf:
+	  - items:
+	    - const: qusb2_phy
+	  - items:
+	    - const: dp_hs_phy_irq
+	    - const: dm_hs_phy_irq
+	- const: pwr_event
+	- const: ss_phy_irq	(optional)
+
+Johan
 
