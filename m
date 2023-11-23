@@ -1,114 +1,135 @@
-Return-Path: <linux-usb+bounces-3252-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3253-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 740137F600B
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 14:19:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D29C67F60A3
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 14:44:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECA02B21524
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 13:19:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D1AF281E11
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 13:44:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10547250FF;
-	Thu, 23 Nov 2023 13:18:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B0D12574B;
+	Thu, 23 Nov 2023 13:44:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r42g7gVE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O0iR60nv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A51C24B3F;
-	Thu, 23 Nov 2023 13:18:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FFAAC433C9;
-	Thu, 23 Nov 2023 13:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EEB725561;
+	Thu, 23 Nov 2023 13:44:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A349C433C8;
+	Thu, 23 Nov 2023 13:44:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700745532;
-	bh=BJOuctG/jOXVT0hO6qxyVXBeYyH4TG/ylT0dyLa92yI=;
+	s=k20201202; t=1700747068;
+	bh=trYkMaqpWLmDB4oJKoY1+CJr1bJOUKmTS9Un+OPmKFg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r42g7gVEtjBJ5WfLPAfCypJTdeIZa9tza+98XErRLkZuJq42IHSNqt9TjDoS1u/dO
-	 mqRTO6hyOgRcqG5Vqi98sspSbfx6Ne64w0KZSaAUUdSmCRm0SeW9B8r2AffO7bhDq0
-	 voQrIzDl2Rys7kYNdpWCPkldE19sNixdWiKMUoa9j34EYG62L/DgZtbbaspmEPmu14
-	 PuPzBMdYXfPSBprGxxIV2rleVHq+xRFaQ7/X8REU4C8BYG2H4sP4+OADV7Tg2Ri8NY
-	 w8CXZUWWNJUaMlJH5PPc15vZ4ox/kvWZIeet2zBszz9qi15zBW/WlVu+mFthIg8ovM
-	 qoF7yc2VytIMg==
-Date: Thu, 23 Nov 2023 14:18:33 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: linux-fsdevel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-	Jan Kara <jack@suse.cz>, Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>,
-	Oded Gabbay <ogabbay@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Zhenyu Wang <zhenyuw@linux.intel.com>,
-	Zhi Wang <zhi.a.wang@intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Leon Romanovsky <leon@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Frederic Barrat <fbarrat@linux.ibm.com>,
-	Andrew Donnellan <ajd@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
+	b=O0iR60nvxcY0qV3BXuSd3E3+kk2rlD00vl2QflXaT3x8kIjB3SH99q8WMPevw7P5E
+	 bNTm+mpm2pxNjC9xPQbuB3x/IKG4XnGufxHxD0iPOVHnVf1qPad2Bt1F4ESuWukMIH
+	 zvQ8zPwGph1R53DSx9un/SlNOkzSAXkKp0xh0xk6rUGb65WCyv0z/P0dTdiq7zRwAb
+	 CTKBQ6oHAsCAFRSnhDdYtR8O5uU9e48wZ4zgyJezTH+vV3idEiozG5qFRTMOHj5wNQ
+	 G3Uu/R1HLqXLaR9+ZOOtCtOfDY5XW7AyRE0PCrCuk3pXAsCguNnFb4gx19DVMiSclI
+	 YxGgbMmcx8fpQ==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1r6A0b-0004vo-0K;
+	Thu, 23 Nov 2023 14:44:45 +0100
+Date: Thu, 23 Nov 2023 14:44:45 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Eric Farman <farman@linux.ibm.com>,
-	Matthew Rosato <mjrosato@linux.ibm.com>,
-	Halil Pasic <pasic@linux.ibm.com>,
-	Vineeth Vijayan <vneethv@linux.ibm.com>,
-	Peter Oberparleiter <oberpar@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Tony Krowiak <akrowiak@linux.ibm.com>,
-	Jason Herne <jjherne@linux.ibm.com>,
-	Harald Freudenberger <freude@linux.ibm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Diana Craciun <diana.craciun@oss.nxp.com>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Eric Auger <eric.auger@redhat.com>, Fei Li <fei1.li@intel.com>,
-	Benjamin LaHaise <bcrl@kvack.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeelb@google.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Kirti Wankhede <kwankhede@nvidia.com>, kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-fpga@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-	linux-aio@kvack.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
-	Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] eventfd: simplify eventfd_signal()
-Message-ID: <20231123-portwein-geeignet-787b940c7d2d@brauner>
-References: <20231122-vfs-eventfd-signal-v2-0-bd549b14ce0c@kernel.org>
- <20231122-vfs-eventfd-signal-v2-2-bd549b14ce0c@kernel.org>
- <877cm9n7dh.fsf@intel.com>
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Felipe Balbi <balbi@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+	ahalaney@redhat.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v13 05/10] usb: dwc3: qcom: Refactor IRQ handling in QCOM
+ Glue driver
+Message-ID: <ZV9XTU-q038BaWn3@hovoldconsulting.com>
+References: <ZTY7Lwjd3_8NlfEi@hovoldconsulting.com>
+ <cabf24d0-8eea-4eb5-8205-bf7fe6017ec2@quicinc.com>
+ <ZTZ-EvvbuA6HpycT@hovoldconsulting.com>
+ <fb5e5e1d-520c-4cbc-adde-f30e853421a1@quicinc.com>
+ <ZTdqnSHq_Jo8AuPW@hovoldconsulting.com>
+ <04615205-e380-4719-aff1-f32c26004b14@quicinc.com>
+ <ZUz4RD3MjnLlPn6V@hovoldconsulting.com>
+ <6d4d959c-b155-471b-b13d-f6fda557cfe0@quicinc.com>
+ <ZVYTFi3Jnnljl48L@hovoldconsulting.com>
+ <e0789695-43ee-4285-95e9-4cdee24d6ffe@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <877cm9n7dh.fsf@intel.com>
+In-Reply-To: <e0789695-43ee-4285-95e9-4cdee24d6ffe@quicinc.com>
 
-> >   * eventfd_signal - Adds @n to the eventfd counter.
+On Thu, Nov 23, 2023 at 01:02:24AM +0530, Krishna Kurapati PSSNV wrote:
+
+>   Pushed [1] to address all the queries and comments. I was initially 
+> looking at only Femto phy targets, but when I looked at all targets in 
+> general, seems there is one irq not defined in bindings. It is qubs2_phy 
+> irq which is named as "hs_phy_irq" on QUSB target DT's (both downstream 
+> and upstream).
+>
+> There is one actual "hs_phy_irq" as well but it is not used either by hs 
+> validation team or sw team on any target. It was put in for debug 
+> purpose only and doesn't have code to trigger it (even downstream never 
+> implemented it I suppose) Atleast 4.4 onwards I saw the code but I 
+> didn't see the actual hs_phy_irq being used. It was the qusb2_phy irq 
+> named as hs_phy_irq.
 > 
-> This still refers to @n here, and in patch 4.
+> Even hw folks used it under the same name which is why they recommended 
+> using it on qusb2 targets and dp/dm on femto targets.
 
-Fixed and folded. Thanks!
+Ah, thanks for getting to the bottom of this.
+
+> On some targets the hs_phy_irq was given vector number of pwr_event irq 
+> also like sm8550/sm8450 etc., I tried to address those as well in the 
+> series.
+
+I can imagine that we have a number of such issues.
+
+> Also, per your question as to there are some qusb2 targets having dp/dm 
+> interrupts defined... It is only for SDM845/SDM670/SM6350 which were 
+> last in line of using qusb2 phy's and they started incorporating dp/dm 
+> interrupts.
+
+Ok.
+
+> Also added missing interrupts for qcs404/ipq5332.
+
+Thanks.
+
+> I didn't add missing interrupts on sc8280xp because I see that current 
+> interrupts present are working fine (I see ADB working and wakeup 
+> working as well), but the interrupt vector numbers are off by "1" 
+> between hs specifics and DT (both upstream and downstream). Will sort it 
+> out and clean that target up later.
+
+Which interrupt numbers are off by one here?
+ 
+> [1]: https://patchwork.kernel.org/project/linux-arm-msm/list/?series=803412
+
+I took a quick look at the series, and it looks like this will
+eventually clean things up a lot. We should probably define a generic
+order for the interrupts with the sometimes optional SS interrupts last.
+
+Side note: It looks like the threading in that series is broken.
+Consider using git-send-email for sending series as it takes care of
+things like that.
+
+Johan
 
