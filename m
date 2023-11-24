@@ -1,216 +1,128 @@
-Return-Path: <linux-usb+bounces-3291-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3292-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E45A87F73E3
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 13:33:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29F247F7460
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 13:56:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99445281E8C
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 12:33:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDF77B21632
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 12:55:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68D11D53B;
-	Fri, 24 Nov 2023 12:33:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FF9125778;
+	Fri, 24 Nov 2023 12:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rhRRJEoz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XGO9GYcV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69393D69
-	for <linux-usb@vger.kernel.org>; Fri, 24 Nov 2023 04:33:46 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3b842c1511fso1092700b6e.1
-        for <linux-usb@vger.kernel.org>; Fri, 24 Nov 2023 04:33:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700829225; x=1701434025; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u+Mi6KZdaleOXeeLFy+tPLW5lDs0FVUPIzM032jyvLo=;
-        b=rhRRJEozhQnC64EWTZjMo26rULV7TQEUU0WNdHkkXIDkvjWQ0Zk//0jBYuDYQCCfMG
-         pVSOODFy9iRn3ziNFgR/0s5cXSSKVbl/CF85iUwaQmyZ5rBp7FUHpSW+NxlzGBA2e93f
-         dd9FkfSdW2HXA+PAUu+BAJMb9z0EBlLRaOkdZSpX1pj742hhfndqqVdAEo59RNWJX91E
-         TClR3r2e2x8qP+GEmiiw++J1KICAn0jqgv5cDzTV8KgQrPgL54K4Fl756abKMEpck4CI
-         iFPRwBkRY1wnoKnQAvEeKy/9yGy6mEE0gyjfSv0QsSzOcq0psONuXTUz4OD6cNMo4opE
-         Tvxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700829225; x=1701434025;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u+Mi6KZdaleOXeeLFy+tPLW5lDs0FVUPIzM032jyvLo=;
-        b=V331yqzyWX9mTqFP3BzITHfq5knvlaUKxM3oVt9DSC3b6nlnrGIa3I1hvphlXhxstg
-         Z+LaYT4Yl72IB3+D7t7Ws3qHqHKmGzYkhWJ38e326tCc3VyiDmWip8QUlYI3PEIE97aL
-         Z5YTv8M/M96QNqS0xryicMPC/UA/VodChDEL5FPraJBXDQ5cokBmQ0HTt1m59YrCXTkB
-         qXsE/EuRp3eCPnr5pguouEX0Bb1uh/1oiivxoYVztCpawTVe0f8UiqLBYUS/CaX2iG34
-         WY8ULj88QBtDARcNkTGV/wcquNHfDu73mqRe4CcCVLVfckqX0cLaXyHHvORYYM0LhUqv
-         xJfA==
-X-Gm-Message-State: AOJu0Yy1DHVFItgNrYztXbMOL1vzpEl8F8o15SY1S95doDkrPyZjlFv7
-	VjtnY5BNqBntg3jAFpvTcF8VkT7/241gi8vGZzKyZw==
-X-Google-Smtp-Source: AGHT+IHePhubWcSlpkQpCam8S7h8ECxff9+Tgwphv1Ehy4bBd4FY2MbEGXszV+3z0Z0IiI2fK7mb4i6avOc4hHx5dF8=
-X-Received: by 2002:a05:6808:1705:b0:3b5:6421:1a6b with SMTP id
- bc5-20020a056808170500b003b564211a6bmr3140033oib.5.1700829225586; Fri, 24 Nov
- 2023 04:33:45 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682B710E4;
+	Fri, 24 Nov 2023 04:55:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700830553; x=1732366553;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0CJxRztR8sP9yMA/a6oz2vAEEQEj6uTdKxgPbgOsEUU=;
+  b=XGO9GYcVle02jjOEVNlICY6HYMhVWz1vInqD0ra3Rx8s2A3TvaWnODgm
+   D8vU/m7mVqaZaXkQ4TY3+9WNL3A1veHB93FuBNUS+HfgqK+If/+ITqX1E
+   4m1gjLaSMKqcS9jxaddrC+57wWZ+RQVVfLsVVTSaapVA5VU1Y4V8otdDK
+   UZ+vt7yIibH4ldFr6tC3X8uAq/OygCO9RJATQtNfkyorSNncTwMgVw8Qi
+   SV2x0zWpWkqIRk7IbUyWf56Nzdbw/DP/OXu0EGzGBZlifY95nwVOGlrtx
+   oyvbbnD+UtjVoxH2XMzlbgefkGXCori8QQwdSAJZppbhfvHdCdC3gSXHI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="372582127"
+X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
+   d="scan'208";a="372582127"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 04:55:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="858380941"
+X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
+   d="scan'208";a="858380941"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by FMSMGA003.fm.intel.com with SMTP; 24 Nov 2023 04:55:50 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 24 Nov 2023 14:55:49 +0200
+Date: Fri, 24 Nov 2023 14:55:49 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>
+Subject: Re: Unplugging USB-C charger cable causes `ucsi_acpi USBC000:00:
+ ucsi_handle_connector_change: ACK failed (-110)`
+Message-ID: <ZWCdVWRGzh/2RSs3@kuha.fi.intel.com>
+References: <b2466bc2-b62c-4328-94a4-b60af4135ba7@molgen.mpg.de>
+ <ZVy5+AxnOZNmUZ15@kuha.fi.intel.com>
+ <2bfe2311-27a6-46b5-8662-ba3cbb409f81@molgen.mpg.de>
+ <ZV3CTg03IPnZTVL0@kuha.fi.intel.com>
+ <6288389c-59cb-4eb4-bbe6-163413db7b7e@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231103230414.1483428-1-dmitry.baryshkov@linaro.org> <8cf55d82-afb7-475a-bc0b-ec33b56340dd@linaro.org>
-In-Reply-To: <8cf55d82-afb7-475a-bc0b-ec33b56340dd@linaro.org>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 24 Nov 2023 14:33:34 +0200
-Message-ID: <CAA8EJpormPU+GVL4ZBkuiiRR-oMJB0y-rPUTW=W-FM+Hhqqw=Q@mail.gmail.com>
-Subject: Re: [PATCH v6 0/6] drm: simplify support for transparent DRM bridges
-To: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, dri-devel@lists.freedesktop.org, 
-	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
-	linux-usb@vger.kernel.org, freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6288389c-59cb-4eb4-bbe6-163413db7b7e@molgen.mpg.de>
 
-On Fri, 24 Nov 2023 at 14:23, Bryan O'Donoghue
-<bryan.odonoghue@linaro.org> wrote:
->
-> On 03/11/2023 23:03, Dmitry Baryshkov wrote:
-> > Supporting DP/USB-C can result in a chain of several transparent
-> > bridges (PHY, redrivers, mux, etc). All attempts to implement DP support
-> > in a different way resulted either in series of hacks or in device tree
-> > not reflecting the actual hardware design. This results in drivers
-> > having similar boilerplate code for such bridges.
-> >
-> > Next, these drivers are susceptible to -EPROBE_DEFER loops: the next
-> > bridge can either be probed from the bridge->attach callback, when it is
-> > too late to return -EPROBE_DEFER, or from the probe() callback, when the
-> > next bridge might not yet be available, because it depends on the
-> > resources provided by the probing device. Device links can not fully
-> > solve this problem since there are mutual dependencies between adjancent
-> > devices.
-> >
-> > Last, but not least, this results in the the internal knowledge of DRM
-> > subsystem slowly diffusing into other subsystems, like PHY or USB/TYPEC.
-> >
-> > To solve all these issues, define a separate DRM helper, which creates
-> > separate aux device just for the bridge. During probe such aux device
-> > doesn't result in the EPROBE_DEFER loops. Instead it allows the device
-> > drivers to probe properly, according to the actual resource
-> > dependencies. The bridge auxdevs are then probed when the next bridge
-> > becomes available, sparing drivers from drm_bridge_attach() returning
-> > -EPROBE_DEFER.
->
-> Dmitry,
->
-> Looking to give you a Tested-by: here but got the below splat.
+Hi,
 
-This should be fixed by
-https://gitlab.freedesktop.org/drm/msm/-/tags/drm-msm-fixes-2023-11-21
+> > Just list what you have in /sys/class/typec/ before and after plugging
+> > a device to the port:
+> > 
+> >          ls /sys/class/typec/
+> 
+> Sorry, here you go:
+> 
+> With charger:
+> 
+>     $ ls /sys/class/typec/
+>     port0  port0-partner
+> 
+> After unplugging the charger:
+> 
+>     $ LANG= ls /sys/class/typec/
+>     port0
 
->
-> https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/next-20231123-tcpm-fix?ref_type=heads
->
-> - Boot via fastboot
-> - Remove USB cable
-> - Attach DisplayPort cable
-> - Get some activity on the DP
-> - Then this
->
-> root@linaro-gnome:~# [  376.861822] xhci-hcd xhci-hcd.4.auto: xHCI Host
-> Controller
-> [  376.867584] xhci-hcd xhci-hcd.4.auto: new USB bus registered,
-> assigned bus number 3
-> [  376.875775] xhci-hcd xhci-hcd.4.auto: hcc params 0x0230ffe5 hci
-> version 0x110 quirks 0x0000000000000010
-> [  376.885666] xhci-hcd xhci-hcd.4.auto: irq 229, io mem 0x0a600000
-> [  376.892140] xhci-hcd xhci-hcd.4.auto: xHCI Host Controller
-> [  376.897951] xhci-hcd xhci-hcd.4.auto: new USB bus registered,
-> assigned bus number 4
-> [  376.905869] xhci-hcd xhci-hcd.4.auto: Host supports USB 3.1 Enhanced
-> SuperSpeed
-> [  376.914130] hub 3-0:1.0: USB hub found
-> [  376.918030] hub 3-0:1.0: 1 port detected
-> [  376.922417] usb usb4: We don't know the algorithms for LPM for this
-> host, disabling LPM.
-> [  376.931540] hub 4-0:1.0: USB hub found
-> [  376.935439] hub 4-0:1.0: 1 port detected
-> [  377.885638] Unable to handle kernel NULL pointer dereference at
-> virtual address 0000000000000060
-> [  377.892927] msm_dpu ae01000.display-controller: [drm] Cannot find any
-> crtc or sizes
-> [  377.894724] Mem abort info:
-> [  377.905504]   ESR = 0x0000000096000004
-> [  377.909375]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [  377.914852]   SET = 0, FnV = 0
-> [  377.918005]   EA = 0, S1PTW = 0
-> [  377.921250]   FSC = 0x04: level 0 translation fault
-> [  377.926269] Data abort info:
-> [  377.929239]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-> [  377.934881]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> [  377.940095]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> [  377.945563] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000101992000
-> [  377.952441] [0000000000000060] pgd=0000000000000000, p4d=0000000000000000
-> [  377.959448] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> [  377.965882] Modules linked in: typec_displayport nf_tables libcrc32c
-> nfnetlink q6asm_dai q6routing q6afe_clocks q6afe_dai q6asm q6adm
-> snd_q6dsp_common q6afe q6core apr pdr_interfacer
-> [  377.965984]  aux_bridge crct10dif_ce snd_soc_lpass_macro_common
-> drm_kms_helper qnoc_sm8250 qcom_wdt icc_osm_l3 fuse drm backlight dm_mod
-> ip_tables x_tables
-> [  378.072201] CPU: 5 PID: 379 Comm: dp_hpd_handler Not tainted
-> 6.7.0-rc2-next-20231123-00008-g812004aeedc0-dirty #30
-> [  378.082817] Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
-> [  378.088884] msm_dpu ae01000.display-controller: [drm] Cannot find any
-> crtc or sizes
-> [  378.089697] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS
-> BTYPE=--)
-> [  378.089700] pc : drm_object_property_set_value+0x0/0x88 [drm]
-> [  378.110607] lr : drm_dp_set_subconnector_property+0x58/0x64
-> [drm_display_helper]
-> [  378.118205] sp : ffff800081fbbda0
-> [  378.121616] x29: ffff800081fbbda0 x28: 0000000000000000 x27:
-> 0000000000000000
-> [  378.128940] x26: 0000000000000000 x25: 0000000000000000 x24:
-> ffff38d1ccef2880
-> [  378.136264] x23: ffff38d1ccef2a10 x22: ffff38d1ccef2880 x21:
-> ffff38d1ccef29f0
-> [  378.143587] x20: 0000000000000000 x19: ffff38d1ccef2880 x18:
-> 0000000000000000
-> [  378.150911] x17: 000000040044ffff x16: ffffa79c03e1fe34 x15:
-> 0000000000000000
-> [  378.158235] x14: ffff38d1c5861000 x13: 00000000000003ec x12:
-> 0000000000000001
-> [  378.165560] x11: 071c71c71c71c71c x10: 0000000000000b00 x9 :
-> ffff800081fbb9d0
-> [  378.172884] x8 : ffffa79b9b4d9000 x7 : 0000000000000001 x6 :
-> ffffa79b9b6d74b0
-> [  378.180207] x5 : 0000000000000000 x4 : ffff38d1cb2d3800 x3 :
-> ffff38d1c28e169f
-> [  378.187530] x2 : 000000000000000f x1 : 0000000000000000 x0 :
-> ffff38d1cb2d3840
-> [  378.194853] Call trace:
-> [  378.197376]  drm_object_property_set_value+0x0/0x88 [drm]
-> [  378.202947]  dp_display_process_hpd_high+0xa0/0x14c [msm]
-> [  378.208526]  dp_hpd_plug_handle.isra.0+0x8c/0x10c [msm]
-> [  378.213918]  hpd_event_thread+0xc4/0x56c [msm]
-> [  378.218508]  kthread+0x110/0x114
-> [  378.221828]  ret_from_fork+0x10/0x20
-> [  378.225506] Code: 128002a0 d65f03c0 d4210000 17ffffea (f9403024)
-> [  378.231763] ---[ end trace 0000000000000000 ]---
-> [  384.505974] msm_dpu ae01000.display-controller: [drm] Cannot find any
-> crtc or sizes
-> [  385.538016] msm_dpu ae01000.display-controller: [drm] Cannot find any
-> crtc or sizes
-> [  385.666018] msm_dpu ae01000.display-controller: [drm] Cannot find any
-> crtc or sizes
->
->
+Thanks. The interface does not appear to be completely stuck, which is
+what I wanted to check.
 
+> By the way, Linux logs the ucsi_handle_connector_change line around five
+> second after unplugging the USB Type-C charger cable.
+> 
+> Kind regards,
+> Paul
+> 
+> PS: In the logs since October 30th, I see the three distinct lines below:
+> 
+> 1.  ucsi_acpi USBC000:00: failed to re-enable notifications (-110)
+> 2.  ucsi_acpi USBC000:00: GET_CONNECTOR_STATUS failed (-110)
+> 3.  ucsi_acpi USBC000:00: ucsi_handle_connector_change: ACK failed (-110)
+> 
+> Is it documented somewhere what -100 means?
+
+That is the error code, and 110 means Timeout. The driver waits 5s,
+which should be more than enough. If the firmware does not respond
+within that 5s, it will most likely never respond.
+
+Two of those errors mean that the driver has sent a command to the
+firmware but the firmware never completes the command.
+
+The ACK failure means that the driver tries to acknowledge a connector
+change event (that you get for example when you plug or unplug the
+cable) indicating that the driver has now processed the event, but the
+firmware does not react to that acknowledgement like it should.
+
+So the firmware is not behaving correctly in all these cases. I could
+try to see if we can workaround those issues, but I would need to be
+able reproduce the problems. Unfortunately I do not have XPS 13 9360.
+
+But none of those problems are critical if the interface really
+continues to work.
+
+thanks,
 
 -- 
-With best wishes
-Dmitry
+heikki
 
