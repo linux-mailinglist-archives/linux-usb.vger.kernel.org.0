@@ -1,210 +1,216 @@
-Return-Path: <linux-usb+bounces-3290-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3291-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 437857F73C0
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 13:25:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E45A87F73E3
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 13:33:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD6F51F20F1D
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 12:25:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99445281E8C
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 12:33:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD607250EA;
-	Fri, 24 Nov 2023 12:25:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68D11D53B;
+	Fri, 24 Nov 2023 12:33:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MEiy96NI"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rhRRJEoz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425DC1EB36;
-	Fri, 24 Nov 2023 12:25:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D6D1C433C7;
-	Fri, 24 Nov 2023 12:25:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700828737;
-	bh=vlxD35wUZLsa3nu20qeMCvKiG+VbVgsNZnGNx/02fxg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MEiy96NIaGLuNYOdK94gKbB9z+I3s/FeaIKV0dBKmINUWvHX3MacJgcR/0ynhWw73
-	 IIFk1fma1iNdNrikyHikmXCCesbtdUDE7Ot+SvRtsLCoZJQYwhCrpNQp7WaT14cbuE
-	 elmGwdQEoRLZQN/tHB6VW0+FApvFzptjCYF1Ecn7tTEukSwsp6myfWpTcmVysLZQTZ
-	 SIE5rwoPxWoKpu2y3VDMwfAWQEJ2uO7eBMeQJ9vj+mEf/LzozfyeU/+igyGLfCfybF
-	 ipkwdv6owRq9ndEiTm2swcH1CT3oObSX117KQ9G7u4WzZUpoGMU5YneuqXG1lB8Yzz
-	 gbkVOIMrK4GVg==
-Date: Fri, 24 Nov 2023 12:25:33 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Anand Moon <linux.amoon@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add the binding example for the
- Genesys Logic GL3523 hub
-Message-ID: <20231124-clear-aids-2fd63e1dcbcf@spud>
-References: <20231122182351.63214-1-linux.amoon@gmail.com>
- <20231122182351.63214-2-linux.amoon@gmail.com>
- <20231123-skeletal-smirk-390543e2d6ab@spud>
- <CANAwSgQCOw_CY_Yy7zYHdme92O=O35Ev=MqHcznYnR=ycaxdPg@mail.gmail.com>
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69393D69
+	for <linux-usb@vger.kernel.org>; Fri, 24 Nov 2023 04:33:46 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3b842c1511fso1092700b6e.1
+        for <linux-usb@vger.kernel.org>; Fri, 24 Nov 2023 04:33:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1700829225; x=1701434025; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=u+Mi6KZdaleOXeeLFy+tPLW5lDs0FVUPIzM032jyvLo=;
+        b=rhRRJEozhQnC64EWTZjMo26rULV7TQEUU0WNdHkkXIDkvjWQ0Zk//0jBYuDYQCCfMG
+         pVSOODFy9iRn3ziNFgR/0s5cXSSKVbl/CF85iUwaQmyZ5rBp7FUHpSW+NxlzGBA2e93f
+         dd9FkfSdW2HXA+PAUu+BAJMb9z0EBlLRaOkdZSpX1pj742hhfndqqVdAEo59RNWJX91E
+         TClR3r2e2x8qP+GEmiiw++J1KICAn0jqgv5cDzTV8KgQrPgL54K4Fl756abKMEpck4CI
+         iFPRwBkRY1wnoKnQAvEeKy/9yGy6mEE0gyjfSv0QsSzOcq0psONuXTUz4OD6cNMo4opE
+         Tvxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700829225; x=1701434025;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u+Mi6KZdaleOXeeLFy+tPLW5lDs0FVUPIzM032jyvLo=;
+        b=V331yqzyWX9mTqFP3BzITHfq5knvlaUKxM3oVt9DSC3b6nlnrGIa3I1hvphlXhxstg
+         Z+LaYT4Yl72IB3+D7t7Ws3qHqHKmGzYkhWJ38e326tCc3VyiDmWip8QUlYI3PEIE97aL
+         Z5YTv8M/M96QNqS0xryicMPC/UA/VodChDEL5FPraJBXDQ5cokBmQ0HTt1m59YrCXTkB
+         qXsE/EuRp3eCPnr5pguouEX0Bb1uh/1oiivxoYVztCpawTVe0f8UiqLBYUS/CaX2iG34
+         WY8ULj88QBtDARcNkTGV/wcquNHfDu73mqRe4CcCVLVfckqX0cLaXyHHvORYYM0LhUqv
+         xJfA==
+X-Gm-Message-State: AOJu0Yy1DHVFItgNrYztXbMOL1vzpEl8F8o15SY1S95doDkrPyZjlFv7
+	VjtnY5BNqBntg3jAFpvTcF8VkT7/241gi8vGZzKyZw==
+X-Google-Smtp-Source: AGHT+IHePhubWcSlpkQpCam8S7h8ECxff9+Tgwphv1Ehy4bBd4FY2MbEGXszV+3z0Z0IiI2fK7mb4i6avOc4hHx5dF8=
+X-Received: by 2002:a05:6808:1705:b0:3b5:6421:1a6b with SMTP id
+ bc5-20020a056808170500b003b564211a6bmr3140033oib.5.1700829225586; Fri, 24 Nov
+ 2023 04:33:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Sjy+fap+ufnQLlh0"
-Content-Disposition: inline
-In-Reply-To: <CANAwSgQCOw_CY_Yy7zYHdme92O=O35Ev=MqHcznYnR=ycaxdPg@mail.gmail.com>
+References: <20231103230414.1483428-1-dmitry.baryshkov@linaro.org> <8cf55d82-afb7-475a-bc0b-ec33b56340dd@linaro.org>
+In-Reply-To: <8cf55d82-afb7-475a-bc0b-ec33b56340dd@linaro.org>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Fri, 24 Nov 2023 14:33:34 +0200
+Message-ID: <CAA8EJpormPU+GVL4ZBkuiiRR-oMJB0y-rPUTW=W-FM+Hhqqw=Q@mail.gmail.com>
+Subject: Re: [PATCH v6 0/6] drm: simplify support for transparent DRM bridges
+To: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, dri-devel@lists.freedesktop.org, 
+	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
+	linux-usb@vger.kernel.org, freedreno@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 
-
---Sjy+fap+ufnQLlh0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Nov 24, 2023 at 04:18:23PM +0530, Anand Moon wrote:
-> Hi Conor
->=20
-> On Thu, 23 Nov 2023 at 23:26, Conor Dooley <conor@kernel.org> wrote:
+On Fri, 24 Nov 2023 at 14:23, Bryan O'Donoghue
+<bryan.odonoghue@linaro.org> wrote:
+>
+> On 03/11/2023 23:03, Dmitry Baryshkov wrote:
+> > Supporting DP/USB-C can result in a chain of several transparent
+> > bridges (PHY, redrivers, mux, etc). All attempts to implement DP support
+> > in a different way resulted either in series of hacks or in device tree
+> > not reflecting the actual hardware design. This results in drivers
+> > having similar boilerplate code for such bridges.
 > >
-> > On Wed, Nov 22, 2023 at 11:53:46PM +0530, Anand Moon wrote:
-> > > Add the binding example for the USB3.1 Genesys Logic GL3523
-> > > integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
-> > > hub.
-> > >
-> > > Onboard USB hub supports USB 3.x and USB 2.0 peer controllers.
-> > > which has a common reset pin and power supply.
-> > > peer-hub phandle each peer controller with proper gpio reset
-> > > and help each peer power on during initialization
-> > > and power off during suspend.
-> > >
-> > > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > > ---
-> > > v4: Fix the description of peer-hub and update the commit message.
-> > > Schematics of the Odroid N2+
-> > > https://dn.odroid.com/S922X/ODROID-N2/Schematic/odroid-n2_rev0.6_2021=
-0121.pdf
-> > > V3: fix the dt_binding_check error, added new example for Genesys GL3=
-523
-> > > v2: added Genesys GL3523 binding
-> > > v1: none
-> > > ---
-> > >  .../bindings/usb/genesys,gl850g.yaml          | 67 +++++++++++++++++=
---
-> > >  1 file changed, 63 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yam=
-l b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > > index ee08b9c3721f..bc3b3f4c8473 100644
-> > > --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > > +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > > @@ -9,9 +9,6 @@ title: Genesys Logic USB hub controller
-> > >  maintainers:
-> > >    - Icenowy Zheng <uwu@icenowy.me>
-> > >
-> > > -allOf:
-> > > -  - $ref: usb-device.yaml#
-> > > -
-> > >  properties:
-> > >    compatible:
-> > >      enum:
-> > > @@ -27,12 +24,48 @@ properties:
-> > >
-> > >    vdd-supply:
-> > >      description:
-> > > -      the regulator that provides 3.3V core power to the hub.
-> > > +      phandle to the regulator that provides power to the hub.
-> > > +
-> > > +  peer-hub:
+> > Next, these drivers are susceptible to -EPROBE_DEFER loops: the next
+> > bridge can either be probed from the bridge->attach callback, when it is
+> > too late to return -EPROBE_DEFER, or from the probe() callback, when the
+> > next bridge might not yet be available, because it depends on the
+> > resources provided by the probing device. Device links can not fully
+> > solve this problem since there are mutual dependencies between adjancent
+> > devices.
 > >
-> > Should the property not be "peer-controller"? Your description refers to
-> > them as such.
->=20
-> No, as per my understanding, peer-hub represents a complete USB hub.
-> See the lock diagram in the below link.
->=20
+> > Last, but not least, this results in the the internal knowledge of DRM
+> > subsystem slowly diffusing into other subsystems, like PHY or USB/TYPEC.
 > >
-> > > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > > +    description:
-> > > +      onboard USB hub supports USB 3.x and USB 2.0 peer controllers.
-> >
-> >
-> > > +      which has a common reset pin and power supply.
-> > > +      peer-hub phandle each peer controller with proper gpio reset
+> > To solve all these issues, define a separate DRM helper, which creates
+> > separate aux device just for the bridge. During probe such aux device
+> > doesn't result in the EPROBE_DEFER loops. Instead it allows the device
+> > drivers to probe properly, according to the actual resource
+> > dependencies. The bridge auxdevs are then probed when the next bridge
+> > becomes available, sparing drivers from drm_bridge_attach() returning
+> > -EPROBE_DEFER.
+>
+> Dmitry,
+>
+> Looking to give you a Tested-by: here but got the below splat.
 
-This is what I don't get. You say "peer-hub phandle each peer
-controller..". It is hard for me to understand that portion of the
-sentence, but the interchanging of "hub" and "controller" is
-confusing. The title of the binding says "hub controller", so maybe it
-is better to use that here.
+This should be fixed by
+https://gitlab.freedesktop.org/drm/msm/-/tags/drm-msm-fixes-2023-11-21
 
-> > > +      and help each peer power on during initialization
-> > > +      and power off during suspend.
-> >
-> > I generally hate to talk about non-native speakers grammar etc, but what
-> > you have here is in need of a lot of improvement. The below is my
-> > attempt to understand what you are trying to say:
-> >
-> > "For onboard hubs that support USB 3.x and USB 2.0 controllers with
-> > shared resets and power supplies, this property is used to identify
-> > the controllers with which these are shared."
+>
+> https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/next-20231123-tcpm-fix?ref_type=heads
+>
+> - Boot via fastboot
+> - Remove USB cable
+> - Attach DisplayPort cable
+> - Get some activity on the DP
+> - Then this
+>
+> root@linaro-gnome:~# [  376.861822] xhci-hcd xhci-hcd.4.auto: xHCI Host
+> Controller
+> [  376.867584] xhci-hcd xhci-hcd.4.auto: new USB bus registered,
+> assigned bus number 3
+> [  376.875775] xhci-hcd xhci-hcd.4.auto: hcc params 0x0230ffe5 hci
+> version 0x110 quirks 0x0000000000000010
+> [  376.885666] xhci-hcd xhci-hcd.4.auto: irq 229, io mem 0x0a600000
+> [  376.892140] xhci-hcd xhci-hcd.4.auto: xHCI Host Controller
+> [  376.897951] xhci-hcd xhci-hcd.4.auto: new USB bus registered,
+> assigned bus number 4
+> [  376.905869] xhci-hcd xhci-hcd.4.auto: Host supports USB 3.1 Enhanced
+> SuperSpeed
+> [  376.914130] hub 3-0:1.0: USB hub found
+> [  376.918030] hub 3-0:1.0: 1 port detected
+> [  376.922417] usb usb4: We don't know the algorithms for LPM for this
+> host, disabling LPM.
+> [  376.931540] hub 4-0:1.0: USB hub found
+> [  376.935439] hub 4-0:1.0: 1 port detected
+> [  377.885638] Unable to handle kernel NULL pointer dereference at
+> virtual address 0000000000000060
+> [  377.892927] msm_dpu ae01000.display-controller: [drm] Cannot find any
+> crtc or sizes
+> [  377.894724] Mem abort info:
+> [  377.905504]   ESR = 0x0000000096000004
+> [  377.909375]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [  377.914852]   SET = 0, FnV = 0
+> [  377.918005]   EA = 0, S1PTW = 0
+> [  377.921250]   FSC = 0x04: level 0 translation fault
+> [  377.926269] Data abort info:
+> [  377.929239]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+> [  377.934881]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+> [  377.940095]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+> [  377.945563] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000101992000
+> [  377.952441] [0000000000000060] pgd=0000000000000000, p4d=0000000000000000
+> [  377.959448] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+> [  377.965882] Modules linked in: typec_displayport nf_tables libcrc32c
+> nfnetlink q6asm_dai q6routing q6afe_clocks q6afe_dai q6asm q6adm
+> snd_q6dsp_common q6afe q6core apr pdr_interfacer
+> [  377.965984]  aux_bridge crct10dif_ce snd_soc_lpass_macro_common
+> drm_kms_helper qnoc_sm8250 qcom_wdt icc_osm_l3 fuse drm backlight dm_mod
+> ip_tables x_tables
+> [  378.072201] CPU: 5 PID: 379 Comm: dp_hpd_handler Not tainted
+> 6.7.0-rc2-next-20231123-00008-g812004aeedc0-dirty #30
+> [  378.082817] Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
+> [  378.088884] msm_dpu ae01000.display-controller: [drm] Cannot find any
+> crtc or sizes
+> [  378.089697] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS
+> BTYPE=--)
+> [  378.089700] pc : drm_object_property_set_value+0x0/0x88 [drm]
+> [  378.110607] lr : drm_dp_set_subconnector_property+0x58/0x64
+> [drm_display_helper]
+> [  378.118205] sp : ffff800081fbbda0
+> [  378.121616] x29: ffff800081fbbda0 x28: 0000000000000000 x27:
+> 0000000000000000
+> [  378.128940] x26: 0000000000000000 x25: 0000000000000000 x24:
+> ffff38d1ccef2880
+> [  378.136264] x23: ffff38d1ccef2a10 x22: ffff38d1ccef2880 x21:
+> ffff38d1ccef29f0
+> [  378.143587] x20: 0000000000000000 x19: ffff38d1ccef2880 x18:
+> 0000000000000000
+> [  378.150911] x17: 000000040044ffff x16: ffffa79c03e1fe34 x15:
+> 0000000000000000
+> [  378.158235] x14: ffff38d1c5861000 x13: 00000000000003ec x12:
+> 0000000000000001
+> [  378.165560] x11: 071c71c71c71c71c x10: 0000000000000b00 x9 :
+> ffff800081fbb9d0
+> [  378.172884] x8 : ffffa79b9b4d9000 x7 : 0000000000000001 x6 :
+> ffffa79b9b6d74b0
+> [  378.180207] x5 : 0000000000000000 x4 : ffff38d1cb2d3800 x3 :
+> ffff38d1c28e169f
+> [  378.187530] x2 : 000000000000000f x1 : 0000000000000000 x0 :
+> ffff38d1cb2d3840
+> [  378.194853] Call trace:
+> [  378.197376]  drm_object_property_set_value+0x0/0x88 [drm]
+> [  378.202947]  dp_display_process_hpd_high+0xa0/0x14c [msm]
+> [  378.208526]  dp_hpd_plug_handle.isra.0+0x8c/0x10c [msm]
+> [  378.213918]  hpd_event_thread+0xc4/0x56c [msm]
+> [  378.218508]  kthread+0x110/0x114
+> [  378.221828]  ret_from_fork+0x10/0x20
+> [  378.225506] Code: 128002a0 d65f03c0 d4210000 17ffffea (f9403024)
+> [  378.231763] ---[ end trace 0000000000000000 ]---
+> [  384.505974] msm_dpu ae01000.display-controller: [drm] Cannot find any
+> crtc or sizes
+> [  385.538016] msm_dpu ae01000.display-controller: [drm] Cannot find any
+> crtc or sizes
+> [  385.666018] msm_dpu ae01000.display-controller: [drm] Cannot find any
+> crtc or sizes
+>
+>
 
-"For onboard hub controllers that support USB 3.x and USB 2.0 hubs
-with shared resets and power supplies, this property is used to identify
-the hubs with which these are shared."
 
-I re-worded this again to try and remove the use of "controller".
-Do you think that this still makes sense?
-
-> Sorry for the poor grammar, I will update this in the next v5.
->=20
-> > Also - this is one particular system, what prevents there being a hub
-> > that has more than 2 controllers? Also, as you insist that this is
-> > generic, and not just for genesys, should this not be defined in a
-> > common location?
->=20
-> Here is the block diagram of the Genesys GL3523 hub.
-> [0] https://www.genesyslogic.com.tw/en/product_view.php?show=3D67 [Block =
-Diagram]
->=20
-> It has two USB 2.0 and USB 3.1 controllers, so using peer-hub node
-> the onboard hub module will bring up this hub.
->=20
-> There are many examples that use similar properties hence it is generic.
->=20
-> # Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-> # Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-> # Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
-> # Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-> # Documentation/devicetree/bindings/usb/vialab,vl817.yaml
-
-Which brings me back to the unanswered question, should this not be
-defined in a common location given there are several devices using it?
-I assume because it only applies to hub controllers and not other types
-of devices.
-
-Also, the descriptions that I saw when looking at some of those other
-bindings are similarly poor. I can't bring myself to care any more,
-just clean up the ambiguous wording here and I'll ack the next version,
-I don't expect you to sort out the wording in other bindings.
-
-Cheers,
-Conor.
-
---Sjy+fap+ufnQLlh0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZWCWPQAKCRB4tDGHoIJi
-0n2KAP4gfrkarKYYdtk0+pmhfTKrC35P8NCTE3zgnTcc7D19xwD9EzBpIn9jIfF4
-gxd2BDzJFdP2jjGpQP195vHDU5eDFgY=
-=r79W
------END PGP SIGNATURE-----
-
---Sjy+fap+ufnQLlh0--
+-- 
+With best wishes
+Dmitry
 
