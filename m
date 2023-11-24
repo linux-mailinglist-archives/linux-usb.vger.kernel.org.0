@@ -1,178 +1,220 @@
-Return-Path: <linux-usb+bounces-3280-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3281-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 331DE7F71FD
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 11:48:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF0287F7264
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 12:06:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6505D1C20FB2
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 10:48:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 25856B21226
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 11:06:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9454818B15;
-	Fri, 24 Nov 2023 10:48:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88FD21A733;
+	Fri, 24 Nov 2023 11:06:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MbD/CW6n"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UJ4Drx0o"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EDB92;
-	Fri, 24 Nov 2023 02:48:40 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-3b843b61d8aso1044590b6e.0;
-        Fri, 24 Nov 2023 02:48:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700822919; x=1701427719; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JSUEAKedcFlvjkIzN6LzNXLF8ZLIJ83SRbS1kwzATO0=;
-        b=MbD/CW6nfK6nqn0J496x4uzqaxSn9ZC5LItkOPJOrECSsjMW06vzsdW3y2inl4Iq9K
-         crdAa4/CBU4kpQDIlnG7JZqi25wzny9Bb2wkCHAA1n2X80yoX1kHJrsiZ2Icl++m+AQc
-         9tU1y3bZpctBrkHG8M/Cvu3K/JZqrgp7y3ng4lGt78rbgVC7iqkgJIZid6HUdlqG2mMf
-         VFY/ES07LpxKxLLdFs3m6MCJHJR+cymQlPXO/LaPNXSZFTin1P5QzHtEaz30b0npkEbg
-         kFKtBSMu9nbo9se4364p9nyp90c3XwKzx70Hvj2DSvYJdBmO+Y6tblu7Vwp2XhHiqIC+
-         W70g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700822919; x=1701427719;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JSUEAKedcFlvjkIzN6LzNXLF8ZLIJ83SRbS1kwzATO0=;
-        b=wb3ByAJi9iVURYnT6keF4HLMcaChGw5I0aTsWuzws8rCAcBSYO6nG7FkKoUg+FoAOY
-         K28lHt2rBQ4G+ta9KW6ypogxBle5H69rzVGAove5krslu6YLD9UtoMwJQyxa7/rj1hKp
-         7UNTDnyY5E3zcorK5SQH5tL73+hdySKzpVhQaJ8kdCeEO7GSR6dlsz4/JS7MO2Q0cXVr
-         rN9cj8BXcHaSr7hOh08MKqALTr+HZp7YvbAh3UCZ8D+gJuibmsSy9jJmPLC9L//a+3kG
-         8guavZkdFjyvQXHIejoSWO/mAICqL+fgOnlAOzV3BtYzP7VmGm1CMn1HxtVJpqBY00Jt
-         Q1Sg==
-X-Gm-Message-State: AOJu0Yztqg3d+SMF1XRR+LR8+s2cloAABwAYKcyL196SHXI6y/0KDtQm
-	aKofMZfe2BSoSI8z25eVYbnnYe+kZI1WQT+TUz8=
-X-Google-Smtp-Source: AGHT+IH2TyCtkFLMnAO/yClVYDhq70yZy6EcVUl/P6ZwWvgPzvLcjJQMd6c3yTIRYwm7OY8ExvVm49pGjrDQTZCwM54=
-X-Received: by 2002:a05:6870:9f8b:b0:1e9:c7cc:df9a with SMTP id
- xm11-20020a0568709f8b00b001e9c7ccdf9amr3508073oab.11.1700822919197; Fri, 24
- Nov 2023 02:48:39 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4978D67
+	for <linux-usb@vger.kernel.org>; Fri, 24 Nov 2023 03:06:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700823976; x=1732359976;
+  h=date:from:to:cc:subject:message-id;
+  bh=IKs+isjP74Sj4EwewcZBVGpDfcINW1blwAl6Lxl6srk=;
+  b=UJ4Drx0o9EqFfel6BYGhzztnGFOOJvRGmbnQsfU8wTOhaxr/v9TK2+3W
+   8ypGt7uBS9INq8WOK+4cfpzZfdhhgX6aX9src6ni283myH8ObXBlrQsW0
+   m09sd/3F/OyaTUXW5p/JiCWLcyVk9Lcn7iedkyON+BQHW9h18stBYJIC7
+   QOE2rDpAEMeilQLM/MMt2PXt2wPnNp4A0updbtfEPDUUsdws5Mo0CuOUJ
+   WrqK2IMyDvZ24IPOh8CIMRfdL6o8x+JIcbZu3ydnqVMfBXGk8+rnrH3Oh
+   6pA40KcllSWm2ty//wEIirhADRaS+8tKtvvnhMA+Trjg6DG87wDia+CiR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="423542514"
+X-IronPort-AV: E=Sophos;i="6.04,223,1695711600"; 
+   d="scan'208";a="423542514"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 03:06:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="885245612"
+X-IronPort-AV: E=Sophos;i="6.04,223,1695711600"; 
+   d="scan'208";a="885245612"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Nov 2023 03:06:12 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r6U0f-0002cv-2i;
+	Fri, 24 Nov 2023 11:06:09 +0000
+Date: Fri, 24 Nov 2023 19:05:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 9cf87666fc6e08572341fe08ecd909935998fbbd
+Message-ID: <202311241952.mqRbf3w5-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231122182351.63214-1-linux.amoon@gmail.com> <20231122182351.63214-2-linux.amoon@gmail.com>
- <20231123-skeletal-smirk-390543e2d6ab@spud>
-In-Reply-To: <20231123-skeletal-smirk-390543e2d6ab@spud>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Fri, 24 Nov 2023 16:18:23 +0530
-Message-ID: <CANAwSgQCOw_CY_Yy7zYHdme92O=O35Ev=MqHcznYnR=ycaxdPg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add the binding example for the
- Genesys Logic GL3523 hub
-To: Conor Dooley <conor@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Icenowy Zheng <uwu@icenowy.me>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-Hi Conor
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 9cf87666fc6e08572341fe08ecd909935998fbbd  USB: dwc3: qcom: fix ACPI platform device leak
 
-On Thu, 23 Nov 2023 at 23:26, Conor Dooley <conor@kernel.org> wrote:
->
-> On Wed, Nov 22, 2023 at 11:53:46PM +0530, Anand Moon wrote:
-> > Add the binding example for the USB3.1 Genesys Logic GL3523
-> > integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
-> > hub.
-> >
-> > Onboard USB hub supports USB 3.x and USB 2.0 peer controllers.
-> > which has a common reset pin and power supply.
-> > peer-hub phandle each peer controller with proper gpio reset
-> > and help each peer power on during initialization
-> > and power off during suspend.
-> >
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> > v4: Fix the description of peer-hub and update the commit message.
-> > Schematics of the Odroid N2+
-> > https://dn.odroid.com/S922X/ODROID-N2/Schematic/odroid-n2_rev0.6_20210121.pdf
-> > V3: fix the dt_binding_check error, added new example for Genesys GL3523
-> > v2: added Genesys GL3523 binding
-> > v1: none
-> > ---
-> >  .../bindings/usb/genesys,gl850g.yaml          | 67 +++++++++++++++++--
-> >  1 file changed, 63 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > index ee08b9c3721f..bc3b3f4c8473 100644
-> > --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > @@ -9,9 +9,6 @@ title: Genesys Logic USB hub controller
-> >  maintainers:
-> >    - Icenowy Zheng <uwu@icenowy.me>
-> >
-> > -allOf:
-> > -  - $ref: usb-device.yaml#
-> > -
-> >  properties:
-> >    compatible:
-> >      enum:
-> > @@ -27,12 +24,48 @@ properties:
-> >
-> >    vdd-supply:
-> >      description:
-> > -      the regulator that provides 3.3V core power to the hub.
-> > +      phandle to the regulator that provides power to the hub.
-> > +
-> > +  peer-hub:
->
-> Should the property not be "peer-controller"? Your description refers to
-> them as such.
+elapsed time: 2788m
 
-No, as per my understanding, peer-hub represents a complete USB hub.
-See the lock diagram in the below link.
+configs tested: 142
+configs skipped: 1
 
->
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description:
-> > +      onboard USB hub supports USB 3.x and USB 2.0 peer controllers.
->
->
-> > +      which has a common reset pin and power supply.
-> > +      peer-hub phandle each peer controller with proper gpio reset
-> > +      and help each peer power on during initialization
-> > +      and power off during suspend.
->
-> I generally hate to talk about non-native speakers grammar etc, but what
-> you have here is in need of a lot of improvement. The below is my
-> attempt to understand what you are trying to say:
->
-> "For onboard hubs that support USB 3.x and USB 2.0 controllers with
-> shared resets and power supplies, this property is used to identify
-> the controllers with which these are shared."
->
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Sorry for the poor grammar, I will update this in the next v5.
+tested configs:
+arc                          axs103_defconfig   gcc  
+arc                   randconfig-001-20231123   gcc  
+arc                   randconfig-002-20231123   gcc  
+arm                     am200epdkit_defconfig   clang
+arm                          collie_defconfig   clang
+arm                          pxa168_defconfig   clang
+arm                   randconfig-001-20231123   gcc  
+arm                   randconfig-002-20231123   gcc  
+arm                   randconfig-003-20231123   gcc  
+arm                   randconfig-004-20231123   gcc  
+arm64                 randconfig-001-20231123   gcc  
+arm64                 randconfig-002-20231123   gcc  
+arm64                 randconfig-003-20231123   gcc  
+arm64                 randconfig-004-20231123   gcc  
+csky                  randconfig-001-20231123   gcc  
+csky                  randconfig-002-20231123   gcc  
+hexagon               randconfig-001-20231123   clang
+hexagon               randconfig-002-20231123   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20231122   clang
+i386         buildonly-randconfig-002-20231122   clang
+i386         buildonly-randconfig-003-20231122   clang
+i386         buildonly-randconfig-004-20231122   clang
+i386         buildonly-randconfig-005-20231122   clang
+i386         buildonly-randconfig-006-20231122   clang
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231122   clang
+i386                  randconfig-002-20231122   clang
+i386                  randconfig-003-20231122   clang
+i386                  randconfig-004-20231122   clang
+i386                  randconfig-005-20231122   clang
+i386                  randconfig-006-20231122   clang
+i386                  randconfig-011-20231122   gcc  
+i386                  randconfig-012-20231122   gcc  
+i386                  randconfig-013-20231122   gcc  
+i386                  randconfig-014-20231122   gcc  
+i386                  randconfig-015-20231122   gcc  
+i386                  randconfig-016-20231122   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231123   gcc  
+loongarch             randconfig-002-20231123   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                       allyesconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                      maltasmvp_defconfig   gcc  
+mips                           mtx1_defconfig   clang
+nios2                            allmodconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                 randconfig-001-20231123   gcc  
+nios2                 randconfig-002-20231123   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                generic-64bit_defconfig   gcc  
+parisc                randconfig-001-20231123   gcc  
+parisc                randconfig-002-20231123   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                        cell_defconfig   gcc  
+powerpc                    ge_imp3a_defconfig   clang
+powerpc               randconfig-001-20231123   gcc  
+powerpc               randconfig-002-20231123   gcc  
+powerpc               randconfig-003-20231123   gcc  
+powerpc                     tqm8540_defconfig   clang
+powerpc64             randconfig-001-20231123   gcc  
+powerpc64             randconfig-002-20231123   gcc  
+powerpc64             randconfig-003-20231123   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20231123   gcc  
+riscv                 randconfig-002-20231123   gcc  
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                  randconfig-001-20231123   clang
+s390                  randconfig-002-20231123   clang
+sh                               allmodconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                    randconfig-001-20231123   gcc  
+sh                    randconfig-002-20231123   gcc  
+sh                           se7705_defconfig   gcc  
+sh                   secureedge5410_defconfig   gcc  
+sh                            shmin_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64               randconfig-001-20231123   gcc  
+sparc64               randconfig-002-20231123   gcc  
+um                               allmodconfig   clang
+um                               allyesconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20231123   gcc  
+um                    randconfig-002-20231123   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20231122   clang
+x86_64       buildonly-randconfig-002-20231122   clang
+x86_64       buildonly-randconfig-003-20231122   clang
+x86_64       buildonly-randconfig-004-20231122   clang
+x86_64       buildonly-randconfig-005-20231122   clang
+x86_64       buildonly-randconfig-006-20231122   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231122   gcc  
+x86_64                randconfig-002-20231122   gcc  
+x86_64                randconfig-003-20231122   gcc  
+x86_64                randconfig-004-20231122   gcc  
+x86_64                randconfig-005-20231122   gcc  
+x86_64                randconfig-006-20231122   gcc  
+x86_64                randconfig-011-20231122   clang
+x86_64                randconfig-012-20231122   clang
+x86_64                randconfig-013-20231122   clang
+x86_64                randconfig-014-20231122   clang
+x86_64                randconfig-015-20231122   clang
+x86_64                randconfig-016-20231122   clang
+x86_64                randconfig-071-20231122   clang
+x86_64                randconfig-072-20231122   clang
+x86_64                randconfig-073-20231122   clang
+x86_64                randconfig-074-20231122   clang
+x86_64                randconfig-075-20231122   clang
+x86_64                randconfig-076-20231122   clang
+x86_64                          rhel-8.3-rust   clang
+xtensa                  nommu_kc705_defconfig   gcc  
+xtensa                randconfig-001-20231123   gcc  
+xtensa                randconfig-002-20231123   gcc  
+xtensa                    smp_lx200_defconfig   gcc  
 
-> Also - this is one particular system, what prevents there being a hub
-> that has more than 2 controllers? Also, as you insist that this is
-> generic, and not just for genesys, should this not be defined in a
-> common location?
-
-Here is the block diagram of the Genesys GL3523 hub.
-[0] https://www.genesyslogic.com.tw/en/product_view.php?show=67 [Block Diagram]
-
-It has two USB 2.0 and USB 3.1 controllers, so using peer-hub node
-the onboard hub module will bring up this hub.
-
-There are many examples that use similar properties hence it is generic.
-
-# Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-# Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-# Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
-# Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-# Documentation/devicetree/bindings/usb/vialab,vl817.yaml
-
->
-> Cheers,
-> Conor.
->
-
-Thanks
--Anand
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
