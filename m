@@ -1,205 +1,183 @@
-Return-Path: <linux-usb+bounces-3271-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3272-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74C737F68A7
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 22:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C64AF7F6A6E
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 03:03:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8AB531C20B50
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Nov 2023 21:27:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0393E1C20CF7
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 02:03:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63516156C9;
-	Thu, 23 Nov 2023 21:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB38A23D9;
+	Fri, 24 Nov 2023 02:02:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O/zgkhz7"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ECGZCL00"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23998D72;
+	Thu, 23 Nov 2023 18:02:45 -0800 (PST)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AO1jNiO015266;
+	Fri, 24 Nov 2023 02:02:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=0Ng7PzLWRUN5PalkUI/r7oq/iQlhZgewM1sHhRV/b/k=;
+ b=ECGZCL00vygNh+PUV5gvGed1LpVpCU7AdG7pzF9Z8KI3aSTOrYALRwYA9iMrun3VFWzS
+ Cxhnp4ju5bJ41wqtCaH/lg7Wfikym+5857Jz4RkwtHSi2nA99Up9BuAFwb/8fYIx/KNA
+ HftBjFo5Bpbiw0XS5MNMcB7sGBhg7fd+foZx49RJNRTc4+s120bDWEU0j1NiZ7i8qNbK
+ l8STevmDmrn8thyn0PpsZPYsu9Z85uQ689/XPgwp6z254ghbikGvf3qX4FWrYG6G9S4j
+ QIlqy6X/Mf8hfmbRCiEsMfwjSZ9Jo7HVzzZUjUNvYLb3keI5NbExPrh0Zl9NoxjqUNZw BA== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ujjes89q9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 Nov 2023 02:02:42 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ANMn0lC010802;
+	Fri, 24 Nov 2023 02:02:41 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3uf80030uu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 Nov 2023 02:02:41 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3AO22dBc3539676
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 24 Nov 2023 02:02:39 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5F86320049;
+	Fri, 24 Nov 2023 02:02:39 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7A2CD20040;
+	Fri, 24 Nov 2023 02:02:38 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 24 Nov 2023 02:02:38 +0000 (GMT)
+Received: from jarvis.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D2A154A8
-	for <linux-usb@vger.kernel.org>; Thu, 23 Nov 2023 21:27:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2E597C433CB
-	for <linux-usb@vger.kernel.org>; Thu, 23 Nov 2023 21:27:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700774827;
-	bh=qDIhtfcrbqNZCvk+fx9EUS3ujU6mx9OfbSRWWft6Ei8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=O/zgkhz7m6R9yjOUk2ZdfqbseU2ZXA3Z7m7nXJk/pEU0E8+j3kAWNeiMzHPOslj8X
-	 KRMBOECriNDGTL97jBMZc4lfGKt/fI8OgMt/gAJuX/53J8HfTgSrnftMYUf+ZMHu4q
-	 R0+UZn5NUtvwwG2amX5iVwkjrys6UvozEF6RgKanAxVzWOdUrKXdbguH1unY5GLwUI
-	 lopM2SeQVOzRFlF+e/4ssauCRqf6b1V4TfQxckPasdW0TsCF/ZCy5FGBp5mMTth+5M
-	 6vOKqwchTn7Au9uRyatVNMsa6QMBwWvtqELjqfhQ23QbgtYxT+QB0NH+XelrvH12zj
-	 iDCFQVM1i1M5g==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 1B888C53BD5; Thu, 23 Nov 2023 21:27:07 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 215740] kernel warning: DMA-API: xhci_hcd: cacheline tracking
- EEXIST, overlapping mappings aren't supported
-Date: Thu, 23 Nov 2023 21:27:06 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ferry.toth@elsinga.info
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215740-208809-Xf0V58dyrt@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215740-208809@https.bugzilla.kernel.org/>
-References: <bug-215740-208809@https.bugzilla.kernel.org/>
+	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id C622F60234;
+	Fri, 24 Nov 2023 13:02:35 +1100 (AEDT)
+Message-ID: <ef939be36737bba5d91aa6d5c8af19683aebd92c.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 2/4] eventfd: simplify eventfd_signal()
+From: Andrew Donnellan <ajd@linux.ibm.com>
+To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc: Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>,
+        Vitaly
+ Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org,
+        David Woodhouse
+ <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>,
+        Oded Gabbay
+ <ogabbay@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Xu Yilun <yilun.xu@intel.com>, Zhenyu
+ Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani
+ Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen
+ <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie
+ <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Leon Romanovsky
+ <leon@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Frederic Barrat
+ <fbarrat@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew
+ Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth
+ Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter
+ <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik
+ <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian
+ Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle
+ <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne
+ <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Diana Craciun
+ <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>, Fei Li <fei1.li@intel.com>,
+        Benjamin
+ LaHaise <bcrl@kvack.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal
+ Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Kirti Wankhede <kwankhede@nvidia.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fpga@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-usb@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-aio@kvack.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov
+ <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Date: Fri, 24 Nov 2023 13:02:25 +1100
+In-Reply-To: <20231122-vfs-eventfd-signal-v2-2-bd549b14ce0c@kernel.org>
+References: <20231122-vfs-eventfd-signal-v2-0-bd549b14ce0c@kernel.org>
+	 <20231122-vfs-eventfd-signal-v2-2-bd549b14ce0c@kernel.org>
+Autocrypt: addr=ajd@linux.ibm.com; prefer-encrypt=mutual;
+ keydata=mDMEZPaWfhYJKwYBBAHaRw8BAQdAAuMUoxVRwqphnsFua1W+WBz6I2cIn0+Ox4YypJSdBJ+0MEFuZHJldyBEb25uZWxsYW4gKElCTSBzdHVmZikgPGFqZEBsaW51eC5pYm0uY29tPoiTBBMWCgA7FiEE01kE3s9shZVYLX1Aj1Qx8QRYRqAFAmT2ln4CGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQj1Qx8QRYRqAdswD8DhIh4trRQYiPe+7LaM7q+0+Thz+CwUJCW3UFOf0SEO0BAPNdsi7aVV+4Oah6nYzqzH5Zbs4Tz5RY+Vsf+DD/EzUKuDgEZPaWfhIKKwYBBAGXVQEFAQEHQLN9moJRqN8Zop/kcyIjga+2qzLoVaNAL6+4diGnlr1xAwEIB4h4BBgWCgAgFiEE01kE3s9shZVYLX1Aj1Qx8QRYRqAFAmT2ln4CGwwACgkQj1Qx8QRYRqCYkwD/W+gIP9kITfU4wnLtueFUThxA0T/LF49M7k31Qb8rPCwBALeEYAlX648lzjSA07pJB68Jt39FuUno444dSVmhYtoH
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+User-Agent: Evolution 3.50.1 (3.50.1-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 31fTWNmCyikAMfyiNj-46ApM598Jj2fJ
+X-Proofpoint-ORIG-GUID: 31fTWNmCyikAMfyiNj-46ApM598Jj2fJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-23_15,2023-11-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=513
+ lowpriorityscore=0 suspectscore=0 spamscore=0 adultscore=0 phishscore=0
+ priorityscore=1501 bulkscore=0 malwarescore=0 impostorscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311240014
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
+On Wed, 2023-11-22 at 13:48 +0100, Christian Brauner wrote:
+> Ever since the evenfd type was introduced back in 2007 in commit
+> e1ad7468c77d ("signal/timer/event: eventfd core") the
+> eventfd_signal()
+> function only ever passed 1 as a value for @n. There's no point in
+> keeping that additional argument.
+>=20
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
 
---- Comment #20 from Ferry Toth (ferry.toth@elsinga.info) ---
-It's not a conflict or so, I am getting (using qgit or cli):
-git am --signoff /home/ferry/Downloads/dma-dbg.patch
-Patch format detection failed.
-
-when I add --patch-format=3Dmbox I get:
-\Applying: @@ -, +, @@
-fatal: empty ident name (for <>) not allowed
-
-Never had this before.
-
-I am testing on Intel Merrifield (Edison Arduino):
-
-root@yuna:~# lsusb -t=20
-/:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci-hcd/1p, 5000M
-/:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci-hcd/1p, 480M
-    |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/7p, 480M
-        |__ Port 1: Dev 3, If 0, Class=3DHuman Interface Device, Driver=3Du=
-sbhid,
-1.5M
-
-But root_hub 5000M is not available due to no phy.
-
-With Diagnostic to find DMA overlap attachment 305456
-
-------------[ cut here ]------------
-DMA-API: dwc3 dwc3.0.auto: cacheline tracking EEXIST, overlapping mappings
-aren't supported
-WARNING: CPU: 0 PID: 105 at kernel/dma/debug.c:608 add_dma_entry+0x1fc/0x370
-Modules linked in: rfcomm iptable_nat bnep snd_sof_nocodec spi_pxa2xx_platf=
-orm
-dw_dmac brcmfmac_wcc pwm_lpss_pci pwm_lpss snd_sof_pci_intel_tng
-intel_mrfld_pwrbtn snd_sof_pci snd_sof_intel_atom intel_mrfld_adc snd_sof
-dw_dmac_pci snd_sof_utils snd_sof_xtensa_dsp dw_dmac_core snd_intel_dspcfg
-snd_soc_acpi spi_pxa2xx_pci brcmfmac brcmutil hci_uart leds_gpio btbcm
-ti_ads7950 tun ledtrig_timer ledtrig_heartbeat mmc_block extcon_intel_mrfld
-sdhci_pci cqhci sdhci led_class mmc_core intel_soc_pmic_mrfld btrfs libcrc3=
-2c
-xor zlib_deflate zstd_compress raid6_pq
-CPU: 0 PID: 105 Comm: kworker/0:3 Not tainted 6.6.0-edison-acpi-standard+ #1
-Hardware name: Intel Corporation Merrifield/BODEGA BAY, BIOS 542
-2015.01.21:18.19.48
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:add_dma_entry+0x1fc/0x370
-Code: ff 0f 84 80 01 00 00 4c 8b 67 50 4d 85 e4 75 03 4c 8b 27 e8 e6 9d 6a =
-00
-48 89 c6 4c 89 e2 48 c7 c7 10 21 5a b1 e8 94 a5 f5 ff <0f> 0b 48 85 db 74 1=
-a 48
-c7 c7 44 18 53 b1 e8 01 f9 fc ff 8b 73 4c
-RSP: 0000:ffffb63c403fbab0 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff908001374f00 RCX: 0000000000000027
-RDX: ffff90803e21c5c8 RSI: 0000000000000001 RDI: ffff90803e21c5c0
-RBP: 000000000019d4b5 R08: ffffffffb19431e8 R09: 00000000ffffdfff
-R10: ffffffffb1863200 R11: ffffffffb1913200 R12: ffff908002124860
-R13: 0000000000000001 R14: 0000000000000202 R15: 000000000019d4b5
-FS:  0000000000000000(0000) GS:ffff90803e200000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd58c003000 CR3: 0000000008096000 CR4: 00000000001006f0
-Call Trace:
- <TASK>
- ? __warn+0x84/0x140
- ? add_dma_entry+0x1fc/0x370
- ? report_bug+0x199/0x1b0
- ? handle_bug+0x3c/0x70
- ? exc_invalid_op+0x18/0x70
- ? asm_exc_invalid_op+0x1a/0x20
- ? add_dma_entry+0x1fc/0x370
- dma_map_page_attrs+0x10a/0x280
- usb_hcd_map_urb_for_dma+0x46f/0x650
- usb_hcd_submit_urb+0xa0/0xaa0
- ? kick_hub_wq+0x69/0xf0
- ? hub_activate+0x2c3/0x890
- ? usb_disable_remote_wakeup+0x34/0x70
- usb_start_wait_urb+0x65/0x100
- usb_control_msg+0xe5/0x150
- hub_ext_port_status+0x8a/0x1b0
- hub_event+0x1d1/0x18e0
- process_one_work+0x139/0x2f0
- ? __pfx_worker_thread+0x10/0x10
- worker_thread+0x2f4/0x400
- ? __pfx_worker_thread+0x10/0x10
- kthread+0xe6/0x120
- ? __pfx_kthread+0x10/0x10
- ret_from_fork+0x34/0x50
- ? __pfx_kthread+0x10/0x10
- ret_from_fork_asm+0x1b/0x30
- </TASK>
----[ end trace 0000000000000000 ]---
-DMA-API: Mapped at:
- debug_dma_map_page+0x6d/0x100
- dma_map_page_attrs+0x10a/0x280
- usb_hcd_map_urb_for_dma+0x46f/0x650
- usb_hcd_submit_urb+0xa0/0xaa0
- usb_start_wait_urb+0x65/0x100
-DMA-API: Overlapped entry: 108342600 size 1
-DMA-API: Mapped at:
- debug_dma_map_page+0x6d/0x100
- dma_map_page_attrs+0x10a/0x280
- usb_hcd_map_urb_for_dma+0x46f/0x650
- usb_hcd_submit_urb+0xa0/0xaa0
- hub_activate+0x29c/0x890
-Map error: 108342608 108342608 len 4
-Map error: 108342608 108342608 len 4
-usb 1-1.1: new low-speed USB device number 3 using xhci-hcd
-Map error: 108342608 108342608 len 4
-usb 1-1.1: New USB device found, idVendor=3D046d, idProduct=3Dc03e, bcdDevi=
-ce=3D20.00
-usb 1-1.1: New USB device strings: Mfr=3D1, Product=3D2, SerialNumber=3D0
-usb 1-1.1: Product: USB-PS/2 Optical Mouse
-usb 1-1.1: Manufacturer: Logitech
-input: Logitech USB-PS/2 Optical Mouse as
-/devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.1.auto/usb1/1-1/1-1.1=
-/1-1.1:1.0/0003:046D:C03E.0001/input/input1
-hid-generic 0003:046D:C03E.0001: input,hidraw0: USB HID v1.10 Mouse [Logite=
-ch
-USB-PS/2 Optical Mouse] on usb-xhci-hcd.1.auto-1.1/input0
-
-I also notice now on unplugging the mouse:
-
-Map error: 108342608 108342608 len 4
-usb 1-1.1: USB disconnect, device number 3
-Map error: 108342608 108342608 len 4
-Map error: 108342608 108342608 len 4
-Map error: 108342608 108342608 len 4
-Map error: 108342608 108342608 len 4
-Map error: 108342608 108342608 len 4
+Acked-by: Andrew Donnellan <ajd@linux.ibm.com> # ocxl
 
 --=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Andrew Donnellan    OzLabs, ADL Canberra
+ajd@linux.ibm.com   IBM Australia Limited
 
