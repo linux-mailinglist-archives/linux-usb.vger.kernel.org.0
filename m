@@ -1,177 +1,109 @@
-Return-Path: <linux-usb+bounces-3295-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3296-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FD3E7F7571
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 14:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 027417F76DE
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 15:50:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5919C281FC4
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 13:45:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B23F4281F7A
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 14:50:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DB128E3A;
-	Fri, 24 Nov 2023 13:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o9CzBtB2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A34442D62C;
+	Fri, 24 Nov 2023 14:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43019286B9;
-	Fri, 24 Nov 2023 13:45:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C789FC433C7;
-	Fri, 24 Nov 2023 13:45:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700833541;
-	bh=EzqT4v8vZXGnSVX9M8qsp06zVhLbFhH0kYlZVwhXdTc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=o9CzBtB2XVBvWvf4qEK3/cdglI9Ej7m5YdPkCvTE+vmSq5ifMZ2s4WhZWi1FX+EXn
-	 TRyZ00bY4BMjVSHD4o4EYG5nFg6paKOdsFYqoXpj0ZYYd/4/m6FZN03E28fvxwYaa0
-	 g217e4oJwaTF2ou1LKMh5Fyn0oVi8xOHeExMJ3HE2SKEFeCuj/E/syDZMFAHBvC74o
-	 w3qn/gPd+hCVGb4mXNnmDwlHA4rSNFL5BAY+onlyPUL9JrJp3IbyKG5IMZ7VknUqRe
-	 mi9L9uzoAZY9rvSSx6sh1Nttv1AWD+eMAnnA3MsIXVqT64ts57gqtq0fSmqvnbGmV9
-	 yECsf5Sc3zlRw==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1r6WVN-0000to-1Y;
-	Fri, 24 Nov 2023 14:46:02 +0100
-Date: Fri, 24 Nov 2023 14:46:01 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, quic_wcheng@quicinc.com,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_ppratap@quicinc.com, quic_jackp@quicinc.com
-Subject: Re: [PATCH 1/6] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
- bindings
-Message-ID: <ZWCpGdJRexnk98IN@hovoldconsulting.com>
-References: <20231122191335.3058-1-quic_kriskura@quicinc.com>
- <ZV9dYpTYRXn63tXe@hovoldconsulting.com>
- <1192d91f-11bf-44af-953a-14e08e2b6ca8@quicinc.com>
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6ECD60;
+	Fri, 24 Nov 2023 06:50:12 -0800 (PST)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 17D2C5201D5;
+	Fri, 24 Nov 2023 15:50:11 +0100 (CET)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.34; Fri, 24 Nov
+ 2023 15:50:10 +0100
+Date: Fri, 24 Nov 2023 15:50:05 +0100
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+CC: Hardik Gajjar <hgajjar@de.adit-jv.com>, <gregkh@linuxfoundation.org>,
+	<corbet@lwn.net>, <tj@kernel.org>, <rdunlap@infradead.org>,
+	<paulmck@kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<erosca@de.adit-jv.com>, <Martin.Mueller5@de.bosch.com>
+Subject: Re: [PATCH] usb: hubs: Decrease IN-endpoint poll interval for
+ Microchip USB491x hub
+Message-ID: <20231124145005.GA72525@vmlxhi-118.adit-jv.com>
+References: <20231123081948.58776-1-hgajjar@de.adit-jv.com>
+ <988f4311-a726-4a7e-b0bf-6aeec13d8f23@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1192d91f-11bf-44af-953a-14e08e2b6ca8@quicinc.com>
+In-Reply-To: <988f4311-a726-4a7e-b0bf-6aeec13d8f23@rowland.harvard.edu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
 
-On Fri, Nov 24, 2023 at 05:32:37PM +0530, Krishna Kurapati PSSNV wrote:
+On Thu, Nov 23, 2023 at 01:17:03PM -0500, Alan Stern wrote:
+> On Thu, Nov 23, 2023 at 09:19:48AM +0100, Hardik Gajjar wrote:
+> > There is a potential delay in announcing downstream USB bus activity to
+> > Linux USB drivers due to the default interrupt endpoint having a poll
+> > interval of 256ms.
 > > 
-> > Thanks for sorting this out.
+> > Microchip has recommended ignoring the device descriptor and reducing
+> > that value to 32ms, as it was too late to modify it in silicon.
 > > 
-> > It seems like we have a few combinations of these interrupts and we
-> > should probably try to define the order for these once and for all and
-> > update the current devicetrees to match (even if it means adding new
-> > interrupts in the middle).
+> > This patch aims to speed up the USB enumeration process, facilitating
+> > the successful completion of Apple CarPlay certifications and enhancing
+> > user experience when utilizing USB devices through the Microchip Multihost
+> > Hub.
 > > 
-> > Instead of adding separate compatibles for the controllers without SS
-> > support, I suggest keeping that interrupt last as an optional one.
-> > 
-> > But IIUC we essentially have something like:
-> > 
-> > qusb2-:
-> > 
-> > 	- const: qusb2_phy
-> > 	- const: pwr_event
-> > 	- const: ss_phy_irq	(optional)
-> > 
-> > qusb2:
-> > 
-> > 	- const: hs_phy_irq
-> > 	- const: qusb2_phy
-> > 	- const: pwr_event
-> > 	- const: ss_phy_irq	(optional)
-> > 
-> > qusb2+:
-> > 
-> > 	- const: hs_phy_irq
-> > 	- const: qusb2_phy
-> > 	- const: dp_hs_phy_irq
-> > 	- const: dm_hs_phy_irq
-> > 	- const: pwr_event
-> > 	- const: ss_phy_irq	(optional)
-> > 
+> > A new quirk, USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL, accelerates the
+> > notification process by changing the Endpoint interrupt poll interval
+> > from 256ms to 32ms.
 > 
-> This combination doesn't exist. So we can skip this one.
+> But this is meant to apply only to hubs, right?  So shouldn't it be a 
+> HUB_QUIRK_32_MS_INTR_INTERVAL macro, used in hub.c's hub_id_table, 
+> rather than a general USB quirk?
 
-Ok, good. I thought you said some QUSB2 platforms used DP/DM, but I guess
-that means they don't have the qusb2_phy interrupt then.
- 
-> > femto-:
-> > 	- const: dp_hs_phy_irq
-> > 	- const: dm_hs_phy_irq
-> > 	- const: pwr_event
-> > 	- const: ss_phy_irq	(optional)
-> > 
-> > femto:
-> > 	- const: hs_phy_irq
-> > 	- const: dp_hs_phy_irq
-> > 	- const: dm_hs_phy_irq
-> > 	- const: pwr_event
-> > 	- const: ss_phy_irq	(optional)
-> > 
-> > Does this look like it would cover all of our currents SoCs?
-> > 
-> > Do all of them have the pwr_event interrupt?
+Thank you, Alan, for the feedback. To confirm my understanding, are you suggesting
+moving all implementations to hub.c, adding the hub-specific quirk, and using the
+same quirk to update the bInterval value parsed by usb_get_configuration() in
+usb_enumerate_device()?"
+
 > 
-> Yes. From whatever targets I was able to find, only one of them didn't 
-> have the power_event irq. Rest all of them had. I will recheck that 
-> particular one again.
-
-Please do. The driver polls the corresponding status register on all
-platforms currently, and perhaps this interrupt can one day be used to
-get rid of the polling.
- 
-> > Note that DP comes before DM above as that seems like the natural order
-> > of these (plus before minus).
+> > Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+> > ---
+> >  Documentation/admin-guide/kernel-parameters.txt |  4 ++++
+> >  drivers/usb/core/config.c                       |  8 ++++++++
+> >  drivers/usb/core/quirks.c                       | 11 +++++++++++
+> >  include/linux/usb/quirks.h                      |  5 +++++
+> >  4 files changed, 28 insertions(+)
 > > 
-> > Now if the HS interrupt is truly unusable, I guess we can consider
-> > dropping it throughout and the above becomes just three permutations
-> > instead, which can even be expressed along the lines of:
+> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > index 65731b060e3f..6b0a66f0e6bf 100644
+> > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > @@ -6908,6 +6908,10 @@
+> >  					pause after every control message);
+> >  				o = USB_QUIRK_HUB_SLOW_RESET (Hub needs extra
+> >  					delay after resetting its port);
+> > +				p = USB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL (Set
+> > +					bInterval to a Maximum of 9 to Reduce
+> > +					default Poll Rate from 256 ms to
+> > +					32 ms);
 > 
-> Infact, I wanted to do this but since you mentioned before that if HW 
-> has it, we must describe it, I kept it in. But since this functionality 
-> is confirmed to be mutually exclusive of qusb2/{dp/dm}, I am aligned to 
-> skip it in bindings and drop it in DT.
-
-As I mentioned elsewhere, it depends on whether it can be used at all.
-Not simply whether there is some other mechanism that can be used in its
-stead. Such a decision should be left up to the implementation.
-
-That's why I said "truly unusable" above. It's still not clear to me
-whether that is the case or not.
-
-> > 	- anyOf:
-> > 	  - items:
-> > 	    - const: qusb2_phy
-> > 	  - items:
-> > 	    - const: dp_hs_phy_irq
-> > 	    - const: dm_hs_phy_irq
-> > 	- const: pwr_event
-> > 	- const: ss_phy_irq	(optional)
-> > 
+> 256 ms and 32 ms are _periods_ (or intervals), not _rates_.
 > 
-> This must cover all cases AFAIK. How about we keep pwr_event also 
-> optional for time being. The ones I am not able to find also would come 
-> up under still binding block.
-
-No, we should avoid that if we can as with two many optional things,
-these quickly gets messy (one optional interrupt at the end is fine and
-can be expressed using min/maxItems).
-
-If the "qusb2+" combination above isn't needed, then we're down to four
-permutations, which is few enough to be spelled out explicitly even if
-we decide that the hs_phy_irq should be kept in. Without hs_phy_irq, it
-seems there's really only two permutations.
-
-Johan
+> bInterval=9 corresponds to 32 ms only for High Speed and SuperSpeed* 
+> devices.  For Low and Full Speed it corresponds to 9 ms.  Explanatory 
+> comments should strive not to be misleading.
+> 
+> Alan Stern
 
