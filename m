@@ -1,128 +1,221 @@
-Return-Path: <linux-usb+bounces-3292-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3293-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29F247F7460
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 13:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 601C97F7487
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 14:05:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDF77B21632
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 12:55:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5227B21481
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 13:05:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FF9125778;
-	Fri, 24 Nov 2023 12:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XGO9GYcV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99F48286AC;
+	Fri, 24 Nov 2023 13:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682B710E4;
-	Fri, 24 Nov 2023 04:55:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700830553; x=1732366553;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0CJxRztR8sP9yMA/a6oz2vAEEQEj6uTdKxgPbgOsEUU=;
-  b=XGO9GYcVle02jjOEVNlICY6HYMhVWz1vInqD0ra3Rx8s2A3TvaWnODgm
-   D8vU/m7mVqaZaXkQ4TY3+9WNL3A1veHB93FuBNUS+HfgqK+If/+ITqX1E
-   4m1gjLaSMKqcS9jxaddrC+57wWZ+RQVVfLsVVTSaapVA5VU1Y4V8otdDK
-   UZ+vt7yIibH4ldFr6tC3X8uAq/OygCO9RJATQtNfkyorSNncTwMgVw8Qi
-   SV2x0zWpWkqIRk7IbUyWf56Nzdbw/DP/OXu0EGzGBZlifY95nwVOGlrtx
-   oyvbbnD+UtjVoxH2XMzlbgefkGXCori8QQwdSAJZppbhfvHdCdC3gSXHI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="372582127"
-X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
-   d="scan'208";a="372582127"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 04:55:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="858380941"
-X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
-   d="scan'208";a="858380941"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by FMSMGA003.fm.intel.com with SMTP; 24 Nov 2023 04:55:50 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 24 Nov 2023 14:55:49 +0200
-Date: Fri, 24 Nov 2023 14:55:49 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>
-Subject: Re: Unplugging USB-C charger cable causes `ucsi_acpi USBC000:00:
- ucsi_handle_connector_change: ACK failed (-110)`
-Message-ID: <ZWCdVWRGzh/2RSs3@kuha.fi.intel.com>
-References: <b2466bc2-b62c-4328-94a4-b60af4135ba7@molgen.mpg.de>
- <ZVy5+AxnOZNmUZ15@kuha.fi.intel.com>
- <2bfe2311-27a6-46b5-8662-ba3cbb409f81@molgen.mpg.de>
- <ZV3CTg03IPnZTVL0@kuha.fi.intel.com>
- <6288389c-59cb-4eb4-bbe6-163413db7b7e@molgen.mpg.de>
+X-Greylist: delayed 340 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Nov 2023 05:05:08 PST
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E459110;
+	Fri, 24 Nov 2023 05:05:08 -0800 (PST)
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 418D821DF5;
+	Fri, 24 Nov 2023 12:59:25 +0000 (UTC)
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 19D551340B;
+	Fri, 24 Nov 2023 12:59:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Mw6jBS2eYGVuKgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Fri, 24 Nov 2023 12:59:25 +0000
+Message-ID: <bfc4259e-c293-1e53-a787-4131e8bacc21@suse.cz>
+Date: Fri, 24 Nov 2023 13:59:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6288389c-59cb-4eb4-bbe6-163413db7b7e@molgen.mpg.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [REGRESSION] USB ports do not work after suspend/resume cycle
+ with v6.6.2
+Content-Language: en-US
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ stable@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Sasha Levin <sashal@kernel.org>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Thorsten Leemhuis <linux@leemhuis.info>, Petr Tesarik <petr@tesarici.cz>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Javier Martinez Canillas <javierm@redhat.com>, workflows@vger.kernel.org
+References: <5993222.lOV4Wx5bFT@natalenko.name>
+ <2023112421-brisket-starless-c20d@gregkh>
+From: Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <2023112421-brisket-starless-c20d@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Bar: +++++++
+X-Spam-Score: 7.64
+X-Rspamd-Server: rspamd1
+X-Rspamd-Queue-Id: 418D821DF5
+Authentication-Results: smtp-out1.suse.de;
+	dkim=none;
+	dmarc=none;
+	spf=softfail (smtp-out1.suse.de: 2a07:de40:b281:104:10:150:64:97 is neither permitted nor denied by domain of vbabka@suse.cz) smtp.mailfrom=vbabka@suse.cz
+X-Spamd-Result: default: False [7.64 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 ARC_NA(0.00)[];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%];
+	 MIME_GOOD(-0.10)[text/plain];
+	 DMARC_NA(1.20)[suse.cz];
+	 R_SPF_SOFTFAIL(4.60)[~all];
+	 NEURAL_SPAM_SHORT(2.66)[0.886];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 MX_GOOD(-0.01)[];
+	 NEURAL_SPAM_LONG(0.09)[0.027];
+	 RCPT_COUNT_TWELVE(0.00)[16];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[natalenko.name:url];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 R_DKIM_NA(2.20)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_TLS_ALL(0.00)[];
+	 MID_RHS_MATCH_FROM(0.00)[]
 
-Hi,
++Cc workflows
 
-> > Just list what you have in /sys/class/typec/ before and after plugging
-> > a device to the port:
-> > 
-> >          ls /sys/class/typec/
+On 11/24/23 12:43, Greg Kroah-Hartman wrote:
+> On Thu, Nov 23, 2023 at 07:20:46PM +0100, Oleksandr Natalenko wrote:
+>> Hello.
+>> 
+>> Since v6.6.2 kernel release I'm experiencing a regression with regard
+>> to USB ports behaviour after a suspend/resume cycle.
+>> 
+>> If a USB port is empty before suspending, after resuming the machine
+>> the port doesn't work. After a device insertion there's no reaction in
+>> the kernel log whatsoever, although I do see that the device gets
+>> powered up physically. If the machine is suspended with a device
+>> inserted into the USB port, the port works fine after resume.
+>> 
+>> This is an AMD-based machine with hci version 0x110 reported. As per
+>> the changelog between v6.6.1 and v6.6.2, 603 commits were backported
+>> into v6.6.2, and one of the commits was as follows:
+>> 
+>> $ git log --oneline v6.6.1..v6.6.2 -- drivers/usb/host/xhci-pci.c 
+>> 14a51fa544225 xhci: Loosen RPM as default policy to cover for AMD xHC
+>> 1.1
+>> 
+>> It seems that this commit explicitly enables runtime PM specifically
+>> for my platform. As per dmesg:
+>> 
+>> v6.6.1: quirks 0x0000000000000410 v6.6.2: quirks 0x0000000200000410
+>> 
+>> Here, bit 33 gets set, which, as expected, corresponds to:
+>> 
+>> drivers/usb/host/xhci.h 1895:#define XHCI_DEFAULT_PM_RUNTIME_ALLOW
+>> BIT_ULL(33)
+>> 
+>> This commit is backported from the upstream commit 4baf12181509, which
+>> is one of 16 commits of the following series named "xhci features":
+>> 
+>> https://lore.kernel.org/all/20231019102924.2797346-1-mathias.nyman@linux.intel.com/
+>>
+>>  It appears that there was another commit in this series, also from
+>> Basavaraj (in Cc), a5d6264b638e, which was not picked for v6.6.2, but
+>> which stated the following:
+>> 
+>> Use the low-power states of the underlying platform to enable runtime
+>> PM. If the platform doesn't support runtime D3, then enabling default
+>> RPM will result in the controller malfunctioning, as in the case of
+>> hotplug devices not being detected because of a failed interrupt
+>> generation.
+>> 
+>> It felt like this was exactly my case. So, I've conducted two tests:
+>> 
+>> 1. Reverted 14a51fa544225 from v6.6.2. With this revert the USB ports
+>> started to work fine, just as they did in v6.6.1. 2. Left 14a51fa544225
+>> in place, but also applied upstream a5d6264b638e on top of v6.6.2. With
+>> this patch added the USB ports also work after a suspend/resume cycle.
+>> 
+>> This runtime PM enablement did also impact my AX200 Bluetooth device,
+>> resulting in long delays before headphones/speaker can connect, but
+>> I've solved this with btusb.enable_autosuspend=N. I think this has
+>> nothing to do with the original issue, and I'm OK with this workaround
+>> unless someone has got a different idea.
+>> 
+>> With that, please consider either reverting 14a51fa544225 from the
+>> stable kernel, or applying a5d6264b638e in addition to it. Given the
+>> mainline kernel has got both of them, I'm in favour of applying
+>> additional commit to the stable kernel.
 > 
-> Sorry, here you go:
+> I've applied this other commit as well to all of the affected branches, 
+> thanks for letting us know.
 > 
-> With charger:
+>> I'm also Cc'ing all the people from our Mastodon discussion where I
+>> initially complained about the issue as well as about stable kernel
+>> branch stability:
+>> 
+>> https://activitypub.natalenko.name/@oleksandr/statuses/01HFRXBYWMXF9G4KYPE3XHH0S8
+>>
+>>  I'm not going to expand more on that in this email, especially given
+>> Greg indicated he read the conversation, but I'm open to continuing
+>> this discussion as I still think that current workflow brings visible
+>> issues to ordinary users, and hence some adjustments should be made.
 > 
->     $ ls /sys/class/typec/
->     port0  port0-partner
+> What type of adjustments exactly?  Testing on wide ranges of systems is
+> pretty hard, and this patch explicitly was set to be backported when it
+> hit Linus's tree,
+
+Are you sure about that "explicitly was set to be backported" part?
+According to Documentation/process/stable-kernel-rules.rst:
+
+> There are three options to submit a change to -stable trees:
 > 
-> After unplugging the charger:
+>  1. Add a 'stable tag' to the description of a patch you then submit for
+>     mainline inclusion.
+>  2. Ask the stable team to pick up a patch already mainlined.
+>  3. Submit a patch to the stable team that is equivalent to a change already
+>     mainlined.
+
+I don't see a stable tag in 4baf12181509 ("xhci: Loosen RPM as default
+policy to cover for AMD xHC 1.1"), was it option 2 or 3 then?
+
+Do you mean the Fixes: tag? the docs only say that can replace the "# 3.3.x"
+part to determine where backporting should stop, but is not itself an
+explicit marking for stable backport?
+
+> it just looks like someone forgot to mark the
+> follow-up patch that you found also to be properly backported.
 > 
->     $ LANG= ls /sys/class/typec/
->     port0
-
-Thanks. The interface does not appear to be completely stuck, which is
-what I wanted to check.
-
-> By the way, Linux logs the ucsi_handle_connector_change line around five
-> second after unplugging the USB Type-C charger cable.
+> We will always make mistakes, we are only human.  The best thing to do
+> is if we get notified quickly of issues, like you did here, and work to
+> resolve them, as we have done here.  So again, thanks for letting us
+> know about the problem, and be sure to let us know of any future issues
+> you might find as well.
 > 
-> Kind regards,
-> Paul
+> Remember, hardware is messy, and the kernel's job is to fix hardware
+> issues and quirks in it.  Sometimes we get it wrong as we are trying to
+> fix up inconsistencies and they cause other problems, so in the end, we
+> can only grumble at the hardware companies for stuff like this, be
+> patient with those of us who have to deal with this mess :)
 > 
-> PS: In the logs since October 30th, I see the three distinct lines below:
+> thanks,
 > 
-> 1.  ucsi_acpi USBC000:00: failed to re-enable notifications (-110)
-> 2.  ucsi_acpi USBC000:00: GET_CONNECTOR_STATUS failed (-110)
-> 3.  ucsi_acpi USBC000:00: ucsi_handle_connector_change: ACK failed (-110)
-> 
-> Is it documented somewhere what -100 means?
+> greg k-h
 
-That is the error code, and 110 means Timeout. The driver waits 5s,
-which should be more than enough. If the firmware does not respond
-within that 5s, it will most likely never respond.
-
-Two of those errors mean that the driver has sent a command to the
-firmware but the firmware never completes the command.
-
-The ACK failure means that the driver tries to acknowledge a connector
-change event (that you get for example when you plug or unplug the
-cable) indicating that the driver has now processed the event, but the
-firmware does not react to that acknowledgement like it should.
-
-So the firmware is not behaving correctly in all these cases. I could
-try to see if we can workaround those issues, but I would need to be
-able reproduce the problems. Unfortunately I do not have XPS 13 9360.
-
-But none of those problems are critical if the interface really
-continues to work.
-
-thanks,
-
--- 
-heikki
 
