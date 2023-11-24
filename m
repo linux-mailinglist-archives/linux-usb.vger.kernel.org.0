@@ -1,85 +1,88 @@
-Return-Path: <linux-usb+bounces-3284-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3285-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59F4A7F7319
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 12:53:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0F197F7346
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 13:02:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B3B51C20F8A
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 11:53:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D5F41C209D9
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Nov 2023 12:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B8B20303;
-	Fri, 24 Nov 2023 11:53:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D72982031B;
+	Fri, 24 Nov 2023 12:02:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BASZG532"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ohYPfb1P"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CED200B2;
-	Fri, 24 Nov 2023 11:53:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C931FC433C8;
-	Fri, 24 Nov 2023 11:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A0D2374A
+	for <linux-usb@vger.kernel.org>; Fri, 24 Nov 2023 12:02:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9F9A1C433CC
+	for <linux-usb@vger.kernel.org>; Fri, 24 Nov 2023 12:02:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700826792;
-	bh=XHnDADyl/mLuqW5J+O0k4fs+l8mVA8e2IA7fajuKfCE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BASZG532fKp8ghNds6SwiWPo5+a/jkHQztlzmcv3KliPxgpkCqRuEfl4srcNFljWI
-	 vG+1SQ2OAGuCsqYv9uPMZXO1D6BS6McEj07Wo1K2ucEpaaUt71U2TeUCohTM26KymB
-	 +vEFoCHpTqOoXOsEM2CgY3I+0UeYxdyKGsqjxZtlwhb8kNXZqJA/OyU8krwTWBjrzq
-	 kMURkEKD7hRaHpaQekfJ1s5/k0roH170FgcrBryhEVGnxTH9O9mCpy6yW36mdPFZZ7
-	 cg9oPw7Wj8aeCwqRtrjxXONsQU6mvg8+2fBLJgwUD2qdc+otmoo5p7KuGPg8sztyKO
-	 KDzCLtojYQ81g==
-Date: Fri, 24 Nov 2023 11:53:07 +0000
-From: Simon Horman <horms@kernel.org>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>, dmitry.bezrukov@aquantia.com,
-	marcinguy@gmail.com, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCHv2] USB: gl620a: check for rx buffer overflow
-Message-ID: <20231124115307.GP50352@kernel.org>
-References: <20231122095306.15175-1-oneukum@suse.com>
- <2c1a8d3e-fac1-d728-1c8d-509cd21f7b4d@omp.ru>
- <367cedf8-881b-4b88-8da0-a46a556effda@suse.com>
- <5a04ff8e-7044-2d46-ab12-f18f7833b7f5@gmail.com>
- <2338f70a-1823-47ad-8302-7fb62481f736@suse.com>
+	s=k20201202; t=1700827326;
+	bh=emVDzqg5q4/67zNB2dFd+ngKIViEXXMXZdwEgp+nyTo=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ohYPfb1P+ZCX1h1KmeCRKXmAz9ArG01cx9O4YY1/Q+OeXntZgddgp2CJ5IAiD+Ihw
+	 KFB7qyQXklHvSkPl9g2GRlHbbN13vc9fezj0zVt3HVeHxXHaW37Na/LFafO/nrz2DE
+	 sJOaZCKXoyyI133ZKEfzvrdJ0b09YbWXVMXdwkU9O25HqU1h64QvLYXjZeUAcXcdYL
+	 mWQwFw4OHmw+N9gnQObJaZ0QQMhh7jOtQ9JxZUqOmlVyLaWKMsw3oVU+bSvmZH36dX
+	 Mj2iYS4u2jLzsbU2KQGe5qzKoP0vtobMSIWzjgmvvoZLj2lb829ZdRk0Kqa6/c1L7y
+	 8eE4jMEByYcRA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 90256C53BD2; Fri, 24 Nov 2023 12:02:06 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 215740] kernel warning: DMA-API: xhci_hcd: cacheline tracking
+ EEXIST, overlapping mappings aren't supported
+Date: Fri, 24 Nov 2023 12:02:06 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: andy.shevchenko@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215740-208809-aYUieqwRBz@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215740-208809@https.bugzilla.kernel.org/>
+References: <bug-215740-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2338f70a-1823-47ad-8302-7fb62481f736@suse.com>
 
-On Wed, Nov 22, 2023 at 11:20:47AM +0100, Oliver Neukum wrote:
-> 
-> 
-> On 22.11.23 11:07, Sergei Shtylyov wrote:
-> > On 11/22/23 1:04 PM, Oliver Neukum wrote:
-> > 
-> > [...]
-> > > > > The driver checks for a single package overflowing
-> > > > 
-> > > >      Maybe packet?
-> > > 
-> > > No, that would be read as network packet, which
-> > > is precisely what this not not and should not
-> > > be mistaken for.
-> > 
-> >     But "package" hardly fits either. Is it a USB packet or something else?
-> 
-> Technically the content of the buffer associated
-> with a single URB. Which on USB physically can be multiple
-> packets. The network packets arrive together in a package.
-> That is how this and related drivers operate.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
 
-I think it would be useful to include information along the lines
-of the above in the patch description.
+--- Comment #21 from Andy Shevchenko (andy.shevchenko@gmail.com) ---
+Looks like read mapping is bigger than 8, I think it might have a cache line
+alignment requirement. But I have knowledge of USB core code, I believe Alan
+knows much better what's going on there.
+
+Btw, I don't see USB using
+https://elixir.bootlin.com/linux/v6.7-rc2/C/ident/dma_get_cache_alignment A=
+PI
+(except the only DWC2 case).
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
