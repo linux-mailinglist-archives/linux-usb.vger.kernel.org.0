@@ -1,127 +1,297 @@
-Return-Path: <linux-usb+bounces-3321-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3323-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D90927F9114
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 03:57:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34BB37F91A9
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 07:38:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9438C2814B3
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 02:57:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53F521C20AFF
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 06:38:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F5023C1;
-	Sun, 26 Nov 2023 02:57:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7DA03C2F;
+	Sun, 26 Nov 2023 06:38:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="Xz+Q6Xfs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aeqc1aJ9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979D811F;
-	Sat, 25 Nov 2023 18:57:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=s31663417; t=1700967407; x=1701572207; i=wahrenst@gmx.net;
-	bh=eZ6xuOR9KsJjzE9TJhEPlzg6rY8M8dZ0jHI2v3+5O8Y=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
-	 References;
-	b=Xz+Q6XfseVYGkViydcymyPEtm345vJxqxYIJT/fWE75QRinYiIISoHmvf60jZrTc
-	 cZH9U0xrxm+G1ItcAZVlo+hzTW2XS1h7Z5jUv4JSc7T/AZTNQ72ITnp0hvkIF0ezc
-	 fegTU/CUaspueg9//fyKRJS/dYc94S7RNspZAiIgLQ5gdj6diFuqMC2YEPUFMs/Ud
-	 0hs37+y7PjzDppXd97A7uxJjO8D67Ew0UV4HBoWY4vszRFVFfBvWSEs19G5D06W1M
-	 LAPhJ8qYBAA+t7Ghrl+dZnPGGjoas+TUTG/Z25iSwrpHGuib/VOZY76Bpe5Sq/ISZ
-	 pqy7JU2uEX4hF4FMSA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MrhQ6-1rcnVL2XY4-00nhbX; Sun, 26
- Nov 2023 03:56:47 +0100
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Mathias Nyman <mathias.nyman@intel.com>
-Cc: bcm-kernel-feedback-list@broadcom.com,
-	Cyril Brulebois <kibi@debian.org>,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH 3/3] ARM: dts: bcm2711-rpi-cm4-io: Enable xHCI host
-Date: Sun, 26 Nov 2023 03:56:12 +0100
-Message-Id: <20231126025612.12522-4-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231126025612.12522-1-wahrenst@gmx.net>
-References: <20231126025612.12522-1-wahrenst@gmx.net>
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A5A110
+	for <linux-usb@vger.kernel.org>; Sat, 25 Nov 2023 22:38:38 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-da7ea62e76cso3006854276.3
+        for <linux-usb@vger.kernel.org>; Sat, 25 Nov 2023 22:38:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700980717; x=1701585517; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vISbD30EvP+9aupIShYJZV4weiqPCww0YgFpdMlRk4A=;
+        b=aeqc1aJ9WNlugomv5Ths7jHFePX1o7YFIiJXOQdOGI4Iwsn2bdKaFghxxTZG0i7FAk
+         8M7cj4xKt5hNW1jCtSqd3yPqc1L7DFSvwGsBSRy458Xl/7gv9RpelnhHJplSLBywtOUM
+         Le2+LaL3+zUKqPUPtNGBOK9cEry6hUxut+K4AYreTX58Tgpmik5awDglN0lojRkWwtiv
+         K1VjmS12P4KlFfLzHOQIHuj5cev9rIHJIOLsmXo15pSIqiBmfm6zXvB/QiXuV9KhwCg9
+         L3eCSb8HaQkZtv463oy+XazLL++0J+eV5M1z8vfW3wahObQK57MN+VQX6x6/7QdhlgDK
+         I5Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700980717; x=1701585517;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vISbD30EvP+9aupIShYJZV4weiqPCww0YgFpdMlRk4A=;
+        b=Qs90EKBI78vCC74nzupyFPLDC51WWh4KEmeoFE524y0fspYFmrZab4neSEfYTDqtXt
+         uYCfnz7RMYD8pVTd08RS84hvYjWB3FwZ4ue1dcitHkuvzXHbqQLClCrj2fId32INRgop
+         VXf5hfgzJSEsbWgowEjUxyYcsidqDxYTcID15o4rS+Hy49XhY4znetLlSQwBVSKTmBuT
+         gwiwscBL8xClr0dj22raN9jaG/9McGbMafcQ6cYIt687BW90ETMgw1vRtB65dz7UcI8+
+         9lQB6TJanJ2ibh0r5p44bAyVpxDo9uH2DV8AuH7rvVngThfumUxihsfBxzoNC3YBwS2U
+         /N3Q==
+X-Gm-Message-State: AOJu0Yw4e2Jzz8UROvsEsqn3iWHAj99JRXueHz070YC5T4fGKyo35E5B
+	57LuDWk8M+Ykt2nqS+ciLa7LTq/FBU1e31n4CXzL8mRmWlA=
+X-Google-Smtp-Source: AGHT+IHCQuLu8zvgU9zslSNumZ8wGMkT/VWIrEfz9Wo5udJlyWp2fRtT6vpc2m3ibVmD0mLpqwCoxw5HWbt9B/fYkaA=
+X-Received: by 2002:a5b:f83:0:b0:da0:c80f:5775 with SMTP id
+ q3-20020a5b0f83000000b00da0c80f5775mr6117233ybh.61.1700980717095; Sat, 25 Nov
+ 2023 22:38:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:SW6X2kYT944c4hEQnaNDU2UYHD7RGQ8PiLdBSZKTTcz9xFxb4Fu
- YEZV9dorpXbXIGJ1TD5vSF8J9wWOeVCt+GI60DcccHVsUZSMYUxIxjtCOcgQ5t49tcaRnjO
- 0LtALyhA/m8ZrHol3VIqqleOtllZPO8yVTn3Km6FXqpBvna7LqMVHgkEZ41m4bG0V4qxFjc
- uzxsh27/bywsu+RzB6dEQ==
-UI-OutboundReport: notjunk:1;M01:P0:V8ZDdUFvExM=;sdtdBO52CinYSAYGoFpWO+1TAHy
- KusDi0LIxEx6SpFoGdsOuOqTa6m6oS5luXOZneGeL/Dug0nm+JhAzAYRxjfj3e0SmxZXns366
- hM85SIoU4s4+Y0hwG2vllv29nkx0HVBJGjyRyswNSNJ+/2pYAPxfoLUcWrg19NHI2dSgqQBVx
- 0lDmFUE4gBk8RW9o7toAmMN6ywathaNqaVeGVAtbjEE/fIOSp4h/Ymtog1zZnDynE31tlMkWB
- KPRaSfl6JJksoBEiU77MF789fP0hxZzlpDPLl1bDaBwihwW0YQh/jEj/Vmj8ZserH3bMIqnPe
- 4cObHWpbb8JliRYqNDsGyiYgz91MJcZNe870XD/rMDavQgDjEs/ip5JoW1nYjWqA4rWtA8cdH
- AEcmaybrPk73e3A5aUeVvtew0PffA4ice3Q5MvTP+vWk9xhYCXibjRhWB8N8reXzysQ/4rviw
- XlYoy9kuRjjexV1QPmPAjQ8iHIhQE4wD7FB7VRPJvU5E+1eub0X4xbF9pmFAGXx1XQIHagMFo
- K0TdwWtEuakXv4UjyHKcPz1g7Ycst9BNtRLPqsnPtP8bBH+h1VoCi3/ri7EOpYWPVYvg06KlR
- DZ+Z/XGceZC5tojOGFJANzFUB9I8SwbQquV2j09B9/UF8wgv2+KddOEvt7gyljjzZvF0Fo6Uv
- DfobAWLsAWxrfK05ysVUD04sga2zpUq5W5EZu5WNm525hUD+HIKipfJ6VhRsTFwWMAQIKRW08
- /8OKGw8ICAdban8irFFCuhNobeZIR3u3jh9ooohUqUYi9ytPnM1MTc0FH0HF25/lmcjcfUGFC
- sS9LgDSwVgiZLO/1KBP9uX6QPgawkoJjsdEa/HAn7/ftlr4KxNBtoeNgWwDbsU1HbTBMjaLh4
- 3/seX1z3IyFylsKwtULPhqNCI15bE0Hpqf0LGUD1Q6g9LAUYwmyH0cdRvkHw7esTlJCZUkGjG
- Ki407bhAH/lCmisFhulWMLH4lX8=
+From: Ian Zurutuza <ian.zurutuza@gmail.com>
+Date: Sun, 26 Nov 2023 00:38:26 -0600
+Message-ID: <CAJrDFhpoOLNx-RX_raU4v++ZPYVShg_pmaxv0V2WfkfgcFdUGg@mail.gmail.com>
+Subject: device driver association
+To: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The initial version of the bcm2711-rpi-cm4-io based on the
-false assumption, that the USB host interface was connected to
-the DWC2 IP. So replace it with the xHCI and get the USB host
-running.
+Hi,
 
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-=2D--
- arch/arm/boot/dts/broadcom/bcm2711-rpi-cm4-io.dts | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+I need help associating this device with the proper driver for serial
+communication. If I am barking up the wrong tree, please let me know.
 
-diff --git a/arch/arm/boot/dts/broadcom/bcm2711-rpi-cm4-io.dts b/arch/arm/=
-boot/dts/broadcom/bcm2711-rpi-cm4-io.dts
-index d7ba02f586d3..17e7c2235d09 100644
-=2D-- a/arch/arm/boot/dts/broadcom/bcm2711-rpi-cm4-io.dts
-+++ b/arch/arm/boot/dts/broadcom/bcm2711-rpi-cm4-io.dts
-@@ -2,7 +2,6 @@
- /dts-v1/;
- #include "bcm2711-rpi-cm4.dtsi"
- #include "bcm283x-rpi-led-deprecated.dtsi"
--#include "bcm283x-rpi-usb-host.dtsi"
+I am able to open a serial port to send commands to the Epson BT-40
+moverio AR glasses after running this command `sudo modprobe -r
+cdc_acm && sudo modprobe usbserial vendor=0x04b8 product=0x0d12`.
+After I saw in the system log a message that asked me to reach out to
+this mailing list to get this device added to a proper driver.
 
- / {
- 	model =3D "Raspberry Pi Compute Module 4 IO Board";
-@@ -130,6 +129,10 @@ &pixelvalve4 {
- 	status =3D "okay";
- };
+Please let me know if you need more information regarding this device.
 
-+&usb {
-+	status =3D "disabled";
-+};
-+
- &vc4 {
- 	status =3D "okay";
- };
-@@ -137,3 +140,7 @@ &vc4 {
- &vec {
- 	status =3D "disabled";
- };
-+
-+&xhci {
-+	status =3D "okay";
-+};
-=2D-
-2.34.1
+lsusb -v
+```
+Bus 007 Device 006: ID 04b8:0d12 Seiko Epson Corp. EPSON HMD Com&Sens
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x04b8 Seiko Epson Corp.
+  idProduct          0x0d12
+  bcdDevice            2.00
+  iManufacturer           1 Seiko Epson Corporation
+  iProduct                2 EPSON HMD Com&Sens
+  iSerial                 3 NPH269690577
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x007d
+    bNumInterfaces          4
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower              100mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         3 Human Interface Device
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+        HID Device Descriptor:
+          bLength                 9
+          bDescriptorType        33
+          bcdHID               1.11
+          bCountryCode            0 Not supported
+          bNumDescriptors         1
+          bDescriptorType        34 Report
+          wDescriptorLength    2408
+         Report Descriptors:
+           ** UNAVAILABLE **
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               1
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         1
+      bInterfaceCount         2
+      bFunctionClass          2 Communications
+      bFunctionSubClass       2 Abstract (modem)
+      bFunctionProtocol       1 AT-commands (v.25ter)
+      iFunction               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      1 AT-commands (v.25ter)
+      iInterface              0
+      CDC Header:
+        bcdCDC               1.10
+      CDC Call Management:
+        bmCapabilities       0x00
+        bDataInterface          1
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Union:
+        bMasterInterface        0
+        bSlaveInterface         1
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x84  EP 4 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval              16
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         3 Human Interface Device
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+        HID Device Descriptor:
+          bLength                 9
+          bDescriptorType        33
+          bcdHID               1.11
+          bCountryCode            0 Not supported
+          bNumDescriptors         1
+          bDescriptorType        34 Report
+          wDescriptorLength    2204
+         Report Descriptors:
+           ** UNAVAILABLE **
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               1
 
+Bus 007 Device 007: ID 04b8:0335 Seiko Epson Corp. EPSON HMD Audio
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.01
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x04b8 Seiko Epson Corp.
+  idProduct          0x0335
+  bcdDevice            0.03
+  iManufacturer           1 EPSON
+  iProduct                2 EPSON HMD Audio
+  iSerial                 0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0022
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower              100mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         3 Human Interface Device
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+        HID Device Descriptor:
+          bLength                 9
+          bDescriptorType        33
+          bcdHID               1.11
+          bCountryCode            0 Not supported
+          bNumDescriptors         1
+          bDescriptorType        34 Report
+          wDescriptorLength      42
+         Report Descriptors:
+           ** UNAVAILABLE **
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x86  EP 6 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               4
+```
+
+Many thanks,
+Ian
 
