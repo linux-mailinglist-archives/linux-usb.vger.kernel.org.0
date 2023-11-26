@@ -1,106 +1,172 @@
-Return-Path: <linux-usb+bounces-3328-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3329-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B63E7F9283
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 12:41:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BC2F7F929A
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 13:41:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6FB21C20ACA
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 11:41:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F22B2810FB
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 12:41:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E667CCA69;
-	Sun, 26 Nov 2023 11:41:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E5FA79C5;
+	Sun, 26 Nov 2023 12:41:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNNU1cqS"
+	dkim=pass (2048-bit key) header.d=keeping.me.uk header.i=@keeping.me.uk header.b="uF/fdLRT";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AUsm9mqs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462FECA57
-	for <linux-usb@vger.kernel.org>; Sun, 26 Nov 2023 11:41:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BD93FC433C8
-	for <linux-usb@vger.kernel.org>; Sun, 26 Nov 2023 11:41:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700998882;
-	bh=bYN16vd8yn5K6eilWKuLe7mneeMMbKXkpIJEuPMYF0w=;
-	h=From:To:Subject:Date:From;
-	b=cNNU1cqSsXb6YEu+DEHG5F3CdCAEdT3EQkIjx1jRRAXvB6SPXp66DmMLmCcfslI43
-	 ATPQWql+rkF2MhM+qU1pDq3bUmOKCTy31W96wWCZ5PTftJhf6Fn+EBrNKz8FxVRxWP
-	 AyCzkeEP5tLTPHWO5lmzrr+57sLvWtfWvT/wPJWEY9snXUxlm5Pxpvm0i7i+urZm3D
-	 NEdzOaUXRNAcZapFy2jKVpcroBSIi3OViVZ1ge3C2eiTwRdi4MaKbCeZ4BPrEmHm3R
-	 pFXAQVN2A34uINbJs6ZVrJeyjWKIuWZw4wsg4BomR6OL6z9y9/LHbpxNbCILkoykLM
-	 hQxN2QGAN/voA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id A320CC4332E; Sun, 26 Nov 2023 11:41:22 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218190] New: Driver fails to flash ROM to Renesas
- uPD720201/uPD720202 when using not officially supported SPI Flash
-Date: Sun, 26 Nov 2023 11:41:22 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: gamelaster@outlook.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-218190-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69FCC4;
+	Sun, 26 Nov 2023 04:41:20 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 9881E5C0109;
+	Sun, 26 Nov 2023 07:41:18 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Sun, 26 Nov 2023 07:41:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=keeping.me.uk;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to; s=fm2; t=1701002478; x=
+	1701088878; bh=S1b5+mAkwAi6TXjxtxbvUviQ6QcnSGD3Zyf3iG37d1M=; b=u
+	F/fdLRTW+4HwSPx/b5jyLsLEOM58wxu8rNjvtNxGQiBWUC3B3qRzSYl4deGMWN8Y
+	Fc0goSeabqJUI2uT1VJGj7B+70Uiv5YyU+dNLTwdAQS0L1P282vQBNbJCRkPgYUF
+	1s8hJeFJy9jDJfARQLWCeCb6bOoCRHr95INxfd+qvRoKhtLqQZ077VTYknmD07Mj
+	W9ZhliL6gY0M4bSIPvkZd2VLUjhKOGkgCzFB+12eglYxM8qjbF9zmTwx7D6v8mJT
+	EdbXr/JKYnTTE6gYehXKSDWEH3aKAjWeb6CGNJmj/UARl8I7wNNICpRN5kcH5huU
+	vb2cW89auJzPB3+6lrgng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1701002478; x=1701088878; bh=S1b5+mAkwAi6T
+	XjxtxbvUviQ6QcnSGD3Zyf3iG37d1M=; b=AUsm9mqsOyYRzKqPb5vaJZ+xekPy2
+	j1tNNld6lEaqCjocNwmWBL4pkNFHfrprtRjIzJD7qofwNIOMErsbpqV0QR2ykoVS
+	lACihb1VmZ0ulUXD/nZE8d5Yq/OFVx31NwX1PfKpA07g4XhtMApta8F1g5HAxzfl
+	TMzuRgpd1Mxe7UhtILCaOGpvm0kpNYhCxyi9gaI97JSYDbU77+MLpJ/fwA+uzwi4
+	AGxda7yNm/uZuXzmTuRJnOn4i52QaHiW4rBArF+YX9pPbOvx571khDde2hQZYeT7
+	kLE5hJY/xUEKVL91a847Ps9fBCHM3dk59PMNegkSi3AprBAghURX1KxOg==
+X-ME-Sender: <xms:7TxjZfnsy-fJjKi1ohn-c68jP7AZRlv5nGR7csIYQkfgZlJY_yaRPg>
+    <xme:7TxjZS24PZTa9VhRB6P066L5Mt02Lo09bPl2mKALixds3M7ksSak1apeb7HR-mVtV
+    HHBdlT8RqDDFSgm4bs>
+X-ME-Received: <xmr:7TxjZVoxnFjsmrQ7JB_ydbR6dMUcnicA2gaqVOc7nwYhO6aIVXiRf70U2m6nxX84pQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehledggeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheplfhohhhn
+    ucfmvggvphhinhhguceojhhohhhnsehkvggvphhinhhgrdhmvgdruhhkqeenucggtffrrg
+    htthgvrhhnpeehvdehfeefleettedvvdffhfeihfdvvddtvdelteetffeitdeijeduieek
+    tdetleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hjohhhnheskhgvvghpihhnghdrmhgvrdhukh
+X-ME-Proxy: <xmx:7TxjZXlLs96VlfWMnOyqWT042eI5sxPJNBZ3Q3yqQHyut0Mxnelk0g>
+    <xmx:7TxjZd2c9aXrpOga33bn08sEwhY8HHnIZ0ZGlkENRUcg3AIQpsgcQQ>
+    <xmx:7TxjZWv0JBcyJEZInnbULZJxVcgXk8Ul0I2hkAdaV8ALNxsEic1srg>
+    <xmx:7jxjZXqC4t7Qy3Y2QX1zqSxPblN1OQQxk72DazyQkSASDtcQNNCmHA>
+Feedback-ID: ic4e149f5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 26 Nov 2023 07:41:16 -0500 (EST)
+Date: Sun, 26 Nov 2023 12:41:15 +0000
+From: John Keeping <john@keeping.me.uk>
+To: Hardik Gajjar <hgajjar@de.adit-jv.com>
+Cc: gregkh@linuxfoundation.org, quic_ugoswami@quicinc.com,
+	brauner@kernel.org, jlayton@kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, erosca@de.adit-jv.com
+Subject: Re: [PATCH] usb: gadget: f_fs: Add the missing get_alt callback
+Message-ID: <ZWM864zH3M8W9B2f@keeping.me.uk>
+References: <20231124164435.74727-1-hgajjar@de.adit-jv.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231124164435.74727-1-hgajjar@de.adit-jv.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218190
+On Fri, Nov 24, 2023 at 05:44:35PM +0100, Hardik Gajjar wrote:
+> Some USB OTG hubs have multiple alternate configurations to offer,
+> such as one for Carplay and another for Carlife.
+> 
+> This patch implements and sets the get_alt callback to retrieve the
+> currently used alternate setting. The new function allows dynamic
+> retrieval of the current alternate setting for a specific interface. The
+> current alternate setting values are stored in the 'cur_alt' array
+> within the 'ffs_function' structure.
 
-            Bug ID: 218190
-           Summary: Driver fails to flash ROM to Renesas
-                    uPD720201/uPD720202 when using not officially
-                    supported SPI Flash
-           Product: Drivers
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: high
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: gamelaster@outlook.com
-        Regression: No
+Doesn't the alt setting need to be forwarded to userspace?
 
-My uPD720201 is using XT25F04B SPI Flash, which is not officially supported,
-according to User Manual document. Because of this, register 0xF0
-(RENESAS_ROM_CONFIG -> External ROM Configuration Register) is 0x0000. This
-register contains configuration for SPI Flash, thus when xhci-pci-renesas
-driver tries to upload the firmware into ROM, it corrupts SPI Flash and fai=
-ls,
-resulting the hub working from ROM, or not working at all. In this case, the
-RENESAS_ROM_CONFIG register needs to be set to appropriate value, in this c=
-ase,
-0x700 worked properly, and so far, for most of non officially supported SPI
-Flashes, 0x700 worked fine.
+What happens if the available endpoints change - doesn't that mean the
+available endpoint files change?
 
---=20
-You may reply to this email to add a comment.
+It's not sufficient to just blindly accept any alt setting and assume it
+will work, that may be the case in one specific constrained scenario,
+but it's not true in general.  At the very least we must not accept an
+alt setting that is not defined in the descriptors.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+> ---
+>  drivers/usb/gadget/function/f_fs.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index efe3e3b85769..37c47c11f57a 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -75,6 +75,7 @@ struct ffs_function {
+>  	short				*interfaces_nums;
+>  
+>  	struct usb_function		function;
+> +	int				cur_alt[MAX_CONFIG_INTERFACES];
+>  };
+>  
+>  
+> @@ -98,6 +99,7 @@ static int __must_check ffs_func_eps_enable(struct ffs_function *func);
+>  static int ffs_func_bind(struct usb_configuration *,
+>  			 struct usb_function *);
+>  static int ffs_func_set_alt(struct usb_function *, unsigned, unsigned);
+> +static int ffs_func_get_alt(struct usb_function *f, unsigned int intf);
+>  static void ffs_func_disable(struct usb_function *);
+>  static int ffs_func_setup(struct usb_function *,
+>  			  const struct usb_ctrlrequest *);
+> @@ -3232,6 +3234,15 @@ static void ffs_reset_work(struct work_struct *work)
+>  	ffs_data_reset(ffs);
+>  }
+>  
+> +static int ffs_func_get_alt(struct usb_function *f,
+> +			    unsigned int interface)
+> +{
+> +	struct ffs_function *func = ffs_func_from_usb(f);
+> +	int intf = ffs_func_revmap_intf(func, interface);
+> +
+> +	return (intf < 0) ? intf : func->cur_alt[interface];
+> +}
+> +
+>  static int ffs_func_set_alt(struct usb_function *f,
+>  			    unsigned interface, unsigned alt)
+>  {
+> @@ -3266,8 +3277,10 @@ static int ffs_func_set_alt(struct usb_function *f,
+>  
+>  	ffs->func = func;
+>  	ret = ffs_func_eps_enable(func);
+> -	if (ret >= 0)
+> +	if (ret >= 0) {
+>  		ffs_event_add(ffs, FUNCTIONFS_ENABLE);
+> +		func->cur_alt[interface] = alt;
+> +	}
+>  	return ret;
+>  }
+>  
+> @@ -3574,6 +3587,7 @@ static struct usb_function *ffs_alloc(struct usb_function_instance *fi)
+>  	func->function.bind    = ffs_func_bind;
+>  	func->function.unbind  = ffs_func_unbind;
+>  	func->function.set_alt = ffs_func_set_alt;
+> +	func->function.get_alt = ffs_func_get_alt;
+>  	func->function.disable = ffs_func_disable;
+>  	func->function.setup   = ffs_func_setup;
+>  	func->function.req_match = ffs_func_req_match;
+> -- 
+> 2.17.1
+> 
 
