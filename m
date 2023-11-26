@@ -1,43 +1,45 @@
-Return-Path: <linux-usb+bounces-3325-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3326-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D69B7F9241
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 11:34:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 529F97F9244
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 11:35:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A61F1281203
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 10:34:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 849181C209C2
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 10:35:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ED5C440C;
-	Sun, 26 Nov 2023 10:34:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD4F4538A;
+	Sun, 26 Nov 2023 10:34:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AfUjISw2"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fjKkxhFG"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8BCEC2
-	for <linux-usb@vger.kernel.org>; Sun, 26 Nov 2023 10:34:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22798C433C8;
-	Sun, 26 Nov 2023 10:34:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488E165B
+	for <linux-usb@vger.kernel.org>; Sun, 26 Nov 2023 10:34:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78559C433C7;
+	Sun, 26 Nov 2023 10:34:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700994872;
-	bh=P/34EZh4uB3kuC67GjgvQ3qNX76o8UEsRZC9ofNhGlM=;
+	s=korg; t=1700994898;
+	bh=FUAkUf1HPGsRCvh9R8252q79NBvhybHGAFsP7UBdKqA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AfUjISw24DmjMgW0H+u8Td1m9qJjiNvAKvcnX0174x5rfkPcFxC9wH6tLkMaygFZr
-	 qMpKtdisxMI5D4PmgNJW+jNPKj05CDqoNUDn5x/kDRmvr4aNENBRuFGicW2JAGf/u/
-	 07qO/o9lP8wBq7tPnyzCBipyw7zFN7MbNZaQWFho=
-Date: Sun, 26 Nov 2023 10:34:30 +0000
-From: Greg KH <gregkh@linuxfoundation.org>
-To: shitao <shitao@kylinos.cn>
-Cc: justin.chen@broadcom.com, alcooperx@gmail.com,
-	bcm-kernel-feedback-list@broadcom.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH] usb: Correct misspelling comment word dynamic
-Message-ID: <2023112610-curling-swinging-89cb@gregkh>
-References: <20231123032245.2986309-1-shitao@kylinos.cn>
+	b=fjKkxhFGSbc6djr7bcrQCXUtcUjTKfoCB4c2QD7MUAi5RagWH9/F9gaQ1pct2HqYU
+	 BUnbYAAC5SUV2GZJx/4GXadbRMJ+DT0AQWu0EVA5OKxi8Ea7ioFWNoI9hPVDv3NKJr
+	 g18Ts2f22M/vI1WcA8uOEW2ZNkWpSVHcUwaapbms=
+Date: Sun, 26 Nov 2023 10:34:55 +0000
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Ren Xiao <u202112004@hust.edu.cn>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	hust-os-kernel-patches@googlegroups.com,
+	Dongliang Mu <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: storage: transport: Fix switch-case indentation
+ typo in 'transport.c'
+Message-ID: <2023112639-perjurer-suffocate-965d@gregkh>
+References: <20231123063417.2625808-1-u202112004@hust.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -46,17 +48,18 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231123032245.2986309-1-shitao@kylinos.cn>
+In-Reply-To: <20231123063417.2625808-1-u202112004@hust.edu.cn>
 
-On Thu, Nov 23, 2023 at 11:22:45AM +0800, shitao wrote:
-> The word 'dyanmic memory'is misspelled, fixed the word 'dyanmic'
-> to 'dynamic',avoiding confusing other developers.
+On Thu, Nov 23, 2023 at 01:34:16AM -0500, Ren Xiao wrote:
+> Adjusted the indentation of the switch-case code blocks which
+> start from line 1051 and line 1304.
 > 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: shitao <shitao@kylinos.cn>
+> Signed-off-by: Ren Xiao <u202112004@hust.edu.cn>
+> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
 > ---
->  drivers/usb/gadget/udc/bdc/bdc_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/usb/storage/transport.c | 46 ++++++++++++++++-----------------
+>  1 file changed, 23 insertions(+), 23 deletions(-)
+> 
 
 Hi,
 
