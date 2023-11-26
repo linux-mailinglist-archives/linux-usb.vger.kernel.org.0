@@ -1,131 +1,71 @@
-Return-Path: <linux-usb+bounces-3317-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3318-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 231EF7F8FAE
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Nov 2023 23:15:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EA1C7F90EF
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 03:28:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EB4AB21033
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Nov 2023 22:15:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E4CD5B20FB0
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 02:28:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A80CD31584;
-	Sat, 25 Nov 2023 22:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BFA81398;
+	Sun, 26 Nov 2023 02:28:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kzwah6Ag"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HiyYk3u6"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104099442
-	for <linux-usb@vger.kernel.org>; Sat, 25 Nov 2023 22:15:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 923D1C433CB
-	for <linux-usb@vger.kernel.org>; Sat, 25 Nov 2023 22:15:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6AA7E
+	for <linux-usb@vger.kernel.org>; Sun, 26 Nov 2023 02:28:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C0AE2C433C7;
+	Sun, 26 Nov 2023 02:28:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700950519;
-	bh=brsAELMPduV99YPiXYKifYscpDcx+nsVX228ULJ+S90=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=kzwah6Ags2uYNMADvwbMCiR1jw/v7EnTTKMzDWMH1O1+Qo7izQq9Wpe/mCVy1PcGi
-	 oVIH4qaONLOpchrt5LkRxVIjKrpIQg0NHh4dI0IrDwcKoHjuAMIGplvZVJwKzvsQDh
-	 xf4g5VWP60b4r09cTlF5zBw50qureAHvizJjYV3IS7y8DpeLFWv0iJawvpgLuVKegk
-	 ogyvBR+vQaH53O16ogtlP9LlrfwQKXYvlpv/5RlhmyP+USPdR7dHsGVkgrlYLo5o68
-	 wFvTh9RyVlZKF5a7uQOPSfGde+KOSoc9xXEcuhP4jrrwr85aRt9mOIZN5/SsM1eCkK
-	 +tfdRHJfN/veA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 80C0EC4332E; Sat, 25 Nov 2023 22:15:19 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 215740] kernel warning: DMA-API: xhci_hcd: cacheline tracking
- EEXIST, overlapping mappings aren't supported
-Date: Sat, 25 Nov 2023 22:15:18 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.isobsolete attachments.created
-Message-ID: <bug-215740-208809-RJpeuh8D0E@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215740-208809@https.bugzilla.kernel.org/>
-References: <bug-215740-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1700965705;
+	bh=u61T+JQ8kZ7n3lD3cBPLroWyDJeD5T1giCodUv0LMRM=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=HiyYk3u6J5SinV5bz/CpdXNhuqdaWilzJjhzjf0eXF8WSC7ZPUtDmtwBgtf8RbvBZ
+	 ViIKuuooSwwtK1gKL1c20JXDp/XAVBlmOgh7MrIOH4vGYkoYGGzfWoSSHMy01yCYQG
+	 Mw81+lNIHQNX2LDgYVZEl/nGK3S8aquo+5E3OPjk3szJ67T0erIiVqALix/M59EXzw
+	 Zk5WEc03ENz5VWC2Zh5L99NV7b4u0Ffr2AsBSb0JVpSqXovHvlCIhv9QGAIUKcxnDR
+	 LIs6HphPl6yAw4j+UtIocg9YTCYL+J1sQK61NPugiombnMP68JlrWXggJ8LsJHfSF9
+	 SQbZ6U+GshMTA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AEC2CEAA958;
+	Sun, 26 Nov 2023 02:28:25 +0000 (UTC)
+Subject: Re: [GIT PULL] USB/PHY/Thunderbolt driver fixes for 6.7-rc3
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ZWJQOw3VcmTOB62a@kroah.com>
+References: <ZWJQOw3VcmTOB62a@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZWJQOw3VcmTOB62a@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.7-rc3
+X-PR-Tracked-Commit-Id: cb9a830e871779b4f9b8d5f76a2abf24915cd007
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 090472ed9c922e699dc61dd601a9b376a64f4390
+Message-Id: <170096570570.17835.11926136154771545086.pr-tracker-bot@kernel.org>
+Date: Sun, 26 Nov 2023 02:28:25 +0000
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
+The pull request you sent on Sat, 25 Nov 2023 19:51:23 +0000:
 
-Alan Stern (stern@rowland.harvard.edu) changed:
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.7-rc3
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #305444|0                           |1
-        is obsolete|                            |
- Attachment #305456|0                           |1
-        is obsolete|                            |
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/090472ed9c922e699dc61dd601a9b376a64f4390
 
---- Comment #34 from Alan Stern (stern@rowland.harvard.edu) ---
-Created attachment 305473
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305473&action=3Dedit
-Revised (again) diagnostics
+Thank you!
 
-I revised the test patch slightly.  Now the addresses are printed in hex, as
-they should have been all along.  Also, there's a line to print out the
-physical addresses pointed to by hub->buffer and hub->status when a new hub=
- is
-configured.  Here's the log for plugging in a hub, then plugging a mouse in=
-to
-the hub:
-
-[   32.757399] usb 1-1: new high-speed USB device number 5 using xhci_hcd
-[   32.886200] usb 1-1: New USB device found, idVendor=3D05e3, idProduct=3D=
-0608,
-bcdDevice=3D 9.01
-[   32.886444] usb 1-1: New USB device strings: Mfr=3D0, Product=3D1,
-SerialNumber=3D0
-[   32.886631] usb 1-1: Product: USB2.0 Hub
-[   32.889566] hub 1-1:1.0: USB hub found
-[   32.889813] usb 1-1: hub buffer at 100e71818, status at 100e71610
-[   32.890499] hub 1-1:1.0: 4 ports detected
-[   42.761267] usb 1-1.3: new low-speed USB device number 6 using xhci_hcd
-[   42.833935] kauditd_printk_skb: 101 callbacks suppressed
-[   42.844775] usb 1-1.3: New USB device found, idVendor=3D093a, idProduct=
-=3D2510,
-bcdDevice=3D 1.00
-[   42.844841] usb 1-1.3: New USB device strings: Mfr=3D1, Product=3D2,
-SerialNumber=3D0
-[   42.844890] usb 1-1.3: Product: USB OPTICAL MOUSE
-[   42.844933] usb 1-1.3: Manufacturer: PIXART
-[   42.851150] input: PIXART USB OPTICAL MOUSE as
-/devices/pci0000:00/0000:00:14.0/usb1/1-1/1-1.3/1-1.3:1.0/0003:093A:2510.00=
-09/input/input10
-[   42.851585] hid-generic 0003:093A:2510.0009: input,hidraw8: USB HID v1.11
-Mouse [PIXART USB OPTICAL MOUSE] on usb-0000:00:14.0-1.3/input0
-
-The cache line size on this computer is 64 bytes, same as yours.  As you can
-see, hub->buffer and hub->status were allocated in different cache lines, so
-the DMA debugging routine did not detect an overlap.  That's why I didn't g=
-et
-any error messages.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
