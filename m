@@ -1,172 +1,162 @@
-Return-Path: <linux-usb+bounces-3329-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3330-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BC2F7F929A
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 13:41:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E7087F93AE
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 17:12:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F22B2810FB
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 12:41:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B09E11C20C10
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 16:12:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E5FA79C5;
-	Sun, 26 Nov 2023 12:41:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97CFDDBA;
+	Sun, 26 Nov 2023 16:12:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=keeping.me.uk header.i=@keeping.me.uk header.b="uF/fdLRT";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AUsm9mqs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HN2CC0k9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69FCC4;
-	Sun, 26 Nov 2023 04:41:20 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 9881E5C0109;
-	Sun, 26 Nov 2023 07:41:18 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sun, 26 Nov 2023 07:41:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=keeping.me.uk;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm2; t=1701002478; x=
-	1701088878; bh=S1b5+mAkwAi6TXjxtxbvUviQ6QcnSGD3Zyf3iG37d1M=; b=u
-	F/fdLRTW+4HwSPx/b5jyLsLEOM58wxu8rNjvtNxGQiBWUC3B3qRzSYl4deGMWN8Y
-	Fc0goSeabqJUI2uT1VJGj7B+70Uiv5YyU+dNLTwdAQS0L1P282vQBNbJCRkPgYUF
-	1s8hJeFJy9jDJfARQLWCeCb6bOoCRHr95INxfd+qvRoKhtLqQZ077VTYknmD07Mj
-	W9ZhliL6gY0M4bSIPvkZd2VLUjhKOGkgCzFB+12eglYxM8qjbF9zmTwx7D6v8mJT
-	EdbXr/JKYnTTE6gYehXKSDWEH3aKAjWeb6CGNJmj/UARl8I7wNNICpRN5kcH5huU
-	vb2cW89auJzPB3+6lrgng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701002478; x=1701088878; bh=S1b5+mAkwAi6T
-	XjxtxbvUviQ6QcnSGD3Zyf3iG37d1M=; b=AUsm9mqsOyYRzKqPb5vaJZ+xekPy2
-	j1tNNld6lEaqCjocNwmWBL4pkNFHfrprtRjIzJD7qofwNIOMErsbpqV0QR2ykoVS
-	lACihb1VmZ0ulUXD/nZE8d5Yq/OFVx31NwX1PfKpA07g4XhtMApta8F1g5HAxzfl
-	TMzuRgpd1Mxe7UhtILCaOGpvm0kpNYhCxyi9gaI97JSYDbU77+MLpJ/fwA+uzwi4
-	AGxda7yNm/uZuXzmTuRJnOn4i52QaHiW4rBArF+YX9pPbOvx571khDde2hQZYeT7
-	kLE5hJY/xUEKVL91a847Ps9fBCHM3dk59PMNegkSi3AprBAghURX1KxOg==
-X-ME-Sender: <xms:7TxjZfnsy-fJjKi1ohn-c68jP7AZRlv5nGR7csIYQkfgZlJY_yaRPg>
-    <xme:7TxjZS24PZTa9VhRB6P066L5Mt02Lo09bPl2mKALixds3M7ksSak1apeb7HR-mVtV
-    HHBdlT8RqDDFSgm4bs>
-X-ME-Received: <xmr:7TxjZVoxnFjsmrQ7JB_ydbR6dMUcnicA2gaqVOc7nwYhO6aIVXiRf70U2m6nxX84pQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehledggeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheplfhohhhn
-    ucfmvggvphhinhhguceojhhohhhnsehkvggvphhinhhgrdhmvgdruhhkqeenucggtffrrg
-    htthgvrhhnpeehvdehfeefleettedvvdffhfeihfdvvddtvdelteetffeitdeijeduieek
-    tdetleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hjohhhnheskhgvvghpihhnghdrmhgvrdhukh
-X-ME-Proxy: <xmx:7TxjZXlLs96VlfWMnOyqWT042eI5sxPJNBZ3Q3yqQHyut0Mxnelk0g>
-    <xmx:7TxjZd2c9aXrpOga33bn08sEwhY8HHnIZ0ZGlkENRUcg3AIQpsgcQQ>
-    <xmx:7TxjZWv0JBcyJEZInnbULZJxVcgXk8Ul0I2hkAdaV8ALNxsEic1srg>
-    <xmx:7jxjZXqC4t7Qy3Y2QX1zqSxPblN1OQQxk72DazyQkSASDtcQNNCmHA>
-Feedback-ID: ic4e149f5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 26 Nov 2023 07:41:16 -0500 (EST)
-Date: Sun, 26 Nov 2023 12:41:15 +0000
-From: John Keeping <john@keeping.me.uk>
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>
-Cc: gregkh@linuxfoundation.org, quic_ugoswami@quicinc.com,
-	brauner@kernel.org, jlayton@kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, erosca@de.adit-jv.com
-Subject: Re: [PATCH] usb: gadget: f_fs: Add the missing get_alt callback
-Message-ID: <ZWM864zH3M8W9B2f@keeping.me.uk>
-References: <20231124164435.74727-1-hgajjar@de.adit-jv.com>
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C513494
+	for <linux-usb@vger.kernel.org>; Sun, 26 Nov 2023 08:12:32 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1cc9b626a96so23459675ad.2
+        for <linux-usb@vger.kernel.org>; Sun, 26 Nov 2023 08:12:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701015152; x=1701619952; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jx1vwNxY8sfzGHnhlOePT8EU1LRTlTtAecKFFptNgPA=;
+        b=HN2CC0k9hVDq3JztuNKWtSxvOUq2QWaanTCiMXNN5duQBiYD1EmZupT4vDGrfOkViY
+         4aifdApek/XyGpvZJ2ANwxHFNdv6S0aTY1ppY4VasWZEqrOKjYFwny4NbXVVj+KG5PG1
+         HqNhzTqe9GK+JgcEsBVM6K4eerv0ibxJuHLFY/RV4ZbXtfZypXEGSqHEJIA6TklncWQH
+         cU4zLguzBJn9U7syRJJseexXJ6I4lsos5EHu5n8t1epiGVAv7y5Qpx2iMCshq7L2pfNG
+         n2TF9FW0jP1HEAIWbkYM/vzSaggXFEVkltKxExMmko8kOh1X+5jFHI/+TWf08xqPe9/I
+         i/+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701015152; x=1701619952;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jx1vwNxY8sfzGHnhlOePT8EU1LRTlTtAecKFFptNgPA=;
+        b=Oj0Eu3cNcNGUnrXFQLWaynsDfPJsm/ii1TUy3LD4v8N4A5j2aMInrgpLFg9VGFtrok
+         GmkhYRnp6cuKee45ewndhK+pCNN4y5RUmKuNd0cPRUySu1y9f8PSD2Zro+8MEn3zM3y7
+         9qvSJwJ9dICPo3G++cXeMrVO6Javm7zP5ZLC8IwEiNYAHTQAZwodb4V4KwmWNq9Ex+WW
+         EnfqIGjUjRoTWe+EsjC8nbTXoYnE/uDg+Q3GUE0+0d/pvIX5+i3oLutD5oysuyiWx6PF
+         PPepBLT6Tesjnbjx6+CAWqHnx2+yeyQIzALL76wSCROJ3NCNPdz/BqLGBCY9Uv/sXjLm
+         Zxzg==
+X-Gm-Message-State: AOJu0YyOJY+xZusZbBMcZh6q0/HZJmXMPI54IqmNrnfTYf2MK5KiTxXT
+	rUm6KK9S4rVuJ310gPSlyV+YfBDj74RB9GDpgyL5sQySbyc=
+X-Google-Smtp-Source: AGHT+IFPtFRKo/cqnI1LNnhf69l/Juc4gVwT+pKNL3CJNuPxVUyPpKIybJtd//B/9nmhZRDgVDJtQGTr92ZZyQ1nTuU=
+X-Received: by 2002:a17:90b:1d0f:b0:285:a2af:31aa with SMTP id
+ on15-20020a17090b1d0f00b00285a2af31aamr3229068pjb.37.1701015152076; Sun, 26
+ Nov 2023 08:12:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231124164435.74727-1-hgajjar@de.adit-jv.com>
+References: <CAJrDFhpoOLNx-RX_raU4v++ZPYVShg_pmaxv0V2WfkfgcFdUGg@mail.gmail.com>
+ <2023112652-scowling-submarine-5071@gregkh> <CAJrDFhoXrXry+gXL6477P-WHJfN58RreHSQ=7dyw-L=rx7E6mA@mail.gmail.com>
+ <2023112636-entail-blend-8680@gregkh>
+In-Reply-To: <2023112636-entail-blend-8680@gregkh>
+From: Ian Zurutuza <ian.zurutuza@gmail.com>
+Date: Sun, 26 Nov 2023 10:12:20 -0600
+Message-ID: <CAJrDFhrm7F26rtQnmwMXkwio0DC7ZmTzpxPdJEFnL1wbU370mA@mail.gmail.com>
+Subject: Re: device driver association
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 24, 2023 at 05:44:35PM +0100, Hardik Gajjar wrote:
-> Some USB OTG hubs have multiple alternate configurations to offer,
-> such as one for Carplay and another for Carlife.
-> 
-> This patch implements and sets the get_alt callback to retrieve the
-> currently used alternate setting. The new function allows dynamic
-> retrieval of the current alternate setting for a specific interface. The
-> current alternate setting values are stored in the 'cur_alt' array
-> within the 'ffs_function' structure.
+Sorry, I wasn't paying attention, need coffee.
 
-Doesn't the alt setting need to be forwarded to userspace?
+It won't attach, no /dev/ttyACM node were created.
 
-What happens if the available endpoints change - doesn't that mean the
-available endpoint files change?
+I had attempted to manually set the driver with `modprobe cdc-acm
+vendor=3D0x04b8 product=3D0x0d12`, It didn't attach, but I removed it just
+in case.
 
-It's not sufficient to just blindly accept any alt setting and assume it
-will work, that may be the case in one specific constrained scenario,
-but it's not true in general.  At the very least we must not accept an
-alt setting that is not defined in the descriptors.
+Original /sys/kernel/debug/usb/devices
+```
+T:  Bus=3D07 Lev=3D02 Prnt=3D48 Port=3D00 Cnt=3D01 Dev#=3D 49 Spd=3D480  Mx=
+Ch=3D 0
+D:  Ver=3D 2.01 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
+P:  Vendor=3D04b8 ProdID=3D0335 Rev=3D 0.03
+S:  Manufacturer=3DEPSON
+S:  Product=3DEPSON HMD Audio
+C:* #Ifs=3D 1 Cfg#=3D 1 Atr=3De0 MxPwr=3D100mA
+I:* If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D03(HID  ) Sub=3D00 Prot=3D00 Driver=
+=3Dusbhid
+E:  Ad=3D86(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D1ms
 
-> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> ---
->  drivers/usb/gadget/function/f_fs.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index efe3e3b85769..37c47c11f57a 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -75,6 +75,7 @@ struct ffs_function {
->  	short				*interfaces_nums;
->  
->  	struct usb_function		function;
-> +	int				cur_alt[MAX_CONFIG_INTERFACES];
->  };
->  
->  
-> @@ -98,6 +99,7 @@ static int __must_check ffs_func_eps_enable(struct ffs_function *func);
->  static int ffs_func_bind(struct usb_configuration *,
->  			 struct usb_function *);
->  static int ffs_func_set_alt(struct usb_function *, unsigned, unsigned);
-> +static int ffs_func_get_alt(struct usb_function *f, unsigned int intf);
->  static void ffs_func_disable(struct usb_function *);
->  static int ffs_func_setup(struct usb_function *,
->  			  const struct usb_ctrlrequest *);
-> @@ -3232,6 +3234,15 @@ static void ffs_reset_work(struct work_struct *work)
->  	ffs_data_reset(ffs);
->  }
->  
-> +static int ffs_func_get_alt(struct usb_function *f,
-> +			    unsigned int interface)
-> +{
-> +	struct ffs_function *func = ffs_func_from_usb(f);
-> +	int intf = ffs_func_revmap_intf(func, interface);
-> +
-> +	return (intf < 0) ? intf : func->cur_alt[interface];
-> +}
-> +
->  static int ffs_func_set_alt(struct usb_function *f,
->  			    unsigned interface, unsigned alt)
->  {
-> @@ -3266,8 +3277,10 @@ static int ffs_func_set_alt(struct usb_function *f,
->  
->  	ffs->func = func;
->  	ret = ffs_func_eps_enable(func);
-> -	if (ret >= 0)
-> +	if (ret >= 0) {
->  		ffs_event_add(ffs, FUNCTIONFS_ENABLE);
-> +		func->cur_alt[interface] = alt;
-> +	}
->  	return ret;
->  }
->  
-> @@ -3574,6 +3587,7 @@ static struct usb_function *ffs_alloc(struct usb_function_instance *fi)
->  	func->function.bind    = ffs_func_bind;
->  	func->function.unbind  = ffs_func_unbind;
->  	func->function.set_alt = ffs_func_set_alt;
-> +	func->function.get_alt = ffs_func_get_alt;
->  	func->function.disable = ffs_func_disable;
->  	func->function.setup   = ffs_func_setup;
->  	func->function.req_match = ffs_func_req_match;
-> -- 
-> 2.17.1
-> 
+T:  Bus=3D07 Lev=3D02 Prnt=3D48 Port=3D01 Cnt=3D02 Dev#=3D 50 Spd=3D12   Mx=
+Ch=3D 0
+D:  Ver=3D 2.00 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
+P:  Vendor=3D04b8 ProdID=3D0d12 Rev=3D 2.00
+S:  Manufacturer=3DSeiko Epson Corporation
+S:  Product=3DEPSON HMD Com&Sens
+S:  SerialNumber=3DNPH269690577
+C:* #Ifs=3D 4 Cfg#=3D 1 Atr=3Dc0 MxPwr=3D100mA
+A:  FirstIf#=3D 1 IfCount=3D 2 Cls=3D02(comm.) Sub=3D02 Prot=3D01
+I:* If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D03(HID  ) Sub=3D00 Prot=3D00 Driver=
+=3Dusbhid
+E:  Ad=3D83(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D1ms
+I:* If#=3D 1 Alt=3D 0 #EPs=3D 1 Cls=3D02(comm.) Sub=3D02 Prot=3D01 Driver=
+=3D(none)
+E:  Ad=3D84(I) Atr=3D03(Int.) MxPS=3D   8 Ivl=3D16ms
+I:* If#=3D 2 Alt=3D 0 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00 Prot=3D00 Driver=
+=3D(none)
+E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D  64 Ivl=3D0ms
+E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D  64 Ivl=3D0ms
+I:* If#=3D 3 Alt=3D 0 #EPs=3D 1 Cls=3D03(HID  ) Sub=3D00 Prot=3D00 Driver=
+=3Dusbhid
+E:  Ad=3D82(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D1ms
+```
+
+/sys/kernel/debug/usb/devices after `sudo modprobe usbserial
+vendor=3D0x04b8 product=3D0x0d12`
+```
+T:  Bus=3D07 Lev=3D02 Prnt=3D48 Port=3D01 Cnt=3D02 Dev#=3D 50 Spd=3D12   Mx=
+Ch=3D 0
+D:  Ver=3D 2.00 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
+P:  Vendor=3D04b8 ProdID=3D0d12 Rev=3D 2.00
+S:  Manufacturer=3DSeiko Epson Corporation
+S:  Product=3DEPSON HMD Com&Sens
+S:  SerialNumber=3DNPH269690577
+C:* #Ifs=3D 4 Cfg#=3D 1 Atr=3Dc0 MxPwr=3D100mA
+A:  FirstIf#=3D 1 IfCount=3D 2 Cls=3D02(comm.) Sub=3D02 Prot=3D01
+I:* If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D03(HID  ) Sub=3D00 Prot=3D00 Driver=
+=3Dusbhid
+E:  Ad=3D83(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D1ms
+I:* If#=3D 1 Alt=3D 0 #EPs=3D 1 Cls=3D02(comm.) Sub=3D02 Prot=3D01 Driver=
+=3D(none)
+E:  Ad=3D84(I) Atr=3D03(Int.) MxPS=3D   8 Ivl=3D16ms
+I:* If#=3D 2 Alt=3D 0 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00 Prot=3D00 Driver=
+=3Dusbserial_generic
+E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D  64 Ivl=3D0ms
+E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D  64 Ivl=3D0ms
+I:* If#=3D 3 Alt=3D 0 #EPs=3D 1 Cls=3D03(HID  ) Sub=3D00 Prot=3D00 Driver=
+=3Dusbhid
+E:  Ad=3D82(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D1ms
+```
+
+Thank you,
+Ian
+
+On Sun, Nov 26, 2023 at 10:08=E2=80=AFAM Greg KH <gregkh@linuxfoundation.or=
+g> wrote:
+>
+> On Sun, Nov 26, 2023 at 10:03:24AM -0600, Ian Zurutuza wrote:
+> > It won't attach, no /dev/ttyACM node were created.
+>
+> <snip>
+>
+> For some reason you sent this only to me, which is a bit rude to
+> everyone else on the mailing list.  I'll be glad to respond if you
+> resend it to everyone.
+>
+> thanks,
+>
+> greg k-h
 
