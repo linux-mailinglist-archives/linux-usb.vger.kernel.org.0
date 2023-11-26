@@ -1,162 +1,91 @@
-Return-Path: <linux-usb+bounces-3330-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3331-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E7087F93AE
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 17:12:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 905157F9561
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 22:03:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B09E11C20C10
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 16:12:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09BCAB20A89
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 21:03:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97CFDDBA;
-	Sun, 26 Nov 2023 16:12:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6463B12E5A;
+	Sun, 26 Nov 2023 21:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HN2CC0k9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VF6vMpZR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C513494
-	for <linux-usb@vger.kernel.org>; Sun, 26 Nov 2023 08:12:32 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1cc9b626a96so23459675ad.2
-        for <linux-usb@vger.kernel.org>; Sun, 26 Nov 2023 08:12:32 -0800 (PST)
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDB1FB
+	for <linux-usb@vger.kernel.org>; Sun, 26 Nov 2023 13:02:57 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6cb66fbc63dso2416602b3a.0
+        for <linux-usb@vger.kernel.org>; Sun, 26 Nov 2023 13:02:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701015152; x=1701619952; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jx1vwNxY8sfzGHnhlOePT8EU1LRTlTtAecKFFptNgPA=;
-        b=HN2CC0k9hVDq3JztuNKWtSxvOUq2QWaanTCiMXNN5duQBiYD1EmZupT4vDGrfOkViY
-         4aifdApek/XyGpvZJ2ANwxHFNdv6S0aTY1ppY4VasWZEqrOKjYFwny4NbXVVj+KG5PG1
-         HqNhzTqe9GK+JgcEsBVM6K4eerv0ibxJuHLFY/RV4ZbXtfZypXEGSqHEJIA6TklncWQH
-         cU4zLguzBJn9U7syRJJseexXJ6I4lsos5EHu5n8t1epiGVAv7y5Qpx2iMCshq7L2pfNG
-         n2TF9FW0jP1HEAIWbkYM/vzSaggXFEVkltKxExMmko8kOh1X+5jFHI/+TWf08xqPe9/I
-         i/+g==
+        d=gmail.com; s=20230601; t=1701032577; x=1701637377; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=KWOiuRBb3qWMj0z0bynYMJHcoo/v5rCyHeLqTf/DYk0=;
+        b=VF6vMpZRHwXYm4RfE2ibv/lAg2Maz1XAB0PsVJ2zaWx3lBz0r/LQEgHLpF/cOfZAUz
+         BsY2UaaUixXycISzPYdPrAp1ZbN8JN9BhSHmZKw2sLSm4+bf/qxtJjeWffXMHEoII7j8
+         xAXPrx+zRN62V52UMza0xcLgEan9dUh4uE3CbnlGvSirdnpYdgAuuoLgptldqYjGKMJY
+         nQFjqAF8yk1XyoSMw5/oVpSwpFHcgT/kk8vscQGGLktHNF09rEqAiTBZ5okRzQDAR9RC
+         nlQTKkSbrHq8mbJexIOm/OGKA+kMj+D2GVgIwXwS+OlqRHnMgSsjW0WV3DyROD3y9K/L
+         4lsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701015152; x=1701619952;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jx1vwNxY8sfzGHnhlOePT8EU1LRTlTtAecKFFptNgPA=;
-        b=Oj0Eu3cNcNGUnrXFQLWaynsDfPJsm/ii1TUy3LD4v8N4A5j2aMInrgpLFg9VGFtrok
-         GmkhYRnp6cuKee45ewndhK+pCNN4y5RUmKuNd0cPRUySu1y9f8PSD2Zro+8MEn3zM3y7
-         9qvSJwJ9dICPo3G++cXeMrVO6Javm7zP5ZLC8IwEiNYAHTQAZwodb4V4KwmWNq9Ex+WW
-         EnfqIGjUjRoTWe+EsjC8nbTXoYnE/uDg+Q3GUE0+0d/pvIX5+i3oLutD5oysuyiWx6PF
-         PPepBLT6Tesjnbjx6+CAWqHnx2+yeyQIzALL76wSCROJ3NCNPdz/BqLGBCY9Uv/sXjLm
-         Zxzg==
-X-Gm-Message-State: AOJu0YyOJY+xZusZbBMcZh6q0/HZJmXMPI54IqmNrnfTYf2MK5KiTxXT
-	rUm6KK9S4rVuJ310gPSlyV+YfBDj74RB9GDpgyL5sQySbyc=
-X-Google-Smtp-Source: AGHT+IFPtFRKo/cqnI1LNnhf69l/Juc4gVwT+pKNL3CJNuPxVUyPpKIybJtd//B/9nmhZRDgVDJtQGTr92ZZyQ1nTuU=
-X-Received: by 2002:a17:90b:1d0f:b0:285:a2af:31aa with SMTP id
- on15-20020a17090b1d0f00b00285a2af31aamr3229068pjb.37.1701015152076; Sun, 26
- Nov 2023 08:12:32 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701032577; x=1701637377;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KWOiuRBb3qWMj0z0bynYMJHcoo/v5rCyHeLqTf/DYk0=;
+        b=C/HTUFCYt5jKp2m5R26/I3xwWlpKzuMv5i19ZrCQrStb0/krW2SQZmVaBGWtfXyCTm
+         X+l9C0/Xf8Ncz1wH0B0CJN8WHkbINoPUEH0shMwiPjJm00BHwUi/yMAUgklzsbUiQ/51
+         y58uQqQiMS6lZNg2E2tIyVp2q/GLTrD1aq6Nb9UbcpnshRAFvfIwdJJwlETdZocwPLgA
+         j5pEivgt5MkX2qPTlYHfrgQiXZkZvsynZrGAgm26NKN9O6nz7zDoZnJ6S8MpUn3Q+Gl+
+         pCOK7gOihyajJ3kqy5Qbr+5P0kwxldWL/7X69sCjM5WNPtJbS0tyaxX84+HlTAJS6B4/
+         pwpg==
+X-Gm-Message-State: AOJu0YxR4oEQfgBBe88Y57+tvNBhppCochFuTzLG+9uMawAjzzNZp9gC
+	LooMZB5OKm7t7tf8xTFFs5PULL/114W9vA==
+X-Google-Smtp-Source: AGHT+IGBr6IQzbQQCyPMs9SpqQ3wHOBB4zsfw8NIGbj0gFywlkRMOKjdeoi5h0oBSefB4nHdehVVWw==
+X-Received: by 2002:a05:6a00:2e8b:b0:6cb:4361:773c with SMTP id fd11-20020a056a002e8b00b006cb4361773cmr12586148pfb.5.1701032576805;
+        Sun, 26 Nov 2023 13:02:56 -0800 (PST)
+Received: from [192.168.43.30] ([1.46.146.195])
+        by smtp.googlemail.com with ESMTPSA id ey25-20020a056a0038d900b006c06804cd39sm5981198pfb.153.2023.11.26.13.02.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Nov 2023 13:02:56 -0800 (PST)
+Message-ID: <27d60f61-77cf-46d5-9e60-8f60e8469008@gmail.com>
+Date: Mon, 27 Nov 2023 04:02:52 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJrDFhpoOLNx-RX_raU4v++ZPYVShg_pmaxv0V2WfkfgcFdUGg@mail.gmail.com>
- <2023112652-scowling-submarine-5071@gregkh> <CAJrDFhoXrXry+gXL6477P-WHJfN58RreHSQ=7dyw-L=rx7E6mA@mail.gmail.com>
- <2023112636-entail-blend-8680@gregkh>
-In-Reply-To: <2023112636-entail-blend-8680@gregkh>
-From: Ian Zurutuza <ian.zurutuza@gmail.com>
-Date: Sun, 26 Nov 2023 10:12:20 -0600
-Message-ID: <CAJrDFhrm7F26rtQnmwMXkwio0DC7ZmTzpxPdJEFnL1wbU370mA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: device driver association
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Ian Zurutuza <ian.zurutuza@gmail.com>, linux-usb@vger.kernel.org
+References: <CAJrDFhpoOLNx-RX_raU4v++ZPYVShg_pmaxv0V2WfkfgcFdUGg@mail.gmail.com>
+Content-Language: en-US
+From: Lars Melin <larsm17@gmail.com>
+In-Reply-To: <CAJrDFhpoOLNx-RX_raU4v++ZPYVShg_pmaxv0V2WfkfgcFdUGg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Sorry, I wasn't paying attention, need coffee.
+On 11/26/2023 13:38, Ian Zurutuza wrote:
+> Hi,
+> 
+> I need help associating this device with the proper driver for serial
+> communication. If I am barking up the wrong tree, please let me know.
+> 
+> I am able to open a serial port to send commands to the Epson BT-40
+> moverio AR glasses after running this command `sudo modprobe -r
+> cdc_acm && sudo modprobe usbserial vendor=0x04b8 product=0x0d12`.
+> After I saw in the system log a message that asked me to reach out to
+> this mailing list to get this device added to a proper driver. >
 
-It won't attach, no /dev/ttyACM node were created.
+The proper driver is cdc-acm but your device has to be defined in the 
+driver with the quirk NO_UNION_NORMAL due to the flawed Union descriptor 
+in your device.
 
-I had attempted to manually set the driver with `modprobe cdc-acm
-vendor=3D0x04b8 product=3D0x0d12`, It didn't attach, but I removed it just
-in case.
-
-Original /sys/kernel/debug/usb/devices
-```
-T:  Bus=3D07 Lev=3D02 Prnt=3D48 Port=3D00 Cnt=3D01 Dev#=3D 49 Spd=3D480  Mx=
-Ch=3D 0
-D:  Ver=3D 2.01 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
-P:  Vendor=3D04b8 ProdID=3D0335 Rev=3D 0.03
-S:  Manufacturer=3DEPSON
-S:  Product=3DEPSON HMD Audio
-C:* #Ifs=3D 1 Cfg#=3D 1 Atr=3De0 MxPwr=3D100mA
-I:* If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D03(HID  ) Sub=3D00 Prot=3D00 Driver=
-=3Dusbhid
-E:  Ad=3D86(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D1ms
-
-T:  Bus=3D07 Lev=3D02 Prnt=3D48 Port=3D01 Cnt=3D02 Dev#=3D 50 Spd=3D12   Mx=
-Ch=3D 0
-D:  Ver=3D 2.00 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
-P:  Vendor=3D04b8 ProdID=3D0d12 Rev=3D 2.00
-S:  Manufacturer=3DSeiko Epson Corporation
-S:  Product=3DEPSON HMD Com&Sens
-S:  SerialNumber=3DNPH269690577
-C:* #Ifs=3D 4 Cfg#=3D 1 Atr=3Dc0 MxPwr=3D100mA
-A:  FirstIf#=3D 1 IfCount=3D 2 Cls=3D02(comm.) Sub=3D02 Prot=3D01
-I:* If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D03(HID  ) Sub=3D00 Prot=3D00 Driver=
-=3Dusbhid
-E:  Ad=3D83(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D1ms
-I:* If#=3D 1 Alt=3D 0 #EPs=3D 1 Cls=3D02(comm.) Sub=3D02 Prot=3D01 Driver=
-=3D(none)
-E:  Ad=3D84(I) Atr=3D03(Int.) MxPS=3D   8 Ivl=3D16ms
-I:* If#=3D 2 Alt=3D 0 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00 Prot=3D00 Driver=
-=3D(none)
-E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D  64 Ivl=3D0ms
-E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D  64 Ivl=3D0ms
-I:* If#=3D 3 Alt=3D 0 #EPs=3D 1 Cls=3D03(HID  ) Sub=3D00 Prot=3D00 Driver=
-=3Dusbhid
-E:  Ad=3D82(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D1ms
-```
-
-/sys/kernel/debug/usb/devices after `sudo modprobe usbserial
-vendor=3D0x04b8 product=3D0x0d12`
-```
-T:  Bus=3D07 Lev=3D02 Prnt=3D48 Port=3D01 Cnt=3D02 Dev#=3D 50 Spd=3D12   Mx=
-Ch=3D 0
-D:  Ver=3D 2.00 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
-P:  Vendor=3D04b8 ProdID=3D0d12 Rev=3D 2.00
-S:  Manufacturer=3DSeiko Epson Corporation
-S:  Product=3DEPSON HMD Com&Sens
-S:  SerialNumber=3DNPH269690577
-C:* #Ifs=3D 4 Cfg#=3D 1 Atr=3Dc0 MxPwr=3D100mA
-A:  FirstIf#=3D 1 IfCount=3D 2 Cls=3D02(comm.) Sub=3D02 Prot=3D01
-I:* If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D03(HID  ) Sub=3D00 Prot=3D00 Driver=
-=3Dusbhid
-E:  Ad=3D83(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D1ms
-I:* If#=3D 1 Alt=3D 0 #EPs=3D 1 Cls=3D02(comm.) Sub=3D02 Prot=3D01 Driver=
-=3D(none)
-E:  Ad=3D84(I) Atr=3D03(Int.) MxPS=3D   8 Ivl=3D16ms
-I:* If#=3D 2 Alt=3D 0 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00 Prot=3D00 Driver=
-=3Dusbserial_generic
-E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D  64 Ivl=3D0ms
-E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D  64 Ivl=3D0ms
-I:* If#=3D 3 Alt=3D 0 #EPs=3D 1 Cls=3D03(HID  ) Sub=3D00 Prot=3D00 Driver=
-=3Dusbhid
-E:  Ad=3D82(I) Atr=3D03(Int.) MxPS=3D  64 Ivl=3D1ms
-```
-
-Thank you,
-Ian
-
-On Sun, Nov 26, 2023 at 10:08=E2=80=AFAM Greg KH <gregkh@linuxfoundation.or=
-g> wrote:
->
-> On Sun, Nov 26, 2023 at 10:03:24AM -0600, Ian Zurutuza wrote:
-> > It won't attach, no /dev/ttyACM node were created.
->
-> <snip>
->
-> For some reason you sent this only to me, which is a bit rude to
-> everyone else on the mailing list.  I'll be glad to respond if you
-> resend it to everyone.
->
-> thanks,
->
-> greg k-h
+Lars
 
