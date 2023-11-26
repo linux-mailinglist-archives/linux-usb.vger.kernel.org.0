@@ -1,37 +1,37 @@
-Return-Path: <linux-usb+bounces-3322-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3321-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 062DB7F9116
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 03:57:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D90927F9114
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 03:57:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CD36B211B0
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 02:57:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9438C2814B3
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Nov 2023 02:57:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FF8A3C35;
-	Sun, 26 Nov 2023 02:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F5023C1;
+	Sun, 26 Nov 2023 02:57:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="iX7PpgDO"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="Xz+Q6Xfs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D62BC;
-	Sat, 25 Nov 2023 18:57:09 -0800 (PST)
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979D811F;
+	Sat, 25 Nov 2023 18:57:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
 	s=s31663417; t=1700967407; x=1701572207; i=wahrenst@gmx.net;
-	bh=ae8bjDGLrd8SODQBQpQFN5h1gMGw+YkRkmMEpiG27lw=;
+	bh=eZ6xuOR9KsJjzE9TJhEPlzg6rY8M8dZ0jHI2v3+5O8Y=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
 	 References;
-	b=iX7PpgDOZuWUKdYtAG/ZK5bCFNznzsGuMHI+ukUVqmsEvNqsxNJBbVCOO+hRjGl2
-	 Zce5YD5D/IsWx/3GqYlModR6pS9briBQu8nkNpArRxmwFA4vKhiqFwjkCXCBsnjhe
-	 bP0CGyX3y/nFauBAnL8XqkFljPJs0f6SI1BG0TIS7tiu6iwULEiSuOHCTSpViWmBL
-	 TQ8QN8oMjh25Bg6RkUxu7XjIqWoPgtc1aJ2oBhZTaMuzuw8nHJjmia0I/SI1mXTUl
-	 TsuDBBNzlSycMTgprUBELwh6cXAQFWyBV7dNo7T/V2f+CFhc3V2H7svvPfmnkzUh+
-	 wWC4uVql2ShXl8HNCA==
+	b=Xz+Q6XfseVYGkViydcymyPEtm345vJxqxYIJT/fWE75QRinYiIISoHmvf60jZrTc
+	 cZH9U0xrxm+G1ItcAZVlo+hzTW2XS1h7Z5jUv4JSc7T/AZTNQ72ITnp0hvkIF0ezc
+	 fegTU/CUaspueg9//fyKRJS/dYc94S7RNspZAiIgLQ5gdj6diFuqMC2YEPUFMs/Ud
+	 0hs37+y7PjzDppXd97A7uxJjO8D67Ew0UV4HBoWY4vszRFVFfBvWSEs19G5D06W1M
+	 LAPhJ8qYBAA+t7Ghrl+dZnPGGjoas+TUTG/Z25iSwrpHGuib/VOZY76Bpe5Sq/ISZ
+	 pqy7JU2uEX4hF4FMSA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M6llE-1rEECH0l9q-008MYz; Sun, 26
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MrhQ6-1rcnVL2XY4-00nhbX; Sun, 26
  Nov 2023 03:56:47 +0100
 From: Stefan Wahren <wahrenst@gmx.net>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -46,9 +46,9 @@ Cc: bcm-kernel-feedback-list@broadcom.com,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH 2/3] ARM: dts: bcm2711: Add generic xHCI
-Date: Sun, 26 Nov 2023 03:56:11 +0100
-Message-Id: <20231126025612.12522-3-wahrenst@gmx.net>
+Subject: [PATCH 3/3] ARM: dts: bcm2711-rpi-cm4-io: Enable xHCI host
+Date: Sun, 26 Nov 2023 03:56:12 +0100
+Message-Id: <20231126025612.12522-4-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231126025612.12522-1-wahrenst@gmx.net>
 References: <20231126025612.12522-1-wahrenst@gmx.net>
@@ -59,77 +59,68 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:LbLdy05e4OaGCeGKKccPl+U1DEWeZ14f3uBvm9qPfxhlgS8nN5g
- lWIUbxwjMqwgEtGB18RDBriWr1nuK07nbN67TBSdtFf8C6Vxx47DLSLDSlbpcNdcFQuOPDT
- jckKn7chrj3jamIGBa8uRaYjUVRbRxWbKHi+CPaH6fsLPcQkCXgl93225c+kmhNUK5CrePG
- zL/b+bKM7gBRaBYmu5i0Q==
-UI-OutboundReport: notjunk:1;M01:P0:TjJW6+Z+Z/o=;pisWYDE9TFwEHqZv4EoMTlkbZEO
- tStRlZDvnBnNsk1Z+cLOgo0NF7zSBTrkikRJOkczHOk+oAw0Q8AOo3cESqXQOvCOEUcgnPZUM
- pGUqko9cG0/1c2f9hF/C5axwmvrnmjKJ5ayPIjeGpNyFyTfzvcHs3LJNCbhNsXSl7GViENmyY
- EYjcySpSIXkY3TnaWMLMoS1va8TpBF5SPIUGRonSNHFhkzesyel/dSBN/apU//zg1B8kNb85H
- Db62ljWTV2UBxo7905bIamIeIjmzyYi1BV6nPy3nahm1sEF3gGWJuKrS+0U8/F2tMaKiqKK2y
- I9ev2Y+S8h7Wn4K6b6inZHyFdL9gj/SBWuv77kZDhq2NMGEaoHjzqPy+lweo5h97DxlYAfOJj
- MRdsQrX8vt5MvkCFsmyuxsmmi7eCUBLms0pDQUqU8tfz/ruDouIPezenNke7gA3c1CS1mELmi
- dSrLkSsLiOw7IpoGA4DVPx+EkeYDMBMyJOS6vCOqqQURCNwdhGNvuLyGcV9yUfzq2B2k6QZ1q
- ew3qcrGtCiJ4hPRwVzBmIFcpPCIOU2aNzYjzdhnVxvMWlUgYFx1RaQE4yEKF69eiMlpypLASF
- G97JOa2RTi3xbf47RywlJdPM7vXKs+3SyIx0gGoSBIx/NTujf15+L+0LFxniJPqQhvOsviTzC
- hl+oev9RHTcscsvivWKyrHx7xbCWtbR8vrHEbxVzGTnBfJcFTvIWazJ+hmh9q0xF5ZQo5qmFB
- XEAemsKWwiK7cAI2U2P7VxEx/dKNLVYR111IV4gja8kzig8m0TGc3kbrxs14felnTDaMxz71q
- gALqhBTd8OCRfzfFe3HhR+mYXR4r4ok2UXspbGvEbDK1jfZhRGQVyzNlRvqmiQFYRgiG9N5n5
- inELtw6FrjSz0DgwpKceFzo4QK74c9UZ+BrdoMsZciLiQSZGNTzaJqyj5N6mNA9+Gff9+Cz0h
- /Lb+0Q==
+X-Provags-ID: V03:K1:SW6X2kYT944c4hEQnaNDU2UYHD7RGQ8PiLdBSZKTTcz9xFxb4Fu
+ YEZV9dorpXbXIGJ1TD5vSF8J9wWOeVCt+GI60DcccHVsUZSMYUxIxjtCOcgQ5t49tcaRnjO
+ 0LtALyhA/m8ZrHol3VIqqleOtllZPO8yVTn3Km6FXqpBvna7LqMVHgkEZ41m4bG0V4qxFjc
+ uzxsh27/bywsu+RzB6dEQ==
+UI-OutboundReport: notjunk:1;M01:P0:V8ZDdUFvExM=;sdtdBO52CinYSAYGoFpWO+1TAHy
+ KusDi0LIxEx6SpFoGdsOuOqTa6m6oS5luXOZneGeL/Dug0nm+JhAzAYRxjfj3e0SmxZXns366
+ hM85SIoU4s4+Y0hwG2vllv29nkx0HVBJGjyRyswNSNJ+/2pYAPxfoLUcWrg19NHI2dSgqQBVx
+ 0lDmFUE4gBk8RW9o7toAmMN6ywathaNqaVeGVAtbjEE/fIOSp4h/Ymtog1zZnDynE31tlMkWB
+ KPRaSfl6JJksoBEiU77MF789fP0hxZzlpDPLl1bDaBwihwW0YQh/jEj/Vmj8ZserH3bMIqnPe
+ 4cObHWpbb8JliRYqNDsGyiYgz91MJcZNe870XD/rMDavQgDjEs/ip5JoW1nYjWqA4rWtA8cdH
+ AEcmaybrPk73e3A5aUeVvtew0PffA4ice3Q5MvTP+vWk9xhYCXibjRhWB8N8reXzysQ/4rviw
+ XlYoy9kuRjjexV1QPmPAjQ8iHIhQE4wD7FB7VRPJvU5E+1eub0X4xbF9pmFAGXx1XQIHagMFo
+ K0TdwWtEuakXv4UjyHKcPz1g7Ycst9BNtRLPqsnPtP8bBH+h1VoCi3/ri7EOpYWPVYvg06KlR
+ DZ+Z/XGceZC5tojOGFJANzFUB9I8SwbQquV2j09B9/UF8wgv2+KddOEvt7gyljjzZvF0Fo6Uv
+ DfobAWLsAWxrfK05ysVUD04sga2zpUq5W5EZu5WNm525hUD+HIKipfJ6VhRsTFwWMAQIKRW08
+ /8OKGw8ICAdban8irFFCuhNobeZIR3u3jh9ooohUqUYi9ytPnM1MTc0FH0HF25/lmcjcfUGFC
+ sS9LgDSwVgiZLO/1KBP9uX6QPgawkoJjsdEa/HAn7/ftlr4KxNBtoeNgWwDbsU1HbTBMjaLh4
+ 3/seX1z3IyFylsKwtULPhqNCI15bE0Hpqf0LGUD1Q6g9LAUYwmyH0cdRvkHw7esTlJCZUkGjG
+ Ki407bhAH/lCmisFhulWMLH4lX8=
 
-The BCM2711 SoC also has a generic xHCI. The USB port is currently
-only usable on the Compute Module 4 (e.g. via IO board).
+The initial version of the bcm2711-rpi-cm4-io based on the
+false assumption, that the USB host interface was connected to
+the DWC2 IP. So replace it with the xHCI and get the USB host
+running.
 
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 =2D--
- arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi | 5 +++++
- arch/arm/boot/dts/broadcom/bcm2711.dtsi     | 9 +++++++++
- 2 files changed, 14 insertions(+)
+ arch/arm/boot/dts/broadcom/bcm2711-rpi-cm4-io.dts | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi b/arch/arm/boot/d=
-ts/broadcom/bcm2711-rpi.dtsi
-index 98817a6675b9..d233a191c139 100644
-=2D-- a/arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi
-+++ b/arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "bcm2835-rpi.dtsi"
-
-+#include <dt-bindings/power/raspberrypi-power.h>
- #include <dt-bindings/reset/raspberrypi,firmware-reset.h>
+diff --git a/arch/arm/boot/dts/broadcom/bcm2711-rpi-cm4-io.dts b/arch/arm/=
+boot/dts/broadcom/bcm2711-rpi-cm4-io.dts
+index d7ba02f586d3..17e7c2235d09 100644
+=2D-- a/arch/arm/boot/dts/broadcom/bcm2711-rpi-cm4-io.dts
++++ b/arch/arm/boot/dts/broadcom/bcm2711-rpi-cm4-io.dts
+@@ -2,7 +2,6 @@
+ /dts-v1/;
+ #include "bcm2711-rpi-cm4.dtsi"
+ #include "bcm283x-rpi-led-deprecated.dtsi"
+-#include "bcm283x-rpi-usb-host.dtsi"
 
  / {
-@@ -76,3 +77,7 @@ &v3d {
- &vchiq {
- 	interrupts =3D <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+ 	model =3D "Raspberry Pi Compute Module 4 IO Board";
+@@ -130,6 +129,10 @@ &pixelvalve4 {
+ 	status =3D "okay";
+ };
+
++&usb {
++	status =3D "disabled";
++};
++
+ &vc4 {
+ 	status =3D "okay";
+ };
+@@ -137,3 +140,7 @@ &vc4 {
+ &vec {
+ 	status =3D "disabled";
  };
 +
 +&xhci {
-+	power-domains =3D <&power RPI_POWER_DOMAIN_USB>;
++	status =3D "okay";
 +};
-diff --git a/arch/arm/boot/dts/broadcom/bcm2711.dtsi b/arch/arm/boot/dts/b=
-roadcom/bcm2711.dtsi
-index 4a379a14966d..724f1f0f4be7 100644
-=2D-- a/arch/arm/boot/dts/broadcom/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/broadcom/bcm2711.dtsi
-@@ -604,6 +604,15 @@ genet_mdio: mdio@e14 {
- 			};
- 		};
-
-+		xhci: usb@7e9c0000 {
-+			compatible =3D "generic-xhci";
-+			reg =3D <0x0 0x7e9c0000 0x100000>;
-+			#address-cells =3D <1>;
-+			#size-cells =3D <0>;
-+			interrupts =3D <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;
-+			status =3D "disabled";
-+		};
-+
- 		v3d: gpu@7ec00000 {
- 			compatible =3D "brcm,2711-v3d";
- 			reg =3D <0x0 0x7ec00000 0x4000>,
 =2D-
 2.34.1
 
