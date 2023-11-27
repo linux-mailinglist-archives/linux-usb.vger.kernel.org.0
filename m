@@ -1,209 +1,128 @@
-Return-Path: <linux-usb+bounces-3337-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3338-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7CC87F9C3F
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 10:04:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 610AE7F9CA5
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 10:31:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3314EB20AC3
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 09:04:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9672B20DF7
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 09:31:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 613B312E6E;
-	Mon, 27 Nov 2023 09:04:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDE0C15EAA;
+	Mon, 27 Nov 2023 09:30:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D19EDC
-	for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 01:04:19 -0800 (PST)
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id BC27621B75;
-	Mon, 27 Nov 2023 09:04:17 +0000 (UTC)
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id A39C2132A6;
-	Mon, 27 Nov 2023 09:04:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id vb1WJZFbZGVYZQAAn2gu4w
-	(envelope-from <aporta@suse.de>); Mon, 27 Nov 2023 09:04:17 +0000
-Date: Mon, 27 Nov 2023 10:04:17 +0100
-From: Andrea della Porta <aporta@suse.de>
-To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc: Oliver Neukum <oneukum@suse.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Ivan Ivanov <ivan.ivanov@suse.com>,
-	Andrea della Porta <andrea.porta@suse.com>
-Subject: Re: [PATCH] USB: dwc2: write HCINT with INTMASK applied
-Message-ID: <ZWRbkdTASTNJB8Fv@apocalypse>
-Mail-Followup-To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-	Oliver Neukum <oneukum@suse.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Ivan Ivanov <ivan.ivanov@suse.com>,
-	Andrea della Porta <andrea.porta@suse.com>
-References: <20231115144514.15248-1-oneukum@suse.com>
- <f0bd323a-8384-e303-907f-5d533af6d71e@synopsys.com>
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8D4BE;
+	Mon, 27 Nov 2023 01:30:51 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a0bdf4eeb46so198310566b.3;
+        Mon, 27 Nov 2023 01:30:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701077450; x=1701682250;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O8q/voH+i9Ldx+ztHik99cegjVPYsrH8RZvyBTq86Z4=;
+        b=jzYtMN9MX+AEFKpq1tLxKlTMoGWj/iO1XRIkavuL7vHlRrbBagMw1EDIUlRLN1SL08
+         0gRVfBhIw6aD8sX8ihaTFhWB+AjWSEaGWAlLIDPEdJVO8BPEiXaAYsrvXlCrSNNHSNXP
+         MzOLaGig+N7247/aNWvfncG9npV5T57v8nWNK75YWPDFUevIQ3wbY0IJ+3NYRxaXkIq9
+         lhi7rHwwxgQtaRE7tdwBPWJRO+TIfsq5BO1M8oA6EU2K7gG1pwaa08ogLIvWOn8v90oR
+         8hAfmW67Mvki77tb/zvYtC2aPYA8ZhVDpmpODQrZ1IWkHCgXQvExsbC+JwQfR6V7h7Bo
+         GzEw==
+X-Gm-Message-State: AOJu0Yzy25jkyszCxmjxQeF6Pwb7GuCoHMxQRn4x/DVHDzr8q4Ksp/ds
+	KJgKlu3uvPPEzR0fHOLgvMA=
+X-Google-Smtp-Source: AGHT+IGOL4p6pRTLJQNQfn9XZhg6d0N84E2x7yPVKT5klJi7npiXgzGA0O2/3qGpveigBqDOWQXy6g==
+X-Received: by 2002:a17:906:f904:b0:a04:838e:861 with SMTP id lc4-20020a170906f90400b00a04838e0861mr7962640ejb.34.1701077450194;
+        Mon, 27 Nov 2023 01:30:50 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
+        by smtp.gmail.com with ESMTPSA id r17-20020a170906a21100b009ae57888718sm5462676ejy.207.2023.11.27.01.30.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Nov 2023 01:30:49 -0800 (PST)
+Message-ID: <d0b4f6e7-cf01-4751-8d46-03028341acb4@kernel.org>
+Date: Mon, 27 Nov 2023 10:30:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f0bd323a-8384-e303-907f-5d533af6d71e@synopsys.com>
-X-Spamd-Bar: ++++++
-X-Spam-Score: 6.68
-X-Rspamd-Server: rspamd1
-X-Rspamd-Queue-Id: BC27621B75
-Authentication-Results: smtp-out1.suse.de;
-	dkim=none;
-	dmarc=fail reason="No valid SPF, No valid DKIM" header.from=suse.de (policy=none);
-	spf=softfail (smtp-out1.suse.de: 2a07:de40:b281:104:10:150:64:98 is neither permitted nor denied by domain of aporta@suse.de) smtp.mailfrom=aporta@suse.de
-X-Spamd-Result: default: False [6.68 / 50.00];
-	 TO_DN_EQ_ADDR_SOME(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 R_SPF_SOFTFAIL(4.60)[~all:c];
-	 RCPT_COUNT_FIVE(0.00)[6];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 MX_GOOD(-0.01)[];
-	 NEURAL_HAM_SHORT(-0.10)[-0.516];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 R_DKIM_NA(2.20)[];
-	 MIME_TRACE(0.00)[0:+];
-	 BAYES_HAM(-3.00)[100.00%];
-	 ARC_NA(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 NEURAL_SPAM_LONG(3.50)[0.999];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 RCVD_IN_DNSWL_HI(-1.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:98:from];
-	 RCVD_TLS_ALL(0.00)[];
-	 DMARC_POLICY_SOFTFAIL(0.10)[suse.de : No valid SPF, No valid DKIM,none]
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/17] tty: small cleanups and fixes
+Content-Language: en-US
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Jakub Kicinski
+ <kuba@kernel.org>, Jan Kara <jack@suse.com>,
+ Laurentiu Tudor <laurentiu.tudor@nxp.com>, linux-alpha@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org,
+ Matt Turner <mattst88@gmail.com>, netdev@vger.kernel.org,
+ Paolo Abeni <pabeni@redhat.com>,
+ Richard Henderson <richard.henderson@linaro.org>
+References: <20231121092258.9334-1-jirislaby@kernel.org>
+ <2023112321-veto-trapping-ca47@gregkh>
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ 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
+In-Reply-To: <2023112321-veto-trapping-ca47@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 12:35 Wed 22 Nov     , Minas Harutyunyan wrote:
-> Hi Oliver,
+On 23. 11. 23, 21:19, Greg KH wrote:
+> On Tue, Nov 21, 2023 at 10:22:41AM +0100, Jiri Slaby (SUSE) wrote:
+>> This is a series to fix/clean up some obvious issues I revealed during
+>> u8+size_t conversions (to be posted later).
 > 
-> On 11/15/23 18:45, Oliver Neukum wrote:
-> > dwc2_hc_n_intr() writes back INTMASK as read but evaluates it
-> > with intmask applied. In stress testing this causes spurious
-> > interrupts like this:
-> > 
-> > [Mon Aug 14 10:51:07 2023] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 7 - ChHltd set, but reason is unknown
-> > [Mon Aug 14 10:51:07 2023] dwc2 3f980000.usb: hcint 0x00000002, intsts 0x04600001
-> > [Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 0 - ChHltd set, but reason is unknown
-> > [Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: hcint 0x00000002, intsts 0x04600001
-> > [Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 4 - ChHltd set, but reason is unknown
-> > [Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: hcint 0x00000002, intsts 0x04600001
-> > [Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: dwc2_update_urb_state_abn(): trimming xfer length
-> > 
-> > Applying INTMASK prevents this. The issue exists in all versions of the
-> > driver.
-> 
-> I'm Ok with this patch, just need some elaboration.
-> So, channel halted interrupt asserted due to some other interrupt (AHB 
-> Error, Excessive transaction errors, Babble, Stall) which was masked. 
-> Can you check which of masked interrupts is cause of channel halt interrupt?
-> 
-> Thanks,
-> Minas
->
+> I applied most of these except the last few, as I think you were going
+> to reorder them, right?
 
-Hi Minas,
-here's the report from dmesg:
+Yes, great. I will rebase and see/resend what is missing.
 
-[209384.238724]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.246725]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.247634]   hcint 0x00000003, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.254722]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.262725]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.270724]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.278336]   hcint 0x00000092, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.278384]   hcint 0x00000010, hcintmsk 0x00000436, hcint&hcintmsk 0x00000010
-[209384.278720]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.286723]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.288486]   hcint 0x00000021, hcintmsk 0x00000426, hcint&hcintmsk 0x00000020
-[209384.288511]   hcint 0x00000002, hcintmsk 0x00000406, hcint&hcintmsk 0x00000002
-[209384.288528] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 1 - ChHltd set, but reason is unknown
-[209384.288604]   hcint 0x00000010, hcintmsk 0x00000436, hcint&hcintmsk 0x00000010
-[209384.294720]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.302734]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.310724]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.318721]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.321722]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[209384.326729]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+thanks,
+-- 
+js
+suse labs
 
-
-Many thanks,
-Andrea 
-
-
-> > 
-> > Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> > Tested-by: Ivan Ivanov <ivan.ivanov@suse.com>
-> > Tested-by: Andrea della Porta <andrea.porta@suse.com>
-> > ---
-> >   drivers/usb/dwc2/hcd_intr.c | 15 +++++++--------
-> >   1 file changed, 7 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc2/hcd_intr.c b/drivers/usb/dwc2/hcd_intr.c
-> > index 0144ca8350c3..5c7538d498dd 100644
-> > --- a/drivers/usb/dwc2/hcd_intr.c
-> > +++ b/drivers/usb/dwc2/hcd_intr.c
-> > @@ -2015,15 +2015,17 @@ static void dwc2_hc_n_intr(struct dwc2_hsotg *hsotg, int chnum)
-> >   {
-> >   	struct dwc2_qtd *qtd;
-> >   	struct dwc2_host_chan *chan;
-> > -	u32 hcint, hcintmsk;
-> > +	u32 hcint, hcintraw, hcintmsk;
-> >   
-> >   	chan = hsotg->hc_ptr_array[chnum];
-> >   
-> > -	hcint = dwc2_readl(hsotg, HCINT(chnum));
-> > +	hcintraw = dwc2_readl(hsotg, HCINT(chnum));
-> >   	hcintmsk = dwc2_readl(hsotg, HCINTMSK(chnum));
-> > +	hcint = hcintraw & hcintmsk;
-> > +	dwc2_writel(hsotg, hcint, HCINT(chnum));
-> > +
-> >   	if (!chan) {
-> >   		dev_err(hsotg->dev, "## hc_ptr_array for channel is NULL ##\n");
-> > -		dwc2_writel(hsotg, hcint, HCINT(chnum));
-> >   		return;
-> >   	}
-> >   
-> > @@ -2032,11 +2034,9 @@ static void dwc2_hc_n_intr(struct dwc2_hsotg *hsotg, int chnum)
-> >   			 chnum);
-> >   		dev_vdbg(hsotg->dev,
-> >   			 "  hcint 0x%08x, hcintmsk 0x%08x, hcint&hcintmsk 0x%08x\n",
-> > -			 hcint, hcintmsk, hcint & hcintmsk);
-> > +			 hcintraw, hcintmsk, hcint);
-> >   	}
-> >   
-> > -	dwc2_writel(hsotg, hcint, HCINT(chnum));
-> > -
-> >   	/*
-> >   	 * If we got an interrupt after someone called
-> >   	 * dwc2_hcd_endpoint_disable() we don't want to crash below
-> > @@ -2046,8 +2046,7 @@ static void dwc2_hc_n_intr(struct dwc2_hsotg *hsotg, int chnum)
-> >   		return;
-> >   	}
-> >   
-> > -	chan->hcint = hcint;
-> > -	hcint &= hcintmsk;
-> > +	chan->hcint = hcintraw;
-> >   
-> >   	/*
-> >   	 * If the channel was halted due to a dequeue, the qtd list might
 
