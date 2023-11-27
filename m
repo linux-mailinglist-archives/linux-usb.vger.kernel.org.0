@@ -1,118 +1,202 @@
-Return-Path: <linux-usb+bounces-3351-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3348-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5A1F7F9E80
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 12:24:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63B187F9E79
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 12:23:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60B322814D8
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 11:24:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3F8AB20FBA
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 11:23:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE7119BA6;
-	Mon, 27 Nov 2023 11:24:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 821C319BD2;
+	Mon, 27 Nov 2023 11:23:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fris.de header.i=@fris.de header.b="ViqeLKiV"
+	dkim=pass (1024-bit key) header.d=mysnt.onmicrosoft.com header.i=@mysnt.onmicrosoft.com header.b="NbrY72nN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.fris.de (mail.fris.de [116.203.77.234])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D651D1FC8;
-	Mon, 27 Nov 2023 03:24:06 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D6F82C0159;
-	Mon, 27 Nov 2023 12:24:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-	t=1701084244; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=n4MWxKLJ2mEngVhhcucO0tz7IR393NcgZWJ1yY5pvlM=;
-	b=ViqeLKiVxM44tFzNHhpFOKGDdOwjEuYgCpRUR6BBRf6vb7UrwZDIOnfJJ7/tOSTYAQQk+L
-	aiAIPCE1vpycaeAXizSS2ecd1y0lZfX9r9YNrfT2MiH5uPo5Y/PIKtYZW9GPAKKXoxiYaf
-	tRGkxPb8hPiusbdtM55l6JMpD8BJlBCPZ/0SU8itJzpneKtCaZr/9qtr6A67xZvvpKdRJ/
-	rjcNNxXtInDMlVqQkq7a7tPJmiQrECB1LnXiXZM+V3DLBOt+hgtU3ZjqokduWqCjgrbvLA
-	Erd+6sEUADQmPGofYUcYt3Pi2GlrqzppsqakbSnRqUdneiNap+Hy9Ef4xkRmgQ==
-From: Frieder Schrempf <frieder@fris.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Matthias Kaehlcke <mka@chromium.org>
-Cc: Frieder Schrempf <frieder.schrempf@kontron.de>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Anand Moon <linux.amoon@gmail.com>,
-	Benjamin Bara <benjamin.bara@skidata.com>,
-	Icenowy Zheng <uwu@icenowy.me>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Marco Felsch <m.felsch@pengutronix.de>,
-	Rob Herring <robh@kernel.org>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Subject: [RESEND PATCH v2 3/3] usb: misc: onboard_usb_hub: Add support for Cypress CY7C6563x
-Date: Mon, 27 Nov 2023 12:22:26 +0100
-Message-ID: <20231127112234.109073-3-frieder@fris.de>
-In-Reply-To: <20231127112234.109073-1-frieder@fris.de>
-References: <20231127112234.109073-1-frieder@fris.de>
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2099.outbound.protection.outlook.com [40.107.13.99])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCC810A;
+	Mon, 27 Nov 2023 03:23:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RTA9+gKAWq4CFDbK86X8oQEOF6cErA0eiCaQ08UcAaeFviHDuqbXoht1NmK2OEUMgEk2vHHWPexnG+rVjI9gVd+Kk7riycvwkEepqZtlA7qpaqu9wfI80KlueLo9PXB+7HUpFEy+mx9n/gV+Y4+4+MBzPDeUknjZbzJmpvGhh5/Z/irZOxXFmuEGIFbJGoj4auZUxADYXhFWH5HP+1My9T7cbx6Pf/w8bK1ouc1fzrzYQQwkTZODe+wPD8d87NopozabkKgCZT9z8bfSMB+fUSV8Fe1x2ZuqBCjYVhwfMfX5Nm1FaaIp6aCdcBAi2/o1EMQmhLb+vRKeIe061E32Xg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YTYXQS0qnDLglDKCa3AxY43B02Lnnajd9Qc6SBzbvhQ=;
+ b=VK4tn0Nk3yoyDGBY1FXc7zfNhhv6ccapqYX4PX7fP1B7CTiKvGXbCZoWv1NC2dBVOx476eC3zgjVogm8KGcKqmO0szMoE3mxtP5z7/cQ15pNTeIWlYFNDcfOiqowsaS+bc2jnrsKIA6+UlQNwl/zwFFrhLWzPaIqI81M5/AaBeEcOQqCMTJ632lRNqB1/mfCPSh2/hfuitFvBfK/9Er9WEJlGFyd9mHEQaEbcwgaFIJf6rdd5cWApbRUvEA/hc0CPNc/qAEyrtlDf6F1QNX6RploSrND4VdqvTiojprRpZUBrFfUEQJ5aeXHftHjDfN+fcpAfG9whDbM82xFhQ8BQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YTYXQS0qnDLglDKCa3AxY43B02Lnnajd9Qc6SBzbvhQ=;
+ b=NbrY72nNVcZDpX6uZTD31uzMPytVTGgzPQ36/VhpyDoLhJI2uvptNbJBL1MPCDIszKRe8SEDGa5JPg9REXa1tP6BdeeGgpWn2ueylBT/S2qqYeMNaNZWMJh3w8HKIaKpyzvQbzJLT7R1YOOFuCh9vAINj/aQFbxy6q4jlkOQQ3w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kontron.de;
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
+ by GVXPR10MB8198.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:113::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.27; Mon, 27 Nov
+ 2023 11:23:38 +0000
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::27ba:9922:8d12:7b3d]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::27ba:9922:8d12:7b3d%5]) with mapi id 15.20.7025.022; Mon, 27 Nov 2023
+ 11:23:38 +0000
+Message-ID: <18b2ad8e-6b06-407a-a141-91a90ee7cffd@kontron.de>
+Date: Mon, 27 Nov 2023 12:23:36 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] usb: misc: onboard_usb_hub: Print symbolic error
+ names
+Content-Language: en-US, de-DE
+To: Frieder Schrempf <frieder@fris.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ Matthias Kaehlcke <mka@chromium.org>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
+ Anand Moon <linux.amoon@gmail.com>, Benjamin Bara
+ <benjamin.bara@skidata.com>, Rob Herring <robh@kernel.org>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+References: <20231127111332.107640-1-frieder@fris.de>
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
+In-Reply-To: <20231127111332.107640-1-frieder@fris.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0116.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9d::9) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:263::10)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|GVXPR10MB8198:EE_
+X-MS-Office365-Filtering-Correlation-Id: ef827cfe-8bf9-4543-83c4-08dbef3b4d14
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	0J+LqqJRC1zUv3zbhPrCS3YT2BCEJkFnjbP7X6QncJ7A0A4PMvFeksCCrSAIqU3lfvjJ09y1eckIMvBPKcyNMw/1Cw5ncedLRiNKqBmhEbzDcSn0jO/h2xDZIROSxCs6wFTti5qAk3D3wRKASJB/l5bychyBDYj+DNf21pcb0EaItcDbuLTZCq/jXBdtd9VJA/qv+t4uapvRC77TYmsm7vjUZdWz7d88JD/l7/Q/XrXrE9aM503pMh9q5eoJHGy/1bJasinmtwmlBQnA5SvQRuYLgu6W1eQqHqt8YaiM9M4yiwy9Ei6UwELb0Al7S4P4rCuvJBu1+kHteZarENMFljp/I1j4h28HV0wMYkpEyggKyex00IdUzBGbrYx/dZzQEJGlTh6mUBJI/8jBIR89T/3v/vFCmQ2YFJ3/NQbxZLl5BRvq21Sx9Cg4VaevK/L1UZ3e6/5Y2X/Xlw1PBiiCXDQe+QVwwclSU5YlQDaTYADj9kHnKSRY5sar9NNWrM1zpIvGfg9GcH8ohTKeUFhhzght+WvzRMz1t9HhL+rbo9sUxHTL9ObgCmKV/54JWWrieyX1WoJuWjosTXiQ3CVeUscIheedVTTVCxUx5lCJ17QDRcknflHlv0XuV4rdWspReNPJ2u1oVWIz8TgkNwitQg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(136003)(346002)(376002)(396003)(366004)(39860400002)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(2616005)(26005)(6506007)(6512007)(53546011)(8676002)(8936002)(4326008)(44832011)(86362001)(6486002)(5660300002)(478600001)(54906003)(316002)(110136005)(66476007)(66556008)(66946007)(31696002)(38100700002)(83380400001)(31686004)(7416002)(2906002)(41300700001)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NkxiQlBzUXV1eUZFNmlFY0xyL09kOWZLQ1poS1R4bXpEbXZJU0dNOFFKcGRz?=
+ =?utf-8?B?QkNmRDVmaGdONU9vbmtoQzZYQ1JvMFd3ZkNFd2VKdC81Q1Fidlh6dVA1RnZQ?=
+ =?utf-8?B?dHl2M09pK0Fub29OKy9mQms2RFRJczk4Q1dqQzZ3WE9RWFMwMkRJclB5QnJz?=
+ =?utf-8?B?Qi9WbEtML0RWazA5UXlMVnlGTjl2ekpuLzE1VDY4c1orWnY1OXJHMW81UGxO?=
+ =?utf-8?B?WGhHTEtxVE5hd3V6VGkwRG5JUlM5MDYrcmR1dHlZdzRwZVgyMnVUak1RblA1?=
+ =?utf-8?B?cUhZWVZ4NndNeTBwS3JTTXpUQnF2MmZXMHMrck9QK2VLVTloT1E1dG5sMEM0?=
+ =?utf-8?B?cmVkSzN0b3FmM3ZsbFIyc2FBM1YwRVBRVUxWRWlQdmVzVTJHU0Z0SlZISEE5?=
+ =?utf-8?B?ek9PQWMyaEFFMklYeENVUDhOZDFYUnJQZC9DUnF5MUY0WnA5bEF0cE80WENn?=
+ =?utf-8?B?dlpZaVFENm9UcDZHQjVqYXRZOVd0SmJ4UjhhZE5FSTRJRDFXQ204Z0lFRnk5?=
+ =?utf-8?B?blVzOE1ZMElqQkxJY1VNRlFqZmJlVWVSVDE1UWRFa1NWUW1qOEl5VkFoWWhh?=
+ =?utf-8?B?dkFGTVliMFV2UzRicG9PcDlSZ3lGYnhPaFE4T0JTaFBVcEtrNDcxaWwvU1V3?=
+ =?utf-8?B?NDdjY20xRWtkZjNicWU3TTZuK2dTSS8vSmI0eEV4Nld4d3JValBTcHZ0b0VT?=
+ =?utf-8?B?eG1CUGhuZ3RTZmZXSnJ2Z3FjQWNrc2xTeGRCT1FNaFd2Y0kyYmNaSWJSR2pO?=
+ =?utf-8?B?citRZXovRHFOOXBkKzNCL01jUnFGTytiNnhRNnJiUmpqcnpTSmlDLzZDWEZz?=
+ =?utf-8?B?WHBSRFpnWlkvcHkxeTlocExoTndLSWtGazFha3pTTU1EVzFsV2dMOC82Umgy?=
+ =?utf-8?B?M3lsVy85RDBYbG8xRGdpQnpHSTBnc3VPVlQ4SkQxVkFER2xDR2FmQk5oaXFk?=
+ =?utf-8?B?Z2srRDBJT1U1YmFJdm8xR042T1doVnlUNytXSjNUUytpZDY3bWdFVzBmUXN6?=
+ =?utf-8?B?Z2YvZzY3LyszLzZpUUUxL0oxRjhmekFmWmVKWnhkUTBHbzVSYUp6M2htQ1pn?=
+ =?utf-8?B?R3JuSVd3VHRjb2tMMFA4QTI2WUFTSDJnWS8rbnVHNFFQU3c1SWR6N1NUNm9H?=
+ =?utf-8?B?dEs3ekNIUWNBQTN3Zzd6K1F3TzdBb2JSOVhsZGI1T09EeFFZT0txZWNTOFYy?=
+ =?utf-8?B?MEYyR1Z5d2tKS3llVFZxWkJiL2ZuZGZEUmU5N2I2TmV5SjR4ZG1GL21Ya2VW?=
+ =?utf-8?B?cE1oSWQyTkdyVnFYS0ZEOUF6cUR4NHdyM1VGL3grSHZBUEVxdWE2K3p3V1Zn?=
+ =?utf-8?B?b0IwK0ZFWjFsR1o3RjlKUFQzalJrUHUySU11U0YvNXlhSFRPZWhFdmtzK3E3?=
+ =?utf-8?B?cGJZYllTYmJjQjhVU2QvT0VaSTlMNUJoblk0WUh3Y3JKVjZaQ0ZZdml1L3dk?=
+ =?utf-8?B?VzZsQXBXdndDWWd4QWVHSGlZRkl2Mno1ZUIxdlpVWVhySS9SWW1taERJL1Z3?=
+ =?utf-8?B?S1NBeWFSQ2hHVmlaSEREQjMzejV0MDNqSVA4NUkrTzlCM25HUmVvL2FmbGda?=
+ =?utf-8?B?eU10VGYzYWU0UGNpZGdSNTJaTlo2T1RpQnlRbXBSUU9jZzV5VmxZMXZUOTNo?=
+ =?utf-8?B?Wi93U2NpV1lVT2R5c2JYamk4U3l6L0tKMUhMQTV2d2N1a2ZhaExKeHA4cHR4?=
+ =?utf-8?B?eFdrTFMvL1MvQmEyRm5jVEFUaEVXaVhYRGNNM3lwWS9YZXlCNFE5aUJnMTNR?=
+ =?utf-8?B?MEg3TDR3TEprVDk2SVlid3c3QVhMZDByMExUN1dncXdNUUswM0NtM2pXQkVB?=
+ =?utf-8?B?R0cwYlpiRE8ySnB0Qkd3WXFVMkVoSGtqbmpDRFh5dHh5ZlpZTmd2ak1hbzRG?=
+ =?utf-8?B?ZXZBMDgxKzFCUXJYVlRIQkpmaE1GaWpTNDRXTEJBZVB1VTFqQlQrdktyTmZJ?=
+ =?utf-8?B?aEpYWDkydDl6emttOEVaUWtGaC9XS3hoYllMTGszaXN1ZVVFOWR5RnZhUWJp?=
+ =?utf-8?B?UzlLMTZqNnZwd2VUN0sxcXY0K09lbVBnOThlOFJIa3labFdybmM0YjJDc00w?=
+ =?utf-8?B?MEZHUDNjbk5kZ212RUpCSVdkdWNTNFdsYzJtbnc0ZDVpVkNITFIzUnJFV0Np?=
+ =?utf-8?B?K3BTNnN1MVFCTE5EOUVad29WUVRzNTV3QlZMcHRyUUtDVVF3V0w2N3VtTEkw?=
+ =?utf-8?B?ZVE9PQ==?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef827cfe-8bf9-4543-83c4-08dbef3b4d14
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2023 11:23:37.9572
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N9QYDyZ7Sxk4+i+0qCVwmFS02QyBk1ZsSA42FbfJLfohyX0IydsEIL5dN7SVUrn8HDJlqQCp/QR3iin/+F+UhW+V1C1+UJ8Eqh6dcw2JXto=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR10MB8198
 
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
+Sorry, forgot to add the correct version prefix v2 in this series. I
+will resend.
 
-The Cypress CY7C6563x is a 2/4-port USB 2.0 hub. Add support for
-this hub in the driver in order to bring up reset, supply or clock
-dependencies.
-
-There is no reset pulse width given in the datasheet so we expect
-a minimal value of 1us to be enough. This hasn't been tested though
-due to lack of hardware which has the reset connected to a GPIO.
-
-Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
----
-Changes in v2:
-* none
----
- drivers/usb/misc/onboard_usb_hub.c | 1 +
- drivers/usb/misc/onboard_usb_hub.h | 6 ++++++
- 2 files changed, 7 insertions(+)
-
-diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index 0d84b16deab50..0c0b698f008b9 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -441,6 +441,7 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
- static const struct usb_device_id onboard_hub_id_table[] = {
- 	{ USB_DEVICE(VENDOR_ID_CYPRESS, 0x6504) }, /* CYUSB33{0,1,2}x/CYUSB230x 3.0 */
- 	{ USB_DEVICE(VENDOR_ID_CYPRESS, 0x6506) }, /* CYUSB33{0,1,2}x/CYUSB230x 2.0 */
-+	{ USB_DEVICE(VENDOR_ID_CYPRESS, 0x6570) }, /* CY7C6563x 2.0 */
- 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
- 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 */
- 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0620) }, /* Genesys Logic GL3523 USB 3.1 */
-diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-index c4e24a7b92904..67b2cc1e15e67 100644
---- a/drivers/usb/misc/onboard_usb_hub.h
-+++ b/drivers/usb/misc/onboard_usb_hub.h
-@@ -31,6 +31,11 @@ static const struct onboard_hub_pdata cypress_hx3_data = {
- 	.num_supplies = 2,
- };
- 
-+static const struct onboard_hub_pdata cypress_hx2vl_data = {
-+	.reset_us = 1,
-+	.num_supplies = 1,
-+};
-+
- static const struct onboard_hub_pdata genesys_gl850g_data = {
- 	.reset_us = 3,
- 	.num_supplies = 1,
-@@ -54,6 +59,7 @@ static const struct of_device_id onboard_hub_match[] = {
- 	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
- 	{ .compatible = "usb4b4,6504", .data = &cypress_hx3_data, },
- 	{ .compatible = "usb4b4,6506", .data = &cypress_hx3_data, },
-+	{ .compatible = "usb4b4,6570", .data = &cypress_hx2vl_data, },
- 	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
- 	{ .compatible = "usb5e3,610", .data = &genesys_gl852g_data, },
- 	{ .compatible = "usb5e3,620", .data = &genesys_gl852g_data, },
--- 
-2.42.1
-
+On 27.11.23 12:13, Frieder Schrempf wrote:
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+> 
+> Instead of printing the decimal error codes, let's use the more
+> human-readable symbolic error names provided by the %pe printk
+> format specifier.
+> 
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> ---
+> Changes in v2:
+> * new patch
+> ---
+>  drivers/usb/misc/onboard_usb_hub.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index a341b2fbb7b44..077824beffa01 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -7,6 +7,7 @@
+>  
+>  #include <linux/device.h>
+>  #include <linux/export.h>
+> +#include <linux/err.h>
+>  #include <linux/gpio/consumer.h>
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+> @@ -68,7 +69,7 @@ static int onboard_hub_power_on(struct onboard_hub *hub)
+>  
+>  	err = regulator_bulk_enable(hub->pdata->num_supplies, hub->supplies);
+>  	if (err) {
+> -		dev_err(hub->dev, "failed to enable supplies: %d\n", err);
+> +		dev_err(hub->dev, "failed to enable supplies: %pe\n", ERR_PTR(err));
+>  		return err;
+>  	}
+>  
+> @@ -88,7 +89,7 @@ static int onboard_hub_power_off(struct onboard_hub *hub)
+>  
+>  	err = regulator_bulk_disable(hub->pdata->num_supplies, hub->supplies);
+>  	if (err) {
+> -		dev_err(hub->dev, "failed to disable supplies: %d\n", err);
+> +		dev_err(hub->dev, "failed to disable supplies: %pe\n", ERR_PTR(err));
+>  		return err;
+>  	}
+>  
+> @@ -235,7 +236,7 @@ static void onboard_hub_attach_usb_driver(struct work_struct *work)
+>  
+>  	err = driver_attach(&onboard_hub_usbdev_driver.drvwrap.driver);
+>  	if (err)
+> -		pr_err("Failed to attach USB driver: %d\n", err);
+> +		pr_err("Failed to attach USB driver: %pe\n", ERR_PTR(err));
+>  }
+>  
+>  static int onboard_hub_probe(struct platform_device *pdev)
+> @@ -262,7 +263,7 @@ static int onboard_hub_probe(struct platform_device *pdev)
+>  
+>  	err = devm_regulator_bulk_get(dev, hub->pdata->num_supplies, hub->supplies);
+>  	if (err) {
+> -		dev_err(dev, "Failed to get regulator supplies: %d\n", err);
+> +		dev_err(dev, "Failed to get regulator supplies: %pe\n", ERR_PTR(err));
+>  		return err;
+>  	}
+>  
 
