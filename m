@@ -1,114 +1,118 @@
-Return-Path: <linux-usb+bounces-3347-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3349-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A24A17F9E6B
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 12:22:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B5F97F9E7B
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 12:24:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D2E7281450
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 11:22:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E173EB20D53
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 11:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B976F199C2;
-	Mon, 27 Nov 2023 11:22:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C93199BF;
+	Mon, 27 Nov 2023 11:24:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="Er9wtzOl"
+	dkim=pass (2048-bit key) header.d=fris.de header.i=@fris.de header.b="a6FFS39b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268AA135
-	for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 03:22:30 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5cd81e76164so33600717b3.1
-        for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 03:22:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1701084149; x=1701688949; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OSqZ1LC6PGby35X/pA57G3jaWFYPlkSXydb/PTyGgHA=;
-        b=Er9wtzOl4UOjL6/wDJvyokS/F5UiRE6HX2S97Gh/CGtwpHiKb6/hK7gSYS5+2LMu1j
-         INX1gdRJwWGCmW9+2uikRg357zUeVSTZHsqX7NCyQB1AFiAfoQP6bPmY/VNPuXNN2uoI
-         QewpaGXbIkSi3OVemN2vbfbhoorP8av8oVf8caEhJNiZL2ppvhfbakSWpbsEO9Ba0049
-         +csafNypRk2ZP77dj4jG0JoqDyU7V7yQ8vJBL5SiZ+2DDY1RdhX8QTULG6tSVvLReHN9
-         yqsNt9NCSY3dEDbJFKdRecPHzwW29spI92CpLIT2zX7H8/HF65UzS3TkW0enykwAR1OD
-         cV/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701084149; x=1701688949;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OSqZ1LC6PGby35X/pA57G3jaWFYPlkSXydb/PTyGgHA=;
-        b=rRLIUX8Q314txCOH2wWJrd2wqNMfLIVz6L9OKO8QuLApGCV+c8yuiiKwoZ/Ul34iXN
-         YFhiGQy/cdjqBUciyWL5rUCauzvFnTwS6pP8GNy2VxV/TEfmBxl8fqrxhxIPSbg1S49N
-         WLNVi8TBCJ9c49Uns0pwqWOsoUMShVMlxhQB63cvEv53alZRb8syo6XjOFvmU6QJAhIv
-         D1QvPbtYT71Hx9zBshhP0xzbfrymYlRvX87eROsgym85MdJNLTp1toOf+E3MkcE7ks8y
-         lvYnvv9JE8g+d0Y/ZiZIFJje87N8HWxbgrWYGWooDREVzQvJwWAsfbYILFY1ITwXzt+p
-         gdiw==
-X-Gm-Message-State: AOJu0Yw+qBqkDVoZM822OnK1DCdq7DBUPYMD6zXtduP+KZlxuTaz1Fwt
-	veEuLQM2AC37HEQi2NwL/Sds/SF8MKifsJJ6l72HHg==
-X-Google-Smtp-Source: AGHT+IGT+Jz3oRbJCMrN6JyHccuWIXHwb/Z0VM3wtO5suAsKP8/c6a5/8jFBvlwnttH2xjITgHkAfzkay/sSr2Kyonk=
-X-Received: by 2002:a81:8083:0:b0:5cd:ad4:16dd with SMTP id
- q125-20020a818083000000b005cd0ad416ddmr11792845ywf.45.1701084149374; Mon, 27
- Nov 2023 03:22:29 -0800 (PST)
+Received: from mail.fris.de (mail.fris.de [116.203.77.234])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B921BCA;
+	Mon, 27 Nov 2023 03:24:00 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5231DC00A1;
+	Mon, 27 Nov 2023 12:23:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
+	t=1701084238; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=lIwxznIaQ/Q1UMhEJA7Uobh5avUf1uO3muzdBhAnjx8=;
+	b=a6FFS39b2rc9P5CPQxqSCTBAyumOVqCsBGy6MNAnHSUWQaEwM/20G7JbBgBweeT5hPpnRt
+	ZD957/9piH9yq1LbI9D9r1k99RH1c/3NUQnL7xEQg9SABvJ3tp+ZwF5F0kTFEEaNUJ1N+B
+	CNXKOFHmZGDWMh4qs4gxzhYnVao8CDgysH80xhu1hNban7PZ179WdlmjU/QIPhhq36KifO
+	ZQhNKkDId7ty3Muy14/c94b9Xl20DGzJ5iUzyNfCSvaRRc3Z/1Ys3zVBc7QfFaXW/FAZyd
+	xcq4inQ7VcclNwxYODoofi/qe3iWi/YWhnH0uRTPd1QE5GQGQozyJkTc5cRjMQ==
+From: Frieder Schrempf <frieder@fris.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Matthias Kaehlcke <mka@chromium.org>
+Cc: Frieder Schrempf <frieder.schrempf@kontron.de>,
+	Anand Moon <linux.amoon@gmail.com>,
+	Benjamin Bara <benjamin.bara@skidata.com>,
+	Rob Herring <robh@kernel.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Subject: [RESEND PATCH v2 1/3] usb: misc: onboard_usb_hub: Print symbolic error names
+Date: Mon, 27 Nov 2023 12:22:24 +0100
+Message-ID: <20231127112234.109073-1-frieder@fris.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231126025612.12522-1-wahrenst@gmx.net> <53e1f6e6-a28e-45af-991e-75b283a21b34@broadcom.com>
- <46320840-09ab-4c86-90c9-bee7b75f248a@gmx.net>
-In-Reply-To: <46320840-09ab-4c86-90c9-bee7b75f248a@gmx.net>
-From: Phil Elwell <phil@raspberrypi.com>
-Date: Mon, 27 Nov 2023 11:22:17 +0000
-Message-ID: <CAMEGJJ3SXHSnasqoMJnshf5Wu92NVi8+NoMdxmMsJH7WH2WjWg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] ARM: dts: bcm2711-rpi-cm4-io: Enable xHCI host
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: Justin Chen <justin.chen@broadcom.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, Mathias Nyman <mathias.nyman@intel.com>, 
-	bcm-kernel-feedback-list@broadcom.com, Cyril Brulebois <kibi@debian.org>, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, 27 Nov 2023 at 11:08, Stefan Wahren <wahrenst@gmx.net> wrote:
->
-> Hi Justin,
->
-> [add Phil]
->
-> Am 27.11.23 um 07:02 schrieb Justin Chen:
-> >
-> >
-> > On 11/25/23 6:56 PM, Stefan Wahren wrote:
-> >> In contrast to the Raspberry Pi 4, the Compute Module 4 or the IO board
-> >> does not have a VL805 USB 3.0 host controller, which is connected via
-> >> PCIe. Instead, the BCM2711 on the Compute Module provides the built-in
-> >> xHCI.
-> >>
-> >
-> > Does this work? I maintain this built-in xHCI controller internally. I
-> > wasn't aware the Compute Module uses this block.
-> i successful tested this with a CM4 (arm 32 bit,
-> multi_v7_lpae_defconfig) with eMMC. Before this series the USB devices
-> (mouse, keyboard) connected to the host interface didn't work. After
-> comparing vendor DTS with mainline i noticed the missing xHCI block [1].
-> Unfortunately i wasn't able to get further information from the public
-> datasheets. I don't know if the VideoCore does some magic tricks on the
-> xHCI or i missed some downstream xHCI changes.
->
-> > This block is held in reset and needs a bit toggled to get things
-> > going. Florian, just to confirm, this is our "brcm,xhci-brcm-v2" block
-> > correct?
-> >
-> > Justin
->
-> [1]  -
-> https://github.com/raspberrypi/linux/blob/rpi-6.1.y/arch/arm/boot/dts/bcm2711-rpi-ds.dtsi#L119
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-What's the question here? Does the XHCI block present in the
-raspberrypi/linux dtsi file really exist? Yes it does.
+Instead of printing the decimal error codes, let's use the more
+human-readable symbolic error names provided by the %pe printk
+format specifier.
 
-Phil
+Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+---
+Changes in v2:
+* new patch
+---
+ drivers/usb/misc/onboard_usb_hub.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+index a341b2fbb7b44..077824beffa01 100644
+--- a/drivers/usb/misc/onboard_usb_hub.c
++++ b/drivers/usb/misc/onboard_usb_hub.c
+@@ -7,6 +7,7 @@
+ 
+ #include <linux/device.h>
+ #include <linux/export.h>
++#include <linux/err.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+@@ -68,7 +69,7 @@ static int onboard_hub_power_on(struct onboard_hub *hub)
+ 
+ 	err = regulator_bulk_enable(hub->pdata->num_supplies, hub->supplies);
+ 	if (err) {
+-		dev_err(hub->dev, "failed to enable supplies: %d\n", err);
++		dev_err(hub->dev, "failed to enable supplies: %pe\n", ERR_PTR(err));
+ 		return err;
+ 	}
+ 
+@@ -88,7 +89,7 @@ static int onboard_hub_power_off(struct onboard_hub *hub)
+ 
+ 	err = regulator_bulk_disable(hub->pdata->num_supplies, hub->supplies);
+ 	if (err) {
+-		dev_err(hub->dev, "failed to disable supplies: %d\n", err);
++		dev_err(hub->dev, "failed to disable supplies: %pe\n", ERR_PTR(err));
+ 		return err;
+ 	}
+ 
+@@ -235,7 +236,7 @@ static void onboard_hub_attach_usb_driver(struct work_struct *work)
+ 
+ 	err = driver_attach(&onboard_hub_usbdev_driver.drvwrap.driver);
+ 	if (err)
+-		pr_err("Failed to attach USB driver: %d\n", err);
++		pr_err("Failed to attach USB driver: %pe\n", ERR_PTR(err));
+ }
+ 
+ static int onboard_hub_probe(struct platform_device *pdev)
+@@ -262,7 +263,7 @@ static int onboard_hub_probe(struct platform_device *pdev)
+ 
+ 	err = devm_regulator_bulk_get(dev, hub->pdata->num_supplies, hub->supplies);
+ 	if (err) {
+-		dev_err(dev, "Failed to get regulator supplies: %d\n", err);
++		dev_err(dev, "Failed to get regulator supplies: %pe\n", ERR_PTR(err));
+ 		return err;
+ 	}
+ 
+-- 
+2.42.1
+
 
