@@ -1,164 +1,209 @@
-Return-Path: <linux-usb+bounces-3336-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3337-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85AEA7F9C2D
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 09:59:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7CC87F9C3F
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 10:04:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 410EE280D52
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 08:59:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3314EB20AC3
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 09:04:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F6BA12E50;
-	Mon, 27 Nov 2023 08:58:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DoSx9Yil"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 613B312E6E;
+	Mon, 27 Nov 2023 09:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1429E;
-	Mon, 27 Nov 2023 00:58:54 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AR6qhTu030841;
-	Mon, 27 Nov 2023 08:58:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=VUK2zSLPO3Hh4UQ4+PimsBW853SUNPurIoSc11ax5Ls=;
- b=DoSx9Yil81hIL58c1nDBlKGdJHL2JKMbWIcGb6AdBzlBj8OREJjJl6W7m+PehIphDWSw
- Ytx8PFBUQ2vUN1iJU1ZasJmSPunruwsRpI+zRQr0erYsX9b4qXJ3yWUf09htyniBWi7o
- NXLgMw76ULRxiKp8EEkMwdygcXG0a0OjYyZ4jhRY86JCipkpPKhc9BrxTpLjbBRlZwJr
- F2so/t1672l2QKrSlF1Dv2E+tX8BCZ8ZX21AYej7gBpuSnotBDpno/qgd7q0sIUk8ube
- pEORjGVF+jZZtBuZCBDTXYcFUluS61gqokbM3Fa5P4mfzJ2f0e23w41LGTjJC3Zu/oBC uw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uk9adkntf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 08:58:51 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AR8woMe019288
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 08:58:50 GMT
-Received: from [10.218.35.239] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 27 Nov
- 2023 00:58:48 -0800
-Message-ID: <d4d25747-83d4-a8e7-7968-caf3b14a844c@quicinc.com>
-Date: Mon, 27 Nov 2023 14:28:45 +0530
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D19EDC
+	for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 01:04:19 -0800 (PST)
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id BC27621B75;
+	Mon, 27 Nov 2023 09:04:17 +0000 (UTC)
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id A39C2132A6;
+	Mon, 27 Nov 2023 09:04:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id vb1WJZFbZGVYZQAAn2gu4w
+	(envelope-from <aporta@suse.de>); Mon, 27 Nov 2023 09:04:17 +0000
+Date: Mon, 27 Nov 2023 10:04:17 +0100
+From: Andrea della Porta <aporta@suse.de>
+To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc: Oliver Neukum <oneukum@suse.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	Ivan Ivanov <ivan.ivanov@suse.com>,
+	Andrea della Porta <andrea.porta@suse.com>
+Subject: Re: [PATCH] USB: dwc2: write HCINT with INTMASK applied
+Message-ID: <ZWRbkdTASTNJB8Fv@apocalypse>
+Mail-Followup-To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+	Oliver Neukum <oneukum@suse.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	Ivan Ivanov <ivan.ivanov@suse.com>,
+	Andrea della Porta <andrea.porta@suse.com>
+References: <20231115144514.15248-1-oneukum@suse.com>
+ <f0bd323a-8384-e303-907f-5d533af6d71e@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] usb: dwc3: core: Add support for
- XHCI_SG_TRB_CACHE_SIZE_QUIRK
-Content-Language: en-US
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <stable@vger.kernel.org>
-References: <20231121135936.1669167-1-quic_prashk@quicinc.com>
-From: Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <20231121135936.1669167-1-quic_prashk@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: akeJg2k1-GmsaR_m0FX6W1FHUIJH0psr
-X-Proofpoint-GUID: akeJg2k1-GmsaR_m0FX6W1FHUIJH0psr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-27_07,2023-11-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- clxscore=1015 priorityscore=1501 malwarescore=0 lowpriorityscore=0
- phishscore=0 bulkscore=0 mlxlogscore=999 adultscore=0 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311270062
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0bd323a-8384-e303-907f-5d533af6d71e@synopsys.com>
+X-Spamd-Bar: ++++++
+X-Spam-Score: 6.68
+X-Rspamd-Server: rspamd1
+X-Rspamd-Queue-Id: BC27621B75
+Authentication-Results: smtp-out1.suse.de;
+	dkim=none;
+	dmarc=fail reason="No valid SPF, No valid DKIM" header.from=suse.de (policy=none);
+	spf=softfail (smtp-out1.suse.de: 2a07:de40:b281:104:10:150:64:98 is neither permitted nor denied by domain of aporta@suse.de) smtp.mailfrom=aporta@suse.de
+X-Spamd-Result: default: False [6.68 / 50.00];
+	 TO_DN_EQ_ADDR_SOME(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 R_SPF_SOFTFAIL(4.60)[~all:c];
+	 RCPT_COUNT_FIVE(0.00)[6];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 MX_GOOD(-0.01)[];
+	 NEURAL_HAM_SHORT(-0.10)[-0.516];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 R_DKIM_NA(2.20)[];
+	 MIME_TRACE(0.00)[0:+];
+	 BAYES_HAM(-3.00)[100.00%];
+	 ARC_NA(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_SPAM_LONG(3.50)[0.999];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 RCVD_IN_DNSWL_HI(-1.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:98:from];
+	 RCVD_TLS_ALL(0.00)[];
+	 DMARC_POLICY_SOFTFAIL(0.10)[suse.de : No valid SPF, No valid DKIM,none]
 
-
-
-On 21-11-23 07:29 pm, Prashanth K wrote:
->   drivers/usb/dwc3/host.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
+On 12:35 Wed 22 Nov     , Minas Harutyunyan wrote:
+> Hi Oliver,
 > 
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index 61f57fe5bb78..ee3b667a88b2 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -11,6 +11,7 @@
->   #include <linux/of.h>
->   #include <linux/platform_device.h>
->   
-> +#include "../host/xhci-plat.h"
->   #include "core.h"
->   
->   static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
-> @@ -63,6 +64,7 @@ int dwc3_host_init(struct dwc3 *dwc)
->   {
->   	struct property_entry	props[4];
->   	struct platform_device	*xhci;
-> +	struct xhci_plat_priv   dwc3_xhci_plat_priv;
->   	int			ret, irq;
->   	int			prop_idx = 0;
->   
-> @@ -87,6 +89,14 @@ int dwc3_host_init(struct dwc3 *dwc)
->   		goto err;
->   	}
->   
-> +	memset(&dwc3_xhci_plat_priv, 0, sizeof(struct xhci_plat_priv));
-> +
-> +	dwc3_xhci_plat_priv.quirks |= XHCI_SG_TRB_CACHE_SIZE_QUIRK;
-> +	ret = platform_device_add_data(xhci, &dwc3_xhci_plat_priv,
-> +					sizeof(dwc3_xhci_plat_priv));
-> +	if (ret)
-> +		goto err;
-> +
->   	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
->   
->   	if (dwc->usb3_lpm_capable)
+> On 11/15/23 18:45, Oliver Neukum wrote:
+> > dwc2_hc_n_intr() writes back INTMASK as read but evaluates it
+> > with intmask applied. In stress testing this causes spurious
+> > interrupts like this:
+> > 
+> > [Mon Aug 14 10:51:07 2023] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 7 - ChHltd set, but reason is unknown
+> > [Mon Aug 14 10:51:07 2023] dwc2 3f980000.usb: hcint 0x00000002, intsts 0x04600001
+> > [Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 0 - ChHltd set, but reason is unknown
+> > [Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: hcint 0x00000002, intsts 0x04600001
+> > [Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 4 - ChHltd set, but reason is unknown
+> > [Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: hcint 0x00000002, intsts 0x04600001
+> > [Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: dwc2_update_urb_state_abn(): trimming xfer length
+> > 
+> > Applying INTMASK prevents this. The issue exists in all versions of the
+> > driver.
+> 
+> I'm Ok with this patch, just need some elaboration.
+> So, channel halted interrupt asserted due to some other interrupt (AHB 
+> Error, Excessive transaction errors, Babble, Stall) which was masked. 
+> Can you check which of masked interrupts is cause of channel halt interrupt?
+> 
+> Thanks,
+> Minas
+>
 
-Is the above approach acceptable? I'm not sure if accessing xhci-plat's 
-structure from dwc3 is a recommended way. If not, then can we go ahead 
-with the following approach where we add a property to XHCI SW node.
+Hi Minas,
+here's the report from dmesg:
 
-
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -89,6 +89,8 @@ int dwc3_host_init(struct dwc3 *dwc)
-
-         memset(props, 0, sizeof(struct property_entry) * 
-ARRAY_SIZE(props));
-
-+       props[prop_idx++] = 
-PROPERTY_ENTRY_BOOL("xhci-sg-trb-cache-size-quirk");
-+
-         if (dwc->usb3_lpm_capable)
-                 props[prop_idx++] = 
-PROPERTY_ENTRY_BOOL("usb3-lpm-capable");
+[209384.238724]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.246725]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.247634]   hcint 0x00000003, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.254722]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.262725]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.270724]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.278336]   hcint 0x00000092, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.278384]   hcint 0x00000010, hcintmsk 0x00000436, hcint&hcintmsk 0x00000010
+[209384.278720]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.286723]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.288486]   hcint 0x00000021, hcintmsk 0x00000426, hcint&hcintmsk 0x00000020
+[209384.288511]   hcint 0x00000002, hcintmsk 0x00000406, hcint&hcintmsk 0x00000002
+[209384.288528] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 1 - ChHltd set, but reason is unknown
+[209384.288604]   hcint 0x00000010, hcintmsk 0x00000436, hcint&hcintmsk 0x00000010
+[209384.294720]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.302734]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.310724]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.318721]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.321722]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[209384.326729]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
 
 
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -323,6 +323,9 @@ static int xhci_plat_probe(struct platform_device *pdev)
-                 if (device_property_read_bool(tmpdev, 
-"quirk-broken-port-ped"))
-                         xhci->quirks |= XHCI_BROKEN_PORT_PED;
-
-+               if (device_property_read_bool(tmpdev, 
-"xhci-sg-trb-cache-size-quirk"))
-+                       xhci->quirks |= XHCI_SG_TRB_CACHE_SIZE_QUIRK;
-+
-                 device_property_read_u32(tmpdev, "imod-interval-ns",
-                                          &xhci->imod_interval);
-         }
+Many thanks,
+Andrea 
 
 
-Regards,
-Prashanth K
+> > 
+> > Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> > Tested-by: Ivan Ivanov <ivan.ivanov@suse.com>
+> > Tested-by: Andrea della Porta <andrea.porta@suse.com>
+> > ---
+> >   drivers/usb/dwc2/hcd_intr.c | 15 +++++++--------
+> >   1 file changed, 7 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc2/hcd_intr.c b/drivers/usb/dwc2/hcd_intr.c
+> > index 0144ca8350c3..5c7538d498dd 100644
+> > --- a/drivers/usb/dwc2/hcd_intr.c
+> > +++ b/drivers/usb/dwc2/hcd_intr.c
+> > @@ -2015,15 +2015,17 @@ static void dwc2_hc_n_intr(struct dwc2_hsotg *hsotg, int chnum)
+> >   {
+> >   	struct dwc2_qtd *qtd;
+> >   	struct dwc2_host_chan *chan;
+> > -	u32 hcint, hcintmsk;
+> > +	u32 hcint, hcintraw, hcintmsk;
+> >   
+> >   	chan = hsotg->hc_ptr_array[chnum];
+> >   
+> > -	hcint = dwc2_readl(hsotg, HCINT(chnum));
+> > +	hcintraw = dwc2_readl(hsotg, HCINT(chnum));
+> >   	hcintmsk = dwc2_readl(hsotg, HCINTMSK(chnum));
+> > +	hcint = hcintraw & hcintmsk;
+> > +	dwc2_writel(hsotg, hcint, HCINT(chnum));
+> > +
+> >   	if (!chan) {
+> >   		dev_err(hsotg->dev, "## hc_ptr_array for channel is NULL ##\n");
+> > -		dwc2_writel(hsotg, hcint, HCINT(chnum));
+> >   		return;
+> >   	}
+> >   
+> > @@ -2032,11 +2034,9 @@ static void dwc2_hc_n_intr(struct dwc2_hsotg *hsotg, int chnum)
+> >   			 chnum);
+> >   		dev_vdbg(hsotg->dev,
+> >   			 "  hcint 0x%08x, hcintmsk 0x%08x, hcint&hcintmsk 0x%08x\n",
+> > -			 hcint, hcintmsk, hcint & hcintmsk);
+> > +			 hcintraw, hcintmsk, hcint);
+> >   	}
+> >   
+> > -	dwc2_writel(hsotg, hcint, HCINT(chnum));
+> > -
+> >   	/*
+> >   	 * If we got an interrupt after someone called
+> >   	 * dwc2_hcd_endpoint_disable() we don't want to crash below
+> > @@ -2046,8 +2046,7 @@ static void dwc2_hc_n_intr(struct dwc2_hsotg *hsotg, int chnum)
+> >   		return;
+> >   	}
+> >   
+> > -	chan->hcint = hcint;
+> > -	hcint &= hcintmsk;
+> > +	chan->hcint = hcintraw;
+> >   
+> >   	/*
+> >   	 * If the channel was halted due to a dequeue, the qtd list might
 
