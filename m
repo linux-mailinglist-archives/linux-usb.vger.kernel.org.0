@@ -1,40 +1,40 @@
-Return-Path: <linux-usb+bounces-3378-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3379-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 169507FA94B
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 19:52:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6DD37FAA28
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 20:23:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B03F81F20F10
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 18:52:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 57EFDB21186
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 19:23:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F7C3C6A3;
-	Mon, 27 Nov 2023 18:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79BF63EA83;
+	Mon, 27 Nov 2023 19:23:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="j7BjkE4r"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="JOIJtPE2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69381D51;
-	Mon, 27 Nov 2023 10:52:40 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62856D63;
+	Mon, 27 Nov 2023 11:23:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=s31663417; t=1701111139; x=1701715939; i=wahrenst@gmx.net;
-	bh=zgQ46fZfr/CiBcyEnxMyauIj38My1M/FDk/PQg+sgSY=;
+	s=s31663417; t=1701112966; x=1701717766; i=wahrenst@gmx.net;
+	bh=4bz8S+SPuo0ElywPc/Te413kcUpBIGf3VS26j8jaio0=;
 	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
 	 In-Reply-To;
-	b=j7BjkE4rEpYsgkWryDvl2t2rTGx7YYo6Z8IXMsBXTwwzxiqV4BX1pnfhgtRqc/H1
-	 h0jjIt9+A41qeZolxE//J0l+gIyYUnQm4Dmp9rsBCRAPjbsu6sPE0h4JsQg8dMU9r
-	 h1+fQ2W8lhrrqJWCpOLsFuAp3sBwDkVhhjtoTigsQnNf6TtE5qNsbH7GJ/6sg1YzO
-	 Lkj+cmgngBllg/c/GpPmn8siuTs422MHWojVFUkcEoIBmoAH+Q6k3TF76Wc7FhtvI
-	 E32V0UO/+uW/dQP6w6eqMWY4bgKWKTt7sUPtZHMsbp+fkfN31jxJcVUS21T4Xs03a
-	 yhIBxF9jMbIG/twjfw==
+	b=JOIJtPE2sk6N84MNR6qfNcb+ypmpjh2nuZxoqEivJ8L8Y6seRCIQuohXvyYRCyVF
+	 XbDaBMdYci/MIGxF1bEQgbOKLKyGdRBoUFmOdA+/JWAzSA9V9NaPN8dL1D31aAI0A
+	 u2U0G0diyzHO9DAK5o333KswIBdSaQmKAqTbValgwuv4yjCB1b6PxIOMzJ8da3gqc
+	 ns0y+SvKbTgjYLG3ZiRpOZZTVzHaLWznWHqx/mUp0metv/bPAAbV14di3WrNntyex
+	 CzGQtx0A3oIWOKdtbp6gpmxYzEnUo/FBKomhaU/Dw1f+dCBkSkZaWjGiosaRrkVpx
+	 ZZYBixQezq0+BBqYOw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [192.168.1.129] ([37.4.248.43]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N3siA-1rGFN51NVA-00zmGa; Mon, 27
- Nov 2023 19:52:19 +0100
-Message-ID: <7ea67bce-9b19-4bd6-98cf-10fe85ab8298@gmx.net>
-Date: Mon, 27 Nov 2023 19:52:17 +0100
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N5mGH-1rNgtB2KmR-017D07; Mon, 27
+ Nov 2023 20:22:46 +0100
+Message-ID: <10383aa9-942b-415d-b70e-ade3a7aae6fa@gmx.net>
+Date: Mon, 27 Nov 2023 20:22:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -44,83 +44,156 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 0/3] ARM: dts: bcm2711-rpi-cm4-io: Enable xHCI host
 Content-Language: en-US
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Cc: Rob Herring <robh+dt@kernel.org>,
+To: Florian Fainelli <florian.fainelli@broadcom.com>,
+ Justin Chen <justin.chen@broadcom.com>, Phil Elwell <phil@raspberrypi.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, Cyril Brulebois <kibi@debian.org>
+ Conor Dooley <conor+dt@kernel.org>, Mathias Nyman <mathias.nyman@intel.com>,
+ bcm-kernel-feedback-list@broadcom.com, Cyril Brulebois <kibi@debian.org>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
 References: <20231126025612.12522-1-wahrenst@gmx.net>
- <20231127003432.7aztwjxper2a3o33@mraw.org>
- <b1156fee-aa43-43b3-bb03-baaac49575f4@gmx.net>
- <20231127115538.npv23hhn7jfrk3fc@mraw.org>
- <892c2e2f-3187-491b-b464-56d099b6fd49@gmx.net>
- <20231127130225.lyk2jngfru5lw6sd@mraw.org>
+ <53e1f6e6-a28e-45af-991e-75b283a21b34@broadcom.com>
+ <46320840-09ab-4c86-90c9-bee7b75f248a@gmx.net>
+ <CAMEGJJ3SXHSnasqoMJnshf5Wu92NVi8+NoMdxmMsJH7WH2WjWg@mail.gmail.com>
+ <a78f9ba5-ad34-4af2-9817-eeb7dd9d02ef@gmx.net>
+ <CAMEGJJ3PpEgD_davgTn9e+re4hosunU+uj_i5sdKMFNLFR5hBA@mail.gmail.com>
+ <624b79b1-f2dc-4f2e-a225-d1623d905b19@gmx.net>
+ <CAMEGJJ0aL4VDoq06+JGHz9yx5nVvgbNULNKoT07myzVGNiyCoQ@mail.gmail.com>
+ <b8a90433-e0fe-4148-a512-c0e9ace2b4b6@broadcom.com>
+ <91ceed68-fe3a-408c-a858-095d5749b4d2@broadcom.com>
 From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <20231127130225.lyk2jngfru5lw6sd@mraw.org>
+In-Reply-To: <91ceed68-fe3a-408c-a858-095d5749b4d2@broadcom.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:xnnOzTGdtR3Q0fQO6C+En1vLkbnWIscJ+Z4aH3jGFu4H9HmsXB8
- 6oXHqt6oQLDcncQ7cTBlgKOb7yRRW4Z77gR3qvjBw+OPZVys+ZxGYjZzl704FEj8MSNiaJx
- XP3e1iKkU77oo380lIvPmeRkLkDnIVZn4UxchnVEDFLC9oxcxveOaPsdwLN2ZSQKvmJmOU0
- X14FQYl71DWZ11DiRteXA==
-UI-OutboundReport: notjunk:1;M01:P0:KEesNfuao8c=;cdsTqmwYkAxcT/vQpXAHJ0AgRnr
- yBaDn4UOqKtLlFY+iSSYi3Do3DTBmUih5KrUUq4w3Ex3UJi7ql14fl5v71joveS+S4bMK4eNR
- 3q27Q2DMbBJIv2XdW6xy1cIFAthTRAShxyyLPZwunbzSaZbDtrbPxsxIK1zUPzsr1y5SU7EUN
- 7db5VkiRsbqZOv5iozYXniDKMnAY5RfFV8c5Om/ZyOCj7/wQG57X+28Wh1KApJRc/3iFmOuK2
- UC/nVQHvKPbhZF7BnQsaj8zY9INmeh6JTedvLvTjIEnWqYrgouqjF74/nSC//tlI63zLj1cyK
- Q2NlazeYdvEAH5yaIi9MShoKcO8G9DJ6rV8kLeVVKemqw7bWvirZ2SicyOjIrONltPMQSEOrn
- Im+DHP7D60xv9W2p6/Q+EnBv4OKYh6jNvaxio67Bzh0qe7d83/9BT0QoV7/roi8CQB6VIn8wi
- Sm0PJ6BErxFFiL3LwZp0FTWiuvO8DEEJvsR3Q5n6JLVeFMthaB+KRtA5nGGa9Jc0jAEnADcQT
- Ml4evyqTcgdssBB76lTWre9QrPs/yYEzuZPJ+pEPAlGCnBmW7fX+92/7Sw0Gq3cy5zRre/7TV
- fDc0QmGCuvkMP5v0OIvc3YXlXhWIXu1RhlkjeZeTfputGPzC7cMbwJqgJRAUYNivUV5LA0ynv
- 8HPmpU4ASASyLUlGco8mXAOL3Y0PGkk51AxzTBc+w4FddWqKodYFuB3Ana5HUtenzHY5komZu
- loNulPhF3F7orDgaEm+EPB2l/V214C4TuLnW36/LTQEoHxAIULku2azu28CEvtp2JgUFZ0Ph7
- AfY4Lf4/+i6KL1DUGbgdxEvVIFWgmjaXqeuZkxwGr4ulCS2+fnNFx5ra4fYFmZabN41VMjD0W
- bXDel9StaItRWyHGbxVTV8qwBxC84HrQMXwu2LZYDq2voCdSELAvo/tbPHTCipe8SsHIycNio
- eGl4ww==
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:q2rC1yp6xMX8C9A42htUmiRRGPod1pff40Kvq8kbK7jh+TUe3Ex
+ IrtjK+8Yr1bYgLCNJRDOna59Ihc5SX8IYbqEQW1zBymIg1EfUEBSdBa0iAPffgPu3L19ahx
+ 33Kfi5jBfsiubH6BuCgU0+9J85NROgv7bUv3V0wzQG88M/biMoLo7FxQLzWP4AEi9fHwc/r
+ peG4hcZEFUWMGZjoLESVw==
+UI-OutboundReport: notjunk:1;M01:P0:kBt2PlGSZHU=;ktOWreB/e8Ta/JCqVzcjNptrKQY
+ OVzh3zIR/alNUv2HiDN8ObWIRUH95vBL6gw06uxnDWO2bk8XolIhv83TwUG6RcViiCeh6v0r5
+ psNvtjNbNQM20FWUtkHXasjK1nYIGmuAARe7EfgwGaUZeAjOJ9Y1bvoJ3yBAOainxuwCncGiC
+ Z/nPSZFEIH57yHZuNK1/Rj+cfx7EP4WZ+ddL1uzfFa0utBFLgQCP0re8dogMrwAtJwhiyOZue
+ lTrogxyK+PskU5/sK+Vly+PmfNPzA1wVJgkXxf95TZ0CJ4PZTnvZwvcDc5fjS8EKPX+kVErJl
+ n9saSuZgSwv0tZjcRwWE4ESFHIMT1cAcSXxnuhf6oLVP0FQGvHMPgpmBslQtg0EbjV5XpKD95
+ J7lKSk6Sl+vzrGz7WGq3xvva/++JBW+uggzd/UtJBJiBNZg8C/hzBCeNHw0gO5sJAN5e/2R3z
+ Yp/5r2u7atmRKdaaQGvhqaD4eUOr/oUbFTbwQw0yNOu/3WMqS0w6H/Qpb8h+Wz69wE7km5Jr9
+ Y1fIdYdBlbc1FUAPeW6pqtByXx6LxVsORyL+PsBvoH+bJH/TTZ6aOsgpSZzHOEh4Sb7k7lIGm
+ F4o1qgajLgxqMryKlSNAHvUM7ZcDaIdjnoJsW/oDu6zrZG8wSpBkMBi40I0KxUZq5jk+kOYWx
+ UzVAKfzGYs+OdgAeaAMUFbWnKBoXTk6uv1OU/qa5MBJGjvWbgb046XCMeWFhKN/r9Q+H1pFNF
+ ykOsulncQ6f+LqhM/eAbcZEUo07vhRYsj3JV/FRxYo8EGgNZZeoi/DnfMN9GhfZnm1Ht0WhS9
+ oZ5hKekjcTWNeYEcmSCfq1fIVZvcoyZC7x1ehvf3ufHFd5CUCkFLD7pFcDbIBE/YPaeKefMFK
+ AU04JBcCsczon/SAdmF+hC9hWMllEzqbAQ00cs5yFu9RP3K7yPEWkIGo8LoLM4Igx/PdJMi1S
+ sQxHtA==
 
-SGksDQoNCmV2ZW4gYWZ0ZXIgQ3lyaWwgZ2V0IG1hbmFnZWQgdG8gZ2V0IHhIQ0kgcnVubmluZy4g
-SSBub3RpY2VkIGEgaXNzdWUuIElmIA0KaSBjb21waWxlIHhoY2kgYXMgYSBrZXJuZWwgbW9kdWxl
-IGZvciBhcm02NDoNCg0KIw0KIyBVU0IgSG9zdCBDb250cm9sbGVyIERyaXZlcnMNCiMNCiMgQ09O
-RklHX1VTQl9DNjdYMDBfSENEIGlzIG5vdCBzZXQNCkNPTkZJR19VU0JfWEhDSV9IQ0Q9bQ0KIyBD
-T05GSUdfVVNCX1hIQ0lfREJHQ0FQIGlzIG5vdCBzZXQNCkNPTkZJR19VU0JfWEhDSV9QQ0k9bQ0K
-Q09ORklHX1VTQl9YSENJX1BDSV9SRU5FU0FTPW0NCkNPTkZJR19VU0JfWEhDSV9QTEFURk9STT1t
-DQoNClRoZSBkcml2ZXIgaXNuJ3QgYXV0b2xvYWRlZCwgaSBuZWVkIHRvIHJ1biAibW9kcHJvYmUg
-eGhjaS1wbGF0LWhjZCIgDQptYW51YWxseS4NCg0KcGlAcmFzcGJlcnJ5cGk6fiQgbW9kaW5mbyB4
-aGNpLXBsYXQtaGNkDQpmaWxlbmFtZTogDQovbGliL21vZHVsZXMvNi42LjAtMDAwMDQtZzBjZGQ0
-MzM3YzUyOS9rZXJuZWwvZHJpdmVycy91c2IvaG9zdC94aGNpLXBsYXQtaGNkLmtvDQpsaWNlbnNl
-OsKgwqDCoMKgwqDCoMKgIEdQTA0KZGVzY3JpcHRpb246wqDCoMKgIHhIQ0kgUGxhdGZvcm0gSG9z
-dCBDb250cm9sbGVyIERyaXZlcg0KYWxpYXM6wqDCoMKgwqDCoMKgwqDCoMKgIHBsYXRmb3JtOnho
-Y2ktaGNkDQphbGlhczrCoMKgwqDCoMKgwqDCoMKgwqAgb2Y6TipUKkNicmNtLGJjbTc0NDUteGhj
-aUMqDQphbGlhczrCoMKgwqDCoMKgwqDCoMKgwqAgb2Y6TipUKkNicmNtLGJjbTc0NDUteGhjaQ0K
-YWxpYXM6wqDCoMKgwqDCoMKgwqDCoMKgIG9mOk4qVCpDYnJjbSx4aGNpLWJyY20tdjJDKg0KYWxp
-YXM6wqDCoMKgwqDCoMKgwqDCoMKgIG9mOk4qVCpDYnJjbSx4aGNpLWJyY20tdjINCmFsaWFzOsKg
-wqDCoMKgwqDCoMKgwqDCoCBvZjpOKlQqQ21hcnZlbGwsYXJtYWRhMzcwMC14aGNpQyoNCmFsaWFz
-OsKgwqDCoMKgwqDCoMKgwqDCoCBvZjpOKlQqQ21hcnZlbGwsYXJtYWRhMzcwMC14aGNpDQphbGlh
-czrCoMKgwqDCoMKgwqDCoMKgwqAgb2Y6TipUKkNtYXJ2ZWxsLGFybWFkYS0zODAteGhjaUMqDQph
-bGlhczrCoMKgwqDCoMKgwqDCoMKgwqAgb2Y6TipUKkNtYXJ2ZWxsLGFybWFkYS0zODAteGhjaQ0K
-YWxpYXM6wqDCoMKgwqDCoMKgwqDCoMKgIG9mOk4qVCpDbWFydmVsbCxhcm1hZGEtMzc1LXhoY2lD
-Kg0KYWxpYXM6wqDCoMKgwqDCoMKgwqDCoMKgIG9mOk4qVCpDbWFydmVsbCxhcm1hZGEtMzc1LXho
-Y2kNCmFsaWFzOsKgwqDCoMKgwqDCoMKgwqDCoCBvZjpOKlQqQ3hoY2ktcGxhdGZvcm1DKg0KYWxp
-YXM6wqDCoMKgwqDCoMKgwqDCoMKgIG9mOk4qVCpDeGhjaS1wbGF0Zm9ybQ0KYWxpYXM6wqDCoMKg
-wqDCoMKgwqDCoMKgIG9mOk4qVCpDZ2VuZXJpYy14aGNpQyoNCmFsaWFzOsKgwqDCoMKgwqDCoMKg
-wqDCoCBvZjpOKlQqQ2dlbmVyaWMteGhjaQ0KYWxpYXM6wqDCoMKgwqDCoMKgwqDCoMKgIGFjcGkq
-OlBOUDBEMTA6Kg0KZGVwZW5kczrCoMKgwqDCoMKgwqDCoCB4aGNpLWhjZA0KaW50cmVlOsKgwqDC
-oMKgwqDCoMKgwqAgWQ0KbmFtZTrCoMKgwqDCoMKgwqDCoMKgwqDCoCB4aGNpX3BsYXRfaGNkDQp2
-ZXJtYWdpYzrCoMKgwqDCoMKgwqAgNi42LjAtMDAwMDQtZzBjZGQ0MzM3YzUyOSBTTVAgcHJlZW1w
-dCBtb2RfdW5sb2FkIGFhcmNoNjQNCg0KcGlAcmFzcGJlcnJ5cGk6fiQgbW9kaW5mbyB4aGNpLWhj
-ZA0KZmlsZW5hbWU6IA0KL2xpYi9tb2R1bGVzLzYuNi4wLTAwMDA0LWcwY2RkNDMzN2M1Mjkva2Vy
-bmVsL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1oY2Qua28NCmxpY2Vuc2U6wqDCoMKgwqDCoMKgwqAg
-R1BMDQphdXRob3I6wqDCoMKgwqDCoMKgwqDCoCBTYXJhaCBTaGFycA0KZGVzY3JpcHRpb246wqDC
-oMKgICdlWHRlbnNpYmxlJyBIb3N0IENvbnRyb2xsZXIgKHhIQykgRHJpdmVyDQpkZXBlbmRzOg0K
-aW50cmVlOsKgwqDCoMKgwqDCoMKgwqAgWQ0KbmFtZTrCoMKgwqDCoMKgwqDCoMKgwqDCoCB4aGNp
-X2hjZA0KdmVybWFnaWM6wqDCoMKgwqDCoMKgIDYuNi4wLTAwMDA0LWcwY2RkNDMzN2M1MjkgU01Q
-IHByZWVtcHQgbW9kX3VubG9hZCBhYXJjaDY0DQpwYXJtOsKgwqDCoMKgwqDCoMKgwqDCoMKgIGxp
-bmtfcXVpcms6RG9uJ3QgY2xlYXIgdGhlIGNoYWluIGJpdCBvbiBhIGxpbmsgVFJCIChpbnQpDQpw
-YXJtOsKgwqDCoMKgwqDCoMKgwqDCoMKgIHF1aXJrczpCaXQgZmxhZ3MgZm9yIHF1aXJrcyB0byBi
-ZSBlbmFibGVkIGFzIGRlZmF1bHQgDQoodWxsb25nKQ0KDQpIYXMgYW55b25lIGFuIGlkZWEsIHdo
-YXQncyB3cm9uZyBoZXJlPw0KDQoNCg==
+Hi,
+
+Am 27.11.23 um 19:41 schrieb Florian Fainelli:
+> On 11/27/23 09:44, Justin Chen wrote:
+>>
+>>
+>> On 11/27/23 8:28 AM, Phil Elwell wrote:
+>>> On Mon, 27 Nov 2023 at 12:39, Stefan Wahren <wahrenst@gmx.net> wrote:
+>>>>
+>>>> Hi Phil,
+>>>>
+>>>>>>>> Hi Justin,
+>>>>>>>>
+>>>>>>>> [add Phil]
+>>>>>>>>
+>>>>>>>> Am 27.11.23 um 07:02 schrieb Justin Chen:
+>>>>>>>>> On 11/25/23 6:56 PM, Stefan Wahren wrote:
+>>>>>>>>>> In contrast to the Raspberry Pi 4, the Compute Module 4 or
+>>>>>>>>>> the IO board
+>>>>>>>>>> does not have a VL805 USB 3.0 host controller, which is
+>>>>>>>>>> connected via
+>>>>>>>>>> PCIe. Instead, the BCM2711 on the Compute Module provides the
+>>>>>>>>>> built-in
+>>>>>>>>>> xHCI.
+>>>>>>>>>>
+>>>>>>>>> Does this work? I maintain this built-in xHCI controller
+>>>>>>>>> internally. I
+>>>>>>>>> wasn't aware the Compute Module uses this block.
+>>>>>>>> i successful tested this with a CM4 (arm 32 bit,
+>>>>>>>> multi_v7_lpae_defconfig) with eMMC. Before this series the USB
+>>>>>>>> devices
+>>>>>>>> (mouse, keyboard) connected to the host interface didn't work.
+>>>>>>>> After
+>>>>>>>> comparing vendor DTS with mainline i noticed the missing xHCI
+>>>>>>>> block [1].
+>>>>>>>> Unfortunately i wasn't able to get further information from the
+>>>>>>>> public
+>>>>>>>> datasheets. I don't know if the VideoCore does some magic
+>>>>>>>> tricks on the
+>>>>>>>> xHCI or i missed some downstream xHCI changes.
+>>>>>>>>
+>>>>>>>>> This block is held in reset and needs a bit toggled to get thing=
+s
+>>>>>>>>> going. Florian, just to confirm, this is our
+>>>>>>>>> "brcm,xhci-brcm-v2" block
+>>>>>>>>> correct?
+>>>>>>>>>
+>>>>>>>>> Justin
+>>>>>>>> [1]=C2=A0 -
+>>>>>>>> https://github.com/raspberrypi/linux/blob/rpi-6.1.y/arch/arm/boot=
+/dts/bcm2711-rpi-ds.dtsi#L119
+>>>>>>>>
+>>>>>>> What's the question here? Does the XHCI block present in the
+>>>>>>> raspberrypi/linux dtsi file really exist? Yes it does.
+>>>>>> since i don't have any documentation about the xHCI block, i
+>>>>>> assumed the
+>>>>>> compatible generic-xhci is correct. But Justin seems to suggest
+>>>>>> that the
+>>>>>> xHCI block needs some special treatment and we need a specific
+>>>>>> compatible.
+>>>>>>
+>>>>>> Did i missed some xHCI driver changes?
+>>>>>> Does the VC firmware something to the xHCI especially on CM4?
+>>>>> The firmware switches the on-board USB pins from DWC-OTG to XHCI if
+>>>>> otg_mode=3D1 is set in config.txt, or if booting over USB MSD.
+>>>> is this pinctrl/pinmux available from ARM via 0x7e200000 or a
+>>>> different
+>>>> IO address?
+>>>
+>>> It's in a different, undocumented block.
+>>>
+>>> Phil
+>>
+>> Well if it works, then maybe I am misunderstanding something here.
+>> Maybe its time for me to pick up a CM4 board.
+> There is one on my desk that you are welcome to use, or remote into if
+> you prefer.
+>
+> To answer your earlier question, yes this is the same block as the one
+> present in 72112 for which we use the "brcm,xhci-brcm-v2" compatible
+> string, it would be preferable to have it backed by that compatible
+> string in case we happen to support suspend/resume on the Pi 4B one
+> day, if nothing else.
+>
+> I did confirm that after applying Stefan's patches plus changing my
+> config.txt to have otg_mode=3D1, USB continues to be fully functional.
+> This is the case with using both "generic-xhci" or "brcm,xhci-brcm-v2"
+> so with the minor request to update the compatible to
+> "brcm,xhci-brcm-v2", this is:
+>
+> Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
+>
+> Stefan, I am getting a deadlock on boot if I leave your changes in and
+> uncomment dwc_otg=3D1 in config.txt, is there an alias or something that
+> the boot loader should be patching?
+
+sorry but i'm unable reproduce those deadlocks, neither in arm or arm64,
+with eMMC or without eMMC, xhci builtin or module. If i uncomment this
+in config.txt, USB host is just disabled.
+
+I'm using the following firmware:
+
+raspberrypi-firmware soc:firmware: Attached to firmware from
+2023-03-17T10:50:39
+
+Is this DTS difference a problem?
+
+upstream=C2=A0=C2=A0 -> xhci: usb@7e9c0000
+downstream -> xhci: xhci@7e9c0000
 
