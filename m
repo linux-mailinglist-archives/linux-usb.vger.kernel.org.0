@@ -1,57 +1,57 @@
-Return-Path: <linux-usb+bounces-3385-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3386-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 095EA7FAD35
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 23:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 660C87FAD7F
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 23:34:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD5331C20CED
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 22:16:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9822D1C20E22
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 22:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5F5648CC7;
-	Mon, 27 Nov 2023 22:16:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF1D24594E;
+	Mon, 27 Nov 2023 22:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GI26j6SD"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="d/kZFQmS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D076B26B3
-	for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 14:16:06 -0800 (PST)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1fa3828b66fso438319fac.1
-        for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 14:16:06 -0800 (PST)
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838561AD
+	for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 14:33:52 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-7b38ff8a517so21869239f.1
+        for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 14:33:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1701123366; x=1701728166; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1701124432; x=1701729232; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VOtiHhCXcTs7U7N8iXM/fTHfmUjP1auJELJxitQ/CYY=;
-        b=GI26j6SDuj17y1bcbf9dUKpW5rObBS5AQ1RQ1rA+SeMdivOJglptSaw2harbdPy0mX
-         WkUnyyAvsOn3SnkY5HJ6WV7ZKjziPGf8YVp1obS6mV9hmqdVDquCTlcVhEhzapJG63D8
-         Z6zV+mS32Mggz8ePnRLMnpmV+IIhFHpQuEbNk=
+        bh=wRurvJBixT9EaPt149GqF23JO/Hj3FJOfl0g3s+cV30=;
+        b=d/kZFQmSqL/CVbe8x/MUYwLDMONqAUs8YcXijkfvYPIRComGmCw4fXjT3b0M2Mcpb6
+         Jr1ql3VL3wNfkJVVHplNgIWy/y1TrIaIaI0eg2RAFcZgKhCFpmAyAi5lLZW55OgQyOqx
+         DGMVP6bc+Clb2lGACqMGopBdrVHyQUytYf6G4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701123366; x=1701728166;
+        d=1e100.net; s=20230601; t=1701124432; x=1701729232;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VOtiHhCXcTs7U7N8iXM/fTHfmUjP1auJELJxitQ/CYY=;
-        b=VPEiJn2kd7yi8W7hBxQZD58irq0HJB4ondSpnMJjRxo/k7QS7D2/cNhkYgiOodcFbF
-         15QN4aDDfY0w/KhEEsNZlGXxkIlLI5BYkGE5WmIri6kZByopyk1e2+2Nlwl+ATfhXjU0
-         tQWsfdZAiG1YkiUD8BdwoQFOB0qJi5PwPAwLtjxM6uR4P3K0ltG0j6GFa3fR5lWdzuCO
-         HSiTpZsVYDrt6UdippTU607BYMapJDYZBoCHg7PaAPI99XmORTEdBFARvNuwOnKvGxp+
-         WqZ0eg1WVyvjHya6gWSyAGtO6hIZEPV7+wpcjerOKTWFLdp+3ql+CoFOnD9+eifiR0tF
-         M3kQ==
-X-Gm-Message-State: AOJu0YzrgFyqWT/fAS4ryjYgN8jwaVhD6aa4FkDl5HnTdz/1oj+S14eg
-	eiDDh4L2BQ9QqtP5U6FSr3i3Eg==
-X-Google-Smtp-Source: AGHT+IHcYWuhBqbWWINw7ql+l95FDuxpiFZKblBR6VSUVqnwT28MUHtJGGplWNnVycy41sgg43uDgg==
-X-Received: by 2002:a05:6870:f78f:b0:1e9:9440:fe4a with SMTP id fs15-20020a056870f78f00b001e99440fe4amr18433816oab.3.1701123366057;
-        Mon, 27 Nov 2023 14:16:06 -0800 (PST)
+        bh=wRurvJBixT9EaPt149GqF23JO/Hj3FJOfl0g3s+cV30=;
+        b=MLlwgS8qFFBuwhdWAmPNpN76Ul++jwXEIKgiFge1fcGFQuNFva5EIruUahHDmB5cgj
+         ZcJJ0byS1U8d0orZXfATrwu4b8+QzeWtEMWQbDa2RmtWaCgrmYmakoxGiFPR1KxTa2Rn
+         psWdsd3iEAle7Agx/ouqKK8ZsJyUvIaQtLcmEAVTCUqYjdxdpLPkAYblDlAkiLgf4oKv
+         ORjEd4jj+e9NhitrO+A0lITnb4pznoP2wfJsEIvBugZnpEnkoUY4CaqUB4ZO/GCWVqYj
+         2IQu2+XgDuinn4DtoSljprv4iRKgaNLDRN7AwNbgW07Q6llpFKSR1hxjNsfusmaw8WHE
+         LycQ==
+X-Gm-Message-State: AOJu0Yy86J1139q0wpa88FdXxUkoHeBv4yk5H9qkC/cIDhIUS9uITmJk
+	RLkRFI8agrSgxgIJ1Pyggq2vuQ==
+X-Google-Smtp-Source: AGHT+IGh5IiXqi5dcw0tW55Z6m25NZgO5YspNsDlNPeNkzRHiMxeLfGiS5mMw/2e+Xpfx5UIOjXfjg==
+X-Received: by 2002:a6b:7a07:0:b0:7b3:92ea:3438 with SMTP id h7-20020a6b7a07000000b007b392ea3438mr6812083iom.2.1701124431854;
+        Mon, 27 Nov 2023 14:33:51 -0800 (PST)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id n6-20020a0568301e8600b006b9848f8aa7sm1508051otr.45.2023.11.27.14.16.05
+        by smtp.gmail.com with ESMTPSA id w30-20020a056638379e00b004665c3f56ebsm2579841jal.15.2023.11.27.14.33.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Nov 2023 14:16:05 -0800 (PST)
-Message-ID: <919ae87a-b906-44ba-8d6e-cca58664afa8@linuxfoundation.org>
-Date: Mon, 27 Nov 2023 15:16:04 -0700
+        Mon, 27 Nov 2023 14:33:51 -0800 (PST)
+Message-ID: <b0ab598c-4303-449d-8a01-349e642d8c11@linuxfoundation.org>
+Date: Mon, 27 Nov 2023 15:33:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,42 +59,38 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: usbip: vudc: Convert to platform remove callback
- returning void
+Subject: Re: [PATCH] usbip: Don't submit special requests twice
 Content-Language: en-US
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan <shuah@kernel.org>
-Cc: Hongren Zheng <i@zenithal.me>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- kernel@pengutronix.de, Shuah Khan <skhan@linuxfoundation.org>
-References: <20231103171428.3636570-2-u.kleine-koenig@pengutronix.de>
+To: Simon Holesch <simon@holesch.de>,
+ Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20231126234839.52434-1-simon@holesch.de>
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20231103171428.3636570-2-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20231126234839.52434-1-simon@holesch.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 11/3/23 11:14, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource leaks.
+On 11/26/23 16:48, Simon Holesch wrote:
+> Even though submitting those requests twice should be harmless, there
+> are USB devices that react poorly to some duplicated requests.
 > 
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new(), which already returns void. Eventually after all drivers
-> are converted, .remove_new() will be renamed to .remove().
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Looks good to me. I thought responded to this patch. Getting to
-this now.
+The change looks good to me. I want to see the change explained in
+the commit log. I see the information on why the change is needed.
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Please add a bit more information on the change.
+
+> One example is the ChipIdea controller implementation in U-Boot: The
+> second SET_CONFIURATION request makes U-Boot disable and re-enable all
+> endpoints. Re-enabling an endpoint in the ChipIdea controller, however,
+> was broken until U-Boot commit b272c8792502 ("usb: ci: Fix gadget
+> reinit").
+> 
+> Signed-off-by: Simon Holesch <simon@holesch.de>
 
 thanks,
 -- Shuah
-
 
