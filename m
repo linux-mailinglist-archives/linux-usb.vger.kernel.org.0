@@ -1,174 +1,114 @@
-Return-Path: <linux-usb+bounces-3346-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3347-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F7CB7F9E5F
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 12:17:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A24A17F9E6B
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 12:22:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD9CB281403
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 11:17:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D2E7281450
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 11:22:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0448D1947A;
-	Mon, 27 Nov 2023 11:17:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B976F199C2;
+	Mon, 27 Nov 2023 11:22:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mysnt.onmicrosoft.com header.i=@mysnt.onmicrosoft.com header.b="GGB2/ujo"
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="Er9wtzOl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2137.outbound.protection.outlook.com [40.107.7.137])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A15135;
-	Mon, 27 Nov 2023 03:17:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BzFbK6/h85GiraBs2K9JrTZAR2DXtvLEUmluXuVrbBqYeRhfLuv5VgAU9BVhs+JuJark+tALdrCt871i1oCsppO3fqeq6xlji68QCDvtTqw08kgeJW28mK7u6SpEjur+yL5knbbcJQ60UAkWkNAKkWVb9BbyeI6FwGQun6vQHD8t1P33txwcCLL34SIQSA3rrpOYWOLz/97I5GO/nvpPZETs5Gz+Vmid1wpC+Oasws8LY1wbCdeqCDxVZ/MdzqmBWQrIQyhN55+Y3GDrHWWugsZNax4L0Thb0jngDy6m10CtFR8PCpY86LdyPtqCnp/CEv/K73thK68+CG1HomoQWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6TwUHk4aYq26hKKTWHjMkouJNcgQyt/8798Kwubhq98=;
- b=IfStxzy4HF62BF0DS4SBbUQF015Y2OYDyyAABDxd8D8+YxzGINapj5eygK4m+QKZk38OKWHGXcV2QwfhlHYbKVbGXz5dVMCuJSKnT/UL1MA9YUL7mPMuZZ2n8iNzQwWXwLAxGwapXikCttKAt7jPOFC8gj0jxjQvRldNNt5ayX8gizDI8SBU0dJAOtFfmNj6mdByAtBfOYRAb6FNrQ0aVn0JuJeX5HEDB0ZlmTTJYCYNn1xEWOwcVPEqE92Oqd6z4MzkVqINZYES7J4++2Lsgb4nshjPDmJ7VpJgNd8IsbcaMmZGh12yPxMdNS4CdRnwJiWh+dE5FFRAvPYbzNdL6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6TwUHk4aYq26hKKTWHjMkouJNcgQyt/8798Kwubhq98=;
- b=GGB2/ujolbREn5XmIDhFm8P0xLwiDM2jSi/dazaKJ7i9YURSg1oiY2QjDH9XmG3viea2lcjtztKgBaTkm76OKkA80k9DM+gu8lbGd1Altm551FnTi5nGbLK5IekP/JWOs413n3GDfcrgdPb+hCqojUNlCewdrMTmrYvd8oAdEjk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kontron.de;
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
- by AS2PR10MB7712.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:62d::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.27; Mon, 27 Nov
- 2023 11:17:22 +0000
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::27ba:9922:8d12:7b3d]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::27ba:9922:8d12:7b3d%5]) with mapi id 15.20.7025.022; Mon, 27 Nov 2023
- 11:17:22 +0000
-Message-ID: <158cf11e-53fa-4af8-a8a5-db18d43d0abb@kontron.de>
-Date: Mon, 27 Nov 2023 12:17:19 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] usb: misc: onboard_usb_hub: Add support for clock
- input
-Content-Language: en-US, de-DE
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Frieder Schrempf <frieder@fris.de>, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
- Anand Moon <linux.amoon@gmail.com>, Benjamin Bara
- <benjamin.bara@skidata.com>, Icenowy Zheng <uwu@icenowy.me>,
- Rob Herring <robh@kernel.org>
-References: <20231123134728.709533-1-frieder@fris.de>
- <2023112329-augmented-ecology-0753@gregkh>
- <20231123173610.d6ytwlpbpcqng5pv@pengutronix.de>
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
-In-Reply-To: <20231123173610.d6ytwlpbpcqng5pv@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0120.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a3::18) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:263::10)
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268AA135
+	for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 03:22:30 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5cd81e76164so33600717b3.1
+        for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 03:22:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google; t=1701084149; x=1701688949; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OSqZ1LC6PGby35X/pA57G3jaWFYPlkSXydb/PTyGgHA=;
+        b=Er9wtzOl4UOjL6/wDJvyokS/F5UiRE6HX2S97Gh/CGtwpHiKb6/hK7gSYS5+2LMu1j
+         INX1gdRJwWGCmW9+2uikRg357zUeVSTZHsqX7NCyQB1AFiAfoQP6bPmY/VNPuXNN2uoI
+         QewpaGXbIkSi3OVemN2vbfbhoorP8av8oVf8caEhJNiZL2ppvhfbakSWpbsEO9Ba0049
+         +csafNypRk2ZP77dj4jG0JoqDyU7V7yQ8vJBL5SiZ+2DDY1RdhX8QTULG6tSVvLReHN9
+         yqsNt9NCSY3dEDbJFKdRecPHzwW29spI92CpLIT2zX7H8/HF65UzS3TkW0enykwAR1OD
+         cV/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701084149; x=1701688949;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OSqZ1LC6PGby35X/pA57G3jaWFYPlkSXydb/PTyGgHA=;
+        b=rRLIUX8Q314txCOH2wWJrd2wqNMfLIVz6L9OKO8QuLApGCV+c8yuiiKwoZ/Ul34iXN
+         YFhiGQy/cdjqBUciyWL5rUCauzvFnTwS6pP8GNy2VxV/TEfmBxl8fqrxhxIPSbg1S49N
+         WLNVi8TBCJ9c49Uns0pwqWOsoUMShVMlxhQB63cvEv53alZRb8syo6XjOFvmU6QJAhIv
+         D1QvPbtYT71Hx9zBshhP0xzbfrymYlRvX87eROsgym85MdJNLTp1toOf+E3MkcE7ks8y
+         lvYnvv9JE8g+d0Y/ZiZIFJje87N8HWxbgrWYGWooDREVzQvJwWAsfbYILFY1ITwXzt+p
+         gdiw==
+X-Gm-Message-State: AOJu0Yw+qBqkDVoZM822OnK1DCdq7DBUPYMD6zXtduP+KZlxuTaz1Fwt
+	veEuLQM2AC37HEQi2NwL/Sds/SF8MKifsJJ6l72HHg==
+X-Google-Smtp-Source: AGHT+IGT+Jz3oRbJCMrN6JyHccuWIXHwb/Z0VM3wtO5suAsKP8/c6a5/8jFBvlwnttH2xjITgHkAfzkay/sSr2Kyonk=
+X-Received: by 2002:a81:8083:0:b0:5cd:ad4:16dd with SMTP id
+ q125-20020a818083000000b005cd0ad416ddmr11792845ywf.45.1701084149374; Mon, 27
+ Nov 2023 03:22:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|AS2PR10MB7712:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5ea211e2-aa9b-4513-9ccc-08dbef3a6d07
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Clu/SwmGpwRH9HQf6BXgEGmYPzfj6x/iuUtwpy5Z5A52q1uDor1GLLmrEMyNZvpO+OI4LqGMYd12k+kxwZOr8LdJbgUJ2vAyjPVWJLofBS86DPbv2hayGcr0zRgX0NPyKzwTq1nbEZiJG4JrUp1JGPilgw5HmUYJvG8/RuQDfgxbTbP0PT1y6noLuJCO3oSb/QSPh6ZsSeoHbuVOG2QPQc5bc5rPt0hgVCWqnmj7apCOOcHVI6bay3XrpYmxB+mH4pueYk7L0Nqo4NNwsGEOQ3adPamWQyGVHIpyRxs7NGvCBDrq8aU1o/lsj/KANdA0MR8mNj64+kh2NVbEpYdsrSeOCWNodhB1FkaEj3+wKErgTr00TqdtkEbmeYzrc+iJaKvo5NzKYCo/WIEzyRYDJUc2MB7nYcpXX4uOfc1MjmshFkDBhdt/Pv+JpKvfnwEzM+PPMWh1+6e1AnhcOGmoNA+NtYvgCS3/Kp+rqbTIiSZE1tWvsH6j64sp1myCbpzyzug3DyX7C6tMdj1nWtxQjr/7qYOb95NdCo4b+6EeLFaPwGU3giitZ5P7PVx5r67UhDauEyz1mFQBq203G8+koaZn27O2X1f8dFNZ4IzPmgEFP9exxzg3gm3YHwBVmSD0r/6iEmpKVHqph8wHBzEpPw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(136003)(39850400004)(366004)(396003)(230922051799003)(451199024)(1800799012)(186009)(64100799003)(83380400001)(38100700002)(31686004)(53546011)(6512007)(6666004)(6506007)(8936002)(4326008)(110136005)(316002)(66556008)(66946007)(54906003)(66476007)(6486002)(5660300002)(31696002)(44832011)(8676002)(7416002)(478600001)(86362001)(41300700001)(4744005)(2906002)(36756003)(26005)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cXZSWWRTL2xpNFMyRzlkVmxNdHdSall6TzJLY3JEc3NIMTVIbUdiTTBMUlda?=
- =?utf-8?B?Q21OOHpQSmJLclAwcktRbTlYMEp4MVZYV0E0eGtNdjRHM1QzUnBvUGJhU2lH?=
- =?utf-8?B?dklLenhBRnVGaFR0eVlFSm4zUFZzTGhLMWFMUHRFeWNKL2JaTkkwRGx6bHdP?=
- =?utf-8?B?bE5WN1pkSElhZGRtY1dZYWNQM3ZYUEluNDNzUlFJNVljRUpWZ3B4OEpVOFdJ?=
- =?utf-8?B?VXl5NEYvTDFZejdSbHNyM1dFcUVKODk5RXJuV0xBWTVONzFnTEdCblFhQkE1?=
- =?utf-8?B?bzE2QktnSVVXU09MT2xjK0pmQyt6NW8zUjJuaEpJeGxrVWZBMXcrYnVNb0Zp?=
- =?utf-8?B?V1JCNHVQRGFDaTgzWFBDdjJSVExaOTh3NFJqU2lJc3k2LzNIZE80bmZqS3dH?=
- =?utf-8?B?ZGl2UlIwWlVmUlo2Y1p0Mk54SGRJdzcwY2tmdm9zY0R4SE15OWxaTUYwSmVB?=
- =?utf-8?B?WjEyaUhER0NldXdwN045dW00a0dNV082clMrck1rM1poMWNuUGRucGFTT2sz?=
- =?utf-8?B?TDQ2RmhCMU9CYm5sOEVEQU1oWG5pdWErc1RJQTJzNzI1WEYxOWMwTWF2YzRj?=
- =?utf-8?B?WlJyU3VhdmtvWVdwUVlBZTRaTEo3Z1FXU0J5N1U3RUthb1lFTVE1eWYxREw3?=
- =?utf-8?B?WHRWcWtmVGhFVW1vUmp2V0dIbkR4czVnSVNiOHJvdHpNOGxZdjZsZk96ODFB?=
- =?utf-8?B?RTl4L2JzdW9haFE4U3JPbkcrUWpRRG1sWnVFZkxMK0hCWVdJSkZRUHdTMG1K?=
- =?utf-8?B?SHFiUWlMdzFZOHNrc2R3eGN5dkl3d3FLN2w3dE80V1pBODVsOUNRYW90OFpS?=
- =?utf-8?B?ZVR1Mlg5R25LbUVucXh4UWpRM0NxQzdkUWl4bElUQm0vTGpLMHJTaW83NFJM?=
- =?utf-8?B?cDVsUHc0Z2prbUg0SlgvbzJ4KzVjZzZ0SlBLUEEyVUwyTktZa3hoMHBQblha?=
- =?utf-8?B?ZUV5QUc3SlU4UWFVNkZSVHhGWDhWYjBKRFdiYlVnSFJveHdlZ0JlUEhnSnk0?=
- =?utf-8?B?ZGVWNklyMVQzd2ppaVBXUmJ3RDFMRXNyMlhWc0I4M3VyY3Q2bE1KeU1VUCt3?=
- =?utf-8?B?ZGp2QXhwL0N5VTREd1EydW1pb04wWmtHNHhFY0VBOWYwSmt3emlhL3JtZVEr?=
- =?utf-8?B?YmNkUldLc1pHbitaMEZ3WDl0ckJYeFJPcW9aZ29sUVArd1NZQTZROW9kSzIz?=
- =?utf-8?B?bDZKMDkxTzlPTHBZV1hqQzRXejZ5SmlZb1ljczBqV2xjSFRrTXByS2ZlR254?=
- =?utf-8?B?aGR6VlhUSEpUbHVkYUVkZWtHQUlOUTlxSDJkZW1qRzdYUFd2NWUwZ0k2K0FJ?=
- =?utf-8?B?UE8xYW01b1JUQUN5MUNSeCtUSDd2TG1SYnY5NkxzWS8rVm5TdHVQb2JUallu?=
- =?utf-8?B?UXJQZUpvR1VuMExsbjNpZ25yK0Z1VEl5dEx0ZkpXRGUrVWhMNEU0OWYxRWgz?=
- =?utf-8?B?Ui9zUzZ6b1lYb3dYeS9NRkt4eWRHOHFDeVRtbG9YeXRrVUN6THdET01KVGQ0?=
- =?utf-8?B?U1JRLzhPN0xMeUZ0K0R4YmJPWUt0UGJoZEc5Tm1FNWJOQlk2UWlsakRiQTB2?=
- =?utf-8?B?VHdFQlVWSnRaQnRNRDlxSDBEdTZFVUZlSkI0VUdtZ3VoYnJIS3h1NjVHMkIz?=
- =?utf-8?B?cXI5NUhFNVA4a3NobElwSnhiZHZ0NmQzWi9sQzFYaHlEelNkemU5MGVLZ1Zq?=
- =?utf-8?B?SWFJZndFeHNFNVFzUGJWb3J6Nk5weDBmYVdpY3ZTQStpdXdsZFdXaC9xWGt2?=
- =?utf-8?B?QUFMVUhRQkRoZFg4SFl4WFArR0htbmdjMTFnOHhPTG5FdVFxRXF5NjhVZ3Ix?=
- =?utf-8?B?T0xLVW1WMlhaZ1JOQ1QxMGhEMWwweDRrdjVBZ0FZcG5Vcm5nNTZMc3BERHlP?=
- =?utf-8?B?R0lucUIwUnVoRW01VUcrWWg2Q0owbTdRUERqVlVuVDJHdVZFa2phdG8ydUR6?=
- =?utf-8?B?YWZ1VEZTVXRFbm05TWN1OENibXRRemFkdnBiMDZJam1VMVRGRGtaSnk4aEIy?=
- =?utf-8?B?ODhsVWxuWWhUbE53V21PVDNpbXV5NDB1czU2WlBha1k0emhuSHBtSWkreXJI?=
- =?utf-8?B?ZXdhMjF1TVhNN3NSUzU0QU9HRUxncG9PZ2R5Rm5sbS94NnN5dFVoTHJFM2ty?=
- =?utf-8?B?Rmt2UWh3eC84S1NqZkxFTmVBRDJOMUZhb29SdUVjS0gzVmdiN1F4azlFQVVj?=
- =?utf-8?B?aVE9PQ==?=
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ea211e2-aa9b-4513-9ccc-08dbef3a6d07
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2023 11:17:22.1159
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: duNzEMeITbffotHsEEaTqI5Ux1e/jq3+sEjAIm4az96fZz2q3yNZtgt9rNdRVmVKwOv6QPRgjimwivK+4wyybHiUftyXodizqWXbHAT+t0A=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR10MB7712
+References: <20231126025612.12522-1-wahrenst@gmx.net> <53e1f6e6-a28e-45af-991e-75b283a21b34@broadcom.com>
+ <46320840-09ab-4c86-90c9-bee7b75f248a@gmx.net>
+In-Reply-To: <46320840-09ab-4c86-90c9-bee7b75f248a@gmx.net>
+From: Phil Elwell <phil@raspberrypi.com>
+Date: Mon, 27 Nov 2023 11:22:17 +0000
+Message-ID: <CAMEGJJ3SXHSnasqoMJnshf5Wu92NVi8+NoMdxmMsJH7WH2WjWg@mail.gmail.com>
+Subject: Re: [PATCH 0/3] ARM: dts: bcm2711-rpi-cm4-io: Enable xHCI host
+To: Stefan Wahren <wahrenst@gmx.net>
+Cc: Justin Chen <justin.chen@broadcom.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, Mathias Nyman <mathias.nyman@intel.com>, 
+	bcm-kernel-feedback-list@broadcom.com, Cyril Brulebois <kibi@debian.org>, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Greg, hi Uwe,
+On Mon, 27 Nov 2023 at 11:08, Stefan Wahren <wahrenst@gmx.net> wrote:
+>
+> Hi Justin,
+>
+> [add Phil]
+>
+> Am 27.11.23 um 07:02 schrieb Justin Chen:
+> >
+> >
+> > On 11/25/23 6:56 PM, Stefan Wahren wrote:
+> >> In contrast to the Raspberry Pi 4, the Compute Module 4 or the IO board
+> >> does not have a VL805 USB 3.0 host controller, which is connected via
+> >> PCIe. Instead, the BCM2711 on the Compute Module provides the built-in
+> >> xHCI.
+> >>
+> >
+> > Does this work? I maintain this built-in xHCI controller internally. I
+> > wasn't aware the Compute Module uses this block.
+> i successful tested this with a CM4 (arm 32 bit,
+> multi_v7_lpae_defconfig) with eMMC. Before this series the USB devices
+> (mouse, keyboard) connected to the host interface didn't work. After
+> comparing vendor DTS with mainline i noticed the missing xHCI block [1].
+> Unfortunately i wasn't able to get further information from the public
+> datasheets. I don't know if the VideoCore does some magic tricks on the
+> xHCI or i missed some downstream xHCI changes.
+>
+> > This block is held in reset and needs a bit toggled to get things
+> > going. Florian, just to confirm, this is our "brcm,xhci-brcm-v2" block
+> > correct?
+> >
+> > Justin
+>
+> [1]  -
+> https://github.com/raspberrypi/linux/blob/rpi-6.1.y/arch/arm/boot/dts/bcm2711-rpi-ds.dtsi#L119
 
-thanks for reviewing!
+What's the question here? Does the XHCI block present in the
+raspberrypi/linux dtsi file really exist? Yes it does.
 
-On 23.11.23 18:36, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Thu, Nov 23, 2023 at 01:55:57PM +0000, Greg Kroah-Hartman wrote:
->> On Thu, Nov 23, 2023 at 02:47:20PM +0100, Frieder Schrempf wrote:
->>> +	err = clk_prepare_enable(hub->clk);
->>> +	if (err) {
->>> +		dev_err(hub->dev, "failed to enable clock: %d\n", err);
->>> +		return err;
-> 
-> I suggest to use %pe (and ERR_PTR(err)) here.
-
-Ok, I added this in v2. I also added a patch to convert the other error
-logs to be consistent within the driver.
-
-> 
->>> +	}
->>
->> But what happens if clk is not set here?
-> 
-> clk_prepare_enable() just does "return 0" if the clk argument is NULL.
-
-Exactly!
-
-> 
->> And doesn't clk_prepare_enable() print out a message if it fails?
-> 
-> clk_prepare_enable is silent on errors.
-
-Right!
-
-Thanks
-Frieder
+Phil
 
