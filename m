@@ -1,33 +1,34 @@
-Return-Path: <linux-usb+bounces-3349-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3350-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B5F97F9E7B
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 12:24:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7A2B7F9E7D
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 12:24:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E173EB20D53
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 11:24:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6B83AB20F0B
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 11:24:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C93199BF;
-	Mon, 27 Nov 2023 11:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD78199CC;
+	Mon, 27 Nov 2023 11:24:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fris.de header.i=@fris.de header.b="a6FFS39b"
+	dkim=pass (2048-bit key) header.d=fris.de header.i=@fris.de header.b="YzAC6mU7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.fris.de (mail.fris.de [116.203.77.234])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B921BCA;
-	Mon, 27 Nov 2023 03:24:00 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5231DC00A1;
-	Mon, 27 Nov 2023 12:23:56 +0100 (CET)
+Received: from mail.fris.de (unknown [IPv6:2a01:4f8:c2c:390b::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF95E1BE2;
+	Mon, 27 Nov 2023 03:24:02 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3EF12C00F5;
+	Mon, 27 Nov 2023 12:24:00 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-	t=1701084238; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding; bh=lIwxznIaQ/Q1UMhEJA7Uobh5avUf1uO3muzdBhAnjx8=;
-	b=a6FFS39b2rc9P5CPQxqSCTBAyumOVqCsBGy6MNAnHSUWQaEwM/20G7JbBgBweeT5hPpnRt
-	ZD957/9piH9yq1LbI9D9r1k99RH1c/3NUQnL7xEQg9SABvJ3tp+ZwF5F0kTFEEaNUJ1N+B
-	CNXKOFHmZGDWMh4qs4gxzhYnVao8CDgysH80xhu1hNban7PZ179WdlmjU/QIPhhq36KifO
-	ZQhNKkDId7ty3Muy14/c94b9Xl20DGzJ5iUzyNfCSvaRRc3Z/1Ys3zVBc7QfFaXW/FAZyd
-	xcq4inQ7VcclNwxYODoofi/qe3iWi/YWhnH0uRTPd1QE5GQGQozyJkTc5cRjMQ==
+	t=1701084240; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=TtObVw8YUfhzjUng8rafUVONqr/7XfXzj8lQVXj7nE0=;
+	b=YzAC6mU7eSXCWNV/s6NbfpkGalIernf22FZMLR/7LYe2CApjm1wXlI1Yl95mOIpgrLtr8p
+	FVrM8cVM1a8ecMDCML33ZKk9QsnHeaBE3WlBA5hTSmJS2To6XEO9l0J93QWbmFxmIznhpf
+	w4NR0Kyh8T1vUZHCroZgjxKGYoJQe8Q3PXZQMLsWG/eYoBiruPKyFAGfpeD7W9y2kNzxDi
+	mUacNXuUE3tjZ2+P9xMLyBAhqxiSK3aVAZF+qgTYCFlp4DwhgXau2lGOd0eR81TXaUt/dF
+	N/8rNrDsPqotxPllIyl8Fj671fpDXn+M7MtR5a4UFqoZZbTjfca6sLtDQWKu8g==
 From: Frieder Schrempf <frieder@fris.de>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-kernel@vger.kernel.org,
@@ -38,9 +39,11 @@ Cc: Frieder Schrempf <frieder.schrempf@kontron.de>,
 	Benjamin Bara <benjamin.bara@skidata.com>,
 	Rob Herring <robh@kernel.org>,
 	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Subject: [RESEND PATCH v2 1/3] usb: misc: onboard_usb_hub: Print symbolic error names
-Date: Mon, 27 Nov 2023 12:22:24 +0100
-Message-ID: <20231127112234.109073-1-frieder@fris.de>
+Subject: [RESEND PATCH v2 2/3] usb: misc: onboard_usb_hub: Add support for clock input
+Date: Mon, 27 Nov 2023 12:22:25 +0100
+Message-ID: <20231127112234.109073-2-frieder@fris.de>
+In-Reply-To: <20231127112234.109073-1-frieder@fris.de>
+References: <20231127112234.109073-1-frieder@fris.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -52,66 +55,73 @@ X-Last-TLS-Session-Version: TLSv1.3
 
 From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-Instead of printing the decimal error codes, let's use the more
-human-readable symbolic error names provided by the %pe printk
-format specifier.
+Most onboard USB hubs have a dedicated crystal oscillator but on some
+boards the clock signal for the hub is provided by the SoC.
+
+In order to support this, we add the possibility of specifying a
+clock in the devicetree that gets enabled/disabled when the hub
+is powered up/down.
 
 Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 ---
 Changes in v2:
-* new patch
+* use %pe to print symbolic error name
 ---
- drivers/usb/misc/onboard_usb_hub.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/usb/misc/onboard_usb_hub.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
 diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index a341b2fbb7b44..077824beffa01 100644
+index 077824beffa01..0d84b16deab50 100644
 --- a/drivers/usb/misc/onboard_usb_hub.c
 +++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -7,6 +7,7 @@
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2022, Google LLC
+  */
  
++#include <linux/clk.h>
  #include <linux/device.h>
  #include <linux/export.h>
-+#include <linux/err.h>
- #include <linux/gpio/consumer.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
-@@ -68,7 +69,7 @@ static int onboard_hub_power_on(struct onboard_hub *hub)
+ #include <linux/err.h>
+@@ -61,12 +62,19 @@ struct onboard_hub {
+ 	bool going_away;
+ 	struct list_head udev_list;
+ 	struct mutex lock;
++	struct clk *clk;
+ };
  
+ static int onboard_hub_power_on(struct onboard_hub *hub)
+ {
+ 	int err;
+ 
++	err = clk_prepare_enable(hub->clk);
++	if (err) {
++		dev_err(hub->dev, "failed to enable clock: %pe\n", ERR_PTR(err));
++		return err;
++	}
++
  	err = regulator_bulk_enable(hub->pdata->num_supplies, hub->supplies);
  	if (err) {
--		dev_err(hub->dev, "failed to enable supplies: %d\n", err);
-+		dev_err(hub->dev, "failed to enable supplies: %pe\n", ERR_PTR(err));
+ 		dev_err(hub->dev, "failed to enable supplies: %pe\n", ERR_PTR(err));
+@@ -93,6 +101,8 @@ static int onboard_hub_power_off(struct onboard_hub *hub)
  		return err;
  	}
  
-@@ -88,7 +89,7 @@ static int onboard_hub_power_off(struct onboard_hub *hub)
++	clk_disable_unprepare(hub->clk);
++
+ 	hub->is_powered_on = false;
  
- 	err = regulator_bulk_disable(hub->pdata->num_supplies, hub->supplies);
- 	if (err) {
--		dev_err(hub->dev, "failed to disable supplies: %d\n", err);
-+		dev_err(hub->dev, "failed to disable supplies: %pe\n", ERR_PTR(err));
+ 	return 0;
+@@ -267,6 +277,10 @@ static int onboard_hub_probe(struct platform_device *pdev)
  		return err;
  	}
  
-@@ -235,7 +236,7 @@ static void onboard_hub_attach_usb_driver(struct work_struct *work)
- 
- 	err = driver_attach(&onboard_hub_usbdev_driver.drvwrap.driver);
- 	if (err)
--		pr_err("Failed to attach USB driver: %d\n", err);
-+		pr_err("Failed to attach USB driver: %pe\n", ERR_PTR(err));
- }
- 
- static int onboard_hub_probe(struct platform_device *pdev)
-@@ -262,7 +263,7 @@ static int onboard_hub_probe(struct platform_device *pdev)
- 
- 	err = devm_regulator_bulk_get(dev, hub->pdata->num_supplies, hub->supplies);
- 	if (err) {
--		dev_err(dev, "Failed to get regulator supplies: %d\n", err);
-+		dev_err(dev, "Failed to get regulator supplies: %pe\n", ERR_PTR(err));
- 		return err;
- 	}
- 
++	hub->clk = devm_clk_get_optional(dev, NULL);
++	if (IS_ERR(hub->clk))
++		return dev_err_probe(dev, PTR_ERR(hub->clk), "failed to get clock\n");
++
+ 	hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+ 						  GPIOD_OUT_HIGH);
+ 	if (IS_ERR(hub->reset_gpio))
 -- 
 2.42.1
 
