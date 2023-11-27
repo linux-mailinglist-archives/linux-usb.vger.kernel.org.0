@@ -1,120 +1,126 @@
-Return-Path: <linux-usb+bounces-3377-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3378-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 526E37FA943
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 19:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 169507FA94B
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 19:52:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F18C61F20F23
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 18:51:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B03F81F20F10
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 18:52:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 030493A8DE;
-	Mon, 27 Nov 2023 18:50:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F7C3C6A3;
+	Mon, 27 Nov 2023 18:52:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="j7BjkE4r"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA15D53;
-	Mon, 27 Nov 2023 10:50:50 -0800 (PST)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1f0f94943d9so2323955fac.2;
-        Mon, 27 Nov 2023 10:50:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701111050; x=1701715850;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x3bXET2IS76jIzfigzKYg8jJt8fngAdagUE+PXY9fpw=;
-        b=tbk6JlRpQZDCG4ysF47qaV/ztuKW4SPaz6jjt1rLlosJVIt5D7SQa6Rwb61VTpp81p
-         MLhR5mFxmkzuCke9bGl4bdY5ZJ2/TV21Rh1W1p6skd7rbHhKMrti6nXEU4jfWXzBTy81
-         rZWj+x/wkrELrRPEleljsVTiT2qOAw3sSpkx2ZKZbllVglLq4S8FF0iGCXJlTZKZc98R
-         ffCoyjKQcNAs5SCVuMVgiga11eDMG8e91kVjCf0o1/OmBuBaHmaOUvnYqr5UbYBVMcS2
-         3S3z9EWSgmYieg8r2HEs2JJOd9UGq3egUFEV0SazrrCpZGVEmF4CwiRpM0TgpdTIbqNn
-         lSaw==
-X-Gm-Message-State: AOJu0Yz10ODXHSf7zkMe4AY1bV3X73i64mvHQ+AQZf5IdZ1olglZb8v5
-	0YW8BcbCJnsDM8pheXcXYg==
-X-Google-Smtp-Source: AGHT+IFu6MBtpvG30olCkRcT79pWOuBCeHq2F+wARXLqrblLRPuUmlli51A8gca9rI73GLBTtFURCQ==
-X-Received: by 2002:a05:6870:3308:b0:1f9:efdb:966a with SMTP id x8-20020a056870330800b001f9efdb966amr13405063oae.44.1701111050091;
-        Mon, 27 Nov 2023 10:50:50 -0800 (PST)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id nz4-20020a056871758400b001fa2b18a175sm1288144oac.49.2023.11.27.10.50.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Nov 2023 10:50:49 -0800 (PST)
-Received: (nullmailer pid 2390459 invoked by uid 1000);
-	Mon, 27 Nov 2023 18:50:48 -0000
-Date: Mon, 27 Nov 2023 12:50:48 -0600
-From: Rob Herring <robh@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Hans de Goede <hdegoede@redhat.com>, Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, Mark Gross <markgross@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: connector: usb: add altmodes
- description
-Message-ID: <20231127185048.GA2291396-robh@kernel.org>
-References: <20231120224919.2293730-1-dmitry.baryshkov@linaro.org>
- <20231120224919.2293730-2-dmitry.baryshkov@linaro.org>
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69381D51;
+	Mon, 27 Nov 2023 10:52:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+	s=s31663417; t=1701111139; x=1701715939; i=wahrenst@gmx.net;
+	bh=zgQ46fZfr/CiBcyEnxMyauIj38My1M/FDk/PQg+sgSY=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=j7BjkE4rEpYsgkWryDvl2t2rTGx7YYo6Z8IXMsBXTwwzxiqV4BX1pnfhgtRqc/H1
+	 h0jjIt9+A41qeZolxE//J0l+gIyYUnQm4Dmp9rsBCRAPjbsu6sPE0h4JsQg8dMU9r
+	 h1+fQ2W8lhrrqJWCpOLsFuAp3sBwDkVhhjtoTigsQnNf6TtE5qNsbH7GJ/6sg1YzO
+	 Lkj+cmgngBllg/c/GpPmn8siuTs422MHWojVFUkcEoIBmoAH+Q6k3TF76Wc7FhtvI
+	 E32V0UO/+uW/dQP6w6eqMWY4bgKWKTt7sUPtZHMsbp+fkfN31jxJcVUS21T4Xs03a
+	 yhIBxF9jMbIG/twjfw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.129] ([37.4.248.43]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N3siA-1rGFN51NVA-00zmGa; Mon, 27
+ Nov 2023 19:52:19 +0100
+Message-ID: <7ea67bce-9b19-4bd6-98cf-10fe85ab8298@gmx.net>
+Date: Mon, 27 Nov 2023 19:52:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231120224919.2293730-2-dmitry.baryshkov@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] ARM: dts: bcm2711-rpi-cm4-io: Enable xHCI host
+Content-Language: en-US
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Cc: Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, Cyril Brulebois <kibi@debian.org>
+References: <20231126025612.12522-1-wahrenst@gmx.net>
+ <20231127003432.7aztwjxper2a3o33@mraw.org>
+ <b1156fee-aa43-43b3-bb03-baaac49575f4@gmx.net>
+ <20231127115538.npv23hhn7jfrk3fc@mraw.org>
+ <892c2e2f-3187-491b-b464-56d099b6fd49@gmx.net>
+ <20231127130225.lyk2jngfru5lw6sd@mraw.org>
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <20231127130225.lyk2jngfru5lw6sd@mraw.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:xnnOzTGdtR3Q0fQO6C+En1vLkbnWIscJ+Z4aH3jGFu4H9HmsXB8
+ 6oXHqt6oQLDcncQ7cTBlgKOb7yRRW4Z77gR3qvjBw+OPZVys+ZxGYjZzl704FEj8MSNiaJx
+ XP3e1iKkU77oo380lIvPmeRkLkDnIVZn4UxchnVEDFLC9oxcxveOaPsdwLN2ZSQKvmJmOU0
+ X14FQYl71DWZ11DiRteXA==
+UI-OutboundReport: notjunk:1;M01:P0:KEesNfuao8c=;cdsTqmwYkAxcT/vQpXAHJ0AgRnr
+ yBaDn4UOqKtLlFY+iSSYi3Do3DTBmUih5KrUUq4w3Ex3UJi7ql14fl5v71joveS+S4bMK4eNR
+ 3q27Q2DMbBJIv2XdW6xy1cIFAthTRAShxyyLPZwunbzSaZbDtrbPxsxIK1zUPzsr1y5SU7EUN
+ 7db5VkiRsbqZOv5iozYXniDKMnAY5RfFV8c5Om/ZyOCj7/wQG57X+28Wh1KApJRc/3iFmOuK2
+ UC/nVQHvKPbhZF7BnQsaj8zY9INmeh6JTedvLvTjIEnWqYrgouqjF74/nSC//tlI63zLj1cyK
+ Q2NlazeYdvEAH5yaIi9MShoKcO8G9DJ6rV8kLeVVKemqw7bWvirZ2SicyOjIrONltPMQSEOrn
+ Im+DHP7D60xv9W2p6/Q+EnBv4OKYh6jNvaxio67Bzh0qe7d83/9BT0QoV7/roi8CQB6VIn8wi
+ Sm0PJ6BErxFFiL3LwZp0FTWiuvO8DEEJvsR3Q5n6JLVeFMthaB+KRtA5nGGa9Jc0jAEnADcQT
+ Ml4evyqTcgdssBB76lTWre9QrPs/yYEzuZPJ+pEPAlGCnBmW7fX+92/7Sw0Gq3cy5zRre/7TV
+ fDc0QmGCuvkMP5v0OIvc3YXlXhWIXu1RhlkjeZeTfputGPzC7cMbwJqgJRAUYNivUV5LA0ynv
+ 8HPmpU4ASASyLUlGco8mXAOL3Y0PGkk51AxzTBc+w4FddWqKodYFuB3Ana5HUtenzHY5komZu
+ loNulPhF3F7orDgaEm+EPB2l/V214C4TuLnW36/LTQEoHxAIULku2azu28CEvtp2JgUFZ0Ph7
+ AfY4Lf4/+i6KL1DUGbgdxEvVIFWgmjaXqeuZkxwGr4ulCS2+fnNFx5ra4fYFmZabN41VMjD0W
+ bXDel9StaItRWyHGbxVTV8qwBxC84HrQMXwu2LZYDq2voCdSELAvo/tbPHTCipe8SsHIycNio
+ eGl4ww==
 
-On Tue, Nov 21, 2023 at 12:00:18AM +0200, Dmitry Baryshkov wrote:
-> Add description of the USB-C AltModes supported on the particular USB-C
-> connector. This is required for devices like Qualcomm Robotics RB5,
-> which have no other way to express alternative modes supported by the
-> hardware platform.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  .../bindings/connector/usb-connector.yaml     | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> index 7c8a3e8430d3..c1aaac861d9d 100644
-> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> @@ -171,6 +171,28 @@ properties:
->        offer the power, Capability Mismatch is set. Required for power sink and
->        power dual role.
->  
-> +  altmodes:
-> +    type: object
-> +    description: List of Alternative Modes supported by the schematics on the
-> +      particular device. This is only necessary if there are no other means to
-> +      discover supported alternative modes (e.g. through the UCSI firmware
-> +      interface).
-
-Move additionalProperties here.
-
-> +
-> +    patternProperties:
-> +      "^(displayport)$":
-> +        type: object
-> +        description:
-> +          A single USB-C Alternative Mode as supported by the USB-C connector logic.
-
-Move additionalProperties here.
-
-And a blank line
-
-> +        properties:
-> +          svid:
-> +            $ref: /schemas/types.yaml#/definitions/uint16
-> +            description: Unique value assigned by USB-IF to the Vendor / AltMode.
-
-blank line
-
-Since you've constrained the node name, then the only possible value 
-here is 0xff01?
-
-OTOH, I don't know that we want to enumerate all possible values here 
-especially if there could be lots of vendor modes. But then again, maybe 
-better to just wait and see if that becomes a problem.
-
-With those nits fixed,
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+SGksDQoNCmV2ZW4gYWZ0ZXIgQ3lyaWwgZ2V0IG1hbmFnZWQgdG8gZ2V0IHhIQ0kgcnVubmluZy4g
+SSBub3RpY2VkIGEgaXNzdWUuIElmIA0KaSBjb21waWxlIHhoY2kgYXMgYSBrZXJuZWwgbW9kdWxl
+IGZvciBhcm02NDoNCg0KIw0KIyBVU0IgSG9zdCBDb250cm9sbGVyIERyaXZlcnMNCiMNCiMgQ09O
+RklHX1VTQl9DNjdYMDBfSENEIGlzIG5vdCBzZXQNCkNPTkZJR19VU0JfWEhDSV9IQ0Q9bQ0KIyBD
+T05GSUdfVVNCX1hIQ0lfREJHQ0FQIGlzIG5vdCBzZXQNCkNPTkZJR19VU0JfWEhDSV9QQ0k9bQ0K
+Q09ORklHX1VTQl9YSENJX1BDSV9SRU5FU0FTPW0NCkNPTkZJR19VU0JfWEhDSV9QTEFURk9STT1t
+DQoNClRoZSBkcml2ZXIgaXNuJ3QgYXV0b2xvYWRlZCwgaSBuZWVkIHRvIHJ1biAibW9kcHJvYmUg
+eGhjaS1wbGF0LWhjZCIgDQptYW51YWxseS4NCg0KcGlAcmFzcGJlcnJ5cGk6fiQgbW9kaW5mbyB4
+aGNpLXBsYXQtaGNkDQpmaWxlbmFtZTogDQovbGliL21vZHVsZXMvNi42LjAtMDAwMDQtZzBjZGQ0
+MzM3YzUyOS9rZXJuZWwvZHJpdmVycy91c2IvaG9zdC94aGNpLXBsYXQtaGNkLmtvDQpsaWNlbnNl
+OsKgwqDCoMKgwqDCoMKgIEdQTA0KZGVzY3JpcHRpb246wqDCoMKgIHhIQ0kgUGxhdGZvcm0gSG9z
+dCBDb250cm9sbGVyIERyaXZlcg0KYWxpYXM6wqDCoMKgwqDCoMKgwqDCoMKgIHBsYXRmb3JtOnho
+Y2ktaGNkDQphbGlhczrCoMKgwqDCoMKgwqDCoMKgwqAgb2Y6TipUKkNicmNtLGJjbTc0NDUteGhj
+aUMqDQphbGlhczrCoMKgwqDCoMKgwqDCoMKgwqAgb2Y6TipUKkNicmNtLGJjbTc0NDUteGhjaQ0K
+YWxpYXM6wqDCoMKgwqDCoMKgwqDCoMKgIG9mOk4qVCpDYnJjbSx4aGNpLWJyY20tdjJDKg0KYWxp
+YXM6wqDCoMKgwqDCoMKgwqDCoMKgIG9mOk4qVCpDYnJjbSx4aGNpLWJyY20tdjINCmFsaWFzOsKg
+wqDCoMKgwqDCoMKgwqDCoCBvZjpOKlQqQ21hcnZlbGwsYXJtYWRhMzcwMC14aGNpQyoNCmFsaWFz
+OsKgwqDCoMKgwqDCoMKgwqDCoCBvZjpOKlQqQ21hcnZlbGwsYXJtYWRhMzcwMC14aGNpDQphbGlh
+czrCoMKgwqDCoMKgwqDCoMKgwqAgb2Y6TipUKkNtYXJ2ZWxsLGFybWFkYS0zODAteGhjaUMqDQph
+bGlhczrCoMKgwqDCoMKgwqDCoMKgwqAgb2Y6TipUKkNtYXJ2ZWxsLGFybWFkYS0zODAteGhjaQ0K
+YWxpYXM6wqDCoMKgwqDCoMKgwqDCoMKgIG9mOk4qVCpDbWFydmVsbCxhcm1hZGEtMzc1LXhoY2lD
+Kg0KYWxpYXM6wqDCoMKgwqDCoMKgwqDCoMKgIG9mOk4qVCpDbWFydmVsbCxhcm1hZGEtMzc1LXho
+Y2kNCmFsaWFzOsKgwqDCoMKgwqDCoMKgwqDCoCBvZjpOKlQqQ3hoY2ktcGxhdGZvcm1DKg0KYWxp
+YXM6wqDCoMKgwqDCoMKgwqDCoMKgIG9mOk4qVCpDeGhjaS1wbGF0Zm9ybQ0KYWxpYXM6wqDCoMKg
+wqDCoMKgwqDCoMKgIG9mOk4qVCpDZ2VuZXJpYy14aGNpQyoNCmFsaWFzOsKgwqDCoMKgwqDCoMKg
+wqDCoCBvZjpOKlQqQ2dlbmVyaWMteGhjaQ0KYWxpYXM6wqDCoMKgwqDCoMKgwqDCoMKgIGFjcGkq
+OlBOUDBEMTA6Kg0KZGVwZW5kczrCoMKgwqDCoMKgwqDCoCB4aGNpLWhjZA0KaW50cmVlOsKgwqDC
+oMKgwqDCoMKgwqAgWQ0KbmFtZTrCoMKgwqDCoMKgwqDCoMKgwqDCoCB4aGNpX3BsYXRfaGNkDQp2
+ZXJtYWdpYzrCoMKgwqDCoMKgwqAgNi42LjAtMDAwMDQtZzBjZGQ0MzM3YzUyOSBTTVAgcHJlZW1w
+dCBtb2RfdW5sb2FkIGFhcmNoNjQNCg0KcGlAcmFzcGJlcnJ5cGk6fiQgbW9kaW5mbyB4aGNpLWhj
+ZA0KZmlsZW5hbWU6IA0KL2xpYi9tb2R1bGVzLzYuNi4wLTAwMDA0LWcwY2RkNDMzN2M1Mjkva2Vy
+bmVsL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1oY2Qua28NCmxpY2Vuc2U6wqDCoMKgwqDCoMKgwqAg
+R1BMDQphdXRob3I6wqDCoMKgwqDCoMKgwqDCoCBTYXJhaCBTaGFycA0KZGVzY3JpcHRpb246wqDC
+oMKgICdlWHRlbnNpYmxlJyBIb3N0IENvbnRyb2xsZXIgKHhIQykgRHJpdmVyDQpkZXBlbmRzOg0K
+aW50cmVlOsKgwqDCoMKgwqDCoMKgwqAgWQ0KbmFtZTrCoMKgwqDCoMKgwqDCoMKgwqDCoCB4aGNp
+X2hjZA0KdmVybWFnaWM6wqDCoMKgwqDCoMKgIDYuNi4wLTAwMDA0LWcwY2RkNDMzN2M1MjkgU01Q
+IHByZWVtcHQgbW9kX3VubG9hZCBhYXJjaDY0DQpwYXJtOsKgwqDCoMKgwqDCoMKgwqDCoMKgIGxp
+bmtfcXVpcms6RG9uJ3QgY2xlYXIgdGhlIGNoYWluIGJpdCBvbiBhIGxpbmsgVFJCIChpbnQpDQpw
+YXJtOsKgwqDCoMKgwqDCoMKgwqDCoMKgIHF1aXJrczpCaXQgZmxhZ3MgZm9yIHF1aXJrcyB0byBi
+ZSBlbmFibGVkIGFzIGRlZmF1bHQgDQoodWxsb25nKQ0KDQpIYXMgYW55b25lIGFuIGlkZWEsIHdo
+YXQncyB3cm9uZyBoZXJlPw0KDQoNCg==
 
