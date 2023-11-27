@@ -1,125 +1,82 @@
-Return-Path: <linux-usb+bounces-3370-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3371-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD7427FA65E
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 17:29:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EC6A7FA695
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 17:34:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68B2B28198A
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 16:29:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED27E281A1A
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 16:34:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1AE0364C0;
-	Mon, 27 Nov 2023 16:29:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44EF036AF9;
+	Mon, 27 Nov 2023 16:34:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="cXZDY253"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EEBH7jbC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCA5CE
-	for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 08:29:01 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-db35caa1749so3942568276.2
-        for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 08:29:01 -0800 (PST)
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5766DCE
+	for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 08:34:16 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1cfd04a6e49so8060835ad.0
+        for <linux-usb@vger.kernel.org>; Mon, 27 Nov 2023 08:34:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1701102540; x=1701707340; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i70tntcGFXXrEjgo++8Q6tFowckjpLWeV9hv9uXKYaM=;
-        b=cXZDY2536itPDE7PfXTWEbUbOkFgqOcwJI7VnOisF1flRRAZhcwHFcV63m2oLNHb5N
-         ndXJVc7U8CZiJ0YUV0V7CuAnXuWV6emssx43Rhr5Y91B52v6umhWH1Tm3za2TqVTzqMV
-         3/F+JJ4ojKAOp9azsK8pOMdcNROb4qRfyR/EQplABsKQRYuWbpNkVtqqf/sh1euusfzX
-         S7HDrCSGsFtVZIMa3gpDMc0IrxikXi5bH98VC1F32r99u9/J1iK4v1A57jOss7TA+MJf
-         yIXUX2eSoVPdsqw5EzT2yfHwb04A3py2eedK6c4vtXQ3vuhaYlEN5qScdPz4tXGYX8Ug
-         V0yw==
+        d=gmail.com; s=20230601; t=1701102856; x=1701707656; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:to:from:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=3gxUKtXvFTtxde5Trn8Yvcd1G+tM2Ob+td6M9TUIAd8=;
+        b=EEBH7jbC24b8oi2NCDb0Pmjwcl/1ynz3M1bFnvXTQZsP2iIWu5vs1tvo0y431ID384
+         E96PCQSpPeS0mhMDvlxjFGqNTs5GGj4XTy8eXvA9ER1VghB0aE++sub9UB6Xpyt6IbQn
+         5IkgBHa+Ql7W0jF+HVdITE/KexwngNo7iDOTtcDaEABGzRuiySPaCKn0Yp6ZaVp8czn8
+         TMuvewPKtbGdJXksVrLabc8Vr2mxWCnFS1JBWokDso5MfZjchK3ueWkrtczdJrVqbpjx
+         t25pG8zQ5NUt1A9CAuzlRLj7Gq+RX/6/YSV2Np//I7qBOFJ75BeI+VBCO32KrYDVvFSb
+         zydg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701102540; x=1701707340;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1701102856; x=1701707656;
+        h=content-transfer-encoding:subject:to:from:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=i70tntcGFXXrEjgo++8Q6tFowckjpLWeV9hv9uXKYaM=;
-        b=Bm+ZXzYz04IKhtR3qEcfQkhQuEOuBDfSvyHfsFf5PNoSBbK+kYigP+yyAkl/2BNCz9
-         qWJjP8hOnM8SByKNoHV6nfjplKyUBcvCKLKEb0tC87m/jh+Wtz0Cl+81q3yEf1k/zgcI
-         hDuSNrfuN0//+uV8tAwc2T+a8Umv/T2IS1QF9EqMQCrGr0Axu8hVAa368xhe7sH/wAsZ
-         kuU36m24efdvmYAUOdUyRMa0Ik4LqhKLmHXwZNPZjLPy3NwRmR9mxi9Gz9T9c7EDBaTj
-         15DxHEeuK8ODWcLvOK4L5pLqT4pIwuii353yqyA4LTTbHd6vGB7TtAD4hXKVY0AtstTw
-         N+FA==
-X-Gm-Message-State: AOJu0YyKmo2AjfFFxEQrlzyG/xqANJ/7zCjILKuNFrAvfmS/VU+RFLhr
-	MCPWnVMYUQyJb1+fHFHMp9hPOlMW1et2MpVcZTEv+Q==
-X-Google-Smtp-Source: AGHT+IECO7V4AYcbg7yNybQqcBKejUQe6X0wJ0B9pkzgEqrXskYntB79d2VRHm4J8BZo27Bj904D9w0enPPVZtjnbSg=
-X-Received: by 2002:a25:3626:0:b0:d9c:7d48:3020 with SMTP id
- d38-20020a253626000000b00d9c7d483020mr11734725yba.20.1701102540286; Mon, 27
- Nov 2023 08:29:00 -0800 (PST)
+        bh=3gxUKtXvFTtxde5Trn8Yvcd1G+tM2Ob+td6M9TUIAd8=;
+        b=F7ZeU85/pg6CTi+aGJ6Ft/OLjwVqQb8TklNHSrc/3HlCr6GKVbJ8kjOL6jydpj+ytu
+         lLdVg2+D6KAdDAF2F83wVFgg+xOYsxCOFvEF18SxOr3obm3zSPxbo2nQgYwzh+vCpfV9
+         qTegERJa1/RJ6vhaXdznv2NGHQSR8Y8Garv1zoO+dLR0UYZZ9fiaaEG1/CXd1zWfmak2
+         /WHOqh9A2gg5eeORF703wlkLmp7kUWGVeXGo3CKm6DinjBV1r0TLV08HxJSpm5QHmkrL
+         kYBOJIEjD0r/fvV0WX9HgvkitqJz5JfMKm9gxCHhb66aZl9kBOrgLNikic0bocJARiQe
+         h+0g==
+X-Gm-Message-State: AOJu0Ywbih6RN1TRPZZ3q9B9y0EuL7hFnruoZmB3YjwWQWVsqQfPQnwp
+	cpCAAiLPJyu3RuT/cQbav5NsNMGYzzo=
+X-Google-Smtp-Source: AGHT+IEzu4msm0Y2jIqYvpHkQfXL4EbmQGTFtfl8IuPoKIPlTQwgSOBBlPKah2Cw4fO1PBYIgpUs/Q==
+X-Received: by 2002:a17:902:d2cf:b0:1cf:d8c5:22a8 with SMTP id n15-20020a170902d2cf00b001cfd8c522a8mr2878762plc.21.1701102855486;
+        Mon, 27 Nov 2023 08:34:15 -0800 (PST)
+Received: from DESKTOP-6F6Q0LF (static-host119-30-85-97.link.net.pk. [119.30.85.97])
+        by smtp.gmail.com with ESMTPSA id n8-20020a170902e54800b001cfa3022adcsm6668812plf.47.2023.11.27.08.34.13
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Mon, 27 Nov 2023 08:34:15 -0800 (PST)
+Message-ID: <6564c507.170a0220.97175.f286@mx.google.com>
+Date: Mon, 27 Nov 2023 08:34:15 -0800 (PST)
+X-Google-Original-Date: 27 Nov 2023 11:34:13 -0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231126025612.12522-1-wahrenst@gmx.net> <53e1f6e6-a28e-45af-991e-75b283a21b34@broadcom.com>
- <46320840-09ab-4c86-90c9-bee7b75f248a@gmx.net> <CAMEGJJ3SXHSnasqoMJnshf5Wu92NVi8+NoMdxmMsJH7WH2WjWg@mail.gmail.com>
- <a78f9ba5-ad34-4af2-9817-eeb7dd9d02ef@gmx.net> <CAMEGJJ3PpEgD_davgTn9e+re4hosunU+uj_i5sdKMFNLFR5hBA@mail.gmail.com>
- <624b79b1-f2dc-4f2e-a225-d1623d905b19@gmx.net>
-In-Reply-To: <624b79b1-f2dc-4f2e-a225-d1623d905b19@gmx.net>
-From: Phil Elwell <phil@raspberrypi.com>
-Date: Mon, 27 Nov 2023 16:28:48 +0000
-Message-ID: <CAMEGJJ0aL4VDoq06+JGHz9yx5nVvgbNULNKoT07myzVGNiyCoQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] ARM: dts: bcm2711-rpi-cm4-io: Enable xHCI host
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: Justin Chen <justin.chen@broadcom.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, Mathias Nyman <mathias.nyman@intel.com>, 
-	bcm-kernel-feedback-list@broadcom.com, Cyril Brulebois <kibi@debian.org>, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+From: marshallbrecken429@gmail.com
+To: linux-usb@vger.kernel.org
+Subject: Building Estimates
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Level: ***
 
-On Mon, 27 Nov 2023 at 12:39, Stefan Wahren <wahrenst@gmx.net> wrote:
->
-> Hi Phil,
->
-> >>>> Hi Justin,
-> >>>>
-> >>>> [add Phil]
-> >>>>
-> >>>> Am 27.11.23 um 07:02 schrieb Justin Chen:
-> >>>>> On 11/25/23 6:56 PM, Stefan Wahren wrote:
-> >>>>>> In contrast to the Raspberry Pi 4, the Compute Module 4 or the IO board
-> >>>>>> does not have a VL805 USB 3.0 host controller, which is connected via
-> >>>>>> PCIe. Instead, the BCM2711 on the Compute Module provides the built-in
-> >>>>>> xHCI.
-> >>>>>>
-> >>>>> Does this work? I maintain this built-in xHCI controller internally. I
-> >>>>> wasn't aware the Compute Module uses this block.
-> >>>> i successful tested this with a CM4 (arm 32 bit,
-> >>>> multi_v7_lpae_defconfig) with eMMC. Before this series the USB devices
-> >>>> (mouse, keyboard) connected to the host interface didn't work. After
-> >>>> comparing vendor DTS with mainline i noticed the missing xHCI block [1].
-> >>>> Unfortunately i wasn't able to get further information from the public
-> >>>> datasheets. I don't know if the VideoCore does some magic tricks on the
-> >>>> xHCI or i missed some downstream xHCI changes.
-> >>>>
-> >>>>> This block is held in reset and needs a bit toggled to get things
-> >>>>> going. Florian, just to confirm, this is our "brcm,xhci-brcm-v2" block
-> >>>>> correct?
-> >>>>>
-> >>>>> Justin
-> >>>> [1]  -
-> >>>> https://github.com/raspberrypi/linux/blob/rpi-6.1.y/arch/arm/boot/dts/bcm2711-rpi-ds.dtsi#L119
-> >>> What's the question here? Does the XHCI block present in the
-> >>> raspberrypi/linux dtsi file really exist? Yes it does.
-> >> since i don't have any documentation about the xHCI block, i assumed the
-> >> compatible generic-xhci is correct. But Justin seems to suggest that the
-> >> xHCI block needs some special treatment and we need a specific compatible.
-> >>
-> >> Did i missed some xHCI driver changes?
-> >> Does the VC firmware something to the xHCI especially on CM4?
-> > The firmware switches the on-board USB pins from DWC-OTG to XHCI if
-> > otg_mode=1 is set in config.txt, or if booting over USB MSD.
-> is this pinctrl/pinmux available from ARM via 0x7e200000 or a different
-> IO address?
+Hi,=0D=0A=0D=0AWe provide estimation & quantities takeoff service=
+s. We are providing 98-100 accuracy in our estimates and take-off=
+s. Please tell us if you need any estimating services regarding y=
+our projects.=0D=0A=0D=0ASend over the plans and mention the exac=
+t scope of work and shortly we will get back with a proposal on w=
+hich our charges and turnaround time will be mentioned=0D=0A=0D=0A=
+You may ask for sample estimates and take-offs. Thanks.=0D=0A=0D=0A=
+Kind Regards=0D=0AMarshall Brecken	=0D=0ADreamland Estimation, LL=
+C
 
-It's in a different, undocumented block.
-
-Phil
 
