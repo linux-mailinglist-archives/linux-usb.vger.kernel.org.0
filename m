@@ -1,144 +1,189 @@
-Return-Path: <linux-usb+bounces-3362-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3363-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2D407FA43B
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 16:17:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32B6D7FA495
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 16:29:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FECEB21218
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 15:17:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64AA71C209E3
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Nov 2023 15:29:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B568531A7F;
-	Mon, 27 Nov 2023 15:17:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5B9A328C7;
+	Mon, 27 Nov 2023 15:29:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="Mzn2l2x+"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="AahtNgUD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E845AA;
-	Mon, 27 Nov 2023 07:17:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=s31663417; t=1701098201; x=1701703001; i=wahrenst@gmx.net;
-	bh=uKHkG9+U47RYHsud2aL+arN6vGOO0g0Agwwf3Wi2AkI=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=Mzn2l2x+c6ZyZLyWIoYyljmPPba9NLq2y6sgEPrMA3UNWP0VRAFoDDByYvxUfn+G
-	 2A6MJd/fpDeOmQR21zy+mkb/RpR+05xyOfqrJO471aZ7HXR5npacQ556OXOxs72HF
-	 29u+1HlA/mKMMETPo0XQjDmzJu8PJwQwqqJeYDywqVncTZIFbeZEtCro08XgcgQE8
-	 064bRQLooOoFR8WNQoBKo3oEmwwcq9U+0HiCp9KhD6hGRFqySv5UVQ96C55FTIAxL
-	 TVCXTUvvvfmDvJiL6CqhsKhlEz3M6GxOux7cNCE2U9C5t+7QEOeQlU6IGOGbw75N6
-	 LOOgiQ6xXz7Ca86J+w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.129] ([37.4.248.43]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MQMyf-1qulIG1xh3-00MKLB; Mon, 27
- Nov 2023 16:16:41 +0100
-Message-ID: <91488944-64e2-4715-baaa-ff5c18d46840@gmx.net>
-Date: Mon, 27 Nov 2023 16:16:40 +0100
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2089.outbound.protection.outlook.com [40.107.6.89])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457D019D;
+	Mon, 27 Nov 2023 07:29:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QXYANBbNHM7VweXHp5cuoMu9Wl+B/VT9akN9jPH/rd4sS4SjUEC1CfL2BOEOaZyB49VsSlNoYCWqCsrdrkjIUM2/6NPP5KCiwDVM553b9oOCg9tKGGh78xYd4n4gIM8qKDC/FrPiq7A5609ym0T6ggImXZupbZq6YWGEfyjLR+NqDqtY7ysh3JsYMZhUajxZT7PT7LGnDXecDDLDetmXvBfvDbM282hJSepJAiuQ6tKC5IGXOORiVppTk++27PcUgj9G0UIY+CPaEjQGJJ0y2cBHobMiQ+Ky2VvG1XaGzFfSCbxqKDC/02R0ANAjXTcJD+KrDNqHX3y0nVavvSelAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qUWltBBsIZE4eUYAIWtqNILb3mSl1d9ipSKOn96uw9k=;
+ b=hviesataSvTUlpOwVF07DH1ikyLKM4WGEForUwTh4YjC4fTPtpuBSt2Em3DJA11CtTpQFGENOjDNS3NUwmLiXafj4VSFPR0nI63U6qX2AIc9DiAYTzZwAedLwNRgW4Bf0EIYBXZWp/KUJnqCd2zATFpOuXuF7uQ4YklHAwwL2BLmAMSnwpQFz87fuBdWqyXYUD+RU8iPE6GOhefd8yB9b80A3YvJ1aakUTqhn4LlNEmtU4COtMu6kzEKNC/CP8ADN3Y05qSk/sWmWTKb5IXfbYTs2jm2YgEGNdt0na59OrucaQgBM8w0CoNmTnBi43sGLWy0+7wDkmr4FrI+emIenw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qUWltBBsIZE4eUYAIWtqNILb3mSl1d9ipSKOn96uw9k=;
+ b=AahtNgUD7e8gc8PNQqKMHjvbYHZ0KLdBJ9pqcysv4lBqdkSYLMXLTxip0hC0lIWsfIWlW45ZsJI9XUHT5jXPGLRargoWeVL9g+PRYx4glh+FTLD/cnzEpPtLJsYeTnlwMyuznF8ntiy/PIPlLA2IVscCqokOz7A5607O+pvFbpg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4845.eurprd04.prod.outlook.com (2603:10a6:803:51::30)
+ by AS1PR04MB9456.eurprd04.prod.outlook.com (2603:10a6:20b:4d7::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.19; Mon, 27 Nov
+ 2023 15:29:07 +0000
+Received: from VI1PR04MB4845.eurprd04.prod.outlook.com
+ ([fe80::6410:9a52:b833:5bc1]) by VI1PR04MB4845.eurprd04.prod.outlook.com
+ ([fe80::6410:9a52:b833:5bc1%4]) with mapi id 15.20.7046.015; Mon, 27 Nov 2023
+ 15:29:07 +0000
+Date: Mon, 27 Nov 2023 10:28:57 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: Peter Chen <peter.chen@kernel.org>, gregkh@linuxfoundation.org
+Cc: imx@lists.linux.dev, Pawel Laszczak <pawell@cadence.com>,
+	Roger Quadros <rogerq@kernel.org>,
+	Aswath Govindraju <a-govindraju@ti.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"open list:CADENCE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] usb: cdns3: skip set TRB_IOC when usb_request:
+ no_interrupt is true
+Message-ID: <ZWS1ucR7dXs153R1@lizhi-Precision-Tower-5810>
+References: <20231027183919.664271-1-Frank.Li@nxp.com>
+ <20231031084521.GA1948529@nchen-desktop>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231031084521.GA1948529@nchen-desktop>
+X-ClientProxiedBy: SJ0PR13CA0067.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c4::12) To VI1PR04MB4845.eurprd04.prod.outlook.com
+ (2603:10a6:803:51::30)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] ARM: dts: bcm2711-rpi-cm4-io: Enable xHCI host
-To: Cyril Brulebois <kibi@debian.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- bcm-kernel-feedback-list@broadcom.com, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20231126025612.12522-1-wahrenst@gmx.net>
- <20231127003432.7aztwjxper2a3o33@mraw.org>
- <b1156fee-aa43-43b3-bb03-baaac49575f4@gmx.net>
- <20231127115538.npv23hhn7jfrk3fc@mraw.org>
- <892c2e2f-3187-491b-b464-56d099b6fd49@gmx.net>
- <20231127130225.lyk2jngfru5lw6sd@mraw.org>
-Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <20231127130225.lyk2jngfru5lw6sd@mraw.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:z1I3XJZGqSHwV2wlk4Op4Opz52HPOPJnSUJgR9jfPR+DgUYNCv8
- Fk2ZVaVfTwW9+nM5EVzpNaLJvXuPZDD+JTP5HGQRG/dXZEBRB2BkaoShkrn//i0eLvn9+YT
- 8UFNs78XOCf4cTWG7mUs4lq704i0oJ7ZGeVziVHJYGmmt6ROVkNPBfhS1UiDPX8wzXH82Bd
- sdZ++l2hvgKg6Sf6OK2Eg==
-UI-OutboundReport: notjunk:1;M01:P0:eF3XxoYewsw=;OxmxbOEhmmsNtFOX1lmtKKIqcOF
- pvZRTMpyXUQZ8afCb0NdcKjrb9OxU65SRH7UO2mdaVERykcGrwS5qx8U8tryyzYL5aCv7IEnK
- sBonKenQ6ibbYEQbCtfXSCQRHAKb86AyYmBsJRiD/QCvnFr5D78yXdGI4ZQ5oOG79ASqwjxrX
- nGkzjYof+B29Md+8wdk8fNektjXBY+ehdZQ8jdvo23D5AfHR/qL8NJKvL1HGUpTklxwbNHK9Q
- QwjBv+1iS7tIz06EkAMz4MPtLZi5nOS43lu9Tv8H1P2awmOE6pZrKKjBqgRPwPy/O1iwZUeNL
- 7HrlwhxPuct/zasL+/roj1JCBArFKHkv2HzUWy6sB0CrInVonIK0zMcIVlWCwwPYz/dAFMhGh
- CePwb/3S+brnvOSF8kk4E99W9AL35Dv5shFlqsQbV2momvLlc4lALPLfKx6xR+gieVOGlXmbu
- 4Kt0i0qiLIOgjIOFzuPJdXv0zh22cS1tgErKxiKsMbv94lZTljSe3Oj/iYa36oXAV11WRgT3l
- 7Fd85WD2RI19zJ7pUck3ikIo5dExg7XHQ9aNh4EHlsHaT/2IVphQ3vvtOLeL621UjO1rfJN7I
- G97EFneJCQ9nGH2d038Ctd/cF7n72tk7NYM6+l8k2Jd5AyPwE9bXLElR36ukmEPA/ksFuzaHE
- bBykkGxJts0MUaF/WqyTJgNCl0W9zvxZHk+wEcRBb/ZHe28ZOej0tI2mulbgRMR9QVnRXrORp
- lR1PWoDrE0l4N0KSqStMPNp1XEXk3EwFCLtaGjbvwwWU1pj2Xq1x5ifuKX07KLxexuf6adW+p
- ivrKombmGjf77GlE2ntAYjj2g2mYNetJnVDcYdOQMrhXNzlYE7fbBMQrqTiEJbtwKYhPKl7fP
- hsLj64Y0yJ7yRxYbDfghgxBxcpTx7k1xrINpgmKzWJu5RDHDQd8J44ywe7eSnCjTnIkJtupaD
- kla38xBu+e6i4J9n8OUeSTrYoKQ=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB4845:EE_|AS1PR04MB9456:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1ad2a7af-da0e-4ed6-5217-08dbef5d984d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	/fGPnU+TxaVY+JlBCnxTkf6H77Knt+pi6gZgW2TOA476SU0SDhJqxleUk1MxtIAVyzwGWqqVsdCiVrnXMMEBbNDfplDPxMQpO+wS9sWYcZHLNN5xFSmsv28tA658/L4GxTWRgkmAcvksPp/TmGIYY2x4qIdZDV5BHfgi//jn98ly5xFRhSp5vEh7wsVYvhLK3fKCj4aBEjHQw8SHbh8RZwSIhujyTY9YRdPxjh1EIfEws3NQxpsF9kRbAUber9dpCrdLHWOEgCqm09j44ENSwk1hZOzvCG6UB9ureEUIMplk2QuBjxD6DpCPt6xoq/lm/kVIvxMoo9y5i6lI9wqlWuWGGj+uSEHCwVeNSfbO7uAUFmuqoHkaphth5dLOGzCOlYFy/GZGi4g9jaxUugP2IQKspMi6jz+QJzKpUR/BXdzUFFrlVd8brT/07DVabqXWwb3sWakP4sMLUg0SvBamoxLL/d5JABZHn91kSoF3BcYp+MytAjSoyJPmWxWIGN8dVIIOy0N+RVLxnfy/zhx3slxtxN8dI2d4Lt2lOLUzJ+BM6dWWxD9gErIy8l05XBYpL1Mb4s0nZxqIrw9IVoY+xPUMmihtbUZAzcBtbsOTMSL7dyK0HwOCNFRTTvH+VX7m
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4845.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(136003)(346002)(396003)(376002)(39860400002)(366004)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(38100700002)(33716001)(38350700005)(86362001)(54906003)(316002)(66556008)(66476007)(8936002)(8676002)(41300700001)(66946007)(9686003)(6512007)(53546011)(52116002)(6666004)(6506007)(478600001)(6486002)(4326008)(5660300002)(2906002)(26005)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Gwd4fPMcATdQDWFGRtynUJdrVRVcmS89LBa/JWFi89zamPtrtT3tmnaG65yD?=
+ =?us-ascii?Q?wcbK0VTICdbJsEmbeY0up8cfNUUUWkjizOO2AZI0oGcxmcXYfTcWWa0tYO8/?=
+ =?us-ascii?Q?ZwZTxPtC7fF13RbxdsIgRsgaboTiUDL8/TwLg7MRdeH3CNF36sxJlfLrHbTa?=
+ =?us-ascii?Q?zRzbIxh2+Ls9DqbjtAlphbkbGxqhUoo/TK2v5KiRMRtB2i+J+V19OXJxxEE1?=
+ =?us-ascii?Q?GxCmceU7osFiNy38zb5zNQw2EsY6jKN4EYHMEUcdBaug0gbtTsGTKDvjthsZ?=
+ =?us-ascii?Q?k8A9JB+DW3AAFuZ1BI/wNA2Kvj9zpN98GM/v69HErHR/hDL+QXQxvJ3mFZ8a?=
+ =?us-ascii?Q?/7PDD11IpsC1pymk9UbqofxoJQrsmastwqsSAr45LblUzjpUOji+mph8NsXG?=
+ =?us-ascii?Q?FJwlsRQeIqFbYnAm+lPEfoQSaZmmPU4Ontz6Wn1D4q+9GZK1J8yJfMIOqX45?=
+ =?us-ascii?Q?4QavtBEivPTCT3TkYp5tEJY4deOAY3S0Onr7aClHLyh0RIQ9ekqgzokOzQ+s?=
+ =?us-ascii?Q?MJtF8gX0QZ2Crc9Db9KD/T3YY3wNVvoSvyapLgGz8SBV6Flr6Fd+Mh+oH2T0?=
+ =?us-ascii?Q?zra/1qxzQGjMOaAgJLwvFpX83A3fX1ElrQIduHyL93SXzD6Q9Va8PgQBspaf?=
+ =?us-ascii?Q?HUYDW6QcMwpltzemCZPKFdqR5xgC7Mi3lY9+xENOsVcrzI1abn3Bf8NB+AC7?=
+ =?us-ascii?Q?aVfEm0WxFy0HEex3qH+tzSidxJ1QYRkVyxHGeWvyc/t4HddXxPUoXx5IEe0v?=
+ =?us-ascii?Q?Ty+724W6y4wylovQ5xgErA1hYvdyelzowOMnnG3pO8ZkVwQDoR/vB77MFNjn?=
+ =?us-ascii?Q?XTrWLXgFINWfz46pkfIY44JgNRxIdhjgWRk7oNWKN2vsVoPdRsL7cVbII4oV?=
+ =?us-ascii?Q?i9yotu4ZAsxPbkbw/sU/vgYUz55M7t7y0EodzenCKZXWJNv/D82XP1af9Cfx?=
+ =?us-ascii?Q?74UYQlHAUcG+3mIE2jG/Fxfb0s2wvNtuXONsHuR5rRzlol5wMLXVf9gvkysU?=
+ =?us-ascii?Q?chjSLlEPiGs405QSIbZgG6f8B4kku4ExS7XF+V5nivpL2wsxuxKii8Ndlt/5?=
+ =?us-ascii?Q?osWsGN/OOnnL77Pz9R6U28I6HSdOxbqzP/eJk1eEOWdfQMp/MGM3IpPXI5VE?=
+ =?us-ascii?Q?Au1oF8nhZn4ByV3b+DKCOon1BDCL7qwrQe6zDl1C9NDTZDqDbDgK7mfVl1uE?=
+ =?us-ascii?Q?tYl2/j+lPWfjyhX73XP3HON1l1nb11zrB4vZj5GsT+rAdAY3PS0Ph+7c3HKI?=
+ =?us-ascii?Q?OPcQxXqIMZA89AEKszJn+FiZcZdBnzPqIPoakJjTXN0mnGJuPpRyCPLVDaE5?=
+ =?us-ascii?Q?c996NhNzlllcozMJnlvh4jgV0CHpXXU670UWjLmfDFQZtwO1X6p29/BIx0W1?=
+ =?us-ascii?Q?i8S1CUEzpIf0WX/wgWoDz0q+09vHaJXwl5KbsCizu2jfdii8q8yAqKecYQio?=
+ =?us-ascii?Q?5Q2tlKie951JSoI5KSlI6tkYYjNA3EN0wrHDDPqVcy9sTIHLQcZHriD1jR89?=
+ =?us-ascii?Q?rOYnYanbu659ZT1/kQFsMbwuSIXkbt9TWl8dsASNLz2nlqd4GPSrnzxkTZ8r?=
+ =?us-ascii?Q?absXwUl+bxIX/RtZ1S8=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ad2a7af-da0e-4ed6-5217-08dbef5d984d
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4845.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2023 15:29:07.1181
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vndQcXH6hQcj/8C9sHW+tzGSTsAZ0xftpOD5JRMEWBh8VdkW0rBRpeR9Srv23QsdsFbAqtzEV9WpmuswC6x3bQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9456
 
-Hi Cyril,
+On Tue, Oct 31, 2023 at 04:45:21PM +0800, Peter Chen wrote:
+> On 23-10-27 14:39:19, Frank Li wrote:
+> > No completion irq is needed if no_interrupt is true. Needn't set TRB_IOC
+> > at this case.
+> > 
+> > Check usb_request: no_interrupt and set/skip TRB_IOC in
+> > cdns3_ep_run_transfer().
+> > 
+> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> 
+> Acked-by: Peter Chen <peter.chen@kernel.org>
 
-Am 27.11.23 um 14:02 schrieb Cyril Brulebois:
-> Stefan Wahren <wahrenst@gmx.net> (2023-11-27):
->> Could you please provide the following information:
->>
->> - settings of config.txt
-> Here you go:
->
->      arm_64bit=3D1
->      enable_uart=3D1
->      upstream_kernel=3D1
->
->      kernel=3Dvmlinuz-6.6.0+
->      initramfs initrd.img-6.6.0+
->
->      enable_jtag_gpio=3D1
->      force_turbo=3D1
->
->> - VC firmware version
-> This is pieeprom-2023-01-11.bin
->
-> I know there's pieeprom-2023-05-11.bin as well, but I've been keeping
-> the former as a constant throughout the PCIe patch series testing once
-> I realized how critical it was (old beta EEPROM versions found in some
-> CM4s made everything much harder initially).
+@Greg:
+	ping
 
-Sorry, i was a little bit unspecific. This the first level bootloader
-stored in the EEPROM. I meant the VC firmware version from the SD card
-which is logged in dmesg:
+Frank
 
-raspberrypi-firmware soc:firmware: Attached to firmware from ...
-
-> In case the config matters:
->
->      [all]
->      BOOT_UART=3D0
->      WAKE_ON_GPIO=3D1
->      POWER_OFF_ON_HALT=3D0
->      BOOT_ORDER=3D0xf25641
->      ENABLE_SELF_UPDATE=3D1
->
->> - did you use arm64/defconfig or something special?
-> I'm using a =E2=80=9Cdistribution config=E2=80=9D, starting from the lat=
-est arm64 config
-> found in Debian unstable (6.5.10-1), and applying `make oldconfig`.
->
-> You'll find it attached.
-Thanks
->
->
-> Cheers,
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
+> 
+> Peter
+> > ---
+> >  drivers/usb/cdns3/cdns3-gadget.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+> > index 69a44bd7e5d02..cd08897f8da8b 100644
+> > --- a/drivers/usb/cdns3/cdns3-gadget.c
+> > +++ b/drivers/usb/cdns3/cdns3-gadget.c
+> > @@ -1124,6 +1124,7 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
+> >  	u16 total_tdl = 0;
+> >  	struct scatterlist *s = NULL;
+> >  	bool sg_supported = !!(request->num_mapped_sgs);
+> > +	u32 ioc = request->no_interrupt ? 0 : TRB_IOC;
+> >  
+> >  	if (priv_ep->type == USB_ENDPOINT_XFER_ISOC)
+> >  		num_trb = priv_ep->interval;
+> > @@ -1233,11 +1234,11 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
+> >  			control |= pcs;
+> >  
+> >  		if (priv_ep->type == USB_ENDPOINT_XFER_ISOC  && !priv_ep->dir) {
+> > -			control |= TRB_IOC | TRB_ISP;
+> > +			control |= ioc | TRB_ISP;
+> >  		} else {
+> >  			/* for last element in TD or in SG list */
+> >  			if (sg_iter == (num_trb - 1) && sg_iter != 0)
+> > -				control |= pcs | TRB_IOC | TRB_ISP;
+> > +				control |= pcs | ioc | TRB_ISP;
+> >  		}
+> >  
+> >  		if (sg_iter)
+> > @@ -1268,7 +1269,7 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
+> >  	priv_req->num_of_trb = num_trb;
+> >  
+> >  	if (sg_iter == 1)
+> > -		trb->control |= cpu_to_le32(TRB_IOC | TRB_ISP);
+> > +		trb->control |= cpu_to_le32(ioc | TRB_ISP);
+> >  
+> >  	if (priv_dev->dev_ver < DEV_VER_V2 &&
+> >  	    (priv_ep->flags & EP_TDLCHK_EN)) {
+> > -- 
+> > 2.34.1
+> > 
+> 
+> -- 
+> 
+> Thanks,
+> Peter Chen
 
