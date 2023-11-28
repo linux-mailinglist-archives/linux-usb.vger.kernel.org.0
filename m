@@ -1,147 +1,182 @@
-Return-Path: <linux-usb+bounces-3399-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3400-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04D177FB7E7
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 11:33:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E61DB7FB807
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 11:37:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4BAF1F20F78
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 10:33:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 157BA1C21357
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 10:37:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDBD24F208;
-	Tue, 28 Nov 2023 10:33:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E54A18E03;
+	Tue, 28 Nov 2023 10:37:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aX8lSSVK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VVLE8ce+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9EDD53;
-	Tue, 28 Nov 2023 02:33:10 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AS5cLmx030603;
-	Tue, 28 Nov 2023 10:33:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=tUIonUHh0NVX+sJd3d2rgPNx2Scj+OX6wN3VlhkdTYk=;
- b=aX8lSSVKZZR6teGAznGrWZtjVkfHBKhqqUphd+hbSdEqOchQdzO1svWu3VboiJmRNMnB
- yx1eI2r1HYduIQ/JGdGhOn8mWGwPtp7nxyxv9+l1b4zSidoXySqqy1dpLuy83S0YfMgD
- QttdBjiJ+QT03T3aantzRKOrYFdhEpY5moy2hR5Xfn8infAe82O/iBBhulJ/UWOlWA8i
- n8RsUSns5WBaITd86hUyL3tZVCuwxCliFosV+ZLoyvTOMYbU+5SH2lFSTpsOuIOIOMsG
- zQ45C5L3G7jMBzUCun8stqAWDeVvp0MMOWI3afIwF60/K+g7IXbacIgyUI96DjJ/elpr BA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3un02h1xc2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Nov 2023 10:33:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3ASAX2aM017390
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Nov 2023 10:33:02 GMT
-Received: from [10.216.9.39] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 28 Nov
- 2023 02:32:56 -0800
-Message-ID: <18965bb9-7afa-4892-8b71-981ba29d2cd4@quicinc.com>
-Date: Tue, 28 Nov 2023 16:02:53 +0530
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546911BD1
+	for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 02:37:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701167854; x=1732703854;
+  h=date:from:to:cc:subject:message-id;
+  bh=S6crE8aKV7f8mOnmvvKMooT+sAesTVcMIvr0rZa/fKQ=;
+  b=VVLE8ce+Gc+Xmzp7uDGlP9RzP1yANEDvYwXEFU1q7HTzCDQim6g2k3u7
+   AGo+VQgJGSwPbP2tBo5vA9IT/wmNKGqGdFDgvgyaaDXEbTI1gODA8y186
+   aLxGvYVgQGaN9pB5KxJ+rAB36j9985FIpqPvrl5UqBwp8AH03ykEMFJGl
+   WnZnkkR3ApJA3GTdr2+qXxNknM7HwjRqE4uGCW0xrGUeBiSIjfOStMVIB
+   lE0qaVUWuE/CU+y2ZUG6zi41bYcpMwIwch/Y7E0s+0SSEktP+K2kdQzxd
+   oB2FGObUjJeGAbhExFnZK1a6xbtlPO4wmmJ6/19auQqyNLae1n6M3RyWW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="391768160"
+X-IronPort-AV: E=Sophos;i="6.04,233,1695711600"; 
+   d="scan'208";a="391768160"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 02:37:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="1100048927"
+X-IronPort-AV: E=Sophos;i="6.04,233,1695711600"; 
+   d="scan'208";a="1100048927"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Nov 2023 02:37:32 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r7vT8-0007RA-2g;
+	Tue, 28 Nov 2023 10:37:30 +0000
+Date: Tue, 28 Nov 2023 18:37:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-next] BUILD SUCCESS
+ 3396b3372e61f8b579395e32c53212612b14daff
+Message-ID: <202311281805.4SIMEvqu-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
- bindings
-Content-Language: en-US
-To: Johan Hovold <johan@kernel.org>
-CC: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>
-References: <20231122191335.3058-1-quic_kriskura@quicinc.com>
- <ZV9dYpTYRXn63tXe@hovoldconsulting.com>
- <1192d91f-11bf-44af-953a-14e08e2b6ca8@quicinc.com>
- <ZWCpGdJRexnk98IN@hovoldconsulting.com>
- <004ddc69-1566-4de4-b260-0fca96a9395f@quicinc.com>
- <ZWW_FOAKp95Cf9vN@hovoldconsulting.com>
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZWW_FOAKp95Cf9vN@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5JcXaZYvs-01ZIgzCotYzzgV5wXle1C8
-X-Proofpoint-ORIG-GUID: 5JcXaZYvs-01ZIgzCotYzzgV5wXle1C8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-28_08,2023-11-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 malwarescore=0 adultscore=0 lowpriorityscore=0
- impostorscore=0 spamscore=0 mlxscore=0 phishscore=0 bulkscore=0
- mlxlogscore=660 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311060000 definitions=main-2311280083
 
->>>>> Now if the HS interrupt is truly unusable, I guess we can consider
->>>>> dropping it throughout and the above becomes just three permutations
->>>>> instead, which can even be expressed along the lines of:
->>>>
->>>> Infact, I wanted to do this but since you mentioned before that if HW
->>>> has it, we must describe it, I kept it in. But since this functionality
->>>> is confirmed to be mutually exclusive of qusb2/{dp/dm}, I am aligned to
->>>> skip it in bindings and drop it in DT.
->>>
->>> As I mentioned elsewhere, it depends on whether it can be used at all.
->>> Not simply whether there is some other mechanism that can be used in its
->>> stead. Such a decision should be left up to the implementation.
->>>
->>> That's why I said "truly unusable" above. It's still not clear to me
->>> whether that is the case or not.
->>
->> I looked at the code of  4.4, 4.14/ 4.19/ 5.4/ 5.10/ 5.15/ 6.1 and none
->> of them implement the hs_phy_irq.
-> 
-> But again, that is completely irrelevant. As I've said numerous times
-> now, this is about what the hardware is capable of, not which
-> functionality a particular OS chooses to use.
->    >> My opinion would be to keep the power_event irq as mandatory and not to
->> include the hs_phy_irq.
-> 
-> Ok, but you still need to explain why dropping hs_phy_irq is correct.
-> 
-> Until there's a clear answer to that, it seems we need to include it.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+branch HEAD: 3396b3372e61f8b579395e32c53212612b14daff  Merge 6.7-rc3 into usb-next
 
-Sure, I agree with you. It should describe what hardware is capable of, 
-not what we choose to add in driver code. In that sense we can add the 
-hs_phy_irq to all targets.
+elapsed time: 1493m
 
-In my next revision, I can do the following:
+configs tested: 104
+configs skipped: 2
 
-	- anyOf:
-	  - items:
-	    - const: qusb2_phy
-	  - items:
-	    - const: dp_hs_phy_irq
-	    - const: dm_hs_phy_irq
-	- const: hs_phy_irq
-	- const: pwr_event
-	- const: ss_phy_irq	(optional)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-A modified version of your suggestion should help cover all cases and 
-describe all DT's perfectly.
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                      integrator_defconfig   gcc  
+arm                        shmobile_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386                                defconfig   gcc  
+i386                  randconfig-011-20231127   clang
+i386                  randconfig-012-20231127   clang
+i386                  randconfig-013-20231127   clang
+i386                  randconfig-014-20231127   clang
+i386                  randconfig-015-20231127   clang
+i386                  randconfig-016-20231127   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                       m5275evb_defconfig   gcc  
+m68k                        mvme16x_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   clang
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc64                        alldefconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                          r7785rp_defconfig   gcc  
+sh                          sdk7786_defconfig   gcc  
+sh                            shmin_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
+xtensa                          iss_defconfig   gcc  
 
-Let me know your thoughts on this.
-
-Regards,
-Krishna,
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
