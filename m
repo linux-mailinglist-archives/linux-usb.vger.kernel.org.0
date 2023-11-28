@@ -1,93 +1,116 @@
-Return-Path: <linux-usb+bounces-3433-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3435-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88B457FC578
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 21:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BF2787FC6B9
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 22:06:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44FF1282E6B
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 20:32:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79A9D2842AE
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 21:06:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECD785ABA5;
-	Tue, 28 Nov 2023 20:32:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1593E1E4B8;
+	Tue, 28 Nov 2023 21:06:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SiwLo2O0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dyDhiu1t"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A9E19A7
-	for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 12:31:59 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-7b37a2e6314so5397139f.1
-        for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 12:31:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1701203519; x=1701808319; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8XKy/giFFBzRIyzsC6NU3QO7zkRURqbCQ/tW1YwEn6Y=;
-        b=SiwLo2O0OhSmKDYpHILB9ohM2R3qBHSzWMgVUb7M2dWwniXNSGgCcmuJcoGePpAOeG
-         S0fFFAjutdIyjJMXXNv6nA+njDrO2oOZpZ2AeUu1tFLc7QqUfMBrMDW58fbvePNvlnnC
-         jXJwF/SOE3oeGUX/e21onWUce0Q/bin7331Ko=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701203519; x=1701808319;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8XKy/giFFBzRIyzsC6NU3QO7zkRURqbCQ/tW1YwEn6Y=;
-        b=kG5HPVJkyagY7NFQxnYmg89xTWu/fuq/ZYet2qrfXso5d6yMK2LDir6urP0H53xyfm
-         A+R2X/vaynWCdTG0djDTeChziyWIDuBQnGVQdP4zZzW1akFnqtb4Bx5KiSiBpHclDn24
-         gB3xoBlpCnxqROCSwXoIOc4B+cD/7R5XWeIovx5DWfAb8dC4m+6pdWeNtU7uJQY4a/s6
-         /1mQgwXY4Qh29y4PPVN9FjrxHZDJDG+hBk8OYBySPqmEsX4PA+G/f5Hy1igpyPiDBgA8
-         OnK8Z8sj0f+r4X5gmNi/WpQudz4dQ76IKQW620jy3gWqWxam+4kKP6RhxxvOjBm7CeiT
-         K01Q==
-X-Gm-Message-State: AOJu0YxRttyYmB9CMlAkU9SBqRo4mJYN9MOe1t/Kul2cgwpRhwql6zjg
-	LMM2235FOLN64LpNsN5Y47ZsyA==
-X-Google-Smtp-Source: AGHT+IFna264rM5zePA54oe3gS4wTFePNviMXEcNhpU5WbPBZPcIwYZstfSmI2NMsYQlR27ceiOn8Q==
-X-Received: by 2002:a05:6602:2e0f:b0:792:6068:dcc8 with SMTP id o15-20020a0566022e0f00b007926068dcc8mr20561718iow.2.1701203519002;
-        Tue, 28 Nov 2023 12:31:59 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id q1-20020a056638238100b004596858b397sm3103355jat.7.2023.11.28.12.31.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Nov 2023 12:31:58 -0800 (PST)
-Message-ID: <c9c09012-9df8-406b-a299-1310d9c626b2@linuxfoundation.org>
-Date: Tue, 28 Nov 2023 13:31:58 -0700
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F2F44366;
+	Tue, 28 Nov 2023 21:06:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBDC5C433C9;
+	Tue, 28 Nov 2023 21:06:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701205584;
+	bh=VF+FqZDwC1y4zaNtTATkaYq4JV+XiOLwLQAQ5id2JQw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=dyDhiu1tR/k04EBFPd6vrsXtq/mrug4hKe43nvPKWEkVWg1Yay3OSKTIJtT7yruF0
+	 Pkzgfjrh7oRuOmfJ0HeP+NjpHtkZbqMx/FaQkmXglNIzF7d2LpWqhwzsRvRalNR34i
+	 YqrcRIIzSlde31yAgrPVkUNGjtIgSRsM0qdWYqm7Y0xFmzZHLeZ7+W1z5OzN/76foo
+	 VewVtqkNsfJSSkl/ga0XWNdO4JCvvAPEv9U/ogHeW+aV3wCCZIRUQ5gWy2cYlWX+Qv
+	 6XkI/NTBOAx9Cvd3/o+0QcIf3OPf54dGwnX+M7IhUjNs0dVWJ1pnHoqWe63wdjoDpO
+	 +xFOK9/kewGOA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Sasha Levin <sashal@kernel.org>,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 02/40] usb: aqc111: check packet for fixup for true limit
+Date: Tue, 28 Nov 2023 16:05:08 -0500
+Message-ID: <20231128210615.875085-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231128210615.875085-1-sashal@kernel.org>
+References: <20231128210615.875085-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usbip: Don't submit special requests twice
-Content-Language: en-US
-To: Simon Holesch <simon@holesch.de>,
- Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan
- <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20231128000955.119735-1-simon@holesch.de>
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20231128000955.119735-1-simon@holesch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.6.3
+Content-Transfer-Encoding: 8bit
 
-On 11/27/23 17:08, Simon Holesch wrote:
-> Skip submitting URBs, when identical requests were already sent in
-> tweak_special_requests(). Instead call the completion handler directly
-> to return the result of the URB.
-> 
+From: Oliver Neukum <oneukum@suse.com>
 
-Sounds reasonable. What happens when a tweak_* routine does nothing
-or returns an error.
+[ Upstream commit ccab434e674ca95d483788b1895a70c21b7f016a ]
 
-tweak_reset_device_cmd() returns 0 when it can't get the device lock
-and after calling usb_reset_device().
+If a device sends a packet that is inbetween 0
+and sizeof(u64) the value passed to skb_trim()
+as length will wrap around ending up as some very
+large value.
 
-tweak_set_interface_cmd() and tweak_clear_halt_cmd() return the value
-the usb_* routine they call. Don't these cases be handled as well?
+The driver will then proceed to parse the header
+located at that position, which will either oops or
+process some random value.
 
-thanks,
--- Shuah
+The fix is to check against sizeof(u64) rather than
+0, which the driver currently does. The issue exists
+since the introduction of the driver.
+
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/aqc111.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
+index a017e9de2119d..7b8afa589a53c 100644
+--- a/drivers/net/usb/aqc111.c
++++ b/drivers/net/usb/aqc111.c
+@@ -1079,17 +1079,17 @@ static int aqc111_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 	u16 pkt_count = 0;
+ 	u64 desc_hdr = 0;
+ 	u16 vlan_tag = 0;
+-	u32 skb_len = 0;
++	u32 skb_len;
+ 
+ 	if (!skb)
+ 		goto err;
+ 
+-	if (skb->len == 0)
++	skb_len = skb->len;
++	if (skb_len < sizeof(desc_hdr))
+ 		goto err;
+ 
+-	skb_len = skb->len;
+ 	/* RX Descriptor Header */
+-	skb_trim(skb, skb->len - sizeof(desc_hdr));
++	skb_trim(skb, skb_len - sizeof(desc_hdr));
+ 	desc_hdr = le64_to_cpup((u64 *)skb_tail_pointer(skb));
+ 
+ 	/* Check these packets */
+-- 
+2.42.0
+
 
