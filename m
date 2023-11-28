@@ -1,94 +1,129 @@
-Return-Path: <linux-usb+bounces-3431-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3432-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ADC17FC3F9
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 20:04:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ABC87FC478
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 20:52:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25DAA282B98
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 19:04:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2243B216D5
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 19:52:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E464F885;
-	Tue, 28 Nov 2023 19:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 121D040BE4;
+	Tue, 28 Nov 2023 19:52:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b8OGqtm6"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BWFbCeo0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92641988;
+	Tue, 28 Nov 2023 11:52:22 -0800 (PST)
+Received: from notapiano (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D799A1E4A7
-	for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 19:04:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5EB98C43391
-	for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 19:04:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701198261;
-	bh=M6HyDu8KLSH4xh6JjCdOzbqUNbQDhtq1XnEjVOs8bzA=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=b8OGqtm63Q9YOH5Xxw3dZHutPw+ZR62enEv18w6FqwCtp82EO0vbO5fGyLtaxZkKZ
-	 o+nnOSB8CMIwVlg1erd4lIixaSRiyKV7H4PLX61mEUkvMv8dC2RiQqkVu/78BSIlK5
-	 n0JP3x6/E0OwMhBQHccMhq+b1iqe1sxaVIvPdfdpmjfsRqpVBMJj5B/5iResQ8TEWn
-	 xnVQWSw4j9TXLIr+BS0I63i/7ZN/FqBOQFmMdHpHKwHeq+Fv+dLr5FoBvAgksKcgD0
-	 N5SeUD+D+H+8kve8a/m21e0g0nf1P4DtM9ud/fzS+X9h/hWzoNcKaah9+Z8MOdUSHD
-	 Em2BQtVa87Z0A==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 4E55AC53BD2; Tue, 28 Nov 2023 19:04:21 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 215740] kernel warning: DMA-API: xhci_hcd: cacheline tracking
- EEXIST, overlapping mappings aren't supported
-Date: Tue, 28 Nov 2023 19:04:20 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215740-208809-2C4Hb0GW1M@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215740-208809@https.bugzilla.kernel.org/>
-References: <bug-215740-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	(Authenticated sender: nfraprado)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id EC19B6602F2B;
+	Tue, 28 Nov 2023 19:52:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1701201140;
+	bh=lTlr8qen9KRZ2EZ5Mj/C5s4YyiYXfeKPKLVSZIrbTaI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BWFbCeo0pR89kb8EP/q48zvjI3cmzqzkOP5Ssg6KCYoxmkYsWhGw7YnYwnK0Ydqx9
+	 shS65Zdg/bf6ykTyCPIAoN+VgUo6f2E5W0QcfQUeciCr3rka0YrpUzn+HSv/Bj7Zct
+	 H7Infuv8i02YACPgJR2RW94Pq1aXDa0SK6yC1DMGOERLw6n3KijfKvg4e7UliZB2FY
+	 gALs+B7NKhpeP+t7oyOtEriPW0ZcVjhpIUPqzuejbdo7CDI5XAGpOkkGmtxmvMbKR9
+	 Y183UDfOcNi0JPgzAIknumKFCAi/HtwqTGlS66GpmKmxmcaHod/LOIaopU07q5hAKg
+	 UIW+brHODLCag==
+Date: Tue, 28 Nov 2023 14:52:12 -0500
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: "Bird, Tim" <Tim.Bird@sony.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	"kernelci@lists.linux.dev" <kernelci@lists.linux.dev>,
+	David Gow <davidgow@google.com>,
+	Guenter Roeck <groeck@chromium.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"kernel@collabora.com" <kernel@collabora.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+	Doug Anderson <dianders@chromium.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 2/2] kselftest: devices: Add sample board file for
+ google,spherion
+Message-ID: <3f22eea4-121d-4d5b-b7af-71961a2ab5e9@notapiano>
+References: <20231127233558.868365-1-nfraprado@collabora.com>
+ <20231127233558.868365-3-nfraprado@collabora.com>
+ <BN8PR13MB27384F089C7DAAF06DF9DDECFDBCA@BN8PR13MB2738.namprd13.prod.outlook.com>
+ <ee913bc5-c752-4da7-a140-7492f429c2cb@notapiano>
+ <BN8PR13MB273808C3B81BABBAADACC6B6FDBCA@BN8PR13MB2738.namprd13.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <BN8PR13MB273808C3B81BABBAADACC6B6FDBCA@BN8PR13MB2738.namprd13.prod.outlook.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
+On Tue, Nov 28, 2023 at 05:54:57PM +0000, Bird, Tim wrote:
+> > -----Original Message-----
+> > From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > On Tue, Nov 28, 2023 at 12:10:46AM +0000, Bird, Tim wrote:
+> > > > -----Original Message-----
+> > > > From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > Add a sample board file describing the file's format and with the list
+> > > > of devices expected to be probed on the google,spherion machine as an
+> > > > example.
+> > > >
+> > > > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > ---
+> > > >
+> > > > (no changes since v1)
+> > > >
+> > > >  .../testing/selftests/devices/boards/google,spherion | 12 ++++++++++++
+> > >
+> > > Overall, while trying to maintain a comprehensive set of board definitions
+> > > seems hard, I think having a few as examples is useful.
+> > >
+> > > I'm not a big fan of naming these with a comma in the name.  Is there a reason
+> > > you are not using dash or underscore?
+> > 
+> > I'm using the name that we get from the DT compatible, so the right file can be
+> > automatically selected by the test.
+> > 
+> > >
+> > > Do you anticipate a convention of  <producer> <board-or-product-name> tuples for
+> > > the filename?
+> > 
+> > I'd just stick to the DT compatible as it's the simplest option and should work
+> > just the same, assuming I understood correctly what you mean.
+> 
+> OK - I see that was mentioned in the original submission.  I should
+> have read more closely.
+> 
+> It makes sense.  Maybe it's worth mentioning in the commit message that the
+> filename is the compatible string from the DT for this board?
+> 
+> This convention, IMHO, should be documented somewhere.
 
---- Comment #35 from Alan Stern (stern@rowland.harvard.edu) ---
-So as most of the people subscribing to this bug have seen from the email
-discussion, it looks like the bug ultimately lies in the alignment of kmall=
-oc()
-buffers and it probably will be fixed with a kernel patch.
+I have that as part of the comment at the top of the test script in patch 1:
 
-Equally important, however, is the question of why the people experiencing =
-this
-problem turned on CONFIG_DMA_API_DEBUG in the first place.  That setting is
-meant only for kernel testing and it drastically reduces performance.  Redh=
-at
-certainly should not enable it in any of their distribution kernels (and in
-fact it is not set in my copy of Fedora 38).
+# The per-platform list of devices to be tested is stored inside the boards/
+# directory and chosen based on compatible.
 
-Andrew, Ferry, any comments?
+And also in the commit message of patch 1.
 
---=20
-You may reply to this email to add a comment.
+But I guess this sample file is the most likely one to be read when someone
+writes a new board file, so I'll document it here too for next version.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks,
+Nícolas
 
