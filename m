@@ -1,224 +1,242 @@
-Return-Path: <linux-usb+bounces-3391-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3392-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B6457FAF22
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 01:36:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2144A7FB20D
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 07:45:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5FA3B212FE
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 00:36:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8CB9BB211E5
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 06:44:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71B7015C5;
-	Tue, 28 Nov 2023 00:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B0A1D511;
+	Tue, 28 Nov 2023 06:44:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="A4OvNYtL"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="MOcwYO8o"
 X-Original-To: linux-usb@vger.kernel.org
-X-Greylist: delayed 1507 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Nov 2023 16:36:32 PST
-Received: from mx08-001d1705.pphosted.com (mx08-001d1705.pphosted.com [185.183.30.70])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24341A2;
-	Mon, 27 Nov 2023 16:36:32 -0800 (PST)
-Received: from pps.filterd (m0209318.ppops.net [127.0.0.1])
-	by mx08-001d1705.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARMDE4j025363;
-	Tue, 28 Nov 2023 00:10:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : mime-version :
- content-type : content-transfer-encoding; s=S1;
- bh=MRn2eyz7OH/SrlGvAzHCG56tDOQonGKFHRM+I5MFfuo=;
- b=A4OvNYtL+Gh0zcFCcPKRte3Pmtr6oTI5GhJzBXzZKKT3W0UDQ27VUYmrIeGDPS74sTFy
- dEgojgMZlRNU1+sy8mCiv5ry5G668YfV57i+67vgai+Iaqg/HIlA4CotstXLHuDrc8lO
- hZPMLnAZsb8fGke347LJ+HE7A/hvXcT7GQ6PjIeRqthg3XemM8hQE5Oyr12sGMO+2LL9
- IgQdTZrUAuKz9xuoWBzmAcEKtYHndkEFet/rnn9je+9kR3SvMaJVj62rghmqJgBDQ6IY
- wEz5BtPCtIuvhqBXfzFFAcEmVBi8h7m6IXlBpn26aOYXiCzYEL/eWGFz8vVnyo7pGEYB 0Q== 
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
-	by mx08-001d1705.pphosted.com (PPS) with ESMTPS id 3uk7g6a76w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Nov 2023 00:10:52 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LrhV2mi+mbraYuK+mbX5NHKQ808t0isya3WEVTtUgUk23s7K5Ydl4QAQw2+WcUJn2SUSCRIIFpvUxQ7dhb7AJhHdWCQoDMukoSn3oJdJrsdEKabTJsrz6F8GJ4+yptBEV5ve1KbgtVKoSEJ8350hV37NM47qiw0+SQqYZfzplx3qEfs0gLQ7ayjeArtCfD3/JW4WgqpD7WKB1IfNMhR+f3cuOGhs4kZDlriZlKOJZyaqO7OyvKI5rDvm18GAgU118dEHMX6FwCILquq0+BFbE0CNLms21/72BTH/W35yVjo1uOseIB44CLhkVS6o/J7vhrXq+Fc/1tQwAn7wu6oWWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MRn2eyz7OH/SrlGvAzHCG56tDOQonGKFHRM+I5MFfuo=;
- b=UWa4JE2T8j4REB90dBqR4WFA3xPrm2Z4nY8QCgNvDr5rjmUU/yqAP5F/lMJ2qydPFJJQzAjoHjiuOk82FaLEv8iA0jG+DpIce9V3n3m5jW4ljGgSQHgZYk+RKYE3VVQAtTqQfwDHUa/HwvziZV1JX03mybfcj45OiigITzi4eRGobNDUyVA9j2KX8e1Z8FCp65MNBkVpHNAnXf/SVW3msLUWzkoqtAmxABsH9xF755tV5luslkOeqNQcuGxEzAL07NeVH7sfb77j1oVK+YjPOuOxrl9UQ6Jli+2JCWOj+AJsO7mQ6cML8bOPssKlfEt3HIfDWdXh0SJmZjE8Sg+cqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-Received: from BN8PR13MB2738.namprd13.prod.outlook.com (2603:10b6:408:8d::28)
- by PH7PR13MB5913.namprd13.prod.outlook.com (2603:10b6:510:158::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.27; Tue, 28 Nov
- 2023 00:10:47 +0000
-Received: from BN8PR13MB2738.namprd13.prod.outlook.com
- ([fe80::58b:bf63:b6b:706c]) by BN8PR13MB2738.namprd13.prod.outlook.com
- ([fe80::58b:bf63:b6b:706c%6]) with mapi id 15.20.7025.022; Tue, 28 Nov 2023
- 00:10:46 +0000
-From: "Bird, Tim" <Tim.Bird@sony.com>
-To: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC: Saravana Kannan <saravanak@google.com>, Rob Herring <robh+dt@kernel.org>,
-        "kernelci@lists.linux.dev" <kernelci@lists.linux.dev>,
-        David Gow
-	<davidgow@google.com>, Guenter Roeck <groeck@chromium.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        Dan Carpenter
-	<dan.carpenter@linaro.org>,
-        "linux-pci@vger.kernel.org"
-	<linux-pci@vger.kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC PATCH v2 2/2] kselftest: devices: Add sample board file for
- google,spherion
-Thread-Topic: [RFC PATCH v2 2/2] kselftest: devices: Add sample board file for
- google,spherion
-Thread-Index: AQHaIYqHCCVqMV2IwESZQPAOrwlnnbCO2peQ
-Date: Tue, 28 Nov 2023 00:10:46 +0000
-Message-ID: 
- <BN8PR13MB27384F089C7DAAF06DF9DDECFDBCA@BN8PR13MB2738.namprd13.prod.outlook.com>
-References: <20231127233558.868365-1-nfraprado@collabora.com>
- <20231127233558.868365-3-nfraprado@collabora.com>
-In-Reply-To: <20231127233558.868365-3-nfraprado@collabora.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN8PR13MB2738:EE_|PH7PR13MB5913:EE_
-x-ms-office365-filtering-correlation-id: a7793d92-7404-420c-8442-08dbefa6780f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- 5NS1h0s93VHnvAG+jqQnDOpnQ6VkFsjtp/xxGq1M1M1YQU5z5Utcw/0YXxChNSnpS1nplPL7cMwqkiydP95jmLbtB2O4nc/jYZwoBhhHdJwM3vRI2bGpwG+2/mbt8on4oHipVBwZumePvw+qeeNlKZZFxUAyC3WBZExqhVeR5K7SbhgBVDvW9tfjz7Dl48cjtNvcku9qUz6V3o5gGDbJfniXMhitk7K9+9WcHXhCAM9SKYgyVxQ+iTwSSh24XcozYl2JqQIhYuumQiX7yPLR0zSs8ye3sw5OO6pzk3z5+npOuh/edkBrAtwiYZNcqJA/p6X1E2HLfzbGvkU9PLBFh+BFFEsveYWEjRNOQen2eYEsbeD+AYfRk53vCx5ZJM61Od5lqG8BgpiHVhu1+Yo3gF77B4ahDKAfUZzvvrCdvpq6ey5o9Rsh0TUwSQECuZbGZv1k7NCHlYIdjm0CTu+4zIULy9ZXceqx+vdITnzKwgFXXNlSbrneu5/VDyFglQyLFk+Zd53/R3meqKusI305jXiiFGJOQTFXw4tLgo5WakdSzWHqmGlp1hWZnLaXVLO8D2HFexfprSOCxQcw25I6bUA6y+a54TKrBRuUbSivVBAdRnbHCs1/vZG3Q5CJ8FCBiE9TbmAzKxfKIkplxNEHXCRH6/7rzhSjA/M1sNsbN5E=
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR13MB2738.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(136003)(39860400002)(346002)(376002)(230922051799003)(64100799003)(451199024)(186009)(1800799012)(52536014)(8936002)(8676002)(4326008)(9686003)(71200400001)(6506007)(7696005)(64756008)(54906003)(110136005)(66556008)(66476007)(76116006)(66946007)(316002)(478600001)(66446008)(122000001)(55016003)(41300700001)(38100700002)(38070700009)(33656002)(86362001)(26005)(2906002)(83380400001)(7416002)(5660300002)(82960400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?utf-8?B?K1Vxd2pDUU9NN3JUaVoxNHdGVktpWW9Yb0hrbWN5MEFTcklzajRsNXFQaURC?=
- =?utf-8?B?RU9uVjRSNm9OdjREM1owMlhRdDhKNE1EaGxWQk43STVtSjBzNVRRRDBpUFB5?=
- =?utf-8?B?Q2hkcS9lUk5tK3NNSFU3ZmE5cC9tbWt0SDFwa2p1bWpGTU5CS0R2eWRpSVZp?=
- =?utf-8?B?K0h0QXQ1QVJzSHY0bmlUaG5IOUtSbDhIaHR5TThrV3Rlam1pZmJQblZib0d2?=
- =?utf-8?B?a2I4RXRPVFRIT2JZTjk5TjBzMDBXRnhndDd6NEhqWmRpOFBmRTFyTEtHVUw5?=
- =?utf-8?B?eU5WbkE2K2ZZWVZBZEZZelp3MVhiZER0V05VYk5VNFg2UWZSdy9nVkM0V0lw?=
- =?utf-8?B?QWJwSzliaDBHeGdVNTBEaWx4Vyt4aGtnVmppUHFSR2FReU1TVW1RZmJtSG1B?=
- =?utf-8?B?b0g5cW1oRjBINXFzMmtJZ2ZWT3BDRTNhaVhCTjVnU3JxcE9KZHozdGg5cG1J?=
- =?utf-8?B?UHJzb25EZUNzMUdnU25MQjlJYnhNcS9XcWoxa0dpLzU4SjdoVE1rY1gyc0sy?=
- =?utf-8?B?OEpXdHpqTkV3TDBibHQ3MXFOVzYyazhuQVpPN1hsNzRpTFlYazVFZ2JUaC9B?=
- =?utf-8?B?blRKc1JZcVdhdUhKWHpRYVlDTVRYZmdCQjBJNVNuZVZOaDQzNWU2cG9EVUdL?=
- =?utf-8?B?YnpKUDdEeGRFVnNrcDZFc3oxRFZpbXhaSlVBa09vVDN4Vmp6TWY4TnpKcXFi?=
- =?utf-8?B?b0dkeWYrcjJZRHhETHY4aFpTQldINVdZT2trdG5pNUlONjlqMnBkWVFXWnJX?=
- =?utf-8?B?ZkxwUGF6Yk1nandrbEFObkxXWUU1aWlWQU9uQ2lqSHNxZkRGdnRRZXdNRXlz?=
- =?utf-8?B?dENIeHBGMkRlUmVqZWV1NUhDYUd4Sm5LTnFDWnBKblByYlpkY3dZVEJXelRK?=
- =?utf-8?B?blJYZ2ZhZzY5cXRJOTN0ZVhKNERGR0xtci9zOXhacUhYY1BrRllpa1JIYVM4?=
- =?utf-8?B?VlFxendNc1BLSTcvdmhod3hiY0VrcUV5MkVibENISC9HN2dqY0hBZUg3Q0l6?=
- =?utf-8?B?Y3B3RU5ydFludVdsdVkwU1hrM2V6Rm5wQ1dBVTdmbzhTbG1Ic0p2amNGd3Ir?=
- =?utf-8?B?MEl1dzdYQWpnTVJ4VHdzQklZdk9WWXAyVWp5cnlQd1BkTUVGUlg5SjVwNWl1?=
- =?utf-8?B?S1lHSk5GSnNRMHREVC9JNmpYUFY0YWhZQ2IzNXJwYXZPSFAwZGN1U015Umtk?=
- =?utf-8?B?cDJBNjA3Tk85R1BRM3VyRG1NMkwvTlFHSFJ6anlKRE1uK1VzbmFLN2Z6aGVF?=
- =?utf-8?B?SW5TYlVQYXdrRERxK0FJWkQwWHg3L0pmZ3Rvc1ZnUGFLS21jZ2g3MmFpQU5D?=
- =?utf-8?B?YnNXNTFJTDZFdlgrK1hTMjJaRklZVVZOci9RU2dSVXBqSlJYaXYxQ2s0cXNx?=
- =?utf-8?B?T05PK1JXaDJwVWpFM0NHYW81Q2t1Rk1vV2x1NlIya0RqbUhoUklLdUNFVmpX?=
- =?utf-8?B?RDdLYjJoZmIvWXRVK292MDN4MjMyUU9IQWNzTjFpaFAzOFFaVld0YVNpNi84?=
- =?utf-8?B?V1Zha25iNU9FR1ZKeTVYUUxIYUg3QnNwQm9qZU1yWENlazRyL1pPZ2ZyZy95?=
- =?utf-8?B?cnVRcjlYdkZtb3JZU2h0NXlzS1k1Z2Q5bG55Z0FKZnZSdWVZSUxyMHMydFhJ?=
- =?utf-8?B?VEc0c3ZNYWpMaVBldllmK2VpeFVrclZIdzNqWkhwOXEzWk4wVzN4ZjlVTjZU?=
- =?utf-8?B?eXpvVkExT1loVXlyNmFzYjlSSndtQ1lXZG52b0RlMXFqempYMUVFZ3lOY2dk?=
- =?utf-8?B?UTRJa09neG9VR3ZDTDQ2NjZTTjB4dW96b3JWZ0lzaEFaWW4zRS9XR1ZuS0pM?=
- =?utf-8?B?dHMwWnBqZ3kyc2NjOFl6NTd6dENJam9oakx2L0UxRHBscWhFeE1Za0xiamVX?=
- =?utf-8?B?ZEtTQW4rQjJBc0RnSEs2NEY0VjF4WHVvKy9rQTlNd1JWVmpjOFRLQzJ4dWhm?=
- =?utf-8?B?SFBVMlRnME9EcnB5cUhIUUdKSTRPUnV3L3Nsbk1PSnFLOFRObXA5UmFUYjE2?=
- =?utf-8?B?ZEtPby9IMzVLYUtkTEIwWnlXVEdsM0JJMkZXUzBxVVVFWjV1NVNWVEZERlZW?=
- =?utf-8?B?c25CK044MkprdmsxQllYZUJlY2hja1loQUFhNWFJSTNlTUZieWpnWE9IeE1I?=
- =?utf-8?Q?z3N0=3D?=
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CD2197;
+	Mon, 27 Nov 2023 22:44:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+	s=s31663417; t=1701153864; x=1701758664; i=wahrenst@gmx.net;
+	bh=9p/L+dIs/yOOUpJOeqIgX4V6lS9jUXF4jrKNFp088qM=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=MOcwYO8oGqVOwSez+bQ8AUaDwNQyDoIEzmMxUvHuibeCG3r+HZXE+VL3IjVG+Wmx
+	 Q2xh1kpW2luPlUN0oY1/ZmDkeOeM2+5D2+xKcmwitC3eL7+6u2h/HRLGwrmQIzfXn
+	 RNxqKL7WX5xEGE5TibR5XYFnLRSdoHdEXFy8au8jk/9MtVsi2TV4QeEwQBTKEJ1ll
+	 bLEa5wZZDQsaYtQ/8mo0Ralo584JBqBvEx49aR+BPsIsMZ39VyZqrgkhA+ODOloaQ
+	 hDFYuoIdyW4+nlGbgapr/z9xEq6QKMf1J2ecyMwo1OLky9hkDwEokqwtohD3bXEDO
+	 /A4HDkFm/VMeY8Ws8Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.129] ([37.4.248.43]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MFbVu-1r59ss1tIE-00HBCp; Tue, 28
+ Nov 2023 07:44:24 +0100
+Message-ID: <ab4b6629-9e30-4385-bf14-c31223e68769@gmx.net>
+Date: Tue, 28 Nov 2023 07:44:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	=?utf-8?B?RUdsaUxZS0M1TFdaTjJYQkJwN3YwWW9mQVVDTC9TUmRoVmdITFRkRlJCV3RV?=
- =?utf-8?B?RkpuN3NvOEZtMTA3d3ppWUhvNU5TTndUMlJWT2xwckVPZ2xqTU9Jb3k4Mmtp?=
- =?utf-8?B?aytvMm5wbit1L2R0K1ZtQ3doWTd1MDFyR21KODFzYTFZT0sxT0ZFbE4rRENP?=
- =?utf-8?B?TmpUVjd1cFFka09VbCtvRGhoM3lFQlJmdkIxTFYzUDQ2eUxBNENJWjFqUlpO?=
- =?utf-8?B?U2lGTllzQU41RExvOW91UmMxVUtLUnNFb2tKMTNOVndrY0g4YjhZQ1FrNTc4?=
- =?utf-8?B?OFZqTW9oYlBXR2JOYmVPMXphZmhXbWt4UElTM1dBbWhUcEZzVXhXZ3UzQ1hw?=
- =?utf-8?B?NlZLUVVqNDhrOE9DU2szdmk3RC9VYnFPVS9PN1dKZ0VlN0hxVGZWdHZrcUFW?=
- =?utf-8?B?TUc3K3pGaHhPbTdxSFpoTW5KaVF2ZTFqcTA3cEhvbmxPZFhSM3A5SnF1TzhW?=
- =?utf-8?B?alkveUJES1Y3RGRrR3U3K2RYUXdBUVUrR015dVJwa2dQN2V3dkNUZTdEMXJL?=
- =?utf-8?B?RVpTVUdsRndIQkprLzJNd0k1eGZzbzFCVDhyYy9aU2xGYTZqam90QTlXWm9W?=
- =?utf-8?B?ZHJkM1cxWlVXaFFCYWNoM1o1RjV4UnRDc3V6TmQ5Y2NaSEZRZ2dzNHZuSzVF?=
- =?utf-8?B?aXl0VG1mREpub3M5ZUpOeWpxSEswMXB3NkpueGJWRGhnSmRrd240T1JJMDRq?=
- =?utf-8?B?MnRXUHk3Q3lrcUtnTVlHTGJYamtPUlVSQWFvVzdMaUg5b3R5dG42MENObEdU?=
- =?utf-8?B?bnBrSmlZUGoxeHVMRUM0czJJVzBudzJZM0F4UEtwdUtSSlpmUnpjakw4WkJv?=
- =?utf-8?B?UmF4TU1iVklGNHN1dDZtWjBWWXBBTU14Z2hUcWtXREIzZVk3Y3dGOFhjN0w0?=
- =?utf-8?B?TlkzQjJXWDJmYitjUkR6alMrYkJMbGh1Z0NsN0h4cHR0TjN1VXJRTThLUDJZ?=
- =?utf-8?B?R1Ira05pcnUvV2todksyMkR1Y3JsTER0M24wRlh2OUpHRzZRa3Y1OTAvK0pn?=
- =?utf-8?B?RFJGeHVGSkFJMWIzSHhRaWJscVlaeTlaRUlnWXZ1VEVDSDI4Y0kwMjdrVXRL?=
- =?utf-8?B?V0lIRWtkZWNrczNEYTMzcmc1UElML1VEd0tEbjBUUjIzL2hZUkJVV21uZzFZ?=
- =?utf-8?B?d01uV3loRktXTWJCQ2JTUE1lTHdrL3ZCUzB2d2tzdnZtWG1uUHRqNDk1bHFZ?=
- =?utf-8?B?S0pGUkh5V1BVclZ6TlJHbjViZ290UmN0NXZJRXE4ZVdRT0ZIdjNNOVFSUFEz?=
- =?utf-8?B?c3ZpMnFwUmUzWXUybW9rajFGRnlpRWJteVZPY1dTblR2cFk0dFBZM3JoUUxB?=
- =?utf-8?B?amVnQ05obFA0akZoeWo5ZC9pVVViRVlCUTlNY1Z1cXVPK3FMSUI4MFlPTTNH?=
- =?utf-8?Q?Iv0U0NkTTamqSTmgS0cbFLaCSaMQBwi8=3D?=
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR13MB2738.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7793d92-7404-420c-8442-08dbefa6780f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2023 00:10:46.0795
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jMqKYkqqSznhw4GAJbSZOvIzrN9HYBbhNpWeA6wBVj4SLjLTcUEBfWSrN4b74FcwCb9J1+2n6o3ahsLbF6WfxA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB5913
-X-Proofpoint-GUID: fWru3I_Sx1KzvcOT8X9kr-CHOAyX7H9-
-X-Proofpoint-ORIG-GUID: fWru3I_Sx1KzvcOT8X9kr-CHOAyX7H9-
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-X-Sony-Outbound-GUID: fWru3I_Sx1KzvcOT8X9kr-CHOAyX7H9-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-27_20,2023-11-27_01,2023-05-22_02
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] ARM: dts: bcm2711-rpi-cm4-io: Enable xHCI host
+To: Florian Fainelli <florian.fainelli@broadcom.com>,
+ Justin Chen <justin.chen@broadcom.com>, Phil Elwell <phil@raspberrypi.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Mathias Nyman <mathias.nyman@intel.com>,
+ bcm-kernel-feedback-list@broadcom.com, Cyril Brulebois <kibi@debian.org>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20231126025612.12522-1-wahrenst@gmx.net>
+ <53e1f6e6-a28e-45af-991e-75b283a21b34@broadcom.com>
+ <46320840-09ab-4c86-90c9-bee7b75f248a@gmx.net>
+ <CAMEGJJ3SXHSnasqoMJnshf5Wu92NVi8+NoMdxmMsJH7WH2WjWg@mail.gmail.com>
+ <a78f9ba5-ad34-4af2-9817-eeb7dd9d02ef@gmx.net>
+ <CAMEGJJ3PpEgD_davgTn9e+re4hosunU+uj_i5sdKMFNLFR5hBA@mail.gmail.com>
+ <624b79b1-f2dc-4f2e-a225-d1623d905b19@gmx.net>
+ <CAMEGJJ0aL4VDoq06+JGHz9yx5nVvgbNULNKoT07myzVGNiyCoQ@mail.gmail.com>
+ <b8a90433-e0fe-4148-a512-c0e9ace2b4b6@broadcom.com>
+ <91ceed68-fe3a-408c-a858-095d5749b4d2@broadcom.com>
+ <10383aa9-942b-415d-b70e-ade3a7aae6fa@gmx.net>
+ <71e96b4e-a0b4-4145-8174-a18cf1ccd06e@broadcom.com>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <71e96b4e-a0b4-4145-8174-a18cf1ccd06e@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:CqIwg5/UCbqJkTfCiwIUHNcnS9TAwnk+UW0II9hDbnAJK8qb/Xb
+ oSbZZJxEqwn/EC7vvXQlkYfzvMeHTx9pgFkLhflu5XgdVA0iB1TcISE3Lq1wSVKHWl7bRXV
+ 6gjpmxZquEYll700lLpj3agKkHFdoCYQTYfvgVhcjchKQBFAFw1Sj7B3/uSt5HbiPggAoO4
+ lVEDCZra9OoCgjGl651ug==
+UI-OutboundReport: notjunk:1;M01:P0:zPIufbtySzk=;XenWx8vAVuUR4HRy1YhTuigUX6F
+ tF6hld/NOyKRKrMkjPpJ+AQzziMuM2L6M/adCDRg9mGSKaQIVW9aH0djNx2ZbaCuK2GjjfkDw
+ gvwdUfgBOiocN1zoksmE0UiA+MS16roHpF0NwY4EhnI0aBXYV88jfL0eRn9eoIXiK7dbiusUw
+ 8aMR73BOtENVgtMp1Kf9z4EWCd7+oIeW1gKXT+yI77neJuMShM9Y1aM/6EFMpJLlF1LOxRuBc
+ t6vYULd+AT/Fh6Vo/D/b8TY9OQA9c7Vm0o5vQPkyfLSQmJ/BwsLFnaz98IX2f9w+x3fezJ2LK
+ iY6cKZPHpr33claxqnWX9aNdP7RUfkRBH883furNEdAMTsYOY7OhW0aUxX1iebMDvAMzPHh1+
+ OWmQZuedZun2/rYTBm93lidtNRrOoqjt/uiWHAHyzp2H4BORpbW6dYC6LDKTaB8cblrmApSNC
+ uOt3ShKRJ51wI4T4WV4EJBQmM5j1UFWmq/srZke9Tw1UnLHF6Sef0jKdQ2Hni/QkCljQj/+LF
+ hZkMHU+YBj1sXUvqcKfeVCVlg9N8QtaNTNxZX6EfdHIi1OwACPKeaiHF1p4BnAtlQQ/0S7mnv
+ wo7cb92Xy1yZzowJxUl47C05dYrXD6KMMZshIdJMejAcvm/EFl4QdWQzFgcDjPtUg9TeuZhBF
+ FcwCrNpKsD9WDK86Y2mfoRws4dsyY8s9E0QggAzZseqlw2/MW+R4g6ozaWJBecoVvCnLm6kL4
+ ql9cpUxxjaARCnNdhSorD/iH4XskynG/6w5cOSTLWynoqGrolDfpwXHA/sO0TH22GrLLTqbMg
+ V6a7lD7jMA8NGnX6lyFLKXsK2HcoqmN8QUADL/0xB4+cC3BZHgeEbFPfyvrRw2joAkS8yh73/
+ 9B3YkX/fSjoICuDTvavhrTv4jBsNOrOAgV+OSJPGSHVKk19llvbWIMo6i7JRirSL4K3FhC8Z0
+ ovU84Q==
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBOw61jb2xhcyBGLiBSLiBBLiBQ
-cmFkbyA8bmZyYXByYWRvQGNvbGxhYm9yYS5jb20+DQo+IEFkZCBhIHNhbXBsZSBib2FyZCBmaWxl
-IGRlc2NyaWJpbmcgdGhlIGZpbGUncyBmb3JtYXQgYW5kIHdpdGggdGhlIGxpc3QNCj4gb2YgZGV2
-aWNlcyBleHBlY3RlZCB0byBiZSBwcm9iZWQgb24gdGhlIGdvb2dsZSxzcGhlcmlvbiBtYWNoaW5l
-IGFzIGFuDQo+IGV4YW1wbGUuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBOw61jb2xhcyBGLiBSLiBB
-LiBQcmFkbyA8bmZyYXByYWRvQGNvbGxhYm9yYS5jb20+DQo+IC0tLQ0KPiANCj4gKG5vIGNoYW5n
-ZXMgc2luY2UgdjEpDQo+IA0KPiAgLi4uL3Rlc3Rpbmcvc2VsZnRlc3RzL2RldmljZXMvYm9hcmRz
-L2dvb2dsZSxzcGhlcmlvbiB8IDEyICsrKysrKysrKysrKw0KDQpPdmVyYWxsLCB3aGlsZSB0cnlp
-bmcgdG8gbWFpbnRhaW4gYSBjb21wcmVoZW5zaXZlIHNldCBvZiBib2FyZCBkZWZpbml0aW9ucw0K
-c2VlbXMgaGFyZCwgSSB0aGluayBoYXZpbmcgYSBmZXcgYXMgZXhhbXBsZXMgaXMgdXNlZnVsLg0K
-DQpJJ20gbm90IGEgYmlnIGZhbiBvZiBuYW1pbmcgdGhlc2Ugd2l0aCBhIGNvbW1hIGluIHRoZSBu
-YW1lLiAgSXMgdGhlcmUgYSByZWFzb24NCnlvdSBhcmUgbm90IHVzaW5nIGRhc2ggb3IgdW5kZXJz
-Y29yZT8NCg0KRG8geW91IGFudGljaXBhdGUgYSBjb252ZW50aW9uIG9mICA8cHJvZHVjZXI+IDxi
-b2FyZC1vci1wcm9kdWN0LW5hbWU+IHR1cGxlcyBmb3INCnRoZSBmaWxlbmFtZT8NCiAtLSBUaW0N
-Cg0KPiAgMSBmaWxlIGNoYW5nZWQsIDEyIGluc2VydGlvbnMoKykNCj4gIGNyZWF0ZSBtb2RlIDEw
-MDY0NCB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9kZXZpY2VzL2JvYXJkcy9nb29nbGUsc3BoZXJp
-b24NCj4gDQo+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9kZXZpY2VzL2Jv
-YXJkcy9nb29nbGUsc3BoZXJpb24gYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9kZXZpY2VzL2Jv
-YXJkcy9nb29nbGUsc3BoZXJpb24NCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAw
-MDAwMDAwMDAwLi5kYjlhMTdjY2NkMDMNCj4gLS0tIC9kZXYvbnVsbA0KPiArKysgYi90b29scy90
-ZXN0aW5nL3NlbGZ0ZXN0cy9kZXZpY2VzL2JvYXJkcy9nb29nbGUsc3BoZXJpb24NCj4gQEAgLTAs
-MCArMSwxMiBAQA0KPiArIyBFeGFtcGxlIHRlc3QgZGVmaW5pdGlvbiBmb3IgR29vZ2xlIFNwaGVy
-aW9uIENocm9tZWJvb2sNCj4gKyMNCj4gKyMgRm9ybWF0Og0KPiArIyAgIHVzYnxwY2kgdGVzdF9u
-YW1lIG51bWJlcl9vZl9tYXRjaGVzIGZpZWxkPXZhbHVlIFsgZmllbGQ9dmFsdWUgLi4uIF0NCj4g
-KyMNCj4gKyMgVGhlIGF2YWlsYWJsZSBtYXRjaCBmaWVsZHMgdmFyeSBieSBidXMuIFRoZSBmaWVs
-ZC12YWx1ZSBtYXRjaCBwYWlycyBmb3IgYQ0KPiArIyBkZXZpY2UgY2FuIGJlIHJldHJpZXZlZCBm
-cm9tIHRoZSBkZXZpY2UncyBtb2RhbGlhcyBhdHRyaWJ1dGUgaW4gc3lzZnMuIEENCj4gKyMgc3Vi
-c2V0IG9mIHRoZSBmaWVsZHMgbWF5IGJlIHVzZWQgdG8gbWFrZSB0aGUgbWF0Y2ggbW9yZSBnZW5l
-cmljIHNvIGl0IGNhbiB3b3JrDQo+ICsjIHdpdGggdGhlIGRpZmZlcmVudCBoYXJkd2FyZSB2YXJp
-YW50cyBvZiBhIGRldmljZSBvbiB0aGUgbWFjaGluZS4NCj4gK3VzYiBjYW1lcmEgMSBpYz0wZSBp
-c2M9MDEgaXA9MDANCj4gK3VzYiBibHVldG9vdGggMSBpYz1lMCBpc2M9MDEgaXA9MDEgaW49MDAN
-Cj4gK3BjaSB3aWZpIDEgdj0xNGMzIGQ9Nzk2MQ0KPiAtLQ0KPiAyLjQyLjENCg0K
+
+Am 27.11.23 um 22:49 schrieb Florian Fainelli:
+> On 11/27/23 11:22, Stefan Wahren wrote:
+>> Hi,
+>>
+>> Am 27.11.23 um 19:41 schrieb Florian Fainelli:
+>>> On 11/27/23 09:44, Justin Chen wrote:
+>>>>
+>>>>
+>>>> On 11/27/23 8:28 AM, Phil Elwell wrote:
+>>>>> On Mon, 27 Nov 2023 at 12:39, Stefan Wahren <wahrenst@gmx.net> wrote=
+:
+>>>>>>
+>>>>>> Hi Phil,
+>>>>>>
+>>>>>>>>>> Hi Justin,
+>>>>>>>>>>
+>>>>>>>>>> [add Phil]
+>>>>>>>>>>
+>>>>>>>>>> Am 27.11.23 um 07:02 schrieb Justin Chen:
+>>>>>>>>>>> On 11/25/23 6:56 PM, Stefan Wahren wrote:
+>>>>>>>>>>>> In contrast to the Raspberry Pi 4, the Compute Module 4 or
+>>>>>>>>>>>> the IO board
+>>>>>>>>>>>> does not have a VL805 USB 3.0 host controller, which is
+>>>>>>>>>>>> connected via
+>>>>>>>>>>>> PCIe. Instead, the BCM2711 on the Compute Module provides the
+>>>>>>>>>>>> built-in
+>>>>>>>>>>>> xHCI.
+>>>>>>>>>>>>
+>>>>>>>>>>> Does this work? I maintain this built-in xHCI controller
+>>>>>>>>>>> internally. I
+>>>>>>>>>>> wasn't aware the Compute Module uses this block.
+>>>>>>>>>> i successful tested this with a CM4 (arm 32 bit,
+>>>>>>>>>> multi_v7_lpae_defconfig) with eMMC. Before this series the USB
+>>>>>>>>>> devices
+>>>>>>>>>> (mouse, keyboard) connected to the host interface didn't work.
+>>>>>>>>>> After
+>>>>>>>>>> comparing vendor DTS with mainline i noticed the missing xHCI
+>>>>>>>>>> block [1].
+>>>>>>>>>> Unfortunately i wasn't able to get further information from the
+>>>>>>>>>> public
+>>>>>>>>>> datasheets. I don't know if the VideoCore does some magic
+>>>>>>>>>> tricks on the
+>>>>>>>>>> xHCI or i missed some downstream xHCI changes.
+>>>>>>>>>>
+>>>>>>>>>>> This block is held in reset and needs a bit toggled to get
+>>>>>>>>>>> things
+>>>>>>>>>>> going. Florian, just to confirm, this is our
+>>>>>>>>>>> "brcm,xhci-brcm-v2" block
+>>>>>>>>>>> correct?
+>>>>>>>>>>>
+>>>>>>>>>>> Justin
+>>>>>>>>>> [1]=C2=A0 -
+>>>>>>>>>> https://github.com/raspberrypi/linux/blob/rpi-6.1.y/arch/arm/bo=
+ot/dts/bcm2711-rpi-ds.dtsi#L119
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>> What's the question here? Does the XHCI block present in the
+>>>>>>>>> raspberrypi/linux dtsi file really exist? Yes it does.
+>>>>>>>> since i don't have any documentation about the xHCI block, i
+>>>>>>>> assumed the
+>>>>>>>> compatible generic-xhci is correct. But Justin seems to suggest
+>>>>>>>> that the
+>>>>>>>> xHCI block needs some special treatment and we need a specific
+>>>>>>>> compatible.
+>>>>>>>>
+>>>>>>>> Did i missed some xHCI driver changes?
+>>>>>>>> Does the VC firmware something to the xHCI especially on CM4?
+>>>>>>> The firmware switches the on-board USB pins from DWC-OTG to XHCI i=
+f
+>>>>>>> otg_mode=3D1 is set in config.txt, or if booting over USB MSD.
+>>>>>> is this pinctrl/pinmux available from ARM via 0x7e200000 or a
+>>>>>> different
+>>>>>> IO address?
+>>>>>
+>>>>> It's in a different, undocumented block.
+>>>>>
+>>>>> Phil
+>>>>
+>>>> Well if it works, then maybe I am misunderstanding something here.
+>>>> Maybe its time for me to pick up a CM4 board.
+>>> There is one on my desk that you are welcome to use, or remote into if
+>>> you prefer.
+>>>
+>>> To answer your earlier question, yes this is the same block as the one
+>>> present in 72112 for which we use the "brcm,xhci-brcm-v2" compatible
+>>> string, it would be preferable to have it backed by that compatible
+>>> string in case we happen to support suspend/resume on the Pi 4B one
+>>> day, if nothing else.
+>>>
+>>> I did confirm that after applying Stefan's patches plus changing my
+>>> config.txt to have otg_mode=3D1, USB continues to be fully functional.
+>>> This is the case with using both "generic-xhci" or "brcm,xhci-brcm-v2"
+>>> so with the minor request to update the compatible to
+>>> "brcm,xhci-brcm-v2", this is:
+>>>
+>>> Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
+>>>
+>>> Stefan, I am getting a deadlock on boot if I leave your changes in and
+>>> uncomment dwc_otg=3D1 in config.txt, is there an alias or something th=
+at
+>>> the boot loader should be patching?
+>>
+>> sorry but i'm unable reproduce those deadlocks, neither in arm or arm64=
+,
+>> with eMMC or without eMMC, xhci builtin or module. If i uncomment this
+>> in config.txt, USB host is just disabled.
+>
+> Here is my config.txt FWIW:
+>
+> # A bit too verbose
+> uart_2ndstage=3D1
+> enable_uart=3D1
+> arm_64bit=3D1
+> # Custom kernel images
+> kernel=3Dkernel8-upstream.img
+> #kernel=3Dkernel7l.img
+> #device_tree=3Dbcm2711-rpi-4-b-UPSTREAM.dtb
+> device_tree=3Dbcm2711-rpi-cm4-io-UPSTREAM.dtb
+> force_turbo=3D1
+> # DWC-OTG <=3D> XHCI
+> #otg_mode=3D1
+>
+>>
+>> I'm using the following firmware:
+>>
+>> raspberrypi-firmware soc:firmware: Attached to firmware from
+>> 2023-03-17T10:50:39
+>
+> OK, my CM4 is at 2022-07-25T15:10:17, updating to 2023-10-17T15:39:16
+> does not really show any difference.
+>
+>>
+>> Is this DTS difference a problem?
+>
+> It does not appear so, changing the node unit-name does not affect the
+> results.
+>
+>>
+>> upstream=C2=A0=C2=A0 -> xhci: usb@7e9c0000
+>> downstream -> xhci: xhci@7e9c0000
+>
+> Side question: does the VPU boot ROM or firmware take care of
+> configuring the USB PHY somehow? Should not we also have a Device Tree
+> node for it eventually?
+
+Sorry, as the person with the least knowledge about the hardware i
+cannot answer this question. But we should avoid those nop-PHY because
+they have source of regressions in the past.
+
 
