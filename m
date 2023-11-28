@@ -1,121 +1,191 @@
-Return-Path: <linux-usb+bounces-3408-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3409-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 332257FBBB5
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 14:37:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39AE57FBBC9
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 14:39:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B19A6B21B24
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 13:37:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA32AB21D25
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 13:39:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC3A58AC5;
-	Tue, 28 Nov 2023 13:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3895358AC2;
+	Tue, 28 Nov 2023 13:39:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eWJeF/Oz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F79183;
-	Tue, 28 Nov 2023 05:37:06 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id 9FA90227A87; Tue, 28 Nov 2023 14:37:02 +0100 (CET)
-Date: Tue, 28 Nov 2023 14:37:02 +0100
-From: Christoph Hellwig <hch@lst.de>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Christoph Hellwig <hch@lst.de>,
-	Hamza Mahfooz <someguy@effective-light.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Andrew <travneff@gmail.com>, Ferry Toth <ferry.toth@elsinga.info>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Thorsten Leemhuis <regressions@leemhuis.info>,
-	iommu@lists.linux.dev,
-	Kernel development list <linux-kernel@vger.kernel.org>,
-	USB mailing list <linux-usb@vger.kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>
-Subject: Re: Bug in add_dma_entry()'s debugging code
-Message-ID: <20231128133702.GA9917@lst.de>
-References: <736e584f-7d5f-41aa-a382-2f4881ba747f@rowland.harvard.edu> <20231127160759.GA1668@lst.de> <637d6dff-de56-4815-a15a-1afccde073f0@rowland.harvard.edu>
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B71818F
+	for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 05:38:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701178737; x=1732714737;
+  h=date:from:to:cc:subject:message-id;
+  bh=2DdClgVuX/GfxG/8EsoiB88lCAMcBsrZQsEr+igsEjY=;
+  b=eWJeF/OzlCKsEx8ny4jVQfEymFv+47NhmGd9M6m8xoADeuCfVpXk4qG7
+   n9z7ou211d2pch6kby+l/m3GhgYIsCbm8u1H+LcdYCEMy1LYMIDFCPETE
+   AV92zjTwjBCBexTP688NSlJgAiEwARVGLRpcFVykNmJ8N4B4O8qJygFk2
+   mkDlNZDj8q81fmUtyyPvg/7AvqmBD9OEAIAj0HCZpGi1ALxF8EOwNAlkv
+   3HRURgzDyw4iHhQ1D9zDOs3+izokVXAtxL3dWd04g7J/41FirqCSoh4w8
+   VF6loeio2McNeJIpGRW5lG5EhPpcDbLKszgRqHzNBvPK4kF8XamOWhMGY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="372297701"
+X-IronPort-AV: E=Sophos;i="6.04,233,1695711600"; 
+   d="scan'208";a="372297701"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 05:38:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,233,1695711600"; 
+   d="scan'208";a="10119249"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 28 Nov 2023 05:38:56 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r7yIf-0007c4-3B;
+	Tue, 28 Nov 2023 13:38:53 +0000
+Date: Tue, 28 Nov 2023 21:38:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:fixes] BUILD SUCCESS
+ ac43c9122e4287bbdbe91e980fc2528acb72cc1e
+Message-ID: <202311282101.kWW3GdOM-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <637d6dff-de56-4815-a15a-1afccde073f0@rowland.harvard.edu>
-User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Mon, Nov 27, 2023 at 11:51:21AM -0500, Alan Stern wrote:
-> The buffers in the bug report were allocated by kmalloc().  Doesn't 
-> kmalloc() guarantee that on architectures with non-cache-coherent DMA, 
-> allocations will be aligned on cache-line boundaries (or larger)?  Isn't 
-> this what ARCH_DMA_MINALIGN and ARCH_KMALLOC_MINALIGN are supposed to 
-> take care of in include/linux/slab.h?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git fixes
+branch HEAD: ac43c9122e4287bbdbe91e980fc2528acb72cc1e  thunderbolt: Fix memory leak in margining_port_remove()
 
-Oh.  Yes, the variable alignment from kmalloc make things complicated.
+elapsed time: 1487m
 
-> 	Architectures must ensure that kmalloc'ed buffer is
-> 	DMA-safe. Drivers and subsystems depend on it. If an architecture
-> 	isn't fully DMA-coherent (i.e. hardware doesn't ensure that data in
-> 	the CPU cache is identical to data in main memory),
-> 	ARCH_DMA_MINALIGN must be set so that the memory allocator
-> 	makes sure that kmalloc'ed buffer doesn't share a cache line with
-> 	the others. See arch/arm/include/asm/cache.h as an example.
-> 
-> It says nothing about avoiding more than one DMA operation at a time to 
-> prevent overlap.  Is the documentation wrong?
+configs tested: 114
+configs skipped: 2
 
-The documentation is a bit lacking unfortunately.  Again, assuming
-you actually have non-coherent mappings you'd easily break the fragile
-cache line ownership if you did.  That doesn't apply to x86 as-is, but
-we really try to keep drivers portable.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> >  This might not have an
-> > effect on the particular plaform you are currently running on, but it
-> > is still wrong.
-> 
-> Who decides what is right and what is wrong in this area?  Clearly you 
-> have a different opinion from David S. Miller, Richard Henderson, and 
-> Jakub Jelinek (the authors of that documentation file).
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20231127   gcc  
+i386         buildonly-randconfig-001-20231128   clang
+i386         buildonly-randconfig-002-20231127   gcc  
+i386         buildonly-randconfig-002-20231128   clang
+i386         buildonly-randconfig-003-20231127   gcc  
+i386         buildonly-randconfig-003-20231128   clang
+i386         buildonly-randconfig-004-20231127   gcc  
+i386         buildonly-randconfig-004-20231128   clang
+i386         buildonly-randconfig-005-20231127   gcc  
+i386         buildonly-randconfig-005-20231128   clang
+i386         buildonly-randconfig-006-20231127   gcc  
+i386         buildonly-randconfig-006-20231128   clang
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231127   gcc  
+i386                  randconfig-001-20231128   clang
+i386                  randconfig-002-20231128   clang
+i386                  randconfig-003-20231128   clang
+i386                  randconfig-004-20231128   clang
+i386                  randconfig-005-20231128   clang
+i386                  randconfig-006-20231128   clang
+i386                  randconfig-011-20231128   gcc  
+i386                  randconfig-012-20231128   gcc  
+i386                  randconfig-013-20231128   gcc  
+i386                  randconfig-014-20231128   gcc  
+i386                  randconfig-015-20231128   gcc  
+i386                  randconfig-016-20231128   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   clang
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
 
-I don't think this about anyone's opinion. It's a fundamental propery of
-how to manage caches in the face of non-coherent DMA.
-
-> 
-> >  Note that there have been various mumblings about
-> > using nosnoop dma on x86, in which case you'll have the issue there
-> > as well.
-> 
-> Unless the people who implement nosnoop DMA also modify kmalloc() or 
-> ARCH_DMA_MINALIGN.
-
-Or don't do it on kmalloc buffers.
-
-> I guess the real question boils down to where the responsiblity should 
-> lie.  Should kmalloc() guarantee that the memory regions it provides 
-> will always be suitable for DMA, with no overlap issues?  Or should all 
-> the innumerable users of kmalloc() be responsible for jumping through 
-> hoops to request arch-specific minimum alignment for their DMA buffers?
-
-I'd actually go one step back:
-
- 1) for not cache coherent DMA you can't do overlapping operations inside
-    a cache line
- 2) dma-debug is intended to find DMA API misuses, even if they don't
-    have bad effects on your particular system
- 3) the fact that the kmalloc implementation returns differently aligned
-    memory depending on the platform breaks how dma-debug works currently
-
-The logical confcusion from that would be that IFF dma-debug is enabled on
-any platform we need to set ARCH_DMA_MINALIGN to the cache line size.
-
-BUT:  we're actually reduzing our dependency on ARCH_DMA_MINALIGN by
-moving to bounce buffering unaligned memory for non-coherent
-architectures, which makes this even more complicated.  Right now I
-don't have a good idea how to actually deal with having the cachline
-sanity checks with that, but I'm Ccing some of the usual suspects if
-they have a better idea.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
