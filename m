@@ -1,62 +1,62 @@
-Return-Path: <linux-usb+bounces-3418-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3419-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE7A57FBDBE
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 16:10:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A173F7FBDC6
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 16:11:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFB221C20E6B
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 15:10:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D25D31C20A55
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 15:11:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CD095CD1A;
-	Tue, 28 Nov 2023 15:10:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC3E65CD20;
+	Tue, 28 Nov 2023 15:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ktZ2NWjH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q1USgUUx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE49D49;
-	Tue, 28 Nov 2023 07:10:05 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6c4eb5fda3cso5541142b3a.2;
-        Tue, 28 Nov 2023 07:10:05 -0800 (PST)
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA1B10E6;
+	Tue, 28 Nov 2023 07:11:08 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6cbda959062so4887307b3a.1;
+        Tue, 28 Nov 2023 07:11:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701184204; x=1701789004; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701184267; x=1701789067; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=9gTO/lsmMT02/mKjUt6mIt9M7rachNh8Snu1bmEsL/o=;
-        b=ktZ2NWjHVubPL/GFgDVS7MUNDpvhhe6bg+q4dOl6O5PwY2oZwCvaZRfyXb1OW9LBCp
-         jOq9iMHPGSZi1jJqmcJv0lDudSzql4fqKUUTr78LoE4UaY81tuWbUQkZFFSZVA5jlPxC
-         15qXD/xB/xdqsLQwGH2TSsf95baw5gysG5aETUKu9mzlSUlJV4NWzO0DFlw/F2EEEC3j
-         /G1CQFHNrbypvmWyjvvb6k0CEusdEwcl7cfiU/OIgNC4fprMoNv1A1Cgt8a4KBu6lH9+
-         ma5/VFc42qzlwYNROU5CwO+oeZuDS+AuAdt37eWiNKgnSIfImaKCAGbzKCL1ehJKLIEu
-         XfXw==
+        bh=O/wZZsUIDaRDxiRotGIrauQpDcJ1B8wta7UrRDoHoxA=;
+        b=Q1USgUUx+V67zkeDZhlUVV54IvbmUY7hiJu0QuiHATXzZW8E9fsgjdK8MjJ8hx/wJ3
+         psTGT41vRZ2TUuDGkUSR4xhJBHeBGfbYBGeTT2BqLVDRBwJn3Pdc24HieMRvjM1jEPpA
+         O0JdU9z9+rt6bRXqAEU524j5pJA3wca0+EYJQkPkGE56llw6nfPDidEIz86OyN6KDwS3
+         Pt/t3TGF4Drk5MzWgTcvV6PmkJi/egWfd3sEy51RYpQf1gqET+uz3FIPKZ05AdmKuvKs
+         xXpXgBNmx/OU++CbdrSaIb0Cl+mUfj3C9XK8vl/i5b9YTlBA2iCviWRXV7c8wAB5xABN
+         RDFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701184204; x=1701789004;
+        d=1e100.net; s=20230601; t=1701184267; x=1701789067;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9gTO/lsmMT02/mKjUt6mIt9M7rachNh8Snu1bmEsL/o=;
-        b=GSt+Lw0K+7qe48b7BB2Jh3nsemFsNj+eCHw5Tnet8M2eS3IxpUoqQWiW+AeWfiLLyC
-         Guo/qWSYM+J2NLn50SS8QsfdwvOPfuk2TwV7l6l1daIc1PSgad0P6A34F+7u+JiTw2Ro
-         EwkhPBEwNWAqCxIK0bzPBqflw2WFPDeqQ3Xa9kxqhGi4nHvC/G88wPJlkpU3d6THm5uT
-         XGZrs1CdpH5aorcVfJaZgmqE3Z9+5958pYHrd+qws/LEbbM0t6f4eOm7Lho/gFk7FdB4
-         Iusb2dB6SYBXXfaAf5gQ769SW2Cdv7U/jE2aQuOm/K8FODgJbbY7plHa4Mr3C7k5uCsy
-         8EBw==
-X-Gm-Message-State: AOJu0YyHkx0pYImYUAn7kz8cCNYJ0RRgpPG8rXwPbTJp6g8lurJcIlTt
-	6fiDr0MUyoFElIcK4R+o6jGShwmTSvo=
-X-Google-Smtp-Source: AGHT+IGWzaDUea0ajlkrSbSSmCnp+vcrqJ2VqUnk/5in6A7md7kQoDU66QREew1bm3H5TomHThX6dw==
-X-Received: by 2002:a05:6a20:3c93:b0:18c:55b4:df2d with SMTP id b19-20020a056a203c9300b0018c55b4df2dmr13052723pzj.14.1701184204459;
-        Tue, 28 Nov 2023 07:10:04 -0800 (PST)
+        bh=O/wZZsUIDaRDxiRotGIrauQpDcJ1B8wta7UrRDoHoxA=;
+        b=vQkH/sAebW/lTDASPRTASG48rbrF//8rIljqn1aTzo1hNemQEoFEeOZCquhlcB8oEf
+         uJpvXyR/i75St6WZjrntmaqcTCb32onrYMgNk4PFy/PScq2iqbLg0MHUX9fV6mtK203l
+         vaIlrI4qoXkN1VQGm8e85yLs5p22BWtOsX7w0ooI8X7uFlmFlkyCRqIvcpKkzlXAtIMC
+         Wk75kcJ7PdQLBeqyyiY4uPDUUF1RuP8sDx67o8nyfuf6ts/y3v3b7piKreMP9jgFvC6B
+         JiT3t3kWoaysapu5vj0AqnKwbE3KYm/NgdJ46uK9oWGF50lIwIVgKqWDA5/l+YcGtaJT
+         e0FA==
+X-Gm-Message-State: AOJu0YyE36kJ18QC1Wdeo5e2LG5OxbPKZpsPc7dnopJ7vXKPDSwuQOSe
+	0j4+j1RtEAAEQvQQbGnxNZk=
+X-Google-Smtp-Source: AGHT+IHpKcgc68RoDJtqlWaxAU3zEngXwIbGmWP9LWGUWMv+viF9007hlDgXDwAPe9lj+WTw+eLfdg==
+X-Received: by 2002:a05:6a21:3116:b0:187:8bd4:e1b6 with SMTP id yz22-20020a056a21311600b001878bd4e1b6mr15452488pzb.31.1701184267591;
+        Tue, 28 Nov 2023 07:11:07 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bm6-20020a656e86000000b005c1ae0b5440sm8387318pgb.74.2023.11.28.07.10.03
+        by smtp.gmail.com with ESMTPSA id bm6-20020a656e86000000b005c1ae0b5440sm8387318pgb.74.2023.11.28.07.11.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Nov 2023 07:10:04 -0800 (PST)
+        Tue, 28 Nov 2023 07:11:07 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f1bdaeef-2a41-477e-b719-c469618b41bf@roeck-us.net>
-Date: Tue, 28 Nov 2023 07:10:02 -0800
+Message-ID: <cec8454e-4eb9-4b98-975f-100b5503b073@roeck-us.net>
+Date: Tue, 28 Nov 2023 07:11:06 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,14 +64,14 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] usb: typec: tcpm: add tcpm_port_error_recovery
- symbol
+Subject: Re: [PATCH v1 2/2] usb: typec: tcpci: add vconn over current fault
+ handling to maxim_core
 Content-Language: en-US
 To: RD Babiera <rdbabiera@google.com>, heikki.krogerus@linux.intel.com,
  gregkh@linuxfoundation.org
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, badhri@google.com
 References: <20231121203845.170234-4-rdbabiera@google.com>
- <20231121203845.170234-5-rdbabiera@google.com>
+ <20231121203845.170234-6-rdbabiera@google.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -116,18 +116,19 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231121203845.170234-5-rdbabiera@google.com>
+In-Reply-To: <20231121203845.170234-6-rdbabiera@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 11/21/23 12:38, RD Babiera wrote:
-> Add tcpm_port_error_recovery symbol and corresponding event that runs in
-> tcpm_pd_event handler to set the port to the ERROR_RECOVERY state. tcpci
-> drivers can use the symbol to reset the port when tcpc faults affect port
-> functionality.
+> Add TCPC_FAULT_STATUS_VCONN_OC constant and corresponding mask definition.
+> Maxim TCPC is capable of detecting VConn over current faults, so add
+> fault to alert mask. When a Vconn over current fault is triggered, put the
+> port in an error recovery state via tcpm_port_error_recovery.
 > 
 > Signed-off-by: RD Babiera <rdbabiera@google.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 
 
