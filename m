@@ -1,106 +1,133 @@
-Return-Path: <linux-usb+bounces-3417-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3418-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A86567FBD97
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 16:01:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE7A57FBDBE
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 16:10:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6369D28265D
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 15:01:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFB221C20E6B
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 15:10:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F54B5C08D;
-	Tue, 28 Nov 2023 15:01:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CD095CD1A;
+	Tue, 28 Nov 2023 15:10:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YuqoL6rA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ktZ2NWjH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0011B5
-	for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 07:01:46 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-41cdc669c5eso185041cf.1
-        for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 07:01:46 -0800 (PST)
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE49D49;
+	Tue, 28 Nov 2023 07:10:05 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6c4eb5fda3cso5541142b3a.2;
+        Tue, 28 Nov 2023 07:10:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701183705; x=1701788505; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=51z15QLCTvUCxMQGRCe0dIJ/n54kd0sYe/k+835mZ+Q=;
-        b=YuqoL6rA3uuOkl8O2VFudG+nU+jD/4CNGD63jsk6OSrXUnZbiDD/qfuEr732ynH/Na
-         tohYIOH9fw4DAGUrCc0aNuioZH14ytEzkR+ie8xVBxg5DEJMqANaLVCLYn9RDFa0JX2A
-         dcJNpJ7N5xozOOzOvHwRvfVmhEWb0NMqXOgW3kEGFtVjGPS1zr0aB/l97hlhmXbElnmp
-         5Z2YwOjvh5oJ2ABRxNhMCa9Pku8xJeGNfSSCd6tCsMDsefxyzAnllEO2jd3ONVWIIJOo
-         ilpxXWJ+zUdN/HqK3HDwrpHTqszE0ClevArOauGwQ2fnPCrCfiRiXv3Xh4v+MOlfnh5S
-         GWHA==
+        d=gmail.com; s=20230601; t=1701184204; x=1701789004; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=9gTO/lsmMT02/mKjUt6mIt9M7rachNh8Snu1bmEsL/o=;
+        b=ktZ2NWjHVubPL/GFgDVS7MUNDpvhhe6bg+q4dOl6O5PwY2oZwCvaZRfyXb1OW9LBCp
+         jOq9iMHPGSZi1jJqmcJv0lDudSzql4fqKUUTr78LoE4UaY81tuWbUQkZFFSZVA5jlPxC
+         15qXD/xB/xdqsLQwGH2TSsf95baw5gysG5aETUKu9mzlSUlJV4NWzO0DFlw/F2EEEC3j
+         /G1CQFHNrbypvmWyjvvb6k0CEusdEwcl7cfiU/OIgNC4fprMoNv1A1Cgt8a4KBu6lH9+
+         ma5/VFc42qzlwYNROU5CwO+oeZuDS+AuAdt37eWiNKgnSIfImaKCAGbzKCL1ehJKLIEu
+         XfXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701183705; x=1701788505;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1701184204; x=1701789004;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=51z15QLCTvUCxMQGRCe0dIJ/n54kd0sYe/k+835mZ+Q=;
-        b=IYL6148bifUzayfFiZ3iedcg32KIpkpkfenZiDJEYGePD6hIcnb/MPjnWPmUG0s6gT
-         gl5k1PAJH2VPuqhvQN/TKrRtQBj1KA208fInn7jwLs80Mf3FlVlx7bhElkokIhgAHQ3o
-         jQlAObj2s8lXK3FWT9O1TVQzyiyxmRFJVUNggfq9xBkenS7XWkNMVxCHskjZ8wehG5jo
-         EK0+uXmrRLwa82bAibUUOFXoQcPyGXK9W7dqMx9VAoHaFv92kY0ANn0kQ7Y9lBwm7GDv
-         Xmm1cZOpMuZ4J48AoR8d8AbE4N1tiTIXLwsKaFWa7S8pYA8f4d/ZnUNwmxY3kF1/bjva
-         sTfA==
-X-Gm-Message-State: AOJu0Yxenjpjumy7UWN0W9xzQGSQAWhGgbyKfJLeIGq5ZeJ/rode4zUi
-	4hrg6OuXfjitTHgzz0EEVUvFzoMNcrTG/+VKX0cROw==
-X-Google-Smtp-Source: AGHT+IEnnqJc8lfN5xFbLFc8UvzSuJ8lofgbBb9+EyaycetBPAnEURXmIxIBlynaUktSHJ8NHBsB7/YPd8aGr7GZzso=
-X-Received: by 2002:ac8:59ca:0:b0:420:c750:c244 with SMTP id
- f10-20020ac859ca000000b00420c750c244mr1118141qtf.12.1701183705214; Tue, 28
- Nov 2023 07:01:45 -0800 (PST)
+        bh=9gTO/lsmMT02/mKjUt6mIt9M7rachNh8Snu1bmEsL/o=;
+        b=GSt+Lw0K+7qe48b7BB2Jh3nsemFsNj+eCHw5Tnet8M2eS3IxpUoqQWiW+AeWfiLLyC
+         Guo/qWSYM+J2NLn50SS8QsfdwvOPfuk2TwV7l6l1daIc1PSgad0P6A34F+7u+JiTw2Ro
+         EwkhPBEwNWAqCxIK0bzPBqflw2WFPDeqQ3Xa9kxqhGi4nHvC/G88wPJlkpU3d6THm5uT
+         XGZrs1CdpH5aorcVfJaZgmqE3Z9+5958pYHrd+qws/LEbbM0t6f4eOm7Lho/gFk7FdB4
+         Iusb2dB6SYBXXfaAf5gQ769SW2Cdv7U/jE2aQuOm/K8FODgJbbY7plHa4Mr3C7k5uCsy
+         8EBw==
+X-Gm-Message-State: AOJu0YyHkx0pYImYUAn7kz8cCNYJ0RRgpPG8rXwPbTJp6g8lurJcIlTt
+	6fiDr0MUyoFElIcK4R+o6jGShwmTSvo=
+X-Google-Smtp-Source: AGHT+IGWzaDUea0ajlkrSbSSmCnp+vcrqJ2VqUnk/5in6A7md7kQoDU66QREew1bm3H5TomHThX6dw==
+X-Received: by 2002:a05:6a20:3c93:b0:18c:55b4:df2d with SMTP id b19-20020a056a203c9300b0018c55b4df2dmr13052723pzj.14.1701184204459;
+        Tue, 28 Nov 2023 07:10:04 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bm6-20020a656e86000000b005c1ae0b5440sm8387318pgb.74.2023.11.28.07.10.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Nov 2023 07:10:04 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f1bdaeef-2a41-477e-b719-c469618b41bf@roeck-us.net>
+Date: Tue, 28 Nov 2023 07:10:02 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231117072131.2886406-1-khtsai@google.com> <a4a129a3-e271-acbb-949c-534a8e1627ee@linux.intel.com>
- <CAKzKK0rnx+tSFAj6N-U_vcAZ_5P=Hx_Kb97NFkdPMHs8dR3Ukw@mail.gmail.com>
- <a970f296-da67-9a80-ab2f-a94fd16e0fd9@linux.intel.com> <51b8fc3d-25ef-1ab3-d744-8d851a133828@linux.intel.com>
-In-Reply-To: <51b8fc3d-25ef-1ab3-d744-8d851a133828@linux.intel.com>
-From: Kuen-Han Tsai <khtsai@google.com>
-Date: Tue, 28 Nov 2023 23:01:17 +0800
-Message-ID: <CAKzKK0r_a_8uWTxjupDwwHH9hyCUd_NNTojL=209FiEzrcK9fw@mail.gmail.com>
-Subject: Re: [PATCH] xhci: fix null pointer deref for xhci_urb_enqueue
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	alan Stern <stern@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/2] usb: typec: tcpm: add tcpm_port_error_recovery
+ symbol
+Content-Language: en-US
+To: RD Babiera <rdbabiera@google.com>, heikki.krogerus@linux.intel.com,
+ gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, badhri@google.com
+References: <20231121203845.170234-4-rdbabiera@google.com>
+ <20231121203845.170234-5-rdbabiera@google.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20231121203845.170234-5-rdbabiera@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you so much for fixing the issue, Mathias!
+On 11/21/23 12:38, RD Babiera wrote:
+> Add tcpm_port_error_recovery symbol and corresponding event that runs in
+> tcpm_pd_event handler to set the port to the ERROR_RECOVERY state. tcpci
+> drivers can use the symbol to reset the port when tcpc faults affect port
+> functionality.
+> 
+> Signed-off-by: RD Babiera <rdbabiera@google.com>
 
-> I moved the max packet checks away from xhci_urb_enqueue() and fixed up the locking.
-> I can't trigger the original issue, but I tested it by setting incorrect initial max packet
-> size values.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-I added a 3-seconds delay within xhci_check_maxpacket(). When I saw
-the max packet size was being checked, I removed the USB device to
-trigger the race problem.
-
-[  172.392813][ T1960] [khtsai] xhci_check_maxpacket, before,
-slot_id=2, devs[slot_id]=000000003cb76fec
-[  174.290601][   T20] usb 2-1: USB disconnect, device number 2
-[  174.290608][   T20] usb 2-1.2: USB disconnect, device number 3
-[  174.297180][   T20] [khtsai] xhci_free_dev, ret=1
-[  174.305010][  T133] usb usb3: USB disconnect, device number 1
-[  174.316346][   T20] [khtsai] xhci_free_dev, ret=1
-[  175.458962][ T1960] [khtsai] xhci_check_maxpacket, after,
-slot_id=2, devs[slot_id]=0000000000000000
-[  175.460835][ T1960] Unable to handle kernel NULL pointer
-dereference at virtual address 0000000000000010
-
-> If you have the chance to test this with your setup I'd appreciate it.
-
-Sure, I will definitely help verify it. However, I believe the race
-problem won't happen as your patch already removes max packet checks
-from xhci_urb_enqueue() and also protects sections using the
-xhci->devs[slot_id] virtual device.
-
-> patches found here:
-> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_urb_enqueue_locking
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=fix_urb_enqueue_locking
-
-I'll add them to this thread as well
 
