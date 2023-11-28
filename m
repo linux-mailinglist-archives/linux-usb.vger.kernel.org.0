@@ -1,37 +1,37 @@
-Return-Path: <linux-usb+bounces-3444-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3445-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B97D7FC798
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 22:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 395F17FC7AF
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 22:11:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2BCEEB23C81
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 21:11:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BBF65B25F66
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 21:11:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3CF044C87;
-	Tue, 28 Nov 2023 21:09:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFE275C8F3;
+	Tue, 28 Nov 2023 21:10:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AJFm85h9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z+erl7Jk"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B5542ABF;
-	Tue, 28 Nov 2023 21:09:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7563C433A9;
-	Tue, 28 Nov 2023 21:09:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3492041C9D;
+	Tue, 28 Nov 2023 21:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E02C6C43391;
+	Tue, 28 Nov 2023 21:10:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701205798;
-	bh=Lmekx3QN79MlWykgZQVrFzX+VnH2qflN9/VVt0W0TWE=;
+	s=k20201202; t=1701205817;
+	bh=dZ5xHxNxz4T466zwerq6F8F6Mr+1EUEQePt9zVKCDHU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AJFm85h9VKcfAhfIO4+TDxiXGX/qCMW+ty688HwCMyAGcn9D/kSfp8RIEIzODPSnk
-	 9h9Z1pmpcfhTQc1dpQZPqClPzWXrTTOt636cPhlh62psJ1hAi2FDAA1ZZvScdoH+5V
-	 /ckYcXdbNeHkkywgYHBA2FBo2ivSr4HDrRm+ZutKyQ8IaZKteO5QRzlb6R08uDa0P/
-	 OJWXJwRWLoRueuD24sFCVtijRCD4o4lXJN4ue8NyNbEPKc9MFBU1vQeDAtmo3HGXUO
-	 K2fgM+dO12xj7X/3YUl132SMWLPfSsp5HSkTEfh5Wp7sdKuVzFzqvdzT8rlwwZ8IDy
-	 YosRJs47i43Qg==
+	b=Z+erl7JkqBn3N5QPjfHiilnKdvQUSWH+5kjeGoyH37fRW36ZBl6J8wxYI3scJ1DxG
+	 H1UpWlkEtBPpf8o5IaDF4wFDYocuIG0Ku/1wWcd3HWV6I6bRAbP6RDCpJ0+bL7D6Zl
+	 ZhCLfuKXkhuA/FCsmnPfHm5m+d0jdIc2oSTd4vaxrhog0nlpIodnjZ1SsTzp0zEnKk
+	 3yZVWC5Ayz5f7fdxoWGOZX+Anbsr5LrNqxN3UWrIo6JG7izWOVJ6B6080lCCUrIFTK
+	 dbl7hO41khzd4PwkA/BQ69w3iOLivZ1oM5YJuq28J91lYh0iecQ5GHhEi+IT5S/eZ4
+	 dY97TswyyrPWw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -44,12 +44,12 @@ Cc: Lech Perczak <lech.perczak@gmail.com>,
 	kuba@kernel.org,
 	netdev@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 11/11] net: usb: qmi_wwan: claim interface 4 for ZTE MF290
-Date: Tue, 28 Nov 2023 16:09:35 -0500
-Message-ID: <20231128210941.877094-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 10/10] net: usb: qmi_wwan: claim interface 4 for ZTE MF290
+Date: Tue, 28 Nov 2023 16:09:59 -0500
+Message-ID: <20231128211001.877333-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231128210941.877094-1-sashal@kernel.org>
-References: <20231128210941.877094-1-sashal@kernel.org>
+In-Reply-To: <20231128211001.877333-1-sashal@kernel.org>
+References: <20231128211001.877333-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,7 +59,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.262
+X-stable-base: Linux 4.19.300
 Content-Transfer-Encoding: 8bit
 
 From: Lech Perczak <lech.perczak@gmail.com>
@@ -108,10 +108,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index ebc1f01d5ea27..c2bd4abce6de5 100644
+index aefa57e726954..f787b9a4f9a9e 100644
 --- a/drivers/net/usb/qmi_wwan.c
 +++ b/drivers/net/usb/qmi_wwan.c
-@@ -1247,6 +1247,7 @@ static const struct usb_device_id products[] = {
+@@ -1250,6 +1250,7 @@ static const struct usb_device_id products[] = {
  	{QMI_FIXED_INTF(0x19d2, 0x0168, 4)},
  	{QMI_FIXED_INTF(0x19d2, 0x0176, 3)},
  	{QMI_FIXED_INTF(0x19d2, 0x0178, 3)},
