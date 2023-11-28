@@ -1,129 +1,93 @@
-Return-Path: <linux-usb+bounces-3432-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3433-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ABC87FC478
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 20:52:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88B457FC578
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 21:32:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2243B216D5
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 19:52:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44FF1282E6B
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 20:32:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 121D040BE4;
-	Tue, 28 Nov 2023 19:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECD785ABA5;
+	Tue, 28 Nov 2023 20:32:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BWFbCeo0"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SiwLo2O0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92641988;
-	Tue, 28 Nov 2023 11:52:22 -0800 (PST)
-Received: from notapiano (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id EC19B6602F2B;
-	Tue, 28 Nov 2023 19:52:16 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1701201140;
-	bh=lTlr8qen9KRZ2EZ5Mj/C5s4YyiYXfeKPKLVSZIrbTaI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BWFbCeo0pR89kb8EP/q48zvjI3cmzqzkOP5Ssg6KCYoxmkYsWhGw7YnYwnK0Ydqx9
-	 shS65Zdg/bf6ykTyCPIAoN+VgUo6f2E5W0QcfQUeciCr3rka0YrpUzn+HSv/Bj7Zct
-	 H7Infuv8i02YACPgJR2RW94Pq1aXDa0SK6yC1DMGOERLw6n3KijfKvg4e7UliZB2FY
-	 gALs+B7NKhpeP+t7oyOtEriPW0ZcVjhpIUPqzuejbdo7CDI5XAGpOkkGmtxmvMbKR9
-	 Y183UDfOcNi0JPgzAIknumKFCAi/HtwqTGlS66GpmKmxmcaHod/LOIaopU07q5hAKg
-	 UIW+brHODLCag==
-Date: Tue, 28 Nov 2023 14:52:12 -0500
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: "Bird, Tim" <Tim.Bird@sony.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	"kernelci@lists.linux.dev" <kernelci@lists.linux.dev>,
-	David Gow <davidgow@google.com>,
-	Guenter Roeck <groeck@chromium.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"kernel@collabora.com" <kernel@collabora.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-	Doug Anderson <dianders@chromium.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 2/2] kselftest: devices: Add sample board file for
- google,spherion
-Message-ID: <3f22eea4-121d-4d5b-b7af-71961a2ab5e9@notapiano>
-References: <20231127233558.868365-1-nfraprado@collabora.com>
- <20231127233558.868365-3-nfraprado@collabora.com>
- <BN8PR13MB27384F089C7DAAF06DF9DDECFDBCA@BN8PR13MB2738.namprd13.prod.outlook.com>
- <ee913bc5-c752-4da7-a140-7492f429c2cb@notapiano>
- <BN8PR13MB273808C3B81BABBAADACC6B6FDBCA@BN8PR13MB2738.namprd13.prod.outlook.com>
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A9E19A7
+	for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 12:31:59 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-7b37a2e6314so5397139f.1
+        for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 12:31:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1701203519; x=1701808319; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8XKy/giFFBzRIyzsC6NU3QO7zkRURqbCQ/tW1YwEn6Y=;
+        b=SiwLo2O0OhSmKDYpHILB9ohM2R3qBHSzWMgVUb7M2dWwniXNSGgCcmuJcoGePpAOeG
+         S0fFFAjutdIyjJMXXNv6nA+njDrO2oOZpZ2AeUu1tFLc7QqUfMBrMDW58fbvePNvlnnC
+         jXJwF/SOE3oeGUX/e21onWUce0Q/bin7331Ko=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701203519; x=1701808319;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8XKy/giFFBzRIyzsC6NU3QO7zkRURqbCQ/tW1YwEn6Y=;
+        b=kG5HPVJkyagY7NFQxnYmg89xTWu/fuq/ZYet2qrfXso5d6yMK2LDir6urP0H53xyfm
+         A+R2X/vaynWCdTG0djDTeChziyWIDuBQnGVQdP4zZzW1akFnqtb4Bx5KiSiBpHclDn24
+         gB3xoBlpCnxqROCSwXoIOc4B+cD/7R5XWeIovx5DWfAb8dC4m+6pdWeNtU7uJQY4a/s6
+         /1mQgwXY4Qh29y4PPVN9FjrxHZDJDG+hBk8OYBySPqmEsX4PA+G/f5Hy1igpyPiDBgA8
+         OnK8Z8sj0f+r4X5gmNi/WpQudz4dQ76IKQW620jy3gWqWxam+4kKP6RhxxvOjBm7CeiT
+         K01Q==
+X-Gm-Message-State: AOJu0YxRttyYmB9CMlAkU9SBqRo4mJYN9MOe1t/Kul2cgwpRhwql6zjg
+	LMM2235FOLN64LpNsN5Y47ZsyA==
+X-Google-Smtp-Source: AGHT+IFna264rM5zePA54oe3gS4wTFePNviMXEcNhpU5WbPBZPcIwYZstfSmI2NMsYQlR27ceiOn8Q==
+X-Received: by 2002:a05:6602:2e0f:b0:792:6068:dcc8 with SMTP id o15-20020a0566022e0f00b007926068dcc8mr20561718iow.2.1701203519002;
+        Tue, 28 Nov 2023 12:31:59 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id q1-20020a056638238100b004596858b397sm3103355jat.7.2023.11.28.12.31.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Nov 2023 12:31:58 -0800 (PST)
+Message-ID: <c9c09012-9df8-406b-a299-1310d9c626b2@linuxfoundation.org>
+Date: Tue, 28 Nov 2023 13:31:58 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <BN8PR13MB273808C3B81BABBAADACC6B6FDBCA@BN8PR13MB2738.namprd13.prod.outlook.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usbip: Don't submit special requests twice
+Content-Language: en-US
+To: Simon Holesch <simon@holesch.de>,
+ Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20231128000955.119735-1-simon@holesch.de>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20231128000955.119735-1-simon@holesch.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 28, 2023 at 05:54:57PM +0000, Bird, Tim wrote:
-> > -----Original Message-----
-> > From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > On Tue, Nov 28, 2023 at 12:10:46AM +0000, Bird, Tim wrote:
-> > > > -----Original Message-----
-> > > > From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > > > Add a sample board file describing the file's format and with the list
-> > > > of devices expected to be probed on the google,spherion machine as an
-> > > > example.
-> > > >
-> > > > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > > > ---
-> > > >
-> > > > (no changes since v1)
-> > > >
-> > > >  .../testing/selftests/devices/boards/google,spherion | 12 ++++++++++++
-> > >
-> > > Overall, while trying to maintain a comprehensive set of board definitions
-> > > seems hard, I think having a few as examples is useful.
-> > >
-> > > I'm not a big fan of naming these with a comma in the name.  Is there a reason
-> > > you are not using dash or underscore?
-> > 
-> > I'm using the name that we get from the DT compatible, so the right file can be
-> > automatically selected by the test.
-> > 
-> > >
-> > > Do you anticipate a convention of  <producer> <board-or-product-name> tuples for
-> > > the filename?
-> > 
-> > I'd just stick to the DT compatible as it's the simplest option and should work
-> > just the same, assuming I understood correctly what you mean.
+On 11/27/23 17:08, Simon Holesch wrote:
+> Skip submitting URBs, when identical requests were already sent in
+> tweak_special_requests(). Instead call the completion handler directly
+> to return the result of the URB.
 > 
-> OK - I see that was mentioned in the original submission.  I should
-> have read more closely.
-> 
-> It makes sense.  Maybe it's worth mentioning in the commit message that the
-> filename is the compatible string from the DT for this board?
-> 
-> This convention, IMHO, should be documented somewhere.
 
-I have that as part of the comment at the top of the test script in patch 1:
+Sounds reasonable. What happens when a tweak_* routine does nothing
+or returns an error.
 
-# The per-platform list of devices to be tested is stored inside the boards/
-# directory and chosen based on compatible.
+tweak_reset_device_cmd() returns 0 when it can't get the device lock
+and after calling usb_reset_device().
 
-And also in the commit message of patch 1.
+tweak_set_interface_cmd() and tweak_clear_halt_cmd() return the value
+the usb_* routine they call. Don't these cases be handled as well?
 
-But I guess this sample file is the most likely one to be read when someone
-writes a new board file, so I'll document it here too for next version.
-
-Thanks,
-Nícolas
+thanks,
+-- Shuah
 
