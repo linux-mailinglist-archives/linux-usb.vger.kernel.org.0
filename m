@@ -1,59 +1,45 @@
-Return-Path: <linux-usb+bounces-3394-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3395-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F35A7FB36A
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 08:59:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97EE37FB370
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 09:00:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AE8C281F18
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 07:59:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04921B20FE6
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 08:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EE8014A91;
-	Tue, 28 Nov 2023 07:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4410A13AF5;
+	Tue, 28 Nov 2023 08:00:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e/wc1yI3"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ae2am8lm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC3210A;
-	Mon, 27 Nov 2023 23:59:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701158364; x=1732694364;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eH8K0Rq16QUjtscu5lkGKQW6/VMHMllPbrirgbRjrcQ=;
-  b=e/wc1yI3NoRwywNF6JsynvxzgN0vyGBHzNqZYjlP0wbA5iTJjO/4Lg69
-   HZTf0C7fscIh56Jx5tN2m0+ssIObaJExv6M8y2zY/9Ny6x64SEXmnTQHT
-   yX00eZJlfww5T93WO2FvVUhiaFUQOQwj9/a92T0IYy2Mld5krB4P96Ubx
-   0nc34o/odqAUnhJY9evAxewcY2S+HpQphy0ulc5YQ3krh/mFrpeJRJ/z6
-   RifJIeVq14HnQBSbTAxLTm1bT94KeSNKfKLAnOVO12+SmMInlvJC2KXGh
-   eyRumbv4lCvpkWyosLd23UC5LPbzV7AoZoCaTuH7CayO7Hl3V6qBZOWwM
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="391745240"
-X-IronPort-AV: E=Sophos;i="6.04,233,1695711600"; 
-   d="scan'208";a="391745240"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 23:59:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="768441744"
-X-IronPort-AV: E=Sophos;i="6.04,233,1695711600"; 
-   d="scan'208";a="768441744"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga002.jf.intel.com with SMTP; 27 Nov 2023 23:59:21 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 28 Nov 2023 09:59:20 +0200
-Date: Tue, 28 Nov 2023 09:59:20 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: RD Babiera <rdbabiera@google.com>
-Cc: linux@roeck-us.net, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	badhri@google.com
-Subject: Re: [PATCH v1 2/2] usb: typec: tcpci: add vconn over current fault
- handling to maxim_core
-Message-ID: <ZWWd2AU+rJOWzzvx@kuha.fi.intel.com>
-References: <20231121203845.170234-4-rdbabiera@google.com>
- <20231121203845.170234-6-rdbabiera@google.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385421428A
+	for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 08:00:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 482E9C433C9;
+	Tue, 28 Nov 2023 08:00:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1701158439;
+	bh=XsSMYgbPthzsqVva9D0suVZ4nWHiEJsubyND6RHq0UM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ae2am8lm7OGWz/wFSHlecym9K80fpY5DiEzAY9yJ0tRhCt54pvWrWJ5lmDEhtLdWH
+	 b4pTDWEtLRm7QGc4PEgiSIb0BiehAW2IibphzDtoU8yaFRG+tHskOAqwhSc/s2+NGn
+	 5SAB0e8+wKWVw+xdj0NfOC6od44tytRCugtR8kjo=
+Date: Tue, 28 Nov 2023 08:00:36 +0000
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Roy Luo <royluo@google.com>
+Cc: stern@rowland.harvard.edu, badhri@google.com, quic_kriskura@quicinc.com,
+	francesco.dolcini@toradex.com, quic_eserrao@quicinc.com,
+	ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] USB: gadget: core: adjust uevent timing on gadget
+ unbind
+Message-ID: <2023112827-repent-broadband-e557@gregkh>
+References: <20231127220047.2199234-1-royluo@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,91 +48,51 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231121203845.170234-6-rdbabiera@google.com>
+In-Reply-To: <20231127220047.2199234-1-royluo@google.com>
 
-On Tue, Nov 21, 2023 at 08:38:48PM +0000, RD Babiera wrote:
-> Add TCPC_FAULT_STATUS_VCONN_OC constant and corresponding mask definition.
-> Maxim TCPC is capable of detecting VConn over current faults, so add
-> fault to alert mask. When a Vconn over current fault is triggered, put the
-> port in an error recovery state via tcpm_port_error_recovery.
+On Mon, Nov 27, 2023 at 10:00:47PM +0000, Roy Luo wrote:
+> The KOBJ_CHANGE uevent is sent before gadget unbind is actually
+> executed, resulting in inaccurate uevent emitted at incorrect timing
+> (the uevent would have USB_UDC_DRIVER variable set while it would
+> soon be removed).
+> Move the KOBJ_CHANGE uevent to the end of the unbind function so that
+> uevent is sent only after the change has been made.
 > 
-> Signed-off-by: RD Babiera <rdbabiera@google.com>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> Fixes: 2ccea03a8f7e ("usb: gadget: introduce UDC Class")
+> Signed-off-by: Roy Luo <royluo@google.com>
 > ---
->  drivers/usb/typec/tcpm/tcpci_maxim_core.c | 20 +++++++++++++++++++-
->  include/linux/usb/tcpci.h                 |  5 ++++-
->  2 files changed, 23 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> index 9454b12a073c..7fb966fd639b 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> @@ -92,11 +92,16 @@ static void max_tcpci_init_regs(struct max_tcpci_chip *chip)
->  		return;
->  	}
->  
-> +	/* Vconn Over Current Protection */
-> +	ret = max_tcpci_write8(chip, TCPC_FAULT_STATUS_MASK, TCPC_FAULT_STATUS_MASK_VCONN_OC);
-> +	if (ret < 0)
-> +		return;
-> +
->  	alert_mask = TCPC_ALERT_TX_SUCCESS | TCPC_ALERT_TX_DISCARDED | TCPC_ALERT_TX_FAILED |
->  		TCPC_ALERT_RX_HARD_RST | TCPC_ALERT_RX_STATUS | TCPC_ALERT_CC_STATUS |
->  		TCPC_ALERT_VBUS_DISCNCT | TCPC_ALERT_RX_BUF_OVF | TCPC_ALERT_POWER_STATUS |
->  		/* Enable Extended alert for detecting Fast Role Swap Signal */
-> -		TCPC_ALERT_EXTND | TCPC_ALERT_EXTENDED_STATUS;
-> +		TCPC_ALERT_EXTND | TCPC_ALERT_EXTENDED_STATUS | TCPC_ALERT_FAULT;
->  
->  	ret = max_tcpci_write16(chip, TCPC_ALERT_MASK, alert_mask);
->  	if (ret < 0) {
-> @@ -295,6 +300,19 @@ static irqreturn_t _max_tcpci_irq(struct max_tcpci_chip *chip, u16 status)
->  		}
->  	}
->  
-> +	if (status & TCPC_ALERT_FAULT) {
-> +		ret = max_tcpci_read8(chip, TCPC_FAULT_STATUS, &reg_status);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		ret = max_tcpci_write8(chip, TCPC_FAULT_STATUS, reg_status);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		if (reg_status & TCPC_FAULT_STATUS_VCONN_OC)
-> +			tcpm_port_error_recovery(chip->port);
-> +	}
-> +
->  	if (status & TCPC_ALERT_EXTND) {
->  		ret = max_tcpci_read8(chip, TCPC_ALERT_EXTENDED, &reg_status);
->  		if (ret < 0)
-> diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-> index 83376473ac76..467e8045e9f8 100644
-> --- a/include/linux/usb/tcpci.h
-> +++ b/include/linux/usb/tcpci.h
-> @@ -36,7 +36,9 @@
->  
->  #define TCPC_ALERT_MASK			0x12
->  #define TCPC_POWER_STATUS_MASK		0x14
-> -#define TCPC_FAULT_STATUS_MASK		0x15
-> +
-> +#define TCPC_FAULT_STATUS_MASK			0x15
-> +#define TCPC_FAULT_STATUS_MASK_VCONN_OC		BIT(1)
->  
->  #define TCPC_EXTENDED_STATUS_MASK		0x16
->  #define TCPC_EXTENDED_STATUS_MASK_VSAFE0V	BIT(0)
-> @@ -104,6 +106,7 @@
->  
->  #define TCPC_FAULT_STATUS		0x1f
->  #define TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT BIT(7)
-> +#define TCPC_FAULT_STATUS_VCONN_OC	BIT(1)
->  
->  #define TCPC_ALERT_EXTENDED		0x21
->  
-> -- 
-> 2.43.0.rc1.413.gea7ed67945-goog
+> Changes since v1: add Fixes tag
+> ---
+>  drivers/usb/gadget/udc/core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
--- 
-heikki
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
