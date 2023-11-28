@@ -1,90 +1,140 @@
-Return-Path: <linux-usb+bounces-3424-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3425-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F92C7FBFC1
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 17:54:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0EBE7FC079
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 18:44:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6E53B213D8
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 16:54:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63CD7282BEC
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 17:44:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17B1B5C064;
-	Tue, 28 Nov 2023 16:54:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6293739AD8;
+	Tue, 28 Nov 2023 17:44:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C3EE10E2;
-	Tue, 28 Nov 2023 08:54:27 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0BC9AC15;
-	Tue, 28 Nov 2023 08:55:14 -0800 (PST)
-Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F22403F6C4;
-	Tue, 28 Nov 2023 08:54:24 -0800 (PST)
-Message-ID: <fe743e4f-67b7-4b34-884b-141abee6c63c@arm.com>
-Date: Tue, 28 Nov 2023 16:54:23 +0000
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD89C39AC1;
+	Tue, 28 Nov 2023 17:44:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC3D5C433C7;
+	Tue, 28 Nov 2023 17:44:50 +0000 (UTC)
+Date: Tue, 28 Nov 2023 17:44:48 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Christoph Hellwig <hch@lst.de>,
+	Hamza Mahfooz <someguy@effective-light.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Andrew <travneff@gmail.com>, Ferry Toth <ferry.toth@elsinga.info>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Thorsten Leemhuis <regressions@leemhuis.info>,
+	iommu@lists.linux.dev,
+	Kernel development list <linux-kernel@vger.kernel.org>,
+	USB mailing list <linux-usb@vger.kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>
+Subject: Re: Bug in add_dma_entry()'s debugging code
+Message-ID: <ZWYnECPRKca5Dpqc@arm.com>
+References: <736e584f-7d5f-41aa-a382-2f4881ba747f@rowland.harvard.edu>
+ <20231127160759.GA1668@lst.de>
+ <637d6dff-de56-4815-a15a-1afccde073f0@rowland.harvard.edu>
+ <20231128133702.GA9917@lst.de>
+ <cb7dc5da-37cb-45ba-9846-5a085f55692e@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Bug in add_dma_entry()'s debugging code
-Content-Language: en-GB
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, Christoph Hellwig <hch@lst.de>,
- Hamza Mahfooz <someguy@effective-light.com>,
- Dan Williams <dan.j.williams@intel.com>,
- Marek Szyprowski <m.szyprowski@samsung.com>, Andrew <travneff@gmail.com>,
- Ferry Toth <ferry.toth@elsinga.info>,
- Thorsten Leemhuis <regressions@leemhuis.info>, iommu@lists.linux.dev,
- Kernel development list <linux-kernel@vger.kernel.org>,
- USB mailing list <linux-usb@vger.kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-References: <736e584f-7d5f-41aa-a382-2f4881ba747f@rowland.harvard.edu>
- <20231127160759.GA1668@lst.de>
- <637d6dff-de56-4815-a15a-1afccde073f0@rowland.harvard.edu>
- <20231128133702.GA9917@lst.de>
- <cb7dc5da-37cb-45ba-9846-5a085f55692e@rowland.harvard.edu>
- <a91938e3-a7cb-4f74-aeaa-7cb56c0b43a4@arm.com>
- <CAHp75VeQoOFQ7V7gbVfR3-ANNMRT=-UniOCbnUtszo-1F3NMDA@mail.gmail.com>
-From: Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAHp75VeQoOFQ7V7gbVfR3-ANNMRT=-UniOCbnUtszo-1F3NMDA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cb7dc5da-37cb-45ba-9846-5a085f55692e@rowland.harvard.edu>
 
-On 28/11/2023 4:34 pm, Andy Shevchenko wrote:
-> On Tue, Nov 28, 2023 at 6:31 PM Robin Murphy <robin.murphy@arm.com> wrote:
->> On 28/11/2023 3:18 pm, Alan Stern wrote:
->>> On Tue, Nov 28, 2023 at 02:37:02PM +0100, Christoph Hellwig wrote:
+On Tue, Nov 28, 2023 at 10:18:19AM -0500, Alan Stern wrote:
+> On Tue, Nov 28, 2023 at 02:37:02PM +0100, Christoph Hellwig wrote:
+> > I'd actually go one step back:
+> > 
+> >  1) for not cache coherent DMA you can't do overlapping operations inside
+> >     a cache line
 > 
-> ...
-> 
->>>> The logical confcusion from that would be that IFF dma-debug is enabled on
->>>> any platform we need to set ARCH_DMA_MINALIGN to the cache line size.
->>>
->>> (IF, not IFF.)  And tell distributions that CONFIG_DMA_API_DEBUG is not
->>> meant for production systems but rather for kernel testing, right?
->>
->> Yikes, I'd hope that distros are heeding the warning that the Kconfig
->> calls out already. It's perhaps somewhat understated, as I'd describe
->> the performance impact to large modern systems with high-bandwidth I/O
->> as somewhere between "severe" and "crippling".
-> 
-> Independently on the distros configurations the (false positive)
-> message(s) will make difficult to debug the actual things, shouldn't
-> we have our code robust in any case?
+> Rephrasing slightly: You mustn't perform multiple non-cache-coherent DMA 
+> operations that touch the same cache line concurrently.  (The word 
+> "overlapping" is a a little ambiguous in this context.)
 
-Sure, I have no objection to making dma-debug more robust and useful for 
-its intended purpose, I was just commenting on the fact that any 
-potential change in behaviour from this should be of less concern to 
-distros than the significant change in behaviour that enabling it 
-*already* poses (i.e. globally serialising DMA operations and doing 
-inherently slow stuff in what are normally expected to be fast paths).
+The problem is worse. I'd say you should not perform even a single
+non-cache-coherent DMA (usually from-device or bidirectional) operation
+if the cache line is shared with anything else modifying it. It doesn't
+need to be another DMA operation. But that's more difficult to add to
+the DMA API debug code (maybe something like the bouncing logic in
+dma_kmalloc_needs_bounce()).
 
-Thanks,
-Robin.
+> > The logical confcusion from that would be that IFF dma-debug is enabled on
+> > any platform we need to set ARCH_DMA_MINALIGN to the cache line size.
+
+Or just force the kmalloc() min align to cache_line_size(), something
+like:
+
+diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
+index 4a658de44ee9..3ece20367636 100644
+--- a/include/linux/dma-mapping.h
++++ b/include/linux/dma-mapping.h
+@@ -543,6 +543,8 @@ static inline int dma_get_cache_alignment(void)
+ #ifdef ARCH_HAS_DMA_MINALIGN
+ 	return ARCH_DMA_MINALIGN;
+ #endif
++	if (IS_ENABLED(CONFIG_DMA_API_DEBUG))
++		return cache_line_size();
+ 	return 1;
+ }
+ #endif
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 8d431193c273..d0b21d6e9328 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -879,7 +879,7 @@ static unsigned int __kmalloc_minalign(void)
+ 	unsigned int minalign = dma_get_cache_alignment();
+ 
+ 	if (IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) &&
+-	    is_swiotlb_allocated())
++	    is_swiotlb_allocated() && !IS_ENABLED(CONFIG_DMA_API_DEBUG))
+ 		minalign = ARCH_KMALLOC_MINALIGN;
+ 
+ 	return max(minalign, arch_slab_minalign());
+
+Also note that to_cacheline_number() in kernel/dma/debug.c only takes
+into account the L1_CACHE_SHIFT. On arm64 for example, cache_line_size()
+returns the maximum line of all the cache levels (and we've seen
+hardware where the L1 is 64-byte, L2 is 128).
+
+> > BUT:  we're actually reduzing our dependency on ARCH_DMA_MINALIGN by
+> > moving to bounce buffering unaligned memory for non-coherent
+> > architectures,
+> 
+> What's the reason for this?  To allow the minimum allocation size to be
+> smaller than the cache line size?  Does the savings in memory make up 
+> for the extra overhead of bounce buffering?
+> 
+> Or is this just to allow people to be more careless about how they 
+> allocate their DMA buffers (which doesn't seem to make sense)?
+
+It's the former and it does make a difference with lots of small
+structure or string allocations.
+
+[...]
+> I get the impression that you would really like to have two different 
+> versions of kmalloc() and friends: one for buffers that will be used in 
+> DMA (and hence require cache-line alignment) and one for buffers that 
+> won't be.
+
+We've been there for the past 2-3 years (and a few other options). It's
+hard to guess in a generic way because the allocation place may not
+necessarily know how the device is going to access that memory (PIO,
+DMA). The conclusion was that for those cases where the buffer is small,
+we just do a bounce. If it's performance critical, the driver can use a
+kmem_cache_create(SLAB_HWCACHE_ALIGN) and avoid the bouncing.
+
+-- 
+Catalin
 
