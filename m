@@ -1,56 +1,71 @@
-Return-Path: <linux-usb+bounces-3401-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3402-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29BA67FB8B3
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 11:57:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B0DA7FB97A
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 12:32:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADDEFB21DE6
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 10:57:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 466E9282D38
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 11:32:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1430849F88;
-	Tue, 28 Nov 2023 10:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8B074F880;
+	Tue, 28 Nov 2023 11:32:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AD6s+RD+"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="b/8F5y2s"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72756D511;
-	Tue, 28 Nov 2023 10:57:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8033C433C7;
-	Tue, 28 Nov 2023 10:57:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701169043;
-	bh=YneTLXB1mmfGNl3d0q1JaknL6gIyvE7m5Usmdw11fFk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AD6s+RD+HhYX03u/xLI9X4ZvmMgS7DysGh94q+tZS3O1cAf+OBIcDcpYBkIiwr53Y
-	 EVosBvet6LVHec5YJbCJHj6TjLkISwR64UUZHY5DGWLvU6UmbP75XfBvyCpJeC86tP
-	 UjJTzPU8atfgF0MRQNDTRY2GoqpUGc+B7197fW3MtQEoi5ELJYg+R36Xd8rg075hPo
-	 1wFeEgfjh2L/KmdVr8uNtrPYuF78BwN0I1lnqoZocOYReov7Le4/gtEzelwIKcQDoq
-	 vY4rpwYWwcfiZQFQ1z0EgxF0xz5GNFoS8xetv+l/QEwPod/iNzgf6tvqUz+I10VQX9
-	 NKQe2+aV88aNA==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1r7vmo-0005v9-2v;
-	Tue, 28 Nov 2023 11:57:51 +0100
-Date: Tue, 28 Nov 2023 11:57:50 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, quic_wcheng@quicinc.com,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_ppratap@quicinc.com, quic_jackp@quicinc.com
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8981A5;
+	Tue, 28 Nov 2023 03:32:24 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AS5RDVp009385;
+	Tue, 28 Nov 2023 11:32:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=SEGnUrmikiwRznz3qOTJpKGnloA4dLgJgwKDt8NRKco=;
+ b=b/8F5y2si+YfF9P9XVxL8ASGg2dv6ZwPjNIqZcoYzPdue1TJBaYaZLcJCr2dxqhug8dS
+ Uhf0jNijoIDHsUJTxyGoyjV5d/iGcn8cb+TF2mrhJ2M549S5gE2exZZAjWvPqriIl3iG
+ oqFjiGJzOQfKB5EYB+5hsj8WbhX6QW4WdIDRywLtrnJa31Tv8dzoHQGYNXpYjbY+Q45P
+ /MgMmmQnn46Mmi28KCPnMm/YAfgpYoeYr9V+S2spjOlh7f8Lo4L5l9B57ZPcKx1lgzO2
+ wJqfIMAwTgp8bY4QHHNOvwqnTrGEe+uxpqo7waOBqyasZEF235Di1OoeR7f+exPEGSIp Vg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3un02h25bv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Nov 2023 11:32:16 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3ASBWEc4009779
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Nov 2023 11:32:14 GMT
+Received: from [10.216.9.39] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 28 Nov
+ 2023 03:32:09 -0800
+Message-ID: <6d7527bf-8c1a-49b5-a0cf-99a92098c971@quicinc.com>
+Date: Tue, 28 Nov 2023 17:02:06 +0530
+Precedence: bulk
+X-Mailing-List: linux-usb@vger.kernel.org
+List-Id: <linux-usb.vger.kernel.org>
+List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/6] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
  bindings
-Message-ID: <ZWXHrvUDnF2dMk6r@hovoldconsulting.com>
+To: Johan Hovold <johan@kernel.org>
+CC: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>
 References: <20231122191335.3058-1-quic_kriskura@quicinc.com>
  <ZV9dYpTYRXn63tXe@hovoldconsulting.com>
  <1192d91f-11bf-44af-953a-14e08e2b6ca8@quicinc.com>
@@ -58,80 +73,66 @@ References: <20231122191335.3058-1-quic_kriskura@quicinc.com>
  <004ddc69-1566-4de4-b260-0fca96a9395f@quicinc.com>
  <ZWW_FOAKp95Cf9vN@hovoldconsulting.com>
  <18965bb9-7afa-4892-8b71-981ba29d2cd4@quicinc.com>
-Precedence: bulk
-X-Mailing-List: linux-usb@vger.kernel.org
-List-Id: <linux-usb.vger.kernel.org>
-List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <18965bb9-7afa-4892-8b71-981ba29d2cd4@quicinc.com>
+ <ZWXHrvUDnF2dMk6r@hovoldconsulting.com>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZWXHrvUDnF2dMk6r@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: cG1tIf1mNPlTpH-NQj9j6TjYWAEJOwHD
+X-Proofpoint-ORIG-GUID: cG1tIf1mNPlTpH-NQj9j6TjYWAEJOwHD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-28_11,2023-11-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=9 clxscore=1015
+ priorityscore=1501 malwarescore=0 adultscore=0 lowpriorityscore=0
+ impostorscore=0 spamscore=9 mlxscore=9 phishscore=0 bulkscore=0
+ mlxlogscore=100 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311060000 definitions=main-2311280091
 
-On Tue, Nov 28, 2023 at 04:02:53PM +0530, Krishna Kurapati PSSNV wrote:
 
-> >    >> My opinion would be to keep the power_event irq as mandatory and not to
-> >> include the hs_phy_irq.
-> > 
-> > Ok, but you still need to explain why dropping hs_phy_irq is correct.
-> > 
-> > Until there's a clear answer to that, it seems we need to include it.
 > 
-> Sure, I agree with you. It should describe what hardware is capable of, 
-> not what we choose to add in driver code. In that sense we can add the 
-> hs_phy_irq to all targets.
+> So back to my initial proposal, with a slight modification moving
+> pwr_event first (e.g. as it is not a wakeup interrupt):
 > 
-> In my next revision, I can do the following:
+> qusb2-:
 > 
-> 	- anyOf:
-> 	  - items:
-> 	    - const: qusb2_phy
-> 	  - items:
-> 	    - const: dp_hs_phy_irq
-> 	    - const: dm_hs_phy_irq
-> 	- const: hs_phy_irq
 > 	- const: pwr_event
+> 	- const: qusb2_phy
 > 	- const: ss_phy_irq	(optional)
 > 
-> A modified version of your suggestion should help cover all cases and 
-> describe all DT's perfectly.
+> qusb2:
+> 
+> 	- const: pwr_event
+> 	- const: hs_phy_irq
+> 	- const: qusb2_phy
+> 	- const: ss_phy_irq	(optional)
+> 
+> femto-:
+> 	- const: pwr_event
+> 	- const: dp_hs_phy_irq
+> 	- const: dm_hs_phy_irq
+> 	- const: ss_phy_irq	(optional)
+> 
+> femto:
+> 	- const: pwr_event
+> 	- const: hs_phy_irq
+> 	- const: dp_hs_phy_irq
+> 	- const: dm_hs_phy_irq
+> 	- const: ss_phy_irq	(optional)
+> 
+> That ss_phy_irq is optional would be expressed as minItems being one
+> less than maxItems for each permutation.
 
-It may be better to spell out the permutations. Especially since there
-are no platforms with both qusb2_phy and dp/dm as I thought when
-mentioning the above. Using anyOf also makes it hard to specify
-min/maxItems as you'll need to do.
+I am fine with this except that "femto-" might not be required. I looked 
+at 
+https://lore.kernel.org/all/20231122191436.3146-1-quic_kriskura@quicinc.com/ 
+and I see that all of them have hs_phy_irq.
 
-So back to my initial proposal, with a slight modification moving
-pwr_event first (e.g. as it is not a wakeup interrupt):
-
-qusb2-:
-
-	- const: pwr_event
-	- const: qusb2_phy
-	- const: ss_phy_irq	(optional)
-
-qusb2:
-
-	- const: pwr_event
-	- const: hs_phy_irq
-	- const: qusb2_phy
-	- const: ss_phy_irq	(optional)
-
-femto-:
-	- const: pwr_event
-	- const: dp_hs_phy_irq
-	- const: dm_hs_phy_irq
-	- const: ss_phy_irq	(optional)
-
-femto:
-	- const: pwr_event
-	- const: hs_phy_irq
-	- const: dp_hs_phy_irq
-	- const: dm_hs_phy_irq
-	- const: ss_phy_irq	(optional)
-
-That ss_phy_irq is optional would be expressed as minItems being one
-less than maxItems for each permutation.
-
-Johan
+Regards,
+Krishna,
 
