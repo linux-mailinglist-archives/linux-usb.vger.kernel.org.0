@@ -1,79 +1,94 @@
-Return-Path: <linux-usb+bounces-3430-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3431-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3F737FC3E8
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 20:01:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ADC17FC3F9
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 20:04:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D31D1F20F6F
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 19:01:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25DAA282B98
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Nov 2023 19:04:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAA094F1F5;
-	Tue, 28 Nov 2023 19:01:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E464F885;
+	Tue, 28 Nov 2023 19:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1+OMbSkF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b8OGqtm6"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17AC82E3EF
-	for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 19:01:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DCC1C433C7;
-	Tue, 28 Nov 2023 19:01:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1701198070;
-	bh=VKkpuFR72ZkZ7siURjXwuxonkiOvNT0lixSufQC1atU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1+OMbSkFz8t98hJg5Lt+DOSCYE4Mn22zIauqXDZMp0veBexAMXcfupxwT3FvUuEM+
-	 jC6t6PQpMYiv/3i1TOQB7ID5gDu2sHUmbYVdzv+aDQtDcy0LSNGWpBhOpW3nMWgmUU
-	 HvZakkbAS+sDhxWRWowk3VKAGLK30bFxNmw6Pzp4=
-Date: Tue, 28 Nov 2023 19:01:08 +0000
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Roy Luo <royluo@google.com>
-Cc: stern@rowland.harvard.edu, badhri@google.com, quic_kriskura@quicinc.com,
-	francesco.dolcini@toradex.com, quic_eserrao@quicinc.com,
-	ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] USB: gadget: core: adjust uevent timing on gadget
- unbind
-Message-ID: <2023112835-sediment-subsidy-7e99@gregkh>
-References: <20231127220047.2199234-1-royluo@google.com>
- <2023112827-repent-broadband-e557@gregkh>
- <CA+zupgxfxaB_bO51ZXW+5T3-FMF94=Tm+mqZ92LCYBZtwiQd3A@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D799A1E4A7
+	for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 19:04:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5EB98C43391
+	for <linux-usb@vger.kernel.org>; Tue, 28 Nov 2023 19:04:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701198261;
+	bh=M6HyDu8KLSH4xh6JjCdOzbqUNbQDhtq1XnEjVOs8bzA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=b8OGqtm63Q9YOH5Xxw3dZHutPw+ZR62enEv18w6FqwCtp82EO0vbO5fGyLtaxZkKZ
+	 o+nnOSB8CMIwVlg1erd4lIixaSRiyKV7H4PLX61mEUkvMv8dC2RiQqkVu/78BSIlK5
+	 n0JP3x6/E0OwMhBQHccMhq+b1iqe1sxaVIvPdfdpmjfsRqpVBMJj5B/5iResQ8TEWn
+	 xnVQWSw4j9TXLIr+BS0I63i/7ZN/FqBOQFmMdHpHKwHeq+Fv+dLr5FoBvAgksKcgD0
+	 N5SeUD+D+H+8kve8a/m21e0g0nf1P4DtM9ud/fzS+X9h/hWzoNcKaah9+Z8MOdUSHD
+	 Em2BQtVa87Z0A==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 4E55AC53BD2; Tue, 28 Nov 2023 19:04:21 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 215740] kernel warning: DMA-API: xhci_hcd: cacheline tracking
+ EEXIST, overlapping mappings aren't supported
+Date: Tue, 28 Nov 2023 19:04:20 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215740-208809-2C4Hb0GW1M@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215740-208809@https.bugzilla.kernel.org/>
+References: <bug-215740-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+zupgxfxaB_bO51ZXW+5T3-FMF94=Tm+mqZ92LCYBZtwiQd3A@mail.gmail.com>
 
-On Tue, Nov 28, 2023 at 10:52:49AM -0800, Roy Luo wrote:
-> On Tue, Nov 28, 2023 at 12:00 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > - You have marked a patch with a "Fixes:" tag for a commit that is in an
-> >   older released kernel, yet you do not have a cc: stable line in the
-> >   signed-off-by area at all, which means that the patch will not be
-> >   applied to any older kernel releases.  To properly fix this, please
-> >   follow the documented rules in the
-> >   Documentation/process/stable-kernel-rules.rst file for how to resolve
-> >   this.
-> 
-> I don't see a need for this patch to go into stable kernels after
-> reviewing Documentation/process/stable-kernel-rules.rst, please let me
-> know if you think otherwise.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215740
 
-If you think this fixes a bug in the existing code, why wouldn't it be
-needed?
+--- Comment #35 from Alan Stern (stern@rowland.harvard.edu) ---
+So as most of the people subscribing to this bug have seen from the email
+discussion, it looks like the bug ultimately lies in the alignment of kmall=
+oc()
+buffers and it probably will be fixed with a kernel patch.
 
-Also, this implies that you will not be wanting it backported to any
-chromeos or android kernels?
+Equally important, however, is the question of why the people experiencing =
+this
+problem turned on CONFIG_DMA_API_DEBUG in the first place.  That setting is
+meant only for kernel testing and it drastically reduces performance.  Redh=
+at
+certainly should not enable it in any of their distribution kernels (and in
+fact it is not set in my copy of Fedora 38).
 
-thanks,
+Andrew, Ferry, any comments?
 
-greg k-h
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
