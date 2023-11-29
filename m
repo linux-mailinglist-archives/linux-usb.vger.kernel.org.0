@@ -1,137 +1,147 @@
-Return-Path: <linux-usb+bounces-3462-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3463-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5616D7FDAEE
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 16:16:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CDC77FDB88
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 16:34:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 106FD28302C
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 15:16:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D4761C20A6B
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 15:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F65374F0;
-	Wed, 29 Nov 2023 15:16:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4444F38F86;
+	Wed, 29 Nov 2023 15:34:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gJsLTbjS"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="MRbAGApy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAB3BE
-	for <linux-usb@vger.kernel.org>; Wed, 29 Nov 2023 07:16:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701270987;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=OcpkJmyvNj3eShS3c+JKZr285NS0S6mgXrW8UfGiu30=;
-	b=gJsLTbjS+Em6G3KiAyc8PGrE+od6pZ9GO+PZAHE5J3HA/EFABUcWl+z2PcwxdAR8UMZYmY
-	rk5rH7sSfen9k9hmXBzGM2ZbYLZCFRfSikLO8LaUFzMt0MgA0YeTaIwOk7JP8EA4zhEJYW
-	FUJ+84eYtXP4cIN4h6rpz0gAikTGWtw=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-386-_OovbazvNDybf2Px3T3cDw-1; Wed,
- 29 Nov 2023 10:16:23 -0500
-X-MC-Unique: _OovbazvNDybf2Px3T3cDw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 16A723821344;
-	Wed, 29 Nov 2023 15:16:23 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.192.182])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0BF06502E;
-	Wed, 29 Nov 2023 15:16:20 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: jtornosm@redhat.com
-Subject: [PATCH] net: usb: ax88179_178a: avoid failed operations when device is disconnected
-Date: Wed, 29 Nov 2023 16:16:11 +0100
-Message-ID: <20231129151618.455618-1-jtornosm@redhat.com>
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2087.outbound.protection.outlook.com [40.107.21.87])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6A2D44;
+	Wed, 29 Nov 2023 07:34:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xpg3dUGGcy+BKya9K7FHhtobx8QF5dVzZpo0qT3M/ASMjYjzqywKPh0iAEVjqxW2iA3U7VZxlqJeSvMQWYf1O+DQr4ZFbVtwJtb3Cuw8x/vLajDFEDi49qFGcCg3KmH5fzfZShoGlWt0zvkz9TOFZWfDK2OXc7vCX2anXtmXt5eo4+i+8W4XRdXohDtO5l9YtNS1UHSYIkySjbRKYPT8ID5aa43uEZmvYaTaHj3ot8WBQAdBWNE3ia9Bs1Q9OueR3bOLU8qwra5cXDcicAdZqhs/EEZFvG4pbp4ffR6JQ8gpsSlDNTa3Lrk6hiq3ACOCgzdUZ9Hm1y0SGAOGKh9W2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AkBx3d+u+3dMzncLEMOm/rFUGOv1bnHg4tZCu1LQC98=;
+ b=KOqhiJQWVVn5nLjMsWQDlsETyItMkxofZFrsh804zr8g4e/yERKDoddZJI8e/SZ9WWT1LWMJIwm79HqCVOBjzg3KPPmRqz1EAiAow1B5ovCIng/JG4pTj5yPyjDCQWPvAFb6elVwgCBs6DV4RbElu2LcJqiJxCXQwExh93w86i0SfBZf3ArLZI+vUTcPCahoNkPDN3/jMXS4M3Z/fosxZEGMuAsyKg53ghseMMj/UaiUjNJasTjBp5DEgEgWNy2DjYhCX7FBixK92NGTOyZH0v0ZdVaW0DgkLORwTDXCEQe1/149z8uSrIsbhkwaqbfity/E6u9Sum0wlHZYq8QVuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AkBx3d+u+3dMzncLEMOm/rFUGOv1bnHg4tZCu1LQC98=;
+ b=MRbAGApywmBvhwXYAubiwzOO1qwNUYf7y72P9pZr14W+Xj13dhxBaYf3kK31sOl0IJ3dVkXPpMskWESvDwvM6St2hGOFFkmAdxmg4/EQGNs7pYEYNTXW+I1dp5P7iajHG6lL0z7v61w6U5XFUqW73nnQIkv5wIkuXLDF6wU+znNtUc58WbhDKPk8HuX+fireodhXbP7tmvd64R6le6VPtVzGXB06Q8JUnltiroMRqA/fjwgaVTV4ge7SnsWPoZIQmixj7EO2y9ibXNcxjQidqumfa1dd5aLdwVzbRT6S6uRqlJ+xJKH4lxS0QsyKhzjp8HKJdctIEslS0BofiYpuxA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM0PR04MB6467.eurprd04.prod.outlook.com (2603:10a6:208:16c::20)
+ by AS8PR04MB8787.eurprd04.prod.outlook.com (2603:10a6:20b:42e::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.22; Wed, 29 Nov
+ 2023 15:34:01 +0000
+Received: from AM0PR04MB6467.eurprd04.prod.outlook.com
+ ([fe80::5c46:ada1:fcf3:68e6]) by AM0PR04MB6467.eurprd04.prod.outlook.com
+ ([fe80::5c46:ada1:fcf3:68e6%7]) with mapi id 15.20.7046.023; Wed, 29 Nov 2023
+ 15:34:00 +0000
+Message-ID: <f684feac-2941-4407-846b-2d984daca733@suse.com>
+Date: Wed, 29 Nov 2023 16:33:58 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] net: usb: ax88179_178a: avoid failed operations when
+ device is disconnected
+Content-Language: en-US
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231129151618.455618-1-jtornosm@redhat.com>
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20231129151618.455618-1-jtornosm@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0004.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:c8::16) To AM0PR04MB6467.eurprd04.prod.outlook.com
+ (2603:10a6:208:16c::20)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6467:EE_|AS8PR04MB8787:EE_
+X-MS-Office365-Filtering-Correlation-Id: ac9434e1-9a83-48ea-1118-08dbf0f09c2a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	6CPf+PNFZezVTGWAV9zKwpcNIU7Pdztx9cGWgYkiM1aWY6nI2VHrXLHBSypIN0WLibb2Xk3Mv67W4ve+fB+ElNf2tTl78MrptCnlaYP1k81N4LQyQDA4PPKWe5hq+/WCN7vjkDSxfhuYLRXluF8osxTKO6hVRchlRi+5YKVTwqiokYe78TTVgQF/Ws6DqL7/HzGjhZ+9+NilKz8ehw0tu02gyLgX5Ksli/jNxaJ/kJn28hfBoloE2y7qgEU7IvsRiJBWDdDP4l+pje50VYVEExzl8FW5LMvZi5rGQ0nBCitfegAoXpPrqdnqxX/jKgZ/M9uwWVKgWZoaCtL1xmdtZYX8N39yA3BY0SbrUKuYiGVIyHJuNDvWe1X1ogd+gvd+AzpJo9DTKhWZGZXtLg7V3Aqq+mn8QFIktMyMh169ZLn8J8QxtjcwTKUpHRrBZCZPG2MapJFxEAM4Q1gtTM0+SrF6a8YF7r7EmbLcZ+j+CGprebpgmzfs9XYuh2vIAioHm0m66WvR72yXXMEMx5w+fKLfQaM5qWEt4fojkiWqLqmDEUDs6uRIXmragYNnCXtfiS8BoxDf5hNQZDrSj+GcubKoFzUFsus8l2KA+ReJGt9Yj2UCxX6D+F9K62w1qwvG1MLKTsnW7VD2P9cfhqOGCQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6467.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(366004)(346002)(376002)(396003)(39860400002)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(2616005)(53546011)(478600001)(83380400001)(6512007)(6506007)(5660300002)(4744005)(2906002)(6486002)(8676002)(66556008)(66476007)(66946007)(8936002)(316002)(41300700001)(36756003)(31696002)(86362001)(38100700002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?U1BPbFdPRm1IMWxPZ1JqODZHeWtIMEhMQnZsYTJGWWk4Zmx1NGhBU3pzdU9G?=
+ =?utf-8?B?aEtiMkQya3ZpRDhYMVFOaWpzR0hhY1R5TXQ2eTFpUHRQRlE4SnZ6cXhqOWNu?=
+ =?utf-8?B?TVMrT3Z1dnpzSFpROUFUSmVjMFV0NHh0TkVyZ2lkWWFRSzgzZ2d4UVE3bzRp?=
+ =?utf-8?B?U002M3ZucFF0OEQ3N2V6amtxWGJEdjB3dlVUdkM3N1B2eWdEZTNES1loczE0?=
+ =?utf-8?B?VW4ycytGL1VXZ3lJY3BJNDNCOEg1QlVzNHVFUXcrc2l6ZTdTRC9WOWEvRGNM?=
+ =?utf-8?B?OENseHN2TFFBR2lpcm5pODZ3NFFNbFhtUlAwTEdNdlJTblBuSkRvZm5GS2dX?=
+ =?utf-8?B?KysxSUxuNEp1dUUrd05za1V6ZjlMNzMwTE1mL1BobDYwSW04NnJDeGhlMnp5?=
+ =?utf-8?B?R1pxTldwZDYreWVCVVFiUXE5TFRjSjN6N29sWDhob0tKTVNzVlcwSDNzNkhm?=
+ =?utf-8?B?Z0JPOW9UamJQZkZsTEFIY2VzeEdaODdOeThxU2luWDVaWDBvMWgrVDdVbEUr?=
+ =?utf-8?B?OWFqcDB6azJleTI0Z01CU0xnVElWOGhHYzhZbzFEeXIxWGFRUjhyYWdyUlBn?=
+ =?utf-8?B?aEppMkRyZG1tWGdjVHJyZ2NDSmsvYmRyS2VUV2VJMUFkUWhDdWt1Mm5ISVZP?=
+ =?utf-8?B?RDF3aTVYSTJFQXNlRERtNDQwTDRqQ0NDRFhCazd0anhtSEQ4alRmTmx4cFRC?=
+ =?utf-8?B?cDRJT1YyU2dGY3RxV3dyd1lRMDdkSXVtR24zd1BINndkQVNRb2hiMHhFNEFj?=
+ =?utf-8?B?OWRWTkN3RVZRdnIvU0FhQzZxR3R1VGxURGF6R3ZTWUdrR01vT0RUNFRkQ01q?=
+ =?utf-8?B?N3Joc2s5a2ZzbElBRDZYU0hDenlTRmRJRDgya0s4Z2hWaGl3Nm16MjRGSi8v?=
+ =?utf-8?B?Y0hjMGZQUzBRM0NGTnlSSkZWdW00UGR3Ty85dk8yek9zc0Vyd2FQblIvaFVX?=
+ =?utf-8?B?aSsyQUhqaWRJeWxZc0ExS1VSQXorNldmdVFxRzNJOTdBMUFOaVVxbzdyOG5N?=
+ =?utf-8?B?cXp6MEtCTldpZm1rYzBWblQ2Z0RLVnJqK1pFTTJWcXoyNXpKMk5zTHJpQ2g5?=
+ =?utf-8?B?VlNucWpZY2pLa1hzOS9DVFJXczVzRHhhMitOblpkaUdYYTd2YmVISHBiZjVZ?=
+ =?utf-8?B?Mm5LVWE5YzRMTkROVnlDL0FCd2lqTDNyK0R4bC9XcUZUSWloZ09RQjNET3Bk?=
+ =?utf-8?B?UHVNWEZuS0F4dzJWZ01MamkxQjY5OGcybHFoTllTV1U5MjA4TzNyRGlFZ0tk?=
+ =?utf-8?B?STFNOUwxaXIzVGZTNitjcFlacWdldU1Jbng3UEtOV2VyTkVyeGNmbEZ5dVFH?=
+ =?utf-8?B?UWgrd3U3ZFBvc1Mwa200REU0UjhWNncrVjNrWVAremZ4UW40Tk45OHhQa2dY?=
+ =?utf-8?B?eVRsdEwvK2luQWFmYWFaQ2gyVWJrVE1SemtPcnc3eXZ5UmQrbHVkU2NtQ1Y4?=
+ =?utf-8?B?UlJWbHRIbThPNTYxUnVFTklzUGtZOGY3NXRiMlJXb1pJbjdvVlkvUmcwWjl3?=
+ =?utf-8?B?eVVkRURNOGJLYkNST3RKLytwRmNDUzNGa0dEdG9ORGFsOXoxZGRhMTZIYi96?=
+ =?utf-8?B?Nnkva3BpWXdDVlJYVWQ0UXExZzJDTWhlODMvRVBDdEtqRm1SOUNGZUwzckFE?=
+ =?utf-8?B?ZkZRMmlBYkJlVWpaUkFQWVdoclpIQUZzSHFUaFVOTTA4SHhpbS9NQ0FQc3do?=
+ =?utf-8?B?bUwwcktnYVZZVmlUU01WcUZKRDJpSHU0UUtiWWhWV3c2aDhWcm55U2YvclBS?=
+ =?utf-8?B?ZHNWcndIMENjU2tsWDZVdk5VaU90M2ozc2JOUGlDUUdaaVVBLzBXZk9RYkZE?=
+ =?utf-8?B?Wnd1SGhBS1pubVZBTGl5bDgwVUROSkhsRVI2QzFFd2p0SDBGRSt2SjVtUmc5?=
+ =?utf-8?B?MUlQdkMwQnZxR3hha1RSNC9CL0thMjVqZmVHVTk2dnptdDU5SVVzWmhCUCt2?=
+ =?utf-8?B?WEc4aiszVHpvakh5c0tCL0p5WENuK3dQUFRFc3dBMEgrTFV2cHRRWlRnUHh3?=
+ =?utf-8?B?Vk43eVkvTjRhbE01QUtMUUVTaW5KejVhTVl1cXBocUZTRENCaW92VXQ0MmRO?=
+ =?utf-8?B?T1lGZmlzUUV2eUVycmVVSVpob3lmM3EzNFovT0RTWWtkNW5vRWd0OXF1UDNh?=
+ =?utf-8?B?RlFBL3VXZk5GZHY2ODF1OTU1ZVo1WUxwZG8xS2JhTXl0SjRhMWF6MVBabmx6?=
+ =?utf-8?Q?dmL5sG08vmBu8D2Jpd1/zrup5XNx9RXwGBXUgUVDEkpF?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac9434e1-9a83-48ea-1118-08dbf0f09c2a
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6467.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2023 15:34:00.7840
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: w9PjbO1ZkqGkamvRw/VMsqtjvHbDXkQOBPVMteD62YQ8CjCAnbfbdJp/87t02L0H46g2tGiqph+4QICLnzZjbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8787
 
-When the device is disconnected we get the following messages showing
-failed operations:
-Nov 28 20:22:11 localhost kernel: usb 2-3: USB disconnect, device number 2
-Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: unregister 'ax88179_178a' usb-0000:02:00.0-3, ASIX AX88179 USB 3.0 Gigabit Ethernet
-Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to read reg index 0x0002: -19
-Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to write reg index 0x0002: -19
-Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
-Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0001: -19
-Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
+On 29.11.23 16:16, Jose Ignacio Tornos Martinez wrote:
 
-The reason is that although the device is detached, normal stop and
-unbind operations are commanded. Avoid these unnecessary operations
-when the device is detached (state is USB_STATE_NOTATTACHED) so as
-not to get the error messages.
+Hi,
 
-Fixes: e2ca90c276e1f ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
-Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
----
- drivers/net/usb/ax88179_178a.c | 26 +++++++++++++++-----------
- 1 file changed, 15 insertions(+), 11 deletions(-)
+> The reason is that although the device is detached, normal stop and
+> unbind operations are commanded. Avoid these unnecessary operations
+> when the device is detached (state is USB_STATE_NOTATTACHED) so as
+> not to get the error messages.
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 4ea0e155bb0d..e78d555dd95e 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1308,16 +1308,18 @@ static void ax88179_unbind(struct usbnet *dev, struct usb_interface *intf)
- 	struct ax88179_data *ax179_data = dev->driver_priv;
- 	u16 tmp16;
- 
--	/* Configure RX control register => stop operation */
--	tmp16 = AX_RX_CTL_STOP;
--	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_RX_CTL, 2, 2, &tmp16);
-+	if (dev->udev->state != USB_STATE_NOTATTACHED) {
-+		/* Configure RX control register => stop operation */
-+		tmp16 = AX_RX_CTL_STOP;
-+		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_RX_CTL, 2, 2, &tmp16);
- 
--	tmp16 = 0;
--	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_CLK_SELECT, 1, 1, &tmp16);
-+		tmp16 = 0;
-+		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_CLK_SELECT, 1, 1, &tmp16);
- 
--	/* Power down ethernet PHY */
--	tmp16 = 0;
--	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL, 2, 2, &tmp16);
-+		/* Power down ethernet PHY */
-+		tmp16 = 0;
-+		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL, 2, 2, &tmp16);
-+	}
- 
- 	kfree(ax179_data);
- }
-@@ -1663,11 +1665,13 @@ static int ax88179_stop(struct usbnet *dev)
- {
- 	u16 tmp16;
- 
--	ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
-+	if (dev->udev->state != USB_STATE_NOTATTACHED) {
-+		ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
- 			 2, 2, &tmp16);
--	tmp16 &= ~AX_MEDIUM_RECEIVE_EN;
--	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
-+		tmp16 &= ~AX_MEDIUM_RECEIVE_EN;
-+		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
- 			  2, 2, &tmp16);
-+	}
- 
- 	return 0;
- }
--- 
-2.43.0
+I am sorry, but this is a layering violation. You are looking
+at an internal state of the USB layer to surpress logging
+-ENODEV. If you think these messages should go away, filter
+for ENODEV where they are generated.
 
+	Regards
+		Oliver
 
