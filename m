@@ -1,111 +1,193 @@
-Return-Path: <linux-usb+bounces-3468-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3470-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75BF47FE145
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 21:44:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 693657FE1CA
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 22:26:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A77781C20C24
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 20:44:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A6591C20D2B
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 21:26:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ECA55EE9F;
-	Wed, 29 Nov 2023 20:44:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4761461FB0;
+	Wed, 29 Nov 2023 21:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ZPvbimEB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A7010DB
-	for <linux-usb@vger.kernel.org>; Wed, 29 Nov 2023 12:44:00 -0800 (PST)
-Received: from [192.168.1.103] (178.176.78.44) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Wed, 29 Nov
- 2023 23:43:50 +0300
-To: Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-	<usb-storage@lists.one-eyed-alien.net>
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH] usb: storage: freecom: drop useless assignment in
- init_freecom()
-Organization: Open Mobile Platform
-Message-ID: <4d3fb70f-bf2f-96cc-a8fb-1ef658a24920@omp.ru>
-Date: Wed, 29 Nov 2023 23:43:50 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7ACD7F
+	for <linux-usb@vger.kernel.org>; Wed, 29 Nov 2023 13:26:22 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-5c27ee9c36bso213677a12.1
+        for <linux-usb@vger.kernel.org>; Wed, 29 Nov 2023 13:26:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1701293182; x=1701897982; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XNCUzlT66xSSzQeRG+3/Vjdg0+tkFMt3clYOj0yBxCw=;
+        b=ZPvbimEBh8xSzwTEtOWWe8MrLkwmup8mXmlIf/LDDw3wIQZtQKqvu4z4cZG3icQ545
+         xazyz2ORF4ObT7bM6rXCBKc1U1zseYGa29BjCouutJ6/+yohq4zgKUds36bgl4iOPy6B
+         4+ds8kxiTIR0fxRSi5Pz+t2uldV7nCBzVbQk4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701293182; x=1701897982;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XNCUzlT66xSSzQeRG+3/Vjdg0+tkFMt3clYOj0yBxCw=;
+        b=b8fGtX+D0P9Ff4i5K5TUg3yUthjtDDx0AClQDHDodyd0hHj1X68YY0gyeLqLyLxpvc
+         4nuDeQXXq0Ko3o5s0hHBmrhh1Xw00uRbP6TXUz9HWDeBmBmVOgPkzi6Wfq1qccBoMOXH
+         AtXZLurNoaq4U20QNyDZ4+gkw2Zgh0Sl43OGGiww8NseyS6iZD3Q/ptYROiqAqepJu0P
+         Y+qLC2boXSuJ3+VwyzePi+3XrmxUF+8+jWoPeG5onB0FEg9Od/iU2fflUr9z8wniH32+
+         fD3mpnZyU0lx87FUCt0epCpa8ycmuvZP2wqzdlLZgoReYN2GyKBscsfrW0oxQ0OgKVlF
+         vLxA==
+X-Gm-Message-State: AOJu0YweYJuzWpt3xlwWyonBJichywUay+h4BrXxQtWfRhlHYO9nRi+/
+	+BgWu07KRap/R9492bMLzbksJn9TM26/fFDN1Nf8p+E4
+X-Google-Smtp-Source: AGHT+IGOwv+JMe9LhytdON3udR8lCNrEUEhKRkteEYEJXfm1i3wfjX3UCluoIHcPnUFu32ZmHv+K/A==
+X-Received: by 2002:a05:6a20:244b:b0:18c:fa:17f7 with SMTP id t11-20020a056a20244b00b0018c00fa17f7mr24241206pzc.46.1701293181673;
+        Wed, 29 Nov 2023 13:26:21 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:dcf:15e4:5f50:e692])
+        by smtp.gmail.com with ESMTPSA id t22-20020a634616000000b005c215baacc1sm11816336pga.70.2023.11.29.13.26.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Nov 2023 13:26:21 -0800 (PST)
+From: Douglas Anderson <dianders@chromium.org>
+To: Jakub Kicinski <kuba@kernel.org>,
+	Hayes Wang <hayeswang@realtek.com>,
+	"David S . Miller" <davem@davemloft.net>
+Cc: linux-usb@vger.kernel.org,
+	Grant Grundler <grundler@chromium.org>,
+	Laura Nao <laura.nao@collabora.com>,
+	Edward Hill <ecgh@chromium.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Simon Horman <horms@kernel.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH net v3 1/5] r8152: Hold the rtnl_lock for all of reset
+Date: Wed, 29 Nov 2023 13:25:20 -0800
+Message-ID: <20231129132521.net.v3.1.I77097aa9ec01aeca1b3c75fde4ba5007a17fdf76@changeid>
+X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.0.0, Database issued on: 11/29/2023 20:26:37
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 181714 [Nov 29 2023]
-X-KSE-AntiSpam-Info: Version: 6.0.0.2
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 5 0.3.5 98d108ddd984cca1d7e65e595eac546a62b0144b
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.78.44 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info:
-	127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.78.44
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 11/29/2023 20:30:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 11/29/2023 6:46:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
 
-In init_freecom(), the results of usb_stor_control_msg() calls are stored
-in the local variable and then printed out by usb_stor_dbg() (if enabled),
-except for the 1st call, the result of which is completely ignored.  Drop
-the useless assignment.
+As of commit d9962b0d4202 ("r8152: Block future register access if
+register access fails") there is a race condition that can happen
+between the USB device reset thread and napi_enable() (not) getting
+called during rtl8152_open(). Specifically:
+* While rtl8152_open() is running we get a register access error
+  that's _not_ -ENODEV and queue up a USB reset.
+* rtl8152_open() exits before calling napi_enable() due to any reason
+  (including usb_submit_urb() returning an error).
 
-Found by Linux Verification Center (linuxtesting.org) with the Svace static
-analysis tool.
+In that case:
+* Since the USB reset is perform in a separate thread asynchronously,
+  it can run at anytime USB device lock is not held - even before
+  rtl8152_open() has exited with an error and caused __dev_open() to
+  clear the __LINK_STATE_START bit.
+* The rtl8152_pre_reset() will notice that the netif_running() returns
+  true (since __LINK_STATE_START wasn't cleared) so it won't exit
+  early.
+* rtl8152_pre_reset() will then hang in napi_disable() because
+  napi_enable() was never called.
 
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+We can fix the race by making sure that the r8152 reset routines don't
+run at the same time as we're opening the device. Specifically we need
+the reset routines in their entirety rely on the return value of
+netif_running(). The only way to reliably depend on that is for them
+to hold the rntl_lock() mutex for the duration of reset.
 
+Grabbing the rntl_lock() mutex for the duration of reset seems like a
+long time, but reset is not expected to be common and the rtnl_lock()
+mutex is already held for long durations since the core grabs it
+around the open/close calls.
+
+Fixes: d9962b0d4202 ("r8152: Block future register access if register access fails")
+Reviewed-by: Grant Grundler <grundler@chromium.org>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
-This patch is against the 'usb-next' branch of Greg KH's 'usb.git' repo...
+In response to v1 Paolo questioned the wisdom of grabbing the
+rtnl_lock in the USB pre_reset() and releasing it in the USB
+post_reset() [1]. While his concern is a legitimate one because this
+looks a bit fragile, I'm still of the belief that the current patch is
+the best solution.
 
- drivers/usb/storage/freecom.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch has been tested with lockdep and I saw no splats about
+it. I've also read through the usb core code twice and I don't see any
+way that post_reset() won't be called if pre_reset() was called,
+assuming that the pre_reset() doesn't return an error (we never return
+an error from pre_reset()).
 
-Index: usb/drivers/usb/storage/freecom.c
-===================================================================
---- usb.orig/drivers/usb/storage/freecom.c
-+++ usb/drivers/usb/storage/freecom.c
-@@ -446,7 +446,7 @@ static int init_freecom(struct us_data *
- 	 * all our packets.  No need to allocate any extra buffer space.
- 	 */
+If folks have some example of something that's broken by the current
+rtnl_lock strategy used by this patch (or if folks feel very strongly
+that it needs to be changed) then I can spin another version. ...but
+as per my reply to Paolo [2] I think that does have some minor
+downsides.
+
+[1] https://lore.kernel.org/r/f8c1979e2c71d871998aec0126dd87adb5e76cce.camel@redhat.com
+[2] https://lore.kernel.org/r/CAD=FV=VqZq33eLiFPNiZCJmewQ1hxECmUnwbjVbvdJiDkQMAJA@mail.gmail.com
+
+(no changes since v2)
+
+Changes in v2:
+- Added "after the cut" notes about rtnl lock strategy.
+
+ drivers/net/usb/r8152.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 2c5c1e91ded6..d6edf0254599 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -8397,6 +8397,8 @@ static int rtl8152_pre_reset(struct usb_interface *intf)
+ 	struct r8152 *tp = usb_get_intfdata(intf);
+ 	struct net_device *netdev;
  
--	result = usb_stor_control_msg(us, us->recv_ctrl_pipe,
-+	usb_stor_control_msg(us, us->recv_ctrl_pipe,
- 			0x4c, 0xc0, 0x4346, 0x0, buffer, 0x20, 3*HZ);
- 	buffer[32] = '\0';
- 	usb_stor_dbg(us, "String returned from FC init is: %s\n", buffer);
++	rtnl_lock();
++
+ 	if (!tp || !test_bit(PROBED_WITH_NO_ERRORS, &tp->flags))
+ 		return 0;
+ 
+@@ -8428,20 +8430,17 @@ static int rtl8152_post_reset(struct usb_interface *intf)
+ 	struct sockaddr sa;
+ 
+ 	if (!tp || !test_bit(PROBED_WITH_NO_ERRORS, &tp->flags))
+-		return 0;
++		goto exit;
+ 
+ 	rtl_set_accessible(tp);
+ 
+ 	/* reset the MAC address in case of policy change */
+-	if (determine_ethernet_addr(tp, &sa) >= 0) {
+-		rtnl_lock();
++	if (determine_ethernet_addr(tp, &sa) >= 0)
+ 		dev_set_mac_address (tp->netdev, &sa, NULL);
+-		rtnl_unlock();
+-	}
+ 
+ 	netdev = tp->netdev;
+ 	if (!netif_running(netdev))
+-		return 0;
++		goto exit;
+ 
+ 	set_bit(WORK_ENABLE, &tp->flags);
+ 	if (netif_carrier_ok(netdev)) {
+@@ -8460,6 +8459,8 @@ static int rtl8152_post_reset(struct usb_interface *intf)
+ 	if (!list_empty(&tp->rx_done))
+ 		napi_schedule(&tp->napi);
+ 
++exit:
++	rtnl_unlock();
+ 	return 0;
+ }
+ 
+-- 
+2.43.0.rc1.413.gea7ed67945-goog
+
 
