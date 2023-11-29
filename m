@@ -1,100 +1,137 @@
-Return-Path: <linux-usb+bounces-3461-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3462-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB43F7FDA92
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 15:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5616D7FDAEE
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 16:16:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 762EA28320F
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 14:57:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 106FD28302C
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 15:16:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15AE735268;
-	Wed, 29 Nov 2023 14:57:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F65374F0;
+	Wed, 29 Nov 2023 15:16:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KFVbs5fq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gJsLTbjS"
 X-Original-To: linux-usb@vger.kernel.org
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Nov 2023 06:57:09 PST
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F6DBE;
-	Wed, 29 Nov 2023 06:57:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701269830; x=1732805830;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=xjxoK83vet1mIKAXJBVjtUZAKs/CZNfXjuPi3R8lz6w=;
-  b=KFVbs5fqwmLRtSFk2L7MFewkygL26Lt/M+I+bxr2CxiAjyg6wrS/fesp
-   ezojIklD0gT5x+2BUwhB6z/QL2pOYP1O3wExF9HvjsEARiSa6YDuWTlGZ
-   172RDxUWHChhhgx+1x/+MeGWOa4DSGPRI40/+iFTnAQobInvEgb4+JeZx
-   Aw8gWuP2jBkKEHtTLqQ/UKW9HkriGll+iiRz80s132Kh/iXRbPVZsUPpy
-   jBVTIube067fdhGzm5B2xHTefdWQ0qRg7doWa3jajDMJwV42/DYNLUuJo
-   sIwwqSq1tc0NjY0v2ed+1c5F3/C6cG/Z0fU4PZ54Bja06HBfTqNzis8JZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="159742"
-X-IronPort-AV: E=Sophos;i="6.04,235,1695711600"; 
-   d="scan'208";a="159742"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 06:56:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="912879560"
-X-IronPort-AV: E=Sophos;i="6.04,235,1695711600"; 
-   d="scan'208";a="912879560"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Nov 2023 06:56:05 -0800
-Message-ID: <0d6880a5-0cf4-9961-97ab-04777cccd9ed@linux.intel.com>
-Date: Wed, 29 Nov 2023 16:57:23 +0200
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAB3BE
+	for <linux-usb@vger.kernel.org>; Wed, 29 Nov 2023 07:16:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701270987;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OcpkJmyvNj3eShS3c+JKZr285NS0S6mgXrW8UfGiu30=;
+	b=gJsLTbjS+Em6G3KiAyc8PGrE+od6pZ9GO+PZAHE5J3HA/EFABUcWl+z2PcwxdAR8UMZYmY
+	rk5rH7sSfen9k9hmXBzGM2ZbYLZCFRfSikLO8LaUFzMt0MgA0YeTaIwOk7JP8EA4zhEJYW
+	FUJ+84eYtXP4cIN4h6rpz0gAikTGWtw=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-386-_OovbazvNDybf2Px3T3cDw-1; Wed,
+ 29 Nov 2023 10:16:23 -0500
+X-MC-Unique: _OovbazvNDybf2Px3T3cDw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 16A723821344;
+	Wed, 29 Nov 2023 15:16:23 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.182])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0BF06502E;
+	Wed, 29 Nov 2023 15:16:20 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: jtornosm@redhat.com
+Subject: [PATCH] net: usb: ax88179_178a: avoid failed operations when device is disconnected
+Date: Wed, 29 Nov 2023 16:16:11 +0100
+Message-ID: <20231129151618.455618-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Kuen-Han Tsai <khtsai@google.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, stern@rowland.harvard.edu
-References: <51b8fc3d-25ef-1ab3-d744-8d851a133828@linux.intel.com>
- <20231128140141.1161490-1-mathias.nyman@linux.intel.com>
- <CAKzKK0psOFJdBsPkqdRi4_5V=5z9XMnFPCYbcE1Nj6A1zj8Gmw@mail.gmail.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFT PATCH 1/2] xhci: Reconfigure endpoint 0 max packet size only
- during endpoint reset
-In-Reply-To: <CAKzKK0psOFJdBsPkqdRi4_5V=5z9XMnFPCYbcE1Nj6A1zj8Gmw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
->> +       ep_index = xhci_get_endpoint_index(&host_ep->desc);
->> +
->> +       /*
->> +        * Usb core assumes a max packet value for ep0 on FS devices until the
->> +        * real value is read from the descriptor. Core resets Ep0 if values
->> +        * mismatch. Reconfigure the xhci ep0 endpoint context here in that case
->> +        */
->> +       if (usb_endpoint_xfer_control(&host_ep->desc) && ep_index == 0) {
->> +               udev = container_of(host_ep, struct usb_device, ep0);
->> +               if (udev->speed == USB_SPEED_FULL)
->> +                       xhci_check_ep0_maxpacket(xhci, xhci->devs[udev->slot_id]);
->> +               /* Nothing else should be done here for ep0 during ep reset */
->> +               return;
->> +       }
->> +
-> 
-> Could there be a race condition between the xhci_endpoint_reset() and
-> xhci_free_dev() functions, resulting in the xhci->devs[udev->slot_id]
-> becoming null?
-> If so, a null pointer dereference will happen in
-> xhci_check_ep0_maxpacket() when accessing vdev->out_ctx.
+When the device is disconnected we get the following messages showing
+failed operations:
+Nov 28 20:22:11 localhost kernel: usb 2-3: USB disconnect, device number 2
+Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: unregister 'ax88179_178a' usb-0000:02:00.0-3, ASIX AX88179 USB 3.0 Gigabit Ethernet
+Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to read reg index 0x0002: -19
+Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to write reg index 0x0002: -19
+Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
+Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0001: -19
+Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
 
-should not race. xhci_free_dev() and xhci_endpoint_reset() for endpoint 0 should only
-be called by hub driver hub_free_dev() and usb_ep0_reinit() respectively.
+The reason is that although the device is detached, normal stop and
+unbind operations are commanded. Avoid these unnecessary operations
+when the device is detached (state is USB_STATE_NOTATTACHED) so as
+not to get the error messages.
 
-Hub driver takes care of concurrency for these
+Fixes: e2ca90c276e1f ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
+Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+---
+ drivers/net/usb/ax88179_178a.c | 26 +++++++++++++++-----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
 
-Thanks
-Mathias
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index 4ea0e155bb0d..e78d555dd95e 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1308,16 +1308,18 @@ static void ax88179_unbind(struct usbnet *dev, struct usb_interface *intf)
+ 	struct ax88179_data *ax179_data = dev->driver_priv;
+ 	u16 tmp16;
+ 
+-	/* Configure RX control register => stop operation */
+-	tmp16 = AX_RX_CTL_STOP;
+-	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_RX_CTL, 2, 2, &tmp16);
++	if (dev->udev->state != USB_STATE_NOTATTACHED) {
++		/* Configure RX control register => stop operation */
++		tmp16 = AX_RX_CTL_STOP;
++		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_RX_CTL, 2, 2, &tmp16);
+ 
+-	tmp16 = 0;
+-	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_CLK_SELECT, 1, 1, &tmp16);
++		tmp16 = 0;
++		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_CLK_SELECT, 1, 1, &tmp16);
+ 
+-	/* Power down ethernet PHY */
+-	tmp16 = 0;
+-	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL, 2, 2, &tmp16);
++		/* Power down ethernet PHY */
++		tmp16 = 0;
++		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL, 2, 2, &tmp16);
++	}
+ 
+ 	kfree(ax179_data);
+ }
+@@ -1663,11 +1665,13 @@ static int ax88179_stop(struct usbnet *dev)
+ {
+ 	u16 tmp16;
+ 
+-	ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
++	if (dev->udev->state != USB_STATE_NOTATTACHED) {
++		ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
+ 			 2, 2, &tmp16);
+-	tmp16 &= ~AX_MEDIUM_RECEIVE_EN;
+-	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
++		tmp16 &= ~AX_MEDIUM_RECEIVE_EN;
++		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
+ 			  2, 2, &tmp16);
++	}
+ 
+ 	return 0;
+ }
+-- 
+2.43.0
 
 
