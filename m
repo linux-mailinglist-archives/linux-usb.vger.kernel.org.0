@@ -1,128 +1,111 @@
-Return-Path: <linux-usb+bounces-3467-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3468-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9ACE7FE045
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 20:24:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75BF47FE145
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 21:44:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7487BB211FA
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 19:24:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A77781C20C24
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Nov 2023 20:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D645DF3E;
-	Wed, 29 Nov 2023 19:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2J163aE8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ECA55EE9F;
+	Wed, 29 Nov 2023 20:44:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BEE1A8
-	for <linux-usb@vger.kernel.org>; Wed, 29 Nov 2023 11:24:10 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5cd573c2cccso1188607b3.1
-        for <linux-usb@vger.kernel.org>; Wed, 29 Nov 2023 11:24:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701285849; x=1701890649; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nbRm4suVWbGsrLER/c9C6n/j7Z59bcCi6w3YIA8nGRc=;
-        b=2J163aE8jjyj0sr3zrcjukKraBevaXgTTOisII0DUqXCwcJgbVAm8Id2McJt+QKNEe
-         3AxNz/xo1ka2x9YeOuuYZaaFxaqBePbRHqvTek4BRjbsrJkW1lOAaMZEsu2mrJsqh+NL
-         o6orkRdif1g2GtDdSLZINZHBKr2f3mRBs7Xz06ALgQdsr7Sv7jWIQrU2kJq14Mkga1pA
-         Cs9PTMwspjScCZRQ9cq15byNA8tXAmhZKoqR32QEPTifByqKBxXt0tGjzOPcSfYsZQQI
-         YZlFgwsOS76aEnXGW9c1JemvAl9pxjRqzC28Q/NjpkBouoyJdGB5wWvC0x7/AQorfs5X
-         0z8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701285849; x=1701890649;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nbRm4suVWbGsrLER/c9C6n/j7Z59bcCi6w3YIA8nGRc=;
-        b=VgdVE+o9VH5NO07r2hA0wUjNMh8Swbn+khBhqhOxR92UK4axftAixyAtql7MSXQ15H
-         DIfyisF21ZVW5eNGM2SjEKSCTCappNUdnSWwmH6a0LiHYE48s2/W+D28C2w1fNRoygu8
-         FQAGqyulmlsHRFL56+Lgga3BO3GXY/oVsNCT7gNEldJ15G+ORP2HCvZ9J1tCdATutchk
-         le3d67SqRxOs1qjdFJ5vkk2Gi328GsWxWO812mm1F/z8h+zhZvHY/U5IENkppYtNmwh9
-         G4Gj3VXefeUBeB+7lKrPqhUcc/JQ26FmGj8fnt50bZpNKe/EZJP8OZqtnM/c2Ita7YGc
-         q5iw==
-X-Gm-Message-State: AOJu0Ywx8sa+6+TlSkPWOjsr74WPhjUY/zme8TntC2rNyCWxa0q5cY4I
-	rsnnoNXTpBJgnGo1e+AMGp64QmYkPjHaYL4=
-X-Google-Smtp-Source: AGHT+IGUV2ky/TT9mGRYJ5pFVrh0jASDhJCBwvPWpjpt765Xg0YWTSmEZ4rYKzsMus2sqZK7XZEPar97Iz/z6uI=
-X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
- (user=rdbabiera job=sendgmr) by 2002:a81:fe03:0:b0:5c1:4b36:85bf with SMTP id
- j3-20020a81fe03000000b005c14b3685bfmr805785ywn.1.1701285849740; Wed, 29 Nov
- 2023 11:24:09 -0800 (PST)
-Date: Wed, 29 Nov 2023 19:23:50 +0000
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A7010DB
+	for <linux-usb@vger.kernel.org>; Wed, 29 Nov 2023 12:44:00 -0800 (PST)
+Received: from [192.168.1.103] (178.176.78.44) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Wed, 29 Nov
+ 2023 23:43:50 +0300
+To: Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+	<usb-storage@lists.one-eyed-alien.net>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: [PATCH] usb: storage: freecom: drop useless assignment in
+ init_freecom()
+Organization: Open Mobile Platform
+Message-ID: <4d3fb70f-bf2f-96cc-a8fb-1ef658a24920@omp.ru>
+Date: Wed, 29 Nov 2023 23:43:50 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1907; i=rdbabiera@google.com;
- h=from:subject; bh=zyy9vTRp0NQrUD3/z05jR9WXsk12rtwCGm6eizGKGaM=;
- b=owGbwMvMwCFW0bfok0KS4TbG02pJDKnp/Uf1mm2Z7pxYbhr7MqNxfdfdL3POX+H3rL4WuD7xY
- dyinDSXjlIWBjEOBlkxRRZd/zyDG1dSt8zhrDGGmcPKBDKEgYtTACbi5szI8GjjmS8hl0J9volM
- 2PR14dd95032SSRde1B8kPne2XkeOg2MDNNsjjJniLzf01z3UYYv1vV86+uJ+Z6xUbJ1/CueHA8 NYwMA
-X-Mailer: git-send-email 2.43.0.rc2.451.g8631bc7472-goog
-Message-ID: <20231129192349.1773623-2-rdbabiera@google.com>
-Subject: [PATCH v3] usb: typec: class: fix typec_altmode_put_partner to put plugs
-From: RD Babiera <rdbabiera@google.com>
-To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, badhri@google.com, 
-	RD Babiera <rdbabiera@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.0.0, Database issued on: 11/29/2023 20:26:37
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 181714 [Nov 29 2023]
+X-KSE-AntiSpam-Info: Version: 6.0.0.2
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 5 0.3.5 98d108ddd984cca1d7e65e595eac546a62b0144b
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.78.44 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info:
+	127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.78.44
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 11/29/2023 20:30:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 11/29/2023 6:46:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Level: *
 
-When typec_altmode_put_partner is called by a plug altmode upon release,
-the port altmode the plug belongs to will not remove its reference to the
-plug. The check to see if the altmode being released evaluates against the
-released altmode's partner instead of the calling altmode itself, so change
-adev in typec_altmode_put_partner to properly refer to the altmode being
-released.
+In init_freecom(), the results of usb_stor_control_msg() calls are stored
+in the local variable and then printed out by usb_stor_dbg() (if enabled),
+except for the 1st call, the result of which is completely ignored.  Drop
+the useless assignment.
 
-typec_altmode_set_partner is not run for port altmodes, so also add a check
-in typec_altmode_release to prevent typec_altmode_put_partner() calls on
-port altmode release.
+Found by Linux Verification Center (linuxtesting.org) with the Svace static
+analysis tool.
 
-Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
-Cc: stable@vger.kernel.org
-Signed-off-by: RD Babiera <rdbabiera@google.com>
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
 ---
-Changes since v2:
-* Moved changelog under "Signed-off-by" tag
+This patch is against the 'usb-next' branch of Greg KH's 'usb.git' repo...
 
-Changes since v1:
-* Changed commit message for clarity
-* Added check to typec_altmode_release to only call put_partner if altmode
-belongs to port partner or plug
----
- drivers/usb/typec/class.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/usb/storage/freecom.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 2e0451bd336e..16a670828dde 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -267,7 +267,7 @@ static void typec_altmode_put_partner(struct altmode *altmode)
- 	if (!partner)
- 		return;
+Index: usb/drivers/usb/storage/freecom.c
+===================================================================
+--- usb.orig/drivers/usb/storage/freecom.c
++++ usb/drivers/usb/storage/freecom.c
+@@ -446,7 +446,7 @@ static int init_freecom(struct us_data *
+ 	 * all our packets.  No need to allocate any extra buffer space.
+ 	 */
  
--	adev = &partner->adev;
-+	adev = &altmode->adev;
- 
- 	if (is_typec_plug(adev->dev.parent)) {
- 		struct typec_plug *plug = to_typec_plug(adev->dev.parent);
-@@ -497,7 +497,8 @@ static void typec_altmode_release(struct device *dev)
- {
- 	struct altmode *alt = to_altmode(to_typec_altmode(dev));
- 
--	typec_altmode_put_partner(alt);
-+	if (!is_typec_port(dev->parent))
-+		typec_altmode_put_partner(alt);
- 
- 	altmode_id_remove(alt->adev.dev.parent, alt->id);
- 	kfree(alt);
-
-base-commit: 24af68a0ed53629bdde7b53ef8c2be72580d293b
--- 
-2.43.0.rc1.413.gea7ed67945-goog
-
+-	result = usb_stor_control_msg(us, us->recv_ctrl_pipe,
++	usb_stor_control_msg(us, us->recv_ctrl_pipe,
+ 			0x4c, 0xc0, 0x4346, 0x0, buffer, 0x20, 3*HZ);
+ 	buffer[32] = '\0';
+ 	usb_stor_dbg(us, "String returned from FC init is: %s\n", buffer);
 
