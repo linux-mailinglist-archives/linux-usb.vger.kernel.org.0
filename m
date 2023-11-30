@@ -1,233 +1,224 @@
-Return-Path: <linux-usb+bounces-3528-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3529-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31AA97FFF3B
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 00:17:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E34F37FFFAD
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 00:45:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3B59B21059
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 23:17:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12A071C20EA3
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 23:45:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC9B461FB5;
-	Thu, 30 Nov 2023 23:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E243B5955E;
+	Thu, 30 Nov 2023 23:45:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PcsNdaMk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3157CD5C;
-	Thu, 30 Nov 2023 15:17:16 -0800 (PST)
-Received: from localhost ([80.209.221.177]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MKsWr-1qpwLs0uE9-00LHtd; Fri, 01 Dec 2023 00:17:05 +0100
-From: Simon Holesch <simon@holesch.de>
-To: Valentina Manea <valentina.manea.m@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Hongren Zheng <i@zenithal.me>,
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E2D1704
+	for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 15:44:36 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6cdd13c586fso1449586b3a.0
+        for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 15:44:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1701387875; x=1701992675; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SLd4D6mSQG/joWbwU/b54aJUKA2FESFs2G7TafIy+Is=;
+        b=PcsNdaMkVWR6Sez2xUDyEatVn3eH0riySSyk/DD9rDF23Q7W6qI5ffyiW8WymH4jT9
+         PQc/ZkLmIMVfVfQGs7kih+X5lu61cSD5AHjAtoNZtb/NCOr/MDiOlyNsOEGHkqaNKgqY
+         ZDWL1Tu1+u5pMtKjxk8GKwsJ184TqltUH0CWU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701387875; x=1701992675;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SLd4D6mSQG/joWbwU/b54aJUKA2FESFs2G7TafIy+Is=;
+        b=a7HV3uGP2EppjBGHYtXYM2zpJ7SMmwKA1ozX2vvAPBmLl4HCswh5dpziIcrYw5p5Qs
+         OubMlRpprMY4HSVLOKz6GyKC7wam93yXL6YQNvJSuXVr3i/oW5F6AuYI20tk2lj9nWD2
+         obKrwe9DwJaEcdZdKZm3+cbg16+lkrAGlJ08Vp+lAnQJJ6vTvGuZT94ZFzH9/m4CPdGt
+         z+94TI7eFCHPGw+sEYGQXZPY+rlGpRwNOCZgw4u/0sQ7b51W1yCTj2JRkkwRcDadVEsu
+         /jECznL4NS0VFPbbAzeQOhu2BH+X6uijvfZemrFp4V6gjN97Wt4KLwFL1PWaxWXE+iUB
+         J7/w==
+X-Gm-Message-State: AOJu0YzaUGLPZhXkD9Xj+B48IXyKDa+huG+xwp6O/gMJMV6mExJvzSOo
+	ZAf7BFChdfvaTziOjeW2bvkB4r8ErIZ1IdoW4rk=
+X-Google-Smtp-Source: AGHT+IF0n3Rck8JGMEe3DIUCNOxgLiieLlqRMlI0w2eWxG/jaCq8ZZLjK2DDCZjkCpsFpWkaJwa0LA==
+X-Received: by 2002:a05:6a20:daaa:b0:187:c662:9b7e with SMTP id iy42-20020a056a20daaa00b00187c6629b7emr24192616pzb.25.1701387875141;
+        Thu, 30 Nov 2023 15:44:35 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:11eb:92ac:94e:c791])
+        by smtp.gmail.com with ESMTPSA id b24-20020aa78718000000b0068fece22469sm1756401pfo.4.2023.11.30.15.44.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Nov 2023 15:44:34 -0800 (PST)
+From: Douglas Anderson <dianders@chromium.org>
+To: linux-usb@vger.kernel.org,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Simon Holesch <simon@holesch.de>,
-	linux-usb@vger.kernel.org,
+Cc: Simon Horman <horms@kernel.org>,
+	Grant Grundler <grundler@chromium.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Hayes Wang <hayeswang@realtek.com>,
+	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+	Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Brian Geffon <bgeffon@google.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Bastien Nocera <hadess@hadess.net>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	Flavio Suligoi <f.suligoi@asem.it>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	=?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
+	Rob Herring <robh@kernel.org>,
+	Roy Luo <royluo@google.com>,
+	Stanley Chang <stanley_chang@realtek.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usbip: Don't submit special requests twice
-Date: Fri,  1 Dec 2023 00:10:13 +0100
-Message-ID: <20231130231650.22410-1-simon@holesch.de>
-X-Mailer: git-send-email 2.43.0
+Subject: [PATCH] usb: core: Save the config when a device is deauthorized+authorized
+Date: Thu, 30 Nov 2023 15:43:47 -0800
+Message-ID: <20231130154337.1.Ie00e07f07f87149c9ce0b27ae4e26991d307e14b@changeid>
+X-Mailer: git-send-email 2.43.0.rc2.451.g8631bc7472-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:JSWYadvl06BY/GP/X48YbWWR8oe7ky/mMR7iCfES6xabSW7p4uX
- Ysu1/4quPMTyT/Hf2vaXRoHv2tJLXwqSpaSo7wnkaVbpefNa3YO0YmCz4RWndmR35+0egRS
- xYI/RmhbBul3gu8EP4tT5tJ9l30UgkyImITjfYH+2+3dDTAmJbz+96QGMb8c7mDuH//5WhJ
- CIzGRumnU98q/9p2eH3XA==
-UI-OutboundReport: notjunk:1;M01:P0:uQqYBdCFXmg=;jOFLonkHGXSl33/h14ZjSomW1mh
- 9UWwnIQBCrppk7rruyVzSwR6N+/v2t71hnbJ5XmbgsIOyFO77rg/TTjcv8KM0jR6ND2CEUfev
- Fe7qb7UMX/CLfTd0xIkCQ9RDIDMs69npmggec9x9Goo0reYuHSpZQCO1y4WOfuKLug+FASBOt
- l7z7CCXQDbU1tKWBoUcOhANTp6x6dH653KVVWfmLkGGIcKgq6LRg9D7wobMDjnDT4BTD0z97J
- aZt/k5BjMdNqILzKzrkab+dJ3Dwym+6q6b0MM+pxnWoRi2xyDGRxqfeU3pUvYK4cXEQJ+gCM+
- u6d4LI/mXalQuYptxKRKP0aqKFOna3lzpAnXr30Wvowotcr1H8+/qV8RabzJZclLxBvmTwlHP
- jSyMvHjxSJac+vzwTDOPs3ehragt8RqA2uVbxKXWn9NMIjuPSG6gZxGWwteRb+WivXxiphATM
- WiA5uATTNaz0iuLlJprQu5WwM3R3T8pDGIWpQ/za8QcUe7S/QRieH3tJXa8sWgTbkQm9gIHCD
- APY4yogeZVCAyCyi5kEE3Oi+w4OOUfEEZ2tTl1jIwSqP7AyHhTphk3BaQhIuwqBCXIc0yvFYH
- O/84wHOfu2kPmClUTk223GzuuPjvSMupRO9RFSCzVn6KIF4SAFVvw5f624FTUOD7E6Pd2Jx1R
- wDHqH0+r22ogBJYCYEyPxtESCbpFB9iS5M2B4L6xyNrDMwetY56yIqL/EHsxD97BDxazioYvz
- KYI+lw+G9r7eKB5F4UCxKfThe5GkWqvvGymAz5vmN+Bx4vSUP9RIoY9cdfVXavaTa4dxC33pt
- 3JuaE+g/ZiUcPh3Y0WpbMwBAFYMsREWn/PpqVpiWfDcFQ8VjBpHwmiAwHl2K6iQTor+CmU/b6
- rwn0O80H5N9SZ9w==
 
-Skip submitting URBs, when identical requests were already sent in
-tweak_special_requests(). Instead call the completion handler directly
-to return the result of the URB.
+Right now, when a USB device is deauthorized (by writing 0 to the
+"authorized" field in sysfs) and then reauthorized (by writing a 1) it
+loses any configuration it might have had. This is because
+usb_deauthorize_device() calls:
+  usb_set_configuration(usb_dev, -1);
+...and then usb_authorize_device() calls:
+  usb_choose_configuration(udev);
+...to choose the "best" configuration.
 
-Even though submitting those requests twice should be harmless, there
-are USB devices that react poorly to some duplicated requests.
+This generally works OK and it looks like the above design was chosen
+on purpose. In commit 93993a0a3e52 ("usb: introduce
+usb_authorize/deauthorize()") we can see some discussion about keeping
+the old config but it was decided not to bother since we can't save it
+for wireless USB anyway. It can be noted that as of commit
+1e4c574225cc ("USB: Remove remnants of Wireless USB and UWB") wireless
+USB is removed anyway, so there's really not a good reason not to keep
+the old config.
 
-One example is the ChipIdea controller implementation in U-Boot: The
-second SET_CONFIURATION request makes U-Boot disable and re-enable all
-endpoints. Re-enabling an endpoint in the ChipIdea controller, however,
-was broken until U-Boot commit b272c8792502 ("usb: ci: Fix gadget
-reinit").
+Unfortunately, throwing away the old config breaks when something has
+decided to choose a config other than the normal "best" config.
+Specifically, it can be noted that as of commit ec51fbd1b8a2 ("r8152:
+add USB device driver for config selection") that the r8152 driver
+subclasses the generic USB driver and selects a config other than the
+one that would have been selected by usb_choose_configuration(). This
+logic isn't re-run after a deauthorize + authorize and results in the
+r8152 driver not being re-bound.
 
-Signed-off-by: Simon Holesch <simon@holesch.de>
+Let's change things to save the old config when we deauthorize and
+then restore it when we re-authorize. We'll disable this logic for
+wireless USB where we re-fetch the descriptor after authorization.
+
+Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
+Although this seems to work for me and doesn't seem too terrible, I
+could certainly imagine that USB folks might want something different
+in terms of style or general approach. If there's some other way we
+should be tackling this problem then please yell. I guess worst case
+we could also revert the r8152 changes to subclass the generic USB
+driver until this problem is solved, though that doesn't seem
+wonderful.
 
-Changes in v3:
-- handle errors in tweak_* routines: send URB if tweaking fails
+ drivers/usb/core/hub.c     | 19 ++++++++++++++++---
+ drivers/usb/core/message.c |  2 ++
+ include/linux/usb.h        |  3 +++
+ 3 files changed, 21 insertions(+), 3 deletions(-)
 
-Changes in v2:
-- explain change in commit message
-
-Thanks again for the feedback!
-
- drivers/usb/usbip/stub_rx.c | 73 +++++++++++++++++++++++--------------
- 1 file changed, 46 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
-index fc01b31bbb87..76a6f46b8676 100644
---- a/drivers/usb/usbip/stub_rx.c
-+++ b/drivers/usb/usbip/stub_rx.c
-@@ -144,53 +144,62 @@ static int tweak_set_configuration_cmd(struct urb *urb)
- 	if (err && err != -ENODEV)
- 		dev_err(&sdev->udev->dev, "can't set config #%d, error %d\n",
- 			config, err);
--	return 0;
-+	return err;
- }
- 
- static int tweak_reset_device_cmd(struct urb *urb)
- {
- 	struct stub_priv *priv = (struct stub_priv *) urb->context;
- 	struct stub_device *sdev = priv->sdev;
-+	int err;
- 
- 	dev_info(&urb->dev->dev, "usb_queue_reset_device\n");
- 
--	if (usb_lock_device_for_reset(sdev->udev, NULL) < 0) {
-+	err = usb_lock_device_for_reset(sdev->udev, NULL)
-+	if (err < 0) {
- 		dev_err(&urb->dev->dev, "could not obtain lock to reset device\n");
--		return 0;
-+		return err;
- 	}
--	usb_reset_device(sdev->udev);
-+	err = usb_reset_device(sdev->udev);
- 	usb_unlock_device(sdev->udev);
- 
--	return 0;
-+	return err;
- }
- 
- /*
-  * clear_halt, set_interface, and set_configuration require special tricks.
-+ * Returns 1 if request was tweaked, 0 otherwise.
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index b4584a0cd484..4afbbfa279ae 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2653,12 +2653,20 @@ int usb_new_device(struct usb_device *udev)
   */
--static void tweak_special_requests(struct urb *urb)
-+static int tweak_special_requests(struct urb *urb)
+ int usb_deauthorize_device(struct usb_device *usb_dev)
  {
-+	int err;
++	int old_configuration;
 +
- 	if (!urb || !urb->setup_packet)
--		return;
-+		return 0;
+ 	usb_lock_device(usb_dev);
+ 	if (usb_dev->authorized == 0)
+ 		goto out_unauthorized;
  
- 	if (usb_pipetype(urb->pipe) != PIPE_CONTROL)
--		return;
-+		return 0;
++	/*
++	 * Keep the `saved_configuration` in a local since
++	 * usb_set_configuration() will clobber it.
++	 */
++	old_configuration = usb_dev->saved_configuration;
+ 	usb_dev->authorized = 0;
+ 	usb_set_configuration(usb_dev, -1);
++	usb_dev->saved_configuration = old_configuration;
  
- 	if (is_clear_halt_cmd(urb))
- 		/* tweak clear_halt */
--		 tweak_clear_halt_cmd(urb);
-+		err = tweak_clear_halt_cmd(urb);
- 
- 	else if (is_set_interface_cmd(urb))
- 		/* tweak set_interface */
--		tweak_set_interface_cmd(urb);
-+		err = tweak_set_interface_cmd(urb);
- 
- 	else if (is_set_configuration_cmd(urb))
- 		/* tweak set_configuration */
--		tweak_set_configuration_cmd(urb);
-+		err = tweak_set_configuration_cmd(urb);
- 
- 	else if (is_reset_device_cmd(urb))
--		tweak_reset_device_cmd(urb);
+ out_unauthorized:
+ 	usb_unlock_device(usb_dev);
+@@ -2685,7 +2693,10 @@ int usb_authorize_device(struct usb_device *usb_dev)
+ 	/* Choose and set the configuration.  This registers the interfaces
+ 	 * with the driver core and lets interface drivers bind to them.
+ 	 */
+-	c = usb_choose_configuration(usb_dev);
++	if (usb_dev->saved_configuration != -1)
++		c = usb_dev->saved_configuration;
++	else
++		c = usb_choose_configuration(usb_dev);
+ 	if (c >= 0) {
+ 		result = usb_set_configuration(usb_dev, c);
+ 		if (result) {
+@@ -5077,10 +5088,12 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+ 					retval);
+ 		goto fail;
+ 	}
+-	if (initial)
++	if (initial) {
+ 		udev->descriptor = *descr;
 -	else
-+		err = tweak_reset_device_cmd(urb);
-+	else {
- 		usbip_dbg_stub_rx("no need to tweak\n");
-+		return 0;
++		udev->saved_configuration = -1;
++	} else {
+ 		*dev_descr = *descr;
 +	}
+ 	kfree(descr);
+ 
+ 	/*
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index 077dfe48d01c..015522068300 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -1998,6 +1998,8 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
+ 	struct usb_hcd *hcd = bus_to_hcd(dev->bus);
+ 	int n, nintf;
+ 
++	dev->saved_configuration = configuration;
 +
-+	return !err;
- }
+ 	if (dev->authorized == 0 || configuration == -1)
+ 		configuration = 0;
+ 	else {
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 8c61643acd49..6b989b8b2f01 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -644,6 +644,7 @@ struct usb3_lpm_parameters {
+  *	parent->hub_delay + wHubDelay + tTPTransmissionDelay (40ns)
+  *	Will be used as wValue for SetIsochDelay requests.
+  * @use_generic_driver: ask driver core to reprobe using the generic driver.
++ * @saved_configuration: The last value passed to usb_set_configuration().
+  *
+  * Notes:
+  * Usbcore drivers should not set usbdev->state directly.  Instead use
+@@ -729,6 +730,8 @@ struct usb_device {
  
- /*
-@@ -468,6 +477,7 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
- 	int support_sg = 1;
- 	int np = 0;
- 	int ret, i;
-+	int is_tweaked;
+ 	u16 hub_delay;
+ 	unsigned use_generic_driver:1;
++
++	int saved_configuration;
+ };
  
- 	if (pipe == -1)
- 		return;
-@@ -580,8 +590,7 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
- 		priv->urbs[i]->pipe = pipe;
- 		priv->urbs[i]->complete = stub_complete;
- 
--		/* no need to submit an intercepted request, but harmless? */
--		tweak_special_requests(priv->urbs[i]);
-+		is_tweaked = tweak_special_requests(priv->urbs[i]);
- 
- 		masking_bogus_flags(priv->urbs[i]);
- 	}
-@@ -594,22 +603,32 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
- 
- 	/* urb is now ready to submit */
- 	for (i = 0; i < priv->num_urbs; i++) {
--		ret = usb_submit_urb(priv->urbs[i], GFP_KERNEL);
-+		if (!is_tweaked) {
-+			ret = usb_submit_urb(priv->urbs[i], GFP_KERNEL);
- 
--		if (ret == 0)
--			usbip_dbg_stub_rx("submit urb ok, seqnum %u\n",
--					pdu->base.seqnum);
--		else {
--			dev_err(&udev->dev, "submit_urb error, %d\n", ret);
--			usbip_dump_header(pdu);
--			usbip_dump_urb(priv->urbs[i]);
-+			if (ret == 0)
-+				usbip_dbg_stub_rx("submit urb ok, seqnum %u\n",
-+						pdu->base.seqnum);
-+			else {
-+				dev_err(&udev->dev, "submit_urb error, %d\n", ret);
-+				usbip_dump_header(pdu);
-+				usbip_dump_urb(priv->urbs[i]);
- 
-+				/*
-+				 * Pessimistic.
-+				 * This connection will be discarded.
-+				 */
-+				usbip_event_add(ud, SDEV_EVENT_ERROR_SUBMIT);
-+				break;
-+			}
-+		} else {
- 			/*
--			 * Pessimistic.
--			 * This connection will be discarded.
-+			 * An identical URB was already submitted in
-+			 * tweak_special_requests(). Skip submitting this URB to not
-+			 * duplicate the request.
- 			 */
--			usbip_event_add(ud, SDEV_EVENT_ERROR_SUBMIT);
--			break;
-+			priv->urbs[i]->status = 0;
-+			stub_complete(priv->urbs[i]);
- 		}
- 	}
- 
+ #define to_usb_device(__dev)	container_of_const(__dev, struct usb_device, dev)
 -- 
-2.43.0
+2.43.0.rc2.451.g8631bc7472-goog
 
 
