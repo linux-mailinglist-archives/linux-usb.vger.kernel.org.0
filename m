@@ -1,57 +1,57 @@
-Return-Path: <linux-usb+bounces-3517-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3518-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 779427FF8D0
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 18:50:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4EEE7FF917
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 19:10:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6CCCB20D7D
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 17:50:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 53574B20E59
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 18:10:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DF99584DF;
-	Thu, 30 Nov 2023 17:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A87EC59161;
+	Thu, 30 Nov 2023 18:10:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="J5dudgB2"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="RsPWt8q6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBBEF4
-	for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 09:50:21 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1cf98ffc257so11795795ad.3
-        for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 09:50:21 -0800 (PST)
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E72310D9
+	for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 10:09:59 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-41cc535cd5cso6671931cf.2
+        for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 10:09:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1701366621; x=1701971421; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1701367799; x=1701972599; darn=vger.kernel.org;
         h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BEMYJsQ0+TAk1WMTU2heuYnubswr4NLTfr0w+A0LTHo=;
-        b=J5dudgB2a5zyKkk3rMKW6dnRx9zJrxDP4bO2Yl6S0wyN+0Iy3/8CNg+83kAEDTMHKa
-         6VGZktvrv6hyNi4rTIsfMxgezLkUrJK+JiqVuFORG1X2LzEj5E31yHza1DzQ/I7K8Cy5
-         +CSfYiYKzj3+pDT08Uvl2hUOySlDvW4ycgkIM=
+        bh=DAN8PUrPGt5Ep59RZrb+K6ldYhWEuMD8ZnwgrjJ7/Z0=;
+        b=RsPWt8q65IQmjFhW29Kp5mijBTghDutUH6qLyYi5Hk0FkBlhmuPn6ogiOt9v0goeC6
+         jWeGyy93vXdaI4ethd0O0WuuRMtmtuqVByS3kJ7rXQVPgIpstT/BdEYNhUrY0TslhONU
+         NdtdQTPmpOQ5dCJnIB9gI4MoZLfkWhyMYj+jk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701366621; x=1701971421;
+        d=1e100.net; s=20230601; t=1701367799; x=1701972599;
         h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=BEMYJsQ0+TAk1WMTU2heuYnubswr4NLTfr0w+A0LTHo=;
-        b=wc672Q2lOwgTlYysN0RTyNV2Rs/pQbCunZ39oheV2KwK9+sEpcY1FEHmzOYIvB77kl
-         M2kRHssd6vBsZbHzKKsOUv7thYlH/VGzdijT4RTM7ebXWydMrjLTbW8qfbntKHHG3El/
-         z1f1fr6NYWJ9FLw6RfVfz8JCwjj8aDEpZMxUU7OnfHp6s6DRtuNmWnQa3wJxriIZZklH
-         aN/Dxo9HbE0hqT9dEToAIZ0ULh3elbcxegGjkwczYQxrQKySFrGu9FBXOVjUNdVVxsSP
-         uwgmdL/zWy3HwasSK71SXmAU4285+gJyVq4+xC6TA9FVyvSM+CbWXByM860yfms8YzOC
-         TH4w==
-X-Gm-Message-State: AOJu0YwP3gAnrVKnVg5WRWTxq4XXmKxP3j51vMqIlCbnBCRk61EeLrAl
-	debQyYafdj2r4ia2eJ1kjE5P5A==
-X-Google-Smtp-Source: AGHT+IFBb7Cm5Oj2gTARNJdb/dLHkvrk8mS7eXXpJjnVnF55rFf5QWL7G82X9htJUfFeGNg/++NdNg==
-X-Received: by 2002:a17:902:e54b:b0:1ce:6589:d1c0 with SMTP id n11-20020a170902e54b00b001ce6589d1c0mr27982884plf.46.1701366620749;
-        Thu, 30 Nov 2023 09:50:20 -0800 (PST)
+        bh=DAN8PUrPGt5Ep59RZrb+K6ldYhWEuMD8ZnwgrjJ7/Z0=;
+        b=ck1Vc5gBzm5MiGUEVp1qofpI9PVC+GGq688YIlPvhera6m8pUFtMSL/hE6/kykKNJW
+         SHhLCYOfebfO3b+2/lwlZ0alNw5zBOvbn3JU/bVcv8tnBQkn00FsQM5o7+KIZuS/n+v2
+         wdcCio6neGFVfZS+BKZRtcWRIlhO1pp6DpaOqsG+vTP9DA98dwo7MfyKbbzYdXJyJOTk
+         ppxL2vV1wP5TsyAVOhVxWCrrOrOygWgKitrq6l0soQhi1ZU9xUdANABOrRIfFtVfoxIz
+         pGp33FJy1wtyETGdKoEu+GsX8dJOjdMOkiKSj//SeFFkDB5XodM39HEH9+GnGcKHfZyK
+         VDzA==
+X-Gm-Message-State: AOJu0YxGQSXDr+oXWj2R97tYnQJebJroSwBLG8IMKMUBaZGg0kRRaKII
+	GxmvOdiccwpE6yI5yH6G1j6yQA==
+X-Google-Smtp-Source: AGHT+IEx0xJMN/MT7szKAsxzjqwWFAxGeTCpx6uy+U4fYIRGh6/Tvhakcbvi+TyHSAolCuKL1MjZxQ==
+X-Received: by 2002:a0c:e845:0:b0:67a:2745:3c8e with SMTP id l5-20020a0ce845000000b0067a27453c8emr20897740qvo.46.1701367798743;
+        Thu, 30 Nov 2023 10:09:58 -0800 (PST)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id j7-20020a170902da8700b001c60c3f9508sm1682209plx.230.2023.11.30.09.50.17
+        by smtp.gmail.com with ESMTPSA id g13-20020a0ce4cd000000b0067a3ad49979sm696722qvm.96.2023.11.30.10.09.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Nov 2023 09:50:19 -0800 (PST)
-Message-ID: <c9f14a17-0dd8-4bf8-a969-8592593b39c5@broadcom.com>
-Date: Thu, 30 Nov 2023 09:50:17 -0800
+        Thu, 30 Nov 2023 10:09:58 -0800 (PST)
+Message-ID: <946c67a4-67e3-4ffb-ab95-6905720e14f3@broadcom.com>
+Date: Thu, 30 Nov 2023 10:09:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,7 +59,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 1/2] dt-bindings: usb: xhci: Add optional power-domains
+Subject: Re: [PATCH V2 2/2] ARM: dts: bcm2711: Add generic xHCI
 To: Stefan Wahren <wahrenst@gmx.net>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Rob Herring <robh+dt@kernel.org>,
@@ -67,10 +67,9 @@ To: Stefan Wahren <wahrenst@gmx.net>,
  Conor Dooley <conor+dt@kernel.org>, Mathias Nyman <mathias.nyman@intel.com>
 Cc: bcm-kernel-feedback-list@broadcom.com, Cyril Brulebois <kibi@debian.org>,
  linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- Conor Dooley <conor.dooley@microchip.com>
+ linux-arm-kernel@lists.infradead.org
 References: <20231130154229.22334-1-wahrenst@gmx.net>
- <20231130154229.22334-2-wahrenst@gmx.net>
+ <20231130154229.22334-3-wahrenst@gmx.net>
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
@@ -104,45 +103,31 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
  7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
  95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20231130154229.22334-2-wahrenst@gmx.net>
+In-Reply-To: <20231130154229.22334-3-wahrenst@gmx.net>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000158853060b624970"
+	boundary="0000000000004b074a060b628f54"
 
---000000000000158853060b624970
+--0000000000004b074a060b628f54
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 11/30/23 07:42, Stefan Wahren wrote:
-> BCM2711 SoC use a power domain for the xHCI. So allow supplying this
-> domain in bindings.
+> The BCM2711 SoC also has a generic xHCI. The USB port is currently
+> only usable on the Compute Module 4 (e.g. via IO board). Because
+> DWC2 and xHCI share the same PHY, we let the bootloader enable it
+> on demand.
 > 
 > Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->   Documentation/devicetree/bindings/usb/generic-xhci.yaml | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/generic-xhci.yaml b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
-> index 594ebb3ee432..e48beaff7d0d 100644
-> --- a/Documentation/devicetree/bindings/usb/generic-xhci.yaml
-> +++ b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
-> @@ -49,6 +49,9 @@ properties:
->         - const: core
->         - const: reg
-> 
-> +  power-domains:
-> +    maxItems: 1
+> Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
 
-That works, I am not sure whether we want to key off based upon the 
-compatible string, but either way:
-
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+And this gives a consistent + 4MB/sec throughput compared to dwc2, so 
+this looks great!
 -- 
 Florian
 
 
---000000000000158853060b624970
+--0000000000004b074a060b628f54
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -213,15 +198,15 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIOTEidvYfIQ6vwL
-cPvqxcRSuVp1p0K91ADFZ6910EelMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMTEzMDE3NTAyMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICUqPh3rtq6/G1tS
+dOWcChUoha812ukit+eW3z+02fzMMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMTEzMDE4MDk1OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCQds3PmeZ+tXkTK09lTFLVtGFpD4TE64HF
-2PyS0P12To/oRCHMwXdRw7TGcbM6A34Tq/NgCfzTg50gWtGeHj6V6z+3MlmYcWxhC/KfEHwz/kvC
-5SLAK1TcWH0nQjTQFkjwzU4AeqM39+jDmjWWcxsbHSzSVcG2kBfTbLiThQVCksUwL5cFsGpyBtbY
-4WW614meYKK5Bs4BVPNNOwraJue/AFCEXgHw5zoOn4YM0uBpzn5/IsDFuFzjqDF5ja3SjXeifwjX
-G8KPEmnKF5/jrItVG5dSQAh2frVNlyszTD5vC9Q1wGf8Wtq43j2ONMOV97/7HjPq2EpLI2Oetb6q
-eeti
---000000000000158853060b624970--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAX5nASrh8fY0TbJq424j29WtVD1ZH7zs7V
+JI/taYY9rEUpQ0ZuqMeP28tuKGTJxHV9nMRG47DZTSZUXHcBKYyf7jSeBoCuHBK4OTjylAsM44w6
+9262TSYjqpAVMShJYZh6cPMqXojBxtqtFcnHkt+9CKX4eEperPiD/+hc5l180e5JLLKg9PCS0PAf
+iWvy6IAUfJDiVsI6y2lVdoq2RTCT4kc12/gQc4ovkujIpSXd4eNlllDdwQVVbQZ574EvBbjkwG1e
+aqDrMZzx6E6fOjimxalx1/Vwduu8q80cnSVkQ6uKdnTFZNZDQfJgk2m8MEki2Knb3t6GcZRSCZoZ
+Pbpu
+--0000000000004b074a060b628f54--
 
