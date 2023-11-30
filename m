@@ -1,60 +1,60 @@
-Return-Path: <linux-usb+bounces-3476-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3477-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DF297FEA38
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 09:09:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A79957FEA4D
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 09:16:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 428BF1C20DCE
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 08:09:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D692282110
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 08:16:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F27FA22091;
-	Thu, 30 Nov 2023 08:09:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C67722327;
+	Thu, 30 Nov 2023 08:16:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Kuncds0M"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jvjm0klh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EEDBD
-	for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 00:08:55 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-54c17a12354so42421a12.3
-        for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 00:08:55 -0800 (PST)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A06C4
+	for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 00:16:45 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-a18c001f305so27656066b.3
+        for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 00:16:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701331734; x=1701936534; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1701332204; x=1701937004; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=O0TlxkSYiSYMLKfsE9cTgw+R2Akfbcusr1v9Z2l/iJ4=;
-        b=Kuncds0MIb4kZRgIrgNFDFIbnTdl6KEkIxZlen50mtDCacYISIB93eyLOkYd0Kued/
-         ij9HeqBlaIz5wlCrVreXHqpAS/gNWeKhitvm6evD1I9J0lHQpMsfBWHcffQw4AmxL4tX
-         6OaNmDH8oFCgon0Hr814vsfEfkzpO3dzntpolOV80dmv3MUk3ZaPlMkXJRXOT2HNbBLB
-         WbGGfwSbqo7PXop86OTmFLMh2L/TMqJK+uGAY3reMcfa8m4nJr62vTo8Y2Y0/kmSzUA9
-         K67tnV+3UfBcHw1aG5CmNpsjNZEfhVaUHmUSeY13m7aH/sBKoNsYD43jzCSL1o68+4cG
-         dr7A==
+        bh=E26I7mF32d7TZiN90S+MaDwaONY/27p8LP/G6VOqH6w=;
+        b=jvjm0klhB56i60FPsd6pdO2Nz5D9V5Ipt1+8KevAF9QIayrNgxiOHp3+LtRSs5Cu6O
+         1M2gzSSsSPZJB9lo4t8coMmd6oF0B5noQqTkYzNx/UnGXCEWZVUSwhCdD6HDR03WxA8q
+         jZaa3ls1dMfFmEfOE6MsB+MgzHfe10isp0BQ6DtR5Y096KUx/ozvwZiWFTWmgvjdUttl
+         uxb7TXPIdntaxjfH2GvCbFI5ZQNsqfL5Mih85WLV7G61sOQOyJZrts9KmxYT08Ohy3Rq
+         6N406Jbe6ZRacXRP+3PgtvWYr8bmsF8fBSfhsmFJIIy2aOLGvKiokGTzNE9zwn7jBeqh
+         207g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701331734; x=1701936534;
+        d=1e100.net; s=20230601; t=1701332204; x=1701937004;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O0TlxkSYiSYMLKfsE9cTgw+R2Akfbcusr1v9Z2l/iJ4=;
-        b=MeuOQstofT0BVM2P/pSNSxJ58+NP75s3pifIbOXwSpqXPqNvSAp0Y9zlfJEtzNMOIo
-         Ea9zx3vaXWXbZIF8N4lfLl5dtyEb7elJsrMpkOf8djhE1XKaN8MD4APKk4yKSWjd++9H
-         HLDX6iX6IA7PGjk8PdFU6YhyFE5nsJ+7AEuScjOaKAX5NtTjtlkI+jKTTko/EO4irGVe
-         IUJX6nwgL8OQkeyXJQ3XK8NMaLRyW3AFB/qe1AUPu/Skb49M2lxMbw9TvQdM/7D6jYen
-         Tu2GdT9i5iutT+AicQLhlzy+vMXzouKS0wysFpWEuAx4SR+QFyOIhUGM6eWcNJRLWB8j
-         ugIQ==
-X-Gm-Message-State: AOJu0Yw5CNiR8T4EBclKoGetYmgteWNM/lu4Mk79zQGp0VleMXqTeBwp
-	9XjwEnWZ/TdITUg+SLMnbWycJg==
-X-Google-Smtp-Source: AGHT+IG+zp9WU4nYZCOlDoa3Hyb5JWPq/5DfQn+YAqpp+sYDM3FQo1RNPzUztNps4jWnW8T3l++tDA==
-X-Received: by 2002:a17:907:1687:b0:a12:6a16:15c8 with SMTP id cx7-20020a170907168700b00a126a1615c8mr5820940ejd.6.1701331734352;
-        Thu, 30 Nov 2023 00:08:54 -0800 (PST)
+        bh=E26I7mF32d7TZiN90S+MaDwaONY/27p8LP/G6VOqH6w=;
+        b=Oc78FwFt4j0NVzZbAlyuQ9vwtBrVbiDOn+bBZRqF4npQUN1zAJNbwTVPf5Uro6R++p
+         XtAXOd/bgjdyvoZRCi7HP0Z2Vkga9WoVsm3ZDoiqy+8lRPwDynr0obG7vdVx0NQuGNPP
+         qcRoLZ8ITiP4JcfTUobgAZVF01u2w2zaZMajc1j9i1vAe8x2IxTTWygFDfBEO2nqQa+1
+         evxaFegRseLZifEyJVh7VA/OuvGcYNP99HKH8aakZ/X2mgpbaB+J7VB8KmDbBSu/Jasg
+         ttAoINiGVgbZ49asQnpxKRziTwOXDWA/ml48pUvubqAtmMnmKHwvSkZ3z36ofHgsGa9M
+         xAtg==
+X-Gm-Message-State: AOJu0Ywq4p/l5EZt56J45jk/D8V7YUR96DdPTNKo1LhGNFrxbh3KPcXk
+	jCAMv+LAPaTGd4oQMVoIcweGew==
+X-Google-Smtp-Source: AGHT+IG17hbQ90Xbowdr9xPnDYDdzsVr9taq8BAj8p0KyjiLAk7MDQBcUED2kuU8c2j/r+7UTKDZCg==
+X-Received: by 2002:a17:906:8b:b0:a18:abdc:17ca with SMTP id 11-20020a170906008b00b00a18abdc17camr580812ejc.68.1701332204034;
+        Thu, 30 Nov 2023 00:16:44 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.223.109])
-        by smtp.gmail.com with ESMTPSA id oz11-20020a170906cd0b00b009fc990d9edbsm395410ejb.192.2023.11.30.00.08.52
+        by smtp.gmail.com with ESMTPSA id p7-20020a17090635c700b009fc576e26e6sm406533ejb.80.2023.11.30.00.16.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Nov 2023 00:08:53 -0800 (PST)
-Message-ID: <ef315412-99c7-4179-9e96-80eaf2e25f26@linaro.org>
-Date: Thu, 30 Nov 2023 09:08:52 +0100
+        Thu, 30 Nov 2023 00:16:43 -0800 (PST)
+Message-ID: <85527699-f549-4728-b263-7d10c669b889@linaro.org>
+Date: Thu, 30 Nov 2023 09:16:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,9 +65,9 @@ User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/6] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
  bindings
 Content-Language: en-US
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
- Johan Hovold <johan@kernel.org>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+To: Johan Hovold <johan@kernel.org>
+Cc: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+ Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
  Konrad Dybcio <konrad.dybcio@linaro.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Rob Herring <robh+dt@kernel.org>,
@@ -87,7 +87,6 @@ References: <20231122191335.3058-1-quic_kriskura@quicinc.com>
  <6d7527bf-8c1a-49b5-a0cf-99a92098c971@quicinc.com>
  <c8a28c72-5c0a-4a67-a4c9-e46a5716cda4@linaro.org>
  <ZWcPZPX-eT-xHAOv@hovoldconsulting.com>
- <3abe4ebe-80fc-4214-b01e-50c25575f2b9@quicinc.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -133,85 +132,93 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <3abe4ebe-80fc-4214-b01e-50c25575f2b9@quicinc.com>
+In-Reply-To: <ZWcPZPX-eT-xHAOv@hovoldconsulting.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 29/11/2023 11:50, Krishna Kurapati PSSNV wrote:
-> 
-> 
-> On 11/29/2023 3:46 PM, Johan Hovold wrote:
->> On Wed, Nov 29, 2023 at 10:28:25AM +0100, Krzysztof Kozlowski wrote:
->>> On 28/11/2023 12:32, Krishna Kurapati PSSNV wrote:
->>>>
->>>>>
->>>>> So back to my initial proposal, with a slight modification moving
->>>>> pwr_event first (e.g. as it is not a wakeup interrupt):
->>>>>
->>>>> qusb2-:
->>>>>
->>>>> 	- const: pwr_event
->>>>> 	- const: qusb2_phy
->>>>> 	- const: ss_phy_irq	(optional)
->>>>>
->>>>> qusb2:
->>>>>
->>>>> 	- const: pwr_event
->>>>> 	- const: hs_phy_irq
->>>>> 	- const: qusb2_phy
->>>>> 	- const: ss_phy_irq	(optional)
->>>>>
->>>>> femto-:
->>>>> 	- const: pwr_event
->>>>> 	- const: dp_hs_phy_irq
->>>>> 	- const: dm_hs_phy_irq
->>>>> 	- const: ss_phy_irq	(optional)
->>>>>
->>>>> femto:
->>>>> 	- const: pwr_event
->>>>> 	- const: hs_phy_irq
->>>>> 	- const: dp_hs_phy_irq
->>>>> 	- const: dm_hs_phy_irq
->>>>> 	- const: ss_phy_irq	(optional)
+On 29/11/2023 11:16, Johan Hovold wrote:
+> On Wed, Nov 29, 2023 at 10:28:25AM +0100, Krzysztof Kozlowski wrote:
+>> On 28/11/2023 12:32, Krishna Kurapati PSSNV wrote:
 >>>
->>> I did not follow entire thread and I do not know whether you change the
->>> order in existing bindings, but just in case: the entries in existing
->>> bindings cannot change the order. That's a strict ABI requirement
->>> recently also discussed with Bjorn, because we want to have stable DTB
->>> for laptop platforms. If my comment is not relevant, then please ignore.
+>>>>
+>>>> So back to my initial proposal, with a slight modification moving
+>>>> pwr_event first (e.g. as it is not a wakeup interrupt):
+>>>>
+>>>> qusb2-:
+>>>>
+>>>> 	- const: pwr_event
+>>>> 	- const: qusb2_phy
+>>>> 	- const: ss_phy_irq	(optional)
+>>>>
+>>>> qusb2:
+>>>>
+>>>> 	- const: pwr_event
+>>>> 	- const: hs_phy_irq
+>>>> 	- const: qusb2_phy
+>>>> 	- const: ss_phy_irq	(optional)
+>>>>
+>>>> femto-:
+>>>> 	- const: pwr_event
+>>>> 	- const: dp_hs_phy_irq
+>>>> 	- const: dm_hs_phy_irq
+>>>> 	- const: ss_phy_irq	(optional)
+>>>>
+>>>> femto:
+>>>> 	- const: pwr_event
+>>>> 	- const: hs_phy_irq
+>>>> 	- const: dp_hs_phy_irq
+>>>> 	- const: dm_hs_phy_irq
+>>>> 	- const: ss_phy_irq	(optional)
 >>
->> Your comment is relevant, but I'm not sure I agree.
->>
->> The Qualcomm bindings are a complete mess of DT snippets copied from
->> vendor trees and which have not been sanitised properly before being
->> merged upstream (partly due to there not being any public documentation
->> available).
->>
->> This amounts to an unmaintainable mess which is reflected in the
->> binding schemas which similarly needs to encode every random order which
->> the SoC happened to use when being upstreamed. That makes the binding
->> documentation unreadable too, and the next time a new SoC is upstreamed
->> there is no clear hints of what the binding should look like, and we end
->> up with yet another permutation.
->>
->> As part of this exercise, we've also determined that some of the
->> devicetrees that are already upstream are incorrect as well as
->> incomplete.
->>
->> I really see no alternative to ripping of the plaster and cleaning this
->> up once and for all even if it "breaks" some imaginary OS which (unlike
->> Linux) relies on the current random order of these interrupts.
->>
->> [ If there were any real OSes actually relying on the order, then that
->> would be a different thing of course. ]
->>
+>> I did not follow entire thread and I do not know whether you change the
+>> order in existing bindings, but just in case: the entries in existing
+>> bindings cannot change the order. That's a strict ABI requirement
+>> recently also discussed with Bjorn, because we want to have stable DTB
+>> for laptop platforms. If my comment is not relevant, then please ignore.
 > 
-> Hi Krzysztof, Johan,
+> Your comment is relevant, but I'm not sure I agree.
 > 
->    We are modifying all the DT's in accordance to bindings as well. 
-> Still it would be breaking ABI ?
+> The Qualcomm bindings are a complete mess of DT snippets copied from
+> vendor trees and which have not been sanitised properly before being
+> merged upstream (partly due to there not being any public documentation
+> available).
 
-Yes, how can you modify DTB stored in firmware on the customer board?
+True.
+
+> 
+> This amounts to an unmaintainable mess which is reflected in the
+> binding schemas which similarly needs to encode every random order which
+> the SoC happened to use when being upstreamed. That makes the binding
+> documentation unreadable too, and the next time a new SoC is upstreamed
+> there is no clear hints of what the binding should look like, and we end
+> up with yet another permutation.
+
+
+While in general I agree for the bindings, but here, for order of the
+interrupts, I am not really sure if this contributes to unreadable or
+unmaintainable binding.
+
+> 
+> As part of this exercise, we've also determined that some of the
+> devicetrees that are already upstream are incorrect as well as
+> incomplete.
+
+Sure, good explanation for an ABI break.
+
+> 
+> I really see no alternative to ripping of the plaster and cleaning this
+> up once and for all even if it "breaks" some imaginary OS which (unlike
+> Linux) relies on the current random order of these interrupts.
+> 
+> [ If there were any real OSes actually relying on the order, then that
+> would be a different thing of course. ]
+
+The commit breaking the ABI can justify the reasons, including expected
+impact (e.g. none for Linux).
+
+While the second part probably you can justify (interrupts are taken by
+name), the reason for ABI break like "I think it is poor code, so I will
+ignore ABI" is not enough.
 
 Best regards,
 Krzysztof
