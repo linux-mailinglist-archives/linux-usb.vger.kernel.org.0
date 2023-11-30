@@ -1,200 +1,219 @@
-Return-Path: <linux-usb+bounces-3475-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3476-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 522577FE8B4
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 06:32:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DF297FEA38
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 09:09:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0955C2823F9
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 05:32:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 428BF1C20DCE
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 08:09:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6584171D0;
-	Thu, 30 Nov 2023 05:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F27FA22091;
+	Thu, 30 Nov 2023 08:09:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c44wfmX4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Kuncds0M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4717BC;
-	Wed, 29 Nov 2023 21:31:57 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1ce3084c2d1so5503665ad.3;
-        Wed, 29 Nov 2023 21:31:57 -0800 (PST)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EEDBD
+	for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 00:08:55 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-54c17a12354so42421a12.3
+        for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 00:08:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701322317; x=1701927117; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vtLcNogZL4zUE1VKwwbOaAKoW0e8MSfA/IN4DJLgKRM=;
-        b=c44wfmX4wj+fqdkYUVCWpmDjskMRevagcxolJ4qjr4dpnauJzm0uI0hSjiyVZri+Ul
-         8p/cO+wA7eCTUwiLifAG72dCOdeuSaWb5rxYMl7YKbu4eMtgErW/fxxvZ05Pt+haVFfc
-         UcITO+zT/QdtCNCvObCFzMye0kIVovnO14vCupOQkQgDSu6CkBjcFfLLmvjTxUkc0d9x
-         /hNSiahlFlSBlCmhVF3LqJCEi2dybotfgQaRngDSidwzOC5kUpK2IHjfiPu0vBLo2akS
-         kfvvWLK4sLSdMlveGrrVeZ2NH+1Re+5333XFRoVFmb09ySsxwyzhQIH5FBrs5O80RWSk
-         e+uQ==
+        d=linaro.org; s=google; t=1701331734; x=1701936534; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=O0TlxkSYiSYMLKfsE9cTgw+R2Akfbcusr1v9Z2l/iJ4=;
+        b=Kuncds0MIb4kZRgIrgNFDFIbnTdl6KEkIxZlen50mtDCacYISIB93eyLOkYd0Kued/
+         ij9HeqBlaIz5wlCrVreXHqpAS/gNWeKhitvm6evD1I9J0lHQpMsfBWHcffQw4AmxL4tX
+         6OaNmDH8oFCgon0Hr814vsfEfkzpO3dzntpolOV80dmv3MUk3ZaPlMkXJRXOT2HNbBLB
+         WbGGfwSbqo7PXop86OTmFLMh2L/TMqJK+uGAY3reMcfa8m4nJr62vTo8Y2Y0/kmSzUA9
+         K67tnV+3UfBcHw1aG5CmNpsjNZEfhVaUHmUSeY13m7aH/sBKoNsYD43jzCSL1o68+4cG
+         dr7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701322317; x=1701927117;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vtLcNogZL4zUE1VKwwbOaAKoW0e8MSfA/IN4DJLgKRM=;
-        b=aEtlVC+27j8QVRLCkH+l4ygbeUlOPcQwzI/P1m5FVOmiIQwn0pony2axeXpF8iisGm
-         iSu6JucOrDu+3S5nSWLKtnUSX/JQkopaiuwubqfAGplT7glKwLvzfEfpss2I/0/ajl0O
-         +Sb2iysj2mxKZ8+SsQETR4QGSuLnXmOQ7ORJ1q5S0h46/4UBrsgM5b/ffmiGe+vc06fe
-         fHyR1D7ogQaJKcIZVt9qq/FxPHTbfygLL9Y4+Ki7/9iYwzNy7UxSAhFMv1Zy5bHyBC3V
-         xmZop9cwkSO/o7WOwhliz7NroG1Blc/WUoJVPNxQsXFLCHFL3Kr2QGvtga9dB0WlCTUS
-         1sUg==
-X-Gm-Message-State: AOJu0YyfuMZTnAkC2f34j3OI/olAYubeANHyL4SWBcJVc5mQB0XUl6p/
-	Ta8hbC3sk+/lquBVddBIIeE=
-X-Google-Smtp-Source: AGHT+IGvSDeAfCHQWlmojU1BSM6aAFhh7G+Sujt9p/79qfJ5k9x/f9CssKKroYjciNFXQI2GwHUYFA==
-X-Received: by 2002:a17:902:dac1:b0:1cf:edd5:f783 with SMTP id q1-20020a170902dac100b001cfedd5f783mr10924289plx.15.1701322317321;
-        Wed, 29 Nov 2023 21:31:57 -0800 (PST)
-Received: from localhost.localdomain ([49.205.245.83])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170902a5c500b001cfad1a60cesm336330plq.137.2023.11.29.21.31.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 21:31:56 -0800 (PST)
-From: Anand Moon <linux.amoon@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Icenowy Zheng <uwu@icenowy.me>
-Cc: Anand Moon <linux.amoon@gmail.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-amlogic@lists.infradead.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 1/2] dt-bindings: usb: Add the binding example for the Genesys Logic GL3523 hub
-Date: Thu, 30 Nov 2023 11:01:26 +0530
-Message-ID: <20231130053130.21966-2-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231130053130.21966-1-linux.amoon@gmail.com>
-References: <20231130053130.21966-1-linux.amoon@gmail.com>
+        d=1e100.net; s=20230601; t=1701331734; x=1701936534;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O0TlxkSYiSYMLKfsE9cTgw+R2Akfbcusr1v9Z2l/iJ4=;
+        b=MeuOQstofT0BVM2P/pSNSxJ58+NP75s3pifIbOXwSpqXPqNvSAp0Y9zlfJEtzNMOIo
+         Ea9zx3vaXWXbZIF8N4lfLl5dtyEb7elJsrMpkOf8djhE1XKaN8MD4APKk4yKSWjd++9H
+         HLDX6iX6IA7PGjk8PdFU6YhyFE5nsJ+7AEuScjOaKAX5NtTjtlkI+jKTTko/EO4irGVe
+         IUJX6nwgL8OQkeyXJQ3XK8NMaLRyW3AFB/qe1AUPu/Skb49M2lxMbw9TvQdM/7D6jYen
+         Tu2GdT9i5iutT+AicQLhlzy+vMXzouKS0wysFpWEuAx4SR+QFyOIhUGM6eWcNJRLWB8j
+         ugIQ==
+X-Gm-Message-State: AOJu0Yw5CNiR8T4EBclKoGetYmgteWNM/lu4Mk79zQGp0VleMXqTeBwp
+	9XjwEnWZ/TdITUg+SLMnbWycJg==
+X-Google-Smtp-Source: AGHT+IG+zp9WU4nYZCOlDoa3Hyb5JWPq/5DfQn+YAqpp+sYDM3FQo1RNPzUztNps4jWnW8T3l++tDA==
+X-Received: by 2002:a17:907:1687:b0:a12:6a16:15c8 with SMTP id cx7-20020a170907168700b00a126a1615c8mr5820940ejd.6.1701331734352;
+        Thu, 30 Nov 2023 00:08:54 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.223.109])
+        by smtp.gmail.com with ESMTPSA id oz11-20020a170906cd0b00b009fc990d9edbsm395410ejb.192.2023.11.30.00.08.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Nov 2023 00:08:53 -0800 (PST)
+Message-ID: <ef315412-99c7-4179-9e96-80eaf2e25f26@linaro.org>
+Date: Thu, 30 Nov 2023 09:08:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/6] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
+ bindings
+Content-Language: en-US
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+ Johan Hovold <johan@kernel.org>
+Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, quic_wcheng@quicinc.com,
+ linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ quic_ppratap@quicinc.com, quic_jackp@quicinc.com
+References: <20231122191335.3058-1-quic_kriskura@quicinc.com>
+ <ZV9dYpTYRXn63tXe@hovoldconsulting.com>
+ <1192d91f-11bf-44af-953a-14e08e2b6ca8@quicinc.com>
+ <ZWCpGdJRexnk98IN@hovoldconsulting.com>
+ <004ddc69-1566-4de4-b260-0fca96a9395f@quicinc.com>
+ <ZWW_FOAKp95Cf9vN@hovoldconsulting.com>
+ <18965bb9-7afa-4892-8b71-981ba29d2cd4@quicinc.com>
+ <ZWXHrvUDnF2dMk6r@hovoldconsulting.com>
+ <6d7527bf-8c1a-49b5-a0cf-99a92098c971@quicinc.com>
+ <c8a28c72-5c0a-4a67-a4c9-e46a5716cda4@linaro.org>
+ <ZWcPZPX-eT-xHAOv@hovoldconsulting.com>
+ <3abe4ebe-80fc-4214-b01e-50c25575f2b9@quicinc.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <3abe4ebe-80fc-4214-b01e-50c25575f2b9@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add the binding example for the USB3.1 Genesys Logic GL3523
-integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
-hub.
+On 29/11/2023 11:50, Krishna Kurapati PSSNV wrote:
+> 
+> 
+> On 11/29/2023 3:46 PM, Johan Hovold wrote:
+>> On Wed, Nov 29, 2023 at 10:28:25AM +0100, Krzysztof Kozlowski wrote:
+>>> On 28/11/2023 12:32, Krishna Kurapati PSSNV wrote:
+>>>>
+>>>>>
+>>>>> So back to my initial proposal, with a slight modification moving
+>>>>> pwr_event first (e.g. as it is not a wakeup interrupt):
+>>>>>
+>>>>> qusb2-:
+>>>>>
+>>>>> 	- const: pwr_event
+>>>>> 	- const: qusb2_phy
+>>>>> 	- const: ss_phy_irq	(optional)
+>>>>>
+>>>>> qusb2:
+>>>>>
+>>>>> 	- const: pwr_event
+>>>>> 	- const: hs_phy_irq
+>>>>> 	- const: qusb2_phy
+>>>>> 	- const: ss_phy_irq	(optional)
+>>>>>
+>>>>> femto-:
+>>>>> 	- const: pwr_event
+>>>>> 	- const: dp_hs_phy_irq
+>>>>> 	- const: dm_hs_phy_irq
+>>>>> 	- const: ss_phy_irq	(optional)
+>>>>>
+>>>>> femto:
+>>>>> 	- const: pwr_event
+>>>>> 	- const: hs_phy_irq
+>>>>> 	- const: dp_hs_phy_irq
+>>>>> 	- const: dm_hs_phy_irq
+>>>>> 	- const: ss_phy_irq	(optional)
+>>>
+>>> I did not follow entire thread and I do not know whether you change the
+>>> order in existing bindings, but just in case: the entries in existing
+>>> bindings cannot change the order. That's a strict ABI requirement
+>>> recently also discussed with Bjorn, because we want to have stable DTB
+>>> for laptop platforms. If my comment is not relevant, then please ignore.
+>>
+>> Your comment is relevant, but I'm not sure I agree.
+>>
+>> The Qualcomm bindings are a complete mess of DT snippets copied from
+>> vendor trees and which have not been sanitised properly before being
+>> merged upstream (partly due to there not being any public documentation
+>> available).
+>>
+>> This amounts to an unmaintainable mess which is reflected in the
+>> binding schemas which similarly needs to encode every random order which
+>> the SoC happened to use when being upstreamed. That makes the binding
+>> documentation unreadable too, and the next time a new SoC is upstreamed
+>> there is no clear hints of what the binding should look like, and we end
+>> up with yet another permutation.
+>>
+>> As part of this exercise, we've also determined that some of the
+>> devicetrees that are already upstream are incorrect as well as
+>> incomplete.
+>>
+>> I really see no alternative to ripping of the plaster and cleaning this
+>> up once and for all even if it "breaks" some imaginary OS which (unlike
+>> Linux) relies on the current random order of these interrupts.
+>>
+>> [ If there were any real OSes actually relying on the order, then that
+>> would be a different thing of course. ]
+>>
+> 
+> Hi Krzysztof, Johan,
+> 
+>    We are modifying all the DT's in accordance to bindings as well. 
+> Still it would be breaking ABI ?
 
-For onboard hub controllers that support USB 3.x and USB 2.0 hubs
-with shared resets and power supplies, this property is used to identify
-the hubs with which these are shared.
+Yes, how can you modify DTB stored in firmware on the customer board?
 
-[Conor Dooley: upgrade peer-hub description]
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
-v5: upgrade peer-hub description : Conor Dooley
-[0] https://www.genesyslogic.com.tw/en/product_view.php?show=67 [Block Diagram]
-v4: Fix the description of peer-hub and update the commit message.
-Schematics of the Odroid N2+
-https://dn.odroid.com/S922X/ODROID-N2/Schematic/odroid-n2_rev0.6_20210121.pdf
-V3: fix the dt_binding_check error, added new example for Genesys GL3523
-v2: added Genesys GL3523 binding
-v1: none
----
- .../bindings/usb/genesys,gl850g.yaml          | 65 +++++++++++++++++--
- 1 file changed, 61 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-index ee08b9c3721f..499192ea4074 100644
---- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-+++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-@@ -9,9 +9,6 @@ title: Genesys Logic USB hub controller
- maintainers:
-   - Icenowy Zheng <uwu@icenowy.me>
- 
--allOf:
--  - $ref: usb-device.yaml#
--
- properties:
-   compatible:
-     enum:
-@@ -27,12 +24,46 @@ properties:
- 
-   vdd-supply:
-     description:
--      the regulator that provides 3.3V core power to the hub.
-+      phandle to the regulator that provides power to the hub.
-+
-+  peer-hub:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      For onboard hub controllers that support USB 3.x and USB 2.0 hubs
-+      with shared resets and power supplies, this property is used to identify
-+      the hubs with which these are shared.
- 
- required:
-   - compatible
-   - reg
- 
-+allOf:
-+  - $ref: usb-device.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - usb5e3,608
-+    then:
-+      properties:
-+        peer-hub: false
-+        vdd-supply: false
-+        reset-gpios: true
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - usb5e3,610
-+              - usb5e3,620
-+    then:
-+      properties:
-+        peer-hub: true
-+        vdd-supply: true
-+        reset-gpios: true
-+
- additionalProperties: false
- 
- examples:
-@@ -49,3 +80,29 @@ examples:
-             reset-gpios = <&pio 7 2 GPIO_ACTIVE_LOW>;
-         };
-     };
-+
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    usb {
-+        dr_mode = "host";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        /* 2.0 hub on port 1 */
-+        hub_2_0: hub@1 {
-+            compatible = "usb5e3,610";
-+            reg = <1>;
-+            peer-hub = <&hub_3_0>;
-+            reset-gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
-+            vdd-supply = <&vcc_5v>;
-+        };
-+
-+        /* 3.1 hub on port 4 */
-+        hub_3_0: hub@2 {
-+            compatible = "usb5e3,620";
-+            reg = <2>;
-+            peer-hub = <&hub_2_0>;
-+            reset-gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
-+            vdd-supply = <&vcc_5v>;
-+        };
-+    };
--- 
-2.42.0
+Best regards,
+Krzysztof
 
 
