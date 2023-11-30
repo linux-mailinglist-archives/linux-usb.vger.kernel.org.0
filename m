@@ -1,120 +1,152 @@
-Return-Path: <linux-usb+bounces-3487-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3494-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B77DE7FED57
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 11:54:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 031A97FEDDE
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 12:30:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E882C1C20D8C
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 10:54:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85C2CB20F69
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 11:30:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D5D63B2B7;
-	Thu, 30 Nov 2023 10:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gGrFpjIC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E3563C691;
+	Thu, 30 Nov 2023 11:30:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13789E6;
-	Thu, 30 Nov 2023 02:54:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701341689; x=1732877689;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1bA8QdXkqNyYvXu1SfXfNGr8LDOv/Eh71Y2D+1xrOws=;
-  b=gGrFpjIC5gP5BJpEzdvs8DxrzyqSgo18C2R/CJReAxAVnkJ6wkD55OX5
-   9sksjgcZRWDj1QUqh0t+KD8xL8SpXTtL98NLs92jQ4te0RWrvjGK6e/jx
-   6Fldvp43c8eZrdLvYmOS4k8zgd5WiWZYkuEGBhVKsXaBHRJmdcf9KUquP
-   /qB1oSLoHReBI6gdDXUrGrOpWhuLb4lonw6LRaSKt2p5yRI2dh4M/VNuo
-   yAcp2/xjUstaFyryVFbre8ox406Rlw1pRl7gupOZfJJb4yoYUj23ZWmPJ
-   vciUbaA4cMsfn8ZiEGJPPz7tKp3mQrflaUMFDBbUATvXlEKRQNKDPteJq
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="295220"
-X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
-   d="scan'208";a="295220"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 02:54:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="773021159"
-X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
-   d="scan'208";a="773021159"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga007.fm.intel.com with SMTP; 30 Nov 2023 02:54:44 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 30 Nov 2023 12:54:44 +0200
-Date: Thu, 30 Nov 2023 12:54:44 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Roger Quadros <rogerq@kernel.org>
-Cc: Alexandru Ardelean <alex@shruggie.ro>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-	christophe.jaillet@wanadoo.fr, a-govindraju@ti.com, trix@redhat.com,
-	abdelalkuor@geotab.com
-Subject: Re: [PATCH] USB: typec: tps6598x: use device 'type' field to
- identify devices
-Message-ID: <ZWhp9M8165DiTNTd@kuha.fi.intel.com>
-References: <20231123210021.463122-1-alex@shruggie.ro>
- <ZWdKI9UOZ6INP0Tu@kuha.fi.intel.com>
- <47ffbb30-34a7-4f5b-b262-3e068e574c8a@kernel.org>
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17F01715;
+	Thu, 30 Nov 2023 03:29:59 -0800 (PST)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 78457520115;
+	Thu, 30 Nov 2023 12:29:58 +0100 (CET)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.34; Thu, 30 Nov
+ 2023 12:29:58 +0100
+Date: Thu, 30 Nov 2023 12:29:53 +0100
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: John Keeping <john@keeping.me.uk>
+CC: Hardik Gajjar <hgajjar@de.adit-jv.com>, <gregkh@linuxfoundation.org>,
+	<quic_ugoswami@quicinc.com>, <brauner@kernel.org>, <jlayton@kernel.org>,
+	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<erosca@de.adit-jv.com>
+Subject: Re: [PATCH] usb: gadget: f_fs: Add the missing get_alt callback
+Message-ID: <20231130112953.GA120825@vmlxhi-118.adit-jv.com>
+References: <20231124164435.74727-1-hgajjar@de.adit-jv.com>
+ <ZWM864zH3M8W9B2f@keeping.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <47ffbb30-34a7-4f5b-b262-3e068e574c8a@kernel.org>
+In-Reply-To: <ZWM864zH3M8W9B2f@keeping.me.uk>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
 
-Hi Roger,
-
-> > Why not just match against the structures themselves?
+On Sun, Nov 26, 2023 at 12:41:15PM +0000, John Keeping wrote:
+> On Fri, Nov 24, 2023 at 05:44:35PM +0100, Hardik Gajjar wrote:
+> > Some USB OTG hubs have multiple alternate configurations to offer,
+> > such as one for Carplay and another for Carlife.
 > > 
-> >         if (tps->data == &tps25750_data)
-> >                 ...
+> > This patch implements and sets the get_alt callback to retrieve the
+> > currently used alternate setting. The new function allows dynamic
+> > retrieval of the current alternate setting for a specific interface. The
+> > current alternate setting values are stored in the 'cur_alt' array
+> > within the 'ffs_function' structure.
 > 
-> Then you need to declare tps25750_data and friends at the top of the file?
+> Doesn't the alt setting need to be forwarded to userspace?
 > 
-> A better approach might be to have type agnostic quirk flags for the special
-> behavior required for different types. This way, multiple devices can share
-> the same quirk if needed.
+> What happens if the available endpoints change - doesn't that mean the
+> available endpoint files change?
 > 
-> e.g.
-> NEEDS_POWER_UP instead of TIPD_TYPE_APPLE_CD321X
-> SKIP_VID_READ instead of TIPD_TYPE_TI_TPS25750X
-> INIT_ON_RESUME instead of TIPD_TYPE_TI_TPS25750X
+> It's not sufficient to just blindly accept any alt setting and assume it
+> will work, that may be the case in one specific constrained scenario,
+> but it's not true in general.  At the very least we must not accept an
+> alt setting that is not defined in the descriptors.
+
+The commit message appears a bit confusing.
+The user space creates an FFS/iAP (Apple) gadget and writes an ep0 descriptor
+with multiple alt settings. The host then sends the set_alt request to configure
+alt_setting 0 or 1, verified by the subsequent get_alt request. Without this
+patch, the Host/Phone consistently sets alt 0 and retrieves alt 0, even when
+the request is for alt 1.
+
+Given that f_fs is a user space-controlled gadget, creating a descriptor seems
+quite flexible for this type of gadget.
+
+I intend to submit an upstream patch v2 with a clearer commit message.
+
 > 
-> Also rename cd321x_switch_power_state() to tps6598x_switch_power_state().
+> > Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+> > ---
+> >  drivers/usb/gadget/function/f_fs.c | 16 +++++++++++++++-
+> >  1 file changed, 15 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> > index efe3e3b85769..37c47c11f57a 100644
+> > --- a/drivers/usb/gadget/function/f_fs.c
+> > +++ b/drivers/usb/gadget/function/f_fs.c
+> > @@ -75,6 +75,7 @@ struct ffs_function {
+> >  	short				*interfaces_nums;
+> >  
+> >  	struct usb_function		function;
+> > +	int				cur_alt[MAX_CONFIG_INTERFACES];
+> >  };
+> >  
+> >  
+> > @@ -98,6 +99,7 @@ static int __must_check ffs_func_eps_enable(struct ffs_function *func);
+> >  static int ffs_func_bind(struct usb_configuration *,
+> >  			 struct usb_function *);
+> >  static int ffs_func_set_alt(struct usb_function *, unsigned, unsigned);
+> > +static int ffs_func_get_alt(struct usb_function *f, unsigned int intf);
+> >  static void ffs_func_disable(struct usb_function *);
+> >  static int ffs_func_setup(struct usb_function *,
+> >  			  const struct usb_ctrlrequest *);
+> > @@ -3232,6 +3234,15 @@ static void ffs_reset_work(struct work_struct *work)
+> >  	ffs_data_reset(ffs);
+> >  }
+> >  
+> > +static int ffs_func_get_alt(struct usb_function *f,
+> > +			    unsigned int interface)
+> > +{
+> > +	struct ffs_function *func = ffs_func_from_usb(f);
+> > +	int intf = ffs_func_revmap_intf(func, interface);
+> > +
+> > +	return (intf < 0) ? intf : func->cur_alt[interface];
+> > +}
+> > +
+> >  static int ffs_func_set_alt(struct usb_function *f,
+> >  			    unsigned interface, unsigned alt)
+> >  {
+> > @@ -3266,8 +3277,10 @@ static int ffs_func_set_alt(struct usb_function *f,
+> >  
+> >  	ffs->func = func;
+> >  	ret = ffs_func_eps_enable(func);
+> > -	if (ret >= 0)
+> > +	if (ret >= 0) {
+> >  		ffs_event_add(ffs, FUNCTIONFS_ENABLE);
+> > +		func->cur_alt[interface] = alt;
+> > +	}
+> >  	return ret;
+> >  }
+> >  
+> > @@ -3574,6 +3587,7 @@ static struct usb_function *ffs_alloc(struct usb_function_instance *fi)
+> >  	func->function.bind    = ffs_func_bind;
+> >  	func->function.unbind  = ffs_func_unbind;
+> >  	func->function.set_alt = ffs_func_set_alt;
+> > +	func->function.get_alt = ffs_func_get_alt;
+> >  	func->function.disable = ffs_func_disable;
+> >  	func->function.setup   = ffs_func_setup;
+> >  	func->function.req_match = ffs_func_req_match;
+> > -- 
+> > 2.17.1
+> > 
 
-No. Functions like that isolate cd321x specific functionality into an
-actual "function" just like they should.
-
-Quirk flags mean that if something breaks, it will almost always break
-for everybody (there is no real isolation with quirk flags), and when
-things are fixed and when features are added, we are forced to always
-"dance" around those quirk flags - you always have to consider them.
-
-Platform/device type checks are just as bad IMO, but in one way they
-are better than quirk flags. There is no question about what a
-platform check is checking, but quirk flags can so easily become
-incomprehensible (just what exactly does it mean when you say
-NEEDS_POWER_UP, SKIP_VID_READ and so on (you would need to document
-those quirks, which is waste of effort, and in reality nobody will do).
-
-In case of tipd/code.c, it should be converted into a library that
-only has the common/shared functionality. CD321, TPS2579x, TPS6598x
-and what ever there is, then will have a glue driver that handles
-everything that specific for their controller type.
-
-Before this driver is reorganised like that (any volunteers?), we'll
-have the PD controller type checks, but quirk flags we will not have.
-
-In general, you should only use quirk flags if there is no other
-way to move forward - they are the last resort. They are dangerous,
-and even in the best case they reduce the maintenability of the code.
-
-thanks,
-
--- 
-heikki
+Thanks,
+Hardik
 
