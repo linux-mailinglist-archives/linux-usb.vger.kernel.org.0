@@ -1,171 +1,97 @@
-Return-Path: <linux-usb+bounces-3482-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3483-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D63A97FEABB
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 09:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 394567FEB05
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 09:42:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AF06283FC3
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 08:33:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7E962822D7
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 08:42:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 893C61C28B;
-	Thu, 30 Nov 2023 08:33:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D2DF22088;
+	Thu, 30 Nov 2023 08:42:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gv5ZR8S2"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MFHWq3oB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3D59A
+	for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 00:42:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701333738;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uTY8JL51negu1oTXaU6QSo32AKHRaSyM59v8HnADJ4Q=;
+	b=MFHWq3oBbjs+nSrDxR/msuyLmFeN+FGtL/XimooT8kUEUy4QvanEWr7LMSgJRH4aP55WpK
+	bkHmPbV/5of/bkourANx0kUtOS68JsijWcVBF5n0EU8eI4iG7CUI/MprRMIGp69mPiEju+
+	VHYrHl2oOcDi7EQf+83tFAfPzNayRtk=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-648-YQMyGeimOFeWdGrtcbCGkA-1; Thu,
+ 30 Nov 2023 03:42:12 -0500
+X-MC-Unique: YQMyGeimOFeWdGrtcbCGkA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E102820DD4;
-	Thu, 30 Nov 2023 08:33:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B39C433C8;
-	Thu, 30 Nov 2023 08:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701333220;
-	bh=tRGvouhLQr1KpWUDyBmlCJiZ9WRoYoSqiQEHNkqWpbM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gv5ZR8S2wi4mCPXgnySrTlzpfn8Ix+u0SnoSorF+TU+YWGFoKQITboqfE2qa4B13k
-	 AQmoENYxBt1UZoxBdkhKodzZHHNf3IojFoFob0jYKZV5mEm++fpV7iX0CB/FUt+hR+
-	 MwLAS+X41xv4WfWmruPOAhpu4yGZUXGzblbi2K2aNKw/GwwptHCOKlD2XF3fySsEQO
-	 BrkutL9jYwzpDJUlI2jXJaIQoa6xeg93HWgG3oo2rEHdSvzLhVH8JCTBs7gExvSYen
-	 K3Ue0JhAm73hoJuk6mDKs/FosOv1xbB95a+LvzPnHYWus6oBhUR6HIRDa/U2oTD9kL
-	 yso7IkSVapc6A==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1r8cUt-0006Z9-2R;
-	Thu, 30 Nov 2023 09:34:12 +0100
-Date: Thu, 30 Nov 2023 09:34:11 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, quic_wcheng@quicinc.com,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_ppratap@quicinc.com, quic_jackp@quicinc.com
-Subject: Re: [PATCH 1/6] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
- bindings
-Message-ID: <ZWhJA6m7IQk00rk-@hovoldconsulting.com>
-References: <1192d91f-11bf-44af-953a-14e08e2b6ca8@quicinc.com>
- <ZWCpGdJRexnk98IN@hovoldconsulting.com>
- <004ddc69-1566-4de4-b260-0fca96a9395f@quicinc.com>
- <ZWW_FOAKp95Cf9vN@hovoldconsulting.com>
- <18965bb9-7afa-4892-8b71-981ba29d2cd4@quicinc.com>
- <ZWXHrvUDnF2dMk6r@hovoldconsulting.com>
- <6d7527bf-8c1a-49b5-a0cf-99a92098c971@quicinc.com>
- <c8a28c72-5c0a-4a67-a4c9-e46a5716cda4@linaro.org>
- <ZWcPZPX-eT-xHAOv@hovoldconsulting.com>
- <85527699-f549-4728-b263-7d10c669b889@linaro.org>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C6BB03C0C48C;
+	Thu, 30 Nov 2023 08:42:11 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.192.105])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7927C36E2;
+	Thu, 30 Nov 2023 08:41:37 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: stern@rowland.harvard.edu,
+	oneukum@suse.com
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	jtornosm@redhat.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com
+Subject: Re: [PATCH] net: usb: ax88179_178a: avoid failed operations when device is disconnected
+Date: Thu, 30 Nov 2023 09:41:36 +0100
+Message-ID: <20231130084136.172052-1-jtornosm@redhat.com>
+In-Reply-To: <51cb747a-21fe-4b3b-9567-01b9cc9d8873@rowland.harvard.edu>
+References: <51cb747a-21fe-4b3b-9567-01b9cc9d8873@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <85527699-f549-4728-b263-7d10c669b889@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
 
-On Thu, Nov 30, 2023 at 09:16:41AM +0100, Krzysztof Kozlowski wrote:
-> On 29/11/2023 11:16, Johan Hovold wrote:
-> > On Wed, Nov 29, 2023 at 10:28:25AM +0100, Krzysztof Kozlowski wrote:
-> >> On 28/11/2023 12:32, Krishna Kurapati PSSNV wrote:
-> >>>
-> >>>>
-> >>>> So back to my initial proposal, with a slight modification moving
-> >>>> pwr_event first (e.g. as it is not a wakeup interrupt):
-> >>>>
-> >>>> qusb2-:
-> >>>>
-> >>>> 	- const: pwr_event
-> >>>> 	- const: qusb2_phy
-> >>>> 	- const: ss_phy_irq	(optional)
-> >>>>
-> >>>> qusb2:
-> >>>>
-> >>>> 	- const: pwr_event
-> >>>> 	- const: hs_phy_irq
-> >>>> 	- const: qusb2_phy
-> >>>> 	- const: ss_phy_irq	(optional)
-> >>>>
-> >>>> femto-:
-> >>>> 	- const: pwr_event
-> >>>> 	- const: dp_hs_phy_irq
-> >>>> 	- const: dm_hs_phy_irq
-> >>>> 	- const: ss_phy_irq	(optional)
-> >>>>
-> >>>> femto:
-> >>>> 	- const: pwr_event
-> >>>> 	- const: hs_phy_irq
-> >>>> 	- const: dp_hs_phy_irq
-> >>>> 	- const: dm_hs_phy_irq
-> >>>> 	- const: ss_phy_irq	(optional)
-> >>
-> >> I did not follow entire thread and I do not know whether you change the
-> >> order in existing bindings, but just in case: the entries in existing
-> >> bindings cannot change the order. That's a strict ABI requirement
-> >> recently also discussed with Bjorn, because we want to have stable DTB
-> >> for laptop platforms. If my comment is not relevant, then please ignore.
-> > 
-> > Your comment is relevant, but I'm not sure I agree.
-> > 
-> > The Qualcomm bindings are a complete mess of DT snippets copied from
-> > vendor trees and which have not been sanitised properly before being
-> > merged upstream (partly due to there not being any public documentation
-> > available).
-> 
-> True.
-> 
-> > This amounts to an unmaintainable mess which is reflected in the
-> > binding schemas which similarly needs to encode every random order which
-> > the SoC happened to use when being upstreamed. That makes the binding
-> > documentation unreadable too, and the next time a new SoC is upstreamed
-> > there is no clear hints of what the binding should look like, and we end
-> > up with yet another permutation.
-> 
-> While in general I agree for the bindings, but here, for order of the
-> interrupts, I am not really sure if this contributes to unreadable or
-> unmaintainable binding.
+Hi Oliver,
 
-The more if-then clauses you have, the harder it gets for a human to
-make sense of the binding documents.
+> I am sorry, but this is a layering violation. You are looking
+> at an internal state of the USB layer to surpress logging
+> -ENODEV. If you think these messages should go away, filter
+> for ENODEV where they are generated.
+Thank you for your comments and suggestion.
+My intention was also to avoid unnecessary and failed operations 
+if disconnection was detected.
+Ok, let me research more and do better.
 
-By cleaning up the current clauses in four groups which reflect actual
-classes of hardware and not just arbitrary reordering and omission, it
-will make it much easier next time a new SoC is added. Most likely it
-belongs in the latest category, and a reviewer can more easily spot new
-mistakes if someone tries to add yet another permutation.
+Hi Alan,
 
-> > As part of this exercise, we've also determined that some of the
-> > devicetrees that are already upstream are incorrect as well as
-> > incomplete.
-> 
-> Sure, good explanation for an ABI break.
-> 
-> > I really see no alternative to ripping of the plaster and cleaning this
-> > up once and for all even if it "breaks" some imaginary OS which (unlike
-> > Linux) relies on the current random order of these interrupts.
-> > 
-> > [ If there were any real OSes actually relying on the order, then that
-> > would be a different thing of course. ]
-> 
-> The commit breaking the ABI can justify the reasons, including expected
-> impact (e.g. none for Linux).
-> 
-> While the second part probably you can justify (interrupts are taken by
-> name), the reason for ABI break like "I think it is poor code, so I will
-> ignore ABI" is not enough.
+> In addition, you should be more careful about the distinction between 
+> "unbound" and "disconnected".  It's possible for the driver to be 
+> unbound from the device even while the device is still plugged in.  In 
+> this situation, submitting URBs will fail with an error even though the 
+> device state isn't USB_STATE_NOTATTACHED.
+Thank you for you comments.
+I also tested "unbound" and stop and unbind operations were correctly 
+executed. I just wanted to avoid the issues during disconnection, if other 
+operations are commanded later I think it is better to warn.
+Ok, I will try to do better.
 
-So it's not so much about the code as the messy binding schema this
-results in and that that makes it harder to spot mistakes next time an
-SoC is upstreamed.
+Best regards
+Jose Ignacio
 
-Johan
 
