@@ -1,162 +1,123 @@
-Return-Path: <linux-usb+bounces-3497-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3498-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E05C27FEFC4
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 14:10:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4BEC7FF029
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 14:31:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4CAD4B20EF5
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 13:10:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCBD51C20C9B
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Nov 2023 13:31:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 189CB3E47A;
-	Thu, 30 Nov 2023 13:10:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F405947A6C;
+	Thu, 30 Nov 2023 13:31:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="aizQFdJ3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jtW0lJYR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2071.outbound.protection.outlook.com [40.107.22.71])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B53A10E3;
-	Thu, 30 Nov 2023 05:09:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l0odd57vhph70LwUuspLWUN/AdXzt83Wg6UVxFbHGAEFtXLPjZBGumQR/guzLIKfiX4rXRy4rDs2IQOLFRrjYyQVqEBqpnwt+TF0syc6NZOeEkWfYM+2yPAWYw+7Vmwt+V+6J+566nFME7k7pLH8UGkkOcVEMxa34P3uOOW0OcwkgpM83t8PWhYlgorHGaNiHtnmxSJQwBKuyjGO8pPUuByV+OatcSDjSIGlvXXqY6Gfm7cI0rka5J+63AeHekcu7lJ86JVjWB3iVtFlriKdDIW9C/N/H44DJjJ2siFx7pAjCtA8QvFL3BTGAA+Phjwg+qCNFDz+ufX75I0mJSkF4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xsOowVwC8UY6zr027r3jolDUsn/mY0YvPbe3bU2RY1c=;
- b=RifD8kR4ASsDhnRAjCW85drkz68bDtUdx/e8BA5FdNuwPXTGBtj6b31nRBhw39BjoisYi5iGEipRL7lKFYBEWzboRUvx3DF9jo6HaPvRtIhr7sxnKqUMAK2gOZ1POCDF60Y/owCUeKaRVzmsE2AoMRGL3ACsSpBk0lnyJCwPeZgEGTH2h6N+WELzXY/QmpgoSF5XPouYrIzmqolhdO2Kct+c8blMJy7mx6+BSQVmJCC99FZzoVeUTqz5P4nJI9FL7SkadO1jbmVxUhi5fyGbB8b9J4V3p5wbdCmz+q7O3F56KombM/mVgAHy7XbRaMgVFkvY6mMWygO/QM7y8AFVjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xsOowVwC8UY6zr027r3jolDUsn/mY0YvPbe3bU2RY1c=;
- b=aizQFdJ3hinwnJFoPQuJPPo+mt0N4Uilm1eZpRcJyfR1zN4p+zeVcNDG5OYUVQfOW4t5IpmF4qfWoAewoWJkch9M5gS/OaKT+HBdYmNvaAuWlQAzWrBtMVJjYa+pejrUJCP4zf2sKfyMLeCBlqgsP6EA78NSPiT3vFw5CTHFmDGDh8DfdAwkTTxlsODgyXeNInzEfhkjSOP7i7SIbu5mdTHNQj+l40UvBikWsYmYHQfZZR+ZVC/oRHcIxoySl9TYx5OXFSwButBoorHwT3uqzbq2uUZwN3iGuA4aD1iFwpnmkXfTdH4HSAZT12tFgeKmvUm/1vK7ZwE+GBf7H2W5vA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM0PR04MB6467.eurprd04.prod.outlook.com (2603:10a6:208:16c::20)
- by DB9PR04MB9356.eurprd04.prod.outlook.com (2603:10a6:10:36a::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.11; Thu, 30 Nov
- 2023 13:09:51 +0000
-Received: from AM0PR04MB6467.eurprd04.prod.outlook.com
- ([fe80::5c46:ada1:fcf3:68e6]) by AM0PR04MB6467.eurprd04.prod.outlook.com
- ([fe80::5c46:ada1:fcf3:68e6%7]) with mapi id 15.20.7046.023; Thu, 30 Nov 2023
- 13:09:51 +0000
-Message-ID: <7e649033-0e1d-4c21-a1f3-ceb2de894861@suse.com>
-Date: Thu, 30 Nov 2023 14:09:48 +0100
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, USB list <linux-usb@vger.kernel.org>,
- linux-serial@vger.kernel.org
-From: Oliver Neukum <oneukum@suse.com>
-Subject: question on correct error return from break_ctl()
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0386.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f7::14) To AM0PR04MB6467.eurprd04.prod.outlook.com
- (2603:10a6:208:16c::20)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55563364B5
+	for <linux-usb@vger.kernel.org>; Thu, 30 Nov 2023 13:31:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69D8AC433C7;
+	Thu, 30 Nov 2023 13:30:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701351059;
+	bh=GGplx6KpuPLw09bMktqftv7giakn9VmpBAD9cWeP0fc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=jtW0lJYRSL7dznQ7fezXH+buD8jYnkyUoT+HbKbWKbxCAi3sst+qXhzIVNiL6c7Uz
+	 lvZJyolOYkJz35OkUIAzCVzb+nCibFIrfj2qpe8l1oKuF6ruc+GGttu89pSFf/I0xo
+	 873vChbi5Uqk3YqnGmk3U6S4/0OCgexyUbV7JstzO8o5MxJbeTBFksjnP7hCQL+LMY
+	 a18ka/HuHx1xp6MAKwZPzTOJFOQwRE9eFA9pfX0yRIAt9fdOlrI4DwQFuSyq19Hsc5
+	 oLulGoS2LS3QzpMc+0/3ao8X1THpu5N3FpwUZgcthjb+NgNU6yH82WaGEHj5b9+fmq
+	 XuWTLEuS2gSVA==
+Message-ID: <292f5d48-8567-4b60-ad03-6cf70f71bacc@kernel.org>
+Date: Thu, 30 Nov 2023 15:30:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6467:EE_|DB9PR04MB9356:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f862ec5-fa9d-413c-6260-08dbf1a5a2f7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	CRBaGE4rSqR1yV+pR5lmi7/wwBbUIBbKuSYH0nU3AvEatmdjBAhkn6bntuI5H9pxCbpVjxq/QqdtZARHRYCiW3OFg79rdJnmSvmFdPkE5txfj44EDCvBrrL05Gq6Y0EAK+0xwI5nMz9y4YkSLFDPT97sciEvoJiJh/hs1+9W+yRIE/6/QInaq40/uPmuGs51uYzWHDo9U8pVkf1Gxy7plu4umZ1IBwgGbWwAr0jMoWMUNWTJSdysKS4sVfJUsoqswGKzJilLaM6XH70ItQCnrnf+T1Q3/R846U3wKK2/bh312af0MAJKIX0HWaQvYilAZq/nYxAfNwceHzBxeJ22yHZR5PXMfmfIc9mxj5Majl73rDnnoAnuHEenF4Jjcak9DQJuy8MLAfiRaSiY8xLF0BiJFryJBOAI9WJFHtVEcsutyye1ysRmxlbq3I3lNKsMPqbwXSYvWSGCmNVZY6X9DIzf2wezZqoLPilb2rhLEOD+0nbRuxR+GeIXqor6f3u1M1rRtNRPKBaSBcTDWh25wPFfagmKPbjNmFWHlQgKCUgEgA2RzDaMXYKOO0lc3IrBrvqNG4MdUH0ZRkL2LNApWr1FRrF+iF4Nm0/H/jGiVbpxICguAkZJvEa4BrgmBQck6AQt3Tzj7vSA0grVtudxfQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6467.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(39860400002)(136003)(346002)(376002)(230922051799003)(64100799003)(451199024)(1800799012)(186009)(38100700002)(5660300002)(6506007)(2616005)(6916009)(6512007)(4744005)(2906002)(66556008)(66946007)(66476007)(478600001)(4326008)(54906003)(6666004)(316002)(6486002)(8676002)(8936002)(36756003)(86362001)(31696002)(41300700001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?U0dCYkpEV0lOQmJkK05GYUtmOHQ4eE05SW42cG1SMVk0dm81clRWeUkwM0R1?=
- =?utf-8?B?Zzl6eVUzM1dzYkt6NDNMY1lBL3k1OHVLSEpUTGNpLzJ6UXJBN3hTalVtMHRE?=
- =?utf-8?B?dytPZEF3bldUM0F5WkxRZ0twN05GbHdaZ1B2YjVHdSt2Y3dBTFVtVVg5ZGNW?=
- =?utf-8?B?WnJVOFpSU2pvRXFJYk12YXFsbnpyUWdDM0R2TFEwaTRMWEhKVzVLakVGUXF2?=
- =?utf-8?B?cDZHaUgzV2ZBTmx4a1VzYlNuR0V5ZjM2eGR4VmFlM1dWYTNMTklSUHFHb1FY?=
- =?utf-8?B?L1NkdDVxY2VxQ3lLR3VzQUpkWXg1YXg0UnIxakxyRVBCUHRQdzZkT0lXbGRs?=
- =?utf-8?B?R1RKcjNZdlB5S2dXNC9HZ1lyYXhyZ3ZwZ2xQeDBvRis5VTByQU10aStHeVZl?=
- =?utf-8?B?ZGdWdE9BdndZdHF6MDFSeEcxOUowNTZJeHRQbklDNytLb240QWI1Mk1kRElq?=
- =?utf-8?B?aGdUYnVJUktMQmlWSzRFcW5rQ3lWUXY3TmhrK01iYnVxSmxrL0c3Um9VbGJ4?=
- =?utf-8?B?MU94V1FYaHZ6WjZJL2doZkp6THU0RkdBZ29xVDBibTZpUHRFbDJwT1IvVXU2?=
- =?utf-8?B?a0JIVm1WR0VtRWZrYzBIZVpjM1oybG1UOEJCNHQwdEh5emF1eVJIcHRLTUEz?=
- =?utf-8?B?b2loTE5hMHhNalgxbDZqZXJkNVA5OFpjUEVjTW5Xd2haYlJFZUF4QlZKMHgv?=
- =?utf-8?B?WmNPbVQxNXlEUnlQS0xmU01qNlVCZkw4alRSN2NiYm9Kb25MQWtvQ2NHVnRk?=
- =?utf-8?B?WDIrWElxTldlSWJZbmxxK3BCWXArWlpVbTBiY1JLN0JXTTQyUHp3amFCODJZ?=
- =?utf-8?B?eWlFMzlzZm5naklhTm1adGNVcHlYSXJxbjBGOXZ4cXhtdWhQVEp6Qm5TWFE3?=
- =?utf-8?B?WkpNdUFCMC9seTNRenluOEdJNDdYRnZOTWFkNHdmQ0d3ZVcvaHM2aFJsNDBo?=
- =?utf-8?B?TnhTZVdiZWsrM0NDUGJDeHp5dm1NdkR1NHY2S1VPbTFRT3lNeEtOOTZ5ODBn?=
- =?utf-8?B?b3NXRkNTZVdyWnJmQllMSnpOVHYvNDh4aDB6ZmtsVlA1bFgvdE1yNVM5cmF4?=
- =?utf-8?B?L2hxVFJLcy9zcERDWFdhVWM3NG1JTDlUNlFqSE5xT0ovWE16TjQ4Qm5oeXBM?=
- =?utf-8?B?d0diUlVUK2lsMnhlME5GdG95R2RuNkYxcmpRZTJDcGNzRDdWTVVKR1RDMlVl?=
- =?utf-8?B?bGxjSEJMbFBoK3lLZDJYWVZ6dGpWRTA4bFJQRUwrNmJ1dXJJU3MyQWlZMlpG?=
- =?utf-8?B?YzF4RkcwM2VoeG53d2NwSmJZSDhBbkVFYW5xbTNkbkthSXVXMjFVM1ZzTWp3?=
- =?utf-8?B?MzZXQWV1QzNtZzczM2I2aEgwSVZPSm5mcmd0ZW1uU2krbGtTV21MOEVyOVVw?=
- =?utf-8?B?TEFYNlVCQmxKaEpZUU1qYXZKL1pFbGRRQ2UwK2twa1hqdlBoWjlUSUJ3Vnk5?=
- =?utf-8?B?b29vY0pNTjNXQWZpUTJqcXpMYzR1MVJ3NS9KMVVoKzkzcWF2SDA5V09JZTIv?=
- =?utf-8?B?Y0wzVEZMYVkvZlJUSFNqQUhrR3lnN3FnQnVkdnlkb2YyRnh0UzFCVFpuTHIx?=
- =?utf-8?B?NDk3SndGWGJidkQ2VlNZb3ArMW5CU1VuKzJoY2tCWTh4dUNqV092cE45OXRQ?=
- =?utf-8?B?dTcvaUtrMGcyRnpDbTRLYVlGK28rd0pSYW82VVBlMjc4TWJRSW1velk2Tjgz?=
- =?utf-8?B?WmN4ZHRGaVZPVFRlSmxqczN2Z1FlaXBvSDVKNXA4dFkyeXI2cThNTFBodXcv?=
- =?utf-8?B?ZDVxalRjeDRzUlF0YW9mcTg2QTdCSGN1SXZScVhSWmhJUzNZMkZMc241RHp6?=
- =?utf-8?B?akorTUFxNnZZWlBCdjNaUDNneVZwMzVvUGJrTC9TaUlOMG40RjBkVlBkUFdX?=
- =?utf-8?B?bnRZVUwrRmIrK3FrVkdvS2k1MlBTNENOVEVhNXdIeUtEajdyckRBbmhDbnZF?=
- =?utf-8?B?M3V4ZzdSb0k1QkNLcnJWWXZvNC9nU2ozV3g2YkxGNDBCWFBadVpzTHlSLzlm?=
- =?utf-8?B?NHpsUHh5ZVhZWHM0ZEpyU0xsSXJzUU5wREtySUdzdkVRV0paOGNrSFNrQkps?=
- =?utf-8?B?MlEwcmszNlYzMW0xaWVpTG5vanExcWc2aFMyUkdwWnhUL1pETnRhZG9TQzl2?=
- =?utf-8?B?dHJHQnhMMlUrdldyakU5YVZ1Y29rT3kxdG9uODVCNEx1WmFRWjNUaDZKaEFT?=
- =?utf-8?Q?oEsI4TmQAeFW1fZIwhvvzge4B6DVW+fJQ+2b8l+LxCYc?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f862ec5-fa9d-413c-6260-08dbf1a5a2f7
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6467.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2023 13:09:51.0499
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cvm043RQDl3sQZvNrRcpmiyWN8fuPG10a0+ik2E2jm4nQx1tv4TgnSHloFrOQRF27NHWwo/E01a+3j5wdvM8gw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9356
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: typec: tps6598x: use device 'type' field to identify
+ devices
+Content-Language: en-US
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Alexandru Ardelean <alex@shruggie.ro>, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+ christophe.jaillet@wanadoo.fr, a-govindraju@ti.com, trix@redhat.com,
+ abdelalkuor@geotab.com, Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20231123210021.463122-1-alex@shruggie.ro>
+ <ZWdKI9UOZ6INP0Tu@kuha.fi.intel.com>
+ <47ffbb30-34a7-4f5b-b262-3e068e574c8a@kernel.org>
+ <ZWhp9M8165DiTNTd@kuha.fi.intel.com>
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <ZWhp9M8165DiTNTd@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi,
+Hi Heikki,
 
-it seems inconsistent. The tty layer
-in drivers/tty/tty_io.c::send_break()
+On 30/11/2023 12:54, Heikki Krogerus wrote:
+> Hi Roger,
+> 
+>>> Why not just match against the structures themselves?
+>>>
+>>>         if (tps->data == &tps25750_data)
+>>>                 ...
+>>
+>> Then you need to declare tps25750_data and friends at the top of the file?
+>>
+>> A better approach might be to have type agnostic quirk flags for the special
+>> behavior required for different types. This way, multiple devices can share
+>> the same quirk if needed.
+>>
+>> e.g.
+>> NEEDS_POWER_UP instead of TIPD_TYPE_APPLE_CD321X
+>> SKIP_VID_READ instead of TIPD_TYPE_TI_TPS25750X
+>> INIT_ON_RESUME instead of TIPD_TYPE_TI_TPS25750X
+>>
+>> Also rename cd321x_switch_power_state() to tps6598x_switch_power_state().
+> 
+> No. Functions like that isolate cd321x specific functionality into an
+> actual "function" just like they should.
+> 
+> Quirk flags mean that if something breaks, it will almost always break
+> for everybody (there is no real isolation with quirk flags), and when
+> things are fixed and when features are added, we are forced to always
+> "dance" around those quirk flags - you always have to consider them.
+> 
+> Platform/device type checks are just as bad IMO, but in one way they
+> are better than quirk flags. There is no question about what a
+> platform check is checking, but quirk flags can so easily become
+> incomprehensible (just what exactly does it mean when you say
+> NEEDS_POWER_UP, SKIP_VID_READ and so on (you would need to document
+> those quirks, which is waste of effort, and in reality nobody will do).
+> 
+> In case of tipd/code.c, it should be converted into a library that
+> only has the common/shared functionality. CD321, TPS2579x, TPS6598x
+> and what ever there is, then will have a glue driver that handles
+> everything that specific for their controller type.
 
-static int send_break(struct tty_struct *tty, unsigned int duration)
-{
-         int retval;
+Do you mean that you want to treat the 3 devices as different incompatible devices
+so each one has a separate driver which warrants for a different DT binding
+for each and also Kconfig symbol?
 
-         if (tty->ops->break_ctl == NULL)
-                 return 0;
+> 
+> Before this driver is reorganised like that (any volunteers?), we'll
+> have the PD controller type checks, but quirk flags we will not have.
+> 
+> In general, you should only use quirk flags if there is no other
+> way to move forward - they are the last resort. They are dangerous,
+> and even in the best case they reduce the maintenability of the code.
+> 
+> thanks,
+> 
 
-not supporting break_ctl() is treated as the operation
-succeeding. Yet in drivers/usb/serial/usb-serial.c::serial_break()
-
-static int serial_break(struct tty_struct *tty, int break_state)
-{
-         struct usb_serial_port *port = tty->driver_data;
-
-         dev_dbg(&port->dev, "%s\n", __func__);
-
-         if (port->serial->type->break_ctl)
-                 return port->serial->type->break_ctl(tty, break_state);
-
-         return -ENOTTY;
-}
-
-we are seeing that not supporting break_ctl() leads to returning
--ENOTTY, which drivers/tty/tty_io.c::send_break() will return to user space.
-These reactions are at odds with each other. What is a driver supposed
-to do?
-
-	Regards
-		Oliver
+-- 
+cheers,
+-roger
 
