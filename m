@@ -1,55 +1,58 @@
-Return-Path: <linux-usb+bounces-3547-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3548-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16020800DE6
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8089800DE7
 	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 16:05:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C22CB2122E
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 15:05:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D52081C21063
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 15:05:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F11AE4174A;
-	Fri,  1 Dec 2023 15:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A6F3E460;
+	Fri,  1 Dec 2023 15:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fI+jLXSX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nHII7qES"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C8E93
-	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 07:05:41 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D7B193
+	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 07:05:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701443141; x=1732979141;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jrONfSyxD6aUbp1qb0g7y0X1vL/YnmQNWQyKlyuyX+U=;
-  b=fI+jLXSXd7bfmDHkrQRhIrmmqDf0kdeeDeKwQPkJhRpPLxEv2FFjoFTY
-   45bPjIHfSiI/EtD5e5SNPCFOE4vLqeXJLSUni+x+ctY9JbVc5CbBnIEbT
-   vNJLPn98rA8wveykOgCd+tGT1ao//Yy7hu8e2o+qbmBoZ9bUwdSL6Qwc1
-   Jm0tw6e+/kzWe8+bxav1zBtLAXWRE5ZuxiRZU6GBBKB/vubCxTQxDc02N
-   RWCXFbzqAvxQEq1bHVvdZXJD9FwOj8D5cUomKrhuPL/wGFCZyzNXjjAOG
-   X2b0F+CI+vWOEUu1PmZ/k3wAiM8ppMdWENO2KCR0H/2seGJdK8qeYBhfF
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10911"; a="396309674"
+  t=1701443143; x=1732979143;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=pmgPGc1srr1dzu/HPKmpJ+L8TTfBdUlMHyhoyA6SiTQ=;
+  b=nHII7qESLRa5spQ9S96a5xZwTKxwVe/PiKkJ9023N4QAYMugYCJiA5na
+   rwQWwCc4RjeMuZuzBMHcVNotNMVymcwOlg88YGmhSXxmbrApfrie1haCW
+   4U4QjLLfU95lUtZ1C3wXTOCBillLQbk4naWLAgima93JGm6rtGC/LHV0u
+   8BU9OIBcpqohsFs0lSQP52oCThSuV71pmAnnJ3424pP5CJRXXxNUYaP0K
+   6jFCwO8piEsGlu+p+pFwxXminn6dLGOYukrkMg+Y0umPz4whg8lYwbjJW
+   IKrxjkv6WrnKDsb4yG77jCyffs3jnfUWwjN7nxculWjTYsbhTPUv5M91D
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10911"; a="396309678"
 X-IronPort-AV: E=Sophos;i="6.04,241,1695711600"; 
-   d="scan'208";a="396309674"
+   d="scan'208";a="396309678"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2023 07:05:41 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2023 07:05:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10911"; a="943112496"
+X-IronPort-AV: E=McAfee;i="6600,9927,10911"; a="943112503"
 X-IronPort-AV: E=Sophos;i="6.04,241,1695711600"; 
-   d="scan'208";a="943112496"
+   d="scan'208";a="943112503"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by orsmga005.jf.intel.com with ESMTP; 01 Dec 2023 07:05:39 -0800
+  by orsmga005.jf.intel.com with ESMTP; 01 Dec 2023 07:05:41 -0800
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 00/19] xhci features for usb-next
-Date: Fri,  1 Dec 2023 17:06:28 +0200
-Message-Id: <20231201150647.1307406-1-mathias.nyman@linux.intel.com>
+Subject: [PATCH 01/19] xhci: dbc: Drop duplicate checks for dma_free_coherent()
+Date: Fri,  1 Dec 2023 17:06:29 +0200
+Message-Id: <20231201150647.1307406-2-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231201150647.1307406-1-mathias.nyman@linux.intel.com>
+References: <20231201150647.1307406-1-mathias.nyman@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,53 +61,56 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Greg
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-A set of xhci features and cleanups for usb-next, including xhci dbc
-cleanups, MSI rework, and fixing how we reconfigure max packet size
-for xhc.
+dma_free_coherent() is NULL-aware, not necessary to check for
+the parameter twice. Drop duplicate conditionals in the caller.
 
-One patch fixes a null pointer deref issue, but this hasn't been seen
-in real life. It's a theoretical case triggered by adding a 3 second
-delay in the driver.
-So I don't think it should go to stable.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/host/xhci-dbgcap.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-Thanks
-Mathias
-
-Andy Shevchenko (10):
-  xhci: dbc: Drop duplicate checks for dma_free_coherent()
-  xhci: dbc: Convert to use sysfs_streq()
-  xhci: dbc: Use sysfs_emit() to instead of scnprintf()
-  xhci: dbc: Use ATTRIBUTE_GROUPS()
-  xhci: dbc: Check for errors first in xhci_dbc_stop()
-  xhci: dbc: Don't shadow error codes in store() functions
-  xhci: dbc: Replace custom return value with proper Linux error code
-  xhci: dbc: Use sizeof_field() where it makes sense
-  xhci: dbc: Use sizeof(*pointer) instead of sizeof(type)
-  xhci: dbc: Add missing headers
-
-Mathias Nyman (2):
-  xhci: Reconfigure endpoint 0 max packet size only during endpoint
-    reset
-  xhci: fix possible null pointer deref during xhci urb enqueue
-
-Niklas Neronin (7):
-  xhci: check if legacy irq is available before using it as fallback
-  xhci: add handler for only one interrupt line
-  xhci: refactor static MSI-X function
-  xhci: refactor static MSI function
-  xhci: change 'msix_count' to encompass MSI or MSI-X vectors
-  xhci: rework 'xhci_try_enable_msi()' MSI and MSI-X setup code
-  xhci: minor coding style cleanup in 'xhci_try_enable_msi()'
-
- drivers/usb/host/xhci-dbgcap.c | 132 ++++++++++++++++---------------
- drivers/usb/host/xhci-dbgcap.h |   1 +
- drivers/usb/host/xhci-pci.c    | 140 +++++++++------------------------
- drivers/usb/host/xhci.c        | 123 +++++++++++++++--------------
- drivers/usb/host/xhci.h        |   4 +-
- 5 files changed, 175 insertions(+), 225 deletions(-)
-
+diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
+index b40d9238d447..9e9ce3711813 100644
+--- a/drivers/usb/host/xhci-dbgcap.c
++++ b/drivers/usb/host/xhci-dbgcap.c
+@@ -28,7 +28,7 @@ static void dbc_ring_free(struct device *dev, struct xhci_ring *ring)
+ 	if (!ring)
+ 		return;
+ 
+-	if (ring->first_seg && ring->first_seg->trbs) {
++	if (ring->first_seg) {
+ 		dma_free_coherent(dev, TRB_SEGMENT_SIZE,
+ 				  ring->first_seg->trbs,
+ 				  ring->first_seg->dma);
+@@ -394,9 +394,8 @@ static int dbc_erst_alloc(struct device *dev, struct xhci_ring *evt_ring,
+ 
+ static void dbc_erst_free(struct device *dev, struct xhci_erst *erst)
+ {
+-	if (erst->entries)
+-		dma_free_coherent(dev, sizeof(struct xhci_erst_entry),
+-				  erst->entries, erst->erst_dma_addr);
++	dma_free_coherent(dev, sizeof(struct xhci_erst_entry), erst->entries,
++			  erst->erst_dma_addr);
+ 	erst->entries = NULL;
+ }
+ 
+@@ -543,11 +542,8 @@ static void xhci_dbc_mem_cleanup(struct xhci_dbc *dbc)
+ 
+ 	xhci_dbc_eps_exit(dbc);
+ 
+-	if (dbc->string) {
+-		dma_free_coherent(dbc->dev, dbc->string_size,
+-				  dbc->string, dbc->string_dma);
+-		dbc->string = NULL;
+-	}
++	dma_free_coherent(dbc->dev, dbc->string_size, dbc->string, dbc->string_dma);
++	dbc->string = NULL;
+ 
+ 	dbc_free_ctx(dbc->dev, dbc->ctx);
+ 	dbc->ctx = NULL;
 -- 
 2.25.1
 
