@@ -1,91 +1,129 @@
-Return-Path: <linux-usb+bounces-3569-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3570-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76F57800FD2
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 17:14:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49896800FDD
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 17:17:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A868E1C20FF0
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 16:14:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AEA71C20F6D
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 16:17:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D60E14C3D7;
-	Fri,  1 Dec 2023 16:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD2F34C61A;
+	Fri,  1 Dec 2023 16:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XtP2tlor"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 1BDCA10F4
-	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 08:13:54 -0800 (PST)
-Received: (qmail 291319 invoked by uid 1000); 1 Dec 2023 11:13:53 -0500
-Date: Fri, 1 Dec 2023 11:13:53 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>
-Cc: gregkh@linuxfoundation.org, corbet@lwn.net, linux-usb@vger.kernel.org,
-  linux-kernel@vger.kernel.org, erosca@de.adit-jv.com, tj@kernel.org,
-  paulmck@kernel.org, Martin.Mueller5@de.bosch.com
-Subject: Re: [PATCH v3] usb: hub: Add quirk to decrease IN-ep poll interval
- for Microchip USB491x hub
-Message-ID: <39f334d2-abe6-4b4d-a48c-b22a907c6ea6@rowland.harvard.edu>
-References: <20231201144705.97385-1-hgajjar@de.adit-jv.com>
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0041738;
+	Fri,  1 Dec 2023 08:17:00 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-50be0f13aa6so140885e87.1;
+        Fri, 01 Dec 2023 08:17:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701447418; x=1702052218; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rRyIK44k8WakD7ulTyl1AC/ua3tTG7/92vD0ifCxVf0=;
+        b=XtP2tlorFoEfLRdFeQjeWday0lIulV1BUrFiA3Ale0So92qnyR7VLbwLoTAr78Ivli
+         aLcFHnhjEpHIIoao2XyaywwhkSyeN5tOrM3kcL+zq6zKRMRqWvakc09vcCpghHfpY7OD
+         w9GF/8qXedRP5nntPftKV/PRqN6Fy2Xyh2qBkybPUU4TvLpceNlD7V7FH1H/amDxVQaY
+         ULjNdwPdUUgOtw7GcmvP4qgjkucldmCcePpaHfqaI7vl0+56Kfl1PumrZhfwpSv/Ey3D
+         wtLwdKIID3Ke4qurlFR4u8TJwAYxj/50qie38JMZgPjmPbgn6D5PByzhPwuD/BLO1+GP
+         HX8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701447418; x=1702052218;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rRyIK44k8WakD7ulTyl1AC/ua3tTG7/92vD0ifCxVf0=;
+        b=aXtWOFMT0Zk9JASzWQowyMajVzHg9Z4HWkd5FoRXpBcG7arIJcpXzjd4EIo45B41KS
+         USYtJNK2M9mlj2YVVffjplpZvBewH/mmVX2LJjqohyq6mzTVxkko4ohWW54oZOhgtmfj
+         Pv30DR0ZJqYZM7RVSBB+QURu69w8FqbU2W/J3W+Y/bFzsfvPEAZP6OmEO7Qw6FymeyLf
+         893V+5AqAHALhM+W3KUj5EvJtEog4pGUZ95KeQHQ3bXvbJrIw+4Y8SHtU706MAVGBuSa
+         E4gWh3tSpyHW/RwwofFz1VL07EIToFFXoD6Eecfhd1/1l5RbkA5sPDX3o/4WBJ5FAOkh
+         LhtA==
+X-Gm-Message-State: AOJu0YydElWI4zTt7vqnq35WGa4k9829h6YsMGEIMG1VCodftlpn//P4
+	UV1G6cpho50fgl5UgNrchl8=
+X-Google-Smtp-Source: AGHT+IGPoDbhjTgg1gjXEy/ZiylHE7XfDBS8oO2xBNvPmw2r/iBpeDXMcy6VWWNXXwBJBrhAuCtHIQ==
+X-Received: by 2002:a05:6512:3e22:b0:50b:c7bd:2352 with SMTP id i34-20020a0565123e2200b0050bc7bd2352mr1264861lfv.14.1701447418382;
+        Fri, 01 Dec 2023 08:16:58 -0800 (PST)
+Received: from [192.168.1.104] ([31.173.84.39])
+        by smtp.gmail.com with ESMTPSA id e7-20020a05651236c700b0050bc45777absm457838lfs.113.2023.12.01.08.16.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Dec 2023 08:16:58 -0800 (PST)
+Subject: Re: [PATCH v2] usb: storage: sddr55: clean up variable type
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Karina Yankevich <k.yankevich@omp.ru>
+Cc: Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+ usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
+ lvc-project@linuxtesting.org
+References: <53bc0584-51eb-8bb7-de48-ca07fccafc19@gmail.com>
+ <20230227112541.14849-1-k.yankevich@omp.ru> <Y/yaB2A8qwgRkqVO@kroah.com>
+From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <a1296b9a-c27e-3b35-e256-32350fb2a83e@gmail.com>
+Date: Fri, 1 Dec 2023 19:16:56 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231201144705.97385-1-hgajjar@de.adit-jv.com>
+In-Reply-To: <Y/yaB2A8qwgRkqVO@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-On Fri, Dec 01, 2023 at 03:47:05PM +0100, Hardik Gajjar wrote:
-> There is a potential delay in notifying Linux USB drivers of downstream
-> USB bus activity when connecting a high-speed or superSpeed device via the
-> Microchip USB491x hub. This delay is due to the fixed bInterval value of
-> 12 in the silicon of the Microchip USB491x hub.
-> 
-> Microchip requested to ignore the device descriptor and decrease that
-> value to 9 as it was too late to modify that in silicon.
-> 
-> This patch speeds up the USB enummeration process that helps to pass
-> Apple Carplay certifications and improve the User experience when utilizing
-> the USB device via Microchip Multihost USB491x Hub.
-> 
-> A new hub quirk HUB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL speeds up
-> the notification process for Microchip USB491x hub by limiting
-> the maximum bInterval value to 9.
-> 
-> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> ---
-> changes since version 1:
-> 	- Move implementation from config.c and quirk.c to hub.c as this is hub
-> 	  specific changes.
-> 	- Improve commit message.
-> 	- Link to v1 - https://lore.kernel.org/all/20231123081948.58776-1-hgajjar@de.adit-jv.com/
-> 
-> changes since version 2:
->     - Call usb_set_interface after updating the bInterval to Tell the HCD about modification
-> 	- Link to v2 - https://lore.kernel.org/all/20231130084855.119937-1-hgajjar@de.adit-jv.com/
-> ---
->  drivers/usb/core/hub.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index b4584a0cd484..b5ac29c5f016 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -47,12 +47,18 @@
->  #define USB_VENDOR_TEXAS_INSTRUMENTS		0x0451
->  #define USB_PRODUCT_TUSB8041_USB3		0x8140
->  #define USB_PRODUCT_TUSB8041_USB2		0x8142
-> +#define USB_VENDOR_MICROCHIP			0x0424
-> +#define USB_PRODUCT_USB4913			0x4913
-> +#define USB_PRODUCT_USB4914			0x4914
-> +#define USB_PRODUCT_USB4915			0x4915
->  #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
->  #define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
-> +#define HUB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL	0x08
+Hello!
 
-Why use 0x08 instead of 0x04?
+   Sorry for the really long delay! Your reply scared off Karina
+(it was her 1st kernel patch), so I'm trying to pick this patch up
+where it was left back in February...
 
-Alan Stern
+On 2/27/23 2:54 PM, Greg Kroah-Hartman wrote:
+[...]
+>> SVACE static analyzer complains that we're possibly
+>> losing information by shifting an 'unsigned int pba'
+>> variables in sddr55_{read,write}_data().
+>> It is a false positive, because of the card's total capacity
+>> is no larger than 128 MB. But 'unsigned int' is more
+>> suitable in this case.
+> 
+> Please wrap at 72 columns.
+> 
+>> Found by OMP on behalf of Linux Verification Center
+>> (linuxtesting.org) with SVACE.
+> 
+> What is "OMP"?
+
+   Open Mobile Platform, LLC. The website is in Russian only:
+
+https://www.omp.ru
+
+> What is "SVACE"?
+
+  The patch description said thst it's a static analyzer.
+Here's the link to the Institute for System Programming web page about it:
+
+https://www.ispras.ru/en/technologies/svace/
+
+> And why change anything if there is not a real issue?
+
+   We needlessly use 64-bit type on 64-bit arches.
+
+>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> 
+> That's obviously not the correct commit id for such a "fix" as this is
+> not a real issue.
+
+   That's correct. We'll remove this tag.
+
+> thanks,
+> 
+> greg k-h
+
+MBR, Srrgey
 
