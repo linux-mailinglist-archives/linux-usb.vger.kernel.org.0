@@ -1,150 +1,89 @@
-Return-Path: <linux-usb+bounces-3566-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3567-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CB5A800DFA
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 16:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3665B800EE6
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 17:00:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D213B21ADA
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 15:06:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6F43B21337
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 16:00:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD08487B8;
-	Fri,  1 Dec 2023 15:06:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cRnHKRMi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221984BA8E;
+	Fri,  1 Dec 2023 15:59:59 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220CAD6C
-	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 07:06:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701443175; x=1732979175;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=w0DnSPmZj85cgbMbS+eDufLxzKMrnYRs0INaeLDar+8=;
-  b=cRnHKRMiBqYJhUXK+KqbWR2GbxrKENUqfwap77t/w3C/w6YSMrXx+qIf
-   gt/Osn8egvXwzNO9aJ+C9RkWcVhnv7m1gbsIWLk9nKj51C2HOh+K9aMQZ
-   rKG8J4eDPsfHubflR3ChbQQjhG9A8EAFSdYot9fQGQQ6PEMg8/T8TiQUL
-   a9D5LRjTTpb3sYpsqHhp4RkC/4amqewoMJiUEWzxTewGSl0KVXKzHSwqd
-   EPOGQ8txbT1FZSVFlef7JmOLNvV/eE/2zjhEQCkDaW3yUzlaDIc9q/lP4
-   dbqgp1/cfZSjKuWX0890i4LMtyVbXsfvkfRC+6lzrexzn95ZeQURXWurC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10911"; a="396309790"
-X-IronPort-AV: E=Sophos;i="6.04,241,1695711600"; 
-   d="scan'208";a="396309790"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2023 07:06:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10911"; a="943112679"
-X-IronPort-AV: E=Sophos;i="6.04,241,1695711600"; 
-   d="scan'208";a="943112679"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by orsmga005.jf.intel.com with ESMTP; 01 Dec 2023 07:06:12 -0800
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Kuen-Han Tsai <khtsai@google.com>
-Subject: [PATCH 19/19] xhci: fix possible null pointer deref during xhci urb enqueue
-Date: Fri,  1 Dec 2023 17:06:47 +0200
-Message-Id: <20231201150647.1307406-20-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231201150647.1307406-1-mathias.nyman@linux.intel.com>
-References: <20231201150647.1307406-1-mathias.nyman@linux.intel.com>
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id A53CD19E
+	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 07:59:54 -0800 (PST)
+Received: (qmail 290509 invoked by uid 1000); 1 Dec 2023 10:59:53 -0500
+Date: Fri, 1 Dec 2023 10:59:53 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Douglas Anderson <dianders@chromium.org>
+Cc: linux-usb@vger.kernel.org,
+  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  Simon Horman <horms@kernel.org>, Grant Grundler <grundler@chromium.org>,
+  Hayes Wang <hayeswang@realtek.com>,
+  =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+  Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+  "David S . Miller" <davem@davemloft.net>, Brian Geffon <bgeffon@google.com>,
+  Bastien Nocera <hadess@hadess.net>,
+  Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+  Flavio Suligoi <f.suligoi@asem.it>,
+  Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+  Ricardo =?iso-8859-1?Q?Ca=F1uelo?= <ricardo.canuelo@collabora.com>,
+  Rob Herring <robh@kernel.org>, Roy Luo <royluo@google.com>,
+  Stanley Chang <stanley_chang@realtek.com>,
+  Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: core: Save the config when a device is
+ deauthorized+authorized
+Message-ID: <62b7467f-f142-459d-aa23-8bfd70bbe733@rowland.harvard.edu>
+References: <20231130154337.1.Ie00e07f07f87149c9ce0b27ae4e26991d307e14b@changeid>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231130154337.1.Ie00e07f07f87149c9ce0b27ae4e26991d307e14b@changeid>
 
-There is a short gap between urb being submitted and actually added to the
-endpoint queue (linked). If the device is disconnected during this time
-then usb core is not yet aware of the pending urb, and device may be freed
-just before xhci_urq_enqueue() continues, dereferencing the freed device.
+On Thu, Nov 30, 2023 at 03:43:47PM -0800, Douglas Anderson wrote:
+> Right now, when a USB device is deauthorized (by writing 0 to the
+> "authorized" field in sysfs) and then reauthorized (by writing a 1) it
+> loses any configuration it might have had. This is because
+> usb_deauthorize_device() calls:
+>   usb_set_configuration(usb_dev, -1);
+> ...and then usb_authorize_device() calls:
+>   usb_choose_configuration(udev);
+> ...to choose the "best" configuration.
+> 
+> This generally works OK and it looks like the above design was chosen
+> on purpose. In commit 93993a0a3e52 ("usb: introduce
+> usb_authorize/deauthorize()") we can see some discussion about keeping
+> the old config but it was decided not to bother since we can't save it
+> for wireless USB anyway. It can be noted that as of commit
+> 1e4c574225cc ("USB: Remove remnants of Wireless USB and UWB") wireless
+> USB is removed anyway, so there's really not a good reason not to keep
+> the old config.
+> 
+> Unfortunately, throwing away the old config breaks when something has
+> decided to choose a config other than the normal "best" config.
+> Specifically, it can be noted that as of commit ec51fbd1b8a2 ("r8152:
+> add USB device driver for config selection") that the r8152 driver
+> subclasses the generic USB driver and selects a config other than the
+> one that would have been selected by usb_choose_configuration(). This
+> logic isn't re-run after a deauthorize + authorize and results in the
+> r8152 driver not being re-bound.
+> 
+> Let's change things to save the old config when we deauthorize and
+> then restore it when we re-authorize. We'll disable this logic for
+> wireless USB where we re-fetch the descriptor after authorization.
 
-Freeing the device is protected by the xhci spinlock, so make sure we take
-and keep the lock while checking that device exists, dereference it, and
-add the urb to the queue.
+Would it be better to make the r8152 driver override 
+usb_choose_configuration()?  This is the sort of thing that subclassing 
+is intended for.
 
-Remove the unnecessary URB check, usb core checks it before calling
-xhci_urb_enqueue()
-
-Suggested-by: Kuen-Han Tsai <khtsai@google.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci.c | 40 +++++++++++++++++++++++-----------------
- 1 file changed, 23 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index df31d44498d6..4929c4396e9e 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1521,24 +1521,7 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- 	struct urb_priv	*urb_priv;
- 	int num_tds;
- 
--	if (!urb)
--		return -EINVAL;
--	ret = xhci_check_args(hcd, urb->dev, urb->ep,
--					true, true, __func__);
--	if (ret <= 0)
--		return ret ? ret : -EINVAL;
--
--	slot_id = urb->dev->slot_id;
- 	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
--	ep_state = &xhci->devs[slot_id]->eps[ep_index].ep_state;
--
--	if (!HCD_HW_ACCESSIBLE(hcd))
--		return -ESHUTDOWN;
--
--	if (xhci->devs[slot_id]->flags & VDEV_PORT_ERROR) {
--		xhci_dbg(xhci, "Can't queue urb, port error, link inactive\n");
--		return -ENODEV;
--	}
- 
- 	if (usb_endpoint_xfer_isoc(&urb->ep->desc))
- 		num_tds = urb->number_of_packets;
-@@ -1562,12 +1545,35 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- 
- 	spin_lock_irqsave(&xhci->lock, flags);
- 
-+	ret = xhci_check_args(hcd, urb->dev, urb->ep,
-+			      true, true, __func__);
-+	if (ret <= 0) {
-+		ret = ret ? ret : -EINVAL;
-+		goto free_priv;
-+	}
-+
-+	slot_id = urb->dev->slot_id;
-+
-+	if (!HCD_HW_ACCESSIBLE(hcd)) {
-+		ret = -ESHUTDOWN;
-+		goto free_priv;
-+	}
-+
-+	if (xhci->devs[slot_id]->flags & VDEV_PORT_ERROR) {
-+		xhci_dbg(xhci, "Can't queue urb, port error, link inactive\n");
-+		ret = -ENODEV;
-+		goto free_priv;
-+	}
-+
- 	if (xhci->xhc_state & XHCI_STATE_DYING) {
- 		xhci_dbg(xhci, "Ep 0x%x: URB %p submitted for non-responsive xHCI host.\n",
- 			 urb->ep->desc.bEndpointAddress, urb);
- 		ret = -ESHUTDOWN;
- 		goto free_priv;
- 	}
-+
-+	ep_state = &xhci->devs[slot_id]->eps[ep_index].ep_state;
-+
- 	if (*ep_state & (EP_GETTING_STREAMS | EP_GETTING_NO_STREAMS)) {
- 		xhci_warn(xhci, "WARN: Can't enqueue URB, ep in streams transition state %x\n",
- 			  *ep_state);
--- 
-2.25.1
-
+Alan Stern
 
