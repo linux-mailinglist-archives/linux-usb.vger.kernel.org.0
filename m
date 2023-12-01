@@ -1,138 +1,184 @@
-Return-Path: <linux-usb+bounces-3537-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3538-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D41C6800957
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 12:08:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C14AC800A1E
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 12:52:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E271B20C56
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 11:08:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28B3EB2120D
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 11:52:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30232210F2;
-	Fri,  1 Dec 2023 11:08:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87E6121A05;
+	Fri,  1 Dec 2023 11:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hL8wzaLK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C32170E
+	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 03:52:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701431522;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fycN3hZGNRl6X4amyCpma7UV8ZHfLxVOfAL+B4rgRck=;
+	b=hL8wzaLKgGWcvBE2Wi5+tBXtW1dryfKzGUYrHKEf4KK3ETbHpqbtUlMVW0xvxmXON/Ql9g
+	FC2e9yyH4syoHrbbw6qEj0OI7Nkd5VZx9VNAOBcKKZ/QEqx2zdhNNv7Ok2XQAA5UR2KpP5
+	kECg6aoFDYvIc/A4Z8i/KjKMTTj59Io=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-562-DfTxXO3AO86EyAC7MNdX8Q-1; Fri, 01 Dec 2023 06:51:57 -0500
+X-MC-Unique: DfTxXO3AO86EyAC7MNdX8Q-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D8A210E0;
-	Fri,  1 Dec 2023 11:08:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BBCAC433C7;
-	Fri,  1 Dec 2023 11:08:46 +0000 (UTC)
-Date: Fri, 1 Dec 2023 11:08:43 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Ferry Toth <fntoth@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, Christoph Hellwig <hch@lst.de>,
-	Hamza Mahfooz <someguy@effective-light.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Andrew <travneff@gmail.com>, Ferry Toth <ferry.toth@elsinga.info>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Thorsten Leemhuis <regressions@leemhuis.info>,
-	iommu@lists.linux.dev,
-	Kernel development list <linux-kernel@vger.kernel.org>,
-	USB mailing list <linux-usb@vger.kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>
-Subject: Re: Bug in add_dma_entry()'s debugging code
-Message-ID: <ZWm-u2kV1UP09M84@arm.com>
-References: <736e584f-7d5f-41aa-a382-2f4881ba747f@rowland.harvard.edu>
- <20231127160759.GA1668@lst.de>
- <637d6dff-de56-4815-a15a-1afccde073f0@rowland.harvard.edu>
- <20231128133702.GA9917@lst.de>
- <cb7dc5da-37cb-45ba-9846-5a085f55692e@rowland.harvard.edu>
- <ZWYnECPRKca5Dpqc@arm.com>
- <76e8def2-ff45-47d3-91ab-96876ea84079@gmail.com>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4E172831520;
+	Fri,  1 Dec 2023 11:51:57 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.193.68])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1413C2166B26;
+	Fri,  1 Dec 2023 11:51:54 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: stern@rowland.harvard.edu
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	jtornosm@redhat.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	oneukum@suse.com,
+	pabeni@redhat.com
+Subject: [PATCH v2] net: usb: ax88179_178a: avoid failed operations when device is disconnected
+Date: Fri,  1 Dec 2023 12:51:43 +0100
+Message-ID: <20231201115143.177081-1-jtornosm@redhat.com>
+In-Reply-To: <e8e4ac26-9168-452c-80bc-f32904808cc9@rowland.harvard.edu>
+References: <e8e4ac26-9168-452c-80bc-f32904808cc9@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76e8def2-ff45-47d3-91ab-96876ea84079@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
 
-On Thu, Nov 30, 2023 at 09:08:23PM +0100, Ferry Toth wrote:
-> Op 28-11-2023 om 18:44 schreef Catalin Marinas:
-> > Or just force the kmalloc() min align to cache_line_size(), something
-> > like:
-> > 
-> > diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
-> > index 4a658de44ee9..3ece20367636 100644
-> > --- a/include/linux/dma-mapping.h
-> > +++ b/include/linux/dma-mapping.h
-> > @@ -543,6 +543,8 @@ static inline int dma_get_cache_alignment(void)
-> >   #ifdef ARCH_HAS_DMA_MINALIGN
-> >   	return ARCH_DMA_MINALIGN;
-> >   #endif
-> > +	if (IS_ENABLED(CONFIG_DMA_API_DEBUG))
-> > +		return cache_line_size();
-> >   	return 1;
-> >   }
-> >   #endif
-> > diff --git a/mm/slab_common.c b/mm/slab_common.c
-> > index 8d431193c273..d0b21d6e9328 100644
-> > --- a/mm/slab_common.c
-> > +++ b/mm/slab_common.c
-> > @@ -879,7 +879,7 @@ static unsigned int __kmalloc_minalign(void)
-> >   	unsigned int minalign = dma_get_cache_alignment();
-> >   	if (IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) &&
-> > -	    is_swiotlb_allocated())
-> > +	    is_swiotlb_allocated() && !IS_ENABLED(CONFIG_DMA_API_DEBUG))
-> >   		minalign = ARCH_KMALLOC_MINALIGN;
-> >   	return max(minalign, arch_slab_minalign());
-> 
-> With above suggestion "force the kmalloc() min align to cache_line_size()" +
-> Alan's debug code:
-> 
-> root@yuna:~# journalctl -k | grep hub
-> kernel: usbcore: registered new interface driver hub
-> kernel: hub 1-0:1.0: USB hub found
-> kernel: usb usb1: hub buffer at 71c7180, status at 71c71c0
-> kernel: hub 1-0:1.0: 1 port detected
-> kernel: hub 2-0:1.0: USB hub found
-> kernel: usb usb2: hub buffer at 71c79c0, status at 71c7a00
-> kernel: hub 2-0:1.0: 1 port detected
-> kernel: hub 1-1:1.0: USB hub found
-> kernel: usb 1-1: hub buffer at 65b36c0, status at 6639340
-> kernel: hub 1-1:1.0: 7 ports detected
-> 
-> and the stack trace indeed goes away.
-> 
-> IOW also the 2 root hub kmalloc() are now also aligned to the cache line
-> size, even though these never triggered the stack trace. Strange: hub status
-> is aligned far away from hub buffer, kmalloc mysteries.
+When the device is disconnected we get the following messages showing
+failed operations:
+Nov 28 20:22:11 localhost kernel: usb 2-3: USB disconnect, device number 2
+Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: unregister 'ax88179_178a' usb-0000:02:00.0-3, ASIX AX88179 USB 3.0 Gigabit Ethernet
+Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to read reg index 0x0002: -19
+Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to write reg index 0x0002: -19
+Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
+Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0001: -19
+Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
 
-They are 64 bytes apart in most cases other than the last one which I
-guess the status had to go to a different slab page.
+The reason is that although the device is detached, normal stop and
+unbind operations are commanded from the driver. These operations are
+not necessary in this situation, so avoid these logs when the device is
+detached if the result of the operation is -ENODEV and if the new flag
+informing about the stopping or unbind operation is enabled.
 
-> This still did not land for me: are we detecting a false alarm here as the 2
-> DMA operations can never happen on the same cache line on non-cache-coherent
-> platforms? If so, shouldn't we fix up the dma debug code to not detect a
-> false alarm? Instead of changing the alignment?
+Fixes: e2ca90c276e1f ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
+Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+---
+V1 -> V2:
+- Follow the suggestions from Alan Stern and Oliver Neukum to check the
+result of the operations (-ENODEV) and not the internal state of the USB 
+layer (USB_STATE_NOTATTACHED).
 
-It's a false alarm indeed on this hardware since the DMA is
-cache-coherent. I think Christoph mentioned earlier in this thread that
-he'd like the DMA API debug to report potential problems even if the
-hardware it is running on is safe.
+ drivers/net/usb/ax88179_178a.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-> Or, is this a bonafide warning (for non-cache-coherent platforms)? Then we
-> should not silence it by force aligning it, but issue a WARN (on a cache
-> coherent platform) that is more useful (i.e. here we have not an overlap but
-> a shared cache line). On a non-cache coherent platform something stronger
-> than a WARN might be appropriate?
-
-A non-cache coherent platform would either have the kmalloc()
-allocations aligned or it would bounce those small, unaligned buffers.
-So it doesn't seem right to issue a warning on x86 where kmalloc()
-minimum alignment is 8 and not getting the warning on a non-coherent
-platform which forces the kmalloc() alignment.
-
-If we consider the kmalloc() aspect already covered by bouncing or force
-alignment, the DMA API debug code can still detect other cache line
-sharing situations.
-
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index 4ea0e155bb0d..105bae360128 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -173,6 +173,7 @@ struct ax88179_data {
+ 	u8 in_pm;
+ 	u32 wol_supported;
+ 	u32 wolopts;
++	u8 stopping_unbinding;
+ };
+ 
+ struct ax88179_int_data {
+@@ -208,6 +209,7 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+ {
+ 	int ret;
+ 	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
++	struct ax88179_data *ax179_data = dev->driver_priv;
+ 
+ 	BUG_ON(!dev);
+ 
+@@ -219,7 +221,7 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+ 	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+ 		 value, index, data, size);
+ 
+-	if (unlikely(ret < 0))
++	if (unlikely(ret < 0 && !(ret == -ENODEV && ax179_data->stopping_unbinding)))
+ 		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
+ 			    index, ret);
+ 
+@@ -231,6 +233,7 @@ static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+ {
+ 	int ret;
+ 	int (*fn)(struct usbnet *, u8, u8, u16, u16, const void *, u16);
++	struct ax88179_data *ax179_data = dev->driver_priv;
+ 
+ 	BUG_ON(!dev);
+ 
+@@ -242,7 +245,7 @@ static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+ 	ret = fn(dev, cmd, USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+ 		 value, index, data, size);
+ 
+-	if (unlikely(ret < 0))
++	if (unlikely(ret < 0 && !(ret == -ENODEV && ax179_data->stopping_unbinding)))
+ 		netdev_warn(dev->net, "Failed to write reg index 0x%04x: %d\n",
+ 			    index, ret);
+ 
+@@ -1308,6 +1311,8 @@ static void ax88179_unbind(struct usbnet *dev, struct usb_interface *intf)
+ 	struct ax88179_data *ax179_data = dev->driver_priv;
+ 	u16 tmp16;
+ 
++	ax179_data->stopping_unbinding = 1;
++
+ 	/* Configure RX control register => stop operation */
+ 	tmp16 = AX_RX_CTL_STOP;
+ 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_RX_CTL, 2, 2, &tmp16);
+@@ -1319,6 +1324,8 @@ static void ax88179_unbind(struct usbnet *dev, struct usb_interface *intf)
+ 	tmp16 = 0;
+ 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL, 2, 2, &tmp16);
+ 
++	ax179_data->stopping_unbinding = 0;
++
+ 	kfree(ax179_data);
+ }
+ 
+@@ -1661,14 +1668,19 @@ static int ax88179_reset(struct usbnet *dev)
+ 
+ static int ax88179_stop(struct usbnet *dev)
+ {
++	struct ax88179_data *ax179_data = dev->driver_priv;
+ 	u16 tmp16;
+ 
++	ax179_data->stopping_unbinding = 1;
++
+ 	ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
+ 			 2, 2, &tmp16);
+ 	tmp16 &= ~AX_MEDIUM_RECEIVE_EN;
+ 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
+ 			  2, 2, &tmp16);
+ 
++	ax179_data->stopping_unbinding = 0;
++
+ 	return 0;
+ }
+ 
 -- 
-Catalin
+2.43.0
+
 
