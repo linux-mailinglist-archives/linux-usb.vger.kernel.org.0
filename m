@@ -1,129 +1,138 @@
-Return-Path: <linux-usb+bounces-3536-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3537-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 875C580092A
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 11:57:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D41C6800957
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 12:08:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B88501C20C85
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 10:57:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E271B20C56
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 11:08:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DA8B20B3D;
-	Fri,  1 Dec 2023 10:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f4vVePf+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30232210F2;
+	Fri,  1 Dec 2023 11:08:50 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC15A208A9
-	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 10:57:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A52AFC433C8;
-	Fri,  1 Dec 2023 10:57:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701428233;
-	bh=Oq0kqOP01NdYfWI6CUIb/qnr5mpWp63Eao1PiQvHSdE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=f4vVePf+y0CmsPee1Eprexqu/MEoBYFcR1J3Kk82L80GniiYoMQjKkaTv1cvZ7Dib
-	 M9Dcv6J4zNWHzxn9NvAFrRJGVBjgrZKY+cnd93PIhiwLQGY91gHSAngzS7ZxcgYAU4
-	 XQMfMZs8LHfY4yBYCwvIHBsi6aN23SP3mzlJeo3YBmk5SI5PvEiFmUczAPId0tJq3/
-	 r/DIkk9HCOcofsQDR7tCXsxJS+mH4S4C6IDY1wOeDl8Qtfgliuni4epEjLasrTQx53
-	 OK4IOYYbmKrTbegKIDOqL4yGbDIliau1F/JEq6pd86P/HPzRK5cGNjWn4cOdxg3iET
-	 hrmShK5FUwUIA==
-Message-ID: <019c84e6-2e77-4b76-b105-fc9ff678c058@kernel.org>
-Date: Fri, 1 Dec 2023 12:57:07 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D8A210E0;
+	Fri,  1 Dec 2023 11:08:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BBCAC433C7;
+	Fri,  1 Dec 2023 11:08:46 +0000 (UTC)
+Date: Fri, 1 Dec 2023 11:08:43 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Ferry Toth <fntoth@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>, Christoph Hellwig <hch@lst.de>,
+	Hamza Mahfooz <someguy@effective-light.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Andrew <travneff@gmail.com>, Ferry Toth <ferry.toth@elsinga.info>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Thorsten Leemhuis <regressions@leemhuis.info>,
+	iommu@lists.linux.dev,
+	Kernel development list <linux-kernel@vger.kernel.org>,
+	USB mailing list <linux-usb@vger.kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>
+Subject: Re: Bug in add_dma_entry()'s debugging code
+Message-ID: <ZWm-u2kV1UP09M84@arm.com>
+References: <736e584f-7d5f-41aa-a382-2f4881ba747f@rowland.harvard.edu>
+ <20231127160759.GA1668@lst.de>
+ <637d6dff-de56-4815-a15a-1afccde073f0@rowland.harvard.edu>
+ <20231128133702.GA9917@lst.de>
+ <cb7dc5da-37cb-45ba-9846-5a085f55692e@rowland.harvard.edu>
+ <ZWYnECPRKca5Dpqc@arm.com>
+ <76e8def2-ff45-47d3-91ab-96876ea84079@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: typec: tps6598x: use device 'type' field to identify
- devices
-Content-Language: en-US
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Alexandru Ardelean <alex@shruggie.ro>, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
- christophe.jaillet@wanadoo.fr, a-govindraju@ti.com, trix@redhat.com,
- abdelalkuor@geotab.com, Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Rob Herring <robh+dt@kernel.org>
-References: <20231123210021.463122-1-alex@shruggie.ro>
- <ZWdKI9UOZ6INP0Tu@kuha.fi.intel.com>
- <47ffbb30-34a7-4f5b-b262-3e068e574c8a@kernel.org>
- <ZWhp9M8165DiTNTd@kuha.fi.intel.com>
- <292f5d48-8567-4b60-ad03-6cf70f71bacc@kernel.org>
- <ZWmVA9KTVhZ4YCPO@kuha.fi.intel.com>
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <ZWmVA9KTVhZ4YCPO@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <76e8def2-ff45-47d3-91ab-96876ea84079@gmail.com>
 
-+Rob & Krzysztof
-
-On 01/12/2023 10:10, Heikki Krogerus wrote:
-> Hi Roger,
+On Thu, Nov 30, 2023 at 09:08:23PM +0100, Ferry Toth wrote:
+> Op 28-11-2023 om 18:44 schreef Catalin Marinas:
+> > Or just force the kmalloc() min align to cache_line_size(), something
+> > like:
+> > 
+> > diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
+> > index 4a658de44ee9..3ece20367636 100644
+> > --- a/include/linux/dma-mapping.h
+> > +++ b/include/linux/dma-mapping.h
+> > @@ -543,6 +543,8 @@ static inline int dma_get_cache_alignment(void)
+> >   #ifdef ARCH_HAS_DMA_MINALIGN
+> >   	return ARCH_DMA_MINALIGN;
+> >   #endif
+> > +	if (IS_ENABLED(CONFIG_DMA_API_DEBUG))
+> > +		return cache_line_size();
+> >   	return 1;
+> >   }
+> >   #endif
+> > diff --git a/mm/slab_common.c b/mm/slab_common.c
+> > index 8d431193c273..d0b21d6e9328 100644
+> > --- a/mm/slab_common.c
+> > +++ b/mm/slab_common.c
+> > @@ -879,7 +879,7 @@ static unsigned int __kmalloc_minalign(void)
+> >   	unsigned int minalign = dma_get_cache_alignment();
+> >   	if (IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) &&
+> > -	    is_swiotlb_allocated())
+> > +	    is_swiotlb_allocated() && !IS_ENABLED(CONFIG_DMA_API_DEBUG))
+> >   		minalign = ARCH_KMALLOC_MINALIGN;
+> >   	return max(minalign, arch_slab_minalign());
 > 
-> On Thu, Nov 30, 2023 at 03:30:54PM +0200, Roger Quadros wrote:
->> Hi Heikki,
->>
->> On 30/11/2023 12:54, Heikki Krogerus wrote:
->>> Hi Roger,
->>>
->>>>> Why not just match against the structures themselves?
->>>>>
->>>>>         if (tps->data == &tps25750_data)
->>>>>                 ...
->>>>
->>>> Then you need to declare tps25750_data and friends at the top of the file?
->>>>
->>>> A better approach might be to have type agnostic quirk flags for the special
->>>> behavior required for different types. This way, multiple devices can share
->>>> the same quirk if needed.
->>>>
->>>> e.g.
->>>> NEEDS_POWER_UP instead of TIPD_TYPE_APPLE_CD321X
->>>> SKIP_VID_READ instead of TIPD_TYPE_TI_TPS25750X
->>>> INIT_ON_RESUME instead of TIPD_TYPE_TI_TPS25750X
->>>>
->>>> Also rename cd321x_switch_power_state() to tps6598x_switch_power_state().
->>>
->>> No. Functions like that isolate cd321x specific functionality into an
->>> actual "function" just like they should.
->>>
->>> Quirk flags mean that if something breaks, it will almost always break
->>> for everybody (there is no real isolation with quirk flags), and when
->>> things are fixed and when features are added, we are forced to always
->>> "dance" around those quirk flags - you always have to consider them.
->>>
->>> Platform/device type checks are just as bad IMO, but in one way they
->>> are better than quirk flags. There is no question about what a
->>> platform check is checking, but quirk flags can so easily become
->>> incomprehensible (just what exactly does it mean when you say
->>> NEEDS_POWER_UP, SKIP_VID_READ and so on (you would need to document
->>> those quirks, which is waste of effort, and in reality nobody will do).
->>>
->>> In case of tipd/code.c, it should be converted into a library that
->>> only has the common/shared functionality. CD321, TPS2579x, TPS6598x
->>> and what ever there is, then will have a glue driver that handles
->>> everything that specific for their controller type.
->>
->> Do you mean that you want to treat the 3 devices as different incompatible devices
->> so each one has a separate driver which warrants for a different DT binding
->> for each and also Kconfig symbol?
+> With above suggestion "force the kmalloc() min align to cache_line_size()" +
+> Alan's debug code:
 > 
-> I did not consider that, I was thinking that we would still continue
-> with just one probe driver for all of these, but now that you
-> mentioned this, maybe it would actually make sense to have separate
-> full fledged probing drivers for all of these. Do you think it would
-> be better like that? Would it be a problem to split the bindings?
+> root@yuna:~# journalctl -k | grep hub
+> kernel: usbcore: registered new interface driver hub
+> kernel: hub 1-0:1.0: USB hub found
+> kernel: usb usb1: hub buffer at 71c7180, status at 71c71c0
+> kernel: hub 1-0:1.0: 1 port detected
+> kernel: hub 2-0:1.0: USB hub found
+> kernel: usb usb2: hub buffer at 71c79c0, status at 71c7a00
+> kernel: hub 2-0:1.0: 1 port detected
+> kernel: hub 1-1:1.0: USB hub found
+> kernel: usb 1-1: hub buffer at 65b36c0, status at 6639340
+> kernel: hub 1-1:1.0: 7 ports detected
+> 
+> and the stack trace indeed goes away.
+> 
+> IOW also the 2 root hub kmalloc() are now also aligned to the cache line
+> size, even though these never triggered the stack trace. Strange: hub status
+> is aligned far away from hub buffer, kmalloc mysteries.
 
-I'm no DT expert but looks like an overkill to me.
+They are 64 bytes apart in most cases other than the last one which I
+guess the status had to go to a different slab page.
+
+> This still did not land for me: are we detecting a false alarm here as the 2
+> DMA operations can never happen on the same cache line on non-cache-coherent
+> platforms? If so, shouldn't we fix up the dma debug code to not detect a
+> false alarm? Instead of changing the alignment?
+
+It's a false alarm indeed on this hardware since the DMA is
+cache-coherent. I think Christoph mentioned earlier in this thread that
+he'd like the DMA API debug to report potential problems even if the
+hardware it is running on is safe.
+
+> Or, is this a bonafide warning (for non-cache-coherent platforms)? Then we
+> should not silence it by force aligning it, but issue a WARN (on a cache
+> coherent platform) that is more useful (i.e. here we have not an overlap but
+> a shared cache line). On a non-cache coherent platform something stronger
+> than a WARN might be appropriate?
+
+A non-cache coherent platform would either have the kmalloc()
+allocations aligned or it would bounce those small, unaligned buffers.
+So it doesn't seem right to issue a warning on x86 where kmalloc()
+minimum alignment is 8 and not getting the warning on a non-coherent
+platform which forces the kmalloc() alignment.
+
+If we consider the kmalloc() aspect already covered by bouncing or force
+alignment, the DMA API debug code can still detect other cache line
+sharing situations.
 
 -- 
-cheers,
--roger
+Catalin
 
