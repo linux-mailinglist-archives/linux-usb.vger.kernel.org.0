@@ -1,44 +1,34 @@
-Return-Path: <linux-usb+bounces-3567-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3568-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3665B800EE6
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 17:00:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5373D800F8C
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 17:13:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6F43B21337
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 16:00:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F07731F20FA6
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 16:13:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221984BA8E;
-	Fri,  1 Dec 2023 15:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6122B4C609;
+	Fri,  1 Dec 2023 16:13:13 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id A53CD19E
-	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 07:59:54 -0800 (PST)
-Received: (qmail 290509 invoked by uid 1000); 1 Dec 2023 10:59:53 -0500
-Date: Fri, 1 Dec 2023 10:59:53 -0500
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id 63FD410DB
+	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 08:13:09 -0800 (PST)
+Received: (qmail 291284 invoked by uid 1000); 1 Dec 2023 11:13:08 -0500
+Date: Fri, 1 Dec 2023 11:13:08 -0500
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Douglas Anderson <dianders@chromium.org>
-Cc: linux-usb@vger.kernel.org,
-  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-  Simon Horman <horms@kernel.org>, Grant Grundler <grundler@chromium.org>,
-  Hayes Wang <hayeswang@realtek.com>,
-  =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-  Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-  "David S . Miller" <davem@davemloft.net>, Brian Geffon <bgeffon@google.com>,
-  Bastien Nocera <hadess@hadess.net>,
-  Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-  Flavio Suligoi <f.suligoi@asem.it>,
-  Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-  Ricardo =?iso-8859-1?Q?Ca=F1uelo?= <ricardo.canuelo@collabora.com>,
-  Rob Herring <robh@kernel.org>, Roy Luo <royluo@google.com>,
-  Stanley Chang <stanley_chang@realtek.com>,
-  Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: core: Save the config when a device is
- deauthorized+authorized
-Message-ID: <62b7467f-f142-459d-aa23-8bfd70bbe733@rowland.harvard.edu>
-References: <20231130154337.1.Ie00e07f07f87149c9ce0b27ae4e26991d307e14b@changeid>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: greg@kroah.com, davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+  netdev@vger.kernel.org, oneukum@suse.com, pabeni@redhat.com,
+  stable@vger.kernel.org
+Subject: Re: [PATCH v3] net: usb: ax88179_178a: avoid failed operations when
+ device is disconnected
+Message-ID: <140e912f-8702-4e85-8d6c-ef0255e718f8@rowland.harvard.edu>
+References: <2023120130-repair-tackle-698e@gregkh>
+ <20231201132647.178979-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -47,43 +37,38 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231130154337.1.Ie00e07f07f87149c9ce0b27ae4e26991d307e14b@changeid>
+In-Reply-To: <20231201132647.178979-1-jtornosm@redhat.com>
 
-On Thu, Nov 30, 2023 at 03:43:47PM -0800, Douglas Anderson wrote:
-> Right now, when a USB device is deauthorized (by writing 0 to the
-> "authorized" field in sysfs) and then reauthorized (by writing a 1) it
-> loses any configuration it might have had. This is because
-> usb_deauthorize_device() calls:
->   usb_set_configuration(usb_dev, -1);
-> ...and then usb_authorize_device() calls:
->   usb_choose_configuration(udev);
-> ...to choose the "best" configuration.
+On Fri, Dec 01, 2023 at 02:26:47PM +0100, Jose Ignacio Tornos Martinez wrote:
+> When the device is disconnected we get the following messages showing
+> failed operations:
+> Nov 28 20:22:11 localhost kernel: usb 2-3: USB disconnect, device number 2
+> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: unregister 'ax88179_178a' usb-0000:02:00.0-3, ASIX AX88179 USB 3.0 Gigabit Ethernet
+> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to read reg index 0x0002: -19
+> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to write reg index 0x0002: -19
+> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
+> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0001: -19
+> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
 > 
-> This generally works OK and it looks like the above design was chosen
-> on purpose. In commit 93993a0a3e52 ("usb: introduce
-> usb_authorize/deauthorize()") we can see some discussion about keeping
-> the old config but it was decided not to bother since we can't save it
-> for wireless USB anyway. It can be noted that as of commit
-> 1e4c574225cc ("USB: Remove remnants of Wireless USB and UWB") wireless
-> USB is removed anyway, so there's really not a good reason not to keep
-> the old config.
+> The reason is that although the device is detached, normal stop and
+> unbind operations are commanded from the driver. These operations are
+> not necessary in this situation, so avoid these logs when the device is
+> detached if the result of the operation is -ENODEV and if the new flag
+> informing about the stopping or unbind operation is enabled.
 > 
-> Unfortunately, throwing away the old config breaks when something has
-> decided to choose a config other than the normal "best" config.
-> Specifically, it can be noted that as of commit ec51fbd1b8a2 ("r8152:
-> add USB device driver for config selection") that the r8152 driver
-> subclasses the generic USB driver and selects a config other than the
-> one that would have been selected by usb_choose_configuration(). This
-> logic isn't re-run after a deauthorize + authorize and results in the
-> r8152 driver not being re-bound.
-> 
-> Let's change things to save the old config when we deauthorize and
-> then restore it when we re-authorize. We'll disable this logic for
-> wireless USB where we re-fetch the descriptor after authorization.
+> cc: stable@vger.kernel.org
+> Fixes: e2ca90c276e1f ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
+> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
 
-Would it be better to make the r8152 driver override 
-usb_choose_configuration()?  This is the sort of thing that subclassing 
-is intended for.
+> @@ -242,7 +245,7 @@ static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>  	ret = fn(dev, cmd, USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+>  		 value, index, data, size);
+>  
+> -	if (unlikely(ret < 0))
+> +	if (unlikely(ret < 0 && !(ret == -ENODEV && ax179_data->stopping_unbinding)))
+
+Would it be good enough just to check for ret != -ENODEV and not do the 
+stopping_unbinding check at all?
 
 Alan Stern
 
