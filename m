@@ -1,60 +1,94 @@
-Return-Path: <linux-usb+bounces-3539-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3540-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64651800A8D
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 13:12:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5C3A800ABE
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 13:19:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FB23281B51
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 12:12:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00C041C20C6D
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 12:19:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BD3724A00;
-	Fri,  1 Dec 2023 12:12:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7E4224B4B;
+	Fri,  1 Dec 2023 12:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eHwXw4YM"
+	dkim=pass (2048-bit key) header.d=elsinga.info header.i=@elsinga.info header.b="DHtDohKQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF544CD
-	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 04:12:41 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-a19067009d2so211013966b.3
-        for <linux-usb@vger.kernel.org>; Fri, 01 Dec 2023 04:12:41 -0800 (PST)
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 01 Dec 2023 04:18:55 PST
+Received: from mailfilter06-out30.webhostingserver.nl (mailfilter06-out30.webhostingserver.nl [195.211.73.76])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C44CD48
+	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 04:18:55 -0800 (PST)
+ARC-Seal: i=2; a=rsa-sha256; t=1701433072; cv=pass;
+	d=webhostingserver.nl; s=whs1;
+	b=rCPv1KLVRil3TUxqRWPon/forYUMDR+WgLbwOMmXAU1v/Rcld69Jqz9lROxRrltdcsCteRFK4x9zi
+	 qlsPgOQpWeadrGKNs5HWUsgKSm2Z3YSbh0m0fJoNrfWVyamhos98ZECj3bxxSwBUNk+AJNPIpQxajP
+	 y3RirwoPczB3+SLx2GvM9AfsFSq98s+tSHjm084QQ/jbe+Xnub4Q2qhyJats/z0fAGJ6tB6mIGNwh8
+	 gJAoV4VVTU5OInIjduxZjH2U2NDViSBOzgpO/zCo7p8j5X4foYW5Yxr8S/F75FraTHvHlL23qTbMaY
+	 0aJQ/D+Rgz4aIN0lTMMeCt2sGAF6mYQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=webhostingserver.nl; s=whs1;
+	h=content-transfer-encoding:content-type:in-reply-to:from:references:cc:to:
+	 subject:mime-version:date:message-id:dkim-signature:from;
+	bh=yxpfp6W8Fp6DLbwBF/kgwWsTWE16o4TY8bwwqfhZLqg=;
+	b=HoVqjDWXY0fSIQGqSrhlxOuBppyaLCbCawfBoz20GbkYS6ywED6rjhZo5Rx9Khes9heu4SMVkiW4A
+	 SooB3vo9+oIn77Kh1Vduzyqqgje8bAhlI/3ILjuezBBZbaOUya607GUI+SyXr+DoQyG5OA6Udi+6yN
+	 tST4Zu9EzmcQba7LcUKHahjDsRn4/cof5yVtcLVfQxqDh6DhEyloToT/YsHMSsreGpk65ErokIPpM9
+	 i5bMuan+5IVqfXb5XgPCJ065+WuJzlSmudQGEQp3dZWPbfKKh7Mcy5ZEZYfYUDdqLE46yuQ2EJtmLp
+	 oGgLCc0wbCMneWaxatqzLaclmNxryRg==
+ARC-Authentication-Results: i=2; mailfilter06.webhostingserver.nl;
+	spf=pass smtp.mailfrom=elsinga.info smtp.remote-ip=141.138.168.154;
+	dmarc=pass header.from=elsinga.info;
+	arc=pass header.oldest-pass=0;
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701432760; x=1702037560; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=elxv3lTJW8D4+Mj9XKImFIdtqE5ajcp6kHSasoKUYrw=;
-        b=eHwXw4YM2wTeHw3qBsWUAANRkLjaXD7mrBaAWR6kyFROGvdpPx3cNztQ/rBKi/0kcm
-         U4EbYVHoJU/Y1Lk0W3a/Xnbx27kzl6SVNPi0d64fO2vEfIKgKCZhWLR3ytvTM/+5XJdy
-         +dT+tWvSPJu9jlDkA+IyMdgwNuKs/vnlOYuO5ss1ub+aTmGHoqJnBOn8xnkOARIn9hX/
-         G2dy4tWTmBR2/iWsQfPkxXrKsFh2nSkBTKPZ2NLMbaOUwfiuorfoL8Py/YfsZNNwYo4N
-         zsEh8gW+KTcQPigqilqJe2YxX3YlyzXtFAwXYsFMbJu18pRAwIdZudex76TOgWwyKzDP
-         wXsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701432760; x=1702037560;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=elxv3lTJW8D4+Mj9XKImFIdtqE5ajcp6kHSasoKUYrw=;
-        b=NwaZMYHuGj6oYSOPBEE1pZYUwvTnZVs/T0I4WU/1NG9o6ibDdmtfOgFp0KNTEZc0ct
-         PWtOWR7pGwjQcNbTGRCP0DWJ+MXm0MxGCf65JYKFHncr07L6gC+HqL/uxrOuKjgvxNf7
-         QQzgoUWIaT8RR6Z+AhjiN8/O/fiyRxUe9ZLTntBaLbMx0sVPldt4pPjOoPjSrGzi4tB2
-         mMGK7RTPguKbAsr7/eUaIAe9SCMui+5lfHEEz7Irk8Afbr4blRjdhpjk1T3PmdUd14A8
-         0divDLAa8c4UKnj5GblRUXlwLXyNSg8Y8hDiY7id80Gjf5c47vXWozIEE3ZzQQx8y/gy
-         2fVg==
-X-Gm-Message-State: AOJu0YzsSHHZbgR5pUX/p+yLUx1DkEctDmjdz1xj04gBNvfIHcSl3di8
-	55UxrboZBbpyls1KgArYZjfW4g==
-X-Google-Smtp-Source: AGHT+IG6K1LKQfvVGGJzsHpnDnlJY0Qg0R2GO2J6XFLCT2ebTzKDDa97z0J6Hxm2tfR/LLTtvwIsIg==
-X-Received: by 2002:a17:906:738d:b0:a19:a19a:ea97 with SMTP id f13-20020a170906738d00b00a19a19aea97mr827630ejl.80.1701432760061;
-        Fri, 01 Dec 2023 04:12:40 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.223.109])
-        by smtp.gmail.com with ESMTPSA id d8-20020a1709061f4800b00a0435148ed7sm1873850ejk.17.2023.12.01.04.12.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Dec 2023 04:12:39 -0800 (PST)
-Message-ID: <b2b774fb-d252-4e5b-a6b7-1e5e92955a8f@linaro.org>
-Date: Fri, 1 Dec 2023 13:12:37 +0100
+	d=elsinga.info; s=whs1;
+	h=content-transfer-encoding:content-type:in-reply-to:from:references:cc:to:
+	 subject:mime-version:date:message-id:from;
+	bh=yxpfp6W8Fp6DLbwBF/kgwWsTWE16o4TY8bwwqfhZLqg=;
+	b=DHtDohKQmEY+eqynGBAOn7iNpoPS0RUk0b8s8aPaG5ZrreFKwwhvcyBNfekLs99DjIS83ITA7TDkZ
+	 NnU7/E1vIrvldMtpbI8tCBEy6NG85Prk3yDxi3wMrfFo/63wcTS78MyNe/RMMYrw2phmc82Vecp8Qt
+	 8Sx/uzMACH7rIhsmKbDzeVhVhdNpors6af46jwV1jeco1JNJyY1oU5z2fxphN/QWOEg0GYZOg9oYoN
+	 artc//CuFuUPI9Z67EvC0g17LeedPkWuoGrHQaM09H8q+1EpdnwBxjS/lB6X5HnpJnhOnRwD49HkmQ
+	 dWN2MyGFq/HrYuVlCZgnzCSS+pSIfDg==
+X-Halon-ID: a4b5a065-9043-11ee-aaea-001a4a4cb958
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+	by mailfilter06.webhostingserver.nl (Halon) with ESMTPSA
+	id a4b5a065-9043-11ee-aaea-001a4a4cb958;
+	Fri, 01 Dec 2023 13:17:49 +0100 (CET)
+ARC-Seal: i=1; cv=none; a=rsa-sha256; d=webhostingserver.nl; s=whs1; t=1701433069;
+	 b=ZO1kv4yCzwZXVpW6uIo/3k9Ho99IJMKp0wU/UVGutWkyYp3zQXrp/IFH37tqJpLV66M4PgXOb2
+	  1i8kqkK4bKjivojFuEjJtDiYe0tH+OuGSAxOeRbLaAR2fm+MOPpaXZnQrdfOAW8SuoBiBJ21KB
+	  fg4mXgbaSiIJz4bQUO4EYoKrp3YH05kCGkJfpMtdZIWjNoWaEEk4v8ZVOOFMdfHA11oTSGFVqW
+	  p+jqndO8Pln3Jqk1nDP0U4MzMMzZpQS24pitLRyn25VDCBkRhk3HCf1WJIw9sJuI6wtwvWcnMP
+	  6nXtqQdTF/zhC7UzvJDVEpMO/HhRtQswG5nsQWlthCVXPA==;
+ARC-Authentication-Results: i=1; webhostingserver.nl; smtp.remote-ip=178.250.146.69;
+	iprev=pass (cust-178-250-146-69.breedbanddelft.nl) smtp.remote-ip=178.250.146.69;
+	auth=pass (PLAIN) smtp.auth=ferry.toth@elsinga.info;
+	spf=softfail smtp.mailfrom=elsinga.info;
+	dmarc=skipped header.from=elsinga.info;
+	arc=none
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed; d=webhostingserver.nl; s=whs1; t=1701433069;
+	bh=xcmaprzeJXX9JycvvDRK4GIG8vXC2u+XIWrfOky6RTk=;
+	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:To:
+	  Subject:MIME-Version:Date:Message-ID;
+	b=M1YPdQCDkTu4qcv+vPrxFr3u2sIJajNHjarRWY9XArlRnWuMWSAt0rA+I5bl7q3alfkegTfBOb
+	  3A/ZM04rn82H5jMt0T78RPijXiJWjASwZDgWctQC3n3p+J82liXWot/rcFmJXj71ykTP+eWVkj
+	  XuXzILQ0lvlhBeFi7j3xDGUFlVdTaeiO3xwEOKCUUBFPNwDr7cFF8hVIajtKzRZedtCDAkrhiq
+	  seNnCsYA5+aygQBJL9uCRRkBQkD6Chr/ZdqMTmiIaplBDKiPx30f8qGZMZS0B2wPCSOgN9cd8e
+	  4CdS3ZIvoEWONSvxoF6jq3r2HXQu4JuzhoRU50zLhsy4XQ==;
+Authentication-Results: webhostingserver.nl;
+	iprev=pass (cust-178-250-146-69.breedbanddelft.nl) smtp.remote-ip=178.250.146.69;
+	auth=pass (PLAIN) smtp.auth=ferry.toth@elsinga.info;
+	spf=softfail smtp.mailfrom=elsinga.info;
+	dmarc=skipped header.from=elsinga.info;
+	arc=none
+Received: from cust-178-250-146-69.breedbanddelft.nl ([178.250.146.69] helo=smtp)
+	by s198.webhostingserver.nl with esmtpa (Exim 4.97)
+	(envelope-from <ferry.toth@elsinga.info>)
+	id 1r92Sr-00000008FSj-14wA;
+	Fri, 01 Dec 2023 13:17:49 +0100
+Message-ID: <5425cf42-0f49-41b5-b26d-1e099d5bdcc2@elsinga.info>
+Date: Fri, 1 Dec 2023 13:17:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,140 +96,134 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: typec: tps6598x: use device 'type' field to identify
- devices
-Content-Language: en-US
-To: Roger Quadros <rogerq@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Alexandru Ardelean <alex@shruggie.ro>, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
- christophe.jaillet@wanadoo.fr, a-govindraju@ti.com, trix@redhat.com,
- abdelalkuor@geotab.com, Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Rob Herring <robh+dt@kernel.org>
-References: <20231123210021.463122-1-alex@shruggie.ro>
- <ZWdKI9UOZ6INP0Tu@kuha.fi.intel.com>
- <47ffbb30-34a7-4f5b-b262-3e068e574c8a@kernel.org>
- <ZWhp9M8165DiTNTd@kuha.fi.intel.com>
- <292f5d48-8567-4b60-ad03-6cf70f71bacc@kernel.org>
- <ZWmVA9KTVhZ4YCPO@kuha.fi.intel.com>
- <019c84e6-2e77-4b76-b105-fc9ff678c058@kernel.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
- m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
- HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
- XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
- mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
- v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
- cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
- rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
- qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
- aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
- gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
- dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
- NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
- hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
- oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
- H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
- yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
- 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
- 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
- +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
- FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
- 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
- DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
- oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
- 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
- Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
- qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
- /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
- qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
- EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
- KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
- fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <019c84e6-2e77-4b76-b105-fc9ff678c058@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: Bug in add_dma_entry()'s debugging code
+To: Catalin Marinas <catalin.marinas@arm.com>, Ferry Toth <fntoth@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>, Christoph Hellwig <hch@lst.de>,
+ Hamza Mahfooz <someguy@effective-light.com>,
+ Dan Williams <dan.j.williams@intel.com>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, Andrew <travneff@gmail.com>,
+ Andy Shevchenko <andy.shevchenko@gmail.com>,
+ Thorsten Leemhuis <regressions@leemhuis.info>, iommu@lists.linux.dev,
+ Kernel development list <linux-kernel@vger.kernel.org>,
+ USB mailing list <linux-usb@vger.kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>
+References: <736e584f-7d5f-41aa-a382-2f4881ba747f@rowland.harvard.edu>
+ <20231127160759.GA1668@lst.de>
+ <637d6dff-de56-4815-a15a-1afccde073f0@rowland.harvard.edu>
+ <20231128133702.GA9917@lst.de>
+ <cb7dc5da-37cb-45ba-9846-5a085f55692e@rowland.harvard.edu>
+ <ZWYnECPRKca5Dpqc@arm.com> <76e8def2-ff45-47d3-91ab-96876ea84079@gmail.com>
+ <ZWm-u2kV1UP09M84@arm.com>
+Content-Language: en-US, nl
+From: Ferry Toth <ferry.toth@elsinga.info>
+In-Reply-To: <ZWm-u2kV1UP09M84@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
 
-On 01/12/2023 11:57, Roger Quadros wrote:
-> +Rob & Krzysztof
-> 
-> On 01/12/2023 10:10, Heikki Krogerus wrote:
->> Hi Roger,
->>
->> On Thu, Nov 30, 2023 at 03:30:54PM +0200, Roger Quadros wrote:
->>> Hi Heikki,
+Hi
+
+On 01-12-2023 12:08, Catalin Marinas wrote:
+> On Thu, Nov 30, 2023 at 09:08:23PM +0100, Ferry Toth wrote:
+>> Op 28-11-2023 om 18:44 schreef Catalin Marinas:
+>>> Or just force the kmalloc() min align to cache_line_size(), something
+>>> like:
 >>>
->>> On 30/11/2023 12:54, Heikki Krogerus wrote:
->>>> Hi Roger,
->>>>
->>>>>> Why not just match against the structures themselves?
->>>>>>
->>>>>>         if (tps->data == &tps25750_data)
->>>>>>                 ...
->>>>>
->>>>> Then you need to declare tps25750_data and friends at the top of the file?
->>>>>
->>>>> A better approach might be to have type agnostic quirk flags for the special
->>>>> behavior required for different types. This way, multiple devices can share
->>>>> the same quirk if needed.
->>>>>
->>>>> e.g.
->>>>> NEEDS_POWER_UP instead of TIPD_TYPE_APPLE_CD321X
->>>>> SKIP_VID_READ instead of TIPD_TYPE_TI_TPS25750X
->>>>> INIT_ON_RESUME instead of TIPD_TYPE_TI_TPS25750X
->>>>>
->>>>> Also rename cd321x_switch_power_state() to tps6598x_switch_power_state().
->>>>
->>>> No. Functions like that isolate cd321x specific functionality into an
->>>> actual "function" just like they should.
->>>>
->>>> Quirk flags mean that if something breaks, it will almost always break
->>>> for everybody (there is no real isolation with quirk flags), and when
->>>> things are fixed and when features are added, we are forced to always
->>>> "dance" around those quirk flags - you always have to consider them.
->>>>
->>>> Platform/device type checks are just as bad IMO, but in one way they
->>>> are better than quirk flags. There is no question about what a
->>>> platform check is checking, but quirk flags can so easily become
->>>> incomprehensible (just what exactly does it mean when you say
->>>> NEEDS_POWER_UP, SKIP_VID_READ and so on (you would need to document
->>>> those quirks, which is waste of effort, and in reality nobody will do).
->>>>
->>>> In case of tipd/code.c, it should be converted into a library that
->>>> only has the common/shared functionality. CD321, TPS2579x, TPS6598x
->>>> and what ever there is, then will have a glue driver that handles
->>>> everything that specific for their controller type.
->>>
->>> Do you mean that you want to treat the 3 devices as different incompatible devices
->>> so each one has a separate driver which warrants for a different DT binding
->>> for each and also Kconfig symbol?
+>>> diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
+>>> index 4a658de44ee9..3ece20367636 100644
+>>> --- a/include/linux/dma-mapping.h
+>>> +++ b/include/linux/dma-mapping.h
+>>> @@ -543,6 +543,8 @@ static inline int dma_get_cache_alignment(void)
+>>>    #ifdef ARCH_HAS_DMA_MINALIGN
+>>>    	return ARCH_DMA_MINALIGN;
+>>>    #endif
+>>> +	if (IS_ENABLED(CONFIG_DMA_API_DEBUG))
+>>> +		return cache_line_size();
+>>>    	return 1;
+>>>    }
+>>>    #endif
+>>> diff --git a/mm/slab_common.c b/mm/slab_common.c
+>>> index 8d431193c273..d0b21d6e9328 100644
+>>> --- a/mm/slab_common.c
+>>> +++ b/mm/slab_common.c
+>>> @@ -879,7 +879,7 @@ static unsigned int __kmalloc_minalign(void)
+>>>    	unsigned int minalign = dma_get_cache_alignment();
+>>>    	if (IS_ENABLED(CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC) &&
+>>> -	    is_swiotlb_allocated())
+>>> +	    is_swiotlb_allocated() && !IS_ENABLED(CONFIG_DMA_API_DEBUG))
+>>>    		minalign = ARCH_KMALLOC_MINALIGN;
+>>>    	return max(minalign, arch_slab_minalign());
+>> With above suggestion "force the kmalloc() min align to cache_line_size()" +
+>> Alan's debug code:
 >>
->> I did not consider that, I was thinking that we would still continue
->> with just one probe driver for all of these, but now that you
->> mentioned this, maybe it would actually make sense to have separate
->> full fledged probing drivers for all of these. Do you think it would
->> be better like that? Would it be a problem to split the bindings?
-> 
-> I'm no DT expert but looks like an overkill to me.
+>> root@yuna:~# journalctl -k | grep hub
+>> kernel: usbcore: registered new interface driver hub
+>> kernel: hub 1-0:1.0: USB hub found
+>> kernel: usb usb1: hub buffer at 71c7180, status at 71c71c0
+>> kernel: hub 1-0:1.0: 1 port detected
+>> kernel: hub 2-0:1.0: USB hub found
+>> kernel: usb usb2: hub buffer at 71c79c0, status at 71c7a00
+>> kernel: hub 2-0:1.0: 1 port detected
+>> kernel: hub 1-1:1.0: USB hub found
+>> kernel: usb 1-1: hub buffer at 65b36c0, status at 6639340
+>> kernel: hub 1-1:1.0: 7 ports detected
+>>
+>> and the stack trace indeed goes away.
+>>
+>> IOW also the 2 root hub kmalloc() are now also aligned to the cache line
+>> size, even though these never triggered the stack trace. Strange: hub status
+>> is aligned far away from hub buffer, kmalloc mysteries.
+> They are 64 bytes apart in most cases other than the last one which I
+> guess the status had to go to a different slab page.
+>
+>> This still did not land for me: are we detecting a false alarm here as the 2
+>> DMA operations can never happen on the same cache line on non-cache-coherent
+>> platforms? If so, shouldn't we fix up the dma debug code to not detect a
+>> false alarm? Instead of changing the alignment?
+> It's a false alarm indeed on this hardware since the DMA is
+> cache-coherent. I think Christoph mentioned earlier in this thread that
+> he'd like the DMA API debug to report potential problems even if the
+> hardware it is running on is safe.
 
-Splitting or not splitting drivers has nothing to do with bindings. Does
-the hardware suddenly change if you decide to do something with drivers?
-No, it does not.
+I agree with Christoph. So, my question is "are we detecting a false 
+alarm", not "a false alarm indeed on this hardware"?
 
-Best regards,
-Krzysztof
+>> Or, is this a bonafide warning (for non-cache-coherent platforms)? Then we
+>> should not silence it by force aligning it, but issue a WARN (on a cache
+>> coherent platform) that is more useful (i.e. here we have not an overlap but
+>> a shared cache line). On a non-cache coherent platform something stronger
+>> than a WARN might be appropriate?
+> A non-cache coherent platform would either have the kmalloc()
+> allocations aligned or it would bounce those small, unaligned buffers.
+It would? Or it always has?
+> So it doesn't seem right to issue a warning on x86 where kmalloc()
+> minimum alignment is 8 and not getting the warning on a non-coherent
+> platform which forces the kmalloc() alignment.
 
+If *all*non-coherent platforms implement either correct alignment or 
+bounce buffer, and on (coherent) x86 we get an WARN, then it is a false 
+alarm right?
+
+That is exactly my question (because I have no idea which platforms have 
+non-coherent caches).
+
+> If we consider the kmalloc() aspect already covered by bouncing or force
+> alignment, the DMA API debug code can still detect other cache line
+> sharing situations.
+
+Consider? Or know?
+
+If we know, and we can not easily prevent false WARN's on x86 it could 
+be sufficient to change the message to "possible cacheline sharing 
+detected" and add a line that "DMA_API_DEBUG" should be disabled on 
+production systems.
+
+And while at it, we might be able to fix the missed real cacheline 
+sharing mentioned by Alan:
+
+  "As a separate issue, active_cacheline_insert() fails to detect
+overlap in situations where a mapping occupies more than one cache line.
+For example, if mapping A uses lines N and N+1 and mapping B uses line
+N+1, no overlap will be detected because the radix-tree keys for A and B
+will be different (N vs. N+1)."
 
