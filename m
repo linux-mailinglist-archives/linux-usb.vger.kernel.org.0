@@ -1,107 +1,124 @@
-Return-Path: <linux-usb+bounces-3576-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3577-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D5898011F0
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 18:43:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D23F8012C6
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 19:31:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15B0A281468
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 17:43:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEE2A1C20FF0
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 18:31:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95B304E62A;
-	Fri,  1 Dec 2023 17:42:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF23051014;
+	Fri,  1 Dec 2023 18:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bxgEyueO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433DB22080;
-	Fri,  1 Dec 2023 17:42:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2E47C433C7;
-	Fri,  1 Dec 2023 17:42:54 +0000 (UTC)
-Date: Fri, 1 Dec 2023 17:42:52 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Ferry Toth <ferry.toth@elsinga.info>, Ferry Toth <fntoth@gmail.com>,
-	Christoph Hellwig <hch@lst.de>,
-	Hamza Mahfooz <someguy@effective-light.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Andrew <travneff@gmail.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Thorsten Leemhuis <regressions@leemhuis.info>,
-	iommu@lists.linux.dev,
-	Kernel development list <linux-kernel@vger.kernel.org>,
-	USB mailing list <linux-usb@vger.kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>
-Subject: Re: Bug in add_dma_entry()'s debugging code
-Message-ID: <ZWobHJqBji80CTm-@arm.com>
-References: <736e584f-7d5f-41aa-a382-2f4881ba747f@rowland.harvard.edu>
- <20231127160759.GA1668@lst.de>
- <637d6dff-de56-4815-a15a-1afccde073f0@rowland.harvard.edu>
- <20231128133702.GA9917@lst.de>
- <cb7dc5da-37cb-45ba-9846-5a085f55692e@rowland.harvard.edu>
- <ZWYnECPRKca5Dpqc@arm.com>
- <76e8def2-ff45-47d3-91ab-96876ea84079@gmail.com>
- <ZWm-u2kV1UP09M84@arm.com>
- <5425cf42-0f49-41b5-b26d-1e099d5bdcc2@elsinga.info>
- <5093ce37-047e-4aa8-a9e8-2978da9d734a@rowland.harvard.edu>
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3187E129
+	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 10:31:30 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6cddb35ef8bso2316795b3a.2
+        for <linux-usb@vger.kernel.org>; Fri, 01 Dec 2023 10:31:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1701455489; x=1702060289; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ga3+iKjA62Fa6KbPgroTk3zWELzaacYSZ02Ed8CuNZM=;
+        b=bxgEyueOZAnQphyhoXq+kHAIBv2uqcFALaBHS/qh6qysSt6be1qSPaD7prM/eJnSw7
+         +Ikv09MrPqjYMD+N+zuij8PWmZW0fstyim34jalRP1o8OAc5eV0T0sdmZzHu5hAQw2Rm
+         xHPF539GQrw49LYIdIlm9h49bc0lOHqBjAOs0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701455489; x=1702060289;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ga3+iKjA62Fa6KbPgroTk3zWELzaacYSZ02Ed8CuNZM=;
+        b=NX9+FW3ZfwFRKRMQ1wKJye0B1eQbscwe8veRjrM2oWiUrEPiy5V4Z075GZ1Onbr9z6
+         bDRjB1ghkygJYGZznRVM0edi+xjlIytNO3Cw+KQqeYpyknC0gru2+LyvBHjIVpBiiQGB
+         hLh9dHS25cVW5yBwCIdIYfbVCxLVIT+awQdMuBkUN6pt1r/+zLpQ2Zc2XuzkIvjbOxbJ
+         DmLuXtj1Z7AjHvW7xkyI1116QDc4klz0gflkfVRG7V9SLqy47uAwBfp93SsuncAHc3aw
+         hBdz0jpch/T3u8XA/ILenZCkvSxZuMJyDobxeQkNtfyg2C/9AFEpI8mi76k7IYjTPL3F
+         6zHQ==
+X-Gm-Message-State: AOJu0YzI1n/6a4esqAmM0xf17lU8brxh003YmRiJbmKVNcuuFKjcpfcF
+	0hpkiZur8Uf9ex4ROpcS4RWvxxalmoV9tIrBghRJA4zj
+X-Google-Smtp-Source: AGHT+IHbE+wbfalZufbhJj+tBtKr6YsDYezEXtezfVLD2wtXqSnvF5LqZTRKvLOu6DAzM7mOVEHhuw==
+X-Received: by 2002:a05:6a00:1f0a:b0:6cb:63cb:83c0 with SMTP id be10-20020a056a001f0a00b006cb63cb83c0mr29667323pfb.29.1701455488688;
+        Fri, 01 Dec 2023 10:31:28 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:11eb:92ac:94e:c791])
+        by smtp.gmail.com with ESMTPSA id g11-20020a056a00078b00b006cdda10bdafsm3306926pfu.183.2023.12.01.10.31.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Dec 2023 10:31:28 -0800 (PST)
+From: Douglas Anderson <dianders@chromium.org>
+To: linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Grant Grundler <grundler@chromium.org>,
+	Hayes Wang <hayeswang@realtek.com>,
+	Simon Horman <horms@kernel.org>,
+	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+	netdev@vger.kernel.org,
+	Brian Geffon <bgeffon@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Douglas Anderson <dianders@chromium.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] net: usb: r8152: Fix lost config across deauthorize+authorize
+Date: Fri,  1 Dec 2023 10:29:49 -0800
+Message-ID: <20231201183113.343256-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.43.0.rc2.451.g8631bc7472-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5093ce37-047e-4aa8-a9e8-2978da9d734a@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Replying to both here.
 
-On Fri, Dec 01, 2023 at 11:21:40AM -0500, Alan Stern wrote:
-> On Fri, Dec 01, 2023 at 01:17:43PM +0100, Ferry Toth wrote:
-> > > A non-cache coherent platform would either have the kmalloc()
-> > > allocations aligned or it would bounce those small, unaligned buffers.
-> > 
-> > It would? Or it always has?
+This series fixes problems introduced by commit ec51fbd1b8a2 ("r8152:
+add USB device driver for config selection") where the r8152 device
+would stop functioning if you deauthorized it (by writing 0 to the
+"authorized" field in sysfs) and then reauthorized it (by writing a
+1).
 
-It depends on the configuration. arm64 does the bounce as it opted in to
-CONFIG_DMA_BOUNCE_UNALIGNED_KMALLOC.
+In v1 this was just a single patch [1], but it's now a 3-patch series
+and solves the problem in a much cleaner way, as suggested by Alan
+Stern.
 
-> > > So it doesn't seem right to issue a warning on x86 where kmalloc()
-> > > minimum alignment is 8 and not getting the warning on a non-coherent
-> > > platform which forces the kmalloc() alignment.
-> > 
-> > If *all*non-coherent platforms implement either correct alignment or bounce
-> > buffer, and on (coherent) x86 we get an WARN, then it is a false alarm
-> > right?
-> > 
-> > That is exactly my question (because I have no idea which platforms have
-> > non-coherent caches).
-> 
-> Don't forget, not all DMA buffers are allocated by kmalloc().  A buffer 
-> allocated by some other means might not be aligned properly and might 
-> share a cache line with another buffer.
-> 
-> Or you might have a single data structure that was allocated by 
-> kmalloc() and then create separate DMA mappings for two members of that 
-> structure.  If the two members are in the same cache line, that would be 
-> an error.
+Since these three patches straddle the USB subsystem and the
+networking subsystem then maintainers will (obviously) need to work
+out a way for them to land. I don't have any strong suggestions here
+so I'm happy to let the maintainers propose what they think will work
+best.
 
-Indeed, so to be sure we don't trip over other false alarms, we'd also
-need to force ARCH_DMA_MINALIGN to be at least a cache-line size. That's
-used in some structures to force a static alignment of various members
-that take DMA transfers. After that, anything reported might actually be
-a potential issue, not a false alarm.
+[1] https://lore.kernel.org/r/20231130154337.1.Ie00e07f07f87149c9ce0b27ae4e26991d307e14b@changeid
 
-However, I wonder whether we'd actually hide some genuine problems.
-Let's say x86 gets some DMA corruption when it tries to DMA 8 bytes
-into two adjacent buffers because of some DMA buffer overflow, nothing
-to do with cache lines. You enable the DMA API debugging to see if it
-reports anything and it suddenly starts working because of the forced
-minimum alignment.
+Changes in v2:
+- ("Don't force USB generic_subclass drivers to define ...") new for v2.
+- ("Allow subclassed USB drivers to override ...") new for v2.
+- ("Choose our USB config with choose_configuration()...) new for v2.
+
+Douglas Anderson (3):
+  usb: core: Don't force USB generic_subclass drivers to define probe()
+  usb: core: Allow subclassed USB drivers to override
+    usb_choose_configuration()
+  r8152: Choose our USB config with choose_configuration() rather than
+    probe()
+
+ drivers/net/usb/r8152.c    | 16 +++++-----------
+ drivers/usb/core/driver.c  |  5 ++++-
+ drivers/usb/core/generic.c |  7 +++++++
+ include/linux/usb.h        |  6 ++++++
+ 4 files changed, 22 insertions(+), 12 deletions(-)
 
 -- 
-Catalin
+2.43.0.rc2.451.g8631bc7472-goog
+
 
