@@ -1,124 +1,111 @@
-Return-Path: <linux-usb+bounces-3546-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3547-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4825F800DBF
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 15:52:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16020800DE6
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 16:05:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 795841C20F36
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 14:52:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C22CB2122E
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Dec 2023 15:05:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B9833E467;
-	Fri,  1 Dec 2023 14:52:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F11AE4174A;
+	Fri,  1 Dec 2023 15:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fI+jLXSX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECE7103;
-	Fri,  1 Dec 2023 06:52:45 -0800 (PST)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 66FE9520123;
-	Fri,  1 Dec 2023 15:52:44 +0100 (CET)
-Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
- (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 1 Dec
- 2023 15:52:44 +0100
-From: Hardik Gajjar <hgajjar@de.adit-jv.com>
-To: <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-	<john@keeping.me.uk>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<erosca@de.adit-jv.com>, <hgajjar@de.adit-jv.com>, <jlayton@kernel.org>,
-	<brauner@kernel.org>
-Subject: [PATCH v2] usb: gadget: f_fs: Add the missing get_alt callback
-Date: Fri, 1 Dec 2023 15:52:34 +0100
-Message-ID: <20231201145234.97452-1-hgajjar@de.adit-jv.com>
-X-Mailer: git-send-email 2.17.1
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C8E93
+	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 07:05:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701443141; x=1732979141;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jrONfSyxD6aUbp1qb0g7y0X1vL/YnmQNWQyKlyuyX+U=;
+  b=fI+jLXSXd7bfmDHkrQRhIrmmqDf0kdeeDeKwQPkJhRpPLxEv2FFjoFTY
+   45bPjIHfSiI/EtD5e5SNPCFOE4vLqeXJLSUni+x+ctY9JbVc5CbBnIEbT
+   vNJLPn98rA8wveykOgCd+tGT1ao//Yy7hu8e2o+qbmBoZ9bUwdSL6Qwc1
+   Jm0tw6e+/kzWe8+bxav1zBtLAXWRE5ZuxiRZU6GBBKB/vubCxTQxDc02N
+   RWCXFbzqAvxQEq1bHVvdZXJD9FwOj8D5cUomKrhuPL/wGFCZyzNXjjAOG
+   X2b0F+CI+vWOEUu1PmZ/k3wAiM8ppMdWENO2KCR0H/2seGJdK8qeYBhfF
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10911"; a="396309674"
+X-IronPort-AV: E=Sophos;i="6.04,241,1695711600"; 
+   d="scan'208";a="396309674"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2023 07:05:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10911"; a="943112496"
+X-IronPort-AV: E=Sophos;i="6.04,241,1695711600"; 
+   d="scan'208";a="943112496"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by orsmga005.jf.intel.com with ESMTP; 01 Dec 2023 07:05:39 -0800
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 00/19] xhci features for usb-next
+Date: Fri,  1 Dec 2023 17:06:28 +0200
+Message-Id: <20231201150647.1307406-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
+Content-Transfer-Encoding: 8bit
 
-The Apple CarLife iAP gadget has a descriptor with two alternate
-settings. The host sends the set_alt request to configure alt_setting
-0 or 1, and this is verified by the subsequent get_alt request.
+Hi Greg
 
-This patch implements and sets the get_alt callback. Without the
-get_alt callback, composite.c abruptly concludes the
-USB_REQ_GET/SET_INTERFACE request, assuming only one alt setting
-for the endpoint.
+A set of xhci features and cleanups for usb-next, including xhci dbc
+cleanups, MSI rework, and fixing how we reconfigure max packet size
+for xhc.
 
-Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
----
-changes since version 1:
-	- improve commit message to indicate why the get_alt callback
-	  is necessary
-	- Link to v1 - https://lore.kernel.org/all/20231124164435.74727-1-hgajjar@de.adit-jv.com/
----
- drivers/usb/gadget/function/f_fs.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+One patch fixes a null pointer deref issue, but this hasn't been seen
+in real life. It's a theoretical case triggered by adding a 3 second
+delay in the driver.
+So I don't think it should go to stable.
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index efe3e3b85769..37c47c11f57a 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -75,6 +75,7 @@ struct ffs_function {
- 	short				*interfaces_nums;
- 
- 	struct usb_function		function;
-+	int				cur_alt[MAX_CONFIG_INTERFACES];
- };
- 
- 
-@@ -98,6 +99,7 @@ static int __must_check ffs_func_eps_enable(struct ffs_function *func);
- static int ffs_func_bind(struct usb_configuration *,
- 			 struct usb_function *);
- static int ffs_func_set_alt(struct usb_function *, unsigned, unsigned);
-+static int ffs_func_get_alt(struct usb_function *f, unsigned int intf);
- static void ffs_func_disable(struct usb_function *);
- static int ffs_func_setup(struct usb_function *,
- 			  const struct usb_ctrlrequest *);
-@@ -3232,6 +3234,15 @@ static void ffs_reset_work(struct work_struct *work)
- 	ffs_data_reset(ffs);
- }
- 
-+static int ffs_func_get_alt(struct usb_function *f,
-+			    unsigned int interface)
-+{
-+	struct ffs_function *func = ffs_func_from_usb(f);
-+	int intf = ffs_func_revmap_intf(func, interface);
-+
-+	return (intf < 0) ? intf : func->cur_alt[interface];
-+}
-+
- static int ffs_func_set_alt(struct usb_function *f,
- 			    unsigned interface, unsigned alt)
- {
-@@ -3266,8 +3277,10 @@ static int ffs_func_set_alt(struct usb_function *f,
- 
- 	ffs->func = func;
- 	ret = ffs_func_eps_enable(func);
--	if (ret >= 0)
-+	if (ret >= 0) {
- 		ffs_event_add(ffs, FUNCTIONFS_ENABLE);
-+		func->cur_alt[interface] = alt;
-+	}
- 	return ret;
- }
- 
-@@ -3574,6 +3587,7 @@ static struct usb_function *ffs_alloc(struct usb_function_instance *fi)
- 	func->function.bind    = ffs_func_bind;
- 	func->function.unbind  = ffs_func_unbind;
- 	func->function.set_alt = ffs_func_set_alt;
-+	func->function.get_alt = ffs_func_get_alt;
- 	func->function.disable = ffs_func_disable;
- 	func->function.setup   = ffs_func_setup;
- 	func->function.req_match = ffs_func_req_match;
+Thanks
+Mathias
+
+Andy Shevchenko (10):
+  xhci: dbc: Drop duplicate checks for dma_free_coherent()
+  xhci: dbc: Convert to use sysfs_streq()
+  xhci: dbc: Use sysfs_emit() to instead of scnprintf()
+  xhci: dbc: Use ATTRIBUTE_GROUPS()
+  xhci: dbc: Check for errors first in xhci_dbc_stop()
+  xhci: dbc: Don't shadow error codes in store() functions
+  xhci: dbc: Replace custom return value with proper Linux error code
+  xhci: dbc: Use sizeof_field() where it makes sense
+  xhci: dbc: Use sizeof(*pointer) instead of sizeof(type)
+  xhci: dbc: Add missing headers
+
+Mathias Nyman (2):
+  xhci: Reconfigure endpoint 0 max packet size only during endpoint
+    reset
+  xhci: fix possible null pointer deref during xhci urb enqueue
+
+Niklas Neronin (7):
+  xhci: check if legacy irq is available before using it as fallback
+  xhci: add handler for only one interrupt line
+  xhci: refactor static MSI-X function
+  xhci: refactor static MSI function
+  xhci: change 'msix_count' to encompass MSI or MSI-X vectors
+  xhci: rework 'xhci_try_enable_msi()' MSI and MSI-X setup code
+  xhci: minor coding style cleanup in 'xhci_try_enable_msi()'
+
+ drivers/usb/host/xhci-dbgcap.c | 132 ++++++++++++++++---------------
+ drivers/usb/host/xhci-dbgcap.h |   1 +
+ drivers/usb/host/xhci-pci.c    | 140 +++++++++------------------------
+ drivers/usb/host/xhci.c        | 123 +++++++++++++++--------------
+ drivers/usb/host/xhci.h        |   4 +-
+ 5 files changed, 175 insertions(+), 225 deletions(-)
+
 -- 
-2.17.1
+2.25.1
 
 
