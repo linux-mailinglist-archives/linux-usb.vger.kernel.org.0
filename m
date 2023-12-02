@@ -1,154 +1,113 @@
-Return-Path: <linux-usb+bounces-3592-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3593-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20124801B02
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 07:28:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED6B2801B24
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 08:25:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A21081F21193
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 06:28:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E9F11F21174
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 07:25:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5AA5BE60;
-	Sat,  2 Dec 2023 06:28:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YglY1EA2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5122FBE76;
+	Sat,  2 Dec 2023 07:24:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683CAFC
-	for <linux-usb@vger.kernel.org>; Fri,  1 Dec 2023 22:28:23 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1cfd9ce0745so54115ad.1
-        for <linux-usb@vger.kernel.org>; Fri, 01 Dec 2023 22:28:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1701498503; x=1702103303; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tbZ3baswrVIXCpv17EXNLNQ6fCKKgX8I1X1ug4sHQRo=;
-        b=YglY1EA2yEd6/FYjxTbHAGTkC+hloqwMvNU+aEl1QJDbjtmggqyyOocdeuetVZMn3K
-         zZLhB7p6QPVWXs0YLKpFo/ckvmV9FMJM0hSfC1yX7DFKtCWDcf6SDDaCeivY2FbPvo63
-         YJWqdfh6l3bWs0kAV3IJ9pgm1qPCBIwHkkiz0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701498503; x=1702103303;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tbZ3baswrVIXCpv17EXNLNQ6fCKKgX8I1X1ug4sHQRo=;
-        b=FnvZD70O/XTov1qnRVFOq9Se6HuWcWGg5apcMoNiSXIQpBK1huvLBP7UgYMuCrul0e
-         heyNDjvL446Xu3UAeX4ckdYEV3/dhgMN1hhzKSyraG45bpIqN5JdTb1c+V2Wr6p1aDjh
-         3k4sOKRF0bGPTmViwWNHmfX/tLO6O4KFh8v7WPZ5p5pgrshNERPVK3jquJBygO1Ymhxe
-         wXUW+ZBcoaPPp2hOSJLlFsyzbkHY3Qvb4fvMp8o4p7dItYlrHQs3CGD455RULe7ljt9y
-         wB+i3MH5VSzBuavlKlPqnOv84iAMhJt/OX4xjJ0Kd885ZIbUR/EWXkqp1E4X+hSMVU+h
-         E2LQ==
-X-Gm-Message-State: AOJu0Ywn0VIt8dZupXjmjmhaMgQxLIWmDlRgjA5HzPfxEiJMXuVuYjyB
-	gMq/FZNeHZtzqGW51rUSMQw4XKwow83e7tb6TaBL/Q==
-X-Google-Smtp-Source: AGHT+IHHapKzN4HswkxJ9mFZ0Q1mejXuz2mhlzv5W1guU8/mRZQUxRLkyyjIUWIFM++nAIZTEtK2Lat2HMN5Lss2eXw=
-X-Received: by 2002:a17:903:428a:b0:1cf:acbf:d0b5 with SMTP id
- ju10-20020a170903428a00b001cfacbfd0b5mr333159plb.1.1701498502612; Fri, 01 Dec
- 2023 22:28:22 -0800 (PST)
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE071B2;
+	Fri,  1 Dec 2023 23:24:49 -0800 (PST)
+Received: from [192.168.0.2] (ip5f5af70b.dynamic.kabel-deutschland.de [95.90.247.11])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 64ACF61E5FE01;
+	Sat,  2 Dec 2023 08:23:56 +0100 (CET)
+Message-ID: <55c50bf5-bffb-454e-906e-4408c591cb63@molgen.mpg.de>
+Date: Sat, 2 Dec 2023 08:23:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231201183113.343256-1-dianders@chromium.org> <20231201102946.v2.3.Ie00e07f07f87149c9ce0b27ae4e26991d307e14b@changeid>
-In-Reply-To: <20231201102946.v2.3.Ie00e07f07f87149c9ce0b27ae4e26991d307e14b@changeid>
-From: Grant Grundler <grundler@chromium.org>
-Date: Fri, 1 Dec 2023 22:28:11 -0800
-Message-ID: <CANEJEGvVSrRnZNt_i637CW6ajY_AY+1YDRabhBpb62S9UK1xdA@mail.gmail.com>
-Subject: Re: [PATCH net v2 3/3] r8152: Choose our USB config with
- choose_configuration() rather than probe()
-To: Douglas Anderson <dianders@chromium.org>
-Cc: linux-usb@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Grant Grundler <grundler@chromium.org>, Hayes Wang <hayeswang@realtek.com>, 
-	Simon Horman <horms@kernel.org>, =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>, 
-	netdev@vger.kernel.org, Brian Geffon <bgeffon@google.com>, 
-	Alan Stern <stern@rowland.harvard.edu>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: Regression: Inoperative bluetooth, Intel chipset, mainline kernel
+ 6.6.2+
+Content-Language: en-US
+To: Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+ "Kris Karas (Bug Reporting)" <bugs-a21@moonlit-rail.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
+ Thorsten Leemhuis <regressions@leemhuis.info>, regressions@lists.linux.dev,
+ linux-bluetooth@vger.kernel.org,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
+References: <ee109942-ef8e-45b9-8cb9-a98a787fe094@moonlit-rail.com>
+ <8d6070c8-3f82-4a12-8c60-7f1862fef9d9@leemhuis.info>
+ <2023120119-bonus-judgingly-bf57@gregkh>
+ <6a710423-e76c-437e-ba59-b9cefbda3194@moonlit-rail.com>
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <6a710423-e76c-437e-ba59-b9cefbda3194@moonlit-rail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 1, 2023 at 10:31=E2=80=AFAM Douglas Anderson <dianders@chromium=
-.org> wrote:
->
-> If you deauthorize the r8152 device (by writing 0 to the "authorized"
-> field in sysfs) and then reauthorize it (by writing a 1) then it no
-> longer works. This is because when you do the above we lose the
-> special configuration that we set in rtl8152_cfgselector_probe().
-> Deauthorizing causes the config to be set to -1 and then reauthorizing
-> runs the default logic for choosing the best config.
->
-> I made an attempt to fix it so that the config is kept across
-> deauthorizing / reauthorizing [1] but it was a bit ugly.
->
-> Let's instead use the new USB core feature to override
-> choose_configuration().
->
-> This patch relies upon the patches ("usb: core: Don't force USB
-> generic_subclass drivers to define probe()") and ("usb: core: Allow
-> subclassed USB drivers to override usb_choose_configuration()")
->
-> [1] https://lore.kernel.org/r/20231130154337.1.Ie00e07f07f87149c9ce0b27ae=
-4e26991d307e14b@changeid
->
-> Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
-> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+[Cc: +Mario, Mathias, linux-usb]
 
-Reviewed-by: Grant Grundler <grundler@chromium.org>
-
-> ---
->
-> Changes in v2:
-> - ("Choose our USB config with choose_configuration()...) new for v2.
->
->  drivers/net/usb/r8152.c | 16 +++++-----------
->  1 file changed, 5 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 2c5c1e91ded6..0da723d11326 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -10053,7 +10053,7 @@ static struct usb_driver rtl8152_driver =3D {
->         .disable_hub_initiated_lpm =3D 1,
->  };
->
-> -static int rtl8152_cfgselector_probe(struct usb_device *udev)
-> +static int rtl8152_cfgselector_choose_configuration(struct usb_device *u=
-dev)
->  {
->         struct usb_host_config *c;
->         int i, num_configs;
-> @@ -10080,19 +10080,13 @@ static int rtl8152_cfgselector_probe(struct usb=
-_device *udev)
->         if (i =3D=3D num_configs)
->                 return -ENODEV;
->
-> -       if (usb_set_configuration(udev, c->desc.bConfigurationValue)) {
-> -               dev_err(&udev->dev, "Failed to set configuration %d\n",
-> -                       c->desc.bConfigurationValue);
-> -               return -ENODEV;
-> -       }
-> -
-> -       return 0;
-> +       return c->desc.bConfigurationValue;
->  }
->
->  static struct usb_device_driver rtl8152_cfgselector_driver =3D {
-> -       .name =3D         MODULENAME "-cfgselector",
-> -       .probe =3D        rtl8152_cfgselector_probe,
-> -       .id_table =3D     rtl8152_table,
-> +       .name =3D MODULENAME "-cfgselector",
-> +       .choose_configuration =3D rtl8152_cfgselector_choose_configuratio=
-n,
-> +       .id_table =3D rtl8152_table,
->         .generic_subclass =3D 1,
->         .supports_autosuspend =3D 1,
->  };
-> --
-> 2.43.0.rc2.451.g8631bc7472-goog
->
+Am 02.12.23 um 07:43 schrieb Kris Karas (Bug Reporting):
+> Greg KH wrote:
+>> On Fri, Dec 01, 2023 at 07:33:03AM +0100, Thorsten Leemhuis wrote:
+>>> CCing a few lists and people. Greg is among them, who might know if this
+>>> is a known issue that 6.6.4-rc1 et. al. might already fix.
+>>
+>> Not known to me, bisection is needed so we can track down the problem
+>> please.
+> 
+> And the winner is...
+> 
+>> commit 14a51fa544225deb9ac2f1f9f3c10dedb29f5d2f
+>> Author: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+>> Date:   Thu Oct 19 13:29:19 2023 +0300
+>>
+>>     xhci: Loosen RPM as default policy to cover for AMD xHC 1.1
+>> >>     [ Upstream commit 4baf1218150985ee3ab0a27220456a1f027ea0ac ]
+>>
+>>     The AMD USB host controller (1022:43f7) isn't going into PCI D3 by default
+>>     without anything connected. This is because the policy that was introduced
+>>     by commit a611bf473d1f ("xhci-pci: Set runtime PM as default policy on all
+>>     xHC 1.2 or later devices") only covered 1.2 or later.
+>> [ snip ]
+>> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+>> index b9ae5c2a2527..bde43cef8846 100644
+>> --- a/drivers/usb/host/xhci-pci.c
+>> +++ b/drivers/usb/host/xhci-pci.c
+>> @@ -535,6 +535,8 @@ static void xhci_pci_quirks(struct device *dev, 
+>> struct xhci_hcd *xhci)
+>>         /* xHC spec requires PCI devices to support D3hot and D3cold */
+>>         if (xhci->hci_version >= 0x120)
+>>                 xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+>> +       else if (pdev->vendor == PCI_VENDOR_ID_AMD && xhci->hci_version >= 0x110)
+>> +               xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+>>
+>>         if (xhci->quirks & XHCI_RESET_ON_RESUME)
+>>                 xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
+> 
+> 
+> Huh, OK, I was expecting this to be a patch made to the bluetooth code, 
+> as it caused bluetoothd to bomb with "opcode 0x0c03 failed".  But I just 
+> verified I did the bisect correctly by backing this two-liner out of 
+> vanilla 6.6.3, and bluetooth returned to normal operation.  Huzzah!
+> 
+> Just a brief recap:
+> 
+> This bug appears to be rather hardware-specific, as only a few folks 
+> have reported it.  In my case, the hardware is an ASrock "X470 Taichi" 
+> motherboard, and its on-board bluetooth hardware, reporting itself as:
+> lspci: 0f:00.3 USB controller: Advanced Micro Devices, Inc. [AMD] Zeppelin USB 3.0 xHCI Compliant Host Controller
+> lsusb: ID 8087:0aa7 Intel Corp. Wireless-AC 3168 Bluetooth
+> 
+> When Basavaraj's patch is applied (in mainline 6.6.2+), bluetooth stops 
+> functioning on my motherboard.
+> 
+> Originally from bugzilla #218142 [1]
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=218142
 
