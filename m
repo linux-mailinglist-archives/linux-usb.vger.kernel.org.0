@@ -1,94 +1,108 @@
-Return-Path: <linux-usb+bounces-3600-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3603-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE82F801E2B
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 20:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F3370801FB3
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 00:23:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADDC31F20F58
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 19:12:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8AFB1F20FAB
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 23:23:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6111F5E7;
-	Sat,  2 Dec 2023 19:12:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B436224EE;
+	Sat,  2 Dec 2023 23:23:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="BNEneLrD"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="kR/a0TT9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EEA119;
-	Sat,  2 Dec 2023 11:12:19 -0800 (PST)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10da:6900:0:0:0:1])
-	(authenticated bits=0)
-	by dilbert.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 3B2JBO88880565
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Sat, 2 Dec 2023 19:11:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-	t=1701544278; bh=DVj6YU5qtsVR8CtNxuUON4OVY9fj7B5VUSDFcJFPxsc=;
-	h=From:To:Cc:Subject:References:Date:Message-ID:From;
-	b=BNEneLrD5oxC5cNuSB4I+lKiQPEamtsH0h7+LndKpz0Dy28OUzdJv4/2dPQGO+AYl
-	 PtF5zZe9JUNOJx8JzhRDKR4ef2S6keVBNutDdBDpJM7+YWJlAp90YxZZWservazW4i
-	 0uZ9YMwYR4atd7kPJuTpbjBr+b26/yTV/+TiUhLY=
-Received: from miraculix.mork.no ([IPv6:2a01:799:10da:690a:d43d:737:5289:b66f])
-	(authenticated bits=0)
-	by canardo.dyn.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 3B2JBH5A3964449
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Sat, 2 Dec 2023 20:11:17 +0100
-Received: (nullmailer pid 3179962 invoked by uid 1000);
-	Sat, 02 Dec 2023 19:11:17 -0000
-From: =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To: Douglas Anderson <dianders@chromium.org>
-Cc: linux-usb@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Grant Grundler <grundler@chromium.org>,
-        Hayes Wang <hayeswang@realtek.com>, Simon Horman <horms@kernel.org>,
-        netdev@vger.kernel.org, Brian Geffon <bgeffon@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: core: Allow subclassed USB drivers to
- override usb_choose_configuration()
-Organization: m
-References: <20231201183113.343256-1-dianders@chromium.org>
-	<20231201102946.v2.2.Iade5fa31997f1a0ca3e1dec0591633b02471df12@changeid>
-Date: Sat, 02 Dec 2023 20:11:17 +0100
-In-Reply-To: <20231201102946.v2.2.Iade5fa31997f1a0ca3e1dec0591633b02471df12@changeid>
-	(Douglas Anderson's message of "Fri, 1 Dec 2023 10:29:51 -0800")
-Message-ID: <87wmtw2ze2.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80830118;
+	Sat,  2 Dec 2023 15:23:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+	s=s31663417; t=1701559375; x=1702164175; i=wahrenst@gmx.net;
+	bh=BCpo5tuHoZciK4BX0GFd9b3qF9Y6KHB/u2hvsaUQTOk=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+	b=kR/a0TT981RvoGRWicKM5pmTfJtEa3uMXoFXn6Ox3gn13TIiVt+GlzrF96hz51Ov
+	 /YI3luBzo3gE+rqz237fS3mTldsj6uUPbP/y2OCJCOAKR8QPiA0y/bGkonzfoiTC5
+	 v7REN/Pm2IlGEx7d7MM42n+BOrBy5cHDIfCUjZ4LkFy90sRClA4QRd2zS5nFMHDey
+	 zkMxny8qn2enBoZCx+DjfrDGy0A3LCEJmD5PCizi36KYUFGkRdEZhNahcGuzxQPmy
+	 p8CbZwAfoPysL63GhjJVw17wIhVEfmniWdLYYe6ouiRa5nXfpfWi4IdtNi5PBS04g
+	 eByj+QHghGzW7J+nFA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mzyya-1rW1tJ2znK-00x0PE; Sun, 03
+ Dec 2023 00:22:55 +0100
+From: Stefan Wahren <wahrenst@gmx.net>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Mathias Nyman <mathias.nyman@intel.com>
+Cc: bcm-kernel-feedback-list@broadcom.com,
+	Cyril Brulebois <kibi@debian.org>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH V3 0/3] ARM: dts: bcm2711: Add BCM2711 xHCI support
+Date: Sun,  3 Dec 2023 00:22:14 +0100
+Message-Id: <20231202232217.89652-1-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 1.0.3 at canardo
-X-Virus-Status: Clean
+X-Provags-ID: V03:K1:8n/wkLVVmr0wx6rXkhQjGhU+7R1ohZCIWNthzuk4gyQR/s1mnD9
+ FjwiILbvc/+k8+HY9P5SbfdGBBpzgwXWzzuAD0BGieJHzGNckrS0rTb+sDy9EDeX7UVIfql
+ MJy/HHOlbZw8tDaW+m2Mrs/rZ6Fwv4JaMNV1E9S5FexfFa0QIKfF0Y/zrE4vM3Dsxn9TlVq
+ wqlsuheE/lkvZM+yhCaZA==
+UI-OutboundReport: notjunk:1;M01:P0:KnPny017AyU=;OAsbnLSX7nVZBDqmjEzc6LJU5bg
+ /NQdaq2S5Bl44YP6U+SJ/T5UjXQSkpFXxQkeIu0yF8lzWliVKFOucqeS/tWFDyoTjbTZ12BxF
+ aOnUxHHOgd0bjNeq7L5nCeDvlRJ9cs7xP/y99HGlOL6yaTMiLKPv7tqAxem017tg7MVIAEO3k
+ WGBNzxtVTvqfB5/xXFkAZEzuxJSLw+TMSiZ/K0fGJaAS2fc2X3T5bYP3xNeaxgEqXKp7Eywcc
+ a0oBE0e/OseqzG9oof+QXdamwVj/JkQ77KopCidg798tV0anS3IrNJe6sq7fT9xRgoLwPH3Wq
+ 6Q8R95DUnT2pFyEgjkL0d92PiH+zOKIwyI07Y/WQ2geUorPxNdv/AHAfGf8SMzsJ+o56/vcQ1
+ RIrEAnYAEuGsObc1Kqahvc19wkqWoZq1mlFV9FR3M/VjLFn8VOGjUnHrSoydN3K6AixAS0/aE
+ Sb55XtQjfjE1+hZJU8htjls3Y3d8/SwDd5+9EgAV59PYlAVcnUlhrt2UbAm1h3uOnUTQ5qD3t
+ pNftLFongnW5QUDJWsIU10YdPlhS2slpsJgpN03I1lFoApsqcmN0jxNkOwjz03whj5LCeOwc7
+ S6GHS48x19Om8GpyMlnjrUx2UbjUJC0RI29FkorVP5Z0/rjWqIII6B7lhIExMMnB3ea44hbPN
+ eaiBvJheDNzev7I51l9N3evfGan2kxFOZv99qfhrsBn+X5T8YhEHYuRm0A9LvK2nfs3dVV2Hl
+ JqwguN/7twH4Dj4FvM+/PXSQ+q+fxi0V7JyzSYR5fckiEHV5Gao1LHvwybQR8yw7388HlEU5y
+ lbfXpF87+rJRCzvhSfMdXXojZiYlVt8S1rsIHYvfuzMd9RtKL0JRBRU9DPkdxK/PLjm+AQdfb
+ LHzuXRkHaQvz+YXMz2zjI/IjqoS1+QEu+is2X4ru5n8lu6TYd1VynB+FViNi/T8sX5smdBrxy
+ K8pkgUmk3mQv104yQwpAIJmjZBk=
 
-Douglas Anderson <dianders@chromium.org> writes:
+In contrast to the Raspberry Pi 4, the Compute Module 4 or the IO board
+does not have a VL805 USB 3.0 host controller, which is connected via
+PCIe. Instead, the BCM2711 on the Compute Module provides the built-in
+xHCI.
 
-> The r8152 driver tried to make things work by implementing a USB
-> generic_subclass driver and then overriding the normal config
-> selection after it happened. This is less than ideal and also caused
-> breakage if someone deauthorized and re-authorized the USB device
-> because the USB core ended up going back to it's default logic for
-> choosing the best config. I made an attempt to fix this [1] but it was
-> a bit ugly.
->
-> Let's do this better and allow USB generic_subclass drivers to
-> override usb_choose_configuration().
->
-> [1] https://lore.kernel.org/r/20231130154337.1.Ie00e07f07f87149c9ce0b27ae=
-4e26991d307e14b@changeid
->
-> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Changes in V3:
+- introduce a new compatible for BCM2711 in order to make the
+  power domain dependency SoC specific, which also results in
+  a driver change
 
-Brilliant!  Thanks for doing this.  It is obviously what I should have
-done in the first place if I had been smart enough.
+Changes in V2:
+- adjust xHCI compatible as suggested by Justin & Florian
+- keep xHCI disabled in order to let the bootloader decide which
+  USB block should be enabled, which result in a drop of patch 3
 
+Stefan Wahren (3):
+  dt-bindings: usb: xhci: add support for BCM2711
+  usb: xhci: xhci-plat: Add support for BCM2711
+  ARM: dts: bcm2711: Add BCM2711 xHCI support
 
-Bj=C3=B8rn
+ .../devicetree/bindings/usb/generic-xhci.yaml | 21 ++++++++++++++++---
+ arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi   |  5 +++++
+ arch/arm/boot/dts/broadcom/bcm2711.dtsi       | 14 +++++++++++++
+ drivers/usb/host/xhci-plat.c                  |  3 +++
+ 4 files changed, 40 insertions(+), 3 deletions(-)
+
+=2D-
+2.34.1
+
 
