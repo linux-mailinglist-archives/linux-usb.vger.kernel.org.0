@@ -1,37 +1,37 @@
-Return-Path: <linux-usb+bounces-3604-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3601-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9934A801FB4
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 00:23:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8847E801FAF
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 00:23:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 479CF28100A
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 23:23:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 446B9280F6E
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 23:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6408224F2;
-	Sat,  2 Dec 2023 23:23:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D76D8224CF;
+	Sat,  2 Dec 2023 23:23:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="XRTyZn0v"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="XtJce6lW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C5511F;
-	Sat,  2 Dec 2023 15:23:20 -0800 (PST)
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3ECEB;
+	Sat,  2 Dec 2023 15:23:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
 	s=s31663417; t=1701559376; x=1702164176; i=wahrenst@gmx.net;
-	bh=TbxRik80dLzZG7DIQ9xWqFWVyrcfx693GRjJ1QeCo4o=;
+	bh=LHPm3I7nooBOlcBz8F69INMnOtFEIJsNvnQM9Izw8DU=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
 	 References;
-	b=XRTyZn0v3J6k8WSkFtnNhfFZEOmA4fBbQGdjrB5KGE7U4XcaseiYRPw6SvYD+vJL
-	 x4dkU2awZCyRzOybT4ccySAvB76n54Ml8lRCvNrkm8+rGCsSY9j8XEKKLBqROTAtn
-	 MGnXjnRfEyJ40Pe6hP8weRQVv8zHyANxD4igZrFll+aASbAbApv+I563AdWiW6O/7
-	 4vSCJD19HANt9gMeIldTWD969aurixSCMsftUcb1C6MHsxKR+Vv2c7j9HoTzBiHgN
-	 ieWCdz6cru0r01hIruRaYYCTy5QH27fekLrq9Qgl3St8DCFMKE446pNJQM5L73Vj+
-	 MPBK0C7fCtPZah3SNA==
+	b=XtJce6lWzCvVKTYiPbVMXRWKM1yu3ah7RMzdQVdKXnkWStdvjnmaEPyrbULtVi4C
+	 ZwjWvHgC1G5r7zbds5D4rLCZLBnh6T1jcj1TIk7OBGy9fQfdV0HYgg2Nrhhj6Tlfg
+	 wqO1AKUFPmAjT0YXKlxFQM6RvZfWQ1Kr4ETSUoXl0qEluJVUG9SavRolqqJMsok7P
+	 iJi1PJVV6P21fc9+NOzNohbQSCTQehRGLg+kHU0CT6VuYLRkMbI+TrjmT3B3nqM38
+	 EVWIMr7xuWAvAzVy2I/4fRJ8VR2Xixk/YKjUqTcl9FYIJ92mMaa2SvqwfTQrEMqQm
+	 yHXgzSLGwFQDQPBK+Q==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MhlKs-1rn0nw0oNs-00dp5u; Sun, 03
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MowKi-1rcWA22qSs-00qW9U; Sun, 03
  Dec 2023 00:22:56 +0100
 From: Stefan Wahren <wahrenst@gmx.net>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -46,9 +46,9 @@ Cc: bcm-kernel-feedback-list@broadcom.com,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V3 1/3] dt-bindings: usb: xhci: add support for BCM2711
-Date: Sun,  3 Dec 2023 00:22:15 +0100
-Message-Id: <20231202232217.89652-2-wahrenst@gmx.net>
+Subject: [PATCH V3 2/3] usb: xhci: xhci-plat: Add support for BCM2711
+Date: Sun,  3 Dec 2023 00:22:16 +0100
+Message-Id: <20231202232217.89652-3-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231202232217.89652-1-wahrenst@gmx.net>
 References: <20231202232217.89652-1-wahrenst@gmx.net>
@@ -59,90 +59,49 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:mVHHG7lLDU2toWoVhlnfCV8tio7telUp1Yc0xssnqcRC7o2XUht
- 4btrZuVRxJAfzs9mhoidiP5ynBJ8sd8a5iItdXcZFRKvlFEM9Ul7yxyKppHPhlD8HUJuFEa
- mYCBRYEuWcRr+iZNL+Hq7E/JYnhUYUK4DsO6x+TdRnezLgmMghnAf6QafurLCzdV+p367rl
- gt9eAEBCiuoOpk5tAPEkw==
-UI-OutboundReport: notjunk:1;M01:P0:ycFP+XFM+cM=;R2TbG7g6ZnUeVAfMTN2+GFWFBKS
- NQgEWBl5M5DT0KwYwBPYV7hPHJg+nwXf3Kr+Aip70vGVFdamItzFb+PuTvKiW8ojl6bPKhvlE
- w+XrTa22/kokJWr0fkqlvioGYdrWlnA6p9u1uQ/taZ3gettDayXTELUMa07WQPI8kK0gDtL5U
- V4/9ezeYA9DQxIPclEM05qwGDosLKLpTZQuVezCD/BNmElKpC5dPfMBip8zDOS4eIwU50Jdtq
- WPmBSs8TkL7ay3apB0D09wK9HiM5Pzz7/t1XXa+0L1pS9K4f69Pz69v02R4IRDN9/Iirl+hZb
- UIBq7gIk86xNQeWj1zf51zOlaZ7KwPiVEdptv2r8F8Me8/PCKQhunv4RHpBk0m2EVo1RKnkzg
- AOA5T//6yywxnzx2nWw27Au76C+MAn5L6sjkqWUITUljKCexE2P8Pk5EaGeoynlMTlbzp7l1o
- OEJB8VgAbc7prEbg9G0gFAa15N1yckhpjlNiVMJbYvveYB9LmSrpkOXRTFKlYE8nkX10TjJsb
- uXzWzzEuonTvusNbN+ghxCaty+FjNDww5t/K5aQ7XkLw3lc/pjYTeS93iMI76UX+83lZ1UK3i
- Tx6orNklRygieFhoMnyOu38nf7WaemMu1lvnJqokOMaE44NK5mZKKN63CA0rqZtHvbPvJRvhm
- V2cM6Hv4LaLkZFXCSzgW7FNSiVTV10U/g5prfBK7BtlJ/AziPe6YSXggpgBhe9Ctjhbz/N9j9
- DBAKcM7ZY8qYomND2G1PaNGOe+zxo60uXvbmvMNg+IdKKsLD2bKVLsKvuX2r5TipbNcBxDRUn
- h0eJMteGSk8GyzWzmjDCoYKg/ONeuRHKXgq9TGgkU69Ur0MfQcWUrjdw5tPaiwM5Cp2ln9cFH
- 0IxqoQBxtsL0TddLyRYW/VKYD5qtw42jv4umkICONjuJvHdU6CwMxVs1S3tfY7g92Tlll5xLx
- KG8zBUW8DGF7WzzLofM4xqP5HJY=
+X-Provags-ID: V03:K1:jkod35pfP6IVT1yPHy/ubfhNbuOWfZ6zrF8jvxn8h1WGUukJjJY
+ vq/WkDTfelW1I6VKTTJWrECtAyZnWCgqYbF2h9p6ZzseuHAO7DSTR26Xhe+BLpAmarmg/u7
+ S789n7ALXaerBd8jmUqeqbuTYrkrXlWQqRSw1hlIXFr7kxio1q9Lo9qL1ghDnpeAjjz7GEr
+ bUn2YlJ8P++b3o3Vk3PnQ==
+UI-OutboundReport: notjunk:1;M01:P0:fqSH4xPEJco=;Gtr7IbXbVd8KI02Gb8IvHelltEh
+ uM+CpcK/K/V6VUyupxnebvUXT0k4OONrj48Wfr6VZItTdb7AT+xpLlXA8c9WJIsR4BCQX6Syj
+ peopkFD5eWD9v5TchOkFo4aWbkB9tIdfS+mMAp8yFNpN1oxcxdaWYqxVdWRA8iSPb1YRybXs2
+ OcPHg3dSfUA7LTDRV3Bj0eaZHMSHM3KHkHRQ6nZZTqX/SmdNRMTP7Rt0dzq/5Ry/Ksiak/vA0
+ gTL1pSG0K3AWHSWjBNqU0qkhxYEq+oQuRMCmEo+pHNZtWATCAC+nVuF1+LxAh+nHfJ3ePVvYm
+ 3Kkeuv+pfNk8nDldDtzwcrJXTA8DSvd49axfK5+m8csSyNi6YS7OekFt8ktyWL0SHoWfVhUej
+ woHjnQ/QfmZwXj1HfpLd9rbHIAnuyXb7uHsdJW1i6IO7EK988D/snJPKh7AB+HzQp2+9ulBpm
+ vfQvKvTWSYdGBKFkOrOk2Rtriu8sWD2fYlHH4GGmVHnIQQLK81hWkvGqKAUTmQLaH81gr4JNb
+ Q+QU4kZmSMYfTyLlM/s8AvZ6lrUbpfMaqwc0tRuvrAvr6jfpjwKvPsIXHn+cjgiVEfdSWhz8j
+ JcU405pS4OE9PLKXasz2LvKczU1OxqldzIUrNgZnQjv1yIxPsRhDto4G0lLgI8ryj7EAc1nfJ
+ /Q6F1eOoS4bMmFZP9Gdr9kS4Dem5YxaIL3dAtw2BWAUsyrWPiKGTmnvo3I62TovYS7d+Ng7YA
+ 5V/MW9BSkZHOO7oCk7WeBPwDocEPkwS/0qIyUfKcDcrM2T3hdlsBF8ZIsYuEDrFD2zsZqMjw8
+ JxKUASRpY+jGeNGOQ2LqC8liy0sXhjRzl7kHUKBjhaOJiRZRxdqYsroFTRyEW92ulpQ3AbNGk
+ jogubfreDDxBfpfHuiwi1D176LcrruClt8Sw57ZdvIvXpdyeke4pDPgbVw2d3G7xjZbC3O3V0
+ qVKNoA==
 
-The xHCI IP on the BCM2711 SoC is compatible to "brcm,xhci-brcm-v2",
-but also requires a power domain. So introduce a new compatible
-and the specific constraints. Since the key allOf can only occur
-once, merge the reference below.
+With the introduction of a BCM2711 specific compatible, this also
+needs to be added to the xHCI driver.
 
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 =2D--
- .../devicetree/bindings/usb/generic-xhci.yaml | 21 ++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ drivers/usb/host/xhci-plat.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/generic-xhci.yaml b/Doc=
-umentation/devicetree/bindings/usb/generic-xhci.yaml
-index 594ebb3ee432..b6e10b0a3c24 100644
-=2D-- a/Documentation/devicetree/bindings/usb/generic-xhci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
-@@ -9,9 +9,6 @@ title: USB xHCI Controller
- maintainers:
-   - Mathias Nyman <mathias.nyman@intel.com>
-
--allOf:
--  - $ref: usb-xhci.yaml#
--
- properties:
-   compatible:
-     oneOf:
-@@ -28,6 +25,7 @@ properties:
-       - description: Broadcom STB SoCs with xHCI
-         enum:
-           - brcm,xhci-brcm-v2
-+          - brcm,bcm2711-xhci
-           - brcm,bcm7445-xhci
-       - description: Generic xHCI device
-         const: xhci-platform
-@@ -49,6 +47,9 @@ properties:
-       - const: core
-       - const: reg
-
-+  power-domains:
-+    maxItems: 1
-+
- unevaluatedProperties: false
-
- required:
-@@ -56,6 +57,20 @@ required:
-   - reg
-   - interrupts
-
-+allOf:
-+  - $ref: usb-xhci.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: brcm,bcm2711-xhci
-+    then:
-+      required:
-+        - power-domains
-+    else:
-+      properties:
-+        power-domains: false
-+
- examples:
-   - |
-     usb@f0931000 {
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index b93161374293..bc5e8f4cdadf 100644
+=2D-- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -129,6 +129,9 @@ static const struct of_device_id usb_xhci_of_match[] =
+=3D {
+ 	}, {
+ 		.compatible =3D "brcm,xhci-brcm-v2",
+ 		.data =3D &xhci_plat_brcm,
++	}, {
++		.compatible =3D "brcm,bcm2711-xhci",
++		.data =3D &xhci_plat_brcm,
+ 	}, {
+ 		.compatible =3D "brcm,bcm7445-xhci",
+ 		.data =3D &xhci_plat_brcm,
 =2D-
 2.34.1
 
