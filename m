@@ -1,192 +1,90 @@
-Return-Path: <linux-usb+bounces-3597-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3598-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5EB5801D68
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 15:51:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4870D801D91
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 16:50:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FA791F21169
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 14:51:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E24D01F2117F
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 15:50:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB6B18C1E;
-	Sat,  2 Dec 2023 14:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=keeping.me.uk header.i=@keeping.me.uk header.b="kDYOQ1c+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="2yDjmJsz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1111E1A595;
+	Sat,  2 Dec 2023 15:50:33 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A383AE6;
-	Sat,  2 Dec 2023 06:51:21 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id 233C45C0193;
-	Sat,  2 Dec 2023 09:51:19 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 02 Dec 2023 09:51:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=keeping.me.uk;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm3; t=1701528679; x=
-	1701615079; bh=YMgoHxjqqZ9F14ZU/o+RYJbU3jJCBdqlDOft1tYkRxE=; b=k
-	DYOQ1c+kOQYJKQapQ784GkdEie4IcFQjGlaDPtuZZISuIdqQNQNMZ9WF8CMcBbML
-	oEQXUx3ET0Mi+4NB3sYYzCLcTahL3yWxoPW4/tu2MFXV7p8ClaxUPP9uTOF+SzOj
-	NtAWX0qcZXZnYAouayY0Qp7YSQ+jNwqgccevFApT3X/oSu2zyNWUcU8Rx2LyB4yS
-	FGZsRjj+4tc024tW+iTznu/9u1/sH5HdFvut8FOAi301LqKNlNFYyNvVsnBfbaMe
-	f48lkTKvZ4pMHeT9DoNUidWVpLSeanPh5dG3oIfSkkwdDhMnAwP3lFTTic8f+pTp
-	fObM1pNYl2ttdC7t+m4zA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701528679; x=1701615079; bh=YMgoHxjqqZ9F1
-	4ZU/o+RYJbU3jJCBdqlDOft1tYkRxE=; b=2yDjmJsz7bdX/AaPUC2ziNcDVFwbR
-	ZsV69gO7SfK9s14iNe8L7+1dCdJc74wiLGNjHUvBys/fH9lPL9/hC+GNwPqI/EVJ
-	i2SzBLOqLFrBK2ryW+NFT01LrViKrfOiLqepumuOs9gABZaW2cZuzhQe40Ewb7Ht
-	0aBciwEDYhZnvzoE0lDXOMMI97j8emxFPyAqQU49nF6XpN9XxQzO1OINkwZ7SSCZ
-	MY8QFPYzyJ84RN1zf9I93xycmX/+2sLmMmZ4KCT2I1XRil6dSuZX5T5g7o5fp4CQ
-	6rM5NXqBEGIdyjtcWEbA4Jh22PJ/lYaaEwpz+3QCFMOIiodPvoPeXsghQ==
-X-ME-Sender: <xms:ZkRrZdI9wnbZa_JkcvbUUNlQ3fsa5R4kl-yDz0ZKvr92x_grfyFKeQ>
-    <xme:ZkRrZZIazXXyC2nC9XuSn5maCiRewRTPepb7Edb3_xOqo2S7JqlgD_T2AlpBpSSxm
-    uIkOUGURYqAV8dNPVw>
-X-ME-Received: <xmr:ZkRrZVvUK4DNFgRYFcaE0pq9VYLlXLJ9J-QXm_IxpL_Epz7-8tPkCs9f7U9HLBbNJw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudejuddgieelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheplfhohhhn
-    ucfmvggvphhinhhguceojhhohhhnsehkvggvphhinhhgrdhmvgdruhhkqeenucggtffrrg
-    htthgvrhhnpeefgefgffeuveejhfdvfeduhefghedthfetgfetueeihfeuvefffefftdek
-    leehveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhohhhnsehkvggvphhinhhgrdhmvgdr
-    uhhk
-X-ME-Proxy: <xmx:ZkRrZeaYOubrzsX5HAFrVA_5HyOQ7Grls0-XLSSkCjg5AtGM2coDoQ>
-    <xmx:ZkRrZUaCnVBab983Cl1GLdHGtB2hY3OzsrcT8xXtxA_ATlgDSfP1ZA>
-    <xmx:ZkRrZSD4iSP6-eOVh2iv-TP_UZp3nlakrpxiCQUWtCLbfR85bWZhlQ>
-    <xmx:Z0RrZZO7Yhp0LrBQ7p23yCxs8EFqZwtiBwTZgqg13rpQWZ5TUBu1tg>
-Feedback-ID: ic4e149f5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 2 Dec 2023 09:51:17 -0500 (EST)
-Date: Sat, 2 Dec 2023 14:51:15 +0000
-From: John Keeping <john@keeping.me.uk>
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>
-Cc: gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	erosca@de.adit-jv.com, jlayton@kernel.org, brauner@kernel.org
-Subject: Re: [PATCH v2] usb: gadget: f_fs: Add the missing get_alt callback
-Message-ID: <ZWtEY0oKS-PcaJ0c@keeping.me.uk>
-References: <20231201145234.97452-1-hgajjar@de.adit-jv.com>
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5894FD
+	for <linux-usb@vger.kernel.org>; Sat,  2 Dec 2023 07:50:29 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-173-TUa3ohsNMV6P5MhNUEV3Fw-1; Sat, 02 Dec 2023 15:50:26 +0000
+X-MC-Unique: TUa3ohsNMV6P5MhNUEV3Fw-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 2 Dec
+ 2023 15:50:15 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sat, 2 Dec 2023 15:50:15 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
+CC: 'Mathias Nyman' <mathias.nyman@linux.intel.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH 08/19] xhci: dbc: Use sizeof_field() where it makes sense
+Thread-Topic: [PATCH 08/19] xhci: dbc: Use sizeof_field() where it makes sense
+Thread-Index: AQHaJGfznirkAH2q70aZpnygD+weDLCUrt6wgAAbzgCAAVrSUA==
+Date: Sat, 2 Dec 2023 15:50:15 +0000
+Message-ID: <aa4848b742854ab7921386ca69613866@AcuMS.aculab.com>
+References: <20231201150647.1307406-1-mathias.nyman@linux.intel.com>
+ <20231201150647.1307406-9-mathias.nyman@linux.intel.com>
+ <e98fd89faf4446e594ca3b7c3cc627fc@AcuMS.aculab.com>
+ <ZWovIn0V95c-T74n@smile.fi.intel.com>
+In-Reply-To: <ZWovIn0V95c-T74n@smile.fi.intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231201145234.97452-1-hgajjar@de.adit-jv.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 01, 2023 at 03:52:34PM +0100, Hardik Gajjar wrote:
-> The Apple CarLife iAP gadget has a descriptor with two alternate
-> settings. The host sends the set_alt request to configure alt_setting
-> 0 or 1, and this is verified by the subsequent get_alt request.
-> 
-> This patch implements and sets the get_alt callback. Without the
-> get_alt callback, composite.c abruptly concludes the
-> USB_REQ_GET/SET_INTERFACE request, assuming only one alt setting
-> for the endpoint.
-> 
-> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> ---
-> changes since version 1:
-> 	- improve commit message to indicate why the get_alt callback
-> 	  is necessary
-> 	- Link to v1 - https://lore.kernel.org/all/20231124164435.74727-1-hgajjar@de.adit-jv.com/
+From: Andy Shevchenko
+> Sent: 01 December 2023 19:08
+>=20
+> On Fri, Dec 01, 2023 at 05:31:52PM +0000, David Laight wrote:
+> > From: Mathias Nyman
+> > > Sent: 01 December 2023 15:07
+>=20
+> ...
+>=20
+> > > -=09memset(dbc->eps, 0, sizeof(struct dbc_ep) * ARRAY_SIZE(dbc->eps))=
+;
+> > > +=09memset(dbc->eps, 0, sizeof_field(struct xhci_dbc, eps));
+> >
+> > Isn't that just:
+> > =09memset(dpc->eps, 0, sizeof (dpc->eps));
+> > perhaps better written as:
+> > =09memset(&dpc->epc, 0, sizeof (dpc->eps);
+>=20
+> Maybe...
+> You can send a patch, so it gets tested for regressions!
 
-This doesn't address my questions about v1 - I understand what the
-get_alt callback does, but I don't see how this is sufficient to make it
-work in all circumstances.
+Any patch I write will conflict with v2 of this series.
 
-To use your example of having settings 0 and 1, what happens if the host
-requests setting 2?
+=09David
 
-Without this patch, when .get_alt is not set, composite_setup() will
-reject all settings except 0 so there is no need for ffs_func_set_alt()
-to filter its input.  But if .get_alt is set, don't we need to filter
-for valid input here?
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
-I also do not see how it is acceptable to change alt setting without
-notifying userspace in the general case.  If it works for your specific
-use case, that is one thing, but nothing requires the endpoint setup to
-be the same across alt settings and the userspace component likely needs
-to know if the setup changes.
-
-For examples, look at afunc_set_alt() or tcm_set_alt() in other gadget
-functions.  If either of these were to be implemented in userspace then
-simply accepting the alt setting is not enough - there are changes that
-must be made to the functionality.
-
-> ---
->  drivers/usb/gadget/function/f_fs.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index efe3e3b85769..37c47c11f57a 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -75,6 +75,7 @@ struct ffs_function {
->  	short				*interfaces_nums;
->  
->  	struct usb_function		function;
-> +	int				cur_alt[MAX_CONFIG_INTERFACES];
->  };
->  
->  
-> @@ -98,6 +99,7 @@ static int __must_check ffs_func_eps_enable(struct ffs_function *func);
->  static int ffs_func_bind(struct usb_configuration *,
->  			 struct usb_function *);
->  static int ffs_func_set_alt(struct usb_function *, unsigned, unsigned);
-> +static int ffs_func_get_alt(struct usb_function *f, unsigned int intf);
->  static void ffs_func_disable(struct usb_function *);
->  static int ffs_func_setup(struct usb_function *,
->  			  const struct usb_ctrlrequest *);
-> @@ -3232,6 +3234,15 @@ static void ffs_reset_work(struct work_struct *work)
->  	ffs_data_reset(ffs);
->  }
->  
-> +static int ffs_func_get_alt(struct usb_function *f,
-> +			    unsigned int interface)
-> +{
-> +	struct ffs_function *func = ffs_func_from_usb(f);
-> +	int intf = ffs_func_revmap_intf(func, interface);
-> +
-> +	return (intf < 0) ? intf : func->cur_alt[interface];
-> +}
-> +
->  static int ffs_func_set_alt(struct usb_function *f,
->  			    unsigned interface, unsigned alt)
->  {
-> @@ -3266,8 +3277,10 @@ static int ffs_func_set_alt(struct usb_function *f,
->  
->  	ffs->func = func;
->  	ret = ffs_func_eps_enable(func);
-> -	if (ret >= 0)
-> +	if (ret >= 0) {
->  		ffs_event_add(ffs, FUNCTIONFS_ENABLE);
-> +		func->cur_alt[interface] = alt;
-> +	}
->  	return ret;
->  }
->  
-> @@ -3574,6 +3587,7 @@ static struct usb_function *ffs_alloc(struct usb_function_instance *fi)
->  	func->function.bind    = ffs_func_bind;
->  	func->function.unbind  = ffs_func_unbind;
->  	func->function.set_alt = ffs_func_set_alt;
-> +	func->function.get_alt = ffs_func_get_alt;
->  	func->function.disable = ffs_func_disable;
->  	func->function.setup   = ffs_func_setup;
->  	func->function.req_match = ffs_func_req_match;
-> -- 
-> 2.17.1
-> 
 
