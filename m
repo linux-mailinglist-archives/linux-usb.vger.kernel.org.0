@@ -1,143 +1,112 @@
-Return-Path: <linux-usb+bounces-3602-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3605-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9D2C801FB0
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 00:23:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB8BB80202F
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 02:17:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F01121C20864
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Dec 2023 23:23:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4EB6D1F20F55
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 01:17:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C7F6224D8;
-	Sat,  2 Dec 2023 23:23:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE08764F;
+	Sun,  3 Dec 2023 01:17:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="CR58v8pi"
+	dkim=pass (1024-bit key) header.d=hawknetworks.com header.i=@hawknetworks.com header.b="PXQtfmqR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31BBFD;
-	Sat,  2 Dec 2023 15:23:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=s31663417; t=1701559377; x=1702164177; i=wahrenst@gmx.net;
-	bh=1yHSNAC8bttHA6etqyuvQwPmI2IH8vcMMN4otfV1ovM=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
-	 References;
-	b=CR58v8piGKktaHJHTEyfJjzEDVT/Hl6nEuUOU010dXUC9Sc1fuyyMGL8VWzvWijb
-	 WjfNzcIaC7fHJuZpoxMZFhk0/pTPMESOISVMKjJ46Flkece5+JG6zhcqqj3MH1Ucm
-	 CmNf6LgK5eJ4pCl5U1OMVtLgCUkFdPxs4NTJgsdm4XLqXCn6XtpYRAlyMr3PUhiF+
-	 j95phUHJrBUYjhxZJy2iSA72IwWrTFxeUgLor6RbIbLe+rayMrTmhyXIPNPDcvUGc
-	 6g7E1VKPlIW+FaThs1MFCWa+Ytq8md9Y2IzYI9Hzl6urLg7YHSq6EC2qBSN6gWnHg
-	 diC5jdbwLhcCuyODAA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N63Vi-1rKRJJ0l0y-016Obq; Sun, 03
- Dec 2023 00:22:57 +0100
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Mathias Nyman <mathias.nyman@intel.com>
-Cc: bcm-kernel-feedback-list@broadcom.com,
-	Cyril Brulebois <kibi@debian.org>,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V3 3/3] ARM: dts: bcm2711: Add BCM2711 xHCI support
-Date: Sun,  3 Dec 2023 00:22:17 +0100
-Message-Id: <20231202232217.89652-4-wahrenst@gmx.net>
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F098124
+	for <linux-usb@vger.kernel.org>; Sat,  2 Dec 2023 17:17:32 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5c21e185df5so1444328a12.1
+        for <linux-usb@vger.kernel.org>; Sat, 02 Dec 2023 17:17:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=hawknetworks.com; s=hawknetworks; t=1701566252; x=1702171052; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VJuY8GE58qdOR7T86duPKoW3wzd9Ql6QkE8GpXHr/I4=;
+        b=PXQtfmqRUB6cNdVzkWcUJgTlo1jwgR3UCp/dAPAF2E/m/g4uxjj+1x9zAJKcfPpovS
+         vK9Jc7u1N8AeRPhLiZ6GJmUG/n5pi2D+TG/sNInvHkmCgtgNTSIWK6rFif66zUt5avMC
+         z+K0YUWOwy0tcL8TlRg5+an0/NQEhvl4K//dE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701566252; x=1702171052;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VJuY8GE58qdOR7T86duPKoW3wzd9Ql6QkE8GpXHr/I4=;
+        b=iOkXvunq5tFPZOuLdUlpufxpuejtOfop/+BBzqxv1vB+NTlH81gJ8xvl4L/CCfbHBf
+         fu8a9IH60GRd4aY/kBcUCp6ore5CbzJ/+QrKKNM9LYjbQopHHlhpgGl9D/KIKtXrqA/f
+         K8xhl0k2Euhtrn0XRBLMbwyxvXUkmN6M1I4/2/CINNx4Byh2y/LIR0WPvBOjKNEtOaCJ
+         V56XmjTAwPUsSw3fO6b6pJgAC3MrFPx8LuBbc4YXkz7nhT3zNoT+GdMu0JIUNkvnHE63
+         t/1Qir15PpaXXwU2rS2FSPX3ORw0/K8b9PfMgKyPHkINTZLDvqBGz47m6BoMGLjTj1IP
+         r9+w==
+X-Gm-Message-State: AOJu0YwfMViEQhHd8KtwedhbFA6RVCDSOjIU5PJgpeThyrdAHl6IQzUL
+	oncGS76JAGYT7P0bktycdBR6EA==
+X-Google-Smtp-Source: AGHT+IGfaVYI9bV0rdDz70emOMa1CZFH4dogTRDVWXjCON7HkMRGMBsitKlfZ3VEnBZKYwLiMCiSMg==
+X-Received: by 2002:a05:6a20:dd92:b0:148:f952:552b with SMTP id kw18-20020a056a20dd9200b00148f952552bmr2146109pzb.51.1701566252028;
+        Sat, 02 Dec 2023 17:17:32 -0800 (PST)
+Received: from kkane-x1.adsrvr.org ([47.145.249.123])
+        by smtp.gmail.com with ESMTPSA id z19-20020a62d113000000b0068ffd56f705sm557766pfg.118.2023.12.02.17.17.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Dec 2023 17:17:31 -0800 (PST)
+From: Kelly Kane <kelly@hawknetworks.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] r8152: add vendor/device ID pair for ASUS USB-C2500
+Date: Sat,  2 Dec 2023 17:17:12 -0800
+Message-Id: <20231203011712.6314-1-kelly@hawknetworks.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231202232217.89652-1-wahrenst@gmx.net>
-References: <20231202232217.89652-1-wahrenst@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:oNPvOdjYtiFOilEXE/1leOM7ZjfciiG7DjObmgGpBw4RREIAqhu
- wCYZ0ZleIUeNr7Cqtc5NKBF2TQEljc6ld9ceaclTubDUDrpBnE3V3V5Gsp75zK5lKRXUeaq
- F5Ga4Vx8YfRFVjtgXKiTyyBti5dUJP/0suZIWpqTfhnBofokB7WSDnUtJVa6FvguMTeSzL/
- Rasr3YY/2Nq8Rv2/u3xpA==
-UI-OutboundReport: notjunk:1;M01:P0:ybfmQK7mqQc=;v9tWK0EXOv41q04Vz6HWv8Tao3+
- YU/cNJsSwPSH2C4EUr4ZdCtwAxgbrB3m8Iuu4u56vmOhkjker+wYvFPAs7ZFNKKJ7iOUgZPul
- lb2Ft29bYfhQGCyFvUxZl50pKKsyqmZLLpFmRQw9FZbSzvCVF4iIdIPfH7mURvO3tuZQ8WUqa
- IBwLkQlYcIS25jpKzsFomejd6SaAGGFUYo8X+XA5qlrgSERsOcCJweoMyhqL7gsGBr5r1zcGp
- P+HYEYcAGLPktEXadcTwhbN6Je7bNHjQ9gpTX+5+2I9dnVXy2kI2EYIgmbZbwXZ6RsF2oEytD
- CpPFGmaKWu4PK7qgWYarR1I24oL3bs0+0gPLNCS8oDCHdafePRWwvlUahuZ8+Y81dFm0QM5XQ
- JxbFV/fVqgI8Nijb3pz7lR1nSFjQZbS4GWIDd0/IV/J9e4iSc6GVqKHXF/WWtnulHMtUCfwV5
- Hb+ihoxjSvkQApjCeBnBpgjDM5NFsPuzEolpqllQvBJCzlGhMboSTxC2s/s5MJAsLiXgNC/nv
- XP0ai6Lv8jx/AeVQANhn/gH7tGDlhUpTq98BZzl/9gDExo12xa9xswKBt+b1yJwqUxnNyoydO
- 5uUUPwShycL24s1ZamwcKp4th0zaRPipZMfxsAJSV2OG8u77ClV+awqf89T5Jn2FX0wCQaEz/
- 5JaVk+elzZROf7a+q+nrDLSSfGwrAm4Tn+OlKX4mSRAtXyS/Q4O8a/MqmQAm+Zyrcode2Ra9z
- iACwWSmQoNPfW9lXhDb3ofCJEurtYAbQsgoK0MHg/Cp4fumLR6G+i2kE9W1gL+1aoV0fqYe8e
- ELV4qr8l4LwGHOr3tRo6yMQBzjSVWXpeymx7wSkg2eFdHfvdzCkVzsXyXEqKHP4nLcLWFRMks
- kYE1+jF61K9Q62LzDjwOt4bukRmn5kxSk3arFziseHQ8DwTJwaRmtu2BH+ciRMgF0p3NXk1WL
- Xrj0gCQx7iTjbqp6YrnAkGAfZik=
+Content-Transfer-Encoding: 8bit
 
-The BCM2711 SoC also has a mostly generic xHCI. The USB port is
-currently only usable on the Compute Module 4 (e.g. via IO board).
-Because DWC2 and xHCI share the same PHY, we let the bootloader
-enable it on demand.
+The ASUS USB-C2500 is an RTL8156 based 2.5G Ethernet controller.
 
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-=2D--
- arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi |  5 +++++
- arch/arm/boot/dts/broadcom/bcm2711.dtsi     | 14 ++++++++++++++
- 2 files changed, 19 insertions(+)
+Add the vendor and product ID values to the driver. This makes Ethernet
+work with the adapter.
 
-diff --git a/arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi b/arch/arm/boot/d=
-ts/broadcom/bcm2711-rpi.dtsi
-index 98817a6675b9..d233a191c139 100644
-=2D-- a/arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi
-+++ b/arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "bcm2835-rpi.dtsi"
+Signed-off-by: Kelly Kane <kelly@hawknetworks.com>
+---
+ drivers/net/usb/r8152.c   | 1 +
+ include/linux/usb/r8152.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-+#include <dt-bindings/power/raspberrypi-power.h>
- #include <dt-bindings/reset/raspberrypi,firmware-reset.h>
-
- / {
-@@ -76,3 +77,7 @@ &v3d {
- &vchiq {
- 	interrupts =3D <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index afb20c0ed688..04aaae8a74c3 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -9993,6 +9993,7 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
+ 	{ USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
+ 	{ USB_DEVICE(VENDOR_ID_DLINK,   0xb301) },
++	{ USB_DEVICE(VENDOR_ID_ASUS,    0x1976) },
+ 	{}
  };
-+
-+&xhci {
-+	power-domains =3D <&power RPI_POWER_DOMAIN_USB>;
-+};
-diff --git a/arch/arm/boot/dts/broadcom/bcm2711.dtsi b/arch/arm/boot/dts/b=
-roadcom/bcm2711.dtsi
-index 4a379a14966d..ed5ef36e08ff 100644
-=2D-- a/arch/arm/boot/dts/broadcom/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/broadcom/bcm2711.dtsi
-@@ -604,6 +604,20 @@ genet_mdio: mdio@e14 {
- 			};
- 		};
+ 
+diff --git a/include/linux/usb/r8152.h b/include/linux/usb/r8152.h
+index 287e9d83fb8b..33a4c146dc19 100644
+--- a/include/linux/usb/r8152.h
++++ b/include/linux/usb/r8152.h
+@@ -30,6 +30,7 @@
+ #define VENDOR_ID_NVIDIA		0x0955
+ #define VENDOR_ID_TPLINK		0x2357
+ #define VENDOR_ID_DLINK			0x2001
++#define VENDOR_ID_ASUS			0x0b05
+ 
+ #if IS_REACHABLE(CONFIG_USB_RTL8152)
+ extern u8 rtl8152_get_version(struct usb_interface *intf);
 
-+		xhci: usb@7e9c0000 {
-+			compatible =3D "brcm,bcm2711-xhci";
-+			reg =3D <0x0 0x7e9c0000 0x100000>;
-+			#address-cells =3D <1>;
-+			#size-cells =3D <0>;
-+			interrupts =3D <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;
-+			/* DWC2 and this IP block share the same USB PHY,
-+			 * enabling both at the same time results in lockups.
-+			 * So keep this node disabled and let the bootloader
-+			 * decide which interface should be enabled.
-+			 */
-+			status =3D "disabled";
-+		};
-+
- 		v3d: gpu@7ec00000 {
- 			compatible =3D "brcm,2711-v3d";
- 			reg =3D <0x0 0x7ec00000 0x4000>,
-=2D-
+base-commit: ffc253263a1375a65fa6c9f62a893e9767fbebfa
+-- 
 2.34.1
 
 
