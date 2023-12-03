@@ -1,168 +1,174 @@
-Return-Path: <linux-usb+bounces-3610-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3611-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 897FE8022A4
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 12:11:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00612802350
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 12:43:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B717F1C208D4
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 11:11:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8B18B20A57
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 11:43:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAD68947F;
-	Sun,  3 Dec 2023 11:11:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57B22BE7D;
+	Sun,  3 Dec 2023 11:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B86yJ4rl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J4QyUmie"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3A68833;
-	Sun,  3 Dec 2023 11:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291DBC433C8;
-	Sun,  3 Dec 2023 11:11:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701601874;
-	bh=axh+C9i/WNo7QI5/h/RxNR+LYbThXfmZV9VO9RE6NdA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B86yJ4rlMvJqKKKzAoiG/uY7bChF3LIFDp+Jky7dRuI5bXLSdWt6rJB1FONIy39h7
-	 IdDSVMVpA4t/4UaKHCmKPWqJDsMJ4Dv5s4eJ10cSiifucZhIhct627XNj1UvYNvlDw
-	 V6aOm1o3R126GZ741cf6q6k/CU5L+xE7nJ0ayQ9ABncUhH4LcJrfrEo/FIrfnDQsKw
-	 MaeIHVcuCgGAgQ61mxMu9tNsVF0jDEBPcQ5IEjk6tC8kE28tw7oYae8ADHm0h+PapQ
-	 pmdr92cTLegEiJbUq6jHqNSd5j92K83b71mk+fnlmYSx5GHLPDbF9aN4624CYzbn+l
-	 mPHofHmZENduw==
-Date: Sun, 3 Dec 2023 11:11:09 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	bcm-kernel-feedback-list@broadcom.com,
-	Cyril Brulebois <kibi@debian.org>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V3 1/3] dt-bindings: usb: xhci: add support for BCM2711
-Message-ID: <20231203-traffic-aide-cb03afdb3546@spud>
-References: <20231202232217.89652-1-wahrenst@gmx.net>
- <20231202232217.89652-2-wahrenst@gmx.net>
- <20231203-chair-zen-afb8b280ca2f@spud>
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F382CC0
+	for <linux-usb@vger.kernel.org>; Sun,  3 Dec 2023 03:43:35 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40c09fcfa9fso2671605e9.2
+        for <linux-usb@vger.kernel.org>; Sun, 03 Dec 2023 03:43:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701603814; x=1702208614; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SxbKBXKaOzx3/nX++/IEYvlJe8A11NOZYUGsnN9FBBY=;
+        b=J4QyUmievc3DypbSeJhaPO6naFODZztsy6yYCn17mZ/k/AO7OVPok7s3rBfr3nPBnl
+         P2Ke/mhkRG7lI7G1omKBUsocdoCPXYdYMWKlK61b9EDfIozm6N0m1PRmhxnwLsBiR3jy
+         h8TpMcpHsh8yMJ65MCYc8bzi+DOUnQQ9e7aPFwiHNl1yUmfy5tEwvWayIVFfp62sQ19s
+         HrPDwp4jN5zsKhA5NKuzbT5v3NjHas0Xub5mqGL2inX2BjNHb5BRRdyFO4+qIBi7Hfu0
+         6i94/7l0+x+OkJum+8n0rrqCHRNA97PKj9sV6LIV1QtgO577WokSYFcUnkypw5aGiQkC
+         rj6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701603814; x=1702208614;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SxbKBXKaOzx3/nX++/IEYvlJe8A11NOZYUGsnN9FBBY=;
+        b=H7Y8gLjCHGjyccZryXw+mp00Cqy0RDERnIulYC2PGYF3HFRsbpWoCu2lkmdwBxDzpd
+         IUmQb9aVe3R5twG2QLZGdlgb5zAtKp1hhR9KbkDKJ3G0Bh5cLfG/J8KGHdscCX5f23rH
+         6CtBAg05pGRmMdE/sRB5KLIkHwa/KBa9mH2xtyqU5N9KUnx5oKsA8ivCufbyVkSxJfxl
+         kmnknSCEy6KjpOYfeT+yXuVLEQEGR9L5wXvFc41nEEAL4QTPpBUsi5slBwzyemu2Lgbo
+         euieB5bgXQtAsd1A5LglvYLq9Onk+9V+1do6AT0O+DWmhZFm1ZP348DvfVhl4O4wusMA
+         njVw==
+X-Gm-Message-State: AOJu0Yx6AdgXT1D8tK5WSDrdMezFJ3iAvAVYUGY7NRNNAunMew0zN1+x
+	Rt/mZc1MB03u9oNFbWZ8AD9HGQ==
+X-Google-Smtp-Source: AGHT+IFdlXbi66bdK9azUEA/kFeRtMy70HvUZr1Nq1VwrzdZy0ztuHZBa7GKWBHTMGCpnYETs9x7YA==
+X-Received: by 2002:a05:600c:2d4c:b0:40b:5f03:b428 with SMTP id a12-20020a05600c2d4c00b0040b5f03b428mr914549wmg.330.1701603814301;
+        Sun, 03 Dec 2023 03:43:34 -0800 (PST)
+Received: from umbar.unikie.fi ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id o17-20020a2e90d1000000b002c993c5d4c6sm894666ljg.105.2023.12.03.03.43.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Dec 2023 03:43:33 -0800 (PST)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Janne Grunau <j@jannau.net>,
+	Simon Ser <contact@emersion.fr>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: dri-devel@lists.freedesktop.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	freedreno@lists.freedesktop.org
+Subject: [PATCH RESEND 0/6] drm: simplify support for transparent DRM bridges
+Date: Sun,  3 Dec 2023 14:43:27 +0300
+Message-Id: <20231203114333.1305826-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Oqdw2jwLt/x//D/T"
-Content-Disposition: inline
-In-Reply-To: <20231203-chair-zen-afb8b280ca2f@spud>
+Content-Transfer-Encoding: 8bit
+
+Greg, could you please ack the last patch to be merged through the
+drm-misc tree? You have acked patch 3, but since that time I've added
+patches 4-6.
+
+Supporting DP/USB-C can result in a chain of several transparent
+bridges (PHY, redrivers, mux, etc). All attempts to implement DP support
+in a different way resulted either in series of hacks or in device tree
+not reflecting the actual hardware design. This results in drivers
+having similar boilerplate code for such bridges.
+
+Next, these drivers are susceptible to -EPROBE_DEFER loops: the next
+bridge can either be probed from the bridge->attach callback, when it is
+too late to return -EPROBE_DEFER, or from the probe() callback, when the
+next bridge might not yet be available, because it depends on the
+resources provided by the probing device. Device links can not fully
+solve this problem since there are mutual dependencies between adjancent
+devices.
+
+Last, but not least, this results in the the internal knowledge of DRM
+subsystem slowly diffusing into other subsystems, like PHY or USB/TYPEC.
+
+To solve all these issues, define a separate DRM helper, which creates
+separate aux device just for the bridge. During probe such aux device
+doesn't result in the EPROBE_DEFER loops. Instead it allows the device
+drivers to probe properly, according to the actual resource
+dependencies. The bridge auxdevs are then probed when the next bridge
+becomes available, sparing drivers from drm_bridge_attach() returning
+-EPROBE_DEFER.
+
+Changes since v5:
+ - Removed extra semicolon in !DRM_AUX_HPD_BRIDGE stubs definition.
+
+Changes since v4:
+ - Added documentation for new API (Sima)
+ - Added generic code to handle "last mile" DP bridges implementing just
+   the HPD functionality.
+ - Rebased on top of linux-next to be able to drop #ifdef's around
+   drm_bridge->of_node
+
+Changes since v3:
+ - Moved bridge driver to gpu/drm/bridge (Neil Armstrong)
+ - Renamed it to aux-bridge (since there is already a simple_bridge driver)
+ - Made CONFIG_OF mandatory for this driver (Neil Armstrong)
+ - Added missing kfree and ida_free (Dan Carpenter)
+
+Changes since v2:
+ - ifdef'ed bridge->of_node access (LKP)
+
+Changes since v1:
+ - Added EXPORT_SYMBOL_GPL / MODULE_LICENSE / etc. to drm_simple_bridge
 
 
---Oqdw2jwLt/x//D/T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Dmitry Baryshkov (6):
+  drm/bridge: add transparent bridge helper
+  phy: qcom: qmp-combo: switch to DRM_AUX_BRIDGE
+  usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE
+  drm/bridge: implement generic DP HPD bridge
+  soc: qcom: pmic-glink: switch to DRM_AUX_HPD_BRIDGE
+  usb: typec: qcom-pmic-typec: switch to DRM_AUX_HPD_BRIDGE
 
-On Sun, Dec 03, 2023 at 11:06:43AM +0000, Conor Dooley wrote:
-> On Sun, Dec 03, 2023 at 12:22:15AM +0100, Stefan Wahren wrote:
-> > The xHCI IP on the BCM2711 SoC is compatible to "brcm,xhci-brcm-v2",
-> > but also requires a power domain.
-Hmm
-This & the driver change makes it look like your compatible setup should
-be `compatible =3D "brcm,bcm2711-xhci", "brcm,xhci-brcm-v2";.
-If the pattern in this patch was repeated, we'd have to modify the
-driver like your 2nd patch does for each and new broadcom system that
-needs the power domain.
+ drivers/gpu/drm/bridge/Kconfig                |  17 ++
+ drivers/gpu/drm/bridge/Makefile               |   2 +
+ drivers/gpu/drm/bridge/aux-bridge.c           | 140 +++++++++++++++
+ drivers/gpu/drm/bridge/aux-hpd-bridge.c       | 164 ++++++++++++++++++
+ drivers/phy/qualcomm/Kconfig                  |   2 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c     |  44 +----
+ drivers/soc/qcom/Kconfig                      |   1 +
+ drivers/soc/qcom/pmic_glink_altmode.c         |  33 +---
+ drivers/usb/typec/mux/Kconfig                 |   2 +-
+ drivers/usb/typec/mux/nb7vpq904m.c            |  44 +----
+ drivers/usb/typec/tcpm/Kconfig                |   1 +
+ drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c |  41 +----
+ include/drm/bridge/aux-bridge.h               |  37 ++++
+ 13 files changed, 383 insertions(+), 145 deletions(-)
+ create mode 100644 drivers/gpu/drm/bridge/aux-bridge.c
+ create mode 100644 drivers/gpu/drm/bridge/aux-hpd-bridge.c
+ create mode 100644 include/drm/bridge/aux-bridge.h
 
+-- 
+2.39.2
 
-> > So introduce a new compatible
-> > and the specific constraints. Since the key allOf can only occur
-> > once, merge the reference below.
-> >=20
-> > Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
->=20
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->=20
-> Cheers,
-> Conor.
->=20
-> > ---
-> >  .../devicetree/bindings/usb/generic-xhci.yaml | 21 ++++++++++++++++---
-> >  1 file changed, 18 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/usb/generic-xhci.yaml b/=
-Documentation/devicetree/bindings/usb/generic-xhci.yaml
-> > index 594ebb3ee432..b6e10b0a3c24 100644
-> > --- a/Documentation/devicetree/bindings/usb/generic-xhci.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
-> > @@ -9,9 +9,6 @@ title: USB xHCI Controller
-> >  maintainers:
-> >    - Mathias Nyman <mathias.nyman@intel.com>
-> >=20
-> > -allOf:
-> > -  - $ref: usb-xhci.yaml#
-> > -
-> >  properties:
-> >    compatible:
-> >      oneOf:
-> > @@ -28,6 +25,7 @@ properties:
-> >        - description: Broadcom STB SoCs with xHCI
-> >          enum:
-> >            - brcm,xhci-brcm-v2
-> > +          - brcm,bcm2711-xhci
-> >            - brcm,bcm7445-xhci
-> >        - description: Generic xHCI device
-> >          const: xhci-platform
-> > @@ -49,6 +47,9 @@ properties:
-> >        - const: core
-> >        - const: reg
-> >=20
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> >  unevaluatedProperties: false
-> >=20
-> >  required:
-> > @@ -56,6 +57,20 @@ required:
-> >    - reg
-> >    - interrupts
-> >=20
-> > +allOf:
-> > +  - $ref: usb-xhci.yaml#
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: brcm,bcm2711-xhci
-> > +    then:
-> > +      required:
-> > +        - power-domains
-> > +    else:
-> > +      properties:
-> > +        power-domains: false
-> > +
-> >  examples:
-> >    - |
-> >      usb@f0931000 {
-> > --
-> > 2.34.1
-> >=20
-
-
-
---Oqdw2jwLt/x//D/T
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZWxiTQAKCRB4tDGHoIJi
-0pwvAP0ftjAqzLu/r6pNoYYAYQs5oTugu3kN3GmT+drnPNAU4QD/RRZ8W6M+gRsw
-4hzlTOnZ7h1U7vo+cBsICs9eV3qTuwI=
-=AR0B
------END PGP SIGNATURE-----
-
---Oqdw2jwLt/x//D/T--
 
