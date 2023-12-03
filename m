@@ -1,219 +1,188 @@
-Return-Path: <linux-usb+bounces-3619-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3620-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9EC2802567
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 17:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EA8998025CA
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 17:57:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0250A1C2095E
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 16:24:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26C4F1C20942
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 16:57:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5D3615AFD;
-	Sun,  3 Dec 2023 16:24:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99BA31643D;
+	Sun,  3 Dec 2023 16:56:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="M2DrlGCK"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="PYnJoJyK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2067.outbound.protection.outlook.com [40.107.220.67])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D59A8;
-	Sun,  3 Dec 2023 08:24:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UOrX1/sTd97elKMHbWkGPzeSZVKa8nF/6HPSq/FA/9Zdr0NGZ+rojhV0qlgBq2tgNP2MXdzd6Gw8cl8MDM5cEcblnzyT27s6C0TUYuHUwo6XqyROi+WDOge7238h9sL3mPNhJ9GoI/sj4CtK76+FxnsdXse4Qn5w9v/RcnPl7vEQxwll5ceOSlemrScpVpU0NHld2tdW7X7SBvbvCwTpy985a/2+b9CpPsg0Dygaq2gayMLEH0S12VTa9wvT+0HKOL/Ml78H0L+r2iHVzLjE/PZswYYR9ebOizYvC/dH5NtWsG531Dr6qfeVCfE4i0Ma6WXxgY0OENtFwzrbQTTrWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ln7OulHVbKZRD/ZM9dyadwbv/YmfGEJMLPSaOE3929A=;
- b=JiqsYgab6cDkwl7Wn+38ajAhELqTzAWc0GvV5DlAco1HW4SPnVjNG5Yblfd55UMTLOGrUbVHDMRBgF8ItEbNpZ+IKlS6ktYmK3h6TIPbvurG121AatGudwqmilovP9hWb4+y3qgMHgh/4E3U62DLkGspSkDzeqIWyI+p+TH4xvgu60H6xqQWszrCwMhLuwogDE/RZwMyTnk/rSeb8YwzrjRy7mws/dquUNQDgUUUmk8sidEYDId5FRn2r+nNDU9lVyXh2WgdXq7wx25dcNvcrLuIBjaXi8ita8tPFceKn0v1kmi5ofMYlRoDnIIPcharlYDeSt6P6klGEnlu/n06HQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ln7OulHVbKZRD/ZM9dyadwbv/YmfGEJMLPSaOE3929A=;
- b=M2DrlGCKgX5ZK1LyGhE+PRqvAxsSx8u5j+TE13WIoLH6OmnthoskFBq5+4/ebVJ58PDM75O/HcMrU1ucxmbBxAXNGn7eddBuyOnt7fyU1DRs+l+nDkgyDk1criRItGXv5t+fBHY8frf++4gxKnIWt+7Xc5Vo5bIrNWb0LVx66Jo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5040.namprd12.prod.outlook.com (2603:10b6:5:38b::19)
- by PH7PR12MB6395.namprd12.prod.outlook.com (2603:10b6:510:1fd::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.28; Sun, 3 Dec
- 2023 16:24:39 +0000
-Received: from DM4PR12MB5040.namprd12.prod.outlook.com
- ([fe80::6f3c:cedb:bf1e:7504]) by DM4PR12MB5040.namprd12.prod.outlook.com
- ([fe80::6f3c:cedb:bf1e:7504%4]) with mapi id 15.20.7046.032; Sun, 3 Dec 2023
- 16:24:38 +0000
-Message-ID: <4c8072b9-637b-a871-4dc1-3031aa3712bd@amd.com>
-Date: Sun, 3 Dec 2023 21:54:28 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: Regression: Inoperative bluetooth, Intel chipset, mainline kernel
- 6.6.2+
-Content-Language: en-US
-From: Basavaraj Natikar <bnatikar@amd.com>
-To: Greg KH <gregkh@linuxfoundation.org>,
- "Kris Karas (Bug Reporting)" <bugs-a21@moonlit-rail.com>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>, stable@vger.kernel.org,
- Thorsten Leemhuis <regressions@leemhuis.info>, regressions@lists.linux.dev,
- linux-bluetooth@vger.kernel.org,
- Mario Limonciello <mario.limonciello@amd.com>,
- Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
-References: <ee109942-ef8e-45b9-8cb9-a98a787fe094@moonlit-rail.com>
- <8d6070c8-3f82-4a12-8c60-7f1862fef9d9@leemhuis.info>
- <2023120119-bonus-judgingly-bf57@gregkh>
- <6a710423-e76c-437e-ba59-b9cefbda3194@moonlit-rail.com>
- <55c50bf5-bffb-454e-906e-4408c591cb63@molgen.mpg.de>
- <2023120213-octagon-clarity-5be3@gregkh>
- <f1e0a872-cd9a-4ef4-9ac9-cd13cf2d6ea4@moonlit-rail.com>
- <2023120259-subject-lubricant-579f@gregkh>
- <ef575387-4a52-49bd-9c26-3a03ac816b61@moonlit-rail.com>
- <2023120329-length-strum-9ee1@gregkh>
- <93b7d9ca-788a-53cd-efdb-6a61b583c550@amd.com>
-In-Reply-To: <93b7d9ca-788a-53cd-efdb-6a61b583c550@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0012.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:95::21) To DM4PR12MB5040.namprd12.prod.outlook.com
- (2603:10b6:5:38b::19)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EF6F3;
+	Sun,  3 Dec 2023 08:56:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+	s=s31663417; t=1701622586; x=1702227386; i=wahrenst@gmx.net;
+	bh=tRP6BrTRk1GtQs78xeszswu5cMfOHdwOWb4VV2A2ZF4=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=PYnJoJyKn/Fx7cAR3W6cqm36Xt73h6neV74U40fuVqzinQSWSpjcoOdEJZdSDe0/
+	 CZYux+p255r/n3VjAPYm0K6nyw6h3kR/aaI+KaZJfKwDO/1z77g84EmjtrfN2/UQ/
+	 9rCIvAxGFCIWXOMGwq0nHxuRl0nPOzyeTX4YXT5Q764JCxW9khCkTSOr2X1YLt7iC
+	 r4I01RiotM5Y7Wa/IUVpL+zf76FWBe3Pg8kYrsc/eDtZZ0pRwmVmLtgNj26n6QVrq
+	 CftAgJBnzgguAJOh1ppg07Je7FXLtzEfPHeTwMfSvz6Zb7hRclmUdhFo8YmqMro3g
+	 4brIBRWqQlxlvMV2QA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.130] ([37.4.248.43]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MTAFb-1qh0Mv29p1-00UWz1; Sun, 03
+ Dec 2023 17:56:26 +0100
+Message-ID: <7dd529a0-ebee-4f3b-879b-c7b1033cfdb9@gmx.net>
+Date: Sun, 3 Dec 2023 17:56:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5040:EE_|PH7PR12MB6395:EE_
-X-MS-Office365-Filtering-Correlation-Id: 82745e9c-d567-4cee-a175-08dbf41c585e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	xpzmaMJz0ac8l/Xt8PGaroSwXio6JGwkNLW9NoXuIW5ty/1QkPgpmkYxkOoq4gktejdxRZ8xpBLTbfqzlmoSVcwfnZMmY9kVNi7DAgAX9sBHxQ1CR7quogjFa9i9+OJdS0ypz8ezcx0QfZK5nWMPxe8ElwnX7mexwSZyy90YgBw13f0vKn+nPID8+u5pEPwK9U0CRVi6omYmtFBiOl56gERxRosoPHiMMrC0EVl1UaeloV73MloWl9IwHHNqbqQD31xNmlHFJTPEaWOeNe47YpKa/EWi4XqvDSrRK/mHsMa82w7msuvqyHp7if0fklEwNP9mSjm+htNkeDsBMoKzfGWl5RZYH/cqENqktLZ41URDbDF1Gewer/zuJsoyKFnvs7FftJzmz/e1MBctn8wcz7iEx7MhlkcrsDHHeVrhoKiO5PRPOTe37xwluHGexmXAi4Sj3RcmtPyTJz8Qx15kONZXAP4/i2isors3OdZWCGPG5mn45JmoJ5vdrry/8FLwo8JGyfd1jfjX3FZdnjGE63JHbp8Bkq1nxVxD9RlNZOkNsuK1q7z6NPCwaELG3q/845jfUX1NGTfCRqL3JMbwxMRmuxFoFBB5WG/AIURD/+7tc/4Pw/UCA3ENLnf/84Cv+jc0pOD2kzx2GapIALC28Q==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5040.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(376002)(346002)(136003)(39860400002)(230922051799003)(451199024)(1800799012)(186009)(64100799003)(26005)(53546011)(6506007)(36756003)(6666004)(2616005)(5660300002)(66476007)(2906002)(66946007)(54906003)(110136005)(316002)(66556008)(31696002)(4326008)(8936002)(8676002)(31686004)(6512007)(38100700002)(478600001)(6486002)(41300700001)(966005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?T2Fpbk50blRjd1lVZ2J4YzhHOUVuVGoweUErV0g2UDlHdVlick5HL1NCM0sv?=
- =?utf-8?B?bnJwaFdUazRmb2dRSzlNV3FmbDJwOU5nbHorY3pTMHdRay94anJSWjhwTms4?=
- =?utf-8?B?UDFaNDR5UndWK0QzQnlScFVTbmF2cGRCSk5rcHdhcFV0ZkY0cjZNVWZ4TFFv?=
- =?utf-8?B?OFRjZFAySmxkWFFWWTJleWh6VE52azdKS1FzRFBqWDZQWC83M1FpZjN6SE5C?=
- =?utf-8?B?bnBKTzVENXZaNmhaaDl1V1VmS3dhOEVUbmxLcWs4dG9wc3pSOFA3RWxkUDVJ?=
- =?utf-8?B?czV2cGEvQ1hNcklQNWZvRjZ0bWpsdnhndDN2L2pWaXVwZjNkaDkxTTZXa0t0?=
- =?utf-8?B?SFlxWVdlQlovNVNndVVCa3M4OEIrYllleXJmbEd1N2lWZW5UOFdhZjhaNGxl?=
- =?utf-8?B?TElLcGtPMFdwVmFrSHFRMjVHTzc3elUxVklQcnArQjU5YmdBN1lSZHVWMi8r?=
- =?utf-8?B?NU5WTmxYeThBOWo2eTVJVTBzTjFxbEVYeGtYdTZkOElXdloyL0lzVDF6bWsv?=
- =?utf-8?B?dG8vRHZKbzU5dm8vcURrSURPQnhxWFk3aEZQL2N4UXZ5UVg2TzYxbjRjWUli?=
- =?utf-8?B?ak5XRWJXeVZqOTVCQVlPU2ErS1N0MXcxaERwU0xkR2VNdGJmK2gzdTZQTVRx?=
- =?utf-8?B?SzdlZEp0YTJvdGtPR1lCcEk1OS9WWjFXaS9NYk5hekxBQnFLUXBnSklqTDJX?=
- =?utf-8?B?UHB5MmxmVXVyNkplUyt4aGRPaFpmLzdUVjM1RExBbCtVUDhobHorWjlVRmlu?=
- =?utf-8?B?WXNyQndyemlsY1hJVnFDUFVTWTVFVzU2bnJBVnZiYkhoWDNUM0g3TkVlaU1k?=
- =?utf-8?B?cVNDV0lQdWFJdFFhT25WenNOVDB5SXltVlFtWng1amlNeDVzcXRDNmtJZHdM?=
- =?utf-8?B?NVhqaUQvWCtXOTc2VS82S2JDdGlHMlNob2kwUjdXZmtQZUROaVQzYnlvSlEr?=
- =?utf-8?B?UEtsRlRTRnluK0N2bkc1ekFSYjNwc01vNUg2RDN5UmpBNVZCSkdyMUp5QnpG?=
- =?utf-8?B?NjRrZ09vVW0zYXIxc0gwR2R4ZkNkMGZraWdQa2diL3RtV2hrdFdMWHFKcTFG?=
- =?utf-8?B?WlVpN0RvalV5YVhKS3lwZGo3eUFhVG1uMld2ajRnSy9ON2p0TTVDL0FVSmJF?=
- =?utf-8?B?azdkY3hXaW9DQXpldTl6anljNit3Y1MwOGhYYURrZmNUR2o2L1lkWWZjMFo1?=
- =?utf-8?B?TGxSZHNaVXphVTFBMnNteXBzNnh2aTRpTEF4NDAwV2xpbXJJR0pqZ0dFL0Yz?=
- =?utf-8?B?a2wyNXNUbnh5Q1JVVDFkajIzUEFiRXF0d2daOWVxQVV4d1dUZHY5N1h2NjRa?=
- =?utf-8?B?TjJ3MHBhQS9JR1owMXVhemdubEo2RkNORFdBTUxKVXBPcmswMHg4ZEhTSDJI?=
- =?utf-8?B?dU1KZkhJZXNsSHlONi9IaXRiUlBYK28zUXVKNFpWL281M09Wd3poOGJ0R3ZQ?=
- =?utf-8?B?NG53QTY3T1IwRHI2WXZZQVFqc2xnemc2Wk85NVFKdS96Q0JVblQveldjZWI2?=
- =?utf-8?B?SUc2Q3diYTJCa1c4NkpOOHYyMnVkYkxOUEQ1Vm0ySk5PVkRHMVA4NWUvWEly?=
- =?utf-8?B?Q0c3eS82SWVsY2xnSUltKzNlMnFWZzJxM0t6K1JYcmpQTGszODNTeVJkK1VK?=
- =?utf-8?B?N2FzaGRreUQrWXluTTZMTUE0TGxpWWNCU05CMnBEdFNwbXdIZG5EbHF4VDVJ?=
- =?utf-8?B?eWxYUXJKUnRQelRLOTJ3d0hSYmVsb3U1U3c1K0IzNmlMKzNlK2Y1QTJVR0Ux?=
- =?utf-8?B?Y24wcW94Tk9HSHZ1bEF6VlRuMGF5V0dPQU0xRXUvK212RmplWXFVMzQvcUli?=
- =?utf-8?B?Z3dyL2cyanZwS3FXajJFQUhpYktuUS9NSEpmcHdtWGt2SWI1T0wvOGpVc3lT?=
- =?utf-8?B?RmhWaUVkUXVWSkVVSDkwYUJTcWEyb3pHNUs2TmNXZ0xIRUJNSS9iMEp2aDc3?=
- =?utf-8?B?U2tpc2FCNHRRZTVuQ3JMd3RjME9mQ2lQUko0RVhNMFpNZGdCZXJNSTg0UjNN?=
- =?utf-8?B?MFVLcUtFbm1SMjJVajN3WFFZWFNrbFh0R0JwY2VhQXRxWGFvMEJaY2VZQklU?=
- =?utf-8?B?M0ZIT2Z4endHYldsRmQzU01QRXhXY0YxVEwyRzJ1MGtqTXpGeUxodXVGOHVD?=
- =?utf-8?Q?wOhXak502f66qyFFo3hGJXa20?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82745e9c-d567-4cee-a175-08dbf41c585e
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5040.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2023 16:24:38.5062
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3OJSWimOrn+6OzdNu7QxBD9gUdIl6MutsRzo9AnRZq1q0+Z77aCnZ8r4i0JGfzBf7ZRU6HG5NWzPT09ZJrY5tg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6395
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 1/3] dt-bindings: usb: xhci: add support for BCM2711
+To: Conor Dooley <conor@kernel.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Justin Chen <justin.chen@broadcom.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Mathias Nyman <mathias.nyman@intel.com>,
+ bcm-kernel-feedback-list@broadcom.com, Cyril Brulebois <kibi@debian.org>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20231202232217.89652-1-wahrenst@gmx.net>
+ <20231202232217.89652-2-wahrenst@gmx.net>
+ <20231203-chair-zen-afb8b280ca2f@spud>
+ <20231203-traffic-aide-cb03afdb3546@spud>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <20231203-traffic-aide-cb03afdb3546@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:57ZWdztn7nG7UVMkRZWPzK3rBPm+idGw8u9SpKKyRVp7WZYzhLo
+ CSrw0j41kIsjnAz3msQiVvGXbZlIggtk4H6iEoR4F//kMzLvbCOVpvO0jxyZNuQjZOw8vVq
+ S7mAVWwaY9svt65fcRPWi0z4zrZDTNgmUQIWIK+G60DvvFWrhLDeVdmST38q6626CPVPR9x
+ R5I9O0tuPQBJXKwi5MhvA==
+UI-OutboundReport: notjunk:1;M01:P0:iBWZ4jTwWqo=;L993cU8qd6epOofaELofyPBIFZv
+ orTbsIH0fK6e+nDi9zAdX0ZGDm7MRlllz7VYTBYIwgzxp1ytVs8WcaG/UxpITlTagM0EBd/Vz
+ /c9FU7wUTHjMgLzDk3qjXQ4RD3KTJ7AcgStkITUIPgIywi3e4yShTVhUaDSbVzegujHsx5VAC
+ 4iO+PBksdEV/TwJuwx72t9J8PYz1NH138uEz1pdnejB5oByniVBJmmnUm5L+mIY1Cb3fVZcfo
+ h9u3reLM2N6VLxhze4QY3iED+vTi0So98rBDF0MnEojMzreXD9l/oAAqlfKQ27yYSHhxalBZa
+ 6pOLxhNk50b/sWXI80D7aj6whTITbG8bvQij9ALp40XvKSbkQ/WVYH3LAo8qx9BKGzqbAusU/
+ VIxENOt6N4dVodTa+aFj5ywk7TBOzFL1RP5TiCnqHsmrq7fDHmjNCeiVU9ZYfxsNMqr70s/Jp
+ 3azE5meCaIaw6bAfuCfNpdAP2/XKL2hyVBJg0JFPtS2Fn0m2YRLsBdK6PeiHfAIeUYHCmI+pc
+ SOW3Pw5aJJU/oxhDi70R1dwHjwtUeg1JDeMWlgGBv9Itrnj7jd0mqu6vldSlUNPCN0i3tyQLV
+ N4zXk2sATj4RRwSANDr5s7FXoVFYrovIvrUCUtbgOAfRt6qLRnZBkblD4V09IfWPLKvFvetkM
+ G/QIgVXL15DaspeKiwm9mqhBZiIT07CEkDxfpRmbOKds41DwyObemYpXp3kFg5T03sSIeptRt
+ tNThas2Am/OMrj5w4bgSU6l6OkBFNXrxFxUqNT+jAvMaMLCaLQ3wFG9cKS9YX0qbBzc//XjMG
+ g3KkGO25BzgsVUU8/Fo2gi7wv1NXFBsCje6q0C0hqNKe03C6nXQqmkIvfnEDIjMJlVDB0IGSj
+ zEY2ZVFUMOImvDsSlcIZcBJK5XCMNGGNmIxY7wM+MLor5mmNahnADYLisbTxcZLTMAgW4FzEj
+ TdjPpZkggFL1CGOHqEsNLpiZGGA=
 
+Hi,
 
-On 12/3/2023 9:46 PM, Basavaraj Natikar wrote:
-> On 12/3/2023 2:08 PM, Greg KH wrote:
->> On Sun, Dec 03, 2023 at 03:32:52AM -0500, Kris Karas (Bug Reporting) wrote:
->>> Greg KH wrote:
->>>> Thanks for testing, any chance you can try 6.6.4-rc1?  Or wait a few
->>>> hours for me to release 6.6.4 if you don't want to mess with a -rc
->>>> release.
->>> As I mentioned to Greg off-list (to save wasting other peoples' bandwidth),
->>> I couldn't find 6.6.4-rc1.  Looking in wrong git tree?  But 6.6.4 is now
->>> out, which I have tested and am running at the moment, albeit with the
->>> problem commit from 6.6.2 backed out.
+Am 03.12.23 um 12:11 schrieb Conor Dooley:
+> On Sun, Dec 03, 2023 at 11:06:43AM +0000, Conor Dooley wrote:
+>> On Sun, Dec 03, 2023 at 12:22:15AM +0100, Stefan Wahren wrote:
+>>> The xHCI IP on the BCM2711 SoC is compatible to "brcm,xhci-brcm-v2",
+>>> but also requires a power domain.
+> Hmm
+> This & the driver change makes it look like your compatible setup should
+> be `compatible =3D "brcm,bcm2711-xhci", "brcm,xhci-brcm-v2";.
+i don't have insight into the hardware, but the fact that the other
+Broadcom SoC didn't require a power domain before let me think we
+shouldn't do this. Otherwise this binding was broken before. But Justin
+and Florian could clarify this.
+> If the pattern in this patch was repeated, we'd have to modify the
+> driver like your 2nd patch does for each and new broadcom system that
+> needs the power domain.
+ From my understanding the DT compatible should be specific as possible.
+This is what i did, especially because the Raspberry Pi boards tends to
+needs some quirks.
+
+Best regards
+>
+>
+>>> So introduce a new compatible
+>>> and the specific constraints. Since the key allOf can only occur
+>>> once, merge the reference below.
 >>>
->>> There is no change with respect to this bug.  The problematic patch
->>> introduced in 6.6.2 was neither reverted nor amended.  The "opcode 0x0c03
->>> failed" lines to the kernel log continue to be present.
+>>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>>
+>> Cheers,
+>> Conor.
+>>
+>>> ---
+>>>   .../devicetree/bindings/usb/generic-xhci.yaml | 21 ++++++++++++++++-=
+--
+>>>   1 file changed, 18 insertions(+), 3 deletions(-)
 >>>
->>>> Also, is this showing up in 6.7-rc3?  If so, that would be a big help in
->>>> tracking this down.
->>> The bug shows up in 6.7-rc3 as well, exactly as it does here in 6.6.2+ and
->>> in 6.1.63+.  The problematic patch bisected earlier appears identically (and
->>> seems to have been introduced simultaneously) in these recent releases.
->> Ok, in a way, this is good as that means I haven't missed a fix, but bad
->> in that this does affect everyone more.
->>
->> So let's start over, you found the offending commit, and nothing has
->> fixed it, so what do we do?  xhci/amd developers, any ideas?
-> Can we enable RPM on specific controllers for AMD xHC 1.1
-> instead to cover all AMD xHC 1.1? 
+>>> diff --git a/Documentation/devicetree/bindings/usb/generic-xhci.yaml b=
+/Documentation/devicetree/bindings/usb/generic-xhci.yaml
+>>> index 594ebb3ee432..b6e10b0a3c24 100644
+>>> --- a/Documentation/devicetree/bindings/usb/generic-xhci.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/generic-xhci.yaml
+>>> @@ -9,9 +9,6 @@ title: USB xHCI Controller
+>>>   maintainers:
+>>>     - Mathias Nyman <mathias.nyman@intel.com>
+>>>
+>>> -allOf:
+>>> -  - $ref: usb-xhci.yaml#
+>>> -
+>>>   properties:
+>>>     compatible:
+>>>       oneOf:
+>>> @@ -28,6 +25,7 @@ properties:
+>>>         - description: Broadcom STB SoCs with xHCI
+>>>           enum:
+>>>             - brcm,xhci-brcm-v2
+>>> +          - brcm,bcm2711-xhci
+>>>             - brcm,bcm7445-xhci
+>>>         - description: Generic xHCI device
+>>>           const: xhci-platform
+>>> @@ -49,6 +47,9 @@ properties:
+>>>         - const: core
+>>>         - const: reg
+>>>
+>>> +  power-domains:
+>>> +    maxItems: 1
+>>> +
+>>>   unevaluatedProperties: false
+>>>
+>>>   required:
+>>> @@ -56,6 +57,20 @@ required:
+>>>     - reg
+>>>     - interrupts
+>>>
+>>> +allOf:
+>>> +  - $ref: usb-xhci.yaml#
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            const: brcm,bcm2711-xhci
+>>> +    then:
+>>> +      required:
+>>> +        - power-domains
+>>> +    else:
+>>> +      properties:
+>>> +        power-domains: false
+>>> +
+>>>   examples:
+>>>     - |
+>>>       usb@f0931000 {
+>>> --
+>>> 2.34.1
+>>>
 >
-> Please find below the proposed changes and let me know if it is OK?
->  
-> Author: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-> Date:   Sun Dec 3 18:28:27 2023 +0530
 >
->     xhci: Remove RPM as default policy to cover AMD xHC 1.1
->
->     xHC 1.1 runtime PM as default policy causes issues on few AMD controllers.
->     Hence remove RPM as default policy to cover AMD xHC 1.1 and add only
->     AMD USB host controller (1022:43f7) which has RPM support. 
->
->     Fixes: 4baf12181509 ("xhci: Loosen RPM as default policy to cover for AMD xHC 1.1")
->     Link: https://lore.kernel.org/all/2023120329-length-strum-9ee1@gregkh
->     Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
->
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 95ed9404f6f8..7ffd6b8227cc 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -535,7 +535,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->         /* xHC spec requires PCI devices to support D3hot and D3cold */
->         if (xhci->hci_version >= 0x120)
->                 xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
-> -       else if (pdev->vendor == PCI_VENDOR_ID_AMD && xhci->hci_version >= 0x110)
-> +       else if (pdev->vendor == PCI_VENDOR_ID_AMD && pdev->vendor == 0x43f7)
-
-sorry its 
-pdev->device == 0x43f7
-
-Incorrect ---> else if (pdev->vendor == PCI_VENDOR_ID_AMD && pdev->vendor == 0x43f7)
-correct line --> else if (pdev->vendor == PCI_VENDOR_ID_AMD && pdev->device == 0x43f7)
-
->                 xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
->
->         if (xhci->quirks & XHCI_RESET_ON_RESUME)
->
-> Thanks,
-> --
-> Basavaraj
->
->> thanks,
->>
->> greg k-h
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
 
