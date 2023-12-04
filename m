@@ -1,103 +1,208 @@
-Return-Path: <linux-usb+bounces-3691-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3692-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22C12803647
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 15:21:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5468F803756
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 15:45:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BA221C20B0B
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 14:21:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4F98B20CC3
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 14:45:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EF7928DB0;
-	Mon,  4 Dec 2023 14:21:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2170C2575A;
+	Mon,  4 Dec 2023 14:45:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SaCT2Z3a"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VtDFUM3I"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899BDA4;
-	Mon,  4 Dec 2023 06:21:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701699677; x=1733235677;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=S/q+3vorDfPpthd0q6uZxtoV7s+8c0tIQjUWqprsjHc=;
-  b=SaCT2Z3aoLZhoVgz6DYtvnpC+sjJNETTu9f2OtMDaxHX3+HJMsHja7gE
-   zbtPb8koGtTX3SDIvDooHYxlPTvKwnvPhSwxN0AE+h6RSAX4NI8Q/iP0O
-   /5vvCaIatDNERyi7gMddAAg9yVClda5qfj33SDZl8VHgJEXjnS3NnJhFG
-   8xdAAvsFurzvAwYaWnJHjH6CW9nzmWxiqEnSGNfrC8qOy4upmXD7r+qU7
-   WxhVmOLi6+Q+8+jnWdKI3h4mnAlt2u3PhrPZ0+yeRqNIHLQDv6GWW3o1H
-   5ubyReT2flmW6++xXNpa36YCZmAzFh5iQ3jJG3s03RmVCLfZzVmYxaLIF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="460233418"
-X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="460233418"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 06:21:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="861391915"
-X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="861391915"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by FMSMGA003.fm.intel.com with ESMTP; 04 Dec 2023 06:21:14 -0800
-Message-ID: <db579656-5700-d99b-f1eb-c1e27749eb7b@linux.intel.com>
-Date: Mon, 4 Dec 2023 16:22:33 +0200
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECC719A7;
+	Mon,  4 Dec 2023 06:44:49 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1d0538d9bbcso27099765ad.3;
+        Mon, 04 Dec 2023 06:44:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701701088; x=1702305888; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7eRLjlThPLhM7zIw6XvrWrrbob10TfqT1M4cq4iJfTE=;
+        b=VtDFUM3IswYKjFC6VBYY7ucRJ7NImAHtJ94e7EcNY4Ht6AIzWAK3y6TZHFqSQr6AJf
+         XrhMZTZeN6wXY7kJozyRPTL/A2d+7GjFWKTHihb7rLqQpZyoXiJ78+6OgkAZS8DnKcCd
+         a2G7H2jxIQL9+eVzgw5JWugYu8HFhRdxoE0B5i51yrEt/lJoBjj8LCtOtO6EOmJW3Xfk
+         8d8Bp59lEVdmQkCUmVbHud0ww3o+sg3//xCr2E0bE6wTpdtwqiuPlen63FNW0gEkVfsj
+         4bB4yuWXZ/i7J4OOTGGmEDSNx2qH8pWzwcoWsg5oJMbQoIriV2mZKcVMCs5DF4KY7fpU
+         AoPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701701088; x=1702305888;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7eRLjlThPLhM7zIw6XvrWrrbob10TfqT1M4cq4iJfTE=;
+        b=fiRXS3PPUJ5vjvm/QvGWV7sNdQph3E6y3aDRORDR5NToKr5IG+rdLUqhKM63qx46TD
+         7VhTlrZpZRie6n7fwmdX/BGve/opMukD/KFFNDi6pXm6ZSa0Mw+EIQR0P9lEkrtP0qhP
+         AYSTcs1lZp450gDDKB9LQAMBYW/WHgLM1y/TItRpnmoQd0PsThZb7Bid540KKhD42m1Z
+         hmneSlzt+NsqJ+q0wkwmKHcbIvKYpIUsfEldza8DwHSRAUOUKyNTKvLIliwgdc5v6dU9
+         /5UUJt0cstFURbHOn3WKSCWDee6ci/oWZ6cB67/uPIRFYlfYRYoRzQdnDqZZ17FyM9w6
+         Wd6w==
+X-Gm-Message-State: AOJu0YzZ6Mp2m76gHEr2iWJ8x7vfcPL3qgs9KF5Okhvmm8BR01GRFVPC
+	9n09tkdC88utDtBWb3hnm14=
+X-Google-Smtp-Source: AGHT+IGTgdMm1IrP9P0QKhOOvICj9TIyyaKAwxubN0u1nWy9phktn3LnrrLnNFT21DIFr3oeklgtcg==
+X-Received: by 2002:a17:903:647:b0:1d0:8e61:102a with SMTP id kh7-20020a170903064700b001d08e61102amr2321909plb.90.1701701088620;
+        Mon, 04 Dec 2023 06:44:48 -0800 (PST)
+Received: from localhost.localdomain ([49.205.242.26])
+        by smtp.gmail.com with ESMTPSA id l6-20020a170902d34600b001cfb99d8b82sm6446815plk.136.2023.12.04.06.44.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Dec 2023 06:44:48 -0800 (PST)
+From: Anand Moon <linux.amoon@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Icenowy Zheng <uwu@icenowy.me>
+Cc: Anand Moon <linux.amoon@gmail.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-amlogic@lists.infradead.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v6 1/2] dt-bindings: usb: Add the binding example for the Genesys Logic GL3523 hub
+Date: Mon,  4 Dec 2023 20:14:25 +0530
+Message-ID: <20231204144429.45197-2-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231204144429.45197-1-linux.amoon@gmail.com>
+References: <20231204144429.45197-1-linux.amoon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Basavaraj Natikar <bnatikar@amd.com>, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org,
- mario.limonciello@amd.com, regressions@lists.linux.dev,
- regressions@leemhuis.info, Basavaraj.Natikar@amd.com, pmenzel@molgen.mpg.de,
- bugs-a21@moonlit-rail.com, stable@vger.kernel.org
-References: <3d3b8fd3-a1b9-9793-b709-eda447ebd1ab@linux.intel.com>
- <20231204100859.1332772-1-mathias.nyman@linux.intel.com>
- <070b3ce1-815c-4f3d-af09-e02cda8f9bf0@amd.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH 1/2] Revert "xhci: Enable RPM on controllers that support
- low-power states"
-In-Reply-To: <070b3ce1-815c-4f3d-af09-e02cda8f9bf0@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4.12.2023 12.49, Basavaraj Natikar wrote:
-> 
-> On 12/4/2023 3:38 PM, Mathias Nyman wrote:
->> This reverts commit a5d6264b638efeca35eff72177fd28d149e0764b.
->>
->> This patch was an attempt to solve issues seen when enabling runtime PM
->> as default for all AMD 1.1 xHC hosts. see commit 4baf12181509
->> ("xhci: Loosen RPM as default policy to cover for AMD xHC 1.1")
-> 
-> AFAK, only 4baf12181509 commit has regression on AMD xHc 1.1 below is not regression
-> patch and its unrelated to AMD xHC 1.1.
-> 
-> Only [PATCH 2/2] Revert "xhci: Loosen RPM as default policy to cover for AMD xHC 1.1"
-> alone in this series solves regression issues.
-> 
+Add the binding example for the USB3.1 Genesys Logic GL3523
+integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
+hub.
 
-Patch a5d6264b638e ("xhci: Enable RPM on controllers that support low-power states")
-was originally not supposed to go to stable. It was added later as it solved some
-cases triggered by 4baf12181509 ("xhci: Loosen RPM as default policy to cover for AMD xHC 1.1")
-see:
-https://lore.kernel.org/linux-usb/5993222.lOV4Wx5bFT@natalenko.name/
+For onboard hub controllers that support USB 3.x and USB 2.0 hubs
+with shared resets and power supplies, this property is used to identify
+the hubs with which these are shared.
 
-Turns out it wasn't enough.
+GL3523 has built-in 5V to 3.3V and 5V to 1.2V regulators, which serves
+power to the USB HUB, it uses 5V power regulator.
 
-If we now revert 4baf12181509 "xhci: Loosen RPM as default policy to cover for AMD xHC 1.1"
-I still think it makes sense to also revert a5d6264b638e.
-Especially from the stable kernels.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+---
+V6: fix the description of the regulators
+Updated the commit message for regulator updates.
+add reviewed by Conor Dooley
+[1] https://lore.kernel.org/all/20231130053130.21966-2-linux.amoon@gmail.com/
+v5: upgrade peer-hub description : Conor Dooley
+[0] https://www.genesyslogic.com.tw/en/product_view.php?show=67 [Block Diagram]
+v4: Fix the description of peer-hub and update the commit message.
+Schematics of the Odroid N2+
+https://dn.odroid.com/S922X/ODROID-N2/Schematic/odroid-n2_rev0.6_20210121.pdf
+V3: fix the dt_binding_check error, added new example for Genesys GL3523
+v2: added Genesys GL3523 binding
+v1: none
+---
+ .../bindings/usb/genesys,gl850g.yaml          | 65 +++++++++++++++++--
+ 1 file changed, 61 insertions(+), 4 deletions(-)
 
-This way we roll back this whole issue to a known working state.
+diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+index ee08b9c3721f..c6f63a69396d 100644
+--- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
++++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+@@ -9,9 +9,6 @@ title: Genesys Logic USB hub controller
+ maintainers:
+   - Icenowy Zheng <uwu@icenowy.me>
+ 
+-allOf:
+-  - $ref: usb-device.yaml#
+-
+ properties:
+   compatible:
+     enum:
+@@ -27,12 +24,46 @@ properties:
+ 
+   vdd-supply:
+     description:
+-      the regulator that provides 3.3V core power to the hub.
++      The regulator that provides 3.3V or 5.0V core power to the hub.
++
++  peer-hub:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      For onboard hub controllers that support USB 3.x and USB 2.0 hubs
++      with shared resets and power supplies, this property is used to identify
++      the hubs with which these are shared.
+ 
+ required:
+   - compatible
+   - reg
+ 
++allOf:
++  - $ref: usb-device.yaml#
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - usb5e3,608
++    then:
++      properties:
++        peer-hub: false
++        vdd-supply: false
++        reset-gpios: true
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - usb5e3,610
++              - usb5e3,620
++    then:
++      properties:
++        peer-hub: true
++        vdd-supply: true
++        reset-gpios: true
++
+ additionalProperties: false
+ 
+ examples:
+@@ -49,3 +80,29 @@ examples:
+             reset-gpios = <&pio 7 2 GPIO_ACTIVE_LOW>;
+         };
+     };
++
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    usb {
++        dr_mode = "host";
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        /* 2.0 hub on port 1 */
++        hub_2_0: hub@1 {
++            compatible = "usb5e3,610";
++            reg = <1>;
++            peer-hub = <&hub_3_0>;
++            reset-gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
++            vdd-supply = <&vcc_5v>;
++        };
++
++        /* 3.1 hub on port 4 */
++        hub_3_0: hub@2 {
++            compatible = "usb5e3,620";
++            reg = <2>;
++            peer-hub = <&hub_2_0>;
++            reset-gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
++            vdd-supply = <&vcc_5v>;
++        };
++    };
+-- 
+2.42.0
 
-Thanks
-Mathias
 
