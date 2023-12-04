@@ -1,241 +1,126 @@
-Return-Path: <linux-usb+bounces-3625-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3626-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC0E1802725
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 20:52:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C766802A12
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 03:03:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A2E71C209BB
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Dec 2023 19:52:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D0F9CB209C7
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 02:03:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEFC818B19;
-	Sun,  3 Dec 2023 19:52:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C02423D0;
+	Mon,  4 Dec 2023 02:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b="fq17eXjp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZqNwbVlm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A88AA5;
-	Sun,  3 Dec 2023 11:52:41 -0800 (PST)
-Received: from spock.localnet (unknown [94.142.239.106])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by vulcan.natalenko.name (Postfix) with ESMTPSA id 8748B15BEF1E;
-	Sun,  3 Dec 2023 20:52:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-	s=dkim-20170712; t=1701633157;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4wMVCVObgzmwcJOuu+aKIsCcHKEPTod9TuG1xyf6Axo=;
-	b=fq17eXjpweF2uu7lLww9PmutjPYA8Wyp/Ed8Ze8qJK1IOdpgGtedz02tO0BGyyL+BYPqJN
-	aJOTo0L5YPR9F6Ftn//saGvvwlCP0u0FVAvSGqPYGjoQ1tH6B5OyYPHrjlJhzYgG8HjPxs
-	rA9010E2996tc7FG/beDjAP29lfu5RE=
-From: Oleksandr Natalenko <oleksandr@natalenko.name>
-To: Greg KH <gregkh@linuxfoundation.org>,
- "Kris Karas (Bug Reporting)" <bugs-a21@moonlit-rail.com>,
- Basavaraj Natikar <bnatikar@amd.com>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>, stable@vger.kernel.org,
- Thorsten Leemhuis <regressions@leemhuis.info>, regressions@lists.linux.dev,
- linux-bluetooth@vger.kernel.org,
- Mario Limonciello <mario.limonciello@amd.com>,
- Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
-Subject: Re: Regression: Inoperative bluetooth, Intel chipset,
- mainline kernel 6.6.2+
-Date: Sun, 03 Dec 2023 20:52:26 +0100
-Message-ID: <12335218.O9o76ZdvQC@natalenko.name>
-In-Reply-To: <4c8072b9-637b-a871-4dc1-3031aa3712bd@amd.com>
-References:
- <ee109942-ef8e-45b9-8cb9-a98a787fe094@moonlit-rail.com>
- <93b7d9ca-788a-53cd-efdb-6a61b583c550@amd.com>
- <4c8072b9-637b-a871-4dc1-3031aa3712bd@amd.com>
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A27107
+	for <linux-usb@vger.kernel.org>; Sun,  3 Dec 2023 18:03:06 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-50be3611794so2009327e87.0
+        for <linux-usb@vger.kernel.org>; Sun, 03 Dec 2023 18:03:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701655384; x=1702260184; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AqWyck20cDBBqys7ex+djsjdXdDHAZm2aFpyswHTisk=;
+        b=ZqNwbVlm2kLUON2ruW3+bAGbtlvbahN2KURWieHKr8KKLxlsw9aGdGRHNNTK47X9uv
+         S1BlTxnXJfG2aNbWhf1apdEq6ZS51r8UA85SgzMlXexcYdcgwyp9KFb9QgO6wCGfUJZi
+         1DtkAOyPb1jV9MpYyzrlNcC856rQF4NfZtVpFnUsemwxrsQyVD+drQL+xcsPxn92VcgV
+         zO5Ui3uNGR2taXb8EvmX/zjsW2NNKDHorek9/2vA+lbIdSGoukzPfE8W7JBLDCtw+xm9
+         MsFc4XGTOM968Pd0IkPrBQhSxk3fI9rRhyL1W+hXhPoacfuxVqhRH5Z08jYMYzBtQXw1
+         FP1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701655384; x=1702260184;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AqWyck20cDBBqys7ex+djsjdXdDHAZm2aFpyswHTisk=;
+        b=vhJEDc8rx7szMmDumE6EcC13N3lJgrzVGTtw/H2UrmF4PYLJPk0yPrKj2m6WmsBk1o
+         hFzxquMNs0tu1pKtMUncnAlEGtt261pcIhEyBf2EJ2wcGLAbSBorHLIGW8Y65WE5Xx9H
+         XdEt1kY+clWAzQCw3bqg0KZFyhzDAD6CEkLs8kTFgRuw5Jr2yMXvqJ18WH+3x2PGbKHe
+         4Ho11j+hIuChBjNQA9l43FPR21f+SIUZJcBpGI8bdHy8gPCH36HYJ5kSuQECisZztR70
+         2rJ/8IMJCW7DvU/w0+UzHdT73VC5yA/HLR9OxnbYDnawzfa6jIHgyyJUlVAmpAGiIAod
+         eRiA==
+X-Gm-Message-State: AOJu0YzRe7ym0nUYgzkVXcFbGl6QRQ3xSGiqu6mAkRqEMnGa0tRGiP6H
+	rCNFyrh8mFk6O5Epb/6QwL7gWA==
+X-Google-Smtp-Source: AGHT+IHlf5cZZfyZCvGmTUr0UqBGf1nOu2Hl8bZCWwmidyxQGr+3+dIS9AyQUWz1vi/TQW4JbdMBYw==
+X-Received: by 2002:a05:6512:24a:b0:50b:e4b4:d4f1 with SMTP id b10-20020a056512024a00b0050be4b4d4f1mr1330691lfo.87.1701655384258;
+        Sun, 03 Dec 2023 18:03:04 -0800 (PST)
+Received: from eriador.unikie.fi ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id v12-20020a056512348c00b0050bea5c2850sm525381lfr.39.2023.12.03.18.03.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Dec 2023 18:03:03 -0800 (PST)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: "Rob Herring" <robh+dt@kernel.org>,
+	"Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+	"Conor Dooley" <conor+dt@kernel.org>,
+	"Andy Gross" <agross@kernel.org>,
+	"Bjorn Andersson" <andersson@kernel.org>,
+	"Konrad Dybcio" <konrad.dybcio@linaro.org>,
+	"Hans de Goede" <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"Mark Gross" <markgross@kernel.org>,
+	"Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
+	"Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v4 0/3] dt-bindings: connector: usb: provide bindings for altmodes
+Date: Mon,  4 Dec 2023 04:02:59 +0200
+Message-ID: <20231204020303.2287338-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart5733948.DvuYhMxLoT";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
 
---nextPart5733948.DvuYhMxLoT
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
-From: Oleksandr Natalenko <oleksandr@natalenko.name>
-Date: Sun, 03 Dec 2023 20:52:26 +0100
-Message-ID: <12335218.O9o76ZdvQC@natalenko.name>
-In-Reply-To: <4c8072b9-637b-a871-4dc1-3031aa3712bd@amd.com>
-MIME-Version: 1.0
+In some cases we need a way to specify USB-C AltModes that can be
+supportd on the particular USB-C connector. For example, x86 INT33FE
+driver does this by populating fwnode properties internally. For the
+Qualcomm Robotics RB5 platform (and several similar devices which use
+Qualcomm PMIC TCPM) we have to put this information to the DT.
 
-Hello.
+Provide the DT bindings for this kind of information and while we are at
+it, change svid property to be 16-bit unsigned integer instead of a
+simple u32.
 
-On ned=C4=9Ble 3. prosince 2023 17:24:28 CET Basavaraj Natikar wrote:
->=20
-> On 12/3/2023 9:46 PM, Basavaraj Natikar wrote:
-> > On 12/3/2023 2:08 PM, Greg KH wrote:
-> >> On Sun, Dec 03, 2023 at 03:32:52AM -0500, Kris Karas (Bug Reporting) w=
-rote:
-> >>> Greg KH wrote:
-> >>>> Thanks for testing, any chance you can try 6.6.4-rc1?  Or wait a few
-> >>>> hours for me to release 6.6.4 if you don't want to mess with a -rc
-> >>>> release.
-> >>> As I mentioned to Greg off-list (to save wasting other peoples' bandw=
-idth),
-> >>> I couldn't find 6.6.4-rc1.  Looking in wrong git tree?  But 6.6.4 is =
-now
-> >>> out, which I have tested and am running at the moment, albeit with the
-> >>> problem commit from 6.6.2 backed out.
-> >>>
-> >>> There is no change with respect to this bug.  The problematic patch
-> >>> introduced in 6.6.2 was neither reverted nor amended.  The "opcode 0x=
-0c03
-> >>> failed" lines to the kernel log continue to be present.
-> >>>
-> >>>> Also, is this showing up in 6.7-rc3?  If so, that would be a big hel=
-p in
-> >>>> tracking this down.
-> >>> The bug shows up in 6.7-rc3 as well, exactly as it does here in 6.6.2=
-+ and
-> >>> in 6.1.63+.  The problematic patch bisected earlier appears identical=
-ly (and
-> >>> seems to have been introduced simultaneously) in these recent release=
-s.
-> >> Ok, in a way, this is good as that means I haven't missed a fix, but b=
-ad
-> >> in that this does affect everyone more.
-> >>
-> >> So let's start over, you found the offending commit, and nothing has
-> >> fixed it, so what do we do?  xhci/amd developers, any ideas?
-> > Can we enable RPM on specific controllers for AMD xHC 1.1
-> > instead to cover all AMD xHC 1.1?=20
-> >
-> > Please find below the proposed changes and let me know if it is OK?
-> > =20
-> > Author: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-> > Date:   Sun Dec 3 18:28:27 2023 +0530
-> >
-> >     xhci: Remove RPM as default policy to cover AMD xHC 1.1
-> >
-> >     xHC 1.1 runtime PM as default policy causes issues on few AMD contr=
-ollers.
-> >     Hence remove RPM as default policy to cover AMD xHC 1.1 and add only
-> >     AMD USB host controller (1022:43f7) which has RPM support.=20
-> >
-> >     Fixes: 4baf12181509 ("xhci: Loosen RPM as default policy to cover f=
-or AMD xHC 1.1")
-> >     Link: https://lore.kernel.org/all/2023120329-length-strum-9ee1@greg=
-kh
-> >     Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-> >
-> > diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> > index 95ed9404f6f8..7ffd6b8227cc 100644
-> > --- a/drivers/usb/host/xhci-pci.c
-> > +++ b/drivers/usb/host/xhci-pci.c
-> > @@ -535,7 +535,7 @@ static void xhci_pci_quirks(struct device *dev, str=
-uct xhci_hcd *xhci)
-> >         /* xHC spec requires PCI devices to support D3hot and D3cold */
-> >         if (xhci->hci_version >=3D 0x120)
-> >                 xhci->quirks |=3D XHCI_DEFAULT_PM_RUNTIME_ALLOW;
-> > -       else if (pdev->vendor =3D=3D PCI_VENDOR_ID_AMD && xhci->hci_ver=
-sion >=3D 0x110)
-> > +       else if (pdev->vendor =3D=3D PCI_VENDOR_ID_AMD && pdev->vendor =
-=3D=3D 0x43f7)
->=20
-> sorry its=20
-> pdev->device =3D=3D 0x43f7
->=20
-> Incorrect ---> else if (pdev->vendor =3D=3D PCI_VENDOR_ID_AMD && pdev->ve=
-ndor =3D=3D 0x43f7)
-> correct line --> else if (pdev->vendor =3D=3D PCI_VENDOR_ID_AMD && pdev->=
-device =3D=3D 0x43f7)
->=20
-> >                 xhci->quirks |=3D XHCI_DEFAULT_PM_RUNTIME_ALLOW;
-> >
-> >         if (xhci->quirks & XHCI_RESET_ON_RESUME)
+NOTE: usage of u16 is not compatible with the recenty extended
+qcom/qrb5165-rb5.dts DT file, but it is more logical since SVID is
+16 bits wide.
 
-Given the following hardware:
+Changes since v3:
+- Added enum to constraint atmode SVID (Rob)
+- Moved additionaPropperties to come beore the property definitions
+  (Rob)
 
-[~]> lspci -nn | grep -i usb
-06:00.4 USB controller [0c03]: Realtek Semiconductor Co., Ltd. RTL811x EHCI=
- host controller [10ec:816d] (rev 1a)
-07:00.1 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Matisse U=
-SB 3.0 Host Controller [1022:149c]
-07:00.3 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Matisse U=
-SB 3.0 Host Controller [1022:149c]
-0f:00.3 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD] Matisse U=
-SB 3.0 Host Controller [1022:149c]
+Changes since v2:
+- Inlined altmode definitions instead of having them under $defs (Rob)
+- Explicity list permitted AltMode names (currenty only displayport is
+  allowed) (Rob)
 
-and v6.6.4 kernel, without this patch:
+Changes since v1:
+- Added type:object and fixed 'description' string in the altmodes-list
+  definition.
 
-[~]> LC_TIME=3DC jctl -kb -1 --grep 'hci version'
-Dec 03 13:22:03 archlinux kernel: xhci_hcd 0000:07:00.1: hcc params 0x0278f=
-fe5 hci version 0x110 quirks 0x0000000200000410
-Dec 03 13:22:03 archlinux kernel: xhci_hcd 0000:07:00.3: hcc params 0x0278f=
-fe5 hci version 0x110 quirks 0x0000000200000410
-Dec 03 13:22:03 archlinux kernel: xhci_hcd 0000:0f:00.3: hcc params 0x0278f=
-fe5 hci version 0x110 quirks 0x0000000200000410
+Dmitry Baryshkov (3):
+  dt-bindings: connector: usb: add altmodes description
+  usb: typec: change altmode SVID to u16 entry
+  arm64: dts: qcom: qrb5165-rb5: use u16 for DP altmode svid
 
-With the patch applied:
+ .../bindings/connector/usb-connector.yaml     | 33 +++++++++++++++++++
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts      |  2 +-
+ drivers/platform/x86/intel/chtwc_int33fe.c    |  2 +-
+ drivers/usb/typec/class.c                     |  5 +--
+ 4 files changed, 38 insertions(+), 4 deletions(-)
 
-[~]> LC_TIME=3DC jctl -kb --grep 'hci version'
-Dec 03 20:46:59 archlinux kernel: xhci_hcd 0000:07:00.1: hcc params 0x0278f=
-fe5 hci version 0x110 quirks 0x0000000000000410
-Dec 03 20:46:59 archlinux kernel: xhci_hcd 0000:07:00.3: hcc params 0x0278f=
-fe5 hci version 0x110 quirks 0x0000000000000410
-Dec 03 20:46:59 archlinux kernel: xhci_hcd 0000:0f:00.3: hcc params 0x0278f=
-fe5 hci version 0x110 quirks 0x0000000000000410
-
-(note the difference in `quirks` as expected)
-
-Hence, feel free to add:
-
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Link: https://lore.kernel.org/lkml/5993222.lOV4Wx5bFT@natalenko.name/
-
-Thank you.
-
-> >
-> > Thanks,
-> > --
-> > Basavaraj
-> >
-> >> thanks,
-> >>
-> >> greg k-h
->=20
->=20
->=20
-
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
---nextPart5733948.DvuYhMxLoT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmVs3HoACgkQil/iNcg8
-M0vXgxAAnCuDbSTJjvqeMrlLQN9AR7j2d3d+p+pxye+TJs8stCZsuDnx2hRHBKKk
-8ELfC1MekYFRV+z8bGHH9GrZ5I+coJH2/Wu0oCljzZ5eYJgDoqkbgMIUYpV5szF4
-UHnn8jeaPAWNylB+YWXiapr94LmLEJmaInIgQdcN8QKB4XJWWlCzM8XCpkHocp6Q
-5aObF6YE3c0Bw6pm/qRmTzYsYWvhkKgc01jmpHdavVjVIebwdaBf0Smnp3xZNE0Z
-iprlBujByKSaGSRaOccRSnu2hJ/IlOB1ccRzJJ5iXTbih2m6d483+VVtphKTiCSc
-GsPE+vdGjfh6UFXiLi19OoBc4AlzPVAOMDz2yR1L61RMBiIpKK4C3ZnoNRTPHSbu
-CLdud76hl0jIDocB8/0mkYKap5OOFg62Ksm0V1TvKoAk2Br1B6uu9RmkrSsOW3oN
-2JM6vqc0IjqD0EbRLGHZa9LhFQTcQR0+wD24Zq5zQAizQLo1R8PTUrd/avwo48Kv
-bmY/Wh5B5gaVxvfUdgtZnGSbMIBcNIGndzEQic38qw068LgtbZoxUbuvR5eIzu8u
-CxUcMg4oZFujQz4XD8VUkAdwfVFbaABehIomhF2U+IU2RVjq0hnZPgL3G3ZUNx/O
-Dl7/Y0NGkbG+31ELB+cMgJeR1XZV1szcfV8ydb4WirwLUQ+CTSI=
-=UPkH
------END PGP SIGNATURE-----
-
---nextPart5733948.DvuYhMxLoT--
-
-
+-- 
+2.42.0
 
 
