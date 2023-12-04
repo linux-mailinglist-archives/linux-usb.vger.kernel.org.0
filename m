@@ -1,236 +1,244 @@
-Return-Path: <linux-usb+bounces-3704-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3705-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA292803BFE
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 18:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 876A4803C68
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 19:07:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81216281142
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 17:49:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9D11281168
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 18:07:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EC7A2EAE4;
-	Mon,  4 Dec 2023 17:49:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 813032FC39;
+	Mon,  4 Dec 2023 18:07:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="cc6ALdlS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sbzk/cJa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A40124
-	for <linux-usb@vger.kernel.org>; Mon,  4 Dec 2023 09:49:44 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6cde104293fso3681229b3a.0
-        for <linux-usb@vger.kernel.org>; Mon, 04 Dec 2023 09:49:44 -0800 (PST)
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816DD129;
+	Mon,  4 Dec 2023 10:07:10 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6ce46470647so821732b3a.1;
+        Mon, 04 Dec 2023 10:07:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1701712183; x=1702316983; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1701713230; x=1702318030; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ElUMEtSDghaN+GKhmkz5uaQT8IK7hlTUTH0sPfvdPWw=;
-        b=cc6ALdlSypI9KADCZ37ekh9BtmVCLZj2qhQs721OxZBEbyC46JMfZVspwi84eA6pSQ
-         +NZothqQaBPOdp+4O4dizzw6nySHdWZStkN8loEpRChHAm6iU0znlSTqUxEQfQXPL6BC
-         Cakip5o7q50I4ZsfGDa2Iy6fKVoZ702pBLDYw=
+        bh=vnKGL9rVmaXJ0k7UQTGGb8qgGBw3yaFYXulmlj0ClVk=;
+        b=Sbzk/cJarJS+HKABhyq9ZXjIKHReZXRZD2BmG6K1tjWjkQP6qWn2M1Hej+A0irmaku
+         MiQQibihKqnyE5TVi9uvaP+TQXi4717965Cj5SWoxsFXT08rL/dq7gcQha9HMJ+iJ6E4
+         BVSsykoGX1GtN128YVvHFOLoVXyY9pSvbwxF1qFD/Yff8eCGgX7GFA1jKFa07niVVpY4
+         d9OCXuF3WhLpOcz+yEjCxARi6Zebpvmf8U8x8xjf+1Jj/H4bG5JnvtbOkN1l+9J9gmEl
+         oiEG7ELXzD08vZaeO7QyUcVFM2Rqj1v3KKn+P22m3559f6bBVfzqLvxbIyP1mZuhfgJK
+         shBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701712183; x=1702316983;
-        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ElUMEtSDghaN+GKhmkz5uaQT8IK7hlTUTH0sPfvdPWw=;
-        b=F/ldM6AsEKg27ISsAIPMe7BP988vlsQRPDo91av+eyj4U67TXb5LitSlFlG/Lh1Iqz
-         WkhUyZVIyq67eL/zqqiCiFiU0ZI/SsYU7cEG/HXztDDbBJP87bRBLgqOnmylheRpGfv2
-         2PoWA197ysslUYLmFb8+1T6Sq8De79A89du4H3FAfqe/s2JARtKIUUeMzNe8cTFcjo8O
-         Yz9AH228Yx33Wpj9F2Y627QJ8M1jnYe0N3vQJ85TOz+bB8oqjDRMTleKTgrv7TucZwWc
-         d9Y3lM5S6FgUSU3JmP965mQYn/fDN6Q0G4Qm+U1L5Q+Y3npGPdg6UzN1w/X0c/O/pp14
-         1PpQ==
-X-Gm-Message-State: AOJu0YzyedL5R3MPYSOhgCOg2fC9pdePEp867Ff7ikn7SXeKmDBbO3ZE
-	RZPZm4VfNMBq3REEH0gjgRoY8A==
-X-Google-Smtp-Source: AGHT+IGlvlRu/RW+rKxSWClVyImKGFokQ1UQpsDGl39GCUyxQ+2gwPsO29SS2yt/dzXmjXrv12Qnsg==
-X-Received: by 2002:a05:6a20:1018:b0:18f:97c:4f57 with SMTP id gs24-20020a056a20101800b0018f097c4f57mr2191684pzc.99.1701712183505;
-        Mon, 04 Dec 2023 09:49:43 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id p30-20020a056a0026de00b006cb903ab057sm7932750pfw.83.2023.12.04.09.49.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Dec 2023 09:49:42 -0800 (PST)
-Message-ID: <0f7fa9f1-2337-428f-8a76-a5b4cac30677@broadcom.com>
-Date: Mon, 4 Dec 2023 09:49:41 -0800
+        d=1e100.net; s=20230601; t=1701713230; x=1702318030;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vnKGL9rVmaXJ0k7UQTGGb8qgGBw3yaFYXulmlj0ClVk=;
+        b=AYyMCAiofwW1w8/LKfRAUteUMOKs3IGWzjKZ81HOLm4Qog7YCel+I5tMBELYkYd3Ic
+         C4T4qpkFlGZeeXP+bncCihQfhjeGD3TsJFVqGBXi/XIjoPO4B2kA2Qlk2CwoPwhDujan
+         +NNUBj2hdZwzJF+J3y4w2hEVmDWduaQnATolFiBBR9nrKzAorPwLhVN5eBryUxtqzHrX
+         V+Fk7vGMXsTDRx7WiPSB9OD38PTNnbefsY008s69lgAXGCZSuKzQm1is49s8RxAW7uOj
+         fmc91cbZIRseHKFcBH1ZvFv+pbAs/b98BwWxq9xVaO3s3RAhfCBsGBSyGFZhNwjbcZOo
+         v/lw==
+X-Gm-Message-State: AOJu0YygE6uwIjeYYcpP+0PeLWzLwNjgGit6simtM/p2Q2tE1GHwtNrK
+	68fyZnN9/CqU4w30ZC6sDjE=
+X-Google-Smtp-Source: AGHT+IGDIGeeBa7UWPj4E4w2SIGHBjZgGz8oxGqwAWzNb+KD7mpnEvIno4bt3NIHORxil3wMtNwC4w==
+X-Received: by 2002:a05:6a20:1448:b0:18c:374c:6e64 with SMTP id a8-20020a056a20144800b0018c374c6e64mr27716780pzi.36.1701713229690;
+        Mon, 04 Dec 2023 10:07:09 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::4:27ef])
+        by smtp.gmail.com with ESMTPSA id u2-20020a056a00158200b006cdd507ca2esm7943470pfk.167.2023.12.04.10.07.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Dec 2023 10:07:09 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Mon, 4 Dec 2023 08:07:07 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Naohiro Aota <Naohiro.Aota@wdc.com>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+	"ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
+	"cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+	"coreteam@netfilter.org" <coreteam@netfilter.org>,
+	"dm-devel@lists.linux.dev" <dm-devel@lists.linux.dev>,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"gfs2@lists.linux.dev" <gfs2@lists.linux.dev>,
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+	"linux-cachefs@redhat.com" <linux-cachefs@redhat.com>,
+	"linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
+	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+	"linux-erofs@lists.ozlabs.org" <linux-erofs@lists.ozlabs.org>,
+	"linux-f2fs-devel@lists.sourceforge.net" <linux-f2fs-devel@lists.sourceforge.net>,
+	"linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+	"linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+	"linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+	"linux-raid@vger.kernel.org" <linux-raid@vger.kernel.org>,
+	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+	"linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+	"linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+	"nbd@other.debian.org" <nbd@other.debian.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"ntb@lists.linux.dev" <ntb@lists.linux.dev>,
+	"open-iscsi@googlegroups.com" <open-iscsi@googlegroups.com>,
+	"oss-drivers@corigine.com" <oss-drivers@corigine.com>,
+	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+	"samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+	"target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
+	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>,
+	"wireguard@lists.zx2c4.com" <wireguard@lists.zx2c4.com>
+Subject: Re: Performance drop due to alloc_workqueue() misuse and recent
+ change
+Message-ID: <ZW4VS3Z0auYCjg-W@slm.duckdns.org>
+References: <dbu6wiwu3sdhmhikb2w6lns7b27gbobfavhjj57kwi2quafgwl@htjcc5oikcr3>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 1/3] dt-bindings: usb: xhci: add support for BCM2711
-To: Conor Dooley <conor@kernel.org>, Stefan Wahren <wahrenst@gmx.net>
-Cc: Justin Chen <justin.chen@broadcom.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Mathias Nyman <mathias.nyman@intel.com>,
- bcm-kernel-feedback-list@broadcom.com, Cyril Brulebois <kibi@debian.org>,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-References: <20231202232217.89652-1-wahrenst@gmx.net>
- <20231202232217.89652-2-wahrenst@gmx.net>
- <20231203-chair-zen-afb8b280ca2f@spud>
- <20231203-traffic-aide-cb03afdb3546@spud>
- <7dd529a0-ebee-4f3b-879b-c7b1033cfdb9@gmx.net>
- <20231204-sevenfold-slashing-bb7ea3419c92@spud>
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- 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
-In-Reply-To: <20231204-sevenfold-slashing-bb7ea3419c92@spud>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000003ad564060bb2be40"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dbu6wiwu3sdhmhikb2w6lns7b27gbobfavhjj57kwi2quafgwl@htjcc5oikcr3>
 
---0000000000003ad564060bb2be40
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hello,
 
-On 12/4/23 09:04, Conor Dooley wrote:
-> On Sun, Dec 03, 2023 at 05:56:24PM +0100, Stefan Wahren wrote:
->> Hi,
->>
->> Am 03.12.23 um 12:11 schrieb Conor Dooley:
->>> On Sun, Dec 03, 2023 at 11:06:43AM +0000, Conor Dooley wrote:
->>>> On Sun, Dec 03, 2023 at 12:22:15AM +0100, Stefan Wahren wrote:
->>>>> The xHCI IP on the BCM2711 SoC is compatible to "brcm,xhci-brcm-v2",
->>>>> but also requires a power domain.
->>> Hmm
->>> This & the driver change makes it look like your compatible setup should
->>> be `compatible = "brcm,bcm2711-xhci", "brcm,xhci-brcm-v2";.
->> i don't have insight into the hardware, but the fact that the other
->> Broadcom SoC didn't require a power domain before let me think we
->> shouldn't do this. Otherwise this binding was broken before. But Justin
->> and Florian could clarify this.
-
-That seems to me like the right approach, the XHCI controller in 2711 is 
-tied to a power domain, however that is not the case for other Broadcom 
-STB SoCs.
-
->>> If the pattern in this patch was repeated, we'd have to modify the
->>> driver like your 2nd patch does for each and new broadcom system that
->>> needs the power domain.
->>  From my understanding the DT compatible should be specific as possible.
+On Mon, Dec 04, 2023 at 04:03:47PM +0000, Naohiro Aota wrote:
+> Recently, commit 636b927eba5b ("workqueue: Make unbound workqueues to use
+> per-cpu pool_workqueues") changed WQ_UNBOUND workqueue's behavior. It
+> changed the meaning of alloc_workqueue()'s max_active from an upper limit
+> imposed per NUMA node to a limit per CPU. As a result, massive number of
+> workers can be running at the same time, especially if the workqueue user
+> thinks the max_active is a global limit.
 > 
-> Note that I am suggesting have 2 compatibles. One specific, falling back
-> to the existing generic one.
+> Actually, it is already written it is per-CPU limit in the documentation
+> before the commit. However, several callers seem to misuse max_active,
+> maybe thinking it is a global limit. It is an unexpected behavior change
+> for them.
 
-We could do that, yes.
+Right, and the behavior has been like that for a very long time and there
+was no other way to achieve reasonable level of concurrency, so the current
+situation is expected.
+
+> For example, these callers set max_active = num_online_cpus(), which is a
+> suspicious limit applying to per-CPU. This config means we can have nr_cpu
+> * nr_cpu active tasks working at the same time.
+
+Yeah, that sounds like a good indicator.
+
+> fs/f2fs/data.c: sbi->post_read_wq = alloc_workqueue("f2fs_post_read_wq",
+> fs/f2fs/data.c-                                          WQ_UNBOUND | WQ_HIGHPRI,
+> fs/f2fs/data.c-                                          num_online_cpus());
+> 
+> fs/crypto/crypto.c:     fscrypt_read_workqueue = alloc_workqueue("fscrypt_read_queue",
+> fs/crypto/crypto.c-                                              WQ_UNBOUND | WQ_HIGHPRI,
+> fs/crypto/crypto.c-                                              num_online_cpus());
+> 
+> fs/verity/verify.c:     fsverity_read_workqueue = alloc_workqueue("fsverity_read_queue",
+> fs/verity/verify.c-                                               WQ_HIGHPRI,
+> fs/verity/verify.c-                                               num_online_cpus());
+> 
+> drivers/crypto/hisilicon/qm.c:  qm->wq = alloc_workqueue("%s", WQ_HIGHPRI | WQ_MEM_RECLAIM |
+> drivers/crypto/hisilicon/qm.c-                           WQ_UNBOUND, num_online_cpus(),
+> drivers/crypto/hisilicon/qm.c-                           pci_name(qm->pdev));
+> 
+> block/blk-crypto-fallback.c:    blk_crypto_wq = alloc_workqueue("blk_crypto_wq",
+> block/blk-crypto-fallback.c-                                    WQ_UNBOUND | WQ_HIGHPRI |
+> block/blk-crypto-fallback.c-                                    WQ_MEM_RECLAIM, num_online_cpus());
+> 
+> drivers/md/dm-crypt.c:          cc->crypt_queue = alloc_workqueue("kcryptd/%s",
+> drivers/md/dm-crypt.c-                                            WQ_CPU_INTENSIVE | WQ_MEM_RECLAIM | WQ_UNBOUND,
+> drivers/md/dm-crypt.c-                                            num_online_cpus(), devname);
+
+Most of these work items are CPU bound but not completley so. e.g.
+kcrypt_crypt_write_continue() does wait_for_completion(), so setting
+max_active to 1 likely isn't what they want either. They mostly want some
+reasonable system-wide concurrency limit w.r.t. the CPU count while keeping
+some level of flexibility in terms of task placement.
+
+The previous max_active wasn't great for this because its meaning changed
+depending on the number of nodes. Now, the meaning doesn't change but it's
+not really useful for the above purpose. It's only useful for avoiding
+melting the system completely.
+
+One way to go about it is to declare that concurrency level management for
+unbound workqueue is on users but that seems not ideal given many use cases
+would want it anyway.
+
+Let me think it over but I think the right way to go about it is going the
+other direction - ie. making max_active apply to the whole system regardless
+of the number of nodes / ccx's / whatever.
+
+> Furthermore, the change affects performance in a certain case.
+> 
+> Btrfs creates several WQ_UNBOUND workqueues with a default max_active =
+> min(NRCPUS + 2, 8). As my machine has 96 CPUs with NUMA disabled, this
+> max_active config allows running over 700 active works. Before the commit,
+> it is limited to 8 if NUMA is disabled or limited to 16 if NUMA nodes is 2.
+> 
+> I reverted the workqueue code back to before the commit, and I ran the
+> following fio command on RAID0 btrfs on 6 SSDs.
+> 
+> fio --group_reporting --eta=always --eta-interval=30s --eta-newline=30s \
+>     --rw=write --fallocate=none \
+>     --direct=1 --ioengine=libaio --iodepth=32 \
+>     --filesize=100G \
+>     --blocksize=64k \
+>     --time_based --runtime=300s \
+>     --end_fsync=1 \
+>     --directory=${MNT} \
+>     --name=writer --numjobs=32
+> 
+> By changing workqueue's max_active, the result varies.
+> 
+> - wq max_active=8   (intended limit by btrfs?)
+>   WRITE: bw=2495MiB/s (2616MB/s), 2495MiB/s-2495MiB/s (2616MB/s-2616MB/s), io=753GiB (808GB), run=308953-308953msec
+> - wq max_active=16  (actual limit on 2 NUMA nodes setup)
+>   WRITE: bw=1736MiB/s (1820MB/s), 1736MiB/s-1736MiB/s (1820MB/s-1820MB/s), io=670GiB (720GB), run=395532-395532msec
+> - wq max_active=768 (simulating current limit)
+>   WRITE: bw=1276MiB/s (1338MB/s), 1276MiB/s-1276MiB/s (1338MB/s-1338MB/s), io=375GiB (403GB), run=300984-300984msec
+> 
+> The current performance is slower than the previous limit (max_active=16)
+> by 27%, or it is 50% slower than the intended limit.  The performance drop
+> might be due to contention of the btrfs-endio-write works. There are over
+> 700 kworker instances were created and 100 works are on the 'D' state
+> competing for a lock.
+> 
+> More specifically, I tested the same workload on the commit.
+> 
+> - At commit 636b927eba5b ("workqueue: Make unbound workqueues to use per-cpu pool_workqueues")
+>   WRITE: bw=1191MiB/s (1249MB/s), 1191MiB/s-1191MiB/s (1249MB/s-1249MB/s), io=350GiB (376GB), run=300714-300714msec
+> - At the previous commit = 4cbfd3de73 ("workqueue: Call wq_update_unbound_numa() on all CPUs in NUMA node on CPU hotplug")
+>   WRITE: bw=1747MiB/s (1832MB/s), 1747MiB/s-1747MiB/s (1832MB/s-1832MB/s), io=748GiB (803GB), run=438134-438134msec
+> 
+> So, it is -31.8% performance down with the commit.
+> 
+> In summary, we misuse max_active, considering it is a global limit. And,
+> the recent commit introduced a huge performance drop in some cases.  We
+> need to review alloc_workqueue() usage to check if its max_active setting
+> is proper or not.
+
+Thanks a lot for the report. I think it's a lot more reasonable to assume
+that max_active is global for unbound workqueues. The current workqueue
+behavior is not very intuitive or useful. I'll try to find something more
+reasonable. Thanks for the report and analysis. Much appreciated.
+
+Thanks.
+
 -- 
-Florian
-
-
---0000000000003ad564060bb2be40
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIASKy39wLHYuxGvR
-qFgCo2k0XS5y7oY2rwbtTi61+0M2MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMTIwNDE3NDk0M1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDRCkBn3jT5FsaGqZNJT+jBWFPQXzZGW339
-xKqEXHmW51YqRWyWqC+Q5MnRof4sgYijmOuPFj+4YwMg9OLOyci6+HB75nGV9TABX0Z/3V7y1OlQ
-hfsvt8YHU/wsxvp+GT45FwwPIqtaH9+fN+Gh7HL0nCeq0yLqYaTk3Sb1oriAwrRzcnss/6mF2K57
-rJA6JxQrv/KR8+UFj+q439rOi1tkVPfV0MvWCsPjJ48IZf76WnWzC3cv/9saz7bubGE1kDIJv3vh
-Y6tSQAlu1GOyhS4Ev5LKWDsCKdT59RsowczyXXy7pNwqxpi5oSXume11OA0SccKDECsSsnUN7JMt
-20nr
---0000000000003ad564060bb2be40--
+tejun
 
