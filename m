@@ -1,159 +1,105 @@
-Return-Path: <linux-usb+bounces-3642-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3643-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66493802FBC
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 11:11:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAABE803019
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 11:22:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96F5C1C20A2C
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 10:11:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B45DB209EC
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 10:22:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 909D4210F2;
-	Mon,  4 Dec 2023 10:10:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69F2920B09;
+	Mon,  4 Dec 2023 10:22:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YoVnGjF1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JrKv1s73"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFED106;
-	Mon,  4 Dec 2023 02:10:47 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B49Vsjx014936;
-	Mon, 4 Dec 2023 10:10:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=VKU/KipbxtGN7bM04jF1vbKfqum/zD2mIO6ySGQW4N0=;
- b=YoVnGjF1hbhqQvUc2cs3n7uLrzfsg7kl2p5A3hlUVUezP7xH4bjKTGJTL+sQVpEFkLUq
- UL4WL9M/wiSfmDqiaSr6qL9lvCYjZ643LbXxzjZKi07Lduw6/STJ9dDQUx6nBPs2c2AZ
- kodlVkOhmd8J5RVdFXuU7hM4C2pYTtuRT++v1QbDoAam72kbleUyxjREGaJM3PgJi8/z
- YjuE9dJtFZbHmW2tcoVarHCKP0Xrwy/SlC01JM9zi2BYyUiy4zi0Zgj+6FNW3gNz16Tn
- 7wd3CNd39durXqpNEYuC6m+KQusTQJnmB3w9n9h8tsTVfEnRcy8fY7bBkv14EY3jaCAI CA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uqvt8kkej-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Dec 2023 10:10:42 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3B4AAglf021349
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 4 Dec 2023 10:10:42 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 4 Dec 2023 02:10:36 -0800
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring
-	<robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Conor Dooley <conor+dt@kernel.org>, Johan Hovold <johan@kernel.org>,
-        <cros-qcom-dts-watchers@chromium.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>
-Subject: [PATCH v2 6/6] arm64: dts: qcom: Add missing interrupts for qcs404/ipq5332
-Date: Mon, 4 Dec 2023 15:39:50 +0530
-Message-ID: <20231204100950.28712-7-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231204100950.28712-1-quic_kriskura@quicinc.com>
-References: <20231204100950.28712-1-quic_kriskura@quicinc.com>
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D71A191
+	for <linux-usb@vger.kernel.org>; Mon,  4 Dec 2023 02:22:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701685355; x=1733221355;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=4u4lrx+P6PHxIIV2DHGygciIoa/jQYSB3t+WHNzVJcY=;
+  b=JrKv1s73kJjtKOPhebfslZKbJIKH6R7DrcMkrtRSxsRshoXC9QVugA3t
+   PGjJgJ6aAuNO8OkjSW5lnv8KvttLeHcr5P4ZVrvU2WVqdDf87EkgBDg35
+   a+h8goOPWaEEq3STU71dBzYwrOSb/GHfTtUjtdDdDgj+5598OFYlsq89b
+   TW6tKtHyHkhQaG2hd25gWEbYGtpRqb7u8Hd0DpIDtK4m+riDhjBFIkMJX
+   pacWKqLWys+AtEhOXn961i4DJbWDb9I68UCHQHURq/t4q+kCEchM295+c
+   mVcjKt/uX4tz701EgatFOOAIVXUf1sa3vm35kLzNfi1MXzwrmtCfmVpR4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="384115376"
+X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
+   d="scan'208";a="384115376"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 02:22:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="804858816"
+X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
+   d="scan'208";a="804858816"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 04 Dec 2023 02:22:32 -0800
+Message-ID: <e0d6698d-329a-64cb-a8e2-200dd03f3cd2@linux.intel.com>
+Date: Mon, 4 Dec 2023 12:23:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Hmx4DowGjZ3cRlKwp9qHdi3Cex71YmEO
-X-Proofpoint-ORIG-GUID: Hmx4DowGjZ3cRlKwp9qHdi3Cex71YmEO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-04_06,2023-11-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 mlxlogscore=506 phishscore=0 spamscore=0 bulkscore=0
- adultscore=0 impostorscore=0 suspectscore=0 lowpriorityscore=0
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2312040077
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: David Laight <David.Laight@ACULAB.COM>,
+ 'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <20231201150647.1307406-1-mathias.nyman@linux.intel.com>
+ <20231201150647.1307406-9-mathias.nyman@linux.intel.com>
+ <e98fd89faf4446e594ca3b7c3cc627fc@AcuMS.aculab.com>
+ <ZWovIn0V95c-T74n@smile.fi.intel.com>
+ <aa4848b742854ab7921386ca69613866@AcuMS.aculab.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH 08/19] xhci: dbc: Use sizeof_field() where it makes sense
+In-Reply-To: <aa4848b742854ab7921386ca69613866@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-For qcs404 and ipq5332, certain interrupts are missing in DT.
-Add them to ensure they are in accordance to bindings.
+On 2.12.2023 17.50, David Laight wrote:
+> From: Andy Shevchenko
+>> Sent: 01 December 2023 19:08
+>>
+>> On Fri, Dec 01, 2023 at 05:31:52PM +0000, David Laight wrote:
+>>> From: Mathias Nyman
+>>>> Sent: 01 December 2023 15:07
+>>
+>> ...
+>>
+>>>> -	memset(dbc->eps, 0, sizeof(struct dbc_ep) * ARRAY_SIZE(dbc->eps));
+>>>> +	memset(dbc->eps, 0, sizeof_field(struct xhci_dbc, eps));
+>>>
+>>> Isn't that just:
+>>> 	memset(dpc->eps, 0, sizeof (dpc->eps));
+>>> perhaps better written as:
+>>> 	memset(&dpc->epc, 0, sizeof (dpc->eps);
+>>
+>> Maybe...
+>> You can send a patch, so it gets tested for regressions!
+> 
+> Any patch I write will conflict with v2 of this series.
+> 
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq5332.dtsi |  8 ++++++--
- arch/arm64/boot/dts/qcom/qcs404.dtsi  | 16 ++++++++++++++++
- 2 files changed, 22 insertions(+), 2 deletions(-)
+I'll drop this 8/19 patch as it's just a one liner cleanup that does no
+harm, but apparently doesn't really help either.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-index d3fef2f80a81..82cd807af475 100644
---- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-@@ -307,8 +307,12 @@ usb: usb@8af8800 {
- 			compatible = "qcom,ipq5332-dwc3", "qcom,dwc3";
- 			reg = <0x08af8800 0x400>;
- 
--			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "hs_phy_irq";
-+			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 53 IRQ_TYPE_EDGE_BOTH>,
-+				     <GIC_SPI 52 IRQ_TYPE_EDGE_BOTH>;
-+			interrupt-names = "pwr_event",
-+					  "dp_hs_phy_irq",
-+					  "dm_hs_phy_irq";
- 
- 			clocks = <&gcc GCC_USB0_MASTER_CLK>,
- 				 <&gcc GCC_SNOC_USB_CLK>,
-diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-index 2721f32dfb71..469ea4d8cd3b 100644
---- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-@@ -684,6 +684,14 @@ usb3: usb@7678800 {
- 			assigned-clocks = <&gcc GCC_USB20_MOCK_UTMI_CLK>,
- 					  <&gcc GCC_USB30_MASTER_CLK>;
- 			assigned-clock-rates = <19200000>, <200000000>;
-+
-+			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 319 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "pwr_event",
-+					  "hs_phy_irq",
-+					  "qusb2_phy";
-+
- 			status = "disabled";
- 
- 			usb3_dwc3: usb@7580000 {
-@@ -713,6 +721,14 @@ usb2: usb@79b8800 {
- 			assigned-clocks = <&gcc GCC_USB20_MOCK_UTMI_CLK>,
- 					  <&gcc GCC_USB_HS_SYSTEM_CLK>;
- 			assigned-clock-rates = <19200000>, <133333333>;
-+
-+			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 318 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "pwr_event",
-+					  "hs_phy_irq",
-+					  "qusb2_phy";
-+
- 			status = "disabled";
- 
- 			usb@78c0000 {
--- 
-2.42.0
+David, I'll be happy to take a patch for this from you, but still need to
+run it through some testing
 
+I'll send v2 of this series
+
+Thanks
+Mathias
 
