@@ -1,58 +1,58 @@
-Return-Path: <linux-usb+bounces-3628-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3629-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B153802A19
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 03:03:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFE4D802A1C
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 03:03:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B0061C2040C
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 02:03:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4254280C53
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 02:03:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27F89443D;
-	Mon,  4 Dec 2023 02:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22C424A3E;
+	Mon,  4 Dec 2023 02:03:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="M56yn2aT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RuIt6aEX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD06BFC
-	for <linux-usb@vger.kernel.org>; Sun,  3 Dec 2023 18:03:08 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-50be0f13aa6so1885022e87.1
-        for <linux-usb@vger.kernel.org>; Sun, 03 Dec 2023 18:03:08 -0800 (PST)
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C17106
+	for <linux-usb@vger.kernel.org>; Sun,  3 Dec 2023 18:03:09 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-50bf2d9b3fdso846878e87.3
+        for <linux-usb@vger.kernel.org>; Sun, 03 Dec 2023 18:03:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1701655387; x=1702260187; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nU+isl/cmvOumBeEJVaIP24Ow/f7bjobvPWRPynQaf8=;
-        b=M56yn2aTw7h/zSNqrgKdfY7GEi7xsJoYZnVw79rEcs2p292xNgDpx7WosbEGZdbJVL
-         eFi0fk+5kHsFcOhoOvqnYrD3gJ+oHuEUoU1JgUQRRdSxtskBPpsGQS3j/ojeMulZgbiw
-         zhI6A829rMUYxAdTfuaPZEvyOIIkF24i4JVYTmMgjJlKtwxmUgquVBsYUJmeTL/Ei+E8
-         DlSoQbxQHxuw6Q5BHztsPVjLSVAe0wIDCLFcmunTV8dd6yGQd4fI4n0XLIJ9zaoJ5J2x
-         3WC29yS2N/DSbAeaZSdddKA1/+fn3ywdooUW06SnjJGpUelZKY62X60OKTzXFiiXpvO3
-         X3aA==
+        bh=7w3IPGNvRYti0737C04DV640y8lLrN0zZWGxZvPfBuQ=;
+        b=RuIt6aEXs8YvqAjLVu1VycJ5l75taKd0KGIVnK8Dbcj8QEY6jLV0R2KXy8bUS82b6E
+         lbsqKw4flKq9JAIP4R61UGRKrbK81JdVpmzFulpFj/I6iOHdgjKJ/3hEenG8vKlnOwM2
+         RwhPlR1YznyNuohXt0MTZClr43lKK/9OlPFuQbzOK9sJ1XhqgIkrsz0U3syfgi0vhfPi
+         YMo3cz1+s0CMLgmXq5B4IcJSfUoYuGcmHnwbrQa9pwCa2SMwoni/l2saHET6wcmdN1/K
+         ib5S5Hu6DVmy0EAkQfdERE8GGRsKDqDQ8bapOP63lhGigVosTfGvOZk9fzHXkwkagY9o
+         W+eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1701655387; x=1702260187;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nU+isl/cmvOumBeEJVaIP24Ow/f7bjobvPWRPynQaf8=;
-        b=KjwYoc5erEnraln5e2CdUUn9rZ++xZ1NtPewWbGQEwIsLkfgMKHyJ122flFema7SaR
-         zTCUH8e+7h07m2DXPMAcCh2dG2FRK5735sESObHd24kpspljKP4DZPJIgZRlzq5tpEqp
-         DsWCsXOOkXBP9HszMiH8S5/Sx4Sl8NR+1KlJ2Ak4TT6zslnwydtkkudv0khVSC5YuV7o
-         EFykvwgagp87YZ8Pt8KPFISDvuJ8pIjm47Ytflg6XjP1zpTdLacG2U0umU19KypkxkeN
-         F2xkEuwJHYa6KHGZICjASnazHUxYIvcuvjcAWaJk/ZmbJ5Ab7K98Vmze2zrZkxO96IAG
-         s5wA==
-X-Gm-Message-State: AOJu0Yz+Tnw1mSCtBG+AWaViQOeVo9o9VCd5M/43wDXMGhLGHk04cKTq
-	Jbq0sJgp+0Ogc0MPfGKP3v/BJg==
-X-Google-Smtp-Source: AGHT+IF2BaKSfbGgOJcuur4nyNBw+zmrxBa85rY71yvqdk6sw/yYSlw4/eaFyeU/Nq5IFQWNX3P35w==
-X-Received: by 2002:a05:6512:3d1d:b0:50b:c36e:a70e with SMTP id d29-20020a0565123d1d00b0050bc36ea70emr2917074lfv.34.1701655386300;
-        Sun, 03 Dec 2023 18:03:06 -0800 (PST)
+        bh=7w3IPGNvRYti0737C04DV640y8lLrN0zZWGxZvPfBuQ=;
+        b=FJbAkQDySRUvCvLYVl0q+3DEZbijLaHHpKGSZ6OwglDPYTRb14yGtMAWqZJXwYl+pm
+         wSVW+AsiiI81JWnWthU0WnLeSHxODl+l4nmCXwrJwXSybt9+c4lWXHvOT+50nrQfFL93
+         +9/TfxqObHXYrfllH7Z+BKipuSrhJwIUYbXr7/vTKkb261rI7H7GGT5z8tb5zzKgvxpC
+         MRdz9gNRjqvX+V87V3dc04KFPbUkxj7NcYrbEwBB7UquDlSBAZvpWyNAaiuCtTGVwf6O
+         ZKCorTBUO+YS7Nvit/F6yCQMeUK5BzxoIYqNbRypRHepGQJWqtPUD1gqpDc3rZNx/POG
+         YiVA==
+X-Gm-Message-State: AOJu0YzijYyj4vwiX5+XguH2EhQkW1WE7peAN0tB/EkEmeNEc+lQDwmO
+	LZr1aX5BRAW0uKXNuTCb+hjw8Q==
+X-Google-Smtp-Source: AGHT+IG7QyaVUc2ZKhy1cxZKsZEOS4C6cyPro5nNM707U6/C0w0pXqPIoFPEWzbXku87m7lBxnj77w==
+X-Received: by 2002:a05:6512:3ba4:b0:50b:de3b:5359 with SMTP id g36-20020a0565123ba400b0050bde3b5359mr2580077lfv.107.1701655387091;
+        Sun, 03 Dec 2023 18:03:07 -0800 (PST)
 Received: from eriador.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id v12-20020a056512348c00b0050bea5c2850sm525381lfr.39.2023.12.03.18.03.05
+        by smtp.gmail.com with ESMTPSA id v12-20020a056512348c00b0050bea5c2850sm525381lfr.39.2023.12.03.18.03.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Dec 2023 18:03:05 -0800 (PST)
+        Sun, 03 Dec 2023 18:03:06 -0800 (PST)
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To: "Rob Herring" <robh+dt@kernel.org>,
 	"Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
@@ -70,9 +70,9 @@ Cc: devicetree@vger.kernel.org,
 	linux-arm-msm@vger.kernel.org,
 	platform-driver-x86@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH v4 2/3] usb: typec: change altmode SVID to u16 entry
-Date: Mon,  4 Dec 2023 04:03:01 +0200
-Message-ID: <20231204020303.2287338-3-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v4 3/3] arm64: dts: qcom: qrb5165-rb5: use u16 for DP altmode svid
+Date: Mon,  4 Dec 2023 04:03:02 +0200
+Message-ID: <20231204020303.2287338-4-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231204020303.2287338-1-dmitry.baryshkov@linaro.org>
 References: <20231204020303.2287338-1-dmitry.baryshkov@linaro.org>
@@ -84,55 +84,29 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-As stated in the changelog for the commit 7b458a4c5d73 ("usb: typec: Add
-typec_port_register_altmodes()"), the code should be adjusted according
-to the AltMode bindings. As the SVID is 16 bits wide (according to the
-USB PD Spec), use fwnode_property_read_u16() to read it.
+Follow the bindings and use 16-bit value for AltMode SVID instead of
+using the full u32.
 
-Acked-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Fixes: b3dea914127e ("arm64: dts: qcom: qrb5165-rb5: enable DP altmode")
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/platform/x86/intel/chtwc_int33fe.c | 2 +-
- drivers/usb/typec/class.c                  | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/intel/chtwc_int33fe.c b/drivers/platform/x86/intel/chtwc_int33fe.c
-index 848baecc1bb0..93f75ba1dafd 100644
---- a/drivers/platform/x86/intel/chtwc_int33fe.c
-+++ b/drivers/platform/x86/intel/chtwc_int33fe.c
-@@ -136,7 +136,7 @@ static const struct software_node altmodes_node = {
- };
+diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+index c8cd40a462a3..88b37ceb13ed 100644
+--- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
++++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+@@ -1425,7 +1425,7 @@ PDO_FIXED_USB_COMM |
  
- static const struct property_entry dp_altmode_properties[] = {
--	PROPERTY_ENTRY_U32("svid", 0xff01),
-+	PROPERTY_ENTRY_U16("svid", 0xff01),
- 	PROPERTY_ENTRY_U32("vdo", 0x0c0086),
- 	{ }
- };
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 2e0451bd336e..a959dcc3374a 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -2230,7 +2230,8 @@ void typec_port_register_altmodes(struct typec_port *port,
- 	struct typec_altmode_desc desc;
- 	struct typec_altmode *alt;
- 	size_t index = 0;
--	u32 svid, vdo;
-+	u16 svid;
-+	u32 vdo;
- 	int ret;
- 
- 	altmodes_node = device_get_named_child_node(&port->dev, "altmodes");
-@@ -2238,7 +2239,7 @@ void typec_port_register_altmodes(struct typec_port *port,
- 		return; /* No altmodes specified */
- 
- 	fwnode_for_each_child_node(altmodes_node, child) {
--		ret = fwnode_property_read_u32(child, "svid", &svid);
-+		ret = fwnode_property_read_u16(child, "svid", &svid);
- 		if (ret) {
- 			dev_err(&port->dev, "Error reading svid for altmode %s\n",
- 				fwnode_get_name(child));
+ 		altmodes {
+ 			displayport {
+-				svid = <0xff01>;
++				svid = /bits/ 16 <0xff01>;
+ 				vdo = <0x00001c46>;
+ 			};
+ 		};
 -- 
 2.42.0
 
