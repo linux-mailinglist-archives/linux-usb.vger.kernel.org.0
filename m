@@ -1,49 +1,49 @@
-Return-Path: <linux-usb+bounces-3654-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3652-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD324803095
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 11:39:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0278C803091
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 11:39:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98E4A280FFD
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 10:39:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3438A1C20AA2
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 10:39:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F83E2233E;
-	Mon,  4 Dec 2023 10:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 483B622EE9;
+	Mon,  4 Dec 2023 10:38:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YjOteVXV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cnd0S1Ga"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F89E6
-	for <linux-usb@vger.kernel.org>; Mon,  4 Dec 2023 02:38:37 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC09CC
+	for <linux-usb@vger.kernel.org>; Mon,  4 Dec 2023 02:38:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701686317; x=1733222317;
+  t=1701686316; x=1733222316;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=naIQkVDqBOFmYKcMnnwGT3WOCdW4ZZF8Y3zHbaDkIrE=;
-  b=YjOteVXVvW9GRnJOjoteOGnC8Y46AmK1PpTYj7BaTQapR26YZjPbXlT3
-   OIdzO88UTf4vea25DnAZYygQGZ6RTlwFULtx1l+Q2oKsr6RwSNaKU8wzQ
-   Saq7/9lcY3hwhNHw3A6fO9sBuq95PMZSF1RzSKedcPNDYw6hMput+oTLQ
-   zWVKs9LAkBjJToVaagVK6kZH8E0+uaUintEQT2ABlozNP5MpPb79tqxSE
-   ZxGhPAp8iBKMPwoptFCz8qBA/SnbwRpP+iP9SLuAnwoJfjyfOiT16vQxS
-   pC4hziisSB5DRtjMXXcEwbPukyYEfsgYcayRNj1cLEUhqvrhzEcpcZpBb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="424880791"
+  bh=057mGHnVGGK8tKJutQgSFT1RqfxhyCB2cuy/qjbnvPI=;
+  b=Cnd0S1GanBsqtfF8UObJE3wcsgSzpltFeupv4mnsBeDhYJEzjdv5NQk+
+   teTA+oVhM5wQZIXZAOnyZYIN+id4INAbFbukdSgk6H8WUKbvbmhs891DZ
+   rY+ZemC9yV/+92bfHY2ALs8CwbqeKYcaHU2gMqCIuzjow5YtLSzhKGF7v
+   m1cjI9ogSsLlyQ1nCnH/jmcUP+g7h6o8Lev/cs1oPCmwpNZ12rPBCEard
+   Skcpx8B4+ARWqf2wPGy0M+o6OznMxWqQOoLGLkkQ81GsmVeQBrl/05zMW
+   rzydkFwSeE//fB1xm89yWoB2RzSDDAK0fHXRvRtiH9OXdrfbUUXOvDObR
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="384116748"
 X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="424880791"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 02:38:36 -0800
+   d="scan'208";a="384116748"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 02:38:35 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="763904032"
+X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="804861278"
 X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="763904032"
+   d="scan'208";a="804861278"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 04 Dec 2023 02:38:33 -0800
+  by orsmga001.jf.intel.com with ESMTP; 04 Dec 2023 02:38:33 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id ACDB1A7D; Mon,  4 Dec 2023 12:38:28 +0200 (EET)
+	id BB5CAA9A; Mon,  4 Dec 2023 12:38:28 +0200 (EET)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Michael Jamet <michael.jamet@intel.com>,
@@ -54,9 +54,9 @@ Cc: linux-usb@vger.kernel.org,
 	Pengfei Xu <pengfei.xu@intel.com>,
 	Dan Carpenter <dan.carpenter@linaro.org>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 08/11] thunderbolt: Improve logging when DisplayPort resource is added due to hotplug
-Date: Mon,  4 Dec 2023 12:38:25 +0200
-Message-ID: <20231204103828.1635531-9-mika.westerberg@linux.intel.com>
+Subject: [PATCH 09/11] thunderbolt: Make PCIe tunnel setup and teardown follow CM guide
+Date: Mon,  4 Dec 2023 12:38:26 +0200
+Message-ID: <20231204103828.1635531-10-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231204103828.1635531-1-mika.westerberg@linux.intel.com>
 References: <20231204103828.1635531-1-mika.westerberg@linux.intel.com>
@@ -70,29 +70,45 @@ Content-Transfer-Encoding: 8bit
 
 From: Gil Fine <gil.fine@linux.intel.com>
 
-To allow us differentiate how DisplayPort resource is added to the
-DisplayPort resources list make the debug log to append "hotplug" when
-this was due to an actual hotplug.
+The USB4 Connection Manager guide suggests that the PCIe paths are
+enabled from the upstream adapter to the downstream adapter and vice
+versa on disable so make the driver follows this sequence.
 
 Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/tb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thunderbolt/tunnel.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 1308f7872f97..0a32e7ec4dc0 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -1913,7 +1913,7 @@ static void tb_dp_resource_available(struct tb *tb, struct tb_port *port)
- 			return;
+diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
+index a46ae3f598c5..f0fde79b3b02 100644
+--- a/drivers/thunderbolt/tunnel.c
++++ b/drivers/thunderbolt/tunnel.c
+@@ -199,14 +199,21 @@ static int tb_pci_activate(struct tb_tunnel *tunnel, bool activate)
+ 			return res;
  	}
  
--	tb_port_dbg(port, "DP %s resource available\n",
-+	tb_port_dbg(port, "DP %s resource available after hotplug\n",
- 		    tb_port_is_dpin(port) ? "IN" : "OUT");
- 	list_add_tail(&port->list, &tcm->dp_resources);
+-	res = tb_pci_port_enable(tunnel->src_port, activate);
++	if (activate)
++		res = tb_pci_port_enable(tunnel->dst_port, activate);
++	else
++		res = tb_pci_port_enable(tunnel->src_port, activate);
+ 	if (res)
+ 		return res;
  
+-	if (tb_port_is_pcie_up(tunnel->dst_port)) {
+-		res = tb_pci_port_enable(tunnel->dst_port, activate);
++
++	if (activate) {
++		res = tb_pci_port_enable(tunnel->src_port, activate);
+ 		if (res)
+ 			return res;
++	} else {
++		/* Downstream router could be unplugged */
++		tb_pci_port_enable(tunnel->dst_port, activate);
+ 	}
+ 
+ 	return activate ? 0 : tb_pci_set_ext_encapsulation(tunnel, activate);
 -- 
 2.42.0
 
