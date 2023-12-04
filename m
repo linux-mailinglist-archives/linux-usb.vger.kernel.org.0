@@ -1,105 +1,117 @@
-Return-Path: <linux-usb+bounces-3643-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3644-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAABE803019
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 11:22:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DB9880303A
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 11:26:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B45DB209EC
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 10:22:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCB4A280E25
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 10:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69F2920B09;
-	Mon,  4 Dec 2023 10:22:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6927A210FF;
+	Mon,  4 Dec 2023 10:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JrKv1s73"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eD+CmL3E"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D71A191
-	for <linux-usb@vger.kernel.org>; Mon,  4 Dec 2023 02:22:35 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2C3100
+	for <linux-usb@vger.kernel.org>; Mon,  4 Dec 2023 02:25:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701685355; x=1733221355;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=4u4lrx+P6PHxIIV2DHGygciIoa/jQYSB3t+WHNzVJcY=;
-  b=JrKv1s73kJjtKOPhebfslZKbJIKH6R7DrcMkrtRSxsRshoXC9QVugA3t
-   PGjJgJ6aAuNO8OkjSW5lnv8KvttLeHcr5P4ZVrvU2WVqdDf87EkgBDg35
-   a+h8goOPWaEEq3STU71dBzYwrOSb/GHfTtUjtdDdDgj+5598OFYlsq89b
-   TW6tKtHyHkhQaG2hd25gWEbYGtpRqb7u8Hd0DpIDtK4m+riDhjBFIkMJX
-   pacWKqLWys+AtEhOXn961i4DJbWDb9I68UCHQHURq/t4q+kCEchM295+c
-   mVcjKt/uX4tz701EgatFOOAIVXUf1sa3vm35kLzNfi1MXzwrmtCfmVpR4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="384115376"
+  t=1701685542; x=1733221542;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uJeWwnvMh6AR6XKR1G3piVA8TqQ7rB7zxcZzMZq04A4=;
+  b=eD+CmL3EhPHSxlim2R5DT6pf4NzweX3CkCZYWl8BLhu+UUqvNXWEXdv2
+   MdgmG73iJhcRM/2qyQz9Oa/raRPat65GMuqjI+gzOA2QTh9dqHLMpdy7p
+   1uCVV41jnmRJwbnGChWSk/QSX5OWBiWv6eiIPHSh02WM96NfdwOxGCTnH
+   YYBhub1afe4CPtCmyz3SvN1Z2a5pAUnmXo2EHa9SVDXXHf54Nf1rwR3Ik
+   Hndk7Y3y3yLEY2WKMjgdKYpy1MJYEtsHZpUFVtnXkUXvCzIklTb0bvlns
+   TFX+9+f/P1n1lCLNdZz+11Q1Sbz3owt421D9uJYEmP4AWP3DOeyRfVzB6
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="378746621"
 X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="384115376"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 02:22:33 -0800
+   d="scan'208";a="378746621"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 02:25:42 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="804858816"
+X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="1017788098"
 X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="804858816"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 04 Dec 2023 02:22:32 -0800
-Message-ID: <e0d6698d-329a-64cb-a8e2-200dd03f3cd2@linux.intel.com>
-Date: Mon, 4 Dec 2023 12:23:51 +0200
+   d="scan'208";a="1017788098"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 04 Dec 2023 02:25:39 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id B5B73315; Mon,  4 Dec 2023 12:25:38 +0200 (EET)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>
+Cc: linux-usb@vger.kernel.org,
+	Gil Fine <gil.fine@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH] thunderbolt: Fix minimum allocated USB 3.x and PCIe bandwidth
+Date: Mon,  4 Dec 2023 12:25:38 +0200
+Message-ID: <20231204102538.1634776-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: David Laight <David.Laight@ACULAB.COM>,
- 'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <20231201150647.1307406-1-mathias.nyman@linux.intel.com>
- <20231201150647.1307406-9-mathias.nyman@linux.intel.com>
- <e98fd89faf4446e594ca3b7c3cc627fc@AcuMS.aculab.com>
- <ZWovIn0V95c-T74n@smile.fi.intel.com>
- <aa4848b742854ab7921386ca69613866@AcuMS.aculab.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH 08/19] xhci: dbc: Use sizeof_field() where it makes sense
-In-Reply-To: <aa4848b742854ab7921386ca69613866@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2.12.2023 17.50, David Laight wrote:
-> From: Andy Shevchenko
->> Sent: 01 December 2023 19:08
->>
->> On Fri, Dec 01, 2023 at 05:31:52PM +0000, David Laight wrote:
->>> From: Mathias Nyman
->>>> Sent: 01 December 2023 15:07
->>
->> ...
->>
->>>> -	memset(dbc->eps, 0, sizeof(struct dbc_ep) * ARRAY_SIZE(dbc->eps));
->>>> +	memset(dbc->eps, 0, sizeof_field(struct xhci_dbc, eps));
->>>
->>> Isn't that just:
->>> 	memset(dpc->eps, 0, sizeof (dpc->eps));
->>> perhaps better written as:
->>> 	memset(&dpc->epc, 0, sizeof (dpc->eps);
->>
->> Maybe...
->> You can send a patch, so it gets tested for regressions!
-> 
-> Any patch I write will conflict with v2 of this series.
-> 
+From: Gil Fine <gil.fine@linux.intel.com>
 
-I'll drop this 8/19 patch as it's just a one liner cleanup that does no
-harm, but apparently doesn't really help either.
+With the current bandwidth allocation we end up reserving too much for the USB
+3.x and PCIe tunnels that leads to reduced capabilities for the second
+DisplayPort tunnel.
 
-David, I'll be happy to take a patch for this from you, but still need to
-run it through some testing
+Fix this by decreasing the USB 3.x allocation to 900 Mb/s which then allows
+both tunnels to get the maximum HBR2 bandwidth.  This way, the reserved
+bandwidth for USB 3.x and PCIe, would be 1350 Mb/s (taking weights of USB 3.x
+and PCIe into account). So bandwidth allocations on a link are:
+USB 3.x + PCIe tunnels => 1350 Mb/s
+DisplayPort tunnel #1  => 17280 Mb/s
+DisplayPort tunnel #2  => 17280 Mb/s
 
-I'll send v2 of this series
+Total consumed bandwidth is 35910 Mb/s. So that all the above can be tunneled
+on a Gen 3 link (which allows maximum of 36000 Mb/s).
 
-Thanks
-Mathias
+Fixes: 582e70b0d3a4 ("thunderbolt: Change bandwidth reservations to comply USB4 v2")
+Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/thunderbolt/usb4.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index 4277733d0021..f8f0d24ff6e4 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -2311,13 +2311,13 @@ int usb4_usb3_port_release_bandwidth(struct tb_port *port, int *upstream_bw,
+ 		goto err_request;
+ 
+ 	/*
+-	 * Always keep 1000 Mb/s to make sure xHCI has at least some
++	 * Always keep 900 Mb/s to make sure xHCI has at least some
+ 	 * bandwidth available for isochronous traffic.
+ 	 */
+-	if (consumed_up < 1000)
+-		consumed_up = 1000;
+-	if (consumed_down < 1000)
+-		consumed_down = 1000;
++	if (consumed_up < 900)
++		consumed_up = 900;
++	if (consumed_down < 900)
++		consumed_down = 900;
+ 
+ 	ret = usb4_usb3_port_write_allocated_bandwidth(port, consumed_up,
+ 						       consumed_down);
+-- 
+2.42.0
+
 
