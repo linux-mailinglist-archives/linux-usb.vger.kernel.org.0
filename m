@@ -1,121 +1,118 @@
-Return-Path: <linux-usb+bounces-3694-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3695-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36B11803842
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 16:05:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B1808038B8
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 16:26:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B94CFB20C58
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 15:05:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14C1E281268
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Dec 2023 15:26:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90EEE2C184;
-	Mon,  4 Dec 2023 15:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M5OPDaVo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B992C844;
+	Mon,  4 Dec 2023 15:25:59 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60081B2;
-	Mon,  4 Dec 2023 07:05:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701702345; x=1733238345;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=64ZxS30NJt+fUaGcwGEanxzPTAeQjRu0SMM1BZzKljQ=;
-  b=M5OPDaVol3wrnewIGi2uCGqC08k2s/iM4mEuDnz9NPDRzgzLfvHEtqDL
-   36O7SBWY3vNH3HThcdyMkXggeeCQMNwTMT8wkug8gS4uggf9J6LBbaDFy
-   B6hgCDkXUUXA5COUY5tkFa1nFWi4LZrfkTTlhJdx3MWe0sK9qBar4f982
-   cVKFHb3wjll2LX6/NohRk4goZHqLgS4QxZGlXsTZWYYmKpKUiTlXNvBCE
-   s84eCN2wtrtq+A7n+zGGxy09li+lDNqezb4+3pmMFbtsGOsgSjBF2UJfJ
-   7o+zoYVE+4GV6mZVLALzonsOyn6eVf/vKIN0Jtc4G95qDBVWEr3O70Lp7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="789934"
-X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="789934"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 07:05:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="746867985"
-X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
-   d="scan'208";a="746867985"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga006.jf.intel.com with ESMTP; 04 Dec 2023 07:05:06 -0800
-Message-ID: <273a8811-f34e-dbe7-c301-bb796ddcced1@linux.intel.com>
-Date: Mon, 4 Dec 2023 17:06:25 +0200
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF292CA;
+	Mon,  4 Dec 2023 07:25:53 -0800 (PST)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 053995202C0;
+	Mon,  4 Dec 2023 16:25:52 +0100 (CET)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Mon, 4 Dec
+ 2023 16:25:51 +0100
+Date: Mon, 4 Dec 2023 16:25:43 +0100
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: Alan Stern <stern@rowland.harvard.edu>, Hardik Gajjar
+	<hgajjar@de.adit-jv.com>, <corbet@lwn.net>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <erosca@de.adit-jv.com>, <tj@kernel.org>,
+	<paulmck@kernel.org>, <Martin.Mueller5@de.bosch.com>
+Subject: Re: [PATCH v3] usb: hub: Add quirk to decrease IN-ep poll interval
+ for Microchip USB491x hub
+Message-ID: <20231204152543.GA115715@vmlxhi-118.adit-jv.com>
+References: <20231201144705.97385-1-hgajjar@de.adit-jv.com>
+ <39f334d2-abe6-4b4d-a48c-b22a907c6ea6@rowland.harvard.edu>
+ <2023120437-opposite-juiciness-e0dd@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Basavaraj Natikar <bnatikar@amd.com>, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org,
- mario.limonciello@amd.com, regressions@lists.linux.dev,
- regressions@leemhuis.info, Basavaraj.Natikar@amd.com, pmenzel@molgen.mpg.de,
- bugs-a21@moonlit-rail.com, stable@vger.kernel.org
-References: <3d3b8fd3-a1b9-9793-b709-eda447ebd1ab@linux.intel.com>
- <20231204100859.1332772-1-mathias.nyman@linux.intel.com>
- <070b3ce1-815c-4f3d-af09-e02cda8f9bf0@amd.com>
- <db579656-5700-d99b-f1eb-c1e27749eb7b@linux.intel.com>
- <f28b4e98-dd9b-458e-8a72-a9da3c0727cd@amd.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH 1/2] Revert "xhci: Enable RPM on controllers that support
- low-power states"
-In-Reply-To: <f28b4e98-dd9b-458e-8a72-a9da3c0727cd@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2023120437-opposite-juiciness-e0dd@gregkh>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
 
-On 4.12.2023 16.49, Basavaraj Natikar wrote:
+On Mon, Dec 04, 2023 at 08:02:50AM +0100, Greg KH wrote:
+> On Fri, Dec 01, 2023 at 11:13:53AM -0500, Alan Stern wrote:
+> > On Fri, Dec 01, 2023 at 03:47:05PM +0100, Hardik Gajjar wrote:
+> > > There is a potential delay in notifying Linux USB drivers of downstream
+> > > USB bus activity when connecting a high-speed or superSpeed device via the
+> > > Microchip USB491x hub. This delay is due to the fixed bInterval value of
+> > > 12 in the silicon of the Microchip USB491x hub.
+> > > 
+> > > Microchip requested to ignore the device descriptor and decrease that
+> > > value to 9 as it was too late to modify that in silicon.
+> > > 
+> > > This patch speeds up the USB enummeration process that helps to pass
+> > > Apple Carplay certifications and improve the User experience when utilizing
+> > > the USB device via Microchip Multihost USB491x Hub.
+> > > 
+> > > A new hub quirk HUB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL speeds up
+> > > the notification process for Microchip USB491x hub by limiting
+> > > the maximum bInterval value to 9.
+> > > 
+> > > Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+> > > ---
+> > > changes since version 1:
+> > > 	- Move implementation from config.c and quirk.c to hub.c as this is hub
+> > > 	  specific changes.
+> > > 	- Improve commit message.
+> > > 	- Link to v1 - https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_all_20231123081948.58776-2D1-2Dhgajjar-40de.adit-2Djv.com_&d=DwICAg&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=SAhjP5GOmrADp1v_EE5jWoSuMlYCIt9gKduw-DCBPLs&m=MwlH5BZuYXKwMbYoZm0ibbRgqL9CLBFJs3W-um9OX810KDZtChbSXjDyPjCZhJDf&s=xgoOKLqU4fKUbsJMZHzIQzrWKH2W9ikdmKvGntoPcaA&e=
+> > > 
+> > > changes since version 2:
+> > >     - Call usb_set_interface after updating the bInterval to Tell the HCD about modification
+> > > 	- Link to v2 - https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_all_20231130084855.119937-2D1-2Dhgajjar-40de.adit-2Djv.com_&d=DwICAg&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=SAhjP5GOmrADp1v_EE5jWoSuMlYCIt9gKduw-DCBPLs&m=MwlH5BZuYXKwMbYoZm0ibbRgqL9CLBFJs3W-um9OX810KDZtChbSXjDyPjCZhJDf&s=Ck2GM1MhxBKLkLrlkZd_QwoIXz07CbJGVqpVss0rSEI&e=
+> > > ---
+> > >  drivers/usb/core/hub.c | 27 +++++++++++++++++++++++++++
+> > >  1 file changed, 27 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > > index b4584a0cd484..b5ac29c5f016 100644
+> > > --- a/drivers/usb/core/hub.c
+> > > +++ b/drivers/usb/core/hub.c
+> > > @@ -47,12 +47,18 @@
+> > >  #define USB_VENDOR_TEXAS_INSTRUMENTS		0x0451
+> > >  #define USB_PRODUCT_TUSB8041_USB3		0x8140
+> > >  #define USB_PRODUCT_TUSB8041_USB2		0x8142
+> > > +#define USB_VENDOR_MICROCHIP			0x0424
+> > > +#define USB_PRODUCT_USB4913			0x4913
+> > > +#define USB_PRODUCT_USB4914			0x4914
+> > > +#define USB_PRODUCT_USB4915			0x4915
+> > >  #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
+> > >  #define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
+> > > +#define HUB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL	0x08
+> > 
+> > Why use 0x08 instead of 0x04?
 > 
-> On 12/4/2023 7:52 PM, Mathias Nyman wrote:
->> On 4.12.2023 12.49, Basavaraj Natikar wrote:
->>>
->>> On 12/4/2023 3:38 PM, Mathias Nyman wrote:
->>>> This reverts commit a5d6264b638efeca35eff72177fd28d149e0764b.
->>>>
->>>> This patch was an attempt to solve issues seen when enabling runtime PM
->>>> as default for all AMD 1.1 xHC hosts. see commit 4baf12181509
->>>> ("xhci: Loosen RPM as default policy to cover for AMD xHC 1.1")
->>>
->>> AFAK, only 4baf12181509 commit has regression on AMD xHc 1.1 below is
->>> not regression
->>> patch and its unrelated to AMD xHC 1.1.
->>>
->>> Only [PATCH 2/2] Revert "xhci: Loosen RPM as default policy to cover
->>> for AMD xHC 1.1"
->>> alone in this series solves regression issues.
->>>
->>
->> Patch a5d6264b638e ("xhci: Enable RPM on controllers that support
->> low-power states")
->> was originally not supposed to go to stable. It was added later as it
->> solved some
->> cases triggered by 4baf12181509 ("xhci: Loosen RPM as default policy
->> to cover for AMD xHC 1.1")
->> see:
->> https://lore.kernel.org/linux-usb/5993222.lOV4Wx5bFT@natalenko.name/
->>
->> Turns out it wasn't enough.
->>
->> If we now revert 4baf12181509 "xhci: Loosen RPM as default policy to
->> cover for AMD xHC 1.1"
->> I still think it makes sense to also revert a5d6264b638e.
->> Especially from the stable kernels.
+> And why not use BIT() as that's what these are.
 > 
-> Yes , a5d6264b638e still solves other issues if underlying hardware doesn't support RPM
-> if we revert a5d6264b638e on stable releases then new issues (not related to regression)
-> other than AMD xHC 1.1 controllers including xHC 1.2 will still exist on stable releases.
+> thanks,
+> 
+> greg k-h
 
-Ok, got it, so a5d6264b638e also solves other issues than those exposed by 4baf12181509.
-And that one (a5d6264b638) should originally have been marked for stable.
+I am considering aligning with existing quirks.
+Is it advisable to use something like HUB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL BIT(2)? 
+I'm thinking to submit two patches – one to replace hard values with BIT() in existing quirks and a second patch containing my changes.
 
-So only revert 4baf12181509, PATCH 2/2 in this series
+Thanks,
+Hardik 
 
-Thanks
-Mathias
 
