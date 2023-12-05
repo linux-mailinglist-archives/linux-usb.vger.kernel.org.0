@@ -1,105 +1,175 @@
-Return-Path: <linux-usb+bounces-3740-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3741-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1C97805713
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 15:20:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 895A380579A
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 15:41:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 679D2B20FE1
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 14:20:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EBCA282405
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 14:41:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B28F865EA8;
-	Tue,  5 Dec 2023 14:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34415C8F1;
+	Tue,  5 Dec 2023 14:41:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="owdQ0/CE"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="P7p04kQ8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210BDB9;
-	Tue,  5 Dec 2023 06:20:01 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 57F78FF81B;
-	Tue,  5 Dec 2023 14:20:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1701786000;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lwuiW0STsSMaPhGuAH3x8TpmoKmRnPd9Iuz61of3lF4=;
-	b=owdQ0/CE5DFSPIrWuyNxaLrHPOYLgnH9iV1zma4QRazr50vS+SSGKQnYHQe41EJCcj1CC1
-	ZWvBgoVH9Ex5P358tWGilWr5tp5+C2WPBWWfrpzx6kXl/e2yx8Qghk+TOJt4cH31PxAM7G
-	/n0QRlFUoUM1ziOlqgNfiSVQ/oqcSTZOrzgVUv+4BsNp7uva7AtOzg4QPXaGVzsYuyxpf/
-	+eQ2Cr/h7bqBolsTvC4tnMPJissHl8ZwgNU+xvw9pEtQzQIzCktPBiCVQV3h3HIge4zUCX
-	bHuAmMSb5EIfmKh1k/1e8VmVaYqvwMIg3WXW2lghdyrW5UvEHnXOInhlm5dhYA==
-Date: Tue, 5 Dec 2023 15:19:59 +0100
-From: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Jisheng Zhang <jszhang@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Lu jicong <jiconglu58@gmail.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH] usb: dwc3: don't reset device side if dwc3 was
- configured as host-only
-Message-ID: <20231205151959.5236c231@kmaincent-XPS-13-7390>
-In-Reply-To: <20231202002625.ujvqghwm42aabc2f@synopsys.com>
-References: <20231116174206.1a823aa3@kmaincent-XPS-13-7390>
-	<20231116175959.71f5d060@kmaincent-XPS-13-7390>
-	<20231117014038.kbcfnpiefferqomk@synopsys.com>
-	<20231117015527.jqoh6i3n4ywg7qui@synopsys.com>
-	<20231121104917.0fd67952@kmaincent-XPS-13-7390>
-	<20231201100954.597bb6de@kmaincent-XPS-13-7390>
-	<20231202002625.ujvqghwm42aabc2f@synopsys.com>
-Organization: bootlin
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D865D1A1
+	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 06:40:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=41X7tFiHQfjscTD0MI4N3CZZAsABYRv0bngDHyE8hME=; b=P7p04kQ82QojiCtgmqiWyoIcC/
+	WEoSASzIM7O2g4I0vId30TswcqPGl9PQ86DuOAAipo9XD2Wg1Scf3IbZcmY2ec90OCzmIU/7Z6kVS
+	LWtFT4y/aRkqajQ/WoCy34hawM63WPr/ygd84nqhenUKoEPwUm6bF1i4L99yRYtACOAmBr2bujw+1
+	rUnJyJsUpW7iRopqGMlQIUqajDgwq46jrO6t24TqErXEoqU6/BPfAqLrC6KVZb/3bIU+rFj1txfY+
+	tbLRiY9YBT8w8YuKeh8g2pZVVK773PNQ1kRlvnC+5uXHd6DLfVb3TVcI/Txpe7awm52siIRtN4gDb
+	P6iu/waQ==;
+Received: from [179.232.147.2] (helo=[192.168.0.5])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1rAWbR-00Acot-Ez; Tue, 05 Dec 2023 15:40:49 +0100
+Message-ID: <9efaed91-d246-cf3c-efc0-e866f88a943d@igalia.com>
+Date: Tue, 5 Dec 2023 11:40:42 -0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH] usb: dwc3: Fix spurious wakeup when port is on device
+ mode
+Content-Language: en-US
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "balbi@kernel.org" <balbi@kernel.org>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "johan@kernel.org" <johan@kernel.org>,
+ "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+ "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+ "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+ Andrey Smirnov <andrew.smirnov@gmail.com>,
+ Vivek Dasmohapatra <vivek@collabora.com>, piyush.mehta@amd.com,
+ ray.huang@amd.com
+References: <20231122165931.443845-1-gpiccoli@igalia.com>
+ <2dfbf5c9-dd38-c919-c604-618ad08ce456@igalia.com>
+ <20231205012336.mn7b7f4zypwcyv6w@synopsys.com>
+From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20231205012336.mn7b7f4zypwcyv6w@synopsys.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: kory.maincent@bootlin.com
+Content-Transfer-Encoding: 7bit
 
-On Sat, 2 Dec 2023 00:26:34 +0000
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+Hi Thinh, thanks for your response. I'll clarify inline below:
 
-> Hi,
->=20
-> On Fri, Dec 01, 2023, K=C3=B6ry Maincent wrote:
-> > On Tue, 21 Nov 2023 10:49:17 +0100
-> > K=C3=B6ry Maincent <kory.maincent@bootlin.com> wrote:
-> >  =20
-> > > Hello Thinh,
-> > >=20
-> > > On Fri, 17 Nov 2023 01:55:30 +0000
-> > > Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote: =20
-> >  =20
-> > > Still not working on my side. =20
-> >=20
-> > Hello,
-> >=20
-> > Just wondering if you have received my email as you said having client =
-mail
-> > issue.
-> >  =20
->=20
-> Sorry for the delay. Things got busy for me recently.
->=20
-> So your platform has multiple ports. Do you use UTMI or ULPI phy?
+On 04/12/2023 22:23, Thinh Nguyen wrote:
+> [...]
+>>> It was noticed that on plugging a low-power USB source on Steam
+>>> Deck USB-C port (handled by dwc3), if such port is on device role,
+> 
+> I'm not clear of the testing sequence here. Can you clarify further? Is
+> this device operating as host mode but then it switches role to device
+> mode when no device is connected?
+> 
 
-It uses USB3220 ULPI phy.
+Exactly this. We have a driver that changes between host/device mode
+according to ACPI notifications on port connect. But to make
+tests/discussion easier and eliminate more variables, we just dropped
+this driver and do it manually.
 
-> I forgot another thing, the phy reset we're doing now doesn't apply to
-> ULPI phys. We may need to teach HCRST to dwc3, this may not look clean.
+So the steps are:
 
-So that is the reason it does not apply for my case.
+(A) host mode test
+1) Put the port on host mode using debugfs interface.
+2) Wait 30 seconds, plug a cable connecting the Steam Deck to a laptop -
+we call this connection a "low-power source", since it seems to charge
+slowly the Deck.
+3) Suspend the Deck after some seconds (S3/deep) - success
 
-Regards,
---=20
-K=C3=B6ry Maincent, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+(B) device mode test
+
+1) Put the port on device mode using debugfs interface.
+2) Wait 30 seconds, plug a cable connecting the Steam Deck to a laptop.
+3) Suspend the Deck after some seconds (S3/deep) - fails
+
+3a) If pcie_pme is using MSIs, it fails showing that a wakeup interrupt
+is pending, in this case the Steam Deck effectively doesn't enter suspend.
+
+3b) if PCIe PME is not using MSIs, Deck suspends and right after (less
+than a second), wakes up properly.
+
+
+>>> the HW somehow keep asseting the PCIe PME line and triggering a
+>>> wakeup event on S3/deep suspend (that manifests as a PME wakeup
+>>> interrupt, failing the suspend path). That doesn't happen when the USB
+>>> port is on host mode or if the USB device connected is not a low-power
+>>> type (for example, a connected keyboard doesn't reproduce that).
+> 
+> Is the PME continuously generating non-stop? Did you test this in USB3
+> speed? Does this happen for every low-power device or just this specific
+> low-power device?
+
+It seems PME is continuously being generated, yes. I tested by
+connecting to my laptop as mentioned, I guess others tested different
+scenarios, not always reproduces. An example: a keyboard or a disk
+connected when the USB port is on device mode doesn't reproduce. Also, I
+think I didn't test "in USB3 speed" - could you detail more, not sure if
+I understood that properly.
+
+
+> [...] 
+> Even if you masked all the interrupts, and the events are still
+> generating? Did you check if the driver handled wakeup from PME and
+> properly restore the controller?
+> 
+
+Ok, let me clarify a bit. From the ACPI perspective, I was able to check
+from kernel that some GPEs were generated on resume when the issue
+happens (and potentially even when the issue doesn't happen, in host
+mode for example). So, what I did was masking all these GPEs using the
+kernel sysfs interface. After masking, the issue still reproduces but
+the GPEs count doesn't increase.
+
+Regarding the PME interrupt now: if MSI is used on PME, I can see an
+increase of 1 in every suspend/resume attempt (checking
+/proc/interrupts). Now if MSIs are not used, guess what? There was no
+increase in the interrupt at all. I didn't mask the PME interrupt on
+PCIe PME driver...but even with PME driver disabled, IIRC the problem
+reproduces.
+
+"Did you check if the driver handled wakeup from PME and properly
+restore the controller?" <- I think I didn't - how do you suggest me to
+check that?
+
+What I've noticed is that either the system can't suspend, or if no MSIs
+are used on PCIe PME, it suspends and resumes right after, with success.
+In this latter case, dwc3 works normally again, resume is successful.
+Let me know if you want me to check any other path or function called, etc.
+
+
+> [...]
+> 
+> Some platforms may need a soft reset before a change to prtcapdir. This
+> may break some setups. This seems to be a workaround and should not be
+> treated as part of a normal flow.
+
+OK, do you have any other idea of a register change that is softer than
+changing "prtcapdir" and could prevent the issue? Also, would that
+workaround makes sense as...a quirk?
+
+We could guard it for Deck's HW exclusively, using DMI if you think it
+does make sense...or the dwc3 quirks (already have some for AMD right?)
+
+I'm CCing Piyush and Huang from AMD, since this is AMD HW. Any other
+suggestions are much appreciated.
+Thanks,
+
+
+Guilherme
 
