@@ -1,112 +1,90 @@
-Return-Path: <linux-usb+bounces-3728-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3729-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25136804D28
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 10:04:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A8FD3804EAB
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 10:50:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5ECB28159E
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 09:04:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00D472816A0
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 09:50:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 739D63D98C;
-	Tue,  5 Dec 2023 09:04:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A391B495DF;
+	Tue,  5 Dec 2023 09:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m7tG/LKK"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UPOag59d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871A111F;
-	Tue,  5 Dec 2023 01:04:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701767083; x=1733303083;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VCYXjHvj6vQAnVMBfKsjYdOGUml5t+S2AlaIXferjKU=;
-  b=m7tG/LKK+kicsfluRVH9dfjJe/Y65QCipF42e0cfZWlJeM8JEtfiakI9
-   x16tRaweZ1L5l5yZN1LJq3IXc1w8U2XPSwR/UMQzmErral9aMb8UGfjDX
-   a99oj04tqkD89kjydWElnnS4xItjJAVadyndLk7QAwAK62JjWVhDa1KFg
-   FJ8BBVv9XiLsjoLHm6DNqfMOJWGoUv3nnUTml6UMfSd0wf1Gm69uFcAfe
-   5ZwPNgXXPSweGq3sRch8vY3akdBgK/Gye/TV90IIj1fkjf0Jup0F8agRC
-   vS/7kNk9G6SKpwpRWy5ZK3rPdPVTvx2HFF9W2DPtj9B25zPu56iYpZ3oM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="378891874"
-X-IronPort-AV: E=Sophos;i="6.04,251,1695711600"; 
-   d="scan'208";a="378891874"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 01:04:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="1102386629"
-X-IronPort-AV: E=Sophos;i="6.04,251,1695711600"; 
-   d="scan'208";a="1102386629"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Dec 2023 01:04:38 -0800
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>,
-	linux-bluetooth@vger.kernel.org,
-	mario.limonciello@amd.com,
-	regressions@lists.linux.dev,
-	regressions@leemhuis.info,
-	Basavaraj.Natikar@amd.com,
-	pmenzel@molgen.mpg.de,
-	bugs-a21@moonlit-rail.com,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] Revert "xhci: Loosen RPM as default policy to cover for AMD xHC 1.1"
-Date: Tue,  5 Dec 2023 11:05:48 +0200
-Message-Id: <20231205090548.1377667-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2023120521-dusk-handwrite-cea3@gregkh>
-References: <2023120521-dusk-handwrite-cea3@gregkh>
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF069A
+	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 01:50:22 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-40c09f5a7cfso24362035e9.0
+        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 01:50:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1701769820; x=1702374620; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cBV4B4TbyE8Idb38ySCm9bhGFw3XKWiHtHIiEhuAXKc=;
+        b=UPOag59dB5a1aRg/mN/oXnRYQAwioUZqQcuZVliekg+KeF7IPwv+qSQl7PzVmqTNOG
+         0KWw7MTQM9rp2VfVV1RtKgcmdS8zicHMTimH/J5ASnaAywfOb1o6C7v8n7okyfxVTOd7
+         L/0MibiaCIRho9GFS7bO7kT6dwH8t9btnTyz2zXTunDD4yeSySDqJLgdTI8G1o5G3eyn
+         lf1Iidu/0jJwYE203WE9l2HHPGPCBEla8PgmXjdBWTFHWPwFoYGZPzCEguNC5/OwlM2X
+         4Y3DeqeLltd0AW6TTzzoV9G+zYe/bOtA49trHScwDGPwzRenjJ+EwIvzAuDcWs2+3au5
+         AhUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701769820; x=1702374620;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cBV4B4TbyE8Idb38ySCm9bhGFw3XKWiHtHIiEhuAXKc=;
+        b=w9Nuq3EC1QY86EAHCuFJIWJBwHd/HFwe844WSv15f/eR6lQ42OYGDB+DJXkfiT1xcD
+         5bukMYDDaRGQOHo6mhJ0XLKNbIzT2d984QXXI4li4ean6TBqzl5AelE11s4C9FacerKX
+         DbUiE7aU3XeYxskcjRs7IWnP/1wKN156IMUhKMHvknruHICRV+SEpdX4+ej6XcUFsrvt
+         aYByfqPMHeGp67wHCh3OOsElv5nT14s/rhWOjAFcXhT+6iltZ+m67hZsRTNDER8cHae8
+         O7nA/+qYZKfvpCDaGNA83aUM1dAFebaKKiQlC7kN3RTqqlzqluGDjUCfWgjIrVbbOquQ
+         a3IQ==
+X-Gm-Message-State: AOJu0YzwyjLMGOBoyIT/4ncdA6ShU/uoqLo/vfc9gRQG0yYJka+IY+PB
+	3/Ug/R0pWRJcIajfXe72kZxPqg==
+X-Google-Smtp-Source: AGHT+IG7eAmkxY6rdcw+fjUx2OrqFIBHl11dMIZIv4ptjHXtDNEopEjWv9DDqbkNCB5lNRQVNKo2bw==
+X-Received: by 2002:a05:600c:35d1:b0:40b:5e21:ec2a with SMTP id r17-20020a05600c35d100b0040b5e21ec2amr294053wmq.92.1701769820549;
+        Tue, 05 Dec 2023 01:50:20 -0800 (PST)
+Received: from ?IPV6:2001:a61:1362:9c01:78ff:1f81:1ea8:d077? ([2001:a61:1362:9c01:78ff:1f81:1ea8:d077])
+        by smtp.gmail.com with ESMTPSA id d7-20020a05600c3ac700b0040b632f31d2sm13092839wms.5.2023.12.05.01.50.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Dec 2023 01:50:20 -0800 (PST)
+Message-ID: <df7a9e1e-3399-4ebe-bfcc-4cb0ac164f99@suse.com>
+Date: Tue, 5 Dec 2023 10:50:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: Question regarding CDC NCM and VNC performance issue
+Content-Language: en-US
+To: Hiago De Franco <hiagofranco@gmail.com>, linux-usb@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Hiago De Franco <hiago.franco@toradex.com>
+References: <20231204183751.64202-1-hiagofranco@gmail.com>
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20231204183751.64202-1-hiagofranco@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-This reverts commit 4baf1218150985ee3ab0a27220456a1f027ea0ac.
+On 04.12.23 19:37, Hiago De Franco wrote:
 
-Enabling runtime pm as default for all AMD xHC 1.1 controllers caused
-regression. An initial attempt to fix those was done in commit a5d6264b638e
-("xhci: Enable RPM on controllers that support low-power states") but new
-issues are still seen.
+> 
+> Has anyone encountered a similar issue before? Could this be related to
+> the size or quantity of transmitted packages?
 
-Revert this to get those AMD xHC 1.1 systems working
+At first thought my gut feeling is that the packet bonding is killing
+your performance. What does a simple ping do?
 
-This patch went to stable an needs to be reverted from there as well.
+	Regards
+		Oliver
 
-Fixes: 4baf12181509 ("xhci: Loosen RPM as default policy to cover for AMD xHC 1.1")
-Link: https://lore.kernel.org/linux-usb/55c50bf5-bffb-454e-906e-4408c591cb63@molgen.mpg.de
-Cc: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
-v1 -> v2
-Revert only one patch, keep commit a5d6264b638
-Minor commit message changes
-
- drivers/usb/host/xhci-pci.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 95ed9404f6f8..d6fc08e5db8f 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -535,8 +535,6 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	/* xHC spec requires PCI devices to support D3hot and D3cold */
- 	if (xhci->hci_version >= 0x120)
- 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
--	else if (pdev->vendor == PCI_VENDOR_ID_AMD && xhci->hci_version >= 0x110)
--		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
- 
- 	if (xhci->quirks & XHCI_RESET_ON_RESUME)
- 		xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
--- 
-2.25.1
 
 
