@@ -1,62 +1,62 @@
-Return-Path: <linux-usb+bounces-3762-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3763-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5F75805FDD
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 21:58:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0F5A805FE3
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 21:59:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FB661F21685
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 20:58:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 159241C20E51
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 20:59:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F07D96A038;
-	Tue,  5 Dec 2023 20:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B13A6A32F;
+	Tue,  5 Dec 2023 20:58:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FO5EAXnN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k+DEGTTw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EB4188
-	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 12:58:26 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3b894f5a7f3so3539075b6e.2
-        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 12:58:26 -0800 (PST)
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530711A4
+	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 12:58:55 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1faecf57bedso3219313fac.3
+        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 12:58:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701809906; x=1702414706; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701809934; x=1702414734; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=OTz0DGp9QCmX1RGgDpf7H0St/dxn8C8saZ8skorHRGI=;
-        b=FO5EAXnNOvLulfwBkADuCtSDMRHNB08U8bFkySasXnRW6WgfVBxj+MtcFDub3ghDte
-         Ks0EI2t6WgmT4AfCB6VpYD0GvfD0yAEL981usGJe+Rv9Cof0Xfk29ko3lSx1EJK1/fZ3
-         Qy2SLocuDSmU6+mn8Xj8joP11u0ooi+0zLVE6sFJPW8OjwEO4Ax91WoYxVONqR7jLg+w
-         gqS2A+jyJb5ZAAiGB9Ty9abJxgKRdOECJqPY195kSV96vJ50YXd5OH0i6/3Oe/zc6sQa
-         W9MO7UbQ8aDQKtfz5hBfoRU3CUf+hrmodbCkKGtZUP6uhVfO0ya2d78tWGF6kBAgVUZS
-         mY5A==
+        bh=OzWOREuSwdEoFd+CU5OTzLFsGtCD7C1zfebLpmRFAb0=;
+        b=k+DEGTTwNarxFEJnhZBEuczIrzYGCXLpkLOsc56oKIDdEDYEyAgkzShM63Kk+fbGC/
+         Z4bZ8FbD5f2qshMgwS3eAOy+DkrsgkSZ9vmIZFH01NyPd0hve5r86jYQjwhwnDuM/yxP
+         tgXoBtntc3hAjjeH1XZ0d6Z8NRkU74xbEXV+PN0h0VXJ9c0wLvFN/B6WREVQ1At7wrPk
+         YdyE5GgQAj5nmKEkXhygkLOyMtQ+JRWbqhKN8zD+aTKjln/ZHF30frakfwL8EziuoJfb
+         Rv6S5q+L/er5jYGs8Z/vKdEabqXJuK3r8r+c8x8gzO6MsF+CBb4PnsLQt8xDYhDOaZwX
+         5oOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701809906; x=1702414706;
+        d=1e100.net; s=20230601; t=1701809934; x=1702414734;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OTz0DGp9QCmX1RGgDpf7H0St/dxn8C8saZ8skorHRGI=;
-        b=QCQ2nVMPzJk6elvXj56U68E/BsQvrtL94XKZiAFa9N6V7WMoXLjZId8I7ML8QPFuL/
-         bb560KAZYSw//q9tuaSg4JJYxNMK9iAUT4ub8zzGPYG/9vXiwXfoo1qKe56DXwsazjqV
-         nsh39c6t09IJS02gNKTanEwGUBsgrO8YM1KXT3op5y0yJQmM/YWu/eqWKPmJnD8y9sJm
-         IZHgQq3A/F2/lXkJB/InzAfwHptD7N62caujtSSb8TPs6u1y1/dDSvR0NnD8VP1RVrt7
-         jPvh0Ak/EQB5qk21TXZXe3g4nnor7qYE1ENGRqoyiMKS7eD/HEYTLlZEJBSXCOvmwBma
-         firQ==
-X-Gm-Message-State: AOJu0Yxh2MjmVpgMvT6ofxKxFinuwbOJhLbJG5r1ChY3mB/I0zFD1tOq
-	v/PzeViYbvkTGJaCRJ3aQlo=
-X-Google-Smtp-Source: AGHT+IHpPcmkw+ohOmvDAuV4ZusECHknmOP6GTm71AZAma+sjA2a+dGNYQJwDZ03OWgyU00+OipcPw==
-X-Received: by 2002:a05:6870:9710:b0:1fa:2bbf:a500 with SMTP id n16-20020a056870971000b001fa2bbfa500mr8709469oaq.24.1701809906093;
-        Tue, 05 Dec 2023 12:58:26 -0800 (PST)
+        bh=OzWOREuSwdEoFd+CU5OTzLFsGtCD7C1zfebLpmRFAb0=;
+        b=vkDfICxOXUH4lM5+v4wZaQ3Q9PK/TWfeuG30ZiVr5MkKzO8QumWJJK22G5lyNG+Esf
+         YiAOGvIrehbkHw1bdHtPziFCurYqcqazuUUa/nhs1fSufdiq4GP6F/4k8/XQvSozLNOK
+         +5zm7wI75jSDx0+Q1JsVodMbBiZUbDAOTC7JvEAE1ZdECveCH1DxHVvUYjckOqKTHZQ+
+         1AzP17WE0E3SiR+yi2tQy63tjiGxFlOD63Yfn7L2nwT8df8zfQrxiVw5Zmn+QzIUWeOX
+         WT3b6CAPa29kTlM9HtkaYYvk6ZwX1F4rNGD2fJY7t5Kxij92Sat35tBaWAe+jHFOknBM
+         4UjQ==
+X-Gm-Message-State: AOJu0YwmJw3hNSOsSbVjJLYAp60MJzLubevtrNlwptNs6WpLJfMSstJr
+	piYlr3VsaUQGcJCrLhBKYwU=
+X-Google-Smtp-Source: AGHT+IHXExISh6TSmnzLXi6rRF2I7lXlvjcj+JdCDpo2NyImPcOemMbY0jcJgQE/wN7VZ0Qo1xX3og==
+X-Received: by 2002:a05:6870:b05:b0:1fa:f469:8565 with SMTP id lh5-20020a0568700b0500b001faf4698565mr8360128oab.17.1701809934631;
+        Tue, 05 Dec 2023 12:58:54 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id lg22-20020a0568700b9600b001fa1db68eecsm1547354oab.4.2023.12.05.12.58.24
+        by smtp.gmail.com with ESMTPSA id lg22-20020a0568700b9600b001fa1db68eecsm1547354oab.4.2023.12.05.12.58.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Dec 2023 12:58:25 -0800 (PST)
+        Tue, 05 Dec 2023 12:58:54 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <777081be-2ead-4727-ad06-afb8b976e6b9@roeck-us.net>
-Date: Tue, 5 Dec 2023 12:58:23 -0800
+Message-ID: <76415c2b-4e94-410f-bece-8e12552c28d2@roeck-us.net>
+Date: Tue, 5 Dec 2023 12:58:53 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,8 +64,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] usb: typec: nb7vpq904m: Only select DRM_AUX_BRIDGE
- with OF
+Subject: Re: [PATCH 2/3] usb: typec: qcom-pmic-typec: Only select
+ DRM_AUX_HPD_BRIDGE with OF
 Content-Language: en-US
 To: Nathan Chancellor <nathan@kernel.org>, dmitry.baryshkov@linaro.org
 Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
@@ -73,7 +73,7 @@ Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
  linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
  patches@lists.linux.dev
 References: <20231205-drm_aux_bridge-fixes-v1-0-d242a0ae9df4@kernel.org>
- <20231205-drm_aux_bridge-fixes-v1-1-d242a0ae9df4@kernel.org>
+ <20231205-drm_aux_bridge-fixes-v1-2-d242a0ae9df4@kernel.org>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -118,24 +118,24 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231205-drm_aux_bridge-fixes-v1-1-d242a0ae9df4@kernel.org>
+In-Reply-To: <20231205-drm_aux_bridge-fixes-v1-2-d242a0ae9df4@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 12/5/23 12:13, Nathan Chancellor wrote:
-> CONFIG_DRM_AUX_BRIDGE depends on CONFIG_OF but that dependency is not
-> included when CONFIG_TYPEC_MUX_NB7VPQ904M selects it, resulting in a
+> CONFIG_DRM_AUX_HPD_BRIDGE depends on CONFIG_OF but that dependency is
+> not included when CONFIG_TYPEC_QCOM_PMIC selects it, resulting in a
 > Kconfig warning when CONFIG_OF is disabled:
 > 
->    WARNING: unmet direct dependencies detected for DRM_AUX_BRIDGE
+>    WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
 >      Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && OF [=n]
->      Selected by [y]:
->      - TYPEC_MUX_NB7VPQ904M [=y] && USB_SUPPORT [=y] && TYPEC [=y] && I2C [=y] && (DRM [=y] || DRM [=y]=n) && DRM_BRIDGE [=y]
+>      Selected by [m]:
+>      - TYPEC_QCOM_PMIC [=m] && USB_SUPPORT [=y] && TYPEC [=m] && TYPEC_TCPM [=m] && (ARCH_QCOM || COMPILE_TEST [=y]) && (DRM [=m] || DRM [=m]=n) && DRM_BRIDGE [=y]
 > 
-> Only select CONFIG_DRM_AUX_BRIDGE with both CONFIG_DRM_BRIDGE and
+> Only select CONFIG_DRM_AUX_HPD_BRIDGE with both CONFIG_DRM_BRIDGE and
 > CONFIG_OF to clear up the warning.
 > 
-> Fixes: c5d296bad640 ("usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE")
+> Fixes: 7d9f1b72b296 ("usb: typec: qcom-pmic-typec: switch to DRM_AUX_HPD_BRIDGE")
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
