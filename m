@@ -1,96 +1,127 @@
-Return-Path: <linux-usb+bounces-3724-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3725-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D72DF804B57
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 08:48:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 828E9804BB7
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 09:04:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1DAFBB20CDB
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 07:48:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 383D51F21517
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 08:04:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A8862D63A;
-	Tue,  5 Dec 2023 07:47:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D14539FDD;
+	Tue,  5 Dec 2023 08:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OWniOsrS"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fCO+MI9v"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B30CB
-	for <linux-usb@vger.kernel.org>; Mon,  4 Dec 2023 23:47:53 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5d42c43d8daso31113767b3.0
-        for <linux-usb@vger.kernel.org>; Mon, 04 Dec 2023 23:47:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701762473; x=1702367273; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=INmJtN8JS6E2KqYHMrd6XJhzfWKSoCLZVNWKsSG3lEY=;
-        b=OWniOsrSMKVMYXAk8BCgzDxnombhAt6q8Mxh2L/xIrYRy4SXYzSCjZq7+dvhz8H/Su
-         twZpePhjB6/JtlEZ3M1j98DsG6o1UJOAOINA0QiiHrLO79hJA3ozLTGD7qF2xExeiNG4
-         UYBCG3+0KzBzAft4wJyl6yZz5DS2mMpFfcRKjC7ZgmKBOPxuM5tygr3eh7SQLWtFDUTP
-         oekyFlyL5qZp1x1tJAHWbsHYsq55+uzuMxhNtXu9JaFXBm0/oycc2ZfZQiUY7VvY0G7N
-         EJz+pjuFLNDm1IzpDeTcQgjNs3QNVvoX/lcOI9W7DDaXpAv+mbYe5vlVY3d8Dt156E3N
-         t7Lw==
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942C311F
+	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 00:04:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701763456;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QG11b661HftUVVcgqj8uwD4Zdvva2ZlfcVebX4a7hqE=;
+	b=fCO+MI9vpaB/9ORqjiIvZFQ2DvWouLbBrvIRlnwKU6tqyBA6pTJwIiFbt1IJgAWt3422XV
+	GaImy6dRUdgrmIa+jA+VVYHxmb+C/6ucAJalG371+jQ4mdU9o82aBcGuxMYoTXt0G/ENmS
+	5h5M36Tpu2M9yFm4KA6MXJh+w93CEj4=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-471-Wi6CGHUZNe2-5iQOveGm9g-1; Tue, 05 Dec 2023 03:04:15 -0500
+X-MC-Unique: Wi6CGHUZNe2-5iQOveGm9g-1
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-54c8febd0b0so223127a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 00:04:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701762473; x=1702367273;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=INmJtN8JS6E2KqYHMrd6XJhzfWKSoCLZVNWKsSG3lEY=;
-        b=lg02IPJFohTGUf0KZeCqrieYUwpc8HBby0GIIItdU35PZLROqfszk2bn/5g3dV4f9b
-         lSZ/8NsAwpfNXqKgk2QiEjTEvLUFHPgkZDbGs+3UwslC6zsTczEbIvmWNdvbgEE9RJKc
-         fcTR4q5Uq0vxz6rEzIq6YZX4xjst7ia0nkPBdRBfzq8sjYPPd7YPqmxOwuPbnXuwwCoR
-         Dg/BGrUp4nLECdEhCEsgoXdu/I3CIj+3QH/ssWNBl6hH0rnKhm3tjd43QTT4tKCjAiBp
-         5uKDSb/SoRwOKyvvby92RUMYfwojc0+7JtfYdos3Ck0xGA8o7L7HWTi4ZwCKuf9ag3Pp
-         +UgA==
-X-Gm-Message-State: AOJu0YyhFsPWZabCXWnPNA13Tf6shBJKo/8VPLxD1nvI37avTFajZTXW
-	QpgYz2i/4cUnKu/3Mma5CbEKUK7lZqxU
-X-Google-Smtp-Source: AGHT+IHDsrM5qG/g3mwo20j/t3aM3nd+n7sqb+4JfPSK/lkd4YpfB95s9xXGLrPXQwyaAktUjLXY5Pvp3WQW
-X-Received: from kyletso-p620lin01.ntc.corp.google.com ([2401:fa00:fc:202:8ac9:92f2:1a10:4e1c])
- (user=kyletso job=sendgmr) by 2002:a05:690c:842:b0:5d3:e8b8:e1fd with SMTP id
- bz2-20020a05690c084200b005d3e8b8e1fdmr47271ywb.3.1701762472940; Mon, 04 Dec
- 2023 23:47:52 -0800 (PST)
-Date: Tue,  5 Dec 2023 15:47:46 +0800
+        d=1e100.net; s=20230601; t=1701763454; x=1702368254;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QG11b661HftUVVcgqj8uwD4Zdvva2ZlfcVebX4a7hqE=;
+        b=L8ebas8iPU8O/4IGbhYEO+7OREoGdjoPoUl3M+AXY3+BqVwZ9CJn9PFaiidguEFprc
+         ynGu0d7o5mr+CqiamaUiucG6O49HwdxQdgJwUuwZVVKe1Q7f9ua4MF9AEarXtJyQtM7f
+         TXwuCCOngNfaRA4sVEQPnQhm5eOT8npjXYQS504ynWICjamMlUrAahaqFXluQJ9ToIFi
+         PFDGPki5feSGiuat19p4PA2F2FGW+ciRPql1jnaXJsvQQS2i+W5o1ZrSFQPc9ktZXHXY
+         GnYjZeTKt3MymTKqct/epXKtpdCP2cmJg10CNH+KSU1PGeBA9iWwU4roORA+ASIgolLE
+         dfIA==
+X-Gm-Message-State: AOJu0YxhQzQKP0pxdaBG/nPNUaScBSDiuN6Mj4FSJBAzy4MMX+smrVHc
+	VOQ4lEH7LFU33zf0TrUjlLK0TPBa6ODpxTOo9JIl86peXKuWbZs7VkCxuNXW+e1hREEaN19t7Ue
+	CR28adE4SbgstRkPBUYu+
+X-Received: by 2002:a05:6402:26c5:b0:54c:d1a2:4607 with SMTP id x5-20020a05640226c500b0054cd1a24607mr3368985edd.3.1701763454000;
+        Tue, 05 Dec 2023 00:04:14 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEtXpMsawMsuFwRkEnoQMMcXKCPnk2BWpymAzqEFedNYhFu5lgiRc7w0ozIKmOHNaM1R42zQw==
+X-Received: by 2002:a05:6402:26c5:b0:54c:d1a2:4607 with SMTP id x5-20020a05640226c500b0054cd1a24607mr3368977edd.3.1701763453676;
+        Tue, 05 Dec 2023 00:04:13 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-241-54.dyn.eolo.it. [146.241.241.54])
+        by smtp.gmail.com with ESMTPSA id n10-20020aa7c44a000000b0054cd6346685sm720230edr.35.2023.12.05.00.04.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Dec 2023 00:04:13 -0800 (PST)
+Message-ID: <73ef03a1607f221c7939cb0646c17c5435dcecd1.camel@redhat.com>
+Subject: Re: [PATCHv2] USB: gl620a: check for rx buffer overflow
+From: Paolo Abeni <pabeni@redhat.com>
+To: Oliver Neukum <oneukum@suse.com>, dmitry.bezrukov@aquantia.com, 
+ marcinguy@gmail.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org,  linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Date: Tue, 05 Dec 2023 09:04:11 +0100
+In-Reply-To: <20231122095306.15175-1-oneukum@suse.com>
+References: <20231122095306.15175-1-oneukum@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-Message-ID: <20231205074747.1821297-1-kyletso@google.com>
-Subject: [PATCH v1] usb: typec: tcpm: Query Source partner for FRS capability
- only if it is DRP
-From: Kyle Tso <kyletso@google.com>
-To: linux@roeck-us.net, heikki.krogerus@linux.intel.com, 
-	gregkh@linuxfoundation.org
-Cc: badhri@google.com, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
 
-Source-only port partner will always respond NOT_SUPPORTED to
-GET_SINK_CAP. Avoid this redundant AMS by bailing out querying the FRS
-capability if the Source port partner is not DRP.
+On Wed, 2023-11-22 at 10:52 +0100, Oliver Neukum wrote:
+> The driver checks for a single package overflowing
+> maximum size. That needs to be done, but it is not
+> enough. As a single transmission can contain a high
+> number of packets, we also need to check whether
+> the aggregate of messages in itself short enough
+> overflow the buffer.
+> That is easiest done by checking that the current
+> packet does not overflow the buffer.
+>=20
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
 
-Signed-off-by: Kyle Tso <kyletso@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+This looks like a bugfix, so a suitable Fixes tag should be included.
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 50cbc52386b3..192c103e0d10 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -4401,7 +4401,8 @@ static void run_state_machine(struct tcpm_port *port)
- 			tcpm_set_current_limit(port, tcpm_get_current_limit(port), 5000);
- 		tcpm_swap_complete(port, 0);
- 		tcpm_typec_connect(port);
--		mod_enable_frs_delayed_work(port, 0);
-+		if (port->pd_capable && port->source_caps[0] & PDO_FIXED_DUAL_ROLE)
-+			mod_enable_frs_delayed_work(port, 0);
- 		tcpm_pps_complete(port, port->pps_status);
- 
- 		if (port->ams != NONE_AMS)
--- 
-2.43.0.472.g3155946c3a-goog
+> ---
+>=20
+> v2: corrected typo in commit message
+> =20
+>  drivers/net/usb/gl620a.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/drivers/net/usb/gl620a.c b/drivers/net/usb/gl620a.c
+> index 46af78caf457..d33ae15abdc1 100644
+> --- a/drivers/net/usb/gl620a.c
+> +++ b/drivers/net/usb/gl620a.c
+> @@ -104,6 +104,10 @@ static int genelink_rx_fixup(struct usbnet *dev, str=
+uct sk_buff *skb)
+>  			return 0;
+>  		}
+> =20
+> +		/* we also need to check for overflowing the buffer */
+> +		if (size > skb->len)
+> +			return 0;
+
+I think the above is not strict enough: at this point skb->data points
+to the gl_packet header. The first 4 bytes in skb are gl_packet-
+>packet_length. To ensure an overflow is avoided you should check for:
+
+		if (size + 4 > skb->len)
+
+likely with a describing comment.
+
+Cheers,
+
+Paolo
 
 
