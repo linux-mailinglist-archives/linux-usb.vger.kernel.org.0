@@ -1,74 +1,65 @@
-Return-Path: <linux-usb+bounces-3727-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3728-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 668E4804CFD
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 09:54:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25136804D28
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 10:04:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC999B20CC5
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 08:54:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5ECB28159E
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 09:04:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A10C3D39F;
-	Tue,  5 Dec 2023 08:54:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 739D63D98C;
+	Tue,  5 Dec 2023 09:04:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XMZWch3Z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m7tG/LKK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3BEFA;
-	Tue,  5 Dec 2023 00:54:11 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2c9f751663bso30980531fa.1;
-        Tue, 05 Dec 2023 00:54:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701766450; x=1702371250; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HyknJ2kgcVG072UTY8H4XJfMA8Do1SX6JMn4BPTg2BU=;
-        b=XMZWch3Z2J0PSZ6wcsOj42Jl1z/L59IhIDa8sEkDGErehNI6u/JbOr1VYv0HDL/lRk
-         aGI3gPGf1SU4ZLyhVAoLVgGCaLxy8ht9cZP0rT8pCZ2bMNRAhhFwSIbtf7lf7n8SCrqc
-         8DjkELJV2Ec+DHVYC57Qp6ttwxksp03yL/kClOMjKB9dhMW6zcYR+oxZx5gf4r6PLk6B
-         c0UE63ZawFgK78norn1ZpXDrxA+nOLYbRbCH1mFe/vFSG0IuyYf9KhwCWZZ9iaImqPMr
-         vHHK0S8Fx3MowkMFnes/He5cN5FA8NBCVL583qUcXwfHdo3IWthOkcOFD6I7vqOTjyZY
-         u1cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701766450; x=1702371250;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HyknJ2kgcVG072UTY8H4XJfMA8Do1SX6JMn4BPTg2BU=;
-        b=m/ecpYdGDtMsBVUz5BvFDvH1stV/Ki1CAJx+LgDy5aHlyoZQlSYk+W6DssrqOoVRd2
-         QV+QVN1XgPc1bqzl1j4w+T9W0WFA9EgydRwDM4k/I6o/TKgGGWsZDpKyV4tTAAeUjuBo
-         GhcmKPwFLAmAd7PnyCqnFOk6M+gIio1F784Sd5hb0pwixH/QtwAF4X4DAGf/e5DFbTDM
-         jUUDbZiII9Mlsa1mSSsOWchHuAnxwHVaL9EB/LGDrGRxCkGlj0sTmdBEr/16ON4cZ6Z+
-         oMwpgEdWEDxGL7PsHp/2h5A9ULLVmPwkJBBLFvf5Fp7cJC2IhzdbjIDvLixarsoOQJI3
-         KGiQ==
-X-Gm-Message-State: AOJu0Yy1nnLt/poYvnDpesBI0NqV59QF7lyuyhe+Du5TSTkVAIAvhDqV
-	15d8ItroYGo4aZyNuDwONhk=
-X-Google-Smtp-Source: AGHT+IFkFBpXLWdwrNG0O2AGZ5DnqqZ3qSHpctu5B65CGnP+bLv4YkGnqqMoUfNXS+GoU5bzILHdfw==
-X-Received: by 2002:a2e:7e05:0:b0:2c9:f8bf:1fb with SMTP id z5-20020a2e7e05000000b002c9f8bf01fbmr742373ljc.196.1701766449554;
-        Tue, 05 Dec 2023 00:54:09 -0800 (PST)
-Received: from PC10319.67 ([82.97.198.254])
-        by smtp.googlemail.com with ESMTPSA id y33-20020a05651c222100b002ca0ed22a22sm274879ljq.63.2023.12.05.00.54.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Dec 2023 00:54:09 -0800 (PST)
-From: Konstantin Aladyshev <aladyshev22@gmail.com>
-To: 
-Cc: gregkh@linuxfoundation.org,
-	benjamin.tissoires@redhat.com,
-	aladyshev22@gmail.com,
-	ivan.orlov0322@gmail.com,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	john@keeping.me.uk,
-	lee@kernel.org
-Subject: [PATCH 1/1] usb: gadget: f_hid: fix report descriptor allocation
-Date: Tue,  5 Dec 2023 11:54:03 +0300
-Message-Id: <20231205085404.175-2-aladyshev22@gmail.com>
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871A111F;
+	Tue,  5 Dec 2023 01:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701767083; x=1733303083;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=VCYXjHvj6vQAnVMBfKsjYdOGUml5t+S2AlaIXferjKU=;
+  b=m7tG/LKK+kicsfluRVH9dfjJe/Y65QCipF42e0cfZWlJeM8JEtfiakI9
+   x16tRaweZ1L5l5yZN1LJq3IXc1w8U2XPSwR/UMQzmErral9aMb8UGfjDX
+   a99oj04tqkD89kjydWElnnS4xItjJAVadyndLk7QAwAK62JjWVhDa1KFg
+   FJ8BBVv9XiLsjoLHm6DNqfMOJWGoUv3nnUTml6UMfSd0wf1Gm69uFcAfe
+   5ZwPNgXXPSweGq3sRch8vY3akdBgK/Gye/TV90IIj1fkjf0Jup0F8agRC
+   vS/7kNk9G6SKpwpRWy5ZK3rPdPVTvx2HFF9W2DPtj9B25zPu56iYpZ3oM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="378891874"
+X-IronPort-AV: E=Sophos;i="6.04,251,1695711600"; 
+   d="scan'208";a="378891874"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 01:04:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="1102386629"
+X-IronPort-AV: E=Sophos;i="6.04,251,1695711600"; 
+   d="scan'208";a="1102386629"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by fmsmga005.fm.intel.com with ESMTP; 05 Dec 2023 01:04:38 -0800
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	linux-bluetooth@vger.kernel.org,
+	mario.limonciello@amd.com,
+	regressions@lists.linux.dev,
+	regressions@leemhuis.info,
+	Basavaraj.Natikar@amd.com,
+	pmenzel@molgen.mpg.de,
+	bugs-a21@moonlit-rail.com,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2] Revert "xhci: Loosen RPM as default policy to cover for AMD xHC 1.1"
+Date: Tue,  5 Dec 2023 11:05:48 +0200
+Message-Id: <20231205090548.1377667-1-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231205085404.175-1-aladyshev22@gmail.com>
-References: <20231205085404.175-1-aladyshev22@gmail.com>
+In-Reply-To: <2023120521-dusk-handwrite-cea3@gregkh>
+References: <2023120521-dusk-handwrite-cea3@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,49 +68,44 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The commit "usb: gadget: f_hid: fix f_hidg lifetime vs cdev"
-(89ff3dfac604614287ad5aad9370c3f984ea3f4b) has introduced a bug
-that leads to hid device corruption after the replug operation.
-Reverse device managed memory allocation for the report descriptor
-to fix the issue.
+This reverts commit 4baf1218150985ee3ab0a27220456a1f027ea0ac.
 
-Tested:
-This change was tested on the AMD EthanolX CRB server with the BMC
-based on the OpenBMC distribution. The BMC provides KVM functionality
-via the USB gadget device:
-- before: KVM page refresh results in a broken USB device,
-- after: KVM page refresh works without any issues.
+Enabling runtime pm as default for all AMD xHC 1.1 controllers caused
+regression. An initial attempt to fix those was done in commit a5d6264b638e
+("xhci: Enable RPM on controllers that support low-power states") but new
+issues are still seen.
 
-Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+Revert this to get those AMD xHC 1.1 systems working
+
+This patch went to stable an needs to be reverted from there as well.
+
+Fixes: 4baf12181509 ("xhci: Loosen RPM as default policy to cover for AMD xHC 1.1")
+Link: https://lore.kernel.org/linux-usb/55c50bf5-bffb-454e-906e-4408c591cb63@molgen.mpg.de
+Cc: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/gadget/function/f_hid.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+v1 -> v2
+Revert only one patch, keep commit a5d6264b638
+Minor commit message changes
 
-diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-index ea85e2c701a1..3c8a9dd585c0 100644
---- a/drivers/usb/gadget/function/f_hid.c
-+++ b/drivers/usb/gadget/function/f_hid.c
-@@ -92,6 +92,7 @@ static void hidg_release(struct device *dev)
- {
- 	struct f_hidg *hidg = container_of(dev, struct f_hidg, dev);
+ drivers/usb/host/xhci-pci.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 95ed9404f6f8..d6fc08e5db8f 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -535,8 +535,6 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	/* xHC spec requires PCI devices to support D3hot and D3cold */
+ 	if (xhci->hci_version >= 0x120)
+ 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+-	else if (pdev->vendor == PCI_VENDOR_ID_AMD && xhci->hci_version >= 0x110)
+-		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
  
-+	kfree(hidg->report_desc);
- 	kfree(hidg->set_report_buf);
- 	kfree(hidg);
- }
-@@ -1287,9 +1288,9 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
- 	hidg->report_length = opts->report_length;
- 	hidg->report_desc_length = opts->report_desc_length;
- 	if (opts->report_desc) {
--		hidg->report_desc = devm_kmemdup(&hidg->dev, opts->report_desc,
--						 opts->report_desc_length,
--						 GFP_KERNEL);
-+		hidg->report_desc = kmemdup(opts->report_desc,
-+					    opts->report_desc_length,
-+					    GFP_KERNEL);
- 		if (!hidg->report_desc) {
- 			ret = -ENOMEM;
- 			goto err_put_device;
+ 	if (xhci->quirks & XHCI_RESET_ON_RESUME)
+ 		xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
 -- 
 2.25.1
 
