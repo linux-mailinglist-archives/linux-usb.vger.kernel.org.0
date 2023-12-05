@@ -1,99 +1,116 @@
-Return-Path: <linux-usb+bounces-3732-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3733-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48A0280501C
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 11:22:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44EAA8053FF
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 13:22:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A898DB20D5C
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 10:22:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE75D1F212C0
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 12:22:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C30C5380B;
-	Tue,  5 Dec 2023 10:22:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 883855B5A0;
+	Tue,  5 Dec 2023 12:22:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PZZvDB+c"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IhwDVaHl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F99A5
-	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 02:21:57 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-40c0873cf84so27724095e9.1
-        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 02:21:57 -0800 (PST)
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C6AC9
+	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 04:22:41 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1d05212a7c5so21493965ad.0
+        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 04:22:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1701771716; x=1702376516; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NfZJNSQ5xEmWcdRaICEtZLq/bhaKOh50aZuU1fZaSaQ=;
-        b=PZZvDB+crLG6Y99ObbHMsejws01IPMsnST0UrHwgCTkjnLYxmrR3rqpGcar1tQtv2Y
-         zQMA1C+0ty+5xSI99HOPXbMkPF+DSBBsvvK24bx2FnXXj6OAHw2ZB1pAHzelpeQ6yWZu
-         0V3sIBQgVE98fi+M6jxqQbw7GC2qRuJfmdX5WKW9J7wGvU1tA1NtXju/N8+F0YktEivh
-         ZlTovY1tocO2mhOy97ozC9mKWRfmnkyq/iq7OP1C7UUYHOrAPRHc3Cn8JYbj+Ip2Awu1
-         MkgBgEkT5+TtOYTor15jcZZFnz6AErWcAt43Oiqc4GIi3F++oGZvQv68xWP+2Qt7u0cr
-         /mtQ==
+        d=gmail.com; s=20230601; t=1701778961; x=1702383761; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0DkoNDcu4j63ihXOI4O015vQi/uc6cmZYAURuPc8nI4=;
+        b=IhwDVaHl1BfSvluf5v1pDihYBuyZR90C+s24WQkCW9VrOA5i2EH3N0a2PHtUP+BTEK
+         Z7qIzyMbR6OCAbigVbn0IL6QUl3xpK6TNJiVZOdFPVb/oT63nwY2YJaoDKEuaozSFQSL
+         wJYs/nfytCFW3Xvu0sHhIhX9yeTk40MRjfYYAFa1axXmy4rQXz+j9F3KEVbulae5AWoo
+         9XmGmLO2KrjlhqFCPVoJ4+C8BoEgtyhwINqmM/BNzoUGAm4ArjJBajRQQSWpzPAse1t0
+         PqRMrqs1YPBn7Ts6f7WnIGOWW/GKkOVaADqmVvS2oRBf8rQbf3R9LKpiuU+HzJBmBiQM
+         IOqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701771716; x=1702376516;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NfZJNSQ5xEmWcdRaICEtZLq/bhaKOh50aZuU1fZaSaQ=;
-        b=o63O8G0XNNkQnRJC8NwvrZ7evJafCl+H826pxz4EYi84mjaaH+K0WqgwwyjydvXLuZ
-         WvX9QSivxbj88UhLdXjTAioDQtlfoq4/jUVLl2xXRhy1D6DER2yB0vTXD1dntSP8dCdI
-         359TEJoZcRWvJmVgU1ECSV8kMZ9fMcbQ9ynTEX0CuulJ5Khyhlb97Wu5Lls5tDwPZwDG
-         r8RYhlYt6XxuFKlmV2jVNRj6m1B4i7FwbtQ+plAJiciLIG/SlFgp9gVR0+8LZ+4HLwyl
-         YMp9EzwXznxlq3dJPKxsk5bca6sYF24ViNIzGJkUuOHIvjDBYApyRGOhPP41mTp2Mhm2
-         SsSQ==
-X-Gm-Message-State: AOJu0YxyclLAUhEkJiRNisP8wHToHN6SFChn9e4K9D8W/p+EI45FNtmI
-	GwBnb1J1o3lTMADxM7L2IsUIVg==
-X-Google-Smtp-Source: AGHT+IEGgR9vP/IDHx4I8EsEBlJ6nnlhSkR2i4kB0X8XAHt96YZ8oy3EI1zXi7Ek5iZLKsio1Im4XQ==
-X-Received: by 2002:a05:600c:4eca:b0:40b:5e21:d367 with SMTP id g10-20020a05600c4eca00b0040b5e21d367mr338017wmq.112.1701771715715;
-        Tue, 05 Dec 2023 02:21:55 -0800 (PST)
-Received: from ?IPV6:2001:a61:1362:9c01:78ff:1f81:1ea8:d077? ([2001:a61:1362:9c01:78ff:1f81:1ea8:d077])
-        by smtp.gmail.com with ESMTPSA id bi10-20020a05600c3d8a00b0040b4c7e1a65sm21847794wmb.13.2023.12.05.02.21.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Dec 2023 02:21:55 -0800 (PST)
-Message-ID: <b66c6ee2-a836-4a83-bc0e-f34cac84a0f1@suse.com>
-Date: Tue, 5 Dec 2023 11:21:54 +0100
+        d=1e100.net; s=20230601; t=1701778961; x=1702383761;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0DkoNDcu4j63ihXOI4O015vQi/uc6cmZYAURuPc8nI4=;
+        b=p+u5GhW9eIBuJdHdlCT6kix4e1dyFXohcPLIGeRImkBVTRfG3PLCbHM5vE37NpwnF0
+         aCSGOM1pTg7YTK2hArgtrGrSze5yK0KRsZvQUv6oF7ixsP+SULutwRiJzIByJPPeff4I
+         5luMeYO9sZio5pDikDkq1yL83tu0NDf0mbrIJWcxGpd5Loe0M5MYjnj/GBdEAKyrBl8z
+         arJcSg2fnCxorrsb80848Qqs4rzXTjAEojPmjqhalHlNu4/KqZYQu9E9Hxj9z09u4xmw
+         /KbRER7E0Z3Ncz6ILsyUfVIJVg20LhQMe5ZH0XKoD5ditzSWKrqyHZ4hdehjgG7njKhO
+         qyig==
+X-Gm-Message-State: AOJu0Yyd7foetoZACWbhys+8d8zb6/v4/SmS9NLTMd4zerHqwS+1lmNF
+	whFutGiUir+bHTCl7btItHY=
+X-Google-Smtp-Source: AGHT+IFw6jGhY5iopOrdNVaIUkpaWiMDA1XfzIJAIujwErH4jFtLu6lRbk3CKFANfwJ0GHM16+nExQ==
+X-Received: by 2002:a17:902:bc82:b0:1d0:bc8f:eecb with SMTP id bb2-20020a170902bc8200b001d0bc8feecbmr1483873plb.74.1701778960774;
+        Tue, 05 Dec 2023 04:22:40 -0800 (PST)
+Received: from hdebian.corp.toradex.com ([201.82.41.210])
+        by smtp.gmail.com with ESMTPSA id j8-20020a170903024800b001cfc67d46efsm10030198plh.191.2023.12.05.04.22.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Dec 2023 04:22:40 -0800 (PST)
+From: Hiago De Franco <hiagofranco@gmail.com>
+To: oneukum@suse.com
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	hiago.franco@toradex.com,
+	hiagofranco@gmail.com,
+	kuba@kernel.org,
+	linux-usb@vger.kernel.org,
+	pabeni@redhat.com
+Subject: Re: Question regarding CDC NCM and VNC performance issue
+Date: Tue,  5 Dec 2023 09:22:04 -0300
+Message-ID: <20231205122204.10556-1-hiagofranco@gmail.com>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <df7a9e1e-3399-4ebe-bfcc-4cb0ac164f99@suse.com>
+References: <df7a9e1e-3399-4ebe-bfcc-4cb0ac164f99@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv2] USB: gl620a: check for rx buffer overflow
-Content-Language: en-US
-To: Paolo Abeni <pabeni@redhat.com>, Oliver Neukum <oneukum@suse.com>,
- dmitry.bezrukov@aquantia.com, marcinguy@gmail.com, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org
-References: <20231122095306.15175-1-oneukum@suse.com>
- <73ef03a1607f221c7939cb0646c17c5435dcecd1.camel@redhat.com>
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <73ef03a1607f221c7939cb0646c17c5435dcecd1.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+From: Hiago De Franco <hiago.franco@toradex.com>
 
+Hi Oliver,
 
-On 05.12.23 09:04, Paolo Abeni wrote:
+> At first thought my gut feeling is that the packet bonding is killing
+> your performance. What does a simple ping do?
 
-Hi,
+Thanks for the reply.
 
-> I think the above is not strict enough: at this point skb->data points
-> to the gl_packet header. The first 4 bytes in skb are gl_packet-
->> packet_length. To ensure an overflow is avoided you should check for:
-> 
-> 		if (size + 4 > skb->len)
-> 
-> likely with a describing comment.
+Pinging the device works with or without the VNC connected.
 
-it seems to me that at the time of the check skb->len has already
-been adjusted by the skb_pull() before, respectively at the end, of
-the loop.
+$ ping 192.168.11.2
+PING 192.168.11.2 (192.168.11.2) 56(84) bytes of data.
+64 bytes from 192.168.11.2: icmp_seq=1 ttl=64 time=0.027 ms
+64 bytes from 192.168.11.2: icmp_seq=2 ttl=64 time=0.092 ms
+64 bytes from 192.168.11.2: icmp_seq=3 ttl=64 time=0.072 ms
+...
+64 bytes from 192.168.11.2: icmp_seq=37 ttl=64 time=0.065 ms
+64 bytes from 192.168.11.2: icmp_seq=38 ttl=64 time=0.070 ms
+64 bytes from 192.168.11.2: icmp_seq=39 ttl=64 time=0.090 ms
+^C
+--- 192.168.11.2 ping statistics ---
+39 packets transmitted, 39 received, 0% packet loss, time 38910ms
+rtt min/avg/max/mdev = 0.027/0.076/0.105/0.015 ms
 
-	Regards
-		Oliver
+During the ping, nothing changes, VNC continues to be extremely slow.
 
+I switched from NCM to ECM for testing purposes. On ECM, everything works
+seamlessly without any issues. It appears that the problem may be specific
+to the combination of NCM and the Linux host machine, as the setup works
+fine on Windows.
+
+I'm curious if there are issues with NCM and small USB packet lengths.
+The VNC application tends to send numerous small packets (1514 bytes).
+
+Regards,
+Hiago
 
