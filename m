@@ -1,143 +1,149 @@
-Return-Path: <linux-usb+bounces-3753-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3761-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 393B5805F12
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 21:06:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB782805F3B
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 21:15:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9DE8281FB1
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 20:06:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E94F71C20A60
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 20:15:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C87CB68EA7;
-	Tue,  5 Dec 2023 20:06:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91A0F6DD00;
+	Tue,  5 Dec 2023 20:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="NH6VoiTD"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Jhhq4y0r"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04D71A4;
-	Tue,  5 Dec 2023 12:06:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=s31663417; t=1701806764; x=1702411564; i=wahrenst@gmx.net;
-	bh=51jUPbm6/S373S1XdgCs7OEHNtM2V5AN/Pt7BeLnFo4=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
-	 References;
-	b=NH6VoiTDilABNRMCQrY2M7Fw9zElE4h2FYWKSjqos73gypCG4tT/BxqBr4qecyCY
-	 PtFT4Nt08dXfFaB0LYsb5aHvYCORX1rf7p02CHm1UjYQowqKrfPt/8OsYNPdSMGZO
-	 x/Tazd5PXzdtHIwVdUwpNEiwyFkTYnRNaLpvo4osUJoTcnzf2dMJ0rD98J6+TUipg
-	 W06IGW8T98mfjW/i05475Ie1yIHJ+0VFkzTqmnno0oJ4dKOw9kvSAWYXK9HKK4BI2
-	 9B7wQH9hMKdnQJAkHdbPqXutA0t8uLRgISkXJf3jgdBJtuoG0a2sz6qLMJ2/UNtQW
-	 rZ9AJJwZ0rpfXTB2jg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MQ5rU-1qxUgG1Ymm-00M5P7; Tue, 05
- Dec 2023 21:06:04 +0100
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Mathias Nyman <mathias.nyman@intel.com>
-Cc: bcm-kernel-feedback-list@broadcom.com,
-	Cyril Brulebois <kibi@debian.org>,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V4 3/3] ARM: dts: bcm2711: Add BCM2711 xHCI support
-Date: Tue,  5 Dec 2023 21:05:31 +0100
-Message-Id: <20231205200531.8232-4-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231205200531.8232-1-wahrenst@gmx.net>
-References: <20231205200531.8232-1-wahrenst@gmx.net>
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87304D3;
+	Tue,  5 Dec 2023 12:15:41 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B5KCPfO027444;
+	Tue, 5 Dec 2023 20:15:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=uEhLb0Ninn2CfLq9LAvSGMVPwpAwACXLQKE397HR4Ls=;
+ b=Jhhq4y0rTm8z9lqLHFXr7p/UQ+YEG6vzMG5kuZ8XoqpSOb5K7CcbVC4rigAkJCoymTHf
+ +nE8Bl4Xrls64ESwXoyW493HBm60tStq9EdzCYhtGHfCwrPaAPejx93/i16rYNwhGy06
+ +9Mq6NAQIIIRpEIU/++iMA25QgWxCEZ3MbSgX742DVgW7REitM0D9Jiz/cJJYdTAd6zT
+ 6mjAVwHW1UHw3vPQIwkL0n74Hwn/m19wP5qvX3hyvqqiI3dkt3SN/e3kcHDleWTe4Ct9
+ I0sV3esCO4MjHCQ8UGY4KoJy3q4ez/N+Ycgy88rWb+aep+bWr5x+3k3APX7eOkv4NEEr iA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3utapgr07y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Dec 2023 20:15:37 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3B5KAlxN011615
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 5 Dec 2023 20:10:47 GMT
+Received: from [10.110.40.150] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 5 Dec
+ 2023 12:10:47 -0800
+Message-ID: <5aa271d5-1d7b-ed6a-2066-ad86ed5edc8b@quicinc.com>
+Date: Tue, 5 Dec 2023 12:10:43 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:KgWSquO6kpuFUC6BnC7EI87vl7h/1oyUbpH2rECpuOK4nyJh1fj
- ubTjyLgrZ6KdIhfCtTECBTeSe7WZczrJWBFfyYJvH2gexaW/HlXREckdHaKuMc/uNNY3dMe
- etUaFNSmv2ug+n7+oxCAAiT18mwj1nSj2OS49zmSxJ+iQMA8JGtybhS5a7XbWuZtIFtl9Ce
- KgWrgiQrKekhvfVTNAjIA==
-UI-OutboundReport: notjunk:1;M01:P0:iqIneQT7tew=;idYTigGNSaoYLI75HsETsYdzC7c
- OHOlh0l2sg8Lha1gjRDP3Qt8/RRm/KmajB3gXTeUGqbocJ8ulC/EvmpJxT3WQPrBs8SxFbCN0
- tVJZ3pDCQ/15M3AFhyH3DLx5ZwaoYUJUhUr5uB2nf7M6iq6xf5MDGyvgQkVlg8HBWe3NAw/k0
- /ncZRrXwSnC4zL5ksWlXjUPA4Ta06/z+eMCe+WMIRj+i6qa6YM2xCkXaFmavr9hobb9skUhaM
- CPa/JGAaqDQBmA+PXXR56TnhA5u8c4Gj+qK/AEZI0X/9JjPEYlZWZNguR8jm8JllNUNMe52Vj
- kwyULuxTL8m3vN2tcdb5qPwccxLmcs/SHH5/XMwKaPRexE+KOf5PYkm5dUyOieexXpP8ovni4
- bHVJSjOnW7f6PEt9bWFJM3RhnJkX8QHUDr9dGtHivgaDqpwBeB9vY2RhAP8gmGaFsqI3MMwXI
- gn8SzeB2GA+XGF5ybEzYXIBp+CH5IoeQBtZHjsyonHd6XymLfVgK/oNVhdzAYAYYsqOxs1IVx
- z1e+CbOHYcFbqpFdTcJfsz9/ozX70XrEMeIqgcB8+cx0ZlCTwQqttr1Vbn+JoKSua/SmfU3qZ
- WXCpXpEWWyWuso/UEvfYVbv0nvWQCakna02TSK7S48+5SOjKvZeD19r1SRzxhQUSz+bEhQW/b
- +xD7JRF56hgk4fIoC2zyYuvYq7Rm24mCkTTyFRsGMj7xLI7NgwB6O/EmvqEMMVTmfHtqBn2nm
- SKtvFSRR+Rk7MIbFTk0curc1VFx4HkuGQpyPX3iVvSKu7aVPfXWEvaKAZ2jQeRfm+UPdJYif6
- 0jLAPNzCVD9Yzp5D2uAdcPbO2x7adLlkHn/TxjUJzClcem5atOrO775NALG4D1qtkzemZiiIJ
- mQgvLiHHsFX7pzHvlqWEdmSThGYWiil975QnpYkU62+1Z2hSgpu+DsND50kDJif1k8Jx/59Gd
- GLdzlA==
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: dwc3: gadget: Handle EP0 request dequeuing properly
+Content-Language: en-US
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20231121232003.20249-1-quic_wcheng@quicinc.com>
+ <20231205014647.jvw5yscdn232nddk@synopsys.com>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <20231205014647.jvw5yscdn232nddk@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: r-xYL6KFRaqQzd-Vu9pawnS-TyEASiOv
+X-Proofpoint-GUID: r-xYL6KFRaqQzd-Vu9pawnS-TyEASiOv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-05_15,2023-12-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1011 impostorscore=0
+ mlxscore=0 phishscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311290000 definitions=main-2312050160
 
-The BCM2711 SoC also has a mostly generic xHCI. The USB port is
-currently only usable on the Compute Module 4 (e.g. via IO board).
-Because DWC2 and xHCI share the same PHY, we let the bootloader
-enable it on demand.
+Hi Thinh,
 
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-=2D--
- arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi |  5 +++++
- arch/arm/boot/dts/broadcom/bcm2711.dtsi     | 14 ++++++++++++++
- 2 files changed, 19 insertions(+)
+On 12/4/2023 5:46 PM, Thinh Nguyen wrote:
+> On Tue, Nov 21, 2023, Wesley Cheng wrote:
+>> Current EP0 dequeue path will share the same as other EPs.  However, there
+>> are some special considerations that need to be made for EP0 transfers:
+>>
+>>    - EP0 transfers never transition into the started_list
+>>    - EP0 only has one active request at a time
+>>
+>> In case there is a vendor specific control message for a function over USB
+>> FFS, then there is no guarantee on the timeline which the DATA/STATUS stage
+>> is responded to.  While this occurs, any attempt to end transfers on
+>> non-control EPs will end up having the DWC3_EP_DELAY_STOP flag set, and
+>> defer issuing of the end transfer command.  If the USB FFS application
+>> decides to timeout the control transfer, or if USB FFS AIO path exits, the
+>> USB FFS driver will issue a call to usb_ep_dequeue() for the ep0 request.
+>>
+>> In case of the AIO exit path, the AIO FS blocks until all pending USB
+>> requests utilizing the AIO path is completed.  However, since the dequeue
+>> of ep0 req does not happen properly, all non-control EPs with the
+>> DWC3_EP_DELAY_STOP flag set will not be handled, and the AIO exit path will
+>> be stuck waiting for the USB FFS data endpoints to receive a completion
+>> callback.
+>>
+>> Fix is to utilize dwc3_ep0_reset_state() in the dequeue API to ensure EP0
+>> is brought back to the SETUP state, and ensures that any deferred end
+>> transfer commands are handled.  This also will end any active transfers
+>> on EP0, compared to the previous implementation which directly called
+>> giveback only.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/gadget.c | 12 +++++++++++-
+>>   1 file changed, 11 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 858fe4c299b7..88d8d589f014 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2103,7 +2103,17 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+>>   
+>>   	list_for_each_entry(r, &dep->pending_list, list) {
+>>   		if (r == req) {
+>> -			dwc3_gadget_giveback(dep, req, -ECONNRESET);
+>> +			/*
+>> +			 * Explicitly check for EP0/1 as dequeue for those
+>> +			 * EPs need to be handled differently.  Control EP
+>> +			 * only deals with one USB req, and giveback will
+>> +			 * occur during dwc3_ep0_stall_and_restart().  EP0
+>> +			 * requests are never added to started_list.
+>> +			 */
+>> +			if (dep->number > 1)
+>> +				dwc3_gadget_giveback(dep, req, -ECONNRESET);
+>> +			else
+>> +				dwc3_ep0_reset_state(dwc);
+>>   			goto out;
+>>   		}
+>>   	}
+> 
+> Should we add Fixes tag?
+> 
 
-diff --git a/arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi b/arch/arm/boot/d=
-ts/broadcom/bcm2711-rpi.dtsi
-index 98817a6675b9..d233a191c139 100644
-=2D-- a/arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi
-+++ b/arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "bcm2835-rpi.dtsi"
+Sure will add and resubmit.
 
-+#include <dt-bindings/power/raspberrypi-power.h>
- #include <dt-bindings/reset/raspberrypi,firmware-reset.h>
-
- / {
-@@ -76,3 +77,7 @@ &v3d {
- &vchiq {
- 	interrupts =3D <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
- };
-+
-+&xhci {
-+	power-domains =3D <&power RPI_POWER_DOMAIN_USB>;
-+};
-diff --git a/arch/arm/boot/dts/broadcom/bcm2711.dtsi b/arch/arm/boot/dts/b=
-roadcom/bcm2711.dtsi
-index 4a379a14966d..22c7f1561344 100644
-=2D-- a/arch/arm/boot/dts/broadcom/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/broadcom/bcm2711.dtsi
-@@ -604,6 +604,20 @@ genet_mdio: mdio@e14 {
- 			};
- 		};
-
-+		xhci: usb@7e9c0000 {
-+			compatible =3D "brcm,bcm2711-xhci", "brcm,xhci-brcm-v2";
-+			reg =3D <0x0 0x7e9c0000 0x100000>;
-+			#address-cells =3D <1>;
-+			#size-cells =3D <0>;
-+			interrupts =3D <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;
-+			/* DWC2 and this IP block share the same USB PHY,
-+			 * enabling both at the same time results in lockups.
-+			 * So keep this node disabled and let the bootloader
-+			 * decide which interface should be enabled.
-+			 */
-+			status =3D "disabled";
-+		};
-+
- 		v3d: gpu@7ec00000 {
- 			compatible =3D "brcm,2711-v3d";
- 			reg =3D <0x0 0x7ec00000 0x4000>,
-=2D-
-2.34.1
-
+Thanks
+Wesley Cheng
 
