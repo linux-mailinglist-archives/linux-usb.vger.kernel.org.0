@@ -1,41 +1,49 @@
-Return-Path: <linux-usb+bounces-3741-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3742-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 895A380579A
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 15:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4E15805801
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 15:57:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EBCA282405
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 14:41:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F5D9281D7D
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 14:57:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34415C8F1;
-	Tue,  5 Dec 2023 14:41:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B0F367E67;
+	Tue,  5 Dec 2023 14:57:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="P7p04kQ8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HJDY57Zu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D865D1A1
-	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 06:40:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=41X7tFiHQfjscTD0MI4N3CZZAsABYRv0bngDHyE8hME=; b=P7p04kQ82QojiCtgmqiWyoIcC/
-	WEoSASzIM7O2g4I0vId30TswcqPGl9PQ86DuOAAipo9XD2Wg1Scf3IbZcmY2ec90OCzmIU/7Z6kVS
-	LWtFT4y/aRkqajQ/WoCy34hawM63WPr/ygd84nqhenUKoEPwUm6bF1i4L99yRYtACOAmBr2bujw+1
-	rUnJyJsUpW7iRopqGMlQIUqajDgwq46jrO6t24TqErXEoqU6/BPfAqLrC6KVZb/3bIU+rFj1txfY+
-	tbLRiY9YBT8w8YuKeh8g2pZVVK773PNQ1kRlvnC+5uXHd6DLfVb3TVcI/Txpe7awm52siIRtN4gDb
-	P6iu/waQ==;
-Received: from [179.232.147.2] (helo=[192.168.0.5])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1rAWbR-00Acot-Ez; Tue, 05 Dec 2023 15:40:49 +0100
-Message-ID: <9efaed91-d246-cf3c-efc0-e866f88a943d@igalia.com>
-Date: Tue, 5 Dec 2023 11:40:42 -0300
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5013C9;
+	Tue,  5 Dec 2023 06:57:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701788229; x=1733324229;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=mlZUqVzzz78kYGKI5cXqocVGJbtwH388Pqsjwxt8CGE=;
+  b=HJDY57ZuhNDJCR+XCRfL6Fd17/nPgoGudZfmJL82Mj3hrg8TuUsdVm0l
+   Ycq0cC4nTUnwXJ0a3q041FVthWTJbRn/hFdIuAgAa3+66SdjK8RbcxA+2
+   Zm1X2qZy6U7h1saetvUxQoFc4kTmgGMnmW3y4gcipg/mtgs77FglYNHje
+   JIFW362ErU5IhD+dqUX4MJXJpnylOyLZOXvWmslgx0kNK+2Ld2KFuieDs
+   ckQPGutPSS9LCh+mHw5FAP5pVEAjTvIHmBx5fHBXP9ON+Jpfq2Z7oPqGc
+   u9srmuKRztWlvLRoV0WfmIyMo2FqM6l1/b8Ur2EcQr5j+mi1u2Jb3jZwV
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="378929719"
+X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
+   d="scan'208";a="378929719"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 06:57:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="799991881"
+X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
+   d="scan'208";a="799991881"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga008.jf.intel.com with ESMTP; 05 Dec 2023 06:57:06 -0800
+Message-ID: <f02353be-4e51-aad2-08ee-d44b3693f061@linux.intel.com>
+Date: Tue, 5 Dec 2023 16:58:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -43,133 +51,88 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH] usb: dwc3: Fix spurious wakeup when port is on device
- mode
+ Firefox/102.0 Thunderbird/102.13.0
 Content-Language: en-US
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "balbi@kernel.org" <balbi@kernel.org>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "johan@kernel.org" <johan@kernel.org>,
- "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
- "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
- "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
- Andrey Smirnov <andrew.smirnov@gmail.com>,
- Vivek Dasmohapatra <vivek@collabora.com>, piyush.mehta@amd.com,
- ray.huang@amd.com
-References: <20231122165931.443845-1-gpiccoli@igalia.com>
- <2dfbf5c9-dd38-c919-c604-618ad08ce456@igalia.com>
- <20231205012336.mn7b7f4zypwcyv6w@synopsys.com>
-From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20231205012336.mn7b7f4zypwcyv6w@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
+To: Yaxiong Tian <iambestgod@outlook.com>, mathias.nyman@intel.com,
+ gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ tianyaxiong@kylinos.cn
+References: <TYZPR01MB4784CB3058AC1B5787DB6601D586A@TYZPR01MB4784.apcprd01.prod.exchangelabs.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] usb:xhci: Avoid hub_event() stuck when xHC restore state
+ timeout
+In-Reply-To: <TYZPR01MB4784CB3058AC1B5787DB6601D586A@TYZPR01MB4784.apcprd01.prod.exchangelabs.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Thinh, thanks for your response. I'll clarify inline below:
-
-On 04/12/2023 22:23, Thinh Nguyen wrote:
-> [...]
->>> It was noticed that on plugging a low-power USB source on Steam
->>> Deck USB-C port (handled by dwc3), if such port is on device role,
+On 4.12.2023 10.02, Yaxiong Tian wrote:
+> From: Yaxiong Tian <tianyaxiong@kylinos.cn>
 > 
-> I'm not clear of the testing sequence here. Can you clarify further? Is
-> this device operating as host mode but then it switches role to device
-> mode when no device is connected?
+> when xHc restore state timeout,the xhci_reusme() return -ETIMEDOUT
+
+Out of curiosity, have you tried if it still is possible to revive your
+xHC controller here?
+
+Instead of returning -ETIMEDOUT, try setting " reinit_xhc = true", and
+jump to  "if (reinit_xhc) {"  where we reinitialize xHC in xhci_resume() due
+to other resume issues.
+
+> instantly. After usb_hc_died() called ,they kick hub_wq to running
+> hub_event() but the wq is freezd. When suspend ends,hub_evnet realy
+> running and sticking.
+> Such as:
+> [  968.794016][ 2] [   T37] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+> disables this message.
+> [  968.802969][ 2] [   T37] kworker/2:3     D    0   999      2 0x00000028
+> [  968.809579][ 2] [   T37] Workqueue: usb_hub_wq hub_event
+> [  968.814885][ 2] [   T37] Call trace:
+> [  968.818455][ 2] [   T37]  __switch_to+0xd4/0x138
+> [  968.823067][ 2] [   T37]  __schedule+0x2dc/0x6a0
+> [  968.827680][ 2] [   T37]  schedule+0x34/0xb0
+> [  968.831947][ 2] [   T37]  schedule_timeout+0x1e0/0x298
+> [  968.837079][ 2] [   T37]  __wait_for_common+0xf0/0x208
+> [  968.842212][ 2] [   T37]  wait_for_completion+0x1c/0x28
+> [  968.847432][ 2] [   T37]  xhci_configure_endpoint+0x104/0x640
+> [  968.853173][ 2] [   T37]  xhci_check_bandwidth+0x140/0x2e0
+> [  968.858652][ 2] [   T37]  usb_hcd_alloc_bandwidth+0x1c8/0x348
+> [  968.864393][ 2] [   T37]  usb_disable_device+0x198/0x260
+> [  968.869698][ 2] [   T37]  usb_disconnect+0xdc/0x3a0
+> [  968.874571][ 2] [   T37]  usb_disconnect+0xbc/0x3a0
+> [  968.879441][ 2] [   T37]  hub_quiesce+0xa0/0x108
+> [  968.884053][ 2] [   T37]  hub_event+0x4d4/0x1558
+> [  968.888664][ 2] [   T37]  kretprobe_trampoline+0x0/0xc4
+> [  968.893884][ 2] [   T37]  worker_thread+0x4c/0x488
+> [  968.898668][ 2] [   T37]  kthread+0xf8/0x128
+> [  968.902933][ 2] [   T37]  ret_from_fork+0x10/0x18
 > 
-
-Exactly this. We have a driver that changes between host/device mode
-according to ACPI notifications on port connect. But to make
-tests/discussion easier and eliminate more variables, we just dropped
-this driver and do it manually.
-
-So the steps are:
-
-(A) host mode test
-1) Put the port on host mode using debugfs interface.
-2) Wait 30 seconds, plug a cable connecting the Steam Deck to a laptop -
-we call this connection a "low-power source", since it seems to charge
-slowly the Deck.
-3) Suspend the Deck after some seconds (S3/deep) - success
-
-(B) device mode test
-
-1) Put the port on device mode using debugfs interface.
-2) Wait 30 seconds, plug a cable connecting the Steam Deck to a laptop.
-3) Suspend the Deck after some seconds (S3/deep) - fails
-
-3a) If pcie_pme is using MSIs, it fails showing that a wakeup interrupt
-is pending, in this case the Steam Deck effectively doesn't enter suspend.
-
-3b) if PCIe PME is not using MSIs, Deck suspends and right after (less
-than a second), wakes up properly.
-
-
->>> the HW somehow keep asseting the PCIe PME line and triggering a
->>> wakeup event on S3/deep suspend (that manifests as a PME wakeup
->>> interrupt, failing the suspend path). That doesn't happen when the USB
->>> port is on host mode or if the USB device connected is not a low-power
->>> type (for example, a connected keyboard doesn't reproduce that).
+> The result is that you cannot suspend again.because the wq can't
+> be freezed.Also hard to reboot,when some application visited this
+> piece.
 > 
-> Is the PME continuously generating non-stop? Did you test this in USB3
-> speed? Does this happen for every low-power device or just this specific
-> low-power device?
-
-It seems PME is continuously being generated, yes. I tested by
-connecting to my laptop as mentioned, I guess others tested different
-scenarios, not always reproduces. An example: a keyboard or a disk
-connected when the USB port is on device mode doesn't reproduce. Also, I
-think I didn't test "in USB3 speed" - could you detail more, not sure if
-I understood that properly.
-
-
-> [...] 
-> Even if you masked all the interrupts, and the events are still
-> generating? Did you check if the driver handled wakeup from PME and
-> properly restore the controller?
+> The reason of stuck is that some access related to xhci hardware
+> is being called.But xhci has problem,at least not running.(
+> when xhci_restore_registers(),the xhci will load op_regs.The
+> CMD_RUN will clear in xhci_suspend().)
 > 
 
-Ok, let me clarify a bit. From the ACPI perspective, I was able to check
-from kernel that some GPEs were generated on resume when the issue
-happens (and potentially even when the issue doesn't happen, in host
-mode for example). So, what I did was masking all these GPEs using the
-kernel sysfs interface. After masking, the issue still reproduces but
-the GPEs count doesn't increase.
+Nice catch and debugging work btw.
 
-Regarding the PME interrupt now: if MSI is used on PME, I can see an
-increase of 1 in every suspend/resume attempt (checking
-/proc/interrupts). Now if MSIs are not used, guess what? There was no
-increase in the interrupt at all. I didn't mask the PME interrupt on
-PCIe PME driver...but even with PME driver disabled, IIRC the problem
-reproduces.
+> So using XHCI_STATE_DYING flag,to avoid any code to touching
+> hardware immediately.hub_event() will complete.The usb_hc_died
+> tasks will be completed and some sys interfaces will be removed.
 
-"Did you check if the driver handled wakeup from PME and properly
-restore the controller?" <- I think I didn't - how do you suggest me to
-check that?
+The XHCI_STATE_DYING flag is currently only set in xhci_hc_died().
+So when this flag is set we could assume that the command ring and
+pending URBs are, or will be cleaned up. This would change with your patch.
+  
+We might need some other solution,
+Maybe set the set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags) after
+CNR (Contorller Not Ready) is successfully cleared, and controller is
+actually accessible.
 
-What I've noticed is that either the system can't suspend, or if no MSIs
-are used on PCIe PME, it suspends and resumes right after, with success.
-In this latter case, dwc3 works normally again, resume is successful.
-Let me know if you want me to check any other path or function called, etc.
+We then would need to add checks to see if controller is accessible
+before queuing any commands to xHC hardware.
 
-
-> [...]
-> 
-> Some platforms may need a soft reset before a change to prtcapdir. This
-> may break some setups. This seems to be a workaround and should not be
-> treated as part of a normal flow.
-
-OK, do you have any other idea of a register change that is softer than
-changing "prtcapdir" and could prevent the issue? Also, would that
-workaround makes sense as...a quirk?
-
-We could guard it for Deck's HW exclusively, using DMI if you think it
-does make sense...or the dwc3 quirks (already have some for AMD right?)
-
-I'm CCing Piyush and Huang from AMD, since this is AMD HW. Any other
-suggestions are much appreciated.
-Thanks,
-
-
-Guilherme
+Thanks
+Mathias
 
