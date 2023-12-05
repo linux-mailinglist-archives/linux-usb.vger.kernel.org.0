@@ -1,184 +1,72 @@
-Return-Path: <linux-usb+bounces-3745-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3746-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EAE7805CE1
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 19:07:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CD0A805D13
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 19:18:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C129CB20D1E
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 18:07:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36A87282089
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 18:18:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC31C6A352;
-	Tue,  5 Dec 2023 18:07:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 202AF68B84;
+	Tue,  5 Dec 2023 18:18:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id AB0C218B
-	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 10:07:42 -0800 (PST)
-Received: (qmail 425300 invoked by uid 1000); 5 Dec 2023 13:07:41 -0500
-Date: Tue, 5 Dec 2023 13:07:41 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Cc: oneukum@suse.com, davem@davemloft.net, edumazet@google.com,
-  greg@kroah.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-  linux-usb@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
-  stable@vger.kernel.org
-Subject: Re: [PATCH v4] net: usb: ax88179_178a: avoid failed operations when
- device is disconnected
-Message-ID: <624ad05b-0b90-4d1c-b06b-7a75473401c3@rowland.harvard.edu>
-References: <4ce32363-378c-4ea3-9a4e-d7274d4f7787@suse.com>
- <20231205135154.516342-1-jtornosm@redhat.com>
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016F0AF;
+	Tue,  5 Dec 2023 10:18:39 -0800 (PST)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 41EEE5202EE;
+	Tue,  5 Dec 2023 19:18:37 +0100 (CET)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 5 Dec
+ 2023 19:18:37 +0100
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
+	<corbet@lwn.net>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<erosca@de.adit-jv.com>, <hgajjar@de.adit-jv.com>, <tj@kernel.org>,
+	<paulmck@kernel.org>, <Martin.Mueller5@de.bosch.com>
+Subject: [PATCH 1/2] usb: hub: Replace hardcoded quirk value with BIT() macro
+Date: Tue, 5 Dec 2023 19:18:28 +0100
+Message-ID: <20231205181829.127353-1-hgajjar@de.adit-jv.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231205135154.516342-1-jtornosm@redhat.com>
+Content-Type: text/plain
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
 
-On Tue, Dec 05, 2023 at 02:51:54PM +0100, Jose Ignacio Tornos Martinez wrote:
-> When the device is disconnected we get the following messages showing
-> failed operations:
-> Nov 28 20:22:11 localhost kernel: usb 2-3: USB disconnect, device number 2
-> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: unregister 'ax88179_178a' usb-0000:02:00.0-3, ASIX AX88179 USB 3.0 Gigabit Ethernet
-> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to read reg index 0x0002: -19
-> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to write reg index 0x0002: -19
-> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
-> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0001: -19
-> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
-> 
-> The reason is that although the device is detached, normal stop and
-> unbind operations are commanded from the driver. These operations are
-> not necessary in this situation, so avoid these logs when the device is
-> detached if the result of the operation is -ENODEV and if the new flag
-> informing about the disconnecting status is enabled.
-> 
-> cc: stable@vger.kernel.org
-> Fixes: e2ca90c276e1f ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
-> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-> ---
-> V1 -> V2:
-> - Follow the suggestions from Alan Stern and Oliver Neukum to check the
-> result of the operations (-ENODEV) and not the internal state of the USB 
-> layer (USB_STATE_NOTATTACHED).
-> V2 -> V3
-> - Add cc: stable line in the signed-off-by area.
-> V3 -> V4
-> - Follow the suggestions from Oliver Neukum to use only one flag when
-> disconnecting and include barriers to avoid memory ordering issues.
+This patch replaces the hardcoded quirk value in the macro with
+BIT().
 
-The __ax88179_read_cmd() and __ax88179_write_cmd() routines are 
-asynchronous with respect to ax88179_disconnect(), right?  Or at least, 
-they are if they run as a result of the user closing the network 
-interface.  Otherwise there wouldn't be any memory ordering issues.
+Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+---
+ drivers/usb/core/hub.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-But the memory barriers you added are not the proper solution.  What you 
-need here is _synchronization_, not _ordering_.  As it is, the memory 
-barriers you have added don't do anything; they shouldn't be in the 
-patch.
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index b4584a0cd484..286d203e6952 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -47,8 +47,8 @@
+ #define USB_VENDOR_TEXAS_INSTRUMENTS		0x0451
+ #define USB_PRODUCT_TUSB8041_USB3		0x8140
+ #define USB_PRODUCT_TUSB8041_USB2		0x8142
+-#define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
+-#define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
++#define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	BIT(0)
++#define HUB_QUIRK_DISABLE_AUTOSUSPEND		BIT(1)
+ 
+ #define USB_TP_TRANSMISSION_DELAY	40	/* ns */
+ #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
+-- 
+2.17.1
 
-If you would like a more in-depth explanation, let me know.
-
-Alan Stern
-
->  drivers/net/usb/ax88179_178a.c | 38 +++++++++++++++++++++++++++-------
->  1 file changed, 31 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-> index 4ea0e155bb0d..1c671f2a43ee 100644
-> --- a/drivers/net/usb/ax88179_178a.c
-> +++ b/drivers/net/usb/ax88179_178a.c
-> @@ -173,6 +173,7 @@ struct ax88179_data {
->  	u8 in_pm;
->  	u32 wol_supported;
->  	u32 wolopts;
-> +	u8 disconnecting;
->  };
->  
->  struct ax88179_int_data {
-> @@ -208,6 +209,7 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  {
->  	int ret;
->  	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
-> +	struct ax88179_data *ax179_data = dev->driver_priv;
->  
->  	BUG_ON(!dev);
->  
-> @@ -219,9 +221,12 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
->  		 value, index, data, size);
->  
-> -	if (unlikely(ret < 0))
-> -		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
-> -			    index, ret);
-> +	if (unlikely(ret < 0)) {
-> +		smp_rmb();
-> +		if (!(ret == -ENODEV && ax179_data->disconnecting))
-> +			netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
-> +				    index, ret);
-> +	}
->  
->  	return ret;
->  }
-> @@ -231,6 +236,7 @@ static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  {
->  	int ret;
->  	int (*fn)(struct usbnet *, u8, u8, u16, u16, const void *, u16);
-> +	struct ax88179_data *ax179_data = dev->driver_priv;
->  
->  	BUG_ON(!dev);
->  
-> @@ -242,9 +248,12 @@ static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  	ret = fn(dev, cmd, USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
->  		 value, index, data, size);
->  
-> -	if (unlikely(ret < 0))
-> -		netdev_warn(dev->net, "Failed to write reg index 0x%04x: %d\n",
-> -			    index, ret);
-> +	if (unlikely(ret < 0)) {
-> +		smp_rmb();
-> +		if (!(ret == -ENODEV && ax179_data->disconnecting))
-> +			netdev_warn(dev->net, "Failed to write reg index 0x%04x: %d\n",
-> +				    index, ret);
-> +	}
->  
->  	return ret;
->  }
-> @@ -492,6 +501,21 @@ static int ax88179_resume(struct usb_interface *intf)
->  	return usbnet_resume(intf);
->  }
->  
-> +static void ax88179_disconnect(struct usb_interface *intf)
-> +{
-> +	struct usbnet *dev = usb_get_intfdata(intf);
-> +	struct ax88179_data *ax179_data;
-> +
-> +	if (!dev)
-> +		return;
-> +
-> +	ax179_data = dev->driver_priv;
-> +	ax179_data->disconnecting = 1;
-> +	smp_wmb();
-> +
-> +	usbnet_disconnect(intf);
-> +}
-> +
->  static void
->  ax88179_get_wol(struct net_device *net, struct ethtool_wolinfo *wolinfo)
->  {
-> @@ -1906,7 +1930,7 @@ static struct usb_driver ax88179_178a_driver = {
->  	.suspend =	ax88179_suspend,
->  	.resume =	ax88179_resume,
->  	.reset_resume =	ax88179_resume,
-> -	.disconnect =	usbnet_disconnect,
-> +	.disconnect =	ax88179_disconnect,
->  	.supports_autosuspend = 1,
->  	.disable_hub_initiated_lpm = 1,
->  };
-> -- 
-> 2.43.0
-> 
 
