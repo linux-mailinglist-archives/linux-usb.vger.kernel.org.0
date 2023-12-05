@@ -1,79 +1,79 @@
-Return-Path: <linux-usb+bounces-3719-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3720-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B67E8044D8
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 03:27:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF7ED804505
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 03:34:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 424C81F2132F
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 02:27:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33A45B20BE1
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 02:34:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E60563C1;
-	Tue,  5 Dec 2023 02:27:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AFC26AC2;
+	Tue,  5 Dec 2023 02:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GnjCYzED"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="b/w5kHwP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60C36FB1;
-	Tue,  5 Dec 2023 02:27:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BB53C433C8;
-	Tue,  5 Dec 2023 02:27:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701743262;
-	bh=K7+Z4PmTJherMA+QfJtZKMnSBDi8EWhFiIph/biZs1Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GnjCYzEDhafwXJKdGsMy2PneJB0YNeXvuZtnK43lHxTsfsr0O/w/N02fAfPr2x1Dx
-	 UjJtyt5OUlXmFMVr9Q3zynakR8YrhStg5Oms6+KAnyEsSbF6iqjlfpYfzwuu+V9DBY
-	 uvz4H7It1TmP6xGEo7C7dmYELcctCR1zAFxfM8oJLsPHo0S9Ft0MsQ8EW6ssDbmeTX
-	 u0O47vR4EnSbr73fDqCR4Ip8i2rwNt6jcQmxPvtXBjzpZ4QZFsRPlq5UmEHNcrXcs3
-	 S/sDknYjBde6i87gVOQVOLxE8HOTucdrfDkbKgM/JMtCMEFGLtxPBkMwTw613e544a
-	 KdGC2/MvZRyLg==
-Date: Mon, 4 Dec 2023 18:27:40 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Douglas Anderson <dianders@chromium.org>
-Cc: linux-usb@vger.kernel.org, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Grant
- Grundler <grundler@chromium.org>, Hayes Wang <hayeswang@realtek.com>, Simon
- Horman <horms@kernel.org>, =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
- netdev@vger.kernel.org, Brian Geffon <bgeffon@google.com>, Alan Stern
- <stern@rowland.harvard.edu>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2 3/3] r8152: Choose our USB config with
- choose_configuration() rather than probe()
-Message-ID: <20231204182740.62a49a14@kernel.org>
-In-Reply-To: <20231201102946.v2.3.Ie00e07f07f87149c9ce0b27ae4e26991d307e14b@changeid>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F618CA48;
+	Tue,  5 Dec 2023 02:34:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F47CC433C8;
+	Tue,  5 Dec 2023 02:34:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1701743679;
+	bh=liax+sIHnmEKfEfVW+s4DmqLUntZruIqSMcTRWSs0Tk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=b/w5kHwP00LQYOnC9+5b7PG1sxSHiFKwsRB1yDsd5YpDaHD+tSl0X7jbWde2cdt4L
+	 xyzfu0VP8pQO9lGfB36ETlCv1oD21KUHIKTVAq7ykuYLNXWUVeTt3CjFi3M0dIu3bE
+	 Uv6oZJvVMMkEG9gllT8ApZkUrAyVwSu42Y+khv8Q=
+Date: Tue, 5 Dec 2023 11:34:36 +0900
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Douglas Anderson <dianders@chromium.org>, linux-usb@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Grant Grundler <grundler@chromium.org>,
+	Hayes Wang <hayeswang@realtek.com>, Simon Horman <horms@kernel.org>,
+	=?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+	netdev@vger.kernel.org, Brian Geffon <bgeffon@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] net: usb: r8152: Fix lost config across
+ deauthorize+authorize
+Message-ID: <2023120521-fervor-subscript-20b1@gregkh>
 References: <20231201183113.343256-1-dianders@chromium.org>
-	<20231201102946.v2.3.Ie00e07f07f87149c9ce0b27ae4e26991d307e14b@changeid>
+ <20231204182727.1a52ae59@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231204182727.1a52ae59@kernel.org>
 
-On Fri,  1 Dec 2023 10:29:52 -0800 Douglas Anderson wrote:
-> If you deauthorize the r8152 device (by writing 0 to the "authorized"
-> field in sysfs) and then reauthorize it (by writing a 1) then it no
-> longer works. This is because when you do the above we lose the
-> special configuration that we set in rtl8152_cfgselector_probe().
-> Deauthorizing causes the config to be set to -1 and then reauthorizing
-> runs the default logic for choosing the best config.
+On Mon, Dec 04, 2023 at 06:27:27PM -0800, Jakub Kicinski wrote:
+> On Fri,  1 Dec 2023 10:29:49 -0800 Douglas Anderson wrote:
+> > Since these three patches straddle the USB subsystem and the
+> > networking subsystem then maintainers will (obviously) need to work
+> > out a way for them to land. I don't have any strong suggestions here
+> > so I'm happy to let the maintainers propose what they think will work
+> > best.
 > 
-> I made an attempt to fix it so that the config is kept across
-> deauthorizing / reauthorizing [1] but it was a bit ugly.
-> 
-> Let's instead use the new USB core feature to override
-> choose_configuration().
-> 
-> This patch relies upon the patches ("usb: core: Don't force USB
-> generic_subclass drivers to define probe()") and ("usb: core: Allow
-> subclassed USB drivers to override usb_choose_configuration()")
+> No strong preference here, on a quick read it seems more like a USB
+> change than networking change, tho, so I'll defer to Greg unless told
+> otherwise.
 
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+I took these in my tree already, sorry for not saying anything here.
+
+thanks,
+
+greg k-h
 
