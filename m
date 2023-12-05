@@ -1,199 +1,85 @@
-Return-Path: <linux-usb+bounces-3736-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3739-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6671C80568B
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 14:52:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E7758056D5
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 15:09:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 875E31C2102E
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 13:52:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDFE2281CDC
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 14:09:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C27555FF13;
-	Tue,  5 Dec 2023 13:52:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 463BB61FC2;
+	Tue,  5 Dec 2023 14:09:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cv+1sKgQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qBqoUcG1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8E019F
-	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 05:52:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701784334;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=t/k+Y8Tdfs9ltwRZOhu++CvuRNSUApgINWtqoRysI9s=;
-	b=cv+1sKgQq5RDdz3NlVt8ub1vNm5rb83txO16RsGgBCEdgDTcVzw6j66HXpCyOM6YaGDKTK
-	VMKwtrKr6TDTkbmKh52J9LYiWp3t7EkWLhCJFp+hNuYMsT0YjJZ+Ynb7V0E2x8qkv8Jdwf
-	MaVWei29wdo1GPnDn74xbVZhrEnUzTk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-106-kCG4QsraNpufn24efyM9sA-1; Tue, 05 Dec 2023 08:52:07 -0500
-X-MC-Unique: kCG4QsraNpufn24efyM9sA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 02C4C185A790;
-	Tue,  5 Dec 2023 13:52:07 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.193.51])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 580BA2166B33;
-	Tue,  5 Dec 2023 13:52:04 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: oneukum@suse.com
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	greg@kroah.com,
-	jtornosm@redhat.com,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	stable@vger.kernel.org,
-	stern@rowland.harvard.edu
-Subject: [PATCH v4] net: usb: ax88179_178a: avoid failed operations when device is disconnected
-Date: Tue,  5 Dec 2023 14:51:54 +0100
-Message-ID: <20231205135154.516342-1-jtornosm@redhat.com>
-In-Reply-To: <4ce32363-378c-4ea3-9a4e-d7274d4f7787@suse.com>
-References: <4ce32363-378c-4ea3-9a4e-d7274d4f7787@suse.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B626961FB0
+	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 14:09:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CBBCC433C7;
+	Tue,  5 Dec 2023 14:09:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701785367;
+	bh=zs/eMd88+gmmQRjUvcHkcoCYPI4L0Dw/e1tToZkeGMc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qBqoUcG1F9QafYcLtATQFwFvTjfacezx+nVUGTQsISkgU1nMRmiMcX2MkvjYCZRj5
+	 mQowI6duEjfTHH0iR8M5qbhPOo8UuRjJ4Wb0wLkp3Wr+MNL3YEKdyoRT/2h4myebrS
+	 ZvuRAOJ/wslBIbqFS20ixZGUMIf3OSqfxT0iCWh+FGyRzXpJFD7rQ20Z+2NAZrhD0X
+	 5wKZ/ioqRZ3bVQ6buS4cGlANFO6/ArT6Kzb5gXxLjNWRbSqQDC5K62ORZuUU1M1usH
+	 297UgiQ3Vc/f6b75wudcgDQ3rPyqVrhjQ39YQ8nlHptU9nQNgqeGyVHLOq9XZ/jkYi
+	 l5EKkn8sSXjlg==
+Date: Tue, 5 Dec 2023 21:56:54 +0800
+From: Jisheng Zhang <jszhang@kernel.org>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: =?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Lu jicong <jiconglu58@gmail.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH] usb: dwc3: don't reset device side if dwc3 was
+ configured as host-only
+Message-ID: <ZW8sJoTEKVmDdk5Y@xhacker>
+References: <20231116174206.1a823aa3@kmaincent-XPS-13-7390>
+ <20231116175959.71f5d060@kmaincent-XPS-13-7390>
+ <20231117014038.kbcfnpiefferqomk@synopsys.com>
+ <20231117015527.jqoh6i3n4ywg7qui@synopsys.com>
+ <20231121104917.0fd67952@kmaincent-XPS-13-7390>
+ <20231201100954.597bb6de@kmaincent-XPS-13-7390>
+ <20231202002625.ujvqghwm42aabc2f@synopsys.com>
+ <20231205012745.nt5gxlim6gljpi36@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231205012745.nt5gxlim6gljpi36@synopsys.com>
 
-When the device is disconnected we get the following messages showing
-failed operations:
-Nov 28 20:22:11 localhost kernel: usb 2-3: USB disconnect, device number 2
-Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: unregister 'ax88179_178a' usb-0000:02:00.0-3, ASIX AX88179 USB 3.0 Gigabit Ethernet
-Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to read reg index 0x0002: -19
-Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to write reg index 0x0002: -19
-Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
-Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0001: -19
-Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
+On Tue, Dec 05, 2023 at 01:27:56AM +0000, Thinh Nguyen wrote:
+> 
+> On Sat, Dec 02, 2023, Thinh Nguyen wrote:
+> > 
+> > Hi Lisheng,
+> 
+> Typo, I mean Jisheng.
 
-The reason is that although the device is detached, normal stop and
-unbind operations are commanded from the driver. These operations are
-not necessary in this situation, so avoid these logs when the device is
-detached if the result of the operation is -ENODEV and if the new flag
-informing about the disconnecting status is enabled.
+Hi Thinh
 
-cc: stable@vger.kernel.org
-Fixes: e2ca90c276e1f ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
-Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
----
-V1 -> V2:
-- Follow the suggestions from Alan Stern and Oliver Neukum to check the
-result of the operations (-ENODEV) and not the internal state of the USB 
-layer (USB_STATE_NOTATTACHED).
-V2 -> V3
-- Add cc: stable line in the signed-off-by area.
-V3 -> V4
-- Follow the suggestions from Oliver Neukum to use only one flag when
-disconnecting and include barriers to avoid memory ordering issues.
+> 
+> > 
+> > Did you see any reported issue before your change were applied? If not,
+> > perhaps we should revert the changes related to soft-reset for this.
+> > 
 
- drivers/net/usb/ax88179_178a.c | 38 +++++++++++++++++++++++++++-------
- 1 file changed, 31 insertions(+), 7 deletions(-)
+It seems this patch brings more issues than solved, I think reverting it is
+better. 
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 4ea0e155bb0d..1c671f2a43ee 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -173,6 +173,7 @@ struct ax88179_data {
- 	u8 in_pm;
- 	u32 wol_supported;
- 	u32 wolopts;
-+	u8 disconnecting;
- };
- 
- struct ax88179_int_data {
-@@ -208,6 +209,7 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
- {
- 	int ret;
- 	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
-+	struct ax88179_data *ax179_data = dev->driver_priv;
- 
- 	BUG_ON(!dev);
- 
-@@ -219,9 +221,12 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
- 	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
- 		 value, index, data, size);
- 
--	if (unlikely(ret < 0))
--		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
--			    index, ret);
-+	if (unlikely(ret < 0)) {
-+		smp_rmb();
-+		if (!(ret == -ENODEV && ax179_data->disconnecting))
-+			netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
-+				    index, ret);
-+	}
- 
- 	return ret;
- }
-@@ -231,6 +236,7 @@ static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
- {
- 	int ret;
- 	int (*fn)(struct usbnet *, u8, u8, u16, u16, const void *, u16);
-+	struct ax88179_data *ax179_data = dev->driver_priv;
- 
- 	BUG_ON(!dev);
- 
-@@ -242,9 +248,12 @@ static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
- 	ret = fn(dev, cmd, USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
- 		 value, index, data, size);
- 
--	if (unlikely(ret < 0))
--		netdev_warn(dev->net, "Failed to write reg index 0x%04x: %d\n",
--			    index, ret);
-+	if (unlikely(ret < 0)) {
-+		smp_rmb();
-+		if (!(ret == -ENODEV && ax179_data->disconnecting))
-+			netdev_warn(dev->net, "Failed to write reg index 0x%04x: %d\n",
-+				    index, ret);
-+	}
- 
- 	return ret;
- }
-@@ -492,6 +501,21 @@ static int ax88179_resume(struct usb_interface *intf)
- 	return usbnet_resume(intf);
- }
- 
-+static void ax88179_disconnect(struct usb_interface *intf)
-+{
-+	struct usbnet *dev = usb_get_intfdata(intf);
-+	struct ax88179_data *ax179_data;
-+
-+	if (!dev)
-+		return;
-+
-+	ax179_data = dev->driver_priv;
-+	ax179_data->disconnecting = 1;
-+	smp_wmb();
-+
-+	usbnet_disconnect(intf);
-+}
-+
- static void
- ax88179_get_wol(struct net_device *net, struct ethtool_wolinfo *wolinfo)
- {
-@@ -1906,7 +1930,7 @@ static struct usb_driver ax88179_178a_driver = {
- 	.suspend =	ax88179_suspend,
- 	.resume =	ax88179_resume,
- 	.reset_resume =	ax88179_resume,
--	.disconnect =	usbnet_disconnect,
-+	.disconnect =	ax88179_disconnect,
- 	.supports_autosuspend = 1,
- 	.disable_hub_initiated_lpm = 1,
- };
--- 
-2.43.0
-
+Thanks
 
