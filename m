@@ -1,99 +1,73 @@
-Return-Path: <linux-usb+bounces-3730-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3731-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67B17804EC3
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 10:53:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D07D804ECA
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 10:54:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DFA2EB20DBF
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 09:53:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A988D281760
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 09:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D654BA87;
-	Tue,  5 Dec 2023 09:53:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D80044B5BB;
+	Tue,  5 Dec 2023 09:54:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D189E
-	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 01:53:33 -0800 (PST)
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3b9b4f7df33so2666083b6e.2
-        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 01:53:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701770013; x=1702374813;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2f7L18jtFttpvJFfes6CBhMW1LVntx6OZdWwTsAFipQ=;
-        b=GkOYZ/FftFYA/erWGrPOlC3oCtS5CFvB7WJoN/u/lH8ATBorYlfnkZ1oIqABKRVmVv
-         NxFqBuSBbXTA+tISBN4J5nnjfLfZUgiwYLxyJYgbR3kJJuJPLX1CvLODu0icRb9yvwUI
-         J5BpXBSoe8Iu2yp6TpEpLv9q/49mDujh12NAiOqKN+JDjbiJ/JsZoLfQYERFOKaAQFdy
-         eorstsV0YcYM3QygPMq6z8XUxnDiTM2xd15OnVj2CJXYHBm6610tfzRXe+8Ocz0hN1qM
-         vG2LZEbJBluKJn3Un36NyA+Hx3An1W/sxxiebkrJWYgNaVJf7iNFG00qqaysDt/v+Fne
-         IJ9g==
-X-Gm-Message-State: AOJu0YxRx32d23LlpA3qBxcLFZ88koKRl1t9M5v7fvD5K1+Y9UHzXKou
-	E+l0xlp1lW6DFxUDiuYn01nENQsxbT2Q3A2gH/eTq6w4Cg2R
-X-Google-Smtp-Source: AGHT+IEVw8D2Bi6fgJqzWq5fTn8AdF4hUojkIQidaLYC27w7CjFxBSrOw0n+HTOSGj26IC8mslr2u0JL6NHQfZdLWygWHofy+zoW
+Received: from msr17.hinet.net (msr17.hinet.net [IPv6:2001:b000:1c9:10:168:95:4:117])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE789E;
+	Tue,  5 Dec 2023 01:54:33 -0800 (PST)
+Received: from initramfs.io (2001-b011-4002-3927-0000-0000-0000-000a.dynamic-ip6.hinet.net [IPv6:2001:b011:4002:3927:0:0:0:a])
+	by msr17.hinet.net (8.15.2/8.15.2) with ESMTPS id 3B59sKIL003025
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Tue, 5 Dec 2023 17:54:20 +0800
+Received: from howl.home.internal.initramfs.io ([10.0.96.176])
+	by initramfs.io with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <initramfs@initramfs.io>)
+	id 1rAS8C-0001QX-Gt; Tue, 05 Dec 2023 09:54:20 +0000
+Message-ID: <d928d9ff-b9bd-4a82-9490-72cafdda37cd@initramfs.io>
+Date: Tue, 5 Dec 2023 17:54:18 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:2122:b0:3b9:b430:2908 with SMTP id
- r34-20020a056808212200b003b9b4302908mr2084994oiw.11.1701770013096; Tue, 05
- Dec 2023 01:53:33 -0800 (PST)
-Date: Tue, 05 Dec 2023 01:53:33 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001ebfe6060bc035a3@google.com>
-Subject: [syzbot] Monthly usb report (Dec 2023)
-From: syzbot <syzbot+list834ca8cfb649c1b10f3c@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: ASMedia 2464PD-based SSD enclosure hotplug failure
+To: Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc: Andreas Noever <andreas.noever@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <2fd4b2b0-0526-4946-ad05-058366f3127a@initramfs.io>
+ <ZUC3LAxK9Lyf2Rz9@debian.me>
+ <44d23bf5-9875-4ce8-a361-fb4e678f23f2@initramfs.io>
+ <c22ccb68-64b6-404b-a8a8-f800770e2cfb@gmail.com>
+Content-Language: en-US
+From: initramfs <initramfs@initramfs.io>
+Autocrypt: addr=initramfs@initramfs.io; keydata=
+ xjMEXU2jtxYJKwYBBAHaRw8BAQdA32TNgwBRB8zKTUDw+OD3EMHH6l7/9BctyPJZg7flyZrN
+ JEFtaXQgQWduYW5pIDxpbml0cmFtZnNAaW5pdHJhbWZzLmlvPsKxBBMWCgBZAhsDBAsJCAcF
+ FQoJCAsFFgIDAQACHgECF4ACGQEFCQomf3UWIQTmBUi9vIJeEJq2Q9jQE1WLzz4A7QUCXX/Y
+ XBgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQ0BNVi88+AO2eqgEAhxrvCxHqcWYCjEl3
+ RtK1uMI5Vl78ADXimnIO3Zx2ZygBAK7SL/m0A87AZOj1x/xMjFqYOfSMfe6a8Up//XB0av8M
+ zjgEXU2k1BIKKwYBBAGXVQEFAQEHQEnBKEjJUS59EzqqgBWZE3/2Q0BIXmGqreBXzeDMizs+
+ AwEIB8J+BBgWCgAmAhsMFiEE5gVIvbyCXhCatkPY0BNVi88+AO0FAl/QqPQFCQomJKAACgkQ
+ 0BNVi88+AO2kRQEAiznrjgTNzeNfudqZz8MzyQqPEj3F0XeiloYOCbsrm8sA/jwF56ff7aRi
+ HfhNFwJQJWzduZL3kmlkCrPxf9EGcvIP
+In-Reply-To: <c22ccb68-64b6-404b-a8a8-f800770e2cfb@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.4 cv=DLJKXwBb c=1 sm=1 tr=0 ts=656ef34d
+	a=IkcTkHD0fZMA:10 a=e2cXIFwxEfEA:10 a=4-Zg18BCeCbHWHEr31AA:9
+	a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10
 
-Hello usb maintainers/developers,
+I can report this appears resolved on my system as of 6.7-rc3 and 6.6.4
+most likely by commit 24d85bb3be373b5831699bddf698b392bd2b904d (though I
+have not bisected to confirm).
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+Thanks.
 
-During the period, 2 new issues were detected and 0 were fixed.
-In total, 63 issues are still open and 331 have been fixed so far.
-
-Some of the still happening issues:
-
-Ref  Crashes Repro Title
-<1>  2852    Yes   WARNING in firmware_fallback_sysfs
-                   https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
-<2>  2755    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
-                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
-<3>  824     Yes   general protection fault in ir_raw_event_store_with_filter
-                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
-<4>  540     Yes   INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
-<5>  395     Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<6>  304     Yes   KASAN: use-after-free Read in v4l2_fh_init
-                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
-<7>  239     Yes   INFO: task hung in netdev_run_todo (2)
-                   https://syzkaller.appspot.com/bug?extid=9d77543f47951a63d5c1
-<8>  226     No    INFO: task hung in hub_event (3)
-                   https://syzkaller.appspot.com/bug?extid=a7edecbf389d11a369d4
-<9>  187     Yes   INFO: rcu detected stall in hub_event
-                   https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
-<10> 132     Yes   WARNING in cm109_urb_irq_callback/usb_submit_urb
-                   https://syzkaller.appspot.com/bug?extid=2d6d691af5ab4b7e66df
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
 
