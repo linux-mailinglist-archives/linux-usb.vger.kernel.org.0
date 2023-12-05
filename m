@@ -1,60 +1,60 @@
-Return-Path: <linux-usb+bounces-3765-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3766-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 818D9806143
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 23:03:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26B3C80614F
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 23:04:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 455CFB211E2
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 22:03:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6BD3281E75
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 22:04:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF3656FCF3;
-	Tue,  5 Dec 2023 22:03:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3AB6FCF9;
+	Tue,  5 Dec 2023 22:04:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ktEzvmTp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fH5T8rso"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1FEAC
-	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 14:03:34 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-a1915034144so19963366b.0
-        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 14:03:34 -0800 (PST)
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73845D53
+	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 14:04:34 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2c9f4bb2e5eso49567111fa.1
+        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 14:04:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701813812; x=1702418612; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1701813872; x=1702418672; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=R17jjO/Vw4wRIx9Ju0HZ2kb3C5GDd4Vm8IbDi1LNWjk=;
-        b=ktEzvmTpGa0kGjq8+oF/G7HmFUeXo3horeFfdZpi+z3J5aJ8wkmzxYhX/jU1OZ5pR9
-         42CJyloNsw9Td7GcYkvcB6vXvAZf9+Z/0mZT/j0Z5F7BLV80NbyPAuLPjoOVxKkdiwoS
-         +A8zBaKXuANVN7oizdjsu6ynASuc93Kwgyt2tPTcZRD9HTrt5PeqohcU5q2UJ8Rr0YET
-         Df/pHvvoutkoVsKyHswAICdbXncO8Cu1Yrp+6FJ7y9Ytmm14AOyAElNmjfk72eNdDH14
-         Yeg6JeDpPolxKv23bwVwOUT+4Zm3nKYE6WVLBjtUW3onrVn0dd98sR0DW2dtdrpwx9Q3
-         EPMQ==
+        bh=YcEMEJf4lCydMrLOTT6eApwWgWe19yXNqzmuvh+QqWY=;
+        b=fH5T8rsowcqWO3IPOS6SpZctAHcQB7R9STNdq6gQAvvN7c1Jlry9EW0Sti41Vcqcp4
+         AM8XQeiIAavnGNAtaw/GZ6k4MgX/Y/AZjGXBucvm1NKLGQ8/qj6wTMZ3/bkmvv9rqUkI
+         s2LhSovr11Sgo7Bfcni36KXVC2rD8E5u0sPOUoV5tceccggSOf952OQ3bdkCjscgdsRt
+         aEqU6BcLGNN+Q82Y7ovBt0Hxlq3/u9dwQ7mJmjM/ulc7br+UYbfaNBRlp4MNAF5CnZOg
+         W+RbgI2DCMpvD5x/OeD4R3JqLmlprIGceeCjtvir/fP6cKXpeE0BiBqk5TlFzS7wuQX9
+         wlRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701813812; x=1702418612;
+        d=1e100.net; s=20230601; t=1701813872; x=1702418672;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R17jjO/Vw4wRIx9Ju0HZ2kb3C5GDd4Vm8IbDi1LNWjk=;
-        b=LjAd+VpJUSiOXZ2Z28gDmtxroaUMejyhmutQZnnEm7jkl9CuLBVMY/3btjV0oiCQl7
-         m18971y7tbPfZgq/zx4dcZ45tfL44Qyvl2EinpUeH70/M50uT2MFzdcXuby7lurk0LXM
-         v3BFBT1nD4o7qHmaoN9qT4B5PWRjsKJXR+W+/M0iHZQw+iBgTKHinFgARp6HMmy41ul4
-         7ZY/+j+8HTjW5QHEFdZXCKnMvQBe98Yl213ZFn7M4oADgPXFcXC7mz7wvipiQMqHJgkC
-         vlHqtwGwnPSltf69xiZSz9iWI681Qn4ECTEKfDII/rB4Dp9/usaiwj0M4H0wm+HylLlp
-         KRRA==
-X-Gm-Message-State: AOJu0Yyw7KaUNMnNavYakvgXqWbZ+NnPGke+X+BTQYQIA6ughapgy3XU
-	cIwgFC2VMWRBk2gMmkTV3MXd/4gWGpYJiqS1lbjkmqex
-X-Google-Smtp-Source: AGHT+IE/hqq5solRByq/6s4+0WTlT9xIiduM2nthd2KHQBztl+NRk6XM/HBt9ZMTdjcUIz5MDEwfZg==
-X-Received: by 2002:a17:906:2655:b0:a18:50ad:9ab with SMTP id i21-20020a170906265500b00a1850ad09abmr5106299ejc.74.1701813812535;
-        Tue, 05 Dec 2023 14:03:32 -0800 (PST)
+        bh=YcEMEJf4lCydMrLOTT6eApwWgWe19yXNqzmuvh+QqWY=;
+        b=LcqxTeNi6JaVsFcyackhdI3wpW26m2Nfvdbkdmqsglm7zBgULZqpWmGgqtEGTqnId7
+         KXEw9tjts/fiUrS9F+g2tb+1sp/vJjwLCHpPHyKrqBWThke7NGwkJhJ0xe/+90xOprCE
+         7bmBulGkRNRM2mXIM+fu40MOqasSLJbE3M9Od1X/tT+6cVCtsMstA50MGiTNlE1Izu/3
+         71iX9DnH17cqEAt1Binjk0wyI54eERkn62nxVQm4EIYbweZJyXs+VfPvBblKu6Qm7tEk
+         pvFsi406ecM7183Da1J5jjJgxYyK42s3dl7ZAQNcPjwo99czUijm1OGa00a5WihjUgEF
+         jAzA==
+X-Gm-Message-State: AOJu0YzGiom3w20QFzyOhm+i2C88YM6xYagLt2d0ZvmjDs5TU5FhjLla
+	vgdC8tQBspHlff2cmf7HZ+acLQBFqr1VkQej4azx7tQu
+X-Google-Smtp-Source: AGHT+IELJFW4CRavNSvWmbv6+vTpGPUZn67DcntqLGgQXhIS4H64Z9uxXCZut3JO674Qxj6E0JTCBg==
+X-Received: by 2002:a2e:b742:0:b0:2ca:20f7:531b with SMTP id k2-20020a2eb742000000b002ca20f7531bmr22788ljo.51.1701813872482;
+        Tue, 05 Dec 2023 14:04:32 -0800 (PST)
 Received: from ?IPV6:2001:1c06:2302:5600:366d:ca8f:f3af:381? (2001-1c06-2302-5600-366d-ca8f-f3af-0381.cable.dynamic.v6.ziggo.nl. [2001:1c06:2302:5600:366d:ca8f:f3af:381])
-        by smtp.gmail.com with ESMTPSA id hq3-20020a1709073f0300b00a1cc1be1158sm1159684ejc.165.2023.12.05.14.03.31
+        by smtp.gmail.com with ESMTPSA id hq3-20020a1709073f0300b00a1cc1be1158sm1159684ejc.165.2023.12.05.14.04.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Dec 2023 14:03:32 -0800 (PST)
-Message-ID: <94157ef7-95c9-429a-97c5-3bab2b9074ca@linaro.org>
-Date: Tue, 5 Dec 2023 23:03:31 +0100
+        Tue, 05 Dec 2023 14:04:31 -0800 (PST)
+Message-ID: <bc0bbe57-1739-4338-abfb-bd7011dc904b@linaro.org>
+Date: Tue, 5 Dec 2023 23:04:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,53 +62,53 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] usb: typec: qcom-pmic-typec: Only select
- DRM_AUX_HPD_BRIDGE with OF
+Subject: Re: [PATCH 3/3] drm/bridge: Return NULL instead of plain 0 in
+ drm_dp_hpd_bridge_register() stub
 Content-Language: en-US
 To: Nathan Chancellor <nathan@kernel.org>, dmitry.baryshkov@linaro.org
 Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
  linux@roeck-us.net, neil.armstrong@linaro.org, linux-usb@vger.kernel.org,
- dri-devel@lists.freedesktop.org, patches@lists.linux.dev
+ dri-devel@lists.freedesktop.org, patches@lists.linux.dev,
+ kernel test robot <lkp@intel.com>
 References: <20231205-drm_aux_bridge-fixes-v1-0-d242a0ae9df4@kernel.org>
- <20231205-drm_aux_bridge-fixes-v1-2-d242a0ae9df4@kernel.org>
+ <20231205-drm_aux_bridge-fixes-v1-3-d242a0ae9df4@kernel.org>
 From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20231205-drm_aux_bridge-fixes-v1-2-d242a0ae9df4@kernel.org>
+In-Reply-To: <20231205-drm_aux_bridge-fixes-v1-3-d242a0ae9df4@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 05/12/2023 21:13, Nathan Chancellor wrote:
-> CONFIG_DRM_AUX_HPD_BRIDGE depends on CONFIG_OF but that dependency is
-> not included when CONFIG_TYPEC_QCOM_PMIC selects it, resulting in a
-> Kconfig warning when CONFIG_OF is disabled:
+> sparse complains:
 > 
->    WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
->      Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && OF [=n]
->      Selected by [m]:
->      - TYPEC_QCOM_PMIC [=m] && USB_SUPPORT [=y] && TYPEC [=m] && TYPEC_TCPM [=m] && (ARCH_QCOM || COMPILE_TEST [=y]) && (DRM [=m] || DRM [=m]=n) && DRM_BRIDGE [=y]
+>    drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c: note: in included file:
+>    include/drm/bridge/aux-bridge.h:29:16: sparse: sparse: Using plain integer as NULL pointer
 > 
-> Only select CONFIG_DRM_AUX_HPD_BRIDGE with both CONFIG_DRM_BRIDGE and
-> CONFIG_OF to clear up the warning.
+> Return NULL to clear up the warning.
 > 
-> Fixes: 7d9f1b72b296 ("usb: typec: qcom-pmic-typec: switch to DRM_AUX_HPD_BRIDGE")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202312060025.BdeqZrWx-lkp@intel.com/
+> Fixes: e560518a6c2e ("drm/bridge: implement generic DP HPD bridge")
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
->   drivers/usb/typec/tcpm/Kconfig | 2 +-
+>   include/drm/bridge/aux-bridge.h | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> index 64d5421c69e6..8cdd84ca5d6f 100644
-> --- a/drivers/usb/typec/tcpm/Kconfig
-> +++ b/drivers/usb/typec/tcpm/Kconfig
-> @@ -80,7 +80,7 @@ config TYPEC_QCOM_PMIC
->   	tristate "Qualcomm PMIC USB Type-C Port Controller Manager driver"
->   	depends on ARCH_QCOM || COMPILE_TEST
->   	depends on DRM || DRM=n
-> -	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE
-> +	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE && OF
->   	help
->   	  A Type-C port and Power Delivery driver which aggregates two
->   	  discrete pieces of silicon in the PM8150b PMIC block: the
+> diff --git a/include/drm/bridge/aux-bridge.h b/include/drm/bridge/aux-bridge.h
+> index 66249ff0858e..c4c423e97f06 100644
+> --- a/include/drm/bridge/aux-bridge.h
+> +++ b/include/drm/bridge/aux-bridge.h
+> @@ -26,7 +26,7 @@ void drm_aux_hpd_bridge_notify(struct device *dev, enum drm_connector_status sta
+>   static inline struct device *drm_dp_hpd_bridge_register(struct device *parent,
+>   							struct device_node *np)
+>   {
+> -	return 0;
+> +	return NULL;
+>   }
+>   
+>   static inline void drm_aux_hpd_bridge_notify(struct device *dev, enum drm_connector_status status)
 > 
+
+Nice
 
 Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
