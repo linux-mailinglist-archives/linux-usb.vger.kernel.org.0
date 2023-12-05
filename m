@@ -1,90 +1,99 @@
-Return-Path: <linux-usb+bounces-3729-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3730-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8FD3804EAB
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 10:50:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67B17804EC3
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 10:53:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00D472816A0
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 09:50:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DFA2EB20DBF
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 09:53:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A391B495DF;
-	Tue,  5 Dec 2023 09:50:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UPOag59d"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D654BA87;
+	Tue,  5 Dec 2023 09:53:36 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF069A
-	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 01:50:22 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-40c09f5a7cfso24362035e9.0
-        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 01:50:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1701769820; x=1702374620; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cBV4B4TbyE8Idb38ySCm9bhGFw3XKWiHtHIiEhuAXKc=;
-        b=UPOag59dB5a1aRg/mN/oXnRYQAwioUZqQcuZVliekg+KeF7IPwv+qSQl7PzVmqTNOG
-         0KWw7MTQM9rp2VfVV1RtKgcmdS8zicHMTimH/J5ASnaAywfOb1o6C7v8n7okyfxVTOd7
-         L/0MibiaCIRho9GFS7bO7kT6dwH8t9btnTyz2zXTunDD4yeSySDqJLgdTI8G1o5G3eyn
-         lf1Iidu/0jJwYE203WE9l2HHPGPCBEla8PgmXjdBWTFHWPwFoYGZPzCEguNC5/OwlM2X
-         4Y3DeqeLltd0AW6TTzzoV9G+zYe/bOtA49trHScwDGPwzRenjJ+EwIvzAuDcWs2+3au5
-         AhUQ==
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D189E
+	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 01:53:33 -0800 (PST)
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3b9b4f7df33so2666083b6e.2
+        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 01:53:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701769820; x=1702374620;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cBV4B4TbyE8Idb38ySCm9bhGFw3XKWiHtHIiEhuAXKc=;
-        b=w9Nuq3EC1QY86EAHCuFJIWJBwHd/HFwe844WSv15f/eR6lQ42OYGDB+DJXkfiT1xcD
-         5bukMYDDaRGQOHo6mhJ0XLKNbIzT2d984QXXI4li4ean6TBqzl5AelE11s4C9FacerKX
-         DbUiE7aU3XeYxskcjRs7IWnP/1wKN156IMUhKMHvknruHICRV+SEpdX4+ej6XcUFsrvt
-         aYByfqPMHeGp67wHCh3OOsElv5nT14s/rhWOjAFcXhT+6iltZ+m67hZsRTNDER8cHae8
-         O7nA/+qYZKfvpCDaGNA83aUM1dAFebaKKiQlC7kN3RTqqlzqluGDjUCfWgjIrVbbOquQ
-         a3IQ==
-X-Gm-Message-State: AOJu0YzwyjLMGOBoyIT/4ncdA6ShU/uoqLo/vfc9gRQG0yYJka+IY+PB
-	3/Ug/R0pWRJcIajfXe72kZxPqg==
-X-Google-Smtp-Source: AGHT+IG7eAmkxY6rdcw+fjUx2OrqFIBHl11dMIZIv4ptjHXtDNEopEjWv9DDqbkNCB5lNRQVNKo2bw==
-X-Received: by 2002:a05:600c:35d1:b0:40b:5e21:ec2a with SMTP id r17-20020a05600c35d100b0040b5e21ec2amr294053wmq.92.1701769820549;
-        Tue, 05 Dec 2023 01:50:20 -0800 (PST)
-Received: from ?IPV6:2001:a61:1362:9c01:78ff:1f81:1ea8:d077? ([2001:a61:1362:9c01:78ff:1f81:1ea8:d077])
-        by smtp.gmail.com with ESMTPSA id d7-20020a05600c3ac700b0040b632f31d2sm13092839wms.5.2023.12.05.01.50.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Dec 2023 01:50:20 -0800 (PST)
-Message-ID: <df7a9e1e-3399-4ebe-bfcc-4cb0ac164f99@suse.com>
-Date: Tue, 5 Dec 2023 10:50:19 +0100
+        d=1e100.net; s=20230601; t=1701770013; x=1702374813;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2f7L18jtFttpvJFfes6CBhMW1LVntx6OZdWwTsAFipQ=;
+        b=GkOYZ/FftFYA/erWGrPOlC3oCtS5CFvB7WJoN/u/lH8ATBorYlfnkZ1oIqABKRVmVv
+         NxFqBuSBbXTA+tISBN4J5nnjfLfZUgiwYLxyJYgbR3kJJuJPLX1CvLODu0icRb9yvwUI
+         J5BpXBSoe8Iu2yp6TpEpLv9q/49mDujh12NAiOqKN+JDjbiJ/JsZoLfQYERFOKaAQFdy
+         eorstsV0YcYM3QygPMq6z8XUxnDiTM2xd15OnVj2CJXYHBm6610tfzRXe+8Ocz0hN1qM
+         vG2LZEbJBluKJn3Un36NyA+Hx3An1W/sxxiebkrJWYgNaVJf7iNFG00qqaysDt/v+Fne
+         IJ9g==
+X-Gm-Message-State: AOJu0YxRx32d23LlpA3qBxcLFZ88koKRl1t9M5v7fvD5K1+Y9UHzXKou
+	E+l0xlp1lW6DFxUDiuYn01nENQsxbT2Q3A2gH/eTq6w4Cg2R
+X-Google-Smtp-Source: AGHT+IEVw8D2Bi6fgJqzWq5fTn8AdF4hUojkIQidaLYC27w7CjFxBSrOw0n+HTOSGj26IC8mslr2u0JL6NHQfZdLWygWHofy+zoW
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Question regarding CDC NCM and VNC performance issue
-Content-Language: en-US
-To: Hiago De Franco <hiagofranco@gmail.com>, linux-usb@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Hiago De Franco <hiago.franco@toradex.com>
-References: <20231204183751.64202-1-hiagofranco@gmail.com>
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20231204183751.64202-1-hiagofranco@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6808:2122:b0:3b9:b430:2908 with SMTP id
+ r34-20020a056808212200b003b9b4302908mr2084994oiw.11.1701770013096; Tue, 05
+ Dec 2023 01:53:33 -0800 (PST)
+Date: Tue, 05 Dec 2023 01:53:33 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001ebfe6060bc035a3@google.com>
+Subject: [syzbot] Monthly usb report (Dec 2023)
+From: syzbot <syzbot+list834ca8cfb649c1b10f3c@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 04.12.23 19:37, Hiago De Franco wrote:
+Hello usb maintainers/developers,
 
-> 
-> Has anyone encountered a similar issue before? Could this be related to
-> the size or quantity of transmitted packages?
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
 
-At first thought my gut feeling is that the packet bonding is killing
-your performance. What does a simple ping do?
+During the period, 2 new issues were detected and 0 were fixed.
+In total, 63 issues are still open and 331 have been fixed so far.
 
-	Regards
-		Oliver
+Some of the still happening issues:
 
+Ref  Crashes Repro Title
+<1>  2852    Yes   WARNING in firmware_fallback_sysfs
+                   https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
+<2>  2755    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
+                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
+<3>  824     Yes   general protection fault in ir_raw_event_store_with_filter
+                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
+<4>  540     Yes   INFO: task hung in hub_port_init (3)
+                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
+<5>  395     Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+<6>  304     Yes   KASAN: use-after-free Read in v4l2_fh_init
+                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
+<7>  239     Yes   INFO: task hung in netdev_run_todo (2)
+                   https://syzkaller.appspot.com/bug?extid=9d77543f47951a63d5c1
+<8>  226     No    INFO: task hung in hub_event (3)
+                   https://syzkaller.appspot.com/bug?extid=a7edecbf389d11a369d4
+<9>  187     Yes   INFO: rcu detected stall in hub_event
+                   https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
+<10> 132     Yes   WARNING in cm109_urb_irq_callback/usb_submit_urb
+                   https://syzkaller.appspot.com/bug?extid=2d6d691af5ab4b7e66df
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
 
