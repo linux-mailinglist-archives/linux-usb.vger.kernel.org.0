@@ -1,42 +1,34 @@
-Return-Path: <linux-usb+bounces-3744-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3745-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C9B4805B38
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 18:36:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EAE7805CE1
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 19:07:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D5A21C20FB6
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 17:36:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C129CB20D1E
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 18:07:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A69E768B73;
-	Tue,  5 Dec 2023 17:36:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fvFKOWyw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC31C6A352;
+	Tue,  5 Dec 2023 18:07:47 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F092E68B68
-	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 17:36:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87157C433C8;
-	Tue,  5 Dec 2023 17:36:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1701797776;
-	bh=fZJBVThzrr7Cpbt4r+c/0aCx8e5OR3GiRs46lYXo1Fs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fvFKOWywnSl9+/f0Gh5AAWEcg1w/ig2d93V+HiVVrEHOGeL+dt1MOFMaiV5g26UO+
-	 5G6XH2aMAT2kW9OVIK2R/SuorcoiLwT7/YymLpVBHIL7DYqjL6rFzMYD53OHywhp7/
-	 /SUaOtvkqhgDSwcCXZvbNa4ftY/23akJsW6Gq1zE=
-Date: Wed, 6 Dec 2023 02:36:10 +0900
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [usb:usb-linus] BUILD REGRESSION
- b17b7fe6dd5c6ff74b38b0758ca799cdbb79e26e
-Message-ID: <2023120635-devotee-plank-3278@gregkh>
-References: <202312052256.y5R3B4ix-lkp@intel.com>
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id AB0C218B
+	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 10:07:42 -0800 (PST)
+Received: (qmail 425300 invoked by uid 1000); 5 Dec 2023 13:07:41 -0500
+Date: Tue, 5 Dec 2023 13:07:41 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: oneukum@suse.com, davem@davemloft.net, edumazet@google.com,
+  greg@kroah.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+  linux-usb@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
+  stable@vger.kernel.org
+Subject: Re: [PATCH v4] net: usb: ax88179_178a: avoid failed operations when
+ device is disconnected
+Message-ID: <624ad05b-0b90-4d1c-b06b-7a75473401c3@rowland.harvard.edu>
+References: <4ce32363-378c-4ea3-9a4e-d7274d4f7787@suse.com>
+ <20231205135154.516342-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -45,43 +37,148 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202312052256.y5R3B4ix-lkp@intel.com>
+In-Reply-To: <20231205135154.516342-1-jtornosm@redhat.com>
 
-On Tue, Dec 05, 2023 at 10:07:58PM +0800, kernel test robot wrote:
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-> branch HEAD: b17b7fe6dd5c6ff74b38b0758ca799cdbb79e26e  usb: typec: class: fix typec_altmode_put_partner to put plugs
+On Tue, Dec 05, 2023 at 02:51:54PM +0100, Jose Ignacio Tornos Martinez wrote:
+> When the device is disconnected we get the following messages showing
+> failed operations:
+> Nov 28 20:22:11 localhost kernel: usb 2-3: USB disconnect, device number 2
+> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: unregister 'ax88179_178a' usb-0000:02:00.0-3, ASIX AX88179 USB 3.0 Gigabit Ethernet
+> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to read reg index 0x0002: -19
+> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to write reg index 0x0002: -19
+> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
+> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0001: -19
+> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
 > 
-> Error/Warning ids grouped by kconfigs:
+> The reason is that although the device is detached, normal stop and
+> unbind operations are commanded from the driver. These operations are
+> not necessary in this situation, so avoid these logs when the device is
+> detached if the result of the operation is -ENODEV and if the new flag
+> informing about the disconnecting status is enabled.
 > 
-> gcc_recent_errors
-> |-- sparc-allmodconfig
-> |   `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
-> |-- sparc-allnoconfig
-> |   |-- arch-sparc-kernel-traps_32.c:error:no-previous-prototype-for-trap_init
-> |   |-- arch-sparc-lib-cmpdi2.c:error:no-previous-prototype-for-__cmpdi2
-> |   |-- arch-sparc-lib-ucmpdi2.c:error:no-previous-prototype-for-__ucmpdi2
-> |   |-- arch-sparc-mm-leon_mm.c:error:variable-paddrbase-set-but-not-used
-> |   `-- arch-sparc-mm-srmmu.c:error:variable-clear-set-but-not-used
-> |-- sparc-defconfig
-> |   |-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
-> |   |-- arch-sparc-kernel-traps_32.c:error:no-previous-prototype-for-trap_init
-> |   |-- arch-sparc-lib-cmpdi2.c:error:no-previous-prototype-for-__cmpdi2
-> |   |-- arch-sparc-lib-ucmpdi2.c:error:no-previous-prototype-for-__ucmpdi2
-> |   |-- arch-sparc-mm-leon_mm.c:error:variable-paddrbase-set-but-not-used
-> |   `-- arch-sparc-mm-srmmu.c:error:variable-clear-set-but-not-used
-> |-- sparc-randconfig-001-20231205
-> |   `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
-> |-- sparc64-allmodconfig
-> |   `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
-> |-- sparc64-allyesconfig
-> |   `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
-> `-- sparc64-defconfig
->     `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
+> cc: stable@vger.kernel.org
+> Fixes: e2ca90c276e1f ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
+> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+> ---
+> V1 -> V2:
+> - Follow the suggestions from Alan Stern and Oliver Neukum to check the
+> result of the operations (-ENODEV) and not the internal state of the USB 
+> layer (USB_STATE_NOTATTACHED).
+> V2 -> V3
+> - Add cc: stable line in the signed-off-by area.
+> V3 -> V4
+> - Follow the suggestions from Oliver Neukum to use only one flag when
+> disconnecting and include barriers to avoid memory ordering issues.
 
-Odd, why are errors for changes that are NOT from this branch triggering
-the bot to report them here as if they came from this branch?
+The __ax88179_read_cmd() and __ax88179_write_cmd() routines are 
+asynchronous with respect to ax88179_disconnect(), right?  Or at least, 
+they are if they run as a result of the user closing the network 
+interface.  Otherwise there wouldn't be any memory ordering issues.
 
-thanks,
+But the memory barriers you added are not the proper solution.  What you 
+need here is _synchronization_, not _ordering_.  As it is, the memory 
+barriers you have added don't do anything; they shouldn't be in the 
+patch.
 
-greg k-h
+If you would like a more in-depth explanation, let me know.
+
+Alan Stern
+
+>  drivers/net/usb/ax88179_178a.c | 38 +++++++++++++++++++++++++++-------
+>  1 file changed, 31 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+> index 4ea0e155bb0d..1c671f2a43ee 100644
+> --- a/drivers/net/usb/ax88179_178a.c
+> +++ b/drivers/net/usb/ax88179_178a.c
+> @@ -173,6 +173,7 @@ struct ax88179_data {
+>  	u8 in_pm;
+>  	u32 wol_supported;
+>  	u32 wolopts;
+> +	u8 disconnecting;
+>  };
+>  
+>  struct ax88179_int_data {
+> @@ -208,6 +209,7 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>  {
+>  	int ret;
+>  	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
+> +	struct ax88179_data *ax179_data = dev->driver_priv;
+>  
+>  	BUG_ON(!dev);
+>  
+> @@ -219,9 +221,12 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>  	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+>  		 value, index, data, size);
+>  
+> -	if (unlikely(ret < 0))
+> -		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
+> -			    index, ret);
+> +	if (unlikely(ret < 0)) {
+> +		smp_rmb();
+> +		if (!(ret == -ENODEV && ax179_data->disconnecting))
+> +			netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
+> +				    index, ret);
+> +	}
+>  
+>  	return ret;
+>  }
+> @@ -231,6 +236,7 @@ static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>  {
+>  	int ret;
+>  	int (*fn)(struct usbnet *, u8, u8, u16, u16, const void *, u16);
+> +	struct ax88179_data *ax179_data = dev->driver_priv;
+>  
+>  	BUG_ON(!dev);
+>  
+> @@ -242,9 +248,12 @@ static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+>  	ret = fn(dev, cmd, USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+>  		 value, index, data, size);
+>  
+> -	if (unlikely(ret < 0))
+> -		netdev_warn(dev->net, "Failed to write reg index 0x%04x: %d\n",
+> -			    index, ret);
+> +	if (unlikely(ret < 0)) {
+> +		smp_rmb();
+> +		if (!(ret == -ENODEV && ax179_data->disconnecting))
+> +			netdev_warn(dev->net, "Failed to write reg index 0x%04x: %d\n",
+> +				    index, ret);
+> +	}
+>  
+>  	return ret;
+>  }
+> @@ -492,6 +501,21 @@ static int ax88179_resume(struct usb_interface *intf)
+>  	return usbnet_resume(intf);
+>  }
+>  
+> +static void ax88179_disconnect(struct usb_interface *intf)
+> +{
+> +	struct usbnet *dev = usb_get_intfdata(intf);
+> +	struct ax88179_data *ax179_data;
+> +
+> +	if (!dev)
+> +		return;
+> +
+> +	ax179_data = dev->driver_priv;
+> +	ax179_data->disconnecting = 1;
+> +	smp_wmb();
+> +
+> +	usbnet_disconnect(intf);
+> +}
+> +
+>  static void
+>  ax88179_get_wol(struct net_device *net, struct ethtool_wolinfo *wolinfo)
+>  {
+> @@ -1906,7 +1930,7 @@ static struct usb_driver ax88179_178a_driver = {
+>  	.suspend =	ax88179_suspend,
+>  	.resume =	ax88179_resume,
+>  	.reset_resume =	ax88179_resume,
+> -	.disconnect =	usbnet_disconnect,
+> +	.disconnect =	ax88179_disconnect,
+>  	.supports_autosuspend = 1,
+>  	.disable_hub_initiated_lpm = 1,
+>  };
+> -- 
+> 2.43.0
+> 
 
