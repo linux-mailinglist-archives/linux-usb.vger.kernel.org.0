@@ -1,57 +1,57 @@
-Return-Path: <linux-usb+bounces-3737-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3738-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EDC68056C5
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 15:07:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C05438056D0
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 15:08:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FD8E1C2100A
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 14:07:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 743C3281DDF
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 14:08:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28D3661FC8;
-	Tue,  5 Dec 2023 14:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C29CD61FCE;
+	Tue,  5 Dec 2023 14:08:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TrTckcwt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k2A7/PVb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D85612C
-	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 06:07:19 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229DB183
+	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 06:08:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701785239; x=1733321239;
+  t=1701785299; x=1733321299;
   h=date:from:to:cc:subject:message-id;
-  bh=W06qDQ/CQrMtXrkwAayvXsymLPvpZcA5wJuSSVge/wo=;
-  b=TrTckcwtFD0sxNl9aIauzToxkeh4F16YJXPIL+XS69OEiBVcOCJ9wMsA
-   6qqRi+d8r99XPSnT/eZwYseWfYrCAtQvWZI4733ug0muadVSGiGDYbUNF
-   yNW2cCM8yTF3BnuXyZHBldnzkUX4lo730732bcx5t5RJU067HSTOTYx8n
-   au2LEAbZwKwjtZlEYXecg2SwKRlg+q/3mc0pn5Q1Y1ujf2xRXNK8fe5Za
-   4R4hJtT6My0kMTRUCtqoIO4eNfg86BhN6tJio44kx1s3ngG/AnCkZWjLy
-   etvEOmtYiVY7sqJjCnhosjlkDGFfMX7EAbe/qKMCgh86vLIia1bVuwPQT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="384299321"
+  bh=9IrknkhfQ3AkbiPJ/OIdd4fFs2ZTJ6AmdTGCpvG7xB0=;
+  b=k2A7/PVbYyZgbVOz6Vdv4V5zdE4yejjH7WSxHgPDeZfQau6FRVheiNeW
+   gYtk1Ez+R0lh3ug/IBfy9RKh3+k/8bJ+bkeeFIe5AvBbYKmeevgZkH29l
+   2oBOBSiIXSLWaPKYOSpilQ97Y7I6qa78bkKZoKrTlVTWz7nR/KqRkTeiI
+   vfHnN32ECBgJYuTdKYs9KsKJ9PJ1kQgnmWY8siopYH0b+oCbRQn0QFTeT
+   sNzBNNhhT5dp4LEr96i1Mowc6IK3WucgD9HHdzmb3BDW7oU3aYVZZEAnc
+   Iv2TVKeiwchsC8di+xykHOsFp+14yZLiCk8RJenUSQ/Hv+KwLIgf2x81M
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="981023"
 X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="384299321"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 06:07:18 -0800
+   d="scan'208";a="981023"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 06:08:18 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="836979057"
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="944273294"
 X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="836979057"
+   d="scan'208";a="944273294"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Dec 2023 06:07:16 -0800
+  by orsmga005.jf.intel.com with ESMTP; 05 Dec 2023 06:08:17 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rAW4x-00097c-0D;
-	Tue, 05 Dec 2023 14:07:15 +0000
-Date: Tue, 05 Dec 2023 22:06:44 +0800
+	id 1rAW5v-00097v-0c;
+	Tue, 05 Dec 2023 14:08:15 +0000
+Date: Tue, 05 Dec 2023 22:07:58 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 5e4c8814a431d21bfaf20b464134f40f2f81e152
-Message-ID: <202312052242.SWEMpoyd-lkp@intel.com>
+Subject: [usb:usb-linus] BUILD REGRESSION
+ b17b7fe6dd5c6ff74b38b0758ca799cdbb79e26e
+Message-ID: <202312052256.y5R3B4ix-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -59,16 +59,40 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 5e4c8814a431d21bfaf20b464134f40f2f81e152  usb: typec: tcpci: add vconn over current fault handling to maxim_core
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: b17b7fe6dd5c6ff74b38b0758ca799cdbb79e26e  usb: typec: class: fix typec_altmode_put_partner to put plugs
 
-elapsed time: 1451m
+Error/Warning ids grouped by kconfigs:
 
-configs tested: 208
+gcc_recent_errors
+|-- sparc-allmodconfig
+|   `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
+|-- sparc-allnoconfig
+|   |-- arch-sparc-kernel-traps_32.c:error:no-previous-prototype-for-trap_init
+|   |-- arch-sparc-lib-cmpdi2.c:error:no-previous-prototype-for-__cmpdi2
+|   |-- arch-sparc-lib-ucmpdi2.c:error:no-previous-prototype-for-__ucmpdi2
+|   |-- arch-sparc-mm-leon_mm.c:error:variable-paddrbase-set-but-not-used
+|   `-- arch-sparc-mm-srmmu.c:error:variable-clear-set-but-not-used
+|-- sparc-defconfig
+|   |-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
+|   |-- arch-sparc-kernel-traps_32.c:error:no-previous-prototype-for-trap_init
+|   |-- arch-sparc-lib-cmpdi2.c:error:no-previous-prototype-for-__cmpdi2
+|   |-- arch-sparc-lib-ucmpdi2.c:error:no-previous-prototype-for-__ucmpdi2
+|   |-- arch-sparc-mm-leon_mm.c:error:variable-paddrbase-set-but-not-used
+|   `-- arch-sparc-mm-srmmu.c:error:variable-clear-set-but-not-used
+|-- sparc-randconfig-001-20231205
+|   `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
+|-- sparc64-allmodconfig
+|   `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
+|-- sparc64-allyesconfig
+|   `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
+`-- sparc64-defconfig
+    `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
+
+elapsed time: 1453m
+
+configs tested: 201
 configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
 tested configs:
 alpha                             allnoconfig   gcc  
@@ -81,7 +105,6 @@ arc                          axs103_defconfig   gcc
 arc                      axs103_smp_defconfig   gcc  
 arc                                 defconfig   gcc  
 arc                         haps_hs_defconfig   gcc  
-arc                            hsdk_defconfig   gcc  
 arc                   randconfig-001-20231205   gcc  
 arc                   randconfig-002-20231205   gcc  
 arm                              allmodconfig   gcc  
@@ -91,13 +114,12 @@ arm                         at91_dt_defconfig   gcc
 arm                         axm55xx_defconfig   gcc  
 arm                                 defconfig   clang
 arm                          exynos_defconfig   gcc  
-arm                             mxs_defconfig   clang
-arm                          pxa168_defconfig   clang
+arm                        neponset_defconfig   clang
+arm                           omap1_defconfig   clang
 arm                   randconfig-001-20231205   gcc  
 arm                   randconfig-002-20231205   gcc  
 arm                   randconfig-003-20231205   gcc  
 arm                   randconfig-004-20231205   gcc  
-arm                         s5pv210_defconfig   clang
 arm                           sunxi_defconfig   gcc  
 arm64                            allmodconfig   clang
 arm64                             allnoconfig   gcc  
@@ -112,7 +134,6 @@ csky                             allyesconfig   gcc
 csky                                defconfig   gcc  
 csky                  randconfig-001-20231205   gcc  
 csky                  randconfig-002-20231205   gcc  
-hexagon                          alldefconfig   clang
 hexagon                          allmodconfig   clang
 hexagon                           allnoconfig   clang
 hexagon                          allyesconfig   clang
@@ -150,7 +171,6 @@ loongarch             randconfig-002-20231205   gcc
 m68k                             allmodconfig   gcc  
 m68k                              allnoconfig   gcc  
 m68k                             allyesconfig   gcc  
-m68k                         apollo_defconfig   gcc  
 m68k                          atari_defconfig   gcc  
 m68k                                defconfig   gcc  
 m68k                        m5272c3_defconfig   gcc  
@@ -163,7 +183,7 @@ microblaze                          defconfig   gcc
 mips                             allmodconfig   gcc  
 mips                              allnoconfig   clang
 mips                             allyesconfig   gcc  
-mips                         rt305x_defconfig   gcc  
+mips                      malta_kvm_defconfig   clang
 mips                           xway_defconfig   gcc  
 nios2                            alldefconfig   gcc  
 nios2                            allmodconfig   gcc  
@@ -192,16 +212,17 @@ powerpc                          allyesconfig   clang
 powerpc                 canyonlands_defconfig   gcc  
 powerpc                      cm5200_defconfig   gcc  
 powerpc                      ep88xc_defconfig   gcc  
+powerpc                          g5_defconfig   clang
+powerpc                     kilauea_defconfig   clang
+powerpc                     ksi8560_defconfig   clang
 powerpc                 mpc834x_itx_defconfig   gcc  
 powerpc                      pasemi_defconfig   gcc  
-powerpc                         ps3_defconfig   gcc  
 powerpc                     rainier_defconfig   gcc  
 powerpc               randconfig-001-20231205   gcc  
 powerpc               randconfig-002-20231205   gcc  
 powerpc               randconfig-003-20231205   gcc  
 powerpc                     redwood_defconfig   gcc  
 powerpc                     tqm8548_defconfig   gcc  
-powerpc                     tqm8555_defconfig   gcc  
 powerpc                      tqm8xx_defconfig   gcc  
 powerpc                        warp_defconfig   gcc  
 powerpc                         wii_defconfig   gcc  
@@ -224,16 +245,12 @@ s390                  randconfig-002-20231205   clang
 sh                               allmodconfig   gcc  
 sh                                allnoconfig   gcc  
 sh                               allyesconfig   gcc  
-sh                        apsh4ad0a_defconfig   gcc  
 sh                                  defconfig   gcc  
-sh                         ecovec24_defconfig   gcc  
 sh                               j2_defconfig   gcc  
 sh                          r7780mp_defconfig   gcc  
 sh                    randconfig-001-20231205   gcc  
 sh                    randconfig-002-20231205   gcc  
-sh                           se7724_defconfig   gcc  
 sh                           se7751_defconfig   gcc  
-sh                     sh7710voipgw_defconfig   gcc  
 sh                        sh7757lcr_defconfig   gcc  
 sparc                            allmodconfig   gcc  
 sparc                            allyesconfig   gcc  
