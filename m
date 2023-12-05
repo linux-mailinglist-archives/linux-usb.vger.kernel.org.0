@@ -1,138 +1,110 @@
-Return-Path: <linux-usb+bounces-3742-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3743-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4E15805801
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 15:57:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7945B805B34
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 18:34:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F5D9281D7D
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 14:57:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25704281D5B
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Dec 2023 17:34:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B0F367E67;
-	Tue,  5 Dec 2023 14:57:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC2A668B62;
+	Tue,  5 Dec 2023 17:34:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HJDY57Zu"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Ed+fczkA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5013C9;
-	Tue,  5 Dec 2023 06:57:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701788229; x=1733324229;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=mlZUqVzzz78kYGKI5cXqocVGJbtwH388Pqsjwxt8CGE=;
-  b=HJDY57ZuhNDJCR+XCRfL6Fd17/nPgoGudZfmJL82Mj3hrg8TuUsdVm0l
-   Ycq0cC4nTUnwXJ0a3q041FVthWTJbRn/hFdIuAgAa3+66SdjK8RbcxA+2
-   Zm1X2qZy6U7h1saetvUxQoFc4kTmgGMnmW3y4gcipg/mtgs77FglYNHje
-   JIFW362ErU5IhD+dqUX4MJXJpnylOyLZOXvWmslgx0kNK+2Ld2KFuieDs
-   ckQPGutPSS9LCh+mHw5FAP5pVEAjTvIHmBx5fHBXP9ON+Jpfq2Z7oPqGc
-   u9srmuKRztWlvLRoV0WfmIyMo2FqM6l1/b8Ur2EcQr5j+mi1u2Jb3jZwV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="378929719"
-X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="378929719"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 06:57:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="799991881"
-X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="799991881"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga008.jf.intel.com with ESMTP; 05 Dec 2023 06:57:06 -0800
-Message-ID: <f02353be-4e51-aad2-08ee-d44b3693f061@linux.intel.com>
-Date: Tue, 5 Dec 2023 16:58:25 +0200
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14AF53E483
+	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 17:34:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F253C433A9;
+	Tue,  5 Dec 2023 17:34:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1701797645;
+	bh=jgbfGbZsBewA51hOqnV3bW8oStFg/dIzf/WIRR7nJ1U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ed+fczkAv4EknCnLYlOvj2wiiJNrkWIgDfUzHEIAZG7ya5RsdMc0xMe9jBzcbl3du
+	 oJPL8B8kemEQcMD2/WjDoIsiepE51ryxa7bVvouNiqx9q/k1uH+Vg0OpYQaSSDC3mF
+	 buifRcZXf4IqzZszVKuUicz6PTYPipl34IyydYzM=
+Date: Wed, 6 Dec 2023 02:33:58 +0900
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Konstantin Aladyshev <aladyshev22@gmail.com>
+Cc: benjamin.tissoires@redhat.com, ivan.orlov0322@gmail.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	john@keeping.me.uk, lee@kernel.org
+Subject: Re: [PATCH 1/1] usb: gadget: f_hid: fix report descriptor allocation
+Message-ID: <2023120650-scroll-studio-1083@gregkh>
+References: <20231205085404.175-1-aladyshev22@gmail.com>
+ <20231205085404.175-2-aladyshev22@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Yaxiong Tian <iambestgod@outlook.com>, mathias.nyman@intel.com,
- gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- tianyaxiong@kylinos.cn
-References: <TYZPR01MB4784CB3058AC1B5787DB6601D586A@TYZPR01MB4784.apcprd01.prod.exchangelabs.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] usb:xhci: Avoid hub_event() stuck when xHC restore state
- timeout
-In-Reply-To: <TYZPR01MB4784CB3058AC1B5787DB6601D586A@TYZPR01MB4784.apcprd01.prod.exchangelabs.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231205085404.175-2-aladyshev22@gmail.com>
 
-On 4.12.2023 10.02, Yaxiong Tian wrote:
-> From: Yaxiong Tian <tianyaxiong@kylinos.cn>
+On Tue, Dec 05, 2023 at 11:54:03AM +0300, Konstantin Aladyshev wrote:
+> The commit "usb: gadget: f_hid: fix f_hidg lifetime vs cdev"
+> (89ff3dfac604614287ad5aad9370c3f984ea3f4b) has introduced a bug
+> that leads to hid device corruption after the replug operation.
+
+Nit, this should be written as
+	89ff3dfac604 ("usb: gadget: f_hid: fix f_hidg lifetime vs cdev")
+right?
+
+> Reverse device managed memory allocation for the report descriptor
+> to fix the issue.
 > 
-> when xHc restore state timeout,the xhci_reusme() return -ETIMEDOUT
-
-Out of curiosity, have you tried if it still is possible to revive your
-xHC controller here?
-
-Instead of returning -ETIMEDOUT, try setting " reinit_xhc = true", and
-jump to  "if (reinit_xhc) {"  where we reinitialize xHC in xhci_resume() due
-to other resume issues.
-
-> instantly. After usb_hc_died() called ,they kick hub_wq to running
-> hub_event() but the wq is freezd. When suspend ends,hub_evnet realy
-> running and sticking.
-> Such as:
-> [  968.794016][ 2] [   T37] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-> disables this message.
-> [  968.802969][ 2] [   T37] kworker/2:3     D    0   999      2 0x00000028
-> [  968.809579][ 2] [   T37] Workqueue: usb_hub_wq hub_event
-> [  968.814885][ 2] [   T37] Call trace:
-> [  968.818455][ 2] [   T37]  __switch_to+0xd4/0x138
-> [  968.823067][ 2] [   T37]  __schedule+0x2dc/0x6a0
-> [  968.827680][ 2] [   T37]  schedule+0x34/0xb0
-> [  968.831947][ 2] [   T37]  schedule_timeout+0x1e0/0x298
-> [  968.837079][ 2] [   T37]  __wait_for_common+0xf0/0x208
-> [  968.842212][ 2] [   T37]  wait_for_completion+0x1c/0x28
-> [  968.847432][ 2] [   T37]  xhci_configure_endpoint+0x104/0x640
-> [  968.853173][ 2] [   T37]  xhci_check_bandwidth+0x140/0x2e0
-> [  968.858652][ 2] [   T37]  usb_hcd_alloc_bandwidth+0x1c8/0x348
-> [  968.864393][ 2] [   T37]  usb_disable_device+0x198/0x260
-> [  968.869698][ 2] [   T37]  usb_disconnect+0xdc/0x3a0
-> [  968.874571][ 2] [   T37]  usb_disconnect+0xbc/0x3a0
-> [  968.879441][ 2] [   T37]  hub_quiesce+0xa0/0x108
-> [  968.884053][ 2] [   T37]  hub_event+0x4d4/0x1558
-> [  968.888664][ 2] [   T37]  kretprobe_trampoline+0x0/0xc4
-> [  968.893884][ 2] [   T37]  worker_thread+0x4c/0x488
-> [  968.898668][ 2] [   T37]  kthread+0xf8/0x128
-> [  968.902933][ 2] [   T37]  ret_from_fork+0x10/0x18
+> Tested:
+> This change was tested on the AMD EthanolX CRB server with the BMC
+> based on the OpenBMC distribution. The BMC provides KVM functionality
+> via the USB gadget device:
+> - before: KVM page refresh results in a broken USB device,
+> - after: KVM page refresh works without any issues.
 > 
-> The result is that you cannot suspend again.because the wq can't
-> be freezed.Also hard to reboot,when some application visited this
-> piece.
+> Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+
+We need a Fixes: tag here and also a cc: stable so that this gets
+properly backported.
+
+> ---
+>  drivers/usb/gadget/function/f_hid.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> The reason of stuck is that some access related to xhci hardware
-> is being called.But xhci has problem,at least not running.(
-> when xhci_restore_registers(),the xhci will load op_regs.The
-> CMD_RUN will clear in xhci_suspend().)
-> 
+> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> index ea85e2c701a1..3c8a9dd585c0 100644
+> --- a/drivers/usb/gadget/function/f_hid.c
+> +++ b/drivers/usb/gadget/function/f_hid.c
+> @@ -92,6 +92,7 @@ static void hidg_release(struct device *dev)
+>  {
+>  	struct f_hidg *hidg = container_of(dev, struct f_hidg, dev);
+>  
+> +	kfree(hidg->report_desc);
+>  	kfree(hidg->set_report_buf);
+>  	kfree(hidg);
+>  }
+> @@ -1287,9 +1288,9 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
+>  	hidg->report_length = opts->report_length;
+>  	hidg->report_desc_length = opts->report_desc_length;
+>  	if (opts->report_desc) {
+> -		hidg->report_desc = devm_kmemdup(&hidg->dev, opts->report_desc,
+> -						 opts->report_desc_length,
+> -						 GFP_KERNEL);
+> +		hidg->report_desc = kmemdup(opts->report_desc,
+> +					    opts->report_desc_length,
+> +					    GFP_KERNEL);
 
-Nice catch and debugging work btw.
+Yet one more reason why devm_*() functions are dangerous to use :(
 
-> So using XHCI_STATE_DYING flag,to avoid any code to touching
-> hardware immediately.hub_event() will complete.The usb_hc_died
-> tasks will be completed and some sys interfaces will be removed.
+Nice fix.
 
-The XHCI_STATE_DYING flag is currently only set in xhci_hc_died().
-So when this flag is set we could assume that the command ring and
-pending URBs are, or will be cleaned up. This would change with your patch.
-  
-We might need some other solution,
-Maybe set the set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags) after
-CNR (Contorller Not Ready) is successfully cleared, and controller is
-actually accessible.
+thanks,
 
-We then would need to add checks to see if controller is accessible
-before queuing any commands to xHC hardware.
-
-Thanks
-Mathias
+greg k-h
 
