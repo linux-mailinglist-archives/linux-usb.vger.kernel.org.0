@@ -1,94 +1,122 @@
-Return-Path: <linux-usb+bounces-3791-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3792-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDABF807758
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 19:13:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A451807810
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 19:50:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59FCB281E92
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 18:13:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24C2B1C20EDC
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 18:49:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD0A0675A1;
-	Wed,  6 Dec 2023 18:13:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3082433DF;
+	Wed,  6 Dec 2023 18:49:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fFMF/HdN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BAaohl8i"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730D1D5B;
-	Wed,  6 Dec 2023 10:13:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=9Jjhru2ZS2MjwSXGlS5vMOqG5oAjzFFLnSkNdJ/iC7Y=; b=fFMF/HdNhrOgP0tisubvvm+0du
-	sSkWPYchdFU+7JZ81vY6FMVW3yepI6GBNfY+NNR7wyoIlrWZJt6wZU80vblBmk6OcQ3xs81SafMTA
-	JxTJMZgo8gbFEVLl+GD4lyLD1jmMVQ42mMHDA1nKxouae0DEKk3mIM9OkCpy4859yi9fHpw1tIFch
-	NCPunzAZLmxnRtFOlx+zDLfIOq1fUeR+tdqVcPfQC3knFGD/1x9Kr0QJQso33SaSYC2hFsbQJvVb1
-	rT/329l9EJarlVw0EyMFnOc7yfWOKuQbYeRPatmOWvRWZLndP63LC1LiMrCEwAvQjanWLnTDsp4s8
-	oQb/tGVg==;
-Received: from [50.53.46.231] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rAwOu-00B0qd-0j;
-	Wed, 06 Dec 2023 18:13:36 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E5510C3;
+	Wed,  6 Dec 2023 10:49:20 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1d075392ff6so1023585ad.1;
+        Wed, 06 Dec 2023 10:49:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701888560; x=1702493360; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bFz9y6OzWBpIJlSD+//aAkcmJ5zx0LpA7vS+4tAUhI0=;
+        b=BAaohl8ix4UKeb4KqfelxL5Fcus6GkwJd0gCjwJZ8ZJWXF6TMxn4pLLlU9CXVN4LZe
+         RkwYdwQ0c1jTDFTpcdlsLqjM9fJ6FKNTNrZ2BNmevz80QOIQhtjxJy4vInm4JddqPx6X
+         cBs4SRalArNTWSqQw4DcROhWF99jdfwttvZ/4et/qsZKA18I6A77yrHTLteIWtD0Pvi1
+         733kcqSiXD7Lc9DMXKv7sv83wZS5Rqy/k27FBixjxRuoVMxaSXdzblKv3JkgqVHVcTTG
+         47nX2F99/W05FvSLPb2Jm4fjZoNJ/cEBWYdC0VGQbhW3IKtgXL5uzFXUw85aZm/KWgkI
+         8Vuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701888560; x=1702493360;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bFz9y6OzWBpIJlSD+//aAkcmJ5zx0LpA7vS+4tAUhI0=;
+        b=ZdmdvuRPEEccL0r/NsAMrDrMnorZ28w1AEKChbiBognGr3oDsFmH+fQsR6x/CXG6u1
+         yg7PO+gmL1XQ7ch/NSEfwbpjkZDhRBVHJpj+ReTwqS6uE4opg/y837j96f1N2lEIrIrh
+         rntjS//XLuAM99XTlpTpFZa9J9Tuc9FZ+Yq9riNWgwzjN1sOTknAuAlhGzfTvh/s9SxL
+         POYUonJyDV5h9ylKSJBgbrIIou1OdkosLGXOGYnzj4/9VDnvjW95EEorjeQB0AHrHenN
+         MBhLoqeuHelJTLoKVs96gKi/v4VQwBAByFd8Q7/OD1B/3mRSSYFNBYhCaZyk3c1VGFT3
+         IOJA==
+X-Gm-Message-State: AOJu0YyyHXXu3OjuLEG2E+NzDnIEetrgmEu006UpYBLrvNgfGLY4IQoo
+	uzl6h6kfmR2u/SGO1R9qQG0=
+X-Google-Smtp-Source: AGHT+IGO0kkqhuDJWwAtMavlRxzrlYAC+ZmyXNJC1ygfbswa3mSlt/xVlwLmy9cv3aMfGn3jnL+LmA==
+X-Received: by 2002:a17:902:bc84:b0:1d0:79c4:e627 with SMTP id bb4-20020a170902bc8400b001d079c4e627mr1735143plb.31.1701888560347;
+        Wed, 06 Dec 2023 10:49:20 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m6-20020a170902db0600b001c88f77a156sm149974plx.153.2023.12.06.10.49.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Dec 2023 10:49:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 6 Dec 2023 10:49:19 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kernel@vger.kernel.org,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH] usb: fotg210-udc: fix function kernel-doc comments
-Date: Wed,  6 Dec 2023 10:13:35 -0800
-Message-ID: <20231206181335.27540-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.43.0
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] usb: typec: qcom-pmic: add CONFIG_OF dependency
+Message-ID: <d0323841-a3a7-45b7-b702-0a08f9250c55@roeck-us.net>
+References: <20231206172037.12072-1-rdunlap@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231206172037.12072-1-rdunlap@infradead.org>
 
-Correct kernel-doc comments to prevent warnings from
-scripts/kernel-doc.
+On Wed, Dec 06, 2023 at 09:20:37AM -0800, Randy Dunlap wrote:
+> DRM_AUX_BRIDGE depends on CONFIG_OF, so that is also needed here
+> to fix a kconfig warning:
+> 
+> WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
+>   Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && OF [=n]
+>   Selected by [y]:
+>   - TYPEC_QCOM_PMIC [=y] && USB_SUPPORT [=y] && TYPEC [=y] && TYPEC_TCPM [=y] && (ARCH_QCOM || COMPILE_TEST [=y]) && (DRM [=y] || DRM [=y]=n) && DRM_BRIDGE [=y]
+> 
 
-fotg210-udc.c:1103: warning: Function parameter or member 'g' not described in 'fotg210_vbus_session'
-fotg210-udc.c:1103: warning: Excess function parameter '_gadget' description in 'fotg210_vbus_session'
-fotg210-udc.c:1103: warning: No description found for return value of 'fotg210_vbus_session'
-fotg210-udc.c:1129: warning: No description found for return value of 'fotg210_phy_event'
+All but impossible for me to determine if this patch or
+https://lore.kernel.org/all/20231205-drm_aux_bridge-fixes-v1-2-d242a0ae9df4@kernel.org/
+is more appropriate.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
----
- drivers/usb/fotg210/fotg210-udc.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Guenter
 
-diff -- a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
---- a/drivers/usb/fotg210/fotg210-udc.c
-+++ b/drivers/usb/fotg210/fotg210-udc.c
-@@ -1094,10 +1094,10 @@ static int fotg210_udc_stop(struct usb_g
- 
- /**
-  * fotg210_vbus_session - Called by external transceiver to enable/disable udc
-- * @_gadget: usb gadget
-+ * @g: usb gadget
-  * @is_active: 0 if should disable UDC VBUS, 1 if should enable
-  *
-- * Returns 0
-+ * Returns: %0
-  */
- static int fotg210_vbus_session(struct usb_gadget *g, int is_active)
- {
-@@ -1122,7 +1122,7 @@ static const struct usb_gadget_ops fotg2
-  *
-  * Called by the USB Phy when a cable connect or disconnect is sensed.
-  *
-- * Returns NOTIFY_OK or NOTIFY_DONE
-+ * Returns: NOTIFY_OK or NOTIFY_DONE
-  */
- static int fotg210_phy_event(struct notifier_block *nb, unsigned long action,
- 			     void *data)
+> Fixes: 7d9f1b72b296 ("usb: typec: qcom-pmic-typec: switch to DRM_AUX_HPD_BRIDGE")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/usb/typec/tcpm/Kconfig |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff -- a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
+> --- a/drivers/usb/typec/tcpm/Kconfig
+> +++ b/drivers/usb/typec/tcpm/Kconfig
+> @@ -80,6 +80,7 @@ config TYPEC_QCOM_PMIC
+>  	tristate "Qualcomm PMIC USB Type-C Port Controller Manager driver"
+>  	depends on ARCH_QCOM || COMPILE_TEST
+>  	depends on DRM || DRM=n
+> +	depends on OF
+>  	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE
+>  	help
+>  	  A Type-C port and Power Delivery driver which aggregates two
 
