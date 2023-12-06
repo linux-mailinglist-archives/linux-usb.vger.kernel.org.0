@@ -1,107 +1,80 @@
-Return-Path: <linux-usb+bounces-3770-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3771-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BC088065B2
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 04:39:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1549980666F
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 06:10:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ABEFEB203CF
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 03:39:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B99F4281F0E
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 05:10:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0B4BD292;
-	Wed,  6 Dec 2023 03:39:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YIQ0ECqQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA924DDBA;
+	Wed,  6 Dec 2023 05:10:49 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58DFC8F5
-	for <linux-usb@vger.kernel.org>; Wed,  6 Dec 2023 03:39:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24730C433C9;
-	Wed,  6 Dec 2023 03:39:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1701833942;
-	bh=I58oH3gxaXTUpHLr44iFAtoJDHEru7JOv1e8S71m5zs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YIQ0ECqQT8hbMvrqpOzxYPz7G9yKPp/RgU8FHNILKdDyJno0My3V3wxFoWrJWsGvo
-	 Ix/RkIyAhokLtuxzUxKLGKVQ+f2lw9vDEvBkAQb15LnkgAppWu2CiMae6R2Tkxo7rP
-	 j2RPl1DxZ+byeBOsS1CQGqNsac9fvtgMgD397Zb4=
-Date: Wed, 6 Dec 2023 12:38:59 +0900
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Simon Holesch <simon@holesch.de>
-Cc: Valentina Manea <valentina.manea.m@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usbip: Don't submit special requests twice
-Message-ID: <2023120641-krypton-presume-a375@gregkh>
-References: <20231130231650.22410-1-simon@holesch.de>
+X-Greylist: delayed 774 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Dec 2023 21:10:45 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978B7188;
+	Tue,  5 Dec 2023 21:10:45 -0800 (PST)
+Received: from localhost ([80.209.221.177]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MuUvU-1rRa6d307e-00rVDB; Wed, 06 Dec 2023 05:57:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231130231650.22410-1-simon@holesch.de>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 06 Dec 2023 05:57:37 +0100
+Message-Id: <CXGZGEBGA58J.3CX7BKVV2EUHK@holesch.de>
+Cc: "Valentina Manea" <valentina.manea.m@gmail.com>, "Shuah Khan"
+ <shuah@kernel.org>, "Hongren Zheng" <i@zenithal.me>,
+ <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] usbip: Don't submit special requests twice
+From: "Simon Holesch" <simon@holesch.de>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+X-Mailer: aerc 0.15.2
+References: <20231130231650.22410-1-simon@holesch.de>
+ <2023120641-krypton-presume-a375@gregkh>
+In-Reply-To: <2023120641-krypton-presume-a375@gregkh>
+X-Provags-ID: V03:K1:tCHZ4gb+sEMuSuuvLLnYBL4UZRAdD1wYRUP9ZQGMkCK8d2KqZgN
+ l9ZDICCFETLpD/ixLbnSMS8BaraDvXphGU1Dtn3KYm8D8sTNLzlHXpJbUlXTbCO1c8Rxufv
+ n04T80XeBbLB+pKOyeJJdtRX/RWtRwdIhlk9ep+ct9BN8kIwM5z23gI6Z4vefBpF0Vvgs4w
+ hL4OMCdahx6Ktjrz344jw==
+UI-OutboundReport: notjunk:1;M01:P0:jmQnVkyOyQg=;s138cwMb8b1W3fDoAnPcRP2w4R5
+ Z6K6fBOnVaJJC7b0YTpLdNKs1C3mvuE3iuRqnZLk/mNrkiVEB/1kpmBB5D62tcawTHMxs7rlQ
+ ryoLySywKmVQYehFvb+6H9rhLLsjJKDmQm4wN/Lf4eEXgF1lfMEoLzh27a6Kd+GrnWOz6GyDf
+ OBuw7J2nueqO8TnHAqOvvlnPO3Y1T8+hlbJNrR/A2RafBCs0pAht+zzKhy+zxRfQKuiQCeA1i
+ XYghmfm8bGRNTgmJMcxnCPjPcqRfa9ZGB0FHWSFeG0TQNcYo1pH2BZyR6GiVxh4e/6RdVSUZZ
+ 3LzG3Erg+xW+aIw9posMhY9vB2YKLrc4lLLZ00Eoc0Q9vGNjx8p59HT2L3DCrwCIRCbidYe19
+ 8jv1KnH04EsBAlbVxGqTcyDrm2d815vYb7k20iwMwSnlizTBzveIo6zr5pv2Pb+9YgDld7nEg
+ e7widnPWLTY3PWXZxkPOVjjNxyKzonEaDFaaq8vRHI7nWZ6adXqTu0MSFIlDBxGqEzgM/78yW
+ ZO4H5MbZfFnZY9qlNAgIGVGjt2Uu9uLYfU9gn+hMpADvsM59bHg9Vrmx6BUVf3klbprOgr5SH
+ G1f2Ux94LqELdHoWL2N2l6NkU+ahi0F/c1xLeONuJrK6DPr2umVREZOORurxPU0tiqHPCZQ0v
+ riJchyFTprc+LvFs+nLb7iAXq8Rbk26jh3uSGVhexTWTP0lbRuEplNKL8pnSUBtvNSd295wSI
+ LIwbjD4CdWqSyOsuqnuWZdnbFpWddxGmfPFxJiyB9oqXvnSZ8wTOZjRC9zz0tGjuzl12gdWcd
+ ktxhjeHhCMy2vNMQSjygsyLSGanLJLxVfyq9R2PYxmVXb/Zo5wqh49gNrXgPPYigCx9F+Gfk2
+ +Iu6w2sbKrmkKvA==
 
-On Fri, Dec 01, 2023 at 12:10:13AM +0100, Simon Holesch wrote:
-> Skip submitting URBs, when identical requests were already sent in
-> tweak_special_requests(). Instead call the completion handler directly
-> to return the result of the URB.
-> 
-> Even though submitting those requests twice should be harmless, there
-> are USB devices that react poorly to some duplicated requests.
-> 
-> One example is the ChipIdea controller implementation in U-Boot: The
-> second SET_CONFIURATION request makes U-Boot disable and re-enable all
-> endpoints. Re-enabling an endpoint in the ChipIdea controller, however,
-> was broken until U-Boot commit b272c8792502 ("usb: ci: Fix gadget
-> reinit").
-> 
-> Signed-off-by: Simon Holesch <simon@holesch.de>
-> ---
-> 
-> Changes in v3:
-> - handle errors in tweak_* routines: send URB if tweaking fails
-> 
-> Changes in v2:
-> - explain change in commit message
-> 
-> Thanks again for the feedback!
-> 
->  drivers/usb/usbip/stub_rx.c | 73 +++++++++++++++++++++++--------------
->  1 file changed, 46 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
-> index fc01b31bbb87..76a6f46b8676 100644
-> --- a/drivers/usb/usbip/stub_rx.c
-> +++ b/drivers/usb/usbip/stub_rx.c
-> @@ -144,53 +144,62 @@ static int tweak_set_configuration_cmd(struct urb *urb)
->  	if (err && err != -ENODEV)
->  		dev_err(&sdev->udev->dev, "can't set config #%d, error %d\n",
->  			config, err);
-> -	return 0;
-> +	return err;
->  }
->  
->  static int tweak_reset_device_cmd(struct urb *urb)
->  {
->  	struct stub_priv *priv = (struct stub_priv *) urb->context;
->  	struct stub_device *sdev = priv->sdev;
-> +	int err;
->  
->  	dev_info(&urb->dev->dev, "usb_queue_reset_device\n");
->  
-> -	if (usb_lock_device_for_reset(sdev->udev, NULL) < 0) {
-> +	err = usb_lock_device_for_reset(sdev->udev, NULL)
+On Wed Dec 6, 2023 at 4:38 AM CET, Greg Kroah-Hartman wrote:
+> On Fri, Dec 01, 2023 at 12:10:13AM +0100, Simon Holesch wrote:
+> > -	if (usb_lock_device_for_reset(sdev->udev, NULL) < 0) {
+> > +	err =3D usb_lock_device_for_reset(sdev->udev, NULL)
+>
+> You didn't actually build this change, so how was it tested?
 
-You didn't actually build this change, so how was it tested?
+Last thing I did was update the comment of tweak_special_requests().
+Must have hit undo once too often, because I've seen (and fixed) this
+error. Really sorry about that. I'll send a v4 with a detailed test
+description.
 
-{sigh}
+Simon
 
-greg k-h
+> {sigh}
+>
+> greg k-h
+
 
