@@ -1,88 +1,94 @@
-Return-Path: <linux-usb+bounces-3779-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3780-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39F6C806E38
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 12:40:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 428B9806F8A
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 13:17:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E924D281C50
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 11:40:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6AB4B20E8C
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 12:17:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE561321B7;
-	Wed,  6 Dec 2023 11:40:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E406D364CD;
+	Wed,  6 Dec 2023 12:17:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LDNy3lDA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5451F137
-	for <linux-usb@vger.kernel.org>; Wed,  6 Dec 2023 03:40:17 -0800 (PST)
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3b9b8196e76so4168002b6e.0
-        for <linux-usb@vger.kernel.org>; Wed, 06 Dec 2023 03:40:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701862816; x=1702467616;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DZWvcvFWT3P94ESec92OyEYUrt6Ss1wkXtTKq4rDYxM=;
-        b=fuh5PlmSmNXJfrzAJyOsYZv72FjIy3z59I46alZKVuhbtIU2YfqZE1HI6fiDGvLh63
-         GuhwECSCyomMtvOskxmYQxr9e/zhm3QbeX1dTv9Yq1HLOI9+kfla1PJ72nyO309TeE1u
-         xfHhRazjN3b7RLLKVWWy/UUaaldLAr6O3cBRUr82l1kUOjONpO3EKsZLg9wLyONH9rRq
-         oQw3ePQmaQIGhJ8xboW2on8z8VJH+BZIDXOX9R7xooXmqJ0c+lhCHqqVVRPdvTMHHlXm
-         VRm889Ohkr5/DYcLPFWaVMWt8HI9r3l5Ze9oZZJl2MkJOZM59j+Mpu1eDJz9F0+AEWjP
-         lLRw==
-X-Gm-Message-State: AOJu0YzZrAtlTjCptX/PkQcGg7bXCyadPXH1eXU3eDkDRcLbjyvXX+Cz
-	cbWUlZqkjnYPiyO0dcernm1nEuGPagoQxNmFYYpYEAqAj4SB
-X-Google-Smtp-Source: AGHT+IF30lSMDndHoVg2hQdtUmnxotgzo3as2Lm5GYCQztnzYfAogJgPNYAHJk6lB9qUllZmbMV+u1ITI60NV8NBZ7PXTC2KMXoQ
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47545112
+	for <linux-usb@vger.kernel.org>; Wed,  6 Dec 2023 04:17:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701865061;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eB959rdqwj3McpopDWbd2KITPsbXVjh5QYy/Nwyj7gY=;
+	b=LDNy3lDAHufF7P/X1ceFVZHDVENsTsJorh751Y3eJ4noh/SvPFgGhyPLj7hcB2enuOKChh
+	3GNQiHevgnCrHUcdkerBmhcyX69vI/Po5z/li3tG4ooPkF/bh8ht6GqgEZj7QTsuGy2Ubj
+	oXz6EbFriVdCXwaYgB7V7NQxMF1s6rg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-553-oRHB5hP9Ot2hTUPZpvAgvg-1; Wed, 06 Dec 2023 07:17:38 -0500
+X-MC-Unique: oRHB5hP9Ot2hTUPZpvAgvg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8CCD685CBA5;
+	Wed,  6 Dec 2023 12:17:37 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.193.237])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4998D111E3EE;
+	Wed,  6 Dec 2023 12:17:34 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: stern@rowland.harvard.edu
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	greg@kroah.com,
+	jtornosm@redhat.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	oneukum@suse.com,
+	pabeni@redhat.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v4] net: usb: ax88179_178a: avoid failed operations when device is disconnected
+Date: Wed,  6 Dec 2023 13:17:32 +0100
+Message-ID: <20231206121732.7154-1-jtornosm@redhat.com>
+In-Reply-To: <624ad05b-0b90-4d1c-b06b-7a75473401c3@rowland.harvard.edu>
+References: <624ad05b-0b90-4d1c-b06b-7a75473401c3@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:158e:b0:3b5:6a59:abb7 with SMTP id
- t14-20020a056808158e00b003b56a59abb7mr793260oiw.6.1701862816633; Wed, 06 Dec
- 2023 03:40:16 -0800 (PST)
-Date: Wed, 06 Dec 2023 03:40:16 -0800
-In-Reply-To: <0000000000003ee3610599d20096@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a45bc3060bd5d08f@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in __media_entity_remove_links
-From: syzbot <syzbot+0b0095300dfeb8a83dc8@syzkaller.appspotmail.com>
-To: andreyknvl@google.com, laurent.pinchart@ideasonboard.com, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, nogikh@google.com, 
-	sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
-This bug is marked as fixed by commit:
-media: uvcvideo: Avoid cyclic entity chains due to malformed USB descriptors
+Hello Alan,
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+> The __ax88179_read_cmd() and __ax88179_write_cmd() routines are 
+> asynchronous with respect to ax88179_disconnect(), right?  Or at least, 
+> they are if they run as a result of the user closing the network 
+> interface.  Otherwise there wouldn't be any memory ordering issues.
+Yes, I think so, they could be asynchronous regarding ax88179_disconnect.
 
-#syz fix: exact-commit-title
+> But the memory barriers you added are not the proper solution.  What you 
+> need here is _synchronization_, not _ordering_.  As it is, the memory 
+> barriers you have added don't do anything; they shouldn't be in the 
+> patch.
+Ok, thank you for the helpful clarification, let me check it better,
+I understood it in a wrong way.
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+> If you would like a more in-depth explanation, let me know.
+Thank you for your help, I will try first, I really appreciate this.
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=0b0095300dfeb8a83dc8
+Best regards
+José Ignacio
 
----
-[1] I expect the commit to be present in:
-
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 9 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
 
