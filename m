@@ -1,105 +1,156 @@
-Return-Path: <linux-usb+bounces-3774-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3776-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50FAC806812
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 08:16:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F053806917
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 09:08:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F368C1F21109
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 07:16:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE9F2B2112B
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 08:08:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F5D15AC2;
-	Wed,  6 Dec 2023 07:16:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E71D18AF8;
+	Wed,  6 Dec 2023 08:07:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KIPeSnlm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PnxVg1ca"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369FE1B6
-	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 23:16:13 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-50bfa5a6cffso3603036e87.0
-        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 23:16:13 -0800 (PST)
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AFB18D;
+	Wed,  6 Dec 2023 00:07:49 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2c9f413d6b2so48401811fa.1;
+        Wed, 06 Dec 2023 00:07:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701846971; x=1702451771; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zDXbMWEhNI2lTiHePaAGslfA8GicK9kiWYsFKaGDIVI=;
-        b=KIPeSnlmUAfq8qCDYuebG2RO93LeEF5Q5tXjezP/79MFyEHxfWXmbbu+B0moudr+v+
-         NUVBCmpByYoCfcEVTuELtqfrbzRnEpJMr/TSDGJybI4e5MRAmqw1YXCGo8+a5uFLzgvm
-         1bwFucN5okUca4kYFTIVd5meTGpXqxuL3PNYum7jbp6Ua48TYjjKYxX69hq7dlJGvIDA
-         Q1+0hAXRm0habB08T4fSR4tSw1uGSw0V1iE1YGfRYWVeJKtDaZgC5+uYJ6TIBSv2TpAe
-         einT1xGUAoyJGIAgiN4ELwEtYWAnj1tCWJKEwP9VjBL7sIBWNYmoAAUm3dbcnI8fyboo
-         8XFg==
+        d=gmail.com; s=20230601; t=1701850068; x=1702454868; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z31u/YAwA2e8+zwxuhgrUXJzmhr+xuMP2ChU2OO8dhA=;
+        b=PnxVg1caMOw4zXBcnDl1dU/sdygVavZP8b4WR7QnjxvzsDNVNlwKEvbs8sGTAUs6hn
+         CehTkO66kbAf0oxEorJGLwtd9WhoEWtENR9ZjdT3Ll0JBAWww4riO7SZfcrz2IA+7AB6
+         HPaegrgy7kyQsBJ9pDXPzPVeb6B9s2mGGr/IByzyj0ir21lwcb7YhFmQw7uIFKxXitl4
+         NW5eN2WUjBMNDnmVtMs1tgt8Qn1C5t7KQgAJNqa8hnB50gYFdkSBrczXkbPvA5oB7QrF
+         Q9yZq9pRoyEr1jZZj1QwY7rEdnpKQJcf9p7Cz0ncbF5v/iqB2RES1LW0jrCxAsTSt9cL
+         BHxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701846971; x=1702451771;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zDXbMWEhNI2lTiHePaAGslfA8GicK9kiWYsFKaGDIVI=;
-        b=AQGrqytaGgl1Loc09Su+ZEp8OzuF1tsrjz/htJBFUrzp7OFtStIm66aqXmuq116Ra/
-         XA94LkgOCpYP8ZVjL8GsI3f+0jlExYSzSbupRLi+Ei4SEJ2WupIMLI0Y7aYFGPqMPxG+
-         pPeZLltpkIi5oXQVwfDD1soVBfbHq+FAyLkCmiARqldsLTceip9L+f/98FH5/wcyzCfh
-         HrAE45ER6zXOZqq8ZRHrleob4f3XECyrSLoVy3cMJRD034Awp111x55/vJOUaTeY63AI
-         pH+ukxanSx48sgjMm4To3YtfQ7p6e4VYjVmoXV+dbfAQv7U8lrBHwDoS9ZtIhzxm8mnw
-         3G3A==
-X-Gm-Message-State: AOJu0YzlFtiHxq7SjiCBzhlhySr1VpZ+aBe7RjuhVVeBJd0C5m1aId7k
-	5KixnnEIi4WyllqsNyCQoUzc9A==
-X-Google-Smtp-Source: AGHT+IFosgPawxVbHM+ucU/rImmtmf74cewBhXNK/zsrvoN6gu4JaquJiaTw9BlgaIdmcDryu2w2SQ==
-X-Received: by 2002:a05:6512:3d01:b0:50b:fdc6:9f30 with SMTP id d1-20020a0565123d0100b0050bfdc69f30mr276013lfv.41.1701846971330;
-        Tue, 05 Dec 2023 23:16:11 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a0db:1f00::227? (dzdqv0yyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::227])
-        by smtp.gmail.com with ESMTPSA id f17-20020a05651232d100b0050c10aa4582sm184607lfg.27.2023.12.05.23.16.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Dec 2023 23:16:10 -0800 (PST)
-Message-ID: <fa72affd-ca04-4ea8-9892-d3a7cd1fbc8a@linaro.org>
-Date: Wed, 6 Dec 2023 09:16:09 +0200
+        d=1e100.net; s=20230601; t=1701850068; x=1702454868;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z31u/YAwA2e8+zwxuhgrUXJzmhr+xuMP2ChU2OO8dhA=;
+        b=ciS/OqN3LJQ1/h56ZyRNl1fgL0ZAAlsAj97O/4Dr94G6vxaHVTL8l9D1j5u0/SzX1x
+         JznuyUiaIKT+3tGIR735IrCZgsnAJeVgaA8Nq6k7LGEwgdffEC1khqPHKUc/0JaJ1EIU
+         ZvpFzxj2UAsnp0QGda+hXFP8Ty0F/76jmdENtp/qLktl9xPKmtiCQ9FxQfImWvObfogP
+         HUyXklxL387y/fr1XR5sqUh9/sJJ7dvbBamFL4memMhF8SsAoyS2GsgVCh+EL2jsgBJE
+         zlC4A8pjkV5mwZr1W/9s4LyAX84H5oqpu72Bl2aEIySjEpVKJcAtBV5AUv4Hv/6Fe4aO
+         Nsug==
+X-Gm-Message-State: AOJu0YxcDIvRzXXo8PDBUjkwlFZrGpvy1NU4ikj0M5JMKZO2/fb0pTcJ
+	jU28kf1OY4jpW7ejDbTZUQw=
+X-Google-Smtp-Source: AGHT+IF/kC4mns+8tjDe++tE5Xua77SOCurAapwIltaBOGl25TWJuiAc/vmWPoYjou8D6GEx2Wbapw==
+X-Received: by 2002:a2e:2e09:0:b0:2c9:f560:4a5a with SMTP id u9-20020a2e2e09000000b002c9f5604a5amr261989lju.17.1701850067587;
+        Wed, 06 Dec 2023 00:07:47 -0800 (PST)
+Received: from PC10319.67 ([82.97.198.254])
+        by smtp.googlemail.com with ESMTPSA id w3-20020a05651c118300b002ca044c17d0sm864780ljo.62.2023.12.06.00.07.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Dec 2023 00:07:47 -0800 (PST)
+From: Konstantin Aladyshev <aladyshev22@gmail.com>
+To: 
+Cc: gregkh@linuxfoundation.org,
+	benjamin.tissoires@redhat.com,
+	aladyshev22@gmail.com,
+	ivan.orlov0322@gmail.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	john@keeping.me.uk,
+	lee@kernel.org
+Subject: [PATCH v2 0/1] usb: gadget: f_hid: fix report descriptor allocation
+Date: Wed,  6 Dec 2023 11:07:43 +0300
+Message-Id: <20231206080744.253-1-aladyshev22@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] usb: typec: nb7vpq904m: Only select DRM_AUX_BRIDGE
- with OF
-Content-Language: en-GB
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
- linux@roeck-us.net, neil.armstrong@linaro.org, bryan.odonoghue@linaro.org,
- linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
- patches@lists.linux.dev
-References: <20231205-drm_aux_bridge-fixes-v1-0-d242a0ae9df4@kernel.org>
- <20231205-drm_aux_bridge-fixes-v1-1-d242a0ae9df4@kernel.org>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20231205-drm_aux_bridge-fixes-v1-1-d242a0ae9df4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 05/12/2023 22:13, Nathan Chancellor wrote:
-> CONFIG_DRM_AUX_BRIDGE depends on CONFIG_OF but that dependency is not
-> included when CONFIG_TYPEC_MUX_NB7VPQ904M selects it, resulting in a
-> Kconfig warning when CONFIG_OF is disabled:
-> 
->    WARNING: unmet direct dependencies detected for DRM_AUX_BRIDGE
->      Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && OF [=n]
->      Selected by [y]:
->      - TYPEC_MUX_NB7VPQ904M [=y] && USB_SUPPORT [=y] && TYPEC [=y] && I2C [=y] && (DRM [=y] || DRM [=y]=n) && DRM_BRIDGE [=y]
-> 
-> Only select CONFIG_DRM_AUX_BRIDGE with both CONFIG_DRM_BRIDGE and
-> CONFIG_OF to clear up the warning.
-> 
-> Fixes: c5d296bad640 ("usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->   drivers/usb/typec/mux/Kconfig | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+The commit "usb: gadget: f_hid: fix f_hidg lifetime vs cdev"
+(89ff3dfac604614287ad5aad9370c3f984ea3f4b) has introduced a bug
+that leads to hid device corruption after the replug operation.
 
-For this patch we'd need an ack from Heikki.
+The usb gadget driver bug was observed in the KVM functionality of the
+OpenBMC distribution. In the test environment BMC provides KVM
+functionality for the host (i.e. virtual USB keyboard) via the USB
+gadget device.
+
+The bug occurs when the KVM page is refreshed (i.e. USB device is
+replugged).
+
+Before the 89ff3dfac6 this opeartion was working without any issues.
+Log messages from the host for this operation:
+```
+kernel: usb 1-7.4: USB disconnect, device number 3
+kernel: usb 1-7.4: new high-speedUSB device number 4 using xhci_hcd
+kernel: usb 1-7.4: New USB device found, idVendor=1d6b, idProduct=0104,
+  bcdDevice= 1.00
+kernel: usb 1-7.4: New USB device strings: Mfr=1, Produt=2, SerialNumber=3
+kernel: usb 1-7.4: Product: Virtual Keyboard and Mouse
+kernel: usb 1-7.4: Manufacturer: OpenBMC
+kernel: usb 1-7.4: SerialNumber: OBMC0001
+kernel: input: OpenBMC Virtual Keyboard and Mouse as /devices/pci0000:
+  00/0000:00:140/usb1/1-7/1-7.4/1-7.4:1.0/0003:1D6B:0104.0003/input/input3
+kernel: hid-generic 0003:1D6B:0104.0003: inputhidraw0: USB HID v1.01
+  Keyboard [OpenBMC Virtual Keyboard and Mouse] on usb-0000:00:14.0-7.4/input0
+kernel: input: OpenBMC Virtual Keyboard and Mouse as /devices/pci0000:
+  00/0000:00:14.0/sb1/1-7/1-7.4/1-7.4:1.1/0003:1D6B:0104.0004/input/input4
+kernel: hid-generic 0003:1D6B:0104.0004: input,hidraw1: USB HID v1.01
+  Mouse [OpenBMC Virtual Keyboard and Mouse] on usb-0000:00:14.0-7.4/input1
+```
+
+After the 89ff3dfac6 the KVM page refresh (i.e. USB device replug) results
+to the USB device corruction and the following messages from the driver:
+```
+kernel: usb 1-7.4: USB disconnect, device number 3
+hid-generic 0003:1D6B:0104.0003: item fetching failed at offset 18/63
+hid-generic 0003:1D6B:01040004: item fetching failed at offset 32/76
+kernel: usb 1-7.4: new high-speed USB device number 4 using xhci_hcd
+kernel: usb 1-7.4: New USB device found, idVendor=1d6b, idProduct=0104,
+  bcdDevice= 1.00
+kernel: usb 1-7.4:New USB device strings: Mfr=1, Product=2, SerialNumber=3
+kernel: usb 1-7.4: Product: Virual Keyboard and Mouse
+kernel: usb 1-7.4: Manufacturer: OpenBMC
+kernel: usb 1-7.4: SerialNumber: OBMC0001
+kernel: id-generic 0003:1D6B:0104.0003: unknown main item tag 0x0
+kernel: hid-generic 0003:1D6B:0104.0003: unknown main item tag 0x0
+kernel: hid-generic 0003:1D6B:0104.0003: unknown main item tag 0x0
+kernel: hid-generic 0003:1D6B:0104.0003: unknown main item tag 0x0
+kernel: hid-generic 0003:1D6B:0104.0003: unknown main item tag 0x0
+kernel: hid-generic 0003:1D6B:0104.0003: unknown main item tag 0x0
+kernel: hid-generic 0003:1D6B:0104.0003: unknown main item tag 0x0
+kernel: hid-generic 0003:1D6B:0104.0003: unknown main item tag 0x0
+kernel: hid-generic 0003:1D6B:0104.0003: unknown main item tag 0x0
+kernel: hid-generic 0003:1D6B:0104.0003: unknown main item ag 0x0
+kernel: hid-generic 0003:1D6B:0104.0003: item fetching failed at offset 18/63
+kernel: hid-eneric: probe of 0003:1D6B:0104.0003 failed with error -22
+kernel: hid-generic 0003:1D6B:0104.0004: item fetching failed at offset 32/76
+kernel hid-generic: probe of 0003:1D6B:0104.0004 failed with error -22
+```
+
+Reverse device managed memory allocation for the report descriptor
+to fix the issue.
+
+
+Changes v1 -> v2:
+- update commit message
+
+
+Konstantin Aladyshev (1):
+  usb: gadget: f_hid: fix report descriptor allocation
+
+ drivers/usb/gadget/function/f_hid.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.25.1
 
 
