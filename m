@@ -1,180 +1,105 @@
-Return-Path: <linux-usb+bounces-3773-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3774-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF25E8067E2
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 08:00:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50FAC806812
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 08:16:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B438281BB0
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 07:00:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F368C1F21109
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 07:16:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74D3D12E5C;
-	Wed,  6 Dec 2023 07:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F5D15AC2;
+	Wed,  6 Dec 2023 07:16:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J5FlfAu9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KIPeSnlm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C5D1B5;
-	Tue,  5 Dec 2023 23:00:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701846045; x=1733382045;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MxqLA5pxAlyS9f99ErxXmlln8s3f6yh2wue/tkIXCWA=;
-  b=J5FlfAu9ziGdoI6YFYkwRfSHXniunm9BDYZb62lftNoDA+M2NzC/qDh5
-   tpajh+jS9Rx83v5tyP0bUtzjdXJ175I53LjMhXuIHefHd+xKWAg5mNzL6
-   iMZNYaZXXFrY7UkM1BYUDJ84MjjiSrLgsh4hwP7Cul7W0yifIXDL3p5Tp
-   7VsqUB6X+7haYlvRdT6ec0cPf54OZRAaXfKjk8ujhLgnzKf7QO7Mo2Xxq
-   r8srIt1JmxznPVWBEEV8rREG6j1PKW9XiWePW14RREibkNlXccjQnBBfs
-   hXz6cM4qeG1zjYGszXvhIphZuLEpnfj+XqnVx2ZRIDPNrhB4eQ5NGLfuS
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="12732811"
-X-IronPort-AV: E=Sophos;i="6.04,254,1695711600"; 
-   d="scan'208";a="12732811"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 23:00:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="720981616"
-X-IronPort-AV: E=Sophos;i="6.04,254,1695711600"; 
-   d="scan'208";a="720981616"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 05 Dec 2023 23:00:42 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAltg-000AR0-0c;
-	Wed, 06 Dec 2023 07:00:40 +0000
-Date: Wed, 6 Dec 2023 15:00:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Simon Holesch <simon@holesch.de>,
-	Valentina Manea <valentina.manea.m@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Hongren Zheng <i@zenithal.me>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: oe-kbuild-all@lists.linux.dev, Simon Holesch <simon@holesch.de>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usbip: Don't submit special requests twice
-Message-ID: <202312061416.KFbIrElk-lkp@intel.com>
-References: <20231130231650.22410-1-simon@holesch.de>
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369FE1B6
+	for <linux-usb@vger.kernel.org>; Tue,  5 Dec 2023 23:16:13 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-50bfa5a6cffso3603036e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 05 Dec 2023 23:16:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701846971; x=1702451771; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zDXbMWEhNI2lTiHePaAGslfA8GicK9kiWYsFKaGDIVI=;
+        b=KIPeSnlmUAfq8qCDYuebG2RO93LeEF5Q5tXjezP/79MFyEHxfWXmbbu+B0moudr+v+
+         NUVBCmpByYoCfcEVTuELtqfrbzRnEpJMr/TSDGJybI4e5MRAmqw1YXCGo8+a5uFLzgvm
+         1bwFucN5okUca4kYFTIVd5meTGpXqxuL3PNYum7jbp6Ua48TYjjKYxX69hq7dlJGvIDA
+         Q1+0hAXRm0habB08T4fSR4tSw1uGSw0V1iE1YGfRYWVeJKtDaZgC5+uYJ6TIBSv2TpAe
+         einT1xGUAoyJGIAgiN4ELwEtYWAnj1tCWJKEwP9VjBL7sIBWNYmoAAUm3dbcnI8fyboo
+         8XFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701846971; x=1702451771;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zDXbMWEhNI2lTiHePaAGslfA8GicK9kiWYsFKaGDIVI=;
+        b=AQGrqytaGgl1Loc09Su+ZEp8OzuF1tsrjz/htJBFUrzp7OFtStIm66aqXmuq116Ra/
+         XA94LkgOCpYP8ZVjL8GsI3f+0jlExYSzSbupRLi+Ei4SEJ2WupIMLI0Y7aYFGPqMPxG+
+         pPeZLltpkIi5oXQVwfDD1soVBfbHq+FAyLkCmiARqldsLTceip9L+f/98FH5/wcyzCfh
+         HrAE45ER6zXOZqq8ZRHrleob4f3XECyrSLoVy3cMJRD034Awp111x55/vJOUaTeY63AI
+         pH+ukxanSx48sgjMm4To3YtfQ7p6e4VYjVmoXV+dbfAQv7U8lrBHwDoS9ZtIhzxm8mnw
+         3G3A==
+X-Gm-Message-State: AOJu0YzlFtiHxq7SjiCBzhlhySr1VpZ+aBe7RjuhVVeBJd0C5m1aId7k
+	5KixnnEIi4WyllqsNyCQoUzc9A==
+X-Google-Smtp-Source: AGHT+IFosgPawxVbHM+ucU/rImmtmf74cewBhXNK/zsrvoN6gu4JaquJiaTw9BlgaIdmcDryu2w2SQ==
+X-Received: by 2002:a05:6512:3d01:b0:50b:fdc6:9f30 with SMTP id d1-20020a0565123d0100b0050bfdc69f30mr276013lfv.41.1701846971330;
+        Tue, 05 Dec 2023 23:16:11 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a0db:1f00::227? (dzdqv0yyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::227])
+        by smtp.gmail.com with ESMTPSA id f17-20020a05651232d100b0050c10aa4582sm184607lfg.27.2023.12.05.23.16.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Dec 2023 23:16:10 -0800 (PST)
+Message-ID: <fa72affd-ca04-4ea8-9892-d3a7cd1fbc8a@linaro.org>
+Date: Wed, 6 Dec 2023 09:16:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231130231650.22410-1-simon@holesch.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] usb: typec: nb7vpq904m: Only select DRM_AUX_BRIDGE
+ with OF
+Content-Language: en-GB
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+ linux@roeck-us.net, neil.armstrong@linaro.org, bryan.odonoghue@linaro.org,
+ linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ patches@lists.linux.dev
+References: <20231205-drm_aux_bridge-fixes-v1-0-d242a0ae9df4@kernel.org>
+ <20231205-drm_aux_bridge-fixes-v1-1-d242a0ae9df4@kernel.org>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20231205-drm_aux_bridge-fixes-v1-1-d242a0ae9df4@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Simon,
+On 05/12/2023 22:13, Nathan Chancellor wrote:
+> CONFIG_DRM_AUX_BRIDGE depends on CONFIG_OF but that dependency is not
+> included when CONFIG_TYPEC_MUX_NB7VPQ904M selects it, resulting in a
+> Kconfig warning when CONFIG_OF is disabled:
+> 
+>    WARNING: unmet direct dependencies detected for DRM_AUX_BRIDGE
+>      Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && OF [=n]
+>      Selected by [y]:
+>      - TYPEC_MUX_NB7VPQ904M [=y] && USB_SUPPORT [=y] && TYPEC [=y] && I2C [=y] && (DRM [=y] || DRM [=y]=n) && DRM_BRIDGE [=y]
+> 
+> Only select CONFIG_DRM_AUX_BRIDGE with both CONFIG_DRM_BRIDGE and
+> CONFIG_OF to clear up the warning.
+> 
+> Fixes: c5d296bad640 ("usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>   drivers/usb/typec/mux/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.7-rc4 next-20231206]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Simon-Holesch/usbip-Don-t-submit-special-requests-twice/20231201-072027
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20231130231650.22410-1-simon%40holesch.de
-patch subject: [PATCH v3] usbip: Don't submit special requests twice
-config: hexagon-randconfig-r081-20231201 (https://download.01.org/0day-ci/archive/20231206/202312061416.KFbIrElk-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231206/202312061416.KFbIrElk-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312061416.KFbIrElk-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/usb/usbip/stub_rx.c:8:
-   In file included from include/linux/usb.h:16:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/usb/usbip/stub_rx.c:8:
-   In file included from include/linux/usb.h:16:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/usb/usbip/stub_rx.c:8:
-   In file included from include/linux/usb.h:16:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/usb/usbip/stub_rx.c:158:51: error: expected ';' after expression
-     158 |         err = usb_lock_device_for_reset(sdev->udev, NULL)
-         |                                                          ^
-         |                                                          ;
-   6 warnings and 1 error generated.
-
-
-vim +158 drivers/usb/usbip/stub_rx.c
-
-   149	
-   150	static int tweak_reset_device_cmd(struct urb *urb)
-   151	{
-   152		struct stub_priv *priv = (struct stub_priv *) urb->context;
-   153		struct stub_device *sdev = priv->sdev;
-   154		int err;
-   155	
-   156		dev_info(&urb->dev->dev, "usb_queue_reset_device\n");
-   157	
- > 158		err = usb_lock_device_for_reset(sdev->udev, NULL)
-   159		if (err < 0) {
-   160			dev_err(&urb->dev->dev, "could not obtain lock to reset device\n");
-   161			return err;
-   162		}
-   163		err = usb_reset_device(sdev->udev);
-   164		usb_unlock_device(sdev->udev);
-   165	
-   166		return err;
-   167	}
-   168	
+For this patch we'd need an ack from Heikki.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With best wishes
+Dmitry
+
 
