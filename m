@@ -1,114 +1,134 @@
-Return-Path: <linux-usb+bounces-3793-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3794-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 003268078D5
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 20:46:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 768CC80794A
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 21:22:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9C071F2121E
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 19:46:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6896928215E
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 20:22:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51B5047F73;
-	Wed,  6 Dec 2023 19:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C231D6F61D;
+	Wed,  6 Dec 2023 20:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="STs7399F"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ESVOeUxW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC425D3;
-	Wed,  6 Dec 2023 11:46:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=ZbbXGJgus1UbpDCDhjXLGsD3yiGnIIyarmStVlys6bI=; b=STs7399FPv9DtRiqDNmedwrjo2
-	ek3GCT9XkOwEGqLFaJXUSDTbkjNzGtFAzEKjKiYr+RL/0w/eYSZhZ4S6zG2omW2ieS9II7c4W1cj1
-	bwc52+Vm9AwzrM3qYgyft5xLrGuLpSz2Qag56ACkdJcKzZ4kpn1KvY+zUnaO4aHwKz6I5gNZAxkVl
-	N3hQp19J3OSpEOyKqcaOoRW7iIYpUFGU9a5fIFMqzEv8jAvd1Tf5NIGKShjWNOVXyWX7taO0n5QHD
-	3JSGq8FONvFKpwoHH/7BoUUgj0N+UkSynnOcmLYYj1LMEXiHE7dFLYoSCQw9K7rzRhAjLupiaDwzf
-	TzeT2Fvg==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rAxqi-00B9PW-1j;
-	Wed, 06 Dec 2023 19:46:24 +0000
-Message-ID: <0c1bb5e8-1ad2-4bda-b038-456d9791f9b7@infradead.org>
-Date: Wed, 6 Dec 2023 11:46:22 -0800
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CC512F;
+	Wed,  6 Dec 2023 12:22:08 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B6KFAIB010863;
+	Wed, 6 Dec 2023 20:22:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=sRFsmyZ5qCKqzCrtUBDojqShJ00B0aVgG3aZXs2KlE4=;
+ b=ESVOeUxWTe6/3ftOvnw6+zTd3QKLab5VKiNWeeKoyuC0T/jvSRech3W4Fv9YddMUj8zL
+ 7/N+9JzA/t44EFIh6dzSXC7Z//Q5pRwvQnLm8vFlNphxZy4vP6SkiPoaxZBAe4XngedH
+ qoqxQxOXm2LQkapvVheSUYP5OPAGIG2046xTq0fGQycWM9P70ChWXpctwW2bkXRXuBoB
+ 5rHDHmtF9kyj91zc93kFGy6tA/edaIUeTlNEGeTP4QgGW/VUue6e7XjS3rzntE6vzhzb
+ gG1eIMUc9retXWF3tsuYCJpN3mrUCi/bwvSz5yvywmOCoEorOfHeR+pNyp3lFFxKcbLl jQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ute972sxq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 06 Dec 2023 20:22:05 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3B6KM4qm020081
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 6 Dec 2023 20:22:04 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 6 Dec 2023 12:18:23 -0800
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+To: <Thinh.Nguyen@synopsys.com>, <gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>
+Subject: [PATCH v2] usb: dwc3: gadget: Handle EP0 request dequeuing properly
+Date: Wed, 6 Dec 2023 12:18:14 -0800
+Message-ID: <20231206201814.32664-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: typec: qcom-pmic: add CONFIG_OF dependency
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kernel@vger.kernel.org,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>
-References: <20231206172037.12072-1-rdunlap@infradead.org>
- <d0323841-a3a7-45b7-b702-0a08f9250c55@roeck-us.net>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <d0323841-a3a7-45b7-b702-0a08f9250c55@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PNCx_rXno8R_zFuD3BpWwxveGnampAtT
+X-Proofpoint-ORIG-GUID: PNCx_rXno8R_zFuD3BpWwxveGnampAtT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-06_16,2023-12-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 adultscore=0 impostorscore=0 suspectscore=0 mlxscore=0
+ malwarescore=0 phishscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2312060140
 
+Current EP0 dequeue path will share the same as other EPs.  However, there
+are some special considerations that need to be made for EP0 transfers:
 
+  - EP0 transfers never transition into the started_list
+  - EP0 only has one active request at a time
 
-On 12/6/23 10:49, Guenter Roeck wrote:
-> On Wed, Dec 06, 2023 at 09:20:37AM -0800, Randy Dunlap wrote:
->> DRM_AUX_BRIDGE depends on CONFIG_OF, so that is also needed here
->> to fix a kconfig warning:
->>
->> WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
->>   Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && OF [=n]
->>   Selected by [y]:
->>   - TYPEC_QCOM_PMIC [=y] && USB_SUPPORT [=y] && TYPEC [=y] && TYPEC_TCPM [=y] && (ARCH_QCOM || COMPILE_TEST [=y]) && (DRM [=y] || DRM [=y]=n) && DRM_BRIDGE [=y]
->>
-> 
-> All but impossible for me to determine if this patch or
-> https://lore.kernel.org/all/20231205-drm_aux_bridge-fixes-v1-2-d242a0ae9df4@kernel.org/
-> is more appropriate.
-> 
-> Guenter
+In case there is a vendor specific control message for a function over USB
+FFS, then there is no guarantee on the timeline which the DATA/STATUS stage
+is responded to.  While this occurs, any attempt to end transfers on
+non-control EPs will end up having the DWC3_EP_DELAY_STOP flag set, and
+defer issuing of the end transfer command.  If the USB FFS application
+decides to timeout the control transfer, or if USB FFS AIO path exits, the
+USB FFS driver will issue a call to usb_ep_dequeue() for the ep0 request.
 
-I guess that Bryan is the person to ask about that.
+In case of the AIO exit path, the AIO FS blocks until all pending USB
+requests utilizing the AIO path is completed.  However, since the dequeue
+of ep0 req does not happen properly, all non-control EPs with the
+DWC3_EP_DELAY_STOP flag set will not be handled, and the AIO exit path will
+be stuck waiting for the USB FFS data endpoints to receive a completion
+callback.
 
-I don't see anything wrong with Nathan's patch. It should clear up the kconfig warning,
-so as long as it builds cleanly, it seems OK.
+Fix is to utilize dwc3_ep0_reset_state() in the dequeue API to ensure EP0
+is brought back to the SETUP state, and ensures that any deferred end
+transfer commands are handled.  This also will end any active transfers
+on EP0, compared to the previous implementation which directly called
+giveback only.
 
-> 
->> Fixes: 7d9f1b72b296 ("usb: typec: qcom-pmic-typec: switch to DRM_AUX_HPD_BRIDGE")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->> Cc: Guenter Roeck <linux@roeck-us.net>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: linux-arm-msm@vger.kernel.org
->> Cc: linux-usb@vger.kernel.org
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> ---
->>  drivers/usb/typec/tcpm/Kconfig |    1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff -- a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
->> --- a/drivers/usb/typec/tcpm/Kconfig
->> +++ b/drivers/usb/typec/tcpm/Kconfig
->> @@ -80,6 +80,7 @@ config TYPEC_QCOM_PMIC
->>  	tristate "Qualcomm PMIC USB Type-C Port Controller Manager driver"
->>  	depends on ARCH_QCOM || COMPILE_TEST
->>  	depends on DRM || DRM=n
->> +	depends on OF
->>  	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE
->>  	help
->>  	  A Type-C port and Power Delivery driver which aggregates two
+Fixes: fcd2def66392 ("usb: dwc3: gadget: Refactor dwc3_gadget_ep_dequeue")
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+---
+Changes from v1:
+ - Added fixes tag
 
--- 
-~Randy
+ drivers/usb/dwc3/gadget.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 858fe4c299b7..88d8d589f014 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2103,7 +2103,17 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+ 
+ 	list_for_each_entry(r, &dep->pending_list, list) {
+ 		if (r == req) {
+-			dwc3_gadget_giveback(dep, req, -ECONNRESET);
++			/*
++			 * Explicitly check for EP0/1 as dequeue for those
++			 * EPs need to be handled differently.  Control EP
++			 * only deals with one USB req, and giveback will
++			 * occur during dwc3_ep0_stall_and_restart().  EP0
++			 * requests are never added to started_list.
++			 */
++			if (dep->number > 1)
++				dwc3_gadget_giveback(dep, req, -ECONNRESET);
++			else
++				dwc3_ep0_reset_state(dwc);
+ 			goto out;
+ 		}
+ 	}
 
