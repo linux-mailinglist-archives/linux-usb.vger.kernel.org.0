@@ -1,131 +1,103 @@
-Return-Path: <linux-usb+bounces-3862-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3863-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96FE2808C28
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 16:48:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09504808CE7
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 17:07:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C86081C209B7
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 15:48:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A635B1F20FBA
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 16:07:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC85445C0B;
-	Thu,  7 Dec 2023 15:47:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C5F94654C;
+	Thu,  7 Dec 2023 16:06:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ldx9OVJ0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mPFMZ547"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCA510F3;
-	Thu,  7 Dec 2023 07:47:50 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B78wjtP009869;
-	Thu, 7 Dec 2023 15:47:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=DMNId5NNTRlJNHzk+yn5j+Qypl85O0gZX/21kwX/lzk=;
- b=ldx9OVJ0+ypNve2LIJ8H1fQknaLUsPcq42+3uFP197S33ioy6M4yNvDs/AVSXx3Yo0rU
- lHnixS+ToJlRp3Nu5HfJpDyRoGTK6mpVabJ4A4VZxm008WNq7fZw+a6pUeJOhkWxozZl
- hoALbUqgDMD9DTNHiiv2GorOr4WQnDugNbwSdGYUXJYgjwr4ooKJad3bwUxEQpAvD8tO
- ZtOcyMqFHCShzQpRXGhUYgRfmWXWrFVkdnuyvBToJVKS5pT7r+LyUKVdms+1BNYDV2fF
- FnHmTVV6WGyrSH6MQAC/q6lXT3NIcVMGzTYvpftvpZrvSn1Kj70Afg5xbfppV82amjCq JQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uu2p8a1vx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 Dec 2023 15:47:44 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3B7Flhpf020296
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 7 Dec 2023 15:47:43 GMT
-Received: from [10.216.4.183] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 7 Dec
- 2023 07:47:36 -0800
-Message-ID: <9d52fa8c-41d1-46a7-be89-5c1c11ca09b4@quicinc.com>
-Date: Thu, 7 Dec 2023 21:17:32 +0530
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C974884;
+	Thu,  7 Dec 2023 08:06:52 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-5c68b988f3eso40023a12.1;
+        Thu, 07 Dec 2023 08:06:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701965212; x=1702570012; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SncyDrD1iqLY11BuPRzN4t5QxIXbUDgT8cWLREXyzyY=;
+        b=mPFMZ547LMOIPmGmSXZdiOHz3E96gT6819KsDGjwr7ed/Pn+BdBziLGqJ6cvGuQOeB
+         OKYInvwLMwCXv8jXF8XgTt2VNae3c9E2TKEUjOu9m9rI1P49Jl/RY6mpHCyHalGCYUVG
+         6CRgxbz3y8vix09f2DhVJc+z02iWfabpCaEUaB5hEESAp/AYkAujvzfeas5BhFR85jGA
+         woh+2CbIdoQbHFM6vQklzaCdcbBTLW09Pe/EJqoNqKpYdEEprHWFOJr7f1Gi0rtxMuDd
+         k60/65BSZQ4BIMZQOrA7qWdjkXVclZJy9zDDEXv5plVvsPoHFJqtpMykN0EBPpyMEfUT
+         owyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701965212; x=1702570012;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SncyDrD1iqLY11BuPRzN4t5QxIXbUDgT8cWLREXyzyY=;
+        b=Y4BcCpF+AXi9cGdPOWBOjQS3TOh4wmFevC3GeMKt9XXM6woz2kDWzonRA6JTXhx4WH
+         6Y3DT/BtydE/ebPPFL0pjCRWUQa0v9NGowNDxN32BHt7uwb1ZPm3CLneQBYwnbJek9e3
+         HNxbbPsCWDeDfMW/fv8atNUe4DxR9Pe3hv+yRxJ5zvf/NdQTp55t9Sirekt/JqnfPWwd
+         iQkVHbhjIHCyPl7jofQJCkCCNu/nSer5N6EpCIKJYytLP4GmmWkhCiyMf1Fpm6LOeH6c
+         JveeslTpXdBJYCb4ILCLko8rZQfc4tZpJGf+gTuqnc1k2Ri1UqN8Rtau2HEF5c2TevI6
+         ZT5w==
+X-Gm-Message-State: AOJu0Yxe6iDvW3tEJsXDQ0AfnCahlTzSsI5wnetZ+B+vDIe7fefQRW1J
+	IFkrByWcVu6FQBBc59jonJw=
+X-Google-Smtp-Source: AGHT+IHnJeBMW6DlsH7CCcFUL2AkakRI5XBn+D+QWxbm+CG9Uy/jEGkYqxpCEMDOiJe0WGKSviyQtg==
+X-Received: by 2002:a05:6a20:e117:b0:187:4a56:9a06 with SMTP id kr23-20020a056a20e11700b001874a569a06mr5881126pzb.5.1701965212155;
+        Thu, 07 Dec 2023 08:06:52 -0800 (PST)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:492a:db3d:eb42:de92])
+        by smtp.gmail.com with ESMTPSA id x20-20020a056a00189400b006ce5066282bsm1492673pfh.34.2023.12.07.08.06.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Dec 2023 08:06:51 -0800 (PST)
+From: Fabio Estevam <festevam@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: jun.li@nxp.com,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Fabio Estevam <festevam@denx.de>
+Subject: [PATCH] dt-bindings: usb: nxp,ptn5110: Fix typo in the title
+Date: Thu,  7 Dec 2023 13:06:34 -0300
+Message-Id: <20231207160634.2646285-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/6] usb: dwc3: qcom: Rename hs_phy_irq to
- qusb2_phy_irq
-Content-Language: en-US
-To: Johan Hovold <johan@kernel.org>
-CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring
-	<robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <cros-qcom-dts-watchers@chromium.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>
-References: <20231204100950.28712-1-quic_kriskura@quicinc.com>
- <20231204100950.28712-3-quic_kriskura@quicinc.com>
- <ZXHkpwji_AzXMjfm@hovoldconsulting.com>
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZXHkpwji_AzXMjfm@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5hA4un0pgVGyjOaodvzPzjc48OfgqVvv
-X-Proofpoint-ORIG-GUID: 5hA4un0pgVGyjOaodvzPzjc48OfgqVvv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-07_12,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- suspectscore=0 mlxlogscore=361 mlxscore=0 adultscore=0 lowpriorityscore=0
- malwarescore=0 priorityscore=1501 impostorscore=0 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2312070129
+Content-Transfer-Encoding: 8bit
 
+From: Fabio Estevam <festevam@denx.de>
 
+The word 'Controller' is misspelled.
 
-On 12/7/2023 8:58 PM, Johan Hovold wrote:
-> On Mon, Dec 04, 2023 at 03:39:46PM +0530, Krishna Kurapati wrote:
->> For wakeup to work, driver needs to enable interrupts that depict what is
->> happening on th DP/DM lines. On QUSB targets, this is identified by
-> 
-> typo: the
-> 
->> qusb2_phy whereas on SoCs using Femto PHY, separate {dp,dm}_hs_phy_irq's
->> are used instead.
->>
->> The implementation incorrectly names qusb2_phy interrupts as "hs_phy_irq".
->> Clean this up so that driver would be using only qusb2/(dp & dm) for wakeup
->> purposes.
-> 
-> Here too you should say something about why this won't break any systems
-> booting using an older devicetree. Specifically, the QUSB2 PHY interrupt
-> has never been armed on any system running mainline as those bits never
-> made it upstream.
-> 
-> So an alternative to this could also be to just drop the QUSB2 PHY
-> interrupt handling from this driver for now. >
+Fix it.
 
-Hi Johan,
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+---
+ Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So, are you suggesting that we drop the whole patch ?
-I assume if the older kernels are using old DT, they would be using an 
-old driver version too right ? Is there a case where DT is not updated 
-but driver is ? Because if we drop this patch from series, targets with 
-updated DT's would break.
+diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
+index 28eb25ecba74..f154fae290a4 100644
+--- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
++++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/usb/nxp,ptn5110.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: NXP PTN5110 Typec Port Cotroller
++title: NXP PTN5110 Typec Port Controller
+ 
+ maintainers:
+   - Li Jun <jun.li@nxp.com>
+-- 
+2.34.1
 
-Regards,
-Krishna,
 
