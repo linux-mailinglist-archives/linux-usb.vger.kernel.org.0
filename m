@@ -1,101 +1,127 @@
-Return-Path: <linux-usb+bounces-3855-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3856-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B9A7808A42
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 15:21:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CB29808B17
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 15:53:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5B4BB214DA
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 14:21:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D40F1C20B5A
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 14:53:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 858E041C64;
-	Thu,  7 Dec 2023 14:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1BE74437A;
+	Thu,  7 Dec 2023 14:53:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=devnull.tasossah.com header.i=@devnull.tasossah.com header.b="cD7b1e7i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HAeke04R"
 X-Original-To: linux-usb@vger.kernel.org
-X-Greylist: delayed 2072 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Dec 2023 06:20:45 PST
-Received: from devnull.tasossah.com (devnull.tasossah.com [IPv6:2001:41d0:1:e60e::1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709E147A4
-	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 06:20:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=devnull.tasossah.com; s=vps; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=JTFfzIRreVZQZMwPlb5hPJ5+ZDMf8o4AfcTzUjpODec=; b=cD7b1e7ipUb2uylqdqLwqOKyqz
-	s6UfiIWr27p2diT5hJuPz6N5vHcQt3Wni39efrLCF4xO8f4d158pUA0ugaeTYAg6qW6gLaH4QNTYG
-	MLpeTGHVUbDBWNyJqoMCantPqA94a93O3e+MC7m2M4jbRMI3Xh/pLEIPiRK79bpv/Xwc=;
-Received: from [2a02:587:6a03:ec00::d54] (helo=localhost.localdomain)
-	by devnull.tasossah.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <tasos@tasossah.com>)
-	id 1rBEhe-0065nK-1I; Thu, 07 Dec 2023 15:46:10 +0200
-From: Tasos Sahanidis <tasos@tasossah.com>
-To: linux-usb@vger.kernel.org
-Cc: stern@rowland.harvard.edu,
-	gregkh@linuxfoundation.org,
-	martin.petersen@oracle.com,
-	Tasos Sahanidis <tasos@tasossah.com>
-Subject: [PATCH] usb-storage: Add quirk for incorrect WP on Kingston DT Ultimate 3.0 G3
-Date: Thu,  7 Dec 2023 15:44:41 +0200
-Message-Id: <20231207134441.298131-1-tasos@tasossah.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2DE41C88;
+	Thu,  7 Dec 2023 14:53:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF562C433CA;
+	Thu,  7 Dec 2023 14:53:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701960783;
+	bh=mz3CTM06zZ00I601O+2CjhckI+2+PyBKpVHj/pfINUI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HAeke04RAgpKG+7kiqstjVxdiaIWQU5vESnHB1sCh1BgtiQ+Z/fmSoQpiZuu+ainR
+	 dYt39Akt3+8z7R3b0BKdIgOPoEtV4DLxo6ayMOZj8U9Y8rss2L/1vnWIpiCdVGrTOV
+	 R3UW4xchXyfGJaiyxmXNHsHRJP4ODZa139j/Xvn4b2K2JloKyYNT22R+n0GyAgCgNX
+	 OkU59sdQLdy/ZsrLDk/yUaHIG84rn2w2bxW7xCNRDxXS7lXoYs/eLFZv84RWdHhiUW
+	 z49J9hyOlzh8a1DgvFBwaZqYdpXwkc7jq/C5oOdSLZd1M2aGWfkk26dywWt4YPlzDV
+	 +mexkgy9oQSlA==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1rBFlB-0000hI-0F;
+	Thu, 07 Dec 2023 15:53:53 +0100
+Date: Thu, 7 Dec 2023 15:53:53 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	cros-qcom-dts-watchers@chromium.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, quic_ppratap@quicinc.com,
+	quic_jackp@quicinc.com
+Subject: Re: [PATCH v2 0/6] Refine USB interrupt vectors on Qualcomm platforms
+Message-ID: <ZXHcgZLGCScLVg1O@hovoldconsulting.com>
+References: <20231204100950.28712-1-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231204100950.28712-1-quic_kriskura@quicinc.com>
 
-This flash drive reports write protect during the first mode sense.
+On Mon, Dec 04, 2023 at 03:39:44PM +0530, Krishna Kurapati wrote:
+> Qualcomm targets define the following interrupts for usb wakeup:
+> {dp/dm}_hs_phy_irq, hs_phy_irq, pwr_event, ss_phy_irq.
+> 
+> But QUSB2 Phy based targets have another interrupt which gets triggered
+> in response to J/K states on dp/dm pads. Its functionality is replaced
+> by dp/dm interrupts on Femto/m31/eusb2 phy based targets for wakeup
+> purposes. Exceptions are some targets like SDM845/SDM670/SM6350 where
+> dp/dm irq's are used although they are qusb2 phy targets.
+> 
+> Currently in QUSB2 Phy based DT's, te qusb2_phy interrupt is named and
+> used as "hs_phy_irq" when in fact it is a different interrupt (used by
+> HW validation folks for debug purposes and not used on any downstream
+> target qusb/non-qusb).
+> 
+> On some non-QUSB2 targets (like sm8450/sm8550), the pwr_event IRQ was
+> named as hs_phy_irq and actual pwr_event_irq was skipped.
+> 
+> This series tries to address the discrepancies in the interrupt numbering
+> adding the missing interrupts and correcting the existing ones.
+> 
+> This series has been compared with downstream counter part and hw specifics
+> to ensure the numbering is right. Since there is not functionality change
+> the code has been only compile tested.
 
-In the past this was not an issue as the kernel called revalidate twice,
-thus asking the device for its write protect status twice, with write
-protect being disabled in the second mode sense.
+This is a good summary.
 
-However, since commit 1e029397d12f ("scsi: sd: Reorganize DIF/DIX code to
-avoid calling revalidate twice") that is no longer the case, thus the
-device shows up read only.
+> Changes in v2:
+> Removed additional compatibles added for different targets in v1.
+> Specified permuations of interrupts possible for QC targets and regrouped
+> interrupts for most of the DT's.
+> 
+> Rebased on top of wakeup interrupts fixes by Johan Hovold:
+> https://patchwork.kernel.org/project/linux-arm-msm/cover/20231120164331.8116-1-johan+linaro@kernel.org/
+> 
+> Link to v1: (providing patchwork link since threading was broken in v1)
+> https://patchwork.kernel.org/project/linux-arm-msm/cover/20231122191259.3021-1-quic_kriskura@quicinc.com/
+> 
+> Krishna Kurapati (6):
+>   dt-bindings: usb: dwc3: Clean up hs_phy_irq in bindings
+>   usb: dwc3: qcom: Rename hs_phy_irq to qusb2_phy_irq
+>   arm64: dts: qcom: Fix hs_phy_irq for QUSB2 targets
+>   arm64: dts: qcom: Fix hs_phy_irq for non-QUSB2 targets
+>   arm64: dts: qcom: Fix hs_phy_irq for SDM670/SDM845/SM6350
+>   arm64: dts: qcom: Add missing interrupts for qcs404/ipq5332
 
-[490891.289495] sd 12:0:0:0: [sdl] Write Protect is on
-[490891.289497] sd 12:0:0:0: [sdl] Mode Sense: 2b 00 80 08
+You're still mixing USB binding/driver and DT updates, which is what we
+want for most subsystems, but not for USB.
 
-This does not appear to be a timing issue, as enabling the usbcore quirk
-USB_QUIRK_DELAY_INIT has no effect on write protect.
+For the next version, please split it in two series as these will go in
+through two different maintainer trees.
 
-Fixes: 1e029397d12f ("scsi: sd: Reorganize DIF/DIX code to avoid calling revalidate twice")
-Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
----
- drivers/usb/storage/unusual_devs.h | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+You can link to the driver/binding series from the devicetree series and
+mention to Bjorn that it should not be merged before the bindings are
+in.
 
-diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-index 20dcbccb290b..fd68204374f2 100644
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -1305,6 +1305,17 @@ UNUSUAL_DEV(  0x090c, 0x6000, 0x0100, 0x0100,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_INITIAL_READ10 ),
- 
-+/*
-+ * Patch by Tasos Sahanidis <tasos@tasossah.com>
-+ * This flash drive always shows up with write protect enabled
-+ * during the first mode sense.
-+ */
-+UNUSUAL_DEV(0x0951, 0x1697, 0x0100, 0x0100,
-+		"Kingston",
-+		"DT Ultimate G3",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_NO_WP_DETECT),
-+
- /*
-  * This Pentax still camera is not conformant
-  * to the USB storage specification: -
--- 
-2.25.1
+And please use lore for any links instead of patchwork.
 
+Johan
 
