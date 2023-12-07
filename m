@@ -1,119 +1,125 @@
-Return-Path: <linux-usb+bounces-3842-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3843-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6FF8808719
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 12:55:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC6B6808726
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 12:57:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F8FF1F22504
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 11:55:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91DF61F22410
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 11:57:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CACF39ACA;
-	Thu,  7 Dec 2023 11:55:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0835A39AD1;
+	Thu,  7 Dec 2023 11:57:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GRX4SxXQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H2yHZ8On"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B979919A
-	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 03:55:18 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5d8d2b5d1b5so5551037b3.0
-        for <linux-usb@vger.kernel.org>; Thu, 07 Dec 2023 03:55:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701950118; x=1702554918; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F/q6TRKeG5wf/WNF8oKO4x0xnN5GpvnAL5Al210CdFM=;
-        b=GRX4SxXQkB+6+W9DXR4iUGyfV/07y4Rqu94u7S/y9+xVP/d11HZZ8yb6k1p3TRI2wA
-         Py0jnAhlYMwwX3pw5hZDU03SrU/lwU/CxFHaLmjsfD6EW96vz2gYu4i+wMCLTGSJ3DQ/
-         4rrXAyHG4S82K4F+TJLD10ECSCenq+KBLCbgXIG/5oMJQ2OjfLpuP6TybyibO75NLWiG
-         rUTXj898OF0polYr5qnHeh0Zh5Xx0OLCHpc01nkVT7lOeGlqCYzrNwJCKhvG/cwuyvE6
-         3tzemw/Y5HjDkWyOFasVQalU2Uy0a3If3M0Z85wI+DwBXlDO/mZg1Z8NEgLjzutG/HG7
-         QUOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701950118; x=1702554918;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F/q6TRKeG5wf/WNF8oKO4x0xnN5GpvnAL5Al210CdFM=;
-        b=NWTaL0jFSTAAmWNy1gh50g+4tC8E1hYfR0rMIPBJKG3gCPK8dRj5xE6vG7EjBkqozU
-         5Ovv1KzgBCjwhoYKDMWpPIlCrV3EQ5Gkhfsm3/w3AIJ/iMrSCVsvUizuXK6x4NIFSm9n
-         6x5Rhiz1EJwwoM4tOpJAIw5GX/ps7CzQz/FI4/HlsyP0BPTjwyX2MhHIHMmLN4ZwFqsw
-         50+OcdBPNDZ9jKfbOyBL/ANU9eHbMJOZHdzqRSPF1lyOCCysMwSYN9bSKvaUdMwzKiAB
-         fgr0svyHG3evbpDRp42zq3p4ijLiSLbEbPjGCxwGbNOXraNrmq3chUL/8OrHvbpd+Gid
-         iUog==
-X-Gm-Message-State: AOJu0YzcG3u/f3svfPYJM1Bw9CBWNpU/+FyVXdV3n0T5w6U1dYEeepmH
-	NUhulR+4gCa7c9CefyTiocrjGaaIdes7y2cpWEnV+Q==
-X-Google-Smtp-Source: AGHT+IHVT1d6I3NT15slfWj2OyLzxCga6bksIcWJ0Ex4SeTvFw8STagdoTadd/IyScYtLxzKq6+8sFaTXZxksDGB968=
-X-Received: by 2002:a05:690c:360a:b0:5cc:29fc:9b38 with SMTP id
- ft10-20020a05690c360a00b005cc29fc9b38mr2021839ywb.35.1701950117961; Thu, 07
- Dec 2023 03:55:17 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545B61AD;
+	Thu,  7 Dec 2023 03:57:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701950252; x=1733486252;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U1KMl9XjHFBBJ8+redolqRS6hLCA9TkPnhiPY6uCIwU=;
+  b=H2yHZ8On0z4AlvvaEo16gXNJxQKAx441LHelpJ1tMe5FcjFbm9nVxaFH
+   U3UBWUsfe53vCSLc3RsUmfQg/VnaYGDEBGGbt5+f3kayLxN6I8mqThl3u
+   Wr7tXyzfhzEqn0uP/Ytc/wHuTaZj1DksLbn855YpEgoawXcquQFAptuuj
+   0w7Vr/KkG/lAtbItTUVXU3+n5wSd9ePppsryhbz1/k/MEAIFLnq8gUi4Q
+   EXExDoLj7V1EsxaiDhfkobNgRziiiNr+Q1NA10w9N2g60wGBQuhOCZnkK
+   e0GKChe3QEo0WvbE3YOV1XiDIjnY/aZB+OkgARDZirt/ryc93bIEPj0D0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="12932769"
+X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
+   d="scan'208";a="12932769"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 03:57:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="915554318"
+X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
+   d="scan'208";a="915554318"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 07 Dec 2023 03:57:27 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 07 Dec 2023 13:57:26 +0200
+Date: Thu, 7 Dec 2023 13:57:26 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Arnd Bergmann <arnd@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: nb7vpq904m: add CONFIG_OF dependency
+Message-ID: <ZXGzJlv9C3Z9lMeI@kuha.fi.intel.com>
+References: <20231206123828.587065-1-arnd@kernel.org>
+ <ZXGySCtdsxW4qCel@kuha.fi.intel.com>
+ <CAA8EJprV3O24V0+MnPK1OdQZQ_7F2aMfN1Um13eH9ux4J+ucMw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231206123828.587065-1-arnd@kernel.org> <ZXGySCtdsxW4qCel@kuha.fi.intel.com>
-In-Reply-To: <ZXGySCtdsxW4qCel@kuha.fi.intel.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Thu, 7 Dec 2023 13:55:06 +0200
-Message-ID: <CAA8EJprV3O24V0+MnPK1OdQZQ_7F2aMfN1Um13eH9ux4J+ucMw@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: nb7vpq904m: add CONFIG_OF dependency
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJprV3O24V0+MnPK1OdQZQ_7F2aMfN1Um13eH9ux4J+ucMw@mail.gmail.com>
 
-On Thu, 7 Dec 2023 at 13:53, Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Wed, Dec 06, 2023 at 01:38:14PM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Dec 07, 2023 at 01:55:06PM +0200, Dmitry Baryshkov wrote:
+> On Thu, 7 Dec 2023 at 13:53, Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
 > >
-> > DRM_AUX_BRIDGE depends on CONFIG_OF, so the same dependency is needed
-> > here to avoid a build failure:
+> > On Wed, Dec 06, 2023 at 01:38:14PM +0100, Arnd Bergmann wrote:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > >
+> > > DRM_AUX_BRIDGE depends on CONFIG_OF, so the same dependency is needed
+> > > here to avoid a build failure:
+> > >
+> > > WARNING: unmet direct dependencies detected for DRM_AUX_BRIDGE
+> > >   Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && OF [=n]
+> > >   Selected by [y]:
+> > >   - TYPEC_MUX_NB7VPQ904M [=y] && USB_SUPPORT [=y] && TYPEC [=y] && I2C [=y] && (DRM [=y] || DRM [=y]=n) && DRM_BRIDGE [=y]
+> > > x86_64-linux-ld: drivers/gpu/drm/bridge/aux-bridge.o: in function `drm_aux_bridge_register':
+> > > aux-bridge.c:(.text+0x13b): undefined reference to `auxiliary_device_init'
+> > > x86_64-linux-ld: aux-bridge.c:(.text+0x14d): undefined reference to `__auxiliary_device_add'
+> > > x86_64-linux-ld: drivers/gpu/drm/bridge/aux-bridge.o: in function `drm_aux_bridge_drv_init':
+> > > aux-bridge.c:(.init.text+0x15): undefined reference to `__auxiliary_driver_register'
+> > > x86_64-linux-ld: drivers/gpu/drm/bridge/aux-bridge.o: in function `drm_aux_bridge_drv_exit':
+> > > aux-bridge.c:(.exit.text+0x9): undefined reference to `auxiliary_driver_unregister'
+> > >
+> > > Fixes: c5d296bad640 ("usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE")
+> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > > ---
+> > >  drivers/usb/typec/mux/Kconfig | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
+> > > index 5120942f309d..818624f59120 100644
+> > > --- a/drivers/usb/typec/mux/Kconfig
+> > > +++ b/drivers/usb/typec/mux/Kconfig
+> > > @@ -40,6 +40,7 @@ config TYPEC_MUX_NB7VPQ904M
+> > >       tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
+> > >       depends on I2C
+> > >       depends on DRM || DRM=n
+> > > +     depends on OF
+> > >       select DRM_AUX_BRIDGE if DRM_BRIDGE
+> > >       select REGMAP_I2C
+> > >       help
 > >
-> > WARNING: unmet direct dependencies detected for DRM_AUX_BRIDGE
-> >   Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && OF [=n]
-> >   Selected by [y]:
-> >   - TYPEC_MUX_NB7VPQ904M [=y] && USB_SUPPORT [=y] && TYPEC [=y] && I2C [=y] && (DRM [=y] || DRM [=y]=n) && DRM_BRIDGE [=y]
-> > x86_64-linux-ld: drivers/gpu/drm/bridge/aux-bridge.o: in function `drm_aux_bridge_register':
-> > aux-bridge.c:(.text+0x13b): undefined reference to `auxiliary_device_init'
-> > x86_64-linux-ld: aux-bridge.c:(.text+0x14d): undefined reference to `__auxiliary_device_add'
-> > x86_64-linux-ld: drivers/gpu/drm/bridge/aux-bridge.o: in function `drm_aux_bridge_drv_init':
-> > aux-bridge.c:(.init.text+0x15): undefined reference to `__auxiliary_driver_register'
-> > x86_64-linux-ld: drivers/gpu/drm/bridge/aux-bridge.o: in function `drm_aux_bridge_drv_exit':
-> > aux-bridge.c:(.exit.text+0x9): undefined reference to `auxiliary_driver_unregister'
-> >
-> > Fixes: c5d296bad640 ("usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  drivers/usb/typec/mux/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-> > index 5120942f309d..818624f59120 100644
-> > --- a/drivers/usb/typec/mux/Kconfig
-> > +++ b/drivers/usb/typec/mux/Kconfig
-> > @@ -40,6 +40,7 @@ config TYPEC_MUX_NB7VPQ904M
-> >       tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
-> >       depends on I2C
-> >       depends on DRM || DRM=n
-> > +     depends on OF
-> >       select DRM_AUX_BRIDGE if DRM_BRIDGE
-> >       select REGMAP_I2C
-> >       help
->
-> Shouldn't DRM_BRIDGE depend on OF instead?
+> > Shouldn't DRM_BRIDGE depend on OF instead?
+> 
+> No. DRM_AUX_BRIDGE depends on OF, DRM_BRIDGE framework doesn't.
 
-No. DRM_AUX_BRIDGE depends on OF, DRM_BRIDGE framework doesn't.
+Okay, so this probable should also be
 
+        select DRM_AUX_BRIDGE if DRM_BRIDGE and OF
+
+No?
+
+thanks,
 
 -- 
-With best wishes
-Dmitry
+heikki
 
