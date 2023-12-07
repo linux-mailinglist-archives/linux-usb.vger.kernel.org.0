@@ -1,125 +1,104 @@
-Return-Path: <linux-usb+bounces-3864-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3865-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19748808CF1
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 17:12:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5A63808CFB
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 17:16:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4B241F210C2
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 16:12:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EE731F210BD
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 16:16:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D71CA46B95;
-	Thu,  7 Dec 2023 16:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mgdsO7OI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F6F446B9A;
+	Thu,  7 Dec 2023 16:16:35 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DEFB40BE5;
-	Thu,  7 Dec 2023 16:12:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9396DC433C8;
-	Thu,  7 Dec 2023 16:12:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701965531;
-	bh=oDFKU6He3TF2Z/VxsatMVTx0wO+MupzIPTDKqHifMUQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mgdsO7OIKFVnsRpXfPzhSFtBbKHmi+fLTH0WyXQIbUw+SmRKpaiHLmHcaQhxMjxng
-	 9IHefwqe3Ryh6cPXGecRg3Hubb0SDQ6+CfcPRYxMyquIqGqdF9+dc1Crptxu320g/y
-	 L7bSFC0PRGMrGe20aQYp6+X3X8+KuJlVundGC64PrvmFcG9BBJVX5ojLNHrxjMsjIy
-	 65Wu5b7SCS6kM/XlzY2FjFsjnDIskG1bAX2I+AuPz+xSdWTJPJkNtp4u39MMeyWE4T
-	 +p1VNFAwPB1qdJdm/n6vp6YYGvXOiIxbvB6s087lgX3gV8dzUcg/nBw/iSDI+oYRN3
-	 YDxGY6xtqQcUw==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1rBGzl-00011w-1k;
-	Thu, 07 Dec 2023 17:13:01 +0100
-Date: Thu, 7 Dec 2023 17:13:01 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	cros-qcom-dts-watchers@chromium.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: [PATCH v2 1/6] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
- bindings
-Message-ID: <ZXHvDaeoG1SuZ9xj@hovoldconsulting.com>
-References: <20231204100950.28712-1-quic_kriskura@quicinc.com>
- <20231204100950.28712-2-quic_kriskura@quicinc.com>
- <ZXHjXGEbdtbCiOck@hovoldconsulting.com>
- <028097f3-9056-4c07-a868-4eeac9bc8c94@quicinc.com>
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E69784
+	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 08:16:29 -0800 (PST)
+Received: from [192.168.1.104] (31.173.84.200) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Thu, 7 Dec
+ 2023 19:16:19 +0300
+Subject: Re: [PATCH] usb: storage: freecom: drop useless assignment in
+ init_freecom()
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Alan Stern <stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
+	<usb-storage@lists.one-eyed-alien.net>
+References: <4d3fb70f-bf2f-96cc-a8fb-1ef658a24920@omp.ru>
+ <2023120412-observing-affluent-9432@gregkh>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <b96dc0cc-86da-425b-86b8-39566f594d83@omp.ru>
+Date: Thu, 7 Dec 2023 19:16:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <028097f3-9056-4c07-a868-4eeac9bc8c94@quicinc.com>
+In-Reply-To: <2023120412-observing-affluent-9432@gregkh>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.0.0, Database issued on: 12/07/2023 16:04:27
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 181948 [Dec 07 2023]
+X-KSE-AntiSpam-Info: Version: 6.0.0.2
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 6 0.3.6 62f5a4619c57459c9a142aa1486ed27913162963
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_arrow_text}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.200 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info:
+	127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.200
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 12/07/2023 16:09:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 12/7/2023 3:22:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-On Thu, Dec 07, 2023 at 09:14:55PM +0530, Krishna Kurapati PSSNV wrote:
- 
-> >> +        - qusb2_phy:: SoCs with QUSB2 PHY do not have separate DP/DM IRQs and
-> >> +                      expose only a single IRQ whose behavior can be modified
-> >> +                      by the QUSB2PHY_INTR_CTRL register. The required DPSE/
-> >> +                      DMSE configuration is done in QUSB2PHY_INTR_CTRL register
-> >> +                      of phy address space.
-> >> +        - {dp/dm}_hs_phy_irq:: These IRQ's directly reflect changes on the DP/
-> >> +                               DM pads of the SoC. These are used for wakeup
-> >> +                               only on SoCs with non-QUSBb2 targets with
-> > 
-> > QUSB2 typo
-> > 
-> >> +                               exception of SDM670/SDM845/SM6350.
-> >> +        - ss_phy_irq:: When in super speed mode of operation, interrupts are
-> > 
-> > Capitalise 'Super Speed'
-> > 
-> >> +                       received when a wakeup event is received on ss_phy_irq.
-> > 
-> > The description as it stands sounds circular. And this one is only used
-> > for remote wakeup right?
-> > 
-> Yes. It is used for remote wakeup. Mentioning it as wakeup event should 
-> be changed ?
-
-It would be good to clarify that this one is the IIUC not used for
-connect/disconnect events but just for remote wakeup, that is, unlike
-the qusb2_phy and dp/dm_hs_phy interrupts.
-
-The old descriptions just vaguely said "wakeup event" and
-connect/disconnect events aren't necessarily wakeup events.
-
-> > Also have you set up the tools so that you can verify your bindings
-> > before posing them? I assume the above wouldn't pass (e.g. due to the
-> > "(optional)" strings).
-> > 
-> > There's some more details here:
-> > 
-> > 	https://docs.kernel.org/devicetree/bindings/writing-schema.html
-> > 
-> > under "Running checks".
+On 12/4/23 10:04 AM, Greg Kroah-Hartman wrote:
+[...]
+>> In init_freecom(), the results of usb_stor_control_msg() calls are stored
+>> in the local variable and then printed out by usb_stor_dbg() (if enabled),
+>> except for the 1st call, the result of which is completely ignored.  Drop
+>> the useless assignment.
 > 
-> I did do a dt-binding check and got the following line as well:
+> Instead, you should check the return value and handle it properly, don't
+> just drop the checking entirely, that's not good.
+
+   Hmm... I wonder if you'd actually read the patch...
+   I'm not dropping any checking because there's none, even at the further
+call sites of usb_stor_control_msg() -- the most init_freecom() currently
+is doing is printing out the result of the calls...
+
+> thanks,
 > 
->    DTC_CHK Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb
-> /local/mnt/workspace/sriramd/upstream/torvalds/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb: 
-> usb@a6f8800: interrupt-names:4: 'ss_phy_irq (optional)' was expected
->          From schema:
+> greg k-h
 
-Good that you got that set up.
-
-Johan
+MBR, Sergey
 
