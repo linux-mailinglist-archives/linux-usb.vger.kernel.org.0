@@ -1,280 +1,166 @@
-Return-Path: <linux-usb+bounces-3828-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3829-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D019880852B
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 11:08:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1A19808582
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 11:30:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E76ECB21DC8
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 10:08:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 200741C21F2C
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 10:30:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C0A358AA;
-	Thu,  7 Dec 2023 10:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LPPnoCwQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3316A37D13;
+	Thu,  7 Dec 2023 10:29:50 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33EDE3456B
-	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 10:08:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01AEEC433C9;
-	Thu,  7 Dec 2023 10:08:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1701943687;
-	bh=+TtWj3u6F3zGN0JIXvl73oCLKKxPXp04JKwR9ZXgj3M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LPPnoCwQQoWgHzBERudad0ncb3tnicMaEM1xQeqYyAMaMSeNXmNv5+N2ZGa6k2C/u
-	 fzwsvVRg4OcGLQw4HeVW/9YxXMauLsodfn2ww6y9Z8oNrgRVSfXZSBYyRhffOPKuUq
-	 WWWPpTNzmsmF60dK43Bme7ISlTk30HraApCZoLMs=
-Date: Thu, 7 Dec 2023 11:08:03 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Stanley Chang <stanley_chang@realtek.com>
-Cc: Vinod Koul <vkoul@kernel.org>, Johan Hovold <johan@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Rob Herring <robh@kernel.org>, Jinjie Ruan <ruanjinjie@huawei.com>,
-	Alan Stern <stern@rowland.harvard.edu>, Roy Luo <royluo@google.com>,
-	Flavio Suligoi <f.suligoi@asem.it>,
-	Ricardo =?iso-8859-1?Q?Ca=F1uelo?= <ricardo.canuelo@collabora.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 RESEND 4/4] usb: core: add phy notify connect and
- disconnect
-Message-ID: <2023120730-mouth-jolt-0170@gregkh>
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9D310C8;
+	Thu,  7 Dec 2023 02:29:41 -0800 (PST)
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3B7ASh8X2090781, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3B7ASh8X2090781
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 7 Dec 2023 18:28:43 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.32; Thu, 7 Dec 2023 18:28:43 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Thu, 7 Dec 2023 18:28:42 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
+ RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
+ 15.01.2375.007; Thu, 7 Dec 2023 18:28:42 +0800
+From: =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= <stanley_chang@realtek.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Vinod Koul <vkoul@kernel.org>, Johan Hovold <johan@kernel.org>,
+        "Kishon
+ Vijay Abraham I" <kishon@kernel.org>,
+        Geert Uytterhoeven
+	<geert+renesas@glider.be>,
+        Jinjie Ruan <ruanjinjie@huawei.com>, Rob Herring
+	<robh@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Heikki Krogerus
+	<heikki.krogerus@linux.intel.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        =?utf-8?B?UmljYXJkbyBDYcOxdWVsbw==?= <ricardo.canuelo@collabora.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v3 RESEND 1/4] phy: core: add notify_connect and notify_disconnect callback
+Thread-Topic: [PATCH v3 RESEND 1/4] phy: core: add notify_connect and
+ notify_disconnect callback
+Thread-Index: AQHaKOCi19hiykumv0upIYLDPa/PFrCdESyAgACIcOA=
+Date: Thu, 7 Dec 2023 10:28:42 +0000
+Message-ID: <b94926603360473e9d6c0fc91cf31614@realtek.com>
 References: <20231207074022.14116-1-stanley_chang@realtek.com>
- <20231207074022.14116-4-stanley_chang@realtek.com>
+ <2023120750-giggle-annotate-dc4f@gregkh>
+In-Reply-To: <2023120750-giggle-annotate-dc4f@gregkh>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231207074022.14116-4-stanley_chang@realtek.com>
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
-On Thu, Dec 07, 2023 at 03:38:07PM +0800, Stanley Chang wrote:
-> In Realtek SoC, the parameter of usb phy is designed to can dynamic
-> tuning base on port status. Therefore, add a notify callback of generic
-> phy driver when usb device connect and disconnect change.
-> 
-> The Realtek phy driver is designed to dynamically adjust disconnection
-> level and calibrate phy parameters. When the device connected bit changes
-> and when the disconnected bit changes, do connection change notification:
-> 
-> Check if portstatus is USB_PORT_STAT_CONNECTION and portchange is
-> USB_PORT_STAT_C_CONNECTION.
-> 1. The device is connected, the driver lowers the disconnection level and
->    calibrates the phy parameters.
-> 2. The device disconnects, the driver increases the disconnect level and
->    calibrates the phy parameters.
-> 
-> Generic phy driver in usb core framework does not support device connect
-> and disconnect notifications. Therefore, we add an api to notify phy
-> the connection changes.
-> 
-> Additionally, the generic phy only specifies primary_hcd in the original
-> design. Added specific "usb2-phy" on primary_hcd and "usb3-phy" on
-> shared_hcd.
-> 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
-> v2 to v3:
->     No change
-> v1 to v2 change:
->     rebase the driver to remove the part of usb phy notify API
-> ---
->  drivers/usb/core/hcd.c | 14 +++++--
->  drivers/usb/core/hub.c | 29 +++++++++++++
->  drivers/usb/core/phy.c | 94 ++++++++++++++++++++++++++++++++++++++++++
->  drivers/usb/core/phy.h |  3 ++
->  4 files changed, 136 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 12b6dfeaf658..992284461ad8 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -2794,10 +2794,16 @@ int usb_add_hcd(struct usb_hcd *hcd,
->  	struct usb_device *rhdev;
->  	struct usb_hcd *shared_hcd;
->  
-> -	if (!hcd->skip_phy_initialization && usb_hcd_is_primary_hcd(hcd)) {
-> -		hcd->phy_roothub = usb_phy_roothub_alloc(hcd->self.sysdev);
-> -		if (IS_ERR(hcd->phy_roothub))
-> -			return PTR_ERR(hcd->phy_roothub);
-> +	if (!hcd->skip_phy_initialization) {
-> +		if (usb_hcd_is_primary_hcd(hcd)) {
-> +			hcd->phy_roothub = usb_phy_roothub_alloc(hcd->self.sysdev);
-> +			if (IS_ERR(hcd->phy_roothub))
-> +				return PTR_ERR(hcd->phy_roothub);
-> +		} else {
-> +			hcd->phy_roothub = usb_phy_roothub_alloc_usb3_phy(hcd->self.sysdev);
-> +			if (IS_ERR(hcd->phy_roothub))
-> +				return PTR_ERR(hcd->phy_roothub);
-> +		}
->  
->  		retval = usb_phy_roothub_init(hcd->phy_roothub);
->  		if (retval)
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 87480a6e6d93..65c0454ee70a 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -37,6 +37,7 @@
->  #include <asm/byteorder.h>
->  
->  #include "hub.h"
-> +#include "phy.h"
->  #include "otg_productlist.h"
->  
->  #define USB_VENDOR_GENESYS_LOGIC		0x05e3
-> @@ -622,6 +623,34 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type,
->  		ret = 0;
->  	}
->  	mutex_unlock(&hub->status_mutex);
-> +
-> +	/*
-> +	 * There is no need to lock status_mutex here, because status_mutex
-> +	 * protects hub->status, and the phy driver only checks the port
-> +	 * status without changing the status.
-> +	 */
-> +	if (!ret) {
-> +		struct usb_device *hdev = hub->hdev;
-> +
-> +		/*
-> +		 * Only roothub will be notified of connection changes,
-> +		 * since the USB PHY only cares about changes at the next
-> +		 * level.
-> +		 */
-> +		if (is_root_hub(hdev)) {
-> +			struct usb_hcd *hcd = bus_to_hcd(hdev->bus);
-> +			bool connect;
-> +			bool connect_change;
-> +
-> +			connect_change = *change & USB_PORT_STAT_C_CONNECTION;
-> +			connect = *status & USB_PORT_STAT_CONNECTION;
-> +			if (connect_change && connect)
-> +				usb_phy_roothub_notify_connect(hcd->phy_roothub, port1 - 1);
-> +			else if (connect_change)
-> +				usb_phy_roothub_notify_disconnect(hcd->phy_roothub, port1 - 1);
-> +		}
-> +	}
-> +
->  	return ret;
->  }
->  
-> diff --git a/drivers/usb/core/phy.c b/drivers/usb/core/phy.c
-> index fb1588e7c282..26585fc1ec32 100644
-> --- a/drivers/usb/core/phy.c
-> +++ b/drivers/usb/core/phy.c
-> @@ -19,6 +19,29 @@ struct usb_phy_roothub {
->  	struct list_head	list;
->  };
->  
-> +static int usb_phy_roothub_add_phy_by_name(struct device *dev, const char *name,
-> +					   struct list_head *list)
-> +{
-> +	struct usb_phy_roothub *roothub_entry;
-> +	struct phy *phy;
-> +
-> +	phy = devm_of_phy_get(dev, dev->of_node, name);
-> +	if (IS_ERR(phy))
-> +		return PTR_ERR(phy);
-> +
-> +	roothub_entry = devm_kzalloc(dev, sizeof(*roothub_entry), GFP_KERNEL);
-> +	if (!roothub_entry)
-> +		return -ENOMEM;
-> +
-> +	INIT_LIST_HEAD(&roothub_entry->list);
-> +
-> +	roothub_entry->phy = phy;
-> +
-> +	list_add_tail(&roothub_entry->list, list);
-> +
-> +	return 0;
-> +}
-> +
->  static int usb_phy_roothub_add_phy(struct device *dev, int index,
->  				   struct list_head *list)
->  {
-> @@ -65,6 +88,9 @@ struct usb_phy_roothub *usb_phy_roothub_alloc(struct device *dev)
->  
->  	INIT_LIST_HEAD(&phy_roothub->list);
->  
-> +	if (!usb_phy_roothub_add_phy_by_name(dev, "usb2-phy", &phy_roothub->list))
-> +		return phy_roothub;
-> +
->  	for (i = 0; i < num_phys; i++) {
->  		err = usb_phy_roothub_add_phy(dev, i, &phy_roothub->list);
->  		if (err)
-> @@ -75,6 +101,32 @@ struct usb_phy_roothub *usb_phy_roothub_alloc(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(usb_phy_roothub_alloc);
->  
-> +struct usb_phy_roothub *usb_phy_roothub_alloc_usb3_phy(struct device *dev)
-> +{
-> +	struct usb_phy_roothub *phy_roothub;
-> +	int num_phys;
-> +
-> +	if (!IS_ENABLED(CONFIG_GENERIC_PHY))
-> +		return NULL;
-> +
-> +	num_phys = of_count_phandle_with_args(dev->of_node, "phys",
-> +					      "#phy-cells");
-> +	if (num_phys <= 0)
-> +		return NULL;
-> +
-> +	phy_roothub = devm_kzalloc(dev, sizeof(*phy_roothub), GFP_KERNEL);
-> +	if (!phy_roothub)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	INIT_LIST_HEAD(&phy_roothub->list);
-> +
-> +	if (!usb_phy_roothub_add_phy_by_name(dev, "usb3-phy", &phy_roothub->list))
-> +		return phy_roothub;
-> +
-> +	return NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(usb_phy_roothub_alloc_usb3_phy);
-> +
->  int usb_phy_roothub_init(struct usb_phy_roothub *phy_roothub)
->  {
->  	struct usb_phy_roothub *roothub_entry;
-> @@ -172,6 +224,48 @@ int usb_phy_roothub_calibrate(struct usb_phy_roothub *phy_roothub)
->  }
->  EXPORT_SYMBOL_GPL(usb_phy_roothub_calibrate);
->  
-> +int usb_phy_roothub_notify_connect(struct usb_phy_roothub *phy_roothub, int port)
-> +{
-> +	struct usb_phy_roothub *roothub_entry;
-> +	struct list_head *head;
-> +	int err;
-> +
-> +	if (!phy_roothub)
-> +		return 0;
-
-How can phy_roothub ever be NULL?
-
-> +
-> +	head = &phy_roothub->list;
-> +
-> +	list_for_each_entry(roothub_entry, head, list) {
-> +		err = phy_notify_connect(roothub_entry->phy, port);
-> +		if (err)
-> +			return err;
-> +	}
->
-
-You walk a list with no locking at all?  That does not seem right at
-all.
-
-Also, this is a new function that is exported with no documentation?
-Please fix.
-
-thanks,
-
-greg k-h
+SGkgR3JlZywNCg0KPiANCj4gT24gVGh1LCBEZWMgMDcsIDIwMjMgYXQgMDM6Mzg6MDRQTSArMDgw
+MCwgU3RhbmxleSBDaGFuZyB3cm90ZToNCj4gPiBJbiBSZWFsdGVrIFNvQywgdGhlIHBhcmFtZXRl
+ciBvZiB1c2IgcGh5IGlzIGRlc2lnbmVkIHRvIGNhbiBkeW5hbWljDQo+ID4gdHVuaW5nIGJhc2Ug
+b24gcG9ydCBzdGF0dXMuIFRoZXJlZm9yZSwgYWRkIGEgbm90aWZ5IGNhbGxiYWNrIG9mIHBoeQ0K
+PiA+IGRyaXZlciB3aGVuIHVzYiBjb25uZWN0aW9uL2Rpc2Nvbm5lY3Rpb24gY2hhbmdlLg0KPiA+
+DQo+ID4gU2lnbmVkLW9mZi1ieTogU3RhbmxleSBDaGFuZyA8c3RhbmxleV9jaGFuZ0ByZWFsdGVr
+LmNvbT4NCj4gPiAtLS0NCj4gPiBSRVNFTkQ6DQo+ID4gICAgIEJlY2F1c2UgdGhlcmUgaXMgbm8g
+ZXh0Y29uIGRldmljZSBwcm92aWRlZCBpbiB0aGUgVVNCIGZyYW1ld29yayB0bw0KPiA+ICAgICBu
+b3RpZnkgY29ubmVjdCBhbmQgZGlzY29ubmVjdC4NCj4gPiAgICAgVGhlcmVmb3JlLCBJIGFkZGVk
+IHRoZSBub3RpZmljYXRpb24gY29ubmVjdGlvbi9kaXNjb25uZWN0aW9uIGJhc2VkDQo+ID4gICAg
+IG9uIHRoZSBnZW5lcmljIHBoeS4gU28gSSBubyB1c2UgdGhlIEVYVENPTiBmcmFtZXdvcmsgZm9y
+IG5vdGlmeWluZw0KPiA+ICAgICBjb25uZWN0L2Rpc2Nvbm5lY3QuDQo+ID4gdjIgdG8gdjM6DQo+
+ID4gICAgIE5vIGNoYW5nZQ0KPiA+IHYxIHRvIHYyOg0KPiA+ICAgICBObyBjaGFuZ2UNCj4gPiAt
+LS0NCj4gPiAgZHJpdmVycy9waHkvcGh5LWNvcmUuYyAgfCA0Nw0KPiA+ICsrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4gIGluY2x1ZGUvbGludXgvcGh5L3BoeS5o
+IHwgMTggKysrKysrKysrKysrKysrKw0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDY1IGluc2VydGlv
+bnMoKykNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BoeS9waHktY29yZS5jIGIvZHJp
+dmVycy9waHkvcGh5LWNvcmUuYyBpbmRleA0KPiA+IDk2YTBiMWUxMTFmMy4uYTg0YWQ0ODk2Yjdm
+IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvcGh5L3BoeS1jb3JlLmMNCj4gPiArKysgYi9kcml2
+ZXJzL3BoeS9waHktY29yZS5jDQo+ID4gQEAgLTQ4OSw2ICs0ODksNTMgQEAgaW50IHBoeV9jYWxp
+YnJhdGUoc3RydWN0IHBoeSAqcGh5KSAgfQ0KPiA+IEVYUE9SVF9TWU1CT0xfR1BMKHBoeV9jYWxp
+YnJhdGUpOw0KPiA+DQo+ID4gKy8qKg0KPiA+ICsgKiBwaHlfbm90aWZ5X2Nvbm5lY3QoKSAtIHBo
+eSBjb25uZWN0IG5vdGlmeQ0KPiA+ICsgKiBAcGh5OiB0aGUgcGh5IHJldHVybmVkIGJ5IHBoeV9n
+ZXQoKQ0KPiA+ICsgKiBAcG9ydDogdGhlIHBvcnQgaW5kZXggZm9yIGNvbm5lY3QNCj4gPiArICoN
+Cj4gPiArICogSWYgcGh5IG5lZWQgdGhlIGdldCBjb25uZWN0aW9uIHN0YXR1cywgdGhlIGNhbGxi
+YWNrIGNhbiBiZSB1c2VkLg0KPiA+ICsgKiBSZXR1cm5zOiAlMCBpZiBzdWNjZXNzZnVsLCBhIG5l
+Z2F0aXZlIGVycm9yIGNvZGUgb3RoZXJ3aXNlICAqLyBpbnQNCj4gPiArcGh5X25vdGlmeV9jb25u
+ZWN0KHN0cnVjdCBwaHkgKnBoeSwgaW50IHBvcnQpIHsNCj4gPiArICAgICBpbnQgcmV0Ow0KPiA+
+ICsNCj4gPiArICAgICBpZiAoIXBoeSB8fCAhcGh5LT5vcHMtPmNvbm5lY3QpDQo+ID4gKyAgICAg
+ICAgICAgICByZXR1cm4gMDsNCj4gDQo+IEhvdyBjYW4gcGh5IGJlIG51bGw/DQo+IA0KPiBBbmQg
+aXQgaXMgbm90IHN1Y2Nlc3NmdWwgaWYgY29ubmVjdCBpcyBub3QgdmFsaWQsIHNvIHdoeSBub3Qg
+cmV0dXJuIGFuIGVycm9yIHRoZXJlPw0KDQpUaGlzIGlzIHBvc3NpYmxlLiBJZiBhIGNhbGxlciBu
+byB1c2UgdGhlIGdlbmVyaWMgcGh5IG9yIG5vIGRlZmluZSB0aGUgY29ubmVjdCBjYWxsYmFjay4N
+CkFuZCBpZiBubyBkZWZpbmUgY29ubmVjdCBjYWxsYmFjaywgaXQgd2lsbCBkbyBub3RoaW5nLiBT
+byBubyBhbnkgZXJyb3IuDQoNCj4gPiArDQo+ID4gKyAgICAgbXV0ZXhfbG9jaygmcGh5LT5tdXRl
+eCk7DQo+ID4gKyAgICAgcmV0ID0gcGh5LT5vcHMtPmNvbm5lY3QocGh5LCBwb3J0KTsNCj4gPiAr
+ICAgICBtdXRleF91bmxvY2soJnBoeS0+bXV0ZXgpOw0KPiA+ICsNCj4gPiArICAgICByZXR1cm4g
+cmV0Ow0KPiA+ICt9DQo+ID4gK0VYUE9SVF9TWU1CT0xfR1BMKHBoeV9ub3RpZnlfY29ubmVjdCk7
+DQo+ID4gKw0KPiA+ICsvKioNCj4gPiArICogcGh5X25vdGlmeV9kaXNjb25uZWN0KCkgLSBwaHkg
+ZGlzY29ubmVjdCBub3RpZnkNCj4gPiArICogQHBoeTogdGhlIHBoeSByZXR1cm5lZCBieSBwaHlf
+Z2V0KCkNCj4gPiArICogQHBvcnQ6IHRoZSBwb3J0IGluZGV4IGZvciBkaXNjb25uZWN0DQo+ID4g
+KyAqDQo+ID4gKyAqIElmIHBoeSBuZWVkIHRoZSBnZXQgZGlzY29ubmVjdGlvbiBzdGF0dXMsIHRo
+ZSBjYWxsYmFjayBjYW4gYmUgdXNlZC4NCj4gPiArICoNCj4gPiArICogUmV0dXJuczogJTAgaWYg
+c3VjY2Vzc2Z1bCwgYSBuZWdhdGl2ZSBlcnJvciBjb2RlIG90aGVyd2lzZSAgKi8gaW50DQo+ID4g
+K3BoeV9ub3RpZnlfZGlzY29ubmVjdChzdHJ1Y3QgcGh5ICpwaHksIGludCBwb3J0KSB7DQo+ID4g
+KyAgICAgaW50IHJldDsNCj4gPiArDQo+ID4gKyAgICAgaWYgKCFwaHkgfHwgIXBoeS0+b3BzLT5k
+aXNjb25uZWN0KQ0KPiA+ICsgICAgICAgICAgICAgcmV0dXJuIDA7DQo+IA0KPiBTYW1lIGFzIGFi
+b3ZlLg0KDQpTYW1lIGFzIGNvbm5lY3QgY2FsbGJhY2suDQoNCj4gPiArDQo+ID4gKyAgICAgbXV0
+ZXhfbG9jaygmcGh5LT5tdXRleCk7DQo+ID4gKyAgICAgcmV0ID0gcGh5LT5vcHMtPmRpc2Nvbm5l
+Y3QocGh5LCBwb3J0KTsNCj4gPiArICAgICBtdXRleF91bmxvY2soJnBoeS0+bXV0ZXgpOw0KPiA+
+ICsNCj4gPiArICAgICByZXR1cm4gcmV0Ow0KPiA+ICt9DQo+ID4gK0VYUE9SVF9TWU1CT0xfR1BM
+KHBoeV9ub3RpZnlfZGlzY29ubmVjdCk7DQo+ID4gKw0KPiA+ICAvKioNCj4gPiAgICogcGh5X2Nv
+bmZpZ3VyZSgpIC0gQ2hhbmdlcyB0aGUgcGh5IHBhcmFtZXRlcnMNCj4gPiAgICogQHBoeTogdGhl
+IHBoeSByZXR1cm5lZCBieSBwaHlfZ2V0KCkgZGlmZiAtLWdpdA0KPiA+IGEvaW5jbHVkZS9saW51
+eC9waHkvcGh5LmggYi9pbmNsdWRlL2xpbnV4L3BoeS9waHkuaCBpbmRleA0KPiA+IGY2ZDYwN2Vm
+MGU4MC4uY2Y5OGNiMjlkZGFhIDEwMDY0NA0KPiA+IC0tLSBhL2luY2x1ZGUvbGludXgvcGh5L3Bo
+eS5oDQo+ID4gKysrIGIvaW5jbHVkZS9saW51eC9waHkvcGh5LmgNCj4gPiBAQCAtMTIyLDYgKzEy
+Miw4IEBAIHN0cnVjdCBwaHlfb3BzIHsNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgIHVu
+aW9uIHBoeV9jb25maWd1cmVfb3B0cyAqb3B0cyk7DQo+ID4gICAgICAgaW50ICAgICAoKnJlc2V0
+KShzdHJ1Y3QgcGh5ICpwaHkpOw0KPiA+ICAgICAgIGludCAgICAgKCpjYWxpYnJhdGUpKHN0cnVj
+dCBwaHkgKnBoeSk7DQo+ID4gKyAgICAgaW50ICAgICAoKmNvbm5lY3QpKHN0cnVjdCBwaHkgKnBo
+eSwgaW50IHBvcnQpOw0KPiA+ICsgICAgIGludCAgICAgKCpkaXNjb25uZWN0KShzdHJ1Y3QgcGh5
+ICpwaHksIGludCBwb3J0KTsNCj4gDQo+IFlvdSBmb3Jnb3QgdG8gZG9jdW1lbnQgdGhlc2UgYW5k
+IHdvdWxkIGhhdmUgYSB3YXJuaW5nIGZyb20gdGhlDQo+IGRvY3VtZW50YXRpb24gYnVpbGQgaWYg
+dGhpcyB3YXMgYXBwbGllZCA6KA0KPiANCkkgd2lsbCBhZGQgYSBkZXNjcmlwdGlvbi4NCg0KPiA+
+ICAgICAgIHZvaWQgICAgKCpyZWxlYXNlKShzdHJ1Y3QgcGh5ICpwaHkpOw0KPiA+ICAgICAgIHN0
+cnVjdCBtb2R1bGUgKm93bmVyOw0KPiA+ICB9Ow0KPiA+IEBAIC0yNDMsNiArMjQ1LDggQEAgc3Rh
+dGljIGlubGluZSBlbnVtIHBoeV9tb2RlIHBoeV9nZXRfbW9kZShzdHJ1Y3QNCj4gPiBwaHkgKnBo
+eSkgIH0gIGludCBwaHlfcmVzZXQoc3RydWN0IHBoeSAqcGh5KTsgIGludA0KPiA+IHBoeV9jYWxp
+YnJhdGUoc3RydWN0IHBoeSAqcGh5KTsNCj4gPiAraW50IHBoeV9ub3RpZnlfY29ubmVjdChzdHJ1
+Y3QgcGh5ICpwaHksIGludCBwb3J0KTsgaW50DQo+ID4gK3BoeV9ub3RpZnlfZGlzY29ubmVjdChz
+dHJ1Y3QgcGh5ICpwaHksIGludCBwb3J0KTsNCj4gPiAgc3RhdGljIGlubGluZSBpbnQgcGh5X2dl
+dF9idXNfd2lkdGgoc3RydWN0IHBoeSAqcGh5KSAgew0KPiA+ICAgICAgIHJldHVybiBwaHktPmF0
+dHJzLmJ1c193aWR0aDsNCj4gPiBAQCAtMzk2LDYgKzQwMCwyMCBAQCBzdGF0aWMgaW5saW5lIGlu
+dCBwaHlfY2FsaWJyYXRlKHN0cnVjdCBwaHkgKnBoeSkNCj4gPiAgICAgICByZXR1cm4gLUVOT1NZ
+UzsNCj4gPiAgfQ0KPiA+DQo+ID4gK3N0YXRpYyBpbmxpbmUgaW50IHBoeV9ub3RpZnlfY29ubmVj
+dChzdHJ1Y3QgcGh5ICpwaHksIGludCBpbmRleCkgew0KPiA+ICsgICAgIGlmICghcGh5KQ0KPiA+
+ICsgICAgICAgICAgICAgcmV0dXJuIDA7DQo+IA0KPiBXaHkgY2hlY2sgdGhpcz8NCg0KSXQgaXMg
+bm9ybWFsIGZvciBwaHkgdG8gYmUgbnVsbC4NCkJ1dCBpZiBwaHkgaXMgbm90IGVtcHR5LCAtRU5P
+U1lTIHNob3VsZCBiZSByZXR1cm5lZCB0byBpbmRpY2F0ZSB0aGUgZXJyb3IgIk9wZXJhdGlvbiBu
+b3Qgc3VwcG9ydGVkIi4NCk90aGVyIGNhbGxiYWNrcyBhbHNvIGZvbGxvdyB0aGlzIHJ1bGUuDQoN
+Cj4gPiArICAgICByZXR1cm4gLUVOT1NZUzsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGlu
+bGluZSBpbnQgcGh5X25vdGlmeV9kaXNjb25uZWN0KHN0cnVjdCBwaHkgKnBoeSwgaW50IGluZGV4
+KSB7DQo+ID4gKyAgICAgaWYgKCFwaHkpDQo+ID4gKyAgICAgICAgICAgICByZXR1cm4gMDsNCj4g
+DQo+IEFnYWluLCB3aHkgY2hlY2sgdGhpcz8NCg0KQXMgYWJvdmUuDQoNClRoYW5rcywNClN0YW5s
+ZXkNCg==
 
