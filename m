@@ -1,109 +1,110 @@
-Return-Path: <linux-usb+bounces-3872-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3873-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBB9D808E37
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 18:08:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A5BB808EA8
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 18:29:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 276F31C20A6D
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 17:08:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7C0A1F2113E
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 17:29:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E9C2481DB;
-	Thu,  7 Dec 2023 17:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51F224A993;
+	Thu,  7 Dec 2023 17:29:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3pcJdXB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cxkuaaF9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BF0F3D0D4;
-	Thu,  7 Dec 2023 17:08:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27611C433C7;
-	Thu,  7 Dec 2023 17:08:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701968913;
-	bh=Ivbxa/OIqGXs9KhHgIDLrCuHTLfP3md/DLSZOBIeTB8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S3pcJdXBZxEnLr8MH0skNm4fQ0SwZQ3oA9v3wm3j2pDom/9Y5PEYBgLI3+1C3z5BL
-	 OBjk02+MgKcRQw6ybZ7SUnkJD2V/SkldnWO88tcaERC1XFC6JgGeky4xU/V/amu/l1
-	 j4qfcNWHos9Q2uTrChxTLMy4fHRrRaHrGheg1/AaMOALAAtoANUbLFTVzVsNKS5YvY
-	 cnZOdJJyuf5rpZDRGHaHi8BUfrvnoRZdS8w/mZNkNVRLDyt4smDOViqjaZ3nimm7iN
-	 gbJG+Pxh1V350Ev1iYVhK8uvd9E1y+h+7/gacE2JwiysLEdiNLw5FjQCF470AjqcUe
-	 Opo1sLLq1z4GQ==
-Date: Thu, 7 Dec 2023 17:08:28 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc: Fabio Estevam <festevam@gmail.com>, gregkh@linuxfoundation.org,
-	jun.li@nxp.com, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D72110DD;
+	Thu,  7 Dec 2023 09:29:24 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1d0481b68ebso2714335ad.0;
+        Thu, 07 Dec 2023 09:29:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701970164; x=1702574964; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LkjkzbQQ6Rq4wq73LTQ/pht/xYe3qv9/yWFrPdq2YYw=;
+        b=cxkuaaF9xKrCMDlEPJPJYKJW+CxAQsdZEWDAiqE83yaQ4/KKUik8GvM2NCC3HT8tn/
+         jM85ZMLt8Je/ImLjLWSVso3XJYKP+T1qC9RISoKF642AmcJjQ6V6jR6hFSQyq8Ql3zRL
+         lH/4RisKcgGusPyUAaNHowNBrD5N739n25VfwOS36VqrfS3t4Mk3radpcci0MrFRge7/
+         lYSkn9G3eRNYZ4yeauv++ne/iapgdJ6BfjveiLctlsqzB4gOS3j3kCJDo6fmzbV2aKm0
+         dHu0ugekUqN5/KdP/yIldCUwWST3iz3R+5GTb6umVwEzQC9Vi4kMA85O8YW97nZTk+Se
+         VhPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701970164; x=1702574964;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LkjkzbQQ6Rq4wq73LTQ/pht/xYe3qv9/yWFrPdq2YYw=;
+        b=DIGC/LzXb4NFRX1spxR2DestHjogfYSNh1mOVPEpkxUViCoU6ZEsbaYLxMJ2F438D5
+         OVH6VvbK75ThXC5yCvhBI5h5X+zlFUEX20B/S0iLIMFLVBIcx8cIL9LPn9RB+cAlAOEt
+         eO/w1y8m96AnAZSvjPF+oeEFEFPXxpsW3SXVvDA2Bkk46VKXQ4H4fh72LaC53f593xRJ
+         qY0p/Uh2+7JCLoNKlna+0onVx3AleL1V15Wjcxfkvl2fGx0jaW/36OLffyzlvSIa53Sv
+         D37eHCxJE7fQQUUCCwRZ+XH08LLxTrKmji5Ivb6wrlOwUPnkd18clyDW4K3Uq9bLVlt9
+         wSJQ==
+X-Gm-Message-State: AOJu0YzGeZARKtSjh2GGnES7vPEv3x9/UrjpyPeMp92p/keX4HyA5sBp
+	OHq1OJmvVEJxpr1gmHaZR1Y=
+X-Google-Smtp-Source: AGHT+IEn+z92S4NGDps/OluXN2AeE6gP00NKBFUZkVl0tmuSdxKi9+GnbUnnBejwlkFX2jyDBLOXPA==
+X-Received: by 2002:a17:902:ee45:b0:1d0:9661:161b with SMTP id 5-20020a170902ee4500b001d09661161bmr5649920plo.6.1701970163786;
+        Thu, 07 Dec 2023 09:29:23 -0800 (PST)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:492a:db3d:eb42:de92])
+        by smtp.gmail.com with ESMTPSA id c2-20020a170902d48200b001cfb4d36eb1sm62931plg.215.2023.12.07.09.29.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Dec 2023 09:29:23 -0800 (PST)
+From: Fabio Estevam <festevam@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: jun.li@nxp.com,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	s.shtylyov@omp.ru,
 	Fabio Estevam <festevam@denx.de>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2] dt-bindings: usb: nxp,ptn5110: Fix typo in the title
-Message-ID: <20231207-dental-paddle-fa3c34b324c2@spud>
-References: <20231207163426.2651126-1-festevam@gmail.com>
- <11a53ffd-3bc1-cf27-ff01-b9502195f03e@omp.ru>
+Subject: [PATCH v3] dt-bindings: usb: nxp,ptn5110: Fix typos in the title
+Date: Thu,  7 Dec 2023 14:29:12 -0300
+Message-Id: <20231207172912.2658226-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Ryy1Iyt8SVxnZ5qK"
-Content-Disposition: inline
-In-Reply-To: <11a53ffd-3bc1-cf27-ff01-b9502195f03e@omp.ru>
+Content-Transfer-Encoding: 8bit
 
+From: Fabio Estevam <festevam@denx.de>
 
---Ryy1Iyt8SVxnZ5qK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix the misspelled "Controller" and "Type-C" words.
 
-On Thu, Dec 07, 2023 at 08:02:06PM +0300, Sergey Shtylyov wrote:
-> On 12/7/23 7:34 PM, Fabio Estevam wrote:
->=20
-> > From: Fabio Estevam <festevam@denx.de>
-> >=20
-> > Fix the misspelled "Controller" word.
-> >=20
-> > Signed-off-by: Fabio Estevam <festevam@denx.de>
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> > Changes since v1:
-> > - Use a single line in the commit log. (Krzysztof)
-> >=20
-> >  Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/D=
-ocumentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-> > index 28eb25ecba74..f154fae290a4 100644
-> > --- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-> > @@ -4,7 +4,7 @@
-> >  $id: http://devicetree.org/schemas/usb/nxp,ptn5110.yaml#
-> >  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> > =20
-> > -title: NXP PTN5110 Typec Port Cotroller
-> > +title: NXP PTN5110 Typec Port Controller
->=20
->    Perhaps it's worth fixing Typec to Type C?
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Changes since v2:
+- Also fix the spelling of "Type-C". (Sergey/Conor).
 
-Isn't it actually "Type-C"?
+Changes since v1:
+- Use a single line in the commit log. (Krzysztof)
 
---Ryy1Iyt8SVxnZ5qK
-Content-Type: application/pgp-signature; name="signature.asc"
+ Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
+index 28eb25ecba74..f154fae290a4 100644
+--- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
++++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/usb/nxp,ptn5110.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: NXP PTN5110 Typec Port Cotroller
++title: NXP PTN5110 Type-C Port Controller
+ 
+ maintainers:
+   - Li Jun <jun.li@nxp.com>
+-- 
+2.34.1
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZXH8DAAKCRB4tDGHoIJi
-0usbAQCuYLcX7fBTVKhCObjqfJdc7BSSK0+YMAOP/GJfS19A3QEAoQL2YxzCt4s2
-eZHpieAOJMhiJxFSreQyetwwzJehDQ8=
-=VV6j
------END PGP SIGNATURE-----
-
---Ryy1Iyt8SVxnZ5qK--
 
