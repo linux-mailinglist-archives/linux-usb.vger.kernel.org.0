@@ -1,114 +1,111 @@
-Return-Path: <linux-usb+bounces-3797-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3798-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B60D5807A50
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 22:26:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 115B5807F04
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 04:00:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D39E1C21166
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Dec 2023 21:26:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 429A6B211C1
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 03:00:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ED0E6EB6E;
-	Wed,  6 Dec 2023 21:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C88651869;
+	Thu,  7 Dec 2023 03:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OElDPuUj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BMcTTPao"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C40CF7;
-	Wed,  6 Dec 2023 13:25:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=3j90ZFbMF32YiYwLgeelVPftRxouXRUNKvFk7M5BhLM=; b=OElDPuUj0WoPSBTrYyBEQZNUdV
-	BKlCdrNoMn+A7LAzguP4PBqyQhSrYYhBP9qGZYgDZgsAHmneZpWqFHzuXBqQnqtTSLunseEL34TsN
-	R7nsFasCYWQKzGoEdn+aOxrALz4rj/9uyItZelAzmXVjTagnuIWChlylvJ5g4MK6jN60KYuwU0d4D
-	oalJQSu+6L/rf2UC4sblvoLt4c1ygpnZFtZkjWbr73OFoDI8tP7NtPv3cJcVEKYoa8QndEuaA/lkE
-	H/d/Ew7jPqagBjA2jjIuJUPshEc9wM/QhjLip5POPp0cVi9g8qivxtnB20VFvar2gdfi37T7YlNUZ
-	YcZjPD0g==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rAzOz-00BJSw-31;
-	Wed, 06 Dec 2023 21:25:53 +0000
-Message-ID: <b2ba3809-81b1-4da7-a441-9ce161a06505@infradead.org>
-Date: Wed, 6 Dec 2023 13:25:53 -0800
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EED137;
+	Wed,  6 Dec 2023 19:00:34 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6d8d28e4bbeso318559a34.3;
+        Wed, 06 Dec 2023 19:00:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701918034; x=1702522834; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AhSz+48D5Rt4U23Tg+4vmyl42dn2RcUMbGtIBTvQxYI=;
+        b=BMcTTPaod/BN+Urm/9ApJxmjfk5GaoVwvhVJ6Df0wFWe5xHPGcKLu+yGjUGfgyKao6
+         q80fOjJqhpKWER94jMrsRSFJY2jimODImfiAGaPf9qOkNsxSca5a5SUHNh1lIIaLMrC5
+         YRT4MOmHCNhamkRkJECGi70JkCKQP7W2XTmpHhN4p4jklnPP3Gl8MvRLh3aif4T0aG3M
+         I2bfLyMdsBRYCibbJ6Ybu49Cttuk++LZoTKEF8YLJewg6B7a7LZq70ch3yadPArOIlpZ
+         W2eFEBQN2b6GXvJI7y9QR/zyBoe2auI6UUB2QA3L6udWpeBECeViNXqu6m6bNHzeX6FB
+         TGAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701918034; x=1702522834;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AhSz+48D5Rt4U23Tg+4vmyl42dn2RcUMbGtIBTvQxYI=;
+        b=musEAFM0FUha7lYkyy7wNGCAVhKfBV1tsK0ujTo02DjBs8RxwlbbTpNn9cTMvxxLaD
+         H9hdcBmcoGFDOBQWxQvYsfQ3gc/AeTyIdVGnXFUXwTK1Vj69ruVRrQ+dLmmhIvjSKaGn
+         Ecy2YqMGssm4DYKO2odlwctaHYG5T1Q+esWGcgXK0ASUxdOybahihO5ynM7o/FqsAglV
+         7rAHZjjl/pC6mNAeqGuGPVh0VslcoiUzRsZsMaN7O7JQkr2Q9d4hi8rwIJpVTIuZX+aU
+         Ix1RGaFfCL/n3dI4n9LXZILdC885nYNPuAFiqTl2VUlajqRL9Cv67mRQ0jJ+XqEnm7Lv
+         ZDxQ==
+X-Gm-Message-State: AOJu0YxyMxf5SvGUMjhK+1MR8RMu5BbvL/Y4GWkdFtYgXmiO0NcAazrQ
+	oHTPbpAC0oUif6/qhGLS8jjCj4u7KKOXWrXpfsI=
+X-Google-Smtp-Source: AGHT+IHUpb1GnaA/CMOhx1o6Kl2ufAYV1QErXdu0v0VhY9k1KyIeNaAQMTyBECQwibQwAeE5EkGiE9xYBrVBuWfDHRg=
+X-Received: by 2002:a05:6871:6114:b0:1fa:ded0:d8e6 with SMTP id
+ ra20-20020a056871611400b001faded0d8e6mr2094531oab.5.1701918033974; Wed, 06
+ Dec 2023 19:00:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: typec: qcom-pmic: add CONFIG_OF dependency
-Content-Language: en-US
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kernel@vger.kernel.org,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>
-References: <20231206172037.12072-1-rdunlap@infradead.org>
- <d0323841-a3a7-45b7-b702-0a08f9250c55@roeck-us.net>
- <0c1bb5e8-1ad2-4bda-b038-456d9791f9b7@infradead.org>
- <a058827a-b025-4ee5-b2a4-d6c8963a6b73@linaro.org>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <a058827a-b025-4ee5-b2a4-d6c8963a6b73@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20231206181317.27515-1-rdunlap@infradead.org>
+In-Reply-To: <20231206181317.27515-1-rdunlap@infradead.org>
+From: Peter Chen <hzpeterchen@gmail.com>
+Date: Thu, 7 Dec 2023 11:00:22 +0800
+Message-ID: <CAL411-rcnuJtNJnvpkq4KWMib7xP08SEH8c5F1eT2mgZi4H6ng@mail.gmail.com>
+Subject: Re: [PATCH] usb: cdns3: starfive: don't misuse /** comment
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kernel@vger.kernel.org, Minda Chen <minda.chen@starfivetech.com>, 
+	Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, 
+	Roger Quadros <rogerq@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Dec 7, 2023 at 2:13=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org>=
+ wrote:
+>
+> Use a common C comment "/*" instead of "/**" to prevent a warning
+> from scripts/kernel-doc.
+>
+> cdns3-starfive.c:23: warning: expecting prototype for cdns3(). Prototype =
+was for USB_STRAP_HOST() instead
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Minda Chen <minda.chen@starfivetech.com>
+> Cc: Peter Chen <peter.chen@kernel.org>
+> Cc: Pawel Laszczak <pawell@cadence.com>
+> Cc: Roger Quadros <rogerq@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> ---
+
+Acked-by: Peter Chen <peter.chen@kernel.org>
+
+Peter
 
 
-
-On 12/6/23 13:21, Bryan O'Donoghue wrote:
-> On 06/12/2023 20:46, Randy Dunlap wrote:
->>
->>
->> On 12/6/23 10:49, Guenter Roeck wrote:
->>> On Wed, Dec 06, 2023 at 09:20:37AM -0800, Randy Dunlap wrote:
->>>> DRM_AUX_BRIDGE depends on CONFIG_OF, so that is also needed here
->>>> to fix a kconfig warning:
->>>>
->>>> WARNING: unmet direct dependencies detected for DRM_AUX_HPD_BRIDGE
->>>>    Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && OF [=n]
->>>>    Selected by [y]:
->>>>    - TYPEC_QCOM_PMIC [=y] && USB_SUPPORT [=y] && TYPEC [=y] && TYPEC_TCPM [=y] && (ARCH_QCOM || COMPILE_TEST [=y]) && (DRM [=y] || DRM [=y]=n) && DRM_BRIDGE [=y]
->>>>
->>>
->>> All but impossible for me to determine if this patch or
->>> https://lore.kernel.org/all/20231205-drm_aux_bridge-fixes-v1-2-d242a0ae9df4@kernel.org/
->>> is more appropriate.
->>>
->>> Guenter
->>
->> I guess that Bryan is the person to ask about that.
->>
->> I don't see anything wrong with Nathan's patch. It should clear up the kconfig warning,
->> so as long as it builds cleanly, it seems OK.
->>
-> 
-> So, I see both versions of this fix
-> 
-> Nathan's
-> drivers/gpu/drm/renesas/rcar-du/Kconfig
-
-No, please see https://lore.kernel.org/all/20231205-drm_aux_bridge-fixes-v1-2-d242a0ae9df4@kernel.org/
-
-> 
-> Yours
-> drivers/gpu/drm/tve200/Kconfig
-
-No, please see https://lore.kernel.org/linux-usb/a058827a-b025-4ee5-b2a4-d6c8963a6b73@linaro.org/T/#m034fb56a750522f18813642259b18bb4867ceb46
-
-> 
-> and virtually equivalent commit text. I think we agree its 1:1
-> 
-> So, maybe stick with Nathan's since he posted first.
-
-Sure, I'm OK with that.
-
--- 
-~Randy
+>  drivers/usb/cdns3/cdns3-starfive.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff -- a/drivers/usb/cdns3/cdns3-starfive.c b/drivers/usb/cdns3/cdns3-st=
+arfive.c
+> --- a/drivers/usb/cdns3/cdns3-starfive.c
+> +++ b/drivers/usb/cdns3/cdns3-starfive.c
+> @@ -1,5 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -/**
+> +/*
+>   * cdns3-starfive.c - StarFive specific Glue layer for Cadence USB Contr=
+oller
+>   *
+>   * Copyright (C) 2023 StarFive Technology Co., Ltd.
 
