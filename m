@@ -1,463 +1,222 @@
-Return-Path: <linux-usb+bounces-3820-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3821-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 900D28083D8
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 10:08:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88E3B8083EF
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 10:11:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 114511F22734
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 09:08:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 168251F22779
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 09:11:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CCD433CFB;
-	Thu,  7 Dec 2023 09:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7CE341B9;
+	Thu,  7 Dec 2023 09:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zzRN7Acl"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="tg8NdadU";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="eNkRt1wW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB86D5E
-	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 01:08:15 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5d749e4fa3dso6735807b3.1
-        for <linux-usb@vger.kernel.org>; Thu, 07 Dec 2023 01:08:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701940095; x=1702544895; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+XWVfbECKkYVkmbHjWZO+h6sR43SxXC7QmqywYAISO0=;
-        b=zzRN7Acl4h7bJrdhOhfPFbht2ZvXXbBUeEEqBKCXHacasICpHsu2PoqNmRnzyLzUl2
-         nLyh7Zu0D1Tu6LHhAaKiSqveacJQCSkxcLYVDl4RWTLUit0mJejy2nL2Fs1Bae1aYHKQ
-         v2e6tI8Ugj5snuNgQa+aTgjgocsdV8iZGc5Oiw7XckPFZXqDA3bPcNqIdf5Lk5A8PDkn
-         XaHvEBYpaUo2FOcdeXTVpZfk1jGmnEdmo0i37w/91gL2pzz/8yED7lQfpejnGTl+1Rk1
-         TSYvWq11LLp1yVrvbDX7BiqjKaEAjMxOFfYH0yUTkadllGObPnyX5u1uaRhXC7wGGvjR
-         04xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701940095; x=1702544895;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+XWVfbECKkYVkmbHjWZO+h6sR43SxXC7QmqywYAISO0=;
-        b=k/tU6esmcGQ9vTfF/H+SQukxF7qRhNYIxZbG8uGby3tWzUDdLIX31GWCKZnlssJguu
-         2tiHtaeutkCqzdz+LVDWgNiQOxXMTLHW4v6l6V3SMfpt9YyMWr7cn2qAjteR6+V9J3Cq
-         KBjkh+dgYPGD+/7jyCR5qlbyMXU7Rrz4XVKwcvetdaQ4oDAiI+mk7rcYyIpQQeBGzzA9
-         UzSHRE5B3gFzSuIss8trmdwDqy5BZAYiiDbMKHi4dI8kG52Enzzv+am2t17hrmYZX3JK
-         eSTiRWRYvSPJ2ScNrmDAcll7trYpp42SFU4jIwdmOpboWtZLDwjJVcI7AohVLUZ+vQ4t
-         SP2A==
-X-Gm-Message-State: AOJu0YwwimXIU7y2/TG0wygaiFKCdIQ+nqSznH18jEdPbRm/DBz2t1qP
-	uYWobp2nZT22LFrirGk2ZOMSVIkNzKMtmMk=
-X-Google-Smtp-Source: AGHT+IF6/n+XCgXEAd+gDT11AwSGUccx/1U0K8Jdi+mE1mBuUrtIEK2jbtHRYfxy+4WA6vTqloGig2LgrWIARtI=
-X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
- (user=rdbabiera job=sendgmr) by 2002:a05:690c:fcd:b0:5d9:712e:202b with SMTP
- id dg13-20020a05690c0fcd00b005d9712e202bmr39599ywb.6.1701940095023; Thu, 07
- Dec 2023 01:08:15 -0800 (PST)
-Date: Thu,  7 Dec 2023 09:07:41 +0000
-In-Reply-To: <20231207090738.15721-12-rdbabiera@google.com>
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC901987;
+	Thu,  7 Dec 2023 01:10:26 -0800 (PST)
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 5B8831F897;
+	Thu,  7 Dec 2023 09:10:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1701940224; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jXiKfid97FD5zi8RqmP75wazePMuM2Vj4JZ4H26JF/w=;
+	b=tg8NdadUlk4VfBBiX/KnTc8KWn4/+I2eqU3OCsMmSGO5fGxGo+xFF7FC1+cL85+pnkxgh6
+	+2Q+t+yvWpRrlmhVvY0iaqUjhOk6aDapKv8aWDgxXaeYBRQUq2bq9mHOv8yIv2mkt3uJBW
+	DjcnaOKBqBG38BR6qn1JnsOv3SGRVLU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1701940224;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jXiKfid97FD5zi8RqmP75wazePMuM2Vj4JZ4H26JF/w=;
+	b=eNkRt1wWHc2B/3UiJ7gBmgVmSJJtzZTtEviOYNX31SorNi0ot/Q0TzM7nhemVkTB8kzvHE
+	aOrpBsXvOqOVy6BQ==
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 34B3813907;
+	Thu,  7 Dec 2023 09:10:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id w3HWDACMcWWqPwAAn2gu4w
+	(envelope-from <jack@suse.cz>); Thu, 07 Dec 2023 09:10:24 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 7AF80A07C7; Thu,  7 Dec 2023 10:10:23 +0100 (CET)
+Date: Thu, 7 Dec 2023 10:10:23 +0100
+From: Jan Kara <jack@suse.cz>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Jan Kara <jack@suse.cz>, linux-kernel@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	"Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+	Akinobu Mita <akinobu.mita@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Borislav Petkov <bp@alien8.de>, Chaitanya Kulkarni <kch@nvidia.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Disseldorp <ddiss@suse.de>,
+	Edward Cree <ecree.xilinx@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Gregory Greenman <gregory.greenman@intel.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Hugh Dickins <hughd@google.com>, Ingo Molnar <mingo@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+	Jiri Pirko <jiri@resnulli.us>, Jiri Slaby <jirislaby@kernel.org>,
+	Kalle Valo <kvalo@kernel.org>, Karsten Graul <kgraul@linux.ibm.com>,
+	Karsten Keil <isdn@linux-pingi.de>,
+	Kees Cook <keescook@chromium.org>,
+	Leon Romanovsky <leon@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Martin Habets <habetsm.xilinx@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Oliver Neukum <oneukum@suse.com>, Paolo Abeni <pabeni@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ping-Ke Shih <pkshih@realtek.com>, Rich Felker <dalias@libc.org>,
+	Rob Herring <robh@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuai Xue <xueshuai@linux.alibaba.com>,
+	Stanislaw Gruszka <stf_xl@wp.pl>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Wenjia Zhang <wenjia@linux.ibm.com>, Will Deacon <will@kernel.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	GR-QLogic-Storage-Upstream@marvell.com, alsa-devel@alsa-project.org,
+	ath10k@lists.infradead.org, dmaengine@vger.kernel.org,
+	iommu@lists.linux.dev, kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-net-drivers@amd.com, linux-pci@vger.kernel.org,
+	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-sh@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, mpi3mr-linuxdrv.pdl@broadcom.com,
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org,
+	Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
+	Matthew Wilcox <willy@infradead.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
+	Alexey Klimov <klimov.linux@gmail.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: Re: [PATCH v2 00/35] bitops: add atomic find_bit() operations
+Message-ID: <20231207091023.kioii5mgmnphrvl4@quack3>
+References: <20231203192422.539300-1-yury.norov@gmail.com>
+ <20231204185101.ddmkvsr2xxsmoh2u@quack3>
+ <ZXAFM2VZugdhM3oE@yury-ThinkPad>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20231207090738.15721-12-rdbabiera@google.com>
-X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13047; i=rdbabiera@google.com;
- h=from:subject; bh=LXtNBwuIotDleeOrfFY5zqTZHszmGVHgznxqotaxm8Q=;
- b=owGbwMvMwCFW0bfok0KS4TbG02pJDKmF3XHSjD4lRgGpK8SntNww1/8+12zHv3PtGs+Wbyxbf
- MHsguy8jlIWBjEOBlkxRRZd/zyDG1dSt8zhrDGGmcPKBDKEgYtTACaSncTwh3+1zpGz1fI1i3ee
- kLzV2uhpmNs4V/sAh3n70RU17/9X2TH8s3+wzGKLe5Rvg+EPMd/kbE92vp9POkVCExv1ezwWsdr wAwA=
-X-Mailer: git-send-email 2.43.0.rc2.451.g8631bc7472-goog
-Message-ID: <20231207090738.15721-22-rdbabiera@google.com>
-Subject: [PATCH v1 10/10] usb: typec: altmodes/displayport: add SOP' support
-From: RD Babiera <rdbabiera@google.com>
-To: heikki.krogerus@linux.intel.com, linux@roeck-us.net, 
-	gregkh@linuxfoundation.org, pmalani@chromium.org, bleung@chromium.org, 
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Cc: badhri@google.com, tzungbi@kernel.org, utkarsh.h.patel@intel.com, 
-	andriy.shevchenko@linux.intel.com, RD Babiera <rdbabiera@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZXAFM2VZugdhM3oE@yury-ThinkPad>
+Authentication-Results: smtp-out2.suse.de;
+	none
+X-Spam-Score: 2.70
+X-Spamd-Result: default: False [2.70 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCPT_COUNT_GT_50(0.00)[100];
+	 FREEMAIL_TO(0.00)[gmail.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 FORGED_RECIPIENTS(2.00)[m:yury.norov@gmail.com,m:davem@davemloft.net,m:jejb@linux.ibm.com,m:haris.iqbal@ionos.com,m:akinobu.mita@gmail.com,m:akpm@linux-foundation.org,m:andersson@kernel.org,m:bp@alien8.de,m:brauner@kernel.org,m:dave.hansen@linux.intel.com,m:ecree.xilinx@gmail.com,m:edumazet@google.com,m:fenghua.yu@intel.com,m:geert@linux-m68k.org,m:gregory.greenman@intel.com,m:hughd@google.com,m:kuba@kernel.org,m:axboe@kernel.dk,m:jirislaby@kernel.org,m:kvalo@kernel.org,m:kgraul@linux.ibm.com,m:isdn@linux-pingi.de,m:keescook@chromium.org,m:leon@kernel.org,m:mark.rutland@arm.com,m:habetsm.xilinx@gmail.com,m:mchehab@kernel.org,m:mpe@ellerman.id.au,m:npiggin@gmail.com,m:peterz@infradead.org,m:dalias@libc.org,m:robh@kernel.org,m:robin.murphy@arm.com,m:seanjc@google.com,m:xueshuai@linux.alibaba.com,m:rostedt@goodmis.org,m:tsbogend@alpha.franken.de,m:tglx@linutronix.de,m:wenjia@linux.ibm.com,m:will@kernel.org,m:alsa-devel@alsa-project.org,m:linux-net-drivers@amd.com,m:mpi3mr-linuxdrv.pdl
+ @broadcom.com,m:x86@kernel.org,m:mirsad.todorovac@alu.unizg.hr,m:willy@infradead.org,m:andriy.shevchenko@linux.intel.com,m:maxim.kuvyrkov@linaro.org,m:klimov.linux@gmail.com,m:bvanassche@acm.org,s:s.shtylyov@omp.ru];
+	 BAYES_HAM(-0.00)[40.06%];
+	 ARC_NA(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[wp.pl,xs4all.nl];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 TO_MATCH_ENVRCPT_SOME(0.00)[];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 FREEMAIL_CC(0.00)[suse.cz,vger.kernel.org,davemloft.net,zytor.com,linux.ibm.com,microsoft.com,ionos.com,gmail.com,linux-foundation.org,kernel.org,alien8.de,nvidia.com,opensource.wdc.com,linux.intel.com,suse.de,google.com,intel.com,linux-m68k.org,linuxfoundation.org,xs4all.nl,redhat.com,perex.cz,ziepe.ca,kernel.dk,resnulli.us,linux-pingi.de,chromium.org,arm.com,ellerman.id.au,monstr.eu,suse.com,infradead.org,realtek.com,libc.org,linux.alibaba.com,wp.pl,goodmis.org,alpha.franken.de,linutronix.de,users.sourceforge.jp,marvell.com,alsa-project.org,lists.infradead.org,lists.linux.dev,lists.linux-m68k.org,amd.com,lists.ozlabs.org,broadcom.com,alu.unizg.hr,rasmusvillemoes.dk,linaro.org,acm.org,omp.ru];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
 
-Implement active cable VDM support for SOP' according to the DisplayPort
-Alt Mode 2.0 specification.
+On Tue 05-12-23 21:22:59, Yury Norov wrote:
+> On Mon, Dec 04, 2023 at 07:51:01PM +0100, Jan Kara wrote:
+> > > This series is a result of discussion [1]. All find_bit() functions imply
+> > > exclusive access to the bitmaps. However, KCSAN reports quite a number
+> > > of warnings related to find_bit() API. Some of them are not pointing
+> > > to real bugs because in many situations people intentionally allow
+> > > concurrent bitmap operations.
+> > > 
+> > > If so, find_bit() can be annotated such that KCSAN will ignore it:
+> > > 
+> > >         bit = data_race(find_first_bit(bitmap, nbits));
+> > 
+> > No, this is not a correct thing to do. If concurrent bitmap changes can
+> > happen, find_first_bit() as it is currently implemented isn't ever a safe
+> > choice because it can call __ffs(0) which is dangerous as you properly note
+> > above. I proposed adding READ_ONCE() into find_first_bit() / find_next_bit()
+> > implementation to fix this issue but you disliked that. So other option we
+> > have is adding find_first_bit() and find_next_bit() variants that take
+> > volatile 'addr' and we have to use these in code like xas_find_chunk()
+> > which cannot be converted to your new helpers.
+> 
+> Here is some examples when concurrent operations with plain find_bit()
+> are acceptable:
+> 
+>  - two threads running find_*_bit(): safe wrt ffs(0) and returns correct
+>    value, because underlying bitmap is unchanged;
+>  - find_next_bit() in parallel with set or clear_bit(), when modifying
+>    a bit prior to the start bit to search: safe and correct;
+>  - find_first_bit() in parallel with set_bit(): safe, but may return wrong
+>    bit number;
+>  - find_first_zero_bit() in parallel with clear_bit(): same as above.
+> 
+> In last 2 cases find_bit() may not return a correct bit number, but
+> it may be OK if caller requires any (not exactly first) set or clear
+> bit, correspondingly.
+> 
+> In such cases, KCSAN may be safely silenced.
 
-When probing the DisplayPort driver, the state machine will transition to
-Enter Mode on SOP' if an active cable altmode is detected. The SVDM flow
-is as followed:
-    (1) Enter Mode     SOP'
-    (2) Enter Mode     SOP
-    (3) Status Update  SOP
-    (4) Configure      SOP'
-    (5) Configure      SOP
+True - but these are special cases. In particular the case in xas_find_chunk()
+is not any of these special cases. It is using find_next_bit() which is can
+be racing with clear_bit(). So what are your plans for such usecase?
 
-Status Update on SOP' after Enter Mode is optional and not implemented for
-now. When exiting the alt mode, send Exit Mode over SOP' after SOP.
-
-Should an altmode vdm fail on SOP', the DisplayPort driver will drop its
-reference to the plug and attempt to continue in SOP operation.
-
-Add new dp_state enums DP_STATE_ENTER_PRIME, DP_STATE_CONFIGURE_PRIME, and
-DP_STATE_EXIT_PRIME. dp_altmode adds typec_displayport_data for the cable
-plug to store the plug configuration and adds a typec_altmode reference
-for the cable plug.
-
-dp_altmode_configure takes the cable pin assignment capabilities into
-account when deciding on pin configuration.
-
-Received Exit Mode ACKs are handled by a new dp_exit_mode_handler for line
-count restraints when accounting for SOP* transmit type.
-
-dp_altmode_activate now attempts to enter on SOP' if applicable, and will
-attempt to enter on SOP if that fails.
-
-Signed-off-by: RD Babiera <rdbabiera@google.com>
----
- drivers/usb/typec/altmodes/displayport.c | 166 +++++++++++++++++++----
- 1 file changed, 139 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-index 5ed470069c3e..583f99338710 100644
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -50,13 +50,17 @@ enum {
- enum dp_state {
- 	DP_STATE_IDLE,
- 	DP_STATE_ENTER,
-+	DP_STATE_ENTER_PRIME,
- 	DP_STATE_UPDATE,
- 	DP_STATE_CONFIGURE,
-+	DP_STATE_CONFIGURE_PRIME,
- 	DP_STATE_EXIT,
-+	DP_STATE_EXIT_PRIME,
- };
- 
- struct dp_altmode {
- 	struct typec_displayport_data data;
-+	struct typec_displayport_data data_prime;
- 
- 	enum dp_state state;
- 	bool hpd;
-@@ -67,6 +71,7 @@ struct dp_altmode {
- 	struct typec_altmode *alt;
- 	const struct typec_altmode *port;
- 	struct fwnode_handle *connector_fwnode;
-+	struct typec_altmode *plug_prime;
- };
- 
- static int dp_altmode_notify(struct dp_altmode *dp)
-@@ -99,12 +104,18 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
- 		conf |= DP_CONF_UFP_U_AS_DFP_D;
- 		pin_assign = DP_CAP_UFP_D_PIN_ASSIGN(dp->alt->vdo) &
- 			     DP_CAP_DFP_D_PIN_ASSIGN(dp->port->vdo);
-+		/* Account for active cable capabilities */
-+		if (dp->plug_prime)
-+			pin_assign &= DP_CAP_DFP_D_PIN_ASSIGN(dp->plug_prime->vdo);
- 		break;
- 	case DP_STATUS_CON_UFP_D:
- 	case DP_STATUS_CON_BOTH: /* NOTE: First acting as DP source */
- 		conf |= DP_CONF_UFP_U_AS_UFP_D;
- 		pin_assign = DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo) &
--				 DP_CAP_PIN_ASSIGN_DFP_D(dp->port->vdo);
-+			     DP_CAP_PIN_ASSIGN_DFP_D(dp->port->vdo);
-+		/* Account for active cable capabilities */
-+		if (dp->plug_prime)
-+			pin_assign &= DP_CAP_UFP_D_PIN_ASSIGN(dp->plug_prime->vdo);
- 		break;
- 	default:
- 		break;
-@@ -130,6 +141,8 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
- 	}
- 
- 	dp->data.conf = conf;
-+	if (dp->plug_prime)
-+		dp->data_prime.conf = conf;
- 
- 	return 0;
- }
-@@ -143,13 +156,17 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
- 
- 	if (configured && (dp->data.status & DP_STATUS_SWITCH_TO_USB)) {
- 		dp->data.conf = 0;
--		dp->state = DP_STATE_CONFIGURE;
-+		dp->data_prime.conf = 0;
-+		dp->state = dp->plug_prime ? DP_STATE_CONFIGURE_PRIME :
-+					     DP_STATE_CONFIGURE;
- 	} else if (dp->data.status & DP_STATUS_EXIT_DP_MODE) {
- 		dp->state = DP_STATE_EXIT;
-+	/* Partner is connected but not configured */
- 	} else if (!(con & DP_CONF_CURRENTLY(dp->data.conf))) {
- 		ret = dp_altmode_configure(dp, con);
- 		if (!ret) {
--			dp->state = DP_STATE_CONFIGURE;
-+			dp->state = dp->plug_prime ? DP_STATE_CONFIGURE_PRIME :
-+						     DP_STATE_CONFIGURE;
- 			if (dp->hpd != hpd) {
- 				dp->hpd = hpd;
- 				dp->pending_hpd = true;
-@@ -185,9 +202,12 @@ static int dp_altmode_configured(struct dp_altmode *dp)
- 	return dp_altmode_notify(dp);
- }
- 
--static int dp_altmode_configure_vdm(struct dp_altmode *dp, u32 conf)
-+static int dp_altmode_configure_vdm(struct dp_altmode *dp, u32 conf,
-+				    enum typec_altmode_transmit_type sop_type)
- {
--	int svdm_version = typec_altmode_get_svdm_version(dp->alt);
-+	int svdm_version = sop_type == TYPEC_ALTMODE_SOP_PRIME ?
-+				       typec_altmode_get_cable_svdm_version(dp->alt) :
-+				       typec_altmode_get_svdm_version(dp->alt);
- 	u32 header;
- 	int ret;
- 
-@@ -202,7 +222,7 @@ static int dp_altmode_configure_vdm(struct dp_altmode *dp, u32 conf)
- 		return ret;
- 	}
- 
--	ret = typec_altmode_vdm(dp->alt, header, &conf, 2, TYPEC_ALTMODE_SOP);
-+	ret = typec_altmode_vdm(dp->alt, header, &conf, 2, sop_type);
- 	if (ret)
- 		dp_altmode_notify(dp);
- 
-@@ -223,7 +243,20 @@ static void dp_altmode_work(struct work_struct *work)
- 	case DP_STATE_ENTER:
- 		ret = typec_altmode_enter(dp->alt, NULL, TYPEC_ALTMODE_SOP);
- 		if (ret && ret != -EBUSY)
--			dev_err(&dp->alt->dev, "failed to enter mode\n");
-+			dev_err(&dp->alt->dev, "partner failed to enter mode\n");
-+		break;
-+	case DP_STATE_ENTER_PRIME:
-+		ret = typec_altmode_enter(dp->alt, NULL, TYPEC_ALTMODE_SOP_PRIME);
-+		/*
-+		 * If we fail to enter Alt Mode on SOP', then we should drop the
-+		 * plug from the driver and attempt to run the driver without
-+		 * it.
-+		 */
-+		if (ret && ret != -EBUSY) {
-+			dev_err(&dp->alt->dev, "plug failed to enter mode\n");
-+			dp->state = DP_STATE_ENTER;
-+			goto disable_prime;
-+		}
- 		break;
- 	case DP_STATE_UPDATE:
- 		svdm_version = typec_altmode_get_svdm_version(dp->alt);
-@@ -238,15 +271,30 @@ static void dp_altmode_work(struct work_struct *work)
- 				ret);
- 		break;
- 	case DP_STATE_CONFIGURE:
--		ret = dp_altmode_configure_vdm(dp, dp->data.conf);
-+		ret = dp_altmode_configure_vdm(dp, dp->data.conf, TYPEC_ALTMODE_SOP);
- 		if (ret)
- 			dev_err(&dp->alt->dev,
- 				"unable to send Configure command (%d)\n", ret);
- 		break;
-+	case DP_STATE_CONFIGURE_PRIME:
-+		ret = dp_altmode_configure_vdm(dp, dp->data_prime.conf,
-+					       TYPEC_ALTMODE_SOP_PRIME);
-+		if (ret) {
-+			dev_err(&dp->plug_prime->dev,
-+				"unable to send Configure command (%d)\n",
-+				ret);
-+			dp->state = DP_STATE_CONFIGURE;
-+			goto disable_prime;
-+		}
-+		break;
- 	case DP_STATE_EXIT:
- 		if (typec_altmode_exit(dp->alt, TYPEC_ALTMODE_SOP))
- 			dev_err(&dp->alt->dev, "Exit Mode Failed!\n");
- 		break;
-+	case DP_STATE_EXIT_PRIME:
-+		if (typec_altmode_exit(dp->alt, TYPEC_ALTMODE_SOP_PRIME))
-+			dev_err(&dp->plug_prime->dev, "Exit Mode Failed!\n");
-+		break;
- 	default:
- 		break;
- 	}
-@@ -254,6 +302,12 @@ static void dp_altmode_work(struct work_struct *work)
- 	dp->state = DP_STATE_IDLE;
- 
- 	mutex_unlock(&dp->lock);
-+	return;
-+
-+disable_prime:
-+	typec_altmode_put_plug(dp->plug_prime);
-+	dp->plug_prime = NULL;
-+	schedule_work(&dp->work);
- }
- 
- static void dp_altmode_attention(struct typec_altmode *alt, const u32 vdo)
-@@ -282,6 +336,32 @@ static void dp_altmode_attention(struct typec_altmode *alt, const u32 vdo)
- 	mutex_unlock(&dp->lock);
- }
- 
-+static void dp_exit_mode_handler(struct dp_altmode *dp, enum typec_altmode_transmit_type sop_type)
-+{
-+	if (sop_type == TYPEC_ALTMODE_SOP) {
-+		dp->data.status = 0;
-+		dp->data.conf = 0;
-+		if (dp->hpd) {
-+			drm_connector_oob_hotplug_event(dp->connector_fwnode,
-+							connector_status_disconnected);
-+			dp->hpd = false;
-+			sysfs_notify(&dp->alt->dev.kobj, "displayport", "hpd");
-+		}
-+		/*
-+		 * Delay updating active because driver will not be allowed to send VDMs otherwise
-+		 */
-+		if (dp->plug_prime)
-+			dp->state = DP_STATE_EXIT_PRIME;
-+		else
-+			typec_altmode_update_active(dp->alt, false);
-+	} else if (sop_type == TYPEC_ALTMODE_SOP_PRIME) {
-+		dp->data_prime.status = 0;
-+		dp->data_prime.conf = 0;
-+		typec_altmode_update_active(dp->plug_prime, false);
-+		typec_altmode_update_active(dp->alt, false);
-+	}
-+}
-+
- static int dp_altmode_vdm(struct typec_altmode *alt,
- 			  const u32 hdr, const u32 *vdo, int count,
- 			  enum typec_altmode_transmit_type sop_type)
-@@ -302,26 +382,27 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
- 	case CMDT_RSP_ACK:
- 		switch (cmd) {
- 		case CMD_ENTER_MODE:
--			typec_altmode_update_active(alt, true);
--			dp->state = DP_STATE_UPDATE;
-+			if (sop_type == TYPEC_ALTMODE_SOP_PRIME) {
-+				if (dp->plug_prime)
-+					typec_altmode_update_active(dp->plug_prime, true);
-+				dp->state = DP_STATE_ENTER;
-+			} else {
-+				typec_altmode_update_active(alt, true);
-+				dp->state = DP_STATE_UPDATE;
-+			}
- 			break;
- 		case CMD_EXIT_MODE:
--			typec_altmode_update_active(alt, false);
--			dp->data.status = 0;
--			dp->data.conf = 0;
--			if (dp->hpd) {
--				drm_connector_oob_hotplug_event(dp->connector_fwnode,
--								connector_status_disconnected);
--				dp->hpd = false;
--				sysfs_notify(&dp->alt->dev.kobj, "displayport", "hpd");
--			}
-+			dp_exit_mode_handler(dp, sop_type);
- 			break;
- 		case DP_CMD_STATUS_UPDATE:
- 			dp->data.status = *vdo;
- 			ret = dp_altmode_status_update(dp);
- 			break;
- 		case DP_CMD_CONFIGURE:
--			ret = dp_altmode_configured(dp);
-+			if (sop_type == TYPEC_ALTMODE_SOP_PRIME)
-+				dp->state = DP_STATE_CONFIGURE;
-+			else
-+				ret = dp_altmode_configured(dp);
- 			break;
- 		default:
- 			break;
-@@ -330,8 +411,16 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
- 	case CMDT_RSP_NAK:
- 		switch (cmd) {
- 		case DP_CMD_CONFIGURE:
--			dp->data.conf = 0;
--			ret = dp_altmode_configured(dp);
-+			if (sop_type == TYPEC_ALTMODE_SOP_PRIME) {
-+				dp->data_prime.conf = 0;
-+				/* Attempt to configure on SOP, drop plug */
-+				typec_altmode_put_plug(dp->plug_prime);
-+				dp->plug_prime = NULL;
-+				dp->state = DP_STATE_CONFIGURE;
-+			} else {
-+				dp->data.conf = 0;
-+				ret = dp_altmode_configured(dp);
-+			}
- 			break;
- 		default:
- 			break;
-@@ -351,8 +440,23 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
- 
- static int dp_altmode_activate(struct typec_altmode *alt, int activate)
- {
--	return activate ? typec_altmode_enter(alt, NULL, TYPEC_ALTMODE_SOP) :
--			  typec_altmode_exit(alt, TYPEC_ALTMODE_SOP);
-+	struct dp_altmode *dp = typec_altmode_get_drvdata(alt);
-+	int ret;
-+
-+	if (activate) {
-+		if (dp->plug_prime) {
-+			ret = typec_altmode_enter(alt, NULL, TYPEC_ALTMODE_SOP_PRIME);
-+			if (ret < 0) {
-+				typec_altmode_put_plug(dp->plug_prime);
-+				dp->plug_prime = NULL;
-+			} else {
-+				return ret;
-+			}
-+		}
-+		return typec_altmode_enter(alt, NULL, TYPEC_ALTMODE_SOP);
-+	} else {
-+		return typec_altmode_exit(alt, TYPEC_ALTMODE_SOP);
-+	}
- }
- 
- static const struct typec_altmode_ops dp_altmode_ops = {
-@@ -400,7 +504,7 @@ configuration_store(struct device *dev, struct device_attribute *attr,
- 	conf |= con;
- 
- 	if (dp->alt->active) {
--		ret = dp_altmode_configure_vdm(dp, conf);
-+		ret = dp_altmode_configure_vdm(dp, conf, TYPEC_ALTMODE_SOP);
- 		if (ret)
- 			goto err_unlock;
- 	}
-@@ -502,7 +606,7 @@ pin_assignment_store(struct device *dev, struct device_attribute *attr,
- 
- 	/* Only send Configure command if a configuration has been set */
- 	if (dp->alt->active && DP_CONF_CURRENTLY(dp->data.conf)) {
--		ret = dp_altmode_configure_vdm(dp, conf);
-+		ret = dp_altmode_configure_vdm(dp, conf, TYPEC_ALTMODE_SOP);
- 		if (ret)
- 			goto out_unlock;
- 	}
-@@ -575,6 +679,7 @@ static const struct attribute_group dp_altmode_group = {
- int dp_altmode_probe(struct typec_altmode *alt)
- {
- 	const struct typec_altmode *port = typec_altmode_get_partner(alt);
-+	struct typec_altmode *plug = typec_altmode_get_plug(alt, TYPEC_PLUG_SOP_P);
- 	struct fwnode_handle *fwnode;
- 	struct dp_altmode *dp;
- 	int ret;
-@@ -604,6 +709,11 @@ int dp_altmode_probe(struct typec_altmode *alt)
- 	alt->desc = "DisplayPort";
- 	alt->ops = &dp_altmode_ops;
- 
-+	if (plug)
-+		plug->desc = "Displayport";
-+
-+	dp->plug_prime = plug;
-+
- 	fwnode = dev_fwnode(alt->dev.parent->parent); /* typec_port fwnode */
- 	if (fwnode_property_present(fwnode, "displayport"))
- 		dp->connector_fwnode = fwnode_find_reference(fwnode, "displayport", 0);
-@@ -614,7 +724,8 @@ int dp_altmode_probe(struct typec_altmode *alt)
- 
- 	typec_altmode_set_drvdata(alt, dp);
- 
--	dp->state = DP_STATE_ENTER;
-+	dp->state = plug ? DP_STATE_ENTER_PRIME : DP_STATE_ENTER;
-+
- 	schedule_work(&dp->work);
- 
- 	return 0;
-@@ -627,6 +738,7 @@ void dp_altmode_remove(struct typec_altmode *alt)
- 
- 	sysfs_remove_group(&alt->dev.kobj, &dp_altmode_group);
- 	cancel_work_sync(&dp->work);
-+	typec_altmode_put_plug(dp->plug_prime);
- 
- 	if (dp->connector_fwnode) {
- 		drm_connector_oob_hotplug_event(dp->connector_fwnode,
+								Honza
 -- 
-2.43.0.rc2.451.g8631bc7472-goog
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
