@@ -1,130 +1,135 @@
-Return-Path: <linux-usb+bounces-3880-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3881-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0468809260
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 21:34:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 038B48092A4
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 21:45:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC1FE1C20C65
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 20:34:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0C5B1F211FA
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 20:45:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73FCC56389;
-	Thu,  7 Dec 2023 20:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0AE34B12F;
+	Thu,  7 Dec 2023 20:45:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kCt1qvDa"
+	dkim=pass (4096-bit key) header.d=nozomi.space header.i=@nozomi.space header.b="Ei42pudU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82241722;
-	Thu,  7 Dec 2023 12:33:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701981237; x=1733517237;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SPK2zasUPN95+NP/auAttA6k+ge4mGcg7RBWFAT4m1U=;
-  b=kCt1qvDaMdXsMYqR0qzhCWCKPUUfuiAzshqVcRXmHgikn76HdK0wlGkI
-   9U7HmXo+1Bx3xakelD7zytH+1A7VPpQG9AfBUMk/yn6H6Hca4rPyTzfim
-   635cwVzfMmA9jUpo04nsII6FES1qpU46dDovJLA0ftkjhoxC6jKwpbCWa
-   O5g5WbEAsy2nAmc5O6FaMpfnjCYUQy8CiOMuH+gUndBYgjrcv8WdVglQF
-   i1Jigwt2F13MHh3hkXUqOPZQ+aVZrrWRzWk/XsMQXUxbTTYcQqZ2XZtYp
-   q8YJpXGdoTJZPO40aLv5oYD/087+V3yRQ//a4zlZN6muW14+id4VukKq7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="379306318"
-X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="379306318"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 12:33:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="915695873"
-X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="915695873"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Dec 2023 12:33:53 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rBL4B-000Cnh-1q;
-	Thu, 07 Dec 2023 20:33:51 +0000
-Date: Fri, 8 Dec 2023 04:33:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: RD Babiera <rdbabiera@google.com>, heikki.krogerus@linux.intel.com,
-	linux@roeck-us.net, gregkh@linuxfoundation.org,
-	pmalani@chromium.org, bleung@chromium.org,
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, badhri@google.com,
-	tzungbi@kernel.org, utkarsh.h.patel@intel.com,
-	andriy.shevchenko@linux.intel.com,
-	RD Babiera <rdbabiera@google.com>
-Subject: Re: [PATCH v1 01/10] usb: typec: bus: provide transmit type for
- alternate mode drivers
-Message-ID: <202312080436.1iwq0THA-lkp@intel.com>
-References: <20231207090738.15721-13-rdbabiera@google.com>
+X-Greylist: delayed 376 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Dec 2023 12:45:02 PST
+Received: from mail.nozomi.space (mail.nozomi.space [139.162.184.125])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D341713
+	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 12:45:02 -0800 (PST)
+Date: Thu, 07 Dec 2023 21:38:37 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nozomi.space; s=mail;
+	t=1701981524; bh=VnFM3R7+i438Ui6LMgSGGY3AJolC2K5O2s0ZF7m4RPA=;
+	h=From:Subject:To;
+	b=Ei42pudUP/COpYh0QH2WBa1XPFy5TcWk2zJN7rPjnC3Re634UDZYdQFfQXTiTVUEN
+	 cI7TETJE374ZBRn0q9L1/3lhC62HRu8nC3hLrPnxIFnzkEsbNwkRyaFOwQ4v4vKOBb
+	 xTrHkvSTHjXmo34TIfHvi+9Ywy1e+1nEP/WwKdrcb4qhWQ0zzgW5VnED/jNGw4e6pV
+	 I4Yh/kvA8vFF2uTo8imCbZqBtkG9M31/GFtkMJxaMFQQ39Lb3TN2zBgm8omRRI/Af5
+	 sm/kOq9F5rZL2u+7t7Jv9+kE78axMZoHk8zBgVNipeznIbILD8uI7+LX4MpY0GSFVb
+	 9xsOdTTQep/Z1fPzQxwiSvFWaujG1awkdS9gG2tM4fMgSzcb8RYF8bbJKD9ABe3HID
+	 XGcjuMXKzflxa8bMusUrpY/8vM8YYHdaTR4TeKPuGFSwZQmAuUWDeFFBbw44wH9653
+	 XLQQtmlzK2uiu0+klHYWY6fY952VchMJz9R1bs9t4mwGSBBmboAfDc7i4EjlN+J/+x
+	 Lr5k35t4BFfSGjuQiBR97bA4SG/AEW7R1uhMfmyGrlIP4uqEwYU93lafUBp0AqL5Jy
+	 SVZMWTj3CKPH124zzHkI2ovENFA6ZprSdPzFVAz0+tVUTq5qkbVWCKhr+ZKYLKxoNd
+	 IcaRvVVriRTNaWhlmmPe/G4I=
+From: =?iso-8859-2?q?Micha=B3_Kope=E6?= <michal@nozomi.space>
+Subject: Issue with TPS6598x driver on ThinkPad T14 Gen1
+To: linux-usb@vger.kernel.org
+Message-Id: <DCDB5S.JWZAY91S31EN1@nozomi.space>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231207090738.15721-13-rdbabiera@google.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-Hi RD,
+Greetings,
 
-kernel test robot noticed the following build errors:
+I've been looking into fixing this error in dmesg relating to the=20
+tps6598x driver on my Lenovo ThinkPad T14 Gen1 AMD:
 
-[auto build test ERROR on 5e4c8814a431d21bfaf20b464134f40f2f81e152]
+[ 12.808694] Serial bus multi instantiate pseudo device driver=20
+INT3515:00: error -ENXIO: IRQ index 1 not found
+[ 12.808706] Serial bus multi instantiate pseudo device driver=20
+INT3515:00: error -ENXIO: Error requesting irq at index 1
 
-url:    https://github.com/intel-lab-lkp/linux/commits/RD-Babiera/usb-typec-bus-provide-transmit-type-for-alternate-mode-drivers/20231207-171114
-base:   5e4c8814a431d21bfaf20b464134f40f2f81e152
-patch link:    https://lore.kernel.org/r/20231207090738.15721-13-rdbabiera%40google.com
-patch subject: [PATCH v1 01/10] usb: typec: bus: provide transmit type for alternate mode drivers
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20231208/202312080436.1iwq0THA-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080436.1iwq0THA-lkp@intel.com/reproduce)
+Here's what the device resources look like in the ACPI tables:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312080436.1iwq0THA-lkp@intel.com/
+Method (_CRS, 0, NotSerialized) // _CRS: Current Resource Settings
+{
+    Name (SBFX, ResourceTemplate ()
+    {
+        I2cSerialBusV2 (0x0023, ControllerInitiated, 0x00061A80,
+            AddressingMode7Bit, "\\_SB.I2CA",
+            0x00, ResourceConsumer, , Exclusive,
+            )
+        I2cSerialBusV2 (0x0027, ControllerInitiated, 0x00061A80,
+            AddressingMode7Bit, "\\_SB.I2CA",
+            0x00, ResourceConsumer, , Exclusive,
+            )
+        GpioInt (Edge, ActiveLow, ExclusiveAndWake, PullUp, 0x0000,
+            "\\_SB.GPIO", 0x00, ResourceConsumer, ,
+            )
+            { // Pin list
+                0x0045
+            }
+    })
+    Return (SBFX) /* \_SB_.I2CA.UCMX._CRS.SBFX */
+}
 
-All errors (new ones prefixed by >>):
+I believe the problem is that the serial-multi-instantiate driver is=20
+assuming there are separate irqs defined for each of the i2c device=20
+instances:
 
->> drivers/usb/typec/ucsi/displayport.c:293:31: error: too few arguments to function call, expected 5, have 4
-                                   dp->vdo_data, dp->vdo_size);
-                                                             ^
-   include/linux/usb/typec_altmode.h:84:5: note: 'typec_altmode_vdm' declared here
-   int typec_altmode_vdm(struct typec_altmode *altmode,
-       ^
-   1 error generated.
+static const struct smi_node int3515_data =3D {
+    .instances =3D {
+        { "tps6598x", IRQ_RESOURCE_APIC, 0 },
+        { "tps6598x", IRQ_RESOURCE_APIC, 1 },
+        { "tps6598x", IRQ_RESOURCE_APIC, 2 },
+        { "tps6598x", IRQ_RESOURCE_APIC, 3 },
+        {}
+    },
+    .bus_type =3D SMI_I2C,
+};
+
+However as far as I know the tps6598x family of PD controllers expose=20
+multiple i2c slaves (per USB-C port) with one shared irq. I modified=20
+the smi driver as follows:
+
+ static const struct smi_node int3515_data =3D {
+     .instances =3D {
+         { "tps6598x", IRQ_RESOURCE_AUTO, 0 },
+         { "tps6598x", IRQ_RESOURCE_AUTO, 0 },
+         { "tps6598x", IRQ_RESOURCE_AUTO, 0 },
+         { "tps6598x", IRQ_RESOURCE_AUTO, 0 },
+         {}
+     },
+     .bus_type =3D SMI_I2C,
+ };
+
+which resulted in a successful probe of the driver and creation of=20
+port{0,1} entries in /sys/class/typec:
+
+[ 49.742618] Serial bus multi instantiate pseudo device driver=20
+INT3515:00: Using gpio irq
+[ 49.747584] Serial bus multi instantiate pseudo device driver=20
+INT3515:00: Using gpio irq
+[ 49.752350] Serial bus multi instantiate pseudo device driver=20
+INT3515:00: Instantiated 2 I2C devices.
+
+So I guess my question for y'all is this: would this be an acceptable=20
+change to make in the driver? If so, I'd be happy to push out the=20
+patch. Or is it a case of the ACPI tables being bugged and I need to=20
+pester Lenovo to fix them? Or, do we need to add logic to the driver to=20
+handle both cases?
+
+It would be nice if the authors of the driver could chime in.
+Kind regards / Pozdrawiam,
+Micha=B3 Kope=E6
 
 
-vim +293 drivers/usb/typec/ucsi/displayport.c
-
-af8622f6a585d8 Heikki Krogerus 2019-04-23  284  
-af8622f6a585d8 Heikki Krogerus 2019-04-23  285  static void ucsi_displayport_work(struct work_struct *work)
-af8622f6a585d8 Heikki Krogerus 2019-04-23  286  {
-af8622f6a585d8 Heikki Krogerus 2019-04-23  287  	struct ucsi_dp *dp = container_of(work, struct ucsi_dp, work);
-af8622f6a585d8 Heikki Krogerus 2019-04-23  288  	int ret;
-af8622f6a585d8 Heikki Krogerus 2019-04-23  289  
-af8622f6a585d8 Heikki Krogerus 2019-04-23  290  	mutex_lock(&dp->con->lock);
-af8622f6a585d8 Heikki Krogerus 2019-04-23  291  
-af8622f6a585d8 Heikki Krogerus 2019-04-23  292  	ret = typec_altmode_vdm(dp->alt, dp->header,
-af8622f6a585d8 Heikki Krogerus 2019-04-23 @293  				dp->vdo_data, dp->vdo_size);
-af8622f6a585d8 Heikki Krogerus 2019-04-23  294  	if (ret)
-af8622f6a585d8 Heikki Krogerus 2019-04-23  295  		dev_err(&dp->alt->dev, "VDM 0x%x failed\n", dp->header);
-af8622f6a585d8 Heikki Krogerus 2019-04-23  296  
-af8622f6a585d8 Heikki Krogerus 2019-04-23  297  	dp->vdo_data = NULL;
-af8622f6a585d8 Heikki Krogerus 2019-04-23  298  	dp->vdo_size = 0;
-af8622f6a585d8 Heikki Krogerus 2019-04-23  299  	dp->header = 0;
-af8622f6a585d8 Heikki Krogerus 2019-04-23  300  
-af8622f6a585d8 Heikki Krogerus 2019-04-23  301  	mutex_unlock(&dp->con->lock);
-af8622f6a585d8 Heikki Krogerus 2019-04-23  302  }
-af8622f6a585d8 Heikki Krogerus 2019-04-23  303  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
