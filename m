@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-3882-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3883-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB3B280930A
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 22:07:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20AF8809687
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 00:24:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17EB21C20B83
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 21:07:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C91BB20E03
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 23:24:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E598151009;
-	Thu,  7 Dec 2023 21:07:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E2956467;
+	Thu,  7 Dec 2023 23:24:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jnJHIaOy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CZUOsi4M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DCD1728;
-	Thu,  7 Dec 2023 13:06:59 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C217E10DD;
+	Thu,  7 Dec 2023 15:24:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701983219; x=1733519219;
+  t=1701991481; x=1733527481;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=V6wLJvnYVZuqFU6wsOOkiefEh9B/YqDJrTu7OOqvU+c=;
-  b=jnJHIaOyI3/S4stS9irnVVCG1/KEQzf0xs/NyO9bIrz946eQZznga6VE
-   953efm6PyMYzPtyy6k0SaKYuk8jqDkSXFsFVw8IcfuOtNEi0hH0a4pD0Y
-   6z5lkbPSndcS7D0p2GjyuNWSg/LaB85wzGicKKqZly05Pn7iz6P5zixel
-   IOHcqT+PcdTNlUH0QTTIg/P/rAdN8B34lW9SHyWmV8YttVM6qWwcgt+4l
-   bDUx6xEB/2pbJWqKAKQeD6QACy7ERh6za/AoUybdtpu7svVgZNdQI8C/g
-   8wdMZ+0R+yRchW9B+vxUJRpiQd9tvWmeKL/FpbwagIOk1rD1nC64SSCls
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="460789358"
-X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="460789358"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 13:06:59 -0800
+  bh=xoqsFo9dnxWWy6BSu4v73RRiTtczxofsXV0GmHIT9GE=;
+  b=CZUOsi4MRyWo6dTjyx6dlzZvFQVxCzNSvyuTR7nYOeZrM6R1QHA8kyLv
+   GDpZyQYVbWscMLzKrGqfPd2xC0Wq5PNYlea1TSoa7ln1FOHRuY5L5B828
+   1COj643IiPmYYOZRr/YBvup2thxeuDNrASASSYs1ui/MKVuP3fs+pEM8k
+   sLOazRxhQh95MYbNytoqZSaSJv5ZtIV3iXsTlVnvPElosyZzjtJ8Gyh1Q
+   NX/k637d3jMgz0TBYIBRVWQrS//eNOBd7V4x6uLPrBU61+i+zgjGFF59d
+   zHQBp8yWzLIdQRnl1SmLxNkhDodYpjyP0N09I8ehI8hS3drT9aG3sY4vY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="1430969"
+X-IronPort-AV: E=Sophos;i="6.04,259,1695711600"; 
+   d="scan'208";a="1430969"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 15:24:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="889871123"
-X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="889871123"
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="771923277"
+X-IronPort-AV: E=Sophos;i="6.04,259,1695711600"; 
+   d="scan'208";a="771923277"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Dec 2023 13:06:55 -0800
+  by orsmga002.jf.intel.com with ESMTP; 07 Dec 2023 15:24:36 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rBLa8-000CpH-1e;
-	Thu, 07 Dec 2023 21:06:52 +0000
-Date: Fri, 8 Dec 2023 05:06:01 +0800
+	id 1rBNjM-000CyZ-1m;
+	Thu, 07 Dec 2023 23:24:32 +0000
+Date: Fri, 8 Dec 2023 07:23:58 +0800
 From: kernel test robot <lkp@intel.com>
 To: RD Babiera <rdbabiera@google.com>, heikki.krogerus@linux.intel.com,
 	linux@roeck-us.net, gregkh@linuxfoundation.org,
@@ -57,10 +57,10 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, badhri@google.com,
 	tzungbi@kernel.org, utkarsh.h.patel@intel.com,
 	andriy.shevchenko@linux.intel.com,
 	RD Babiera <rdbabiera@google.com>
-Subject: Re: [PATCH v1 01/10] usb: typec: bus: provide transmit type for
- alternate mode drivers
-Message-ID: <202312080453.iQ1jSiLY-lkp@intel.com>
-References: <20231207090738.15721-13-rdbabiera@google.com>
+Subject: Re: [PATCH v1 02/10] usb: typec: tcpci: enable reception of SOP'
+ messages
+Message-ID: <202312080751.GDJHcwNz-lkp@intel.com>
+References: <20231207090738.15721-14-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231207090738.15721-13-rdbabiera@google.com>
+In-Reply-To: <20231207090738.15721-14-rdbabiera@google.com>
 
 Hi RD,
 
@@ -79,70 +79,100 @@ kernel test robot noticed the following build errors:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/RD-Babiera/usb-typec-bus-provide-transmit-type-for-alternate-mode-drivers/20231207-171114
 base:   5e4c8814a431d21bfaf20b464134f40f2f81e152
-patch link:    https://lore.kernel.org/r/20231207090738.15721-13-rdbabiera%40google.com
-patch subject: [PATCH v1 01/10] usb: typec: bus: provide transmit type for alternate mode drivers
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20231208/202312080453.iQ1jSiLY-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080453.iQ1jSiLY-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/20231207090738.15721-14-rdbabiera%40google.com
+patch subject: [PATCH v1 02/10] usb: typec: tcpci: enable reception of SOP' messages
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20231208/202312080751.GDJHcwNz-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080751.GDJHcwNz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312080453.iQ1jSiLY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312080751.GDJHcwNz-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/platform/chrome/cros_typec_vdm.c:89:82: error: too few arguments to function call, expected 5, have 4
-           ret = typec_altmode_vdm(amode, hdr, &resp.vdm_response[1], resp.vdm_data_objects);
-                 ~~~~~~~~~~~~~~~~~                                                         ^
-   include/linux/usb/typec_altmode.h:84:5: note: 'typec_altmode_vdm' declared here
-   int typec_altmode_vdm(struct typec_altmode *altmode,
-       ^
+>> drivers/usb/typec/tcpm/fusb302.c:1470:39: error: too few arguments to function call, expected 3, have 2
+                   tcpm_pd_receive(chip->tcpm_port, msg);
+                   ~~~~~~~~~~~~~~~                     ^
+   include/linux/usb/tcpm.h:172:6: note: 'tcpm_pd_receive' declared here
+   void tcpm_pd_receive(struct tcpm_port *port,
+        ^
+   1 error generated.
+--
+>> drivers/usb/typec/tcpm/wcove.c:538:37: error: too few arguments to function call, expected 3, have 2
+                           tcpm_pd_receive(wcove->tcpm, &msg);
+                           ~~~~~~~~~~~~~~~                  ^
+   include/linux/usb/tcpm.h:172:6: note: 'tcpm_pd_receive' declared here
+   void tcpm_pd_receive(struct tcpm_port *port,
+        ^
+   1 error generated.
+--
+>> drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c:302:52: error: too few arguments to function call, expected 3, have 2
+                   tcpm_pd_receive(pmic_typec_pdphy->tcpm_port, &msg);
+                   ~~~~~~~~~~~~~~~                                  ^
+   include/linux/usb/tcpm.h:172:6: note: 'tcpm_pd_receive' declared here
+   void tcpm_pd_receive(struct tcpm_port *port,
+        ^
    1 error generated.
 
 
-vim +89 drivers/platform/chrome/cros_typec_vdm.c
+vim +1470 drivers/usb/typec/tcpm/fusb302.c
 
-f54c013e7eef29 Prashant Malani 2023-01-26  55  
-50ed638bbc47ba Prashant Malani 2022-12-28  56  /*
-50ed638bbc47ba Prashant Malani 2022-12-28  57   * Retrieves a VDM response from the EC and forwards it to the altmode driver based on SVID.
-50ed638bbc47ba Prashant Malani 2022-12-28  58   */
-50ed638bbc47ba Prashant Malani 2022-12-28  59  void cros_typec_handle_vdm_response(struct cros_typec_data *typec, int port_num)
-50ed638bbc47ba Prashant Malani 2022-12-28  60  {
-50ed638bbc47ba Prashant Malani 2022-12-28  61  	struct ec_response_typec_vdm_response resp;
-50ed638bbc47ba Prashant Malani 2022-12-28  62  	struct ec_params_typec_vdm_response req = {
-50ed638bbc47ba Prashant Malani 2022-12-28  63  		.port = port_num,
-50ed638bbc47ba Prashant Malani 2022-12-28  64  	};
-50ed638bbc47ba Prashant Malani 2022-12-28  65  	struct typec_altmode *amode;
-50ed638bbc47ba Prashant Malani 2022-12-28  66  	u16 svid;
-50ed638bbc47ba Prashant Malani 2022-12-28  67  	u32 hdr;
-50ed638bbc47ba Prashant Malani 2022-12-28  68  	int ret;
-50ed638bbc47ba Prashant Malani 2022-12-28  69  
-50ed638bbc47ba Prashant Malani 2022-12-28  70  	ret = cros_ec_cmd(typec->ec, 0, EC_CMD_TYPEC_VDM_RESPONSE, &req,
-50ed638bbc47ba Prashant Malani 2022-12-28  71  			  sizeof(req), &resp, sizeof(resp));
-50ed638bbc47ba Prashant Malani 2022-12-28  72  	if (ret < 0) {
-50ed638bbc47ba Prashant Malani 2022-12-28  73  		dev_warn(typec->dev, "Failed VDM response fetch, port: %d\n", port_num);
-50ed638bbc47ba Prashant Malani 2022-12-28  74  		return;
-50ed638bbc47ba Prashant Malani 2022-12-28  75  	}
-50ed638bbc47ba Prashant Malani 2022-12-28  76  
-50ed638bbc47ba Prashant Malani 2022-12-28  77  	hdr = resp.vdm_response[0];
-50ed638bbc47ba Prashant Malani 2022-12-28  78  	svid = PD_VDO_VID(hdr);
-50ed638bbc47ba Prashant Malani 2022-12-28  79  	dev_dbg(typec->dev, "Received VDM header: %x, port: %d\n", hdr, port_num);
-50ed638bbc47ba Prashant Malani 2022-12-28  80  
-50ed638bbc47ba Prashant Malani 2022-12-28  81  	amode = typec_match_altmode(typec->ports[port_num]->port_altmode, CROS_EC_ALTMODE_MAX,
-50ed638bbc47ba Prashant Malani 2022-12-28  82  				    svid, PD_VDO_OPOS(hdr));
-50ed638bbc47ba Prashant Malani 2022-12-28  83  	if (!amode) {
-50ed638bbc47ba Prashant Malani 2022-12-28  84  		dev_err(typec->dev, "Received VDM for unregistered altmode (SVID:%x), port: %d\n",
-50ed638bbc47ba Prashant Malani 2022-12-28  85  			svid, port_num);
-50ed638bbc47ba Prashant Malani 2022-12-28  86  		return;
-50ed638bbc47ba Prashant Malani 2022-12-28  87  	}
-50ed638bbc47ba Prashant Malani 2022-12-28  88  
-50ed638bbc47ba Prashant Malani 2022-12-28 @89  	ret = typec_altmode_vdm(amode, hdr, &resp.vdm_response[1], resp.vdm_data_objects);
-50ed638bbc47ba Prashant Malani 2022-12-28  90  	if (ret)
-50ed638bbc47ba Prashant Malani 2022-12-28  91  		dev_err(typec->dev, "Failed to forward VDM to altmode (SVID:%x), port: %d\n",
-50ed638bbc47ba Prashant Malani 2022-12-28  92  			svid, port_num);
-50ed638bbc47ba Prashant Malani 2022-12-28  93  }
-50ed638bbc47ba Prashant Malani 2022-12-28  94  
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1421  
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1422  static int fusb302_pd_read_message(struct fusb302_chip *chip,
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1423  				   struct pd_message *msg)
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1424  {
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1425  	int ret = 0;
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1426  	u8 token;
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1427  	u8 crc[4];
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1428  	int len;
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1429  
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1430  	/* first SOP token */
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1431  	ret = fusb302_i2c_read(chip, FUSB_REG_FIFOS, &token);
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1432  	if (ret < 0)
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1433  		return ret;
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1434  	ret = fusb302_i2c_block_read(chip, FUSB_REG_FIFOS, 2,
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1435  				     (u8 *)&msg->header);
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1436  	if (ret < 0)
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1437  		return ret;
+f03d95f59026d1 drivers/staging/typec/fusb302/fusb302.c Guru Das Srinagesh 2017-05-10  1438  	len = pd_header_cnt_le(msg->header) * 4;
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1439  	/* add 4 to length to include the CRC */
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1440  	if (len > PD_MAX_PAYLOAD * 4) {
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1441  		fusb302_log(chip, "PD message too long %d", len);
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1442  		return -EINVAL;
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1443  	}
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1444  	if (len > 0) {
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1445  		ret = fusb302_i2c_block_read(chip, FUSB_REG_FIFOS, len,
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1446  					     (u8 *)msg->payload);
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1447  		if (ret < 0)
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1448  			return ret;
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1449  	}
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1450  	/* another 4 bytes to read CRC out */
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1451  	ret = fusb302_i2c_block_read(chip, FUSB_REG_FIFOS, 4, crc);
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1452  	if (ret < 0)
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1453  		return ret;
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1454  	fusb302_log(chip, "PD message header: %x", msg->header);
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1455  	fusb302_log(chip, "PD message len: %d", len);
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1456  
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1457  	/*
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1458  	 * Check if we've read off a GoodCRC message. If so then indicate to
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1459  	 * TCPM that the previous transmission has completed. Otherwise we pass
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1460  	 * the received message over to TCPM for processing.
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1461  	 *
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1462  	 * We make this check here instead of basing the reporting decision on
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1463  	 * the IRQ event type, as it's possible for the chip to report the
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1464  	 * TX_SUCCESS and GCRCSENT events out of order on occasion, so we need
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1465  	 * to check the message type to ensure correct reporting to TCPM.
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1466  	 */
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1467  	if ((!len) && (pd_header_type_le(msg->header) == PD_CTRL_GOOD_CRC))
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1468  		tcpm_pd_transmit_complete(chip->tcpm_port, TCPC_TX_SUCCESS);
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1469  	else
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21 @1470  		tcpm_pd_receive(chip->tcpm_port, msg);
+ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1471  
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1472  	return ret;
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1473  }
+c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1474  
 
 -- 
 0-DAY CI Kernel Test Service
