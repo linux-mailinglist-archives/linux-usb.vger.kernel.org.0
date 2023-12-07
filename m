@@ -1,234 +1,115 @@
-Return-Path: <linux-usb+bounces-3850-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3853-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BA3F8087C8
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 13:33:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17A0B808830
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 13:44:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85B84B21E42
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 12:33:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4BAA28339F
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 12:44:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E18139AEF;
-	Thu,  7 Dec 2023 12:33:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rz8pi5yV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67D623D0C9;
+	Thu,  7 Dec 2023 12:44:35 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB25AD5C;
-	Thu,  7 Dec 2023 04:33:43 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-58ce8513da1so322975eaf.2;
-        Thu, 07 Dec 2023 04:33:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701952423; x=1702557223; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eoyF50C90+byNneOw67lraz5w5fqAkMLns+7xoj94Cw=;
-        b=Rz8pi5yVV5X79T1Yez2j0uZYHI/gmkHZkfKOD9ZZlKQcOQpkXYXaB9LlZrKCwgLWdS
-         3ivpmDrPmoOwgakbf9qtR1Lwx0tCKTze93ONEyyx+QykcyrtEVA2H6mQ8b9yR27PDdV/
-         5NKs1/9ZvnQy8gGfmJOb0mCW31qxE9jekaziOB6by2TO9LR8/KVxnAr9umI6In0cJDio
-         OHFT5g3uqu8M0uqkZUdttxfrylqDbdH2mj442dFgC/bTm4m/DmV1SYjn26sOLGEUQg6X
-         KVHZrgP9UIlKoadsWoirk7tQoKnNEcG0P7GPsBOzvXbT2tOTbGvyMpS8tv7vxQnKw77U
-         qDuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701952423; x=1702557223;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eoyF50C90+byNneOw67lraz5w5fqAkMLns+7xoj94Cw=;
-        b=Lw1pBjtyeWYT5MaLzlIxQRCai6PvZuaJmdqNolOdTHWuZGpxzIy7Fl18sFBTWWsGMZ
-         jzzu8gprciVZ0/ufmLIfRnnOkeH9sylRqiRC+rwmagU7F1zEm5IPiklJIGA/pckHSsjd
-         2k1DwfCpD48FFIj/ep89W8d2rRhVmL5v086udBHhGVRCDfa44iydVsWMOTcWM6pEXLcP
-         V9NY481Kd0JaboNK01jtCj2CKdA2KKoxKRvvYdDOGQ81sAmrc6OgqCGHmq+U9/N68d77
-         VupFXTCMRHI0CA0ItD3Nd5AfW/ul70rMp/cKrJ7grLWLyGCvXU/SLUWaTBC4S6LGad4u
-         L7TA==
-X-Gm-Message-State: AOJu0YyOpuic+yskJHW0NK6fVC+DY2eebuT2YSyU7VmJExevIQmcxias
-	kA6U1fac54T0uHrXWke1z5Dp+i/+iCdVrWrnZ0JvHpi++QZNQQ==
-X-Google-Smtp-Source: AGHT+IFS8NwFi5sJw7amN4YsRotWSEY7Uv9GR7UCo3iJnNkSK0NiiYeAUIhB/yWzq4W+sEwWpOCZYlM6kE4su+J5LnI=
-X-Received: by 2002:a05:6820:1ac8:b0:58d:6ea3:8fc with SMTP id
- bu8-20020a0568201ac800b0058d6ea308fcmr2905570oob.2.1701952422933; Thu, 07 Dec
- 2023 04:33:42 -0800 (PST)
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B91122;
+	Thu,  7 Dec 2023 04:44:29 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SmDVL0kpKz4xGR;
+	Thu,  7 Dec 2023 23:44:10 +1100 (AEDT)
+From: Michael Ellerman <patch-notifications@ellerman.id.au>
+To: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, Guo Ren <guoren@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Greg Ungerer <gerg@linux-m68k.org>, Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Geoff Levand <geoff@infradead.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molna r <mingo@redhat.com>, x86@kernel.org,
+	Helge Deller <deller@gmx.de>,
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Timur Tabi <timur@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	David Woodhouse <dwmw2@infradead.org>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Uwe Kleine-König <u.kleine-koenig@pengutronix.de>,
+	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kerne, l.org@web.codeaurora.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, netdev@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-bcachefs@vger.kernel.org, linux-mtd@lists.infradead.org
+In-Reply-To: <20231108125843.3806765-1-arnd@kernel.org>
+References: <20231108125843.3806765-1-arnd@kernel.org>
+Subject: Re: (subset) [PATCH 00/22] -Wmissing-prototype warning fixes
+Message-Id: <170195271155.2310221.7822619081586355844.b4-ty@ellerman.id.au>
+Date: Thu, 07 Dec 2023 23:38:31 +1100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231204144429.45197-1-linux.amoon@gmail.com> <20231204144429.45197-2-linux.amoon@gmail.com>
- <20231206135311.GA2043711-robh@kernel.org> <CANAwSgTS0ZSFPv4x803pCLEpjH5imh8vEoWpbiJRH14Sy3GZww@mail.gmail.com>
- <21673bfd-bb87-4c7d-a53f-337c263f3a00@linaro.org>
-In-Reply-To: <21673bfd-bb87-4c7d-a53f-337c263f3a00@linaro.org>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Thu, 7 Dec 2023 18:03:25 +0530
-Message-ID: <CANAwSgSo37B0zg-xjrmqndSZ5SbyB3m27_wRsqqN9WTONooeiw@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] dt-bindings: usb: Add the binding example for the
- Genesys Logic GL3523 hub
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Icenowy Zheng <uwu@icenowy.me>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	linux-amlogic@lists.infradead.org, Conor Dooley <conor.dooley@microchip.com>, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof
+On Wed, 08 Nov 2023 13:58:21 +0100, Arnd Bergmann wrote:
+> I slightly dropped the ball on this since last sending the series in
+> August, but a number of warning fixes have made it into the kernel in
+> the meantime, both from my earlier submission and from architecture
+> maintainers.
+> 
+> I have none patches that remain from the previous submission, with
+> two of them reworked according to comments. The additional patches
+> are from more testing across architectures and configurations that
+> I had previously missed.
+> 
+> [...]
 
-On Thu, 7 Dec 2023 at 14:00, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 06/12/2023 18:14, Anand Moon wrote:
-> > Hi Rob,
-> >
-> > On Wed, 6 Dec 2023 at 19:23, Rob Herring <robh@kernel.org> wrote:
-> >>
-> >> On Mon, Dec 04, 2023 at 08:14:25PM +0530, Anand Moon wrote:
-> >>> Add the binding example for the USB3.1 Genesys Logic GL3523
-> >>> integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
-> >>> hub.
-> >>>
-> >>> For onboard hub controllers that support USB 3.x and USB 2.0 hubs
-> >>> with shared resets and power supplies, this property is used to identify
-> >>> the hubs with which these are shared.
-> >>>
-> >>> GL3523 has built-in 5V to 3.3V and 5V to 1.2V regulators, which serves
-> >>> power to the USB HUB, it uses 5V power regulator.
-> >>>
-> >>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> >>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> >>> ---
-> >>> V6: fix the description of the regulators
-> >>> Updated the commit message for regulator updates.
-> >>> add reviewed by Conor Dooley
-> >>> [1] https://lore.kernel.org/all/20231130053130.21966-2-linux.amoon@gmail.com/
-> >>> v5: upgrade peer-hub description : Conor Dooley
-> >>> [0] https://www.genesyslogic.com.tw/en/product_view.php?show=67 [Block Diagram]
-> >>> v4: Fix the description of peer-hub and update the commit message.
-> >>> Schematics of the Odroid N2+
-> >>> https://dn.odroid.com/S922X/ODROID-N2/Schematic/odroid-n2_rev0.6_20210121.pdf
-> >>> V3: fix the dt_binding_check error, added new example for Genesys GL3523
-> >>> v2: added Genesys GL3523 binding
-> >>> v1: none
-> >>> ---
-> >>>  .../bindings/usb/genesys,gl850g.yaml          | 65 +++++++++++++++++--
-> >>>  1 file changed, 61 insertions(+), 4 deletions(-)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> >>> index ee08b9c3721f..c6f63a69396d 100644
-> >>> --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> >>> +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> >>> @@ -9,9 +9,6 @@ title: Genesys Logic USB hub controller
-> >>>  maintainers:
-> >>>    - Icenowy Zheng <uwu@icenowy.me>
-> >>>
-> >>> -allOf:
-> >>> -  - $ref: usb-device.yaml#
-> >>> -
-> >>>  properties:
-> >>>    compatible:
-> >>>      enum:
-> >>> @@ -27,12 +24,46 @@ properties:
-> >>>
-> >>>    vdd-supply:
-> >>>      description:
-> >>> -      the regulator that provides 3.3V core power to the hub.
-> >>> +      The regulator that provides 3.3V or 5.0V core power to the hub.
-> >>> +
-> >>> +  peer-hub:
-> >>> +    $ref: /schemas/types.yaml#/definitions/phandle
-> >>> +    description:
-> >>> +      For onboard hub controllers that support USB 3.x and USB 2.0 hubs
-> >>> +      with shared resets and power supplies, this property is used to identify
-> >>> +      the hubs with which these are shared.
-> >>>
-> >>>  required:
-> >>>    - compatible
-> >>>    - reg
-> >>>
-> >>> +allOf:
-> >>> +  - $ref: usb-device.yaml#
-> >>> +  - if:
-> >>> +      properties:
-> >>> +        compatible:
-> >>> +          contains:
-> >>> +            enum:
-> >>> +              - usb5e3,608
-> >>> +    then:
-> >>> +      properties:
-> >>> +        peer-hub: false
-> >>> +        vdd-supply: false
-> >>> +        reset-gpios: true
-> >>> +
-> >>> +  - if:
-> >>> +      properties:
-> >>> +        compatible:
-> >>> +          contains:
-> >>> +            enum:
-> >>> +              - usb5e3,610
-> >>> +              - usb5e3,620
-> >>> +    then:
-> >>> +      properties:
-> >>> +        peer-hub: true
-> >>> +        vdd-supply: true
-> >>> +        reset-gpios: true
-> >>
-> >> No need for this if schema. The default is they are allowed.
-> >>
-> >
-> > If I move reset-gpios to required, I observe the below warning.
-> >
-> >   DTC_CHK Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb
-> > /home/alarm/linux-amlogic-5.y-devel/Documentation/devicetree/bindings/usb/usb-device.example.dtb:
-> > hub@1: 'reset-gpio' is a required property
-> >         from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
->
-> Where are the properties defined? If you open the binding you see:
-> nowhere. You cannot define properties in some variant with "true".
-> Please define all of them in top-level and only narrow/constrain when
-> applicable.
->
-What I meant is the example below, required meant applicable for both
-the binding
-But it shows me the above warning.
+Applied to powerpc/next.
 
-required:
-  - compatible
-  - reg
-  - reset-gpio
+[17/22] powerpc: ps3: move udbg_shutdown_ps3gelic prototype
+        https://git.kernel.org/powerpc/c/04c40eed3f7ac48ddaf20104489510e743a53c47
+[18/22] powerpc: pasemi: mark pas_shutdown() static
+        https://git.kernel.org/powerpc/c/0c9a768de64d24e38e27652b8c273725ccc31916
+[19/22] powerpc: powermac: mark smp_psurge_{give,take}_timebase static
+        https://git.kernel.org/powerpc/c/afb36ac386783d2ef2ed839293c03fd06f470be0
 
-allOf:
-  - $ref: usb-device.yaml#
-  - if:
-      properties:
-        compatible:
-          contains:
-            enum:
-              - usb5e3,608
-    then:
-      properties:
-        peer-hub: false
-        vdd-supply: false
-
-  - if:
-      properties:
-        compatible:
-          contains:
-            enum:
-              - usb5e3,610
-              - usb5e3,620
-    then:
-      properties:
-        peer-hub: true
-        vdd-supply: true
-
-additionalProperties: false
-
->
-> Best regards,
-> Krzysztof
->
-
-Thanks
--Anand
+cheers
 
