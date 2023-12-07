@@ -1,212 +1,138 @@
-Return-Path: <linux-usb+bounces-3869-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3870-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 573BA808DAA
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 17:41:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 318D6808DC4
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 17:48:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB7BCB20D3E
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 16:41:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5507B20D27
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 16:48:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA790481A2;
-	Thu,  7 Dec 2023 16:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01671481B1;
+	Thu,  7 Dec 2023 16:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nqIEuZXN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 70FE710DE
-	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 08:41:09 -0800 (PST)
-Received: (qmail 9300 invoked by uid 1000); 7 Dec 2023 11:41:08 -0500
-Date: Thu, 7 Dec 2023 11:41:08 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Cc: davem@davemloft.net, edumazet@google.com, greg@kroah.com, kuba@kernel.org,
-  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-  netdev@vger.kernel.org, oneukum@suse.com, pabeni@redhat.com,
-  stable@vger.kernel.org
-Subject: Re: [PATCH v5] net: usb: ax88179_178a: avoid failed operations when
- device is disconnected
-Message-ID: <0bd3204e-19f4-48de-b42e-a75640a1b1da@rowland.harvard.edu>
-References: <624ad05b-0b90-4d1c-b06b-7a75473401c3@rowland.harvard.edu>
- <20231207114209.14595-1-jtornosm@redhat.com>
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0758410DD
+	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 08:48:38 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-54cd2281ccbso1507863a12.2
+        for <linux-usb@vger.kernel.org>; Thu, 07 Dec 2023 08:48:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701967716; x=1702572516; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A7OsVkU3zQRUxoo/NWEHhG9Knpz7q1rdKpZVAowJ3Ro=;
+        b=nqIEuZXNjSnBkSe3bg58Su4QRJwULJ9wXKKZWmoYfYexdNFhZQBTTd5m0mGcoh9Yek
+         LzOcr6f0viT8ACxjNwLzLjV15uGBYm87n+/IMNfY34Wxj+UleEksGUvP+H7/g5gj7nHV
+         BmkSjCk9QGmjf6uOo6u2EXwvHS8FpOOOAK2lyjFHhySLtIQmkOr4CEBLN1KGvSKBHc9l
+         ILWOGWzL8YukoYdN1yQDMEwloAWeWd/CiwZiKWIeIYBiWPRZ6aonMCB1adKEJZelqHcJ
+         t1icxZJuuhGl6ZfWa+QLDw/eKXPdHZl/bItbUZU8seGwgkC3F0z1HcM9XLG49NFrHT/u
+         Jrfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701967716; x=1702572516;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A7OsVkU3zQRUxoo/NWEHhG9Knpz7q1rdKpZVAowJ3Ro=;
+        b=vPWjuztENaeAi7QsrogAJDyl6liCKKR8p9LWv0BPGVx7+b0uhy6CcwKBK2atnLhfab
+         75ik6i0vfmROwgJ/xquVVP5nsmhLfvlTPKeYYxWQfy3vkd7W2fgoKgPrAosDYqQuGb2d
+         LF93DcdwWQWElWKdK/2tqG2+VlED46S+7IXLcwINk3nijM17LQdbIncWtxI6MF6TiDru
+         FiBtu7bFeORtDrCC8Vv0F1uDDjs4gS0LTURqgwnGlYqq6qBHNObCYe7oGWjzNaYMF8yI
+         SnOanv0ccBCsDbuykfcT/wqJFT7GciWtZsEUf99JgcxKpGf4DIAUUPtAyBh3txknK2QG
+         hWaw==
+X-Gm-Message-State: AOJu0YzuSUFooj2kAeegz4HMXFYWj/Taq9xBTrTDr5E1YfEwvcyK5mYC
+	IKs+vNMOc2px0EoQY2lzSF/CMA==
+X-Google-Smtp-Source: AGHT+IEh6uQHy/vljbUsr9meFu5f28gV1bgKaIfu9oYdaqdhVf4QBeawR8BNdwxb6WQDRd5b8JH0+g==
+X-Received: by 2002:a50:9f2f:0:b0:54c:81c5:758a with SMTP id b44-20020a509f2f000000b0054c81c5758amr1762169edf.75.1701967716510;
+        Thu, 07 Dec 2023 08:48:36 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.218.27])
+        by smtp.gmail.com with ESMTPSA id dc14-20020a056402310e00b0054cfb16de51sm22918edb.3.2023.12.07.08.48.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Dec 2023 08:48:36 -0800 (PST)
+Message-ID: <efa6d078-aba9-465a-9040-79250d886b9f@linaro.org>
+Date: Thu, 7 Dec 2023 17:48:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231207114209.14595-1-jtornosm@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: usb: genesys,gl850g: Document 'peer-hub'
+Content-Language: en-US
+To: Fabio Estevam <festevam@gmail.com>, gregkh@linuxfoundation.org
+Cc: uwu@icenowy.me, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ Fabio Estevam <festevam@denx.de>
+References: <20231207124217.2530457-1-festevam@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231207124217.2530457-1-festevam@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Dec 07, 2023 at 12:42:09PM +0100, Jose Ignacio Tornos Martinez wrote:
-> When the device is disconnected we get the following messages showing
-> failed operations:
-> Nov 28 20:22:11 localhost kernel: usb 2-3: USB disconnect, device number 2
-> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: unregister 'ax88179_178a' usb-0000:02:00.0-3, ASIX AX88179 USB 3.0 Gigabit Ethernet
-> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to read reg index 0x0002: -19
-> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3: Failed to write reg index 0x0002: -19
-> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
-> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0001: -19
-> Nov 28 20:22:11 localhost kernel: ax88179_178a 2-3:1.0 enp2s0u3 (unregistered): Failed to write reg index 0x0002: -19
+On 07/12/2023 13:42, Fabio Estevam wrote:
+> From: Fabio Estevam <festevam@denx.de>
 > 
-> The reason is that although the device is detached, normal stop and
-> unbind operations are commanded from the driver. These operations are
-> not necessary in this situation, so avoid these logs when the device is
-> detached if the result of the operation is -ENODEV and if the new flag
-> informing about the disconnecting status is enabled.
+> The 'peer-hub' is a valid property for the hub.
 > 
-> cc: stable@vger.kernel.org
-> Fixes: e2ca90c276e1f ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to gigabit ethernet adapter driver")
-> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-> ---
-> V1 -> V2:
-> - Follow the suggestions from Alan Stern and Oliver Neukum to check the
-> result of the operations (-ENODEV) and not the internal state of the USB 
-> layer (USB_STATE_NOTATTACHED).
-> V2 -> V3
-> - Add cc: stable line in the signed-off-by area.
-> V3 -> V4
-> - Follow the suggestions from Oliver Neukum to use only one flag when
-> disconnecting and include barriers to avoid memory ordering issues.
-> V4 -> V5
-> - Fix my misundestanding and follow the suggestion from Alan Stern to 
-> syncronize and not order the flag.
-
-I did not suggest that you should synchronize anything.  What I said was 
-that the problem you faced was one of synchronization, not of ordering.  
-
-In fact, you should not try to synchronize -- ultimately it is 
-impossible to do.  The only way to get true synchronization is to 
-prevent the user from disconnecting the device and bringing the 
-interface down at the same time, and obviously the kernel cannot do 
-this.
-
->  drivers/net/usb/ax88179_178a.c | 47 +++++++++++++++++++++++++++++-----
->  1 file changed, 40 insertions(+), 7 deletions(-)
+> Document it to fix the following dt-schema warning:
 > 
-> diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-> index 4ea0e155bb0d..e07614799f75 100644
-> --- a/drivers/net/usb/ax88179_178a.c
-> +++ b/drivers/net/usb/ax88179_178a.c
-> @@ -173,6 +173,8 @@ struct ax88179_data {
->  	u8 in_pm;
->  	u32 wol_supported;
->  	u32 wolopts;
-> +	u8 disconnecting;
-> +	struct mutex lock;
->  };
->  
->  struct ax88179_int_data {
-> @@ -208,6 +210,8 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  {
->  	int ret;
->  	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
-> +	struct ax88179_data *ax179_data = dev->driver_priv;
-> +	u8 disconnecting;
->  
->  	BUG_ON(!dev);
->  
-> @@ -219,9 +223,14 @@ static int __ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
->  		 value, index, data, size);
->  
-> -	if (unlikely(ret < 0))
-> -		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
-> -			    index, ret);
-> +	if (unlikely(ret < 0)) {
-> +		mutex_lock(&ax179_data->lock);
-> +		disconnecting = ax179_data->disconnecting;
-> +		mutex_unlock(&ax179_data->lock);
+> imx8mp-debix-som-a-bmb-08.dtb: hub@1: 'peer-hub' does not match any of the regexes: 'pinctrl-[0-9]+'
+> 	from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
+> 
 
-Clearly you don't understand how mutexes work.  Using a mutex like this 
-accomplishes nothing.
 
-> +		if (!(ret == -ENODEV && disconnecting))
-> +			netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
-> +				    index, ret);
-> +	}
->  
->  	return ret;
->  }
-> @@ -231,6 +240,8 @@ static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  {
->  	int ret;
->  	int (*fn)(struct usbnet *, u8, u8, u16, u16, const void *, u16);
-> +	struct ax88179_data *ax179_data = dev->driver_priv;
-> +	u8 disconnecting;
->  
->  	BUG_ON(!dev);
->  
-> @@ -242,9 +253,14 @@ static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  	ret = fn(dev, cmd, USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
->  		 value, index, data, size);
->  
-> -	if (unlikely(ret < 0))
-> -		netdev_warn(dev->net, "Failed to write reg index 0x%04x: %d\n",
-> -			    index, ret);
-> +	if (unlikely(ret < 0)) {
-> +		mutex_lock(&ax179_data->lock);
-> +		disconnecting = ax179_data->disconnecting;
-> +		mutex_unlock(&ax179_data->lock);
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Same here.
+Best regards,
+Krzysztof
 
-> +		if (!(ret == -ENODEV && disconnecting))
-> +			netdev_warn(dev->net, "Failed to write reg index 0x%04x: %d\n",
-> +				    index, ret);
-> +	}
->  
->  	return ret;
->  }
-> @@ -492,6 +508,22 @@ static int ax88179_resume(struct usb_interface *intf)
->  	return usbnet_resume(intf);
->  }
->  
-> +static void ax88179_disconnect(struct usb_interface *intf)
-> +{
-> +	struct usbnet *dev = usb_get_intfdata(intf);
-> +	struct ax88179_data *ax179_data;
-> +
-> +	if (!dev)
-> +		return;
-> +
-> +	ax179_data = dev->driver_priv;
-> +	mutex_lock(&ax179_data->lock);
-> +	ax179_data->disconnecting = 1;
-> +	mutex_unlock(&ax179_data->lock);
-
-And again, this does nothing.
-
-Imagine a situation where the user brings the interface down on CPU 1, 
-while at the same time CPU 2 handles a disconnection.  Then the 
-following timeline of events can occur:
-
-	CPU 1				CPU 2
-	---------------------------	-----------------------------
-	The stop operation calls
-	__ax88179_read_cmd()
-
-					The device is unplugged
-
-	The routine tries to communicate
-	with the device and gets a -ENODEV
-	error because the device is gone
-
-					The USB core calls ax88179_disconnect()
-
-	The routine locks the mutex,
-	reads ax179_data->disconnecting = 0,
-	and unlocks the mutex
-
-					ax88179_disconnect() locks the mutex,
-					sets ax179_data->disconnecting = 1,
-					and unlocks the mutex
-
-	The routine prints an error message
-
-As you can see, using the mutex does not prevent the problem from 
-occurring.  You should not add the mutex at all; it serves no purpose.
-
-Alan Stern
 
