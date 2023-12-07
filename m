@@ -1,128 +1,106 @@
-Return-Path: <linux-usb+bounces-3867-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3868-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B598808D6F
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 17:33:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56B87808D7A
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 17:34:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31A311F2139B
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 16:33:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 878861C20AA8
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 16:34:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03B064776C;
-	Thu,  7 Dec 2023 16:33:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAC934776C;
+	Thu,  7 Dec 2023 16:34:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HCcs02/9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dFIi4YDZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5453D46BB6;
-	Thu,  7 Dec 2023 16:33:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD3D2C433CA;
-	Thu,  7 Dec 2023 16:33:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701966790;
-	bh=8rENzAp0p8TNocu2nRhngKa8SFr6isL6RTBVJp6KrZs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HCcs02/9Ogdjyp9dN1TdkXfGx1t09VNdtVuisKSk/2MgsrOLpeYKzVj3D+aV97LHX
-	 A3fg2Kt+4eRUxoJpfAikLZEZe1B9RFgR1oUsFhgRfKKCz9uAdpCDei+73Kdk7dQfLl
-	 c7Uu5wk6hld0DUq53ArASqtQFqJPm3Jc/pAsFh/c5lU8LnEM8tMlEnF8wAb1ty8VQe
-	 a/plY608cmUIQ46TGaWwosU31iy0MCsDS1VUJinwiMRN+r5iA5+KZoOHc13xUJD+SP
-	 nTjwd2/rH8VbbD4PhCbPYJ+eotlhbrWoMTmMgeEBeRFgSVebMNt1zZXdltX3b4frg9
-	 TtMxCobQJmozQ==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1rBHK4-00019F-0o;
-	Thu, 07 Dec 2023 17:34:00 +0100
-Date: Thu, 7 Dec 2023 17:34:00 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	cros-qcom-dts-watchers@chromium.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: [PATCH v2 2/6] usb: dwc3: qcom: Rename hs_phy_irq to
- qusb2_phy_irq
-Message-ID: <ZXHz-HYgVLbgFp2k@hovoldconsulting.com>
-References: <20231204100950.28712-1-quic_kriskura@quicinc.com>
- <20231204100950.28712-3-quic_kriskura@quicinc.com>
- <ZXHkpwji_AzXMjfm@hovoldconsulting.com>
- <9d52fa8c-41d1-46a7-be89-5c1c11ca09b4@quicinc.com>
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A34810F3;
+	Thu,  7 Dec 2023 08:34:41 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1d072f50a44so2411575ad.0;
+        Thu, 07 Dec 2023 08:34:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701966880; x=1702571680; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oOGw2W3jLOAHznlrSbnbW0fidCo29b1AXBg+sMocrPs=;
+        b=dFIi4YDZNfWqcblp+qcP5skBVP71+hPqaxSNB+x3WbpLbR2tFxDuykD1eX9U0oGND4
+         gQoHdntSczmk53bc6RXPmzktqvCqNd8LAXLVZQjGDzpyK2A9fHIVf1BMHV5z+/eYIJKN
+         PU/Ti0hkoggbrExxG+4W9rr56aLA2ugmBU/ZBDe9mbZQ6YFeYCGrdtvDtDEgSEYEheFN
+         wXzpaQwaKhC67HTPzFEr36/ln5Xr9jtSm4lOx5c7n7XC6zXBQHcP+3X2r9B/SHbRGOXC
+         4hkU+826pSZs45VvkHMF5KwLXBgS89Per6oQcxzvrlhQ9BAy57CsliBmn4H+TebeLISW
+         DnVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701966880; x=1702571680;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oOGw2W3jLOAHznlrSbnbW0fidCo29b1AXBg+sMocrPs=;
+        b=KgzghNaJQA64O8ZPi7LD5O2G5N0KjBASNG+y2AoZydJEYsaDW2+u0cpF28HiFttdiZ
+         2ykl3GsbRTiihCuG1V1fudFN4L/v5OjGVuyqAFZyJh3OUap4ORonCBAO7C8XUqHC1cvu
+         +GMLkPM2vs3qn1OhhlACYFBQB3l6Xsxecz6WI9Gl0aT1dzU/7mTkAYXmPeNFmmGfL7BZ
+         h/v7I7NRoFbUpJhzpcCnE5ftDc64pTuyktOyN4RJIkWOaR1fTDoOC6h9L7Tn+san0Ft4
+         cz15ebCywSKyIf9wLuvYoKv+eG4sU5pyPDw7ZVg4oMTaPzFn65m/43jmGjQujIOV0cT6
+         Bmpw==
+X-Gm-Message-State: AOJu0YyDCpHuTx+KQLGAf5xzxGAuXlDNFsaAyHgkT++OB4Tq2flbJmU2
+	S+EqmWWxKnB3+F8vKfc/MXs=
+X-Google-Smtp-Source: AGHT+IHu8CxMgLoCdvksxhWQU2Ti1IysB/voNu8hbXfDghp7QitpQlcBCIBMiUnLEIiqNarLr7KHOg==
+X-Received: by 2002:a17:902:7616:b0:1d0:bcd5:903 with SMTP id k22-20020a170902761600b001d0bcd50903mr5346780pll.4.1701966880470;
+        Thu, 07 Dec 2023 08:34:40 -0800 (PST)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:492a:db3d:eb42:de92])
+        by smtp.gmail.com with ESMTPSA id ja7-20020a170902efc700b001cf51972586sm3790plb.292.2023.12.07.08.34.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Dec 2023 08:34:39 -0800 (PST)
+From: Fabio Estevam <festevam@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: jun.li@nxp.com,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Fabio Estevam <festevam@denx.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] dt-bindings: usb: nxp,ptn5110: Fix typo in the title
+Date: Thu,  7 Dec 2023 13:34:26 -0300
+Message-Id: <20231207163426.2651126-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9d52fa8c-41d1-46a7-be89-5c1c11ca09b4@quicinc.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 07, 2023 at 09:17:32PM +0530, Krishna Kurapati PSSNV wrote:
-> On 12/7/2023 8:58 PM, Johan Hovold wrote:
+From: Fabio Estevam <festevam@denx.de>
 
-> > Here too you should say something about why this won't break any systems
-> > booting using an older devicetree. Specifically, the QUSB2 PHY interrupt
-> > has never been armed on any system running mainline as those bits never
-> > made it upstream.
-> > 
-> > So an alternative to this could also be to just drop the QUSB2 PHY
-> > interrupt handling from this driver for now. >
+Fix the misspelled "Controller" word.
 
-> So, are you suggesting that we drop the whole patch ?
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Changes since v1:
+- Use a single line in the commit log. (Krzysztof)
 
-No, I meant that an alternative could be to drop the current hs_phy_irq
-handling from the driver.
+ Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I assume if the older kernels are using old DT, they would be using an 
-> old driver version too right ?
+diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
+index 28eb25ecba74..f154fae290a4 100644
+--- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
++++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/usb/nxp,ptn5110.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: NXP PTN5110 Typec Port Cotroller
++title: NXP PTN5110 Typec Port Controller
+ 
+ maintainers:
+   - Li Jun <jun.li@nxp.com>
+-- 
+2.34.1
 
-No, and this is part of the devicetree ABI as we discussed the other
-week.
-
-You should generally be able to continue booting with an older devicetree
-on a newer kernel (even if newer functionality may not be enabled then).
-
-> Is there a case where DT is not updated but driver is ? Because if we
-> drop this patch from series, targets with updated DT's would break.
-
-Actually they would not due to the fact that the QUSB2 PHY interrupt is
-currently never armed in the PHY (and the interrupts are looked up by
-name and are considered optional by the driver).
-
-But simply dropping this patch is not an option here. I'm fine with this
-patch as it is, but the reason we can merge it is that those interrupts
-are currently not actually used. Otherwise, this would break older
-devicetrees.
-
-But this also means, we could consider dropping the current hs_phy_irq
-handling altogether.
-
-Hmm. Looking at the qusb2_phy_runtime_suspend() again now I see that the
-interrupt is actually armed on runtime suspend, it's just that it is
-configured incorrectly and would wakeup immediately if someone ever
-exercised this path.
-
-Specifically, the bits that would set those PHY_MODE_USB_HOST_HS modes
-(that should never have been merged) never made it upstream so this code
-is just dead code currently. I said before I'll look into ripping this
-out, but yeah, I'm swamped with work as usual (and it has been sitting
-there dead for years so there's no rush).
-
-So to summarise, the QUSB2 wakeup handling is incomplete and broken, so
-we won't actually make things worse by renaming the interrupts. If this
-was working, we would need to continue supporting the old names, though.
-
-Johan
 
