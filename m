@@ -1,101 +1,193 @@
-Return-Path: <linux-usb+bounces-3832-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3833-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 710EC80865F
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 12:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D6A08086CD
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 12:35:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A14F11C21EF6
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 11:07:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D4FE1C21F72
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 11:35:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B39237D09;
-	Thu,  7 Dec 2023 11:07:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97929381A2;
+	Thu,  7 Dec 2023 11:34:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HX/cpNvg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E13MIFBY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10896D6D
-	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 03:07:29 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2ca0f21e48cso7310551fa.2
-        for <linux-usb@vger.kernel.org>; Thu, 07 Dec 2023 03:07:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1701947247; x=1702552047; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bx4HpmYmlVXG5IQBI17IgTNCivl41HccJ/yjvncqRLw=;
-        b=HX/cpNvgK3rkfPsfT3Ei34spV3KBZIGcC6tdBsQjVOa6U/XQt+GntwBJW8gpflvSBz
-         2qxvJtzidqrLH1slIygBcc76gRLkBm3nYkTSDtjWMzCSDWrhbG+lOH3LABrpJrrEQxV0
-         5/DEPR9BrWqRN2qi3XccACToJ/HPrx6zutDlxhZrqwOFd47oZP7AfoLc9DToWLj6fAs+
-         rYh4dQ4ZQcbiantGCgj8r849VZzeeiH5QQO8xH+necHPXs2k5i3FfFthKUYcnyNYZ6P4
-         APVAuXkcymnNi+SKXZApDdZ8BlZMcNMKycIKBQzoTkraVL9KaiVaDH/xmevkcM0BmTpK
-         g3BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701947247; x=1702552047;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bx4HpmYmlVXG5IQBI17IgTNCivl41HccJ/yjvncqRLw=;
-        b=MfvuO2cEORInbDpvi3GUYYd4l0AZ77hk/Q2LxxCvzxztvGPzIiFC+zrtAL25uoYUcb
-         EX/A2HZ0LJ29hAgvaG1h4PiHPiQTRKNjBiz2a5Uy+9EjaaXblmofwSt/QM4cwzGyPKlR
-         m8K49DEKpxxv8j1FMfgHdNJan/mv16sEiU0zO5IGPvyPgMNzlbqvLQCUKqEatTe4ds4X
-         3b5+E9kmuJrDsItU+Dfs6VDodbiqDaQh5Oo25EXNtbCJgt/h3i71Zzea5MtZ4HHSOo8g
-         ujFxQmhx8XItiahUSQa9x9eHgihF/6hzBSbnlDv8FuCnFo9odeYQxqGOgWRFb+qi5QNc
-         ZaGA==
-X-Gm-Message-State: AOJu0YxkIywpGOMnfvOoe7Ar4vEdKineMMSGxQL/yBA0fvk3nbLxDbaG
-	btJOBD0pZ8bzXJetWRAySp1xdw==
-X-Google-Smtp-Source: AGHT+IH1kMq9OVqWlL29emxd9O6UUHUDw1zP942RGlfKMVI+C0S0d3kMChnjaQG+wtuPoQ2/WCKapA==
-X-Received: by 2002:a2e:a98d:0:b0:2ca:30f5:7e02 with SMTP id x13-20020a2ea98d000000b002ca30f57e02mr568028ljq.78.1701947247249;
-        Thu, 07 Dec 2023 03:07:27 -0800 (PST)
-Received: from ?IPV6:2001:a61:13af:fb01:d424:8584:98d8:cd65? ([2001:a61:13af:fb01:d424:8584:98d8:cd65])
-        by smtp.gmail.com with ESMTPSA id cw17-20020a056402229100b0054cc7a4dc4csm639917edb.13.2023.12.07.03.07.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Dec 2023 03:07:27 -0800 (PST)
-Message-ID: <604fb326-61d5-4d67-b009-649ece32a1e9@suse.com>
-Date: Thu, 7 Dec 2023 12:07:25 +0100
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6022110C0;
+	Thu,  7 Dec 2023 03:34:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701948895; x=1733484895;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0e0ecIPjielu3IMg9w9+57qtFRSlZw6k9A5nrmNNudM=;
+  b=E13MIFBYMQFsL8EYCwz269U++62FbhdUIjXWg5DLTZHmYQ8cSnyIsA5G
+   eNupv8wyXNnMwBTh4vcavzWGZaUTeNUjEseq7WNjF2GrcHHANrKZ96Wj4
+   vOt2l8HkIVkSy8vXaMAxVxyeYa6m5PQfiskSCHYxU9/pJINK0eWihXoXx
+   nAICDwUJGk0WbnF5cjuGEod2cbq7fJayBQyanIMhMCIj90NW/H62dgEI/
+   8swkn9vdjO06uL7QCyN49jegE4SYMFlr41DNvBb8K1mPY0jmihMkAYYJP
+   6q+YEPQ3fRA0rMysLZxUhZYtH96Y7QsBTjrxyaQIBWtyGEznH0F+UQCeK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="1098277"
+X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
+   d="scan'208";a="1098277"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 03:34:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="775371126"
+X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
+   d="scan'208";a="775371126"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga007.fm.intel.com with SMTP; 07 Dec 2023 03:34:50 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 07 Dec 2023 13:34:49 +0200
+Date: Thu, 7 Dec 2023 13:34:49 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: RD Babiera <rdbabiera@google.com>
+Cc: linux@roeck-us.net, gregkh@linuxfoundation.org, pmalani@chromium.org,
+	bleung@chromium.org, chrome-platform@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	badhri@google.com, tzungbi@kernel.org, utkarsh.h.patel@intel.com,
+	andriy.shevchenko@linux.intel.com
+Subject: Re: [PATCH v1 01/10] usb: typec: bus: provide transmit type for
+ alternate mode drivers
+Message-ID: <ZXGt2drhV/K+qtTG@kuha.fi.intel.com>
+References: <20231207090738.15721-12-rdbabiera@google.com>
+ <20231207090738.15721-13-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Question regarding CDC NCM and VNC performance issue
-To: Francesco Dolcini <francesco@dolcini.it>, Oliver Neukum <oneukum@suse.com>
-Cc: Hiago De Franco <hiagofranco@gmail.com>,
- =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>, davem@davemloft.net,
- edumazet@google.com, hiago.franco@toradex.com, kuba@kernel.org,
- linux-usb@vger.kernel.org, pabeni@redhat.com
-References: <2ce653b3-c553-457f-bcbf-9fce36f82dff@suse.com>
- <20231206162353.53767-1-hiagofranco@gmail.com>
- <c2ee0ecf-993e-4736-b005-588fa6ef51a3@suse.com>
- <ZXGYgfFhVhlprqco@francesco-nb.int.toradex.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <ZXGYgfFhVhlprqco@francesco-nb.int.toradex.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231207090738.15721-13-rdbabiera@google.com>
 
+Hi,
 
-
-On 07.12.23 11:03, Francesco Dolcini wrote:
-> Hello Oliver and Maciej
+On Thu, Dec 07, 2023 at 09:07:32AM +0000, RD Babiera wrote:
+> Add enum tcpm_altmode_transmit_type that Alternate Mode drivers can use
+> to communicate which SOP type to send a SVDM on to the tcpm, and that the
+> tcpm can use to communicate a received SVDM' SOP type to the Alternate Mode
+> drivers.
 > 
-> On Thu, Dec 07, 2023 at 10:41:51AM +0100, Oliver Neukum wrote:
-
->> OK, you are using Linux on _both_ sides. Interesting, far from obvious, though.
->> (Putting Maciej into CC)
+> Update all typec_altmode_ops users to use tcpm_altmode_transmit_type, and
+> drop all messages that are not TYPEC_ALTMODE_SOP. Default all calls that
+> require sop_type as input to TYPEC_ALTMODE_SOP.
 > 
-> One more data point. If the USB host side is Windows and not Linux it
-> works fine.
+> Signed-off-by: RD Babiera <rdbabiera@google.com>
+> ---
+>  drivers/platform/chrome/cros_typec_vdm.c | 12 +++++++++--
+>  drivers/usb/typec/altmodes/displayport.c | 15 +++++++-------
+>  drivers/usb/typec/bus.c                  | 17 ++++++++++------
+>  drivers/usb/typec/class.c                |  2 +-
+>  drivers/usb/typec/tcpm/tcpm.c            | 15 ++++++++------
+>  drivers/usb/typec/ucsi/displayport.c     | 18 +++++++++++++---
+>  include/linux/usb/typec_altmode.h        | 26 ++++++++++++++++++------
+>  7 files changed, 74 insertions(+), 31 deletions(-)
 
-That suggests, but does not prove that the issue is on the host side.
-Could you post the result of "ethtool -S" after a test run? We should
-get statistics on the reasons for transmissions that way.
+<snip>
 
-	Regards
-		Oliver
+> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
+> index 28aeef8f9e7b..4d527d92457d 100644
+> --- a/include/linux/usb/typec_altmode.h
+> +++ b/include/linux/usb/typec_altmode.h
+> @@ -34,6 +34,16 @@ struct typec_altmode {
+>  
+>  #define to_typec_altmode(d) container_of(d, struct typec_altmode, dev)
+>  
+> +/**
+> + * These are used by the Alternate Mode drivers to tell the tcpm to transmit
+> + * over the selected SOP type, and are used by the tcpm to communicate the
+> + * received VDM SOP type to the Alternate Mode drivers.
+> + */
+> +enum typec_altmode_transmit_type {
+> +	TYPEC_ALTMODE_SOP,
+> +	TYPEC_ALTMODE_SOP_PRIME,
+> +};
+> +
+>  static inline void typec_altmode_set_drvdata(struct typec_altmode *altmode,
+>  					     void *data)
+>  {
+> @@ -55,21 +65,25 @@ static inline void *typec_altmode_get_drvdata(struct typec_altmode *altmode)
+>   * @activate: User callback for Enter/Exit Mode
+>   */
+>  struct typec_altmode_ops {
+> -	int (*enter)(struct typec_altmode *altmode, u32 *vdo);
+> -	int (*exit)(struct typec_altmode *altmode);
+> +	int (*enter)(struct typec_altmode *altmode, u32 *vdo,
+> +		     enum typec_altmode_transmit_type sop_type);
+> +	int (*exit)(struct typec_altmode *altmode,
+> +		    enum typec_altmode_transmit_type sop_type);
+>  	void (*attention)(struct typec_altmode *altmode, u32 vdo);
+>  	int (*vdm)(struct typec_altmode *altmode, const u32 hdr,
+> -		   const u32 *vdo, int cnt);
+> +		   const u32 *vdo, int cnt, enum typec_altmode_transmit_type sop_type);
+>  	int (*notify)(struct typec_altmode *altmode, unsigned long conf,
+>  		      void *data);
+>  	int (*activate)(struct typec_altmode *altmode, int activate);
+>  };
+>  
+> -int typec_altmode_enter(struct typec_altmode *altmode, u32 *vdo);
+> -int typec_altmode_exit(struct typec_altmode *altmode);
+> +int typec_altmode_enter(struct typec_altmode *altmode, u32 *vdo,
+> +			enum typec_altmode_transmit_type sop_type);
+> +int typec_altmode_exit(struct typec_altmode *altmode, enum typec_altmode_transmit_type sop_type);
+>  int typec_altmode_attention(struct typec_altmode *altmode, u32 vdo);
+>  int typec_altmode_vdm(struct typec_altmode *altmode,
+> -		      const u32 header, const u32 *vdo, int count);
+> +		      const u32 header, const u32 *vdo, int count,
+> +		      enum typec_altmode_transmit_type sop_type);
+>  int typec_altmode_notify(struct typec_altmode *altmode, unsigned long conf,
+>  			 void *data);
+>  const struct typec_altmode *
 
+Instead of forcing this change immediately on every existing user of
+that API, why not supply separate API for the cable alt modes?
+
+Although the SOP* communication is the same in most parts, at least
+Attention (and probable some other messages too) is not valid with
+cable plugs. So maybe it would be more clear to just separate SOP
+communication from SOP Prime/Double Prime in the API?
+
+So it would look something like this:
+
+diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
+index bd41bc362ab0..2f7ae50585b1 100644
+--- a/include/linux/usb/typec_altmode.h
++++ b/include/linux/usb/typec_altmode.h
+@@ -75,6 +75,24 @@ int typec_altmode_notify(struct typec_altmode *altmode, unsigned long conf,
+ const struct typec_altmode *
+ typec_altmode_get_partner(struct typec_altmode *altmode);
+ 
++/**
++ * struct typec_cable_ops - Cable alternate mode operations vector
++ * @enter: Operations to be executed with Enter Mode Command
++ * @exit: Operations to be executed with Exit Mode Command
++ * @vdm: Callback for SVID specific commands
++ */
++struct typec_cable_ops {
++       int (*enter)(struct typec_altmode *altmode, enum typec_plug_index sop, u32 *vdo);
++       int (*exit)(struct typec_altmode *altmode, enum typec_plug_index sop);
++       int (*vdm)(struct typec_altmode *altmode, enum typec_plug_index sop,
++                  const u32 hdr, const u32 *vdo, int cnt);
++};
++
++int typec_cable_altmode_enter(struct typec_altmode *altmode, enum typec_plug_index sop, u32 *vdo);
++int typec_cable_altmode_exit(struct typec_altmode *altmode, enum typec_plug_index sop);
++int typec_cable_altmode_vdm(struct typec_altmode *altmode, enum typec_plug_index sop,
++                           const u32 header, const u32 *vdo, int count);
++
+ /*
+  * These are the connector states (USB, Safe and Alt Mode) defined in USB Type-C
+  * Specification. SVID specific connector states are expected to follow and
+
+
+thanks,
+
+-- 
+heikki
 
