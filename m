@@ -1,134 +1,95 @@
-Return-Path: <linux-usb+bounces-3846-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3847-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CB7380873A
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 13:02:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10385808768
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 13:12:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D66E1C215F6
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 12:01:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 846401F224B7
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 12:12:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6366A39ADF;
-	Thu,  7 Dec 2023 12:01:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E0C639AED;
+	Thu,  7 Dec 2023 12:12:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CBZ59ry5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S/mftodZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DB1AA;
-	Thu,  7 Dec 2023 04:01:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701950509; x=1733486509;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=APk8BnUEAD3kMbuSbw1mcu8TmnFWgLBT+IUePjKQZeE=;
-  b=CBZ59ry5/leUv5Bs39R3nlDHhmUTWqKko5nQ+EewLX2HwHM18DDD24mN
-   7P8pFG2uRdD2gwYeILqO8Rmsx5WqiuH2nB/fWtF0B6bfjP1pYBiFtpRCe
-   5htZQPHmy6dHqvTXzfAR/o0t8kiTNA5bEi/aqXuRJ1P4IBo2Fl58GOYRo
-   if4iCPnX7Lrcb4Hw8eRHABjBWYgDZNckzeLsAC5BXCq16l7a0s7tHBEZp
-   4HCtLyDmMtDGG1M+PWa7DzQ8uT5Tgvw/eYwgh1cDIuAQnYKIOLUQGGSCR
-   QYv1Tjxz8RXtRT83FXfyed4zMBcxcnPZbtozL2JVHVwjQBw29xv/29Q60
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="1100881"
-X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
-   d="scan'208";a="1100881"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 04:01:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="862452336"
-X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
-   d="scan'208";a="862452336"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by FMSMGA003.fm.intel.com with SMTP; 07 Dec 2023 04:01:46 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 07 Dec 2023 14:01:45 +0200
-Date: Thu, 7 Dec 2023 14:01:45 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Arnd Bergmann <arnd@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: nb7vpq904m: add CONFIG_OF dependency
-Message-ID: <ZXG0Kc0HmSAoTNx+@kuha.fi.intel.com>
-References: <20231206123828.587065-1-arnd@kernel.org>
- <ZXGySCtdsxW4qCel@kuha.fi.intel.com>
- <CAA8EJprV3O24V0+MnPK1OdQZQ_7F2aMfN1Um13eH9ux4J+ucMw@mail.gmail.com>
- <ZXGzJlv9C3Z9lMeI@kuha.fi.intel.com>
- <CAA8EJpphJwfL-ZBOirzezBkBQ4E0RhhugtJh_jM0aHsHgp0D8g@mail.gmail.com>
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD31D7F
+	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 04:12:49 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5d40c728fc4so4512237b3.1
+        for <linux-usb@vger.kernel.org>; Thu, 07 Dec 2023 04:12:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701951168; x=1702555968; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1nl7VzXYUVLpuywJ0ghnOgpBSVbJk3MSKILZ8n2HQ/Y=;
+        b=S/mftodZiG4i4zFf1I5snXr76QX5fPvJ2UQLo9CYYm+rFwg+OIFKUmVvJHg0XYYTo0
+         E16xkwZSgw0OdlnzXja4emaegK0lX/a8YvAj1FQp7arjpneT9Rav7GXlS7T5LETuSWS3
+         5F19Hu5gxKqVYb1soc1K05uYEOF0l/4sHB6rp9AqJj4kdMk0vQuJsuIjkrevWXPqAokB
+         geGYuTxwTX5RabpoUmswPvykiJgnux+tzYp79DNoRirvrbURpDrHtPD9JBqGaj5E7Bwq
+         /+kg4x6Palc6uhgKGDNh8flhGikWEcEGOF1vTdpYi1DrmkCmpO/t7Gn9Eu5gRvkKGgQo
+         MHTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701951168; x=1702555968;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1nl7VzXYUVLpuywJ0ghnOgpBSVbJk3MSKILZ8n2HQ/Y=;
+        b=wqKiMjb+unR2WpILgqyQnlb5+GbKNvbXjikK3ugIqw1Gpw1iZ/IhEf4wfLZBkMgQIl
+         EbE12npahWLTZcY7SYITUR9YLsKcZnDHCZkPwQcxud452cTRyIiYmpTWBmCxkZprE0IX
+         wOaGIbX+bEeqOvUqKt1kLLEIoKcupwyAJvpXwEg+QUHmuU9YWO8dHPo9tkwvrDc1jr+t
+         MPKiluJRWqMP1Z1kEzLOobHHmyT2l/aBY00gJckQ/el++iiQXjRfDueuYaQpnZXjrpAr
+         r/Rw5oZVrzEQeQp0LfeBR2fhOpfZL04d4IThFAf7x3/pAy84qgj4SCD8bTE9fNtLO6xL
+         IUqQ==
+X-Gm-Message-State: AOJu0Yy4uTldpNGLyN3RKuM/JtI8hEZXDPY+T4zMELgZk2mFnAsKHNjl
+	iGe7kJyvZJU1nFe4NniX9BNrb/7zc4vuK9WYEjeDzQWxBOzcOd86
+X-Google-Smtp-Source: AGHT+IGBQEt+6GpTODFbSFDlARHWKMqOvTNDHhmGHjyt06ChJHobnZLbJNE5ZT57jwuIGHkEkLgeHxLiKcSb32XnRQM=
+X-Received: by 2002:a81:5293:0:b0:5d7:1940:3ef6 with SMTP id
+ g141-20020a815293000000b005d719403ef6mr1945230ywb.39.1701951168367; Thu, 07
+ Dec 2023 04:12:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpphJwfL-ZBOirzezBkBQ4E0RhhugtJh_jM0aHsHgp0D8g@mail.gmail.com>
+References: <20231206123828.587065-1-arnd@kernel.org> <ZXGySCtdsxW4qCel@kuha.fi.intel.com>
+ <CAA8EJprV3O24V0+MnPK1OdQZQ_7F2aMfN1Um13eH9ux4J+ucMw@mail.gmail.com>
+ <ZXGzJlv9C3Z9lMeI@kuha.fi.intel.com> <c1df6dc4-ad3f-41ba-b024-1b432dac7af1@app.fastmail.com>
+In-Reply-To: <c1df6dc4-ad3f-41ba-b024-1b432dac7af1@app.fastmail.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Thu, 7 Dec 2023 14:12:37 +0200
+Message-ID: <CAA8EJpp+ikpFZ1BL4PZJG_kK3n_u3mTTGZjd8A+=20gPm_SOyA@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: nb7vpq904m: add CONFIG_OF dependency
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Arnd Bergmann <arnd@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Dec 07, 2023 at 01:58:31PM +0200, Dmitry Baryshkov wrote:
-> On Thu, 7 Dec 2023 at 13:57, Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
+On Thu, 7 Dec 2023 at 14:00, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Thu, Dec 7, 2023, at 12:57, Heikki Krogerus wrote:
 > > On Thu, Dec 07, 2023 at 01:55:06PM +0200, Dmitry Baryshkov wrote:
-> > > On Thu, 7 Dec 2023 at 13:53, Heikki Krogerus
-> > > <heikki.krogerus@linux.intel.com> wrote:
-> > > >
-> > > > On Wed, Dec 06, 2023 at 01:38:14PM +0100, Arnd Bergmann wrote:
-> > > > > From: Arnd Bergmann <arnd@arndb.de>
-> > > > >
-> > > > > DRM_AUX_BRIDGE depends on CONFIG_OF, so the same dependency is needed
-> > > > > here to avoid a build failure:
-> > > > >
-> > > > > WARNING: unmet direct dependencies detected for DRM_AUX_BRIDGE
-> > > > >   Depends on [n]: HAS_IOMEM [=y] && DRM_BRIDGE [=y] && OF [=n]
-> > > > >   Selected by [y]:
-> > > > >   - TYPEC_MUX_NB7VPQ904M [=y] && USB_SUPPORT [=y] && TYPEC [=y] && I2C [=y] && (DRM [=y] || DRM [=y]=n) && DRM_BRIDGE [=y]
-> > > > > x86_64-linux-ld: drivers/gpu/drm/bridge/aux-bridge.o: in function `drm_aux_bridge_register':
-> > > > > aux-bridge.c:(.text+0x13b): undefined reference to `auxiliary_device_init'
-> > > > > x86_64-linux-ld: aux-bridge.c:(.text+0x14d): undefined reference to `__auxiliary_device_add'
-> > > > > x86_64-linux-ld: drivers/gpu/drm/bridge/aux-bridge.o: in function `drm_aux_bridge_drv_init':
-> > > > > aux-bridge.c:(.init.text+0x15): undefined reference to `__auxiliary_driver_register'
-> > > > > x86_64-linux-ld: drivers/gpu/drm/bridge/aux-bridge.o: in function `drm_aux_bridge_drv_exit':
-> > > > > aux-bridge.c:(.exit.text+0x9): undefined reference to `auxiliary_driver_unregister'
-> > > > >
-> > > > > Fixes: c5d296bad640 ("usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE")
-> > > > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > > > > ---
-> > > > >  drivers/usb/typec/mux/Kconfig | 1 +
-> > > > >  1 file changed, 1 insertion(+)
-> > > > >
-> > > > > diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-> > > > > index 5120942f309d..818624f59120 100644
-> > > > > --- a/drivers/usb/typec/mux/Kconfig
-> > > > > +++ b/drivers/usb/typec/mux/Kconfig
-> > > > > @@ -40,6 +40,7 @@ config TYPEC_MUX_NB7VPQ904M
-> > > > >       tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
-> > > > >       depends on I2C
-> > > > >       depends on DRM || DRM=n
-> > > > > +     depends on OF
-> > > > >       select DRM_AUX_BRIDGE if DRM_BRIDGE
-> > > > >       select REGMAP_I2C
-> > > > >       help
-> > > >
-> > > > Shouldn't DRM_BRIDGE depend on OF instead?
-> > >
-> > > No. DRM_AUX_BRIDGE depends on OF, DRM_BRIDGE framework doesn't.
-> >
+>
 > > Okay, so this probable should also be
 > >
 > >         select DRM_AUX_BRIDGE if DRM_BRIDGE and OF
-> 
-> Yes, this is what a patch from Nathan does:
-> https://patchwork.freedesktop.org/patch/570638/?series=127385&rev=1
+> >
+> > No?
+>
+> I think that fails if CONFIG_OF is disabled and
+> CONFIG_DRM_AUX_BRIDGE, since drm_aux_bridge_register()
+> will still be called from a built-in driver in that
+> case but can't be linked against.
 
-Ah, sorry about the noise.
-
-thanks,
+If DRM_AUX_BRIDGE is not enabled, then the stubs from
+include/drm/bridge/aux-bridge will be used instead.
 
 -- 
-heikki
+With best wishes
+Dmitry
 
