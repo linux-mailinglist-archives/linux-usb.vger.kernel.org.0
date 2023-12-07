@@ -1,106 +1,197 @@
-Return-Path: <linux-usb+bounces-3802-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3803-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA7DB8081B7
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 08:17:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA89C80820F
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 08:41:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6F7F2830A4
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 07:17:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3097CB214EC
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 07:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C0E016409;
-	Thu,  7 Dec 2023 07:17:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DC47199CF;
+	Thu,  7 Dec 2023 07:41:38 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47961193;
-	Wed,  6 Dec 2023 23:17:21 -0800 (PST)
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3B77G47p84188847, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3B77G47p84188847
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F144137;
+	Wed,  6 Dec 2023 23:41:34 -0800 (PST)
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3B77eMLW1005290, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3B77eMLW1005290
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 7 Dec 2023 15:16:04 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+	Thu, 7 Dec 2023 15:40:22 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 7 Dec 2023 15:16:04 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ 15.1.2375.32; Thu, 7 Dec 2023 15:40:23 +0800
+Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 7 Dec 2023 15:16:04 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
- RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
- 15.01.2375.007; Thu, 7 Dec 2023 15:16:04 +0800
-From: =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= <stanley_chang@realtek.com>
+ 15.1.2375.7; Thu, 7 Dec 2023 15:40:22 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
+ 15.1.2507.17 via Frontend Transport; Thu, 7 Dec 2023 15:40:22 +0800
+From: Stanley Chang <stanley_chang@realtek.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Vinod Koul <vkoul@kernel.org>, Johan Hovold <johan@kernel.org>,
-        "Kishon
- Vijay Abraham I" <kishon@kernel.org>,
-        Geert Uytterhoeven
-	<geert+renesas@glider.be>,
-        Rob Herring <robh@kernel.org>, Jinjie Ruan
-	<ruanjinjie@huawei.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Yang
- Yingliang" <yangyingliang@huawei.com>,
-        =?utf-8?B?UmljYXJkbyBDYcOxdWVsbw==?=
-	<ricardo.canuelo@collabora.com>,
-        Roy Luo <royluo@google.com>,
+CC: Stanley Chang <stanley_chang@realtek.com>, Vinod Koul <vkoul@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jinjie Ruan
+	<ruanjinjie@huawei.com>, Rob Herring <robh@kernel.org>,
+        Alan Stern
+	<stern@rowland.harvard.edu>,
         Heikki Krogerus
 	<heikki.krogerus@linux.intel.com>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-phy@lists.infradead.org"
-	<linux-phy@lists.infradead.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v3 4/4] usb: core: add phy notify connect and disconnect
-Thread-Topic: [PATCH v3 4/4] usb: core: add phy notify connect and disconnect
-Thread-Index: AQHaE5mWy2ByyOGB8E2Gd3l7rr7vdLCdakMA//+hewCAAIbuYA==
-Date: Thu, 7 Dec 2023 07:16:04 +0000
-Message-ID: <fa4041d2a2ac4d6498938bfa10106dc5@realtek.com>
-References: <20231110054738.23515-1-stanley_chang@realtek.com>
- <20231110054738.23515-4-stanley_chang@realtek.com>
- <4736a6933f3546c48f24a635c15a5e20@realtek.com>
- <2023120724-herring-filled-c32e@gregkh>
-In-Reply-To: <2023120724-herring-filled-c32e@gregkh>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Flavio Suligoi <f.suligoi@asem.it>,
+        =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>
+Subject: [PATCH v3 RESEND 1/4] phy: core: add notify_connect and notify_disconnect callback
+Date: Thu, 7 Dec 2023 15:38:04 +0800
+Message-ID: <20231207074022.14116-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-KSE-ServerInfo: RTEXDAG01.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
 X-KSE-AntiSpam-Interceptor-Info: fallback
 
-SGkgR3JlZywNCg0KT2theS4NCkkgd2lsbCByZXN1Ym1pdCB0aGVzZSBwYXRjaGVzLg0KDQpUaGFu
-a3MsDQpTdGFubGV5DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR3Jl
-ZyBLcm9haC1IYXJ0bWFuIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4NCj4gU2VudDogVGh1
-cnNkYXksIERlY2VtYmVyIDcsIDIwMjMgMzoxMSBQTQ0KPiBUbzogU3RhbmxleSBDaGFuZ1vmmIzo
-grLlvrddIDxzdGFubGV5X2NoYW5nQHJlYWx0ZWsuY29tPg0KPiBDYzogVmlub2QgS291bCA8dmtv
-dWxAa2VybmVsLm9yZz47IEpvaGFuIEhvdm9sZCA8am9oYW5Aa2VybmVsLm9yZz47IEtpc2hvbg0K
-PiBWaWpheSBBYnJhaGFtIEkgPGtpc2hvbkBrZXJuZWwub3JnPjsgR2VlcnQgVXl0dGVyaG9ldmVu
-DQo+IDxnZWVydCtyZW5lc2FzQGdsaWRlci5iZT47IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5v
-cmc+OyBKaW5qaWUgUnVhbg0KPiA8cnVhbmppbmppZUBodWF3ZWkuY29tPjsgQWxhbiBTdGVybiA8
-c3Rlcm5Acm93bGFuZC5oYXJ2YXJkLmVkdT47IFlhbmcNCj4gWWluZ2xpYW5nIDx5YW5neWluZ2xp
-YW5nQGh1YXdlaS5jb20+OyBSaWNhcmRvIENhw7F1ZWxvDQo+IDxyaWNhcmRvLmNhbnVlbG9AY29s
-bGFib3JhLmNvbT47IFJveSBMdW8gPHJveWx1b0Bnb29nbGUuY29tPjsgSGVpa2tpDQo+IEtyb2dl
-cnVzIDxoZWlra2kua3JvZ2VydXNAbGludXguaW50ZWwuY29tPjsgbGludXgta2VybmVsQHZnZXIu
-a2VybmVsLm9yZzsNCj4gbGludXgtcGh5QGxpc3RzLmluZnJhZGVhZC5vcmc7IGxpbnV4LXVzYkB2
-Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2MyA0LzRdIHVzYjogY29yZTog
-YWRkIHBoeSBub3RpZnkgY29ubmVjdCBhbmQgZGlzY29ubmVjdA0KPiANCj4gDQo+IEV4dGVybmFs
-IG1haWwuDQo+IA0KPiANCj4gDQo+IE9uIFRodSwgRGVjIDA3LCAyMDIzIGF0IDA0OjUwOjEwQU0g
-KzAwMDAsIFN0YW5sZXkgQ2hhbmdb5piM6IKy5b63XSB3cm90ZToNCj4gPiBIaSBHcmVnLA0KPiA+
-DQo+ID4gUGxlYXNlIGhlbHAgcmV2aWV3IHRoaXMgcGF0Y2guDQo+IA0KPiBUaGlzIHNlcmllcyBp
-cyBnb25lIGZyb20gbXkgdHJlZSBhcyBvdGhlcnMgcmV2aWV3ZWQgaXQgYW5kIGFza2VkIGZvciBj
-aGFuZ2VzLg0KPiBJZiB5b3UgdGhpbmsgdGhvc2UgY2hhbmdlcyBhcmUgbm90IG5lZWRlZCwgZmVl
-bCBmcmVlIHRvIHJlc2VuZCBpdCB3aXRoIGFuDQo+IGV4cGxhbmF0aW9uIG9mIHdoeSB0aGF0IGlz
-IHNvLg0KPiANCj4gdGhhbmtzLA0KPiANCj4gZ3JlZyBrLWgNCg==
+In Realtek SoC, the parameter of usb phy is designed to can dynamic
+tuning base on port status. Therefore, add a notify callback of phy
+driver when usb connection/disconnection change.
+
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+RESEND:
+    Because there is no extcon device provided in the USB framework to
+    notify connect and disconnect.
+    Therefore, I added the notification connection/disconnection based
+    on the generic phy. So I no use the EXTCON framework for notifying
+    connect/disconnect.
+v2 to v3:
+    No change
+v1 to v2:
+    No change
+---
+ drivers/phy/phy-core.c  | 47 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/phy/phy.h | 18 ++++++++++++++++
+ 2 files changed, 65 insertions(+)
+
+diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+index 96a0b1e111f3..a84ad4896b7f 100644
+--- a/drivers/phy/phy-core.c
++++ b/drivers/phy/phy-core.c
+@@ -489,6 +489,53 @@ int phy_calibrate(struct phy *phy)
+ }
+ EXPORT_SYMBOL_GPL(phy_calibrate);
+ 
++/**
++ * phy_notify_connect() - phy connect notify
++ * @phy: the phy returned by phy_get()
++ * @port: the port index for connect
++ *
++ * If phy need the get connection status, the callback can be used.
++ * Returns: %0 if successful, a negative error code otherwise
++ */
++int phy_notify_connect(struct phy *phy, int port)
++{
++	int ret;
++
++	if (!phy || !phy->ops->connect)
++		return 0;
++
++	mutex_lock(&phy->mutex);
++	ret = phy->ops->connect(phy, port);
++	mutex_unlock(&phy->mutex);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(phy_notify_connect);
++
++/**
++ * phy_notify_disconnect() - phy disconnect notify
++ * @phy: the phy returned by phy_get()
++ * @port: the port index for disconnect
++ *
++ * If phy need the get disconnection status, the callback can be used.
++ *
++ * Returns: %0 if successful, a negative error code otherwise
++ */
++int phy_notify_disconnect(struct phy *phy, int port)
++{
++	int ret;
++
++	if (!phy || !phy->ops->disconnect)
++		return 0;
++
++	mutex_lock(&phy->mutex);
++	ret = phy->ops->disconnect(phy, port);
++	mutex_unlock(&phy->mutex);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(phy_notify_disconnect);
++
+ /**
+  * phy_configure() - Changes the phy parameters
+  * @phy: the phy returned by phy_get()
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index f6d607ef0e80..cf98cb29ddaa 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -122,6 +122,8 @@ struct phy_ops {
+ 			    union phy_configure_opts *opts);
+ 	int	(*reset)(struct phy *phy);
+ 	int	(*calibrate)(struct phy *phy);
++	int	(*connect)(struct phy *phy, int port);
++	int	(*disconnect)(struct phy *phy, int port);
+ 	void	(*release)(struct phy *phy);
+ 	struct module *owner;
+ };
+@@ -243,6 +245,8 @@ static inline enum phy_mode phy_get_mode(struct phy *phy)
+ }
+ int phy_reset(struct phy *phy);
+ int phy_calibrate(struct phy *phy);
++int phy_notify_connect(struct phy *phy, int port);
++int phy_notify_disconnect(struct phy *phy, int port);
+ static inline int phy_get_bus_width(struct phy *phy)
+ {
+ 	return phy->attrs.bus_width;
+@@ -396,6 +400,20 @@ static inline int phy_calibrate(struct phy *phy)
+ 	return -ENOSYS;
+ }
+ 
++static inline int phy_notify_connect(struct phy *phy, int index)
++{
++	if (!phy)
++		return 0;
++	return -ENOSYS;
++}
++
++static inline int phy_notify_disconnect(struct phy *phy, int index)
++{
++	if (!phy)
++		return 0;
++	return -ENOSYS;
++}
++
+ static inline int phy_configure(struct phy *phy,
+ 				union phy_configure_opts *opts)
+ {
+-- 
+2.34.1
+
 
