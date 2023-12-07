@@ -1,90 +1,62 @@
-Return-Path: <linux-usb+bounces-3878-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3879-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8666180924A
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 21:28:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 254BF809256
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 21:33:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7A0B1C20AF9
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 20:28:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4B25281977
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 20:33:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45C1551009;
-	Thu,  7 Dec 2023 20:28:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C881F524CB;
+	Thu,  7 Dec 2023 20:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kW81JGLc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 007C910F9
-	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 12:28:36 -0800 (PST)
-Received: (qmail 18693 invoked by uid 1000); 7 Dec 2023 15:28:36 -0500
-Date: Thu, 7 Dec 2023 15:28:36 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Tasos Sahanidis <tasos@tasossah.com>
-Cc: linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-  martin.petersen@oracle.com
-Subject: Re: [PATCH] usb-storage: Add quirk for incorrect WP on Kingston DT
- Ultimate 3.0 G3
-Message-ID: <1d2cb947-8fb2-43e7-83bf-4386df35badd@rowland.harvard.edu>
-References: <20231207134441.298131-1-tasos@tasossah.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2703F563A8;
+	Thu,  7 Dec 2023 20:32:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EB37C433C7;
+	Thu,  7 Dec 2023 20:32:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701981177;
+	bh=Czicd5N/eXaMLjTilbeZ1WUkn0YbvQTJzzOKqY7RemA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=kW81JGLc1cjb9TaxSmqDV2nxeQjeYaPVfVhNAtH2tZ81Y3GWgXgHZAY0rOWblhVYv
+	 YOql0kFfBUFjj9v9eZ4MHZtx/Osz2FBORYVcLOC5JphinYn/42k064IrOAFY9vQyYY
+	 eCkTadcdQephXqlSuGRJ/wp4L7QHOd7/Mnp5giuMWCyP4GIUUw5PDwcdFenWq/gxpn
+	 282pHAsjgL2blUaHo6nbYDaq97UHuM6O8oP8brwLiA3qQM+d4JjPiJeqwotrtkI5Fz
+	 toOtfsjaGqAt52VztbWiIENZW034Ckx3N1Sz0KNDUgo2ITm9Cs+kwIcQ0yWv+7vhWh
+	 bfM0GKuCXcCeA==
+Date: Thu, 7 Dec 2023 12:32:56 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>, davem@davemloft.net,
+ edumazet@google.com, greg@kroah.com, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org, oneukum@suse.com,
+ pabeni@redhat.com, stable@vger.kernel.org
+Subject: Re: [PATCH v6] net: usb: ax88179_178a: avoid failed operations when
+ device is disconnected
+Message-ID: <20231207123256.337753f9@kernel.org>
+In-Reply-To: <d8c331dd-deb1-4f12-8e66-295bfac8b1d7@rowland.harvard.edu>
+References: <0bd3204e-19f4-48de-b42e-a75640a1b1da@rowland.harvard.edu>
+	<20231207175007.263907-1-jtornosm@redhat.com>
+	<d8c331dd-deb1-4f12-8e66-295bfac8b1d7@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231207134441.298131-1-tasos@tasossah.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Dec 07, 2023 at 03:44:41PM +0200, Tasos Sahanidis wrote:
-> This flash drive reports write protect during the first mode sense.
-> 
-> In the past this was not an issue as the kernel called revalidate twice,
-> thus asking the device for its write protect status twice, with write
-> protect being disabled in the second mode sense.
-> 
-> However, since commit 1e029397d12f ("scsi: sd: Reorganize DIF/DIX code to
-> avoid calling revalidate twice") that is no longer the case, thus the
-> device shows up read only.
-> 
-> [490891.289495] sd 12:0:0:0: [sdl] Write Protect is on
-> [490891.289497] sd 12:0:0:0: [sdl] Mode Sense: 2b 00 80 08
-> 
-> This does not appear to be a timing issue, as enabling the usbcore quirk
-> USB_QUIRK_DELAY_INIT has no effect on write protect.
-> 
-> Fixes: 1e029397d12f ("scsi: sd: Reorganize DIF/DIX code to avoid calling revalidate twice")
-> Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
-> ---
+On Thu, 7 Dec 2023 15:23:23 -0500 Alan Stern wrote:
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
->  drivers/usb/storage/unusual_devs.h | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-> index 20dcbccb290b..fd68204374f2 100644
-> --- a/drivers/usb/storage/unusual_devs.h
-> +++ b/drivers/usb/storage/unusual_devs.h
-> @@ -1305,6 +1305,17 @@ UNUSUAL_DEV(  0x090c, 0x6000, 0x0100, 0x0100,
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->  		US_FL_INITIAL_READ10 ),
->  
-> +/*
-> + * Patch by Tasos Sahanidis <tasos@tasossah.com>
-> + * This flash drive always shows up with write protect enabled
-> + * during the first mode sense.
-> + */
-> +UNUSUAL_DEV(0x0951, 0x1697, 0x0100, 0x0100,
-> +		"Kingston",
-> +		"DT Ultimate G3",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_NO_WP_DETECT),
-> +
->  /*
->   * This Pentax still camera is not conformant
->   * to the USB storage specification: -
-> -- 
-> 2.25.1
-> 
+FWIW I'm expecting Greg to pick this up for usb.
 
