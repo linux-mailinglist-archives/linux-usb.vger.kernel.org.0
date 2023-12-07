@@ -1,103 +1,125 @@
-Return-Path: <linux-usb+bounces-3863-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3864-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09504808CE7
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 17:07:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19748808CF1
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 17:12:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A635B1F20FBA
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 16:07:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4B241F210C2
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 16:12:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C5F94654C;
-	Thu,  7 Dec 2023 16:06:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D71CA46B95;
+	Thu,  7 Dec 2023 16:12:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mPFMZ547"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mgdsO7OI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C974884;
-	Thu,  7 Dec 2023 08:06:52 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-5c68b988f3eso40023a12.1;
-        Thu, 07 Dec 2023 08:06:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701965212; x=1702570012; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SncyDrD1iqLY11BuPRzN4t5QxIXbUDgT8cWLREXyzyY=;
-        b=mPFMZ547LMOIPmGmSXZdiOHz3E96gT6819KsDGjwr7ed/Pn+BdBziLGqJ6cvGuQOeB
-         OKYInvwLMwCXv8jXF8XgTt2VNae3c9E2TKEUjOu9m9rI1P49Jl/RY6mpHCyHalGCYUVG
-         6CRgxbz3y8vix09f2DhVJc+z02iWfabpCaEUaB5hEESAp/AYkAujvzfeas5BhFR85jGA
-         woh+2CbIdoQbHFM6vQklzaCdcbBTLW09Pe/EJqoNqKpYdEEprHWFOJr7f1Gi0rtxMuDd
-         k60/65BSZQ4BIMZQOrA7qWdjkXVclZJy9zDDEXv5plVvsPoHFJqtpMykN0EBPpyMEfUT
-         owyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701965212; x=1702570012;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SncyDrD1iqLY11BuPRzN4t5QxIXbUDgT8cWLREXyzyY=;
-        b=Y4BcCpF+AXi9cGdPOWBOjQS3TOh4wmFevC3GeMKt9XXM6woz2kDWzonRA6JTXhx4WH
-         6Y3DT/BtydE/ebPPFL0pjCRWUQa0v9NGowNDxN32BHt7uwb1ZPm3CLneQBYwnbJek9e3
-         HNxbbPsCWDeDfMW/fv8atNUe4DxR9Pe3hv+yRxJ5zvf/NdQTp55t9Sirekt/JqnfPWwd
-         iQkVHbhjIHCyPl7jofQJCkCCNu/nSer5N6EpCIKJYytLP4GmmWkhCiyMf1Fpm6LOeH6c
-         JveeslTpXdBJYCb4ILCLko8rZQfc4tZpJGf+gTuqnc1k2Ri1UqN8Rtau2HEF5c2TevI6
-         ZT5w==
-X-Gm-Message-State: AOJu0Yxe6iDvW3tEJsXDQ0AfnCahlTzSsI5wnetZ+B+vDIe7fefQRW1J
-	IFkrByWcVu6FQBBc59jonJw=
-X-Google-Smtp-Source: AGHT+IHnJeBMW6DlsH7CCcFUL2AkakRI5XBn+D+QWxbm+CG9Uy/jEGkYqxpCEMDOiJe0WGKSviyQtg==
-X-Received: by 2002:a05:6a20:e117:b0:187:4a56:9a06 with SMTP id kr23-20020a056a20e11700b001874a569a06mr5881126pzb.5.1701965212155;
-        Thu, 07 Dec 2023 08:06:52 -0800 (PST)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:492a:db3d:eb42:de92])
-        by smtp.gmail.com with ESMTPSA id x20-20020a056a00189400b006ce5066282bsm1492673pfh.34.2023.12.07.08.06.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Dec 2023 08:06:51 -0800 (PST)
-From: Fabio Estevam <festevam@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: jun.li@nxp.com,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Fabio Estevam <festevam@denx.de>
-Subject: [PATCH] dt-bindings: usb: nxp,ptn5110: Fix typo in the title
-Date: Thu,  7 Dec 2023 13:06:34 -0300
-Message-Id: <20231207160634.2646285-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DEFB40BE5;
+	Thu,  7 Dec 2023 16:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9396DC433C8;
+	Thu,  7 Dec 2023 16:12:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701965531;
+	bh=oDFKU6He3TF2Z/VxsatMVTx0wO+MupzIPTDKqHifMUQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mgdsO7OIKFVnsRpXfPzhSFtBbKHmi+fLTH0WyXQIbUw+SmRKpaiHLmHcaQhxMjxng
+	 9IHefwqe3Ryh6cPXGecRg3Hubb0SDQ6+CfcPRYxMyquIqGqdF9+dc1Crptxu320g/y
+	 L7bSFC0PRGMrGe20aQYp6+X3X8+KuJlVundGC64PrvmFcG9BBJVX5ojLNHrxjMsjIy
+	 65Wu5b7SCS6kM/XlzY2FjFsjnDIskG1bAX2I+AuPz+xSdWTJPJkNtp4u39MMeyWE4T
+	 +p1VNFAwPB1qdJdm/n6vp6YYGvXOiIxbvB6s087lgX3gV8dzUcg/nBw/iSDI+oYRN3
+	 YDxGY6xtqQcUw==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1rBGzl-00011w-1k;
+	Thu, 07 Dec 2023 17:13:01 +0100
+Date: Thu, 7 Dec 2023 17:13:01 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	cros-qcom-dts-watchers@chromium.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, quic_ppratap@quicinc.com,
+	quic_jackp@quicinc.com
+Subject: Re: [PATCH v2 1/6] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
+ bindings
+Message-ID: <ZXHvDaeoG1SuZ9xj@hovoldconsulting.com>
+References: <20231204100950.28712-1-quic_kriskura@quicinc.com>
+ <20231204100950.28712-2-quic_kriskura@quicinc.com>
+ <ZXHjXGEbdtbCiOck@hovoldconsulting.com>
+ <028097f3-9056-4c07-a868-4eeac9bc8c94@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <028097f3-9056-4c07-a868-4eeac9bc8c94@quicinc.com>
 
-From: Fabio Estevam <festevam@denx.de>
-
-The word 'Controller' is misspelled.
-
-Fix it.
-
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
- Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-index 28eb25ecba74..f154fae290a4 100644
---- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-+++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/usb/nxp,ptn5110.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
+On Thu, Dec 07, 2023 at 09:14:55PM +0530, Krishna Kurapati PSSNV wrote:
  
--title: NXP PTN5110 Typec Port Cotroller
-+title: NXP PTN5110 Typec Port Controller
- 
- maintainers:
-   - Li Jun <jun.li@nxp.com>
--- 
-2.34.1
+> >> +        - qusb2_phy:: SoCs with QUSB2 PHY do not have separate DP/DM IRQs and
+> >> +                      expose only a single IRQ whose behavior can be modified
+> >> +                      by the QUSB2PHY_INTR_CTRL register. The required DPSE/
+> >> +                      DMSE configuration is done in QUSB2PHY_INTR_CTRL register
+> >> +                      of phy address space.
+> >> +        - {dp/dm}_hs_phy_irq:: These IRQ's directly reflect changes on the DP/
+> >> +                               DM pads of the SoC. These are used for wakeup
+> >> +                               only on SoCs with non-QUSBb2 targets with
+> > 
+> > QUSB2 typo
+> > 
+> >> +                               exception of SDM670/SDM845/SM6350.
+> >> +        - ss_phy_irq:: When in super speed mode of operation, interrupts are
+> > 
+> > Capitalise 'Super Speed'
+> > 
+> >> +                       received when a wakeup event is received on ss_phy_irq.
+> > 
+> > The description as it stands sounds circular. And this one is only used
+> > for remote wakeup right?
+> > 
+> Yes. It is used for remote wakeup. Mentioning it as wakeup event should 
+> be changed ?
 
+It would be good to clarify that this one is the IIUC not used for
+connect/disconnect events but just for remote wakeup, that is, unlike
+the qusb2_phy and dp/dm_hs_phy interrupts.
+
+The old descriptions just vaguely said "wakeup event" and
+connect/disconnect events aren't necessarily wakeup events.
+
+> > Also have you set up the tools so that you can verify your bindings
+> > before posing them? I assume the above wouldn't pass (e.g. due to the
+> > "(optional)" strings).
+> > 
+> > There's some more details here:
+> > 
+> > 	https://docs.kernel.org/devicetree/bindings/writing-schema.html
+> > 
+> > under "Running checks".
+> 
+> I did do a dt-binding check and got the following line as well:
+> 
+>    DTC_CHK Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb
+> /local/mnt/workspace/sriramd/upstream/torvalds/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb: 
+> usb@a6f8800: interrupt-names:4: 'ss_phy_irq (optional)' was expected
+>          From schema:
+
+Good that you got that set up.
+
+Johan
 
