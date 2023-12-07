@@ -1,70 +1,55 @@
-Return-Path: <linux-usb+bounces-3852-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3854-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDADB808810
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 13:42:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 047B680891E
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 14:26:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 863E1283391
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 12:42:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40BD82828F4
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 13:26:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A28133D0AD;
-	Thu,  7 Dec 2023 12:42:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37312405ED;
+	Thu,  7 Dec 2023 13:26:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hgnqVnZe"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="CVZE7JSk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACD2D5E;
-	Thu,  7 Dec 2023 04:42:27 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5c67fdbe7d4so111328a12.0;
-        Thu, 07 Dec 2023 04:42:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701952947; x=1702557747; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kBoD0NAlVPKWgZXNfYVQBHK6l1V4ZPm2HAkRoJxe6G8=;
-        b=hgnqVnZeE/zo6bn7psD1QLEF3sod0mgeeNVUWn9ogmm7yACZRYyX0SbYFQPUamx5Am
-         QcEl4GWxT/N/KuYzJXYciDRDi4dHBuRgfbc8Kt0XGJChEnBBRmLY+RQa/udMMkOUiowj
-         owj+O1hj4RHC/WDsslxaAqoDBQ/LjnBLCGjfpCON0qmUfsmZOLRo4Mrrq9pmQ0G0nHh4
-         9juHB3mzGVB4Ojr70iA9I4ed/s+fcPIEFF7WqCEnMsPv2IRZZ/kiDyQg+0ofM3VRVCE8
-         ncrVjGqW5WEOUccymbzHKmzCP38Ab88EVSwjcuRRKU6LqstDf6kLDrcA/v9393DNcFhA
-         9PFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701952947; x=1702557747;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kBoD0NAlVPKWgZXNfYVQBHK6l1V4ZPm2HAkRoJxe6G8=;
-        b=biRsa0aU92NjAQPzVpm6d55JgCdjYg59Xs7DZalogzvpiu4jcsIm72ztLJHidhcEJf
-         Rywa6+5SGWtzbvu42u1/OYci2+KEkV6JZ4fOijCyBgBpvnsdWAMc1fTyzWsy/KioCw9E
-         0teb0a5E7X9OQKqB82Hmk4Ku/BFriLxJCcqg/2zrS2y4n0Wng2F7HOaa433TAr9S/v60
-         AJdr3cKfFOKjwa1t01B6pH4R8BCM/YiF3zFUwsbA75CJoSmYrA17bnX+Q5ryUMhx93Tg
-         7iOqzc8uTB8bf+3B4+Q/Rw/EHGNmLy7THvYD0d4pQc2Kgi7LvRKOBogWP3hJRuhJiTay
-         /7fg==
-X-Gm-Message-State: AOJu0YwT3mKQ4rkhcSw0cHLEtLCADO1QXS5jjuEvGuyOcsxaVtddfJGW
-	iEQ6k2/jT202XJNdgT4mLAU=
-X-Google-Smtp-Source: AGHT+IFH6AJFYpAebsuV5dy8XuNU7aXMCnYbBJkNaIgFkUfJ8ynJX2GLPLJDDjo0NDNpIg6Zl5tSEw==
-X-Received: by 2002:a05:6a21:188:b0:18f:c8e7:ac9f with SMTP id le8-20020a056a21018800b0018fc8e7ac9fmr5160633pzb.3.1701952947301;
-        Thu, 07 Dec 2023 04:42:27 -0800 (PST)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:492a:db3d:eb42:de92])
-        by smtp.gmail.com with ESMTPSA id pw10-20020a17090b278a00b002867594de40sm1263064pjb.14.2023.12.07.04.42.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Dec 2023 04:42:26 -0800 (PST)
-From: Fabio Estevam <festevam@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: uwu@icenowy.me,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Fabio Estevam <festevam@denx.de>
-Subject: [PATCH] dt-bindings: usb: genesys,gl850g: Document 'peer-hub'
-Date: Thu,  7 Dec 2023 09:42:17 -0300
-Message-Id: <20231207124217.2530457-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2a07:de40:b251:101:10:150:64:2])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0675CAA
+	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 05:26:43 -0800 (PST)
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 8801B1FB5B;
+	Thu,  7 Dec 2023 13:26:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1701955602; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=PRjokn8ymlmJiE3WTalVFwVkyc7m7Nrc4bVoc9q+N1E=;
+	b=CVZE7JSkNCoZOwYOzqJaSmd874jo1eWTHVB4l9PkwvhLibNiINVgdN36HrLIA8tzhAf+UY
+	rNFKgtgtWpBYc42nkO3CHHcVSF85fMULyGoiQVHA9UfxezNBlzkgKXgal3pHU4vo36k4cb
+	jMYnBmLknNClDZbgCCC5GaLBIZ+ovOg=
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 3A65213907;
+	Thu,  7 Dec 2023 13:26:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id vbyGCxLIcWVtEgAAn2gu4w
+	(envelope-from <oneukum@suse.com>); Thu, 07 Dec 2023 13:26:42 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: gregkh@linuxfoundation.org,
+	hovold@kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] usb: cdc-acm: return correct error code on unsupported break
+Date: Thu,  7 Dec 2023 14:26:30 +0100
+Message-ID: <20231207132639.18250-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -72,38 +57,77 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [4.98 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 BAYES_SPAM(0.08)[59.18%];
+	 FROM_HAS_DN(0.00)[];
+	 RCPT_COUNT_THREE(0.00)[4];
+	 R_MISSING_CHARSET(2.50)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 BROKEN_CONTENT_TYPE(1.50)[];
+	 TO_DN_SOME(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 MID_CONTAINS_FROM(1.00)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_TLS_ALL(0.00)[]
+Authentication-Results: smtp-out2.suse.de;
+	none
+X-Spam-Score: 4.98
 
-From: Fabio Estevam <festevam@denx.de>
+In ACM support for sending breaks to devices is optional.
+If a device says that it doenot support sending breaks,
+the host must respect that.
+Given the number of optional features providing tty operations
+for each combination is not practical and errors need to be
+returned dynamically if unsupported features are requested.
 
-The 'peer-hub' is a valid property for the hub.
+In case a device does not support break, we want the tty layer
+to treat that like it treats drivers that statically cannot
+support sending a break. It ignores the inability and does nothing.
+This patch uses EOPNOTSUPP to indicate that.
 
-Document it to fix the following dt-schema warning:
-
-imx8mp-debix-som-a-bmb-08.dtb: hub@1: 'peer-hub' does not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
-
-Signed-off-by: Fabio Estevam <festevam@denx.de>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Fixes: 9e98966c7bb94 ("tty: rework break handling")
 ---
- Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/tty/tty_io.c        | 3 +++
+ drivers/usb/class/cdc-acm.c | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-index ee08b9c3721f..37cf5249e526 100644
---- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-+++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-@@ -29,6 +29,11 @@ properties:
-     description:
-       the regulator that provides 3.3V core power to the hub.
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 06414e43e0b5..96617f9af819 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -2489,6 +2489,9 @@ static int send_break(struct tty_struct *tty, unsigned int duration)
+ 	if (!retval) {
+ 		msleep_interruptible(duration);
+ 		retval = tty->ops->break_ctl(tty, 0);
++	} else if (retval == -EOPNOTSUPP) {
++		/* some drivers can tell only dynamically */
++		retval = 0;
+ 	}
+ 	tty_write_unlock(tty);
  
-+  peer-hub:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle to the peer hub on the controller.
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index a1f4e1ead97f..0e7439dba8fe 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -916,6 +916,9 @@ static int acm_tty_break_ctl(struct tty_struct *tty, int state)
+ 	struct acm *acm = tty->driver_data;
+ 	int retval;
+ 
++	if (!(acm->ctrl_caps & USB_CDC_CAP_BRK))
++		return -EOPNOTSUPP;
 +
- required:
-   - compatible
-   - reg
+ 	retval = acm_send_break(acm, state ? 0xffff : 0);
+ 	if (retval < 0)
+ 		dev_dbg(&acm->control->dev,
 -- 
-2.34.1
+2.43.0
 
 
