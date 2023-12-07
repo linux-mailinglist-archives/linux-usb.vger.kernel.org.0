@@ -1,42 +1,42 @@
-Return-Path: <linux-usb+bounces-3856-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3857-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CB29808B17
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 15:53:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4359F808BB5
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 16:22:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D40F1C20B5A
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 14:53:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 02B0F1F2134A
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 15:22:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1BE74437A;
-	Thu,  7 Dec 2023 14:53:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 998CF44C8A;
+	Thu,  7 Dec 2023 15:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HAeke04R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R65VkIkd"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2DE41C88;
-	Thu,  7 Dec 2023 14:53:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF562C433CA;
-	Thu,  7 Dec 2023 14:53:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6DD40BF4;
+	Thu,  7 Dec 2023 15:22:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1624C433CA;
+	Thu,  7 Dec 2023 15:22:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701960783;
-	bh=mz3CTM06zZ00I601O+2CjhckI+2+PyBKpVHj/pfINUI=;
+	s=k20201202; t=1701962538;
+	bh=sSg4qggAKfOIMoU7cAGFb55QGJXmj09uIc6zejvgP+o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HAeke04RAgpKG+7kiqstjVxdiaIWQU5vESnHB1sCh1BgtiQ+Z/fmSoQpiZuu+ainR
-	 dYt39Akt3+8z7R3b0BKdIgOPoEtV4DLxo6ayMOZj8U9Y8rss2L/1vnWIpiCdVGrTOV
-	 R3UW4xchXyfGJaiyxmXNHsHRJP4ODZa139j/Xvn4b2K2JloKyYNT22R+n0GyAgCgNX
-	 OkU59sdQLdy/ZsrLDk/yUaHIG84rn2w2bxW7xCNRDxXS7lXoYs/eLFZv84RWdHhiUW
-	 z49J9hyOlzh8a1DgvFBwaZqYdpXwkc7jq/C5oOdSLZd1M2aGWfkk26dywWt4YPlzDV
-	 +mexkgy9oQSlA==
+	b=R65VkIkdHOTIji/Q+amWpQbIa5ZhKCaC/nGH0Et2FdBLZDdJ1xZ+fG9tVzK2fLogq
+	 2VFmAPJb3xZjIQxzjxTq2UYn3eMIgub1shc6Dwv/4Adve6lq2RB8wFb+VqvjltE7Bo
+	 sdKPzSgBR+og1WmtaOnwAx7tl42wsFaGi7lcnk13Calp1SljdGRneZSXbKPWA3AlAe
+	 834IoZuFcZX2BdvF6gFxiQYcfwqnnP02PI7kf7SMR+vBEYO02440yj60jgoPuWwdOW
+	 WIenk9BD6LlcXeEUqlmW12ImvuydHf2HiBTeFIfF9bUQmbSv/vXqma1YdYejY4FdKG
+	 hPEKHIaWE/zRw==
 Received: from johan by xi.lan with local (Exim 4.96.2)
 	(envelope-from <johan@kernel.org>)
-	id 1rBFlB-0000hI-0F;
-	Thu, 07 Dec 2023 15:53:53 +0100
-Date: Thu, 7 Dec 2023 15:53:53 +0100
+	id 1rBGDU-0000p1-0H;
+	Thu, 07 Dec 2023 16:23:08 +0100
+Date: Thu, 7 Dec 2023 16:23:08 +0100
 From: Johan Hovold <johan@kernel.org>
 To: Krishna Kurapati <quic_kriskura@quicinc.com>
 Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
@@ -52,9 +52,11 @@ Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
 	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
 	devicetree@vger.kernel.org, quic_ppratap@quicinc.com,
 	quic_jackp@quicinc.com
-Subject: Re: [PATCH v2 0/6] Refine USB interrupt vectors on Qualcomm platforms
-Message-ID: <ZXHcgZLGCScLVg1O@hovoldconsulting.com>
+Subject: Re: [PATCH v2 1/6] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
+ bindings
+Message-ID: <ZXHjXGEbdtbCiOck@hovoldconsulting.com>
 References: <20231204100950.28712-1-quic_kriskura@quicinc.com>
+ <20231204100950.28712-2-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,65 +65,209 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231204100950.28712-1-quic_kriskura@quicinc.com>
+In-Reply-To: <20231204100950.28712-2-quic_kriskura@quicinc.com>
 
-On Mon, Dec 04, 2023 at 03:39:44PM +0530, Krishna Kurapati wrote:
-> Qualcomm targets define the following interrupts for usb wakeup:
-> {dp/dm}_hs_phy_irq, hs_phy_irq, pwr_event, ss_phy_irq.
+On Mon, Dec 04, 2023 at 03:39:45PM +0530, Krishna Kurapati wrote:
+> The high speed related interrupts present on QC targets are as follows:
 > 
-> But QUSB2 Phy based targets have another interrupt which gets triggered
-> in response to J/K states on dp/dm pads. Its functionality is replaced
-> by dp/dm interrupts on Femto/m31/eusb2 phy based targets for wakeup
-> purposes. Exceptions are some targets like SDM845/SDM670/SM6350 where
-> dp/dm irq's are used although they are qusb2 phy targets.
+> dp/dm irq's
+> These IRQ's directly reflect changes on the DP/DM pads of the SoC. These
+> are used as wakeup interrupts only on SoCs with non-QUSB2 targets with
+> exception of SDM670/SDM845/SM6350.
 > 
-> Currently in QUSB2 Phy based DT's, te qusb2_phy interrupt is named and
-> used as "hs_phy_irq" when in fact it is a different interrupt (used by
-> HW validation folks for debug purposes and not used on any downstream
-> target qusb/non-qusb).
+> qusb2_phy irq
+> SoCs with QUSB2 PHY do not have separate DP/DM IRQs and expose only a
+> single IRQ whose behavior can be modified by the QUSB2PHY_INTR_CTRL
+> register. The required DPSE/DMSE configuration is done in
+> QUSB2PHY_INTR_CTRL register of phy address space.
 > 
-> On some non-QUSB2 targets (like sm8450/sm8550), the pwr_event IRQ was
-> named as hs_phy_irq and actual pwr_event_irq was skipped.
+> hs_phy_irq
+> This is completely different from the above two and is present on all
+> targets with exception of a few IPQ ones. The interrupt is not enabled by
+> default and its functionality is mutually exclusive of qusb2_phy on QUSB
+> targets and DP/DM on femto phy targets.
 > 
-> This series tries to address the discrepancies in the interrupt numbering
-> adding the missing interrupts and correcting the existing ones.
+> The DTs of several QUSB2 PHY based SoCs incorrectly define "hs_phy_irq"
+> when they should have been "qusb2_phy_irq". On Femto phy targets, the
+> "hs_phy_irq" mentioned is either the actual "hs_phy_irq" or "pwr_event",
+> neither of which would never be triggered directly are non-functional
+> currently. The implementation tries to clean up this issue by addressing
+> the discrepencies involved and fixing the hs_phy_irq's in respective DT's.
 > 
-> This series has been compared with downstream counter part and hw specifics
-> to ensure the numbering is right. Since there is not functionality change
-> the code has been only compile tested.
+> Classify interrupts based on whether qusb2_phy interrupt is used or
+> {dp/dm}_hs_phy_irq is used and whether hs_phy_irq is present or not.
 
-This is a good summary.
+s/interrupts/SoCs in four groups/
 
-> Changes in v2:
-> Removed additional compatibles added for different targets in v1.
-> Specified permuations of interrupts possible for QC targets and regrouped
-> interrupts for most of the DT's.
+And say something about the SS PHY interrupt being treated as optional
+as there are SoCs with multiple controllers where only some supports SS.
+
+As Krzysztof mentioned you should also add something to motivate why
+this de-facto ABI breakage by reordering interrupts is justified and
+safe in this case.
+ 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  .../devicetree/bindings/usb/qcom,dwc3.yaml    | 147 +++++++-----------
+>  1 file changed, 58 insertions(+), 89 deletions(-)
 > 
-> Rebased on top of wakeup interrupts fixes by Johan Hovold:
-> https://patchwork.kernel.org/project/linux-arm-msm/cover/20231120164331.8116-1-johan+linaro@kernel.org/
-> 
-> Link to v1: (providing patchwork link since threading was broken in v1)
-> https://patchwork.kernel.org/project/linux-arm-msm/cover/20231122191259.3021-1-quic_kriskura@quicinc.com/
-> 
-> Krishna Kurapati (6):
->   dt-bindings: usb: dwc3: Clean up hs_phy_irq in bindings
->   usb: dwc3: qcom: Rename hs_phy_irq to qusb2_phy_irq
->   arm64: dts: qcom: Fix hs_phy_irq for QUSB2 targets
->   arm64: dts: qcom: Fix hs_phy_irq for non-QUSB2 targets
->   arm64: dts: qcom: Fix hs_phy_irq for SDM670/SDM845/SM6350
->   arm64: dts: qcom: Add missing interrupts for qcs404/ipq5332
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index 3ec62027f663..94deef765ec3 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -98,12 +98,30 @@ properties:
+>        - const: apps-usb
+>  
+>    interrupts:
+> -    minItems: 1
+> -    maxItems: 4
+> +    description: |
+> +      Different types of interrupts are used based on HS phy used on target::
 
-You're still mixing USB binding/driver and DT updates, which is what we
-want for most subsystems, but not for USB.
+Try to use uppercase 'PHY' consistently in text throughout the series.
 
-For the next version, please split it in two series as these will go in
-through two different maintainer trees.
+> +        - qusb2_phy:: SoCs with QUSB2 PHY do not have separate DP/DM IRQs and
+> +                      expose only a single IRQ whose behavior can be modified
+> +                      by the QUSB2PHY_INTR_CTRL register. The required DPSE/
+> +                      DMSE configuration is done in QUSB2PHY_INTR_CTRL register
+> +                      of phy address space.
+> +        - {dp/dm}_hs_phy_irq:: These IRQ's directly reflect changes on the DP/
+> +                               DM pads of the SoC. These are used for wakeup
+> +                               only on SoCs with non-QUSBb2 targets with
 
-You can link to the driver/binding series from the devicetree series and
-mention to Bjorn that it should not be merged before the bindings are
-in.
+QUSB2 typo
 
-And please use lore for any links instead of patchwork.
+> +                               exception of SDM670/SDM845/SM6350.
+> +        - ss_phy_irq:: When in super speed mode of operation, interrupts are
+
+Capitalise 'Super Speed'
+
+> +                       received when a wakeup event is received on ss_phy_irq.
+
+The description as it stands sounds circular. And this one is only used
+for remote wakeup right?
+
+> +        - hs_phY_irq:: Apart from DP/DM/QUSB2 Phy interrupts, there is
+
+s/phY/phy/
+
+Perhaps rephrase to sound less like a commit message and to make it a
+bit more concise.
+
+But this is already an improvement over the current descriptions which
+are too terse and not even correct.
+
+> +                       hs_phy_irq which is not triggered by default and its
+> +                       functionality is mutually exclusive to that of
+> +                       {dp/dm}_hs_phy_irq and qusb2_phy_irq.
+> +        - pwr_event:: Used for wakeup based on other power events.
+
+I'm not sure about the free text description of these (format etc), but
+at least this avoid repeating the descriptions for each permutation.
+
+Perhaps the DT maintainers can chime in here.
+
+I think you should reorder them to match the permutations below though.
+
+> +    minItems: 2
+> +    maxItems: 5
+>  
+>    interrupt-names:
+> -    minItems: 1
+> -    maxItems: 4
+> +    minItems: 2
+> +    maxItems: 5
+>  
+>    qcom,select-utmi-as-pipe-clk:
+>      description:
+> @@ -359,116 +377,54 @@ allOf:
+>          compatible:
+>            contains:
+>              enum:
+> -              - qcom,ipq4019-dwc3
+> +              - qcom,ipq5018-dwc3
+>                - qcom,ipq6018-dwc3
+> -              - qcom,ipq8064-dwc3
+>                - qcom,ipq8074-dwc3
+> -              - qcom,msm8994-dwc3
+> -              - qcom,qcs404-dwc3
+> -              - qcom,sc7180-dwc3
+> -              - qcom,sdm670-dwc3
+> -              - qcom,sdm845-dwc3
+> -              - qcom,sdx55-dwc3
+> -              - qcom,sdx65-dwc3
+> -              - qcom,sdx75-dwc3
+> -              - qcom,sm4250-dwc3
+> -              - qcom,sm6350-dwc3
+> -              - qcom,sm8150-dwc3
+> -              - qcom,sm8250-dwc3
+> -              - qcom,sm8350-dwc3
+> -              - qcom,sm8450-dwc3
+> -              - qcom,sm8550-dwc3
+> -              - qcom,sm8650-dwc3
+> +              - qcom,msm8953-dwc3
+> +              - qcom,msm8998-dwc3
+> +              - qcom,qcm2290-dwc3
+>      then:
+>        properties:
+> -        interrupts:
+> -          items:
+> -            - description: The interrupt that is asserted
+> -                when a wakeup event is received on USB2 bus.
+> -            - description: The interrupt that is asserted
+> -                when a wakeup event is received on USB3 bus.
+> -            - description: Wakeup event on DM line.
+> -            - description: Wakeup event on DP line.
+>          interrupt-names:
+>            items:
+> -            - const: hs_phy_irq
+> -            - const: ss_phy_irq
+> -            - const: dm_hs_phy_irq
+> -            - const: dp_hs_phy_irq
+> +            - const: pwr_event
+> +            - const: qusb2_phy
+> +            - const: ss_phy_irq (optional)
+
+You should not include the string "(optional)" here. It was only a
+notation I used when we discussed this earlier.
+
+The fact that these are optional should be expressed using min/maxItems
+as I mentioned earlier. For the above SoCs that would be
+
+	minItems: 2
+	maxItems: 3
+
+> @@ -522,12 +490,13 @@ examples:
+>                            <&gcc GCC_USB30_PRIM_MASTER_CLK>;
+>              assigned-clock-rates = <19200000>, <150000000>;
+>  
+> -            interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+> -                         <GIC_SPI 486 IRQ_TYPE_LEVEL_HIGH>,
+> +            interrupts = <GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
+> +                         <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+> +                         <GIC_SPI 489 IRQ_TYPE_EDGE_BOTH>,
+>                           <GIC_SPI 488 IRQ_TYPE_EDGE_BOTH>,
+> -                         <GIC_SPI 489 IRQ_TYPE_EDGE_BOTH>;
+> -            interrupt-names = "hs_phy_irq", "ss_phy_irq",
+> -                          "dm_hs_phy_irq", "dp_hs_phy_irq";
+> +                         <GIC_SPI 486 IRQ_TYPE_LEVEL_HIGH>;
+> +            interrupt-names = "pwr_event", "hs_phy_irq",
+> +                          "dp_hs_phy_irq", "dm_hs_phy_irq", "ss_phy_irq";
+
+Perhaps you should align the continuation line here too.
+
+>  
+>              power-domains = <&gcc USB30_PRIM_GDSC>;
+
+Also have you set up the tools so that you can verify your bindings
+before posing them? I assume the above wouldn't pass (e.g. due to the
+"(optional)" strings).
+
+There's some more details here:
+
+	https://docs.kernel.org/devicetree/bindings/writing-schema.html
+
+under "Running checks".
 
 Johan
 
