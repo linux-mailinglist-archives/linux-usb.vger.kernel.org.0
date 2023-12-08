@@ -1,109 +1,125 @@
-Return-Path: <linux-usb+bounces-3928-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3929-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20A1D80AEA7
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 22:14:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EDEA80B0BC
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 00:56:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDC09281B10
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 21:14:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 807901C20CAA
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 23:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D75C57890;
-	Fri,  8 Dec 2023 21:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF43C5B1FC;
+	Fri,  8 Dec 2023 23:56:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S7AxMH4l"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C9CA9
-	for <linux-usb@vger.kernel.org>; Fri,  8 Dec 2023 13:14:38 -0800 (PST)
-Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 40E9876226;
-	Fri,  8 Dec 2023 21:14:37 +0000 (UTC)
-Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
-	by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id 39C22231A0;
-	Fri,  8 Dec 2023 21:14:37 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: -0.199
-X-Spam-Level:
-Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
-	by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
-	with ESMTP id qnQPfrU1qpLk; Fri,  8 Dec 2023 21:14:36 +0000 (UTC)
-Received: from [192.168.48.17] (host-104-157-209-188.dyn.295.ca [104.157.209.188])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dgilbert@interlog.com)
-	by mail.ca.inter.net (Postfix) with ESMTPSA id B391F231A1;
-	Fri,  8 Dec 2023 21:14:36 +0000 (UTC)
-Message-ID: <81a04236-de8c-423e-ad8c-c74d7ff5ecba@interlog.com>
-Date: Fri, 8 Dec 2023 16:14:35 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6741734
+	for <linux-usb@vger.kernel.org>; Fri,  8 Dec 2023 15:56:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702079806; x=1733615806;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mYkeT968/7W0MI+cOCJ0+wS2CIfQJZVDY3pyhVxZcV4=;
+  b=S7AxMH4l5VPDDkHu3PxCh2s+tYmNRBNCgwOVSvJdT1cEhqtpOs1eXHET
+   vhbmo1h5OmctcFIK6wh0xoTZkjC2sPs9QqJemPOIg2Xq3kNtaQOL4UV73
+   oQq8lZy79RZxFOu1Y/GtyNVwPnDrBNjmGJe5AjHidSfwpWrW9kT28uXMN
+   1mtcwSjN5dD/2nNqNWChWOAyt2OJY1h3pInTVMtI5qXSF4fkXsU7IAU6k
+   NBeQMKirj0aPPT8wF2c4lQWl7HbR5lnFH+oSCrhy+z6R++lHDsVZyJbwX
+   lM5M9fXFIbZf/jF7ajjBGAelFENiMpb+B+/X4WkwrvXxIubFDz6Wd7xfl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10918"; a="13175893"
+X-IronPort-AV: E=Sophos;i="6.04,262,1695711600"; 
+   d="scan'208";a="13175893"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2023 15:56:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10918"; a="890318957"
+X-IronPort-AV: E=Sophos;i="6.04,262,1695711600"; 
+   d="scan'208";a="890318957"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Dec 2023 15:56:38 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rBkhv-000EYj-2w;
+	Fri, 08 Dec 2023 23:56:35 +0000
+Date: Sat, 9 Dec 2023 07:56:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+	linux-usb@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Daniel Scally <dan.scally@ideasonboard.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+	kernel@collabora.com
+Subject: Re: [PATCH v2] usb: gadget: webcam: Make g_webcam loadable again
+Message-ID: <202312090717.dUYTE5cM-lkp@intel.com>
+References: <20231208131342.65671-1-andrzej.p@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: dgilbert@interlog.com
-Subject: Re: [Announce] lsucpd release 0.91 utility for USB Type-C
-Content-Language: en-CA
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-References: <5f74a231-e0c2-4be6-ab90-6592f7cfa8df@interlog.com>
- <2023120804-chowder-sampling-8ebb@gregkh>
-From: Douglas Gilbert <dgilbert@interlog.com>
-In-Reply-To: <2023120804-chowder-sampling-8ebb@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231208131342.65671-1-andrzej.p@collabora.com>
 
-On 12/8/23 02:16, Greg KH wrote:
-> On Fri, Dec 08, 2023 at 01:36:02AM -0500, Douglas Gilbert wrote:
->> lsucpd is a command line utility for listing USB Type-C ports, partners
->> and any associated PD objects. It is essentially data-mining the
->> /sys/class/typec and /sys/class/usb_power_delivery directories. So
->> lsucpd performs no magic and root permissions are not required.
->>
->> lsucpd was originally announced in this post on 28 August 2023:
->>    https://marc.info/?l=linux-usb&m=169325926403279&w=2
->> That code has been tagged as 'r0.89'. There is also a 'r0.90' tag
->> but it was not announced. This release is tagged as 'r0.91'. The
->> code is available at this git mirror at:
->>      https://github.com/doug-gilbert/lsucpd
->>
->> Changelog since 0.89 [20230827] [svn: r9]
->>    - add the first stage of JSON support
->>    - add --pdo-snk= and --pdo-src= options to decode PDOs
->>    - add --rdo= option to decode RDOs
->>    - make preparations for PD revision 3.2
-> 
-> Nice!  Any thoughts about adding this functionality to the usbutils
-> package to make it all in one place?
+Hi Andrzej,
 
-Well that should be a medium term goal. However currently the environment in
-which lsucpd works is far from ideal.
+kernel test robot noticed the following build warnings:
 
-The main problem is the dubious nature of some of the information provided
-(via UCSI_ACPI in my case). For my Thinkpad X13 Gen3 either Intel or Lenovo
-have screwed up but since that design is 18 months old my guess is those
-companies won't do anything about it, only fixing serious security issues.
-Maybe they will fix UCSI_ACPI properly in future models. Some other recent
-laptops I have tested (less than 12 months old) don't support UCSI_ACPI at
-all. Also the design of /sys/class/power_supply isn't a good fit for USB PD.
-Not sure how that could be solved. Heikki sounded off about design issues in:
-    https://marc.info/?l=linux-usb&m=169278141600478&w=2
-Maybe USB PD needs its own power_supply class or at least a class that
-is higher level than class/typec and class/usb-power_delivery.
+[auto build test WARNING on 33cc938e65a98f1d29d0a18403dbbee050dcad9a]
 
-A secondary problem is that I chose to implement lsucpd in C++20 and later
-found out that g++ and clang were bending the truth when they said they
-supported C++20. std::print is one area of non-compliance. Hopefully this
-will improve in time for the next LTS cycle of major distributions.
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrzej-Pietrasiewicz/usb-gadget-webcam-Make-g_webcam-loadable-again/20231208-211513
+base:   33cc938e65a98f1d29d0a18403dbbee050dcad9a
+patch link:    https://lore.kernel.org/r/20231208131342.65671-1-andrzej.p%40collabora.com
+patch subject: [PATCH v2] usb: gadget: webcam: Make g_webcam loadable again
+config: i386-buildonly-randconfig-002-20231209 (https://download.01.org/0day-ci/archive/20231209/202312090717.dUYTE5cM-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231209/202312090717.dUYTE5cM-lkp@intel.com/reproduce)
 
-Doug Gilbert
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312090717.dUYTE5cM-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/gadget/legacy/webcam.c:368:32: warning: 'uvcg_frame_mjpeg_720p' defined but not used [-Wunused-const-variable=]
+     368 | static const struct uvcg_frame uvcg_frame_mjpeg_720p = {
+         |                                ^~~~~~~~~~~~~~~~~~~~~
 
 
+vim +/uvcg_frame_mjpeg_720p +368 drivers/usb/gadget/legacy/webcam.c
 
+   367	
+ > 368	static const struct uvcg_frame uvcg_frame_mjpeg_720p = {
+   369		.fmt_type		= UVCG_MJPEG,
+   370		.frame = {
+   371			.b_length			= uvc_frame_mjpg_720p.bLength,
+   372			.b_descriptor_type		= uvc_frame_mjpg_720p.bDescriptorType,
+   373			.b_descriptor_subtype		= uvc_frame_mjpg_720p.bDescriptorSubType,
+   374			.b_frame_index			= uvc_frame_mjpg_720p.bFrameIndex,
+   375			.bm_capabilities		= uvc_frame_mjpg_720p.bmCapabilities,
+   376			.w_width			= uvc_frame_mjpg_720p.wWidth,
+   377			.w_height			= uvc_frame_mjpg_720p.wHeight,
+   378			.dw_min_bit_rate		= uvc_frame_mjpg_720p.dwMinBitRate,
+   379			.dw_max_bit_rate		= uvc_frame_mjpg_720p.dwMaxBitRate,
+   380			.dw_max_video_frame_buffer_size	= uvc_frame_mjpg_720p.dwMaxVideoFrameBufferSize,
+   381			.dw_default_frame_interval	= uvc_frame_mjpg_720p.dwDefaultFrameInterval,
+   382			.b_frame_interval_type		= uvc_frame_mjpg_720p.bFrameIntervalType,
+   383		},
+   384		.dw_frame_interval	= (u32 *)uvc_frame_mjpg_720p.dwFrameInterval,
+   385	};
+   386	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
