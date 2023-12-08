@@ -1,106 +1,83 @@
-Return-Path: <linux-usb+bounces-3910-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3911-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F35480A4DD
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 14:56:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 909E880A5E8
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 15:51:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B90441F212C1
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 13:56:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CDFD281BEC
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 14:51:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7274C1DA58;
-	Fri,  8 Dec 2023 13:56:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25EE41F952;
+	Fri,  8 Dec 2023 14:51:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QbPbZqnx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YpgiesEX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F7B198C;
-	Fri,  8 Dec 2023 05:56:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702043811; x=1733579811;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=55M1hh3vjcTT4qbO8ePl/PG9N+ftOAwqAUqgSIIaDag=;
-  b=QbPbZqnx40/b5djRjENAAqQIPeMs8h/Z+0keaMOUm+ids76OeMO0xge2
-   L8JYANyrOZxgTszBakoF2oasQxCJR/f/4wQ3SMMfWuh9L1RBnZIRa6kyy
-   Jt2dG3GgtFwUxk1rNHiHqSdZInwgEt8vSDOYa/YGAhgrDDBlG5x1b39PT
-   xVVlWQ+nQRuT7A9aVYFOsN/sSip8VyQVlQWfl/MZjhGMoNU4a+uipoQHd
-   oo3m2+OnzTQOsltOlWIjdAR7iGhev8B7pr5NbRPwcZvpC00AcS9idhf3f
-   GXLgJLOHd/DW0Mi8lmm7cPJihoNLfkhB9hGFgn/WAecbaYRTBJJ9vQxm8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="384811841"
-X-IronPort-AV: E=Sophos;i="6.04,261,1695711600"; 
-   d="scan'208";a="384811841"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2023 05:56:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="721872348"
-X-IronPort-AV: E=Sophos;i="6.04,261,1695711600"; 
-   d="scan'208";a="721872348"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga003.jf.intel.com with SMTP; 08 Dec 2023 05:56:47 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 08 Dec 2023 15:56:46 +0200
-Date: Fri, 8 Dec 2023 15:56:46 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Johan Hovold <johan+linaro@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA9E179A7;
+	Fri,  8 Dec 2023 14:51:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32FC2C433CA;
+	Fri,  8 Dec 2023 14:51:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702047066;
+	bh=QRMVM5h4+fVEvQ0BvMG0bbOAh/7k4oCayZJfWKA4imo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=YpgiesEX76rqOf3Umuv4sB18o2BP4ybYBXCgiIQNXubhSFpzd8lrdic4ClTuKvjtV
+	 MwjxSYgio6/nBIqQZXUf8/MuynMefNyBJItd2ckY693B/oTFfnRBZ/jkUCdbz3staq
+	 SvfaL5UIHvIHXWRU/bEtGKRF9UkMzBD4f7bJh04C2RHndKZf5hQC+JkDvtm/WLNVt1
+	 Hngt//7K4X529PdtDEKFZH+BFNxSKhcfyR7SQSW5ylpqRIZt7T5o2xAfbiTZ+uWSI0
+	 qM359snqYkzfvLbg/zWaYVnVa8BJ/REZKmeBSI1cdnrqDta6Hl0ASV1PvqxqU+CpHg
+	 +IE1b/dEv0Rtg==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Gross <agross@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
 	Neil Armstrong <neil.armstrong@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: fix gpio-based orientation detection
-Message-ID: <ZXMgntTKDPfAQbYT@kuha.fi.intel.com>
-References: <20231208123603.29957-1-johan+linaro@kernel.org>
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Rob Herring <robh@kernel.org>,
+	linux-usb@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] usb: typec: ucsi: add workaround for several Qualcomm platforms
+Date: Fri,  8 Dec 2023 06:55:16 -0800
+Message-ID: <170204733611.342318.16716488555248581167.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231025115620.905538-1-dmitry.baryshkov@linaro.org>
+References: <20231025115620.905538-1-dmitry.baryshkov@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231208123603.29957-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 08, 2023 at 01:36:02PM +0100, Johan Hovold wrote:
-> Fix the recently added connector sanity check which was off by one and
-> prevented orientation notifications from being handled correctly for the
-> second port when using GPIOs to determine orientation.
-> 
-> Fixes: c6165ed2f425 ("usb: ucsi: glink: use the connector orientation GPIO to provide switch events")
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+On Wed, 25 Oct 2023 14:49:28 +0300, Dmitry Baryshkov wrote:
+> The UCSI firmware on Qualcomm SC8180X, SC8280XP and SM8350 are buggy.
+> Submitting UCSI_GET_PDOS command for partners which do not actually
+> support PD and do not have PDOs causes firmware to crash, preventing
+> further UCSI activity. Firmware on newer platforms have fixed this
+> issue. In order to still be able to use UCSI functionality on the
+> mentioned platforms (e.g. to be able to handle USB role switching),
+> apply a workaround that completely shortcuts UCSI_GET_PDOS command for
+> the USB-C partner.
+> 
+> [...]
 
-> ---
-> 
-> I found this one through inspection when skimming the driver.
-> 
-> Johan
-> 
-> 
->  drivers/usb/typec/ucsi/ucsi_glink.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index db6e248f8208..4853141cd10c 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -228,7 +228,7 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
->  
->  	con_num = UCSI_CCI_CONNECTOR(cci);
->  	if (con_num) {
-> -		if (con_num < PMIC_GLINK_MAX_PORTS &&
-> +		if (con_num <= PMIC_GLINK_MAX_PORTS &&
->  		    ucsi->port_orientation[con_num - 1]) {
->  			int orientation = gpiod_get_value(ucsi->port_orientation[con_num - 1]);
->  
-> -- 
-> 2.41.0
+Applied, thanks!
 
+[1/2] usb: typec: ucsi: fix UCSI on buggy Qualcomm devices
+      commit: 1d103d6af241dbfc7e11eb9a46dff65db257a37f
+[2/2] soc: qcom: pmic_glink: enable UCSI by default
+      commit: 4db09e7b967b905ba3036a4d96e81c06b896b1bf
+
+Best regards,
 -- 
-heikki
+Bjorn Andersson <andersson@kernel.org>
 
