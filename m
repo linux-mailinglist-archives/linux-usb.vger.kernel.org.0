@@ -1,40 +1,40 @@
-Return-Path: <linux-usb+bounces-3906-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3907-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63A1580A3E3
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 13:52:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7799380A43C
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 14:14:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17AB42818F4
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 12:52:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2666E281683
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 13:14:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D30951C2A1;
-	Fri,  8 Dec 2023 12:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 496981C6BF;
+	Fri,  8 Dec 2023 13:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="UplswUUg"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GmP/KUP2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEDE199D
-	for <linux-usb@vger.kernel.org>; Fri,  8 Dec 2023 04:52:45 -0800 (PST)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1EEC3
+	for <linux-usb@vger.kernel.org>; Fri,  8 Dec 2023 05:13:52 -0800 (PST)
 Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: andrzej.p)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id B37A366073AA;
-	Fri,  8 Dec 2023 12:52:43 +0000 (GMT)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 1BC6766073AA;
+	Fri,  8 Dec 2023 13:13:50 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1702039964;
-	bh=xfZhZUs5ydcxdGHLaqKFshp3+jfefvB75EixagQEAXI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=UplswUUgsRSR3+xEOEuknz0Rp13dC72oONB7yj70d+yGSErDXmjJE2wI4zGUkXami
-	 on/DK5zdq3rxlP2Gz33LuUjt8VYQpEYAi+KpJfaLtAecGm6zb1Ks/UMXEW/HK6vIrg
-	 cNbx6zMBjYxN4AUZcGbNvYo5O0VnzDfys7/jTYkqyoidjzqpG3LIV+Y7vn8ic14FQO
-	 q+fqjMAwxzakxaGR6nzZLufQSrJZuBSXPO7kLDZpgGM1KmxpaDJPE1BQ3tl0SNpojg
-	 6r6avmnHonZm5nuWpqhmsnmIUO6ellnIB3e7EMwHtaCqIwUHl4UmTco2eZWyc1K3Pr
-	 5Edn0SXew6jww==
+	s=mail; t=1702041230;
+	bh=JerhLxsD392Psl32tCURz0dGpr1m5ijpff/agxIcGZY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=GmP/KUP2gEpQEcGx7wNtB6qxzDbKDhKDsXfOw0H/nTAmieC0dPtOB+/PwSvM0jaDB
+	 Kr54WcCXnc1o5fI9eJF0WwTi5X6O8WwJy424UweubxFcBUg/5gZ20JfDujWkx91tch
+	 ifa+JvkY2q6rycsz9crlYjrkRds1XTxQDScWfiExsz+7HQQPRq4/GjDhHwlwB3nfVU
+	 jc5zbOI6OqFTRZRn1ZLfcVFGYc4ERrlm64aWO8X0WqMWMzyLKzYTstWWpJB5bDtG36
+	 t/EHO/5J26R+t5kcxBrZmwth0kl9RBehQDUTQPFI22+OqSECbZZpLyDm+YMShYTZyO
+	 HLAOgMuO7to8g==
 From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 To: linux-usb@vger.kernel.org
 Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -43,10 +43,12 @@ Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	Michael Grzeschik <m.grzeschik@pengutronix.de>,
 	Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH] usb: gadget: webcam: Make g_webcam loadable again
-Date: Fri,  8 Dec 2023 13:52:31 +0100
-Message-Id: <20231208125231.55568-1-andrzej.p@collabora.com>
+Subject: [PATCH v2] usb: gadget: webcam: Make g_webcam loadable again
+Date: Fri,  8 Dec 2023 14:13:42 +0100
+Message-Id: <20231208131342.65671-1-andrzej.p@collabora.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231208125231.55568-1-andrzej.p@collabora.com>
+References: <20231208125231.55568-1-andrzej.p@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -74,6 +76,9 @@ found at https://gitlab.freedesktop.org/camera/uvc-gadget.git.
 Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 Fixes: 588b9e85609b ("usb: gadget: uvc: add v4l2 enumeration api calls")
 ---
+v1..v2:
+- fixed a typo (missing character) in one of uvcg_frame_mjpeg_720p's members
+
  drivers/usb/gadget/function/f_uvc.c |  45 +++---
  drivers/usb/gadget/function/u_uvc.h |   6 +
  drivers/usb/gadget/legacy/webcam.c  | 232 ++++++++++++++++++++++------
@@ -160,7 +165,7 @@ index 1ce58f61253c..3ac392cbb779 100644
  
  #endif /* U_UVC_H */
 diff --git a/drivers/usb/gadget/legacy/webcam.c b/drivers/usb/gadget/legacy/webcam.c
-index c06dd1af7a0c..6700c5e17055 100644
+index c06dd1af7a0c..4658de9369e2 100644
 --- a/drivers/usb/gadget/legacy/webcam.c
 +++ b/drivers/usb/gadget/legacy/webcam.c
 @@ -12,6 +12,7 @@
@@ -390,7 +395,7 @@ index c06dd1af7a0c..6700c5e17055 100644
 +		.dw_max_bit_rate		= uvc_frame_mjpg_720p.dwMaxBitRate,
 +		.dw_max_video_frame_buffer_size	= uvc_frame_mjpg_720p.dwMaxVideoFrameBufferSize,
 +		.dw_default_frame_interval	= uvc_frame_mjpg_720p.dwDefaultFrameInterval,
-+		.b_frame_interval_typ		= uvc_frame_mjpg_720p.bFrameIntervalType,
++		.b_frame_interval_type		= uvc_frame_mjpg_720p.bFrameIntervalType,
 +	},
 +	.dw_frame_interval	= (u32 *)uvc_frame_mjpg_720p.dwFrameInterval,
 +};
