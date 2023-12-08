@@ -1,117 +1,93 @@
-Return-Path: <linux-usb+bounces-3903-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3904-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62A8380A32C
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 13:27:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0D9A80A36A
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 13:37:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F0CF1F214AA
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 12:27:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59CA328193B
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 12:37:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C0231C68F;
-	Fri,  8 Dec 2023 12:27:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2DC11C294;
+	Fri,  8 Dec 2023 12:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="csCsJbiW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rGRLCeNz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3941732
-	for <linux-usb@vger.kernel.org>; Fri,  8 Dec 2023 04:27:36 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6d9e993d94dso385418a34.0
-        for <linux-usb@vger.kernel.org>; Fri, 08 Dec 2023 04:27:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702038456; x=1702643256; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=d5GaRohf0h1IWsuY7RB86dh4ed8My3jkzq5ac8cnOms=;
-        b=csCsJbiW6S5jflHS3gbgE7KV6NAfO5Bvi0MFEB+ilLFspbdHgBn4cK1MjvRmE4pxZh
-         29EYLQXyjlDdoXOlrOEggfK8sY1Mq0nVPWVLkrXKj40w1H+c0PcQQV9BKEIF4S2WLu6V
-         SYvDWc3tonto2pKN9iFBBY55ODbqdDyFFWZTx5y5E86f2qFv3gignU7sHbimRrqghnH8
-         0cU7XYixtYumxuddb0nMa8PLiwFdKAV4BVdareUueG1Chao221CUwP37r6wb+7ykHGBL
-         EGAsSMkuE0B07EV1dPzi+DS59W9wAWvQ5woYjy/krxy785G//Z6nRnYVKtw2JA+aDd6i
-         Cjng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702038456; x=1702643256;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d5GaRohf0h1IWsuY7RB86dh4ed8My3jkzq5ac8cnOms=;
-        b=Wk/nakl5eD69xy0CYCWIFtMStPFurJjfbPnZKTyrqi5y/VaY1teqplwNJm2kznrogQ
-         z3b0z440oayXhIzBjBVYR9LmIf8bjkn+3gQfIFYqTp2/9jyTtsg9cv6E2pX6Dv04RvrI
-         ivCzcMBTV3SXyY0YKtI0NatsQwT9PxrErrHwldwTFCRT8CuY5bf20jmvnDYiKiYQnYSl
-         RW1/uU/9yiudaaRSqXjgM9fxsaHze2ZE7FnahpoYPayYuJMlW3vGEeqTJBx6D6W3Iv0S
-         uMbWpv6zD6otQT6AF1mHT2wFtyZHsoSvETD3Wnw3tmbQgGSFBK9CggR7gY4zjHTFIgop
-         Ox7Q==
-X-Gm-Message-State: AOJu0YzRkh+ZccTDWZbfTFYLvuAOJDtZ4lk7vUrbUKDbBZgWRxR8p1v4
-	6PnRRk+BqeY8WtfCkyxyoRMdJkkNDJxrAl81rOiaKw==
-X-Google-Smtp-Source: AGHT+IH6BV7F+PEhv3epJTH3OpR8RboufeN98w7EXEgzK/7izhoEJn84Qn84Gh9eLbwet2KUB3ixLXbDe2X493oqJpc=
-X-Received: by 2002:a9d:7f9a:0:b0:6d9:e454:4e88 with SMTP id
- t26-20020a9d7f9a000000b006d9e4544e88mr1531445otp.63.1702038455897; Fri, 08
- Dec 2023 04:27:35 -0800 (PST)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBFC1C694
+	for <linux-usb@vger.kernel.org>; Fri,  8 Dec 2023 12:37:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4FE1C433C7;
+	Fri,  8 Dec 2023 12:37:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702039042;
+	bh=gqQmFdVmCQcNd8eKCMxCHIDAeVXnQ1wKVZgIjb/cu7E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=rGRLCeNzGWF3GpJdrEeFpcxOAAO3hSBToCupmGi0kWqtNUDaK5uGOOum3/+R1nCIG
+	 M21XLvFvzPQV0ZKl7Jptqcb67rDybpXqqQSgESiZjyKnhkEskWo8suGEWt6v3p6E5x
+	 n/X7wP1pd+75peLzsXgV0mPX/Qo1uyIl2c0yZYA30n4Rt57/0Qptu4Xf7jYFDLpp30
+	 jT4cKNTdm5DP7S8ZneFs98UKXRVhnDCaowJZax3Uueqg57fL1MqwkWQoGp7rm4HKBs
+	 tKeWMP1ybW4TtBCJq7fcEG9t7g7zl/MfIXByv4Wva7GlYSk38LyyI0EbtdErq3rBml
+	 EIClylnvCZCjw==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan+linaro@kernel.org>)
+	id 1rBa7P-0007o9-1V;
+	Fri, 08 Dec 2023 13:38:12 +0100
+From: Johan Hovold <johan+linaro@kernel.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] usb: typec: ucsi: fix gpio-based orientation detection
+Date: Fri,  8 Dec 2023 13:36:02 +0100
+Message-ID: <20231208123603.29957-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231025115620.905538-1-dmitry.baryshkov@linaro.org>
- <ZXLWiVJYWdlwOBou@hovoldconsulting.com> <CAA8EJpp-BsabZB3FXnFsWZBNbF7keCrOKPPg3Qb7MzE3puMFeg@mail.gmail.com>
- <ZXL5jvDHr-MuxMoz@hovoldconsulting.com> <CAA8EJpoG-qg24wV953Xd9KQ957gpJVHc20Te2cYQWfs9imC63w@mail.gmail.com>
- <ZXMCgVWNCfwmY8oS@hovoldconsulting.com> <CAA8EJpqqekmGrHt11czTTfdM1DVtY5g3j3k-0aM8u1PDQUDHRw@mail.gmail.com>
- <ZXMLhau7pZPv2ftk@hovoldconsulting.com>
-In-Reply-To: <ZXMLhau7pZPv2ftk@hovoldconsulting.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 8 Dec 2023 14:27:25 +0200
-Message-ID: <CAA8EJpqJwn_13pt8oG38sYbM-Opp6kVhZoXE=6eBWP-=RoXvsg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] usb: typec: ucsi: add workaround for several
- Qualcomm platforms
-To: Johan Hovold <johan@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andy Gross <agross@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Rob Herring <robh@kernel.org>, linux-usb@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, 8 Dec 2023 at 14:25, Johan Hovold <johan@kernel.org> wrote:
->
-> On Fri, Dec 08, 2023 at 02:16:27PM +0200, Dmitry Baryshkov wrote:
-> > On Fri, 8 Dec 2023 at 13:47, Johan Hovold <johan@kernel.org> wrote:
-> > > On Fri, Dec 08, 2023 at 01:10:59PM +0200, Dmitry Baryshkov wrote:
-> > > > On Fri, 8 Dec 2023 at 13:09, Johan Hovold <johan@kernel.org> wrote:
->
-> > > > > The first error is sometimes GET_CONNECTOR_STATUS failed (-95) instead:
-> > > >
-> > > > Ack, thank you. This is pending on my side together with the UCSI
-> > > > glink / altmode rework. I hope to have patches for that closer to the
-> > > > NY.
-> > >
-> > > What does that mean? That we shall revert these patches until that work
-> > > is finished? I don't want to have these errors littering the logs,
-> > > scaring users and possibly slowing down boot (those are five second
-> > > timeouts).
-> >
-> > Just send a patch disabling ucsi for sc8280xp.
->
-> Ok, will do.
->
-> Looks like that is indeed the only platform besides sc8180x which had
-> not yet been tested.
+Fix the recently added connector sanity check which was off by one and
+prevented orientation notifications from being handled correctly for the
+second port when using GPIOs to determine orientation.
 
-And it has its own peculiarities which I didn't observe on other platforms.
+Fixes: c6165ed2f425 ("usb: ucsi: glink: use the connector orientation GPIO to provide switch events")
+Cc: Neil Armstrong <neil.armstrong@linaro.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
 
->
-> > > Also, if this was known issue, why wasn't it mentioned the cover letter
-> > > or commit messages?
-> >
-> > Surely it was not the known issue, otherwise I would not have sent the series.
->
-> Ah, sorry, I misunderstood you then.
+I found this one through inspection when skimming the driver.
 
-No problem :-)
+Johan
 
+
+ drivers/usb/typec/ucsi/ucsi_glink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+index db6e248f8208..4853141cd10c 100644
+--- a/drivers/usb/typec/ucsi/ucsi_glink.c
++++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+@@ -228,7 +228,7 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
+ 
+ 	con_num = UCSI_CCI_CONNECTOR(cci);
+ 	if (con_num) {
+-		if (con_num < PMIC_GLINK_MAX_PORTS &&
++		if (con_num <= PMIC_GLINK_MAX_PORTS &&
+ 		    ucsi->port_orientation[con_num - 1]) {
+ 			int orientation = gpiod_get_value(ucsi->port_orientation[con_num - 1]);
+ 
 -- 
-With best wishes
-Dmitry
+2.41.0
+
 
