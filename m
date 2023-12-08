@@ -1,141 +1,109 @@
-Return-Path: <linux-usb+bounces-3927-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3928-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56E3180AE86
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 22:05:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20A1D80AEA7
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 22:14:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 018191F21942
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 21:05:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDC09281B10
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 21:14:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B66485788B;
-	Fri,  8 Dec 2023 21:05:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VB8vo0Xq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D75C57890;
+	Fri,  8 Dec 2023 21:14:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA00E1985;
-	Fri,  8 Dec 2023 13:05:15 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-35d396ae91fso9016175ab.3;
-        Fri, 08 Dec 2023 13:05:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702069515; x=1702674315; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QqvWOUimTI+IzTX35gstFYIO9U9PLoGOpX1jOFzw7Ys=;
-        b=VB8vo0Xqp7swVF76pi+Avk7GpowXCingFV9/UxArKQEyRHEnu7a0vK583YvK8KIc4G
-         6UcTaX4bpynXTE3LBca85RfMUeY1PhinVgGlOhr2wQQC1TeaXvXNHkOYvrtFIE/QWHt6
-         ozZzWGV9HP9XTSn4uZY5HoQW5RMYZDs/omv6N4NpOGrzhDHYuyxexEkcmwibdnz8On88
-         U2RGVqvWUJCu/EEk7MPx3RfmV2y6I2mwDmQHruu4Quu4hSwlR25zxt+b3c2YLe6grdrJ
-         W0i32/Av3vgTpgEdUvNUMvrlGZwcGk2LFIrPAK/m5mUn6nm/if5HbAkXwzSz0ne/kGwG
-         0iWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702069515; x=1702674315;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QqvWOUimTI+IzTX35gstFYIO9U9PLoGOpX1jOFzw7Ys=;
-        b=jnjbuA4TVP8fwtXfor1XH65CXAj7buihoiIBJ5XGYz2TW/C2T1G3dIEbANQrryu/YT
-         oFcdHNMr5cGGDz4E5JlMzlCt1MGnpveYE5PyFFbTUxGucI1oX+OyihADMcklpcugTAkJ
-         L03sUwckaJFk8ge9XqbLkMn2nXhfmtoKuxoL3DEUws1geQ+FdFUiVJyOc6fPEA4FjZGD
-         uo7bfYFzvWd6e+nh28OZ1B2kL+pKIsdoO6+mA22z+yC1XXp0WW9kZVERBwgo085Scpf0
-         VaiTLbApKllRfN7sMv7CPDET3XYLQ14cKEgUt2YKRKaJSKj05Zq7cq8SLG5lhKXLu63E
-         UczA==
-X-Gm-Message-State: AOJu0Yzqxb8b+4HMHkwDyU3Bfef5hiqRT+sduRWUysMHW7zdpDJkBspQ
-	76MGQP91/PI3d6ndphYAuRk=
-X-Google-Smtp-Source: AGHT+IHJccm62cOKUWkw44apCwQUzTR5ks7nbDr2UPv/+vNBT8nqq4QoUUazVrDhRPx34NpezSVCGQ==
-X-Received: by 2002:a05:6e02:1bc9:b0:35d:5f9d:d9be with SMTP id x9-20020a056e021bc900b0035d5f9dd9bemr915380ilv.10.1702069514926;
-        Fri, 08 Dec 2023 13:05:14 -0800 (PST)
-Received: from celestia.nettie.lan ([2001:470:42c4:101:971d:15c7:de39:3b4b])
-        by smtp.gmail.com with ESMTPSA id g12-20020a056e020d0c00b0035d5a1760c1sm736458ilj.69.2023.12.08.13.05.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Dec 2023 13:05:14 -0800 (PST)
-From: Sam Edwards <cfsworks@gmail.com>
-X-Google-Original-From: Sam Edwards <CFSworks@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sam Edwards <CFSworks@gmail.com>
-Subject: [PATCH 2/2] usb: dwc3: host: Disable USB3 ports if maximum-speed doesn't permit USB3
-Date: Fri,  8 Dec 2023 14:04:58 -0700
-Message-ID: <20231208210458.912776-3-CFSworks@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231208210458.912776-1-CFSworks@gmail.com>
-References: <20231208210458.912776-1-CFSworks@gmail.com>
+Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C9CA9
+	for <linux-usb@vger.kernel.org>; Fri,  8 Dec 2023 13:14:38 -0800 (PST)
+Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 40E9876226;
+	Fri,  8 Dec 2023 21:14:37 +0000 (UTC)
+Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
+	by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id 39C22231A0;
+	Fri,  8 Dec 2023 21:14:37 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+X-Spam-Score: -0.199
+X-Spam-Level:
+Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
+	by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
+	with ESMTP id qnQPfrU1qpLk; Fri,  8 Dec 2023 21:14:36 +0000 (UTC)
+Received: from [192.168.48.17] (host-104-157-209-188.dyn.295.ca [104.157.209.188])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dgilbert@interlog.com)
+	by mail.ca.inter.net (Postfix) with ESMTPSA id B391F231A1;
+	Fri,  8 Dec 2023 21:14:36 +0000 (UTC)
+Message-ID: <81a04236-de8c-423e-ad8c-c74d7ff5ecba@interlog.com>
+Date: Fri, 8 Dec 2023 16:14:35 -0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Reply-To: dgilbert@interlog.com
+Subject: Re: [Announce] lsucpd release 0.91 utility for USB Type-C
+Content-Language: en-CA
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+References: <5f74a231-e0c2-4be6-ab90-6592f7cfa8df@interlog.com>
+ <2023120804-chowder-sampling-8ebb@gregkh>
+From: Douglas Gilbert <dgilbert@interlog.com>
+In-Reply-To: <2023120804-chowder-sampling-8ebb@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The DWC3 core can be configured (during IP instantiation, and/or via
-configuration signals) not to have any USB3 ports. Some SoCs, however,
-may have USB3 interfaces enabled that do not have USB3 PHYs driving
-them. This can be due to a few circumstances, including:
-a) The hardware designer didn't include USB3 PHYs and neglected to
-   disable the DWC3 core's USB ports (I know of no instance where this
-   has actually happened, however, and it seems pretty unlikely).
-b) The USB3 PHYs are present but powered off. Perhaps a driver to enable
-   the PHYs has not yet been written or merged, or USB3 capability is
-   unneeded in the system and the system designer would like to conserve
-   power.
-c) The USB3 PHYs are muxed to a different controller. This can happen if
-   the PHYs support non-USB protocols and one of these alternate
-   functions is needed instead.
+On 12/8/23 02:16, Greg KH wrote:
+> On Fri, Dec 08, 2023 at 01:36:02AM -0500, Douglas Gilbert wrote:
+>> lsucpd is a command line utility for listing USB Type-C ports, partners
+>> and any associated PD objects. It is essentially data-mining the
+>> /sys/class/typec and /sys/class/usb_power_delivery directories. So
+>> lsucpd performs no magic and root permissions are not required.
+>>
+>> lsucpd was originally announced in this post on 28 August 2023:
+>>    https://marc.info/?l=linux-usb&m=169325926403279&w=2
+>> That code has been tagged as 'r0.89'. There is also a 'r0.90' tag
+>> but it was not announced. This release is tagged as 'r0.91'. The
+>> code is available at this git mirror at:
+>>      https://github.com/doug-gilbert/lsucpd
+>>
+>> Changelog since 0.89 [20230827] [svn: r9]
+>>    - add the first stage of JSON support
+>>    - add --pdo-snk= and --pdo-src= options to decode PDOs
+>>    - add --rdo= option to decode RDOs
+>>    - make preparations for PD revision 3.2
+> 
+> Nice!  Any thoughts about adding this functionality to the usbutils
+> package to make it all in one place?
 
-In these circumstances, if the DWC3 does not receive clear link status
-indication on an enabled USB3 port, the DWC3 may not allow even USB2
-to function: in host mode, the DWC3 generates an endless barrage of
-PORT_CSC status on the accompanying USB2 port, and the xHCI driver is
-unable to bring the USB2 port to a functioning state.
+Well that should be a medium term goal. However currently the environment in
+which lsucpd works is far from ideal.
 
-Fix this by first checking if the maximum-speed property in the DT
-permits USB3. If not, pass the new `disable-usb3;` property to the
-virtual xHCI device, causing the xHCI driver not to enable the USB3
-ports. This allows USB2 to function even with USB3 PHYs
-missing/misbehaving, and may be useful even when the USB3 PHYs are
-well-behaved: a DT author may know that USB3 support is intact, but
-disconnected (not exposed off-board) and choose to lower the
-maximum-speed property to avoid an unusable USB3 rhub showing up in
-sysfs/lsusb where it may mislead end-users.
+The main problem is the dubious nature of some of the information provided
+(via UCSI_ACPI in my case). For my Thinkpad X13 Gen3 either Intel or Lenovo
+have screwed up but since that design is 18 months old my guess is those
+companies won't do anything about it, only fixing serious security issues.
+Maybe they will fix UCSI_ACPI properly in future models. Some other recent
+laptops I have tested (less than 12 months old) don't support UCSI_ACPI at
+all. Also the design of /sys/class/power_supply isn't a good fit for USB PD.
+Not sure how that could be solved. Heikki sounded off about design issues in:
+    https://marc.info/?l=linux-usb&m=169278141600478&w=2
+Maybe USB PD needs its own power_supply class or at least a class that
+is higher level than class/typec and class/usb-power_delivery.
 
-Signed-off-by: Sam Edwards <CFSworks@gmail.com>
----
- drivers/usb/dwc3/host.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+A secondary problem is that I chose to implement lsucpd in C++20 and later
+found out that g++ and clang were bending the truth when they said they
+supported C++20. std::print is one area of non-compliance. Hopefully this
+will improve in time for the next LTS cycle of major distributions.
 
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index 61f57fe5bb78..29f170927e70 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -61,7 +61,7 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
- 
- int dwc3_host_init(struct dwc3 *dwc)
- {
--	struct property_entry	props[4];
-+	struct property_entry	props[5];
- 	struct platform_device	*xhci;
- 	int			ret, irq;
- 	int			prop_idx = 0;
-@@ -95,6 +95,9 @@ int dwc3_host_init(struct dwc3 *dwc)
- 	if (dwc->usb2_lpm_disable)
- 		props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb2-lpm-disable");
- 
-+	if (dwc->maximum_speed == USB_SPEED_FULL || dwc->maximum_speed == USB_SPEED_HIGH)
-+		props[prop_idx++] = PROPERTY_ENTRY_BOOL("disable-usb3");
-+
- 	/**
- 	 * WORKAROUND: dwc3 revisions <=3.00a have a limitation
- 	 * where Port Disable command doesn't work.
--- 
-2.41.0
+Doug Gilbert
+
+
 
 
