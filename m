@@ -1,180 +1,253 @@
-Return-Path: <linux-usb+bounces-3883-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3884-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20AF8809687
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 00:24:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB0DD80972E
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 01:25:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C91BB20E03
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Dec 2023 23:24:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74C801F21313
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 00:25:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E2956467;
-	Thu,  7 Dec 2023 23:24:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 848F781D;
+	Fri,  8 Dec 2023 00:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CZUOsi4M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mXtbziia"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C217E10DD;
-	Thu,  7 Dec 2023 15:24:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701991481; x=1733527481;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xoqsFo9dnxWWy6BSu4v73RRiTtczxofsXV0GmHIT9GE=;
-  b=CZUOsi4MRyWo6dTjyx6dlzZvFQVxCzNSvyuTR7nYOeZrM6R1QHA8kyLv
-   GDpZyQYVbWscMLzKrGqfPd2xC0Wq5PNYlea1TSoa7ln1FOHRuY5L5B828
-   1COj643IiPmYYOZRr/YBvup2thxeuDNrASASSYs1ui/MKVuP3fs+pEM8k
-   sLOazRxhQh95MYbNytoqZSaSJv5ZtIV3iXsTlVnvPElosyZzjtJ8Gyh1Q
-   NX/k637d3jMgz0TBYIBRVWQrS//eNOBd7V4x6uLPrBU61+i+zgjGFF59d
-   zHQBp8yWzLIdQRnl1SmLxNkhDodYpjyP0N09I8ehI8hS3drT9aG3sY4vY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="1430969"
-X-IronPort-AV: E=Sophos;i="6.04,259,1695711600"; 
-   d="scan'208";a="1430969"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 15:24:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="771923277"
-X-IronPort-AV: E=Sophos;i="6.04,259,1695711600"; 
-   d="scan'208";a="771923277"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 07 Dec 2023 15:24:36 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rBNjM-000CyZ-1m;
-	Thu, 07 Dec 2023 23:24:32 +0000
-Date: Fri, 8 Dec 2023 07:23:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: RD Babiera <rdbabiera@google.com>, heikki.krogerus@linux.intel.com,
-	linux@roeck-us.net, gregkh@linuxfoundation.org,
-	pmalani@chromium.org, bleung@chromium.org,
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, badhri@google.com,
-	tzungbi@kernel.org, utkarsh.h.patel@intel.com,
-	andriy.shevchenko@linux.intel.com,
-	RD Babiera <rdbabiera@google.com>
-Subject: Re: [PATCH v1 02/10] usb: typec: tcpci: enable reception of SOP'
- messages
-Message-ID: <202312080751.GDJHcwNz-lkp@intel.com>
-References: <20231207090738.15721-14-rdbabiera@google.com>
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AE819BF;
+	Thu,  7 Dec 2023 16:25:01 -0800 (PST)
+Received: by mail-oo1-xc2f.google.com with SMTP id 006d021491bc7-59063f8455eso741440eaf.3;
+        Thu, 07 Dec 2023 16:25:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701995101; x=1702599901; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MSN+KGwjWnynTpdt4z2HpHMekwKnkXSJkY0oqIZKp+Q=;
+        b=mXtbziiaTLKymrhRZLBoQSvAVgt84GLrjsLnABE7Pr7LaIpruPaEMCXrmIpvEkrUzl
+         Ln/alo/ubUSM3EZqsxDTRQrSg65T83nmKRun4+tWFqS5YjBxA+HvwDrUOEDvrjKrMiYR
+         23GZtmGmtXp2P4xsD6Eop0NOhoqG/hF/MEpQ8ka5v3UtV6/vtLLF630jaSpWJBynpNnh
+         ZCaqZg7WG/2ZX/rz5lfAp8bIEAnRJiUtBBP5XXbQJv4it2kPQowmJh+xSqohR3zjEVPA
+         RxzSf96pP2LwqlqiJSRnb2fpx8s/SJOhrKJjO97vDU7eGLvi4wpe968OOd4RlNvFoXka
+         Mjaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701995101; x=1702599901;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MSN+KGwjWnynTpdt4z2HpHMekwKnkXSJkY0oqIZKp+Q=;
+        b=V3CHJcxHr57pWzMlw2ZD/oPa2pWhgLjevBbkuxwrSpSI8acAe2N8IL8tqZU5BHVHXG
+         Igp8o2Av+UOgyntusHDYl9XbFoXzOCiZb//2q12E4xCYrArq8GjIM6FWzmi3oypvs7fu
+         WE7iI6XdxEAyQqpWdwBONDhh+SZoZ0uoFOVj0QNGmLrr2JtDQqAeJU4S5Cb291ourWtE
+         M8XQEQ3pT/Xi2kV03WxdMbVNNP5Qg5G+AGKP0rtxqWiocIUtb19uEZ2rDovAa+lOIjiN
+         1imA5kG4RS4/dpNJyusK2WvwFUVxJyBPhBMWby7YG7chJxmxS0zwqyUcigo33CedAjsu
+         AzRA==
+X-Gm-Message-State: AOJu0YxTXX5m/mVf2A6cHLx4fxOkIAZqodDRwTov/5abpADylnyFsTHZ
+	F1EAWjHmxyI6rbIhlsC+FlkYFD9kAOLu6rjxOUSdFbPSh4X/Eg==
+X-Google-Smtp-Source: AGHT+IE2udV2rvMrY/grsLbuSgK8URfWOYUoftrCeWOfi0y4igmmQ/GFemj7anYUoOXKfI5XMf4vtFLfWHzvboXtdVQ=
+X-Received: by 2002:a05:6820:1ac8:b0:58d:6ea3:8fc with SMTP id
+ bu8-20020a0568201ac800b0058d6ea308fcmr4111694oob.2.1701995100761; Thu, 07 Dec
+ 2023 16:25:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231207090738.15721-14-rdbabiera@google.com>
+References: <20231204144429.45197-1-linux.amoon@gmail.com> <20231204144429.45197-2-linux.amoon@gmail.com>
+ <20231206135311.GA2043711-robh@kernel.org> <CANAwSgTS0ZSFPv4x803pCLEpjH5imh8vEoWpbiJRH14Sy3GZww@mail.gmail.com>
+ <21673bfd-bb87-4c7d-a53f-337c263f3a00@linaro.org> <CANAwSgSo37B0zg-xjrmqndSZ5SbyB3m27_wRsqqN9WTONooeiw@mail.gmail.com>
+ <604e653d-c1e2-45c7-b121-8a6b4be5c6bb@linaro.org>
+In-Reply-To: <604e653d-c1e2-45c7-b121-8a6b4be5c6bb@linaro.org>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Fri, 8 Dec 2023 05:54:43 +0530
+Message-ID: <CANAwSgRB=XWo2-40rDru=Zy277-kgGNjozJ8Lxnxgv_4ABB-kg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] dt-bindings: usb: Add the binding example for the
+ Genesys Logic GL3523 hub
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Icenowy Zheng <uwu@icenowy.me>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	linux-amlogic@lists.infradead.org, Conor Dooley <conor.dooley@microchip.com>, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi RD,
+Hi Krzysztof,
 
-kernel test robot noticed the following build errors:
+On Thu, 7 Dec 2023 at 18:11, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 07/12/2023 13:33, Anand Moon wrote:
+> > Hi Krzysztof
+> >
+> > On Thu, 7 Dec 2023 at 14:00, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 06/12/2023 18:14, Anand Moon wrote:
+> >>> Hi Rob,
+> >>>
+> >>> On Wed, 6 Dec 2023 at 19:23, Rob Herring <robh@kernel.org> wrote:
+> >>>>
+> >>>> On Mon, Dec 04, 2023 at 08:14:25PM +0530, Anand Moon wrote:
+> >>>>> Add the binding example for the USB3.1 Genesys Logic GL3523
+> >>>>> integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
+> >>>>> hub.
+> >>>>>
+> >>>>> For onboard hub controllers that support USB 3.x and USB 2.0 hubs
+> >>>>> with shared resets and power supplies, this property is used to identify
+> >>>>> the hubs with which these are shared.
+> >>>>>
+> >>>>> GL3523 has built-in 5V to 3.3V and 5V to 1.2V regulators, which serves
+> >>>>> power to the USB HUB, it uses 5V power regulator.
+> >>>>>
+> >>>>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> >>>>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> >>>>> ---
+> >>>>> V6: fix the description of the regulators
+> >>>>> Updated the commit message for regulator updates.
+> >>>>> add reviewed by Conor Dooley
+> >>>>> [1] https://lore.kernel.org/all/20231130053130.21966-2-linux.amoon@gmail.com/
+> >>>>> v5: upgrade peer-hub description : Conor Dooley
+> >>>>> [0] https://www.genesyslogic.com.tw/en/product_view.php?show=67 [Block Diagram]
+> >>>>> v4: Fix the description of peer-hub and update the commit message.
+> >>>>> Schematics of the Odroid N2+
+> >>>>> https://dn.odroid.com/S922X/ODROID-N2/Schematic/odroid-n2_rev0.6_20210121.pdf
+> >>>>> V3: fix the dt_binding_check error, added new example for Genesys GL3523
+> >>>>> v2: added Genesys GL3523 binding
+> >>>>> v1: none
+> >>>>> ---
+> >>>>>  .../bindings/usb/genesys,gl850g.yaml          | 65 +++++++++++++++++--
+> >>>>>  1 file changed, 61 insertions(+), 4 deletions(-)
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> >>>>> index ee08b9c3721f..c6f63a69396d 100644
+> >>>>> --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> >>>>> +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> >>>>> @@ -9,9 +9,6 @@ title: Genesys Logic USB hub controller
+> >>>>>  maintainers:
+> >>>>>    - Icenowy Zheng <uwu@icenowy.me>
+> >>>>>
+> >>>>> -allOf:
+> >>>>> -  - $ref: usb-device.yaml#
+> >>>>> -
+> >>>>>  properties:
+> >>>>>    compatible:
+> >>>>>      enum:
+> >>>>> @@ -27,12 +24,46 @@ properties:
+> >>>>>
+> >>>>>    vdd-supply:
+> >>>>>      description:
+> >>>>> -      the regulator that provides 3.3V core power to the hub.
+> >>>>> +      The regulator that provides 3.3V or 5.0V core power to the hub.
+> >>>>> +
+> >>>>> +  peer-hub:
+> >>>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+> >>>>> +    description:
+> >>>>> +      For onboard hub controllers that support USB 3.x and USB 2.0 hubs
+> >>>>> +      with shared resets and power supplies, this property is used to identify
+> >>>>> +      the hubs with which these are shared.
+> >>>>>
+> >>>>>  required:
+> >>>>>    - compatible
+> >>>>>    - reg
+> >>>>>
+> >>>>> +allOf:
+> >>>>> +  - $ref: usb-device.yaml#
+> >>>>> +  - if:
+> >>>>> +      properties:
+> >>>>> +        compatible:
+> >>>>> +          contains:
+> >>>>> +            enum:
+> >>>>> +              - usb5e3,608
+> >>>>> +    then:
+> >>>>> +      properties:
+> >>>>> +        peer-hub: false
+> >>>>> +        vdd-supply: false
+> >>>>> +        reset-gpios: true
+> >>>>> +
+> >>>>> +  - if:
+> >>>>> +      properties:
+> >>>>> +        compatible:
+> >>>>> +          contains:
+> >>>>> +            enum:
+> >>>>> +              - usb5e3,610
+> >>>>> +              - usb5e3,620
+> >>>>> +    then:
+> >>>>> +      properties:
+> >>>>> +        peer-hub: true
+> >>>>> +        vdd-supply: true
+> >>>>> +        reset-gpios: true
+> >>>>
+> >>>> No need for this if schema. The default is they are allowed.
+> >>>>
+> >>>
+> >>> If I move reset-gpios to required, I observe the below warning.
+> >>>
+> >>>   DTC_CHK Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb
+> >>> /home/alarm/linux-amlogic-5.y-devel/Documentation/devicetree/bindings/usb/usb-device.example.dtb:
+> >>> hub@1: 'reset-gpio' is a required property
+> >>>         from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
+> >>
+> >> Where are the properties defined? If you open the binding you see:
+> >> nowhere. You cannot define properties in some variant with "true".
+> >> Please define all of them in top-level and only narrow/constrain when
+> >> applicable.
+> >>
+> > What I meant is the example below, required meant applicable for both
+> > the binding
+> > But it shows me the above warning.
+>
+> My explanation stands... So again:
+>
+> >> Please define all of them in top-level and only narrow/constrain when
+> >> applicable.
+>
+Apologies, But I have tried this multiple times but have not been able
+to fix the device tree warning
+I have verified that example
+Documentation/devicetree/bindings/usb/genesys,gl850g.example.dts
+generate is correct
 
-[auto build test ERROR on 5e4c8814a431d21bfaf20b464134f40f2f81e152]
+required:
+  - compatible
+  - reg
+  - reset-gpio
+  - peer-hub
+  - vdd-supply
 
-url:    https://github.com/intel-lab-lkp/linux/commits/RD-Babiera/usb-typec-bus-provide-transmit-type-for-alternate-mode-drivers/20231207-171114
-base:   5e4c8814a431d21bfaf20b464134f40f2f81e152
-patch link:    https://lore.kernel.org/r/20231207090738.15721-14-rdbabiera%40google.com
-patch subject: [PATCH v1 02/10] usb: typec: tcpci: enable reception of SOP' messages
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20231208/202312080751.GDJHcwNz-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080751.GDJHcwNz-lkp@intel.com/reproduce)
+allOf:
+  - $ref: usb-device.yaml#
+  - if:
+      properties:
+        compatible:
+          contains:
+            enum:
+              - usb5e3,608
+    then:
+      properties:
+        peer-hub: false
+        vdd-supply: false
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312080751.GDJHcwNz-lkp@intel.com/
+  - if:
+      properties:
+        compatible:
+          contains:
+            enum:
+              - usb5e3,610
+              - usb5e3,620
+    then:
+      properties:
+        peer-hub: true
+        vdd-supply: true
 
-All errors (new ones prefixed by >>):
+additionalProperties: false
 
->> drivers/usb/typec/tcpm/fusb302.c:1470:39: error: too few arguments to function call, expected 3, have 2
-                   tcpm_pd_receive(chip->tcpm_port, msg);
-                   ~~~~~~~~~~~~~~~                     ^
-   include/linux/usb/tcpm.h:172:6: note: 'tcpm_pd_receive' declared here
-   void tcpm_pd_receive(struct tcpm_port *port,
-        ^
-   1 error generated.
---
->> drivers/usb/typec/tcpm/wcove.c:538:37: error: too few arguments to function call, expected 3, have 2
-                           tcpm_pd_receive(wcove->tcpm, &msg);
-                           ~~~~~~~~~~~~~~~                  ^
-   include/linux/usb/tcpm.h:172:6: note: 'tcpm_pd_receive' declared here
-   void tcpm_pd_receive(struct tcpm_port *port,
-        ^
-   1 error generated.
---
->> drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c:302:52: error: too few arguments to function call, expected 3, have 2
-                   tcpm_pd_receive(pmic_typec_pdphy->tcpm_port, &msg);
-                   ~~~~~~~~~~~~~~~                                  ^
-   include/linux/usb/tcpm.h:172:6: note: 'tcpm_pd_receive' declared here
-   void tcpm_pd_receive(struct tcpm_port *port,
-        ^
-   1 error generated.
+> Best regards,
+> Krzysztof
+>
 
-
-vim +1470 drivers/usb/typec/tcpm/fusb302.c
-
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1421  
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1422  static int fusb302_pd_read_message(struct fusb302_chip *chip,
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1423  				   struct pd_message *msg)
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1424  {
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1425  	int ret = 0;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1426  	u8 token;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1427  	u8 crc[4];
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1428  	int len;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1429  
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1430  	/* first SOP token */
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1431  	ret = fusb302_i2c_read(chip, FUSB_REG_FIFOS, &token);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1432  	if (ret < 0)
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1433  		return ret;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1434  	ret = fusb302_i2c_block_read(chip, FUSB_REG_FIFOS, 2,
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1435  				     (u8 *)&msg->header);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1436  	if (ret < 0)
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1437  		return ret;
-f03d95f59026d1 drivers/staging/typec/fusb302/fusb302.c Guru Das Srinagesh 2017-05-10  1438  	len = pd_header_cnt_le(msg->header) * 4;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1439  	/* add 4 to length to include the CRC */
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1440  	if (len > PD_MAX_PAYLOAD * 4) {
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1441  		fusb302_log(chip, "PD message too long %d", len);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1442  		return -EINVAL;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1443  	}
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1444  	if (len > 0) {
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1445  		ret = fusb302_i2c_block_read(chip, FUSB_REG_FIFOS, len,
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1446  					     (u8 *)msg->payload);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1447  		if (ret < 0)
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1448  			return ret;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1449  	}
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1450  	/* another 4 bytes to read CRC out */
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1451  	ret = fusb302_i2c_block_read(chip, FUSB_REG_FIFOS, 4, crc);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1452  	if (ret < 0)
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1453  		return ret;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1454  	fusb302_log(chip, "PD message header: %x", msg->header);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1455  	fusb302_log(chip, "PD message len: %d", len);
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1456  
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1457  	/*
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1458  	 * Check if we've read off a GoodCRC message. If so then indicate to
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1459  	 * TCPM that the previous transmission has completed. Otherwise we pass
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1460  	 * the received message over to TCPM for processing.
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1461  	 *
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1462  	 * We make this check here instead of basing the reporting decision on
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1463  	 * the IRQ event type, as it's possible for the chip to report the
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1464  	 * TX_SUCCESS and GCRCSENT events out of order on occasion, so we need
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1465  	 * to check the message type to ensure correct reporting to TCPM.
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1466  	 */
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1467  	if ((!len) && (pd_header_type_le(msg->header) == PD_CTRL_GOOD_CRC))
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1468  		tcpm_pd_transmit_complete(chip->tcpm_port, TCPC_TX_SUCCESS);
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1469  	else
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21 @1470  		tcpm_pd_receive(chip->tcpm_port, msg);
-ab69f61321140f drivers/usb/typec/fusb302/fusb302.c     Adam Thomson       2017-11-21  1471  
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1472  	return ret;
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1473  }
-c034a43e72dda5 drivers/staging/typec/fusb302/fusb302.c Yueyao Zhu         2017-04-27  1474  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks
+-Anand
 
