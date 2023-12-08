@@ -1,238 +1,163 @@
-Return-Path: <linux-usb+bounces-3898-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3899-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EE7E80A2BD
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 12:57:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96DE180A2E5
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 13:15:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 259E92818DF
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 11:57:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2F8DB20B96
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 12:15:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13F4F1BDE5;
-	Fri,  8 Dec 2023 11:57:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1535F1C293;
+	Fri,  8 Dec 2023 12:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DVQZgJvL"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="k7fdtT5E"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B088C3
-	for <linux-usb@vger.kernel.org>; Fri,  8 Dec 2023 03:57:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702036632; x=1733572632;
-  h=date:from:to:cc:subject:message-id;
-  bh=0w5wFM1vuCntgtbiJTf0y49BxW5v6JdsCSmGhQiiomk=;
-  b=DVQZgJvLLsl6oQMLo7dscrDvN8Fd6H48aRHndodfXrLgjSwOelqI9VBn
-   JUOQws8EG3/dCSc5RwrlPg+qR7QIprPQjhbUrRWctxXXMh4/yrAXFPIFw
-   /uMcdvPK8JrARhy3jwYEmLj3ud/7TqI6HVQPWAHlpWZyPT0VEBF0v2uq3
-   lpj98A3QJyDUj2/JzqgJEA+uYfc9HanqD4IcX79nWm69Ax/qhkW9YVSZ3
-   /O5L2VVHzbD14mDJ/Jc0MP0/3RjEpOYi5KgYPOrCGUniKW/bQC+B03QBT
-   apsXxLLoWghEoj1umYq1re6Izf1KNjZipd1tgjlZcLRhJd3UNXe4Jtc2M
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="15947546"
-X-IronPort-AV: E=Sophos;i="6.04,260,1695711600"; 
-   d="scan'208";a="15947546"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2023 03:57:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="1103543183"
-X-IronPort-AV: E=Sophos;i="6.04,260,1695711600"; 
-   d="scan'208";a="1103543183"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Dec 2023 03:57:11 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rBZTh-000DhZ-0g;
-	Fri, 08 Dec 2023 11:57:09 +0000
-Date: Fri, 08 Dec 2023 19:56:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD REGRESSION
- 61890dc28f7d9e9aac8a9471302613824c22fae4
-Message-ID: <202312081947.jNGRYbku-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75021199F;
+	Fri,  8 Dec 2023 04:15:05 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B8BBngr009546;
+	Fri, 8 Dec 2023 12:14:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=84Cc+cs4mWLxWjEijA/iCSxp8CdOJhiE3inczZ/76mQ=;
+ b=k7fdtT5EG4riH7s+A0QqatjvRUUqbZeROdaQFblzse6o6wSZkx/jL/7tu/tpPLh9iQPj
+ hphr80P1+LPiLxpf5DI5U/KjWeel33z81A+HXBJftF/2LgJXovgFwYmfNe1iOs+bhivI
+ yWOQ5daehdJd1gtGP/a4t0aEIqYzxe2ERzJ93JYLRKSvZ2MMnkSl/B2+RLOtH1HsT5Af
+ Lfs2soRGw4+9FWy9Y/8vRlzxpJwKehQ9CwfQ56HnmCT0zFcDSv4D6LLOvdkVWvjU6D1K
+ bDimQ51Md+XefURibdbhPF7wU5Wu0yjnOocDUNTbQ3lkl4sVPyWs4Af7LSXvSWGOs7/H 1g== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uuj96j1ff-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 Dec 2023 12:14:52 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3B8CEp1j029351
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 8 Dec 2023 12:14:51 GMT
+Received: from [10.216.26.153] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 8 Dec
+ 2023 04:14:45 -0800
+Message-ID: <516aeb55-69ad-460c-9757-6ad8a203b693@quicinc.com>
+Date: Fri, 8 Dec 2023 17:44:41 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/6] usb: dwc3: qcom: Rename hs_phy_irq to
+ qusb2_phy_irq
+To: Johan Hovold <johan@kernel.org>
+CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring
+	<robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <cros-qcom-dts-watchers@chromium.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>
+References: <20231204100950.28712-1-quic_kriskura@quicinc.com>
+ <20231204100950.28712-3-quic_kriskura@quicinc.com>
+ <ZXHkpwji_AzXMjfm@hovoldconsulting.com>
+ <9d52fa8c-41d1-46a7-be89-5c1c11ca09b4@quicinc.com>
+ <ZXHz-HYgVLbgFp2k@hovoldconsulting.com>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZXHz-HYgVLbgFp2k@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: SFyHIducnV-0mN69EJA_ZT_2NW7IOWjW
+X-Proofpoint-ORIG-GUID: SFyHIducnV-0mN69EJA_ZT_2NW7IOWjW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-08_06,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ mlxlogscore=497 malwarescore=0 phishscore=0 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 adultscore=0 mlxscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2312080102
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 61890dc28f7d9e9aac8a9471302613824c22fae4  usb: gadget: f_hid: fix report descriptor allocation
 
-Error/Warning ids grouped by kconfigs:
 
-gcc_recent_errors
-|-- sparc-allmodconfig
-|   `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
-|-- sparc-allnoconfig
-|   |-- arch-sparc-kernel-traps_32.c:error:no-previous-prototype-for-trap_init
-|   |-- arch-sparc-lib-cmpdi2.c:error:no-previous-prototype-for-__cmpdi2
-|   |-- arch-sparc-lib-ucmpdi2.c:error:no-previous-prototype-for-__ucmpdi2
-|   |-- arch-sparc-mm-leon_mm.c:error:variable-paddrbase-set-but-not-used
-|   `-- arch-sparc-mm-srmmu.c:error:variable-clear-set-but-not-used
-|-- sparc-defconfig
-|   |-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
-|   |-- arch-sparc-kernel-traps_32.c:error:no-previous-prototype-for-trap_init
-|   |-- arch-sparc-lib-cmpdi2.c:error:no-previous-prototype-for-__cmpdi2
-|   |-- arch-sparc-lib-ucmpdi2.c:error:no-previous-prototype-for-__ucmpdi2
-|   |-- arch-sparc-mm-leon_mm.c:error:variable-paddrbase-set-but-not-used
-|   `-- arch-sparc-mm-srmmu.c:error:variable-clear-set-but-not-used
-|-- sparc-randconfig-001-20231208
-|   |-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
-|   |-- arch-sparc-kernel-traps_32.c:error:no-previous-prototype-for-trap_init
-|   |-- arch-sparc-lib-cmpdi2.c:error:no-previous-prototype-for-__cmpdi2
-|   |-- arch-sparc-lib-ucmpdi2.c:error:no-previous-prototype-for-__ucmpdi2
-|   |-- arch-sparc-mm-leon_mm.c:error:variable-paddrbase-set-but-not-used
-|   `-- arch-sparc-mm-srmmu.c:error:variable-clear-set-but-not-used
-|-- sparc64-allmodconfig
-|   `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
-|-- sparc64-allyesconfig
-|   `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
-|-- sparc64-defconfig
-|   `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
-`-- sparc64-randconfig-001-20231208
-    `-- arch-sparc-kernel-module.c:error:variable-strtab-set-but-not-used
+On 12/7/2023 10:04 PM, Johan Hovold wrote:
+> On Thu, Dec 07, 2023 at 09:17:32PM +0530, Krishna Kurapati PSSNV wrote:
+>> On 12/7/2023 8:58 PM, Johan Hovold wrote:
+> 
+>>> Here too you should say something about why this won't break any systems
+>>> booting using an older devicetree. Specifically, the QUSB2 PHY interrupt
+>>> has never been armed on any system running mainline as those bits never
+>>> made it upstream.
+>>>
+>>> So an alternative to this could also be to just drop the QUSB2 PHY
+>>> interrupt handling from this driver for now. >
+> 
+>> So, are you suggesting that we drop the whole patch ?
+> 
+> No, I meant that an alternative could be to drop the current hs_phy_irq
+> handling from the driver.
+> 
+>> I assume if the older kernels are using old DT, they would be using an
+>> old driver version too right ?
+> 
+> No, and this is part of the devicetree ABI as we discussed the other
+> week.
+> 
+> You should generally be able to continue booting with an older devicetree
+> on a newer kernel (even if newer functionality may not be enabled then).
+> 
+>> Is there a case where DT is not updated but driver is ? Because if we
+>> drop this patch from series, targets with updated DT's would break.
+> 
+> Actually they would not due to the fact that the QUSB2 PHY interrupt is
+> currently never armed in the PHY (and the interrupts are looked up by
+> name and are considered optional by the driver).
+> 
+> But simply dropping this patch is not an option here. I'm fine with this
+> patch as it is, but the reason we can merge it is that those interrupts
+> are currently not actually used. Otherwise, this would break older
+> devicetrees.
+> 
+> But this also means, we could consider dropping the current hs_phy_irq
+> handling altogether.
+> 
+> Hmm. Looking at the qusb2_phy_runtime_suspend() again now I see that the
+> interrupt is actually armed on runtime suspend, it's just that it is
+> configured incorrectly and would wakeup immediately if someone ever
+> exercised this path.
+> 
+> Specifically, the bits that would set those PHY_MODE_USB_HOST_HS modes
+> (that should never have been merged) never made it upstream so this code
+> is just dead code currently. I said before I'll look into ripping this
+> out, but yeah, I'm swamped with work as usual (and it has been sitting
+> there dead for years so there's no rush).
+> 
+> So to summarise, the QUSB2 wakeup handling is incomplete and broken, so
+> we won't actually make things worse by renaming the interrupts. If this
+> was working, we would need to continue supporting the old names, though.
+> 
 
-elapsed time: 1705m
+Thanks for the review. Since renaming the interrupts won't be an issue, 
+I will keep this patch as is in that case in v3.
 
-configs tested: 129
-configs skipped: 2
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231208   gcc  
-arc                   randconfig-002-20231208   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20231208   clang
-arm                   randconfig-002-20231208   clang
-arm                   randconfig-003-20231208   clang
-arm                   randconfig-004-20231208   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20231208   clang
-arm64                 randconfig-002-20231208   clang
-arm64                 randconfig-003-20231208   clang
-arm64                 randconfig-004-20231208   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20231208   gcc  
-csky                  randconfig-002-20231208   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20231208   clang
-hexagon               randconfig-002-20231208   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20231208   clang
-i386         buildonly-randconfig-002-20231208   clang
-i386         buildonly-randconfig-003-20231208   clang
-i386         buildonly-randconfig-004-20231208   clang
-i386         buildonly-randconfig-005-20231208   clang
-i386         buildonly-randconfig-006-20231208   clang
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231208   clang
-i386                  randconfig-002-20231208   clang
-i386                  randconfig-003-20231208   clang
-i386                  randconfig-004-20231208   clang
-i386                  randconfig-005-20231208   clang
-i386                  randconfig-006-20231208   clang
-i386                  randconfig-011-20231208   gcc  
-i386                  randconfig-012-20231208   gcc  
-i386                  randconfig-013-20231208   gcc  
-i386                  randconfig-014-20231208   gcc  
-i386                  randconfig-015-20231208   gcc  
-i386                  randconfig-016-20231208   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231208   gcc  
-loongarch             randconfig-002-20231208   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20231208   gcc  
-nios2                 randconfig-002-20231208   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20231208   gcc  
-parisc                randconfig-002-20231208   gcc  
-parisc64                            defconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc               randconfig-001-20231208   clang
-powerpc               randconfig-002-20231208   clang
-powerpc               randconfig-003-20231208   clang
-powerpc64             randconfig-001-20231208   clang
-powerpc64             randconfig-002-20231208   clang
-powerpc64             randconfig-003-20231208   clang
-riscv                             allnoconfig   clang
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231208   clang
-riscv                 randconfig-002-20231208   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231208   gcc  
-s390                  randconfig-002-20231208   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20231208   gcc  
-sh                    randconfig-002-20231208   gcc  
-sparc                            allmodconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20231208   gcc  
-sparc64               randconfig-002-20231208   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20231208   clang
-um                    randconfig-002-20231208   clang
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20231208   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Krishna,
 
