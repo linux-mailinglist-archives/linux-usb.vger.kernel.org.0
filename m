@@ -1,105 +1,186 @@
-Return-Path: <linux-usb+bounces-3885-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3886-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C00EE809B43
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 06:03:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BB65809C8C
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 07:42:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 697D61F21141
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 05:03:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F29A1C20BC1
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 06:42:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB9A453AB;
-	Fri,  8 Dec 2023 05:02:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="EofmHpNL";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="0JoNE5lc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2163E63AF;
+	Fri,  8 Dec 2023 06:42:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-X-Greylist: delayed 387 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Dec 2023 21:02:54 PST
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6AB10F7;
-	Thu,  7 Dec 2023 21:02:54 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailnew.west.internal (Postfix) with ESMTP id 492732B00124;
-	Thu,  7 Dec 2023 23:56:22 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 07 Dec 2023 23:56:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1702011381; x=1702018581; bh=PI
-	Y64CBSNt0PPb9bxeilH/4eQNVTuavlLXd+xLtdLt4=; b=EofmHpNL/cIg5AKToO
-	umxa3/vm8NffW15CQ/NYWKLTmOntZUlTXzL07BQN9Zzd1qkj/zIQY2BNpeU3NNnE
-	DsyuHH3WZaGBzjQorUzlwiFe/4NPCQlENpKqreDBuJVMeLp6sZaNlIXcysHdaNRc
-	VEBzwBp21QplxcXEbl27bmgnF5pmLSDH0ONvG3vpQ7j3dFUXRgm6b+dWV4nd4HGl
-	SWheN6zX7f77TSnmKwBt69fMkeY7vcpYMbjU7GbnOXep63hQWV1N/LSBPbrYOTRp
-	fXLqehXrXtZqsPTcqJbc3tosb+da+i8EQrUzDBVMvjAsRUUs+nAZG0k6OSVXdw8F
-	kR8Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1702011381; x=1702018581; bh=PIY64CBSNt0PP
-	b9bxeilH/4eQNVTuavlLXd+xLtdLt4=; b=0JoNE5lcC5CNnZsf0Wrxk0j03GnnD
-	jKhNB/IWHt20uvZzwI8UD4N+ZmDmCB7ssaaymo/kcvUG9aTopzcCzQC/kIar85eH
-	FF73aIfF48k+sJCT6KDh2qwa4MpjeIS8zono/MVUEsiM/KpsAwbbQDRFyrE7JP6t
-	iZ+SdSRt+D8vWJNgNstFf7rxNYiEfRWIO/LXVRKWJEc5rSrblhxPCO3hwsPyJ2MA
-	BWB1vtmLc1nS7dNF4hkptHIe+jCQfQKYq6S23Rj84g4b85QqQsisSTFc2aXhhm3q
-	lfGZwhLYxEqTogHcPiuVYoVmuQyjsJtiomiXqlN1FbTEortKcfJ3ehxew==
-X-ME-Sender: <xms:9aFyZYCQddBddhZLtTdmaCagb1YejJJydeA7lnR9rCFc2q2T68f5Rg>
-    <xme:9aFyZaii19_64B-wL9K1uZUjRIE0pAy_5jb714kJnHdyH6bLJuIQ2-8r6Gk8MGV6-
-    SmpbysNcrM9zQ>
-X-ME-Received: <xmr:9aFyZbmJM6VIeIhwKoz-C4nYvlKCuRI71S6CIsmYX141cRu6ODga5VANakJmYUtEfjoWCeTgzgfOBv2l4u53-EaJGhnT6Spfxg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudekhedgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:9aFyZexFHU7norGA_X7Vuge-0fgLPT5e-anhtsm-yBQXlpEC96Xu2w>
-    <xmx:9aFyZdSRHOl3NF57458as0Ve8eZCYGAaF_n1-6gqdF1RZ0r7dlPAHg>
-    <xmx:9aFyZZYrhbQQaBlzWULnF1wKDDRQooLtJAJuUYqDs3mhE7PSQ08drQ>
-    <xmx:9aFyZeSODrZnAjSz5JEizXuxoWQeQSuK2TXNjmKIflKUcWV2ydV1ReukdwI>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 7 Dec 2023 23:56:21 -0500 (EST)
-Date: Fri, 8 Dec 2023 05:56:19 +0100
-From: Greg KH <greg@kroah.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-	davem@davemloft.net, edumazet@google.com,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, oneukum@suse.com, pabeni@redhat.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v6] net: usb: ax88179_178a: avoid failed operations when
- device is disconnected
-Message-ID: <2023120813-yummy-scrubbed-517e@gregkh>
-References: <0bd3204e-19f4-48de-b42e-a75640a1b1da@rowland.harvard.edu>
- <20231207175007.263907-1-jtornosm@redhat.com>
- <d8c331dd-deb1-4f12-8e66-295bfac8b1d7@rowland.harvard.edu>
- <20231207123256.337753f9@kernel.org>
+X-Greylist: delayed 377 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Dec 2023 22:42:21 PST
+Received: from mp-relay-01.fibernetics.ca (mp-relay-01.fibernetics.ca [208.85.217.136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E021722
+	for <linux-usb@vger.kernel.org>; Thu,  7 Dec 2023 22:42:21 -0800 (PST)
+Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mp-relay-01.fibernetics.ca (Postfix) with ESMTPS id 56980E0F97
+	for <linux-usb@vger.kernel.org>; Fri,  8 Dec 2023 06:36:03 +0000 (UTC)
+Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
+	by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id 4DC6560BE2
+	for <linux-usb@vger.kernel.org>; Fri,  8 Dec 2023 06:36:03 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+X-Spam-Score: -0.199
+X-Spam-Level:
+Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
+	by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
+	with ESMTP id IF5Mxc_bIezw for <linux-usb@vger.kernel.org>;
+	Fri,  8 Dec 2023 06:36:02 +0000 (UTC)
+Received: from [192.168.48.17] (host-104-157-209-188.dyn.295.ca [104.157.209.188])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dgilbert@interlog.com)
+	by mail.ca.inter.net (Postfix) with ESMTPSA id 7D85C6043E
+	for <linux-usb@vger.kernel.org>; Fri,  8 Dec 2023 06:36:02 +0000 (UTC)
+Message-ID: <5f74a231-e0c2-4be6-ab90-6592f7cfa8df@interlog.com>
+Date: Fri, 8 Dec 2023 01:36:02 -0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231207123256.337753f9@kernel.org>
+User-Agent: Mozilla Thunderbird
+From: Douglas Gilbert <dgilbert@interlog.com>
+Subject: [Announce] lsucpd release 0.91 utility for USB Type-C
+Reply-To: dgilbert@interlog.com
+To: linux-usb@vger.kernel.org
+Content-Language: en-CA
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Dec 07, 2023 at 12:32:56PM -0800, Jakub Kicinski wrote:
-> On Thu, 7 Dec 2023 15:23:23 -0500 Alan Stern wrote:
-> > Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> 
-> FWIW I'm expecting Greg to pick this up for usb.
+lsucpd is a command line utility for listing USB Type-C ports, partners
+and any associated PD objects. It is essentially data-mining the
+/sys/class/typec and /sys/class/usb_power_delivery directories. So
+lsucpd performs no magic and root permissions are not required.
 
-Sure, will do!
+lsucpd was originally announced in this post on 28 August 2023:
+   https://marc.info/?l=linux-usb&m=169325926403279&w=2
+That code has been tagged as 'r0.89'. There is also a 'r0.90' tag
+but it was not announced. This release is tagged as 'r0.91'. The
+code is available at this git mirror at:
+     https://github.com/doug-gilbert/lsucpd
 
+Changelog since 0.89 [20230827] [svn: r9]
+   - add the first stage of JSON support
+   - add --pdo-snk= and --pdo-src= options to decode PDOs
+   - add --rdo= option to decode RDOs
+   - make preparations for PD revision 3.2
+
+The last one is a bit optimistic as the kernel PD stack can't yet handle
+the additions in PD 3.1 (e.g. fixed 28, 36 and 48 Volts, plus AVS from
+15 to 48 Volts). Recently PD 3.1 dropped all support for 3.3 to < 5 Volts.
+PD 3.2 splits AVS (Adjustable Voltage Supply) into SPR (Standard Power
+Range [<= 21 Volts]) and EPR (Extended ...) variants. SPR AVS is the new
+one going from 9 to 20 Volts. What is the difference between AVS and PPS
+(Programmable PS)? Answer: PPS does current limiting, AVS doesn't ***.
+
+
+Note: USB TypeC/PD standards have been in place for almost 10 years
+and now almost all new mobile devices use TypeC/PD . However visibility
+of TypeC/PD to host operating systems is relatively new and immature.
+Previously mobile devices handled TypeC/PD in their BIOS or Embedded
+Controllers and left the host OS "in the dark".
+Please keep this in mind if reporting issues.
+
+Here is a debian binary package built on Ubuntu 23.10 :
+     https://doug-gilbert.github.io/p/lsucpd_0.91-0.1_amd64.deb
+
+Here is a rpm built on Fedora 39 :
+     https://doug-gilbert.github.io/p/lsucpd-0.91-1.x86_64.rpm
+
+Doug Gilbert
+
+
+*** "current limiting" as defined by PPS. AVS (and PPS) still does
+      OCP (Over Current Protection) but that is pretty brutal (i.e.
+      the source removes power for a few hundred milliseconds to
+      let the sink cool off)
+
+
+Examples from a Thinkpad X13 Gen 3, U 23.10 lk 6.7.0-rc1
+   [port0-partner: is an alternate mode DP dongle,
+    port1-partner: is a PD power adapter (source)]
+
+$ lsucpd
+  port0 [pd0]  ====>>  partner [pd3]
+  port1 [pd1]  <<====  partner [pd2]
+
+$ lsucpd -c
+  port0 [pd0]  ====>>  partner [pd3]
+  port1 [pd1]  <<====  partner [pd2]
+
+ > pd0: has NO source-capabilities
+ >  pd0: sink-capabilities:
+    >> 1:fixed_supply; fixed: 5.00 Volts, 3.00 Amps (op)
+    >> 2:variable_supply; variable: 5.00 to 20.00 Volts, 3.25 Amps (op)
+    >> 3:battery; battery: 5.00 to 20.00 Volts, 65.00 Watts (op)
+ > pd1: source-capabilities:
+   >> 1:fixed_supply; fixed: 0.00 Volts, 7.21 Amps (max)
+ >  pd1: sink-capabilities:
+    >> 1:fixed_supply; fixed: 5.00 Volts, 3.00 Amps (op)
+    >> 2:variable_supply; variable: 5.00 to 20.00 Volts, 3.25 Amps (op)
+    >> 3:battery; battery: 5.00 to 20.00 Volts, 65.00 Watts (op)
+ > pd2: source-capabilities:
+   >> 1:fixed_supply; fixed: 5.00 Volts, 3.00 Amps (max)
+   >> 2:fixed_supply; fixed: 9.00 Volts, 3.00 Amps (max)
+   >> 3:fixed_supply; fixed: 12.00 Volts, 3.00 Amps (max)
+   >> 4:fixed_supply; fixed: 15.00 Volts, 3.00 Amps (max)
+   >> 5:fixed_supply; fixed: 20.00 Volts, 3.00 Amps (max)
+ >  pd2: has NO sink-capabilities
+ > pd3: has NO source-capabilities
+ >  pd3: has NO sink-capabilities
+
+$ lsucpd -ll
+  port0 [pd0]  ====>>  partner [pd3]
+  port1 [pd1]  <<====  partner [pd2]
+
+ > port0  [pd0]:
+       data_role='[host] device'
+       power_operation_mode='usb_power_delivery'
+       power_role='[source] sink'
+       preferred_role=''
+       supported_accessory_modes='none'
+       usb_power_delivery_revision='2.0'
+       usb_typec_revision='1.0'
+       vconn_source='no'
+       waiting_for_supplier='0'
+    port0-partner  [pd3]:
+       accessory_mode='none'
+       number_of_alternate_modes='1'
+       supports_usb_power_delivery='yes'
+       usb_power_delivery_revision='0.0'
+       Alternate mode: /sys/class/typec/port0-partner/port0-partner.0
+         active='yes'
+         description='DisplayPort'
+         mode='1'
+         svid='ff01'
+         vdo='0x00001085'
+ > port1  [pd1]:
+       data_role='host [device]'
+       power_operation_mode='usb_power_delivery'
+       power_role='source [sink]'
+       preferred_role=''
+       supported_accessory_modes='none'
+       usb_power_delivery_revision='2.0'
+       usb_typec_revision='1.0'
+       vconn_source='no'
+       waiting_for_supplier='0'
+    port1-partner  [pd2]:
+       accessory_mode='none'
+       supports_usb_power_delivery='yes'
+       usb_power_delivery_revision='0.0'
+
+
+Note: not all that output is believable (e.g. '0.00 Volts, 7.21 Amps (max)')
+so some common sense is required interpreting the output from lsucpd .
 
 
