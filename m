@@ -1,214 +1,143 @@
-Return-Path: <linux-usb+bounces-3935-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3936-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CEFB80B348
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 09:37:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 959EF80B34E
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 09:43:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C86F1F21128
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 08:37:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E49971F211B9
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 08:43:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB3A379E1;
-	Sat,  9 Dec 2023 08:37:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD6F6FC9;
+	Sat,  9 Dec 2023 08:43:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kpXPzocV"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="f36WZ639"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C4AFA
-	for <linux-usb@vger.kernel.org>; Sat,  9 Dec 2023 00:37:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702111066; x=1733647066;
-  h=date:from:to:cc:subject:message-id;
-  bh=TSCi0WlwbSBXtpnCF+0f3FLQPhoa2Pn8V5+JiYNzgq8=;
-  b=kpXPzocVUx8ZJ9IG1cf9qNM9Y5wgkrhd2m2b9sv+ByT/kkk7KQb+9HGy
-   VKQdj3K1NMYnuH1OCSECqSwmhKNvo0L1wDYkGblf8SwMUSkCShK4SbQHn
-   weCBi2+QYI7H2V9VQwmqkyR4c13Mhui66at3bONzrmFPPOCbzEfLPATFQ
-   DXc6TmWoL/K+oVcoPdrwwnGop63WRqyA/ODCZA3nHrXIPCyl2i/o0h1f/
-   raD82tQdHZfCQeSS1heyoL/Ec76QVnm8lZ82EnfDUF6ZLvfhP6uwIJN1W
-   1jPJGEtr7+M+31oYiq9FrUgJrEkV46UW5rLiDiUSdYjZEHhBYB04CUHGp
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10918"; a="391673670"
-X-IronPort-AV: E=Sophos;i="6.04,262,1695711600"; 
-   d="scan'208";a="391673670"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2023 00:37:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10918"; a="1019610011"
-X-IronPort-AV: E=Sophos;i="6.04,262,1695711600"; 
-   d="scan'208";a="1019610011"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Dec 2023 00:37:45 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rBsqF-000F5m-0P;
-	Sat, 09 Dec 2023 08:37:43 +0000
-Date: Sat, 09 Dec 2023 16:37:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: [westeri-thunderbolt:fixes] BUILD SUCCESS
- f0b94c1c5c7994a74e487f43c91cfc922105a423
-Message-ID: <202312091613.bWRZHAmJ-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF4310D0
+	for <linux-usb@vger.kernel.org>; Sat,  9 Dec 2023 00:42:54 -0800 (PST)
+Received: from [192.168.1.18] ([92.140.202.140])
+	by smtp.orange.fr with ESMTPA
+	id BsvCrcsGt8sqPBsvCrXaRV; Sat, 09 Dec 2023 09:42:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1702111372;
+	bh=OL7jJBAHp3+DKzbCvIViVa6sqM1F9KNTat4GEYWo3l4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=f36WZ639mb34IksRNaZ5zgh56e30qvgeiG2HRFdG0qifwbk17zBUE5ybPQoK4APa/
+	 xbOQXM3oS8EEZG3+9TrPSXWbDFOYAUR5Ujf51ci7KTOcppfu5PD05hjq1c+qKtK7Tb
+	 k7G/NoiUyKnWc7qJBprEVoQLjAwaftR///q5FLcljBNG1UdCPBGYsfkABYnL96sAHx
+	 HEUGdL8lF5Zk7GorqLnf2l5dDaMnXSh8iSmxChgR9cf7H+FYQ1lIJtWHlJpXKJh2yT
+	 0HXQqCJjL0cRNQmksacxES8XH3nBxSYeN1RnzG3fpcQDbz7LaMV0Ka6rsnAqOM0Z+u
+	 1owR75wXIe9Xw==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 09 Dec 2023 09:42:52 +0100
+X-ME-IP: 92.140.202.140
+Message-ID: <02a2787a-1fb9-4238-820b-c3b1e8460e5a@wanadoo.fr>
+Date: Sat, 9 Dec 2023 09:42:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] usb: typec: mux: add Qualcomm WCD939X USB SubSystem
+ Altmode Mux driver
+Content-Language: fr
+To: Neil Armstrong <neil.armstrong@linaro.org>, Andy Gross
+ <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231208-topic-sm8650-upstream-wcd939x-usbss-v1-0-91d1ba680fe0@linaro.org>
+ <20231208-topic-sm8650-upstream-wcd939x-usbss-v1-2-91d1ba680fe0@linaro.org>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20231208-topic-sm8650-upstream-wcd939x-usbss-v1-2-91d1ba680fe0@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git fixes
-branch HEAD: f0b94c1c5c7994a74e487f43c91cfc922105a423  thunderbolt: Fix minimum allocated USB 3.x and PCIe bandwidth
+Le 08/12/2023 à 16:27, Neil Armstrong a écrit :
+> Qualcomm WCD9390/WCD9395 is a standalone Hi-Fi audio codec IC with a
+> functionally separate USB SubSystem for Altmode/Analog Audio Switch
+> accessible over an I2C interface.
+> 
+> It provides switching USB-C USB2.0 lines between USB and Audio Headphones
+> speaker lines, and the USB-C SBU lines between DisplayPort AUX and Audio
+> Headphones Microphone/Ground.
+> 
+> The Audio Headphone and Microphone data path between the Codec and the
+> USB-C Mux subsystems are external to the IC, thus requiring DT
+> port-endpoint graph description to handle USB-C altmode & orientation
+> switching for Audio Accessory Mode.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
 
-elapsed time: 1462m
+...
 
-configs tested: 136
-configs skipped: 2
+> +	usbss->sw = typec_switch_register(dev, &sw_desc);
+> +	if (IS_ERR(usbss->sw)) {
+> +		ret = dev_err_probe(dev, PTR_ERR(usbss->sw), "failed to register typec switch\n");
+> +		goto err_regulator_disable;
+> +	}
+> +
+> +	mux_desc.drvdata = usbss;
+> +	mux_desc.fwnode = dev_fwnode(dev);
+> +	mux_desc.set = wcd939x_usbss_mux_set;
+> +
+> +	usbss->mux = typec_mux_register(dev, &mux_desc);
+> +	if (IS_ERR(usbss->mux)) {
+> +		typec_switch_unregister(usbss->sw);
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Already called at the 'err_switch_unregister' label below.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              alldefconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231209   gcc  
-arc                   randconfig-002-20231209   gcc  
-arm                               allnoconfig   gcc  
-arm                                 defconfig   clang
-arm                            dove_defconfig   clang
-arm                        keystone_defconfig   gcc  
-arm                   milbeaut_m10v_defconfig   clang
-arm                         orion5x_defconfig   clang
-arm                   randconfig-001-20231209   gcc  
-arm                   randconfig-002-20231209   gcc  
-arm                   randconfig-003-20231209   gcc  
-arm                   randconfig-004-20231209   gcc  
-arm                         s5pv210_defconfig   clang
-arm                         socfpga_defconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20231209   gcc  
-arm64                 randconfig-002-20231209   gcc  
-arm64                 randconfig-003-20231209   gcc  
-arm64                 randconfig-004-20231209   gcc  
-csky                              allnoconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20231209   gcc  
-csky                  randconfig-002-20231209   gcc  
-hexagon                           allnoconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20231209   clang
-hexagon               randconfig-002-20231209   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20231208   clang
-i386         buildonly-randconfig-002-20231208   clang
-i386         buildonly-randconfig-003-20231208   clang
-i386         buildonly-randconfig-004-20231208   clang
-i386         buildonly-randconfig-005-20231208   clang
-i386         buildonly-randconfig-006-20231208   clang
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231208   clang
-i386                  randconfig-002-20231208   clang
-i386                  randconfig-003-20231208   clang
-i386                  randconfig-004-20231208   clang
-i386                  randconfig-005-20231208   clang
-i386                  randconfig-006-20231208   clang
-i386                  randconfig-011-20231208   gcc  
-i386                  randconfig-012-20231208   gcc  
-i386                  randconfig-013-20231208   gcc  
-i386                  randconfig-014-20231208   gcc  
-i386                  randconfig-015-20231208   gcc  
-i386                  randconfig-016-20231208   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231209   gcc  
-loongarch             randconfig-002-20231209   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5275evb_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   clang
-mips                      bmips_stb_defconfig   clang
-mips                  cavium_octeon_defconfig   clang
-mips                     decstation_defconfig   gcc  
-mips                      malta_kvm_defconfig   clang
-mips                        qi_lb60_defconfig   clang
-nios2                             allnoconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20231209   gcc  
-nios2                 randconfig-002-20231209   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20231209   gcc  
-parisc                randconfig-002-20231209   gcc  
-parisc64                            defconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      chrp32_defconfig   gcc  
-powerpc                      pcm030_defconfig   gcc  
-powerpc               randconfig-001-20231209   gcc  
-powerpc               randconfig-002-20231209   gcc  
-powerpc               randconfig-003-20231209   gcc  
-powerpc64             randconfig-001-20231209   gcc  
-powerpc64             randconfig-002-20231209   gcc  
-powerpc64             randconfig-003-20231209   gcc  
-riscv                             allnoconfig   clang
-riscv                               defconfig   gcc  
-riscv                    nommu_k210_defconfig   gcc  
-riscv                 randconfig-001-20231209   gcc  
-riscv                 randconfig-002-20231209   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231209   clang
-s390                  randconfig-002-20231209   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                        edosk7760_defconfig   gcc  
-sh                    randconfig-001-20231209   gcc  
-sh                    randconfig-002-20231209   gcc  
-sparc                            allmodconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20231209   gcc  
-sparc64               randconfig-002-20231209   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20231209   gcc  
-um                    randconfig-002-20231209   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20231209   gcc  
-xtensa                randconfig-002-20231209   gcc  
+> +		ret = dev_err_probe(dev, PTR_ERR(usbss->mux), "failed to register typec mux\n");
+> +		goto err_switch_unregister;
+> +	}
+> +
+> +	i2c_set_clientdata(client, usbss);
+> +
+> +	return 0;
+> +
+> +err_switch_unregister:
+> +	typec_switch_unregister(usbss->sw);
+> +
+> +err_regulator_disable:
+> +	regulator_disable(usbss->vdd_supply);
+> +
+> +err_mux_switch:
+> +	typec_switch_put(usbss->codec_switch);
+> +
+> +err_mux_put:
+> +	typec_mux_put(usbss->codec);
+> +
+> +	return ret;
+> +}
+> +
+> +static void wcd939x_usbss_remove(struct i2c_client *client)
+> +{
+> +	struct wcd939x_usbss *usbss = i2c_get_clientdata(client);
+> +
+> +	typec_mux_unregister(usbss->mux);
+> +	typec_switch_unregister(usbss->sw);
+> +
+> +	regulator_disable(usbss->vdd_supply);
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Based on error hadling of the probe: typec_switch_put() missing?
+
+> +
+> +	typec_mux_put(usbss->codec);
+> +}
+
+CJ
+
 
