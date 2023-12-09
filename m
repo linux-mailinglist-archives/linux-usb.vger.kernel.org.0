@@ -1,60 +1,60 @@
-Return-Path: <linux-usb+bounces-3932-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3933-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17B8480B305
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 09:03:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EA7580B30E
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 09:06:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0CB52810E9
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 08:03:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFB76B20C7B
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 08:06:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 330187461;
-	Sat,  9 Dec 2023 08:02:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2BB7499;
+	Sat,  9 Dec 2023 08:06:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kBwpBP2h"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mZO/GV+U"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1073FC
-	for <linux-usb@vger.kernel.org>; Sat,  9 Dec 2023 00:02:53 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40c0a0d068bso29142245e9.3
-        for <linux-usb@vger.kernel.org>; Sat, 09 Dec 2023 00:02:53 -0800 (PST)
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7250510C9
+	for <linux-usb@vger.kernel.org>; Sat,  9 Dec 2023 00:06:22 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-54c77e0835bso3986524a12.2
+        for <linux-usb@vger.kernel.org>; Sat, 09 Dec 2023 00:06:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702108972; x=1702713772; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702109181; x=1702713981; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=244sbHE40LT5zDzQrN/UZvjCcPFns4b5ZId3i95ZggM=;
-        b=kBwpBP2hz39kYxjkP3G0gQZO54xcCi2PONLcsegGq22DfgznduLmK4QJ7fZSvS1pxs
-         ouecURKrXaydMba0ZFxvNseslY5bv8tgzJk0yP6GrQHm67UApenTLye4PeYtrtyeCquu
-         lyqbhoNSY1xlR+Y03stqmRi5JcExB1lFg7B21cp5UHmvZpeGLQgPSefiLZVj7UGy2BvC
-         GyFtM7gjNlncx8MjRxiO+3CI16TxX6sWtgHDUNDSSa9xw4Onr9GzdHzmQQKlCwKoauMe
-         vwjKXQqE5GMBCn3TdB2hjokkOt0TC0c0VoG9vBO1N15DXFvqTSp3V2rISPtMquJ+Ruk+
-         BCiw==
+        bh=jG8s3fgJS9ICRkeB82xh1ujF1QUWunYPHipPKKbwr90=;
+        b=mZO/GV+Uq7r3vwjlnQRL2ENkpWw0GWtl4JhMfKqhiq7rAhYa+j/sxfcMs7mtecpNsT
+         eukDbyvk+WI/e+9FXN6TEQNBvmrleRQgZacbtFnS3d6PP9/6Hxd/GdyG4sPueFKgO408
+         eumViDIRwpMlr/qQDGZnd77AzKiIGr6YghUCMrcXR1SlV0D5I3BMUWpSOE6cflOcQppB
+         u3fXlpFj1/Ul1hG+0Xi/m5lJr0tw+uxSwdVV77JzZVLaYX6x4SHllpfjhXPEWtsfSbyB
+         m0f0FCDnM0ZY2lKwjpazD/FnZzy4jhDwqzwMRds8AwuKLaUbwZAmgcqACbEVH+WABR0i
+         sTEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702108972; x=1702713772;
+        d=1e100.net; s=20230601; t=1702109181; x=1702713981;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=244sbHE40LT5zDzQrN/UZvjCcPFns4b5ZId3i95ZggM=;
-        b=KzAIhbv4N0DiwuXK9xPzyfnGAdkijcMY5SSKlPZsN8n6/a07DNdMn5+GcPgJYY9/KY
-         OBq09A8QVs1OIwh++ly+xhtqEYO8XJduGXvbGxKD4sVeq6o3SZPZsLc2+zr/sNDsHKuf
-         i2+Ii2nTa1qCKrpL9DigS4ZZdO6iGnrPSBDfiRY1Lw0IiCfr9V0PIUZaEpjlDU8LuApy
-         +ZSJBgoUdloyEIxZrG4++L3KBeAEPPsQQ6NUztE3vn31COv5pKoXzSnzz33okpNX+R66
-         IZe4PXbzV5r7H65yAD4maBEML+yJDQtuIxAjl6hskdCoa02sFc0aXzLmvhTZAgMML60Z
-         1UvA==
-X-Gm-Message-State: AOJu0YzfyDAnEYjNH0UcXBlw9UFEu0MR8YVyykliOnWBIeP4/weMYNOS
-	dJ6pcn+GKf60eLQsEkBxDSgBww==
-X-Google-Smtp-Source: AGHT+IFykgxfzPN93jrdg+oFHAH58ye60uQvewenZph85pb9mJT+pddOf7TqsD15T1l8oGLNZhum6g==
-X-Received: by 2002:a1c:7213:0:b0:40b:4b29:aa1c with SMTP id n19-20020a1c7213000000b0040b4b29aa1cmr741127wmc.30.1702108972002;
-        Sat, 09 Dec 2023 00:02:52 -0800 (PST)
+        bh=jG8s3fgJS9ICRkeB82xh1ujF1QUWunYPHipPKKbwr90=;
+        b=uZxlaKIBohda3Oe2U5DNzDZ9K767fqwnkKBhoHxhrJhbP4TjFLj2PhZjcU0PCk8vHo
+         0iLZrbnoKGw632Ff6C9O5Qm92NkvE9sCzarVqeShs4KDej3zKsziQBUW8FOw1lWGgYhC
+         neZCkwGtTTs0LEShIw8/VrulpMX+A+se4HOgp/wONXJ6OQ+rIScIlRhvRFcSGVAQu2v5
+         J10Lz7R2SuBJE47u/uBt6IHv2NJ38oYDzRpWB76a01pqFENafzcoB2GeKLHdbL0X2mbh
+         ImmmDlFbj4H6PuRHNO67cgYmDlXX+e+R9DND0WMDEXgg9HUIt/FdGlnst3iYROhnRrax
+         0/QQ==
+X-Gm-Message-State: AOJu0YyqpqVh0mQo2+F6tHC5QL0brtYd2nMnnnFZqop7haHGQc44bXMJ
+	uGs8iuAZQ/8z2I1GIqMKWe1oEQ==
+X-Google-Smtp-Source: AGHT+IEUbmH3LAgL7uriu/u+MzS7UhwQ/2ruC5NLdTRqF+mG+Ec/pk403yEXSu8PF8XoEoaRsY9Z/g==
+X-Received: by 2002:a50:858c:0:b0:54c:1fc:7574 with SMTP id a12-20020a50858c000000b0054c01fc7574mr744606edh.29.1702109180900;
+        Sat, 09 Dec 2023 00:06:20 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id f5-20020a1c6a05000000b00405c33a9a12sm1332578wmc.0.2023.12.09.00.02.50
+        by smtp.gmail.com with ESMTPSA id 3-20020a508e03000000b0054cfa5c47b2sm1504555edw.61.2023.12.09.00.06.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Dec 2023 00:02:51 -0800 (PST)
-Message-ID: <5869740e-95b2-4cb2-b791-464fe37e0488@linaro.org>
-Date: Sat, 9 Dec 2023 09:02:49 +0100
+        Sat, 09 Dec 2023 00:06:20 -0800 (PST)
+Message-ID: <9f27351a-6ab1-4b28-b5de-cce741d5810a@linaro.org>
+Date: Sat, 9 Dec 2023 09:06:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,22 +62,22 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/6] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
- bindings
+Subject: Re: [PATCH 2/2] usb: typec: mux: add Qualcomm WCD939X USB SubSystem
+ Altmode Mux driver
 Content-Language: en-US
-To: Krishna Kurapati <quic_kriskura@quicinc.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+To: Neil Armstrong <neil.armstrong@linaro.org>, Andy Gross
+ <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Wesley Cheng <quic_wcheng@quicinc.com>, Conor Dooley <conor+dt@kernel.org>,
- Johan Hovold <johan@kernel.org>, cros-qcom-dts-watchers@chromium.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- quic_ppratap@quicinc.com, quic_jackp@quicinc.com
-References: <20231204100950.28712-1-quic_kriskura@quicinc.com>
- <20231204100950.28712-2-quic_kriskura@quicinc.com>
+ Conor Dooley <conor+dt@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231208-topic-sm8650-upstream-wcd939x-usbss-v1-0-91d1ba680fe0@linaro.org>
+ <20231208-topic-sm8650-upstream-wcd939x-usbss-v1-2-91d1ba680fe0@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -123,33 +123,25 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231204100950.28712-2-quic_kriskura@quicinc.com>
+In-Reply-To: <20231208-topic-sm8650-upstream-wcd939x-usbss-v1-2-91d1ba680fe0@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 04/12/2023 11:09, Krishna Kurapati wrote:
+On 08/12/2023 16:27, Neil Armstrong wrote:
+> Qualcomm WCD9390/WCD9395 is a standalone Hi-Fi audio codec IC with a
+> functionally separate USB SubSystem for Altmode/Analog Audio Switch
+> accessible over an I2C interface.
+> 
+> It provides switching USB-C USB2.0 lines between USB and Audio Headphones
 
->      then:
->        properties:
-> -        interrupts:
-> -          items:
-> -            - description: The interrupt that is asserted
-> -                when a wakeup event is received on USB2 bus.
-> -            - description: The interrupt that is asserted
-> -                when a wakeup event is received on USB3 bus.
-> -            - description: Wakeup event on DM line.
-> -            - description: Wakeup event on DP line.
->          interrupt-names:
->            items:
-> -            - const: hs_phy_irq
-> -            - const: ss_phy_irq
-> -            - const: dm_hs_phy_irq
-> -            - const: dp_hs_phy_irq
-> +            - const: pwr_event
-> +            - const: qusb2_phy
-> +            - const: ss_phy_irq (optional)
+...
 
-You did not test your bindings.
+> +
+> +static const struct i2c_device_id wcd939x_usbss_table[] = {
+> +	{ "wcd9390-usbss" },
+> +	{ "wcd9395-usbss" },
+
+You can drop this entry (also in of_device_id).
 
 Best regards,
 Krzysztof
