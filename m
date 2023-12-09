@@ -1,125 +1,103 @@
-Return-Path: <linux-usb+bounces-3929-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3930-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EDEA80B0BC
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 00:56:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7251080B219
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 06:00:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 807901C20CAA
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Dec 2023 23:56:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E1D51F21350
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 05:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF43C5B1FC;
-	Fri,  8 Dec 2023 23:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0485117D0;
+	Sat,  9 Dec 2023 05:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S7AxMH4l"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W1vJ2HWm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6741734
-	for <linux-usb@vger.kernel.org>; Fri,  8 Dec 2023 15:56:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702079806; x=1733615806;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mYkeT968/7W0MI+cOCJ0+wS2CIfQJZVDY3pyhVxZcV4=;
-  b=S7AxMH4l5VPDDkHu3PxCh2s+tYmNRBNCgwOVSvJdT1cEhqtpOs1eXHET
-   vhbmo1h5OmctcFIK6wh0xoTZkjC2sPs9QqJemPOIg2Xq3kNtaQOL4UV73
-   oQq8lZy79RZxFOu1Y/GtyNVwPnDrBNjmGJe5AjHidSfwpWrW9kT28uXMN
-   1mtcwSjN5dD/2nNqNWChWOAyt2OJY1h3pInTVMtI5qXSF4fkXsU7IAU6k
-   NBeQMKirj0aPPT8wF2c4lQWl7HbR5lnFH+oSCrhy+z6R++lHDsVZyJbwX
-   lM5M9fXFIbZf/jF7ajjBGAelFENiMpb+B+/X4WkwrvXxIubFDz6Wd7xfl
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10918"; a="13175893"
-X-IronPort-AV: E=Sophos;i="6.04,262,1695711600"; 
-   d="scan'208";a="13175893"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2023 15:56:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10918"; a="890318957"
-X-IronPort-AV: E=Sophos;i="6.04,262,1695711600"; 
-   d="scan'208";a="890318957"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Dec 2023 15:56:38 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rBkhv-000EYj-2w;
-	Fri, 08 Dec 2023 23:56:35 +0000
-Date: Sat, 9 Dec 2023 07:56:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-	linux-usb@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-	kernel@collabora.com
-Subject: Re: [PATCH v2] usb: gadget: webcam: Make g_webcam loadable again
-Message-ID: <202312090717.dUYTE5cM-lkp@intel.com>
-References: <20231208131342.65671-1-andrzej.p@collabora.com>
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8503510E6;
+	Fri,  8 Dec 2023 21:00:33 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-50be9e6427dso2955481e87.1;
+        Fri, 08 Dec 2023 21:00:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702098031; x=1702702831; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BQ6KAjlHjfDZW8uY6DsJK0Hf/7tre7xZG4al0V3/BsA=;
+        b=W1vJ2HWma/YLa4qZdwRfWFFOR+dg5UkAzjXXgtyGEuRTNa9wQOjTi3IguYghYEhd+2
+         NsRlVtKkI05GrsergOdtu2nEB4eLyo2o4YzbfzNkNZT3BHqkXlc/y58F6qOwhbJaoD7i
+         aJr/5mMNr0GaiULr/6PBEiImX0ud2i+O0rQ8mMPqACHveoJV+fQyzhzgDV3HW12nqsmC
+         Ps9Kk+RPq9+u+0eW4X4IgZtr+wlZfgLMngrs+LI09KDwshpLvtXJY2i9Mg4wy5vb29rj
+         4q+D0fPEr3LGClfwRxFXsrq3q0siznhCIKU/e+R0HPBm30CTYWgY7nlRuaO1CWhcdW/L
+         wlFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702098031; x=1702702831;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BQ6KAjlHjfDZW8uY6DsJK0Hf/7tre7xZG4al0V3/BsA=;
+        b=D1tON1aGE+52y7nDr1P/9z5Ucf677swXyp0jFdZ6Ud+V7W3k+wIBO9UZVaceHPkVDR
+         8yNnyY2L7bdW1UA4eHXvIdfgTdC2bYIt8qgzqbHUONwTseh6uQOvb71LjGLzfPIkBlmK
+         c9dPbbtLR3zOUi5GOu5tbtjnxS3LuotnUgY876f1jPKn6q4IzNFXJ+X/jibUYsy4l51s
+         rK2vYwDuScsEDXTNujFcXayPfdRGxeShTGqtILp1cYipL8Fp31pK3zoyo8PTFJH3YGtF
+         PJcRolmd4kuTKZmS4rc4cUBWq3wiRAhpAUjcZ+vFIFPwMtABF2Btrmnru5B88ifsh9Xs
+         JQqQ==
+X-Gm-Message-State: AOJu0Yw5QipRaeSrwCZ+gkDPAGVdHNc5DtBc4vpksLIHjeSRmP8VFILD
+	PsAohhDnusq15FEsY9uXOttsQP90JGUSQpDDCZw=
+X-Google-Smtp-Source: AGHT+IGsNbYAdw+cxY/PDa+tKM4JAcCQ870JoL59/S6VNsWNaxysMF9SxnLw6vuQfPxameeOStSG9SBG88tMYKMUae0=
+X-Received: by 2002:a05:6512:60f:b0:50b:ebfe:4ef0 with SMTP id
+ b15-20020a056512060f00b0050bebfe4ef0mr480610lfe.86.1702098031050; Fri, 08 Dec
+ 2023 21:00:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231208131342.65671-1-andrzej.p@collabora.com>
+References: <CAEPPPKtEoiF-xiNm+LjCxb_Rt4c7rrUDRr7KkGE_8iJDuc+M1g@mail.gmail.com>
+ <CAA8EJpqMEmORJYZKHKBwexBCjmA916d9_-Y+eAByFD_VFQiA=g@mail.gmail.com>
+In-Reply-To: <CAA8EJpqMEmORJYZKHKBwexBCjmA916d9_-Y+eAByFD_VFQiA=g@mail.gmail.com>
+From: Xilin Wu <wuxilin123@gmail.com>
+Date: Sat, 9 Dec 2023 13:00:18 +0800
+Message-ID: <CAEPPPKvrjvB_T8+JcgG-9JMOJcQr_+iFV+K+mDuspQGeGynZZw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] usb: typec: ucsi: fix UCSI on buggy Qualcomm devices
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Andy Gross <agross@kernel.org>, andersson@kernel.org, gregkh@linuxfoundation.org, 
+	heikki.krogerus@linux.intel.com, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
+	neil.armstrong@linaro.org, robh@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andrzej,
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org> =E4=BA=8E2023=E5=B9=B412=E6=
+=9C=888=E6=97=A5=E5=91=A8=E4=BA=94 23:39=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, 8 Dec 2023 at 17:27, Xilin Wu <wuxilin123@gmail.com> wrote:
+> >
+> > Hi,
+> >
+> > On Wed, 25 Oct 2023 14:49, Dmitry Baryshkov wrote:
+> > > On sevral Qualcomm platforms (SC8180X, SM8350, SC8280XP) a call to
+> > > UCSI_GET_PDOS for non-PD partners will cause a firmware crash with no
+> > > easy way to recover from it. Since we have no easy way to determine
+> > > whether the partner really has PD support, shortcut UCSI_GET_PDOS on
+> > > such platforms. This allows us to enable UCSI support on such devices=
+.
+> >
+> > This issue actually also exists on an SM8550 platform, specifically AYN=
+ Odin 2.
+> > I tested the patch on AYN Odin 2 and it also fixed the issue.
+>
+> Do you have the latest firmware available?
 
-kernel test robot noticed the following build warnings:
+I think yes. The firmware version is
+`ADSP.HT.5.8-01153-KAILUA-1: QCM8550-ADSP-R01-1.00_20231106`
 
-[auto build test WARNING on 33cc938e65a98f1d29d0a18403dbbee050dcad9a]
+> If it's true, please send a patch adding sm8550 to the list of platforms =
+requiring
+> the workaround.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrzej-Pietrasiewicz/usb-gadget-webcam-Make-g_webcam-loadable-again/20231208-211513
-base:   33cc938e65a98f1d29d0a18403dbbee050dcad9a
-patch link:    https://lore.kernel.org/r/20231208131342.65671-1-andrzej.p%40collabora.com
-patch subject: [PATCH v2] usb: gadget: webcam: Make g_webcam loadable again
-config: i386-buildonly-randconfig-002-20231209 (https://download.01.org/0day-ci/archive/20231209/202312090717.dUYTE5cM-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231209/202312090717.dUYTE5cM-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312090717.dUYTE5cM-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/gadget/legacy/webcam.c:368:32: warning: 'uvcg_frame_mjpeg_720p' defined but not used [-Wunused-const-variable=]
-     368 | static const struct uvcg_frame uvcg_frame_mjpeg_720p = {
-         |                                ^~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/uvcg_frame_mjpeg_720p +368 drivers/usb/gadget/legacy/webcam.c
-
-   367	
- > 368	static const struct uvcg_frame uvcg_frame_mjpeg_720p = {
-   369		.fmt_type		= UVCG_MJPEG,
-   370		.frame = {
-   371			.b_length			= uvc_frame_mjpg_720p.bLength,
-   372			.b_descriptor_type		= uvc_frame_mjpg_720p.bDescriptorType,
-   373			.b_descriptor_subtype		= uvc_frame_mjpg_720p.bDescriptorSubType,
-   374			.b_frame_index			= uvc_frame_mjpg_720p.bFrameIndex,
-   375			.bm_capabilities		= uvc_frame_mjpg_720p.bmCapabilities,
-   376			.w_width			= uvc_frame_mjpg_720p.wWidth,
-   377			.w_height			= uvc_frame_mjpg_720p.wHeight,
-   378			.dw_min_bit_rate		= uvc_frame_mjpg_720p.dwMinBitRate,
-   379			.dw_max_bit_rate		= uvc_frame_mjpg_720p.dwMaxBitRate,
-   380			.dw_max_video_frame_buffer_size	= uvc_frame_mjpg_720p.dwMaxVideoFrameBufferSize,
-   381			.dw_default_frame_interval	= uvc_frame_mjpg_720p.dwDefaultFrameInterval,
-   382			.b_frame_interval_type		= uvc_frame_mjpg_720p.bFrameIntervalType,
-   383		},
-   384		.dw_frame_interval	= (u32 *)uvc_frame_mjpg_720p.dwFrameInterval,
-   385	};
-   386	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Will do.
 
