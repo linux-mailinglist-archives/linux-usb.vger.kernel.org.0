@@ -1,195 +1,214 @@
-Return-Path: <linux-usb+bounces-3934-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3935-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6247980B314
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 09:12:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CEFB80B348
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 09:37:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA3E62810DD
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 08:11:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C86F1F21128
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 08:37:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E7B79C0;
-	Sat,  9 Dec 2023 08:11:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB3A379E1;
+	Sat,  9 Dec 2023 08:37:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Pz2a78Dl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kpXPzocV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D5E11F
-	for <linux-usb@vger.kernel.org>; Sat,  9 Dec 2023 00:11:47 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-50c0dbaf2baso2771594e87.3
-        for <linux-usb@vger.kernel.org>; Sat, 09 Dec 2023 00:11:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702109505; x=1702714305; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UIJ/Q6eMLTeAjhFzDKcuKqAtgXgPEPS5ycS7mozW2x0=;
-        b=Pz2a78DlIRzgMh3BWy+UCNeAniX4FAZTS76mkvea8nNJ2w9CPaauCVmB8T8rBwgbR7
-         cffkTZFGIGjgCIIXcZetFOWAa1zIlVICZl1jHbVUCAsiUlvWnN5uh3w5DfMEreXvvdDG
-         7qr1hcQxDA8tEOkruXJRpG0lHcUlZrixBVSwI0fCmGRX4kOL7UHdLIHnP/Nus8ciKgLW
-         0b2OwsS7oq/0LaEseAYHbQ0eI6tLyHCz/xfLlSDK1j8Y98C3OKYQK1aCOg5WxMxM+lcz
-         8j+2T9HXUkHagdtX8WoAN+9LZgaG8ry9Qxm/qW7SbQTUr22dFhkQ9lD092i3n9+EhlRu
-         W+1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702109505; x=1702714305;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UIJ/Q6eMLTeAjhFzDKcuKqAtgXgPEPS5ycS7mozW2x0=;
-        b=hVmWBdnYsc8aiatR5EtJFXusipWcROFsmF9c+1/mC10u3fuM1CT7QjlBJJEjRuzz/Y
-         4g5qLPwPZUCKE/YlkPQR5NO17Up8slszxbb6QSNkgwvF6zAKUbGwwjBJr9hrw89h8W4H
-         tC0sGchNtA/NQWGoQH5acITqwky22ffVFVq2k152sBROAetkkLqT2vLFQzCZAGrYFy/9
-         Vm6xuAz0o+joD0HDABOu5pWkSb4uYMoM74OJ9eW98V8EnWUeh4Fz1mFFZTiPggucA27m
-         KeVG359XlwCKcs7Fzl5gadHvhTZEgepqA8wadlJAa288UcDXfFdDRcXQj0dFsD4RWfbW
-         V43w==
-X-Gm-Message-State: AOJu0YzPbJqmDuVa4TnxdGhdFNi3r4fHJzKhbPpM+YWqLCs4ZMZHBIxr
-	OuZCPS3jXuPym/Yhd0OToC2uaA==
-X-Google-Smtp-Source: AGHT+IHNowo7b1GM/EuQrc87dFKhD8atK7vzo49lbfkiLTJyl4FKsfSqboMB3Usx7FSxYYoVOPvKCQ==
-X-Received: by 2002:ac2:42c6:0:b0:50c:f16f:5e3 with SMTP id n6-20020ac242c6000000b0050cf16f05e3mr322452lfl.191.1702109505453;
-        Sat, 09 Dec 2023 00:11:45 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id uv6-20020a170907cf4600b00a1f699e5217sm1684637ejc.135.2023.12.09.00.11.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Dec 2023 00:11:45 -0800 (PST)
-Message-ID: <1dc8c529-bb30-43f0-a184-ce00b6d5e9b6@linaro.org>
-Date: Sat, 9 Dec 2023 09:11:43 +0100
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C4AFA
+	for <linux-usb@vger.kernel.org>; Sat,  9 Dec 2023 00:37:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702111066; x=1733647066;
+  h=date:from:to:cc:subject:message-id;
+  bh=TSCi0WlwbSBXtpnCF+0f3FLQPhoa2Pn8V5+JiYNzgq8=;
+  b=kpXPzocVUx8ZJ9IG1cf9qNM9Y5wgkrhd2m2b9sv+ByT/kkk7KQb+9HGy
+   VKQdj3K1NMYnuH1OCSECqSwmhKNvo0L1wDYkGblf8SwMUSkCShK4SbQHn
+   weCBi2+QYI7H2V9VQwmqkyR4c13Mhui66at3bONzrmFPPOCbzEfLPATFQ
+   DXc6TmWoL/K+oVcoPdrwwnGop63WRqyA/ODCZA3nHrXIPCyl2i/o0h1f/
+   raD82tQdHZfCQeSS1heyoL/Ec76QVnm8lZ82EnfDUF6ZLvfhP6uwIJN1W
+   1jPJGEtr7+M+31oYiq9FrUgJrEkV46UW5rLiDiUSdYjZEHhBYB04CUHGp
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10918"; a="391673670"
+X-IronPort-AV: E=Sophos;i="6.04,262,1695711600"; 
+   d="scan'208";a="391673670"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2023 00:37:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10918"; a="1019610011"
+X-IronPort-AV: E=Sophos;i="6.04,262,1695711600"; 
+   d="scan'208";a="1019610011"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 09 Dec 2023 00:37:45 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rBsqF-000F5m-0P;
+	Sat, 09 Dec 2023 08:37:43 +0000
+Date: Sat, 09 Dec 2023 16:37:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:fixes] BUILD SUCCESS
+ f0b94c1c5c7994a74e487f43c91cfc922105a423
+Message-ID: <202312091613.bWRZHAmJ-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: usb: Document WCD939x USB SubSystem
- Altmode/Analog Audio Switch
-Content-Language: en-US
-To: Neil Armstrong <neil.armstrong@linaro.org>, Andy Gross
- <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231208-topic-sm8650-upstream-wcd939x-usbss-v1-0-91d1ba680fe0@linaro.org>
- <20231208-topic-sm8650-upstream-wcd939x-usbss-v1-1-91d1ba680fe0@linaro.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231208-topic-sm8650-upstream-wcd939x-usbss-v1-1-91d1ba680fe0@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 08/12/2023 16:27, Neil Armstrong wrote:
-> Document the Qualcomm WCD9390/WCD9395 USB SubSystem Altmode/Analog Audio Switch
-> which is a separate USB SubSystem for Altmode/Analog Audio Switch accessible
-> over an I2C interface.
-> 
-> Since Audio Headphone and Microphone data path between the Codec and the USB-C Mux
-> subsystems are external to the IC, it requires a second port to handle USB-C altmode
-> & orientation switching for Audio Accessory Mode to the Codec SubSystem.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/usb/qcom,wcd939x-usbss.yaml           | 99 ++++++++++++++++++++++
->  1 file changed, 99 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,wcd939x-usbss.yaml b/Documentation/devicetree/bindings/usb/qcom,wcd939x-usbss.yaml
-> new file mode 100644
-> index 000000000000..da86b1d119d4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/qcom,wcd939x-usbss.yaml
-> @@ -0,0 +1,99 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/qcom,wcd939x-usbss.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm WCD9380/WCD9385 USB SubSystem Altmode/Analog Audio Switch
-> +
-> +maintainers:
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +
-> +description: |
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git fixes
+branch HEAD: f0b94c1c5c7994a74e487f43c91cfc922105a423  thunderbolt: Fix minimum allocated USB 3.x and PCIe bandwidth
 
-Do not need '|' unless you need to preserve formatting.
+elapsed time: 1462m
 
-> +  Qualcomm WCD9390/WCD9395 is a standalone Hi-Fi audio codec IC with a functionally
-> +  separate USB SubSystem for Altmode/Analog Audio Switch accessible over an I2C interface.
+configs tested: 136
+configs skipped: 2
 
-Please wrap at 80. In other descriptions as well.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> +  The Audio Headphone and Microphone data path between the Codec and the USB-C Mux
-> +  subsystems are external to the IC, thus requiring DT port-endpoint graph description
-> +  to handle USB-C altmode & orientation switching for Audio Accessory Mode.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: qcom,wcd9390-usbss
-> +      - items:
-> +          - const: qcom,wcd9395-usbss
-> +          - const: qcom,wcd9390-usbss
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  reset-gpios: true
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              alldefconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20231209   gcc  
+arc                   randconfig-002-20231209   gcc  
+arm                               allnoconfig   gcc  
+arm                                 defconfig   clang
+arm                            dove_defconfig   clang
+arm                        keystone_defconfig   gcc  
+arm                   milbeaut_m10v_defconfig   clang
+arm                         orion5x_defconfig   clang
+arm                   randconfig-001-20231209   gcc  
+arm                   randconfig-002-20231209   gcc  
+arm                   randconfig-003-20231209   gcc  
+arm                   randconfig-004-20231209   gcc  
+arm                         s5pv210_defconfig   clang
+arm                         socfpga_defconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20231209   gcc  
+arm64                 randconfig-002-20231209   gcc  
+arm64                 randconfig-003-20231209   gcc  
+arm64                 randconfig-004-20231209   gcc  
+csky                              allnoconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20231209   gcc  
+csky                  randconfig-002-20231209   gcc  
+hexagon                           allnoconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20231209   clang
+hexagon               randconfig-002-20231209   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20231208   clang
+i386         buildonly-randconfig-002-20231208   clang
+i386         buildonly-randconfig-003-20231208   clang
+i386         buildonly-randconfig-004-20231208   clang
+i386         buildonly-randconfig-005-20231208   clang
+i386         buildonly-randconfig-006-20231208   clang
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231208   clang
+i386                  randconfig-002-20231208   clang
+i386                  randconfig-003-20231208   clang
+i386                  randconfig-004-20231208   clang
+i386                  randconfig-005-20231208   clang
+i386                  randconfig-006-20231208   clang
+i386                  randconfig-011-20231208   gcc  
+i386                  randconfig-012-20231208   gcc  
+i386                  randconfig-013-20231208   gcc  
+i386                  randconfig-014-20231208   gcc  
+i386                  randconfig-015-20231208   gcc  
+i386                  randconfig-016-20231208   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231209   gcc  
+loongarch             randconfig-002-20231209   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                       m5275evb_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   clang
+mips                      bmips_stb_defconfig   clang
+mips                  cavium_octeon_defconfig   clang
+mips                     decstation_defconfig   gcc  
+mips                      malta_kvm_defconfig   clang
+mips                        qi_lb60_defconfig   clang
+nios2                             allnoconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20231209   gcc  
+nios2                 randconfig-002-20231209   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20231209   gcc  
+parisc                randconfig-002-20231209   gcc  
+parisc64                            defconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                      chrp32_defconfig   gcc  
+powerpc                      pcm030_defconfig   gcc  
+powerpc               randconfig-001-20231209   gcc  
+powerpc               randconfig-002-20231209   gcc  
+powerpc               randconfig-003-20231209   gcc  
+powerpc64             randconfig-001-20231209   gcc  
+powerpc64             randconfig-002-20231209   gcc  
+powerpc64             randconfig-003-20231209   gcc  
+riscv                             allnoconfig   clang
+riscv                               defconfig   gcc  
+riscv                    nommu_k210_defconfig   gcc  
+riscv                 randconfig-001-20231209   gcc  
+riscv                 randconfig-002-20231209   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20231209   clang
+s390                  randconfig-002-20231209   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                        edosk7760_defconfig   gcc  
+sh                    randconfig-001-20231209   gcc  
+sh                    randconfig-002-20231209   gcc  
+sparc                            allmodconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20231209   gcc  
+sparc64               randconfig-002-20231209   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20231209   gcc  
+um                    randconfig-002-20231209   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-001-20231209   gcc  
+xtensa                randconfig-002-20231209   gcc  
 
-This is the only GPIO from common GPIOs which actually needs maxItems.
-Please add maxItems: 1
-
-
-
-Best regards,
-Krzysztof
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
