@@ -1,153 +1,71 @@
-Return-Path: <linux-usb+bounces-3941-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3942-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D383E80B60E
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 20:27:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D41380B66E
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 22:11:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49578B20B41
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 19:27:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1EDEB20C6D
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 21:11:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EB651A29F;
-	Sat,  9 Dec 2023 19:27:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6D671CF83;
+	Sat,  9 Dec 2023 21:11:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hh53SB8a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YDBaI345"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBEAB7;
-	Sat,  9 Dec 2023 11:27:00 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-7b70f451399so70222539f.0;
-        Sat, 09 Dec 2023 11:27:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702150019; x=1702754819; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/CS+2dOrg8lRndJOViWuMxTn+pfWJIfx/SVtYqnhXtI=;
-        b=Hh53SB8ahy2b/D0tp9eFElLQPxxwSL6IUPg02di6KBba92UYuFGMJ9QxujiFL7q0Nz
-         3vp1Wk1RqfTV5aMeQC/qg/4wHqyIyCl88i5jDn8dBdws+WvKBwncYcPleTlK8V20lrme
-         UNbp2MS0EJpe1WiqMMnzldwtqQKQvx3Ay8jOXOxmfjSVgiccXWw+tzgqjBrMeB5SOMEg
-         G74QrWdfONX4Dt94Eo4uAzohtCUJsfMgjiQj/dOWrwIDZwSzplGgMC+cukatHf6DUk8R
-         krdBjDDca4xOA2UEcWkJYEXsSZtw2iPbNTgN6S5ALyMJDV3GjuBH1shZCTNgshflVqEF
-         trlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702150019; x=1702754819;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/CS+2dOrg8lRndJOViWuMxTn+pfWJIfx/SVtYqnhXtI=;
-        b=u9UgiauI7w9vwUt0vbo/COnxn5L+pJ8d3g1gI9xgPPPY7lA6ulMlu4fM81JvygLLZY
-         LAr6v6tTKocjVKFCmdtMGONahAhuAwTcRI+i3heJKW1pX2Qh1ew4iYs0VTlPf5lzyuXJ
-         z6Ap8bzuBvT/Wvs5MOCVBjvuMrhrUGcR2F544xdA3slIUxEvHfievuaCN1jFRABNs0g7
-         O1e0Egd9ruRaN24VOI6SSLOB7WxRfCqbADouCA/JvpQ/Iv5YCkxc0jzLyhWiR+Qxp60d
-         kQr7qn1N9dHGMUH28QdQtG9ABbqt6Fg8cZFD7sJ1Cvh1muyw9laxtKnyj836dIZD2av7
-         KMrA==
-X-Gm-Message-State: AOJu0Ywrys5XyZ0ZcJz8tC0KWom1/cD906eoLpEgw75ops+8GUtjsa4Q
-	Ugt15VbW48CPRfZd8j4ZQFE=
-X-Google-Smtp-Source: AGHT+IFGbII4YZhDonPEH7GIate2RH3+ElxvIRJUX8NgI0k1MZogzaEWMhWBgr/qDMtj9j8jLf7vLw==
-X-Received: by 2002:a5e:9413:0:b0:7b7:19d2:b53a with SMTP id q19-20020a5e9413000000b007b719d2b53amr2659456ioj.28.1702150019544;
-        Sat, 09 Dec 2023 11:26:59 -0800 (PST)
-Received: from ?IPV6:2001:470:42c4:101:971d:15c7:de39:3b4b? ([2001:470:42c4:101:971d:15c7:de39:3b4b])
-        by smtp.gmail.com with ESMTPSA id fh11-20020a056638628b00b004690150ade2sm1086084jab.147.2023.12.09.11.26.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Dec 2023 11:26:59 -0800 (PST)
-Message-ID: <9915035d-88ce-f961-00c0-fad24aa07764@gmail.com>
-Date: Sat, 9 Dec 2023 12:26:52 -0700
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B341DA2B
+	for <linux-usb@vger.kernel.org>; Sat,  9 Dec 2023 21:11:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 25E21C433C7;
+	Sat,  9 Dec 2023 21:11:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702156277;
+	bh=h8buZ2IBiA++XSGduzIdIJoihRJx+y2kdU3W2P8GguI=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=YDBaI345UQg4np3jvtgPJxE/AazUEEYWzDeQD15OVAnecCnY0QxhSXfmthJOi5Yj6
+	 S19m/8v5GMAgzh30F8iamQ0oVQspa32POivNhRXWuWnZm3vfTJRoTXKpeQZ0p0qoo4
+	 0+cuiE6TmNhkZflho1JhIGuE7EKCg8kyzSAXaazeD9j+bALItkztEILnqmsk7lGw2B
+	 7ReVwW3q2FuQdHGCuHdX3owWPsPG1TUCDrNxhAN/6kGLzcOEZbmMBuynClWOhx0uzw
+	 mm0CLnpU5xaQsN1PYeq+ToDZmhffudWstM+45JFr0jvpZLGzKuOHsGcdqqxod4VOuo
+	 FbzNU7ZXfxS0A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1100BC04DD9;
+	Sat,  9 Dec 2023 21:11:17 +0000 (UTC)
+Subject: Re: [GIT PULL] USB driver fixes for 6.7-rc5
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ZXRxx0o07FDnsRhN@kroah.com>
+References: <ZXRxx0o07FDnsRhN@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZXRxx0o07FDnsRhN@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.7-rc5
+X-PR-Tracked-Commit-Id: 61890dc28f7d9e9aac8a9471302613824c22fae4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 21b73ffcc62ab772bc06e3e90bd87eff5e9e8ed4
+Message-Id: <170215627706.20711.15799502446513904618.pr-tracker-bot@kernel.org>
+Date: Sat, 09 Dec 2023 21:11:17 +0000
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 1/2] xhci: Introduce "disable-usb3" DT property/quirk
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Heiko Stuebner <heiko@sntech.de>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231208210458.912776-1-CFSworks@gmail.com>
- <20231208210458.912776-2-CFSworks@gmail.com>
- <d9ebe207-1f20-4254-9523-f2231bf9a0a4@kernel.org>
-From: Sam Edwards <cfsworks@gmail.com>
-In-Reply-To: <d9ebe207-1f20-4254-9523-f2231bf9a0a4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+The pull request you sent on Sat, 9 Dec 2023 14:55:19 +0100:
 
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.7-rc5
 
-On 12/9/23 06:53, Krzysztof Kozlowski wrote:
-> On 08/12/2023 22:04, Sam Edwards wrote:
->> Some systems may have xHCI controllers that enumerate USB 3.0 ports, but
->> these ports nevertheless cannot be used. Perhaps enabling them triggers a
->> hardware bug, or perhaps they simply aren't connected and it would be
->> confusing to the user to see an unusable USB 3.0 rhub show up -- whatever
->> the case may be, it's reasonable to want to disable these ports.
->>
->> Add a DT property (and associated quirk) to the xHCI driver that skips
->> over (i.e. ignores and doesn't initialize) any USB 3.0 ports discovered
->> during driver initialization.
->>
->> Signed-off-by: Sam Edwards <CFSworks@gmail.com>
->> ---
->>   Documentation/devicetree/bindings/usb/usb-xhci.yaml | 4 ++++
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/21b73ffcc62ab772bc06e3e90bd87eff5e9e8ed4
 
-Hi Krzysztof,
+Thank you!
 
-> 
-> Bindings are always separate patches.
-> 
-> Please do not sneak in properties without DT review.
-> 
-
-It makes sense that the new property should be introduced in a separate 
-patch. I'll ensure that is the case in v2. (If there is one -- see below.)
-
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC. It might happen, that command when run on an older
-> kernel, gives you outdated entries. Therefore please be sure you base
-> your patches on recent Linux kernel.
-> 
-> You missed at least devicetree list (maybe more), so this won't be
-> tested by automated tooling.
-
-I have tried (and failed) to find the documentation for this 
-linux-devicetree bot. Do you have the link? In particular, I'd like to 
-ensure that patch 2/2 (the one that actually changes established 
-behavior) is tested sufficiently thoroughly.
-
-> Performing review on untested code might be
-> a waste of time, thus I will skip this patch entirely till you follow
-> the process allowing the patch to be tested.
-
-That's fine; this patch has just failed review anyway (due to the new 
-property not being introduced in a separate patch), and I'll need to 
-prepare and send a v2 to proceed. However as I mentioned in the cover, 
-this is a semi-RFC. I haven't discussed the overall idea with anyone 
-yet, so to avoid wasting my own time, I need to give the USB folks ample 
-opportunity to object to the proposed changes or suggest improvements 
-before investing more effort in refining the patchset.
-
-As of now, I'm only seeking commentary, not formal review. I'd 
-appreciate any insights on the approach I've taken and whether there are 
-any potential challenges or alternatives that haven't been explored yet. 
-Therefore, I'll hold off on CC-ing linux-devicetree at this stage to 
-keep the focus on the broader concept, and will loop them in (with any 
-other recipients as appropriate) for v2 when (and if!) there's consensus 
-here on linux-usb that the general direction is worth pursuing.
-
-> 
-> Please kindly resend and include all necessary To/Cc entries.
-> 
-> Best regards,
-> Krzysztof
-> 
-
-Happy Saturday,
-Sam
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
