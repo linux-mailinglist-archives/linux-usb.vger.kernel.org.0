@@ -1,135 +1,121 @@
-Return-Path: <linux-usb+bounces-3943-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3944-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 145CD80B6C9
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 23:22:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0B5A80BA49
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Dec 2023 12:10:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39F701C208FB
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Dec 2023 22:22:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6680B20A25
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Dec 2023 11:10:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51C5C1DDD5;
-	Sat,  9 Dec 2023 22:22:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5B75849C;
+	Sun, 10 Dec 2023 11:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZN5WPH3h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MpBE03jj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BC1100
-	for <linux-usb@vger.kernel.org>; Sat,  9 Dec 2023 14:22:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702160556; x=1733696556;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jQVI10ojt2pNa2p7oTrsLX7J984azRT0H87VfWxIKKE=;
-  b=ZN5WPH3hjedN0E2KZFAJ5DkVJ8mVA6MUxLz9K0xno6olRilSeKnL7ztM
-   larktTJRdqPUMJZRQt+jEMPtulNWgukgFZZrRhIdeeBJMVD8abmAa7RGv
-   yXuD1raCCehxXVo+YIU2/hlJTXPMiVq6AC62mJTAGFI30tNg7jxFPbiqK
-   cWY83gX74TfSnOlPTXFr0VzEzDh/Vn6/3wfMqwhPzWCOtXd0Vsr1p8JCJ
-   xfjr7NoMI0MXSE70JXtzGiO6+esnRTIfExy86g1O6NLS5rgwEOz69aRos
-   B59zrTC++9tSzgPAVuTK2Mj1jh+43ndhwMZmFWuIJKu7z1gs4FtK5PbNk
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="1345042"
-X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
-   d="scan'208";a="1345042"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2023 14:22:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="748729927"
-X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
-   d="scan'208";a="748729927"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 09 Dec 2023 14:17:42 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rC5dk-000G1Z-0B;
-	Sat, 09 Dec 2023 22:17:40 +0000
-Date: Sun, 10 Dec 2023 06:17:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-	linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-	kernel@collabora.com
-Subject: Re: [PATCH v2] usb: gadget: webcam: Make g_webcam loadable again
-Message-ID: <202312100602.sdYTHOg1-lkp@intel.com>
-References: <20231208131342.65671-1-andrzej.p@collabora.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206D77477
+	for <linux-usb@vger.kernel.org>; Sun, 10 Dec 2023 11:10:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67EB4C433C8;
+	Sun, 10 Dec 2023 11:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702206628;
+	bh=D79kvMHolT4tIZIRdCaLAFuX1e3nd7n1+qxkQbDHh44=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=MpBE03jjh9t1CitXUxAlZHyH1BfdeV914VF7Nl8vX5hThXrI+6BMckN/NlYCpSZlv
+	 kaSproVQm/j2vtMImPGkr4NCQnus2QuSoiL/fmgI9Rtvm/AihI8gxRm4hoecnOQCnn
+	 4RD1hoP5tyJmGLuxZ6jtJOh+o/sEkp7Zdw/3s3njUTgw9Blr9OI5Cg+cVDj0YBP0ze
+	 VIlhS3k5V269IqiKnSJS+gov71Y4zF6GMMSHIPdI8F5a/+BBdDgyZHIIcU0bgAib/T
+	 wBvCZykdUbHUpDQqkLo7OteL7GPfpClYiCeajtdr4broHyT3FTf/EFCqtaZNBLbI3z
+	 Z71F/g+dOspBw==
+Message-ID: <bceffb44-037a-487f-87d2-15f1b3a4f9ed@kernel.org>
+Date: Sun, 10 Dec 2023 12:10:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231208131342.65671-1-andrzej.p@collabora.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] xhci: Introduce "disable-usb3" DT property/quirk
+To: Sam Edwards <cfsworks@gmail.com>, Mathias Nyman
+ <mathias.nyman@intel.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Heiko Stuebner <heiko@sntech.de>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231208210458.912776-1-CFSworks@gmail.com>
+ <20231208210458.912776-2-CFSworks@gmail.com>
+ <d9ebe207-1f20-4254-9523-f2231bf9a0a4@kernel.org>
+ <9915035d-88ce-f961-00c0-fad24aa07764@gmail.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <9915035d-88ce-f961-00c0-fad24aa07764@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Andrzej,
+On 09/12/2023 20:26, Sam Edwards wrote:
+>> Performing review on untested code might be
+>> a waste of time, thus I will skip this patch entirely till you follow
+>> the process allowing the patch to be tested.
+> 
+> That's fine; this patch has just failed review anyway (due to the new 
+> property not being introduced in a separate patch), and I'll need to 
+> prepare and send a v2 to proceed. However as I mentioned in the cover, 
+> this is a semi-RFC. I haven't discussed the overall idea with anyone 
+> yet, so to avoid wasting my own time, I need to give the USB folks ample 
 
-kernel test robot noticed the following build errors:
+It does not really explain why you did not Cc some of the maintainers.
+If this is a RFC, even though not marked as such in subject prefix, then
+I guess all maintainers should be involved for comments.
 
-[auto build test ERROR on 33cc938e65a98f1d29d0a18403dbbee050dcad9a]
+Best regards,
+Krzysztof
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrzej-Pietrasiewicz/usb-gadget-webcam-Make-g_webcam-loadable-again/20231208-211513
-base:   33cc938e65a98f1d29d0a18403dbbee050dcad9a
-patch link:    https://lore.kernel.org/r/20231208131342.65671-1-andrzej.p%40collabora.com
-patch subject: [PATCH v2] usb: gadget: webcam: Make g_webcam loadable again
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231210/202312100602.sdYTHOg1-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231210/202312100602.sdYTHOg1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312100602.sdYTHOg1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/gadget/legacy/webcam.c:224:36: error: initializer element is not a compile-time constant
-     224 |                 .b_length                       = uvc_frame_yuv_360p.bLength,
-         |                                                   ~~~~~~~~~~~~~~~~~~~^~~~~~~
-   drivers/usb/gadget/legacy/webcam.c:263:36: error: initializer element is not a compile-time constant
-     263 |                 .b_length                       = uvc_frame_yuv_720p.bLength,
-         |                                                   ~~~~~~~~~~~~~~~~~~~^~~~~~~
-   drivers/usb/gadget/legacy/webcam.c:332:37: error: initializer element is not a compile-time constant
-     332 |                 .b_length                       = uvc_frame_mjpg_360p.bLength,
-         |                                                   ~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   drivers/usb/gadget/legacy/webcam.c:371:37: error: initializer element is not a compile-time constant
-     371 |                 .b_length                       = uvc_frame_mjpg_720p.bLength,
-         |                                                   ~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   4 errors generated.
-
-
-vim +224 drivers/usb/gadget/legacy/webcam.c
-
-   220	
-   221	static const struct uvcg_frame uvcg_frame_yuv_360p = {
-   222		.fmt_type		= UVCG_UNCOMPRESSED,
-   223		.frame = {
- > 224			.b_length			= uvc_frame_yuv_360p.bLength,
-   225			.b_descriptor_type		= uvc_frame_yuv_360p.bDescriptorType,
-   226			.b_descriptor_subtype		= uvc_frame_yuv_360p.bDescriptorSubType,
-   227			.b_frame_index			= uvc_frame_yuv_360p.bFrameIndex,
-   228			.bm_capabilities		= uvc_frame_yuv_360p.bmCapabilities,
-   229			.w_width			= uvc_frame_yuv_360p.wWidth,
-   230			.w_height			= uvc_frame_yuv_360p.wHeight,
-   231			.dw_min_bit_rate		= uvc_frame_yuv_360p.dwMinBitRate,
-   232			.dw_max_bit_rate		= uvc_frame_yuv_360p.dwMaxBitRate,
-   233			.dw_max_video_frame_buffer_size	= uvc_frame_yuv_360p.dwMaxVideoFrameBufferSize,
-   234			.dw_default_frame_interval	= uvc_frame_yuv_360p.dwDefaultFrameInterval,
-   235			.b_frame_interval_type		= uvc_frame_yuv_360p.bFrameIntervalType,
-   236		},
-   237		.dw_frame_interval	= (u32 *)uvc_frame_yuv_360p.dwFrameInterval,
-   238	};
-   239	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
