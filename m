@@ -1,101 +1,108 @@
-Return-Path: <linux-usb+bounces-3950-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3951-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 165BB80BD62
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Dec 2023 22:39:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ADDD80BED2
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Dec 2023 02:45:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B134FB207EB
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Dec 2023 21:39:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 712811C20950
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Dec 2023 01:45:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B0A21CFAF;
-	Sun, 10 Dec 2023 21:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC3C5C8E8;
+	Mon, 11 Dec 2023 01:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I0OGpeCo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="enojSTRb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728DCCF;
-	Sun, 10 Dec 2023 13:39:18 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-35d3b220b64so15857025ab.2;
-        Sun, 10 Dec 2023 13:39:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702244358; x=1702849158; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lW0H7+bFSP6Z58s2PRDDO9oFTOkEf9fiSxOV+rclK5U=;
-        b=I0OGpeCoPSC5AjbZxAG7Wd+ZxY3BneLE9DuC6YfkU9GU9Q0OHiJzrlhSqvBHwJBMYU
-         WW12d+yq3Zd0dQjajt8EpIrzWw+83w9PXTXEDq8oLcOqfX8gh3fNEEmqfT62nlazm2gf
-         4SElrgFIO2aa/buqnNiWpoOWnfNc2Xhtl6C3i6y+I99tto5PauEBw1Y24hJS5xhcDdKy
-         TwdU7izSqfWArmssltMCtfGsrqUZT3llXO+T0u1wv/Y/7nbyyv3ejqftgealPrARnTuK
-         QRhF9K8LNTKMZGOH3eRee0VWSbCaWB2wauLdiMp4pSXP0++4gZ1j7gX7Af4+iV8UW8rr
-         3VFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702244358; x=1702849158;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lW0H7+bFSP6Z58s2PRDDO9oFTOkEf9fiSxOV+rclK5U=;
-        b=rkQ4Mvs2v9c6EJH6PVWugW74mpTy9ewe4JIioIcvTUgJCfdqkZXbeT6ngRTVY6th47
-         AYrD2ox39vL6LDvigke27gil889Kmbb3eA5nPUu+icF6iywzLv8n+1erDRiYnw9YN6pt
-         ZWn+Jvc3RkUX/giNG3Zs583twR/msNs78PpipTIP16wriqwYR285eYn1RraiTydu1O8h
-         m0QNox7HpmT2Sidb+C3Vg0lLn6FvBxzLdLdUHqAXhUO1/1PUOFVggu6idKftKPlJmknJ
-         QcoWyjNRMBt207Kzx/Lt0s/IDHdNx6Zc2z1s31TQnq7rUEMq+QhgZ6g1zKtW6BQszEdm
-         VM8A==
-X-Gm-Message-State: AOJu0YyHBW8r0uTVNpvhywr3mR8gEmr/WZhz5PKoOmhDINXZcJcceUbc
-	4Azzv0sY5HXy+noDDVLsHzQ=
-X-Google-Smtp-Source: AGHT+IEfR1CNt2C5uHaB99LgUusnZSMmCOupCUHNisNFJVmcedHgQbJz+pXfphrNnpzQi+C0ePj5LA==
-X-Received: by 2002:a92:ce06:0:b0:35d:7f56:17f3 with SMTP id b6-20020a92ce06000000b0035d7f5617f3mr2934138ilo.65.1702244357619;
-        Sun, 10 Dec 2023 13:39:17 -0800 (PST)
-Received: from ?IPV6:2001:470:42c4:101:37c1:804a:cea4:fc4e? ([2001:470:42c4:101:37c1:804a:cea4:fc4e])
-        by smtp.gmail.com with ESMTPSA id p16-20020a92d290000000b0035d6c524cc8sm1905559ilp.76.2023.12.10.13.39.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Dec 2023 13:39:17 -0800 (PST)
-Message-ID: <7984df40-e365-f190-2af5-41073b72403b@gmail.com>
-Date: Sun, 10 Dec 2023 14:39:14 -0700
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD58A950;
+	Mon, 11 Dec 2023 01:45:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2004CC433C8;
+	Mon, 11 Dec 2023 01:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702259106;
+	bh=/jf3ec7E9hlGrUOPKNv/BrysUMxQfNuXUfDv4GGeYHg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=enojSTRbQ2ytH0mpAXRcNTAjmXjNW8o47GiBqpr8cmGghNgi6FAB4C98bbDplpe0v
+	 /mfy8cjzUNSJFD4Ec8puzAsgN8nveFuDlGYuYuMb9XrbYNLrq+yKzrxWyw2tFvDt4C
+	 A0Ts6xN4pQnMwXOCdZY84ACaTfd1eGt/S2JmBhCNZR9NYfwheby76BcTVc7Z09W8WL
+	 ojM0ymPHGPAumZT0sp9N7cuHCleHH0Nr1yYt5SE9MoYpb0QznL1PEfP9kmydmUPRlB
+	 LIzvN9RH5x8pZMGUi3jaNwzF9+U8yDeGPt823iWxOgkbAE+vY6shxUYNqNcVozKKfC
+	 I3fFERD/cLQDQ==
+Date: Mon, 11 Dec 2023 09:44:56 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: chipidea: Remove usage of the deprecated
+ ida_simple_xx() API
+Message-ID: <20231211014456.GA1197808@nchen-desktop>
+References: <8bf382976c0ba0986c0dbe93427266273f0776ef.1702230217.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 1/2] xhci: Introduce "disable-usb3" DT property/quirk
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Heiko Stuebner <heiko@sntech.de>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231208210458.912776-1-CFSworks@gmail.com>
- <20231208210458.912776-2-CFSworks@gmail.com>
- <d9ebe207-1f20-4254-9523-f2231bf9a0a4@kernel.org>
- <9915035d-88ce-f961-00c0-fad24aa07764@gmail.com>
- <bceffb44-037a-487f-87d2-15f1b3a4f9ed@kernel.org>
-From: Sam Edwards <cfsworks@gmail.com>
-In-Reply-To: <bceffb44-037a-487f-87d2-15f1b3a4f9ed@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8bf382976c0ba0986c0dbe93427266273f0776ef.1702230217.git.christophe.jaillet@wanadoo.fr>
 
-On 12/10/23 04:10, Krzysztof Kozlowski wrote:
-> It does not really explain why you did not Cc some of the maintainers.
-> If this is a RFC, even though not marked as such in subject prefix, then
-> I guess all maintainers should be involved for comments.
+On 23-12-10 18:43:56, Christophe JAILLET wrote:
+> ida_alloc() and ida_free() should be preferred to the deprecated
+> ida_simple_get() and ida_simple_remove().
+> 
+> This is less verbose.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Hi Krzysztof,
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
-More simply put: I don't want to waste anyone's time by seeking 
-review/commentary from linux-devicetree on a property enabling a feature 
-that someone here on linux-usb might soon deem (summarily) untenable.
+> ---
+>  drivers/usb/chipidea/core.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> index 7ac39a281b8c..0af9e68035fb 100644
+> --- a/drivers/usb/chipidea/core.c
+> +++ b/drivers/usb/chipidea/core.c
+> @@ -862,7 +862,7 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
+>  	if (ret)
+>  		return ERR_PTR(ret);
+>  
+> -	id = ida_simple_get(&ci_ida, 0, 0, GFP_KERNEL);
+> +	id = ida_alloc(&ci_ida, GFP_KERNEL);
+>  	if (id < 0)
+>  		return ERR_PTR(id);
+>  
+> @@ -892,7 +892,7 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
+>  err:
+>  	platform_device_put(pdev);
+>  put_id:
+> -	ida_simple_remove(&ci_ida, id);
+> +	ida_free(&ci_ida, id);
+>  	return ERR_PTR(ret);
+>  }
+>  EXPORT_SYMBOL_GPL(ci_hdrc_add_device);
+> @@ -901,7 +901,7 @@ void ci_hdrc_remove_device(struct platform_device *pdev)
+>  {
+>  	int id = pdev->id;
+>  	platform_device_unregister(pdev);
+> -	ida_simple_remove(&ci_ida, id);
+> +	ida_free(&ci_ida, id);
+>  }
+>  EXPORT_SYMBOL_GPL(ci_hdrc_remove_device);
+>  
+> -- 
+> 2.34.1
+> 
 
-I agree fully that I need (and want) the DT reviewers' sign-off on this 
-new property, and I'll get more serious about that (and other things) in 
-v2. I just need to know if there's going to be a v2 first.
+-- 
 
-Warm regards,
-Sam
+Thanks,
+Peter Chen
 
