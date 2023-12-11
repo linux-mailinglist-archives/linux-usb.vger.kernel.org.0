@@ -1,167 +1,103 @@
-Return-Path: <linux-usb+bounces-3958-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3959-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8776F80C267
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Dec 2023 08:53:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C3EA80C2C9
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Dec 2023 09:11:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24727B208C5
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Dec 2023 07:53:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D5A51C2096F
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Dec 2023 08:11:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D747E20B06;
-	Mon, 11 Dec 2023 07:53:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBC520B30;
+	Mon, 11 Dec 2023 08:11:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fubGD19R"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DQhMPHbX"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D93A208A2;
-	Mon, 11 Dec 2023 07:53:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09D9FC433C8;
-	Mon, 11 Dec 2023 07:53:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE6E20B27
+	for <linux-usb@vger.kernel.org>; Mon, 11 Dec 2023 08:11:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D7CCC433C8;
+	Mon, 11 Dec 2023 08:11:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1702281206;
-	bh=V8JRc6Ds9R+nfWjTNmn6P57m/pgKhuSAd3+p3IiUTT4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fubGD19Rqj07XtqVgVZ6xm8zGDYR07xLruxRhpoH5eLvvyRCAy1xkVpGg1149abmV
-	 AjJ15TJVSbNY0hc56DN2vB1wbdkNy+74/e0KrBFBOARyWBtokCrEJfYDzD5j5sv60P
-	 63w1MiZyTaHPxJ+93eNNz4AuiP6zbZX5Nct8nHTc=
-Date: Mon, 11 Dec 2023 08:53:24 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Xinhu Wu <xinhu.wu@unisoc.com>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, orsonzhai@gmail.com,
-	baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-	heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	xinhuwu.unisoc@gmail.com, zhiyong.liu@unisoc.com,
-	peak.yang@unisoc.com, teng.zhang1@unisoc.com, bruce.chen@unisoc.com,
-	surong.pang@unisoc.com, xingxing.luo@unisoc.com
-Subject: Re: [PATCH V2 1/2] usb: typec: Support sprd_pmic_typec driver
-Message-ID: <2023121122-jelly-password-6eac@gregkh>
-References: <20231211074120.27958-1-xinhu.wu@unisoc.com>
- <20231211074120.27958-2-xinhu.wu@unisoc.com>
+	s=korg; t=1702282307;
+	bh=7l7te64f1FxKTV3SgTp3erflOzHo7PMH4lk5tGacn+M=;
+	h=Subject:To:From:Date:From;
+	b=DQhMPHbXbQifEixXetEz+d4Rrd9qF0QZ5qXF+9xvXQI9Q+Mv1t4QP6dQYhTuynt2U
+	 /pSJwpQsYUokavuK2PU5q5cnaDUDPzBT5vKzyl+xJ6yhD8wKpe7XqC2Dk6LHi8EDVd
+	 K4Tdfo05teR/GuyiVPXGA8HzvEeakkfmMytjpTxo=
+Subject: patch "usb: cdns3: starfive: don't misuse /** comment" added to usb-next
+To: rdunlap@infradead.org,gregkh@linuxfoundation.org,linux-usb@vger.kernel.org,minda.chen@starfivetech.com,pawell@cadence.com,peter.chen@kernel.org,rogerq@kernel.org
+From: <gregkh@linuxfoundation.org>
+Date: Mon, 11 Dec 2023 09:11:44 +0100
+Message-ID: <2023121144-shrivel-unsubtle-fba7@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231211074120.27958-2-xinhu.wu@unisoc.com>
-
-On Mon, Dec 11, 2023 at 03:41:19PM +0800, Xinhu Wu wrote:
-> +config TYPEC_SPRD_PMIC
-> +	tristate "SPRD Serials PMICs Typec Controller"
-> +	help
-> +	  Say Y or M here if your system has a SPRD PMIC Type-C port controller.
-> +
-> +	  If you choose to build this driver as a dynamically linked module, the
-> +	  module will be called sprd_pmic_typec.ko.
-> +	  SPRD_PMIC_TYPEC notify usb, phy, charger, and analog audio to proceed
-> +	  with work
-
-I do not understand these last two lines, are you sure they are correct?
-
-> +
-> +
-
-Nit, only one blank line is needed here.
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
 
 
-> +static irqreturn_t sprd_pmic_typec_interrupt(int irq, void *data)
-> +{
-> +	struct sprd_pmic_typec *sc = data;
-> +	u32 event;
-> +	int ret;
-> +
-> +	dev_info(sc->dev, "%s enter line %d\n", __func__, __LINE__);
+This is a note to let you know that I've just added the patch titled
 
-debugging information?  Please remove.
+    usb: cdns3: starfive: don't misuse /** comment
 
-> +	ret = regmap_read(sc->regmap, sc->base + SC27XX_INT_MASK, &event);
-> +	if (ret)
-> +		return ret;
-> +
-> +	event &= sc->var_data->event_mask;
-> +
-> +	ret = regmap_read(sc->regmap, sc->base + SC27XX_STATUS, &sc->state);
-> +	if (ret)
-> +		goto clear_ints;
-> +
-> +	sc->state &= sc->var_data->state_mask;
-> +
-> +	if (event & SC27XX_ATTACH_INT) {
-> +		ret = sprd_pmic_typec_connect(sc, sc->state);
-> +		if (ret)
-> +			dev_warn(sc->dev, "failed to register partner\n");
-> +	} else if (event & SC27XX_DETACH_INT) {
-> +		sprd_pmic_typec_disconnect(sc, sc->state);
-> +	}
-> +
-> +clear_ints:
-> +	regmap_write(sc->regmap, sc->base + sc->var_data->int_clr, event);
-> +
-> +	dev_info(sc->dev, "now works as DRP and is in %d state, event %d\n",
-> +		sc->state, event);
+to my usb git tree which can be found at
+    git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+in the usb-next branch.
 
-When drivers work properly, they are quiet, please never spam the kernel
-log for normal operations.
+The patch will show up in the next release of the linux-next tree
+(usually sometime within the next 24 hours during the week.)
 
-> +static ssize_t
-> +sprd_pmic_typec_cc_polarity_role_show(struct device *dev, struct device_attribute *attr,
-> +		char *buf)
-> +{
-> +	struct sprd_pmic_typec *sc = dev_get_drvdata(dev);
-> +
-> +	return snprintf(buf, 5, "%s\n", sprd_pmic_typec_cc_polarity_roles[sc->cc_polarity]);
+The patch will also be merged in the next major kernel release
+during the merge window.
 
-sysfs_emit() please.
+If you have any questions about this process, please let me know.
 
-> +}
-> +static DEVICE_ATTR_RO(sprd_pmic_typec_cc_polarity_role);
 
-Where is this new sysfs file documented?
+From 5cc623a4edaf383eea39546104084b089f3035ca Mon Sep 17 00:00:00 2001
+From: Randy Dunlap <rdunlap@infradead.org>
+Date: Wed, 6 Dec 2023 10:13:17 -0800
+Subject: usb: cdns3: starfive: don't misuse /** comment
 
-> +	ret = sysfs_create_groups(&sc->dev->kobj, sprd_pmic_typec_groups);
+Use a common C comment "/*" instead of "/**" to prevent a warning
+from scripts/kernel-doc.
 
-You just raced with userspace and lost, and better yet:
+cdns3-starfive.c:23: warning: expecting prototype for cdns3(). Prototype was for USB_STRAP_HOST() instead
 
-> +	if (ret < 0)
-> +		dev_err(sc->dev, "failed to create cc_polarity %d\n", ret);
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Minda Chen <minda.chen@starfivetech.com>
+Cc: Peter Chen <peter.chen@kernel.org>
+Cc: Pawel Laszczak <pawell@cadence.com>
+Cc: Roger Quadros <rogerq@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:  <linux-usb@vger.kernel.org>
+Acked-by: Peter Chen <peter.chen@kernel.org>
+Link: https://lore.kernel.org/r/20231206181317.27515-1-rdunlap@infradead.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/cdns3/cdns3-starfive.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You do not even clean up properly here.
+diff --git a/drivers/usb/cdns3/cdns3-starfive.c b/drivers/usb/cdns3/cdns3-starfive.c
+index a7265b86e427..c04d196abd87 100644
+--- a/drivers/usb/cdns3/cdns3-starfive.c
++++ b/drivers/usb/cdns3/cdns3-starfive.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/**
++/*
+  * cdns3-starfive.c - StarFive specific Glue layer for Cadence USB Controller
+  *
+  * Copyright (C) 2023 StarFive Technology Co., Ltd.
+-- 
+2.43.0
 
-Please use the default groups for the driver and it should work just
-fine.
 
-> +	ret = sprd_pmic_typec_set_rtrim(sc);
-> +	if (ret < 0) {
-> +		dev_err(sc->dev, "failed to set typec rtrim %d\n", ret);
-> +		goto error;
-> +	}
-> +
-> +	ret = devm_request_threaded_irq(sc->dev, sc->irq, NULL,
-> +					sprd_pmic_typec_interrupt,
-> +					IRQF_EARLY_RESUME | IRQF_ONESHOT,
-> +					dev_name(sc->dev), sc);
-
-Are you sure you can use devm_() here?
-
-> +static int sprd_pmic_typec_remove(struct platform_device *pdev)
-> +{
-> +	struct sprd_pmic_typec *sc = platform_get_drvdata(pdev);
-> +
-> +	sysfs_remove_groups(&sc->dev->kobj, sprd_pmic_typec_groups);
-
-Again, should not be needed if you use the default groups of the
-platform driver.
-
-thanks,
-
-greg k-h
 
