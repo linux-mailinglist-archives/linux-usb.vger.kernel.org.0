@@ -1,118 +1,108 @@
-Return-Path: <linux-usb+bounces-3960-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3961-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71E5F80C2CC
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Dec 2023 09:12:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2961580C2ED
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Dec 2023 09:20:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1CEA1C209A9
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Dec 2023 08:12:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0D751F21049
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Dec 2023 08:20:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D083720B2E;
-	Mon, 11 Dec 2023 08:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BVUNNdi6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45A120DC1;
+	Mon, 11 Dec 2023 08:20:22 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E57420B19
-	for <linux-usb@vger.kernel.org>; Mon, 11 Dec 2023 08:11:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1E7EC433C7;
-	Mon, 11 Dec 2023 08:11:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1702282316;
-	bh=lwg3nYb4h/3ogXtioWhBqB3UFL32bdulqLDfxNytXS4=;
-	h=Subject:To:From:Date:From;
-	b=BVUNNdi67klPhkt+V+4yazd9Etbi8/qL+pUF931c99MuhHzLDTWb4jzK514o8+Yv9
-	 pELHlQA0mWRtgB2L1cVcA6WPA7I3qtFI9ypAkOqLRFG0R/sfgrmrv4jhEi0PJwm7FU
-	 a8I7gxckwpjjHREuH6v/nKP4T3dTC5wd+hCm3r9w=
-Subject: patch "usb: fotg210-udc: fix function kernel-doc comments" added to usb-next
-To: rdunlap@infradead.org,gregkh@linuxfoundation.org,linus.walleij@linaro.org,linux-usb@vger.kernel.org
-From: <gregkh@linuxfoundation.org>
-Date: Mon, 11 Dec 2023 09:11:45 +0100
-Message-ID: <2023121145-mushily-overpass-6cc1@gregkh>
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669A5E5;
+	Mon, 11 Dec 2023 00:20:19 -0800 (PST)
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6d9f7af8918so1846548a34.0;
+        Mon, 11 Dec 2023 00:20:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702282818; x=1702887618;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=X70dnLMW4EGZmNUCbaymENDJWJzKWVaikH9lFWWn4e4=;
+        b=Ds36Cgr9i94aXhL7BXK821wmGrZKwu7oHliIQaS7n5ydCEcffuJCMy4+az+dhrToDN
+         sPEVM12L6p5gtfqPMZJNyV3AadizAXeU+GesRM86elr6MdmIFK99GurxHWIgNa5a1l7C
+         A76u7P+M64dBXFvjEKXK6mN+koV0YXT+hcUwRv6GvHELEGp5BZyIVOCtLA6EZqb/3OWU
+         +3uYsgDnwk5EdZ23I13bVT93hJF1/GzTevSPFAV5i8RNYmi+/AsLhxa0Wb5GxF6IhMgm
+         gEizcPIP+d6CiFz28Y5h5FC71bdLJtVQMgyamqc50gNLL5B78Y/SwfN80XkM/4H2+3eb
+         0plw==
+X-Gm-Message-State: AOJu0YwuiweHUIqo9UYCEf7daqQcrp/qUXKy02gGxvr17mW0BZxHGzh4
+	pj5TD/KRc7EeByjuYdODBw==
+X-Google-Smtp-Source: AGHT+IEpHlX5EqpS08UtKaozsgHbMxD/r857ExlfYfeaTrWUPThkSeZY78lbRo8zxUU4fvhZVeNUug==
+X-Received: by 2002:a9d:68c6:0:b0:6da:c0d:90fb with SMTP id i6-20020a9d68c6000000b006da0c0d90fbmr1630420oto.6.1702282818598;
+        Mon, 11 Dec 2023 00:20:18 -0800 (PST)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id en12-20020a056830488c00b006d9fcb44e00sm1119600otb.32.2023.12.11.00.20.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 00:20:18 -0800 (PST)
+Received: (nullmailer pid 1310035 invoked by uid 1000);
+	Mon, 11 Dec 2023 08:20:16 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ANSI_X3.4-1968
-Content-Transfer-Encoding: 8bit
+From: Rob Herring <robh@kernel.org>
+To: Xinhu Wu <xinhu.wu@unisoc.com>
+Cc: surong.pang@unisoc.com, zhang.lyra@gmail.com, bruce.chen@unisoc.com, heikki.krogerus@linux.intel.com, orsonzhai@gmail.com, xinhuwu.unisoc@gmail.com, baolin.wang@linux.alibaba.com, zhiyong.liu@unisoc.com, krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, teng.zhang1@unisoc.com, devicetree@vger.kernel.org, peak.yang@unisoc.com, gregkh@linuxfoundation.org, xingxing.luo@unisoc.com, conor+dt@kernel.org, robh+dt@kernel.org
+In-Reply-To: <20231211074120.27958-3-xinhu.wu@unisoc.com>
+References: <20231211074120.27958-1-xinhu.wu@unisoc.com>
+ <20231211074120.27958-3-xinhu.wu@unisoc.com>
+Message-Id: <170228281685.1310019.14783806901713791242.robh@kernel.org>
+Subject: Re: [PATCH V2 2/2] dt-bindings: usb: Add an Spreadtrum pmic typec
+ yaml
+Date: Mon, 11 Dec 2023 02:20:16 -0600
 
 
-This is a note to let you know that I've just added the patch titled
+On Mon, 11 Dec 2023 15:41:20 +0800, Xinhu Wu wrote:
+> Add device tree binding Documentation details for
+> Spreadtrum pmic typec driver
+> 
+> Signed-off-by: Xinhu Wu <xinhu.wu@unisoc.com>
+> ---
+>  .../bindings/usb/sprd,pmic_typec.yaml         | 65 +++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/sprd,pmic_typec.yaml
+> 
 
-    usb: fotg210-udc: fix function kernel-doc comments
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-to my usb git tree which can be found at
-    git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-in the usb-next branch.
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/sprd,pmic_typec.yaml:28:18: [error] syntax error: mapping values are not allowed here (syntax)
 
-The patch will show up in the next release of the linux-next tree
-(usually sometime within the next 24 hours during the week.)
+dtschema/dtc warnings/errors:
+make[2]: *** Deleting file 'Documentation/devicetree/bindings/usb/sprd,pmic_typec.example.dts'
+Documentation/devicetree/bindings/usb/sprd,pmic_typec.yaml:28:18: mapping values are not allowed in this context
+make[2]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/usb/sprd,pmic_typec.example.dts] Error 1
+make[2]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/usb/sprd,pmic_typec.yaml:28:18: mapping values are not allowed in this context
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/sprd,pmic_typec.yaml: ignoring, error parsing file
+make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1424: dt_binding_check] Error 2
+make: *** [Makefile:234: __sub-make] Error 2
 
-The patch will also be merged in the next major kernel release
-during the merge window.
+doc reference errors (make refcheckdocs):
 
-If you have any questions about this process, please let me know.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231211074120.27958-3-xinhu.wu@unisoc.com
 
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-From 51920207674e9e3475a91d2091583889792df99a Mon Sep 17 00:00:00 2001
-From: Randy Dunlap <rdunlap@infradead.org>
-Date: Wed, 6 Dec 2023 10:13:35 -0800
-Subject: usb: fotg210-udc: fix function kernel-doc comments
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-Correct kernel-doc comments to prevent warnings from
-scripts/kernel-doc.
+pip3 install dtschema --upgrade
 
-fotg210-udc.c:1103: warning: Function parameter or member 'g' not described in 'fotg210_vbus_session'
-fotg210-udc.c:1103: warning: Excess function parameter '_gadget' description in 'fotg210_vbus_session'
-fotg210-udc.c:1103: warning: No description found for return value of 'fotg210_vbus_session'
-fotg210-udc.c:1129: warning: No description found for return value of 'fotg210_phy_event'
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:  <linux-usb@vger.kernel.org>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20231206181335.27540-1-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/fotg210/fotg210-udc.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/fotg210/fotg210-udc.c b/drivers/usb/fotg210/fotg210-udc.c
-index f7ea84070554..0bae12e34f9a 100644
---- a/drivers/usb/fotg210/fotg210-udc.c
-+++ b/drivers/usb/fotg210/fotg210-udc.c
-@@ -1094,10 +1094,10 @@ static int fotg210_udc_stop(struct usb_gadget *g)
- 
- /**
-  * fotg210_vbus_session - Called by external transceiver to enable/disable udc
-- * @_gadget: usb gadget
-+ * @g: usb gadget
-  * @is_active: 0 if should disable UDC VBUS, 1 if should enable
-  *
-- * Returns 0
-+ * Returns: %0
-  */
- static int fotg210_vbus_session(struct usb_gadget *g, int is_active)
- {
-@@ -1122,7 +1122,7 @@ static const struct usb_gadget_ops fotg210_gadget_ops = {
-  *
-  * Called by the USB Phy when a cable connect or disconnect is sensed.
-  *
-- * Returns NOTIFY_OK or NOTIFY_DONE
-+ * Returns: NOTIFY_OK or NOTIFY_DONE
-  */
- static int fotg210_phy_event(struct notifier_block *nb, unsigned long action,
- 			     void *data)
--- 
-2.43.0
-
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
