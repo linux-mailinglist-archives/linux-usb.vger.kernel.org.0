@@ -1,138 +1,131 @@
-Return-Path: <linux-usb+bounces-4077-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4078-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 222CD80F61F
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 20:09:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE8B680F659
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 20:17:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CF27B20F60
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 19:09:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4043BB20E80
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 19:17:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 285198005A;
-	Tue, 12 Dec 2023 19:09:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38E5D81E2E;
+	Tue, 12 Dec 2023 19:17:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="amWo4Qg0"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Zlf7Pz/t"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A68BD;
-	Tue, 12 Dec 2023 11:09:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=JOfmT37a1O6ltRt9f24ymIuuDIGdgEf/puwz89pIzfk=; b=amWo4Qg0R+e+2YnuKeDk/37FCs
-	R7MsaQh8Psr8Jr8ybt6AVcOkHAaooWWy/nxORyp9d9cBjBKGpEut52euP4jkhaPP9M0RAUIczQgQ8
-	g2jboNJsJQ1YDcsa/IcqpuhsxogjK+h0ZpPmrYwW1YWfk6o4imK+XBVmcx2RqBOI63jofeWTiBLcS
-	c95yCsK4Bl8lZhw4tHoS9Y9H5nhEJHfqbJ2kA55UQsn/I8FJgUwMQCtrIcP8s79u5F3XVli1YO5iS
-	sbkrxXCjSoqsb3qp3Ism/lqEwyHvBoCNzxC2r5TkvA8SrfK33U7uC5BcODEhYwAvpfA3+Hg4gjmAj
-	cEsqN10w==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <kibi@debian.org>)
-	id 1rD885-0068fw-HD; Tue, 12 Dec 2023 19:09:18 +0000
-Date: Tue, 12 Dec 2023 20:09:04 +0100
-From: Cyril Brulebois <kibi@debian.org>
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	bcm-kernel-feedback-list@broadcom.com, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V4 0/3] ARM: dts: bcm2711: Add BCM2711 xHCI support
-Message-ID: <20231212190904.igxm2twvftokhdwr@mraw.org>
-Organization: Debian
-References: <20231205200531.8232-1-wahrenst@gmx.net>
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2087.outbound.protection.outlook.com [40.107.244.87])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBE083;
+	Tue, 12 Dec 2023 11:17:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EtEp/fYqpBiSzTvn6doFB1ycTFdNXxeEpPfv24Tsp+WRBnIreD/Xete2k1ZBX7y7/taI0DvsNY9xl2KtWpeD7EF92Jl10flsPrTD3tdOhNQVHmZbrd6art8/hquPpzLaoJM7FhXkVBbX8jTUUvSCOejrKlVkSxNO894745xbN9bJn+ktoA9+R9k94mqk78VIpH+b4ZfgKNGR2BwsPHSgRsuaCqsW6zuKq2h9gEjg4qKy6Lyt0GmWEm8Aezwy/50AYnGlQZ7Mal9AWerd1V0zkUBScpeEQ6tQbBJkWlLnt8TmxuwH12AMQxDG6oDLB8QdUcukFb4VPKep0KrSE2DAcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sUhthFUhBtxuA8moBvPCU0uOEKOUhr+O84ytXzkrkPg=;
+ b=nFPdCrFyXK8E6BPUHm7qv79iwWQ8jGgzh6rO1np5c7foFD2ELmBo0d+nIiFFkvUm6D85HNkYGOsPvUU59yirRIKG0GxBMfEsbHi7BtsZ96bj0wT1koVqLhUzVeYMSucFcUmzlN+MZaTui18wDm9ZcgzdxH+wwXEeclWl0JU/6NdhX3Qbxi+b1gS9IOO9XhU0KB7R96GaTHzAkeOx7OcdUkPBbtVp7qCtKNTKq+T2JokjXANH/4uCvj8m6nTQX9xctW1ZErRL0E55wIsVX0HThJ5w+7SwekwqkOxlC5inCztgiVHCq1H0r/dYy0Q/qV+OlZJbMINlKLHomYFMgiQgAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sUhthFUhBtxuA8moBvPCU0uOEKOUhr+O84ytXzkrkPg=;
+ b=Zlf7Pz/tdo1pPx6TTgzHLQ9VwC2BMcRWl1d2+g9PMsfww32lPCFINXQ8dcqOnfy55OF/cy4eUOHfKOapj+ZAH1jWe6KsOfJK3sLQWeGD0Gfgm8FiyMmeJyJvc4iE9KImFKdbhn246aalddHZSrTJFMQKHW69EBhy2LrI/13umoM=
+Received: from MW4PR03CA0014.namprd03.prod.outlook.com (2603:10b6:303:8f::19)
+ by MW4PR12MB6828.namprd12.prod.outlook.com (2603:10b6:303:209::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.33; Tue, 12 Dec
+ 2023 19:16:59 +0000
+Received: from CO1PEPF000044FC.namprd21.prod.outlook.com
+ (2603:10b6:303:8f:cafe::9c) by MW4PR03CA0014.outlook.office365.com
+ (2603:10b6:303:8f::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.33 via Frontend
+ Transport; Tue, 12 Dec 2023 19:16:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000044FC.mail.protection.outlook.com (10.167.241.202) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7113.7 via Frontend Transport; Tue, 12 Dec 2023 19:16:58 +0000
+Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Tue, 12 Dec
+ 2023 13:16:55 -0600
+From: Sanath S <Sanath.S@amd.com>
+To: <mario.limonciello@amd.com>, <andreas.noever@gmail.com>,
+	<michael.jamet@intel.com>, <mika.westerberg@linux.intel.com>,
+	<YehezkelShB@gmail.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: Sanath S <Sanath.S@amd.com>
+Subject: [PATCH v2 0/2] Add support for downstream port reset(DPR)
+Date: Wed, 13 Dec 2023 00:46:33 +0530
+Message-ID: <20231212191635.2022520-1-Sanath.S@amd.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2mascii7e2qhbhct"
-Content-Disposition: inline
-In-Reply-To: <20231205200531.8232-1-wahrenst@gmx.net>
-X-Debian-User: kibi
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044FC:EE_|MW4PR12MB6828:EE_
+X-MS-Office365-Filtering-Correlation-Id: 685307fa-ec63-4a67-6424-08dbfb46e9b2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	F3lLYVpnrvlOYBtnNCOH64C4I0EIFaupkeLCj6anv/YlB7M7QlgxHdFI6Mjb268vYV+jetccO9AXvHIiRY/CtB4Us8jQNXIfPbZyw8T6aUj0Qpp+J9SJz4h290TzroTTF2qYcLKrkhZK1wsuPB7dKPEtjk6Kwhmhu3TdqV8Vt9WojAOWwW6Z+T8zwNTbYyztKmHIZi5pfFONGDkomJadGB2oCgy71p1DbNxUxxhRujv/WEtlUiLz7deZ18lw0CoRuWWGTFFiDIOaTsGFOBnsXavB7moWe0yIARr8wXuUOKLvLfJzHqHYBaCvgYf+8lMCP3A9sASdn8x5Og27AKQ8MlBeVsjEm7SVhgWR9cVfBfKqj/9or5WB52Ck/J9OzA8OMXa2QVeIGHtkrPgmScT+0yqEPigOylJdZBsB/QgAanjetJwtOtYd4t5pLX1gFKFN9MFM1iJMCHv1fSqfKnFJdAQhCqi0q3iYrl6ruCsXcO7nBo4gMIC9rkwrXLpHNPV/ss9yx3ry/P3aBKURt663Lpxv0XHFLAAnfgxnalL0dduHTGym2++szYqCawoaAXXdqtG9udxQSxVf7uR8wh7Y4wdTBWtE5+8COCG1X0OYY56HFtm9Po6mhGuMglyGaEyzD9sQjyEAWFm+cHocaRhiCNnnKp3pqMAICZBOdTbn2Yw/spsO+yvYSA/gT1lAc46mNN1zYk/dDjqZIUbstrFVgyeGHh5NATMJJ+0y3Lg0xqEONLkch6xkb9/s34VlHLyB
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(396003)(346002)(39860400002)(376002)(230922051799003)(82310400011)(451199024)(186009)(64100799003)(1800799012)(40470700004)(46966006)(36840700001)(336012)(40460700003)(16526019)(426003)(83380400001)(1076003)(7696005)(2616005)(47076005)(36860700001)(5660300002)(4326008)(41300700001)(8936002)(4744005)(2906002)(110136005)(8676002)(478600001)(26005)(316002)(6666004)(70586007)(82740400003)(70206006)(86362001)(36756003)(356005)(81166007)(40480700001)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2023 19:16:58.8090
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 685307fa-ec63-4a67-6424-08dbfb46e9b2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000044FC.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6828
 
+Tunnels created by boot firmware results in incorrect PCI resource
+allocation, which results in failure of extending daisy chain.
 
---2mascii7e2qhbhct
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series aligns with windows behaviour of performing a teardown of
+tunnels and resetting the downstream ports using DPR during the init
+sequence.
 
-Stefan Wahren <wahrenst@gmx.net> (2023-12-05):
-> In contrast to the Raspberry Pi 4, the Compute Module 4 or the IO board
-> does not have a VL805 USB 3.0 host controller, which is connected via
-> PCIe. Instead, the Compute Module provides the built-in
-> xHCI of the BCM2711 SoC.
->=20
-> Changes in V4:
-> - use "brcm,xhci-brcm-v2" as fallback compatible as suggested by
->   Conor & Florian
->=20
-> Changes in V3:
-> - introduce a new compatible for BCM2711 in order to make the
->   power domain dependency SoC specific, which also results in
->   a driver change
+Changes since V1:
+ - Perform DPR only for USB4 routers.
+ - Update kernel-doc and return value to -EOPNOTSUPP.
+ - Limit delay range to 10-15ms.
 
-This is still:
+Sanath S (2):
+  thunderbolt: Introduce tb_switch_reset_ports(), tb_port_reset() and
+    usb4_port_reset()
+  thunderbolt: Teardown tunnels and reset downstream ports created by
+    boot firmware
 
-Tested-by: Cyril Brulebois <cyril@debamax.com>
+ drivers/thunderbolt/switch.c  | 35 +++++++++++++++++++++++++++++++
+ drivers/thunderbolt/tb.c      | 11 ++++++++++
+ drivers/thunderbolt/tb.h      |  2 ++
+ drivers/thunderbolt/tb_regs.h |  1 +
+ drivers/thunderbolt/usb4.c    | 39 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 88 insertions(+)
 
+-- 
+2.34.1
 
-Again, I'm also applying Jim Quinlan's PCIe patch series v8, to be able
-to fully test what happens with USB devices, onboard and behind PCIe:
-  https://lore.kernel.org/all/20231126201946.ffm3bhg5du2xgztv@mraw.org/
-
-With the following on a CM4 IO Board, with a Samsung flash drive and a
-USB keyboard connected to onboard USB ports:
- - CM4 Lite Rev 1.0
- - CM4 8/32 Rev 1.0
- - CM4 4/32 Rev 1.1
-
-and using one of the three PCIe-to-USB boards referenced previously,
-connecting another Samsung flash drive on one of its USB ports.
-
-Conclusion: I can see and use onboard USB devices alongside behind-PCIe
-USB devices, either with or without adding otg_mode=3D1 to config.txt.
-
-On a CM4-based product that uses both onboard USB ports and PCIe-to-USB
-ports, all USB components still work fine (3 RF adapters, 1 modem), with
-or without otg_mode=3D1.
-
-(All of this is still with a Debian 12 arm64 user space.)
-
-
-Cheers,
---=20
-Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
-D-I release manager -- Release team member -- Freelance Consultant
-
---2mascii7e2qhbhct
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmV4r8wACgkQ/5FK8MKz
-VSBkYg//cI6s0//qpVlGV1kSosOTyG1w3Ze7eLTkFQpsWTE9Cq1zvEiD7Kx/fA/y
-M9BzcNz7nqRWiykkqNXpjPwkFLINb7EPgfYypfXLZbHl39Q4QgfcfsxpW/WDQ9Vw
-6PUNf68xW1HL4zGsZkkKTEeZvsTFULW1SZG8z3//etz1vS0inBRR6l8vNkzKQ44W
-CwzqhrP/glLv/fs/K1Kq+H2ICGbUah4ejdk8thgv6k2C8ASjFrOlyOso/HjAN4hN
-gXYpJgHpCxlcDwpT/75FHcxkuZNCf5IYE+NeaRyNodzml/nCFAe4npfhA8aZlNc2
-Z3T7cKOWNsygKxMiJrYVVGr5Ln304DCp9Ay4WxNFaxXisC9ebk4qDkUKDJKupzzr
-aKJi7nB992Od0g65AgfDWOcxcQFqDHqr3Sw1G/zlTuw/OZugy96H+0EXCkU46eLX
-DcM8zaRy6ITIKq08ZxVdhcYPNXg4dBuxXbXqGS8xUDHKEK4Zsy/ZjnlU5NmwS27p
-Wl/PmS7xGCAtNzjvfCzyFsx4xc6VQ/+EUbkjjaWjT5FeSpmPQND4+M5HuV2ab1Z0
-Ur0C3kfi3S/hcsClOaaakfiRTZhgTLAp4Tj9RGAh9Vbu+5jKOYYz1fyfx2FWjLSE
-q7Jyf53O/0m+IhCasy2nFvK9Qmnmr7Aa/8/Ws8Dx+JPdYEKc50o=
-=w+VB
------END PGP SIGNATURE-----
-
---2mascii7e2qhbhct--
 
