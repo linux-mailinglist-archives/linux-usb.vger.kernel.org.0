@@ -1,140 +1,139 @@
-Return-Path: <linux-usb+bounces-4081-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4080-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5414580F66B
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 20:17:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8B2580F668
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 20:17:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 851CE1C20D8E
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 19:17:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3816AB20DE8
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 19:17:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CB4C81E3A;
-	Tue, 12 Dec 2023 19:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DF7081E3D;
+	Tue, 12 Dec 2023 19:17:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="VpolDjF1"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="siTGftYd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2074.outbound.protection.outlook.com [40.107.101.74])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A9C83;
-	Tue, 12 Dec 2023 11:17:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WmTDVyaKGiGfTl6l+gk37ORfYsHy6e0OE4pGz0d6bbixR04pbivOHR/L05k1Q0sCyu6pv5SrGayCfd6Ew2Gvj9RtfJs0bo6wABG9sQAMH/Huvm9QwTAEhu7wQyR0C3+M5+hhg+gWDUQxVUEShFM5wHp8zWO2ChvtzT2zyL3TaiU57mNvDJ81wrkk8UWTQW01bcRtER+YRRHrCHHqdqi483FxieSlvOM2Yl5+zvbZGAkdPsYtzLEdqamU8ItVpo1crGhpVVFIuK0t0gMzM4yHhz7445b8b0xNgu9CGpCdHPApPuiGkw6AU90T3ludAA4eFw0rhmRG4dev1KSH6bNscg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uQDGNZV+kRUa8WSgBqwG6IHrtd7fj0+dXeO4MASopj4=;
- b=nsg18xKlhn+akC0CR8cEc9DYCmNFlh8LMelei6u9nzT6lZrmcqp/95xdM3m5X7iGswHcR7uOfXvsxRts/kUSKktqTl7vY1sP+/oF+46tXnCJpR2zQRTBrxJK/JX0y4eD12IFWbTwVUnQs3U+5zH2n3tKcd484RNSFHBaHx3pHXwnT/FCxdfbgeZIz7ATPHtkoOq2zgcmyt+MCL/e9W/5m8VOJp9vH4ft7JC9sqOqpr0dNMCIYcI6Rr+//cPbeQqy497IZkCYsnX7C1+r+vLx7VdmCld8ZYmW3b43tO1jghYS+UV7s8/lFw4tocvRdk/1iAU/9Jja2okBmlftsdoozA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uQDGNZV+kRUa8WSgBqwG6IHrtd7fj0+dXeO4MASopj4=;
- b=VpolDjF1aG8N7mLK3hQ+HYHD+tYYtmbJU3zpFP/b4ToNf66iunzP+tIY2VoQwpC+ZY7MdhHtIJCHratH+rNx5rizVW3IOk6eq1ZTfz1uUEWqK10CwTLtNMpgMcwGzeDWMjwbUnERsBnBiQQ0TUCLq1VbwaKTrDfNKcPuf5X4Zik=
-Received: from MW4PR04CA0355.namprd04.prod.outlook.com (2603:10b6:303:8a::30)
- by SJ0PR12MB6831.namprd12.prod.outlook.com (2603:10b6:a03:47d::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26; Tue, 12 Dec
- 2023 19:17:42 +0000
-Received: from CO1PEPF000044FD.namprd21.prod.outlook.com
- (2603:10b6:303:8a:cafe::3a) by MW4PR04CA0355.outlook.office365.com
- (2603:10b6:303:8a::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26 via Frontend
- Transport; Tue, 12 Dec 2023 19:17:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000044FD.mail.protection.outlook.com (10.167.241.203) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7113.7 via Frontend Transport; Tue, 12 Dec 2023 19:17:42 +0000
-Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Tue, 12 Dec
- 2023 13:17:03 -0600
-From: Sanath S <Sanath.S@amd.com>
-To: <mario.limonciello@amd.com>, <andreas.noever@gmail.com>,
-	<michael.jamet@intel.com>, <mika.westerberg@linux.intel.com>,
-	<YehezkelShB@gmail.com>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: Sanath S <Sanath.S@amd.com>
-Subject: [Patch v2 2/2] thunderbolt: Teardown tunnels and reset downstream ports created by boot firmware
-Date: Wed, 13 Dec 2023 00:46:35 +0530
-Message-ID: <20231212191635.2022520-3-Sanath.S@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231212191635.2022520-1-Sanath.S@amd.com>
-References: <20231212191635.2022520-1-Sanath.S@amd.com>
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D2FE9;
+	Tue, 12 Dec 2023 11:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+	s=s31663417; t=1702408604; x=1703013404; i=wahrenst@gmx.net;
+	bh=ACbaWNFhI4Cx8ABOfIZf0sedQjo/96CkJf/XFm3gSFw=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=siTGftYdIIfpqLMjfSUMkNoTPDjSwYkv77spcXetPEEqcUIZ/rJCW5AdXdhT2E+/
+	 vIDyTST7e9OwWhlxMlm3uOQ/LFyqsxmTa/+ikLL5mNf2EAEIv1PIxFZwSAmt8b2Vt
+	 33eVU7lYHDa5peCQMkX3wmHMxTcMcD7REf7FDMk4B58cd8JQrqY7lqINqKC8aJdcM
+	 GSVy0RH5twchCmxvXkLfCrF8V+S/oFM9ZhXK90oh2cI3eOM4R/V2rx2b7d6VzcsP8
+	 kEirOjqCEot/T4LWwloPdLWR7YfkKotZJR07sgJn3WF+lVsgTHxx5sL/sBDDhUJkM
+	 o4Kd/3p/72C4SGx/wQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.130] ([37.4.248.43]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mn2aD-1rfHw30WoB-00kAvS; Tue, 12
+ Dec 2023 20:16:44 +0100
+Message-ID: <6f5ced56-94fb-43dc-859d-42398624cd55@gmx.net>
+Date: Tue, 12 Dec 2023 20:16:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044FD:EE_|SJ0PR12MB6831:EE_
-X-MS-Office365-Filtering-Correlation-Id: 83a6067f-bf39-445c-8050-08dbfb470396
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Q+JAqKy5zjbIAgzjZKD4sH7tae3ALMcKO7d7PbyddRMmkY8YsS4qDEfzXgqkFIdLQXBRF0SKrnx6wMc8qJHFTqhSwsELkQ31hCfZKu5S+3K8t9XmKjKegVkyiptUixzsyV7MgKtaaxSDMGdfreUpcGOJlVCxKYgi5NZOVaRk4pJVg/cvQmEidXVpA40V/RhAxtAUhYt4GSUY3I43zTIX4NZocg/a6kWxG5GlSbgHP6cZkzmsZdsF1DAjCjQ5ORbAdJm7sBm6P6ftNukjFIi0dnC+QRlfSEpO/DPvPPVBAUNmj5M4J5e/6Ne661oHOjT3FLiHpKPltNhAfzR2ULXfZOEkSgCaGJjhU8y1xIM96bj3tcUD8jDHsm2BNB+wJv8t8r5eqVrCKoK6rxTjAysMxwNqNgiItjD+4aPJGE+xYIhdIghMEwy58Pg/uWLucTvu9G0qlaPW8ccdUQ3kVhafeJUAQk7HbfuA6uHtXhxCNmj3MZNRLQ30n2v1ZfBC0KmBtGjObhL3XDD7uU5cVKBwBUs7x4aWEwsBmE6OzxVsGzF6dcdNfo6AQjtHvklnOudS/1k9yn7rdzJvDO5G6o84PK9eUYqgOdoBkGkSg5xCxyymcuBfNVE6EHUSsq1TQAoTfWZPll1m+rHqWsJOZDqf3pQHayKW59u5qw4sLWT3lMtATu5XMi5cb1jbugNxVCPBlh7FnCtjWrvrFcgvJ1gBHCm6e2n/B98yKLbZy0lArq/f/6Yst1MrvboUuXIub681
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(39860400002)(136003)(396003)(346002)(230922051799003)(82310400011)(1800799012)(64100799003)(451199024)(186009)(46966006)(40470700004)(36840700001)(81166007)(356005)(36860700001)(47076005)(41300700001)(1076003)(2616005)(426003)(16526019)(40460700003)(336012)(26005)(36756003)(86362001)(40480700001)(82740400003)(7696005)(6666004)(478600001)(316002)(110136005)(70586007)(70206006)(4326008)(2906002)(8936002)(8676002)(5660300002)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2023 19:17:42.2939
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83a6067f-bf39-445c-8050-08dbfb470396
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000044FD.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6831
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V4 0/3] ARM: dts: bcm2711: Add BCM2711 xHCI support
+Content-Language: en-US
+To: Cyril Brulebois <kibi@debian.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ bcm-kernel-feedback-list@broadcom.com, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20231205200531.8232-1-wahrenst@gmx.net>
+ <20231212190904.igxm2twvftokhdwr@mraw.org>
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <20231212190904.igxm2twvftokhdwr@mraw.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ZnBG0/z+wh4wy+82FAbvdMniRIaOdEwLDjVTNOM4OeTg0y4mlTi
+ L7zC8cls2KR4y8dIcuSFXJtjCUTKFMbP5jKXa/+d0oZ5XuCF6C4HBvXjGgoNkr6rpP8doc/
+ AEAk+fApgL7HgbiNV5NLVeeBdPwTgAD6YNEz5KOKFATthEsMJiUKqmQ1O6S7pgGGnvTSIGF
+ IWwcoEuwhr8Pz6h4PA1tw==
+UI-OutboundReport: notjunk:1;M01:P0:dK5623jq9jw=;und38testhdiz4Hqpq74S1f8GWt
+ UnL1HTAtz9q8LfpsKQ9gtC24PG1Jz7eUziKQ3ulr0WhYxLZZhcq93A6cRQ3dljRbRuvCQh1i6
+ QPTQ83wX2OBO+8VQ9Pah4PnPB6hgymDk/bz0g7FWRg+5Q4TqxnOobm7JPtH0TW8tPYDH63mGp
+ sh5y15qjCZhBkYx/XkGRlIYStx8mFwOQhUOTSpHMTC0a8KZRXB2TC3PlbhJqOi7udehY7GKRk
+ sK229Oztdqs2sJtXuX+B53x0RNLy0xd1Kplw2U4SFQp+YuFdFlNRYcPivgCC05BCg5eGJNlq1
+ ELf9M65BXeqQBHHb6rE3TXCmVvn1JY6cKWHCSv/HL70dsROYvaBU9Fnwxdl7fmoBL5L8vmGI7
+ Ei8pXcFgEOvT5t0B0TByg4AfGOxgsisZSmt5y+QCNmKo8Z1iPFFUdiiXT7fW2FguC8viYkN8H
+ U/5Gm2yMeJWWqegJqVZHaw0BQ73n9Yow9GD7upRZpsVxS+vzeL/I+F/0VeA0+7nC01/b8CVen
+ ruyDRbSLUpdW9DK4yiaA/TZNluXKe3hugisWdcHVtzk91SydcpL1KHeMaNvU0JFS7ReVShlZx
+ /oCT1h0otY4QPTpscKqv2qlNkwwIXs8e5PqtOEB9puhpf+jXvsdiaInlo9e9/WsFrl59RSRip
+ 2EIXbtWkfhHgDG+TQXDiEbBtp1IF4ZySCdOlubRtA78Kkpu9CAGPr4Krd70+NIsfefsipylot
+ fFRzXOlJ//i0Mzbb6fa/pRojBv0HT8V692SkRF34QjvMZQ4eaiDm1sjYdPyEoUfT/4pBuloYk
+ 9QAZz2/AIcvZKcDwJY9Sj1aYUugg+w0G+nchCyFynUmgTetgg4i36oRIV1Q+qnEUYLHuTuHTw
+ zUn8YTvdR57tCjAfiG47BcALP24dxUqMVqbPHxBLwFIGT0VsOPZgu+U404wtZ8tSRPRlqk2e6
+ lHFpzg==
 
-Boot firmware might have created tunnels of its own. Since we cannot
-be sure they are usable for us. Tear them down and reset the ports
-to handle it as a new hotplug for USB3 routers.
+Hi Cyril,
 
-Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Sanath S <Sanath.S@amd.com>
----
- drivers/thunderbolt/tb.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Am 12.12.23 um 20:09 schrieb Cyril Brulebois:
+> Stefan Wahren <wahrenst@gmx.net> (2023-12-05):
+>> In contrast to the Raspberry Pi 4, the Compute Module 4 or the IO board
+>> does not have a VL805 USB 3.0 host controller, which is connected via
+>> PCIe. Instead, the Compute Module provides the built-in
+>> xHCI of the BCM2711 SoC.
+>>
+>> Changes in V4:
+>> - use "brcm,xhci-brcm-v2" as fallback compatible as suggested by
+>>    Conor & Florian
+>>
+>> Changes in V3:
+>> - introduce a new compatible for BCM2711 in order to make the
+>>    power domain dependency SoC specific, which also results in
+>>    a driver change
+> This is still:
+>
+> Tested-by: Cyril Brulebois <cyril@debamax.com>
+thank you very much for your efforts. The series has been already
+applied by Greg.
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index fd49f86e0353..febd0b6972e3 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -2598,6 +2598,17 @@ static int tb_start(struct tb *tb)
- 	tb_switch_tmu_enable(tb->root_switch);
- 	/* Full scan to discover devices added before the driver was loaded. */
- 	tb_scan_switch(tb->root_switch);
-+	/*
-+	 * Boot firmware might have created tunnels of its own. Since we cannot
-+	 * be sure they are usable for us, Tear them down and reset the ports
-+	 * to handle it as new hotplug for USB4 routers.
-+	 */
-+	if (tb_switch_is_usb4(tb->root_switch)) {
-+		tb_switch_discover_tunnels(tb->root_switch,
-+					   &tcm->tunnel_list, false);
-+		tcm->hotplug_active = true;
-+		return tb_switch_reset_ports(tb->root_switch);
-+	}
- 	/* Find out tunnels created by the boot firmware */
- 	tb_discover_tunnels(tb);
- 	/* Add DP resources from the DP tunnels created by the boot firmware */
--- 
-2.34.1
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/log/?h=3Dus=
+b-next
+>
+>
+> Again, I'm also applying Jim Quinlan's PCIe patch series v8, to be able
+> to fully test what happens with USB devices, onboard and behind PCIe:
+>    https://lore.kernel.org/all/20231126201946.ffm3bhg5du2xgztv@mraw.org/
+>
+> With the following on a CM4 IO Board, with a Samsung flash drive and a
+> USB keyboard connected to onboard USB ports:
+>   - CM4 Lite Rev 1.0
+>   - CM4 8/32 Rev 1.0
+>   - CM4 4/32 Rev 1.1
+>
+> and using one of the three PCIe-to-USB boards referenced previously,
+> connecting another Samsung flash drive on one of its USB ports.
+>
+> Conclusion: I can see and use onboard USB devices alongside behind-PCIe
+> USB devices, either with or without adding otg_mode=3D1 to config.txt.
+>
+> On a CM4-based product that uses both onboard USB ports and PCIe-to-USB
+> ports, all USB components still work fine (3 RF adapters, 1 modem), with
+> or without otg_mode=3D1.
+>
+> (All of this is still with a Debian 12 arm64 user space.)
+>
+>
+> Cheers,
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
 
