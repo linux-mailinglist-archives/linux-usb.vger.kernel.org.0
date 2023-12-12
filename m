@@ -1,44 +1,44 @@
-Return-Path: <linux-usb+bounces-3998-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-3999-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2C6780E059
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 01:39:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5695A80E06E
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 01:46:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05E751C2160C
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 00:39:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA630B212A2
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 00:46:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F81646;
-	Tue, 12 Dec 2023 00:39:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6F97E3;
+	Tue, 12 Dec 2023 00:46:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=nozomi.space header.i=@nozomi.space header.b="AN0vjkXi"
+	dkim=pass (4096-bit key) header.d=nozomi.space header.i=@nozomi.space header.b="rgXsXynP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail.nozomi.space (mail.nozomi.space [139.162.184.125])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2DB9F
-	for <linux-usb@vger.kernel.org>; Mon, 11 Dec 2023 16:39:44 -0800 (PST)
-Date: Tue, 12 Dec 2023 01:39:34 +0100
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A1499
+	for <linux-usb@vger.kernel.org>; Mon, 11 Dec 2023 16:46:33 -0800 (PST)
+Date: Tue, 12 Dec 2023 01:46:24 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nozomi.space; s=mail;
-	t=1702341582; bh=sMk5r8SG5kva6GoTJNRlScXOUXXLc9lcoa6GE+EZX54=;
+	t=1702341990; bh=cjkge3z+KaAw64Tp+7lotjeEnGyo9RIxiijjuRhseEo=;
 	h=From:Subject:To:Cc;
-	b=AN0vjkXi9P1btHz5ltGGFWFUKuXPaSH5NQr55lcucrGC5wyG8Jem/+gbwR0vcPliR
-	 kGmKmAGdvYhCbeItWy+NKAY47mee3UjcwlxUa9XpIPdWkdrEQZr178bBsOTJPQzJMd
-	 WGTHWegi1DSYGUNs94jD/fhBSHPdbviOQ6dMaYLBK3bYRdRrUUO7dgByXf4JvC6t5a
-	 HNS1vMEczM5YpR20wDKloP8sZ2DaClTL4a4mTv6eC72VhYccx8U6nXH3s0Lf+7BPri
-	 FElxuKwsPHgxgLWjUkRep6rabJSwiGDD9mOOz7Yu8hy7G/DwLsM7bFCSrtsy9xMo8F
-	 2cutMhgDnQ4TecQRjftH3I0k08DR4j0mLNSWEgEyfEHZiu/unAEmAT33qzjjPWuUZk
-	 UpB1YPjoO/c41rnv+KinUi4IZUElgpJx6yKligVr0aYrN7vTWKsANt/CwuNdLe9Yyf
-	 VHm+wN/73xH7jvHkC/HvO2K3TrClME+25JIQrbjDBgINcvL4HpS4yhBc9liBWcczWD
-	 blO4SeTkm81xzwmch7gFJTYkLsB6FPvyLxDN6XQne3VNNpdVZuh9gKbdo0ZRKD258O
-	 6+dpgqpIBsOyGLQLvmppw9QWedb+w19Jno/ez6ZvFZ3i5m/pW+iKq1RwHbR5sT/VWe
-	 pPvnPCapswpCYJwH/gY62r2Y=
+	b=rgXsXynPcumIjg2yOLBCFHpBVh/9ZMpNW+UzmEf/h8Rvl6gwKIMemaXbOnYEAPTER
+	 qbgu++PKGVIKu1Jd1kWt51GLsl51vrBIyBxLgStcgkfMiExbzA1lf2lCRwK3UcIqvP
+	 JuNS4f5l/5BWn9J2zzCBt7L8QYoxbw477/zQnfousyH2uVHDUsAJq8o+sRouCnZuHV
+	 LcxqTotaHmez2NCXeFpouhQqV6kxY8o0z+5DLalLcZIlUWTe8WbvMUE3ChZfqE15Xo
+	 wNWAULcaXF4bBxCjGqmiGFQrsMu7O1js6MQIHqXeA2tb0P/lOqKWymJ9Vt5MvQdEeh
+	 zmy8NWFrmtLErU9gPci+M0OvNPZDDvYBgmCcpKSVs3M2eLUP/HoTd7G/97sK6f1wr0
+	 luiwQd0/VXYt5Ewyi6z3jzWXY/kLx+fGIE8edJjr8ykdU3Mx1ZVKKJtHQ9DKSLQUpv
+	 ZIO8ml7Gu5Vtl/XP8/Q2Ka2rwvx7NcpDnhUrIIorRyyUjY2kp7f7h3l5Q0dU6cS+iu
+	 tKLSQOfgW8bUYbj1oHapll3YyP0ed7X90nE9kpVvWT8iE3uZJGU37Ev9wgrHY3Z7yr
+	 xSh9qw19CA+u7Ld4QWYIyLaNH1JXLUTCUjr9WZgqJYJthuxshEIE1cnl3AN/2ud7QY
+	 n5k5+0GSNLaufENCKmvfpUAU=
 From: =?iso-8859-2?q?Micha=B3_Kope=E6?= <michal@nozomi.space>
-Subject: [PATCH] platform/x86: serial-multi-instantiate: allow single GpioInt
- IRQ for INT3515
+Subject: [PATCH v2] platform/x86: serial-multi-instantiate: allow single
+ GpioInt IRQ for INT3515
 To: linux-usb <linux-usb@vger.kernel.org>
-Cc: hdegoede@redhat.com
-Message-Id: <Y53J5S.LX6YEPYLP1CF2@nozomi.space>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Message-Id: <CH3J5S.PJBGAHBM3MBE2@nozomi.space>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -48,20 +48,21 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-2; format=flowed
 Content-Transfer-Encoding: quoted-printable
 
-On some devices, such as the Lenovo ThinkPad T14 Gen1 (AMD), there is=20
-only one
-GpioInt resource defined for all i2c device instances. Handle this case
-appropriately by autodetecting the irq type and allowing fallback to=20
-the first
-IRQ index for the second, third and fourth tps6598x instances.
+On some devices, such as the Lenovo ThinkPad T14 Gen1 (AMD), there is
+only one GpioInt resource defined for all i2c device instances. Handle
+this case appropriately by autodetecting the irq type and allowing
+fallback to the first IRQ index for the second, third and fourth=20
+tps6598x
+instances.
 
-Additionally, to use the `platform_get_irq_optional` function to=20
-silence errors
-that may not be relevant if the IRQ is optional. In cases where the IRQ=20
-is not
-optional, `dev_err_probe` is still triggered, so other devices will not=20
-be
-affected by this change.
+Additionally, to use the `platform_get_irq_optional` function to silence
+errors that may not be relevant if the IRQ is optional. In cases where=20
+the
+IRQ is not optional, `dev_err_probe` is still triggered, so other=20
+devices
+will not be affected by this change.
+
+v2: fix linewrap in summary
 
 Signed-off-by: Micha=B3 Kope=E6 <michal@nozomi.space>
 ---
