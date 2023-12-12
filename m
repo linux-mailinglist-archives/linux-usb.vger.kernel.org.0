@@ -1,308 +1,111 @@
-Return-Path: <linux-usb+bounces-4046-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4047-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0272580EE46
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 15:02:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B32080EE7C
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 15:15:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A93E41F2165D
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 14:02:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A93161C20B1B
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 14:15:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3F7F73167;
-	Tue, 12 Dec 2023 14:02:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB2C73176;
+	Tue, 12 Dec 2023 14:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="GfOHH/K+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xf5jImnR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2073.outbound.protection.outlook.com [40.107.102.73])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E262F100;
-	Tue, 12 Dec 2023 06:02:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ah/6KNcZbGspPWn0qliB5588N4uSukzTW/f1wS3xiIYD0c8DAQm3BtBzmgBdy5WGFaRk9sNsD47tHdGPi/M6VwSCxLDrjORpmSqM8AhugFVVWIiXCT+lN/6djqfTfDXD2mYRjWKF5mCUFL4HhAmKBgcbzIBSvl9i3M6KMuAKzokIeV81OB7XqhgPwGej+INBugTx4E2U2ec6Lzij6ADxWywVsEtjeZa9m1sMVB7yDBgxfma58NEFhRvrKz8ZLbePGNwNizLVTrNIVhwk7getjyFuXSyUmsgUHZs8mCEgOtcm8nZz5qr1zFc/4iqmtzIil7L1cL2uXQIa9InvJAK/jQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1bFfMCuV86jnR/ilSFLrF6DfQazlBQvcxV1L9vTV3pI=;
- b=FjbNM2/IjKmccKHiPMsoCbe9d7aZCiqQ0LV1RlvjWIp15HaHO5/kzXTVPR6mZ06IUI69lB7smm/V5tQPAmPfLlnXcQ033/+VKAZEnY134agjlzhgBupcVzaI8ADE/JrPmmina5fMiTXcjmHDfNG5p9/OZ5WjfCBDhc/bJ3kurqhqeXfvuO+7BUCHNwQFzSCj3ChISUlgzUKjJZvvsNtLFjkFgXg28ZWo9KPOWgPQVAm41/6iXXeXbBkrPlJmHYGm2sH2tXKGoKZbAthr2nS6AdJIEI2rdqpHZ3ok1JLd1kqolBCv6CQmn1OygtBPE7c6YgI3Spb2pRjEOVn4NPG6hw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1bFfMCuV86jnR/ilSFLrF6DfQazlBQvcxV1L9vTV3pI=;
- b=GfOHH/K+kWH6MdB18VkO9BsDDjfTTqUAiTZyzIaNyLnyd6+IFG3Jg/F+D/DEvXNF+UVlU/670gCAdzZ4RiqYrZboYuhWYLjGfthKJKQYoFE1pc0X37IwGJOYwQTXE7RE/15b6lsLh8p+oyf0IDgleIIEFD3eYkSITFS2xIAYRts=
-Received: from BN1PR13CA0010.namprd13.prod.outlook.com (2603:10b6:408:e2::15)
- by MN6PR12MB8514.namprd12.prod.outlook.com (2603:10b6:208:474::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.32; Tue, 12 Dec
- 2023 14:02:00 +0000
-Received: from SN1PEPF0002636A.namprd02.prod.outlook.com
- (2603:10b6:408:e2:cafe::c0) by BN1PR13CA0010.outlook.office365.com
- (2603:10b6:408:e2::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.25 via Frontend
- Transport; Tue, 12 Dec 2023 14:02:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SN1PEPF0002636A.mail.protection.outlook.com (10.167.241.135) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7091.26 via Frontend Transport; Tue, 12 Dec 2023 14:01:59 +0000
-Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Tue, 12 Dec
- 2023 08:01:23 -0600
-From: Sanath S <Sanath.S@amd.com>
-To: <mario.limonciello@amd.com>, <andreas.noever@gmail.com>,
-	<michael.jamet@intel.com>, <mika.westerberg@linux.intel.com>,
-	<YehezkelShB@gmail.com>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: Sanath S <Sanath.S@amd.com>
-Subject: [PATCH 2/2] thunderbolt: Teardown tunnels and reset downstream ports created by boot firmware
-Date: Tue, 12 Dec 2023 19:30:47 +0530
-Message-ID: <20231212140047.2021496-3-Sanath.S@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231212140047.2021496-1-Sanath.S@amd.com>
-References: <20231212140047.2021496-1-Sanath.S@amd.com>
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007C6AC;
+	Tue, 12 Dec 2023 06:15:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702390529; x=1733926529;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+CyqDkty4gAG4dffVL639tJHtioITjzlgMZMq9sVuE8=;
+  b=Xf5jImnRTqabHtGef0ftPMQKhN0T6DwfeGW61tbFD3uHlbfQ8E8oTXkD
+   xEdcN7evttzKBs7yllOIZz/HUTi7XwWx6RsSzfmzkzUU8CQob38go+Ipk
+   pOWiWhnrVOFW+eOVQX37+ywtJ0AZH4oHhTj1n9HmeW4mkuwr8WoG1QMMF
+   331kdOOhViLGT23GgSXFkaEDuQYYWaGvckbnHiFrJonDCDtI4fJJ2iOGO
+   9uuLyCHYmgaCCid6hloZqeADhEnUR//9Qxz7kVXXdvesWgmJXMmw5whqf
+   d2zNUezd/4aWloUTQUsES8CIU5Sw7QPlY/80wwzRM3XLmO6zOf1mJilUV
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="16364166"
+X-IronPort-AV: E=Sophos;i="6.04,270,1695711600"; 
+   d="scan'208";a="16364166"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 06:15:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="802484555"
+X-IronPort-AV: E=Sophos;i="6.04,270,1695711600"; 
+   d="scan'208";a="802484555"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga008.jf.intel.com with SMTP; 12 Dec 2023 06:15:25 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 12 Dec 2023 16:15:24 +0200
+Date: Tue, 12 Dec 2023 16:15:24 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] usb: typec: tipd: add function to request firmware
+Message-ID: <ZXhq/IJp9KVCkQYb@kuha.fi.intel.com>
+References: <20231207-tps6598x_update-v1-0-dc21b5301d91@wolfvision.net>
+ <20231207-tps6598x_update-v1-2-dc21b5301d91@wolfvision.net>
+ <ZXMudF++A9/y4TNk@kuha.fi.intel.com>
+ <196acb44-fb0d-45b6-a9c3-b5a289a41917@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002636A:EE_|MN6PR12MB8514:EE_
-X-MS-Office365-Filtering-Correlation-Id: a54a373c-418e-43a4-2a5f-08dbfb1ae91b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	EVIzvQ6AjlvQ9XcA9N3QqnOH+uMHTVkN79hUm1RkVNW5YDf7lzNI3LOQ4lNK4NNiMElYylfcjdO1uJulM8iYbwdpiwVDeFnv/7TAnboelO0h1qYX5e16NT/TZ8KXVy6ZqCDiPBKTW+jgqRLnt3CgGsPgfc0fg1n+czGhupcawMe0BCFq+ki1HRxnhmE0c/1SKK/kd9x4kxUi4g2zerSHPxDCdmZB0GwRFN/4YyBcQTbcFtltuPKkAnlGxnwHwNqHZXpHPfb2cG0GzHHcZG7Ypz3G8H9aVqJLLLIeuZQD6c74PGa4EkxmvRWBhWDweyPFHbPTgCHUbbEnmXx7GAagzt3inysLvhmB404AsMXzSHsX59RfHr4UqKubN9oc87cVFCUBNVLiGcRauRtydT6BBghjOZ5HnEohpc1jAZO/lfUL03L1Bplzc5BUte9J8i7T1eKqrdfgNa0MM6BkRSF/cWDtpOfiajXpjhCXjKS1nsQOTKGFR3QqDyzCGTN866oUc8GRGTSw1slCtMwPXt2J3vwCeT4srLmdCzZzQM4wL/HaijV3mP7LHEcg0tmrVR2uJXnmOKsmegky7U/81oUFQSG4pDdpnzsvskgpZHt55sa03fFTAL9s4HcpFX71nqtYDDXn+QUeS3Bky0KSIF1nOnf+gBvI5yF4nf73lmnMGW4egAUXaMjrLvBU02/aHp+PF3egZr6llJhj/q7oFIBO1hRJi5T5SUoEmG/LcXhCF3Uy8EexblzWxbJcznF46aU278pvGwJhj+NRhVcD67sjzqn/durophf2dBcAuVYCe0s=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(136003)(39860400002)(376002)(396003)(230922051799003)(64100799003)(82310400011)(451199024)(186009)(1800799012)(36840700001)(40470700004)(46966006)(40480700001)(41300700001)(40460700003)(2906002)(5660300002)(316002)(4326008)(8936002)(70586007)(8676002)(70206006)(356005)(82740400003)(81166007)(2616005)(36860700001)(110136005)(36756003)(86362001)(66574015)(47076005)(83380400001)(426003)(26005)(6666004)(478600001)(1076003)(336012)(16526019)(7696005)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2023 14:01:59.7900
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a54a373c-418e-43a4-2a5f-08dbfb1ae91b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF0002636A.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8514
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <196acb44-fb0d-45b6-a9c3-b5a289a41917@wolfvision.net>
 
-Boot firmware might have created tunnels of its own. Since we cannot
-be sure they are usable for us. Tear them down and reset the ports
-to handle it as a new hotplug.
+Hi,
 
-Since we teardown the tunnels, Discovering of tunnels is not needed.
-Removing helper functions tb_discover_tunnels(),
-tb_discover_dp_resources(), tb_create_usb3_tunnels(),
-tb_add_dp_resources() and device_for_each_child().
+On Fri, Dec 08, 2023 at 07:58:52PM +0100, Javier Carrasco wrote:
+> Hi Heikki,
+> 
+> On 08.12.23 15:55, Heikki Krogerus wrote:
+> 
+> >> +	ret = request_firmware(fw, firmware_name, tps->dev);
+> >> +	if (ret) {
+> >> +		dev_err(tps->dev, "failed to retrieve \"%s\"\n", firmware_name);
+> >> +		/* probe deferring in case the file system is not ready */
+> >> +		return (ret == -ENOENT) ? -EPROBE_DEFER : ret;
+> > 
+> > It's more likely that the firmware really isn't available, and it will
+> > never be available in this case. I think there is only one place in
+> > kernel where failing request_firmware() can lead to deferred probe
+> > (drivers/tee/optee/smc_abi.c) and there the code can actually see the
+> > system state - that's actually the condition.
+> > 
+> > So just return dev_err_probe() here:
+> > 
+> > 	ret = request_firmware(fw, firmware_name, tps->dev);
+> > 	if (ret)
+> >                 return dev_err_probe(tps->dev, ret, "failed to retrieve \"%s\"", firmware_name);
+> > 
+> Thank you for your feedback.
+> 
+> This solution arose from a real use case: in the system I am using to
+> test the tps65987d, the filesystem is not ready when the probe function
+> is called. If I just return on -ENOENT, the device will never get the
+> update.
 
-Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Sanath S <Sanath.S@amd.com>
----
- drivers/thunderbolt/tb.c | 137 ++-------------------------------------
- 1 file changed, 7 insertions(+), 130 deletions(-)
+Just like all the other devices that require firmware. This driver is
+no different from the others, and it is also not the only one that
+needs the firmware only in special cases. Just make the firmware part
+of your ramdisk, or build the driver as a module.
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index fd49f86e0353..bfad14846514 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -151,24 +151,6 @@ tb_attach_bandwidth_group(struct tb_cm *tcm, struct tb_port *in,
- 	return group;
- }
- 
--static void tb_discover_bandwidth_group(struct tb_cm *tcm, struct tb_port *in,
--					struct tb_port *out)
--{
--	if (usb4_dp_port_bandwidth_mode_enabled(in)) {
--		int index, i;
--
--		index = usb4_dp_port_group_id(in);
--		for (i = 0; i < ARRAY_SIZE(tcm->groups); i++) {
--			if (tcm->groups[i].index == index) {
--				tb_bandwidth_group_attach_port(&tcm->groups[i], in);
--				return;
--			}
--		}
--	}
--
--	tb_attach_bandwidth_group(tcm, in, out);
--}
--
- static void tb_detach_bandwidth_group(struct tb_port *in)
- {
- 	struct tb_bandwidth_group *group = in->group;
-@@ -247,32 +229,6 @@ static void tb_remove_dp_resources(struct tb_switch *sw)
- 	}
- }
- 
--static void tb_discover_dp_resource(struct tb *tb, struct tb_port *port)
--{
--	struct tb_cm *tcm = tb_priv(tb);
--	struct tb_port *p;
--
--	list_for_each_entry(p, &tcm->dp_resources, list) {
--		if (p == port)
--			return;
--	}
--
--	tb_port_dbg(port, "DP %s resource available discovered\n",
--		    tb_port_is_dpin(port) ? "IN" : "OUT");
--	list_add_tail(&port->list, &tcm->dp_resources);
--}
--
--static void tb_discover_dp_resources(struct tb *tb)
--{
--	struct tb_cm *tcm = tb_priv(tb);
--	struct tb_tunnel *tunnel;
--
--	list_for_each_entry(tunnel, &tcm->tunnel_list, list) {
--		if (tb_tunnel_is_dp(tunnel))
--			tb_discover_dp_resource(tb, tunnel->dst_port);
--	}
--}
--
- /* Enables CL states up to host router */
- static int tb_enable_clx(struct tb_switch *sw)
- {
-@@ -472,34 +428,6 @@ static void tb_switch_discover_tunnels(struct tb_switch *sw,
- 	}
- }
- 
--static void tb_discover_tunnels(struct tb *tb)
--{
--	struct tb_cm *tcm = tb_priv(tb);
--	struct tb_tunnel *tunnel;
--
--	tb_switch_discover_tunnels(tb->root_switch, &tcm->tunnel_list, true);
--
--	list_for_each_entry(tunnel, &tcm->tunnel_list, list) {
--		if (tb_tunnel_is_pci(tunnel)) {
--			struct tb_switch *parent = tunnel->dst_port->sw;
--
--			while (parent != tunnel->src_port->sw) {
--				parent->boot = true;
--				parent = tb_switch_parent(parent);
--			}
--		} else if (tb_tunnel_is_dp(tunnel)) {
--			struct tb_port *in = tunnel->src_port;
--			struct tb_port *out = tunnel->dst_port;
--
--			/* Keep the domain from powering down */
--			pm_runtime_get_sync(&in->sw->dev);
--			pm_runtime_get_sync(&out->sw->dev);
--
--			tb_discover_bandwidth_group(tcm, in, out);
--		}
--	}
--}
--
- static int tb_port_configure_xdomain(struct tb_port *port, struct tb_xdomain *xd)
- {
- 	if (tb_switch_is_usb4(port->sw))
-@@ -1043,31 +971,6 @@ static int tb_tunnel_usb3(struct tb *tb, struct tb_switch *sw)
- 	return ret;
- }
- 
--static int tb_create_usb3_tunnels(struct tb_switch *sw)
--{
--	struct tb_port *port;
--	int ret;
--
--	if (!tb_acpi_may_tunnel_usb3())
--		return 0;
--
--	if (tb_route(sw)) {
--		ret = tb_tunnel_usb3(sw->tb, sw);
--		if (ret)
--			return ret;
--	}
--
--	tb_switch_for_each_port(sw, port) {
--		if (!tb_port_has_remote(port))
--			continue;
--		ret = tb_create_usb3_tunnels(port->remote->sw);
--		if (ret)
--			return ret;
--	}
--
--	return 0;
--}
--
- /**
-  * tb_configure_asym() - Transition links to asymmetric if needed
-  * @tb: Domain structure
-@@ -2534,27 +2437,6 @@ static void tb_stop(struct tb *tb)
- 	tcm->hotplug_active = false; /* signal tb_handle_hotplug to quit */
- }
- 
--static int tb_scan_finalize_switch(struct device *dev, void *data)
--{
--	if (tb_is_switch(dev)) {
--		struct tb_switch *sw = tb_to_switch(dev);
--
--		/*
--		 * If we found that the switch was already setup by the
--		 * boot firmware, mark it as authorized now before we
--		 * send uevent to userspace.
--		 */
--		if (sw->boot)
--			sw->authorized = 1;
--
--		dev_set_uevent_suppress(dev, false);
--		kobject_uevent(&dev->kobj, KOBJ_ADD);
--		device_for_each_child(dev, NULL, tb_scan_finalize_switch);
--	}
--
--	return 0;
--}
--
- static int tb_start(struct tb *tb)
- {
- 	struct tb_cm *tcm = tb_priv(tb);
-@@ -2598,20 +2480,15 @@ static int tb_start(struct tb *tb)
- 	tb_switch_tmu_enable(tb->root_switch);
- 	/* Full scan to discover devices added before the driver was loaded. */
- 	tb_scan_switch(tb->root_switch);
--	/* Find out tunnels created by the boot firmware */
--	tb_discover_tunnels(tb);
--	/* Add DP resources from the DP tunnels created by the boot firmware */
--	tb_discover_dp_resources(tb);
- 	/*
--	 * If the boot firmware did not create USB 3.x tunnels create them
--	 * now for the whole topology.
-+	 * Boot firmware might have created tunnels of its own. Since we cannot
-+	 * be sure they are usable for us, Tear them down and reset the ports
-+	 * to handle it as new hotplug.
- 	 */
--	tb_create_usb3_tunnels(tb->root_switch);
--	/* Add DP IN resources for the root switch */
--	tb_add_dp_resources(tb->root_switch);
--	/* Make the discovered switches available to the userspace */
--	device_for_each_child(&tb->root_switch->dev, NULL,
--			      tb_scan_finalize_switch);
-+	tb_switch_discover_tunnels(tb->root_switch, &tcm->tunnel_list, false);
-+	ret = tb_switch_reset_ports(tb->root_switch);
-+	if (ret)
-+		return ret;
- 
- 	/* Allow tb_handle_hotplug to progress events */
- 	tcm->hotplug_active = true;
+Are these firmwares available linux-firmware (or are the going to be)?
+https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+
+thanks,
+
 -- 
-2.34.1
-
+heikki
 
