@@ -1,139 +1,192 @@
-Return-Path: <linux-usb+bounces-4080-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4082-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8B2580F668
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 20:17:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B20D080F697
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 20:24:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3816AB20DE8
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 19:17:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32BB61F216A9
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 19:24:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DF7081E3D;
-	Tue, 12 Dec 2023 19:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5784F81E48;
+	Tue, 12 Dec 2023 19:24:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="siTGftYd"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="zO7hEQ1x"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D2FE9;
-	Tue, 12 Dec 2023 11:17:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=s31663417; t=1702408604; x=1703013404; i=wahrenst@gmx.net;
-	bh=ACbaWNFhI4Cx8ABOfIZf0sedQjo/96CkJf/XFm3gSFw=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=siTGftYdIIfpqLMjfSUMkNoTPDjSwYkv77spcXetPEEqcUIZ/rJCW5AdXdhT2E+/
-	 vIDyTST7e9OwWhlxMlm3uOQ/LFyqsxmTa/+ikLL5mNf2EAEIv1PIxFZwSAmt8b2Vt
-	 33eVU7lYHDa5peCQMkX3wmHMxTcMcD7REf7FDMk4B58cd8JQrqY7lqINqKC8aJdcM
-	 GSVy0RH5twchCmxvXkLfCrF8V+S/oFM9ZhXK90oh2cI3eOM4R/V2rx2b7d6VzcsP8
-	 kEirOjqCEot/T4LWwloPdLWR7YfkKotZJR07sgJn3WF+lVsgTHxx5sL/sBDDhUJkM
-	 o4Kd/3p/72C4SGx/wQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.130] ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mn2aD-1rfHw30WoB-00kAvS; Tue, 12
- Dec 2023 20:16:44 +0100
-Message-ID: <6f5ced56-94fb-43dc-859d-42398624cd55@gmx.net>
-Date: Tue, 12 Dec 2023 20:16:42 +0100
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2079.outbound.protection.outlook.com [40.107.237.79])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DA2AD;
+	Tue, 12 Dec 2023 11:24:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rm8OBcs0mtAAKahdtz9Ea0KnRA59f9obijFgxyuS2KvfN2Xg4YTV38jN5Wx9KbmMg0r8YzB9Ztw3xRHc/N6OeDDNeTIkSomCSWWES+eohL8YUnY7hOvFfrQRW+yOGYnfHVsIekKOo7D7f5cIvACL9cgmgg0Xcnao6XA+baZ1j5Oz5Jn0APdF6VZ8Ew4FpXvE1kqh158JB5L+fdV6R4m/2szHbduKLMuTyHqnoUKVLHr4ThFlLziZ5eTg048CCCKqNEELCNfTixKSSQWJgCixnSCfk4HHiaOe/KYlhlw+JLNwcRwT5QZpRIJtCY5l/cyta3/GTLun+FUb0DcdYG3/2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8W1m88smBGwaG5Zda4VGyqjsGH3zi36nZO9GiCDnYy8=;
+ b=dmks+Ovhb6GEq9ftGd0X8bwCOtqoYjcie11H7pUeQ3cq/oyIUBwsW2VxfoBQY77KuZyAoGUxM8nDJQ47aIGbpHPa6Tx8lqu1i2SHRJtA/cVJtjt//Z3X7vCT61tDULJhlFH8Cz/NAzaROXsIJCfYULqBP6inVi8HMtCwcITftoh6GY6mrfSC8pNxKqQST+DzVYl8ouOsnX1j8CJuAVZWJ5qou5RZHyj3CzH/08u6UYdq57oYDAUWkGpIitkG+Uwaassb0jRnpkcYYRWuFLYqN+dkPsssgsBDUIOCM27tnOTM7FQdUqS/pNQVOdr+6PsdKzKEsu66zaw1sYhuhsOd7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8W1m88smBGwaG5Zda4VGyqjsGH3zi36nZO9GiCDnYy8=;
+ b=zO7hEQ1x4lMeRqyplOc5ZPQdrg/+pqcDVpT4mvgL9KgDSOhEYLi9EWkDHkC7DPOBX+czL/Biey6usGjBp1snVyiLPKFPIMicz13utcXjxGo0z2eOAtc4/7IcqL85SdLy2abSxuc6z3M29ETd13s68hg9myunzK1CC2zkJ1tOEmg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by SJ2PR12MB8740.namprd12.prod.outlook.com (2603:10b6:a03:53f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.32; Tue, 12 Dec
+ 2023 19:24:25 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::83d7:9c4f:4d9b:1f2a]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::83d7:9c4f:4d9b:1f2a%5]) with mapi id 15.20.7068.033; Tue, 12 Dec 2023
+ 19:24:25 +0000
+Message-ID: <ef5c74ce-d794-4b80-8d37-4a88de5db3f2@amd.com>
+Date: Tue, 12 Dec 2023 13:24:22 -0600
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Patch v2 2/2] thunderbolt: Teardown tunnels and reset downstream
+ ports created by boot firmware
+Content-Language: en-US
+To: Sanath S <Sanath.S@amd.com>, andreas.noever@gmail.com,
+ michael.jamet@intel.com, mika.westerberg@linux.intel.com,
+ YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231212191635.2022520-1-Sanath.S@amd.com>
+ <20231212191635.2022520-3-Sanath.S@amd.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20231212191635.2022520-3-Sanath.S@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN4PR0501CA0059.namprd05.prod.outlook.com
+ (2603:10b6:803:41::36) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V4 0/3] ARM: dts: bcm2711: Add BCM2711 xHCI support
-Content-Language: en-US
-To: Cyril Brulebois <kibi@debian.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- bcm-kernel-feedback-list@broadcom.com, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20231205200531.8232-1-wahrenst@gmx.net>
- <20231212190904.igxm2twvftokhdwr@mraw.org>
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <20231212190904.igxm2twvftokhdwr@mraw.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ZnBG0/z+wh4wy+82FAbvdMniRIaOdEwLDjVTNOM4OeTg0y4mlTi
- L7zC8cls2KR4y8dIcuSFXJtjCUTKFMbP5jKXa/+d0oZ5XuCF6C4HBvXjGgoNkr6rpP8doc/
- AEAk+fApgL7HgbiNV5NLVeeBdPwTgAD6YNEz5KOKFATthEsMJiUKqmQ1O6S7pgGGnvTSIGF
- IWwcoEuwhr8Pz6h4PA1tw==
-UI-OutboundReport: notjunk:1;M01:P0:dK5623jq9jw=;und38testhdiz4Hqpq74S1f8GWt
- UnL1HTAtz9q8LfpsKQ9gtC24PG1Jz7eUziKQ3ulr0WhYxLZZhcq93A6cRQ3dljRbRuvCQh1i6
- QPTQ83wX2OBO+8VQ9Pah4PnPB6hgymDk/bz0g7FWRg+5Q4TqxnOobm7JPtH0TW8tPYDH63mGp
- sh5y15qjCZhBkYx/XkGRlIYStx8mFwOQhUOTSpHMTC0a8KZRXB2TC3PlbhJqOi7udehY7GKRk
- sK229Oztdqs2sJtXuX+B53x0RNLy0xd1Kplw2U4SFQp+YuFdFlNRYcPivgCC05BCg5eGJNlq1
- ELf9M65BXeqQBHHb6rE3TXCmVvn1JY6cKWHCSv/HL70dsROYvaBU9Fnwxdl7fmoBL5L8vmGI7
- Ei8pXcFgEOvT5t0B0TByg4AfGOxgsisZSmt5y+QCNmKo8Z1iPFFUdiiXT7fW2FguC8viYkN8H
- U/5Gm2yMeJWWqegJqVZHaw0BQ73n9Yow9GD7upRZpsVxS+vzeL/I+F/0VeA0+7nC01/b8CVen
- ruyDRbSLUpdW9DK4yiaA/TZNluXKe3hugisWdcHVtzk91SydcpL1KHeMaNvU0JFS7ReVShlZx
- /oCT1h0otY4QPTpscKqv2qlNkwwIXs8e5PqtOEB9puhpf+jXvsdiaInlo9e9/WsFrl59RSRip
- 2EIXbtWkfhHgDG+TQXDiEbBtp1IF4ZySCdOlubRtA78Kkpu9CAGPr4Krd70+NIsfefsipylot
- fFRzXOlJ//i0Mzbb6fa/pRojBv0HT8V692SkRF34QjvMZQ4eaiDm1sjYdPyEoUfT/4pBuloYk
- 9QAZz2/AIcvZKcDwJY9Sj1aYUugg+w0G+nchCyFynUmgTetgg4i36oRIV1Q+qnEUYLHuTuHTw
- zUn8YTvdR57tCjAfiG47BcALP24dxUqMVqbPHxBLwFIGT0VsOPZgu+U404wtZ8tSRPRlqk2e6
- lHFpzg==
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SJ2PR12MB8740:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9398a680-588a-4a81-1263-08dbfb47f38d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	LU05GT8TmCpJzUPEi35/rUfaw+qo+2rl16V8zKFEc2/CSIblT33K7H93HdkiIZxHxijMWPnKxUkKFX1By82W76BqqqASVziuW4ejOqya9FsrgG1af7FcRmBDobcLkpCkhLiosSsp/AnPQhrSodswS67lOrR1SIEijWNJ0eQwCGzsJjRF6UxIUgrv3gV5z7Vl7GFoPziLXKeKgJtYIulNaUKCSdBHsIYrdQvvh8Bm6cpyvDbYBOCa2G5EkBrEgcWuBVWOQr3NItc6Hyitsgi3Q8wgW0INgR9cErd4iZMhlyoTQ0K4uD/HRPVXJ/8aTQnv4pRsSsacpmNgPaM+kdSNcStQwCinWo56WqvUe9Hcm3FWAk2cAmF7+4VrMsopz4wSMxhRI0qUhxhgdcUq3pRqhvqsmzUr1qmwGCOy282BFEbedWYFqaXt1rqoeDeCh5Vt45rx9ZbQmJzjiokaylh4dDPi3dHDB7OvO8o3RBW1bDc01WcgV8tp3F+3ng3qPUc5JVDXlx/4gidqGIdFwbJpx3wzbfyXcbbdOQSwHSaoEjh9e4n5ifSnXsn6FEUAe40Wvg7NR8TZUpkzsJ1h8cDIvGfU9gNhNLzm4YpPyjjyUPP80hKi/Vcbi0IbPgZzM0DuhLHHNJruvvLo8bZt6l4dZg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(376002)(136003)(366004)(39860400002)(230922051799003)(451199024)(1800799012)(186009)(64100799003)(2906002)(41300700001)(478600001)(86362001)(31686004)(66946007)(66476007)(66556008)(6486002)(6666004)(316002)(38100700002)(8676002)(8936002)(31696002)(53546011)(6512007)(36756003)(6506007)(44832011)(5660300002)(26005)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VG1NY1BHSnE0dUdhK0pudzFmYy9zVTZYbUdpelNvR1dLRS9OM0VMQ3FkT2Fk?=
+ =?utf-8?B?aEFEYTcyVlFvd2hLeDNYcW9aSW14c0dvM3dxa3g2UUg2WEI0Q01EY0VwUDE5?=
+ =?utf-8?B?VDgvbVBCaldROGpLb2ZCK2JPV3k2NlFveC9ZUEVtbjlmbWsrUUEvZG5GOW5a?=
+ =?utf-8?B?cnNkKzc0RTY4MzVMN3Z0eW1pTmE3STJmQThvbC9tYXBFeTgrQWg5bjFJNk4w?=
+ =?utf-8?B?T0k3SkFEYVF5NzhKY1BXRWlQNHJMeEVjWGt2ZkZGdkdWZXQ3c095UldlNVVW?=
+ =?utf-8?B?M25IWTdsbkRJU1ZkWXdJdHZNbWFaZHNraUlaM1JqOVh5YVZCbDJjakNNZGls?=
+ =?utf-8?B?cVZKOHZVWHJ6aHIyV1BpYVZ1ek41WDNHRnJBbnNQS2xCbzFwRjhvanAyNGJH?=
+ =?utf-8?B?aVlnRUxMWlZvOGhrRmdhMit6cjBhdHkyYmVJT2dLclBzbHhPbDkrbjFSV0py?=
+ =?utf-8?B?ZkhTZFdaemhUeWJDRmtQUWlLcmloOEtnSVJONTVRcjBrSklhU1VMbUtoZDk5?=
+ =?utf-8?B?VXFuVGVmYkkvTm5QZElJamhvc0U5THdIa1BBOWNzNFpSOEE2R3BTS3BTbGxi?=
+ =?utf-8?B?cjloME9FaVo5cXh3dW0vbEpUZHRTV1hzWTl3WkxYY3NudjhHbER0LzJDVDEv?=
+ =?utf-8?B?bEl3U2l4Zi9rWThBQlRWVk54bWEzY0x3cU9FY3NTbTczMzNyak9rREk3cDVL?=
+ =?utf-8?B?OWZKTzlHYTBlQ092MlRPNGtFc0Y3azlDbm4xSGFzclI5MTF1aHd6bU12Sk5w?=
+ =?utf-8?B?c2xWbGIwWnJHN0N0NXN2K3FhQUVUOVEwNVk2Vnpyci9BY0ZoNC9tQzJMYWN3?=
+ =?utf-8?B?andFaGwrc0hGcEpMYzNxRm51dGppRXU0QUNvQ2NOR0ovdU1LZ2xRamdrOHJn?=
+ =?utf-8?B?SDQzamFBZ3R1V0VIR1cydmJkcGVEMWkyeE91ZDYvVlFlbEtLa0RCdWFWVXBD?=
+ =?utf-8?B?VVBaOG9EbzZMVytPUDRtMVZHVDV5NXFNMlVHbko2aDRVejdySlBjSmd2S2pj?=
+ =?utf-8?B?YW5NakpKMUNoZmtWTGcrb3ZCUnUxSUltNGtPbnl6d3FCZElDWXU0N0NVVGND?=
+ =?utf-8?B?Um5wYjhRZzZjaCtFNDN6RkhZYkM2YW0rRU1xQ2dUUW9xamVSZUVFTVpwdjI5?=
+ =?utf-8?B?N09vQnYrY1B0eXdRRnlyUTNJRjJNMFF0RFIzbXJ5R04rMGdBaW9UdHBhMEI5?=
+ =?utf-8?B?cW9HanNCR083VmNLeVorQXB2bTFBdUJUYml0U095U2pOOXZoK0xwTjdndTd5?=
+ =?utf-8?B?Z2tYcGNqbmR1SmRoOEZkTmg1Z2N1M25weFlTR1lzYmhFaGtsc0FJblFDaU84?=
+ =?utf-8?B?NXlJVzVQODJFQUxOZUwzZzYwbWgvY2srUDhYakNtREJhNnlVYVpOSm5CbDEz?=
+ =?utf-8?B?RHhNVElHazZOZG1VVDNMWkNWd0hQc3MyQVFaMkRFcldHeWRzRFFqaWxNNC9S?=
+ =?utf-8?B?WWNxbC9HZ0h5Q0xSVlB5Z3dyYXAwWHlTMG5seXBEZ0JUSVBrcC9wZGN4R3Qr?=
+ =?utf-8?B?ditwckZRcjZnWHRReCsvcTV6OWdBeTFmeGtKVjRuQlI4a2RsaDQ5RXNlNVo5?=
+ =?utf-8?B?VWdwbUxPanVLaFFySlVkaHBnakxETkdLbEJZUU9oeTJNY3NEZ2NGT2o0N2NT?=
+ =?utf-8?B?OTBaK1BjOXBYV1RIMUFmQko5UkVRRDZyUUZFS01KWlJwSGZ3V0FNekxIZFY0?=
+ =?utf-8?B?eElIVHh3Zi9RanVoTVh4dnhBNitSbjBIWHMvY1Fhazg4Q3V0T1ZQU1dJc2tn?=
+ =?utf-8?B?NG5kNDNJdGVROXlidXJzVGZRdVpZOXdMK1l1WEpuOWl0NGR6U0NhS1RxWE5V?=
+ =?utf-8?B?NzR5RmFYRmZaeFM1Tmc4a0FESytJbjhqS1NOOTZIQ1FXMmdRdzkyaCswTnBr?=
+ =?utf-8?B?cWNuWk1scytzdXRid3lSdktBQW9ha29YbXNRVkMrUnRXRWI1THFMemNNV2hs?=
+ =?utf-8?B?OGtHV0lrdVR2RDl2SVk4QXVTa2M4WWoxQldxWnlucmZrbDY5b014a2RsQmVi?=
+ =?utf-8?B?S3NiNC9GZHBhNy9id2xRVG5QVXV0aUVPQzV5Tlk4c3dQSStnUmYzbGRnTGE0?=
+ =?utf-8?B?WW5ZZEFOR3JNTkFHcWVTeko3YzYwcmdnNDRtVzJTc0FoandHU09PMHBma1Fz?=
+ =?utf-8?Q?8cHKk5um3SfWs5TP0c6C72+hh?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9398a680-588a-4a81-1263-08dbfb47f38d
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2023 19:24:25.2101
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NCKKMcyJDawFSNB8HkarX7kRw5CVcacmrznFVqWrVsxiGURZS8zE/2NyJNHgaIUqziLvRSe4HQzFppv4gTSS6g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8740
 
-Hi Cyril,
+On 12/12/2023 13:16, Sanath S wrote:
+> Boot firmware might have created tunnels of its own. Since we cannot
+> be sure they are usable for us. Tear them down and reset the ports
+> to handle it as a new hotplug for USB3 routers.
+s/3/4/
 
-Am 12.12.23 um 20:09 schrieb Cyril Brulebois:
-> Stefan Wahren <wahrenst@gmx.net> (2023-12-05):
->> In contrast to the Raspberry Pi 4, the Compute Module 4 or the IO board
->> does not have a VL805 USB 3.0 host controller, which is connected via
->> PCIe. Instead, the Compute Module provides the built-in
->> xHCI of the BCM2711 SoC.
->>
->> Changes in V4:
->> - use "brcm,xhci-brcm-v2" as fallback compatible as suggested by
->>    Conor & Florian
->>
->> Changes in V3:
->> - introduce a new compatible for BCM2711 in order to make the
->>    power domain dependency SoC specific, which also results in
->>    a driver change
-> This is still:
->
-> Tested-by: Cyril Brulebois <cyril@debamax.com>
-thank you very much for your efforts. The series has been already
-applied by Greg.
+> 
+> Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Sanath S <Sanath.S@amd.com>
+> ---
+>   drivers/thunderbolt/tb.c | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+> index fd49f86e0353..febd0b6972e3 100644
+> --- a/drivers/thunderbolt/tb.c
+> +++ b/drivers/thunderbolt/tb.c
+> @@ -2598,6 +2598,17 @@ static int tb_start(struct tb *tb)
+>   	tb_switch_tmu_enable(tb->root_switch);
+>   	/* Full scan to discover devices added before the driver was loaded. */
+>   	tb_scan_switch(tb->root_switch);
+> +	/*
+> +	 * Boot firmware might have created tunnels of its own. Since we cannot
+> +	 * be sure they are usable for us, Tear them down and reset the ports
+> +	 * to handle it as new hotplug for USB4 routers.
+> +	 */
+> +	if (tb_switch_is_usb4(tb->root_switch)) {
+> +		tb_switch_discover_tunnels(tb->root_switch,
+> +					   &tcm->tunnel_list, false);
+> +		tcm->hotplug_active = true;
+> +		return tb_switch_reset_ports(tb->root_switch);
+> +	}
+>   	/* Find out tunnels created by the boot firmware */
+>   	tb_discover_tunnels(tb);
+>   	/* Add DP resources from the DP tunnels created by the boot firmware */
 
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/log/?h=3Dus=
-b-next
->
->
-> Again, I'm also applying Jim Quinlan's PCIe patch series v8, to be able
-> to fully test what happens with USB devices, onboard and behind PCIe:
->    https://lore.kernel.org/all/20231126201946.ffm3bhg5du2xgztv@mraw.org/
->
-> With the following on a CM4 IO Board, with a Samsung flash drive and a
-> USB keyboard connected to onboard USB ports:
->   - CM4 Lite Rev 1.0
->   - CM4 8/32 Rev 1.0
->   - CM4 4/32 Rev 1.1
->
-> and using one of the three PCIe-to-USB boards referenced previously,
-> connecting another Samsung flash drive on one of its USB ports.
->
-> Conclusion: I can see and use onboard USB devices alongside behind-PCIe
-> USB devices, either with or without adding otg_mode=3D1 to config.txt.
->
-> On a CM4-based product that uses both onboard USB ports and PCIe-to-USB
-> ports, all USB components still work fine (3 RF adapters, 1 modem), with
-> or without otg_mode=3D1.
->
-> (All of this is still with a Debian 12 arm64 user space.)
->
->
-> Cheers,
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Doesn't this cause the following to not run and thus break hotplug?
 
+tcm->hotplug_active = true;
+
+
+I think it would be better to do this like this flow:
+
+	if (tb_switch_is_usb4(tb->root_switch)) {
+		tb_switch_discover_tunnels(tb->root_switch,
+					   &tcm->tunnel_list, false);
+		tcm->hotplug_active = true;
+		ret = tb_switch_reset_ports(tb->root_switch);
+		if (ret)
+			return ret;
+	} else {
+		/* keep existing tunnel flow */
+	}
+
+	tcm->hotplug_active = true;
+
+	return 0;
+
+That makes it crystal clear that hotplug isn't enabled until it's done 
+being setup, which means either getting the existing tunnels or doing 
+the reset.
 
