@@ -1,76 +1,86 @@
-Return-Path: <linux-usb+bounces-4050-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4068-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B922980EFBC
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 16:11:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79D9080F165
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 16:45:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA5FD1C20C4C
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 15:11:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A99D2816C0
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 15:45:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D88575409;
-	Tue, 12 Dec 2023 15:11:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9664A76DCD;
+	Tue, 12 Dec 2023 15:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ik1JLdq8"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="IvrvKt2R"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC67D3;
-	Tue, 12 Dec 2023 07:11:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702393861; x=1733929861;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dLwFIlq58MNhpi4UGL1OxPkTqyvcNKLBZUifmxhXGb0=;
-  b=Ik1JLdq8z6jd/uAJuSEFVQT3LXhgeUDZ/BMhbxKf93ejHMCf9gZdohK6
-   fn6g6/aIpXRdDxc0hiSrqCBT0hzV+V7OlQP1KaxqdqSplY5zAYrBYYm9D
-   96c1w4FrEfgEsBk5u3U+QErvIhLIGTpobSCwZSrIOEhsZwTqqcxnozOnM
-   c7Y3YNRG8SucHm/n2Ho7PveI9yJGzaqndTeuJcmEZpctkEYuygTaQdePa
-   /A0CqlUN29B0bXmhPxC0iO41NZiJ7olbgUiZkgk8OFWHo85gFBiAUlgF9
-   I9HPLwlZKhTvXU11pNP4AO+6nZf2769QrasqwTMZXhsoBY/zpEtck39y5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="374325642"
-X-IronPort-AV: E=Sophos;i="6.04,270,1695711600"; 
-   d="scan'208";a="374325642"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 07:10:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="896952942"
-X-IronPort-AV: E=Sophos;i="6.04,270,1695711600"; 
-   d="scan'208";a="896952942"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 12 Dec 2023 07:10:47 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 52C193D2; Tue, 12 Dec 2023 17:10:46 +0200 (EET)
-Date: Tue, 12 Dec 2023 17:10:46 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Sanath S <Sanath.S@amd.com>
-Cc: mario.limonciello@amd.com, andreas.noever@gmail.com,
-	michael.jamet@intel.com, YehezkelShB@gmail.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] thunderbolt: Teardown tunnels and reset downstream
- ports created by boot firmware
-Message-ID: <20231212151046.GF1074920@black.fi.intel.com>
-References: <20231212140047.2021496-1-Sanath.S@amd.com>
- <20231212140047.2021496-3-Sanath.S@amd.com>
+X-Greylist: delayed 1397 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Dec 2023 07:44:59 PST
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a02:c205:3004:2154::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4134599
+	for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 07:44:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=8/7UY3Bhx9kOpWH0pljI90JTWKEClugcDBTPjZhXP9I=; b=IvrvKt2Ro9FYXn4zgx6sY8r6zl
+	k7PKyiLzUyhm14tt0yTEl1QZnV/QE9IfhGJ21ZSL4vMaN1gkOPBcpke0/dX6mKmqZSUXZX2K1oKwp
+	wjaM4qdD/Fo80ja6Zqybnbfcp8qHHgBZ3d53i1KP9t5DNwnC4gP2/OAtTKMNktLZRtoqh2fmh5xb2
+	ulGCpojPcIsRQigz5i1JChmXhu+iP9XvN8TqHOYSKS0iDZ3Yy8zc+mjAbgI42L/ufiXBNXAngdQ5O
+	B1/0ttz5R4Dw4LvoqboRjD6Th0xTGNJExrLJ0XsNRuOWHB2yawl3axs5pYIBQL5RuEtJIdGUuiF6P
+	W8fPzubQ==;
+Received: from p200301077700c3001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:107:7700:c300:1a3d:a2ff:febf:d33a] helo=aktux)
+	by mail.andi.de1.cc with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <andreas@kemnade.info>)
+	id 1rD4Zn-007JTV-Hw; Tue, 12 Dec 2023 16:21:39 +0100
+Date: Tue, 12 Dec 2023 16:21:37 +0100
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Adam Ford <aford173@gmail.com>
+Cc: Linux-OMAP <linux-omap@vger.kernel.org>, USB list
+ <linux-usb@vger.kernel.org>, stern@rowland.harvard.edu, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>
+Subject: Re: ehci-omap unresponsive when used with external hub
+Message-ID: <20231212162137.047f9337@aktux>
+In-Reply-To: <CAHCN7xKGW4j6HsELJNbT10OyNX0zx2207nz=AQ97VxKJaEQkyg@mail.gmail.com>
+References: <CAHCN7xKGW4j6HsELJNbT10OyNX0zx2207nz=AQ97VxKJaEQkyg@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231212140047.2021496-3-Sanath.S@amd.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Dec 12, 2023 at 07:30:47PM +0530, Sanath S wrote:
-> Boot firmware might have created tunnels of its own. Since we cannot
-> be sure they are usable for us. Tear them down and reset the ports
-> to handle it as a new hotplug.
+On Tue, 12 Dec 2023 08:58:31 -0600
+Adam Ford <aford173@gmail.com> wrote:
+
+> I have been troubleshooting an issue with USB which appears to happen
+> with  AM3517, OMAP3530,  and DM3730 in which the USB doesn't detect
+> removal or connection of USB devices and interrupts stop occurring.
 > 
-> Since we teardown the tunnels, Discovering of tunnels is not needed.
+> In every case, I have the OMAP3 EHCI connected to a USB3220
+> transceiver which is treated as configured in the device tree as
+> usb-nop-xceiv with reset-gpios configured to enable it.
+> 
+Also issues on GTA04 (DM3730):
+The modem is behind it. There is an errata for that
+combination.
+Somehow reset/turning off does not work really. On GTA04
+we have issues with current consumption during suspend.
+including scenarios where there is a mismatch between state
+of phy and what the omap side the state is.
 
-Let's leave this for non-USB4 (That's TBT1-3) as we agreed.
+What we do:
+enable off-mode and force-reset of both sides.
+
+and have this hack to solve at least the suspend issues:
+https://lore.kernel.org/linux-omap/20180216171414.8097-1-andreas@kemnade.info/
+
+Regards,
+Andreas
 
