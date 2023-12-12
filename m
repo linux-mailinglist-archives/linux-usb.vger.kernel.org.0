@@ -1,62 +1,49 @@
-Return-Path: <linux-usb+bounces-4033-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4036-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 665C480EA52
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 12:25:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66EC280EA84
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 12:38:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E86B281DC7
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 11:25:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 222C6282054
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 11:38:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0D3F5D4A7;
-	Tue, 12 Dec 2023 11:25:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF3D05D4A8;
+	Tue, 12 Dec 2023 11:38:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="U9bCGMjb"
+	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="fFdul7tf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCD2F5;
-	Tue, 12 Dec 2023 03:25:44 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BC8L6Zk003141;
-	Tue, 12 Dec 2023 11:25:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	qcppdkim1; bh=auJmLGf36BIEwAaCkoXd64xnACfFIbcd3T94XlIuBhQ=; b=U9
-	bCGMjbkwGGIL+UsPuGTC+hwtjJ0tQ7s7nDU802EN6lfz7qqfgj7WPPVBChspjrIF
-	hyIihSjtbMmr7rS12WMU4nxET3Mw/9KmjD4IFGPjRcALEeBE5Dd6uJYB5RyN6yTb
-	bj7aCuLpjHkiAvkd9UG9s6ta/+SThx4rdvG2SIWB8Z+4lb9BxaW9XK2/jkzI9UDE
-	4n/TGOBCviQqEwzilQkDF4Q8Diy/31jjQS51uckMsuxf2sbQEW+KhSFOyX5MqMdm
-	HRs2gnUUmYo3vv6LR6dkdqltXAnzwA9yHpRTInAezlIJHMUskEjWK8ibU4UL1RpJ
-	QjnjSWFxtbHEYJ5dE/KA==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uxkx58e8k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Dec 2023 11:25:41 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BCBPev0017163
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Dec 2023 11:25:40 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 12 Dec 2023 03:25:37 -0800
-From: Prashanth K <quic_prashk@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Mathias Nyman
-	<mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Prashanth K
-	<quic_prashk@quicinc.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2 2/2] usb: host: xhci-plat: Add support for XHCI_SG_TRB_CACHE_SIZE_QUIRK
-Date: Tue, 12 Dec 2023 16:55:21 +0530
-Message-ID: <20231212112521.3774610-3-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231212112521.3774610-1-quic_prashk@quicinc.com>
-References: <20231212112521.3774610-1-quic_prashk@quicinc.com>
+X-Greylist: delayed 344 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Dec 2023 03:38:33 PST
+Received: from forward206a.mail.yandex.net (forward206a.mail.yandex.net [178.154.239.87])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67B8ED
+	for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 03:38:33 -0800 (PST)
+Received: from forward101a.mail.yandex.net (forward101a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d101])
+	by forward206a.mail.yandex.net (Yandex) with ESMTP id DE14765BFE
+	for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 14:32:49 +0300 (MSK)
+Received: from mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net [IPv6:2a02:6b8:c0d:2a02:0:640:77d9:0])
+	by forward101a.mail.yandex.net (Yandex) with ESMTP id 8EF4960907;
+	Tue, 12 Dec 2023 14:32:43 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id gWgMi99Yw4Y0-xhSa6cYC;
+	Tue, 12 Dec 2023 14:32:43 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
+	t=1702380763; bh=8Phpyb5PwskZg7D9WswZASCj93/VdmPhH/Kja8Z5tG8=;
+	h=Message-ID:Date:Cc:Subject:To:From;
+	b=fFdul7tfzcK/Y9RZTBPrH/vKEQC8bJ6O/svXRsTQdE2OsZLIqs1CNKX9SBinXWBFB
+	 W9DMB2wljarAv8T5OpHJybsP+Z2A/9v5giTsydwQ2JJYviVTfkBbolWj/6FBVqnAK6
+	 0OgpSjbEsZ4QH0/Oa4ceSX/02XgkCrChk7C9m30U=
+Authentication-Results: mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From: Dmitry Antipov <dmantipov@yandex.ru>
+To: Udipto Goswami <quic_ugoswami@quicinc.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	Dmitry Antipov <dmantipov@yandex.ru>
+Subject: [PATCH] usb: gadget: f_fs: fix fortify warning
+Date: Tue, 12 Dec 2023 14:29:16 +0300
+Message-ID: <20231212112923.61799-1-dmantipov@yandex.ru>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,52 +51,65 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -YEW9CJ-8GK5uoJNMNdNBhyOBMEfdHhX
-X-Proofpoint-ORIG-GUID: -YEW9CJ-8GK5uoJNMNdNBhyOBMEfdHhX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- bulkscore=0 impostorscore=0 mlxscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 phishscore=0 lowpriorityscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312120091
 
-Upstream commit bac1ec551434 ("usb: xhci: Set quirk for
-XHCI_SG_TRB_CACHE_SIZE_QUIRK") introduced a new quirk in XHCI
-which fixes XHC timeout, which was seen on synopsys XHCs while
-using SG buffers. Currently this quirk can only be set using
-xhci private data. But there are some drivers like dwc3/host.c
-which adds adds quirks using software node for xhci device.
-Hence set this xhci quirk by iterating over device properties.
+When compiling with gcc version 14.0.0 20231206 (experimental)
+and CONFIG_FORTIFY_SOURCE=y, I've noticed the following warning:
 
-Cc: <stable@vger.kernel.org> # 5.11
-Fixes: bac1ec551434 ("usb: xhci: Set quirk for XHCI_SG_TRB_CACHE_SIZE_QUIRK")
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+...
+In function 'fortify_memcpy_chk',
+    inlined from '__ffs_func_bind_do_os_desc' at drivers/usb/gadget/function/f_fs.c:2934:3:
+./include/linux/fortify-string.h:588:25: warning: call to '__read_overflow2_field'
+declared with attribute warning: detected read beyond size of field (2nd parameter);
+maybe use struct_group()? [-Wattribute-warning]
+  588 |                         __read_overflow2_field(q_size_field, size);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This call to 'memcpy()' is interpreted as an attempt to copy both
+'CompatibleID' and 'SubCompatibleID' of 'struct usb_ext_compat_desc'
+from an address of the first one, which causes an overread warning.
+Since we actually want to copy both of them at once, use the
+convenient 'struct_group()' and 'sizeof_field()' here.
+
+Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
 ---
- drivers/usb/host/xhci-plat.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/gadget/function/f_fs.c  | 5 ++---
+ include/uapi/linux/usb/functionfs.h | 6 ++++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 732cdeb73920..3c928cbf0558 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -250,6 +250,9 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 		if (device_property_read_bool(tmpdev, "quirk-broken-port-ped"))
- 			xhci->quirks |= XHCI_BROKEN_PORT_PED;
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index efe3e3b85769..dafedc33928d 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -2931,9 +2931,8 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
  
-+		if (device_property_read_bool(tmpdev, "xhci-sg-trb-cache-size-quirk"))
-+			xhci->quirks |= XHCI_SG_TRB_CACHE_SIZE_QUIRK;
-+
- 		device_property_read_u32(tmpdev, "imod-interval-ns",
- 					 &xhci->imod_interval);
+ 		t = &func->function.os_desc_table[desc->bFirstInterfaceNumber];
+ 		t->if_id = func->interfaces_nums[desc->bFirstInterfaceNumber];
+-		memcpy(t->os_desc->ext_compat_id, &desc->CompatibleID,
+-		       ARRAY_SIZE(desc->CompatibleID) +
+-		       ARRAY_SIZE(desc->SubCompatibleID));
++		memcpy(t->os_desc->ext_compat_id, &desc->IDs,
++		       sizeof_field(struct usb_ext_compat_desc, IDs));
+ 		length = sizeof(*desc);
  	}
+ 		break;
+diff --git a/include/uapi/linux/usb/functionfs.h b/include/uapi/linux/usb/functionfs.h
+index d77ee6b65328..afb97d6d950e 100644
+--- a/include/uapi/linux/usb/functionfs.h
++++ b/include/uapi/linux/usb/functionfs.h
+@@ -73,8 +73,10 @@ struct usb_os_desc_header {
+ struct usb_ext_compat_desc {
+ 	__u8	bFirstInterfaceNumber;
+ 	__u8	Reserved1;
+-	__u8	CompatibleID[8];
+-	__u8	SubCompatibleID[8];
++	struct_group(IDs,
++		__u8	CompatibleID[8];
++		__u8	SubCompatibleID[8];
++	);
+ 	__u8	Reserved2[6];
+ };
+ 
 -- 
-2.25.1
+2.43.0
 
 
