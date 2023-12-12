@@ -1,131 +1,276 @@
-Return-Path: <linux-usb+bounces-4034-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4035-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A858B80EA76
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 12:35:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 066E880EA7D
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 12:38:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64AA2281E84
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 11:35:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 291741C20B94
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 11:38:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B365D4A9;
-	Tue, 12 Dec 2023 11:35:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA9145D4AA;
+	Tue, 12 Dec 2023 11:38:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="FvsonUF9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bjn7Fr1/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5D5CD;
-	Tue, 12 Dec 2023 03:35:22 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BCBWBxX023198;
-	Tue, 12 Dec 2023 11:35:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:from:to:cc:references
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=LDgvI07ObLh7qIhXltVCW2uzZOetks4/bakQTKmv6GA=; b=Fv
-	sonUF9q5yu2V8CiD3z154iNCKutFE2sN00TLIGMm5RR+cZyKRpEUFzWCDJQfSDiC
-	hFgflu7oUvNqOD61/4cKkvz7mE5fuCoSSQ10F/kHcUAtFSf4KTiol26Zg9i4rYGA
-	PQ6uJTrP9Uk3sFyGRqWjatsm1lqAfKJT/aujkCIDIiusfxqArrx9QVq46m5qkqCX
-	isuZHdUgVYRfnpbhXIJ+hUHhjSmwNLZ2gKTG0uBx0iGEs07IwcLEQ+7YDIfr3WOB
-	PBLWZqFoCCzCXwaNCeUO1UJ+piNZhviBWFTAGCJltVx3RC/LPTmU+KEBIGYVNBqY
-	ZaCmQ/MVymnRgM8rHChA==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uxkxfgexr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Dec 2023 11:35:19 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BCBZI3U012093
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Dec 2023 11:35:18 GMT
-Received: from [10.218.35.239] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 12 Dec
- 2023 03:35:16 -0800
-Message-ID: <605a4c59-6e7e-0ae8-a825-f364530216d5@quicinc.com>
-Date: Tue, 12 Dec 2023 17:05:13 +0530
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73FDCD;
+	Tue, 12 Dec 2023 03:38:10 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-3ba084395d9so1503959b6e.0;
+        Tue, 12 Dec 2023 03:38:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702381090; x=1702985890; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+L2kxEHCu62/EVSOcD5zqPnIMCZrQemKF2WuvkQ2BF4=;
+        b=Bjn7Fr1/g4Rg38kquG3stvn1yHLCv0gMNYP/hoN0xro7e0kC7SyU+/PxLfE3QMXnPd
+         CojxjjECgy63G5EE10/0CTr7Rs3MBVerZkJIbaN6QKcVuiGqiNuk7gnK91GpaV/mLFL/
+         0hHwrEjRMHnpP7J1HHkPs+KBm1yE3KDkjizb2bIGyapbvsSf6tuJQKs0AQYafmGke5gK
+         iJPTHxYDkhZGnfOfVIeL9HzhNd1N4IiLIJ1MA7aM8idbuSBLgENDMZ50d8WgU5ThqxLa
+         ZmsVjh+D2YbijuY80Y9BxlL8ynWWpmgHq/5FWOJ6mVCgZX598aLT0NB/WuuV5cV88/HX
+         3LUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702381090; x=1702985890;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+L2kxEHCu62/EVSOcD5zqPnIMCZrQemKF2WuvkQ2BF4=;
+        b=hV3fNGm5uc/W1pd6JqflFhU+k504+vnvpfVm7f5M2ZHEL2tKaiezei03pko6K8ARWz
+         rs5rgqVU0ZI48vOcdGLh6N7xcqVeoGRyoZx7i4AGUlwAxgZE5FPfj6EkFBV9tM5nlqCg
+         GjwcVZa3MCY5M1V5b7a4OfGp0P9Y1n3Mwz4Nt8Z2zF9yTWkY8VhUqIQ8vOtJkMgEpgMR
+         dp8IMaNIxRWnLz5AW2972tIw2afLK1zGOdFeXpoZICevTwka0PIkb5vamDm+JhEiZ+l5
+         FJ3QvFLY7zFAx8rtLGA2FGu1DX99qpgHIpVaJA3BRB9x5ydN5sWb867Os89VBP4JNGLk
+         aGeg==
+X-Gm-Message-State: AOJu0YzLQFEb4PZWEz8kJW4b45OlJVIbs11iGV6FRlx38ModB+rIQRXs
+	VosWB+S4/UYBHRQLXOxpk3jjJ99iA6Eyu4ChnTk=
+X-Google-Smtp-Source: AGHT+IF+mLItRlwncGPLaOBSbWrzSF4zO2CcLPzv42Do4B8u1Slt2WF4wMUjE3qjHmiGNMT7cW9QlrmRlFHAq5rq+7I=
+X-Received: by 2002:a05:6870:aa97:b0:1fb:75b:99a0 with SMTP id
+ gr23-20020a056870aa9700b001fb075b99a0mr7675745oab.79.1702381089856; Tue, 12
+ Dec 2023 03:38:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] usb: dwc3: core: Add support for
- XHCI_SG_TRB_CACHE_SIZE_QUIRK
-Content-Language: en-US
-From: Prashanth K <quic_prashk@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <stable@vger.kernel.org>
-References: <20231121135936.1669167-1-quic_prashk@quicinc.com>
- <d4d25747-83d4-a8e7-7968-caf3b14a844c@quicinc.com>
-In-Reply-To: <d4d25747-83d4-a8e7-7968-caf3b14a844c@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4d8uLoFOQo-fs-xTJs7WbQWsdZozOVE9
-X-Proofpoint-ORIG-GUID: 4d8uLoFOQo-fs-xTJs7WbQWsdZozOVE9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- bulkscore=0 mlxlogscore=748 spamscore=0 lowpriorityscore=0 adultscore=0
- clxscore=1015 impostorscore=0 priorityscore=1501 malwarescore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2311290000
- definitions=main-2312120093
+References: <20231204144429.45197-1-linux.amoon@gmail.com> <20231204144429.45197-2-linux.amoon@gmail.com>
+ <20231206135311.GA2043711-robh@kernel.org> <CANAwSgTS0ZSFPv4x803pCLEpjH5imh8vEoWpbiJRH14Sy3GZww@mail.gmail.com>
+ <21673bfd-bb87-4c7d-a53f-337c263f3a00@linaro.org> <CANAwSgSo37B0zg-xjrmqndSZ5SbyB3m27_wRsqqN9WTONooeiw@mail.gmail.com>
+ <604e653d-c1e2-45c7-b121-8a6b4be5c6bb@linaro.org> <CANAwSgRB=XWo2-40rDru=Zy277-kgGNjozJ8Lxnxgv_4ABB-kg@mail.gmail.com>
+ <1a78d453-62a2-410a-a40f-1ff0c2b62e86@linaro.org> <CANAwSgTy4N7Q8e0OQLsFRkRDWksTSbkOetKQGygaqsQ8++U1_g@mail.gmail.com>
+ <2e688f4e-11d7-4f8e-b8ec-58f4a97304a8@linaro.org> <CANAwSgQstkS-SDaV2hj0fimt7vgfEgOT_x4efshZ6sZQ0gWSEA@mail.gmail.com>
+ <8f28ea77-b3d0-445e-8d8e-80f980775f89@linaro.org>
+In-Reply-To: <8f28ea77-b3d0-445e-8d8e-80f980775f89@linaro.org>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Tue, 12 Dec 2023 17:07:54 +0530
+Message-ID: <CANAwSgRLORHb6qiHWRBR0tMbYB=O=gwatuGhk72SwZyhYMopCw@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] dt-bindings: usb: Add the binding example for the
+ Genesys Logic GL3523 hub
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Icenowy Zheng <uwu@icenowy.me>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	linux-amlogic@lists.infradead.org, Conor Dooley <conor.dooley@microchip.com>, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Krzysztof,
 
+On Tue, 12 Dec 2023 at 14:10, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 12/12/2023 07:22, Anand Moon wrote:
+> > Hi Krzysztof,
+> >
+> > On Fri, 8 Dec 2023 at 17:47, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 08/12/2023 12:19, Anand Moon wrote:
+> >>> Hi Krzysztof,
+> >>>
+> >>> On Fri, 8 Dec 2023 at 13:14, Krzysztof Kozlowski
+> >>> <krzysztof.kozlowski@linaro.org> wrote:
+> >>>>
+> >>>> On 08/12/2023 01:24, Anand Moon wrote:
+> >>>>>>>>>
+> >>>>>>>>> If I move reset-gpios to required, I observe the below warning.
+> >>>>>>>>>
+> >>>>>>>>>   DTC_CHK Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb
+> >>>>>>>>> /home/alarm/linux-amlogic-5.y-devel/Documentation/devicetree/bindings/usb/usb-device.example.dtb:
+> >>>>>>>>> hub@1: 'reset-gpio' is a required property
+> >>>>>>>>>         from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
+> >>>>>>>>
+> >>>>>>>> Where are the properties defined? If you open the binding you see:
+> >>>>>>>> nowhere. You cannot define properties in some variant with "true".
+> >>>>>>>> Please define all of them in top-level and only narrow/constrain when
+> >>>>>>>> applicable.
+> >>>>>>>>
+> >>>>>>> What I meant is the example below, required meant applicable for both
+> >>>>>>> the binding
+> >>>>>>> But it shows me the above warning.
+> >>>>>>
+> >>>>>> My explanation stands... So again:
+> >>>>>>
+> >>>>>>>> Please define all of them in top-level and only narrow/constrain when
+> >>>>>>>> applicable.
+> >>>>>>
+> >>>>> Apologies, But I have tried this multiple times but have not been able
+> >>>>> to fix the device tree warning
+> >>>>
+> >>>> Did you document all properties in top-level "properties:" block?
+> >>>>
+> >>> Yes, I have,
+> >>>
+> >>> Can you suggest a couple of examples to follow?
+> >>> I looked at some of the YAML files but could not fix my issue.
+> >>
+> >> 99% of bindings. Look also at example-schema.
+> >>
+> >> You can also attach here complete patch for fast look / short review.
+> >>
+> >
+> > Please find the modified patch, I have tried a few things but none
+> > resolve the binding warning.
+> > I am not able to debug this.
+>
+> And where is the warning or the issue? Can you describe what problem do
+> you have?
 
-On 27-11-23 02:28 pm, Prashanth K wrote:
+Here is the list of warnings I observed with this patch
 
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -89,6 +89,8 @@ int dwc3_host_init(struct dwc3 *dwc)
-> 
->          memset(props, 0, sizeof(struct property_entry) * 
-> ARRAY_SIZE(props));
-> 
-> +       props[prop_idx++] = 
-> PROPERTY_ENTRY_BOOL("xhci-sg-trb-cache-size-quirk");
-> +
->          if (dwc->usb3_lpm_capable)
->                  props[prop_idx++] = 
-> PROPERTY_ENTRY_BOOL("usb3-lpm-capable");
-> 
-> 
-> --- a/drivers/usb/host/xhci-plat.c
-> +++ b/drivers/usb/host/xhci-plat.c
-> @@ -323,6 +323,9 @@ static int xhci_plat_probe(struct platform_device 
-> *pdev)
->                  if (device_property_read_bool(tmpdev, 
-> "quirk-broken-port-ped"))
->                          xhci->quirks |= XHCI_BROKEN_PORT_PED;
-> 
-> +               if (device_property_read_bool(tmpdev, 
-> "xhci-sg-trb-cache-size-quirk"))
-> +                       xhci->quirks |= XHCI_SG_TRB_CACHE_SIZE_QUIRK;
-> +
->                  device_property_read_u32(tmpdev, "imod-interval-ns",
->                                           &xhci->imod_interval);
->          }
-> 
-> 
-> Regards,
-> Prashanth K
-> 
+  DTC_CHK Documentation/devicetree/bindings/usb/nvidia,tegra186-xusb.example.dtb
+/home/amoon/mainline/linux-amlogic-6.y-devel/Documentation/devicetree/bindings/usb/usb-device.example.dtb:
+hub@1: 'vdd-supply' is a required property
+        from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
+/home/amoon/mainline/linux-amlogic-6.y-devel/Documentation/devicetree/bindings/usb/usb-device.example.dtb:
+hub@1: 'reset-gpios' is a required property
+        from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
+/home/amoon/mainline/linux-amlogic-6.y-devel/Documentation/devicetree/bindings/usb/usb-device.example.dtb:
+hub@1: 'peer-hub' is a required property
+        from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
+  DTC_CHK Documentation/devicetree/bindings/usb/ti,tps6598x.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/xlnx,usb2.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/renesas,usb-xhci.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/renesas,usbhs.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/cypress,cypd4226.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/cdns,usb3.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/renesas,rzn1-usbf.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/nvidia,tegra124-xusb.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/ci-hdrc-usb2.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/brcm,usb-pinmap.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/renesas,usb3-peri.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/qcom,pmic-typec.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/microchip,usb5744.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/smsc,usb3503.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/mediatek,musb.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/vialab,vl817.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/richtek,rt1711h.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/usb.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/realtek,rts5411.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/nvidia,tegra210-xusb.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/realtek,rtd-dwc3.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/usb-drd.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/genesys,gl850g.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/ti,j721e-usb.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/ti,am62-usb.example.dtb
+/home/amoon/mainline/linux-amlogic-6.y-devel/Documentation/devicetree/bindings/usb/genesys,gl850g.example.dtb:
+hub@1: 'vdd-supply' is a required property
+        from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
+/home/amoon/mainline/linux-amlogic-6.y-devel/Documentation/devicetree/bindings/usb/genesys,gl850g.example.dtb:
+hub@1: 'peer-hub' is a required property
+        from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
+  DTC_CHK Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/usb-hcd.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/fsl,imx8mq-dwc3.example.dtb
+  DTC_CHK Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb
+/home/amoon/mainline/linux-amlogic-6.y-devel/Documentation/devicetree/bindings/usb/usb-hcd.example.dtb:
+hub@1: 'vdd-supply' is a required property
+        from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
+/home/amoon/mainline/linux-amlogic-6.y-devel/Documentation/devicetree/bindings/usb/usb-hcd.example.dtb:
+hub@1: 'reset-gpios' is a required property
+        from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
+/home/amoon/mainline/linux-amlogic-6.y-devel/Documentation/devicetree/bindings/usb/usb-hcd.example.dtb:
+hub@1: 'peer-hub' is a required property
+        from schema $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
+  DTC_CHK Documentation/devicetree/bindings/usb/nxp,isp1760.example.dtb
 
-Updated the patch by splitting it into a series of 2 patch-sets
-https://lore.kernel.org/all/20231212112521.3774610-1-quic_prashk@quicinc.com/
+>
+> >
+> > -Thanks
+> > Anand
+> > -----8<----------8<----------8<----------8<----------8<----------8<-----
+> > diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > index ee08b9c3721f..7f75fa3c1945 100644
+> > --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > @@ -9,9 +9,6 @@ title: Genesys Logic USB hub controller
+> >  maintainers:
+> >    - Icenowy Zheng <uwu@icenowy.me>
+> >
+> > -allOf:
+> > -  - $ref: usb-device.yaml#
+> > -
+> >  properties:
+> >    compatible:
+> >      enum:
+> > @@ -27,11 +24,47 @@ properties:
+> >
+> >    vdd-supply:
+> >      description:
+> > -      the regulator that provides 3.3V core power to the hub.
+> > +      The regulator that provides 3.3V or 5.0V core power to the hub.
+> > +
+> > +  peer-hub:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +    description:
+> > +      For onboard hub controllers that support USB 3.x and USB 2.0 hubs with
+> > +      shared resets and power supplies, this property is used to identify the
+> > +      hubs with which these are shared.
+> >
+> >  required:
+> >    - compatible
+> >    - reg
+> > +  - vdd-supply
+> > +  - reset-gpios
+> > +  - peer-hub
+> > +
+> > +allOf:
+> > +  - $ref: usb-device.yaml#
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - usb5e3,608
+> > +    then:
+> > +      properties:
+> > +        peer-hub: false
+> > +        vdd-supply: false
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - usb5e3,610
+> > +              - usb5e3,620
+> > +    then:
+> > +      properties:
+> > +        peer-hub: true
+> > +        vdd-supply: true
+>
+> Drop this if:, redundant.
+>
+No, this does not resolve the above issue.
+>
 
-Thanks,
-Prashanth K
+Thanks
+-Anand
 
