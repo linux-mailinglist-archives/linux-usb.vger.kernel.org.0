@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-4044-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4045-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB44280EE3F
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 15:01:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D7E280EE43
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 15:02:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7708C1F2165A
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 14:01:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 919EB281B41
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 14:02:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E1E97316A;
-	Tue, 12 Dec 2023 14:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D86567316A;
+	Tue, 12 Dec 2023 14:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="4+qSdh8D"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="GtnKma2z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2088.outbound.protection.outlook.com [40.107.94.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBF7123;
-	Tue, 12 Dec 2023 06:01:29 -0800 (PST)
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2064.outbound.protection.outlook.com [40.107.243.64])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFDCF3;
+	Tue, 12 Dec 2023 06:01:59 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l42lHiFPT/E9ciOlhM1T6pSR1SLfIu6Yv4arMtE1yxfLQXe7uPiEPkbtwHvouk4gCVBoeq0UcKUrDdh8r+TzPsDldOH/X6HMgg4zHSgNscFkbr08K21mMSHz3HXw/cT61EOdcomljnOmRNpYtQuJ5LnDOaoIJPVwk8oM8GdHCJmCrnGXz3YqURsS3182RNtkR850xxcdd18t5hBJjo0IF5pxPDlkv1kCNIDWHfegeY4bntFdfTfWexXMnPrpUfXjwhybkShQbTs4i1SHke9+H6gbj0Qgc3pvyRZ9An4OZ+FGVwgt/s1huSfR0zRyAwrnfZsrGdQTBYB8PzpGXIhTaQ==
+ b=V72v3pIdPoHo8y0RGnzRmrwPJGd2+MNLoE4GMokcVXBSopHco312Ed2Wv6yxShu16VW05/DWm3wWqgvE3nLXVXtsoDDczvxTEUtECvBKwpR/Mx3i18WCwOAuU4oumPei78rZm83pLqysdLs1+v/eff/PqZbE4GxPv6CfnAlJ2LgoUmjB2DsDQ/dGwgSywDgHfeueG4Rj/wSZDPDXCT/ijG3ZFG6S7xXPyG2M/o/RYksf79cM9uggkyKM42oVAtYqOYVx4C19LMoQ39QHhn46QQmSNcq5ZIDixVXJM0HmDoBbkRemZY7ns+hD/NvIooTi5zQDeSK9dKyn6NaZGnHlOw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BSnd2IGkkS0MWVY0uJF8r6OlttqJpc66bQcN81UroT0=;
- b=ScLcrWlsKziKdVAEo9hxIVckZu+8I9FB4y1f0MZazDVMFFrE+rw7w8o4dopq+f9nIRZhbeuqhBzwRVJBbkzmKTmfF9OrRhRZ/mi2ZZMS74JhsKbTJQDNXrLwyYkzRhfeQC0WXLG8AWsnpXlSU9u++GCOV2NEV2HLHOyAT7oab5YD6OFEg45+SOr3u6yn8QtCHTc0M7Jh6aPxqWx7BcVYAnJky/dEqzH1yjrzgaPDbzI9+DnhjY+V9Btp66RQkRZmh18iTH/1kvW/QeWecqSGu8mNd59mjcYdAJ7PkgfQKTLKZYLonvbxM0MxC8qQHx3HgKn5NHGHiWZmi+Q6Kzc7Ow==
+ bh=SfcQUXvVw0p9oOtumuPAfOaWMEsChYFgXhfRAz0rlJk=;
+ b=mK/1YJn862Um9MPMQgBT7ORBy6d7AOpVkS3mcNFkfEJ0A3k2Nz1OO+FBoEgOaP1gCJzhnJjqguCERQ/dOBt1RJH9/SOgODwqqRnUJcq7sRnqVOzr5q1y+xhuc5r12/Z0GgSrdPsO0C5NndBNuQmr+Q7cih00b/vLNflo8S9LsBT5WJBkRNLS12ZUxdIaPkG9qqkgCSnbpBx4aro0hI7oTCVvrF+IbSgNQb6KNiYKZLpWBOQ4vor5NB+F9bqLR4PFmAjrF3SZ2wulBSHH169ltDjWjhai5IdCRHkAiA3url5A6bMr76dJq28MMkBhVsmY24l1EGO65grm2PN9FK7tZA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BSnd2IGkkS0MWVY0uJF8r6OlttqJpc66bQcN81UroT0=;
- b=4+qSdh8Dr/RW6GerktCiMmSmP2ZsW9PzNlIwelfK+42qVrqsPIed3rEMtszoPPqFep7u3FcgSFrPuLwplNoaDslhg92lRas9r3kCR/0V7aVvB0HnV1zfDWORNP3J5vgHuVw8Gxkxs+1W/s4UohLn3eJypHPVs+ceUSsbsfKxsvo=
-Received: from BN1PR13CA0021.namprd13.prod.outlook.com (2603:10b6:408:e2::26)
- by DM6PR12MB4185.namprd12.prod.outlook.com (2603:10b6:5:216::13) with
+ bh=SfcQUXvVw0p9oOtumuPAfOaWMEsChYFgXhfRAz0rlJk=;
+ b=GtnKma2z9Z/lr0IDMxrC8dqe7C/yEDBNlgojrCyFgGnMRDcG34xD0DRkn9MpXSi6pLCwAaCrsgEgubWF7PpaUf2+OEr/JVu/is/lZ9VBntGfRM7nYvlgb6i4wWJy3JfigRM8Z+kg5vJZeHaK/o3VaI7k1djCPIvOT1r87NtZa0I=
+Received: from BN1PR13CA0014.namprd13.prod.outlook.com (2603:10b6:408:e2::19)
+ by SN7PR12MB7153.namprd12.prod.outlook.com (2603:10b6:806:2a4::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.33; Tue, 12 Dec
- 2023 14:01:26 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26; Tue, 12 Dec
+ 2023 14:01:56 +0000
 Received: from SN1PEPF0002636A.namprd02.prod.outlook.com
- (2603:10b6:408:e2:cafe::7c) by BN1PR13CA0021.outlook.office365.com
- (2603:10b6:408:e2::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.23 via Frontend
- Transport; Tue, 12 Dec 2023 14:01:26 +0000
+ (2603:10b6:408:e2:cafe::36) by BN1PR13CA0014.outlook.office365.com
+ (2603:10b6:408:e2::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.25 via Frontend
+ Transport; Tue, 12 Dec 2023 14:01:55 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -52,21 +52,23 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  SN1PEPF0002636A.mail.protection.outlook.com (10.167.241.135) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7091.26 via Frontend Transport; Tue, 12 Dec 2023 14:01:18 +0000
+ 15.20.7091.26 via Frontend Transport; Tue, 12 Dec 2023 14:01:53 +0000
 Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Tue, 12 Dec
- 2023 08:01:14 -0600
+ 2023 08:01:19 -0600
 From: Sanath S <Sanath.S@amd.com>
 To: <mario.limonciello@amd.com>, <andreas.noever@gmail.com>,
 	<michael.jamet@intel.com>, <mika.westerberg@linux.intel.com>,
 	<YehezkelShB@gmail.com>, <linux-usb@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>
 CC: Sanath S <Sanath.S@amd.com>
-Subject: [PATCH 0/2] Add support for downstream port reset(DPR)
-Date: Tue, 12 Dec 2023 19:30:45 +0530
-Message-ID: <20231212140047.2021496-1-Sanath.S@amd.com>
+Subject: [PATCH 1/2] thunderbolt: Introduce tb_switch_reset_ports(), tb_port_reset() and usb4_port_reset()
+Date: Tue, 12 Dec 2023 19:30:46 +0530
+Message-ID: <20231212140047.2021496-2-Sanath.S@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231212140047.2021496-1-Sanath.S@amd.com>
+References: <20231212140047.2021496-1-Sanath.S@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,47 +81,177 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002636A:EE_|DM6PR12MB4185:EE_
-X-MS-Office365-Filtering-Correlation-Id: 58e0e8a4-fc56-48f8-433b-08dbfb1ad3b4
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002636A:EE_|SN7PR12MB7153:EE_
+X-MS-Office365-Filtering-Correlation-Id: c3e2dd1f-9f39-43af-12a3-08dbfb1ae5fa
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	FrR0mJzN1bsvi8q+i6la4+fB04+gBfmwOnwAw/fNTxnCNcAn01ho1nyBQqeDvHtG1OsSmlUYe+jsybSz5zZ0kryq90CdiNPbd/rqiOuveLXd19rb8cVy/ES/yxJL3oh59okcHItDL1so8D5l5hccDex6RAI4/SCSBsb1WdCmgz5duCSGb/F6tjEryppUvg/QdC4ngFU/Wdvc42Jed6frm3Fa2ovu6OfgJY08sZPtJ41zesE6QxpUr/ADjOrnj55qqgOS9YEVkHyj78Kvl8BleaJNJT0aURc8TNhKqoc30r6cyV3t6kX+bEPeMsF84gOw+VEzPHZCtM7VCo0Cd+K3IlmiShim8HvLrWmMisU5tPEinThChWmvwGaQWqYnD8dHA8x8cpS7/dqICO3wAfUbn1RNbFGUzH6zKaglDiGOkhpLAG2YE5mVo78OzQnHX2ZfRD25NFYD02sPWRR+rCFewRwLg6PVq5D1bZAwq1UIx29nsy7SKCOgGiQctuDu1I0mEwNhf6DyoGITa+0cDVWFaJ4a+OxXgclvphmefejWn97Y3h9K5wSZC20v3xspXtg3tqGnyIMaHzvrmuy4PZrdbJOk2uA0I0DRRusZ4fnTzyv2TaBCEZhofcZU35IybJAdHr7rI/E+nIzgotRnfcJfmUzZh4ygCyC62S+31D/7MV6ShzFmsPOS7rYl4l6QFxDYouQmgAa0QBaB+2NGOfv9ZEc+2VvjBKZTL0pEDPmB+xFtRr+Lk0GgQdZWNj1C9cLOUXtyvXX4jx2FBsBPSUTsyaqpqavzbxMuP2vtzDRunYk=
+	EsI++7bIt/zWCOx0venzJPGyD/xH5ZL/G5Jjhxa+uCT4yZnRObW5eSquCS2oyo25X6W+offz00DBU6N1aztatXXajNba7gNjyFyG2K/JP+5YrB20iCqNw8Cv6Ev+MqfOs6x3DZEwcuO1AfLAR31MCGsmlDtmrFUsLRW5AX3k7mJoCeCJ+PUMnp/rYu51GmokuSap8cCaDNnN84JbE4XzYGo0Pl1y3/zS8hHygBXasIQVdOsPnAtYA9uGmfMI3VzI/0h0bsDwhzyOHU4Z3r+3av79VBPz11kfW4IGYAS/IQvF1BCQS3d3UoDUY71kKH9rbeFQBQ28FaJ7BtzM0eqn22dIWvk+c/gwfNy3V1u7OMBSUiGlmUd/95Mx5/xIjOGDktFsGc+u8HP/NhrK6fGMEw8TG7liosIjLfbQMJQOjfWaHvrM3m6R8Kr3WigKTZyWcaVs/xRww5Sytg/z0cLTL9NhFq4Yj86ikEGIog06h1Uom7zbcU8FQEbQ1SGOKPIM2+JBTOCQ/bbLd2QhRDp09v4sqA5eJAujstx/zhALYtY7+uZyagmOU+nfvh+XzEXTc6TSK7u/L2+qhZLpZMJjb1qlxri/DGEyZB4z64H+kal4nXiqRzj98CJOaT5ev75b2uxwb1xUlw/c/vpX2bOn8uPbSc2lMmiICNZHtsxfqRm5Ul3LG7K+VAW/VV8twRwge043fs9kUdvQKSvRwJZZkNv/+GVWtJTLhpfXLc5swqVqWFRL4+FmI4BNKB3Is0iSzGOD/3rp/6URSSSCwkUQhUL5plwpLbuHK/k6eUaVBvA=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(346002)(396003)(136003)(39860400002)(230922051799003)(451199024)(186009)(82310400011)(64100799003)(1800799012)(46966006)(40470700004)(36840700001)(41300700001)(81166007)(82740400003)(8676002)(8936002)(86362001)(316002)(36756003)(70206006)(110136005)(70586007)(478600001)(356005)(2906002)(16526019)(426003)(7696005)(336012)(40480700001)(4744005)(1076003)(26005)(5660300002)(2616005)(83380400001)(40460700003)(47076005)(6666004)(36860700001)(4326008)(36900700001)(2101003);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(136003)(39860400002)(376002)(346002)(230922051799003)(82310400011)(186009)(64100799003)(451199024)(1800799012)(36840700001)(40470700004)(46966006)(40480700001)(40460700003)(110136005)(70586007)(82740400003)(81166007)(356005)(86362001)(36756003)(70206006)(36860700001)(47076005)(83380400001)(26005)(16526019)(426003)(336012)(1076003)(2616005)(7696005)(2906002)(316002)(6666004)(478600001)(5660300002)(4326008)(8936002)(8676002)(41300700001)(2101003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2023 14:01:18.8990
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2023 14:01:53.7743
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58e0e8a4-fc56-48f8-433b-08dbfb1ad3b4
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3e2dd1f-9f39-43af-12a3-08dbfb1ae5fa
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	SN1PEPF0002636A.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4185
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7153
 
-Tunnels created by boot firmware results in incorrect PCI resource
-allocation, which results in failure of extending daisy chain.
+Introduce the tb_switch_reset_ports() function that resets the
+downstream ports of a given switch. This helps us reset the USB4
+links created by boot firmware during the init sequence.
 
-This series aligns with windows behaviour of performing a teardown of
-tunnels and resetting the downstream ports using DPR during the init
-sequence.
+Introduce the tb_port_reset() helper function that resets the
+given port.
 
-Sanath S (2):
-  thunderbolt: Introduce tb_switch_reset_ports(), tb_port_reset() and
-    usb4_port_reset()
-  thunderbolt: Teardown tunnels and reset downstream ports created by
-    boot firmware
+Introduce the usb4_port_reset() function that performs the DPR
+of a given port. This function follows the CM guide specification 7.3
 
- drivers/thunderbolt/switch.c  |  31 ++++++++
- drivers/thunderbolt/tb.c      | 137 ++--------------------------------
- drivers/thunderbolt/tb.h      |   2 +
- drivers/thunderbolt/tb_regs.h |   1 +
- drivers/thunderbolt/usb4.c    |  39 ++++++++++
- 5 files changed, 80 insertions(+), 130 deletions(-)
+Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Sanath S <Sanath.S@amd.com>
+---
+ drivers/thunderbolt/switch.c  | 31 ++++++++++++++++++++++++++++
+ drivers/thunderbolt/tb.h      |  2 ++
+ drivers/thunderbolt/tb_regs.h |  1 +
+ drivers/thunderbolt/usb4.c    | 39 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 73 insertions(+)
 
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 44e9b09de47a..26ad6cc1ee91 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -626,6 +626,19 @@ int tb_port_unlock(struct tb_port *port)
+ 	return 0;
+ }
+ 
++/**
++ * tb_port_reset() - Reset downstream port
++ * @port: Port to reset
++ *
++ * Helps to reconfigure the USB4 link by resetting the downstream port.
++ *
++ * Return: Returns 0 on success or an error code on failure.
++ */
++static int tb_port_reset(struct tb_port *port)
++{
++	return usb4_port_reset(port);
++}
++
+ static int __tb_port_enable(struct tb_port *port, bool enable)
+ {
+ 	int ret;
+@@ -1547,6 +1560,24 @@ static void tb_dump_switch(const struct tb *tb, const struct tb_switch *sw)
+ 	       regs->__unknown1, regs->__unknown4);
+ }
+ 
++/**
++ * tb_switch_reset_ports() - Reset downstream ports of switch.
++ * @sw: Switch whose ports need to be reset.
++ *
++ * Return: Returns 0 on success or an error code on failure.
++ */
++int tb_switch_reset_ports(struct tb_switch *sw)
++{
++	struct tb_port *port;
++	int ret = -EINVAL;
++
++	tb_switch_for_each_port(sw, port) {
++		if (tb_port_is_null(port) && port->cap_usb4)
++			ret = tb_port_reset(port);
++	}
++	return ret;
++}
++
+ /**
+  * tb_switch_reset() - reconfigure route, enable and send TB_CFG_PKG_RESET
+  * @sw: Switch to reset
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index e299e53473ae..f2687ec4ac53 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -797,6 +797,7 @@ void tb_switch_remove(struct tb_switch *sw);
+ void tb_switch_suspend(struct tb_switch *sw, bool runtime);
+ int tb_switch_resume(struct tb_switch *sw);
+ int tb_switch_reset(struct tb_switch *sw);
++int tb_switch_reset_ports(struct tb_switch *sw);
+ int tb_switch_wait_for_bit(struct tb_switch *sw, u32 offset, u32 bit,
+ 			   u32 value, int timeout_msec);
+ void tb_sw_set_unplugged(struct tb_switch *sw);
+@@ -1281,6 +1282,7 @@ struct tb_port *usb4_switch_map_usb3_down(struct tb_switch *sw,
+ int usb4_switch_add_ports(struct tb_switch *sw);
+ void usb4_switch_remove_ports(struct tb_switch *sw);
+ 
++int usb4_port_reset(struct tb_port *port);
+ int usb4_port_unlock(struct tb_port *port);
+ int usb4_port_hotplug_enable(struct tb_port *port);
+ int usb4_port_configure(struct tb_port *port);
+diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+index 87e4795275fe..d49530bc0d53 100644
+--- a/drivers/thunderbolt/tb_regs.h
++++ b/drivers/thunderbolt/tb_regs.h
+@@ -389,6 +389,7 @@ struct tb_regs_port_header {
+ #define PORT_CS_18_CSA				BIT(22)
+ #define PORT_CS_18_TIP				BIT(24)
+ #define PORT_CS_19				0x13
++#define PORT_CS_19_DPR				BIT(0)
+ #define PORT_CS_19_PC				BIT(3)
+ #define PORT_CS_19_PID				BIT(4)
+ #define PORT_CS_19_WOC				BIT(16)
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index 4277733d0021..55f7c163bf84 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -1073,6 +1073,45 @@ void usb4_switch_remove_ports(struct tb_switch *sw)
+ 	}
+ }
+ 
++/**
++ * usb4_port_reset() - Reset USB4 downsteam port
++ * @port: USB4 port to reset.
++ *
++ * Helps to reconfigure USB4 link by resetting downstream port.
++ *
++ * Return: Returns 0 on success or an error code on failure.
++ */
++int usb4_port_reset(struct tb_port *port)
++{
++	int ret;
++	u32 val = 0;
++
++	ret = tb_port_read(port, &val, TB_CFG_PORT,
++			port->cap_usb4 + PORT_CS_19, 1);
++	if (ret)
++		return ret;
++
++	val = val | PORT_CS_19_DPR;
++	ret = tb_port_write(port, &val, TB_CFG_PORT,
++			port->cap_usb4 + PORT_CS_19, 1);
++	if (ret)
++		return ret;
++
++	/* Wait for 10ms after requesting downstream port reset */
++	msleep(10);
++
++	ret = tb_port_read(port, &val, TB_CFG_PORT,
++			port->cap_usb4 + PORT_CS_19, 1);
++	if (ret)
++		return ret;
++
++	val &= ~PORT_CS_19_DPR;
++	ret = tb_port_write(port, &val, TB_CFG_PORT,
++			port->cap_usb4 + PORT_CS_19, 1);
++
++	return ret;
++}
++
+ /**
+  * usb4_port_unlock() - Unlock USB4 downstream port
+  * @port: USB4 port to unlock
 -- 
 2.34.1
 
