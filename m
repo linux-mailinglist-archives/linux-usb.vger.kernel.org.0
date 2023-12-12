@@ -1,256 +1,87 @@
-Return-Path: <linux-usb+bounces-4067-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4069-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C96E80F157
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 16:41:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87C8880F322
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 17:36:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCADF1F210E5
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 15:41:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41FE7281A3A
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 16:36:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3570E76DC9;
-	Tue, 12 Dec 2023 15:41:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZdO1yfHz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EB8278E81;
+	Tue, 12 Dec 2023 16:36:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD0695;
-	Tue, 12 Dec 2023 07:41:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702395669; x=1733931669;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kZ6hvomjTCYe68qbVXiiPSpyzF165YdGy6Q7vZP6y80=;
-  b=ZdO1yfHzts9gL/OHocgUnzzkvhUkCeztyfHAmWsGJZvOi3x6rmZ2DMnG
-   TS26DMZQXRYeCE8ghWpTi0ahI+MzXjz3mq5j5yutF5cPZpiveP7WT8/9h
-   HYk6IguSp2eXShiRcp8saMRd/soSgISkbei+M0obk2yLk/GwCdXbA4vo8
-   nQrbSvSRCV01hVk1cIoLWJ4zKWVUZogJwIbnur4/AE11cffFVmtu0Z9yS
-   ufV11zQUeQ6mmuZ/NYtdG4vA6Coa40ior8ReGipRiIRd1+r2Wovn2P84s
-   mRKqk/LbTLEUA/9fx0Rr4H+D61s55cid5KUD4uJpf0V57B6KIsKDzBzmB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="1903332"
-X-IronPort-AV: E=Sophos;i="6.04,270,1695711600"; 
-   d="scan'208";a="1903332"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 07:41:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="777137588"
-X-IronPort-AV: E=Sophos;i="6.04,270,1695711600"; 
-   d="scan'208";a="777137588"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 12 Dec 2023 07:41:06 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id E19453D2; Tue, 12 Dec 2023 17:41:04 +0200 (EET)
-Date: Tue, 12 Dec 2023 17:41:04 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Sanath S <Sanath.S@amd.com>, andreas.noever@gmail.com,
-	michael.jamet@intel.com, YehezkelShB@gmail.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] thunderbolt: Introduce tb_switch_reset_ports(),
- tb_port_reset() and usb4_port_reset()
-Message-ID: <20231212154104.GH1074920@black.fi.intel.com>
-References: <20231212140047.2021496-1-Sanath.S@amd.com>
- <20231212140047.2021496-2-Sanath.S@amd.com>
- <20231212152706.GG1074920@black.fi.intel.com>
- <c56a359b-d035-4557-84d2-6c8ddd600bff@amd.com>
+Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD3AD7E
+	for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 08:36:22 -0800 (PST)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 271572205B;
+	Tue, 12 Dec 2023 17:36:18 +0100 (CET)
+Date: Tue, 12 Dec 2023 17:36:14 +0100
+From: Francesco Dolcini <francesco@dolcini.it>
+To: linux-usb@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Linyu Yuan <quic_linyyuan@quicinc.com>,
+	Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+	Jon Hunter <jonathanh@nvidia.com>
+Subject: kernel warning in usb_ep_queue() during suspend/resume
+Message-ID: <ZXiL/tXS5/xSV+aP@francesco-nb.int.toradex.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c56a359b-d035-4557-84d2-6c8ddd600bff@amd.com>
 
-On Tue, Dec 12, 2023 at 09:32:03AM -0600, Mario Limonciello wrote:
-> On 12/12/2023 09:27, Mika Westerberg wrote:
-> > On Tue, Dec 12, 2023 at 07:30:46PM +0530, Sanath S wrote:
-> > > Introduce the tb_switch_reset_ports() function that resets the
-> > > downstream ports of a given switch. This helps us reset the USB4
-> > > links created by boot firmware during the init sequence.
-> > > 
-> > > Introduce the tb_port_reset() helper function that resets the
-> > > given port.
-> > > 
-> > > Introduce the usb4_port_reset() function that performs the DPR
-> > > of a given port. This function follows the CM guide specification 7.3
-> > > 
-> > > Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > Signed-off-by: Sanath S <Sanath.S@amd.com>
-> > > ---
-> > >   drivers/thunderbolt/switch.c  | 31 ++++++++++++++++++++++++++++
-> > >   drivers/thunderbolt/tb.h      |  2 ++
-> > >   drivers/thunderbolt/tb_regs.h |  1 +
-> > >   drivers/thunderbolt/usb4.c    | 39 +++++++++++++++++++++++++++++++++++
-> > >   4 files changed, 73 insertions(+)
-> > > 
-> > > diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> > > index 44e9b09de47a..26ad6cc1ee91 100644
-> > > --- a/drivers/thunderbolt/switch.c
-> > > +++ b/drivers/thunderbolt/switch.c
-> > > @@ -626,6 +626,19 @@ int tb_port_unlock(struct tb_port *port)
-> > >   	return 0;
-> > >   }
-> > > +/**
-> > > + * tb_port_reset() - Reset downstream port
-> > > + * @port: Port to reset
-> > > + *
-> > > + * Helps to reconfigure the USB4 link by resetting the downstream port.
-> > > + *
-> > > + * Return: Returns 0 on success or an error code on failure.
-> > > + */
-> > > +static int tb_port_reset(struct tb_port *port)
-> > > +{
-> > > +	return usb4_port_reset(port);
-> > > +}
-> > > +
-> > >   static int __tb_port_enable(struct tb_port *port, bool enable)
-> > >   {
-> > >   	int ret;
-> > > @@ -1547,6 +1560,24 @@ static void tb_dump_switch(const struct tb *tb, const struct tb_switch *sw)
-> > >   	       regs->__unknown1, regs->__unknown4);
-> > >   }
-> > > +/**
-> > > + * tb_switch_reset_ports() - Reset downstream ports of switch.
-> > > + * @sw: Switch whose ports need to be reset.
-> > > + *
-> > > + * Return: Returns 0 on success or an error code on failure.
-> > > + */
-> > > +int tb_switch_reset_ports(struct tb_switch *sw)
-> > > +{
-> > > +	struct tb_port *port;
-> > > +	int ret = -EINVAL;
-> > 
-> > Why it returns -EINVAL? What if this is run for non-USB4 router?
-> 
-> This is a good point, but in the non USB4 case (default return) maybe it's
-> better to be -ENODEV and in patch 2 be careful about the caller.
+Hello all,
+while doing some tests on kernel 6.1 the following warning is hit
+sporadically:
 
-Or -EOPNOTSUPP (to be consistent with the rest of the driver). Add this
-to the kernel-doc too so that the caller needs to make sure
-tb_switch_is_usb4() is called before this one or so.
+  ------------[ cut here ]------------
+  WARNING: CPU: 0 PID: 1385 at drivers/usb/gadget/udc/core.c:295 usb_ep_queue+0x58/0x6c
+  Modules linked in: 8021q bnep mcp251x mwifiex_sdio mwifiex cfg80211 btmrvl_sdio btmrvl imx_sdma fuse
+  CPU: 0 PID: 1385 Comm: analogclock Not tainted 6.1.66-6.5.0-devel+git.6c6a6c7e211c #1
+  Hardware name: Freescale i.MX6 Ultralite (Device Tree)
+   unwind_backtrace from show_stack+0x10/0x14
+   show_stack from dump_stack_lvl+0x40/0x4c
+   dump_stack_lvl from __warn+0x88/0xc0
+   __warn from warn_slowpath_fmt+0x10c/0x1a0
+   warn_slowpath_fmt from usb_ep_queue+0x58/0x6c
+   usb_ep_queue from eth_start_xmit+0x1ec/0x330
+   eth_start_xmit from dev_hard_start_xmit+0x7c/0xf8
+   dev_hard_start_xmit from sch_direct_xmit+0x110/0x310
+   sch_direct_xmit from __qdisc_run+0x110/0x5d8
+   __qdisc_run from net_tx_action+0x170/0x20c
+   net_tx_action from __do_softirq+0xc0/0x234
+   __do_softirq from __irq_exit_rcu+0x8c/0xb8
+   __irq_exit_rcu from irq_exit+0x8/0x10
+   irq_exit from call_with_stack+0x18/0x20
+   call_with_stack from __irq_usr+0x7c/0xa0
+  Exception stack(0xe0fcdfb0 to 0xe0fcdff8)
+  dfa0:                                     b2f9e000 b30775a0 0002edf8 00000000
+  dfc0: 01493268 014fdd00 0002edf8 0002edf8 000185b8 be8d9734 b3f6f811 0000000c
+  dfe0: b2fb4580 be8d95f4 b3f6f7d3 b64006a8 20070010 ffffffff
+  ---[ end trace 0000000000000000 ]---
 
-> 
-> > 
-> > > +
-> > > +	tb_switch_for_each_port(sw, port) {
-> > > +		if (tb_port_is_null(port) && port->cap_usb4)
-> > > +			ret = tb_port_reset(port);
-> > 
-> > Should it stop here and return ret?
-> 
-> +1
-> 
-> > 
-> > > +	}
-> > > +	return ret;
-> > > +}
-> > > +
-> > >   /**
-> > >    * tb_switch_reset() - reconfigure route, enable and send TB_CFG_PKG_RESET
-> > >    * @sw: Switch to reset
-> > > diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-> > > index e299e53473ae..f2687ec4ac53 100644
-> > > --- a/drivers/thunderbolt/tb.h
-> > > +++ b/drivers/thunderbolt/tb.h
-> > > @@ -797,6 +797,7 @@ void tb_switch_remove(struct tb_switch *sw);
-> > >   void tb_switch_suspend(struct tb_switch *sw, bool runtime);
-> > >   int tb_switch_resume(struct tb_switch *sw);
-> > >   int tb_switch_reset(struct tb_switch *sw);
-> > > +int tb_switch_reset_ports(struct tb_switch *sw);
-> > >   int tb_switch_wait_for_bit(struct tb_switch *sw, u32 offset, u32 bit,
-> > >   			   u32 value, int timeout_msec);
-> > >   void tb_sw_set_unplugged(struct tb_switch *sw);
-> > > @@ -1281,6 +1282,7 @@ struct tb_port *usb4_switch_map_usb3_down(struct tb_switch *sw,
-> > >   int usb4_switch_add_ports(struct tb_switch *sw);
-> > >   void usb4_switch_remove_ports(struct tb_switch *sw);
-> > > +int usb4_port_reset(struct tb_port *port);
-> > >   int usb4_port_unlock(struct tb_port *port);
-> > >   int usb4_port_hotplug_enable(struct tb_port *port);
-> > >   int usb4_port_configure(struct tb_port *port);
-> > > diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-> > > index 87e4795275fe..d49530bc0d53 100644
-> > > --- a/drivers/thunderbolt/tb_regs.h
-> > > +++ b/drivers/thunderbolt/tb_regs.h
-> > > @@ -389,6 +389,7 @@ struct tb_regs_port_header {
-> > >   #define PORT_CS_18_CSA				BIT(22)
-> > >   #define PORT_CS_18_TIP				BIT(24)
-> > >   #define PORT_CS_19				0x13
-> > > +#define PORT_CS_19_DPR				BIT(0)
-> > >   #define PORT_CS_19_PC				BIT(3)
-> > >   #define PORT_CS_19_PID				BIT(4)
-> > >   #define PORT_CS_19_WOC				BIT(16)
-> > > diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-> > > index 4277733d0021..55f7c163bf84 100644
-> > > --- a/drivers/thunderbolt/usb4.c
-> > > +++ b/drivers/thunderbolt/usb4.c
-> > > @@ -1073,6 +1073,45 @@ void usb4_switch_remove_ports(struct tb_switch *sw)
-> > >   	}
-> > >   }
-> > > +/**
-> > > + * usb4_port_reset() - Reset USB4 downsteam port
-> > > + * @port: USB4 port to reset.
-> > > + *
-> > > + * Helps to reconfigure USB4 link by resetting downstream port.
-> > > + *
-> > > + * Return: Returns 0 on success or an error code on failure.
-> > > + */
-> > > +int usb4_port_reset(struct tb_port *port)
-> > > +{
-> > > +	int ret;
-> > > +	u32 val = 0;
-> > 
-> > Reverse christmas tree please:
-> > 
-> > u32 val = 0;
-> > int ret;
-> > 
-> > > +
-> > > +	ret = tb_port_read(port, &val, TB_CFG_PORT,
-> > > +			port->cap_usb4 + PORT_CS_19, 1);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	val = val | PORT_CS_19_DPR;
-> > > +	ret = tb_port_write(port, &val, TB_CFG_PORT,
-> > > +			port->cap_usb4 + PORT_CS_19, 1);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	/* Wait for 10ms after requesting downstream port reset */
-> > > +	msleep(10);
-> > 
-> > Probably good to add a couple of more ms just in case. Also
-> > usleep_range()? (or fsleep()).
-> 
-> Sanath had it at 20 but I had suggested to align to spec.
-> For the wiggle room maybe usleep_range(10000, 15000)?
 
-Works for me.
+The warning is happening during a suspend/resume test (not sure which
+one of the twos), I cannot really tell if this is a regression (and from
+which version, eventually), but this is happening since a while with
+multiple 6.1 kernel version (this last log is from a recent 6.1.66).
 
-> 
-> > 
-> > > +
-> > > +	ret = tb_port_read(port, &val, TB_CFG_PORT,
-> > > +			port->cap_usb4 + PORT_CS_19, 1);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	val &= ~PORT_CS_19_DPR;
-> > > +	ret = tb_port_write(port, &val, TB_CFG_PORT,
-> > > +			port->cap_usb4 + PORT_CS_19, 1);
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > >   /**
-> > >    * usb4_port_unlock() - Unlock USB4 downstream port
-> > >    * @port: USB4 port to unlock
-> > > -- 
-> > > 2.34.1
+I cannot really tell the current status with mainline or v6.6 given that
+it does not seems so trivial to reproduce.
+
+It happened on various arm and arm64 machine.
+
+The ethernet device is a USB NCM/ECM, running in gadget mode.
+
+Any idea?
+
+Francesco
+
 
