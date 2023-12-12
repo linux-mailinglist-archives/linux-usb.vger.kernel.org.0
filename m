@@ -1,45 +1,45 @@
-Return-Path: <linux-usb+bounces-4025-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4026-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E58BF80E8FA
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 11:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7581480E92E
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 11:33:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C9371F2194D
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 10:21:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24E7E1F2190A
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 10:33:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D66A5B5B7;
-	Tue, 12 Dec 2023 10:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE0F4433DA;
+	Tue, 12 Dec 2023 10:33:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="iPXFmG93"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="nEGcQylX"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E6959539
-	for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 10:21:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FC61C433C8;
-	Tue, 12 Dec 2023 10:21:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422DA1805F
+	for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 10:33:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6525FC433C8;
+	Tue, 12 Dec 2023 10:33:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1702376492;
-	bh=bBdsJ1LFHIAiNvuKQ5c872B4cUZ1SzBz3JpEuXPCcuk=;
+	s=korg; t=1702377184;
+	bh=mE398c7jk9AvIxkEkHC4GzU5TspzQBYu7lYnUJsZEyk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iPXFmG93uJ75RElaOyg4kQqMjdOkE78zjP7doLMl+g2h85P/Psu1gL+xUKrXJFr9l
-	 XpeickXl7jbSgK3VLgIg/gR5qKA/hY5QeG5UVFy30XX3w2NwKTcPwenK4fCRxvZkRb
-	 ppaPB0Ox37BuGmDkF+hBDZMqmIZoxfilw8Gjdoo4=
-Date: Tue, 12 Dec 2023 11:21:30 +0100
+	b=nEGcQylXEfvsf5IxoXzgDn6PdeiN46WBGEHowzAvHvcd87Ie4PtfoBkhURrh3LwpF
+	 rDvKnjhTdh0w4yQxyBRDdFE1zqiNdyBgvFK/FA/+ortmNTh2Sgh2+Q6hZ738qsgQbk
+	 ifWzXUQ5HRwpIyxIY9s1R2eRxXBrJVscTY43WGW4=
+Date: Tue, 12 Dec 2023 11:33:02 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
 To: shitao <shitao@kylinos.cn>
 Cc: alcooperx@gmail.com, chunfeng.yun@mediatek.com,
 	justin.chen@broadcom.com, kernel-bot@kylinos.cn,
 	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
 	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: mtu3: fix comment typo
-Message-ID: <2023121216-shabby-hastily-f094@gregkh>
+Subject: Re: [PATCH] usb: gadget: udc: bdc: fix comment typo
+Message-ID: <2023121251-attest-shout-cbaa@gregkh>
 References: <2023121236-earful-email-ea09@gregkh>
- <20231212100657.3115089-1-shitao@kylinos.cn>
+ <20231212101955.3115267-1-shitao@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -48,31 +48,31 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231212100657.3115089-1-shitao@kylinos.cn>
+In-Reply-To: <20231212101955.3115267-1-shitao@kylinos.cn>
 
-On Tue, Dec 12, 2023 at 06:06:57PM +0800, shitao wrote:
-> Fix comment typo in mtu3_qmu.c file.
-> "empty" is misspelled as "emtpy".
+On Tue, Dec 12, 2023 at 06:19:55PM +0800, shitao wrote:
+> Fix comment typo in bdc_core.c file.
+> "dynamic" is misspelled as "dyanmic".
 > 
 > Reported-by: k2ci <kernel-bot@kylinos.cn>
 > Signed-off-by: shitao <shitao@kylinos.cn>
 > ---
->  drivers/usb/mtu3/mtu3_qmu.c | 2 +-
+>  drivers/usb/gadget/udc/bdc/bdc_core.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/mtu3/mtu3_qmu.c b/drivers/usb/mtu3/mtu3_qmu.c
-> index 3d77408e3133..03f26589b056 100644
-> --- a/drivers/usb/mtu3/mtu3_qmu.c
-> +++ b/drivers/usb/mtu3/mtu3_qmu.c
-> @@ -221,7 +221,7 @@ static struct qmu_gpd *advance_deq_gpd(struct mtu3_gpd_ring *ring)
->  	return ring->dequeue;
+> diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
+> index 35a652807fca..874122f8baa3 100644
+> --- a/drivers/usb/gadget/udc/bdc/bdc_core.c
+> +++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
+> @@ -361,7 +361,7 @@ int bdc_reinit(struct bdc *bdc)
+>  	return ret;
 >  }
 >  
-> -/* check if a ring is emtpy */
-> +/* check if a ring is empty */
->  static bool gpd_ring_empty(struct mtu3_gpd_ring *ring)
+> -/* Allocate all the dyanmic memory */
+> +/* Allocate all the dynamic memory */
+>  static int bdc_mem_alloc(struct bdc *bdc)
 >  {
->  	struct qmu_gpd *enq = ring->enqueue;
+>  	u32 page_size;
 > -- 
 > 2.34.1
 > 
