@@ -1,139 +1,163 @@
-Return-Path: <linux-usb+bounces-4119-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4120-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A93088115EB
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 16:16:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 728D281178C
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 16:41:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4911A1F217A8
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 15:16:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 177C51C20C52
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 15:41:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6098A30F8D;
-	Wed, 13 Dec 2023 15:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF09433099;
+	Wed, 13 Dec 2023 15:32:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WuyxeKSD"
+	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="qfgBGbL5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85661F7;
-	Wed, 13 Dec 2023 07:15:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702480558; x=1734016558;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ga/06Gm65DZz6cxBTRPoAOr5ox5/yudCTiMMj5NoYNM=;
-  b=WuyxeKSDenD+U7sk1EJ3VZZUldlxwQTI0rb0ZQaNOF49XfJZ1XGZW2Zu
-   jHwCFeW5xL1Is1IBcZ+awz/WctrYr6RjOmDQDegOlKvKVnqymhIKlJxxW
-   2foi+Szr8Ju2g7ZWiNWkeSQ4QYR3HMfoZ3hdxUZOqbqW7gkZYWSgX3Rzv
-   OTnn2Si7eBQp5Cj77JofMPs8ywAHgVKEu1n4CUUmm6DUrawjKEXASea0G
-   WdyDhuBIvbqsCnxLAT0+fzm6sXU8gmaZZXJxllAFXrsedxsO29BJoEBFA
-   2qk8j7LCuaLiBUECmPn8pVvo0joBVbwMyUl4tvhnf/NliP/UhCS3wxTbk
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="398820987"
-X-IronPort-AV: E=Sophos;i="6.04,273,1695711600"; 
-   d="scan'208";a="398820987"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 07:15:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="750150031"
-X-IronPort-AV: E=Sophos;i="6.04,273,1695711600"; 
-   d="scan'208";a="750150031"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga006.jf.intel.com with SMTP; 13 Dec 2023 07:15:55 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 13 Dec 2023 17:15:54 +0200
-Date: Wed, 13 Dec 2023 17:15:54 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Javier Carrasco <javier.carrasco@wolfvision.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2052.outbound.protection.outlook.com [40.107.241.52])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3021985;
+	Wed, 13 Dec 2023 07:32:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FGDdULdeDaT+1Znnxw5mpQl+w7ShuoYkLfT575q/anVnfXKe8dv1najhSjaqKCHnLIPDh3o/KAAiixktcKpAR8buNr8JLQrG40HrbgNr7Cv7adAu4X1ofMK+bHOdsWoNGXCuJKsnkGIV6Eglbyh/ZbKxaJMGQ52b2eyRINi1azCWwnXstZY3K3o/jPoyrtA1IDTomNgCH5zQu/znN1prpFXh9JSzcapIZSlGhfUCRf8qTeantLgvfxVZiqtg6c5H6wVsjc9NKJF2p4TLyFymmRcDKyxK/TUOk6xGaO7KPYsVaQMsWtcQ44KbsH4+5/YlMHQq6K4UfGisixFV0Viwew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Oi5QWdYREGBDf4+0LM2jGZv3eRqwhA6HxVQtYWqtO9Y=;
+ b=hRaTAYHUyBmPYDyXUCMvQ7IdryBb+4MFeglXnRVo/waGJohKU0qQPjPbC7u+4mS433/Urdrxz7TDbgfFwAWn8z9Q1i/CeYHHBB9GXrVGTLHItfi7gUdNw9z+4vAkqlJW22adoQxyNTwy3sxoN7Rf7NseTJq7orAwVQjmuOrx8lqbID4bvsxXI4P7fSXtUDqKgPWqav96a+3684T5dSZLTtWQPptBWYMB2wz2/mpH9++6l2FXv9ULaNdnrsA5V1QTOzGfqb31KwhhWIqgSp1OUmCbR7WFFlpc57PJHQSJD5uR1I/NkvkSo6DdPR05Owjsga/EhFdn3aMZku/lkWjpLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Oi5QWdYREGBDf4+0LM2jGZv3eRqwhA6HxVQtYWqtO9Y=;
+ b=qfgBGbL5Sq0wqi4FKmlXLSiB0+UDUaZUdJ/BbV+XCMcyKeqgJpnbYa5szJA175WDnFCwk0omcyEa8BJMI3v0Dhbre7F85nCVPFFrJvKUxdUoUUq6s1pyuPx7yZC5I6YsP46hX5LJgIuHcyWr7sOMVds+wq7G+rUhljIFYu3Hq8Q=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
+ by DU0PR08MB8907.eurprd08.prod.outlook.com (2603:10a6:10:47f::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.33; Wed, 13 Dec
+ 2023 15:32:12 +0000
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::6b40:1e6f:7c94:71dc]) by VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::6b40:1e6f:7c94:71dc%4]) with mapi id 15.20.7068.031; Wed, 13 Dec 2023
+ 15:32:12 +0000
+Message-ID: <d70255fb-7dc0-4119-b52a-9e8a955f0712@wolfvision.net>
+Date: Wed, 13 Dec 2023 16:32:09 +0100
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 2/4] usb: typec: tipd: add function to request firmware
-Message-ID: <ZXnKqsy2rEJxmXhG@kuha.fi.intel.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20231207-tps6598x_update-v1-0-dc21b5301d91@wolfvision.net>
  <20231207-tps6598x_update-v1-2-dc21b5301d91@wolfvision.net>
  <ZXMudF++A9/y4TNk@kuha.fi.intel.com>
  <196acb44-fb0d-45b6-a9c3-b5a289a41917@wolfvision.net>
  <ZXhq/IJp9KVCkQYb@kuha.fi.intel.com>
  <f942ad57-e2e1-4896-83f5-a1acc0805afa@wolfvision.net>
+ <ZXnKqsy2rEJxmXhG@kuha.fi.intel.com>
+Content-Language: en-US
+From: Javier Carrasco <javier.carrasco@wolfvision.net>
+In-Reply-To: <ZXnKqsy2rEJxmXhG@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1PR04CA0122.eurprd04.prod.outlook.com
+ (2603:10a6:803:f0::20) To VE1PR08MB4974.eurprd08.prod.outlook.com
+ (2603:10a6:803:111::15)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f942ad57-e2e1-4896-83f5-a1acc0805afa@wolfvision.net>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|DU0PR08MB8907:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5c2c6400-3384-4508-4593-08dbfbf0ad0c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Du50s63jaPQR0dBKHi6HVdwrF/ag98t1LERIr9x0TWwNf5DXftJEBvwnDEBug0zN6xX2EVP6Bnc5s0GARG1CDrZ9808w423J/N1B819XWrN2zBN0jXQT+028syavEj3j6KS1GzZyxqtROhZkVfJMYhx0cshw1aDFCM3vDVbJPL3GtrkCCqQKmwJEYPItZr+PHOi14dI3Fcs25Acnk0VEppDnbLc91L4a30UyszWozsiUouy96xLWY4gBNZT0FUeAzJohnfi3I9pqjOkJaW70V3nwPCnjvC8hLUmQdZ11rMmh6Yx+FdYj9h/K4F3WfJBT0ffJdJ14Xf+a0eheFeATjAImYriGUmBk5R+OOaRINqFWd/z5SoYpWZXf34im6PrBWu6f90n+CEnTGqBNCCNEL1hPCo0Rio+aqU5p4JgYkIUGMfyncnxZD+Q4bWRJVbAOCQzMHq5GjUKWMvW62jbsSg9xYdFPAS7EHVz50g0cPKxY2XOhA1wCXHS46Syo2pDjEvoTQ1GaHwXyfqowgJDUpqmmNHupkWiul1VfpHl64/h4SC0b+g7oU779JkAOPciF4XBj2n3pJOBoJkBw45B/rw5v905QKJg4a9CDDLAekBhy5Z576Z0zOJVL2ov75po/nJNQaOc5dr22fkB2/8h0RA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39850400004)(136003)(376002)(366004)(346002)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(38100700002)(83380400001)(26005)(2616005)(36756003)(86362001)(41300700001)(31696002)(31686004)(6506007)(6666004)(6512007)(478600001)(6916009)(66946007)(66556008)(66476007)(8936002)(8676002)(4326008)(5660300002)(2906002)(44832011)(316002)(53546011)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MU5IYkVKRHlRRC9DdUtXa1c0aEpUN0xGdkx5OVhmbSt0UU9NT2xEdXJENFpu?=
+ =?utf-8?B?OWVGajBXRm5UOWljRmJ2R2dONHFDek5XOStLaXlXbUhUT04zS09laGtySk1G?=
+ =?utf-8?B?YUUxY2Q5N2ZhRjE2bWY4SEJuMGFEbTBTNVpTVXJ6NVVJVEVKM0NvRVNWcmlw?=
+ =?utf-8?B?RktKbTA5cmI3K0d0akNOZWVUMnNYUGV1RWVsSlhEdWc1a09FUTZPbE5NeUIx?=
+ =?utf-8?B?R0kySEFQZUx1Z2s5NFJTOGpRSEpjcVZPbUtlcjlwdTdUbGY3d3BHYnIvR0NR?=
+ =?utf-8?B?Uks0ZFNGTnpyRmp4WmtBWTVTMHF6N29aZXplUEI5ZWtsVzhUUFZuSXdJcHBP?=
+ =?utf-8?B?NWFkb1dOcGo3UUg3RjFSYTczRXM0RUlnbTZYb1Q3N2lTamlzdmJwbUxTSXBZ?=
+ =?utf-8?B?enh6OWZkamRxTUx0czc0cVd3TW5pQUsrdTNqaUI5aWF0QmdyL096MEFkemJO?=
+ =?utf-8?B?cmtlYzB6aXZGSzh4SGx0dHdSS00rUjROT090MXBYc1Uxdlh0WDBMWmZWMlUx?=
+ =?utf-8?B?MDhQTjBKTDh2clROOUlpZVltQlk0OXhXdHhRV2pHc2xoVmw2enZJbFVVRnVu?=
+ =?utf-8?B?anpSYXE0TXpxeHdUZUliSyt5cHhTSDIwQXE3aVdtcEpHWXFEZ0FySFhKNCtJ?=
+ =?utf-8?B?ZWI4eCs0aUFxOERkOEV4NXF5RFZNNEsyd213R1dDbHo0TEhxZDM0N3MrU3FS?=
+ =?utf-8?B?N1grbHNqNU40YVYvWVpsQjdJa2xOQW1OUE8vRThaMTJUSGJNOXp2eGV4Ull0?=
+ =?utf-8?B?MFBtSDFXcnhBZW41bG1FQS9lQ0ViZWdFWjJBbGhucjBSVnAzaGQvdHBZeGgy?=
+ =?utf-8?B?aXhON1BuNW1uNk4zZ3I4cTRSY3lXRUJIS0x2eFVGdEFwaDVwTWhxQ2ZCV3F4?=
+ =?utf-8?B?TFJsQ25RaDFSR21NTzlLN0dBRG5ybFVqbG9GWnV1eS95Y204d21OL0hicHVF?=
+ =?utf-8?B?S1E5bUNITTBXWEpZby91YSsrR1FhN1lXbG40aVRxY2dVbzMwRytwZnhUQ2lj?=
+ =?utf-8?B?LzRvd3R4clhSWFVoWlRGK3RhWWErTVhEYnpIVFMyTUx2OUJzVlZYWnYycFRH?=
+ =?utf-8?B?WUFZcmJaNFliWEtESDZCUXpTcy9KTWFZa2ExeHFYOUt0N0tCQ0VTQXU2Rzkr?=
+ =?utf-8?B?dVBYNnU2YlN5VlN3ZkRiRTJsZEZqVFpDc3dEclhRcFhSb0UzSU5rQVVoWHZZ?=
+ =?utf-8?B?ZmYxUDVBS296cGpBeXhDRjdZdEdNRkdBemxrcmRMZGM4OWw5anlIOHF3OWF1?=
+ =?utf-8?B?bXlENXhzeUpCTnJTWEdtNWVPcjZib1BEc1l0ZmlkRWl2UW1UQVg2Z2xMZWFO?=
+ =?utf-8?B?aFQ3WmpBWk14YityOXUrSTBmRXFyNzkyMFVHTzllNlBnRjJpZVZVZ3pWdVFr?=
+ =?utf-8?B?NG9Rb0R4bGRwNklaanF2K21Fc0JpWG5rQ2hydGZlbUFSYVM0VnI2cmlLZXZz?=
+ =?utf-8?B?MVhoUGpKa0p3MWw4QlFFQ2hVVVNiU2dMZTlhQ3Y3UFRtTUxlSERDVTNqTUhM?=
+ =?utf-8?B?czNYdU5ubGhlVyswczRzZ3Q4ZUVPazlObXZ6YlBZYnVYTndGSmlCM0g5TVE3?=
+ =?utf-8?B?TGhYb1FoYmNnNVJUNEM4RGZBWG9sNjRoNWdPQnhTTC9NejMrUlRiZmhlNXkx?=
+ =?utf-8?B?Mm1tRUprQXhYSjU4QTBEdzdlZVVhQ3lXeldlS2Jjb0N5OXZqclhMSFJXMEs3?=
+ =?utf-8?B?V2Y5NFpjYlZZaGlQaGpORGQzSkJZc2ZSNGNBZlZTTDlpOE45blJVZTE4dm9U?=
+ =?utf-8?B?TFIzcmFVeUN0eW5udEJHSlRTWFVYdDllT0tXdEF6T1Q3TC9LaThuOTJxbGd0?=
+ =?utf-8?B?LzR2VFFFVmFQVG9ZN3U2cjdiUGtUSFdDcENKSGc4ZElyYy8zMWtlYUJEaCs2?=
+ =?utf-8?B?emdpcG5YaUU1YW9IV29OWmlVYUVWT0RIUFRtanZzWDlqSlg2OTZLdDBGdVE2?=
+ =?utf-8?B?clI3MEhJZmg0TWs2ay9QTGJIRUVBLzRXcndTbTk1SkZiY210bXY1Ukx0aTRy?=
+ =?utf-8?B?VE12RTUveW9aZ3dmTUVsdW14TUlDSlB4SVlDS1p6ZTVPM2pCbHZYTkp6ZUMz?=
+ =?utf-8?B?OWZGWG94UHBiMEhLOU9Ra2J6eWtaaUF1b1ZSN0lEbUx0SXBqRS9wNGNNZ0d3?=
+ =?utf-8?B?ZDg5blVvNDNvcFErYlEwc2pHbGR6ZVVOQ3FYT1VlNkNYMVdROUxTMlBtUENi?=
+ =?utf-8?B?TlE9PQ==?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c2c6400-3384-4508-4593-08dbfbf0ad0c
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2023 15:32:12.0079
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +SvcyiOBUwalTCgfGq5wOwCg8pYmrBQg8pfVFVRdr2iIG2oT0/MBaxG+A1fOPuGfYE09qU4ZgpCTSRV8RFzqHe5dlVWFtHkvRvFuOPSUpM0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB8907
 
-On Tue, Dec 12, 2023 at 03:41:35PM +0100, Javier Carrasco wrote:
+On 13.12.23 16:15, Heikki Krogerus wrote:
+> On Tue, Dec 12, 2023 at 03:41:35PM +0100, Javier Carrasco wrote:
+>> I wonder why then there is no general solution that does not force the
+>> driver to be built as a module.
 > 
+> Why would you need anything like that? Are you saying that even if you
+> put the firmware into your ramdisk, the driver still fails to find the
+> firmware if it's statically build? If so, then there is something else
+> wrong.
 > 
-> On 12.12.23 15:15, Heikki Krogerus wrote:
-> > Hi,
-> > 
-> > On Fri, Dec 08, 2023 at 07:58:52PM +0100, Javier Carrasco wrote:
-> >> Hi Heikki,
-> >>
-> >> On 08.12.23 15:55, Heikki Krogerus wrote:
-> >>
-> >>>> +	ret = request_firmware(fw, firmware_name, tps->dev);
-> >>>> +	if (ret) {
-> >>>> +		dev_err(tps->dev, "failed to retrieve \"%s\"\n", firmware_name);
-> >>>> +		/* probe deferring in case the file system is not ready */
-> >>>> +		return (ret == -ENOENT) ? -EPROBE_DEFER : ret;
-> >>>
-> >>> It's more likely that the firmware really isn't available, and it will
-> >>> never be available in this case. I think there is only one place in
-> >>> kernel where failing request_firmware() can lead to deferred probe
-> >>> (drivers/tee/optee/smc_abi.c) and there the code can actually see the
-> >>> system state - that's actually the condition.
-> >>>
-> >>> So just return dev_err_probe() here:
-> >>>
-> >>> 	ret = request_firmware(fw, firmware_name, tps->dev);
-> >>> 	if (ret)
-> >>>                 return dev_err_probe(tps->dev, ret, "failed to retrieve \"%s\"", firmware_name);
-> >>>
-> >> Thank you for your feedback.
-> >>
-> >> This solution arose from a real use case: in the system I am using to
-> >> test the tps65987d, the filesystem is not ready when the probe function
-> >> is called. If I just return on -ENOENT, the device will never get the
-> >> update.
-> > 
-> > Just like all the other devices that require firmware. This driver is
-> > no different from the others, and it is also not the only one that
-> > needs the firmware only in special cases. Just make the firmware part
-> > of your ramdisk, or build the driver as a module.
-> 
-> I wonder why then there is no general solution that does not force the
-> driver to be built as a module.
+The firmware is always found unless the file system is still not ready,
+which is the case on the system I am working on. If the driver is built
+as a module, the issue is gone as expected.
 
-Why would you need anything like that? Are you saying that even if you
-put the firmware into your ramdisk, the driver still fails to find the
-firmware if it's statically build? If so, then there is something else
-wrong.
+My point was that there is no limitation to have the driver built-in and
+no documentation to reference, so anyone could stumble on the same
+issue. And as you said, this driver is not special in that sense, so
+other drivers might be facing the same eventuality.
+Am I missing any existing documentation for the fact that the firmware
+must be put into the ramdisk or the driver must be built as a module? Or
+is it only based on common sense?
 
-> If there is none, the documentation
-> should mention that somehow (sorry if it does, I missed it). Actually a
-> solution like the one implemented in the driver you mentioned could be
-> used by any driver that can wait to be updated when the system is
-> running.
-> 
-> > Are these firmwares available linux-firmware (or are the going to be)?
-> > https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
-> > 
-> > thanks,
-> > 
-> The firmware (at least for the tps6598x) can be tailored with a TI
-> specific tool and it depends on the use case, so I suppose making it
-> public does not make much sense.
+Anyway the next version will not have any probe deferring and only
+return an error if the firmware is not available.
 
-Okay.
-
-thanks,
-
--- 
-heikki
+Thanks and best regards,
+Javier Carrasco
 
