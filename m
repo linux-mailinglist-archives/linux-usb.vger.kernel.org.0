@@ -1,217 +1,283 @@
-Return-Path: <linux-usb+bounces-4107-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4108-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDF89810E8B
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 11:35:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF3A5810F84
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 12:13:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54C7BB20CAA
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 10:35:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A62DB20C31
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 11:13:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16CE4225A6;
-	Wed, 13 Dec 2023 10:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A90423759;
+	Wed, 13 Dec 2023 11:13:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="n4dmVWyR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cHHzPtIB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2070.outbound.protection.outlook.com [40.107.237.70])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E547812B;
-	Wed, 13 Dec 2023 02:35:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ygfg6hkyLsZtOvAvAG8JQ7fb9KesUajYU1VHFgpDIj6JnqVyCJXBGgWy85q0BuThU0nha2qxKHNJzKxiOrtsIVXWqY6zvi7SGQRSkXfeIoNBn9/Ey7InVQsl0L3V2Y7FX5DPAK+Ym/np+uyeHRazjVI+WcRYNekR8M6JI+7l3DCiZBoDq6F3ik4LfKcuR0ZdJ21ZsjwFKvRV4Tzyve3DNCXBDJm93rbBkDrE72TjFvhPqRK5gQC9Bq6NpbsLBRsTAlrOPnyufZrkBMfIh+Op3H1dlHkm5Q+DjaAsPC6/hJJLwo8c8BR6H14JxADed4uGpPpcMQ7XjYIlT/9D1pRS5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oJWm9Rx+UtwUZYZFJkczuFMdP7EjzEq2ZomOQRsasbU=;
- b=XhKjRMhrmxCghHt7o/Pr79QH1ie3dh6UvxWjdBsHdQrvvPR/pwZX2pyom+4RY/7llUvUrBV9H2lV052iERomtBiBxXXHyZMMBtlnG1SBDcetQijzoDhcEEtZCyGy+kv7S8rjCJG7CRKsKzKIBzL1B2CVIKWVT3iY97TCOjxbElvX9uh0JRTpa5f4Ac6IResPHAWQeKcOQhi96AX/0GPvyQvewYh7/ZaW8KBz8Q1UaF3RE9xFxdkGC3UVqywLrbw47OHKA66jBh6nuKqN5KxaLGZdDxgbo5BOU/YBQmapC3T5qjKDWLE4/0zDM0BojBequ+GZ5DUt73R8Ke4R8VQCVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oJWm9Rx+UtwUZYZFJkczuFMdP7EjzEq2ZomOQRsasbU=;
- b=n4dmVWyRbLZpLmczzUyTYl/wW97IEOBWbi74rcEIEAh2yLY1Fzjg9JRatNoLb0ACiVwqXHq4+TDlB/UF4pMUfJgpJuD3I/b/Km9XWsAxxUspXQnKCWjGuGeS30W9qACP77hXNeQ2Ths1zawSBHzLWg/6x4narJqNWRACt/1RFeU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW4PR12MB7016.namprd12.prod.outlook.com (2603:10b6:303:218::14)
- by SA1PR12MB6895.namprd12.prod.outlook.com (2603:10b6:806:24e::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26; Wed, 13 Dec
- 2023 10:35:06 +0000
-Received: from MW4PR12MB7016.namprd12.prod.outlook.com
- ([fe80::1f1b:e85b:abf0:3d3c]) by MW4PR12MB7016.namprd12.prod.outlook.com
- ([fe80::1f1b:e85b:abf0:3d3c%6]) with mapi id 15.20.7091.022; Wed, 13 Dec 2023
- 10:35:06 +0000
-Message-ID: <adcc6446-8c30-a258-e19b-76fca2c50d21@amd.com>
-Date: Wed, 13 Dec 2023 16:04:57 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [Patch v2 2/2] thunderbolt: Teardown tunnels and reset downstream
- ports created by boot firmware
-Content-Language: en-US
-To: Mika Westerberg <mika.westerberg@linux.intel.com>,
- Sanath S <Sanath.S@amd.com>
-Cc: mario.limonciello@amd.com, andreas.noever@gmail.com,
- michael.jamet@intel.com, YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231212191635.2022520-1-Sanath.S@amd.com>
- <20231212191635.2022520-3-Sanath.S@amd.com>
- <20231213054914.GI1074920@black.fi.intel.com>
- <20231213061805.GK1074920@black.fi.intel.com>
- <20231213062306.GL1074920@black.fi.intel.com>
-From: Sanath S <sanaths2@amd.com>
-In-Reply-To: <20231213062306.GL1074920@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0218.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:ea::10) To MW4PR12MB7016.namprd12.prod.outlook.com
- (2603:10b6:303:218::14)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89762A0
+	for <linux-usb@vger.kernel.org>; Wed, 13 Dec 2023 03:13:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702465984; x=1734001984;
+  h=date:from:to:cc:subject:message-id;
+  bh=3NBRWtrtLH5iKSpd///ai7MZHtMoShnItT+F5zgnX7Y=;
+  b=cHHzPtIBDq3FRn3FzgVby3f538pJjZHoH6zA5TwL5djdzjmVxTd7EW85
+   ivCKIO5ziMGptuMvgpRqSiLYVz/OcPqaMILU2xv84BLvIIl7ib5XP1oCa
+   M15CMgQ82dIu99hFuCFhcPDvml4oCRvWXaFDrYN/l7O3xB/hmnYcLF1yM
+   /wHiVFagUK/S8zSReWwNpgaex9U9NR+CSsssQMV9eFfJp2BKECR+olwdK
+   7q+zrFJWI0klfbcT61L6hL1YwMgxjGIY03CHfbGCg6xUHxDxXZWDetwrx
+   zfxZVsEZPgIGsPGZ4glS2Q4QuDsUfPpNwODpDzvJoDvjQTZAsr+4M7uqD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="2121194"
+X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
+   d="scan'208";a="2121194"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 03:13:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="773911311"
+X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
+   d="scan'208";a="773911311"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 13 Dec 2023 03:13:03 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rDNAi-000KSb-2b;
+	Wed, 13 Dec 2023 11:13:00 +0000
+Date: Wed, 13 Dec 2023 19:12:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ da48708e873312aeba42481f12e2982f8a8ffb80
+Message-ID: <202312131955.41cJyasq-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR12MB7016:EE_|SA1PR12MB6895:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd63527b-82d5-4077-ec11-08dbfbc72bff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	bQ1yueQKTDarkYS34B2LhfUJGWOZ7XQc70uuVXtZgiBQvooL1oJW2qGy/McUYewwBGObGb36WP8y1uWXHirHbNI56fM0NFcsxQOchrJXlBKVURIKl17vLQIlR306231obt6QcHdv92lAee8G/qSElcy3/udv6J27kV63VQ9LCObDdxEeZeETp2ioaGTRnRDFJgLKu5bvs3b4C/iRMZPU3gXDWAzBNAGZ3plzYyN+HEPG8UEc3Q346CPR7GQh2R6DQnqwOt+ugSQn5iXN7zxMijIJxqp1pGpqn5PkvHDOnJj9nMQJivojlQk//5bNTxYrkYxYuBaloguDdHPK81OX23cURVmBFFxNKCPQxLxn3O8HBrHjqaPJgnPAwh4eJT5dcNwYDMhcR2rSAHNmK/vPzASpi7NRzKZYsJ9eST8uaR1Fgu7BO/mhj20M/7PJe045qAFMg74qdv/W01jyChUhj9C7GcGDcwkP1smcOX0MhmBVL0jNEarFYESJhsEbaraNrxCSRvDsr2BNLTVYALhAMzgSUYeKZ3bX96GVpdO31bbCaoTwf/uBV9PS330zWQ0cdkC1ndEFkTfXDyQaFGfoB0MxoUmG7AvpU/a11QOgzmFPs4jYq/9J+dKT2pc55rYJD506YtR3cnOgN0ITB6imLw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB7016.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(346002)(366004)(136003)(376002)(230922051799003)(64100799003)(1800799012)(186009)(451199024)(66574015)(2616005)(26005)(6506007)(6512007)(6666004)(53546011)(83380400001)(8676002)(5660300002)(4326008)(8936002)(41300700001)(2906002)(6486002)(478600001)(316002)(6636002)(66556008)(66946007)(110136005)(66476007)(31696002)(38100700002)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aTdRUU9oSjZRUG9CQzNxem5CZHZMcUx6ckVmNVJ5cVJiaUMyRUR5L256a1dx?=
- =?utf-8?B?dHJTVWFrYjd4bVZaRllNSTFRTnFGVFJkK0hRbWxaOFAxdUdKRExEamZ1VlA2?=
- =?utf-8?B?MkFCcE5uckhOUGhnZHlRNE9GaFNzZnU5T1h0NVBXUnVBNWRHcUgvTno0Yys0?=
- =?utf-8?B?VUdKK1MzUUcrblV5WkpsZzU1ZUJ0c01SczlUNmhwNFFwdmk4dnBYd1oxUk9l?=
- =?utf-8?B?QzQzYVFRWVF0THJYWWFLbU1QYmVKT0JpTmFYTW50U3VIUzhXaDVUUktiT3VN?=
- =?utf-8?B?YmhaVXRGZUtZaDFOVGlDNHpqaXVxN3pRdkFpYysxNWhub0ZqdWdlNUkzUTF2?=
- =?utf-8?B?U2FXWE96VWY5bHQ4WDdabTJaMFdBK2pZWUpDQWt2Wi9Qak1VZitEbkYyeFlh?=
- =?utf-8?B?UXFRc3hkM2gwWWxIWktsRDZkMW1YZTBYRnZqM2QzbVYvTGlNU3I1U3pHK0lR?=
- =?utf-8?B?b2t2ekVCTVhJNTJ4ajU5dGZnTFBxVkxSYWZKNitzaXhsV2ZRMWpWZGFtcVN2?=
- =?utf-8?B?ZlNpRy9TMEZVUUJ6TDd4TGVPZGk5eFFSZ3JSL1VXblBIQVg3aWd2dmdQQUtW?=
- =?utf-8?B?S2xaYVI4TkdRd0lZdU9TdTZHUVdpbzRVVVpGczBWLzVWQ2VvdGxia2pWNTJQ?=
- =?utf-8?B?T3dYOGJCL3BBbHkrckpUREdtRkV4L0pMN0oxd3JCMy9NQUFJK3V1YU1Jd245?=
- =?utf-8?B?ZCtuQVpkUXVXdGE0ejFpQnpMckhIN0dhSjFWWU1ieWxVelRmeXdsS0pDcnlp?=
- =?utf-8?B?bU11bEJQa2cvcHRIcEV3TWtIb3ZBZzN1NGZXMmxKa0VjOE0ybXdxVU9meDZX?=
- =?utf-8?B?VExOVTZhdnZWSEhUQTdFanBib2VhRCtiaEIxaWNuT3NUdDh0TXZpUHJMdTdP?=
- =?utf-8?B?ZndSUnJLZTZaQ1liWHJnbElXQkpJa2lOZU54cHorNmNVQUpXQktrNkRGcVAr?=
- =?utf-8?B?RGhyU1hia2lMekNCU29Ud2VjNG5hbnJ0dlkvU3NIVEhOV3Y1Z1J2Y1pQcDVG?=
- =?utf-8?B?b3dJdkN3ZzBNazBDU3pvTmJOM3oxQlFzdVRQR0xLTis3VDlTbVNHUG4yZitR?=
- =?utf-8?B?YjFvU3hXMWZ6Tm5BTFZya1l2T1RSbGduZ1VYc0IydVVBOUg1SkhibkJoWGtk?=
- =?utf-8?B?Y0QzNGRwT2xHbGovRHZ4THU0cGZlb2ZlMDQ2eTlVbFBycmNPck1qbDlPdXJh?=
- =?utf-8?B?UzRCalZjRVZGTzkvM0dnRERzTUpQZ1lCS2hWZDBkemNQUGpWUHpra3hyVjg1?=
- =?utf-8?B?b0JleHQzb1E0cXZNaW04NkQrL25PbmppYWZ2TlY0eE05dGNYR2cyRS9lVlRL?=
- =?utf-8?B?eTRsNHlLVXdkdTY4S3F2Tno0akliWFl2T1dPWEVKNTB4alNPeHpQdUppMFBw?=
- =?utf-8?B?MHRCN1VrZjJ2ZmZrYUJhQk1PSU53bGFmZDF4WTBBWVF3U2hNSDlWSkp0WmtB?=
- =?utf-8?B?cDlPLzNtKzBFTW00b2xJcXNUR3RtZTVXYjN3QWJHMEdpK3JQSFNibGhNV0h1?=
- =?utf-8?B?WngvclNEYW1xWUljbHJYbmFyUGtJcG9PVkE2ajh5ZEc5SDVDalJVTm9tOW1m?=
- =?utf-8?B?RTQxZ2cwbFR3VEpuSEFMa2JKZE1JSlROZnVNcHBsT3JkQTNvNlBtKytWUU12?=
- =?utf-8?B?YkdQWlR3NC9nNk5nc3hqWkhYVC9Xb1ROWWF0bitPYUgvOFRHZHZUZlJFaEl0?=
- =?utf-8?B?d1NVZzNuUy9hZUhreWZxUG5xemM5VHpSOXQ5aW5EZWRQWGVMSGpWbmpCcnVi?=
- =?utf-8?B?S3RWYWRyNmw2V2tMaFB1bkVZZlFuQ1pTT2NRRGpuQTJuT3RoZCtQcjBNTUhp?=
- =?utf-8?B?WUdxcnNLRjNoVVlPdGEzNXNjQlBsTG5UbE4xMWprZEN1ZmNMUVV0NjhkZmxJ?=
- =?utf-8?B?WDZuZVdkN01wQmwyMUtqeDhFbk5WaDdwQWZVTElFSHFXMlJrRlJMZ2dTK0JK?=
- =?utf-8?B?Z0VIY0ZiN01ocTBYZFhOdDdXODl6dmF6b0Vac2c3V1JpajhGNEJ3V1BBRStQ?=
- =?utf-8?B?WlhlZ2JiekZzV01RblBCU0R4N05BM0NxOG8rUDIrVW9SSlhqd3BsL0F1OTcz?=
- =?utf-8?B?bW4zYTVMbVR5NEdtK0t0OGVabUdqOXd0M0xWNjBJQ3JiMFlUZForYkJLdFR4?=
- =?utf-8?Q?K9MidB1Oq7xSWGCKnV60w5mr3?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd63527b-82d5-4077-ec11-08dbfbc72bff
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB7016.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2023 10:35:06.3567
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /sPjR0WE0h4UDwaoFjr+5mHTgOtajIDHhrEN4X4lwEbG08tfx5W1aq99V91+izCjx+jBa773pLNOTJhTk8mKpA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6895
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: da48708e873312aeba42481f12e2982f8a8ffb80  Merge tag 'thunderbolt-for-v6.7-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
 
-On 12/13/2023 11:53 AM, Mika Westerberg wrote:
-> On Wed, Dec 13, 2023 at 08:18:06AM +0200, Mika Westerberg wrote:
->> On Wed, Dec 13, 2023 at 07:49:14AM +0200, Mika Westerberg wrote:
->>> On Wed, Dec 13, 2023 at 12:46:35AM +0530, Sanath S wrote:
->>>> Boot firmware might have created tunnels of its own. Since we cannot
->>>> be sure they are usable for us. Tear them down and reset the ports
->>>> to handle it as a new hotplug for USB3 routers.
->>>>
->>>> Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
->>>> Signed-off-by: Sanath S <Sanath.S@amd.com>
->>>> ---
->>>>   drivers/thunderbolt/tb.c | 11 +++++++++++
->>>>   1 file changed, 11 insertions(+)
->>>>
->>>> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
->>>> index fd49f86e0353..febd0b6972e3 100644
->>>> --- a/drivers/thunderbolt/tb.c
->>>> +++ b/drivers/thunderbolt/tb.c
->>>> @@ -2598,6 +2598,17 @@ static int tb_start(struct tb *tb)
->>>>   	tb_switch_tmu_enable(tb->root_switch);
->>>>   	/* Full scan to discover devices added before the driver was loaded. */
->>>>   	tb_scan_switch(tb->root_switch);
->>>> +	/*
->>>> +	 * Boot firmware might have created tunnels of its own. Since we cannot
->>>> +	 * be sure they are usable for us, Tear them down and reset the ports
->>>> +	 * to handle it as new hotplug for USB4 routers.
->>>> +	 */
->>>> +	if (tb_switch_is_usb4(tb->root_switch)) {
->>>> +		tb_switch_discover_tunnels(tb->root_switch,
->>>> +					   &tcm->tunnel_list, false);
->>> Why this is needed?
->>>
->>> It should be enough, to do simply something like this:
->>>
->>> 	if (tb_switch_is_usb4(tb->root_switch))
->>> 		tb_switch_reset(tb->root_switch);
-If we don't tear down of tunnels before performing the DPR, the PCIe 
-enumeration is failing.
+elapsed time: 1465m
 
-PCIe link is not coming up after DPR. Below log is missing without 
-performing path
-deactivation before performing DPR and hence PCIe enumeration is not 
-initiated.
+configs tested: 205
+configs skipped: 3
 
-[  746.630865] pcieport 0000:00:03.1: pciehp: Slot(0-1): Card present
-[  746.630885] pcieport 0000:00:03.1: pciehp: Slot(0-1): Link Up
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I think when we do a DPR, it internally does some handling with PCI Path 
-Enable bit(PE).
-So, deactivation of PCIe path is necessary for DPR to work.
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                          axs103_defconfig   gcc  
+arc                                 defconfig   gcc  
+arc                     nsimosci_hs_defconfig   gcc  
+arc                   randconfig-001-20231213   gcc  
+arc                   randconfig-002-20231213   gcc  
+arc                    vdk_hs38_smp_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                         axm55xx_defconfig   gcc  
+arm                                 defconfig   clang
+arm                            hisi_defconfig   gcc  
+arm                         lpc18xx_defconfig   gcc  
+arm                       omap2plus_defconfig   gcc  
+arm                   randconfig-001-20231213   clang
+arm                   randconfig-002-20231213   clang
+arm                   randconfig-003-20231213   clang
+arm                   randconfig-004-20231213   clang
+arm                         vf610m4_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20231213   clang
+arm64                 randconfig-002-20231213   clang
+arm64                 randconfig-003-20231213   clang
+arm64                 randconfig-004-20231213   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20231213   gcc  
+csky                  randconfig-002-20231213   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20231213   clang
+hexagon               randconfig-002-20231213   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20231212   gcc  
+i386         buildonly-randconfig-002-20231212   gcc  
+i386         buildonly-randconfig-003-20231212   gcc  
+i386         buildonly-randconfig-004-20231212   gcc  
+i386         buildonly-randconfig-005-20231212   gcc  
+i386         buildonly-randconfig-006-20231212   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231212   gcc  
+i386                  randconfig-002-20231212   gcc  
+i386                  randconfig-003-20231212   gcc  
+i386                  randconfig-004-20231212   gcc  
+i386                  randconfig-005-20231212   gcc  
+i386                  randconfig-006-20231212   gcc  
+i386                  randconfig-011-20231212   clang
+i386                  randconfig-011-20231213   gcc  
+i386                  randconfig-012-20231212   clang
+i386                  randconfig-012-20231213   gcc  
+i386                  randconfig-013-20231212   clang
+i386                  randconfig-013-20231213   gcc  
+i386                  randconfig-014-20231212   clang
+i386                  randconfig-014-20231213   gcc  
+i386                  randconfig-015-20231212   clang
+i386                  randconfig-015-20231213   gcc  
+i386                  randconfig-016-20231212   clang
+i386                  randconfig-016-20231213   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231213   gcc  
+loongarch             randconfig-002-20231213   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                       m5249evb_defconfig   gcc  
+m68k                        m5307c3_defconfig   gcc  
+m68k                          multi_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   clang
+mips                             allyesconfig   gcc  
+mips                 decstation_r4k_defconfig   gcc  
+mips                            gpr_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20231213   gcc  
+nios2                 randconfig-002-20231213   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20231213   gcc  
+parisc                randconfig-002-20231213   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                     asp8347_defconfig   gcc  
+powerpc                      ppc6xx_defconfig   gcc  
+powerpc               randconfig-001-20231213   clang
+powerpc               randconfig-002-20231213   clang
+powerpc               randconfig-003-20231213   clang
+powerpc                    sam440ep_defconfig   gcc  
+powerpc                     tqm8541_defconfig   gcc  
+powerpc                      tqm8xx_defconfig   gcc  
+powerpc64             randconfig-001-20231213   clang
+powerpc64             randconfig-002-20231213   clang
+powerpc64             randconfig-003-20231213   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                    nommu_k210_defconfig   gcc  
+riscv                 randconfig-001-20231213   clang
+riscv                 randconfig-002-20231213   clang
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                          debug_defconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20231213   gcc  
+s390                  randconfig-002-20231213   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                         apsh4a3a_defconfig   gcc  
+sh                                  defconfig   gcc  
+sh                        dreamcast_defconfig   gcc  
+sh                        edosk7760_defconfig   gcc  
+sh                    randconfig-001-20231213   gcc  
+sh                    randconfig-002-20231213   gcc  
+sh                          rsk7264_defconfig   gcc  
+sh                          sdk7786_defconfig   gcc  
+sh                           se7619_defconfig   gcc  
+sh                           se7724_defconfig   gcc  
+sh                        sh7763rdp_defconfig   gcc  
+sh                   sh7770_generic_defconfig   gcc  
+sh                            titan_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                 randconfig-001-20231213   gcc  
+sparc                 randconfig-002-20231213   gcc  
+sparc                       sparc32_defconfig   gcc  
+sparc                       sparc64_defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20231213   gcc  
+sparc64               randconfig-002-20231213   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20231213   clang
+um                    randconfig-002-20231213   clang
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20231213   clang
+x86_64       buildonly-randconfig-002-20231213   clang
+x86_64       buildonly-randconfig-003-20231213   clang
+x86_64       buildonly-randconfig-004-20231213   clang
+x86_64       buildonly-randconfig-005-20231213   clang
+x86_64       buildonly-randconfig-006-20231213   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                randconfig-011-20231213   clang
+x86_64                randconfig-012-20231213   clang
+x86_64                randconfig-013-20231213   clang
+x86_64                randconfig-014-20231213   clang
+x86_64                randconfig-015-20231213   clang
+x86_64                randconfig-016-20231213   clang
+x86_64                randconfig-071-20231213   clang
+x86_64                randconfig-072-20231213   clang
+x86_64                randconfig-073-20231213   clang
+x86_64                randconfig-074-20231213   clang
+x86_64                randconfig-075-20231213   clang
+x86_64                randconfig-076-20231213   clang
+x86_64                           rhel-8.3-bpf   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                           alldefconfig   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
+xtensa                randconfig-001-20231213   gcc  
+xtensa                randconfig-002-20231213   gcc  
 
->> Actually this needs to be done only for USB4 v1 routers since we already
->> reset USB4 v2 hosts so something like:
->>
->> 	/*
->> 	 * Reset USB4 v1 host router to get rid of possible tunnels the
->> 	 * boot firmware created. This makes sure all the tunnels are
->> 	 * created by us and thus have known configuration.
->> 	 *
->> 	 * For USB4 v2 and beyond we do this in nhi_reset() using the
->> 	 * host router reset interface.
->> 	 */
->> 	if (usb4_switch_version(tb->root_switch) == 1)
->> 		tb_switch_reset(tb->root_switch);
->>
->> (possibly add similar comment to the nhi_reset() to refer this one).
-> Oh, and would it be possible to tie this with the "host_reset" parameter
-> too somehow? I guess it could be moved to "tb.c" and "tb.h" and then
-> check it from nhi.c as already done and then here so this would become:
->
->   	if (host_reset && usb4_switch_version(tb->root_switch) == 1)
->   		tb_switch_reset(tb->root_switch);
-
-Is host_reset necessary for USB4 v1 routers ? I did not use host_reset 
-in this case.
-If its needed, then we have to modify to enable host_reset in nhi.c as well.
-
-> With the idea that the user has a "chicken bit" to disable this
-> behaviour (and consistent one with USB4 v2). Feel free to make it look
-> nicer though.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
