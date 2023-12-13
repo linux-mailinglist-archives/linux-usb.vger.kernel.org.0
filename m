@@ -1,180 +1,196 @@
-Return-Path: <linux-usb+bounces-4090-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4091-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C96A810770
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 02:12:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59468810896
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 04:13:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22BCC1F2197C
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 01:12:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE698B21034
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 03:13:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03CC2A5E;
-	Wed, 13 Dec 2023 01:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Epi5hp+O"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D3096126;
+	Wed, 13 Dec 2023 03:13:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878F0A5
-	for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 17:12:06 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-54744e66d27so6343a12.0
-        for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 17:12:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702429925; x=1703034725; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hduHVDy0MOFsp0Y6n+Hk33OuNWF1OBB68kJNXYKHkws=;
-        b=Epi5hp+Oyzv9xfRAHslcuz2VY5Tl7azdwA1RNETf/7YZa8fHwajdYv4BYm5WtXxTtV
-         d7UF/Xsx+Lswuo0mRoA572V4+B9lS9kpjRucA31dFP48fZ45xaKULzHDcleDc2mhyPXK
-         X9YciKxjL+OjpD0KcnD2LxgO+wIEEcymEfufl9pRa8vi9KmZIG+6SHqT6xmijVuCh6zN
-         wkHsX8AQb2mdNM8pc0gT6K0s/ULj40gMJpkMORIJ03X9/HtrbFZzNcoQhkA/dxrDj+MP
-         l11FP+CLc9ijEAA2hHojE4rZmUsFMv8XWn8gjs/qOJuID4X0LKyg8KQ2rKbBeqIucZtM
-         eXKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702429925; x=1703034725;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hduHVDy0MOFsp0Y6n+Hk33OuNWF1OBB68kJNXYKHkws=;
-        b=BJPNcehen85xGWI7TGKreOrhYqGR7pVz0dWK/AEZSNxAWnf3NGQVhzkGVTzeZJuLnv
-         RqtwePKv5QGjdcPfqJZGn/rYMvpnTAy+8xnPK0ozm/5YtuAib00y/KLyIg4ZG3IeuLw1
-         BirZ8dYzyknYYwhGFs4bMlhYVuZCHJHC+cS4m03oMR4G7b4ORre1X6ve7v1UZC/XmnWu
-         /Kv/4JGG9q6XblD0ucmkgxFq8ah/6azUlB6+aexY/+vYBKQClfY471gm5fqQL1v4gZXJ
-         nqNHAST6WJkG4aZdxwUfCH4alxF85Kh+tf93ecGRLV9v97FtuA732Ob5vKP+XkdPPYlK
-         V5dA==
-X-Gm-Message-State: AOJu0Yyf52sYVprehP+84q257Hm9+qh5yw6AaBTIWId0NZzypDzhfzlR
-	WeTw6a+Fpb/tKQ/3ytVqM13dW8e5MIDT+AophAwtCQ==
-X-Google-Smtp-Source: AGHT+IGQerk5NGB3rNbGAUhdn/wlj9huGSDWiM00yD90xC46A7t3vCO7/NkzbSY4Z1OsywStrGPvVXCqs1DnDcFfo/Y=
-X-Received: by 2002:a50:d601:0:b0:551:f450:752a with SMTP id
- x1-20020a50d601000000b00551f450752amr39888edi.6.1702429924863; Tue, 12 Dec
- 2023 17:12:04 -0800 (PST)
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0862CB2;
+	Tue, 12 Dec 2023 19:13:23 -0800 (PST)
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3BD3C6prC3944118, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3BD3C6prC3944118
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 13 Dec 2023 11:12:06 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Wed, 13 Dec 2023 11:12:06 +0800
+Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 13 Dec 2023 11:12:03 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
+ 15.1.2507.17 via Frontend Transport; Wed, 13 Dec 2023 11:12:03 +0800
+From: Stanley Chang <stanley_chang@realtek.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Stanley Chang <stanley_chang@realtek.com>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Johan Hovold
+	<johan+linaro@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jinjie Ruan <ruanjinjie@huawei.com>, Rob Herring <robh@kernel.org>,
+        "Alan
+ Stern" <stern@rowland.harvard.edu>, Roy Luo <royluo@google.com>,
+        =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
+        "Heikki
+ Krogerus" <heikki.krogerus@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>
+Subject: [PATCH v4 1/4] phy: core: add notify_connect and notify_disconnect callback
+Date: Wed, 13 Dec 2023 11:10:06 +0800
+Message-ID: <20231213031203.4911-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212203222.lxihy34lh22g6d3w@hdebian> <ccb72864-6623-4652-8ccf-700c2c68916e@suse.com>
-In-Reply-To: <ccb72864-6623-4652-8ccf-700c2c68916e@suse.com>
-From: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date: Tue, 12 Dec 2023 17:11:49 -0800
-Message-ID: <CANP3RGdOT9rrBai+uuTZCo7JPyeEbh_u+vu6VD7t_Z80nfAn1Q@mail.gmail.com>
-Subject: Re: Question regarding CDC NCM and VNC performance issue
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Hiago De Franco <hiagofranco@gmail.com>, Francesco Dolcini <francesco@dolcini.it>, davem@davemloft.net, 
-	edumazet@google.com, hiago.franco@toradex.com, kuba@kernel.org, 
-	linux-usb@vger.kernel.org, pabeni@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-KSE-ServerInfo: RTEXMBS02.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
-On Tue, Dec 12, 2023 at 1:21=E2=80=AFPM Oliver Neukum <oneukum@suse.com> wr=
-ote:
->
-> On 12.12.23 21:32, Hiago De Franco wrote:
->
-> Hi,
->
-> > On Mon, Dec 11, 2023 at 12:44:42PM -0800, Maciej =C5=BBenczykowski wrot=
-e:
-> >> On Mon, Dec 11, 2023 at 12:29=E2=80=AFPM Hiago De Franco <hiagofranco@=
-gmail.com> wrote:
->
-> >> Hiago, could you try lowering CDC_NCM_TIMER_PENDING_CNT, if need be al=
-l the way to 1?
-> >> It is defined in include/linux/usb/cdc_ncm.h as 3 currently
-> >> This applies to the host side.
-> >
-> > On my side CDC_NCM_TIMER_PENDING_CNT is set to 2 by default, did you
-> > mean CDC_NCM_RESTART_TIMER_DATAGRAM_CNT?
->
-> Yes, I meant that. Sorry.
->
-> > Despite of that, I tried to lower both CDC_NCM_TIMER_PENDING_CNT and
-> > CDC_NCM_RESTART_TIMER_DATAGRAM_CNT all the way down to 1, first the
-> > CDC_NCM_TIMER_PENDING_CNT, then CDC_NCM_RESTART_TIMER_DATAGRAM_CNT and
-> > finally both at the same time, but it didn't help.
-> >
-> > I've also put some printks as following:
-> >
-> >       ctx->tx_curr_frame_num =3D n;
-> >       printk("hfranco: tx_curr_frame_num =3D %d", n);
-> >
-> >       if (n =3D=3D 0) {
-> >               printk("hfranco: n =3D=3D 0");
-> >               /* wait for more frames */
-> >               /* push variables */
-> >               ctx->tx_curr_skb =3D skb_out;
-> >               goto exit_no_skb;
-> >
-> >       } else if ((n < ctx->tx_max_datagrams) && (ready2send =3D=3D 0) &=
-& (ctx->timer_interval > 0)) {
-> >               printk("hfranco: tx_max_datagrams =3D %d", ctx->tx_max_da=
-tagrams);
-> >               printk("hfranco: timer_interval =3D %d", ctx->timer_inter=
-val);
-> >               printk("hfranco: n inside else if =3D %d", n);
-> >               /* wait for more frames */
-> >               /* push variables */
-> >               ctx->tx_curr_skb =3D skb_out;
-> >               /* set the pending count */
-> >               if (n < CDC_NCM_RESTART_TIMER_DATAGRAM_CNT)
-> >                       ctx->tx_timer_pending =3D CDC_NCM_TIMER_PENDING_C=
-NT;
-> >               goto exit_no_skb;
-> >
-> >       } else {
-> >               printk("hfranco: n inside else =3D %d", n);
-> >               if (n =3D=3D ctx->tx_max_datagrams)
-> >                       ctx->tx_reason_max_datagram++;  /* count reason f=
-or transmitting */
-> >
-> > I ran it on my host PC, compiled it as module for my Debian dekstop, an=
-d
+In Realtek SoC, the parameter of usb phy is designed to be able to
+do dynamic tuning based in the port status. Therefore, add a notify
+callback of phy driver when usb connection/disconnection change.
 
-Shouldn't you be doing this on the gadget side?
-I thought we were thinking it was the gadget transmit timer having issues.
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+v3 to v4 change:
+   1. Modified some phrasing.
+   2. Add the description for callback function.
+v2 to v3:
+    No change
+v1 to v2:
+    No change
+---
+ drivers/phy/phy-core.c  | 47 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/phy/phy.h | 21 ++++++++++++++++++
+ 2 files changed, 68 insertions(+)
 
-> > this is the dmesg:
-> >
-> > [ 9663.478807] hfranco: tx_curr_frame_num =3D 1
-> > [ 9663.478816] hfranco: tx_max_datagrams =3D 40
-> > [ 9663.478818] hfranco: timer_interval =3D 400000
-> > [ 9663.478820] hfranco: n inside else if =3D 1
-> > [ 9663.478822] hfranco: timer started
-> > [ 9663.479645] hfranco: tx_curr_frame_num =3D 1
-> > [ 9663.479652] hfranco: n inside else =3D 1
-> >
-> > And then it basically repeats. Looks like 'n' never passes the 1 value.
-> > By tweaking the flags mentioned before, 'n' got a value of 4, but that
-> > was the maximum value. I was wondering, why do you think this code look=
-s
-> > suspicious? I basically just inserted some printks on the tx side, I
-> > will see if I can get something from the rx as well.
->
-> If we look at the statistics you initially gathered, we can see that all =
-transmissions
-> on the host side happen because the timeout elapses. That, however, does
-> _not_ tell us that the host is to blame. We could look at two possible sc=
-enarios
->
-> A - the gadget is bundling up the packets with too much delay and the hos=
-t
-> just answers to the megatransmissions with one packet and the delay on th=
-e host
-> is inconsequential
->
-> B - the timer on the host runs for too long or sometimes not at all. If t=
-hat were
-> the case that code I pointed out would be most likely to blame
->
-> Could I suggest we try to localize the issue? Can you ping the host from =
-the device?
->
->         Regards
->                 Oliver
+diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+index 96a0b1e111f3..acfa408a3ca5 100644
+--- a/drivers/phy/phy-core.c
++++ b/drivers/phy/phy-core.c
+@@ -489,6 +489,53 @@ int phy_calibrate(struct phy *phy)
+ }
+ EXPORT_SYMBOL_GPL(phy_calibrate);
+ 
++/**
++ * phy_notify_connect() - phy connect notification
++ * @phy: the phy returned by phy_get()
++ * @port: the port index for connect
++ *
++ * If the phy needs to get connection status, the callback can be used.
++ * Returns: %0 if successful, a negative error code otherwise
++ */
++int phy_notify_connect(struct phy *phy, int port)
++{
++	int ret;
++
++	if (!phy || !phy->ops->connect)
++		return 0;
++
++	mutex_lock(&phy->mutex);
++	ret = phy->ops->connect(phy, port);
++	mutex_unlock(&phy->mutex);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(phy_notify_connect);
++
++/**
++ * phy_notify_disconnect() - phy disconnect notification
++ * @phy: the phy returned by phy_get()
++ * @port: the port index for disconnect
++ *
++ * If the phy needs to get connection status, the callback can be used.
++ *
++ * Returns: %0 if successful, a negative error code otherwise
++ */
++int phy_notify_disconnect(struct phy *phy, int port)
++{
++	int ret;
++
++	if (!phy || !phy->ops->disconnect)
++		return 0;
++
++	mutex_lock(&phy->mutex);
++	ret = phy->ops->disconnect(phy, port);
++	mutex_unlock(&phy->mutex);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(phy_notify_disconnect);
++
+ /**
+  * phy_configure() - Changes the phy parameters
+  * @phy: the phy returned by phy_get()
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index f6d607ef0e80..aa76609ba258 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -122,6 +122,11 @@ struct phy_ops {
+ 			    union phy_configure_opts *opts);
+ 	int	(*reset)(struct phy *phy);
+ 	int	(*calibrate)(struct phy *phy);
++
++	/* notify phy connect status change */
++	int	(*connect)(struct phy *phy, int port);
++	int	(*disconnect)(struct phy *phy, int port);
++
+ 	void	(*release)(struct phy *phy);
+ 	struct module *owner;
+ };
+@@ -243,6 +248,8 @@ static inline enum phy_mode phy_get_mode(struct phy *phy)
+ }
+ int phy_reset(struct phy *phy);
+ int phy_calibrate(struct phy *phy);
++int phy_notify_connect(struct phy *phy, int port);
++int phy_notify_disconnect(struct phy *phy, int port);
+ static inline int phy_get_bus_width(struct phy *phy)
+ {
+ 	return phy->attrs.bus_width;
+@@ -396,6 +403,20 @@ static inline int phy_calibrate(struct phy *phy)
+ 	return -ENOSYS;
+ }
+ 
++static inline int phy_notify_connect(struct phy *phy, int index)
++{
++	if (!phy)
++		return 0;
++	return -ENOSYS;
++}
++
++static inline int phy_notify_disconnect(struct phy *phy, int index)
++{
++	if (!phy)
++		return 0;
++	return -ENOSYS;
++}
++
+ static inline int phy_configure(struct phy *phy,
+ 				union phy_configure_opts *opts)
+ {
+-- 
+2.34.1
 
---
-Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
 
