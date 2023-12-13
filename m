@@ -1,50 +1,46 @@
-Return-Path: <linux-usb+bounces-4129-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4130-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 513BB8119D5
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 17:43:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1D7D8119D6
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 17:43:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDBAD1F218B7
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 16:43:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B6062827D9
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 16:43:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 220C8364B3;
-	Wed, 13 Dec 2023 16:43:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B78B439FC5;
+	Wed, 13 Dec 2023 16:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OikvGNj6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EutNB+zN"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A6A2FC42
-	for <linux-usb@vger.kernel.org>; Wed, 13 Dec 2023 16:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C16C433C9;
-	Wed, 13 Dec 2023 16:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ADD0364D4
+	for <linux-usb@vger.kernel.org>; Wed, 13 Dec 2023 16:43:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D53F6C433CA;
+	Wed, 13 Dec 2023 16:43:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702485791;
-	bh=wYZoxRzv7f2lUWGVcUrdQYjqojzH2JSBWrtkL9KlpB4=;
+	s=k20201202; t=1702485793;
+	bh=Xx02t9tpORoHITkBD1x5P/vBMElFrxoGnWnTgr1OD4o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OikvGNj6sd0jUETMSWlDSLI5ZF/U+uXbQ8cVDaFNlkARUf5qtCOPFz/y3XWqThSt8
-	 cEuyEzZacvtERUMB5wriCrNSxDOFQtiDQjRRTxmdNqT4jo0SCEsVbcIY82OKRdZhoH
-	 HM3VYJzdSXnumn5UpTJomk69ro5yyp6jl7AOUaWDuuP+JqilQ2Ux4CVJ6q9s2iGbFC
-	 Mztob5uy85eoJrWtcOrBgI8hOAMk+iahwGDNv38hzfGSXFeILsO2PIfr1PGFEoWQ6o
-	 8k9KL+WzlfxAxmaxUjYswgOY4eP+iOTNwsQj6Sn+XvHB0Id3BUw94U00TfCDWIDGN6
-	 DcKnJuEBEW5tQ==
+	b=EutNB+zNKO4N/VpzUrYjbCv+FL+7uqhHDzbhfhdf6kUFBBoU5zCuXwircAdOnN7N2
+	 F20tPDI/AsLUekafvAm+A9k9bs97hk0Pixjq6liQaUVHRlvCPCLnvOWT16e31KTXku
+	 fR/Kus4TFXB95ldUvG2CW9kh8lu9/klGDgsXea8v9vt9WiaSvSDq6t6C6yt5kO8v0p
+	 7qtPahEkz8yk9Q88FAuc3o7gIUTYrDTW82I+FTRbWNJ1gD8tUSKuKeA+5xOiJIpi3Y
+	 S4wEsePZQrGp4Rwj9YHpWQbbS52vKg8vIFzgXX+VdthuUy5A9xqJIAQkMRF6+jrRBo
+	 vmK+bIWyD6TXg==
 From: Lee Jones <lee@kernel.org>
 To: lee@kernel.org,
 	gregkh@linuxfoundation.org
 Cc: linux-kernel@vger.kernel.org,
 	linux-usb@vger.kernel.org,
-	Cristian Birsan <cristian.birsan@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 07/12] usb: host: max3421-hcd: Replace snprintf() with the safer scnprintf() variant
-Date: Wed, 13 Dec 2023 16:42:36 +0000
-Message-ID: <20231213164246.1021885-8-lee@kernel.org>
+	Tomoki Sekiyama <tomoki.sekiyama@gmail.com>
+Subject: [PATCH 08/12] usb: yurex: Replace snprintf() with the safer scnprintf() variant
+Date: Wed, 13 Dec 2023 16:42:37 +0000
+Message-ID: <20231213164246.1021885-9-lee@kernel.org>
 X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 In-Reply-To: <20231213164246.1021885-1-lee@kernel.org>
 References: <20231213164246.1021885-1-lee@kernel.org>
@@ -65,54 +61,58 @@ in the past.  It's generally considered safer to use the {v}scnprintf()
 variants in their place (or even sprintf() in simple cases).  So let's
 do that.
 
+Whilst we're at it, let's define some magic numbers to increase
+readability and ease of maintenance.
+
 Link: https://lwn.net/Articles/69419/
 Link: https://github.com/KSPP/linux/issues/105
-Cc: Cristian Birsan <cristian.birsan@microchip.com>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Cc: linux-arm-kernel@lists.infradead.org
+Cc: Tomoki Sekiyama <tomoki.sekiyama@gmail.com>
 Signed-off-by: Lee Jones <lee@kernel.org>
 ---
- drivers/usb/host/max3421-hcd.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/usb/misc/yurex.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
-index d152d72de1269..9fe4f48b18980 100644
---- a/drivers/usb/host/max3421-hcd.c
-+++ b/drivers/usb/host/max3421-hcd.c
-@@ -1158,12 +1158,12 @@ dump_eps(struct usb_hcd *hcd)
- 		end = dp + sizeof(ubuf);
- 		*dp = '\0';
- 		list_for_each_entry(urb, &ep->urb_list, urb_list) {
--			ret = snprintf(dp, end - dp, " %p(%d.%s %d/%d)", urb,
--				       usb_pipetype(urb->pipe),
--				       usb_urb_dir_in(urb) ? "IN" : "OUT",
--				       urb->actual_length,
--				       urb->transfer_buffer_length);
--			if (ret < 0 || ret >= end - dp)
-+			ret = scnprintf(dp, end - dp, " %p(%d.%s %d/%d)", urb,
-+					usb_pipetype(urb->pipe),
-+					usb_urb_dir_in(urb) ? "IN" : "OUT",
-+					urb->actual_length,
-+					urb->transfer_buffer_length);
-+			if (ret == end - dp - 1)
- 				break;	/* error or buffer full */
- 			dp += ret;
- 		}
-@@ -1255,9 +1255,9 @@ max3421_handle_irqs(struct usb_hcd *hcd)
- 			end = sbuf + sizeof(sbuf);
- 			*dp = '\0';
- 			for (i = 0; i < 16; ++i) {
--				int ret = snprintf(dp, end - dp, " %lu",
--						   max3421_hcd->err_stat[i]);
--				if (ret < 0 || ret >= end - dp)
-+				int ret = scnprintf(dp, end - dp, " %lu",
-+						    max3421_hcd->err_stat[i]);
-+				if (ret == end - dp - 1)
- 					break;	/* error or buffer full */
- 				dp += ret;
- 			}
+diff --git a/drivers/usb/misc/yurex.c b/drivers/usb/misc/yurex.c
+index c640f98d20c54..5a13cddace0e6 100644
+--- a/drivers/usb/misc/yurex.c
++++ b/drivers/usb/misc/yurex.c
+@@ -34,6 +34,8 @@
+ #define YUREX_BUF_SIZE		8
+ #define YUREX_WRITE_TIMEOUT	(HZ*2)
+ 
++#define MAX_S64_STRLEN 20 /* {-}922337203685477580{7,8} */
++
+ /* table of devices that work with this driver */
+ static struct usb_device_id yurex_table[] = {
+ 	{ USB_DEVICE(YUREX_VENDOR_ID, YUREX_PRODUCT_ID) },
+@@ -401,7 +403,7 @@ static ssize_t yurex_read(struct file *file, char __user *buffer, size_t count,
+ {
+ 	struct usb_yurex *dev;
+ 	int len = 0;
+-	char in_buffer[20];
++	char in_buffer[MAX_S64_STRLEN];
+ 	unsigned long flags;
+ 
+ 	dev = file->private_data;
+@@ -412,14 +414,14 @@ static ssize_t yurex_read(struct file *file, char __user *buffer, size_t count,
+ 		return -ENODEV;
+ 	}
+ 
++	if (WARN_ON_ONCE(dev->bbu > S64_MAX || dev->bbu < S64_MIN))
++		return -EIO;
++
+ 	spin_lock_irqsave(&dev->lock, flags);
+-	len = snprintf(in_buffer, 20, "%lld\n", dev->bbu);
++	scnprintf(in_buffer, MAX_S64_STRLEN, "%lld\n", dev->bbu);
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 	mutex_unlock(&dev->io_mutex);
+ 
+-	if (WARN_ON_ONCE(len >= sizeof(in_buffer)))
+-		return -EIO;
+-
+ 	return simple_read_from_buffer(buffer, count, ppos, in_buffer, len);
+ }
+ 
 -- 
 2.43.0.472.g3155946c3a-goog
 
