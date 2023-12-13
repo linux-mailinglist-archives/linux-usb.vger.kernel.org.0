@@ -1,163 +1,156 @@
-Return-Path: <linux-usb+bounces-4120-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4121-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 728D281178C
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 16:41:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C8DA81190C
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 17:19:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 177C51C20C52
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 15:41:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A6CDDB2103C
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 16:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF09433099;
-	Wed, 13 Dec 2023 15:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BABB33CCF;
+	Wed, 13 Dec 2023 16:19:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="qfgBGbL5"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="joLQ/K6h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2052.outbound.protection.outlook.com [40.107.241.52])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3021985;
-	Wed, 13 Dec 2023 07:32:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FGDdULdeDaT+1Znnxw5mpQl+w7ShuoYkLfT575q/anVnfXKe8dv1najhSjaqKCHnLIPDh3o/KAAiixktcKpAR8buNr8JLQrG40HrbgNr7Cv7adAu4X1ofMK+bHOdsWoNGXCuJKsnkGIV6Eglbyh/ZbKxaJMGQ52b2eyRINi1azCWwnXstZY3K3o/jPoyrtA1IDTomNgCH5zQu/znN1prpFXh9JSzcapIZSlGhfUCRf8qTeantLgvfxVZiqtg6c5H6wVsjc9NKJF2p4TLyFymmRcDKyxK/TUOk6xGaO7KPYsVaQMsWtcQ44KbsH4+5/YlMHQq6K4UfGisixFV0Viwew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Oi5QWdYREGBDf4+0LM2jGZv3eRqwhA6HxVQtYWqtO9Y=;
- b=hRaTAYHUyBmPYDyXUCMvQ7IdryBb+4MFeglXnRVo/waGJohKU0qQPjPbC7u+4mS433/Urdrxz7TDbgfFwAWn8z9Q1i/CeYHHBB9GXrVGTLHItfi7gUdNw9z+4vAkqlJW22adoQxyNTwy3sxoN7Rf7NseTJq7orAwVQjmuOrx8lqbID4bvsxXI4P7fSXtUDqKgPWqav96a+3684T5dSZLTtWQPptBWYMB2wz2/mpH9++6l2FXv9ULaNdnrsA5V1QTOzGfqb31KwhhWIqgSp1OUmCbR7WFFlpc57PJHQSJD5uR1I/NkvkSo6DdPR05Owjsga/EhFdn3aMZku/lkWjpLw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Oi5QWdYREGBDf4+0LM2jGZv3eRqwhA6HxVQtYWqtO9Y=;
- b=qfgBGbL5Sq0wqi4FKmlXLSiB0+UDUaZUdJ/BbV+XCMcyKeqgJpnbYa5szJA175WDnFCwk0omcyEa8BJMI3v0Dhbre7F85nCVPFFrJvKUxdUoUUq6s1pyuPx7yZC5I6YsP46hX5LJgIuHcyWr7sOMVds+wq7G+rUhljIFYu3Hq8Q=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
- by DU0PR08MB8907.eurprd08.prod.outlook.com (2603:10a6:10:47f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.33; Wed, 13 Dec
- 2023 15:32:12 +0000
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::6b40:1e6f:7c94:71dc]) by VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::6b40:1e6f:7c94:71dc%4]) with mapi id 15.20.7068.031; Wed, 13 Dec 2023
- 15:32:12 +0000
-Message-ID: <d70255fb-7dc0-4119-b52a-9e8a955f0712@wolfvision.net>
-Date: Wed, 13 Dec 2023 16:32:09 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] usb: typec: tipd: add function to request firmware
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231207-tps6598x_update-v1-0-dc21b5301d91@wolfvision.net>
- <20231207-tps6598x_update-v1-2-dc21b5301d91@wolfvision.net>
- <ZXMudF++A9/y4TNk@kuha.fi.intel.com>
- <196acb44-fb0d-45b6-a9c3-b5a289a41917@wolfvision.net>
- <ZXhq/IJp9KVCkQYb@kuha.fi.intel.com>
- <f942ad57-e2e1-4896-83f5-a1acc0805afa@wolfvision.net>
- <ZXnKqsy2rEJxmXhG@kuha.fi.intel.com>
-Content-Language: en-US
-From: Javier Carrasco <javier.carrasco@wolfvision.net>
-In-Reply-To: <ZXnKqsy2rEJxmXhG@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR04CA0122.eurprd04.prod.outlook.com
- (2603:10a6:803:f0::20) To VE1PR08MB4974.eurprd08.prod.outlook.com
- (2603:10a6:803:111::15)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F26106;
+	Wed, 13 Dec 2023 08:19:13 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BDEQLKL015880;
+	Wed, 13 Dec 2023 16:19:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=YXZ0gTJLcXRK80R/QdLUiDkkAhr39zUqg+imbXMMADs=; b=jo
+	LQ/K6hqlFwmZKeD4dfiV5QBttJYWTMnKOLbJ0B2Hs8Gm8W6i9/17wOY25qQzOi6u
+	EIEbEfoMhUBrOO1MvxWvLMfs3jJHNN8M3Pd3Rb40NsMxR48lWwgu3dLcIt6jmBB3
+	qvpYVFdas5SRhmNdNXE1kXNGn3monN+Ylj1uIWpoc63LCOPXFnXONubKrbOnBDUI
+	FTMnrfkE3glkLOPxPdYYVW4K27ZNn4Dfc+9nm/GccD8hXN8dxCYMpjphSDrkg13y
+	Rp7/3avpAfKNElr7GQrY/CzHNwx4PH+16Dz33sz8JRSCUKYbpToWzj9DjoLuaVdG
+	uD81DSsnuGmE1farQ9rg==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uyec5r9cg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 13 Dec 2023 16:19:07 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BDGJ6ts023703
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 13 Dec 2023 16:19:06 GMT
+Received: from [10.216.40.169] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 13 Dec
+ 2023 08:19:00 -0800
+Message-ID: <c5d85c84-3783-4262-a379-1f28e13ae4ce@quicinc.com>
+Date: Wed, 13 Dec 2023 21:48:57 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|DU0PR08MB8907:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c2c6400-3384-4508-4593-08dbfbf0ad0c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Du50s63jaPQR0dBKHi6HVdwrF/ag98t1LERIr9x0TWwNf5DXftJEBvwnDEBug0zN6xX2EVP6Bnc5s0GARG1CDrZ9808w423J/N1B819XWrN2zBN0jXQT+028syavEj3j6KS1GzZyxqtROhZkVfJMYhx0cshw1aDFCM3vDVbJPL3GtrkCCqQKmwJEYPItZr+PHOi14dI3Fcs25Acnk0VEppDnbLc91L4a30UyszWozsiUouy96xLWY4gBNZT0FUeAzJohnfi3I9pqjOkJaW70V3nwPCnjvC8hLUmQdZ11rMmh6Yx+FdYj9h/K4F3WfJBT0ffJdJ14Xf+a0eheFeATjAImYriGUmBk5R+OOaRINqFWd/z5SoYpWZXf34im6PrBWu6f90n+CEnTGqBNCCNEL1hPCo0Rio+aqU5p4JgYkIUGMfyncnxZD+Q4bWRJVbAOCQzMHq5GjUKWMvW62jbsSg9xYdFPAS7EHVz50g0cPKxY2XOhA1wCXHS46Syo2pDjEvoTQ1GaHwXyfqowgJDUpqmmNHupkWiul1VfpHl64/h4SC0b+g7oU779JkAOPciF4XBj2n3pJOBoJkBw45B/rw5v905QKJg4a9CDDLAekBhy5Z576Z0zOJVL2ov75po/nJNQaOc5dr22fkB2/8h0RA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39850400004)(136003)(376002)(366004)(346002)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(38100700002)(83380400001)(26005)(2616005)(36756003)(86362001)(41300700001)(31696002)(31686004)(6506007)(6666004)(6512007)(478600001)(6916009)(66946007)(66556008)(66476007)(8936002)(8676002)(4326008)(5660300002)(2906002)(44832011)(316002)(53546011)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MU5IYkVKRHlRRC9DdUtXa1c0aEpUN0xGdkx5OVhmbSt0UU9NT2xEdXJENFpu?=
- =?utf-8?B?OWVGajBXRm5UOWljRmJ2R2dONHFDek5XOStLaXlXbUhUT04zS09laGtySk1G?=
- =?utf-8?B?YUUxY2Q5N2ZhRjE2bWY4SEJuMGFEbTBTNVpTVXJ6NVVJVEVKM0NvRVNWcmlw?=
- =?utf-8?B?RktKbTA5cmI3K0d0akNOZWVUMnNYUGV1RWVsSlhEdWc1a09FUTZPbE5NeUIx?=
- =?utf-8?B?R0kySEFQZUx1Z2s5NFJTOGpRSEpjcVZPbUtlcjlwdTdUbGY3d3BHYnIvR0NR?=
- =?utf-8?B?Uks0ZFNGTnpyRmp4WmtBWTVTMHF6N29aZXplUEI5ZWtsVzhUUFZuSXdJcHBP?=
- =?utf-8?B?NWFkb1dOcGo3UUg3RjFSYTczRXM0RUlnbTZYb1Q3N2lTamlzdmJwbUxTSXBZ?=
- =?utf-8?B?enh6OWZkamRxTUx0czc0cVd3TW5pQUsrdTNqaUI5aWF0QmdyL096MEFkemJO?=
- =?utf-8?B?cmtlYzB6aXZGSzh4SGx0dHdSS00rUjROT090MXBYc1Uxdlh0WDBMWmZWMlUx?=
- =?utf-8?B?MDhQTjBKTDh2clROOUlpZVltQlk0OXhXdHhRV2pHc2xoVmw2enZJbFVVRnVu?=
- =?utf-8?B?anpSYXE0TXpxeHdUZUliSyt5cHhTSDIwQXE3aVdtcEpHWXFEZ0FySFhKNCtJ?=
- =?utf-8?B?ZWI4eCs0aUFxOERkOEV4NXF5RFZNNEsyd213R1dDbHo0TEhxZDM0N3MrU3FS?=
- =?utf-8?B?N1grbHNqNU40YVYvWVpsQjdJa2xOQW1OUE8vRThaMTJUSGJNOXp2eGV4Ull0?=
- =?utf-8?B?MFBtSDFXcnhBZW41bG1FQS9lQ0ViZWdFWjJBbGhucjBSVnAzaGQvdHBZeGgy?=
- =?utf-8?B?aXhON1BuNW1uNk4zZ3I4cTRSY3lXRUJIS0x2eFVGdEFwaDVwTWhxQ2ZCV3F4?=
- =?utf-8?B?TFJsQ25RaDFSR21NTzlLN0dBRG5ybFVqbG9GWnV1eS95Y204d21OL0hicHVF?=
- =?utf-8?B?S1E5bUNITTBXWEpZby91YSsrR1FhN1lXbG40aVRxY2dVbzMwRytwZnhUQ2lj?=
- =?utf-8?B?LzRvd3R4clhSWFVoWlRGK3RhWWErTVhEYnpIVFMyTUx2OUJzVlZYWnYycFRH?=
- =?utf-8?B?WUFZcmJaNFliWEtESDZCUXpTcy9KTWFZa2ExeHFYOUt0N0tCQ0VTQXU2Rzkr?=
- =?utf-8?B?dVBYNnU2YlN5VlN3ZkRiRTJsZEZqVFpDc3dEclhRcFhSb0UzSU5rQVVoWHZZ?=
- =?utf-8?B?ZmYxUDVBS296cGpBeXhDRjdZdEdNRkdBemxrcmRMZGM4OWw5anlIOHF3OWF1?=
- =?utf-8?B?bXlENXhzeUpCTnJTWEdtNWVPcjZib1BEc1l0ZmlkRWl2UW1UQVg2Z2xMZWFO?=
- =?utf-8?B?aFQ3WmpBWk14YityOXUrSTBmRXFyNzkyMFVHTzllNlBnRjJpZVZVZ3pWdVFr?=
- =?utf-8?B?NG9Rb0R4bGRwNklaanF2K21Fc0JpWG5rQ2hydGZlbUFSYVM0VnI2cmlLZXZz?=
- =?utf-8?B?MVhoUGpKa0p3MWw4QlFFQ2hVVVNiU2dMZTlhQ3Y3UFRtTUxlSERDVTNqTUhM?=
- =?utf-8?B?czNYdU5ubGhlVyswczRzZ3Q4ZUVPazlObXZ6YlBZYnVYTndGSmlCM0g5TVE3?=
- =?utf-8?B?TGhYb1FoYmNnNVJUNEM4RGZBWG9sNjRoNWdPQnhTTC9NejMrUlRiZmhlNXkx?=
- =?utf-8?B?Mm1tRUprQXhYSjU4QTBEdzdlZVVhQ3lXeldlS2Jjb0N5OXZqclhMSFJXMEs3?=
- =?utf-8?B?V2Y5NFpjYlZZaGlQaGpORGQzSkJZc2ZSNGNBZlZTTDlpOE45blJVZTE4dm9U?=
- =?utf-8?B?TFIzcmFVeUN0eW5udEJHSlRTWFVYdDllT0tXdEF6T1Q3TC9LaThuOTJxbGd0?=
- =?utf-8?B?LzR2VFFFVmFQVG9ZN3U2cjdiUGtUSFdDcENKSGc4ZElyYy8zMWtlYUJEaCs2?=
- =?utf-8?B?emdpcG5YaUU1YW9IV29OWmlVYUVWT0RIUFRtanZzWDlqSlg2OTZLdDBGdVE2?=
- =?utf-8?B?clI3MEhJZmg0TWs2ay9QTGJIRUVBLzRXcndTbTk1SkZiY210bXY1Ukx0aTRy?=
- =?utf-8?B?VE12RTUveW9aZ3dmTUVsdW14TUlDSlB4SVlDS1p6ZTVPM2pCbHZYTkp6ZUMz?=
- =?utf-8?B?OWZGWG94UHBiMEhLOU9Ra2J6eWtaaUF1b1ZSN0lEbUx0SXBqRS9wNGNNZ0d3?=
- =?utf-8?B?ZDg5blVvNDNvcFErYlEwc2pHbGR6ZVVOQ3FYT1VlNkNYMVdROUxTMlBtUENi?=
- =?utf-8?B?TlE9PQ==?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c2c6400-3384-4508-4593-08dbfbf0ad0c
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2023 15:32:12.0079
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +SvcyiOBUwalTCgfGq5wOwCg8pYmrBQg8pfVFVRdr2iIG2oT0/MBaxG+A1fOPuGfYE09qU4ZgpCTSRV8RFzqHe5dlVWFtHkvRvFuOPSUpM0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB8907
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
+ bindings
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring
+	<robh+dt@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Johan Hovold
+	<johan@kernel.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>, "Conor
+ Dooley" <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, Bjorn Andersson <andersson@kernel.org>
+References: <20231211121124.4194-1-quic_kriskura@quicinc.com>
+ <20231211121124.4194-2-quic_kriskura@quicinc.com>
+ <24fb0b25-0139-4370-864c-839ae931f847@linaro.org>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <24fb0b25-0139-4370-864c-839ae931f847@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 4ZVhg3XykqQzlODK8lYcj2XIQHMOsVYK
+X-Proofpoint-GUID: 4ZVhg3XykqQzlODK8lYcj2XIQHMOsVYK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ mlxlogscore=733 impostorscore=0 adultscore=0 phishscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2312130115
 
-On 13.12.23 16:15, Heikki Krogerus wrote:
-> On Tue, Dec 12, 2023 at 03:41:35PM +0100, Javier Carrasco wrote:
->> I wonder why then there is no general solution that does not force the
->> driver to be built as a module.
+
+
+On 12/13/2023 12:45 PM, Krzysztof Kozlowski wrote:
+> On 11/12/2023 13:11, Krishna Kurapati wrote:
+>> The high speed related interrupts present on QC targets are as follows:
+>>
+>> dp/dm irq's
+>> These IRQ's directly reflect changes on the DP/DM pads of the SoC. These
+>> are used as wakeup interrupts only on SoCs with non-QUSB2 targets with
+>> exception of SDM670/SDM845/SM6350.
+>>
+>> qusb2_phy irq
+>> SoCs with QUSB2 PHY do not have separate DP/DM IRQs and expose only a
+>> single IRQ whose behavior can be modified by the QUSB2PHY_INTR_CTRL
+>> register. The required DPSE/DMSE configuration is done in
+>> QUSB2PHY_INTR_CTRL register of phy address space.
+>>
+>> hs_phy_irq
+>> This is completely different from the above two and is present on all
+>> targets with exception of a few IPQ ones. The interrupt is not enabled by
+>> default and its functionality is mutually exclusive of qusb2_phy on QUSB
+>> targets and DP/DM on femto phy targets.
+>>
+>> The DTs of several QUSB2 PHY based SoCs incorrectly define "hs_phy_irq"
+>> when they should have been "qusb2_phy_irq". On Femto phy targets, the
+>> "hs_phy_irq" mentioned is either the actual "hs_phy_irq" or "pwr_event",
+>> neither of which would never be triggered directly are non-functional
+>> currently. The implementation tries to clean up this issue by addressing
+>> the discrepencies involved and fixing the hs_phy_irq's in respective DT's.
+>>
+>> Classiffy SoC's into four groups based on whether qusb2_phy interrupt
+>> or {dp/dm}_hs_phy_irq is used for wakeup in high speed and whether the
+>> SoCs have hs_phy_irq present in them or not.
+>>
+>> The ss_phy_irq is optional interrupt because there are mutliple SoC's
+>> which either support only High Speed or there are multiple controllers
+>> within same Soc and the secondary controller is High Speed only capable.
+>>
+>> This breaks ABI on targets running older kernels, but since the interrupt
+>> definitions are given wrong on many targets and to establish proper rules
+>> for usage of DWC3 interrupts on Qualcomm platforms, DT binding update is
+>> necessary.
 > 
-> Why would you need anything like that? Are you saying that even if you
-> put the firmware into your ramdisk, the driver still fails to find the
-> firmware if it's statically build? If so, then there is something else
-> wrong.
+> This still does not explain why missing property has to be added as
+> first one, causing huge reordering of everything here and in DTS.
 > 
-The firmware is always found unless the file system is still not ready,
-which is the case on the system I am working on. If the driver is built
-as a module, the issue is gone as expected.
+> If pwr_event is required and we already break the ABI, reduce the impact
+> of the change by putting it after all required interrupts. Otherwise
+> please explain here and in commit msg why different approach is taken.
+> 
 
-My point was that there is no limitation to have the driver built-in and
-no documentation to reference, so anyone could stumble on the same
-issue. And as you said, this driver is not special in that sense, so
-other drivers might be facing the same eventuality.
-Am I missing any existing documentation for the fact that the firmware
-must be put into the ramdisk or the driver must be built as a module? Or
-is it only based on common sense?
+Hi Krzysztof. I don't know much about the effect of the ordering on ABI. 
+I will try to learn up on it. Would the series be good if we just move 
+the pwr_event to the end and keep everything in v3 as it is, and push v4 
+for now ?
 
-Anyway the next version will not have any probe deferring and only
-return an error if the firmware is not available.
-
-Thanks and best regards,
-Javier Carrasco
+Regards,
+Krishna,
 
