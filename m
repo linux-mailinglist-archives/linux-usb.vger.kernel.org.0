@@ -1,60 +1,60 @@
-Return-Path: <linux-usb+bounces-4104-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4105-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18E66810B46
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 08:16:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B03F2810BF9
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 09:06:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CA1B1C20CE2
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 07:16:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F50C1F21131
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 08:06:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E93D418C07;
-	Wed, 13 Dec 2023 07:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF6E31CA9C;
+	Wed, 13 Dec 2023 08:06:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pcq0pfR0"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="majoPybo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA4FD5
-	for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 23:15:48 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-a1fae88e66eso309051266b.3
-        for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 23:15:48 -0800 (PST)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2E6E3
+	for <linux-usb@vger.kernel.org>; Wed, 13 Dec 2023 00:05:58 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3333a3a599fso4059464f8f.0
+        for <linux-usb@vger.kernel.org>; Wed, 13 Dec 2023 00:05:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702451746; x=1703056546; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702454757; x=1703059557; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tMTwt7L6rgKnu3PUy8qh8FUCF9fFCzjsiWdGKd+O9a4=;
-        b=pcq0pfR0y1hcqMtgToMZYxK2f9BkZFZg07gT1bLleAhKLU8HxgjgkqS3cC0MfyytQP
-         z7tgY5jDRYcCJmtOkxyW8+nuZH8vdW/D8VoHpsIzfyd2FyHtOQCXVO4T09LmJfzl70aN
-         sahsIGJjCIEeQEYM6J7C9sYYK69E9Za7agPICKTYXDUdOh5LjT7C+qSLa1UO62lz24NM
-         GBA6X2YHp7iiQqm40kshkZbz+L4a32euWONXU4D+msBS7RJYedPutkZnZqsguhDTZkxR
-         enruOmO3KDpf/2Ykg9iKhs8320BRXjbG/IoRb6wUd+XAZMpYUahhJiEeWyK0WxkuZl0A
-         d0dQ==
+        bh=5ZmxijuA5hnyrvkskvNPuvTs985zbDNlr+bpWRJ6COY=;
+        b=majoPyboQhFwt0bUdL/PX1+cGFbYXMgcnfX+NWjugatxfDKv+Qw7obyth1slQ5zVoB
+         Kp+9CbnsHfaPOhI/epkHBmAzFcw2PAap0HpaOAfYSlycITher3/rh0Zm/VTiLQELJNm1
+         NDYunzYim78r/Y0hMnKun20AY8flr7O7HJqNABXqpsuvXxCDQ92MX6aJJMbNa0SqkZPC
+         wapV+zlBgYcpwMVaA6mRz45Y50GsrJMHUT803dfO2yKdcz90oN3dFzf1xM2iKb9t46NR
+         bcBRIW2w8fN+4JkEZQ/fuVa7p7DMAp8FLifBvQj2Q7Q2CMMwX/RNOsCmxUyvSCi+1wLg
+         MG5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702451746; x=1703056546;
+        d=1e100.net; s=20230601; t=1702454757; x=1703059557;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tMTwt7L6rgKnu3PUy8qh8FUCF9fFCzjsiWdGKd+O9a4=;
-        b=L6CPNTDbDRtcBCvZEy7ePA8xbhkSV7xdjDCpmXwaEfY3khEFGr+kX33qrNwf0XTKRy
-         uEQOCFklL2pcZFPqfjC8CyZIbJ+sR4s25KQi/G7U63ikpHzB3pNoGWQlhyINIQfYrseH
-         L6k1n3DHFsBZdpuqucEenVsNa3XEYW9iege2kB5/MV9spaEVTLd63gLkJzEnupZlJ0Hi
-         MNnh5VoDSXsbyfex80eV/6nXpklughXcHC3T6jqDaKWZ1OT1hYJ5jtPG6NV94K7pzjFj
-         mY97o1L/JpLN8ni9+0X2M5G+FV2AuC1xRt+XqaLTlX2UiiStcz8HdPokWwfIe12ve+cK
-         J2hw==
-X-Gm-Message-State: AOJu0Yyg49iGLsU3LmG/fFgEiwcAvrkDNx5+rM9fY/7ndQ1QI7YRLq/r
-	qZOB7SwRCahZjNPHAEsEo4pWAw==
-X-Google-Smtp-Source: AGHT+IGsrKBnPBDqJ4VH7yA/4zgFx/jx29FZ3j6NGsplz0s+1Bb3O0BwU6x9CkfwnMlKKrFhbWUseg==
-X-Received: by 2002:a17:906:5ace:b0:a1e:82b2:e2fc with SMTP id x14-20020a1709065ace00b00a1e82b2e2fcmr3715564ejs.120.1702451746469;
-        Tue, 12 Dec 2023 23:15:46 -0800 (PST)
+        bh=5ZmxijuA5hnyrvkskvNPuvTs985zbDNlr+bpWRJ6COY=;
+        b=jjDYHFSaKbS+5qhi/9mT47iW2W5Tsj17WuzcNwBy0q4mZFbsmGgq16d5DHxPF+Elab
+         xfOPVabzWsaAWNvLdO0BF3nP6N24lzxbrmXzSgjOunHTyAyL5cKsTwi1Z5OaFjR3k4I1
+         GG6dP1WDyXbMWTUx74a6q80sCDccbXJy+HlBBXXVNLFfleWZeSMoHHFAHCcPlUZC6pAs
+         MEwx92fyHOZATKpzhi8/9uU5pPWSWZQtloVgkegsVtngvyFFqfdenUm/XVgKLwX/6yzb
+         8DJ0jW5FVEZdydNBNEI+I1Q5lXU9DUdTXUOKfSPuTVFjUqptzyPHFbuR4xGAPjJvEXmZ
+         ZLEg==
+X-Gm-Message-State: AOJu0YyynTYLcxTow4bJeiZYyGU40+gOLRwfrFRZwdho4Sqb/BXAK5HI
+	Mq/sO70ispGNHFuMCr/mJox2oQ==
+X-Google-Smtp-Source: AGHT+IEAUiAETxskD05jflgbpP4kX4iVuGEh/MOU83d11xtd0QWQ9H1Vi/j6YVWZZyHZ9RzwdExeoQ==
+X-Received: by 2002:a05:600c:290a:b0:40c:2ca4:1642 with SMTP id i10-20020a05600c290a00b0040c2ca41642mr3686512wmd.137.1702454757215;
+        Wed, 13 Dec 2023 00:05:57 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id hu19-20020a170907a09300b00a0ad580e1b6sm7196336ejc.48.2023.12.12.23.15.44
+        by smtp.gmail.com with ESMTPSA id f11-20020a5d664b000000b003333e71ef9asm12572434wrw.115.2023.12.13.00.05.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Dec 2023 23:15:45 -0800 (PST)
-Message-ID: <24fb0b25-0139-4370-864c-839ae931f847@linaro.org>
-Date: Wed, 13 Dec 2023 08:15:43 +0100
+        Wed, 13 Dec 2023 00:05:56 -0800 (PST)
+Message-ID: <c1bc144d-07d6-422c-8294-42be47f83e59@linaro.org>
+Date: Wed, 13 Dec 2023 09:05:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,22 +62,21 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
- bindings
+Subject: Re: [PATCH 1/3] dt-bindings: usb: mtk-xhci: add a property for Gen1
+ isoc-in transfer issue
 Content-Language: en-US
-To: Krishna Kurapati <quic_kriskura@quicinc.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+To: Chunfeng Yun <chunfeng.yun@mediatek.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Wesley Cheng <quic_wcheng@quicinc.com>, Johan Hovold <johan@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- quic_ppratap@quicinc.com, quic_jackp@quicinc.com
-References: <20231211121124.4194-1-quic_kriskura@quicinc.com>
- <20231211121124.4194-2-quic_kriskura@quicinc.com>
+ Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Macpaul Lin <macpaul.lin@mediatek.com>, Eddie Hung <eddie.hung@mediatek.com>
+References: <20231213063543.12435-1-chunfeng.yun@mediatek.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -123,56 +122,40 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231211121124.4194-2-quic_kriskura@quicinc.com>
+In-Reply-To: <20231213063543.12435-1-chunfeng.yun@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/12/2023 13:11, Krishna Kurapati wrote:
-> The high speed related interrupts present on QC targets are as follows:
+On 13/12/2023 07:35, Chunfeng Yun wrote:
+> For Gen1 isoc-in endpoint on controller before about SSUSB IPM v1.6.0, it
+> still send out unexpected ACK after receiving a short packet in burst
+> transfer, this will cause an exception on connected device, specially for
+> a 4k camera.
+> Add a quirk property "mediatek,rxfifo-depth" to work around this hardware
+> issue;
+> The side-effect is that may cause performance drop about 10%, including
+> bulk transfer.
 > 
-> dp/dm irq's
-> These IRQ's directly reflect changes on the DP/DM pads of the SoC. These
-> are used as wakeup interrupts only on SoCs with non-QUSB2 targets with
-> exception of SDM670/SDM845/SM6350.
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>  .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml     | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> qusb2_phy irq
-> SoCs with QUSB2 PHY do not have separate DP/DM IRQs and expose only a
-> single IRQ whose behavior can be modified by the QUSB2PHY_INTR_CTRL
-> register. The required DPSE/DMSE configuration is done in
-> QUSB2PHY_INTR_CTRL register of phy address space.
-> 
-> hs_phy_irq
-> This is completely different from the above two and is present on all
-> targets with exception of a few IPQ ones. The interrupt is not enabled by
-> default and its functionality is mutually exclusive of qusb2_phy on QUSB
-> targets and DP/DM on femto phy targets.
-> 
-> The DTs of several QUSB2 PHY based SoCs incorrectly define "hs_phy_irq"
-> when they should have been "qusb2_phy_irq". On Femto phy targets, the
-> "hs_phy_irq" mentioned is either the actual "hs_phy_irq" or "pwr_event",
-> neither of which would never be triggered directly are non-functional
-> currently. The implementation tries to clean up this issue by addressing
-> the discrepencies involved and fixing the hs_phy_irq's in respective DT's.
-> 
-> Classiffy SoC's into four groups based on whether qusb2_phy interrupt
-> or {dp/dm}_hs_phy_irq is used for wakeup in high speed and whether the
-> SoCs have hs_phy_irq present in them or not.
-> 
-> The ss_phy_irq is optional interrupt because there are mutliple SoC's
-> which either support only High Speed or there are multiple controllers
-> within same Soc and the secondary controller is High Speed only capable.
-> 
-> This breaks ABI on targets running older kernels, but since the interrupt
-> definitions are given wrong on many targets and to establish proper rules
-> for usage of DWC3 interrupts on Qualcomm platforms, DT binding update is
-> necessary.
+> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> index e9644e333d78..b8ed68574ba4 100644
+> --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> @@ -124,6 +124,16 @@ properties:
+>        defined in the xHCI spec on MTK's controller.
+>      default: 5000
+>  
+> +  mediatek,rxfifo-depth:
+> +    description:
 
-This still does not explain why missing property has to be added as
-first one, causing huge reordering of everything here and in DTS.
+The property description and driver patch suggest you configure the
+depth of FIFO, so this should be not bool, but some uint32. And then,
+use generic "fifo-depth" property to set desired depth.
 
-If pwr_event is required and we already break the ABI, reduce the impact
-of the change by putting it after all required interrupts. Otherwise
-please explain here and in commit msg why different approach is taken.
 
 Best regards,
 Krzysztof
