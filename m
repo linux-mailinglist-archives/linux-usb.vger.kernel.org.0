@@ -1,149 +1,180 @@
-Return-Path: <linux-usb+bounces-4089-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4090-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEFF780FA77
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 23:38:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C96A810770
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 02:12:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0BFD281A11
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Dec 2023 22:38:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22BCC1F2197C
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Dec 2023 01:12:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 733CEC2EE;
-	Tue, 12 Dec 2023 22:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03CC2A5E;
+	Wed, 13 Dec 2023 01:12:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iaWERBnR"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Epi5hp+O"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303CDAA
-	for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 14:38:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702420692; x=1733956692;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=h8t5QXL6Y/ehxu347O7xBo8bJeRhhquvqG+ltUVUxcg=;
-  b=iaWERBnR/idOx+Tj4VIfg7WtVMbUk+tYTN3cpD8EmQp0fGjWKWJRF07Y
-   /BHJGx+ztDfmbiT27FdaDHGkSp8tVAmCrPXNSv9Kysmpd8gdaVz8NRFek
-   P4kl2zT0HGW3b5//og/ld7bdjnQIlcf3IBF6bEJqMziV/R3OtT4ftisfL
-   aDlJEogcVGVDv31ZYkqixf3QkizORt3ycsR0tyvhou8pejBjZExbbS63I
-   1nW8xsNNaE/vYnaJe3btCigwWNFrzmKMaDe7qhHBMexRhjoWN4VA5qGIY
-   id1SQ99PkZF/JoDjxNs9HT7mYsqwCaq+xpK/QhktGxuf+OAsEazm2Fc7Z
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="1737036"
-X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
-   d="scan'208";a="1737036"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 14:38:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
-   d="scan'208";a="15185388"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 12 Dec 2023 14:38:10 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rDBOB-000Jnr-24;
-	Tue, 12 Dec 2023 22:38:07 +0000
-Date: Wed, 13 Dec 2023 06:37:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?utf-8?B?TWljaGHFgiBLb3BlxIc=?= <michal.kopec@3mdeb.com>,
-	linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	=?utf-8?B?TWljaGHFgiBLb3BlxIc=?= <michal@nozomi.space>
-Subject: Re: [PATCH] platform/x86: serial-multi-instantiate: allow single
- GpioInt IRQ for INT3515
-Message-ID: <202312130609.vkwtG6qJ-lkp@intel.com>
-References: <20231212103823.546118-2-michal.kopec@3mdeb.com>
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878F0A5
+	for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 17:12:06 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-54744e66d27so6343a12.0
+        for <linux-usb@vger.kernel.org>; Tue, 12 Dec 2023 17:12:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702429925; x=1703034725; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hduHVDy0MOFsp0Y6n+Hk33OuNWF1OBB68kJNXYKHkws=;
+        b=Epi5hp+Oyzv9xfRAHslcuz2VY5Tl7azdwA1RNETf/7YZa8fHwajdYv4BYm5WtXxTtV
+         d7UF/Xsx+Lswuo0mRoA572V4+B9lS9kpjRucA31dFP48fZ45xaKULzHDcleDc2mhyPXK
+         X9YciKxjL+OjpD0KcnD2LxgO+wIEEcymEfufl9pRa8vi9KmZIG+6SHqT6xmijVuCh6zN
+         wkHsX8AQb2mdNM8pc0gT6K0s/ULj40gMJpkMORIJ03X9/HtrbFZzNcoQhkA/dxrDj+MP
+         l11FP+CLc9ijEAA2hHojE4rZmUsFMv8XWn8gjs/qOJuID4X0LKyg8KQ2rKbBeqIucZtM
+         eXKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702429925; x=1703034725;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hduHVDy0MOFsp0Y6n+Hk33OuNWF1OBB68kJNXYKHkws=;
+        b=BJPNcehen85xGWI7TGKreOrhYqGR7pVz0dWK/AEZSNxAWnf3NGQVhzkGVTzeZJuLnv
+         RqtwePKv5QGjdcPfqJZGn/rYMvpnTAy+8xnPK0ozm/5YtuAib00y/KLyIg4ZG3IeuLw1
+         BirZ8dYzyknYYwhGFs4bMlhYVuZCHJHC+cS4m03oMR4G7b4ORre1X6ve7v1UZC/XmnWu
+         /Kv/4JGG9q6XblD0ucmkgxFq8ah/6azUlB6+aexY/+vYBKQClfY471gm5fqQL1v4gZXJ
+         nqNHAST6WJkG4aZdxwUfCH4alxF85Kh+tf93ecGRLV9v97FtuA732Ob5vKP+XkdPPYlK
+         V5dA==
+X-Gm-Message-State: AOJu0Yyf52sYVprehP+84q257Hm9+qh5yw6AaBTIWId0NZzypDzhfzlR
+	WeTw6a+Fpb/tKQ/3ytVqM13dW8e5MIDT+AophAwtCQ==
+X-Google-Smtp-Source: AGHT+IGQerk5NGB3rNbGAUhdn/wlj9huGSDWiM00yD90xC46A7t3vCO7/NkzbSY4Z1OsywStrGPvVXCqs1DnDcFfo/Y=
+X-Received: by 2002:a50:d601:0:b0:551:f450:752a with SMTP id
+ x1-20020a50d601000000b00551f450752amr39888edi.6.1702429924863; Tue, 12 Dec
+ 2023 17:12:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231212103823.546118-2-michal.kopec@3mdeb.com>
+References: <20231212203222.lxihy34lh22g6d3w@hdebian> <ccb72864-6623-4652-8ccf-700c2c68916e@suse.com>
+In-Reply-To: <ccb72864-6623-4652-8ccf-700c2c68916e@suse.com>
+From: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date: Tue, 12 Dec 2023 17:11:49 -0800
+Message-ID: <CANP3RGdOT9rrBai+uuTZCo7JPyeEbh_u+vu6VD7t_Z80nfAn1Q@mail.gmail.com>
+Subject: Re: Question regarding CDC NCM and VNC performance issue
+To: Oliver Neukum <oneukum@suse.com>
+Cc: Hiago De Franco <hiagofranco@gmail.com>, Francesco Dolcini <francesco@dolcini.it>, davem@davemloft.net, 
+	edumazet@google.com, hiago.franco@toradex.com, kuba@kernel.org, 
+	linux-usb@vger.kernel.org, pabeni@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Michał,
+On Tue, Dec 12, 2023 at 1:21=E2=80=AFPM Oliver Neukum <oneukum@suse.com> wr=
+ote:
+>
+> On 12.12.23 21:32, Hiago De Franco wrote:
+>
+> Hi,
+>
+> > On Mon, Dec 11, 2023 at 12:44:42PM -0800, Maciej =C5=BBenczykowski wrot=
+e:
+> >> On Mon, Dec 11, 2023 at 12:29=E2=80=AFPM Hiago De Franco <hiagofranco@=
+gmail.com> wrote:
+>
+> >> Hiago, could you try lowering CDC_NCM_TIMER_PENDING_CNT, if need be al=
+l the way to 1?
+> >> It is defined in include/linux/usb/cdc_ncm.h as 3 currently
+> >> This applies to the host side.
+> >
+> > On my side CDC_NCM_TIMER_PENDING_CNT is set to 2 by default, did you
+> > mean CDC_NCM_RESTART_TIMER_DATAGRAM_CNT?
+>
+> Yes, I meant that. Sorry.
+>
+> > Despite of that, I tried to lower both CDC_NCM_TIMER_PENDING_CNT and
+> > CDC_NCM_RESTART_TIMER_DATAGRAM_CNT all the way down to 1, first the
+> > CDC_NCM_TIMER_PENDING_CNT, then CDC_NCM_RESTART_TIMER_DATAGRAM_CNT and
+> > finally both at the same time, but it didn't help.
+> >
+> > I've also put some printks as following:
+> >
+> >       ctx->tx_curr_frame_num =3D n;
+> >       printk("hfranco: tx_curr_frame_num =3D %d", n);
+> >
+> >       if (n =3D=3D 0) {
+> >               printk("hfranco: n =3D=3D 0");
+> >               /* wait for more frames */
+> >               /* push variables */
+> >               ctx->tx_curr_skb =3D skb_out;
+> >               goto exit_no_skb;
+> >
+> >       } else if ((n < ctx->tx_max_datagrams) && (ready2send =3D=3D 0) &=
+& (ctx->timer_interval > 0)) {
+> >               printk("hfranco: tx_max_datagrams =3D %d", ctx->tx_max_da=
+tagrams);
+> >               printk("hfranco: timer_interval =3D %d", ctx->timer_inter=
+val);
+> >               printk("hfranco: n inside else if =3D %d", n);
+> >               /* wait for more frames */
+> >               /* push variables */
+> >               ctx->tx_curr_skb =3D skb_out;
+> >               /* set the pending count */
+> >               if (n < CDC_NCM_RESTART_TIMER_DATAGRAM_CNT)
+> >                       ctx->tx_timer_pending =3D CDC_NCM_TIMER_PENDING_C=
+NT;
+> >               goto exit_no_skb;
+> >
+> >       } else {
+> >               printk("hfranco: n inside else =3D %d", n);
+> >               if (n =3D=3D ctx->tx_max_datagrams)
+> >                       ctx->tx_reason_max_datagram++;  /* count reason f=
+or transmitting */
+> >
+> > I ran it on my host PC, compiled it as module for my Debian dekstop, an=
+d
 
-kernel test robot noticed the following build warnings:
+Shouldn't you be doing this on the gadget side?
+I thought we were thinking it was the gadget transmit timer having issues.
 
-[auto build test WARNING on westeri-thunderbolt/next]
-[also build test WARNING on linus/master v6.7-rc5 next-20231212]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > this is the dmesg:
+> >
+> > [ 9663.478807] hfranco: tx_curr_frame_num =3D 1
+> > [ 9663.478816] hfranco: tx_max_datagrams =3D 40
+> > [ 9663.478818] hfranco: timer_interval =3D 400000
+> > [ 9663.478820] hfranco: n inside else if =3D 1
+> > [ 9663.478822] hfranco: timer started
+> > [ 9663.479645] hfranco: tx_curr_frame_num =3D 1
+> > [ 9663.479652] hfranco: n inside else =3D 1
+> >
+> > And then it basically repeats. Looks like 'n' never passes the 1 value.
+> > By tweaking the flags mentioned before, 'n' got a value of 4, but that
+> > was the maximum value. I was wondering, why do you think this code look=
+s
+> > suspicious? I basically just inserted some printks on the tx side, I
+> > will see if I can get something from the rx as well.
+>
+> If we look at the statistics you initially gathered, we can see that all =
+transmissions
+> on the host side happen because the timeout elapses. That, however, does
+> _not_ tell us that the host is to blame. We could look at two possible sc=
+enarios
+>
+> A - the gadget is bundling up the packets with too much delay and the hos=
+t
+> just answers to the megatransmissions with one packet and the delay on th=
+e host
+> is inconsequential
+>
+> B - the timer on the host runs for too long or sometimes not at all. If t=
+hat were
+> the case that code I pointed out would be most likely to blame
+>
+> Could I suggest we try to localize the issue? Can you ping the host from =
+the device?
+>
+>         Regards
+>                 Oliver
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Micha-Kope/platform-x86-serial-multi-instantiate-allow-single-GpioInt-IRQ-for-INT3515/20231212-184116
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
-patch link:    https://lore.kernel.org/r/20231212103823.546118-2-michal.kopec%403mdeb.com
-patch subject: [PATCH] platform/x86: serial-multi-instantiate: allow single GpioInt IRQ for INT3515
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231213/202312130609.vkwtG6qJ-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231213/202312130609.vkwtG6qJ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312130609.vkwtG6qJ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/platform/x86/serial-multi-instantiate.c:79:17: warning: logical not is only applied to the left hand side of this bitwise operator [-Wlogical-not-parentheses]
-           if (ret < 0 && !inst->flags & IRQ_OPTIONAL)
-                          ^            ~
-   drivers/platform/x86/serial-multi-instantiate.c:79:17: note: add parentheses after the '!' to evaluate the bitwise operator first
-           if (ret < 0 && !inst->flags & IRQ_OPTIONAL)
-                          ^
-                           (                         )
-   drivers/platform/x86/serial-multi-instantiate.c:79:17: note: add parentheses around left hand side expression to silence this warning
-           if (ret < 0 && !inst->flags & IRQ_OPTIONAL)
-                          ^
-                          (           )
-   1 warning generated.
-
-
-vim +79 drivers/platform/x86/serial-multi-instantiate.c
-
-    51	
-    52	static int smi_get_irq(struct platform_device *pdev, struct acpi_device *adev,
-    53			       const struct smi_instance *inst)
-    54	{
-    55		int ret;
-    56	
-    57		switch (inst->flags & IRQ_RESOURCE_TYPE) {
-    58		case IRQ_RESOURCE_AUTO:
-    59			ret = acpi_dev_gpio_irq_get(adev, inst->irq_idx);
-    60			if (ret > 0) {
-    61				dev_dbg(&pdev->dev, "Using gpio irq\n");
-    62				break;
-    63			}
-    64			ret = platform_get_irq_optional(pdev, inst->irq_idx);
-    65			if (ret > 0) {
-    66				dev_dbg(&pdev->dev, "Using platform irq\n");
-    67				break;
-    68			}
-    69			break;
-    70		case IRQ_RESOURCE_GPIO:
-    71			ret = acpi_dev_gpio_irq_get(adev, inst->irq_idx);
-    72			break;
-    73		case IRQ_RESOURCE_APIC:
-    74			ret = platform_get_irq_optional(pdev, inst->irq_idx);
-    75			break;
-    76		default:
-    77			return 0;
-    78		}
-  > 79		if (ret < 0 && !inst->flags & IRQ_OPTIONAL)
-    80			return dev_err_probe(&pdev->dev, ret, "Error requesting irq at index %d\n",
-    81					     inst->irq_idx);
-    82	
-    83		return ret;
-    84	}
-    85	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
 
