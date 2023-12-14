@@ -1,98 +1,147 @@
-Return-Path: <linux-usb+bounces-4172-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4173-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85146813DEA
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 00:04:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 138AC813E03
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 00:09:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 804921C21EA9
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Dec 2023 23:04:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB7A01F229C3
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Dec 2023 23:09:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A2A66AA4;
-	Thu, 14 Dec 2023 23:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE97C6D1D6;
+	Thu, 14 Dec 2023 23:09:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kq4u/RXP"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="riEueaeT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6162367214
-	for <linux-usb@vger.kernel.org>; Thu, 14 Dec 2023 23:04:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41F666ADC
+	for <linux-usb@vger.kernel.org>; Thu, 14 Dec 2023 23:08:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40c38e520e2so23805e9.0
-        for <linux-usb@vger.kernel.org>; Thu, 14 Dec 2023 15:04:25 -0800 (PST)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-5b8d4a559ddso149223a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 14 Dec 2023 15:08:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702595063; x=1703199863; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cphvl2wyh1GyJLsprr0iWOYpnSYMRlz6FGZQv5qE9aY=;
-        b=Kq4u/RXPnDaPbgOkiKlHpBcpC7+2xRa0rjYO3149uTr6iLynbgqfp7ZpCILrLYNBqr
-         LeGCE8w/qtPUtm0X9gHt8kZcJB2VX9vlLcFmjbni3c1Y4kfhoJYzrZuYopULKg2F3XS7
-         hsBWrqGnos+j5i8bVBlPOz4WKXRn3dsuDb424rIlMBvk5gL9NfX7LQK/gmqvrUKYARsk
-         qFI2RHfj/2jJj3UcpvGvD6Nd7MV8YJ6jXe8Td/1DfEm2liNV2wEfCDpn/sj34RIt4D8s
-         30ZmmySVcPfqilZ37bjjn02mjgRlKiDYkhSUp7iaex6fNIevNW5+zDMCLDCr5npgZjBQ
-         9WVw==
+        d=google.com; s=20230601; t=1702595339; x=1703200139; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=m1XHLYDgttvIMmrtDZCBn4GcSoDP8mjqcR9fU091Bms=;
+        b=riEueaeTjJKOjhmJ5OYnP3E2dqgce9V1C4XXgWmAgNibnsHKjDwpwg8V1Zwn+k65+s
+         /uOzu/PQSO4qWzLGmvG92QwjDZk4gb0zfYV6D7L0b0Sr3YuR0rtX2Q4JeysXgrCbuqXr
+         gb86OV9oFnRs/VE/Ec5pTgDoU8OFX/MCG8w74KFmsxEdkVxRabSKXH5Jr0QY2CpiWn5a
+         AzykBGM63Qd48QsZAB2rtlKfUXRgLE82YSIcGCrRlGhD/RifmOo1OEvXwUL7b68tJhD/
+         ZC36TPzHrVrh5USfwTA6LJxj0y8HNQsLAeDrFzfJtz/P79Z6U5uCD6YMy645GeY9wlEg
+         ZV1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702595063; x=1703199863;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cphvl2wyh1GyJLsprr0iWOYpnSYMRlz6FGZQv5qE9aY=;
-        b=uGMgLf9GJisxUr17ygwLz9s3AuDGVNsnaEbWgS4fyrRdaA6Z+f1HzHH4E7ud8ht7oj
-         crH0zmKl/vnVRa1Kep6rRv82+fEKNm/b3gzwtohVnY2iOlpqeefugJ8spSjmjbpWdtVF
-         Pu7fU0aq8wIM/PbWR0E8sNGbj3ykgtYDO8XDVlhEzHy+OlgLeHJRovp2X185wKJwQtH9
-         l/iZFhX5R/4wnftRxeGk3sqwiuB25JtbGprChwRl1A+FvBJbfIcQZvuj+b+H/UFbfHJN
-         wBaJ7LoP71LApVRAwDDdbsV5D/EQxrtfgnDYFPRUIX4CRUDZHoJoWdivq1B0wMZpA6hC
-         I7aA==
-X-Gm-Message-State: AOJu0Yxr+v3ZDdGtYGAUU927kBsPr/rMzSHZxZt7EYpiwWTzEkL1nA0R
-	eGWlzzrz5UoMdR4da0dO9w14LNqTK6wbGseuQ+8XzmeFdRvjJUz9SA6e922s
-X-Google-Smtp-Source: AGHT+IGXb16j/LfeqtBoeO0x3fK0w00V9lsrj7lfha/L4eV4jsQEDQaHUg/9HPGFB+bKX/beNWh7ACqwFXJFkQTQH1Q=
-X-Received: by 2002:a50:c082:0:b0:54c:9996:7833 with SMTP id
- k2-20020a50c082000000b0054c99967833mr718937edf.7.1702594641723; Thu, 14 Dec
- 2023 14:57:21 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702595339; x=1703200139;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m1XHLYDgttvIMmrtDZCBn4GcSoDP8mjqcR9fU091Bms=;
+        b=jxFKVrS8kRBzGW0+OasWc6OO4h6BHVSCPNQSIGtMzO2uxrWO92+jXg1qhEHzYRvTRO
+         Torf7e7jQp8TQ7F4nta/omJMT+prGT6h8ck1Qqi1EyyP+R3AxhS+oqiXDoEoCPNcewwN
+         Vxxo4yy4r2C578uhj0UR0cXxbrU/jV1opMZ6qZVFbahUIMM4NO03M61wTwtuX3NCZDwh
+         dhH/PsBUmYv7GSx3bs+GIO5ztmwp4IMdPTM9VsRKX0sy9MrXrdlQWNAn9YMnivhayA3T
+         +OVpJBIz4/2EFdUYQuKxIaJjvlpcAi6PGCzRzwhUNruzUEaRIoE6xUehYv3tl1Nc3Nc0
+         zIOA==
+X-Gm-Message-State: AOJu0YyYC2JZIgO2T85hnBE0/GnrkC1Z7C3ZqEJKP4wPywpGR8UJhej0
+	aIh7KAawrN1V3/sOvSVmmQviR066pnlIKPI=
+X-Google-Smtp-Source: AGHT+IHDJKWfSybkMhla9TdjhPbSbpqNJOcAfa+si8NqEKf1OW4EzAfPd636heZxGpEYkLGQUXaSbcDZZc+uHsA=
+X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
+ (user=rdbabiera job=sendgmr) by 2002:a63:7257:0:b0:5b9:63f2:e4cc with SMTP id
+ c23-20020a637257000000b005b963f2e4ccmr751102pgn.2.1702595339152; Thu, 14 Dec
+ 2023 15:08:59 -0800 (PST)
+Date: Thu, 14 Dec 2023 23:08:44 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231207090738.15721-12-rdbabiera@google.com> <20231207090738.15721-13-rdbabiera@google.com>
- <ZXGt2drhV/K+qtTG@kuha.fi.intel.com>
-In-Reply-To: <ZXGt2drhV/K+qtTG@kuha.fi.intel.com>
+Mime-Version: 1.0
+X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3372; i=rdbabiera@google.com;
+ h=from:subject; bh=IYcw+cHXq4wHuxatFe2diBHKZYJEbfEV7ubHbpP+JVo=;
+ b=owGbwMvMwCFW0bfok0KS4TbG02pJDKnV3UxnM+6KZ9kb9fqERN51Nc9MV2m/u2S6VH2R2XbDW
+ DOFi+0dpSwMYhwMsmKKLLr+eQY3rqRumcNZYwwzh5UJZAgDF6cATKTqB8M/7bvXvB8Ye37fyCb/
+ if9Ty5v5KRbFrSlMK74qXi7kX1t1l5GhO71vsb9SWnbtZy7WqvpkY0aRg2dYH28yv/ht940VypX sAA==
+X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
+Message-ID: <20231214230850.379863-14-rdbabiera@google.com>
+Subject: [PATCH v2 00/12] usb: typec: add SOP' support to the tcpm and alt
+ mode drivers
 From: RD Babiera <rdbabiera@google.com>
-Date: Thu, 14 Dec 2023 14:57:10 -0800
-Message-ID: <CALzBnUEvKWScSxjE60ONDc7KsUPDwy48rWrSKATyr2D2nQBimg@mail.gmail.com>
-Subject: Re: [PATCH v1 01/10] usb: typec: bus: provide transmit type for
- alternate mode drivers
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux@roeck-us.net, gregkh@linuxfoundation.org, pmalani@chromium.org, 
-	bleung@chromium.org, chrome-platform@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, badhri@google.com, 
-	tzungbi@kernel.org, utkarsh.h.patel@intel.com, 
-	andriy.shevchenko@linux.intel.com
+To: rdbabiera@google.com, heikki.krogerus@linux.intel.com, linux@roeck-us.net, 
+	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Cc: badhri@google.com, bryan.odonoghue@linaro.org, agross@kernel.org, 
+	andersson@kernel.org, konrad.dybcio@linaro.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Heikki,
+Extend the TCPM's functionality to include support for SOP' messages.
+This feature is opt-in: TCPCI chip drivers opt into sending and receiving
+SOP' messages. TCPCI drivers will also be expected to take the SOP frame
+type in order to process SOP' messages within the TCPM. Specifically,
+the exisiting API tcpm_pd_receive now takes tcpm_transmit_type as input.
+The Maxim TCPCI implements this in Patch 4.
 
-On Thu, Dec 7, 2023 at 3:34=E2=80=AFAM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
-> Instead of forcing this change immediately on every existing user of
-> that API, why not supply separate API for the cable alt modes?
->
-> Although the SOP* communication is the same in most parts, at least
-> Attention (and probable some other messages too) is not valid with
-> cable plugs. So maybe it would be more clear to just separate SOP
-> communication from SOP Prime/Double Prime in the API?
+Discover Identity, Discover SVIDs, Discover Modes, and Alt Mode SVDM
+support are included within the patchset. Because the port is expected to
+be the Vconn source in order to communicate with the cable, TCPCI chip
+drivers opt into performing a Vconn swap after Discover Identity on SOP
+before performing Discover Identity on SOP'.
 
-Your idea makes much more sense and simplified implementation, so
-I added it to the next version of the patch set.
-
-Thanks a lot!
+typec_cable_ops are defined to facilitate communication between the alt
+mode drivers and the cable plugs. 2 new apis allow the alt mode drivers
+to enter and exit mode on active cable plugs. A third is used by alt mode
+drivers to send VDMs to the cable plugs or by the TCPM to return the
+resulting VDM from the cable plug to the alt mode drivers.
 ---
-RD
+Changes since v1:
+* Add typec_cable_ops as replacement for changing typec_altmode_ops
+  interface. Displayport driver patch now reflects this
+* Separate patch for cable SVDM versioning.
+* Separate patch for tcpm_pd_receive() api changes and cable_comm_capable
+  addition to tcpci.
+* Separate patches for Discover SVIDs/Discover Modes and Alt Mode
+  operations on SOP'.
+
+RD Babiera (12):
+  usb: typec: altmodes: add typec_cable_ops to typec_altmode
+  usb: typec: altmodes: add svdm version info for typec cables
+  usb: typec: tcpci: add cable_comm_capable attribute
+  usb: typec: tcpci: add tcpm_transmit_type to tcpm_pd_receive
+  usb: typec: tcpm: process receive and transmission of sop' messages
+  usb: typec: tcpm: add control message support to sop'
+  usb: typec: tcpci: add attempt_vconn_swap_discovery callback
+  usb: typec: tcpm: add discover identity support for SOP'
+  usb: typec: tcpm: add state machine support for
+    SRC_VDM_IDENTITY_REQUEST
+  usb: typec: tcpm: add discover svids and discover modes support for
+    sop'
+  usb: typec: tcpm: add alt mode enter/exit/vdm support for sop'
+  usb: typec: altmodes/displayport: add SOP' support
+
+ drivers/usb/typec/altmodes/displayport.c      |  161 ++-
+ drivers/usb/typec/bus.c                       |  102 ++
+ drivers/usb/typec/class.c                     |   59 +
+ drivers/usb/typec/class.h                     |    1 +
+ drivers/usb/typec/tcpm/fusb302.c              |    2 +-
+ .../typec/tcpm/qcom/qcom_pmic_typec_pdphy.c   |    2 +-
+ drivers/usb/typec/tcpm/tcpci.c                |   26 +-
+ drivers/usb/typec/tcpm/tcpci_maxim.h          |    1 +
+ drivers/usb/typec/tcpm/tcpci_maxim_core.c     |   38 +-
+ drivers/usb/typec/tcpm/tcpm.c                 | 1043 ++++++++++++++---
+ drivers/usb/typec/tcpm/wcove.c                |    2 +-
+ include/linux/usb/pd.h                        |    1 +
+ include/linux/usb/pd_vdo.h                    |    8 +-
+ include/linux/usb/tcpci.h                     |   13 +
+ include/linux/usb/tcpm.h                      |   16 +-
+ include/linux/usb/typec.h                     |    7 +
+ include/linux/usb/typec_altmode.h             |   30 +
+ 17 files changed, 1346 insertions(+), 166 deletions(-)
+
+-- 
+2.43.0.472.g3155946c3a-goog
+
 
