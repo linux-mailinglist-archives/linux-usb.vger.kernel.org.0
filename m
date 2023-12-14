@@ -1,208 +1,113 @@
-Return-Path: <linux-usb+bounces-4147-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4148-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F42D812963
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Dec 2023 08:33:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B48B0812B17
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Dec 2023 10:05:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1D991C214A3
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Dec 2023 07:32:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1750D2828D4
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Dec 2023 09:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C7BB12E55;
-	Thu, 14 Dec 2023 07:32:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55FD925773;
+	Thu, 14 Dec 2023 09:05:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E7EgaJkR"
+	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="O4RQB6Ut"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF3F12B;
-	Wed, 13 Dec 2023 23:32:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702539171; x=1734075171;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=yRBCGMjJPeNLdde6gmkCVoQ50q7qAYUMozdOeoIWt4c=;
-  b=E7EgaJkR3Zuaw1U8Cy1Em7AUYaEgWRj6QOKc/eY3j23HaSlpaOzEoWTn
-   lIQnW98G7nuQb6lNmmB11vmrRDGS6wgcnYeQ9nyCN3lVQT8MUteBmz8gu
-   q52Ia/VW4MrjbzeRz+4hk2a7uBPq+Af1edXHpvU3mMrq9Yv5ik2EukpnN
-   4cf3N3vwkm0SA4Kw76eOCIGYFxf45c40Cumoav5IIZY71yy1UNpT60EyO
-   eO2HhOsEYQeFA6AmIZsPrQnWEnJJbk+gP31gpi70/Afe4uY8GwleGybjj
-   4dxow4bUerOWhoiIA9h9d7Gdsz9uQ1ZmRcYgWBO32muZ+ouRRszME/nid
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="393953226"
-X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
-   d="scan'208";a="393953226"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 23:32:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="723970969"
-X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
-   d="scan'208";a="723970969"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 13 Dec 2023 23:32:44 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 133853AE; Thu, 14 Dec 2023 09:32:42 +0200 (EET)
-Date: Thu, 14 Dec 2023 09:32:42 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Sanath S <sanaths2@amd.com>
-Cc: Sanath S <Sanath.S@amd.com>, mario.limonciello@amd.com,
-	andreas.noever@gmail.com, michael.jamet@intel.com,
-	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [Patch v2 2/2] thunderbolt: Teardown tunnels and reset
- downstream ports created by boot firmware
-Message-ID: <20231214073242.GT1074920@black.fi.intel.com>
-References: <20231212191635.2022520-1-Sanath.S@amd.com>
- <20231212191635.2022520-3-Sanath.S@amd.com>
- <20231213054914.GI1074920@black.fi.intel.com>
- <20231213061805.GK1074920@black.fi.intel.com>
- <20231213062306.GL1074920@black.fi.intel.com>
- <adcc6446-8c30-a258-e19b-76fca2c50d21@amd.com>
- <20231213115256.GM1074920@black.fi.intel.com>
- <f673ffc8-f6f8-4898-d809-effb2c24e53e@amd.com>
- <20231214070746.GS1074920@black.fi.intel.com>
- <32163f49-8387-0754-534f-1764e731f26d@amd.com>
+Received: from forward103b.mail.yandex.net (forward103b.mail.yandex.net [178.154.239.150])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5D310A
+	for <linux-usb@vger.kernel.org>; Thu, 14 Dec 2023 01:05:31 -0800 (PST)
+Received: from mail-nwsmtp-smtp-production-main-22.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-22.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:9c8d:0:640:38ed:0])
+	by forward103b.mail.yandex.net (Yandex) with ESMTP id 6243360B20;
+	Thu, 14 Dec 2023 12:05:29 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-22.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id S5gp596PmGk0-mcefhQZX;
+	Thu, 14 Dec 2023 12:05:28 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
+	t=1702544728; bh=qNAf6a0n2iFrRHyvBKAct41bNMWRnW2Gh+8LEzcjWAg=;
+	h=Message-ID:Date:Cc:Subject:To:From;
+	b=O4RQB6Ut7dF5Ym4TUGw+cCVVMY/lCg3QUjtfIuREqB8RuZDsaY7bCNJC8jYgce3pl
+	 X9UmpeUfK7aqqiJG2jb4OO4bGhuL5FpJ/TXlX5UbPCihsLfmdgZaHRw3ueF4onnTRn
+	 aVHTzFx4jijcgLx5Ea0vF4xBh0uBscDUT0xMwgu0=
+Authentication-Results: mail-nwsmtp-smtp-production-main-22.iva.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From: Dmitry Antipov <dmantipov@yandex.ru>
+To: Udipto Goswami <quic_ugoswami@quicinc.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	Dmitry Antipov <dmantipov@yandex.ru>
+Subject: [PATCH] [v2] usb: gadget: f_fs: fix fortify warning
+Date: Thu, 14 Dec 2023 12:04:15 +0300
+Message-ID: <20231214090428.27292-1-dmantipov@yandex.ru>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <32163f49-8387-0754-534f-1764e731f26d@amd.com>
 
-On Thu, Dec 14, 2023 at 12:50:21PM +0530, Sanath S wrote:
-> 
-> On 12/14/2023 12:37 PM, Mika Westerberg wrote:
-> > On Thu, Dec 14, 2023 at 12:08:34PM +0530, Sanath S wrote:
-> > > On 12/13/2023 5:22 PM, Mika Westerberg wrote:
-> > > > On Wed, Dec 13, 2023 at 04:04:57PM +0530, Sanath S wrote:
-> > > > > On 12/13/2023 11:53 AM, Mika Westerberg wrote:
-> > > > > > On Wed, Dec 13, 2023 at 08:18:06AM +0200, Mika Westerberg wrote:
-> > > > > > > On Wed, Dec 13, 2023 at 07:49:14AM +0200, Mika Westerberg wrote:
-> > > > > > > > On Wed, Dec 13, 2023 at 12:46:35AM +0530, Sanath S wrote:
-> > > > > > > > > Boot firmware might have created tunnels of its own. Since we cannot
-> > > > > > > > > be sure they are usable for us. Tear them down and reset the ports
-> > > > > > > > > to handle it as a new hotplug for USB3 routers.
-> > > > > > > > > 
-> > > > > > > > > Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > > > > > > > Signed-off-by: Sanath S <Sanath.S@amd.com>
-> > > > > > > > > ---
-> > > > > > > > >     drivers/thunderbolt/tb.c | 11 +++++++++++
-> > > > > > > > >     1 file changed, 11 insertions(+)
-> > > > > > > > > 
-> > > > > > > > > diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-> > > > > > > > > index fd49f86e0353..febd0b6972e3 100644
-> > > > > > > > > --- a/drivers/thunderbolt/tb.c
-> > > > > > > > > +++ b/drivers/thunderbolt/tb.c
-> > > > > > > > > @@ -2598,6 +2598,17 @@ static int tb_start(struct tb *tb)
-> > > > > > > > >     	tb_switch_tmu_enable(tb->root_switch);
-> > > > > > > > >     	/* Full scan to discover devices added before the driver was loaded. */
-> > > > > > > > >     	tb_scan_switch(tb->root_switch);
-> > > > > > > > > +	/*
-> > > > > > > > > +	 * Boot firmware might have created tunnels of its own. Since we cannot
-> > > > > > > > > +	 * be sure they are usable for us, Tear them down and reset the ports
-> > > > > > > > > +	 * to handle it as new hotplug for USB4 routers.
-> > > > > > > > > +	 */
-> > > > > > > > > +	if (tb_switch_is_usb4(tb->root_switch)) {
-> > > > > > > > > +		tb_switch_discover_tunnels(tb->root_switch,
-> > > > > > > > > +					   &tcm->tunnel_list, false);
-> > > > > > > > Why this is needed?
-> > > > > > > > 
-> > > > > > > > It should be enough, to do simply something like this:
-> > > > > > > > 
-> > > > > > > > 	if (tb_switch_is_usb4(tb->root_switch))
-> > > > > > > > 		tb_switch_reset(tb->root_switch);
-> > > > > If we don't tear down of tunnels before performing the DPR, the PCIe
-> > > > > enumeration is failing.
-> > > > > 
-> > > > > PCIe link is not coming up after DPR. Below log is missing without
-> > > > > performing path
-> > > > > deactivation before performing DPR and hence PCIe enumeration is not
-> > > > > initiated.
-> > > > > 
-> > > > > [  746.630865] pcieport 0000:00:03.1: pciehp: Slot(0-1): Card present
-> > > > > [  746.630885] pcieport 0000:00:03.1: pciehp: Slot(0-1): Link Up
-> > > > > 
-> > > > > I think when we do a DPR, it internally does some handling with PCI Path
-> > > > > Enable bit(PE).
-> > > > > So, deactivation of PCIe path is necessary for DPR to work.
-> > > > Rigth, it should be enough to reset the protocol adapter config and path
-> > > > config spaces. I guess using discovery at this point is fine too but I
-> > > > would at least check how complex doing the minimal "reset" turns out.
-> > > > 
-> > > > I mean in tb_switch_reset() for USB4 v1 routers it can go over all the
-> > > > adapters and perform "cleanup" or so.
-> > > I gave it a thought yesterday and we can do something like this:
-> > > 
-> > > We are already doing tb_discovery(tb) in tb_start. This would
-> > > discover the path configuration done by Boot firmware.
-> > > 
-> > > Now, we can place the tb_switch_reset() right below that api with
-> > > conditions suggested by you.
-> > > 
-> > > And tb_switch_reset() would internally DPR for all down steam ports.
-> > > 
-> > > It can look something like below:
-> > > 
-> > >      /* Find out tunnels created by the boot firmware */
-> > >          tb_discover_tunnels(tb);
-> > >      /*
-> > >       * Reset USB4 v1 host router to get rid of possible tunnels the
-> > >       * boot firmware created. This makes sure all the tunnels are
-> > >       * created by us and thus have known configuration.
-> > >       *
-> > >       * For USB4 v2 and beyond we do this in nhi_reset() using the
-> > >       * host router reset interface.
-> > >       */
-> > >      if (host_reset && usb4_switch_version(tb->root_switch) == 1)
-> > >          tb_switch_reset(tb->root_switch);
-> > > 
-> > > With this, we are making sure while we get a unplug event after doing a DPR,
-> > > We are clearing all the paths established by Boot firmware. This wouldn't be
-> > > possible
-> > > if we had not discovered the paths before we perform DPR.
-> > > 
-> > > It would create inconsistency for a new hot plug if we have not cleared the
-> > > path configurations
-> > > of previous hot unplug events.
-> > Right. I would still check if doing protocol adapter "reset" + path
-> > config space clear in tb_switch_reset() is enough and how complex that
-> > ends up to be. I think that's all what is needed.
-> > 
-> > If it turns out too complex, yes I guess something like this:
-> > 
-> > 	/* Find out tunnels created by the boot firmware */
-> > 	tb_discover_tunnels(tb);
-> > 	/* Add DP resources from the DP tunnels created by the boot firmware */
-> > 	tb_discover_dp_resources(tb);
-> > 
-> > 	if (host_reset && usb4_switch_version(tb->root_switch) == 1) {
-> > 		struct tb_tunnel *n, *tunnel;
-> > 
-> > 		list_for_each_entry_safe(tunnel, n, &tcm->tunnel_list, list)
-> > 			tb_deactivate_and_free_tunnel(tunnel);
-> > 
-> > 		tb_switch_reset(tb->root_switch);
-> > 	}
-> > 
-> > With proper comments would work, no?
-> Yes, this works. Tested it too and works fine.
+When compiling with gcc version 14.0.0 20231206 (experimental)
+and CONFIG_FORTIFY_SOURCE=y, I've noticed the following warning:
 
-Cool.
+...
+In function 'fortify_memcpy_chk',
+    inlined from '__ffs_func_bind_do_os_desc' at drivers/usb/gadget/function/f_fs.c:2934:3:
+./include/linux/fortify-string.h:588:25: warning: call to '__read_overflow2_field'
+declared with attribute warning: detected read beyond size of field (2nd parameter);
+maybe use struct_group()? [-Wattribute-warning]
+  588 |                         __read_overflow2_field(q_size_field, size);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-> Probably we can move tb_deactivate_and_free_tunnel() inside
-> tb_switch_reset() to make it
-> look better.
+This call to 'memcpy()' is interpreted as an attempt to copy both
+'CompatibleID' and 'SubCompatibleID' of 'struct usb_ext_compat_desc'
+from an address of the first one, which causes an overread warning.
+Since we actually want to copy both of them at once, use the
+convenient 'struct_group()' and 'sizeof_field()' here.
 
-Unfortunately that's not possible because tb_switch_reset() lives in
-switch.s (and should live there) and tb_deactivate_and_free_tunnel() is
-part of tb.c (as should be). This is actually why I would like to try
-the "reset" protocol adapters + their path config spaces in
-tb_switch_reset() as then that would work with any router and does not
-need to have any knowledge about tunnels or tb.c internals.
+Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
+---
+v2: fix __struct_group(...) usage in uapi header
+---
+ drivers/usb/gadget/function/f_fs.c  | 5 ++---
+ include/uapi/linux/usb/functionfs.h | 6 ++++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index efe3e3b85769..dafedc33928d 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -2931,9 +2931,8 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
+ 
+ 		t = &func->function.os_desc_table[desc->bFirstInterfaceNumber];
+ 		t->if_id = func->interfaces_nums[desc->bFirstInterfaceNumber];
+-		memcpy(t->os_desc->ext_compat_id, &desc->CompatibleID,
+-		       ARRAY_SIZE(desc->CompatibleID) +
+-		       ARRAY_SIZE(desc->SubCompatibleID));
++		memcpy(t->os_desc->ext_compat_id, &desc->IDs,
++		       sizeof_field(struct usb_ext_compat_desc, IDs));
+ 		length = sizeof(*desc);
+ 	}
+ 		break;
+diff --git a/include/uapi/linux/usb/functionfs.h b/include/uapi/linux/usb/functionfs.h
+index d77ee6b65328..078098e73fd3 100644
+--- a/include/uapi/linux/usb/functionfs.h
++++ b/include/uapi/linux/usb/functionfs.h
+@@ -73,8 +73,10 @@ struct usb_os_desc_header {
+ struct usb_ext_compat_desc {
+ 	__u8	bFirstInterfaceNumber;
+ 	__u8	Reserved1;
+-	__u8	CompatibleID[8];
+-	__u8	SubCompatibleID[8];
++	__struct_group(/* no tag */, IDs, /* no attrs */,
++		__u8	CompatibleID[8];
++		__u8	SubCompatibleID[8];
++	);
+ 	__u8	Reserved2[6];
+ };
+ 
+-- 
+2.43.0
+
 
