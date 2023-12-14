@@ -1,113 +1,116 @@
-Return-Path: <linux-usb+bounces-4148-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4149-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B48B0812B17
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Dec 2023 10:05:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53F7C812C43
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Dec 2023 10:56:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1750D2828D4
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Dec 2023 09:05:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8700F1C2147E
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Dec 2023 09:56:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55FD925773;
-	Thu, 14 Dec 2023 09:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EE1C29424;
+	Thu, 14 Dec 2023 09:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="O4RQB6Ut"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GADCLlq3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from forward103b.mail.yandex.net (forward103b.mail.yandex.net [178.154.239.150])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5D310A
-	for <linux-usb@vger.kernel.org>; Thu, 14 Dec 2023 01:05:31 -0800 (PST)
-Received: from mail-nwsmtp-smtp-production-main-22.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-22.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:9c8d:0:640:38ed:0])
-	by forward103b.mail.yandex.net (Yandex) with ESMTP id 6243360B20;
-	Thu, 14 Dec 2023 12:05:29 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-22.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id S5gp596PmGk0-mcefhQZX;
-	Thu, 14 Dec 2023 12:05:28 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
-	t=1702544728; bh=qNAf6a0n2iFrRHyvBKAct41bNMWRnW2Gh+8LEzcjWAg=;
-	h=Message-ID:Date:Cc:Subject:To:From;
-	b=O4RQB6Ut7dF5Ym4TUGw+cCVVMY/lCg3QUjtfIuREqB8RuZDsaY7bCNJC8jYgce3pl
-	 X9UmpeUfK7aqqiJG2jb4OO4bGhuL5FpJ/TXlX5UbPCihsLfmdgZaHRw3ueF4onnTRn
-	 aVHTzFx4jijcgLx5Ea0vF4xBh0uBscDUT0xMwgu0=
-Authentication-Results: mail-nwsmtp-smtp-production-main-22.iva.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-From: Dmitry Antipov <dmantipov@yandex.ru>
-To: Udipto Goswami <quic_ugoswami@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	Dmitry Antipov <dmantipov@yandex.ru>
-Subject: [PATCH] [v2] usb: gadget: f_fs: fix fortify warning
-Date: Thu, 14 Dec 2023 12:04:15 +0300
-Message-ID: <20231214090428.27292-1-dmantipov@yandex.ru>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701F32E854;
+	Thu, 14 Dec 2023 09:56:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7342C433C7;
+	Thu, 14 Dec 2023 09:56:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702547792;
+	bh=wGKhND1VfRS+D1xAwDoI8Hg7Nwb7ZoAYE7B0z+inPCM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GADCLlq3M+2WeHKjyGpBSbsGGuM6Aq3ZPmvdby8mBpQHiXZWnWRCCJI0UI7UedGtc
+	 3WuWgWBoGU8ioevc1HxgM2lZmQJuS9Qy2a1ZqX322zNaD8sIy5R1yqrJ0DS1TZ4dpD
+	 osLRPlatKi68ocGgfxrP9j9Ixoi8G+GYBlOzEzvh+1qJNVQ/+zCJRurIhZB2m87y1I
+	 LVwyjP1rAUsMMU7GX8Q1uY6B3gi1KhRXs06VeRXhYnTIAZ6Ae2pMMgKroZtOF2ewqh
+	 qUB62T45DB2cBOs4QRnFBYdiqgMm1jCBEakytBzQInGC2l0b42Phvrz/Cc2A9XnqUB
+	 F6WKFeiXrSaRA==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1rDiSB-0007l7-1q;
+	Thu, 14 Dec 2023 10:56:28 +0100
+Date: Thu, 14 Dec 2023 10:56:27 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Andy Gross <agross@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, quic_ppratap@quicinc.com,
+	quic_jackp@quicinc.com, Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
+ bindings
+Message-ID: <ZXrRS7O0Cv1sAJdk@hovoldconsulting.com>
+References: <20231211121124.4194-1-quic_kriskura@quicinc.com>
+ <20231211121124.4194-2-quic_kriskura@quicinc.com>
+ <24fb0b25-0139-4370-864c-839ae931f847@linaro.org>
+ <c5d85c84-3783-4262-a379-1f28e13ae4ce@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c5d85c84-3783-4262-a379-1f28e13ae4ce@quicinc.com>
 
-When compiling with gcc version 14.0.0 20231206 (experimental)
-and CONFIG_FORTIFY_SOURCE=y, I've noticed the following warning:
+On Wed, Dec 13, 2023 at 09:48:57PM +0530, Krishna Kurapati PSSNV wrote:
+> On 12/13/2023 12:45 PM, Krzysztof Kozlowski wrote:
+> > On 11/12/2023 13:11, Krishna Kurapati wrote:
+> >> The high speed related interrupts present on QC targets are as follows:
 
-...
-In function 'fortify_memcpy_chk',
-    inlined from '__ffs_func_bind_do_os_desc' at drivers/usb/gadget/function/f_fs.c:2934:3:
-./include/linux/fortify-string.h:588:25: warning: call to '__read_overflow2_field'
-declared with attribute warning: detected read beyond size of field (2nd parameter);
-maybe use struct_group()? [-Wattribute-warning]
-  588 |                         __read_overflow2_field(q_size_field, size);
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >> Classiffy SoC's into four groups based on whether qusb2_phy interrupt
 
-This call to 'memcpy()' is interpreted as an attempt to copy both
-'CompatibleID' and 'SubCompatibleID' of 'struct usb_ext_compat_desc'
-from an address of the first one, which causes an overread warning.
-Since we actually want to copy both of them at once, use the
-convenient 'struct_group()' and 'sizeof_field()' here.
+typo: Classify
 
-Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
----
-v2: fix __struct_group(...) usage in uapi header
----
- drivers/usb/gadget/function/f_fs.c  | 5 ++---
- include/uapi/linux/usb/functionfs.h | 6 ++++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+> >> or {dp/dm}_hs_phy_irq is used for wakeup in high speed and whether the
+> >> SoCs have hs_phy_irq present in them or not.
+> >>
+> >> The ss_phy_irq is optional interrupt because there are mutliple SoC's
+> >> which either support only High Speed or there are multiple controllers
+> >> within same Soc and the secondary controller is High Speed only capable.
+> >>
+> >> This breaks ABI on targets running older kernels, but since the interrupt
+> >> definitions are given wrong on many targets and to establish proper rules
+> >> for usage of DWC3 interrupts on Qualcomm platforms, DT binding update is
+> >> necessary.
+> > 
+> > This still does not explain why missing property has to be added as
+> > first one, causing huge reordering of everything here and in DTS.
+> > 
+> > If pwr_event is required and we already break the ABI, reduce the impact
+> > of the change by putting it after all required interrupts. Otherwise
+> > please explain here and in commit msg why different approach is taken.
+> > 
+> 
+> Hi Krzysztof. I don't know much about the effect of the ordering on ABI. 
+> I will try to learn up on it. Would the series be good if we just move 
+> the pwr_event to the end and keep everything in v3 as it is, and push v4 
+> for now ?
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index efe3e3b85769..dafedc33928d 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -2931,9 +2931,8 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
- 
- 		t = &func->function.os_desc_table[desc->bFirstInterfaceNumber];
- 		t->if_id = func->interfaces_nums[desc->bFirstInterfaceNumber];
--		memcpy(t->os_desc->ext_compat_id, &desc->CompatibleID,
--		       ARRAY_SIZE(desc->CompatibleID) +
--		       ARRAY_SIZE(desc->SubCompatibleID));
-+		memcpy(t->os_desc->ext_compat_id, &desc->IDs,
-+		       sizeof_field(struct usb_ext_compat_desc, IDs));
- 		length = sizeof(*desc);
- 	}
- 		break;
-diff --git a/include/uapi/linux/usb/functionfs.h b/include/uapi/linux/usb/functionfs.h
-index d77ee6b65328..078098e73fd3 100644
---- a/include/uapi/linux/usb/functionfs.h
-+++ b/include/uapi/linux/usb/functionfs.h
-@@ -73,8 +73,10 @@ struct usb_os_desc_header {
- struct usb_ext_compat_desc {
- 	__u8	bFirstInterfaceNumber;
- 	__u8	Reserved1;
--	__u8	CompatibleID[8];
--	__u8	SubCompatibleID[8];
-+	__struct_group(/* no tag */, IDs, /* no attrs */,
-+		__u8	CompatibleID[8];
-+		__u8	SubCompatibleID[8];
-+	);
- 	__u8	Reserved2[6];
- };
- 
--- 
-2.43.0
+Since all SoCs have the pwr_event (HS) interrupt, but not all
+controllers have the SS PHY interrupt, this would prevent expressing
+that the SS PHY is optional by keeping it last in the binding schema and
+making sure that minItem = maxItems - 1.
 
+And as we discussed, the aim here is to group the three classes of SoCs
+(qusb2, qusb2+, femto) and fix the order of these interrupts once and
+for all so that random reorderings, renames and omissions do not make it
+into the bindings next time someone grabs a downstream DT and sends it
+upstream.
+
+Johan
 
