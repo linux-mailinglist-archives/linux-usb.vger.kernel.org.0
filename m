@@ -1,144 +1,131 @@
-Return-Path: <linux-usb+bounces-4269-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4270-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50C31815337
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 23:08:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C67B8153D3
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 23:39:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8369C1C23E6C
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 22:08:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A233283B5C
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 22:39:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22D5E18EDB;
-	Fri, 15 Dec 2023 22:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC3C45BF2;
+	Fri, 15 Dec 2023 22:39:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O7+8u+Pp"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="FnRbQ5ZE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4480318EB0;
-	Fri, 15 Dec 2023 21:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7b6f19f3af9so43279339f.3;
-        Fri, 15 Dec 2023 13:59:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702677598; x=1703282398; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k+o2vPOmzTka+nWw8pzxJ+sUTAkkv28Vapnb4OBgttM=;
-        b=O7+8u+PpmYb+ZPc2dbukLFk4/jRAsJt9lo7e70tPfr0o2nrNX0yQdDZG0n0tEtz7aJ
-         C9GXvavmFooDagjB8fVw/n/OU8Gm+yVYsD+TPGU8wxrBRNkjZS58x7ZiUEFtDwQpODNF
-         1mXWkQHTDKwQpEGlhc7jIlkSRCcApiE1aKPjMPXOA7WWubVJC4GP12oG+TkU0i0prkQ+
-         LHrZ/wjffMWlTguAN5MQd4V0SPOdXahn6KShCZuTJI9ZQADCzoIwxE2+29sTlNuHWEo8
-         84dJqHzXxfFLbwN+zBoeY5r5dPHv4GrSmomvValuEFrGF9IUz9gqA2TGriTSZ+3JP873
-         QAqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702677598; x=1703282398;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k+o2vPOmzTka+nWw8pzxJ+sUTAkkv28Vapnb4OBgttM=;
-        b=VbQ9n1m+HLGr2HUKL5KdKvtSJYmwFVr+MOKR0A+p9HcloxT3RI+a7lunn9Vh3mljlH
-         92E+Z2M2ZUuOqJByKhUxjIvAj493a5677tci9Qq6liWt35m4Mu8xmwZSc2E7RWVRRFWb
-         /nXULtwje9iy1AZu4NqlvSExkQ/MqWdrchyraSr2XFy7TGJ3NKWqNt7B6SjStLSEHFR5
-         /l468OP4foMZ2S4yRGtLZyONqlY2L25+p8iXkQKl8JVczfip8OsBSmzA8ojRpA2rt9dZ
-         eyqSuhRShvqSpEMd2Vux7JU63QWbuEEskps1ipuaDNuprt0BB0m+oKOkBeKGx4cb/ok2
-         oGOQ==
-X-Gm-Message-State: AOJu0Yy0/VIPlOkT4mfjTbat89hGQlfisMRj56QJ7Naa32ydBsnzFkwO
-	RQbEt5I/8N5Ue14bJ4SEtDk=
-X-Google-Smtp-Source: AGHT+IEGxSpDElEMH0e5PuL0HjabpcYJbt6Y50sh3KqKaAsRBXy1hjNsTMC39RZ56Qum0h0lkVGFgw==
-X-Received: by 2002:a5d:8853:0:b0:7b4:5583:30b8 with SMTP id t19-20020a5d8853000000b007b4558330b8mr15069113ios.23.1702677598304;
-        Fri, 15 Dec 2023 13:59:58 -0800 (PST)
-Received: from ?IPV6:2001:470:42c4:101:7c7f:3273:a81a:4618? ([2001:470:42c4:101:7c7f:3273:a81a:4618])
-        by smtp.gmail.com with ESMTPSA id ge25-20020a056638681900b00468f0b59f31sm4151200jab.31.2023.12.15.13.59.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Dec 2023 13:59:57 -0800 (PST)
-Message-ID: <edf15619-8f31-2a30-d92e-997bc1464c58@gmail.com>
-Date: Fri, 15 Dec 2023 14:59:56 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183D013B12E;
+	Fri, 15 Dec 2023 22:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BFLVMlU023006;
+	Fri, 15 Dec 2023 22:38:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=i5e3VNsHMtLdnZjKEnpBG17/DfBO8lIAIhhbJZLJYwE=; b=Fn
+	RbQ5ZEXEHBuX4ttkNQ3M26mGIGsNg+wmUPp6CqOydH0nusvg8tWBlYDjqu4R515P
+	M6JPdi1pZRKj2oiaLOB7/TbqlHISBFpqGsMY34Wyk7nOFyvNr3V+8+E2EpdRLjT7
+	TiNUDoHwPFLLMLpSoGrECEDlDeXr9OF+F8dc50JpJtoxAf+qqkxmGesOZXKZqKSz
+	8l+msL9CiH43M8XgJbHQeilIGAmXG1d/WZJYH102Z9ZmsGvHBIgkYefwo38sVoDn
+	hkgAu7M3DuOP/LBoquOzViJd1H3A5BqJKjODHH0z7yf9jJ4vimXkDJ5OJ0eIuFZb
+	thCIunEJ7q6mR+pN6Rhg==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v0m46hrg1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 22:38:56 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BFMct9A027457
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 22:38:55 GMT
+Received: from [10.110.36.237] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 15 Dec
+ 2023 14:38:54 -0800
+Message-ID: <80111881-13dd-4b05-876a-a97eb3889726@quicinc.com>
+Date: Fri, 15 Dec 2023 14:38:53 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 0/2] Allow disabling USB3 ports in xHCI/DWC3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 18/41] ALSA: usb-audio: qcom: Add USB QMI definitions
 Content-Language: en-US
-To: Mathias Nyman <mathias.nyman@linux.intel.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Heiko Stuebner <heiko@sntech.de>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231208210458.912776-1-CFSworks@gmail.com>
- <7fdd62c6-f492-1f7e-9eca-9f965cdd73ef@linux.intel.com>
-From: Sam Edwards <cfsworks@gmail.com>
-In-Reply-To: <7fdd62c6-f492-1f7e-9eca-9f965cdd73ef@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Wesley Cheng <quic_wcheng@quicinc.com>, <srinivas.kandagatla@linaro.org>,
+        <mathias.nyman@intel.com>, <perex@perex.cz>, <conor+dt@kernel.org>,
+        <corbet@lwn.net>, <gregkh@linuxfoundation.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@linaro.org>, <Thinh.Nguyen@synopsys.com>,
+        <broonie@kernel.org>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
+        <robh+dt@kernel.org>, <agross@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20231215214955.12110-1-quic_wcheng@quicinc.com>
+ <20231215214955.12110-19-quic_wcheng@quicinc.com>
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20231215214955.12110-19-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: y0Zvylxqky0dYnXVoe0CvMAArWBxbEqy
+X-Proofpoint-ORIG-GUID: y0Zvylxqky0dYnXVoe0CvMAArWBxbEqy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 adultscore=0 phishscore=0 mlxscore=0 clxscore=1011
+ mlxlogscore=899 impostorscore=0 malwarescore=0 bulkscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2312150159
 
-Hi Mathias,
-
-On 12/14/23 04:05, Mathias Nyman wrote:
-> I don't think this will work as a generic xhci driver feature.
+On 12/15/2023 1:49 PM, Wesley Cheng wrote:
+> The Qualcomm USB audio offload driver utilizes the QMI protocol to
+> communicate with the audio DSP.  Add the necessary QMI header and field
+> definitions, so the QMI interface driver is able to route the QMI packet
+> received to the USB audio offload driver.
 > 
-> Even if we ignore all USB3 ports in software they will for most xHC 
-> hosts be powered
-> and enabled in hardware by default after controller reset.
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>  sound/usb/qcom/usb_audio_qmi_v01.c | 892 +++++++++++++++++++++++++++++
+>  sound/usb/qcom/usb_audio_qmi_v01.h | 162 ++++++
+>  2 files changed, 1054 insertions(+)
+>  create mode 100644 sound/usb/qcom/usb_audio_qmi_v01.c
+>  create mode 100644 sound/usb/qcom/usb_audio_qmi_v01.h
 > 
-> This means they perform link training, generate all kinds of events with 
-> interrupts
-> (connect, over-current etc) that driver now can't handle.
+> diff --git a/sound/usb/qcom/usb_audio_qmi_v01.c b/sound/usb/qcom/usb_audio_qmi_v01.c
+> new file mode 100644
+> index 000000000000..bdfd67d980eb
+> --- /dev/null
+> +++ b/sound/usb/qcom/usb_audio_qmi_v01.c
+> @@ -0,0 +1,892 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/soc/qcom/qmi.h>
+> +
+> +#include "usb_audio_qmi_v01.h"
+> +
+> +static struct qmi_elem_info mem_info_v01_ei[] = {
 
-By this do you mean that having the xHCI driver ignore the USB3 ports 
-isn't enough to ensure that PP=0 (and the driver would need to do a 
-little bit more to make sure that the "parking brake" is on: e.g. 
-initialize, but not use, the ports) or that the xHC's PP=0 signal isn't 
-sufficient to keep the PHYs from trying to bring the link up and 
-generating those interrupts (PP=0 really isn't enough, and there is no 
-general "parking brake" to be found here)?
+I believe all of the struct qmi_elem_info arrays can be const.
 
-> Sound like the setup you are using has a very specific issue, and it 
-> would need
-> a narrow targeted quirk to solve it.
+At least that was the goal of commit ff6d365898d4 ("soc: qcom: qmi: use
+const for struct qmi_elem_info")
 
-I infer from this that you're against having a DT property added to 
-xHCI? What if the property were to be narrowed in scope to "ignore the 
-USB3 PHYs, they're disabled/absent" vs. this iteration's "disable the 
-USB3 ports" meaning?
+/jeff
 
-If this quirk ends up landing in the dwc3 driver (since, arguably, DWC3 
-is the real misbehaving hw block in these circumstances), what would be 
-your preferred mechanism of signaling to the xHCI layer "the USB3 PHYs 
-have been disabled; please ignore"?
-
-> 
->>
->> There are other ways to disable the USB3 ports on RK3588, such as via 
->> some
->> syscon registers. I figured I would start with the most general solution
->> (benefitting other SoCs) first, getting more specific only if 
->> necessary. :)
-> 
-> To me a specific solution to a specific problem like this sounds better.
-
-I am starting to think so as well. I may shift my focus to DWC3 (with 
-xHCI driver changes made only to facilitate them) for now, since 
-`maximum-speed = "high-speed";` very reasonably (imo) should prevent 
-registering the usb3 rhub -- though something may convince me otherwise 
-in the near future. :)
-
-> Thanks
-> Mathias
-
-Thanks to you as well, this is exactly the type of feedback I was 
-fishing for!
-
-Cheers,
-Sam
 
