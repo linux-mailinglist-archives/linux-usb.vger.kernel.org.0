@@ -1,587 +1,474 @@
-Return-Path: <linux-usb+bounces-4225-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4236-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E81B815205
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 22:44:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD96D81524B
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 22:52:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CFE51F243E2
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 21:44:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83B3B2872A8
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 21:52:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3BA8482ED;
-	Fri, 15 Dec 2023 21:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D398B692B6;
+	Fri, 15 Dec 2023 21:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MEKyc9pu"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pdtRnfar"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C113358B0
-	for <linux-usb@vger.kernel.org>; Fri, 15 Dec 2023 21:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-54744e66d27so3684a12.0
-        for <linux-usb@vger.kernel.org>; Fri, 15 Dec 2023 13:44:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702676681; x=1703281481; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IvoaTCHQB6m2X17NpTDNaTvh2i4TVhNSwNiho0jhKxg=;
-        b=MEKyc9puBxEwIltRJx2hfmbzub2J/UBw9biTtkMnss91iFNq9Ljo2mYRD07sBoCYVm
-         Di4lT3uXH8vvEWvkBa010qmcFHwIewQ6Rz+N6dgYqb3az9L0HNsC97iCpk1lSLwTJxl5
-         WR5dshXWZ0lmLfScT7AfFbu+vtk6JUoumDCF3Boqx4DDZZfhyDcR12l1qNpO5rlzPp7g
-         QRqAUpcWQZK0Yxbcev4c7wJU1DL1np6bz0JZhO4NQGIPVlQQ28SWUOlkRv308K8879Su
-         nTcBhEkO0NF9mSniJHi31q/SWduJlQML4oJZjIBUTORBGiIDmzQtDby8bw7w7MwdeFs1
-         NPVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702676681; x=1703281481;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IvoaTCHQB6m2X17NpTDNaTvh2i4TVhNSwNiho0jhKxg=;
-        b=jInEvep65AtHfojBp2WRSPXvXSmJSBAicZsvtBikzXrqbS7wCzNCw5+6Mf6+zm16/W
-         z120iFbn5rNaD09Wfy0+x4VUEmvRioZc5vGOqnvdV22uW+ex2BM39JW04MWSoF061Wvl
-         aP75K2KsJLMSloM+Nerq/lUtzQn6B2KwyEoxGDyFBrLQDqdY5taVxG2pL7DCnS4Fd6sw
-         18W4LZTtzT4RuwGOhb1eccQ4hYANAzJ8dnZ5wP7BOTPpcYqRZGJ1lqhXcq0bbMxBreER
-         65nJaxGQDvxrUBkvKA1H4qEx2V2JAibDbfzKg1CiVQuLrTf/IRyLiMOW1Uz84GyilJy+
-         jLmw==
-X-Gm-Message-State: AOJu0YzEP5THWDZcWSx5V4+3aoXcNvQ+ak7+mbm/cRdKviylGMWf5rfr
-	9jZqXGbSnSxOD7MShnOK80DGVAtCsmK/UVH526Tg+DX4dIvw
-X-Google-Smtp-Source: AGHT+IFOPwKgHaaFecQceJHrkoPOUp73tHhJU433RVr3RTbfxd/xRG3nE7ACDzgy5ZO93qsuJ9vTs9HqkpyUkzZj4TI=
-X-Received: by 2002:a50:cdc6:0:b0:551:9870:472 with SMTP id
- h6-20020a50cdc6000000b0055198700472mr22796edj.1.1702676680838; Fri, 15 Dec
- 2023 13:44:40 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4921A563AF;
+	Fri, 15 Dec 2023 21:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BFICrkN032364;
+	Fri, 15 Dec 2023 21:50:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=CFSPafqFTn+R5H0sY4CtfHL4NA+YHsAs6yyfyHP6iBg=; b=pd
+	tRnfarmJvG9ZMSuBycYIOZnAIYZopvdZsq+31SqYutSU2WVPnrC1nsWu4o7VZtqb
+	HUHAeU3m+tqDAynsq7QWR4Qde9I05/gI/V55FJL65qadv2FTbqcDhmIyGNLFYLNj
+	ezj899PX7aqT3Or8BYLZyq1fsjqpscwzpxdU8mShFIWepXEGEmQWaj+V4ijLL2x1
+	Lhi7bGTNGVV6l5ajsD+i9RjIPZ2bMbF0xMV1e+beBYqj2nIvgiwVytErEqWYotWn
+	QvqKIw0aCapyIfWbt6EYI+1h+ePpb1Zwa3TLveLRr3hjMVD8IPIh7rDrPg1bOliG
+	QwToCjKjQCamP73WleLw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v0hdfa7dq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 21:50:06 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BFLo5vL008226
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 21:50:05 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Fri, 15 Dec 2023 13:50:05 -0800
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <gregkh@linuxfoundation.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@linaro.org>, <Thinh.Nguyen@synopsys.com>,
+        <broonie@kernel.org>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
+        <robh+dt@kernel.org>, <agross@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v10 00/41] Introduce QC USB SND audio offloading support
+Date: Fri, 15 Dec 2023 13:49:14 -0800
+Message-ID: <20231215214955.12110-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ccb72864-6623-4652-8ccf-700c2c68916e@suse.com>
- <CANP3RGdOT9rrBai+uuTZCo7JPyeEbh_u+vu6VD7t_Z80nfAn1Q@mail.gmail.com> <20231215212023.pas6tem7ekd2zcf6@hdebian>
-In-Reply-To: <20231215212023.pas6tem7ekd2zcf6@hdebian>
-From: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date: Fri, 15 Dec 2023 13:44:29 -0800
-Message-ID: <CANP3RGefehSBiFUbaEbLGiaj64JsYbATJhr+i_4ed-xjq2ARZA@mail.gmail.com>
-Subject: Re: Question regarding CDC NCM and VNC performance issue
-To: Hiago De Franco <hiagofranco@gmail.com>
-Cc: Oliver Neukum <oneukum@suse.com>, Francesco Dolcini <francesco@dolcini.it>, davem@davemloft.net, 
-	edumazet@google.com, hiago.franco@toradex.com, kuba@kernel.org, 
-	linux-usb@vger.kernel.org, pabeni@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: q2CPSEV9gRF5FUzYT6kcTI6vPE7R2IsW
+X-Proofpoint-GUID: q2CPSEV9gRF5FUzYT6kcTI6vPE7R2IsW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 impostorscore=0 spamscore=0 lowpriorityscore=0
+ adultscore=0 clxscore=1011 priorityscore=1501 mlxscore=0 phishscore=0
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2312150152
 
-On Fri, Dec 15, 2023 at 1:20=E2=80=AFPM Hiago De Franco <hiagofranco@gmail.=
-com> wrote:
->
-> Hi Oliver and Maciej,
->
-> Sorry for the delay on my message. I took some time to set up some
-> debugging tools, hoping to find something more interesting. I couldn't
-> find too much I guess, but I will describe the results here.
+Several Qualcomm based chipsets can support USB audio offloading to a
+dedicated audio DSP, which can take over issuing transfers to the USB
+host controller.  The intention is to reduce the load on the main
+processors in the SoC, and allow them to be placed into lower power modes.
+There are several parts to this design:
+  1. Adding ASoC binding layer
+  2. Create a USB backend for Q6DSP
+  3. Introduce XHCI interrupter support
+  4. Create vendor ops for the USB SND driver
 
-No worries.
+      USB                          |            ASoC
+--------------------------------------------------------------------
+                                   |  _________________________
+                                   | |sm8250 platform card     |
+                                   | |_________________________|
+                                   |         |           |
+                                   |      ___V____   ____V____
+                                   |     |Q6USB   | |Q6AFE    |  
+                                   |     |"codec" | |"cpu"    |
+                                   |     |________| |_________|
+                                   |         ^  ^        ^
+                                   |         |  |________|
+                                   |      ___V____    |
+                                   |     |SOC-USB |   |
+   ________       ________               |        |   |
+  |USB SND |<--->|QC offld|<------------>|________|   |
+  |(card.c)|     |        |<----------                |
+  |________|     |________|___     | |                |
+      ^               ^       |    | |    ____________V_________
+      |               |       |    | |   |APR/GLINK             |
+   __ V_______________V_____  |    | |   |______________________|
+  |USB SND (endpoint.c)     | |    | |              ^
+  |_________________________| |    | |              |
+              ^               |    | |   ___________V___________
+              |               |    | |->|audio DSP              |
+   ___________V_____________  |    |    |_______________________|
+  |XHCI HCD                 |<-    |
+  |_________________________|      |
 
-> First, I set up ftrace to track 'package_for_tx' function. My idea would
-> be that I would see the delays between two consecutives calls of this
-> function being more than 300us, this would say the code wasn't
-> respecting the hrtimer. The trace log looks something like that:
 
-Here's my recommendation.
-On the gadget side.
-Print something when the timer is armed.
-Print something when the timer fires.
-Include the timestamp.
+Adding ASoC binding layer:
+soc-usb: Intention is to treat a USB port similar to a headphone jack.
+The port is always present on the device, but cable/pin status can be
+enabled/disabled.  Expose mechanisms for USB backend ASoC drivers to
+communicate with USB SND.
 
-Then try to send something (a single packet) that won't trigger a reply.
+Create a USB backend for Q6DSP:
+q6usb: Basic backend driver that will be responsible for maintaining the
+resources needed to initiate a playback stream using the Q6DSP.  Will
+be the entity that checks to make sure the connected USB audio device
+supports the requested PCM format.  If it does not, the PCM open call will
+fail, and userpsace ALSA can take action accordingly.
 
-For example run a script in a screen session that sends 1 unsolicited
-arp reply packet every 10 seconds.
-This is rare enough, it should obviously get the timer to fire.
-Again, wait 5 minutes, so you've had 30+ packets sent.
-See if it does even fire...
-You can run tcpdump on the receiver to see what you receive (and the
-timestamps on that)
+Introduce XHCI interrupter support:
+XHCI HCD supports multiple interrupters, which allows for events to be routed
+to different event rings.  This is determined by "Interrupter Target" field
+specified in Section "6.4.1.1 Normal TRB" of the XHCI specification.
 
+Events in the offloading case will be routed to an event ring that is assigned
+to the audio DSP.
 
->
-> # tracer: function
-> #
-> # entries-in-buffer/entries-written: 468/468   #P:2
-> #
-> #                                _-----=3D> irqs-off/BH-disabled
-> #                               / _----=3D> need-resched
-> #                              | / _---=3D> hardirq/softirq
-> #                              || / _--=3D> preempt-depth
-> #                              ||| / _-=3D> migrate-disable
-> #                              |||| /     delay
-> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> #              | |         |   |||||     |         |
->             tezi-237     [001] dns..   101.030667: package_for_tx <-ncm_w=
-rap_ntb
->           <idle>-0       [000] d.s..   101.032771: package_for_tx <-ncm_w=
-rap_ntb
->           weston-228     [001] d.s..   101.039430: package_for_tx <-ncm_w=
-rap_ntb
->             tezi-237     [000] d.s..   101.041634: package_for_tx <-ncm_w=
-rap_ntb
->           <idle>-0       [001] d.s..   101.042326: package_for_tx <-ncm_w=
-rap_ntb
->           <idle>-0       [001] d.s..   101.055665: package_for_tx <-ncm_w=
-rap_ntb
->           weston-231     [001] d.s..   101.057779: package_for_tx <-ncm_w=
-rap_ntb
->           <idle>-0       [001] d.s..   101.068630: package_for_tx <-ncm_w=
-rap_ntb
->           weston-231     [001] d.s..   101.085738: package_for_tx <-ncm_w=
-rap_ntb
->             tezi-237     [000] D.s..   101.088611: package_for_tx <-ncm_w=
-rap_ntb
->
-> So I created a simple script to calculate the delta time between two
-> consecutive calls and give me at the end how many of them are above
-> 300us. This is the result:
->
-> Total timestamps above 300 microseconds: 440 of 742
-> Percentage of timestamps above 300 microseconds: 59.30%
->
-> Then I decided to lower down the TX_MAX_NUM_DPE from 32 to 0.
-> 0 and 4 made the VNC runs smooth. I've also tested 8 and 16, but these
-> two didn't help. Again, by setting the number to 0, this is the result:
->
-> Total timestamps above 300 microseconds: 3149 of 65420
-> Percentage of timestamps above 300 microseconds: 4.81%
->
-> Of course we also have more packages, as the VNC is working and it's not
-> frozen. It's interesting how fast this is now, but as discussed with a
-> coleague, we don't know if this tells much. There are more latencies
-> envolved, for example from the scheduler, so probably the result is not
-> showing me anything valuable.
->
-> My second test was trying to figure out how TX_MAX_NUM_DPE was
-> impacting my issue, so I added two printks to check the number it was
-> getting and when it was being zeroed.
->
-> /* Delay for the transmit to wait before sending an unfilled NTB frame. *=
-/
->  #define TX_TIMEOUT_NSECS       300000
-> @@ -964,6 +964,7 @@ static struct sk_buff *package_for_tx(struct f_ncm *n=
-cm)
->         /* Set the final NDP wLength */
->         new_len =3D opts->ndp_size +
->                         (ncm->ndp_dgram_count * dgram_idx_len);
-> +       printk("hfranco: package_for_tx called, setting ndp_dram_count to=
- 0");
->         ncm->ndp_dgram_count =3D 0;
->         /* Increment from start to wLength */
->         ntb_iter =3D (void *) ncm->skb_tx_ndp->data;
-> @@ -1027,6 +1028,8 @@ static struct sk_buff *ncm_wrap_ntb(struct gether *=
-port,
->                  * ready for new data.
->                  * NOTE: Assume maximum align for speed of calculation.
->                  */
-> +
-> +               printk("hfranco: ncm->ndp_dgram_count =3D %d", ncm->ndp_d=
-gram_count);
->                 if (ncm->skb_tx_data
->                     && (ncm->ndp_dgram_count >=3D TX_MAX_NUM_DPE
->                     || (ncm->skb_tx_data->len +
->
-> This is the result:
->
-> [ 6613.034304] hfranco: package_for_tx called, setting ndp_dram_count to =
-0
-> [ 6613.034783] hfranco: ncm->ndp_dgram_count =3D 0
-> [ 6613.034812] hfranco: ncm->ndp_dgram_count =3D 2
-> [ 6613.034823] hfranco: ncm->ndp_dgram_count =3D 3
-> [ 6613.034835] hfranco: ncm->ndp_dgram_count =3D 4
-> [ 6613.034844] hfranco: ncm->ndp_dgram_count =3D 5
-> [ 6613.034855] hfranco: ncm->ndp_dgram_count =3D 6
-> [ 6613.034865] hfranco: ncm->ndp_dgram_count =3D 7
-> [ 6613.034874] hfranco: ncm->ndp_dgram_count =3D 8
-> [ 6613.034884] hfranco: ncm->ndp_dgram_count =3D 9
-> [ 6613.034895] hfranco: ncm->ndp_dgram_count =3D 10
-> [ 6613.034905] hfranco: ncm->ndp_dgram_count =3D 11
-> [ 6613.034914] hfranco: package_for_tx called, setting ndp_dram_count to =
-0
-> [ 6613.035266] hfranco: ncm->ndp_dgram_count =3D 2
-> [ 6613.035281] hfranco: ncm->ndp_dgram_count =3D 3
-> [ 6613.035292] hfranco: ncm->ndp_dgram_count =3D 4
-> [ 6613.035301] hfranco: ncm->ndp_dgram_count =3D 5
-> [ 6613.035310] hfranco: ncm->ndp_dgram_count =3D 6
-> [ 6613.035320] hfranco: ncm->ndp_dgram_count =3D 7
-> [ 6613.035329] hfranco: ncm->ndp_dgram_count =3D 8
-> [ 6613.035339] hfranco: ncm->ndp_dgram_count =3D 9
-> [ 6613.035350] hfranco: ncm->ndp_dgram_count =3D 10
-> [ 6613.035360] hfranco: ncm->ndp_dgram_count =3D 11
-> [ 6613.035366] hfranco: package_for_tx called, setting ndp_dram_count to =
-0
->
-> So, in general the value never passes 10 or 11, from all the test I done
-> with the VNC. As said earlier, by putting 4 made the VNC work:
->
-> [   17.333014] hfranco: package_for_tx called, setting ndp_dram_count to =
-0
-> [   17.333065] hfranco: ncm->ndp_dgram_count =3D 2
-> [   17.333079] hfranco: ncm->ndp_dgram_count =3D 3
-> [   17.333105] hfranco: ncm->ndp_dgram_count =3D 4
-> [   17.333114] hfranco: package_for_tx called, setting ndp_dram_count to =
-0
-> [   17.333161] hfranco: ncm->ndp_dgram_count =3D 2
-> [   17.333173] hfranco: ncm->ndp_dgram_count =3D 3
-> [   17.333184] hfranco: ncm->ndp_dgram_count =3D 4
-> [   17.333191] hfranco: package_for_tx called, setting ndp_dram_count to =
-0
-> [   17.333235] hfranco: ncm->ndp_dgram_count =3D 2
-> [   17.333259] hfranco: ncm->ndp_dgram_count =3D 3
-> [   17.333271] hfranco: ncm->ndp_dgram_count =3D 4
->
-> On Tue, Dec 12, 2023 at 10:21:13PM +0100, Oliver Neukum wrote:
-> > On 12.12.23 21:32, Hiago De Franco wrote:
-> >
-> > Hi,
-> >
-> > > On Mon, Dec 11, 2023 at 12:44:42PM -0800, Maciej =C5=BBenczykowski wr=
-ote:
-> > > > On Mon, Dec 11, 2023 at 12:29=E2=80=AFPM Hiago De Franco <hiagofran=
-co@gmail.com> wrote:
-> >
-> > > > Hiago, could you try lowering CDC_NCM_TIMER_PENDING_CNT, if need be=
- all the way to 1?
-> > > > It is defined in include/linux/usb/cdc_ncm.h as 3 currently
-> > > > This applies to the host side.
-> > >
-> > > On my side CDC_NCM_TIMER_PENDING_CNT is set to 2 by default, did you
-> > > mean CDC_NCM_RESTART_TIMER_DATAGRAM_CNT?
-> >
-> > Yes, I meant that. Sorry.
-> >
-> > > Despite of that, I tried to lower both CDC_NCM_TIMER_PENDING_CNT and
-> > > CDC_NCM_RESTART_TIMER_DATAGRAM_CNT all the way down to 1, first the
-> > > CDC_NCM_TIMER_PENDING_CNT, then CDC_NCM_RESTART_TIMER_DATAGRAM_CNT an=
-d
-> > > finally both at the same time, but it didn't help.
-> > >
-> > > I've also put some printks as following:
-> > >
-> > >     ctx->tx_curr_frame_num =3D n;
-> > >     printk("hfranco: tx_curr_frame_num =3D %d", n);
-> > >
-> > >     if (n =3D=3D 0) {
-> > >             printk("hfranco: n =3D=3D 0");
-> > >             /* wait for more frames */
-> > >             /* push variables */
-> > >             ctx->tx_curr_skb =3D skb_out;
-> > >             goto exit_no_skb;
-> > >
-> > >     } else if ((n < ctx->tx_max_datagrams) && (ready2send =3D=3D 0) &=
-& (ctx->timer_interval > 0)) {
-> > >             printk("hfranco: tx_max_datagrams =3D %d", ctx->tx_max_da=
-tagrams);
-> > >             printk("hfranco: timer_interval =3D %d", ctx->timer_inter=
-val);
-> > >             printk("hfranco: n inside else if =3D %d", n);
-> > >             /* wait for more frames */
-> > >             /* push variables */
-> > >             ctx->tx_curr_skb =3D skb_out;
-> > >             /* set the pending count */
-> > >             if (n < CDC_NCM_RESTART_TIMER_DATAGRAM_CNT)
-> > >                     ctx->tx_timer_pending =3D CDC_NCM_TIMER_PENDING_C=
-NT;
-> > >             goto exit_no_skb;
-> > >
-> > >     } else {
-> > >             printk("hfranco: n inside else =3D %d", n);
-> > >             if (n =3D=3D ctx->tx_max_datagrams)
-> > >                     ctx->tx_reason_max_datagram++;  /* count reason f=
-or transmitting */
-> > >
-> > > I ran it on my host PC, compiled it as module for my Debian dekstop, =
-and
-> > > this is the dmesg:
-> > >
-> > > [ 9663.478807] hfranco: tx_curr_frame_num =3D 1
-> > > [ 9663.478816] hfranco: tx_max_datagrams =3D 40
-> > > [ 9663.478818] hfranco: timer_interval =3D 400000
-> > > [ 9663.478820] hfranco: n inside else if =3D 1
-> > > [ 9663.478822] hfranco: timer started
-> > > [ 9663.479645] hfranco: tx_curr_frame_num =3D 1
-> > > [ 9663.479652] hfranco: n inside else =3D 1
-> > >
-> > > And then it basically repeats. Looks like 'n' never passes the 1 valu=
-e.
-> > > By tweaking the flags mentioned before, 'n' got a value of 4, but tha=
-t
-> > > was the maximum value. I was wondering, why do you think this code lo=
-oks
-> > > suspicious? I basically just inserted some printks on the tx side, I
-> > > will see if I can get something from the rx as well.
-> >
-> > If we look at the statistics you initially gathered, we can see that al=
-l transmissions
-> > on the host side happen because the timeout elapses. That, however, doe=
-s
-> > _not_ tell us that the host is to blame. We could look at two possible =
-scenarios
-> >
-> > A - the gadget is bundling up the packets with too much delay and the h=
-ost
-> > just answers to the megatransmissions with one packet and the delay on =
-the host
-> > is inconsequential
-> >
-> > B - the timer on the host runs for too long or sometimes not at all. If=
- that were
-> > the case that code I pointed out would be most likely to blame
-> >
-> > Could I suggest we try to localize the issue? Can you ping the host fro=
-m the device?
->
-> Lastly, about Oliver's question, I tried to send an UDP package using
-> netcat from host to device and then from device to host. I was sending
-> one single packet in loop with 1 second interval first, then tried with
-> 0.5 second and 0.1 second. My hope was, with this test, detect who was
-> failing, host or device.
->
-> For 1 second, it pretty much works on both directions. As example, this
-> is the output of my host PC (sendind packages with the device -> "echo
-> 'hi' | nc -u 192.168.11.2 5201"):
->
-> $ sudo tcpdump -i enx9627798c3fa3
-> tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
-> listening on enx9627798c3fa3, link-type EN10MB (Ethernet), snapshot lengt=
-h 262144 bytes
-> 17:47:51.865967 IP apalis-imx6-10692086.local.54882 > hdebian.5201: UDP, =
-length 3
-> 17:47:51.866051 IP hdebian > apalis-imx6-10692086.local: ICMP hdebian udp=
- port 5201 unreachable, length 39
-> 17:47:52.145987 IP hdebian.mdns > mdns.mcast.net.mdns: 0 [b2&3=3D0x200] [=
-2a] PTR (QM)? 1.11.168.192.in-addr.arpa. (134)
-> 17:47:52.146020 IP hdebian.mdns > mdns.mcast.net.mdns: 0 [0q] (12)
-> 17:47:52.198689 IP apalis-imx6-10692086.local.mdns > mdns.mcast.net.mdns:=
- 0*- [0q] 1/0/0 (Cache flush) PTR apalis-imx6-10692086.local. (77)
-> 17:47:52.882532 IP apalis-imx6-10692086.local.37745 > hdebian.5201: UDP, =
-length 3
-> 17:47:52.882634 IP hdebian > apalis-imx6-10692086.local: ICMP hdebian udp=
- port 5201 unreachable, length 39
-> 17:47:53.903508 IP apalis-imx6-10692086.local.38147 > hdebian.5201: UDP, =
-length 3
-> 17:47:53.903585 IP hdebian > apalis-imx6-10692086.local: ICMP hdebian udp=
- port 5201 unreachable, length 39
-> 17:47:54.920174 IP apalis-imx6-10692086.local.60718 > hdebian.5201: UDP, =
-length 3
-> 17:47:54.920265 IP hdebian > apalis-imx6-10692086.local: ICMP hdebian udp=
- port 5201 unreachable, length 39
-> 17:47:55.940687 IP apalis-imx6-10692086.local.38729 > hdebian.5201: UDP, =
-length 3
-> 17:47:55.940743 IP hdebian > apalis-imx6-10692086.local: ICMP hdebian udp=
- port 5201 unreachable, length 39
-> 17:47:56.913135 ARP, Request who-has apalis-imx6-10692086.local tell hdeb=
-ian, length 28
-> 17:47:56.915052 ARP, Reply apalis-imx6-10692086.local is-at ba:6d:d0:0a:9=
-5:6b (oui Unknown), length 28
-> 17:47:56.956927 IP apalis-imx6-10692086.local.54649 > hdebian.5201: UDP, =
-length 3
-> 17:47:56.956966 IP hdebian > apalis-imx6-10692086.local: ICMP hdebian udp=
- port 5201 unreachable, length 39
-> 17:47:57.980879 IP apalis-imx6-10692086.local.53366 > hdebian.5201: UDP, =
-length 3
-> 17:47:57.980984 IP hdebian > apalis-imx6-10692086.local: ICMP hdebian udp=
- port 5201 unreachable, length 39
+Create vendor ops for the USB SND driver:
+qc_audio_offload: This particular driver has several components associated
+with it:
+- QMI stream request handler
+- XHCI interrupter and resource management
+- audio DSP memory management
 
-note that you're getting bidirectional transfer due to the icmp errors.
+When the audio DSP wants to enable a playback stream, the request is first
+received by the ASoC platform sound card.  Depending on the selected route,
+ASoC will bring up the individual DAIs in the path.  The Q6USB backend DAI
+will send an AFE port start command (with enabling the USB playback path), and
+the audio DSP will handle the request accordingly.
 
-if you want to test unidirectionally, you need to send something that
-won't get a reply.
-for example an unsolicited arp reply (with arping)... or a udp packet
-to a port drop'ed by a firewall.
+Part of the AFE USB port start handling will have an exchange of control
+messages using the QMI protocol.  The qc_audio_offload driver will populate the
+buffer information:
+- Event ring base address
+- EP transfer ring base address
 
-and of course make sure you don't run it in such a way that you get
-ssh traffic causing bidirectional traffic.
-(ie. run it (and tcpdump) under screen)
-[this is assuming you can't run it directly on the device without
-getting in via ssh,
-maybe you can via serial port or whatever - though do note that serial
-wakeups could potentially also 'trigger' / 'fix' your hrtimer,
-so probably best to run things silently under screen with no direct
-output via ssh/serial/console.
+and pass it along to the audio DSP.  All endpoint management will now be handed
+over to the DSP, and the main processor is not involved in transfers.
 
-> When I lower down the time between two packages from 1 second to 0.5 and
-> 0.1, it suddenly freezes. It happens on both directions, host to device
-> and device to host. As example, this is the host send UDP packets to the
-> device with 0.1s interval:
->
-> / # tcpdump -i usb0
-> tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
-> listening on usb0, link-type EN10MB (Ethernet), snapshot length 262144 by=
-tes
-> 18:39:53.662594 IP 192.168.11.2.54802 > 192.168.11.1.5201: UDP, length 3
-> 18:39:53.662716 IP 192.168.11.1 > 192.168.11.2: ICMP 192.168.11.1 udp por=
-t 5201 unreachable, length 39
-> 18:39:53.768678 IP 192.168.11.2.49080 > 192.168.11.1.5201: UDP, length 3
-> 18:39:53.768767 IP 192.168.11.1 > 192.168.11.2: ICMP 192.168.11.1 udp por=
-t 5201 unreachable, length 39
-> 18:39:53.875305 IP 192.168.11.2.56938 > 192.168.11.1.5201: UDP, length 3
-> 18:39:53.875376 IP 192.168.11.1 > 192.168.11.2: ICMP 192.168.11.1 udp por=
-t 5201 unreachable, length 39
-> 18:39:53.982238 IP 192.168.11.2.40177 > 192.168.11.1.5201: UDP, length 3
-> 18:39:53.982354 IP 192.168.11.1 > 192.168.11.2: ICMP 192.168.11.1 udp por=
-t 5201 unreachable, length 39
-> 18:39:54.089279 IP 192.168.11.2.43284 > 192.168.11.1.5201: UDP, length 3
-> 18:39:54.089378 IP 192.168.11.1 > 192.168.11.2: ICMP 192.168.11.1 udp por=
-t 5201 unreachable, length 39
-> 18:39:54.196027 IP 192.168.11.2.41990 > 192.168.11.1.5201: UDP, length 3
-> 18:39:54.196105 IP 192.168.11.1 > 192.168.11.2: ICMP 192.168.11.1 udp por=
-t 5201 unreachable, length 39
-> 18:39:54.303793 IP 192.168.11.2.42362 > 192.168.11.1.5201: UDP, length 3
-> 18:39:58.664608 ARP, Request who-has 192.168.11.2 tell 192.168.11.1, leng=
-th 28
-> 18:39:58.666781 ARP, Reply 192.168.11.2 is-at ea:2a:bc:40:41:30 (oui Unkn=
-own), length 28
-> 18:39:58.669531 ARP, Request who-has 192.168.11.1 tell 192.168.11.2, leng=
-th 28
-> 18:39:58.669582 ARP, Reply 192.168.11.1 is-at 1e:be:d4:00:51:0e (oui Unkn=
-own), length 28
->
-> It stops after this ARP request. Sometimes it send packages again, but
-> after a few seconds it freezes. So, at the end, I couldn't figure out
-> where the issue is...
->
-> >
-> >       Regards
-> >               Oliver
->
-> On Tue, Dec 12, 2023 at 05:11:49PM -0800, Maciej =C5=BBenczykowski wrote:
-> > On Tue, Dec 12, 2023 at 1:21=E2=80=AFPM Oliver Neukum <oneukum@suse.com=
-> wrote:
-> > >
-> > > On 12.12.23 21:32, Hiago De Franco wrote:
-> > >
-> > > Hi,
-> > >
-> > > > On Mon, Dec 11, 2023 at 12:44:42PM -0800, Maciej =C5=BBenczykowski =
-wrote:
-> > > >> On Mon, Dec 11, 2023 at 12:29=E2=80=AFPM Hiago De Franco <hiagofra=
-nco@gmail.com> wrote:
-> > >
-> > > >> Hiago, could you try lowering CDC_NCM_TIMER_PENDING_CNT, if need b=
-e all the way to 1?
-> > > >> It is defined in include/linux/usb/cdc_ncm.h as 3 currently
-> > > >> This applies to the host side.
-> > > >
-> > > > On my side CDC_NCM_TIMER_PENDING_CNT is set to 2 by default, did yo=
-u
-> > > > mean CDC_NCM_RESTART_TIMER_DATAGRAM_CNT?
-> > >
-> > > Yes, I meant that. Sorry.
-> > >
-> > > > Despite of that, I tried to lower both CDC_NCM_TIMER_PENDING_CNT an=
-d
-> > > > CDC_NCM_RESTART_TIMER_DATAGRAM_CNT all the way down to 1, first the
-> > > > CDC_NCM_TIMER_PENDING_CNT, then CDC_NCM_RESTART_TIMER_DATAGRAM_CNT =
-and
-> > > > finally both at the same time, but it didn't help.
-> > > >
-> > > > I've also put some printks as following:
-> > > >
-> > > >       ctx->tx_curr_frame_num =3D n;
-> > > >       printk("hfranco: tx_curr_frame_num =3D %d", n);
-> > > >
-> > > >       if (n =3D=3D 0) {
-> > > >               printk("hfranco: n =3D=3D 0");
-> > > >               /* wait for more frames */
-> > > >               /* push variables */
-> > > >               ctx->tx_curr_skb =3D skb_out;
-> > > >               goto exit_no_skb;
-> > > >
-> > > >       } else if ((n < ctx->tx_max_datagrams) && (ready2send =3D=3D =
-0) && (ctx->timer_interval > 0)) {
-> > > >               printk("hfranco: tx_max_datagrams =3D %d", ctx->tx_ma=
-x_datagrams);
-> > > >               printk("hfranco: timer_interval =3D %d", ctx->timer_i=
-nterval);
-> > > >               printk("hfranco: n inside else if =3D %d", n);
-> > > >               /* wait for more frames */
-> > > >               /* push variables */
-> > > >               ctx->tx_curr_skb =3D skb_out;
-> > > >               /* set the pending count */
-> > > >               if (n < CDC_NCM_RESTART_TIMER_DATAGRAM_CNT)
-> > > >                       ctx->tx_timer_pending =3D CDC_NCM_TIMER_PENDI=
-NG_CNT;
-> > > >               goto exit_no_skb;
-> > > >
-> > > >       } else {
-> > > >               printk("hfranco: n inside else =3D %d", n);
-> > > >               if (n =3D=3D ctx->tx_max_datagrams)
-> > > >                       ctx->tx_reason_max_datagram++;  /* count reas=
-on for transmitting */
-> > > >
-> > > > I ran it on my host PC, compiled it as module for my Debian dekstop=
-, and
-> >
-> > Shouldn't you be doing this on the gadget side?
-> > I thought we were thinking it was the gadget transmit timer having issu=
-es.
->
-> Because I still don't know where the issue is, I was testing both sides.
->
-> >
-> > > > this is the dmesg:
-> > > >
-> > > > [ 9663.478807] hfranco: tx_curr_frame_num =3D 1
-> > > > [ 9663.478816] hfranco: tx_max_datagrams =3D 40
-> > > > [ 9663.478818] hfranco: timer_interval =3D 400000
-> > > > [ 9663.478820] hfranco: n inside else if =3D 1
-> > > > [ 9663.478822] hfranco: timer started
-> > > > [ 9663.479645] hfranco: tx_curr_frame_num =3D 1
-> > > > [ 9663.479652] hfranco: n inside else =3D 1
-> > > >
-> > > > And then it basically repeats. Looks like 'n' never passes the 1 va=
-lue.
-> > > > By tweaking the flags mentioned before, 'n' got a value of 4, but t=
-hat
-> > > > was the maximum value. I was wondering, why do you think this code =
-looks
-> > > > suspicious? I basically just inserted some printks on the tx side, =
-I
-> > > > will see if I can get something from the rx as well.
-> > >
-> > > If we look at the statistics you initially gathered, we can see that =
-all transmissions
-> > > on the host side happen because the timeout elapses. That, however, d=
-oes
-> > > _not_ tell us that the host is to blame. We could look at two possibl=
-e scenarios
-> > >
-> > > A - the gadget is bundling up the packets with too much delay and the=
- host
-> > > just answers to the megatransmissions with one packet and the delay o=
-n the host
-> > > is inconsequential
-> > >
-> > > B - the timer on the host runs for too long or sometimes not at all. =
-If that were
-> > > the case that code I pointed out would be most likely to blame
-> > >
-> > > Could I suggest we try to localize the issue? Can you ping the host f=
-rom the device?
-> > >
-> > >         Regards
-> > >                 Oliver
-> >
-> > --
-> > Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
->
-> Sorry if I couldn't provide enough information, I'm kind of learning
-> trought the process. The TX_MAX_NUM_DPE is something I'm not fully
-> convinced, but again I will keep debugging.
->
-> Best regards,
-> Hiago.
+Overall, implementing this feature will still expose separate sound card and PCM
+devices for both the platorm card and USB audio device:
+ 0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
+                      SM8250-MTP-WCD9380-WSA8810-VA-DMIC
+ 1 [Audio          ]: USB-Audio - USB Audio
+                      Generic USB Audio at usb-xhci-hcd.1.auto-1.4, high speed
 
---
-Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
+This is to ensure that userspace ALSA entities can decide which route to take
+when executing the audio playback.  In the above, if card#1 is selected, then
+USB audio data will take the legacy path over the USB PCM drivers, etc...
+
+This feature was validated using:
+- tinymix: set/enable the multimedia path to route to USB backend
+- tinyplay: issue playback on platform card
+
+Changelog
+--------------------------------------------
+Changes in v10:
+- Added new mixer for exposing kcontrol for sound card created by USB SND.  This
+allows for applications to know which platform sound card has offload support.
+Will return the card number.
+- Broke down and cleaned up some functions/APIs within qc_audio_offload driver.
+- Exported xhci_initialize_ring_info(), and modified XHCI makefile to allow for
+the XHCI sideband to exist as a module.
+- Reworked the jack registration and moved it to the QCOM platform card driver,
+ie sm8250.
+- Added an SOC USB API to fetch a standard component tag that can be appended to
+the platform sound card.  Added this tag to sm8250 if any USB path exists within
+the DT node.
+- Moved kcontrols that existed in the Q6USB driver, and made it a bit more generic,
+so that naming can be standardized across solutions.  SOC USB is now responsible
+for creation of these kcontrols.
+- Added a SOC USB RST document explaining some code flows and implementation details
+so that other vendors can utilize the framework.
+- Addressed a case where USB device connection events are lost if usb offload driver
+(qc_audio_offload) is not probed when everything else has been initialized, ie 
+USB SND, SOC USB and ASoC sound card.  Add a rediscover device call during module
+init, to ensure that connection events will be propagated.
+- Rebased to usb-next.
+
+Changes in v9:
+- Fixed the dt binding check issue with regards to num-hc-interrupters.
+
+Changes in v8:
+- Cleaned up snd_soc_usb_find_priv_data() based on Mark's feedback.  Removed some of
+the duplicate looping code that was present on previous patches.  Also renamed the API.
+- Integrated Mathias' suggestions on his new sideband changes:
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
+- Addressed some of Mathias' fixme tags, such as:
+ - Resetting transfer ring dequeue/enqueue pointers
+ - Issuing stop endpoint command during ep removal
+ - Reset ERDP properly to first segment ring during interrupter removal. (this is currently
+   just being cleared to 0, but should be pointing to a valid segment if controller is still
+   running.
+
+Changes in v7:
+- Fixed dt check error for q6usb bindings
+- Updated q6usb property from qcom,usb-audio-intr-num --> qcom,usb-audio-intr-idx
+- Removed separate DWC3 HC interrupters num property, and place limits to XHCI one.
+- Modified xhci_ring_to_sgtable() to use assigned IOVA/DMA address to fetch pages, as
+it is not ensured event ring allocated is always done in the vmalloc range.
+
+Changes in v6:
+- Fixed limits and description on several DT bindings (XHCI and Q6USB)
+- Fixed patch subjects to follow other ALSA/ASoC notations.
+
+USB SND
+- Addressed devices which expose multiple audio (UAC) interfaces.  These devices will
+create a single USB sound card with multiple audio streams, and receive multiple
+interface probe routines.  QC offload was not properly considering cases with multiple
+probe calls.
+- Renamed offload module name and kconfig to fit within the SND domain.
+- Renamed attach/detach endpoint API to keep the hw_params notation.
+
+Changes in v5:
+- Removed some unnescessary files that were included
+- Fixed some typos mentioned
+- Addressed dt-binding issues and added hc-interrupters definition to usb-xhci.yaml
+
+XHCI:
+- Moved secondary skip events API to xhci-ring and updated implementation
+   - Utilized existing XHCI APIs, such as inc_deq and xhci_update_erst_dequeue()
+
+USB SND
+- Renamed and reworked the APIs in "sound: usb: Export USB SND APIs for modules" patch to
+include suggestions to utilize snd_usb_hw_params/free and to avoid generic naming.
+- Added a resume_cb() op for completion sake.
+- Addressed some locking concerns with regards to when registering for platform hooks.
+- Added routine to disconnect all offloaded devices during module unbind.
+
+ASoC
+- Replaced individual PCM parameter arguments in snd_soc_usb_connect() with new
+snd_soc_usb_device structure to pass along PCM info.
+- Modified snd_jack set report to notify HEADPHONE event, as we do not support record path.
+
+Changes in v4:
+- Rebased to xhci/for-usb-next
+- Addressed some dt-bindings comments
+
+XHCI:
+- Pulled in latest changes from Mathias' feature_interrupters branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
+
+- Fixed commit text and signage for the XHCI sideband/interrupter related changes
+- Added some logic to address the FIXME tags mentioned throughout the commits, such
+as handling multi segment rings and building the SGT, locking concerns, and ep
+cleanup operations.
+- Removed some fixme tags for conditions that may not be needed/addressed.
+- Repurposed the new endpoint stop sync API to be utilized in other places.
+- Fixed potential compile issue if XHCI sideband config is not defined.
+
+ASoC:
+- Added sound jack control into the Q6USB driver.  Allows for userpsace to know when
+an offload capable device is connected.
+
+USB SND:
+- Avoided exporting _snd_pcm_hw_param_set based on Takashi's recommendation.
+- Split USB QMI packet header definitions into a separate commit.  This is used to
+properly allow the QMI interface driver to parse and route QMI packets accordingly
+- Added a "depends on" entry when enabling QC audio offload to avoid compile time
+issues.
+
+Changes in v3:
+- Changed prefix from RFC to PATCH
+- Rebased entire series to usb-next
+- Updated copyright years
+
+XHCI:
+- Rebased changes on top of XHCI changes merged into usb-next, and only added
+changes that were still under discussion.
+- Added change to read in the "num-hc-interrupters" device property.
+
+ASoC:
+- qusb6 USB backend
+  - Incorporated suggestions to fetch iommu information with existing APIs
+  - Added two new sound kcontrols to fetch offload status and offload device
+    selection.
+    - offload status - will return the card and pcm device in use
+        tinymix -D 0 get 1 --> 1, 0 (offload in progress on card#1 pcm#0)
+
+    - device selection - set the card and pcm device to enable offload on. Ex.:
+        tinymix -D 0 set 1 2 0  --> sets offload on card#2 pcm#0
+                                    (this should be the USB card)
+
+USB SND:
+- Fixed up some locking related concerns for registering platform ops.
+   - Moved callbacks under the register_mutex, so that 
+- Modified APIs to properly pass more information about the USB SND device, so
+that the Q6USB backend can build a device list/map, in order to monitor offload
+status and device selection.
+
+Changes in v2:
+
+XHCI:
+- Replaced XHCI and HCD changes with Mathias' XHCI interrupter changes
+in his tree:
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
+
+Adjustments made to Mathias' changes:
+  - Created xhci-intr.h to export/expose interrupter APIs versus exposing xhci.h.
+    Moved dependent structures to this file as well. (so clients can parse out
+    information from "struct xhci_interrupter")
+  - Added some basic locking when requesting interrupters.
+  - Fixed up some sanity checks.
+  - Removed clearing of the ERSTBA during freeing of the interrupter. (pending
+    issue where SMMU fault occurs if DMA addr returned is 64b - TODO)
+
+- Clean up pending events in the XHCI secondary interrupter.  While testing USB
+bus suspend, it was seen that on bus resume, the xHCI HC would run into a command
+timeout.
+- Added offloading APIs to xHCI to fetch transfer and event ring information.
+
+ASoC:
+- Modified soc-usb to allow for multiple USB port additions.  For this to work,
+the USB offload driver has to have a reference to the USB backend by adding
+a "usb-soc-be" DT entry to the device saved into XHCI sysdev.
+- Created separate dt-bindings for defining USB_RX port.
+- Increased APR timeout to accommodate the situation where the AFE port start
+command could be delayed due to having to issue a USB bus resume while
+handling the QMI stream start command.
+
+USB SND:
+- Added a platform ops during usb_audio_suspend().  This allows for the USB
+offload driver to halt the audio stream when system enters PM suspend.  This
+ensures the audio DSP is not issuing transfers on the USB bus.
+- Do not override platform ops if they are already populated.
+- Introduce a shared status variable between the USB offload and USB SND layers,
+to ensure that only one path is active at a time.  If the USB bus is occupied,
+then userspace is notified that the path is busy.
+
+Mathias Nyman (3):
+  xhci: add support to allocate several interrupters
+  xhci: add helper to stop endpoint and wait for completion
+  xhci: sideband: add initial api to register a sideband entity
+
+Wesley Cheng (38):
+  usb: host: xhci-mem: Cleanup pending secondary event ring events
+  usb: host: xhci-mem: Allow for interrupter clients to choose specific
+    index
+  ASoC: Add SOC USB APIs for adding an USB backend
+  ASoC: dt-bindings: qcom,q6dsp-lpass-ports: Add USB_RX port
+  ASoC: qcom: qdsp6: Introduce USB AFE port to q6dsp
+  ASoC: qdsp6: q6afe: Increase APR timeout
+  ASoC: qcom: qdsp6: Add USB backend ASoC driver for Q6
+  ALSA: usb-audio: Introduce USB SND platform op callbacks
+  ALSA: usb-audio: Export USB SND APIs for modules
+  ALSA: usb-audio: Save UAC sample size information
+  dt-bindings: usb: xhci: Add num-hc-interrupters definition
+  dt-bindings: usb: dwc3: Limit num-hc-interrupters definition
+  usb: dwc3: Specify maximum number of XHCI interrupters
+  usb: host: xhci-plat: Set XHCI max interrupters if property is present
+  ALSA: usb-audio: qcom: Add USB QMI definitions
+  ALSA: usb-audio: qcom: Introduce QC USB SND offloading support
+  ALSA: usb-audio: Check for support for requested audio format
+  ASoC: usb: Add PCM format check API for USB backend
+  ASoC: qcom: qdsp6: Ensure PCM format is supported by USB audio device
+  ALSA: usb-audio: Prevent starting of audio stream if in use
+  ALSA: usb-audio: Do not allow USB offload path if PCM device is in use
+  ASoC: dt-bindings: Add Q6USB backend
+  ASoC: dt-bindings: Update example for enabling USB offload on SM8250
+  ALSA: usb-audio: qcom: Populate PCM and USB chip information
+  ASoC: qcom: qdsp6: Add support to track available USB PCM devices
+  ASoC: Introduce SND kcontrols to select sound card and PCM device
+  ASoC: qcom: qdsp6: Add SOC USB offload select get/put callbacks
+  ASoC: Add SND kcontrol for fetching USB offload status
+  ASoC: qcom: qdsp6: Add PCM ops to track current state
+  ASoC: usb: Create SOC USB SND jack kcontrol
+  ASoC: qcom: qdsp6: Add headphone jack for offload connection status
+  ASoC: usb: Fetch ASoC sound card information
+  ALSA: usb-audio: mixer: Add USB offloading mixer control
+  ALSA: usb-audio: qcom: Use card and PCM index from QMI request
+  ALSA: usb-audio: Allow for rediscovery of connected USB SND devices
+  ASoC: usb: Rediscover USB SND devices on USB port add
+  ASoC: qcom: Populate SoC components string
+  ASoC: doc: Add documentation for SOC USB
+
+ .../devicetree/bindings/sound/qcom,q6usb.yaml |   55 +
+ .../bindings/sound/qcom,sm8250.yaml           |   15 +
+ .../devicetree/bindings/usb/snps,dwc3.yaml    |    4 +
+ .../devicetree/bindings/usb/usb-xhci.yaml     |    6 +
+ Documentation/sound/soc/index.rst             |    1 +
+ Documentation/sound/soc/usb.rst               |  611 ++++++
+ drivers/usb/dwc3/core.c                       |   12 +
+ drivers/usb/dwc3/core.h                       |    2 +
+ drivers/usb/dwc3/host.c                       |    5 +-
+ drivers/usb/host/Kconfig                      |    9 +
+ drivers/usb/host/Makefile                     |    2 +
+ drivers/usb/host/xhci-debugfs.c               |    2 +-
+ drivers/usb/host/xhci-mem.c                   |  113 +-
+ drivers/usb/host/xhci-plat.c                  |    2 +
+ drivers/usb/host/xhci-ring.c                  |   48 +-
+ drivers/usb/host/xhci-sideband.c              |  374 ++++
+ drivers/usb/host/xhci.c                       |  115 +-
+ drivers/usb/host/xhci.h                       |   19 +-
+ .../sound/qcom,q6dsp-lpass-ports.h            |    1 +
+ include/linux/usb/xhci-sideband.h             |   67 +
+ include/sound/q6usboffload.h                  |   20 +
+ include/sound/soc-usb.h                       |   90 +
+ sound/soc/Makefile                            |    2 +-
+ sound/soc/qcom/Kconfig                        |    4 +
+ sound/soc/qcom/common.c                       |   41 +
+ sound/soc/qcom/common.h                       |    4 +-
+ sound/soc/qcom/qdsp6/Makefile                 |    1 +
+ sound/soc/qcom/qdsp6/q6afe-dai.c              |   60 +
+ sound/soc/qcom/qdsp6/q6afe.c                  |  193 +-
+ sound/soc/qcom/qdsp6/q6afe.h                  |   36 +-
+ sound/soc/qcom/qdsp6/q6dsp-lpass-ports.c      |   23 +
+ sound/soc/qcom/qdsp6/q6dsp-lpass-ports.h      |    1 +
+ sound/soc/qcom/qdsp6/q6routing.c              |    9 +
+ sound/soc/qcom/qdsp6/q6usb.c                  |  401 ++++
+ sound/soc/qcom/sm8250.c                       |   14 +-
+ sound/soc/soc-usb.c                           |  538 +++++
+ sound/usb/Kconfig                             |   19 +
+ sound/usb/Makefile                            |    3 +-
+ sound/usb/card.c                              |  123 ++
+ sound/usb/card.h                              |   24 +
+ sound/usb/endpoint.c                          |    1 +
+ sound/usb/format.c                            |    1 +
+ sound/usb/helper.c                            |    1 +
+ sound/usb/mixer.c                             |    5 +
+ sound/usb/mixer_usb_offload.c                 |   82 +
+ sound/usb/mixer_usb_offload.h                 |   14 +
+ sound/usb/pcm.c                               |   94 +-
+ sound/usb/pcm.h                               |   11 +
+ sound/usb/qcom/Makefile                       |    2 +
+ sound/usb/qcom/qc_audio_offload.c             | 1909 +++++++++++++++++
+ sound/usb/qcom/usb_audio_qmi_v01.c            |  892 ++++++++
+ sound/usb/qcom/usb_audio_qmi_v01.h            |  162 ++
+ 52 files changed, 6161 insertions(+), 82 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6usb.yaml
+ create mode 100644 Documentation/sound/soc/usb.rst
+ create mode 100644 drivers/usb/host/xhci-sideband.c
+ create mode 100644 include/linux/usb/xhci-sideband.h
+ create mode 100644 include/sound/q6usboffload.h
+ create mode 100644 include/sound/soc-usb.h
+ create mode 100644 sound/soc/qcom/qdsp6/q6usb.c
+ create mode 100644 sound/soc/soc-usb.c
+ create mode 100644 sound/usb/mixer_usb_offload.c
+ create mode 100644 sound/usb/mixer_usb_offload.h
+ create mode 100644 sound/usb/qcom/Makefile
+ create mode 100644 sound/usb/qcom/qc_audio_offload.c
+ create mode 100644 sound/usb/qcom/usb_audio_qmi_v01.c
+ create mode 100644 sound/usb/qcom/usb_audio_qmi_v01.h
+
 
