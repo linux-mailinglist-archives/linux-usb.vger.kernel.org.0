@@ -1,61 +1,62 @@
-Return-Path: <linux-usb+bounces-4217-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4218-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42303814ED1
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 18:32:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AED03814ED7
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 18:32:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F10B828745F
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 17:32:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4EF6EB21152
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 17:32:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4559E3FB37;
-	Fri, 15 Dec 2023 17:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 422DF405FB;
+	Fri, 15 Dec 2023 17:30:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mhSVL1Ma"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I3vTY/Iy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B95241851
-	for <linux-usb@vger.kernel.org>; Fri, 15 Dec 2023 17:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A903E41845
+	for <linux-usb@vger.kernel.org>; Fri, 15 Dec 2023 17:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-50bfd3a5b54so997457e87.3
-        for <linux-usb@vger.kernel.org>; Fri, 15 Dec 2023 09:30:10 -0800 (PST)
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-50e0d1f9fe6so1064177e87.1
+        for <linux-usb@vger.kernel.org>; Fri, 15 Dec 2023 09:30:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702661409; x=1703266209; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EdUQqqaWMHzQxJ+jrzxIYZWyQq/RjIiVZaz4ReZcmIY=;
-        b=mhSVL1Ma+Jnqqq5ywAlSIDb/NWgqWWUNbOmemY3rfHxrfysE6Bq2RGfuMR7+f5J64m
-         GIPu5W9UJL/xrhL8XA9iVzjLmpRTlfhv089s/6NnZTfPrzvZQEjX+LrffLaa676sRM0I
-         1z17SKGg5TimPUa3xEmzIwgE7XKvEKEiNR6jCjQtJ6jJcWUoFcN+h7ZWZ//d/Z2Uu2g2
-         Q2sf1zfCJ3mBp+XE/jCPEtQcFFGjfd+8aD5vpPZXcIHWt6Hb/3a2qODHn5WsiTKfn0Jn
-         dkrJ0/DFrSRLw9Ki1FGg1mg8eaJtqHQ5q+N50ACYhGKjSXYyrpSwkT2CyapwlhpL8VZo
-         eRog==
+        d=linaro.org; s=google; t=1702661411; x=1703266211; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FXxEPbVpvlpkz5h9kq5ZSDoZpnxMYJx569OmkvoDVuM=;
+        b=I3vTY/Iy2/cM/mTDsAFfwVM18esevBF22FCDo2fFzsj2xHTqpl/wCnCvIPN0s77HCE
+         Vxzq/kbV0WI//vRJ6xmfGov7xOmHCXX0PbfHhh9vXDz8vubrvt+MjFxCOCios16uFdqC
+         8Ajg98hWtjaDk0/awvA8xOyvibBTp3WeQVhnzwA5n6InF3yM6Kqo1QCD89YLlLFjIzfM
+         TTZIdtHc4y6637SmY5lytUxahImvLnU/VGmJSi5IDnzeF9VglO8ZWSeglk3jM5eoj45J
+         24yyJHgrPQbX7wCP+KkK2dW0ufJnrZtgCMDTih729TvzVj5QLyhq+wuNcCs9eRr0Ulcc
+         kydg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702661409; x=1703266209;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EdUQqqaWMHzQxJ+jrzxIYZWyQq/RjIiVZaz4ReZcmIY=;
-        b=eoc0FyjoyKNR9Yb8K+5b+P/DTY3fBaz70CpFl7072rkzRdr++n+yJbSvJeriqJZZM5
-         HmZ2UKjWgKelTS6UJDK9E63GQ2Sd7Tx/mUd4HEu8XLeJrN/SNd32EDFXYUxWnwwD29Wi
-         6lOJB60ukYKa1LsjO5LswCkppYvIWWbsSWbylhF1Ms+rUaGtOBX8p6S1uD6Fu6tW/uUh
-         Zuua6qe7iHYDCarO0MoBDs/DjBwAICsqZ6m6M7wqwerohRnJ6Btd0HMDWb1LJqf4LXml
-         JWf7+IPBe5DS9u0oRWqukSXm5zk3SAAGw7/V+7G6EgGMbgyF93lmAC8jDXVPe1CV0o59
-         UGUw==
-X-Gm-Message-State: AOJu0Ywu9YyIX4ijx7e77BG3ysB0xjIglQm4clIdFUn7/y+8eDqfQX0i
-	51Dy7WshXsH+hw2npNF8Ps69AQ==
-X-Google-Smtp-Source: AGHT+IEpxgNeNbJ9qmCuwuVfhPnZ0zvgsZ0AHWIarVbGf9r7l8dYVujZp+q007vDsJ/4JjoLhvo+tw==
-X-Received: by 2002:a19:e001:0:b0:50c:11:4740 with SMTP id x1-20020a19e001000000b0050c00114740mr5196408lfg.29.1702661408967;
-        Fri, 15 Dec 2023 09:30:08 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702661411; x=1703266211;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FXxEPbVpvlpkz5h9kq5ZSDoZpnxMYJx569OmkvoDVuM=;
+        b=iWtlJB2hNkohS9OzlO678gON06GAZir2xShnZ0mGcu60MkhU+rcF1s37hZuI6KBndo
+         xJP43ZO+MJn2hbn2PCO56/amf/f/V4gBaD9MsBKd3ZW0GRl3t04+P+OAPqjqUuSnNrde
+         DMd+JpCugDGSbIeIhNkmsMCMOI7WSm0ZYN7kQbpZM2vE7Y9fZZjzRbCJFk6fKVmEUg4x
+         /gLfg1wOzZBDmvt10+2/Dh4Bog3AG8cyqQmZqNLJf+BQt5m0c6fNMOtBYmNUxvYVhwFj
+         zXz/3dfixZ4XStylzWeJeVt+D/BYJgQmZHaI51VdMM2Q/LGwaQ3hBFYk4rKSuWxOQg+k
+         FawQ==
+X-Gm-Message-State: AOJu0YyxxVvnKUBMnOjnHUMc9VTHc+FbnIwtJiZIn+Xo0Ws0Jm0pRWaP
+	30sRLqh2sv+TtWNokg6Th+k1nw==
+X-Google-Smtp-Source: AGHT+IE7218glxhiZz2gh4AtA5kRLKfEHG0lrOJTOLYEAG1ZqxJ/q1RgeGY0//AHef5htJVVywJzcw==
+X-Received: by 2002:a05:6512:3c9a:b0:50b:f2f4:279 with SMTP id h26-20020a0565123c9a00b0050bf2f40279mr6961634lfv.110.1702661410833;
+        Fri, 15 Dec 2023 09:30:10 -0800 (PST)
 Received: from eriador.lumag.spb.ru (85-76-13-188-nat.elisa-mobile.fi. [85.76.13.188])
-        by smtp.gmail.com with ESMTPSA id g8-20020a056512118800b0050bf54b9f18sm2202274lfr.113.2023.12.15.09.30.07
+        by smtp.gmail.com with ESMTPSA id g8-20020a056512118800b0050bf54b9f18sm2202274lfr.113.2023.12.15.09.30.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Dec 2023 09:30:08 -0800 (PST)
+        Fri, 15 Dec 2023 09:30:10 -0800 (PST)
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To: "Rob Herring" <robh+dt@kernel.org>,
 	"Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
@@ -64,11 +65,14 @@ To: "Rob Herring" <robh+dt@kernel.org>,
 	Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc: devicetree@vger.kernel.org,
 	linux-arm-msm@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH RESEND v2 0/2] usb: typec: tcpm: Handle Accessory Modes
-Date: Fri, 15 Dec 2023 19:30:03 +0200
-Message-ID: <20231215173005.313422-1-dmitry.baryshkov@linaro.org>
+	linux-usb@vger.kernel.org,
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH RESEND v2 1/2] dt-bindings: connector: usb: add accessory mode description
+Date: Fri, 15 Dec 2023 19:30:04 +0200
+Message-ID: <20231215173005.313422-2-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231215173005.313422-1-dmitry.baryshkov@linaro.org>
+References: <20231215173005.313422-1-dmitry.baryshkov@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,34 +81,40 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Resending to be applicable on top of usb-testing, as the AltModes
-patchset was picked up.
+Add description of the USB-C Accessory Modes supported on the particular
+USB-C connector. This is required for devices like Qualcomm SM8150-HDK,
+which have no other way to express accessory modes supported by the
+hardware platform.
 
-In addition to Alternative Modes (see [1]), some of the TCPM-backed
-boards (e.g. Qualcomm SM8150-HDK) can support USB-C Accessory Modes
-(e.g. the Analog Audio). Add bindings and driver support for parsing
-this kind of information.
-
-Note, while it might make sense to put accessory-mode-audio and -debug
-handling to typec_get_fw_cap(), I decided against it. Several existing
-drivers use this function, while providing AccMode caps based on some
-internal logic.
-
-[1] https://lore.kernel.org/linux-usb/20231120224919.2293730-1-dmitry.baryshkov@linaro.org/
-
-Changes since v1:
-
-- Initialised the `mode' variable to 0 (Sergei Shtylyov)
-
-
-Dmitry Baryshkov (2):
-  dt-bindings: connector: usb: add accessory mode description
-  usb: typec: tcpm: Parse Accessory Mode information
-
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
  .../devicetree/bindings/connector/usb-connector.yaml | 12 ++++++++++++
- drivers/usb/typec/tcpm/tcpm.c                        |  9 +++++++++
- 2 files changed, 21 insertions(+)
+ 1 file changed, 12 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+index 28660b931d0c..f5966b3a2d9a 100644
+--- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
++++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+@@ -171,6 +171,18 @@ properties:
+       offer the power, Capability Mismatch is set. Required for power sink and
+       power dual role.
+ 
++  accessory-mode-audio:
++    type: boolean
++    description: Whether the device supports Audio Adapter Accessory Mode. This
++      is only necessary if there are no other means to discover supported
++      alternative modes (e.g. through the UCSI firmware interface).
++
++  accessory-mode-debug:
++    type: boolean
++    description: Whether the device supports Debug Accessory Mode. This
++      is only necessary if there are no other means to discover supported
++      alternative modes (e.g. through the UCSI firmware interface).
++
+   altmodes:
+     type: object
+     description: List of Alternative Modes supported by the schematics on the
 -- 
 2.43.0
 
