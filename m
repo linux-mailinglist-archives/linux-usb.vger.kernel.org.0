@@ -1,83 +1,100 @@
-Return-Path: <linux-usb+bounces-4194-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4195-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54627814306
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 08:57:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89A8D8143D4
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 09:40:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 878821C224A8
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 07:57:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B20E1F22BA0
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 08:40:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5102410A04;
-	Fri, 15 Dec 2023 07:56:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E1331803F;
+	Fri, 15 Dec 2023 08:39:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dxl+4YOA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SukheDzC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D7D10952;
-	Fri, 15 Dec 2023 07:56:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF52C433C7;
-	Fri, 15 Dec 2023 07:56:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702627015;
-	bh=GQzlbYxdmN/odCSG1aUf4K3A+XwEp54m5ZTi8W6hKww=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Dxl+4YOAjJwEgsD7CL5xrmBDvcB8dbRWGz+RglwQZ/0y8rtTGZpJXQ57IjutzE7K9
-	 hMBLdQT3Q7CxkGNYVC9/82HAAt1sRkQmJtOhIooFsJwOqiQhp0F3KVu+0T1NxoE7n1
-	 g28OEuxcYsXTRv6aSAXsXgpThnH1MlB+r5YrrcyiE/O8d4TfQB4dm7WrX351ramkBT
-	 9zA6WrFonH57rRZ6T/YivdDBcXimr60ztmDi8gQg//x2uNXE0ZpbQv1xGMIzj4Hnxm
-	 GNZKjS8uQfJwepXkRDyLflFKaUZ0NgyPkgpfGQnl1+V4JkOmg2f4jTrXytl8j3suOD
-	 8WRBAQUje3fRQ==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1rE33y-0004mT-2B;
-	Fri, 15 Dec 2023 08:56:50 +0100
-Date: Fri, 15 Dec 2023 08:56:50 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Slark Xiao <slark_xiao@163.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Foxconn T99W265 with new
- baseline
-Message-ID: <ZXwGwknjavRzn9C5@hovoldconsulting.com>
-References: <20231201020950.34770-1-slark_xiao@163.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD4A18029;
+	Fri, 15 Dec 2023 08:39:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6da41cd19d3so426394a34.2;
+        Fri, 15 Dec 2023 00:39:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702629596; x=1703234396; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2AO3yjiUYIdHC+VFwE6rSiRrMUR/zgHnkv0+F2jQjLg=;
+        b=SukheDzCyOEUDlZzOw4TEcg2SGPFVLf4Vin/70PqCOBAO9RTKMmr979kES4hmn+JJU
+         4UkCFK7bNOJluuCyy26w2LiFZJIZ/l0vLmtvmWvOWcK/q9F5EIbxMcj9db+l6nF50Mpy
+         FfgKQvUpEhUVOVJCoBdmtkelf2KbjmJ7kdkk3Q+o6qF48E9vsFoLb6gQ1G9oVpd1cwkA
+         aTRstNQyFgra8ouANrLPbUF2z7GxxOijTCseOm/ycvKWN+/29ZIKbsd30kWu7IwzLPYs
+         0+IhsxJn03BkV4mbvxlQXqfjz0paSUvYgfMAxakfEpawU8P9qxqvokAFebJQGKcTvd3z
+         4UdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702629596; x=1703234396;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2AO3yjiUYIdHC+VFwE6rSiRrMUR/zgHnkv0+F2jQjLg=;
+        b=pm/NtK70WUYHW0Klv2SknXbjX2dBLY7kvkyas2SkA5+vQQ2AvmmYltuirgMKLzcnUV
+         +quA3tyHYbzTFZxSm9HdNqi9Y8mhjY6BL1ZD3jbqrWsWvKM9X4QLcBrW7GVLN958+QOn
+         6jB8VGFmR/VI7bgUV8rmL/HS/JYzl9DBiecSEbqqGJQG3dK7Lb7uthdPO9DNBwKDwW1M
+         ea/bPRBszAbmkIXCDp3s86aSYN7ZbjHcdAkvm/o0LhRUEFonSLX73vI77B9B/5CHh7Y7
+         P0TxuhSVdaS7HryHIodrcUiV+8XNrQAJLWs0rkF2Ys6p1XiA4yvpbu1Z4b7tgAPU3Smz
+         kijQ==
+X-Gm-Message-State: AOJu0YyNPUqC031s8viHY10zBO4eEds3BN2Yqw5x3/jzj46zGUzGEohc
+	2UNvM5ylrg133HNjS55RhcU=
+X-Google-Smtp-Source: AGHT+IG7vwtay99+owRCx/pWv7x/yzgqEjICgRfABNiZpBSFGMk0Yr1EdWmBU9mbayDyQ6vVkO+51w==
+X-Received: by 2002:a05:6808:14d5:b0:3b9:e3d7:1271 with SMTP id f21-20020a05680814d500b003b9e3d71271mr15011091oiw.9.1702629596419;
+        Fri, 15 Dec 2023 00:39:56 -0800 (PST)
+Received: from localhost.localdomain ([202.137.218.19])
+        by smtp.gmail.com with ESMTPSA id fb6-20020a056a002d8600b006ce95e37a40sm12950545pfb.111.2023.12.15.00.39.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Dec 2023 00:39:56 -0800 (PST)
+From: Ghanshyam Agrawal <ghanshyam1898@gmail.com>
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org
+Cc: Ghanshyam Agrawal <ghanshyam1898@gmail.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: fixed a typo
+Date: Fri, 15 Dec 2023 14:09:30 +0530
+Message-Id: <20231215083930.566164-1-ghanshyam1898@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231201020950.34770-1-slark_xiao@163.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 01, 2023 at 10:09:50AM +0800, Slark Xiao wrote:
-> This ID was added based on latest SDX12 code base line, and we
-> made some changes with previous 0489:e0db.
-> 
-> Test evidence as below:
-> T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-> D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  2
-> P:  Vendor=0489 ProdID=e0da Rev=05.04
-> S:  Manufacturer=Qualcomm
-> S:  Product=Qualcomm Snapdragon X12
-> S:  SerialNumber=2bda65fb
-> C:  #Ifs= 6 Cfg#= 2 Atr=a0 MxPwr=896mA
-> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-> I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-> I:  If#=0x4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> 
-> 0&1: MBIM, 2: Modem, 3:GNSS, 4:Diag, 5:ADB
-> 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Fixed one typo.
 
-Now applied, thanks.
+Signed-off-by: Ghanshyam Agrawal <ghanshyam1898@gmail.com>
+---
+ drivers/usb/typec/pd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Johan
+diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
+index 85d015cdbe1f..bc4a35f322df 100644
+--- a/drivers/usb/typec/pd.c
++++ b/drivers/usb/typec/pd.c
+@@ -468,7 +468,7 @@ static struct device_type pd_capabilities_type = {
+ /**
+  * usb_power_delivery_register_capabilities - Register a set of capabilities.
+  * @pd: The USB PD instance that the capabilities belong to.
+- * @desc: Description of the Capablities Message.
++ * @desc: Description of the Capabilities Message.
+  *
+  * This function registers a Capabilities Message described in @desc. The
+  * capabilities will have their own sub-directory under @pd in sysfs.
+-- 
+2.25.1
+
 
