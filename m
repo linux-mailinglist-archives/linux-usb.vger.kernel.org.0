@@ -1,436 +1,223 @@
-Return-Path: <linux-usb+bounces-4185-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4186-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14682813E1A
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 00:12:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60D718141B1
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 07:10:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 381EB1C21EF6
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Dec 2023 23:12:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 169F9283C71
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 06:10:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DBCA2DB86;
-	Thu, 14 Dec 2023 23:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9A848471;
+	Fri, 15 Dec 2023 06:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zJqDBKEe"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Q59Me2I2";
+	dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b="BbEa3ek1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152BC2DB84
-	for <linux-usb@vger.kernel.org>; Thu, 14 Dec 2023 23:09:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-5c668b87db3so80258a12.3
-        for <linux-usb@vger.kernel.org>; Thu, 14 Dec 2023 15:09:19 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD0710782;
+	Fri, 15 Dec 2023 06:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: a7cf2e3c9b1011eeba30773df0976c77-20231215
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=Cq2QeswQ35/31u2kQ4ggWOSFs5g2Cs3YR6usBDY2mpc=;
+	b=Q59Me2I2kgdo7Qjqnc6SeqqG/VU6b62y/Tg+EqKJ0pFk2TIBwxKQ8elSIjkNCkiP+DnaPvSN7YKrp9YEPx/iF04ngGAYr5Dp+ALhLfR/DBVTBhaTm4XvBedFPE0gHj3sOmEMryOTdHlkGN0kRHDmyagzs5BpPJe6RYzV4bQoqbA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.35,REQID:98c3fe24-041d-4fff-91e0-6fc2738c3523,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:5d391d7,CLOUDID:6688b3fd-4a48-46e2-b946-12f04f20af8c,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
+	NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: a7cf2e3c9b1011eeba30773df0976c77-20231215
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+	(envelope-from <chunfeng.yun@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 435131621; Fri, 15 Dec 2023 14:10:33 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 15 Dec 2023 14:10:32 +0800
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 15 Dec 2023 14:10:31 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ejNDnw6iFJOh4tIMqFmGI0JioPro3xXuGSfRYhIpfeouA41TGmsASN31KiT67nC54uVl0EmbtHbH4enQCF8veTbOlGwDh6B9/eEk0dgYJFcXbGAl/iOwekKoaaq37tILTxUN49XTy7aNshS/emSyMHF2+w+dTcA/2d/PBLl0vIRXYY0tIy4Uapl8vNe9pujweUilfvUQnQZVSwJzLh89x/B3Hjnea3o3y6+RJODxJ6RY7iPkWZGgncW/GjnxRsdFo7qxKFNvr/QUmOxQ8T0Z+ArPOdCmJue0HbcvTucNjMSvmGekouIDjMjE5yrzmf0/4Gi1DfZq6eUfQelvDxmm7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Cq2QeswQ35/31u2kQ4ggWOSFs5g2Cs3YR6usBDY2mpc=;
+ b=moaBLMDbeXg1UKDCp7e1jP+5layCsLFDwebBulFOc6Yr4Hfz7hQXegEdoztFBTZCTmYtY5PoV2+q8tAJI2OKeqghhHIco+v5T93N7b04enSrafocqCh4Y3V7xqMxE5I0o3ekKQNXSApU7wqZU4X1tsRukp8ssDyvKrQpWRjV8P+/pUaz/09hsAUmlGcjP4RDpeFVPnpp2H1OaIYtf2eaq66+P/w6kOUM12k4XmRQ4nqd4CCr9YZvKrQWJo7xCrod9lFuEMUK/7jJPl0B0nfk5HCdJcTu2sbHqIX+veMkSsIlMEWPkCkuut5CawsXpBWiTdGTL60h5ryygJfZWyS8Vw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702595359; x=1703200159; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3IQ7Offe19G51JXB0kOzKEmzBAE/jVivsxuYkbsoqQw=;
-        b=zJqDBKEeCUS3TBt+tafjQ03cXB5jmqcco0SmvOliWZHJUq2qo4c9lluElRgpJWVg9n
-         nd61V/MPu2aixGp3uil8bcv3enxdEpJy6ZqeLx7pvco3w0nxMJfHkVQCUOR30sARJtfp
-         kGJ27bs38niEo1P4o4Us+KLpJZwZvX6aPIMBCCMAhsuoUuar7gDPMqqw20tTutiJi9vM
-         UobVrm8O82lVLQydyj5l+JxsjLQeRh67E+H5kxwkwE/bIoY1aAE9yCJtCT3J5W8fO+Oz
-         N6xGm9pfgVIrSgBvVYINcfVrnPIzhwxbFHz2C8sWO/Tknhsj3l0Ae2OQak1M5jYUS9N2
-         5eNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702595359; x=1703200159;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3IQ7Offe19G51JXB0kOzKEmzBAE/jVivsxuYkbsoqQw=;
-        b=mijoZWCv3o9a02F6OADZF44z0+nQr4oeisqDwv3z/YGXYs7mMh1N7LFRK1ZWBPXUsA
-         u4WqNF4fDUoLHffINz4taI9t8v6S2Gq30UwG4xJ31hOkaPTSpbB+XaUV2A2F/RyNxWvL
-         QR5Wav+CJM+iVIo4L9bWys2pFdw/A4X7vxEyi3a+jTFKVHqGTFCERWmxQD9RYbRUeSlW
-         2JU2n9EsZNd+g0hJb3kzswQXWAC8NO1BteJQ1B8mu+IPC2V5cHrR+98tXqk1GmCfpzjr
-         DA54o22jgBk66iDlkwec0SHl4a/C7sAnYldBZ4UGDW1576rQjYGevFMRztOzpdr16Rvz
-         DE1A==
-X-Gm-Message-State: AOJu0YwtRvXWAzsHqdAkw+LyVjzQl5k7Gn8fswWtm1V8MjNrFOpwmXf5
-	kNTqSZo9smBT7350Zv/IlyUhh0RimY/GDZw=
-X-Google-Smtp-Source: AGHT+IEdTztbRYAWS7Gmu2NsVp3Frt00PuoI/s9hnmABgDqVG5/xKDQOz4i0IemB8l6SivjWIpRTbw5p03wcMG8=
-X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
- (user=rdbabiera job=sendgmr) by 2002:a05:6a02:592:b0:5ca:3aff:a2cb with SMTP
- id by18-20020a056a02059200b005ca3affa2cbmr958570pgb.1.1702595359401; Thu, 14
- Dec 2023 15:09:19 -0800 (PST)
-Date: Thu, 14 Dec 2023 23:08:56 +0000
-In-Reply-To: <20231214230850.379863-14-rdbabiera@google.com>
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Cq2QeswQ35/31u2kQ4ggWOSFs5g2Cs3YR6usBDY2mpc=;
+ b=BbEa3ek1m8XwT4132jaxleNzBIj2HlJt/i6JwcsVwGxE49TLDS3L5bqW4hFVNw2UcHSoXnCIFRjO0lRdfNdXW+A2OctcZwYWXcr4vkoGkC6oHqr6CFrbM2OPC9KIe3zPKMlW5iy2FYA+M5PBMwE+y6ymsKPth8OdALs+fND4k/c=
+Received: from TYZPR03MB7153.apcprd03.prod.outlook.com (2603:1096:400:33c::6)
+ by KL1PR03MB7078.apcprd03.prod.outlook.com (2603:1096:820:cb::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.28; Fri, 15 Dec
+ 2023 06:10:27 +0000
+Received: from TYZPR03MB7153.apcprd03.prod.outlook.com
+ ([fe80::75b5:9f6d:dc01:9946]) by TYZPR03MB7153.apcprd03.prod.outlook.com
+ ([fe80::75b5:9f6d:dc01:9946%6]) with mapi id 15.20.7091.029; Fri, 15 Dec 2023
+ 06:10:27 +0000
+From: =?utf-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= <Chunfeng.Yun@mediatek.com>
+To: "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>
+CC: "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+	=?utf-8?B?RWRkaWUgSHVuZyAo5rSq5q2j6ZGrKQ==?= <Eddie.Hung@mediatek.com>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	=?utf-8?B?TWFjcGF1bCBMaW4gKOael+aZuuaWjCk=?= <Macpaul.Lin@mediatek.com>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "krzysztof.kozlowski+dt@linaro.org"
+	<krzysztof.kozlowski+dt@linaro.org>, "matthias.bgg@gmail.com"
+	<matthias.bgg@gmail.com>, "angelogioacchino.delregno@collabora.com"
+	<angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH 1/3] dt-bindings: usb: mtk-xhci: add a property for Gen1
+ isoc-in transfer issue
+Thread-Topic: [PATCH 1/3] dt-bindings: usb: mtk-xhci: add a property for Gen1
+ isoc-in transfer issue
+Thread-Index: AQHaLY6dWSsEXZq+1E2EPlX2xQrPALCm20YAgAMEZwA=
+Date: Fri, 15 Dec 2023 06:10:27 +0000
+Message-ID: <150d776b6a4ab0f0ee1926dd916d6eea3a583ad5.camel@mediatek.com>
+References: <20231213063543.12435-1-chunfeng.yun@mediatek.com>
+	 <c1bc144d-07d6-422c-8294-42be47f83e59@linaro.org>
+In-Reply-To: <c1bc144d-07d6-422c-8294-42be47f83e59@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR03MB7153:EE_|KL1PR03MB7078:EE_
+x-ms-office365-filtering-correlation-id: bf19c423-cfc2-49c9-8c46-08dbfd3488cc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Rc4fIY0EPrLF9qcSvBTg3YqSKYOMUBsKyQ8wxff8upW0ETlC/CxJcweHOUuToOoagt62pR5xyIznVZNGuCDtgcfOT2k80k2SQnwFPi4WNUKLHQ5TyR062XpcM9Juv7zllJey9/IJb7Br/Vp6w8cjOuBTJNjFnt/PRsT0GHDZVw3mQmv4k4GpMwoqXjBi9AsrrWKhGyBzmahiIZnugV1r2FX+EJAw0csEus93+P8cdL5/9diZAyReaOEFuvmVDYLl41GX4dvKf5/nAERPVkzP7tQMFjWIdH/fmculYaU7d5C4akJMBZCpz53KkDu/0csEwciyQS1sputR7pybm5icWb4TjVTeVblH+NmTZcLXg9d35GblOihGU+mUaPvaYAvLXyLzEMa1LRMLgStmgwi31ySX+6OZ1WOjlHyxMcDLxfKhLdd8spj05wcZ17EXEOmGRs7ztVFZi3jZzHjquM0YlN/dgaKA0AM22zzD0b1Gyj4RbGvcNxmpJfUtKkBoBjOIiFmdUSbdr9TUdDFhuYsRwKaVjAj9HOOTGPZDSAtIKxAnkvVYDpL8/gzgjlI+U9XMQwvHG0MNPkDTtrgdOAMObfQBL/qFs22gp6mY/umdoAC/Fy2unC06FPfUhlk6v3r274tr2fNyLWen5B7VGnZGC3KNFPNI40kC+yoR+xnkJ+oktQyJH2qmQKzspvCbXc/ppdpS1h3AvEnJB57kEXi7d/yGboGlbWQgnvuUgU6arE4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB7153.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(346002)(39860400002)(366004)(396003)(136003)(230273577357003)(230173577357003)(230922051799003)(186009)(451199024)(1800799012)(64100799003)(4326008)(8936002)(8676002)(83380400001)(316002)(36756003)(38100700002)(85182001)(41300700001)(4001150100001)(86362001)(38070700009)(2906002)(122000001)(7416002)(5660300002)(2616005)(26005)(54906003)(478600001)(6486002)(6506007)(53546011)(6512007)(71200400001)(91956017)(64756008)(66446008)(66476007)(66556008)(66946007)(76116006)(110136005)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RkVlcEVtd2NlT3dUS0M4M1UwZEdaaUIwK0UvOW5MYzVXNzhLQ3ZPbWphV01s?=
+ =?utf-8?B?WmhaWnpkV0dHWXVFYzdic1BGaWlxbVlrUUs0RnMzU0QzV0s2NTVzWWVnZFd3?=
+ =?utf-8?B?QTdBRE9WRWFjaGppbmpNN0hNN1VmQ1dRTko3M2ZRNlAyMDFUdHl3ZHYxRllR?=
+ =?utf-8?B?T2pyM0J2eGxQQmU3UkhsQmJ5aitsMUI3Y01xdUMwcXFSZTQ3ME5VbEVsNjhl?=
+ =?utf-8?B?SUFWK2h3YmRhMUJBRG55cTdtQitzLzV4NVlZUGNiNkoyWFQvQStnSkx6VENo?=
+ =?utf-8?B?TlZMNUFtOWNqNjlHUysvMnZyN2xhdGYrTUM3cVFRc3pQd0N1WWlrbjBUZ05u?=
+ =?utf-8?B?U1p6L3hKc2ljV0haQVN5QWZ2Y1BkK0JWQldxZzFsckowZnhmU0tBY0RoQ1ZU?=
+ =?utf-8?B?TXM1OUdpeGpwUzFsdEdZK09oZW1JMXJhMVEwcVZPTUNCbEI5L2Y1M2IvNGZR?=
+ =?utf-8?B?eW5nVmJCV3FxT1lCOUhMcG5PUzV5ZVZBS2xSTkZFZTVhbm1oOFhhanE3Q0sv?=
+ =?utf-8?B?blRINHNNV1RnMkZlNFp0VEZmVmt5Y094eGp4SVJmNnFQNk56cmFXWUd2NVBG?=
+ =?utf-8?B?a2xseERwY3ZLTllBajZwbldRd2VoNXRieXNQNWkwdlF5L1ErdmlVK1AyR3RG?=
+ =?utf-8?B?U0NZMDJRZkxWVlV1V0crZlcxa2JYNFFwMlIzNDU1YzB2Z2RyN2J2UUtiNEpk?=
+ =?utf-8?B?QnByeS9Pd2I3TGxSWm8zNDVEREpLbXZxVnBIOW9ITkp2aGhFNkswdHkzV0I3?=
+ =?utf-8?B?eDRpOXd1eG4yVXB6dFJEbWJWQkwwbkxxcVpBNnhCYWtXSjlNT2FrTm95WTdk?=
+ =?utf-8?B?dnF2ZVNmZkRSVENyMDYyMm5wdDNGSFgwSGV3YVRLejZybWVSbmNIMGptRzhQ?=
+ =?utf-8?B?Zk8yOS9vcE42WnczU3JKZ1YvakRJb1YzRzBxb2oxT0dwOXJQRXRsTnBMVUN0?=
+ =?utf-8?B?dERqNlFxcHJPQUp5VHhrSjUyeGtKQ003UTNUQWxJOXlrMVZNeHZ5SnoyRzFO?=
+ =?utf-8?B?cmpWd0t2ZllPMEtKa2dPemd6UUsyOW9xOGoxdHFBWDdNMGF0TTlJL3lldHZR?=
+ =?utf-8?B?L0FtT3BldWx0Z2dJTmtGS0NHWXhIMXZlZG0vYkwxRUVWNU92TDdvUVNUTlZr?=
+ =?utf-8?B?a2ZuWU1qNGpKYnJ1eDZ3M3NseWl3SE1ZQ3ZZVzhmaThCYi9mVHJnb29HSG85?=
+ =?utf-8?B?cFo5VENwTjNvaHZ1aVM0QnVVUktGOWI4d3JUbVh4MFpXKzVGVkpUQ0lRS3lm?=
+ =?utf-8?B?T2NHQU5rSUx1WTRUOFVQeXQ0aEdRNitva2xqU3l5M3hwck9SMmpiWCs1bC9V?=
+ =?utf-8?B?cXcrVXRDNTFMajUrSllLK0d1T3JtemorZ2wwMjNPdDdadzJpTWhrTDMveDdn?=
+ =?utf-8?B?MlBseExZblZzMndRaHhpYjFHUDc0QldOZWdOQS9pTnRsK0pIdC9TS3lkZTc0?=
+ =?utf-8?B?ek1XZDlYRkFCcGJPVnh0NW1nNUJlSEY4aDdyVlVRMEpDekpYb1UxZTRwRVVa?=
+ =?utf-8?B?aE1sNTgwUGtWRkZhL2FzRklMcElvK29tRENmVDV6T1VNN1BFcGxPR25KejdW?=
+ =?utf-8?B?Q2Yrb1JVdG43UmZ1UmR6NGZiQlA4c3dNRGE5MndWR2lLMmxlZmFlYUNDbDdk?=
+ =?utf-8?B?MU9JOFA3MUNNTThEOXNWYXZ1dlN3L0VEZ3JaK2dteFVUZjY5bWxUYm4rdTAr?=
+ =?utf-8?B?b1hwRHJ0UTh0ZFNGRkpZVm9ac3FvZ3hWWnlQdFIwVUJ0Wm1tS1c0Lzc1VjJU?=
+ =?utf-8?B?QWZjaDUxZStKaE1QczRFZVN4V2FacUVhYlk2cHZWem1UMmpncytWV0ZiOFMy?=
+ =?utf-8?B?eXhKREdieC9wbGhZUlhoTnRKUjZvdys2aG1EdFA4amNIakdGMG9zdEd3UzUw?=
+ =?utf-8?B?L1Z2Unl5T09LSkdqWExrUDJFWE4rSnNldnp3TC94d0JVbEVLYlB5RUFBd205?=
+ =?utf-8?B?aWppWXJnSjhKMlh3RWhhcjNlVUNvVXA4Qm1QUFdISU5BeXVYSE5TdmU1aVNC?=
+ =?utf-8?B?ampoL1BmWDRFVDNXOFZBVmdqWldNUy9TYXVkTHF4Y0s2cWRXM3lxbjdGSG5Y?=
+ =?utf-8?B?RGU2MkcraWNVSk9RTTcyQldKVzdHNERkU1M1ZWYxcHQ3aExRMlpKekJ2ZFlG?=
+ =?utf-8?B?bmI0NzJ5SXRsbGhpSEtjRElZNWw5U2Q0dUxLbGZtWTlhQ1IxaU80ZlhpVWZx?=
+ =?utf-8?B?dHc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9E799EBB1FE1E44E8BA5FA3E2FB157C2@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20231214230850.379863-14-rdbabiera@google.com>
-X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11211; i=rdbabiera@google.com;
- h=from:subject; bh=2RsnYJUPf/3qls/7oIZN2O+MPD006tAhSP8VVqTiq80=;
- b=owGbwMvMwCFW0bfok0KS4TbG02pJDKnV3ewn804f5N3ta7VNjOeT8h2vFPt7k2Sj7YT6ZdZPE
- 7tjsf5ORykLgxgHg6yYIouuf57BjSupW+Zw1hjDzGFlAhnCwMUpABMxWsPIsHzb2cc6z73LT3uk
- /LpcxrG9wP3LvoyrW3TWtYWetlnWz8TIcENY+jWbpWWTRtvE/ut2U7/OV9x5wyOCcUqhb5F7lbs zBwA=
-X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-Message-ID: <20231214230850.379863-26-rdbabiera@google.com>
-Subject: [PATCH v2 12/12] usb: typec: altmodes/displayport: add SOP' support
-From: RD Babiera <rdbabiera@google.com>
-To: rdbabiera@google.com, heikki.krogerus@linux.intel.com, linux@roeck-us.net, 
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Cc: badhri@google.com, bryan.odonoghue@linaro.org, agross@kernel.org, 
-	andersson@kernel.org, konrad.dybcio@linaro.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB7153.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bf19c423-cfc2-49c9-8c46-08dbfd3488cc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2023 06:10:27.8124
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HZCRPlddh555yWw4YUb536xSzragA2tzSdLhMOell+9JjHjkjDFLQJbrcVvkxT5q73L4mwoLQAtbjUsC6gfnFwFzGdZSLu6qi5oZcapEjnk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB7078
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--30.219400-8.000000
+X-TMASE-MatchedRID: c/HXCguHooHUL3YCMmnG4ia1MaKuob8PCJpCCsn6HCHBnyal/eRn3gzR
+	CsGHURLuwpcJm2NYlPAF6GY0Fb6yCs4D9nSCoJCSmlaAItiONP0mOHJ0aBcO1LVhTD1Udgq8Q4m
+	03/V++Q7aFEofExIUPLYkV2Ealq/r0RCs70uuPqGM29hkek7Xd0yQ5fRSh265ArMcoUfMuwmrwz
+	W10Vkqj1jFdRz4gFyhkDfm1zFLejyz4qmxBSXJhTPDkSOzeDWWJNtuyL6mpIXHkH7uosEn7P0ub
+	/xgdoFfDN6hJxw3x/8fZdczzDm/ukL9tcyTZdAsgxsfzkNRlfKx5amWK2anSPoLR4+zsDTtAqYB
+	E3k9Mpw=
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--30.219400-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP:
+	8C41EB17B18EE8A3D75F4281A26982A5A7ACA5B5308BAFF05E4023A4AAA672872000:8
+X-MTK: N
 
-Implement active cable VDM support for SOP' according to the DisplayPort
-Alt Mode 2.0 specification.
-
-When probing the DisplayPort driver, the state machine will transition to
-Enter Mode on SOP' if an active cable altmode is detected. The SVDM flow
-is as followed:
-    (1) Enter Mode     SOP'
-    (2) Enter Mode     SOP
-    (3) Status Update  SOP
-    (4) Configure      SOP'
-    (5) Configure      SOP
-
-Status Update on SOP' after Enter Mode is optional and not implemented for
-now. When exiting the alt mode, send Exit Mode over SOP' after SOP.
-
-Should an altmode vdm fail on SOP', the DisplayPort driver will drop its
-reference to the plug and attempt to continue in SOP operation.
-
-Add new dp_state enums DP_STATE_ENTER_PRIME, DP_STATE_CONFIGURE_PRIME, and
-DP_STATE_EXIT_PRIME. dp_altmode adds typec_displayport_data for the cable
-plug to store the plug configuration and adds a typec_altmode reference
-for the cable plug.
-
-dp_altmode_configure takes the cable pin assignment capabilities into
-account when deciding on pin configuration. dp_altmode_configure_vdm_cable
-sends the configure message on SOP'.
-
-dp_altmode_activate now attempts to enter on SOP' if applicable, and will
-attempt to enter on SOP on failure.
-
-dp_cable_altmode_vdm handles VDMs passed to the DisplayPort driver from
-the tcpm.
-
-Signed-off-by: RD Babiera <rdbabiera@google.com>
----
-Changes since v1:
-* dp_altmode_configure_vdm no longer handles sop', now handled by
-  dp_altmode_configure_vdm_cable
-* dp_exit_mode_handler deleted
-* dp_altmode_vdm no longer handles sop', now handled by
-  dp_cable_altmode_vdm as typec_cable_ops callback assigned to plug_prime
-  if it exists.
-* driver data registered to plug_prime if applicable.
----
- drivers/usb/typec/altmodes/displayport.c | 161 ++++++++++++++++++++++-
- 1 file changed, 157 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-index f81bec0c7b86..06ea63bc536e 100644
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -50,13 +50,17 @@ enum {
- enum dp_state {
- 	DP_STATE_IDLE,
- 	DP_STATE_ENTER,
-+	DP_STATE_ENTER_PRIME,
- 	DP_STATE_UPDATE,
- 	DP_STATE_CONFIGURE,
-+	DP_STATE_CONFIGURE_PRIME,
- 	DP_STATE_EXIT,
-+	DP_STATE_EXIT_PRIME,
- };
- 
- struct dp_altmode {
- 	struct typec_displayport_data data;
-+	struct typec_displayport_data data_prime;
- 
- 	enum dp_state state;
- 	bool hpd;
-@@ -67,6 +71,7 @@ struct dp_altmode {
- 	struct typec_altmode *alt;
- 	const struct typec_altmode *port;
- 	struct fwnode_handle *connector_fwnode;
-+	struct typec_altmode *plug_prime;
- };
- 
- static int dp_altmode_notify(struct dp_altmode *dp)
-@@ -99,12 +104,18 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
- 		conf |= DP_CONF_UFP_U_AS_DFP_D;
- 		pin_assign = DP_CAP_UFP_D_PIN_ASSIGN(dp->alt->vdo) &
- 			     DP_CAP_DFP_D_PIN_ASSIGN(dp->port->vdo);
-+		/* Account for active cable capabilities */
-+		if (dp->plug_prime)
-+			pin_assign &= DP_CAP_DFP_D_PIN_ASSIGN(dp->plug_prime->vdo);
- 		break;
- 	case DP_STATUS_CON_UFP_D:
- 	case DP_STATUS_CON_BOTH: /* NOTE: First acting as DP source */
- 		conf |= DP_CONF_UFP_U_AS_UFP_D;
- 		pin_assign = DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo) &
- 				 DP_CAP_PIN_ASSIGN_DFP_D(dp->port->vdo);
-+		/* Account for active cable capabilities */
-+		if (dp->plug_prime)
-+			pin_assign &= DP_CAP_UFP_D_PIN_ASSIGN(dp->plug_prime->vdo);
- 		break;
- 	default:
- 		break;
-@@ -130,6 +141,8 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
- 	}
- 
- 	dp->data.conf = conf;
-+	if (dp->plug_prime)
-+		dp->data_prime.conf = conf;
- 
- 	return 0;
- }
-@@ -143,7 +156,9 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
- 
- 	if (configured && (dp->data.status & DP_STATUS_SWITCH_TO_USB)) {
- 		dp->data.conf = 0;
--		dp->state = DP_STATE_CONFIGURE;
-+		dp->data_prime.conf = 0;
-+		dp->state = dp->plug_prime ? DP_STATE_CONFIGURE_PRIME :
-+					     DP_STATE_CONFIGURE;
- 	} else if (dp->data.status & DP_STATUS_EXIT_DP_MODE) {
- 		dp->state = DP_STATE_EXIT;
- 	} else if (!(con & DP_CONF_CURRENTLY(dp->data.conf))) {
-@@ -209,6 +224,19 @@ static int dp_altmode_configure_vdm(struct dp_altmode *dp, u32 conf)
- 	return ret;
- }
- 
-+static int dp_altmode_configure_vdm_cable(struct dp_altmode *dp, u32 conf)
-+{
-+	int svdm_version = typec_altmode_get_cable_svdm_version(dp->plug_prime);
-+	u32 header;
-+
-+	if (svdm_version < 0)
-+		return svdm_version;
-+
-+	header = DP_HEADER(dp, svdm_version, DP_CMD_CONFIGURE);
-+
-+	return typec_cable_altmode_vdm(dp->plug_prime, TYPEC_PLUG_SOP_P, header, &conf, 2);
-+}
-+
- static void dp_altmode_work(struct work_struct *work)
- {
- 	struct dp_altmode *dp = container_of(work, struct dp_altmode, work);
-@@ -225,6 +253,19 @@ static void dp_altmode_work(struct work_struct *work)
- 		if (ret && ret != -EBUSY)
- 			dev_err(&dp->alt->dev, "failed to enter mode\n");
- 		break;
-+	case DP_STATE_ENTER_PRIME:
-+		ret = typec_cable_altmode_enter(dp->alt, TYPEC_PLUG_SOP_P, NULL);
-+		/*
-+		 * If we fail to enter Alt Mode on SOP', then we should drop the
-+		 * plug from the driver and attempt to run the driver without
-+		 * it.
-+		 */
-+		if (ret && ret != -EBUSY) {
-+			dev_err(&dp->alt->dev, "plug failed to enter mode\n");
-+			dp->state = DP_STATE_ENTER;
-+			goto disable_prime;
-+		}
-+		break;
- 	case DP_STATE_UPDATE:
- 		svdm_version = typec_altmode_get_svdm_version(dp->alt);
- 		if (svdm_version < 0)
-@@ -243,10 +284,24 @@ static void dp_altmode_work(struct work_struct *work)
- 			dev_err(&dp->alt->dev,
- 				"unable to send Configure command (%d)\n", ret);
- 		break;
-+	case DP_STATE_CONFIGURE_PRIME:
-+		ret = dp_altmode_configure_vdm_cable(dp, dp->data_prime.conf);
-+		if (ret) {
-+			dev_err(&dp->plug_prime->dev,
-+				"unable to send Configure command (%d)\n",
-+				ret);
-+			dp->state = DP_STATE_CONFIGURE;
-+			goto disable_prime;
-+		}
-+		break;
- 	case DP_STATE_EXIT:
- 		if (typec_altmode_exit(dp->alt))
- 			dev_err(&dp->alt->dev, "Exit Mode Failed!\n");
- 		break;
-+	case DP_STATE_EXIT_PRIME:
-+		if (typec_cable_altmode_exit(dp->plug_prime, TYPEC_PLUG_SOP_P))
-+			dev_err(&dp->plug_prime->dev, "Exit Mode Failed!\n");
-+		break;
- 	default:
- 		break;
- 	}
-@@ -254,6 +309,12 @@ static void dp_altmode_work(struct work_struct *work)
- 	dp->state = DP_STATE_IDLE;
- 
- 	mutex_unlock(&dp->lock);
-+	return;
-+
-+disable_prime:
-+	typec_altmode_put_plug(dp->plug_prime);
-+	dp->plug_prime = NULL;
-+	schedule_work(&dp->work);
- }
- 
- static void dp_altmode_attention(struct typec_altmode *alt, const u32 vdo)
-@@ -314,6 +375,8 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
- 				dp->hpd = false;
- 				sysfs_notify(&dp->alt->dev.kobj, "displayport", "hpd");
- 			}
-+			if (dp->plug_prime)
-+				dp->state = DP_STATE_EXIT_PRIME;
- 			break;
- 		case DP_CMD_STATUS_UPDATE:
- 			dp->data.status = *vdo;
-@@ -348,10 +411,84 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
- 	return ret;
- }
- 
-+static int dp_cable_altmode_vdm(struct typec_altmode *alt, enum typec_plug_index sop,
-+				const u32 hdr, const u32 *vdo, int count)
-+{
-+	struct dp_altmode *dp = typec_altmode_get_drvdata(alt);
-+	int cmd_type = PD_VDO_CMDT(hdr);
-+	int cmd = PD_VDO_CMD(hdr);
-+	int ret = 0;
-+
-+	mutex_lock(&dp->lock);
-+
-+	if (dp->state != DP_STATE_IDLE) {
-+		ret = -EBUSY;
-+		goto err_unlock;
-+	}
-+
-+	switch (cmd_type) {
-+	case CMDT_RSP_ACK:
-+		switch (cmd) {
-+		case CMD_ENTER_MODE:
-+			typec_altmode_update_active(dp->plug_prime, true);
-+			dp->state = DP_STATE_ENTER;
-+			break;
-+		case CMD_EXIT_MODE:
-+			dp->data_prime.status = 0;
-+			dp->data_prime.conf = 0;
-+			typec_altmode_update_active(dp->plug_prime, false);
-+			break;
-+		case DP_CMD_CONFIGURE:
-+			dp->state = DP_STATE_CONFIGURE;
-+			break;
-+		default:
-+			break;
-+		}
-+		break;
-+	case CMDT_RSP_NAK:
-+		switch (cmd) {
-+		case DP_CMD_CONFIGURE:
-+			dp->data_prime.conf = 0;
-+			/* Attempt to configure on SOP, drop plug */
-+			typec_altmode_put_plug(dp->plug_prime);
-+			dp->plug_prime = NULL;
-+			dp->state = DP_STATE_CONFIGURE;
-+			break;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	if (dp->state != DP_STATE_IDLE)
-+		schedule_work(&dp->work);
-+
-+err_unlock:
-+	mutex_unlock(&dp->lock);
-+	return ret;
-+}
-+
- static int dp_altmode_activate(struct typec_altmode *alt, int activate)
- {
--	return activate ? typec_altmode_enter(alt, NULL) :
--			  typec_altmode_exit(alt);
-+	struct dp_altmode *dp = typec_altmode_get_drvdata(alt);
-+	int ret;
-+
-+	if (activate) {
-+		if (dp->plug_prime) {
-+			ret = typec_cable_altmode_enter(alt, TYPEC_PLUG_SOP_P, NULL);
-+			if (ret < 0) {
-+				typec_altmode_put_plug(dp->plug_prime);
-+				dp->plug_prime = NULL;
-+			} else {
-+				return ret;
-+			}
-+		}
-+		return typec_altmode_enter(alt, NULL);
-+	} else {
-+		return typec_altmode_exit(alt);
-+	}
- }
- 
- static const struct typec_altmode_ops dp_altmode_ops = {
-@@ -360,6 +497,10 @@ static const struct typec_altmode_ops dp_altmode_ops = {
- 	.activate = dp_altmode_activate,
- };
- 
-+static const struct typec_cable_ops dp_cable_ops = {
-+	.vdm = dp_cable_altmode_vdm,
-+};
-+
- static const char * const configurations[] = {
- 	[DP_CONF_USB]	= "USB",
- 	[DP_CONF_DFP_D]	= "source",
-@@ -501,6 +642,7 @@ pin_assignment_store(struct device *dev, struct device_attribute *attr,
- 
- 	/* Only send Configure command if a configuration has been set */
- 	if (dp->alt->active && DP_CONF_CURRENTLY(dp->data.conf)) {
-+		/* todo: send manual configure over SOP'*/
- 		ret = dp_altmode_configure_vdm(dp, conf);
- 		if (ret)
- 			goto out_unlock;
-@@ -574,6 +716,7 @@ static const struct attribute_group dp_altmode_group = {
- int dp_altmode_probe(struct typec_altmode *alt)
- {
- 	const struct typec_altmode *port = typec_altmode_get_partner(alt);
-+	struct typec_altmode *plug = typec_altmode_get_plug(alt, TYPEC_PLUG_SOP_P);
- 	struct fwnode_handle *fwnode;
- 	struct dp_altmode *dp;
- 	int ret;
-@@ -603,6 +746,13 @@ int dp_altmode_probe(struct typec_altmode *alt)
- 	alt->desc = "DisplayPort";
- 	alt->ops = &dp_altmode_ops;
- 
-+	if (plug) {
-+		plug->desc = "Displayport";
-+		plug->cable_ops = &dp_cable_ops;
-+	}
-+
-+	dp->plug_prime = plug;
-+
- 	fwnode = dev_fwnode(alt->dev.parent->parent); /* typec_port fwnode */
- 	if (fwnode_property_present(fwnode, "displayport"))
- 		dp->connector_fwnode = fwnode_find_reference(fwnode, "displayport", 0);
-@@ -612,8 +762,10 @@ int dp_altmode_probe(struct typec_altmode *alt)
- 		dp->connector_fwnode = NULL;
- 
- 	typec_altmode_set_drvdata(alt, dp);
-+	if (plug)
-+		typec_altmode_set_drvdata(plug, dp);
- 
--	dp->state = DP_STATE_ENTER;
-+	dp->state = plug ? DP_STATE_ENTER_PRIME : DP_STATE_ENTER;
- 	schedule_work(&dp->work);
- 
- 	return 0;
-@@ -626,6 +778,7 @@ void dp_altmode_remove(struct typec_altmode *alt)
- 
- 	sysfs_remove_group(&alt->dev.kobj, &dp_altmode_group);
- 	cancel_work_sync(&dp->work);
-+	typec_altmode_put_plug(dp->plug_prime);
- 
- 	if (dp->connector_fwnode) {
- 		drm_connector_oob_hotplug_event(dp->connector_fwnode,
--- 
-2.43.0.472.g3155946c3a-goog
-
+T24gV2VkLCAyMDIzLTEyLTEzIGF0IDA5OjA1ICswMTAwLCBLcnp5c3p0b2YgS296bG93c2tpIHdy
+b3RlOg0KPiAgCSANCj4gRXh0ZXJuYWwgZW1haWwgOiBQbGVhc2UgZG8gbm90IGNsaWNrIGxpbmtz
+IG9yIG9wZW4gYXR0YWNobWVudHMgdW50aWwNCj4geW91IGhhdmUgdmVyaWZpZWQgdGhlIHNlbmRl
+ciBvciB0aGUgY29udGVudC4NCj4gIE9uIDEzLzEyLzIwMjMgMDc6MzUsIENodW5mZW5nIFl1biB3
+cm90ZToNCj4gPiBGb3IgR2VuMSBpc29jLWluIGVuZHBvaW50IG9uIGNvbnRyb2xsZXIgYmVmb3Jl
+IGFib3V0IFNTVVNCIElQTQ0KPiB2MS42LjAsIGl0DQo+ID4gc3RpbGwgc2VuZCBvdXQgdW5leHBl
+Y3RlZCBBQ0sgYWZ0ZXIgcmVjZWl2aW5nIGEgc2hvcnQgcGFja2V0IGluDQo+IGJ1cnN0DQo+ID4g
+dHJhbnNmZXIsIHRoaXMgd2lsbCBjYXVzZSBhbiBleGNlcHRpb24gb24gY29ubmVjdGVkIGRldmlj
+ZSwNCj4gc3BlY2lhbGx5IGZvcg0KPiA+IGEgNGsgY2FtZXJhLg0KPiA+IEFkZCBhIHF1aXJrIHBy
+b3BlcnR5ICJtZWRpYXRlayxyeGZpZm8tZGVwdGgiIHRvIHdvcmsgYXJvdW5kIHRoaXMNCj4gaGFy
+ZHdhcmUNCj4gPiBpc3N1ZTsNCj4gPiBUaGUgc2lkZS1lZmZlY3QgaXMgdGhhdCBtYXkgY2F1c2Ug
+cGVyZm9ybWFuY2UgZHJvcCBhYm91dCAxMCUsDQo+IGluY2x1ZGluZw0KPiA+IGJ1bGsgdHJhbnNm
+ZXIuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5A
+bWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy91c2Iv
+bWVkaWF0ZWssbXRrLXhoY2kueWFtbCAgICAgfCAxMA0KPiArKysrKysrKysrDQo+ID4gIDEgZmls
+ZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL0RvY3Vt
+ZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvbWVkaWF0ZWssbXRrLQ0KPiB4aGNpLnlh
+bWwgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL21lZGlhdGVrLG10ay0N
+Cj4geGhjaS55YW1sDQo+ID4gaW5kZXggZTk2NDRlMzMzZDc4Li5iOGVkNjg1NzRiYTQgMTAwNjQ0
+DQo+ID4gLS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9tZWRpYXRl
+ayxtdGsteGhjaS55YW1sDQo+ID4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
+bmdzL3VzYi9tZWRpYXRlayxtdGsteGhjaS55YW1sDQo+ID4gQEAgLTEyNCw2ICsxMjQsMTYgQEAg
+cHJvcGVydGllczoNCj4gPiAgICAgICAgZGVmaW5lZCBpbiB0aGUgeEhDSSBzcGVjIG9uIE1USydz
+IGNvbnRyb2xsZXIuDQo+ID4gICAgICBkZWZhdWx0OiA1MDAwDQo+ID4gIA0KPiA+ICsgIG1lZGlh
+dGVrLHJ4Zmlmby1kZXB0aDoNCj4gPiArICAgIGRlc2NyaXB0aW9uOg0KPiANCj4gVGhlIHByb3Bl
+cnR5IGRlc2NyaXB0aW9uIGFuZCBkcml2ZXIgcGF0Y2ggc3VnZ2VzdCB5b3UgY29uZmlndXJlIHRo
+ZQ0KPiBkZXB0aCBvZiBGSUZPLCBzbyB0aGlzIHNob3VsZCBiZSBub3QgYm9vbCwgYnV0IHNvbWUg
+dWludDMyLiBBbmQgdGhlbiwNCj4gdXNlIGdlbmVyaWMgImZpZm8tZGVwdGgiIHByb3BlcnR5IHRv
+IHNldCBkZXNpcmVkIGRlcHRoLg0KSSBmaXggaXQgYXMgMiwgaXQncyBPSyB0byB1c2UgYSB1aW50
+MzIsIEknbGwgbW9kaWZ5IGl0Lg0KDQpUaGFua3MNCg0KPiANCj4gDQo+IEJlc3QgcmVnYXJkcywN
+Cj4gS3J6eXN6dG9mDQo+IA0KPiANCg==
 
