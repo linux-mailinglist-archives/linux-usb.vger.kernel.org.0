@@ -1,45 +1,46 @@
-Return-Path: <linux-usb+bounces-4201-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4202-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 167D581484E
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 13:42:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0AD181485A
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 13:44:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16E051C20999
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 12:42:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A04E286263
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 12:44:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A02E32C6A3;
-	Fri, 15 Dec 2023 12:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDB322C6B4;
+	Fri, 15 Dec 2023 12:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MAX8XRts"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Wb8qv6yO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF412574B;
-	Fri, 15 Dec 2023 12:42:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28356C433C7;
-	Fri, 15 Dec 2023 12:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8102D7BB;
+	Fri, 15 Dec 2023 12:44:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5A80C433C8;
+	Fri, 15 Dec 2023 12:44:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1702644164;
-	bh=6irgSRIOBfDx7Y9R4iebo0z59NK156l2slhjQb5uxoM=;
+	s=korg; t=1702644261;
+	bh=OE6L5PNX6SGRt851a9OF5sucHu+J1674aufGgMwMSXI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MAX8XRtsMR7KN/CX4loqTS3cNHS+A2K9md2xahwOcn1k5HGpybvApb4ssdQgs0G1U
-	 6rjzXMWainYRiHm2pt9OtNRh2ZCJaTNy1XLuYHGzHfNhDgOuIYs9lVl7vzBMHG/y4t
-	 hyTjyonBwa39LfE9FtSyBVDS+jDbgknSBWheQTNE=
-Date: Fri, 15 Dec 2023 13:42:41 +0100
+	b=Wb8qv6yOz7kb7SzBjxFcHjpjelmwnipxcMznBaBt6H+xVhnYCcBH9uZ8G03LxTgZe
+	 5PJaTNm5lNhooQavzZeTDPyNQAqYjOWvpNdeVlQARqgiG8PX1PY7e4HHexIht1j3nZ
+	 0pzKzbpFZLMp1lhSVL6hL0bzUI0srek605qS1vVU=
+Date: Fri, 15 Dec 2023 13:44:17 +0100
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Prashanth K <quic_prashk@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] usb: dwc3: host: Set XHCI_SG_TRB_CACHE_SIZE_QUIRK
-Message-ID: <2023121518-uncharted-riddance-7c58@gregkh>
-References: <20231212112521.3774610-1-quic_prashk@quicinc.com>
- <20231212112521.3774610-2-quic_prashk@quicinc.com>
+To: Sam Edwards <cfsworks@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Heiko Stuebner <heiko@sntech.de>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: dwc3: host: Disable USB3 ports if maximum-speed
+ doesn't permit USB3
+Message-ID: <2023121506-persecute-lining-45bf@gregkh>
+References: <20231208210458.912776-1-CFSworks@gmail.com>
+ <20231208210458.912776-3-CFSworks@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -48,51 +49,48 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231212112521.3774610-2-quic_prashk@quicinc.com>
+In-Reply-To: <20231208210458.912776-3-CFSworks@gmail.com>
 
-On Tue, Dec 12, 2023 at 04:55:20PM +0530, Prashanth K wrote:
-> Upstream commit bac1ec551434 ("usb: xhci: Set quirk for
-> XHCI_SG_TRB_CACHE_SIZE_QUIRK") introduced a new quirk in XHCI
-> which fixes XHC timeout, which was seen on synopsys XHCs while
-> using SG buffers. But the support for this quirk isn't present
-> in the DWC3 layer.
+On Fri, Dec 08, 2023 at 02:04:58PM -0700, Sam Edwards wrote:
+> The DWC3 core can be configured (during IP instantiation, and/or via
+> configuration signals) not to have any USB3 ports. Some SoCs, however,
+> may have USB3 interfaces enabled that do not have USB3 PHYs driving
+> them. This can be due to a few circumstances, including:
+> a) The hardware designer didn't include USB3 PHYs and neglected to
+>    disable the DWC3 core's USB ports (I know of no instance where this
+>    has actually happened, however, and it seems pretty unlikely).
+> b) The USB3 PHYs are present but powered off. Perhaps a driver to enable
+>    the PHYs has not yet been written or merged, or USB3 capability is
+>    unneeded in the system and the system designer would like to conserve
+>    power.
+> c) The USB3 PHYs are muxed to a different controller. This can happen if
+>    the PHYs support non-USB protocols and one of these alternate
+>    functions is needed instead.
 > 
-> We will encounter this XHCI timeout/hung issue if we run iperf
-> loopback tests using RTL8156 ethernet adaptor on DWC3 targets
-> with scatter-gather enabled. This gets resolved after enabling
-> the XHCI_SG_TRB_CACHE_SIZE_QUIRK. This patch enables it using
-> the xhci device property since its needed for DWC3 controller.
+> In these circumstances, if the DWC3 does not receive clear link status
+> indication on an enabled USB3 port, the DWC3 may not allow even USB2
+> to function: in host mode, the DWC3 generates an endless barrage of
+> PORT_CSC status on the accompanying USB2 port, and the xHCI driver is
+> unable to bring the USB2 port to a functioning state.
 > 
-> In Synopsys DWC3 databook,
-> Table 9-3: xHCI Debug Capability Limitations
-> Chained TRBs greater than TRB cache size: The debug capability
-> driver must not create a multi-TRB TD that describes smaller
-> than a 1K packet that spreads across 8 or more TRBs on either
-> the IN TR or the OUT TR.
+> Fix this by first checking if the maximum-speed property in the DT
+> permits USB3. If not, pass the new `disable-usb3;` property to the
+> virtual xHCI device, causing the xHCI driver not to enable the USB3
+> ports. This allows USB2 to function even with USB3 PHYs
+> missing/misbehaving, and may be useful even when the USB3 PHYs are
+> well-behaved: a DT author may know that USB3 support is intact, but
+> disconnected (not exposed off-board) and choose to lower the
+> maximum-speed property to avoid an unusable USB3 rhub showing up in
+> sysfs/lsusb where it may mislead end-users.
 > 
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-
-What commit id does this fix?
-
-
+> Signed-off-by: Sam Edwards <CFSworks@gmail.com>
 > ---
->  drivers/usb/dwc3/host.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index 61f57fe5bb78..31a496233d87 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -89,6 +89,8 @@ int dwc3_host_init(struct dwc3 *dwc)
->  
->  	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
->  
-> +	props[prop_idx++] = PROPERTY_ENTRY_BOOL("xhci-sg-trb-cache-size-quirk");
+>  drivers/usb/dwc3/host.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-And this is ok if the entry is not present?
+Where is patch 1/2 of this series?
 
-thanks,
+confused,
 
 greg k-h
 
