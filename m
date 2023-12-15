@@ -1,85 +1,90 @@
-Return-Path: <linux-usb+bounces-4213-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4215-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4765D814C19
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 16:50:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DF71814D96
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 17:53:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0345D2813E7
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 15:50:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1045E284D4D
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Dec 2023 16:53:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FC5E381B9;
-	Fri, 15 Dec 2023 15:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 853563FB1A;
+	Fri, 15 Dec 2023 16:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TV6FdQbJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id D0AAD374EA
-	for <linux-usb@vger.kernel.org>; Fri, 15 Dec 2023 15:50:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 275031 invoked by uid 1000); 15 Dec 2023 10:50:19 -0500
-Date: Fri, 15 Dec 2023 10:50:19 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Yajun Deng <yajun.deng@linux.dev>
-Cc: gregkh@linuxfoundation.org, marcel@holtmann.org, johan.hedberg@gmail.com,
-  luiz.dentz@gmail.com, wg@grandegger.com, mkl@pengutronix.de,
-  aspriel@gmail.com, franky.lin@broadcom.com, hante.meuleman@broadcom.com,
-  kvalo@kernel.org, briannorris@chromium.org, mka@chromium.org,
-  johan@kernel.org, oneukum@suse.com, valentina.manea.m@gmail.com,
-  shuah@kernel.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: core: Use device_driver directly in struct
- usb_driver and usb_device_driver
-Message-ID: <d4a6b988-c938-4f2a-8815-9b4f1e7f338f@rowland.harvard.edu>
-References: <20231215063101.792991-1-yajun.deng@linux.dev>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DB83FB0F;
+	Fri, 15 Dec 2023 16:53:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E85CC433C8;
+	Fri, 15 Dec 2023 16:53:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702659190;
+	bh=H/n0IAG/cynjDEVrZj84z7sndMgNHo04Ohh/G1RtAtU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=TV6FdQbJdiC6wFLg0cT8RPHZ/MTWZJMrBpnS3aeU5NZ5fZ7RZa1a1kiuH6qyosV0a
+	 bAn/wUMkWCdUMKgQllZNfVHHCYBq2TxM/M4QMvT2y9uirhknWFAsB9qRCMHA/b8MHT
+	 J7D1E5GlnPylXCeyF2uq3UEkpIqWiZ7I0CV3GQ1R5wtCYal9Q0uzkCFal43zXEP1ex
+	 Ekw2pwD9MhrXnSKJm6OR1lEf7DnNmruw+gfVSkFcuhqHE/v2nlfBvQoi1teoX6sBXK
+	 xxjaezGzTOU6vm+NGdDEvDqNEEcW2nBYJ+39Q3MWVjJXZIs1QtVpP9KveVARf9edMa
+	 SZ7swzfK1NaxQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8232ADD4EF1;
+	Fri, 15 Dec 2023 16:53:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231215063101.792991-1-yajun.deng@linux.dev>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 1/2] Revert "xhci: Enable RPM on controllers that support
+ low-power states"
+From: patchwork-bot+bluetooth@kernel.org
+Message-Id: 
+ <170265919052.3838.9262588716198159739.git-patchwork-notify@kernel.org>
+Date: Fri, 15 Dec 2023 16:53:10 +0000
+References: <20231204100859.1332772-1-mathias.nyman@linux.intel.com>
+In-Reply-To: <20231204100859.1332772-1-mathias.nyman@linux.intel.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-bluetooth@vger.kernel.org, mario.limonciello@amd.com,
+ regressions@lists.linux.dev, regressions@leemhuis.info,
+ Basavaraj.Natikar@amd.com, pmenzel@molgen.mpg.de, bugs-a21@moonlit-rail.com,
+ stable@vger.kernel.org
 
-On Fri, Dec 15, 2023 at 02:31:01PM +0800, Yajun Deng wrote:
-> There is usbdrv_wrap in struct usb_driver and usb_device_driver,
-> it contains device_driver and for_devices. for_devices is used to
-> distinguish between device drivers and interface drivers.
+Hello:
+
+This series was applied to bluetooth/bluetooth-next.git (master)
+by Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+
+On Mon,  4 Dec 2023 12:08:58 +0200 you wrote:
+> This reverts commit a5d6264b638efeca35eff72177fd28d149e0764b.
 > 
-> We can compare that if 'drv->probe' is equal to usb_probe_device instead
-> of using for_devices in is_usb_device_driver().
+> This patch was an attempt to solve issues seen when enabling runtime PM
+> as default for all AMD 1.1 xHC hosts. see commit 4baf12181509
+> ("xhci: Loosen RPM as default policy to cover for AMD xHC 1.1")
 > 
-> Remove struct usbdrv_wrap, use device_driver directly in struct usb_driver
-> and usb_device_driver. This makes the code more concise.
+> This was not enough, regressions are still seen, so start from a clean
+> slate and revert both of them.
 > 
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-> ---
+> [...]
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Here is the summary with links:
+  - [1/2] Revert "xhci: Enable RPM on controllers that support low-power states"
+    (no matching commit)
+  - [2/2] Revert "xhci: Loosen RPM as default policy to cover for AMD xHC 1.1"
+    https://git.kernel.org/bluetooth/bluetooth-next/c/24be0b3c4059
 
-However you should simplify the new test:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> --- a/drivers/usb/core/usb.h
-> +++ b/drivers/usb/core/usb.h
-> @@ -176,11 +176,12 @@ static inline int is_root_hub(struct usb_device *udev)
->  }
->  
->  /* Do the same for device drivers and interface drivers. */
-> -
-> +extern int usb_probe_device(struct device *dev);
->  static inline int is_usb_device_driver(struct device_driver *drv)
->  {
-> -	return container_of(drv, struct usbdrv_wrap, driver)->
-> -			for_devices;
-> +	if (drv->probe == usb_probe_device)
-> +		return 1;
-> +	return 0;
->  }
 
-This should just be:
-
-	return drv->probe == usb_probe_device;
-
-Alan Stern
 
