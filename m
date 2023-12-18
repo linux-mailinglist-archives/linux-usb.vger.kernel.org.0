@@ -1,285 +1,140 @@
-Return-Path: <linux-usb+bounces-4315-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4316-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D1378173B7
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 15:36:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA7DA8175D7
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 16:44:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0D62B23775
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 14:36:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C073D1C234F3
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 15:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1BEA1D144;
-	Mon, 18 Dec 2023 14:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ECCA5D74A;
+	Mon, 18 Dec 2023 15:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="RpOP8NKb";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="2ERhtadi";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="RpOP8NKb";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="2ERhtadi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GpJFPLnu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C381D148
-	for <linux-usb@vger.kernel.org>; Mon, 18 Dec 2023 14:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 752101F396;
-	Mon, 18 Dec 2023 14:36:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1702910185; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=orBPCRN8tvOMWdl09gf1WkaT7M89Xr4uWWB1P1n9Uy0=;
-	b=RpOP8NKbxfWZT85gpOjKUEvWPRuW3Tootr8JprVl2Kgt/jlF5Qm09CsPrxKO8bm9YrpbDm
-	/uKsz03808v/m3D92HFUZ3K0y0VoDFHpNX3tUpFgyqAfTUSybFt7Tb9ePIJZOUmRuAkWpp
-	g6gQBxZT0oS+zlS3jBefgzSosK1GkWo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1702910185;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=orBPCRN8tvOMWdl09gf1WkaT7M89Xr4uWWB1P1n9Uy0=;
-	b=2ERhtadi6K4S97STsoEzCxsLlq8jVtzzYJqMa7eV4xBaI+ov8MN3vIbBH5dBfGA+rbnkzW
-	sgJhL2wEOJEwQFCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1702910185; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=orBPCRN8tvOMWdl09gf1WkaT7M89Xr4uWWB1P1n9Uy0=;
-	b=RpOP8NKbxfWZT85gpOjKUEvWPRuW3Tootr8JprVl2Kgt/jlF5Qm09CsPrxKO8bm9YrpbDm
-	/uKsz03808v/m3D92HFUZ3K0y0VoDFHpNX3tUpFgyqAfTUSybFt7Tb9ePIJZOUmRuAkWpp
-	g6gQBxZT0oS+zlS3jBefgzSosK1GkWo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1702910185;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=orBPCRN8tvOMWdl09gf1WkaT7M89Xr4uWWB1P1n9Uy0=;
-	b=2ERhtadi6K4S97STsoEzCxsLlq8jVtzzYJqMa7eV4xBaI+ov8MN3vIbBH5dBfGA+rbnkzW
-	sgJhL2wEOJEwQFCg==
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 5101B13927;
-	Mon, 18 Dec 2023 14:36:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id 6e6LEelYgGVQbwAAn2gu4w
-	(envelope-from <aporta@suse.de>); Mon, 18 Dec 2023 14:36:25 +0000
-Date: Mon, 18 Dec 2023 15:36:24 +0100
-From: Andrea della Porta <aporta@suse.de>
-To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc: Ivan Ivanov <ivan.ivanov@suse.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	Oliver Neukum <oneukum@suse.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Andrea della Porta <andrea.porta@suse.com>
-Subject: Re: [PATCH] USB: dwc2: write HCINT with INTMASK applied
-Message-ID: <ZYBY6LdDLRc0XBx_@apocalypse>
-Mail-Followup-To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-	Ivan Ivanov <ivan.ivanov@suse.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	Oliver Neukum <oneukum@suse.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Andrea della Porta <andrea.porta@suse.com>
-References: <20231115144514.15248-1-oneukum@suse.com>
- <f0bd323a-8384-e303-907f-5d533af6d71e@synopsys.com>
- <ZWRbkdTASTNJB8Fv@apocalypse>
- <f293d306-54fb-ecb5-4515-70a6c1faf1b1@synopsys.com>
- <ZWWsGknhNuVggNNa@apocalypse>
- <bfb8e693-7085-430c-0481-3d6630168240@synopsys.com>
- <d8176b8a6851974a692804f006d59d3324903b62.camel@suse.com>
- <079ddad4-ab41-49ac-6d86-d90075320dcd@synopsys.com>
- <ZWwltzMB8gq5k5oe@apocalypse>
- <07250e1e-c5ca-0586-b53f-7f2bb3d19b39@synopsys.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C085A86A;
+	Mon, 18 Dec 2023 15:39:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702913940; x=1734449940;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=chMB5GRwuFwlFnA1mbL/H7timbEewlCfwN5PbZeKMEw=;
+  b=GpJFPLnupirRi8yrxRnA3wk1epftXEd7jfiuLs/dcp303jV1Afc2U4hq
+   clPqhMZsfZuLUkMMH/MdTOAIBz73vL3uNyFDpV1ivKtiNhRTp23jI7NCx
+   m4H/d4NQr9ukZAkEU2Vf1yi5Vs7VNvJ0E6KfvciuIvvr0Tb/rhpdcYO0o
+   vqD+06IDEY75a3MvQKW0vXXnQpdikGWkI3MTlJ+yO+h5HxvhAfpUeBEgZ
+   y+24v1Oil2wF3kAIlwBNdBrVDj50k2z4lyqm8wrj6HvO4gxo/zoYEMVnR
+   /upMPRi2steOzuBwaLtlOwIPTFjlCgu6+3mflQSJMMT44HPXnVYG0+65M
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="14208202"
+X-IronPort-AV: E=Sophos;i="6.04,286,1695711600"; 
+   d="scan'208";a="14208202"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 07:39:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="768874367"
+X-IronPort-AV: E=Sophos;i="6.04,286,1695711600"; 
+   d="scan'208";a="768874367"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga007.jf.intel.com with ESMTP; 18 Dec 2023 07:38:57 -0800
+Message-ID: <f3342e07-4d35-7714-ad85-5c5c9ed9b25b@linux.intel.com>
+Date: Mon, 18 Dec 2023 17:40:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <07250e1e-c5ca-0586-b53f-7f2bb3d19b39@synopsys.com>
-X-Spam-Level: 
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spam-Level: 
-X-Spam-Score: -3.80
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	 ARC_NA(0.00)[];
-	 TO_DN_EQ_ADDR_SOME(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 MIME_GOOD(-0.10)[text/plain];
-	 RCPT_COUNT_FIVE(0.00)[6];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 NEURAL_HAM_SHORT(-0.20)[-0.997];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%]
-X-Spam-Flag: NO
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Sam Edwards <cfsworks@gmail.com>, Mathias Nyman
+ <mathias.nyman@intel.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Heiko Stuebner <heiko@sntech.de>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231208210458.912776-1-CFSworks@gmail.com>
+ <7fdd62c6-f492-1f7e-9eca-9f965cdd73ef@linux.intel.com>
+ <edf15619-8f31-2a30-d92e-997bc1464c58@gmail.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH 0/2] Allow disabling USB3 ports in xHCI/DWC3
+In-Reply-To: <edf15619-8f31-2a30-d92e-997bc1464c58@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Minas,
-
-On 12:23 Thu 14 Dec     , Minas Harutyunyan wrote:
-> Hi Andrea,
+On 15.12.2023 23.59, Sam Edwards wrote:
+> Hi Mathias,
 > 
-> On 12/3/23 10:52, Andrea della Porta wrote:
-> > Hi Minas,
-> > 
-> > On 10:26 Fri 01 Dec     , Minas Harutyunyan wrote:
-> >> Hi Ivan,
-> >>
-> >> On 11/28/23 18:43, Ivan Ivanov wrote:
-> >>>
-> >>> Hi Minas,
-> >>>
-> >>> On Tue, 2023-11-28 at 11:48 +0000, Minas Harutyunyan wrote:
-> >>>>
-> >>>> Does this "spurious" interrupt broke your tests?
-> >>>
-> >>> It is not just some kind of synthetic test case that was broken.
-> >>> but real world usage. You can find complains about this error on
-> >>> various internet forums, just search for dwc2_hc_chhltd_intr_dma
-> >>> and it is not so difficult to reproduce.
-> >>>
-> >>> Without databook I am not sure we can create better fix, but if
-> >>> you develop different solution I will gladly tested it.
-> >>>
-> >>> Regards,
-> >>> Ivan
-> >> 1. In addition to HCCHARx and ep_type printing please add printing of
-> >> GRXFSTSR if EP is IN or GNPTXSTS if EP is OUT, and provide dmesg with
-> >> error case.
-> > 
-> > Here's the log, before comenting the 'goto' out:
-> > 
-> > 
-> > [684829.206854] --Host Channel Interrupt--, Channel 2
-> > [684829.206866]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-> > [684829.206875]   hcchar[2] = 0x015c9810, chan->ep_type=3
-> > [684829.206883]   GRXSTSR = 0x000E0002
-> > [684829.214851] --Host Channel Interrupt--, Channel 6
-> > [684829.214864]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-> > [684829.214876]   hcchar[6] = 0x015c9810, chan->ep_type=3
-> > [684829.214886]   GRXSTSR = 0x000E0007
-> > [684829.217853] --Host Channel Interrupt--, Channel 5
-> > [684829.217869]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-> > [684829.217881]   hcchar[5] = 0x009c8801, chan->ep_type=3
-> > [684829.217891]   GRXSTSR = 0x000E0005
-> > [684829.222647] --Host Channel Interrupt--, Channel 0
-> > [684829.222659]   hcint 0x00000021, hcintmsk 0x00000426, hcint&hcintmsk 0x00000020
-> > [684829.222671]   hcchar[0] = 0x01d8d200, chan->ep_type=2
-> > [684829.222681]   GRXSTSR = 0x00070044
-> > [684829.222696] --Host Channel Interrupt--, Channel 0
-> > [684829.222704]   hcint 0x00000002, hcintmsk 0x00000406, hcint&hcintmsk 0x00000002
-> > [684829.222714]   hcchar[0] = 0x01d8d200, chan->ep_type=2
-> > [684829.222724]   GRXSTSR = 0x00070044
-> > [684829.222740] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 0 - ChHltd set, but reason is unknown
-> > [684829.222758] dwc2 3f980000.usb: hcint 0x00000002, intsts 0x04000009
+> On 12/14/23 04:05, Mathias Nyman wrote:
+>> I don't think this will work as a generic xhci driver feature.
+>>
+>> Even if we ignore all USB3 ports in software they will for most xHC hosts be powered
+>> and enabled in hardware by default after controller reset.
+>>
+>> This means they perform link training, generate all kinds of events with interrupts
+>> (connect, over-current etc) that driver now can't handle.
 > 
+> By this do you mean that having the xHCI driver ignore the USB3 ports isn't enough to ensure that PP=0 (and the driver would need to do a little bit more to make sure that the "parking brake" is on: e.g. initialize, but not use, the ports) or that the xHC's PP=0 signal isn't sufficient to keep the PHYs from trying to bring the link up and generating those interrupts (PP=0 really isn't enough, and there is no general "parking brake" to be found here)?
 > 
-> Sorry for delayed response.
-> I guess the cause of issue is because of channel halted interrupt late 
-> for about ~40-50us. In above log, Channel 0 twice assert interrupt: 
-> first for ACK (XferComplete masked) and second for Channel_Halted. These 
-> all interrupts related to same BULK IN transfer. Ideally these 3 source 
-> of interrupt (ACK, XferCompl and ChHalt) should be asserted together.
-> To check it lets do follow:
-> 1. Do not allow unmask ACK interrupt in function 
-> dwc2_hc_enable_dma_ints(). Just comment "hcintmsk |= HCINTMSK_ACK;"
-> 2. remove comment for "goto error"
-> 3. remove printing GRXSTSR and GNPTXSTS
-> 4. build in non verbose debug mode
-> It's just temporary solution to check ACK influence on the issue.
+
+Yes, in most cases PP==1 after xHC reset, here's some old debug output during boot:
+
+[    2.571057] xhci_hcd 0000:00:0d.0: new USB bus registered, assigned bus number 2
+[    2.571061] xhci_hcd 0000:00:0d.0: Host supports USB 3.2 Enhanced SuperSpeed
+[    2.571065] xhci_hcd 0000:00:0d.0: // Turn on HC, cmd = 0x5.
+[    2.571067] xhci_hcd 0000:00:0d.0: Finished xhci_run for USB3 roothub
+[    2.571093] usb usb2: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 5.15
+[    2.571095] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    2.571097] usb usb2: Product: xHCI Host Controller
+[    2.571098] usb usb2: Manufacturer: Linux 5.15.57-06982-gf7339f7585d8-dirty xhci-hcd
+[    2.571099] usb usb2: SerialNumber: 0000:00:0d.0
+[    2.571197] xHCI xhci_add_endpoint called for root hub
+[    2.571199] xHCI xhci_check_bandwidth called for root hub
+[    2.571224] hub 2-0:1.0: USB hub found
+[    2.571230] hub 2-0:1.0: 2 ports detected
+[    2.571279] xhci_hcd 0000:00:0d.0: set port power 2-1 ON, portsc: 0x2a0
+
+Note that portsc: 0x2a0 entry above has PP=1, and it shows the portsc register value
+_before_  port power is set to 1 (ON).
+
+Port Status: 0x2a0
+	Disconnected
+	Disabled
+	Link: Rx Detect
+	Powered
+	Unknown port speed
+
+Forcing PP=0 could possibly prevent any events from those ports.
+
+>> Sound like the setup you are using has a very specific issue, and it would need
+>> a narrow targeted quirk to solve it.
 > 
-> Thanks,
-> Minas
+> I infer from this that you're against having a DT property added to xHCI? What if the property were to be narrowed in scope to "ignore the USB3 PHYs, they're disabled/absent" vs. this iteration's "disable the USB3 ports" meaning?
+> 
+> If this quirk ends up landing in the dwc3 driver (since, arguably, DWC3 is the real misbehaving hw block in these circumstances), what would be your preferred mechanism of signaling to the xHCI layer "the USB3 PHYs have been disabled; please ignore"?
 
-Testing the changes you suggested revealed that "ChHltd set, but reason is unknown" error
-is not showing up anymore, but we now have some "Transaction error" as shown in the
-following log:
+I don't have a good solution in mind for this so I'll just throw some ideas:
 
+What happends if you in some RK3588 platform code disable USB  ports via those
+syscon registers, but let the xhci driver be, and USB3 roothub enumerates normally?
 
-[13941.590252]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.590263]  hcchar[5] = 0x00dc8801, chan->ep_type=3
-[13941.592240] --Host Channel Interrupt--, Channel 4
-[13941.592249]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.592258]  hcchar[4] = 0x015c9810, chan->ep_type=3
-[13941.600243] --Host Channel Interrupt--, Channel 2
-[13941.600263]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.600273]  hcchar[2] = 0x015c9810, chan->ep_type=3
-[13941.605521] --Host Channel Interrupt--, Channel 3
-[13941.605539]   hcint 0x00000003, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.605549]  hcchar[3] = 0x01d83200, chan->ep_type=2
-[13941.608242] --Host Channel Interrupt--, Channel 6
-[13941.608256]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.608266]  hcchar[6] = 0x015c9810, chan->ep_type=3
-[13941.609685] --Host Channel Interrupt--, Channel 1
-[13941.609696]   hcint 0x00000023, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.609706]  hcchar[1] = 0x01d8d200, chan->ep_type=2
-[13941.616243] --Host Channel Interrupt--, Channel 5
-[13941.616262]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.616272]  hcchar[5] = 0x015c9810, chan->ep_type=3
-[13941.619514] --Host Channel Interrupt--, Channel 0
-[13941.619527]   hcint 0x00000023, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.619538]  hcchar[0] = 0x01d8d200, chan->ep_type=2
-[13941.620015] --Host Channel Interrupt--, Channel 2
-[13941.620027]   hcint 0x00000003, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.620037]  hcchar[2] = 0x01d83200, chan->ep_type=2
-[13941.624240] --Host Channel Interrupt--, Channel 3
-[13941.624249]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.624259]  hcchar[3] = 0x015c9810, chan->ep_type=3
-[13941.627347] --Host Channel Interrupt--, Channel 4
-[13941.627363]   hcint 0x00000092, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.627373]  hcchar[4] = 0x01d8d200, chan->ep_type=2
-[13941.627391] dwc2 3f980000.usb: --Host Channel 4 Interrupt: Transaction Error--
-[13941.627432] --Host Channel Interrupt--, Channel 6
-[13941.627440]   hcint 0x00000010, hcintmsk 0x00000416, hcint&hcintmsk 0x00000010
-[13941.627450]  hcchar[6] = 0x81d8d200, chan->ep_type=2
-[13941.632240] --Host Channel Interrupt--, Channel 1
-[13941.632248]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.632257]  hcchar[1] = 0x015c9810, chan->ep_type=3
-[13941.635528] --Host Channel Interrupt--, Channel 5
-[13941.635543]   hcint 0x00000003, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.635553]  hcchar[5] = 0x01d83200, chan->ep_type=2
-[13941.640244] --Host Channel Interrupt--, Channel 0
-[13941.640263]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.640272]  hcchar[0] = 0x015c9810, chan->ep_type=3
-[13941.642078] --Host Channel Interrupt--, Channel 6
-[13941.642086]   hcint 0x00000023, hcintmsk 0x00000406, hcint&hcintmsk 0x00000002
-[13941.642095]  hcchar[6] = 0x01d8d200, chan->ep_type=2
-[13941.648243] --Host Channel Interrupt--, Channel 3
-[13941.648262]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.648272]  hcchar[3] = 0x015c9810, chan->ep_type=3
-[13941.652240] --Host Channel Interrupt--, Channel 4
-[13941.652248]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.652257]  hcchar[4] = 0x009c8801, chan->ep_type=3
-[13941.656241] --Host Channel Interrupt--, Channel 1
-[13941.656256]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.656266]  hcchar[1] = 0x015c9810, chan->ep_type=3
-[13941.664240] --Host Channel Interrupt--, Channel 5
-[13941.664248]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
-[13941.664257]  hcchar[5] = 0x015c9810, chan->ep_type=3
+Or if this is about a misbehaving USB3 PHY, how about adding the USB3 PHY driver that
+describes reality and fails when usb_phy_roothub_init() or usb_phy_roothub_set_mode()
+are called by for USB3 hcd during usb_add_hcd(USB3).
+xhci driver could then continue without the USB3 hcd. turning off USB3 ports.
+      
+Adding the 'maximum-speed = "high-speed"' entry could also be one option.
 
+Thanks
+Mathias
 
-The ping flood is otherwise working, except for a minor percentage loss (~0.7%).
-Many thanks,
-
-Andrea
 
