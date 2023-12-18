@@ -1,77 +1,139 @@
-Return-Path: <linux-usb+bounces-4319-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4320-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CCD6817946
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 18:57:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC79D817B8B
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 20:58:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A415C1C21B76
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 17:57:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AC40285786
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 19:58:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C29B5BFBC;
-	Mon, 18 Dec 2023 17:57:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60A6272068;
+	Mon, 18 Dec 2023 19:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OR2h4lEM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id F2BF243154
-	for <linux-usb@vger.kernel.org>; Mon, 18 Dec 2023 17:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 385326 invoked by uid 1000); 18 Dec 2023 12:57:01 -0500
-Date: Mon, 18 Dec 2023 12:57:00 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Yinghua Yang Yang <yinghua.yang@motorolasolutions.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-  zachary.zuzzio@motorolasolutions.com,
-  Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-  Oliver Neukum <oneukum@suse.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-  Wentong Wu <wentong.wu@intel.com>,
-  Sakari Ailus <sakari.ailus@linux.intel.com>, linux-kernel@vger.kernel.org,
-  linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: misc: Add driver for Motorola Solutions security
- accessories
-Message-ID: <fa0492da-7b18-47f8-8c79-a640835a3174@rowland.harvard.edu>
-References: <20231215211218.2313996-1-Yinghua.Yang@motorolasolutions.com>
- <26c70a69-f18f-4c82-a520-7943be0e1961@rowland.harvard.edu>
- <CAHhS5zZzHzZBADHkKyzCzr5FJ0zdTvsaQUE0ygjU1FG3vocrCA@mail.gmail.com>
- <2023121712-gigabyte-oppressed-b8f4@gregkh>
- <CAHhS5zY+X5DFX5cYir-raswc0Pmck-nuMSWAsK7epBU3ARO_BA@mail.gmail.com>
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492581DDFC;
+	Mon, 18 Dec 2023 19:58:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BII7awl009072;
+	Mon, 18 Dec 2023 19:58:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=t0bpCimWvMhWfdI+TsPYGoHOoVAQBV1OEIZbPnpfoak=; b=OR
+	2h4lEM4dBzCsLd+KqD8zxpFrlQcglcplmQPVD6bBdBUEtesGx8DRYqcbadwSyAX5
+	jmEiOQcHKgdSvekkRMgu9/U7x2Li4Pfk0oD+VytunYIV4/Zu9CzuGNsd64EHQGHx
+	0h/KLdwKGOZ1bxSjn740snWNNAyIdoFnB0R0rlP4H309nRNyae940OtHLcoDVNFR
+	9kwAtUEG8ocQ1EmG9hIUXLQc6xsBO0xwZ4lTk7GSRi4anORUkKffrYR7LsalsFhK
+	6kPH+oFrTklJRRu9hpxsGH7MOU+qSRZ48m1HJpCUP9NU3z8d6oyGYbIL8Y4A5DvK
+	9AY1uv0JExp/EJLocjBw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v2mfe1euh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Dec 2023 19:58:09 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BIJw8YC027591
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Dec 2023 19:58:08 GMT
+Received: from [10.110.97.107] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 18 Dec
+ 2023 11:58:06 -0800
+Message-ID: <0a3a6277-62f6-2d6c-d36a-46a442c89b67@quicinc.com>
+Date: Mon, 18 Dec 2023 11:58:02 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHhS5zY+X5DFX5cYir-raswc0Pmck-nuMSWAsK7epBU3ARO_BA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v10 18/41] ALSA: usb-audio: qcom: Add USB QMI definitions
+Content-Language: en-US
+To: Jeff Johnson <quic_jjohnson@quicinc.com>, <srinivas.kandagatla@linaro.org>,
+        <mathias.nyman@intel.com>, <perex@perex.cz>, <conor+dt@kernel.org>,
+        <corbet@lwn.net>, <gregkh@linuxfoundation.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@linaro.org>, <Thinh.Nguyen@synopsys.com>,
+        <broonie@kernel.org>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
+        <robh+dt@kernel.org>, <agross@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20231215214955.12110-1-quic_wcheng@quicinc.com>
+ <20231215214955.12110-19-quic_wcheng@quicinc.com>
+ <80111881-13dd-4b05-876a-a97eb3889726@quicinc.com>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <80111881-13dd-4b05-876a-a97eb3889726@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: P-tbYw2YI5KNM16_-dyXNk1fYgg76NOe
+X-Proofpoint-GUID: P-tbYw2YI5KNM16_-dyXNk1fYgg76NOe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 suspectscore=0 malwarescore=0 lowpriorityscore=0 mlxscore=0
+ mlxlogscore=999 phishscore=0 adultscore=0 impostorscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2312180148
 
-On Sun, Dec 17, 2023 at 09:56:34PM -0600, Yinghua Yang Yang wrote:
-> Is there a way to set the auto suspend mode for a usb device without root
-> permission? I think this is a general question for many usb devices.
-> According to the Linux Kernel document
-> https://www.kernel.org/doc/Documentation/usb/power-management.txt, by
-> default the kernel disables autosuspend for all devices. So there are many
-> usb devices that support autosuspend but by default autosuspend is
-> disabled. In order to support autosuspend on those devices, are the only
-> solutions 1) obtain root permission and write ../power/control file using a
-> script
+Hi Jeff,
 
-It doesn't have to be a script; any sort of program can do it.  A 
-power-management daemon such as PowerTOP, for example.
+On 12/15/2023 2:38 PM, Jeff Johnson wrote:
+> On 12/15/2023 1:49 PM, Wesley Cheng wrote:
+>> The Qualcomm USB audio offload driver utilizes the QMI protocol to
+>> communicate with the audio DSP.  Add the necessary QMI header and field
+>> definitions, so the QMI interface driver is able to route the QMI packet
+>> received to the USB audio offload driver.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>   sound/usb/qcom/usb_audio_qmi_v01.c | 892 +++++++++++++++++++++++++++++
+>>   sound/usb/qcom/usb_audio_qmi_v01.h | 162 ++++++
+>>   2 files changed, 1054 insertions(+)
+>>   create mode 100644 sound/usb/qcom/usb_audio_qmi_v01.c
+>>   create mode 100644 sound/usb/qcom/usb_audio_qmi_v01.h
+>>
+>> diff --git a/sound/usb/qcom/usb_audio_qmi_v01.c b/sound/usb/qcom/usb_audio_qmi_v01.c
+>> new file mode 100644
+>> index 000000000000..bdfd67d980eb
+>> --- /dev/null
+>> +++ b/sound/usb/qcom/usb_audio_qmi_v01.c
+>> @@ -0,0 +1,892 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+>> +
+>> +#include <linux/soc/qcom/qmi.h>
+>> +
+>> +#include "usb_audio_qmi_v01.h"
+>> +
+>> +static struct qmi_elem_info mem_info_v01_ei[] = {
+> 
+> I believe all of the struct qmi_elem_info arrays can be const.
+> 
+> At least that was the goal of commit ff6d365898d4 ("soc: qcom: qmi: use
+> const for struct qmi_elem_info")
+> 
 
->  2) work with the hardware vendor on a driver/kernel to write the
-> autosuspend flag?
+Thanks for the review.  Will fix this.
 
-That would be kind of silly.  After all, if the vendor is willing to 
-work with you on a kernel driver, they certainly ought to be willing to 
-work with you on installing a power-management userspace program.  And 
-installing a program should be much easier than getting a new driver 
-into the kernel.
-
-But to answer your question -- Yes, the only ways to modify the 
-autosuspend settings are from userspace or from within the kernel.
-
-Alan Stern
+Thanks
+Wesley Cheng
 
