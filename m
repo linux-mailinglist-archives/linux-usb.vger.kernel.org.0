@@ -1,54 +1,54 @@
-Return-Path: <linux-usb+bounces-4310-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4311-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECEB8816C2B
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 12:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 79D9A816DE2
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 13:23:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EE251C22E10
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 11:32:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A010D1C21D3A
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 12:23:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF6D5199CC;
-	Mon, 18 Dec 2023 11:31:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D1C74B126;
+	Mon, 18 Dec 2023 12:23:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L2fEUAA9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lq8cBDxh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF000199A0;
-	Mon, 18 Dec 2023 11:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC023481AB;
+	Mon, 18 Dec 2023 12:23:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702899115; x=1734435115;
+  t=1702902196; x=1734438196;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=4FhFbG0sBZc+TGV56La6V9iAQRv2TwSBI9ELI2O1vXQ=;
-  b=L2fEUAA9A6GzIx53gFt2qaK3dt0Zk6IwcK51LxJSc7pR/RiY4PN7ef/n
-   zXJ9dxNKE6pZwFyhSSfrXZq0IFvjBPzRGD9NXC4uGl3P4Chxya5rIwSNr
-   d8DILMZCtBGVz7nl+XPusXk5+SrnpucNlTyU4KcoZjRZ1Qca25KT6GEHI
-   3x1VOXNWsCnQi+Pw8vgJR9BRArvxisVKEKoeDsc/HdLvLfR93S/0EdvTP
-   Y3uBt7Ac1wxDFFYY7w0DaM/qXg3x0lvxJWvT9s/Iw3O0QSjYGZ/GcCUqf
-   UhUAq9fyP1YuD5UKdCLbKKiTIQV/X2wBrEbZo/B9a44lfLPt3WZCYbZ6M
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10927"; a="385916760"
+  bh=N7eUeKAMzm2gBFL7HvjuwqCenf2l5Dhwml6Vay6Fgy0=;
+  b=Lq8cBDxhJ8qwdWwYGtJ7oP9LqJix2nvkkhGwYQSFdJUOzQpUhkXEzK5l
+   ZbnoomT55iKSQDmloGu6JWgGkNiDLHvUlIsOZu4rZ3NdzCH9eg9DWKWTo
+   yi6LGgU8qQ6jHt/pTySdfFVMaE44uVmUm75ihpib58x4oyhG2EH7P91o/
+   /wc/9rhabMcSMzk9D709TpeRfZCFoBovpOe/VGL8irf0xbp3PBD6Qgcqa
+   Lf7LCiDaduYd1ZP6HBxjCF91s8osRduDu1vsY91zJuKKibycOuGCTF8Uk
+   C7Oc+HiiRFfpoJIda4GPrMi8bqpZ5Dibs2hI9DyjtzhV1GoeQE3iMIa+1
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10927"; a="8859487"
 X-IronPort-AV: E=Sophos;i="6.04,285,1695711600"; 
-   d="scan'208";a="385916760"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 03:31:54 -0800
+   d="scan'208";a="8859487"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 04:23:16 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10927"; a="775548374"
+X-IronPort-AV: E=McAfee;i="6600,9927,10927"; a="768822020"
 X-IronPort-AV: E=Sophos;i="6.04,285,1695711600"; 
-   d="scan'208";a="775548374"
+   d="scan'208";a="768822020"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 18 Dec 2023 03:31:52 -0800
+  by orsmga007.jf.intel.com with ESMTP; 18 Dec 2023 04:23:13 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 5BF6938C; Mon, 18 Dec 2023 13:31:51 +0200 (EET)
-Date: Mon, 18 Dec 2023 13:31:51 +0200
+	id 5FB543CC; Mon, 18 Dec 2023 14:23:12 +0200 (EET)
+Date: Mon, 18 Dec 2023 14:23:12 +0200
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: Sanath S <sanaths2@amd.com>
 Cc: Sanath S <Sanath.S@amd.com>, mario.limonciello@amd.com,
@@ -57,9 +57,8 @@ Cc: Sanath S <Sanath.S@amd.com>, mario.limonciello@amd.com,
 	linux-kernel@vger.kernel.org
 Subject: Re: [Patch v2 2/2] thunderbolt: Teardown tunnels and reset
  downstream ports created by boot firmware
-Message-ID: <20231218113151.GC1074920@black.fi.intel.com>
-References: <20231214070746.GS1074920@black.fi.intel.com>
- <32163f49-8387-0754-534f-1764e731f26d@amd.com>
+Message-ID: <20231218122312.GE1074920@black.fi.intel.com>
+References: <32163f49-8387-0754-534f-1764e731f26d@amd.com>
  <20231214073242.GT1074920@black.fi.intel.com>
  <ff143967-63ff-c4fb-9c88-8537a663c45b@amd.com>
  <20231215115521.GW1074920@black.fi.intel.com>
@@ -68,6 +67,7 @@ References: <20231214070746.GS1074920@black.fi.intel.com>
  <866cb714-b9a8-a7d4-4c59-6ba771ef325f@amd.com>
  <20231218104234.GB1074920@black.fi.intel.com>
  <c433f29b-597c-b6d6-aa48-2b84a26dc623@amd.com>
+ <20231218113151.GC1074920@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,52 +77,37 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c433f29b-597c-b6d6-aa48-2b84a26dc623@amd.com>
+In-Reply-To: <20231218113151.GC1074920@black.fi.intel.com>
 
-On Mon, Dec 18, 2023 at 04:49:13PM +0530, Sanath S wrote:
-> > The discover part should not do anything (like write the hardware) so
-> > perhaps it is just some timing thing (but that's weird too).
+On Mon, Dec 18, 2023 at 01:31:51PM +0200, Mika Westerberg wrote:
+> On Mon, Dec 18, 2023 at 04:49:13PM +0530, Sanath S wrote:
+> > > The discover part should not do anything (like write the hardware) so
+> > > perhaps it is just some timing thing (but that's weird too).
+> > > 
+> > > I think we should do something like this:
+> > > 
+> > > 1. Disable all enabled protocol adapters (reset them to defaults).
+> > > 2. Clear all protocol adapter paths.
+> > > 3. Issue DPR over all enabled USB4 ports.
+> > > 
+> > > BTW, what you mean "didn't work"?
+> > Path activation would go fine after DPR like below:
 > > 
-> > I think we should do something like this:
+> > [   15.090905] thunderbolt 0000:c4:00.5: 0:5 <-> 2:9 (PCI): activating
+> > [   15.090932] thunderbolt 0000:c4:00.5: activating PCIe Down path from 0:5
+> > to 2:9
+> > [   15.091602] thunderbolt 0000:c4:00.5: activating PCIe Up path from 2:9 to
+> > 0:5
 > > 
-> > 1. Disable all enabled protocol adapters (reset them to defaults).
-> > 2. Clear all protocol adapter paths.
-> > 3. Issue DPR over all enabled USB4 ports.
-> > 
-> > BTW, what you mean "didn't work"?
-> Path activation would go fine after DPR like below:
+> > But, PCIE enumeration doesn't happen (pcie link up will not happen, will not
+> > see below logs)
+> > [   15.134223] pcieport 0000:00:03.1: pciehp: Slot(0-1): Card present
+> > [   15.134243] pcieport 0000:00:03.1: pciehp: Slot(0-1): Link Up
 > 
-> [   15.090905] thunderbolt 0000:c4:00.5: 0:5 <-> 2:9 (PCI): activating
-> [   15.090932] thunderbolt 0000:c4:00.5: activating PCIe Down path from 0:5
-> to 2:9
-> [   15.091602] thunderbolt 0000:c4:00.5: activating PCIe Up path from 2:9 to
-> 0:5
-> 
-> But, PCIE enumeration doesn't happen (pcie link up will not happen, will not
-> see below logs)
-> [   15.134223] pcieport 0000:00:03.1: pciehp: Slot(0-1): Card present
-> [   15.134243] pcieport 0000:00:03.1: pciehp: Slot(0-1): Link Up
+> Okay, what if you like reset the PCIe adapter config spaces back to the
+> defaults? Just as an experiment.
 
-Okay, what if you like reset the PCIe adapter config spaces back to the
-defaults? Just as an experiment.
-
-> > > > > > +			} else if (tb_port_is_usb3_down(port) ||
-> > > > > > +				   tb_port_is_usb3_up(port)) {
-> > > > > > +				tb_usb3_port_enable(port, false);
-> > > > > > +			} else if (tb_port_is_dpin(port) ||
-> > > > > > +				   tb_port_is_dpout(port)) {
-> > > > > > +				tb_dp_port_enable(port, false);
-> > > > > > +			} else if (tb_port_is_pcie_down(port) ||
-> > > > > > +				   tb_port_is_pcie_up(port)) {
-> > > > > > +				tb_pci_port_enable(port, false);
-> > > Here, as per spec it would be better if we first teardown it for DOWN path
-> > > and then the UP
-> > > path.
-> > Right makes sense.
-> We never get up_port of protocol adapters here for reset. It's always
-> down_port.
-> So probably when we discover the path, we do path deactivation for both down
-> and up ports.
-
-If we are going to do DPR anyway, it should not matter.
+If this turns out to be really complex then I guess it is better to do
+it like you did originally using discovery but at least it would be nice
+to see what the end result of this experiment looks like :)
 
