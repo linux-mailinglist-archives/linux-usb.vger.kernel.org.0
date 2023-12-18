@@ -1,108 +1,285 @@
-Return-Path: <linux-usb+bounces-4314-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4315-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9F7C8173AC
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 15:34:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D1378173B7
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 15:36:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88BD01F23D07
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 14:34:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0D62B23775
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 14:36:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 365C21D157;
-	Mon, 18 Dec 2023 14:34:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1BEA1D144;
+	Mon, 18 Dec 2023 14:36:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HY+Z+6se"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="RpOP8NKb";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="2ERhtadi";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="RpOP8NKb";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="2ERhtadi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE41B13FE6
-	for <linux-usb@vger.kernel.org>; Mon, 18 Dec 2023 14:34:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40c38de1ee4so30877455e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 18 Dec 2023 06:34:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1702910078; x=1703514878; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4tFwZXf2Irj42ckvI2oDltH+Fbux2n5rYVXFMWyRFHI=;
-        b=HY+Z+6seoyq0iyMBqgFdKSc6ZwmXSksNhr4SRYsWcL8fjKldU3XMyroh32p+xHEM3t
-         bxGmS+1sry2aWJLWfVvVwFyNG3PjirjqpNd2/CaWFpRNLNqUv7FclhhIs+O4/l15qUOA
-         /2hhu47ZBmPxRlFfzDTlAyZwseHABpWvCBesxiUrXYY0wHXQvGiDjYVJmblwL46KZpSG
-         o+GYdc/l2MhxP+b/YHTzb190gSQyBi7ySjybz6PIqvW2igzEkpC8nfxvXn5UMv+OWOxL
-         b0tT88RnqJNTRw0sqsK8qHLUlKvUio+v3Lk31zpIfEB7BPXtERiPZ0lv4+6SU7YozPB7
-         vkHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702910078; x=1703514878;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4tFwZXf2Irj42ckvI2oDltH+Fbux2n5rYVXFMWyRFHI=;
-        b=FGR9GtzJ/fT/rIgrHZlEPqr4ADoK9uqRalrgIBfi0qLibHnNAzTNZUSEaZgPWQxeKW
-         c61R7Pno50DUYQH8tyA6r1STPzjZ1m7pYVBKuMgSimfrMOupnmgH9lC+1oWHEUIDN0TK
-         +iUNJb5TAlo+zH4u2pWAlC8WwTGL2RRjsi96ET+cECp8HDbjRdjMvQlTKkuduJB8FFHb
-         qKNW8r1MyNs8cP46N7GVLmub2c1Ip9N7x/YzoDqQrVOop16GVsy3xpU403cJ0LnP3+E6
-         v2Vpej1ckWX11T7w0l3PQfT5mBFYW1NfZD+vI3RLTBZBDJBw+Ra9K2WEsPnj7weyGIj5
-         adhQ==
-X-Gm-Message-State: AOJu0Yw8LsifU2CL4m5cUGWAkmZ9OVKr32obyvqRTpE6KAopBYxAsipH
-	6Z8BBhspvlcWVC2ZwxoyIsbaLg==
-X-Google-Smtp-Source: AGHT+IGKZUWIRkTdwjW0E8rrqdMaYt4xJrVj49KaN2zuDm0cqmk92q2TqNR398yRDQ3Q3TSovPG8jg==
-X-Received: by 2002:a7b:cc95:0:b0:405:3455:e1a3 with SMTP id p21-20020a7bcc95000000b004053455e1a3mr8324444wma.17.1702910077976;
-        Mon, 18 Dec 2023 06:34:37 -0800 (PST)
-Received: from ?IPV6:2001:a61:13af:fb01:86:2ba4:6c05:7fe8? ([2001:a61:13af:fb01:86:2ba4:6c05:7fe8])
-        by smtp.gmail.com with ESMTPSA id q12-20020a05600c46cc00b0040b4c59f133sm42506016wmo.1.2023.12.18.06.34.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Dec 2023 06:34:37 -0800 (PST)
-Message-ID: <70822a4d-a9d9-4be4-9d1f-89e50a8a7378@suse.com>
-Date: Mon, 18 Dec 2023 15:34:36 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C381D148
+	for <linux-usb@vger.kernel.org>; Mon, 18 Dec 2023 14:36:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 752101F396;
+	Mon, 18 Dec 2023 14:36:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1702910185; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=orBPCRN8tvOMWdl09gf1WkaT7M89Xr4uWWB1P1n9Uy0=;
+	b=RpOP8NKbxfWZT85gpOjKUEvWPRuW3Tootr8JprVl2Kgt/jlF5Qm09CsPrxKO8bm9YrpbDm
+	/uKsz03808v/m3D92HFUZ3K0y0VoDFHpNX3tUpFgyqAfTUSybFt7Tb9ePIJZOUmRuAkWpp
+	g6gQBxZT0oS+zlS3jBefgzSosK1GkWo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1702910185;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=orBPCRN8tvOMWdl09gf1WkaT7M89Xr4uWWB1P1n9Uy0=;
+	b=2ERhtadi6K4S97STsoEzCxsLlq8jVtzzYJqMa7eV4xBaI+ov8MN3vIbBH5dBfGA+rbnkzW
+	sgJhL2wEOJEwQFCg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1702910185; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=orBPCRN8tvOMWdl09gf1WkaT7M89Xr4uWWB1P1n9Uy0=;
+	b=RpOP8NKbxfWZT85gpOjKUEvWPRuW3Tootr8JprVl2Kgt/jlF5Qm09CsPrxKO8bm9YrpbDm
+	/uKsz03808v/m3D92HFUZ3K0y0VoDFHpNX3tUpFgyqAfTUSybFt7Tb9ePIJZOUmRuAkWpp
+	g6gQBxZT0oS+zlS3jBefgzSosK1GkWo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1702910185;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=orBPCRN8tvOMWdl09gf1WkaT7M89Xr4uWWB1P1n9Uy0=;
+	b=2ERhtadi6K4S97STsoEzCxsLlq8jVtzzYJqMa7eV4xBaI+ov8MN3vIbBH5dBfGA+rbnkzW
+	sgJhL2wEOJEwQFCg==
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 5101B13927;
+	Mon, 18 Dec 2023 14:36:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id 6e6LEelYgGVQbwAAn2gu4w
+	(envelope-from <aporta@suse.de>); Mon, 18 Dec 2023 14:36:25 +0000
+Date: Mon, 18 Dec 2023 15:36:24 +0100
+From: Andrea della Porta <aporta@suse.de>
+To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc: Ivan Ivanov <ivan.ivanov@suse.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	Oliver Neukum <oneukum@suse.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	Andrea della Porta <andrea.porta@suse.com>
+Subject: Re: [PATCH] USB: dwc2: write HCINT with INTMASK applied
+Message-ID: <ZYBY6LdDLRc0XBx_@apocalypse>
+Mail-Followup-To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+	Ivan Ivanov <ivan.ivanov@suse.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	Oliver Neukum <oneukum@suse.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	Andrea della Porta <andrea.porta@suse.com>
+References: <20231115144514.15248-1-oneukum@suse.com>
+ <f0bd323a-8384-e303-907f-5d533af6d71e@synopsys.com>
+ <ZWRbkdTASTNJB8Fv@apocalypse>
+ <f293d306-54fb-ecb5-4515-70a6c1faf1b1@synopsys.com>
+ <ZWWsGknhNuVggNNa@apocalypse>
+ <bfb8e693-7085-430c-0481-3d6630168240@synopsys.com>
+ <d8176b8a6851974a692804f006d59d3324903b62.camel@suse.com>
+ <079ddad4-ab41-49ac-6d86-d90075320dcd@synopsys.com>
+ <ZWwltzMB8gq5k5oe@apocalypse>
+ <07250e1e-c5ca-0586-b53f-7f2bb3d19b39@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Question regarding CDC NCM and VNC performance issue
-Content-Language: en-US
-To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
- Hiago De Franco <hiagofranco@gmail.com>
-Cc: Oliver Neukum <oneukum@suse.com>, Francesco Dolcini
- <francesco@dolcini.it>, davem@davemloft.net, edumazet@google.com,
- hiago.franco@toradex.com, kuba@kernel.org, linux-usb@vger.kernel.org,
- pabeni@redhat.com
-References: <ccb72864-6623-4652-8ccf-700c2c68916e@suse.com>
- <CANP3RGdOT9rrBai+uuTZCo7JPyeEbh_u+vu6VD7t_Z80nfAn1Q@mail.gmail.com>
- <20231215212023.pas6tem7ekd2zcf6@hdebian>
- <CANP3RGefehSBiFUbaEbLGiaj64JsYbATJhr+i_4ed-xjq2ARZA@mail.gmail.com>
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <CANP3RGefehSBiFUbaEbLGiaj64JsYbATJhr+i_4ed-xjq2ARZA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <07250e1e-c5ca-0586-b53f-7f2bb3d19b39@synopsys.com>
+X-Spam-Level: 
+Authentication-Results: smtp-out2.suse.de;
+	none
+X-Spam-Level: 
+X-Spam-Score: -3.80
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	 ARC_NA(0.00)[];
+	 TO_DN_EQ_ADDR_SOME(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 MIME_GOOD(-0.10)[text/plain];
+	 RCPT_COUNT_FIVE(0.00)[6];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 NEURAL_HAM_SHORT(-0.20)[-0.997];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%]
+X-Spam-Flag: NO
 
+Hi Minas,
 
-
-On 15.12.23 22:44, Maciej Żenczykowski wrote:
-> On Fri, Dec 15, 2023 at 1:20 PM Hiago De Franco <hiagofranco@gmail.com> wrote:
-
-Hi,
-
-> Here's my recommendation.
-> On the gadget side.
-> Print something when the timer is armed.
-> Print something when the timer fires.
-> Include the timestamp.
+On 12:23 Thu 14 Dec     , Minas Harutyunyan wrote:
+> Hi Andrea,
 > 
-> Then try to send something (a single packet) that won't trigger a reply.
+> On 12/3/23 10:52, Andrea della Porta wrote:
+> > Hi Minas,
+> > 
+> > On 10:26 Fri 01 Dec     , Minas Harutyunyan wrote:
+> >> Hi Ivan,
+> >>
+> >> On 11/28/23 18:43, Ivan Ivanov wrote:
+> >>>
+> >>> Hi Minas,
+> >>>
+> >>> On Tue, 2023-11-28 at 11:48 +0000, Minas Harutyunyan wrote:
+> >>>>
+> >>>> Does this "spurious" interrupt broke your tests?
+> >>>
+> >>> It is not just some kind of synthetic test case that was broken.
+> >>> but real world usage. You can find complains about this error on
+> >>> various internet forums, just search for dwc2_hc_chhltd_intr_dma
+> >>> and it is not so difficult to reproduce.
+> >>>
+> >>> Without databook I am not sure we can create better fix, but if
+> >>> you develop different solution I will gladly tested it.
+> >>>
+> >>> Regards,
+> >>> Ivan
+> >> 1. In addition to HCCHARx and ep_type printing please add printing of
+> >> GRXFSTSR if EP is IN or GNPTXSTS if EP is OUT, and provide dmesg with
+> >> error case.
+> > 
+> > Here's the log, before comenting the 'goto' out:
+> > 
+> > 
+> > [684829.206854] --Host Channel Interrupt--, Channel 2
+> > [684829.206866]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+> > [684829.206875]   hcchar[2] = 0x015c9810, chan->ep_type=3
+> > [684829.206883]   GRXSTSR = 0x000E0002
+> > [684829.214851] --Host Channel Interrupt--, Channel 6
+> > [684829.214864]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+> > [684829.214876]   hcchar[6] = 0x015c9810, chan->ep_type=3
+> > [684829.214886]   GRXSTSR = 0x000E0007
+> > [684829.217853] --Host Channel Interrupt--, Channel 5
+> > [684829.217869]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+> > [684829.217881]   hcchar[5] = 0x009c8801, chan->ep_type=3
+> > [684829.217891]   GRXSTSR = 0x000E0005
+> > [684829.222647] --Host Channel Interrupt--, Channel 0
+> > [684829.222659]   hcint 0x00000021, hcintmsk 0x00000426, hcint&hcintmsk 0x00000020
+> > [684829.222671]   hcchar[0] = 0x01d8d200, chan->ep_type=2
+> > [684829.222681]   GRXSTSR = 0x00070044
+> > [684829.222696] --Host Channel Interrupt--, Channel 0
+> > [684829.222704]   hcint 0x00000002, hcintmsk 0x00000406, hcint&hcintmsk 0x00000002
+> > [684829.222714]   hcchar[0] = 0x01d8d200, chan->ep_type=2
+> > [684829.222724]   GRXSTSR = 0x00070044
+> > [684829.222740] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 0 - ChHltd set, but reason is unknown
+> > [684829.222758] dwc2 3f980000.usb: hcint 0x00000002, intsts 0x04000009
+> 
+> 
+> Sorry for delayed response.
+> I guess the cause of issue is because of channel halted interrupt late 
+> for about ~40-50us. In above log, Channel 0 twice assert interrupt: 
+> first for ACK (XferComplete masked) and second for Channel_Halted. These 
+> all interrupts related to same BULK IN transfer. Ideally these 3 source 
+> of interrupt (ACK, XferCompl and ChHalt) should be asserted together.
+> To check it lets do follow:
+> 1. Do not allow unmask ACK interrupt in function 
+> dwc2_hc_enable_dma_ints(). Just comment "hcintmsk |= HCINTMSK_ACK;"
+> 2. remove comment for "goto error"
+> 3. remove printing GRXSTSR and GNPTXSTS
+> 4. build in non verbose debug mode
+> It's just temporary solution to check ACK influence on the issue.
+> 
+> Thanks,
+> Minas
 
-You are implicitly raising a question.
-Does this bug strike if a single package is queued? The failure
-case seems to be 10 or 11 packages.
+Testing the changes you suggested revealed that "ChHltd set, but reason is unknown" error
+is not showing up anymore, but we now have some "Transaction error" as shown in the
+following log:
 
-	Regards
-		Oliver
 
+[13941.590252]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.590263]  hcchar[5] = 0x00dc8801, chan->ep_type=3
+[13941.592240] --Host Channel Interrupt--, Channel 4
+[13941.592249]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.592258]  hcchar[4] = 0x015c9810, chan->ep_type=3
+[13941.600243] --Host Channel Interrupt--, Channel 2
+[13941.600263]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.600273]  hcchar[2] = 0x015c9810, chan->ep_type=3
+[13941.605521] --Host Channel Interrupt--, Channel 3
+[13941.605539]   hcint 0x00000003, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.605549]  hcchar[3] = 0x01d83200, chan->ep_type=2
+[13941.608242] --Host Channel Interrupt--, Channel 6
+[13941.608256]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.608266]  hcchar[6] = 0x015c9810, chan->ep_type=3
+[13941.609685] --Host Channel Interrupt--, Channel 1
+[13941.609696]   hcint 0x00000023, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.609706]  hcchar[1] = 0x01d8d200, chan->ep_type=2
+[13941.616243] --Host Channel Interrupt--, Channel 5
+[13941.616262]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.616272]  hcchar[5] = 0x015c9810, chan->ep_type=3
+[13941.619514] --Host Channel Interrupt--, Channel 0
+[13941.619527]   hcint 0x00000023, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.619538]  hcchar[0] = 0x01d8d200, chan->ep_type=2
+[13941.620015] --Host Channel Interrupt--, Channel 2
+[13941.620027]   hcint 0x00000003, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.620037]  hcchar[2] = 0x01d83200, chan->ep_type=2
+[13941.624240] --Host Channel Interrupt--, Channel 3
+[13941.624249]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.624259]  hcchar[3] = 0x015c9810, chan->ep_type=3
+[13941.627347] --Host Channel Interrupt--, Channel 4
+[13941.627363]   hcint 0x00000092, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.627373]  hcchar[4] = 0x01d8d200, chan->ep_type=2
+[13941.627391] dwc2 3f980000.usb: --Host Channel 4 Interrupt: Transaction Error--
+[13941.627432] --Host Channel Interrupt--, Channel 6
+[13941.627440]   hcint 0x00000010, hcintmsk 0x00000416, hcint&hcintmsk 0x00000010
+[13941.627450]  hcchar[6] = 0x81d8d200, chan->ep_type=2
+[13941.632240] --Host Channel Interrupt--, Channel 1
+[13941.632248]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.632257]  hcchar[1] = 0x015c9810, chan->ep_type=3
+[13941.635528] --Host Channel Interrupt--, Channel 5
+[13941.635543]   hcint 0x00000003, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.635553]  hcchar[5] = 0x01d83200, chan->ep_type=2
+[13941.640244] --Host Channel Interrupt--, Channel 0
+[13941.640263]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.640272]  hcchar[0] = 0x015c9810, chan->ep_type=3
+[13941.642078] --Host Channel Interrupt--, Channel 6
+[13941.642086]   hcint 0x00000023, hcintmsk 0x00000406, hcint&hcintmsk 0x00000002
+[13941.642095]  hcchar[6] = 0x01d8d200, chan->ep_type=2
+[13941.648243] --Host Channel Interrupt--, Channel 3
+[13941.648262]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.648272]  hcchar[3] = 0x015c9810, chan->ep_type=3
+[13941.652240] --Host Channel Interrupt--, Channel 4
+[13941.652248]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.652257]  hcchar[4] = 0x009c8801, chan->ep_type=3
+[13941.656241] --Host Channel Interrupt--, Channel 1
+[13941.656256]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.656266]  hcchar[1] = 0x015c9810, chan->ep_type=3
+[13941.664240] --Host Channel Interrupt--, Channel 5
+[13941.664248]   hcint 0x00000012, hcintmsk 0x00000006, hcint&hcintmsk 0x00000002
+[13941.664257]  hcchar[5] = 0x015c9810, chan->ep_type=3
+
+
+The ping flood is otherwise working, except for a minor percentage loss (~0.7%).
+Many thanks,
+
+Andrea
 
