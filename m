@@ -1,250 +1,141 @@
-Return-Path: <linux-usb+bounces-4292-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4293-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92A4A816262
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Dec 2023 22:26:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E744E8163DC
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 01:55:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 048F81C20AD0
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Dec 2023 21:26:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D7851C21474
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Dec 2023 00:55:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F9144878E;
-	Sun, 17 Dec 2023 21:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BE1E111F;
+	Mon, 18 Dec 2023 00:55:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i2cN7bef"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nkVP9MCM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1F1481BD
-	for <linux-usb@vger.kernel.org>; Sun, 17 Dec 2023 21:26:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2cc4e15605aso26424211fa.0
-        for <linux-usb@vger.kernel.org>; Sun, 17 Dec 2023 13:26:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702848359; x=1703453159; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n3Idro5zsa9Cmgu0QGX1C3Hf0llBuUy62RG6uo0pTM0=;
-        b=i2cN7bef4o+D/C0Me8vybvAybAZMTQKe+qN/advXOFRDvEeJG5M5NB1+zEQ4zHVlk1
-         sS1Yja4jsRTQIYNCPnXTHrWY0w3oWEJzIQf3CJy/uVAXK+7b35JiLCLcFWRgDRLI3oly
-         2DEDvVHGqBqnO/c0SlUuuO5sTg+TEWkf62FyFcZ9LHQ7aJNMX8lDbWdsRlrwJ8UVTgsZ
-         nV/jT0hK5Uy5wmBuO3bHUmJgGZ8fk3lZZrDoeOKqaxKPWpZN1pGyKfjuI69GpXfgB4eF
-         h/64P03a7L9HFi0ZTkBUyqhwObuNAWLCyMIlgiZA0q3YD2l5rCWznAqxJjBOvnqc2lpS
-         1UsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702848359; x=1703453159;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n3Idro5zsa9Cmgu0QGX1C3Hf0llBuUy62RG6uo0pTM0=;
-        b=BK3trmlmeSCoARcppxhyRDrmAI6CRR3LtoiSvL+0vqWxAUsNWnZMYZ9tVMVlqSyqRn
-         O6IiJAqe7aeRn1c1stKapNABgrxsJzbGD6il8KYoQ0IavekKJ3LYOf1L8BxBj0cfa8mK
-         UH0wGdXjPXogcxZL3B4yyHLF5axcJhyBVqeQq4GiphsN8T88/dfqvf15Q4SSQ7WQzi1W
-         9nbtIHHemqB+vVQdvk1mQW5E5xtqrpZmzO4Fv7Zqb2m0I3Cy6BeBLgEXSIZlURlDRNrh
-         9QQZEMGI+3a5bxiIzQf7pezfodVMCYBiYQqlvKnICcwotxwwMdQsZiV82zEevyLAZu5Z
-         V1sw==
-X-Gm-Message-State: AOJu0YxzSiVhNXl6qK8Bk++bzgAiwCy4roJF+awJHlnsNkWj0D0BwoWv
-	eBAWtLXJlvz8TOVov1wyKazErjO7H0k9pYt7mTk=
-X-Google-Smtp-Source: AGHT+IHg7iw6A5qK0LiyKpcKK/gLgRQXNH86iOv/J5BqAP8hJ3zNjGiZPb2iDM+s83bF6HlraLHx0DMPV0PGl77Ccro=
-X-Received: by 2002:a2e:81a:0:b0:2cc:3f53:eb85 with SMTP id
- 26-20020a2e081a000000b002cc3f53eb85mr3776642lji.69.1702848358896; Sun, 17 Dec
- 2023 13:25:58 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B41210E7
+	for <linux-usb@vger.kernel.org>; Mon, 18 Dec 2023 00:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702860905; x=1734396905;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=SX321zBiEBN7jztDpGT8OAdI61LrNKGSl+Ax97mksgM=;
+  b=nkVP9MCMFLNzJXrzj9JQp03cjjLZxDiMpr85aD341reCzHAzdCQNT+LV
+   UVUqTE8D2eb1hSeVkplMXgEbxBqs926QBDi04mucDT5I5/sDIcaCQc/GD
+   RChsaWxwXA+IjDE99wDP+I5hiTpOOilrvdoTr4Hgzwo+Ll6un00bMmeWV
+   YC/ARAxujrCZtnchi/XCKng1Qojc7Zka4BnNoT8AC2em5OAXb8BEAMhfW
+   DegMhqB1y9or/d9zG2qVB5+HTRcXBB39ooPjSsmLA1FArIx5YNFkhwD1v
+   m3AV3QqLnebw5EyV6E3XXHiUg6ZRLQ0/6lCTuLYyS0vy4D6/vx11q8eaz
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10927"; a="461894411"
+X-IronPort-AV: E=Sophos;i="6.04,284,1695711600"; 
+   d="scan'208";a="461894411"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2023 16:55:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10927"; a="768654948"
+X-IronPort-AV: E=Sophos;i="6.04,284,1695711600"; 
+   d="scan'208";a="768654948"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 17 Dec 2023 16:55:02 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rF1uO-0003bA-0M;
+	Mon, 18 Dec 2023 00:55:00 +0000
+Date: Mon, 18 Dec 2023 08:54:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?utf-8?B?TWljaGHFgiBLb3BlxIc=?= <michal.kopec@3mdeb.com>,
+	linux-usb@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev,
+	=?utf-8?B?TWljaGHFgiBLb3BlxIc=?= <michal@nozomi.space>
+Subject: Re: [PATCH] platform/x86: serial-multi-instantiate: allow single
+ GpioInt IRQ for INT3515
+Message-ID: <202312180832.j4FO9TyV-lkp@intel.com>
+References: <20231212103823.546118-2-michal.kopec@3mdeb.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CADS+iDWFVZp81Ck48wQjzh--n_7Z-bV2u0SR4Z6-OZOMBLeMKw@mail.gmail.com>
- <520bd89d-b6e4-4654-adcd-8bb884802f56@interlog.com> <CADS+iDVhNzAHfbW+Nks_29rgJXwFTCsTU93XHQpCYBCW6cvxzQ@mail.gmail.com>
- <e7257a7a-1391-47e7-9702-d7c9ec3ff338@interlog.com> <CADS+iDWM8czf-D8D8H1gx2YBPCYbO4cexO83dUQ6-H8KKQSx4g@mail.gmail.com>
-In-Reply-To: <CADS+iDWM8czf-D8D8H1gx2YBPCYbO4cexO83dUQ6-H8KKQSx4g@mail.gmail.com>
-From: Yaroslav Isakov <yaroslav.isakov@gmail.com>
-Date: Sun, 17 Dec 2023 22:25:47 +0100
-Message-ID: <CADS+iDWSsLA+HrFLsD4nvo5KCRJTdiuZKp5cYVkXBnkC_nTfRw@mail.gmail.com>
-Subject: Re: type-c subsystem is empty on Thinkpad T14 Gen 4 AMD
-To: dgilbert@interlog.com
-Cc: linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231212103823.546118-2-michal.kopec@3mdeb.com>
 
-=D0=B2=D1=81, 17 =D0=B4=D0=B5=D0=BA. 2023=E2=80=AF=D0=B3. =D0=B2 21:48, Yar=
-oslav Isakov <yaroslav.isakov@gmail.com>:
->
-> =D0=B2=D1=81, 17 =D0=B4=D0=B5=D0=BA. 2023=E2=80=AF=D0=B3. =D0=B2 20:15, D=
-ouglas Gilbert <dgilbert@interlog.com>:
-> >
-> > On 12/17/23 12:24, Yaroslav Isakov wrote:
-> > > =D0=B2=D1=81, 17 =D0=B4=D0=B5=D0=BA. 2023=E2=80=AF=D0=B3. =D0=B2 18:0=
-8, Douglas Gilbert <dgilbert@interlog.com>:
-> > >>
-> > >> On 12/17/23 11:21, Yaroslav Isakov wrote:
-> > >>> Hello! I recently bought Thinkpad T14 Gen 4 AMD laptop, and I
-> > >>> installed Gentoo on it, with kernel 6.6.4.
-> > >>>
-> > >>> Even though type-c ports seems to be working (I checked usb3 flash
-> > >>> stick, lenovo charger, Jabra headset, Yubikey), I cannot see any
-> > >>> devices in /sys/class/(typec,typec_mux,usb_power_delivery).
-> > >>>
-> > >>> There are no messages in dmesg at all, mentioning typec. I can see
-> > >>> that modules typec_ucsi, ucsi_acpi, thunderbolt are loaded. I can s=
-ee
-> > >>> that device TYPEC000 is present on acpi bus, there are files in
-> > >>> /sys/bus/acpi/devices/USBC000:00, but, there is no driver linked in
-> > >>> it.
-> > >>>
-> > >>> I tried to recompile module ucsi_acpi, with adding { "USBC000", 0 }
-> > >>> to ucsi_acpi_match, but it did not change anything (except that in
-> > >>> modinfo of this module, USBC000 is now seen.
-> > >>>
-> > >>> I tried to decompile SSDT1 table, which has definition of USBC, but
-> > >>> there is nothing in it, which is supicious.
-> > >>>
-> > >>> What else can I check, to understand, why can't I see anything in
-> > >>> typec/PD subsystems?
-> > >>>
-> > >>
-> > >> I have a X13 Gen 3 [i5-1240P] which is about 18 months old. Everythi=
-ng you
-> > >> mention is present plus the typec ports and the associated pd object=
-s:
-> > >>
-> > >> $ lsucpd
-> > >>    port0 [pd0]  <<=3D=3D=3D=3D  partner [pd2]
-> > >>    port1 [pd1]  <
-> > >
-> > > I guess, it makes no sense to install lsucpd, if it checks /sys/class=
-/typec etc?
-> > >
-> > >>
-> > >> A power adapter is connected to port0. Here are the modules loaded:
-> > >>
-> > >> $ lsmod | grep typec
-> > >> typec_ucsi             57344  1 ucsi_acpi
-> > >> roles                  16384  1 typec_ucsi
-> > >> typec                 114688  1 typec_ucsi
-> > >> usb_common             20480  4 xhci_hcd,usbcore,uvcvideo,typec_ucsi
-> > >> $ lsmod | grep ucsi
-> > >> ucsi_acpi              12288  0
-> > >> typec_ucsi             57344  1 ucsi_acpi
-> > >> roles                  16384  1 typec_ucsi
-> > >> typec                 114688  1 typec_ucsi
-> > >> usb_common             20480  4 xhci_hcd,usbcore,uvcvideo,typec_ucsi
-> > >>
-> > > I have exact same modules.
-> > >
-> > >> $ ls /sys/bus/acpi/devices/USBC000:00
-> > >> device:ac  device:ad  hid  modalias  path  physical_node  power  sta=
-tus
-> > >> subsystem  uevent  uid  wakeup
-> > > Under /sys/bus/acpi/devices/USBC000:00 I have the similar files:
-> > > adr  device:48  device:49  hid  modalias  path  physical_node  power
-> > > status  subsystem  uevent  uid
-> > > As you don't have driver symlink there, too, then it's a red herring,
-> > > that lack of driver file is symptom of this issue.
-> > >
-> > >>
-> > >> Strange that the Thunderbolt module is loaded since I thought only t=
-he Intel
-> > >> variants supported Thunderbolt.
-> > > thundebolt module is now shared with USB4 subsystem, and T14 started
-> > > to have USB4 from Gen 3, for AMD variant.
-> > >>
-> > >> The only thing that I can think of is some BIOS setting. When I poke=
-d around
-> > >> in the X13 BIOS I don't remember any setting that would cause what y=
-ou are
-> > >> seeing.]
-> > > I checked BIOS settings, but I cannot find anything related
-> > >
-> > > Could you please show, what drivers are used for device:ac and
-> > > device:ad, under /sys/bus/acpi/devices/USBC000:00? It seems that if I
-> > > have such entries in my /sys/bus/acpi/devices/USBC000:00, at least
-> > > ucsi_acpi works properly.
-> >
-> > dougg@treten:/sys/bus/acpi/devices/USBC000:00/device:ac$ ls -l
-> > total 0
-> > -r--r--r-- 1 root root 4096 Dec 16 19:11 adr
-> > -r--r--r-- 1 root root 4096 Dec 16 19:11 path
-> > lrwxrwxrwx 1 root root    0 Dec 16 19:11 physical_node ->
-> > ../../../../platform/USBC000:00/typec/port0
-> > drwxr-xr-x 2 root root    0 Dec 16 19:11 power
-> > lrwxrwxrwx 1 root root    0 Dec 16 16:45 subsystem -> ../../../../../bu=
-s/acpi
-> > -rw-r--r-- 1 root root 4096 Dec 16 16:45 uevent
-> >
-> > dougg@treten:/sys/bus/acpi/devices/USBC000:00/device:ac$ cd ../device\:=
-ad
-> > dougg@treten:/sys/bus/acpi/devices/USBC000:00/device:ad$ ls -l
-> > total 0
-> > -r--r--r-- 1 root root 4096 Dec 16 19:11 adr
-> > -r--r--r-- 1 root root 4096 Dec 16 19:11 path
-> > lrwxrwxrwx 1 root root    0 Dec 16 19:11 physical_node ->
-> > ../../../../platform/USBC000:00/typec/port1
-> > drwxr-xr-x 2 root root    0 Dec 16 19:11 power
-> > lrwxrwxrwx 1 root root    0 Dec 16 16:45 subsystem -> ../../../../../bu=
-s/acpi
-> > -rw-r--r-- 1 root root 4096 Dec 16 16:45 uevent
-> >
-> >
-> > >
-> > > In my /sys/bus/acpi/devices/USBC000:00/device:(48,49), there are only
-> > > adr, path and uevent files, and power and subsytem folders. Subsystem
-> > > links to bus/acpi, and path has \_SB_.UBTC.CR01, \_SB_.UBTC.CR02
-> >
-> > Mine has the extra physical_node symlinks to typec/port0 and typec/port=
-1
-> Yes, I have the same as on T14 Gen 3 (Intel). Looks like they have no
-> driver symlinks, too, but they're working on Intel.
-> >
-> > > P.S. I tried latest live Fedora, just to see if I forgot to compile
-> > > some drivers for custom-built Gentoo kernel, but same issue on Fedora
-> >
-> > Below is a fragment of a post from Heikki Krogerus about turning on ucs=
-i debug:
-> >
-> > If you want to see the actual UCSI notification in user space, then
-> > that is not possible, but the driver does produce trace output, and I
-> > would actually like to see what we got there. You need debugfs to be
-> > mounted. Then try the following:
-> >
-> >          # Unload all UCSI modules
-> >          modprobe -r ucsi_acpi
-> >
-> >          # At this point you should plug-in the problematic device
-> >
-> >          # Reload the UCSI core module
-> >          modprobe typec_ucsi
-> >
-> >          # Enable UCSI tracing
-> >          echo 1 > /sys/kernel/debug/tracing/events/ucsi/enable
-> >
-> >          # Now reload the ACPI glue driver
-> >          modprobe ucsi_acpi
-> >
-> >          # Unplug the problematic device so that you see the error
-> >
-> >          # Finally dump the trace output
-> >          cat /sys/kernel/debug/tracing/trace
-> >
-> > So if that works, please send the trace output to me.
-> > [Heikki]
-> I tried provided commands, both in Gentoo and Fedora - nothing in
-> trace at all. I guess, it's because ucsi on AMD can see two devices,
-> but cannot work with them, for some reason. I also checked same
-> commands on T14 Gen 3 (Intel), and I can see many ucsi_register_port
-> and ucsi_register_altmode events.
-> >
-> >
+Hi Michał,
 
-I think I managed to find the issue - looks like on my laptop,
-ucsi_register fails in version check, !ucsi->version returns False.
-Commenting out this check populates /sys/class/typec and
-/sys/class/usb_power_delivery. I did not check yet, if populated data
-is correct, but, it's definite progress.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on westeri-thunderbolt/next]
+[also build test WARNING on linus/master v6.7-rc5 next-20231215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Micha-Kope/platform-x86-serial-multi-instantiate-allow-single-GpioInt-IRQ-for-INT3515/20231212-184116
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+patch link:    https://lore.kernel.org/r/20231212103823.546118-2-michal.kopec%403mdeb.com
+patch subject: [PATCH] platform/x86: serial-multi-instantiate: allow single GpioInt IRQ for INT3515
+config: i386-randconfig-r112-20231217 (https://download.01.org/0day-ci/archive/20231218/202312180832.j4FO9TyV-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231218/202312180832.j4FO9TyV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312180832.j4FO9TyV-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/platform/x86/serial-multi-instantiate.c:79:37: sparse: sparse: dubious: !x & y
+
+vim +79 drivers/platform/x86/serial-multi-instantiate.c
+
+    51	
+    52	static int smi_get_irq(struct platform_device *pdev, struct acpi_device *adev,
+    53			       const struct smi_instance *inst)
+    54	{
+    55		int ret;
+    56	
+    57		switch (inst->flags & IRQ_RESOURCE_TYPE) {
+    58		case IRQ_RESOURCE_AUTO:
+    59			ret = acpi_dev_gpio_irq_get(adev, inst->irq_idx);
+    60			if (ret > 0) {
+    61				dev_dbg(&pdev->dev, "Using gpio irq\n");
+    62				break;
+    63			}
+    64			ret = platform_get_irq_optional(pdev, inst->irq_idx);
+    65			if (ret > 0) {
+    66				dev_dbg(&pdev->dev, "Using platform irq\n");
+    67				break;
+    68			}
+    69			break;
+    70		case IRQ_RESOURCE_GPIO:
+    71			ret = acpi_dev_gpio_irq_get(adev, inst->irq_idx);
+    72			break;
+    73		case IRQ_RESOURCE_APIC:
+    74			ret = platform_get_irq_optional(pdev, inst->irq_idx);
+    75			break;
+    76		default:
+    77			return 0;
+    78		}
+  > 79		if (ret < 0 && !inst->flags & IRQ_OPTIONAL)
+    80			return dev_err_probe(&pdev->dev, ret, "Error requesting irq at index %d\n",
+    81					     inst->irq_idx);
+    82	
+    83		return ret;
+    84	}
+    85	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
