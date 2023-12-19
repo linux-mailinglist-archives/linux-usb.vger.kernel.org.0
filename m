@@ -1,61 +1,62 @@
-Return-Path: <linux-usb+bounces-4335-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4336-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 661588186AA
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 12:51:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4A548186AC
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 12:52:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05F3A282ED6
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 11:51:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D8C11F220F7
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 11:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF12515E95;
-	Tue, 19 Dec 2023 11:51:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5DE215E98;
+	Tue, 19 Dec 2023 11:52:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SYrGD+0x"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kfLaMZjk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE8718E2F;
-	Tue, 19 Dec 2023 11:51:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D487A18629;
+	Tue, 19 Dec 2023 11:52:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702986662; x=1734522662;
+  t=1702986721; x=1734522721;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=fnK/Y9O3xSfWK7qWy8ICoXoJrkOhv0lVOPade4CcLM0=;
-  b=SYrGD+0xVyypsVgyB2oYVGeDUs0eUVB9sxrgWMiNGUTKH0W3tFjH7X7B
-   cE2jsSeHFAQS0BuSi69g1LBDe54T0W4k6eD9WvCV1eHTZbvN1DiXqODVX
-   7O40pngjA5LNowz33+45dYeWldxAlyXcS6ig4mxhILek7V3QWpLCpV1GJ
-   2iXny+5bF8/4e+wg3cLT6EGJTE9T4mD7elh4BAW11yPmoeseE2RnKPgUy
-   8qXQHl8PWQuoqpM1bT8CEs6r9qt3HrEDJr/2IAfG0YHi9ABr7L3QcWe+K
-   Xdm8poUpsS0RDdQPyyVu7YwzRl71WD+6yXFWJcnWBDluGrIOV6oHUFArM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="394524569"
+  bh=M2pLPbJFA0BRzGzcj7zUHtvY6vO14MPKUj+G4zRU83Y=;
+  b=kfLaMZjkcidGLiAmrhyJzD43UyfY7obUWJ0+Grx2LxFsyjRJAahoZnUq
+   Yf94SNKDtzEwRdNMIq42S8DPxZZYMeNKiAP4PLbo+lZQuwQTx2aNm/VxC
+   EA1NPqjGuyAW4aL6ed6J8EC2dHLQM215hHbXDH5V44aHP57gh3CAFX2wS
+   H6aUl5b2OIpiuqEfxnNHRD4/EIbr1ArzTZ02GFvoupzJxSE1l0ssx3rlO
+   aQnCr4DZBgph7497SIsbYAE6S5qHX84JrLOaXZBnS7zPawOPTYg1GZOZN
+   3eP8X55Vig3Jy9Lvoz9qYSlZNp7yDrHop197cEUTKDRhVp35ynE4JhiTS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="459988851"
 X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
-   d="scan'208";a="394524569"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 03:51:01 -0800
+   d="scan'208";a="459988851"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 03:52:01 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="779458621"
+X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="894264381"
 X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
-   d="scan'208";a="779458621"
+   d="scan'208";a="894264381"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga007.fm.intel.com with SMTP; 19 Dec 2023 03:50:59 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 19 Dec 2023 13:50:58 +0200
-Date: Tue, 19 Dec 2023 13:50:58 +0200
+  by fmsmga002.fm.intel.com with SMTP; 19 Dec 2023 03:51:58 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 19 Dec 2023 13:51:58 +0200
+Date: Tue, 19 Dec 2023 13:51:58 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Javier Carrasco <javier.carrasco@wolfvision.net>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] usb: typec: tipd: add function to request firmware
-Message-ID: <ZYGDoi9rBvMnE+MX@kuha.fi.intel.com>
+Subject: Re: [PATCH v2 3/4] usb: typec: tipd: declare in_data in as const in
+ exec_cmd functions
+Message-ID: <ZYGD3h1/il9hmdL0@kuha.fi.intel.com>
 References: <20231207-tps6598x_update-v2-0-f3cfcde6d890@wolfvision.net>
- <20231207-tps6598x_update-v2-2-f3cfcde6d890@wolfvision.net>
+ <20231207-tps6598x_update-v2-3-f3cfcde6d890@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,74 +65,51 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231207-tps6598x_update-v2-2-f3cfcde6d890@wolfvision.net>
+In-Reply-To: <20231207-tps6598x_update-v2-3-f3cfcde6d890@wolfvision.net>
 
-On Thu, Dec 14, 2023 at 05:29:10PM +0100, Javier Carrasco wrote:
-> The firmware request process is device agnostic and can be used for
-> other parts.
+On Thu, Dec 14, 2023 at 05:29:11PM +0100, Javier Carrasco wrote:
+> The input data passed to execute commands with tps6598x_exec_cmd()
+> is not supposed to be modified by the function. Moreover, this data is
+> passed to tps6598x_exec_cmd_tmo() and finally to tps6598x_block_write(),
+> which expects a const pointer.
+> 
+> The current implementation does not produce any bugs, but it discards
+> const qualifiers from the pointers passed as arguments. This leads to
+> compile issues if 'discarded-qualifiers' is active and a const pointer
+> is passed to the function, which is the case if data from a firmware
+> structure is passed to execute update commands. Adding the const
+> modifier to in_data prevents such issues and provides code consistency.
 > 
 > Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tipd/core.c | 35 ++++++++++++++++++++++++++---------
->  1 file changed, 26 insertions(+), 9 deletions(-)
+>  drivers/usb/typec/tipd/core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index f0c4cd571a37..83e5eeecdf5c 100644
+> index 83e5eeecdf5c..7f4bbc0629b0 100644
 > --- a/drivers/usb/typec/tipd/core.c
 > +++ b/drivers/usb/typec/tipd/core.c
-> @@ -873,6 +873,30 @@ tps6598x_register_port(struct tps6598x *tps, struct fwnode_handle *fwnode)
->  	return 0;
+> @@ -330,7 +330,7 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
 >  }
 >  
-> +static int tps_request_firmware(struct tps6598x *tps, const struct firmware **fw)
-> +{
-> +	const char *firmware_name;
-> +	int ret;
-> +
-> +	ret = device_property_read_string(tps->dev, "firmware-name",
-> +					  &firmware_name);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = request_firmware(fw, firmware_name, tps->dev);
-> +	if (ret) {
-> +		dev_err(tps->dev, "failed to retrieve \"%s\"\n", firmware_name);
-> +		return ret;
-> +	}
-> +
-> +	if ((*fw)->size == 0) {
-> +		release_firmware(*fw);
-> +		ret = -EINVAL;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  static int
->  tps25750_write_firmware(struct tps6598x *tps,
->  			u8 bpms_addr, const u8 *data, size_t len)
-> @@ -961,16 +985,9 @@ static int tps25750_start_patch_burst_mode(struct tps6598x *tps)
->  	if (ret)
->  		return ret;
+>  static int tps6598x_exec_cmd_tmo(struct tps6598x *tps, const char *cmd,
+> -			     size_t in_len, u8 *in_data,
+> +			     size_t in_len, const u8 *in_data,
+>  			     size_t out_len, u8 *out_data,
+>  			     u32 cmd_timeout_ms, u32 res_delay_ms)
+>  {
+> @@ -396,7 +396,7 @@ static int tps6598x_exec_cmd_tmo(struct tps6598x *tps, const char *cmd,
+>  }
 >  
-> -	ret = request_firmware(&fw, firmware_name, tps->dev);
-> -	if (ret) {
-> -		dev_err(tps->dev, "failed to retrieve \"%s\"\n", firmware_name);
-> +	ret = tps_request_firmware(tps, &fw);
-> +	if (ret)
->  		return ret;
-> -	}
-> -
-> -	if (fw->size == 0) {
-> -		ret = -EINVAL;
-> -		goto release_fw;
-> -	}
->  
->  	ret = of_property_match_string(np, "reg-names", "patch-address");
->  	if (ret < 0) {
+>  static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
+> -			     size_t in_len, u8 *in_data,
+> +			     size_t in_len, const u8 *in_data,
+>  			     size_t out_len, u8 *out_data)
+>  {
+>  	return tps6598x_exec_cmd_tmo(tps, cmd, in_len, in_data,
 > 
 > -- 
 > 2.39.2
