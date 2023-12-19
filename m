@@ -1,64 +1,65 @@
-Return-Path: <linux-usb+bounces-4337-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4338-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 500C38186E4
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 13:02:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C2118186EA
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 13:03:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4250B24B09
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 12:02:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CFAA1F24921
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 12:03:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D96168DE;
-	Tue, 19 Dec 2023 12:01:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D43B1182A0;
+	Tue, 19 Dec 2023 12:01:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TfiQgIiE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="i17N1M1o"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82641BDD4
-	for <linux-usb@vger.kernel.org>; Tue, 19 Dec 2023 12:01:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF02118B08
+	for <linux-usb@vger.kernel.org>; Tue, 19 Dec 2023 12:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a2358a75b69so457713966b.1
-        for <linux-usb@vger.kernel.org>; Tue, 19 Dec 2023 04:01:29 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a1f33c13ff2so364480666b.3
+        for <linux-usb@vger.kernel.org>; Tue, 19 Dec 2023 04:01:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702987288; x=1703592088; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xYTg9juDWxZcIBckJUEaGgG12ZfS5cBo/+tlYXpzWNI=;
-        b=TfiQgIiEroygCBHwAPWpgNdcW/lIaTjzR5Knx8Xis9uI5c3d+gCiv5aW/JavyYXHwH
-         6jwt6xrL9+LZWcaLoy7YPpkwLdCzkTzoEDmpawL2VWXpZsQge4HPJVpFaxsUwFSyj8nP
-         4ma1xtbiuw+aPb+WRkMRSDbeO3ZLdOBu0AntrPIrOSFtQnei9nOnw3zqWxd2hen2OfH4
-         fTsdkMd6sUGvxRe94GbFIp7k12TdvcdRlyo15hwKQrXbYJCat8vD4Wp44iKNYzLrGlgP
-         J0z8ywp0vs2UimNRp6KkUyuPRaf0vn73wJpTx9IdzzAGcSb7/2h8BxvzMKrIgu7NT+QC
-         DhuA==
+        d=linaro.org; s=google; t=1702987311; x=1703592111; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=YVvvKQRps43iz6LpvgBs+AvFLcUj1lrxhvkgfLbhk5Y=;
+        b=i17N1M1os7ATsdSlPugI18vzAk9gf7sNtVpEMQH5+PNf9v17gu3QXv1L/w9eUU03cY
+         R3xNipBeTD0nVFTzrbrhqtpI4+6kE11kkoSz80z4RsUZkEcAeBjrp/mwr42HShThhIBV
+         d/wigBpBTDXfT4DQV3jyW28OQUDUOTzNZANHvrDaBqopHxirmc3s6fL8bfxVaa+pI4Ba
+         SyUmQcpGmwh3BHRV6fU5xTfDAoilM5QKYT1NZsjsajZaydcX7eCPenYRcUwOCvDuxqlJ
+         ylbNVuvgHYCy5qxbXltMlpaXhUKTeU5yUOaJyt6Vobu2eKytvTSBjdJqAE9fifmFBBIB
+         Lc9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702987288; x=1703592088;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xYTg9juDWxZcIBckJUEaGgG12ZfS5cBo/+tlYXpzWNI=;
-        b=R76tZNQ6mfmHChvkP+f4LCQnJ91wSG0n9l84Rh3r0WHh5M8IX5d3yBKCKnGKcECgXA
-         oyZRzXeSrnYNYCA/fbiZozVDpPQ7xLggPxOmAExdGWf+nDfzOFovfKt5hbfFBD297tZ9
-         jzLwYirbnnjIY9m19Dms3WwZGuN55b94EMBho+2hc7j4w2OHnVuU1alzkBZKdex8qWfW
-         tMo9Nn8KBGQ3c2Cm32fEpS6oYwr4ezbb6ADsmp3RQTafrFxiD0JvrDBUbuV2vULCzNXA
-         s6l8SLE6CeE4Biix8iHiWlpY4NPf7PBpn03EWLdoZart4HejcEUTHwRq+sv4XsabKPYM
-         6RBw==
-X-Gm-Message-State: AOJu0YwOViil7iC4GnMCWjcJHJNsd0CDnd5gLX30/5iVfbYR2/Q/j6Is
-	gSgJOK8jo7wbOGAOorCCfiWLyw==
-X-Google-Smtp-Source: AGHT+IGZR13abm6xSkWVYuuhV9Qk7aYDgUNIM6tTPh2sieIdPWD79f7wwxOnWNLPqKuo2dnW88SnOA==
-X-Received: by 2002:a17:906:1194:b0:a1c:d8c6:c21 with SMTP id n20-20020a170906119400b00a1cd8c60c21mr947426eja.67.1702987288015;
-        Tue, 19 Dec 2023 04:01:28 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702987311; x=1703592111;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YVvvKQRps43iz6LpvgBs+AvFLcUj1lrxhvkgfLbhk5Y=;
+        b=Mc90xHoJN++nAdAk1JoYbTqyBvp6A5pXwxoQPEPbHCcFDGuXi3xwPOk1UMFhtUyGPj
+         pvy6xnpA/LuET+h1nlSIteUdkSMFZTxwp5upemUpzfZ1ECQlJKdkyZIeS/Y+h7pgNQK+
+         6llTnbWyRQWZboZxQ3fxPekApXeupmeHgiqccNLiw2A3G5vfQYYvxkk7+l5mBaw1Dbbu
+         K87NVdivuQGj+HjkpEN8XxOUuUVwbOcSM8z51gzSd2a7TtGhmnJRwdVCAeXFFmCnv2/Z
+         bTAc1fsiGGuTttcr1XCx0uB4ZEXZmeyKmHoP4dqM2jEl5TK3gG5fKNuLZb1XyfmCRd61
+         vcig==
+X-Gm-Message-State: AOJu0YwipD0ZNzj/2b5EHInotjYLL21CdQDnTKaNvBA2vt9qUzPSb0tB
+	RTaNOkX/rViiu0aLmdIx0gXUNA==
+X-Google-Smtp-Source: AGHT+IHfEJcj5sqilHKdlPgFubmK4nI/7tH8em/CPcCCZeiKmAjLc3BZXIWyh3bOrm4xpr41lMaPbg==
+X-Received: by 2002:a17:907:9016:b0:a23:339f:3313 with SMTP id ay22-20020a170907901600b00a23339f3313mr2181362ejc.55.1702987311149;
+        Tue, 19 Dec 2023 04:01:51 -0800 (PST)
 Received: from [192.168.199.59] (178235179206.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.206])
-        by smtp.gmail.com with ESMTPSA id lm11-20020a17090718cb00b00a1db76f99c8sm15508227ejc.93.2023.12.19.04.01.25
+        by smtp.gmail.com with ESMTPSA id lm11-20020a17090718cb00b00a1db76f99c8sm15508227ejc.93.2023.12.19.04.01.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Dec 2023 04:01:27 -0800 (PST)
-Message-ID: <4b644ed4-358d-4caa-bed8-ca76e0baadb3@linaro.org>
-Date: Tue, 19 Dec 2023 13:01:24 +0100
+        Tue, 19 Dec 2023 04:01:50 -0800 (PST)
+Message-ID: <da5df198-6e17-46f0-a12e-0083a5601785@linaro.org>
+Date: Tue, 19 Dec 2023 13:01:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,6 +69,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v10 18/41] ALSA: usb-audio: qcom: Add USB QMI definitions
 Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
 To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
  mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
  corbet@lwn.net, gregkh@linuxfoundation.org, lgirdwood@gmail.com,
@@ -80,7 +82,7 @@ Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
  alsa-devel@alsa-project.org
 References: <20231215214955.12110-1-quic_wcheng@quicinc.com>
  <20231215214955.12110-19-quic_wcheng@quicinc.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
+ <4b644ed4-358d-4caa-bed8-ca76e0baadb3@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
  BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
@@ -116,41 +118,43 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20231215214955.12110-19-quic_wcheng@quicinc.com>
+In-Reply-To: <4b644ed4-358d-4caa-bed8-ca76e0baadb3@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 15.12.2023 22:49, Wesley Cheng wrote:
-> The Qualcomm USB audio offload driver utilizes the QMI protocol to
-> communicate with the audio DSP.  Add the necessary QMI header and field
-> definitions, so the QMI interface driver is able to route the QMI packet
-> received to the USB audio offload driver.
-> 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->  sound/usb/qcom/usb_audio_qmi_v01.c | 892 +++++++++++++++++++++++++++++
->  sound/usb/qcom/usb_audio_qmi_v01.h | 162 ++++++
->  2 files changed, 1054 insertions(+)
->  create mode 100644 sound/usb/qcom/usb_audio_qmi_v01.c
->  create mode 100644 sound/usb/qcom/usb_audio_qmi_v01.h
-> 
-> diff --git a/sound/usb/qcom/usb_audio_qmi_v01.c b/sound/usb/qcom/usb_audio_qmi_v01.c
-> new file mode 100644
-> index 000000000000..bdfd67d980eb
-> --- /dev/null
-> +++ b/sound/usb/qcom/usb_audio_qmi_v01.c
-> @@ -0,0 +1,892 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/soc/qcom/qmi.h>
-> +
-> +#include "usb_audio_qmi_v01.h"
-> +
-> +static struct qmi_elem_info mem_info_v01_ei[] = {
-can these be const?
+On 19.12.2023 13:01, Konrad Dybcio wrote:
+> On 15.12.2023 22:49, Wesley Cheng wrote:
+>> The Qualcomm USB audio offload driver utilizes the QMI protocol to
+>> communicate with the audio DSP.  Add the necessary QMI header and field
+>> definitions, so the QMI interface driver is able to route the QMI packet
+>> received to the USB audio offload driver.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>  sound/usb/qcom/usb_audio_qmi_v01.c | 892 +++++++++++++++++++++++++++++
+>>  sound/usb/qcom/usb_audio_qmi_v01.h | 162 ++++++
+>>  2 files changed, 1054 insertions(+)
+>>  create mode 100644 sound/usb/qcom/usb_audio_qmi_v01.c
+>>  create mode 100644 sound/usb/qcom/usb_audio_qmi_v01.h
+>>
+>> diff --git a/sound/usb/qcom/usb_audio_qmi_v01.c b/sound/usb/qcom/usb_audio_qmi_v01.c
+>> new file mode 100644
+>> index 000000000000..bdfd67d980eb
+>> --- /dev/null
+>> +++ b/sound/usb/qcom/usb_audio_qmi_v01.c
+>> @@ -0,0 +1,892 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+>> +
+>> +#include <linux/soc/qcom/qmi.h>
+>> +
+>> +#include "usb_audio_qmi_v01.h"
+>> +
+>> +static struct qmi_elem_info mem_info_v01_ei[] = {
+> can these be const?
+Sorry, it was already pointed out.
 
 Konrad
 
