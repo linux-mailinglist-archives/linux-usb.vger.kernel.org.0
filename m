@@ -1,220 +1,171 @@
-Return-Path: <linux-usb+bounces-4326-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4327-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0F8F818211
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 08:15:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72ABD818256
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 08:36:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2833C1F24546
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 07:15:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BD5328687F
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 07:36:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 828648826;
-	Tue, 19 Dec 2023 07:15:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6840D8C11;
+	Tue, 19 Dec 2023 07:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FWAiaavo"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="mj+YAsfr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2043.outbound.protection.outlook.com [40.107.105.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765B8C2D3
-	for <linux-usb@vger.kernel.org>; Tue, 19 Dec 2023 07:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702970135; x=1734506135;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=q/c2fEz4rScCXXn6dyUsZAStkjXTa7aPMHV7hjYbCUs=;
-  b=FWAiaavoHUm1xX4ukhHHo1T4QOq2BhWBDrsomeAxD0M6gpbPlK1lFE22
-   HaPNfrQxVlyodAk3PZbBPDgzCYFwmiSUWbbNsET2tOoxU7o5MUCSJLJg3
-   Obj3BsZMQxzzB64/htkt8/RSzLVu4n2PAIcyN/h5ainLlvfdhwBLB+4hT
-   YiDEAuDDV9++DmMAHQHFfJZe6VPCRUkHeNvlqv3tNCodiyydskHbPzct4
-   Bl9d0TET1FF7Ob56aWA3JkXmVDV19oxNxF6LeJ46ay42bOw+5A4m3kKJj
-   0oN0pox1YxP23ufeor6hjB92eilL4LMq6xBBkXEpY5jmr+IKbkQK7gdBM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="386040199"
-X-IronPort-AV: E=Sophos;i="6.04,287,1695711600"; 
-   d="scan'208";a="386040199"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 23:15:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="810124926"
-X-IronPort-AV: E=Sophos;i="6.04,287,1695711600"; 
-   d="scan'208";a="810124926"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 18 Dec 2023 23:15:32 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 69B7023A; Tue, 19 Dec 2023 09:15:31 +0200 (EET)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Gil Fine <gil.fine@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH] thunderbolt: Keep link as asymmetric if preferred by hardware
-Date: Tue, 19 Dec 2023 09:15:31 +0200
-Message-ID: <20231219071531.2375978-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C198911700;
+	Tue, 19 Dec 2023 07:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bu2EalDipy6LwNfNvOHs6wOQjklbIg5YxF58tiHnDHaXakbXD/ijM4IIg5a4FaQtCFXZ0UHnQxMbbbQ9pGKcRNYRJqG5lO6ZQm2Ni2Du/sTPPOLdcba9ZWo8epQe2hP9vjIMOQtG67OhIHtxv0ykHES3oHdhrulJ7UvAXOzU7qoNZ8gPpsUlHSkbe8k4CrWXlbSq10VfitqnisUkXsq3Z5cfMLmwVK+RrnaiGXgDzIvuj+hGf1ybNVwCXvyF/uoK0oEwyBmMe5DYkA/+Qlqr3JnI6T/shCrelPLMFjeI69XjMb1JR7NZs+tvqfVFCdtfYrnzPMW+l7h+5VPLrWCMfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lGbCVt9yXy2f0arrQ5W3zl6YRdEDhj0cpMlm2/8cfsQ=;
+ b=NWD123YAsWwN1rMzlMTwrHxMIEjTrbdEP/2tPWqI7wdJmg3vQBuF/6X1XVqiM8RQK/jCTa2q6T92zYRDddOhV9Tp1qYzgH0cNzwAZbC3S1n34PP5dTAr8yAZAYnDC/JltXe2Zv+bUf+CiWCScTwaYMTYVFblydCk/bP3s+K9uItpJoL0dGHiv8h9RsHhsVDVGGWwekw23nbERg63TRjpQTRHGTkIxxix9TpGebr6VbFAjc3YT2i8SLMgvDpAvOjbh0ZWxVvkwTD9w6YhzFvVLoFBX9AI29ibvVzaCHoJelk6a4VmSIgc2cyP/zSg653qy7BKLaFa/3yZMXw68/SciQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lGbCVt9yXy2f0arrQ5W3zl6YRdEDhj0cpMlm2/8cfsQ=;
+ b=mj+YAsfrtFBrQRuJga0ixKngc4tFwHCW5Px9iC6IJRSH+CaK1Bva0ovUh8G5ZfWTvyjAa8isxi31TuSO76m5nzgkoaYCxhLed917KjVSDZKBd4802HDa6rgjBNc8oqylFCnbtqJ3K8yW53RVkGxJcXNrOvFMaO8bswm11NGoSSI=
+Received: from DB7PR04MB5146.eurprd04.prod.outlook.com (2603:10a6:10:23::16)
+ by AS8PR04MB8707.eurprd04.prod.outlook.com (2603:10a6:20b:42a::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.38; Tue, 19 Dec
+ 2023 07:35:48 +0000
+Received: from DB7PR04MB5146.eurprd04.prod.outlook.com
+ ([fe80::709e:6876:7df0:fc30]) by DB7PR04MB5146.eurprd04.prod.outlook.com
+ ([fe80::709e:6876:7df0:fc30%7]) with mapi id 15.20.7091.034; Tue, 19 Dec 2023
+ 07:35:48 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Fabio Estevam <festevam@gmail.com>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "shawnguo@kernel.org"
+	<shawnguo@kernel.org>, "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+	"kernel@pengutronix.de" <kernel@pengutronix.de>, dl-linux-imx
+	<linux-imx@nxp.com>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, Jun Li <jun.li@nxp.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [EXT] Re: [PATCH v2 2/5] arm64: dts: imx8ulp-evk: enable usb
+ nodes and add ptn5150 nodes
+Thread-Topic: [EXT] Re: [PATCH v2 2/5] arm64: dts: imx8ulp-evk: enable usb
+ nodes and add ptn5150 nodes
+Thread-Index: AQHaMY8RLfDcovEB4kKV3s/AlqfBCbCu030AgAAD92A=
+Date: Tue, 19 Dec 2023 07:35:48 +0000
+Message-ID:
+ <DB7PR04MB51469ABA1E7922B839B4F36E8C97A@DB7PR04MB5146.eurprd04.prod.outlook.com>
+References: <20231218085456.3962720-1-xu.yang_2@nxp.com>
+ <20231218085456.3962720-2-xu.yang_2@nxp.com>
+ <CAOMZO5AZ6oLgeqvwf5_u9YhrFvwgRSiNjGq+wVMjXYsq7t3MxA@mail.gmail.com>
+In-Reply-To:
+ <CAOMZO5AZ6oLgeqvwf5_u9YhrFvwgRSiNjGq+wVMjXYsq7t3MxA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DB7PR04MB5146:EE_|AS8PR04MB8707:EE_
+x-ms-office365-filtering-correlation-id: 47cac0ce-f951-4ed7-1b8d-08dc00651e8b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ nM6FmnTvFHJrW3qevnhFmUeMRa/wdmvaS2BWfStl3pT38a2wwZBs8/OjJnL5W1rPizXuG56f9vjNoz2TG/AIMr9IGsJ8UDDzvxEUSl0/WAA4Mld1gAnsznKTah+fPY0cu/jOWeO96On8ie+rJG9g+d5KBLJQ4LiSbmGgRkn/grvshur1IEqoTjizAI7YZRSq9G6EKDNMgq2oW2WEHbQI2LBIlAxcVjPCta30gr3vx8Jm+1Xsx+E1tZFa+jydjT0v47n+PAA0nvR/TJyzu1VUVVjrhArJd0EDmgmZDMES91iCEaCSwpce1+e8FjxbSJak4v5OWVeupfOViOR3Y48f+48sK4nWWdKu4W6Z9QxRTmM919Stmp3TWv69jFh5zNtspmkL1wR8zstCx20QPyCP/uojj0/hrG9xSX/WgIgtiqeq/kRUjEOhISY5rLefXNQhH8XgzjiKeBa5Ex4KYRG4aHzr/08J6WMQqb354bA4facz3ZqdvN25jmw1i2ajDUdgOuF1P5HMQipudd83RWn4uakr7nEFk3v1d2hEkGsEHegAIX7Npq8LrrEwJ5JlgyX61ziW0Dc4prwFkOECbbaShIPu3mhsu59Grb2rsSeZOPLNHD+UrSmkI3nxgrQJhNnUovlP0OGLa4sXjXG2IwTAIdIksBlHUe+HYcdR9rAxl55Yb7zA557PC60e4MHFGg9I
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5146.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(39860400002)(346002)(396003)(136003)(230273577357003)(230173577357003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(55016003)(122000001)(7416002)(2906002)(5660300002)(86362001)(33656002)(83380400001)(26005)(38100700002)(6506007)(7696005)(9686003)(71200400001)(53546011)(38070700009)(41300700001)(316002)(52536014)(64756008)(66476007)(66556008)(66946007)(54906003)(66446008)(76116006)(6916009)(478600001)(8676002)(8936002)(4326008)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?Ujl0NmlWTHdiVGYxK3JBSkFKa2s4VmdhbFNvN2piTTlhYlh6cVNvbnJVS1pU?=
+ =?utf-8?B?dTQrb1QxM0FpQ2VkSW42dHlvOXBvMEJWM256cDJQeGtKWkFuRzFNU0RGWUdN?=
+ =?utf-8?B?ODZDdkRCS0VIaEYzdzRibFdEQlk3QzJUUHlIZDE1YnRoUVp2eDRpSGI4c2p6?=
+ =?utf-8?B?L0ZjOGkxRDhhYURtWU5CN2QySm5kQmVDMnc1K1hLcWJVVXBnRzFtYkRRc3Iv?=
+ =?utf-8?B?Nm50RUdZMHNmYVorUFZ0S3Z3RXAvd2pmZzVvekwrOUxWNjMrL2Y3ZFkyejRK?=
+ =?utf-8?B?QitPRnQ0TWhScWcwalo4eE0wTGVJeWVCbStORzV1ekxxV08rS01VVDdwVzhk?=
+ =?utf-8?B?UzBlQVFuNnBzdEwvWSt3aGYvNHZrZGRGdTZWWjF2b0Rka0Y2TFVFbXFaVy84?=
+ =?utf-8?B?alNCSUFQMHZ2OWtsamUxdVdFWnlMaWw1L2pmVk9uZFV3QUVSWUx6cFFKUytX?=
+ =?utf-8?B?bjgyNTkzVFEzSUpid3Y1bEQxL28vcXlUUUdaeklMWWg5VzI0bzVpZXhwdEEy?=
+ =?utf-8?B?emF6dk9zcjFyZEhtL3BtVTVoSC84UDR2aktMSEtQc1BHZzJhWDFwd3p4bDlF?=
+ =?utf-8?B?YTArREJWa0VIa2xkTkU5Yk9URi9jRGpwcjFHeVlVVEZtTU9SUjNkUTVKN0Yy?=
+ =?utf-8?B?RWIrUkxOcGZENW5zVnZSYURVa2ZmMUQvT1NVR01LZ01MS0dFUmN3elhCOGdk?=
+ =?utf-8?B?ekF6eG96OGRNK1IrcmFVVEpMTWRURW90aDhmNHhkLzF3MGRTdzIzOVkvQ0pL?=
+ =?utf-8?B?SmdqZEo1VVlSa0J0Q1p2VFRKSlNTQ1hVbWh1UWYrTER4VFpZVE16aDJPejAy?=
+ =?utf-8?B?ZUtTUjYrUWplN2JSb2RScDMxRHEydi9taDJKYkVhamg3aElVTVE5Wk9aRVFS?=
+ =?utf-8?B?ZmRWSndkK3k0NWtERHJFMG50K29BMkdxSmMvMzJncGtac0lGZGtqNW9qMUpi?=
+ =?utf-8?B?UDd4ZmlQa3cwY1M1byticjNwdnFmU3F0UGRzWXhpL3h6V3NiZlQ5cVF4dVpl?=
+ =?utf-8?B?RlRFbTN2d1pCMVE1SEdBWGN5bDNFL0FlUlpQRUtaVXFyMjNXUVlQdFJLRmJo?=
+ =?utf-8?B?ZU1UY0wrVFdNdjBEdVJYK2VDcUMwcHBRU09hZWhOUGRteTkzWEtjdXQxSTN3?=
+ =?utf-8?B?S29nMDhrM3I5MVF2TW9pUUtjRTJxMFZhckFjWkxXVGxtY0ZzZGNNYldHZFJh?=
+ =?utf-8?B?c2dBNTFPUTQrbVYvekNxbktyRGVQdDZyZ0ViUjkwRDVwSWpBMzg3aHJXVzhN?=
+ =?utf-8?B?cU1acXdPODJCdVVVMy9DM0JRVEUxbmU1bENiUGpTS2xHTGFTbzQ5UE9yYi9i?=
+ =?utf-8?B?TGRiWHdKUUZRY3pYcUExTTRsVzZrMVNnVStSK0NXZ2hGeFoyT0F5SDg5UnRk?=
+ =?utf-8?B?amdMeEJ6UjMrMUhZdENuczAyaFIwNEplYkxpeXFES0xSWjkwV2FmUDc1YWNi?=
+ =?utf-8?B?djU2OWYrcmVmdFhxZmd1aEozdzAxeVRCT2tGaHBXVGhPdFEyazFSUCttU1d5?=
+ =?utf-8?B?ZktLbXNQSXhTMTZxZHpwN1RSRTlZcGVaSHE0QXZJT2RPQXB2L1IyQ3VrUGtF?=
+ =?utf-8?B?Y24xa2tXaldwdDYxMlFNZFgyN25EUE1RVG85QkZOSWdGb3phUjNPSmRKNTRW?=
+ =?utf-8?B?YjgydUhNaFNjcWc0NEd3NEgxOFNnUG1tZWFCRUtuS1ZsRUh0Y3dpYlVvamtJ?=
+ =?utf-8?B?cEF6ZSs3dng5TmJqWGdWR1d2SGJvaVhFN3k1U255cTJxUGhRNWVaajRQa2R5?=
+ =?utf-8?B?ZHFRRXdITlZZcU1qenZoMzJWWVVaVW5zOG5UUGYxS1ZqTitQcnl0ZUZoWjhN?=
+ =?utf-8?B?NlZ4L0VhYjNlTGtpMkpKb0lDdW0yWHVUV1NLRHBUdHFROGlYc1oxMmlxbEx6?=
+ =?utf-8?B?d0w5bVh3N1RYRC9SVUdlTEM5bW1kKzZQejRXVVpGdXFsTnJQY0FWdVpmYWlk?=
+ =?utf-8?B?QWVsb3hqaTc0RmYvVjNRbVlXbkRiRitMNnp3SDh0NDBDMlhVV2pUcGZvd3N1?=
+ =?utf-8?B?RHVESFdjbmVEZHNJQ0F5YzcwM3NsTWxGdWpUcXFFaU1lMnorMVEwb1ZlRFVh?=
+ =?utf-8?B?bkdwTlhralpoWEhqaFRubVRKSlhUNS9nMHE2RGR2S0t6OUN4Y0JzNmZDNE5L?=
+ =?utf-8?Q?ELDo=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5146.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 47cac0ce-f951-4ed7-1b8d-08dc00651e8b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Dec 2023 07:35:48.3692
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zQX0lBmCx51bjZZrD7qCrpjB5odwBQNTG5wmWxmwq1BkrDqVchVewe/vLFd3UNgab07MbadHpsYFzDAlTwoKKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8707
 
-From: Gil Fine <gil.fine@linux.intel.com>
-
-In case of the link is brought up as asymmetric (due to hardware preference), we
-honor that and don't transition it to symmetric, unless a router with symmetric
-link got plugged below, in the topology (and a bandwidth allows transition to
-symmetric).
-
-Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/thunderbolt/switch.c | 13 +++++++++++++
- drivers/thunderbolt/tb.c     | 28 +++++++++++++++++++++-------
- drivers/thunderbolt/tb.h     |  2 ++
- 3 files changed, 36 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index dbab551ac7b3..900114ba4371 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -2773,6 +2773,19 @@ static void tb_switch_link_init(struct tb_switch *sw)
- 	if (down->dual_link_port)
- 		down->dual_link_port->bonded = bonded;
- 	tb_port_update_credits(down);
-+
-+	if (tb_port_get_link_generation(up) < 4)
-+		return;
-+
-+	/*
-+	 * Set the Gen 4 preferred link width. This is what the router
-+	 * prefers when the link is brought up. If the router does not
-+	 * support asymmetric link configuration, this also will be set
-+	 * to TB_LINK_WIDTH_DUAL.
-+	 */
-+	sw->preferred_link_width = sw->link_width;
-+	tb_sw_dbg(sw, "preferred link width %s\n",
-+		  tb_width_name(sw->preferred_link_width));
- }
- 
- /**
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 0a32e7ec4dc0..846d2813bb1a 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -1183,14 +1183,15 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
-  * @dst_port: Destination adapter
-  * @requested_up: New lower bandwidth request upstream (Mb/s)
-  * @requested_down: New lower bandwidth request downstream (Mb/s)
-+ * @keep_asym: Keep asymmetric link if preferred
-  *
-  * Goes over each link from @src_port to @dst_port and tries to
-  * transition the link to symmetric if the currently consumed bandwidth
-- * allows.
-+ * allows and link asymmetric preference is ignored (if @keep_asym is %false).
-  */
- static int tb_configure_sym(struct tb *tb, struct tb_port *src_port,
- 			    struct tb_port *dst_port, int requested_up,
--			    int requested_down)
-+			    int requested_down, bool keep_asym)
- {
- 	bool clx = false, clx_disabled = false, downstream;
- 	struct tb_switch *sw;
-@@ -1239,6 +1240,19 @@ static int tb_configure_sym(struct tb *tb, struct tb_port *src_port,
- 		if (up->sw->link_width == TB_LINK_WIDTH_DUAL)
- 			continue;
- 
-+		/*
-+		 * Here consumed < threshold so we can transition the
-+		 * link to symmetric.
-+		 *
-+		 * However, if the router prefers asymmetric link we
-+		 * honor that (unless @keep_asym is %false).
-+		 */
-+		if (keep_asym &&
-+		    up->sw->preferred_link_width > TB_LINK_WIDTH_DUAL) {
-+			tb_sw_dbg(up->sw, "keeping preferred asymmetric link\n");
-+			continue;
-+		}
-+
- 		/* Disable CL states before doing any transitions */
- 		if (!clx_disabled) {
- 			clx = tb_disable_clx(sw);
-@@ -1292,7 +1306,7 @@ static void tb_configure_link(struct tb_port *down, struct tb_port *up,
- 		struct tb_port *host_port;
- 
- 		host_port = tb_port_at(tb_route(sw), tb->root_switch);
--		tb_configure_sym(tb, host_port, up, 0, 0);
-+		tb_configure_sym(tb, host_port, up, 0, 0, false);
- 	}
- 
- 	/* Set the link configured */
-@@ -1477,7 +1491,7 @@ static void tb_deactivate_and_free_tunnel(struct tb_tunnel *tunnel)
- 		 * If bandwidth on a link is < asym_threshold
- 		 * transition the link to symmetric.
- 		 */
--		tb_configure_sym(tb, src_port, dst_port, 0, 0);
-+		tb_configure_sym(tb, src_port, dst_port, 0, 0, true);
- 		/* Now we can allow the domain to runtime suspend again */
- 		pm_runtime_mark_last_busy(&dst_port->sw->dev);
- 		pm_runtime_put_autosuspend(&dst_port->sw->dev);
-@@ -2299,7 +2313,7 @@ static int tb_alloc_dp_bandwidth(struct tb_tunnel *tunnel, int *requested_up,
- 		 * If bandwidth on a link is < asym_threshold transition
- 		 * the link to symmetric.
- 		 */
--		tb_configure_sym(tb, in, out, *requested_up, *requested_down);
-+		tb_configure_sym(tb, in, out, *requested_up, *requested_down, true);
- 		/*
- 		 * If requested bandwidth is less or equal than what is
- 		 * currently allocated to that tunnel we simply change
-@@ -2342,7 +2356,7 @@ static int tb_alloc_dp_bandwidth(struct tb_tunnel *tunnel, int *requested_up,
- 		ret = tb_configure_asym(tb, in, out, *requested_up,
- 					*requested_down);
- 		if (ret) {
--			tb_configure_sym(tb, in, out, 0, 0);
-+			tb_configure_sym(tb, in, out, 0, 0, true);
- 			return ret;
- 		}
- 
-@@ -2350,7 +2364,7 @@ static int tb_alloc_dp_bandwidth(struct tb_tunnel *tunnel, int *requested_up,
- 						requested_down);
- 		if (ret) {
- 			tb_tunnel_warn(tunnel, "failed to allocate bandwidth\n");
--			tb_configure_sym(tb, in, out, 0, 0);
-+			tb_configure_sym(tb, in, out, 0, 0, true);
- 		}
- 	} else {
- 		ret = -ENOBUFS;
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 1760c21e5b12..997c5a536905 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -125,6 +125,7 @@ struct tb_switch_tmu {
-  * @device_name: Name of the device (or %NULL if not known)
-  * @link_speed: Speed of the link in Gb/s
-  * @link_width: Width of the upstream facing link
-+ * @preferred_link_width: Router preferred link width (only set for Gen 4 links)
-  * @link_usb4: Upstream link is USB4
-  * @generation: Switch Thunderbolt generation
-  * @cap_plug_events: Offset to the plug events capability (%0 if not found)
-@@ -178,6 +179,7 @@ struct tb_switch {
- 	const char *device_name;
- 	unsigned int link_speed;
- 	enum tb_link_width link_width;
-+	enum tb_link_width preferred_link_width;
- 	bool link_usb4;
- 	unsigned int generation;
- 	int cap_plug_events;
--- 
-2.43.0
-
+SGkgRmFiaW8sDQoNCj4gDQo+IE9uIE1vbiwgRGVjIDE4LCAyMDIzIGF0IDU6NDnigK9BTSBYdSBZ
+YW5nIDx4dS55YW5nXzJAbnhwLmNvbT4gd3JvdGU6DQo+IA0KPiA+ICsNCj4gPiArICAgICAgIHB0
+bjUxNTBfMTogdHlwZWNAMWQgew0KPiA+ICsgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gIm54
+cCxwdG41MTUwIjsNCj4gPiArICAgICAgICAgICAgICAgcmVnID0gPDB4MWQ+Ow0KPiA+ICsgICAg
+ICAgICAgICAgICBpbnQtZ3Bpb3MgPSA8JmdwaW9mIDMgSVJRX1RZUEVfRURHRV9GQUxMSU5HPjsN
+Cj4gPiArICAgICAgICAgICAgICAgcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsNCj4gPiArICAg
+ICAgICAgICAgICAgcGluY3RybC0wID0gPCZwaW5jdHJsX3R5cGVjMT47DQo+ID4gKyAgICAgICAg
+ICAgICAgIHN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+IA0KPiBXaHkgZGlzYWJsZWQ/DQoNCkFzIHdl
+IHRhbGtlZCBiZWZvcmUsICBJIGp1c3QgcHJlc2VudCB0aGVzZSBub2RlcyBoZXJlIHNpbmNlIHRo
+ZQ0KaS5NWDhVTFAgYm9hcmQgZG9lcyBoYXZlIHRoZXNlIGNoaXBzLiBBbmQgSSB0aGluayB0aGUg
+YWJvdmUgDQppbmZvcm1hdGlvbiBpcyBlbm91Z2ggdG8gbGV0IHBlb3BsZSBrbm93IGFuZCB1c2Ug
+aXQgaWYgdGhleQ0KcmVhbGx5IHdhbnQuIEluIG1vc3Qgb2YgdGhlIGNhc2VzLCBpdCdzIG5vdCBu
+ZWVkZWQuIA0KDQo+IA0KPiBObyBjb25uZWN0b3IgYW5kIG5vIHBvcnQgcHJvcGVydGllcy4gUGxl
+YXNlIHJ1biBkdC1zY2hlbWEgY2hlY2sNCj4gYWdhaW5zdCBsaW51eC1uZXh0Lg0KDQpUaGUgcHRu
+NTE1MCBkcml2ZXIgZG9lc24ndCBoYXZlIGFueSByZWxhdGlvbiB3aXRoIHR5cGVjIHN1YnN5c3Rl
+bS4gQXMNCkp1biBzYWlkLCBpdCB1c2VzIGV4dGNvbi4gDQoNCkFsc28gSSBoYXZlIHJ1biBkdC1z
+Y2hlbWEgY2hlY2ssIG5vIHdhcm5pbmdzLg0KDQpUaGFua3MsDQpYdSBZYW5nDQoJDQo+IA0KPiA+
+ICsgICAgICAgfTsNCj4gPiArDQo+ID4gKyAgICAgICBwdG41MTUwXzI6IHR5cGVjQDNkIHsNCj4g
+PiArICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJueHAscHRuNTE1MCI7DQo+ID4gKyAgICAg
+ICAgICAgICAgIHJlZyA9IDwweDNkPjsNCj4gPiArICAgICAgICAgICAgICAgaW50LWdwaW9zID0g
+PCZncGlvZiA1IElSUV9UWVBFX0VER0VfRkFMTElORz47DQo+ID4gKyAgICAgICAgICAgICAgICAg
+ICAgICAgcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsNCj4gPiArICAgICAgICAgICAgICAgcGlu
+Y3RybC0wID0gPCZwaW5jdHJsX3R5cGVjMj47DQo+ID4gKyAgICAgICAgICAgICAgIHN0YXR1cyA9
+ICJkaXNhYmxlZCI7DQo+IA0KPiBTYW1lIGhlcmUuDQo=
 
