@@ -1,63 +1,64 @@
-Return-Path: <linux-usb+bounces-4343-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4344-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D16B481889F
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 14:25:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0195781890B
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 14:54:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CA481F24993
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 13:25:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D76A1C23F46
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 13:54:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3982518ED6;
-	Tue, 19 Dec 2023 13:25:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB4961A58F;
+	Tue, 19 Dec 2023 13:54:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eDNw3Dbk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gUvPeHJ8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744A21945B;
-	Tue, 19 Dec 2023 13:25:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCC319BD8;
+	Tue, 19 Dec 2023 13:54:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702992331; x=1734528331;
+  t=1702994079; x=1734530079;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ZL8mJ+MiEm0edIiOsgaqMnUw5Ho6siAo3hb1ggpThD4=;
-  b=eDNw3Dbk66Roii5tt2yLzQucQEsHY3lGkvVydZrNdJHdy4TfWHAy2aw+
-   nVfwqR7Xz6XVp46T+wG4N7wL6LNSAt5AE4QNAgQIEGfhPiAyA+/KSUgaG
-   VSggrUxDF6K2ohD5M56eP2W6glSYN7sn5jnRz3WNOGpxTz6VEJBa4t1e0
-   z/wMpN2PS/EWe2WzgEKb3rlaf+y9/GjUu/VXYYaqhMGMUSlAewU3Cf6Za
-   xw9FO5CnxQvtvQDIBBwLn4dykWphouwo9DNJ07g4zGVANJkyXtVPkvnky
-   oFIgmTSjcU9aGSlltWilA9Lx6kMfKXKcwn/nV/4Bgp3kAVjzFeaDPJE2l
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="481845389"
+  bh=5gQ7r/pmi5wibRZjHmkgsZN5qhQdYc1sTqxinTId8tY=;
+  b=gUvPeHJ8PCUiyxOWawSxDPlY9nYnaNjEF1/U5S2d484cV6iEe7J2o0BO
+   IeWQWBT43XKC+yQ21JJDzU1yNebPlJkE5KhMmwd+DR/S2bFhkGCPos9BC
+   sk2xls4sQ+I5YKl7XmU+NIMmmjk4NGxk6U56/lCgJg1AjtpsQEfVOfg+t
+   ON3QIkaelyHgwi6PN1RHLiRZ82tNUKiDCSLldQk584Bae4NEZF7lrFPlt
+   KFUTb5EIIocNXQt5qBf2CGaSlk+ZDC+SW4pPqv3favh6afwUmrJa7KfSp
+   tLjiaL+aIaYrejWqcHdBdzEsYSp8JEHkXjofOmcI7iUoKQwWXwiRl69HF
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="14347790"
 X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
-   d="scan'208";a="481845389"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 05:25:30 -0800
+   d="scan'208";a="14347790"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 05:54:38 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="846341721"
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="1107357081"
 X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
-   d="scan'208";a="846341721"
+   d="scan'208";a="1107357081"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga004.fm.intel.com with SMTP; 19 Dec 2023 05:25:27 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 19 Dec 2023 15:25:26 +0200
-Date: Tue, 19 Dec 2023 15:25:26 +0200
+  by fmsmga005.fm.intel.com with SMTP; 19 Dec 2023 05:54:34 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 19 Dec 2023 15:54:33 +0200
+Date: Tue, 19 Dec 2023 15:54:33 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Kyle Tso <kyletso@google.com>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, linux@roeck-us.net, gregkh@linuxfoundation.org,
-	badhri@google.com, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] usb: typec: tcpm: Support multiple capabilities
-Message-ID: <ZYGZxgW7ViuNo1wH@kuha.fi.intel.com>
-References: <20231216104630.2720818-1-kyletso@google.com>
- <20231216104630.2720818-3-kyletso@google.com>
+To: RD Babiera <rdbabiera@google.com>
+Cc: linux@roeck-us.net, gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	badhri@google.com, bryan.odonoghue@linaro.org, agross@kernel.org,
+	andersson@kernel.org, konrad.dybcio@linaro.org
+Subject: Re: [PATCH v2 02/12] usb: typec: altmodes: add svdm version info for
+ typec cables
+Message-ID: <ZYGgmTr+7bbrjl1T@kuha.fi.intel.com>
+References: <20231214230850.379863-14-rdbabiera@google.com>
+ <20231214230850.379863-16-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,552 +67,126 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231216104630.2720818-3-kyletso@google.com>
+In-Reply-To: <20231214230850.379863-16-rdbabiera@google.com>
 
-On Sat, Dec 16, 2023 at 06:46:30PM +0800, Kyle Tso wrote:
-> Refactor tcpm_fw_get_caps to support the multiple pd capabilities got
-> from fwnode. For backward compatibility, the original single capability
-> is still applicable. The fetched data is stored in the newly defined
-> structure "pd_data" and there is an array "pd_list" to store the
-> pointers to them. A dedicated array "pds" is used to store the handles
-> of the registered usb_power_delivery instances.
+On Thu, Dec 14, 2023 at 11:08:46PM +0000, RD Babiera wrote:
+> Add typec_cable_set_svdm_version and typec_get_cable_svdm version symbols.
+> Cables can operate under a lower PD revision than the port partner, and the
+> max SVDM version is tied to the PD revision. So, typec_cable maintains its
+> own svdm_version.
 > 
-> Also implement the .pd_get and .pd_set ops which are introduced in
-> commit a7cff92f0635 ("usb: typec: USB Power Delivery helpers for ports
-> and partners"). Once the .pd_set is called, the current capability will
-> be updated and state machine will re-negotiate the power contract if
-> possible.
+> Add typec_altmode_get_cable_svdm_version to return the cable's negotiated
+> svdm_version for altmode drivers to use.
 > 
-> Signed-off-by: Kyle Tso <kyletso@google.com>
+> Signed-off-by: RD Babiera <rdbabiera@google.com>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
-> v5 -> v6:
->  - Removed the function tcpm_fw_get_properties
->  - Merged it to tcpm_fw_get_caps
+>  drivers/usb/typec/class.c         | 40 +++++++++++++++++++++++++++++++
+>  drivers/usb/typec/class.h         |  1 +
+>  include/linux/usb/typec.h         |  3 +++
+>  include/linux/usb/typec_altmode.h | 10 ++++++++
+>  4 files changed, 54 insertions(+)
 > 
->  drivers/usb/typec/tcpm/tcpm.c | 387 ++++++++++++++++++++++++++--------
->  1 file changed, 298 insertions(+), 89 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index ff67553b6932..e11d680fd8b7 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -297,6 +297,15 @@ struct pd_pps_data {
->  	bool active;
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 86b5a8414b89..038c6498e683 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -2129,6 +2129,46 @@ int typec_get_negotiated_svdm_version(struct typec_port *port)
+>  }
+>  EXPORT_SYMBOL_GPL(typec_get_negotiated_svdm_version);
+>  
+> +/**
+> + * typec_get_cable_svdm_version - Get cable negotiated SVDM Version
+> + * @port: USB Type-C Port.
+> + *
+> + * Get the negotiated SVDM Version for the cable. The Version is set to the port
+> + * default value based on the PD Revision during cable registration, and updated
+> + * after a successful Discover Identity if the negotiated value is less than the
+> + * default.
+> + *
+> + * Returns usb_pd_svdm_ver if the cable has been registered otherwise -ENODEV.
+> + */
+> +int typec_get_cable_svdm_version(struct typec_port *port)
+> +{
+> +	enum usb_pd_svdm_ver svdm_version;
+> +	struct device *cable_dev;
+> +
+> +	cable_dev = device_find_child(&port->dev, NULL, cable_match);
+> +	if (!cable_dev)
+> +		return -ENODEV;
+> +
+> +	svdm_version = to_typec_cable(cable_dev)->svdm_version;
+> +	put_device(cable_dev);
+> +
+> +	return svdm_version;
+> +}
+> +EXPORT_SYMBOL_GPL(typec_get_cable_svdm_version);
+> +
+> +/**
+> + * typec_cable_set_svdm_version - Set negotiated Structured VDM (SVDM) Version
+> + * @cable: USB Type-C Active Cable that supports SVDM
+> + * @svdm_version: Negotiated SVDM Version
+> + *
+> + * This routine is used to save the negotiated SVDM Version.
+> + */
+> +void typec_cable_set_svdm_version(struct typec_cable *cable, enum usb_pd_svdm_ver svdm_version)
+> +{
+> +	cable->svdm_version = svdm_version;
+> +}
+> +EXPORT_SYMBOL_GPL(typec_cable_set_svdm_version);
+> +
+>  /**
+>   * typec_get_drvdata - Return private driver data pointer
+>   * @port: USB Type-C port
+> diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
+> index c36761ba3f59..759b98355eeb 100644
+> --- a/drivers/usb/typec/class.h
+> +++ b/drivers/usb/typec/class.h
+> @@ -23,6 +23,7 @@ struct typec_cable {
+>  	struct usb_pd_identity		*identity;
+>  	unsigned int			active:1;
+>  	u16				pd_revision; /* 0300H = "3.0" */
+> +	enum usb_pd_svdm_ver		svdm_version;
 >  };
 >  
-> +struct pd_data {
-> +	struct usb_power_delivery *pd;
-> +	struct usb_power_delivery_capabilities *source_cap;
-> +	struct usb_power_delivery_capabilities_desc source_desc;
-> +	struct usb_power_delivery_capabilities *sink_cap;
-> +	struct usb_power_delivery_capabilities_desc sink_desc;
-> +	unsigned int operating_snk_mw;
-> +};
+>  struct typec_partner {
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index 38f93d72fd1b..b35b427561ab 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -337,6 +337,9 @@ void typec_partner_set_svdm_version(struct typec_partner *partner,
+>  				    enum usb_pd_svdm_ver svdm_version);
+>  int typec_get_negotiated_svdm_version(struct typec_port *port);
+>  
+> +int typec_get_cable_svdm_version(struct typec_port *port);
+> +void typec_cable_set_svdm_version(struct typec_cable *cable, enum usb_pd_svdm_ver svdm_version);
 > +
->  struct tcpm_port {
->  	struct device *dev;
+>  struct usb_power_delivery *typec_partner_usb_power_delivery_register(struct typec_partner *partner,
+>  							struct usb_power_delivery_desc *desc);
 >  
-> @@ -398,12 +407,14 @@ struct tcpm_port {
->  	unsigned int rx_msgid;
+> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
+> index 72ec8058543a..b3c0866ea70f 100644
+> --- a/include/linux/usb/typec_altmode.h
+> +++ b/include/linux/usb/typec_altmode.h
+> @@ -95,6 +95,16 @@ int typec_cable_altmode_exit(struct typec_altmode *altmode, enum typec_plug_inde
+>  int typec_cable_altmode_vdm(struct typec_altmode *altmode, enum typec_plug_index sop,
+>  			    const u32 header, const u32 *vdo, int count);
 >  
->  	/* USB PD objects */
-> -	struct usb_power_delivery *pd;
-> +	struct usb_power_delivery **pds;
-> +	struct pd_data **pd_list;
->  	struct usb_power_delivery_capabilities *port_source_caps;
->  	struct usb_power_delivery_capabilities *port_sink_caps;
->  	struct usb_power_delivery *partner_pd;
->  	struct usb_power_delivery_capabilities *partner_source_caps;
->  	struct usb_power_delivery_capabilities *partner_sink_caps;
-> +	struct usb_power_delivery *selected_pd;
->  
->  	/* Partner capabilities/requests */
->  	u32 sink_request;
-> @@ -413,6 +424,7 @@ struct tcpm_port {
->  	unsigned int nr_sink_caps;
->  
->  	/* Local capabilities */
-> +	unsigned int pd_count;
->  	u32 src_pdo[PDO_MAX_OBJECTS];
->  	unsigned int nr_src_pdo;
->  	u32 snk_pdo[PDO_MAX_OBJECTS];
-> @@ -6059,12 +6071,114 @@ static int tcpm_port_type_set(struct typec_port *p, enum typec_port_type type)
->  	return 0;
->  }
->  
-> +static struct pd_data *tcpm_find_pd_data(struct tcpm_port *port, struct usb_power_delivery *pd)
+> +/**
+> + * typec_altmode_get_cable_svdm_version - Get negotiated SVDM version for cable plug
+> + * @altmode: Handle to the alternate mode
+> + */
+> +static inline int
+> +typec_altmode_get_cable_svdm_version(struct typec_altmode *altmode)
 > +{
-> +	int i;
-> +
-> +	for (i = 0; port->pd_list[i]; i++) {
-> +		if (port->pd_list[i]->pd == pd)
-> +			return port->pd_list[i];
-> +	}
-> +
-> +	return ERR_PTR(-ENODATA);
+> +	return typec_get_cable_svdm_version(typec_altmode2port(altmode));
 > +}
 > +
-> +static struct usb_power_delivery **tcpm_pd_get(struct typec_port *p)
-> +{
-> +	struct tcpm_port *port = typec_get_drvdata(p);
-> +
-> +	return port->pds;
-> +}
-> +
-> +static int tcpm_pd_set(struct typec_port *p, struct usb_power_delivery *pd)
-> +{
-> +	struct tcpm_port *port = typec_get_drvdata(p);
-> +	struct pd_data *data;
-> +	int i, ret = 0;
-> +
-> +	mutex_lock(&port->lock);
-> +
-> +	if (port->selected_pd == pd)
-> +		goto unlock;
-> +
-> +	data = tcpm_find_pd_data(port, pd);
-> +	if (IS_ERR(data)) {
-> +		ret = PTR_ERR(data);
-> +		goto unlock;
-> +	}
-> +
-> +	if (data->sink_desc.pdo[0]) {
-> +		for (i = 0; i < PDO_MAX_OBJECTS && data->sink_desc.pdo[i]; i++)
-> +			port->snk_pdo[i] = data->sink_desc.pdo[i];
-> +		port->nr_snk_pdo = i + 1;
-> +		port->operating_snk_mw = data->operating_snk_mw;
-> +	}
-> +
-> +	if (data->source_desc.pdo[0]) {
-> +		for (i = 0; i < PDO_MAX_OBJECTS && data->source_desc.pdo[i]; i++)
-> +			port->snk_pdo[i] = data->source_desc.pdo[i];
-> +		port->nr_src_pdo = i + 1;
-> +	}
-> +
-> +	switch (port->state) {
-> +	case SRC_UNATTACHED:
-> +	case SRC_ATTACH_WAIT:
-> +	case SRC_TRYWAIT:
-> +		tcpm_set_cc(port, tcpm_rp_cc(port));
-> +		break;
-> +	case SRC_SEND_CAPABILITIES:
-> +	case SRC_SEND_CAPABILITIES_TIMEOUT:
-> +	case SRC_NEGOTIATE_CAPABILITIES:
-> +	case SRC_READY:
-> +	case SRC_WAIT_NEW_CAPABILITIES:
-> +		port->caps_count = 0;
-> +		port->upcoming_state = SRC_SEND_CAPABILITIES;
-> +		ret = tcpm_ams_start(port, POWER_NEGOTIATION);
-> +		if (ret == -EAGAIN) {
-> +			port->upcoming_state = INVALID_STATE;
-> +			goto unlock;
-> +		}
-> +		break;
-> +	case SNK_NEGOTIATE_CAPABILITIES:
-> +	case SNK_NEGOTIATE_PPS_CAPABILITIES:
-> +	case SNK_READY:
-> +	case SNK_TRANSITION_SINK:
-> +	case SNK_TRANSITION_SINK_VBUS:
-> +		if (port->pps_data.active)
-> +			port->upcoming_state = SNK_NEGOTIATE_PPS_CAPABILITIES;
-> +		else if (port->pd_capable)
-> +			port->upcoming_state = SNK_NEGOTIATE_CAPABILITIES;
-> +		else
-> +			break;
-> +
-> +		port->update_sink_caps = true;
-> +
-> +		ret = tcpm_ams_start(port, POWER_NEGOTIATION);
-> +		if (ret == -EAGAIN) {
-> +			port->upcoming_state = INVALID_STATE;
-> +			goto unlock;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	port->port_source_caps = data->source_cap;
-> +	port->port_sink_caps = data->sink_cap;
-> +	port->selected_pd = pd;
-> +unlock:
-> +	mutex_unlock(&port->lock);
-> +	return ret;
-> +}
-> +
->  static const struct typec_operations tcpm_ops = {
->  	.try_role = tcpm_try_role,
->  	.dr_set = tcpm_dr_set,
->  	.pr_set = tcpm_pr_set,
->  	.vconn_set = tcpm_vconn_set,
-> -	.port_type_set = tcpm_port_type_set
-> +	.port_type_set = tcpm_port_type_set,
-> +	.pd_get = tcpm_pd_get,
-> +	.pd_set = tcpm_pd_set
->  };
->  
->  void tcpm_tcpc_reset(struct tcpm_port *port)
-> @@ -6078,58 +6192,63 @@ EXPORT_SYMBOL_GPL(tcpm_tcpc_reset);
->  
->  static void tcpm_port_unregister_pd(struct tcpm_port *port)
->  {
-> -	usb_power_delivery_unregister_capabilities(port->port_sink_caps);
-> +	int i;
-> +
->  	port->port_sink_caps = NULL;
-> -	usb_power_delivery_unregister_capabilities(port->port_source_caps);
->  	port->port_source_caps = NULL;
-> -	usb_power_delivery_unregister(port->pd);
-> -	port->pd = NULL;
-> +	for (i = 0; i < port->pd_count; i++) {
-> +		usb_power_delivery_unregister_capabilities(port->pd_list[i]->sink_cap);
-> +		kfree(port->pd_list[i]->sink_cap);
-> +		usb_power_delivery_unregister_capabilities(port->pd_list[i]->source_cap);
-> +		kfree(port->pd_list[i]->source_cap);
-> +		devm_kfree(port->dev, port->pd_list[i]);
-> +		port->pd_list[i] = NULL;
-> +		usb_power_delivery_unregister(port->pds[i]);
-> +		port->pds[i] = NULL;
-> +	}
->  }
->  
->  static int tcpm_port_register_pd(struct tcpm_port *port)
->  {
->  	struct usb_power_delivery_desc desc = { port->typec_caps.pd_revision };
-> -	struct usb_power_delivery_capabilities_desc caps = { };
->  	struct usb_power_delivery_capabilities *cap;
-> -	int ret;
-> +	int ret, i;
->  
->  	if (!port->nr_src_pdo && !port->nr_snk_pdo)
->  		return 0;
->  
-> -	port->pd = usb_power_delivery_register(port->dev, &desc);
-> -	if (IS_ERR(port->pd)) {
-> -		ret = PTR_ERR(port->pd);
-> -		goto err_unregister;
-> -	}
-> -
-> -	if (port->nr_src_pdo) {
-> -		memcpy_and_pad(caps.pdo, sizeof(caps.pdo), port->src_pdo,
-> -			       port->nr_src_pdo * sizeof(u32), 0);
-> -		caps.role = TYPEC_SOURCE;
-> -
-> -		cap = usb_power_delivery_register_capabilities(port->pd, &caps);
-> -		if (IS_ERR(cap)) {
-> -			ret = PTR_ERR(cap);
-> +	for (i = 0; i < port->pd_count; i++) {
-> +		port->pds[i] = usb_power_delivery_register(port->dev, &desc);
-> +		if (IS_ERR(port->pds[i])) {
-> +			ret = PTR_ERR(port->pds[i]);
->  			goto err_unregister;
->  		}
-> -
-> -		port->port_source_caps = cap;
-> -	}
-> -
-> -	if (port->nr_snk_pdo) {
-> -		memcpy_and_pad(caps.pdo, sizeof(caps.pdo), port->snk_pdo,
-> -			       port->nr_snk_pdo * sizeof(u32), 0);
-> -		caps.role = TYPEC_SINK;
-> -
-> -		cap = usb_power_delivery_register_capabilities(port->pd, &caps);
-> -		if (IS_ERR(cap)) {
-> -			ret = PTR_ERR(cap);
-> -			goto err_unregister;
-> +		port->pd_list[i]->pd = port->pds[i];
-> +
-> +		if (port->pd_list[i]->source_desc.pdo[0]) {
-> +			cap = usb_power_delivery_register_capabilities(port->pds[i],
-> +								&port->pd_list[i]->source_desc);
-> +			if (IS_ERR(cap)) {
-> +				ret = PTR_ERR(cap);
-> +				goto err_unregister;
-> +			}
-> +			port->pd_list[i]->source_cap = cap;
->  		}
->  
-> -		port->port_sink_caps = cap;
-> +		if (port->pd_list[i]->sink_desc.pdo[0]) {
-> +			cap = usb_power_delivery_register_capabilities(port->pds[i],
-> +								&port->pd_list[i]->sink_desc);
-> +			if (IS_ERR(cap)) {
-> +				ret = PTR_ERR(cap);
-> +				goto err_unregister;
-> +			}
-> +			port->pd_list[i]->sink_cap = cap;
-> +		}
->  	}
->  
-> +	port->port_source_caps = port->pd_list[0]->source_cap;
-> +	port->port_sink_caps = port->pd_list[0]->sink_cap;
-> +	port->selected_pd = port->pds[0];
->  	return 0;
->  
->  err_unregister:
-> @@ -6138,12 +6257,14 @@ static int tcpm_port_register_pd(struct tcpm_port *port)
->  	return ret;
->  }
->  
-> -static int tcpm_fw_get_caps(struct tcpm_port *port,
-> -			    struct fwnode_handle *fwnode)
-> +static int tcpm_fw_get_caps(struct tcpm_port *port, struct fwnode_handle *fwnode)
->  {
-> +	struct fwnode_handle *capabilities, *child, *caps = NULL;
-> +	unsigned int nr_src_pdo, nr_snk_pdo;
->  	const char *opmode_str;
-> -	int ret;
-> -	u32 mw, frs_current;
-> +	u32 *src_pdo, *snk_pdo;
-> +	u32 uw, frs_current;
-> +	int ret = 0, i;
->  
->  	if (!fwnode)
->  		return -EINVAL;
-> @@ -6163,28 +6284,10 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
->  
->  	port->port_type = port->typec_caps.type;
->  	port->pd_supported = !fwnode_property_read_bool(fwnode, "pd-disable");
-> -
->  	port->slow_charger_loop = fwnode_property_read_bool(fwnode, "slow-charger-loop");
-> -	if (port->port_type == TYPEC_PORT_SNK)
-> -		goto sink;
-> -
-> -	/* Get Source PDOs for the PD port or Source Rp value for the non-PD port */
-> -	if (port->pd_supported) {
-> -		ret = fwnode_property_count_u32(fwnode, "source-pdos");
-> -		if (ret == 0)
-> -			return -EINVAL;
-> -		else if (ret < 0)
-> -			return ret;
-> +	port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
->  
-> -		port->nr_src_pdo = min(ret, PDO_MAX_OBJECTS);
-> -		ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
-> -						     port->src_pdo, port->nr_src_pdo);
-> -		if (ret)
-> -			return ret;
-> -		ret = tcpm_validate_caps(port, port->src_pdo, port->nr_src_pdo);
-> -		if (ret)
-> -			return ret;
-> -	} else {
-> +	if (!port->pd_supported) {
->  		ret = fwnode_property_read_string(fwnode, "typec-power-opmode", &opmode_str);
->  		if (ret)
->  			return ret;
-> @@ -6192,45 +6295,150 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
->  		if (ret < 0)
->  			return ret;
->  		port->src_rp = tcpm_pwr_opmode_to_rp(ret);
-> -	}
-> -
-> -	if (port->port_type == TYPEC_PORT_SRC)
-> -		return 0;
-> -
-> -sink:
-> -	port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
-> -
-> -	if (!port->pd_supported)
->  		return 0;
-> +	}
->  
-> -	/* Get sink pdos */
-> -	ret = fwnode_property_count_u32(fwnode, "sink-pdos");
-> -	if (ret <= 0)
-> -		return -EINVAL;
-> -
-> -	port->nr_snk_pdo = min(ret, PDO_MAX_OBJECTS);
-> -	ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
-> -					     port->snk_pdo, port->nr_snk_pdo);
-> -	if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
-> -					    port->nr_snk_pdo))
-> -		return -EINVAL;
-> -
-> -	if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
-> -		return -EINVAL;
-> -	port->operating_snk_mw = mw / 1000;
-> +	/* The following code are applicable to pd-capable ports, i.e. pd_supported is true. */
->  
->  	/* FRS can only be supported by DRP ports */
->  	if (port->port_type == TYPEC_PORT_DRP) {
->  		ret = fwnode_property_read_u32(fwnode, "new-source-frs-typec-current",
->  					       &frs_current);
-> -		if (ret >= 0 && frs_current <= FRS_5V_3A)
-> +		if (!ret && frs_current <= FRS_5V_3A)
->  			port->new_source_frs_current = frs_current;
-> +
-> +		if (ret)
-> +			ret = 0;
->  	}
->  
-> +	/* For the backward compatibility, "capabilities" node is optional. */
-> +	capabilities = fwnode_get_named_child_node(fwnode, "capabilities");
-> +	if (!capabilities) {
-> +		port->pd_count = 1;
-> +	} else {
-> +		fwnode_for_each_child_node(capabilities, child)
-> +			port->pd_count++;
-> +
-> +		if (!port->pd_count) {
-> +			ret = -ENODATA;
-> +			goto put_capabilities;
-> +		}
-> +	}
-> +
-> +	port->pds = devm_kcalloc(port->dev, port->pd_count, sizeof(struct usb_power_delivery *),
-> +				 GFP_KERNEL);
-> +	if (!port->pds) {
-> +		ret = -ENOMEM;
-> +		goto put_capabilities;
-> +	}
-> +
-> +	port->pd_list = devm_kcalloc(port->dev, port->pd_count, sizeof(struct pd_data *),
-> +				     GFP_KERNEL);
-> +	if (!port->pd_list) {
-> +		ret = -ENOMEM;
-> +		goto put_capabilities;
-> +	}
-> +
-> +	for (i = 0; i < port->pd_count; i++) {
-> +		port->pd_list[i] = devm_kzalloc(port->dev, sizeof(struct pd_data), GFP_KERNEL);
-> +		if (!port->pd_list[i]) {
-> +			ret = -ENOMEM;
-> +			goto put_capabilities;
-> +		}
-> +
-> +		src_pdo = port->pd_list[i]->source_desc.pdo;
-> +		port->pd_list[i]->source_desc.role = TYPEC_SOURCE;
-> +		snk_pdo = port->pd_list[i]->sink_desc.pdo;
-> +		port->pd_list[i]->sink_desc.role = TYPEC_SINK;
-> +
-> +		/* If "capabilities" is NULL, fall back to single pd cap population. */
-> +		if (!capabilities)
-> +			caps = fwnode;
-> +		else
-> +			caps = fwnode_get_next_child_node(capabilities, caps);
-> +
-> +		if (port->port_type != TYPEC_PORT_SNK) {
-> +			ret = fwnode_property_count_u32(caps, "source-pdos");
-> +			if (ret == 0) {
-> +				ret = -EINVAL;
-> +				goto put_caps;
-> +			}
-> +			if (ret < 0)
-> +				goto put_caps;
-> +
-> +			nr_src_pdo = min(ret, PDO_MAX_OBJECTS);
-> +			ret = fwnode_property_read_u32_array(caps, "source-pdos", src_pdo,
-> +							     nr_src_pdo);
-> +			if (ret)
-> +				goto put_caps;
-> +
-> +			ret = tcpm_validate_caps(port, src_pdo, nr_src_pdo);
-> +			if (ret)
-> +				goto put_caps;
-> +
-> +			if (i == 0) {
-> +				port->nr_src_pdo = nr_src_pdo;
-> +				memcpy_and_pad(port->src_pdo, sizeof(u32) * PDO_MAX_OBJECTS,
-> +					       port->pd_list[0]->source_desc.pdo,
-> +					       sizeof(u32) * nr_src_pdo,
-> +					       0);
-> +			}
-> +		}
-> +
-> +		if (port->port_type != TYPEC_PORT_SRC) {
-> +			ret = fwnode_property_count_u32(caps, "sink-pdos");
-> +			if (ret == 0) {
-> +				ret = -EINVAL;
-> +				goto put_caps;
-> +			}
-> +
-> +			if (ret < 0)
-> +				goto put_caps;
-> +
-> +			nr_snk_pdo = min(ret, PDO_MAX_OBJECTS);
-> +			ret = fwnode_property_read_u32_array(caps, "sink-pdos", snk_pdo,
-> +							     nr_snk_pdo);
-> +			if (ret)
-> +				goto put_caps;
-> +
-> +			ret = tcpm_validate_caps(port, snk_pdo, nr_snk_pdo);
-> +			if (ret)
-> +				goto put_caps;
-> +
-> +			if (fwnode_property_read_u32(caps, "op-sink-microwatt", &uw) < 0) {
-> +				ret = -EINVAL;
-> +				goto put_caps;
-> +			}
-> +
-> +			port->pd_list[i]->operating_snk_mw = uw / 1000;
-> +
-> +			if (i == 0) {
-> +				port->nr_snk_pdo = nr_snk_pdo;
-> +				memcpy_and_pad(port->snk_pdo, sizeof(u32) * PDO_MAX_OBJECTS,
-> +					       port->pd_list[0]->sink_desc.pdo,
-> +					       sizeof(u32) * nr_snk_pdo,
-> +					       0);
-> +				port->operating_snk_mw = port->pd_list[0]->operating_snk_mw;
-> +			}
-> +		}
-> +	}
-> +
-> +put_caps:
-> +	if (caps != fwnode)
-> +		fwnode_handle_put(caps);
-> +put_capabilities:
-> +	fwnode_handle_put(capabilities);
-> +	return ret;
-> +}
-> +
-> +static int tcpm_fw_get_snk_vdos(struct tcpm_port *port, struct fwnode_handle *fwnode)
-> +{
-> +	int ret;
-> +
->  	/* sink-vdos is optional */
->  	ret = fwnode_property_count_u32(fwnode, "sink-vdos");
->  	if (ret < 0)
-> -		ret = 0;
-> +		return 0;
->  
->  	port->nr_snk_vdo = min(ret, VDO_MAX_OBJECTS);
->  	if (port->nr_snk_vdo) {
-> @@ -6596,12 +6804,14 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->  	tcpm_debugfs_init(port);
->  
->  	err = tcpm_fw_get_caps(port, tcpc->fwnode);
-> +	if (err < 0)
-> +		goto out_destroy_wq;
-> +	err = tcpm_fw_get_snk_vdos(port, tcpc->fwnode);
->  	if (err < 0)
->  		goto out_destroy_wq;
->  
->  	port->try_role = port->typec_caps.prefer_role;
->  
-> -	port->typec_caps.fwnode = tcpc->fwnode;
->  	port->typec_caps.revision = 0x0120;	/* Type-C spec release 1.2 */
->  	port->typec_caps.pd_revision = 0x0300;	/* USB-PD spec release 3.0 */
->  	port->typec_caps.svdm_version = SVDM_VER_2_0;
-> @@ -6610,7 +6820,6 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->  	port->typec_caps.orientation_aware = 1;
->  
->  	port->partner_desc.identity = &port->partner_ident;
-> -	port->port_type = port->typec_caps.type;
->  
->  	port->role_sw = usb_role_switch_get(port->dev);
->  	if (!port->role_sw)
-> @@ -6629,7 +6838,7 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->  	if (err)
->  		goto out_role_sw_put;
->  
-> -	port->typec_caps.pd = port->pd;
-> +	port->typec_caps.pd = port->pds[0];
->  
->  	port->typec_port = typec_register_port(port->dev, &port->typec_caps);
->  	if (IS_ERR(port->typec_port)) {
+>  /*
+>   * These are the connector states (USB, Safe and Alt Mode) defined in USB Type-C
+>   * Specification. SVID specific connector states are expected to follow and
 > -- 
 > 2.43.0.472.g3155946c3a-goog
 
