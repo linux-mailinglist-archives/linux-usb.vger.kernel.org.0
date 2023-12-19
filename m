@@ -1,291 +1,363 @@
-Return-Path: <linux-usb+bounces-4346-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4347-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70F34818920
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 14:59:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9010818958
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 15:07:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A0CF1C239D0
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 13:59:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E8191F24E36
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 14:07:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDDAC1A594;
-	Tue, 19 Dec 2023 13:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 391AB1A72F;
+	Tue, 19 Dec 2023 14:07:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RGzHaMlA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lfXrfHdS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26E91A587;
-	Tue, 19 Dec 2023 13:59:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7F120DC7;
+	Tue, 19 Dec 2023 14:07:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702994347; x=1734530347;
+  t=1702994848; x=1734530848;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VjjWEcaFw5AcYEfhgaTZph8Nh19CglCkY2AK88XKipA=;
-  b=RGzHaMlAob2EnTTpO4fCh1v/BufbRJFDLVI9Ovt8TFl/NUN6qip1Kt6n
-   t0EyhhhqplOniCUR2mBJyICqAE0Al9aQdZBAqnNDofBRlfnicSD2S+owp
-   b+4kwTCy3mF8/xHaBjJppjJ8xSRxVhnbkY5Igkc5is5X7WZl6PSDQFasz
-   56HMXtsuVaf3HngXZXzKXObDN1xtZ89gfXUu+BAyIDHcja449g0S4NYyS
-   cOryM+elHASVOavAcMoE45YMGD2bA1w2nGPnVrnfkU8t4a29rnEDUflt3
-   CiN4W/Z7jw2MwwAAgZr2+vqjwoFjhSoKOTlL+mo2nIz5/cGUUsq/4RyQC
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=k8HRPwanlNvagjL2x1VWakPdYeKVgB5+5JJkqV1vtPE=;
+  b=lfXrfHdSufqoqQkc7VQEayN0Hq2cjJ23ZF8trFPEVaYT8CKdphwrfHkj
+   scBkrl6vy2+TLQWAXwWmTwhy5mRK3NP84OOKsKwbPbSyT8ZMlO+NB13qv
+   vwo2tmdzp2y9Jbf+vMqeL26x9OARdANY8FVXxweTS6YXeMBaly/qUH0ah
+   3uX82YSI89mVrRN9R2jfaBlsvxr/kIPgteFyijqxfK6TwH28PMbgq4h2q
+   FxoSNzWgCuRMG5da+X03TjmVKQTQ9Q3tw2Sgp1zxD8pB4J1mu8pC4UORz
+   tpIfisEmPYjAcgW66WQlb70FUhJPj0Gz8Z7hAcujrXJrVoRuQZg0fU+k+
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="398443935"
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="481850882"
 X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
-   d="scan'208";a="398443935"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 05:59:06 -0800
+   d="scan'208";a="481850882"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 06:07:27 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="779487581"
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="810244022"
 X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
-   d="scan'208";a="779487581"
+   d="scan'208";a="810244022"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga007.fm.intel.com with SMTP; 19 Dec 2023 05:59:02 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 19 Dec 2023 15:59:01 +0200
-Date: Tue, 19 Dec 2023 15:59:01 +0200
+  by orsmga001.jf.intel.com with SMTP; 19 Dec 2023 06:07:23 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 19 Dec 2023 16:07:22 +0200
+Date: Tue, 19 Dec 2023 16:07:22 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: RD Babiera <rdbabiera@google.com>
 Cc: linux@roeck-us.net, gregkh@linuxfoundation.org,
 	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
 	badhri@google.com, bryan.odonoghue@linaro.org, agross@kernel.org,
 	andersson@kernel.org, konrad.dybcio@linaro.org
-Subject: Re: [PATCH v2 04/12] usb: typec: tcpci: add tcpm_transmit_type to
- tcpm_pd_receive
-Message-ID: <ZYGhAeu2DVftQReO@kuha.fi.intel.com>
+Subject: Re: [PATCH v2 05/12] usb: typec: tcpm: process receive and
+ transmission of sop' messages
+Message-ID: <ZYGjmryUR7m2Q9yw@kuha.fi.intel.com>
 References: <20231214230850.379863-14-rdbabiera@google.com>
- <20231214230850.379863-18-rdbabiera@google.com>
+ <20231214230850.379863-19-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231214230850.379863-18-rdbabiera@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231214230850.379863-19-rdbabiera@google.com>
 
-On Thu, Dec 14, 2023 at 11:08:48PM +0000, RD Babiera wrote:
-> tcpm_pd_receive adds the SOP type as a parameter, and passes it within the
-> pd_rx_event struct for tcpm_pd_rx_handler to use. For now, the handler
-> drops all SOP' messages.
+On Thu, Dec 14, 2023 at 11:08:49PM +0000, RD Babiera wrote:
+> Add negotiated revision and tx/rx message ids to tcpm_port specific to
+> SOP'. tx_sop_type is added to the tcpm_port to determine whether the
+> current constructed message will be sent over SOP or SOP' if not
+> sent immediately.
 > 
-> Maxim based tcpci drivers are capable of SOP' communication, so process_rx
-> now takes the SOP type into account and passes the value to
-> tcpm_pd_receive.
+> tcpm_pd_rx_handler updates the received message ids. SOP* messages are not
+> processed afterwards. The handler also calls tcpm_can_communicate_sop_prime
+> to determine if a SOP' message is directed towards the port, and drops SOP'
+> messages it should not respond to.
 > 
-> tcpci_set_pd_rx now utilizes the cable_comm_capable flag to determine if
-> TCPC_RX_DETECT_SOP1 should be added to the bitfield when enabling PD
-> message reception.
-> 
-> For all other consumers of tcpm_pd_receive, default the new field to
-> TCPC_TX_SOP.
+> tcpm_can_communicate_sop_prime is added as a helper to determine whether
+> the port is capable of communicating over SOP' at a given moment. Being
+> the Vconn source is a requirement in Power Delivery 3.0 but only a
+> recommendation in Power Delviery 2.0. Because the port should ensure that
+> the cable is powered before communication, always enforce the port is the
+> Vconn source regardless of revision.
 > 
 > Signed-off-by: RD Babiera <rdbabiera@google.com>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
 > ---
->  drivers/usb/typec/tcpm/fusb302.c              |  2 +-
->  .../typec/tcpm/qcom/qcom_pmic_typec_pdphy.c   |  2 +-
->  drivers/usb/typec/tcpm/tcpci.c                |  7 +++++--
->  drivers/usb/typec/tcpm/tcpci_maxim_core.c     | 20 ++++++++++++++++---
->  drivers/usb/typec/tcpm/tcpm.c                 | 10 +++++++++-
->  drivers/usb/typec/tcpm/wcove.c                |  2 +-
->  include/linux/usb/tcpci.h                     |  1 +
->  include/linux/usb/tcpm.h                      |  3 ++-
->  8 files changed, 37 insertions(+), 10 deletions(-)
+>  drivers/usb/typec/tcpm/tcpm.c | 156 +++++++++++++++++++++++++++++++---
+>  1 file changed, 145 insertions(+), 11 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-> index bc21006e979c..ef18a448b740 100644
-> --- a/drivers/usb/typec/tcpm/fusb302.c
-> +++ b/drivers/usb/typec/tcpm/fusb302.c
-> @@ -1467,7 +1467,7 @@ static int fusb302_pd_read_message(struct fusb302_chip *chip,
->  	if ((!len) && (pd_header_type_le(msg->header) == PD_CTRL_GOOD_CRC))
->  		tcpm_pd_transmit_complete(chip->tcpm_port, TCPC_TX_SUCCESS);
->  	else
-> -		tcpm_pd_receive(chip->tcpm_port, msg);
-> +		tcpm_pd_receive(chip->tcpm_port, msg, TCPC_TX_SOP);
->  
->  	return ret;
->  }
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> index 52c81378e36e..a3154085ae32 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> @@ -299,7 +299,7 @@ static void qcom_pmic_typec_pdphy_pd_receive(struct pmic_typec_pdphy *pmic_typec
->  
->  	if (!ret) {
->  		dev_vdbg(dev, "pd_receive: handing %d bytes to tcpm\n", size);
-> -		tcpm_pd_receive(pmic_typec_pdphy->tcpm_port, &msg);
-> +		tcpm_pd_receive(pmic_typec_pdphy->tcpm_port, &msg, TCPC_TX_SOP);
->  	}
->  }
->  
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index 1ededbcecc09..8ea4ed159a13 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -445,8 +445,11 @@ static int tcpci_set_pd_rx(struct tcpc_dev *tcpc, bool enable)
->  	unsigned int reg = 0;
->  	int ret;
->  
-> -	if (enable)
-> +	if (enable) {
->  		reg = TCPC_RX_DETECT_SOP | TCPC_RX_DETECT_HARD_RESET;
-> +		if (tcpci->data->cable_comm_capable)
-> +			reg |= TCPC_RX_DETECT_SOP1;
-> +	}
->  	ret = regmap_write(tcpci->regmap, TCPC_RX_DETECT, reg);
->  	if (ret < 0)
->  		return ret;
-> @@ -719,7 +722,7 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->  		/* Read complete, clear RX status alert bit */
->  		tcpci_write16(tcpci, TCPC_ALERT, TCPC_ALERT_RX_STATUS);
->  
-> -		tcpm_pd_receive(tcpci->port, &msg);
-> +		tcpm_pd_receive(tcpci->port, &msg, TCPC_TX_SOP);
->  	}
->  
->  	if (tcpci->data->vbus_vsafe0v && (status & TCPC_ALERT_EXTENDED_STATUS)) {
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> index 7b2d4e6e52a2..f9f838df43f7 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> @@ -128,6 +128,7 @@ static void process_rx(struct max_tcpci_chip *chip, u16 status)
->  	u8 count, frame_type, rx_buf[TCPC_RECEIVE_BUFFER_LEN];
->  	int ret, payload_index;
->  	u8 *rx_buf_ptr;
-> +	enum tcpm_transmit_type rx_type;
->  
->  	/*
->  	 * READABLE_BYTE_COUNT: Indicates the number of bytes in the RX_BUF_BYTE_x registers
-> @@ -143,10 +144,23 @@ static void process_rx(struct max_tcpci_chip *chip, u16 status)
->  	count = rx_buf[TCPC_RECEIVE_BUFFER_COUNT_OFFSET];
->  	frame_type = rx_buf[TCPC_RECEIVE_BUFFER_FRAME_TYPE_OFFSET];
->  
-> -	if (count == 0 || frame_type != TCPC_RX_BUF_FRAME_TYPE_SOP) {
-> +	switch (frame_type) {
-> +	case TCPC_RX_BUF_FRAME_TYPE_SOP1:
-> +		rx_type = TCPC_TX_SOP_PRIME;
-> +		break;
-> +	case TCPC_RX_BUF_FRAME_TYPE_SOP:
-> +		rx_type = TCPC_TX_SOP;
-> +		break;
-> +	default:
-> +		rx_type = TCPC_TX_SOP;
-> +		break;
-> +	}
-> +
-> +	if (count == 0 || (frame_type != TCPC_RX_BUF_FRAME_TYPE_SOP &&
-> +	    frame_type != TCPC_RX_BUF_FRAME_TYPE_SOP1)) {
->  		max_tcpci_write16(chip, TCPC_ALERT, TCPC_ALERT_RX_STATUS);
->  		dev_err(chip->dev, "%s\n", count ==  0 ? "error: count is 0" :
-> -			"error frame_type is not SOP");
-> +			"error frame_type is not SOP/SOP'");
->  		return;
->  	}
->  
-> @@ -183,7 +197,7 @@ static void process_rx(struct max_tcpci_chip *chip, u16 status)
->  	if (ret < 0)
->  		return;
->  
-> -	tcpm_pd_receive(chip->port, &msg);
-> +	tcpm_pd_receive(chip->port, &msg, rx_type);
->  }
->  
->  static int max_tcpci_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata, bool source, bool sink)
 > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index ff67553b6932..b05325dcd7ac 100644
+> index b05325dcd7ac..bc6c5f04e62f 100644
 > --- a/drivers/usb/typec/tcpm/tcpm.c
 > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -506,6 +506,7 @@ struct pd_rx_event {
->  	struct kthread_work work;
->  	struct tcpm_port *port;
->  	struct pd_message msg;
-> +	enum tcpm_transmit_type rx_sop_type;
->  };
+> @@ -493,6 +493,35 @@ struct tcpm_port {
+>  	 * transitions.
+>  	 */
+>  	bool potential_contaminant;
+> +
+> +	/* SOP* Related Fields */
+> +	/*
+> +	 * tx_sop_type determines which SOP* a message is being sent on.
+> +	 * For messages that are queued and not sent immediately such as in
+> +	 * tcpm_queue_message or messages that send after state changes,
+> +	 * the tx_sop_type is set accordingly.
+> +	 */
+> +	enum tcpm_transmit_type tx_sop_type;
+> +	/*
+> +	 * Prior to discovering the port partner's Specification Revision, the
+> +	 * Vconn source and cable plug will use the lower of their two revisions.
+> +	 *
+> +	 * When the port partner's Specification Revision is discovered, the following
+> +	 * rules are put in place.
+> +	 *	1. If the cable revision (1) is lower than the revision negotiated
+> +	 * between the port and partner (2), the port and partner will communicate
+> +	 * on revision (2), but the port and cable will communicate on revision (1).
+> +	 *	2. If the cable revision (1) is higher than the revision negotiated
+> +	 * between the port and partner (2), the port and partner will communicate
+> +	 * on revision (2), and the port and cable will communicate on revision (2)
+> +	 * as well.
+> +	 */
+> +	unsigned int negotiated_rev_prime;
+> +	/*
+> +	 * Each SOP* type must maintain their own tx and rx message IDs
+> +	 */
+> +	unsigned int message_id_prime;
+> +	unsigned int rx_msgid_prime;
+>  #ifdef CONFIG_DEBUG_FS
+>  	struct dentry *dentry;
+>  	struct mutex logbuffer_lock;	/* log buffer access lock */
+> @@ -882,19 +911,32 @@ static void tcpm_ams_finish(struct tcpm_port *port)
+>  }
 >  
->  static const char * const pd_rev[] = {
-> @@ -2969,12 +2970,17 @@ static void tcpm_pd_rx_handler(struct kthread_work *work)
->  	const struct pd_message *msg = &event->msg;
->  	unsigned int cnt = pd_header_cnt_le(msg->header);
->  	struct tcpm_port *port = event->port;
-> +	enum tcpm_transmit_type rx_sop_type = event->rx_sop_type;
+>  static int tcpm_pd_transmit(struct tcpm_port *port,
+> -			    enum tcpm_transmit_type type,
+> +			    enum tcpm_transmit_type tx_sop_type,
+>  			    const struct pd_message *msg)
+>  {
+>  	unsigned long timeout;
+>  	int ret;
+> +	unsigned int negotiated_rev;
+> +
+> +	switch (tx_sop_type) {
+> +	case TCPC_TX_SOP_PRIME:
+> +		negotiated_rev = port->negotiated_rev_prime;
+> +		break;
+> +	case TCPC_TX_SOP:
+> +		negotiated_rev = port->negotiated_rev;
+> +		break;
+> +	default:
+> +		negotiated_rev = port->negotiated_rev;
+> +		break;
+
+Why not just fall through?
+
+	case TCPC_TX_SOP:
+	default:
+		negotiated_rev = port->negotiated_rev;
+		break;
+
+> +	}
 >  
->  	mutex_lock(&port->lock);
+>  	if (msg)
+>  		tcpm_log(port, "PD TX, header: %#x", le16_to_cpu(msg->header));
+>  	else
+> -		tcpm_log(port, "PD TX, type: %#x", type);
+> +		tcpm_log(port, "PD TX, type: %#x", tx_sop_type);
 >  
+>  	reinit_completion(&port->tx_complete);
+> -	ret = port->tcpc->pd_transmit(port->tcpc, type, msg, port->negotiated_rev);
+> +	ret = port->tcpc->pd_transmit(port->tcpc, tx_sop_type, msg, negotiated_rev);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> @@ -907,7 +949,20 @@ static int tcpm_pd_transmit(struct tcpm_port *port,
+>  
+>  	switch (port->tx_status) {
+>  	case TCPC_TX_SUCCESS:
+> -		port->message_id = (port->message_id + 1) & PD_HEADER_ID_MASK;
+> +		switch (tx_sop_type) {
+> +		case TCPC_TX_SOP_PRIME:
+> +			port->message_id_prime = (port->message_id_prime + 1) &
+> +						 PD_HEADER_ID_MASK;
+> +			break;
+> +		case TCPC_TX_SOP:
+> +			port->message_id = (port->message_id + 1) &
+> +					   PD_HEADER_ID_MASK;
+> +			break;
+
+Ditto.
+
+> +		default:
+> +			port->message_id = (port->message_id + 1) &
+> +					   PD_HEADER_ID_MASK;
+> +			break;
+> +		}
+>  		/*
+>  		 * USB PD rev 2.0, 8.3.2.2.1:
+>  		 * USB PD rev 3.0, 8.3.2.1.3:
+> @@ -1592,6 +1647,57 @@ static void tcpm_register_partner_altmodes(struct tcpm_port *port)
+>  
+>  #define supports_modal(port)	PD_IDH_MODAL_SUPP((port)->partner_ident.id_header)
+>  
+> +/*
+> + * Helper to determine whether the port is capable of SOP' communication at the
+> + * current point in time.
+> + */
+> +static bool tcpm_can_communicate_sop_prime(struct tcpm_port *port)
+> +{
+> +	/* Check to see if tcpc supports SOP' communication */
+> +	if (!port->tcpc->cable_comm_capable || !port->tcpc->cable_comm_capable(port->tcpc))
+> +		return false;
+> +	/*
+> +	 * Power Delivery 2.0 Section 6.3.11
+> +	 * Before communicating with a Cable Plug a Port Should ensure that it
+> +	 * is the Vconn Source and that the Cable Plugs are powered by
+> +	 * performing a Vconn swap if necessary. Since it cannot be guaranteed
+> +	 * that the present Vconn Source is supplying Vconn, the only means to
+> +	 * ensure that the Cable Plugs are powered is for a Port wishing to
+> +	 * communicate with a Cable Plug is to become the Vconn Source.
+> +	 *
+> +	 * Power Delivery 3.0 Section 6.3.11
+> +	 * Before communicating with a Cable Plug a Port Shall ensure that it
+> +	 * is the Vconn source.
+> +	 */
+> +	if (port->vconn_role != TYPEC_SOURCE)
+> +		return false;
+> +	/*
+> +	 * Power Delivery 2.0 Section 2.4.4
+> +	 * When no Contract or an Implicit Contract is in place the Source can
+> +	 * communicate with a Cable Plug using SOP' packets in order to discover
+> +	 * its characteristics.
+> +	 *
+> +	 * Power Delivery 3.0 Section 2.4.4
+> +	 * When no Contract or an Implicit Contract is in place only the Source
+> +	 * port that is supplying Vconn is allowed to send packets to a Cable
+> +	 * Plug and is allowed to respond to packets from the Cable Plug.
+> +	 */
+> +	if (!port->explicit_contract)
+> +		return port->pwr_role == TYPEC_SOURCE;
+> +	if (port->negotiated_rev == PD_REV30)
+> +		return true;
+> +	/*
+> +	 * Power Delivery 2.0 Section 2.4.4
+> +	 *
+> +	 * When an Explicit Contract is in place the DFP (either the Source or
+> +	 * the Sink) can communicate with the Cable Plug(s) using SOP’/SOP”
+> +	 * Packets (see Figure 2-3).
+> +	 */
+> +	if (port->negotiated_rev == PD_REV20)
+> +		return port->data_role == TYPEC_HOST;
+> +	return false;
+> +}
+> +
+>  static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+>  			const u32 *p, int cnt, u32 *response,
+>  			enum adev_actions *adev_action)
+> @@ -2977,14 +3083,18 @@ static void tcpm_pd_rx_handler(struct kthread_work *work)
 >  	tcpm_log(port, "PD RX, header: %#x [%d]", le16_to_cpu(msg->header),
 >  		 port->attached);
 >  
-> +	/* Ignore SOP' for now */
-> +	if (rx_sop_type == TCPC_TX_SOP_PRIME)
-> +		goto done;
-> +
+> -	/* Ignore SOP' for now */
+> -	if (rx_sop_type == TCPC_TX_SOP_PRIME)
+> -		goto done;
+> -
 >  	if (port->attached) {
 >  		enum pd_ctrl_msg_type type = pd_header_type_le(msg->header);
 >  		unsigned int msgid = pd_header_msgid_le(msg->header);
-> @@ -3016,7 +3022,8 @@ static void tcpm_pd_rx_handler(struct kthread_work *work)
->  	kfree(event);
->  }
 >  
-> -void tcpm_pd_receive(struct tcpm_port *port, const struct pd_message *msg)
-> +void tcpm_pd_receive(struct tcpm_port *port, const struct pd_message *msg,
-> +		     enum tcpm_transmit_type rx_sop_type)
->  {
->  	struct pd_rx_event *event;
+> +		/*
+> +		 * Drop SOP' messages if cannot receive via
+> +		 * tcpm_can_communicate_sop_prime
+> +		 */
+> +		if (rx_sop_type == TCPC_TX_SOP_PRIME &&
+> +		    !tcpm_can_communicate_sop_prime(port))
+> +			goto done;
+> +
+>  		/*
+>  		 * USB PD standard, 6.6.1.2:
+>  		 * "... if MessageID value in a received Message is the
+> @@ -2994,16 +3104,33 @@ static void tcpm_pd_rx_handler(struct kthread_work *work)
+>  		 * Message). Note: this shall not apply to the Soft_Reset
+>  		 * Message which always has a MessageID value of zero."
+>  		 */
+> -		if (msgid == port->rx_msgid && type != PD_CTRL_SOFT_RESET)
+> +		switch (rx_sop_type) {
+> +		case TCPC_TX_SOP_PRIME:
+> +			if (msgid == port->rx_msgid_prime)
+> +				goto done;
+> +			port->rx_msgid_prime = msgid;
+> +			/* Ignore SOP' for now */
+>  			goto done;
+> -		port->rx_msgid = msgid;
+> +		case TCPC_TX_SOP:
+> +			if (msgid == port->rx_msgid &&
+> +			    type != PD_CTRL_SOFT_RESET)
+> +				goto done;
+> +			port->rx_msgid = msgid;
+> +			break;
+
+Ditto.
+
+> +		default:
+> +			if (msgid == port->rx_msgid &&
+> +			    type != PD_CTRL_SOFT_RESET)
+
+And that fits on one line.
+
+> +				goto done;
+> +			port->rx_msgid = msgid;
+> +			break;
+> +		}
 >  
-> @@ -3026,6 +3033,7 @@ void tcpm_pd_receive(struct tcpm_port *port, const struct pd_message *msg)
+>  		/*
+>  		 * If both ends believe to be DFP/host, we have a data role
+>  		 * mismatch.
+>  		 */
+>  		if (!!(le16_to_cpu(msg->header) & PD_HEADER_DATA_ROLE) ==
+> -		    (port->data_role == TYPEC_HOST)) {
+> +		    (port->data_role == TYPEC_HOST) && rx_sop_type == TCPC_TX_SOP) {
+>  			tcpm_log(port,
+>  				 "Data role mismatch, initiating error recovery");
+>  			tcpm_set_state(port, ERROR_RECOVERY, 0);
+> @@ -3708,6 +3835,7 @@ static void tcpm_reset_port(struct tcpm_port *port)
+>  	 * we can check tcpm_pd_rx_handler() if we had seen it before.
+>  	 */
+>  	port->rx_msgid = -1;
+> +	port->rx_msgid_prime = -1;
 >  
->  	kthread_init_work(&event->work, tcpm_pd_rx_handler);
->  	event->port = port;
-> +	event->rx_sop_type = rx_sop_type;
->  	memcpy(&event->msg, msg, sizeof(*msg));
->  	kthread_queue_work(port->wq, &event->work);
->  }
-> diff --git a/drivers/usb/typec/tcpm/wcove.c b/drivers/usb/typec/tcpm/wcove.c
-> index 87d4abde0ea2..cf719307b3f6 100644
-> --- a/drivers/usb/typec/tcpm/wcove.c
-> +++ b/drivers/usb/typec/tcpm/wcove.c
-> @@ -535,7 +535,7 @@ static irqreturn_t wcove_typec_irq(int irq, void *data)
->  				goto err;
->  			}
+>  	port->tcpc->set_pd_rx(port->tcpc, false);
+>  	tcpm_init_vbus(port);	/* also disables charging */
+> @@ -4022,8 +4150,11 @@ static void run_state_machine(struct tcpm_port *port)
+>  		port->pwr_opmode = TYPEC_PWR_MODE_USB;
+>  		port->caps_count = 0;
+>  		port->negotiated_rev = PD_MAX_REV;
+> +		port->negotiated_rev_prime = PD_MAX_REV;
+>  		port->message_id = 0;
+> +		port->message_id_prime = 0;
+>  		port->rx_msgid = -1;
+> +		port->rx_msgid_prime = -1;
+>  		port->explicit_contract = false;
+>  		/* SNK -> SRC POWER/FAST_ROLE_SWAP finished */
+>  		if (port->ams == POWER_ROLE_SWAP ||
+> @@ -4263,8 +4394,11 @@ static void run_state_machine(struct tcpm_port *port)
+>  		typec_set_pwr_opmode(port->typec_port, opmode);
+>  		port->pwr_opmode = TYPEC_PWR_MODE_USB;
+>  		port->negotiated_rev = PD_MAX_REV;
+> +		port->negotiated_rev_prime = PD_MAX_REV;
+>  		port->message_id = 0;
+> +		port->message_id_prime = 0;
+>  		port->rx_msgid = -1;
+> +		port->rx_msgid_prime = -1;
+>  		port->explicit_contract = false;
 >  
-> -			tcpm_pd_receive(wcove->tcpm, &msg);
-> +			tcpm_pd_receive(wcove->tcpm, &msg, TCPC_TX_SOP);
->  
->  			ret = regmap_read(wcove->regmap, USBC_RXSTATUS,
->  					  &status);
-> diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-> index 1d0b849defd0..9ed6d62c9c5f 100644
-> --- a/include/linux/usb/tcpci.h
-> +++ b/include/linux/usb/tcpci.h
-> @@ -145,6 +145,7 @@
->  #define TCPC_RX_BYTE_CNT		0x30
->  #define TCPC_RX_BUF_FRAME_TYPE		0x31
->  #define TCPC_RX_BUF_FRAME_TYPE_SOP	0
-> +#define TCPC_RX_BUF_FRAME_TYPE_SOP1	1
->  #define TCPC_RX_HDR			0x32
->  #define TCPC_RX_DATA			0x34 /* through 0x4f */
->  
-> diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
-> index 430fa3ec69bb..41d1ac9c8bbf 100644
-> --- a/include/linux/usb/tcpm.h
-> +++ b/include/linux/usb/tcpm.h
-> @@ -170,7 +170,8 @@ void tcpm_cc_change(struct tcpm_port *port);
->  void tcpm_sink_frs(struct tcpm_port *port);
->  void tcpm_sourcing_vbus(struct tcpm_port *port);
->  void tcpm_pd_receive(struct tcpm_port *port,
-> -		     const struct pd_message *msg);
-> +		     const struct pd_message *msg,
-> +		     enum tcpm_transmit_type rx_sop_type);
->  void tcpm_pd_transmit_complete(struct tcpm_port *port,
->  			       enum tcpm_transmit_status status);
->  void tcpm_pd_hard_reset(struct tcpm_port *port);
+>  		if (port->ams == POWER_ROLE_SWAP ||
 > -- 
 > 2.43.0.472.g3155946c3a-goog
 
