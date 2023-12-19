@@ -1,379 +1,301 @@
-Return-Path: <linux-usb+bounces-4352-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4353-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84EA7818A22
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 15:37:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36047818A29
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 15:38:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 152C428B23C
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 14:37:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A458A1F2A861
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Dec 2023 14:38:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A6371C6AD;
-	Tue, 19 Dec 2023 14:32:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEC321B288;
+	Tue, 19 Dec 2023 14:35:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H9BmZ/4u"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="wXq1THF9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060.outbound.protection.outlook.com [40.107.244.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8040A1CA87;
-	Tue, 19 Dec 2023 14:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702996373; x=1734532373;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zgnPHDLJ8u4g3QyfWL0f2WzmY47LIKpPT0Bu+7ASWGg=;
-  b=H9BmZ/4uCblP9PDpPmuZazmk79UjSzjvsmUKCOgPynho6kiKD4CKIvR+
-   sEAFMv/Zbt8usrLJxU0VNE3ZMDAka1r5Su5aKgtT7i/xvlyzfbRzNoODT
-   AuMTJs0wjh6YJafWkg3n0Hq00XeR2hCugfwNnqZa4LFr0iHNp079S38H9
-   wP95jKJXX+r7ZIIoxhCrvWQc3wRnhDCyplTUWonNcHyNL20mU2vV7M4Ro
-   N6T5IbDzpdrXzLOl0sTR4pXAjPXwofP4s70pwUJDNG7IhsQOXIrQe6x3b
-   lTQYbeL27pkJ+7q4qK29nfDZ9IDh65bhwQOfmTPSoAJFEnD18BVustkfL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="395394959"
-X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
-   d="scan'208";a="395394959"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 06:32:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="1107367502"
-X-IronPort-AV: E=Sophos;i="6.04,288,1695711600"; 
-   d="scan'208";a="1107367502"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga005.fm.intel.com with SMTP; 19 Dec 2023 06:32:39 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 19 Dec 2023 16:32:38 +0200
-Date: Tue, 19 Dec 2023 16:32:38 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: RD Babiera <rdbabiera@google.com>
-Cc: linux@roeck-us.net, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	badhri@google.com, bryan.odonoghue@linaro.org, agross@kernel.org,
-	andersson@kernel.org, konrad.dybcio@linaro.org
-Subject: Re: [PATCH v2 10/12] usb: typec: tcpm: add discover svids and
- discover modes support for sop'
-Message-ID: <ZYGphs1nBu3pnmYd@kuha.fi.intel.com>
-References: <20231214230850.379863-14-rdbabiera@google.com>
- <20231214230850.379863-24-rdbabiera@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE89225D1;
+	Tue, 19 Dec 2023 14:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I8V1vsCsL0Vof2siP3ib98aT4yBHpjPLl+rpRn/0Rn2MH+xvUIsWaOSkIZ00lnCFnIGWybCdRE27/xYPjEtm5gN9Q7C9bub4qqmyTmHrjGA4aav5NCRPYGL1Cds2/QFwfMhQf8+gl6JsvqnFtpQgRqbfPr72gzYzBroO1luDdEpfKcvor9KeT1BI143bu+9f2/i7h49Gnl1jEsvTRGLJo4LSHOG62MlF/QO0pme5tE7sgjUHziwbBWYTA21pEmSPtLdfSx0FtjCwwh7J+gESZJmfUuMibfOlQyxDZ+RiwVOvJMFhu0fzHdAXtUwNItyjFas5w6w85Pi9u3WHMozS7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PTwczpdXpulRvCcejC7EdJT2B75XkRFzkxZS038HkMk=;
+ b=fxpzXxPxnXmZh/p7zgZamqm8ItTYCMNR/2vzrcTA6Rk0b6PU8aCsxZxzvji5t1+mc37ZJHJVUxvwns082c86J7xP+tub/c4nmsGof7PXJVTIhOPFk4Id1Yhgyv+KeG+p0JvQDFcP3qef4ZLGyv+ySVv2bbgWkWvCfx8C/poTSSPQ4y9mU2O3Ow9lIZUiZw7QqMpvt7mlnMvqnwY4ANl8a4EVQIy79SzQfxZZufIGCLNT/UxTe6Gc+m0x+ADWtZCcrvqVAOcIU7bHiBjhdG4j+zO0pL88/PEhlGFe4e9FdEC/6AJQNybKtdF1l7hDi+EQojAbmM4JnlxXxS4qFsrUXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PTwczpdXpulRvCcejC7EdJT2B75XkRFzkxZS038HkMk=;
+ b=wXq1THF9ZF+1MwaurqP12K6byPl2ZG/M7Zmzu0QQjkIAt464MHskkHXXYWwUBhnVx5z5eoLjOvuTc9pvg3B0EVueth7HoORcLBVGNZ5SOE9fQ45H/6/KHQnJ/fZCH4QSep20Og+yzLwvtYshcN0CXj2zMRsu0ham3rYKvgIFWvY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW4PR12MB7016.namprd12.prod.outlook.com (2603:10b6:303:218::14)
+ by DM4PR12MB6349.namprd12.prod.outlook.com (2603:10b6:8:a4::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7113.18; Tue, 19 Dec 2023 14:35:23 +0000
+Received: from MW4PR12MB7016.namprd12.prod.outlook.com
+ ([fe80::1f1b:e85b:abf0:3d3c]) by MW4PR12MB7016.namprd12.prod.outlook.com
+ ([fe80::1f1b:e85b:abf0:3d3c%6]) with mapi id 15.20.7091.034; Tue, 19 Dec 2023
+ 14:35:23 +0000
+Message-ID: <0816caa4-81b5-d0f9-2305-80c7fec6abb9@amd.com>
+Date: Tue, 19 Dec 2023 20:05:15 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [Patch v2 2/2] thunderbolt: Teardown tunnels and reset downstream
+ ports created by boot firmware
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Sanath S <Sanath.S@amd.com>, mario.limonciello@amd.com,
+ andreas.noever@gmail.com, michael.jamet@intel.com, YehezkelShB@gmail.com,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <c7d174d3-028f-9ce4-7ef5-3e033c195159@amd.com>
+ <20231215140224.GX1074920@black.fi.intel.com>
+ <866cb714-b9a8-a7d4-4c59-6ba771ef325f@amd.com>
+ <20231218104234.GB1074920@black.fi.intel.com>
+ <c433f29b-597c-b6d6-aa48-2b84a26dc623@amd.com>
+ <20231218113151.GC1074920@black.fi.intel.com>
+ <20231218122312.GE1074920@black.fi.intel.com>
+ <997f2a94-66d9-fb95-8f75-46d61937f7e8@amd.com>
+ <20231218131840.GH1074920@black.fi.intel.com>
+ <0fd5c09f-1cf2-8813-a8f9-1bd856e3a298@amd.com>
+ <20231219122634.GJ1074920@black.fi.intel.com>
+Content-Language: en-US
+From: Sanath S <sanaths2@amd.com>
+In-Reply-To: <20231219122634.GJ1074920@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN3PR01CA0036.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:97::15) To MW4PR12MB7016.namprd12.prod.outlook.com
+ (2603:10b6:303:218::14)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231214230850.379863-24-rdbabiera@google.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW4PR12MB7016:EE_|DM4PR12MB6349:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9c476b1b-416a-4530-f7a9-08dc009fbbf0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	/IzBEyfq6K/iaJF5RxydyArrPq36dJ3ZvAvFAUorXJAifkVEnUr7DUXwBcjGA1F4FG/FOJqzeN+n4m3vi9658jxfexEMH3vZJCVWvN4L5bZBv6BemwxvvN3x3VL1rC7+9E0wvFoNFGxs76n4DTv0ig2MATUZPrnamHyXspmDFVVW+4/2yxDtA3j9LnsTmeEErtdA1gNtsfzaYquhnVJQs2pVqLL44Lg3gkManLSohmNmidVDqPkRf/uN6ZGFO49GcQ94r/p5W2VAe0B0y8ngV5IViZLJo/v6QD5nzMnbL5YmpXyHjZpqwq3MRKNyNh6Goj11qFmtWOOnwoGYpPXYQ+iDGNr3RVmgfrCP0bjOLsLrWyn0iWsSZKijCnmyYja8z5+qwXjP4v9q6EeFAMA5P/fge/woBBSakULfipS0sY/OyOobdnZfmiwwB9boW2vIkoawfh2F3goX/2YPbp0/9hf7WK5N4giU99JvOk6IkADIwqaGkOVAPRSCW+L+PUCPa6Ku50EBVwMsXbSvApHB7D+pVFSB8cXF6rxYlwewL6oEuUUcWOV4Tqd+BpmSTJA8B5ZULsy17s1jsPBERKZHQz3g79z4CEV+vPQqwAbPvN+2BGUU9cBa3VJi9F/Nj/hkmjl1o5nFZenIeBqUC+utPQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB7016.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(376002)(39860400002)(396003)(346002)(136003)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(38100700002)(26005)(83380400001)(2616005)(36756003)(31696002)(31686004)(53546011)(6512007)(478600001)(6506007)(6666004)(6916009)(316002)(66946007)(66556008)(66476007)(4326008)(8676002)(8936002)(2906002)(5660300002)(6486002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dytqUUNEVi94MXJ6RVZHZFEvQzg2b2tja1plY1gxS3lKQXJOTjc0ZllvUCtU?=
+ =?utf-8?B?Z1kxM3VUZ1pVNFcwMEJPb3VRQ0J2UGZjcVBmcjdzM0lERWxVUlY3U3lmNzBq?=
+ =?utf-8?B?MzRKRE5aVGJWREFjSlAwVHhZckt2YWs5QU1HYzljY2lvMDE3NmVKWGFSb0xz?=
+ =?utf-8?B?b2lyUVo3NWhUSDZHdE04YjVSZUtSUUk3Q0hRVVhIZXZOTXlPcUtGQ3IvMEdX?=
+ =?utf-8?B?RCsveW1TeGpENTg5MjBJTWt2S3pXRlFIVzR3V2hqMisrTzJnc0dyRVVaNnZI?=
+ =?utf-8?B?d3lnQUltNTJOd3JDRkFDK0IvemtNMnVSWjZwaER2cFNaM2ljZFAyZm40UkEy?=
+ =?utf-8?B?YWFCMlVrSHY1U2U4dUZZMjFYaWRBTEtCUkdqVmFDZ21tNEU4TkdyenJhOFpj?=
+ =?utf-8?B?Ymd0c1IvaEdSdEZmeHBmbjdRU1hITUJBNFlVS3pTdFllUW5ydHdubVhVcW1h?=
+ =?utf-8?B?emVrMTl4S3IrSlYwd0o3VlFQbms3Y1dsYytyT1RFNVlyaGwzSzFxUDcvU21R?=
+ =?utf-8?B?WTlBNnQ3NXIycXFJVW1NaHdaa0kxc1BwblJZOXM4c09lMlN4Vzh6d1hBUlRY?=
+ =?utf-8?B?RjFpaUVUWmpLMWdGUXBhTkQ5UTF5VlZlSmZraUQ5K2ZlL3AxU1dibGl6aXhO?=
+ =?utf-8?B?OHkrSW5veDNGSFcxSi84dHV3MDBkV1JrRTkrQnZnYkJyM2ZleUtYbXl5V2du?=
+ =?utf-8?B?aDN4M3ZGRnpnNTNYczd5ekkwOHRWVGZiN2RWK2pER1lOTFlpbzIyamhBcTJR?=
+ =?utf-8?B?RGhvZW51UCtuaTl5U3owUnhpeEJnMEFIRlBvcGR1d3JJUnRqM1lPbWpkbFRt?=
+ =?utf-8?B?SzZkRVlac01rUkNJUFBjMWFFSmdzQmNuZXZSeWx4TUQ4cHBBQTZSYVlaM2Jo?=
+ =?utf-8?B?Q0ZEckpJaEJZd1B4dkdnTS9IcjYyRytIREtYcXRQQmRmeEhuUjFMdDBQR3VC?=
+ =?utf-8?B?aVFveUVqc25DTkZnY2U4QjIxdlY5bU5yTTBOTUZhb2g0bUUvcXVFTFFhaFhO?=
+ =?utf-8?B?REUyQmFKVTBVbHFJNjB3ZUd1VnY5TVhMMUNVYUhRVjFmcTNhbHY4Ylhxempx?=
+ =?utf-8?B?SGMydTZ2b25lRXRWcDcvUSs4QWpHT0RwVDczOGpVRFlCbnBaR29GLzJiMFNi?=
+ =?utf-8?B?M21SV0o3amJHYXl5QWRrcEd2eHdlU2l3byt6ZWdIaFVmeVdWVnFBbW05Uk8r?=
+ =?utf-8?B?UlY0U1RXUm11MlFqUnRNUDRZZDFWT0lPaHRXN1Q0aTd4RXFrTWlqMHo3T05w?=
+ =?utf-8?B?bmRTZUp5aEE2aHQxT2wzOW9FSEV0cW15UzlueUFRRUpaNHoyZFNjWHZJbFBy?=
+ =?utf-8?B?Qi9KRm9mRExLY2ZsUkt3ajZxMFcxQTdCQ1AwcmEvekNLL1dJMFQzc3BQbk54?=
+ =?utf-8?B?T0ZvY1JGTXNYY05TcnNYTUdld1NzUGQ5MmFDQllENDFwMDMvbUNlMkRCY2I5?=
+ =?utf-8?B?Snc4RTlwNjdSanc0MXpCaXpTWVU0L3E4QlJXY0JLUjVqV3U1VDkzNEpzWDF3?=
+ =?utf-8?B?QU9IR25qRUpFSFg1TDVIQkNoWnplUm1qUDh4YW5UZ28wS0xSRWxBcU5iVUd1?=
+ =?utf-8?B?bm5Idkg1aVRCcW5YNUFCaWVUV1E2Qzg4NVBhbktRaXFzYWQ3Q09WN2RXZ2JH?=
+ =?utf-8?B?K1BZRmVaRDlXWGxLV1lISWlLN05jbjNMMitkeWZ5UXJKS0s1ZWZZOE03WW9D?=
+ =?utf-8?B?TjJxUVAvU3hrWlg4cTg2a2o3WExid3pMenB1RkJvUzlNcUF5RGFkMDlMTVJN?=
+ =?utf-8?B?bSsvNFByUW1DVmYrZHZTYUpjM1d2aDZqQlBUNXpTR2dGdVJ2dzNoRTlrV2Zn?=
+ =?utf-8?B?QjVmWGNpVWFjVGFiM3greWJjR09xU283c3hVNC9sUWtTYmY5QnpkTFRzQTQ3?=
+ =?utf-8?B?TkN4MTNoM3BpVEJQVC9jZTZNMzl2S1grSHl2b3Zha3A5ZUd6Y2RYMkY1NDZh?=
+ =?utf-8?B?MWlrQ3diRFRwdEZvQUhkYTZKeDNvNTV4ejRkN25hWTlkYUdOWElGOE9CdmNh?=
+ =?utf-8?B?cW4rNUJ1akdic1FnMUhvOHpPUDVWSFZNLzVXeVQvQ1dqZXNEWkdqLzFIWFRH?=
+ =?utf-8?B?ZnhjSGVwbnVIWkcrUzdXcEw0Nmx0dW9BbVJldEVGRENWMzBhZ2dVZjJTNlJZ?=
+ =?utf-8?Q?bWITAU/nCw2QYcB/LV+Og2CnN?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c476b1b-416a-4530-f7a9-08dc009fbbf0
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB7016.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2023 14:35:23.6133
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: X4Q//XVqmIra8ZMKjCMbeg0MOg/NB/qeBAXkooFbij4HpVDqrNynclttlwyHkGE763L8+XP/ulbz+9mrsUFn1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6349
 
-On Thu, Dec 14, 2023 at 11:08:54PM +0000, RD Babiera wrote:
-> Adds Discover SVIDs and Discover Modes support for SOP' and Alt Mode
-> SVDM support over SOP'. tcpm_port adds separate Alt Mode data for SOP'.
-> 
-> svdm_consume_svids and svdm_consume_modes take the received SVDM's SOP*
-> type to store svids/modes separately, and tcpm_register_plug_altmodes
-> registers the active cable's alt modes.
-> 
-> In tcpm_pd_svdm, the port will send Discover SVIDs to SOP' after Discover
-> Modes on SOP if the connected cable is an active cable. Discover Modes on
-> SOP' is sent following Discover SVIDs on SOP. Registering partner alt modes
-> is delayed when an active cable is present until Discover Modes completes
-> on SOP', or if the Discover SVIDs/Discover Modes request on SOP' encounters
-> a transmission error.
-> 
-> Signed-off-by: RD Babiera <rdbabiera@google.com>
-> ---
-> Changes since v1:
-> * Changes to tcpm_altmode_enter/exit/vdm are moved to next patch
-> * adev_action changes are moved to next patch
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 163 +++++++++++++++++++++++++++++-----
->  1 file changed, 139 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index e21bc2eea3fc..61433dc4c917 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -465,7 +465,9 @@ struct tcpm_port {
->  
->  	/* Alternate mode data */
->  	struct pd_mode_data mode_data;
-> +	struct pd_mode_data mode_data_prime;
->  	struct typec_altmode *partner_altmode[ALTMODE_DISCOVERY_MAX];
-> +	struct typec_altmode *plug_prime_altmode[ALTMODE_DISCOVERY_MAX];
->  	struct typec_altmode *port_altmode[ALTMODE_DISCOVERY_MAX];
->  
->  	/* Deadline in jiffies to exit src_try_wait state */
-> @@ -1629,9 +1631,11 @@ static void svdm_consume_identity_sop_prime(struct tcpm_port *port, const u32 *p
->  	}
->  }
->  
-> -static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
-> +static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt,
-> +			       enum tcpm_transmit_type rx_sop_type)
->  {
-> -	struct pd_mode_data *pmdata = &port->mode_data;
-> +	struct pd_mode_data *pmdata = rx_sop_type == TCPC_TX_SOP_PRIME ?
-> +				      &port->mode_data_prime : &port->mode_data;
->  	int i;
->  
->  	for (i = 1; i < cnt; i++) {
-> @@ -1677,14 +1681,29 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
->  	return false;
->  }
->  
-> -static void svdm_consume_modes(struct tcpm_port *port, const u32 *p, int cnt)
-> +static void svdm_consume_modes(struct tcpm_port *port, const u32 *p, int cnt,
-> +			       enum tcpm_transmit_type rx_sop_type)
->  {
->  	struct pd_mode_data *pmdata = &port->mode_data;
->  	struct typec_altmode_desc *paltmode;
->  	int i;
->  
-> -	if (pmdata->altmodes >= ARRAY_SIZE(port->partner_altmode)) {
-> -		/* Already logged in svdm_consume_svids() */
-> +	switch (rx_sop_type) {
-> +	case TCPC_TX_SOP_PRIME:
-> +		pmdata = &port->mode_data_prime;
-> +		if (pmdata->altmodes >= ARRAY_SIZE(port->plug_prime_altmode)) {
-> +			/* Already logged in svdm_consume_svids() */
-> +			return;
-> +		}
-> +		break;
-> +	case TCPC_TX_SOP:
-> +		pmdata = &port->mode_data;
-> +		if (pmdata->altmodes >= ARRAY_SIZE(port->partner_altmode)) {
-> +			/* Already logged in svdm_consume_svids() */
-> +			return;
-> +		}
-> +		break;
-> +	default:
->  		return;
->  	}
->  
-> @@ -1722,7 +1741,28 @@ static void tcpm_register_partner_altmodes(struct tcpm_port *port)
->  	}
->  }
->  
-> +static void tcpm_register_plug_altmodes(struct tcpm_port *port)
-> +{
-> +	struct pd_mode_data *modep = &port->mode_data_prime;
-> +	struct typec_altmode *altmode;
-> +	int i;
-> +
-> +	typec_plug_set_num_altmodes(port->plug_prime, modep->altmodes);
-> +
-> +	for (i = 0; i < modep->altmodes; i++) {
-> +		altmode = typec_plug_register_altmode(port->plug_prime,
-> +						&modep->altmode_desc[i]);
-> +		if (IS_ERR(altmode)) {
-> +			tcpm_log(port, "Failed to register plug SVID 0x%04x",
-> +				 modep->altmode_desc[i].svid);
-> +			altmode = NULL;
-> +		}
-> +		port->plug_prime_altmode[i] = altmode;
-> +	}
-> +}
-> +
->  #define supports_modal(port)	PD_IDH_MODAL_SUPP((port)->partner_ident.id_header)
-> +#define supports_modal_cable(port)     PD_IDH_MODAL_SUPP((port)->cable_ident.id_header)
->  #define supports_host(port)    PD_IDH_HOST_SUPP((port->partner_ident.id_header))
->  
->  /*
-> @@ -1800,6 +1840,15 @@ static bool tcpm_attempt_vconn_swap_discovery(struct tcpm_port *port)
->  	return false;
->  }
->  
-> +
-> +static bool tcpm_cable_vdm_supported(struct tcpm_port *port)
-> +{
-> +	return !IS_ERR_OR_NULL(port->cable) &&
-> +	       typec_cable_is_active(port->cable) &&
-> +	       supports_modal_cable(port) &&
-> +	       tcpm_can_communicate_sop_prime(port);
-> +}
-> +
->  static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			const u32 *p, int cnt, u32 *response,
->  			enum adev_actions *adev_action,
-> @@ -1807,8 +1856,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			enum tcpm_transmit_type *response_tx_sop_type)
->  {
->  	struct typec_port *typec = port->typec_port;
-> -	struct typec_altmode *pdev;
-> -	struct pd_mode_data *modep;
-> +	struct typec_altmode *pdev, *pdev_prime;
-> +	struct pd_mode_data *modep, *modep_prime;
->  	int svdm_version;
->  	int rlen = 0;
->  	int cmd_type;
-> @@ -1829,6 +1878,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  
->  	switch (rx_sop_type) {
->  	case TCPC_TX_SOP_PRIME:
-> +		modep_prime = &port->mode_data_prime;
-> +		pdev_prime = typec_match_altmode(port->plug_prime_altmode,
-> +						 ALTMODE_DISCOVERY_MAX,
-> +						 PD_VDO_VID(p[0]),
-> +						 PD_VDO_OPOS(p[0]));
->  		if (!IS_ERR_OR_NULL(port->cable)) {
->  			svdm_version = typec_get_cable_svdm_version(typec);
->  			if (PD_VDO_SVDM_VER(p[0]) < svdm_version)
-> @@ -1836,11 +1890,21 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  		}
->  		break;
->  	case TCPC_TX_SOP:
-> +		modep = &port->mode_data;
-> +		pdev = typec_match_altmode(port->partner_altmode,
-> +					   ALTMODE_DISCOVERY_MAX,
-> +					   PD_VDO_VID(p[0]),
-> +					   PD_VDO_OPOS(p[0]));
->  		svdm_version = typec_get_negotiated_svdm_version(typec);
->  		if (svdm_version < 0)
->  			return 0;
->  		break;
->  	default:
-> +		modep = &port->mode_data;
-> +		pdev = typec_match_altmode(port->partner_altmode,
-> +					   ALTMODE_DISCOVERY_MAX,
-> +					   PD_VDO_VID(p[0]),
-> +					   PD_VDO_OPOS(p[0]));
->  		svdm_version = typec_get_negotiated_svdm_version(typec);
->  		if (svdm_version < 0)
->  			return 0;
-> @@ -1932,6 +1996,9 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  		 * SOP'		Discover Identity
->  		 * SOP		Discover SVIDs
->  		 *		Discover Modes
-> +		 * (Active Cables)
-> +		 * SOP'		Discover SVIDs
-> +		 *		Discover Modes
->  		 *
->  		 * Perform Discover SOP' if the port can communicate with cable
->  		 * plug.
-> @@ -2011,26 +2078,62 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			}
->  			break;
->  		case CMD_DISCOVER_SVID:
-> +			*response_tx_sop_type = rx_sop_type;
->  			/* 6.4.4.3.2 */
-> -			if (svdm_consume_svids(port, p, cnt)) {
-> +			if (svdm_consume_svids(port, p, cnt, rx_sop_type)) {
->  				response[0] = VDO(USB_SID_PD, 1, svdm_version, CMD_DISCOVER_SVID);
->  				rlen = 1;
-> -			} else if (modep->nsvids && supports_modal(port)) {
-> -				response[0] = VDO(modep->svids[0], 1, svdm_version,
-> -						  CMD_DISCOVER_MODES);
-> -				rlen = 1;
-> +			} else {
-> +				if (rx_sop_type == TCPC_TX_SOP) {
-> +					if (modep->nsvids && supports_modal(port)) {
-> +						response[0] = VDO(modep->svids[0], 1, svdm_version,
-> +								CMD_DISCOVER_MODES);
-> +						rlen = 1;
-> +					}
-> +				} else if (rx_sop_type == TCPC_TX_SOP_PRIME) {
-> +					if (modep_prime->nsvids) {
-> +						response[0] = VDO(modep_prime->svids[0], 1,
-> +								  svdm_version, CMD_DISCOVER_MODES);
-> +						rlen = 1;
-> +					}
-> +				}
->  			}
->  			break;
->  		case CMD_DISCOVER_MODES:
-> -			/* 6.4.4.3.3 */
-> -			svdm_consume_modes(port, p, cnt);
-> -			modep->svid_index++;
-> -			if (modep->svid_index < modep->nsvids) {
-> -				u16 svid = modep->svids[modep->svid_index];
-> -				response[0] = VDO(svid, 1, svdm_version, CMD_DISCOVER_MODES);
-> -				rlen = 1;
-> -			} else {
-> -				tcpm_register_partner_altmodes(port);
-> +			if (rx_sop_type == TCPC_TX_SOP) {
-> +				/* 6.4.4.3.3 */
-> +				svdm_consume_modes(port, p, cnt, rx_sop_type);
-> +				modep->svid_index++;
-> +				if (modep->svid_index < modep->nsvids) {
-> +					u16 svid = modep->svids[modep->svid_index];
-> +					*response_tx_sop_type = TCPC_TX_SOP;
-> +					response[0] = VDO(svid, 1, svdm_version,
-> +							  CMD_DISCOVER_MODES);
-> +					rlen = 1;
-> +				} else if (tcpm_cable_vdm_supported(port)) {
-> +					*response_tx_sop_type = TCPC_TX_SOP_PRIME;
-> +					response[0] = VDO(USB_SID_PD, 1,
-> +							  typec_get_cable_svdm_version(typec),
-> +							  CMD_DISCOVER_SVID);
-> +					rlen = 1;
-> +				} else {
-> +					tcpm_register_partner_altmodes(port);
-> +				}
-> +			} else if (rx_sop_type == TCPC_TX_SOP_PRIME) {
-> +				/* 6.4.4.3.3 */
-> +				svdm_consume_modes(port, p, cnt, rx_sop_type);
-> +				modep_prime->svid_index++;
-> +				if (modep_prime->svid_index < modep_prime->nsvids) {
-> +					u16 svid = modep_prime->svids[modep_prime->svid_index];
-> +					*response_tx_sop_type = TCPC_TX_SOP_PRIME;
-> +					response[0] = VDO(svid, 1,
-> +							  typec_get_cable_svdm_version(typec),
-> +							  CMD_DISCOVER_MODES);
-> +					rlen = 1;
-> +				} else {
-> +					tcpm_register_plug_altmodes(port);
-> +					tcpm_register_partner_altmodes(port);
-> +				}
->  			}
->  			break;
->  		case CMD_ENTER_MODE:
-> @@ -2411,6 +2514,16 @@ static void vdm_run_state_machine(struct tcpm_port *port)
->  				tcpm_queue_vdm(port, response[0], &response[1],
->  					       0, TCPC_TX_SOP);
->  				break;
-> +			/*
-> +			 * If Discover SVIDs or Discover Modes fail, then
-> +			 * proceed with Alt Mode discovery process on SOP.
-> +			 */
-> +			case CMD_DISCOVER_SVID:
-> +				tcpm_register_partner_altmodes(port);
-> +				break;
-> +			case CMD_DISCOVER_MODES:
-> +				tcpm_register_partner_altmodes(port);
-> +				break;
->  			default:
->  				break;
->  			}
-> @@ -4123,14 +4236,16 @@ static void tcpm_typec_disconnect(struct tcpm_port *port)
->  static void tcpm_unregister_altmodes(struct tcpm_port *port)
->  {
->  	struct pd_mode_data *modep = &port->mode_data;
-> +	struct pd_mode_data *modep_prime = &port->mode_data_prime;
->  	int i;
->  
-> -	for (i = 0; i < modep->altmodes; i++) {
-> -		typec_unregister_altmode(port->partner_altmode[i]);
-> -		port->partner_altmode[i] = NULL;
-> +	for (i = 0; i < modep_prime->altmodes; i++) {
-> +		typec_unregister_altmode(port->plug_prime_altmode[i]);
-> +		port->plug_prime_altmode[i] = NULL;
->  	}
 
-I'm probable missing something, but where are the partner altmodes now
-unregistered?
+On 12/19/2023 5:56 PM, Mika Westerberg wrote:
+> On Tue, Dec 19, 2023 at 02:41:08PM +0530, Sanath S wrote:
+>> On 12/18/2023 6:48 PM, Mika Westerberg wrote:
+>>> On Mon, Dec 18, 2023 at 06:35:13PM +0530, Sanath S wrote:
+>>>> On 12/18/2023 5:53 PM, Mika Westerberg wrote:
+>>>>> On Mon, Dec 18, 2023 at 01:31:51PM +0200, Mika Westerberg wrote:
+>>>>>> On Mon, Dec 18, 2023 at 04:49:13PM +0530, Sanath S wrote:
+>>>>>>>> The discover part should not do anything (like write the hardware) so
+>>>>>>>> perhaps it is just some timing thing (but that's weird too).
+>>>>>>>>
+>>>>>>>> I think we should do something like this:
+>>>>>>>>
+>>>>>>>> 1. Disable all enabled protocol adapters (reset them to defaults).
+>>>>>>>> 2. Clear all protocol adapter paths.
+>>>>>>>> 3. Issue DPR over all enabled USB4 ports.
+>>>>>>>>
+>>>>>>>> BTW, what you mean "didn't work"?
+>>>>>>> Path activation would go fine after DPR like below:
+>>>>>>>
+>>>>>>> [   15.090905] thunderbolt 0000:c4:00.5: 0:5 <-> 2:9 (PCI): activating
+>>>>>>> [   15.090932] thunderbolt 0000:c4:00.5: activating PCIe Down path from 0:5
+>>>>>>> to 2:9
+>>>>>>> [   15.091602] thunderbolt 0000:c4:00.5: activating PCIe Up path from 2:9 to
+>>>>>>> 0:5
+>>>>>>>
+>>>>>>> But, PCIE enumeration doesn't happen (pcie link up will not happen, will not
+>>>>>>> see below logs)
+>>>>>>> [   15.134223] pcieport 0000:00:03.1: pciehp: Slot(0-1): Card present
+>>>>>>> [   15.134243] pcieport 0000:00:03.1: pciehp: Slot(0-1): Link Up
+>>>>>> Okay, what if you like reset the PCIe adapter config spaces back to the
+>>>>>> defaults? Just as an experiment.
+>>>>> If this turns out to be really complex then I guess it is better to do
+>>>>> it like you did originally using discovery but at least it would be nice
+>>>>> to see what the end result of this experiment looks like :)
+>> I feel it's better to go with discover and then reset for now (as v3).
+>> I'll keep this experiment as "to do" and will send out when I crack it down.
+> Fair enough.
+>
+>>>> Yes, I'll give a try.
+>>>> As an experiment, I tried to compare the path deactivation that occurs at
+>>>> two place.
+>>>> 1. In tb_switch_reset where we are calling tb_path_deactivate_hop(port, i).
+>>>> 2. While we get a unplug event after doing DPR.
+>>>>
+>>>> I observed both have different hop_index and port numbers.
+>>>> So, are we calling tb_path_deactivate_hop with wrong hop ids ?
+>>> Wrong adapters possibly.
+>>>
+>>>>   From deactivate tunnel (called while unplug) :
+>>>> [    3.408268] thunderbolt 0000:c4:00.5: deactivating PCIe Down path from
+>>>> 2:9 to 0:5
+>>>> [    3.408282] deactivate hop port = 9 hop_index=8
+>>>> [    3.408328] deactivate hop port = 2 hop_index=10
+>>> Definitely should be port = 5 (that's PCIe down in your log) and
+>>> hop_index = 8 (that's the one used with PCIe).
+>>>
+>>>> Deactivate from tb_switch_reset() :
+>>>> deactivate hop port = 5 hop_index=8
+>>> Can you add some more logging and provide me the dmesg or
+>>> alternativively investigate it yourself. You can use tb_port_dbg() to
+>>> get the port numbers to the log.
+>> I've sent you complete dmesg.
+> Got it, thanks!
+>
+>> Here is the log w.r.t port numbers and path clean up.
+>>
+>> [    3.389038] thunderbolt 0000:c4:00.5: 0:3: Downstream port, setting DPR
+>> [    3.389065] Calling usb4_port_reset
+>> [    3.389068] thunderbolt 0000:c4:00.5: 0:4: Found USB3 DOWN
+>> [    3.389193] thunderbolt 0000:c4:00.5: 0:4: In reset, cleaning up path,
+>> port->port = 4 hopid = 8
+>> [    3.389203] thunderbolt 0000:c4:00.5: 0:4: deactivating_hop port = 4
+>> hop_index=8
+>> [    3.389682] thunderbolt 0000:c4:00.5: 0:5: Found PCI Down
+>> [    3.389811] thunderbolt 0000:c4:00.5: 0:5: In reset, cleaning up path,
+>> port->port = 5 hopid = 8
+>> [    3.389817] thunderbolt 0000:c4:00.5: 0:5: deactivating_hop port = 5
+>> hop_index=8
+>> [    3.390296] thunderbolt 0000:c4:00.5: 0:6: Found DP IN
+>> [    3.390555] thunderbolt 0000:c4:00.5: 0:6: In reset, cleaning up path,
+>> port->port = 6 hopid = 8
+>> [    3.390558] thunderbolt 0000:c4:00.5: 0:6: deactivating_hop port = 6
+>> hop_index=8
+>> [    3.390686] thunderbolt 0000:c4:00.5: 0:6: In reset, cleaning up path,
+>> port->port = 6 hopid = 9
+>> [    3.390689] thunderbolt 0000:c4:00.5: 0:6: deactivating_hop port = 6
+>> hop_index=9
+>> [    3.390816] thunderbolt 0000:c4:00.5: 0:7: Found DP IN
+>> [    3.391077] thunderbolt 0000:c4:00.5: 0:7: In reset, cleaning up path,
+>> port->port = 7 hopid = 8
+>> [    3.391080] thunderbolt 0000:c4:00.5: 0:7: deactivating_hop port = 7
+>> hop_index=8
+>> [    3.391213] thunderbolt 0000:c4:00.5: 0:7: In reset, cleaning up path,
+>> port->port = 7 hopid = 9
+>> [    3.391217] thunderbolt 0000:c4:00.5: 0:7: deactivating_hop port = 7
+>> hop_index=9
+>> [    3.391342] Reset success
+>> [    3.391391] thunderbolt 0000:c4:00.5: 0:2: switch unplugged
+>> [    3.391434] thunderbolt 0000:c4:00.5: 0:4 <-> 2:16 (USB3): deactivating
+>> [    3.391471] thunderbolt 0000:c4:00.5: deactivating USB3 Down path from
+>> 0:4 to 2:16
+>> [    3.391477] thunderbolt 0000:c4:00.5: 0:4: deactivating_hop port = 4
+>> hop_index=8
+>> [    3.391641] thunderbolt 0000:c4:00.5: 2:1: deactivating_hop port = 1
+>> hop_index=9
+>> [    3.391651] thunderbolt 0000:c4:00.5: deactivating USB3 Up path from 2:16
+>> to 0:4
+>> [    3.391659] thunderbolt 0000:c4:00.5: 2:16: deactivating_hop port = 16
+>> hop_index=8
+>> [    3.391664] thunderbolt 0000:c4:00.5: 0:2: deactivating_hop port = 2
+>> hop_index=9
+>> [    3.391701] thunderbolt 0000:c4:00.6: total paths: 3
+>> [    3.391720] thunderbolt 0000:c4:00.6: IOMMU DMA protection is disabled
+>> [    3.392027] thunderbolt 0000:c4:00.5: 0:5 <-> 2:9 (PCI): deactivating
+>> [    3.392154] thunderbolt 0000:c4:00.5: deactivating PCIe Down path from
+>> 2:9 to 0:5
+>> [    3.392163] thunderbolt 0000:c4:00.5: 2:9: deactivating_hop port = 9
+>> hop_index=8
+>> [    3.392170] thunderbolt 0000:c4:00.5: 0:2: deactivating_hop port = 2
+>> hop_index=10
+>> [    3.392534] thunderbolt 0000:c4:00.5: deactivating PCIe Up path from 0:5
+>> to 2:9
+>> [    3.392539] thunderbolt 0000:c4:00.5: 0:5: deactivating_hop port = 5
+>> hop_index=8
+>> [    3.392637] thunderbolt 0000:c4:00.5: 2:1: deactivating_hop port = 1
+>> hop_index=10
+>> [    3.392799] thunderbolt 0-2: device disconnected
+>>
+>> But it seems like we are not cleaning up all the paths ?
+> To me this looks correct and even your dmesg the PCIe tunnel that gets
+> established after the "reset" seems to be working just fine. I also see
+> that in your log you are doing the discovery before reset even though
+> the original idea was to avoid it.
+I did this as an experiment to collect logs and check if we are 
+resetting the same
+path config. Just to get a comparison view.
+>
+> In any case this was a good experiment. I will see if I can get this
+> working on my side if I have some spare time during holidays.
+Sure. I'll keep trying too.
+> I guess we can to with the discovery but taking into account the
+> "host_reset".
+Yes, along with changes in lc.c for <= TBT3
+> One additional question though, say we have PCIe tunnel established by
+> the BIOS CM and we do the "reset", that means there will be hot-remove
+> on the PCIe side and then hotplug again, does this slow down the boot
+> considerably? We have some delays there in the PCIe code that might hit
+> us here although I agree that we definitely prefer working system rather
+> than fast-booting non-working system but perhaps the delays are not
+> noticeable by the end-user?
+I've not observed any delay which is noticeable. As soon as I get the 
+login screen
+and check dmesg, it would already be enumerated.
 
->  	memset(modep, 0, sizeof(*modep));
-> +	memset(modep_prime, 0, sizeof(*modep_prime));
->  }
->  
->  static void tcpm_set_partner_usb_comm_capable(struct tcpm_port *port, bool capable)
-
-thanks,
-
--- 
-heikki
+And moreover, this scenario is applicable only when dock stays connected 
+during reboot or S5.
 
