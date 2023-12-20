@@ -1,103 +1,104 @@
-Return-Path: <linux-usb+bounces-4420-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4421-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0F39819F77
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Dec 2023 14:05:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F199819FCA
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Dec 2023 14:27:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33652B257D0
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Dec 2023 13:05:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BECBF285A63
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Dec 2023 13:27:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB2825559;
-	Wed, 20 Dec 2023 13:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC622D634;
+	Wed, 20 Dec 2023 13:27:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kc4bUzfH"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="J6n34k67";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Im9WNxp5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E3F36AF0;
-	Wed, 20 Dec 2023 13:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703077515; x=1734613515;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zJytX3zE8ONPwbeFb4umrlqXX7hgiaaTV61DVCriigI=;
-  b=kc4bUzfHHshSSF+pNTOoaC9k1u69skcZiWSH3EBLoTiE8Pc1O+aXtFbL
-   lggdFe+bY+4ClAnaP0ZYEIxnV5/54VcHDF27s0lDHKD3bc08/wxjD0D+5
-   reTIpXy+kdJk3adv3pb9fVd/SajD2Axtyl3Xa+lSpO3d0NGIw4mHK5oGi
-   cAoYeTYKvf3yUJvRnVqTHJ/2/JO1teZwpzTxGkxg8MMBO3mLVfTTJo76S
-   844Uxjry7k5KTgqnNpEJr7gV2uQE2nrt6+HA/9JtfCre9yE/SeiFPERJD
-   HfZrFwXeMMi6FcVNew2r+uf5g55IjtAOrJqbcaS0O7bcsODoyFapTV5Dl
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="398590174"
-X-IronPort-AV: E=Sophos;i="6.04,291,1695711600"; 
-   d="scan'208";a="398590174"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2023 05:05:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="776327941"
-X-IronPort-AV: E=Sophos;i="6.04,291,1695711600"; 
-   d="scan'208";a="776327941"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 20 Dec 2023 05:05:11 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 0D52454B; Wed, 20 Dec 2023 14:58:57 +0200 (EET)
-Date: Wed, 20 Dec 2023 14:58:57 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Sanath S <sanaths2@amd.com>
-Cc: Sanath S <Sanath.S@amd.com>, mario.limonciello@amd.com,
-	andreas.noever@gmail.com, michael.jamet@intel.com,
-	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [Patch v2 2/2] thunderbolt: Teardown tunnels and reset
- downstream ports created by boot firmware
-Message-ID: <20231220125857.GA2543524@black.fi.intel.com>
-References: <20231218104234.GB1074920@black.fi.intel.com>
- <c433f29b-597c-b6d6-aa48-2b84a26dc623@amd.com>
- <20231218113151.GC1074920@black.fi.intel.com>
- <20231218122312.GE1074920@black.fi.intel.com>
- <997f2a94-66d9-fb95-8f75-46d61937f7e8@amd.com>
- <20231218131840.GH1074920@black.fi.intel.com>
- <0fd5c09f-1cf2-8813-a8f9-1bd856e3a298@amd.com>
- <20231219122634.GJ1074920@black.fi.intel.com>
- <0816caa4-81b5-d0f9-2305-80c7fec6abb9@amd.com>
- <20231219180424.GL1074920@black.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B69C2CCB4
+	for <linux-usb@vger.kernel.org>; Wed, 20 Dec 2023 13:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailout.nyi.internal (Postfix) with ESMTP id 690DB5C0003;
+	Wed, 20 Dec 2023 08:26:59 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Wed, 20 Dec 2023 08:26:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1703078819; x=1703165219; bh=nEV/Ksy9HU
+	V+q3K0PUTwUMLHhFqDOo3lGpeHQH+ufpE=; b=J6n34k67NDop3VLMTTxt1RQwP/
+	fHlso7zWw/NHseL9JitRydpDUsxM5y3L8yRR1KiZ43hDplU0Nydl6KMSlArUA9pz
+	WaGaOcFdH+Xv3KO7qWIiWCYFlNyJ1bo3Tymohi37gbOw6G+3vEGs1m70yt0aVeOt
+	PpTcjLh6knBXHi/og2UMcKPJyS+BySgjesQ5ful7t7VnR5/1RrxE6pp4YokTIPt+
+	EfUhKB6Dnh18/ies1qPiDxgvV+gM6YRPYTyxYBUFg3LW0f9BayamijpFQBJPp/3/
+	PtujvxrgO2I6X+23Jy7Wkf27iwlwH5YPcKdmlNHjk9f5zInlI5dH0+pKu4vg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1703078819; x=1703165219; bh=nEV/Ksy9HUV+q3K0PUTwUMLHhFqD
+	Oo3lGpeHQH+ufpE=; b=Im9WNxp51zsKQmh9jNZms/OJmJYNLXbGhQPiQsvVFV4A
+	ZC6a+m5Oy92nOXNJXgjruRfNMmZl9+gOD08AuRqDYFrykx0nQVsxqdSqF+0uU8sq
+	pipse1T3Zg5nejo9H+B7NMittwl82IpShcWYoH58MbrIZGsLKUEfBh11nMQw+MyE
+	OZH7DdWbivMk7WMvCfQ5aPtTuE7fdt9ppDRvR2/CEvvj+Yz4HBLu8Hsbi8g0hDoG
+	6zyUtpS/o64CUZsbKAX8NbmYm+QIPtgr1KDdFkIp09lrd75ef85sXxKvxFxXZ97D
+	5G2MKgQ6Hhx4bmsmFVxpu4uixu080iL5sqwF62ne3g==
+X-ME-Sender: <xms:o-uCZTCBAa3EG5tu9uG9A-ycuIVdldra1BpDlIKpyrUrQSX6ExcsNw>
+    <xme:o-uCZZg96wOaxOi4FRWQ7nCIIjpn1WNSYjszvoYUfB52bGqykwT0HXbGENU976p_A
+    1zfh1SwlO7nHA>
+X-ME-Received: <xmr:o-uCZekhAJRUTpSIhhUo0pRZ0fQ74SuT-LXqlEcKS4aHXz32XgVt6jR-1yvejEvRce2dcdp38jEzGYU8i-PiOo1B84OOrniNYg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdduvddgheefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:o-uCZVwyNbgTFPv3qn4rGmTkuKSt7Uc-ycuCPSVJE4Oy8ecDSACfwQ>
+    <xmx:o-uCZYTd-KpZS9kS2FOokmfcqtpKGVPvTiBWh2t6ayO95zrlUzOoFA>
+    <xmx:o-uCZYaFkZH_Z6yKik1Zu2qqgFjXHIPnaeM2vdNUHfbgBEfaqnJebg>
+    <xmx:o-uCZeM8jqoGU_IGX0AWwLCf8ZYoD-UKchKBA-LLk05PdHtO4stmsQ>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 20 Dec 2023 08:26:58 -0500 (EST)
+Date: Wed, 20 Dec 2023 14:26:56 +0100
+From: Greg KH <greg@kroah.com>
+To: Mark Glover <mark.glover@actisense.com>
+Cc: Johan Hovold <johan@kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: USB: ftdi_sio: Actisense PIDs constant Names
+Message-ID: <2023122011-commodore-deceit-565b@gregkh>
+References: <AS8PR10MB4424F3366DA20492BA9B1605FABAA@AS8PR10MB4424.EURPRD10.PROD.OUTLOOK.COM>
+ <ZWB5VtdzyGsROpuO@hovoldconsulting.com>
+ <AS8PR10MB442424BD43EE4AECDDC93F1EFA8EA@AS8PR10MB4424.EURPRD10.PROD.OUTLOOK.COM>
+ <ZXq4A-Uht67KcJNV@hovoldconsulting.com>
+ <AS8PR10MB4424F8DB8AE222C7075514FAFA96A@AS8PR10MB4424.EURPRD10.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231219180424.GL1074920@black.fi.intel.com>
+In-Reply-To: <AS8PR10MB4424F8DB8AE222C7075514FAFA96A@AS8PR10MB4424.EURPRD10.PROD.OUTLOOK.COM>
 
-On Tue, Dec 19, 2023 at 08:04:24PM +0200, Mika Westerberg wrote:
-> > > One additional question though, say we have PCIe tunnel established by
-> > > the BIOS CM and we do the "reset", that means there will be hot-remove
-> > > on the PCIe side and then hotplug again, does this slow down the boot
-> > > considerably? We have some delays there in the PCIe code that might hit
-> > > us here although I agree that we definitely prefer working system rather
-> > > than fast-booting non-working system but perhaps the delays are not
-> > > noticeable by the end-user?
-> > I've not observed any delay which is noticeable. As soon as I get the login
-> > screen
-> > and check dmesg, it would already be enumerated.
-> 
-> Okay, I need to try it on my side too.
+On Wed, Dec 20, 2023 at 11:17:40AM +0000, Mark Glover wrote:
+> [This patch] changes the constant names for unused USB PIDs (product identifiers) to reflect the new products now using the PIDs.
 
-One additional thing that came to mind. Please check with some device
-with a real PCIe endpoint. For instance there is the integrated xHCI
-controller on Intel Titan Ridge and Goshen Ridge based docks. With TR it
-is easy because it does not support USB4 so xHCI is brought up
-immediately once there is PCIe tunnel. For GR (the OWC dock you have) it
-is disabled when the link is USB4 (because USB 3.x is tunneled as well)
-but you can get it enabled too if you connect it with an active TBT3
-cable.
+No need for "[This patch]", right?
+
+Also, can you wrap your lines at 72 columns?
+
+thanks,
+
+greg k-h
 
