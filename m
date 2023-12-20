@@ -1,95 +1,122 @@
-Return-Path: <linux-usb+bounces-4424-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4425-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A87A281A0F3
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Dec 2023 15:19:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AF4981A129
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Dec 2023 15:33:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EABE1F22211
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Dec 2023 14:19:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB3E92856F8
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Dec 2023 14:33:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C822A38DE0;
-	Wed, 20 Dec 2023 14:18:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D403AC1A;
+	Wed, 20 Dec 2023 14:33:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZKX3SwHk"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="nz7oM5qo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C17E3A26F
-	for <linux-usb@vger.kernel.org>; Wed, 20 Dec 2023 14:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5e637faa52fso29229297b3.1
-        for <linux-usb@vger.kernel.org>; Wed, 20 Dec 2023 06:18:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703081936; x=1703686736; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0dJ/uTYOAXQ9/VO+SpE3eiUrHkLtjwxggeQpM/8y8I0=;
-        b=ZKX3SwHkhxRkpt2AZ0SJxa/dcXoE42aLpXzmYzxyVkWrwqga54YEZJfApXi9Sm0pAq
-         89zkA9pVJhnaUo2C4Bl/M9Wwh2iNjDHtTz0UzUQ311Cee3rN8dKw7pZWkYFQW+2wYqq+
-         XWos3gFdTEkLRUqSTmseG5OSfg/NfM9XklLm1Bjye3qqujZ14k+Ks0uGYcazZ5XXDgvX
-         MTANkztdbj6bZakjooAWdNauPIMK9+Lu/dD0NGyUYqVWYeb5Wk0RKsPrrC1ZBvYpgPq7
-         ngl7jtYPN2sbYqas3gRTTRtGvOJaLSCSW5gGt+++uuPfPB+w4eoZPeJAG/LpEaCK8i9R
-         /lZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703081936; x=1703686736;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0dJ/uTYOAXQ9/VO+SpE3eiUrHkLtjwxggeQpM/8y8I0=;
-        b=V5d1Sa4W9Y0SrSpM0MQuZwN+5Kb/vOLEctS4X1hRiM7YzQeaQL1u4XQC83ytOu9Fah
-         /GLyYABkygaEGvxXDyUAEKyob/ilK/vOheiUf1g1dVnWzBCkEJkF/EFoQhn7EKm6i4l5
-         5Krn7mwf7uh9ys/DOZKI2OhwKeuHg8nZobhNscQXI0t/bOMH95LUPttp+p270S1fMPBI
-         gbv/BsORCOZHyX2/yUfKRsEikzB43DscSgkUdgKDdWCV3V991kNCI5ERsAj4+bbedgVQ
-         /+A/ZvNB9gTm9gzkGG8XyO8bEkeXKp9oKYIXGV0rTDF8lbsgWUdWK6dZEZ22RSBdztvO
-         fGWw==
-X-Gm-Message-State: AOJu0YwhUmZahiqMJcqX3iLzaAKQK2CEE5Z4FpQAWd5FeeG0HHCIgO9J
-	HWR7y6au6kYXHTYduubXCBJxZaXgSVJhdqb2KVfCqg==
-X-Google-Smtp-Source: AGHT+IGYeV0v/WtQuzYBXkz8MyIbFUmMaWaLwF2L65FzaM7MvZgbusGiiqhH18ISHE/cxMHp63q9EolKbR34g5Yw7zE=
-X-Received: by 2002:a81:5b45:0:b0:5d9:36ee:50a8 with SMTP id
- p66-20020a815b45000000b005d936ee50a8mr15930266ywb.2.1703081935494; Wed, 20
- Dec 2023 06:18:55 -0800 (PST)
+Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32FDB4423
+	for <linux-usb@vger.kernel.org>; Wed, 20 Dec 2023 14:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
+	Content-Type; bh=P+62m2hM+zchhtFV25UKUdJcNkVD9rHWZad3j2uDE8A=;
+	b=nz7oM5qo91/voUJwH+TOaWKZdDv3xMG3d40ex3usmqdhbUIlheGNxbEqSJB7jr
+	YYq2lJ8WhhXJXeSZ1KPc0hpoqtIGftTS0bz1en+pUDDju0cVfT6TsinLHtVXnqWp
+	x4wnpSf4WKj9rq3uw/zzO1Zkz1jtyfU80lLEpfZIcJqS0=
+Received: from [192.168.71.6] (unknown [114.92.108.205])
+	by zwqz-smtp-mta-g1-1 (Coremail) with SMTP id _____wBXX8st+4JlLIROEQ--.20864S2;
+	Wed, 20 Dec 2023 22:33:18 +0800 (CST)
+Message-ID: <b793b44e-ce40-4f03-808a-8606970cb2e6@163.com>
+Date: Wed, 20 Dec 2023 22:33:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231220-fp5-pmic-glink-v1-0-2a1f8e3c661c@fairphone.com> <20231220-fp5-pmic-glink-v1-2-2a1f8e3c661c@fairphone.com>
-In-Reply-To: <20231220-fp5-pmic-glink-v1-2-2a1f8e3c661c@fairphone.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Wed, 20 Dec 2023 16:18:44 +0200
-Message-ID: <CAA8EJprW-ZTf8azegjb6H-tx01JGRgifL+AeKiPW_pc+k4PPhQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] usb: typec: ucsi: Add qcm6490-pmic-glink as needing
- PDOS quirk
-To: Luca Weiss <luca.weiss@fairphone.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, cros-qcom-dts-watchers@chromium.org, 
-	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/7] usb: gadget: f_uvc: change endpoint allocation in
+ uvc_function_bind()
+Content-Language: en-US
+To: Frank Li <Frank.li@nxp.com>
+Cc: linux-usb@vger.kernel.org
+References: <20230803091053.9714-1-quic_linyyuan@quicinc.com>
+ <20230803091053.9714-4-quic_linyyuan@quicinc.com>
+ <ZYHCESCO4EXPQbFY@lizhi-Precision-Tower-5810>
+From: yuan linyu <cugyly@163.com>
+In-Reply-To: <ZYHCESCO4EXPQbFY@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBXX8st+4JlLIROEQ--.20864S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uFy5ZF1fCryrGrW7AFWkWFg_yoW8Kw4rpa
+	1fJa4rCr47tFZ8tws7J3Z5ZF47tws2q3yDWFWUK343Zr43ZF93CF1DKFW8KFyfCr97Aw48
+	tFZ5C3yS9r90yrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Uylk-UUUUU=
+X-CM-SenderInfo: pfxj5zr16rljoofrz/1tbiERJM417++KliJQAAsa
 
-On Wed, 20 Dec 2023 at 12:04, Luca Weiss <luca.weiss@fairphone.com> wrote:
+
+On 2023/12/20 00:17, Frank Li wrote:
+> On Thu, Aug 03, 2023 at 05:10:49PM +0800, Linyu Yuan wrote:
+>> when call uvc_function_bind(), gadget still have no connection speed,
+>> just follow other gadget function, use fs endpoint descriptor to allocate
+>> a video endpoint, remove gadget_is_{super|dual}speed() API call.
+>>
+>> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+>> ---
+>> v2: no change
+>>
+>>  drivers/usb/gadget/function/f_uvc.c | 10 +---------
+>>  1 file changed, 1 insertion(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+>> index 5e919fb65833..c8e149f8315f 100644
+>> --- a/drivers/usb/gadget/function/f_uvc.c
+>> +++ b/drivers/usb/gadget/function/f_uvc.c
+>> @@ -719,21 +719,13 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+>>  	}
+>>  	uvc->enable_interrupt_ep = opts->enable_interrupt_ep;
+>>  
+>> -	if (gadget_is_superspeed(c->cdev->gadget))
+>> -		ep = usb_ep_autoconfig_ss(cdev->gadget, &uvc_ss_streaming_ep,
+>> -					  &uvc_ss_streaming_comp);
+>> -	else if (gadget_is_dualspeed(cdev->gadget))
+>> -		ep = usb_ep_autoconfig(cdev->gadget, &uvc_hs_streaming_ep);
+>> -	else
+>> -		ep = usb_ep_autoconfig(cdev->gadget, &uvc_fs_streaming_ep);
+>> -
+>> +	ep = usb_ep_autoconfig(cdev->gadget, &uvc_fs_streaming_ep);
+> Some UDC driver use gadget_check_config() and match_ep() to allocate EP
+> internal fifo memory resource, if only pass download full speed EP.
+Could you share  the detail of problem ? do you mean find another different endpoint compared
+
+with change before?
+
+
+From my understanding, according to configfs gadget driver design, when find a endpoint, there is no
+
+working speed, this means each hardware endpoint should support all possible speeds.
 >
-> The QCM6490 Linux Android firmware needs this workaround as well. Add it
-> to the list.
+> UDC will allocate too much internal memory to each EP. It may failure when
+> use ss config. Generally, ss config have bigger max package size.
+is there another way to solve your issue in your driver ?
 >
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
->  drivers/usb/typec/ucsi/ucsi_glink.c | 1 +
->  1 file changed, 1 insertion(+)
+> Frank
+>
+>>  	if (!ep) {
+>>  		uvcg_info(f, "Unable to allocate streaming EP\n");
+>>  		goto error;
+>>  	}
+>>  	uvc->video.ep = ep;
+>>  
+>> -	uvc_fs_streaming_ep.bEndpointAddress = uvc->video.ep->address;
+>>  	uvc_hs_streaming_ep.bEndpointAddress = uvc->video.ep->address;
+>>  	uvc_ss_streaming_ep.bEndpointAddress = uvc->video.ep->address;
+>>  
+>> -- 
+>> 2.17.1
+>>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
--- 
-With best wishes
-Dmitry
 
