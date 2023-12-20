@@ -1,174 +1,117 @@
-Return-Path: <linux-usb+bounces-4401-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4402-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD6A18199AA
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Dec 2023 08:38:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF394819A9A
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Dec 2023 09:37:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1D6D1C21DBA
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Dec 2023 07:38:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9842288674
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Dec 2023 08:37:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59186168C4;
-	Wed, 20 Dec 2023 07:38:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A8B51C68D;
+	Wed, 20 Dec 2023 08:36:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MHceU14J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mEDYC2jQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49BC91B285
-	for <linux-usb@vger.kernel.org>; Wed, 20 Dec 2023 07:38:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3367a304091so386854f8f.3
-        for <linux-usb@vger.kernel.org>; Tue, 19 Dec 2023 23:38:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703057889; x=1703662689; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A978Jx+3VSg0AMdmNaimG6rYzex+t/4lm9ZuWKtTMP8=;
-        b=MHceU14JKA9tmcuaysRp/pzJw/TwydNrLfDmF/riSpS2HOLm93G4mpLjIRX41BmcQ3
-         3vBvEXYtfLaL8saJ2DMDWHs+FiT79hiUYgY9VTsnb1FWStL7GS4SUEhxuhxNRgPiy1ks
-         x9IsCp5KJT1D/GEVzHShw+jRvCGxgrDzCBcnvexaQijm7UNBEdGi/9troY6k1yjdE/Yo
-         81P9mMPuRQ9x/7MdSSKFDIG7x7UWLGv+VCfKEOhz952cVvl3fIB3Bwv97kg3NdS1+Tp4
-         hRUvIw5Ud6Q/2AMg8mBCnqWWlLGkVq/VJjtMa/aHizVo/zlrFluFrcjSaVO128BgBnzI
-         3N7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703057889; x=1703662689;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A978Jx+3VSg0AMdmNaimG6rYzex+t/4lm9ZuWKtTMP8=;
-        b=omqh1Tm334Fwg1lYcNAytlaLRxGYwvOkEzueyaDwvbl7vnuDU6Vhr/vGzFNEkyZI+A
-         hBTBXEWtO1oIkxmvxI11/z8DMISnlwtngRaR6nCrlB1c6X5nJjsCdECZmT9A5VCdr/y+
-         Xu/ANR01ZRL6Ml12rfpo1auE/ZACwlxLFE75yNZVUc5bW4QTAsX+Y5K8R1HKykLiUe2Y
-         srEs3wR8XyxA3C2WTEKmZmRnGkU9ykublM4om1Eb12i6kXXWqpQ7FNy0460kL3YunKFD
-         aJTA6rlQN3oc0KZxd+Sj5gh04Ic/T3O5l2i3iDxkCq0kmaJD6oPcwGFjVv2771TPwrDf
-         ifqw==
-X-Gm-Message-State: AOJu0YxXr1DPxrwm1PpNaQs4Acy2ZLlphbe58kOD3zl3vhnAAySTco3j
-	etQ7toI/exTthdsRJwVcsuD9yQ==
-X-Google-Smtp-Source: AGHT+IHVldZXvf8gh9Fjz5xND/R2oEBz0VfWJ1k1c+jgSnaSA9WrCM77EuVGC6nFlZxbXsD4/Op2mA==
-X-Received: by 2002:adf:f40a:0:b0:336:6116:2e15 with SMTP id g10-20020adff40a000000b0033661162e15mr2439640wro.160.1703057889425;
-        Tue, 19 Dec 2023 23:38:09 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id t15-20020a0560001a4f00b003367d48520dsm397648wry.46.2023.12.19.23.38.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Dec 2023 23:38:08 -0800 (PST)
-Message-ID: <c3d372f0-3d21-4500-96cd-9c88aaf5ce89@linaro.org>
-Date: Wed, 20 Dec 2023 08:38:07 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D727316434;
+	Wed, 20 Dec 2023 08:36:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C92C433C9;
+	Wed, 20 Dec 2023 08:36:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703061417;
+	bh=AdqAwz81NSKcWiMU11RDDZBgCQhJ9xWGLTtbQCSJNbU=;
+	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+	b=mEDYC2jQqWm8vnT9Nkrs+3k0nHT+0K4lQ81FXcmNW9hquUi1VceiooL6YC+EoD/v3
+	 E45aScEhmnrdWxm4r26Vnxr3Rh7k+dJidaRRZ4RSjKfvl7q1yxCo6V4LpWHEdDgPhB
+	 ds7woxKIH/rFoQZYoLzGAzcU0D0XzSzCn4aVWulmweX5orveJg58kyG+GspFDnbkSb
+	 qSVBse1t2OgkYQQZ1c2Jrq7v7yzV4JoTZ2LsotOOEz1ScV10Ljpsk80fA5wHV3vze7
+	 xDgyn3V75H+2vBfcbDeCKMPzJyhox0V3p7xlDmTsj4T3jcyMiypTc9VYAHi2Tweq9O
+	 M2Pe3ZFztQnhg==
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailauth.nyi.internal (Postfix) with ESMTP id 8650227C0061;
+	Wed, 20 Dec 2023 03:36:55 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 20 Dec 2023 03:36:55 -0500
+X-ME-Sender: <xms:pqeCZVVgQ9feUAubE_UGRljNpRwTNFakBlr6_WNwG2tE7FM85ux4qg>
+    <xme:pqeCZVl-jvy4st4hso5ixDc_suLOsRu9EGHi-PSiZ-09bn9KA78kCkw5CJCPvYAQh
+    inqyHR-7xiP15wgrKE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdduuddguddvtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtf
+    frrghtthgvrhhnpedvveeigfetudegveeiledvgfevuedvgfetgeefieeijeejffeggeeh
+    udegtdevheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrrhhnugdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidquddvkeehudej
+    tddvgedqvdekjedttddvieegqdgrrhhnugeppehkvghrnhgvlhdrohhrghesrghrnhgusg
+    druggv
+X-ME-Proxy: <xmx:pqeCZRYanC1WLiEFsG4-MAjWuA71k30OI4ivWyXUx3Ddq9cT3QLZzQ>
+    <xmx:pqeCZYVLEhDPnmxHjnu2xZge4p1LMU2JvFdnJbnWOeQMjLDlPoxCCg>
+    <xmx:pqeCZflpg3gqgULnEtvhu0bbQ5eyV2JyOrf1ABOQrweuKE4PBe8Rww>
+    <xmx:p6eCZS-EHB8GVnpcX6MaGvLUsgqvB2pxWXT_ilSCWGl1_CSKvPBxZA>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 4B72AB6008D; Wed, 20 Dec 2023 03:36:54 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1364-ga51d5fd3b7-fm-20231219.001-ga51d5fd3
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] dt-bindings: usb: mtk-xhci: add a property for
- Gen1 isoc-in transfer issue
-Content-Language: en-US
-To: Chunfeng Yun <chunfeng.yun@mediatek.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Conor Dooley <conor+dt@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Eddie Hung <eddie.hung@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>
-References: <20231220025842.7082-1-chunfeng.yun@mediatek.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
- m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
- HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
- XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
- mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
- v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
- cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
- rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
- qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
- aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
- gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
- dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
- NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
- hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
- oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
- H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
- yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
- 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
- 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
- +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
- FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
- 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
- DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
- oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
- 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
- Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
- qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
- /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
- qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
- EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
- KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
- fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231220025842.7082-1-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Message-Id: <01ea8c41-88cd-4123-95c7-391640845fc3@app.fastmail.com>
+In-Reply-To: <20231219-sam-sparc32-sunset-v3-v1-0-64bb44b598c5@ravnborg.org>
+References: <20231219-sam-sparc32-sunset-v3-v1-0-64bb44b598c5@ravnborg.org>
+Date: Wed, 20 Dec 2023 08:36:36 +0000
+From: "Arnd Bergmann" <arnd@kernel.org>
+To: "Sam Ravnborg" <sam@ravnborg.org>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Andreas Larsson" <andreas@gaisler.com>
+Cc: "Helge Deller" <deller@gmx.de>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Alan Stern" <stern@rowland.harvard.edu>, "Jaroslav Kysela" <perex@perex.cz>,
+ "Takashi Iwai" <tiwai@suse.com>, sparclinux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-sound@vger.kernel.org
+Subject: Re: [PATCH 00/27] sparc32: sunset sun4m and sun4d
+Content-Type: text/plain
 
-On 20/12/2023 03:58, Chunfeng Yun wrote:
-> For Gen1 isoc-in endpoint on controller before about SSUSB IPM v1.6.0, it
-> still send out unexpected ACK after receiving a short packet in burst
-> transfer, this will cause an exception on connected device, specially for
-> a 4k camera.
-> Add a quirk property "rx-fifo-depth" to work around this hardware issue,
-> prefer to use 3k bytes;
-> The side-effect is that may cause performance drop about 10%, including
-> bulk transfer.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v3: add fifo depth unit, change the value range from 0-3 to 1-4
-> v2: change 'mediatek,rxfifo-depth' to 'rx-fifo-depth'
-> ---
->  .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml   | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> index e9644e333d78..9478b7031796 100644
-> --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> @@ -124,6 +124,18 @@ properties:
->        defined in the xHCI spec on MTK's controller.
->      default: 5000
->  
-> +  rx-fifo-depth:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      It is a quirk used to work around Gen1 isoc-in endpoint transfer issue
-> +      that still send out unexpected ACK after device finish the burst transfer
-> +      with a short packet and cause an exception, specially on a 4K camera
-> +      device, it happens on controller before about IPM v1.6.0; the side-effect
-> +      is that may cause performance drop about 10%, include bulk transfer,
-> +      prefer to use 3 here. The unit is 1K bytes.
+On Tue, Dec 19, 2023, at 22:03, Sam Ravnborg via B4 Relay wrote:
+> TODO before this can be applied:
+> - Ack from davem - as he is the principal sparc maintainer
+> - Tested-by: preferably on a target or QEMU (see above)
+>   I expect bugs as there are some involved changes!
+>
+> Ideas for the future
+> - Apply the most relevant downstream Gaisler patches
+>   - The ones introducing CAS should have preference as we then
+>     can drop the cmpxchg emulation
 
-NAK. Read comments on previous submission.
+One note about the CAS -- as far as I can tell, the absence
+of the futex() syscall on sparc32 kernels means that no glibc
+from the past decade can work correctly as it now requires futex
+for its internal locking, though it does work on sparc64 kernels
+in compat32 mode as well as the LEON3 kernel that adds futex
+support.
 
-Best regards,
-Krzysztof
+There have been a number of other bugs in sun4m/sun4d support that
+ended up making the system unusable during the same timeframe,
+I remember sysvipc being broken in native 32-bit mode (but again
+not in compat mode) and I think Al Viro has a list of things that
+he fixed over the years.
 
+All of these were found through inspection rather than testing,
+so there is a good chance that other fatal kernel bugs prevent
+testing in qemu, at least until the fixes from Andreas' tree
+are included.
+
+       Arnd
 
