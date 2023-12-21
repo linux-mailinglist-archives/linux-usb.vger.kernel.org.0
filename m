@@ -1,111 +1,128 @@
-Return-Path: <linux-usb+bounces-4479-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4480-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38E8281ACA9
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 03:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ADBDD81AF77
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 08:33:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA0AF1F249FB
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 02:35:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 386721F273E9
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 07:33:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01B7C4691;
-	Thu, 21 Dec 2023 02:35:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68F1F154B1;
+	Thu, 21 Dec 2023 07:33:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="z6eef2g4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172A94404;
-	Thu, 21 Dec 2023 02:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: c2713873dbb3464a955e73b98afabf69-20231221
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.33,REQID:90a79e35-9fc6-466c-ab94-6681d1db0fed,IP:25,
-	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:8,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:28
-X-CID-INFO: VERSION:1.1.33,REQID:90a79e35-9fc6-466c-ab94-6681d1db0fed,IP:25,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:8,FILE:0,BULK:0,RULE:Release_HamU,ACTION
-	:release,TS:28
-X-CID-META: VersionHash:364b77b,CLOUDID:cdde512e-1ab8-4133-9780-81938111c800,B
-	ulkID:231221103511OABB4G6M,BulkQuantity:0,Recheck:0,SF:66|38|24|16|19|44|1
-	02,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSI,TF_CID_SPAM_SNR,TF_CID_SPAM_USA,TF_CID_SPAM_FSD
-X-UUID: c2713873dbb3464a955e73b98afabf69-20231221
-Received: from node4.com.cn [(39.156.73.12)] by mailgw
-	(envelope-from <liyouhong@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1028198504; Thu, 21 Dec 2023 10:35:10 +0800
-Received: from node4.com.cn (localhost [127.0.0.1])
-	by node4.com.cn (NSMail) with SMTP id 6805B16001CD7;
-	Thu, 21 Dec 2023 10:35:10 +0800 (CST)
-X-ns-mid: postfix-6583A45E-29320911
-Received: from localhost.localdomain (unknown [172.20.185.164])
-	by node4.com.cn (NSMail) with ESMTPA id 6C42C16001CD7;
-	Thu, 21 Dec 2023 02:35:09 +0000 (UTC)
-From: YouHong Li <liyouhong@kylinos.cn>
-To: balbi@kernel.org,
-	leoyang.li@nxp.com
-Cc: linux-usb@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org,
-	liyouhong <liyouhong@kylinos.cn>,
-	k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] drivers/usb/gadget/udc: Fix spelling typo in comments(reqest->request)
-Date: Thu, 21 Dec 2023 10:34:25 +0800
-Message-Id: <20231221023425.1316397-1-liyouhong@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F97914AB5
+	for <linux-usb@vger.kernel.org>; Thu, 21 Dec 2023 07:33:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a2698eae0a9so51980666b.3
+        for <linux-usb@vger.kernel.org>; Wed, 20 Dec 2023 23:33:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1703143989; x=1703748789; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/0VpDqqUIzOlKBhn2gCRz1W1Bf+NVsRHUpuRi9T9QvI=;
+        b=z6eef2g4EqmeXmxruoboMdtYIIFX7jty01jJp5XKrkyR4TFwFjSIN7HHR+QzwjjxYc
+         +dlYrwtyRhdZncCygQ5jmyJ+bhICblx1+Snz72UOCRywXqCmpiJIELkZhxP6KIyqmZ9X
+         X0Y3GOYccegVkSvgE9u5muEaNB4N5Zo6L/PDlIXH/F1tt0UqlIb4tMD7Q4Ki+1mNsA/j
+         6vcK+MN8ZR8Zq0F+9ORtg1hqDgV9tkPqBbv8VwnZXoaIu53S3MCbpodN91e2zQp/gkd2
+         6kIJgmpwrir/b1DBfNK967xY4hH1xVTpmOMWDi8SK/esDgndy/xpyDBUMQIuP6031Xk4
+         oF4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703143989; x=1703748789;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/0VpDqqUIzOlKBhn2gCRz1W1Bf+NVsRHUpuRi9T9QvI=;
+        b=EKaka/5f1Wf1DXdKm6qQY9/SvrwHz6RES+Mzd2InAwApsp+DBfKDtpDAY+tqH1Xyaz
+         9RfqNiwjpsB3M2PCZZwR1/mHWP5ppNp3dKUUnoy5V8DU9+RZmg6Kj+RBpdRarAP8RqQX
+         YsWcWt93eXkXydSyCU1ErKia+o4yHBsjqsBkfKgZuFMLl7F3G3vNEH+KdoHGzkorzIU+
+         iNcdZp0km7a3/ZL1SHGAB5FLhzuFF2kzwOyc4KLzTSlABY1vz6vvdC3V1hhJKIUCfeM2
+         VniCjkLu77SPZVFNm91YKik3etZ2mhDfpNT5IVBweh1EAsb5XFTgI6H1l7h6JRDu4fd6
+         LqaA==
+X-Gm-Message-State: AOJu0Yy9TNIC9u4tZcf4mnPYU19hPEPUcJQnBrCcUp57RZ49BoV8Lxy2
+	dw/3zAlvphPdvPSn7q8gPREObw==
+X-Google-Smtp-Source: AGHT+IH0oytZXCEplX5mnIjMU1XTUB7KsqnPxyVQVbzXWE5l7gbKRZ2BZnW985lnddzue73LNbDOQA==
+X-Received: by 2002:a17:906:f5a3:b0:a1f:5c21:a577 with SMTP id cm35-20020a170906f5a300b00a1f5c21a577mr12532478ejd.152.1703143989091;
+        Wed, 20 Dec 2023 23:33:09 -0800 (PST)
+Received: from localhost (2a02-8388-6584-6400-d322-7350-96d2-429d.cable.dynamic.v6.surfer.at. [2a02:8388:6584:6400:d322:7350:96d2:429d])
+        by smtp.gmail.com with ESMTPSA id wh14-20020a170906fd0e00b00a233efe6aa7sm641391ejb.51.2023.12.20.23.33.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Dec 2023 23:33:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 21 Dec 2023 08:33:07 +0100
+Message-Id: <CXTU5MLN0YDS.29PPV8KZF8G9R@fairphone.com>
+Cc: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
+ <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 0/3] Fairphone 5 PMIC-GLINK support (USB-C, charger,
+ fuel gauge)
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+To: "Konrad Dybcio" <konrad.dybcio@linaro.org>, "Bjorn Andersson"
+ <andersson@kernel.org>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ <cros-qcom-dts-watchers@chromium.org>, "Dmitry Baryshkov"
+ <dmitry.baryshkov@linaro.org>
+X-Mailer: aerc 0.15.2
+References: <20231220-fp5-pmic-glink-v1-0-2a1f8e3c661c@fairphone.com>
+ <8d042095-1e09-45cc-9762-909fe8d663a9@linaro.org>
+In-Reply-To: <8d042095-1e09-45cc-9762-909fe8d663a9@linaro.org>
 
-From: liyouhong <liyouhong@kylinos.cn>
+On Wed Dec 20, 2023 at 1:32 PM CET, Konrad Dybcio wrote:
+> On 20.12.2023 11:02, Luca Weiss wrote:
+> > This series adds all the necessary bits to enable USB-C role switching,
+> > charger and fuel gauge (all via pmic-glink) on Fairphone 5.
+> >=20
+> > One thing that could be made different is the pmic-glink compatible.
+> > I've chosen to use qcm6490 compatible for it and not sc7280 since
+> > there's plenty of firmware variety on sc7280-based platforms and they
+> > might require different quirks in the future, so limit this PDOS quirk
+> > to just qcm6490 for now.
+> >=20
+> > If someone thinks it should be qcom,sc7280-pmic-glink, please let me
+> > know :)
+> IMO it's best to continue using the "base soc" (which just so happened
+> to fall onto sc7280 this time around) for all compatibles, unless the
+> derivatives actually had changes
 
-Fix spelling typo in comments.
+Hi Konrad,
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: liyouhong <liyouhong@kylinos.cn>
+I think at some point I asked Dmitry what he thought and he mentioned
+qcm6490. Even found the message again:
 
-diff --git a/drivers/usb/gadget/udc/fsl_udc_core.c b/drivers/usb/gadget/u=
-dc/fsl_udc_core.c
-index ee5705d336e3..97932278e381 100644
---- a/drivers/usb/gadget/udc/fsl_udc_core.c
-+++ b/drivers/usb/gadget/udc/fsl_udc_core.c
-@@ -1360,7 +1360,7 @@ static void ch9getstatus(struct fsl_udc *udc, u8 re=
-quest_type, u16 value,
- 	udc->ep0_dir =3D USB_DIR_IN;
- 	/* Borrow the per device status_req */
- 	req =3D udc->status_req;
--	/* Fill in the reqest structure */
-+	/* Fill in the request structure */
- 	*((u16 *) req->req.buf) =3D cpu_to_le16(tmp);
-=20
- 	req->ep =3D ep;
-diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/ud=
-c/mv_udc_core.c
-index d888dcda2bc8..78308b64955d 100644
---- a/drivers/usb/gadget/udc/mv_udc_core.c
-+++ b/drivers/usb/gadget/udc/mv_udc_core.c
-@@ -1451,7 +1451,7 @@ udc_prime_status(struct mv_udc *udc, u8 direction, =
-u16 status, bool empty)
-=20
- 	req =3D udc->status_req;
-=20
--	/* fill in the reqest structure */
-+	/* fill in the request structure */
- 	if (empty =3D=3D false) {
- 		*((u16 *) req->req.buf) =3D cpu_to_le16(status);
- 		req->req.length =3D 2;
---=20
-2.34.1
+> well, since it is a firmware thing, you might want to emphasise that.
+> So from my POV qcm6490 makes more sense
+
+But yeah since it's likely that sc7280 firmware behaves the same as
+qcm6490 firmware it's probably okay to use sc7280 compatible, worst case
+we change it later :) I'll send a v2 with those changes.
+
+Regards
+Luca
+
+>
+> as far as firmware goes, I *think* CrOS doesn't even have PMIC_GLINK?
+> There are however WoA 7280 laptops which totally should have it.. Would
+> be nice to hunt some down and see if they report different stuff to
+> what's there on android firmware
+>
+> Konrad
 
 
