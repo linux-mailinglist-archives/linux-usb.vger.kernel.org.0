@@ -1,63 +1,64 @@
-Return-Path: <linux-usb+bounces-4498-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4499-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8588881BA63
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 16:16:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D55081BAD2
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 16:32:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BCD3285B5C
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 15:16:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA9D42866B5
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 15:32:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD624D5A3;
-	Thu, 21 Dec 2023 15:16:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA707539EF;
+	Thu, 21 Dec 2023 15:32:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="oCV4Ghlm"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="EPOlLkFY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF184E1B0;
-	Thu, 21 Dec 2023 15:16:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931E2539E6;
+	Thu, 21 Dec 2023 15:32:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BLEur8K012177;
-	Thu, 21 Dec 2023 15:16:34 GMT
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BLE52L6014601;
+	Thu, 21 Dec 2023 15:32:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=qcppdkim1; bh=KxELH7v
-	9ITZOwsllWmWfZmzJThagjN0t4hjGlBiSjc4=; b=oCV4Ghlm96tCyPXkKLf4ccw
-	FHNhKPc8QMqGnHUa7px5hmUpmhP+js19SF+wBJ8v6xZDse5Gnt2gX6W9GiMAgDWm
-	Z7XS/oTv1fZsAE7tdmYUe6evIEjIjfqAK5l796c5Xjl9DKffN39nsHys8cN/H5BI
-	hWKEyr593jxM/ETKREhaODEZWDtUnecpWLHiu1exvPJ/doiBCyWwqH/tQQZrguZA
-	QebIOI7AcoS7BoHi1LOWISVTuY2DMxeifOnAO+jCWPeWQh1YPRv/ufeJK0HE7NEn
-	KkcG5bachFT/JM1wLK3DpjMVD3I/OIlxB1xHIsbv09G0+1sTmiH5Aqm81k+W/zg=
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=r2eajES
+	iH3ZLCXG80R1YRJE+/6dxGjQt9PsMJiwCzc8=; b=EPOlLkFYE7UCwzDw1KVnS6L
+	MPMXBshaMm1aOvkNRMn4xqWJ/XRLLdo4rm59d0CVeJYfMAohw4f4P6TQ18QpNZh3
+	TBJPQb+0wOEKhTqvWWyKG7tzdhXtejmWgP2gBGFh2mpXVBjI6q9rbiuuxa2aDKJc
+	2uSzBqs33Oe1RmxkL3LRYe5wlcJ4YnvCQjKGeS/rMU8SeE+30Fz7/XAQ+VkGisVc
+	oPr3Dd+kBF6PotdN2FIe1HUaETielmlAqM3nTo3QKTWIdvS+Vrt8tDARCawHnk/O
+	NfrWZJLYJJR+ha55r36tXkQ3OecnpWeLbWKKqigUpmi5jndTLxIZy5A14EnCY6A=
 	=
 Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v4pq386pw-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v4pte077p-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Dec 2023 15:16:34 +0000 (GMT)
+	Thu, 21 Dec 2023 15:32:29 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BLFGXJZ013592
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BLFWSmL031684
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Dec 2023 15:16:33 GMT
+	Thu, 21 Dec 2023 15:32:28 GMT
 Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Thu, 21 Dec 2023 07:16:30 -0800
+ 15.2.1118.40; Thu, 21 Dec 2023 07:32:25 -0800
 From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet
+	<corbet@lwn.net>,
+        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
+        Hardik Gajjar <hgajjar@de.adit-jv.com>
 CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>
-Subject: [PATCH v2] usb: dwc3: gadget: Ignore dwc3 interrupt if GEVNTCOUNT reads corrupt value
-Date: Thu, 21 Dec 2023 20:46:20 +0530
-Message-ID: <20231221151620.16030-1-quic_kriskura@quicinc.com>
+        <linux-doc@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v2] usb: gadget: ncm: Add support to update wMaxSegmentSize via configfs
+Date: Thu, 21 Dec 2023 21:02:16 +0530
+Message-ID: <20231221153216.18657-1-quic_kriskura@quicinc.com>
 X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -71,96 +72,223 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Em5qpkGqSDNHFIOHKxtysObEv8P-wvrO
-X-Proofpoint-ORIG-GUID: Em5qpkGqSDNHFIOHKxtysObEv8P-wvrO
+X-Proofpoint-GUID: OiI5g155Wochpovj5LFAQssmCeM82dGU
+X-Proofpoint-ORIG-GUID: OiI5g155Wochpovj5LFAQssmCeM82dGU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 phishscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0
- mlxscore=0 clxscore=1015 impostorscore=0 mlxlogscore=842 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312210115
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ clxscore=1011 priorityscore=1501 malwarescore=0 impostorscore=0
+ phishscore=0 suspectscore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2312210117
 
-In the current implementation, the check_event_buf call reads the
-GEVNTCOUNT register to determine the amount of event data generated
-and copies it from ev->buf to ev->cache after masking interrupt.
+The max segment size is currently limited to the ethernet frame length of
+the kernel which happens to be 1514 at this point in time. However the NCM
+specification limits it to 64K for sixtenn bit NTB's. For peer to peer
+connections, increasing the segment size gives better throughput.
 
-During copy if the amount of data to be copied is more than
-(length - lpos), we fill the ev->cache till the end of 4096 byte
-buffer allocated and then start filling from the top (lpos = 0).
+Add support to configure this value before configfs symlink is created.
+Also since the NTB Out/In buffer sizes are fixed at 16384 bytes, limit the
+segment size to an upper cap of 8000 to allow at least a minimum of 2 MTU
+sized datagrams to be aggregated.
 
-In one instance of SMMU crash it is observed that GEVNTCOUNT register
-reads more than 4096 bytes:
+Set the default MTU size for the ncm interface during function bind before
+network interface is registered allowing MTU to be set in parity with
+wMaxSegmentSize.
 
-dwc3_readl   base=0xffffffc0091dc000  offset=50188  value=63488
-
-(offset = 50188 -> 0xC40C)  -> reads 63488 bytes
-
-As per crash dump:
-dwc->lpos = 2056
-
-and evt->buf is at 0xFFFFFFC009185000 and the crash is at
-0xFFFFFFC009186000. The diff which is exactly 0x1000 bytes.
-
-We first memcpy 2040 bytes from (buf + lpos) to (buf + 0x1000).
-
-And then we copy the rest of the data (64388 - 2040) from beginning
-of dwc->ev_buf. While doing so we go beyond bounds as we are trying
-to memcpy 62348 bytes into a 4K buffer resulting in crash.
-
-Fix this by ignoring the interrupt when GEVNTCOUNT register reads a
-value more than the event ring allocated.
+Update gadget documentation describing the new configfs property.
 
 Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 ---
 Changes in v2:
-Instead of fixing amount of data being copied from ring, ignored
-the interrupt when count is corrupt as per suggestion from Thinh.
+Commit text updated as per reviews on v1.
+Documenation and driver code merged into one patch.
 
 Link to v1:
-https://lore.kernel.org/all/20230521100330.22478-1-quic_kriskura@quicinc.com/
+https://lore.kernel.org/all/20231009142005.21338-1-quic_kriskura@quicinc.com/
 
- drivers/usb/dwc3/gadget.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ Documentation/usb/gadget-testing.rst | 20 ++++----
+ drivers/usb/gadget/function/f_ncm.c  | 69 ++++++++++++++++++++++++++--
+ drivers/usb/gadget/function/u_ncm.h  |  2 +
+ 3 files changed, 79 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 858fe4c299b7..e27933fdcce3 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4451,6 +4451,7 @@ static irqreturn_t dwc3_thread_interrupt(int irq, void *_evt)
- static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
- {
- 	struct dwc3 *dwc = evt->dwc;
-+	int ret = IRQ_WAKE_THREAD;
- 	u32 amount;
- 	u32 count;
+diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+index 29072c166d23..8cd62c466d20 100644
+--- a/Documentation/usb/gadget-testing.rst
++++ b/Documentation/usb/gadget-testing.rst
+@@ -448,15 +448,17 @@ Function-specific configfs interface
+ The function name to use when creating the function directory is "ncm".
+ The NCM function provides these attributes in its function directory:
  
-@@ -4480,6 +4481,12 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
- 	if (!count)
- 		return IRQ_NONE;
+-	=============== ==================================================
+-	ifname		network device interface name associated with this
+-			function instance
+-	qmult		queue length multiplier for high and super speed
+-	host_addr	MAC address of host's end of this
+-			Ethernet over USB link
+-	dev_addr	MAC address of device's end of this
+-			Ethernet over USB link
+-	=============== ==================================================
++	===============   ==================================================
++	ifname		  network device interface name associated with this
++			  function instance
++	qmult		  queue length multiplier for high and super speed
++	host_addr	  MAC address of host's end of this
++			  Ethernet over USB link
++	dev_addr	  MAC address of device's end of this
++			  Ethernet over USB link
++	max_segment_size  Segment size required for P2P connections. This
++			  will set MTU to (max_segment_size - 14 bytes)
++	===============   ==================================================
  
-+	if (count > evt->length) {
-+		dev_err(dwc->dev, "GEVTCOUNT corrupt\n");
-+		ret = IRQ_NONE;
-+		goto done;
+ and after creating the functions/ncm.<instance name> they contain default
+ values: qmult is 5, dev_addr and host_addr are randomly selected.
+diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+index cc0ed29a4adc..a1575a0ca568 100644
+--- a/drivers/usb/gadget/function/f_ncm.c
++++ b/drivers/usb/gadget/function/f_ncm.c
+@@ -103,6 +103,16 @@ static inline struct f_ncm *func_to_ncm(struct usb_function *f)
+ /* Delay for the transmit to wait before sending an unfilled NTB frame. */
+ #define TX_TIMEOUT_NSECS	300000
+ 
++/*
++ * Although max mtu as dictated by u_ether is 15412 bytes, setting
++ * max_segment_sizeto 15426 would not be efficient. If user chooses segment
++ * size to be (>= 8192), then we can't aggregate more than one  buffer in each
++ * NTB (assuming each packet coming from network layer is >= 8192 bytes) as ep
++ * maxpacket limit is 16384. So let max_segment_size be limited to 8000 to allow
++ * at least 2 packets to be aggregated reducing wastage of NTB buffer space
++ */
++#define MAX_DATAGRAM_SIZE	8000
++
+ #define FORMATS_SUPPORTED	(USB_CDC_NCM_NTB16_SUPPORTED |	\
+ 				 USB_CDC_NCM_NTB32_SUPPORTED)
+ 
+@@ -179,7 +189,6 @@ static struct usb_cdc_ether_desc ecm_desc = {
+ 	/* this descriptor actually adds value, surprise! */
+ 	/* .iMACAddress = DYNAMIC */
+ 	.bmEthernetStatistics =	cpu_to_le32(0), /* no statistics */
+-	.wMaxSegmentSize =	cpu_to_le16(ETH_FRAME_LEN),
+ 	.wNumberMCFilters =	cpu_to_le16(0),
+ 	.bNumberPowerFilters =	0,
+ };
+@@ -1166,11 +1175,15 @@ static int ncm_unwrap_ntb(struct gether *port,
+ 	struct sk_buff	*skb2;
+ 	int		ret = -EINVAL;
+ 	unsigned	ntb_max = le32_to_cpu(ntb_parameters.dwNtbOutMaxSize);
+-	unsigned	frame_max = le16_to_cpu(ecm_desc.wMaxSegmentSize);
++	unsigned	frame_max;
+ 	const struct ndp_parser_opts *opts = ncm->parser_opts;
+ 	unsigned	crc_len = ncm->is_crc ? sizeof(uint32_t) : 0;
+ 	int		dgram_counter;
+ 	int		to_process = skb->len;
++	struct f_ncm_opts *ncm_opts;
++
++	ncm_opts = container_of(port->func.fi, struct f_ncm_opts, func_inst);
++	frame_max = ncm_opts->max_segment_size;
+ 
+ parse_ntb:
+ 	tmp = (__le16 *)ntb_ptr;
+@@ -1430,8 +1443,10 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
+ 
+ 	mutex_lock(&ncm_opts->lock);
+ 	gether_set_gadget(ncm_opts->net, cdev->gadget);
+-	if (!ncm_opts->bound)
++	if (!ncm_opts->bound) {
++		ncm_opts->net->mtu = (ncm_opts->max_segment_size - ETH_HLEN);
+ 		status = gether_register_netdev(ncm_opts->net);
++	}
+ 	mutex_unlock(&ncm_opts->lock);
+ 
+ 	if (status)
+@@ -1474,6 +1489,8 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
+ 	ncm_data_intf.bInterfaceNumber = status;
+ 	ncm_union_desc.bSlaveInterface0 = status;
+ 
++	ecm_desc.wMaxSegmentSize = ncm_opts->max_segment_size;
++
+ 	status = -ENODEV;
+ 
+ 	/* allocate instance-specific endpoints */
+@@ -1576,11 +1593,56 @@ USB_ETHERNET_CONFIGFS_ITEM_ATTR_QMULT(ncm);
+ /* f_ncm_opts_ifname */
+ USB_ETHERNET_CONFIGFS_ITEM_ATTR_IFNAME(ncm);
+ 
++static ssize_t ncm_opts_max_segment_size_show(struct config_item *item,
++					      char *page)
++{
++	struct f_ncm_opts *opts = to_f_ncm_opts(item);
++	u16 segment_size;
++
++	mutex_lock(&opts->lock);
++	segment_size = opts->max_segment_size;
++	mutex_unlock(&opts->lock);
++
++	return sysfs_emit(page, "%u\n", segment_size);
++}
++
++static ssize_t ncm_opts_max_segment_size_store(struct config_item *item,
++					       const char *page, size_t len)
++{
++	struct f_ncm_opts *opts = to_f_ncm_opts(item);
++	u16 segment_size;
++	int ret;
++
++	mutex_lock(&opts->lock);
++	if (opts->refcnt) {
++		ret = -EBUSY;
++		goto out;
 +	}
 +
- 	evt->count = count;
- 	evt->flags |= DWC3_EVENT_PENDING;
- 
-@@ -4493,9 +4500,10 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
- 	if (amount < count)
- 		memcpy(evt->cache, evt->buf, count - amount);
- 
-+done:
- 	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), count);
- 
--	return IRQ_WAKE_THREAD;
++	ret = kstrtou16(page, 0, &segment_size);
++	if (ret)
++		goto out;
++
++	if (segment_size > MAX_DATAGRAM_SIZE) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	opts->max_segment_size = segment_size;
++	ret = len;
++out:
++	mutex_unlock(&opts->lock);
 +	return ret;
- }
++}
++
++CONFIGFS_ATTR(ncm_opts_, max_segment_size);
++
+ static struct configfs_attribute *ncm_attrs[] = {
+ 	&ncm_opts_attr_dev_addr,
+ 	&ncm_opts_attr_host_addr,
+ 	&ncm_opts_attr_qmult,
+ 	&ncm_opts_attr_ifname,
++	&ncm_opts_attr_max_segment_size,
+ 	NULL,
+ };
  
- static irqreturn_t dwc3_interrupt(int irq, void *_evt)
+@@ -1623,6 +1685,7 @@ static struct usb_function_instance *ncm_alloc_inst(void)
+ 		kfree(opts);
+ 		return ERR_CAST(net);
+ 	}
++	opts->max_segment_size = cpu_to_le16(ETH_FRAME_LEN);
+ 	INIT_LIST_HEAD(&opts->ncm_os_desc.ext_prop);
+ 
+ 	descs[0] = &opts->ncm_os_desc;
+diff --git a/drivers/usb/gadget/function/u_ncm.h b/drivers/usb/gadget/function/u_ncm.h
+index 5408854d8407..49ec095cdb4b 100644
+--- a/drivers/usb/gadget/function/u_ncm.h
++++ b/drivers/usb/gadget/function/u_ncm.h
+@@ -31,6 +31,8 @@ struct f_ncm_opts {
+ 	 */
+ 	struct mutex			lock;
+ 	int				refcnt;
++
++	u16				max_segment_size;
+ };
+ 
+ #endif /* U_NCM_H */
 -- 
 2.42.0
 
