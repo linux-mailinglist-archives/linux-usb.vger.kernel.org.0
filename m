@@ -1,259 +1,109 @@
-Return-Path: <linux-usb+bounces-4481-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4482-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5387981AFFB
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 09:05:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 899EA81B01A
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 09:15:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 088D2282F22
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 08:05:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 449FC282A8A
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 08:15:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E04DE156E4;
-	Thu, 21 Dec 2023 08:05:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6C7171D3;
+	Thu, 21 Dec 2023 08:14:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RVqi4QgZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RpJMRLXe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7002815AC3
-	for <linux-usb@vger.kernel.org>; Thu, 21 Dec 2023 08:05:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703145942; x=1734681942;
-  h=date:from:to:cc:subject:message-id;
-  bh=x0yUTrbwn+Lt8xJi/MOG3MxNfZixDBGRtZPnYaklxNg=;
-  b=RVqi4QgZU9XdJKnOw/sy8P2Zbgzzu8UgFGcQWIt5hBKqPXTv0IEjGoPK
-   EEyQqe9nYlOmKB/iCPvhm10eo6QvHhd69gwv9W1qmqbVbGnTVWSVqjYQf
-   JRSLc99fk0hg5rIcR1tgVGO34+kobqD41NDGsfgnkqcS0T8A0w1LsONJK
-   eeq7D1Gu9yaRE/yRISkhmj3kHnV4FMmRoVks5maVRZP+OegnaaaiVLsdU
-   F7iRoEJrb3mrxgiqoQNrYiUAY1/xMKxWo4kxRF0UbWw+YO31dATraRuZD
-   kR6qqFu5ybfQHn96jZ9/0C3pDU6S3LcdVJfzxRDCCNLkokfoZD5lCUEqW
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10930"; a="395666512"
-X-IronPort-AV: E=Sophos;i="6.04,293,1695711600"; 
-   d="scan'208";a="395666512"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2023 00:05:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10930"; a="805531589"
-X-IronPort-AV: E=Sophos;i="6.04,293,1695711600"; 
-   d="scan'208";a="805531589"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 21 Dec 2023 00:05:33 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rGE3d-00087K-1v;
-	Thu, 21 Dec 2023 08:05:29 +0000
-Date: Thu, 21 Dec 2023 16:05:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 8be0c877fb3b671dac0cf56d1f1f9e65f9a9fb81
-Message-ID: <202312211608.ghm1Lf2k-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544AB171C4
+	for <linux-usb@vger.kernel.org>; Thu, 21 Dec 2023 08:14:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7E7FC433C8;
+	Thu, 21 Dec 2023 08:14:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703146492;
+	bh=XMPL8d3WusmpgbGVbFhpN7SrqKyUlyr2xc75iH/5V4Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RpJMRLXeTcFoJYvKRFr7krTwDot2100GHWtGPsvezImm/15rB6JMzGyFZDT6CbC7E
+	 1X1xtO5mKkjfH3UCtSgDBag8m5NYRfPRvH6MdU7DFqiE0eNmPkcp2ByQBEtQ85VTGl
+	 9bJi+5Qnn37XBW2OmXdIdQ/yEO0ILi/UOHMbrID/RDLv7ifiQYo4L462onMhUDx5QZ
+	 JMwp7rCi+BtMGQ4luaoLYV6DzrNPex7RjUY/MLjqOUYaGOkZUQ8r+aDyRnWB3bUL+G
+	 rKHXf7/8DZfVAbw8RJasiyA73KS55x4K3yrFmdwsLYZfiSedA9nXY968C7wROeBKqc
+	 in7OGk9uYpUeA==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1rGECi-00033I-2T;
+	Thu, 21 Dec 2023 09:14:52 +0100
+Date: Thu, 21 Dec 2023 09:14:52 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Mark Glover <mark.glover@actisense.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: ftdi_sio: Actisense PIDs constant Names
+Message-ID: <ZYPz_MS9BDEJVx0S@hovoldconsulting.com>
+References: <AS8PR10MB4424F3366DA20492BA9B1605FABAA@AS8PR10MB4424.EURPRD10.PROD.OUTLOOK.COM>
+ <ZWB5VtdzyGsROpuO@hovoldconsulting.com>
+ <AS8PR10MB442424BD43EE4AECDDC93F1EFA8EA@AS8PR10MB4424.EURPRD10.PROD.OUTLOOK.COM>
+ <ZXq4A-Uht67KcJNV@hovoldconsulting.com>
+ <AS8PR10MB4424F8DB8AE222C7075514FAFA96A@AS8PR10MB4424.EURPRD10.PROD.OUTLOOK.COM>
+ <AS8PR10MB4424408E2BFBD055150629C9FA96A@AS8PR10MB4424.EURPRD10.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AS8PR10MB4424408E2BFBD055150629C9FA96A@AS8PR10MB4424.EURPRD10.PROD.OUTLOOK.COM>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 8be0c877fb3b671dac0cf56d1f1f9e65f9a9fb81  thunderbolt: make tb_bus_type const
+On Wed, Dec 20, 2023 at 01:57:40PM +0000, Mark Glover wrote:
+> This changes the constant names for unused USB PIDs (product identifiers)
+> to reflect the new products now using the PIDs.
 
-elapsed time: 1462m
+Commit messages should use imperative mode (see the process
+documentation) so I changed this to:
 
-configs tested: 177
-configs skipped: 2
+	Update the constant names for unused USB PIDs (product
+	identifiers) to reflect the new products now using the PIDs.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+and similar in the commit summary (Subject) where I also added the
+missing common prefix ("USB: serial: ").
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231221   gcc  
-arc                   randconfig-002-20231221   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                       aspeed_g4_defconfig   clang
-arm                                 defconfig   clang
-arm                            qcom_defconfig   gcc  
-arm                   randconfig-001-20231221   clang
-arm                   randconfig-002-20231221   clang
-arm                   randconfig-003-20231221   clang
-arm                   randconfig-004-20231221   clang
-arm                        vexpress_defconfig   clang
-arm                         vf610m4_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20231221   clang
-arm64                 randconfig-002-20231221   clang
-arm64                 randconfig-003-20231221   clang
-arm64                 randconfig-004-20231221   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20231221   gcc  
-csky                  randconfig-002-20231221   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20231221   clang
-hexagon               randconfig-002-20231221   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20231220   gcc  
-i386         buildonly-randconfig-002-20231220   gcc  
-i386         buildonly-randconfig-003-20231220   gcc  
-i386         buildonly-randconfig-004-20231220   gcc  
-i386         buildonly-randconfig-005-20231220   gcc  
-i386         buildonly-randconfig-006-20231220   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231220   gcc  
-i386                  randconfig-002-20231220   gcc  
-i386                  randconfig-003-20231220   gcc  
-i386                  randconfig-004-20231220   gcc  
-i386                  randconfig-005-20231220   gcc  
-i386                  randconfig-006-20231220   gcc  
-i386                  randconfig-011-20231220   clang
-i386                  randconfig-012-20231220   clang
-i386                  randconfig-013-20231220   clang
-i386                  randconfig-014-20231220   clang
-i386                  randconfig-015-20231220   clang
-i386                  randconfig-016-20231220   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231221   gcc  
-loongarch             randconfig-002-20231221   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5275evb_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                      bmips_stb_defconfig   clang
-mips                  decstation_64_defconfig   gcc  
-mips                      loongson3_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20231221   gcc  
-nios2                 randconfig-002-20231221   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                generic-32bit_defconfig   gcc  
-parisc                randconfig-001-20231221   gcc  
-parisc                randconfig-002-20231221   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                      pcm030_defconfig   gcc  
-powerpc                       ppc64_defconfig   gcc  
-powerpc                      ppc6xx_defconfig   gcc  
-powerpc               randconfig-001-20231221   clang
-powerpc               randconfig-002-20231221   clang
-powerpc               randconfig-003-20231221   clang
-powerpc64             randconfig-001-20231221   clang
-powerpc64             randconfig-002-20231221   clang
-powerpc64             randconfig-003-20231221   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231221   clang
-riscv                 randconfig-002-20231221   clang
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231221   gcc  
-s390                  randconfig-002-20231221   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                         apsh4a3a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20231221   gcc  
-sh                    randconfig-002-20231221   gcc  
-sh                      rts7751r2d1_defconfig   gcc  
-sh                           se7705_defconfig   gcc  
-sh                   sh7770_generic_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20231221   gcc  
-sparc64               randconfig-002-20231221   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20231221   clang
-um                    randconfig-002-20231221   clang
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20231221   clang
-x86_64       buildonly-randconfig-002-20231221   clang
-x86_64       buildonly-randconfig-003-20231221   clang
-x86_64       buildonly-randconfig-004-20231221   clang
-x86_64       buildonly-randconfig-005-20231221   clang
-x86_64       buildonly-randconfig-006-20231221   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231221   gcc  
-x86_64                randconfig-002-20231221   gcc  
-x86_64                randconfig-003-20231221   gcc  
-x86_64                randconfig-004-20231221   gcc  
-x86_64                randconfig-005-20231221   gcc  
-x86_64                randconfig-006-20231221   gcc  
-x86_64                randconfig-011-20231221   clang
-x86_64                randconfig-012-20231221   clang
-x86_64                randconfig-013-20231221   clang
-x86_64                randconfig-014-20231221   clang
-x86_64                randconfig-015-20231221   clang
-x86_64                randconfig-016-20231221   clang
-x86_64                randconfig-071-20231221   clang
-x86_64                randconfig-072-20231221   clang
-x86_64                randconfig-073-20231221   clang
-x86_64                randconfig-074-20231221   clang
-x86_64                randconfig-075-20231221   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20231221   gcc  
-xtensa                randconfig-002-20231221   gcc  
+And when revising patches you should indicate that in Subject (e.g.
+"[PATCH v2]") and include a short changelog below the '---' line (which
+is missing below, but goes below the SoB).
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Next time, try using git format-patch to generate the patch.
+
+> Signed-off-by: Mark Glover <mark.glover@actisense.com>
+> 
+> diff -urN linux-6.6.4/drivers/usb/serial/ftdi_sio.c linux/drivers/usb/serial/ftdi_sio.c
+> --- linux-6.6.4/drivers/usb/serial/ftdi_sio.c	2023-12-03 06:33:10.000000000 +0000
+> +++ linux/drivers/usb/serial/ftdi_sio.c	2023-12-12 10:39:51.157327241 +0000
+> @@ -1033,9 +1033,9 @@
+>  	{ USB_DEVICE(FTDI_VID, ACTISENSE_USG_PID) },
+>  	{ USB_DEVICE(FTDI_VID, ACTISENSE_NGT_PID) },
+>  	{ USB_DEVICE(FTDI_VID, ACTISENSE_NGW_PID) },
+> -	{ USB_DEVICE(FTDI_VID, ACTISENSE_D9AC_PID) },
+> -	{ USB_DEVICE(FTDI_VID, ACTISENSE_D9AD_PID) },
+> -	{ USB_DEVICE(FTDI_VID, ACTISENSE_D9AE_PID) },
+> +	{ USB_DEVICE(FTDI_VID, ACTISENSE_UID_PID) },
+> +	{ USB_DEVICE(FTDI_VID, ACTISENSE_USA_PID) },
+> +	{ USB_DEVICE(FTDI_VID, ACTISENSE_NGX_PID) },
+>  	{ USB_DEVICE(FTDI_VID, ACTISENSE_D9AF_PID) },
+>  	{ USB_DEVICE(FTDI_VID, CHETCO_SEAGAUGE_PID) },
+>  	{ USB_DEVICE(FTDI_VID, CHETCO_SEASWITCH_PID) }, 
+
+For some reason that I was not able to determine, this hunk did not
+apply to mainline despite that there hasn't really been any changes to
+the surrounding code since 6.6.4 (which you used to generate this
+patch).
+
+I fixed it up manually this time. End result is here:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-linus&id=513d88a88e0203188a38f4647dd08170aebd85df
+
+Johan
 
