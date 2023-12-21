@@ -1,119 +1,160 @@
-Return-Path: <linux-usb+bounces-4488-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4489-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3D1681B3BC
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 11:37:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88B5381B3EF
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 11:41:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 550FD1F25406
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 10:37:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3885D28199C
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 10:41:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AEC56AB81;
-	Thu, 21 Dec 2023 10:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08456697B1;
+	Thu, 21 Dec 2023 10:40:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hVlujhbF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RJGWpB4f"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C93D6A00A;
-	Thu, 21 Dec 2023 10:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703155043; x=1734691043;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ke4J4uyPnsfHC4InqtLGeta3zbE3qTWCL7jxGbalv6U=;
-  b=hVlujhbF1ngPfEcY1kK7/Jzjyj0uNHGOfte+1LYSMGIY3OxWXiqtEK6V
-   y0EipQGZMkoxoU0+DjcPDDfzpmhr9IpOUBmtIDMXGwcO9cASj1tRcxcz/
-   FUp93IbC4vniMZeOyg+v8h8EMgi/NuednfZ7NnAmPGFP/GHuHEtBPZow0
-   b4iZhrdrCD+BdBSzHbKx5QmJRU76rN0k5nkSVSD/YA5tz7FpKRRSy73Jq
-   dTH37OrvG0zXjsRs+aWdbb3Dkzv3YZUYNEj43gVPrJQecthCNNFwk6uaS
-   GjtO6nqbqf56ZSESjRjiE8gXw0Uq+pRKHMyBVeDBm0+b9U5E0nz4b4Cfm
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10930"; a="2789852"
-X-IronPort-AV: E=Sophos;i="6.04,293,1695711600"; 
-   d="scan'208";a="2789852"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2023 02:37:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10930"; a="726393319"
-X-IronPort-AV: E=Sophos;i="6.04,293,1695711600"; 
-   d="scan'208";a="726393319"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 21 Dec 2023 02:37:20 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id BBDE4B8; Thu, 21 Dec 2023 12:37:18 +0200 (EET)
-Date: Thu, 21 Dec 2023 12:37:18 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Greg KH <greg@kroah.com>
-Cc: Werner Sembach <wse@tuxedocomputers.com>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Reduce retry timeout to speed up boot for
- some devices
-Message-ID: <20231221103718.GC2543524@black.fi.intel.com>
-References: <20231220150956.230227-1-wse@tuxedocomputers.com>
- <2e00a0dc-5911-44ee-8c50-a8482eb44197@tuxedocomputers.com>
- <2023122012-spruce-unsteady-e187@gregkh>
- <e7c768aa-a071-4590-ab1a-d80738dce1e5@tuxedocomputers.com>
- <2023122056-snowflake-visor-1262@gregkh>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543B76978E;
+	Thu, 21 Dec 2023 10:40:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1d04c097e34so4676665ad.0;
+        Thu, 21 Dec 2023 02:40:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703155247; x=1703760047; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=764vQaFmy7dOHEXW+A4EOmJdBTDoOKn++aJan9T3nsw=;
+        b=RJGWpB4f5AOMI1nuG/jFT0BXmZKNm5yiuII6S+C8WSyLOcO5XtxRxK0PA912a29W3B
+         Dtq2Frkqdeg8CtApmqmTo758/tFj5CwJAiKrc6X/WvyhcN0T/fmION/aXjKP4PNLf3yZ
+         SXOv7p6V1CLnDapCNxq6uWYly0EK1zUECwipmpZ6CCn9a/OVEWXSOVbLo/AvxOmD75IE
+         b5pceCMi3UHOCOuGJ3H1ajl6ZETMzxnohVXA4bvHuNciHhZ0cAXbQQ5rVywVAJGLUGBl
+         SUDOhk4rVGQoUwvnrdOzRgSIKNs0+CGovH5QBuouC91YoAoMacV4ha2k76wKV34PoQ/k
+         DSMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703155247; x=1703760047;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=764vQaFmy7dOHEXW+A4EOmJdBTDoOKn++aJan9T3nsw=;
+        b=QQDCuNKxMTpLM8Gf1NxLNIBtWYcKr+Dt6LF+Cqow/8L7bfp4IO9/sdZryYWMRsyqVi
+         fh7dRQwtNJpOtVJAbLZDwjxlxq+FS5FAsOsC6SJqovajm0LdaFBwCyllSDR6hcvRCHOn
+         /Q8XEj7w7GphXg9MrxWs6irDL4RM+CEG7LvwTX1ceIpn+d4gTDsWKUjfQjnG8wi7lOId
+         ZC8SjyrUvJU2EtPlcPm9kLZV+6xEXGKNWAg/dvGaWBn7Rb2dLbKaKv2Eg6TrV0VWXVd1
+         OM+1Hfe92zDwmik5dB//HCgdoVZXiXKHPWqewz2SfQflLQT6o+1+CZovxBxp+2Fn1Xm2
+         oPhg==
+X-Gm-Message-State: AOJu0YyKeaY3p0jBvMgcz7a/0gSSs2iqDop/owIGBd8I1eIwqXGNXqTe
+	sOV0YIq6ea1HCiu6T3wuANrj7i78ZIxtwCEM1HjMOw==
+X-Google-Smtp-Source: AGHT+IETJ5enjJloFRZrnVwDcZ6bS+QXn8cAnAjlsuxA8uaHbdUSPhZK5cl+0+9HelbhterwR0dAxw==
+X-Received: by 2002:a17:903:228b:b0:1d4:45b:8770 with SMTP id b11-20020a170903228b00b001d4045b8770mr598389plh.29.1703155247588;
+        Thu, 21 Dec 2023 02:40:47 -0800 (PST)
+Received: from g2039B650.. ([2001:da8:203:a502:3f:1d17:2d9c:d20])
+        by smtp.gmail.com with ESMTPSA id l17-20020a170902f69100b001d3dff2575fsm1320565plg.52.2023.12.21.02.40.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Dec 2023 02:40:47 -0800 (PST)
+From: Gui-Dong Han <2045gemini@gmail.com>
+To: gregkh@linuxfoundation.org,
+	ivan.orlov0322@gmail.com,
+	surenb@google.com,
+	42.hyeyoo@gmail.com,
+	Liam.Howlett@Oracle.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	baijiaju1990@outlook.com,
+	Gui-Dong Han <2045gemini@gmail.com>,
+	BassCheck <bass@buaa.edu.cn>
+Subject: [PATCH] usb: mon: Fix atomicity violation in mon_bin_vma_fault
+Date: Thu, 21 Dec 2023 18:40:34 +0800
+Message-Id: <20231221104034.4851-1-2045gemini@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2023122056-snowflake-visor-1262@gregkh>
+Content-Transfer-Encoding: 8bit
 
-Hi,
+In mon_bin_vma_fault():
+	offset = vmf->pgoff << PAGE_SHIFT;
+	if (offset >= rp->b_size)
+		return VM_FAULT_SIGBUS;
+	chunk_idx = offset / CHUNK_SIZE;
+	pageptr = rp->b_vec[chunk_idx].pg;
+The code is executed without holding any lock.
 
-On Wed, Dec 20, 2023 at 06:30:53PM +0100, Greg KH wrote:
-> On Wed, Dec 20, 2023 at 05:41:01PM +0100, Werner Sembach wrote:
-> > 
-> > Am 20.12.23 um 17:04 schrieb Greg KH:
-> > > On Wed, Dec 20, 2023 at 04:23:15PM +0100, Werner Sembach wrote:
-> > > > Am 20.12.23 um 16:09 schrieb Werner Sembach:
-> > > > > This is a followup to "thunderbolt: Workaround an IOMMU fault on certain
-> > > > > systems with Intel Maple Ridge".
-> > > > > 
-> > > > > It seems like the timeout can be reduced to 250ms. This reduces the overall
-> > > > > delay caused by the retires to ~1s. This is about the time other things
-> > > > > being initialized in parallel need anyway*, so like this the effective boot
-> > > > > time is no longer compromised.
-> > > > > 
-> > > > > *I only had a single device available for my measurements: A Clevo X170KM-G
-> > > > > desktop replacement notebook.
-> > > > > 
-> > > > > Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-> > > > I wonder if this could also land in stable? Or would it be to risky?
-> > > If it's really a bugfix now, why would it _not_ be relevant for stable?
-> > 
-> > Because it changes a timeout that could cause issues if set to low: This
-> > Patch sets to to 250ms. Set to 50ms it causes issues, currently it's 2000ms,
-> > 2 people tested that 250ms is enough, but i don't know if this is a big
-> > enough sample size for stable.
-> 
-> Remember, the next kernel will be a stable kernel tree, just like the
-> one after that.  If it's good enough for Linus's tree, why wouldn't it
-> be good enough for all stable trees?  Either it works or it doesn't,
-> none of this "we will break things when you move to a new kernel" stuff
-> please.
+In mon_bin_vma_close():
+	spin_lock_irqsave(&rp->b_lock, flags);
+	rp->mmap_active--;
+	spin_unlock_irqrestore(&rp->b_lock, flags);
 
-Since this is kind of "improvement" over already functioning code, I
-would put it to v6.8 and not to stable trees. This way it gets more some
-more exposure before landing to distro kernels.
+In mon_bin_ioctl():
+	spin_lock_irqsave(&rp->b_lock, flags);
+	if (rp->mmap_active) {
+		...
+	} else {
+		...
+		kfree(rp->b_vec);
+		rp->b_vec  = vec;
+		rp->b_size = size;
+		...
+	}
+	spin_unlock_irqrestore(&rp->b_lock, flags);
 
-It would be nice to get Tested-by from the folks involved on that
-bugzilla as well, if that's possible. I can try this on my side on a
-Maple Ridge based system (that does not have the original issue) so that
-we know that it does not cause any issues on them.
+Concurrent execution of mon_bin_vma_fault() with mon_bin_vma_close() and
+mon_bin_ioctl() could lead to atomicity violations. mon_bin_vma_fault()
+accesses rp->b_size and rp->b_vec without locking, risking array
+out-of-bounds access or use-after-free bugs due to possible modifications
+in mon_bin_ioctl().
+
+This possible bug is found by an experimental static analysis tool
+developed by our team. This tool analyzes the locking APIs to extract
+function pairs that can be concurrently executed, and then analyzes the
+instructions in the paired functions to identify possible concurrency
+bugs including data races and atomicity violations. The above possible
+bug is reported, when our tool analyzes the source code of Linux 6.2.
+
+To address this issue, it is proposed to add a spin lock pair in
+mon_bin_vma_fault() to ensure atomicity. With this patch applied, our tool
+never reports the possible bug, with the kernel configuration allyesconfig
+for x86_64. Due to the lack of associated hardware, we cannot test the
+patch in runtime testing, and just verify it according to the code logic.
+
+Fixes: 6f23ee1fefdc1 ("USB: add binary API to usbmon")
+Reported-by: BassCheck <bass@buaa.edu.cn>
+Signed-off-by: Gui-Dong Han <2045gemini@gmail.com>
+---
+ drivers/usb/mon/mon_bin.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
+index 9ca9305243fe..509cd1b8ff13 100644
+--- a/drivers/usb/mon/mon_bin.c
++++ b/drivers/usb/mon/mon_bin.c
+@@ -1250,12 +1250,16 @@ static vm_fault_t mon_bin_vma_fault(struct vm_fault *vmf)
+ 	struct mon_reader_bin *rp = vmf->vma->vm_private_data;
+ 	unsigned long offset, chunk_idx;
+ 	struct page *pageptr;
+-
++	unsigned long flags;
++	spin_lock_irqsave(&rp->b_lock, flags);
+ 	offset = vmf->pgoff << PAGE_SHIFT;
+-	if (offset >= rp->b_size)
++	if (offset >= rp->b_size) {
++		spin_unlock_irqrestore(&rp->b_lock, flags);
+ 		return VM_FAULT_SIGBUS;
++	}
+ 	chunk_idx = offset / CHUNK_SIZE;
+ 	pageptr = rp->b_vec[chunk_idx].pg;
++	spin_unlock_irqrestore(&rp->b_lock, flags);
+ 	get_page(pageptr);
+ 	vmf->page = pageptr;
+ 	return 0;
+-- 
+2.34.1
+
 
