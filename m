@@ -1,45 +1,64 @@
-Return-Path: <linux-usb+bounces-4492-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4493-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCF7281B5AC
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 13:21:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2387E81B6B5
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 13:59:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B7FF1C22912
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 12:21:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD85F281AE3
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 12:59:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 885CE6E5AF;
-	Thu, 21 Dec 2023 12:21:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E94DC77F29;
+	Thu, 21 Dec 2023 12:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="GkwhSoJP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eUKQgpcS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2AA2206F;
-	Thu, 21 Dec 2023 12:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
-Received: from [192.168.42.27] (p5de453e7.dip0.t-ipconnect.de [93.228.83.231])
-	(Authenticated sender: wse@tuxedocomputers.com)
-	by mail.tuxedocomputers.com (Postfix) with ESMTPSA id 467E32FC004D;
-	Thu, 21 Dec 2023 13:21:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
-	s=default; t=1703161260;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TaTXdxxi1qEmCPfc18xKCwxA9qIyX/tmNomXuvnbtvo=;
-	b=GkwhSoJP79bqpFsKzA7v/FduanVrV1FlmEb12tG4qGDT0z7ZDIiJZMVdYZEyzHiSyPwoX8
-	YPpPrNVfibGUxTrWHcWQtmm2YVpRE3zdv1mISQ77YHtCR6nnpvqoXHBtIDN5OtyIPYXU9R
-	Z8Puf/uaE6aN9OVFLVxZIw9TOlKLHdQ=
-Authentication-Results: mail.tuxedocomputers.com;
-	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
-Message-ID: <4aa4b757-13eb-4653-99eb-16aec7c8a3d9@tuxedocomputers.com>
-Date: Thu, 21 Dec 2023 13:20:59 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF35F7318E
+	for <linux-usb@vger.kernel.org>; Thu, 21 Dec 2023 12:53:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-55322dbabf6so836023a12.0
+        for <linux-usb@vger.kernel.org>; Thu, 21 Dec 2023 04:53:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703163214; x=1703768014; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g+z6IBb57Ppqbid95erAGh0Pwx17723I4teCRYnelRI=;
+        b=eUKQgpcSqYKRPfadBuzXvHodNmBODVtGliW0mBFAqcotP0tfLt/6CfhcpgNLk1tL1S
+         flN+OpyNPwXsz07OrP3J7QyJJXSP5asVcNru3DMZHEorN0Yf0Zgk3EQ79Jj6xGM7903Z
+         WxUBA3FEj1wPrKqIsyGsdUNXRfHgzXv4AA6etL32U5mRkFeE39IKd7OzeBQ0exWNYf87
+         v3jGLDE4TS0BMzYX1cSB1D52l+1F791phEuwwvNN2kgxuj6PDb/YArdqBsF3v1/CV16P
+         dzYbV1Sy88jMoxPSPVITO2xLjziWDlhXzyULvpx3cC5aZEb1H0KbhlBknts5HfSEcvPW
+         mJeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703163214; x=1703768014;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g+z6IBb57Ppqbid95erAGh0Pwx17723I4teCRYnelRI=;
+        b=xVHXn9sN/7QYG7EaEnoRtTTXcmbMHkwacsArGMUHkpQlL4HmHJesx7DYUmKxutltlB
+         yk4AIAiF4hzrdhaSfvZuua1ZKGtfqeyO6q29WGXLhMaq4POuvks3IdxGaW4B/nlXiWO8
+         3n3PeLIFfTJxU62gL5kajp5a6UpeQM6cuUtsVvKeNMZuvpUPgcivcZBbteJbvwPpZsRO
+         xjNvpqSNOUOEX1VVB6845foFKnfNIcySmgDEl1FVSg2TXz6wSO04XVr37AsDnHlG+9L+
+         eP0u/PffoPgxx/WjZKaH/AchQZYexRVg1/uwR2uJEI4l3Q5aUo2zLRDltjH5sj+wv7Ia
+         q8Wg==
+X-Gm-Message-State: AOJu0Yw2mGsVKn3L7d9DIBnavUA1iS/YFWcyqGs4cYd2gkufRq7XVTTb
+	1JDW54oko1+vmiAsCa9Ij3OISw==
+X-Google-Smtp-Source: AGHT+IH8WuhcvcvvMLjvCJ3CAdXqw5omFoQd3Z1bMT/YRAxPAgWjh4hH/toJSYDqjXr7zZJ7Xno8uQ==
+X-Received: by 2002:a17:906:dc:b0:a23:5d5d:783 with SMTP id 28-20020a17090600dc00b00a235d5d0783mr2423146eji.151.1703163214030;
+        Thu, 21 Dec 2023 04:53:34 -0800 (PST)
+Received: from [192.168.199.125] (178235179206.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.206])
+        by smtp.gmail.com with ESMTPSA id e3-20020a17090681c300b00a1f7ae3dfbcsm935159ejx.174.2023.12.21.04.53.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Dec 2023 04:53:33 -0800 (PST)
+Message-ID: <d2007240-2779-4881-8e9d-1c4f5daa55e5@linaro.org>
+Date: Thu, 21 Dec 2023 13:53:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -47,59 +66,101 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Werner Sembach <wse@tuxedocomputers.com>
-Subject: Re: [PATCH] thunderbolt: Reduce retry timeout to speed up boot for
- some devices
-To: Greg KH <greg@kroah.com>
-Cc: Andreas Noever <andreas.noever@gmail.com>,
- Michael Jamet <michael.jamet@intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231220150956.230227-1-wse@tuxedocomputers.com>
- <2e00a0dc-5911-44ee-8c50-a8482eb44197@tuxedocomputers.com>
- <2023122012-spruce-unsteady-e187@gregkh>
-Content-Language: de-DE, en-US
-In-Reply-To: <2023122012-spruce-unsteady-e187@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH 0/3] Fairphone 5 PMIC-GLINK support (USB-C, charger, fuel
+ gauge)
+Content-Language: en-US
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Luca Weiss <luca.weiss@fairphone.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ cros-qcom-dts-watchers@chromium.org, ~postmarketos/upstreaming@lists.sr.ht,
+ phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20231220-fp5-pmic-glink-v1-0-2a1f8e3c661c@fairphone.com>
+ <8d042095-1e09-45cc-9762-909fe8d663a9@linaro.org>
+ <CXTU5MLN0YDS.29PPV8KZF8G9R@fairphone.com>
+ <CAA8EJpoD3x=kVLu4x2yLtAqCp=wmGSU4ssq5Oj_SD5VQ=GyAYQ@mail.gmail.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <CAA8EJpoD3x=kVLu4x2yLtAqCp=wmGSU4ssq5Oj_SD5VQ=GyAYQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
+On 21.12.2023 11:34, Dmitry Baryshkov wrote:
+> On Thu, 21 Dec 2023 at 09:33, Luca Weiss <luca.weiss@fairphone.com> wrote:
+>>
+>> On Wed Dec 20, 2023 at 1:32 PM CET, Konrad Dybcio wrote:
+>>> On 20.12.2023 11:02, Luca Weiss wrote:
+>>>> This series adds all the necessary bits to enable USB-C role switching,
+>>>> charger and fuel gauge (all via pmic-glink) on Fairphone 5.
+>>>>
+>>>> One thing that could be made different is the pmic-glink compatible.
+>>>> I've chosen to use qcm6490 compatible for it and not sc7280 since
+>>>> there's plenty of firmware variety on sc7280-based platforms and they
+>>>> might require different quirks in the future, so limit this PDOS quirk
+>>>> to just qcm6490 for now.
+>>>>
+>>>> If someone thinks it should be qcom,sc7280-pmic-glink, please let me
+>>>> know :)
+>>> IMO it's best to continue using the "base soc" (which just so happened
+>>> to fall onto sc7280 this time around) for all compatibles, unless the
+>>> derivatives actually had changes
+>>
+>> Hi Konrad,
+>>
+>> I think at some point I asked Dmitry what he thought and he mentioned
+>> qcm6490. Even found the message again:
+>>
+>>> well, since it is a firmware thing, you might want to emphasise that.
+>>> So from my POV qcm6490 makes more sense
+>>
+>> But yeah since it's likely that sc7280 firmware behaves the same as
+>> qcm6490 firmware it's probably okay to use sc7280 compatible, worst case
+>> we change it later :) I'll send a v2 with those changes.
+> 
+> Worst case we end up with sc7280 which has yet another slightly
+> different UCSI / PMIC GLINK implementation, but the compatible string
+> is already taken.
+> I still suppose that this should be a qcm6490-related string.
+Right, let's keep qcm then
 
-Am 20.12.23 um 17:04 schrieb Greg KH:
-> On Wed, Dec 20, 2023 at 04:23:15PM +0100, Werner Sembach wrote:
->> Am 20.12.23 um 16:09 schrieb Werner Sembach:
->>> This is a followup to "thunderbolt: Workaround an IOMMU fault on certain
->>> systems with Intel Maple Ridge".
->>>
->>> It seems like the timeout can be reduced to 250ms. This reduces the overall
->>> delay caused by the retires to ~1s. This is about the time other things
->>> being initialized in parallel need anyway*, so like this the effective boot
->>> time is no longer compromised.
->>>
->>> *I only had a single device available for my measurements: A Clevo X170KM-G
->>> desktop replacement notebook.
->>>
->>> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
->> I wonder if this could also land in stable? Or would it be to risky?
-> If it's really a bugfix now, why would it _not_ be relevant for stable?
-
-edit: Sorry if this is the 3rd time I send this, I got mail server 
-errors (hopefully fixed now) and am not sure if it reached out
-
-Because it changes a timeout that could cause issues if set to low: This 
-Patch sets to to 250ms. Set to 50ms it causes issues, currently it's 
-2000ms, 2 people tested that 250ms is enough, but i don't know if this 
-is a big enough sample size for stable.
-
-The advantage is significantly faster boot time on affected devices 
-(~12s down to ~3s), however they do already work fine without it.
-
-Kind regards,
-
-Werner
-
->
-> thanks,
->
-> greg k-h
+Konrad
 
