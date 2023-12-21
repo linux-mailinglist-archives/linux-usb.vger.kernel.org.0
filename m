@@ -1,178 +1,146 @@
-Return-Path: <linux-usb+bounces-4484-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4485-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5151081B283
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 10:37:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F54C81B2C1
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 10:42:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0C00285AA1
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 09:37:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81482B222F7
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Dec 2023 09:42:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9B1219F1;
-	Thu, 21 Dec 2023 09:32:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B42BC4E62D;
+	Thu, 21 Dec 2023 09:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="KEcnAPzc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rpEtGmjI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2049.outbound.protection.outlook.com [40.107.243.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7D9208DE;
-	Thu, 21 Dec 2023 09:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ePi09wAFvw8gZuCyaRUOd/7iRnb3HhABtjjqWI3J9ZGmlvSns2cASSXxhybAdaQEkv/ojiOfPRkajlKNTs1eSMYcr9IjfsslbtSXD0W8cWUdSehxWKlBmLhxrLD1SmXxeODBBnbUH+VHYQk2TT5G27SCEJymr23GjmHNyU5IEEB3qvXvNlAq02+Vg/+ini/cLNL+213rV2Ojhrb4gbiIafYRbMI4vbAJIGNMjq44OsV/MJBda3cI5/dkZWw3HtCOd/rCTxeUkENPGzYPriL/BHmKWGeTqJuxiYPkV6Fm11uYclElo3mLPFpWWIbXhUqgOpbMmegK5rcJGHeL/Uio3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fWkadBbnlmHP6LcXAovQ4CiGKvMG0YDUbC7zyCRvPsk=;
- b=Nu1Mr/qKipVUOY0tqeHzilKTjzOPtLitnVthFVW7QN8wnL7n/YpC8GPT1l4SmDIE7iNrrFlS+BsUs1naJi9IezDVlHLNTUO0pPLxBdglG+WW2lFAGjxWTLOirAcqW3bcIcQzfIouFPxu6deMxzBSpZfx6c5NLAwkPdBsEioo8nXfB1DfcPdUraAp69O0xi0daHLHydk9RIlAfwNUjYspeNZS/gVC9FCxlkLQ5TJ4i8khJt9B59xaAsS80twx9M/u5crY4CYRpMNV31dIoZi1QosXVc6tHXzCOwK+KCTm4tQWUgXcDvvtsN7m1IKBi3LgFh1hcVqvuV3EDZfFSl6pHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fWkadBbnlmHP6LcXAovQ4CiGKvMG0YDUbC7zyCRvPsk=;
- b=KEcnAPzcOU7gW/YSl38IS+I+17RMbDYZNkWuHs9La3PpZ5hkvojEF7xiwN37N6MLgXYwsQQRbwg+p12F/QZ+GttpPOp3lOqiTClg2u6FRWlJDzv4p9tO1n4TAl2yqEAksoT0KRKxXgwvGBExTxLfdpMdCbkHsGiAqXqhjBUfwgY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW4PR12MB7016.namprd12.prod.outlook.com (2603:10b6:303:218::14)
- by BY5PR12MB4242.namprd12.prod.outlook.com (2603:10b6:a03:203::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.21; Thu, 21 Dec
- 2023 09:31:59 +0000
-Received: from MW4PR12MB7016.namprd12.prod.outlook.com
- ([fe80::1f1b:e85b:abf0:3d3c]) by MW4PR12MB7016.namprd12.prod.outlook.com
- ([fe80::1f1b:e85b:abf0:3d3c%6]) with mapi id 15.20.7113.016; Thu, 21 Dec 2023
- 09:31:59 +0000
-Message-ID: <257c694f-5aa2-c29b-891d-3a1f480dd4a1@amd.com>
-Date: Thu, 21 Dec 2023 15:01:50 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [Patch v2 2/2] thunderbolt: Teardown tunnels and reset downstream
- ports created by boot firmware
-Content-Language: en-US
-From: Sanath S <sanaths2@amd.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Sanath S <Sanath.S@amd.com>, mario.limonciello@amd.com,
- andreas.noever@gmail.com, michael.jamet@intel.com, YehezkelShB@gmail.com,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231218104234.GB1074920@black.fi.intel.com>
- <c433f29b-597c-b6d6-aa48-2b84a26dc623@amd.com>
- <20231218113151.GC1074920@black.fi.intel.com>
- <20231218122312.GE1074920@black.fi.intel.com>
- <997f2a94-66d9-fb95-8f75-46d61937f7e8@amd.com>
- <20231218131840.GH1074920@black.fi.intel.com>
- <0fd5c09f-1cf2-8813-a8f9-1bd856e3a298@amd.com>
- <20231219122634.GJ1074920@black.fi.intel.com>
- <0816caa4-81b5-d0f9-2305-80c7fec6abb9@amd.com>
- <20231219180424.GL1074920@black.fi.intel.com>
- <20231220125857.GA2543524@black.fi.intel.com>
- <5bfaa405-b15e-36ef-a4e0-04b93dd983b1@amd.com>
-In-Reply-To: <5bfaa405-b15e-36ef-a4e0-04b93dd983b1@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0069.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:23::14) To MW4PR12MB7016.namprd12.prod.outlook.com
- (2603:10b6:303:218::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F584E637
+	for <linux-usb@vger.kernel.org>; Thu, 21 Dec 2023 09:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-50e384cd6ebso693322e87.3
+        for <linux-usb@vger.kernel.org>; Thu, 21 Dec 2023 01:36:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703151403; x=1703756203; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VAQgZLT6MJzqToCCRHqRMgeKmPjv4qb6pRJlgJ6h2xs=;
+        b=rpEtGmjIxO7744Ro/I5W7bQrmtlVoOMeIpCrEolPmcDtgHj4/NUhzoZbhUx4UulPV0
+         3hT5ZIEtWRs3v0e5pHidM4WsXu4iREuRACaHGyWCZca2NL57FFCmEoL1HevA+UwUGDYr
+         t2AzRMTJtL4NgE9hfHS5UMZOUhain+MkgTKBaSbm+fgj7p0YW6CjO6DBzzBVmeU2IZId
+         J1aFi7VaykBSybCxRu27TiW7VH3gA+mzLeGipJOeHeOUOa46YhbnB8XrLEx/7LcVaUxV
+         mC4P/0pwFRRlgqnp7xvfc2j84Z3OAQWrzGDu9XezDXFtZOxeOpKTvuwlbCAdnue9iFuR
+         8y3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703151403; x=1703756203;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VAQgZLT6MJzqToCCRHqRMgeKmPjv4qb6pRJlgJ6h2xs=;
+        b=PNe0BML/s2KSIwYzDTPDLeW/h/8KwLA8+VZ5f04SASkLTKHHShfPq8QFgn7cn4qlpV
+         iLss3gBBaocGLqCtSU41f/TeyPT/qh5wLzbPHe8QL+khRn/f/aoWg5NtrJAXHDy7Ckre
+         7oA1uKAyK6iuZdUGEB7SeC/VJiF0WzAlbJzduKGwCFd0uf6Y4vMPD6xZd79khiqmmTU1
+         frSQHMjvKv8xBa8GgdHV/gtzE59c4z5/s1qbVYHESpjCZlKG+gCSWAcbgmyC/n6OB3ke
+         k/CVchsjNSsJrIsSATZJqCVnhHbq3pMVcH54hROOMjllxucVu+qWVNBWgZ8aSPJZg54w
+         FnbA==
+X-Gm-Message-State: AOJu0Yxw+Ynmo2i4x4HXay4L4tMMESn0W6rLxszYAH9NtYj2bgfAHvRj
+	kXhSXkG0lObpumV4OqJP2CU8OA==
+X-Google-Smtp-Source: AGHT+IG2g9cPY53SrvukT+opnaiuFgyvHCmBlc8NKMeq4llaF7oY8zF/znDeExaTsWIeyqbduuGRwA==
+X-Received: by 2002:a05:6512:696:b0:50e:588b:5bad with SMTP id t22-20020a056512069600b0050e588b5badmr764854lfe.67.1703151402826;
+        Thu, 21 Dec 2023 01:36:42 -0800 (PST)
+Received: from [192.168.0.22] ([78.10.206.178])
+        by smtp.gmail.com with ESMTPSA id wh14-20020a170906fd0e00b009fc576e26e6sm753457ejb.80.2023.12.21.01.36.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Dec 2023 01:36:42 -0800 (PST)
+Message-ID: <d15b4544-c60a-45b4-a0e4-739675e2e4e2@linaro.org>
+Date: Thu, 21 Dec 2023 10:36:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR12MB7016:EE_|BY5PR12MB4242:EE_
-X-MS-Office365-Filtering-Correlation-Id: 09b0c508-3860-4bbe-3fb7-08dc0207adac
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	YLJhwkW3TmWHwPI/U1xGenQUdhlKAlQ/zhuiP0d/sMDCogAtejGeIw41yc7KxRAQ23Oa6Lj02zlEnkBFgvqjQPAi35QNyfxuVcabCt/TSUXIXDjMTwquSw/vGGrFbW3Jbq/7U6UrvA4KlQPHalj+l6SwVDP9KxE9cEFExQwKwBNPzO6XNsR6iXkx1dlQESCGUAMJRU9m5ZZaxjSYNdIWqZjBQM8oXYv5DiBi+oOGdGc+pv1CDrq+viP1JHiy8l7jZisu8HqqdONvXMkAb8H1WJfziyr7p9AZMr32CAysNa6Vn3IIdZMG0XKCtBgIuHVY0kdAEB10QKkgwyDvQyr95LnN0VGRZz91GwB2p/7IT6zAmvKz4Yw7/SW/shCPlQ2rBhtV6uRTY09HrBl3smxv5OUHQLoPpukAeOTxm9g65sZYE61+Jt5N1R2wY3OpCG0vI9NGYdAIxeLRL6zK3GF9iifWDmVt1hEKm8dTYM6T5v6brvp1kyJKITt+zz6hleykEzNKT0DlxTnpf0OnISXYeCmOCSlPCCS0rGjjL4iT3fV/sEfn2pSVNJB/tLLOi7bFjwMQOifT14GpBKTo3ubkoDQxSH6LaTIXbZU3ElCTuzMwWVZGHeJ/tMdKeU6ISBeDMZVhSINz3ph4Z3YKdXTfMg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB7016.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(396003)(39860400002)(136003)(376002)(230922051799003)(451199024)(64100799003)(1800799012)(186009)(2906002)(6666004)(6506007)(31696002)(36756003)(53546011)(6512007)(478600001)(83380400001)(26005)(38100700002)(2616005)(41300700001)(5660300002)(6486002)(66556008)(66476007)(66946007)(31686004)(316002)(6916009)(4326008)(8676002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MFlQYStDbkd2ZzEyNnB5K21xdVhwNmp1Y3lCSnFiMFlVd240Qml0RkJjMFlt?=
- =?utf-8?B?SjZrbDhkV1UvUUU1NWFiRllzN1ZSMU54YzhOVUpCaS9UTnlMbUMrTUlJZWcx?=
- =?utf-8?B?WmRMd3BWakQ1dzNlRUJ6b25yWVczdmI4THhBNnZ3SXBsejdWRm1wK0RuRVdT?=
- =?utf-8?B?cVlkejViQlB2YWZRTDZ1NUZMRUlFRUsvZnU2cUthdy9pbFdzYlVyc2VZZUQy?=
- =?utf-8?B?ZEpJRG9Lbk5PRnJHWE02QkJkM1Q2M3llZUtFSEZLT25PYWVFeE1mTmQ2N285?=
- =?utf-8?B?alhpSmcxRld3eDZXaGtHYmwxUVJKckRIeUZlazdNcVJ0b01wa2FYaWVrUm5L?=
- =?utf-8?B?OTFaY3lxb3hDVEg1eEs2Z2ptS01uanorNDl6cHJDbWdPUU5xVjVYSnREWnZv?=
- =?utf-8?B?RjJpMFBlZE1MbXhUV3pCRGJvNWs0T2lDdWZlWFJnVU1pTWx2Ujg0ZnZrbzJ5?=
- =?utf-8?B?TUJFbUJWMm1OWFp4TUJVcmp6V0pzRjZidEloTmlXL01EbjRhcXQ2aU9Kcnd2?=
- =?utf-8?B?ZVRiVjZ4U0ZIZWwzcmlQbVhxM3hYa0tkL1QzdnoyWTFjN1dTcFN4aXVMeUVH?=
- =?utf-8?B?SXlkenRSVy91aGJtQ1VFVkl2YXhuYlNQZDBTZzU4andkd2NQdTVOamEzamZV?=
- =?utf-8?B?MTZ4TGM4S015cnZiL3pST2V1M2tCMjlCMVpJTlRWWUZ5aytmeWVuOUdsNWRv?=
- =?utf-8?B?amxtZDBMb0NnZEh0V1dsM1M4a2NPTUVSZ1kzYU8yKzF6RUtzekZrQm9PRHNM?=
- =?utf-8?B?VzFISXpHcWZCREFKNVpxU0NCRUpQdGY4Q2tUbDd6TVBQZmgyZWpjT0ZhaFVE?=
- =?utf-8?B?eFJKZWQ2eXNGRUlENEZhTTc0NmRnUmxnanZsalkyR1hmWDJmVUJWOEliVVpa?=
- =?utf-8?B?YjdPN3p1MjNwS0RWa3JMckNXSWpBSTc5Y1o2TUtveW1DaUNFalVudjI5UXNF?=
- =?utf-8?B?NmNOWHV5dEdiWTN2Z0FucVNMUjZHMVNMb1BqdWhEdUFWUlZoeTFkT1JNT3Yx?=
- =?utf-8?B?MHlOOUx2YUVPSTJKZEN4dVFEOEpvRjlCUWpMYmVQNlF4YzBjN0xCTWFaVWhn?=
- =?utf-8?B?VEFiWm15Vzg3RDVlWi9OS244M1pWMjNNeWd2d2ZrUldaU29SVVo0R2lCOUgy?=
- =?utf-8?B?d1k2VUYvNjVGVVhGSEtPenRlMWJ2c0FITFgrQitMalk3dnVObGQ3b2FvL2Yv?=
- =?utf-8?B?OGJkMWtFaDFzZ3JQREloUWlXZFhDYU5lQllFQlVKbUY5c3pCNEpCaE9qWEVP?=
- =?utf-8?B?NGtMeWprbitzaE43MjBnbjQycUI1eitQQldRdFdTbE9QbXd1RE0zRU1qTWJO?=
- =?utf-8?B?cFVIOXk0LzE0NTQ4NDRPeTZxMHh1QzlNdDlVSVpqUmFjMStPeEdId0F2N0xF?=
- =?utf-8?B?eGNYQnpkbFV3RC9PQWQ0MS9nUktOSXVLeThtcjA0NEJGWDdsWmkyeG9rT1du?=
- =?utf-8?B?OFBYMXBpaEJuSWhSTEZUQndLbUxWK254NzNqVUd4YkNQRHB5ckNpd0dQTW9q?=
- =?utf-8?B?R0VpNzJxa0lOUXBoWFJwTjVBZzhaUXgzZW1ldEtTSVBVVzYzQ3BUNDdDbVNn?=
- =?utf-8?B?dlFyOGhwS1kzU0g2aFAyanl6Zlh4YVZrQk9xZlZ2bUFCcGNSV2RwdjE0NkUv?=
- =?utf-8?B?S1hhcEVNY2d5TTdxd0ZTSUFlVlJEVVlOK3phNjNldWZYN2NQUkxJVmRiTDRJ?=
- =?utf-8?B?VklZY2ZBS2IwN1lsRVFCN3h5a2J6Y2EralpwRVpQUE9pYzhONmZjaFNpN29a?=
- =?utf-8?B?eFNuVXFUa3B3cWFuTXNwbHgxRUxrMzMxL1lIeEtRUlQwYkhhejE3QWJhaFVt?=
- =?utf-8?B?YXVWNUVUUUpxRzNCR2RWb1BEV0hYZW5XVm9wRFdTN0ppZDRqemRFYkVKRGcy?=
- =?utf-8?B?UzR3N1EvZzM3ajBoQzRJSkExc1NSdmJZZGtkQ0hHb0NNQjd5LzVKVGt3STB4?=
- =?utf-8?B?cS81SE81V2ZoNnp4Tm44T0JJMlUva3JDMXkycDc4bVhjQ2wxVHZwZXdManA5?=
- =?utf-8?B?c3pUKzcrMFVObVBuVkNlaUdyRllBb3NXSnhVYnd6ZkpiQThBaFZSTUlMQVFZ?=
- =?utf-8?B?NTV2TDM4MmdkUWpBaGNPTWFqZE1TVFZxMWo2emJnWnpoT29DSE91aFd3UW9Z?=
- =?utf-8?Q?zPK/1VHL3r4RUtQ0cwdMHu+h6?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09b0c508-3860-4bbe-3fb7-08dc0207adac
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB7016.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2023 09:31:58.8269
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NCdIkWDG3PxhS4UeVrEj7GqojTsDgLJDQHyLfi4Uvg3IvyZ3NVdzSrgGAbrznQYrbjFgsu8x/oKoZjm2xk2/nw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4242
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] dt-bindings: soc: qcom: qcom,pmic-glink: document
+ QCM6490 compatible
+Content-Language: en-US
+To: Luca Weiss <luca.weiss@fairphone.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ cros-qcom-dts-watchers@chromium.org
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20231220-fp5-pmic-glink-v1-0-2a1f8e3c661c@fairphone.com>
+ <20231220-fp5-pmic-glink-v1-1-2a1f8e3c661c@fairphone.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231220-fp5-pmic-glink-v1-1-2a1f8e3c661c@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 20/12/2023 11:02, Luca Weiss wrote:
+> Document the QCM6490 compatible used to describe the pmic glink on this
+> platform.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
 
-On 12/20/2023 10:31 PM, Sanath S wrote:
->
-> On 12/20/2023 6:28 PM, Mika Westerberg wrote:
->> On Tue, Dec 19, 2023 at 08:04:24PM +0200, Mika Westerberg wrote:
->>>>> One additional question though, say we have PCIe tunnel 
->>>>> established by
->>>>> the BIOS CM and we do the "reset", that means there will be 
->>>>> hot-remove
->>>>> on the PCIe side and then hotplug again, does this slow down the boot
->>>>> considerably? We have some delays there in the PCIe code that 
->>>>> might hit
->>>>> us here although I agree that we definitely prefer working system 
->>>>> rather
->>>>> than fast-booting non-working system but perhaps the delays are not
->>>>> noticeable by the end-user?
->>>> I've not observed any delay which is noticeable. As soon as I get 
->>>> the login
->>>> screen
->>>> and check dmesg, it would already be enumerated.
->>> Okay, I need to try it on my side too.
->> One additional thing that came to mind. Please check with some device
->> with a real PCIe endpoint. For instance there is the integrated xHCI
->> controller on Intel Titan Ridge and Goshen Ridge based docks. With TR it
->> is easy because it does not support USB4 so xHCI is brought up
->> immediately once there is PCIe tunnel. For GR (the OWC dock you have) it
->> is disabled when the link is USB4 (because USB 3.x is tunneled as well)
->> but you can get it enabled too if you connect it with an active TBT3
->> cable.
-> Sure. I'll check with these combinations.
-Can you name any docks that meets these requirements ? I'll try to get hold
-of it here and check.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
 
