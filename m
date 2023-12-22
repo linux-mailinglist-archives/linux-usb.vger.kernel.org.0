@@ -1,109 +1,101 @@
-Return-Path: <linux-usb+bounces-4512-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4513-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BD0C81C395
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 04:42:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E22081C3D9
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 05:31:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AFD91F25394
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 03:42:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B25CF1C2460E
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 04:31:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57A5184C;
-	Fri, 22 Dec 2023 03:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F901211C;
+	Fri, 22 Dec 2023 04:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="obG8Yim+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OOdTWeB/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5662717C7
-	for <linux-usb@vger.kernel.org>; Fri, 22 Dec 2023 03:42:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96FD9C433C7;
-	Fri, 22 Dec 2023 03:42:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703216526;
-	bh=P7h8IFjd6XQxMOmZ4+m88fAgrs2f7/PSu0zBioB9ySw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=obG8Yim+ZWvrs8t2n8tlQNoR9o8KoNsK/m8DtYucDrK+LzOm5b4d0OU0Dhc0uRYwK
-	 8ddIsU69Zo1dDruDStOkyIS4QmSSUo/kkc8Oo0SvdBeexfQtel9vGGFBSLw20pgkV+
-	 xx+DTJfOR+CSMZIW17uSOWeoJLgKiFvbNfWAhGcV2fK30XelyyB1rPQUAYurCCvyLK
-	 BCui3zzVAIzHmPAzLv3adguhNyATRpfXy5kfk7Ph69TDgoTCpUwQrcbX1wSQYKAiaN
-	 PGTNqWdV0AuPUFjcOlpLgAZXc8XmW0YosY251/uBfrqgEhCv5Jx/9Ox6dO1OUPNVcG
-	 TUEXYD+PK3hQQ==
-Date: Fri, 22 Dec 2023 11:41:55 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: gregkh@linuxfoundation.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-	festevam@gmail.com, linux-imx@nxp.com, luca.ceresoli@bootlin.com,
-	jun.li@nxp.com, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/3] usb: chipidea: wait controller resume finished
- for wakeup irq
-Message-ID: <20231222034155.GB1951375@nchen-desktop>
-References: <20231218061420.3460145-1-xu.yang_2@nxp.com>
- <20231218061420.3460145-2-xu.yang_2@nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C61E5395
+	for <linux-usb@vger.kernel.org>; Fri, 22 Dec 2023 04:31:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2ccad57dadbso481061fa.1
+        for <linux-usb@vger.kernel.org>; Thu, 21 Dec 2023 20:31:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703219482; x=1703824282; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UBqYUMDRSmD5MTMI1kcx3bvD/seUrQpIK9x37z1DzRk=;
+        b=OOdTWeB/Eq7tsafVvRhRGvdimsHswUzkzCXxgW2kBrTij9ZbU7iJUhO0fudsOjFIuJ
+         0qEXHZpNp34dpDOZqxpprHihwKMVNu0aCDE3RdEQIDYkKdwnmcKq2pUkB5MI2EXWU6Ke
+         FquHucmfA9DIsiUZrz0fF93hbIVfJcShwd0NuwqrCMYRlTEbznL+fFvTAmNyEGVborxr
+         6MFuhc2wud7weP3kFEUsYetM3jWud6TXYe6sFi3gcvrYRl0Vdqb1/slcB07nkBteTB/O
+         q5kT8MMpF/9cUTPns16/mWDXeYFP4Znk/Vi8Cwuj7Z2mz2yGOHN7j3HnB5RCxv5wVR2b
+         89ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703219482; x=1703824282;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UBqYUMDRSmD5MTMI1kcx3bvD/seUrQpIK9x37z1DzRk=;
+        b=I4VC0ezgugs2g6OBZAzisomIGPVMvPTu2Qrz7QPHF5y8D1Q58f9F9nX07puYSKqGdG
+         7U79J5OfJby+CaGynSvuFYOWZjzU1CnQJWK+WDMC9NBJIW+bKKJtEfXSjzE6T1Ukoc7V
+         JD+FEWpCcH8p0zFEHFoObGXTmBkbHnFw4EeUoCwLATNkftcYpFu8sQ0oO6ated5KGcL+
+         sn2tRgFXKCrNxzVLBY1WOf8p7OyKoBIeFEGm3AOUk70tEQ9b1LayMOprHeplTO/LKBUY
+         g1SvqAzgIBFUz2u/mB9OeeGhYsckDhnfpRco+qo6vHXzM95QCMjWNwyghlcXjEbE2tcX
+         xINw==
+X-Gm-Message-State: AOJu0Yw/EUtIlrRc+mb4eQlFxYFGIg2KGIIxQCJ0vRWbjMm06zbIk91o
+	FrARaceGx5mFdkxxstmiNKaYc//2Cc1kWYv7kR+UXikHyJg=
+X-Google-Smtp-Source: AGHT+IFIMwO92XAflzm1/Cj/MLp00ZAGA2h5gGzNBcLd8q8xyChc+ZNqCdkzNRH7rGkgAJl/kitx1/qpp+C6dY/3mpI=
+X-Received: by 2002:a05:651c:507:b0:2cc:9ec8:fc5a with SMTP id
+ o7-20020a05651c050700b002cc9ec8fc5amr350772ljp.39.1703219482295; Thu, 21 Dec
+ 2023 20:31:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231218061420.3460145-2-xu.yang_2@nxp.com>
+From: Rajaram R <rajaram.officemail@gmail.com>
+Date: Fri, 22 Dec 2023 10:01:09 +0530
+Message-ID: <CAOiXhaL4E-PwoE2=DK2SQUxAoB+Y6xEw2KZAHjtAjR9=84X65g@mail.gmail.com>
+Subject: [ANNOUNCE] libtypec-0.5.0/lstypec-0.5.0 is released
+To: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 23-12-18 14:14:19, Xu Yang wrote:
-> After the chipidea driver introduce extcon for id and vbus, it's able
-> to wakeup from another irq source, in case the system with extcon ID
-> cable, wakeup from usb ID cable and device removal, the usb device
-> disconnect irq may come firstly before the extcon notifier while system
-> resume, so we will get 2 "wakeup" irq, one for usb device disconnect;
-> and one for extcon ID cable change(real wakeup event), current driver
-> treat them as 2 successive wakeup irq so can't handle it correctly, then
-> finally the usb irq can't be enabled. This patch adds a check to bypass
-> further usb events before controller resume finished to fix it.
-> 
-> Fixes: 1f874edcb731 ("usb: chipidea: add runtime power management support")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> Signed-off-by: Li Jun <jun.li@nxp.com>
+libtypec
+++++++
+=E2=80=9Clibtypec=E2=80=9D is aimed to provide a generic interface abstract=
+ing all
+platform complexity for user space to develop tools
+for efficient USB-C port management. The library can also enable
+development of diagnostic and debug tools to
+debug system issues around USB-C/USB PD topology.
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+Tools :
++++++
+- ./lstypec : https://github.com/Rajaram-Regupathy/libtypec/wiki/lstypec-:-=
+Know-your-USB-C-Ports
+- ./typecstatus :
+https://github.com/Rajaram-Regupathy/libtypec/wiki/typecstatus---Gauge-your=
+-USB-C-port-for-better-UX
 
-> 
-> ---
-> Changes in v2:
->  - no changes
-> ---
->  drivers/usb/chipidea/core.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-> index 7ac39a281b8c..85e9c3ab66e9 100644
-> --- a/drivers/usb/chipidea/core.c
-> +++ b/drivers/usb/chipidea/core.c
-> @@ -523,6 +523,13 @@ static irqreturn_t ci_irq_handler(int irq, void *data)
->  	u32 otgsc = 0;
->  
->  	if (ci->in_lpm) {
-> +		/*
-> +		 * If we already have a wakeup irq pending there,
-> +		 * let's just return to wait resume finished firstly.
-> +		 */
-> +		if (ci->wakeup_int)
-> +			return IRQ_HANDLED;
-> +
->  		disable_irq_nosync(irq);
->  		ci->wakeup_int = true;
->  		pm_runtime_get(ci->dev);
-> -- 
-> 2.34.1
-> 
+New Features
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
--- 
+libtypec-0.5.0:
+-------------------
+- New packages in DEB and RPM formats for easy installation.
 
-Thanks,
-Peter Chen
+Release:
+=3D=3D=3D=3D=3D=3D=3D
+
+https://github.com/Rajaram-Regupathy/libtypec/releases/download/libtypec-0.=
+5.0/libtypec-0.5.0-x86_64.rpm
+https://github.com/Rajaram-Regupathy/libtypec/releases/download/libtypec-0.=
+5.0/libtypec_0.5.0_amd64.deb
 
