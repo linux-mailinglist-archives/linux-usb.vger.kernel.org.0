@@ -1,124 +1,100 @@
-Return-Path: <linux-usb+bounces-4516-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4517-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3363C81C4E8
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 07:10:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1738C81C4EE
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 07:14:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF22A1F21742
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 06:10:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA3BE1F25020
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 06:14:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA59F7484;
-	Fri, 22 Dec 2023 06:10:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9CC07484;
+	Fri, 22 Dec 2023 06:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kifCBQFZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fgZYAi6/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFF09444;
-	Fri, 22 Dec 2023 06:10:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FF7C433C8;
-	Fri, 22 Dec 2023 06:10:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1703225444;
-	bh=xYXbxxhkYye8R6cZYemP7SDJUtXgX90hz1d089uRcew=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kifCBQFZFekLHT8JNYbslYBtOe6aSFNcJiM7CZBZsVv0qXs/AkQw5/pNqaV3R5jKI
-	 UGU1IEJS8So4qEC/2FprG046fMAbkcnv7IJy7MfXa6TTgWJUqr7IaFjS1RkU1UDV5t
-	 uZvCTa0J4ZxEZKrcofnINPeoFUC2oCKFQATy3t2s=
-Date: Fri, 22 Dec 2023 07:10:41 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Prashanth K <quic_prashk@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] usb: dwc3: host: Set XHCI_SG_TRB_CACHE_SIZE_QUIRK
-Message-ID: <2023122212-stellar-handlebar-2f70@gregkh>
-References: <20231212112521.3774610-1-quic_prashk@quicinc.com>
- <20231212112521.3774610-2-quic_prashk@quicinc.com>
- <2023121518-uncharted-riddance-7c58@gregkh>
- <849d0ea9-d4f7-c568-968c-88835f64fadf@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B6E9447;
+	Fri, 22 Dec 2023 06:14:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-28be1240414so1217337a91.3;
+        Thu, 21 Dec 2023 22:14:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703225643; x=1703830443; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=enoBXf4tcUrXpMZvG4dDEisAshfULeCKxGo8vnP8oh0=;
+        b=fgZYAi6/34MD5yIXIR7YZMMwm+mwPPb6GGiw5xwSH/KMN+o1BA/kXzFoeA0KKVFx0O
+         aeDeY+kexYDBoAQeEtuwYSsXFDSU9v78ou9Die5IheNGYnhSy30Yz8DROClHGCMPXTfr
+         hB4TuQjZY3RJIimnOAVIHro8Gt8+0gKvafgC65qcU4NUY4TIQL85CHIO2QWM6iIlLd2C
+         RbONwHSX/n0a+35ocU2Be18mSMH0+PrePusGrrGvngQIdxVHOTz7sl5s4fvIVW3lLNje
+         SLiGovXzQU5Vd+QCLiAx+WiBzIrgnpgg2dPWy1/z8MuaYR5QNKo1FW/dv9oXP3/INV4E
+         ZGAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703225643; x=1703830443;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=enoBXf4tcUrXpMZvG4dDEisAshfULeCKxGo8vnP8oh0=;
+        b=YLxqD8HqiBliNf+rSj6b3M+4Pvegl7Z/t7EEP7KLRkYcD9mqEOKOAriNSvaFNvVfR9
+         O1UPLwQBpswSdptxnao3PXQC+5ohoQHtOWflt6gDcN+hopIZy8CepccePP/3zhwjtfK+
+         JlivV2taWjpsLyyFRz3jZYUxpjx5ef28PSgTyPaC5sZIV3ZTVDJeop9AiCPJsDQSxhoi
+         VsJ6MH9+eoRgobpor3joiQ+EbrseTYjIUiZXdHHc1T/llPWu5j0hhYaki/dd7wABkniw
+         22L3CssAvyFZtqRkEecTU+oIl9733gHIvj8ljuaEhqDSzDjdiWk1DalK1T7+7aW4auRN
+         tozg==
+X-Gm-Message-State: AOJu0YxP2PvEqHkdAsrfIrW7jVXOp8cJmcVVQ2hU3X3zhJwuLdDoKiIN
+	mlLHqs6LCivYtEq0uO2lz+WBuO2DuoqDleaHOAA=
+X-Google-Smtp-Source: AGHT+IHA7+Mlub/8ZuwEIHn8/cuhxPvhuDb+1SriZNxcO6XSp8ADsoyGx4twEpiDOpYyKPlPOqHRfLYxsXG2JvIQo+k=
+X-Received: by 2002:a17:90b:108f:b0:286:9d14:65c with SMTP id
+ gj15-20020a17090b108f00b002869d14065cmr684005pjb.63.1703225643274; Thu, 21
+ Dec 2023 22:14:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <849d0ea9-d4f7-c568-968c-88835f64fadf@quicinc.com>
+References: <20231221104034.4851-1-2045gemini@gmail.com> <2023122140-mobile-barrel-5db2@gregkh>
+In-Reply-To: <2023122140-mobile-barrel-5db2@gregkh>
+From: 20 39 <2045gemini@gmail.com>
+Date: Fri, 22 Dec 2023 14:13:28 +0800
+Message-ID: <CAOPYjvZ8mCACSjfs8v-B57N9uD+f5n2kOsfzOt5QzVcz2EZSFw@mail.gmail.com>
+Subject: Re: [PATCH] usb: mon: Fix atomicity violation in mon_bin_vma_fault
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: ivan.orlov0322@gmail.com, surenb@google.com, 42.hyeyoo@gmail.com, 
+	Liam.Howlett@oracle.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, baijiaju1990@outlook.com, 
+	BassCheck <bass@buaa.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 22, 2023 at 11:29:01AM +0530, Prashanth K wrote:
-> On 15-12-23 06:12 pm, Greg Kroah-Hartman wrote:
-> > On Tue, Dec 12, 2023 at 04:55:20PM +0530, Prashanth K wrote:
-> > > Upstream commit bac1ec551434 ("usb: xhci: Set quirk for
-> > > XHCI_SG_TRB_CACHE_SIZE_QUIRK") introduced a new quirk in XHCI
-> > > which fixes XHC timeout, which was seen on synopsys XHCs while
-> > > using SG buffers. But the support for this quirk isn't present
-> > > in the DWC3 layer.
-> > > 
-> > > We will encounter this XHCI timeout/hung issue if we run iperf
-> > > loopback tests using RTL8156 ethernet adaptor on DWC3 targets
-> > > with scatter-gather enabled. This gets resolved after enabling
-> > > the XHCI_SG_TRB_CACHE_SIZE_QUIRK. This patch enables it using
-> > > the xhci device property since its needed for DWC3 controller.
-> > > 
-> > > In Synopsys DWC3 databook,
-> > > Table 9-3: xHCI Debug Capability Limitations
-> > > Chained TRBs greater than TRB cache size: The debug capability
-> > > driver must not create a multi-TRB TD that describes smaller
-> > > than a 1K packet that spreads across 8 or more TRBs on either
-> > > the IN TR or the OUT TR.
-> > > 
-> > > Cc: <stable@vger.kernel.org>
-> > > Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> > 
-> > What commit id does this fix?
-> > 
-> This doesn't fix any commit as such, but adds the support for
-> XHCI_SG_TRB_CACHE_SIZE_QUIRK (which is present in XHCI layer) to DWC3 layer.
+Hi,
 
-So this is a new feature?
+In the patch v2, we've added some information of the static analysis
+tool used, as per the researcher guidelines. Also, we've added a cc in
+the signed-off-by area, according to the stable-kernel-rules.
+Thank you for helpful advice.
 
-How does this fit into the stable kernel rules?
+Thanks,
+Han
 
-> I have CC'ed stable kernel for this to be back-ported to older kernels
-> (#5.11).
-
-Why that specific kernel version and newer?  Why not list it as
-documented?
-
-> > 
-> > > ---
-> > >   drivers/usb/dwc3/host.c | 2 ++
-> > >   1 file changed, 2 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> > > index 61f57fe5bb78..31a496233d87 100644
-> > > --- a/drivers/usb/dwc3/host.c
-> > > +++ b/drivers/usb/dwc3/host.c
-> > > @@ -89,6 +89,8 @@ int dwc3_host_init(struct dwc3 *dwc)
-> > >   	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
-> > > +	props[prop_idx++] = PROPERTY_ENTRY_BOOL("xhci-sg-trb-cache-size-quirk");
-> > 
-> > And this is ok if the entry is not present?
-> > 
-> We are intending to use this quirk for all the dwc3 based devices since the
-> DWC3 XHC needs it.
-
-So you do not have this quirk yet in the kernel tree?  We can't take
-code without any in-tree users.
-
-> If the entry is not present then we will hit stall if
-> certain conditions aren't met (have mentioned the condition in commit text).
-
-When will the quirk be added?  To what platforms?
-
-thanks,
-
-greg k-h
+Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B412=E6=9C=8821=E6=
+=97=A5=E5=91=A8=E5=9B=9B 18:50=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Thu, Dec 21, 2023 at 06:40:34PM +0800, Gui-Dong Han wrote:
+> > Fixes: 6f23ee1fefdc1 ("USB: add binary API to usbmon")
+> > Reported-by: BassCheck <bass@buaa.edu.cn>
+>
+> You need to document this tool as per the researcher guidelines in the
+> kernel documentation, right?
+>
+> thanks,
+>
+> greg k-h
 
