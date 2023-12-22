@@ -1,140 +1,85 @@
-Return-Path: <linux-usb+bounces-4530-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4531-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 646D281C792
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 10:48:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2F2C81C8B1
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 12:02:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0607B287D48
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 09:48:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2D1F1C21E69
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 11:02:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7E4FBF2;
-	Fri, 22 Dec 2023 09:48:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC3E814F92;
+	Fri, 22 Dec 2023 11:02:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TiC7bqae"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VAEgv77j"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97F4FBE4;
-	Fri, 22 Dec 2023 09:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BM9ZuZc010230;
-	Fri, 22 Dec 2023 09:48:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type; s=
-	qcppdkim1; bh=UukgpImPfM56bAgawI5Cs+EiVCWsaW6onrQ11fyKQoc=; b=Ti
-	C7bqaeRdpuv8QkzWEDhSoffFr/L179hO7BWF6V0jDVVI9xEkaaNihoFVcNkqcmPT
-	9cxRzH7QwJ7N7xL0Rrq4MHAPUJw7WWO+hOLkAACVtR42ohM9JYeeEtIxICQrg7Uf
-	OJ1s/urF2vsPIKz/LyXhUe2A6VLpogWHbmgwrWiLxfyU7bbfh8i1kf+kgMTRCbFM
-	ZRrga8yB/HP2WKLg9Gr7nVZ+6ZiYgNrES4MxM5opVAyvcThUWG1Rxq2tqnUd4CB6
-	jZSJuaZ6C0hpEdqyHJSQjMWxKlBPQuBg+X4v2lSuFUo4RpB/+tqlD2LA0m6U0ere
-	mT7T50dVchQ8RO4ODCKw==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v57xx01nw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Dec 2023 09:48:02 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BM9lW8Q021583
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Dec 2023 09:47:32 GMT
-Received: from hu-uaggarwa-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Fri, 22 Dec 2023 01:47:29 -0800
-From: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
-To: <Thinh.Nguyen@synopsys.com>, <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Uttkarsh
- Aggarwal" <quic_uaggarwa@quicinc.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: dwc: ep0: Update request status in dwc3_ep0_stall_restart
-Date: Fri, 22 Dec 2023 15:17:04 +0530
-Message-ID: <20231222094704.20276-1-quic_uaggarwa@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4CF156C4
+	for <linux-usb@vger.kernel.org>; Fri, 22 Dec 2023 11:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703242961; x=1734778961;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=40ksBg7VKNKUvi2pw+aRwqgVvNpnr3+nlV8D7JZXi/E=;
+  b=VAEgv77jHbOD5ixo/AQyM395eaT7jH+nshV/VMK/5YBrKBvihsEW9XOb
+   8ySLQE5kZy+4IfK27Ir+RfNQqlcqdGA/0QXXEuwp0uco4MndDlANQFPaV
+   1iG0mbuo5/cYj+TeMVfO2TCSMnIrJ2Dh3oIQ7/b/1Nbf2k9UM2nOorCsr
+   +10xVy2cLodB88uKjWNPS5WRsrZuqo64MUsR1VuXI0uKOCjQadgeOsZhs
+   zuCcMQCklGWBTTsxMPgzp3Rfp4iFWzMYsDAv7rxm7bSgwXBiftsBeR0nl
+   e36paEPi/aqWO1eWBjnLHLsAXnlArszvgfCdHSCZKvQ+zmeGHcNaezH3E
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="9504379"
+X-IronPort-AV: E=Sophos;i="6.04,296,1695711600"; 
+   d="scan'208";a="9504379"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 03:02:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="811289509"
+X-IronPort-AV: E=Sophos;i="6.04,296,1695711600"; 
+   d="scan'208";a="811289509"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 22 Dec 2023 03:02:38 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 212AB305; Fri, 22 Dec 2023 13:02:37 +0200 (EET)
+Date: Fri, 22 Dec 2023 13:02:37 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Gil Fine <gil.fine@linux.intel.com>
+Subject: Re: [PATCH] thunderbolt: Keep link as asymmetric if preferred by
+ hardware
+Message-ID: <20231222110237.GE2543524@black.fi.intel.com>
+References: <20231219071531.2375978-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fxhOu5eQ9axRHmAj1z-0os44CrmXhTqV
-X-Proofpoint-ORIG-GUID: fxhOu5eQ9axRHmAj1z-0os44CrmXhTqV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
- impostorscore=0 mlxscore=0 lowpriorityscore=0 priorityscore=1501
- bulkscore=0 adultscore=0 mlxlogscore=801 suspectscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312220069
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231219071531.2375978-1-mika.westerberg@linux.intel.com>
 
-Current implementation blocks the running operations when Plug-out and
-Plug-In is performed continuously, process gets stuck in
-dwc3_thread_interrupt().
+On Tue, Dec 19, 2023 at 09:15:31AM +0200, Mika Westerberg wrote:
+> From: Gil Fine <gil.fine@linux.intel.com>
+> 
+> In case of the link is brought up as asymmetric (due to hardware preference), we
+> honor that and don't transition it to symmetric, unless a router with symmetric
+> link got plugged below, in the topology (and a bandwidth allows transition to
+> symmetric).
+> 
+> Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Code Flow:
-
-	CPU1
-
-	->Gadget_start
-	->dwc3_interrupt
-	->dwc3_thread_interrupt
-	->dwc3_process_event_buf
-	->dwc3_process_event_entry
-	->dwc3_endpoint_interrupt
-	->dwc3_ep0_interrupt
-	->dwc3_ep0_inspect_setup
-	->dwc3_ep0_stall_and_restart
-
-By this time if pending_list is not empty, it will get the next request
-on the given list and calls dwc3_gadget_giveback which will unmap request
-and call its complete() callback to notify upper layers that it has
-completed. Currently dwc3_gadget_giveback status is set to -ECONNRESET,
-whereas it should be -ESHUTDOWN based on condition if not dwc->connected
-is true.
-
-Cc: <stable@vger.kernel.org>
-Fixes: d742220b3577 ("usb: dwc3: ep0: giveback requests on stall_and_restart")
-Signed-off-by: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
----
-
-Changes in v2:
-Added dwc->connected check to set status either -ESHUTDOWN and -ECONNRESET 
-in dwc3_gadget_giveback.
-
-Link to v1:
-https://lore.kernel.org/all/20231122091127.3636-1-quic_uaggarwa@quicinc.com/T/#m28b011642024788c507d8b7eee4f7c5b0709d236
-
- drivers/usb/dwc3/ep0.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index b94243237293..816b8eea73d6 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -238,7 +238,10 @@ void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
- 		struct dwc3_request	*req;
- 
- 		req = next_request(&dep->pending_list);
--		dwc3_gadget_giveback(dep, req, -ECONNRESET);
-+		if (!dwc->connected)
-+			dwc3_gadget_giveback(dep, req, -ESHUTDOWN);
-+		else
-+			dwc3_gadget_giveback(dep, req, -ECONNRESET);
- 	}
- 
- 	dwc->eps[0]->trb_enqueue = 0;
--- 
-2.17.1
-
+Applied to thunderbolt.git/next.
 
