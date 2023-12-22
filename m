@@ -1,87 +1,112 @@
-Return-Path: <linux-usb+bounces-4532-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4534-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C5A881C8B2
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 12:03:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1434A81C9EF
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 13:27:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50950289992
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 11:03:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7E031F22BDD
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Dec 2023 12:27:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2AAB156D3;
-	Fri, 22 Dec 2023 11:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B06AB18053;
+	Fri, 22 Dec 2023 12:27:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OHnc36/2"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="p+Cyvlqo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9639156C6;
-	Fri, 22 Dec 2023 11:03:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703242990; x=1734778990;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qo9kVLRTA5g9uD10OHLNcwX9WmuI9qyqNSWDkMj1SPs=;
-  b=OHnc36/2Wv2ZCQsxVwwMGfhVOSDtRiTdhLuisJNKSAzbyzB98A44yYh/
-   QWDh2BEePDk/mGLRYPUABfTZiquayW3CV1NjG+yzxYXEEjUhGe9PpUWBu
-   n0SPbkewTB5S/Ja/QKDjq96NiF7BhxTjtHnqGmnYfK+sV4R4+zxoVrgCb
-   E/DdGxEMoTTR6slZwsTlRnYYCdQN83s8LwEJDU2qD8DmlYGU+YjcO+ruA
-   lM4R704fmNoCrWIz6jAvrP6VJP1LZ02+1sCYESIa6LpH2apl/jyo5WR0v
-   6EPXKD+4+BLDeGz1gJ6yeMWvKVFRPMMd+z8XIKoJjmOnt3sC7F13Dkws0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="2951428"
-X-IronPort-AV: E=Sophos;i="6.04,296,1695711600"; 
-   d="scan'208";a="2951428"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 03:03:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="900396146"
-X-IronPort-AV: E=Sophos;i="6.04,296,1695711600"; 
-   d="scan'208";a="900396146"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 22 Dec 2023 03:03:06 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 5252B305; Fri, 22 Dec 2023 13:03:05 +0200 (EET)
-Date: Fri, 22 Dec 2023 13:03:05 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Werner Sembach <wse@tuxedocomputers.com>
-Cc: Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Reduce retry timeout to speed up boot for
- some devices
-Message-ID: <20231222110305.GF2543524@black.fi.intel.com>
-References: <20231220150956.230227-1-wse@tuxedocomputers.com>
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A64ED527;
+	Fri, 22 Dec 2023 12:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
+	Content-Type; bh=6lNfPcJ9vgueCowbSfbMeQeA1QK5J3XCK2/SVo88cZw=;
+	b=p+CyvlqoaM1DlLmGvPWaPaqex3Qn9UPhvDQBcZEsSlvxc2aHj9dS3nOa7Jd6aO
+	G/XDCbFbe5gqTevFru8Vez0EPOe1wmiTzgPXqC1tDRuCC8fz6p+99yctdG2MCt+i
+	ge0SHmU1EJ/XNSNdO+Rtw+cEMl6U3ly3GJTRbYox241ik=
+Received: from [192.168.71.6] (unknown [114.92.108.205])
+	by zwqz-smtp-mta-g5-0 (Coremail) with SMTP id _____wDXH3RlgIVlc7QaCg--.29733S2;
+	Fri, 22 Dec 2023 20:26:29 +0800 (CST)
+Message-ID: <3c51ffb5-8198-459f-b4db-b9136a407c08@163.com>
+Date: Fri, 22 Dec 2023 20:26:13 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231220150956.230227-1-wse@tuxedocomputers.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/4] Revert "usb: gadget: f_uvc: change endpoint
+ allocation in uvc_function_bind()"
+To: Frank Li <Frank.Li@nxp.com>, peter.chen@kernel.org
+Cc: a-govindraju@ti.com, gregkh@linuxfoundation.org, imx@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, pawell@cadence.com,
+ rogerq@kernel.org
+References: <20231221165426.1590866-1-Frank.Li@nxp.com>
+ <20231221165426.1590866-5-Frank.Li@nxp.com>
+Content-Language: en-US
+From: yuan linyu <cugyly@163.com>
+In-Reply-To: <20231221165426.1590866-5-Frank.Li@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:_____wDXH3RlgIVlc7QaCg--.29733S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ar4UKw4kXw1xJr45Xr4Dtwb_yoW8ZF18pa
+	1rJ3yrCr47tFZxtwn7Jwn5ZF47Xan2qrWqgF9rK343Zr43Xr93CFyUK348KFy5Cr97AF40
+	qFZak3yS9r9YkrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j1mhrUUUUU=
+X-CM-SenderInfo: pfxj5zr16rljoofrz/1tbiERdO417++Nl7bwAAs+
 
-On Wed, Dec 20, 2023 at 04:09:56PM +0100, Werner Sembach wrote:
-> This is a followup to "thunderbolt: Workaround an IOMMU fault on certain
-> systems with Intel Maple Ridge".
-> 
-> It seems like the timeout can be reduced to 250ms. This reduces the overall
-> delay caused by the retires to ~1s. This is about the time other things
-> being initialized in parallel need anyway*, so like this the effective boot
-> time is no longer compromised.
-> 
-> *I only had a single device available for my measurements: A Clevo X170KM-G
-> desktop replacement notebook.
-> 
-> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
 
-Applied to thunderbolt.git/next, thanks!
+On 2023/12/22 00:54, Frank Li wrote:
+> This reverts commit 3c5b006f3ee800b4bd9ed37b3a8f271b8560126e.
+>
+> gadget_is_{super|dual}speed() API check UDC controller capitblity. It
+> should pass down highest speed endpoint descriptor to UDC controller. So
+> UDC controller driver can reserve enough resource at check_config(),
+> especially mult and maxburst. So UDC driver (such as cdns3) can know need
+> at least (mult + 1) * (maxburst + 1) * wMaxPacketSize internal memory for
+> this uvc functions.
+>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  drivers/usb/gadget/function/f_uvc.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> index faa398109431f..cc4e08c8169b4 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -719,13 +719,21 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+>  	}
+>  	uvc->enable_interrupt_ep = opts->enable_interrupt_ep;
+>  
+> -	ep = usb_ep_autoconfig(cdev->gadget, &uvc_fs_streaming_ep);
+
+how about all none-0 endpoint used for all uvc ?
+
+please add some comment if currently this is only way to fix your issue.
+
+need it for stable ?
+
+> +	if (gadget_is_superspeed(c->cdev->gadget))
+> +		ep = usb_ep_autoconfig_ss(cdev->gadget, &uvc_ss_streaming_ep,
+> +					  &uvc_ss_streaming_comp);
+> +	else if (gadget_is_dualspeed(cdev->gadget))
+> +		ep = usb_ep_autoconfig(cdev->gadget, &uvc_hs_streaming_ep);
+> +	else
+> +		ep = usb_ep_autoconfig(cdev->gadget, &uvc_fs_streaming_ep);
+> +
+>  	if (!ep) {
+>  		uvcg_info(f, "Unable to allocate streaming EP\n");
+>  		goto error;
+>  	}
+>  	uvc->video.ep = ep;
+>  
+> +	uvc_fs_streaming_ep.bEndpointAddress = uvc->video.ep->address;
+>  	uvc_hs_streaming_ep.bEndpointAddress = uvc->video.ep->address;
+>  	uvc_ss_streaming_ep.bEndpointAddress = uvc->video.ep->address;
+>  
+
 
