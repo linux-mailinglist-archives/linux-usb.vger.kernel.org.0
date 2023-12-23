@@ -1,41 +1,34 @@
-Return-Path: <linux-usb+bounces-4550-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4551-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83A8A81D359
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 10:36:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0274481D66A
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 21:01:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0334BB2304B
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 09:36:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A86E31F21992
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 20:01:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2485C8F7E;
-	Sat, 23 Dec 2023 09:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0pkt+Ti9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60C6416400;
+	Sat, 23 Dec 2023 20:01:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF69CA4C;
-	Sat, 23 Dec 2023 09:36:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3434C433C9;
-	Sat, 23 Dec 2023 09:36:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1703324191;
-	bh=c7w7Td7hvk3yk3T4+0e3MPRvg+8ZTAWeuyd81csuZd0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=0pkt+Ti9+qTvr4IALKMWXzmKWt+7nQG+PNVqb4D0oleNezTo7n54CNvjJdVYOrcTG
-	 Ke2ZZYccTWD2A8HFRKQMPYJYRIKDp18j1RfFb/1yxBtgnylfef49dIsPIsUhHkNUGm
-	 VjovBJ1qmiwe82TMWGb53QKZ9fPLmR4aPIVpz65U=
-Date: Sat, 23 Dec 2023 10:36:29 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 6.7-rc6
-Message-ID: <ZYaqHUkBTsBP0_ZQ@kroah.com>
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id E65B12031B
+	for <linux-usb@vger.kernel.org>; Sat, 23 Dec 2023 20:01:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 63711 invoked by uid 1000); 23 Dec 2023 15:01:22 -0500
+Date: Sat, 23 Dec 2023 15:01:22 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+  linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+  stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: core: Add quirk for Logitech Rallybar
+Message-ID: <82bf432c-2a78-4b9c-88ab-ef4f0888e9aa@rowland.harvard.edu>
+References: <20231222-rallybar-v2-1-5849d62a9514@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -44,77 +37,76 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231222-rallybar-v2-1-5849d62a9514@chromium.org>
 
-The following changes since commit a39b6ac3781d46ba18193c9dbb2110f31e9bffe9:
+On Fri, Dec 22, 2023 at 10:55:49PM +0000, Ricardo Ribalda wrote:
+> Logitech Rallybar devices, despite behaving as UVC camera, they have a
+> different power management system than the rest of the other Logitech
+> cameras.
+> 
+> USB_QUIRK_RESET_RESUME causes undesired USB disconnects, that make the
+> device unusable.
+> 
+> These are the only two devices that have this behavior, and we do not
+> have the list of devices that require USB_QUIRK_RESET_RESUME, so lets
+> create a new lit for them that un-apply the USB_QUIRK_RESET_RESUME
+> quirk.
+> 
+> Fixes: e387ef5c47dd ("usb: Add USB_QUIRK_RESET_RESUME for all Logitech UVC webcams")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
 
-  Linux 6.7-rc5 (2023-12-10 14:33:40 -0800)
+Would it make more sense to do this inside the uvc driver instead of 
+creating a new single-purpose list in the core?
 
-are available in the Git repository at:
+Alan Stern
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.7-rc7
-
-for you to fetch changes up to ab241a0ab5abd70036c3d959146e534a02447d17:
-
-  Merge tag 'usb-serial-6.7-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2023-12-22 09:59:30 +0100)
-
-----------------------------------------------------------------
-USB / Thunderbolt fixes for 6.7-rc7
-
-Here are some small bugfixes and new device ids for USB and Thunderbolt
-drivers for 6.7-rc7.  Included in here are:
-  - new usb-serial device ids
-  - thunderbolt driver fixes
-  - typec driver fix
-  - usb-storage driver quirk added
-  - fotg210 driver fix
-
-All of these have been in linux-next with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Alper Ak (1):
-      USB: serial: option: add Quectel EG912Y module support
-
-Dan Carpenter (1):
-      usb: fotg210-hcd: delete an incorrect bounds test
-
-Gil Fine (1):
-      thunderbolt: Fix minimum allocated USB 3.x and PCIe bandwidth
-
-Greg Kroah-Hartman (2):
-      Merge tag 'thunderbolt-for-v6.7-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
-      Merge tag 'usb-serial-6.7-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-
-Johan Hovold (1):
-      usb: typec: ucsi: fix gpio-based orientation detection
-
-Jose Ignacio Tornos Martinez (1):
-      net: usb: ax88179_178a: avoid failed operations when device is disconnected
-
-Mark Glover (1):
-      USB: serial: ftdi_sio: update Actisense PIDs constant names
-
-Reinhard Speyerer (1):
-      USB: serial: option: add Quectel RM500Q R13 firmware support
-
-Slark Xiao (1):
-      USB: serial: option: add Foxconn T99W265 with new baseline
-
-Tasos Sahanidis (1):
-      usb-storage: Add quirk for incorrect WP on Kingston DT Ultimate 3.0 G3
-
-Yaxiong Tian (1):
-      thunderbolt: Fix memory leak in margining_port_remove()
-
- drivers/net/usb/ax88179_178a.c      | 23 ++++++++++++++++++++---
- drivers/thunderbolt/debugfs.c       |  2 +-
- drivers/thunderbolt/usb4.c          | 10 +++++-----
- drivers/usb/fotg210/fotg210-hcd.c   |  3 ---
- drivers/usb/serial/ftdi_sio.c       |  6 +++---
- drivers/usb/serial/ftdi_sio_ids.h   |  6 +++---
- drivers/usb/serial/option.c         |  5 +++++
- drivers/usb/storage/unusual_devs.h  | 11 +++++++++++
- drivers/usb/typec/ucsi/ucsi_glink.c |  2 +-
- 9 files changed, 49 insertions(+), 19 deletions(-)
+> Tested with a Rallybar Mini with an Acer Chromebook Spin 513
+> ---
+> Changes in v2:
+> - Add Fixes tag
+> - Add UVC maintainer as Cc
+> - Link to v1: https://lore.kernel.org/r/20231222-rallybar-v1-1-82b2a4d3106f@chromium.org
+> ---
+>  drivers/usb/core/quirks.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+> index 15e9bd180a1d..8fa8de50e7f0 100644
+> --- a/drivers/usb/core/quirks.c
+> +++ b/drivers/usb/core/quirks.c
+> @@ -553,6 +553,14 @@ static const struct usb_device_id usb_interface_quirk_list[] = {
+>  	{ }  /* terminating entry must be last */
+>  };
+>  
+> +static const struct usb_device_id usb_interface_unsupported_quirk_list[] = {
+> +	/* Logitech Rallybar VC systems*/
+> +	{ USB_DEVICE(0x046d, 0x089b), .driver_info = USB_QUIRK_RESET_RESUME },
+> +	{ USB_DEVICE(0x046d, 0x08d3), .driver_info = USB_QUIRK_RESET_RESUME },
+> +
+> +	{ }  /* terminating entry must be last */
+> +};
+> +
+>  static const struct usb_device_id usb_amd_resume_quirk_list[] = {
+>  	/* Lenovo Mouse with Pixart controller */
+>  	{ USB_DEVICE(0x17ef, 0x602e), .driver_info = USB_QUIRK_RESET_RESUME },
+> @@ -718,6 +726,8 @@ void usb_detect_interface_quirks(struct usb_device *udev)
+>  	u32 quirks;
+>  
+>  	quirks = usb_detect_static_quirks(udev, usb_interface_quirk_list);
+> +	quirks &= ~usb_detect_static_quirks(udev,
+> +					usb_interface_unsupported_quirk_list);
+>  	if (quirks == 0)
+>  		return;
+>  
+> 
+> ---
+> base-commit: c0f65a7c112b3cfa691cead54bcf24d6cc2182b5
+> change-id: 20231222-rallybar-19ce0c64d5e6
+> 
+> Best regards,
+> -- 
+> Ricardo Ribalda <ribalda@chromium.org>
+> 
 
