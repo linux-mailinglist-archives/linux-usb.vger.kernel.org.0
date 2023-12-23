@@ -1,186 +1,120 @@
-Return-Path: <linux-usb+bounces-4549-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4550-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0893B81D331
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 09:36:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83A8A81D359
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 10:36:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A3F91C217F8
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 08:36:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0334BB2304B
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 09:36:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1CC58BF7;
-	Sat, 23 Dec 2023 08:36:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2485C8F7E;
+	Sat, 23 Dec 2023 09:36:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="odI4NINX"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0pkt+Ti9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A849CB67E;
-	Sat, 23 Dec 2023 08:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BN8RC7G020528;
-	Sat, 23 Dec 2023 08:36:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=d2+7u/3bqorXkghsvV/QI+xuUdz3o4SvpsRMeqbpgNI=; b=od
-	I4NINXkUz8RrhoPqPnyx6b5IM8/Va8AWit0HeTPnXhZ3S8vMLY46rQYdUhdtz5VB
-	SxLk14Bu0ca1YeSU8LWiTbiECesX4LIm8t5H5rWzXjpNVYgtBM49T9KYtJWIwaeT
-	cTmmIGQiOueiDQPGUJZlYVpBvCax408gBU0+vyk76C8j2h/ZroATAhK3qzDNehUx
-	7B+lvBa489uqQD/lsRecZwhKtdS5VGtEVNNUJBsnKNi917eXiRTz1DHy0H6lxcJB
-	BMk9m+fBokMBCQPPaxH2QwAVeTE8GNyhUyWlc4cN3OeRE/4GsXA8NCco8uwRQ6wi
-	HNCVa5xxl93e6Cmao3FA==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v5pgv8e6v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 23 Dec 2023 08:36:38 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BN8acRf005836
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 23 Dec 2023 08:36:38 GMT
-Received: from [10.216.46.13] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sat, 23 Dec
- 2023 00:36:35 -0800
-Message-ID: <883d18cd-909a-472d-b96f-4f985e092d23@quicinc.com>
-Date: Sat, 23 Dec 2023 14:06:32 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF69CA4C;
+	Sat, 23 Dec 2023 09:36:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3434C433C9;
+	Sat, 23 Dec 2023 09:36:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1703324191;
+	bh=c7w7Td7hvk3yk3T4+0e3MPRvg+8ZTAWeuyd81csuZd0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=0pkt+Ti9+qTvr4IALKMWXzmKWt+7nQG+PNVqb4D0oleNezTo7n54CNvjJdVYOrcTG
+	 Ke2ZZYccTWD2A8HFRKQMPYJYRIKDp18j1RfFb/1yxBtgnylfef49dIsPIsUhHkNUGm
+	 VjovBJ1qmiwe82TMWGb53QKZ9fPLmR4aPIVpz65U=
+Date: Sat, 23 Dec 2023 10:36:29 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 6.7-rc6
+Message-ID: <ZYaqHUkBTsBP0_ZQ@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: dwc3: core: set force_gen1 bit in USB31 devices
- if max speed is SS
-Content-Language: en-US
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <20231219041559.15789-1-quic_kriskura@quicinc.com>
- <20231222223143.kbbni2uqwf4nt3yi@synopsys.com>
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20231222223143.kbbni2uqwf4nt3yi@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IsW2fq0VyBIjNFe8568Q4wq80-zFzXH9
-X-Proofpoint-ORIG-GUID: IsW2fq0VyBIjNFe8568Q4wq80-zFzXH9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- suspectscore=0 phishscore=0 adultscore=0 impostorscore=0 mlxlogscore=999
- malwarescore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312230065
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+The following changes since commit a39b6ac3781d46ba18193c9dbb2110f31e9bffe9:
 
+  Linux 6.7-rc5 (2023-12-10 14:33:40 -0800)
 
-On 12/23/2023 4:01 AM, Thinh Nguyen wrote:
-> On Tue, Dec 19, 2023, Krishna Kurapati wrote:
->> Currently for dwc3_usb31 controller, if maximum_speed is limited to
->> super-speed in DT, then device mode is limited to SS, but host mode
->> still works in SSP.
->>
->> The documentation for max-speed property is as follows:
->>
->> "Tells USB controllers we want to work up to a certain speed.
->> Incase  this isn't passed via DT, USB controllers should default to
->> their maximum HW capability."
->>
->> It doesn't specify that the property is only for device mode.
->> There are cases where we need to limit the host's maximum speed to
->> SuperSpeed only. Use this property for host mode to contrain host's
->> speed to SuperSpeed.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->> Link to v2: https://urldefense.com/v3/__https://lore.kernel.org/all/20230514145118.20973-1-quic_kriskura@quicinc.com/__;!!A4F2R9G_pg!d8OsArNeKYrQqDG89M-Lh-1_c7zIMZp0x1CX6X_m_D2maHEA3QM3qiQV-g4mpb12ZOPT6F8D-ESuCwHxM26peHqe5jtIkQ$
->> Link to v1: https://urldefense.com/v3/__https://lore.kernel.org/all/20230512170107.18821-1-quic_kriskura@quicinc.com/__;!!A4F2R9G_pg!d8OsArNeKYrQqDG89M-Lh-1_c7zIMZp0x1CX6X_m_D2maHEA3QM3qiQV-g4mpb12ZOPT6F8D-ESuCwHxM26peHoSWlLDaw$
->>
->> Discussion regarding the same at:
->> https://urldefense.com/v3/__https://lore.kernel.org/all/e465c69c-3a9d-cbdb-d44e-96b99cfa1a92@quicinc.com/__;!!A4F2R9G_pg!d8OsArNeKYrQqDG89M-Lh-1_c7zIMZp0x1CX6X_m_D2maHEA3QM3qiQV-g4mpb12ZOPT6F8D-ESuCwHxM26peHqdyS2ZMQ$
->> ---
->>   drivers/usb/dwc3/core.c | 12 ++++++++++++
->>   drivers/usb/dwc3/core.h |  5 +++++
->>   2 files changed, 17 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index b101dbf8c5dc..056ba95d9295 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -1367,6 +1367,18 @@ static int dwc3_core_init(struct dwc3 *dwc)
->>   
->>   	dwc3_config_threshold(dwc);
->>   
->> +	/*
->> +	 * Modify this for all supported Super Speed ports when
->> +	 * multiport support is added.
->> +	 */
->> +	if (hw_mode != DWC3_GHWPARAMS0_MODE_GADGET &&
->> +	    (DWC3_IP_IS(DWC31)) &&
-> 
->> +	    dwc->maximum_speed == USB_SPEED_SUPER) {
->> +		reg = dwc3_readl(dwc->regs, DWC3_LLUCTL);
->> +		reg |= DWC3_LLUCTL_FORCE_GEN1;
->> +		dwc3_writel(dwc->regs, DWC3_LLUCTL, reg);
->> +	}
->> +
->>   	return 0;
->>   
->>   err_power_off_phy:
->> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->> index efe6caf4d0e8..e120611a5174 100644
->> --- a/drivers/usb/dwc3/core.h
->> +++ b/drivers/usb/dwc3/core.h
->> @@ -172,6 +172,8 @@
->>   #define DWC3_OEVTEN		0xcc0C
->>   #define DWC3_OSTS		0xcc10
->>   
->> +#define DWC3_LLUCTL		0xd024
->> +
->>   /* Bit fields */
->>   
->>   /* Global SoC Bus Configuration INCRx Register 0 */
->> @@ -657,6 +659,9 @@
->>   #define DWC3_OSTS_VBUSVLD		BIT(1)
->>   #define DWC3_OSTS_CONIDSTS		BIT(0)
->>   
->> +/* Force Gen1 speed on Gen2 link */
->> +#define DWC3_LLUCTL_FORCE_GEN1		BIT(10)
->> +
->>   /* Structures */
->>   
->>   struct dwc3_trb;
->> -- 
->> 2.42.0
->>
-> 
-> I believe you can also loop through and apply to all 16 offsets of
-> register LLUCTL without affecting the controller. Regardless whether you
-> will apply that for v2 or keep this version:
-> 
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> 
+are available in the Git repository at:
 
-Thanks for the review Thinh.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.7-rc7
 
-Multiport isn't merged yet. It will be rebased after interrupt cleanup 
-and flattening device tree v2 of Bjorn. Once it is merged, I will modify 
-this for logic multiple ports.
+for you to fetch changes up to ab241a0ab5abd70036c3d959146e534a02447d17:
 
-Regards,
-Krishna,
+  Merge tag 'usb-serial-6.7-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2023-12-22 09:59:30 +0100)
+
+----------------------------------------------------------------
+USB / Thunderbolt fixes for 6.7-rc7
+
+Here are some small bugfixes and new device ids for USB and Thunderbolt
+drivers for 6.7-rc7.  Included in here are:
+  - new usb-serial device ids
+  - thunderbolt driver fixes
+  - typec driver fix
+  - usb-storage driver quirk added
+  - fotg210 driver fix
+
+All of these have been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alper Ak (1):
+      USB: serial: option: add Quectel EG912Y module support
+
+Dan Carpenter (1):
+      usb: fotg210-hcd: delete an incorrect bounds test
+
+Gil Fine (1):
+      thunderbolt: Fix minimum allocated USB 3.x and PCIe bandwidth
+
+Greg Kroah-Hartman (2):
+      Merge tag 'thunderbolt-for-v6.7-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
+      Merge tag 'usb-serial-6.7-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+
+Johan Hovold (1):
+      usb: typec: ucsi: fix gpio-based orientation detection
+
+Jose Ignacio Tornos Martinez (1):
+      net: usb: ax88179_178a: avoid failed operations when device is disconnected
+
+Mark Glover (1):
+      USB: serial: ftdi_sio: update Actisense PIDs constant names
+
+Reinhard Speyerer (1):
+      USB: serial: option: add Quectel RM500Q R13 firmware support
+
+Slark Xiao (1):
+      USB: serial: option: add Foxconn T99W265 with new baseline
+
+Tasos Sahanidis (1):
+      usb-storage: Add quirk for incorrect WP on Kingston DT Ultimate 3.0 G3
+
+Yaxiong Tian (1):
+      thunderbolt: Fix memory leak in margining_port_remove()
+
+ drivers/net/usb/ax88179_178a.c      | 23 ++++++++++++++++++++---
+ drivers/thunderbolt/debugfs.c       |  2 +-
+ drivers/thunderbolt/usb4.c          | 10 +++++-----
+ drivers/usb/fotg210/fotg210-hcd.c   |  3 ---
+ drivers/usb/serial/ftdi_sio.c       |  6 +++---
+ drivers/usb/serial/ftdi_sio_ids.h   |  6 +++---
+ drivers/usb/serial/option.c         |  5 +++++
+ drivers/usb/storage/unusual_devs.h  | 11 +++++++++++
+ drivers/usb/typec/ucsi/ucsi_glink.c |  2 +-
+ 9 files changed, 49 insertions(+), 19 deletions(-)
 
