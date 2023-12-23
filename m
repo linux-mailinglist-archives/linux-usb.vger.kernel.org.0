@@ -1,71 +1,106 @@
-Return-Path: <linux-usb+bounces-4552-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4553-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4CB281D672
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 21:21:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0E1B81D742
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Dec 2023 00:36:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B67B61C216BE
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 20:21:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E285E1C216BA
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 23:36:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 804CB168B8;
-	Sat, 23 Dec 2023 20:21:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3491D53B;
+	Sat, 23 Dec 2023 23:36:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RCaG/Vbe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cPpeo/+D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEAA15E97;
-	Sat, 23 Dec 2023 20:21:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D8729C433C8;
-	Sat, 23 Dec 2023 20:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703362870;
-	bh=JNGRVnMa3662bEfrFLkBnNgJ8uGBrUoPyKUTcegWbcA=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=RCaG/VbeA/r8zMI8tt9yaMO81fJMzUi1DtrhdmdlYCQRAQAhzzMa9cSjWUag6m0C3
-	 QOsKbTbTDgnYwnhgbUEJ8Oudc44hJ+6+OF/sNDo9HPheT6R4uAYz/lUCjwQK92O8zs
-	 hjIKxYionrPOufMvTdyS+A/9CX4F8ohFVuWwf0WfgGp3ujKBJl/05gKe2EFjqionNh
-	 K+fUEQX0VcTRYOe01eG70gw/UZOBXmHmcyGyRERRgOgoPu1u19hOYEFM2VUbE6G9AK
-	 L79XkKCXsNgon6UNgZJKjDMfQXa5DxZ+8Qmx45Pnls8sOtHjtGODys1sjs8TQ0AZV0
-	 y8o5bRwzJI9dA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5CCBC561EE;
-	Sat, 23 Dec 2023 20:21:10 +0000 (UTC)
-Subject: Re: [GIT PULL] USB driver fixes for 6.7-rc6
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZYaqHUkBTsBP0_ZQ@kroah.com>
-References: <ZYaqHUkBTsBP0_ZQ@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZYaqHUkBTsBP0_ZQ@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.7-rc7
-X-PR-Tracked-Commit-Id: ab241a0ab5abd70036c3d959146e534a02447d17
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4b2ee6d2b33d56e36da552a26e817eeed637e76e
-Message-Id: <170336287080.28590.1826296808985196062.pr-tracker-bot@kernel.org>
-Date: Sat, 23 Dec 2023 20:21:10 +0000
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC3641D527;
+	Sat, 23 Dec 2023 23:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-554ae571341so313851a12.1;
+        Sat, 23 Dec 2023 15:36:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703374575; x=1703979375; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=29EMoIYluWAxowNn35akgo5ZU3ui59UzWlGkKdTNPS8=;
+        b=cPpeo/+DDbg97Z/uMU9Err1ZLkNtfB7Ld5Nek5BjdqzrDlBwYXOTQ7/4aPBwvk7RUD
+         P/k4TBN3nmFLzU+EWn60ELJ94NhjUx4PhJ6UoGQWhxlFsBZsR3qOAJb9sVFawAYnihoa
+         jhIv6DN7+w+P51KNVIogpdmK3xqUeqC0lR95z7MaJcbexmN8ny+Rd72wMWvnq9+6xx5r
+         vPVxzYyq+tAE2Z4yMTYgPXDx0QXKL0waceGtJwpKbVIedkgM3keV+oOApPW6FamFJrZ6
+         d7ds7GY8SXdxEm8oD99nDBbIaGlErNtoHyLmuyT/myvLMfDV41jqnjF5dDaq3paIz/yo
+         cZlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703374575; x=1703979375;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=29EMoIYluWAxowNn35akgo5ZU3ui59UzWlGkKdTNPS8=;
+        b=Pe7OyhcrGszFUr8qy2AU9CVMkKJOluWljCvszPdgEgtBTfqBqjuZFUA0K5Cfm8ccYz
+         QRNW2+Nx7gqC9gdLPaPO/0LOn3g3HENuqvSLg/yh68W8BLQlZY/fHx2QHNOU8IDgouHr
+         cPSu/aQL74QMzNDZiOWbt/a/A/1SQS4sBiabByslqEa/nAMHgR2CnSivp+y+vwFL3PBf
+         gCKqWlUzce70U2c3v7zptUGiF9EwwP1Uj/6a5yosI4RL4DQquxze+1PjkNT4DbwoAPDx
+         PKiQ8s9+AARO5ETeNoxB2dthDxaaUWlHldr5e5Gi7W8MUBXIpgEOSB/2mPq5FkNoiACk
+         QBmw==
+X-Gm-Message-State: AOJu0Yyi8QQ2lCWqSot6l1cSYgNh52r5iDSasTx6diybvYYFCB6UBg1U
+	GFNeO3mV5CJu/+fP5V9OgXk=
+X-Google-Smtp-Source: AGHT+IEbdbFV/XUqsIdTT8Cecpt5mzbVRU09mEu6QbZDa2yrAmwDjRdOigSYiup4qbUHBpR5xWPnUg==
+X-Received: by 2002:a17:906:cb81:b0:a23:6d24:94cd with SMTP id mf1-20020a170906cb8100b00a236d2494cdmr1698251ejb.14.1703374574683;
+        Sat, 23 Dec 2023 15:36:14 -0800 (PST)
+Received: from localhost ([5.255.99.108])
+        by smtp.gmail.com with ESMTPSA id jt4-20020a170906dfc400b00a2369d8ca07sm3472088ejc.203.2023.12.23.15.36.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Dec 2023 15:36:14 -0800 (PST)
+From: Maxim Mikityanskiy <maxtram95@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Hayes Wang <hayeswang@realtek.com>
+Cc: Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Grant Grundler <grundler@chromium.org>,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Maxim Mikityanskiy <maxtram95@gmail.com>
+Subject: [PATCH net 0/2] r8152: Fix a regression with usbguard
+Date: Sun, 24 Dec 2023 01:35:21 +0200
+Message-ID: <20231223233523.4411-1-maxtram95@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Sat, 23 Dec 2023 10:36:29 +0100:
+Introduction of r8152-cfgselector broke hotplug of Realtek USB NICs on
+machines that use usbguard. These patches are supposed to fix it.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.7-rc7
+Tested on RTL8153 (0bda:8153) that has two configuration descriptors:
+vendor and CDC.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4b2ee6d2b33d56e36da552a26e817eeed637e76e
+P.S. I'm not sure whether it's supposed to go through the USB or netdev
+tree, therefore submitting to both mailing lists and marking for "net",
+but please advise.
 
-Thank you!
+Maxim Mikityanskiy (2):
+  USB: Allow usb_device_driver to override usb_choose_configuration
+  r8152: Switch to using choose_configuration
+
+ drivers/net/usb/r8152.c    | 18 +++++++++---------
+ drivers/usb/core/generic.c | 10 ++++++++++
+ include/linux/usb.h        |  3 +++
+ 3 files changed, 22 insertions(+), 9 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.43.0
+
 
