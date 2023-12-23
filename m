@@ -1,54 +1,54 @@
-Return-Path: <linux-usb+bounces-4548-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4549-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 916C681D320
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 09:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0893B81D331
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 09:36:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C235C1C21F07
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 08:33:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A3F91C217F8
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 08:36:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C17E68BF2;
-	Sat, 23 Dec 2023 08:33:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1CC58BF7;
+	Sat, 23 Dec 2023 08:36:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="U5hcdZWS"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="odI4NINX"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62D4CA48;
-	Sat, 23 Dec 2023 08:33:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A849CB67E;
+	Sat, 23 Dec 2023 08:36:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BN8SCv8002400;
-	Sat, 23 Dec 2023 08:32:56 GMT
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BN8RC7G020528;
+	Sat, 23 Dec 2023 08:36:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	message-id:date:mime-version:subject:to:cc:references:from
 	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=QSXg0r0K7t8xw6d3E7LKmmEWgDR6KIgpGP+y4KnM42k=; b=U5
-	hcdZWSkbsMJlWZO3+otp9BxZjOTZR/QCOtjsl1vssVdVv/OZ8c8OpM1LD+fGi8ks
-	upMQEXyjOArH/jHIRSCU3ZUQIccIRDpKpC67U5YZRht5vCezlGx1m5KbI6c9wsSn
-	Dfb1LlN9NDU9MfHskX1kp84sT85UJuP2pOEtIzS5q5sGqj/TlMq06IK6jTP8ZtTz
-	y5gfREx5XAb5nUH4S6U4dDl8vErl12aj2S5LghzKZ+cwqqEE6UzdVerGdfTlcUWM
-	aOeE0t/sU/BZQdf37YLRSbQFy8+YLW12EMgc3IjOf6x0wDJkwiW2pg0mGYdxwBpu
-	PqhAbUNXoPSgxona+Iqw==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v5n8p0hf0-1
+	qcppdkim1; bh=d2+7u/3bqorXkghsvV/QI+xuUdz3o4SvpsRMeqbpgNI=; b=od
+	I4NINXkUz8RrhoPqPnyx6b5IM8/Va8AWit0HeTPnXhZ3S8vMLY46rQYdUhdtz5VB
+	SxLk14Bu0ca1YeSU8LWiTbiECesX4LIm8t5H5rWzXjpNVYgtBM49T9KYtJWIwaeT
+	cTmmIGQiOueiDQPGUJZlYVpBvCax408gBU0+vyk76C8j2h/ZroATAhK3qzDNehUx
+	7B+lvBa489uqQD/lsRecZwhKtdS5VGtEVNNUJBsnKNi917eXiRTz1DHy0H6lxcJB
+	BMk9m+fBokMBCQPPaxH2QwAVeTE8GNyhUyWlc4cN3OeRE/4GsXA8NCco8uwRQ6wi
+	HNCVa5xxl93e6Cmao3FA==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v5pgv8e6v-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 23 Dec 2023 08:32:56 +0000 (GMT)
+	Sat, 23 Dec 2023 08:36:38 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BN8WtQe008970
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BN8acRf005836
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 23 Dec 2023 08:32:55 GMT
+	Sat, 23 Dec 2023 08:36:38 GMT
 Received: from [10.216.46.13] (10.80.80.8) by nalasex01a.na.qualcomm.com
  (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sat, 23 Dec
- 2023 00:32:53 -0800
-Message-ID: <61d4f3f6-dc91-449a-9666-67f1eaca414c@quicinc.com>
-Date: Sat, 23 Dec 2023 14:02:50 +0530
+ 2023 00:36:35 -0800
+Message-ID: <883d18cd-909a-472d-b96f-4f985e092d23@quicinc.com>
+Date: Sat, 23 Dec 2023 14:06:32 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,126 +56,130 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Ignore dwc3 interrupt if GEVNTCOUNT
- reads corrupt value
+Subject: Re: [PATCH v3] usb: dwc3: core: set force_gen1 bit in USB31 devices
+ if max speed is SS
+Content-Language: en-US
 To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
         "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <20231221151620.16030-1-quic_kriskura@quicinc.com>
- <20231222221907.l7s5olt6uubwfjlh@synopsys.com>
-Content-Language: en-US
+References: <20231219041559.15789-1-quic_kriskura@quicinc.com>
+ <20231222223143.kbbni2uqwf4nt3yi@synopsys.com>
 From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20231222221907.l7s5olt6uubwfjlh@synopsys.com>
+In-Reply-To: <20231222223143.kbbni2uqwf4nt3yi@synopsys.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Wp-8x-NR9tJeRJ7Py9K1UlqhkMmbjhMa
-X-Proofpoint-ORIG-GUID: Wp-8x-NR9tJeRJ7Py9K1UlqhkMmbjhMa
+X-Proofpoint-GUID: IsW2fq0VyBIjNFe8568Q4wq80-zFzXH9
+X-Proofpoint-ORIG-GUID: IsW2fq0VyBIjNFe8568Q4wq80-zFzXH9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=875
- impostorscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
- spamscore=0 mlxscore=0 suspectscore=0 adultscore=0 phishscore=0
- bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2311290000 definitions=main-2312230065
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ suspectscore=0 phishscore=0 adultscore=0 impostorscore=0 mlxlogscore=999
+ malwarescore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2312230065
 
 
 
-On 12/23/2023 3:49 AM, Thinh Nguyen wrote:
-> On Thu, Dec 21, 2023, Krishna Kurapati wrote:
->> In the current implementation, the check_event_buf call reads the
->> GEVNTCOUNT register to determine the amount of event data generated
->> and copies it from ev->buf to ev->cache after masking interrupt.
+On 12/23/2023 4:01 AM, Thinh Nguyen wrote:
+> On Tue, Dec 19, 2023, Krishna Kurapati wrote:
+>> Currently for dwc3_usb31 controller, if maximum_speed is limited to
+>> super-speed in DT, then device mode is limited to SS, but host mode
+>> still works in SSP.
 >>
->> During copy if the amount of data to be copied is more than
->> (length - lpos), we fill the ev->cache till the end of 4096 byte
->> buffer allocated and then start filling from the top (lpos = 0).
+>> The documentation for max-speed property is as follows:
 >>
->> In one instance of SMMU crash it is observed that GEVNTCOUNT register
->> reads more than 4096 bytes:
+>> "Tells USB controllers we want to work up to a certain speed.
+>> Incase  this isn't passed via DT, USB controllers should default to
+>> their maximum HW capability."
 >>
->> dwc3_readl   base=0xffffffc0091dc000  offset=50188  value=63488
->>
->> (offset = 50188 -> 0xC40C)  -> reads 63488 bytes
->>
->> As per crash dump:
->> dwc->lpos = 2056
->>
->> and evt->buf is at 0xFFFFFFC009185000 and the crash is at
->> 0xFFFFFFC009186000. The diff which is exactly 0x1000 bytes.
->>
->> We first memcpy 2040 bytes from (buf + lpos) to (buf + 0x1000).
->>
->> And then we copy the rest of the data (64388 - 2040) from beginning
->> of dwc->ev_buf. While doing so we go beyond bounds as we are trying
->> to memcpy 62348 bytes into a 4K buffer resulting in crash.
->>
->> Fix this by ignoring the interrupt when GEVNTCOUNT register reads a
->> value more than the event ring allocated.
+>> It doesn't specify that the property is only for device mode.
+>> There are cases where we need to limit the host's maximum speed to
+>> SuperSpeed only. Use this property for host mode to contrain host's
+>> speed to SuperSpeed.
 >>
 >> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 >> ---
->> Changes in v2:
->> Instead of fixing amount of data being copied from ring, ignored
->> the interrupt when count is corrupt as per suggestion from Thinh.
+>> Link to v2: https://urldefense.com/v3/__https://lore.kernel.org/all/20230514145118.20973-1-quic_kriskura@quicinc.com/__;!!A4F2R9G_pg!d8OsArNeKYrQqDG89M-Lh-1_c7zIMZp0x1CX6X_m_D2maHEA3QM3qiQV-g4mpb12ZOPT6F8D-ESuCwHxM26peHqe5jtIkQ$
+>> Link to v1: https://urldefense.com/v3/__https://lore.kernel.org/all/20230512170107.18821-1-quic_kriskura@quicinc.com/__;!!A4F2R9G_pg!d8OsArNeKYrQqDG89M-Lh-1_c7zIMZp0x1CX6X_m_D2maHEA3QM3qiQV-g4mpb12ZOPT6F8D-ESuCwHxM26peHoSWlLDaw$
 >>
->> Link to v1:
->> https://urldefense.com/v3/__https://lore.kernel.org/all/20230521100330.22478-1-quic_kriskura@quicinc.com/__;!!A4F2R9G_pg!ewM3u9Pdk8yD9eU24sOuQqmhm8M2VpGXH8zALqVWGKffGbcJxrtyKKlUPuh8SS2arqO09DjnC9atC3bemEpx-g5UQMllbA$
+>> Discussion regarding the same at:
+>> https://urldefense.com/v3/__https://lore.kernel.org/all/e465c69c-3a9d-cbdb-d44e-96b99cfa1a92@quicinc.com/__;!!A4F2R9G_pg!d8OsArNeKYrQqDG89M-Lh-1_c7zIMZp0x1CX6X_m_D2maHEA3QM3qiQV-g4mpb12ZOPT6F8D-ESuCwHxM26peHqdyS2ZMQ$
+>> ---
+>>   drivers/usb/dwc3/core.c | 12 ++++++++++++
+>>   drivers/usb/dwc3/core.h |  5 +++++
+>>   2 files changed, 17 insertions(+)
 >>
->>   drivers/usb/dwc3/gadget.c | 10 +++++++++-
->>   1 file changed, 9 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 858fe4c299b7..e27933fdcce3 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -4451,6 +4451,7 @@ static irqreturn_t dwc3_thread_interrupt(int irq, void *_evt)
->>   static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
->>   {
->>   	struct dwc3 *dwc = evt->dwc;
->> +	int ret = IRQ_WAKE_THREAD;
-> 
-> irqreturn_t instead of int?
-> 
->>   	u32 amount;
->>   	u32 count;
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index b101dbf8c5dc..056ba95d9295 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -1367,6 +1367,18 @@ static int dwc3_core_init(struct dwc3 *dwc)
 >>   
->> @@ -4480,6 +4481,12 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
->>   	if (!count)
->>   		return IRQ_NONE;
+>>   	dwc3_config_threshold(dwc);
 >>   
->> +	if (count > evt->length) {
->> +		dev_err(dwc->dev, "GEVTCOUNT corrupt\n");
->> +		ret = IRQ_NONE;
->> +		goto done;
+>> +	/*
+>> +	 * Modify this for all supported Super Speed ports when
+>> +	 * multiport support is added.
+>> +	 */
+>> +	if (hw_mode != DWC3_GHWPARAMS0_MODE_GADGET &&
+>> +	    (DWC3_IP_IS(DWC31)) &&
+> 
+>> +	    dwc->maximum_speed == USB_SPEED_SUPER) {
+>> +		reg = dwc3_readl(dwc->regs, DWC3_LLUCTL);
+>> +		reg |= DWC3_LLUCTL_FORCE_GEN1;
+>> +		dwc3_writel(dwc->regs, DWC3_LLUCTL, reg);
 >> +	}
 >> +
->>   	evt->count = count;
->>   	evt->flags |= DWC3_EVENT_PENDING;
+>>   	return 0;
 >>   
->> @@ -4493,9 +4500,10 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
->>   	if (amount < count)
->>   		memcpy(evt->cache, evt->buf, count - amount);
+>>   err_power_off_phy:
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index efe6caf4d0e8..e120611a5174 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -172,6 +172,8 @@
+>>   #define DWC3_OEVTEN		0xcc0C
+>>   #define DWC3_OSTS		0xcc10
 >>   
->> +done:
->>   	dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), count);
+>> +#define DWC3_LLUCTL		0xd024
+>> +
+>>   /* Bit fields */
+>>   
+>>   /* Global SoC Bus Configuration INCRx Register 0 */
+>> @@ -657,6 +659,9 @@
+>>   #define DWC3_OSTS_VBUSVLD		BIT(1)
+>>   #define DWC3_OSTS_CONIDSTS		BIT(0)
+>>   
+>> +/* Force Gen1 speed on Gen2 link */
+>> +#define DWC3_LLUCTL_FORCE_GEN1		BIT(10)
+>> +
+>>   /* Structures */
+>>   
+>>   struct dwc3_trb;
+>> -- 
+>> 2.42.0
+>>
 > 
-> Don't update the GEVNTCOUNT if the read is invalid. We're not processing
-> any event, so we should not write back the "count" that we did not
-> process.
+> I believe you can also loop through and apply to all 16 offsets of
+> register LLUCTL without affecting the controller. Regardless whether you
+> will apply that for v2 or keep this version:
 > 
->>   
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> 
+
 Thanks for the review Thinh.
 
-If we don't update, won't the register always be non-zero ? It will keep 
-triggering the dwc3_interrupt unnecessarily right ?
+Multiport isn't merged yet. It will be rebased after interrupt cleanup 
+and flattening device tree v2 of Bjorn. Once it is merged, I will modify 
+this for logic multiple ports.
 
 Regards,
 Krishna,
