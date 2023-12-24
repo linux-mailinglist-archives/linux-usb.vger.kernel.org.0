@@ -1,163 +1,205 @@
-Return-Path: <linux-usb+bounces-4555-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4556-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86EFC81D746
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Dec 2023 00:36:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF39481D838
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Dec 2023 09:21:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3A83282FA9
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Dec 2023 23:36:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B05B1F21911
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Dec 2023 08:21:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B85A420B3E;
-	Sat, 23 Dec 2023 23:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A17139F;
+	Sun, 24 Dec 2023 08:21:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C8guBJqe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gpt2xz/w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA66A1EB4C;
-	Sat, 23 Dec 2023 23:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a234dc0984fso309312766b.0;
-        Sat, 23 Dec 2023 15:36:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703374578; x=1703979378; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SEx7xfusdmQXhw9i1ARuI4xTKHuwCraW+mZTw9408Ng=;
-        b=C8guBJqeVhRERRNaCa9+/2aGM2dPSEA/sjochhL+HECyet3sT5IV9UHmDFOWjn5Wvc
-         26fxZqUYEEPmcVD5Rde85X0+topdoIV4mfrXYIHHOd7nlggxNuVR4zuLllz/SPfK4BSz
-         +ICm9aemSLKjIqA+FGTbHI1U6yDhJCnS4gC8KOF358qEJTdUjqdQT54WqjMBLKcBGhw8
-         2DMX7uK1x8E66S2ill87uvbvQGFciFEinjtQeNni5DNtkR4TZ5TKtLjqlcHaQkTwnlf7
-         rUg2uWqNbjoi8Dvz57RXDDnRWdEqkAUDlLLEHKZ3UmRVfNHYzuCm78wbevYIltS8CFwu
-         Pw2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703374578; x=1703979378;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SEx7xfusdmQXhw9i1ARuI4xTKHuwCraW+mZTw9408Ng=;
-        b=gf+0kb0j7cvqwD2XFKAkxIANMX+iAYZ9NGkyHHfOViXhT6+1LMBFduSslc9OvKN0sv
-         Gg2n/Mvdn58W4dS4K41tvhJaJHgT22Uk97L4t4X2YTejqNzYmztma1UjMoD2OCOd9Vik
-         qOAf5+ClF//NEkjnY2XwLdjTraX2aw140Q9wgQiCPFMCOnsdwARgIus1sKqWa2FxvitJ
-         B1vBOkhjpCVFHL9Ftfr1QqG7HTyO6jHE2NHm9S8H+kiT6qGFSXBPky8hH8UWObFokCWm
-         RDSRnpRt51QS+G7DyRmriiInEzQK4Do8cotLUHJVvf5sXofSAOvDmO9r/KHUbMxYa1DZ
-         TcfA==
-X-Gm-Message-State: AOJu0YzwelW4NWzRe0GZ5gl7SSgbD5QAwApGGGNlB0ICGrW+wm0kLtAV
-	WsSYX494zPiC8jl9vxr54Ps=
-X-Google-Smtp-Source: AGHT+IED6CmEiqkckDFO7TKKuz2PVr3JXMUmSXr8UjGO661pcIN+s9cs+OU/YKyJwYUNALMab8msJQ==
-X-Received: by 2002:a17:906:74c2:b0:a23:6b80:c1db with SMTP id z2-20020a17090674c200b00a236b80c1dbmr1800681ejl.95.1703374577793;
-        Sat, 23 Dec 2023 15:36:17 -0800 (PST)
-Received: from localhost ([5.255.99.108])
-        by smtp.gmail.com with ESMTPSA id gs16-20020a170906f19000b00a269910e708sm3473555ejb.206.2023.12.23.15.36.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Dec 2023 15:36:17 -0800 (PST)
-From: Maxim Mikityanskiy <maxtram95@gmail.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hayes Wang <hayeswang@realtek.com>
-Cc: Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Douglas Anderson <dianders@chromium.org>,
-	Grant Grundler <grundler@chromium.org>,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Maxim Mikityanskiy <maxtram95@gmail.com>
-Subject: [PATCH net 2/2] r8152: Switch to using choose_configuration
-Date: Sun, 24 Dec 2023 01:35:23 +0200
-Message-ID: <20231223233523.4411-3-maxtram95@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231223233523.4411-1-maxtram95@gmail.com>
-References: <20231223233523.4411-1-maxtram95@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD5315A1
+	for <linux-usb@vger.kernel.org>; Sun, 24 Dec 2023 08:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703406066; x=1734942066;
+  h=date:from:to:cc:subject:message-id;
+  bh=Qex4s8EreQ64AaULpgJL4ywlDW4NBJzmbPTxWBgsmQg=;
+  b=Gpt2xz/wY1k4s/50C68qvsF0RvpfuC2RV3Kzb7O4UwRZxrADyfg22Ln2
+   5MQ4hM8J30VesU7nKG20HdXB2ktdkJHzPDUwl4FaPg69nsLSvixGJwAww
+   10FtsrXyYWKkO1aSO8ShfnJA2pSTbVP94QJGrPeUg4CvVtizodu3pRj5z
+   YwztSGVGIxURf7I1BFIu7HctWg2BKLPhOWvI+zh3uBYRRPbSHz4EPawGd
+   qLrnx9duCXr5Pq2VuYFUfXQeLZKfyx2LOBjYRVPoNaNuzkwVJVcpP5SPh
+   4rwHF1fIEHtHYZmhloTdxmpZsdRaFI1Wd2B0wfm6iHJIhla8PaBJlYO8+
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10933"; a="3499718"
+X-IronPort-AV: E=Sophos;i="6.04,300,1695711600"; 
+   d="scan'208";a="3499718"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2023 00:21:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10933"; a="806417414"
+X-IronPort-AV: E=Sophos;i="6.04,300,1695711600"; 
+   d="scan'208";a="806417414"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 24 Dec 2023 00:21:04 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rHJjJ-000C0p-2r;
+	Sun, 24 Dec 2023 08:21:01 +0000
+Date: Sun, 24 Dec 2023 16:17:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ ab241a0ab5abd70036c3d959146e534a02447d17
+Message-ID: <202312241604.tzelmZM3-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-With the introduction of r8152-cfgselector, the following regression
-appeared on machines that use usbguard: the netdev appears only when the
-USB device is inserted the first time (before the module is loaded), but
-on the second and next insertions no netdev is registered.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: ab241a0ab5abd70036c3d959146e534a02447d17  Merge tag 'usb-serial-6.7-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
 
-It happens because the device is probed as unauthorized, and usbguard
-gives it an authorization a moment later. If the module is not loaded,
-it's normally loaded slower than the authorization is given, and
-everything works. If the module is already loaded, the cfgselector's
-probe function runs first, but then usb_authorize_device kicks in and
-changes the configuration to something chosen by the standard
-usb_choose_configuration. rtl8152_probe refuses to probe non-vendor
-configurations, and the user ends up without a netdev.
+elapsed time: 2818m
 
-The previous commit added possibility to override
-usb_choose_configuration. Use it to fix the bug and pick the right
-configuration on both probe and authorization.
+configs tested: 123
+configs skipped: 0
 
-Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
----
- drivers/net/usb/r8152.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 9bf2140fd0a1..f0ac31a94f3c 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -10070,6 +10070,11 @@ static struct usb_driver rtl8152_driver = {
- };
- 
- static int rtl8152_cfgselector_probe(struct usb_device *udev)
-+{
-+	return 0;
-+}
-+
-+static int rtl8152_cfgselector_choose_configuration(struct usb_device *udev)
- {
- 	struct usb_host_config *c;
- 	int i, num_configs;
-@@ -10078,7 +10083,7 @@ static int rtl8152_cfgselector_probe(struct usb_device *udev)
- 	 * driver supports it.
- 	 */
- 	if (__rtl_get_hw_ver(udev) == RTL_VER_UNKNOWN)
--		return 0;
-+		return -EOPNOTSUPP;
- 
- 	/* The vendor mode is not always config #1, so to find it out. */
- 	c = udev->config;
-@@ -10094,20 +10099,15 @@ static int rtl8152_cfgselector_probe(struct usb_device *udev)
- 	}
- 
- 	if (i == num_configs)
--		return -ENODEV;
--
--	if (usb_set_configuration(udev, c->desc.bConfigurationValue)) {
--		dev_err(&udev->dev, "Failed to set configuration %d\n",
--			c->desc.bConfigurationValue);
--		return -ENODEV;
--	}
-+		return -EOPNOTSUPP;
- 
--	return 0;
-+	return c->desc.bConfigurationValue;
- }
- 
- static struct usb_device_driver rtl8152_cfgselector_driver = {
- 	.name =		MODULENAME "-cfgselector",
- 	.probe =	rtl8152_cfgselector_probe,
-+	.choose_configuration = rtl8152_cfgselector_choose_configuration,
- 	.id_table =	rtl8152_table,
- 	.generic_subclass = 1,
- 	.supports_autosuspend = 1,
+tested configs:
+alpha                            allyesconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                   randconfig-001-20231224   gcc  
+arc                   randconfig-002-20231224   gcc  
+arc                        vdk_hs38_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                      jornada720_defconfig   gcc  
+arm                   randconfig-001-20231224   gcc  
+arm                   randconfig-002-20231224   gcc  
+arm                   randconfig-003-20231224   gcc  
+arm                   randconfig-004-20231224   gcc  
+arm64                 randconfig-001-20231224   gcc  
+arm64                 randconfig-002-20231224   gcc  
+arm64                 randconfig-003-20231224   gcc  
+arm64                 randconfig-004-20231224   gcc  
+csky                  randconfig-001-20231224   gcc  
+csky                  randconfig-002-20231224   gcc  
+hexagon               randconfig-001-20231224   clang
+hexagon               randconfig-002-20231224   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20231223   clang
+i386         buildonly-randconfig-002-20231223   clang
+i386         buildonly-randconfig-003-20231223   clang
+i386         buildonly-randconfig-004-20231223   clang
+i386         buildonly-randconfig-005-20231223   clang
+i386         buildonly-randconfig-006-20231223   clang
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231223   clang
+i386                  randconfig-002-20231223   clang
+i386                  randconfig-003-20231223   clang
+i386                  randconfig-004-20231223   clang
+i386                  randconfig-005-20231223   clang
+i386                  randconfig-006-20231223   clang
+i386                  randconfig-011-20231223   gcc  
+i386                  randconfig-012-20231223   gcc  
+i386                  randconfig-013-20231223   gcc  
+i386                  randconfig-014-20231223   gcc  
+i386                  randconfig-015-20231223   gcc  
+i386                  randconfig-016-20231223   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch             randconfig-001-20231224   gcc  
+loongarch             randconfig-002-20231224   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                          amiga_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                       allyesconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                      maltaaprp_defconfig   clang
+nios2                            allmodconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                 randconfig-001-20231224   gcc  
+nios2                 randconfig-002-20231224   gcc  
+openrisc                         allyesconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                randconfig-001-20231224   gcc  
+parisc                randconfig-002-20231224   gcc  
+parisc64                         alldefconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                          allyesconfig   clang
+powerpc                    amigaone_defconfig   gcc  
+powerpc                 mpc836x_rdk_defconfig   clang
+powerpc                     powernv_defconfig   clang
+powerpc               randconfig-001-20231224   gcc  
+powerpc               randconfig-002-20231224   gcc  
+powerpc               randconfig-003-20231224   gcc  
+powerpc                     tqm8555_defconfig   gcc  
+powerpc                      walnut_defconfig   clang
+powerpc                        warp_defconfig   gcc  
+powerpc64             randconfig-001-20231224   gcc  
+powerpc64             randconfig-002-20231224   gcc  
+powerpc64             randconfig-003-20231224   gcc  
+riscv                 randconfig-001-20231224   gcc  
+riscv                 randconfig-002-20231224   gcc  
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                  randconfig-001-20231224   clang
+s390                  randconfig-002-20231224   clang
+sh                               allmodconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                        edosk7760_defconfig   gcc  
+sh                    randconfig-001-20231224   gcc  
+sh                    randconfig-002-20231224   gcc  
+sh                          rsk7201_defconfig   gcc  
+sh                           se7751_defconfig   gcc  
+sh                            shmin_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+um                               allmodconfig   clang
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20231224   gcc  
+x86_64       buildonly-randconfig-002-20231224   gcc  
+x86_64       buildonly-randconfig-003-20231224   gcc  
+x86_64       buildonly-randconfig-004-20231224   gcc  
+x86_64       buildonly-randconfig-005-20231224   gcc  
+x86_64       buildonly-randconfig-006-20231224   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231224   clang
+x86_64                randconfig-002-20231224   clang
+x86_64                randconfig-003-20231224   clang
+x86_64                randconfig-004-20231224   clang
+x86_64                randconfig-005-20231224   clang
+x86_64                randconfig-006-20231224   clang
+x86_64                randconfig-011-20231224   gcc  
+x86_64                randconfig-012-20231224   gcc  
+x86_64                randconfig-013-20231224   gcc  
+x86_64                randconfig-014-20231224   gcc  
+x86_64                randconfig-015-20231224   gcc  
+x86_64                randconfig-016-20231224   gcc  
+x86_64                randconfig-071-20231224   gcc  
+x86_64                randconfig-072-20231224   gcc  
+x86_64                randconfig-073-20231224   gcc  
+x86_64                randconfig-074-20231224   gcc  
+x86_64                randconfig-075-20231224   gcc  
+x86_64                randconfig-076-20231224   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                  audio_kc705_defconfig   gcc  
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
