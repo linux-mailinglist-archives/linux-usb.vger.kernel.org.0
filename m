@@ -1,182 +1,180 @@
-Return-Path: <linux-usb+bounces-4564-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4565-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6945C81DB16
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Dec 2023 16:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D850C81DD8D
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Dec 2023 03:18:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B52E281A77
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Dec 2023 15:40:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85A9C281A50
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Dec 2023 02:18:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17AD7D528;
-	Sun, 24 Dec 2023 15:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FEEB7F3;
+	Mon, 25 Dec 2023 02:18:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="OiOc/23p"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l1F71M7N"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2040.outbound.protection.outlook.com [40.107.22.40])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072D1EED4;
-	Sun, 24 Dec 2023 15:38:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QoPflTfSURGHyFTUdjlpToZ4nVhCSleAxa9LyICZDot4vN5X5abSIWTfndc6c71Ip3SEoSsOisXHTwzxA+EIp0HPI1nr9aLxqDifsqNzKnYUAVXKcE+3zj5ZaZav6qGKraELOM3sz3p2zHesw0ov7zJ3vVJ0eFvf4kfHCxuWHcfeoK2xGV4/2n0EnaPboRmSxmz3DsSzo7aUOgjWzn2URVzWNP4xX6TrNuF/CR8fCtVeDpQ9n0Dqjw5ajrPoevSxQ1Nok7hUj5q3KoJeJJsAZHARSqJsTAQotfbQypP6YbvKJxmqCqrivmP0FII+TwsqkGn1p2rdkTLwIAw4V5uGvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XXpaAagGWQhxWjrKD7Fn5u0Z2e0L3PSMrRONa1XQftI=;
- b=FIvkjoGTec5XA4n3ME2mzhV2qMBAx8ks3lZF1MOSicBTdpfyWM58SFwCF/EUPYY2qn9TweAHwACLSu3KhrvDSPlPnZpc3cvbXUP99TWtLRyL4yAcjdddwLuPzJ4gxwF//6FVQ6jB1GjgJq/G4BWWF+GR/N/mLCJqxKK187G9LSfqOI3xdxZUuuP2J8VGMrAQuu4ekzI+I3S6t0XofurtMEreh0fL4H3qGEjXb50WBj9+YYPGYqYjtOeYYyzqaWiPXaUJbVaf/rDmj3bjOhJ4DQffActf8j6aLzGODT/uxkRxQFSNcsdUIY0uNtGMMFlrnDEGY9IkDiDwLDuHmVbfKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XXpaAagGWQhxWjrKD7Fn5u0Z2e0L3PSMrRONa1XQftI=;
- b=OiOc/23p1335SugnglauWSc08httD8TURRuYCjPqatkUwCAhpMgq+TFz2lflNCAtBhG+YF064u+8ZYUR+KlZgXriSkg+hCOoZ496t4N2Fp9El2LEf29RZQDNgMr7R/p9RsipDKEythSSZdYD7cy4yls+Fub+WsqtY9MCzKDNagk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by DBAPR04MB7285.eurprd04.prod.outlook.com (2603:10a6:10:1ac::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.24; Sun, 24 Dec
- 2023 15:38:45 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::95f5:5118:258f:ee40]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::95f5:5118:258f:ee40%7]) with mapi id 15.20.7113.026; Sun, 24 Dec 2023
- 15:38:45 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: cugyly@163.com
-Cc: Frank.Li@nxp.com,
-	a-govindraju@ti.com,
-	gregkh@linuxfoundation.org,
-	imx@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	pawell@cadence.com,
-	peter.chen@kernel.org,
-	rogerq@kernel.org
-Subject: [PATCH v2 4/4] Revert "usb: gadget: f_uvc: change endpoint allocation in uvc_function_bind()"
-Date: Sun, 24 Dec 2023 10:38:16 -0500
-Message-Id: <20231224153816.1664687-5-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231224153816.1664687-1-Frank.Li@nxp.com>
-References: <20231224153816.1664687-1-Frank.Li@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR11CA0058.namprd11.prod.outlook.com
- (2603:10b6:a03:80::35) To AM6PR04MB4838.eurprd04.prod.outlook.com
- (2603:10a6:20b:4::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 918247E9
+	for <linux-usb@vger.kernel.org>; Mon, 25 Dec 2023 02:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703470704; x=1735006704;
+  h=date:from:to:cc:subject:message-id;
+  bh=hc+nCJEiNfkOUGVYBKWGZdG5Sd6qCF/vY4mAHYUhRMM=;
+  b=l1F71M7Nffh4bmWSzMxPt8kna6ULqlkU3PJhd6K3P/6D2URA5tJ47WOf
+   yB7AwDSsJaBvC1R19CW8ADm/dc2WfHzHLB1ft960o9YUPgtQqPDRsXIAa
+   tkqS7EB5S0TMFuu6lwIQ+ukfyHWGfxNFY9u8KBwqRWQVn2Qlt7BpXXadV
+   m/niio7RrMf+tXU4337cVrcLhsOQQeriO50+GsJOHYU6gRgKCs5ctqt2e
+   eOKpfFzElFpwdgN5TEeG0pSvsWRRtkxQNeCsZVq639EsAMHIWfz5yj54L
+   l6PAidE6B82lnLTPFsI71DD/E2TweroltJiOFeoEffWRGlLodPjBvvK0+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="460588983"
+X-IronPort-AV: E=Sophos;i="6.04,302,1695711600"; 
+   d="scan'208";a="460588983"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2023 18:18:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="921256158"
+X-IronPort-AV: E=Sophos;i="6.04,302,1695711600"; 
+   d="scan'208";a="921256158"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Dec 2023 18:18:22 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rHaUb-000CqP-2X;
+	Mon, 25 Dec 2023 02:16:25 +0000
+Date: Mon, 25 Dec 2023 10:14:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 1760bfa7d7ca490cf8a61fe50ddeb1769cadd89e
+Message-ID: <202312251015.2WKoUYUx-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|DBAPR04MB7285:EE_
-X-MS-Office365-Filtering-Correlation-Id: f29f1699-46d7-4a6c-5f5e-08dc04966a1d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	LlwfngmD7DMyOLGaZng41dNWX8he15EEXZX/N3YULuQD3janEH+PMrjCdDXzlZJt8FQlkj+n3Q0MLIP2UYT9h1//rOUpV6+hOUnrUR38r/574NYmNQ3ih+DdTwoqWjcJefGTzw1L0TYHSUXaHQcIldUgh8mO3LYyp9kT+y51rcrW08jxYVjySwDM/qeeGbplt08tOGEJsdYtOhCz07g7Em0soyIjipyBafHDOB3aHWAs20iRS1bByidGMj2Ro6DtSnwMgJ536G/3D0MYa27iQFEbiaMYikZu6j10aCM8SXbrdHmMlNbr2TAf4D29mWaCHewB5HZ2b6ddE+u+OtxkbLVIO/7+KimsuJwi4c3ZHWJqhb+GsnoLT6+zqtrYVMgIeatA+JRxL234+jzyvV24+hc7qssDqjm6JRyrROA2v21DirnAQ8dwnQNW2GjLJfG1aDPFz1ZPtS9S7GUpzepcE3yaqiYSg0k9vba0Lr7B1aAvSC/dfL3qtJLsMAoEn1yWZgXenclm2BNGl9bnuGGpUwnz5UEfy9hg8E7p2l3izpdWA+zNknu7DBHfWzl4RLhX4DbhEZF9R9a3jjE9rxfF5KNeMCcj8yWkCgkltPRp3E1heeXqZlVNLpcYBlldxVmoyptlz10xAu+hZnCq2Mvokg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(136003)(376002)(366004)(39850400004)(230922051799003)(64100799003)(451199024)(1800799012)(186009)(66556008)(66476007)(66946007)(38100700002)(6916009)(316002)(2616005)(1076003)(26005)(4326008)(8936002)(8676002)(478600001)(6486002)(83380400001)(41300700001)(52116002)(2906002)(6506007)(6666004)(6512007)(36756003)(86362001)(38350700005)(5660300002)(1491003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?2bZHOFYsc5VXbvKiyPUaXlV2CeGfgGU+iU4abCTlqYyehKg9yDdJy0v7s92A?=
- =?us-ascii?Q?HvhjIuzeutAfKz4m5MtzgMIbjSogBB0HkG5KBQXdnMjEjZqp7IJMchxiSqVB?=
- =?us-ascii?Q?dnH4vZQ1/uwZoFN6bZ4DwWS5U9C2VuVb4bzX2vcFEe8NVoYfTVB0D040hqki?=
- =?us-ascii?Q?xYx5+U0XTmiSitwJH22Ru7lhW0IITWJuNPAfHnDbitK1nUp2h2d4OMtdhNSv?=
- =?us-ascii?Q?7UQQr0LNq38oaT1OsL8aGu1XbYZLIkC0KInBu7ZU9mcwYgnwZ+QTtWUVL503?=
- =?us-ascii?Q?slFlIi307QmE2Ie8KfvwRrUJuXgSuQ4sgasS6IUhsNaWDSZ0zZxyGy3HUlZI?=
- =?us-ascii?Q?zGWx6VXsNITDq9R4wrXHUrBq/QeS2fb2Lk+Ppj0ecoYGEPnxEIT+aD+AGzur?=
- =?us-ascii?Q?rPiaUKOh3x1ksxlgmavHpWghcFoZiy+Xb+n7TDZWGcRznPHKQbuxq6/8z6th?=
- =?us-ascii?Q?Gjf4yQ5VeTaNElra4mKSepv0BaJk0YUww9ovM1gIaRaGH5O0PjuQJirtHtKK?=
- =?us-ascii?Q?kMNOPh6G0vZKoV4OGcNGuVOPx/o5DaadBQdhwr4LuEkfKLvrmPenLdpHvhTS?=
- =?us-ascii?Q?OKyTOr45jkyqRE7yyXgI0UzvdMY2wDoNBzP0ne2BuDYoieyJ/Z3M30yi7icx?=
- =?us-ascii?Q?DHatVave8ZhwuOLCZ7PJPWSmytbx5zbu5SVUGJ/CgZcvc+LiU/q3LZni5bd0?=
- =?us-ascii?Q?XZP/SfL/d9ukdVb2c4Y1NXLxBj+UiNo9Q6V+jrnM/HCzvMBn/hAk7q9MKjXH?=
- =?us-ascii?Q?esb7lRTKzp2FPmz55hy98maRZLZSle3rgqhz0LXYz+3PqzULg8VBZUmngJyU?=
- =?us-ascii?Q?u8FW1AY1LBglJ4wA0q/5qku8IQ5mh6TzZ2z249jkUBly89DFNIWcEf4ITrG4?=
- =?us-ascii?Q?aRT/r7A7Zst8P6m3mO+hsy4euWozQNh2pwDcB4LbS9fK5gbcFabXSH/xiew5?=
- =?us-ascii?Q?PeUrY3VIbNTm29uB7iEK9dOrlg+G9YkBjDLJbXWNzoASHdDFAWQhSYE1CfWz?=
- =?us-ascii?Q?wZeNtqvrHrXVFaBpSuVKd502JV2t+Dof22OrziDPbNdyQh4EBfsEp3Mlb5Kg?=
- =?us-ascii?Q?8ufvvvQVUYe1n0DfUgMSEq2GJSmzWn8BccxisOG2Lf+oLhJOme4w/lsF3oT5?=
- =?us-ascii?Q?dMo8PiCgu2F9ecU45yZKwaCpaXMrDtW2242eLNjxMzXzZrBXXwrXimOQpPDx?=
- =?us-ascii?Q?cz+9WuhGRodn36Zby94umLCCWNbQ1stQ4RRVVq3zLuUhWZXe+9U9u9E2wqIe?=
- =?us-ascii?Q?e4p1zm+WR9B4qTYNsDxFvwfPomx02xppn+5LjyAsdEB/3wpRLfjMGuJtptrp?=
- =?us-ascii?Q?qy7MBVTLZaSur7vCJ/d8EP9hbjzeQQ2tla6SlzGBzIFD7Nhvg4va/oQVBeXa?=
- =?us-ascii?Q?IaV+qq5lJ/W9FAcZNX+fd+y2SU3o3S+cnjsZPvLX2880SNdRh48c6WiyUe/r?=
- =?us-ascii?Q?gm3KnxwHmR96MOXio1B6wYL6z7iIwixNU+odpTAwOjZXYNwffr7kLjlYGIal?=
- =?us-ascii?Q?sZ98Pyq8xz6Dx/mZE6w4by1hTnvUHDIppGRfs9TJLTTaZ826iMfPqn21v6WU?=
- =?us-ascii?Q?W1OqsK4bugMTXk5VQZc=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f29f1699-46d7-4a6c-5f5e-08dc04966a1d
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Dec 2023 15:38:45.3239
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WeZZzOsWEhLg27En6EUwRFvH3Z1iByx4hetxlfEMpllhXWu1sDLiy1eEJWBAmUPrxBU/6YOQ6eXvlqeOAwXbJw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7285
 
-This reverts commit 3c5b006f3ee800b4bd9ed37b3a8f271b8560126e.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 1760bfa7d7ca490cf8a61fe50ddeb1769cadd89e  usb: linux/usb.h: fix Excess kernel-doc description warning
 
-gadget_is_{super|dual}speed() API check UDC controller capitblity. It
-should pass down highest speed endpoint descriptor to UDC controller. So
-UDC controller driver can reserve enough resource at check_config(),
-especially mult and maxburst. So UDC driver (such as cdns3) can know need
-at least (mult + 1) * (maxburst + 1) * wMaxPacketSize internal memory for
-this uvc functions.
+elapsed time: 2204m
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
- drivers/usb/gadget/function/f_uvc.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+configs tested: 98
+configs skipped: 2
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index faa398109431f..3d5c03e1361e4 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -719,13 +719,29 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 	}
- 	uvc->enable_interrupt_ep = opts->enable_interrupt_ep;
- 
--	ep = usb_ep_autoconfig(cdev->gadget, &uvc_fs_streaming_ep);
-+	/*
-+	 * gadget_is_{super|dual}speed() API check UDC controller capitblity. It should pass down
-+	 * highest speed endpoint descriptor to UDC controller. So UDC controller driver can reserve
-+	 * enough resource at check_config(), especially mult and maxburst. So UDC driver (such as
-+	 * cdns3) can know need at least (mult + 1) * (maxburst + 1) * wMaxPacketSize internal
-+	 * memory for this uvc functions. This is the only straightforward method to resolve the UDC
-+	 * resource allocation issue in the current gadget framework.
-+	 */
-+	if (gadget_is_superspeed(c->cdev->gadget))
-+		ep = usb_ep_autoconfig_ss(cdev->gadget, &uvc_ss_streaming_ep,
-+					  &uvc_ss_streaming_comp);
-+	else if (gadget_is_dualspeed(cdev->gadget))
-+		ep = usb_ep_autoconfig(cdev->gadget, &uvc_hs_streaming_ep);
-+	else
-+		ep = usb_ep_autoconfig(cdev->gadget, &uvc_fs_streaming_ep);
-+
- 	if (!ep) {
- 		uvcg_info(f, "Unable to allocate streaming EP\n");
- 		goto error;
- 	}
- 	uvc->video.ep = ep;
- 
-+	uvc_fs_streaming_ep.bEndpointAddress = uvc->video.ep->address;
- 	uvc_hs_streaming_ep.bEndpointAddress = uvc->video.ep->address;
- 	uvc_ss_streaming_ep.bEndpointAddress = uvc->video.ep->address;
- 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                               defconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20231224   gcc  
+arc                   randconfig-002-20231224   gcc  
+arm                               allnoconfig   gcc  
+arm                                 defconfig   clang
+arm                   randconfig-001-20231224   gcc  
+arm                   randconfig-002-20231224   gcc  
+arm                   randconfig-003-20231224   gcc  
+arm                   randconfig-004-20231224   gcc  
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20231224   gcc  
+arm64                 randconfig-002-20231224   gcc  
+arm64                 randconfig-003-20231224   gcc  
+arm64                 randconfig-004-20231224   gcc  
+csky                              allnoconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20231224   gcc  
+csky                  randconfig-002-20231224   gcc  
+hexagon                           allnoconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20231224   clang
+hexagon               randconfig-002-20231224   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20231224   gcc  
+i386         buildonly-randconfig-002-20231224   gcc  
+i386         buildonly-randconfig-003-20231224   gcc  
+i386         buildonly-randconfig-004-20231224   gcc  
+i386         buildonly-randconfig-005-20231224   gcc  
+i386         buildonly-randconfig-006-20231224   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231224   gcc  
+i386                  randconfig-002-20231224   gcc  
+i386                  randconfig-003-20231224   gcc  
+i386                  randconfig-004-20231224   gcc  
+i386                  randconfig-005-20231224   gcc  
+i386                  randconfig-006-20231224   gcc  
+i386                  randconfig-011-20231224   clang
+i386                  randconfig-012-20231224   clang
+i386                  randconfig-013-20231224   clang
+i386                  randconfig-014-20231224   clang
+i386                  randconfig-015-20231224   clang
+i386                  randconfig-016-20231224   clang
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231224   gcc  
+loongarch             randconfig-002-20231224   gcc  
+m68k                              allnoconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   clang
+nios2                             allnoconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20231224   gcc  
+nios2                 randconfig-002-20231224   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20231224   gcc  
+parisc                randconfig-002-20231224   gcc  
+parisc64                            defconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc               randconfig-001-20231224   gcc  
+powerpc               randconfig-002-20231224   gcc  
+powerpc               randconfig-003-20231224   gcc  
+powerpc64             randconfig-001-20231224   gcc  
+powerpc64             randconfig-002-20231224   gcc  
+powerpc64             randconfig-003-20231224   gcc  
+riscv                             allnoconfig   clang
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20231224   gcc  
+riscv                 randconfig-002-20231224   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                  randconfig-001-20231224   clang
+s390                  randconfig-002-20231224   clang
+sh                               allmodconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                    randconfig-001-20231224   gcc  
+sh                    randconfig-002-20231224   gcc  
+sparc64               randconfig-001-20231224   gcc  
+sparc64               randconfig-002-20231224   gcc  
+um                    randconfig-001-20231224   gcc  
+um                    randconfig-002-20231224   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                randconfig-001-20231224   gcc  
+xtensa                randconfig-002-20231224   gcc  
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
