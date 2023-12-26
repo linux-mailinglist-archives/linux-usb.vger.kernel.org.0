@@ -1,288 +1,228 @@
-Return-Path: <linux-usb+bounces-4568-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4569-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 566B781E0B6
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Dec 2023 14:05:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B45F81E4FE
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Dec 2023 06:25:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB7381F22126
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Dec 2023 13:05:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F9D41C21C94
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Dec 2023 05:25:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88E9451C50;
-	Mon, 25 Dec 2023 13:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37B414B5D0;
+	Tue, 26 Dec 2023 05:24:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NFW+HR8G"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="n1meGHlE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E7151C3D
-	for <linux-usb@vger.kernel.org>; Mon, 25 Dec 2023 13:05:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a235e394758so384939266b.1
-        for <linux-usb@vger.kernel.org>; Mon, 25 Dec 2023 05:05:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703509542; x=1704114342; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sDk7ERblMSZzmxPuU2OCO6B0rTP+vS6gs+aSEfXyP2s=;
-        b=NFW+HR8GcFaDUaBu86szFzDIZTomiAika9oA01c56ry8/xv/Va+4s2T6IHHJe5V6ti
-         HowuC+4dx8motk2lHIYnV49OuwbfbXslMA4h+/mmapOZPYq+ma/XY+G8FKWEnV1ncRTg
-         Af+L2tl6wOHOJ9Sdqbt0ILh5jh850OTh0Vyvdlwo4htd4/mSX19xmP6iT2t8k4C6ViPB
-         fCLRONDJ9qp71MIGvFYJLnKDGZ6SOac2NqcvG+eM+Ddf0NEsteCXoC3m+J8UXxeRUUmh
-         7i3cwpFG2WfCz99kUu19GvopICxfuCvRPKlU/AAECcGcXg0GFcdxSScbFyxuaCFknxDm
-         1gyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703509542; x=1704114342;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sDk7ERblMSZzmxPuU2OCO6B0rTP+vS6gs+aSEfXyP2s=;
-        b=jVvsAry5doveOu8IsILx3GSzRfywlNy1LQHu25jsiYhZh7D2auRq0zhxQKbRWVE2KK
-         yYnaLNBKlitEZ6yVhJTTQq9fQ0vRZr9tI5yxh++Uia97Y2DuZqiht8s+9OOTC/duXP22
-         co2hG4xk48V6Hw7IIGrsu8xhVhfD9ZC+FMYWKdAxUF1F6gPVI03MjYtJpd1ZdB5BwRbJ
-         QeVh3JdiDweHdvQTXvZG8w8jYdUvUj0bUAbjrxN9ahUnAa+ogTeWVLuPER0E5bS1nZ5a
-         RaUyT9/fGyNUk7+ajqPeTgmbcZP7009J2DqZAtzL+BpDUH9k6uKACRS6odbolLVG5NMa
-         AWpQ==
-X-Gm-Message-State: AOJu0Yxfb1xhWqHk7NBpj2D3+yZyJhFzYZrhBymJB1o8HTqe8bugb2ap
-	vSzEgnLkbQK1yxbz9JUvtMpgJIUYhLxcWQ==
-X-Google-Smtp-Source: AGHT+IFhJ4P90RyO4Idzt9nu7cpUEDy7mhDywJQMQXFCpXr2lx5qVV2Bpo30mJkA4wRh4rF+o3MYEw==
-X-Received: by 2002:a17:906:1456:b0:a23:32bd:d166 with SMTP id q22-20020a170906145600b00a2332bdd166mr2511388ejc.48.1703509541798;
-        Mon, 25 Dec 2023 05:05:41 -0800 (PST)
-Received: from [192.168.0.22] ([78.10.206.178])
-        by smtp.gmail.com with ESMTPSA id pj25-20020a170906d79900b00a26b036affcsm3837174ejb.53.2023.12.25.05.05.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Dec 2023 05:05:41 -0800 (PST)
-Message-ID: <e6419898-0d77-4286-a04b-7240eb90d8df@linaro.org>
-Date: Mon, 25 Dec 2023 14:05:39 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 102CB4B5C5;
+	Tue, 26 Dec 2023 05:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BQ4x1vh023783;
+	Tue, 26 Dec 2023 05:24:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=AyqDWWihAa1zlhpr5k42krhHmxZ0myDPF3QTT8zp9NU=; b=n1
+	meGHlEsCsluHafGFtTwuvJMifnQNJa8FEsvtlJ8nlefSur5otdGfcwQnk9YH7uVD
+	cWUzKu4U3nQRYtuCN/l3EywoLHKNv78k/Yhg7KWJd4PmQSs5Tpqeys8F1Y8rbaK4
+	LZMFDUO38onxuVPhChmsSRY2dWYqjB5eVs12vF0KKWXNj7p5NWoZhxoq0aUm77kw
+	2ZGlaDybLcS104jnB5+a9fBLzryvHO7U/w6tPNNELA2Ilgz89ZVXCVNE6fhfD2tc
+	JX6vfiJBK/xMmaRgln8/ZGQRzbo0rPyx99ivZXxCIXxrglrs0GUwNUtKX1zRg3Iy
+	o8GgF5p2p1ax/1wimwuw==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v7gd98pbw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 Dec 2023 05:24:47 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BQ5OkDR027920
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 Dec 2023 05:24:46 GMT
+Received: from [10.216.25.18] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 25 Dec
+ 2023 21:24:43 -0800
+Message-ID: <43ff1971-aeb1-21e1-4700-9ee84cd5aede@quicinc.com>
+Date: Tue, 26 Dec 2023 10:54:38 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
- binding
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/2] usb: dwc3: host: Set XHCI_SG_TRB_CACHE_SIZE_QUIRK
 Content-Language: en-US
-To: Krishna Kurapati <quic_kriskura@quicinc.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <bjorn.andersson@linaro.org>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Wesley Cheng <quic_wcheng@quicinc.com>, Conor Dooley <conor+dt@kernel.org>,
- Johan Hovold <johan@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- quic_ppratap@quicinc.com, quic_jackp@quicinc.com
-References: <20231222063648.11193-1-quic_kriskura@quicinc.com>
- <20231222063648.11193-2-quic_kriskura@quicinc.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231222063648.11193-2-quic_kriskura@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman
+	<mathias.nyman@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <stable@vger.kernel.org>
+References: <20231212112521.3774610-1-quic_prashk@quicinc.com>
+ <20231212112521.3774610-2-quic_prashk@quicinc.com>
+ <2023121518-uncharted-riddance-7c58@gregkh>
+ <849d0ea9-d4f7-c568-968c-88835f64fadf@quicinc.com>
+ <2023122212-stellar-handlebar-2f70@gregkh>
+From: Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <2023122212-stellar-handlebar-2f70@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: X-atXzeIR_zyOLS9sZHi_nMTKlRz2t-U
+X-Proofpoint-GUID: X-atXzeIR_zyOLS9sZHi_nMTKlRz2t-U
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 clxscore=1011
+ bulkscore=0 phishscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2311290000 definitions=main-2312260037
 
-On 22/12/2023 07:36, Krishna Kurapati wrote:
-> The high speed related interrupts present on QC targets are as follows:
+
+
+On 22-12-23 11:40 am, Greg Kroah-Hartman wrote:
+> On Fri, Dec 22, 2023 at 11:29:01AM +0530, Prashanth K wrote:
+>> On 15-12-23 06:12 pm, Greg Kroah-Hartman wrote:
+>>> On Tue, Dec 12, 2023 at 04:55:20PM +0530, Prashanth K wrote:
+>>>> Upstream commit bac1ec551434 ("usb: xhci: Set quirk for
+>>>> XHCI_SG_TRB_CACHE_SIZE_QUIRK") introduced a new quirk in XHCI
+>>>> which fixes XHC timeout, which was seen on synopsys XHCs while
+>>>> using SG buffers. But the support for this quirk isn't present
+>>>> in the DWC3 layer.
+>>>>
+>>>> We will encounter this XHCI timeout/hung issue if we run iperf
+>>>> loopback tests using RTL8156 ethernet adaptor on DWC3 targets
+>>>> with scatter-gather enabled. This gets resolved after enabling
+>>>> the XHCI_SG_TRB_CACHE_SIZE_QUIRK. This patch enables it using
+>>>> the xhci device property since its needed for DWC3 controller.
+>>>>
+>>>> In Synopsys DWC3 databook,
+>>>> Table 9-3: xHCI Debug Capability Limitations
+>>>> Chained TRBs greater than TRB cache size: The debug capability
+>>>> driver must not create a multi-TRB TD that describes smaller
+>>>> than a 1K packet that spreads across 8 or more TRBs on either
+>>>> the IN TR or the OUT TR.
+>>>>
+>>>> Cc: <stable@vger.kernel.org>
+>>>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+>>>
+>>> What commit id does this fix?
+>>>
+>> This doesn't fix any commit as such, but adds the support for
+>> XHCI_SG_TRB_CACHE_SIZE_QUIRK (which is present in XHCI layer) to DWC3 layer.
 > 
+> So this is a new feature?
+> 
+> How does this fit into the stable kernel rules?
+
+This isn't a new feature. To give some background, upstream commit 
+bac1ec551434 ("usb: xhci: Set quirk for XHCI_SG_TRB_CACHE_SIZE_QUIRK")
+added a XHCI quirk which converts SG lists to CMA buffers/URBS if 
+certain conditions aren't met. But they never enabled this xhci quirk
+since no issues were hit at that time. So, the support for the above 
+mentioned quirk is added from 5.11 kernel onwards, but was never enabled 
+anywhere.
+
+ From commit bac1ec551434 : "We discovered this issue with devices on 
+other platforms but have not yet come across any device that triggers 
+this on Linux. But it could be a real problem now or in the future. All 
+it takes is N number of small chained TRBs. And other instances of the 
+Synopsys IP may have smaller values for the TRB_CACHE_SIZE which would 
+exacerbate the problem."
+
+For more info: 
+https://lore.kernel.org/all/20201208092912.1773650-3-mathias.nyman@linux.intel.com/
+
+> 
+>> I have CC'ed stable kernel for this to be back-ported to older kernels
+>> (#5.11).
+> 
+> Why that specific kernel version and newer?  Why not list it as
+> documented?
+
+I mentioned 5.11 because commit bac1ec551434 ("usb: xhci: Set quirk for 
+XHCI_SG_TRB_CACHE_SIZE_QUIRK") is present from 5.11.
+> 
+>>>
+>>>> ---
+>>>>    drivers/usb/dwc3/host.c | 2 ++
+>>>>    1 file changed, 2 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+>>>> index 61f57fe5bb78..31a496233d87 100644
+>>>> --- a/drivers/usb/dwc3/host.c
+>>>> +++ b/drivers/usb/dwc3/host.c
+>>>> @@ -89,6 +89,8 @@ int dwc3_host_init(struct dwc3 *dwc)
+>>>>    	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
+>>>> +	props[prop_idx++] = PROPERTY_ENTRY_BOOL("xhci-sg-trb-cache-size-quirk");
+>>>
+>>> And this is ok if the entry is not present?
+>>>
+>> We are intending to use this quirk for all the dwc3 based devices since the
+>> DWC3 XHC needs it.
+> 
+> So you do not have this quirk yet in the kernel tree?  We can't take
+> code without any in-tree users.
+
+This is a 2 patch series, patch 1/2 sets a property from dwc3 layer. And 
+patch 2 enables XHCI quirk based on the property set from DWC3.
+> 
+>> If the entry is not present then we will hit stall if
+>> certain conditions aren't met (have mentioned the condition in commit text).
+> 
+> When will the quirk be added?  To what platforms?
+
+I guess there is some sort of confusion here, sorry for that.
+
+Earlier Tejas Joglekar from synopsys pushed a patch in XHCI layer which 
+converts certain SG lists to CMA buffers if some pre-requisites aren't 
+met. And this operation is done if an xhci->quirk is set 
+(XHCI_SG_TRB_CACHE_SIZE_QUIRK - BIT39)
+
+- 
+https://lore.kernel.org/all/20201208092912.1773650-2-mathias.nyman@linux.intel.com/
+
+- 
+https://lore.kernel.org/all/20201208092912.1773650-3-mathias.nyman@linux.intel.com/
+
+But here the option to enable this quirk was done using XHCI priv data
+
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index aa2d35f98200..4d34f6005381 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -333,6 +333,9 @@ static int xhci_plat_probe(struct platform_device *pdev)
+  	if (priv && (priv->quirks & XHCI_SKIP_PHY_INIT))
+  		hcd->skip_phy_initialization = 1;
+
++	if (priv && (priv->quirks & XHCI_SG_TRB_CACHE_SIZE_QUIRK))
++		xhci->quirks |= XHCI_SG_TRB_CACHE_SIZE_QUIRK;
++
+  	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
+  	if (ret)
+  		goto disable_usb_phy;
 
 
->  
->    interrupt-names:
-> -    minItems: 1
-> -    maxItems: 4
-> +    minItems: 2
-> +    maxItems: 5
->  
->    qcom,select-utmi-as-pipe-clk:
->      description:
-> @@ -361,60 +378,21 @@ allOf:
->          compatible:
->            contains:
->              enum:
-> -              - qcom,ipq4019-dwc3
+And this XHCI quirk (XHCI_SG_TRB_CACHE_SIZE_QUIRK) needs to be enabled 
+for DWC3 controllers. There are 2 ways to do it. One way is by directly 
+accessing XHCI private data from DWC3 layer (dwc3/host.c) which is not 
+cleaner approach.
 
-Why do you remove it, without adding it somewhere else. Nothing in the
-commit msg explains it.
+So I'm reusing the device_create_managed_software_node() which is 
+present in dwc3/host.c to add a quirk to XHCI node, and enable 
+XHCI_SG_TRB_CACHE_SIZE_QUIRK based on property set from DWC3 layer.
 
-> +              - qcom,ipq5018-dwc3
->                - qcom,ipq6018-dwc3
-> -              - qcom,ipq8064-dwc3
->                - qcom,ipq8074-dwc3
-> -              - qcom,msm8994-dwc3
-> -              - qcom,qcs404-dwc3
-> -              - qcom,sc7180-dwc3
-> -              - qcom,sdm670-dwc3
-> -              - qcom,sdm845-dwc3
-> -              - qcom,sdx55-dwc3
-> -              - qcom,sdx65-dwc3
-> -              - qcom,sdx75-dwc3
-> -              - qcom,sm4250-dwc3
-> -              - qcom,sm6350-dwc3
-> -              - qcom,sm8150-dwc3
-> -              - qcom,sm8250-dwc3
-> -              - qcom,sm8350-dwc3
-> -              - qcom,sm8450-dwc3
-> -              - qcom,sm8550-dwc3
-> -              - qcom,sm8650-dwc3
-> -    then:
-> -      properties:
-> -        interrupts:
-> -          items:
-> -            - description: The interrupt that is asserted
-> -                when a wakeup event is received on USB2 bus.
-> -            - description: The interrupt that is asserted
-> -                when a wakeup event is received on USB3 bus.
-> -            - description: Wakeup event on DM line.
-> -            - description: Wakeup event on DP line.
-> -        interrupt-names:
-> -          items:
-> -            - const: hs_phy_irq
-> -            - const: ss_phy_irq
-> -            - const: dm_hs_phy_irq
-> -            - const: dp_hs_phy_irq
-> -
-> -  - if:
-> -      properties:
-> -        compatible:
-> -          contains:
-> -            enum:
->                - qcom,msm8953-dwc3
-> -              - qcom,msm8996-dwc3
->                - qcom,msm8998-dwc3
-> -              - qcom,sm6115-dwc3
-> -              - qcom,sm6125-dwc3
-> +              - qcom,qcm2290-dwc3
->      then:
->        properties:
->          interrupts:
-> -          maxItems: 2
-> +          minItems: 2
-> +          maxItems: 3
->          interrupt-names:
->            items:
-> -            - const: hs_phy_irq
-> +            - const: pwr_event
-> +            - const: qusb2_phy
->              - const: ss_phy_irq
->  
->    - if:
-> @@ -422,37 +400,21 @@ allOf:
->          compatible:
->            contains:
->              enum:
-> -              - qcom,ipq5018-dwc3
-> -              - qcom,ipq5332-dwc3
-> +              - qcom,msm8996-dwc3
-> +              - qcom,qcs404-dwc3
->                - qcom,sdm660-dwc3
-> -    then:
-> -      properties:
-> -        interrupts:
-> -          minItems: 1
-> -          maxItems: 2
-> -        interrupt-names:
-> -          minItems: 1
-> -          items:
-> -            - const: hs_phy_irq
-> -            - const: ss_phy_irq
-> -
-> -  - if:
-> -      properties:
-> -        compatible:
-> -          contains:
-> -            enum:
-> -              - qcom,sc7280-dwc3
-> +              - qcom,sm6115-dwc3
-> +              - qcom,sm6125-dwc3
->      then:
->        properties:
->          interrupts:
->            minItems: 3
->            maxItems: 4
->          interrupt-names:
-> -          minItems: 3
->            items:
-> +            - const: pwr_event
->              - const: hs_phy_irq
-> -            - const: dp_hs_phy_irq
-> -            - const: dm_hs_phy_irq
-> +            - const: qusb2_phy
-
-Why qusb2_phy is after hs_phy_irq? In the earlier if:then: it is the
-second one.
-
-
->              - const: ss_phy_irq
->  
->    - if:
-> @@ -460,11 +422,13 @@ allOf:
->          compatible:
->            contains:
->              enum:
-> +              - qcom,ipq5332-dwc3
->                - qcom,sc8280xp-dwc3
->                - qcom,x1e80100-dwc3
->      then:
->        properties:
->          interrupts:
-> +          minItems: 3
-
-Hm, why? This commit is unmanageable. Your commit msg is already huge
-but still does not explain this. Are you sure you are fixing only one
-logical thing per patch? Does not look like.
-
-Best regards,
-Krzysztof
-
+Thanks,
+Prashanth K
 
