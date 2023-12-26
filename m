@@ -1,242 +1,203 @@
-Return-Path: <linux-usb+bounces-4576-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4577-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B317381E6C3
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Dec 2023 11:03:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20E6A81E6E4
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Dec 2023 11:21:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C6F71F22845
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Dec 2023 10:03:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1FE01F21D49
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Dec 2023 10:21:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E28B74D598;
-	Tue, 26 Dec 2023 10:03:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68EB24E1A0;
+	Tue, 26 Dec 2023 10:21:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TYw9b/QA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f/KZCM/h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35404D582;
-	Tue, 26 Dec 2023 10:03:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BQ2lBpe007802;
-	Tue, 26 Dec 2023 10:03:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=EbK0Zbrv9EAUjwNIQmV+qBbfXKtF8OfJi0XbfDJeMOc=; b=TY
-	w9b/QAnaP0n4Dyc2yQaMSyo4SQ0sTgl2NC7HAeSSCPe5+P4LkmPI9U3KhqsZHDaW
-	a3rX7BKaPGVz4eSGYyj+6hfDa8jsVlwI5j3vfxHNzV1AT9i5OgotVRt/HhLFpCX8
-	pd9f5OIGkSTPAd5murFQn8Qg9v57OVjVqdVdnQeo3K5l+mbOIQiyfCL+Zu/BWdIL
-	BqK2la6S3+VATIS0YW/3vhaqoWpQuxFTryG3qO2+ajzUslbTBbQmBIghrcNb1c0e
-	sUX+B6jecSRoOlBccs0j0CkwVJyJG1xYNA/yd+Cj0p/unm1pfBra2KauF+koEGA8
-	Hfp1HENKVEaxU36jI+yw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v7c9jhp6f-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Dec 2023 10:03:19 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BQA3IcZ007942
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Dec 2023 10:03:18 GMT
-Received: from [10.216.59.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 26 Dec
- 2023 02:03:13 -0800
-Message-ID: <67c7c84c-c631-468e-ae67-1c31d41a605b@quicinc.com>
-Date: Tue, 26 Dec 2023 15:33:09 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602044D59B;
+	Tue, 26 Dec 2023 10:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40d4a7f0d17so33027115e9.1;
+        Tue, 26 Dec 2023 02:21:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703586079; x=1704190879; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=r57M7drypBfFBLKNyoojpq8hOvL7UrNpx4l/8Uu5xJ4=;
+        b=f/KZCM/hXMKawIUuoCg7ZbpEg0zlNQrsj7V13bPWRNkdqEoYoqokTfk5NANFGEhohB
+         waXEcyVyytVvLAptQhYFbMDk5shbzwzIgr7uICta+97ms/a3SSwX3vX/7s13YXm8a7PG
+         PB3N2l/O04B4ID+qO9Mgh/v95CpZFk4qVXSznJHPPAQmM9YGlDT8lQzXEtGAfzCpBwD/
+         ghlvuRGSB1r+DuoxkQFPl+Z4R+Yw4NU2kRCe5uPnxB4SqWNCkMnDtILOIfxhVHANSAEQ
+         o3BY36j+6pBCr3M0FJs+V28V3wDFwQmNK2/SbLD397aPk5D2aXLSH+2hoYo98yn3dWbJ
+         6ctA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703586079; x=1704190879;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r57M7drypBfFBLKNyoojpq8hOvL7UrNpx4l/8Uu5xJ4=;
+        b=O1s97siX8gxdps7LuWedzfLcna/qLbPRUNjstlF6QXbl3bT4zHGh5RBOVIaDJ+BPqK
+         o1saa6I7FAKKOjPcagUGA+25sbDgp7c0SEYyzVxQCh/I+MR209BR9EtB8m6mz+Twczhm
+         FYItf2nCmH93Mel2pVbMffMM3oRPBRlm+eLrxVLz1TirAYKgnCeegGp4yor8u1K+gOgb
+         woNOzEueeA8VpEs4iXsrbF8YBSbs8eXI51j2PrtwbQN1vu/ANgvrKDT6uI0GROjVejqM
+         wZ2Oud9xiluDFy3vGHOpSTMm6fzy+p7K0l9QQxYwDDi0UFtwXm4N7jiCIjOfvIJMAoMt
+         og2Q==
+X-Gm-Message-State: AOJu0YwJ633JJm+BtSvfZ6ONith6zkO7BW5htZH6Uf2GKi1wnX5I+uwT
+	Cb0QNDeFgl2VXlNqoEYvqThS/JmDrT5o+I5vPNsUlg==
+X-Google-Smtp-Source: AGHT+IGcyQgxerBUK3Iob3Vhw6M94Mz1zHLi31gRvjH7WhoYInwaNtMI8Sj/4Hbd3xMv93l7L4nCEw==
+X-Received: by 2002:a05:600c:3b13:b0:40d:5b8d:39f5 with SMTP id m19-20020a05600c3b1300b0040d5b8d39f5mr177496wms.39.1703586079231;
+        Tue, 26 Dec 2023 02:21:19 -0800 (PST)
+Received: from localhost (vps-bc70a8f0.vps.ovh.net. [57.128.171.125])
+        by smtp.gmail.com with ESMTPSA id v16-20020a05600c471000b0040c4886f254sm27841848wmo.13.2023.12.26.02.21.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Dec 2023 02:21:18 -0800 (PST)
+Date: Tue, 26 Dec 2023 12:21:14 +0200
+From: Maxim Mikityanskiy <maxtram95@gmail.com>
+To: Grant Grundler <grundler@chromium.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	=?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Hayes Wang <hayeswang@realtek.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Douglas Anderson <dianders@chromium.org>, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH net 2/2] r8152: Switch to using choose_configuration
+Message-ID: <ZYqpGqSgZBV800Or@mail.gmail.com>
+References: <20231223233523.4411-1-maxtram95@gmail.com>
+ <20231223233523.4411-3-maxtram95@gmail.com>
+ <CANEJEGuJFq3Wf8=DxTnrbENi586ccsi7Y+pgQWOSaqzvCp2aZg@mail.gmail.com>
+ <CANEJEGu7j8JZ37=94TETTcK_K69YVOnvYWaQZT5Qr+6y6f20ow@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
- binding
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Bjorn
- Andersson" <bjorn.andersson@linaro.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Johan
- Hovold" <johan@kernel.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, Andy Gross <agross@kernel.org>
-References: <20231222063648.11193-1-quic_kriskura@quicinc.com>
- <20231222063648.11193-2-quic_kriskura@quicinc.com>
- <e6419898-0d77-4286-a04b-7240eb90d8df@linaro.org>
- <268f9f54-8b2a-42bb-9a5d-10bd930cb282@quicinc.com>
- <55c478c7-abcc-4487-b81c-479df47d5666@linaro.org>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <55c478c7-abcc-4487-b81c-479df47d5666@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fJCHyT5XdHpAzkVGSbod1V8F0sxOoLx6
-X-Proofpoint-ORIG-GUID: fJCHyT5XdHpAzkVGSbod1V8F0sxOoLx6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 bulkscore=0 spamscore=0 adultscore=0 phishscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=783 lowpriorityscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312260074
+In-Reply-To: <CANEJEGu7j8JZ37=94TETTcK_K69YVOnvYWaQZT5Qr+6y6f20ow@mail.gmail.com>
 
+On Mon, 25 Dec 2023 at 23:42:08 -0800, Grant Grundler wrote:
+> On Mon, Dec 25, 2023 at 11:18 PM Grant Grundler <grundler@chromium.org> wrote:
+> >
+> > On Sat, Dec 23, 2023 at 3:36 PM Maxim Mikityanskiy <maxtram95@gmail.com> wrote:
+> > >
+> > > With the introduction of r8152-cfgselector, the following regression
+> > > appeared on machines that use usbguard: the netdev appears only when the
+> > > USB device is inserted the first time (before the module is loaded), but
+> > > on the second and next insertions no netdev is registered.
+> > >
+> > > It happens because the device is probed as unauthorized, and usbguard
+> > > gives it an authorization a moment later. If the module is not loaded,
+> > > it's normally loaded slower than the authorization is given, and
+> > > everything works. If the module is already loaded, the cfgselector's
+> > > probe function runs first, but then usb_authorize_device kicks in and
+> > > changes the configuration to something chosen by the standard
+> > > usb_choose_configuration. rtl8152_probe refuses to probe non-vendor
+> > > configurations, and the user ends up without a netdev.
+> > >
+> > > The previous commit added possibility to override
+> > > usb_choose_configuration. Use it to fix the bug and pick the right
+> > > configuration on both probe and authorization.
+> > >
+> > > Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+> > > Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+> >
+> > Maxim,
+> > Does this solve the same problem that Doug Anderson posted patches for
+> > a few weeks ago?
+> >
+> > https://lore.kernel.org/all/20231201183113.343256-1-dianders@chromium.org/
+> >
+> > Those went through the USB tree, so that probably explains why you
+> > didn't see them in the net.git tree.
 
+Oh right, I didn't see these... Sorry for making noise then, Doug's
+patches should solve my problem.
 
-On 12/26/2023 3:03 PM, Krzysztof Kozlowski wrote:
-> On 26/12/2023 06:37, Krishna Kurapati PSSNV wrote:
->>
->>
->> On 12/25/2023 6:35 PM, Krzysztof Kozlowski wrote:
->>> On 22/12/2023 07:36, Krishna Kurapati wrote:
->>>> The high speed related interrupts present on QC targets are as follows:
->>>>
->>>
->>>
->>>>    
->>>>      interrupt-names:
->>>> -    minItems: 1
->>>> -    maxItems: 4
->>>> +    minItems: 2
->>>> +    maxItems: 5
->>>>    
->>>>      qcom,select-utmi-as-pipe-clk:
->>>>        description:
->>>> @@ -361,60 +378,21 @@ allOf:
->>>>            compatible:
->>>>              contains:
->>>>                enum:
->>>> -              - qcom,ipq4019-dwc3
->>>
->>> Why do you remove it, without adding it somewhere else. Nothing in the
->>> commit msg explains it.
->>>
->>
->> Apologies, Will check and add it back.
+> Specifically, usb.git usb-next branch:
+> "r8152: Choose our USB config with choose_configuration() rather than probe()"
+> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/drivers/net/usb/r8152.c?h=usb-next&id=aa4f2b3e418e8673e55145de8b8016a7a9920306
 > 
-> Please check your patch for other entries. I just took first compatible
-> which turns out to be gone. I did not check the reset and I don't want
-> to keep checking.
-> > ...
+> Given this has a fixes tag, and two people have now tracked this down
+> and posted fixes for this problem, is there any chance of this landing
+> in 6.7?
 > 
->>>> -    then:
->>>> -      properties:
->>>> -        interrupts:
->>>> -          minItems: 1
->>>> -          maxItems: 2
->>>> -        interrupt-names:
->>>> -          minItems: 1
->>>> -          items:
->>>> -            - const: hs_phy_irq
->>>> -            - const: ss_phy_irq
->>>> -
->>>> -  - if:
->>>> -      properties:
->>>> -        compatible:
->>>> -          contains:
->>>> -            enum:
->>>> -              - qcom,sc7280-dwc3
->>>> +              - qcom,sm6115-dwc3
->>>> +              - qcom,sm6125-dwc3
->>>>        then:
->>>>          properties:
->>>>            interrupts:
->>>>              minItems: 3
->>>>              maxItems: 4
->>>>            interrupt-names:
->>>> -          minItems: 3
->>>>              items:
->>>> +            - const: pwr_event
->>>>                - const: hs_phy_irq
->>>> -            - const: dp_hs_phy_irq
->>>> -            - const: dm_hs_phy_irq
->>>> +            - const: qusb2_phy
->>>
->>> Why qusb2_phy is after hs_phy_irq? In the earlier if:then: it is the
->>> second one.
->>>
->>
->> In v3 as well, the hs_phy_irq is before qusb2_phy interrupt:
->> https://lore.kernel.org/all/20231211121124.4194-2-quic_kriskura@quicinc.com/
-> 
-> ? How v3 matters?
-> 
->>
->>>
->>>>                - const: ss_phy_irq
->>>>    
->>>>      - if:
->>>> @@ -460,11 +422,13 @@ allOf:
->>>>            compatible:
->>>>              contains:
->>>>                enum:
->>>> +              - qcom,ipq5332-dwc3
->>>>                  - qcom,sc8280xp-dwc3
->>>>                  - qcom,x1e80100-dwc3
->>>>        then:
->>>>          properties:
->>>>            interrupts:
->>>> +          minItems: 3
->>>
->>> Hm, why? This commit is unmanageable. Your commit msg is already huge
->>> but still does not explain this. Are you sure you are fixing only one
->>> logical thing per patch? Does not look like.
->>>
->>
->> This is reordering the targets based on interrupts they have. I put it
->> in one commit because splitting this into multiple patches breaks one
->> thing or other. Also once I am defining permutations, I have to group
->> targets into these combinations in the same patch. I know this is a big
->> commit but it solves the interrupt cleanup and defines a way for future
->> targets.
-> 
-> 
-> This does not answer why, you sc8280xp and x1e80100 not get one optional
-> interrupt. I asked "why" you are doing this change. Why do you need it?
-> What is the rationale?
-> 
-> Then I grunted about unmanageable commit, because all my troubles to
-> review it are the effect of it: it is very difficult to read. It is also
-> difficult for you, because you keep making here mistakes. So if you
-> cannot write this commit properly and I cannot review it, then it is way
-> over-complicated, don't you think? But this is still second problem
-> here, don't ignore the fist - "why?"
+> And it looks like Maxim's change could be rebased on top of Doug's
+> patch and clean up a few more things. Do I see that correctly?
 
-HI Krzysztof,
+I only see some minor difference in error handling, not sure it's worth
+chasing for.
 
-  Thanks for the review.
-  To answer the question,
-
-"why ?" : The interrupts have been mis-interpreted on many platforms or 
-many interrupts are missing.
-
-Now, if I am adding the missing interrupts, I need to segregate targets 
-also into respective buckets in the same patch and that is what making 
-this patch a little complicated. Is it possible / acceptable to split 
-this into two patches if this is the case. Can you help with suggestions 
-from your end ? Or may be I am understanding your question wrong ? 😅
-
-Regards,
-Krishna,
+> cheers,
+> grant
+> 
+> >
+> > cheers,
+> > grant
+> >
+> > > ---
+> > >  drivers/net/usb/r8152.c | 18 +++++++++---------
+> > >  1 file changed, 9 insertions(+), 9 deletions(-)
+> > >
+> > > diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+> > > index 9bf2140fd0a1..f0ac31a94f3c 100644
+> > > --- a/drivers/net/usb/r8152.c
+> > > +++ b/drivers/net/usb/r8152.c
+> > > @@ -10070,6 +10070,11 @@ static struct usb_driver rtl8152_driver = {
+> > >  };
+> > >
+> > >  static int rtl8152_cfgselector_probe(struct usb_device *udev)
+> > > +{
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +static int rtl8152_cfgselector_choose_configuration(struct usb_device *udev)
+> > >  {
+> > >         struct usb_host_config *c;
+> > >         int i, num_configs;
+> > > @@ -10078,7 +10083,7 @@ static int rtl8152_cfgselector_probe(struct usb_device *udev)
+> > >          * driver supports it.
+> > >          */
+> > >         if (__rtl_get_hw_ver(udev) == RTL_VER_UNKNOWN)
+> > > -               return 0;
+> > > +               return -EOPNOTSUPP;
+> > >
+> > >         /* The vendor mode is not always config #1, so to find it out. */
+> > >         c = udev->config;
+> > > @@ -10094,20 +10099,15 @@ static int rtl8152_cfgselector_probe(struct usb_device *udev)
+> > >         }
+> > >
+> > >         if (i == num_configs)
+> > > -               return -ENODEV;
+> > > -
+> > > -       if (usb_set_configuration(udev, c->desc.bConfigurationValue)) {
+> > > -               dev_err(&udev->dev, "Failed to set configuration %d\n",
+> > > -                       c->desc.bConfigurationValue);
+> > > -               return -ENODEV;
+> > > -       }
+> > > +               return -EOPNOTSUPP;
+> > >
+> > > -       return 0;
+> > > +       return c->desc.bConfigurationValue;
+> > >  }
+> > >
+> > >  static struct usb_device_driver rtl8152_cfgselector_driver = {
+> > >         .name =         MODULENAME "-cfgselector",
+> > >         .probe =        rtl8152_cfgselector_probe,
+> > > +       .choose_configuration = rtl8152_cfgselector_choose_configuration,
+> > >         .id_table =     rtl8152_table,
+> > >         .generic_subclass = 1,
+> > >         .supports_autosuspend = 1,
+> > > --
+> > > 2.43.0
+> > >
 
