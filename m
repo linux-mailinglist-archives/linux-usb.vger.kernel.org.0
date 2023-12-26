@@ -1,273 +1,171 @@
-Return-Path: <linux-usb+bounces-4570-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4571-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E2F381E510
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Dec 2023 06:38:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C19681E593
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Dec 2023 08:19:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89193B21C4D
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Dec 2023 05:38:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 184501F225CC
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Dec 2023 07:19:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC8684B5AF;
-	Tue, 26 Dec 2023 05:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5B524C601;
+	Tue, 26 Dec 2023 07:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pru6ZLVa"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="a+et5cdg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBDDE4B12B;
-	Tue, 26 Dec 2023 05:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BQ52MXB007526;
-	Tue, 26 Dec 2023 05:37:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=NKISodyv7L5WQ1e9xudYOVUIOYOCl7Cp0/KhkGuHHS8=; b=pr
-	u6ZLVavTzmKyaV3kyujmzSWFe8SBjP1OtEJ6YEljZ9QgMg/aGxrjc7sdf6jHq1kB
-	FdfO8wiEQTvDgqofsqh+wuO0AFCPBN/JF6N9Dn9HCzqCbD/KppwebVhozdRFbvF0
-	FALo2O6Nca3uZHWbeD4TFADqcHnhlx3ruCHUC5ipSzsxWArj5oxyXljuMBOReNI4
-	Qu3H14hYNBKCyagPQLsUmJ55gdM1n6onvTW36Pb4SteQz6gbrKnltyoKYSwoGtLe
-	8oIH0rZqoWPuglRpLNXLFz/wgAS3EhGvkcZL32xij9XVM9xe4+F+QWqEqyr5sLSU
-	HkU+9TW8iHUNUu9h1tgw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v7baq956r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Dec 2023 05:37:41 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BQ5beH9026647
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Dec 2023 05:37:40 GMT
-Received: from [10.216.59.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 25 Dec
- 2023 21:37:35 -0800
-Message-ID: <268f9f54-8b2a-42bb-9a5d-10bd930cb282@quicinc.com>
-Date: Tue, 26 Dec 2023 11:07:31 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31F64C3D0
+	for <linux-usb@vger.kernel.org>; Tue, 26 Dec 2023 07:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1d3ea8d0f9dso359965ad.1
+        for <linux-usb@vger.kernel.org>; Mon, 25 Dec 2023 23:19:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1703575141; x=1704179941; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+BqKiCCJczZL+gxOw2NyidScj0rEfopbjoqalm0LO44=;
+        b=a+et5cdgz5ns37+lhlu3LCAPs8YWHRwreXOUFB22oQNK5uz/5AipNJi/cgTmXzSIKO
+         PTlZ/L6uc1jNDnoZrj3WQ3+7GQs57BTq5sNOB5wkIn3L7fgRdbm3Wz3n+K2vWDwunbUW
+         UZhKFup0sedaNaLZV01VCLaCShPLBih4epF4g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703575141; x=1704179941;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+BqKiCCJczZL+gxOw2NyidScj0rEfopbjoqalm0LO44=;
+        b=VCrB7CLyUj9szSdRpjdK1C0n9pHKfARzx/s9vNQP/maFVSOYh6kni54dg4wsZ5r6y8
+         BmlBH8/4/06ss3JN9ORg4M0zJtp1PBULdoZeZOQrID8dFHByBmmZAhSYsZDaEoLKluhH
+         YSi8tiU3+Kb+qK33tAqfvcciKUr9Lw5RT3O80T+CrHO3jB0zueJFVQDCz8GBrqE4sSNw
+         MWqROcElBX/mpk0IJDSPqBqBqcjNMyn4hOikHZnsg3x5fwWcXjxP+BW1yFh1/jt8GkdD
+         kLadwek9kQdTevmMGS8LRTIvQhtN6/LEY20VS4cSrtX3y9Lj5O4S4QRrHfgUGWjNHA5O
+         H6nw==
+X-Gm-Message-State: AOJu0Yz/Rpm1TUK15xNM/roG8WC+rwnusfvP412R0/p1HuDUJY5lp/pp
+	WBIuoi1E0P5Zbt7MLIFYMBpCRxJMIgZub3JXVbi5lBP10wbA
+X-Google-Smtp-Source: AGHT+IEu6NYYayr8UOC7asMhepBxKP/v5uIw5Yh2GV/X6zM/MGAD8x8GF6xuO9qNcPQ/gjH1RHLOZGUE0p4m7IlRkqQ=
+X-Received: by 2002:a17:902:e5cb:b0:1d3:ce75:a696 with SMTP id
+ u11-20020a170902e5cb00b001d3ce75a696mr352298plf.5.1703575140625; Mon, 25 Dec
+ 2023 23:19:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
- binding
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Bjorn
- Andersson" <bjorn.andersson@linaro.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Johan
- Hovold" <johan@kernel.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, Andy Gross <agross@kernel.org>
-References: <20231222063648.11193-1-quic_kriskura@quicinc.com>
- <20231222063648.11193-2-quic_kriskura@quicinc.com>
- <e6419898-0d77-4286-a04b-7240eb90d8df@linaro.org>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <e6419898-0d77-4286-a04b-7240eb90d8df@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Prfdge6fS4ZNsx5Sg5ZKn9v0bAu56B6q
-X-Proofpoint-GUID: Prfdge6fS4ZNsx5Sg5ZKn9v0bAu56B6q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 adultscore=0 lowpriorityscore=0 mlxscore=0 phishscore=0
- suspectscore=0 bulkscore=0 impostorscore=0 mlxlogscore=511 spamscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312260040
+References: <20231223233523.4411-1-maxtram95@gmail.com> <20231223233523.4411-3-maxtram95@gmail.com>
+In-Reply-To: <20231223233523.4411-3-maxtram95@gmail.com>
+From: Grant Grundler <grundler@chromium.org>
+Date: Mon, 25 Dec 2023 23:18:48 -0800
+Message-ID: <CANEJEGuJFq3Wf8=DxTnrbENi586ccsi7Y+pgQWOSaqzvCp2aZg@mail.gmail.com>
+Subject: Re: [PATCH net 2/2] r8152: Switch to using choose_configuration
+To: Maxim Mikityanskiy <maxtram95@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hayes Wang <hayeswang@realtek.com>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Douglas Anderson <dianders@chromium.org>, Grant Grundler <grundler@chromium.org>, linux-usb@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Sat, Dec 23, 2023 at 3:36=E2=80=AFPM Maxim Mikityanskiy <maxtram95@gmail=
+.com> wrote:
+>
+> With the introduction of r8152-cfgselector, the following regression
+> appeared on machines that use usbguard: the netdev appears only when the
+> USB device is inserted the first time (before the module is loaded), but
+> on the second and next insertions no netdev is registered.
+>
+> It happens because the device is probed as unauthorized, and usbguard
+> gives it an authorization a moment later. If the module is not loaded,
+> it's normally loaded slower than the authorization is given, and
+> everything works. If the module is already loaded, the cfgselector's
+> probe function runs first, but then usb_authorize_device kicks in and
+> changes the configuration to something chosen by the standard
+> usb_choose_configuration. rtl8152_probe refuses to probe non-vendor
+> configurations, and the user ends up without a netdev.
+>
+> The previous commit added possibility to override
+> usb_choose_configuration. Use it to fix the bug and pick the right
+> configuration on both probe and authorization.
+>
+> Fixes: ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
 
+Maxim,
+Does this solve the same problem that Doug Anderson posted patches for
+a few weeks ago?
 
-On 12/25/2023 6:35 PM, Krzysztof Kozlowski wrote:
-> On 22/12/2023 07:36, Krishna Kurapati wrote:
->> The high speed related interrupts present on QC targets are as follows:
->>
-> 
-> 
->>   
->>     interrupt-names:
->> -    minItems: 1
->> -    maxItems: 4
->> +    minItems: 2
->> +    maxItems: 5
->>   
->>     qcom,select-utmi-as-pipe-clk:
->>       description:
->> @@ -361,60 +378,21 @@ allOf:
->>           compatible:
->>             contains:
->>               enum:
->> -              - qcom,ipq4019-dwc3
-> 
-> Why do you remove it, without adding it somewhere else. Nothing in the
-> commit msg explains it.
-> 
+https://lore.kernel.org/all/20231201183113.343256-1-dianders@chromium.org/
 
-Apologies, Will check and add it back.
+Those went through the USB tree, so that probably explains why you
+didn't see them in the net.git tree.
 
->> +              - qcom,ipq5018-dwc3
->>                 - qcom,ipq6018-dwc3
->> -              - qcom,ipq8064-dwc3
->>                 - qcom,ipq8074-dwc3
->> -              - qcom,msm8994-dwc3
->> -              - qcom,qcs404-dwc3
->> -              - qcom,sc7180-dwc3
->> -              - qcom,sdm670-dwc3
->> -              - qcom,sdm845-dwc3
->> -              - qcom,sdx55-dwc3
->> -              - qcom,sdx65-dwc3
->> -              - qcom,sdx75-dwc3
->> -              - qcom,sm4250-dwc3
->> -              - qcom,sm6350-dwc3
->> -              - qcom,sm8150-dwc3
->> -              - qcom,sm8250-dwc3
->> -              - qcom,sm8350-dwc3
->> -              - qcom,sm8450-dwc3
->> -              - qcom,sm8550-dwc3
->> -              - qcom,sm8650-dwc3
->> -    then:
->> -      properties:
->> -        interrupts:
->> -          items:
->> -            - description: The interrupt that is asserted
->> -                when a wakeup event is received on USB2 bus.
->> -            - description: The interrupt that is asserted
->> -                when a wakeup event is received on USB3 bus.
->> -            - description: Wakeup event on DM line.
->> -            - description: Wakeup event on DP line.
->> -        interrupt-names:
->> -          items:
->> -            - const: hs_phy_irq
->> -            - const: ss_phy_irq
->> -            - const: dm_hs_phy_irq
->> -            - const: dp_hs_phy_irq
->> -
->> -  - if:
->> -      properties:
->> -        compatible:
->> -          contains:
->> -            enum:
->>                 - qcom,msm8953-dwc3
->> -              - qcom,msm8996-dwc3
->>                 - qcom,msm8998-dwc3
->> -              - qcom,sm6115-dwc3
->> -              - qcom,sm6125-dwc3
->> +              - qcom,qcm2290-dwc3
->>       then:
->>         properties:
->>           interrupts:
->> -          maxItems: 2
->> +          minItems: 2
->> +          maxItems: 3
->>           interrupt-names:
->>             items:
->> -            - const: hs_phy_irq
->> +            - const: pwr_event
->> +            - const: qusb2_phy
->>               - const: ss_phy_irq
->>   
->>     - if:
->> @@ -422,37 +400,21 @@ allOf:
->>           compatible:
->>             contains:
->>               enum:
->> -              - qcom,ipq5018-dwc3
->> -              - qcom,ipq5332-dwc3
->> +              - qcom,msm8996-dwc3
->> +              - qcom,qcs404-dwc3
->>                 - qcom,sdm660-dwc3
->> -    then:
->> -      properties:
->> -        interrupts:
->> -          minItems: 1
->> -          maxItems: 2
->> -        interrupt-names:
->> -          minItems: 1
->> -          items:
->> -            - const: hs_phy_irq
->> -            - const: ss_phy_irq
->> -
->> -  - if:
->> -      properties:
->> -        compatible:
->> -          contains:
->> -            enum:
->> -              - qcom,sc7280-dwc3
->> +              - qcom,sm6115-dwc3
->> +              - qcom,sm6125-dwc3
->>       then:
->>         properties:
->>           interrupts:
->>             minItems: 3
->>             maxItems: 4
->>           interrupt-names:
->> -          minItems: 3
->>             items:
->> +            - const: pwr_event
->>               - const: hs_phy_irq
->> -            - const: dp_hs_phy_irq
->> -            - const: dm_hs_phy_irq
->> +            - const: qusb2_phy
-> 
-> Why qusb2_phy is after hs_phy_irq? In the earlier if:then: it is the
-> second one.
-> 
+cheers,
+grant
 
-In v3 as well, the hs_phy_irq is before qusb2_phy interrupt:
-https://lore.kernel.org/all/20231211121124.4194-2-quic_kriskura@quicinc.com/
-
-> 
->>               - const: ss_phy_irq
->>   
->>     - if:
->> @@ -460,11 +422,13 @@ allOf:
->>           compatible:
->>             contains:
->>               enum:
->> +              - qcom,ipq5332-dwc3
->>                 - qcom,sc8280xp-dwc3
->>                 - qcom,x1e80100-dwc3
->>       then:
->>         properties:
->>           interrupts:
->> +          minItems: 3
-> 
-> Hm, why? This commit is unmanageable. Your commit msg is already huge
-> but still does not explain this. Are you sure you are fixing only one
-> logical thing per patch? Does not look like.
-> 
-
-This is reordering the targets based on interrupts they have. I put it 
-in one commit because splitting this into multiple patches breaks one 
-thing or other. Also once I am defining permutations, I have to group 
-targets into these combinations in the same patch. I know this is a big 
-commit but it solves the interrupt cleanup and defines a way for future 
-targets.
-
-Regards,
-Krishna,
+> ---
+>  drivers/net/usb/r8152.c | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+> index 9bf2140fd0a1..f0ac31a94f3c 100644
+> --- a/drivers/net/usb/r8152.c
+> +++ b/drivers/net/usb/r8152.c
+> @@ -10070,6 +10070,11 @@ static struct usb_driver rtl8152_driver =3D {
+>  };
+>
+>  static int rtl8152_cfgselector_probe(struct usb_device *udev)
+> +{
+> +       return 0;
+> +}
+> +
+> +static int rtl8152_cfgselector_choose_configuration(struct usb_device *u=
+dev)
+>  {
+>         struct usb_host_config *c;
+>         int i, num_configs;
+> @@ -10078,7 +10083,7 @@ static int rtl8152_cfgselector_probe(struct usb_d=
+evice *udev)
+>          * driver supports it.
+>          */
+>         if (__rtl_get_hw_ver(udev) =3D=3D RTL_VER_UNKNOWN)
+> -               return 0;
+> +               return -EOPNOTSUPP;
+>
+>         /* The vendor mode is not always config #1, so to find it out. */
+>         c =3D udev->config;
+> @@ -10094,20 +10099,15 @@ static int rtl8152_cfgselector_probe(struct usb=
+_device *udev)
+>         }
+>
+>         if (i =3D=3D num_configs)
+> -               return -ENODEV;
+> -
+> -       if (usb_set_configuration(udev, c->desc.bConfigurationValue)) {
+> -               dev_err(&udev->dev, "Failed to set configuration %d\n",
+> -                       c->desc.bConfigurationValue);
+> -               return -ENODEV;
+> -       }
+> +               return -EOPNOTSUPP;
+>
+> -       return 0;
+> +       return c->desc.bConfigurationValue;
+>  }
+>
+>  static struct usb_device_driver rtl8152_cfgselector_driver =3D {
+>         .name =3D         MODULENAME "-cfgselector",
+>         .probe =3D        rtl8152_cfgselector_probe,
+> +       .choose_configuration =3D rtl8152_cfgselector_choose_configuratio=
+n,
+>         .id_table =3D     rtl8152_table,
+>         .generic_subclass =3D 1,
+>         .supports_autosuspend =3D 1,
+> --
+> 2.43.0
+>
 
