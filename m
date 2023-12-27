@@ -1,204 +1,168 @@
-Return-Path: <linux-usb+bounces-4593-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4595-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E5F381EDBD
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Dec 2023 10:22:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 037BD81EEF1
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Dec 2023 13:39:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 737591C223E2
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Dec 2023 09:22:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B371C28395F
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Dec 2023 12:39:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390BD2D059;
-	Wed, 27 Dec 2023 09:20:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5266945026;
+	Wed, 27 Dec 2023 12:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ky90w3Kf"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="r7pQchoj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D1329411;
-	Wed, 27 Dec 2023 09:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BR8orX3010913;
-	Wed, 27 Dec 2023 09:20:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	qcppdkim1; bh=jw1H3w9UWrmJKj+AOPeHOzT8J2H7y3MhUCmyo8DCgkw=; b=ky
-	90w3KfSbSqsXk02PpuU22mcF3DfcjjLkaQNJ/QPdFvizEyE07/KmIWHHvBu0zq06
-	lLZBV6R6ibME9VVUjIGjbEiFvOmhUZ5LmBbelQqeiSg3HIGFtN4CHFLFKZmA0TSD
-	YpKhcDo9+OxtECHy6t0vUFaxNhq6kNqBYsuZHZGE6awVPrL+7D5YZ0m47xUK6Pxx
-	FpbSo8NbZs9SILDyYfOOh4mnGlIwJiNPw2Qt9v5G9LYJUrn1Qc7R3Dh9SQO8Ej8f
-	bc6BcRJrQ7MJ5FO1VSTp/L8qDdJlrVy4iNoNUfzp1VET4z3FOe8FEpAMrxQBi/iv
-	PdGOLZJeIKgBpxLnADLA==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v8grt01hn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Dec 2023 09:20:25 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BR9KOwC017107
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Dec 2023 09:20:24 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Wed, 27 Dec 2023 01:20:19 -0800
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, "Andy
- Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Thinh
- Nguyen" <Thinh.Nguyen@synopsys.com>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Conor
- Dooley <conor+dt@kernel.org>, Johan Hovold <johan@kernel.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>
-Subject: [PATCH v6 2/2] usb: dwc3: qcom: Rename hs_phy_irq to qusb2_phy_irq
-Date: Wed, 27 Dec 2023 14:49:51 +0530
-Message-ID: <20231227091951.685-3-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231227091951.685-1-quic_kriskura@quicinc.com>
-References: <20231227091951.685-1-quic_kriskura@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBEF44C84;
+	Wed, 27 Dec 2023 12:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1703680732;
+	bh=ENMqB+GT1yQvxRmlz3ucoCgKOSrPmqH+OYpt0j0UxRs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=r7pQchoju1ee2cF4Rzet87ddM5lLfb2Cirtd1jT/A1vDs3qeg0+vqTziKHdFhHBiu
+	 fbivtrS+zIi3LNmw3rvJONlwXXj/DM2SMmsIUvYzCRYUuX6Y6Z7qy6u8FTTXbdGIzr
+	 vPkX2RI5rzu2PTf5RjB/UA5FYVFXKifZF8mJVmjThZpuYG083Jj/9bhQbIKMoJXHGI
+	 IvKirkUbQIqUFu6qxt9820xuO9MDP8n2P0akC1ZjGH+RN+NI6QGxte50kR6zFvQIuI
+	 Tk6cKGroY+/S3bTFR0Jul+l9y9cTTFWdSd7of352yUYC7maKmrT5EjKWe0K7jpfi6G
+	 RZ6G+CUl4MIMA==
+Received: from localhost.localdomain (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 93CB537813EA;
+	Wed, 27 Dec 2023 12:38:46 +0000 (UTC)
+From: =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bjorn Helgaas <bhelgaas@google.com>
+Cc: kernelci@lists.linux.dev,
+	kernel@collabora.com,
+	Tim Bird <Tim.Bird@sony.com>,
+	linux-pci@vger.kernel.org,
+	David Gow <davidgow@google.com>,
+	linux-kselftest@vger.kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Doug Anderson <dianders@chromium.org>,
+	linux-usb@vger.kernel.org,
+	Saravana Kannan <saravanak@google.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	devicetree@vger.kernel.org,
+	=?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v3 0/3] Add test to verify probe of devices from discoverable busses
+Date: Wed, 27 Dec 2023 09:34:59 -0300
+Message-ID: <20231227123643.52348-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Ml5kKwIcZFrp69ERBSk6M0dH9ggqT7u-
-X-Proofpoint-ORIG-GUID: Ml5kKwIcZFrp69ERBSk6M0dH9ggqT7u-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- phishscore=0 suspectscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=747 mlxscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312270067
 
-For wakeup to work, driver needs to enable interrupts that depict what is
-happening on the DP/DM lines. On QUSB targets, this is identified by
-qusb2_phy whereas on SoCs using Femto PHY, separate {dp,dm}_hs_phy_irq's
-are used instead.
 
-The implementation incorrectly names qusb2_phy interrupts as "hs_phy_irq".
-Clean this up so that driver would be using only qusb2/(dp & dm) for wakeup
-purposes.
+Hi,
 
-For devices running older kernels, this won't break any functionality
-because the interrupt configurations in QUSB2 PHY based SoCs is done
-by configuring QUSB2PHY_INTR_CTRL register in PHY address space and it was
-never armed properly right from the start.
+for this v3 I changed the approach for identifying devices in a stable
+way from the match fields back to the hardware topology (used in v1).
+The match fields were proposed as a way to avoid the possible issue of
+PCI topology being reconfigured, but that wasn't observed on any real
+system so far. However using match fields does allow for a real issue if
+an external device similar to an internal one is connected to the
+system, which results in a change of the match count and therefore a
+test failure. So using the HW topology was chosen as the most reliable
+approach.
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- drivers/usb/dwc3/dwc3-qcom.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+The per-platform device description file now uses YAML following a
+suggestion from Chris Obbard, and the test script was re-written in
+python to handle the new YAML format.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index fdf6d5d3c2ad..dbd6a5b2b289 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -57,7 +57,7 @@ struct dwc3_acpi_pdata {
- 	u32			qscratch_base_offset;
- 	u32			qscratch_base_size;
- 	u32			dwc3_core_base_size;
--	int			hs_phy_irq_index;
-+	int			qusb2_phy_irq_index;
- 	int			dp_hs_phy_irq_index;
- 	int			dm_hs_phy_irq_index;
- 	int			ss_phy_irq_index;
-@@ -73,7 +73,7 @@ struct dwc3_qcom {
- 	int			num_clocks;
- 	struct reset_control	*resets;
- 
--	int			hs_phy_irq;
-+	int			qusb2_phy_irq;
- 	int			dp_hs_phy_irq;
- 	int			dm_hs_phy_irq;
- 	int			ss_phy_irq;
-@@ -372,7 +372,7 @@ static void dwc3_qcom_disable_wakeup_irq(int irq)
- 
- static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
- {
--	dwc3_qcom_disable_wakeup_irq(qcom->hs_phy_irq);
-+	dwc3_qcom_disable_wakeup_irq(qcom->qusb2_phy_irq);
- 
- 	if (qcom->usb2_speed == USB_SPEED_LOW) {
- 		dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
-@@ -389,7 +389,7 @@ static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
- 
- static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
- {
--	dwc3_qcom_enable_wakeup_irq(qcom->hs_phy_irq, 0);
-+	dwc3_qcom_enable_wakeup_irq(qcom->qusb2_phy_irq, 0);
- 
- 	/*
- 	 * Configure DP/DM line interrupts based on the USB2 device attached to
-@@ -542,19 +542,19 @@ static int dwc3_qcom_setup_irq(struct platform_device *pdev)
- 	int irq;
- 	int ret;
- 
--	irq = dwc3_qcom_get_irq(pdev, "hs_phy_irq",
--				pdata ? pdata->hs_phy_irq_index : -1);
-+	irq = dwc3_qcom_get_irq(pdev, "qusb2_phy",
-+				pdata ? pdata->qusb2_phy_irq_index : -1);
- 	if (irq > 0) {
- 		/* Keep wakeup interrupts disabled until suspend */
- 		ret = devm_request_threaded_irq(qcom->dev, irq, NULL,
- 					qcom_dwc3_resume_irq,
- 					IRQF_ONESHOT | IRQF_NO_AUTOEN,
--					"qcom_dwc3 HS", qcom);
-+					"qcom_dwc3 QUSB2", qcom);
- 		if (ret) {
--			dev_err(qcom->dev, "hs_phy_irq failed: %d\n", ret);
-+			dev_err(qcom->dev, "qusb2_phy_irq failed: %d\n", ret);
- 			return ret;
- 		}
--		qcom->hs_phy_irq = irq;
-+		qcom->qusb2_phy_irq = irq;
- 	}
- 
- 	irq = dwc3_qcom_get_irq(pdev, "dp_hs_phy_irq",
-@@ -1058,7 +1058,7 @@ static const struct dwc3_acpi_pdata sdm845_acpi_pdata = {
- 	.qscratch_base_offset = SDM845_QSCRATCH_BASE_OFFSET,
- 	.qscratch_base_size = SDM845_QSCRATCH_SIZE,
- 	.dwc3_core_base_size = SDM845_DWC3_CORE_SIZE,
--	.hs_phy_irq_index = 1,
-+	.qusb2_phy_irq_index = 1,
- 	.dp_hs_phy_irq_index = 4,
- 	.dm_hs_phy_irq_index = 3,
- 	.ss_phy_irq_index = 2
-@@ -1068,7 +1068,7 @@ static const struct dwc3_acpi_pdata sdm845_acpi_urs_pdata = {
- 	.qscratch_base_offset = SDM845_QSCRATCH_BASE_OFFSET,
- 	.qscratch_base_size = SDM845_QSCRATCH_SIZE,
- 	.dwc3_core_base_size = SDM845_DWC3_CORE_SIZE,
--	.hs_phy_irq_index = 1,
-+	.qusb2_phy_irq_index = 1,
- 	.dp_hs_phy_irq_index = 4,
- 	.dm_hs_phy_irq_index = 3,
- 	.ss_phy_irq_index = 2,
+A second sample board file is also now included for an x86 platform,
+which contains an USB controller behind a PCI controller, which wasn't
+possible to describe in v1.
+
+Thanks,
+Nícolas
+
+v2: https://lore.kernel.org/all/20231127233558.868365-1-nfraprado@collabora.com
+v1: https://lore.kernel.org/all/20231024211818.365844-1-nfraprado@collabora.com
+
+Original cover letter:
+
+This is part of an effort to improve detection of regressions impacting
+device probe on all platforms. The recently merged DT kselftest [3]
+detects probe issues for all devices described statically in the DT.
+That leaves out devices discovered at run-time from discoverable busses.
+
+This is where this test comes in. All of the devices that are connected
+through discoverable busses (ie USB and PCI), and which are internal and
+therefore always present, can be described in a per-platform file so
+they can be checked for. The test will check that the device has been
+instantiated and bound to a driver.
+
+Patch 1 introduces the test. Patch 2 and 3 add the device definitions
+for the google,spherion machine (Acer Chromebook 514) and XPS 13 as
+examples.
+
+This is the output from the test running on Spherion:
+
+TAP version 13
+Using board file: boards/google,spherion.yaml
+1..8
+ok 1 /usb2-controller@11200000/1.4.1/camera.device
+ok 2 /usb2-controller@11200000/1.4.1/camera.0.driver
+ok 3 /usb2-controller@11200000/1.4.1/camera.1.driver
+ok 4 /usb2-controller@11200000/1.4.2/bluetooth.device
+ok 5 /usb2-controller@11200000/1.4.2/bluetooth.0.driver
+ok 6 /usb2-controller@11200000/1.4.2/bluetooth.1.driver
+ok 7 /pci-controller@11230000/0.0/0.0/wifi.device
+ok 8 /pci-controller@11230000/0.0/0.0/wifi.driver
+Totals: pass:8 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+[3] https://lore.kernel.org/all/20230828211424.2964562-1-nfraprado@collabora.com/
+
+Changes in v3:
+- Reverted approach of encoding stable device reference in test file
+from device match fields (from modalias) back to HW topology (from v1)
+- Changed board file description to YAML
+- Rewrote test script in python to handle YAML and support x86 platforms
+
+Changes in v2:
+- Changed approach of encoding stable device reference in test file from
+HW topology to device match fields (the ones from modalias)
+- Better documented test format
+
+Nícolas F. R. A. Prado (3):
+  kselftest: Add test to verify probe of devices from discoverable
+    busses
+  kselftest: devices: Add sample board file for google,spherion
+  kselftest: devices: Add sample board file for XPS 13 9300
+
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/devices/Makefile      |   4 +
+ .../devices/boards/Dell Inc.,XPS 13 9300.yaml |  40 +++
+ .../devices/boards/google,spherion.yaml       |  50 +++
+ tools/testing/selftests/devices/ksft.py       |  90 +++++
+ .../devices/test_discoverable_devices.py      | 318 ++++++++++++++++++
+ 6 files changed, 503 insertions(+)
+ create mode 100644 tools/testing/selftests/devices/Makefile
+ create mode 100644 tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml
+ create mode 100644 tools/testing/selftests/devices/boards/google,spherion.yaml
+ create mode 100644 tools/testing/selftests/devices/ksft.py
+ create mode 100755 tools/testing/selftests/devices/test_discoverable_devices.py
+
 -- 
-2.42.0
+2.43.0
 
 
