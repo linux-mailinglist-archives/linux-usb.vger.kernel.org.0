@@ -1,171 +1,132 @@
-Return-Path: <linux-usb+bounces-4587-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4589-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8489681EB82
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Dec 2023 03:18:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0151A81EC64
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Dec 2023 07:03:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F4CA283357
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Dec 2023 02:18:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C653C1C22259
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Dec 2023 06:03:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0639823D7;
-	Wed, 27 Dec 2023 02:18:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D43F525A;
+	Wed, 27 Dec 2023 06:03:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="oLRreVyP"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="NcxIVVNS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D52210F;
-	Wed, 27 Dec 2023 02:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BR2GhNc014632;
-	Wed, 27 Dec 2023 02:18:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=9/HQZGbtop8fnbO6JTfa5TBQcnEZlTaVzl4vyS/b3NM=; b=oL
-	RreVyPEXewp0FfHLtQhJTS3XmbFiPc/8OJX/7WXFT6d7f0ed8UHOQctQXtnadZ12
-	CrhuHMUAVIGJqc2++AuriOx+v7gMNbLXAf6E1UQgdWNKLP8NJVQ9+juVsyB6Wfj1
-	uKPmMsGAXax1HiXWMG1M8vkJwLwUWDsXQWh0amtUh4PRRfXMcYgawvOxtFli6l2B
-	pnhDV/B2D4MIKl3TshsQ+FilZIOYRqnv6B+hOd426d2YFZ0pU5BoVDFqVO6sKMHJ
-	yLY3y60a8pZ4cCwGbCHiXBhqgIMOZIyGfCD45CqcG/7zAbUxoIgGz7CPQJDYSiAQ
-	yuUds9JpgBsATLxzVgig==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v7c9jk6qu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Dec 2023 02:18:25 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BR2IOhe001070
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Dec 2023 02:18:24 GMT
-Received: from [10.216.28.88] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 26 Dec
- 2023 18:18:18 -0800
-Message-ID: <a2108be4-5f35-4625-9c80-e7d6db978bab@quicinc.com>
-Date: Wed, 27 Dec 2023 07:48:14 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC02363AA;
+	Wed, 27 Dec 2023 06:03:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: a24991aca47d11ee9e680517dc993faa-20231227
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=NGljdjksTJl7cSSu9XYy7FO8kYtRZge6sNRdb6feXL4=;
+	b=NcxIVVNS0IdJpB5IsuQktbnvfJasN0mYmtFKHPu1rBiCeDvV3SiZytfUSH5h1xgy9sEI/DdeJPzUSwFLoqeYDjmGLqSiV383PR+fR6aXS6HSJEANYRpZIGDXQsCdGu7Z1ZH+3EU7/i3F4f3o/kLEht5lz+X2d0SIUsg1WelQyIg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.35,REQID:59444eab-01a9-4c50-a5d2-b27ae2a07c76,IP:0,U
+	RL:0,TC:0,Content:0,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-30
+X-CID-META: VersionHash:5d391d7,CLOUDID:e2489d8d-e2c0-40b0-a8fe-7c7e47299109,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
+	L:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:N
+	O,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: a24991aca47d11ee9e680517dc993faa-20231227
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+	(envelope-from <chunfeng.yun@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 171561098; Wed, 27 Dec 2023 14:03:19 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 27 Dec 2023 14:03:17 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 27 Dec 2023 14:03:17 +0800
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
+	<robh+dt@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: Chunfeng Yun <chunfeng.yun@mediatek.com>, Conor Dooley
+	<conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, "Mathias
+ Nyman" <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Eddie Hung
+	<eddie.hung@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>
+Subject: [PATCH v4 1/3] dt-bindings: usb: mtk-xhci: add a property for Gen1 isoc-in transfer issue
+Date: Wed, 27 Dec 2023 14:03:14 +0800
+Message-ID: <20231227060316.8539-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] dt-bindings: usb: dwc3: Clean up hs_phy_irq in
- binding
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>,
-        Johan Hovold <johan@kernel.org>,
-        Bjorn Andersson
-	<quic_bjorande@quicinc.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, Andy Gross <agross@kernel.org>
-References: <20231222063648.11193-1-quic_kriskura@quicinc.com>
- <20231222063648.11193-2-quic_kriskura@quicinc.com>
- <e6419898-0d77-4286-a04b-7240eb90d8df@linaro.org>
- <268f9f54-8b2a-42bb-9a5d-10bd930cb282@quicinc.com>
- <55c478c7-abcc-4487-b81c-479df47d5666@linaro.org>
- <67c7c84c-c631-468e-ae67-1c31d41a605b@quicinc.com>
- <efdf2923-4669-409f-b5c4-d5b95009309f@linaro.org>
- <a284c13d-b55a-467d-8756-c41b0f913df3@quicinc.com>
- <1f8fdd47-0c48-4ccd-9352-41c830ec9240@linaro.org>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <1f8fdd47-0c48-4ccd-9352-41c830ec9240@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: U96yhAiXlMwworn7unip6mWtyMVWfE6e
-X-Proofpoint-ORIG-GUID: U96yhAiXlMwworn7unip6mWtyMVWfE6e
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 bulkscore=0 spamscore=0 adultscore=0 phishscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=507 lowpriorityscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312270016
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--6.698500-8.000000
+X-TMASE-MatchedRID: G4NbPPbBCbo28LK855iUisp9Bgr5ONKhXxT5cg8K/td+YesuCgkiXKLs
+	GdYIe0oEWB8Rur00SOpx/Hv6BudnAqB/4ZSHyd2lsyNb+yeIRApRnscLnNAC7BjQD3m2MCf7FWo
+	Asts4LpWPqQJ9fQR1ziV2YP+J+E56aACC67qZQKpsG7r4Qh7N3DNzwULQwTBPVzOmd/bB9b6uoc
+	zUog5jKJR0/TJZAy/xoJY+2TrDFLUdpD3DKTh+QJ4CIKY/Hg3AGdQnQSTrKGPEQdG7H66TyH4gK
+	q42LRYkmKjeD7ZgQXRJ1fYQaQSqLhehi1q7el9sGHUWvrwT/1d+3BndfXUhXQ==
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--6.698500-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP: 9363BDB1CBB7952FF72435AEDE0989D1A860F3E2E01C0BACAFCA187C3CADDD0C2000:8
+X-MTK: N
 
+For Gen1 isoc-in endpoint on controller before about SSUSB IPM v1.6.0, it
+still send out unexpected ACK after receiving a short packet in burst
+transfer, this will cause an exception on connected device, specially for
+a 4k camera.
+Add a quirk property "rx-fifo-depth" to work around this hardware issue,
+prefer to use 3k bytes;
+The side-effect is that may cause performance drop about 10%, including
+bulk transfer.
 
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v4: change rx-fifo size in bytes
+v3: add fifo depth unit, change the value range from 0-3 to 1-4
+v2: change 'mediatek,rxfifo-depth' to 'rx-fifo-depth'
+---
+ .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml    | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-On 12/27/2023 12:34 AM, Krzysztof Kozlowski wrote:
-> On 26/12/2023 16:03, Krishna Kurapati PSSNV wrote:
->>
->>
->> On 12/26/2023 5:52 PM, Krzysztof Kozlowski wrote:
->>
->>>>>
->>>>> This does not answer why, you sc8280xp and x1e80100 not get one optional
->>>>> interrupt. I asked "why" you are doing this change. Why do you need it?
->>>>> What is the rationale?
->>>>>
->>>>> Then I grunted about unmanageable commit, because all my troubles to
->>>>> review it are the effect of it: it is very difficult to read. It is also
->>>>> difficult for you, because you keep making here mistakes. So if you
->>>>> cannot write this commit properly and I cannot review it, then it is way
->>>>> over-complicated, don't you think? But this is still second problem
->>>>> here, don't ignore the fist - "why?"
->>>>
->>>> HI Krzysztof,
->>>>
->>>>     Thanks for the review.
->>>>     To answer the question,
->>>>
->>>> "why ?" : The interrupts have been mis-interpreted on many platforms or
->>>> many interrupts are missing.
->>>
->>> I asked about these two specific platforms. Please explain these
->>> changes. Above is so generic that tells me nothing.
->>>
->>
->> Is the question, "Why do x1e80100 and sc8280 don't have hs_phy_irq ?"
-> 
->   No, not entirely, the question was why these have flexible number of
-> IRQs (last one optional)?
-> 
-> 
->> If so, I checked the SC8280 HW specifics and I see one small error. The
->> name was printed wrong. I got it from another source. Will move sc8280
->> to list having 5 interrupts. As per x1e80100, I wasn't able to get my
->> hands on the hw specifics and I followed the following link by Abel Vesa:
->>
->> https://lore.kernel.org/r/20231214-x1e80100-usb-v1-1-c22be5c0109e@linaro.org
->>
->> As per the above patch, x1e80100 had only 4 interrupts.
-> 
-> Hm, ok, you say "4" but your patch says "minItems: 3". 3 != 4.
-> 
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+index e9644e333d78..9f621f2209df 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+@@ -124,6 +124,17 @@ properties:
+       defined in the xHCI spec on MTK's controller.
+     default: 5000
+ 
++  rx-fifo-depth:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      It is a quirk used to work around Gen1 isoc-in endpoint transfer issue
++      that still send out unexpected ACK after device finish the burst transfer
++      with a short packet and cause an exception, specially on a 4K camera
++      device, it happens on controller before about IPM v1.6.0; the side-effect
++      is that may cause performance drop about 10%, include bulk transfer,
++      prefer to use 3k here. The size is in bytes.
++    enum: [1024, 2048, 3072, 4096]
++
+   # the following properties are only used for case 1
+   wakeup-source:
+     description: enable USB remote wakeup, see power/wakeup-source.txt
+-- 
+2.18.0
 
-Actually, you are right. We don't need the max/min items as we are sure 
-that the targets mentioned under this have 4 interrupts definitively.
-
-But the optional interrupt was put in just in case any target comes in 
-that has no ss_phy and no hs_phy and has only the other 3 interrupts. 
-Since those targets are not present currently, I will remove the max/min 
-items from this.
-
-Thanks for the catch. Sorry for bothering you with a couple of mails 
-because I didn't understand the question you were trying to ask.
-
-Regards,
-Krishna,
 
