@@ -1,87 +1,124 @@
-Return-Path: <linux-usb+bounces-4610-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4611-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AE9381FF72
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Dec 2023 13:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DBA9A820041
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Dec 2023 16:32:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFA6F1F22AC1
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Dec 2023 12:34:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70C5E1F22A4E
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Dec 2023 15:32:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03D3F111B2;
-	Fri, 29 Dec 2023 12:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="uoYinAw/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A09F125BB;
+	Fri, 29 Dec 2023 15:32:22 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF57111A2;
-	Fri, 29 Dec 2023 12:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1703853276;
-	bh=QwXYveaBC0ig2U8Y++IbF9SuqXAv85RwXyV1v2MqwYw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uoYinAw/k9tO5Pzh9Q+ZvHcynf8ItzRqwE+/5fg+cDwTrDQCGqXX0COasXbkLau0l
-	 SCFWZ0neUFGhBjrSTUg+6Gsv9lKfs3fGrO7ZIgOzuWL4skZ27vthnxVZb+IYgxyk+N
-	 3XSNJWtusID5FirWwYQVjpo2FelXQ0TVkmicry6BbWZOg3xwa6ZS6/b4BJB00ZZeZf
-	 JkodFGfrVfuhWEPetUT0Iwsi5nj/ndnsI6+5EOzh0xaOz+lU+0Z6HD9FN7srgr39vr
-	 h9uJ0m0AnVmQPk3925HAf2D2tuZzzAVTCRG0K/RDt1SS4Jr/J4GU6EAxjnrz+ZnvTO
-	 8pjBFHHYhk5Qg==
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id BE3BB3781472;
-	Fri, 29 Dec 2023 12:34:30 +0000 (UTC)
-Date: Fri, 29 Dec 2023 09:33:57 -0300
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, kernelci@lists.linux.dev,
-	kernel@collabora.com, Tim Bird <Tim.Bird@sony.com>,
-	linux-pci@vger.kernel.org, David Gow <davidgow@google.com>,
-	linux-kselftest@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Doug Anderson <dianders@chromium.org>, linux-usb@vger.kernel.org,
-	Saravana Kannan <saravanak@google.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Guenter Roeck <groeck@chromium.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3 0/3] Add test to verify probe of devices from
- discoverable busses
-Message-ID: <1d0ecab9-73a3-44e5-8d5b-f4d4cc5a3baf@notapiano>
-References: <20231227123643.52348-1-nfraprado@collabora.com>
- <20231228235348.GA1559485@bhelgaas>
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CEA6125AB;
+	Fri, 29 Dec 2023 15:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 671A71402F9; Fri, 29 Dec 2023 16:32:16 +0100 (CET)
+Date: Fri, 29 Dec 2023 16:32:16 +0100
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: RD Babiera <rdbabiera@google.com>
+Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	badhri@google.com, stable@vger.kernel.org,
+	Chris Bainbridge <chris.bainbridge@gmail.com>
+Subject: Re: [PATCH v1] usb: typec: class: fix typec_altmode_put_partner to
+ put plugs
+Message-ID: <ZY7mgMkoaZDZGua4@cae.in-ulm.de>
+References: <20231121203954.173364-2-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231228235348.GA1559485@bhelgaas>
+In-Reply-To: <20231121203954.173364-2-rdbabiera@google.com>
 
-On Thu, Dec 28, 2023 at 05:53:48PM -0600, Bjorn Helgaas wrote:
-> I have no opinion about the patches themselves, but just a heads-up
-> that "busses" may be regarded as a misspelling of "buses", e.g.,
-> https://lore.kernel.org/r/20231223184720.25645-1-tintinm2017@gmail.com,
-> I'm guessing because codespell complains about it.
+
+Hi,
+
+I found this mail in the archives after looking at a bug report
+that was bisected to the change that resulted from the following
+analysis:
+
+https://lore.kernel.org/all/CAP-bSRb3SXpgo_BEdqZB-p1K5625fMegRZ17ZkPE1J8ZYgEHDg@mail.gmail.com/
+
+AFAICS the analysis below is partially flawed
+
+On Tue, Nov 21, 2023 at 08:39:55PM +0000, RD Babiera wrote:
+> When releasing an Alt Mode, typec_altmode_release called by a plug device
+> will not release the plug Alt Mode, meaning that a port will hold a
+> reference to a plug Alt Mode even if the port partner is unregistered.
+> As a result, typec_altmode_get_plug() can return an old plug altmode.
 > 
-> Git grep says there are almost as many instances of "busses" as
-> "buses" in the kernel, so I don't go out of my way to change them.
-> Just FYI, doesn't matter to me either way.
+> Currently, typec_altmode_put_partner does not raise issues
+> when unregistering a partner altmode. Looking at the current
+> implementation:
+> 
+> > static void typec_altmode_put_partner(struct altmode *altmode)
+> > {
+> >	struct altmode *partner = altmode->partner;
+> 
+> When called by the partner Alt Mode, then partner evaluates to the port's
+> Alt Mode. When called by the plug Alt Mode, this also evaluates to the
+> port's Alt Mode.
+> 
+> >	struct typec_altmode *adev;
+> >
+> >	if (!partner)
+> >		return;
+> >
+> >	adev = &partner->adev;
+> 
+> This always evaluates to the port's typec_altmode
+> 
+> >	if (is_typec_plug(adev->dev.parent)) {
+> >		struct typec_plug *plug = to_typec_plug(adev->dev.parent);
+> >
+> >		partner->plug[plug->index] = NULL;
+> 
+> If the routine is called to put the plug's Alt mode and altmode refers to
+> the plug, then adev referring to the port can never be a typec_plug. If
+> altmode refers to the port, adev will always refer to the port partner,
+> which runs the block below.
+> 
+> >	} else {
+> >		partner->partner = NULL;
+> >	}
+> >	put_device(&adev->dev);
+> > }
 
-Thanks for the heads up. The online dictionaries seem to agree on "buses", so
-I'll use that on the next version.
+So far everything is fine.
 
-Thanks,
-Nícolas
+> When calling typec_altmode_set_partner, a registration always calls
+> get_device() on the port partner or the plug being registered,
+
+This is wrong. It is the altmode of the plug or partner
+that holds a reference to the altmode of the port not the other
+way around. The port's altmode has (back) pointers to the altmodes
+of its partner and the cable plugs but these are weak references that
+do not contribute to the refcount.
+
+> therefore
+> typec_altmode_put_partner should put_device() the same device. By changing
+
+Thus this conclusion is wrong. The put_device() used to be correct.
+
+> adev to altmode->adev, we make sure to put the correct device and properly
+> unregister plugs. The reason port partners are always properly
+> unregistered is because even when adev refers to the port, the port
+> partner gets nullified in the else block. The port device currently gets
+> put().
+
+Please correct me if I missed something.
+
+       regards    Christian
+
 
