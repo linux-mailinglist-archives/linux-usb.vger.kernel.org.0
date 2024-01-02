@@ -1,85 +1,137 @@
-Return-Path: <linux-usb+bounces-4620-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4621-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E4328218EF
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 10:32:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E517D82190A
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 10:46:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 848511C21729
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 09:32:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 835DD1F215AA
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 09:46:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55CAC7492;
-	Tue,  2 Jan 2024 09:31:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A662A7492;
+	Tue,  2 Jan 2024 09:46:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="hC5jvCVa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kfBQBv/l"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6D66AB7;
-	Tue,  2 Jan 2024 09:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1704187910;
-	bh=GS1ilAjGtQe9kYt0ZI0ljTUErP/Rc2UM30xX6zpBUl0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hC5jvCVas/Ki5j2R6EMxqy8XF1AZwdw0WBI++dRQdLK8BF7Czcj+1Mk/pg2Q5D0V9
-	 3aRpZnVS/OU9GI2ZFp6vGxtsykLR7XHYgG9ap6SRWHOhD9Mos/KDykGIZ5y9GAtaka
-	 syEVvz0ceeDCbtkfyAfbRumHjHIfklYBmzWxKf7Y6n7U3g8Zs6znpMdKmnLfMK6Z0O
-	 ZlxeH7ysuRCuY2rU45gJm21/abxJCWBxqv2TFxVBSRi+uvopFMpOm86kR99IXURS9X
-	 d6Igr+QeM6FYjxbm30Kf4s4FHJ3YwmxFisRHKB1PQPHUkVY48A/bYgOgWbyT74vYG5
-	 u245MsWFF5YDA==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 8122737813DB;
-	Tue,  2 Jan 2024 09:31:49 +0000 (UTC)
-Message-ID: <db7b4cb4-7302-47c0-9712-0d746347c6a9@collabora.com>
-Date: Tue, 2 Jan 2024 10:31:48 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5D4C8FD;
+	Tue,  2 Jan 2024 09:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704188799; x=1735724799;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bECZ7O/z8Tc/UmhXEp68O58/Z4Jph3I5VYLasVMhaxg=;
+  b=kfBQBv/lrT7kBwX6xjDAwoTOEFfpoHvhizxG4ei8mpqp9aK0MoaAKNLj
+   Bbws5UytIbY+a+1/LshMfymDpO1xhY2966ENSlLKeodRunvU8d/hSDvmF
+   /BmJpFpYqixLQuZ32of7OgGN02Y46yBHLDX6EojXT3hUVHWhmN9bFQJst
+   2hRwS7P3SRgNz/iOZyHh4t9TR8ggY45mHLTS1uNE8cEFayqWklHXDgMUI
+   1oNOeYGrlfwpPAnec1RYqQlaWagpW7gQRchj0mUCNIJGA9P3J3LsX/Oq3
+   I/HPNILtayGpEa8BOXFPnGp71NmhguDDzTg5yHVomAeak04UjlwrC4rPs
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="400664998"
+X-IronPort-AV: E=Sophos;i="6.04,324,1695711600"; 
+   d="scan'208";a="400664998"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2024 01:46:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="923179865"
+X-IronPort-AV: E=Sophos;i="6.04,324,1695711600"; 
+   d="scan'208";a="923179865"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 02 Jan 2024 01:46:35 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Jan 2024 11:46:34 +0200
+Date: Tue, 2 Jan 2024 11:46:34 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Suniel Mahesh <sunil@amarulasolutions.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Kyle Tso <kyletso@google.com>,
+	Jagan Teki <jagan@amarulasolutions.com>,
+	USB list <linux-usb@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: USB PD TYPEC - FUSB302B port controller hard reset issue
+Message-ID: <ZZPbeUbMM3J4pH/K@kuha.fi.intel.com>
+References: <CAM+7aWvGerEdUnsKboUg9+EoL=66k3nULHCnQgHyxsWQhUwmpw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/3] dt-bindings: usb: mtk-xhci: add a property for
- Gen1 isoc-in transfer issue
-Content-Language: en-US
-To: Chunfeng Yun <chunfeng.yun@mediatek.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Conor Dooley <conor+dt@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Eddie Hung <eddie.hung@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>
-References: <20231227060316.8539-1-chunfeng.yun@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20231227060316.8539-1-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM+7aWvGerEdUnsKboUg9+EoL=66k3nULHCnQgHyxsWQhUwmpw@mail.gmail.com>
 
-Il 27/12/23 07:03, Chunfeng Yun ha scritto:
-> For Gen1 isoc-in endpoint on controller before about SSUSB IPM v1.6.0, it
-> still send out unexpected ACK after receiving a short packet in burst
-> transfer, this will cause an exception on connected device, specially for
-> a 4k camera.
-> Add a quirk property "rx-fifo-depth" to work around this hardware issue,
-> prefer to use 3k bytes;
-> The side-effect is that may cause performance drop about 10%, including
-> bulk transfer.
+Hi Suniel,
+
+On Tue, Dec 26, 2023 at 04:14:48PM +0530, Suniel Mahesh wrote:
+> Hi Guenter Roeck / Heikki Krogerus and all,
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> 1.
+> I am testing USB TYPEC PD on a Rockchip Rk3399 SOC based target which has a
+> FUSB302B TYPEC port controller.
+> 
+> 2.
+> My source is a wall charger which is based on Gallium Nitride (GaN II)
+> technology and has four ports as follows:
+> 
+> USB-C1: 100W PD3.0, 5V/3A, 9V/3A, 12V/3A, 15V/3A. 20V/5A. PPS: 3.3V-11V/4A
+> USB-C2: 100W PD3.0. 5V/3A. 9V/3A. 12V/3A, 15V/3A. 20V/5A PPS:3.3-11V/4A
+> USB-C3: 20W PD3.0, 5V/3A, 9V/2.22A, 12V/1.67A
+> USB-A: 18W QC3.0. 5V/3A, 9V/2A, 12V/1.5A
+> 
+> 3.
+> i am using latest linux-next and enabled all the relevant configs,
+> especially:
+> CONFIG_TYPEC=y
+> CONFIG_TYPEC_TCPM=y
+> CONFIG_TYPEC_FUSB302=y
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Which kernel version?
 
+> 4.
+> DT node is as follows when i use USB-C1 of wall charger:
+> 
+>  connector {
+>                         compatible = "usb-c-connector";
+>                         label = "USB-C";
+>                         data-role = "dual";
+>                         power-role = "sink";
+>                         try-power-role = "sink";
+>                         op-sink-microwatt = <1000000>;
+>                         sink-pdos = <PDO_FIXED(5000, 3000,
+> PDO_FIXED_USB_COMM)
+>                                     PDO_FIXED(12000, 3000,
+> PDO_FIXED_USB_COMM)>;
+>                 };
 
+What do you mean by "when i use USB-C1..."? Why is the above valid
+only then and not with the other PD contracts?
+
+> Issue:
+> The board power well most of the time, but may be in 1 out of 5 cold boots,
+> FUSB302B is getting a hard reset, as
+> FUSB302B INTERRUPTA register bit I_HARDRST is getting set.
+> 
+> After some digging, found out that the above behaviour is accounted to when
+> something is wrong with the CRC of
+> the received packet (SOP - Start of Packet)
+
+How did you determine that the problem is a bad CRC?
+
+> This behaviour is seen i.e. FUSB302B getting a hard reset more on the
+> USB-C3 port.
+> 
+> Any pointers on how to solve this issue.
+
+Guenter, do you have time to take a look at this?
+
+thanks,
+
+-- 
+heikki
 
