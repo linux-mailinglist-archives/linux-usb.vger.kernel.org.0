@@ -1,59 +1,73 @@
-Return-Path: <linux-usb+bounces-4636-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4637-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E306D821D1F
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 14:53:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 604F7821D39
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 15:02:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39F20B2200C
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 13:53:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B12E2834C8
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 14:02:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6BFAFC1F;
-	Tue,  2 Jan 2024 13:53:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578791078F;
+	Tue,  2 Jan 2024 14:02:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="F/ehNzKq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VoKoAELH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F64C1119C;
-	Tue,  2 Jan 2024 13:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB4A9C433C7;
-	Tue,  2 Jan 2024 13:53:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1704203587;
-	bh=GjOKiW0xtneKjT+iVjyAoNrxX77mFm1Dq2j6C8liY9I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F/ehNzKqswC0ZnX/TtOamWQ/36hQN7FbZuWjYAjJR0QS3T/FjDAT5Y6aTuRKDwPqa
-	 LwEmdEMrrxEtmtRpxpV7uCja0xh4KW0U3GcZ6oKts53vJrJccrgGDYVjSK1kUokGkq
-	 qhEDN7rgiVeeOS1XCNQCCmdTBGW7BZIz+z3GDAQU=
-Date: Tue, 2 Jan 2024 14:53:04 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Luca Weiss <luca.weiss@fairphone.com>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	cros-qcom-dts-watchers@chromium.org,
-	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/3] Fairphone 5 PMIC-GLINK support (USB-C, charger, fuel
- gauge)
-Message-ID: <2024010205-placidly-expire-221c@gregkh>
-References: <20231220-fp5-pmic-glink-v1-0-2a1f8e3c661c@fairphone.com>
- <8d042095-1e09-45cc-9762-909fe8d663a9@linaro.org>
- <CXTU5MLN0YDS.29PPV8KZF8G9R@fairphone.com>
- <CAA8EJpoD3x=kVLu4x2yLtAqCp=wmGSU4ssq5Oj_SD5VQ=GyAYQ@mail.gmail.com>
- <d2007240-2779-4881-8e9d-1c4f5daa55e5@linaro.org>
- <CXU22OZNAH2H.24YIQWBA4KE3C@fairphone.com>
- <2024010227-darn-litmus-4ddf@gregkh>
- <CY49JOEDOEZX.1KNYT91GHL3MX@fairphone.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1B5111A5
+	for <linux-usb@vger.kernel.org>; Tue,  2 Jan 2024 14:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-40d5ac76667so46730425e9.1
+        for <linux-usb@vger.kernel.org>; Tue, 02 Jan 2024 06:02:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704204160; x=1704808960; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gr8xoz17s/BB7TieecZUfYiPuxeYJ5dbt5GBG9TEZsY=;
+        b=VoKoAELHUTT8NKGmWPhINjJD1kxhBswjaCEmyDe7AIK56dHGshJ2axn/zVH76rK3ex
+         bY6Zk46FJUm2ybvQatR0Q3GqXviXzUid8AZKnpFNR+dLlanwRqy3lmuKNqOsMP2lBw2d
+         +zSjNf8pGaCVfQZeVvSxsl49aKlf581xbVheyHFzMlFKrPRhMqGNXTX+JsQBUV/p5Iif
+         a09TauhfAjSk7M7WTFKav65RXi2YpkzQtoZU+Gxq7lEPwoFoThshQ/WfZKeYY6+2YKCn
+         LXAH+wZGSaZpLmKZemE6i3z+d8/iInV/VtKxI+SHDg0Tn8Xl/LKVyLvqBhiJK1gbkI+u
+         UYiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704204160; x=1704808960;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gr8xoz17s/BB7TieecZUfYiPuxeYJ5dbt5GBG9TEZsY=;
+        b=VivHnu5iwK4DdXoKSX5sHPLPL91HHZGvvdvzurgIbueABlvcncS9kWRyYyikQPtFAD
+         6r9/VMCTs6NmFowqzvQovVxfQAMfHRkcYq6BoOvQi3HQRjHg1h35YVVUUDyF8bSTTI+P
+         TZoToPOHrirPxknyt7/kFtdhPYQLQohUgSr0g1u+7DmeDlmK92DAefa9/XDYOa5TBFLF
+         QfK3UgVwfMS+WSv4eAyibMU9g0NILAa4tthuwKzvBLZ7Q7zVUWvJkjH8o0TnO/xCwone
+         mdNMEqNHyD4bbrxgzUs7Tv7wcDT0l1hpgl7ly56AF0OUm8gxi4IDV/0JstiqozB2wLwC
+         mH3w==
+X-Gm-Message-State: AOJu0YwEeRhYvikIaQin3gto3hpNTKeJkJIsB7pae8weO6pc7P7gs3xY
+	R4BL70hFQ9ZWmBNMVQz7VWNATb5Cbef6SQ==
+X-Google-Smtp-Source: AGHT+IFtpOEIbKNXlmkc2tSjGwdHUZnL6Caf7NVCepLhF55Ox65Xqs4fDODl+NB3TOWE3iTyA6rJ8g==
+X-Received: by 2002:a5d:5286:0:b0:336:c963:2741 with SMTP id c6-20020a5d5286000000b00336c9632741mr5386059wrv.11.1704204159887;
+        Tue, 02 Jan 2024 06:02:39 -0800 (PST)
+Received: from localhost ([102.140.209.237])
+        by smtp.gmail.com with ESMTPSA id e14-20020a5d6d0e000000b00336cbbf2e0fsm19026505wrq.27.2024.01.02.06.02.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jan 2024 06:02:39 -0800 (PST)
+Date: Tue, 2 Jan 2024 17:02:33 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, RD Babiera <rdbabiera@google.com>,
+	heikki.krogerus@linux.intel.com, linux@roeck-us.net,
+	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, badhri@google.com,
+	bryan.odonoghue@linaro.org, agross@kernel.org, andersson@kernel.org,
+	konrad.dybcio@linaro.org
+Subject: Re: [PATCH v2 12/12] usb: typec: altmodes/displayport: add SOP'
+ support
+Message-ID: <c1e59ca9-d2f5-4a9c-a653-f533ff5772c1@suswa.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,73 +76,117 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CY49JOEDOEZX.1KNYT91GHL3MX@fairphone.com>
+In-Reply-To: <20231214230850.379863-26-rdbabiera@google.com>
 
-On Tue, Jan 02, 2024 at 02:43:24PM +0100, Luca Weiss wrote:
-> On Tue Jan 2, 2024 at 2:36 PM CET, Greg Kroah-Hartman wrote:
-> > On Thu, Dec 21, 2023 at 02:45:26PM +0100, Luca Weiss wrote:
-> > > On Thu Dec 21, 2023 at 1:53 PM CET, Konrad Dybcio wrote:
-> > > > On 21.12.2023 11:34, Dmitry Baryshkov wrote:
-> > > > > On Thu, 21 Dec 2023 at 09:33, Luca Weiss <luca.weiss@fairphone.com> wrote:
-> > > > >>
-> > > > >> On Wed Dec 20, 2023 at 1:32 PM CET, Konrad Dybcio wrote:
-> > > > >>> On 20.12.2023 11:02, Luca Weiss wrote:
-> > > > >>>> This series adds all the necessary bits to enable USB-C role switching,
-> > > > >>>> charger and fuel gauge (all via pmic-glink) on Fairphone 5.
-> > > > >>>>
-> > > > >>>> One thing that could be made different is the pmic-glink compatible.
-> > > > >>>> I've chosen to use qcm6490 compatible for it and not sc7280 since
-> > > > >>>> there's plenty of firmware variety on sc7280-based platforms and they
-> > > > >>>> might require different quirks in the future, so limit this PDOS quirk
-> > > > >>>> to just qcm6490 for now.
-> > > > >>>>
-> > > > >>>> If someone thinks it should be qcom,sc7280-pmic-glink, please let me
-> > > > >>>> know :)
-> > > > >>> IMO it's best to continue using the "base soc" (which just so happened
-> > > > >>> to fall onto sc7280 this time around) for all compatibles, unless the
-> > > > >>> derivatives actually had changes
-> > > > >>
-> > > > >> Hi Konrad,
-> > > > >>
-> > > > >> I think at some point I asked Dmitry what he thought and he mentioned
-> > > > >> qcm6490. Even found the message again:
-> > > > >>
-> > > > >>> well, since it is a firmware thing, you might want to emphasise that.
-> > > > >>> So from my POV qcm6490 makes more sense
-> > > > >>
-> > > > >> But yeah since it's likely that sc7280 firmware behaves the same as
-> > > > >> qcm6490 firmware it's probably okay to use sc7280 compatible, worst case
-> > > > >> we change it later :) I'll send a v2 with those changes.
-> > > > > 
-> > > > > Worst case we end up with sc7280 which has yet another slightly
-> > > > > different UCSI / PMIC GLINK implementation, but the compatible string
-> > > > > is already taken.
-> > > > > I still suppose that this should be a qcm6490-related string.
-> > > > Right, let's keep qcm then
-> > > 
-> > > Ack from my side also. Thanks for the feedback!
-> >
-> > This doesn't apply to my tree, where should it be going through?
-> 
-> As far as I can see the dependency for the driver commit 1d103d6af241
-> ("usb: typec: ucsi: fix UCSI on buggy Qualcomm devices") was applied to
-> Bjorn's qcom tree, so 2/3 should also go there then.
-> 
-> Patch 3/3 (arm64 dts) definitely also Bjorn's qcom tree.
-> 
-> So that leaves patch 1/3 which Bjorn can probably pick up as well but
-> looking at git log you also picked up some for that file in the past,
-> dunno.
+Hi RD,
 
-Ok, for any remaining ones that want to be merged before 6.8-rc1 is out,
-feel free to add my:
+kernel test robot noticed the following build warnings:
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-If they don't get picked up by 6.8-rc1, feel free to rebase and send it
-for me to take through my tree.
+url:    https://github.com/intel-lab-lkp/linux/commits/RD-Babiera/usb-typec-altmodes-add-typec_cable_ops-to-typec_altmode/20231215-071339
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20231214230850.379863-26-rdbabiera%40google.com
+patch subject: [PATCH v2 12/12] usb: typec: altmodes/displayport: add SOP' support
+config: riscv-randconfig-r081-20231216 (https://download.01.org/0day-ci/archive/20231216/202312161205.sNH5M6Pz-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
 
-thanks,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202312161205.sNH5M6Pz-lkp@intel.com/
 
-greg k-h
+smatch warnings:
+drivers/usb/typec/altmodes/displayport.c:317 dp_altmode_work() warn: inconsistent returns '&dp->lock'.
+
+vim +317 drivers/usb/typec/altmodes/displayport.c
+
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  240  static void dp_altmode_work(struct work_struct *work)
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  241  {
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  242  	struct dp_altmode *dp = container_of(work, struct dp_altmode, work);
+4c93cad8cc78bd Kyle Tso        2021-02-05  243  	int svdm_version;
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  244  	u32 header;
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  245  	u32 vdo;
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  246  	int ret;
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  247  
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  248  	mutex_lock(&dp->lock);
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  249  
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  250  	switch (dp->state) {
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  251  	case DP_STATE_ENTER:
+8face9aa57c833 Heikki Krogerus 2019-12-30  252  		ret = typec_altmode_enter(dp->alt, NULL);
+5789051fc57bb6 Heikki Krogerus 2020-09-28  253  		if (ret && ret != -EBUSY)
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  254  			dev_err(&dp->alt->dev, "failed to enter mode\n");
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  255  		break;
+92483f2f3092f0 RD Babiera      2023-12-14  256  	case DP_STATE_ENTER_PRIME:
+92483f2f3092f0 RD Babiera      2023-12-14  257  		ret = typec_cable_altmode_enter(dp->alt, TYPEC_PLUG_SOP_P, NULL);
+92483f2f3092f0 RD Babiera      2023-12-14  258  		/*
+92483f2f3092f0 RD Babiera      2023-12-14  259  		 * If we fail to enter Alt Mode on SOP', then we should drop the
+92483f2f3092f0 RD Babiera      2023-12-14  260  		 * plug from the driver and attempt to run the driver without
+92483f2f3092f0 RD Babiera      2023-12-14  261  		 * it.
+92483f2f3092f0 RD Babiera      2023-12-14  262  		 */
+92483f2f3092f0 RD Babiera      2023-12-14  263  		if (ret && ret != -EBUSY) {
+92483f2f3092f0 RD Babiera      2023-12-14  264  			dev_err(&dp->alt->dev, "plug failed to enter mode\n");
+92483f2f3092f0 RD Babiera      2023-12-14  265  			dp->state = DP_STATE_ENTER;
+92483f2f3092f0 RD Babiera      2023-12-14  266  			goto disable_prime;
+92483f2f3092f0 RD Babiera      2023-12-14  267  		}
+92483f2f3092f0 RD Babiera      2023-12-14  268  		break;
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  269  	case DP_STATE_UPDATE:
+4c93cad8cc78bd Kyle Tso        2021-02-05  270  		svdm_version = typec_altmode_get_svdm_version(dp->alt);
+4c93cad8cc78bd Kyle Tso        2021-02-05  271  		if (svdm_version < 0)
+4c93cad8cc78bd Kyle Tso        2021-02-05  272  			break;
+4c93cad8cc78bd Kyle Tso        2021-02-05  273  		header = DP_HEADER(dp, svdm_version, DP_CMD_STATUS_UPDATE);
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  274  		vdo = 1;
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  275  		ret = typec_altmode_vdm(dp->alt, header, &vdo, 2);
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  276  		if (ret)
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  277  			dev_err(&dp->alt->dev,
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  278  				"unable to send Status Update command (%d)\n",
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  279  				ret);
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  280  		break;
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  281  	case DP_STATE_CONFIGURE:
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  282  		ret = dp_altmode_configure_vdm(dp, dp->data.conf);
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  283  		if (ret)
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  284  			dev_err(&dp->alt->dev,
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  285  				"unable to send Configure command (%d)\n", ret);
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  286  		break;
+92483f2f3092f0 RD Babiera      2023-12-14  287  	case DP_STATE_CONFIGURE_PRIME:
+92483f2f3092f0 RD Babiera      2023-12-14  288  		ret = dp_altmode_configure_vdm_cable(dp, dp->data_prime.conf);
+92483f2f3092f0 RD Babiera      2023-12-14  289  		if (ret) {
+92483f2f3092f0 RD Babiera      2023-12-14  290  			dev_err(&dp->plug_prime->dev,
+92483f2f3092f0 RD Babiera      2023-12-14  291  				"unable to send Configure command (%d)\n",
+92483f2f3092f0 RD Babiera      2023-12-14  292  				ret);
+92483f2f3092f0 RD Babiera      2023-12-14  293  			dp->state = DP_STATE_CONFIGURE;
+92483f2f3092f0 RD Babiera      2023-12-14  294  			goto disable_prime;
+92483f2f3092f0 RD Babiera      2023-12-14  295  		}
+92483f2f3092f0 RD Babiera      2023-12-14  296  		break;
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  297  	case DP_STATE_EXIT:
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  298  		if (typec_altmode_exit(dp->alt))
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  299  			dev_err(&dp->alt->dev, "Exit Mode Failed!\n");
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  300  		break;
+92483f2f3092f0 RD Babiera      2023-12-14  301  	case DP_STATE_EXIT_PRIME:
+92483f2f3092f0 RD Babiera      2023-12-14  302  		if (typec_cable_altmode_exit(dp->plug_prime, TYPEC_PLUG_SOP_P))
+92483f2f3092f0 RD Babiera      2023-12-14  303  			dev_err(&dp->plug_prime->dev, "Exit Mode Failed!\n");
+92483f2f3092f0 RD Babiera      2023-12-14  304  		break;
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  305  	default:
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  306  		break;
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  307  	}
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  308  
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  309  	dp->state = DP_STATE_IDLE;
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  310  
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  311  	mutex_unlock(&dp->lock);
+92483f2f3092f0 RD Babiera      2023-12-14  312  	return;
+92483f2f3092f0 RD Babiera      2023-12-14  313  
+92483f2f3092f0 RD Babiera      2023-12-14  314  disable_prime:
+92483f2f3092f0 RD Babiera      2023-12-14  315  	typec_altmode_put_plug(dp->plug_prime);
+92483f2f3092f0 RD Babiera      2023-12-14  316  	dp->plug_prime = NULL;
+
+We need a mutex_unlock(&dp->lock); somewhere here.
+
+92483f2f3092f0 RD Babiera      2023-12-14 @317  	schedule_work(&dp->work);
+0e3bb7d6894d9b Heikki Krogerus 2018-06-27  318  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
 
