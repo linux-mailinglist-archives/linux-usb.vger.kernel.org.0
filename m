@@ -1,155 +1,95 @@
-Return-Path: <linux-usb+bounces-4613-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4614-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64936821782
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 06:52:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D01682181C
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 08:46:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 02B5C1F2129F
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 05:52:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9603B2179C
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 07:46:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 428CD15A1;
-	Tue,  2 Jan 2024 05:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F027468C;
+	Tue,  2 Jan 2024 07:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="euwHxWwO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="N1DVmgA3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7643223AD;
-	Tue,  2 Jan 2024 05:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4023vt8N032529;
-	Tue, 2 Jan 2024 05:52:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=qcppdkim1; bh=nqkpKW1
-	BO7eF60KkQnC7BBZxA2RoHV62l7mseP9CNgk=; b=euwHxWwOcAJmzQADEiGOxWd
-	k3MOUNdXO4FUwj5AR2LO3zY70MkxcY/5/NMo8Rer2yS2gN2VVmpkGqM6KqJew2Fw
-	G6RO1fdWUygKknEafYHRNWV+nvC4r9EWEPBP4iqKiNPZ1CWoEW087PIyxFh9iZrk
-	tuYYUE1pJ6JH1eQbL1UEloRKWW2bcKoUDUbJItMOaMMwJP0bzxo/oDEMcSH/NGwi
-	CzusVH5l7dxu/aF6twDfwU1fmdvUPGcnpschdvKo4iEIS4P8jwzi0aTECmTzFH0A
-	jlidI6gX3y0K3o1ox1FSuN4BacrsMpjy5KgpMFcX8DDuNfDAkiBW0vwPDju+I2g=
-	=
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vabe7c5ad-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 02 Jan 2024 05:52:12 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4025pvNd004884
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 2 Jan 2024 05:51:57 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 1 Jan 2024 21:51:54 -0800
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
-        Hardik Gajjar
-	<hgajjar@de.adit-jv.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH] usb: gadget: ncm: Avoid dropping datagrams of properly parsed NTBs
-Date: Tue, 2 Jan 2024 11:21:43 +0530
-Message-ID: <20240102055143.3889-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.42.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950C42101
+	for <linux-usb@vger.kernel.org>; Tue,  2 Jan 2024 07:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-40d4a7f0c4dso85755775e9.1
+        for <linux-usb@vger.kernel.org>; Mon, 01 Jan 2024 23:46:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704181563; x=1704786363; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iHhD+e+1GG2LR5Q+uwUPWMKjzXneKZEYPGVrdDS3Exk=;
+        b=N1DVmgA3QG20HYFe8fWTDKWrDtgi2M2/gb+rQdRhJ1T5H1beql8jG6H4UOqTti/7MX
+         sOQeko1606byMN1KGo5kz24RAYGdrTwBDga773ky2w+lcge60ZtwGXrUUgwNeI/GMKlJ
+         emZDJELz+Dl1SOsUS+Z9sRfwxZYfZDkcGOx+d0y0W0IzJHEw/BjBtPn3KR5PoD66hJet
+         0sJ8Nrq6lBBKXfk3CZ5NUcCyZ+1VsSDTPBVkYsC0rESpLM7SsJsPOY93akY3CrDGcK3z
+         x/22GYF0d3JczPn95Oi8V9OqfLyPpVmTLQ5mGjaBxEni5Rw3tOU0MbjDRQkvZIJFQrkq
+         J0/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704181563; x=1704786363;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iHhD+e+1GG2LR5Q+uwUPWMKjzXneKZEYPGVrdDS3Exk=;
+        b=VxfIPE4VTpjU9zQsYs+Nkwyd6oo52owLW41QrBn7dEvn2Pr6vEZ/TbybaKK+tNerrz
+         T5S4qPap+9uV6Gv9qYSP6tQvMpCTRHC+DLhHVRdp+qCoSe6ayJQsrfHVYZtYon9y94WY
+         eGZke9IETesP/XT7jWuI0VFAoRSev3f5zpFJ8K0Ia/u7kV9lJzmC7gazwABB0a3vm99R
+         TptHN+mkMdXJV+qdMNmJ/Quav2ZM31xRXeaEPbBfRk1T/ZJYSq6+M+jyH2b2TdsYx9y7
+         P/uI62Wnh/VPMfnRbOh994dTijLP2ITGA7KInLA1A9hhlVTC7W+RWnP/P6gQn80v3BpB
+         x7nQ==
+X-Gm-Message-State: AOJu0Yy8dMBdvDXSOqxkrtje3SnbAP80UOTxkzzh3pBEFvvZ3XjVknZi
+	WvXdvZBb2oQLZVPcS+JRMyn3HJMjeg6PvA==
+X-Google-Smtp-Source: AGHT+IHZM9WS+upGseBJPvyCFjM81kkTRQxUR0kQ5A933R//MIPNKfDQsQzf7os5FOBCXJA8CoAPxg==
+X-Received: by 2002:a05:600c:1987:b0:40d:5798:1797 with SMTP id t7-20020a05600c198700b0040d57981797mr6118743wmq.63.1704181562764;
+        Mon, 01 Jan 2024 23:46:02 -0800 (PST)
+Received: from localhost ([102.140.209.237])
+        by smtp.gmail.com with ESMTPSA id o20-20020a05600c4fd400b004094d4292aesm43262533wmq.18.2024.01.01.23.46.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jan 2024 23:46:02 -0800 (PST)
+Date: Tue, 2 Jan 2024 10:45:59 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, kernelci@lists.linux.dev,
+	kernel@collabora.com, Tim Bird <Tim.Bird@sony.com>,
+	linux-pci@vger.kernel.org, David Gow <davidgow@google.com>,
+	linux-kselftest@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+	Doug Anderson <dianders@chromium.org>, linux-usb@vger.kernel.org,
+	Saravana Kannan <saravanak@google.com>,
+	Guenter Roeck <groeck@chromium.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 0/3] Add test to verify probe of devices from
+ discoverable busses
+Message-ID: <3271d300-74c9-4ef3-b993-a8ddeda6076c@suswa.mountain>
+References: <20231227123643.52348-1-nfraprado@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: njA0TAA-TpOdBu5vcoKT5MADoqv0CTc4
-X-Proofpoint-ORIG-GUID: njA0TAA-TpOdBu5vcoKT5MADoqv0CTc4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- bulkscore=0 priorityscore=1501 phishscore=0 adultscore=0 mlxlogscore=638
- impostorscore=0 malwarescore=0 suspectscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401020043
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231227123643.52348-1-nfraprado@collabora.com>
 
-It is observed sometimes when tethering is used over NCM with Windows 11
-as host, at some instances, the gadget_giveback has one byte appended at
-the end of a proper NTB. When the NTB is parsed, unwrap call looks for
-any leftover bytes in SKB provided by u_ether and if there are any pending
-bytes, it treats them as a separate NTB and parses it. But in case the
-second NTB (as per unwrap call) is faulty/corrupt, all the datagrams that
-were parsed properly in the first NTB and saved in rx_list are dropped.
+Life hack: Don't put RFC in the subject.  Especially if it's a v2 or
+higher.  No one reads RFC patches.
 
-Adding a few custom traces showed the following:
+This patchset seems like a low risk patch to apply.
 
-[002] d..1  7828.532866: dwc3_gadget_giveback: ep1out:
-req 000000003868811a length 1025/16384 zsI ==> 0
-[002] d..1  7828.532867: ncm_unwrap_ntb: K: ncm_unwrap_ntb toprocess: 1025
-[002] d..1  7828.532867: ncm_unwrap_ntb: K: ncm_unwrap_ntb nth: 1751999342
-[002] d..1  7828.532868: ncm_unwrap_ntb: K: ncm_unwrap_ntb seq: 0xce67
-[002] d..1  7828.532868: ncm_unwrap_ntb: K: ncm_unwrap_ntb blk_len: 0x400
-[002] d..1  7828.532868: ncm_unwrap_ntb: K: ncm_unwrap_ntb ndp_len: 0x10
-[002] d..1  7828.532869: ncm_unwrap_ntb: K: Parsed NTB with 1 frames
+regards,
+dan carpenter
 
-In this case, the giveback is of 1025 bytes and block length is 1024.
-The rest 1 byte (which is 0x00) won't be parsed resulting in drop of
-all datagrams in rx_list.
-
-Same is case with packets of size 2048:
-[002] d..1  7828.557948: dwc3_gadget_giveback: ep1out:
-req 0000000011dfd96e length 2049/16384 zsI ==> 0
-[002] d..1  7828.557949: ncm_unwrap_ntb: K: ncm_unwrap_ntb nth: 1751999342
-[002] d..1  7828.557950: ncm_unwrap_ntb: K: ncm_unwrap_ntb blk_len: 0x800
-
-Lecroy shows one byte coming in extra confirming that the byte is coming
-in from PC:
-
-Transfer 2959 - Bytes Transferred(1025)  Timestamp((18.524 843 590)
-- Transaction 8391 - Data(1025 bytes) Timestamp(18.524 843 590)
---- Packet 4063861
-      Data(1024 bytes)
-      Duration(2.117us) Idle(14.700ns) Timestamp(18.524 843 590)
---- Packet 4063863
-      Data(1 byte)
-      Duration(66.160ns) Time(282.000ns) Timestamp(18.524 845 722)
-
-Fix this by checking if the leftover bytes before parsing next NTB is of
-size more than the expected header.
-
-Fixes: 427694cfaafa ("usb: gadget: ncm: Handle decoding of multiple NTB's in unwrap call")
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
-There could probably be cases where the first NTB is proper and the second
-NTB's header is proper but the NDP is corrupt, and in those cases too, all
-the datagrams are dropped. But I haven't seen such case practically.
-
- drivers/usb/gadget/function/f_ncm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-index cc0ed29a4adc..a75b6dc8b0cb 100644
---- a/drivers/usb/gadget/function/f_ncm.c
-+++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -1325,7 +1325,7 @@ static int ncm_unwrap_ntb(struct gether *port,
- 	     "Parsed NTB with %d frames\n", dgram_counter);
- 
- 	to_process -= block_len;
--	if (to_process != 0) {
-+	if (to_process > opts->nth_size) {
- 		ntb_ptr = (unsigned char *)(ntb_ptr + block_len);
- 		goto parse_ntb;
- 	}
--- 
-2.42.0
 
 
