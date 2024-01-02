@@ -1,137 +1,160 @@
-Return-Path: <linux-usb+bounces-4621-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4622-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E517D82190A
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 10:46:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B427082195C
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 11:02:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 835DD1F215AA
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 09:46:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 696851F210F3
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 10:02:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A662A7492;
-	Tue,  2 Jan 2024 09:46:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E7FD281;
+	Tue,  2 Jan 2024 10:02:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kfBQBv/l"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZBm9+e6E"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5D4C8FD;
-	Tue,  2 Jan 2024 09:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704188799; x=1735724799;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bECZ7O/z8Tc/UmhXEp68O58/Z4Jph3I5VYLasVMhaxg=;
-  b=kfBQBv/lrT7kBwX6xjDAwoTOEFfpoHvhizxG4ei8mpqp9aK0MoaAKNLj
-   Bbws5UytIbY+a+1/LshMfymDpO1xhY2966ENSlLKeodRunvU8d/hSDvmF
-   /BmJpFpYqixLQuZ32of7OgGN02Y46yBHLDX6EojXT3hUVHWhmN9bFQJst
-   2hRwS7P3SRgNz/iOZyHh4t9TR8ggY45mHLTS1uNE8cEFayqWklHXDgMUI
-   1oNOeYGrlfwpPAnec1RYqQlaWagpW7gQRchj0mUCNIJGA9P3J3LsX/Oq3
-   I/HPNILtayGpEa8BOXFPnGp71NmhguDDzTg5yHVomAeak04UjlwrC4rPs
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="400664998"
-X-IronPort-AV: E=Sophos;i="6.04,324,1695711600"; 
-   d="scan'208";a="400664998"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2024 01:46:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="923179865"
-X-IronPort-AV: E=Sophos;i="6.04,324,1695711600"; 
-   d="scan'208";a="923179865"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 02 Jan 2024 01:46:35 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Jan 2024 11:46:34 +0200
-Date: Tue, 2 Jan 2024 11:46:34 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Suniel Mahesh <sunil@amarulasolutions.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Kyle Tso <kyletso@google.com>,
-	Jagan Teki <jagan@amarulasolutions.com>,
-	USB list <linux-usb@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: USB PD TYPEC - FUSB302B port controller hard reset issue
-Message-ID: <ZZPbeUbMM3J4pH/K@kuha.fi.intel.com>
-References: <CAM+7aWvGerEdUnsKboUg9+EoL=66k3nULHCnQgHyxsWQhUwmpw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B182CA64;
+	Tue,  2 Jan 2024 10:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4028wxAp031023;
+	Tue, 2 Jan 2024 10:02:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=U/qIkXpqNy15nekMfvk/AQomDo1b68nmO+3poX3Uda0=; b=ZB
+	m9+e6E1iaENa7KrTz2VptTU7k8/J5qh6JLnl2AaNjd3r5AlULLR/T0nEES7cEPVU
+	a73He4TPM1LBIwwGw4yUeHx6t86YDtgS4pO+rFOlN7cFdflMen6A/GrItgesLD3G
+	CZH9kM6o8Xc1GQuyTJre3JiMBqLI8oKfVHZL9QMaxL6fdXfsmgxQz6NnhtE0gGGg
+	VbqlEkmEOC90t/WMHDp4bd9dpJRKR/9qz4fnZVWINO0VUZyYbASrZa/XdTa7p3sd
+	E3FlEBr1Oy8v7J1BqR7E6lA0K1Dr74fNaeUTr980+VOeSnfzpHM7v1JAo6EZDCJx
+	HByu9MyZkBTf7PeKDdtQ==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vccc1gdgq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 02 Jan 2024 10:02:10 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 402A29iZ016088
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 2 Jan 2024 10:02:09 GMT
+Received: from [10.239.132.150] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 2 Jan
+ 2024 02:02:03 -0800
+Message-ID: <dce0f577-b08e-4eed-8457-9ea5fefbd8c9@quicinc.com>
+Date: Tue, 2 Jan 2024 18:01:59 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM+7aWvGerEdUnsKboUg9+EoL=66k3nULHCnQgHyxsWQhUwmpw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/14] arm64: dts: qcom: msm8916: Drop RPM bus clocks
+Content-Language: en-US
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn
+ Andersson" <andersson@kernel.org>,
+        Mathieu Poirier
+	<mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Sibi Sankar
+	<quic_sibis@quicinc.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy
+	<robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+CC: Marijn Suijten <marijn.suijten@somainline.org>,
+        Alexey Minnekhanov
+	<alexeymin@postmarketos.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
+        <linux-usb@vger.kernel.org>
+References: <20230721-topic-rpm_clk_cleanup-v2-0-1e506593b1bd@linaro.org>
+ <20230721-topic-rpm_clk_cleanup-v2-1-1e506593b1bd@linaro.org>
+ <bd11d1b1-efe5-4f96-43e7-163fca5d3278@linaro.org>
+ <ac501bcc-80a1-4b65-ba24-272152d1c95c@linaro.org>
+ <7b500bba-3091-f425-a60d-e58a3d9e4c1a@linaro.org>
+ <9a0ab5a9-d4d8-41b8-94b0-9c62bd686254@linaro.org>
+ <30bb6068-6bb8-9a2c-af19-b989960d0be9@linaro.org>
+ <70b19df7-c70c-41ea-ac4c-8af6956f4fc6@linaro.org>
+From: "Aiqun Yu (Maria)" <quic_aiquny@quicinc.com>
+In-Reply-To: <70b19df7-c70c-41ea-ac4c-8af6956f4fc6@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: wcsyJrzxICN3wHO1NZ9_HEVWn06ctdHI
+X-Proofpoint-ORIG-GUID: wcsyJrzxICN3wHO1NZ9_HEVWn06ctdHI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=921
+ lowpriorityscore=0 malwarescore=0 spamscore=0 clxscore=1011
+ impostorscore=0 adultscore=0 phishscore=0 suspectscore=0 mlxscore=0
+ bulkscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2311290000 definitions=main-2401020076
 
-Hi Suniel,
 
-On Tue, Dec 26, 2023 at 04:14:48PM +0530, Suniel Mahesh wrote:
-> Hi Guenter Roeck / Heikki Krogerus and all,
+
+On 9/13/2023 7:14 PM, Konrad Dybcio wrote:
+> On 13.09.2023 13:14, Krzysztof Kozlowski wrote:
+>> On 13/09/2023 12:48, Konrad Dybcio wrote:
+>>> On 13.09.2023 10:53, Krzysztof Kozlowski wrote:
+>>>> On 13/09/2023 10:47, Konrad Dybcio wrote:
+>>>>> On 13.09.2023 09:07, Krzysztof Kozlowski wrote:
+>>>>>> On 12/09/2023 15:31, Konrad Dybcio wrote:
+>>>>>>> These clocks are now handled from within the icc framework and are
+>>>>>>
+>>>>>> That's a driver behavior, not hardware.
+>>>>> I believe we've been over this already..
+>>>>>
+>>>>> The rationale behind this change is: that hardware, which falls
+>>>>> under the "interconnect" class, was previously misrepresented as
+>>>>> a bunch of clocks. There are clocks underneath, but accessing them
+>>>>> directly would be equivalent to e.g. circumventing the PHY subsystem
+>>>>> and initializing your UFS PHY from within the UFS device.
+>>>>
+>>>> And every time one write such commit msg, how should we remember there
+>>>> is some exception and actually it is about clock representation not CCF
+>>>> or ICC framework.
+>>> So is your reply essentially "fine, but please make it clear in
+>>> each commit message"?
+>>
+>> I am fine with this change. If commit msg had such statement, I would
+>> not have doubts :/
+> Ok, I'll resend, thanks for confirming!
+Is there any one continue working on this?
+
+The bindings already merged while the dtb is not consistent with current 
+binding files. So dt bindings checks are failed actually.
 > 
-> 1.
-> I am testing USB TYPEC PD on a Rockchip Rk3399 SOC based target which has a
-> FUSB302B TYPEC port controller.
+> Konrad
 > 
-> 2.
-> My source is a wall charger which is based on Gallium Nitride (GaN II)
-> technology and has four ports as follows:
-> 
-> USB-C1: 100W PD3.0, 5V/3A, 9V/3A, 12V/3A, 15V/3A. 20V/5A. PPS: 3.3V-11V/4A
-> USB-C2: 100W PD3.0. 5V/3A. 9V/3A. 12V/3A, 15V/3A. 20V/5A PPS:3.3-11V/4A
-> USB-C3: 20W PD3.0, 5V/3A, 9V/2.22A, 12V/1.67A
-> USB-A: 18W QC3.0. 5V/3A, 9V/2A, 12V/1.5A
-> 
-> 3.
-> i am using latest linux-next and enabled all the relevant configs,
-> especially:
-> CONFIG_TYPEC=y
-> CONFIG_TYPEC_TCPM=y
-> CONFIG_TYPEC_FUSB302=y
-
-Which kernel version?
-
-> 4.
-> DT node is as follows when i use USB-C1 of wall charger:
-> 
->  connector {
->                         compatible = "usb-c-connector";
->                         label = "USB-C";
->                         data-role = "dual";
->                         power-role = "sink";
->                         try-power-role = "sink";
->                         op-sink-microwatt = <1000000>;
->                         sink-pdos = <PDO_FIXED(5000, 3000,
-> PDO_FIXED_USB_COMM)
->                                     PDO_FIXED(12000, 3000,
-> PDO_FIXED_USB_COMM)>;
->                 };
-
-What do you mean by "when i use USB-C1..."? Why is the above valid
-only then and not with the other PD contracts?
-
-> Issue:
-> The board power well most of the time, but may be in 1 out of 5 cold boots,
-> FUSB302B is getting a hard reset, as
-> FUSB302B INTERRUPTA register bit I_HARDRST is getting set.
-> 
-> After some digging, found out that the above behaviour is accounted to when
-> something is wrong with the CRC of
-> the received packet (SOP - Start of Packet)
-
-How did you determine that the problem is a bad CRC?
-
-> This behaviour is seen i.e. FUSB302B getting a hard reset more on the
-> USB-C3 port.
-> 
-> Any pointers on how to solve this issue.
-
-Guenter, do you have time to take a look at this?
-
-thanks,
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
 -- 
-heikki
+Thx and BRs,
+Aiqun(Maria) Yu
 
