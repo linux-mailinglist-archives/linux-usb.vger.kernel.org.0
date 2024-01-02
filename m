@@ -1,64 +1,45 @@
-Return-Path: <linux-usb+bounces-4615-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4616-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82B1382181F
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 08:47:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37D06821829
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 09:03:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2148B1F228E4
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 07:47:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3D0F2825F5
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 08:03:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 631A923D1;
-	Tue,  2 Jan 2024 07:47:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EE3B2116;
+	Tue,  2 Jan 2024 08:03:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qx56niNx"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="liRJtG0C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C79020F5;
-	Tue,  2 Jan 2024 07:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704181658; x=1735717658;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EAl8v2EMp7z1bYG6wZjJbmelzzdeOCO0ej64a3nJYLU=;
-  b=Qx56niNx+KUVB0B3whPzlprWbVp5NiwyMCD1v6spH9Q7zzZITUjfMpMW
-   hUI3n9AXzrufVvJAaKQcEdkhHFeKTBvHVklS+o/XPvWWgcCs3gnmMgkb6
-   DKAex+3RUhgDGtJRDCIpqnsXmjnbjPHuzLXxng6e+ZPjHKuJOV5buPyVM
-   leYhzbyEOXKVeGZgzRdy8s8Tk/v1UoVKckLdqoK26fBGo+ESLAU8fGyuR
-   Vp82FA2Z5SBZpxHbTEaRkl3uyW0SxX9/BEUCANeUKcBNSXQgiDd+qgSK5
-   Jd4tvSewF888XO19RWlH9ma/KgA5W3glh/l3I8ep6AGW5Xlf9MXImwbBB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="4183748"
-X-IronPort-AV: E=Sophos;i="6.04,324,1695711600"; 
-   d="scan'208";a="4183748"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2024 23:47:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="772765494"
-X-IronPort-AV: E=Sophos;i="6.04,324,1695711600"; 
-   d="scan'208";a="772765494"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga007.jf.intel.com with SMTP; 01 Jan 2024 23:47:33 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Jan 2024 09:47:32 +0200
-Date: Tue, 2 Jan 2024 09:47:32 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: RD Babiera <rdbabiera@google.com>, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	badhri@google.com, stable@vger.kernel.org,
-	Chris Bainbridge <chris.bainbridge@gmail.com>
-Subject: Re: [PATCH v1] usb: typec: class: fix typec_altmode_put_partner to
- put plugs
-Message-ID: <ZZO+HZjR6O1eSyjv@kuha.fi.intel.com>
-References: <20231121203954.173364-2-rdbabiera@google.com>
- <ZY7mgMkoaZDZGua4@cae.in-ulm.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A384C8D;
+	Tue,  2 Jan 2024 08:03:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E89C433C8;
+	Tue,  2 Jan 2024 08:03:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1704182619;
+	bh=G7TbsBighO2IjplER38wkl1W6g99DzQ9SMBnkOmvlWs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=liRJtG0CIeoBvO67Pa0qb0EBCTeQ+1ZZIsYirwrjtfOSkUVncqvG1rWciP/AB4aju
+	 ndVe/cGhG01SJTGu1XOx1Hm8ojyPvoT+R3bGpC6J+QFipu8zyunBuzuRIVzKCrcILz
+	 mR5sTYyQ64qhUi3t0vffNNF7OIgRpIQeuCvxTQ1o=
+Date: Tue, 2 Jan 2024 08:03:36 +0000
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+	Hardik Gajjar <hgajjar@de.adit-jv.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+	quic_wcheng@quicinc.com, quic_jackp@quicinc.com
+Subject: Re: [PATCH] usb: gadget: ncm: Avoid dropping datagrams of properly
+ parsed NTBs
+Message-ID: <2024010223-snore-unbolted-dc68@gregkh>
+References: <20240102055143.3889-1-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,96 +48,90 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZY7mgMkoaZDZGua4@cae.in-ulm.de>
+In-Reply-To: <20240102055143.3889-1-quic_kriskura@quicinc.com>
 
-Hi Christian,
+On Tue, Jan 02, 2024 at 11:21:43AM +0530, Krishna Kurapati wrote:
+> It is observed sometimes when tethering is used over NCM with Windows 11
+> as host, at some instances, the gadget_giveback has one byte appended at
+> the end of a proper NTB. When the NTB is parsed, unwrap call looks for
+> any leftover bytes in SKB provided by u_ether and if there are any pending
+> bytes, it treats them as a separate NTB and parses it. But in case the
+> second NTB (as per unwrap call) is faulty/corrupt, all the datagrams that
+> were parsed properly in the first NTB and saved in rx_list are dropped.
+> 
+> Adding a few custom traces showed the following:
+> 
+> [002] d..1  7828.532866: dwc3_gadget_giveback: ep1out:
+> req 000000003868811a length 1025/16384 zsI ==> 0
+> [002] d..1  7828.532867: ncm_unwrap_ntb: K: ncm_unwrap_ntb toprocess: 1025
+> [002] d..1  7828.532867: ncm_unwrap_ntb: K: ncm_unwrap_ntb nth: 1751999342
+> [002] d..1  7828.532868: ncm_unwrap_ntb: K: ncm_unwrap_ntb seq: 0xce67
+> [002] d..1  7828.532868: ncm_unwrap_ntb: K: ncm_unwrap_ntb blk_len: 0x400
+> [002] d..1  7828.532868: ncm_unwrap_ntb: K: ncm_unwrap_ntb ndp_len: 0x10
+> [002] d..1  7828.532869: ncm_unwrap_ntb: K: Parsed NTB with 1 frames
+> 
+> In this case, the giveback is of 1025 bytes and block length is 1024.
+> The rest 1 byte (which is 0x00) won't be parsed resulting in drop of
+> all datagrams in rx_list.
+> 
+> Same is case with packets of size 2048:
+> [002] d..1  7828.557948: dwc3_gadget_giveback: ep1out:
+> req 0000000011dfd96e length 2049/16384 zsI ==> 0
+> [002] d..1  7828.557949: ncm_unwrap_ntb: K: ncm_unwrap_ntb nth: 1751999342
+> [002] d..1  7828.557950: ncm_unwrap_ntb: K: ncm_unwrap_ntb blk_len: 0x800
+> 
+> Lecroy shows one byte coming in extra confirming that the byte is coming
+> in from PC:
+> 
+> Transfer 2959 - Bytes Transferred(1025)  Timestamp((18.524 843 590)
+> - Transaction 8391 - Data(1025 bytes) Timestamp(18.524 843 590)
+> --- Packet 4063861
+>       Data(1024 bytes)
+>       Duration(2.117us) Idle(14.700ns) Timestamp(18.524 843 590)
+> --- Packet 4063863
+>       Data(1 byte)
+>       Duration(66.160ns) Time(282.000ns) Timestamp(18.524 845 722)
+> 
+> Fix this by checking if the leftover bytes before parsing next NTB is of
+> size more than the expected header.
+> 
+> Fixes: 427694cfaafa ("usb: gadget: ncm: Handle decoding of multiple NTB's in unwrap call")
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+> There could probably be cases where the first NTB is proper and the second
+> NTB's header is proper but the NDP is corrupt, and in those cases too, all
+> the datagrams are dropped. But I haven't seen such case practically.
+> 
+>  drivers/usb/gadget/function/f_ncm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, Dec 29, 2023 at 04:32:16PM +0100, Christian A. Ehrhardt wrote:
-> 
-> Hi,
-> 
-> I found this mail in the archives after looking at a bug report
-> that was bisected to the change that resulted from the following
-> analysis:
-> 
-> https://lore.kernel.org/all/CAP-bSRb3SXpgo_BEdqZB-p1K5625fMegRZ17ZkPE1J8ZYgEHDg@mail.gmail.com/
-> 
-> AFAICS the analysis below is partially flawed
-> 
-> On Tue, Nov 21, 2023 at 08:39:55PM +0000, RD Babiera wrote:
-> > When releasing an Alt Mode, typec_altmode_release called by a plug device
-> > will not release the plug Alt Mode, meaning that a port will hold a
-> > reference to a plug Alt Mode even if the port partner is unregistered.
-> > As a result, typec_altmode_get_plug() can return an old plug altmode.
-> > 
-> > Currently, typec_altmode_put_partner does not raise issues
-> > when unregistering a partner altmode. Looking at the current
-> > implementation:
-> > 
-> > > static void typec_altmode_put_partner(struct altmode *altmode)
-> > > {
-> > >	struct altmode *partner = altmode->partner;
-> > 
-> > When called by the partner Alt Mode, then partner evaluates to the port's
-> > Alt Mode. When called by the plug Alt Mode, this also evaluates to the
-> > port's Alt Mode.
-> > 
-> > >	struct typec_altmode *adev;
-> > >
-> > >	if (!partner)
-> > >		return;
-> > >
-> > >	adev = &partner->adev;
-> > 
-> > This always evaluates to the port's typec_altmode
-> > 
-> > >	if (is_typec_plug(adev->dev.parent)) {
-> > >		struct typec_plug *plug = to_typec_plug(adev->dev.parent);
-> > >
-> > >		partner->plug[plug->index] = NULL;
-> > 
-> > If the routine is called to put the plug's Alt mode and altmode refers to
-> > the plug, then adev referring to the port can never be a typec_plug. If
-> > altmode refers to the port, adev will always refer to the port partner,
-> > which runs the block below.
-> > 
-> > >	} else {
-> > >		partner->partner = NULL;
-> > >	}
-> > >	put_device(&adev->dev);
-> > > }
-> 
-> So far everything is fine.
-> 
-> > When calling typec_altmode_set_partner, a registration always calls
-> > get_device() on the port partner or the plug being registered,
-> 
-> This is wrong. It is the altmode of the plug or partner
-> that holds a reference to the altmode of the port not the other
-> way around. The port's altmode has (back) pointers to the altmodes
-> of its partner and the cable plugs but these are weak references that
-> do not contribute to the refcount.
-> 
-> > therefore
-> > typec_altmode_put_partner should put_device() the same device. By changing
-> 
-> Thus this conclusion is wrong. The put_device() used to be correct.
-> 
-> > adev to altmode->adev, we make sure to put the correct device and properly
-> > unregister plugs. The reason port partners are always properly
-> > unregistered is because even when adev refers to the port, the port
-> > partner gets nullified in the else block. The port device currently gets
-> > put().
-> 
-> Please correct me if I missed something.
+Hi,
 
-Thanks for checking this. Your analysis sounds correct to me.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-RD, I think we need to revert the commmit. If you still see the original
-problem, please prepare a new patch.
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
--- 
-heikki
+greg k-h's patch email bot
 
