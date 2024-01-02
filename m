@@ -1,88 +1,67 @@
-Return-Path: <linux-usb+bounces-4631-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4632-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24CFB821C4F
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 14:12:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D311821C8A
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 14:26:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD4DF1F228DA
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 13:12:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AB0B9B2162E
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 13:26:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E3D0FBE5;
-	Tue,  2 Jan 2024 13:12:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23ECAFBE4;
+	Tue,  2 Jan 2024 13:26:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="SjMzrZ3X"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Efuu0tnA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D873F9DA;
-	Tue,  2 Jan 2024 13:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1704201160;
-	bh=jURNCYzIQMWJUFkXTyaEOnK3LZ2MAWqvj/wPwq9Ok3Y=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79828FBE1
+	for <linux-usb@vger.kernel.org>; Tue,  2 Jan 2024 13:26:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68261C433C8;
+	Tue,  2 Jan 2024 13:26:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1704201976;
+	bh=dqTMLpR8Ro8LGSOozsItv2spwR/NNtMT8KKVaoD2KGI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SjMzrZ3X9QwRg2hEYy796StNOVaXo5RbVzE4knGw2jEvBc3ksAZha66xtVpcWDMzQ
-	 vMxVT6gNCZQ7Y5VG3KeZVu3BxS0ABul3frAqcdARUtr6rfuExuIl0GTVbOQobSM4o4
-	 swXwOxcW7T1cIUrPGzFq0HBvcGX6Nd2i7azvH0caKFkwp3EnYb4f+4p+JSLH8sEb3X
-	 JDWlZH3Mcz3s3FH1H7XqAMmtixFp8pDSPsFRsze/HDKa7NMZuaWIZMskiK8Yl55jW3
-	 A/Z0OzH10h9swPRRkGS99rfx4APvzRS3gNe7n5pq0QeYOi6kR8j9dFyH2NLTbnJ8a/
-	 HPcusGofkyZpQ==
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 7025C378047E;
-	Tue,  2 Jan 2024 13:12:34 +0000 (UTC)
-Date: Tue, 2 Jan 2024 10:12:01 -0300
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, kernelci@lists.linux.dev,
-	kernel@collabora.com, Tim Bird <Tim.Bird@sony.com>,
-	linux-pci@vger.kernel.org, David Gow <davidgow@google.com>,
-	linux-kselftest@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Doug Anderson <dianders@chromium.org>, linux-usb@vger.kernel.org,
-	Saravana Kannan <saravanak@google.com>,
-	Guenter Roeck <groeck@chromium.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3 0/3] Add test to verify probe of devices from
- discoverable busses
-Message-ID: <fb89ae5c-f3ef-49de-b93c-da6c8b92b06c@notapiano>
-References: <20231227123643.52348-1-nfraprado@collabora.com>
- <3271d300-74c9-4ef3-b993-a8ddeda6076c@suswa.mountain>
+	b=Efuu0tnA0n0M2d8X1zpsV8RFvw2wr1B84GBcDrDeo0VYzQnCzaihTUaMPYkWr6jpM
+	 s4RtImAK5Vtz+9ZYNbEDeUAriW78fT2CuEJCYWGmaJhzRaPIR8C54XFGV/Em3KZciy
+	 oFkHGfd0HIEizsmT1QRTMObWd6UjLx0nlWi/iorU=
+Date: Tue, 2 Jan 2024 14:25:34 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB4/Thunderbolt changes for v6.8 merge window
+Message-ID: <2024010227-dean-placate-68c6@gregkh>
+References: <20240102123954.GK2543524@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3271d300-74c9-4ef3-b993-a8ddeda6076c@suswa.mountain>
+In-Reply-To: <20240102123954.GK2543524@black.fi.intel.com>
 
-On Tue, Jan 02, 2024 at 10:45:59AM +0300, Dan Carpenter wrote:
-> Life hack: Don't put RFC in the subject.  Especially if it's a v2 or
-> higher.  No one reads RFC patches.
-
-Thanks for the tip. I've had a mixed experience with RFC series in the past,
-though this time around I did get some feedback on the previous versions so I
-can't complain. And I wasn't expecting swift replies in the middle of the
-holidays :). In any case, this should be the last RFC version as I feel like the
-approach has consolidated by now.
-
+On Tue, Jan 02, 2024 at 02:39:54PM +0200, Mika Westerberg wrote:
+> Hi Greg,
 > 
-> This patchset seems like a low risk patch to apply.
+> The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+> 
+>   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.8-rc1
 
-That's an interesting take on the usage of RFC I hadn't considered.
+Pulled and pushed out,
 
-Thanks,
-Nícolas
+greg k-h
 
