@@ -1,169 +1,138 @@
-Return-Path: <linux-usb+bounces-4627-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4628-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86E93821B07
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 12:34:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 802CD821BA0
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 13:31:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 921631C21DD8
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 11:34:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A80911C21F16
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 12:31:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B469CE57E;
-	Tue,  2 Jan 2024 11:34:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5DFF9EF;
+	Tue,  2 Jan 2024 12:30:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Fo3EJ1db"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MvWAYpJW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B132EE56E;
-	Tue,  2 Jan 2024 11:34:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 402AUxoa023229;
-	Tue, 2 Jan 2024 11:34:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=Y/2fdTPEe2sPzCEy2WILmWKM60PXcxjYTVJBAsJLWI8=; b=Fo
-	3EJ1dbR/5LUJi6NLMRVjg397U1GEgCPZStX3InDM+f03CbAtf4nM9YsFDhYEBvqv
-	oDt3oo8j+RAjFQuqEAPi3jkekEVqp5KyYo/3rrGBOP6mKPcwkoa+jwKtaLwBFuNM
-	nHwijtf9GF2KNRR3GiKgPvO7TzLTBq11qibVkiR60VAVLyBx0SrZHfy3loZKE+M6
-	uB+b12YMRlJix8dJfseq2wLf9jy4Kidiw3pMbb7S1N5vxmLdhFNjmHKeQL/iKK86
-	s9wwVNaSR5yt6Gz+3ni/aFob/qIU8el+CUfew6luy3tQ51Ptb4g6a718irOH2KtI
-	P0ZH0O7qDc3hEIckRwHw==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vcets8a60-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 02 Jan 2024 11:34:08 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 402BY8rv020937
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 2 Jan 2024 11:34:08 GMT
-Received: from [10.216.52.214] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 2 Jan
- 2024 03:34:04 -0800
-Message-ID: <572c21f8-e642-4d30-84aa-673051be6bb4@quicinc.com>
-Date: Tue, 2 Jan 2024 17:04:01 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347C1F9D2;
+	Tue,  2 Jan 2024 12:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704198648; x=1735734648;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=rtM5doXFq2NWibzp7OwFSY3PvLEqNSMtMBZ+d5jeVxk=;
+  b=MvWAYpJWQAdH/qOacLAHCdqaMVKIj7KJaBhg4kL/AmJKEAqSkRDIAnk7
+   lAw0umOyzh4ZhIPuVaOZibPIm/OPgYBKSxhhzEODHYcRtaVgMBg0+6WuE
+   5cW/ZuAjouaQgUpafQy1LqHUQ3854XdKaBX1bVok3Fy6KKJ47BPZuIhkN
+   fzEYZOu6TD0BnrnzU0bE+8G5HvuArtVlsqToTZvDaJVgQiXNODpMPZKbU
+   Etop6uBeQH0vZ/gpSvAdwQVifzAMHBOSroZJDnrIWqIj15t4slTL+SiG7
+   dTtmIeuAzXA6fZVJOUmtUz5CTxhfq5U1ozQp+7MR2/yBS6rq2N3I7DjTM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="377030763"
+X-IronPort-AV: E=Sophos;i="6.04,325,1695711600"; 
+   d="scan'208";a="377030763"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2024 04:30:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="1111033434"
+X-IronPort-AV: E=Sophos;i="6.04,325,1695711600"; 
+   d="scan'208";a="1111033434"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Jan 2024 04:30:45 -0800
+Message-ID: <b88a9573-6ab5-ed86-dabc-dd07875f88f3@linux.intel.com>
+Date: Tue, 2 Jan 2024 14:32:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: ncm: Avoid dropping datagrams of properly
- parsed NTBs
-To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hardik Gajjar
-	<hgajjar@de.adit-jv.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>
-References: <20240102055143.3889-1-quic_kriskura@quicinc.com>
- <CANP3RGeirg+f8cBbw_3YR5AvuB1ZxJC_9-wcn+Tb-GXf1ESKCQ@mail.gmail.com>
- <ad60f399-5c6a-4f16-8c28-f4d4e0fde1ff@quicinc.com>
- <CANP3RGf5dg14DNuKOn9pqWd4oSBDsPhwwBB7AJ0c3qHbDT0sBQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
 Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <CANP3RGf5dg14DNuKOn9pqWd4oSBDsPhwwBB7AJ0c3qHbDT0sBQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Prashanth K <quic_prashk@quicinc.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Mathias Nyman <mathias.nyman@intel.com>, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, stable@vger.kernel.org
+References: <20231212112521.3774610-1-quic_prashk@quicinc.com>
+ <20231212112521.3774610-2-quic_prashk@quicinc.com>
+ <2023121518-uncharted-riddance-7c58@gregkh>
+ <849d0ea9-d4f7-c568-968c-88835f64fadf@quicinc.com>
+ <2023122212-stellar-handlebar-2f70@gregkh>
+ <43ff1971-aeb1-21e1-4700-9ee84cd5aede@quicinc.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v2 1/2] usb: dwc3: host: Set XHCI_SG_TRB_CACHE_SIZE_QUIRK
+In-Reply-To: <43ff1971-aeb1-21e1-4700-9ee84cd5aede@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: _32YhLGxJidW16K72xpi2hapLS1OR2Kv
-X-Proofpoint-GUID: _32YhLGxJidW16K72xpi2hapLS1OR2Kv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 bulkscore=0 clxscore=1015 priorityscore=1501 spamscore=0
- lowpriorityscore=0 phishscore=0 malwarescore=0 mlxlogscore=913
- adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401020088
 
-
-
->> The above might work. But just wanted to check why this 1 byte would
->> come actually ? Any reason for this ? ZLP must not give a 1 byte packet
->> of 1 byte AFAIK.
+On 26.12.2023 7.24, Prashanth K wrote:
 > 
-> I'm not a USB expert, but... my (possibly wrong) understanding is:
-> (note I may be using bad terminology... also the 1024/16384 constants
-> are USB3 specific, USB2 has afaik max 512 not 1024, I think USB1 is
-> even 64, but it's likely too old to matter, etc.)
 > 
-> USB3 payloads can be up to 16384 bytes in size,
-> on the wire they are split up into packets of between 0 and 1024 bytes.
-> [a Zero Length Packet is a ZLP]
-> A usb payload is terminated with a usb packet of < 1024 bytes.
-> 
-> So a 1524 byte payload would be sent as 2 packets 1024 + 500.
-> While a 2048 byte payload would be sent as 3 packets 1024 + 1024 + 0 (ie. ZLP)
-> 
-> A 16384 byte payload could be sent as 16 * 1024 + ZLP,
-> but since 16384 is the max you might be able to get away with just 16
-> * 1024 and skip the ZLP...
-> 
-> I think this is why the Linux usb code base has ZLP / NO_ZLP quirks.
-> [but do note I may be wrong, I haven't gone looking at what exactly
-> the zlp quirks do,
-> not even sure if they're receive or transmit side... or both]
-> 
-> Different hardware/usb chipsets/etc have different behaviour wrt. ZLPs.
-> 
-> In general it seems like what needs to happen is much clearer if you
-> just avoid the need for ZLPs entirely.
-> I think that's what windows is trying to do here: avoid ever sending a
-> usb payload with a multiple of 1024 bytes,
-> so it never has to send ZLPs. This seems easy enough to do...
-> limit max to 16383 (not 16384) and add 1 byte of zero pad if the
-> payload ends up being a multiple of 1024.
-> 
-
-Got it. Thanks for the explanation. Atleast this gives me an insight 
-into what might be the problem.
-
->>> It seems a little dangerous to just blindly ignore arbitrary amounts
->>> of trailing garbage...
+> On 22-12-23 11:40 am, Greg Kroah-Hartman wrote:
+>> On Fri, Dec 22, 2023 at 11:29:01AM +0530, Prashanth K wrote:
+>>> On 15-12-23 06:12 pm, Greg Kroah-Hartman wrote:
+>>>> On Tue, Dec 12, 2023 at 04:55:20PM +0530, Prashanth K wrote:
+>>>>> Upstream commit bac1ec551434 ("usb: xhci: Set quirk for
+>>>>> XHCI_SG_TRB_CACHE_SIZE_QUIRK") introduced a new quirk in XHCI
+>>>>> which fixes XHC timeout, which was seen on synopsys XHCs while
+>>>>> using SG buffers. But the support for this quirk isn't present
+>>>>> in the DWC3 layer.
+>>>>>
+>>>>> We will encounter this XHCI timeout/hung issue if we run iperf
+>>>>> loopback tests using RTL8156 ethernet adaptor on DWC3 targets
+>>>>> with scatter-gather enabled. This gets resolved after enabling
+>>>>> the XHCI_SG_TRB_CACHE_SIZE_QUIRK. This patch enables it using
+>>>>> the xhci device property since its needed for DWC3 controller.
+>>>>>
+>>>>> In Synopsys DWC3 databook,
+>>>>> Table 9-3: xHCI Debug Capability Limitations
+>>>>> Chained TRBs greater than TRB cache size: The debug capability
+>>>>> driver must not create a multi-TRB TD that describes smaller
+>>>>> than a 1K packet that spreads across 8 or more TRBs on either
+>>>>> the IN TR or the OUT TR.
+>>>>>
+>>>>> Cc: <stable@vger.kernel.org>
+>>>>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+>>>>
+>>>> What commit id does this fix?
+>>>>
+>>> This doesn't fix any commit as such, but adds the support for
+>>> XHCI_SG_TRB_CACHE_SIZE_QUIRK (which is present in XHCI layer) to DWC3 layer.
 >>
->> Yes. I agree, which is why I put a note in comment section of patch
->> stating that this doesn't cover all cases, just the ones found in the
->> testing so far. But the code suggestion you provided might actually work
->> out. So something like the following ?
+>> So this is a new feature?
 >>
->> if (to_process == 1) && (block_len%1024 == 0) && (*payload == 0)
+>> How does this fit into the stable kernel rules?
 > 
-> Assuming it compiles and works ;-) I wrote this without looking at the code. >
+> This isn't a new feature. To give some background, upstream commit bac1ec551434 ("usb: xhci: Set quirk for XHCI_SG_TRB_CACHE_SIZE_QUIRK")
+> added a XHCI quirk which converts SG lists to CMA buffers/URBS if certain conditions aren't met. But they never enabled this xhci quirk
+> since no issues were hit at that time. So, the support for the above mentioned quirk is added from 5.11 kernel onwards, but was never enabled anywhere.
 
-I will check and put a v2 with the proper check.
+I remember this now.
+  
+Original series had three patches, two adding the feature to xhci, and one for dwc3 enabling it.
+The xhci patches were fine and got in.
 
-> I'm guessing this needs to be %512 for usb2...
-> Do we know if we're connected via usb2 or usb3?
-> [mayhaps there's some field that already stores this 1024 constant...]
-> If not... should we just check for %512 instead to support both usb2 and usb3?
-> 
->>       // extra 1 zero byte pad to prevent multiple of 1024 sized packet
->>       return
->> } else if (to_process > 1) {
-> 
-> this should likely continue to be != 0 or > 0
-> 
->>       goto parse_ntb;
->> }
-Ok, will make it (> 0)
+https://marc.info/?l=linux-usb&m=160570849625065&w=2
 
-BTW, Totally, off the conversation, can you also review: 
-https://lore.kernel.org/all/20231221153216.18657-1-quic_kriskura@quicinc.com/
+The last dwc3 patch had issues and never apparently got in
 
-I made changes in this v2 as per comments on v1.
+https://marc.info/?l=linux-usb&m=161008968009766&w=2
 
-Regards,
-Krishna,
+As this feature hasn't been enabled and code not widely run I think it would be  better
+to skip stable for now. Stable can be added later once this has been successfully running
+in upstream for a while.
+
+Thanks
+Mathias
+
+
 
