@@ -1,112 +1,109 @@
-Return-Path: <linux-usb+bounces-4618-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4619-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 302FD82188E
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 09:51:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1FEE8218B2
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 10:12:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A83A1C2158C
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 08:51:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A88F282C2C
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 09:12:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCEAE5672;
-	Tue,  2 Jan 2024 08:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AA6863CC;
+	Tue,  2 Jan 2024 09:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XMf5qLQh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bPKWtbpt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1BC53A5;
-	Tue,  2 Jan 2024 08:51:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D86FDC433C7;
-	Tue,  2 Jan 2024 08:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704185466;
-	bh=2pamsJzOfalMkhVWaBDNI7cGzCZwKULHf8AWyrgT91Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XMf5qLQhtU+xCzPEB8vHAJ4PLS21u8Lk2WorG7ghLytZFEtEt6O9Rd81G0qrGzGQQ
-	 Tm/3b+TEgzCdZY1bJ031fSlK/m4kt17kHv0l4kVDDFCl0pQ9AKYLmgp3XYyh2sgpmV
-	 2anVjFKRyob0KB4npTntHDLoEiGI+KtW9PLIjbGhQ0GOm8g63nqWF0MYIdaQIiHZRH
-	 oxJq0ANqooG2CN5xKM0If16YD0wqunZ19osOO3zT1H+S4wjfs6OPxb7jGX2fZL1gT3
-	 7NJhAbZ1SG55GDtIv37lNQ542Ss7VKiY/mAKIMKs5JBht4xukcNXSFs5USyIjF5oNC
-	 ARYwbuJlJDttg==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1rKaUE-0004wn-04;
-	Tue, 02 Jan 2024 09:50:58 +0100
-Date: Tue, 2 Jan 2024 09:50:58 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Stan Bertrand <stanislasbertrand@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B3C568D;
+	Tue,  2 Jan 2024 09:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704186723; x=1735722723;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NyvPMiWn3WT/oZc8EH+SNeHjU8WnY+nEsLSZKALA/ow=;
+  b=bPKWtbptAPui07c3URUxb4MdOZTEVwLrCn7bpqavfXnLSzI1qHTW9M5Q
+   9t1haV9KH71skJ+Di4mes4yuIgb8wTJ4KnRpz7cie3w4UfXam1Fp+WFvm
+   KkNU/hXMNKcUcO8ppAorKrluSarOJEDgZd1jFJ3O65WXKxQWqlrlyvQAW
+   SfHHbLiJRjQ1TcukWOQfqzFD398G2J4Ox7K93cjv5nZhI6DhIHY9hhBmz
+   HMzNolRoHhPHhwgPfEODqj28+LU/W6IlHG54vAG3rvuvCidIgq4Rtdc+7
+   BGreGo7j1iFdvP5va39hhC6Vp+1zeESzgWxzJtXXWe/3bomigrxoEUJeN
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="463258977"
+X-IronPort-AV: E=Sophos;i="6.04,324,1695711600"; 
+   d="scan'208";a="463258977"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2024 01:11:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="923172841"
+X-IronPort-AV: E=Sophos;i="6.04,324,1695711600"; 
+   d="scan'208";a="923172841"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 02 Jan 2024 01:11:43 -0800
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Greg KH <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: ftdi_sio: add ftdi serial to gpiochip label
-Message-ID: <ZZPOcpN5Th3wEh2W@hovoldconsulting.com>
-References: <20231003001135.2713961-1-sbertrand@witekio.com>
- <ZXwmBxvQlxca8aNv@hovoldconsulting.com>
- <4193075.XuvPJYOev2@dl3541lx>
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	RD Babiera <rdbabiera@google.com>,
+	Chris Bainbridge <chris.bainbridge@gmail.com>
+Subject: [PATCH] Revert "usb: typec: class: fix typec_altmode_put_partner to put plugs"
+Date: Tue,  2 Jan 2024 11:11:41 +0200
+Message-ID: <20240102091142.2136472-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4193075.XuvPJYOev2@dl3541lx>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 01, 2024 at 06:00:22PM -0800, Stan Bertrand wrote:
-> On Friday, December 15, 2023 2:10:15 AM PST Johan Hovold wrote:
-> > On Mon, Oct 02, 2023 at 05:11:35PM -0700, Stan Bertrand wrote:
-> > > From: Stanislas Bertrand <stanislasbertrand@gmail.com>
-> > > 
-> > > Use ftdi serial number on gpiochip label.
-> > > Allows to interface with gpiod utils using the serial number:
-> > > 
-> > > $ gpiodetect
-> > > gpiochip5 [ftdi-cbus-FTRelay2] (4 lines)
-> > > gpiochip6 [ftdi-cbus] (4 lines)
-> > > gpiochip7 [ftdi-cbus-A106TPEC] (4 lines)
-> > > 
-> > > $ gpioget ftdi-cbus-FTRelay2 2
-> > > 0
-> > 
-> > I don't think this is a good idea, for example, as not all devices have
-> > a unique serial string.
-> 
-> The goal is to identify the gpiochip corresponding to a known FTDI device.
-> If serials are not unique, it can still differentiate others.
-> A device serial can be set (FT Prog, Python lib, ...) for direct of access.
+This reverts commit b17b7fe6dd5c6ff74b38b0758ca799cdbb79e26e.
 
-I understand why you want this, I just don't think it's a good interface
-and this something that will become ABI.
+That commit messed up the reference counting, so it needs to
+be rethought.
 
-Also note that all gpiochips on a multiport FTDI device will all end up
-with the same label with the current proposal.
+Fixes: b17b7fe6dd5c ("usb: typec: class: fix typec_altmode_put_partner to put plugs")
+Cc: stable@vger.kernel.org
+Cc: RD Babiera <rdbabiera@google.com>
+Reported-by: Chris Bainbridge <chris.bainbridge@gmail.com>
+Closes: https://lore.kernel.org/lkml/CAP-bSRb3SXpgo_BEdqZB-p1K5625fMegRZ17ZkPE1J8ZYgEHDg@mail.gmail.com/
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/class.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-> > Looks like the naming of gpiochips are all over the place, and ideally
-> > this should not have been something that was left up to individual
-> > driver to decide.
-> > 
-> > I see several drivers using the name of the corresponding platform
-> > device as label, which works in most cases, but not always either. The
-> > only unique and always available identifier is the gpiochip's place in
-> > the device tree itself.
-> > 
-> > For USB, we already encode the bus topology in the USB device names
-> > (e.g. 1-11.5.1) and we could possibly consider using that. But we
-> > already have USB serial devices with multiple GPIO chips so also that
-> > would require some further thought (e.g. using the interface name
-> > instead).
-> 
-> The aim is identification while being platform agnostic, device tree or x86.
-> The FTDI serial allows device identification regardless of the system topology.
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index aeae8009b9e3..4d11f2b536fa 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -267,7 +267,7 @@ static void typec_altmode_put_partner(struct altmode *altmode)
+ 	if (!partner)
+ 		return;
+ 
+-	adev = &altmode->adev;
++	adev = &partner->adev;
+ 
+ 	if (is_typec_plug(adev->dev.parent)) {
+ 		struct typec_plug *plug = to_typec_plug(adev->dev.parent);
+@@ -497,8 +497,7 @@ static void typec_altmode_release(struct device *dev)
+ {
+ 	struct altmode *alt = to_altmode(to_typec_altmode(dev));
+ 
+-	if (!is_typec_port(dev->parent))
+-		typec_altmode_put_partner(alt);
++	typec_altmode_put_partner(alt);
+ 
+ 	altmode_id_remove(alt->adev.dev.parent, alt->id);
+ 	kfree(alt);
+-- 
+2.43.0
 
-The USB bus topology will be the same regardless whether you use
-devicetree or ACPI. Granted, the USB bus numbers are not stable on Linux
-but that is a generic problem.
-
-Johan
 
