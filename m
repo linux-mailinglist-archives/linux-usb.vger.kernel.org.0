@@ -1,124 +1,123 @@
-Return-Path: <linux-usb+bounces-4611-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4612-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBA9A820041
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Dec 2023 16:32:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D90082163E
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 03:00:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70C5E1F22A4E
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Dec 2023 15:32:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 422C2281A69
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jan 2024 02:00:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A09F125BB;
-	Fri, 29 Dec 2023 15:32:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F3A41866;
+	Tue,  2 Jan 2024 02:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W+uX7IuU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CEA6125AB;
-	Fri, 29 Dec 2023 15:32:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-	id 671A71402F9; Fri, 29 Dec 2023 16:32:16 +0100 (CET)
-Date: Fri, 29 Dec 2023 16:32:16 +0100
-From: "Christian A. Ehrhardt" <lk@c--e.de>
-To: RD Babiera <rdbabiera@google.com>
-Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	badhri@google.com, stable@vger.kernel.org,
-	Chris Bainbridge <chris.bainbridge@gmail.com>
-Subject: Re: [PATCH v1] usb: typec: class: fix typec_altmode_put_partner to
- put plugs
-Message-ID: <ZY7mgMkoaZDZGua4@cae.in-ulm.de>
-References: <20231121203954.173364-2-rdbabiera@google.com>
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F4215C5;
+	Tue,  2 Jan 2024 02:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1d480c6342dso30421395ad.2;
+        Mon, 01 Jan 2024 18:00:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704160833; x=1704765633; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dIT9xyB9jvfWORYTKPL+MJa0zI7NaXZHz6Iz0Vz/t90=;
+        b=W+uX7IuUcj/JRcdqhDYsr1E/NNNqFIwGW5IBRGQ6JF+dwgICwMvkcSu+04pSDPhlYf
+         UU6Jk4vHdYvWKJhXFCoyepBhOio9Q164x7cqa2zxFVTZHNESo6AEv9JM2g5qnZ3wLKL/
+         YBeZoaAwi80GnewAR9nhERE4vCwf+JsGggGQDX39gBL85eT/E2GPZkv99JMx6HAyC7/6
+         P2XKBxl0PuJcxNe2lex6P1Usg8hDmLb1Y7rrwmc/CW/mAuMoz5u7rarSiPCSSjAT0fXI
+         fsO2GBa7RGgiveDoBzSaLK3tcSWEqISjLgBcS0xX7a4SDIRnU+l3buIXfJkszgbocen1
+         sJcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704160833; x=1704765633;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dIT9xyB9jvfWORYTKPL+MJa0zI7NaXZHz6Iz0Vz/t90=;
+        b=Y1yj8vZ4YFlZ+TutdLnQ2pLdm/e6bbwLwniJQQA8vYrzI0pxki7YAU08YlNlwZJNCU
+         +wV7rI6+fBZGMIHAK930O9E+rS64E6rZsx4SCkUG7AfJtoVjj8LfVHZ4l5ZUTQRUMwbR
+         +inLsnsxVMCIFRjW5K8kRDCqYOrlwTad/7/0fGQaWUIK5Ag9mMcRKwkckACzF/ot4QfJ
+         IL7wyaaCpJuK/d3+HHvfZfnEmfoJWhEzBzyg2BQd4dITJgwWSs+ZuIFrOcOJKmT44zFT
+         O9oL8owrM8skqLUmJvEU6ZB2xYeXBzeV+hcYaMDxupUlKhb/6PVbb2UobQQgHy/bSEB1
+         iE6A==
+X-Gm-Message-State: AOJu0YzaFqE8yPqtNY+OEgWw3MajKlpJWkvOEnk+Kv65EOcxiGPZh1rl
+	ljL7NAD37sVDEG0YQJrorJaeznVo028ZuuL0
+X-Google-Smtp-Source: AGHT+IGGtyE9heKavk6YKVQN4zOklIeITJMXbim9pVi/vEynpsqDd1V1mevnIuLVNWPBxqgRnayCaQ==
+X-Received: by 2002:a17:903:1205:b0:1d4:ab6e:e13 with SMTP id l5-20020a170903120500b001d4ab6e0e13mr5987030plh.77.1704160832895;
+        Mon, 01 Jan 2024 18:00:32 -0800 (PST)
+Received: from dl3541lx.localnet ([2604:4080:1020:8032:e1f1:d56c:230e:b188])
+        by smtp.gmail.com with ESMTPSA id bf8-20020a170902b90800b001d4921cbe6fsm8118118plb.8.2024.01.01.18.00.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jan 2024 18:00:32 -0800 (PST)
+From: Stan Bertrand <stanislasbertrand@gmail.com>
+To: Stan Bertrand <stanislasbertrand@gmail.com>, Johan Hovold <johan@kernel.org>
+Cc: linux-usb@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: ftdi_sio: add ftdi serial to gpiochip label
+Date: Mon, 01 Jan 2024 18:00:22 -0800
+Message-ID: <4193075.XuvPJYOev2@dl3541lx>
+In-Reply-To: <ZXwmBxvQlxca8aNv@hovoldconsulting.com>
+References: <20231003001135.2713961-1-sbertrand@witekio.com> <ZXwmBxvQlxca8aNv@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231121203954.173364-2-rdbabiera@google.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-
-Hi,
-
-I found this mail in the archives after looking at a bug report
-that was bisected to the change that resulted from the following
-analysis:
-
-https://lore.kernel.org/all/CAP-bSRb3SXpgo_BEdqZB-p1K5625fMegRZ17ZkPE1J8ZYgEHDg@mail.gmail.com/
-
-AFAICS the analysis below is partially flawed
-
-On Tue, Nov 21, 2023 at 08:39:55PM +0000, RD Babiera wrote:
-> When releasing an Alt Mode, typec_altmode_release called by a plug device
-> will not release the plug Alt Mode, meaning that a port will hold a
-> reference to a plug Alt Mode even if the port partner is unregistered.
-> As a result, typec_altmode_get_plug() can return an old plug altmode.
+On Friday, December 15, 2023 2:10:15 AM PST Johan Hovold wrote:
+> On Mon, Oct 02, 2023 at 05:11:35PM -0700, Stan Bertrand wrote:
+> > From: Stanislas Bertrand <stanislasbertrand@gmail.com>
+> > 
+> > Use ftdi serial number on gpiochip label.
+> > Allows to interface with gpiod utils using the serial number:
+> > 
+> > $ gpiodetect
+> > gpiochip5 [ftdi-cbus-FTRelay2] (4 lines)
+> > gpiochip6 [ftdi-cbus] (4 lines)
+> > gpiochip7 [ftdi-cbus-A106TPEC] (4 lines)
+> > 
+> > $ gpioget ftdi-cbus-FTRelay2 2
+> > 0
 > 
-> Currently, typec_altmode_put_partner does not raise issues
-> when unregistering a partner altmode. Looking at the current
-> implementation:
+> I don't think this is a good idea, for example, as not all devices have
+> a unique serial string.
+
+The goal is to identify the gpiochip corresponding to a known FTDI device.
+If serials are not unique, it can still differentiate others.
+A device serial can be set (FT Prog, Python lib, ...) for direct of access.
+
+> Looks like the naming of gpiochips are all over the place, and ideally
+> this should not have been something that was left up to individual
+> driver to decide.
 > 
-> > static void typec_altmode_put_partner(struct altmode *altmode)
-> > {
-> >	struct altmode *partner = altmode->partner;
+> I see several drivers using the name of the corresponding platform
+> device as label, which works in most cases, but not always either. The
+> only unique and always available identifier is the gpiochip's place in
+> the device tree itself.
 > 
-> When called by the partner Alt Mode, then partner evaluates to the port's
-> Alt Mode. When called by the plug Alt Mode, this also evaluates to the
-> port's Alt Mode.
-> 
-> >	struct typec_altmode *adev;
-> >
-> >	if (!partner)
-> >		return;
-> >
-> >	adev = &partner->adev;
-> 
-> This always evaluates to the port's typec_altmode
-> 
-> >	if (is_typec_plug(adev->dev.parent)) {
-> >		struct typec_plug *plug = to_typec_plug(adev->dev.parent);
-> >
-> >		partner->plug[plug->index] = NULL;
-> 
-> If the routine is called to put the plug's Alt mode and altmode refers to
-> the plug, then adev referring to the port can never be a typec_plug. If
-> altmode refers to the port, adev will always refer to the port partner,
-> which runs the block below.
-> 
-> >	} else {
-> >		partner->partner = NULL;
-> >	}
-> >	put_device(&adev->dev);
-> > }
+> For USB, we already encode the bus topology in the USB device names
+> (e.g. 1-11.5.1) and we could possibly consider using that. But we
+> already have USB serial devices with multiple GPIO chips so also that
+> would require some further thought (e.g. using the interface name
+> instead).
 
-So far everything is fine.
+The aim is identification while being platform agnostic, device tree or x86.
+The FTDI serial allows device identification regardless of the system topology.
 
-> When calling typec_altmode_set_partner, a registration always calls
-> get_device() on the port partner or the plug being registered,
+> Johan
 
-This is wrong. It is the altmode of the plug or partner
-that holds a reference to the altmode of the port not the other
-way around. The port's altmode has (back) pointers to the altmodes
-of its partner and the cable plugs but these are weak references that
-do not contribute to the refcount.
+Thanks,
+Stan
 
-> therefore
-> typec_altmode_put_partner should put_device() the same device. By changing
-
-Thus this conclusion is wrong. The put_device() used to be correct.
-
-> adev to altmode->adev, we make sure to put the correct device and properly
-> unregister plugs. The reason port partners are always properly
-> unregistered is because even when adev refers to the port, the port
-> partner gets nullified in the else block. The port device currently gets
-> put().
-
-Please correct me if I missed something.
-
-       regards    Christian
 
 
