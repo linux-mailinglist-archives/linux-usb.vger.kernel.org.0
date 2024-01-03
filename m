@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-4705-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4706-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42468823654
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 21:17:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51635823659
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 21:18:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5C3B2859E5
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 20:17:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA7C92857E2
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 20:18:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 299C91DDE6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA4E1EB5C;
 	Wed,  3 Jan 2024 20:16:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j0n2mIwV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="je0E91ZM"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8B01DDE9
-	for <linux-usb@vger.kernel.org>; Wed,  3 Jan 2024 20:15:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166071EA84
+	for <linux-usb@vger.kernel.org>; Wed,  3 Jan 2024 20:15:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-50ea9e189ebso528308e87.3
-        for <linux-usb@vger.kernel.org>; Wed, 03 Jan 2024 12:15:58 -0800 (PST)
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-50e7d6565b5so8019970e87.0
+        for <linux-usb@vger.kernel.org>; Wed, 03 Jan 2024 12:15:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704312957; x=1704917757; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1704312958; x=1704917758; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WlRGkSxspqLt8e6uj4TsPbjrXxLpOwfPHKo5tpzsP1U=;
-        b=j0n2mIwVTvGSqDWyYser0LZwVW95yXczmYnenMlGuJOClM7NXi+3c8E/gUopyfkB7n
-         idLW0Y/ECQC8kzuMvNbI2v8XIes6SWAR5FtfH67pJ/N7gFEQoYJCdwTgIEx0TfWpl/Nt
-         OrOnAIg8lYGDWrLDGsWy6S9KvRMBo8bKYPghWHgLLT08utjbfyd+oRJsqFDV4euUB4m+
-         YKpyR2Ee3mRfgvzI+GihQsDBaLGDIF6f7oJT5IbMIIoINGSyC1T/0AMYpFLAxQvfKsJE
-         oBUMjZfF9fDraSKyd+dflxywqoY6u7NQF+Z5zGlMGeCPLdKn8Q20kL+K5f9Z1STxYMlM
-         d0hA==
+        bh=9hbiB6tdnnMQ24hCb1VT6gYRHp21EZ3VUAmZLEGkw/Q=;
+        b=je0E91ZM5QdWXGqCP9KoguqCBQOyUD0YD+nDpCmDqMrMo/kcJ4dZWT9nrNX2Xt+HHV
+         OFelW/zKjM7oa1mnLaxKgBwN4Pa24db6zwrH90O2LtK7o14RxzmmNY6M2fKYzwoCR/Ds
+         be1kynAGADWA469HJif653hdxEGUmcdnjT4yh8dT9xxW+OXaJbiwxb1A2Jg/+OnTLaCY
+         zeA2fknGSgIs+J9fceJnaXDvYRuvB9iJIxisS2vPklcBFp6f8AmTTp5RtihCgOPfugyb
+         bt7HohvOKZCS3IptkzfrgAYkAXt3L5S8I7WJsHm+QU6iLlv23n1EoJXYRbvDkN6rEF0Z
+         Pv6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704312957; x=1704917757;
+        d=1e100.net; s=20230601; t=1704312958; x=1704917758;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WlRGkSxspqLt8e6uj4TsPbjrXxLpOwfPHKo5tpzsP1U=;
-        b=Fe1vf5/zhDRtpYA4+YQOhgm1t0Oy3YoLsnN+xjgswABWHj8+xncCrECcooH5xaJi1d
-         5Pne5r6yfnmnxAB/vpbPZ8cHKkVu7wcV/mIbCEY5rOLKfQ8Kw7aKvgJQc6CkS+2M3PHJ
-         DZCmrat6xCslGy6K8gSIluqFbPr/ETm0FrPWPFXmzos7zqbxdo21HC3IcDQw/7FM6nJ9
-         hQgGOivUAkGzKsPy5jJnsuNrEC7DVQ1dig8FjvFwcEzOt9dSQ+tSnztZ95XTx670JREH
-         R0XTM27KWDyH8U5UUBSIECrNDSEjm9+Na2y1w+WKplmq/urH8D2q1Kz2pDsbPUUnigWl
-         So+g==
-X-Gm-Message-State: AOJu0Yz46oRc/1AA1AAitvM4gpcG3Zwnd/3kp83LwPbyyiZAZEj0ySIb
-	MF4L1xBf8fb3sQ2ScERzHLjVGiipmROzxg==
-X-Google-Smtp-Source: AGHT+IEVvy0cSxkpkQE7xYVxHf/U0MKSkUruQtZANnzecQeQ2YZwnD/BWk8zALBpd1fT9kVrswLqCw==
-X-Received: by 2002:ac2:58d7:0:b0:50e:2737:f603 with SMTP id u23-20020ac258d7000000b0050e2737f603mr7182940lfo.48.1704312956978;
-        Wed, 03 Jan 2024 12:15:56 -0800 (PST)
+        bh=9hbiB6tdnnMQ24hCb1VT6gYRHp21EZ3VUAmZLEGkw/Q=;
+        b=VE5Zxp3m3b1r1ZMOHwmeGLRdeOBCNHxrrGlwoAafTqWePpBmI1FHucETblAVtKVj1D
+         YC2hcfZlJ3J/KDmjRwvK+asUZfG18FrpTc6s0+bJ3NEO9WxButuOORjsoN9mjueD3VFl
+         Dpb9sn5q7Y4mMjR5/Roy3Nj89/eZQfVgIDtaGiv0Zp6p7PjhiIYBPimu6r52lg2yb9SX
+         XMVcV5T9zbDNaN5MUQnYUC9eEZrk1npfI5t9lSsq6cJtxPHG/yFJwpc++r8iVoyvhAk7
+         GC8qioJ27Zwvg8/2XeocWJji5po4G3Cj56JYX4MAUzV8GVDkj87TY29rFmgy8vi6xnwU
+         45OA==
+X-Gm-Message-State: AOJu0YyNR1IcjnyDaVusfGz8JHOXyPn3QrGQmdv4fOizN7IGplGRw/T9
+	epxaReGe17GlCCwMwftNl/3BXcSXyG41FA==
+X-Google-Smtp-Source: AGHT+IF+PX1H5YpNkKHol6f02kdPeRx82Wa/Rkf4Fpbw5Q1iLBaNpm5ydmT3t4fBzavvFWxbsSKc9g==
+X-Received: by 2002:ac2:4e4c:0:b0:50e:5aab:a287 with SMTP id f12-20020ac24e4c000000b0050e5aaba287mr7355382lfr.8.1704312958294;
+        Wed, 03 Jan 2024 12:15:58 -0800 (PST)
 Received: from [10.167.154.1] (178235179036.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.36])
-        by smtp.gmail.com with ESMTPSA id fg9-20020a056402548900b00552691fc7f9sm17549670edb.66.2024.01.03.12.15.55
+        by smtp.gmail.com with ESMTPSA id fg9-20020a056402548900b00552691fc7f9sm17549670edb.66.2024.01.03.12.15.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jan 2024 12:15:56 -0800 (PST)
+        Wed, 03 Jan 2024 12:15:58 -0800 (PST)
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Date: Wed, 03 Jan 2024 21:15:35 +0100
-Subject: [PATCH v3 5/9] arm64: dts: qcom: sdm630: Drop RPM bus clocks
+Date: Wed, 03 Jan 2024 21:15:36 +0100
+Subject: [PATCH v3 6/9] arm64: dts: qcom: msm8939: Drop RPM bus clocks
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230721-topic-rpm_clk_cleanup-v3-5-a66e698932e3@linaro.org>
+Message-Id: <20230721-topic-rpm_clk_cleanup-v3-6-a66e698932e3@linaro.org>
 References: <20230721-topic-rpm_clk_cleanup-v3-0-a66e698932e3@linaro.org>
 In-Reply-To: <20230721-topic-rpm_clk_cleanup-v3-0-a66e698932e3@linaro.org>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -79,13 +79,14 @@ To: Bjorn Andersson <andersson@kernel.org>,
 Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
  linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Konrad Dybcio <konrad.dybcio@linaro.org>
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1704312946; l=5031;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1704312946; l=1930;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=cl8sg1LTCxzGU52mzB+vk83BznWR80LOUN+g9wXpRf0=;
- b=pvj8+pAQlY7Mrw9NDRswB7bRzDGoa0CzPM1aqi5SgUUCLigue33wE/7OY8OyV9EaJGEsyVmEu
- RxTOKHepsBQCfIH8MRcYuTLSVHAyZ3EilGt6Q2fSgp7YQK+vvmOC7jk
+ bh=iAST6Bi3i5Py4hFCq2uz7LHvVl/s5kvpbNjyyM0F4x4=;
+ b=2R6ks9a76Dvsfe5auiqvqhip6ClBOvXKYnTJ/pC1kYCapQIL5V0+tMo0rRPly12pPuyHEcmVG
+ iL8baUaPiu3DK2b7qA+EF263xvgEHrlXW/wWUiNYedw8B+8WEeBL2hc
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
@@ -97,148 +98,52 @@ on an NoC bus.
 These clocks are now handled from within the icc framework and are
 no longer registered from within the CCF. Remove them.
 
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sdm630.dtsi | 53 ++++++++----------------------------
- 1 file changed, 12 insertions(+), 41 deletions(-)
+ arch/arm64/boot/dts/qcom/msm8939.dtsi | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index 775700f78e0f..513fe5e76b68 100644
---- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -606,9 +606,6 @@ bimc: interconnect@1008000 {
- 			compatible = "qcom,sdm660-bimc";
- 			reg = <0x01008000 0x78000>;
- 			#interconnect-cells = <1>;
+diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+index 29f6bd9df2eb..82d85ff61045 100644
+--- a/arch/arm64/boot/dts/qcom/msm8939.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+@@ -602,9 +602,6 @@ rpm_msg_ram: sram@60000 {
+ 		bimc: interconnect@400000 {
+ 			compatible = "qcom,msm8939-bimc";
+ 			reg = <0x00400000 0x62000>;
 -			clock-names = "bus", "bus_a";
 -			clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
 -				 <&rpmcc RPM_SMD_BIMC_A_CLK>;
+ 			#interconnect-cells = <1>;
  		};
  
- 		restart@10ac000 {
-@@ -620,28 +617,17 @@ cnoc: interconnect@1500000 {
- 			compatible = "qcom,sdm660-cnoc";
- 			reg = <0x01500000 0x10000>;
- 			#interconnect-cells = <1>;
+@@ -648,25 +645,16 @@ restart@4ab000 {
+ 		pcnoc: interconnect@500000 {
+ 			compatible = "qcom,msm8939-pcnoc";
+ 			reg = <0x00500000 0x11000>;
 -			clock-names = "bus", "bus_a";
--			clocks = <&rpmcc RPM_SMD_CNOC_CLK>,
--				 <&rpmcc RPM_SMD_CNOC_A_CLK>;
+-			clocks = <&rpmcc RPM_SMD_PCNOC_CLK>,
+-				 <&rpmcc RPM_SMD_PCNOC_A_CLK>;
+ 			#interconnect-cells = <1>;
  		};
  
- 		snoc: interconnect@1626000 {
- 			compatible = "qcom,sdm660-snoc";
- 			reg = <0x01626000 0x7090>;
- 			#interconnect-cells = <1>;
+ 		snoc: interconnect@580000 {
+ 			compatible = "qcom,msm8939-snoc";
+ 			reg = <0x00580000 0x14080>;
 -			clock-names = "bus", "bus_a";
 -			clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
 -				 <&rpmcc RPM_SMD_SNOC_A_CLK>;
- 		};
- 
- 		anoc2_smmu: iommu@16c0000 {
- 			compatible = "qcom,sdm630-smmu-v2", "qcom,smmu-v2";
- 			reg = <0x016c0000 0x40000>;
--
--			assigned-clocks = <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
--			assigned-clock-rates = <1000>;
--			clocks = <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
--			clock-names = "bus";
- 			#global-interrupts = <2>;
- 			#iommu-cells = <1>;
- 
-@@ -686,16 +672,12 @@ a2noc: interconnect@1704000 {
- 			compatible = "qcom,sdm660-a2noc";
- 			reg = <0x01704000 0xc100>;
  			#interconnect-cells = <1>;
--			clock-names = "bus",
--				      "bus_a",
--				      "ipa",
-+			clock-names = "ipa",
- 				      "ufs_axi",
- 				      "aggre2_ufs_axi",
- 				      "aggre2_usb3_axi",
- 				      "cfg_noc_usb2_axi";
--			clocks = <&rpmcc RPM_SMD_AGGR2_NOC_CLK>,
--				 <&rpmcc RPM_SMD_AGGR2_NOC_A_CLK>,
--				 <&rpmcc RPM_SMD_IPA_CLK>,
-+			clocks = <&rpmcc RPM_SMD_IPA_CLK>,
- 				 <&gcc GCC_UFS_AXI_CLK>,
- 				 <&gcc GCC_AGGRE2_UFS_AXI_CLK>,
- 				 <&gcc GCC_AGGRE2_USB3_AXI_CLK>,
-@@ -706,10 +688,8 @@ mnoc: interconnect@1745000 {
- 			compatible = "qcom,sdm660-mnoc";
- 			reg = <0x01745000 0xa010>;
- 			#interconnect-cells = <1>;
--			clock-names = "bus", "bus_a", "iface";
--			clocks = <&rpmcc RPM_SMD_MMSSNOC_AXI_CLK>,
--				 <&rpmcc RPM_SMD_MMSSNOC_AXI_CLK_A>,
--				 <&mmcc AHB_CLK_SRC>;
-+			clock-names = "iface";
-+			clocks = <&mmcc AHB_CLK_SRC>;
+ 
+ 			snoc_mm: interconnect-snoc {
+ 				compatible = "qcom,msm8939-snoc-mm";
+-				clock-names = "bus", "bus_a";
+-				clocks = <&rpmcc RPM_SMD_SYSMMNOC_CLK>,
+-					 <&rpmcc RPM_SMD_SYSMMNOC_A_CLK>;
+ 				#interconnect-cells = <1>;
+ 			};
  		};
- 
- 		tsens: thermal-sensor@10ae000 {
-@@ -1186,7 +1166,9 @@ kgsl_smmu: iommu@5040000 {
- 			clocks = <&gcc GCC_GPU_CFG_AHB_CLK>,
- 				 <&gcc GCC_BIMC_GFX_CLK>,
- 				 <&gcc GCC_GPU_BIMC_GFX_CLK>;
--			clock-names = "iface", "mem", "mem_iface";
-+			clock-names = "iface",
-+			              "mem",
-+				      "mem_iface";
- 			#global-interrupts = <2>;
- 			#iommu-cells = <1>;
- 
-@@ -1288,20 +1270,16 @@ usb3: usb@a8f8800 {
- 				 <&gcc GCC_USB30_MASTER_CLK>,
- 				 <&gcc GCC_AGGRE2_USB3_AXI_CLK>,
- 				 <&gcc GCC_USB30_SLEEP_CLK>,
--				 <&gcc GCC_USB30_MOCK_UTMI_CLK>,
--				 <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
-+				 <&gcc GCC_USB30_MOCK_UTMI_CLK>;
- 			clock-names = "cfg_noc",
- 				      "core",
- 				      "iface",
- 				      "sleep",
--				      "mock_utmi",
--				      "bus";
-+				      "mock_utmi";
- 
- 			assigned-clocks = <&gcc GCC_USB30_MOCK_UTMI_CLK>,
--					  <&gcc GCC_USB30_MASTER_CLK>,
--					  <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
--			assigned-clock-rates = <19200000>, <120000000>,
--					       <19200000>;
-+					  <&gcc GCC_USB30_MASTER_CLK>;
-+			assigned-clock-rates = <19200000>, <120000000>;
- 
- 			interrupts = <GIC_SPI 347 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 243 IRQ_TYPE_LEVEL_HIGH>;
-@@ -2204,10 +2182,9 @@ mmss_smmu: iommu@cd00000 {
- 
- 			clocks = <&mmcc MNOC_AHB_CLK>,
- 				 <&mmcc BIMC_SMMU_AHB_CLK>,
--				 <&rpmcc RPM_SMD_MMSSNOC_AXI_CLK>,
- 				 <&mmcc BIMC_SMMU_AXI_CLK>;
- 			clock-names = "iface-mm", "iface-smmu",
--				      "bus-mm", "bus-smmu";
-+				      "bus-smmu";
- 			#global-interrupts = <2>;
- 			#iommu-cells = <1>;
- 
-@@ -2324,12 +2301,6 @@ gnoc: interconnect@17900000 {
- 			compatible = "qcom,sdm660-gnoc";
- 			reg = <0x17900000 0xe000>;
- 			#interconnect-cells = <1>;
--			/*
--			 * This one apparently features no clocks,
--			 * so let's not mess with the driver needlessly
--			 */
--			clock-names = "bus", "bus_a";
--			clocks = <&xo_board>, <&xo_board>;
- 		};
- 
- 		apcs_glb: mailbox@17911000 {
 
 -- 
 2.43.0
