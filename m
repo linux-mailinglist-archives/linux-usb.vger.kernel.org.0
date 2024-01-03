@@ -1,92 +1,128 @@
-Return-Path: <linux-usb+bounces-4687-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4688-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86CF0822796
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 04:36:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E49182283F
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 07:07:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27D48B215E6
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 03:36:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDD4E285035
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 06:07:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 526D110A32;
-	Wed,  3 Jan 2024 03:35:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694CA17998;
+	Wed,  3 Jan 2024 06:06:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Wu6zRJTx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (unknown [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D634A26;
-	Wed,  3 Jan 2024 03:35:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost (unknown [124.16.138.129])
-	by APP-05 (Coremail) with SMTP id zQCowAAH6Azo1ZRltG4VAw--.33879S2;
-	Wed, 03 Jan 2024 11:35:05 +0800 (CST)
-From: Chen Ni <nichen@iscas.ac.cn>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	christian.riesch@omicron.at,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH] asix: Add check for usbnet_get_endpoints
-Date: Wed,  3 Jan 2024 03:35:34 +0000
-Message-Id: <20240103033534.2764386-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A5C18021;
+	Wed,  3 Jan 2024 06:06:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D90C433C7;
+	Wed,  3 Jan 2024 06:06:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1704262016;
+	bh=JtxIzIlnugHCagbmexlScQ8CXMjGCmhR4H3XfHvY6ME=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Wu6zRJTxrben9Fh8b7yNPuWI+2YLyqJ3pSy9zVXvMSKtL9ZQpdm4bXhXETW45HD3E
+	 imgSCd6JfnzElMI3XSlz43PmOtY8ntXS5Kzz+q1Z86Vl6tmP9CiAM1+xn+V82mw8+v
+	 L/Jla+z9Qk32JZjswfJhE4CsnIlk2+CMxJQwEDZo=
+Date: Wed, 3 Jan 2024 07:06:52 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: Thinh.Nguyen@synopsys.com, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: gadget: Queue PM runtime idle on disconnect
+ event
+Message-ID: <2024010322-cement-richness-0781@gregkh>
+References: <20240103023023.477-1-quic_wcheng@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowAAH6Azo1ZRltG4VAw--.33879S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw1kCr17Cw1DCF4fAF4fKrg_yoW3tFg_u3
-	y8W3Z8Jr1UKr4Fgw1DWF4avFWYyF1kXr1xZF48ta4aqa4qq3W3Arn2v3srJ3W7WFWYvwnr
-	Cw1IyFyfJry7KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbc8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-	0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r48
-	MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-	0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
-	wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-	W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-	cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUYnYwUUUUU
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240103023023.477-1-quic_wcheng@quicinc.com>
 
-Add check for usbnet_get_endpoints() and return the error if it fails
-in order to transfer the error.
+On Tue, Jan 02, 2024 at 06:30:23PM -0800, Wesley Cheng wrote:
+> There is a scenario where DWC3 runtime suspend is blocked due to the
+> dwc->connected flag still being true while PM usage_count is zero after
+> DWC3 giveback is completed and the USB gadget session is being terminated.
+> This leads to a case where nothing schedules a PM runtime idle for the
+> device.
+> 
+> The exact condition is seen with the following sequence:
+>   1.  USB bus reset is issued by the host
+>   2.  Shortly after, or concurrently, a USB PD DR SWAP request is received
+>       (sink->source)
+>   3.  USB bus reset event handler runs and issues
+>       dwc3_stop_active_transfers(), and pending transfer are stopped
+>   4.  DWC3 usage_count decremented to 0, and runtime idle occurs while
+>       dwc->connected == true, returns -EBUSY
+>   5.  DWC3 disconnect event seen, dwc->connected set to false due to DR
+>       swap handling
+>   6.  No runtime idle after this point
+> 
+> Address this by issuing an asynchronous PM runtime idle call after the
+> disconnect event is completed, as it modifies the dwc->connected flag,
+> which is what blocks the initial runtime idle.
+> 
+> Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>  drivers/usb/dwc3/gadget.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 858fe4c299b7..de6056277f94 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -3973,6 +3973,13 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
+>  	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
+>  
+>  	dwc3_ep0_reset_state(dwc);
+> +
+> +	/*
+> +	 * Request PM idle to address condition where usage count is
+> +	 * already decremented to zero, but waiting for the disconnect
+> +	 * interrupt to set dwc->connected to FALSE.
+> +	 */
+> +	pm_request_idle(dwc->dev);
+>  }
+>  
+>  static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
 
-Fixes: 16626b0cc3d5 ("asix: Add a new driver for the AX88172A")
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
----
- drivers/net/usb/ax88172a.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Hi,
 
-diff --git a/drivers/net/usb/ax88172a.c b/drivers/net/usb/ax88172a.c
-index 3777c7e2e6fc..e47bb125048d 100644
---- a/drivers/net/usb/ax88172a.c
-+++ b/drivers/net/usb/ax88172a.c
-@@ -161,7 +161,9 @@ static int ax88172a_bind(struct usbnet *dev, struct usb_interface *intf)
- 	u8 buf[ETH_ALEN];
- 	struct ax88172a_private *priv;
- 
--	usbnet_get_endpoints(dev, intf);
-+	ret = usbnet_get_endpoints(dev, intf);
-+	if (ret)
-+		return ret;
- 
- 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
--- 
-2.25.1
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
