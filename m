@@ -1,43 +1,44 @@
-Return-Path: <linux-usb+bounces-4688-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4689-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E49182283F
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 07:07:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 165BC822847
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 07:12:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDD4E285035
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 06:07:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 247521C22FC5
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 06:12:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694CA17998;
-	Wed,  3 Jan 2024 06:06:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD88179AC;
+	Wed,  3 Jan 2024 06:12:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Wu6zRJTx"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="aKBKayc+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A5C18021;
-	Wed,  3 Jan 2024 06:06:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D90C433C7;
-	Wed,  3 Jan 2024 06:06:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 639CB18021;
+	Wed,  3 Jan 2024 06:12:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CBCDC433C7;
+	Wed,  3 Jan 2024 06:12:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1704262016;
-	bh=JtxIzIlnugHCagbmexlScQ8CXMjGCmhR4H3XfHvY6ME=;
+	s=korg; t=1704262323;
+	bh=ZnALP/rsm1JX4E6rxglrE/RNqWl1VhEe5May+DWkRFA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wu6zRJTxrben9Fh8b7yNPuWI+2YLyqJ3pSy9zVXvMSKtL9ZQpdm4bXhXETW45HD3E
-	 imgSCd6JfnzElMI3XSlz43PmOtY8ntXS5Kzz+q1Z86Vl6tmP9CiAM1+xn+V82mw8+v
-	 L/Jla+z9Qk32JZjswfJhE4CsnIlk2+CMxJQwEDZo=
-Date: Wed, 3 Jan 2024 07:06:52 +0100
+	b=aKBKayc+vO2e81o8/bKPhFxdcvFkDqCpD/RFq1KtyTtFJLDapxOEXEmBm7wqh50vH
+	 CZIAfreNurV+Qy20H/S1IcmB8f7/1XGGQF5b0Pm6Ofxnub7IampkQi0tw7s8zP8L7t
+	 /lnn8twfw55Q7M2QLRI5QX572lfoLkznUFyEc4dg=
+Date: Wed, 3 Jan 2024 07:12:00 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: Thinh.Nguyen@synopsys.com, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: gadget: Queue PM runtime idle on disconnect
- event
-Message-ID: <2024010322-cement-richness-0781@gregkh>
-References: <20240103023023.477-1-quic_wcheng@quicinc.com>
+To: Chen Ni <nichen@iscas.ac.cn>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, christian.riesch@omicron.at,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] asix: Add check for usbnet_get_endpoints
+Message-ID: <2024010347-daybed-unrated-5608@gregkh>
+References: <20240103033534.2764386-1-nichen@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -46,55 +47,17 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240103023023.477-1-quic_wcheng@quicinc.com>
+In-Reply-To: <20240103033534.2764386-1-nichen@iscas.ac.cn>
 
-On Tue, Jan 02, 2024 at 06:30:23PM -0800, Wesley Cheng wrote:
-> There is a scenario where DWC3 runtime suspend is blocked due to the
-> dwc->connected flag still being true while PM usage_count is zero after
-> DWC3 giveback is completed and the USB gadget session is being terminated.
-> This leads to a case where nothing schedules a PM runtime idle for the
-> device.
+On Wed, Jan 03, 2024 at 03:35:34AM +0000, Chen Ni wrote:
+> Add check for usbnet_get_endpoints() and return the error if it fails
+> in order to transfer the error.
 > 
-> The exact condition is seen with the following sequence:
->   1.  USB bus reset is issued by the host
->   2.  Shortly after, or concurrently, a USB PD DR SWAP request is received
->       (sink->source)
->   3.  USB bus reset event handler runs and issues
->       dwc3_stop_active_transfers(), and pending transfer are stopped
->   4.  DWC3 usage_count decremented to 0, and runtime idle occurs while
->       dwc->connected == true, returns -EBUSY
->   5.  DWC3 disconnect event seen, dwc->connected set to false due to DR
->       swap handling
->   6.  No runtime idle after this point
-> 
-> Address this by issuing an asynchronous PM runtime idle call after the
-> disconnect event is completed, as it modifies the dwc->connected flag,
-> which is what blocks the initial runtime idle.
-> 
-> Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> Fixes: 16626b0cc3d5 ("asix: Add a new driver for the AX88172A")
+> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
 > ---
->  drivers/usb/dwc3/gadget.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 858fe4c299b7..de6056277f94 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -3973,6 +3973,13 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
->  	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
->  
->  	dwc3_ep0_reset_state(dwc);
-> +
-> +	/*
-> +	 * Request PM idle to address condition where usage count is
-> +	 * already decremented to zero, but waiting for the disconnect
-> +	 * interrupt to set dwc->connected to FALSE.
-> +	 */
-> +	pm_request_idle(dwc->dev);
->  }
->  
->  static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+>  drivers/net/usb/ax88172a.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
 Hi,
 
