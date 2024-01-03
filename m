@@ -1,277 +1,270 @@
-Return-Path: <linux-usb+bounces-4693-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4694-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCCDB822F5B
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 15:23:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0475D822F64
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 15:26:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5802E1F246D7
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 14:23:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 085251C235EA
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 14:26:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BB391A594;
-	Wed,  3 Jan 2024 14:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 129141A5A9;
+	Wed,  3 Jan 2024 14:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kaddPOhH"
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="LTtjvLXS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8796C1A591
-	for <linux-usb@vger.kernel.org>; Wed,  3 Jan 2024 14:23:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704291786; x=1735827786;
-  h=date:from:to:cc:subject:message-id;
-  bh=lRtFOcM207fHc4rhnvCiJF4Aad/VTYYnoMozhpNTXSM=;
-  b=kaddPOhHMvlALYrk76jQMVOY9e+MCLfiKSQ3hHMIqEHcDOG31KnBMLMx
-   vbZ8N1m5Fp2yOLtzFMrssoIfjqYObcIVaivK3y7O7mfam1rH2mqzMA/hW
-   9ikdWgFfZEU5rRAlX4K8scII+9vmJrokdcXWa0gaIbTtV1/OP8Jiqfczp
-   AVAeQuUpDb2s/ku50OrJnnWRX5tfGh3mujoBOiA0mYrB6HITnvcErpX4E
-   OaYrzQia0sMqyCqJJFUtEzeXT93rOO+ZTYdOZoeCmx7x0ZNOfqJrRFMVM
-   6f9QytP8XuAM/pwR2oENkxkYYayh+iNIBa2qdZNYRZqtZXCHD0hPQ6NPl
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="381976217"
-X-IronPort-AV: E=Sophos;i="6.04,327,1695711600"; 
-   d="scan'208";a="381976217"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 06:23:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,327,1695711600"; 
-   d="scan'208";a="14513133"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 03 Jan 2024 06:23:04 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rL298-000MAb-12;
-	Wed, 03 Jan 2024 14:23:02 +0000
-Date: Wed, 03 Jan 2024 22:22:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- e7d3b9f28654dbfce7e09f8028210489adaf6a33
-Message-ID: <202401032242.quRaWDwP-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76A91A587
+	for <linux-usb@vger.kernel.org>; Wed,  3 Jan 2024 14:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-40d76923ec4so42956475e9.3
+        for <linux-usb@vger.kernel.org>; Wed, 03 Jan 2024 06:26:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1704291972; x=1704896772; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e722oByqgpHNvGYkLGBGT1QkBNwB8tcOkyv0srHUQbY=;
+        b=LTtjvLXSHjXGme2Z0Zm3AG858vleSC9FMMP8JMmjAlLS8lOhBRhG+Hu6FuiqH6j+D1
+         emCUZuebIZT5QM4zxe0HBC/zHnoPthGUm2+3BFA8GuZVYOHXWSs80yucJ4aRIEv2eyC4
+         3ueYO73X+iog6Rv54InqswgmATMZ3NNl+NZuE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704291972; x=1704896772;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e722oByqgpHNvGYkLGBGT1QkBNwB8tcOkyv0srHUQbY=;
+        b=WCcVB6A5+Kc4fojbknWB31ZhyjtiGeUkYCEuWN1A6vlsZn7QhZyHmcMIyn0nSJ3jYH
+         aSAbGcGarVUvSYWisSUsulT5xC7MKT8cVKMMoyboPWa2qcf0tuU9SqCLeGsd3z28+Twq
+         uj7JDMd7zG3A/8sU174EptsIAf8bBPHNwAp2fGxU6xbvL8Ymsjtz+JCwH8Z1F9/qiUhl
+         hX04V47/aQl5M5YI/vKiankNpZxUmmbwRi5pgcwLbnnk0ewLvwq9tZieQU265rpbAOjQ
+         HFBmvXl3ub+FPKBDplxbMcrx1jB+KcVpma1JqLxSbcx7jaVWijyr9BK9jOcVLtt7D0h8
+         4ClA==
+X-Gm-Message-State: AOJu0YyNHAdqO7lhsGchLuHPRfh0kHN9iAxHZob/oG2Pf/IqACGNl7+Q
+	SB8Xe8R7I1g57NyhMTTDOQQB5rZdMmYmNklCnWprVYjXa+NN/A==
+X-Google-Smtp-Source: AGHT+IGuI2r//nXGoqQe8hb1yYyJOPkhJr8O+DQHx/jGjD3K0TDwb5rtlHLKE2nNFAih/hisSmIbht2maih2yoSyIc0=
+X-Received: by 2002:a05:600c:3849:b0:40d:589d:cbe1 with SMTP id
+ s9-20020a05600c384900b0040d589dcbe1mr7046124wmr.43.1704291972067; Wed, 03 Jan
+ 2024 06:26:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <CAM+7aWvGerEdUnsKboUg9+EoL=66k3nULHCnQgHyxsWQhUwmpw@mail.gmail.com>
+ <ZZPbeUbMM3J4pH/K@kuha.fi.intel.com>
+In-Reply-To: <ZZPbeUbMM3J4pH/K@kuha.fi.intel.com>
+From: Suniel Mahesh <sunil@amarulasolutions.com>
+Date: Wed, 3 Jan 2024 19:56:00 +0530
+Message-ID: <CAM+7aWu9iEZYtge489eihZUc-5KDH9xfaDfwrBA6Bzj5OPXjwA@mail.gmail.com>
+Subject: Re: USB PD TYPEC - FUSB302B port controller hard reset issue
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Kyle Tso <kyletso@google.com>, 
+	Jagan Teki <jagan@amarulasolutions.com>, USB list <linux-usb@vger.kernel.org>, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: e7d3b9f28654dbfce7e09f8028210489adaf6a33  usb: yurex: Fix inconsistent locking bug in yurex_read()
+Hi Heikki,
 
-elapsed time: 1463m
+On Tue, Jan 2, 2024 at 3:16=E2=80=AFPM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi Suniel,
+>
+> On Tue, Dec 26, 2023 at 04:14:48PM +0530, Suniel Mahesh wrote:
+> > Hi Guenter Roeck / Heikki Krogerus and all,
+> >
+> > 1.
+> > I am testing USB TYPEC PD on a Rockchip Rk3399 SOC based target which h=
+as a
+> > FUSB302B TYPEC port controller.
+> >
+> > 2.
+> > My source is a wall charger which is based on Gallium Nitride (GaN II)
+> > technology and has four ports as follows:
+> >
+> > USB-C1: 100W PD3.0, 5V/3A, 9V/3A, 12V/3A, 15V/3A. 20V/5A. PPS: 3.3V-11V=
+/4A
+> > USB-C2: 100W PD3.0. 5V/3A. 9V/3A. 12V/3A, 15V/3A. 20V/5A PPS:3.3-11V/4A
+> > USB-C3: 20W PD3.0, 5V/3A, 9V/2.22A, 12V/1.67A
+> > USB-A: 18W QC3.0. 5V/3A, 9V/2A, 12V/1.5A
+> >
+> > 3.
+> > i am using latest linux-next and enabled all the relevant configs,
+> > especially:
+> > CONFIG_TYPEC=3Dy
+> > CONFIG_TYPEC_TCPM=3Dy
+> > CONFIG_TYPEC_FUSB302=3Dy
+>
+> Which kernel version?
 
-configs tested: 196
-configs skipped: 2
+The kernel version is linux-next which is 6.7.0-rc8
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>
+> > 4.
+> > DT node is as follows when i use USB-C1 of wall charger:
+> >
+> >  connector {
+> >                         compatible =3D "usb-c-connector";
+> >                         label =3D "USB-C";
+> >                         data-role =3D "dual";
+> >                         power-role =3D "sink";
+> >                         try-power-role =3D "sink";
+> >                         op-sink-microwatt =3D <1000000>;
+> >                         sink-pdos =3D <PDO_FIXED(5000, 3000,
+> > PDO_FIXED_USB_COMM)
+> >                                     PDO_FIXED(12000, 3000,
+> > PDO_FIXED_USB_COMM)>;
+> >                 };
+>
+> What do you mean by "when i use USB-C1..."? Why is the above valid
+> only then and not with the other PD contracts?
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              alldefconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240103   gcc  
-arc                   randconfig-002-20240103   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                         lpc32xx_defconfig   clang
-arm                   randconfig-001-20240103   clang
-arm                   randconfig-002-20240103   clang
-arm                   randconfig-003-20240103   clang
-arm                   randconfig-004-20240103   clang
-arm                        shmobile_defconfig   gcc  
-arm                        spear6xx_defconfig   gcc  
-arm                           tegra_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240103   clang
-arm64                 randconfig-002-20240103   clang
-arm64                 randconfig-003-20240103   clang
-arm64                 randconfig-004-20240103   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240103   gcc  
-csky                  randconfig-002-20240103   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240103   clang
-hexagon               randconfig-002-20240103   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20240103   clang
-i386         buildonly-randconfig-002-20240103   clang
-i386         buildonly-randconfig-003-20240103   clang
-i386         buildonly-randconfig-004-20240103   clang
-i386         buildonly-randconfig-005-20240103   clang
-i386         buildonly-randconfig-006-20240103   clang
-i386                                defconfig   gcc  
-i386                  randconfig-001-20240103   clang
-i386                  randconfig-002-20240103   clang
-i386                  randconfig-003-20240103   clang
-i386                  randconfig-004-20240103   clang
-i386                  randconfig-005-20240103   clang
-i386                  randconfig-006-20240103   clang
-i386                  randconfig-011-20240103   gcc  
-i386                  randconfig-012-20240103   gcc  
-i386                  randconfig-013-20240103   gcc  
-i386                  randconfig-014-20240103   gcc  
-i386                  randconfig-015-20240103   gcc  
-i386                  randconfig-016-20240103   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch                 loongson3_defconfig   gcc  
-loongarch             randconfig-001-20240103   gcc  
-loongarch             randconfig-002-20240103   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                          hp300_defconfig   gcc  
-m68k                       m5208evb_defconfig   gcc  
-m68k                          sun3x_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                           ci20_defconfig   gcc  
-mips                         db1xxx_defconfig   gcc  
-mips                           ip27_defconfig   gcc  
-mips                       lemote2f_defconfig   gcc  
-mips                   sb1250_swarm_defconfig   gcc  
-mips                           xway_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240103   gcc  
-nios2                 randconfig-002-20240103   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                generic-64bit_defconfig   gcc  
-parisc                randconfig-001-20240103   gcc  
-parisc                randconfig-002-20240103   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                    amigaone_defconfig   gcc  
-powerpc                       eiger_defconfig   gcc  
-powerpc                     ksi8560_defconfig   gcc  
-powerpc               randconfig-001-20240103   clang
-powerpc               randconfig-002-20240103   clang
-powerpc               randconfig-003-20240103   clang
-powerpc                        warp_defconfig   gcc  
-powerpc                 xes_mpc85xx_defconfig   gcc  
-powerpc64             randconfig-001-20240103   clang
-powerpc64             randconfig-002-20240103   clang
-powerpc64             randconfig-003-20240103   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                    nommu_k210_defconfig   gcc  
-riscv                 randconfig-001-20240103   clang
-riscv                 randconfig-002-20240103   clang
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20240103   gcc  
-s390                  randconfig-002-20240103   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                            hp6xx_defconfig   gcc  
-sh                    randconfig-001-20240103   gcc  
-sh                    randconfig-002-20240103   gcc  
-sh                          rsk7264_defconfig   gcc  
-sh                   rts7751r2dplus_defconfig   gcc  
-sh                          sdk7780_defconfig   gcc  
-sh                           se7721_defconfig   gcc  
-sh                   sh7724_generic_defconfig   gcc  
-sh                             shx3_defconfig   gcc  
-sh                            titan_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240103   gcc  
-sparc64               randconfig-002-20240103   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240103   clang
-um                    randconfig-002-20240103   clang
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240103   clang
-x86_64       buildonly-randconfig-002-20240103   clang
-x86_64       buildonly-randconfig-003-20240103   clang
-x86_64       buildonly-randconfig-004-20240103   clang
-x86_64       buildonly-randconfig-005-20240103   clang
-x86_64       buildonly-randconfig-006-20240103   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240103   gcc  
-x86_64                randconfig-002-20240103   gcc  
-x86_64                randconfig-003-20240103   gcc  
-x86_64                randconfig-004-20240103   gcc  
-x86_64                randconfig-005-20240103   gcc  
-x86_64                randconfig-006-20240103   gcc  
-x86_64                randconfig-011-20240103   clang
-x86_64                randconfig-012-20240103   clang
-x86_64                randconfig-013-20240103   clang
-x86_64                randconfig-014-20240103   clang
-x86_64                randconfig-015-20240103   clang
-x86_64                randconfig-016-20240103   clang
-x86_64                randconfig-071-20240103   clang
-x86_64                randconfig-072-20240103   clang
-x86_64                randconfig-073-20240103   clang
-x86_64                randconfig-074-20240103   clang
-x86_64                randconfig-075-20240103   clang
-x86_64                randconfig-076-20240103   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                  cadence_csp_defconfig   gcc  
-xtensa                  nommu_kc705_defconfig   gcc  
-xtensa                randconfig-001-20240103   gcc  
-xtensa                randconfig-002-20240103   gcc  
-xtensa                         virt_defconfig   gcc  
-xtensa                    xip_kc705_defconfig   gcc  
+USB-C1, USB-C2 and USB-C3 are the receptacles/connectors on the PD Wall cha=
+rger
+USB-C1 and USB-C2 are idenical rated as: 100W PD3.0, 5V/3A, 9V/3A,
+12V/3A, 15V/3A. 20V/5A. PPS: 3.3V-11V/4A
+USB-C3 is rated as: 20W PD3.0, 5V/3A, 9V/2.22A, 12V/1.67A
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+now when i say "when i use USB-C1", i mean that I am using receptacle
+USB-C1 on the wall charger to power
+my target/development system which has a FUSB302B receptacle/connector.
+
+irrespective of the PDO's requested, like:
+PDO_FIXED(9000, 3000, PDO_FIXED_USB_COMM);
+or
+PDO_FIXED(12000, 3000, PDO_FIXED_USB_COMM);
+or
+PDO_FIXED(15000, 3000, PDO_FIXED_USB_COMM);
+or
+PDO_FIXED(20000, 5000, PDO_FIXED_USB_COMM);
+
+the target/development board FUSB302B is getting a hard reset like i
+mentioned in
+1 out of 5 cold boots.
+
+>
+> > Issue:
+> > The board power well most of the time, but may be in 1 out of 5 cold bo=
+ots,
+> > FUSB302B is getting a hard reset, as
+> > FUSB302B INTERRUPTA register bit I_HARDRST is getting set.
+> >
+> > After some digging, found out that the above behaviour is accounted to =
+when
+> > something is wrong with the CRC of
+> > the received packet (SOP - Start of Packet)
+>
+> How did you determine that the problem is a bad CRC?
+
+The power contract negotiation as per my understanding is:
+cable detect =3D> source sends Accept =3D> Sink responds with good CRC =3D>
+source sends capabilities =3D>
+=3D> sink replied with goodCRC and sink requests for a particular PDO =3D>
+=3D> source sends accept =3D> sink replied with goodCRC =3D>
+=3D> source sends PS_RDY to sink =3D> sink replied with goodCRC and gets
+bound to desired contract from source.
+
+However in some scenarios, based on below log, i guessed it as bad
+CRC: (RX, header is 0x0)
+[    1.599074] FUSB302: IRQ: 0x80, a: 0x00, b: 0x00, status0: 0x83
+[    1.602877] FUSB302: IRQ: 0x00, a: 0x40, b: 0x00, status0: 0x83
+[    1.605978] TCPM: tcpm_pd_event_handler:
+[    1.606575] TCPM: tcpm_pd_event_handler: in TCPM_CC_EVENT
+[    1.967732] FUSB302: IRQ: 0x80, a: 0x00, b: 0x00, status0: 0x83
+[    2.132493] FUSB302: IRQ: 0x41, a: 0x04, b: 0x00, status0: 0x93
+[    2.133057] FUSB302: IRQ: PD tx success
+[    2.135446] TCPM: PD TX complete, status: 0
+[    2.138529] FUSB302: IRQ: 0x51, a: 0x00, b: 0x00, status0: 0xd1
+[    2.141351] FUSB302: IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
+[    2.141968] FUSB302: IRQ: PD sent good CRC
+[    2.144321] FUSB302: fusb302_pd_read_message: to tcpm_pd_receive
+[    2.144912] TCPM: PD RX, header: 0x1a3 [1]
+[    2.145479] TCPM: tcpm_pd_ctrl_request: type:0x3
+[    2.145873] TCPM: tcpm_pd_ctrl_request: case PD_CTRL_ACCEPT
+[    2.146309] TCPM: tcpm_pd_ctrl_request: case SOFT_RESET_SEND
+[    2.146706] TCPM: tcpm_pd_rx_handler: done
+[    2.154971] FUSB302: IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
+[    2.155374] FUSB302: IRQ: PD sent good CRC
+[    2.158067] FUSB302: fusb302_pd_read_message: to tcpm_pd_receive
+[    2.158496] TCPM: PD RX, header: 0x0 [1]
+[    2.159030] TCPM: tcpm_pd_rx_handler: done
+[    2.176842] FUSB302: IRQ: 0x41, a: 0x01, b: 0x00, status0: 0x83
+[    2.177298] FUSB302: IRQ: PD received hardreset: interrupta: 1
+[    2.177850] FUSB302: fusb302_pd_reset:
+[    2.179471] TCPM: tcpm_pd_event_handler:
+[    2.179919] TCPM: tcpm_pd_event_handler: TCPM_RESET_EVENT
+[    2.180449] TCPM: _tcpm_pd_hard_reset: Received hard reset
+[    2.181099] TCPM4: _tcpm_pd_hard_reset:
+
+board(FUSB302B hard reset) reboots
+
+when i use a USB-C3 receptacle on wall charger with rating: 20W PD3.0,
+5V/3A, 9V/2.22A, 12V/1.67A
+and device tree node as:
+connector {
+                        compatible =3D "usb-c-connector";
+                        label =3D "USB-C";
+                        data-role =3D "dual";
+                        power-role =3D "sink";
+                        try-power-role =3D "sink";
+                        op-sink-microwatt =3D <1000000>;
+                        sink-pdos =3D <PDO_FIXED(5000, 3000, PDO_FIXED_USB_=
+COMM)
+                                    PDO_FIXED(12000, 1670, PDO_FIXED_USB_CO=
+MM)>;
+                };
+log when FUSB302B gets a hard reset: (here it might or might not be a bad C=
+RC ?)
+
+[   1.602441] FUSB302: IRQ: 0x80, a: 0x00, b: 0x00, status0: 0x83
+[    1.606642] FUSB302: IRQ: 0x00, a: 0x40, b: 0x00, status0: 0x83
+[    1.609672] TCPM: tcpm_pd_event_handler:
+[    1.610240] TCPM: tcpm_pd_event_handler: in TCPM_CC_EVENT
+[    1.976170] FUSB302: IRQ: 0x80, a: 0x00, b: 0x00, status0: 0x83
+[    2.136304] FUSB302: IRQ: 0x41, a: 0x04, b: 0x00, status0: 0x93
+[    2.136916] FUSB302: IRQ: PD tx success
+[    2.139148] TCPM: PD TX complete, status: 0
+[    2.141867] FUSB302: IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
+[    2.142325] FUSB302: IRQ: PD sent good CRC
+[    2.144775] FUSB302: fusb302_pd_read_message: to tcpm_pd_receive
+[    2.145313] TCPM: PD RX, header: 0x1a3 [1]
+[    2.145886] TCPM: tcpm_pd_ctrl_request: type:0x3
+[    2.146281] TCPM: tcpm_pd_ctrl_request: case PD_CTRL_ACCEPT
+[    2.146716] TCPM:tcpm_pd_ctrl_request: case SOFT_RESET_SEND
+[    2.147113] TCPM: tcpm_pd_rx_handler: done
+[    2.167042] FUSB302: IRQ: 0x41, a: 0x01, b: 0x00, status0: 0x83
+[    2.167495] FUSB302: IRQ: PD received hardreset: interrupta: 1
+[    2.168047] FUSB302: fusb302_pd_reset:
+[    2.169988] TCPM: tcpm_pd_event_handler:
+[    2.170395] TCPM: tcpm_pd_event_handler: TCPM_RESET_EVENT
+[    2.170785] TCPM: _tcpm_pd_hard_reset: Received hard reset
+[    2.171290] TCPM4: _tcpm_pd_hard_reset:
+
+ when FUSB302B negotiates for a contract on USB-C3 receptacle, the
+FUSB302B gets hard reset more
+ number of times compared to USB-C1/C2.
+
+>
+> > This behaviour is seen i.e. FUSB302B getting a hard reset more on the
+> > USB-C3 port.
+> >
+> > Any pointers on how to solve this issue.
+>
+> Guenter, do you have time to take a look at this?
+>
+> thanks,
+>
+> --
+> heikki
+
+Thanks,
+Suniel
 
