@@ -1,56 +1,56 @@
-Return-Path: <linux-usb+bounces-4694-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4695-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0475D822F64
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 15:26:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F08A1822F91
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 15:32:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 085251C235EA
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 14:26:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EAAF1C2368E
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 14:32:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 129141A5A9;
-	Wed,  3 Jan 2024 14:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 967F71A71B;
+	Wed,  3 Jan 2024 14:30:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="LTtjvLXS"
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="IVfZtuC2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76A91A587
-	for <linux-usb@vger.kernel.org>; Wed,  3 Jan 2024 14:26:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CD691A705
+	for <linux-usb@vger.kernel.org>; Wed,  3 Jan 2024 14:30:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-40d76923ec4so42956475e9.3
-        for <linux-usb@vger.kernel.org>; Wed, 03 Jan 2024 06:26:13 -0800 (PST)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-40d2e56f3a6so3135895e9.1
+        for <linux-usb@vger.kernel.org>; Wed, 03 Jan 2024 06:30:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1704291972; x=1704896772; darn=vger.kernel.org;
+        d=amarulasolutions.com; s=google; t=1704292237; x=1704897037; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e722oByqgpHNvGYkLGBGT1QkBNwB8tcOkyv0srHUQbY=;
-        b=LTtjvLXSHjXGme2Z0Zm3AG858vleSC9FMMP8JMmjAlLS8lOhBRhG+Hu6FuiqH6j+D1
-         emCUZuebIZT5QM4zxe0HBC/zHnoPthGUm2+3BFA8GuZVYOHXWSs80yucJ4aRIEv2eyC4
-         3ueYO73X+iog6Rv54InqswgmATMZ3NNl+NZuE=
+        bh=nwUN6t7HAGr2hlOOQMzSTbesbM08m3jhum8Tc06lG9g=;
+        b=IVfZtuC2E6HmMZxMtEOo7kB43FFq/LCIEGbru+J9m34rM4ktdMlQ4f1B67A+I33YFQ
+         zDx3DiUaKLOBqK94gEdsLYOdIDbDtfcsJnCicPcpFE9PSbr8cbFkGLaWV7xSaZZnCOZa
+         7FBxCHceUGLUzLCtbuE3NNN/9FG9CC1ESkFrA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704291972; x=1704896772;
+        d=1e100.net; s=20230601; t=1704292237; x=1704897037;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e722oByqgpHNvGYkLGBGT1QkBNwB8tcOkyv0srHUQbY=;
-        b=WCcVB6A5+Kc4fojbknWB31ZhyjtiGeUkYCEuWN1A6vlsZn7QhZyHmcMIyn0nSJ3jYH
-         aSAbGcGarVUvSYWisSUsulT5xC7MKT8cVKMMoyboPWa2qcf0tuU9SqCLeGsd3z28+Twq
-         uj7JDMd7zG3A/8sU174EptsIAf8bBPHNwAp2fGxU6xbvL8Ymsjtz+JCwH8Z1F9/qiUhl
-         hX04V47/aQl5M5YI/vKiankNpZxUmmbwRi5pgcwLbnnk0ewLvwq9tZieQU265rpbAOjQ
-         HFBmvXl3ub+FPKBDplxbMcrx1jB+KcVpma1JqLxSbcx7jaVWijyr9BK9jOcVLtt7D0h8
-         4ClA==
-X-Gm-Message-State: AOJu0YyNHAdqO7lhsGchLuHPRfh0kHN9iAxHZob/oG2Pf/IqACGNl7+Q
-	SB8Xe8R7I1g57NyhMTTDOQQB5rZdMmYmNklCnWprVYjXa+NN/A==
-X-Google-Smtp-Source: AGHT+IGuI2r//nXGoqQe8hb1yYyJOPkhJr8O+DQHx/jGjD3K0TDwb5rtlHLKE2nNFAih/hisSmIbht2maih2yoSyIc0=
-X-Received: by 2002:a05:600c:3849:b0:40d:589d:cbe1 with SMTP id
- s9-20020a05600c384900b0040d589dcbe1mr7046124wmr.43.1704291972067; Wed, 03 Jan
- 2024 06:26:12 -0800 (PST)
+        bh=nwUN6t7HAGr2hlOOQMzSTbesbM08m3jhum8Tc06lG9g=;
+        b=PcJcFVeRrUZFLAH+qEJgJdfIxFs9IQmsA4abvnxERLkftYqcC6xHxT+4bJNvMZQQ5N
+         TdjGRt+W/IxpWjiR3bEQ7bhZN6XlKM8VmtcMcKElpCQ6KEPwSw5QV4oQmZZscVibCdPJ
+         hz80Pbcq3SacGfgAWQaDH6ldSpS1GKACd+1CQC6Xs2Rz6iKE2JNr+VOwXklyLsZ19DKt
+         vNpQd8BK3q/mT+wozUtqWLQ5Ppk0Cy5b6sDnDei5Tp9VT163NdJfZDoPxU0ebKMj47qa
+         E4PjGovfRd1Bl8QKP3oWmsqgZb7hCYdqe1O98SfU42gfUU/hbZmSlwai0LiRieL31av6
+         NBGA==
+X-Gm-Message-State: AOJu0YwLVB7MPTHHVR26HiV4S/krwzVbIIQ6B9X8hDFXmpDl+QD7xjfD
+	7hZcJVqJEdshnq8wswBMbJHuDPFkXlK4jlEUYQbgXscvZR/yTA==
+X-Google-Smtp-Source: AGHT+IGwje3n2wj+C3cmRhuCtqab9yj971l+9oHM45uUPA3uLFszo+Jdtd2NfrOEa0Cb6+h7NYbTxhkPFZJoNjbW1as=
+X-Received: by 2002:a1c:4b14:0:b0:40d:5cd1:7652 with SMTP id
+ y20-20020a1c4b14000000b0040d5cd17652mr595182wma.15.1704292236772; Wed, 03 Jan
+ 2024 06:30:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,212 +58,119 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <CAM+7aWvGerEdUnsKboUg9+EoL=66k3nULHCnQgHyxsWQhUwmpw@mail.gmail.com>
- <ZZPbeUbMM3J4pH/K@kuha.fi.intel.com>
-In-Reply-To: <ZZPbeUbMM3J4pH/K@kuha.fi.intel.com>
+ <ZZPbeUbMM3J4pH/K@kuha.fi.intel.com> <5458c2f4-b212-4e35-b870-f15fb724f41a@roeck-us.net>
+In-Reply-To: <5458c2f4-b212-4e35-b870-f15fb724f41a@roeck-us.net>
 From: Suniel Mahesh <sunil@amarulasolutions.com>
-Date: Wed, 3 Jan 2024 19:56:00 +0530
-Message-ID: <CAM+7aWu9iEZYtge489eihZUc-5KDH9xfaDfwrBA6Bzj5OPXjwA@mail.gmail.com>
+Date: Wed, 3 Jan 2024 20:00:25 +0530
+Message-ID: <CAM+7aWvfB-TyYfwYiWiWc+RrGn9yyjr5SHagWeXqKwN44Z1H3Q@mail.gmail.com>
 Subject: Re: USB PD TYPEC - FUSB302B port controller hard reset issue
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Kyle Tso <kyletso@google.com>, 
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Kyle Tso <kyletso@google.com>, 
 	Jagan Teki <jagan@amarulasolutions.com>, USB list <linux-usb@vger.kernel.org>, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Heikki,
+Hi Guenter,
 
-On Tue, Jan 2, 2024 at 3:16=E2=80=AFPM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
+On Tue, Jan 2, 2024 at 10:39=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
 >
-> Hi Suniel,
->
-> On Tue, Dec 26, 2023 at 04:14:48PM +0530, Suniel Mahesh wrote:
-> > Hi Guenter Roeck / Heikki Krogerus and all,
+> On Tue, Jan 02, 2024 at 11:46:34AM +0200, Heikki Krogerus wrote:
+> > Hi Suniel,
 > >
-> > 1.
-> > I am testing USB TYPEC PD on a Rockchip Rk3399 SOC based target which h=
-as a
-> > FUSB302B TYPEC port controller.
+> > On Tue, Dec 26, 2023 at 04:14:48PM +0530, Suniel Mahesh wrote:
+> > > Hi Guenter Roeck / Heikki Krogerus and all,
+> > >
+> > > 1.
+> > > I am testing USB TYPEC PD on a Rockchip Rk3399 SOC based target which=
+ has a
+> > > FUSB302B TYPEC port controller.
+> > >
+> > > 2.
+> > > My source is a wall charger which is based on Gallium Nitride (GaN II=
+)
+> > > technology and has four ports as follows:
+> > >
+> > > USB-C1: 100W PD3.0, 5V/3A, 9V/3A, 12V/3A, 15V/3A. 20V/5A. PPS: 3.3V-1=
+1V/4A
+> > > USB-C2: 100W PD3.0. 5V/3A. 9V/3A. 12V/3A, 15V/3A. 20V/5A PPS:3.3-11V/=
+4A
+> > > USB-C3: 20W PD3.0, 5V/3A, 9V/2.22A, 12V/1.67A
+> > > USB-A: 18W QC3.0. 5V/3A, 9V/2A, 12V/1.5A
+> > >
+> > > 3.
+> > > i am using latest linux-next and enabled all the relevant configs,
+> > > especially:
+> > > CONFIG_TYPEC=3Dy
+> > > CONFIG_TYPEC_TCPM=3Dy
+> > > CONFIG_TYPEC_FUSB302=3Dy
 > >
-> > 2.
-> > My source is a wall charger which is based on Gallium Nitride (GaN II)
-> > technology and has four ports as follows:
+> > Which kernel version?
 > >
-> > USB-C1: 100W PD3.0, 5V/3A, 9V/3A, 12V/3A, 15V/3A. 20V/5A. PPS: 3.3V-11V=
-/4A
-> > USB-C2: 100W PD3.0. 5V/3A. 9V/3A. 12V/3A, 15V/3A. 20V/5A PPS:3.3-11V/4A
-> > USB-C3: 20W PD3.0, 5V/3A, 9V/2.22A, 12V/1.67A
-> > USB-A: 18W QC3.0. 5V/3A, 9V/2A, 12V/1.5A
+> > > 4.
+> > > DT node is as follows when i use USB-C1 of wall charger:
+> > >
+> > >  connector {
+> > >                         compatible =3D "usb-c-connector";
+> > >                         label =3D "USB-C";
+> > >                         data-role =3D "dual";
+> > >                         power-role =3D "sink";
+> > >                         try-power-role =3D "sink";
+> > >                         op-sink-microwatt =3D <1000000>;
+> > >                         sink-pdos =3D <PDO_FIXED(5000, 3000,
+> > > PDO_FIXED_USB_COMM)
+> > >                                     PDO_FIXED(12000, 3000,
+> > > PDO_FIXED_USB_COMM)>;
+> > >                 };
 > >
-> > 3.
-> > i am using latest linux-next and enabled all the relevant configs,
-> > especially:
-> > CONFIG_TYPEC=3Dy
-> > CONFIG_TYPEC_TCPM=3Dy
-> > CONFIG_TYPEC_FUSB302=3Dy
->
-> Which kernel version?
-
-The kernel version is linux-next which is 6.7.0-rc8
-
->
-> > 4.
-> > DT node is as follows when i use USB-C1 of wall charger:
+> > What do you mean by "when i use USB-C1..."? Why is the above valid
+> > only then and not with the other PD contracts?
 > >
-> >  connector {
-> >                         compatible =3D "usb-c-connector";
-> >                         label =3D "USB-C";
-> >                         data-role =3D "dual";
-> >                         power-role =3D "sink";
-> >                         try-power-role =3D "sink";
-> >                         op-sink-microwatt =3D <1000000>;
-> >                         sink-pdos =3D <PDO_FIXED(5000, 3000,
-> > PDO_FIXED_USB_COMM)
-> >                                     PDO_FIXED(12000, 3000,
-> > PDO_FIXED_USB_COMM)>;
-> >                 };
->
-> What do you mean by "when i use USB-C1..."? Why is the above valid
-> only then and not with the other PD contracts?
-
-USB-C1, USB-C2 and USB-C3 are the receptacles/connectors on the PD Wall cha=
-rger
-USB-C1 and USB-C2 are idenical rated as: 100W PD3.0, 5V/3A, 9V/3A,
-12V/3A, 15V/3A. 20V/5A. PPS: 3.3V-11V/4A
-USB-C3 is rated as: 20W PD3.0, 5V/3A, 9V/2.22A, 12V/1.67A
-
-now when i say "when i use USB-C1", i mean that I am using receptacle
-USB-C1 on the wall charger to power
-my target/development system which has a FUSB302B receptacle/connector.
-
-irrespective of the PDO's requested, like:
-PDO_FIXED(9000, 3000, PDO_FIXED_USB_COMM);
-or
-PDO_FIXED(12000, 3000, PDO_FIXED_USB_COMM);
-or
-PDO_FIXED(15000, 3000, PDO_FIXED_USB_COMM);
-or
-PDO_FIXED(20000, 5000, PDO_FIXED_USB_COMM);
-
-the target/development board FUSB302B is getting a hard reset like i
-mentioned in
-1 out of 5 cold boots.
-
->
-> > Issue:
-> > The board power well most of the time, but may be in 1 out of 5 cold bo=
-ots,
-> > FUSB302B is getting a hard reset, as
-> > FUSB302B INTERRUPTA register bit I_HARDRST is getting set.
+> > > Issue:
+> > > The board power well most of the time, but may be in 1 out of 5 cold =
+boots,
+> > > FUSB302B is getting a hard reset, as
+> > > FUSB302B INTERRUPTA register bit I_HARDRST is getting set.
+> > >
+> > > After some digging, found out that the above behaviour is accounted t=
+o when
+> > > something is wrong with the CRC of
+> > > the received packet (SOP - Start of Packet)
 > >
-> > After some digging, found out that the above behaviour is accounted to =
-when
-> > something is wrong with the CRC of
-> > the received packet (SOP - Start of Packet)
->
-> How did you determine that the problem is a bad CRC?
-
-The power contract negotiation as per my understanding is:
-cable detect =3D> source sends Accept =3D> Sink responds with good CRC =3D>
-source sends capabilities =3D>
-=3D> sink replied with goodCRC and sink requests for a particular PDO =3D>
-=3D> source sends accept =3D> sink replied with goodCRC =3D>
-=3D> source sends PS_RDY to sink =3D> sink replied with goodCRC and gets
-bound to desired contract from source.
-
-However in some scenarios, based on below log, i guessed it as bad
-CRC: (RX, header is 0x0)
-[    1.599074] FUSB302: IRQ: 0x80, a: 0x00, b: 0x00, status0: 0x83
-[    1.602877] FUSB302: IRQ: 0x00, a: 0x40, b: 0x00, status0: 0x83
-[    1.605978] TCPM: tcpm_pd_event_handler:
-[    1.606575] TCPM: tcpm_pd_event_handler: in TCPM_CC_EVENT
-[    1.967732] FUSB302: IRQ: 0x80, a: 0x00, b: 0x00, status0: 0x83
-[    2.132493] FUSB302: IRQ: 0x41, a: 0x04, b: 0x00, status0: 0x93
-[    2.133057] FUSB302: IRQ: PD tx success
-[    2.135446] TCPM: PD TX complete, status: 0
-[    2.138529] FUSB302: IRQ: 0x51, a: 0x00, b: 0x00, status0: 0xd1
-[    2.141351] FUSB302: IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
-[    2.141968] FUSB302: IRQ: PD sent good CRC
-[    2.144321] FUSB302: fusb302_pd_read_message: to tcpm_pd_receive
-[    2.144912] TCPM: PD RX, header: 0x1a3 [1]
-[    2.145479] TCPM: tcpm_pd_ctrl_request: type:0x3
-[    2.145873] TCPM: tcpm_pd_ctrl_request: case PD_CTRL_ACCEPT
-[    2.146309] TCPM: tcpm_pd_ctrl_request: case SOFT_RESET_SEND
-[    2.146706] TCPM: tcpm_pd_rx_handler: done
-[    2.154971] FUSB302: IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
-[    2.155374] FUSB302: IRQ: PD sent good CRC
-[    2.158067] FUSB302: fusb302_pd_read_message: to tcpm_pd_receive
-[    2.158496] TCPM: PD RX, header: 0x0 [1]
-[    2.159030] TCPM: tcpm_pd_rx_handler: done
-[    2.176842] FUSB302: IRQ: 0x41, a: 0x01, b: 0x00, status0: 0x83
-[    2.177298] FUSB302: IRQ: PD received hardreset: interrupta: 1
-[    2.177850] FUSB302: fusb302_pd_reset:
-[    2.179471] TCPM: tcpm_pd_event_handler:
-[    2.179919] TCPM: tcpm_pd_event_handler: TCPM_RESET_EVENT
-[    2.180449] TCPM: _tcpm_pd_hard_reset: Received hard reset
-[    2.181099] TCPM4: _tcpm_pd_hard_reset:
-
-board(FUSB302B hard reset) reboots
-
-when i use a USB-C3 receptacle on wall charger with rating: 20W PD3.0,
-5V/3A, 9V/2.22A, 12V/1.67A
-and device tree node as:
-connector {
-                        compatible =3D "usb-c-connector";
-                        label =3D "USB-C";
-                        data-role =3D "dual";
-                        power-role =3D "sink";
-                        try-power-role =3D "sink";
-                        op-sink-microwatt =3D <1000000>;
-                        sink-pdos =3D <PDO_FIXED(5000, 3000, PDO_FIXED_USB_=
-COMM)
-                                    PDO_FIXED(12000, 1670, PDO_FIXED_USB_CO=
-MM)>;
-                };
-log when FUSB302B gets a hard reset: (here it might or might not be a bad C=
-RC ?)
-
-[   1.602441] FUSB302: IRQ: 0x80, a: 0x00, b: 0x00, status0: 0x83
-[    1.606642] FUSB302: IRQ: 0x00, a: 0x40, b: 0x00, status0: 0x83
-[    1.609672] TCPM: tcpm_pd_event_handler:
-[    1.610240] TCPM: tcpm_pd_event_handler: in TCPM_CC_EVENT
-[    1.976170] FUSB302: IRQ: 0x80, a: 0x00, b: 0x00, status0: 0x83
-[    2.136304] FUSB302: IRQ: 0x41, a: 0x04, b: 0x00, status0: 0x93
-[    2.136916] FUSB302: IRQ: PD tx success
-[    2.139148] TCPM: PD TX complete, status: 0
-[    2.141867] FUSB302: IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
-[    2.142325] FUSB302: IRQ: PD sent good CRC
-[    2.144775] FUSB302: fusb302_pd_read_message: to tcpm_pd_receive
-[    2.145313] TCPM: PD RX, header: 0x1a3 [1]
-[    2.145886] TCPM: tcpm_pd_ctrl_request: type:0x3
-[    2.146281] TCPM: tcpm_pd_ctrl_request: case PD_CTRL_ACCEPT
-[    2.146716] TCPM:tcpm_pd_ctrl_request: case SOFT_RESET_SEND
-[    2.147113] TCPM: tcpm_pd_rx_handler: done
-[    2.167042] FUSB302: IRQ: 0x41, a: 0x01, b: 0x00, status0: 0x83
-[    2.167495] FUSB302: IRQ: PD received hardreset: interrupta: 1
-[    2.168047] FUSB302: fusb302_pd_reset:
-[    2.169988] TCPM: tcpm_pd_event_handler:
-[    2.170395] TCPM: tcpm_pd_event_handler: TCPM_RESET_EVENT
-[    2.170785] TCPM: _tcpm_pd_hard_reset: Received hard reset
-[    2.171290] TCPM4: _tcpm_pd_hard_reset:
-
- when FUSB302B negotiates for a contract on USB-C3 receptacle, the
-FUSB302B gets hard reset more
- number of times compared to USB-C1/C2.
-
->
-> > This behaviour is seen i.e. FUSB302B getting a hard reset more on the
-> > USB-C3 port.
+> > How did you determine that the problem is a bad CRC?
 > >
-> > Any pointers on how to solve this issue.
+> > > This behaviour is seen i.e. FUSB302B getting a hard reset more on the
+> > > USB-C3 port.
+> > >
+> > > Any pointers on how to solve this issue.
+> >
+> > Guenter, do you have time to take a look at this?
+> >
 >
-> Guenter, do you have time to take a look at this?
+> As far as I can see, the bit means that a hard reset request has been
+> received from the charger. What else can the code do but to execute
+> that hard reset ? On a higher level, if there is a communication problem
+> due to bad CRC (i.e., a bad communication link) between the wall charger
+> and the development system, I am not sure if there is anything we can do
+> in software to remedy the problem.
 >
-> thanks,
+> Secondary question: Is this a regression ? The original e-mail states
+> that it was seen with the "latest linux-next". If it is a regression, it
+> should be possible to bisect it. However, the only recent commit which
+> might affect reset behavior is a6fe37f428c1 ("usb: typec: tcpm: Skip hard
+> reset when in error recovery"). If anything I would assume that this
+> commit would improve the situation, not make it worse.
+
+I have tested linux-next, linux-lts (v6.1) and linux-stable branches.
+
+linux-next atleast reboots after it(FUSB302B) gets a hard reset
+some branches in LTS, development board power is cutoff during
+negotiation and board never boots.
+
 >
-> --
-> heikki
+> Thanks,
+> Guenter
 
 Thanks,
 Suniel
