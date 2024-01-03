@@ -1,130 +1,130 @@
-Return-Path: <linux-usb+bounces-4709-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4710-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55452823666
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 21:19:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CDB2823745
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 22:50:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE5FAB22F2A
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 20:19:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AF8AB248A7
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 21:50:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A6932033E;
-	Wed,  3 Jan 2024 20:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E631DA2C;
+	Wed,  3 Jan 2024 21:50:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yaH2ymto"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="E+QhrLv6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7AE200DD
-	for <linux-usb@vger.kernel.org>; Wed,  3 Jan 2024 20:16:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-50e835800adso6940798e87.0
-        for <linux-usb@vger.kernel.org>; Wed, 03 Jan 2024 12:16:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704312963; x=1704917763; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=agWOk7w6rgV8y2OB/j9TiP5HID7PZwKq37+MydcMd3Q=;
-        b=yaH2ymtosQorCjffDM2nq133azvGr/KkHcFP2jkaXGKV3hh+uqJV5wI42eNBMnTHGb
-         tEjGWN3xgf8s07+C0L4KsA+8tSh1gPVHuUh+JlFWUJnEUcnXwCvi1yta/ZsFV1qGDn0l
-         upDS8XYcVQ7PcsSSHr+15vt9k5GlzE0x/u0fM6d6SWDpSOtyu1KufVMOv7DaEZcJDnuK
-         DfVAgLpog2eZUTtufVi2SR9N71gZF/s9w6z2AVrp3LU7J43qW1t2w+Aqdqj7JH46ZE/2
-         QDlhqoKKNSEgTmgmm6ew9kcZWmWInVbqCHd1iLDFGu/URiotvGZmVUsBl2elb+ir2P2U
-         mlzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704312963; x=1704917763;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=agWOk7w6rgV8y2OB/j9TiP5HID7PZwKq37+MydcMd3Q=;
-        b=nqxmIcIgTd7xRN8xE3wb3KwIxXy/Y5cEkuqH/DhmcB259/Vd3J1qORtIGtmmo0g0b4
-         ITG+nmeFyDq/QhA2uhcnRVyup9SKCIvIQSZGfotA7h4JeIkYKkZ+5pyl5B1gKTaW6TdU
-         GlFIt++QR8MEWUdcRnSWqKRyz121WhNTMK88hyydvVcGWuSDylj+EwC/9eBic4qdCXUK
-         0MDSvQ09boV2cuSYcpO1JFm1W9QoEvl4CHnhVS5N936muxFT7HiYuufNWOQ4ZTQcByJa
-         uUPylNtWOqpp4r5xSOpJN+ZqoYg6GFclvAJVVFsV7Gjl9p6gl4xze7NkZ92KXrzU6AH1
-         h0MQ==
-X-Gm-Message-State: AOJu0YyoB9QGg6uw9LNNGRMyrUvI0OvFsyj72bE3hATFs5XIFONDKNNl
-	O0DmMKVsIAx8Zv0Zy/3eV/xKOSCbLVzM8g==
-X-Google-Smtp-Source: AGHT+IHKQKRuYd+I0nrZXegy4ZNvuCWzu8ez/JtqTR3BixAbs6pNVBJay8L2h0a30COQ6YXXT35IFg==
-X-Received: by 2002:ac2:41c2:0:b0:50e:7044:704b with SMTP id d2-20020ac241c2000000b0050e7044704bmr4312375lfi.90.1704312963418;
-        Wed, 03 Jan 2024 12:16:03 -0800 (PST)
-Received: from [10.167.154.1] (178235179036.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.36])
-        by smtp.gmail.com with ESMTPSA id fg9-20020a056402548900b00552691fc7f9sm17549670edb.66.2024.01.03.12.16.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jan 2024 12:16:03 -0800 (PST)
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Date: Wed, 03 Jan 2024 21:15:39 +0100
-Subject: [PATCH v3 9/9] arm64: dts: qcom: msm8996: Remove PNoC clock from
- MSS
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07391DA23;
+	Wed,  3 Jan 2024 21:50:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 403LcQHL016677;
+	Wed, 3 Jan 2024 21:49:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=uHNnF/bZ94LqrAIEs8WqP6zxB4HkEIdKigzoxp3FnMs=; b=E+
+	QhrLv61P/gb9vrQFMdMoQ75FQns6tuA4gOqTCkEb8LgZ2jBTGN3NL1hgalFe3R1q
+	wHqgvy+xSpWbFqrC5YDCqlLZ4MAEdTajbYJ/wLGVqEf9YoBytd/AjmN2nMaHsY5N
+	DqQAuXfapmYvUArEKuLQFG4e7En0zHTxMAnX4YBw/wzVPu3OCL2udExg+48SkUgN
+	7tueCNbWpO1XwAQmaT9q0B4Nu/yC0UCGUHDJzQwQVT+o4cGfcnkmEkmfH47WFzDs
+	8GSv0KfqdafubHDHu7Pv37E0pRlIYRrtKe0CIWyCux/2t9dB6VDEyyhpS3keWCA9
+	dqipJh4/Syf/plxvoZyQ==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vdchnge8x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 03 Jan 2024 21:49:56 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 403LntAI026012
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 3 Jan 2024 21:49:56 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 3 Jan 2024 13:49:55 -0800
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+To: <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>, <stable@vger.kernel.org>
+Subject: [PATCH v2] usb: dwc3: gadget: Queue PM runtime idle on disconnect event
+Date: Wed, 3 Jan 2024 13:49:46 -0800
+Message-ID: <20240103214946.2596-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230721-topic-rpm_clk_cleanup-v3-9-a66e698932e3@linaro.org>
-References: <20230721-topic-rpm_clk_cleanup-v3-0-a66e698932e3@linaro.org>
-In-Reply-To: <20230721-topic-rpm_clk_cleanup-v3-0-a66e698932e3@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1704312946; l=1234;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=lDN9I443Hl2d8DVCOQ4aNKeHtWkZFlxqcP4xR6KB6zk=;
- b=EL7JckzCpuqfY1C5Jg62k+EicmGHKeLrQolwseYXNXDeyuOumzO8IUKBRA1/gjGZHSoJP9ld0
- vGGnQXQ6jTrDDzjCYW3tjwB9ltzeS8AaO4BPUKpSSvZ2h7SNgJOFm1t
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Content-Type: text/plain
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: YFXwFkLpgfQ5ub3fwda2QtO2dozwio8I
+X-Proofpoint-GUID: YFXwFkLpgfQ5ub3fwda2QtO2dozwio8I
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 malwarescore=0 adultscore=0 clxscore=1011
+ suspectscore=0 impostorscore=0 mlxscore=0 spamscore=0 bulkscore=0
+ mlxlogscore=906 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2311290000 definitions=main-2401030176
 
-The PNoC clock is a clock for the entire PNoC bus, managed from
-within the interconnect driver. Attaching it to MSS was a total hack.
-Get rid of it and take the liberty to make the clock-names entries
-more readable.
+There is a scenario where DWC3 runtime suspend is blocked due to the
+dwc->connected flag still being true while PM usage_count is zero after
+DWC3 giveback is completed and the USB gadget session is being terminated.
+This leads to a case where nothing schedules a PM runtime idle for the
+device.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+The exact condition is seen with the following sequence:
+  1.  USB bus reset is issued by the host
+  2.  Shortly after, or concurrently, a USB PD DR SWAP request is received
+      (sink->source)
+  3.  USB bus reset event handler runs and issues
+      dwc3_stop_active_transfers(), and pending transfer are stopped
+  4.  DWC3 usage_count decremented to 0, and runtime idle occurs while
+      dwc->connected == true, returns -EBUSY
+  5.  DWC3 disconnect event seen, dwc->connected set to false due to DR
+      swap handling
+  6.  No runtime idle after this point
+
+Address this by issuing an asynchronous PM runtime idle call after the
+disconnect event is completed, as it modifies the dwc->connected flag,
+which is what blocks the initial runtime idle.
+
+Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
+Cc: stable@vger.kernel.org
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+changes from v1:
+- CC'ed stable
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 174eb410824b..8d41ed261adf 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -2513,10 +2513,15 @@ mss_pil: remoteproc@2080000 {
- 				 <&gcc GCC_MSS_GPLL0_DIV_CLK>,
- 				 <&gcc GCC_MSS_SNOC_AXI_CLK>,
- 				 <&gcc GCC_MSS_MNOC_BIMC_AXI_CLK>,
--				 <&rpmcc RPM_SMD_PCNOC_CLK>,
- 				 <&rpmcc RPM_SMD_QDSS_CLK>;
--			clock-names = "iface", "bus", "mem", "xo", "gpll0_mss",
--				      "snoc_axi", "mnoc_axi", "pnoc", "qdss";
-+			clock-names = "iface",
-+				      "bus",
-+				      "mem",
-+				      "xo",
-+				      "gpll0_mss",
-+				      "snoc_axi",
-+				      "mnoc_axi",
-+				      "qdss";
+ drivers/usb/dwc3/gadget.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 858fe4c299b7..de6056277f94 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3973,6 +3973,13 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
+ 	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
  
- 			resets = <&gcc GCC_MSS_RESTART>;
- 			reset-names = "mss_restart";
-
--- 
-2.43.0
-
+ 	dwc3_ep0_reset_state(dwc);
++
++	/*
++	 * Request PM idle to address condition where usage count is
++	 * already decremented to zero, but waiting for the disconnect
++	 * interrupt to set dwc->connected to FALSE.
++	 */
++	pm_request_idle(dwc->dev);
+ }
+ 
+ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
 
