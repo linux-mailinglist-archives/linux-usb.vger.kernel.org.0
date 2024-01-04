@@ -1,156 +1,147 @@
-Return-Path: <linux-usb+bounces-4759-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4760-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1393B824A25
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 22:19:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2790824A77
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 22:50:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB9FC1F23352
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 21:19:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEA341C22772
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 21:50:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC9D2C69C;
-	Thu,  4 Jan 2024 21:19:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133CA2C850;
+	Thu,  4 Jan 2024 21:50:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HR4ebhCh"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C9X8YWpQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B612C1B5;
-	Thu,  4 Jan 2024 21:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 404L0uH7008842;
-	Thu, 4 Jan 2024 21:19:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=dQ/JHTvaWK6L1BzBckOKy
-	fMx62b/1aDP820BHSs3Pzo=; b=HR4ebhChG16tFWKX92VEpKHCVeS90FEUgi+xk
-	Pah3WvhzpX7vM2WURm4d88nJPCLm/vykISG7N/3WrhvF+zmj74yRsEZB9NyM7FVC
-	otHbjtwz2+PWwKy2OfdUdNMsY0qJpmVtlL8Xu8hWR0V/a+1gliKNcm1VLjplD4EH
-	4qEUXGpStTnC8/cEaIO0PZYD0XkOKIX20cmnmYti2gMU+yAmpVRDWgKD1lGz3fIf
-	Ft1ceGeD9S1t+WL4v9O4Gx72ZDCNe8mtpnTEiOvHjB/8PIWWSw2w3Te2dwOzJ57C
-	xds8qnjDqIkHdfcsWWsfKvqDSxKdIZHGXT4oSznPLEqujm+Vw==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ve1418fk0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 04 Jan 2024 21:19:01 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 404LJ0pO020856
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 4 Jan 2024 21:19:00 GMT
-Received: from hu-jackp-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Thu, 4 Jan 2024 13:18:59 -0800
-Date: Thu, 4 Jan 2024 13:18:58 -0800
-From: Jack Pham <quic_jackp@quicinc.com>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-CC: Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Hardik Gajjar <hgajjar@de.adit-jv.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_wcheng@quicinc.com>
-Subject: Re: [PATCH] usb: gadget: ncm: Avoid dropping datagrams of properly
- parsed NTBs
-Message-ID: <20240104211858.GB4127689@hu-jackp-lv.qualcomm.com>
-References: <20240102055143.3889-1-quic_kriskura@quicinc.com>
- <CANP3RGeirg+f8cBbw_3YR5AvuB1ZxJC_9-wcn+Tb-GXf1ESKCQ@mail.gmail.com>
- <ad60f399-5c6a-4f16-8c28-f4d4e0fde1ff@quicinc.com>
- <CANP3RGf5dg14DNuKOn9pqWd4oSBDsPhwwBB7AJ0c3qHbDT0sBQ@mail.gmail.com>
- <572c21f8-e642-4d30-84aa-673051be6bb4@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7752C6BC
+	for <linux-usb@vger.kernel.org>; Thu,  4 Jan 2024 21:50:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--arakesh.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dbe9e10c4fcso1389722276.3
+        for <linux-usb@vger.kernel.org>; Thu, 04 Jan 2024 13:50:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1704405013; x=1705009813; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vr/OBsTWvGDiBKievrq74k8mPQfV1kdauoMo8LQ/tKk=;
+        b=C9X8YWpQAaJNrOHmiZHduX+qHhz74Buc/ehbei978YX1JakLX4HJf/AoBdZP9ufDqs
+         vvXWD61C9AEYH9xLk1kolhEY4mzoer5I+ecudx+8HXH6opiVSv1CBLcBi2eT4r8eT32V
+         IzKr31cNxn/81GKBN4kqhOWrW7WwzHlYb7hhjjwy7ogeDR8TYSeJ9rdaw7kwbtEQ37YF
+         l/mqWLnF7/tylc8aUSboY4IQCz379tSCosTl1blcjV0IcaWdhVYE2g87pWjms8e7+PW5
+         hfs+j++0z8yKo+InDS3Cla57/whu5IHKPT0lRJB6k0Wwk0cOckyJ+WwObWdAwGTcfc9w
+         +9OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704405013; x=1705009813;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vr/OBsTWvGDiBKievrq74k8mPQfV1kdauoMo8LQ/tKk=;
+        b=SQ6zL+uw9qfyLhP42/qpUFOSUQO2+PVf/81lA5opDtrR9jZcGDSBLLglg2XBWf+MAd
+         PdVB2wo0sKKSiamggliY7MF3lBYIV/n7RGm4K2Kd/PcPduT55W7EFr6xFE86OgPcoAcd
+         vfdakDypl2aELP/JlefFRFQxLOS7Ua9Zzyw0Q+S5JyO9krKUYXnsAyScBBbD+FeVk0yG
+         pD29r7X+1ibulQh5grTQUgAHMNqdWINjpAEESVYSXeNgoFB13WmUhW2Fqg3lfntNFpdd
+         61kemQtSynh+fi9M7Nji/4pn4MbRPX7NT3JBP5HjOwc7kxUmTTT7GPSddgsFqYtOgqlc
+         szdQ==
+X-Gm-Message-State: AOJu0YyYm3jNUxLN9B63GLfc/gugQChOXkWtRynFuValUcqF1uBWlQq+
+	PXTMsukZz0dCGKsGPOSsIYkupfjNlNCipchl6rw=
+X-Google-Smtp-Source: AGHT+IHX11kdbCtYUTemM/UsbhmAPpGN/iCqaRNkAgvtkryuwnIP7VFMH0PU+nqEjfZUwAMuJZiUdTuwaCLp
+X-Received: from hi-h2o-specialist.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cef])
+ (user=arakesh job=sendgmr) by 2002:a25:ef11:0:b0:dbe:9dbe:adb6 with SMTP id
+ g17-20020a25ef11000000b00dbe9dbeadb6mr436407ybd.4.1704405013049; Thu, 04 Jan
+ 2024 13:50:13 -0800 (PST)
+Date: Thu,  4 Jan 2024 13:50:08 -0800
+In-Reply-To: <20231215210746.821494-1-arakesh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <572c21f8-e642-4d30-84aa-673051be6bb4@quicinc.com>
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: khRM8CFDqD_hI6VnILsFEqGL7o0jMTNv
-X-Proofpoint-ORIG-GUID: khRM8CFDqD_hI6VnILsFEqGL7o0jMTNv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 suspectscore=0 clxscore=1011 malwarescore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=612 bulkscore=0 spamscore=0
- mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401040167
+Mime-Version: 1.0
+References: <20231215210746.821494-1-arakesh@google.com>
+X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
+Message-ID: <20240104215009.2252452-1-arakesh@google.com>
+Subject: [PATCH v2 1/2] usb: gadget: uvc: Fix use are free during STREAMOFF
+From: Avichal Rakesh <arakesh@google.com>
+To: arakesh@google.com, gregkh@linuxfoundation.org
+Cc: dan.scally@ideasonboard.com, etalvala@google.com, jchowdhary@google.com, 
+	laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jan 02, 2024 at 05:04:01PM +0530, Krishna Kurapati PSSNV wrote:
-> 
-> 
-> > > The above might work. But just wanted to check why this 1 byte would
-> > > come actually ? Any reason for this ? ZLP must not give a 1 byte packet
-> > > of 1 byte AFAIK.
-> > 
-> > I'm not a USB expert, but... my (possibly wrong) understanding is:
-> > (note I may be using bad terminology... also the 1024/16384 constants
-> > are USB3 specific, USB2 has afaik max 512 not 1024, I think USB1 is
-> > even 64, but it's likely too old to matter, etc.)
-> > 
-> > USB3 payloads can be up to 16384 bytes in size,
-> > on the wire they are split up into packets of between 0 and 1024 bytes.
-> > [a Zero Length Packet is a ZLP]
-> > A usb payload is terminated with a usb packet of < 1024 bytes.
-> > 
-> > So a 1524 byte payload would be sent as 2 packets 1024 + 500.
-> > While a 2048 byte payload would be sent as 3 packets 1024 + 1024 + 0 (ie. ZLP)
-> > 
-> > A 16384 byte payload could be sent as 16 * 1024 + ZLP,
-> > but since 16384 is the max you might be able to get away with just 16
-> > * 1024 and skip the ZLP...
-> > 
-> > I think this is why the Linux usb code base has ZLP / NO_ZLP quirks.
-> > [but do note I may be wrong, I haven't gone looking at what exactly
-> > the zlp quirks do,
-> > not even sure if they're receive or transmit side... or both]
-> > 
-> > Different hardware/usb chipsets/etc have different behaviour wrt. ZLPs.
-> > 
-> > In general it seems like what needs to happen is much clearer if you
-> > just avoid the need for ZLPs entirely.
-> > I think that's what windows is trying to do here: avoid ever sending a
-> > usb payload with a multiple of 1024 bytes,
-> > so it never has to send ZLPs. This seems easy enough to do...
-> > limit max to 16383 (not 16384) and add 1 byte of zero pad if the
-> > payload ends up being a multiple of 1024.
-> > 
-> 
-> Got it. Thanks for the explanation. Atleast this gives me an insight into
-> what might be the problem.
+There is a path that may lead to freed memory being referenced,
+causing kernel panics.
 
-Hooray to MS for having open-sourced a reference version of their NCM
-driver on GitHub (under MIT license)--and I think this might explain it:
+The kernel panic has the following stack trace:
 
-https://github.com/microsoft/NCM-Driver-for-Windows/blob/release_21H2/host/device.cpp#L902
+Workqueue: uvcgadget uvcg_video_pump.c51fb85fece46625450f86adbf92c56c.cfi_jt
+pstate: 60c00085 (nZCv daIf +PAN +UAO -TCO BTYPE=--)
+pc : __list_del_entry_valid+0xc0/0xd4
+lr : __list_del_entry_valid+0xc0/0xd4
+Call trace:
+  __list_del_entry_valid+0xc0/0xd4
+  uvc_video_free_request+0x60/0x98
+  uvcg_video_pump+0x1cc/0x204
+  process_one_work+0x21c/0x4b8
+  worker_thread+0x29c/0x574
+  kthread+0x158/0x1b0
+  ret_from_fork+0x10/0x30
 
-which states in a comment (pasted line-wrapped for mail-friendliness)
+The root cause is that uvcg_video_usb_req_queue frees the uvc_request
+if is_enabled is false and returns an error status. video_pump also
+frees the associated request if uvcg_video_usb_req_queue returns an
+error status, leading to double free and accessing garbage memory.
 
-        //NCM spec is not explicit if a ZLP shall be sent when
-        //wBlockLength != 0 and it happens to be
-        //multiple of wMaxPacketSize. Our interpretation is that no ZLP
-        //needed if wBlockLength is non-zero,
-        //because the non-zero wBlockLength has already told the
-        //function side the size of transfer to be expected.
-        //
-        //However, there are in-market NCM devices rely on ZLP as long
-        //as the wBlockLength is multiple of wMaxPacketSize.
-        //To deal with such devices, we pad an extra 0 at end so the
-        //transfer is no longer multiple of wMaxPacketSize
+To fix the issue, this patch removes freeing logic from
+uvcg_video_usb_req_queue, and lets the callers to the function handle
+queueing errors as they see fit.
 
-If so then would be worth calling this out in commit text and/or code
-comment.
+Fixes: 6acba0345b68 ("usb:gadget:uvc Do not use worker thread to pump isoc usb requests")
+Tested-by: Avichal Rakesh <arakesh@google.com>
+Signed-off-by: Avichal Rakesh <arakesh@google.com>
+---
+v1 -> v2: Address review comment; add "Fixes" tag; fix goofy line wrap
 
-Jack
+ drivers/usb/gadget/function/uvc_video.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index 98ba524c27f5..7f18dc471be3 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -276,10 +276,9 @@ static int uvcg_video_usb_req_queue(struct uvc_video *video,
+ 	bool is_bulk = video->max_payload_size;
+ 	struct list_head *list = NULL;
+
+-	if (!video->is_enabled) {
+-		uvc_video_free_request(req->context, video->ep);
++	if (!video->is_enabled)
+ 		return -ENODEV;
+-	}
++
+ 	if (queue_to_ep) {
+ 		struct uvc_request *ureq = req->context;
+ 		/*
+@@ -464,8 +463,15 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ 		 * and this thread for isoc endpoints.
+ 		 */
+ 		ret = uvcg_video_usb_req_queue(video, to_queue, !is_bulk);
+-		if (ret < 0)
++		if (ret < 0) {
++			/*
++			 * Endpoint error, but the stream is still enabled.
++			 * Put request back in req_free for it to be cleaned
++			 * up later.
++			 */
+ 			uvcg_queue_cancel(queue, 0);
++			list_add_tail(&to_queue->list, &video->req_free);
++		}
+ 	} else {
+ 		uvc_video_free_request(ureq, ep);
+ 	}
+--
+2.43.0.472.g3155946c3a-goog
 
