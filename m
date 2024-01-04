@@ -1,502 +1,203 @@
-Return-Path: <linux-usb+bounces-4712-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4713-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B07F823B20
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 04:29:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6827B823C1C
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 07:12:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D55721F2617E
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 03:29:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F3071C24582
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 06:12:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53D9BC138;
-	Thu,  4 Jan 2024 03:29:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4901A594;
+	Thu,  4 Jan 2024 06:12:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Kq0pfd9N"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="KsADN0Hg";
+	dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b="lGN6Swt4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF355231
-	for <linux-usb@vger.kernel.org>; Thu,  4 Jan 2024 03:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1704338964;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=JasdmOYFBXvHxdqm2iEwbFiLYX+AqpiowvqyeQeEmmA=;
-	b=Kq0pfd9NLl/Ky5Nc+fCXn3R1dN+nRmq3Zwrr+F763oqGAsjSgT3WQ0KS6RudUPyPLQF4CW
-	fvidEICwyZmnuM4ghLEsQ69Sx6h4aGSXa4DOy32CV3hTU4wLk7Ty6yW0aaPwJTmpdNTqgH
-	KRstnz36bQUlz9QyDj68QY7ZuIV31Wg=
-From: Yajun Deng <yajun.deng@linux.dev>
-To: gregkh@linuxfoundation.org
-Cc: marcel@holtmann.org,
-	wg@grandegger.com,
-	aspriel@gmail.com,
-	kvalo@kernel.org,
-	mka@chromium.org,
-	johan@kernel.org,
-	oneukum@suse.com,
-	stern@rowland.harvard.edu,
-	valentina.manea.m@gmail.com,
-	robh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH v3] USB: core: Use device_driver directly in struct usb_driver and usb_device_driver
-Date: Thu,  4 Jan 2024 11:28:22 +0800
-Message-Id: <20240104032822.1896596-1-yajun.deng@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC411DFE3;
+	Thu,  4 Jan 2024 06:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 3d93196caac811ee9e680517dc993faa-20240104
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=Pf/kO4WtGM61Jj1D5PQ/9bVy7L/Z+IaVQXCSNvkIdhU=;
+	b=KsADN0Hg8WYYf6crLBxEbUdEGYli4z45zKj8y3mp8OmXno+YsPCiu62XI39QV7VFenqcf7QK9cPJlSf9JyJrvcOEvyu0Tg3wJIViRON4WHmCRRkBW8yQNs73WknreVcKuc/hpezn5pmr4UhRsPFSQ4R/FaetcoNk2/5IFduEPyE=;
+X-CID-CACHE: Type:Local,Time:202401041400+08,HitQuantity:1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.35,REQID:492358fa-fce8-4507-a364-d18c8b9b27f3,IP:0,U
+	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-25
+X-CID-META: VersionHash:5d391d7,CLOUDID:8378f97e-4f93-4875-95e7-8c66ea833d57,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:0,Content:0,EDM:-3,IP:nil,URL
+	:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+	,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: 3d93196caac811ee9e680517dc993faa-20240104
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
+	(envelope-from <chunfeng.yun@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 208096196; Thu, 04 Jan 2024 14:12:29 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 4 Jan 2024 14:12:28 +0800
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 4 Jan 2024 14:12:28 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HV72/sWrV9ohuppCD+Y7qY2FRgxxSmVwoPNiJUBYgNfCf5Lt6dYnjEpQ5FdAhEb+RoZECF71QN0Qlr9O1Db+1PjVhfHcEf+5mEm5zsNVxafxGF+VMPyA73vBICKbroR7xoBHu2WNAfeDowJfn6KuVm3iP04t2AJm/SyX+lWiWz9G90ZjQcz+3GlWP9yN89vmD0+r7aZkPht3/CUKyPLGmRfAdoD3EbU4XikyMGcAmMiNDNvTEvCzgSL9guJDxP0LVq5N+MH2l5x4vjIbfao54/UHlJk+KGDBnl3M6D6pDGMIH6wPY7pHc6zL/t6O4rfmijSIHmLoHq64u4dJdDY5PQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Pf/kO4WtGM61Jj1D5PQ/9bVy7L/Z+IaVQXCSNvkIdhU=;
+ b=muvupkwjBgRNgHA+D1ZN6ebkqkHtKIzn3jyFVaESkUqe8LYTGakt08PizVFjF8hb1f5778ZDSdMQnO19871dvLu/P998IaRPSUDRQfPjVQQvy5K3fk+X2wI2EEEY4RGghPZltxSlA4jLmuxtFJORbE9cHtg8+90gjzTcHqz6zXvUSWXE8T5flymCutZMKewBMnR7gTw2enhUnPXNsH9B/YJNaJJXodQDtq5HGSgxJlT8rUAFnfprk8KYzmcTSdfsZMtNw8oReOAn9PW7IIZm3xUv5FGhWHmO/07RX2xAH8YXUoKcPDWIIdOq21G04CZYlFJAM1FqyvFRo+5E0QEDHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pf/kO4WtGM61Jj1D5PQ/9bVy7L/Z+IaVQXCSNvkIdhU=;
+ b=lGN6Swt41uISufBIJKHRT1FAb6W90MLRYGmGM2auQg6nhuoJo7ZLiwcc6+5kInL3yaQXxGBtA/mbP883mFOVl7gJdoWwHCZXDPXBYSPUZChdbgkWK4gdkRclIKvy0lLi9nqzhTbonJ5Wngpc4h5bGEpYkyE7z0NVgjIIhZ3ycbs=
+Received: from TYZPR03MB7153.apcprd03.prod.outlook.com (2603:1096:400:33c::6)
+ by TY0PR03MB6428.apcprd03.prod.outlook.com (2603:1096:400:1ac::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.13; Thu, 4 Jan
+ 2024 06:12:26 +0000
+Received: from TYZPR03MB7153.apcprd03.prod.outlook.com
+ ([fe80::75b5:9f6d:dc01:9946]) by TYZPR03MB7153.apcprd03.prod.outlook.com
+ ([fe80::75b5:9f6d:dc01:9946%6]) with mapi id 15.20.7159.013; Thu, 4 Jan 2024
+ 06:12:26 +0000
+From: =?utf-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= <Chunfeng.Yun@mediatek.com>
+To: "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"angelogioacchino.delregno@collabora.com"
+	<angelogioacchino.delregno@collabora.com>
+CC: "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+	=?utf-8?B?RWRkaWUgSHVuZyAo5rSq5q2j6ZGrKQ==?= <Eddie.Hung@mediatek.com>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	=?utf-8?B?TWFjcGF1bCBMaW4gKOael+aZuuaWjCk=?= <Macpaul.Lin@mediatek.com>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "matthias.bgg@gmail.com"
+	<matthias.bgg@gmail.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: usb: mtk-xhci: add a property for
+ Gen1 isoc-in transfer issue
+Thread-Topic: [PATCH v4 1/3] dt-bindings: usb: mtk-xhci: add a property for
+ Gen1 isoc-in transfer issue
+Thread-Index: AQHaOIpkcdKDXzmoj0eSssQ68oUiA7C+hIWAgAq0XIA=
+Date: Thu, 4 Jan 2024 06:12:26 +0000
+Message-ID: <b2d007ee05f34fc2865841744e89eba39ccf4945.camel@mediatek.com>
+References: <20231227060316.8539-1-chunfeng.yun@mediatek.com>
+	 <1718f25d-3274-3e4d-0cdf-72fda8788e39@linux.intel.com>
+In-Reply-To: <1718f25d-3274-3e4d-0cdf-72fda8788e39@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR03MB7153:EE_|TY0PR03MB6428:EE_
+x-ms-office365-filtering-correlation-id: b3cb24af-c4b3-4ffd-f22c-08dc0cec1fa0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HnfXtPxkCjXxjEUGlEoFB1cy/TR69vUr8hxVqWsBTULdYwFQOFPi8n9DjNxZOSQPqc61pu9E/dAfl09j8G3a3bYXH+X5LUJFVfX2MiZLpZ89tr9MiarvPX53Ygs6C32LakouinSE3yqnm6V9O3S4CVSkjQTiSpgGKmv4CnWCyj9zXPqj3cPrinzpWkzYN/FutTVNJRtxQAfmI5bA7xtaCMzL72RSBAKK5O2MdOIm0a0RUx57DjDn/5BeN0KPKLxbQWwAFZ9hB6aeTlt1sm5GLs3hQQ84o4BY7a8aGlhXCrUO63u0vU9qTvymU4D9npHL4sViAFj0eGjs78mGqfaKn4IaKmgeyfdY21vNttkK11TV/6PjLo9VxLyHo26S+kmZmnvPVmh7vm124cwtrfb/Qb3RkRbbjkwkOQET4TKr/66yzpW1QDJ1muR+Qn6Wul/icLJct8XkeHvm6SnBs6eSz+FUy/g1sXIXql5pcDZSB9wuFaAaGu/snbRpYPh5oZJsIRB/0lTR6rxPgf4l92jplXym78ukYA0Un+1Vc6tlRjPry1I05KFG8Y9DEXkhxktSONoANjjYR8NeLlz6qBGELmjXtYMtv8Ea0H8ow5yCKCNwDWqI+QBba4z/TutK2MGzpPKhY77+sQBZ9YyMBXBTr6Vj8Q9BuoZnLcRs3b4maYhNCPbSsw0D6eNVJ4eUGP7PAudMIjfKhCCpx73dAMQvXCFGdQd4aYtNNckV+QgodQI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB7153.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(366004)(346002)(376002)(396003)(39860400002)(230922051799003)(230173577357003)(230273577357003)(1800799012)(186009)(64100799003)(451199024)(7416002)(5660300002)(478600001)(8676002)(6486002)(6512007)(6506007)(86362001)(2616005)(26005)(71200400001)(8936002)(316002)(85182001)(36756003)(91956017)(76116006)(66946007)(66556008)(110136005)(54906003)(41300700001)(66446008)(64756008)(66476007)(38100700002)(122000001)(83380400001)(4326008)(38070700009)(2906002)(4001150100001)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Nm5ta041ZXpEZS9mY2d1UGtreE5rZm5MUlFDSTYvU3M1MVZJZUtFVnZYUXM5?=
+ =?utf-8?B?MWtjWFRyNHNwc3hPYlJ6ME5LWVJIVjdUaGhqQzFDQUQxSEdzUlVJVVZOSFdk?=
+ =?utf-8?B?ZHg2SXNFNHZxQ2lmWkpQdGF5TUpETHNMMERzb3RrUFQxVDdLTU5WMzlTdHJu?=
+ =?utf-8?B?YVN4eHhneVBHQmdhcVU3Ym1aWm42ZHlFWG8vM3dFUXZlU3dIZDhFSVJ3b2dF?=
+ =?utf-8?B?WmpvNUcyWkpSTDIzYVNNMCtBRTJzWWEzT1djdDA5ZE9tMmRjdk80M1l1c1Vj?=
+ =?utf-8?B?eW8xK3dwWXE3WE1TNjZaWHpEdDVab05MM3hVMzZFUFF2QklxNGJoMWRqTFIz?=
+ =?utf-8?B?L2xobTAvWU9BYmdJZHlZYzRCU1M2eWNmQUo3dWUrYy9RTHJxYlNYZjhUeU1Q?=
+ =?utf-8?B?b1p0cGxtRjl4b3BrNURvTW4wTERTVS8xOFBQMGFGbVZxYVQyQWlJalpMbmc3?=
+ =?utf-8?B?b09zUEpScCtyZS9sUmlYeSt5eVlTU2tqeGdLNGU2bUt0MlJvRTlRa1FXVzFH?=
+ =?utf-8?B?cG1aam9KVG5PN25pNitNMHFQbU9wQTlKZDZBSjNaS1NjTkJIK3FZZTFSMkRq?=
+ =?utf-8?B?N3FmWUYvTTRZMTVDdlhkN2tEY2x1WGNoeExoQ2Y3Y2xtUXVQN3M0QnlENlZj?=
+ =?utf-8?B?SmNCZitiYlp0TFV2T0drdjFYNnJNdEJrRXJuQklEQjVBZkdvNmpFTWordEtp?=
+ =?utf-8?B?WXpkRzhWUkR1WjczYnp6S3NZRlJreXFLR1pzVDR2VTd0dnEvRnlUWDRickNv?=
+ =?utf-8?B?WklsRDIwdXlPYmlOWjdFemxnYkhROE9XRFM4OTVramVQejEzTW05ZUUzdEx1?=
+ =?utf-8?B?T1I4UDE0WmZUZzhhV280bzJlb2pjMEJYb1M1dGRyNGs5eW00SldLa3hyalZm?=
+ =?utf-8?B?ZTBGYStxdHo3LzNVcnp6UW9JakVoQkx3MkFxRVdGMy8yUHdlWjZoTG45SFNK?=
+ =?utf-8?B?b29oU01CTmV5bkV2VmxHQUN4N1V2eFRiaFdaam9ySE1mMWJTdTdCaDBZT2sy?=
+ =?utf-8?B?YmY2bUNKK2h2ODlRWk93MkhNMzk1eWtQZUR3cXYvMUh3T01KdWFQazdzUThN?=
+ =?utf-8?B?eTZScWNNWEJqWDF1bEZoRHJQUnhnbDVBS1J0UUt6M2RKZVdDcEo4QndTZjlp?=
+ =?utf-8?B?U2c3dld0WmlkdElINXZzVkNqeXplZVIzcGw1OHdCYzV5OFNHWnpFb2xJWDhH?=
+ =?utf-8?B?dHBKcjRTMmZpYUlTYld4aXNaVFdnUGJWV1lhK0c2TzFiZU5SaGtYWTlzWnhz?=
+ =?utf-8?B?aE5pOFZMcS9RVGhuUUFsQ3d2S0ZYZTg1Q1FFUmlLaFZLcnNLRyt6SkZNU096?=
+ =?utf-8?B?QjJNb0h3MnBqdWlvWVZHSHI0TnFGMlMrWXphNlhwRUVJbk9BNFYraXRxYW54?=
+ =?utf-8?B?cXdSMmExSXBMQXlsSHJXTnVOSk80MENCUU1PWnFiYVJscll4UXhCQkJnSUpj?=
+ =?utf-8?B?REt4eXVpdGtVU2FjMjgvQmJhQVljQnJENHZFd2J4eG5xenpSQmltZVFMcjBB?=
+ =?utf-8?B?WXdWOStUeTJVenFicUo2NDB2U0FLS2ZxMXhZTTVlUVVUcWJYZFN0TCtkQ01L?=
+ =?utf-8?B?bDZlMTZCdEp1eU5hVHkrYTNzVzAxVGdQVXZtRmUyWUx0RnhlTEVjSWRqNFZM?=
+ =?utf-8?B?bm1KaEdRMmFDVmYzQnlJOFZ5S2N1TGZUbm5qaW03STFscUhCYVpTMGtJVWNZ?=
+ =?utf-8?B?RkJDMHpxY1kwUkk2alJUSnA3ZFdiVEdYUmp1UkQvUS9rZHpkVG5HRm9yV1RS?=
+ =?utf-8?B?V2dhVVJGYjZrU0lhQmhIVnBKU2lJbHI1QVN2QWV4MzRZY0FjU0dtY1o2VXQr?=
+ =?utf-8?B?a2RZQWFpU2lKQnFqaFdjSDNYMGt1T3ZFZkdaNkNFazc2QzEzcXFQekh2L3Bq?=
+ =?utf-8?B?dU16MktLOG9wWVlLazZCUUY2cGdYeGpXUytlTk9GTnhadUFXK1F3eVYvZW1F?=
+ =?utf-8?B?TTh5ejNqQU9qTlZ2U0tJSUd4VXJaS3lIdWRRR3VYcXAyVmgycE45L0ZmSVZm?=
+ =?utf-8?B?RFVzTXdIRzc5TmMrM0xZN1Q3MFJ4SFBFZEM0aHdyYjdGYWVKc1RTRndlMFZ1?=
+ =?utf-8?B?MUh6QzFRWXlidFJRMzA5c043d1NLVUtGM0N6cDFLWVRWRDBCdjNTbkhYOVVV?=
+ =?utf-8?B?L2p3MEpPckNVdEpGUllmdEc1RUpuM1Fndmk1Z3JLRGpwbm9LRXdnRWtuMnBV?=
+ =?utf-8?B?emc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D5E0DF7179EAD54CA94852CAF6EDDA9C@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB7153.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3cb24af-c4b3-4ffd-f22c-08dc0cec1fa0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jan 2024 06:12:26.2005
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qQYoa/HvgAAjEWsyTZjLwQjS4yPANfkzTdJublBLN8TcNL+4bn7z+nu5ASqagPoAxXoxUY+lyNbTpY1bLp6n3sMTm4JBhfB9MR31XI7+22M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR03MB6428
+X-MTK: N
 
-There is usbdrv_wrap in struct usb_driver and usb_device_driver, it
-contains device_driver and for_devices. for_devices is used to
-distinguish between device drivers and interface drivers.
-
-Like the is_usb_device(), it tests the type of the device. We can test
-that if the probe of device_driver is equal to usb_probe_device in
-is_usb_device_driver(), and then the struct usbdrv_wrap is no longer
-needed.
-
-Clean up struct usbdrv_wrap, use device_driver directly in struct
-usb_driver and usb_device_driver. This makes the code cleaner.
-
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
----
-v3: Don't extern usb_probe_device, move is_usb_device_driver() to driver.c
-v2: simplify is_usb_device_driver().
-v1: https://lore.kernel.org/all/20231215063101.792991-1-yajun.deng@linux.dev/
----
- drivers/bluetooth/btusb.c                     |  6 +-
- drivers/net/can/usb/peak_usb/pcan_usb_core.c  |  2 +-
- .../broadcom/brcm80211/brcmfmac/usb.c         |  2 +-
- drivers/net/wireless/marvell/mwifiex/usb.c    |  2 +-
- drivers/usb/core/driver.c                     | 59 ++++++++++---------
- drivers/usb/core/usb.c                        |  2 +-
- drivers/usb/core/usb.h                        |  8 +--
- drivers/usb/misc/onboard_usb_hub.c            |  2 +-
- drivers/usb/serial/bus.c                      |  2 +-
- drivers/usb/serial/usb-serial.c               |  2 +-
- drivers/usb/storage/uas.c                     |  2 +-
- drivers/usb/usbip/stub_main.c                 |  8 +--
- include/linux/usb.h                           | 24 +++-----
- 13 files changed, 53 insertions(+), 68 deletions(-)
-
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index a0a317bac095..c4e0456153d8 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -4799,10 +4799,8 @@ static struct usb_driver btusb_driver = {
- 	.disable_hub_initiated_lpm = 1,
- 
- #ifdef CONFIG_DEV_COREDUMP
--	.drvwrap = {
--		.driver = {
--			.coredump = btusb_coredump,
--		},
-+	.driver = {
-+		.coredump = btusb_coredump,
- 	},
- #endif
- };
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-index 24ad9f593a77..1efa39e134f4 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-@@ -1143,7 +1143,7 @@ static void __exit peak_usb_exit(void)
- 	int err;
- 
- 	/* last chance do send any synchronous commands here */
--	err = driver_for_each_device(&peak_usb_driver.drvwrap.driver, NULL,
-+	err = driver_for_each_device(&peak_usb_driver.driver, NULL,
- 				     NULL, peak_usb_do_device_exit);
- 	if (err)
- 		pr_err("%s: failed to stop all can devices (err %d)\n",
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c
-index 2178675ae1a4..0ccf735316c2 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c
-@@ -1581,7 +1581,7 @@ static int brcmf_usb_reset_device(struct device *dev, void *notused)
- 
- void brcmf_usb_exit(void)
- {
--	struct device_driver *drv = &brcmf_usbdrvr.drvwrap.driver;
-+	struct device_driver *drv = &brcmf_usbdrvr.driver;
- 	int ret;
- 
- 	brcmf_dbg(USB, "Enter\n");
-diff --git a/drivers/net/wireless/marvell/mwifiex/usb.c b/drivers/net/wireless/marvell/mwifiex/usb.c
-index d3ab9572e711..515e6db410f2 100644
---- a/drivers/net/wireless/marvell/mwifiex/usb.c
-+++ b/drivers/net/wireless/marvell/mwifiex/usb.c
-@@ -687,7 +687,7 @@ static struct usb_driver mwifiex_usb_driver = {
- 	.suspend = mwifiex_usb_suspend,
- 	.resume = mwifiex_usb_resume,
- 	.soft_unbind = 1,
--	.drvwrap.driver = {
-+	.driver = {
- 		.coredump = mwifiex_usb_coredump,
- 	},
- };
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index 1dc0c0413043..e01b1913d02b 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -189,13 +189,13 @@ static int usb_create_newid_files(struct usb_driver *usb_drv)
- 		goto exit;
- 
- 	if (usb_drv->probe != NULL) {
--		error = driver_create_file(&usb_drv->drvwrap.driver,
-+		error = driver_create_file(&usb_drv->driver,
- 					   &driver_attr_new_id);
- 		if (error == 0) {
--			error = driver_create_file(&usb_drv->drvwrap.driver,
-+			error = driver_create_file(&usb_drv->driver,
- 					&driver_attr_remove_id);
- 			if (error)
--				driver_remove_file(&usb_drv->drvwrap.driver,
-+				driver_remove_file(&usb_drv->driver,
- 						&driver_attr_new_id);
- 		}
- 	}
-@@ -209,9 +209,9 @@ static void usb_remove_newid_files(struct usb_driver *usb_drv)
- 		return;
- 
- 	if (usb_drv->probe != NULL) {
--		driver_remove_file(&usb_drv->drvwrap.driver,
-+		driver_remove_file(&usb_drv->driver,
- 				&driver_attr_remove_id);
--		driver_remove_file(&usb_drv->drvwrap.driver,
-+		driver_remove_file(&usb_drv->driver,
- 				   &driver_attr_new_id);
- 	}
- }
-@@ -552,7 +552,7 @@ int usb_driver_claim_interface(struct usb_driver *driver,
- 	if (!iface->authorized)
- 		return -ENODEV;
- 
--	dev->driver = &driver->drvwrap.driver;
-+	dev->driver = &driver->driver;
- 	usb_set_intfdata(iface, data);
- 	iface->needs_binding = 0;
- 
-@@ -615,7 +615,7 @@ void usb_driver_release_interface(struct usb_driver *driver,
- 	struct device *dev = &iface->dev;
- 
- 	/* this should never happen, don't release something that's not ours */
--	if (!dev->driver || dev->driver != &driver->drvwrap.driver)
-+	if (!dev->driver || dev->driver != &driver->driver)
- 		return;
- 
- 	/* don't release from within disconnect() */
-@@ -950,7 +950,7 @@ static int __usb_bus_reprobe_drivers(struct device *dev, void *data)
- 	int ret;
- 
- 	/* Don't reprobe if current driver isn't usb_generic_driver */
--	if (dev->driver != &usb_generic_driver.drvwrap.driver)
-+	if (dev->driver != &usb_generic_driver.driver)
- 		return 0;
- 
- 	udev = to_usb_device(dev);
-@@ -964,6 +964,11 @@ static int __usb_bus_reprobe_drivers(struct device *dev, void *data)
- 	return 0;
- }
- 
-+bool is_usb_device_driver(const struct device_driver *drv)
-+{
-+	return drv->probe == usb_probe_device;
-+}
-+
- /**
-  * usb_register_device_driver - register a USB device (not interface) driver
-  * @new_udriver: USB operations for the device driver
-@@ -983,15 +988,14 @@ int usb_register_device_driver(struct usb_device_driver *new_udriver,
- 	if (usb_disabled())
- 		return -ENODEV;
- 
--	new_udriver->drvwrap.for_devices = 1;
--	new_udriver->drvwrap.driver.name = new_udriver->name;
--	new_udriver->drvwrap.driver.bus = &usb_bus_type;
--	new_udriver->drvwrap.driver.probe = usb_probe_device;
--	new_udriver->drvwrap.driver.remove = usb_unbind_device;
--	new_udriver->drvwrap.driver.owner = owner;
--	new_udriver->drvwrap.driver.dev_groups = new_udriver->dev_groups;
-+	new_udriver->driver.name = new_udriver->name;
-+	new_udriver->driver.bus = &usb_bus_type;
-+	new_udriver->driver.probe = usb_probe_device;
-+	new_udriver->driver.remove = usb_unbind_device;
-+	new_udriver->driver.owner = owner;
-+	new_udriver->driver.dev_groups = new_udriver->dev_groups;
- 
--	retval = driver_register(&new_udriver->drvwrap.driver);
-+	retval = driver_register(&new_udriver->driver);
- 
- 	if (!retval) {
- 		pr_info("%s: registered new device driver %s\n",
-@@ -1023,7 +1027,7 @@ void usb_deregister_device_driver(struct usb_device_driver *udriver)
- 	pr_info("%s: deregistering device driver %s\n",
- 			usbcore_name, udriver->name);
- 
--	driver_unregister(&udriver->drvwrap.driver);
-+	driver_unregister(&udriver->driver);
- }
- EXPORT_SYMBOL_GPL(usb_deregister_device_driver);
- 
-@@ -1051,18 +1055,17 @@ int usb_register_driver(struct usb_driver *new_driver, struct module *owner,
- 	if (usb_disabled())
- 		return -ENODEV;
- 
--	new_driver->drvwrap.for_devices = 0;
--	new_driver->drvwrap.driver.name = new_driver->name;
--	new_driver->drvwrap.driver.bus = &usb_bus_type;
--	new_driver->drvwrap.driver.probe = usb_probe_interface;
--	new_driver->drvwrap.driver.remove = usb_unbind_interface;
--	new_driver->drvwrap.driver.owner = owner;
--	new_driver->drvwrap.driver.mod_name = mod_name;
--	new_driver->drvwrap.driver.dev_groups = new_driver->dev_groups;
-+	new_driver->driver.name = new_driver->name;
-+	new_driver->driver.bus = &usb_bus_type;
-+	new_driver->driver.probe = usb_probe_interface;
-+	new_driver->driver.remove = usb_unbind_interface;
-+	new_driver->driver.owner = owner;
-+	new_driver->driver.mod_name = mod_name;
-+	new_driver->driver.dev_groups = new_driver->dev_groups;
- 	spin_lock_init(&new_driver->dynids.lock);
- 	INIT_LIST_HEAD(&new_driver->dynids.list);
- 
--	retval = driver_register(&new_driver->drvwrap.driver);
-+	retval = driver_register(&new_driver->driver);
- 	if (retval)
- 		goto out;
- 
-@@ -1077,7 +1080,7 @@ int usb_register_driver(struct usb_driver *new_driver, struct module *owner,
- 	return retval;
- 
- out_newid:
--	driver_unregister(&new_driver->drvwrap.driver);
-+	driver_unregister(&new_driver->driver);
- 
- 	pr_err("%s: error %d registering interface driver %s\n",
- 		usbcore_name, retval, new_driver->name);
-@@ -1102,7 +1105,7 @@ void usb_deregister(struct usb_driver *driver)
- 			usbcore_name, driver->name);
- 
- 	usb_remove_newid_files(driver);
--	driver_unregister(&driver->drvwrap.driver);
-+	driver_unregister(&driver->driver);
- 	usb_free_dynids(driver);
- }
- EXPORT_SYMBOL_GPL(usb_deregister);
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index 2a938cf47ccd..dc8d9228a5e7 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -431,7 +431,7 @@ struct usb_interface *usb_find_interface(struct usb_driver *drv, int minor)
- 	struct device *dev;
- 
- 	argb.minor = minor;
--	argb.drv = &drv->drvwrap.driver;
-+	argb.drv = &drv->driver;
- 
- 	dev = bus_find_device(&usb_bus_type, NULL, &argb, __find_interface);
- 
-diff --git a/drivers/usb/core/usb.h b/drivers/usb/core/usb.h
-index 60363153fc3f..bfecb50773b6 100644
---- a/drivers/usb/core/usb.h
-+++ b/drivers/usb/core/usb.h
-@@ -175,13 +175,7 @@ static inline int is_root_hub(struct usb_device *udev)
- 	return (udev->parent == NULL);
- }
- 
--/* Do the same for device drivers and interface drivers. */
--
--static inline int is_usb_device_driver(struct device_driver *drv)
--{
--	return container_of(drv, struct usbdrv_wrap, driver)->
--			for_devices;
--}
-+extern bool is_usb_device_driver(const struct device_driver *drv);
- 
- /* for labeling diagnostics */
- extern const char *usbcore_name;
-diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index c09fb6bd7d7d..0dd2b032c90b 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -244,7 +244,7 @@ static void onboard_hub_attach_usb_driver(struct work_struct *work)
- {
- 	int err;
- 
--	err = driver_attach(&onboard_hub_usbdev_driver.drvwrap.driver);
-+	err = driver_attach(&onboard_hub_usbdev_driver.driver);
- 	if (err)
- 		pr_err("Failed to attach USB driver: %pe\n", ERR_PTR(err));
- }
-diff --git a/drivers/usb/serial/bus.c b/drivers/usb/serial/bus.c
-index 3eb8dc3a1a8f..6c812d01b37d 100644
---- a/drivers/usb/serial/bus.c
-+++ b/drivers/usb/serial/bus.c
-@@ -113,7 +113,7 @@ static ssize_t new_id_store(struct device_driver *driver,
- 	if (retval >= 0 && usb_drv->usb_driver != NULL)
- 		retval = usb_store_new_id(&usb_drv->usb_driver->dynids,
- 					  usb_drv->usb_driver->id_table,
--					  &usb_drv->usb_driver->drvwrap.driver,
-+					  &usb_drv->usb_driver->driver,
- 					  buf, count);
- 	return retval;
- }
-diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
-index 17b09f03ef84..f1e91eb7f8a4 100644
---- a/drivers/usb/serial/usb-serial.c
-+++ b/drivers/usb/serial/usb-serial.c
-@@ -1521,7 +1521,7 @@ int usb_serial_register_drivers(struct usb_serial_driver *const serial_drivers[]
- 
- 	/* Now set udriver's id_table and look for matches */
- 	udriver->id_table = id_table;
--	rc = driver_attach(&udriver->drvwrap.driver);
-+	rc = driver_attach(&udriver->driver);
- 	return 0;
- 
- err_deregister_drivers:
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 696bb0b23599..9707f53cfda9 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -1246,7 +1246,7 @@ static struct usb_driver uas_driver = {
- 	.suspend = uas_suspend,
- 	.resume = uas_resume,
- 	.reset_resume = uas_reset_resume,
--	.drvwrap.driver.shutdown = uas_shutdown,
-+	.driver.shutdown = uas_shutdown,
- 	.id_table = uas_usb_ids,
- };
- 
-diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
-index 0a6624d37929..79110a69d697 100644
---- a/drivers/usb/usbip/stub_main.c
-+++ b/drivers/usb/usbip/stub_main.c
-@@ -377,14 +377,14 @@ static int __init usbip_host_init(void)
- 		goto err_usb_register;
- 	}
- 
--	ret = driver_create_file(&stub_driver.drvwrap.driver,
-+	ret = driver_create_file(&stub_driver.driver,
- 				 &driver_attr_match_busid);
- 	if (ret) {
- 		pr_err("driver_create_file failed\n");
- 		goto err_create_file;
- 	}
- 
--	ret = driver_create_file(&stub_driver.drvwrap.driver,
-+	ret = driver_create_file(&stub_driver.driver,
- 				 &driver_attr_rebind);
- 	if (ret) {
- 		pr_err("driver_create_file failed\n");
-@@ -402,10 +402,10 @@ static int __init usbip_host_init(void)
- 
- static void __exit usbip_host_exit(void)
- {
--	driver_remove_file(&stub_driver.drvwrap.driver,
-+	driver_remove_file(&stub_driver.driver,
- 			   &driver_attr_match_busid);
- 
--	driver_remove_file(&stub_driver.drvwrap.driver,
-+	driver_remove_file(&stub_driver.driver,
- 			   &driver_attr_rebind);
- 
- 	/*
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 07556341ba2b..9e52179872a5 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1143,16 +1143,6 @@ extern ssize_t usb_store_new_id(struct usb_dynids *dynids,
- 
- extern ssize_t usb_show_dynids(struct usb_dynids *dynids, char *buf);
- 
--/**
-- * struct usbdrv_wrap - wrapper for driver-model structure
-- * @driver: The driver-model core driver structure.
-- * @for_devices: Non-zero for device drivers, 0 for interface drivers.
-- */
--struct usbdrv_wrap {
--	struct device_driver driver;
--	int for_devices;
--};
--
- /**
-  * struct usb_driver - identifies USB interface driver to usbcore
-  * @name: The driver name should be unique among USB drivers,
-@@ -1193,7 +1183,7 @@ struct usbdrv_wrap {
-  *	is bound to the driver.
-  * @dynids: used internally to hold the list of dynamically added device
-  *	ids for this driver.
-- * @drvwrap: Driver-model core structure wrapper.
-+ * @driver: The driver-model core driver structure.
-  * @no_dynamic_id: if set to 1, the USB core will not allow dynamic ids to be
-  *	added to this driver by preventing the sysfs file from being created.
-  * @supports_autosuspend: if set to 0, the USB core will not allow autosuspend
-@@ -1241,13 +1231,13 @@ struct usb_driver {
- 	const struct attribute_group **dev_groups;
- 
- 	struct usb_dynids dynids;
--	struct usbdrv_wrap drvwrap;
-+	struct device_driver driver;
- 	unsigned int no_dynamic_id:1;
- 	unsigned int supports_autosuspend:1;
- 	unsigned int disable_hub_initiated_lpm:1;
- 	unsigned int soft_unbind:1;
- };
--#define	to_usb_driver(d) container_of(d, struct usb_driver, drvwrap.driver)
-+#define	to_usb_driver(d) container_of(d, struct usb_driver, driver)
- 
- /**
-  * struct usb_device_driver - identifies USB device driver to usbcore
-@@ -1268,7 +1258,7 @@ struct usb_driver {
-  *	on to call the normal usb_choose_configuration().
-  * @dev_groups: Attributes attached to the device that will be created once it
-  *	is bound to the driver.
-- * @drvwrap: Driver-model core structure wrapper.
-+ * @driver: The driver-model core driver structure.
-  * @id_table: used with @match() to select better matching driver at
-  * 	probe() time.
-  * @supports_autosuspend: if set to 0, the USB core will not allow autosuspend
-@@ -1277,7 +1267,7 @@ struct usb_driver {
-  *	resume and suspend functions will be called in addition to the driver's
-  *	own, so this part of the setup does not need to be replicated.
-  *
-- * USB drivers must provide all the fields listed above except drvwrap,
-+ * USB drivers must provide all the fields listed above except driver,
-  * match, and id_table.
-  */
- struct usb_device_driver {
-@@ -1293,13 +1283,13 @@ struct usb_device_driver {
- 	int (*choose_configuration) (struct usb_device *udev);
- 
- 	const struct attribute_group **dev_groups;
--	struct usbdrv_wrap drvwrap;
-+	struct device_driver driver;
- 	const struct usb_device_id *id_table;
- 	unsigned int supports_autosuspend:1;
- 	unsigned int generic_subclass:1;
- };
- #define	to_usb_device_driver(d) container_of(d, struct usb_device_driver, \
--		drvwrap.driver)
-+		driver)
- 
- /**
-  * struct usb_class_driver - identifies a USB driver that wants to use the USB major number
--- 
-2.25.1
-
+T24gVGh1LCAyMDIzLTEyLTI4IGF0IDEyOjQ0ICswMjAwLCBNYXRoaWFzIE55bWFuIHdyb3RlOg0K
+PiAgCSANCj4gRXh0ZXJuYWwgZW1haWwgOiBQbGVhc2UgZG8gbm90IGNsaWNrIGxpbmtzIG9yIG9w
+ZW4gYXR0YWNobWVudHMgdW50aWwNCj4geW91IGhhdmUgdmVyaWZpZWQgdGhlIHNlbmRlciBvciB0
+aGUgY29udGVudC4NCj4gIEhpDQo+IA0KPiBPbiAyNy4xMi4yMDIzIDguMDMsIENodW5mZW5nIFl1
+biB3cm90ZToNCj4gPiBGb3IgR2VuMSBpc29jLWluIGVuZHBvaW50IG9uIGNvbnRyb2xsZXIgYmVm
+b3JlIGFib3V0IFNTVVNCIElQTQ0KPiB2MS42LjAsIGl0DQo+ID4gc3RpbGwgc2VuZCBvdXQgdW5l
+eHBlY3RlZCBBQ0sgYWZ0ZXIgcmVjZWl2aW5nIGEgc2hvcnQgcGFja2V0IGluDQo+IGJ1cnN0DQo+
+ID4gdHJhbnNmZXIsIHRoaXMgd2lsbCBjYXVzZSBhbiBleGNlcHRpb24gb24gY29ubmVjdGVkIGRl
+dmljZSwNCj4gc3BlY2lhbGx5IGZvcg0KPiA+IGEgNGsgY2FtZXJhLg0KPiA+IEFkZCBhIHF1aXJr
+IHByb3BlcnR5ICJyeC1maWZvLWRlcHRoIiB0byB3b3JrIGFyb3VuZCB0aGlzIGhhcmR3YXJlDQo+
+IGlzc3VlLA0KPiA+IHByZWZlciB0byB1c2UgM2sgYnl0ZXM7DQo+ID4gVGhlIHNpZGUtZWZmZWN0
+IGlzIHRoYXQgbWF5IGNhdXNlIHBlcmZvcm1hbmNlIGRyb3AgYWJvdXQgMTAlLA0KPiBpbmNsdWRp
+bmcNCj4gPiBidWxrIHRyYW5zZmVyLg0KPiANCj4gSXMgaXQgYmUgcG9zc2libGUgdG8gZGV0ZWN0
+IHRob3NlIE1lZGlhdGVrIHhIQyB2ZXJzaW9ucyB0aGF0IG5lZWQNCj4gdGhpcw0KPiB3b3JrYXJv
+dW5kIGluIHRoZSB4aGNpLW10ayBkcml2ZXIgZGlyZWN0bHk/DQp0aGUgdmVyc2lvbiBpbmZvIGlz
+IHNhdmVkIGluIElQUEMgcmVnaXN0ZXIsIHdoZW4gc3VwcG9ydCBkdWFsLXJvbGUNCm1vZGUsIHho
+Y2ktbXRrIGRyaXZlciBjYW4ndCBhY2Nlc3MgdGhlc2UgcmVnaXN0ZXIgd2hpY2ggYXJlIGNvbnRy
+b2xsZWQNCmJ5IGR1YWwtcm9sZSBjb250cm9sbGVyIG10dTMgZHJpdmVyOw0KYW5vdGhlciByZWFz
+b24gaXMgdGhhdCBzb21lIGNhc2VzLCBlLmcuIGNvbm5lY3RlZCBhIG9uLWJvYXJkIGZpeGVkIG1h
+c3MNCnN0b3JhZ2UgZGV2aWNlLCBkbyBub3QgdXNlIDRLIGNhbWVyYSwgaXQncyBiZXR0ZXIgdG8g
+dXNlIHRoZSBkZWZhdWx0DQpyeC1maWZvLWRlcHRoOw0KDQpUaGFua3MNCj4gDQo+IFRoaXMgd2F5
+IHdlIGNvdWxkIGF2b2lkIHBhc3NpbmcgYSBuZXcgInJ4LWZpZm8tZGVwdGgiIHByb3BlcnR5IHRv
+IGl0Lg0KPiANCj4gVGhhbmtzDQo+IE1hdGhpYXMNCj4gDQo+IA0K
 
