@@ -1,183 +1,101 @@
-Return-Path: <linux-usb+bounces-4729-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4730-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1752C824128
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 12:59:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55F6482416B
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 13:13:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DFF21C21C6A
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 11:59:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A1071F22756
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 12:13:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE6BD2136B;
-	Thu,  4 Jan 2024 11:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AB8321A01;
+	Thu,  4 Jan 2024 12:12:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e7Mmsssw"
+	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="XrvlPvy+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from dilbert.mork.no (dilbert.mork.no [65.108.154.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92B321360;
-	Thu,  4 Jan 2024 11:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704369547; x=1735905547;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UTe/RxVVE0sGfQ8+wsroyqcIDjd9fQHmLgDYmLEGuUY=;
-  b=e7MmssswY+j9lfVs80IuesQKJPAOfiQnLdJKo5w5GsOv2sSeaNsNmfeL
-   CloToH7/gqEnOc0W6tfk8Rg21XlnzWDLryx4A4HBOe67ypWGIzk3yj41g
-   fDJ84lbqa04D4lf7QIAZLwhINWEIzzi27nuD7CufHgOa+Pwwei18c6nCK
-   3A8aBIW+Gvdy+oC4LqruX08+vE+DRf7/rarxEkb8b+gER29KsuN8HuEG8
-   9Meo6Z7a2Hf3Lmq/Ebm5acMCkiaiNDC1mAg2jheaL1ml1TYwKnw8WhZTL
-   Pi7vVCualiH4R9lUwOnlzCr+aEtptCK7EwE2qAjjnIVZSr6RJGFQ9H9Je
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="399995586"
-X-IronPort-AV: E=Sophos;i="6.04,330,1695711600"; 
-   d="diff'?scan'208";a="399995586"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2024 03:59:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="809200356"
-X-IronPort-AV: E=Sophos;i="6.04,330,1695711600"; 
-   d="diff'?scan'208";a="809200356"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga008.jf.intel.com with SMTP; 04 Jan 2024 03:59:03 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 04 Jan 2024 13:59:02 +0200
-Date: Thu, 4 Jan 2024 13:59:02 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Saranya Gopal <saranya.gopal@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC] Fix stuck UCSI controller on DELL
-Message-ID: <ZZadhlh3q9ZInxvU@kuha.fi.intel.com>
-References: <20240103100635.57099-1-lk@c--e.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D775D21A10
+	for <linux-usb@vger.kernel.org>; Thu,  4 Jan 2024 12:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraculix.mork.no
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10da:6900:0:0:0:1])
+	(authenticated bits=0)
+	by dilbert.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 404C06Yt298551
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Thu, 4 Jan 2024 12:00:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+	t=1704369601; bh=WK8bZJLou4k/OH68Tz/v5cv5NZRdAgVTmvLj+PCKZcs=;
+	h=From:To:Cc:Subject:References:Date:Message-ID:From;
+	b=XrvlPvy+SpMC/wBthrL8e86ZwJBHYzE/U2tcAXUH1CjMEhPgejWNJnVOnzE/UJZMt
+	 w6Dsb22dOgDQ5bIK+On9iIUQPNwwqkh5PJ7z5LdDry7luAqgVEnLINTEonOiyyxuYU
+	 plgcUL54rXefZvnbGsDo1TdYmBqvsSEbQVTU2m7g=
+Received: from miraculix.mork.no ([IPv6:2a01:799:10da:690a:d43d:737:5289:b66f])
+	(authenticated bits=0)
+	by canardo.dyn.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 404C01G7642529
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Thu, 4 Jan 2024 13:00:01 +0100
+Received: (nullmailer pid 195720 invoked by uid 1000);
+	Thu, 04 Jan 2024 12:00:01 -0000
+From: =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [RFC] usb: r8152: interface driver before device driver
+Organization: m
+References: <20240104103811.2318-1-oneukum@suse.com>
+Date: Thu, 04 Jan 2024 13:00:01 +0100
+In-Reply-To: <20240104103811.2318-1-oneukum@suse.com> (Oliver Neukum's message
+	of "Thu, 4 Jan 2024 11:37:59 +0100")
+Message-ID: <87frzd9um6.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="YdX7gGF+0oK9KB31"
-Content-Disposition: inline
-In-Reply-To: <20240103100635.57099-1-lk@c--e.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 1.0.3 at canardo
+X-Virus-Status: Clean
+
+Oliver Neukum <oneukum@suse.com> writes:
+
+> The r8152 interface driver is preferred over the generic
+> class driver because it provides more features. Hence
+> we now have a device driver that switches the configuration.
+>
+> That device driver is sensible only if an interface driver
+> for the selected configuration exists.
+> However, the initialization for this module first reisters
+> the device driver and after that the interface driver.
+> That screws up error handling. Both registrations return
+> error codes. That means that the registration of the
+> device driver can currently work, but the interface
+> driver can fail.
+> In that case we switch the devices to a configuration
+> we have no driver for. That must not happen. The easiest
+> fix is to register the interface driver first and
+> bail out if that fails. That way if the device driver
+> fails, nothing needs to be undone.
+
+Yup. Switching this around makes sense.=20
 
 
---YdX7gGF+0oK9KB31
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> +	ret =3D usb_register_device_driver(&rtl8152_cfgselector_driver, THIS_MO=
+DULE);
+> +	return ret;
+> +
 
-Hi Christian,
 
-On Wed, Jan 03, 2024 at 11:06:35AM +0100, Christian A. Ehrhardt wrote:
-> I have a DELL Latitude 5431 where typec only works somewhat.
-> After the first plug/unplug event the PPM seems to be stuck and
-> commands end with a timeout (GET_CONNECTOR_STATUS failed (-110)).
-> 
-> This patch fixes it for me but according to my reading it is in
-> violation of the UCSI spec. On the other hand searching through
-> the net it appears that many DELL models seem to have timeout problems
-> with UCSI.
-> 
-> Do we want some kind of quirk here? There does not seem to be a quirk
-> framework for this part of the code, yet. Or is it ok to just send the
-> additional ACK in all cases and hope that the PPM will do the right
-> thing?
+Why not
+	return usb_register_device_driver(&rtl8152_cfgselector_driver, THIS_MODULE=
+);
+?
 
-We can use DMI quirks. Something like the attached diff (not tested).
 
-thanks,
-
--- 
-heikki
-
---YdX7gGF+0oK9KB31
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="dell_ucsi_quirk.diff"
-
-diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-index 6bbf490ac401..7e8b1fcfa024 100644
---- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-+++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-@@ -113,18 +113,44 @@ ucsi_zenbook_read(struct ucsi *ucsi, unsigned int offset, void *val, size_t val_
- 	return 0;
- }
- 
--static const struct ucsi_operations ucsi_zenbook_ops = {
--	.read = ucsi_zenbook_read,
--	.sync_write = ucsi_acpi_sync_write,
--	.async_write = ucsi_acpi_async_write
--};
-+static int ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
-+				const void *val, size_t val_len)
-+{
-+	u64 ctrl = *(u64 *)val;
-+	int ret;
-+
-+	ret = ucsi_acpi_sync_write(ucsi, offset, val, val_len);
-+	if (ret && (ctrl & (UCSI_ACK_CC_CI | UCSI_ACK_CONNECTOR_CHANGE))) {
-+		ctrl= UCSI_ACK_CC_CI | UCSI_ACK_COMMAND_COMPLETE;
-+
-+		dev_dbg(ucsi->dev->parent, "%s: ACK failed\n", __func__);
-+		ret = ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
-+	}
- 
--static const struct dmi_system_id zenbook_dmi_id[] = {
-+	return ret;
-+}
-+
-+static const struct dmi_system_id ucsi_acpi_quirks[] = {
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
- 		},
-+		.driver_data = &(struct ucsi_operations) {
-+			.read = ucsi_zenbook_read,
-+			.sync_write = ucsi_acpi_sync_write,
-+			.async_write = ucsi_acpi_async_write
-+		},
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+		},
-+		.driver_data = &(struct ucsi_operations) {
-+			.read = ucsi_acpi_read,
-+			.sync_write = ucsi_dell_sync_write,
-+			.async_write = ucsi_acpi_async_write
-+		},
- 	},
- 	{ }
- };
-@@ -151,6 +177,7 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
- {
- 	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
- 	const struct ucsi_operations *ops = &ucsi_acpi_ops;
-+	const struct dmi_system_id *id;
- 	struct ucsi_acpi *ua;
- 	struct resource *res;
- 	acpi_status status;
-@@ -180,8 +207,9 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
- 	init_completion(&ua->complete);
- 	ua->dev = &pdev->dev;
- 
--	if (dmi_check_system(zenbook_dmi_id))
--		ops = &ucsi_zenbook_ops;
-+	id = dmi_first_match(ucsi_acpi_quirks);
-+	if (id)
-+		ops = id->driver_data;
- 
- 	ua->ucsi = ucsi_create(&pdev->dev, ops);
- 	if (IS_ERR(ua->ucsi))
-
---YdX7gGF+0oK9KB31--
+Bj=C3=B8rn
 
