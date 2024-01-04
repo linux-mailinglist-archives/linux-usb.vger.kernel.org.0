@@ -1,122 +1,148 @@
-Return-Path: <linux-usb+bounces-4754-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4755-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 573548246DE
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 18:07:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78DCD8246E5
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 18:09:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8ABD3B2147E
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 17:07:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E3791C210F9
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 17:09:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 289D52557B;
-	Thu,  4 Jan 2024 17:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2B925574;
+	Thu,  4 Jan 2024 17:09:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Juuz7xeK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HPcxO3yM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACB62556D;
-	Thu,  4 Jan 2024 17:07:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-50e7f58c5fbso955074e87.1;
-        Thu, 04 Jan 2024 09:07:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704388039; x=1704992839; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mUPzHOnfF3iea/GuFmKJkEyxB16BB6l3SJBZkhRVK1U=;
-        b=Juuz7xeKWaK/RfLtDlPHVIMZz+oHr8YDuBPVf5Ks54TkfanJ/j3yPGVknvlQSGIAVR
-         2K+GDcejho/uRC7XjBgupKhkU+7admHPZwIFvSXAMS8E0XGt9eD6MpyVP2vZo9MnPcLu
-         Ly8siHbZCn9vKmatUIWsCJsIZNDONacddqwMCg6CjAlsJWbHCvrNb6W9TRifTYJk/Uxf
-         omD52+XaFL2vC8DmB+gWUJfsPHyJrBEQ/4jRzsnzqvTNZro/ZTUEOdEgK0QtlG7FxmRt
-         tcWCIugPt3qPbnDFqf8iMAjLMyMWXECRk4BvSYW5GCjfQjgFELfyN0wDHNIGD44wwYzr
-         uZjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704388039; x=1704992839;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mUPzHOnfF3iea/GuFmKJkEyxB16BB6l3SJBZkhRVK1U=;
-        b=s4QMZNAwPbhCr4vLRcd8A+ztpj37DaQG8yBQMRVR3VMJJFTEDwzNKCQBaZoHC9zPdJ
-         Ncgd20QxW+MqU4E4AlHSsX2dR/FnvnknFRnvM1ppmoHYva3Ch13UNnxCFxqVM0ISWRrG
-         es612hyvEAXSbgDPYqBJ3WT5pMeu12j3ozVOGo+wMEttb517Qj244B/wp5jxEIM7lqr1
-         XoINPH+Z34zGf81NJCqDj2kKC9D4c55gYLPTCr2TEckWDmh21OZeg59oEdUqoBisM1Ao
-         ZShn7QHvUX0bZFudfwF01B38qLHTK7Wll4KMc9/eGH7KajdQxgHcz1FPmaS140O0/Xih
-         t59A==
-X-Gm-Message-State: AOJu0YzwQIJNZQx5usKiz+BMy3TNgMN7M7QYA1raQkfHwNidPueVS5zC
-	g4tQQ/qcm0z88hzN9gsBiTY=
-X-Google-Smtp-Source: AGHT+IEnt/+N2u90wK9ceSSUrk8ig+m7VpFGqLCI4F+9HsEKK64haRTzaqA0g/ZbEfveDAVR/ho3lA==
-X-Received: by 2002:ac2:4c18:0:b0:50e:8f00:f182 with SMTP id t24-20020ac24c18000000b0050e8f00f182mr521046lfq.115.1704388038677;
-        Thu, 04 Jan 2024 09:07:18 -0800 (PST)
-Received: from [127.0.1.1] (2a02-8389-41cf-e200-1f94-8caf-c195-798f.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:1f94:8caf:c195:798f])
-        by smtp.gmail.com with ESMTPSA id hg2-20020a170906f34200b00a26b361ec0esm12820005ejb.118.2024.01.04.09.07.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jan 2024 09:07:18 -0800 (PST)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Thu, 04 Jan 2024 18:07:12 +0100
-Subject: [PATCH] usb: typec: tipd: fix use of device-specific init function
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F7825568;
+	Thu,  4 Jan 2024 17:09:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E46C433C7;
+	Thu,  4 Jan 2024 17:09:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704388144;
+	bh=RWeAVVvZw1mx2BvGayUBS6umOxU8tPTVMM+VecJn/f8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HPcxO3yMF3LAMwce01ASv+HwPrY6kxiRVKzBS1WDDfGH4hfeIaJwmR8OsadaPgI+q
+	 QOUuo6L0QiaDmKaFgIzixHb4rGQY2OLcVMpdHSVSNOtxTMeeqw3c7Ivs6LXHNqPwTD
+	 PgMzUiD+Pp/r/5exuDJyKI5s8fvXJy+BSB2KqspKzKTYzYTb0mqPYOKG5aPdV6OcCI
+	 XbSNeR1xlNpU82dXUZRMygcOd4KqzAjbeRj6ZTOGJD5FZ12rEsBq6n9vdTz4oxocSk
+	 jo5XHUncegf+8c0b7f2cxzV0k0qmTCOZoSBEjuDNeEVQK4eUq7A+i/ufwCtlMP5N6d
+	 Cfsfs67PvbVag==
+Message-ID: <5ed7ee66-ad7f-43ce-8550-a1a671cce9ad@kernel.org>
+Date: Thu, 4 Jan 2024 19:08:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] usb: typec: tipd: add patch update support for
+ tps6598x
+Content-Language: en-US
+To: Javier Carrasco <javier.carrasco@wolfvision.net>,
+ Jai Luthra <j-luthra@ti.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, vigneshr@ti.com,
+ d-gole@ti.com, nm@ti.com
+References: <20231207-tps6598x_update-v2-0-f3cfcde6d890@wolfvision.net>
+ <vmngazj6si7xxss7txenezkcukqje2glhvvs7ipdcx3vjiqvlk@ohmmhhhlryws>
+ <2nqiaxakx6setx4tzgddnbjadbh7miegz5p6wamsbbiyrfuq3x@un2uxajbswkg>
+ <e9e8dd9f-b11b-43fc-8d76-6734dbddb540@kernel.org>
+ <b0963302-b498-4a81-b635-0b4faf02e83b@wolfvision.net>
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <b0963302-b498-4a81-b635-0b4faf02e83b@wolfvision.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240104-dev_spec_init-v1-1-1a57e7fd8cc8@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAL/llmUC/x3MTQqAIBBA4avIrBNUjH6uEiGhY83GREMC8e5Jy
- 2/xXoWMiTDDyiokLJTpDh1yYGCvI5zIyXWDEkoLKTR3WEyOaA0Ferh2fp6kVMtoHfQmJvT0/r9
- tb+0DXGz/Dl8AAAA=
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Roger Quadros <rogerq@kernel.org>, 
- Javier Carrasco <javier.carrasco@wolfvision.net>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.13-dev-4e032
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1704388037; l=1124;
- i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
- bh=Hbb/poJIkVKNkLIjP1N6v5qai0RdKXdnO+ikZ9Ptu9E=;
- b=HB5CR8Sel1fxfT3bpyhVa9d7eOorpKu2tyGnP1jubGB/mBJ2hpNeE39T2GB5nyFn2LoVQ4Bq4
- 5272QhLogkgDEn01bBgbusUxniysU5mvNwgcx9GgKnPjevpbbmk4sRJ
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
 
-The current implementation supports device-pecific callbacks for the
-init function with a function pointer. The patch that introduced this
-feature did not update one call to the tps25750 init function to turn it
-into a call with the new pointer in the resume function.
 
-Fixes: d49f90822015 ("usb: typec: tipd: add init and reset functions to tipd_data")
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- drivers/usb/typec/tipd/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index a956eb976906..8a7cdfee27a1 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -1495,7 +1495,7 @@ static int __maybe_unused tps6598x_resume(struct device *dev)
- 		return ret;
- 
- 	if (ret == TPS_MODE_PTCH) {
--		ret = tps25750_init(tps);
-+		ret = tps->data->init(tps);
- 		if (ret)
- 			return ret;
- 	}
+On 04/01/2024 18:36, Javier Carrasco wrote:
+> On 04.01.24 17:15, Roger Quadros wrote:
+>>
+>>
+>> On 04/01/2024 17:47, Jai Luthra wrote:
+>>> Hi Javier,
+>>> The following change seems to fix boot on SK-AM62A without reverting 
+>>> this whole series:
+>>>
+>>> ------------------
+>>>
+>>> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+>>> index a956eb976906a5..8ba2aa05db519b 100644
+>>> --- a/drivers/usb/typec/tipd/core.c
+>>> +++ b/drivers/usb/typec/tipd/core.c
+>>> @@ -1223,11 +1223,16 @@ static int cd321x_reset(struct tps6598x *tps)
+>>>  	return 0;
+>>>  }
+>>>  
+>>> -static int tps6598x_reset(struct tps6598x *tps)
+>>> +static int tps25750_reset(struct tps6598x *tps)
+>>>  {
+>>>  	return tps6598x_exec_cmd_tmo(tps, "GAID", 0, NULL, 0, NULL, 2000, 0);
+>>>  }
+>>>  
+>>> +static int tps6598x_reset(struct tps6598x *tps)
+>>> +{
+>>> +	return 0;
+>>> +}
+>>> +
+>>>  static int
+>>>  tps25750_register_port(struct tps6598x *tps, struct fwnode_handle *fwnode)
+>>>  {
+>>> @@ -1545,7 +1550,7 @@ static const struct tipd_data tps25750_data = {
+>>>  	.trace_status = trace_tps25750_status,
+>>>  	.apply_patch = tps25750_apply_patch,
+>>>  	.init = tps25750_init,
+>>> -	.reset = tps6598x_reset,
+>>> +	.reset = tps25750_reset,
+>>>  };
+>>>  
+>>>  static const struct of_device_id tps6598x_of_match[] = {
+>>>
+>>> ------------------
+>>>
+>>> I am not an expert on this, will let you/others decide on what should be 
+>>> the correct way to reset TPS6598x for patching without breaking this SK.
+>>>
+>>>
+>>
+>> This looks like a correct fix to me.
+>> Could you please send a proper PATCH with Fixes tag? Thanks!
+>>
+> Hi Roger,
+> 
+> that fix only removes the reset function and does nothing instead, but
+> the reset call is identical for both devices (hence why there was a
+> single function for both devices). As I mentioned in my reply to Jai
 
----
-base-commit: e7d3b9f28654dbfce7e09f8028210489adaf6a33
-change-id: 20240104-dev_spec_init-4df8711295cd
+This is incorrect.
 
-Best regards,
+Look at the original code, the GAID command is issued only if it is a
+tps25750 device.
+
+Below is your part of the code that replaces it with reset() ops.
+
+> @@ -1340,8 +1360,8 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	tps6598x_write64(tps, TPS_REG_INT_MASK1, 0);
+>  err_reset_controller:
+>  	/* Reset PD controller to remove any applied patch */
+> -	if (is_tps25750)
+> -		tps6598x_exec_cmd_tmo(tps, "GAID", 0, NULL, 0, NULL, 2000, 0);
+> +	tps->data->reset(tps);
+> +
+>  	return ret;
+>  }
+
+which means the GAID command will be executed for both tps25750 and tps6598x
+as you have a single reset function for both.
+This is a problem for boards using the tps6598x.
+
 -- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
-
+cheers,
+-roger
 
