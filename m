@@ -1,142 +1,97 @@
-Return-Path: <linux-usb+bounces-4741-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4742-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43174824416
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 15:47:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1E98824431
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 15:54:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5654F1C210A1
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 14:47:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F1731F22BDD
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 14:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4334F23758;
-	Thu,  4 Jan 2024 14:47:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7859023765;
+	Thu,  4 Jan 2024 14:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dPlcMVr2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nUtfcXe6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D044223748;
-	Thu,  4 Jan 2024 14:47:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704379623; x=1735915623;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=AgNpe/rQhXH4s/zrVu4O6NOZqlKS54MKFZBPb9+vKyQ=;
-  b=dPlcMVr2hjex705BPBxtdxY+dPlW18/Ezfq2Y+Gf/Bklt9mQDB9NPdYq
-   e62DRDhuO8OoxmfrS9G8T+alzrRnX4VZ05nL7jYu/BuB8c20OMnjPqF2D
-   GkrGWTbGofB65Gmt/q7wxNk9XtDPf3L9XEY90WXBwCiMPQPGmuWOlxgqR
-   YrDuA3gbCnytS/RcKV2TdylGTRGFG0XDPRqbHfddwViXZLKbGBTDmZncJ
-   9XZaojziSZs38fXvgvjsecLJa2AU2EYW8iisvQ7qgPA98rpB5VDk1hgNw
-   XKVH6QrNBRXi6pao4dcKO1taAtwaboCEJ5oKJg9BabegH42AxSOZtI9J+
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10943"; a="15895923"
-X-IronPort-AV: E=Sophos;i="6.04,331,1695711600"; 
-   d="scan'208";a="15895923"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2024 06:47:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10943"; a="773536659"
-X-IronPort-AV: E=Sophos;i="6.04,330,1695711600"; 
-   d="scan'208";a="773536659"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga007.jf.intel.com with ESMTP; 04 Jan 2024 06:46:52 -0800
-Message-ID: <734591a1-50b4-6dc7-0b93-077355ec12e4@linux.intel.com>
-Date: Thu, 4 Jan 2024 16:48:19 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E617422F1E;
+	Thu,  4 Jan 2024 14:54:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17EC1C433C7;
+	Thu,  4 Jan 2024 14:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704380071;
+	bh=E9L91yMKm/IOnJapy8qxMAwMEzDJHXCfOiSiBSjhfFk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nUtfcXe6/fVl4KzcO4zqbk+ezOlXlOHUIdxba4GzIpiYFkC8stCxHEbe5iLtrgj5v
+	 bQbK3GPSL8bYDR4fdjFOK4gh18bJeeinlXDy9Q4G6h63o8TdNlQoALqVppa4wyP3ZT
+	 xecqrjDXgeECmWK1o0nhW7A6lR5KfCheqwoGPvKfQhZZIz339BO9BJI+cvoAnQTaYg
+	 N7reFTJ70hxYQg1frSZL6ewEIKoDmVxw1b59Ezmyn84bNKOU6fSAMqxfE3Yxhuhtoy
+	 iQU6/bfaxrwIkbspVkX3R+rE1rLWOQFxIqcJSXMZawpHjdQW30xHS1ORJ3I3rOYmn2
+	 u0lmrGg6mse1g==
+Date: Thu, 4 Jan 2024 14:54:20 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, kernelci@lists.linux.dev,
+	kernel@collabora.com, Tim Bird <Tim.Bird@sony.com>,
+	linux-pci@vger.kernel.org, David Gow <davidgow@google.com>,
+	linux-kselftest@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+	Doug Anderson <dianders@chromium.org>, linux-usb@vger.kernel.org,
+	Saravana Kannan <saravanak@google.com>,
+	Guenter Roeck <groeck@chromium.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 0/3] Add test to verify probe of devices from
+ discoverable busses
+Message-ID: <ded0cce0-3462-4c40-96e5-ca53b2028767@sirena.org.uk>
+References: <20231227123643.52348-1-nfraprado@collabora.com>
+ <3271d300-74c9-4ef3-b993-a8ddeda6076c@suswa.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- corbet@lwn.net, gregkh@linuxfoundation.org, lgirdwood@gmail.com,
- andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- konrad.dybcio@linaro.org, Thinh.Nguyen@synopsys.com, broonie@kernel.org,
- bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org, agross@kernel.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
- alsa-devel@alsa-project.org
-References: <20240102214549.22498-1-quic_wcheng@quicinc.com>
- <20240102214549.22498-5-quic_wcheng@quicinc.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v12 04/41] usb: host: xhci-mem: Cleanup pending secondary
- event ring events
-In-Reply-To: <20240102214549.22498-5-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="g/NlNyEnSF48Q/hE"
+Content-Disposition: inline
+In-Reply-To: <3271d300-74c9-4ef3-b993-a8ddeda6076c@suswa.mountain>
+X-Cookie: Q:	Are we not men?
 
-On 2.1.2024 23.45, Wesley Cheng wrote:
-> As part of xHCI bus suspend, the XHCI is halted.  However, if there are
-> pending events in the secondary event ring, it is observed that the xHCI
-> controller stops responding to further commands upon host or device
-> initiated bus resume.  Iterate through all pending events and update the
-> dequeue pointer to the beginning of the event ring.
-> 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-...
-> +/*
-> + * Move the event ring dequeue pointer to skip events kept in the secondary
-> + * event ring.  This is used to ensure that pending events in the ring are
-> + * acknowledged, so the XHCI HCD can properly enter suspend/resume.  The
-> + * secondary ring is typically maintained by an external component.
-> + */
-> +void xhci_skip_sec_intr_events(struct xhci_hcd *xhci,
-> +	struct xhci_ring *ring,	struct xhci_interrupter *ir)
-> +{
-> +	union xhci_trb *erdp_trb, *current_trb;
-> +	u64 erdp_reg;
-> +	u32 iman_reg;
-> +	dma_addr_t deq;
-> +
-> +	/* disable irq, ack pending interrupt and ack all pending events */
-> +	xhci_disable_interrupter(ir);
-> +	iman_reg = readl_relaxed(&ir->ir_set->irq_pending);
-> +	if (iman_reg & IMAN_IP)
-> +		writel_relaxed(iman_reg, &ir->ir_set->irq_pending);
-> +
-> +	/* last acked event trb is in erdp reg  */
-> +	erdp_reg = xhci_read_64(xhci, &ir->ir_set->erst_dequeue);
-> +	deq = (dma_addr_t)(erdp_reg & ERST_PTR_MASK);
-> +	if (!deq) {
-> +		xhci_err(xhci, "event ring handling not required\n");
-> +		return;
-> +	}
-> +
-> +	erdp_trb = current_trb = ir->event_ring->dequeue;
-> +	/* read cycle state of the last acked trb to find out CCS */
-> +	ring->cycle_state = le32_to_cpu(current_trb->event_cmd.flags) & TRB_CYCLE;
-> +
-> +	while (1) {
-> +		inc_deq(xhci, ir->event_ring);
-> +		erdp_trb = ir->event_ring->dequeue;
-> +		/* cycle state transition */
-> +		if ((le32_to_cpu(erdp_trb->event_cmd.flags) & TRB_CYCLE) !=
-> +		    ring->cycle_state)
-> +			break;
-> +	}
-> +
-> +	xhci_update_erst_dequeue(xhci, ir, current_trb, true);
-> +}
 
-Code above is very similar to the existing event ring processing parts of xhci_irq()
-and xhci_handle_event()
+--g/NlNyEnSF48Q/hE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I'll see if I can refactor the existing event ring processing, decouple it from
-event handling so that it could be used by primary and secondary interrupters with
-handlers, and this case where we just want to clear the event ring.
+On Tue, Jan 02, 2024 at 10:45:59AM +0300, Dan Carpenter wrote:
 
-Thanks
-Mathias
+> Life hack: Don't put RFC in the subject.  Especially if it's a v2 or
+> higher.  No one reads RFC patches.
 
+RFC does tend to be useful in cases where you know that there are
+substantial problems with the patches but are posting to solicit
+feedback of some kind - otherwise people will tend to get annoyed when
+they notice the problems.
+
+--g/NlNyEnSF48Q/hE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWWxpsACgkQJNaLcl1U
+h9A4RggAgLG7ZcjiZWpD080jcXJXiUSTKdDw2ybN7fZmObKI60MTc35hGtxZd9g7
+vMyfr3rjtJLW7OZzrvMa902sWVyadOAjxIq3PbuvcZ34ISgR+GZ7ofyk/+sk/MDm
+klzDi5pvQ99GuUuryAiJvnzXZCsltchdPfVlSjy3vNRQvBIm/dG7MGoO89PF5zEc
+BE8PXyPfvJtaaFfjXlF9urVd5xbRX6ebg84HCOpW/Mn1m8Kmmd/B6Pb95cR2xRTx
+1JYRXWGcMWyPi8RKoHl5EBvH1FLXXYy8j3VgFvr7P7S78J7iHxfwhaT5FSuKVkfV
+ALy6TqkVvQjeFeoBOvSfZNtNzrtCPA==
+=Cz3a
+-----END PGP SIGNATURE-----
+
+--g/NlNyEnSF48Q/hE--
 
