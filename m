@@ -1,171 +1,156 @@
-Return-Path: <linux-usb+bounces-4758-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4759-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4817F824973
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 21:15:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1393B824A25
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 22:19:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 484831C2268B
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 20:15:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB9FC1F23352
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 21:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E710C2C68F;
-	Thu,  4 Jan 2024 20:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC9D2C69C;
+	Thu,  4 Jan 2024 21:19:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="kQP2Ms/d"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HR4ebhCh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2053.outbound.protection.outlook.com [40.107.104.53])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2232C691;
-	Thu,  4 Jan 2024 20:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolfvision.net
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bjq9eRgVQB0ntFPUr259E7WV++aFJhhZSEJ5KFuAh6EUDqVLo4HA4KhgG/0JWVUoPxB3h76Bj/OZpl+kESAOOm+uXQDPEktkUZSj95cZu4mj3kqZ+CMPbDoiR98aIwLgfeuYBcd9Bm2sf0Q6ka3Bg5SOE5pW3ywS1x6gWLT/S5XIlWos3a/MvUz5zUbZpoaTeFSpSMUPpv9+eFM+SYhmyYhYv/MJ6r2C3ycA8+8saB9empYjb1zILx8YcjHr3mvy2ibfYoLq74qx9Y3VbWHNd3x32LZjjUL+8lYdJbUYER76uLvy6amwT/jIy4c4KXsMnA67Nwb4g7A30wLu6VE51w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/JGUcjr8VjcXt9VDHdYAgUfJeqPGWYQU1MSpypEyJ/k=;
- b=BuQgOtHi7qa/20xqk863XWtKDd3guo1icvyVMO8BdsZCVfoiXpa+C6zlGtgSx5/8TzHmHSkbXkC2lL++8CtmwEFUqMzJw/tojxGewCM+YaZw04slGv3DNAN3WUJBTRCmXnTU8XIlG3BKfLrmYxtDpjBZBo61exai0Xk4W8YD4We74D99JW/46Kbdbf91E/1VY5Rhu9TRbS3hEvlRg1wIPtJfc2mhQsQIkWpz8TaDyo8FZV7DvUyw1AMHPn0rUYD621TbNzFhs4ei6Psn8s4i4bFIVdn863VDR0+i+5DP1KxsE0hqdOmllQiu1x56+0aoJB9B0tztLqlk+VIsLFZgjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/JGUcjr8VjcXt9VDHdYAgUfJeqPGWYQU1MSpypEyJ/k=;
- b=kQP2Ms/dK+GUkP5tQKF9DJHkt6eziXvBSJLMZbWn589FDbNPc14TYHybSrgkNgb9fJ2Z5MwL2MVk65u48EqgXcz62P2v7km+XhZy79SQAt61/QH7YxIMw5yil+U7xghep0FgT+VU4OuKyBNODce/v5FHk8HnAfeFwM44svLCwOE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
- by PR3PR08MB5706.eurprd08.prod.outlook.com (2603:10a6:102:80::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.14; Thu, 4 Jan
- 2024 20:15:30 +0000
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::6b40:1e6f:7c94:71dc]) by VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::6b40:1e6f:7c94:71dc%4]) with mapi id 15.20.7135.023; Thu, 4 Jan 2024
- 20:15:30 +0000
-Message-ID: <ee37ec0f-13e8-4eed-a675-94e315de7c15@wolfvision.net>
-Date: Thu, 4 Jan 2024 21:15:27 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] usb: typec: tipd: add patch update support for
- tps6598x
-Content-Language: en-US
-To: Dhruva Gole <d-gole@ti.com>, Roger Quadros <rogerq@kernel.org>
-Cc: Jai Luthra <j-luthra@ti.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, vigneshr@ti.com,
- nm@ti.com
-References: <20231207-tps6598x_update-v2-0-f3cfcde6d890@wolfvision.net>
- <vmngazj6si7xxss7txenezkcukqje2glhvvs7ipdcx3vjiqvlk@ohmmhhhlryws>
- <2nqiaxakx6setx4tzgddnbjadbh7miegz5p6wamsbbiyrfuq3x@un2uxajbswkg>
- <e9e8dd9f-b11b-43fc-8d76-6734dbddb540@kernel.org>
- <20240104185242.tf2fvgf56ehajqd5@dhruva>
-From: Javier Carrasco <javier.carrasco@wolfvision.net>
-In-Reply-To: <20240104185242.tf2fvgf56ehajqd5@dhruva>
-Content-Type: text/plain; charset=UTF-8
-X-ClientProxiedBy: FR3P281CA0123.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:94::9) To VE1PR08MB4974.eurprd08.prod.outlook.com
- (2603:10a6:803:111::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B612C1B5;
+	Thu,  4 Jan 2024 21:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 404L0uH7008842;
+	Thu, 4 Jan 2024 21:19:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=dQ/JHTvaWK6L1BzBckOKy
+	fMx62b/1aDP820BHSs3Pzo=; b=HR4ebhChG16tFWKX92VEpKHCVeS90FEUgi+xk
+	Pah3WvhzpX7vM2WURm4d88nJPCLm/vykISG7N/3WrhvF+zmj74yRsEZB9NyM7FVC
+	otHbjtwz2+PWwKy2OfdUdNMsY0qJpmVtlL8Xu8hWR0V/a+1gliKNcm1VLjplD4EH
+	4qEUXGpStTnC8/cEaIO0PZYD0XkOKIX20cmnmYti2gMU+yAmpVRDWgKD1lGz3fIf
+	Ft1ceGeD9S1t+WL4v9O4Gx72ZDCNe8mtpnTEiOvHjB/8PIWWSw2w3Te2dwOzJ57C
+	xds8qnjDqIkHdfcsWWsfKvqDSxKdIZHGXT4oSznPLEqujm+Vw==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ve1418fk0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 04 Jan 2024 21:19:01 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 404LJ0pO020856
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 4 Jan 2024 21:19:00 GMT
+Received: from hu-jackp-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Thu, 4 Jan 2024 13:18:59 -0800
+Date: Thu, 4 Jan 2024 13:18:58 -0800
+From: Jack Pham <quic_jackp@quicinc.com>
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+CC: Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Hardik Gajjar <hgajjar@de.adit-jv.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>
+Subject: Re: [PATCH] usb: gadget: ncm: Avoid dropping datagrams of properly
+ parsed NTBs
+Message-ID: <20240104211858.GB4127689@hu-jackp-lv.qualcomm.com>
+References: <20240102055143.3889-1-quic_kriskura@quicinc.com>
+ <CANP3RGeirg+f8cBbw_3YR5AvuB1ZxJC_9-wcn+Tb-GXf1ESKCQ@mail.gmail.com>
+ <ad60f399-5c6a-4f16-8c28-f4d4e0fde1ff@quicinc.com>
+ <CANP3RGf5dg14DNuKOn9pqWd4oSBDsPhwwBB7AJ0c3qHbDT0sBQ@mail.gmail.com>
+ <572c21f8-e642-4d30-84aa-673051be6bb4@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|PR3PR08MB5706:EE_
-X-MS-Office365-Filtering-Correlation-Id: bc2d8e65-1d84-4368-f032-08dc0d61e60a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	MxiZov/gltidj4MRAin+bIM2l9h9UEgId6tnOE8NVnn8jxspoHiHoA0YrL0ANbMkAAPbvOctVtAJZIHoDjBYlA4sQnV9lxxhgxjERvx/6jujN2K4N9LmJGeyeyU/qLNlHEIC/V3e3rRh8oEkd2oKtorW+CMUeOSG+MTDkBPrFyRtIZkcuGfb18udzVNFyhZKZG9kavZzLjjJW1uuxrnQzA+gTDz84ZBGySeh+yfO0OgyzS51Z8f21IVkvazxJRzmBsc99ObMKQo7MqU4jiJi2HiiaMZCwx3LhDW69BClTA7nEnN6RRA5dEmnZfm04i3FHKv9Ali3Q3duusgyS2FXDgzzxjLXIYWLbutqeAhwO9fXxUf3lO2+WmJaiA6DsA9H19L6rKt7hOTfOn/Udy1215Vu5hCLzH9njQBLBOv7OM0ePq7HHgOIPVyVRIUNc3wfQ6xsmFxZpAlEt/StFndx9KYBacnDC7AGJTpsFYZO5Ia419Dul0qHG69EoHl27/CYqj7anIWPd2BGbGaK+jq+zBniPkFqqBxRrmDo+79qX+9Ag5dLsnLRZOzfi3MEoKc2+MjOr8PB6yXAIE+v8z8RZ4AuHXeKHzTLIu65tKFrHGPY7mTAhsYf79BSNNR22svtrmCcpsfdRo4116FIMuYFPQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(346002)(39850400004)(366004)(396003)(376002)(230922051799003)(451199024)(1800799012)(186009)(64100799003)(38100700002)(36756003)(31686004)(31696002)(86362001)(6512007)(53546011)(6666004)(966005)(478600001)(6506007)(6486002)(45080400002)(8676002)(44832011)(8936002)(2616005)(66476007)(66946007)(66556008)(316002)(4326008)(110136005)(54906003)(41300700001)(5660300002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?a1oySFRBdGZqTkJwd0ttY0ZySVplUUhKazRzSVJ3Y2NtNUZYdUhkRGtWN3FH?=
- =?utf-8?B?aXJ4SXJZMjRwekRTNU9td2J5NUlWeE8rcVhRMG5VMXZuRHNDR2JLeTl1ZldN?=
- =?utf-8?B?UVY1VGhob09jY2lNOHkzWHhubjZJL0dYbjJ6RzcrSHpYUVVGODd3bW9iM0xY?=
- =?utf-8?B?TDlqd0hDelB0NlRKNGdxVHBJNHl5emMzNG9QZlU4NGM4RUtHcTQwNElCRlJy?=
- =?utf-8?B?Nzl3YzMvMGs5eFo5SUsxWWVqZ0o2MzRYdHcwS1NLSTB5VER4WlVGbXdsV1gv?=
- =?utf-8?B?UkFMNWFWdEV5VVhvcXV0ZG5ENXlwbE03NFRSaHZaM1dOb3I0S1U4NFRnVmZF?=
- =?utf-8?B?WHRtcldoak1qaS81d3BrQzVEQmhWanptSldWR1FBMTNOU2g4bTd4QmtLcGtX?=
- =?utf-8?B?NUlkY3NwVFg2R1N5TWJnRC9LSnRGZnNkZ1FqYUk3Q2k4ZTZXRHV3Vi9waFBn?=
- =?utf-8?B?QTBXRE1zZXJUaTlNSkI1eVI4VjNxeWZKbTN0bWlyVXZNK3ZCS01vdUNWQnVB?=
- =?utf-8?B?L0VnUXRPNi9HUWF5TGVGK3UwTjJSUEdtMVNvRmUwMVYvSzAwbFlnc1VqT3M0?=
- =?utf-8?B?M2FpU0ZvN012Y21ma2dGM0NzNE96WnhnWDNiTkQ3NHlXUWh4SDFHVUNxSTh1?=
- =?utf-8?B?MVNBbElnT0JJK0UxTjFZUHg2S0lkRGdJUHh6dlRwdC92LzBTaXdDSFN5d3d4?=
- =?utf-8?B?ZTFkTXpsdDJVc3JWazdTRU4zcG1RYkt6eGpnaDNWak9QelB6Y1NaTHA2dlZW?=
- =?utf-8?B?SGY1aWdMZFgxaStpYXhZcnNra2Q5ejN0blB1aWRjeGlNSndhcXBzeUQydGJJ?=
- =?utf-8?B?d1pFS0N4VDNaRFQ5Q2QzZU8wZ2pIS1A2cGhMaERKNGtuYVhXdTJHT0lhd3hD?=
- =?utf-8?B?a3FDVDV3bDVCaWZtaGFrT0t6TnBmZEZrN0txbmRIRlFSZng2ME0vZVh2czZi?=
- =?utf-8?B?eUdTek5hYjNlWTRaLy9IK1d5UmRQRWhLRjVqSW4vWGNMakgxUEJBVC9pZVR2?=
- =?utf-8?B?bUJvbGNzVWhseDhIM3FYL1ZkSllsUENVV3dSN0Rwb1ZjdGpiZGlrTDFnZEdN?=
- =?utf-8?B?RlVhZTR5QUFobTRGcXpzWm5zTE1mQ05IS2NPSENvNUtsbWttcjFlanlaeDBG?=
- =?utf-8?B?S29OS1NUczRlWmxrMFloVGFTcThKZG85TEJKOFlFeVVBSGE3dHFka0t3ME9R?=
- =?utf-8?B?Um1uSGNmVTk3Mmh2c3A2MDZUQ3FtLzdDNXNsNFpSc0FLdXoyYVUzV0ljRmps?=
- =?utf-8?B?SVNHREx3ZEJwcmovaEpnKy9nUlQ3U2NxeG1DTXRPcjc4VXUvMTV3ZEQxNDUv?=
- =?utf-8?B?eDkwWGJ3MzIrV1hzaWZDRU5mMXA1UTk1NFVsSlREdHg3dnNTWjJ0ZC9ZdWQx?=
- =?utf-8?B?RWV0ZDluRkN0dXQ5S213dHZUM2lFVElRWUZHYWZNQWtPUWErM3hVRkZlNi92?=
- =?utf-8?B?NGtZUStKdWZRTWliWmo3NzAyRlVpR0wzTDVkbzFXdFJEenBTTmlGMUFpNG5D?=
- =?utf-8?B?S1lsK0x5ZUhYMVNHeWNuVUJGTlg5QUN3cCszUjhEaE14WWg4eHJpem5yRGlM?=
- =?utf-8?B?ejZLOTZjRUVKbWtiMGZ0eGs1M3dhT2pObi9DQUhWTU5QQk9xaVhtOXU4VG5Q?=
- =?utf-8?B?UWFoL3hTWXV6TzcwYjNYTTkvNGNEUXNrTHVYRGh4OUFFTXVPa1JZbkgxQU1Y?=
- =?utf-8?B?U1FKTXBLRUJad0JpTmFlVStXenJ6c3pJdXVYVFZjL2RETFIrL1h5R3U2akF3?=
- =?utf-8?B?OVZiSkFpbnMzcEh2MGhRUEkwbGZ3K1FFYzVVRGlFdVRVWlkzOG9nazQvK1V4?=
- =?utf-8?B?L2MrM3duaWtjRUtPZ1ByamQxMEp5U2UxUFFKVFVjdml1NG9TNUNOcDFsT05m?=
- =?utf-8?B?UWdjTjlDalRZTjdvbmFxWFBMZFRFWnNIdURpRWNsQU1rYUg0THBoWEpISnRD?=
- =?utf-8?B?SFg4MEo1QU41S0c0NVNYdjRYQ2JwVld5Zjd4cFhvM0xKQ2hGU1BMeE0xNE15?=
- =?utf-8?B?dlpNZ0hIRjBHRjlvSVVPaUpFUzlDeHRvWGVmWVBPQUhaT09CcWl5TStBRnZB?=
- =?utf-8?B?Snd5c3F5NUdZRnJtUXg2c2RveFNKRmxpMEh4ZEx2c3hIVG9IdVJYZTdDd2tB?=
- =?utf-8?B?RFRDZUdhM0o0Y0ZHZ0crSmRINFl4a2RnQkhNMmxCR3FVZUFucXhhREJzY3hj?=
- =?utf-8?B?Q1dNZGdSem1hSGpLeTN2ekZYQW5JeHRWaWJ4Z3dzTjFPZDBORVpLNm43ZDZT?=
- =?utf-8?Q?Bwq+kPTLqHrcNklKiWlJh8Xcxj3DdgUZ4kTeF6ZjNM=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc2d8e65-1d84-4368-f032-08dc0d61e60a
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2024 20:15:30.3714
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PybDfI9x36/0+hrEUvA1c592nDl2eZbuBvpQyVeTXyAsa8KrpmjEpmi38AaAx7C3+m0YSFmKqjElYxzc5Dh804P/Eby1OuL23gUQMt8nAs0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR08MB5706
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <572c21f8-e642-4d30-84aa-673051be6bb4@quicinc.com>
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: khRM8CFDqD_hI6VnILsFEqGL7o0jMTNv
+X-Proofpoint-ORIG-GUID: khRM8CFDqD_hI6VnILsFEqGL7o0jMTNv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 suspectscore=0 clxscore=1011 malwarescore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=612 bulkscore=0 spamscore=0
+ mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2401040167
 
-On 04.01.24 19:52, Dhruva Gole wrote:
-
+On Tue, Jan 02, 2024 at 05:04:01PM +0530, Krishna Kurapati PSSNV wrote:
 > 
-> This series also broke boot on TI SK-AM62x [0].
 > 
-
->>
->> This looks like a correct fix to me.
->> Could you please send a proper PATCH with Fixes tag? Thanks!
+> > > The above might work. But just wanted to check why this 1 byte would
+> > > come actually ? Any reason for this ? ZLP must not give a 1 byte packet
+> > > of 1 byte AFAIK.
+> > 
+> > I'm not a USB expert, but... my (possibly wrong) understanding is:
+> > (note I may be using bad terminology... also the 1024/16384 constants
+> > are USB3 specific, USB2 has afaik max 512 not 1024, I think USB1 is
+> > even 64, but it's likely too old to matter, etc.)
+> > 
+> > USB3 payloads can be up to 16384 bytes in size,
+> > on the wire they are split up into packets of between 0 and 1024 bytes.
+> > [a Zero Length Packet is a ZLP]
+> > A usb payload is terminated with a usb packet of < 1024 bytes.
+> > 
+> > So a 1524 byte payload would be sent as 2 packets 1024 + 500.
+> > While a 2048 byte payload would be sent as 3 packets 1024 + 1024 + 0 (ie. ZLP)
+> > 
+> > A 16384 byte payload could be sent as 16 * 1024 + ZLP,
+> > but since 16384 is the max you might be able to get away with just 16
+> > * 1024 and skip the ZLP...
+> > 
+> > I think this is why the Linux usb code base has ZLP / NO_ZLP quirks.
+> > [but do note I may be wrong, I haven't gone looking at what exactly
+> > the zlp quirks do,
+> > not even sure if they're receive or transmit side... or both]
+> > 
+> > Different hardware/usb chipsets/etc have different behaviour wrt. ZLPs.
+> > 
+> > In general it seems like what needs to happen is much clearer if you
+> > just avoid the need for ZLPs entirely.
+> > I think that's what windows is trying to do here: avoid ever sending a
+> > usb payload with a multiple of 1024 bytes,
+> > so it never has to send ZLPs. This seems easy enough to do...
+> > limit max to 16383 (not 16384) and add 1 byte of zero pad if the
+> > payload ends up being a multiple of 1024.
+> > 
 > 
-> Thanks for reviewing this Roger, the same patch above worked for me to
-> fix SK-AM62x as well [1].
-> 
-> [0] https://storage.kernelci.org/next/master/next-20240103/arm64/defconfig/gcc-10/lab-ti/baseline-nfs-am62xx_sk-fs.txt
-> [1] https://gist.github.com/DhruvaG2000/326b5d7fab4be95f20cd0aac4125f577
-> 
-Hi Dhruva,
+> Got it. Thanks for the explanation. Atleast this gives me an insight into
+> what might be the problem.
 
-I am glad that you guys found a fix that quickly.
+Hooray to MS for having open-sourced a reference version of their NCM
+driver on GitHub (under MIT license)--and I think this might explain it:
 
-it seems that you guys work for the device manufacturer (because of your
-email addresses), so I was wondering if you could explain (or provide
-the documentation) why the tps6598x should not receive the GAID command
-and a reset crashes the system. Everything looks exactly the same as for
-the tps25750, but in that case there are no complaints from sending a
-cold reset.
+https://github.com/microsoft/NCM-Driver-for-Windows/blob/release_21H2/host/device.cpp#L902
 
-Thanks again and best regards,
-Javier Carrasco
+which states in a comment (pasted line-wrapped for mail-friendliness)
+
+        //NCM spec is not explicit if a ZLP shall be sent when
+        //wBlockLength != 0 and it happens to be
+        //multiple of wMaxPacketSize. Our interpretation is that no ZLP
+        //needed if wBlockLength is non-zero,
+        //because the non-zero wBlockLength has already told the
+        //function side the size of transfer to be expected.
+        //
+        //However, there are in-market NCM devices rely on ZLP as long
+        //as the wBlockLength is multiple of wMaxPacketSize.
+        //To deal with such devices, we pad an extra 0 at end so the
+        //transfer is no longer multiple of wMaxPacketSize
+
+If so then would be worth calling this out in commit text and/or code
+comment.
+
+Jack
 
