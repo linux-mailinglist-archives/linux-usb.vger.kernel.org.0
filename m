@@ -1,130 +1,205 @@
-Return-Path: <linux-usb+bounces-4710-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4711-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CDB2823745
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 22:50:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6031B823A2F
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 02:23:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AF8AB248A7
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jan 2024 21:50:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D6001C24B0E
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 01:23:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E631DA2C;
-	Wed,  3 Jan 2024 21:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A7B136A;
+	Thu,  4 Jan 2024 01:23:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="E+QhrLv6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E52YNNrd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07391DA23;
-	Wed,  3 Jan 2024 21:50:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 403LcQHL016677;
-	Wed, 3 Jan 2024 21:49:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type; s=
-	qcppdkim1; bh=uHNnF/bZ94LqrAIEs8WqP6zxB4HkEIdKigzoxp3FnMs=; b=E+
-	QhrLv61P/gb9vrQFMdMoQ75FQns6tuA4gOqTCkEb8LgZ2jBTGN3NL1hgalFe3R1q
-	wHqgvy+xSpWbFqrC5YDCqlLZ4MAEdTajbYJ/wLGVqEf9YoBytd/AjmN2nMaHsY5N
-	DqQAuXfapmYvUArEKuLQFG4e7En0zHTxMAnX4YBw/wzVPu3OCL2udExg+48SkUgN
-	7tueCNbWpO1XwAQmaT9q0B4Nu/yC0UCGUHDJzQwQVT+o4cGfcnkmEkmfH47WFzDs
-	8GSv0KfqdafubHDHu7Pv37E0pRlIYRrtKe0CIWyCux/2t9dB6VDEyyhpS3keWCA9
-	dqipJh4/Syf/plxvoZyQ==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vdchnge8x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Jan 2024 21:49:56 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 403LntAI026012
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 3 Jan 2024 21:49:56 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Wed, 3 Jan 2024 13:49:55 -0800
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Wesley Cheng
-	<quic_wcheng@quicinc.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: dwc3: gadget: Queue PM runtime idle on disconnect event
-Date: Wed, 3 Jan 2024 13:49:46 -0800
-Message-ID: <20240103214946.2596-1-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57939A2A
+	for <linux-usb@vger.kernel.org>; Thu,  4 Jan 2024 01:23:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 29631C433C7
+	for <linux-usb@vger.kernel.org>; Thu,  4 Jan 2024 01:23:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704331399;
+	bh=/U10U9bBymNZtdfdby63amUfqJ9OOGw+GX5Bm9ppIkM=;
+	h=From:To:Subject:Date:From;
+	b=E52YNNrdRBg4N0oD7WKdw+GPyTkKcgrEvafB7ArpShUryJnLpmPBqwXXTpq4tSNIR
+	 8aYnDhMPL7xBNjCUs5ooEn26kYh66m2Cw16RHULCg+MwjebxDit+LjjRinehjGbgUP
+	 00M0sOvkw74u2BBMLbQnaQg8Ls0+ZDbVxkckCurKiD5ZMMnVURiG/gCOBXzjWmJ0DH
+	 3e2uUnv2P2IG5X1QTicFkubBBtEjyGfDy80r224kZs+MWaXnE7marC8E/bp3DWyjWF
+	 ec/mwZ0UsW78JViBUn16e6MiYjUXPX3cq1itLyfCnAEBuiqTyWZ4vZIkchvQ9JT8SI
+	 NrIDwWKp5A2ZA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 0D5FAC4332E; Thu,  4 Jan 2024 01:23:19 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218338] New: usb: cdc_acm: Support for Uniden BC125AT radio
+ scanner
+Date: Thu, 04 Jan 2024 01:23:18 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: enhancement
+X-Bugzilla-Who: felipe.aranda@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-218338-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: YFXwFkLpgfQ5ub3fwda2QtO2dozwio8I
-X-Proofpoint-GUID: YFXwFkLpgfQ5ub3fwda2QtO2dozwio8I
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 malwarescore=0 adultscore=0 clxscore=1011
- suspectscore=0 impostorscore=0 mlxscore=0 spamscore=0 bulkscore=0
- mlxlogscore=906 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2311290000 definitions=main-2401030176
 
-There is a scenario where DWC3 runtime suspend is blocked due to the
-dwc->connected flag still being true while PM usage_count is zero after
-DWC3 giveback is completed and the USB gadget session is being terminated.
-This leads to a case where nothing schedules a PM runtime idle for the
-device.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218338
 
-The exact condition is seen with the following sequence:
-  1.  USB bus reset is issued by the host
-  2.  Shortly after, or concurrently, a USB PD DR SWAP request is received
-      (sink->source)
-  3.  USB bus reset event handler runs and issues
-      dwc3_stop_active_transfers(), and pending transfer are stopped
-  4.  DWC3 usage_count decremented to 0, and runtime idle occurs while
-      dwc->connected == true, returns -EBUSY
-  5.  DWC3 disconnect event seen, dwc->connected set to false due to DR
-      swap handling
-  6.  No runtime idle after this point
+            Bug ID: 218338
+           Summary: usb: cdc_acm: Support for Uniden BC125AT radio scanner
+           Product: Drivers
+           Version: 2.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: felipe.aranda@gmail.com
+        Regression: No
 
-Address this by issuing an asynchronous PM runtime idle call after the
-disconnect event is completed, as it modifies the dwc->connected flag,
-which is what blocks the initial runtime idle.
+Uniden BC125AT radio scanner has USB interface which fails to work
+with cdc_acm driver:
 
-Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
-Cc: stable@vger.kernel.org
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
-changes from v1:
-- CC'ed stable
 
- drivers/usb/dwc3/gadget.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+`dmesg`:
+~~~
+  usb 1-2: New USB device found, idVendor=3D1965, idProduct=3D0017, bcdDevi=
+ce=3D 0.01
+  usb 1-2: New USB device strings: Mfr=3D1, Product=3D2, SerialNumber=3D3
+  usb 1-2: Product: BC125AT
+  usb 1-2: Manufacturer: Uniden America Corp.
+  usb 1-2: SerialNumber: 0001
+  cdc_acm 1-2:1.0: Zero length descriptor references
+  cdc_acm: probe of 1-2:1.0 failed with error -22
+~~~
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 858fe4c299b7..de6056277f94 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3973,6 +3973,13 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
- 	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
- 
- 	dwc3_ep0_reset_state(dwc);
-+
-+	/*
-+	 * Request PM idle to address condition where usage count is
-+	 * already decremented to zero, but waiting for the disconnect
-+	 * interrupt to set dwc->connected to FALSE.
-+	 */
-+	pm_request_idle(dwc->dev);
- }
- 
- static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+`lsusb -v` of the device:
+~~~
+Bus 001 Device 012: ID 1965:0017 Uniden Corporation BC125AT
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            2 Communications
+  bDeviceSubClass         0 [unknown]
+  bDeviceProtocol         0=20
+  bMaxPacketSize0        64
+  idVendor           0x1965 Uniden Corporation
+  idProduct          0x0017 BC125AT
+  bcdDevice            0.01
+  iManufacturer           1 Uniden America Corp.
+  iProduct                2 BC125AT
+  iSerial                 3 0001
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0030
+    bNumInterfaces          2
+    bConfigurationValue     1
+    iConfiguration          0=20
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              500mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass      2 Abstract (modem)
+      bInterfaceProtocol      0=20
+      iInterface              0=20
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x87  EP 7 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval              10
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      0=20
+      iInterface              0=20
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+Device Status:     0x0000
+  (Bus Powered)
+~~~
+
+
+The code to add in /drivers/usb/class/cdc-acm.c
+
+~~~
+  { USB_DEVICE(0x1965, 0x0017), /* Uniden BC125AT */
+  .driver_info =3D NO_UNION_NORMAL, /* has no union descriptor */
+  },
+~~~
+
+Reference:
+https://lore.kernel.org/lkml/20180706054524.670321998@linuxfoundation.org/
+
+
+Thanks in advance !
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
