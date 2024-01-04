@@ -1,97 +1,80 @@
-Return-Path: <linux-usb+bounces-4742-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4743-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1E98824431
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 15:54:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACFC0824492
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 16:07:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F1731F22BDD
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 14:54:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C7801F218B7
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 15:07:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7859023765;
-	Thu,  4 Jan 2024 14:54:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nUtfcXe6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D146624A1A;
+	Thu,  4 Jan 2024 15:02:56 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E617422F1E;
-	Thu,  4 Jan 2024 14:54:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17EC1C433C7;
-	Thu,  4 Jan 2024 14:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704380071;
-	bh=E9L91yMKm/IOnJapy8qxMAwMEzDJHXCfOiSiBSjhfFk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nUtfcXe6/fVl4KzcO4zqbk+ezOlXlOHUIdxba4GzIpiYFkC8stCxHEbe5iLtrgj5v
-	 bQbK3GPSL8bYDR4fdjFOK4gh18bJeeinlXDy9Q4G6h63o8TdNlQoALqVppa4wyP3ZT
-	 xecqrjDXgeECmWK1o0nhW7A6lR5KfCheqwoGPvKfQhZZIz339BO9BJI+cvoAnQTaYg
-	 N7reFTJ70hxYQg1frSZL6ewEIKoDmVxw1b59Ezmyn84bNKOU6fSAMqxfE3Yxhuhtoy
-	 iQU6/bfaxrwIkbspVkX3R+rE1rLWOQFxIqcJSXMZawpHjdQW30xHS1ORJ3I3rOYmn2
-	 u0lmrGg6mse1g==
-Date: Thu, 4 Jan 2024 14:54:20 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, kernelci@lists.linux.dev,
-	kernel@collabora.com, Tim Bird <Tim.Bird@sony.com>,
-	linux-pci@vger.kernel.org, David Gow <davidgow@google.com>,
-	linux-kselftest@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Doug Anderson <dianders@chromium.org>, linux-usb@vger.kernel.org,
-	Saravana Kannan <saravanak@google.com>,
-	Guenter Roeck <groeck@chromium.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3 0/3] Add test to verify probe of devices from
- discoverable busses
-Message-ID: <ded0cce0-3462-4c40-96e5-ca53b2028767@sirena.org.uk>
-References: <20231227123643.52348-1-nfraprado@collabora.com>
- <3271d300-74c9-4ef3-b993-a8ddeda6076c@suswa.mountain>
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 6B0992376A
+	for <linux-usb@vger.kernel.org>; Thu,  4 Jan 2024 15:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 382083 invoked by uid 1000); 4 Jan 2024 09:56:11 -0500
+Date: Thu, 4 Jan 2024 09:56:11 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  Udipto Goswami <quic_ugoswami@quicinc.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: core: Prevent null pointer dereference in
+ update_port_device_state
+Message-ID: <1fafda18-8806-4036-bcc1-ac08e2d3b9cd@rowland.harvard.edu>
+References: <20240104102616.20120-1-quic_ugoswami@quicinc.com>
+ <2024010447-sprite-shelter-0743@gregkh>
+ <eade09eb-4454-460f-9ce6-87da986c5acf@quicinc.com>
+ <2024010432-fifth-shakable-0d84@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="g/NlNyEnSF48Q/hE"
-Content-Disposition: inline
-In-Reply-To: <3271d300-74c9-4ef3-b993-a8ddeda6076c@suswa.mountain>
-X-Cookie: Q:	Are we not men?
-
-
---g/NlNyEnSF48Q/hE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <2024010432-fifth-shakable-0d84@gregkh>
 
-On Tue, Jan 02, 2024 at 10:45:59AM +0300, Dan Carpenter wrote:
+On Thu, Jan 04, 2024 at 02:13:51PM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Jan 04, 2024 at 06:35:38PM +0530, Udipto Goswami wrote:
+> > Hi Greg,
+> > 
+> > On 1/4/2024 4:14 PM, Greg Kroah-Hartman wrote:
+> > > On Thu, Jan 04, 2024 at 03:56:16PM +0530, Udipto Goswami wrote:
+> > > > Currently,the function update_port_device_state gets the usb_hub from
+> > > > udev->parent by calling usb_hub_to_struct_hub.
+> > > > However, in case the actconfig or the maxchild is 0, the usb_hub would
+> > > > be NULL and upon further accessing to get port_dev would result in null
+> > > > pointer dereference.
+> > > 
+> > > Is this true for any real (or fake) hardware?
+> > 
+> > We saw this in our QCOM hardwares where lvstest.c was calling
+> > get_dev_desc_store:
+> > 
+> > 	usb_set_device_state+0x128/0x17c
+> > 	create_lvs_device+0x60/0xf8 [lvstest]
+> > 	get_dev_desc_store+0x94/0x18c [lvstest]
+> > 	dev_attr_store+0x30/0x48
+> > 
+> > I think the part of the test procedure is to first unbind the hub driver
+> > which calls hub_disconnect setting the maxchild = 0.
+> 
+> Are you sure lvstest is correct here?
 
-> Life hack: Don't put RFC in the subject.  Especially if it's a v2 or
-> higher.  No one reads RFC patches.
+This is what happens when people work behind the hub driver's back.  :-(
 
-RFC does tend to be useful in cases where you know that there are
-substantial problems with the patches but are posting to solicit
-feedback of some kind - otherwise people will tend to get annoyed when
-they notice the problems.
+If you can't find another way to fix the problem, you should at least 
+change the patch to include a comment before the "if (hub)" test, 
+explaining why it is necessary.  Otherwise somebody in the future will 
+remove the test, because under normal circumstances hub would never be 
+NULL here.
 
---g/NlNyEnSF48Q/hE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWWxpsACgkQJNaLcl1U
-h9A4RggAgLG7ZcjiZWpD080jcXJXiUSTKdDw2ybN7fZmObKI60MTc35hGtxZd9g7
-vMyfr3rjtJLW7OZzrvMa902sWVyadOAjxIq3PbuvcZ34ISgR+GZ7ofyk/+sk/MDm
-klzDi5pvQ99GuUuryAiJvnzXZCsltchdPfVlSjy3vNRQvBIm/dG7MGoO89PF5zEc
-BE8PXyPfvJtaaFfjXlF9urVd5xbRX6ebg84HCOpW/Mn1m8Kmmd/B6Pb95cR2xRTx
-1JYRXWGcMWyPi8RKoHl5EBvH1FLXXYy8j3VgFvr7P7S78J7iHxfwhaT5FSuKVkfV
-ALy6TqkVvQjeFeoBOvSfZNtNzrtCPA==
-=Cz3a
------END PGP SIGNATURE-----
-
---g/NlNyEnSF48Q/hE--
+Alan Stern
 
