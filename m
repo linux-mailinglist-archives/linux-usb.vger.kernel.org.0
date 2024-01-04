@@ -1,49 +1,41 @@
-Return-Path: <linux-usb+bounces-4726-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4727-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70002823FF1
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 11:55:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64BB8824008
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 12:00:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50CF61C211E8
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 10:55:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2FD0285C05
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jan 2024 11:00:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF43120DE5;
-	Thu,  4 Jan 2024 10:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 412AC210E6;
+	Thu,  4 Jan 2024 11:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BtHk/0LB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail114-240.sinamail.sina.com.cn (mail114-240.sinamail.sina.com.cn [218.30.114.240])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF9620DDE
-	for <linux-usb@vger.kernel.org>; Thu,  4 Jan 2024 10:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
-X-SMAIL-HELO: localhost.localdomain
-Received: from unknown (HELO localhost.localdomain)([113.118.67.178])
-	by sina.com (172.16.235.24) with ESMTP
-	id 65968E7A00004E93; Thu, 4 Jan 2024 18:54:53 +0800 (CST)
-X-Sender: hdanton@sina.com
-X-Auth-ID: hdanton@sina.com
-Authentication-Results: sina.com;
-	 spf=none smtp.mailfrom=hdanton@sina.com;
-	 dkim=none header.i=none;
-	 dmarc=none action=none header.from=hdanton@sina.com
-X-SMAIL-MID: 67516645089256
-X-SMAIL-UIID: 53E238DDBF6C488EB38F1311581F63D6-20240104-185453-1
-From: Hillf Danton <hdanton@sina.com>
-To: Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v12 02/41] xhci: add helper to stop endpoint and wait for completion
-Date: Thu,  4 Jan 2024 18:54:42 +0800
-Message-Id: <20240104105442.2820-1-hdanton@sina.com>
-In-Reply-To: <20240102214549.22498-3-quic_wcheng@quicinc.com>
-References: <20240102214549.22498-1-quic_wcheng@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7C020DE2;
+	Thu,  4 Jan 2024 11:00:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 87A2FC433C7;
+	Thu,  4 Jan 2024 11:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704366025;
+	bh=381JDdfjF2Y9oQEt2wb3RWM+90u9wPsOLkJMGW1dW2A=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=BtHk/0LBFwHWhvRKK6kFigxB//0rgvtTZ6qYWv+TE2tk1jjswpAPEma5753pBfmiC
+	 JyPiOoaa+tBUf/didtcrwMShSv8JTzz7tHFtmPPFaLz5trNg4r29QiQo5Vrg6EUgC3
+	 LK9Dw6qswv7DQ7oGGO7QxcntuKqt7avGkw/RVSDKR7vb+HxXnpTFDrsF/bTyiMfQ1x
+	 VRp9kbOPZdCEcir0v4b9m7SRI+ZYSM67SUtAHsqOoKlsfexyTcmIUNkzrHw52q3oAA
+	 fMtZaZbK7jPq7fUloD8a5sSofMEM6fLgGHvd4sbVu+wM1CRQ8m+4lu22taogb+Nqjk
+	 7fjRrbwD+uPRg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6CF7EC3959F;
+	Thu,  4 Jan 2024 11:00:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -51,52 +43,41 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] asix: Add check for usbnet_get_endpoints
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170436602544.13188.3749207110557059321.git-patchwork-notify@kernel.org>
+Date: Thu, 04 Jan 2024 11:00:25 +0000
+References: <20240103033534.2764386-1-nichen@iscas.ac.cn>
+In-Reply-To: <20240103033534.2764386-1-nichen@iscas.ac.cn>
+To: Chen Ni <nichen@iscas.ac.cn>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, christian.riesch@omicron.at, linux-usb@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 
-On Tue, 2 Jan 2024 13:45:10 -0800
-> From: Mathias Nyman <mathias.nyman@linux.intel.com>
-> +/*
-> + * Synchronous XHCI stop endpoint helper.  Issues the stop endpoint command and
-> + * waits for the command completion before returning.
-> + */
-> +int xhci_stop_endpoint_sync(struct xhci_hcd *xhci, struct xhci_virt_ep *ep, int suspend,
-> +			    gfp_t gfp_flags)
-> +{
-> +	struct xhci_command *command;
-> +	unsigned long flags;
-> +	int ret;
-> +
-> +	command = xhci_alloc_command(xhci, true, GFP_KERNEL);
+Hello:
 
-Given unused gfp_flags, s/GFP_KERNEL/gfp_flags/ ?
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-> +	if (!command)
-> +		return -ENOMEM;
-> +
-> +	spin_lock_irqsave(&xhci->lock, flags);
-> +	ret = xhci_queue_stop_endpoint(xhci, command, ep->vdev->slot_id,
-> +				       ep->ep_index, suspend);
-> +	if (ret < 0) {
-> +		spin_unlock_irqrestore(&xhci->lock, flags);
-> +		goto out;
-> +	}
-> +
-> +	xhci_ring_cmd_db(xhci);
-> +	spin_unlock_irqrestore(&xhci->lock, flags);
-> +
-> +	ret = wait_for_completion_timeout(command->completion, msecs_to_jiffies(3000));
-> +	if (!ret)
-> +		xhci_warn(xhci, "%s: Unable to stop endpoint.\n",
-> +				__func__);
-> +
-> +	if (command->status == COMP_COMMAND_ABORTED ||
-> +	    command->status == COMP_COMMAND_RING_STOPPED) {
-> +		xhci_warn(xhci, "Timeout while waiting for stop endpoint command\n");
-> +		ret = -ETIME;
-> +	}
-> +out:
-> +	xhci_free_command(xhci, command);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(xhci_stop_endpoint_sync);
+On Wed,  3 Jan 2024 03:35:34 +0000 you wrote:
+> Add check for usbnet_get_endpoints() and return the error if it fails
+> in order to transfer the error.
+> 
+> Fixes: 16626b0cc3d5 ("asix: Add a new driver for the AX88172A")
+> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+> ---
+>  drivers/net/usb/ax88172a.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+
+Here is the summary with links:
+  - asix: Add check for usbnet_get_endpoints
+    https://git.kernel.org/netdev/net/c/eaac6a2d26b6
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
