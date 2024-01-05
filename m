@@ -1,134 +1,98 @@
-Return-Path: <linux-usb+bounces-4779-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4780-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39379825276
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 11:57:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7579825286
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 12:01:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D512928666C
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 10:57:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E9B7B22BAE
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 11:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CFCF28E08;
-	Fri,  5 Jan 2024 10:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D8DE286B9;
+	Fri,  5 Jan 2024 11:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WmmgmU6W"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="Xsbh+3Wq";
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="ajKjWUvV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074FA28DD7;
-	Fri,  5 Jan 2024 10:57:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704452242; x=1735988242;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bWLA9uHAE4XhP297Hf+kKUGZ6XNNGd0zX30Q+EHU8bg=;
-  b=WmmgmU6W6dLVdZWLfGY03Xz+MtZHYa/Fa8vMj1REMG9vz5o2OyOiQGCw
-   Hqjub23kInip7e/f6e1ZFhlgq5bCcFzoxecmlaxbhbIp5w2JLGmuXhx97
-   b65gpZ4SGjPQvoxhK+3/81CfbDClzghC/1d6XCMlWBLouh1m6ujII3EYZ
-   HGmpuLYhYNPpRjsD8QnPgadVSw51twL8XbshCP3WeVvJeCFWVxmOX2Asx
-   SdDyER6fOhUUChvdvTt6Ke+9HQwhbg1j148DuAUOD6d2okpUUsWtWyPcf
-   VykMjN38H5aiFDG0mnmDn9ViTjC26jQXbcqHFZOqcinO2LyUu11FmFgc8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10943"; a="401271564"
-X-IronPort-AV: E=Sophos;i="6.04,333,1695711600"; 
-   d="scan'208";a="401271564"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2024 02:57:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10943"; a="730443114"
-X-IronPort-AV: E=Sophos;i="6.04,333,1695711600"; 
-   d="scan'208";a="730443114"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga003.jf.intel.com with SMTP; 05 Jan 2024 02:57:17 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Jan 2024 12:57:16 +0200
-Date: Fri, 5 Jan 2024 12:57:16 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Jai Luthra <j-luthra@ti.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Javier Carrasco <javier.carrasco@wolfvision.net>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	rogerq@kernel.org, r-gunasekaran@ti.com, vigneshr@ti.com,
-	d-gole@ti.com
-Subject: Re: [PATCH] usb: typec: tipd: Separate reset for TPS6598x
-Message-ID: <ZZfSwGokdjD1YdPX@kuha.fi.intel.com>
-References: <20240105-next-tps-fix-v1-1-158cabaec168@ti.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A1C28E10
+	for <linux-usb@vger.kernel.org>; Fri,  5 Jan 2024 11:01:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4T60r61pbSz9sc3;
+	Fri,  5 Jan 2024 12:01:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1704452470;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=idHfuzk1L4byFbmshbzXqqyTFNd/Cu3KIoig5fKPOLo=;
+	b=Xsbh+3WqD+Ezvv/PXFVsuCDsGaaiI2yI2+3dcsyOh8YHNQ8aGwdy5jY5USERtO7L0/vaKi
+	9ax0y4dijHCEwxNSnOEDxQm3tAn8GSug8eaSTB4k4Tr05Y6HRys0qsWzHPPXgwUFwZ26pJ
+	nvtGkXaZGWJ2GpoaPijVBC0NMgd9egr+ykjZkPPyf9dpIAdPub7sI1ZjnlUDrWyjTJH252
+	lB0VWm/rqupY5g/j/U8GEqINIrpAYLULHiiCxn+Loy1TZcD9P5nJFbmlUeuuxbKp+/QINs
+	a/jozf1vvEu8QWYquuMAgLPaPuDP5LHO/gSg7qBuku/FScWjrfLTURMTdrKoBg==
+From: leonard.dallmayr@mailbox.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1704452467;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=idHfuzk1L4byFbmshbzXqqyTFNd/Cu3KIoig5fKPOLo=;
+	b=ajKjWUvV5E7vhPMxxavPM9AZ9G43YvDJVApPiPyglhu91WWX+Rh+xAVCa9IYIcCqnoxP4D
+	NxgySoieXxRzpdJ1BoqbGEHFQ3gqkkJr7oDRtxkovsRNfm3OqliykCYWl+kECMgdaeJWQa
+	dt4MtH0QJn/fP5x11B1HKNKygApz3oMAXyZM5b5Qv7tNG44l69eS5gf1OBPfC/pu+chadG
+	krYKRBZ1q4g68ccMtWCMT6qlmFKXKdMNOJ82CyyDbQ7ROPJVzJUZFoSf3KOzoE0RnkRPnm
+	hg3yT/MTxw8EnzhK1YSVKhQoInJnTtJGh8f1VTjx5Q2DTsTt/dXBxlEfgR62xQ==
+To: johan@kernel.org
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	Leonard Dallmayr <leonard.dallmayr@mailbox.org>
+Subject: [PATCH] Add support for the IMST USB-Stick for Smart Meter device to the cp210x driver.
+Date: Fri,  5 Jan 2024 11:59:16 +0100
+Message-ID: <20240105110029.80421-1-leonard.dallmayr@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240105-next-tps-fix-v1-1-158cabaec168@ti.com>
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: znwgrxubhn9j68txbrie7xs4aun67j5u
+X-MBO-RS-ID: 7f7d4d8c8475244dca1
+X-Rspamd-Queue-Id: 4T60r61pbSz9sc3
 
-On Fri, Jan 05, 2024 at 02:36:54PM +0530, Jai Luthra wrote:
-> Some platforms like SK-AM62, SK-AM62A cannot boot up to prompt if
-> TPS6598x is cold-reset during unconditionally on probe failures by
-> sending "GAID" sequence.
-> 
-> The probe can fail initially because USB0 remote-endpoint may not be
-> probed yet, which defines the usb-role-switch property.
-> 
-> Fixes: d49f90822015 ("usb: typec: tipd: add init and reset functions to tipd_data")
-> Closes: https://lore.kernel.org/linux-usb/vmngazj6si7xxss7txenezkcukqje2glhvvs7ipdcx3vjiqvlk@ohmmhhhlryws/
-> Signed-off-by: Jai Luthra <j-luthra@ti.com>
+From: Leonard Dallmayr <leonard.dallmayr@mailbox.org>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+The device IMST USB-Stick for Smart Meter is a rebranded iM871A-USB Wireless M-Bus USB-adapter. It is used to measure smart meters for electricity, 
+heating, water, etc.
 
-> ---
-> Boot-logs with this patch applied:
-> https://gist.github.com/jailuthra/b66d5722090ce1fbc2886986e53640f7
-> ---
->  drivers/usb/typec/tipd/core.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index a956eb976906..8ba2aa05db51 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -1223,11 +1223,16 @@ static int cd321x_reset(struct tps6598x *tps)
->  	return 0;
->  }
->  
-> -static int tps6598x_reset(struct tps6598x *tps)
-> +static int tps25750_reset(struct tps6598x *tps)
->  {
->  	return tps6598x_exec_cmd_tmo(tps, "GAID", 0, NULL, 0, NULL, 2000, 0);
->  }
->  
-> +static int tps6598x_reset(struct tps6598x *tps)
-> +{
-> +	return 0;
-> +}
-> +
->  static int
->  tps25750_register_port(struct tps6598x *tps, struct fwnode_handle *fwnode)
->  {
-> @@ -1545,7 +1550,7 @@ static const struct tipd_data tps25750_data = {
->  	.trace_status = trace_tps25750_status,
->  	.apply_patch = tps25750_apply_patch,
->  	.init = tps25750_init,
-> -	.reset = tps6598x_reset,
-> +	.reset = tps25750_reset,
->  };
->  
->  static const struct of_device_id tps6598x_of_match[] = {
-> 
-> ---
-> base-commit: e2425464bc87159274879ab30f9d4fe624b9fcd2
-> change-id: 20240105-next-tps-fix-904ed92bc1cc
-> 
-> Best regards,
-> -- 
-> Jai Luthra <j-luthra@ti.com>
+Signed-off-by: Leonard Dallmayr <leonard.dallmayr@mailbox.org>
+---
+ drivers/usb/serial/cp210x.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index 1e61fe043171..099cde4974a3 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -146,6 +146,7 @@ static const struct usb_device_id id_table[] = {
+ 	{ USB_DEVICE(0x10C4, 0x85F8) }, /* Virtenio Preon32 */
+ 	{ USB_DEVICE(0x10C4, 0x8664) }, /* AC-Services CAN-IF */
+ 	{ USB_DEVICE(0x10C4, 0x8665) }, /* AC-Services OBD-IF */
++	{ USB_DEVICE(0x10C4, 0x87ed) }, /* IMST USB-Stick for Smart Meter */
+ 	{ USB_DEVICE(0x10C4, 0x8856) },	/* CEL EM357 ZigBee USB Stick - LR */
+ 	{ USB_DEVICE(0x10C4, 0x8857) },	/* CEL EM357 ZigBee USB Stick */
+ 	{ USB_DEVICE(0x10C4, 0x88A4) }, /* MMB Networks ZigBee USB Device */
 -- 
-heikki
+2.43.0
+
 
