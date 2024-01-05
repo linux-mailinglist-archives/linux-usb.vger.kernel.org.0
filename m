@@ -1,167 +1,178 @@
-Return-Path: <linux-usb+bounces-4763-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4764-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE577824DA9
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 05:42:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A892A824E16
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 06:24:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9E8A1C21CFD
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 04:42:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2676828487F
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 05:24:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80CA05234;
-	Fri,  5 Jan 2024 04:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15E545662;
+	Fri,  5 Jan 2024 05:24:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LHHYLeRa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g/WPVtQb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F4F5228;
-	Fri,  5 Jan 2024 04:42:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4053qVCM019303;
-	Fri, 5 Jan 2024 04:42:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=kETwECccJTubWuIkLIED8QEDY4c1UgxUEHGG4NmaelU=; b=LH
-	HYLeRaJ2Y0PUEXc4HBJdI2/xbLYdjsU6+dv4JcVAxk4rA7pMbsxVXPwjZ6M1zHQd
-	UdZkpwfrt5RjfnN/BimW2c24luyJqZq7CSJ3tm3Xvbz3/2WmCywOzGKuIVjOIm+B
-	/22Q5xgR0j7hzR6Q6LiL5LyCqunBLlGuiA0zLF94cHmxLq7EBPRlAjatkLIVu00P
-	dvOiTqW8+8ApNVVl0bZuInzEZ98x+/OeC6z23VyDj6DOqnvYfyvYFEFv3ZRTdOgh
-	Sh01I2jqUrf4DdpSunpGAPf+p/ltqi0nAzTspDHnsPpghycTO1JLeuY1P9QZQRBK
-	cKpkCLpkufqjgAUKwNxQ==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ve97r85t9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Jan 2024 04:42:00 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4054fxpf032656
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 5 Jan 2024 04:41:59 GMT
-Received: from [10.216.5.109] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 4 Jan
- 2024 20:41:56 -0800
-Message-ID: <50e7cf06-dc3c-4324-9a5d-d82bec9cca89@quicinc.com>
-Date: Fri, 5 Jan 2024 10:11:53 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576191DDD9;
+	Fri,  5 Jan 2024 05:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1d4a2526a7eso8045185ad.3;
+        Thu, 04 Jan 2024 21:24:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704432269; x=1705037069; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZUAzjzZKcTM5m6fQb9IcdJP313nlHgCPZQcP52iARe0=;
+        b=g/WPVtQbRiKwhnW1WNTkFvjsQQ9h4l5+z6Fpu31oQbOj69IHR3HJStuuIJcrbR+v6y
+         PF6gsZ88MHaaNBh8wcO1Bp9rpijeyTLpLFAT/muHWQSPgd4HOz1JmM8cuYLf6/H3qgNM
+         nJTk6wA0kOjuTPT5jhljrt6eBORatiHd8vN9cCl/f9EE4zWWSPByT3wzy3LNhdz2wxUX
+         S1XAz7H1hoZX4AmLgMYRmAHcOX0z0ikpViknfnpbGXgHDyl2ZVyj/YsVJz/gej4o6RXg
+         bA1pOMHjPjhgfSpPMPh2UKFOizCmp8AqEPwv4oifRWI8IWlGXwClTXUXD8ddb+76UzAG
+         ikMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704432269; x=1705037069;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZUAzjzZKcTM5m6fQb9IcdJP313nlHgCPZQcP52iARe0=;
+        b=WPCoB+l9+2mFNi70JqZwp6X+7zSNoDsjJkSIpAx7lTo7VNQZJeSFhiId9Y6yuSNIqZ
+         m/vTR+PSACOHYjKADAsmc9LqdkGGf2LjLjJVcoV6caiOZMAMKEurZK9eNyud5smboQIs
+         4L01nMxYA6swCpXRTg/qPZLLQDn8WHKFE14uNUpIpzOhWLPv08DVurrn4WubtXS8wyxb
+         LHOxHpcNLWsZuhCfVpSYAaQh6z707AzSmmIdzUsB7/zWuVVH91ynl52p16xxPYuBr3H8
+         5X5EwfGMejF7SWr1GVu/h+sWLHVWLW+DB/0FHiIQDzQXhINdxV+5lEBlKcO+vgw4QyKu
+         bJmQ==
+X-Gm-Message-State: AOJu0YxFs9lUQgexjA+vvytXBoMmoPr0OevCEoz2SIMj2wpG7Cs1ijd5
+	G1W+0lAaVyVVuPSDSbx9WOU=
+X-Google-Smtp-Source: AGHT+IHmvtk+B8CsCaQvyw6Z57dGQSva5h0HCt97/tCawph3GRd5Pq42T2N8B+2ctTasZPPaCMpK9A==
+X-Received: by 2002:a17:903:11c5:b0:1d4:3065:6647 with SMTP id q5-20020a17090311c500b001d430656647mr1692151plh.110.1704432269542;
+        Thu, 04 Jan 2024 21:24:29 -0800 (PST)
+Received: from g2039B650.. ([106.39.42.152])
+        by smtp.gmail.com with ESMTPSA id u3-20020a170902bf4300b001d4ea483473sm327841pls.82.2024.01.04.21.24.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jan 2024 21:24:29 -0800 (PST)
+From: Gui-Dong Han <2045gemini@gmail.com>
+To: gregkh@linuxfoundation.org,
+	rppt@kernel.org,
+	ivan.orlov0322@gmail.com,
+	akpm@linux-foundation.org,
+	sebastian.reichel@collabora.com,
+	surenb@google.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	baijiaju1990@outlook.com,
+	Gui-Dong Han <2045gemini@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v3] usb: mon: Fix atomicity violation in mon_bin_vma_fault
+Date: Fri,  5 Jan 2024 13:24:12 +0800
+Message-Id: <20240105052412.9377-1-2045gemini@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: ncm: Avoid dropping datagrams of properly
- parsed NTBs
-To: Jack Pham <quic_jackp@quicinc.com>,
-        =?UTF-8?Q?Maciej_=C5=BBenczykowski?=
-	<maze@google.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hardik Gajjar
-	<hgajjar@de.adit-jv.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_wcheng@quicinc.com>
-References: <20240102055143.3889-1-quic_kriskura@quicinc.com>
- <CANP3RGeirg+f8cBbw_3YR5AvuB1ZxJC_9-wcn+Tb-GXf1ESKCQ@mail.gmail.com>
- <ad60f399-5c6a-4f16-8c28-f4d4e0fde1ff@quicinc.com>
- <CANP3RGf5dg14DNuKOn9pqWd4oSBDsPhwwBB7AJ0c3qHbDT0sBQ@mail.gmail.com>
- <572c21f8-e642-4d30-84aa-673051be6bb4@quicinc.com>
- <20240104211858.GB4127689@hu-jackp-lv.qualcomm.com>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20240104211858.GB4127689@hu-jackp-lv.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: SUZrZqIL7PQLT9VLc6PlXc0m-ULrirpF
-X-Proofpoint-GUID: SUZrZqIL7PQLT9VLc6PlXc0m-ULrirpF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 impostorscore=0 spamscore=0 adultscore=0 lowpriorityscore=0
- bulkscore=0 malwarescore=0 mlxlogscore=765 suspectscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401050036
+Content-Transfer-Encoding: 8bit
 
+In mon_bin_vma_fault():
+    offset = vmf->pgoff << PAGE_SHIFT;
+    if (offset >= rp->b_size)
+        return VM_FAULT_SIGBUS;
+    chunk_idx = offset / CHUNK_SIZE;
+    pageptr = rp->b_vec[chunk_idx].pg;
+The code is executed without holding any lock.
 
+In mon_bin_vma_close():
+    spin_lock_irqsave(&rp->b_lock, flags);
+    rp->mmap_active--;
+    spin_unlock_irqrestore(&rp->b_lock, flags);
 
-On 1/5/2024 2:48 AM, Jack Pham wrote:
-> On Tue, Jan 02, 2024 at 05:04:01PM +0530, Krishna Kurapati PSSNV wrote:
->>
->>
->>>> The above might work. But just wanted to check why this 1 byte would
->>>> come actually ? Any reason for this ? ZLP must not give a 1 byte packet
->>>> of 1 byte AFAIK.
->>>
->>> I'm not a USB expert, but... my (possibly wrong) understanding is:
->>> (note I may be using bad terminology... also the 1024/16384 constants
->>> are USB3 specific, USB2 has afaik max 512 not 1024, I think USB1 is
->>> even 64, but it's likely too old to matter, etc.)
->>>
->>> USB3 payloads can be up to 16384 bytes in size,
->>> on the wire they are split up into packets of between 0 and 1024 bytes.
->>> [a Zero Length Packet is a ZLP]
->>> A usb payload is terminated with a usb packet of < 1024 bytes.
->>>
->>> So a 1524 byte payload would be sent as 2 packets 1024 + 500.
->>> While a 2048 byte payload would be sent as 3 packets 1024 + 1024 + 0 (ie. ZLP)
->>>
->>> A 16384 byte payload could be sent as 16 * 1024 + ZLP,
->>> but since 16384 is the max you might be able to get away with just 16
->>> * 1024 and skip the ZLP...
->>>
->>> I think this is why the Linux usb code base has ZLP / NO_ZLP quirks.
->>> [but do note I may be wrong, I haven't gone looking at what exactly
->>> the zlp quirks do,
->>> not even sure if they're receive or transmit side... or both]
->>>
->>> Different hardware/usb chipsets/etc have different behaviour wrt. ZLPs.
->>>
->>> In general it seems like what needs to happen is much clearer if you
->>> just avoid the need for ZLPs entirely.
->>> I think that's what windows is trying to do here: avoid ever sending a
->>> usb payload with a multiple of 1024 bytes,
->>> so it never has to send ZLPs. This seems easy enough to do...
->>> limit max to 16383 (not 16384) and add 1 byte of zero pad if the
->>> payload ends up being a multiple of 1024.
->>>
->>
->> Got it. Thanks for the explanation. Atleast this gives me an insight into
->> what might be the problem.
-> 
-> Hooray to MS for having open-sourced a reference version of their NCM
-> driver on GitHub (under MIT license)--and I think this might explain it:
-> 
-> https://github.com/microsoft/NCM-Driver-for-Windows/blob/release_21H2/host/device.cpp#L902
-> 
-> which states in a comment (pasted line-wrapped for mail-friendliness)
-> 
->          //NCM spec is not explicit if a ZLP shall be sent when
->          //wBlockLength != 0 and it happens to be
->          //multiple of wMaxPacketSize. Our interpretation is that no ZLP
->          //needed if wBlockLength is non-zero,
->          //because the non-zero wBlockLength has already told the
->          //function side the size of transfer to be expected.
->          //
->          //However, there are in-market NCM devices rely on ZLP as long
->          //as the wBlockLength is multiple of wMaxPacketSize.
->          //To deal with such devices, we pad an extra 0 at end so the
->          //transfer is no longer multiple of wMaxPacketSize
-> 
-> If so then would be worth calling this out in commit text and/or code
-> comment.
+In mon_bin_ioctl():
+    spin_lock_irqsave(&rp->b_lock, flags);
+    if (rp->mmap_active) {
+        ...
+    } else {
+        ...
+        kfree(rp->b_vec);
+        rp->b_vec  = vec;
+        rp->b_size = size;
+        ...
+    }
+    spin_unlock_irqrestore(&rp->b_lock, flags);
 
-Thanks for the inputs Jack. Will make sure to add it in commit text clearly.
+Concurrent execution of mon_bin_vma_fault() with mon_bin_vma_close() and
+mon_bin_ioctl() could lead to atomicity violations. mon_bin_vma_fault()
+accesses rp->b_size and rp->b_vec without locking, risking array
+out-of-bounds access or use-after-free bugs due to possible modifications
+in mon_bin_ioctl().
 
-Regards,
-Krishna,
+This possible bug is found by an experimental static analysis tool
+developed by our team, BassCheck[1]. This tool analyzes the locking APIs
+to extract function pairs that can be concurrently executed, and then
+analyzes the instructions in the paired functions to identify possible
+concurrency bugs including data races and atomicity violations. The above
+possible bug is reported when our tool analyzes the source code of
+Linux 6.2.
+
+To address this issue, it is proposed to add a spin lock pair in
+mon_bin_vma_fault() to ensure atomicity. With this patch applied, our tool
+never reports the possible bug, with the kernel configuration allyesconfig
+for x86_64. Due to the lack of associated hardware, we cannot test the
+patch in runtime testing, and just verify it according to the code logic.
+
+[1] https://sites.google.com/view/basscheck/
+
+Fixes: 19e6317d24c2 ("usb: mon: Fix a deadlock in usbmon between ...")
+Cc: stable@vger.kernel.org
+Signed-off-by: Gui-Dong Han <2045gemini@gmail.com>
+---
+v2:
+* In this patch v2, we've added some information of the static analysis
+tool used, as per the researcher guidelines. Also, we've added a cc in the
+signed-off-by area, according to the stable-kernel-rules.
+  Thank Greg KH for helpful advice.
+---
+v3:
+* In this patch v3, we've added a necessary blank line and adjusted the
+position of spin_unlock_irqrestore() following Greg KH's suggestions.
+  Thank Greg KH for helpful advice.
+---
+ drivers/usb/mon/mon_bin.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
+index 9ca9305243fe..fbc1a9c0b345 100644
+--- a/drivers/usb/mon/mon_bin.c
++++ b/drivers/usb/mon/mon_bin.c
+@@ -1250,14 +1250,19 @@ static vm_fault_t mon_bin_vma_fault(struct vm_fault *vmf)
+ 	struct mon_reader_bin *rp = vmf->vma->vm_private_data;
+ 	unsigned long offset, chunk_idx;
+ 	struct page *pageptr;
+-
++	unsigned long flags;
++
++	spin_lock_irqsave(&rp->b_lock, flags);
+ 	offset = vmf->pgoff << PAGE_SHIFT;
+-	if (offset >= rp->b_size)
++	if (offset >= rp->b_size) {
++		spin_unlock_irqrestore(&rp->b_lock, flags);
+ 		return VM_FAULT_SIGBUS;
++	}
+ 	chunk_idx = offset / CHUNK_SIZE;
+ 	pageptr = rp->b_vec[chunk_idx].pg;
+ 	get_page(pageptr);
+ 	vmf->page = pageptr;
++	spin_unlock_irqrestore(&rp->b_lock, flags);
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
+
 
