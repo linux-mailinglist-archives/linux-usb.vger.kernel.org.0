@@ -1,149 +1,113 @@
-Return-Path: <linux-usb+bounces-4771-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4772-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 963D6825097
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 10:09:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81B0C8250A1
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 10:16:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADF02B2278B
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 09:09:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24A3D285AA1
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 09:16:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A449C22F04;
-	Fri,  5 Jan 2024 09:09:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Ii+DeqnH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6718822F0A;
+	Fri,  5 Jan 2024 09:15:54 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC0A22EE6;
-	Fri,  5 Jan 2024 09:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 405999iH007188;
-	Fri, 5 Jan 2024 03:09:09 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1704445749;
-	bh=z5vei7JlMzAa/jduUZEH+hGUqRGDx7E6gpd6wWEU6+Y=;
-	h=From:Date:Subject:To:CC;
-	b=Ii+DeqnHilv1oFkT3oYLRPOf2LzgbQkKXvrbI+LlosQq31Bjzdt3fho0Z87FLCLl4
-	 sf9QuEVqQGi6M5b00RqF84Pz9D+TR3YJ1D+Bsq2zSJMs3yh7JjreY9LBO3aAMrkWLG
-	 sRGlb2rxqfvx0MdplyHfkre7VScfsjqrSA8JNFcs=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4059998I064077
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 5 Jan 2024 03:09:09 -0600
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
- Jan 2024 03:09:09 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 5 Jan 2024 03:09:09 -0600
-Received: from localhost ([10.249.131.210])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 405998dW034337;
-	Fri, 5 Jan 2024 03:09:08 -0600
-From: Jai Luthra <j-luthra@ti.com>
-Date: Fri, 5 Jan 2024 14:36:54 +0530
-Subject: [PATCH] usb: typec: tipd: Separate reset for TPS6598x
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A14822EEB;
+	Fri,  5 Jan 2024 09:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
+Received: from [192.168.1.104] (178.176.73.147) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Fri, 5 Jan
+ 2024 12:15:37 +0300
+Subject: Re: [PATCH] usb: typec: tipd: Separate reset for TPS6598x
+To: Jai Luthra <j-luthra@ti.com>, Heikki Krogerus
+	<heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Javier Carrasco
+	<javier.carrasco@wolfvision.net>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<rogerq@kernel.org>, <r-gunasekaran@ti.com>, <vigneshr@ti.com>,
+	<d-gole@ti.com>
+References: <20240105-next-tps-fix-v1-1-158cabaec168@ti.com>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <78925337-0bba-ca7d-aeb1-2d5c53c565ea@omp.ru>
+Date: Fri, 5 Jan 2024 12:15:36 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <20240105-next-tps-fix-v1-1-158cabaec168@ti.com>
 Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240105-next-tps-fix-v1-1-158cabaec168@ti.com>
-X-B4-Tracking: v=1; b=H4sIAK3Gl2UC/x2MQQqAIBAAvyJ7bkHFDvaV6FC61V5MVEIQ/550n
- IGZBpkSU4ZFNEj0cuYnDFCTAHfv4SJkPxi01EYqOWOgWrDEjCdXtNKQt/pwyjkYSUw09L9bt94
- /ISpihF4AAAA=
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Javier Carrasco
-	<javier.carrasco@wolfvision.net>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rogerq@kernel.org>, <r-gunasekaran@ti.com>, <vigneshr@ti.com>,
-        <d-gole@ti.com>, Jai Luthra <j-luthra@ti.com>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1839; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=Z8O96E6ST2XTkcI+vrlIMRUkybW9YQ0pWHAzEcvC6XU=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBll8cyHksr3aAh4XZyshxl0tzvJE/F/cb8WuPoi
- JRe6uQdsF2JAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZZfHMgAKCRBD3pH5JJpx
- RVnMD/9y/zHVem29SzahsNwxmycKd7H9EsUBE7K7DyQXCvI0FqIU2fgoYk61YnTf8ub8jKZgMDs
- 1RkuUhbGUue06GinURDRmmk6cuD7db5q4Y85uXwGm/iktSLJlKRQ9BmSSCyn6/pUiHnUg2KXrWy
- TYqfEEGsa9LK7Q5XC2hANHAhuUczWvuVMtF7XHE3yVFZ7gR9ntKV0dtr9hu8UHOxu3/losGyAxn
- nMuCt7jNHaqXZEXpJBhZrjr/Q6H+cel22WukcSybS32emz14yeR+bhLutwZmuApVpvVaAc1S4Ux
- I5oePPJvCX7CwVUQmQ2j6DJa9BaAV4Dm8FJwGH/SVL2cwzFOtd5FC01YuUBR9OkPvU+4bEEEZ9L
- 2bz4cQmv2d4HW4ks9HWQFll/3gtAjOGwkPlfL7A/carDjvxvr4hG2IAc+zmzHPJd9QEEefgvV6T
- aEiNKcVH4VTVIANz5f+edG8o4uCs18qRm5P0VbIC8U+eN8uvy4JIVXW9dwV90Kt9ziFOiuEiHn9
- Tl4akC9xJQYBO2ty+vgzsqy+mS0K57dJEulwwePYZ4wr+qTx+Qr3IX9iu+zPPHLZ5+lF3JDgtih
- RqumgHQjK2OngyDx1bQ0hVJKrXHHf1Isr1cE4V+agexA90FPpfDhV0MYg/EXMncdnmJ02LhM4xq
- RV6cUpp02dANuNA==
-X-Developer-Key: i=j-luthra@ti.com; a=openpgp;
- fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.0, Database issued on: 01/05/2024 09:03:19
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 182464 [Jan 04 2024]
+X-KSE-AntiSpam-Info: Version: 6.1.0.3
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 7 0.3.7 6d6bf5bd8eea7373134f756a2fd73e9456bb7d1a
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_phishing_log_reg_50_60}
+X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.147 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.147 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info:
+	lore.kernel.org:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;178.176.73.147:7.1.2;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.147
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 01/05/2024 09:08:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 1/5/2024 6:56:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-Some platforms like SK-AM62, SK-AM62A cannot boot up to prompt if
-TPS6598x is cold-reset during unconditionally on probe failures by
-sending "GAID" sequence.
+Hello!
 
-The probe can fail initially because USB0 remote-endpoint may not be
-probed yet, which defines the usb-role-switch property.
+On 1/5/24 12:06 PM, Jai Luthra wrote:
 
-Fixes: d49f90822015 ("usb: typec: tipd: add init and reset functions to tipd_data")
-Closes: https://lore.kernel.org/linux-usb/vmngazj6si7xxss7txenezkcukqje2glhvvs7ipdcx3vjiqvlk@ohmmhhhlryws/
-Signed-off-by: Jai Luthra <j-luthra@ti.com>
----
-Boot-logs with this patch applied:
-https://gist.github.com/jailuthra/b66d5722090ce1fbc2886986e53640f7
----
- drivers/usb/typec/tipd/core.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+> Some platforms like SK-AM62, SK-AM62A cannot boot up to prompt if
+> TPS6598x is cold-reset during unconditionally on probe failures by
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index a956eb976906..8ba2aa05db51 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -1223,11 +1223,16 @@ static int cd321x_reset(struct tps6598x *tps)
- 	return 0;
- }
- 
--static int tps6598x_reset(struct tps6598x *tps)
-+static int tps25750_reset(struct tps6598x *tps)
- {
- 	return tps6598x_exec_cmd_tmo(tps, "GAID", 0, NULL, 0, NULL, 2000, 0);
- }
- 
-+static int tps6598x_reset(struct tps6598x *tps)
-+{
-+	return 0;
-+}
-+
- static int
- tps25750_register_port(struct tps6598x *tps, struct fwnode_handle *fwnode)
- {
-@@ -1545,7 +1550,7 @@ static const struct tipd_data tps25750_data = {
- 	.trace_status = trace_tps25750_status,
- 	.apply_patch = tps25750_apply_patch,
- 	.init = tps25750_init,
--	.reset = tps6598x_reset,
-+	.reset = tps25750_reset,
- };
- 
- static const struct of_device_id tps6598x_of_match[] = {
+   Hm, I can't parse this. During what?
 
----
-base-commit: e2425464bc87159274879ab30f9d4fe624b9fcd2
-change-id: 20240105-next-tps-fix-904ed92bc1cc
+> sending "GAID" sequence.
+> 
+> The probe can fail initially because USB0 remote-endpoint may not be
+> probed yet, which defines the usb-role-switch property.
+> 
+> Fixes: d49f90822015 ("usb: typec: tipd: add init and reset functions to tipd_data")
+> Closes: https://lore.kernel.org/linux-usb/vmngazj6si7xxss7txenezkcukqje2glhvvs7ipdcx3vjiqvlk@ohmmhhhlryws/
+> Signed-off-by: Jai Luthra <j-luthra@ti.com>
+[...]
 
-Best regards,
--- 
-Jai Luthra <j-luthra@ti.com>
-
+MBR, Sergey
 
