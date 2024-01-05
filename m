@@ -1,162 +1,134 @@
-Return-Path: <linux-usb+bounces-4778-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4779-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEB92825183
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 11:11:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39379825276
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 11:57:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B78B01C22DEB
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 10:11:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D512928666C
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 10:57:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB0B224B4D;
-	Fri,  5 Jan 2024 10:11:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CFCF28E08;
+	Fri,  5 Jan 2024 10:57:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="fu6+F5yl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WmmgmU6W"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D594824B42;
-	Fri,  5 Jan 2024 10:11:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 405AAvqw060097;
-	Fri, 5 Jan 2024 04:10:57 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1704449457;
-	bh=zgPbm5yoRPogHRwkmQDQezlAr5UfQ2gMpkkB4jBkXt8=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=fu6+F5yl3LlsNf94BxW6rpdWq3h8OZxWaOGkT/Ha4zKQaAm3bZ3/+U70Wkv3zGTfS
-	 79LaTsLuQSloYwGX+3fPW1M3ZPUdbGaWG1mVxUgHWPnYsCw76r7QeKO/1ydLdzavqE
-	 ROHm0vizODl290/TOPvz3Cf9ij+v0vXf0j1QdhK8=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 405AAv1x015209
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 5 Jan 2024 04:10:57 -0600
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
- Jan 2024 04:10:56 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 5 Jan 2024 04:10:56 -0600
-Received: from localhost ([10.249.131.210])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 405AAtVY119550;
-	Fri, 5 Jan 2024 04:10:56 -0600
-Date: Fri, 5 Jan 2024 15:40:54 +0530
-From: Jai Luthra <j-luthra@ti.com>
-To: Javier Carrasco <javier.carrasco@wolfvision.net>,
-        Abdel Alkuor
-	<abdelalkuor@geotab.com>
-CC: <rogerq@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <vigneshr@ti.com>, <d-gole@ti.com>, <nm@ti.com>
-Subject: Re: [PATCH v2 0/4] usb: typec: tipd: add patch update support for
- tps6598x
-Message-ID: <4erwnvyyammnsdihwpvqcmm4v4fcyxozltocklsbnbfdhacoye@le7x2giuxrwv>
-References: <20231207-tps6598x_update-v2-0-f3cfcde6d890@wolfvision.net>
- <vmngazj6si7xxss7txenezkcukqje2glhvvs7ipdcx3vjiqvlk@ohmmhhhlryws>
- <2nqiaxakx6setx4tzgddnbjadbh7miegz5p6wamsbbiyrfuq3x@un2uxajbswkg>
- <f463e49d-9e69-4bff-a663-3ce7c1093202@wolfvision.net>
- <nza4s2kjmcptz6epbyegwy6wh32buyxm5evnk2jultqblgzs4b@6mzuklpqhby7>
- <6e63a1f0-8ed6-41cf-b1bc-34b49099eedf@wolfvision.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074FA28DD7;
+	Fri,  5 Jan 2024 10:57:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704452242; x=1735988242;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bWLA9uHAE4XhP297Hf+kKUGZ6XNNGd0zX30Q+EHU8bg=;
+  b=WmmgmU6W6dLVdZWLfGY03Xz+MtZHYa/Fa8vMj1REMG9vz5o2OyOiQGCw
+   Hqjub23kInip7e/f6e1ZFhlgq5bCcFzoxecmlaxbhbIp5w2JLGmuXhx97
+   b65gpZ4SGjPQvoxhK+3/81CfbDClzghC/1d6XCMlWBLouh1m6ujII3EYZ
+   HGmpuLYhYNPpRjsD8QnPgadVSw51twL8XbshCP3WeVvJeCFWVxmOX2Asx
+   SdDyER6fOhUUChvdvTt6Ke+9HQwhbg1j148DuAUOD6d2okpUUsWtWyPcf
+   VykMjN38H5aiFDG0mnmDn9ViTjC26jQXbcqHFZOqcinO2LyUu11FmFgc8
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10943"; a="401271564"
+X-IronPort-AV: E=Sophos;i="6.04,333,1695711600"; 
+   d="scan'208";a="401271564"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2024 02:57:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10943"; a="730443114"
+X-IronPort-AV: E=Sophos;i="6.04,333,1695711600"; 
+   d="scan'208";a="730443114"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga003.jf.intel.com with SMTP; 05 Jan 2024 02:57:17 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 05 Jan 2024 12:57:16 +0200
+Date: Fri, 5 Jan 2024 12:57:16 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Jai Luthra <j-luthra@ti.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Javier Carrasco <javier.carrasco@wolfvision.net>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rogerq@kernel.org, r-gunasekaran@ti.com, vigneshr@ti.com,
+	d-gole@ti.com
+Subject: Re: [PATCH] usb: typec: tipd: Separate reset for TPS6598x
+Message-ID: <ZZfSwGokdjD1YdPX@kuha.fi.intel.com>
+References: <20240105-next-tps-fix-v1-1-158cabaec168@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="cnaquinfjqktv7bx"
-Content-Disposition: inline
-In-Reply-To: <6e63a1f0-8ed6-41cf-b1bc-34b49099eedf@wolfvision.net>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-
---cnaquinfjqktv7bx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240105-next-tps-fix-v1-1-158cabaec168@ti.com>
 
-Hi Javier, Abdel,
+On Fri, Jan 05, 2024 at 02:36:54PM +0530, Jai Luthra wrote:
+> Some platforms like SK-AM62, SK-AM62A cannot boot up to prompt if
+> TPS6598x is cold-reset during unconditionally on probe failures by
+> sending "GAID" sequence.
+> 
+> The probe can fail initially because USB0 remote-endpoint may not be
+> probed yet, which defines the usb-role-switch property.
+> 
+> Fixes: d49f90822015 ("usb: typec: tipd: add init and reset functions to tipd_data")
+> Closes: https://lore.kernel.org/linux-usb/vmngazj6si7xxss7txenezkcukqje2glhvvs7ipdcx3vjiqvlk@ohmmhhhlryws/
+> Signed-off-by: Jai Luthra <j-luthra@ti.com>
 
-On Jan 05, 2024 at 10:49:22 +0100, Javier Carrasco wrote:
-> On 05.01.24 09:12, Jai Luthra wrote:
-> > I added some prints and can see that the probe fails once at=20
-> > fwnode_usb_role_switch_get() because the other endpoint (of USB device)=
-=20
-> > is not yet probed. It then re-probes later where it passes.
-> >=20
-> > The GAID reset being done unconditionally in your series seems to cause=
-=20
-> > the board to get stuck in the boot process when it hits the above error=
-=20
-> > due to probe-order between USB subsystem and this IC. My guess would be=
-=20
-> > SoC stops getting power because we reset the PD chip?
-> >=20
-> > Anyway, I will send below change as a separate "Fixes:" patch for now,=
-=20
-> > to keep how things as they were before your series.
-> >=20
->=20
-> My biggest concern is that we are sending GAID for the tps25750 under
-> the same circumstances. Could we not have the same problem with that
-> device? We would be resetting the PD controller and the SoC would stop
-> getting power as well, right? Or is there anything device-specific that
-> would avoid that?
->=20
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Yes I would guess same problem can happen depending on probe order of=20
-the remote-endpoint node, but I don't see any upstream platform using=20
-ti,tps25750 compatible, so I have no way to confirm.
-
-Maybe Abdel can comment on how it works, as he added the GAID reset for=20
-tps25750.
-
-> > If you have a better architecture in mind that can reset only when PTCH=
-=20
-> > has been applied and not for other probe defers, feel free to send it o=
-n=20
-> > top of it.
-> >=20
->=20
-> I added the cold reset to have the same behavior upon probe failures for
-> both devices, given that they use the same command. But if that can
-> cause problems, let's leave the reset alone...
->=20
+> ---
+> Boot-logs with this patch applied:
+> https://gist.github.com/jailuthra/b66d5722090ce1fbc2886986e53640f7
+> ---
+>  drivers/usb/typec/tipd/core.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index a956eb976906..8ba2aa05db51 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -1223,11 +1223,16 @@ static int cd321x_reset(struct tps6598x *tps)
+>  	return 0;
+>  }
+>  
+> -static int tps6598x_reset(struct tps6598x *tps)
+> +static int tps25750_reset(struct tps6598x *tps)
+>  {
+>  	return tps6598x_exec_cmd_tmo(tps, "GAID", 0, NULL, 0, NULL, 2000, 0);
+>  }
+>  
+> +static int tps6598x_reset(struct tps6598x *tps)
+> +{
+> +	return 0;
+> +}
+> +
+>  static int
+>  tps25750_register_port(struct tps6598x *tps, struct fwnode_handle *fwnode)
+>  {
+> @@ -1545,7 +1550,7 @@ static const struct tipd_data tps25750_data = {
+>  	.trace_status = trace_tps25750_status,
+>  	.apply_patch = tps25750_apply_patch,
+>  	.init = tps25750_init,
+> -	.reset = tps6598x_reset,
+> +	.reset = tps25750_reset,
+>  };
+>  
+>  static const struct of_device_id tps6598x_of_match[] = {
+> 
+> ---
+> base-commit: e2425464bc87159274879ab30f9d4fe624b9fcd2
+> change-id: 20240105-next-tps-fix-904ed92bc1cc
+> 
 > Best regards,
-> Javier Carrasco
+> -- 
+> Jai Luthra <j-luthra@ti.com>
 
---=20
-Thanks,
-Jai
-
-GPG Fingerprint: 4DE0 D818 E5D5 75E8 D45A AFC5 43DE 91F9 249A 7145
-
---cnaquinfjqktv7bx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEETeDYGOXVdejUWq/FQ96R+SSacUUFAmWX1a0ACgkQQ96R+SSa
-cUWwMw/+OLopIG3GmS4qRykSsenaaI9RZeBk3+FPDPbzycE+Wt+7YsZJBcUhoDFm
-Bkm9mLKpWi2HvVTyCv7l5R0un38kceErcPj5c8warAMXbAI5vvd8/M+YE60j1dr+
-Gbm98I2O/hXDYrtGjhmJajmvchzlc3CUGTfA+CULx9h7zp0zP/ro57HgQwhO/3pA
-NjnoGA9TVh5spheY7Aw7hBO+GZAi/iXqEcQY1TNCvSiARN0OW1bMlqWZJOZYoLk7
-CsGWPq1AkTxW2n1tUjm86pFVuV3l6rRN6E5IW7lQt/UkWoe8d33o0z5DFHwY7TK8
-KtAfE3NHGn+Ancmp3wt3+Y2W0++mB1RtPfnn3QRRIvmlY6Et7EuvVErZPfA0NRj1
-o3FiJNr1Uew6P9pAeer7RvuEBT0NKarZo11uPfAjHhUVEE9tEH/LGFWFt8qwMHiU
-Zl3bhrYhgobnxUJO/6fZQRZCO/P1Ia3B4KTHlo2xhsEBzyGpGUATJktKWXLlf9S5
-3pfTBPOrquiYxZxSo3sQSWVOzGCzrE2FeaWg/o+E1nXTuvVvFCjpHnsNRQJsOO6h
-ydPgQvnn2uOLQJu391xkc90egQRzFvsLihI9rPp7bkQ6I2VPf3nl6yTTCtXaOUeg
-jlSN4urFqi8r4kxKRXSEI4XmSfsJK5pQUpcshaBzkJWXMWlRD0c=
-=T0Ts
------END PGP SIGNATURE-----
-
---cnaquinfjqktv7bx--
+-- 
+heikki
 
