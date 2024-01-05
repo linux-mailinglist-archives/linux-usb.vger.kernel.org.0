@@ -1,120 +1,189 @@
-Return-Path: <linux-usb+bounces-4766-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4767-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF81C824EEF
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 08:08:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6BCD824F22
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 08:24:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71909B233C0
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 07:08:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19E801C223B7
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 07:24:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3033D18041;
-	Fri,  5 Jan 2024 07:08:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0023F1EB3D;
+	Fri,  5 Jan 2024 07:23:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kp2USlvH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f6rRE2D5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBFD20306;
-	Fri,  5 Jan 2024 07:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704438494; x=1735974494;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=k7NPKkHLDmwR2N923yR5n3HVkP/jGh71yLZZpIHTuqI=;
-  b=Kp2USlvHGJK0W+xXcJlXx8uZuBIXp4A+iEP0SWhQF4XmMKeSTsZu08wb
-   1mU9S6uurcY1vct97GNVEKc303wH9qpI9Nr3X/v4pCeKvjW4IoD8dfoH/
-   XJTq51IYt3f0lpqmRmsZ0T/1wqAZ/8fzCWD/c6kXOZxU8yuu3S9rZs8Zx
-   m04H9ToMlms/txifsTc41Zcc8ksjj9GP2kcujKsmrXoKZ8TiSDPkXbMWY
-   89IXpVEbcexnBzUHnRWJoAYsiaIat3MjuVFvq1MwXcJv/zAm9EDkWgFhl
-   1owcSt5Ye3pOrpudBNrXbiMjGMcDc/6SGsVtvZcNU8ma+0q3K8UkjHUQH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10943"; a="396333881"
-X-IronPort-AV: E=Sophos;i="6.04,333,1695711600"; 
-   d="scan'208";a="396333881"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2024 23:08:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10943"; a="1027683361"
-X-IronPort-AV: E=Sophos;i="6.04,333,1695711600"; 
-   d="scan'208";a="1027683361"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 04 Jan 2024 23:08:11 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 0E54129B; Fri,  5 Jan 2024 09:08:09 +0200 (EET)
-Date: Fri, 5 Jan 2024 09:08:09 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Sanath S <sanaths2@amd.com>
-Cc: Sanath S <Sanath.S@amd.com>, mario.limonciello@amd.com,
-	andreas.noever@gmail.com, michael.jamet@intel.com,
-	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [Patch v2 2/2] thunderbolt: Teardown tunnels and reset
- downstream ports created by boot firmware
-Message-ID: <20240105070809.GN2543524@black.fi.intel.com>
-References: <20231219122634.GJ1074920@black.fi.intel.com>
- <0816caa4-81b5-d0f9-2305-80c7fec6abb9@amd.com>
- <20231219180424.GL1074920@black.fi.intel.com>
- <20231220125857.GA2543524@black.fi.intel.com>
- <5bfaa405-b15e-36ef-a4e0-04b93dd983b1@amd.com>
- <257c694f-5aa2-c29b-891d-3a1f480dd4a1@amd.com>
- <20231221095307.GB2543524@black.fi.intel.com>
- <6308b3e6-d935-93cb-b05d-7c9790b091d4@amd.com>
- <20240103171709.GL2543524@black.fi.intel.com>
- <39fc8ce8-baab-bf53-d177-1034dfc81be9@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F66C1DDDC;
+	Fri,  5 Jan 2024 07:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-28bcc273833so1066610a91.1;
+        Thu, 04 Jan 2024 23:23:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704439431; x=1705044231; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mi5dW+kaTv8H8oViBS7oLpGne9QKIEIWJnrqh7QIaNk=;
+        b=f6rRE2D5EahHyZS/wSkGRDmZ9NrSuEUkSISzS4bjfNrnAb3BeSDPIw2s+Ad1y/QLSa
+         Gw1lEfL2PpDneP1pJ7zCEUBoxPEIJoCKSo708ysbb/FQcEgvmQsNcUzErpwoS/zO/JMj
+         zfY2RNqEFz9xdfEdJEERk8dvPFDLf5TAJhjqM+0cH1EhBzm8aaIoqdwunflDQEJ8dzu1
+         05YCS5g+skZ1LwY1NvJ2fiR1fy/I0yypmy+KsyLxLQ9SnIoZknSa/uo4smyDNV0yaN28
+         dkQx82jPHmf6jjAfATSA3MZ2h1aVUBlex0eo0ybxKwrXqBYGl/qcLxXqWvB7paz+VOet
+         +dhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704439431; x=1705044231;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mi5dW+kaTv8H8oViBS7oLpGne9QKIEIWJnrqh7QIaNk=;
+        b=HHBrrvvpf6k4xAquuI8j9A5xqjPOrh1x7Bh5rzX/0pwPwF5z+ua0L7GtZsoWZ0k09X
+         ZoojN8N41Gr9eXT5X2K7hPIzjEs3xlW/LAmR5XV3CCKbKEr5gmPIBWBB0Is5BWdsMNt+
+         7SFc454rfJ/yrOPkttUZjbULzfMi81Ucc1IMkSqQ/9HwV+Zef1F08IR3HCXD7dwmm6Kd
+         2ZS4Nhk/Jilum3QvJPZM9QsfnC/RnUYvfMrnpXJg+bqRBVhtC4KnjtNt2XddyTeaUG75
+         jDb0/VWq205c61uHnzjr0UqHPGjCX+Yz2tK7H73baPV4VVtUZ7x8xdKt0ouojd5Y0woU
+         HJyg==
+X-Gm-Message-State: AOJu0YyYueWj5b5XkIINruv/ioIvzmQAUpp4hc4gpHfSbAFWU69rNOzp
+	aikkgrWkw0yhdZjBSZzbDyE=
+X-Google-Smtp-Source: AGHT+IEnOgUU+Twu/APnYJIBliVK10kdVnA6ApzgZ8e7KrNNqWst6oeA16XX5foM0sm+w/OTpOhiTQ==
+X-Received: by 2002:a17:90b:4387:b0:28c:e296:7336 with SMTP id in7-20020a17090b438700b0028ce2967336mr1586181pjb.34.1704439431455;
+        Thu, 04 Jan 2024 23:23:51 -0800 (PST)
+Received: from ?IPV6:2001:250:206:1c18:5510:d476:e3ee:6e9f? ([2001:250:206:1c18:5510:d476:e3ee:6e9f])
+        by smtp.gmail.com with ESMTPSA id px5-20020a17090b270500b0028b17832efdsm532645pjb.39.2024.01.04.23.23.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Jan 2024 23:23:51 -0800 (PST)
+Message-ID: <fb57ddd4-b5e3-4e76-8642-8020d34fc1f1@gmail.com>
+Date: Fri, 5 Jan 2024 15:23:41 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: mon: Fix atomicity violation in mon_bin_vma_fault
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: surenb@google.com, 42.hyeyoo@gmail.com, benjamin.tissoires@redhat.com,
+ mhocko@suse.com, ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, baijiaju1990@outlook.com,
+ stable@vger.kernel.org, BassCheck <bass@buaa.edu.cn>
+References: <20231222060450.5449-1-2045gemini@gmail.com>
+ <2024010409-poppy-rumor-bff5@gregkh>
+From: Gui-Dong Han <2045gemini@gmail.com>
+In-Reply-To: <2024010409-poppy-rumor-bff5@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <39fc8ce8-baab-bf53-d177-1034dfc81be9@amd.com>
 
-On Thu, Jan 04, 2024 at 07:20:05PM +0530, Sanath S wrote:
-> 
-> On 1/3/2024 10:47 PM, Mika Westerberg wrote:
-> > On Wed, Jan 03, 2024 at 07:45:56PM +0530, Sanath S wrote:
-> > > On 12/21/2023 3:23 PM, Mika Westerberg wrote:
-> > > > On Thu, Dec 21, 2023 at 03:01:50PM +0530, Sanath S wrote:
-> > > > > > Sure. I'll check with these combinations.
-> > > > > Can you name any docks that meets these requirements ? I'll try to get
-> > > > > hold of it here and check.
-> > > > Pretty much every Titan Ridge based dock. For instance Dell WD19TB.
-> > > > 
-> > > > I have some hardware here that I can use to try it out too.
-> > > It seems that issue is seen on Dell WD19TB too. So this fix may have to
-> > > extended to TBT3 as well ?
-> > Hm, what issue? I thought this works accross all the supported devices
-> > due to the DFP, no?
-> > 
-> > > I'll give it a try this week and share the observation.
-> Got my hands on Dell WD19TB. And it works!
-> 
-> Here is lspci -t output with and without fix
-> 
-> without fix:
->            +-03.1-[04-62]----00.0-[05-07]--+-02.0-[06]----00.0
->            |                               \-04.0-[07]--
-> With fix:
->            +-03.1-[04-62]----00.0-[05-62]--+-02.0-[06]----00.0
->            |                               \-04.0-[07-62]--
-> 
-> I'll send out v3 with with splitting into 2/3 patches(Will see how it looks
-> good).
+Hi,
 
-Okay and you checked also that with the WD19TB (and its integrated xHCI)
-there are no additional boot delays because of the reset?
 
-> Any other comments, we can take it on v3.
+Fixed in the patch v3!
 
-Sure.
+Thank you for helpful advice.
+
+
+Thanks,
+
+Han
+
+On 4/1/2024 下午10:16, Greg KH wrote:
+> On Fri, Dec 22, 2023 at 02:04:50PM +0800, Gui-Dong Han wrote:
+>> In mon_bin_vma_fault():
+>> 	offset = vmf->pgoff << PAGE_SHIFT;
+>> 	if (offset >= rp->b_size)
+>> 		return VM_FAULT_SIGBUS;
+>> 	chunk_idx = offset / CHUNK_SIZE;
+>> 	pageptr = rp->b_vec[chunk_idx].pg;
+>> The code is executed without holding any lock.
+>>
+>> In mon_bin_vma_close():
+>> 	spin_lock_irqsave(&rp->b_lock, flags);
+>> 	rp->mmap_active--;
+>> 	spin_unlock_irqrestore(&rp->b_lock, flags);
+>>
+>> In mon_bin_ioctl():
+>> 	spin_lock_irqsave(&rp->b_lock, flags);
+>> 	if (rp->mmap_active) {
+>> 		...
+>> 	} else {
+>> 		...
+>> 		kfree(rp->b_vec);
+>> 		rp->b_vec  = vec;
+>> 		rp->b_size = size;
+>> 		...
+>> 	}
+>> 	spin_unlock_irqrestore(&rp->b_lock, flags);
+>>
+>> Concurrent execution of mon_bin_vma_fault() with mon_bin_vma_close() and
+>> mon_bin_ioctl() could lead to atomicity violations. mon_bin_vma_fault()
+>> accesses rp->b_size and rp->b_vec without locking, risking array
+>> out-of-bounds access or use-after-free bugs due to possible modifications
+>> in mon_bin_ioctl().
+>>
+>> This possible bug is found by an experimental static analysis tool
+>> developed by our team, BassCheck[1]. This tool analyzes the locking APIs
+>> to extract function pairs that can be concurrently executed, and then
+>> analyzes the instructions in the paired functions to identify possible
+>> concurrency bugs including data races and atomicity violations. The above
+>> possible bug is reported when our tool analyzes the source code of
+>> Linux 6.2.
+>>
+>> To address this issue, it is proposed to add a spin lock pair in
+>> mon_bin_vma_fault() to ensure atomicity. With this patch applied, our tool
+>> never reports the possible bug, with the kernel configuration allyesconfig
+>> for x86_64. Due to the lack of associated hardware, we cannot test the
+>> patch in runtime testing, and just verify it according to the code logic.
+>>
+>> [1] https://sites.google.com/view/basscheck/
+>>
+>> Fixes: 19e6317d24c25 ("usb: mon: Fix a deadlock in usbmon between ...")
+>> Cc: stable@vger.kernel.org
+>> Reported-by: BassCheck <bass@buaa.edu.cn>
+>> Signed-off-by: Gui-Dong Han <2045gemini@gmail.com>
+>> ---
+>> v2:
+>> * In this patch v2, we've added some information of the static analysis
+>> tool used, as per the researcher guidelines. Also, we've added a cc in the
+>> signed-off-by area, according to the stable-kernel-rules.
+>>    Thank Greg KH for helpful advice.
+>> ---
+>>   drivers/usb/mon/mon_bin.c | 8 ++++++--
+>>   1 file changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
+>> index 9ca9305243fe..509cd1b8ff13 100644
+>> --- a/drivers/usb/mon/mon_bin.c
+>> +++ b/drivers/usb/mon/mon_bin.c
+>> @@ -1250,12 +1250,16 @@ static vm_fault_t mon_bin_vma_fault(struct vm_fault *vmf)
+>>   	struct mon_reader_bin *rp = vmf->vma->vm_private_data;
+>>   	unsigned long offset, chunk_idx;
+>>   	struct page *pageptr;
+>> -
+>> +	unsigned long flags;
+>> +	spin_lock_irqsave(&rp->b_lock, flags);
+> Nit, you still need the blank line before spin_lock_irqsave() here,
+> right?
+>
+>>   	offset = vmf->pgoff << PAGE_SHIFT;
+>> -	if (offset >= rp->b_size)
+>> +	if (offset >= rp->b_size) {
+>> +		spin_unlock_irqrestore(&rp->b_lock, flags);
+>>   		return VM_FAULT_SIGBUS;
+>> +	}
+>>   	chunk_idx = offset / CHUNK_SIZE;
+>>   	pageptr = rp->b_vec[chunk_idx].pg;
+>> +	spin_unlock_irqrestore(&rp->b_lock, flags);
+>>   	get_page(pageptr);
+>>   	vmf->page = pageptr;
+> Shouldn't the unlock go here, not 2 lines above as you are still
+> modifying things touched by rp.
+>
+> thanks,
+>
+> greg k-h
 
