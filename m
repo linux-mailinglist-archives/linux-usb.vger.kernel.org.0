@@ -1,109 +1,73 @@
-Return-Path: <linux-usb+bounces-4775-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4777-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7B2E825165
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 11:01:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33677825180
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 11:10:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3CD27B22689
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 10:01:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF4F7282F6A
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 10:10:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61D0A24B2F;
-	Fri,  5 Jan 2024 10:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 370DE24B4C;
+	Fri,  5 Jan 2024 10:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TwzST4hG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B13250E1;
-	Fri,  5 Jan 2024 10:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
-Received: from [192.168.1.104] (178.176.73.147) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Fri, 5 Jan
- 2024 13:01:18 +0300
-Subject: Re: [PATCH] usb: typec: tipd: Separate reset for TPS6598x
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Jai Luthra <j-luthra@ti.com>, Heikki Krogerus
-	<heikki.krogerus@linux.intel.com>, Javier Carrasco
-	<javier.carrasco@wolfvision.net>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <rogerq@kernel.org>, <r-gunasekaran@ti.com>,
-	<vigneshr@ti.com>, <d-gole@ti.com>
-References: <20240105-next-tps-fix-v1-1-158cabaec168@ti.com>
- <78925337-0bba-ca7d-aeb1-2d5c53c565ea@omp.ru>
- <2024010559-passcode-bogus-2c97@gregkh>
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <7f026dfe-d143-0d4c-6e3d-fe52ba49a6b7@omp.ru>
-Date: Fri, 5 Jan 2024 13:01:17 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B4B24210;
+	Fri,  5 Jan 2024 10:10:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C022C433C8;
+	Fri,  5 Jan 2024 10:10:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704449425;
+	bh=KRltSTi0bD8VHHjBqa6/utOjY8l/zzl7utSN3i622lI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=TwzST4hGkmVSzCe8hHuXZBQyIEQV6QYTh4/hwdFLQuUykPzRlq7jCMbjViO+Zq8Ph
+	 EvnHkzQ4BAwuL7zOEnF1fiViVjhKpKpXbtyuNw0y3lywBt0gNjTIRiVkL2znWvsZHW
+	 9eLA+eSaD80AQPk+d3cKGNfyFD1rBfAJzon4KotcAUlnzQfowRfwxaWxMLAJbMOtyD
+	 UK6y9rBqGnI40gex4jRuCElFv0PwKkfFnRHosrmk2ByCD6dokK+qLKZAm96K8a1pmg
+	 ipqATxnycGUJO6W7i6p9u3maCqAq+JuGc+zIoC8oUkr+rOnCYpHOKgRdnewPdI9OTH
+	 uKLeOMfgEvM8w==
+Message-ID: <a3bacc32-b4e2-4141-8106-486bbf783f52@kernel.org>
+Date: Fri, 5 Jan 2024 12:10:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <2024010559-passcode-bogus-2c97@gregkh>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: typec: tipd: Separate reset for TPS6598x
+To: Jai Luthra <j-luthra@ti.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ r-gunasekaran@ti.com, vigneshr@ti.com, d-gole@ti.com
+References: <20240105-next-tps-fix-v1-1-158cabaec168@ti.com>
 Content-Language: en-US
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20240105-next-tps-fix-v1-1-158cabaec168@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.0, Database issued on: 01/05/2024 09:46:20
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 182464 [Jan 04 2024]
-X-KSE-AntiSpam-Info: Version: 6.1.0.3
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 7 0.3.7 6d6bf5bd8eea7373134f756a2fd73e9456bb7d1a
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_phishing_log_reg_50_60}
-X-KSE-AntiSpam-Info: {Tracking_arrow_text}
-X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info:
-	d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;178.176.73.147:7.1.2;127.0.0.199:7.1.2;omp.ru:7.1.1;lore.kernel.org:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.147
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 01/05/2024 09:51:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 1/5/2024 9:01:00 AM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-On 1/5/24 12:34 PM, Greg Kroah-Hartman wrote:
 
-[...]
->>> Some platforms like SK-AM62, SK-AM62A cannot boot up to prompt if
->>> TPS6598x is cold-reset during unconditionally on probe failures by
->>
->>    Hm, I can't parse this. During what?
+
+On 05/01/2024 11:06, Jai Luthra wrote:
+> Some platforms like SK-AM62, SK-AM62A cannot boot up to prompt if
+> TPS6598x is cold-reset during unconditionally on probe failures by
+> sending "GAID" sequence.
 > 
-> See the thread that is listed here:
+> The probe can fail initially because USB0 remote-endpoint may not be
+> probed yet, which defines the usb-role-switch property.
 > 
->>> Closes: https://lore.kernel.org/linux-usb/vmngazj6si7xxss7txenezkcukqje2glhvvs7ipdcx3vjiqvlk@ohmmhhhlryws/
+> Fixes: d49f90822015 ("usb: typec: tipd: add init and reset functions to tipd_data")
+> Closes: https://lore.kernel.org/linux-usb/vmngazj6si7xxss7txenezkcukqje2glhvvs7ipdcx3vjiqvlk@ohmmhhhlryws/
+> Signed-off-by: Jai Luthra <j-luthra@ti.com>
 
-   I don't see how it helps with what seems to be a grammar issue...
-Either a noun should follow "during" or that "during" just shouldn't
-be there...
-
-> thanks,
-> 
-> greg k-h
-
-MBR, Sergey
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
