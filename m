@@ -1,103 +1,136 @@
-Return-Path: <linux-usb+bounces-4805-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4806-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E2F782545B
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 14:17:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A4BA82586C
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 17:40:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CDD8283831
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 13:17:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46FB9B20C75
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jan 2024 16:40:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05D2E2D7A7;
-	Fri,  5 Jan 2024 13:17:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 191DE2E647;
+	Fri,  5 Jan 2024 16:40:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lAmNlzfd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DE92D602
-	for <linux-usb@vger.kernel.org>; Fri,  5 Jan 2024 13:17:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-360671f08a3so9419885ab.1
-        for <linux-usb@vger.kernel.org>; Fri, 05 Jan 2024 05:17:25 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDFE1E4BD;
+	Fri,  5 Jan 2024 16:40:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3bbd6e37af4so1230676b6e.1;
+        Fri, 05 Jan 2024 08:40:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704472815; x=1705077615; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=stYajyWPWMqAHb+0oqEiVrcD5n0SgOsrMnrQbqDRt/0=;
+        b=lAmNlzfd5zCGcvJJhMurgtIRq21e5vA9pOhhp+osZWD07uJB7EQPN1DGvH94KqYPAR
+         /OwpR5TRxIOcSxxgXIZW9tsBAfUwJGAWo/O4d9zKwHXwNOsAXtjDk7oh47nX/FSUL2T2
+         C2J1CPF/spIQZM2eU7J7PX5nXaO33kPGjiIqnDZf9GjbYmlDsJmpOEg3+riN371SPjAP
+         GZLBlYz+Ap0C4w2ehJ1TAMtBDmuW9Xs6xKn8leyOc1vbpJZZk5Ecg3xGa1NswNQaFUxd
+         NY8l10rduLlsSwcOzk8WO+F2rhlRIsS7zAmJO7dAFtsj2k+SZ7cxKdEIc2nQyl8dIhFT
+         V1AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704460644; x=1705065444;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xcaKQn4ZrzJMyg8IlqVO++Y6AG8+CZXSU/axxuPlUpI=;
-        b=p279igMYxMMUsK4FGvc1q3BuLVz601q1Rd+tifUqnvbl3ynsv05x6Psyjrefzn1vO8
-         TgjF41kbqi/MASlp0g6B1a2G2EBtBk+CKJp+pqa0hq/uUV9+jxkA5iENnkgq0ESl1o/E
-         z+iQ/l8kfvetNribQI3eY4bz6F20INwn5YGNey78sebgaESDcYNJ3XdrmZ019SX9GUUK
-         XgThU5mWkbbuF6s0ZGG+Ns1q4d7mjbVlr9Tg60RjyVN9AOizvxKSEWva1l4FpwNwqHgZ
-         2/vE/mPW8wHdHDmqQbanjmSvSaKkfF61jBMrNRpuWWfm0kLdpxl3ueDw9LhC9RsIAOCR
-         c0jQ==
-X-Gm-Message-State: AOJu0YzTTSbxxB7R+m/TGYZVoB4ePokPENnaW/oNdjgoWmDzc9TonPLN
-	/w+9vpuVrLWpplz4mYL5G0zPIPfFkjwai3cvARV+50pgnex4
-X-Google-Smtp-Source: AGHT+IE5L/US2FP5ty+hAS6bRkslPj1vqmG/tWftM+xH0aPLpDc6MkbpLYSBz6gkLY8LBd7UERrdMjrJk75WbhTm5VPJTJnH3G3y
+        d=1e100.net; s=20230601; t=1704472815; x=1705077615;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=stYajyWPWMqAHb+0oqEiVrcD5n0SgOsrMnrQbqDRt/0=;
+        b=QwIaD0bLZZRbwkOG3M13t2PVzskD5Cq3nxoi/e8MJ9hubJ4fpvc1IZm/Zrtf7CFxLM
+         QUO2dj1l+V6XtzTcW5CS4UhBPlmujmDZeZQ5hpAFfF5XBcSHc8WITBe2c4YpycQ1goz8
+         SNG95JQDVj7Vjv4zgAqFc1C+pYZhiGyKHRh5Jx7B/gpuAuN4FkCbnEPlH0Le19IhfXdF
+         OLxfckPOyTr4jGZ9HY989FNpakO3j1jpCXwEHZjLglhpx+e81d+52/ge6Yz/yVABWhNd
+         VuWL/LKCykTNHpqAr3xDMyrz2E/+aeHuNPAcDPl7ufFuhGjqXWs/jB85vyFVrmLdm+cJ
+         QWSw==
+X-Gm-Message-State: AOJu0YxZ5rh8BETwn0fuohvz9sjXBpGbsbT8w01555h9u8qsZsm9i3Oo
+	vLy07Tp5Xk1/bUx+KRL/cMA=
+X-Google-Smtp-Source: AGHT+IER7Mmfrirshqi4PsQW5EUqzJ9Q4bZbTOoO2VyzvwoQMJ+wSxBxm2g9U+dIoom8qX6b5lHWyg==
+X-Received: by 2002:a05:6808:1521:b0:3bb:bd59:df86 with SMTP id u33-20020a056808152100b003bbbd59df86mr2699492oiw.86.1704472815201;
+        Fri, 05 Jan 2024 08:40:15 -0800 (PST)
+Received: from abdel ([174.95.13.129])
+        by smtp.gmail.com with ESMTPSA id ez16-20020ad45910000000b0067f81a1494esm726626qvb.55.2024.01.05.08.40.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jan 2024 08:40:14 -0800 (PST)
+Date: Fri, 5 Jan 2024 11:40:05 -0500
+From: Abdel Alkuor <alkuor@gmail.com>
+To: Jai Luthra <j-luthra@ti.com>,
+	Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: Abdel Alkuor <abdelalkuor@geotab.com>, rogerq@kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	vigneshr@ti.com, d-gole@ti.com, nm@ti.com
+Subject: Re: [PATCH v2 0/4] usb: typec: tipd: add patch update support for
+ tps6598x
+Message-ID: <ZZgw5SNZiG4VlhZD@abdel>
+References: <20231207-tps6598x_update-v2-0-f3cfcde6d890@wolfvision.net>
+ <vmngazj6si7xxss7txenezkcukqje2glhvvs7ipdcx3vjiqvlk@ohmmhhhlryws>
+ <2nqiaxakx6setx4tzgddnbjadbh7miegz5p6wamsbbiyrfuq3x@un2uxajbswkg>
+ <f463e49d-9e69-4bff-a663-3ce7c1093202@wolfvision.net>
+ <nza4s2kjmcptz6epbyegwy6wh32buyxm5evnk2jultqblgzs4b@6mzuklpqhby7>
+ <6e63a1f0-8ed6-41cf-b1bc-34b49099eedf@wolfvision.net>
+ <4erwnvyyammnsdihwpvqcmm4v4fcyxozltocklsbnbfdhacoye@le7x2giuxrwv>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1aad:b0:360:6649:29da with SMTP id
- l13-20020a056e021aad00b00360664929damr332479ilv.3.1704460644715; Fri, 05 Jan
- 2024 05:17:24 -0800 (PST)
-Date: Fri, 05 Jan 2024 05:17:24 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000043127b060e32ab2a@google.com>
-Subject: [syzbot] Monthly usb report (Jan 2024)
-From: syzbot <syzbot+listd2a1ebc22715cc638b5a@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4erwnvyyammnsdihwpvqcmm4v4fcyxozltocklsbnbfdhacoye@le7x2giuxrwv>
 
-Hello usb maintainers/developers,
+On Fri, Jan 05, 2024 at 03:40:54PM +0530, Jai Luthra wrote:
+Hi Jai and Jvaier,
+> > My biggest concern is that we are sending GAID for the tps25750 under
+> > the same circumstances. Could we not have the same problem with that
+> > device? We would be resetting the PD controller and the SoC would stop
+> > getting power as well, right? Or is there anything device-specific that
+> > would avoid that?
+> > 
+> 
+> Yes I would guess same problem can happen depending on probe order of 
+> the remote-endpoint node, but I don't see any upstream platform using 
+> ti,tps25750 compatible, so I have no way to confirm.
+> 
+> Maybe Abdel can comment on how it works, as he added the GAID reset for 
+> tps25750.
+> 
+Ops, that's an oversight from my side. In our case, fwnode_usb_role_switch_get()
+returns NULL but if it does return -EPROBE_DEFER, we will end up with
+the same issue you're seeing.
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+The purpose of the reset is to remove any applied patch so we don't
+leave USB-C PD controller in some kind of operable state when the device
+fails to be probed. GO2P command forces PD controller to retrun to PTCH
+mode but unfortunately that doesn't work in all cases unless ADCINx pins
+configurations are set in "NegotiateHighVoltage" option, so I opted into 
+using the hard reset instead regardless of ADCINx configurations.
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 62 issues are still open and 331 have been fixed so far.
+> > > If you have a better architecture in mind that can reset only when PTCH 
+> > > has been applied and not for other probe defers, feel free to send it on 
+> > > top of it.
+> > > 
+> > 
+> > I added the cold reset to have the same behavior upon probe failures for
+> > both devices, given that they use the same command. But if that can
+> > cause problems, let's leave the reset alone...
+> > 
+I think in this case, we might want to apply the patch as the last
+thing in the probe or check for EPROBE_DEFER before issuing a hard
+reset.
 
-Some of the still happening issues:
+Also, I think if the patch is being applied using EEPROM, I don't
+believe we need to issue a hard reset ever as the patch would be applied
+automatically after that.
 
-Ref  Crashes Repro Title
-<1>  2979    Yes   WARNING in firmware_fallback_sysfs
-                   https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
-<2>  2797    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
-                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
-<3>  832     Yes   general protection fault in ir_raw_event_store_with_filter
-                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
-<4>  548     Yes   INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
-<5>  429     Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<6>  385     Yes   INFO: task hung in r871xu_dev_remove
-                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
-<7>  304     Yes   KASAN: use-after-free Read in v4l2_fh_init
-                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
-<8>  240     No    INFO: task hung in hub_event (3)
-                   https://syzkaller.appspot.com/bug?extid=a7edecbf389d11a369d4
-<9>  239     Yes   INFO: task hung in netdev_run_todo (2)
-                   https://syzkaller.appspot.com/bug?extid=9d77543f47951a63d5c1
-<10> 216     Yes   INFO: rcu detected stall in hub_event
-                   https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
+Thanks,
+Abdel
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
 
