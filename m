@@ -1,269 +1,160 @@
-Return-Path: <linux-usb+bounces-4809-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4810-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22F65825FB0
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Jan 2024 14:36:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE14A8260C1
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Jan 2024 17:58:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 985081F2208E
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Jan 2024 13:36:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 183B91F21DE7
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Jan 2024 16:58:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC7DE7475;
-	Sat,  6 Jan 2024 13:35:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B39CD8839;
+	Sat,  6 Jan 2024 16:58:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W1Up0z+b"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="q8vs3frD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2085.outbound.protection.outlook.com [40.107.220.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6846FDD
-	for <linux-usb@vger.kernel.org>; Sat,  6 Jan 2024 13:35:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704548154; x=1736084154;
-  h=date:from:to:cc:subject:message-id;
-  bh=orzgjs9/PEe+TfKIfjvkA9TiM7qajxxsQCbI+X6fVxs=;
-  b=W1Up0z+bVVf49zudS7vS601aI1huehNcnyKGgOxDbgh8eqdYm+z9sBCL
-   3mNHRuqoKjnGE/fGs993JEF1hwQg09FQeIuuhk1CTM5NU84Sd3FV4xtsd
-   h+8vV8+PIqNX5sWT8R8pykMF4qKw5rJqBTHu3AvqbhEqkEDxJVoprsgBs
-   7+yCVU/qdQHKHwE5a1jOLIhlt8aMpG2hj2gFx4H70KZTS4M0RNgadMjdr
-   ex1WQF3xicY45250LGjvZi6GZge7x+OlGYyHEePo7lShSj32h+MWsF0uu
-   xD6MMjfstF42IOG5qR+vy26Cm0Ult5CA86yK8Rf3lFz9fChyZA3X0kl7O
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="396543527"
-X-IronPort-AV: E=Sophos;i="6.04,337,1695711600"; 
-   d="scan'208";a="396543527"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2024 05:35:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10945"; a="1028003470"
-X-IronPort-AV: E=Sophos;i="6.04,337,1695711600"; 
-   d="scan'208";a="1028003470"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 06 Jan 2024 05:35:53 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rM6q7-0002X6-09;
-	Sat, 06 Jan 2024 13:35:51 +0000
-Date: Sat, 06 Jan 2024 21:34:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 933bb7b878ddd0f8c094db45551a7daddf806e00
-Message-ID: <202401062152.PRzWaY0r-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D1CC8DE;
+	Sat,  6 Jan 2024 16:57:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CQGUGiWsg+Jd/R7i8+Ysff900Ea2HHRGz9GWHM8gQRymUTyUCYKmnOgYd2EJwHOpSoWiNUrfDxdhp30a6QyqcZZ5msiIK47CNsjumcRLkb2/0I2X9onKf1LOJ/sqSlIdNio3pqDDs8GEIsL6cn2JC049cz4lJB1h6xAGcJP9nxjUIckOwuVpa/nDJaPc6XV2F2CFk9N7mNj99+SNDc46ek8HhALW35ARgl46CTOnU5Qoa/3pVOAbBY6ZSIv08F9jGHM2HYvTFBja1saZqLD/pWIQaL7b63igTEq43+GaE2VpoWU9vYcqXa8RQAVNsG9o2hLdvAjtTW/ttetf0QCiPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lLqDbC/VkWwHpJsvacZD8fVAgDKcEC649GsjpOYm2q8=;
+ b=I0JPw1kiIUDpJYhXu09B135oydO3FfMXecuCdoj+eq3KNLYiysua7cqqfjlP5qPGdOqnpKsbnNe9BEV7wYG7dO1kXwCB1qTomQXqjKfiFHQWx4yTS9C3YjS/lFImXmBAPjr7mOEuYjblRDJEIiIPXO7xoS6RSF8alS4yMDlx8wk+bzbI2HlK9Ec4Aq1gwI8BgNaBQ3Pp+IqUBQKNTXt7W/cdVAdcDJPIO+kPVnCFYpOhCRTmf8I7Up7UaQxgYxApg2hczqLoJK1inoIRHMN+EIvYTt7SOSJy3BNmEvftAGjNiORhdQr6r1pqoiF7pGt/vsN/SryrpH7jLpxhX63Xwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lLqDbC/VkWwHpJsvacZD8fVAgDKcEC649GsjpOYm2q8=;
+ b=q8vs3frDpMVY6pIuBv5W04NTPow2bUNWS0ais3auqVvu9JceUS6mxkTpIugVnPCNy63jK8r+f7vDRA0AQDH1+ui7x8hBTrWmRMssBpMBAh8HUVVSRyE67PycvQCZ8D641kmDojvgY8p/i9oHObN/QExYsaX54MzF8bDIoJPeFwM=
+Received: from MW4PR04CA0253.namprd04.prod.outlook.com (2603:10b6:303:88::18)
+ by DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.19; Sat, 6 Jan
+ 2024 16:57:55 +0000
+Received: from CO1PEPF000044FB.namprd21.prod.outlook.com
+ (2603:10b6:303:88:cafe::d9) by MW4PR04CA0253.outlook.office365.com
+ (2603:10b6:303:88::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.19 via Frontend
+ Transport; Sat, 6 Jan 2024 16:57:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000044FB.mail.protection.outlook.com (10.167.241.201) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7202.2 via Frontend Transport; Sat, 6 Jan 2024 16:57:54 +0000
+Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Sat, 6 Jan
+ 2024 10:57:51 -0600
+From: Sanath S <Sanath.S@amd.com>
+To: <mario.limonciello@amd.com>, <andreas.noever@gmail.com>,
+	<michael.jamet@intel.com>, <mika.westerberg@linux.intel.com>,
+	<YehezkelShB@gmail.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: Sanath S <Sanath.S@amd.com>
+Subject: [Patch v3 0/4] Add support for downstream port reset(DPR)
+Date: Sat, 6 Jan 2024 22:27:19 +0530
+Message-ID: <20240106165723.3377789-1-Sanath.S@amd.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044FB:EE_|DM4PR12MB5278:EE_
+X-MS-Office365-Filtering-Correlation-Id: a7a010ea-3cc3-442c-bfe0-08dc0ed8a0ac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	JivbEMQ4UZa56ouO07XMltPmnsjuhkAfdfXIt+n0sjTaED94La3n/KHZe7bc7VqBEfoLfRqWh/WZZk94tn9Bn4aBgyJbkG7XCtOXPfqNtWk03F5fCC0TXlBVb97ggbTU1KvB3rA065KHMoE+vN4gcPdp+f+PNfeJTgjTkv4kZDv620GDU7dOqFBDeELroeQ8EReKvqPLpUR7tQYEPvq+4XoZPVO210ilbwOu5rotEzWvQV2fU4R1rimlRGyaVLJZuvmR9kF+O8Yq3um6fwiA36FNKy0OrIWt6JpnjRD2L3bz+NiSPkkpnhyaiVmNuyz8tWrZxBBonI3ImX5hwGpgq636gn7yvSCR3dG8svBvy5ci8xcvFQ7fTPAy8mwr1SFqV7akgJpHM8GCvxEoUmvMci+ek8/4TWdtHQphD2rTxL53JKxwBD3IYvGwOfzg6GVQ4sRpQjpvhCjyXBzc0+2ecQKVVLBbTBp3Vr5BSiMcdL2o2lz5OsxKISs/VPuEoGknalUZa5qtWONZFemvGgS+AV2Cp6UY4WgVvS0SpzoATJQYfI1LcYC0XkEd7CKNWZwuPMIwY34zTXN93wU6T3NRRo//1oTZ36cW8wqujGePE3mEptxAPet2K2aQjarP7VZYNI0kDgc60m2Zyv3HyEPdw0/kWuvG3Ki6/eFyYzCcCTy05qCVkYeFyMqqBcU0FGH50wOVv/DVBOYCKZ7PqfEehdBdteVfjVvDOSixY7HxNiO3PV/moP8FZ/Ulw7RRjNfzeh8PE+aUEVSmzURYNIhiQcSgFySOAZ2tLOIn06ey1k8=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(376002)(346002)(39860400002)(396003)(230922051799003)(1800799012)(451199024)(82310400011)(64100799003)(186009)(36840700001)(46966006)(40470700004)(1076003)(26005)(426003)(336012)(2616005)(478600001)(6666004)(7696005)(16526019)(47076005)(36860700001)(83380400001)(66574015)(2906002)(5660300002)(41300700001)(316002)(70206006)(110136005)(4326008)(8936002)(8676002)(70586007)(82740400003)(86362001)(356005)(81166007)(36756003)(40460700003)(40480700001)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2024 16:57:54.9605
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7a010ea-3cc3-442c-bfe0-08dc0ed8a0ac
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000044FB.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5278
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 933bb7b878ddd0f8c094db45551a7daddf806e00  usb: typec: tipd: fix use of device-specific init function
+Tunnels created by boot firmware results in incorrect PCI resource
+allocation, which results in failure of extending daisy chain.
+This series aims to resolve inconsistent tunnels or paths created
+by boot firmware.
 
-elapsed time: 1456m
+Before:
+           +-03.1-[04-62]----00.0-[05-07]--+-02.0-[06]----00.0
+           |                               \-04.0-[07]--
+After:
+           +-03.1-[04-62]----00.0-[05-62]--+-02.0-[06]----00.0
+           |                               \-04.0-[07-62]-- 
 
-configs tested: 187
-configs skipped: 2
+This series also aligns with windows behaviour of performing a teardown
+of tunnels and resetting the downstream ports using DPR during the init
+sequence.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Changes since V3:
+ - Remove discover_tunnel() api before resetting DPR.
+ - Add lane and protocol adapters reset in tb_switch_reset()
+ - Addition of tb_lc_reset_port() for TBT1, TBT2 and TBT3 routers.
+ - Addition of tb_path_deactivate_hop() api to help suppport path
+   reset of given hop index.
+ - Addition on new patch to store and indicate host router reset 
+   status of USB4 v2
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240106   gcc  
-arc                   randconfig-002-20240106   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                         at91_dt_defconfig   gcc  
-arm                                 defconfig   clang
-arm                         lpc18xx_defconfig   gcc  
-arm                             mxs_defconfig   clang
-arm                       omap2plus_defconfig   gcc  
-arm                            qcom_defconfig   gcc  
-arm                   randconfig-001-20240106   gcc  
-arm                   randconfig-002-20240106   gcc  
-arm                   randconfig-003-20240106   gcc  
-arm                   randconfig-004-20240106   gcc  
-arm                           sunxi_defconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240106   gcc  
-arm64                 randconfig-002-20240106   gcc  
-arm64                 randconfig-003-20240106   gcc  
-arm64                 randconfig-004-20240106   gcc  
-csky                              allnoconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240106   gcc  
-csky                  randconfig-002-20240106   gcc  
-hexagon                           allnoconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240106   clang
-hexagon               randconfig-002-20240106   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20240106   gcc  
-i386         buildonly-randconfig-002-20240106   gcc  
-i386         buildonly-randconfig-003-20240106   gcc  
-i386         buildonly-randconfig-004-20240106   gcc  
-i386         buildonly-randconfig-005-20240106   gcc  
-i386         buildonly-randconfig-006-20240106   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20240106   gcc  
-i386                  randconfig-002-20240106   gcc  
-i386                  randconfig-003-20240106   gcc  
-i386                  randconfig-004-20240106   gcc  
-i386                  randconfig-005-20240106   gcc  
-i386                  randconfig-006-20240106   gcc  
-i386                  randconfig-011-20240106   clang
-i386                  randconfig-012-20240106   clang
-i386                  randconfig-013-20240106   clang
-i386                  randconfig-014-20240106   clang
-i386                  randconfig-015-20240106   clang
-i386                  randconfig-016-20240106   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240106   gcc  
-loongarch             randconfig-002-20240106   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        stmark2_defconfig   gcc  
-m68k                           virt_defconfig   gcc  
-microblaze                       alldefconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                         cobalt_defconfig   gcc  
-mips                         db1xxx_defconfig   gcc  
-mips                 decstation_r4k_defconfig   gcc  
-mips                           ip27_defconfig   gcc  
-mips                        qi_lb60_defconfig   clang
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240106   gcc  
-nios2                 randconfig-002-20240106   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240106   gcc  
-parisc                randconfig-002-20240106   gcc  
-parisc64                            defconfig   gcc  
-powerpc                      acadia_defconfig   clang
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                   bluestone_defconfig   clang
-powerpc                  iss476-smp_defconfig   gcc  
-powerpc                       maple_defconfig   gcc  
-powerpc                  mpc866_ads_defconfig   clang
-powerpc                  mpc885_ads_defconfig   clang
-powerpc               randconfig-001-20240106   gcc  
-powerpc               randconfig-002-20240106   gcc  
-powerpc               randconfig-003-20240106   gcc  
-powerpc                     skiroot_defconfig   clang
-powerpc                         wii_defconfig   gcc  
-powerpc64             randconfig-001-20240106   gcc  
-powerpc64             randconfig-002-20240106   gcc  
-powerpc64             randconfig-003-20240106   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20240106   gcc  
-riscv                 randconfig-002-20240106   gcc  
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20240106   clang
-s390                  randconfig-002-20240106   clang
-sh                               alldefconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                               j2_defconfig   gcc  
-sh                    randconfig-001-20240106   gcc  
-sh                    randconfig-002-20240106   gcc  
-sh                          sdk7780_defconfig   gcc  
-sh                           se7343_defconfig   gcc  
-sh                           se7751_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240106   gcc  
-sparc64               randconfig-002-20240106   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240106   gcc  
-um                    randconfig-002-20240106   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240106   gcc  
-x86_64       buildonly-randconfig-002-20240106   gcc  
-x86_64       buildonly-randconfig-003-20240106   gcc  
-x86_64       buildonly-randconfig-004-20240106   gcc  
-x86_64       buildonly-randconfig-005-20240106   gcc  
-x86_64       buildonly-randconfig-006-20240106   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240106   clang
-x86_64                randconfig-002-20240106   clang
-x86_64                randconfig-003-20240106   clang
-x86_64                randconfig-004-20240106   clang
-x86_64                randconfig-005-20240106   clang
-x86_64                randconfig-006-20240106   clang
-x86_64                randconfig-011-20240106   gcc  
-x86_64                randconfig-012-20240106   gcc  
-x86_64                randconfig-013-20240106   gcc  
-x86_64                randconfig-014-20240106   gcc  
-x86_64                randconfig-015-20240106   gcc  
-x86_64                randconfig-016-20240106   gcc  
-x86_64                randconfig-071-20240106   gcc  
-x86_64                randconfig-072-20240106   gcc  
-x86_64                randconfig-073-20240106   gcc  
-x86_64                randconfig-074-20240106   gcc  
-x86_64                randconfig-075-20240106   gcc  
-x86_64                randconfig-076-20240106   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                  audio_kc705_defconfig   gcc  
-xtensa                generic_kc705_defconfig   gcc  
-xtensa                randconfig-001-20240106   gcc  
-xtensa                randconfig-002-20240106   gcc  
-xtensa                         virt_defconfig   gcc  
+Changes since V2:
+ - Perform DPR only for USB4 routers.
+ - Update kernel-doc and return value to -EOPNOTSUPP.
+ - Limit delay range to 10-15ms.
+
+Sanath S (4):
+  thunderbolt: Introduce usb4_port_reset() and tb_lc_reset_port()
+  thunderbolt: Extend tb_switch_reset() to support lane and protocol
+    adapter reset
+  thunderbolt: Store host router reset status in nhi_probe()
+  thunderbolt: Teardown tunnels and reset downstream ports created by
+    boot firmware
+
+ drivers/thunderbolt/domain.c  |  5 +--
+ drivers/thunderbolt/icm.c     |  2 +-
+ drivers/thunderbolt/lc.c      | 44 +++++++++++++++++++++++++
+ drivers/thunderbolt/nhi.c     | 19 +++++++----
+ drivers/thunderbolt/path.c    | 13 ++++++++
+ drivers/thunderbolt/switch.c  | 61 +++++++++++++++++++++++++++++++++--
+ drivers/thunderbolt/tb.c      | 29 +++++++++++++----
+ drivers/thunderbolt/tb.h      |  7 ++--
+ drivers/thunderbolt/tb_regs.h |  4 +++
+ drivers/thunderbolt/usb4.c    | 39 ++++++++++++++++++++++
+ 10 files changed, 202 insertions(+), 21 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
