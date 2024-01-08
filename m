@@ -1,193 +1,121 @@
-Return-Path: <linux-usb+bounces-4825-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4830-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0FE182694D
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Jan 2024 09:18:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04F64826D8E
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Jan 2024 13:13:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2BBEAB20F35
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Jan 2024 08:18:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 967751F228D6
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Jan 2024 12:13:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 446CEB662;
-	Mon,  8 Jan 2024 08:17:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65E4C405DB;
+	Mon,  8 Jan 2024 12:11:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HoKSlezc"
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="W6fod49M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from aposti.net (aposti.net [89.234.176.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497F5945A
-	for <linux-usb@vger.kernel.org>; Mon,  8 Jan 2024 08:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-680cb09a819so15460866d6.2
-        for <linux-usb@vger.kernel.org>; Mon, 08 Jan 2024 00:17:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1704701868; x=1705306668; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=M7JX/XG4UeOfhBADs4/0tfMCsAlccOtRn7KjHfujLog=;
-        b=HoKSlezcTZcYFJPKYQX48MdyKiQtxELN1qz5OYZTT7/qfX+hWS0xWujR3rPkVHmHYE
-         /mwhsuBZyt0WPRarjqrDajpbqIXqPpfAResAncDLpdBO6EU+qePU04ZhYlLuA3KtPSYQ
-         SsAnZsAJe3x9eYqtmavq6NkTB653NVB47gfHw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704701868; x=1705306668;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M7JX/XG4UeOfhBADs4/0tfMCsAlccOtRn7KjHfujLog=;
-        b=KM5ngnuS5L/A7TCwCwIn1DC2CN54VTgGKtD75gXrTzFj9qlyLPy+NDWhUgFKsJMz4O
-         hcX9SCdwvNdmEmc17OkIpQnBTsewxRcmEMVLmyhgyUVCqlPUCHDKCr4VlD6UGB/phoYg
-         EwBHUILeEZqwvrJm8yo9TbCa4wCKvBdNiDdI3T37CNW7vEzukUd1ceqW3r29Lfzq9vWZ
-         MJUlzKrjVKgpyDbWpVSidhIwM74Ian5+4KiEbBkP389xLeC0tbAyyf26sGudLsKWj2/E
-         F+Xh2YUs1NTvdoUQS69EM/Qf4JZIfoEDzJCerbb3TUVrU42DMpCrMoVE7Smuwq7GGsIv
-         dg2Q==
-X-Gm-Message-State: AOJu0Yy2RZv+elCtYF+9d5FKoOmOutoUsLzcVVNf3EDmQi8r3CwYrc1q
-	M0S4YwJH0ieOYDD4vr9DQ8B4+hS0hWJS
-X-Google-Smtp-Source: AGHT+IGptTWpMNyQDIYX52xrsGYTAvpv9R4EwsCPc08+j3vCXW2Nc3dRQ9UaKgZZwCuhWj3QWQKeeg==
-X-Received: by 2002:a05:6214:c4b:b0:680:c789:c4f2 with SMTP id r11-20020a0562140c4b00b00680c789c4f2mr4369988qvj.86.1704701868179;
-        Mon, 08 Jan 2024 00:17:48 -0800 (PST)
-Received: from denia.c.googlers.com (204.246.236.35.bc.googleusercontent.com. [35.236.246.204])
-        by smtp.gmail.com with ESMTPSA id x12-20020ad4458c000000b00681034fbc9esm924919qvu.94.2024.01.08.00.17.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 00:17:47 -0800 (PST)
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Mon, 08 Jan 2024 08:17:46 +0000
-Subject: [PATCH v4] media: ucvideo: Add quirk for Logitech Rally Bar
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A33405CC;
+	Mon,  8 Jan 2024 12:10:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+	s=mail; t=1704715263;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=kw2xnPE5HtY1SEvsv8OuzuBAyMF2igZ6CutMKzqtu08=;
+	b=W6fod49MZzGKeKASfexzXo/74JFcIFld1pbmYxXq7OXhAtPX5G7Ifl0VWUswisMuN4S04y
+	5NLkk/CClNpn75kJB2PiGGoRGMhR8rj1e35NH8jmlUixSdz4bWBc396mUHcI9K7lAaVlvM
+	g+LHGTNPldL6HMuN9Gh4QWWyJURIlkw=
+From: Paul Cercueil <paul@crapouillou.net>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: Jonathan Cameron <jic23@kernel.org>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <noname.nuno@gmail.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+	linux-usb@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v3 0/4] usb: gadget: functionfs: DMABUF import interface
+Date: Mon,  8 Jan 2024 13:00:52 +0100
+Message-ID: <20240108120056.22165-1-paul@crapouillou.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240108-rallybar-v4-1-a7450641e41b@chromium.org>
-X-B4-Tracking: v=1; b=H4sIAKqvm2UC/3XM0QqCMBTG8VeRXbfYOU7TrnqP6GJuUwfq4qwkE
- d+9KQQRdvkdzu8/s2DJ2cDOyczIji44P8QhDwnTrRoay52Jm6HAFBCRk+q6qVLEodRW6FyazOY
- svt/J1u61pa63uFsXHp6mrTzCet2JjMCBF1ihkiYFkdcX3ZLv3bM/emrY2hnxn8Vos0KWJkdVZ
- iB3bPqxUoD4tmm0QlVQnrSVSuGPXZblDVULOwUbAQAA
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-media@vger.kernel.org, stable@vger.kernel.org, 
- Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.12.3
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
 
-Logitech Rally Bar devices, despite behaving as UVC cameras, have a
-different power management system that the other cameras from Logitech.
+Hi,
 
-USB_QUIRK_RESET_RESUME is applied to all the UVC cameras from Logitech
-at the usb core. Unfortunately, USB_QUIRK_RESET_RESUME causes undesired
-USB disconnects, that make them completely unusable.
+This small patchset adds three new IOCTLs that can be used to attach,
+detach, or transfer from/to a DMABUF object.
 
-Instead of creating a list for this family of devices in the core, let's
-create a quirk in the UVC driver.
+This interface is being used at Analog Devices, to transfer data from
+high-speed transceivers to USB in a zero-copy fashion, using also the
+DMABUF import interface to the IIO subsystem which is being upstreamed
+in parallel [1] (and has high chances to be accepted for 5.9, I think
+Jonathan can confirm). The two are used by the Libiio software [2].
 
-Fixes: e387ef5c47dd ("usb: Add USB_QUIRK_RESET_RESUME for all Logitech UVC webcams")
-Cc: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
-Tested with a Rallybar Mini with an Acer Chromebook Spin 513
----
-Changes in v4:
-- Include Logi Rally Bar Huddle (Thanks Kyle!)
-- Link to v3: https://lore.kernel.org/r/20240102-rallybar-v3-1-0ab197ce4aa2@chromium.org
+On a ZCU102 board with a FMComms3 daughter board, using the combination
+of these two new interfaces yields a drastic improvement of the
+throughput, from about 127 MiB/s using IIO's buffer read/write interface
++ read/write to the FunctionFS endpoints, to about 274 MiB/s when
+passing around DMABUFs, for a lower CPU usage (0.85 load avg. before,
+vs. 0.65 after).
 
-Changes in v3:
-- Move quirk to uvc driver
-- Link to v2: https://lore.kernel.org/r/20231222-rallybar-v2-1-5849d62a9514@chromium.org
+Right now, *technically* there are no users of this interface, as
+Analog Devices wants to wait until both interfaces are accepted upstream
+to merge the DMABUF code in Libiio into the main branch, and Jonathan
+wants to wait and see if this patchset is accepted to greenlight the
+DMABUF interface in IIO as well. I think this isn't really a problem;
+once everybody is happy with its part of the cake, we can merge them all
+at once.
 
-Changes in v2:
-- Add Fixes tag
-- Add UVC maintainer as Cc
-- Link to v1: https://lore.kernel.org/r/20231222-rallybar-v1-1-82b2a4d3106f@chromium.org
----
- drivers/media/usb/uvc/uvc_driver.c | 30 ++++++++++++++++++++++++++++++
- drivers/media/usb/uvc/uvcvideo.h   |  1 +
- 2 files changed, 31 insertions(+)
+This is obviously for 5.9, and based on next-20240108.
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 08fcd2ffa727..9663bcac6843 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -14,6 +14,7 @@
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/usb.h>
-+#include <linux/usb/quirks.h>
- #include <linux/usb/uvc.h>
- #include <linux/videodev2.h>
- #include <linux/vmalloc.h>
-@@ -2233,6 +2234,8 @@ static int uvc_probe(struct usb_interface *intf,
- 	}
- 
- 	uvc_dbg(dev, PROBE, "UVC device initialized\n");
-+	if (dev->quirks & UVC_QUIRK_FORCE_RESUME)
-+		udev->quirks &= ~USB_QUIRK_RESET_RESUME;
- 	usb_enable_autosuspend(udev);
- 	return 0;
- 
-@@ -2574,6 +2577,33 @@ static const struct usb_device_id uvc_ids[] = {
- 	  .bInterfaceSubClass	= 1,
- 	  .bInterfaceProtocol	= 0,
- 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_RESTORE_CTRLS_ON_INIT) },
-+	/* Logitech Rally Bar Huddle */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x046d,
-+	  .idProduct		= 0x087c,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
-+	/* Logitech Rally Bar */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x046d,
-+	  .idProduct		= 0x089b,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
-+	/* Logitech Rally Bar Mini */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x046d,
-+	  .idProduct		= 0x08d3,
-+	  .bInterfaceClass	= USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
- 	/* Chicony CNF7129 (Asus EEE 100HE) */
- 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
- 				| USB_DEVICE_ID_MATCH_INT_INFO,
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 6fb0a78b1b00..fa59a21d2a28 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -73,6 +73,7 @@
- #define UVC_QUIRK_FORCE_Y8		0x00000800
- #define UVC_QUIRK_FORCE_BPP		0x00001000
- #define UVC_QUIRK_WAKE_AUTOSUSPEND	0x00002000
-+#define UVC_QUIRK_FORCE_RESUME		0x00004000
- 
- /* Format flags */
- #define UVC_FMT_FLAG_COMPRESSED		0x00000001
+Changelog:
 
----
-base-commit: c0f65a7c112b3cfa691cead54bcf24d6cc2182b5
-change-id: 20231222-rallybar-19ce0c64d5e6
+- [3/4]:
+  - Inline to_ffs_dma_fence() which was called only once.
+  - Simplify ffs_dma_resv_lock()
+  - Add comment explaining why we unref twice in ffs_dmabuf_detach()
+  - Document uapi struct usb_ffs_dmabuf_transfer_req and IOCTLs
+- [4/4]: New patch, as I figured out having documentation wouldn't hurt.
 
-Best regards,
+Cheers,
+-Paul
+
+[1] https://lore.kernel.org/linux-iio/219abc43b4fdd4a13b307ed2efaa0e6869e68e3f.camel@gmail.com/T/
+[2] https://github.com/analogdevicesinc/libiio/tree/pcercuei/dev-new-dmabuf-api
+
+Paul Cercueil (4):
+  usb: gadget: Support already-mapped DMA SGs
+  usb: gadget: functionfs: Factorize wait-for-endpoint code
+  usb: gadget: functionfs: Add DMABUF import interface
+  Documentation: usb: Document FunctionFS DMABUF API
+
+ Documentation/usb/functionfs.rst    |  36 +++
+ drivers/usb/gadget/function/f_fs.c  | 463 ++++++++++++++++++++++++++--
+ drivers/usb/gadget/udc/core.c       |   7 +-
+ include/linux/usb/gadget.h          |   2 +
+ include/uapi/linux/usb/functionfs.h |  41 +++
+ 5 files changed, 528 insertions(+), 21 deletions(-)
+
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+2.43.0
 
 
