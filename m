@@ -1,142 +1,194 @@
-Return-Path: <linux-usb+bounces-4841-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4842-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25C4682737F
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Jan 2024 16:36:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0325827476
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Jan 2024 16:50:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A6F51C226DD
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Jan 2024 15:36:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48E5E28353B
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Jan 2024 15:50:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDEC85103E;
-	Mon,  8 Jan 2024 15:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C1847778;
+	Mon,  8 Jan 2024 15:49:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QI6F3G0W"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="WgO51rAN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04C0451008;
-	Mon,  8 Jan 2024 15:36:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 408F0Oso004201;
-	Mon, 8 Jan 2024 15:36:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=1/yMGOYu2o111xMSjyfEKkROxqaEP9nQBApj9fCKdz4=; b=QI
-	6F3G0W+JWNl5H3o8RFlY/uNGzR6Xx8L0ys3flED1TKhKCl/YCmOy/LUxzTfuR2k4
-	7n/BZY49OOvD6ny29nNxXcSPBIQR/9Ej3JuP3uCTZ7rYfsyAOH2+dJUYJpWYtHg1
-	c1e+Z6y7NvL7hpWekFzijyK1ZJFh1FLJFci0+ok6+jwLNPdHPsqg7qbDHkq6V9M+
-	fNXap+eJ1VQc18E3k3ZijEMAqvmT19nLj+8SRPiZTUO7/1/oAN+bF0EisB07rGHE
-	34vL/Tk4iWfle2QpOlk7HqTpo3CSlfUlJHR2BUfK1V73hFg9rSfvfHSNKul+FRb1
-	+9MDqmiyHsemNdn6cE8A==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vg8mx9eks-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Jan 2024 15:36:20 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 408FaJE2025601
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 8 Jan 2024 15:36:19 GMT
-Received: from [10.216.17.83] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 8 Jan
- 2024 07:36:16 -0800
-Message-ID: <ee523f70-f41b-42be-967d-60691001b895@quicinc.com>
-Date: Mon, 8 Jan 2024 21:06:12 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 190425100D;
+	Mon,  8 Jan 2024 15:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1704728980; x=1736264980;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=nH6nxd4x4nwK+IhQjHIRG9EjGOXW493hGshxBqum9Ts=;
+  b=WgO51rANay+uC125bxHvTcy2qqYZ1s6pJVsrzogFV8Imorq9rQApqYLr
+   tqZ4CeJUvjbUZz6pt/tUWHWVWJwMQghrozHN+dL6QKLnEZNd8PQXTSqqD
+   4RiJJqb26UkTFO9lNjiT0KLEFqiAzoXlxGziM0MB6OYXnrtiY9hQcQy1c
+   CpYeUT92J2xXA9UNjJ6kS+JIYYVnJAmLGKSQRxPTH7m73+3uxncXpC5J8
+   nZACExterGlkgEvyOe/4A/nlUc8AzoYXpeAOT0RpkOkiQP5MnGz73720G
+   yxu8fFxY8eGgrcFMVF+GzcXJJBLyYonpov35MWbShN2bmFz9157AViT8V
+   A==;
+X-IronPort-AV: E=Sophos;i="6.04,180,1695679200"; 
+   d="scan'208";a="34790581"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 08 Jan 2024 16:49:37 +0100
+Received: from steina-w.localnet (steina-w.tq-net.de [10.123.53.25])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 3CA10280075;
+	Mon,  8 Jan 2024 16:49:37 +0100 (CET)
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: gregkh@linuxfoundation.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, linux-arm-kernel@lists.infradead.org
+Cc: linux-imx@nxp.com, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, jun.li@nxp.com, linux-usb@vger.kernel.org, Xu Yang <xu.yang_2@nxp.com>
+Subject: Re: [PATCH v2 4/5] arm64: dts: imx93: add usb nodes
+Date: Mon, 08 Jan 2024 16:49:36 +0100
+Message-ID: <2609601.iZASKD2KPV@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20231218085456.3962720-4-xu.yang_2@nxp.com>
+References: <20231218085456.3962720-1-xu.yang_2@nxp.com> <20231218085456.3962720-4-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: core: Prevent null pointer dereference in
- update_port_device_state
-Content-Language: en-US
-To: Alan Stern <stern@rowland.harvard.edu>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-References: <20240108130706.15698-1-quic_ugoswami@quicinc.com>
- <2d801dd7-93de-4323-a214-1a73cc5a8451@rowland.harvard.edu>
-From: Udipto Goswami <quic_ugoswami@quicinc.com>
-In-Reply-To: <2d801dd7-93de-4323-a214-1a73cc5a8451@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: qEuM_RaaruA5_t3wM-mvA2220RFLOhSY
-X-Proofpoint-ORIG-GUID: qEuM_RaaruA5_t3wM-mvA2220RFLOhSY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- malwarescore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
- mlxlogscore=811 adultscore=0 impostorscore=0 mlxscore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401080132
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-On 1/8/2024 8:56 PM, Alan Stern wrote:
-> On Mon, Jan 08, 2024 at 06:37:06PM +0530, Udipto Goswami wrote:
->> Currently,the function update_port_device_state gets the usb_hub from
->> udev->parent by calling usb_hub_to_struct_hub.
->> However, in case the actconfig or the maxchild is 0, the usb_hub would
->> be NULL and upon further accessing to get port_dev would result in null
->> pointer dereference.
->>
->> Fix this by introducing an if check after the usb_hub is populated.
->>
->> Fixes: 83cb2604f641 ("usb: core: add sysfs entry for usb device state")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
->> ---
->> v2: Introduced comment for the if check & CC'ed stable.
->>
->>   drivers/usb/core/hub.c | 15 ++++++++++++---
->>   1 file changed, 12 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
->> index ffd7c99e24a3..d40b5500f95b 100644
->> --- a/drivers/usb/core/hub.c
->> +++ b/drivers/usb/core/hub.c
->> @@ -2053,9 +2053,18 @@ static void update_port_device_state(struct usb_device *udev)
->>   
->>   	if (udev->parent) {
->>   		hub = usb_hub_to_struct_hub(udev->parent);
->> -		port_dev = hub->ports[udev->portnum - 1];
->> -		WRITE_ONCE(port_dev->state, udev->state);
->> -		sysfs_notify_dirent(port_dev->state_kn);
->> +
->> +		/*
->> +		 * usb_hub_to_struct_hub() if returns NULL can
->> +		 * potentially cause NULL pointer dereference upon further
->> +		 * access.
->> +		 * Avoid this with an if check.
->> +		 */
-> 
-> This is not what I meant.  It's perfectly obvious that if
-> usb_hub_to_struct_hub() returns NULL then there will be a NULL-pointer
-> dereference.  You don't need to explain that to anybody.
-> 
-> Instead, you need to explain why it is _possible_ for
-> usb_hub_to_struct_hub() to return NULL.  The reason is because the
-> lvstest driver messes around with usbcore internals without telling the
-> hub driver, so hub will be NULL in cases where udev was created by
-> lvstest.
+Hi,
 
-aah okay, Thanks for the clarification. I'll re-write the comment 
-mentioning this.
+thanks for the update.
 
-Thanks,
--Udipto
+Am Montag, 18. Dezember 2023, 09:54:55 CET schrieb Xu Yang:
+> There are 2 USB controllers on i.MX93. Add them.
+>=20
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> ---
+> Changes in v2:
+>  - fix format as suggested by Alexander
+>  - change compatible from fsl,imx8mm-usb to fsl,imx93-usb
+> ---
+>  arch/arm64/boot/dts/freescale/imx93.dtsi | 58 ++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>=20
+> diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi
+> b/arch/arm64/boot/dts/freescale/imx93.dtsi index 34c0540276d1..043ec8dc9a=
+ca
+> 100644
+> --- a/arch/arm64/boot/dts/freescale/imx93.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
+> @@ -171,6 +171,20 @@ cm33: remoteproc-cm33 {
+>  		status =3D "disabled";
+>  	};
+>=20
+> +	usbphynop1: usbphynop1 {
+> +		compatible =3D "usb-nop-xceiv";
+> +		#phy-cells =3D <0>;
+> +		clocks =3D <&clk IMX93_CLK_USB_PHY_BURUNIN>;
+> +		clock-names =3D "main_clk";
+> +	};
+> +
+> +	usbphynop2: usbphynop2 {
+> +		compatible =3D "usb-nop-xceiv";
+> +		#phy-cells =3D <0>;
+> +		clocks =3D <&clk IMX93_CLK_USB_PHY_BURUNIN>;
+> +		clock-names =3D "main_clk";
+> +	};
+> +
+>  	soc@0 {
+>  		compatible =3D "simple-bus";
+>  		#address-cells =3D <1>;
+> @@ -1059,5 +1073,49 @@ ddr-pmu@4e300dc0 {
+>  			reg =3D <0x4e300dc0 0x200>;
+>  			interrupts =3D <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
+>  		};
+> +
+> +		usbotg1: usb@4c100000 {
+> +			compatible =3D "fsl,imx93-usb", "fsl,imx7d-usb",=20
+"fsl,imx27-usb";
+> +			reg =3D <0x4c100000 0x200>;
+> +			interrupts =3D <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks =3D <&clk IMX93_CLK_USB_CONTROLLER_GATE>,
+> +				 <&clk IMX93_CLK_HSIO_32K_GATE>;
+> +			clock-names =3D "usb_ctrl_root_clk",=20
+"usb_wakeup_clk";
+> +			assigned-clocks =3D <&clk IMX93_CLK_HSIO>;
+> +			assigned-clock-parents =3D <&clk=20
+IMX93_CLK_SYS_PLL_PFD1_DIV2>;
+> +			assigned-clock-rates =3D <133000000>;
+> +			fsl,usbphy =3D <&usbphynop1>;
+
+fsl,usbphy is depreacated. Please refer to Documentation/devicetree/binding=
+s/
+usb/ci-hdrc-usb2.yaml
+
+> +			fsl,usbmisc =3D <&usbmisc1 0>;
+> +			status =3D "disabled";
+> +		};
+> +
+> +		usbmisc1: usbmisc@4c100200 {
+> +			compatible =3D "fsl,imx8mm-usbmisc", "fsl,imx7d-
+usbmisc",
+> +					"fsl,imx6q-usbmisc";
+> +			reg =3D <0x4c100200 0x200>;
+> +			#index-cells =3D <1>;
+> +		};
+> +
+> +		usbotg2: usb@4c200000 {
+> +			compatible =3D "fsl,imx93-usb", "fsl,imx7d-usb",=20
+"fsl,imx27-usb";
+> +			reg =3D <0x4c200000 0x200>;
+> +			interrupts =3D <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks =3D <&clk IMX93_CLK_USB_CONTROLLER_GATE>,
+> +				 <&clk IMX93_CLK_HSIO_32K_GATE>;
+> +			clock-names =3D "usb_ctrl_root_clk",=20
+"usb_wakeup_clk";
+> +			assigned-clocks =3D <&clk IMX93_CLK_HSIO>;
+> +			assigned-clock-parents =3D <&clk=20
+IMX93_CLK_SYS_PLL_PFD1_DIV2>;
+> +			assigned-clock-rates =3D <133000000>;
+> +			fsl,usbphy =3D <&usbphynop2>;
+
+fsl,usbphy is depreacated. Please refer to Documentation/devicetree/binding=
+s/
+usb/ci-hdrc-usb2.yaml
+
+> +			fsl,usbmisc =3D <&usbmisc2 0>;
+> +			status =3D "disabled";
+> +		};
+> +
+> +		usbmisc2: usbmisc@4c200200 {
+> +			compatible =3D "fsl,imx8mm-usbmisc", "fsl,imx7d-
+usbmisc",
+> +					"fsl,imx6q-usbmisc";
+> +			reg =3D <0x4c200200 0x200>;
+> +			#index-cells =3D <1>;
+> +		};
+
+Please insert these nodes sorted by node address. It should be inserted bef=
+ore=20
+ddr-pmu.
+
+Best regards,
+Alexander
+
+>  	};
+>  };
+
+
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
+
 
