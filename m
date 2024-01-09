@@ -1,146 +1,97 @@
-Return-Path: <linux-usb+bounces-4891-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4892-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8FD4828599
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 12:58:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C35CD82863A
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 13:48:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14CF11C23C88
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 11:58:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E97931C24291
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 12:48:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6592F374E9;
-	Tue,  9 Jan 2024 11:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DB45381DA;
+	Tue,  9 Jan 2024 12:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VlDz2CRN"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SRFTF1ul"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB6B38DD6;
-	Tue,  9 Jan 2024 11:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 409AkWKS001428;
-	Tue, 9 Jan 2024 11:57:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=HUAeeEbdoLwml3Qkib69/ikNISobITsTP6lTI8OvCmk=; b=Vl
-	Dz2CRNLIP41rtQSIXpewvTH/ElYpzCAnhYLgsH2aReyQhIbPHfNJ+ePgjGr5fhuS
-	BnJKGKBaawgR/41pmshPRRsa2qJ27EFZvGn4wCPnJGFd94GAq27Pu8i40559cV+P
-	3iK+Qfa9xKE07w9QMF2nkM59Fo425nfVMVh0fdF3LEWgeiz3wN2MHggmm4o1R6Mm
-	IR7P9+aU5cONWti8reWMxwJTl425TVZ3FMADHtQ8dUjyAu0hyQCrOrNAYSeWGU9A
-	o+3Wll7mf9VI/im3gMOkXAisElkus13UIoqTRbgJk18SiqTc73p9xNjdSPdllNGw
-	rqsDY1i0TpiH4siYzd8Q==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vgwq1rx2r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Jan 2024 11:57:56 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 409BvtvV015264
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 9 Jan 2024 11:57:55 GMT
-Received: from [10.217.219.221] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 9 Jan
- 2024 03:57:52 -0800
-Message-ID: <5ef9db3d-1e60-4f42-8a5b-52a9800e4707@quicinc.com>
-Date: Tue, 9 Jan 2024 17:27:49 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E14381BB
+	for <linux-usb@vger.kernel.org>; Tue,  9 Jan 2024 12:48:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-28c93513462so1654685a91.2
+        for <linux-usb@vger.kernel.org>; Tue, 09 Jan 2024 04:48:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1704804524; x=1705409324; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=equj060FCt2kUxy+zeJ1G6xYNbtT2kIm8VC3uUxQ9x0=;
+        b=SRFTF1ulw2TAO7H8y2gr8dkwuAMEbEb+7jHFj4zkx3AmnqK6w3hMijt2Q0ARZbY19U
+         n28DwBJISHHEiCDTomIJN9XBHsdZbIv1RekOnt6DOkdNQ+qA9i7LqumussR6DX9lXbjo
+         nUBWp94cLqfHr6TQa4qCondjRzmmIHwt8C0Mg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704804524; x=1705409324;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=equj060FCt2kUxy+zeJ1G6xYNbtT2kIm8VC3uUxQ9x0=;
+        b=n1PcDu7qtc0SC8lMz4ZTLu49maK+MJQG3J41x0ueCAquMBcFtvYowQkj8E4I+JtkJu
+         X+cXkRpltVjrxmhhaDiThxnkYm7pWEAw6S7oazZ/xqWwcxDFOkCrZKAhvZN28O0nSemi
+         /3v0+4jCSn8syjTo4n22ngHI5TVk0cLSymFiQFWGNTXZhaXcx1oCtT5fU49ciqI3pihM
+         yiXT9rp6Frs4SL+oNc1cFYEW3s1brn1ECvK3B4+si0OtailToPpOLAID5JwKkNm+a2Pg
+         j1OCHYhgF1E0Rob8ZKzuSdUqeTf3yobwqGEbx5jb78JI/FdqUmxCHi0oE69z8yLIi8do
+         CAbw==
+X-Gm-Message-State: AOJu0YxC1OLgAwXYTEvTd346CatrJlCMEWXfpq1IGmyJsj47CvtFZrM1
+	IZsXG3SSTmM/i5u67awvGrfWXPZb3txw
+X-Google-Smtp-Source: AGHT+IFaKPZTM2YqYrni+6vdDEZ1l2skb9dMVIwfSfVJEvEFl4Gkl73woedlMgZ1EXGQC6+X2xvV7w==
+X-Received: by 2002:a17:90a:17ab:b0:28c:93c5:1f9e with SMTP id q40-20020a17090a17ab00b0028c93c51f9emr2332149pja.63.1704804523918;
+        Tue, 09 Jan 2024 04:48:43 -0800 (PST)
+Received: from google.com (KD124209171220.ppp-bb.dion.ne.jp. [124.209.171.220])
+        by smtp.gmail.com with ESMTPSA id f21-20020a17090a9b1500b0028d9c540b12sm1292899pjp.23.2024.01.09.04.48.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jan 2024 04:48:43 -0800 (PST)
+Date: Tue, 9 Jan 2024 21:48:38 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v4] media: ucvideo: Add quirk for Logitech Rally Bar
+Message-ID: <20240109124838.GB1012017@google.com>
+References: <20240108-rallybar-v4-1-a7450641e41b@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: core: Prevent null pointer dereference in
- update_port_device_state
-Content-Language: en-US
-To: Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC: Krishna Kurapati <quic_kriskura@quicinc.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-References: <20240109061708.26288-1-quic_ugoswami@quicinc.com>
- <3bb51617-81e1-7d19-598d-2b57164320e1@gmail.com>
-From: Udipto Goswami <quic_ugoswami@quicinc.com>
-In-Reply-To: <3bb51617-81e1-7d19-598d-2b57164320e1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: BtjOb8AzAwaf74a8g6BNVskhpdeZaDgv
-X-Proofpoint-ORIG-GUID: BtjOb8AzAwaf74a8g6BNVskhpdeZaDgv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1011 lowpriorityscore=0 suspectscore=0 malwarescore=0
- adultscore=0 phishscore=0 impostorscore=0 mlxlogscore=949 spamscore=0
- bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401090097
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240108-rallybar-v4-1-a7450641e41b@chromium.org>
 
-Hi Sergei,
-
-On 1/9/2024 3:01 PM, Sergei Shtylyov wrote:
-> On 1/9/24 9:17 AM, Udipto Goswami wrote:
+On (24/01/08 08:17), Ricardo Ribalda wrote:
+> Logitech Rally Bar devices, despite behaving as UVC cameras, have a
+> different power management system that the other cameras from Logitech.
 > 
->> Currently,the function update_port_device_state gets the usb_hub from
->> udev->parent by calling usb_hub_to_struct_hub.
->> However, in case the actconfig or the maxchild is 0, the usb_hub would
->> be NULL and upon further accessing to get port_dev would result in null
->> pointer dereference.
->>
->> Fix this by introducing an if check after the usb_hub is populated.
->>
->> Fixes: 83cb2604f641 ("usb: core: add sysfs entry for usb device state")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
->> ---
->> v3: Re-wrote the comment for better context.
->> v2: Introduced comment for the if check & CC'ed stable.
->>
->>   drivers/usb/core/hub.c | 20 +++++++++++++++++---
->>   1 file changed, 17 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
->> index ffd7c99e24a3..6b514546e59b 100644
->> --- a/drivers/usb/core/hub.c
->> +++ b/drivers/usb/core/hub.c
->> @@ -2053,9 +2053,23 @@ static void update_port_device_state(struct usb_device *udev)
->>   
->>   	if (udev->parent) {
->>   		hub = usb_hub_to_struct_hub(udev->parent);
->> -		port_dev = hub->ports[udev->portnum - 1];
->> -		WRITE_ONCE(port_dev->state, udev->state);
->> -		sysfs_notify_dirent(port_dev->state_kn);
->> +
->> +		/*
->> +		 * The Link Layer Validation System Driver (lvstest)
->> +		 * has procedure of unbinding the hub before running
->> +		 * the rest of the procedure. This triggers
->> +		 * hub_disconnect will set the hub's maxchild to 0.
+> USB_QUIRK_RESET_RESUME is applied to all the UVC cameras from Logitech
+> at the usb core. Unfortunately, USB_QUIRK_RESET_RESUME causes undesired
+> USB disconnects, that make them completely unusable.
 > 
->     I can't parse this sentence, s/th is missing...
-Thanks for the review.
-Maybe this would sound better?
-
-"This triggers hub_disconnect which will set hub's maxchild to 0"
+> Instead of creating a list for this family of devices in the core, let's
+> create a quirk in the UVC driver.
 > 
->> +		 * This would result usb_hub_to_struct_hub in this
->> +		 * function to return NULL.
-> 
->     "This would result in usb_hub_to_struct_hub in this function
-> returning NULL", perhaps?
+> Fixes: e387ef5c47dd ("usb: Add USB_QUIRK_RESET_RESUME for all Logitech UVC webcams")
+> Cc: stable@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-yah sound better. Will take care of it in next version.
-
-Thanks,
--Udipto
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 
