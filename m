@@ -1,211 +1,189 @@
-Return-Path: <linux-usb+bounces-4898-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4899-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1778828A1C
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 17:37:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 518E4828C0E
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 19:10:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C731B236EB
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 16:37:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 428BC1F266EA
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 18:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E9F239AFD;
-	Tue,  9 Jan 2024 16:37:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3974D3C464;
+	Tue,  9 Jan 2024 18:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="pvn91EAO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC603A1CE;
-	Tue,  9 Jan 2024 16:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=de.adit-jv.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=de.adit-jv.com
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 0F427520442;
-	Tue,  9 Jan 2024 17:27:38 +0100 (CET)
-Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
- (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 9 Jan
- 2024 17:27:37 +0100
-Date: Tue, 9 Jan 2024 17:27:32 +0100
-From: Hardik Gajjar <hgajjar@de.adit-jv.com>
-To: John Keeping <john@keeping.me.uk>
-CC: Hardik Gajjar <hgajjar@de.adit-jv.com>, <gregkh@linuxfoundation.org>,
-	<stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <erosca@de.adit-jv.com>,
-	<jlayton@kernel.org>, <brauner@kernel.org>
-Subject: Re: [PATCH v3] usb: gadget: f_fs: Add the missing get_alt callback
-Message-ID: <20240109162732.GA22184@vmlxhi-118.adit-jv.com>
-References: <20240102123419.13491-1-hgajjar@de.adit-jv.com>
- <ZZaTl3mqeCY5xD_d@keeping.me.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933683BB25
+	for <linux-usb@vger.kernel.org>; Tue,  9 Jan 2024 18:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=Q107oPArIi6NYRlDUGnbQcYCIZoG8AJx7Y7gqLZs3Nc=; b=pvn91EAO7i5zd7mPRwxnJJZzqf
+	Gs0osQdZpwvtFmcSJXEfQHE/4bYT3zzN6KKLBg5wwuiYT3mFpNXzjiPlTjkc3qQxcF5UALS7wkueC
+	Am8FxRRuqlY26x7XO3CXkMCG0QItjkmiSTID9hobCbZzC8Eq9DqjOhQlCLSF5ptch9gUq7P7htZN3
+	C++mAA6+FmD40/3iRBpmkSRYvcfV03oZmmc3luwf6ao+jnO0zDoOOpxShOm990wBJkLxmuFaCzGTX
+	9ZjmOMjeNtm8kWbURNuLdyEW2ZoufWqw1HCo/fX7HhRQ86e2K1w2YuC9pdJ/UEOlyOL8EUmdmJls4
+	jmOKvQ2Q==;
+Received: from [179.232.147.2] (helo=[192.168.0.5])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1rNGPG-004hC5-Im; Tue, 09 Jan 2024 19:00:54 +0100
+Message-ID: <d85a5507-4d4a-9e60-fbd1-68b42afb2143@igalia.com>
+Date: Tue, 9 Jan 2024 15:00:48 -0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZZaTl3mqeCY5xD_d@keeping.me.uk>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] usb: dwc3: Fix spurious wakeup when port is on device
+ mode
+Content-Language: en-US
+From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "balbi@kernel.org" <balbi@kernel.org>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "johan@kernel.org" <johan@kernel.org>,
+ "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+ "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+ "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+ Andrey Smirnov <andrew.smirnov@gmail.com>,
+ Vivek Dasmohapatra <vivek@collabora.com>, piyush.mehta@amd.com,
+ ray.huang@amd.com
+References: <20231122165931.443845-1-gpiccoli@igalia.com>
+ <2dfbf5c9-dd38-c919-c604-618ad08ce456@igalia.com>
+ <20231205012336.mn7b7f4zypwcyv6w@synopsys.com>
+ <9efaed91-d246-cf3c-efc0-e866f88a943d@igalia.com>
+In-Reply-To: <9efaed91-d246-cf3c-efc0-e866f88a943d@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 04, 2024 at 11:16:39AM +0000, John Keeping wrote:
-> On Tue, Jan 02, 2024 at 01:34:19PM +0100, Hardik Gajjar wrote:
-> > The Apple CarLife iAP gadget has a descriptor with two alternate
-> > settings. The host sends the set_alt request to configure alt_setting
-> > 0 or 1, and this is verified by the subsequent get_alt request.
-> > 
-> > This patch implements and sets the get_alt callback. Without the
-> > get_alt callback, composite.c abruptly concludes the
-> > USB_REQ_GET/SET_INTERFACE request, assuming only one alt setting
-> > for the endpoint.
+On 05/12/2023 11:40, Guilherme G. Piccoli wrote:
+> Hi Thinh, thanks for your response. I'll clarify inline below:
 > 
-> I still do not understand what happens if different alternate settings
-> have different endpoints.
+> On 04/12/2023 22:23, Thinh Nguyen wrote:
+>> [...]
+>>>> It was noticed that on plugging a low-power USB source on Steam
+>>>> Deck USB-C port (handled by dwc3), if such port is on device role,
+>>
+>> I'm not clear of the testing sequence here. Can you clarify further? Is
+>> this device operating as host mode but then it switches role to device
+>> mode when no device is connected?
+>>
 > 
-> Changing the alternate calls ffs_func_eps_disable() /
-> ffs_func_eps_enable() but those functions affect _all_ the configured
-> endpoints.  If f_fs moves to support multiple alternate settings, then
-> isn't there a problem with that behaviour?  Don't we need
-> ffs_func_eps_enable() to enable only the endpoints used by the current
-> alternate setting?
+> Exactly this. We have a driver that changes between host/device mode
+> according to ACPI notifications on port connect. But to make
+> tests/discussion easier and eliminate more variables, we just dropped
+> this driver and do it manually.
 > 
-> The commit message does not explain why this patch can be as simple as
-> it is and why there is no need to address any wider issues that there
-> seem to be from supporting multiple alternate settings.
->
-If I understand correctly, for example, there are two alt settings: one with bNumEndpoint 3
-and the other with bNumEndpoint 2. So when there is a request from the host to switch to the
-alt setting that has two endpoints, with this patch, all three endpoints are reset and reconfigured
-again as altsetting one instead of altsetting two. This happens because there is no input yet from
-userspace about the endpoint descriptor for the newly requested alt-settings.
+> So the steps are:
+> 
+> (A) host mode test
+> 1) Put the port on host mode using debugfs interface.
+> 2) Wait 30 seconds, plug a cable connecting the Steam Deck to a laptop -
+> we call this connection a "low-power source", since it seems to charge
+> slowly the Deck.
+> 3) Suspend the Deck after some seconds (S3/deep) - success
+> 
+> (B) device mode test
+> 
+> 1) Put the port on device mode using debugfs interface.
+> 2) Wait 30 seconds, plug a cable connecting the Steam Deck to a laptop.
+> 3) Suspend the Deck after some seconds (S3/deep) - fails
+> 
+> 3a) If pcie_pme is using MSIs, it fails showing that a wakeup interrupt
+> is pending, in this case the Steam Deck effectively doesn't enter suspend.
+> 
+> 3b) if PCIe PME is not using MSIs, Deck suspends and right after (less
+> than a second), wakes up properly.
+> 
+> 
+>>>> the HW somehow keep asseting the PCIe PME line and triggering a
+>>>> wakeup event on S3/deep suspend (that manifests as a PME wakeup
+>>>> interrupt, failing the suspend path). That doesn't happen when the USB
+>>>> port is on host mode or if the USB device connected is not a low-power
+>>>> type (for example, a connected keyboard doesn't reproduce that).
+>>
+>> Is the PME continuously generating non-stop? Did you test this in USB3
+>> speed? Does this happen for every low-power device or just this specific
+>> low-power device?
+> 
+> It seems PME is continuously being generated, yes. I tested by
+> connecting to my laptop as mentioned, I guess others tested different
+> scenarios, not always reproduces. An example: a keyboard or a disk
+> connected when the USB port is on device mode doesn't reproduce. Also, I
+> think I didn't test "in USB3 speed" - could you detail more, not sure if
+> I understood that properly.
+> 
+> 
+>> [...] 
+>> Even if you masked all the interrupts, and the events are still
+>> generating? Did you check if the driver handled wakeup from PME and
+>> properly restore the controller?
+>>
+> 
+> Ok, let me clarify a bit. From the ACPI perspective, I was able to check
+> from kernel that some GPEs were generated on resume when the issue
+> happens (and potentially even when the issue doesn't happen, in host
+> mode for example). So, what I did was masking all these GPEs using the
+> kernel sysfs interface. After masking, the issue still reproduces but
+> the GPEs count doesn't increase.
+> 
+> Regarding the PME interrupt now: if MSI is used on PME, I can see an
+> increase of 1 in every suspend/resume attempt (checking
+> /proc/interrupts). Now if MSIs are not used, guess what? There was no
+> increase in the interrupt at all. I didn't mask the PME interrupt on
+> PCIe PME driver...but even with PME driver disabled, IIRC the problem
+> reproduces.
+> 
+> "Did you check if the driver handled wakeup from PME and properly
+> restore the controller?" <- I think I didn't - how do you suggest me to
+> check that?
+> 
+> What I've noticed is that either the system can't suspend, or if no MSIs
+> are used on PCIe PME, it suspends and resumes right after, with success.
+> In this latter case, dwc3 works normally again, resume is successful.
+> Let me know if you want me to check any other path or function called, etc.
+> 
+> 
+>> [...]
+>>
+>> Some platforms may need a soft reset before a change to prtcapdir. This
+>> may break some setups. This seems to be a workaround and should not be
+>> treated as part of a normal flow.
+> 
+> OK, do you have any other idea of a register change that is softer than
+> changing "prtcapdir" and could prevent the issue? Also, would that
+> workaround makes sense as...a quirk?
+> 
+> We could guard it for Deck's HW exclusively, using DMI if you think it
+> does make sense...or the dwc3 quirks (already have some for AMD right?)
+> 
+> I'm CCing Piyush and Huang from AMD, since this is AMD HW. Any other
+> suggestions are much appreciated.
+> Thanks,
+> 
+> 
+> Guilherme
 
-I believe this should not happen in the case of the f_fs gadget because the composite/f_fs driver
-initializes all endpoints of all interfaces during the bind process, creates epfile, and increments the eps count.
-This means that when reinitializing the endpoints during the set_alt, it reinitializes all the endpoints, including
-the endpoints of the proposed alt setting.
 
-Userspace drivers need to ensure that they write the correct epfile after switching in altsettings.
-Also, they should make sure that the endpoints are not overridden when defining the descriptor.
-Below is an example of the descriptors we are using from userspace.
+Hi folks, just curious if you think the way forward would be indeed to
+quirk it based on DMI/device ID, or if should pursue another approach
+here. Suggestions are very welcome, and thanks in advance!
 
-			// Interface descriptor - fs_descs
-            // interface: 0 band width
-            (byte) 0x09, (byte) 0x04, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0xFF,
-            (byte) 0xF0, (byte) 0x01, (byte) 0x01,
 
-            // interface: alt 1
-            (byte) 0x09, (byte) 0x04, (byte) 0x01, (byte) 0x01, (byte) 0x02, (byte) 0xFF,
-            (byte) 0xF0, (byte) 0x01, (byte) 0x01,
-            //  Endpoint descriptor
-            (byte) 0x07, (byte) 0x05, (byte) 0x81, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-            (byte) 0x07, (byte) 0x05, (byte) 0x02, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-
-            // Interface descriptor - hs_descs
-            // interface: 0 band width
-            (byte) 0x09, (byte) 0x04, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0xFF,
-            (byte) 0xF0, (byte) 0x01, (byte) 0x01,
-
-            // Initialize high-speed interface descriptors
-            (byte) 0x09, (byte) 0x04, (byte) 0x01, (byte) 0x01, (byte) 0x02, (byte) 0xFF,
-            (byte) 0xF0, (byte) 0x01, (byte) 0x01,
-            // Initialize high-speed end-point descriptors
-            (byte) 0x07, (byte) 0x05, (byte) 0x81, (byte) 0x02, (byte) 0x00, (byte) 0x02, (byte) 0x00,
-            (byte) 0x07, (byte) 0x05, (byte) 0x02, (byte) 0x02, (byte) 0x00, (byte) 0x02, (byte) 0x01,
-
-Please confirm and share your view.
- 
-> > Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> > ---
-> > changes since version 1:
-> > 	- improve commit message to indicate why the get_alt callback
-> > 	  is necessary
-> > 	- Link to v1 - https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_all_20231124164435.74727-2D1-2Dhgajjar-40de.adit-2Djv.com_&d=DwICAg&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=SAhjP5GOmrADp1v_EE5jWoSuMlYCIt9gKduw-DCBPLs&m=vWvELMp9SHJnKh1jvRtJiGjnwn47jqfKsAjBDdMGF1-wjK3hGliKdP2ap6Az4efB&s=ajL0PmatFt2otvpDyZsjbMozcLP3OI4VhspIzjoUTLE&e=
-> > 
-> > changes since version 2:
-> > 	- Add the limit to allow set up to 2 alt settings.
-> > 	- Link to v2 - https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_all_20231201145234.97452-2D1-2Dhgajjar-40de.adit-2Djv.com_&d=DwICAg&c=euGZstcaTDllvimEN8b7jXrwqOf-v5A_CdpgnVfiiMM&r=SAhjP5GOmrADp1v_EE5jWoSuMlYCIt9gKduw-DCBPLs&m=vWvELMp9SHJnKh1jvRtJiGjnwn47jqfKsAjBDdMGF1-wjK3hGliKdP2ap6Az4efB&s=BSvxAb0iHeXEhufs_mU2MfCKbsrAwJMe7cCiAZq53yY&e=
-> > ---
-> >  drivers/usb/gadget/function/f_fs.c | 20 +++++++++++++++++++-
-> >  1 file changed, 19 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> > index efe3e3b85769..22200d618184 100644
-> > --- a/drivers/usb/gadget/function/f_fs.c
-> > +++ b/drivers/usb/gadget/function/f_fs.c
-> > @@ -42,6 +42,7 @@
-> >  #include "configfs.h"
-> >  
-> >  #define FUNCTIONFS_MAGIC	0xa647361 /* Chosen by a honest dice roll ;) */
-> > +#define MAX_ALT_SETTINGS	2		  /* Allow up to 2 alt settings to be set. */
-> >  
-> >  /* Reference counter handling */
-> >  static void ffs_data_get(struct ffs_data *ffs);
-> > @@ -75,6 +76,7 @@ struct ffs_function {
-> >  	short				*interfaces_nums;
-> >  
-> >  	struct usb_function		function;
-> > +	int				cur_alt[MAX_CONFIG_INTERFACES];
-> >  };
-> >  
-> >  
-> > @@ -98,6 +100,7 @@ static int __must_check ffs_func_eps_enable(struct ffs_function *func);
-> >  static int ffs_func_bind(struct usb_configuration *,
-> >  			 struct usb_function *);
-> >  static int ffs_func_set_alt(struct usb_function *, unsigned, unsigned);
-> > +static int ffs_func_get_alt(struct usb_function *f, unsigned int intf);
-> >  static void ffs_func_disable(struct usb_function *);
-> >  static int ffs_func_setup(struct usb_function *,
-> >  			  const struct usb_ctrlrequest *);
-> > @@ -3232,6 +3235,15 @@ static void ffs_reset_work(struct work_struct *work)
-> >  	ffs_data_reset(ffs);
-> >  }
-> >  
-> > +static int ffs_func_get_alt(struct usb_function *f,
-> > +			    unsigned int interface)
-> > +{
-> > +	struct ffs_function *func = ffs_func_from_usb(f);
-> > +	int intf = ffs_func_revmap_intf(func, interface);
-> > +
-> > +	return (intf < 0) ? intf : func->cur_alt[interface];
-> > +}
-> > +
-> >  static int ffs_func_set_alt(struct usb_function *f,
-> >  			    unsigned interface, unsigned alt)
-> >  {
-> > @@ -3239,6 +3251,9 @@ static int ffs_func_set_alt(struct usb_function *f,
-> >  	struct ffs_data *ffs = func->ffs;
-> >  	int ret = 0, intf;
-> >  
-> > +	if (alt > MAX_ALT_SETTINGS)
-> > +		return -EINVAL;
-> > +
-> >  	if (alt != (unsigned)-1) {
-> >  		intf = ffs_func_revmap_intf(func, interface);
-> >  		if (intf < 0)
-> > @@ -3266,8 +3281,10 @@ static int ffs_func_set_alt(struct usb_function *f,
-> >  
-> >  	ffs->func = func;
-> >  	ret = ffs_func_eps_enable(func);
-> > -	if (ret >= 0)
-> > +	if (ret >= 0) {
-> >  		ffs_event_add(ffs, FUNCTIONFS_ENABLE);
-> > +		func->cur_alt[interface] = alt;
-> > +	}
-> >  	return ret;
-> >  }
-> >  
-> > @@ -3574,6 +3591,7 @@ static struct usb_function *ffs_alloc(struct usb_function_instance *fi)
-> >  	func->function.bind    = ffs_func_bind;
-> >  	func->function.unbind  = ffs_func_unbind;
-> >  	func->function.set_alt = ffs_func_set_alt;
-> > +	func->function.get_alt = ffs_func_get_alt;
-> >  	func->function.disable = ffs_func_disable;
-> >  	func->function.setup   = ffs_func_setup;
-> >  	func->function.req_match = ffs_func_req_match;
-> > -- 
-> > 2.17.1
-> > 
+Guilherme
 
