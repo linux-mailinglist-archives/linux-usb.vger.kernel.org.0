@@ -1,159 +1,522 @@
-Return-Path: <linux-usb+bounces-4900-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4901-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A90BC828C7F
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 19:23:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11F868290F8
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 00:44:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E4AD28ECBC
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 18:22:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BC2F1C250F4
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 23:44:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 889173D0C4;
-	Tue,  9 Jan 2024 18:22:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C15EF3E48F;
+	Tue,  9 Jan 2024 23:43:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hTkAn3qv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27923C6AC
-	for <linux-usb@vger.kernel.org>; Tue,  9 Jan 2024 18:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3607d60e4c8so29881855ab.2
-        for <linux-usb@vger.kernel.org>; Tue, 09 Jan 2024 10:22:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704824543; x=1705429343;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6TNa4G43q4cO/ACdKNuWCSRQEIf696MY0iwPAGfopVg=;
-        b=pxgAQH7VkomL9KEzD3bP2DYHXGBcG/49rGKWTkc1PqGVSor6/TdLkcRhkgVXlEAgCb
-         +mwEMSesJpPnEFR16XeTF5AkA/iaYw5OyPvtEgDcu/wPfHoBMDH2bY/Es5iHwHAJzanZ
-         Zbg4lxKE59UrWVd3Gx8UK6VeegKnk4bQ28ZA1pRwQwnhx6RzTiArdwAW/L+Ng7uolLY7
-         8ktdu0agCshunQTyoe3Njxe7Y+49sD+Uqsi+cDUGsjTYJYYpKVQ+xub7WqKYxEHlXzy5
-         idWkLHheyKxh+4PvpBQqxRJBuuS11LYT9OcqU6AHLJmx737+eCIb0q1rMCvnE1O5iuRU
-         wp+A==
-X-Gm-Message-State: AOJu0YxnigYp3efY1y61WY5uDnUeuaNsusnmR/dHBwun48OqLzpxZkEp
-	pcSFmIZwAN7CDdASU3ylLyIOHJ3UaQuPuLXcqZD3sHVp8Dip
-X-Google-Smtp-Source: AGHT+IGcahAoJvWzpIDo8zselVAoErzwnmmPyfYagYp8tWmDT1/06Ar5CgeRsu+dCZ9Ij37sRUaWExl5csQOSMZG2PlNgjF4GY5u
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF2A364C1;
+	Tue,  9 Jan 2024 23:43:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 409NadZJ015473;
+	Tue, 9 Jan 2024 23:43:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:from:to:cc:references
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=5vsgqYN1xMICRac8a9jc/Xitc5cxzbAO0Ciy0hjnofU=; b=hT
+	kAn3qvFo7ObgGy5OksxJP1DXLtgxdlzkXk5f2Z5u8o5a3zUNWc2+oim9rutnsg6s
+	7Pq3KafEl2D1NoBbdLKf5Gna3fSfxIO6fV9ebb9uOL9ChHCm+uSe7m4auLG4/IxH
+	t3LbU087/+J/Fe4gNYmZoO6DAVG/3w7xGPu/suOj8kO2SzUVqHfHLuHfh0tMm6zA
+	IgX7v+KxT2g0yaXEaLyM/nCIawiOG2Gj1/4lTPveV7lFjjR6cXlmClczxNJVXBjD
+	p6j8P4nQn8NwpUUHiWpdtpVkeimaZhdQ6l+rv+Z6Jbl8bh1CH9N0hJT8vzEJNdcY
+	u0Q1GQRDfOpiGk4mu14w==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vh9vfguf0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Jan 2024 23:43:01 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 409Nh0Dn002252
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 9 Jan 2024 23:43:00 GMT
+Received: from [10.110.97.125] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 9 Jan
+ 2024 15:42:59 -0800
+Message-ID: <b254f73b-a1bc-3dd4-f485-a3acf556835d@quicinc.com>
+Date: Tue, 9 Jan 2024 15:42:59 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2185:b0:35f:d99a:7b1 with SMTP id
- j5-20020a056e02218500b0035fd99a07b1mr752486ila.0.1704824543083; Tue, 09 Jan
- 2024 10:22:23 -0800 (PST)
-Date: Tue, 09 Jan 2024 10:22:23 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004b841a060e876595@google.com>
-Subject: [syzbot] [kernel?] WARNING in input_unregister_device (2)
-From: syzbot <syzbot+617f4ccb03b9869f6494@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, rafael@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v12 04/41] usb: host: xhci-mem: Cleanup pending secondary
+ event ring events
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <gregkh@linuxfoundation.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@linaro.org>, <Thinh.Nguyen@synopsys.com>,
+        <broonie@kernel.org>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
+        <robh+dt@kernel.org>, <agross@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20240102214549.22498-1-quic_wcheng@quicinc.com>
+ <20240102214549.22498-5-quic_wcheng@quicinc.com>
+ <734591a1-50b4-6dc7-0b93-077355ec12e4@linux.intel.com>
+ <7b2ec96b-b72f-c848-7c35-36e61a4072ac@quicinc.com>
+In-Reply-To: <7b2ec96b-b72f-c848-7c35-36e61a4072ac@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: DPckguU-3nXYKirH72rirGdGbZdDUF1O
+X-Proofpoint-ORIG-GUID: DPckguU-3nXYKirH72rirGdGbZdDUF1O
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
+ impostorscore=0 adultscore=0 bulkscore=0 mlxlogscore=999 spamscore=0
+ phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2401090191
 
-Hello,
+Hi Mathias,
 
-syzbot found the following issue on:
+On 1/8/2024 12:51 PM, Wesley Cheng wrote:
+> Hi Mathias,
+> 
+> On 1/4/2024 6:48 AM, Mathias Nyman wrote:
+>> On 2.1.2024 23.45, Wesley Cheng wrote:
+>>> As part of xHCI bus suspend, the XHCI is halted.  However, if there are
+>>> pending events in the secondary event ring, it is observed that the xHCI
+>>> controller stops responding to further commands upon host or device
+>>> initiated bus resume.  Iterate through all pending events and update the
+>>> dequeue pointer to the beginning of the event ring.
+>>>
+>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ...
+>>> +/*
+>>> + * Move the event ring dequeue pointer to skip events kept in the 
+>>> secondary
+>>> + * event ring.  This is used to ensure that pending events in the 
+>>> ring are
+>>> + * acknowledged, so the XHCI HCD can properly enter suspend/resume.  
+>>> The
+>>> + * secondary ring is typically maintained by an external component.
+>>> + */
+>>> +void xhci_skip_sec_intr_events(struct xhci_hcd *xhci,
+>>> +    struct xhci_ring *ring,    struct xhci_interrupter *ir)
+>>> +{
+>>> +    union xhci_trb *erdp_trb, *current_trb;
+>>> +    u64 erdp_reg;
+>>> +    u32 iman_reg;
+>>> +    dma_addr_t deq;
+>>> +
+>>> +    /* disable irq, ack pending interrupt and ack all pending events */
+>>> +    xhci_disable_interrupter(ir);
+>>> +    iman_reg = readl_relaxed(&ir->ir_set->irq_pending);
+>>> +    if (iman_reg & IMAN_IP)
+>>> +        writel_relaxed(iman_reg, &ir->ir_set->irq_pending);
+>>> +
+>>> +    /* last acked event trb is in erdp reg  */
+>>> +    erdp_reg = xhci_read_64(xhci, &ir->ir_set->erst_dequeue);
+>>> +    deq = (dma_addr_t)(erdp_reg & ERST_PTR_MASK);
+>>> +    if (!deq) {
+>>> +        xhci_err(xhci, "event ring handling not required\n");
+>>> +        return;
+>>> +    }
+>>> +
+>>> +    erdp_trb = current_trb = ir->event_ring->dequeue;
+>>> +    /* read cycle state of the last acked trb to find out CCS */
+>>> +    ring->cycle_state = le32_to_cpu(current_trb->event_cmd.flags) & 
+>>> TRB_CYCLE;
+>>> +
+>>> +    while (1) {
+>>> +        inc_deq(xhci, ir->event_ring);
+>>> +        erdp_trb = ir->event_ring->dequeue;
+>>> +        /* cycle state transition */
+>>> +        if ((le32_to_cpu(erdp_trb->event_cmd.flags) & TRB_CYCLE) !=
+>>> +            ring->cycle_state)
+>>> +            break;
+>>> +    }
+>>> +
+>>> +    xhci_update_erst_dequeue(xhci, ir, current_trb, true);
+>>> +}
+>>
+>> Code above is very similar to the existing event ring processing parts 
+>> of xhci_irq()
+>> and xhci_handle_event()
+>>
+>> I'll see if I can refactor the existing event ring processing, 
+>> decouple it from
+>> event handling so that it could be used by primary and secondary 
+>> interrupters with
+>> handlers, and this case where we just want to clear the event ring.
+>>
+> 
+> Thanks, that makes sense.  Will take a look as well.
+> 
 
-HEAD commit:    e7d3b9f28654 usb: yurex: Fix inconsistent locking bug in y..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1766e845e80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1dd225f9d04a5286
-dashboard link: https://syzkaller.appspot.com/bug?extid=617f4ccb03b9869f6494
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+How about something like the below?  Tested this on my set up and 
+everything looks to be working fine.  Had to add another param to struct 
+xhci_interrupters to tell the XHCI interrupt handler to say if that 
+particular interrupter wants to skip_events (handling).  This way, its 
+something that the class driver utilizing the interrupter will have to 
+tell XHCI sideband.  It would allow the user to determine if they want 
+to use the interrupter to actually handle events or not on the proc 
+running Linux.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Thanks
+Wesley Cheng
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5bf2bb53c85f/disk-e7d3b9f2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5f6e5a287ee7/vmlinux-e7d3b9f2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8259e694a7e3/bzImage-e7d3b9f2.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+617f4ccb03b9869f6494@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-add_uevent_var: buffer size too small
-WARNING: CPU: 0 PID: 2442 at lib/kobject_uevent.c:671 add_uevent_var+0x32d/0x390 lib/kobject_uevent.c:671
-Modules linked in:
-CPU: 0 PID: 2442 Comm: kworker/0:6 Not tainted 6.7.0-rc5-syzkaller-ge7d3b9f28654 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/17/2023
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:add_uevent_var+0x32d/0x390 lib/kobject_uevent.c:671
-Code: fb 48 c7 c7 c0 7c 4e 87 e8 50 63 d9 fa 0f 0b bb f4 ff ff ff e9 57 ff ff ff e8 0f 24 10 fb 48 c7 c7 60 7d 4e 87 e8 33 63 d9 fa <0f> 0b eb e1 4c 89 ee 48 c7 c7 a0 f5 22 89 e8 b0 d0 12 fc e9 b4 fe
-RSP: 0018:ffffc90001daf2b8 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff888108b08000 RCX: ffffc9000c6ad000
-RDX: 0000000000040000 RSI: ffffffff811733c6 RDI: 0000000000000001
-RBP: ffffc90001daf3a8 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 00000000006559c8 R12: 1ffff920003b5e5a
-R13: 00000000000007f5 R14: ffff888108b08218 R15: 00000000000007f5
-FS:  0000000000000000(0000) GS:ffff8881f6600000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fb1ddf92c98 CR3: 0000000104e44000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kobject_uevent_env+0x995/0x1800 lib/kobject_uevent.c:588
- device_del+0x642/0xa50 drivers/base/core.c:3832
- input_unregister_device+0xb9/0x100 drivers/input/input.c:2440
- hidinput_disconnect+0x160/0x3e0 drivers/hid/hid-input.c:2388
- hid_disconnect+0x143/0x1b0 drivers/hid/hid-core.c:2280
- hid_hw_stop+0x16/0x70 drivers/hid/hid-core.c:2329
- ms_remove+0x16/0xa0 drivers/hid/hid-microsoft.c:409
- hid_device_remove+0xce/0x250 drivers/hid/hid-core.c:2689
- device_remove+0xc8/0x170 drivers/base/dd.c:567
- __device_release_driver drivers/base/dd.c:1272 [inline]
- device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1295
- bus_remove_device+0x22c/0x420 drivers/base/bus.c:574
- device_del+0x39a/0xa50 drivers/base/core.c:3814
- hid_remove_device drivers/hid/hid-core.c:2867 [inline]
- hid_destroy_device+0xe5/0x150 drivers/hid/hid-core.c:2887
- usbhid_disconnect+0xa0/0xe0 drivers/hid/usbhid/hid-core.c:1456
- usb_unbind_interface+0x1dd/0x8d0 drivers/usb/core/driver.c:461
- device_remove drivers/base/dd.c:569 [inline]
- device_remove+0x11f/0x170 drivers/base/dd.c:561
- __device_release_driver drivers/base/dd.c:1272 [inline]
- device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1295
- bus_remove_device+0x22c/0x420 drivers/base/bus.c:574
- device_del+0x39a/0xa50 drivers/base/core.c:3814
- usb_disable_device+0x36c/0x7f0 drivers/usb/core/message.c:1416
- usb_disconnect+0x2e1/0x910 drivers/usb/core/hub.c:2257
- hub_port_connect drivers/usb/core/hub.c:5305 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5605 [inline]
- port_event drivers/usb/core/hub.c:5765 [inline]
- hub_event+0x1be0/0x4f40 drivers/usb/core/hub.c:5847
- process_one_work+0x884/0x15c0 kernel/workqueue.c:2627
- process_scheduled_works kernel/workqueue.c:2700 [inline]
- worker_thread+0x8b9/0x1290 kernel/workqueue.c:2781
- kthread+0x33c/0x440 kernel/kthread.c:388
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:242
- </TASK>
+---------------------------------------------------------------------
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 4460fa7e9fab..5bf74c37cbf6 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1827,7 +1827,7 @@ xhci_remove_interrupter(struct xhci_hcd *xhci, 
+struct xhci_interrupter *ir)
+  		tmp &= ERST_SIZE_MASK;
+  		writel(tmp, &ir->ir_set->erst_size);
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-		xhci_write_64(xhci, ERST_EHB, &ir->ir_set->erst_dequeue);
++		xhci_update_erst_dequeue(xhci, ir, ir->event_ring->first_seg->trbs, 
+true);
+  	}
+  }
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+@@ -1865,11 +1865,12 @@ void xhci_remove_secondary_interrupter(struct 
+usb_hcd *hcd, struct xhci_interrup
+  	if (!ir || !ir->intr_num || ir->intr_num >= xhci->max_interrupters)
+  		xhci_dbg(xhci, "Invalid secondary interrupter, can't remove\n");
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+-	/* fixme, should we check xhci->interrupter[intr_num] == ir */
+-	/* fixme locking */
+-
+  	spin_lock_irq(&xhci->lock);
+-
++	/*
++	 * Cleanup secondary interrupter to ensure there are no pending events.
++	 * This also updates event ring dequeue pointer back to the start.
++	 */
++	xhci_skip_sec_intr_events(xhci, ir->event_ring, ir);
+  	intr_num = ir->intr_num;
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
+  	xhci_remove_interrupter(xhci, ir);
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 33806ae966f9..1d69da07ffdd 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2905,6 +2905,46 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+  	return -ENODEV;
+  }
 
-If you want to undo deduplication, reply with:
-#syz undup
++static void xhci_clear_interrupt_pending(struct xhci_hcd *xhci, struct 
+xhci_interrupter *ir)
++{
++	struct usb_hcd *hcd = xhci_to_hcd(xhci);
++
++	if (!hcd->msi_enabled) {
++		u32 irq_pending;
++		irq_pending = readl(&ir->ir_set->irq_pending);
++		irq_pending |= IMAN_IP;
++		writel(irq_pending, &ir->ir_set->irq_pending);
++	}
++}
++
++static void xhci_handle_event_trb(struct xhci_hcd *xhci,
++				   struct xhci_interrupter *ir, union xhci_trb *event)
++{
++	u32 trb_type;
++
++	trb_type = TRB_FIELD_TO_TYPE(le32_to_cpu(event->event_cmd.flags));
++
++	switch (trb_type) {
++	case TRB_COMPLETION:
++		handle_cmd_completion(xhci, &event->event_cmd);
++		break;
++	case TRB_PORT_STATUS:
++		handle_port_status(xhci, ir, event);
++		break;
++	case TRB_TRANSFER:
++		handle_tx_event(xhci, ir, &event->trans_event);
++		break;
++	case TRB_DEV_NOTE:
++		handle_device_notification(xhci, event);
++		break;
++	default:
++		if (trb_type >= TRB_VENDOR_DEFINED_LOW)
++			handle_vendor_event(xhci, event, trb_type);
++		else
++			xhci_warn(xhci, "ERROR unknown event type %d\n", trb_type);
++	}
++}
++
+  /*
+   * This function handles all OS-owned events on the event ring.  It 
+may drop
+   * xhci->lock between event processing (e.g. to pass up port status 
+changes).
+@@ -2914,7 +2954,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+  static int xhci_handle_event(struct xhci_hcd *xhci, struct 
+xhci_interrupter *ir)
+  {
+  	union xhci_trb *event;
+-	u32 trb_type;
+
+  	/* Event ring hasn't been allocated yet. */
+  	if (!ir || !ir->event_ring || !ir->event_ring->dequeue) {
+@@ -2935,28 +2974,9 @@ static int xhci_handle_event(struct xhci_hcd 
+*xhci, struct xhci_interrupter *ir)
+  	 * speculative reads of the event's flags/data below.
+  	 */
+  	rmb();
+-	trb_type = TRB_FIELD_TO_TYPE(le32_to_cpu(event->event_cmd.flags));
+-	/* FIXME: Handle more event types. */
++	if (!ir->skip_events)
++		xhci_handle_event_trb(xhci, ir, event);
+
+-	switch (trb_type) {
+-	case TRB_COMPLETION:
+-		handle_cmd_completion(xhci, &event->event_cmd);
+-		break;
+-	case TRB_PORT_STATUS:
+-		handle_port_status(xhci, ir, event);
+-		break;
+-	case TRB_TRANSFER:
+-		handle_tx_event(xhci, ir, &event->trans_event);
+-		break;
+-	case TRB_DEV_NOTE:
+-		handle_device_notification(xhci, event);
+-		break;
+-	default:
+-		if (trb_type >= TRB_VENDOR_DEFINED_LOW)
+-			handle_vendor_event(xhci, event, trb_type);
+-		else
+-			xhci_warn(xhci, "ERROR unknown event type %d\n", trb_type);
+-	}
+  	/* Any of the above functions may drop and re-acquire the lock, so check
+  	 * to make sure a watchdog timer didn't mark the host as non-responsive.
+  	 */
+@@ -2980,7 +3000,7 @@ static int xhci_handle_event(struct xhci_hcd 
+*xhci, struct xhci_interrupter *ir)
+   * - When all events have finished
+   * - To avoid "Event Ring Full Error" condition
+   */
+-static void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
++void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
+  				     struct xhci_interrupter *ir,
+  				     union xhci_trb *event_ring_deq,
+  				     bool clear_ehb)
+@@ -3013,6 +3033,75 @@ static void xhci_update_erst_dequeue(struct 
+xhci_hcd *xhci,
+  	xhci_write_64(xhci, temp_64, &ir->ir_set->erst_dequeue);
+  }
+
++static irqreturn_t xhci_handle_events(struct xhci_hcd *xhci, struct 
+xhci_interrupter *ir)
++{
++	union xhci_trb *event_ring_deq;
++	irqreturn_t ret = IRQ_NONE;
++	int event_loop = 0;
++	u64 temp_64;
++
++	xhci_clear_interrupt_pending(xhci, ir);
++
++	if (xhci->xhc_state & XHCI_STATE_DYING ||
++	    xhci->xhc_state & XHCI_STATE_HALTED) {
++		xhci_dbg(xhci, "xHCI dying, ignoring interrupt. "
++				"Shouldn't IRQs be disabled?\n");
++		/* Clear the event handler busy flag (RW1C);
++		 * the event ring should be empty.
++		 */
++		temp_64 = xhci_read_64(xhci, &ir->ir_set->erst_dequeue);
++		xhci_write_64(xhci, temp_64 | ERST_EHB,
++				&ir->ir_set->erst_dequeue);
++		ret = IRQ_HANDLED;
++		goto out;
++	}
++
++	event_ring_deq = ir->event_ring->dequeue;
++	/* FIXME this should be a delayed service routine
++	 * that clears the EHB.
++	 */
++	while (xhci_handle_event(xhci, ir) > 0) {
++		if (event_loop++ < TRBS_PER_SEGMENT / 2)
++			continue;
++		xhci_update_erst_dequeue(xhci, ir, event_ring_deq, false);
++		event_ring_deq = ir->event_ring->dequeue;
++
++		/* ring is half-full, force isoc trbs to interrupt more often */
++		if (xhci->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
++			xhci->isoc_bei_interval = xhci->isoc_bei_interval / 2;
++
++		event_loop = 0;
++	}
++
++	xhci_update_erst_dequeue(xhci, ir, event_ring_deq, true);
++	ret = IRQ_HANDLED;
++
++out:
++	return ret;
++
++}
++
++/*
++ * Move the event ring dequeue pointer to skip events kept in the secondary
++ * event ring.  This is used to ensure that pending events in the ring are
++ * acknowledged, so the XHCI HCD can properly enter suspend/resume.  The
++ * secondary ring is typically maintained by an external component.
++ */
++void xhci_skip_sec_intr_events(struct xhci_hcd *xhci,
++	struct xhci_ring *ring,	struct xhci_interrupter *ir)
++{
++	union xhci_trb *current_trb;
++
++	/* disable irq, ack pending interrupt and ack all pending events */
++	xhci_disable_interrupter(ir);
++
++	current_trb = ir->event_ring->dequeue;
++	/* read cycle state of the last acked trb to find out CCS */
++	ring->cycle_state = le32_to_cpu(current_trb->event_cmd.flags) & TRB_CYCLE;
++
++	xhci_handle_events(xhci, ir);
++}
++
+  /*
+   * xHCI spec says we can get an interrupt, and if the HC has an error 
+condition,
+   * we might get bad data out of the event ring.  Section 4.10.2.7 has 
+a list of
+@@ -3021,12 +3110,8 @@ static void xhci_update_erst_dequeue(struct 
+xhci_hcd *xhci,
+  irqreturn_t xhci_irq(struct usb_hcd *hcd)
+  {
+  	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+-	union xhci_trb *event_ring_deq;
+-	struct xhci_interrupter *ir;
+  	irqreturn_t ret = IRQ_NONE;
+-	u64 temp_64;
+  	u32 status;
+-	int event_loop = 0;
+
+  	spin_lock(&xhci->lock);
+  	/* Check if the xHC generated the interrupt, or the irq is shared */
+@@ -3060,48 +3145,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+  	status |= STS_EINT;
+  	writel(status, &xhci->op_regs->status);
+
+-	/* This is the handler of the primary interrupter */
+-	ir = xhci->interrupters[0];
+-	if (!hcd->msi_enabled) {
+-		u32 irq_pending;
+-		irq_pending = readl(&ir->ir_set->irq_pending);
+-		irq_pending |= IMAN_IP;
+-		writel(irq_pending, &ir->ir_set->irq_pending);
+-	}
+-
+-	if (xhci->xhc_state & XHCI_STATE_DYING ||
+-	    xhci->xhc_state & XHCI_STATE_HALTED) {
+-		xhci_dbg(xhci, "xHCI dying, ignoring interrupt. "
+-				"Shouldn't IRQs be disabled?\n");
+-		/* Clear the event handler busy flag (RW1C);
+-		 * the event ring should be empty.
+-		 */
+-		temp_64 = xhci_read_64(xhci, &ir->ir_set->erst_dequeue);
+-		xhci_write_64(xhci, temp_64 | ERST_EHB,
+-				&ir->ir_set->erst_dequeue);
+-		ret = IRQ_HANDLED;
+-		goto out;
+-	}
+-
+-	event_ring_deq = ir->event_ring->dequeue;
+-	/* FIXME this should be a delayed service routine
+-	 * that clears the EHB.
+-	 */
+-	while (xhci_handle_event(xhci, ir) > 0) {
+-		if (event_loop++ < TRBS_PER_SEGMENT / 2)
+-			continue;
+-		xhci_update_erst_dequeue(xhci, ir, event_ring_deq, false);
+-		event_ring_deq = ir->event_ring->dequeue;
+-
+-		/* ring is half-full, force isoc trbs to interrupt more often */
+-		if (xhci->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
+-			xhci->isoc_bei_interval = xhci->isoc_bei_interval / 2;
+-
+-		event_loop = 0;
+-	}
+-
+-	xhci_update_erst_dequeue(xhci, ir, event_ring_deq, true);
+-	ret = IRQ_HANDLED;
++	ret = xhci_handle_events(xhci, xhci->interrupters[0]);
+
+  out:
+  	spin_unlock(&xhci->lock);
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 573ca5c4f31a..eb15c63e6775 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -333,7 +333,7 @@ static int xhci_enable_interrupter(struct 
+xhci_interrupter *ir)
+  	return 0;
+  }
+
+-static int xhci_disable_interrupter(struct xhci_interrupter *ir)
++int xhci_disable_interrupter(struct xhci_interrupter *ir)
+  {
+  	u32 iman;
+
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index e98099b960e4..a4126dfbd77a 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1691,6 +1691,7 @@ struct xhci_interrupter {
+  	struct xhci_erst	erst;
+  	struct xhci_intr_reg __iomem *ir_set;
+  	unsigned int		intr_num;
++	bool			skip_events;
+  	/* For interrupter registers save and restore over suspend/resume */
+  	u32	s3_irq_pending;
+  	u32	s3_irq_control;
+@@ -2093,6 +2094,9 @@ struct xhci_interrupter *
+  xhci_create_secondary_interrupter(struct usb_hcd *hcd, int num_seg);
+  void xhci_remove_secondary_interrupter(struct usb_hcd
+  				       *hcd, struct xhci_interrupter *ir);
++void xhci_skip_sec_intr_events(struct xhci_hcd *xhci,
++	struct xhci_ring *ring,	struct xhci_interrupter *ir);
++int xhci_disable_interrupter(struct xhci_interrupter *ir);
+
+  /* xHCI host controller glue */
+  typedef void (*xhci_get_quirks_t)(struct device *, struct xhci_hcd *);
+@@ -2180,6 +2184,10 @@ void inc_deq(struct xhci_hcd *xhci, struct 
+xhci_ring *ring);
+  unsigned int count_trbs(u64 addr, u64 len);
+  int xhci_stop_endpoint_sync(struct xhci_hcd *xhci, struct xhci_virt_ep 
+*ep,
+  			    int suspend, gfp_t gfp_flags);
++void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
++				     struct xhci_interrupter *ir,
++				     union xhci_trb *event_ring_deq,
++				     bool clear_ehb);
+
+  /* xHCI roothub code */
+  void xhci_set_link_state(struct xhci_hcd *xhci, struct xhci_port *port,
+
 
