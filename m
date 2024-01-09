@@ -1,145 +1,104 @@
-Return-Path: <linux-usb+bounces-4882-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4883-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CE70828027
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 09:11:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6737828267
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 09:47:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D27E1C23E87
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 08:11:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48DE4B274E9
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 08:47:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0901C29420;
-	Tue,  9 Jan 2024 08:11:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C6835F0E;
+	Tue,  9 Jan 2024 08:44:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="NAHFzb7p"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fOYdnsKv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD3024B44;
-	Tue,  9 Jan 2024 08:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.helo=mx0b-0016f401.pphosted.com
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4096AZL7024464;
-	Tue, 9 Jan 2024 00:10:56 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	pfpt0220; bh=jLUihTnM3olsTtXRte996/YUIjkAaHvAp0Ch3RrDUM8=; b=NAH
-	Fzb7prd/Y94nd+O6xgDjqXTqkfrJDXPdvvw/FeVsTiWzjGzYcJfnGq+XNwyW0tbI
-	NGCS4c+w/AwNNzSv6bqIZp6pUs3Bnl4uhy3Z6NJyH6Zy/P4Pj9w5C65/bm9YgBOt
-	qh0ucK+6V+Iz1rDSDjG95usDJ67GTSybScJ6AiUTI9drJ8fEXSPpGb4i9TI7mRBg
-	0xjao4V/xwPoubFp71CSu/sRhp6XMnasxeI7SPE+x/ArkjsqERDc1PCNeYK7tUsJ
-	5++APS0ketlbloDntiCqxeNv9wma7h7kl8qxUSPruGOk/MBtFa/S1Q2X9cH+HceQ
-	BQEakSwFtYx8zbuPBUA==
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3vgptf2hgj-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-	Tue, 09 Jan 2024 00:10:56 -0800 (PST)
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 9 Jan
- 2024 00:10:54 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Tue, 9 Jan 2024 00:10:54 -0800
-Received: from dc3lp-swdev041.marvell.com (dc3lp-swdev041.marvell.com [10.6.60.191])
-	by maili.marvell.com (Postfix) with ESMTP id B115E3F70B2;
-	Tue,  9 Jan 2024 00:10:51 -0800 (PST)
-From: Elad Nachman <enachman@marvell.com>
-To: <gregkh@linuxfoundation.org>,
-        rowland.harvard.edu@mx0b-0016f401.pphosted.com, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC: <enachman@marvell.com>
-Subject: [PATCH v3 2/2] usb: host: Add ac5 to EHCI Orion
-Date: Tue, 9 Jan 2024 10:10:44 +0200
-Message-ID: <20240109081044.10515-3-enachman@marvell.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240109081044.10515-1-enachman@marvell.com>
-References: <20240109081044.10515-1-enachman@marvell.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B37F360A8
+	for <linux-usb@vger.kernel.org>; Tue,  9 Jan 2024 08:44:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DE078C433F1
+	for <linux-usb@vger.kernel.org>; Tue,  9 Jan 2024 08:44:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704789870;
+	bh=bKafO/At4FQv8bem7SEc9YfJ290EPpLO1OPlPk0MusI=;
+	h=From:To:Subject:Date:From;
+	b=fOYdnsKvNmkA4oJ9U/FZUgYm9ANxkAEq0oozzkIXdGAt8VZ13BKSfGTUaZHLf/Ook
+	 vl3/yWkCBG+LzIN6VpL5WLVAY0LZ3TDeqrmCIkQ30aUAyDbIK9C5jzQEp+JbjW7s6U
+	 MIQGuL782aRka1qmTcyk3ljgIiCcxwY7fIin5x8RpOp2q7i40ZpNkJhJ1N0it7/h6P
+	 IHlEG9DRb2kZZ0XOIVtpALQyRje0FDNTXSmnm3gDC4191XmNTNv5htiw6DHt22jA7I
+	 E+XBlxbTzQtu7Q5xplBCTEDSKdfpewd6+jwk5USOJf74kQQjppHZJzihn0l48v0p0m
+	 Dptl+UDpBjt4g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id C1585C4332E; Tue,  9 Jan 2024 08:44:30 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218356] New: NETDEV WATCHDOG: wwan0 (cdc_ncm): transmit queue 0
+ timed out
+Date: Tue, 09 Jan 2024 08:44:30 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: 1016309222@qq.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression attachments.created
+Message-ID: <bug-218356-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: aN44lCSp419mlAtg7GgnkykeXwWpK_MR
-X-Proofpoint-GUID: aN44lCSp419mlAtg7GgnkykeXwWpK_MR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
 
-From: Elad Nachman <enachman@marvell.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218356
 
-Add support for ac5 to the EHCI Orion platform driver.
-The ac5 SOC has DDR starting at offset 0x2_0000_0000,
-Hence it requires a larger than 32-bit DMA mask to operate.
-Move the dma mask to be pointed by the OF match data, and
-use that match data when initializng the DMA mask.
+            Bug ID: 218356
+           Summary: NETDEV WATCHDOG: wwan0 (cdc_ncm): transmit queue 0
+                    timed out
+           Product: Drivers
+           Version: 2.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: high
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: 1016309222@qq.com
+        Regression: No
 
-Signed-off-by: Elad Nachman <enachman@marvell.com>
----
- drivers/usb/host/ehci-orion.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+Created attachment 305689
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305689&action=3Dedit
+usb3.0 usbnet crash log
 
-diff --git a/drivers/usb/host/ehci-orion.c b/drivers/usb/host/ehci-orion.c
-index 6c47ab0a491d..58883664c884 100644
---- a/drivers/usb/host/ehci-orion.c
-+++ b/drivers/usb/host/ehci-orion.c
-@@ -65,6 +65,15 @@ struct orion_ehci_hcd {
- 
- static struct hc_driver __read_mostly ehci_orion_hc_driver;
- 
-+/*
-+ * Legacy DMA mask is 32 bit.
-+ * AC5 has the DDR starting at 8GB, hence it requires
-+ * a larger (34-bit) DMA mask, in order for DMA allocations
-+ * to succeed:
-+ */
-+static const u64 dma_mask_orion =	DMA_BIT_MASK(32);
-+static const u64 dma_mask_ac5 =		DMA_BIT_MASK(34);
-+
- /*
-  * Implement Orion USB controller specification guidelines
-  */
-@@ -211,6 +220,7 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
- 	int irq, err;
- 	enum orion_ehci_phy_ver phy_version;
- 	struct orion_ehci_hcd *priv;
-+	u64 *dma_mask_ptr;
- 
- 	if (usb_disabled())
- 		return -ENODEV;
-@@ -228,7 +238,8 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
- 	 * set. Since shared usb code relies on it, set it here for
- 	 * now. Once we have dma capability bindings this can go away.
- 	 */
--	err = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-+	dma_mask_ptr = (u64 *)of_device_get_match_data(&pdev->dev);
-+	err = dma_coerce_mask_and_coherent(&pdev->dev, *dma_mask_ptr);
- 	if (err)
- 		goto err;
- 
-@@ -332,9 +343,9 @@ static void ehci_orion_drv_remove(struct platform_device *pdev)
- }
- 
- static const struct of_device_id ehci_orion_dt_ids[] = {
--	{ .compatible = "marvell,orion-ehci", },
--	{ .compatible = "marvell,armada-3700-ehci", },
--	{},
-+	{ .compatible = "marvell,orion-ehci", .data = &dma_mask_orion},
-+	{ .compatible = "marvell,armada-3700-ehci", .data = &dma_mask_orion},
-+	{ .compatible = "marvell,ac5-ehci", .data = &dma_mask_ac5},
- };
- MODULE_DEVICE_TABLE(of, ehci_orion_dt_ids);
- 
--- 
-2.25.1
+I am using Linux kernel version 5.10.110 and the USB 3.0 interface. During =
+the
+USB device packet filling test, after running for a period of time, an error
+message NETDEV WATCHLOG: wwan0 (cdc-ncm): transmit queue 0 timed out was
+reported. The analysis shows that the print log exceeds the threshold dev
+->txq.qlen>=3DTX_ QLEN (dev), how to solve this problem
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
