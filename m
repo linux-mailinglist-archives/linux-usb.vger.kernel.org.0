@@ -1,94 +1,81 @@
-Return-Path: <linux-usb+bounces-4889-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4890-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 329C982854D
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 12:44:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A362482855E
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 12:46:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13F2E1C237FE
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 11:44:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57FD51F24AE5
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 11:46:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEE95381AE;
-	Tue,  9 Jan 2024 11:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB8D438DF4;
+	Tue,  9 Jan 2024 11:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r4nH7K+G"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QA0hOQoZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D513381A2
-	for <linux-usb@vger.kernel.org>; Tue,  9 Jan 2024 11:43:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B72CC433F1
-	for <linux-usb@vger.kernel.org>; Tue,  9 Jan 2024 11:43:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704800608;
-	bh=iUhgOgxOPJ8Qk0c1x+iKP+TWLf4DSl1kZ3kJbwryuZ4=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=r4nH7K+GLlFJj4oH43XzlTHJBSHFCuMHt7NVa5prC3LZhIFb1ytisZ3GgTih/C/SK
-	 HI66LNvw6r6W8//CeVj+GHQs2pmSvLNYBQlVDMqj4PsitovFPXUuJqemIV8eFJIA6G
-	 nIu23SRNBA5f4c3blB4vPnXZw/el3DsyquHM713FTkWk/Zmhb7VMEXvXWYVcKvvndm
-	 up+VVBghOpvyBsZGbY6y3MtnRIClNvq19nbHvuxuwjkZbUVleXpJhJFEq1+3P3Uox1
-	 zRR8806oQAjw7INkIdIoOWfMpJIIY2/xM1DdzEyysg2iqDbE7kR04lu5EtBdYmkzkN
-	 ANRR3p+7HK6nA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id E9B47C53BCD; Tue,  9 Jan 2024 11:43:27 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218356] NETDEV WATCHDOG: wwan0 (cdc_ncm): transmit queue 0
- timed out
-Date: Tue, 09 Jan 2024 11:43:27 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: opw
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: greg@kroah.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218356-208809-MCoiEDIBtz@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218356-208809@https.bugzilla.kernel.org/>
-References: <bug-218356-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC3138DE0;
+	Tue,  9 Jan 2024 11:44:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC48CC433C7;
+	Tue,  9 Jan 2024 11:44:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1704800699;
+	bh=ZHek6cnUD/06G1ff9DHO+IrMfmDIWNNJ3OElbgXKZgk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QA0hOQoZdvG+WySnNIvWkgT88AHPzZr7yQU3E1sn49Tk+Qsvq3qJN4RpQYU+no2rN
+	 ZlsayES1RLtYXz0X2zQaiphsEuOhr0UAVwx2iRNrfNHwvlJ/8aprhL2YQygSNMMUTb
+	 0ejbhQHt85PRQsgNTm64r5KQ9qrJY9pGGGFVGWL0=
+Date: Tue, 9 Jan 2024 12:44:56 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Stanley =?utf-8?B?Q2hhbmdb5piM6IKy5b63XQ==?= <stanley_chang@realtek.com>
+Cc: Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Rob Herring <robh@kernel.org>, Jinjie Ruan <ruanjinjie@huawei.com>,
+	Alan Stern <stern@rowland.harvard.edu>, Roy Luo <royluo@google.com>,
+	Ricardo =?iso-8859-1?Q?Ca=F1uelo?= <ricardo.canuelo@collabora.com>,
+	Flavio Suligoi <f.suligoi@asem.it>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v4 4/4] usb: core: add phy notify connect and disconnect
+Message-ID: <2024010925-splendid-thorn-3221@gregkh>
+References: <20231213031203.4911-1-stanley_chang@realtek.com>
+ <20231213031203.4911-4-stanley_chang@realtek.com>
+ <bdb2c10798124e228b8562576d73b881@realtek.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bdb2c10798124e228b8562576d73b881@realtek.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218356
+On Tue, Jan 09, 2024 at 02:08:57AM +0000, Stanley Chang[昌育德] wrote:
+> Hi Greg,
+> 
+> Please help review these series of patches.
 
---- Comment #1 from Greg Kroah-Hartman (greg@kroah.com) ---
-On Tue, Jan 09, 2024 at 08:44:30AM +0000, bugzilla-daemon@kernel.org wrote:
-> I am using Linux kernel version 5.10.110 and the USB 3.0 interface. During
-> the
+I was hoping that someone else would review these, which didn't seem to
+happen at all, which is odd for something that I thought many others
+wanted to see merged.
 
-5.10.110 is a very old and obsolete kernel version, having been released
-over a year and a half ago.
+It will have to wait until after 6.8-rc1 is out.  To also help this out,
+please help review other changes that are submitted to the lists as that
+will reduce the maintainer load here.
 
-Please try a newer kernel release, the latest 5.10.y release is
-5.10.206, but really, can you try 6.7 to see if this issue has been
-resolved by now?
+And again, if anyone else cares to see these merged, please help review
+them, the Cc: list here is very long...
 
 thanks,
 
 greg k-h
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
