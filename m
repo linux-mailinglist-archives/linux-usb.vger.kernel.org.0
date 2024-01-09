@@ -1,146 +1,144 @@
-Return-Path: <linux-usb+bounces-4884-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4885-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2DAE8282FF
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 10:21:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E464828338
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 10:31:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60A8C2891A2
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 09:21:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 318D21C24A70
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 09:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B4A83609A;
-	Tue,  9 Jan 2024 09:19:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67D6633CF4;
+	Tue,  9 Jan 2024 09:31:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hLhFpub+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OhB5fRQ5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0C82EB11;
-	Tue,  9 Jan 2024 09:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 666A42E650;
+	Tue,  9 Jan 2024 09:31:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40e5280a381so917395e9.2;
-        Tue, 09 Jan 2024 01:19:04 -0800 (PST)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-50e741123acso2805933e87.0;
+        Tue, 09 Jan 2024 01:31:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704791943; x=1705396743; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DJQguPbha7MXCmeJtqCzdTaw5Ni1LUD1cj0B0gGvNS4=;
-        b=hLhFpub+Fkghf4pxKAB/+ijFJvNw/oCruLQn1MA1aYnftCul6ahyAkKdq89AhvCiI5
-         NYiyK2kY3XBh/2j1pE78PaCnOZuGm6lxCZLqiLv+9elIXsndxx6ZuRa/M0xnNvEX37JF
-         UIBgSAUUDP1Z4p08itFmqJEbsPWVHEw7clkbXJ3UtYMpjQUdYmJ46ixAdsBdufoWN4E7
-         LIHUXyc0r2x4K7QXjsotKYjyjmp8cmGaHhUzVfLGIfJ1iqhJfJ7yaIv/h3rD6Vzsa61a
-         f2dlyVDJm1P5aEpnub621Umyym7qeIt/6n9t+PA4uhVj7v3bxn5G8dLuG960heSeWL5T
-         Ubsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704791943; x=1705396743;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20230601; t=1704792682; x=1705397482; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DJQguPbha7MXCmeJtqCzdTaw5Ni1LUD1cj0B0gGvNS4=;
-        b=wmQvbT6OLSTqUGtMJ4qN9CPzEmf7bvma6hN/5fAaabSCZ9ZVx2iS5d47PqXCcT+rgA
-         vj2eLQRr2fS1e5X9Ch3tza0kPy8plIePvYz0HHaAE+yIw4upgxfLn8bRLZSoOrYsw6do
-         ayVH3dwW6W8BUm25z9qmufdvJ0uOCGdc1J8SMliFn7h32V3U3o+kJiPvJUwq0Zp0fwGF
-         3GsCCYtQNGkBkFrUjYwRq1vXgj594uh5RlVQfyWYb47oK48zgfNdQN7G/nutGsRbcVt3
-         ogJkVbNS9/mn5x10F4mEmcr38MtZik7VCTlN638lBtuic6nrjpaNulHz+8MOecIRVxWG
-         hohQ==
-X-Gm-Message-State: AOJu0Yyj659jgWFYd694L9YOit/yyC6Vuxma3eCJ2vs5bJak3/G4C3U9
-	Q21ZV3Y2Wf0VKTpLYbYFV3G6qyegn26KSLSVj04=
-X-Google-Smtp-Source: AGHT+IH8kjBr6y/PUVs76Dmc5ivmhvqMJo6M7Nycjc2+bCF2ImQ4/rGA/kQrj8cLE6C6hFpmgE0ip2s1p/rhyjCeWRA=
-X-Received: by 2002:a05:600c:4745:b0:40e:491d:acaa with SMTP id
- w5-20020a05600c474500b0040e491dacaamr968576wmo.22.1704791942945; Tue, 09 Jan
- 2024 01:19:02 -0800 (PST)
+        bh=fdolU0EUOihiv4P24pkLi7UHCL7sN9mCnSKzJVpdC60=;
+        b=OhB5fRQ5LguOXWFMeVnEZISpWGj4ao7Xy3+KOeHoMauumDau18q979T+bs2woHCSx4
+         oNYV4jWID1U7sxDTgvyStaCccNsCLpWIQnovJbS7MRMhpMeiUp/nm/PlbbzaMOfx7Sva
+         96o1ejdJo+e2GAyA5+t2OT+FK1PQ6EpC5PDksVpcJWEUToedNBzk6GCtpyZtpWOUxX0B
+         GTPvdzhhuTibBw482rvdrNijg9A4KCdKbEN22U7jXwvBZg9JTvgmh73qT5pVkfXQ1cIe
+         g6BxmD0RMDh/BxUVS/N1+LPtL3xhPP+vr5RXbxyV742gcRnVZZ/OsBKoG6wqx0J1vcrQ
+         Vr8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704792682; x=1705397482;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fdolU0EUOihiv4P24pkLi7UHCL7sN9mCnSKzJVpdC60=;
+        b=B8KRyXW56RM7py0N95olGuIgq5bYRJZzfXPloIdZM/lY6d8YhJVBuTcIiIT232ULDW
+         1Jv5ahS9NVwv4SIL0iHqwqpMLFKJ61xgjSnMn+IpVI0BJ5W7eriVlHbmXXxPryDzRPwP
+         CJSaoNQfgwJy0acWqo41Vdc4RN3C9muQN8JkbVi5xeR9zt7+oob4NYoWXtvUrfRum2fr
+         akoDtvfILCehRZgJC+LYBsq3PrCGtBSYPjwLaWpsMuPBBJ/LASJsoJJwalLUoH4zdlOR
+         UDEoxxjFpsCJUYWbM7KTxAIZGBZSm+y1Mts1yF0jq/FKybW9hO+704myGUe4KkmQxyHr
+         GF2g==
+X-Gm-Message-State: AOJu0YxQkjKM+MHWwlXqCxVJNneJXhpSwKSKGrDOuINJV/LWspVUX4Ls
+	S2hlaAeTiSEmN0sJInSM8I1gk/2IoOQ=
+X-Google-Smtp-Source: AGHT+IESVJ/YLD2uTnT3j2Rl1g58Yxup1gbLsz3UvJQEcPWd3BdOIIpMKOQ3OQB4Mjnn6tGAo2Ckig==
+X-Received: by 2002:ac2:58d6:0:b0:50e:696e:150e with SMTP id u22-20020ac258d6000000b0050e696e150emr1755069lfo.7.1704792681797;
+        Tue, 09 Jan 2024 01:31:21 -0800 (PST)
+Received: from [192.168.1.105] ([178.176.74.61])
+        by smtp.gmail.com with ESMTPSA id n30-20020ac2491e000000b0050e76a5624csm253765lfi.242.2024.01.09.01.31.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jan 2024 01:31:21 -0800 (PST)
+Subject: Re: [PATCH v3] usb: core: Prevent null pointer dereference in
+ update_port_device_state
+To: Udipto Goswami <quic_ugoswami@quicinc.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alan Stern <stern@rowland.harvard.edu>
+Cc: Krishna Kurapati <quic_kriskura@quicinc.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20240109061708.26288-1-quic_ugoswami@quicinc.com>
+From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <3bb51617-81e1-7d19-598d-2b57164320e1@gmail.com>
+Date: Tue, 9 Jan 2024 12:31:19 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAM+7aWvmmyyLN5YHuJhg_X402OFmP_sVe6h_mr5tURjv0Ti5vQ@mail.gmail.com>
-In-Reply-To: <CAM+7aWvmmyyLN5YHuJhg_X402OFmP_sVe6h_mr5tURjv0Ti5vQ@mail.gmail.com>
-From: =?UTF-8?Q?G=C3=A1bor_Stefanik?= <netrolller.3d@gmail.com>
-Date: Tue, 9 Jan 2024 10:18:53 +0100
-Message-ID: <CA+XFjiqUxOPwP7O1qa0zUO8p8deVHQEqQ5kJtr6QsHcSf+YkMQ@mail.gmail.com>
-Subject: Re: USB PD TYPEC - FUSB302B port controller hard reset issue
-To: Suniel Mahesh <sunil@amarulasolutions.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
-	USB list <linux-usb@vger.kernel.org>, Jagan Teki <jagan@amarulasolutions.com>, 
-	Da Xue <da.xue@libretech.co>, Da Xue <da@lessconfused.com>, Da Xue <da@libre.computer>, 
-	Kyle Tso <kyletso@google.com>, RD Babiera <rdbabiera@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240109061708.26288-1-quic_ugoswami@quicinc.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-Unfortunately this seems to just be the behavior of many wall
-chargers, triggered by either an excessive delay between first drawing
-power and beginning PD communication, or by an incorrect sequence
-number. From what I've heard, this is a workaround for a bug in the
-earliest USB-C MacBooks, but it unfortunately makes those chargers
-unusable for powering anything that doesn't have an internal battery.
+On 1/9/24 9:17 AM, Udipto Goswami wrote:
 
-Suniel Mahesh <sunil@amarulasolutions.com> ezt =C3=ADrta (id=C5=91pont: 202=
-4.
-jan. 9., K, 8:17):
->
-> Hi Guenter/Heikki/Greg and all,
->
-> This email is a narrowed version of the earlier discussion at:
-> https://lore.kernel.org/all/CAM+7aWt7hJSmJQ78Fes0jMcrF9E8yhN=3DsDgYuU-hBx=
-O0+1Uj0g@mail.gmail.com/T/
->
-> Please guide/suggest on why the FUSB302B port controller on a target boar=
-d
-> is getting reset(hard reset) on reception of a 0x0 packet from source(PD =
-Wall
-> charger 100W - 20V@5A).
->
-> log when reset:
->
-> [    1.599049] FUSB302: IRQ: 0x80, a: 0x00, b: 0x00, status0: 0x83
-> [    1.602836] FUSB302: IRQ: 0x00, a: 0x40, b: 0x00, status0: 0x83
-> [    1.606210] TCPM: tcpm_pd_event_handler: in TCPM_CC_EVENT
-> [    1.968179] FUSB302: IRQ: 0x80, a: 0x00, b: 0x00, status0: 0x83
-> [    2.133140] FUSB302: IRQ: 0x41, a: 0x04, b: 0x00, status0: 0x93
-> [    2.133704] FUSB302: IRQ: PD tx success
-> [    2.136046] FUSB302: PD message header: 161
-> [    2.136392] FUSB302: PD message len: 0
-> [    2.136845] TCPM: PD TX complete, status: 0
-> [    2.139382] FUSB302: IRQ: 0x51, a: 0x00, b: 0x00, status0: 0x93
-> [    2.142192] FUSB302: IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
-> [    2.142804] FUSB302: IRQ: PD sent good CRC
-> [    2.145274] FUSB302: PD message header: 1a3
-> [    2.145674] FUSB302: PD message len: 0
-> [    2.146072] FUSB302: fusb302_pd_read_message: to tcpm_pd_receive
-> [    2.146478] TCPM: PD RX, header: 0x1a3 [1]
-> [    2.147042] TCPM: tcpm_pd_ctrl_request: type:0x3
-> [    2.147435] TCPM: tcpm_pd_ctrl_request: case PD_CTRL_ACCEPT
-> [    2.146309] TCPM: tcpm_pd_ctrl_request: case SOFT_RESET_SEND
-> [    2.148266] TCPM: tcpm_pd_rx_handler: done
-> [    2.158196] FUSB302: IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
-> [    2.158600] FUSB302: IRQ: PD sent good CRC
-> [    2.161283] FUSB302: PD message header: 0
-> [    2.161710] FUSB302: PD message len: 0
-> [    2.162092] FUSB302: fusb302_pd_read_message: to tcpm_pd_receive
-> [    2.162608] TCPM: PD RX, header: 0x0 [1]
-> [    2.163181] TCPM: tcpm_pd_rx_handler: done
-> [    2.179843] FUSB302: IRQ: 0x41, a: 0x01, b: 0x00, status0: 0x83
-> [    2.180314] FUSB302: IRQ: PD received hardreset: interrupta: 1
-> [    2.181125] FUSB302: fusb302_pd_reset:
-> [    2.182597] TCPM: tcpm_pd_event_handler:
-> [    2.182937] TCPM: tcpm_pd_event_handler: TCPM_RESET_EVENT
-> [    2.183292] TCPM: _tcpm_pd_hard_reset: Received hard reset
-> [    2.183770] TCPM: _tcpm_pd_hard_reset:
->
-> Let me know if you need anymore details.
->
-> Thanks and Regards
-> --
-> Suniel Mahesh
-> Embedded Linux and Kernel Engineer
-> Amarula Solutions India
->
+> Currently,the function update_port_device_state gets the usb_hub from
+> udev->parent by calling usb_hub_to_struct_hub.
+> However, in case the actconfig or the maxchild is 0, the usb_hub would
+> be NULL and upon further accessing to get port_dev would result in null
+> pointer dereference.
+> 
+> Fix this by introducing an if check after the usb_hub is populated.
+> 
+> Fixes: 83cb2604f641 ("usb: core: add sysfs entry for usb device state")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> ---
+> v3: Re-wrote the comment for better context.
+> v2: Introduced comment for the if check & CC'ed stable.
+> 
+>  drivers/usb/core/hub.c | 20 +++++++++++++++++---
+>  1 file changed, 17 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index ffd7c99e24a3..6b514546e59b 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -2053,9 +2053,23 @@ static void update_port_device_state(struct usb_device *udev)
+>  
+>  	if (udev->parent) {
+>  		hub = usb_hub_to_struct_hub(udev->parent);
+> -		port_dev = hub->ports[udev->portnum - 1];
+> -		WRITE_ONCE(port_dev->state, udev->state);
+> -		sysfs_notify_dirent(port_dev->state_kn);
+> +
+> +		/*
+> +		 * The Link Layer Validation System Driver (lvstest)
+> +		 * has procedure of unbinding the hub before running
+> +		 * the rest of the procedure. This triggers
+> +		 * hub_disconnect will set the hub's maxchild to 0.
+
+   I can't parse this sentence, s/th is missing...
+
+> +		 * This would result usb_hub_to_struct_hub in this
+> +		 * function to return NULL.
+
+   "This would result in usb_hub_to_struct_hub in this function
+returning NULL", perhaps?
+
+> +		 *
+> +		 * Add if check to avoid running into NULL pointer
+> +		 * de-reference.
+> +		 */
+> +		if (hub) {
+> +			port_dev = hub->ports[udev->portnum - 1];
+> +			WRITE_ONCE(port_dev->state, udev->state);
+> +			sysfs_notify_dirent(port_dev->state_kn);
+> +		}
+>  	}
+>  }
+>  
+
+MBR, Sergey
 
