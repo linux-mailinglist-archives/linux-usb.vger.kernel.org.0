@@ -1,189 +1,159 @@
-Return-Path: <linux-usb+bounces-4899-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4900-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 518E4828C0E
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 19:10:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A90BC828C7F
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 19:23:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 428BC1F266EA
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 18:02:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E4AD28ECBC
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 18:22:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3974D3C464;
-	Tue,  9 Jan 2024 18:01:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="pvn91EAO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 889173D0C4;
+	Tue,  9 Jan 2024 18:22:25 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933683BB25
-	for <linux-usb@vger.kernel.org>; Tue,  9 Jan 2024 18:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=Q107oPArIi6NYRlDUGnbQcYCIZoG8AJx7Y7gqLZs3Nc=; b=pvn91EAO7i5zd7mPRwxnJJZzqf
-	Gs0osQdZpwvtFmcSJXEfQHE/4bYT3zzN6KKLBg5wwuiYT3mFpNXzjiPlTjkc3qQxcF5UALS7wkueC
-	Am8FxRRuqlY26x7XO3CXkMCG0QItjkmiSTID9hobCbZzC8Eq9DqjOhQlCLSF5ptch9gUq7P7htZN3
-	C++mAA6+FmD40/3iRBpmkSRYvcfV03oZmmc3luwf6ao+jnO0zDoOOpxShOm990wBJkLxmuFaCzGTX
-	9ZjmOMjeNtm8kWbURNuLdyEW2ZoufWqw1HCo/fX7HhRQ86e2K1w2YuC9pdJ/UEOlyOL8EUmdmJls4
-	jmOKvQ2Q==;
-Received: from [179.232.147.2] (helo=[192.168.0.5])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1rNGPG-004hC5-Im; Tue, 09 Jan 2024 19:00:54 +0100
-Message-ID: <d85a5507-4d4a-9e60-fbd1-68b42afb2143@igalia.com>
-Date: Tue, 9 Jan 2024 15:00:48 -0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27923C6AC
+	for <linux-usb@vger.kernel.org>; Tue,  9 Jan 2024 18:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3607d60e4c8so29881855ab.2
+        for <linux-usb@vger.kernel.org>; Tue, 09 Jan 2024 10:22:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704824543; x=1705429343;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6TNa4G43q4cO/ACdKNuWCSRQEIf696MY0iwPAGfopVg=;
+        b=pxgAQH7VkomL9KEzD3bP2DYHXGBcG/49rGKWTkc1PqGVSor6/TdLkcRhkgVXlEAgCb
+         +mwEMSesJpPnEFR16XeTF5AkA/iaYw5OyPvtEgDcu/wPfHoBMDH2bY/Es5iHwHAJzanZ
+         Zbg4lxKE59UrWVd3Gx8UK6VeegKnk4bQ28ZA1pRwQwnhx6RzTiArdwAW/L+Ng7uolLY7
+         8ktdu0agCshunQTyoe3Njxe7Y+49sD+Uqsi+cDUGsjTYJYYpKVQ+xub7WqKYxEHlXzy5
+         idWkLHheyKxh+4PvpBQqxRJBuuS11LYT9OcqU6AHLJmx737+eCIb0q1rMCvnE1O5iuRU
+         wp+A==
+X-Gm-Message-State: AOJu0YxnigYp3efY1y61WY5uDnUeuaNsusnmR/dHBwun48OqLzpxZkEp
+	pcSFmIZwAN7CDdASU3ylLyIOHJ3UaQuPuLXcqZD3sHVp8Dip
+X-Google-Smtp-Source: AGHT+IGcahAoJvWzpIDo8zselVAoErzwnmmPyfYagYp8tWmDT1/06Ar5CgeRsu+dCZ9Ij37sRUaWExl5csQOSMZG2PlNgjF4GY5u
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] usb: dwc3: Fix spurious wakeup when port is on device
- mode
-Content-Language: en-US
-From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "balbi@kernel.org" <balbi@kernel.org>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "johan@kernel.org" <johan@kernel.org>,
- "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
- "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
- "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
- Andrey Smirnov <andrew.smirnov@gmail.com>,
- Vivek Dasmohapatra <vivek@collabora.com>, piyush.mehta@amd.com,
- ray.huang@amd.com
-References: <20231122165931.443845-1-gpiccoli@igalia.com>
- <2dfbf5c9-dd38-c919-c604-618ad08ce456@igalia.com>
- <20231205012336.mn7b7f4zypwcyv6w@synopsys.com>
- <9efaed91-d246-cf3c-efc0-e866f88a943d@igalia.com>
-In-Reply-To: <9efaed91-d246-cf3c-efc0-e866f88a943d@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:2185:b0:35f:d99a:7b1 with SMTP id
+ j5-20020a056e02218500b0035fd99a07b1mr752486ila.0.1704824543083; Tue, 09 Jan
+ 2024 10:22:23 -0800 (PST)
+Date: Tue, 09 Jan 2024 10:22:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004b841a060e876595@google.com>
+Subject: [syzbot] [kernel?] WARNING in input_unregister_device (2)
+From: syzbot <syzbot+617f4ccb03b9869f6494@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 05/12/2023 11:40, Guilherme G. Piccoli wrote:
-> Hi Thinh, thanks for your response. I'll clarify inline below:
-> 
-> On 04/12/2023 22:23, Thinh Nguyen wrote:
->> [...]
->>>> It was noticed that on plugging a low-power USB source on Steam
->>>> Deck USB-C port (handled by dwc3), if such port is on device role,
->>
->> I'm not clear of the testing sequence here. Can you clarify further? Is
->> this device operating as host mode but then it switches role to device
->> mode when no device is connected?
->>
-> 
-> Exactly this. We have a driver that changes between host/device mode
-> according to ACPI notifications on port connect. But to make
-> tests/discussion easier and eliminate more variables, we just dropped
-> this driver and do it manually.
-> 
-> So the steps are:
-> 
-> (A) host mode test
-> 1) Put the port on host mode using debugfs interface.
-> 2) Wait 30 seconds, plug a cable connecting the Steam Deck to a laptop -
-> we call this connection a "low-power source", since it seems to charge
-> slowly the Deck.
-> 3) Suspend the Deck after some seconds (S3/deep) - success
-> 
-> (B) device mode test
-> 
-> 1) Put the port on device mode using debugfs interface.
-> 2) Wait 30 seconds, plug a cable connecting the Steam Deck to a laptop.
-> 3) Suspend the Deck after some seconds (S3/deep) - fails
-> 
-> 3a) If pcie_pme is using MSIs, it fails showing that a wakeup interrupt
-> is pending, in this case the Steam Deck effectively doesn't enter suspend.
-> 
-> 3b) if PCIe PME is not using MSIs, Deck suspends and right after (less
-> than a second), wakes up properly.
-> 
-> 
->>>> the HW somehow keep asseting the PCIe PME line and triggering a
->>>> wakeup event on S3/deep suspend (that manifests as a PME wakeup
->>>> interrupt, failing the suspend path). That doesn't happen when the USB
->>>> port is on host mode or if the USB device connected is not a low-power
->>>> type (for example, a connected keyboard doesn't reproduce that).
->>
->> Is the PME continuously generating non-stop? Did you test this in USB3
->> speed? Does this happen for every low-power device or just this specific
->> low-power device?
-> 
-> It seems PME is continuously being generated, yes. I tested by
-> connecting to my laptop as mentioned, I guess others tested different
-> scenarios, not always reproduces. An example: a keyboard or a disk
-> connected when the USB port is on device mode doesn't reproduce. Also, I
-> think I didn't test "in USB3 speed" - could you detail more, not sure if
-> I understood that properly.
-> 
-> 
->> [...] 
->> Even if you masked all the interrupts, and the events are still
->> generating? Did you check if the driver handled wakeup from PME and
->> properly restore the controller?
->>
-> 
-> Ok, let me clarify a bit. From the ACPI perspective, I was able to check
-> from kernel that some GPEs were generated on resume when the issue
-> happens (and potentially even when the issue doesn't happen, in host
-> mode for example). So, what I did was masking all these GPEs using the
-> kernel sysfs interface. After masking, the issue still reproduces but
-> the GPEs count doesn't increase.
-> 
-> Regarding the PME interrupt now: if MSI is used on PME, I can see an
-> increase of 1 in every suspend/resume attempt (checking
-> /proc/interrupts). Now if MSIs are not used, guess what? There was no
-> increase in the interrupt at all. I didn't mask the PME interrupt on
-> PCIe PME driver...but even with PME driver disabled, IIRC the problem
-> reproduces.
-> 
-> "Did you check if the driver handled wakeup from PME and properly
-> restore the controller?" <- I think I didn't - how do you suggest me to
-> check that?
-> 
-> What I've noticed is that either the system can't suspend, or if no MSIs
-> are used on PCIe PME, it suspends and resumes right after, with success.
-> In this latter case, dwc3 works normally again, resume is successful.
-> Let me know if you want me to check any other path or function called, etc.
-> 
-> 
->> [...]
->>
->> Some platforms may need a soft reset before a change to prtcapdir. This
->> may break some setups. This seems to be a workaround and should not be
->> treated as part of a normal flow.
-> 
-> OK, do you have any other idea of a register change that is softer than
-> changing "prtcapdir" and could prevent the issue? Also, would that
-> workaround makes sense as...a quirk?
-> 
-> We could guard it for Deck's HW exclusively, using DMI if you think it
-> does make sense...or the dwc3 quirks (already have some for AMD right?)
-> 
-> I'm CCing Piyush and Huang from AMD, since this is AMD HW. Any other
-> suggestions are much appreciated.
-> Thanks,
-> 
-> 
-> Guilherme
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    e7d3b9f28654 usb: yurex: Fix inconsistent locking bug in y..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1766e845e80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1dd225f9d04a5286
+dashboard link: https://syzkaller.appspot.com/bug?extid=617f4ccb03b9869f6494
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5bf2bb53c85f/disk-e7d3b9f2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5f6e5a287ee7/vmlinux-e7d3b9f2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8259e694a7e3/bzImage-e7d3b9f2.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+617f4ccb03b9869f6494@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+add_uevent_var: buffer size too small
+WARNING: CPU: 0 PID: 2442 at lib/kobject_uevent.c:671 add_uevent_var+0x32d/0x390 lib/kobject_uevent.c:671
+Modules linked in:
+CPU: 0 PID: 2442 Comm: kworker/0:6 Not tainted 6.7.0-rc5-syzkaller-ge7d3b9f28654 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/17/2023
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:add_uevent_var+0x32d/0x390 lib/kobject_uevent.c:671
+Code: fb 48 c7 c7 c0 7c 4e 87 e8 50 63 d9 fa 0f 0b bb f4 ff ff ff e9 57 ff ff ff e8 0f 24 10 fb 48 c7 c7 60 7d 4e 87 e8 33 63 d9 fa <0f> 0b eb e1 4c 89 ee 48 c7 c7 a0 f5 22 89 e8 b0 d0 12 fc e9 b4 fe
+RSP: 0018:ffffc90001daf2b8 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff888108b08000 RCX: ffffc9000c6ad000
+RDX: 0000000000040000 RSI: ffffffff811733c6 RDI: 0000000000000001
+RBP: ffffc90001daf3a8 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 00000000006559c8 R12: 1ffff920003b5e5a
+R13: 00000000000007f5 R14: ffff888108b08218 R15: 00000000000007f5
+FS:  0000000000000000(0000) GS:ffff8881f6600000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fb1ddf92c98 CR3: 0000000104e44000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kobject_uevent_env+0x995/0x1800 lib/kobject_uevent.c:588
+ device_del+0x642/0xa50 drivers/base/core.c:3832
+ input_unregister_device+0xb9/0x100 drivers/input/input.c:2440
+ hidinput_disconnect+0x160/0x3e0 drivers/hid/hid-input.c:2388
+ hid_disconnect+0x143/0x1b0 drivers/hid/hid-core.c:2280
+ hid_hw_stop+0x16/0x70 drivers/hid/hid-core.c:2329
+ ms_remove+0x16/0xa0 drivers/hid/hid-microsoft.c:409
+ hid_device_remove+0xce/0x250 drivers/hid/hid-core.c:2689
+ device_remove+0xc8/0x170 drivers/base/dd.c:567
+ __device_release_driver drivers/base/dd.c:1272 [inline]
+ device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1295
+ bus_remove_device+0x22c/0x420 drivers/base/bus.c:574
+ device_del+0x39a/0xa50 drivers/base/core.c:3814
+ hid_remove_device drivers/hid/hid-core.c:2867 [inline]
+ hid_destroy_device+0xe5/0x150 drivers/hid/hid-core.c:2887
+ usbhid_disconnect+0xa0/0xe0 drivers/hid/usbhid/hid-core.c:1456
+ usb_unbind_interface+0x1dd/0x8d0 drivers/usb/core/driver.c:461
+ device_remove drivers/base/dd.c:569 [inline]
+ device_remove+0x11f/0x170 drivers/base/dd.c:561
+ __device_release_driver drivers/base/dd.c:1272 [inline]
+ device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1295
+ bus_remove_device+0x22c/0x420 drivers/base/bus.c:574
+ device_del+0x39a/0xa50 drivers/base/core.c:3814
+ usb_disable_device+0x36c/0x7f0 drivers/usb/core/message.c:1416
+ usb_disconnect+0x2e1/0x910 drivers/usb/core/hub.c:2257
+ hub_port_connect drivers/usb/core/hub.c:5305 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5605 [inline]
+ port_event drivers/usb/core/hub.c:5765 [inline]
+ hub_event+0x1be0/0x4f40 drivers/usb/core/hub.c:5847
+ process_one_work+0x884/0x15c0 kernel/workqueue.c:2627
+ process_scheduled_works kernel/workqueue.c:2700 [inline]
+ worker_thread+0x8b9/0x1290 kernel/workqueue.c:2781
+ kthread+0x33c/0x440 kernel/kthread.c:388
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:242
+ </TASK>
 
 
-Hi folks, just curious if you think the way forward would be indeed to
-quirk it based on DMI/device ID, or if should pursue another approach
-here. Suggestions are very welcome, and thanks in advance!
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Guilherme
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
