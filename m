@@ -1,123 +1,101 @@
-Return-Path: <linux-usb+bounces-4879-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4880-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2097A827F1B
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 08:17:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68966828021
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 09:11:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC280285724
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 07:17:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 758B11F26403
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 08:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D098944B;
-	Tue,  9 Jan 2024 07:17:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 069FB12E73;
+	Tue,  9 Jan 2024 08:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="PWaO4h2c"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="FSe3mU1j"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F7CB645
-	for <linux-usb@vger.kernel.org>; Tue,  9 Jan 2024 07:17:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3376ead25e1so1184067f8f.3
-        for <linux-usb@vger.kernel.org>; Mon, 08 Jan 2024 23:17:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1704784652; x=1705389452; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OchCzgotCx6qu/9IkiIF6+O+Abm7bmipg7+KM9sddOI=;
-        b=PWaO4h2clCKmLZcFQ84viF2erY7E5fuSrdMKm71JiC468s1nyICUmM8+8gqIUj0w8c
-         /aHYZXKkd44nqBhNPgArTwN8Yaw5Cw+RAgg/MymRSEPoeckzgrYcfZLFqUiS7rhzbapD
-         jAhS49CaxNyS3nQXHw0qMt6wfDLsBXY0ub3pM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704784652; x=1705389452;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OchCzgotCx6qu/9IkiIF6+O+Abm7bmipg7+KM9sddOI=;
-        b=kIDXG5XYf0/hh/aWTcpwW/J8r5Zz5IsZ7/s7m2eoRJnbN0LXE9PJiNg+JMZ7TOgpjE
-         R9kb/49y6I/O01hH4Q6C+ViqC309bYnu/+4UnkTJ07FeyIQO7P9GaS70qGcLVw+CBmxF
-         xMuDdBn1K4fVF7UW5u/+C/KngQ1P0VriXiBxjl74dkNFnRwZMSwK+FqRXk4e2L/JvW7R
-         b8Ljq2DzG7Ebr6MF9fd8HgADbAo7Y/NqLDOSh0RKof5mf//4dO0EYDQMfmDUyqu1eb95
-         s6+DcH0j3Dnp3PPDNfPuN8GnASRnhMd0DQNY6eSCLjSCDH4DA28xSCb9Vo/OfAsZ+YVh
-         QXsg==
-X-Gm-Message-State: AOJu0Yyk8e11ox6BscI9cES9eF9ug38MMnsa0T35vWyHdMDiSEOqcGTi
-	+crcoGnJTAsDgNdWiwqZ9nRStQgUNq07fImhVvXWjxBkOHhJKg==
-X-Google-Smtp-Source: AGHT+IE8g9H1xQnaEw0sn8epxL0e49UcqAH+tFlt8yuyw/dkODyKiSOO6910tZBmJlRzQhRtmzKCqG5PUdwHSFmA4W4=
-X-Received: by 2002:adf:e5d1:0:b0:336:ca94:3e00 with SMTP id
- a17-20020adfe5d1000000b00336ca943e00mr262001wrn.69.1704784652096; Mon, 08 Jan
- 2024 23:17:32 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BAD729410;
+	Tue,  9 Jan 2024 08:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.helo=mx0b-0016f401.pphosted.com
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40967CDR025033;
+	Tue, 9 Jan 2024 00:10:51 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=pfpt0220; bh=zLW6cbF3
+	JrGJxn4kgxx++71eFi2X1lzPoT/sA8ETBds=; b=FSe3mU1jXa3hVoPn3TkaDHdP
+	mAZjocthhQ/fmdAcGRFGv0ALDzSAZ/gVDCnFm9cTLsx6bi0DMgF4WTtO7qtN4NAF
+	bL4+6yv8hWdLV/YdmQeZAHpAtINF3kstafclrkCD+z1a22/yAYURf5h6og8yq7Fw
+	pxIzOWO7dj0sgqt/SejXs7KMuOeux+DGRPdeqd1czJ19Tuoo4oEWHF2uG/ZnfR8g
+	LWSHTsNzZFipAzb08+uDBHQU4sOrJLm6dltKUNmgFN8RT5u2HGzlnsYpzqFGuW4e
+	vfS2MxzL7vXJEMDLX8uOWnERWoqWUfCVDRymPi1QcHYSaIWpitKi18UXKBmmBg==
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3vgptf2hgc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+	Tue, 09 Jan 2024 00:10:50 -0800 (PST)
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 9 Jan
+ 2024 00:10:48 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Tue, 9 Jan 2024 00:10:48 -0800
+Received: from dc3lp-swdev041.marvell.com (dc3lp-swdev041.marvell.com [10.6.60.191])
+	by maili.marvell.com (Postfix) with ESMTP id 482ED3F70B4;
+	Tue,  9 Jan 2024 00:10:46 -0800 (PST)
+From: Elad Nachman <enachman@marvell.com>
+To: <gregkh@linuxfoundation.org>,
+        rowland.harvard.edu@mx0b-0016f401.pphosted.com, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC: <enachman@marvell.com>
+Subject: [PATCH v3 0/2] usb: host: Add ac5 to EHCI Orion
+Date: Tue, 9 Jan 2024 10:10:42 +0200
+Message-ID: <20240109081044.10515-1-enachman@marvell.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Suniel Mahesh <sunil@amarulasolutions.com>
-Date: Tue, 9 Jan 2024 12:47:21 +0530
-Message-ID: <CAM+7aWvmmyyLN5YHuJhg_X402OFmP_sVe6h_mr5tURjv0Ti5vQ@mail.gmail.com>
-Subject: USB PD TYPEC - FUSB302B port controller hard reset issue
-To: Guenter Roeck <linux@roeck-us.net>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
-	USB list <linux-usb@vger.kernel.org>
-Cc: Jagan Teki <jagan@amarulasolutions.com>, Da Xue <da.xue@libretech.co>, 
-	Da Xue <da@lessconfused.com>, Da Xue <da@libre.computer>, Kyle Tso <kyletso@google.com>, 
-	RD Babiera <rdbabiera@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: zqmC9T8YyQFuydgE9YVdS51K4jIKgMvo
+X-Proofpoint-GUID: zqmC9T8YyQFuydgE9YVdS51K4jIKgMvo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
 
-Hi Guenter/Heikki/Greg and all,
+From: Elad Nachman <enachman@marvell.com>
 
-This email is a narrowed version of the earlier discussion at:
-https://lore.kernel.org/all/CAM+7aWt7hJSmJQ78Fes0jMcrF9E8yhN=sDgYuU-hBxO0+1Uj0g@mail.gmail.com/T/
+Add support for ac5 to the EHCI Orion platform driver.
+The ac5 SOC has DDR starting at offset 0x2_0000_0000,
+Hence it requires a larger than 32-bit DMA mask to operate.
+Move the dma mask to be pointed by the OF match data, and
+use that match data when initializng the DMA mask.
+Add dt bindings compatible string to identify the AC5 SOC,
+so the driver will know when to apply this different dma mask.
 
-Please guide/suggest on why the FUSB302B port controller on a target board
-is getting reset(hard reset) on reception of a 0x0 packet from source(PD Wall
-charger 100W - 20V@5A).
+v3:
+   1) Combine dt bindings and driver pathces into a single patchset.
 
-log when reset:
+v2:
+   1) Fix compiler warning
 
-[    1.599049] FUSB302: IRQ: 0x80, a: 0x00, b: 0x00, status0: 0x83
-[    1.602836] FUSB302: IRQ: 0x00, a: 0x40, b: 0x00, status0: 0x83
-[    1.606210] TCPM: tcpm_pd_event_handler: in TCPM_CC_EVENT
-[    1.968179] FUSB302: IRQ: 0x80, a: 0x00, b: 0x00, status0: 0x83
-[    2.133140] FUSB302: IRQ: 0x41, a: 0x04, b: 0x00, status0: 0x93
-[    2.133704] FUSB302: IRQ: PD tx success
-[    2.136046] FUSB302: PD message header: 161
-[    2.136392] FUSB302: PD message len: 0
-[    2.136845] TCPM: PD TX complete, status: 0
-[    2.139382] FUSB302: IRQ: 0x51, a: 0x00, b: 0x00, status0: 0x93
-[    2.142192] FUSB302: IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
-[    2.142804] FUSB302: IRQ: PD sent good CRC
-[    2.145274] FUSB302: PD message header: 1a3
-[    2.145674] FUSB302: PD message len: 0
-[    2.146072] FUSB302: fusb302_pd_read_message: to tcpm_pd_receive
-[    2.146478] TCPM: PD RX, header: 0x1a3 [1]
-[    2.147042] TCPM: tcpm_pd_ctrl_request: type:0x3
-[    2.147435] TCPM: tcpm_pd_ctrl_request: case PD_CTRL_ACCEPT
-[    2.146309] TCPM: tcpm_pd_ctrl_request: case SOFT_RESET_SEND
-[    2.148266] TCPM: tcpm_pd_rx_handler: done
-[    2.158196] FUSB302: IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
-[    2.158600] FUSB302: IRQ: PD sent good CRC
-[    2.161283] FUSB302: PD message header: 0
-[    2.161710] FUSB302: PD message len: 0
-[    2.162092] FUSB302: fusb302_pd_read_message: to tcpm_pd_receive
-[    2.162608] TCPM: PD RX, header: 0x0 [1]
-[    2.163181] TCPM: tcpm_pd_rx_handler: done
-[    2.179843] FUSB302: IRQ: 0x41, a: 0x01, b: 0x00, status0: 0x83
-[    2.180314] FUSB302: IRQ: PD received hardreset: interrupta: 1
-[    2.181125] FUSB302: fusb302_pd_reset:
-[    2.182597] TCPM: tcpm_pd_event_handler:
-[    2.182937] TCPM: tcpm_pd_event_handler: TCPM_RESET_EVENT
-[    2.183292] TCPM: _tcpm_pd_hard_reset: Received hard reset
-[    2.183770] TCPM: _tcpm_pd_hard_reset:
+Elad Nachman (2):
+  dt-bindings: usb: Add Marvell ac5
+  usb: host: Add ac5 to EHCI Orion
 
-Let me know if you need anymore details.
+ .../devicetree/bindings/usb/generic-ehci.yaml |  1 +
+ drivers/usb/host/ehci-orion.c                 | 19 +++++++++++++++----
+ 2 files changed, 16 insertions(+), 4 deletions(-)
 
-Thanks and Regards
 -- 
-Suniel Mahesh
-Embedded Linux and Kernel Engineer
-Amarula Solutions India
+2.25.1
 
