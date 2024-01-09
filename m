@@ -1,135 +1,147 @@
-Return-Path: <linux-usb+bounces-4877-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4878-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56D80827EB6
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 07:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AEAD5827F13
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 08:13:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 054B0284FD4
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 06:17:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 040BC2853E3
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jan 2024 07:13:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B13B6FD2;
-	Tue,  9 Jan 2024 06:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E7BC9447;
+	Tue,  9 Jan 2024 07:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="BzLKO1XI"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kxd7L47X"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F5717C2;
-	Tue,  9 Jan 2024 06:17:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4093LIp0019957;
-	Tue, 9 Jan 2024 06:17:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type; s=
-	qcppdkim1; bh=FmGVh3W2g4mUkpYE5hHFAFoo4UsVNaeXCU8Z582FdZQ=; b=Bz
-	LKO1XI5i1aSz0Y3Ngdv2pdIZlQ9++EztwQnAZgLEuQaPqM0wSEl1EobAsM1yFgEV
-	t7DT66rc5GGG+Zj8vd8dDxaEcMJqDUy+NeBF0hk2Cr/wjWqwS97RmbPt87yjZ7UF
-	d1xrPm/EJ9a2KAtLhIjoFv58mXE3Zb3jRlL+US2pCxNYF2G5FgqlNq73te0d/DhC
-	Fr4drzodfGqeBzB9bAh8EYHPtjXMbDGbI2Mn2KCjk1BqI43WShNRlkkUtDEYZBIG
-	tpA8j+EVe7b0Ie7o4/Tirtxqi7xFWT5RGWxaZ5MqUd64bccpTYT61ykrnUyLOWjt
-	Lq9jf9AJUsxjSRDLj6Kg==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vgq2ys23f-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Jan 2024 06:17:27 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4096HRkC019581
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 9 Jan 2024 06:17:27 GMT
-Received: from hu-ugoswami-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 8 Jan 2024 22:17:24 -0800
-From: Udipto Goswami <quic_ugoswami@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern
-	<stern@rowland.harvard.edu>
-CC: Krishna Kurapati <quic_kriskura@quicinc.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        Udipto Goswami
-	<quic_ugoswami@quicinc.com>
-Subject: [PATCH v3] usb: core: Prevent null pointer dereference in update_port_device_state
-Date: Tue, 9 Jan 2024 11:47:08 +0530
-Message-ID: <20240109061708.26288-1-quic_ugoswami@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED6A79C4;
+	Tue,  9 Jan 2024 07:13:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F35C433C7;
+	Tue,  9 Jan 2024 07:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1704784381;
+	bh=KW+h+R/WBAgOJEnE4m6clFnLxv6Xr732ZUMriIV0kXQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kxd7L47X0QpJB6vNmFmMeG8Ml9h67ISPM5fncSn9iX0I6pyMJksIukgSkx9A5iEPz
+	 qHNbTKzZ5vhtTcJcbqrPZKnhL54J2VhEaRGVxrl825lzPF1CuKKPfJ7AQ3ORT5nbnM
+	 qTpM9K/NdVGqbOptQZsEJOFU3lcr3Yxh6i9oaPE4=
+Date: Tue, 9 Jan 2024 08:12:58 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Elad Nachman <enachman@marvell.com>
+Cc: stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: host: Add ac5 to EHCI Orion
+Message-ID: <2024010943-deluxe-snitch-febc@gregkh>
+References: <20240108175457.4113480-1-enachman@marvell.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: j7V46y80BPb3l08IrWMq5e68WHn60HEV
-X-Proofpoint-ORIG-GUID: j7V46y80BPb3l08IrWMq5e68WHn60HEV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 malwarescore=0
- mlxlogscore=718 clxscore=1015 priorityscore=1501 phishscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401090045
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240108175457.4113480-1-enachman@marvell.com>
 
-Currently,the function update_port_device_state gets the usb_hub from
-udev->parent by calling usb_hub_to_struct_hub.
-However, in case the actconfig or the maxchild is 0, the usb_hub would
-be NULL and upon further accessing to get port_dev would result in null
-pointer dereference.
+On Mon, Jan 08, 2024 at 07:54:57PM +0200, Elad Nachman wrote:
+> From: Elad Nachman <enachman@marvell.com>
+> 
+> Add support for ac5 to the EHCI Orion platform driver.
+> The ac5 SOC has DDR starting at offset 0x2_0000_0000,
+> Hence it requires a larger than 32-bit DMA mask to operate.
+> Move the dma mask to be pointed by the OF match data, and
+> use that match data when initializng the DMA mask.
+> 
+> Signed-off-by: Elad Nachman <enachman@marvell.com>
+> ---
+>  drivers/usb/host/ehci-orion.c | 19 +++++++++++++++----
+>  1 file changed, 15 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ehci-orion.c b/drivers/usb/host/ehci-orion.c
+> index 6c47ab0a491d..58883664c884 100644
+> --- a/drivers/usb/host/ehci-orion.c
+> +++ b/drivers/usb/host/ehci-orion.c
+> @@ -65,6 +65,15 @@ struct orion_ehci_hcd {
+>  
+>  static struct hc_driver __read_mostly ehci_orion_hc_driver;
+>  
+> +/*
+> + * Legacy DMA mask is 32 bit.
+> + * AC5 has the DDR starting at 8GB, hence it requires
+> + * a larger (34-bit) DMA mask, in order for DMA allocations
+> + * to succeed:
+> + */
+> +static const u64 dma_mask_orion =	DMA_BIT_MASK(32);
+> +static const u64 dma_mask_ac5 =		DMA_BIT_MASK(34);
+> +
+>  /*
+>   * Implement Orion USB controller specification guidelines
+>   */
+> @@ -211,6 +220,7 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
+>  	int irq, err;
+>  	enum orion_ehci_phy_ver phy_version;
+>  	struct orion_ehci_hcd *priv;
+> +	u64 *dma_mask_ptr;
+>  
+>  	if (usb_disabled())
+>  		return -ENODEV;
+> @@ -228,7 +238,8 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
+>  	 * set. Since shared usb code relies on it, set it here for
+>  	 * now. Once we have dma capability bindings this can go away.
+>  	 */
+> -	err = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+> +	dma_mask_ptr = (u64 *)of_device_get_match_data(&pdev->dev);
+> +	err = dma_coerce_mask_and_coherent(&pdev->dev, *dma_mask_ptr);
+>  	if (err)
+>  		goto err;
+>  
+> @@ -332,9 +343,9 @@ static void ehci_orion_drv_remove(struct platform_device *pdev)
+>  }
+>  
+>  static const struct of_device_id ehci_orion_dt_ids[] = {
+> -	{ .compatible = "marvell,orion-ehci", },
+> -	{ .compatible = "marvell,armada-3700-ehci", },
+> -	{},
+> +	{ .compatible = "marvell,orion-ehci", .data = &dma_mask_orion},
+> +	{ .compatible = "marvell,armada-3700-ehci", .data = &dma_mask_orion},
+> +	{ .compatible = "marvell,ac5-ehci", .data = &dma_mask_ac5},
+>  };
+>  MODULE_DEVICE_TABLE(of, ehci_orion_dt_ids);
+>  
+> -- 
+> 2.25.1
+> 
+> 
 
-Fix this by introducing an if check after the usb_hub is populated.
+Hi,
 
-Fixes: 83cb2604f641 ("usb: core: add sysfs entry for usb device state")
-Cc: stable@vger.kernel.org
-Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
----
-v3: Re-wrote the comment for better context.
-v2: Introduced comment for the if check & CC'ed stable.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
- drivers/usb/core/hub.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index ffd7c99e24a3..6b514546e59b 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2053,9 +2053,23 @@ static void update_port_device_state(struct usb_device *udev)
- 
- 	if (udev->parent) {
- 		hub = usb_hub_to_struct_hub(udev->parent);
--		port_dev = hub->ports[udev->portnum - 1];
--		WRITE_ONCE(port_dev->state, udev->state);
--		sysfs_notify_dirent(port_dev->state_kn);
-+
-+		/*
-+		 * The Link Layer Validation System Driver (lvstest)
-+		 * has procedure of unbinding the hub before running
-+		 * the rest of the procedure. This triggers
-+		 * hub_disconnect will set the hub's maxchild to 0.
-+		 * This would result usb_hub_to_struct_hub in this
-+		 * function to return NULL.
-+		 *
-+		 * Add if check to avoid running into NULL pointer
-+		 * de-reference.
-+		 */
-+		if (hub) {
-+			port_dev = hub->ports[udev->portnum - 1];
-+			WRITE_ONCE(port_dev->state, udev->state);
-+			sysfs_notify_dirent(port_dev->state_kn);
-+		}
- 	}
- }
- 
--- 
-2.17.1
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
 
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
