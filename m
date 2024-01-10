@@ -1,112 +1,95 @@
-Return-Path: <linux-usb+bounces-4914-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4915-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C7EA82991A
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 12:31:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1416A829AB2
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 13:54:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AD08287510
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 11:31:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A9A11C25B2B
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 12:54:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 597C347A5F;
-	Wed, 10 Jan 2024 11:31:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C34048799;
+	Wed, 10 Jan 2024 12:54:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eYhJXYR2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fEfY/Vyy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CADB47A60
-	for <linux-usb@vger.kernel.org>; Wed, 10 Jan 2024 11:31:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-50e80d40a41so5041988e87.1
-        for <linux-usb@vger.kernel.org>; Wed, 10 Jan 2024 03:31:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704886263; x=1705491063; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wRh+nUKMpdLNue0MHuy6m8etS3vu8V684tgPuioOlKw=;
-        b=eYhJXYR2QSJXxVL6jtKkX6CQJ6u+HCYxZaPjavG0m3dzYc+IdHdj6BnVq2fkbFLkKO
-         FZBHX4tzkv38uiBYkb0X9uU/e41+62j3bDuBb/VtkH3XhoLqn5+oN0ya90Gq+eRrqCND
-         MkspXX3sD6q9XPq/rKJdNAIrhfUwCuRezgiB8VICYF/frLO6Mo2EDREqDHYKJItd8hwv
-         EiCYcSQ59/n3C0v/IhnU7VFCVYbcAy7/AF+cfO5Xm0Hi9SS/kp1zZy5fDu1xBBRb14ca
-         sP2zKQyRSWyd/JJe4JD9+sF5vLT4Bj5UllPRsfFjKXrF9NhAqimKETVGWcEqqrmfJuKO
-         aTTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704886263; x=1705491063;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wRh+nUKMpdLNue0MHuy6m8etS3vu8V684tgPuioOlKw=;
-        b=FEMTTyHq/thxdw3LsPd7dQtUsL8qsvt7r64lGj8go4AIMapwH5ofVgWTi9e61AlRvt
-         loI5QBW2H6p7CjoLx83ZnSihOT3WcVfNNQ0pgksS8ejU6Iew6CvVUG7Ps2zcc7aYZkBn
-         erYQ5Zwulxfl3zZSH9xhf8FlYHM63Uy/MVVpoSupxHk/Ai+G7VnHApLmpVpo00t7L2my
-         XipZ166rTxTjUiQqvQnxgKI2jzxRybjGaulb1vYKlpzt7hDDha5TZ2tVUP6KLAoGx7LM
-         cAZwo7It21ayyGlluKa9SHjXBy+Y1XuWQrb1YwpacidiyywszkhSL2gFghfFIdYGi5h4
-         haoQ==
-X-Gm-Message-State: AOJu0Yw/Q55r+kzj1CXR8aQLzuCqaQWQ3gNL+UBePjW4x/ZVNjJPYYtL
-	LNq0ZMczwoshcCQGJeYBSEoja2jOJb77vJvfALJMGAeYrXM=
-X-Google-Smtp-Source: AGHT+IHVz4bPR6c2UQ/fwk2lHWrRKg1f6D7FFOpxc73UQlktR9YGkKJk8NeYvpAjCVGEU8v6b2lExA==
-X-Received: by 2002:ac2:5309:0:b0:50e:bc9b:154 with SMTP id c9-20020ac25309000000b0050ebc9b0154mr299490lfh.35.1704886263274;
-        Wed, 10 Jan 2024 03:31:03 -0800 (PST)
-Received: from localhost ([102.140.209.237])
-        by smtp.gmail.com with ESMTPSA id t21-20020a05600c451500b0040e3ac9f4c8sm1846379wmo.28.2024.01.10.03.31.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jan 2024 03:31:03 -0800 (PST)
-Date: Wed, 10 Jan 2024 14:31:00 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: mathias.nyman@linux.intel.com
-Cc: linux-usb@vger.kernel.org
-Subject: [bug report] xhci: add support to allocate several interrupters
-Message-ID: <ffaa0a1b-5984-4a1f-bfd3-9184630a97b9@moroto.mountain>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AA1A482F9
+	for <linux-usb@vger.kernel.org>; Wed, 10 Jan 2024 12:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704891252; x=1736427252;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=wTpoowwTvm1PyeCGdfgyrqzjvoVH1whfIwX9QlJen3Y=;
+  b=fEfY/Vyy+ygsgII2OYizVzdGUdLAQ7OJpUszz3AxMZR1oBJDDaXGCwU8
+   B3SPSZuilT8ZUQavqKajdqYObs/OBgPwxKPYglXSKbCaYYSx+UN9Kb2Qg
+   o7Gobl45QtWBSqYGKTEhSYMA8XvwMxwkd0prz0NrAuUAfAjfX6qIyGbmF
+   R8rRWuBu+Zx4E/x+KbAjsszVTHE2CLASgCmsKuNDfFYidwtEp/1LYT8Y+
+   lIA3/+VYrE4KmXhbz98nUsXYVPCe0GMsL7VvCwmBIPnSMqyNjLzRxXufx
+   sbZ20DNSMO/zKnIbcJ5GK9rAfUCP7taIMw4wJaXzZfmLR8UAzo973uVPW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10948"; a="5866277"
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="5866277"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 04:54:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10948"; a="731851828"
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="731851828"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga003.jf.intel.com with ESMTP; 10 Jan 2024 04:54:09 -0800
+Message-ID: <d79dce2c-c321-bdda-c8df-b7e781a0566f@linux.intel.com>
+Date: Wed, 10 Jan 2024 14:55:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: linux-usb@vger.kernel.org
+References: <ffaa0a1b-5984-4a1f-bfd3-9184630a97b9@moroto.mountain>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [bug report] xhci: add support to allocate several interrupters
+In-Reply-To: <ffaa0a1b-5984-4a1f-bfd3-9184630a97b9@moroto.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello Mathias Nyman,
+Hi
 
-The patch c99b38c41234: "xhci: add support to allocate several
-interrupters" from Jan 2, 2024 (linux-next), leads to the following
-Smatch static checker warning:
+On 10.1.2024 13.31, Dan Carpenter wrote:
+> Hello Mathias Nyman,
+> 
+> The patch c99b38c41234: "xhci: add support to allocate several
+> interrupters" from Jan 2, 2024 (linux-next), leads to the following
+> Smatch static checker warning:
+> 
+> 	drivers/usb/host/xhci-mem.c:1873 xhci_remove_secondary_interrupter()
+> 	error: we previously assumed 'ir' could be null (see line 1865)
+> 
+> drivers/usb/host/xhci-mem.c
+>      1863
+>      1864         /* interrupter 0 is primary interrupter, don't touch it */
+>      1865         if (!ir || !ir->intr_num || ir->intr_num >= xhci->max_interrupters)
+>      1866                 xhci_dbg(xhci, "Invalid secondary interrupter, can't remove\n");
+> 
+> This debug message is kind of pointless...  The Oops will have the stack
+> trace already.
 
-	drivers/usb/host/xhci-mem.c:1873 xhci_remove_secondary_interrupter()
-	error: we previously assumed 'ir' could be null (see line 1865)
+Ah, there's a return statement missing here.
 
-drivers/usb/host/xhci-mem.c
-    1863 
-    1864         /* interrupter 0 is primary interrupter, don't touch it */
-    1865         if (!ir || !ir->intr_num || ir->intr_num >= xhci->max_interrupters)
-    1866                 xhci_dbg(xhci, "Invalid secondary interrupter, can't remove\n");
+Thanks for the report
+Mathias
 
-This debug message is kind of pointless...  The Oops will have the stack
-trace already.
-
-    1867 
-    1868         /* fixme, should we check xhci->interrupter[intr_num] == ir */
-    1869         /* fixme locking */
-    1870 
-    1871         spin_lock_irq(&xhci->lock);
-    1872 
---> 1873         intr_num = ir->intr_num;
-                            ^^^^^^^^^^^^
-Unchecked dereference
-
-    1874 
-    1875         xhci_remove_interrupter(xhci, ir);
-    1876         xhci->interrupters[intr_num] = NULL;
-    1877 
-    1878         spin_unlock_irq(&xhci->lock);
-    1879 
-    1880         xhci_free_interrupter(xhci, ir);
-    1881 }
-
-regards,
-dan carpenter
 
