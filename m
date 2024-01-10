@@ -1,140 +1,133 @@
-Return-Path: <linux-usb+bounces-4909-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4910-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 786E1829637
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 10:22:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F32E18296AF
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 10:56:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2ADFB1F25A5B
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 09:22:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24F601C217A5
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 09:56:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE9F13E49C;
-	Wed, 10 Jan 2024 09:22:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A8523F8FA;
+	Wed, 10 Jan 2024 09:56:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RGYisLeb"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="RA0XWxP/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35ED3FB01;
-	Wed, 10 Jan 2024 09:22:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-50e741123acso4269273e87.0;
-        Wed, 10 Jan 2024 01:22:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704878557; x=1705483357; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y/cX7LhHOFu7/SWqzyr1HY0k2frn1F7ztP3n5/hwhKQ=;
-        b=RGYisLebyQz3WOWIzUsYSkjmKkur4dmqoRpqhpTz1Ew/0STsC3czr0BYkSvgra12MK
-         LBjtp8Z09Fa4lIhCqS4tY3cgCgxymoJmdatoiI37IbxMaERc88bG2X024v0yP6N1kbec
-         n1dUODz+zabjqQxzpC3hmfKdMlD/3/DRN87ro7qLWD5lzIP50SXlCQsfzN6MPz2fmFL9
-         qYPYx+7oQlDb6zSCPbVrlG9VUFdGqm56rWX1I5lyRB0wGn/A6/0iwawgczjFt7MTA+L2
-         M6j0mgsh4C9jKwaXh/rjFDCUjLA3ol3/z8c7VL6NP+whWFdjY8Q25nictZaKFuDZmRlv
-         VQng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704878557; x=1705483357;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y/cX7LhHOFu7/SWqzyr1HY0k2frn1F7ztP3n5/hwhKQ=;
-        b=Cm7OYIw8jPxhAp9TAXybxPIQ5pdRKBy6S+k2yrxIl55oW5q2CMcXcKmJxDHsUkXJJs
-         JpuAaZLEnDygfNF3E4INQbqN0mNZSSlxrSvDXgOs0KrIGIA2Pr0dhsA5dcSY62D08mwo
-         P0+xht6/CBGWyY/Or3YLkOlT4Cy9wW5zGjNErPQz8eS1LwTpufh9vD4VpuK75jzS3d/b
-         9ZpJAWCD8IUIP78zjEDfV7xyZLYai/wI47XiSFDmphsppR5qAtazUjpFYseB0LsCza24
-         yrd2SUXHSRPe/xXM0hA69C/GlJI98wcT5Ti71MJ/CmyZPHn2+yi+8g3xmlkz706RTqai
-         tWbA==
-X-Gm-Message-State: AOJu0YxrLfkubGGDrsB5gf2gMOh6jhyk1dsXVV5SMn/lR7GAARTjDUm5
-	CAAPtPf/BD01JAZmzcX3A/EtAkW/M2M=
-X-Google-Smtp-Source: AGHT+IG705GfnTGOKqaWb7fp2idlD7S4ghIOQnyTKmhk73jZ37PWMTPM+ZVnwFEa/YppiutnkSquyw==
-X-Received: by 2002:ac2:4e8d:0:b0:50e:ac2a:6b6d with SMTP id o13-20020ac24e8d000000b0050eac2a6b6dmr214375lfr.119.1704878557121;
-        Wed, 10 Jan 2024 01:22:37 -0800 (PST)
-Received: from [192.168.1.105] ([178.176.72.35])
-        by smtp.gmail.com with ESMTPSA id n7-20020a05651203e700b0050e84a3d75bsm605855lfq.254.2024.01.10.01.22.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jan 2024 01:22:36 -0800 (PST)
-Subject: Re: [PATCH v4] usb: core: Prevent null pointer dereference in
- update_port_device_state
-To: Udipto Goswami <quic_ugoswami@quicinc.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alan Stern <stern@rowland.harvard.edu>
-Cc: Krishna Kurapati <quic_kriskura@quicinc.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20240110091422.25347-1-quic_ugoswami@quicinc.com>
-From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <4e272d5d-ec19-7621-1346-4363b0070b1c@gmail.com>
-Date: Wed, 10 Jan 2024 12:22:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704AC3EA9E;
+	Wed, 10 Jan 2024 09:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40A8ctMN016855;
+	Wed, 10 Jan 2024 09:56:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=Js4kw6Z7/PgHtkYTNH23saebQTFsZ2uq7LYKYHCHAV4=; b=RA
+	0XWxP/ZGS7IEeihqTnztDTaR8XcfsYXzw0AhpYWZhlTwmNYEkX6j39VzCPyw3oBx
+	GAY8d+ZotwSeNSLywkVXACq+wTUgDX/DCxel1B9QZZQERGxeZB1L7idChP0t/lh1
+	1RHcbQGuPd9TUb5qPno0721ofmEyzOmuUkHV6nP61pvMfs3n6HCYOM3EXK3/zFGg
+	U0nQbvUCqHiPmlAolLQNq/ahoS1y+xdA66ysjerC55al4847GUfb7vjPkTIdtPZ1
+	tb7A+a2bdXC26bUEnDIJ11aSteQWtFhz7VO0xXffUuh4oQ/muDXBdj+ic3bw+LCI
+	p0F+lLmjEH5/P3ubCquw==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vhkem0p4p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Jan 2024 09:56:33 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40A9uWNk031376
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Jan 2024 09:56:32 GMT
+Received: from hu-uaggarwa-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 10 Jan 2024 01:56:29 -0800
+From: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        "Uttkarsh
+ Aggarwal" <quic_uaggarwa@quicinc.com>
+Subject: [RFC PATCH] usb: dwc3: gadget: Fix NULL pointer dereference in dwc3_gadget_suspend
+Date: Wed, 10 Jan 2024 15:25:32 +0530
+Message-ID: <20240110095532.4776-1-quic_uaggarwa@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240110091422.25347-1-quic_ugoswami@quicinc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: mbs42UuGAXrU9ZJOx4Rvp_0Hob1r80-a
+X-Proofpoint-GUID: mbs42UuGAXrU9ZJOx4Rvp_0Hob1r80-a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ mlxlogscore=471 impostorscore=0 phishscore=0 bulkscore=1 suspectscore=0
+ lowpriorityscore=1 spamscore=0 priorityscore=1501 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2401100081
 
-On 1/10/24 12:14 PM, Udipto Goswami wrote:
+In current scenario if Plug-out and Plug-In performed continuously
+there could be a chance while checking for dwc->gadget_driver in
+dwc3_gadget_suspend, a NULL pointer dereference may occur.
 
-> Currently,the function update_port_device_state gets the usb_hub from
+Call Stack:
 
-   Need space between comma and "the"...
+	CPU1:                           CPU2:
+	gadget_unbind_driver            dwc3_suspend_common
+	dw3_gadget_stop                 dwc3_gadget_suspend
+                                        dwc3_disconnect_gadget
 
-> udev->parent by calling usb_hub_to_struct_hub.
-> However, in case the actconfig or the maxchild is 0, the usb_hub would
-> be NULL and upon further accessing to get port_dev would result in null
-> pointer dereference.
-> 
-> Fix this by introducing an if check after the usb_hub is populated.
-> 
-> Fixes: 83cb2604f641 ("usb: core: add sysfs entry for usb device state")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-[...]
+CPU1 basically clears the variable and CPU2 checks the variable.
+Consider CPU1 is running and right before gadget_driver is cleared
+and in parallel CPU2 executes dwc3_gadget_suspend where it finds
+dwc->gadget_driver which is not NULL and resumes execution and then
+CPU1 completes execution. CPU2 executes dwc3_disconnect_gadget where
+it checks dwc->gadget_driver is already NULL because of which the
+NULL pointer deference occur.
 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index ffd7c99e24a3..5ba1875e6bf4 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2053,9 +2053,22 @@ static void update_port_device_state(struct usb_device *udev)
->  
->  	if (udev->parent) {
->  		hub = usb_hub_to_struct_hub(udev->parent);
-> -		port_dev = hub->ports[udev->portnum - 1];
-> -		WRITE_ONCE(port_dev->state, udev->state);
-> -		sysfs_notify_dirent(port_dev->state_kn);
-> +
-> +		/*
-> +		 * The Link Layer Validation System Driver (lvstest)
-> +		 * has step to unbind the hub before running the rest
-> +		 * of the procedure. This triggers hub_disconnect which
-> +		 * will set the hub's maxchild to 0, further resulting
+To prevent this, moving NULL pointer check inside of spin_lock.
 
-   Resulting in.
+Signed-off-by: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
+---
+ drivers/usb/dwc3/gadget.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-> +		 * usb_hub_to_struct_hub returning NULL.
-> +		 *
-> +		 * Add if check to avoid running into NULL pointer
-> +		 * de-reference.
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 019368f8e9c4..564976b3e2b9 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -4709,15 +4709,13 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
+ 	unsigned long flags;
+ 	int ret;
+ 
+-	if (!dwc->gadget_driver)
+-		return 0;
+-
+ 	ret = dwc3_gadget_soft_disconnect(dwc);
+ 	if (ret)
+ 		goto err;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-	dwc3_disconnect_gadget(dwc);
++	if (dwc->gadget_driver)
++		dwc3_disconnect_gadget(dwc);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+ 	return 0;
+-- 
+2.17.1
 
-   This is obvious from the code below, I think...
-
-> +		 */
-> +		if (hub) {
-> +			port_dev = hub->ports[udev->portnum - 1];
-> +			WRITE_ONCE(port_dev->state, udev->state);
-> +			sysfs_notify_dirent(port_dev->state_kn);
-> +		}
->  	}
->  }
->  
-
-MBR, Sergey
 
