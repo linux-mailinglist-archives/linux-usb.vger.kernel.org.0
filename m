@@ -1,140 +1,137 @@
-Return-Path: <linux-usb+bounces-4906-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4908-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D15388295DB
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 10:09:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCD57829604
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 10:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D1EC283FB4
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 09:09:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1000EB25B08
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 09:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD9383C493;
-	Wed, 10 Jan 2024 09:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3BD23EA7A;
+	Wed, 10 Jan 2024 09:14:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="niAPxXdT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094D03BB43;
-	Wed, 10 Jan 2024 09:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4299a70d0a7so14917521cf.3;
-        Wed, 10 Jan 2024 01:09:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704877745; x=1705482545;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v2Qk0JS/X/M+iSFJkteLpcJbyzGhmpZqpSZNg5QY+TE=;
-        b=MXQacc1/SeAtAhpQ6GZYl4WNkxHzGOuKesQTqOTq2D0wG13B9sCgP/EMI6216nr3zZ
-         ZSZas4PvdF55ML8/anUphpB6ZaWfSIY4h80PIF+6UutnNd+boHBuXsz/4q9Zu9p1FZxc
-         xWSptQcPLCBJDAqzP9SLatdKWTnwvxeip3GInn4c4JJFJ0nhVNdY/gxTcI6xPxI3g+ui
-         VGMbqTYwl4JKvXZsZ9xT7UE1ilAM1deda5wMWYVUYcz6P97iwS3v7d8aslxLK4lSg5wE
-         jMQTMp0pklRYeh2yLo/T3ntCf996cSQfTPDwYkOweF+xZ9CLRQhj51DgPkrPNCNxQWrt
-         8+ZA==
-X-Gm-Message-State: AOJu0Yx/i3HoCadj8e3xLNVXhxLBl0G7hvnNIgZAKCb9nDSkD7WUKiir
-	hKZQoi4Jep9GArltCKL4ekP2udPp/aBF3Ii6
-X-Google-Smtp-Source: AGHT+IEUsCKPkoPS/e8/7saFk4TAecb9vR4YBKqRPFns5V18kVBjAPaIMgszLlEUrW0ooK7L0pQYDA==
-X-Received: by 2002:ac8:4e49:0:b0:429:b266:c9a7 with SMTP id e9-20020ac84e49000000b00429b266c9a7mr1095985qtw.124.1704877745657;
-        Wed, 10 Jan 2024 01:09:05 -0800 (PST)
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com. [209.85.160.169])
-        by smtp.gmail.com with ESMTPSA id bv10-20020a05622a0a0a00b00429a0688f8fsm1615777qtb.68.2024.01.10.01.09.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jan 2024 01:09:05 -0800 (PST)
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-42989016014so23231471cf.0;
-        Wed, 10 Jan 2024 01:09:05 -0800 (PST)
-X-Received: by 2002:a81:9843:0:b0:5fa:7e0a:b133 with SMTP id
- p64-20020a819843000000b005fa7e0ab133mr127729ywg.79.1704877413506; Wed, 10 Jan
- 2024 01:03:33 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFE73D57E;
+	Wed, 10 Jan 2024 09:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40A8cYUm020369;
+	Wed, 10 Jan 2024 09:14:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=yAhA8Oceyu1djk0D/e5KpYlLpin5FLpfjCsMWaRJTFw=; b=ni
+	APxXdT8ExeUBnMttdN4GJMHaeL1ytoT8dE2Hil1QiyEFOsgWG6wfPu1HyOMV48sq
+	qLk9AV9SbDpVRCLRzzcY0U0JCCQc53/QSkHKTm7D/Xuz8XV21BCrYfnBiSB2Ja4Y
+	Z18IhdV4/buwRsFevYK7iyyxCqmFdqRvLiMuWko+/Dhwek9jrn4gwDkVahaagf4y
+	jhJy50CBSdi1BaUQEgW74TiGUCavPU2VjSaaN48SatDjT5oV5H3/aL4M4o06evGv
+	AWWeXa+O6OdNTG6CY/G8XZ5Zk9YbIJPx3VKv595xj8fMaaI0ByaGe4SvrczB+2is
+	uEVzC9534q4SZ+h2jQ0A==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vhjh2rq4y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Jan 2024 09:14:43 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40A9Eg0Z014725
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Jan 2024 09:14:42 GMT
+Received: from hu-ugoswami-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 10 Jan 2024 01:14:39 -0800
+From: Udipto Goswami <quic_ugoswami@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern
+	<stern@rowland.harvard.edu>
+CC: Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Sergei Shtylyov
+	<sergei.shtylyov@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>, Udipto Goswami
+	<quic_ugoswami@quicinc.com>
+Subject: [PATCH v4] usb: core: Prevent null pointer dereference in update_port_device_state
+Date: Wed, 10 Jan 2024 14:44:22 +0530
+Message-ID: <20240110091422.25347-1-quic_ugoswami@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231108125843.3806765-1-arnd@kernel.org> <20231108125843.3806765-9-arnd@kernel.org>
-In-Reply-To: <20231108125843.3806765-9-arnd@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 10 Jan 2024 10:03:20 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV8uFKntiMfwwmnFpd4Dcx8vJDwS6r1iBLtkh40N71dbw@mail.gmail.com>
-Message-ID: <CAMuHMdV8uFKntiMfwwmnFpd4Dcx8vJDwS6r1iBLtkh40N71dbw@mail.gmail.com>
-Subject: Re: [PATCH 08/22] [v2] arch: consolidate arch_irq_work_raise prototypes
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, 
-	Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Guo Ren <guoren@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Ard Biesheuvel <ardb@kernel.org>, 
-	Huacai Chen <chenhuacai@kernel.org>, Greg Ungerer <gerg@linux-m68k.org>, 
-	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Geoff Levand <geoff@infradead.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	x86@kernel.org, Helge Deller <deller@gmx.de>, 
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Timur Tabi <timur@kernel.org>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, David Woodhouse <dwmw2@infradead.org>, 
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, Kees Cook <keescook@chromium.org>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Al Viro <viro@zeniv.linux.org.uk>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
-	linux-csky@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
-	sparclinux@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-bcachefs@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	Palmer Dabbelt <palmer@rivosinc.com>, Alexander Gordeev <agordeev@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Z-F7FYVwYTcqWfTAMF69RFMQ-nVvd2_I
+X-Proofpoint-GUID: Z-F7FYVwYTcqWfTAMF69RFMQ-nVvd2_I
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=659 clxscore=1015 bulkscore=0 malwarescore=0 spamscore=0
+ phishscore=0 priorityscore=1501 adultscore=0 impostorscore=0
+ suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2401100075
 
-On Wed, Nov 8, 2023 at 2:01=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
-e:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The prototype was hidden in an #ifdef on x86, which causes a warning:
->
-> kernel/irq_work.c:72:13: error: no previous prototype for 'arch_irq_work_=
-raise' [-Werror=3Dmissing-prototypes]
+Currently,the function update_port_device_state gets the usb_hub from
+udev->parent by calling usb_hub_to_struct_hub.
+However, in case the actconfig or the maxchild is 0, the usb_hub would
+be NULL and upon further accessing to get port_dev would result in null
+pointer dereference.
 
-This issue is now present upstream.
+Fix this by introducing an if check after the usb_hub is populated.
 
-> Some architectures have a working prototype, while others don't.
-> Fix this by providing it in only one place that is always visible.
->
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Acked-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 83cb2604f641 ("usb: core: add sysfs entry for usb device state")
+Cc: stable@vger.kernel.org
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+---
+v4: Fixed minor mistakes in the comment.
+v3: Re-wrote the comment for better context.
+v2: Introduced comment for the if check & CC'ed stable.
 
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+ drivers/usb/core/hub.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-Gr{oetje,eeting}s,
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index ffd7c99e24a3..5ba1875e6bf4 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2053,9 +2053,22 @@ static void update_port_device_state(struct usb_device *udev)
+ 
+ 	if (udev->parent) {
+ 		hub = usb_hub_to_struct_hub(udev->parent);
+-		port_dev = hub->ports[udev->portnum - 1];
+-		WRITE_ONCE(port_dev->state, udev->state);
+-		sysfs_notify_dirent(port_dev->state_kn);
++
++		/*
++		 * The Link Layer Validation System Driver (lvstest)
++		 * has step to unbind the hub before running the rest
++		 * of the procedure. This triggers hub_disconnect which
++		 * will set the hub's maxchild to 0, further resulting
++		 * usb_hub_to_struct_hub returning NULL.
++		 *
++		 * Add if check to avoid running into NULL pointer
++		 * de-reference.
++		 */
++		if (hub) {
++			port_dev = hub->ports[udev->portnum - 1];
++			WRITE_ONCE(port_dev->state, udev->state);
++			sysfs_notify_dirent(port_dev->state_kn);
++		}
+ 	}
+ }
+ 
+-- 
+2.17.1
 
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
