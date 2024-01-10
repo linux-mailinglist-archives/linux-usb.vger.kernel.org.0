@@ -1,96 +1,113 @@
-Return-Path: <linux-usb+bounces-4924-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4925-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 586AE829DBE
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 16:40:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 824D082A09B
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 20:00:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7B7BB26E0C
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 15:40:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1283FB26200
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 19:00:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92B7D4C615;
-	Wed, 10 Jan 2024 15:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461EC4D5A5;
+	Wed, 10 Jan 2024 19:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g7nruqNC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 2249E4C3C2
-	for <linux-usb@vger.kernel.org>; Wed, 10 Jan 2024 15:39:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 568340 invoked by uid 1000); 10 Jan 2024 10:39:13 -0500
-Date: Wed, 10 Jan 2024 10:39:13 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Udipto Goswami <quic_ugoswami@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-  Krishna Kurapati <quic_kriskura@quicinc.com>,
-  Sergei Shtylyov <sergei.shtylyov@gmail.com>, linux-usb@vger.kernel.org,
-  linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v5] usb: core: Prevent null pointer dereference in
- update_port_device_state
-Message-ID: <20abaa31-9558-4a56-9d34-4407f175cada@rowland.harvard.edu>
-References: <20240110095814.7626-1-quic_ugoswami@quicinc.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE0541A86;
+	Wed, 10 Jan 2024 19:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00D23C433C7;
+	Wed, 10 Jan 2024 19:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704913223;
+	bh=anQjN0x5VGSmfBB0IWVmK180LXiah3BHUEKoVRwvMfU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=g7nruqNCyn9ZKeYSfPvatg0/J1OWuB4JotRQaKHaT10ErQ7jrPOI49GWFBGSsbQ64
+	 BeS4c3+jbHThShUvF9lgxUHUeALGsva7PreghaB+sm8XNtEooft9RkftmJ87mHQmJU
+	 9GSpum7hONtjDF0m76Y7Dq0scplmp2YQfeSeaoUtRwv1P5dR4XW+CsKxngXbkUupQt
+	 ek4NsbVmanVKVH0848odvsmlRcNuppnYotEatmdrBHQfev9eDLPWgru3WleTTV/LkZ
+	 /SEaL2+Q2AfyJJDioF5DfZoB5Nrm+7HsjyQdoFTQaoQn98u80LYUNWnPuFZM8Rllwo
+	 3J3gf5+U77b1Q==
+Date: Wed, 10 Jan 2024 13:00:21 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Alex Williamson <alex.williamson@redhat.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Sanath S <Sanath.S@amd.com>, shyam-sundar.s-k@amd.com,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [bugzilla-daemon@kernel.org: =?utf-8?Q?=5B?=
+ =?utf-8?Q?Bug_218360=5D_New=3A_Disk_drive_of_TBT3=2FUSB4_storage_device_c?=
+ =?utf-8?Q?an=E2=80=99t_show_up_i?= =?utf-8?Q?f?= connecting behind TBT3 dock
+ or some USB4 docks DFP TBT port]
+Message-ID: <20240110190021.GA2113949@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240110095814.7626-1-quic_ugoswami@quicinc.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 10, 2024 at 03:28:14PM +0530, Udipto Goswami wrote:
-> Currently, the function update_port_device_state gets the usb_hub from
-> udev->parent by calling usb_hub_to_struct_hub.
-> However, in case the actconfig or the maxchild is 0, the usb_hub would
-> be NULL and upon further accessing to get port_dev would result in null
-> pointer dereference.
-> 
-> Fix this by introducing an if check after the usb_hub is populated.
-> 
-> Fixes: 83cb2604f641 ("usb: core: add sysfs entry for usb device state")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
-> ---
-> v5: Addressed nit picks in commit and the comment.
-> v4: Fixed minor mistakes in the comment.
-> v3: Re-wrote the comment for better context.
-> v2: Introduced comment for the if check & CC'ed stable.
+#regzbot introduced: d3fcd7360338 ("PCI: Fix runtime PM race with PME polling")
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+Sanath, thank you very much for this report and the bisection!
 
->  drivers/usb/core/hub.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index ffd7c99e24a3..48409d51ea43 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2053,9 +2053,19 @@ static void update_port_device_state(struct usb_device *udev)
->  
->  	if (udev->parent) {
->  		hub = usb_hub_to_struct_hub(udev->parent);
-> -		port_dev = hub->ports[udev->portnum - 1];
-> -		WRITE_ONCE(port_dev->state, udev->state);
-> -		sysfs_notify_dirent(port_dev->state_kn);
-> +
-> +		/*
-> +		 * The Link Layer Validation System Driver (lvstest)
-> +		 * has a test step to unbind the hub before running the
-> +		 * rest of the procedure. This triggers hub_disconnect
-> +		 * which will set the hub's maxchild to 0, further
-> +		 * resulting in usb_hub_to_struct_hub returning NULL.
-> +		 */
-> +		if (hub) {
-> +			port_dev = hub->ports[udev->portnum - 1];
-> +			WRITE_ONCE(port_dev->state, udev->state);
-> +			sysfs_notify_dirent(port_dev->state_kn);
-> +		}
->  	}
->  }
->  
-> -- 
-> 2.17.1
-> 
+I assume this happens on hot-adds, i.e., you boot the kernel, then
+connect a USB4 dock, then connect the TBT3/USB4 storage device to the
+dock?
+
+Would you be able to attach the complete dmesgs log from working and
+failing kernels?  The ideal would be from d3fcd7360338 ("PCI: Fix
+runtime PM race with PME polling"), which fails, and 5cd903bce9dd
+("PCI/VPD: Add runtime power management to sysfs interface"), which
+presumably works.  But v6.7 and v6.5 is OK too.
+
+Also the output of "sudo lspci -vv", which I assume doesn't depend on
+which kernel you're running.
+
+Bjorn
+
+----- Forwarded message from bugzilla-daemon@kernel.org -----
+
+Date: Wed, 10 Jan 2024 10:52:40 +0000
+From: bugzilla-daemon@kernel.org
+To: bjorn@helgaas.com
+Subject: [Bug 218360] New: Disk drive of TBT3/USB4 storage device can’t show up if connecting behind TBT3 dock
+	or some USB4 docks DFP TBT port
+Message-ID: <bug-218360-41252@https.bugzilla.kernel.org/>
+
+https://bugzilla.kernel.org/show_bug.cgi?id=218360
+
+            Bug ID: 218360
+           Summary: Disk drive of TBT3/USB4 storage device can’t show up
+                    if connecting behind TBT3 dock or some USB4 docks DFP
+                    TBT port
+          Reporter: Sanath.S@amd.com
+
+The disk drive of the TBT3/USB4 storage device can’t show up behind TBT3 dock
+and some USB4 docks have a DFP TBT port.
+
+TBT3/USB4 storage device can be authorized, the disk drive doesn’t show up.
+
+Issue reproduce sequence: Connect USB4 dock to host → Connect TBT3/USB4 storage
+device to dock DFP TBT3 port → TBT3/USB4 storage device disk driver can’t show
+up.
+
+The issue was observed in the latest mainline kernel 6.7.
+
+
+Failing on all the below combination
+
+HP Thunderbolt Dock 120W G2 HSN-IX01    
+HP Hook 2.0 USB4/TBT4 Dock (PV Phase)   
+CalDigit TS3Plus+ Thunderbolt Station 3 Plus    
+Dell Thunderbolt Dock – WD19TB
 
