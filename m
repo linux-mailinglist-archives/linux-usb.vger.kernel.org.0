@@ -1,98 +1,103 @@
-Return-Path: <linux-usb+bounces-4928-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4929-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2670E82A25B
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 21:36:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A2D282A266
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 21:38:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0CF7B26071
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 20:36:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A9551F235F7
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 20:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0789C4EB56;
-	Wed, 10 Jan 2024 20:36:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B4954F5F8;
+	Wed, 10 Jan 2024 20:38:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="KkKoyZuV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WZ4qXoCT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED15E4F1E0;
-	Wed, 10 Jan 2024 20:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=hm+GOWLWZMlQYiUykVPkXxcZsaeHx3xTaM9h8zPhfMw=; b=KkKoyZuVd8JKHa4QJxJwkcS1Cd
-	D91R5tFWaNIAGiKYHzg+9pVyjQVzgJCabMfF8DCgfXbKu+/N8XHWp/4NW4jZVObdlqF4i2c3ql/ux
-	p47R6bEUjYDJRDmCThWASEIJki0SDf1h2jswBDHHBqwli352TajDPYHZESc8Avymv0lR915IehkMB
-	b5HYXqmFgn8MIizRPfuMpfz4y7q87nSGTxThWYLQUXGSuW3O381uGBIDAEApeBAKu9B1kGvQtGdM3
-	t3aDcmfpEuQdVNiGTLlKEB6y5FXn/WYELDOOSYA4M0m6OtaE43WAC5ZeqU2IvaVHyK86iiYBioPJq
-	na9jppQg==;
-Received: from [50.53.46.231] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rNfIt-00E13W-1W;
-	Wed, 10 Jan 2024 20:35:59 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Krishna Kurapati <quic_kriskura@quicinc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org
-Subject: [PATCH] usb: gadget: fix max_segment_size malformed table
-Date: Wed, 10 Jan 2024 12:35:58 -0800
-Message-ID: <20240110203558.2638-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517094EB42;
+	Wed, 10 Jan 2024 20:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2cd61dd39d9so32075991fa.2;
+        Wed, 10 Jan 2024 12:38:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704919095; x=1705523895; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4HijGEv5O6Rg6COZBqqJMkL7r/71WgbM9Y/yBBvUJU8=;
+        b=WZ4qXoCTSMrTi2FYnRaLg0SPuQh7/iQcnv6W4xMLTJfu24xAx66Qmxr+T81QzEbXiD
+         F/etByaa0GYQ9S5jctz0wVqGdNgufksgX9/lWPi51GwYCiVsvODjlCXl2cuDvE5tCWkW
+         +U+pfE/QYiQ8P4Xecd655X7+Ibwx9z2mujbAQk34+cLQp6ljzwrhOm2aohu/+c1D5i+I
+         9eXcGwzCTjY498tR25HXEzk6gC3zBaywnNYUtqkQ8zgNfOWlAxr/tFZ8Mm9vQbblgiHK
+         tiGu16Ezt8pHqYP5S8dysfIUZNx/oAdoQ2ZQpG0yFwkgUkdSg7UMLmJ+fR+SVTppJGmE
+         Cm3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704919095; x=1705523895;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4HijGEv5O6Rg6COZBqqJMkL7r/71WgbM9Y/yBBvUJU8=;
+        b=Yt6j0DbIsnfre9NvYzuUX9Re+Svi9GHzeHPRWErURJoCpyq3ntOodZLJtw4wfaYt9E
+         LTuw37y+2iLauKXX1mrqKAKe4/Y2v7/6rYpghDB43ZfmyTU2JoBUK00WtjCGm/Cw5gtW
+         ANrTz7XdbIz68HatrRoQaA9M9w/dmtGaPFoLlM5vtGoMVfaTPByQQ8uN3AZquTPGgt9a
+         WUcKROAG2sIjocH5InCqIS6yguJqcio1ASbXPgtTf9VNS4PNXQVcVcJ82ATkiYdTOsjh
+         fx0VTFVgUyNTbfD+2QUOQ6kO0A7Uc1aTbtUegNuNHZyqK4hRgERTpnUw0ZDDZxlRZ2MR
+         50ig==
+X-Gm-Message-State: AOJu0Yw7Wj4h+TmE/HxjWLHI+2UeHUzOYR3EIpBZPmpKeSlQitaxHH+L
+	bmJrD6nxTdF1PQu6/MMJxYdQNBsMKMw=
+X-Google-Smtp-Source: AGHT+IHUWOD6ZPZPWP5+JAG0s2SVFqjmxfdVjr9dNMtbi5+wOshQEQs92Ns0pcr9h0LXrqQsoQHfyw==
+X-Received: by 2002:a2e:9898:0:b0:2cd:5530:2505 with SMTP id b24-20020a2e9898000000b002cd55302505mr75209ljj.28.1704919094726;
+        Wed, 10 Jan 2024 12:38:14 -0800 (PST)
+Received: from [192.168.1.105] ([178.176.75.65])
+        by smtp.gmail.com with ESMTPSA id t21-20020a2e9555000000b002ccc6f06e2dsm865183ljh.128.2024.01.10.12.38.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Jan 2024 12:38:14 -0800 (PST)
+Subject: Re: [PATCH] usb: gadget: fix max_segment_size malformed table
+To: Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc: Krishna Kurapati <quic_kriskura@quicinc.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+References: <20240110203558.2638-1-rdunlap@infradead.org>
+From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <9b22d817-c0d9-4e85-cda7-7843907a70a1@gmail.com>
+Date: Wed, 10 Jan 2024 23:38:12 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240110203558.2638-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-Sphinx reports a malformed table due to the table begin/end line
-segments being too short for the word "max_segment_size", so
-extend them by one more '=' character to prevent to error.
+On 1/10/24 11:35 PM, Randy Dunlap wrote:
 
-Documentation/usb/gadget-testing.rst:459: ERROR: Malformed table.
-Text in column margin in table line 9.
+> Sphinx reports a malformed table due to the table begin/end line
+> segments being too short for the word "max_segment_size", so
+> extend them by one more '=' character to prevent to error.
 
-Fixes: 1900daeefd3e ("usb: gadget: ncm: Add support to update wMaxSegmentSize via configfs")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
----
- Documentation/usb/gadget-testing.rst |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+   s/to error/the error/?
 
-diff -- a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
---- a/Documentation/usb/gadget-testing.rst
-+++ b/Documentation/usb/gadget-testing.rst
-@@ -448,7 +448,7 @@ Function-specific configfs interface
- The function name to use when creating the function directory is "ncm".
- The NCM function provides these attributes in its function directory:
- 
--	===============   ==================================================
-+	================  ==================================================
- 	ifname		  network device interface name associated with this
- 			  function instance
- 	qmult		  queue length multiplier for high and super speed
-@@ -458,7 +458,7 @@ The NCM function provides these attribut
- 			  Ethernet over USB link
- 	max_segment_size  Segment size required for P2P connections. This
- 			  will set MTU to (max_segment_size - 14 bytes)
--	===============   ==================================================
-+	================  ==================================================
- 
- and after creating the functions/ncm.<instance name> they contain default
- values: qmult is 5, dev_addr and host_addr are randomly selected.
+> Documentation/usb/gadget-testing.rst:459: ERROR: Malformed table.
+> Text in column margin in table line 9.
+> 
+> Fixes: 1900daeefd3e ("usb: gadget: ncm: Add support to update wMaxSegmentSize via configfs")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+[...]
+
+MBR, Sergey
 
