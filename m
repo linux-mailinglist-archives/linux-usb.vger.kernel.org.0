@@ -1,133 +1,143 @@
-Return-Path: <linux-usb+bounces-4910-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4911-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F32E18296AF
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 10:56:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 269938296BD
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 10:58:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24F601C217A5
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 09:56:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6B78285E88
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jan 2024 09:58:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A8523F8FA;
-	Wed, 10 Jan 2024 09:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94D7B3FB1F;
+	Wed, 10 Jan 2024 09:57:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="RA0XWxP/"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="gwSvrbps"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704AC3EA9E;
-	Wed, 10 Jan 2024 09:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF42A3F8FF;
+	Wed, 10 Jan 2024 09:57:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40A8ctMN016855;
-	Wed, 10 Jan 2024 09:56:34 GMT
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40A9kKas018787;
+	Wed, 10 Jan 2024 09:57:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type; s=
-	qcppdkim1; bh=Js4kw6Z7/PgHtkYTNH23saebQTFsZ2uq7LYKYHCHAV4=; b=RA
-	0XWxP/ZGS7IEeihqTnztDTaR8XcfsYXzw0AhpYWZhlTwmNYEkX6j39VzCPyw3oBx
-	GAY8d+ZotwSeNSLywkVXACq+wTUgDX/DCxel1B9QZZQERGxeZB1L7idChP0t/lh1
-	1RHcbQGuPd9TUb5qPno0721ofmEyzOmuUkHV6nP61pvMfs3n6HCYOM3EXK3/zFGg
-	U0nQbvUCqHiPmlAolLQNq/ahoS1y+xdA66ysjerC55al4847GUfb7vjPkTIdtPZ1
-	tb7A+a2bdXC26bUEnDIJ11aSteQWtFhz7VO0xXffUuh4oQ/muDXBdj+ic3bw+LCI
-	p0F+lLmjEH5/P3ubCquw==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vhkem0p4p-1
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=tsVnBji+CX6UauGvaGmTOaJaiIeGC7M8aqQ1BW98I7w=; b=gw
+	SvrbpsKk55/zJT4EPjitawV0cNpu4NCERuTjIABtRfrLrOzT1Y5ZqMG4xwN3Fa80
+	rNWbJHH1y7B63ZE1Qz9chBijNsiU7s0qvLLtmZCeD+N6II7coGEW4IRUdXeM3tB0
+	s4ylmf/oMoTRac0+8bB67vzVegEN1LEi8L5baaYusBTdawqlj7yleD6BwVKZHwhm
+	cW//lAdiDm1nw54cIOdoukaY9iH9wLCEZL7Snd0h5j0O0bbc3tlO2EeqDuyfEm0T
+	hpDtgqlPwwVLp+TG01HiAXpzEVy3F1OPcRv7u6lJEdvSHS6EHoAuOBgwW+q7p0iM
+	aZvKrHsE5vERQd6eW01Q==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vhq2h086y-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jan 2024 09:56:33 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40A9uWNk031376
+	Wed, 10 Jan 2024 09:57:51 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40A9voiW003332
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jan 2024 09:56:32 GMT
-Received: from hu-uaggarwa-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Wed, 10 Jan 2024 01:56:29 -0800
-From: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        "Uttkarsh
- Aggarwal" <quic_uaggarwa@quicinc.com>
-Subject: [RFC PATCH] usb: dwc3: gadget: Fix NULL pointer dereference in dwc3_gadget_suspend
-Date: Wed, 10 Jan 2024 15:25:32 +0530
-Message-ID: <20240110095532.4776-1-quic_uaggarwa@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	Wed, 10 Jan 2024 09:57:50 GMT
+Received: from [10.217.219.221] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 10 Jan
+ 2024 01:57:47 -0800
+Message-ID: <556f3d87-1a38-423a-82c0-c7471b232e43@quicinc.com>
+Date: Wed, 10 Jan 2024 15:27:45 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] usb: core: Prevent null pointer dereference in
+ update_port_device_state
+Content-Language: en-US
+To: Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC: Krishna Kurapati <quic_kriskura@quicinc.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+References: <20240110091422.25347-1-quic_ugoswami@quicinc.com>
+ <4e272d5d-ec19-7621-1346-4363b0070b1c@gmail.com>
+From: Udipto Goswami <quic_ugoswami@quicinc.com>
+In-Reply-To: <4e272d5d-ec19-7621-1346-4363b0070b1c@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: mbs42UuGAXrU9ZJOx4Rvp_0Hob1r80-a
-X-Proofpoint-GUID: mbs42UuGAXrU9ZJOx4Rvp_0Hob1r80-a
+X-Proofpoint-GUID: ngUbGCKc8h2k2BZeLif8b7s_wTo8zi-5
+X-Proofpoint-ORIG-GUID: ngUbGCKc8h2k2BZeLif8b7s_wTo8zi-5
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- mlxlogscore=471 impostorscore=0 phishscore=0 bulkscore=1 suspectscore=0
- lowpriorityscore=1 spamscore=0 priorityscore=1501 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ spamscore=0 bulkscore=0 clxscore=1015 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ mlxlogscore=604 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2311290000 definitions=main-2401100081
 
-In current scenario if Plug-out and Plug-In performed continuously
-there could be a chance while checking for dwc->gadget_driver in
-dwc3_gadget_suspend, a NULL pointer dereference may occur.
 
-Call Stack:
 
-	CPU1:                           CPU2:
-	gadget_unbind_driver            dwc3_suspend_common
-	dw3_gadget_stop                 dwc3_gadget_suspend
-                                        dwc3_disconnect_gadget
+On 1/10/2024 2:52 PM, Sergei Shtylyov wrote:
+> On 1/10/24 12:14 PM, Udipto Goswami wrote:
+> 
+>> Currently,the function update_port_device_state gets the usb_hub from
+> 
+>     Need space between comma and "the"...
+got it.
+> 
+>> udev->parent by calling usb_hub_to_struct_hub.
+>> However, in case the actconfig or the maxchild is 0, the usb_hub would
+>> be NULL and upon further accessing to get port_dev would result in null
+>> pointer dereference.
+>>
+>> Fix this by introducing an if check after the usb_hub is populated.
+>>
+>> Fixes: 83cb2604f641 ("usb: core: add sysfs entry for usb device state")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> [...]
+> 
+>> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+>> index ffd7c99e24a3..5ba1875e6bf4 100644
+>> --- a/drivers/usb/core/hub.c
+>> +++ b/drivers/usb/core/hub.c
+>> @@ -2053,9 +2053,22 @@ static void update_port_device_state(struct usb_device *udev)
+>>   
+>>   	if (udev->parent) {
+>>   		hub = usb_hub_to_struct_hub(udev->parent);
+>> -		port_dev = hub->ports[udev->portnum - 1];
+>> -		WRITE_ONCE(port_dev->state, udev->state);
+>> -		sysfs_notify_dirent(port_dev->state_kn);
+>> +
+>> +		/*
+>> +		 * The Link Layer Validation System Driver (lvstest)
+>> +		 * has step to unbind the hub before running the rest
+>> +		 * of the procedure. This triggers hub_disconnect which
+>> +		 * will set the hub's maxchild to 0, further resulting
+> 
+>     Resulting in.
 
-CPU1 basically clears the variable and CPU2 checks the variable.
-Consider CPU1 is running and right before gadget_driver is cleared
-and in parallel CPU2 executes dwc3_gadget_suspend where it finds
-dwc->gadget_driver which is not NULL and resumes execution and then
-CPU1 completes execution. CPU2 executes dwc3_disconnect_gadget where
-it checks dwc->gadget_driver is already NULL because of which the
-NULL pointer deference occur.
+got it.
+> 
+>> +		 * usb_hub_to_struct_hub returning NULL.
+>> +		 *
+>> +		 * Add if check to avoid running into NULL pointer
+>> +		 * de-reference.
+> 
+>     This is obvious from the code below, I think...
+ok will remove this.
 
-To prevent this, moving NULL pointer check inside of spin_lock.
-
-Signed-off-by: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
----
- drivers/usb/dwc3/gadget.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 019368f8e9c4..564976b3e2b9 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4709,15 +4709,13 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
- 	unsigned long flags;
- 	int ret;
- 
--	if (!dwc->gadget_driver)
--		return 0;
--
- 	ret = dwc3_gadget_soft_disconnect(dwc);
- 	if (ret)
- 		goto err;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
--	dwc3_disconnect_gadget(dwc);
-+	if (dwc->gadget_driver)
-+		dwc3_disconnect_gadget(dwc);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
- 	return 0;
--- 
-2.17.1
-
+Thanks,
+-Udipto
 
