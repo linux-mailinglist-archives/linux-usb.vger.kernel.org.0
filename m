@@ -1,185 +1,87 @@
-Return-Path: <linux-usb+bounces-4941-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4942-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D55882B28C
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jan 2024 17:13:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 536AF82B44A
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jan 2024 18:43:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D64F81F251D1
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jan 2024 16:13:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E27281F21711
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jan 2024 17:43:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E718D4F61D;
-	Thu, 11 Jan 2024 16:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF5C6524D7;
+	Thu, 11 Jan 2024 17:43:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="it02bfF6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pyva8T6u"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8A750252
-	for <linux-usb@vger.kernel.org>; Thu, 11 Jan 2024 16:13:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=1SObebIyACm5jNfggE55WNcE1OLcbTp+MGaaz8I7U5w=; b=it02bfF6vvVOOvZ5NXCchfoNNk
-	3h7rXty8DrtHXzvgn6PoNOFTMFTNPh5d1gFCqoZyj5s/ZgAkhjl2CTW4IfK8QNe0l60PfmFOlHsRE
-	ua32gbWAsP9o8auFySgabjXmj2kUeH0BSZJEndo2Jcer+KVUdC0ixRtxceZZd3S9z5MY3GXpkS4Iy
-	zcIr5uDP4+R4rduYUaiaxTg0ZuDzZB1MmFE+G0aj7d+94utys2EdQfB56uP5lPxXDN+hCBc2lrjDz
-	N9GU4RnVqwID2l0/tz0cVaIYknSoEGOCFIPu+K9MBH/wpVtpGhwDsQOnswMlggo3Fm4z/u9/RNeqc
-	gZ0a0exQ==;
-Received: from [179.232.147.2] (helo=[192.168.0.5])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1rNxgS-005S7h-0W; Thu, 11 Jan 2024 17:13:32 +0100
-Message-ID: <849d11d9-9302-4d76-01b6-b5046f474fda@igalia.com>
-Date: Thu, 11 Jan 2024 13:13:24 -0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCCC524CE
+	for <linux-usb@vger.kernel.org>; Thu, 11 Jan 2024 17:43:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CE045C43390
+	for <linux-usb@vger.kernel.org>; Thu, 11 Jan 2024 17:43:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704995002;
+	bh=4hzpbs7Yj8kOAYhqkQkXJGoacgXxDzK74oiyIKnN3lM=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Pyva8T6uFiYA9MTUcHwyhY5E1mQJKVHONefw7PlLEuvlDvhOJ5Vj///lVO/kXw5zf
+	 Q2EVrhBCrYbGQ8AZA93OsOZRLvAZcdRQbqEcmb390GDQHxGj4TbW0f/jUmsgfAPZ/n
+	 EUbMcJcTmmnBxjnD9f/tO14vIVTxm8DKFAbgBIlLJzDgzqMIV7b+yyjhkz9VmUkeLp
+	 lLN3TMIun8YS5eODtEcimUm3jLFXFLnNT+gmoL5G9V13Qx4FdvahQ7yXf4mZfiuLbx
+	 yg6Pj93WI6AG0uKPkjhM+y9nHO6YOqHhp3q4ksEmaUKCFsF+8DFq8vGuvcW2OrlFzU
+	 g1aQ7guLbNSmQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id B6995C4332E; Thu, 11 Jan 2024 17:43:22 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 208177] Lenovo ThinkPad P52 USB connectivity issues
+Date: Thu, 11 Jan 2024 17:43:22 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: nvaert1986@hotmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: OBSOLETE
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-208177-208809-0ZD1koOYjI@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208177-208809@https.bugzilla.kernel.org/>
+References: <bug-208177-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] usb: dwc3: Fix spurious wakeup when port is on device
- mode
-Content-Language: en-US
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "balbi@kernel.org" <balbi@kernel.org>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "johan@kernel.org" <johan@kernel.org>,
- "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
- "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
- "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
- Andrey Smirnov <andrew.smirnov@gmail.com>,
- Vivek Dasmohapatra <vivek@collabora.com>,
- "piyush.mehta@amd.com" <piyush.mehta@amd.com>,
- "ray.huang@amd.com" <ray.huang@amd.com>
-References: <20231122165931.443845-1-gpiccoli@igalia.com>
- <2dfbf5c9-dd38-c919-c604-618ad08ce456@igalia.com>
- <20231205012336.mn7b7f4zypwcyv6w@synopsys.com>
- <9efaed91-d246-cf3c-efc0-e866f88a943d@igalia.com>
- <d85a5507-4d4a-9e60-fbd1-68b42afb2143@igalia.com>
- <20240111020119.5u3k3csn3bi2zhtw@synopsys.com>
-From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20240111020119.5u3k3csn3bi2zhtw@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-Hi Thinh, thanks for your response! My comments are inline below:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D208177
 
+nvaert1986 (nvaert1986@hotmail.com) changed:
 
-On 10/01/2024 23:01, Thinh Nguyen wrote:
-> [...]
-> 
-> I assume there was a role switch negotiation to switch to device mode
-> successfully here before the next step?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |OBSOLETE
 
-Yes, exactly. We have an out-of-tree driver that reads the port state
-through some ACPI message to switch modes, but to be 100% clear:
+--- Comment #1 from nvaert1986 (nvaert1986@hotmail.com) ---
+Resolved in a recent kernel.
 
-**This OOT driver was factored out for our tests** - in other words: all
-tests made were done by manually changing the port mode (via debugfs)
-and waiting some seconds for that to settle. This OOT driver is not even
-compiled for recent kernels (it runs in a downstream 6.1 kernel).
+--=20
+You may reply to this email to add a comment.
 
-
->>> 3b) if PCIe PME is not using MSIs, Deck suspends and right after (less
->>> than a second), wakes up properly.
->>>
-> 
-> Your platform is DRD right? If that's the case, then it should be using
-> level interrupt. It should not support MSI unless it's host mode only.
->
-
-Yes, DRD indeed - but it's the **PCI PME interrupt**  that uses MSI, not
-the USB PCI device. Here is an output of lspci:
-
-$ lspci -vknns 04:00.3
-04:00.3 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD]
-VanGogh USB0 [1022:163a] (prog-if fe [USB Device])
-        Subsystem: Valve Software VanGogh USB0 [1e44:1776]
-        Flags: bus master, fast devsel, latency 0, IRQ 26
-        Memory at 80000000 (64-bit, non-prefetchable) [size=1M]
-        Capabilities: [48] Vendor Specific Information: Len=08 <?>
-        Capabilities: [50] Power Management version 3
-        Capabilities: [64] Express Endpoint, MSI 00
-        Capabilities: [a0] MSI: Enable- Count=1/8 Maskable- 64bit+
-        Capabilities: [c0] MSI-X: Enable- Count=8 Masked-
-        Capabilities: [100] Vendor Specific Information: ID=0001 Rev=1
-Len=010 <?>
-        Kernel driver in use: dwc3-pci
-        Kernel modules: dwc3_pci
-
-Now, I **guess** this is expected, but there is a difference in
-/proc/interrupt between device and host mode:
-
-$ grep 26: /proc/interrupts | tr -s \  # device mode
-[empty]
-
-$ grep 26: /proc/interrupts | tr -s \  # host mode
- 26: 0 0 0 0 0 0 0 0 IO-APIC 25-fasteoi xhci-hcd:usb3
-
-
->>> [...] An example: a keyboard or a disk
->>> connected when the USB port is on device mode doesn't reproduce. Also, I
->>> think I didn't test "in USB3 speed" - could you detail more, not sure if
->>> I understood that properly.
-> 
-> I mean to ask whether this test was done while operating in SuperSpeed
-> or SuperSpeed Plus.
-
-Well, I'm not sure if I know how to answer that heh
-Checking "lsusb --tree" in host mode gives me:
-
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 10000M
-/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci-hcd/1p, 480M
-
-When I switch to device mode, there is no output (and I think this is
-expected, right?). Or...the question was about the USB port in my
-laptop, the one I'm connecting on the Deck?
-
-Apologies for my hard time understanding this one...
-
-
->>>> [...] 
->>> "Did you check if the driver handled wakeup from PME and properly
->>> restore the controller?" <- I think I didn't - how do you suggest me to
->>> check that?
-> 
-> If it's in device mode, and you mentioned PME, that means that the
-> device was in hibernation. I assume that you're not using the mainline
-> dwc3 driver if Steam Deck supports hibernation and was in hibernation
-> before the connection. Otherwise, PME should not be generated. If it
-> does, something is broken and requires a workaround (as the one you
-> have).
-
-There was no hibernation (S4 state) involved, just to clarify - it's a
-mem_sleep /suspend to RAM operation, usually called deep sleep / S3. And
-indeed, the PME seems to be generated and prevents the mem_sleep (or it
-does sleep but instantly wakes-up, which is the case with level interrupts).
-
-I'll check both Steam Deck models (LCD and OLED) to see if both can be
-quirked in the same way and provide then a simple patch doing that for
-review, makes sense?
-
-
-> [...] 
-> Sorry for the delay response. Just got back from break.
-
-No need for apologies at all, thanks a bunch for your comprehensive
-response!
-
-Cheers,
-
-
-Guilherme
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
