@@ -1,114 +1,94 @@
-Return-Path: <linux-usb+bounces-4966-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4967-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB57582C42B
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jan 2024 18:04:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CED6882C525
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jan 2024 19:01:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78F302820C3
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jan 2024 17:04:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D03211C22448
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jan 2024 18:01:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ADED17540;
-	Fri, 12 Jan 2024 17:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0D7417C9A;
+	Fri, 12 Jan 2024 18:01:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AjSL5aKb"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FqgIM4zD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9542E1B585;
-	Fri, 12 Jan 2024 17:04:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62DAAC433C7;
-	Fri, 12 Jan 2024 17:04:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705079059;
-	bh=1iKtOHGK5dbeKaVrIFz5lHMuGkeVlaDW9VTBqF628Mc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AjSL5aKbZ34Pzcb5zxFRhJmQRALsnxiMOMjoy1Ge3UcW7Z98aa5EhZqcxS2gbpeVr
-	 ETu6cWCg+YbLwckvU1wQE6Beie/Bm78MNMt0WPMpdooCfQIIC/ZJXCq9obWu2vBmgN
-	 wEFEVHQeomn5gjFIvpbfxJv3UICofiCo5uDvN71OiRlTX90hxpa+cqT6daNtX7bsJi
-	 BKInXQ+9D1uA/vXpfTk2g2ev1CYMKKLFJX6q56cZkCnqffMLzE1tzt9Lyzlvg2O58E
-	 97atUhkOirmrsKA2I5rqP4F5Q5Bbjik1sSvfViE67CJw3wIMCCBEldeHMtTxtsgswV
-	 gTfFDwlTQ3kfw==
-Date: Fri, 12 Jan 2024 17:04:14 +0000
-From: Conor Dooley <conor@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, matthias.bgg@gmail.com,
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH 1/2] dt-bindings: usb: mtu3: Add MT8195 MTU3 ip-sleep
- support
-Message-ID: <20240112-immodest-cuddly-1c0045fa2861@spud>
-References: <20240112133222.240038-1-angelogioacchino.delregno@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0CB617C8A
+	for <linux-usb@vger.kernel.org>; Fri, 12 Jan 2024 18:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5534180f0e9so192a12.1
+        for <linux-usb@vger.kernel.org>; Fri, 12 Jan 2024 10:01:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1705082486; x=1705687286; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XxcXCQP3+9Bv+ZGDo4IurQCR5mkoBqs8qSMmpsQJKCY=;
+        b=FqgIM4zDMYO2a5OxXFUwlwDbjJ2QIrwd/nKCxMQ/JjKIySI6pz3BQN2P3ZCF7/iKst
+         l0utFJQ/Wp25K4aKvEDRlUXCp4IokUSKmWsf4VAeLBrI2smQmJya1RhgiNd5k77jNlQY
+         lrPMreaQWvhe7aeSoHoV7/YSOMGS2kc56WYwMRD9iw6QSNYvbg9DGbEI0quD1tc0hMfI
+         u0RwVZrY7WHmwVcn3e8r3XBxFpeD7N78dQm3v4hzdvwUZl7VoULJaTCNIYlMBSVkRACP
+         i/Kt/w0wpXem5PeuI15AU0Fwq1ZkPt8JLHJGbzBCUlA6DND1b/0V6Ul2SJm9p5pxQVUv
+         Grew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705082486; x=1705687286;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XxcXCQP3+9Bv+ZGDo4IurQCR5mkoBqs8qSMmpsQJKCY=;
+        b=S05TWSlH+RtTewco0YAt7Si5EpAZQfliVlIQvAVaadvfdLA2D62hnpfwSZeW6XsBPF
+         jUc/X96B1F9detEf6lsaCc3BKDDLhe4MXSGkOU5iR/iMFd+vdd3a0pWcxEHjmzX7u+9R
+         YHtz0Npi4DkSxz2FXcXAV227GbSqdwh2gNB3rJqR6hybPAkr7ksS2pYNQLp8pwq9uT3G
+         T7HThKXEJ8kFe1wBPFZbFFuOenW1yacl6V7++QeuSM1328h2lEmFW5pDlU5B3WZfc/EE
+         +EWjzO6ID7s/BBnL2e5Rtmi1LAueFhvGqaek9XLhlFyqR2MwvgnCgnGGmWbPRbMZzyTz
+         dBMA==
+X-Gm-Message-State: AOJu0YxNsJ/j3rjByq91LsspeSmHyH4Ue9PjMuiOkFw3N6s4MRrBMp7T
+	cgF3orAwP9WKCh5aJxXzRIGBVf53gwGmRFLKl9tZMyXBL05+
+X-Google-Smtp-Source: AGHT+IF37WrheBgs7vZkD4LAZbqDI+dAMM/O+eQ2FkKngINtsaFMvdv46HN03Hdih6jdNpEuUF5/JOa1qC5ybtJoa2w=
+X-Received: by 2002:a05:6402:40d1:b0:558:7f0f:aa70 with SMTP id
+ z17-20020a05640240d100b005587f0faa70mr384479edb.5.1705082485852; Fri, 12 Jan
+ 2024 10:01:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="EVXqlph5rFkFrGvl"
-Content-Disposition: inline
-In-Reply-To: <20240112133222.240038-1-angelogioacchino.delregno@collabora.com>
+From: Jeffery Miller <jefferymiller@google.com>
+Date: Fri, 12 Jan 2024 12:01:14 -0600
+Message-ID: <CAAzPG9MU2PfTk2Yn+spJqH6mLVsG1p6L6vhJ4LFG+aiojnN6HQ@mail.gmail.com>
+Subject: [REGRESSION] In v5.15.146 an ax88179_178a USB ethernet adapter causes crashes
+To: stable@vger.kernel.org
+Cc: Linux kernel regressions list <regressions@lists.linux.dev>, justinpopo6@gmail.com, kuba@kernel.org, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+For 5.15 attempting to use an ax88179_178a adapter "0b95:1790 ASIX
+Electronics Corp. AX88179 Gigabit Ethernet"
+started causing crashes.
+This did not reproduce in the 6.6 kernel.
 
---EVXqlph5rFkFrGvl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The crashes were narrowed down to the following two commits brought
+into v5.15.146:
 
-On Fri, Jan 12, 2024 at 02:32:21PM +0100, AngeloGioacchino Del Regno wrote:
-> Of the four USB controllers present on the MediaTek MT8195 SoC, three
-> of them (0, 2 and 3) are behind MTU3: add wakeup controls for them.
->=20
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
+commit d63fafd6cc28 ("net: usb: ax88179_178a: avoid failed operations
+when device is disconnected")
+commit f860413aa00c ("net: usb: ax88179_178a: wol optimizations")
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Those two use an uninitialized pointer `dev->driver_priv`.
 
-Cheers,
-Conor.
+In later kernels this pointer is initialized in commit 2bcbd3d8a7b4
+("net: usb: ax88179_178a: move priv to driver_priv").
 
-> ---
->  Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml b/D=
-ocumentation/devicetree/bindings/usb/mediatek,mtu3.yaml
-> index a59d91243ac8..d4e187c78a0b 100644
-> --- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
-> @@ -185,7 +185,10 @@ properties:
->              2 - used by mt2712 etc, revision 2 with following IPM rule;
->              101 - used by mt8183, specific 1.01;
->              102 - used by mt8192, specific 1.02;
-> -          enum: [1, 2, 101, 102]
-> +            103 - used by mt8195, IP0, specific 1.03;
-> +            105 - used by mt8195, IP2, specific 1.05;
-> +            106 - used by mt8195, IP3, specific 1.06;
-> +          enum: [1, 2, 101, 102, 103, 105, 106]
-> =20
->    mediatek,u3p-dis-msk:
->      $ref: /schemas/types.yaml#/definitions/uint32
-> --=20
-> 2.43.0
->=20
+Picking in the two following commits fixed the issue for me on 5.15:
+commit 9718f9ce5b86 ("net: usb: ax88179_178a: remove redundant init code")
+commit 2bcbd3d8a7b4 ("net: usb: ax88179_178a: move priv to driver_priv")
 
---EVXqlph5rFkFrGvl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZaFxDgAKCRB4tDGHoIJi
-0uvOAQCyWfE54y99jJzttlHBXQCvcZUHCZa1dEP9+XG1alVbZQD/Wgq9GEpo+OdO
-3RZ4iVo5U/IXF0RkrGu7V56LCksIhAU=
-=4QFj
------END PGP SIGNATURE-----
-
---EVXqlph5rFkFrGvl--
+The commit 9718f9ce5b86 ("net: usb: ax88179_178a: remove redundant
+init code") was required for
+the fix to apply cleanly.
 
