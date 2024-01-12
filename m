@@ -1,94 +1,114 @@
-Return-Path: <linux-usb+bounces-4967-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4968-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CED6882C525
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jan 2024 19:01:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59C8482C5E7
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jan 2024 20:32:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D03211C22448
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jan 2024 18:01:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0766D28668B
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jan 2024 19:32:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0D7417C9A;
-	Fri, 12 Jan 2024 18:01:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EF7715EB0;
+	Fri, 12 Jan 2024 19:32:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FqgIM4zD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JDt7G/WI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0CB617C8A
-	for <linux-usb@vger.kernel.org>; Fri, 12 Jan 2024 18:01:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5534180f0e9so192a12.1
-        for <linux-usb@vger.kernel.org>; Fri, 12 Jan 2024 10:01:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0E415AFA;
+	Fri, 12 Jan 2024 19:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dbd029beef4so6188010276.0;
+        Fri, 12 Jan 2024 11:32:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1705082486; x=1705687286; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=XxcXCQP3+9Bv+ZGDo4IurQCR5mkoBqs8qSMmpsQJKCY=;
-        b=FqgIM4zDMYO2a5OxXFUwlwDbjJ2QIrwd/nKCxMQ/JjKIySI6pz3BQN2P3ZCF7/iKst
-         l0utFJQ/Wp25K4aKvEDRlUXCp4IokUSKmWsf4VAeLBrI2smQmJya1RhgiNd5k77jNlQY
-         lrPMreaQWvhe7aeSoHoV7/YSOMGS2kc56WYwMRD9iw6QSNYvbg9DGbEI0quD1tc0hMfI
-         u0RwVZrY7WHmwVcn3e8r3XBxFpeD7N78dQm3v4hzdvwUZl7VoULJaTCNIYlMBSVkRACP
-         i/Kt/w0wpXem5PeuI15AU0Fwq1ZkPt8JLHJGbzBCUlA6DND1b/0V6Ul2SJm9p5pxQVUv
-         Grew==
+        d=gmail.com; s=20230601; t=1705087944; x=1705692744; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DWZyqbuCyes2XUzEpE38w3XGfwfjhbR2pOBjXgvzPqs=;
+        b=JDt7G/WIPFFPKjllcNpKRkaKh/pKbMwDU/VoI/N3mM+wcJ0mQyaFW1GfL53yY+8DH7
+         RnZXkWT7fLsx/kUh9NjvaFJxl33m4BEnSOgO8eXx963ZlLocTyeVlz7jIuLzf6RIyB/Q
+         RjMQvT1jdJIF3RUEF/Kfd7VvP3gp9TxqChGmVvfbRKkvaadq6nSu1J7gMWgxBbKLvU/S
+         yQSgYiFOZQhctLR1HUSL3a6oDj7Ldix3oQp4YSEEj4nt7VSYGyHwdBzKK8nSbYI8jOdW
+         J0PgobrbE+xcICCocacZzPcSMzjmcKIUqjtikHw/cc9cgL4PcWL4Z6NsUKce9D9DNUtd
+         zNPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705082486; x=1705687286;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XxcXCQP3+9Bv+ZGDo4IurQCR5mkoBqs8qSMmpsQJKCY=;
-        b=S05TWSlH+RtTewco0YAt7Si5EpAZQfliVlIQvAVaadvfdLA2D62hnpfwSZeW6XsBPF
-         jUc/X96B1F9detEf6lsaCc3BKDDLhe4MXSGkOU5iR/iMFd+vdd3a0pWcxEHjmzX7u+9R
-         YHtz0Npi4DkSxz2FXcXAV227GbSqdwh2gNB3rJqR6hybPAkr7ksS2pYNQLp8pwq9uT3G
-         T7HThKXEJ8kFe1wBPFZbFFuOenW1yacl6V7++QeuSM1328h2lEmFW5pDlU5B3WZfc/EE
-         +EWjzO6ID7s/BBnL2e5Rtmi1LAueFhvGqaek9XLhlFyqR2MwvgnCgnGGmWbPRbMZzyTz
-         dBMA==
-X-Gm-Message-State: AOJu0YxNsJ/j3rjByq91LsspeSmHyH4Ue9PjMuiOkFw3N6s4MRrBMp7T
-	cgF3orAwP9WKCh5aJxXzRIGBVf53gwGmRFLKl9tZMyXBL05+
-X-Google-Smtp-Source: AGHT+IF37WrheBgs7vZkD4LAZbqDI+dAMM/O+eQ2FkKngINtsaFMvdv46HN03Hdih6jdNpEuUF5/JOa1qC5ybtJoa2w=
-X-Received: by 2002:a05:6402:40d1:b0:558:7f0f:aa70 with SMTP id
- z17-20020a05640240d100b005587f0faa70mr384479edb.5.1705082485852; Fri, 12 Jan
- 2024 10:01:25 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705087944; x=1705692744;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DWZyqbuCyes2XUzEpE38w3XGfwfjhbR2pOBjXgvzPqs=;
+        b=skV1jBNJHweFvEI3r7AYkwnqH9RUftPMVPXmvww9Djp7m8dpp/1KQFxxbYmumgMC3A
+         DEobuLjIMQd4/hDKRVhlJFiHUghhYXoypVUgB/a/+IG96fZ27qusqutH9C1nbZYjfq4v
+         Zb3zXFGgqgBLqYL5Q7efQmK/vsdhLtv/PMce08YNJORPmauUbN8Yo45E6acp+TUBrpnU
+         YFi5zMM78c1AeHci0SpWN2MGneAwDGQzWPL9CkzP9VAeXuPvaZwsEjuncf84QraM+19+
+         AkslySiJQo3Tl+KpCO1SVsfXTeQWOVoj70Ml3F0ueSzGDJF9ubCS68cRH3reHDRnV3hl
+         EjMw==
+X-Gm-Message-State: AOJu0YzRs7d+zNrGuDnYgwl9iI8+vBx1ur3PkfIIQrMa2KpXBWNpJ/cy
+	uKCisd0AboW6X2OMzwVmPcPbgrJ0cbC0ndsxj4SjjVoDSfL9aw==
+X-Google-Smtp-Source: AGHT+IF5AHQNoTYNYqzXKMf7ayCFabGY/obwfiSYlO9P1bpccUjMLtdMli8LJ/dDqN+pbUy7lEEK02KROV3a91Rj6p0=
+X-Received: by 2002:a25:b91:0:b0:dbe:3074:c6f4 with SMTP id
+ 139-20020a250b91000000b00dbe3074c6f4mr799841ybl.30.1705087944330; Fri, 12 Jan
+ 2024 11:32:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Jeffery Miller <jefferymiller@google.com>
-Date: Fri, 12 Jan 2024 12:01:14 -0600
-Message-ID: <CAAzPG9MU2PfTk2Yn+spJqH6mLVsG1p6L6vhJ4LFG+aiojnN6HQ@mail.gmail.com>
-Subject: [REGRESSION] In v5.15.146 an ax88179_178a USB ethernet adapter causes crashes
-To: stable@vger.kernel.org
-Cc: Linux kernel regressions list <regressions@lists.linux.dev>, justinpopo6@gmail.com, kuba@kernel.org, 
-	linux-usb@vger.kernel.org
+References: <CAAzPG9MU2PfTk2Yn+spJqH6mLVsG1p6L6vhJ4LFG+aiojnN6HQ@mail.gmail.com>
+In-Reply-To: <CAAzPG9MU2PfTk2Yn+spJqH6mLVsG1p6L6vhJ4LFG+aiojnN6HQ@mail.gmail.com>
+From: Justin Chen <justinpopo6@gmail.com>
+Date: Fri, 12 Jan 2024 11:32:13 -0800
+Message-ID: <CAJx26kVJ=TxxejKACMJOoiEZfwpFJ9A3SGncBtd8QyWM5+ew0w@mail.gmail.com>
+Subject: Re: [REGRESSION] In v5.15.146 an ax88179_178a USB ethernet adapter
+ causes crashes
+To: Jeffery Miller <jefferymiller@google.com>
+Cc: stable@vger.kernel.org, 
+	Linux kernel regressions list <regressions@lists.linux.dev>, kuba@kernel.org, linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-For 5.15 attempting to use an ax88179_178a adapter "0b95:1790 ASIX
-Electronics Corp. AX88179 Gigabit Ethernet"
-started causing crashes.
-This did not reproduce in the 6.6 kernel.
+On Fri, Jan 12, 2024 at 10:01=E2=80=AFAM Jeffery Miller
+<jefferymiller@google.com> wrote:
+>
+> For 5.15 attempting to use an ax88179_178a adapter "0b95:1790 ASIX
+> Electronics Corp. AX88179 Gigabit Ethernet"
+> started causing crashes.
+> This did not reproduce in the 6.6 kernel.
+>
+Looks like my patch set was not fully backported. The patchset didn't
+have a "Fixes" tag, so it looks it was partially pulled for
+d63fafd6cc28 ("net: usb: ax88179_178a: avoid failed operations when
+device is disconnected") which does have a fixes tag. Just looks like
+a bad backport here. Apologies, I should have caught it when I saw the
+stable email, I didn't realize it was only for part of the changeset.
 
-The crashes were narrowed down to the following two commits brought
-into v5.15.146:
+Thanks,
+Justin
 
-commit d63fafd6cc28 ("net: usb: ax88179_178a: avoid failed operations
-when device is disconnected")
-commit f860413aa00c ("net: usb: ax88179_178a: wol optimizations")
-
-Those two use an uninitialized pointer `dev->driver_priv`.
-
-In later kernels this pointer is initialized in commit 2bcbd3d8a7b4
-("net: usb: ax88179_178a: move priv to driver_priv").
-
-Picking in the two following commits fixed the issue for me on 5.15:
-commit 9718f9ce5b86 ("net: usb: ax88179_178a: remove redundant init code")
-commit 2bcbd3d8a7b4 ("net: usb: ax88179_178a: move priv to driver_priv")
-
-The commit 9718f9ce5b86 ("net: usb: ax88179_178a: remove redundant
-init code") was required for
-the fix to apply cleanly.
+> The crashes were narrowed down to the following two commits brought
+> into v5.15.146:
+>
+> commit d63fafd6cc28 ("net: usb: ax88179_178a: avoid failed operations
+> when device is disconnected")
+> commit f860413aa00c ("net: usb: ax88179_178a: wol optimizations")
+>
+> Those two use an uninitialized pointer `dev->driver_priv`.
+>
+> In later kernels this pointer is initialized in commit 2bcbd3d8a7b4
+> ("net: usb: ax88179_178a: move priv to driver_priv").
+>
+> Picking in the two following commits fixed the issue for me on 5.15:
+> commit 9718f9ce5b86 ("net: usb: ax88179_178a: remove redundant init code"=
+)
+> commit 2bcbd3d8a7b4 ("net: usb: ax88179_178a: move priv to driver_priv")
+>
+> The commit 9718f9ce5b86 ("net: usb: ax88179_178a: remove redundant
+> init code") was required for
+> the fix to apply cleanly.
 
