@@ -1,126 +1,311 @@
-Return-Path: <linux-usb+bounces-5001-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5002-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4CC282CCE8
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Jan 2024 14:59:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3233B82CCF4
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Jan 2024 15:15:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 093592845E1
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Jan 2024 13:58:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2ECA21C20EBA
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Jan 2024 14:15:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F15582134F;
-	Sat, 13 Jan 2024 13:58:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D22E21106;
+	Sat, 13 Jan 2024 14:15:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tMgXDlTQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Wzky0yXD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075A61F609
-	for <linux-usb@vger.kernel.org>; Sat, 13 Jan 2024 13:58:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 897A221345
+	for <linux-usb@vger.kernel.org>; Sat, 13 Jan 2024 14:15:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-40e6bf323e8so5099965e9.2
-        for <linux-usb@vger.kernel.org>; Sat, 13 Jan 2024 05:58:48 -0800 (PST)
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-598df798696so152176eaf.1
+        for <linux-usb@vger.kernel.org>; Sat, 13 Jan 2024 06:15:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705154327; x=1705759127; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WT8QIYQ+4FB0VcFrJSjLO9Fc2EguI6T2KF8zu0XQvV4=;
-        b=tMgXDlTQelvPFnKLtkLb2OwHnuAofGXGKN9p0to3S5VWeB+4KBlQHOji31Yewx1OD9
-         13FGoa2uAmWp14AE+o/ovhdGTM1R0B88WogQSaN4/pi1djLsFBom+YQVz/MvVDJu/EBN
-         JJnGKqkhVYeiDP3wfi9n0pXO9dQ1Cm+i0qio2ghliWcb1u30rjTMhOwqaDFcvBo2jji2
-         CyG+xyajlQ6RAORymnfHR50b6/jmIP/MFJVuPYaAhETAlZW4FpunLq/+XLRZOAws4aWW
-         J/bCyscW76F1UL6Rr3wu6l0u9D1y8+WmV1jPywmxJ9ISPlv4MjuHKoq5VJLtkE0Ci/ie
-         2fkQ==
+        d=linaro.org; s=google; t=1705155339; x=1705760139; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GpDGmuJVxdjDUWEr6kZyW9N+8zv6rEZ2JqLAU+v81VA=;
+        b=Wzky0yXDmkE7SpiNV5ecXXnyXtSYzECnIsM16i7q9puQrxjzu01MPknsLnt+uli+WX
+         kjrHn0X+M6OaY7m1/9L3UWdlBkoM/ULfXqJqthe2HcdCdu8uwFKSrlDqVe9ng/7KOIY1
+         M0not3dlFdrgD6bxg2MnSjMWinkI9qMEBVu+lTh2yd2fokWaF9skCzdhac4YYM4bddAY
+         NkKFeSFLxzZxjfGQFR20KrUjmnvLvO3tS3dKFYRI55goA0mrXi64iLKITt6moodBdTNH
+         oHz+Dz6NTtZDXqOjSjlt0ZkErBRSvA7EGfXIAFlRYG1RQ9pxG0X6qa7II7s1VjU6iRaw
+         6m9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705154327; x=1705759127;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WT8QIYQ+4FB0VcFrJSjLO9Fc2EguI6T2KF8zu0XQvV4=;
-        b=pHY3AmVXnrPggTtIaPRl89C1ch6qB9TyZrT4FbFYXJKIudZICJTVCnEYhDm9vFS4D1
-         BLUwecPYtTlp138JfUoAwmJVhiPB4npCALIKlu4PMY0gcw4hlwnHgcCaeC5fGIWHuZ/9
-         HxAJZMwC0t8vatbQwt2pRtuP55DPcztDl+WAPS26hgQFLCDNQ0wh8qgk0OotiL/h5y+k
-         PeA7GlUbTehwuzeZ3Z0H01H2Eldhl5BPEFycTlACDiAV9ijowBz/MoG/PfNaHqbhB2XT
-         fQ989Qk5bsypDQYUx20/6YtNimCpCcJWXR3aru3vyMrqUPmvb2bXYusQQ04erfkgOWXB
-         5CYw==
-X-Gm-Message-State: AOJu0YzspufjPwsxAgEIWULF790MitaPKDYjgXpq8GAmO3sADVJarnhd
-	aX72f71ClTD7ZjvpSeadeu/CmD+Irel3Qg==
-X-Google-Smtp-Source: AGHT+IGwKJspmTKwK0oeydh5C+0W91YyLyDhfqNDMWTHwa14f1p0dzNVkcnuqnvLJgl8jRaN9pq7Yg==
-X-Received: by 2002:a05:600c:4e48:b0:40d:39cb:6af6 with SMTP id e8-20020a05600c4e4800b0040d39cb6af6mr1701326wmq.28.1705154327179;
-        Sat, 13 Jan 2024 05:58:47 -0800 (PST)
-Received: from [192.168.100.86] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id h6-20020a05600c350600b0040c6d559490sm9476148wmq.3.2024.01.13.05.58.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Jan 2024 05:58:46 -0800 (PST)
-Message-ID: <7e15bce2-977d-4b02-9f8e-6503383eb281@linaro.org>
-Date: Sat, 13 Jan 2024 13:58:45 +0000
+        d=1e100.net; s=20230601; t=1705155339; x=1705760139;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GpDGmuJVxdjDUWEr6kZyW9N+8zv6rEZ2JqLAU+v81VA=;
+        b=rLbGARCE83nFmAAUkGmmji1UZu/cPAlBCiD4wOXVoRAUlXtGgNe0Ybm/WhFn7nS5Lh
+         WnYkesRDKNZIzSs6yOpjU4KSpveH1cTLfANVvN/MzMO5c3TJffCFA46bFgsx9isavlNR
+         poCbTOHwaEdHh+xevFipawcUg+32viidQX/KN4btJsUGreWMD9RuinUQNnILPiFRmRpt
+         FfBtulIPR6ZLaGiyK06spDxqr+YHtOff4htPb3InH4qBV6ukcq28M/hggRx6PjJGwlHh
+         AY9Vt/TZbSmhctPak7RN6EcAGkqOqdJ+LyUOVZEsPIIOgiiqQd3ZmUXLWG/OHdBdaFw/
+         SLQw==
+X-Gm-Message-State: AOJu0YyEEm5JdkapKHftBfRioOeqL0aPjPsUwqVtfFfkwFlQM1sqYmrF
+	54oJNZqVxYu0v5uC1mlkLbZooMJukdwv5u1c6ysHtS1D4dbFWQ==
+X-Google-Smtp-Source: AGHT+IGmizCd5syeqMnnXBBY8/Nm+SD3H32E3Q7uuwl7FpPEfX8ik7nRdHLpZVBm1j4DEkVPqZDGzNXqzlG2wKpThAs=
+X-Received: by 2002:a05:6358:ee85:b0:175:50b4:8ca2 with SMTP id
+ il5-20020a056358ee8500b0017550b48ca2mr3154743rwb.9.1705155339368; Sat, 13 Jan
+ 2024 06:15:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/13] usb: typec: qcom-pmic-typec: add support for PMI632
- PMIC
-Content-Language: en-US
-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Bjorn Andersson <andersson@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Guenter Roeck <linux@roeck-us.net>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
 References: <20240113-pmi632-typec-v1-0-de7dfd459353@linaro.org>
- <20240113-pmi632-typec-v1-6-de7dfd459353@linaro.org>
- <7e36b380-8ab5-4555-8919-1c2c6ff7aa68@linaro.org>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <7e36b380-8ab5-4555-8919-1c2c6ff7aa68@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <20240113-pmi632-typec-v1-7-de7dfd459353@linaro.org> <f6ec016e-7319-42a7-8ca3-06f21a7ab6e5@linaro.org>
+In-Reply-To: <f6ec016e-7319-42a7-8ca3-06f21a7ab6e5@linaro.org>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Sat, 13 Jan 2024 16:15:28 +0200
+Message-ID: <CAA8EJppOR3z4n4ws_3S9KiCFmHhzPsBiEjWw5Bgy4o+F4deT9w@mail.gmail.com>
+Subject: Re: [PATCH 07/13] phy: qcom: qmp-usb: split USB-C PHY driver
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Wesley Cheng <quic_wcheng@quicinc.com>, "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Bhupesh Sharma <bhupesh.sharma@linaro.org>, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-phy@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 13/01/2024 10:33, Konrad Dybcio wrote:
+On Sat, 13 Jan 2024 at 12:42, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
 > On 13.01.2024 06:42, Dmitry Baryshkov wrote:
->> The PMI632 PMIC support Type-C port handling, but lacks USB
->> PowerDelivery support. The TCPM requires all callbacks to be provided
->> by the implementation. Implement a special, 'stub' Qcom PD PHY
->> implementation to enable the PMI632 support.
->>
->> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> ---
-> 
+> > In preparation to adding Type-C handling for MSM8998, QCM2290 and SM6115
+> > platforms, create new QMP USB-C PHY driver by splitting mentioned
+> > platforms to a separate file. In future it will also be extended with
+> > support for the DisplayPort handling. It will also be reused later for
+> > such platforms as SDM660, SM6125, SM6150.
+> >
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+>
 > [...]
-> 
->>   #endif /* __QCOM_PMIC_TYPEC_PDPHY_H__ */
->> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy_stub.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy_stub.c
->> new file mode 100644
->> index 000000000000..5d3b0e78d4d8
->> --- /dev/null
->> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy_stub.c
-> 
-> Not a fan.
-> 
-> Maybe add some TCPM_FLAG_NO_PD and solve it in a generic manner?
-> 
+>
+>
+> > +#include "phy-qcom-qmp.h"
+> > +#include "phy-qcom-qmp-pcs-misc-v3.h"
+> > +
+> > +/* QPHY_SW_RESET bit */
+> > +#define SW_RESET                             BIT(0)
+> > +/* QPHY_POWER_DOWN_CONTROL */
+> > +#define SW_PWRDN                             BIT(0)
+>
+> Most / all of these defines could probably live in a header file.
+
+For this (and several other comments), see
+https://lore.kernel.org/linux-arm-msm/20240109-phy-qmp-merge-common-v1-0-572899a14318@linaro.org/
+
+>
+> [...]
+>
+> > +struct qmp_usbc_offsets {
+> > +     u16 serdes;
+> > +     u16 pcs;
+> > +     u16 pcs_misc;
+> > +     u16 pcs_usb;
+> > +     u16 tx;
+> > +     u16 rx;
+> > +     /* for PHYs with >= 2 lanes */
+>
+> So, all PHYs within this driver if I'm following correctly
+
+Yes. I just felt that it is easier to follow for copy & modify rather
+than just rushing all the changes in. I can squash one of the next
+patches that clear single-lane support out of this driver..
+
+>
+> > +     u16 tx2;
+> > +     u16 rx2;
+> > +};
+> > +
+>
+> > +static inline void qphy_setbits(void __iomem *base, u32 offset, u32 val)
+> > +{
+> > +     u32 reg;
+> > +
+> > +     reg = readl(base + offset);
+> > +     reg |= val;
+> > +     writel(reg, base + offset);
+> > +
+> > +     /* ensure that above write is through */
+> > +     readl(base + offset);
+> > +}
+> > +
+> > +static inline void qphy_clrbits(void __iomem *base, u32 offset, u32 val)
+> > +{
+> > +     u32 reg;
+> > +
+> > +     reg = readl(base + offset);
+> > +     reg &= ~val;
+> > +     writel(reg, base + offset);
+> > +
+> > +     /* ensure that above write is through */
+> > +     readl(base + offset);
+> > +}
+>
+> Maybe you could use regmap to avoid NIH-ing such accessors
+
+regmap will still require posting through read, will it not?
+
+>
+> > +
+> > +/* list of clocks required by phy */
+> > +static const char * const qmp_usbc_phy_clk_l[] = {
+> > +     "aux", "cfg_ahb", "ref", "com_aux",
+> > +};
+> > +
+> > +/* list of resets */
+> > +static const char * const usb3phy_legacy_reset_l[] = {
+> > +     "phy", "common",
+> > +};
+> > +
+> > +static const char * const usb3phy_reset_l[] = {
+> > +     "phy_phy", "phy",
+> > +};
+> > +
+> > +/* list of regulators */
+> > +static const char * const qmp_phy_vreg_l[] = {
+> > +     "vdda-phy", "vdda-pll",
+> > +};
+> > +
+> > +static const struct qmp_usbc_offsets qmp_usbc_offsets_v3_qcm2290 = {
+> > +     .serdes         = 0x0,
+> > +     .pcs            = 0xc00,
+> > +     .pcs_misc       = 0xa00,
+> > +     .tx             = 0x200,
+> > +     .rx             = 0x400,
+> > +     .tx2            = 0x600,
+> > +     .rx2            = 0x800,
+> > +};
+> > +
+> > +static const struct qmp_phy_cfg msm8998_usb3phy_cfg = {
+> > +     .lanes                  = 2,
+> > +
+> > +     .offsets                = &qmp_usbc_offsets_v3_qcm2290,
+> > +
+> > +     .serdes_tbl             = msm8998_usb3_serdes_tbl,
+> > +     .serdes_tbl_num         = ARRAY_SIZE(msm8998_usb3_serdes_tbl),
+> > +     .tx_tbl                 = msm8998_usb3_tx_tbl,
+> > +     .tx_tbl_num             = ARRAY_SIZE(msm8998_usb3_tx_tbl),
+> > +     .rx_tbl                 = msm8998_usb3_rx_tbl,
+> > +     .rx_tbl_num             = ARRAY_SIZE(msm8998_usb3_rx_tbl),
+> > +     .pcs_tbl                = msm8998_usb3_pcs_tbl,
+> > +     .pcs_tbl_num            = ARRAY_SIZE(msm8998_usb3_pcs_tbl),
+> > +     .vreg_list              = qmp_phy_vreg_l,
+> > +     .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
+> > +     .regs                   = qmp_v3_usb3phy_regs_layout,
+> > +};
+> > +
+> > +static const struct qmp_phy_cfg qcm2290_usb3phy_cfg = {
+> > +     .lanes                  = 2,
+> > +
+> > +     .offsets                = &qmp_usbc_offsets_v3_qcm2290,
+> > +
+> > +     .serdes_tbl             = qcm2290_usb3_serdes_tbl,
+> > +     .serdes_tbl_num         = ARRAY_SIZE(qcm2290_usb3_serdes_tbl),
+> > +     .tx_tbl                 = qcm2290_usb3_tx_tbl,
+> > +     .tx_tbl_num             = ARRAY_SIZE(qcm2290_usb3_tx_tbl),
+> > +     .rx_tbl                 = qcm2290_usb3_rx_tbl,
+> > +     .rx_tbl_num             = ARRAY_SIZE(qcm2290_usb3_rx_tbl),
+> > +     .pcs_tbl                = qcm2290_usb3_pcs_tbl,
+> > +     .pcs_tbl_num            = ARRAY_SIZE(qcm2290_usb3_pcs_tbl),
+> > +     .vreg_list              = qmp_phy_vreg_l,
+> > +     .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
+> > +     .regs                   = qmp_v3_usb3phy_regs_layout_qcm2290,
+> > +};
+> > +
+> > +static void qmp_usbc_configure_lane(void __iomem *base,
+> > +                                     const struct qmp_phy_init_tbl tbl[],
+> > +                                     int num,
+> > +                                     u8 lane_mask)
+> > +{
+> > +     int i;
+> > +     const struct qmp_phy_init_tbl *t = tbl;
+> > +
+> > +     if (!t)
+> > +             return;
+> > +
+> > +     for (i = 0; i < num; i++, t++) {
+> > +             if (!(t->lane_mask & lane_mask))
+> > +                     continue;
+> > +
+> > +             writel(t->val, base + t->offset);
+> > +     }
+> > +}
+> > +
+> > +static void qmp_usbc_configure(void __iomem *base,
+> > +                                const struct qmp_phy_init_tbl tbl[],
+> > +                                int num)
+> > +{
+> > +     qmp_usbc_configure_lane(base, tbl, num, 0xff);
+> > +}
+> > +
+>
+> Can this be inlined?
+
+Yes and yes.
+
+>
+> > +static int qmp_usbc_serdes_init(struct qmp_usbc *qmp)
+> > +{
+> > +     const struct qmp_phy_cfg *cfg = qmp->cfg;
+> > +     void __iomem *serdes = qmp->serdes;
+> > +     const struct qmp_phy_init_tbl *serdes_tbl = cfg->serdes_tbl;
+> > +     int serdes_tbl_num = cfg->serdes_tbl_num;
+> > +
+> > +     qmp_usbc_configure(serdes, serdes_tbl, serdes_tbl_num);
+> > +
+> > +     return 0;
+> > +}
+>
+> Can this be inlined?
+>
+> [...]
+>
+> > +     /* Tx, Rx, and PCS configurations */
+> > +     qmp_usbc_configure_lane(tx, cfg->tx_tbl, cfg->tx_tbl_num, 1);
+> > +     qmp_usbc_configure_lane(rx, cfg->rx_tbl, cfg->rx_tbl_num, 1);
+> > +
+> > +     if (cfg->lanes >= 2) {
+>
+> Again, if (true) IIUC
+>
+>
+> > +             qmp_usbc_configure_lane(qmp->tx2, cfg->tx_tbl, cfg->tx_tbl_num, 2);
+> > +             qmp_usbc_configure_lane(qmp->rx2, cfg->rx_tbl, cfg->rx_tbl_num, 2);
+> > +     }
+> > +
+> > +     qmp_usbc_configure(pcs, cfg->pcs_tbl, cfg->pcs_tbl_num);
+> > +
+> > +     if (pcs_usb)
+>
+> if (false)?
+
+Nice catch.
+
+>
+> [...]
+>
+> The rest looks to be boilerplate that's already present in at least
+> one more driver..
+>
 > Konrad
 
-This is a good suggestion, provided its the direction Heikki and Guenter 
-want to go.
 
-Otherwise @Dmitry you can retain my Acked-by for the stubification.
 
----
-bod
+-- 
+With best wishes
+Dmitry
 
