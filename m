@@ -1,64 +1,64 @@
-Return-Path: <linux-usb+bounces-4998-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-4999-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DACE682CCA2
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Jan 2024 13:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E1BB682CCD6
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Jan 2024 14:40:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D9821F22D5E
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Jan 2024 12:19:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 473F61F221AA
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Jan 2024 13:40:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55521210F0;
-	Sat, 13 Jan 2024 12:18:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB76521341;
+	Sat, 13 Jan 2024 13:40:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m1kCMjBY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qQKwpzYZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9AC20DF5
-	for <linux-usb@vger.kernel.org>; Sat, 13 Jan 2024 12:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7F121108
+	for <linux-usb@vger.kernel.org>; Sat, 13 Jan 2024 13:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5585fe04266so4082789a12.1
-        for <linux-usb@vger.kernel.org>; Sat, 13 Jan 2024 04:18:56 -0800 (PST)
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-336c8ab0b20so6351504f8f.1
+        for <linux-usb@vger.kernel.org>; Sat, 13 Jan 2024 05:40:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705148334; x=1705753134; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1705153215; x=1705758015; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EQGtii+H6n9Awn9eZcWb8sXXEyi+JRG4K8zgNROCcTs=;
-        b=m1kCMjBYV2UXf2b/F0i+If8re20M8WM+ABSulqdlTs8vDOd1yxkAujOM8MH87gfyOE
-         KzbABRrJSkxKoBJbXUi0JTw2LapqGEYWQiVpdpF0VD5yk08gQ9tbVbxqdPFhrC+JWNPX
-         i4r82yel247RzXFFVcaelPMXrVProCkhTk8PevAf4w54zlR6ccEoAE8dKHMgZy0K+FK4
-         aNLWC14ZNFj0L6H00rG/ZDPMeSMavqscpiWfcq9eJPWUTztNirh1IkmNgQbLXW4KW+X1
-         fs4Wcgn7ECeq74A61d9j5MFc2FycHQ6aJWyZfkY9KhvC1X7blh1KfzEoaGjTl7dCJN7T
-         fhmw==
+        bh=n6Fxgya1TVkm3TPxhwzKTyr286c02yPIKDB2qfXb84I=;
+        b=qQKwpzYZS7j/8ImHR9yT8ot/Yo9GLXjVrQp7ygduZWZxo1q6abzoXxcWqv8lwgRu95
+         P92TpBtMBp6DohK1Cyju8GUSJbYrFEEXhFA3TTddHwBBIQ15sYHFjEUtnii/xinnQ0nG
+         gRlcGYSTV+mat5LExXyDTmfz/nd7FjxwcuSXFGnWY3npq9oMT6HjfbdJ/muIn053fQYT
+         CUi8CyVjKfjCG083H5dgnaMp6vzVC7D+Of7P8qIYFx7BJ8vNAl3KAYep/4xF9It4SCKv
+         gWPrjvEl+vbeztm3oIV/o1td49BFnzlo5Vv2pMKAFNldRzsURWkJdWF7eQVT/klBHkA8
+         LRww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705148334; x=1705753134;
+        d=1e100.net; s=20230601; t=1705153215; x=1705758015;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EQGtii+H6n9Awn9eZcWb8sXXEyi+JRG4K8zgNROCcTs=;
-        b=VUQaCxcYPR5yYlrkjKloIaJ3xnBAhRE9GPpUqAJ5Iu74BDydORKiQYeIi+Nb2vNndl
-         8dblNPSc+O/NTUNUwXi+BcxmweScoM8gI+omQOvvmb7wJP4CZqNbXLCXKCKwoqPSIADj
-         DYTY6DLk0FyRd+PnI6znsdiSmcmLiFMXRzTtrq3AA/juBeN4/dqDcRAHoTjHraHWQ5wB
-         m1yxTcqLQBmMUZTbgc0RdMqu1rxPwMW+G/ncnaGmhrdV9P2V2Oxdcuwz3mko7IO1cJaI
-         aXaXMHMaJAxzZbDEvQOidMzSRz9sc+snkrzb5ZOOy1JmvtXBNGKYUSc/IRKAAAfL8pwY
-         SRvQ==
-X-Gm-Message-State: AOJu0YzKtb4b9+oX2mpn8+lu5aFrj7+kjwIm0l8zS5iCESm0KryvnW4p
-	msUoBMFZyGEAWUV0pMwDCx5Fr1cyZKwm/w==
-X-Google-Smtp-Source: AGHT+IGUejsD+UGJUMMzFhLNYyf0jPaCWNl/WJSUiIfU0GpwB57UOZlGZEIDkr6Tmuepxep08t/YTQ==
-X-Received: by 2002:a05:6402:40d:b0:557:427c:1c2c with SMTP id q13-20020a056402040d00b00557427c1c2cmr1210164edv.85.1705148334648;
-        Sat, 13 Jan 2024 04:18:54 -0800 (PST)
+        bh=n6Fxgya1TVkm3TPxhwzKTyr286c02yPIKDB2qfXb84I=;
+        b=NdeVKQQM3gTic0TER9X4h9K8Cx0DD7Z6elwSnTkBKmB1Z3oYXEI0T/hNBbMM6OmS9V
+         /5NzAbfdt8RV0MDP0N6tE1fZ6SQdgUWmtYnXZOKEoucDFEmgHnQBhT3fOXeOeLLxfbiW
+         QoFVpnI3ow1669IDXueCHcZFEgKvIf563ADl56tfrHNT5XXkSzUEIp4iUnPHb5RRQp7a
+         KXeXlZJ2AT71Cltwpb21W6eh5BA4wgsJC9Nr0Deddivq8EAvvRegQyHhpCVffGoX7Wjo
+         UZgZ/zkXHk6p5S1OvYwC3o6ayVS1TLU2k779lyvKWRuKpsj8gYQjkoPM/wVHdKq2KyRv
+         +/Xg==
+X-Gm-Message-State: AOJu0Yw4dyEyb/BWqyx5XAerxBTCC0wLJcMA/2B+ci4zBDyV/rc/pjfh
+	sS/8tZAYSHeEAvhDsa2gn4WjwMRFQBwzKQ==
+X-Google-Smtp-Source: AGHT+IEesURe4l4hBQdzTgbhi4W65rM3L5F8yms56jbFFVQugYXIThxWnItj+cXhWFX6RqpnO4BRrg==
+X-Received: by 2002:a05:600c:4595:b0:40d:8f40:ba2b with SMTP id r21-20020a05600c459500b0040d8f40ba2bmr1809556wmo.167.1705153215294;
+        Sat, 13 Jan 2024 05:40:15 -0800 (PST)
 Received: from [192.168.100.86] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id w12-20020aa7d28c000000b00557c48abe41sm2909969edq.55.2024.01.13.04.18.53
+        by smtp.gmail.com with ESMTPSA id je6-20020a05600c1f8600b0040d8d11bf63sm9459531wmb.41.2024.01.13.05.40.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Jan 2024 04:18:54 -0800 (PST)
-Message-ID: <29006ef0-1aa0-4ec7-8795-8e3729562fac@linaro.org>
-Date: Sat, 13 Jan 2024 12:18:53 +0000
+        Sat, 13 Jan 2024 05:40:14 -0800 (PST)
+Message-ID: <83fd1153-f79f-4d8b-8752-1daa0b9b17f2@linaro.org>
+Date: Sat, 13 Jan 2024 13:40:13 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,8 +66,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/13] arm64: dts: qcom: pmi632: define USB-C related
- blocks
+Subject: Re: [PATCH 06/13] usb: typec: qcom-pmic-typec: add support for PMI632
+ PMIC
 Content-Language: en-US
 To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
  Bjorn Andersson <andersson@kernel.org>,
@@ -85,64 +85,204 @@ To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
 Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
 References: <20240113-pmi632-typec-v1-0-de7dfd459353@linaro.org>
- <20240113-pmi632-typec-v1-11-de7dfd459353@linaro.org>
+ <20240113-pmi632-typec-v1-6-de7dfd459353@linaro.org>
 From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20240113-pmi632-typec-v1-11-de7dfd459353@linaro.org>
+In-Reply-To: <20240113-pmi632-typec-v1-6-de7dfd459353@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 13/01/2024 05:42, Dmitry Baryshkov wrote:
-> Define VBUS regulator and the Type-C handling block as present on the
-> Quacomm PMI632 PMIC.
+> The PMI632 PMIC support Type-C port handling, but lacks USB
+> PowerDelivery support. The TCPM requires all callbacks to be provided
+> by the implementation. Implement a special, 'stub' Qcom PD PHY
+> implementation to enable the PMI632 support.
 > 
 > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->   arch/arm64/boot/dts/qcom/pmi632.dtsi | 29 +++++++++++++++++++++++++++++
->   1 file changed, 29 insertions(+)
+>   drivers/usb/typec/tcpm/qcom/Makefile               |  3 +-
+>   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c      | 30 +++++++---
+>   .../usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.h    |  2 +
+>   .../typec/tcpm/qcom/qcom_pmic_typec_pdphy_stub.c   | 67 ++++++++++++++++++++++
+>   4 files changed, 94 insertions(+), 8 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/pmi632.dtsi b/arch/arm64/boot/dts/qcom/pmi632.dtsi
-> index 4eb79e0ce40a..ccf288ddc987 100644
-> --- a/arch/arm64/boot/dts/qcom/pmi632.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pmi632.dtsi
-> @@ -45,6 +45,35 @@ pmic@2 {
->   		#address-cells = <1>;
->   		#size-cells = <0>;
+> diff --git a/drivers/usb/typec/tcpm/qcom/Makefile b/drivers/usb/typec/tcpm/qcom/Makefile
+> index dc1e8832e197..cc23042b9487 100644
+> --- a/drivers/usb/typec/tcpm/qcom/Makefile
+> +++ b/drivers/usb/typec/tcpm/qcom/Makefile
+> @@ -3,4 +3,5 @@
+>   obj-$(CONFIG_TYPEC_QCOM_PMIC)		+= qcom_pmic_tcpm.o
+>   qcom_pmic_tcpm-y			+= qcom_pmic_typec.o \
+>   					   qcom_pmic_typec_port.o \
+> -					   qcom_pmic_typec_pdphy.o
+> +					   qcom_pmic_typec_pdphy.o \
+> +					   qcom_pmic_typec_pdphy_stub.o \
+> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+> index 4f2dbf20da12..e2513549c58a 100644
+> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+> @@ -118,7 +118,7 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
+>   	const struct pmic_typec_resources *res;
+>   	struct regmap *regmap;
+>   	struct device *bridge_dev;
+> -	u32 base[2];
+> +	u32 base;
+>   	int ret;
 >   
-> +		pmi632_vbus: usb-vbus-regulator@1100 {
-> +			compatible = "qcom,pmi632-vbus-reg", "qcom,pm8150b-vbus-reg";
-> +			status = "disabled";
-> +			reg = <0x1100>;
-> +		};
+>   	res = of_device_get_match_data(dev);
+> @@ -145,7 +145,7 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
+>   		return -ENODEV;
+>   	}
+>   
+> -	ret = of_property_read_u32_array(np, "reg", base, 2);
+> +	ret = of_property_read_u32_index(np, "reg", 0, &base);
+
+So I had to do a double-take here but, this seems fine to me.
+
+>   	if (ret)
+>   		return ret;
+>   
+> @@ -154,14 +154,24 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
+>   		return PTR_ERR(tcpm->pmic_typec_port);
+>   
+>   	ret = qcom_pmic_typec_port_probe(pdev, tcpm->pmic_typec_port,
+> -					 res->port_res, regmap, base[0]);
+> +					 res->port_res, regmap, base);
+>   	if (ret)
+>   		return ret;
+>   
+> -	ret = res->pdphy_probe(pdev, tcpm,
+> -			       res->pdphy_res, regmap, base[1]);
+> -	if (ret)
+> -		return ret;
+> +	if (res->pdphy_res) {
+> +		ret = of_property_read_u32_index(np, "reg", 1, &base);
+> +		if (ret)
+> +			return ret;
 > +
-> +		pmi632_typec: typec@1500 {
-> +			compatible = "qcom,pmi632-typec";
-> +			status = "disabled";
-> +			reg = <0x1500>;
-> +			interrupts = <0x2 0x15 0x00 IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x15 0x01 IRQ_TYPE_EDGE_BOTH>,
-> +				     <0x2 0x15 0x02 IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x15 0x03 IRQ_TYPE_EDGE_BOTH>,
-> +				     <0x2 0x15 0x04 IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x15 0x05 IRQ_TYPE_EDGE_RISING>,
-> +				     <0x2 0x15 0x06 IRQ_TYPE_EDGE_BOTH>,
-> +				     <0x2 0x15 0x07 IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "or-rid-detect-change",
-> +					  "vpd-detect",
-> +					  "cc-state-change",
-> +					  "vconn-oc",
-> +					  "vbus-change",
-> +					  "attach-detach",
-> +					  "legacy-cable-detect",
-> +					  "try-snk-src-detect";
-> +			vdd-vbus-supply = <&pmi632_vbus>;
-> +		};
+> +		ret = qcom_pmic_typec_pdphy_probe(pdev, tcpm,
+> +						  res->pdphy_res, regmap, base);
+> +		if (ret)
+> +			return ret;
+> +	} else {
+> +		ret = qcom_pmic_typec_pdphy_stub_probe(pdev, tcpm);
+> +		if (ret)
+> +			return ret;
+> +	}
+
+Looks fine.
+
+>   
+>   	mutex_init(&tcpm->lock);
+>   	platform_set_drvdata(pdev, tcpm);
+> @@ -253,8 +263,14 @@ static struct pmic_typec_resources pm8150b_typec_res = {
+>   	.port_res = &pm8150b_port_res,
+>   };
+>   
+> +static struct pmic_typec_resources pmi632_typec_res = {
+> +	/* PD PHY not present */
+> +	.port_res = &pm8150b_port_res,
+> +};
 > +
->   		pmi632_temp: temp-alarm@2400 {
->   			compatible = "qcom,spmi-temp-alarm";
->   			reg = <0x2400>;
+>   static const struct of_device_id qcom_pmic_typec_table[] = {
+>   	{ .compatible = "qcom,pm8150b-typec", .data = &pm8150b_typec_res },
+> +	{ .compatible = "qcom,pmi632-typec", .data = &pmi632_typec_res },
+>   	{ }
+>   };
+>   MODULE_DEVICE_TABLE(of, qcom_pmic_typec_table);
+> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.h b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.h
+> index b94eccadb042..2a7dedeb3009 100644
+> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.h
+> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.h
+> @@ -31,5 +31,7 @@ int qcom_pmic_typec_pdphy_probe(struct platform_device *pdev,
+>   				const struct pmic_typec_pdphy_resources *res,
+>   				struct regmap *regmap,
+>   				u32 base);
+> +int qcom_pmic_typec_pdphy_stub_probe(struct platform_device *pdev,
+> +				     struct pmic_typec *tcpm);
+>   
+>   #endif /* __QCOM_PMIC_TYPEC_PDPHY_H__ */
+> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy_stub.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy_stub.c
+> new file mode 100644
+> index 000000000000..5d3b0e78d4d8
+> --- /dev/null
+> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy_stub.c
+> @@ -0,0 +1,67 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2024, Linaro Ltd. All rights reserved.
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/slab.h>
+> +#include <linux/usb/pd.h>
+> +#include <linux/usb/tcpm.h>
+> +#include "qcom_pmic_typec.h"
+> +#include "qcom_pmic_typec_pdphy.h"
+> +
+> +static int qcom_pmic_typec_pdphy_stub_pd_transmit(struct tcpc_dev *tcpc,
+> +						  enum tcpm_transmit_type type,
+> +						  const struct pd_message *msg,
+> +						  unsigned int negotiated_rev)
+> +{
+> +	struct pmic_typec *tcpm = tcpc_to_tcpm(tcpc);
+> +	struct device *dev = tcpm->dev;
+> +
+> +	dev_dbg(dev, "pdphy_transmit: type=%d\n", type);
+> +
+> +	tcpm_pd_transmit_complete(tcpm->tcpm_port,
+> +				  TCPC_TX_SUCCESS);
+> +
+> +	return 0;
+> +}
+> +
+> +static int qcom_pmic_typec_pdphy_stub_set_pd_rx(struct tcpc_dev *tcpc, bool on)
+> +{
+> +	struct pmic_typec *tcpm = tcpc_to_tcpm(tcpc);
+> +	struct device *dev = tcpm->dev;
+> +
+> +	dev_dbg(dev, "set_pd_rx: %s\n", on ? "on" : "off");
+> +
+> +	return 0;
+> +}
+> +
+> +static int qcom_pmic_typec_pdphy_stub_set_roles(struct tcpc_dev *tcpc, bool attached,
+> +						enum typec_role power_role,
+> +						enum typec_data_role data_role)
+> +{
+> +	struct pmic_typec *tcpm = tcpc_to_tcpm(tcpc);
+> +	struct device *dev = tcpm->dev;
+> +
+> +	dev_dbg(dev, "pdphy_set_roles: data_role_host=%d power_role_src=%d\n",
+> +		data_role, power_role);
+> +
+> +	return 0;
+> +}
+> +
+> +int qcom_pmic_typec_pdphy_stub_probe(struct platform_device *pdev,
+> +				     struct pmic_typec *tcpm)
+> +{
+> +	tcpm->tcpc.set_pd_rx = qcom_pmic_typec_pdphy_stub_set_pd_rx;
+> +	tcpm->tcpc.set_roles = qcom_pmic_typec_pdphy_stub_set_roles;
+> +	tcpm->tcpc.pd_transmit = qcom_pmic_typec_pdphy_stub_pd_transmit;
+> +
+> +	return 0;
+> +}
 > 
 
-LTGM
+So this answers the question I had on IRC whether or not the Linux TCPM 
+layer could tolerate a stubbed PD layers.
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+I think this _should_ be fine, I certainly have no problem with the 
+approach overall and the intevention in the code seems small.
+
+Good work.
+
+Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
