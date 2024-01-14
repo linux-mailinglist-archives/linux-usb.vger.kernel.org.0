@@ -1,144 +1,140 @@
-Return-Path: <linux-usb+bounces-5036-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5038-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3D5F82D1C7
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Jan 2024 18:43:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FF9B82D290
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 00:07:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2D3E281FFD
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Jan 2024 17:43:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE0A1B20E93
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Jan 2024 23:07:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22F37101D2;
-	Sun, 14 Jan 2024 17:43:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4E32C680;
+	Sun, 14 Jan 2024 23:07:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="G8/lsiwd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k/CfRm+1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6182BF9D0;
-	Sun, 14 Jan 2024 17:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.helo=mx0b-0016f401.pphosted.com
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40EFrbhI014352;
-	Sun, 14 Jan 2024 09:22:06 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	pfpt0220; bh=QQNf0lKyajsE6Luo4IJ5sBtXhUXF5LYFHu/e6XK5dmg=; b=G8/
-	lsiwd0GmCFpnkzD6MHMPsw8tQnZDR3glMsGv/bJayu9Nhbp2CW/YfhWJgHcZvfs4
-	MRzyzCOjvJwyVFlnyRA/5J4/nLX0h/AYADP0JkWO9umCiI7N/MuWld6BAWx2DOLv
-	TE0b1EQbXv+GLpATW9hAQA+Kj5k0gjlYqJXNiCr4JnQ6pvf7ogF3LuSYncg79mhp
-	q2idmfAqL+AW3+EANnsEyCJ36RW7aR+V08r0Zwr8Z3vuEx2CzS78H61FtyBbiTPy
-	xXcM1Rw9bLKWHXeaks3KDLdq4GdFTlrHeXbi7weyjJkbAnp5iYit2WVdHUdy4ZSZ
-	GBVX9Zp/XzkAT+x9sbw==
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3vktwkafqx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-	Sun, 14 Jan 2024 09:22:05 -0800 (PST)
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 14 Jan
- 2024 09:22:03 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Sun, 14 Jan 2024 09:22:03 -0800
-Received: from dc3lp-swdev041.marvell.com (dc3lp-swdev041.marvell.com [10.6.60.191])
-	by maili.marvell.com (Postfix) with ESMTP id 7D0025E6873;
-	Sun, 14 Jan 2024 09:22:01 -0800 (PST)
-From: Elad Nachman <enachman@marvell.com>
-To: <gregkh@linuxfoundation.org>,
-        rowland.harvard.edu@mx0b-0016f401.pphosted.com, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC: <enachman@marvell.com>
-Subject: [PATCH v4 2/2] usb: host: Add ac5 to EHCI Orion
-Date: Sun, 14 Jan 2024 19:21:54 +0200
-Message-ID: <20240114172154.2622275-3-enachman@marvell.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240114172154.2622275-1-enachman@marvell.com>
-References: <20240114172154.2622275-1-enachman@marvell.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89D81E4AB
+	for <linux-usb@vger.kernel.org>; Sun, 14 Jan 2024 23:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705273641; x=1736809641;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ul5LxjoVAGj+T21ZGU67V27kHziwuFjxBxMjDR3PjfY=;
+  b=k/CfRm+1dvpIqorXt1byWXOTtAwGwbpERp7JcgnHAYWVJM1WHpWiNAey
+   BD8gy/W2SVQL5fQ2txSKquyGJHZw6tOgfqp0/QfPFiSWWBxNZtc9uvbKA
+   MDlmd3MaE8Zul+KBOZt9uYKoZBegJU3dw2GqeTOFKG17PTutPWwBtCU1v
+   uCAAgbjoBjE3/Y7WWQgYXNMin5hs3PC0o0eeHG55Nh/0Gn2eSN+h5H4Qt
+   AnoXBwEFnbBXXWeM+Pre+aW9SmJeuuMzdZJ5e7cTsRrNmTrGcx+vbuqv6
+   vO/e+p6vufVPXyjLF+dAYfdN3XZhUO4v5CjrTTt0wp9DYwKhpgBuGA0hw
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="6592282"
+X-IronPort-AV: E=Sophos;i="6.04,195,1695711600"; 
+   d="scan'208";a="6592282"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2024 15:07:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="776564186"
+X-IronPort-AV: E=Sophos;i="6.04,195,1695711600"; 
+   d="scan'208";a="776564186"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 14 Jan 2024 15:07:17 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rP9ZS-000Buk-2Q;
+	Sun, 14 Jan 2024 23:07:14 +0000
+Date: Mon, 15 Jan 2024 07:06:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xu Yang <xu.yang_2@nxp.com>, gregkh@linuxfoundation.org,
+	benjamin.tissoires@redhat.com, hdegoede@redhat.com,
+	ivan.orlov0322@gmail.com, heikki.krogerus@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com
+Subject: Re: [PATCH] usb: roles: try to get/put all relevant modules
+Message-ID: <202401150608.0Ok2pmGw-lkp@intel.com>
+References: <20240112080108.1147450-1-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 6g2FV-TDOt1RYnH2hzDVuTU4ot22dik8
-X-Proofpoint-GUID: 6g2FV-TDOt1RYnH2hzDVuTU4ot22dik8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240112080108.1147450-1-xu.yang_2@nxp.com>
 
-From: Elad Nachman <enachman@marvell.com>
+Hi Xu,
 
-Add support for ac5 to the EHCI Orion platform driver.
-The ac5 SOC has DDR starting at offset 0x2_0000_0000,
-Hence it requires a larger than 32-bit DMA mask to operate.
-Move the dma mask to be pointed by the OF match data, and
-use that match data when initializng the DMA mask.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Elad Nachman <enachman@marvell.com>
----
- drivers/usb/host/ehci-orion.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus hid/for-next westeri-thunderbolt/next linus/master v6.7 next-20240112]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/usb/host/ehci-orion.c b/drivers/usb/host/ehci-orion.c
-index 6c47ab0a491d..ad145a54ca74 100644
---- a/drivers/usb/host/ehci-orion.c
-+++ b/drivers/usb/host/ehci-orion.c
-@@ -65,6 +65,15 @@ struct orion_ehci_hcd {
- 
- static struct hc_driver __read_mostly ehci_orion_hc_driver;
- 
-+/*
-+ * Legacy DMA mask is 32 bit.
-+ * AC5 has the DDR starting at 8GB, hence it requires
-+ * a larger (34-bit) DMA mask, in order for DMA allocations
-+ * to succeed:
-+ */
-+static const u64 dma_mask_orion =	DMA_BIT_MASK(32);
-+static const u64 dma_mask_ac5 =		DMA_BIT_MASK(34);
-+
- /*
-  * Implement Orion USB controller specification guidelines
-  */
-@@ -211,6 +220,7 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
- 	int irq, err;
- 	enum orion_ehci_phy_ver phy_version;
- 	struct orion_ehci_hcd *priv;
-+	u64 *dma_mask_ptr;
- 
- 	if (usb_disabled())
- 		return -ENODEV;
-@@ -228,7 +238,8 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
- 	 * set. Since shared usb code relies on it, set it here for
- 	 * now. Once we have dma capability bindings this can go away.
- 	 */
--	err = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-+	dma_mask_ptr = (u64 *)of_device_get_match_data(&pdev->dev);
-+	err = dma_coerce_mask_and_coherent(&pdev->dev, *dma_mask_ptr);
- 	if (err)
- 		goto err;
- 
-@@ -332,8 +343,9 @@ static void ehci_orion_drv_remove(struct platform_device *pdev)
- }
- 
- static const struct of_device_id ehci_orion_dt_ids[] = {
--	{ .compatible = "marvell,orion-ehci", },
--	{ .compatible = "marvell,armada-3700-ehci", },
-+	{ .compatible = "marvell,orion-ehci", .data = &dma_mask_orion},
-+	{ .compatible = "marvell,armada-3700-ehci", .data = &dma_mask_orion},
-+	{ .compatible = "marvell,ac5-ehci", .data = &dma_mask_ac5},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, ehci_orion_dt_ids);
+url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Yang/usb-roles-try-to-get-put-all-relevant-modules/20240112-155735
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20240112080108.1147450-1-xu.yang_2%40nxp.com
+patch subject: [PATCH] usb: roles: try to get/put all relevant modules
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240115/202401150608.0Ok2pmGw-lkp@intel.com/config)
+compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project 9bde5becb44ea071f5e1fa1f5d4071dc8788b18c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240115/202401150608.0Ok2pmGw-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401150608.0Ok2pmGw-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/roles/class.c:37:6: warning: no previous prototype for function 'usb_role_switch_get_modules' [-Wmissing-prototypes]
+      37 | void usb_role_switch_get_modules(struct device *dev)
+         |      ^
+   drivers/usb/roles/class.c:37:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      37 | void usb_role_switch_get_modules(struct device *dev)
+         | ^
+         | static 
+>> drivers/usb/roles/class.c:46:6: warning: no previous prototype for function 'usb_role_switch_put_modules' [-Wmissing-prototypes]
+      46 | void usb_role_switch_put_modules(struct device *dev)
+         |      ^
+   drivers/usb/roles/class.c:46:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      46 | void usb_role_switch_put_modules(struct device *dev)
+         | ^
+         | static 
+   2 warnings generated.
+
+
+vim +/usb_role_switch_get_modules +37 drivers/usb/roles/class.c
+
+    36	
+  > 37	void usb_role_switch_get_modules(struct device *dev)
+    38	{
+    39		while (dev) {
+    40			if (dev->driver)
+    41				WARN_ON(!try_module_get(dev->driver->owner));
+    42			dev = dev->parent;
+    43		}
+    44	}
+    45	
+  > 46	void usb_role_switch_put_modules(struct device *dev)
+    47	{
+    48		while (dev) {
+    49			if (dev->driver)
+    50				module_put(dev->driver->owner);
+    51			dev = dev->parent;
+    52		}
+    53	}
+    54	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
