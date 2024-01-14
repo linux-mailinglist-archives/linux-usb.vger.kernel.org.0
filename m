@@ -1,263 +1,81 @@
-Return-Path: <linux-usb+bounces-5024-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5025-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 620B082CEA7
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Jan 2024 21:57:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C98CD82CF97
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Jan 2024 04:41:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B17E9B22333
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Jan 2024 20:57:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CE31B21E40
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Jan 2024 03:41:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2157318C08;
-	Sat, 13 Jan 2024 20:56:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9ADC17FE;
+	Sun, 14 Jan 2024 03:41:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Mu6HD8DW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WDHMJeYj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2B818C05
-	for <linux-usb@vger.kernel.org>; Sat, 13 Jan 2024 20:56:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-50eabfac2b7so8752917e87.0
-        for <linux-usb@vger.kernel.org>; Sat, 13 Jan 2024 12:56:06 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 147A61851
+	for <linux-usb@vger.kernel.org>; Sun, 14 Jan 2024 03:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-7bb5fda069bso334048239f.0
+        for <linux-usb@vger.kernel.org>; Sat, 13 Jan 2024 19:41:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705179365; x=1705784165; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g3WqPQqMhpu3cR1Hf9/2WsEYMLGlQ4ylvG16zRtJv1g=;
-        b=Mu6HD8DWsWELuRtG0tYaHlhzc8A+/zvU9/zT2wo+lS0RXWS1LqRZudHtcgw7ZlrdTh
-         xq0TkVl2k8c5v5DF+z5jEt4Edo1ooR41kMNsuEEMm6SySfOI+TlfRRsdXZTFqiYBEjDr
-         xarjtfZzubyF7wjAZFxJ8VDLwCslGapSot3E/qq4a4tFVIt3sDvsiT/EdSOjPN2O5QpH
-         nesxnSWIoHTKQ04c7eNaBhEadU1LUdhDzcGFHq0fo/UNLp+Fc56R9nIRJdJ1p6lwmsUz
-         w9HaJfHKg/BrIqsM8b5vHCXNHXwRnwsViDwQ/8kTs+83y2leZ6KZUK1Z1h5KK74FFU+2
-         aZ3g==
+        d=gmail.com; s=20230601; t=1705203662; x=1705808462; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nl5R37RgJiJE4BDM/vYyACgdd9Ip+Z4IoNGRc6eN0As=;
+        b=WDHMJeYjXXHJR+PQCeOY0KddaPi66nXFsKCmlUNiiw3Cl8/uJhALm8gbbEFQA86GDa
+         B7n8Cx0Y8N5bA3+rWNZp9VNo5SNY3cn4Gx7Psaei+YfvBEf/46R2CMyHedSeez7BQzpR
+         lVeti0B8T6oAcD/N/ohP9RvA98eb1Xpv6escTRtTntAYUFlEbAYEJ3u4WsvOGrgPfx08
+         KkaVYrwl5Y4/RLe4xbXrjY8aB408G07wE21YdyVtHvFaY+TZH2CRbqV9qL14gZ9GGBtg
+         QLpIUBgVf7cplV8jc+FL5whjonTBfmazWBhkuPlrwTwcDebpj5yhwKlD9Haz2J4CJgx+
+         2foQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705179365; x=1705784165;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g3WqPQqMhpu3cR1Hf9/2WsEYMLGlQ4ylvG16zRtJv1g=;
-        b=hDgrB7t3sm5I9E4V/R84+oap6nQmbOJ2BM8JPpGF3n/bWEUzK4V0zdwyKmcRixHarp
-         4ruZcuoZ5XL2IOp/6P1U4K5IowQwBKXXPLwNOFK4hCzXJa4owY+m+BGufOCAtCmZllR+
-         NE9ja6HPXW6wXbAXZwBJutsJEU8r7psefFVHqaWoMggPsJsMtdtOGjPIoG0E1N07LxW1
-         GHxlCyZPGwM0WRCg8d5GOXX13pSc83VNw7VHAGlODeYrAb1ePoDIksv4PX2JTH7FpjXW
-         9ajI/yHMu3m91DBbPHd/+24oUAHPCsr3PXcCa74oTSfBFwb2ITpHW47/CAGoDyh0CBr6
-         KwYg==
-X-Gm-Message-State: AOJu0YyhHAk6HsR08/0wVp/QLebfMJgsT1kXU+1kPlEu7vxVFs94zsrx
-	uyqlN1yw8L+pGqmPHVC85k+wB17ng95dDw==
-X-Google-Smtp-Source: AGHT+IHoxTXkzP/XPfT3u0hUoP6WnqNyOCTq8GbneVE2E6Aj/bXR7prpCOngtnBZcVXVwtjGiBiLhA==
-X-Received: by 2002:ac2:43db:0:b0:50e:3b8f:3c40 with SMTP id u27-20020ac243db000000b0050e3b8f3c40mr1404982lfl.43.1705179365104;
-        Sat, 13 Jan 2024 12:56:05 -0800 (PST)
-Received: from umbar.lan ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id p14-20020a056512328e00b0050e9355d7eesm919802lfe.103.2024.01.13.12.56.04
+        d=1e100.net; s=20230601; t=1705203662; x=1705808462;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Nl5R37RgJiJE4BDM/vYyACgdd9Ip+Z4IoNGRc6eN0As=;
+        b=krx4OvFBikmM7v9uBVxaQza2kA8uZwqELo7JmNG588rmpKzJAowlt63pcyE7MDr1YA
+         lbPGBfsazKOsg92hjly4e0e2mZC72LGhazJmWmpi0ZCOtmiQ/s/Ctyx5MU+UUEEliJAE
+         jRUAsTjCbcGSqOkgmfLZAXUSBbZ12QuY5CwHWl4LWIGj2Iw10iWXniPiqV5XPSV4e6uW
+         MkI2vzyKAhQaVWj9lCZvCTl75VljXyL5aXIuBUFvN/Xwaztcz25VuqTrH+u+9r/9hTNT
+         wWzslW2aP9IPdEGEfiMVMbmJnDrpdUWIBaHadsSfpX7IdrO+rAJRB4wPy+enUy5C4pgB
+         NLWQ==
+X-Gm-Message-State: AOJu0YywA+QIhQGOBU6xvwjn8Xnc112X548H/erTd4kzPZSpBQKGDgPF
+	US5498/9BKgssnF9ADQyMtY=
+X-Google-Smtp-Source: AGHT+IEH6kwnBDO6OAxJYHf2dntwUkYAFG3mkuhFozgs5/F5OZGjqhct+pPE8QA5Xc/8/VCLKj05+w==
+X-Received: by 2002:a5e:dc42:0:b0:7ba:9c04:2e03 with SMTP id s2-20020a5edc42000000b007ba9c042e03mr4980268iop.27.1705203662050;
+        Sat, 13 Jan 2024 19:41:02 -0800 (PST)
+Received: from debian.realtek. ([115.135.24.14])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170902c1ca00b001d492055303sm5415632plc.279.2024.01.13.19.41.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jan 2024 12:56:04 -0800 (PST)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sat, 13 Jan 2024 22:55:58 +0200
-Subject: [PATCH v2 15/15] arm64: dts: qcom: qrb4210-rb2: enable USB-C port
- handling
+        Sat, 13 Jan 2024 19:41:01 -0800 (PST)
+From: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+To: andreas.noever@gmail.com
+Cc: michael.jamet@intel.com,
+	mika.westerberg@linux.intel.com,
+	YehezkelShB@gmail.com,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] thunderbolt: Fix xdomain rx_lanes_show and tx_lanes_show
+Date: Sun, 14 Jan 2024 11:40:53 +0800
+Message-Id: <20240114034054.28562-1-rahimi.mhmmd@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240113-pmi632-typec-v2-15-182d9aa0a5b3@linaro.org>
-References: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org>
-In-Reply-To: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
- Guenter Roeck <linux@roeck-us.net>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3380;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=XAUYT0JI8EGw2t2EwxsMog3tphSISbkThFhkLyZxRdY=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBlovjYIg71eDGgUhWPH+SjPHm4oIIik1Y2R/pIb
- 75l3i29BimJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZaL42AAKCRCLPIo+Aiko
- 1WqdB/9CYDUoI9k27gvPkw54OvJgUI9rmwd+I3OFtDqKSGk7n6Z0slhDzwM92kwibCzirbZS2Qs
- PoRsEZAKV17iiz5fDVaPou+GBqVywPM81njziMdDRXt0lQJG3K3HXEKJpNOtiTFVeTzDtr3ggE/
- lSTQwGkRddo14aBxz0l5ud1+f/g8VHtY3+FTwRUcXvDkfaxeTh11D+DnPlpr9UrSlnel3kh8HXH
- lUagL5gLd4TOe6C2f+MyCF/jHTbrzcTWBhLlGL2wDSOCL5R6ahy9wvzeeMB3tFaoZumbCNjXpul
- BO9jy4WDFuoyPoQTEYTf//6ZuOKXychZTbkJSxqolEKHEX1r
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+Content-Transfer-Encoding: 8bit
 
-Plug in USB-C related bits and pieces to enable USB role switching and
-USB-C orientation handling for the Qualcomm RB2 board.
-
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 50 ++++++++++++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sm6115.dtsi     | 43 +++++++++++++++++++++++++++
- 2 files changed, 93 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-index 52f31f3166c2..696d6d43c56b 100644
---- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-@@ -6,8 +6,10 @@
- /dts-v1/;
- 
- #include <dt-bindings/leds/common.h>
-+#include <dt-bindings/usb/pd.h>
- #include "sm4250.dtsi"
- #include "pm6125.dtsi"
-+#include "pmi632.dtsi"
- 
- / {
- 	model = "Qualcomm Technologies, Inc. QRB4210 RB2";
-@@ -256,6 +258,46 @@ kypd_vol_up_n: kypd-vol-up-n-state {
- 	};
- };
- 
-+&pmi632_typec {
-+	status = "okay";
-+
-+	connector {
-+		compatible = "usb-c-connector";
-+
-+		power-role = "dual";
-+		data-role = "dual";
-+		self-powered;
-+
-+		typec-power-opmode = "default";
-+		pd-disable;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+				pmi632_hs_in: endpoint {
-+					remote-endpoint = <&usb_dwc3_hs>;
-+				};
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+				pmi632_ss_in: endpoint {
-+					remote-endpoint = <&usb_qmpphy_out>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&pmi632_vbus {
-+	regulator-min-microamp = <500000>;
-+	regulator-max-microamp = <3000000>;
-+	status = "okay";
-+};
-+
- &pon_pwrkey {
- 	status = "okay";
- };
-@@ -607,6 +649,10 @@ &usb {
- 	status = "okay";
- };
- 
-+&usb_dwc3_hs {
-+	remote-endpoint = <&pmi632_hs_in>;
-+};
-+
- &usb_hsphy {
- 	vdd-supply = <&vreg_l4a_0p9>;
- 	vdda-pll-supply = <&vreg_l12a_1p8>;
-@@ -622,6 +668,10 @@ &usb_qmpphy {
- 	status = "okay";
- };
- 
-+&usb_qmpphy_out {
-+	remote-endpoint = <&pmi632_ss_in>;
-+};
-+
- &wifi {
- 	vdd-0.8-cx-mx-supply = <&vreg_l8a_0p664>;
- 	vdd-1.8-xo-supply = <&vreg_l16a_1p3>;
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 76c429e8ebab..01dff6641280 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -878,8 +878,29 @@ usb_qmpphy: phy@1615000 {
- 			clock-output-names = "usb3_phy_pipe_clk_src";
- 
- 			#phy-cells = <0>;
-+			orientation-switch;
- 
- 			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					usb_qmpphy_out: endpoint {
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					usb_qmpphy_usb_ss_in: endpoint {
-+						remote-endpoint = <&usb_dwc3_ss>;
-+					};
-+				};
-+			};
- 		};
- 
- 		system_noc: interconnect@1880000 {
-@@ -1614,6 +1635,28 @@ usb_dwc3: usb@4e00000 {
- 				snps,has-lpm-erratum;
- 				snps,hird-threshold = /bits/ 8 <0x10>;
- 				snps,usb3_lpm_capable;
-+
-+				usb-role-switch;
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+
-+						usb_dwc3_hs: endpoint {
-+						};
-+					};
-+
-+					port@1 {
-+						reg = <1>;
-+
-+						usb_dwc3_ss: endpoint {
-+							remote-endpoint = <&usb_qmpphy_usb_ss_in>;
-+						};
-+					};
-+				};
- 			};
- 		};
- 
-
--- 
-2.39.2
+While reviewing the USB4 Gen4 code, I came across a section that appears to be incorrect.
+Despite consulting the USB4 v2 and Inter-Domain specifications, I couldn't find a justification for it.
+Please take a look at the patch email and let me know if there's anything I might be overlooking. Thank you.
 
 
