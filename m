@@ -1,101 +1,126 @@
-Return-Path: <linux-usb+bounces-5033-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5034-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 364E482D164
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Jan 2024 17:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A4AB82D18D
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Jan 2024 18:06:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D68821F21664
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Jan 2024 16:14:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38DD31F2155A
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Jan 2024 17:06:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B4A13FF4;
-	Sun, 14 Jan 2024 16:13:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8DF8538D;
+	Sun, 14 Jan 2024 17:06:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kkhGhuBm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vgi2LRGB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 608377E
-	for <linux-usb@vger.kernel.org>; Sun, 14 Jan 2024 16:13:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33765009941so6507252f8f.3
-        for <linux-usb@vger.kernel.org>; Sun, 14 Jan 2024 08:13:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705248831; x=1705853631; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jnkq2UkgPpVsEo47nILwi/m7D73qWwB4CzFMK6Ortrw=;
-        b=kkhGhuBmqZEm1U36KEXt0uG/abEjWX6jkygvD6lMg94bywKXx+0IDvSCIzptL0BfVM
-         5vXtt1t4YIQvs+3wjlOTv/xQ+5CYvbdbAR+y5xKKM2DpYEBN8eXLCdbzvb7uYc69vDez
-         kp5hFnN7eP7o+kYaZgTgF+U0n2lDJFPIqgciSBzcq/brfU4mi/BJR4aoxFKMnj85zcQB
-         uweCQ5dOWMhQLC/WIHDoby2WXlQgFwTX4KuXnKud4FvK5BOoZxd03dUVnZK73kTqE1/M
-         bY+DHuHHHdwTVuXCuDZtIl7sXik/ukOP1nH5v59HbPm7+IzVX8WGUPWHDYpnknQJzUwl
-         vgJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705248831; x=1705853631;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jnkq2UkgPpVsEo47nILwi/m7D73qWwB4CzFMK6Ortrw=;
-        b=kh3C8pBkhBPSQe6w1pWF9RAjQta7S/a/TbCAhzxCDN/XzZvpXyiZ13gFb1U6Up9uTL
-         2p6+zOqTM2Pdy4+Y2mmeWH3sV0aymXJOU7Sjy1AlDaX6T3yWWiv1zdlltVdrvStc6Wcn
-         ygbSuF9ZY1pwx+HYYjSWBSyfgidHMrB/nIJmXToq9Z/0jMbCrjaZlx0cWP6ETjOdAFi9
-         Us4qRAFH5aimJKNRMZC37Eq3hcXpeCo8Kb7eNSpyrfb2djAO/GQKroC/JiLikJiHwrqE
-         0BjwiqhEOxoF7ibwSpLq3qdIp6xEHT52CAmWthyPYfGZGfwHrs+dca9OUwBPYDXfAX3I
-         jnuQ==
-X-Gm-Message-State: AOJu0Yy/tsCCT4phnwa5fUowwCWEQ4CQgWvRqLWWugGvS/IRHDIAztJ8
-	v/qOqNI4HCBvP67RmRfZgJx4v74/sWiLkw==
-X-Google-Smtp-Source: AGHT+IF5m2DAEY26RamFHE/RDILSrRoXqn+NXcQBtc0X9MyybfSFoA+02oJOWrUK/+mSZShCljgbVA==
-X-Received: by 2002:adf:eacc:0:b0:337:62ca:7f2e with SMTP id o12-20020adfeacc000000b0033762ca7f2emr2727073wrn.93.1705248830746;
-        Sun, 14 Jan 2024 08:13:50 -0800 (PST)
-Received: from [192.168.100.86] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id e19-20020a5d5953000000b0033609b71825sm9451486wri.35.2024.01.14.08.13.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Jan 2024 08:13:50 -0800 (PST)
-Message-ID: <66aa917e-d1dd-497a-ab06-6577c8256e13@linaro.org>
-Date: Sun, 14 Jan 2024 16:13:49 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B8E3C36;
+	Sun, 14 Jan 2024 17:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705251993; x=1736787993;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kBypvo3nEuuDndZPzEooAarNiHapFV9jzwSKYnqP4Ss=;
+  b=Vgi2LRGB1y72El36q9UJ7MXjaAG1tm7r83zy8MRfiPK9eocmFHKCZ96a
+   V+c/vHksOWc9E4e9cC1qlZ98raftTBxahB/sBtzHX81wGj9HucHiGKGmw
+   jo12A03ZKOWxifW5929s9A9aWHm2TuspsddowrgKEeE1G7GB6WPGlLayb
+   eJbmEiz+u2QYJgYFqHMsfrLu1EfCjeO8MkCcPSIHYJmW7s2tGVvrg29Jy
+   Y0PNGg4HqyR4tNGg6b/x3jxIdkYNCPyA6yiI772oToIPL+gw6y4BY6f+p
+   0iyU6PrATxS2iKuA14tQvUv7svHGBRIJ5PMQ/qX3xGUtICrnAU7Aw3W0k
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="18081194"
+X-IronPort-AV: E=Sophos;i="6.04,194,1695711600"; 
+   d="scan'208";a="18081194"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2024 09:06:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="783579560"
+X-IronPort-AV: E=Sophos;i="6.04,194,1695711600"; 
+   d="scan'208";a="783579560"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2024 09:06:28 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1rP3pP-0000000Dy2n-46Gw;
+	Sun, 14 Jan 2024 18:59:19 +0200
+Date: Sun, 14 Jan 2024 18:59:19 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Hardik Gajjar <hgajjar@de.adit-jv.com>,
+	Ferry Toth <ftoth@exalondelft.nl>
+Cc: gregkh@linuxfoundation.org, s.hauer@pengutronix.de,
+	jonathanh@nvidia.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_linyyuan@quicinc.com,
+	paul@crapouillou.net, quic_eserrao@quicinc.com,
+	erosca@de.adit-jv.com
+Subject: Re: [PATCH v4] usb: gadget: u_ether: Replace netif_stop_queue with
+ netif_device_detach
+Message-ID: <ZaQS5x-XK08Jre6I@smile.fi.intel.com>
+References: <20231006153808.9758-1-hgajjar@de.adit-jv.com>
+ <20231006155646.12938-1-hgajjar@de.adit-jv.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 06/15] usb: typec: qcom-pmic-typec: fix arguments of
- qcom_pmic_typec_pdphy_set_roles
-Content-Language: en-US
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood
- <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Guenter Roeck <linux@roeck-us.net>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
-References: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org>
- <20240113-pmi632-typec-v2-6-182d9aa0a5b3@linaro.org>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20240113-pmi632-typec-v2-6-182d9aa0a5b3@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231006155646.12938-1-hgajjar@de.adit-jv.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On 13/01/2024 20:55, Dmitry Baryshkov wrote:
-> +				 (data_role == TYPEC_HOST ? MSG_CONFIG_PORT_DATA_ROLE : 0) |
-> +				 (power_role == TYPEC_SOURCE ? MSG_CONFIG_PORT_POWER_ROLE : 0));
++Cc: Ferry.
 
-Not a big fan of this syntax but... its fine too
+On Fri, Oct 06, 2023 at 05:56:46PM +0200, Hardik Gajjar wrote:
+> This patch replaces the usage of netif_stop_queue with netif_device_detach
+> in the u_ether driver. The netif_device_detach function not only stops all
+> tx queues by calling netif_tx_stop_all_queues but also marks the device as
+> removed by clearing the __LINK_STATE_PRESENT bit.
+> 
+> This change helps notify user space about the disconnection of the device
+> more effectively, compared to netif_stop_queue, which only stops a single
+> transmit queue.
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+This change effectively broke my USB ether setup.
+
+git bisect start
+# status: waiting for both good and bad commits
+# good: [1f24458a1071f006e3f7449c08ae0f12af493923] Merge tag 'tty-6.7-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty
+git bisect good 1f24458a1071f006e3f7449c08ae0f12af493923
+# status: waiting for bad commit, 1 good commit known
+# bad: [2c40c1c6adab90ee4660caf03722b3a3ec67767b] Merge tag 'usb-6.7-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
+git bisect bad 2c40c1c6adab90ee4660caf03722b3a3ec67767b
+# bad: [17d6b82d2d6d467149874b883cdba844844b996d] usb/usbip: fix wrong data added to platform device
+git bisect bad 17d6b82d2d6d467149874b883cdba844844b996d
+# good: [ba6b83a910b6d8a9379bda55cbf06cb945473a96] usb: xhci-mtk: add a bandwidth budget table
+git bisect good ba6b83a910b6d8a9379bda55cbf06cb945473a96
+# good: [dddc00f255415b826190cfbaa5d6dbc87cd9ded1] Revert "usb: gadget: uvc: cleanup request when not in correct state"
+git bisect good dddc00f255415b826190cfbaa5d6dbc87cd9ded1
+# bad: [8f999ce60ea3d47886b042ef1f22bb184b6e9c59] USB: typec: tps6598x: Refactor tps6598x port registration
+git bisect bad 8f999ce60ea3d47886b042ef1f22bb184b6e9c59
+# bad: [f49449fbc21e7e9550a5203902d69c8ae7dfd918] usb: gadget: u_ether: Replace netif_stop_queue with netif_device_detach
+git bisect bad f49449fbc21e7e9550a5203902d69c8ae7dfd918
+# good: [97475763484245916735a1aa9a3310a01d46b008] USB: usbip: fix stub_dev hub disconnect
+git bisect good 97475763484245916735a1aa9a3310a01d46b008
+# good: [0f5aa1b01263b8b621bc4f031a1f2983ef8517b7] usb: usbtest: fix a type promotion bug
+git bisect good 0f5aa1b01263b8b621bc4f031a1f2983ef8517b7
+# first bad commit: [f49449fbc21e7e9550a5203902d69c8ae7dfd918] usb: gadget: u_ether: Replace netif_stop_queue with netif_device_detach
+
+Note, revert indeed helps. Should I send a revert?
+
+I use configfs to setup USB EEM function and it worked till this commit.
+If needed, I can share my scripts, but I believe it's not needed as here
+we see a clear regression.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
