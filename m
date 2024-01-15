@@ -1,82 +1,92 @@
-Return-Path: <linux-usb+bounces-5051-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5052-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20DE982D589
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 10:07:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 237B982D59A
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 10:14:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 922E61F2171B
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 09:07:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA490281E76
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 09:14:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22F5FC131;
-	Mon, 15 Jan 2024 09:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A24BC13E;
+	Mon, 15 Jan 2024 09:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cJp8ZJIg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VcbMcvTI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E96D514;
-	Mon, 15 Jan 2024 09:07:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3851D275;
+	Mon, 15 Jan 2024 09:14:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705309642; x=1736845642;
+  t=1705310045; x=1736846045;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6toMTsY2MQJYqbY6Y4j4fMTjC7Z9ecuuf5b634SQvJc=;
-  b=cJp8ZJIgEkfDhHGrh9fuMNm7p+Vw/14+Y631Bv9w5Myapd7ypoUzIX2k
-   YzFeBAN5chp8+0ZEC1IV+EwswWFXFcRvftFus1IZPTfgfYoAA5YdGVx4y
-   5KCTS3juCodiZG+bgVg4bCFo7fhFptVIy+YsjSQ5xc1LG4yQjqBDTJeNV
-   VZVaT8cna5Sph8f9DScfvNLU1AsCsYO9+5l3SogWt6myG2hAxb6WQbUGj
-   V0DZGCFNNmU/GwBLxVwrWAxktspj1fN26RlP4SZgG6W6sFE7T/WIBlk9S
-   NOMcS0/5Txr4Ik66fg2bzBo6siFiEEmcyoHlnUKFJ3MxeJglmOFXXea2v
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="398433822"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=/y28wE8Tgm9DLaM6gUQGM7EgFzEnSo+8GE8JINXEIZ4=;
+  b=VcbMcvTIvvbidyHpGIZhI0cEET4ssY4n3VdtWHxspdk3gJvXDOXzIS3V
+   izIb1q/gEYfyVrtNh4X0pcS+G2j9BAI+Xtc6NnU0kpD07wAPYA/H9Zr3X
+   CWJlkLUFIroWclt5T7mDQxVN447M3WDABgXOrMCtDhKQpYbr16VOiYw1h
+   /r0OJuNP/8EwlCstaAbmxzyAy5AnNpha1YPyI+CN1gMdI88koSh3LhdMx
+   H61dIyQ8e8lK8he9UV8phPdA4fMoLvdYZsNyV5sXDelIA1gwGK34oaW4a
+   zr7FKmiybxw1ALsy1yAmIYNVjPWnLsFgJp5muefq0W7Ska9RHcM4dejuC
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="18171359"
 X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="398433822"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 01:07:20 -0800
+   d="scan'208";a="18171359"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 01:14:04 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="1030585206"
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="759804403"
 X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="1030585206"
+   d="scan'208";a="759804403"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga006.fm.intel.com with SMTP; 15 Jan 2024 01:07:17 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 15 Jan 2024 11:07:16 +0200
-Date: Mon, 15 Jan 2024 11:07:16 +0200
+  by orsmga006.jf.intel.com with SMTP; 15 Jan 2024 01:13:56 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 15 Jan 2024 11:13:55 +0200
+Date: Mon, 15 Jan 2024 11:13:55 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: RD Babiera <rdbabiera@google.com>
 Cc: linux@roeck-us.net, gregkh@linuxfoundation.org,
 	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
 	badhri@google.com, bryan.odonoghue@linaro.org, agross@kernel.org,
 	andersson@kernel.org, konrad.dybcio@linaro.org
-Subject: Re: [PATCH v3 01/12] usb: typec: altmodes: add typec_cable_ops to
- typec_altmode
-Message-ID: <ZaT1xE6kQGGnc3Jq@kuha.fi.intel.com>
+Subject: Re: [PATCH v3 05/12] usb: typec: tcpm: process receive and
+ transmission of sop' messages
+Message-ID: <ZaT2Q5vV060SA949@kuha.fi.intel.com>
 References: <20240108191620.987785-14-rdbabiera@google.com>
- <20240108191620.987785-15-rdbabiera@google.com>
+ <20240108191620.987785-19-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240108191620.987785-15-rdbabiera@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240108191620.987785-19-rdbabiera@google.com>
 
-On Mon, Jan 08, 2024 at 07:16:14PM +0000, RD Babiera wrote:
-> Add typec_cable_ops struct for enter, exit, and vdm. The struct is added
-> to typec_altmode so port alt modes can have access to partner and cable
-> specific callbacks, and alt mode drivers can specify operations over SOP'
-> and SOP'' without modifying the existing API.
+On Mon, Jan 08, 2024 at 07:16:18PM +0000, RD Babiera wrote:
+> Add negotiated revision and tx/rx message ids to tcpm_port specific to
+> SOP'. tx_sop_type is added to the tcpm_port to determine whether the
+> current constructed message will be sent over SOP or SOP' if not
+> sent immediately.
 > 
-> typec_port_register_cable_ops is added as a new symbol for port drivers
-> to use to register cable operations to their registered port alt modes.
+> tcpm_pd_rx_handler updates the received message ids. SOP* messages are not
+> processed afterwards. The handler also calls tcpm_can_communicate_sop_prime
+> to determine if a SOP' message is directed towards the port, and drops SOP'
+> messages it should not respond to.
+> 
+> tcpm_can_communicate_sop_prime is added as a helper to determine whether
+> the port is capable of communicating over SOP' at a given moment. Being
+> the Vconn source is a requirement in Power Delivery 3.0 but only a
+> recommendation in Power Delviery 2.0. Because the port should ensure that
+> the cable is powered before communication, always enforce the port is the
+> Vconn source regardless of revision.
 > 
 > Signed-off-by: RD Babiera <rdbabiera@google.com>
 
@@ -84,224 +94,249 @@ Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
 > Changes since v2:
-> * fixed documentation prototype errors
+> * Fixed style errors, switch statements with TCPC_TX_SOP now combine
+> with default case.
 > ---
->  drivers/usb/typec/bus.c           | 102 ++++++++++++++++++++++++++++++
->  drivers/usb/typec/class.c         |  19 ++++++
->  include/linux/usb/typec.h         |   4 ++
->  include/linux/usb/typec_altmode.h |  20 ++++++
->  4 files changed, 145 insertions(+)
+>  drivers/usb/typec/tcpm/tcpm.c | 145 +++++++++++++++++++++++++++++++---
+>  1 file changed, 134 insertions(+), 11 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
-> index e95ec7e382bb..6ea103e1abae 100644
-> --- a/drivers/usb/typec/bus.c
-> +++ b/drivers/usb/typec/bus.c
-> @@ -244,6 +244,108 @@ typec_altmode_get_partner(struct typec_altmode *adev)
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index ff0fcf560c88..d2ca85c8fec6 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -505,6 +505,35 @@ struct tcpm_port {
+>  	 * transitions.
+>  	 */
+>  	bool potential_contaminant;
+> +
+> +	/* SOP* Related Fields */
+> +	/*
+> +	 * tx_sop_type determines which SOP* a message is being sent on.
+> +	 * For messages that are queued and not sent immediately such as in
+> +	 * tcpm_queue_message or messages that send after state changes,
+> +	 * the tx_sop_type is set accordingly.
+> +	 */
+> +	enum tcpm_transmit_type tx_sop_type;
+> +	/*
+> +	 * Prior to discovering the port partner's Specification Revision, the
+> +	 * Vconn source and cable plug will use the lower of their two revisions.
+> +	 *
+> +	 * When the port partner's Specification Revision is discovered, the following
+> +	 * rules are put in place.
+> +	 *	1. If the cable revision (1) is lower than the revision negotiated
+> +	 * between the port and partner (2), the port and partner will communicate
+> +	 * on revision (2), but the port and cable will communicate on revision (1).
+> +	 *	2. If the cable revision (1) is higher than the revision negotiated
+> +	 * between the port and partner (2), the port and partner will communicate
+> +	 * on revision (2), and the port and cable will communicate on revision (2)
+> +	 * as well.
+> +	 */
+> +	unsigned int negotiated_rev_prime;
+> +	/*
+> +	 * Each SOP* type must maintain their own tx and rx message IDs
+> +	 */
+> +	unsigned int message_id_prime;
+> +	unsigned int rx_msgid_prime;
+>  #ifdef CONFIG_DEBUG_FS
+>  	struct dentry *dentry;
+>  	struct mutex logbuffer_lock;	/* log buffer access lock */
+> @@ -894,19 +923,30 @@ static void tcpm_ams_finish(struct tcpm_port *port)
 >  }
->  EXPORT_SYMBOL_GPL(typec_altmode_get_partner);
 >  
-> +/* -------------------------------------------------------------------------- */
-> +/* API for cable alternate modes */
+>  static int tcpm_pd_transmit(struct tcpm_port *port,
+> -			    enum tcpm_transmit_type type,
+> +			    enum tcpm_transmit_type tx_sop_type,
+>  			    const struct pd_message *msg)
+>  {
+>  	unsigned long timeout;
+>  	int ret;
+> +	unsigned int negotiated_rev;
 > +
-> +/**
-> + * typec_cable_altmode_enter - Enter Mode
-> + * @adev: The alternate mode
-> + * @sop: Cable plug target for Enter Mode command
-> + * @vdo: VDO for the Enter Mode command
-> + *
-> + * Alternate mode drivers use this function to enter mode on the cable plug.
-> + * If the alternate mode does not require VDO, @vdo must be NULL.
-> + */
-> +int typec_cable_altmode_enter(struct typec_altmode *adev, enum typec_plug_index sop, u32 *vdo)
-> +{
-> +	struct altmode *partner = to_altmode(adev)->partner;
-> +	struct typec_altmode *pdev;
-> +
-> +	if (!adev || adev->active)
-> +		return 0;
-> +
-> +	if (!partner)
-> +		return -ENODEV;
-> +
-> +	pdev = &partner->adev;
-> +
-> +	if (!pdev->active)
-> +		return -EPERM;
-> +
-> +	if (!pdev->cable_ops || !pdev->cable_ops->enter)
-> +		return -EOPNOTSUPP;
-> +
-> +	return pdev->cable_ops->enter(pdev, sop, vdo);
-> +}
-> +EXPORT_SYMBOL_GPL(typec_cable_altmode_enter);
-> +
-> +/**
-> + * typec_cable_altmode_exit - Exit Mode
-> + * @adev: The alternate mode
-> + * @sop: Cable plug target for Exit Mode command
-> + *
-> + * The alternate mode drivers use this function to exit mode on the cable plug.
-> + */
-> +int typec_cable_altmode_exit(struct typec_altmode *adev, enum typec_plug_index sop)
-> +{
-> +	struct altmode *partner = to_altmode(adev)->partner;
-> +	struct typec_altmode *pdev;
-> +
-> +	if (!adev || !adev->active)
-> +		return 0;
-> +
-> +	if (!partner)
-> +		return -ENODEV;
-> +
-> +	pdev = &partner->adev;
-> +
-> +	if (!pdev->cable_ops || !pdev->cable_ops->exit)
-> +		return -EOPNOTSUPP;
-> +
-> +	return pdev->cable_ops->exit(pdev, sop);
-> +}
-> +EXPORT_SYMBOL_GPL(typec_cable_altmode_exit);
-> +
-> +/**
-> + * typec_cable_altmode_vdm - Send Vendor Defined Messages (VDM) between the cable plug and port.
-> + * @adev: Alternate mode handle
-> + * @sop: Cable plug target for VDM
-> + * @header: VDM Header
-> + * @vdo: Array of Vendor Defined Data Objects
-> + * @count: Number of Data Objects
-> + *
-> + * The alternate mode drivers use this function for SVID specific communication
-> + * with the cable plugs. The port drivers use it to deliver the Structured VDMs
-> + * received from the cable plugs to the alternate mode drivers.
-> + */
-> +int typec_cable_altmode_vdm(struct typec_altmode *adev, enum typec_plug_index sop,
-> +			    const u32 header, const u32 *vdo, int count)
-> +{
-> +	struct altmode *altmode;
-> +	struct typec_altmode *pdev;
-> +
-> +	if (!adev)
-> +		return 0;
-> +
-> +	altmode = to_altmode(adev);
-> +
-> +	if (is_typec_plug(adev->dev.parent)) {
-> +		if (!altmode->partner)
-> +			return -ENODEV;
-> +		pdev = &altmode->partner->adev;
-> +	} else {
-> +		if (!altmode->plug[sop])
-> +			return -ENODEV;
-> +		pdev = &altmode->plug[sop]->adev;
+> +	switch (tx_sop_type) {
+> +	case TCPC_TX_SOP_PRIME:
+> +		negotiated_rev = port->negotiated_rev_prime;
+> +		break;
+> +	case TCPC_TX_SOP:
+> +	default:
+> +		negotiated_rev = port->negotiated_rev;
+> +		break;
 > +	}
-> +
-> +	if (!pdev->cable_ops || !pdev->cable_ops->vdm)
-> +		return -EOPNOTSUPP;
-> +
-> +	return pdev->cable_ops->vdm(pdev, sop, header, vdo, count);
-> +}
-> +EXPORT_SYMBOL_GPL(typec_cable_altmode_vdm);
-> +
->  /* -------------------------------------------------------------------------- */
->  /* API for the alternate mode drivers */
 >  
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 015aa9253353..8fc9795d6bd4 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -2280,6 +2280,25 @@ void typec_port_register_altmodes(struct typec_port *port,
->  }
->  EXPORT_SYMBOL_GPL(typec_port_register_altmodes);
+>  	if (msg)
+>  		tcpm_log(port, "PD TX, header: %#x", le16_to_cpu(msg->header));
+>  	else
+> -		tcpm_log(port, "PD TX, type: %#x", type);
+> +		tcpm_log(port, "PD TX, type: %#x", tx_sop_type);
 >  
-> +/**
-> + * typec_port_register_cable_ops - Register typec_cable_ops to port altmodes
-> + * @altmodes: USB Type-C Port's altmode vector
-> + * @max_altmodes: The maximum number of alt modes supported by the port
-> + * @ops: Cable alternate mode vector
+>  	reinit_completion(&port->tx_complete);
+> -	ret = port->tcpc->pd_transmit(port->tcpc, type, msg, port->negotiated_rev);
+> +	ret = port->tcpc->pd_transmit(port->tcpc, tx_sop_type, msg, negotiated_rev);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> @@ -919,7 +959,17 @@ static int tcpm_pd_transmit(struct tcpm_port *port,
+>  
+>  	switch (port->tx_status) {
+>  	case TCPC_TX_SUCCESS:
+> -		port->message_id = (port->message_id + 1) & PD_HEADER_ID_MASK;
+> +		switch (tx_sop_type) {
+> +		case TCPC_TX_SOP_PRIME:
+> +			port->message_id_prime = (port->message_id_prime + 1) &
+> +						 PD_HEADER_ID_MASK;
+> +			break;
+> +		case TCPC_TX_SOP:
+> +		default:
+> +			port->message_id = (port->message_id + 1) &
+> +					   PD_HEADER_ID_MASK;
+> +			break;
+> +		}
+>  		/*
+>  		 * USB PD rev 2.0, 8.3.2.2.1:
+>  		 * USB PD rev 3.0, 8.3.2.1.3:
+> @@ -1604,6 +1654,57 @@ static void tcpm_register_partner_altmodes(struct tcpm_port *port)
+>  
+>  #define supports_modal(port)	PD_IDH_MODAL_SUPP((port)->partner_ident.id_header)
+>  
+> +/*
+> + * Helper to determine whether the port is capable of SOP' communication at the
+> + * current point in time.
 > + */
-> +void typec_port_register_cable_ops(struct typec_altmode **altmodes, int max_altmodes,
-> +				   const struct typec_cable_ops *ops)
+> +static bool tcpm_can_communicate_sop_prime(struct tcpm_port *port)
 > +{
-> +	int i;
-> +
-> +	for (i = 0; i < max_altmodes; i++) {
-> +		if (!altmodes[i])
-> +			return;
-> +		altmodes[i]->cable_ops = ops;
-> +	}
+> +	/* Check to see if tcpc supports SOP' communication */
+> +	if (!port->tcpc->cable_comm_capable || !port->tcpc->cable_comm_capable(port->tcpc))
+> +		return false;
+> +	/*
+> +	 * Power Delivery 2.0 Section 6.3.11
+> +	 * Before communicating with a Cable Plug a Port Should ensure that it
+> +	 * is the Vconn Source and that the Cable Plugs are powered by
+> +	 * performing a Vconn swap if necessary. Since it cannot be guaranteed
+> +	 * that the present Vconn Source is supplying Vconn, the only means to
+> +	 * ensure that the Cable Plugs are powered is for a Port wishing to
+> +	 * communicate with a Cable Plug is to become the Vconn Source.
+> +	 *
+> +	 * Power Delivery 3.0 Section 6.3.11
+> +	 * Before communicating with a Cable Plug a Port Shall ensure that it
+> +	 * is the Vconn source.
+> +	 */
+> +	if (port->vconn_role != TYPEC_SOURCE)
+> +		return false;
+> +	/*
+> +	 * Power Delivery 2.0 Section 2.4.4
+> +	 * When no Contract or an Implicit Contract is in place the Source can
+> +	 * communicate with a Cable Plug using SOP' packets in order to discover
+> +	 * its characteristics.
+> +	 *
+> +	 * Power Delivery 3.0 Section 2.4.4
+> +	 * When no Contract or an Implicit Contract is in place only the Source
+> +	 * port that is supplying Vconn is allowed to send packets to a Cable
+> +	 * Plug and is allowed to respond to packets from the Cable Plug.
+> +	 */
+> +	if (!port->explicit_contract)
+> +		return port->pwr_role == TYPEC_SOURCE;
+> +	if (port->negotiated_rev == PD_REV30)
+> +		return true;
+> +	/*
+> +	 * Power Delivery 2.0 Section 2.4.4
+> +	 *
+> +	 * When an Explicit Contract is in place the DFP (either the Source or
+> +	 * the Sink) can communicate with the Cable Plug(s) using SOP’/SOP”
+> +	 * Packets (see Figure 2-3).
+> +	 */
+> +	if (port->negotiated_rev == PD_REV20)
+> +		return port->data_role == TYPEC_HOST;
+> +	return false;
 > +}
-> +EXPORT_SYMBOL_GPL(typec_port_register_cable_ops);
 > +
->  /**
->   * typec_register_port - Register a USB Type-C Port
->   * @parent: Parent device
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index a05d6f6f2536..38f93d72fd1b 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -18,6 +18,7 @@ struct typec_cable;
->  struct typec_plug;
->  struct typec_port;
->  struct typec_altmode_ops;
-> +struct typec_cable_ops;
+>  static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+>  			const u32 *p, int cnt, u32 *response,
+>  			enum adev_actions *adev_action)
+> @@ -2989,14 +3090,18 @@ static void tcpm_pd_rx_handler(struct kthread_work *work)
+>  	tcpm_log(port, "PD RX, header: %#x [%d]", le16_to_cpu(msg->header),
+>  		 port->attached);
 >  
->  struct fwnode_handle;
->  struct device;
-> @@ -157,6 +158,9 @@ void typec_port_register_altmodes(struct typec_port *port,
->  	const struct typec_altmode_ops *ops, void *drvdata,
->  	struct typec_altmode **altmodes, size_t n);
+> -	/* Ignore SOP' for now */
+> -	if (rx_sop_type == TCPC_TX_SOP_PRIME)
+> -		goto done;
+> -
+>  	if (port->attached) {
+>  		enum pd_ctrl_msg_type type = pd_header_type_le(msg->header);
+>  		unsigned int msgid = pd_header_msgid_le(msg->header);
 >  
-> +void typec_port_register_cable_ops(struct typec_altmode **altmodes, int max_altmodes,
-> +				   const struct typec_cable_ops *ops);
+> +		/*
+> +		 * Drop SOP' messages if cannot receive via
+> +		 * tcpm_can_communicate_sop_prime
+> +		 */
+> +		if (rx_sop_type == TCPC_TX_SOP_PRIME &&
+> +		    !tcpm_can_communicate_sop_prime(port))
+> +			goto done;
 > +
->  void typec_unregister_altmode(struct typec_altmode *altmode);
+>  		/*
+>  		 * USB PD standard, 6.6.1.2:
+>  		 * "... if MessageID value in a received Message is the
+> @@ -3006,16 +3111,27 @@ static void tcpm_pd_rx_handler(struct kthread_work *work)
+>  		 * Message). Note: this shall not apply to the Soft_Reset
+>  		 * Message which always has a MessageID value of zero."
+>  		 */
+> -		if (msgid == port->rx_msgid && type != PD_CTRL_SOFT_RESET)
+> +		switch (rx_sop_type) {
+> +		case TCPC_TX_SOP_PRIME:
+> +			if (msgid == port->rx_msgid_prime)
+> +				goto done;
+> +			port->rx_msgid_prime = msgid;
+> +			/* Ignore SOP' for now */
+>  			goto done;
+> -		port->rx_msgid = msgid;
+> +		case TCPC_TX_SOP:
+> +		default:
+> +			if (msgid == port->rx_msgid && type != PD_CTRL_SOFT_RESET)
+> +				goto done;
+> +			port->rx_msgid = msgid;
+> +			break;
+> +		}
 >  
->  struct typec_port *typec_altmode2port(struct typec_altmode *alt);
-> diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
-> index 28aeef8f9e7b..72ec8058543a 100644
-> --- a/include/linux/usb/typec_altmode.h
-> +++ b/include/linux/usb/typec_altmode.h
-> @@ -20,6 +20,7 @@ struct typec_altmode_ops;
->   * @active: Tells has the mode been entered or not
->   * @desc: Optional human readable description of the mode
->   * @ops: Operations vector from the driver
-> + * @cable_ops: Cable operations vector from the driver.
->   */
->  struct typec_altmode {
->  	struct device			dev;
-> @@ -30,6 +31,7 @@ struct typec_altmode {
+>  		/*
+>  		 * If both ends believe to be DFP/host, we have a data role
+>  		 * mismatch.
+>  		 */
+>  		if (!!(le16_to_cpu(msg->header) & PD_HEADER_DATA_ROLE) ==
+> -		    (port->data_role == TYPEC_HOST)) {
+> +		    (port->data_role == TYPEC_HOST) && rx_sop_type == TCPC_TX_SOP) {
+>  			tcpm_log(port,
+>  				 "Data role mismatch, initiating error recovery");
+>  			tcpm_set_state(port, ERROR_RECOVERY, 0);
+> @@ -3720,6 +3836,7 @@ static void tcpm_reset_port(struct tcpm_port *port)
+>  	 * we can check tcpm_pd_rx_handler() if we had seen it before.
+>  	 */
+>  	port->rx_msgid = -1;
+> +	port->rx_msgid_prime = -1;
 >  
->  	char				*desc;
->  	const struct typec_altmode_ops	*ops;
-> +	const struct typec_cable_ops	*cable_ops;
->  };
+>  	port->tcpc->set_pd_rx(port->tcpc, false);
+>  	tcpm_init_vbus(port);	/* also disables charging */
+> @@ -4034,8 +4151,11 @@ static void run_state_machine(struct tcpm_port *port)
+>  		port->pwr_opmode = TYPEC_PWR_MODE_USB;
+>  		port->caps_count = 0;
+>  		port->negotiated_rev = PD_MAX_REV;
+> +		port->negotiated_rev_prime = PD_MAX_REV;
+>  		port->message_id = 0;
+> +		port->message_id_prime = 0;
+>  		port->rx_msgid = -1;
+> +		port->rx_msgid_prime = -1;
+>  		port->explicit_contract = false;
+>  		/* SNK -> SRC POWER/FAST_ROLE_SWAP finished */
+>  		if (port->ams == POWER_ROLE_SWAP ||
+> @@ -4275,8 +4395,11 @@ static void run_state_machine(struct tcpm_port *port)
+>  		typec_set_pwr_opmode(port->typec_port, opmode);
+>  		port->pwr_opmode = TYPEC_PWR_MODE_USB;
+>  		port->negotiated_rev = PD_MAX_REV;
+> +		port->negotiated_rev_prime = PD_MAX_REV;
+>  		port->message_id = 0;
+> +		port->message_id_prime = 0;
+>  		port->rx_msgid = -1;
+> +		port->rx_msgid_prime = -1;
+>  		port->explicit_contract = false;
 >  
->  #define to_typec_altmode(d) container_of(d, struct typec_altmode, dev)
-> @@ -75,6 +77,24 @@ int typec_altmode_notify(struct typec_altmode *altmode, unsigned long conf,
->  const struct typec_altmode *
->  typec_altmode_get_partner(struct typec_altmode *altmode);
->  
-> +/**
-> + * struct typec_cable_ops - Cable alternate mode operations vector
-> + * @enter: Operations to be executed with Enter Mode Command
-> + * @exit: Operations to be executed with Exit Mode Command
-> + * @vdm: Callback for SVID specific commands
-> + */
-> +struct typec_cable_ops {
-> +	int (*enter)(struct typec_altmode *altmode, enum typec_plug_index sop, u32 *vdo);
-> +	int (*exit)(struct typec_altmode *altmode, enum typec_plug_index sop);
-> +	int (*vdm)(struct typec_altmode *altmode, enum typec_plug_index sop,
-> +		   const u32 hdr, const u32 *vdo, int cnt);
-> +};
-> +
-> +int typec_cable_altmode_enter(struct typec_altmode *altmode, enum typec_plug_index sop, u32 *vdo);
-> +int typec_cable_altmode_exit(struct typec_altmode *altmode, enum typec_plug_index sop);
-> +int typec_cable_altmode_vdm(struct typec_altmode *altmode, enum typec_plug_index sop,
-> +			    const u32 header, const u32 *vdo, int count);
-> +
->  /*
->   * These are the connector states (USB, Safe and Alt Mode) defined in USB Type-C
->   * Specification. SVID specific connector states are expected to follow and
+>  		if (port->ams == POWER_ROLE_SWAP ||
 > -- 
 > 2.43.0.472.g3155946c3a-goog
 
