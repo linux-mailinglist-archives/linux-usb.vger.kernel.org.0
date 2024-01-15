@@ -1,135 +1,218 @@
-Return-Path: <linux-usb+bounces-5069-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5070-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C593B82D8B2
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 13:03:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EE4582D92C
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 13:54:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5E311C21AEC
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 12:03:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E818A1F2225E
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 12:54:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCCF52C698;
-	Mon, 15 Jan 2024 12:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D49B7168CD;
+	Mon, 15 Jan 2024 12:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="TGJmJtp0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C7C81E865;
-	Mon, 15 Jan 2024 12:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-	id F0DD414035E; Mon, 15 Jan 2024 12:57:23 +0100 (CET)
-Date: Mon, 15 Jan 2024 12:57:23 +0100
-From: "Christian A. Ehrhardt" <lk@c--e.de>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, Dell.Client.Kernel@dell.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Jack Pham <quic_jackp@quicinc.com>,
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-	Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] usb: ucsi: Apply UCSI_ACK_CONNECTOR_CHANGE_ACK_CMD
- to Dell systems
-Message-ID: <ZaUdowRhVjAxAIM+@cae.in-ulm.de>
-References: <20240107001701.130535-1-lk@c--e.de>
- <20240107001701.130535-5-lk@c--e.de>
- <ZaTp5rQLu4rh3Xhm@kuha.fi.intel.com>
+Received: from aposti.net (aposti.net [89.234.176.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C192916430;
+	Mon, 15 Jan 2024 12:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+	s=mail; t=1705323269;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=wPS9PGNnktolpsMyZWmcqV0h8t00iOZeW++DpiBOf6M=;
+	b=TGJmJtp0rN5t00c7n03gNOyVRJq4sQk1NlzxuvE+wlv3F7ww+rqw4JAzaY3L/wysP9SV1z
+	Jhjhq34N8dQBkbqC4uubJK102+jYzUJsrS4FuslO3E5waxli50YKt9q/aMQ8R5Uts0Qs3c
+	D1T2M9eJKFH3dSsExfcnatwd3T18/d8=
+Message-ID: <c100b5f75b12de4a331dd36de3573483dbde915f.camel@crapouillou.net>
+Subject: Re: [PATCH v3 3/4] usb: gadget: functionfs: Add DMABUF import
+ interface
+From: Paul Cercueil <paul@crapouillou.net>
+To: Daniel Vetter <daniel@ffwll.ch>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sumit Semwal
+ <sumit.semwal@linaro.org>, Christian =?ISO-8859-1?Q?K=F6nig?=
+ <christian.koenig@amd.com>, Jonathan Corbet <corbet@lwn.net>, Michael
+ Hennerich <Michael.Hennerich@analog.com>, linux-doc@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, Andrzej Pietrasiewicz
+ <andrzej.p@collabora.com>,  linaro-mm-sig@lists.linaro.org, Nuno
+ =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>, Jonathan Cameron
+ <jic23@kernel.org>,  linux-media@vger.kernel.org
+Date: Mon, 15 Jan 2024 13:54:27 +0100
+In-Reply-To: <ZZ1Dx1Jqbi61_Afb@phenom.ffwll.local>
+References: <20240108120056.22165-1-paul@crapouillou.net>
+	 <20240108120056.22165-4-paul@crapouillou.net>
+	 <ZZvtEXL8DLPPdtPs@phenom.ffwll.local>
+	 <a44aca93adc60ce56a64c50797a029631900172e.camel@crapouillou.net>
+	 <ZZwU827NMHbx7bsO@phenom.ffwll.local>
+	 <2c0d4ef1b657c56ea2290fe16d757ce563a3e71b.camel@crapouillou.net>
+	 <ZZxKvR9gjH8D5qxj@phenom.ffwll.local>
+	 <31e56028b4d865c60b7c01b2a305b3dd8a21ff7a.camel@crapouillou.net>
+	 <ZZ1Dx1Jqbi61_Afb@phenom.ffwll.local>
+Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
+ keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZMLQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5UzFZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtNz8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe+rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIPdlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7Urf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KFlBwgAhlGy6nqP7O3u7q23hRW5AQ0EXQqFwQEIAMo+MgvYHsyjX3Ja4Oolg1Txzm8woj30ch2nACFCqaO0R/1kLj2VVeLrDyQUOlXx9PD6IQI4M8wy8m0sR4wV2p/g/paw7k65cjzYYLh+FdLNyO7IW
+	YXndJO+wDPi3aK/YKUYepqlP+QsmaHNYNdXEQDRKqNfJg8t0f5rfzp9ryxd1tCnbV+tG8VHQWiZXNqN7062DygSNXFUfQ0vZ3J2D4oAcIAEXTymRQ2+hr3Hf7I61KMHWeSkCvCG2decTYsHlw5Erix/jYWqVOtX0roOOLqWkqpQQJWtU+biWrAksmFmCp5fXIg1Nlg39v21xCXBGxJkxyTYuhdWyu1yDQ+LSIUAEQEAAYkBNgQYAQoAIBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsMAAoJEHPua9InSr1B4wsH/Az767YCT0FSsMNt1jkkdLCBi7nY0GTW+PLP1a4zvVqFMo/vD6uz1ZflVTUAEvcTi3VHYZrlgjcxmcGu239oruqUS8Qy/xgZBp9KF0NTWQSl1iBfVbIU5VV1vHS6r77W5x0qXgfvAUWOH4gmN3MnF01SH2zMcLiaUGF+mcwl15rHbjnT3Nu2399aSE6cep86igfCAyFUOXjYEGlJy+c6UyT+DUylpjQg0nl8MlZ/7Whg2fAU9+FALIbQYQzGlT4c71SibR9T741jnegHhlmV4WXXUD6roFt54t0MSAFSVxzG8mLcSjR2cLUJ3NIPXixYUSEn3tQhfZj07xIIjWxAYZo=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <ZaTp5rQLu4rh3Xhm@kuha.fi.intel.com>
 
+Hi Daniel / Sima,
 
-Hi Heikki,
-
-On Mon, Jan 15, 2024 at 11:05:36AM +0200, Heikki Krogerus wrote:
-> Hi Christian,
+Le mardi 09 janvier 2024 =C3=A0 14:01 +0100, Daniel Vetter a =C3=A9crit=C2=
+=A0:
+> On Tue, Jan 09, 2024 at 12:06:58PM +0100, Paul Cercueil wrote:
+> > Hi Daniel / Sima,
+> >=20
+> > Le lundi 08 janvier 2024 =C3=A0 20:19 +0100, Daniel Vetter a =C3=A9crit=
+=C2=A0:
+> > > On Mon, Jan 08, 2024 at 05:27:33PM +0100, Paul Cercueil wrote:
+> > > > Le lundi 08 janvier 2024 =C3=A0 16:29 +0100, Daniel Vetter a =C3=A9=
+crit=C2=A0:
+> > > > > On Mon, Jan 08, 2024 at 03:21:21PM +0100, Paul Cercueil
+> > > > > wrote:
+> > > > > > Hi Daniel (Sima?),
+> > > > > >=20
+> > > > > > Le lundi 08 janvier 2024 =C3=A0 13:39 +0100, Daniel Vetter a
+> > > > > > =C3=A9crit=C2=A0:
+> > > > > > > On Mon, Jan 08, 2024 at 01:00:55PM +0100, Paul Cercueil
+> > > > > > > wrote:
+> > > > > > > > +static void ffs_dmabuf_signal_done(struct
+> > > > > > > > ffs_dma_fence
+> > > > > > > > *dma_fence, int ret)
+> > > > > > > > +{
+> > > > > > > > +	struct ffs_dmabuf_priv *priv =3D dma_fence-
+> > > > > > > > >priv;
+> > > > > > > > +	struct dma_fence *fence =3D &dma_fence->base;
+> > > > > > > > +
+> > > > > > > > +	dma_fence_get(fence);
+> > > > > > > > +	fence->error =3D ret;
+> > > > > > > > +	dma_fence_signal(fence);
+> > > > > > > > +
+> > > > > > > > +	dma_buf_unmap_attachment(priv->attach,
+> > > > > > > > dma_fence-
+> > > > > > > > > sgt,
+> > > > > > > > dma_fence->dir);
+> > > > > > > > +	dma_fence_put(fence);
+> > > > > > > > +	ffs_dmabuf_put(priv->attach);
+> > > > > > >=20
+> > > > > > > So this can in theory take the dma_resv lock, and if the
+> > > > > > > usb
+> > > > > > > completion
+> > > > > > > isn't an unlimited worker this could hold up completion
+> > > > > > > of
+> > > > > > > future
+> > > > > > > dma_fence, resulting in a deadlock.
+> > > > > > >=20
+> > > > > > > Needs to be checked how usb works, and if stalling
+> > > > > > > indefinitely
+> > > > > > > in
+> > > > > > > the
+> > > > > > > io_complete callback can hold up the usb stack you need
+> > > > > > > to:
+> > > > > > >=20
+> > > > > > > - drop a dma_fence_begin/end_signalling annotations in
+> > > > > > > here
+> > > > > > > - pull out the unref stuff into a separate preallocated
+> > > > > > > worker
+> > > > > > > (or at
+> > > > > > > =C2=A0 least the final unrefs for ffs_dma_buf).
+> > > > > >=20
+> > > > > > Only ffs_dmabuf_put() can attempt to take the dma_resv and
+> > > > > > would
+> > > > > > have
+> > > > > > to be in a worker, right? Everything else would be inside
+> > > > > > the
+> > > > > > dma_fence_begin/end_signalling() annotations?
+> > > > >=20
+> > > > > Yup. Also I noticed that unlike the iio patches you don't
+> > > > > have
+> > > > > the
+> > > > > dma_buf_unmap here in the completion path (or I'm blind?),
+> > > > > which
+> > > > > helps a
+> > > > > lot with avoiding trouble.
+> > > >=20
+> > > > They both call dma_buf_unmap_attachment() in the "signal done"
+> > > > callback, the only difference I see is that it is called after
+> > > > the
+> > > > dma_fence_put() in the iio patches, while it's called before
+> > > > dma_fence_put() here.
+> > >=20
+> > > I was indeed blind ...
+> > >=20
+> > > So the trouble is this wont work because:
+> > > - dma_buf_unmap_attachment() requires dma_resv_lock. This is a
+> > > somewhat
+> > > =C2=A0 recent-ish change from 47e982d5195d ("dma-buf: Move
+> > > =C2=A0 dma_buf_map_attachment() to dynamic locking specification"), s=
+o
+> > > maybe
+> > > =C2=A0 old kernel or you don't have full lockdep enabled to get the
+> > > right
+> > > =C2=A0 splat.
+> > >=20
+> > > - dma_fence critical section forbids dma_resv_lock
+> > >=20
+> > > Which means you need to move this out, but then there's the
+> > > potential
+> > > cache management issue. Which current gpu drivers just kinda
+> > > ignore
+> > > because it doesn't matter for current use-case, they all cache
+> > > the
+> > > mapping
+> > > for about as long as the attachment exists. You might want to do
+> > > the
+> > > same,
+> > > unless that somehow breaks a use-case you have, I have no idea
+> > > about
+> > > that.
+> > > If something breaks with unmap_attachment moved out of the fence
+> > > handling
+> > > then I guess it's high time to add separate cache-management only
+> > > to
+> > > dma_buf (and that's probably going to be quite some wiring up,
+> > > not
+> > > sure
+> > > even how easy that would be to do nor what exactly the interface
+> > > should
+> > > look like).
+> >=20
+> > Ok. Then I'll just cache the mapping for now, I think.
 >=20
-> On Sun, Jan 07, 2024 at 01:17:01AM +0100, Christian A. Ehrhardt wrote:
-> > Apply the UCSI_ACK_CONNECTOR_CHANGE_ACK_CMD to all Dell systems.
-> >=20
-> > There are various reports that ucsi does not work on Dell systems
-> > with "GET_CONNECTOR_STATUS failed". At least some of these are
-> > most likely due to the need for this quirk.
-> >=20
-> > If the logic is wrong users can still use the new quirk override
-> > for the typec_ucsi module to disable the quirk.
-> >=20
-> > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-> > ---
-> >  drivers/usb/typec/ucsi/ucsi_acpi.c | 36 +++++++++++++++++++++++++-----
-> >  1 file changed, 31 insertions(+), 5 deletions(-)
-> >=20
-> > diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucs=
-i/ucsi_acpi.c
-> > index 78a0d13584ad..690d5e55bdc4 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-> > @@ -27,6 +27,11 @@ struct ucsi_acpi {
-> >  	u64 cmd;
-> >  };
-> > =20
-> > +struct ucsi_acpi_attach_data {
-> > +	const struct ucsi_operations *ops;
-> > +	unsigned int quirks;
-> > +};
-> > +
-> >  static int ucsi_acpi_dsm(struct ucsi_acpi *ua, int func)
-> >  {
-> >  	union acpi_object *obj;
-> > @@ -121,12 +126,30 @@ static const struct ucsi_operations ucsi_zenbook_=
-ops =3D {
-> >  	.async_write =3D ucsi_acpi_async_write
-> >  };
-> > =20
-> > -static const struct dmi_system_id zenbook_dmi_id[] =3D {
-> > +static const struct ucsi_acpi_attach_data ucsi_acpi_default_attach_dat=
-a =3D {
-> > +	.ops =3D &ucsi_acpi_ops,
-> > +	.quirks =3D 0
-> > +};
-> > +
-> > +static const struct dmi_system_id ucsi_acpi_quirks[] =3D {
-> >  	{
-> >  		.matches =3D {
-> >  			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> >  			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
-> >  		},
-> > +		.driver_data =3D &(struct ucsi_acpi_attach_data) {
-> > +			.ops =3D &ucsi_zenbook_ops,
-> > +			.quirks =3D 0
-> > +		},
-> > +	},
-> > +	{
-> > +		.matches =3D {
-> > +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> > +		},
-> > +		.driver_data =3D &(struct ucsi_acpi_attach_data) {
-> > +			.ops =3D &ucsi_acpi_ops,
-> > +			.quirks =3D UCSI_ACK_CONNECTOR_CHANGE_ACK_CMD
->=20
-> Please don't add any more quirk flags like that for single user (you
-> may never have more than the one user for it). Let's just first handle
-> this with only Dell's like I proposed.
->=20
-> If there are other platforms that need the same quirk, then we can
-> start looking at how to share the quirk.
+> Yeah I think that's simplest. I did ponder a bit and I don't think
+> it'd be
+> too much pain to add the cache-management functions for device
+> attachments/mappings. But it would be quite some typing ...
+> -Sima
 
-Ok, thanks for the feedback. Will do.
+It looks like I actually do have some hardware which requires the cache
+management. If I cache the mappings in both my IIO and USB code, it
+works fine on my ZedBoard, but it doesn't work on my ZCU102.
 
-However, please note that it is not clear if it is all or only some
-dells that need this. This is the prime reason why I was looking for
-a way to enable/disable the quirk.
+(Or maybe it's something else? What I get from USB in that case is a
+stream of zeros, I'd expect it to be more like a stream of
+garbage/stale data).
 
-     regards   Christian
+So, change of plans; I will now unmap the attachment in the cleanup
+worker after the fence is signalled, and add a warning comment before
+the end of the fence critical section about the need to do cache
+management before the signal.
 
+Does that work for you?
+
+Cheers,
+-Paul
 
