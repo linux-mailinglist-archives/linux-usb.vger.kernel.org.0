@@ -1,60 +1,79 @@
-Return-Path: <linux-usb+bounces-5056-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5057-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B27282D5EF
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 10:28:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B6E482D5F8
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 10:29:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B87741C2148C
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 09:28:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9E5F28312D
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 09:29:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A381CC8F1;
-	Mon, 15 Jan 2024 09:28:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBA75D2E6;
+	Mon, 15 Jan 2024 09:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qg2J2Wcm"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TPsdg61j"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F1C440A;
-	Mon, 15 Jan 2024 09:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705310903; x=1736846903;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hArAJBivRDywIhpNEAo1PV7Hc5uBLnwJRLgIkzytAb0=;
-  b=Qg2J2WcmXuXc6MadO8v4Y295YMA9/ZC3igKbYje2ChwU4IdZy9+9Kujp
-   fBrYsKZ3Xh2ZlvXIs7db5GZzfJXaZdNgjmDwc52A+1a2Cx4TBK2zVgQir
-   kEq/LxRwAXwkQezaZRR5wApfXdPw8WsOkKfbBJ3M0IuACgdpjlCjGGqpI
-   ah8o7DlZq4VSPi2vsVOA/iKT0fzhYPrElS2aPKuGJallcJZIiyh9Ekkqw
-   /VXR56/ZcPp7RcNRERrcvkq0oMox6LES3PHbb+fRCDZ6bRi7xdHMHzArp
-   xPuXAXWTyPbFJpqZlbFZiHfLLLUJExgl3CTIAgAvKQmHFVMB52XDAMaqe
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="398438141"
-X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="398438141"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 01:28:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="927068416"
-X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="927068416"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Jan 2024 01:28:21 -0800
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51BDCEAF8
+	for <linux-usb@vger.kernel.org>; Mon, 15 Jan 2024 09:29:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-555144cd330so10433512a12.2
+        for <linux-usb@vger.kernel.org>; Mon, 15 Jan 2024 01:29:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1705310966; x=1705915766; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VoDXqFFLk9wV6ltZ99cVwiQyTGhTczHKPc4pVMyihu8=;
+        b=TPsdg61jtSV0YjC12KsS4M2mEn4vSfDQVUWkx71Mu0uy+zCn5XzeSibd20TxXAeHT7
+         KBENF0v9/+4TI1KkEIUm3qpdHdF1tkwJwexwfTBgMbYKUBMnnAdClt2OPaeRXIJDKfi2
+         kXWHCzKgerRuM0u0VmGJMx+g2/fg7cuIxPAC6i1ZIQ5K+xUzaqkzQXwJ1yG85X4KUzxu
+         8L//EMFx/zFdkATJ5lV7YkYsm38gY4RQ/lM+kZKw7/56RcuvDqtIDo1yLNOzstdyfCbR
+         ZrxX+8lcw9pABGKDE1muVR8nis4aH5FR1DizjMsm1CNQVfkV5iTcXBkAATzxiuu/HRHg
+         Qvhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705310966; x=1705915766;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VoDXqFFLk9wV6ltZ99cVwiQyTGhTczHKPc4pVMyihu8=;
+        b=WB7LHbraqzEOke1IQDq7S9SbURrKcf6965S5+nM81kTMnx+YVPyahosMN7nNWw70Up
+         lffLlSXzCVdZ08+aQhtMIKuEFlYVPCkp53PzWKgtoaizwvzw3UT8txRPFse5hR9QHhMB
+         j0US9khQNutE5zp4HeudDe61P9OqSqfqjl8czQvgdtGU3VmAuHGjAHo8FjK8nB24Jp91
+         IPa/tOsrLlfsI6v3lx6cr4MYfYEKkXUZsV/N9OecrRE9tSGoFCqZdzKQ3yW6oea0L0Zo
+         KUTOnZkzM32YuVifB+3ggy8hDVVtJUFx1tZccIy/wRp1gj+A28OL1XHlqNN/DS1fKoG/
+         2IOg==
+X-Gm-Message-State: AOJu0YxeXpH0JFb9HGw1BhzHRONPKWM8ks3U0Ax0370kYGzFrGJPm8oB
+	dS1Ng46Gbq3p25KXeVXqbkl9iSVR1yUSQg==
+X-Google-Smtp-Source: AGHT+IE9zqq24puqgCWgG7/Z1GO1TNVC+Q5I3mqjOagkZtncMyOLavJV1OOKm0yrJuUqktkc6HrPnA==
+X-Received: by 2002:a05:6402:5148:b0:558:91c4:2e61 with SMTP id n8-20020a056402514800b0055891c42e61mr2544008edd.40.1705310966547;
+        Mon, 15 Jan 2024 01:29:26 -0800 (PST)
+Received: from krzk-bin.. ([178.197.215.66])
+        by smtp.gmail.com with ESMTPSA id e10-20020a056402104a00b005593a4e1635sm1459143edu.11.2024.01.15.01.29.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jan 2024 01:29:26 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Luca Weiss <luca.weiss@fairphone.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
 	linux-usb@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v3] usb: dwc3: pci: add support for the Intel Arrow Lake-H
-Date: Mon, 15 Jan 2024 11:28:20 +0200
-Message-ID: <20240115092820.1454492-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: usb: add common Type-C USB Switch schema
+Date: Mon, 15 Jan 2024 10:29:23 +0100
+Message-Id: <20240115092923.105275-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,42 +82,247 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch adds the necessary PCI ID for Intel Arrow Lake-H
-devices.
+Several bindings implement parts of Type-C USB orientation and mode
+switching, and retiming.  Keep definition of such properties in one
+place, new usb-switch schema, to avoid duplicate defines.
 
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: stable@vger.kernel.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-Changed since v2: Including changelog.
-Changed since v1: CCd stable.
----
- drivers/usb/dwc3/dwc3-pci.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 12 ++--
+ .../devicetree/bindings/usb/gpio-sbu-mux.yaml | 12 ++--
+ .../devicetree/bindings/usb/nxp,ptn36502.yaml | 12 ++--
+ .../bindings/usb/onnn,nb7vpq904m.yaml         | 13 ++--
+ .../bindings/usb/qcom,wcd939x-usbss.yaml      | 12 ++--
+ .../devicetree/bindings/usb/usb-switch.yaml   | 68 +++++++++++++++++++
+ 6 files changed, 93 insertions(+), 36 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/usb-switch.yaml
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 6604845c397c..39564e17f3b0 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -51,6 +51,8 @@
- #define PCI_DEVICE_ID_INTEL_MTLP		0x7ec1
- #define PCI_DEVICE_ID_INTEL_MTLS		0x7f6f
- #define PCI_DEVICE_ID_INTEL_MTL			0x7e7e
-+#define PCI_DEVICE_ID_INTEL_ARLH		0x7ec1
-+#define PCI_DEVICE_ID_INTEL_ARLH_PCH		0x777e
- #define PCI_DEVICE_ID_INTEL_TGL			0x9a15
- #define PCI_DEVICE_ID_AMD_MR			0x163a
+diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+index f9410eb76a62..8b25b9a01ced 100644
+--- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
++++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+@@ -27,13 +27,8 @@ properties:
+   vcc-supply:
+     description: power supply (2.7V-5.5V)
  
-@@ -421,6 +423,8 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
- 	{ PCI_DEVICE_DATA(INTEL, MTLP, &dwc3_pci_intel_swnode) },
- 	{ PCI_DEVICE_DATA(INTEL, MTL, &dwc3_pci_intel_swnode) },
- 	{ PCI_DEVICE_DATA(INTEL, MTLS, &dwc3_pci_intel_swnode) },
-+	{ PCI_DEVICE_DATA(INTEL, ARLH, &dwc3_pci_intel_swnode) },
-+	{ PCI_DEVICE_DATA(INTEL, ARLH_PCH, &dwc3_pci_intel_swnode) },
- 	{ PCI_DEVICE_DATA(INTEL, TGL, &dwc3_pci_intel_swnode) },
+-  mode-switch:
+-    description: Flag the port as possible handle of altmode switching
+-    type: boolean
+-
+-  orientation-switch:
+-    description: Flag the port as possible handler of orientation switching
+-    type: boolean
++  mode-switch: true
++  orientation-switch: true
  
- 	{ PCI_DEVICE_DATA(AMD, NL_USB, &dwc3_pci_amd_swnode) },
+   port:
+     $ref: /schemas/graph.yaml#/$defs/port-base
+@@ -79,6 +74,9 @@ required:
+   - reg
+   - port
+ 
++allOf:
++  - $ref: usb-switch.yaml#
++
+ additionalProperties: false
+ 
+ examples:
+diff --git a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+index d3b2b666ec2a..88e1607cf053 100644
+--- a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
++++ b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+@@ -33,13 +33,8 @@ properties:
+   vcc-supply:
+     description: power supply
+ 
+-  mode-switch:
+-    description: Flag the port as possible handle of altmode switching
+-    type: boolean
+-
+-  orientation-switch:
+-    description: Flag the port as possible handler of orientation switching
+-    type: boolean
++  mode-switch: true
++  orientation-switch: true
+ 
+   port:
+     $ref: /schemas/graph.yaml#/properties/port
+@@ -54,6 +49,9 @@ required:
+   - orientation-switch
+   - port
+ 
++allOf:
++  - $ref: usb-switch.yaml#
++
+ additionalProperties: false
+ 
+ examples:
+diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn36502.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn36502.yaml
+index eee548ac1abe..d805dde80796 100644
+--- a/Documentation/devicetree/bindings/usb/nxp,ptn36502.yaml
++++ b/Documentation/devicetree/bindings/usb/nxp,ptn36502.yaml
+@@ -20,13 +20,8 @@ properties:
+   vdd18-supply:
+     description: Power supply for VDD18 pin
+ 
+-  retimer-switch:
+-    description: Flag the port as possible handle of SuperSpeed signals retiming
+-    type: boolean
+-
+-  orientation-switch:
+-    description: Flag the port as possible handler of orientation switching
+-    type: boolean
++  orientation-switch: true
++  retimer-switch: true
+ 
+   ports:
+     $ref: /schemas/graph.yaml#/properties/ports
+@@ -49,6 +44,9 @@ required:
+   - compatible
+   - reg
+ 
++allOf:
++  - $ref: usb-switch.yaml#
++
+ additionalProperties: false
+ 
+ examples:
+diff --git a/Documentation/devicetree/bindings/usb/onnn,nb7vpq904m.yaml b/Documentation/devicetree/bindings/usb/onnn,nb7vpq904m.yaml
+index c0201da002f6..589914d22bf2 100644
+--- a/Documentation/devicetree/bindings/usb/onnn,nb7vpq904m.yaml
++++ b/Documentation/devicetree/bindings/usb/onnn,nb7vpq904m.yaml
+@@ -21,14 +21,8 @@ properties:
+     description: power supply (1.8V)
+ 
+   enable-gpios: true
+-
+-  retimer-switch:
+-    description: Flag the port as possible handle of SuperSpeed signals retiming
+-    type: boolean
+-
+-  orientation-switch:
+-    description: Flag the port as possible handler of orientation switching
+-    type: boolean
++  orientation-switch: true
++  retimer-switch: true
+ 
+   ports:
+     $ref: /schemas/graph.yaml#/properties/ports
+@@ -95,6 +89,9 @@ required:
+   - compatible
+   - reg
+ 
++allOf:
++  - $ref: usb-switch.yaml#
++
+ additionalProperties: false
+ 
+ examples:
+diff --git a/Documentation/devicetree/bindings/usb/qcom,wcd939x-usbss.yaml b/Documentation/devicetree/bindings/usb/qcom,wcd939x-usbss.yaml
+index 7ddfd3313a18..96346723f3e9 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,wcd939x-usbss.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,wcd939x-usbss.yaml
+@@ -35,13 +35,8 @@ properties:
+   vdd-supply:
+     description: USBSS VDD power supply
+ 
+-  mode-switch:
+-    description: Flag the port as possible handle of altmode switching
+-    type: boolean
+-
+-  orientation-switch:
+-    description: Flag the port as possible handler of orientation switching
+-    type: boolean
++  mode-switch: true
++  orientation-switch: true
+ 
+   ports:
+     $ref: /schemas/graph.yaml#/properties/ports
+@@ -63,6 +58,9 @@ required:
+   - reg
+   - ports
+ 
++allOf:
++  - $ref: usb-switch.yaml#
++
+ additionalProperties: false
+ 
+ examples:
+diff --git a/Documentation/devicetree/bindings/usb/usb-switch.yaml b/Documentation/devicetree/bindings/usb/usb-switch.yaml
+new file mode 100644
+index 000000000000..0d0b60234d1f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/usb-switch.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/usb-switch.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: USB Orientation and Mode Switches Common Properties
++
++maintainers:
++  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
++
++description:
++  Common properties for devices handling USB mode and orientation switching.
++
++properties:
++  mode-switch:
++    description: Possible handle of altmode switching
++    type: boolean
++
++  orientation-switch:
++    description: Possible handler of orientation switching
++    type: boolean
++
++  retimer-switch:
++    description: Possible handle of SuperSpeed signals retiming
++    type: boolean
++
++  port:
++    $ref: /schemas/graph.yaml#/properties/port
++    description:
++      A port node to link the device to a TypeC controller for the purpose of
++      handling altmode muxing and orientation switching.
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          Super Speed (SS) Output endpoint to the Type-C connector
++
++      port@1:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        description:
++          Super Speed (SS) Input endpoint from the Super-Speed PHY
++        unevaluatedProperties: false
++
++        properties:
++          endpoint:
++            $ref: /schemas/graph.yaml#/$defs/endpoint-base
++            # additionalProperties: true
++            unevaluatedProperties: false
++            properties:
++              data-lanes:
++                $ref: /schemas/types.yaml#/definitions/uint32-array
++                minItems: 1
++                maxItems: 8
++                uniqueItems: true
++                items:
++                  maximum: 8
++
++oneOf:
++  - required:
++      - port
++  - required:
++      - ports
++
++additionalProperties: true
 -- 
-2.43.0
+2.34.1
 
 
