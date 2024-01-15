@@ -1,116 +1,111 @@
-Return-Path: <linux-usb+bounces-5071-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5072-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A07082DA0C
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 14:27:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2032F82DAB9
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 14:57:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFEBD1F21D6A
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 13:27:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 458E21C21A8E
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 13:57:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DEED171A6;
-	Mon, 15 Jan 2024 13:27:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E89AE1756F;
+	Mon, 15 Jan 2024 13:57:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LiIZhU1r"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11388168D8;
-	Mon, 15 Jan 2024 13:27:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=de.adit-jv.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=de.adit-jv.com
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id B9D945201E4;
-	Mon, 15 Jan 2024 14:27:27 +0100 (CET)
-Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
- (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Mon, 15 Jan
- 2024 14:27:27 +0100
-Date: Mon, 15 Jan 2024 14:27:20 +0100
-From: Hardik Gajjar <hgajjar@de.adit-jv.com>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-CC: Hardik Gajjar <hgajjar@de.adit-jv.com>, Ferry Toth <ftoth@exalondelft.nl>,
-	<gregkh@linuxfoundation.org>, <s.hauer@pengutronix.de>,
-	<jonathanh@nvidia.com>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <quic_linyyuan@quicinc.com>,
-	<paul@crapouillou.net>, <quic_eserrao@quicinc.com>, <erosca@de.adit-jv.com>
-Subject: Re: [PATCH v4] usb: gadget: u_ether: Replace netif_stop_queue with
- netif_device_detach
-Message-ID: <20240115132720.GA98840@vmlxhi-118.adit-jv.com>
-References: <20231006153808.9758-1-hgajjar@de.adit-jv.com>
- <20231006155646.12938-1-hgajjar@de.adit-jv.com>
- <ZaQS5x-XK08Jre6I@smile.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0140817585
+	for <linux-usb@vger.kernel.org>; Mon, 15 Jan 2024 13:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705327046; x=1736863046;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=RG37vZkflGLMhN3A26a3EvPmmgK4um4GIMKDpVfjwms=;
+  b=LiIZhU1r1Y5366BTUz+m9hU6R+v/zzBwoUO4ay8SPQlz8alH9j0GFGj2
+   ACO3FapC93qzvg9toTvbkm2gESF8I1nSc0bUJBp5bLHjqpK4fkcPlHtGD
+   LYb0EPpngAVm8949cSbixgXe3iuGUPvHk6CHh1Tw53E9qYUXi1MkpHehn
+   ivnwg2c2r7V/VCGfs5Ox6JEk+X4nHcFTTlKbFuDbHZUmHQ/vwQhxqnkTD
+   Ty7SNRt6i87yU7Jn90sH97L9mE0mTWvCax1DjPEA/re6SsIEaeKsZw6Tq
+   mDZ9Me1Z1KjgL7ZcQCP6Ud8QWmA31guWEdcsqGfCocJ6GZ5dcuHszcI4y
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="18222293"
+X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
+   d="scan'208";a="18222293"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 05:57:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="776735654"
+X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
+   d="scan'208";a="776735654"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga007.jf.intel.com with ESMTP; 15 Jan 2024 05:57:23 -0800
+Message-ID: <a4573246-7047-dba3-efbf-3f88a952e322@linux.intel.com>
+Date: Mon, 15 Jan 2024 15:58:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZaQS5x-XK08Jre6I@smile.fi.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: =?UTF-8?Q?Micha=c5=82_Pecio?= <michal.pecio@gmail.com>,
+ linux-usb@vger.kernel.org
+Cc: Mathias Nyman <mathias.nyman@intel.com>
+References: <20240112235205.1259f60c@foxbook>
+ <20240113214757.3f658913@foxbook> <20240114150647.18a46131@foxbook>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: "Transfer event TRB DMA ptr not part of current TD" spam after
+ USB disconnection
+In-Reply-To: <20240114150647.18a46131@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jan 14, 2024 at 06:59:19PM +0200, Andy Shevchenko wrote:
-> +Cc: Ferry.
+On 14.1.2024 16.06, Michał Pecio wrote:
+> Hi Mathias,
 > 
-> On Fri, Oct 06, 2023 at 05:56:46PM +0200, Hardik Gajjar wrote:
-> > This patch replaces the usage of netif_stop_queue with netif_device_detach
-> > in the u_ether driver. The netif_device_detach function not only stops all
-> > tx queues by calling netif_tx_stop_all_queues but also marks the device as
-> > removed by clearing the __LINK_STATE_PRESENT bit.
-> > 
-> > This change helps notify user space about the disconnection of the device
-> > more effectively, compared to netif_stop_queue, which only stops a single
-> > transmit queue.
+> I found that the code which causes my problems was specifically added
+> by your commit d104d0152a97f ("xhci: fix isoc endpoint dequeue from
+> advancing too far on transaction error").
 > 
-> This change effectively broke my USB ether setup.
+> Reverting this change removes the disconnection spam on my two NEC
+> hosts (different boards but same 1033:0194 rev 03 chip IDs). I have no
+> other hosts available to try at this time.
 > 
-> git bisect start
-> # status: waiting for both good and bad commits
-> # good: [1f24458a1071f006e3f7449c08ae0f12af493923] Merge tag 'tty-6.7-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty
-> git bisect good 1f24458a1071f006e3f7449c08ae0f12af493923
-> # status: waiting for bad commit, 1 good commit known
-> # bad: [2c40c1c6adab90ee4660caf03722b3a3ec67767b] Merge tag 'usb-6.7-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
-> git bisect bad 2c40c1c6adab90ee4660caf03722b3a3ec67767b
-> # bad: [17d6b82d2d6d467149874b883cdba844844b996d] usb/usbip: fix wrong data added to platform device
-> git bisect bad 17d6b82d2d6d467149874b883cdba844844b996d
-> # good: [ba6b83a910b6d8a9379bda55cbf06cb945473a96] usb: xhci-mtk: add a bandwidth budget table
-> git bisect good ba6b83a910b6d8a9379bda55cbf06cb945473a96
-> # good: [dddc00f255415b826190cfbaa5d6dbc87cd9ded1] Revert "usb: gadget: uvc: cleanup request when not in correct state"
-> git bisect good dddc00f255415b826190cfbaa5d6dbc87cd9ded1
-> # bad: [8f999ce60ea3d47886b042ef1f22bb184b6e9c59] USB: typec: tps6598x: Refactor tps6598x port registration
-> git bisect bad 8f999ce60ea3d47886b042ef1f22bb184b6e9c59
-> # bad: [f49449fbc21e7e9550a5203902d69c8ae7dfd918] usb: gadget: u_ether: Replace netif_stop_queue with netif_device_detach
-> git bisect bad f49449fbc21e7e9550a5203902d69c8ae7dfd918
-> # good: [97475763484245916735a1aa9a3310a01d46b008] USB: usbip: fix stub_dev hub disconnect
-> git bisect good 97475763484245916735a1aa9a3310a01d46b008
-> # good: [0f5aa1b01263b8b621bc4f031a1f2983ef8517b7] usb: usbtest: fix a type promotion bug
-> git bisect good 0f5aa1b01263b8b621bc4f031a1f2983ef8517b7
-> # first bad commit: [f49449fbc21e7e9550a5203902d69c8ae7dfd918] usb: gadget: u_ether: Replace netif_stop_queue with netif_device_detach
+> It also resolves similar spam and subsequent stream lockup on one
+> particular pair of host adapter and device, which suffers intermittent
+> transaction errors for reasons currently unknown. With d104d0152a97f
+> reverted this device loses frames as expected but keeps going.
 > 
-> Note, revert indeed helps. Should I send a revert?
-> 
-> I use configfs to setup USB EEM function and it worked till this commit.
-> If needed, I can share my scripts, but I believe it's not needed as here
-> we see a clear regression.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+> So this surely looks like the right thing to do with my NEC hosts, but
+> of course d104d0152a97f was done for a reason, which apparently is that
+> some (unspecified) other hosts really work differently.
 
-Without this patch, there may be a potential crash in a race condition, as __LINK_STATE_PRESENT is monitored at many places in the Network stack to determine the status of the link.
+Thanks for debugging this issue.
 
-Could you please provide details on how this patch affects your functionality? Are you experiencing connection problems or data transfer interruptions?
-Instead of reverting this patch, consider trying the upcoming patch (soon to be available in the mainline) to see if it resolves your issue.
+Most hosts trigger transaction error events for either every TRB as
+xhci spec says, (xhci section 4.10.2) or only on the last TRB in a TD
+which has the "interrupt on completion" IOC flag set.
+  
+If we revert d104d0152a97f and finish the td on the first error event
+then we will get a similar "Transfer event TRB DMA ptr not part of current TD"
+message for each remaing TRB in that TD that issues a error event.
 
-https://lore.kernel.org/lkml/2023122900-commence-agenda-db2c@gregkh/T/#m36a812d3f1e5d744ee32381f6ae4185940b376de
+So this case where only the fist TRB triggers an error event isn't yet
+handled by the driver.
 
-Thanks,
-Hardik
+I'll take a look at it.
+Can you try out some testpatches if I post them?
+
+Thanks
+Mathias
+
 
