@@ -1,131 +1,149 @@
-Return-Path: <linux-usb+bounces-5049-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5050-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41F3882D573
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 10:00:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4E1482D583
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 10:05:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF85DB21266
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 09:00:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E36B01C213FF
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 09:05:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD3CFC134;
-	Mon, 15 Jan 2024 09:00:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D08C132;
+	Mon, 15 Jan 2024 09:05:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="aCqBXiAb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JBYMn6Ok"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F202C120;
-	Mon, 15 Jan 2024 09:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1705309228; x=1736845228;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=g6PvM5PZ5lAwk5blKzy9Iw4vRtHOu2phSirCBIVrkLg=;
-  b=aCqBXiAbxocYXze22dXVsEeep/pieVdfxtp9tPGz24shcBwa+iItmfuf
-   K//P4XW3GeYx0y5J/6yy4o3R6s3JcgSrWdgg4wWikvtGSGeWXi9ZYXMqt
-   ZHGNk+OfMIkTxRQcrFKUSTDJmE4FIkRk0C8M8LCpyno0uoTyFfyLjyEzi
-   HsbksytW2zFXJuSM3I4gZwS/vL+AXqeO//6jUEHsUutUiSDBKX3LuM9rF
-   JXBt+fHwbpi0RvXq8wnIGOIFy9ic3um0dR/QDBanA5FYdr+PmeB6B/SE3
-   EDPdzDpP26IhKmoxMTdjE5tsJTvwvI+ZT816wfSZxUrrvlmI6tBPORQl4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C204428;
+	Mon, 15 Jan 2024 09:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705309542; x=1736845542;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SL8v6t1ojU7KNNC4hLj7h3r8VvNn6mhy2xS3hOYvnnY=;
+  b=JBYMn6OkZYurI7Hrq3IFQD2zSh1kPRalznzWz3I+Cs7ruFp0InosM+yK
+   xkMkn2m50b8LkRk27v75gZTkUGp4hIuCAz1nYatoPDoN08CSiTyt9lyCi
+   B3XtiYwT9DtnXjNUxRUz0J1fJVkd4WKffAPeZtIHYId6hohj1XOnAdALo
+   XTFaLjC4jqobial8O/Cz0j24hg2HkKH6N2O0r1933QFW6ytu1/RTR+DEs
+   Ak5PIvLRcXoE6fxTa89JKMIZSNiNU/gxIIdLErzev/HkcQY8962F0QB0X
+   yDGetJbr4T+Pto8a9R+2QWmDzFB5EM/YvaGT4cPp1GrYHqR2et+rNlztY
    Q==;
-X-IronPort-AV: E=Sophos;i="6.04,196,1695679200"; 
-   d="scan'208";a="34890230"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 15 Jan 2024 10:00:20 +0100
-Received: from steina-w.localnet (steina-w.tq-net.de [10.123.53.25])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 4A7BA280075;
-	Mon, 15 Jan 2024 10:00:04 +0100 (CET)
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Guenter Roeck <linux@roeck-us.net>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, Philipp Zabel <p.zabel@pengutronix.de>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
-Subject: Re: [PATCH v2 05/15] usb: typec: tcpm: fix the PD disabled case
-Date: Mon, 15 Jan 2024 10:00:03 +0100
-Message-ID: <12361952.O9o76ZdvQC@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20240113-pmi632-typec-v2-5-182d9aa0a5b3@linaro.org>
-References: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org> <20240113-pmi632-typec-v2-5-182d9aa0a5b3@linaro.org>
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="485730529"
+X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
+   d="scan'208";a="485730529"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 01:05:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="927063221"
+X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
+   d="scan'208";a="927063221"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 15 Jan 2024 01:05:37 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 15 Jan 2024 11:05:36 +0200
+Date: Mon, 15 Jan 2024 11:05:36 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: "Christian A. Ehrhardt" <lk@c--e.de>
+Cc: linux-usb@vger.kernel.org, Dell.Client.Kernel@dell.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Jack Pham <quic_jackp@quicinc.com>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] usb: ucsi: Apply UCSI_ACK_CONNECTOR_CHANGE_ACK_CMD
+ to Dell systems
+Message-ID: <ZaTp5rQLu4rh3Xhm@kuha.fi.intel.com>
+References: <20240107001701.130535-1-lk@c--e.de>
+ <20240107001701.130535-5-lk@c--e.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240107001701.130535-5-lk@c--e.de>
 
-Hi Dmitry,
+Hi Christian,
 
-Am Samstag, 13. Januar 2024, 21:55:48 CET schrieb Dmitry Baryshkov:
-> If the PD is disabled for the port, port->pds will be left as NULL,
-> which causes the following crash during caps intilisation. Fix the
-> crash.
->=20
-> Unable to handle kernel NULL pointer dereference at virtual address
-> 0000000000000000 Call trace:
->  tcpm_register_port+0xaec/0xc44
->  qcom_pmic_typec_probe+0x1a4/0x254
->  platform_probe+0x68/0xc0
->  really_probe+0x148/0x2ac
->  __driver_probe_device+0x78/0x12c
->  driver_probe_device+0xd8/0x160
-> Bluetooth: hci0: QCA Product ID   :0x0000000a
->  __device_attach_driver+0xb8/0x138
->  bus_for_each_drv+0x80/0xdc
-> Bluetooth: hci0: QCA SOC Version  :0x40020150
->  __device_attach+0x9c/0x188
->  device_initial_probe+0x14/0x20
->  bus_probe_device+0xac/0xb0
->  deferred_probe_work_func+0x8c/0xc8
->  process_one_work+0x1ec/0x51c
->  worker_thread+0x1ec/0x3e4
->  kthread+0x120/0x124
->  ret_from_fork+0x10/0x20
->=20
-> Fixes: cd099cde4ed2 ("usb: typec: tcpm: Support multiple capabilities")
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+On Sun, Jan 07, 2024 at 01:17:01AM +0100, Christian A. Ehrhardt wrote:
+> Apply the UCSI_ACK_CONNECTOR_CHANGE_ACK_CMD to all Dell systems.
+> 
+> There are various reports that ucsi does not work on Dell systems
+> with "GET_CONNECTOR_STATUS failed". At least some of these are
+> most likely due to the need for this quirk.
+> 
+> If the logic is wrong users can still use the new quirk override
+> for the typec_ucsi module to disable the quirk.
+> 
+> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 5945e3a2b0f7..a0978ed1a257 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -6848,7 +6848,8 @@ struct tcpm_port *tcpm_register_port(struct device
-> *dev, struct tcpc_dev *tcpc) if (err)
->  		goto out_role_sw_put;
->=20
-> -	port->typec_caps.pd =3D port->pds[0];
-> +	if (port->pds)
+>  drivers/usb/typec/ucsi/ucsi_acpi.c | 36 +++++++++++++++++++++++++-----
+>  1 file changed, 31 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> index 78a0d13584ad..690d5e55bdc4 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> @@ -27,6 +27,11 @@ struct ucsi_acpi {
+>  	u64 cmd;
+>  };
+>  
+> +struct ucsi_acpi_attach_data {
+> +	const struct ucsi_operations *ops;
+> +	unsigned int quirks;
+> +};
+> +
+>  static int ucsi_acpi_dsm(struct ucsi_acpi *ua, int func)
+>  {
+>  	union acpi_object *obj;
+> @@ -121,12 +126,30 @@ static const struct ucsi_operations ucsi_zenbook_ops = {
+>  	.async_write = ucsi_acpi_async_write
+>  };
+>  
+> -static const struct dmi_system_id zenbook_dmi_id[] = {
+> +static const struct ucsi_acpi_attach_data ucsi_acpi_default_attach_data = {
+> +	.ops = &ucsi_acpi_ops,
+> +	.quirks = 0
+> +};
+> +
+> +static const struct dmi_system_id ucsi_acpi_quirks[] = {
+>  	{
+>  		.matches = {
+>  			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+>  			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
+>  		},
+> +		.driver_data = &(struct ucsi_acpi_attach_data) {
+> +			.ops = &ucsi_zenbook_ops,
+> +			.quirks = 0
+> +		},
+> +	},
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> +		},
+> +		.driver_data = &(struct ucsi_acpi_attach_data) {
+> +			.ops = &ucsi_acpi_ops,
+> +			.quirks = UCSI_ACK_CONNECTOR_CHANGE_ACK_CMD
 
-I'm wondering if the check should be for port->pd_supported instead.
-Nevertheless this works on my "pd-disable" platform as well.
+Please don't add any more quirk flags like that for single user (you
+may never have more than the one user for it). Let's just first handle
+this with only Dell's like I proposed.
 
-Best regards,
-Alexander
+If there are other platforms that need the same quirk, then we can
+start looking at how to share the quirk.
 
-> +		port->typec_caps.pd =3D port->pds[0];
->=20
->  	port->typec_port =3D typec_register_port(port->dev, &port-
->typec_caps);
->  	if (IS_ERR(port->typec_port)) {
+thanks,
 
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
-
+-- 
+heikki
 
