@@ -1,163 +1,119 @@
-Return-Path: <linux-usb+bounces-5073-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5074-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78C7582DAD1
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 15:00:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B33BB82DD94
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 17:27:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1665C2816D3
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 14:00:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4E1E1C21D65
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jan 2024 16:27:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3915E17591;
-	Mon, 15 Jan 2024 14:00:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 814E317BB4;
+	Mon, 15 Jan 2024 16:27:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DJu7BBnO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GG0hKanx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBED17583;
-	Mon, 15 Jan 2024 14:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705327221; x=1736863221;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=n/RLhgyGoa+DPRyRCqq45dasWWYKEjc9SvpU3zeNWxA=;
-  b=DJu7BBnOuNj/SImDyBXORRaeLfB5ec7RkBklriuacBBKeIivqpouC2Fd
-   oArlJNI5YQxFshQTZxWRXd/ljUWeir9uGZTbJjI+Gbs/JZBDgH8YZM2OR
-   pNEBuBxGbV6rOzHg53Cm14Xkkp+E8f+NZtnicRiyahA/WHxeg6OmzgenN
-   6GKm1S19K0gvoVPqClRb2ZVT08D4hHMAXtD+CnxTQGff+90WqtVC+rYr8
-   4OoM/+p+IPbnkHVdF3iF7LVsuvglH+PVfmKmjQCPDXjpMKMCj7/biUYoK
-   ZkB54Fm/Y0WfOxuC/6vC8N19RV0Ku8OmTZc5kKks0dxYzBDPwRMlcBhrZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="463900313"
-X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="463900313"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 06:00:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="733312147"
-X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="733312147"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga003.jf.intel.com with ESMTP; 15 Jan 2024 06:00:14 -0800
-Message-ID: <2178e799-2068-7443-59b2-310dfdd1ddee@linux.intel.com>
-Date: Mon, 15 Jan 2024 16:01:43 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901AD17BA7
+	for <linux-usb@vger.kernel.org>; Mon, 15 Jan 2024 16:27:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-50e80d40a41so11343366e87.1
+        for <linux-usb@vger.kernel.org>; Mon, 15 Jan 2024 08:27:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705336034; x=1705940834; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q7P2P6rw7pjqUoDNxLufG25Zn1dUP+6U5qxZYzyS080=;
+        b=GG0hKanxn+Knu3qiZ7LoAPWkIVytDRVQNTCzqPe1EpMq0nsutawpc1O1mZSebzT2U6
+         g6sx9nliKCvNe8VPke/Y1tseLr/mrlJPOHHn/hMuzzMcw/43HGFw476pwgjqiPbcMWB6
+         VMOFRTxkzgGyGrCLM9XSTyGFRMYgIHChD+NS9hv5AXYi1lhT37Q3PHLqAW2+SnNLMmlV
+         xDaOuZ8yuEd386vF/zd7W0arpXE+iFab5rZzrSU1WbzHeRua1qGYmeVXhLlBxJtMCXvq
+         PqFWYKxdig807eElx9mwYb8Xb8yxv6bLfk5IlpIkyg79PI468kyk5RarDO/jKpraag7Q
+         Walg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705336034; x=1705940834;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q7P2P6rw7pjqUoDNxLufG25Zn1dUP+6U5qxZYzyS080=;
+        b=aaklSijIdZIDZaXfmjdxJ/QGROZo8RnpeuOT3WeIbi3H+hlssBFqvIIoWHtfXRHsK5
+         08h1aop6A/wVTYwS63KAiJL9eGuyTMVIvavgOQJJc4eahqCoaGbHxdbL7Hj3++FViiSb
+         I+xhUqbIK2AUVJ2UugX8i2k5sBOTmWwzov20JG+gfvZpPn0mLTNwm7c1ZQ9/g9ioOdtV
+         bNCU2T6WZipgGDw4m2Ih2l4DBpQXrh+KwP0yawBcjyLZc+8WT3XVIT2PyL6DV0TFQ/Kk
+         wGtglCV5jrWsQJ0uc37AA4J4ppA7U9w2jtrWsfMq6fkzwlbjpTF/gdmxfl1q5IEmBsOT
+         DYHg==
+X-Gm-Message-State: AOJu0YwbqZEqxyr/zA39JBwXrz7n+Bk48LI7yuNW1RhyT/2ruQJHMav/
+	nETxXROqFnRmjb/HL2FrfsY=
+X-Google-Smtp-Source: AGHT+IGkgkg0Lrv1sjn83zTPzIIWJmyQ3Q9G/lVpPhu4iKMvBZvSvsTW/q9EpM4ZGzYoOnwwsnLDuA==
+X-Received: by 2002:a05:6512:12c4:b0:50e:ebd3:3517 with SMTP id p4-20020a05651212c400b0050eebd33517mr2446444lfg.39.1705336034277;
+        Mon, 15 Jan 2024 08:27:14 -0800 (PST)
+Received: from foxbook (bff170.neoplus.adsl.tpnet.pl. [83.28.43.170])
+        by smtp.gmail.com with ESMTPSA id t16-20020a05640203d000b00554d57621eesm5615849edw.90.2024.01.15.08.27.13
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 15 Jan 2024 08:27:13 -0800 (PST)
+Date: Mon, 15 Jan 2024 17:27:09 +0100
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+Subject: Re: "Transfer event TRB DMA ptr not part of current TD" spam after
+ USB disconnection
+Message-ID: <20240115172709.0b6f2bba@foxbook>
+In-Reply-To: <a4573246-7047-dba3-efbf-3f88a952e322@linux.intel.com>
+References: <20240112235205.1259f60c@foxbook>
+	<20240113214757.3f658913@foxbook>
+	<20240114150647.18a46131@foxbook>
+	<a4573246-7047-dba3-efbf-3f88a952e322@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [PATCH v12 04/41] usb: host: xhci-mem: Cleanup pending secondary
- event ring events
-Content-Language: en-US
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- corbet@lwn.net, gregkh@linuxfoundation.org, lgirdwood@gmail.com,
- andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- konrad.dybcio@linaro.org, Thinh.Nguyen@synopsys.com, broonie@kernel.org,
- bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org, agross@kernel.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
- alsa-devel@alsa-project.org
-References: <20240102214549.22498-1-quic_wcheng@quicinc.com>
- <20240102214549.22498-5-quic_wcheng@quicinc.com>
- <734591a1-50b4-6dc7-0b93-077355ec12e4@linux.intel.com>
- <7b2ec96b-b72f-c848-7c35-36e61a4072ac@quicinc.com>
- <b254f73b-a1bc-3dd4-f485-a3acf556835d@quicinc.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <b254f73b-a1bc-3dd4-f485-a3acf556835d@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 10.1.2024 1.42, Wesley Cheng wrote:
-> Hi Mathias,
-> 
-> On 1/8/2024 12:51 PM, Wesley Cheng wrote:
->> Hi Mathias,
->>
->> On 1/4/2024 6:48 AM, Mathias Nyman wrote:
->>> On 2.1.2024 23.45, Wesley Cheng wrote:
->>>> As part of xHCI bus suspend, the XHCI is halted.  However, if there are
->>>> pending events in the secondary event ring, it is observed that the xHCI
->>>> controller stops responding to further commands upon host or device
->>>> initiated bus resume.  Iterate through all pending events and update the
->>>> dequeue pointer to the beginning of the event ring.
->>>>
->>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>> ...
->>>> +/*
->>>> + * Move the event ring dequeue pointer to skip events kept in the secondary
->>>> + * event ring.  This is used to ensure that pending events in the ring are
->>>> + * acknowledged, so the XHCI HCD can properly enter suspend/resume. The
->>>> + * secondary ring is typically maintained by an external component.
->>>> + */
->>>> +void xhci_skip_sec_intr_events(struct xhci_hcd *xhci,
->>>> +    struct xhci_ring *ring,    struct xhci_interrupter *ir)
->>>> +{
->>>> +    union xhci_trb *erdp_trb, *current_trb;
->>>> +    u64 erdp_reg;
->>>> +    u32 iman_reg;
->>>> +    dma_addr_t deq;
->>>> +
->>>> +    /* disable irq, ack pending interrupt and ack all pending events */
->>>> +    xhci_disable_interrupter(ir);
->>>> +    iman_reg = readl_relaxed(&ir->ir_set->irq_pending);
->>>> +    if (iman_reg & IMAN_IP)
->>>> +        writel_relaxed(iman_reg, &ir->ir_set->irq_pending);
->>>> +
->>>> +    /* last acked event trb is in erdp reg  */
->>>> +    erdp_reg = xhci_read_64(xhci, &ir->ir_set->erst_dequeue);
->>>> +    deq = (dma_addr_t)(erdp_reg & ERST_PTR_MASK);
->>>> +    if (!deq) {
->>>> +        xhci_err(xhci, "event ring handling not required\n");
->>>> +        return;
->>>> +    }
->>>> +
->>>> +    erdp_trb = current_trb = ir->event_ring->dequeue;
->>>> +    /* read cycle state of the last acked trb to find out CCS */
->>>> +    ring->cycle_state = le32_to_cpu(current_trb->event_cmd.flags) & TRB_CYCLE;
->>>> +
->>>> +    while (1) {
->>>> +        inc_deq(xhci, ir->event_ring);
->>>> +        erdp_trb = ir->event_ring->dequeue;
->>>> +        /* cycle state transition */
->>>> +        if ((le32_to_cpu(erdp_trb->event_cmd.flags) & TRB_CYCLE) !=
->>>> +            ring->cycle_state)
->>>> +            break;
->>>> +    }
->>>> +
->>>> +    xhci_update_erst_dequeue(xhci, ir, current_trb, true);
->>>> +}
->>>
->>> Code above is very similar to the existing event ring processing parts of xhci_irq()
->>> and xhci_handle_event()
->>>
->>> I'll see if I can refactor the existing event ring processing, decouple it from
->>> event handling so that it could be used by primary and secondary interrupters with
->>> handlers, and this case where we just want to clear the event ring.
->>>
->>
->> Thanks, that makes sense.  Will take a look as well.
->>
-> 
-> How about something like the below?  Tested this on my set up and everything looks to be working fine.  Had to add another param to struct xhci_interrupters to tell the XHCI interrupt handler to say if that particular interrupter wants to skip_events (handling).  This way, its something that the class driver utilizing the interrupter will have to tell XHCI sideband.  It would allow the user to determine if they want to use the interrupter to actually handle events or not on the proc running Linux.
-> 
+Thanks for looking at this.
 
-Yes, I have something similar.
-I'll share it soon, just need to
-clean it up a bit fist.
+I recognize that the situation is tricky and simply reverting
+d104d0152a97f is not a permanent option if other hosts need it.
 
-Thanks
-Mathias
+Yes, I have set up a test machine to debug this and I can use it to
+try potential solutions. If you have your own NEC uPD720200 specimen
+you could reproduce it yourself, all it takes is unplugging any UVC
+isochronous camera while recording with any software. This driver
+queues plenty of buffers, so chances of hitting a split TD are good.
 
+
+Regarding the spec, section 4.10.2 only states that an error shall
+generate _a_ Transfer Event on current TRB regargdless of its flags
+and that an error may occur on any TRB of a TD.
+
+I think more relevant and useful is the final note in section 4.9.1:
+
+> If an error is detected while processing a multi-TRB TD, the xHC shall
+> generate a Transfer Event for the TRB that the error was detected on
+> with the appropriate error Condition Code, then may advance to the next
+> TD. If in the process of advancing to the next TD, a Transfer TRB is
+> encountered with its IOC flag set, then the Condition Code of the
+> Transfer Event generated for that Transfer TRB should be Success,
+> because there was no error actually associated with the TRB that
+> generated the Event. However, an xHC implementation may redundantly 
+> assert the original error Condition Code.
+
+To me it looks like the host is expected to skip the remaining TRBs
+(section 4.10.2 also mentions continuing to the next ESIT on isoch EPs),
+but subsequent text seems to assume that IOC flags will nevertheless be
+honored by the xHC (NEC fails here). It is noteworthy that the host is
+encouraged to respond "success", so the driver must remember earlier
+errors anyway while waiting till the end of the TD.
+
+
+Regards,
+Michal
 
