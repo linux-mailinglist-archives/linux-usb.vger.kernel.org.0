@@ -1,64 +1,68 @@
-Return-Path: <linux-usb+bounces-5125-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5126-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEAC682F7F2
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 21:34:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D41A82F83C
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 21:41:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F463288A3F
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 20:34:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DDCE1F220C3
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 20:41:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D99F612B265;
-	Tue, 16 Jan 2024 19:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D8581EB51;
+	Tue, 16 Jan 2024 19:51:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iTlDOg2l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LISdilLR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 577A61DA49;
-	Tue, 16 Jan 2024 19:50:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E0312F5B2;
+	Tue, 16 Jan 2024 19:51:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705434607; cv=none; b=L3t0exmxXgNwhKFQIfT9Ptq0D4QR/BwT5+BuQiQ6DjNa3l8e5xXDf3NCss8qXPssyoedRZhOsNT18eZzbuZR4u53drYCl3tX93hxd84LOqTfrdiJvGAq2HUVpv56FhDFCxio0zyjw6AZd8Mzl8UKVY3I1yPBzTf+h7A71zb5B9g=
+	t=1705434670; cv=none; b=uL7IWSHnWUbXkzcKsXqyxmsdn3Wq0ddpGr/0Dgo35KMlHLAxSrE+s8zFQk6Qe1o7o6Pb2GBmFIXskdPzUoFWbvcpsq3X3YbG+Ku6ujlu7/nxJMb45q6Z7FaqcgeeQ4RTxWfhMYadib4ykILIB8eTu/3Y6aQNIneHcVDlwZlaM9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705434607; c=relaxed/simple;
-	bh=ACQuwnrHOOPZAyDz3qTaDrzWugOxk+sx/8S41lB1OVI=;
+	s=arc-20240116; t=1705434670; c=relaxed/simple;
+	bh=rBoYvdVS2YzR0spwdUAt2VoFNa3jDoAge0YXkInyX40=;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:X-stable:
-	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=l6Yqx9foty1Zs+yJWPsTbQBS1S8U5WXcjaPtbpJRY4FLXFZEMtKnVlG6Jcy9Sg9uwXUrSqYN8XNurAe/zLLRllu3bfv+5HInp3km1pPOVFkpOywePzg9s4LkPvULAhWNklfPJyEFt8D48xk32+dwUBgJ+gOhLtzFUmwKYNAeiwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iTlDOg2l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 693BBC433A6;
-	Tue, 16 Jan 2024 19:50:05 +0000 (UTC)
+	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=oNIwAsOZFgoiaB+2yKMNgi1LIgbpk6Mzlu5v0nn4EyjxvWZZGg8lh4B6KXw7OaC3iRvOHECOudphk3B7UTGdeEil81GHhiLfEidMZ8R1DsYMxNX8qEcqY5vvZlW9MlAg9/22MnMdBuG8bimQpeAFiXJTi2058BVOz2JbaDfSo28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LISdilLR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A59A8C433C7;
+	Tue, 16 Jan 2024 19:51:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705434606;
-	bh=ACQuwnrHOOPZAyDz3qTaDrzWugOxk+sx/8S41lB1OVI=;
+	s=k20201202; t=1705434670;
+	bh=rBoYvdVS2YzR0spwdUAt2VoFNa3jDoAge0YXkInyX40=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iTlDOg2l+gpOTvoPYH98fgUGpnL9zW0znDZlKGLkNq7AaEpYjdzOHRwQv7qMUjQPG
-	 kvuvlsQWgsEMRWPrtZrPhYYw4bZ/DSVxb9HaH3IfU0hMj+28asLPPNzaGVg/xP2Y1H
-	 S6Y40HNsEPr4XvsaOf9SWFbgae4T96f9bckGLpOzYgTtdD4s26Sd92ocpaCExO2Aom
-	 nOkUIJGCgrnSroxM9MpjnFXauDCK0qb9febUfRad/rbpfOf5UmNQFCdZKtf/s3smEs
-	 Q2fMkEnytNCTDY3spl5Fll0XC0vXH5JdJUMiJrD2Fadf1HZwxXxpEUNWLs4nG2aWgZ
-	 2Bfhp5NdSGRxg==
+	b=LISdilLRDQXLNqrR1GEBuA8ht45dpbcgWYDq8TAnY7KfUC5p2E+aqREwbL3TYHBIa
+	 Z+KhNMDGH87h8wBOUSvP+BRc6r+s1U70uiJATxBlKbe9tO+Vo07LMhhHHHNs/dYNHx
+	 3ITrx/BlJr1Q33ESuIAdbEXzToj3Y9QMl2ZyPSTu6PvkYfDN6FhF45gQxJI7hjDog2
+	 w90o2UBRwmUAWDALEuj9EXMsQOcoj37ObCudImwQXDiMjEoB7iovW9DJaIZOdcnLTS
+	 wwZvSj865w+YRlySU6zLr/UOWtrPYKXTv2/DgY2UFkkHx9m1NJATiA1A6mFMykSjPZ
+	 6gm2wpId6b14A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-	Herb Wei <weihao.bj@ieisystem.com>,
-	Jakub Kicinski <kuba@kernel.org>,
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	stern@rowland.harvard.edu,
 	gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 023/104] net: usb: ax88179_178a: avoid two consecutive device resets
-Date: Tue, 16 Jan 2024 14:45:49 -0500
-Message-ID: <20240116194908.253437-23-sashal@kernel.org>
+	hdegoede@redhat.com,
+	saranya.gopal@intel.com,
+	fabrice.gasnier@foss.st.com,
+	quic_jackp@quicinc.com,
+	andriy.shevchenko@linux.intel.com,
+	minhuadotchen@gmail.com,
+	johan+linaro@kernel.org,
+	robh@kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 043/104] usb: typec: ucsi: fix UCSI on buggy Qualcomm devices
+Date: Tue, 16 Jan 2024 14:46:09 -0500
+Message-ID: <20240116194908.253437-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240116194908.253437-1-sashal@kernel.org>
 References: <20240116194908.253437-1-sashal@kernel.org>
@@ -73,41 +77,99 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.12
 Content-Transfer-Encoding: 8bit
 
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit d2689b6a86b9d23574bd4b654bf770b6034e2c7e ]
+[ Upstream commit 1d103d6af241dbfc7e11eb9a46dff65db257a37f ]
 
-The device is always reset two consecutive times (ax88179_reset is called
-twice), one from usbnet_probe during the device binding and the other from
-usbnet_open.
+On sevral Qualcomm platforms (SC8180X, SM8350, SC8280XP) a call to
+UCSI_GET_PDOS for non-PD partners will cause a firmware crash with no
+easy way to recover from it. Since we have no easy way to determine
+whether the partner really has PD support, shortcut UCSI_GET_PDOS on
+such platforms. This allows us to enable UCSI support on such devices.
 
-Remove the non-necessary reset during the device binding and let the reset
-operation from open to keep the normal behavior (tested with generic ASIX
-Electronics Corp. AX88179 Gigabit Ethernet device).
-
-Reported-by: Herb Wei <weihao.bj@ieisystem.com>
-Tested-by: Herb Wei <weihao.bj@ieisystem.com>
-Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Link: https://lore.kernel.org/r/20231120121239.54504-1-jtornosm@redhat.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Link: https://lore.kernel.org/r/20231025115620.905538-2-dmitry.baryshkov@linaro.org
+Signed-off-by: Bjorn Andersson <andersson@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/ax88179_178a.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/usb/typec/ucsi/ucsi.c       |  3 +++
+ drivers/usb/typec/ucsi/ucsi.h       |  3 +++
+ drivers/usb/typec/ucsi/ucsi_glink.c | 13 +++++++++++++
+ 3 files changed, 19 insertions(+)
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 5a1bf42ce156..d837c1887416 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1315,8 +1315,6 @@ static int ax88179_bind(struct usbnet *dev, struct usb_interface *intf)
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 61b64558f96c..5392ec698959 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -578,6 +578,9 @@ static int ucsi_read_pdos(struct ucsi_connector *con,
+ 	u64 command;
+ 	int ret;
  
- 	netif_set_tso_max_size(dev->net, 16384);
++	if (ucsi->quirks & UCSI_NO_PARTNER_PDOS)
++		return 0;
++
+ 	command = UCSI_COMMAND(UCSI_GET_PDOS) | UCSI_CONNECTOR_NUMBER(con->num);
+ 	command |= UCSI_GET_PDOS_PARTNER_PDO(is_partner);
+ 	command |= UCSI_GET_PDOS_PDO_OFFSET(offset);
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 474315a72c77..6478016d5cb8 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -317,6 +317,9 @@ struct ucsi {
+ #define EVENT_PENDING	0
+ #define COMMAND_PENDING	1
+ #define ACK_PENDING	2
++
++	unsigned long quirks;
++#define UCSI_NO_PARTNER_PDOS	BIT(0)	/* Don't read partner's PDOs */
+ };
  
--	ax88179_reset(dev);
--
- 	return 0;
+ #define UCSI_MAX_SVID		5
+diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+index 4853141cd10c..53a7ede8556d 100644
+--- a/drivers/usb/typec/ucsi/ucsi_glink.c
++++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+@@ -6,6 +6,7 @@
+ #include <linux/auxiliary_bus.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
++#include <linux/of_device.h>
+ #include <linux/property.h>
+ #include <linux/soc/qcom/pdr.h>
+ #include <linux/usb/typec_mux.h>
+@@ -296,11 +297,19 @@ static void pmic_glink_ucsi_destroy(void *data)
+ 	mutex_unlock(&ucsi->lock);
  }
  
++static const struct of_device_id pmic_glink_ucsi_of_quirks[] = {
++	{ .compatible = "qcom,sc8180x-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
++	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
++	{ .compatible = "qcom,sm8350-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
++	{}
++};
++
+ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+ 				 const struct auxiliary_device_id *id)
+ {
+ 	struct pmic_glink_ucsi *ucsi;
+ 	struct device *dev = &adev->dev;
++	const struct of_device_id *match;
+ 	struct fwnode_handle *fwnode;
+ 	int ret;
+ 
+@@ -327,6 +336,10 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+ 	if (ret)
+ 		return ret;
+ 
++	match = of_match_device(pmic_glink_ucsi_of_quirks, dev->parent);
++	if (match)
++		ucsi->ucsi->quirks = (unsigned long)match->data;
++
+ 	ucsi_set_drvdata(ucsi->ucsi, ucsi);
+ 
+ 	device_for_each_child_node(dev, fwnode) {
 -- 
 2.43.0
 
