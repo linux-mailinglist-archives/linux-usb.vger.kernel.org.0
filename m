@@ -1,156 +1,206 @@
-Return-Path: <linux-usb+bounces-5119-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5120-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 408E782F1DE
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 16:51:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E0B482F216
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 17:03:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B74A42853A6
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 15:51:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 733721C236EC
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 16:03:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CBFE1C68C;
-	Tue, 16 Jan 2024 15:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D658B1C6A1;
+	Tue, 16 Jan 2024 16:03:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C6C1C2BE
-	for <linux-usb@vger.kernel.org>; Tue, 16 Jan 2024 15:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <jlu@pengutronix.de>)
-	id 1rPlj4-0003Dv-L9; Tue, 16 Jan 2024 16:51:42 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <jlu@pengutronix.de>)
-	id 1rPlj3-000H4W-Sb; Tue, 16 Jan 2024 16:51:41 +0100
-Received: from localhost ([127.0.0.1])
-	by ptz.office.stw.pengutronix.de with esmtp (Exim 4.96)
-	(envelope-from <jlu@pengutronix.de>)
-	id 1rPlj3-0012XM-2I;
-	Tue, 16 Jan 2024 16:51:41 +0100
-Message-ID: <0aba51a8be0fb165b44ec956bec7a9698a9518a2.camel@pengutronix.de>
-Subject: Re: [PATCH 0/3] usb: gadget: 9pfs transport
-From: Jan =?ISO-8859-1?Q?L=FCbbe?= <jlu@pengutronix.de>
-To: Dominique Martinet <asmadeus@codewreck.org>, Michael Grzeschik
-	 <m.grzeschik@pengutronix.de>
-Cc: Latchesar Ionkov <lucho@ionkov.net>, linux-usb@vger.kernel.org, Jonathan
- Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- v9fs@lists.linux.dev,  Christian Schoenebeck <linux_oss@crudebyte.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel@pengutronix.de,  Eric Van Hensbergen <ericvh@kernel.org>
-Date: Tue, 16 Jan 2024 16:51:41 +0100
-In-Reply-To: <ZaZsUQUhSlMPLJg0@codewreck.org>
-References: <20240116-ml-topic-u9p-v1-0-ad8c306f9a4e@pengutronix.de>
-	 <ZaZsUQUhSlMPLJg0@codewreck.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.2 (by Flathub.org) 
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 920121CD03
+	for <linux-usb@vger.kernel.org>; Tue, 16 Jan 2024 16:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 746595 invoked by uid 1000); 16 Jan 2024 11:03:09 -0500
+Date: Tue, 16 Jan 2024 11:03:09 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+  Greg KH <gregkh@linuxfoundation.org>,
+  "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+  "hdegoede@redhat.com" <hdegoede@redhat.com>,
+  "ivan.orlov0322@gmail.com" <ivan.orlov0322@gmail.com>,
+  "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+  dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>
+Subject: Re: [EXT] Re: [PATCH] usb: roles: try to get/put all relevant modules
+Message-ID: <d8f379d2-82ee-4567-8323-961cea5fd095@rowland.harvard.edu>
+References: <20240112080108.1147450-1-xu.yang_2@nxp.com>
+ <2024011213-situated-augmented-64a4@gregkh>
+ <2024011220-asleep-dragster-1e39@gregkh>
+ <DU2PR04MB8822D9964496E39002D131D98C6F2@DU2PR04MB8822.eurprd04.prod.outlook.com>
+ <2024011214-disbelief-sincere-805e@gregkh>
+ <DU2PR04MB8822B8AD6A6DE873F2F160588C6C2@DU2PR04MB8822.eurprd04.prod.outlook.com>
+ <b1edb397-c06d-4112-b2ed-713e213ac751@rowland.harvard.edu>
+ <DU2PR04MB8822E96E3AFF2EBB587B73BA8C732@DU2PR04MB8822.eurprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: jlu@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DU2PR04MB8822E96E3AFF2EBB587B73BA8C732@DU2PR04MB8822.eurprd04.prod.outlook.com>
 
-On Tue, 2024-01-16 at 20:45 +0900, Dominique Martinet wrote:
-> Michael Grzeschik wrote on Tue, Jan 16, 2024 at 02:49:40AM +0100:
-> > This series is adding support to mount 9pfs exported filesystems via th=
-e
-> > usb gadget interface. It also includes tools and descriptions on how to
-> > translate an tcp 9pfs and use it via the usb interface.
->=20
-> So I didn't have time to look at everything through, just want to make
-> sure, this series allows sharing data from an usb gadget (e.g. some
-> device with storage) over 9p as an alternative to things like MTP ?
+On Tue, Jan 16, 2024 at 05:44:47AM +0000, Xu Yang wrote:
+> Hi Alan,
+> 
+> > 
+> > Those of us unfamiliar with this code need you to explain a lot more
+> > about what's going on.
+> > 
+> > On Mon, Jan 15, 2024 at 03:02:06AM +0000, Xu Yang wrote:
+> > > Taking below diagram as example:
+> > >
+> > >      ci_hdrc.0        register   usb    get     tcpm_port
+> > >   (driver: ci_hdrc)  --------->  role  <----  (driver: tcpm)
+> > >          ^  ^                    switch           |   ^
+> > >          |  |                                     |   |
+> > >        +1|  |           +1                        |   |+1
+> > >          |  +-------------------------------------+   |
+> > >          |                                            |
+> > >      4c200000.usb                                   1-0050
+> > > (driver: ci_hdrc_imx)                            (driver: tcpci)
+> > >
+> > > 1. Driver ci_hdrc_imx and tcpci are built as module at least.
+> > > 2. When module ci_hdrc_imx is loaded, it will register ci_hdrc.0 device
+> > >    and try to get ci_hdrc module's reference.
+> > 
+> > This is very confusing.  Normally, a device is registered by the parent
+> > module and its driver belongs in the child module.  When the child
+> > module is loaded it automatically gets a reference to the parent module,
+> > because it calls functions that are defined in the parent.  I don't know
+> > of any cases where a parent module takes a reference to one of its
+> > children -- this would make it impossible to unload the child module!
+> > 
+> > In your diagram I can't tell whether ci_hdrc is the parent module and
+> > ci_hdrc_imx is the child, or vice versa.  I'll guess that ci_hdrc_imx is
+> > the child, since it the one which gets a reference to the other.  But
+> > now we have the ci_hdrc.0 device being registered by the child module
+> > and its driver belonging to the parent module, which is backward!
+> > 
+> > Very difficult to understand.  Please explain more fully.
+> 
+> I checked again and let me correct the words.
+> 
+> 2. When module ci_hdrc_imx is loaded, it will register ci_hdrc.0 device.
+>    At the same time, the reference of module ci_hdrc is added by 1
+>    automatically due to ci_hdrc_imx calls some functions in module ci_hdrc.
+>    ci_hdrc will register usb-role-switch device.
+> 
+> Therefore, module ci_hdrc_imx depends on module ci_hdrc. Device ci_hdrc.0
+> is a child of 4c200000.usb.
 
-It's the other way around. :) The USB host exports a filesystem, while the
-gadget on the USB device side makes it mountable. Our main use-case is to u=
-se it
-as an alternative to NFS root booting during the development of embedded Li=
-nux
-devices. NFS root works in many cases, but has some downsides, which make i=
-t
-cumbersome to use in more and more cases.
+And ci_hdrc_imx is a child module of ci_hdrc.  Got it.
 
-NFS root needs correctly configured Ethernet interfaces on both the develop=
-ment
-host and the target device. On the target, this can interfere with the netw=
-ork
-configuration that is used for the normal device operation (DHCP client, ..=
-.).
-For the host, configuring a NFS (and perhaps DHCP) server can be an obstacl=
-e.
+> > >  ci_hdrc will register
+> > >    usb-role-switch device.
+> > > 3. When module tcpci is loaded, it will register tcpm port device and try
+> > >    to get tcpm module's reference. The tcpm module will get usb-role-switch
+> > >    which is registered by ci_hdrc.
+> > 
+> > What do you mean by "will get"?  Do you mean that tcpm will become the
+> > driver for the usb_role_switch device?  Or do you mean that it simply
+> > calls get_device(&usb_role_switch)?
+> > 
+> > If the latter is the case, how does the tcpm driver learn the address of
+> > usb_role_switch in the first place?
+> 
+> Via
+> port->role_sw = usb_role_switch_get(port->dev) 
+> or
+> port->role_sw = fwnode_usb_role_switch_get(tcpc->fwnode).
+> 
+> The usb controller will register usb-role-swtich device to the global list
+> of usb_role class. The fwnode of usb-role-swtich device is also set to usb
+> controller's fwnode. Initially, a fwnode graph between usb controller of
+> node and tcpm connector node had already been established. These two
+> functions will find usb-role-swtich device based on this fwnode graph
+> and fwnode matching.
 
-For target devices which don't have a real Ethernet interface, NFS root wou=
-ld
-also work with the USB Ethernet gadget, but this increases the complexity
-further.
+If usb_role_switch_get() gives away references to the usb_role_switch 
+device, it should have a way to take those references back.  But I guess 
+it doesn't.
 
-As many embedded boards have a USB device port anyway, which is used during
-development for uploading the boot-loader and to flash filesystem images (i=
-.e.
-via the fastboot protocol), we want to just reuse that single data cable to
-allow access to the root filesystem as well.=20
+>  After usb-role-switce device is found, these two
+> functions will call: try_module_get(sw->dev.parent->driver->owner).
 
-Compared to flashing images, using a network filesystem like NFS and 9P red=
-uces
-the time between compiling on the host and running the binary on the target=
-, as
-no flash and reboot cycle is needed. That can get rid of many minutes of wa=
-iting
-over a day. :)
+You mean usb_role_switch_get() and fwnode_usb_role_switch_get() do this?
 
-> I don't quite understand what the forwarder and diod have to do with
-> this; you're emulating a fake usb device with the forwarder that just
-> transmits requests to diod as backend implementation?
-> But 'usb.core.find(idVendor=3D0x1D6B, idProduct=3D0x0109)' looks like it'=
-s
-> searching for a real device not creating one, so that doesn't seem to
-> match up...
+> Here sw->dev.parent is device ci_hdrc.0. sw->dev.parent->driver is ci_hdrc.
+> 
+> > 
+> > >  In current design, tcpm will also try to
+> > >    get ci_hdrc module's reference after get usb-role-switch.
+> > 
+> > This might be a bug.  There should not be any need for the tcpm driver
+> > to take a reference to the ci_hdrc module.  But there should be a way
+> > for the ci_hdrc driver to notify tcpm when the usb_role_switch device is
+> > about to be unregistered.  If tcpm is usb_role_switch's driver then this
+> > notification happens automatically, by means of the .remove() callback.
+> 
+> I'm not the designer of usb_role class driver. Not sure if this is needed to get
+> module reference of its parent device's driver. Maybe need @heikki's input.
+> 
+> @heikki.krogerus, can you give some explanations?
 
-diod (9pfs server) and the forwarder are on the development host, where the=
- root
-filesystem is actually stored. The gadget is initialized during boot (or la=
-ter)
-on the embedded board. Then the forwarder will find it on the USB bus and s=
-tart
-forwarding requests.
+Yes, please, some additional explanation would help.
 
-It may seem a bit unusual that in this case the requests come from the devi=
-ce
-and are handled by the host. The reason is that USB device ports are normal=
-ly
-not available on PCs, so a connection in the other direction would not work=
-.
+> > > 4. Due to no modules depend on ci_hdrc_imx, ci_hdrc_imx can be manually
+> > >    unloaded. Then device ci_hdrc.0 will be removed by ci_hdrc_imx and
+> > >    device usb-role-switch is also unregistered.
+> > 
+> > At this point, tcpm should learn that it has to drop all its references
+> > to usb_role_swich.  Since the module which registered usb_role_switch
+> > isn't tcpm's ancestor, tcpm must not keep _any_ references to the device
+> > after it is unregistered.
+> 
+> Yes, I also think so.
+> 
+> > 
+> > Well, strictly speaking that's not true.  By misusing the driver model,
+> > tcpm could keep a reference to the ci_hdrc module until it was finished
+> > using usb_role_switch.  Is that what you are trying to do?
+> 
+> No, I'm trying to get module reference of ci_hdrc_imx too. Then, 
+> ci_hdrc_imx can't be unloaded before tcpci module unloaded.
 
-In the future, the functionality of the forwarder could be integrated into =
-the
-9pfs server. Alternatively, an improved forwarder could also react to udev
-events of gadgets showing up and forward them to different 9PFS server over=
- the
-network (when you have multiple target devices connected to one USB host).
+You shouldn't do this.  Users should be able to unload ci_hdrc_imx 
+whenever they want, even if tcpci is still loaded.
 
-Perhaps, the inverse setup (9PFS server on the USB gadget side, mounted on =
-a PC)
-also would be useful in the future and could share some of this code. Then,
-you'd have an alternative to MTP.
+> > > 5. Then, if I try to unload module tcpci, "NULL pointer dereference"
+> > >    will be shown due to below code:
+> > >
+> > >    module_put(sw->dev.parent->driver->owner);
 
-> If you have any background information on where you're coming from and
-> where this is headed it'd be great to include in the cover letter.
+I forgot to ask: What function makes this call?  Is it part of the 
+usb_role class driver?
 
-Yes. Probably also in Documentation/.
+> > >    parent->driver is NULL at this time.
+> > 
+> > What is dev at this point?  And what is dev.parent?  And what did
+> > dev.parent->driver used to be before it was set to NULL?
+> 
+> Here sw->dev is usb-role-switch device. sw->dev.parent is ci_hdrc.0 device.
+> sw->dev.parent->driver was ci_hdrc.
 
-Thanks,
-Jan
+Which is now gone, right.  I understand.
+
+Let's see what Heikki has to say.
+
+However, assuming he wants to continue misusing the driver model in this 
+way, what you should do is add a new field to sw, where you will store 
+sw->dev.parent->driver.owner at the time of the try_module_get() call 
+(but only if the call succeeds!).  Then when the module_put() call runs, 
+have it use the value stored in this new field instead of dereferencing 
+sw->dev.parent->driver.owner.
+
+Alan Stern
 
