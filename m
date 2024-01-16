@@ -1,80 +1,162 @@
-Return-Path: <linux-usb+bounces-5114-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5115-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D45282F08C
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 15:32:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F46082F0B2
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 15:41:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9B6C1F23E6E
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 14:32:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8607A1C2353A
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 14:41:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ACE75CA1;
-	Tue, 16 Jan 2024 14:32:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1835F1BF4E;
+	Tue, 16 Jan 2024 14:41:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CV6S4Bag"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eoW8PYM2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA5E6FBD
-	for <linux-usb@vger.kernel.org>; Tue, 16 Jan 2024 14:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-50e7d6565b5so11701236e87.0
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jan 2024 06:32:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705415539; x=1706020339; darn=vger.kernel.org;
-        h=mime-version:date:subject:to:reply-to:message-id:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5vcp0J7zk08bcGnG6ixoY9FJh5UMVRDDbvoFP3uqAdc=;
-        b=CV6S4BagAt8ofTqqWDb7XDQoa7gnIoqCKRi24VJ4Dinf1wtF53HFzIRzHBmrEdYRno
-         ImM3IWLYHryI0xNQu+SG5j4hxzY/Bb/9BdI6OgIFgJmwoHKdcBl7EMF7J6zDojW3cA5t
-         AJm3psyxJLaGs7Ns4wGOudkK3dKgQhJMbBUrgC4sKF5CB1ropnu9cEcNKUsCC8AEKmx/
-         x48em5BhjXj9HxbR8AiWNE9wHA6yyPOLDfBsQCXU0CJK3UF6doD3BBWv7ADl+Vueyy0V
-         w0tGnEG0Xj7ngcOfof2vbBwE6Z6GQrfDTdj0SsUN+Xr5gee29U2OAymSrjW9OjRgZJdF
-         vxww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705415539; x=1706020339;
-        h=mime-version:date:subject:to:reply-to:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5vcp0J7zk08bcGnG6ixoY9FJh5UMVRDDbvoFP3uqAdc=;
-        b=ItePRicdXrDNxPGuGajIyPzC98zxOVMrcA+YQbVJ9S3d2ozWgw5jGAFz+7LTX44TP2
-         HsAxdBejWg10Wz/Q0zmwXo5pPNbkqIDKGazHHt+HMcqgC/yzWf7ohSxMnlpF+MXV1LKz
-         wqv/HxPEfjsYayX8j8LY6P/4SZOsWngBSk143O9ZA8I4t2eXkFp9nAU/OwtaF9htPDKi
-         pePhNF+Jh1thpUKUkuHD+w48joYSF0KxQR62njzwjW2qKb2uyo0O4YIiw5JNdUFvA/Aj
-         g20LOMvr+ddmnic+2SSRYTPjsT1dDyEP39lDevD3SMg6O2XlFEL8COhPZPjIWQo6bxuT
-         uhkA==
-X-Gm-Message-State: AOJu0Yygj8NQGPBE5diQdyBBja+rwSZtcajKoYxzZ0N2nFVhVtgKSeY9
-	iTOUZTddZYOof3EB7Y3ipab6CFVSfZQ=
-X-Google-Smtp-Source: AGHT+IH+GdRJDvWmo+M8VtNQcNgrkS87jK9QaiPN58X8uDFgKz0b/3LT4Zg2mD0DmC8YaFmSR739kw==
-X-Received: by 2002:ac2:5bce:0:b0:50e:d447:45bc with SMTP id u14-20020ac25bce000000b0050ed44745bcmr3126746lfn.55.1705415538903;
-        Tue, 16 Jan 2024 06:32:18 -0800 (PST)
-Received: from [185.222.58.35] ([185.222.58.35])
-        by smtp.gmail.com with ESMTPSA id w13-20020a056402128d00b00554d6b46a3dsm6872061edv.46.2024.01.16.06.32.18
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Jan 2024 06:32:18 -0800 (PST)
-From: Teri Ford <sofiaw7j121981@gmail.com>
-X-Google-Original-From: Teri Ford <terrford@outlook.com>
-Message-ID: <aca9a4a3700f8c7143a5f8ccc27d5e1f0188fb8f109523ac02f8b20a7cdfb5e3@mx.google.com>
-Reply-To: terrford@hotmail.com
-To: linux-usb@vger.kernel.org
-Subject: ` ` You want this ? `
-Date: Tue, 16 Jan 2024 15:32:18 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433D01BF2A;
+	Tue, 16 Jan 2024 14:41:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82385C433F1;
+	Tue, 16 Jan 2024 14:40:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705416062;
+	bh=pi9f5n7aCz4k4GcDtHhDD5lv5OgeZ4ucYdJWw/uz8rU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eoW8PYM2MfAuIBhKaoTZlWZwOEH64nrarWgh8smz385NHA2AvWbxhu44TZid6guIO
+	 ztdPcokve4KGk/P0r48xP9LXjdlp+nfRggeFVeFp1EKUfQh1HSmalAz393OHzBH8yx
+	 HITZr7gQr/eVgLSaMXJ0zK/Hypf/9tgOSbSJiXzjxDaUW1d3OgO9S7G4+/H4mw666+
+	 L5PksNx2fvrD/Q9/Cn2uOjt9fv52HRvN58krYPnsggJ/tW1Mam7cV3tInWEBTcjzIV
+	 QhTlg/jUO4g8ofnL8rKCTYV2n5vBGWNCAEmw7Luoyo7bgDS5dKI4oEy8rewQcDvB/c
+	 CCz+OFltnyGUA==
+Date: Tue, 16 Jan 2024 14:40:39 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>, linux-spi@vger.kernel.org,
+	kernel@pengutronix.de, Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
+	Alexander Aring <alex.aring@gmail.com>,
+	Stefan Schmidt <stefan@datenfreihafen.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-input@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rayyan Ansari <rayyan@ansari.sh>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Martin Tuma <martin.tuma@digiteqautomotive.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, Sergey Kozlov <serjk@netup.ru>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	linux-mmc@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>,
+	Rob Herring <robh@kernel.org>, linux-mtd@lists.infradead.org,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	Ronald Wahl <ronald.wahl@raritan.com>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	chrome-platform@lists.linux.dev,
+	Michal Simek <michal.simek@amd.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-msm@vger.kernel.org,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-mediatek@lists.infradead.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Sam Ravnborg <sam@ravnborg.org>,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+	linux-staging@lists.linux.dev, Rui Miguel Silva <rmfrfs@gmail.com>,
+	Viresh Kumar <vireshk@kernel.org>, Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>, greybus-dev@lists.linaro.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org,
+	Herve Codina <herve.codina@bootlin.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-usb@vger.kernel.org, Helge Deller <deller@gmx.de>,
+	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Kalle Valo <kvalo@kernel.org>, Dmitry Antipov <dmantipov@yandex.ru>,
+	libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>, James Clark <james.clark@arm.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 00/33] spi: get rid of some legacy macros
+Message-ID: <3404c9af-6c11-45d7-9ba4-a120e21e407e@sirena.org.uk>
+References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="c8yli56mmI+gJGEV"
+Content-Disposition: inline
+In-Reply-To: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
+X-Cookie: Programmers do it bit by bit.
 
-Hello,
 
-I'm giving out my late husband's Yamaha Baby Grand Piano for free to any passionate instrument lover. kindly let me know if you want it or have someone else who wants it.
+--c8yli56mmI+gJGEV
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Teri
+On Mon, Jan 15, 2024 at 09:12:46PM +0100, Uwe Kleine-K=F6nig wrote:
+
+> In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
+> some functions were renamed. Further some compat defines were introduced
+> to map the old names to the new ones.
+
+> Patch #18 and #19 touch the same driver, otherwise the patches #1 - #31
+> are pairwise independent and could be applied by their respective
+> maintainers. The alternative is to let all patches go via the spi tree.
+> Mark, what's your preference here?
+
+I don't have a strong preference here, I'm happy to take all the patches
+if the maintainers for the other subsystem are OK with that - ideally
+I'd apply things at -rc1 but the timeline is a bit tight there.  I think
+my plan here unless anyone objects (or I notice something myself) will
+be to queue things at -rc3, please shout if that doesn't seem
+reasonable.
+
+--c8yli56mmI+gJGEV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWmlVwACgkQJNaLcl1U
+h9AImgf/YhrOsj57KBdfXCGkJi2n+rTwU/YN3Vvfy2fP+4gmJoFGfjk1o+luXQwi
+q3+RNetq9JicN07DE0eggUdY7EqvLtghmHnQWYraw+gEPT7PwkiFuKZgDEy79tmH
+pNpJuEKTeDipvLkXCVMzD0T+NrW2BXshkACyxLpBrh+ewGJpmmgJEH8LEo52dxrk
+uLfK3YjSYco5zXw8Dzak8Ea9Hb57dnySjT6aQf8GRXZMjNYAPqMC27Pzd5pWHnD1
+am4raQY/1ji5yjiVs38+2RB0EnWlFJyj0VvC9vL5PEhkz0XiW3OTTedLKcxKKoYv
+H+d+5ZwIRVx3bl+qcRRzH8EMyJW7pA==
+=Umm1
+-----END PGP SIGNATURE-----
+
+--c8yli56mmI+gJGEV--
 
