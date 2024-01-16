@@ -1,139 +1,106 @@
-Return-Path: <linux-usb+bounces-5131-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5132-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CF6082FD11
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 23:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B095082FD3F
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 23:46:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 616A71C2881F
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 22:40:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4FC81C2878E
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 22:46:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0272E1F617;
-	Tue, 16 Jan 2024 22:20:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c5XylQ3p"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9481567C4F;
+	Tue, 16 Jan 2024 22:41:13 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074C81DA50
-	for <linux-usb@vger.kernel.org>; Tue, 16 Jan 2024 22:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DDC71BF31;
+	Tue, 16 Jan 2024 22:41:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705443653; cv=none; b=QUEfbf08R2Tgbt39MPiIPO44Czndweh0JYwE6EKVzSb6NBH2lssaCldLpIapoDwSSWmzHXM5fBle3J6SL6soQYRTuOY+cFfFaSO08LbjLwvrEfmBDdmYnjiapUb8pNNRjTTTbpGdRLGqhBk4cJfxnIKyQasVcCYiQkKtVOK9DFI=
+	t=1705444873; cv=none; b=oAGlZSl8OZwUwEvzfgWCxF7xJ8oq0xakaryoVADLvtykmjvZr0i2z7i92+4Fx0rGHXENXddvyx9QaqFMJYE2YpCRUe1cAGiizRfi6C6INhPLVacvnjt7oX3x29/vi3Is196ucF2xwZwWL4wRF4J0xbyqKPgs2ayQIYSOT0YtPCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705443653; c=relaxed/simple;
-	bh=PV2seVXH1sa7dW+VOcX/clHk6Nix48PnDZsnaaE3sRU=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Date:
-	 From:To:Cc:Subject:Message-ID:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding; b=rjm5DpUqU3N+jxfh5kfZU5b+D2nylVU2uMuXLF1/tiEJNZ6Ilvx2lrVJQnM7XrGIFBSTboTPKWXWVB3PLgXFc6Yva6or1VDSHzqvQcnT2mZqWoMXNzgcPWq1M83NjeRsgRpO4ivKfOm2f8TG40BpS5FEUfnJCZeqpKa9yfMLG2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c5XylQ3p; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a29c4bbb2f4so1070766666b.1
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jan 2024 14:20:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705443650; x=1706048450; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C3eqvHDvmgig/1QP6IOCwELcu21uCh8KINnQ4OGAj+Q=;
-        b=c5XylQ3pvu+h9nxSf3aRy/3GqvJmLad/b5A8PpUlCB19fz6xJDJUSpq6oNEg7tJq7l
-         wgLUSfsDKSxUkwudPBQrdg8BrAD6TtZdVftfXTBncNhOxTfIMcd3VzdKe/N04CkRydoO
-         uU+9ITKUdoF+1bDmCAccH782bQQi6Ryfd/7bS1loWfXtab3Qg9ZQQWGILYs8UeuJAEE1
-         HUaT0rZfoO8S87tyEPdRIu6RxwxKAJz/hBXA/4Gn1xt3sqH2UpmvhUdZl4AYYu/paf3w
-         I++JDl7Q48vrCc2H3kJEvabcdDDPQ/gm9Kw1J3oUC2imWfTkXXd/EiAP/+i/V7YnHOHk
-         JN1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705443650; x=1706048450;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C3eqvHDvmgig/1QP6IOCwELcu21uCh8KINnQ4OGAj+Q=;
-        b=wXmGhT4SPFDq1digHsZwg/yntZbz+FXdmyILq8ucUodMnf5rhJ4dhRp/MVNejvL+hQ
-         LqhYjY2yAZUQrx692rJm1tiHi0w6n1z/IoDVZ2liICdEIrANd9ppzhJ2ztNqSNd9hEH+
-         bzP0WPz20ICKfgqWz4j26cbYfTyca7QRd1tVcTGFVyZjO2blipjjPiHpwVuJWWILbnQq
-         1QwIUai4Q7rGDeqYH+eY4XxUzRI4e08Ki4EPSPnJ0Ib6xuQcmRfLdPOgNUJ//7Xis5xR
-         701qF0E79Gvyi78gq2VAVa6M2bsBRRgRN+iFDTuEnf5AT3jhfG2snPrwOPNGQ2TU75SV
-         TDPw==
-X-Gm-Message-State: AOJu0YyiIojp0QwS9snsVqsGFxAkb7OuhLh7Z5sY4v/QZ7xK0YvNW0vU
-	ZEJ0ijvsi61JW1drxaBh9HQ=
-X-Google-Smtp-Source: AGHT+IH0X23n6BWpQo3pDb4xn3jiLFuf6ARfmGuC6rsEmpBShP6U4SozmTnCFXl8Pkda4QawFSztVQ==
-X-Received: by 2002:a17:906:3193:b0:a2b:a272:9812 with SMTP id 19-20020a170906319300b00a2ba2729812mr3027406ejy.42.1705443650051;
-        Tue, 16 Jan 2024 14:20:50 -0800 (PST)
-Received: from foxbook (bff170.neoplus.adsl.tpnet.pl. [83.28.43.170])
-        by smtp.gmail.com with ESMTPSA id t3-20020a170906608300b00a2c8dfa5c25sm6399134ejj.123.2024.01.16.14.20.49
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 16 Jan 2024 14:20:49 -0800 (PST)
-Date: Tue, 16 Jan 2024 23:20:45 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [RFT PATCH] xhci: process isoc TD properly when there was an
- error mid TD.
-Message-ID: <20240116232045.76da750b@foxbook>
-In-Reply-To: <20240116153618.2527463-1-mathias.nyman@linux.intel.com>
-References: <20240115172709.0b6f2bba@foxbook>
-	<20240116153618.2527463-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1705444873; c=relaxed/simple;
+	bh=IDDgqgMqyw2E7Xgg9/KdO7AkOipyHB3yv3BBjx3WNQU=;
+	h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding; b=OEU16+wNnS+8ZzLmhp/FPjM5Rs6jpCrGUssjz63LCZTRaGSZYuTTkiePmLbd6TzHhhZ8pEmQvqjtQ5rI/lz7yvm36kCWW0B4YoSfBV3o+Ec635IgxrE1SwZlqYc/+8C6S9WgZl9cOFt32wXLDtLm4nNVHFAs1NNDTvYmPVPXH9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 3EA3514033C; Tue, 16 Jan 2024 23:41:02 +0100 (CET)
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	linux-usb@vger.kernel.org
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>,
+	Dell.Client.Kernel@dell.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Jack Pham <quic_jackp@quicinc.com>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	=?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] UCSI fixes
+Date: Tue, 16 Jan 2024 23:40:38 +0100
+Message-Id: <20240116224041.220740-1-lk@c--e.de>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-I applied your patch on v6.7 and it appears to be working. It removes
-the disconnection spam and also handles intermittent transmission errors
-on UVC without obvious glitches or errors messages, except one xhci_dbg
-added to confirm that I'm really hitting this edge case.
+This small series contains two general bugfixes to ucsi_acpi
+and a quirk to make the UCSI controller on various Dell laptops
+work. The changes can be applied idependantly but all three
+are required to fix the Dell issues.
 
-Anything else that might be worth testing?
+For details on the general bugfixes please refer to the individual
+commit messages.
 
+The UCSI interface on a Dell Latitude 5431 stops working after
+the first async event with:
 
-I have a question, though. What happens if there is no next TD because
-a mid TD error has occured on the last packet queued by the client? Is
-there any mechanism to retire that stuck TD on a NEC host which submits
-one mid TD error event and then goes silent?
+    GET_CONNECTOR_STATUS failed (-110)
 
-Would it be possible to retire the TD right after the first failed TRB?
-(I imagine difficulties in determining when exactly the host has moved
-its internal pointer past the remaining TRBs so they can be reused).
+The core problem is that when sending the ACK_CC_CI command to
+clear the connector status changed condition the PPM expects us
+to send anothr ack for the command completion condition. However,
+the UCSI spec states that no ack for the command completion is
+required when the command is ACK_CC_CI (or PPM_RESET).
 
+There are various reports that suggest that several Dell laptops
+are affected by this problem. E.g. the kernel bugzilla has this
+report which is most likely an instance of this bug:
 
-> -			if (!ep->skip ||
-> -			    !usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
-> +			if (ep->skip && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
-I like this. I would suggest another cleanup: the if(!ep_seg && stuf)
-right above your change could be pulled inside if(!ep_seg).
+    https://bugzilla.kernel.org/show_bug.cgi?id=216426
 
+This led me to the somewhat bold conclusion that the quirk should
+probably be applied to on Dell systems.
 
-> +			 * if there was an error event mid TD then host may not
-> +			 * give an event for the last TRB on an isoc TD.
-> +			 * This event can be for the next TD, See xHCI 4.9.1.
-This seems to suggest that 4.9.1 encourages such behavior, but the
-opposite is the case as far as I understand.
+To mitigate potential problems from this dell quirk includes a
+probe mechanism that detect the need for the quirk once and we
+only deviate from the UCSI spec if the quirk is actually required.
 
+Changes in v2 from v1:
+- Add a second general bugfix.
+- Remove module parmater and generic quirk infrastructure.
+- Implement quirk directly in ucsi_acpi.c
+- Add probe logic to reliably detect the need for the quirk 
 
-> +			if (td->error_mid_td) {
-> +				struct xhci_td *td_next = list_next_entry(td, td_list);
-This if needs && !list_is_last(&td->td_list, &ep_ring->td_list).
+Christian A. Ehrhardt (3):
+  usb: ucsi: Add missing ppm_lock
+  usb: ucsi_acpi: Fix command completion handling
+  usb: ucsi_acpi: Quirk to ack a connector change ack cmd
 
-Otherwise a serious bug in the host (maybe in the driver too) tricks
-us into grabbing a pointer to ep_ring instead, filling the subsequent
-"TRB not part of current TD" message with mystifying garbage numbers.
+ drivers/usb/typec/ucsi/ucsi.c      |  2 +
+ drivers/usb/typec/ucsi/ucsi_acpi.c | 86 +++++++++++++++++++++++++++---
+ 2 files changed, 81 insertions(+), 7 deletions(-)
 
+-- 
+2.40.1
 
-> +				if (ep_seg) {
-> +					/* give back previous TD, start handling new */
-Suggested:
-> +					xhci_dbg(xhci, "Missing completion event after mid TD error\n");
-
-
-Thanks,
-Michal
 
