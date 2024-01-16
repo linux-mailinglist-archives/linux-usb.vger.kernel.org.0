@@ -1,120 +1,127 @@
-Return-Path: <linux-usb+bounces-5090-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5091-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B35A82E861
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 05:04:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A292D82E918
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 06:10:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 323E82848C1
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 04:04:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C92931C22CEC
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 05:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8849A79D2;
-	Tue, 16 Jan 2024 04:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E9A28826;
+	Tue, 16 Jan 2024 05:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="MTCmSxV5";
-	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="MTCmSxV5"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SYaLDxUM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A94848A;
-	Tue, 16 Jan 2024 04:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
-Received: by nautica.notk.org (Postfix, from userid 108)
-	id ED726C021; Tue, 16 Jan 2024 05:04:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-	t=1705377872; bh=/aO4xrkVMg6aSFqO+IRlnuSmorQeMyv8Ss2BauLOeEk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MTCmSxV5vzb2xX7Qa9Mq5Zozqaqtm2X3liNKY65G6TEXJMtLX2WNgg5pvyxmFhamf
-	 PdZ5tDd95sgTThBo5dRm0E9f3UOZf8f31+2EPi31LuQ6i4aExsly2qaORnVrCnLRkV
-	 zxGvb1Q0h2Dn/NZBRs/Y8T9z0OzQCJXK12XDNRSdSqvfwnZU/q844qP9ZUThY5Jj+t
-	 VWdii95JOfvjIvV2A4GvtHhtJJtPIShOWdyBfwwP8xoTZPOZygOXv3wtPD5O2sTfOd
-	 4Ebf+hA38tOwI0zWUuYPuZg3UO2r0L5q84dNZcwm6uGW2jEeyDYP3jrC3639ycB14A
-	 JrgZbsTwDwujw==
-X-Spam-Level: 
-Received: from gaia.codewreck.org (localhost [127.0.0.1])
-	by nautica.notk.org (Postfix) with ESMTPS id AE02EC01A;
-	Tue, 16 Jan 2024 05:04:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-	t=1705377872; bh=/aO4xrkVMg6aSFqO+IRlnuSmorQeMyv8Ss2BauLOeEk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MTCmSxV5vzb2xX7Qa9Mq5Zozqaqtm2X3liNKY65G6TEXJMtLX2WNgg5pvyxmFhamf
-	 PdZ5tDd95sgTThBo5dRm0E9f3UOZf8f31+2EPi31LuQ6i4aExsly2qaORnVrCnLRkV
-	 zxGvb1Q0h2Dn/NZBRs/Y8T9z0OzQCJXK12XDNRSdSqvfwnZU/q844qP9ZUThY5Jj+t
-	 VWdii95JOfvjIvV2A4GvtHhtJJtPIShOWdyBfwwP8xoTZPOZygOXv3wtPD5O2sTfOd
-	 4Ebf+hA38tOwI0zWUuYPuZg3UO2r0L5q84dNZcwm6uGW2jEeyDYP3jrC3639ycB14A
-	 JrgZbsTwDwujw==
-Received: from localhost (gaia.codewreck.org [local])
-	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id 6f25fe22;
-	Tue, 16 Jan 2024 04:04:23 +0000 (UTC)
-Date: Tue, 16 Jan 2024 13:04:08 +0900
-From: Dominique Martinet <asmadeus@codewreck.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	v9fs@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: Re: [PATCH 1/3] usb: gadget: function: 9pfs
-Message-ID: <ZaYAONB-fUB3gjBl@codewreck.org>
-References: <20240116-ml-topic-u9p-v1-0-ad8c306f9a4e@pengutronix.de>
- <20240116-ml-topic-u9p-v1-1-ad8c306f9a4e@pengutronix.de>
- <4856923e-3ce8-4372-9451-f9c8aa157111@rowland.harvard.edu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1070979C3;
+	Tue, 16 Jan 2024 05:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40G1lWaC015163;
+	Tue, 16 Jan 2024 05:09:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=V42Z8SUrbPqP5OhNb5NH6DJUc9wRjJ9wK6WKwXhCFSI=; b=SY
+	aLDxUMjkTlMXNmVZP6yziJkG9OochgtQ1hHrIsnUmDEawXL3sf7PLnmOcBgb02t9
+	R06xAh1Nc+nbZud+maufdqmS+W3+dMq9s2vZE9oXJ25jRr7vmFeqehMsZgztlU9/
+	wf1Sttfmpi97UHGWguTp9eycmIYjWv6NdZcCwj55Auur9boe/zctpF77zg6KSb10
+	SkB6vnKC4Un0FCil18+hvBvC3tVY5hYjI5jEDyB1T0Cy+SjtVeBLi3x2k1U26joo
+	8QYiQ6K22hAxbw3UbUhkLU1osz6/0fZRjZ8RT+LvlNKnWmqsz54/y2Npi8t/Tq7k
+	HbyqQ7WH6hkJSEfj1t2w==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vnb300tvv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Jan 2024 05:09:39 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40G59bnR007352
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Jan 2024 05:09:38 GMT
+Received: from [10.218.35.239] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 15 Jan
+ 2024 21:09:35 -0800
+Message-ID: <d4cbf53c-eb81-1b05-e393-39509aa99d90@quicinc.com>
+Date: Tue, 16 Jan 2024 10:39:31 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4856923e-3ce8-4372-9451-f9c8aa157111@rowland.harvard.edu>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/2] usb: dwc3: host: Set XHCI_SG_TRB_CACHE_SIZE_QUIRK
+Content-Language: en-US
+To: Hans de Goede <hdegoede@redhat.com>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <stable@vger.kernel.org>
+References: <20231212112521.3774610-1-quic_prashk@quicinc.com>
+ <20231212112521.3774610-2-quic_prashk@quicinc.com>
+ <c62db276-289e-4a21-8e2f-6a6055e7c4ca@redhat.com>
+From: Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <c62db276-289e-4a21-8e2f-6a6055e7c4ca@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: YEttWUpq-nHMPwfOCpuZF3sZKzUiiZBk
+X-Proofpoint-GUID: YEttWUpq-nHMPwfOCpuZF3sZKzUiiZBk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ phishscore=0 impostorscore=0 adultscore=0 priorityscore=1501 spamscore=0
+ clxscore=1011 malwarescore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2311290000
+ definitions=main-2401160037
 
-Alan Stern wrote on Mon, Jan 15, 2024 at 10:17:34PM -0500:
-> > diff --git a/drivers/usb/gadget/Kconfig b/drivers/usb/gadget/Kconfig
-> > index b3592bcb0f966..72cdecaef6aa9 100644
-> > --- a/drivers/usb/gadget/Kconfig
-> > +++ b/drivers/usb/gadget/Kconfig
-> > @@ -153,6 +153,10 @@ config USB_F_ACM
-> >  config USB_F_SS_LB
-> >  	tristate
-> >  
-> > +config USB_F_9PFS
-> > +	tristate
-> > +	select NET_9P
-> > +
-> >  config USB_U_SERIAL
-> >  	tristate
-> >  
-> > @@ -363,6 +367,13 @@ config USB_CONFIGFS_F_LB_SS
-> >  	  test software, like the "usbtest" driver, to put your hardware
-> >  	  and its driver through a basic set of functional tests.
-> >  
-> > +config USB_CONFIGFS_F_9PFS
-> > +	bool "9pfs over usb gadget"
-> > +	depends on USB_CONFIGFS
-> > +	select USB_F_9PFS
-> > +	help
-> > +	  9pfs support for usb gadget
+
+
+On 11-01-24 03:46 pm, Hans de Goede wrote:
+>> ---
+>>   drivers/usb/dwc3/host.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+>> index 61f57fe5bb78..31a496233d87 100644
+>> --- a/drivers/usb/dwc3/host.c
+>> +++ b/drivers/usb/dwc3/host.c
+>> @@ -89,6 +89,8 @@ int dwc3_host_init(struct dwc3 *dwc)
+>>   
+>>   	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
+>>   
+>> +	props[prop_idx++] = PROPERTY_ENTRY_BOOL("xhci-sg-trb-cache-size-quirk");
+>> +
 > 
-> This may be a dumb question, but what is the purpose of this CONFIG
-> symbol?  It doesn't get used by any of the patches in this series, as
-> far as I can see.
+> If you do this you also need to make the props array 1 entry bigger (increase
+> it from 4 to 5 entries). Before this patch there are max 3 properties added
+> and there needs to be an empty terminating property at the end (which
+> is what the memset is for). So before this patch props[] needs to have
+> 4 entries (which it does) and thus after this patch props[] needs to
+> have 5 entire.s
+> 
+> Regards,
+> 
+> Hans
+> 
+Thanks for pointing this out Hans! Didn't change it from 4->5 since we 
+had only 4 properties, wasn't aware of the terminating property. Will 
+update the patch.
 
-USB_F_9PFS cannot be selected directly in menuconfig so this allows
-configuring the build option -- that appears to be how the other usb
-gadgets are configured so I assume it's done that way for consistency
-more than out of necessity (I don't see a problem in making the build
-system use USB_CONFIGFS_F_9PFS directly, it'd just be different from the
-rest)
-
--- 
-Dominique Martinet | Asmadeus
+Thanks again
+Prashanth K
 
