@@ -1,176 +1,121 @@
-Return-Path: <linux-usb+bounces-5126-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5127-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D41A82F83C
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 21:41:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB1EF82F867
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 21:44:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DDCE1F220C3
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 20:41:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0333B2466E
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 20:44:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D8581EB51;
-	Tue, 16 Jan 2024 19:51:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC79D131E3F;
+	Tue, 16 Jan 2024 19:51:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LISdilLR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RbmnggF/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E0312F5B2;
-	Tue, 16 Jan 2024 19:51:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1749131745;
+	Tue, 16 Jan 2024 19:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705434670; cv=none; b=uL7IWSHnWUbXkzcKsXqyxmsdn3Wq0ddpGr/0Dgo35KMlHLAxSrE+s8zFQk6Qe1o7o6Pb2GBmFIXskdPzUoFWbvcpsq3X3YbG+Ku6ujlu7/nxJMb45q6Z7FaqcgeeQ4RTxWfhMYadib4ykILIB8eTu/3Y6aQNIneHcVDlwZlaM9s=
+	t=1705434694; cv=none; b=atnRxaW+SCJ/sVVoMdPwYv/PhIeJqeVh5lpNmup7oj4WkYqtA/ynUYyciXi0aMLcGkRYDyU3rY7p6eCzCXM9bqeGvDTaqWZqWuwldrYFugVkRx60PKypCtFZpKg2f9nAx4CvfjfWmJ6Nd6Aqamp6Qp8hNHpNWw/Zsv/DwC7413A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705434670; c=relaxed/simple;
-	bh=rBoYvdVS2YzR0spwdUAt2VoFNa3jDoAge0YXkInyX40=;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:X-stable:
-	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=oNIwAsOZFgoiaB+2yKMNgi1LIgbpk6Mzlu5v0nn4EyjxvWZZGg8lh4B6KXw7OaC3iRvOHECOudphk3B7UTGdeEil81GHhiLfEidMZ8R1DsYMxNX8qEcqY5vvZlW9MlAg9/22MnMdBuG8bimQpeAFiXJTi2058BVOz2JbaDfSo28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LISdilLR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A59A8C433C7;
-	Tue, 16 Jan 2024 19:51:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705434670;
-	bh=rBoYvdVS2YzR0spwdUAt2VoFNa3jDoAge0YXkInyX40=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LISdilLRDQXLNqrR1GEBuA8ht45dpbcgWYDq8TAnY7KfUC5p2E+aqREwbL3TYHBIa
-	 Z+KhNMDGH87h8wBOUSvP+BRc6r+s1U70uiJATxBlKbe9tO+Vo07LMhhHHHNs/dYNHx
-	 3ITrx/BlJr1Q33ESuIAdbEXzToj3Y9QMl2ZyPSTu6PvkYfDN6FhF45gQxJI7hjDog2
-	 w90o2UBRwmUAWDALEuj9EXMsQOcoj37ObCudImwQXDiMjEoB7iovW9DJaIZOdcnLTS
-	 wwZvSj865w+YRlySU6zLr/UOWtrPYKXTv2/DgY2UFkkHx9m1NJATiA1A6mFMykSjPZ
-	 6gm2wpId6b14A==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	gregkh@linuxfoundation.org,
-	hdegoede@redhat.com,
-	saranya.gopal@intel.com,
-	fabrice.gasnier@foss.st.com,
-	quic_jackp@quicinc.com,
-	andriy.shevchenko@linux.intel.com,
-	minhuadotchen@gmail.com,
-	johan+linaro@kernel.org,
-	robh@kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 043/104] usb: typec: ucsi: fix UCSI on buggy Qualcomm devices
-Date: Tue, 16 Jan 2024 14:46:09 -0500
-Message-ID: <20240116194908.253437-43-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240116194908.253437-1-sashal@kernel.org>
-References: <20240116194908.253437-1-sashal@kernel.org>
+	s=arc-20240116; t=1705434694; c=relaxed/simple;
+	bh=LYFKZ7TRuYk1pl41vPfkzt1g9GP165KZ2d+LPbo5cvk=;
+	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
+	 X-IronPort-AV:X-IronPort-AV:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=rzp7GM1z/1QoZm8wN9K8ZU7Ku4muncPBl4JJYW3pC3EkWtHm7DvvqBSXh/9Zxnxhsvcz+IC4AJdx4AYdvHTYGCj9ax24NC0LoNMMgIyQiiDpTxtOgL2ydYGwz5RuYxZ5QQe8pjzkDFAvJvvOOQSDQGz75Rzg7W/RsbtRHdSULa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RbmnggF/; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705434693; x=1736970693;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LYFKZ7TRuYk1pl41vPfkzt1g9GP165KZ2d+LPbo5cvk=;
+  b=RbmnggF/qb4euGFspfd8dksFx7iB6jZlhwTgWHYoaw5z7Ytk2jiXrHLL
+   ADYyOL7qK7GibbMkeQzhGdD0rFQgfMITiVdlOaS9ENdLEMzZ3LIN26HbU
+   TIthaAzpacSclhdAPbn9fqoq43X4ZhXTs32yQgofEIgWWqTW0ZiZppAkP
+   YK+uH3WQkbzpLk/dkTRXzLKzrt2vxAqSZU8SFLU4mQG1KxjD03mIyjst8
+   MHv54LrUwCorB261Zcv8AM/HZsnNheVzkONyieMrYCniyhlDQD9R5vTII
+   2Q+PbBZ4hFOnfR/pmLANz9dVQ/RhdEJH+bvLoizUzKofpJ69WWLnH/ga4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="18562463"
+X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
+   d="scan'208";a="18562463"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2024 11:51:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="907479092"
+X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
+   d="scan'208";a="907479092"
+Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 16 Jan 2024 11:51:28 -0800
+Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rPpT4-0001AK-0z;
+	Tue, 16 Jan 2024 19:51:26 +0000
+Date: Wed, 17 Jan 2024 03:51:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Eric Van Hensbergen <ericvh@kernel.org>,
+	Latchesar Ionkov <lucho@ionkov.net>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Paul Gazzillo <paul@pgazz.com>,
+	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+	oe-kbuild-all@lists.linux.dev, v9fs@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, kernel@pengutronix.de,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: Re: [PATCH 1/3] usb: gadget: function: 9pfs
+Message-ID: <202401170342.VrKVlN1a-lkp@intel.com>
+References: <20240116-ml-topic-u9p-v1-1-ad8c306f9a4e@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.12
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240116-ml-topic-u9p-v1-1-ad8c306f9a4e@pengutronix.de>
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Hi Michael,
 
-[ Upstream commit 1d103d6af241dbfc7e11eb9a46dff65db257a37f ]
+kernel test robot noticed the following build warnings:
 
-On sevral Qualcomm platforms (SC8180X, SM8350, SC8280XP) a call to
-UCSI_GET_PDOS for non-PD partners will cause a firmware crash with no
-easy way to recover from it. Since we have no easy way to determine
-whether the partner really has PD support, shortcut UCSI_GET_PDOS on
-such platforms. This allows us to enable UCSI support on such devices.
+[auto build test WARNING on 052d534373b7ed33712a63d5e17b2b6cdbce84fd]
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Link: https://lore.kernel.org/r/20231025115620.905538-2-dmitry.baryshkov@linaro.org
-Signed-off-by: Bjorn Andersson <andersson@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/typec/ucsi/ucsi.c       |  3 +++
- drivers/usb/typec/ucsi/ucsi.h       |  3 +++
- drivers/usb/typec/ucsi/ucsi_glink.c | 13 +++++++++++++
- 3 files changed, 19 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Grzeschik/usb-gadget-function-9pfs/20240116-095914
+base:   052d534373b7ed33712a63d5e17b2b6cdbce84fd
+patch link:    https://lore.kernel.org/r/20240116-ml-topic-u9p-v1-1-ad8c306f9a4e%40pengutronix.de
+patch subject: [PATCH 1/3] usb: gadget: function: 9pfs
+config: alpha-kismet-CONFIG_NET_9P-CONFIG_USB_F_9PFS-0-0 (https://download.01.org/0day-ci/archive/20240117/202401170342.VrKVlN1a-lkp@intel.com/config)
+reproduce: (https://download.01.org/0day-ci/archive/20240117/202401170342.VrKVlN1a-lkp@intel.com/reproduce)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 61b64558f96c..5392ec698959 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -578,6 +578,9 @@ static int ucsi_read_pdos(struct ucsi_connector *con,
- 	u64 command;
- 	int ret;
- 
-+	if (ucsi->quirks & UCSI_NO_PARTNER_PDOS)
-+		return 0;
-+
- 	command = UCSI_COMMAND(UCSI_GET_PDOS) | UCSI_CONNECTOR_NUMBER(con->num);
- 	command |= UCSI_GET_PDOS_PARTNER_PDO(is_partner);
- 	command |= UCSI_GET_PDOS_PDO_OFFSET(offset);
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 474315a72c77..6478016d5cb8 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -317,6 +317,9 @@ struct ucsi {
- #define EVENT_PENDING	0
- #define COMMAND_PENDING	1
- #define ACK_PENDING	2
-+
-+	unsigned long quirks;
-+#define UCSI_NO_PARTNER_PDOS	BIT(0)	/* Don't read partner's PDOs */
- };
- 
- #define UCSI_MAX_SVID		5
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index 4853141cd10c..53a7ede8556d 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -6,6 +6,7 @@
- #include <linux/auxiliary_bus.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-+#include <linux/of_device.h>
- #include <linux/property.h>
- #include <linux/soc/qcom/pdr.h>
- #include <linux/usb/typec_mux.h>
-@@ -296,11 +297,19 @@ static void pmic_glink_ucsi_destroy(void *data)
- 	mutex_unlock(&ucsi->lock);
- }
- 
-+static const struct of_device_id pmic_glink_ucsi_of_quirks[] = {
-+	{ .compatible = "qcom,sc8180x-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
-+	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
-+	{ .compatible = "qcom,sm8350-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
-+	{}
-+};
-+
- static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
- 				 const struct auxiliary_device_id *id)
- {
- 	struct pmic_glink_ucsi *ucsi;
- 	struct device *dev = &adev->dev;
-+	const struct of_device_id *match;
- 	struct fwnode_handle *fwnode;
- 	int ret;
- 
-@@ -327,6 +336,10 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
- 	if (ret)
- 		return ret;
- 
-+	match = of_match_device(pmic_glink_ucsi_of_quirks, dev->parent);
-+	if (match)
-+		ucsi->ucsi->quirks = (unsigned long)match->data;
-+
- 	ucsi_set_drvdata(ucsi->ucsi, ucsi);
- 
- 	device_for_each_child_node(dev, fwnode) {
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401170342.VrKVlN1a-lkp@intel.com/
+
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for NET_9P when selected by USB_F_9PFS
+   
+   WARNING: unmet direct dependencies detected for NET_9P
+     Depends on [n]: NET [=n]
+     Selected by [y]:
+     - USB_F_9PFS [=y] && USB_SUPPORT [=y] && USB_GADGET [=y]
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
