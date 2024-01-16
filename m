@@ -1,245 +1,107 @@
-Return-Path: <linux-usb+bounces-5107-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5108-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A770B82EEAA
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 13:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 320A182EF10
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 13:33:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30C581F24281
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 12:05:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB7C11F244C6
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 12:33:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EC871BC23;
-	Tue, 16 Jan 2024 12:05:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9FF1BC3A;
+	Tue, 16 Jan 2024 12:33:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VdUFHjEW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ylBQ8WDa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CED1B971;
-	Tue, 16 Jan 2024 12:05:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705406709; x=1736942709;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ObtUgAvWgI8p0FDfghm9eenqCcQ4fSvkALWKCuchi5Y=;
-  b=VdUFHjEWw79wK9MXFr2aEx4KZQfh9n3r9yrZ7YXrm/hNc2ka4bL4rMHi
-   MAT+UJyIUGN6x3jIU183LjTycUc3BcbjNvh0Iq/Q1J+sYyVfLzLjkxdav
-   a95MaO9hEU/3zChDKhrK11VkzwgcfomktvLK2IbAreIbgkiLSDdI6hsL7
-   GC2t/TQEKA77RnhQdTbIUHkmN2ZBvSRgduLUWtFKG3gwl7IV4T3Df6Tld
-   755VMcFHMZxglGKxamGeUc/PnyPQK7Blr6pQ6bAV4ZuAv1VaVxpPTzCru
-   2aXd64MrYl2Xx2GpJVqf0NJJd5occqy2e71nOMCDnw0JLuBwpwbUHAuSX
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10954"; a="21316649"
-X-IronPort-AV: E=Sophos;i="6.05,199,1701158400"; 
-   d="scan'208";a="21316649"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2024 04:05:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,199,1701158400"; 
-   d="scan'208";a="32433354"
-Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 16 Jan 2024 04:05:04 -0800
-Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rPiBi-0000f2-0A;
-	Tue, 16 Jan 2024 12:05:02 +0000
-Date: Tue, 16 Jan 2024 20:04:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: oe-kbuild-all@lists.linux.dev, v9fs@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, kernel@pengutronix.de,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>
-Subject: Re: [PATCH 1/3] usb: gadget: function: 9pfs
-Message-ID: <202401161948.no61pNtO-lkp@intel.com>
-References: <20240116-ml-topic-u9p-v1-1-ad8c306f9a4e@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C5F81B295
+	for <linux-usb@vger.kernel.org>; Tue, 16 Jan 2024 12:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-50eab4bf47aso8181421e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 16 Jan 2024 04:33:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1705408378; x=1706013178; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hYW1j8AmJ2yfjMj34Xd9/BLYIzs+LQRZDCyalHNkf+k=;
+        b=ylBQ8WDaD/QNaaz01Vz/34fVmRQ5fq4Bm8JVl0hrtGQI6lC2pHNvEEu06fzm6nbgwy
+         F7bejM2OjsHX4KQiE/LFt3kUmRBcO1neXV/Z9mkY5SgWV4H/knwdn/dGFcaeIhoM3RPg
+         94pIIPFJtDdmWJ48caF0nw4YNdcpdxcBd8zNcaglg6uQ4+gTbwuKIxxwL04/TeAeLuTy
+         bsG+pzeN6x4cO6mrR/1MzYK1KRNxthVsYF4w0nQXk9U4Z5ZwNfCfvVOQg0jhDqzHQLjk
+         RawbGAvk9zXRF388OgK4S5JNoYWDPCyHE2H7jZ8mo2J5bGLR9ylyBw5LAJp93U64aeEb
+         tFGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705408378; x=1706013178;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hYW1j8AmJ2yfjMj34Xd9/BLYIzs+LQRZDCyalHNkf+k=;
+        b=uhPDdaGmk/HMFsE3M4z5tBe30bvdeSr4oPJS66LnjXNkMETb58MhENebhUVagXvJK9
+         apXlQEUxKiKOhBomsmxZSdt37a7MnS4r1PgQA3T4MNFlIU5cI1KQn77Ei68OmGkZigQC
+         gMbtZBLnvRa9TU9sCT/KT/Pk+IB/1qc9jGDLwuX5X6S2APJwIq842s0kYr3oP7E5q86o
+         Bv9cCaAr6Rkq5o5qBmrHrt6meTtSmukB/+ALsDD50rNe0lz2JPUXxDIpnjgSplkBYOop
+         Aa8EtN+yH/XaZEYYeFYoqQA0w8kO1+XV1PT4GdVtrjekUBhOhav+YqSBtp45Hb8h+3Mm
+         2YSg==
+X-Gm-Message-State: AOJu0Yzk8dIOUFdX4+U4yCoapfV9U0JsSKrAwXr+Z+P+p1nSGYohTZIf
+	QQfgOrdfnlIjrocIaGahn3B43BcQEfhYTQ==
+X-Google-Smtp-Source: AGHT+IHBVsHDGtoAJWdj95FICj2NQkjN6XVsh2kjd01I3c0lrtANH6nBrffkl6x3xHFoYWGY0GkMrQ==
+X-Received: by 2002:a05:6512:474:b0:50e:73e8:8d05 with SMTP id x20-20020a056512047400b0050e73e88d05mr4589168lfd.30.1705408378392;
+        Tue, 16 Jan 2024 04:32:58 -0800 (PST)
+Received: from [172.30.204.234] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id f12-20020a05651232cc00b0050eca8735dfsm1752612lfg.140.2024.01.16.04.32.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jan 2024 04:32:57 -0800 (PST)
+Message-ID: <2e07f014-0884-49ca-babd-b89cc90a16b7@linaro.org>
+Date: Tue, 16 Jan 2024 13:32:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240116-ml-topic-u9p-v1-1-ad8c306f9a4e@pengutronix.de>
-
-Hi Michael,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 052d534373b7ed33712a63d5e17b2b6cdbce84fd]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Grzeschik/usb-gadget-function-9pfs/20240116-095914
-base:   052d534373b7ed33712a63d5e17b2b6cdbce84fd
-patch link:    https://lore.kernel.org/r/20240116-ml-topic-u9p-v1-1-ad8c306f9a4e%40pengutronix.de
-patch subject: [PATCH 1/3] usb: gadget: function: 9pfs
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20240116/202401161948.no61pNtO-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240116/202401161948.no61pNtO-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401161948.no61pNtO-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/usb/gadget/function/f_9pfs.c:21:
-   drivers/usb/gadget/function/f_9pfs.c: In function 'usb9pfs_rx_header':
->> drivers/usb/gadget/function/f_9pfs.c:196:34: warning: format '%u' expects argument of type 'unsigned int', but argument 5 has type 'size_t' {aka 'long unsigned int'} [-Wformat=]
-     196 |         p9_debug(P9_DEBUG_TRANS, "mux %p got %u bytes\n", usb9pfs,
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~
-     197 |                  rc.capacity - rc.offset);
-         |                  ~~~~~~~~~~~~~~~~~~~~~~~
-         |                              |
-         |                              size_t {aka long unsigned int}
-   include/net/9p/9p.h:55:36: note: in definition of macro 'p9_debug'
-      55 |         _p9_debug(level, __func__, fmt, ##__VA_ARGS__)
-         |                                    ^~~
-   drivers/usb/gadget/function/f_9pfs.c:196:47: note: format string is defined here
-     196 |         p9_debug(P9_DEBUG_TRANS, "mux %p got %u bytes\n", usb9pfs,
-         |                                              ~^
-         |                                               |
-         |                                               unsigned int
-         |                                              %lu
-   drivers/usb/gadget/function/f_9pfs.c: At top level:
->> drivers/usb/gadget/function/f_9pfs.c:286:6: warning: no previous prototype for 'disable_endpoints' [-Wmissing-prototypes]
-     286 | void disable_endpoints(struct usb_composite_dev *cdev,
-         |      ^~~~~~~~~~~~~~~~~
->> drivers/usb/gadget/function/f_9pfs.c:825:12: warning: no previous prototype for 'usb9pfs_modinit' [-Wmissing-prototypes]
-     825 | int __init usb9pfs_modinit(void)
-         |            ^~~~~~~~~~~~~~~
->> drivers/usb/gadget/function/f_9pfs.c:838:13: warning: no previous prototype for 'usb9pfs_modexit' [-Wmissing-prototypes]
-     838 | void __exit usb9pfs_modexit(void)
-         |             ^~~~~~~~~~~~~~~
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 09/15] usb: typec: qcom-pmic-typec: add support for
+ PMI632 PMIC
+Content-Language: en-US
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Bjorn Andersson <andersson@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Guenter Roeck <linux@roeck-us.net>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
+References: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org>
+ <20240113-pmi632-typec-v2-9-182d9aa0a5b3@linaro.org>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20240113-pmi632-typec-v2-9-182d9aa0a5b3@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +196 drivers/usb/gadget/function/f_9pfs.c
 
-   184	
-   185	static struct p9_req_t *usb9pfs_rx_header(struct f_usb9pfs *usb9pfs, struct usb_request *req)
-   186	{
-   187		struct p9_req_t *p9_rx_req;
-   188		struct p9_fcall	rc;
-   189		int ret;
-   190	
-   191		/* start by reading header */
-   192		rc.sdata = req->buf;
-   193		rc.offset = 0;
-   194		rc.capacity = rc.size = P9_HDRSZ;
-   195	
- > 196		p9_debug(P9_DEBUG_TRANS, "mux %p got %u bytes\n", usb9pfs,
-   197			 rc.capacity - rc.offset);
-   198	
-   199		ret = p9_parse_header(&rc, &rc.size, NULL, NULL, 0);
-   200		if (ret) {
-   201			p9_debug(P9_DEBUG_ERROR,
-   202				 "error parsing header: %d\n", ret);
-   203			return NULL;
-   204		}
-   205	
-   206		p9_debug(P9_DEBUG_TRANS,
-   207			 "mux %p pkt: size: %d bytes tag: %d\n",
-   208			 usb9pfs, rc.size, rc.tag);
-   209	
-   210		p9_rx_req = p9_tag_lookup(usb9pfs->client, rc.tag);
-   211		if (!p9_rx_req || (p9_rx_req->status != REQ_STATUS_SENT)) {
-   212			p9_debug(P9_DEBUG_ERROR, "Unexpected packet tag %d\n", rc.tag);
-   213			return NULL;
-   214		}
-   215	
-   216		if (rc.size > p9_rx_req->rc.capacity) {
-   217			p9_debug(P9_DEBUG_ERROR,
-   218				 "requested packet size too big: %d for tag %d with capacity %zd\n",
-   219				 rc.size, rc.tag, p9_rx_req->rc.capacity);
-   220			return NULL;
-   221		}
-   222	
-   223		if (!p9_rx_req->rc.sdata) {
-   224			p9_debug(P9_DEBUG_ERROR,
-   225				 "No recv fcall for tag %d (req %p), disconnecting!\n",
-   226				 rc.tag, p9_rx_req);
-   227			p9_req_put(usb9pfs->client, p9_rx_req);
-   228			return NULL;
-   229		}
-   230	
-   231		return p9_rx_req;
-   232	}
-   233	
-   234	static void usb9pfs_rx_complete(struct usb_ep *ep, struct usb_request *req)
-   235	{
-   236		struct f_usb9pfs *usb9pfs = ep->driver_data;
-   237		struct usb_composite_dev *cdev = usb9pfs->function.config->cdev;
-   238		struct p9_req_t *p9_rx_req;
-   239		unsigned long flags;
-   240	
-   241		switch (req->status) {
-   242		case 0:				/* normal completion? */
-   243			spin_lock_irqsave(&usb9pfs->req_lock, flags);
-   244			p9_rx_req = usb9pfs_rx_header(usb9pfs, req);
-   245			if (!p9_rx_req) {
-   246				spin_unlock_irqrestore(&usb9pfs->req_lock, flags);
-   247				goto free_req;
-   248			}
-   249	
-   250			memcpy(p9_rx_req->rc.sdata, req->buf, req->actual);
-   251			p9_rx_req->rc.size = req->actual;
-   252	
-   253			p9_client_cb(usb9pfs->client, p9_rx_req, REQ_STATUS_RCVD);
-   254			p9_req_put(usb9pfs->client, p9_rx_req);
-   255	
-   256			usb9pfs->p9_tx_req = NULL;
-   257	
-   258			usb9pfs_transmit(usb9pfs);
-   259	
-   260			spin_unlock_irqrestore(&usb9pfs->req_lock, flags);
-   261	
-   262			return;
-   263	free_req:
-   264		default:
-   265			dev_err(&cdev->gadget->dev, "%s usb9pfs complete --> %d, %d/%d\n",
-   266				ep->name, req->status, req->actual, req->length);
-   267			usb_ep_free_request(ep == usb9pfs->in_ep ?
-   268					    usb9pfs->out_ep : usb9pfs->in_ep,
-   269					    req->context);
-   270			free_ep_req(ep, req);
-   271			return;
-   272		}
-   273	
-   274		p9_client_cb(usb9pfs->client, p9_rx_req, REQ_STATUS_ERROR);
-   275	}
-   276	
-   277	static void disable_ep(struct usb_composite_dev *cdev, struct usb_ep *ep)
-   278	{
-   279		int value;
-   280	
-   281		value = usb_ep_disable(ep);
-   282		if (value < 0)
-   283			dev_info(&cdev->gadget->dev, "disable %s --> %d\n", ep->name, value);
-   284	}
-   285	
- > 286	void disable_endpoints(struct usb_composite_dev *cdev,
-   287			struct usb_ep *in, struct usb_ep *out,
-   288			struct usb_ep *iso_in, struct usb_ep *iso_out)
-   289	{
-   290		disable_ep(cdev, in);
-   291		disable_ep(cdev, out);
-   292	}
-   293	
+On 1/13/24 21:55, Dmitry Baryshkov wrote:
+> The PMI632 PMIC support Type-C port handling, but lacks USB
+> PowerDelivery support. The TCPM requires all callbacks to be provided
+> by the implementation. Implement a special, 'stub' Qcom PD PHY
+> implementation to enable the PMI632 support.
+> 
+> Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Still not a fan of stubby stubs :/
+
+Konrad
 
