@@ -1,218 +1,192 @@
-Return-Path: <linux-usb+bounces-5129-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5130-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C6D182FC2E
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 23:14:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A16D82FC9F
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 23:25:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3216B29DAC
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 22:12:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7ECD81C25CAE
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 22:25:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E21C22338;
-	Tue, 16 Jan 2024 20:24:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F063E2E82D;
+	Tue, 16 Jan 2024 21:22:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jcFDUvS8"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="GaBM+qsL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68FFE1D55E;
-	Tue, 16 Jan 2024 20:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 140832E653;
+	Tue, 16 Jan 2024 21:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705436679; cv=none; b=hhW4zp1zjO/wC8FZc7vooO7T/qtPgf9gsReZSyADqS6lalOtk2nGyj2CwE7iSnB6HMVgTl3jCknu1gzKRlECoTFwP5hOMI/S44FMuHjs7mhRfAGUuQTwgenxJeHsOhR8ieThLQSYtnOQ/X0KXuI9qSx/t0lgdLYRi6AKRqNqUKQ=
+	t=1705440120; cv=none; b=ogOzK1eQeKkD5QfYJejfgPefpgaEnTfpih/XTBG608oMuu9rQwofpDji0mKE93v1aBA51J+7+2crUpfoXGlRwdeD7ZXuSqIovnzTAy4+GHSFZc3ZcmLsoHs96W91NLWEFOtwXYBWifP11Fb7qYsBl1lrDc/W5aPfW9u6Z/aqAu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705436679; c=relaxed/simple;
-	bh=/iZ/XhGDPKyEC2qDhr4v1BM7WX19k4XGo31kibxi7/c=;
-	h=Received:DKIM-Signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:Content-Language:To:CC:
-	 References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Originating-IP:X-ClientProxiedBy:X-QCInternal:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-GUID:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details; b=srtTX3OIZ0SdF7yx2uyV4AXVAufOX6kTEUHflcYsSMgr6MJDEhFP2U66wHt6N0YtrT8RxZ6szWy7SS6/T4yyhQlJSgYI5eAW65HfPO5hyjkJpxwwm2FXFVTPoijpQeoQsLEPRzOtaQw4/V+UPYBHMzourhujQbVBgnpgRDIbVzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jcFDUvS8; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40GHIZnb009500;
-	Tue, 16 Jan 2024 20:24:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=GofOW4URAae/4uEZ/e91nCMdR8b1OaSRGCZlIwPE/Lo=; b=jc
-	FDUvS8xUL/XwSmOBNAzwFoHw9phsJ2rxpweAyt/aNdWyNeTOQBXnG/4EaUSvjdn4
-	e4VeKfj2iebK3z3zyQw/hU5naw+rVsiLQlBEJHN0p5y/vXyIS6YaRUIFQNEVo3iQ
-	D5r/wmSkg3BTlCNDJpXVP3FEhpYymSc7ct/VpJ6Xc2jYFfZ/X2JoyJy5heswIjH8
-	14hQY2tMXqU/iAeaebQHjoL0RAxLRz4eaOt90do2NB/8QgZHv3mffMr0L4qRQLXm
-	mT13uZpErelnjts2708WHxQgYTgwntwzgNVAx2sit3207PO+OlIFuHnNbTCzctlo
-	9f7mPiN1sHyF3nAPgaZA==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vns4m9b1c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 16 Jan 2024 20:24:14 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40GKODnx024586
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 16 Jan 2024 20:24:13 GMT
-Received: from [10.71.112.49] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 16 Jan
- 2024 12:24:12 -0800
-Message-ID: <ae64ce69-dc1b-1534-7950-0a35c4a56f58@quicinc.com>
-Date: Tue, 16 Jan 2024 12:24:08 -0800
+	s=arc-20240116; t=1705440120; c=relaxed/simple;
+	bh=U3x4ONFy9Ei70OFyJFkS3iOitDj71QgI6j6TOl7h2vo=;
+	h=Received:DKIM-Signature:X-ME-Helo:X-ME-Auth:X-ME-Date:X-ME-IP:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:
+	 To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding; b=AfygbzSzOKH7Dbs34TkPjCtLyAdHm/RAFA9kr7m3QfQUC9MQYhbto/1h68k0YVPnRZ33oqQLyRD7OwkLTYKPoI1n8Cu7VKJxgVcUz8p23qZSv0Xqgdd4u5QthQFCTnQz9ZugOrL+aAGhMM7MfkNEHqzlRzIadbko0NVYsHCKpw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=GaBM+qsL; arc=none smtp.client-ip=80.12.242.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.18] ([92.140.202.140])
+	by smtp.orange.fr with ESMTPA
+	id Pql9rceCI6FTdPqlBrC9ak; Tue, 16 Jan 2024 22:14:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1705439658;
+	bh=wS8NzOHKk5phyyBMwvuAnpbVzPwUbfEIN5JtjGlJSK4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=GaBM+qsLiFrpekYiaNN0jSJ1W0trwHwP5lRr1FwXjar/CcXCr5uiGbqgt42sVpPl2
+	 410dXKMWYXfBn15nVxKkWu2LMhEWwwDccADPFlhPKxL7i7OEn4Z74VGLjzvDgBYtc7
+	 9be/a0NZebkt2fhTQ1u8DU4vMxHgJsZB7BqQyizjR4wLED9wG9TbQVoK9On/UVwGZ7
+	 /YHvJ6B7ztLptm2TLilg6RFexTnEIXLSNdY4qgZIh/slb9feL7OLWpdYTaLsZZZdBX
+	 nc2vOWeovSzexpKdzCrJJ2YIycGvk6S23k2tcHGIzaot7XD9XdCR/M4Ac6Avfn9bYz
+	 pSdi+hyvh7Ktg==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 16 Jan 2024 22:14:18 +0100
+X-ME-IP: 92.140.202.140
+Message-ID: <de0bd3d3-bb7b-4f94-aae2-0d9323b273fb@wanadoo.fr>
+Date: Tue, 16 Jan 2024 22:14:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v12 04/41] usb: host: xhci-mem: Cleanup pending secondary
- event ring events
-Content-Language: en-US
-To: Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <gregkh@linuxfoundation.org>, <lgirdwood@gmail.com>,
-        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <konrad.dybcio@linaro.org>, <Thinh.Nguyen@synopsys.com>,
-        <broonie@kernel.org>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
-        <robh+dt@kernel.org>, <agross@kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-References: <20240102214549.22498-1-quic_wcheng@quicinc.com>
- <20240102214549.22498-5-quic_wcheng@quicinc.com>
- <734591a1-50b4-6dc7-0b93-077355ec12e4@linux.intel.com>
- <7b2ec96b-b72f-c848-7c35-36e61a4072ac@quicinc.com>
- <b254f73b-a1bc-3dd4-f485-a3acf556835d@quicinc.com>
- <2178e799-2068-7443-59b2-310dfdd1ddee@linux.intel.com>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <2178e799-2068-7443-59b2-310dfdd1ddee@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] usb: gadget: function: 9pfs
+Content-Language: en-MW
+To: Michael Grzeschik <m.grzeschik@pengutronix.de>,
+ Eric Van Hensbergen <ericvh@kernel.org>, Latchesar Ionkov
+ <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>,
+ Christian Schoenebeck <linux_oss@crudebyte.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: v9fs@lists.linux.dev, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ kernel@pengutronix.de
+References: <20240116-ml-topic-u9p-v1-0-ad8c306f9a4e@pengutronix.de>
+ <20240116-ml-topic-u9p-v1-1-ad8c306f9a4e@pengutronix.de>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20240116-ml-topic-u9p-v1-1-ad8c306f9a4e@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: gbHT4oiS8cADCWPxnU5049TNAUcUkFXq
-X-Proofpoint-ORIG-GUID: gbHT4oiS8cADCWPxnU5049TNAUcUkFXq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- bulkscore=0 phishscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=720
- spamscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2311290000
- definitions=main-2401160161
 
-Hi Mathias,
-
-On 1/15/2024 6:01 AM, Mathias Nyman wrote:
-> On 10.1.2024 1.42, Wesley Cheng wrote:
->> Hi Mathias,
->>
->> On 1/8/2024 12:51 PM, Wesley Cheng wrote:
->>> Hi Mathias,
->>>
->>> On 1/4/2024 6:48 AM, Mathias Nyman wrote:
->>>> On 2.1.2024 23.45, Wesley Cheng wrote:
->>>>> As part of xHCI bus suspend, the XHCI is halted.  However, if there 
->>>>> are
->>>>> pending events in the secondary event ring, it is observed that the 
->>>>> xHCI
->>>>> controller stops responding to further commands upon host or device
->>>>> initiated bus resume.  Iterate through all pending events and 
->>>>> update the
->>>>> dequeue pointer to the beginning of the event ring.
->>>>>
->>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>>> ...
->>>>> +/*
->>>>> + * Move the event ring dequeue pointer to skip events kept in the 
->>>>> secondary
->>>>> + * event ring.  This is used to ensure that pending events in the 
->>>>> ring are
->>>>> + * acknowledged, so the XHCI HCD can properly enter 
->>>>> suspend/resume. The
->>>>> + * secondary ring is typically maintained by an external component.
->>>>> + */
->>>>> +void xhci_skip_sec_intr_events(struct xhci_hcd *xhci,
->>>>> +    struct xhci_ring *ring,    struct xhci_interrupter *ir)
->>>>> +{
->>>>> +    union xhci_trb *erdp_trb, *current_trb;
->>>>> +    u64 erdp_reg;
->>>>> +    u32 iman_reg;
->>>>> +    dma_addr_t deq;
->>>>> +
->>>>> +    /* disable irq, ack pending interrupt and ack all pending 
->>>>> events */
->>>>> +    xhci_disable_interrupter(ir);
->>>>> +    iman_reg = readl_relaxed(&ir->ir_set->irq_pending);
->>>>> +    if (iman_reg & IMAN_IP)
->>>>> +        writel_relaxed(iman_reg, &ir->ir_set->irq_pending);
->>>>> +
->>>>> +    /* last acked event trb is in erdp reg  */
->>>>> +    erdp_reg = xhci_read_64(xhci, &ir->ir_set->erst_dequeue);
->>>>> +    deq = (dma_addr_t)(erdp_reg & ERST_PTR_MASK);
->>>>> +    if (!deq) {
->>>>> +        xhci_err(xhci, "event ring handling not required\n");
->>>>> +        return;
->>>>> +    }
->>>>> +
->>>>> +    erdp_trb = current_trb = ir->event_ring->dequeue;
->>>>> +    /* read cycle state of the last acked trb to find out CCS */
->>>>> +    ring->cycle_state = le32_to_cpu(current_trb->event_cmd.flags) 
->>>>> & TRB_CYCLE;
->>>>> +
->>>>> +    while (1) {
->>>>> +        inc_deq(xhci, ir->event_ring);
->>>>> +        erdp_trb = ir->event_ring->dequeue;
->>>>> +        /* cycle state transition */
->>>>> +        if ((le32_to_cpu(erdp_trb->event_cmd.flags) & TRB_CYCLE) !=
->>>>> +            ring->cycle_state)
->>>>> +            break;
->>>>> +    }
->>>>> +
->>>>> +    xhci_update_erst_dequeue(xhci, ir, current_trb, true);
->>>>> +}
->>>>
->>>> Code above is very similar to the existing event ring processing 
->>>> parts of xhci_irq()
->>>> and xhci_handle_event()
->>>>
->>>> I'll see if I can refactor the existing event ring processing, 
->>>> decouple it from
->>>> event handling so that it could be used by primary and secondary 
->>>> interrupters with
->>>> handlers, and this case where we just want to clear the event ring.
->>>>
->>>
->>> Thanks, that makes sense.  Will take a look as well.
->>>
->>
->> How about something like the below?  Tested this on my set up and 
->> everything looks to be working fine.  Had to add another param to 
->> struct xhci_interrupters to tell the XHCI interrupt handler to say if 
->> that particular interrupter wants to skip_events (handling).  This 
->> way, its something that the class driver utilizing the interrupter 
->> will have to tell XHCI sideband.  It would allow the user to determine 
->> if they want to use the interrupter to actually handle events or not 
->> on the proc running Linux.
->>
+Le 16/01/2024 à 02:49, Michael Grzeschik a écrit :
+> Add the new gadget function for 9pfs transport. This function is
+> defining an simple 9pfs transport interface that consists of one in and
+> one out endpoint. The endpoints transmit and receive the 9pfs protocol
+> payload when mounting a 9p filesystem over usb.
 > 
-> Yes, I have something similar.
-> I'll share it soon, just need to
-> clean it up a bit fist.
-> 
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> ---
+>   Documentation/filesystems/9p.rst     |  12 +
+>   drivers/usb/gadget/Kconfig           |  11 +
+>   drivers/usb/gadget/function/Makefile |   2 +
+>   drivers/usb/gadget/function/f_9pfs.c | 849 +++++++++++++++++++++++++++++++++++
+>   4 files changed, 874 insertions(+)
 
-Sure, no worries.  Will test it when its available.  Thanks!
+...
 
-Thanks
-Wesley Cheng
+> +static int alloc_requests(struct usb_composite_dev *cdev,
+> +			  struct f_usb9pfs *usb9pfs)
+> +{
+> +	int result = 0;
+> +
+> +	usb9pfs->in_req = usb_ep_alloc_request(usb9pfs->in_ep, GFP_ATOMIC);
+> +	if (!usb9pfs->in_req)
+> +		goto fail;
+> +
+> +	usb9pfs->out_req = usb9pfs_alloc_ep_req(usb9pfs->out_ep, usb9pfs->buflen);
+> +	if (!usb9pfs->out_req)
+> +		goto fail_in;
+> +
+> +	usb9pfs->in_req->complete = usb9pfs_tx_complete;
+> +	usb9pfs->out_req->complete = usb9pfs_rx_complete;
+> +
+> +	/* length will be set in complete routine */
+> +	usb9pfs->in_req->context = usb9pfs->out_req->context = usb9pfs;
+> +
+> +	return 0;
+> +
+> +fail_in:
+> +	usb_ep_free_request(usb9pfs->in_ep, usb9pfs->in_req);
+> +fail:
+> +	return result;
+
+'result' is never overwritten, so we always return 0.
+Is it on purpose?
+
+> +}
+
+...
+
+> +static struct usb_function *usb9pfs_alloc(struct usb_function_instance *fi)
+> +{
+> +	struct f_usb9pfs_opts *usb9pfs_opts;
+> +	struct f_usb9pfs *usb9pfs;
+> +
+> +	usb9pfs = kzalloc(sizeof(*usb9pfs), GFP_KERNEL);
+> +	if (!usb9pfs)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	usb9pfs_opts = container_of(fi, struct f_usb9pfs_opts, func_inst);
+> +
+> +	mutex_lock(&usb9pfs_opts->lock);
+> +	usb9pfs_opts->refcnt++;
+> +	mutex_unlock(&usb9pfs_opts->lock);
+> +
+> +	usb9pfs->buflen = usb9pfs_opts->buflen;
+> +
+> +	usb9pfs->function.name = "usb9pfs";
+> +	usb9pfs->function.bind = usb9pfs_func_bind;
+> +	usb9pfs->function.set_alt = usb9pfs_set_alt;
+> +	usb9pfs->function.disable = usb9pfs_disable;
+> +	usb9pfs->function.strings = usb9pfs_strings;
+> +
+> +	usb9pfs->function.free_func = usb9pfs_free_func;
+> +
+> +	mutex_lock(&usb9pfs_ida_lock);
+> +
+> +	usb9pfs->index = ida_simple_get(&usb9pfs_ida, 0, 100, GFP_KERNEL);
+
+This API will soon be removed.
+Please use ida_alloc_max() instead.
+
+Also, there is no corresponding ida_free()? (or isa_simple_remove())
+
+> +	if (usb9pfs->index < 0) {
+> +		struct usb_function *ret = ERR_PTR(usb9pfs->index);
+> +
+> +		kfree(usb9pfs);
+> +		mutex_unlock(&usb9pfs_ida_lock);
+> +		return ret;
+> +	}
+> +
+> +	mutex_unlock(&usb9pfs_ida_lock);
+> +
+> +	usb9pfs->tag = kasprintf(GFP_KERNEL, "%s%d", usb9pfs->function.name,
+> +				 usb9pfs->index);
+
+Same here, it seems to be freed nowhere?
+I think that both should be added in usb9pfs_free_func().
+
+CJ
+
+> +
+> +	INIT_LIST_HEAD(&usb9pfs->function_list);
+> +
+> +	mutex_lock(&usb9pfs_lock);
+> +	list_add_tail(&usb9pfs->function_list, &usbg_function_list);
+> +	mutex_unlock(&usb9pfs_lock);
+> +
+> +	return &usb9pfs->function;
+> +}
+
+...
+
+
 
