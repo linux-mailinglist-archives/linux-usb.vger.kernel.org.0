@@ -1,157 +1,186 @@
-Return-Path: <linux-usb+bounces-5116-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5117-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD16182F14C
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 16:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2354D82F1A4
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 16:35:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BDFFB22052
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 15:21:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CE23B2259A
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jan 2024 15:35:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D58E01BF57;
-	Tue, 16 Jan 2024 15:21:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEEBB1C29E;
+	Tue, 16 Jan 2024 15:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nmsjii5s"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091DF1BF43
-	for <linux-usb@vger.kernel.org>; Tue, 16 Jan 2024 15:21:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rPlD8-0000tu-OV; Tue, 16 Jan 2024 16:18:42 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rPlD0-000Gxt-VX; Tue, 16 Jan 2024 16:18:34 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rPlD0-0011AW-2X;
-	Tue, 16 Jan 2024 16:18:34 +0100
-Date: Tue, 16 Jan 2024 16:18:34 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Mark Brown <broonie@kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Linus Walleij <linus.walleij@linaro.org>, 
-	dri-devel@lists.freedesktop.org, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Ronald Wahl <ronald.wahl@raritan.com>, Stefan Schmidt <stefan@datenfreihafen.org>, 
-	libertas-dev@lists.infradead.org, Javier Martinez Canillas <javierm@redhat.com>, 
-	Alex Elder <elder@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org, linux-spi@vger.kernel.org, 
-	kernel@pengutronix.de, linux-media@vger.kernel.org, linux-wpan@vger.kernel.org, 
-	Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>, linux-doc@vger.kernel.org, Dmitry Antipov <dmantipov@yandex.ru>, 
-	Max Filippov <jcmvbkbc@gmail.com>, Eric Dumazet <edumazet@google.com>, 
-	James Clark <james.clark@arm.com>, Guenter Roeck <groeck@chromium.org>, 
-	Dario Binacchi <dario.binacchi@amarulasolutions.com>, chrome-platform@lists.linux.dev, 
-	Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, 
-	Viresh Kumar <vireshk@kernel.org>, Helge Deller <deller@gmx.de>, Wu Hao <hao.wu@intel.com>, 
-	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	linux-arm-msm@vger.kernel.org, greybus-dev@lists.linaro.org, 
-	Bjorn Helgaas <bhelgaas@google.com>, Michal Simek <michal.simek@amd.com>, 
-	linux-arm-kernel@lists.infradead.org, Aaro Koskinen <aaro.koskinen@iki.fi>, 
-	"David S. Miller" <davem@davemloft.net>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	linux-integrity@vger.kernel.org, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Herve Codina <herve.codina@bootlin.com>, linux-iio@vger.kernel.org, Tom Rix <trix@redhat.com>, 
-	linux-fpga@vger.kernel.org, linux-fbdev@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	Sam Ravnborg <sam@ravnborg.org>, Rob Herring <robh@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	linux-staging@lists.linux.dev, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	linux-input@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Yang Yingliang <yangyingliang@huawei.com>, Moritz Fischer <mdf@kernel.org>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Benson Leung <bleung@chromium.org>, 
-	Rayyan Ansari <rayyan@ansari.sh>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	linux-mmc@vger.kernel.org, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Martin Tuma <martin.tuma@digiteqautomotive.com>, Xu Yilun <yilun.xu@intel.com>, 
-	Alexander Aring <alex.aring@gmail.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
-	Peter Huewe <peterhuewe@gmx.de>, Sergey Kozlov <serjk@netup.ru>, 
-	Richard Weinberger <richard@nod.at>, Jason Gunthorpe <jgg@ziepe.ca>, Jakub Kicinski <kuba@kernel.org>, 
-	Kalle Valo <kvalo@kernel.org>, Johan Hovold <johan@kernel.org>, 
-	Rui Miguel Silva <rmfrfs@gmail.com>, linux-mediatek@lists.infradead.org, 
-	Tzung-Bi Shih <tzungbi@kernel.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH 00/33] spi: get rid of some legacy macros
-Message-ID: <l4azekfj7hduzi4wcyphispst46fi3m5ams65nzer2ai6upoxw@3p2uki626ytt>
-References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
- <3404c9af-6c11-45d7-9ba4-a120e21e407e@sirena.org.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE6AB1C287
+	for <linux-usb@vger.kernel.org>; Tue, 16 Jan 2024 15:34:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705419295; x=1736955295;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=yB6AKpkoscaBLk3tTKBPHDJzsonZ1+kLy2SlGQJ4iqk=;
+  b=Nmsjii5sVwy0y13kVMLeKq0iCK/+28rOSWPC374Ktf4IY7pQTUjCco9l
+   eCJaaOOYBAw8yOfvj8um1OiLLjSN3PjCGHA9SBJPvQBWhqPIgTaXAv5Uy
+   sApB3CsfqAtGJmeHO6gKcuo6q3cwKQ6AXdhbN3aJIdfWDlgapOLw89rA9
+   b7Q6TKLuzKvADc0UChRX4E4R6WhmhI4yAzq4MkSLZu1JBlAgU/aNzoHJF
+   1MFQk8PtEfdTS01rnff/e8IZcq4xZVMHGfRVr9MG3ojbOylXN491egadz
+   SwUP+STpNcaFHKMB5WUL/16FDwFAOKr7YXKPoZ7BHH4Falmf6ajgD51FF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="390345698"
+X-IronPort-AV: E=Sophos;i="6.05,199,1701158400"; 
+   d="scan'208";a="390345698"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2024 07:34:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="818203171"
+X-IronPort-AV: E=Sophos;i="6.05,199,1701158400"; 
+   d="scan'208";a="818203171"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 16 Jan 2024 07:34:52 -0800
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: michal.pecio@gmail.com
+Cc: linux-usb@vger.kernel.org,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [RFT PATCH] xhci: process isoc TD properly when there was an error mid TD.
+Date: Tue, 16 Jan 2024 17:36:18 +0200
+Message-Id: <20240116153618.2527463-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240115172709.0b6f2bba@foxbook>
+References: <20240115172709.0b6f2bba@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ojpgqs276usvjple"
-Content-Disposition: inline
-In-Reply-To: <3404c9af-6c11-45d7-9ba4-a120e21e407e@sirena.org.uk>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+The last TRB of a isoc TD might not trigger an event if there was
+an error event for TRB mid TD. This is seen on a  NEC Corporation
+uPD720200 USB 3.0 Host
 
---ojpgqs276usvjple
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Driver and xHC host get out of sync as driver is still expecting a
+transfer event for that first TD, while xHC host is already sending
+events for the next TD in the list. This leads to
+"Transfer event TRB DMA ptr not part of current TD" messages.
 
-Hello Mark,
+As a solution we tag the isoc TDs that get error events mid TD.
+If an event doesn't match the first TD, then check if the tag is
+set, and event points to the next TD.
+In that case give back the fist TD and process the next TD normally
 
-On Tue, Jan 16, 2024 at 02:40:39PM +0000, Mark Brown wrote:
-> On Mon, Jan 15, 2024 at 09:12:46PM +0100, Uwe Kleine-K=F6nig wrote:
->=20
-> > In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
-> > some functions were renamed. Further some compat defines were introduced
-> > to map the old names to the new ones.
->=20
-> > Patch #18 and #19 touch the same driver, otherwise the patches #1 - #31
-> > are pairwise independent and could be applied by their respective
-> > maintainers. The alternative is to let all patches go via the spi tree.
-> > Mark, what's your preference here?
->=20
-> I don't have a strong preference here, I'm happy to take all the patches
-> if the maintainers for the other subsystem are OK with that - ideally
-> I'd apply things at -rc1 but the timeline is a bit tight there.  I think
-> my plan here unless anyone objects (or I notice something myself) will
-> be to queue things at -rc3, please shout if that doesn't seem
-> reasonable.
+Reported-by: Michał Pecio <michal.pecio@gmail.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/host/xhci-ring.c | 55 +++++++++++++++++++++++++++---------
+ drivers/usb/host/xhci.h      |  1 +
+ 2 files changed, 42 insertions(+), 14 deletions(-)
 
-=46rom my side there is no rush, we lived with these defines since
-4.13-rc1. Applying them during the next merge window is fine for me.
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 33806ae966f9..4869005379f5 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2401,8 +2401,11 @@ static int process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
+ 		break;
+ 	case COMP_USB_TRANSACTION_ERROR:
+ 		frame->status = -EPROTO;
+-		if (ep_trb != td->last_trb)
++		if (ep_trb != td->last_trb) {
++			td->error_mid_td = true;
++			/* FIXME update actual_length */
+ 			return 0;
++		}
+ 		break;
+ 	case COMP_STOPPED:
+ 		sum_trbs_for_length = true;
+@@ -2808,17 +2811,44 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		}
+ 
+ 		if (!ep_seg) {
+-			if (!ep->skip ||
+-			    !usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
+-				/* Some host controllers give a spurious
+-				 * successful event after a short transfer.
+-				 * Ignore it.
+-				 */
+-				if ((xhci->quirks & XHCI_SPURIOUS_SUCCESS) &&
+-						ep_ring->last_td_was_short) {
+-					ep_ring->last_td_was_short = false;
+-					goto cleanup;
++
++			if (ep->skip && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
++				skip_isoc_td(xhci, td, ep, status);
++				goto cleanup;
++			}
++
++			/*
++			 * Some hosts give a spurious success event after a short
++			 * transfer. Ignore it.
++			 */
++			if ((xhci->quirks & XHCI_SPURIOUS_SUCCESS) &&
++			    ep_ring->last_td_was_short) {
++				ep_ring->last_td_was_short = false;
++				goto cleanup;
++			}
++
++			/*
++			 * if there was an error event mid TD then host may not
++			 * give an event for the last TRB on an isoc TD.
++			 * This event can be for the next TD, See xHCI 4.9.1.
++			 */
++			if (td->error_mid_td) {
++				struct xhci_td *td_next = list_next_entry(td, td_list);
++
++				ep_seg = trb_in_td(xhci, td_next->start_seg, td_next->first_trb,
++						   td_next->last_trb, ep_trb_dma, false);
++				if (ep_seg) {
++					/* give back previous TD, start handling new */
++					ep_ring->dequeue = td->last_trb;
++					ep_ring->deq_seg = td->last_trb_seg;
++					inc_deq(xhci, ep_ring);
++					xhci_td_cleanup(xhci, td, ep_ring, td->status);
++					td = td_next;
+ 				}
++
++			}
++
++			if (!ep_seg) {
+ 				/* HC is busted, give up! */
+ 				xhci_err(xhci,
+ 					"ERROR Transfer event TRB DMA ptr not "
+@@ -2830,9 +2860,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 					  ep_trb_dma, true);
+ 				return -ESHUTDOWN;
+ 			}
+-
+-			skip_isoc_td(xhci, td, ep, status);
+-			goto cleanup;
+ 		}
+ 		if (trb_comp_code == COMP_SHORT_PACKET)
+ 			ep_ring->last_td_was_short = true;
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index a5c72a634e6a..6f82d404883f 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1549,6 +1549,7 @@ struct xhci_td {
+ 	struct xhci_segment	*bounce_seg;
+ 	/* actual_length of the URB has already been set */
+ 	bool			urb_length_set;
++	bool			error_mid_td;
+ 	unsigned int		num_trbs;
+ };
+ 
+-- 
+2.25.1
 
-Anyhow, I intend to resend the series for the feedback I received after
--rc1. Up to you when you want to apply it. Watching out for offending
-patches using lore shouldn't be a big thing and I can do that.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ojpgqs276usvjple
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWmnkkACgkQj4D7WH0S
-/k7Jlgf/bxg8PBfYKKX7PvDPgT3ZVpLLtWReyLQDBjEkSddRCSKzwPE5dQsE6TGF
-pkpgz7Za7CnFfHKtW25alERgnrqA9inDitGvBoBIVgSHPf6GJsGOPVLhziEMU9t1
-tBlCUkInYGMvS/Gn5tOoSjNLmapgV8tiNzeos6MHWZzdKpWIzj6SBNH72Bof8kUq
-R287GggNJ2PLZa24vL2Pct4BZIfpbD+n1o6O62edEmpGe17xuDkSNfjirG7MojjX
-vAtAlEpsLidT0eabHr4XkgyBSQZLwlh1OdReMiXhtK5GM3Oh9R4Y2XVhUq83hKSl
-5zzsBEXwEe1w3pKgGJnCD1jxAAcJ9A==
-=Sz6E
------END PGP SIGNATURE-----
-
---ojpgqs276usvjple--
 
