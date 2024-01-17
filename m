@@ -1,153 +1,110 @@
-Return-Path: <linux-usb+bounces-5182-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5183-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 604AD830A23
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 16:57:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E4C4830A52
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 17:04:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7281B1C21A00
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 15:57:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C055DB24AA2
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 16:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C52E221A18;
-	Wed, 17 Jan 2024 15:56:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9ACD2230D;
+	Wed, 17 Jan 2024 16:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=clisp.org header.i=@clisp.org header.b="oEwpqqAF";
-	dkim=permerror (0-bit key) header.d=clisp.org header.i=@clisp.org header.b="A2njVorL"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XV0Wzw6S"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.25])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B0121A0A
-	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 15:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.25
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705507013; cv=pass; b=sRnxMguwmwb4tgfw4yyLBEyn4FXn8KKsi4ZkCMScU1GhtdoBKHcX2VKy3Jcu0ZlGlGHe6GvCAAmtGl9MdesaEl5qcupnEfVChE/UXIhVUCS8h+AbfEBJjZtiIFUMiDGCoC4Lcsb0toloOzJB40sn1BqAtBPyuH0TQmIn6H/eMrM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705507013; c=relaxed/simple;
-	bh=5XQUZI+ZS7eoVBCf+IpyH+1tDe3B6hrR/5buAo7aG7g=;
-	h=ARC-Message-Signature:ARC-Authentication-Results:X-RZG-CLASS-ID:
-	 DKIM-Signature:DKIM-Signature:X-RZG-AUTH:Received:From:To:Cc:
-	 Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:Content-Type; b=ut9PmmgSvBLRyDr8KfHxHcCbE0AcEtuYcBMxYKNT/RVOgz+RF4jaju72jdblbReTfNM2m5O7cJcrhHR+vYJUtvcjVM9OFZ3sMZFbA1YdwrYiI/Ay9yN05ej3JqrP+dcQ991wcaJYQoc3AfESeKWLes+Hnofew4Pr9N3lM8f0ncM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=clisp.org; spf=none smtp.mailfrom=clisp.org; dkim=pass (2048-bit key) header.d=clisp.org header.i=@clisp.org header.b=oEwpqqAF; dkim=permerror (0-bit key) header.d=clisp.org header.i=@clisp.org header.b=A2njVorL; arc=pass smtp.client-ip=85.215.255.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=clisp.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=clisp.org
-ARC-Seal: i=1; a=rsa-sha256; t=1705507007; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=bh93zjE/imkb0r4C2qR/kSSytvqR8NQfxS+aXWUJ1nF05hnEJo/Y15T8+0mQxc5pKJ
-    cafsXJ6XeIYjnIV0DfcFwOVBOXf0AHcQQYELtD9+SX4mOsmu++SzBtGmjOUuLCCKxVvf
-    suLWNOR/tmD/z12zMX8zecaFo306lmDI1CREI8UzIMKUJk/MkiQ5tsPI76aqTef6auFD
-    sgRHFnvbSuqh+KLgvedz783S1rCmsXmmWBBy9RyDUfiKgBMSNrTeH8qbBLzajSq4D6JD
-    cqutMiwTdsXvbs+FIxmfVDmgvrzVe0xMM7CiS+ePnICjcUlGoWS3eoFagQCKqB1tvI9o
-    Lbvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1705507007;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=Tvw4zPVQuHrP3fa8Gz10G8oSTcD122jkPyaUScBsyZg=;
-    b=LBG+Q0GvxWMUf1BJ2FqEhk3Ftsup6n6+Gn/uYY90nCHmLpKfySyo8zgvmrtFZTcZWV
-    VcI6j2fvttp3+7LZAsGFBZQh97s95bwX4p0K5BnS/EBw5zdmy4O6NxEPcp8cRc1oL6lO
-    MKTSxtjo+RHOzss5fvVTGU+S1kKJNc/ddH0mYr60otA2Doa4BUXXLVL0n0qylwVn5XW2
-    Rfd0vXBRkD7WJo9f6MY5qKdR6tKVzOE/2g01nhsDJfO+TkIgpt3lxg5JnHm+XLWZk0jH
-    x4eVg18kGK/FvcZOsOW2FeTnfl7fy1PIqEdnRsRJ0O6ycpPEld6wXSiDDatfqRGtuwAF
-    ytGg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1705507007;
-    s=strato-dkim-0002; d=clisp.org;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=Tvw4zPVQuHrP3fa8Gz10G8oSTcD122jkPyaUScBsyZg=;
-    b=oEwpqqAFA8fo41aUg7pYbVlNqskqc6FW29w4U23WaPwqOtJmaSy4GAhYt34SpfkWmo
-    hZVd1RUEx8sOIC3EUIqG697EHCUz3v8eFIbvhou2fdVXLFWlbc3OH6FIdlHLpdulkcFg
-    BbfNHiVqcBSEMwzeNbkbwJqoghg32vd3Nbc7ylBJXGruwwWS5Ylx5mrPKZT3vLJyL9W9
-    SceQ33b/AOFz6nRnZDLp1dmE90uIjYpY5mIizLFmV0JU/lSMdBzusIkD+UWutiZ3I+QM
-    XG33g1RIKMBaVPn1U7mdYQqsOtEvUGTipoouJd8y15oBz3/DyDDm2ZQW6Pdb1xksd9nJ
-    0Bjg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1705507007;
-    s=strato-dkim-0003; d=clisp.org;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=Tvw4zPVQuHrP3fa8Gz10G8oSTcD122jkPyaUScBsyZg=;
-    b=A2njVorLCjE2fxRT8NqnG3KopM9CdBkgzdznlP9bDR4noVvhVrHAo/XALw8NOsPdsq
-    fI6N9yE4iNzcTvbrM5Ag==
-X-RZG-AUTH: ":Ln4Re0+Ic/6oZXR1YgKryK8brlshOcZlIWs+iCP5vnk6shH0WWb0LN8XZoH94zq68+3cfpPD3fBonz7dJLi1xPuooJ6RC45Y4g=="
-Received: from nimes.localnet
-    by smtp.strato.de (RZmta 49.10.2 AUTH)
-    with ESMTPSA id c5619e00HFulYKe
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Wed, 17 Jan 2024 16:56:47 +0100 (CET)
-From: Bruno Haible <bruno@clisp.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Lars Melin <larsm17@gmail.com>, Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-Subject: Re: "SilverStone TS16" external SSD enclosing needs an UAS quirk
-Date: Wed, 17 Jan 2024 16:56:46 +0100
-Message-ID: <3172447.D8ZAKjAxdT@nimes>
-In-Reply-To: <21712025-0b46-4afb-9161-5d1f1afb502a@rowland.harvard.edu>
-References: <3750407.VQhiAETyHQ@nimes> <2270283.o7ts2hSHzF@nimes> <21712025-0b46-4afb-9161-5d1f1afb502a@rowland.harvard.edu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2200622301;
+	Wed, 17 Jan 2024 16:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705507448; cv=none; b=YqjTOlBLqO+mdAuIugKYb54ZaL1qG/peqNDWg+gf/J4hPl2mx1ohe8vWcJklLDkBPu23MwYxxjg9Hx9gPd+ToPifz+JKhHqCTdwTPrlG890XzFT85XatS58mCQj4nLaDk/BKBf1CzBfjMQ5cCxoRRnh2YG4s+iG3hv8s+Sr+y2E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705507448; c=relaxed/simple;
+	bh=60VU2dcIMdN0LnwmSLQHz70ySOYSNvUalPN6aiFFDwE=;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To; b=Y6ZIYbADvF358HJJAZER0wkf/rHGoNiANj+iCstQecEh0HPl75zVrnFOxSLosPAiV6E177Bn/FoP1LbOwlNoGoFCjbG6aQhNj6OBjUtBdMm+1d9xsOmfmh/ql27Wouz0UdRsmySxjXJujFvuNm7k/bKIux5V63qc8jWHZztfpBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XV0Wzw6S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E489C433F1;
+	Wed, 17 Jan 2024 16:04:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1705507446;
+	bh=60VU2dcIMdN0LnwmSLQHz70ySOYSNvUalPN6aiFFDwE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XV0Wzw6SbMY8QV/wlCcAIDvzFMs9AQvd2F6I1XoO8oaP0hyCSNeB8UjLxFWYGQ6dE
+	 hVN0FqamxWg84g376gpCwTfBEF/cKlihkocEgBX2WRtlV/iJzIwPj+A2bwI3Q6L3+n
+	 7VHWbL4f1f9Uj4XmN/O6X26YVT5js3un7OT+TjE8=
+Date: Wed, 17 Jan 2024 17:04:03 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Johan Hovold <johan@kernel.org>, Sasha Levin <sashal@kernel.org>,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>, hdegoede@redhat.com,
+	fabrice.gasnier@foss.st.com, quic_jackp@quicinc.com,
+	saranya.gopal@intel.com, quic_linyyuan@quicinc.com,
+	andriy.shevchenko@linux.intel.com, minhuadotchen@gmail.com,
+	johan+linaro@kernel.org, robh@kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.7 044/108] usb: typec: ucsi: fix UCSI on buggy
+ Qualcomm devices
+Message-ID: <2024011719-riverside-flashcard-0524@gregkh>
+References: <20240116194225.250921-1-sashal@kernel.org>
+ <20240116194225.250921-44-sashal@kernel.org>
+ <ZaeJ8Sh4JLo5GAQw@hovoldconsulting.com>
+ <CAA8EJpoQZc0f2HusJOMa_45bh8Eh=sVg-aOUbNR3S0+oQQQ+MQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpoQZc0f2HusJOMa_45bh8Eh=sVg-aOUbNR3S0+oQQQ+MQ@mail.gmail.com>
 
-Alan Stern wrote:
-> > > Slowing down all RTL9120 already in the market with this quirk is in =
-my=20
-> > > humble opinion not a realistic solutio.
-> >=20
-> > What else do you propose, for those of us who buy this hardware (=E2=82=
-=AC 50,
-> > it wasn't a cheap one), connect it directly to a computer (through the
-> > vendor-provided cable, to an USB-C 3.2 Gen.2 connector, as in my case),
-> > and then experience 1-2 crashes per day under Linux?
->=20
-> The proposal is that you keep on doing what you've been doing: Set the=20
-> UAS quirk.  Then your system will work, and others who don't have the=20
-> same problem will get to keep the advantage of quicker transfers with=20
-> the uas driver.
+On Wed, Jan 17, 2024 at 02:17:40PM +0200, Dmitry Baryshkov wrote:
+> On Wed, 17 Jan 2024 at 10:03, Johan Hovold <johan@kernel.org> wrote:
+> >
+> > On Tue, Jan 16, 2024 at 02:39:10PM -0500, Sasha Levin wrote:
+> > > From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > >
+> > > [ Upstream commit 1d103d6af241dbfc7e11eb9a46dff65db257a37f ]
+> > >
+> > > On sevral Qualcomm platforms (SC8180X, SM8350, SC8280XP) a call to
+> > > UCSI_GET_PDOS for non-PD partners will cause a firmware crash with no
+> > > easy way to recover from it. Since we have no easy way to determine
+> > > whether the partner really has PD support, shortcut UCSI_GET_PDOS on
+> > > such platforms. This allows us to enable UCSI support on such devices.
+> > >
+> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > Link: https://lore.kernel.org/r/20231025115620.905538-2-dmitry.baryshkov@linaro.org
+> > > Signed-off-by: Bjorn Andersson <andersson@kernel.org>
+> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> >
+> > Correct me if I'm wrong Dmitry, but while the commit message makes this
+> > sound like a fix, it is not needed unless you backport follow-on patches
+> > that enable UCSI on these platforms.
+> >
+> > So this one can be dropped from all stable queues (unless you're
+> > backporting patches that enable new features and that depend on this
+> > one).
+> 
+> Exactly. It didn't have the Fixes: tag. So I'm completely unsure why
+> it ended up in the autosel queue at all.
 
-There's obviously a speed vs. reliability tradeoff here.
+Based on the text in the subject and in the changelog, it sure looks
+like a bugfix to me!  Perhaps don't write changelogs that say "fix
+SOMETHING on SOMETHING" next time if they really are not a fix :)
 
-On the speed side: Do you know the speed difference between an external
-SSD with uas driver vs. an external SSD with usb-storage driver?
+thanks,
 
-On the reliability side: It makes the difference between a usable and
-an unusable computer. I don't understand why you seem to prefer that
-I have, by default, a fast but unusable computer rather than a reliable,
-even if speed-limited, computer. Isn't it the opposite throughout the
-industry? (For example, the CPU clock is not overclocked _by_default_.
-An admin can overclock it, but the default is to be reliable.)
-
-You say "Set the UAS quirk", as if it was something completely immediate
-to do.
-
-  - As a tech-savvy person (and former Linux kernel developer), it took
-    me 3 days of investigations, web searches, and reading of kernel
-    command-line documentation, in order to get at the solution.
-
-  - For a non-tech-savvy person, it's basically impossible to arrive
-    at the solution you propose. They would have summarized their experience
-    as "Linux is not made for the desktop, let me choose another OS".
-
-Isn't there a more intelligent solution to this problem? For example, the
-uas_eh_abort_handler could, instead of just logging the problem, tell a
-system daemon that the configuration of the particular device is problemati=
-c,
-and that system daemon would change the grub.cfg (or some other file that
-stores kernel command-line parameters), so that the quirk gets activated
-automatically at the next reboot.
-
-Bruno
-
-
-
+greg k-h
 
