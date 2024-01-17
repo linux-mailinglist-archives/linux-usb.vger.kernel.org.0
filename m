@@ -1,124 +1,220 @@
-Return-Path: <linux-usb+bounces-5188-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5189-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BBE0830C3D
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 18:49:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E5B1830C66
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 19:06:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23C32B24590
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 17:49:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC42728458C
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 18:06:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 919BC22EE2;
-	Wed, 17 Jan 2024 17:49:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0114322EFC;
+	Wed, 17 Jan 2024 18:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mC5S88Rw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PdkAAOxN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5E522636
-	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 17:49:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CD7522EE4
+	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 18:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705513753; cv=none; b=SHJRUpFnZwQ+m5ofEEDcPrjqTS2HrHMmY+LKJISEFFXI+zSJGY73Qd0IZrm6q/7jO25DW59Kp1NYdA4JPoHNTqpDML2IiEOAC+n8TEQYUHgGb0PIvL3p4mXK7UPMyHCq5h187T7/+PrIaeWxfaUQ9TpwAnSLxcggiMtz0U0uD70=
+	t=1705514769; cv=none; b=JVCjxATQZcnfXOtZu69le15px/WmNASHU/Y3F1X0FTw+2SDmV7uUCP9QPF4RHnpTd3N2j9QiMG2BbwrvCJHDFlLPK6l1TfSY4clFl8z1fWVc+lqehzWKZkS5isW3Z9PRZrDeuEiM8urR1E6KWd3Ka8fFO43kUCbhklXYxB+9OKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705513753; c=relaxed/simple;
-	bh=5WQg6RNKYhg9JqOJCq2/HPmprF4g2J9hlbFH7Xx+ppg=;
+	s=arc-20240116; t=1705514769; c=relaxed/simple;
+	bh=+xoMF1wZaHymim5riNdD9I4xLtRCnu68F4GVPtWeSYs=;
 	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Date:
-	 From:To:Cc:Subject:Message-ID:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding; b=n87YMAInf1R74mZrDFqJ+7CJ09DH4Rj8J1MiOKonR7W4TMz2WWTzqXYij49nfK0aBSoST7NnA0v/+kYsS7DmqOXRLxJyK68ePk4kDgY8MAa7hr/XxYJF3Y48uOOg24l49ZeD8A0+IjiXd7M8eGEXEDj8usW0R/KrluYRapPHDc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mC5S88Rw; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2cd880ceaf2so75321731fa.2
-        for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 09:49:11 -0800 (PST)
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:MIME-Version:
+	 References:In-Reply-To:From:Date:Message-ID:Subject:To:Cc:
+	 Content-Type:Content-Transfer-Encoding; b=o/yV2CJDDpZ5D/pbK4ACTGYmCyz/rd3E307UAu3HP+TqlUAeZHsxTsQL1bcjEw14230A9Pw0DAblG2m4dcLpzU1ZLWxyDpnKb0Ug0rzrNpr8F5oz6LdmiXlA5553E29+pL/GgL+lzPHIcOE05LfKIuQe1WTUzDVq+9gFxUO7MSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PdkAAOxN; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5ff821b9acfso812187b3.1
+        for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 10:06:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705513749; x=1706118549; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1705514767; x=1706119567; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OOGqHRIBlFh4drud5EsSemoQ6W7z6KIUdnnEwNY8PEg=;
-        b=mC5S88RwZBYKbwb3MI+h8rAv21H1iVTDvkFZVqyI0+yk26zp1OndyMSttDfjDx5Ffa
-         DAPvzH8T/7TDFx70ISVTd4qW2OcxcqVPKmy19PwU7yk9A4O0G8w3w+USpEetmC3CsKKM
-         7xKsODe9Zy80IGv/JdK9mUk846GLKrIs+5y9H0G9lMoUDCJhIk2RCKYTJRG836rhnvzQ
-         plOadSF7Z2hqssBxgRmvAQcmywzzc/EhEfhKL23wAR47Quot7CcX2qOOlWulCbKpLGi+
-         PIdso/DgQq5YOn322twXjWZu9LbXhl6iNRMzQMdE8BjeT1L0ct3e1qidM4EvLWyxLDLs
-         X5RA==
+        bh=YFkmgKfAYW4PQNSghqjXT5WrCqzlgmtfGOBlxJ300S0=;
+        b=PdkAAOxNnROEac8xqoEQ5gHmw9pVfk+ESH9ed+iDxWv0ruNrX53PCP/q68f4ydhDt3
+         YRnauDr9O6jfmymNvRLbtBvUHAuNXT6dpW6+Gid+Ag+hqpYreYrXyFSqzOMX/X8m5g2e
+         eDLZ4VHGL7irAmEmwuEz35UhLM4ZLD5Z2QNODlBBhtJ7qviEfOL52bc9T20Tc1ix375t
+         V6GtMXMOOHo5NkPwau17bWcqO4SCcUnvPENDGgEKg664CZV4KTdIQxqWcpSEOyMSGua6
+         xPY9KhQSwlk6hsppMyymTUjN0vR3u9c7SwLlp+UE7JcNFKPLG9TWsdRvUGaVq/wj9ikE
+         dldg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705513749; x=1706118549;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1705514767; x=1706119567;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OOGqHRIBlFh4drud5EsSemoQ6W7z6KIUdnnEwNY8PEg=;
-        b=M20InODj8A4XFK7i27iZXBfBp9zghmGAWniyfrwGf2mj+baN0nt9MXoqLxBZyhFH2c
-         uJiwFGowakIV/Hq1D71Z7YKs2PjXZ73lZEBjPsmCHEKojaA1hDaKCtyZs8fqJMYDM9W4
-         MqXYgOxZaC9R7j2+TA2HsUVLz6T8MZd6P/1bTmZ0ArLH7b1e4r4HHjaP6bxHlpeMpdP4
-         mVNxl/jhq/qVaeb9ybmNSAy225Oz6/fMhMggjXFy0MU8oU3vDn2TyeZ9ehrzgGXO2Dd2
-         woFzVjbamWrjGwvoH6YA2v7tbJaGB3FSbl45Cj5l1QVpXMIZY7Q49cpL5ceYepW8MWkT
-         2H8w==
-X-Gm-Message-State: AOJu0YyFGcvV0i7rUCDpy4NusMtCgOyzfz5NHAfQkxpVtaqCw7rSZErW
-	xRIuHqcEfi6qfQOUN1/gKVN1iulFew8=
-X-Google-Smtp-Source: AGHT+IHRSEHPXTvWkhU7TPgS2VZeGm6UEHKyDolzAFWnpQlSwAuZTah3GyWewLrK43sOThHKxb9ksA==
-X-Received: by 2002:a2e:b0f0:0:b0:2cc:eefc:20af with SMTP id h16-20020a2eb0f0000000b002cceefc20afmr4529263ljl.52.1705513749378;
-        Wed, 17 Jan 2024 09:49:09 -0800 (PST)
-Received: from foxbook (acgk57.neoplus.adsl.tpnet.pl. [83.9.238.57])
-        by smtp.gmail.com with ESMTPSA id m13-20020a50998d000000b005551387bb85sm8598092edb.94.2024.01.17.09.49.08
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 17 Jan 2024 09:49:09 -0800 (PST)
-Date: Wed, 17 Jan 2024 18:49:05 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [RFT PATCH] xhci: process isoc TD properly when there was an
- error mid TD.
-Message-ID: <20240117184905.1800b1cc@foxbook>
-In-Reply-To: <f6542354-d6d1-be22-82ed-5dfa57aa8337@linux.intel.com>
-References: <20240115172709.0b6f2bba@foxbook>
-	<20240116153618.2527463-1-mathias.nyman@linux.intel.com>
-	<20240116232045.76da750b@foxbook>
-	<f6542354-d6d1-be22-82ed-5dfa57aa8337@linux.intel.com>
+        bh=YFkmgKfAYW4PQNSghqjXT5WrCqzlgmtfGOBlxJ300S0=;
+        b=HDe7Zc76BYDNz7Xw/Ms9arx68m8Tzq+Qd6PLeD8UhUBicTQD7QO2xFcElxEczGz62u
+         puA136TPfCy86ZOVu7DpAmaE1j6a7jKkkM96Sun1sQzXFlB1QOKzcCDATOlbksBmdEGX
+         TocrCkTizwkWoYI2YO/Nqu7uxL0yWVWSLU+AmxJnEcs/M8OEYKeOKZ9c9YhDTDrDs3TV
+         +eIlThDaGjko8FWn/z0H+h2ERyqzHMubVoeHv40rO9hiO9ppKQTR4I6PhEtWG88TVub0
+         qyhnfSks+8ONSVCH5P1qQ4nVAmyVnN0OWhWv3I+D4m3sC80GBllakyrCwJCCq4cnQ0XJ
+         EUZQ==
+X-Gm-Message-State: AOJu0Yxzyr366MAVxkr5kU7G+Bwv40jI3LqKU1U1MXeop9CDWLuZUTiG
+	K4Ftt1RDah2npeUd78OoXBiD7MY99zr2Q7fxq83WPOof9rKibA==
+X-Google-Smtp-Source: AGHT+IFDfNBV5xuLrOdDKdl+6yxpolFF1sCHEtmZ0DxCyYUK0PFmo0Qg0krlc8DqAXWYyh3jmVvY9UrWsNi4UR3YQ3w=
+X-Received: by 2002:a81:f80b:0:b0:5f7:c08:5c66 with SMTP id
+ z11-20020a81f80b000000b005f70c085c66mr6443078ywm.81.1705514766990; Wed, 17
+ Jan 2024 10:06:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org>
+ <20240113-pmi632-typec-v2-13-182d9aa0a5b3@linaro.org> <1d0d325d-d15e-4e86-b8e3-9f91b99e78bf@linaro.org>
+ <CAA8EJpo7qH43FyvO-N9vFH=6K3rMdPpnGp9w6pGW2cz4bMK+0g@mail.gmail.com> <28e019ce-7612-4b10-8068-17c3fef4dba8@linaro.org>
+In-Reply-To: <28e019ce-7612-4b10-8068-17c3fef4dba8@linaro.org>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Wed, 17 Jan 2024 20:05:56 +0200
+Message-ID: <CAA8EJpoXUMehrcf8sXKPhk7qb4SGXT960SUFHX5AUt1wxxHepw@mail.gmail.com>
+Subject: Re: [PATCH v2 13/15] arm64: dts: qcom: pmi632: define USB-C related blocks
+To: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Wesley Cheng <quic_wcheng@quicinc.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> But yes, if the last TD in a URB is a multi TRB isoc TD, and it has
-> an error MID TD then its stuck until timeout.
+On Wed, 17 Jan 2024 at 19:23, Bryan O'Donoghue
+<bryan.odonoghue@linaro.org> wrote:
+>
+> On 15/01/2024 10:43, Dmitry Baryshkov wrote:
+> > On Mon, 15 Jan 2024 at 12:00, Konrad Dybcio <konrad.dybcio@linaro.org> =
+wrote:
+> >>
+> >> On 13.01.2024 21:55, Dmitry Baryshkov wrote:
+> >>> Define VBUS regulator and the Type-C handling block as present on the
+> >>> Quacomm PMI632 PMIC.
+> >>>
+> >>> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> >>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >>> ---
+> >>>   arch/arm64/boot/dts/qcom/pmi632.dtsi | 30 +++++++++++++++++++++++++=
++++++
+> >>>   1 file changed, 30 insertions(+)
+> >>>
+> >>> diff --git a/arch/arm64/boot/dts/qcom/pmi632.dtsi b/arch/arm64/boot/d=
+ts/qcom/pmi632.dtsi
+> >>> index 4eb79e0ce40a..d6832f0b7b80 100644
+> >>> --- a/arch/arm64/boot/dts/qcom/pmi632.dtsi
+> >>> +++ b/arch/arm64/boot/dts/qcom/pmi632.dtsi
+> >>> @@ -45,6 +45,36 @@ pmic@2 {
+> >>>                #address-cells =3D <1>;
+> >>>                #size-cells =3D <0>;
+> >>>
+> >>> +             pmi632_vbus: usb-vbus-regulator@1100 {
+> >>> +                     compatible =3D "qcom,pmi632-vbus-reg", "qcom,pm=
+8150b-vbus-reg";
+> >>> +                     reg =3D <0x1100>;
+> >>> +                     status =3D "disabled";
+> >>> +             };
+> >>> +
+> >>> +             pmi632_typec: typec@1500 {
+> >>> +                     compatible =3D "qcom,pmi632-typec";
+> >>> +                     reg =3D <0x1500>;
+> >>> +                     interrupts =3D <0x2 0x15 0x00 IRQ_TYPE_EDGE_RIS=
+ING>,
+> >>> +                                  <0x2 0x15 0x01 IRQ_TYPE_EDGE_BOTH>=
+,
+> >>> +                                  <0x2 0x15 0x02 IRQ_TYPE_EDGE_RISIN=
+G>,
+> >>> +                                  <0x2 0x15 0x03 IRQ_TYPE_EDGE_BOTH>=
+,
+> >>> +                                  <0x2 0x15 0x04 IRQ_TYPE_EDGE_RISIN=
+G>,
+> >>> +                                  <0x2 0x15 0x05 IRQ_TYPE_EDGE_RISIN=
+G>,
+> >>> +                                  <0x2 0x15 0x06 IRQ_TYPE_EDGE_BOTH>=
+,
+> >>> +                                  <0x2 0x15 0x07 IRQ_TYPE_EDGE_RISIN=
+G>;
+> >> This differs from the downstream irq types:
+> >>
+> >> <0x2 0x15 0x0 IRQ_TYPE_EDGE_BOTH>,
+> >> <0x2 0x15 0x1 IRQ_TYPE_EDGE_BOTH>,
+> >> <0x2 0x15 0x2 IRQ_TYPE_EDGE_RISING>,
+> >> <0x2 0x15 0x3 IRQ_TYPE_EDGE_RISING>,
+> >> <0x2 0x15 0x4 IRQ_TYPE_EDGE_BOTH>,
+> >> <0x2 0x15 0x5 IRQ_TYPE_EDGE_RISING>,
+> >> <0x2 0x15 0x6 IRQ_TYPE_EDGE_RISING>,
+> >> <0x2 0x15 0x7 IRQ_TYPE_EDGE_RISING>;
+> >
+> > I must admit, I copied the IRQs from the pm8150b rather than from the
+> > vendor kernel.
+> >
+> > Bryan, any idea which set of flags is more correct?
+>
+> My =E2=82=AC says 1:1 with the downstream pmi632.dtsi
+>
+> qcom,typec@1500 {
+>      reg =3D <0x1500 0x100>;
+>      interrupts =3D <0x2 0x15 0x0 IRQ_TYPE_EDGE_BOTH>,
+>                   <0x2 0x15 0x1 IRQ_TYPE_EDGE_BOTH>,
+>                   <0x2 0x15 0x2 IRQ_TYPE_EDGE_RISING>,
+>                   <0x2 0x15 0x3 IRQ_TYPE_EDGE_RISING>,
+>                   <0x2 0x15 0x4 IRQ_TYPE_EDGE_BOTH>,
+>                   <0x2 0x15 0x5 IRQ_TYPE_EDGE_RISING>,
+>                   <0x2 0x15 0x6 IRQ_TYPE_EDGE_RISING>,
+>                   <0x2 0x15 0x7 IRQ_TYPE_EDGE_RISING>;
+>
+>      interrupt-names =3D "typec-or-rid-detect-change",
 
-If there are timeouts to deal with hosts failing to respond then that's
-good enough for me. It should be a rare case anyway.
+My 2c say that EDGE_BOTH doesn't make sense for or-rid-detect-change
+at least. It is an "or" of several _pulse_ interrupts, so there is no
+need to detect the falling edge.
 
-I just don't like when stuff locks up forever and requires reconnection
-or reboot to clean up.
+>                        "typec-vpd-detect",
 
+both, correct in both cases
 
-> > Would it be possible to retire the TD right after the first failed
-> > TRB?
-> 
-> Probably not as a normal error handling routine.
-> We have the same "Transfer event TRB DMA ptr not part of current TD"
-> issue for hosts that do issue an event for the last TRB.
+>                        "typec-cc-state-change",
 
-Obviously it would require keeping some information about the retired
-TD to detect subsequent completions and to prevent freeing of its
-remaining TRBs. Probably much more effort than the current approach.
- 
-> But for that special case where there are no more TDs queued it might
-> make sense
+pulse interrupt, raising.
 
-Wouldn't it still require remembering not to free the TRBs too fast?
-(It seems to have worked in the early days, but feels dodgy).
+>                        "typec-vconn-oc",
 
+It is a 'level' interrupt, so we probably want to detect both rising
+and falling edges.
 
-> +					xhci_dbg(xhci, "Missing completion event after mid TD error\n");
-On second thought, this could also print ep_trb_dma to be useful in
-debugging "TRB not part of current TD" issues. Although anyone able to
-compile the kernel with DYNAMIC_DEBUG could also edit as necessary...
+>                        "typec-vbus-change",
+
+"pulse" interrupt =3D> rising, not both, correct in PM8150B.
+
+>                        "typec-attach-detach",
+
+pulse interrupt, rising only.
+
+>                        "typec-legacy-cable-detect",
+
+level, should be both as in PM8150B.
+
+>                        "typec-try-snk-src-detect";
+> };
+
+Pulse interrupt being raised when there is either successful or
+unsuccessful try.SNK or try.SRC.
+
+So, after consulting the documentation, I believe the flags being a
+part of this patch (and in pm8150b.dtsi) are correct.
+
+--=20
+With best wishes
+Dmitry
 
