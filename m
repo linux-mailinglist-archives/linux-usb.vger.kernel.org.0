@@ -1,31 +1,31 @@
-Return-Path: <linux-usb+bounces-5149-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5150-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D9CA82FFEE
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 06:46:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A876282FFFA
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 06:57:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 402E01C245AF
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 05:46:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 184C71F2244C
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 05:57:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BDD79D2;
-	Wed, 17 Jan 2024 05:46:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9CD379DF;
+	Wed, 17 Jan 2024 05:57:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="fK8TlFyF"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="L7EQTt7i"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2040.outbound.protection.outlook.com [40.107.247.40])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2047.outbound.protection.outlook.com [40.107.20.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE144EBE;
-	Wed, 17 Jan 2024 05:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E577465
+	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 05:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705470401; cv=fail; b=Ls+BJn+DfzSCbyMj0UsDP5girewQBMYD7J34FEjD6xb4nYD+KaxJMKYoYkzxkIWbn3eAbROiDSrhD6dm+j8T4tVZLXtkWTu4AsyX08UMkEjxQUnjo5ALKer3OIjVc70zJn8aWE14XmfbCmom1sRCmJH0aipCHPqgytj8RXnu6zg=
+	t=1705471028; cv=fail; b=D/nJX2PUrs02tEfypm6IUrZyDftNO4m8PsucIU6TyDU2sTTggA+cfn0XY9u0sZCgF9eZl10wlHkkGJxo+6Lfj0+WPPUHRIzIl9xPl9AttAZ4WjAMvDOeEf5IlOSWoiUqWWZCE9/iGXv8rAlGkiqSarb84eiaoIWJDC4Goo3ka64=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705470401; c=relaxed/simple;
-	bh=iEa7pGMoUl8Ce4Ktgq39Is59/yhl6urwpkMzcMyUS/M=;
+	s=arc-20240116; t=1705471028; c=relaxed/simple;
+	bh=gdO4WzJiHgKYQiwFDVhS+mWTGYiHSFDzQfHLSVzMIMQ=;
 	h=ARC-Message-Signature:ARC-Authentication-Results:DKIM-Signature:
 	 Received:Received:From:To:CC:Subject:Thread-Topic:Thread-Index:
 	 Date:Message-ID:References:In-Reply-To:Accept-Language:
@@ -45,60 +45,59 @@ ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	 X-MS-Exchange-CrossTenant-fromentityheader:
 	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
 	 X-MS-Exchange-CrossTenant-userprincipalname:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped; b=NU/I3/uxZMU3Japwkdomg4YpGcPmZ0pRAI0YCglMXjyw0SHfK6YogV12A/Mus2z/mVvCwHAzct5DJTdSSME76VPaesAl1BCDCcyyIFJE5br//u+VPhWj6bhSPvoPNnAvSFdnhxs5jdnjdVGQQKeDetZ8A0p2V3jhMxcDsz2NOMo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=fK8TlFyF; arc=fail smtp.client-ip=40.107.247.40
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped; b=gV7wc+RyYQbc2Ofxnokkib9whYB/WCog8Lhq3nfB96hm0yg3PrIE8eRQPdxMSTUzipi8hmRT10mWA0HS9YoYJAQSntp2VwISPTG5X7P71BDgI/yjZqQFwDXn0Yblj0m0SQp4Nk4JL59gTrpSkT1SlhRY2uRfO+QIPWRE2pfMKYE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=L7EQTt7i; arc=fail smtp.client-ip=40.107.20.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O4fsttMuqrbWXBF9GXLrbbpwewX0hgwsnXzEx0Y6yJlBcO+0SmkgqruVhO7TJlNULWmHSOANgoHb+ETUs8a4+XiqA2jtoV3KgCDT0eD9uVkwYhYVWvwNl5YLMDtFhv95kGyu+J95lcuEbfolOtcfHjOFrMl76YknsTxSfk6y3E4tIwDu50dtot6t5T7vOWZm8PFn4hc4cKySaQTztjdJRTcCaBqWhS+tJ1LfTfI5wQZbHqN5YWMeMQ2Y9cTLo+2UcDa/z2L1kveuCUBBU8uL8OqRL5+JvEEBg3NQrcZ/JTf+1d65LVqNae5wxroDqVIxWo0SDwgAHx+8INvpvDgmPA==
+ b=CHJJ95T9nhdUusEQlRglx8m5zqHvlqvDWgv5gA7G0Z/sFmCfnj3QY55UwoWti2gHSHB03V8DSfOsJom4byTChpZMVfW1KPanijlncKaDZAgyIDQWQB+5FGG8zK1OmRNXoRoNqneP2A+motfj4X1PmGlrM9NH3TYXod0cFuQooeUX90gNwiuyVuiehRNbZsDOCaxTpr+OoCefsUaUFFWFZV2P318Sq/wpGCA38tMedA1ge1JUbUUDUvMv44SgNTWWY9P/uf1FD+C/0bl1RgNqs/KKEnIZTOR76uOG6DdGk6s9J20E92XSyFFCw9RRll3Hczb0/3PlTCilJQ1e1b53SA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iEa7pGMoUl8Ce4Ktgq39Is59/yhl6urwpkMzcMyUS/M=;
- b=nNDP1OWz3RVbCzJyzjqgeTpH8tojC5LshPhiuQLWG3E9/HG25EbmalyvJmQp5gpxXATruIuf51BrSz8mdbHeVeBfF5LntKO46nChRU7KUSNXkU2aIkwpLozNvAhWRgTS5/dYOVr32kjytunljdfMuI6e9QaL/1G6tK2NCYYwVZAHoiFXcuRIdJkKanVuE5J0N71WMgJHSLrP6ruKL417poZH0RC10kC8itsgZSKvBtozDg3LCU2p7QavN4MXjVixLvlheIQwqub7tTf/CLT2nFtVNE2cfX025GTXYqt+eXOjqT6p8+mmwk31lJ0584eT9VYzQ5LHzKeaCla/OZCOsA==
+ bh=D4FygHKzIpjZBZXAKt5zllTPdxnnKkm0tRRF+1cMINs=;
+ b=IbKe+hWYf1l8zkM3YbvWezM/hXGWi/L96CXH32Qqz6yRvVvFUtgGXIiXnAQpIZ7o3ZuJnMIAH9jbqeOBDMceL/nJS3VayIXicMGIXL9NR+iFAPel2VpB5Y830szgVveiBvr6o0V+olCi9doiVlUgYwgVQbB/Ps8q4Z6g16/7ilRQgvsS+Hi4R95lJIpLf56N/wv3JkgAxtHmzse4pK74WdynoOjLHxOA80fuh4bgQmQnMmDVR9xdqdR0pkgZivPrV8CLmIy266fM7rViq4mc4TODK5ncm4Zlsi7fwUTMOHG/5p0xYD7wuq3JhFGGifoFON16oWmi+nZEuQSgY5VKTw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iEa7pGMoUl8Ce4Ktgq39Is59/yhl6urwpkMzcMyUS/M=;
- b=fK8TlFyF3MTsW4zZuWqnerDokbGbQcidJ0wCzupRM/X7rt3P96pUPcupV32V99uCjSfz8h5xnnPdRvqw89sAkdyi+5JpEeKa8NFX/UGkNAsTfjLI10zAQMANLCbv6gfOxkUnZUe0pJjFXjaGhnXW9qeo/44Xm15z+GM7GAqW9Vo=
+ bh=D4FygHKzIpjZBZXAKt5zllTPdxnnKkm0tRRF+1cMINs=;
+ b=L7EQTt7igXICKYfM/Z7V4oW0yShGdFhFH6Q1Tj0PW6ZY2isju6IVTQuZtzelxISeYaQgzps9PXSxGMTD3bsiAPUvfI+swVj1duR5ltDM9WuSoc8V+xdctlMxrxmRIjUeyNabUeHDqvr4Huy0ZKL2CQV6u9C9jrm8egz0X8v33UU=
 Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by PAXPR04MB8749.eurprd04.prod.outlook.com (2603:10a6:102:21f::22) with
+ by AS4PR04MB9505.eurprd04.prod.outlook.com (2603:10a6:20b:4e4::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.23; Wed, 17 Jan
- 2024 05:46:34 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.23; Wed, 17 Jan
+ 2024 05:57:03 +0000
 Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
  ([fe80::efd8:23d4:18bf:630a]) by DU2PR04MB8822.eurprd04.prod.outlook.com
  ([fe80::efd8:23d4:18bf:630a%4]) with mapi id 15.20.7181.029; Wed, 17 Jan 2024
- 05:46:34 +0000
+ 05:57:03 +0000
 From: Xu Yang <xu.yang_2@nxp.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "shawnguo@kernel.org"
-	<shawnguo@kernel.org>, "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>, "festevam@gmail.com"
-	<festevam@gmail.com>
-CC: dl-linux-imx <linux-imx@nxp.com>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, Jun Li <jun.li@nxp.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [EXT] Re: [PATCH v3 4/6] dt-bindings: usb: ci-hdrc-usb2: add
- compatible and clock-names restriction for imx93
-Thread-Topic: [EXT] Re: [PATCH v3 4/6] dt-bindings: usb: ci-hdrc-usb2: add
- compatible and clock-names restriction for imx93
-Thread-Index: AQHaRUgjzNmZ+WDWXkmfSRtDZkmevLDaubUAgAFTw5CAAAnPgIABbAMg
-Date: Wed, 17 Jan 2024 05:46:34 +0000
+To: Alan Stern <stern@rowland.harvard.edu>
+CC: "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>, Greg
+ KH <gregkh@linuxfoundation.org>, "benjamin.tissoires@redhat.com"
+	<benjamin.tissoires@redhat.com>, "hdegoede@redhat.com" <hdegoede@redhat.com>,
+	"ivan.orlov0322@gmail.com" <ivan.orlov0322@gmail.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, dl-linux-imx
+	<linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>
+Subject: RE: [EXT] Re: [PATCH] usb: roles: try to get/put all relevant modules
+Thread-Topic: [EXT] Re: [PATCH] usb: roles: try to get/put all relevant
+ modules
+Thread-Index:
+ AQHaRSyichehZ/oUbUS9eAYp9PNYSrDV1xaAgAAAwwCAAAvTQIAATzkAgAPzOkCAAPAvgIAAx6/QgADCqYCAAOYvsA==
+Date: Wed, 17 Jan 2024 05:57:02 +0000
 Message-ID:
- <DU2PR04MB8822F446564AC47C72B24A4C8C722@DU2PR04MB8822.eurprd04.prod.outlook.com>
-References: <20240112111747.1250915-1-xu.yang_2@nxp.com>
- <20240112111747.1250915-4-xu.yang_2@nxp.com>
- <3ade5e2c-e3dc-4cf4-9c12-2487e30a2253@linaro.org>
- <DU2PR04MB8822D31A8AD7BEE1F50AC78A8C732@DU2PR04MB8822.eurprd04.prod.outlook.com>
- <95e2b70e-c6fb-4c10-b341-efd1f9cbf6e6@linaro.org>
-In-Reply-To: <95e2b70e-c6fb-4c10-b341-efd1f9cbf6e6@linaro.org>
+ <DU2PR04MB8822149F7BBDDD0B59ECDE918C722@DU2PR04MB8822.eurprd04.prod.outlook.com>
+References: <20240112080108.1147450-1-xu.yang_2@nxp.com>
+ <2024011213-situated-augmented-64a4@gregkh>
+ <2024011220-asleep-dragster-1e39@gregkh>
+ <DU2PR04MB8822D9964496E39002D131D98C6F2@DU2PR04MB8822.eurprd04.prod.outlook.com>
+ <2024011214-disbelief-sincere-805e@gregkh>
+ <DU2PR04MB8822B8AD6A6DE873F2F160588C6C2@DU2PR04MB8822.eurprd04.prod.outlook.com>
+ <b1edb397-c06d-4112-b2ed-713e213ac751@rowland.harvard.edu>
+ <DU2PR04MB8822E96E3AFF2EBB587B73BA8C732@DU2PR04MB8822.eurprd04.prod.outlook.com>
+ <d8f379d2-82ee-4567-8323-961cea5fd095@rowland.harvard.edu>
+In-Reply-To: <d8f379d2-82ee-4567-8323-961cea5fd095@rowland.harvard.edu>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -106,55 +105,46 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU2PR04MB8822:EE_|PAXPR04MB8749:EE_
-x-ms-office365-filtering-correlation-id: a0308af1-a03d-4c81-993e-08dc171faa37
+x-ms-traffictypediagnostic: DU2PR04MB8822:EE_|AS4PR04MB9505:EE_
+x-ms-office365-filtering-correlation-id: 7fdddef6-d452-474d-e9ec-08dc172120b7
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
 x-microsoft-antispam-message-info:
- +/n4bPh8nk9Jb1eRLOaGO0YBQiR+WuFDisR8k5MV8q24Q1ItY6QBy+wtECT54SnZOIvEQyQpFSkWN6BWAszU3rgjclJpwQKe+zq7iObVh2pJdoghq7/WsjkIPJTwicMGsFJHx52gAbAIj9Wk15Cwdt8xsdI7jfjBlNJWYWtxVOf2uO9A6wSUIJegwfLPOIbTQ+Rqg+GnPImtLfZPjzFOgrISeYhBfEhbzknJU0uTNXS5uo2uvX7WxkZdYKmj/oUe4ttP+TKQg6zyPAnXAp3XkrSmb0AuTiV/fuU7UjAcB7yRYYYjxshQADQpQ08SOnpXwOIQbF8lwndZb3/xjFuIm9HUqHdB0SoYFGIWyQv83M8kek8p1+A7oJHzhDmVy7FJs7R/mrFbqm0SJxtdSghjHYtXljTarD3GN/HiEqRHf8YXR0mDxKcrOe7bGjt6dIHaY6nkdlbHcDZLWYPDGqo76Wh1FstYOjynz9CXe1cM6nVH7ueKus79JDkZn3h/ZFblAGQ2fMfl8goNDRuFLM6P1x4bGZYDEB4mGD33ACEGfNk6pHfZWzT6KYPA5KoLe2lQRj7PYlsJ0va0duCTrZDS46gtnb1mVVCcPnatYs3oZTv8Sv4AkQaG6VPPS8fRLM4R
+ IIu6Vr/R1e1CA1AZHn/Gzd11oUkmgiTXe4NE1fcWuGgu61xknFYZG19r+taDS3EgoVj+kulFz5RZHff1P3lvFqLBvjP09qOj4QPPUYkvqzn+5y6ZIArjsKk5XLdWc2/Tgr/mW4+XcrSm6ucdMhp+A7CRFuE/dFurj5IcA/8rDN3E+RcHhvNu9Q0kAF5LuBy1pECKQ18Lho+3SZezuDlOnMIsWjQGqH7pJNY34N0b0Qz0knOtDN6GJVVrwCyvaiA+T5ZAuqFcwGHLxk10LWf3SpGPgoFxZjo0kHoYhHklFUKiynhU94pc0enlcUZgV5I43Da9RcaHqYtNj0CiL3/pi2S7i1yDmA+/nF4y1Gu0PN8YI11091MAPCCvXmSEtWiGvJ1oSRIzz69Xi0dn/fs/OuxdKgiFbRuWTaVctImImExhajFicyuQVFsF+W8tDfvS7GJIOmZTjrVT0ToiMoXihfHmHpiBWDhk8KUG9LjimqJPYEfvpRdTPsp4ja7W3X7YFa8fbO7/NxNg3xq+rJaB+1f51HP+7Taatn4lnVtEF6yHDAMLP4539YgVtOlj1QvwGYQyvwl4PbFbgfyTBDvfUamT4Hl1tFWPXYRpQl3nWDQYJnhWdiQyPFmV2WXrg5UQ
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(346002)(39860400002)(136003)(376002)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(4326008)(8676002)(8936002)(52536014)(7416002)(2906002)(5660300002)(71200400001)(7696005)(53546011)(6506007)(9686003)(316002)(54906003)(76116006)(66556008)(66446008)(66946007)(64756008)(66476007)(478600001)(41300700001)(86362001)(110136005)(122000001)(38100700002)(38070700009)(33656002)(26005)(55016003)(83380400001);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(376002)(366004)(39860400002)(136003)(230922051799003)(451199024)(1800799012)(64100799003)(186009)(2906002)(5660300002)(33656002)(86362001)(38100700002)(122000001)(83380400001)(478600001)(7696005)(6506007)(9686003)(26005)(8676002)(38070700009)(76116006)(4326008)(71200400001)(316002)(66556008)(41300700001)(66946007)(8936002)(52536014)(54906003)(66476007)(6916009)(64756008)(66446008)(55016003);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?VmliblRJRURrRGI2cTdZVEpuUnZoTkRTOG1KZGRsZmY2YStIaGtqaThuK2NL?=
- =?utf-8?B?WDc0d0JNdWpuUEkySEs2Um5Lck9hQ3lQYm1wUVYyY3d3a1dwNk9vUmtLUlNM?=
- =?utf-8?B?b3hIdGFzMFcwbWJOOFdFQnJsTVNkSytXMmIxWHViVXN6cExnbTI0cGIyMFE3?=
- =?utf-8?B?ZDhGKzN5OUdQZG5YT2RFczhvTUpNWlB4ZUdXNlh5azJyVWRickNWSjFOQU96?=
- =?utf-8?B?SGFaNk9VeHdoSytRaGdHQVRmdUpjaTZXdVZVRnV6NFkxdk03a0tIVzc5MXdR?=
- =?utf-8?B?Qnl0N1VhUFRwZ09qRXMyTzdsbDU1Ky83T3J4eDFKYldCbU54M0Y5VDlzR1Bh?=
- =?utf-8?B?UzNjODdtb1hqdXMwQTRQai94aGFUYzVwSGZoR3lxakhBSDhvUjByWVdXbXNl?=
- =?utf-8?B?Y2U3UTk5aGJXVm9nNVhMVlZIN3kyejRlUkxBVUpjSDRtdms0ZEkwejhjVkNr?=
- =?utf-8?B?YkFhQXlqOEpTYTBqSU9jcnpEUXBRQlhPUnJuUk5neWdSRGhUWVZiSXlQUDB2?=
- =?utf-8?B?U3FEMW9sRmhqaml0LzYrTmg0VFM1djRiNElabzJMdHdRQVdzY3FpSDJvVUQv?=
- =?utf-8?B?RmtYK2VCbzhWTUNUNHNHbWY5T01UZk1kYlV5VFM1TFFNODZTMHB6RkZ4WmxC?=
- =?utf-8?B?WmVxUHYvbnpQZ0FIVThLQURING45Q0hNcGdLRkM0MVRsUCs1UXloTHNDcm5u?=
- =?utf-8?B?LzRDRXpFanFUdFpUcDRFZ1NYR1RxWUhCN3JSQzI4bDNteUpqWEFkc1pSZjls?=
- =?utf-8?B?cWhSVFFySlpydWtHWXhTNFRwV2huNGZNNFZmOHppRHUwZHJJK0syTTVpbXVz?=
- =?utf-8?B?c2hRbXhKOFFvUDBhQ2VuZnNrdUFrZnZIR0NhRFp0MG40MDA5clJJbjFVT0tT?=
- =?utf-8?B?cUNtZ2xZTnJkMjRSUWNBaFRka0E2WWkzTUNrU0hBeFpJTjZUajMrOXk5MlM2?=
- =?utf-8?B?VnVINzBzWHZEQWtqK0JuZWFrS2NTYWsvNkw0c1llUkdON1BIQVRuZjNlYzJn?=
- =?utf-8?B?Z29mNXA3RzlJSE9pRUlHZ2hSTHhwcGZxZGpmZHdvNVhyWnJPRCtRMWo5dURH?=
- =?utf-8?B?dWF6RXcza3piU3dUZk9nbUlLSGNBNkRFaXFPc29rTys0OUIvS0czanp5eE53?=
- =?utf-8?B?WVJldWVGRUJXa3ptUXZvRDRyelVTdk1UQWFya010N0hOSXFCTGpwZ2RsWUFq?=
- =?utf-8?B?cWZHbW50cks0Ym1UK2xtVFlkMmR2Wk1zZmVHUWt0L3NSNmRIUDE4ZGJUemVE?=
- =?utf-8?B?dE9EUWdNWDRBSDlWVlVyQnFCbFdZb2xiVjNPRWhOMWNFY3FsenJKV1pRRjFL?=
- =?utf-8?B?MHltRTZVZEExSXZoeVU4R3pUTTFLd0pvS1NSelVuR0pHVGVvbzBHV2ZobEFq?=
- =?utf-8?B?MXNuSVh5alpicWdtUzUyK01KK2Q4RFMweGM3RnkvQWt5NXBjYXlDeTVLQ2pY?=
- =?utf-8?B?dWpWbmVWOVd1eVl6WlRiSjliNy9mOTJMK0NSNlVvRXBaSC9iUjJNbkxmeVZD?=
- =?utf-8?B?SkZVQ2hwb0Q3OGJLWnVWQ3kvQnNpQ3dRSVdwNnF3WTRiVDh5bzF3QTUrNVp3?=
- =?utf-8?B?cHQrVnZYVWNBczhtSUpLMVdJZCs4RkdRS1ZnSFhEY3ltQll4K0w3OUcyNjZM?=
- =?utf-8?B?eTc2Zm50c3JBYlpDejllR2JRR1lkUElZdUdha1ArMkxLL1pYK3F0WGVlSExB?=
- =?utf-8?B?STc1Z2g1UEwrWEFpTGROWFRWaHdibEpHRmxGQjByR0JiYkIwb1gvMkliR0du?=
- =?utf-8?B?OGlQYjVDbXR4M1YyZVVQM2psSFBkZWdFSVllNFNwU0FwU2ozaWNTaVJEUERD?=
- =?utf-8?B?U2FmTnNsY0llR0pJUWFpSEpwZEtSVGRSaWZJMzlQQkVEdU81R3YwUVNENkpi?=
- =?utf-8?B?ZkRXbVZlSUgvZW8yY0NidXZDNVdJczF5YzhqM2pzL2dNUTc5UzhHWDluWm12?=
- =?utf-8?B?UndoVkJzNHd4bDlZbFNCZjlGaENBSU9GSlRnQ2NldHVJYkRzZUVNUFpqZGdJ?=
- =?utf-8?B?Tk5MZ1htcWlLQzlQZmVWbVVzb2JNaFdmbG9DaHc5ekpCTmtreFFLQWQxOW1m?=
- =?utf-8?B?Ky9JU2Jaa0IrbjhKd1lIWU9ZeFM3NE52K24vbWh0WHVia1ovbjhqaCsrMXdu?=
- =?utf-8?Q?KwsU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ =?us-ascii?Q?jVZB6T2iRWxmQVSCt+zNslJP4govpU6afz5DnOm3GNjRYK4OthoJ1R+gMXJp?=
+ =?us-ascii?Q?lr3POYRKubOLagh7iUegEIHRcYKEuOEnJin0EsbDOQHNtoGjapof/bGZeiJf?=
+ =?us-ascii?Q?7dkbzZ9HC8QPqvBCYQmkgX+f9jnw49Sqn119Z/yK35HX45CB4ev1+Tw3smLq?=
+ =?us-ascii?Q?IfMHIDXoId78DDRkrvvzdLdkaz2skAqqijQRwKaXbfUx/DyMihzUM/pAQCYA?=
+ =?us-ascii?Q?w+kHgP+m5R6dkGA9XVgdrF9aZAEb1fyjeL6pSMSZYUlcjdFRLbxCoQ+zrXy9?=
+ =?us-ascii?Q?XdGS7gDqZuJdcHdmBhx1rtpF/xyFEFvcw84cl+Vg7z2XlCecJ5AN5YZsBRG1?=
+ =?us-ascii?Q?4Dfyy7dG3L0hKTPj6a4pV8dpZ3Q4w7sXTogQ4uc+qAI4LW7SYOd13k8bNWFy?=
+ =?us-ascii?Q?gb6rWLh0uDT8UL3e2qYrz3b6QgTJ5KwYI7FSp98GcyXkSVQpdNDbRchGkV0r?=
+ =?us-ascii?Q?3uH6OZb1anocdSo8jxMDMToZkhnPaUZiwSHMiaVjgZMhHsFgqc7UTpix+3b/?=
+ =?us-ascii?Q?lWW6JUe/bi12MBEhHOEtBkKnDDMF3wEV3h3a6c2R9zvsB6v089ctCFr25pX3?=
+ =?us-ascii?Q?fUeiYW/gKJiPg9VdywaFb01mrXUJZkonXn+vmX1KilhxffmwlOJir31Q9WxL?=
+ =?us-ascii?Q?E5W0Tsi0ECXrrniaa20uDe4ZvkEoonjzzAxzlQDI0/tf/muEMaF8TLNE7Yyp?=
+ =?us-ascii?Q?ZC6J0+l4HVSJQ/u1GqwwzKCMI2sZ64VhBEPfi3J32gevUUfkjftH4yD22KHW?=
+ =?us-ascii?Q?MWsPEjKAh0oRG0VJVf1xps3jJe0oGSoOhLAmu+TmoIHU1t3/79GT+/wOD8Gz?=
+ =?us-ascii?Q?P+nt8D4uWMzmJNScQG68MrLhdQ/pdLJgqWSVxrA07JbjGjo1vd6tY/bW3Wfp?=
+ =?us-ascii?Q?Mxrpusu+6kxOpR9aH0NCIsT43qXO9JUc7TT/0iYR6xGUlVGh0dEe++UZHsOp?=
+ =?us-ascii?Q?77TcncPFLaLjCO13SZ40B/VFWQB2To8Rp6fSZR7RVyc4Veeepkn92F9menW1?=
+ =?us-ascii?Q?KI4u4LVJMKnWhVq+i5CAJqgOx7HcfUd4vdMmCuSbGjXHmQejsdBIFRTFDk1w?=
+ =?us-ascii?Q?hUjb6fzHQG1dS6VgJY3maCCEOA29fR16VWo1AF53N6FuwmnkEsXxVSr5T3J9?=
+ =?us-ascii?Q?owXK9bEuDDQsB69u3CI2GBKlRxSupxqqJ2j4lBUN4iFABF35dGOg5JqSE31Q?=
+ =?us-ascii?Q?uioamFuEOEic/F4/+8GPQDEK1AVO3ojTarM/Z2L8ZT3/bBt1bU3QBZX/ZD2N?=
+ =?us-ascii?Q?pRVTVLWAm1/eAnMNw+02myCeXiwEJTVpjZldo7gwcOmiAArOn1di7RuRD26A?=
+ =?us-ascii?Q?OwZPyreDb/Hv8+D5kMusRs6tMtHlnWZwxNxx4sXNgkRzXyzy0DBoo0WsuTP/?=
+ =?us-ascii?Q?rgGIl9ETKozmH7MLRXAdmuwgJ3CapA3ucaRbeoHhG0a0wjlQGieOVWAC5hep?=
+ =?us-ascii?Q?f/lIZssxr3bSDKcHo6eIxioIfzweuG6l9FpMg4aIDkOJbFtAT8WQB8g2ZE0f?=
+ =?us-ascii?Q?8yhKnoid/6nnGbrmnD6YAmH6ik97mhcCpDQC9x6X4XE6i9J1HBRSjmrXClum?=
+ =?us-ascii?Q?UelkV6QvLY9RCDGDoNI=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -164,83 +154,215 @@ MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0308af1-a03d-4c81-993e-08dc171faa37
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2024 05:46:34.6813
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7fdddef6-d452-474d-e9ec-08dc172120b7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2024 05:57:02.9485
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pIUXfnPuX6jrNH1YsAHDKM62ulVR6J7OczS4VkdCAEd4FQpxj+FTUpILa0EpALZ2+4YOpIviS4KE0oXLS3gzSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8749
+X-MS-Exchange-CrossTenant-userprincipalname: MYjzUh14KfXJj2767h7EsnYNYv26+3rSgSgjWdhosGabhSNuZD+sFjgQixDoI33fpeDEHGSEJOKIToglpW0MgQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9505
 
-SGkgS3J6eXN6dG9mLA0KDQo+IA0KPiBPbiAxNi8wMS8yMDI0IDA4OjQ5LCBYdSBZYW5nIHdyb3Rl
-Og0KPiA+IEhpIEtyenlzenRvZiwNCj4gPg0KPiA+Pg0KPiA+PiBPbiAxMi8wMS8yMDI0IDEyOjE3
-LCBYdSBZYW5nIHdyb3RlOg0KPiA+Pj4gVGhlIGkuTVg5MyBuZWVkcyBhIHdha3VwIGNsb2NrIHRv
-IHdvcmsgcHJvcGVybHkuIFRoaXMgd2lsbCBhZGQgY29tcGF0aWJsZQ0KPiA+Pj4gYW5kIHJlc3Ry
-aWN0aW9uIGZvciBpLk1YOTMgcGxhdGZvcm0uDQo+ID4+Pg0KPiA+Pj4gU2lnbmVkLW9mZi1ieTog
-WHUgWWFuZyA8eHUueWFuZ18yQG54cC5jb20+DQo+ID4+Pg0KPiA+Pj4gLS0tDQo+ID4+PiBDaGFu
-Z2VzIGluIHYyOg0KPiA+Pj4gIC0gbm8gY2hhbmdlcw0KPiA+Pj4gQ2hhbmdlcyBpbiB2MzoNCj4g
-Pj4+ICAtIGFkZCBjbG9ja3MgcmVzdHJpY3Rpb24NCj4gPj4+IC0tLQ0KPiA+Pj4gIC4uLi9kZXZp
-Y2V0cmVlL2JpbmRpbmdzL3VzYi9jaS1oZHJjLXVzYjIueWFtbCAgICB8IDE2ICsrKysrKysrKysr
-KysrKysNCj4gPj4+ICAxIGZpbGUgY2hhbmdlZCwgMTYgaW5zZXJ0aW9ucygrKQ0KPiA+Pj4NCj4g
-Pj4+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL2Np
-LWhkcmMtdXNiMi55YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9j
-aS0NCj4gPj4gaGRyYy11c2IyLnlhbWwNCj4gPj4+IGluZGV4IGI3ZTY2NGY3Mzk1Yi4uNmU3NTA5
-OWI2Mzk0IDEwMDY0NA0KPiA+Pj4gLS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
-bmdzL3VzYi9jaS1oZHJjLXVzYjIueWFtbA0KPiA+Pj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZp
-Y2V0cmVlL2JpbmRpbmdzL3VzYi9jaS1oZHJjLXVzYjIueWFtbA0KPiA+Pj4gQEAgLTU3LDYgKzU3
-LDcgQEAgcHJvcGVydGllczoNCj4gPj4+ICAgICAgICAgICAgLSBlbnVtOg0KPiA+Pj4gICAgICAg
-ICAgICAgICAgLSBmc2wsaW14OG1tLXVzYg0KPiA+Pj4gICAgICAgICAgICAgICAgLSBmc2wsaW14
-OG1uLXVzYg0KPiA+Pj4gKyAgICAgICAgICAgICAgLSBmc2wsaW14OTMtdXNiDQo+ID4+PiAgICAg
-ICAgICAgIC0gY29uc3Q6IGZzbCxpbXg3ZC11c2INCj4gPj4+ICAgICAgICAgICAgLSBjb25zdDog
-ZnNsLGlteDI3LXVzYg0KPiA+Pj4gICAgICAgIC0gaXRlbXM6DQo+ID4+PiBAQCAtNDEyLDYgKzQx
-MywyMSBAQCBhbGxPZjoNCj4gPj4+ICAgICAgICAgIHNhbXN1bmcscGljb3BoeS1wcmUtZW1wLWN1
-cnItY29udHJvbDogZmFsc2UNCj4gPj4+ICAgICAgICAgIHNhbXN1bmcscGljb3BoeS1kYy12b2wt
-bGV2ZWwtYWRqdXN0OiBmYWxzZQ0KPiA+Pj4NCj4gPj4+ICsgIC0gaWY6DQo+ID4+PiArICAgICAg
-cHJvcGVydGllczoNCj4gPj4+ICsgICAgICAgIGNvbXBhdGlibGU6DQo+ID4+PiArICAgICAgICAg
-IGNvbnRhaW5zOg0KPiA+Pj4gKyAgICAgICAgICAgIGNvbnN0OiBmc2wsaW14OTMtdXNiDQo+ID4+
-PiArICAgIHRoZW46DQo+ID4+PiArICAgICAgcHJvcGVydGllczoNCj4gPj4+ICsgICAgICAgIGNs
-b2NrLW5hbWVzOg0KPiA+Pj4gKyAgICAgICAgICBpdGVtczoNCj4gPj4+ICsgICAgICAgICAgICAt
-IGNvbnN0OiB1c2JfY3RybF9yb290X2Nsaw0KPiA+Pj4gKyAgICAgICAgICAgIC0gY29uc3Q6IHVz
-Yl93YWtldXBfY2xrDQo+ID4+PiArICAgICAgICBjbG9ja3M6DQo+ID4+PiArICAgICAgICAgIG1p
-bkl0ZW1zOiAyDQo+ID4+PiArICAgICAgICAgIG1heEl0ZW1zOiAyDQo+ID4+DQo+ID4+IE5vdGhp
-bmcgaW1wcm92ZWQgcmVnYXJkaW5nIG15IGNvbW1lbnRzLiBXaHkgZG8geW91IGFsbG93DQo+ID4+
-IGFueS91bnNwZWNpZmljL3VuY29uc3RyYWluIGludGVycnVwdHMgYW5kIHJlZz8NCj4gPj4NCj4g
-Pj4gWW91IHNhaWQ6DQo+ID4+ICJIb3dldmVyLCByZXNldCwgcmVnIGFuZCBpbnRlcnJ1cHRzIHBy
-b3BlcnR5IGlzIG5vdCBzcGVjaWFsIGZvciBpbXg5My4iDQo+ID4+IGJ1dCB3aGF0IGRvZXMgaXQg
-ZXZlbiBtZWFuPyBIb3cgdGhleSBjYW4gYmUgc3BlY2lhbCBvciBub3Qgc3BlY2lhbD8NCj4gPj4N
-Cj4gPj4gTXkgY29tbWVudHMgZnJvbSBwcmV2aW91cyB2ZXJzaW9uIGFwcGx5LiBJZiB5b3UgZG8g
-bm90IHdhbnQgdG8gd29yayBvbg0KPiA+PiBleGlzdGluZyB0ZWNobmljYWwgZGVidCwgQlRXIGFk
-ZGVkIGJ5IGFub3RoZXIgTlhQIGVtcGxveWVlLCB0aGVuIEkgd2lsbA0KPiA+PiBOQUsgYW55IG5l
-dyBzdWJtaXNzaW9ucy4NCj4gPg0KPiA+IFlvdSB3YW50IG1lIHRvIGFkanVzdCBiZWxvdyBwcm9w
-ZXJ0aWVzIHRvIGJlIG1vcmUgY29tbW9uIHByb3BlcnRpZXMNCj4gPiBhbmQgYWRkIGRldmljZSBz
-cGVjaWZpYyBsaW1pdGF0aW9ucywgcmlnaHQ/DQo+IA0KPiBZZXMNCj4gDQo+ID4NCj4gPiAtLS0N
-Cj4gPiAgIHJlZzoNCj4gPiAgICAgbWluSXRlbXM6IDENCj4gPiAgICAgbWF4SXRlbXM6IDINCj4g
-Pg0KPiA+ICAgaW50ZXJydXB0czoNCj4gPiAgICAgbWluSXRlbXM6IDENCj4gPiAgICAgbWF4SXRl
-bXM6IDINCj4gPg0KPiA+ICAgY2xvY2tzOg0KPiA+ICAgICBtaW5JdGVtczogMQ0KPiA+ICAgICBt
-YXhJdGVtczogMw0KPiA+DQo+ID4gICBjbG9jay1uYW1lczoNCj4gPiAgICAgbWluSXRlbXM6IDEN
-Cj4gPiAgICAgbWF4SXRlbXM6IDMNCj4gPiAtLS0NCj4gPg0KPiA+IEZvciBtb3N0IG9mIHRoZSBk
-ZXZpY2VzLCBwcm9wZXJ0eSByZWcsIGludGVycnVwdHMsIGNsb2NrcyBhbmQgY2xvY2stbmFtZXMN
-Cj4gPiBoYXMgMSBpdGVtLiBTbyB0aGVzZSBwcm9wZXJ0aWVzIGNhbiBzZXQgbWF4SXRlbXMgdG8g
-MS4gRm9yIHNwZWNpYWwgZGV2aWNlcywNCj4gPiBJIHNob3VsZCBsaXN0IHRoZW0gc3RhbmRhbG9u
-ZSwgaXMgdGhpcyB5b3VyIGV4cGVjdGF0aW9uPw0KPiANCj4gSnVzdCBsaWtlIHlvdSBjb25zdHJh
-aW4gY2xvY2tzIGZvciBuZXcgdmFyaWFudCwgeW91ciB2YXJpYW50IHNob3VsZCBoYXZlDQo+IGNv
-bnN0cmFpbmVkIHJlZywgaW50ZXJydXB0cyBhbmQgd2hhdGV2ZXIgZWxzZSBpcyB0aGVyZSB2YXJp
-YWJsZS4gSSBkb24ndA0KPiByZXF1aXJlIGZpeGluZyBhbGwgdGhlIGRldmljZXMgaW4gdGhpcyBi
-aW5kaW5nLCBidXQgYXQgbGVhc3QgeW91ciBuZXcNCj4gb25lIGFuZCBwcmVmZXJhYmx5IG90aGVy
-IE5YUCBhcyB3ZWxsLg0KPiANCg0KSSdtIHRyaW5nIHRvIHNldCB0aGUgbWF4SXRlbXMgb2YgcHJv
-cGVydHkgcmVnLCBpbnRlcnJ1cHRzLCBjbG9ja3MgYW5kIA0KY2xvY2stbmFtZXMgdG8gMSwgdGhl
-biBjb25zdHJhaW4gdGhlIG1pbkl0ZW1zIGFuZCBtYXhJdGVtcyB0byAzIGZvcg0Kb25lIHNvYyBs
-YXRlciBsaWtlIGJlbG93LCBpbiBzdWNoIHdheSBJIG5lZWRuJ3QgdG8gY29uc3RyYWluIHJlZyBh
-bmQNCmludGVycnVwdHMgZm9yIG1vc3Qgb2YgdGhlIHNvY3MuDQpCdXQgZHQtdmFsaWRhdGUgZmFp
-bGVkIGF0IHRoZSBmaXJzdCBwbGFjZSB3aGVuIHZhbGlkYXRlIGNsb2NrcyBwcm9wZXJ0eS4NCg0K
-SXMgdGhlcmUgYSB3YXkgdG8gYWNoaWV2ZSB0aGlzPw0KDQotLS0NCiAgcmVnOg0KICAgIG1heEl0
-ZW1zOiAxDQoNCiAgaW50ZXJydXB0czoNCiAgICBtYXhJdGVtczogMQ0KDQogIGNsb2NrczoNCiAg
-ICBtYXhJdGVtczogMQ0KDQogIGNsb2NrLW5hbWVzOg0KICAgIG1heEl0ZW1zOiAxDQoNCmFsbE9m
-Og0KICAtIGlmOg0KICAgICAgcHJvcGVydGllczoNCiAgICAgICAgY29tcGF0aWJsZToNCiAgICAg
-ICAgICBvbmVPZjoNCiAgICAgICAgICAgIC0gaXRlbXM6DQogICAgICAgICAgICAgICAgLSBjb25z
-dDogZnNsLGlteDI3LXVzYg0KICAgIHRoZW46DQogICAgICBwcm9wZXJ0aWVzOg0KICAgICAgICBj
-bG9ja3M6DQogICAgICAgICAgbWluSXRlbXM6IDMNCiAgICAgICAgICBtYXhJdGVtczogMw0KICAg
-ICAgICBjbG9jay1uYW1lczoNCiAgICAgICAgICBtaW5JdGVtczogMw0KICAgICAgICAgIG1heEl0
-ZW1zOiAzDQotLS0NCg0KVGhhbmtzLA0KWHUgWWFuZw0K
+Hi Alan,
+
+>=20
+> On Tue, Jan 16, 2024 at 05:44:47AM +0000, Xu Yang wrote:
+> > Hi Alan,
+> >
+> > >
+> > > Those of us unfamiliar with this code need you to explain a lot more
+> > > about what's going on.
+> > >
+> > > On Mon, Jan 15, 2024 at 03:02:06AM +0000, Xu Yang wrote:
+> > > > Taking below diagram as example:
+> > > >
+> > > >      ci_hdrc.0        register   usb    get     tcpm_port
+> > > >   (driver: ci_hdrc)  --------->  role  <----  (driver: tcpm)
+> > > >          ^  ^                    switch           |   ^
+> > > >          |  |                                     |   |
+> > > >        +1|  |           +1                        |   |+1
+> > > >          |  +-------------------------------------+   |
+> > > >          |                                            |
+> > > >      4c200000.usb                                   1-0050
+> > > > (driver: ci_hdrc_imx)                            (driver: tcpci)
+> > > >
+> > > > 1. Driver ci_hdrc_imx and tcpci are built as module at least.
+> > > > 2. When module ci_hdrc_imx is loaded, it will register ci_hdrc.0 de=
+vice
+> > > >    and try to get ci_hdrc module's reference.
+> > >
+> > > This is very confusing.  Normally, a device is registered by the pare=
+nt
+> > > module and its driver belongs in the child module.  When the child
+> > > module is loaded it automatically gets a reference to the parent modu=
+le,
+> > > because it calls functions that are defined in the parent.  I don't k=
+now
+> > > of any cases where a parent module takes a reference to one of its
+> > > children -- this would make it impossible to unload the child module!
+> > >
+> > > In your diagram I can't tell whether ci_hdrc is the parent module and
+> > > ci_hdrc_imx is the child, or vice versa.  I'll guess that ci_hdrc_imx=
+ is
+> > > the child, since it the one which gets a reference to the other.  But
+> > > now we have the ci_hdrc.0 device being registered by the child module
+> > > and its driver belonging to the parent module, which is backward!
+> > >
+> > > Very difficult to understand.  Please explain more fully.
+> >
+> > I checked again and let me correct the words.
+> >
+> > 2. When module ci_hdrc_imx is loaded, it will register ci_hdrc.0 device=
+.
+> >    At the same time, the reference of module ci_hdrc is added by 1
+> >    automatically due to ci_hdrc_imx calls some functions in module ci_h=
+drc.
+> >    ci_hdrc will register usb-role-switch device.
+> >
+> > Therefore, module ci_hdrc_imx depends on module ci_hdrc. Device ci_hdrc=
+.0
+> > is a child of 4c200000.usb.
+>=20
+> And ci_hdrc_imx is a child module of ci_hdrc.  Got it.
+>=20
+> > > >  ci_hdrc will register
+> > > >    usb-role-switch device.
+> > > > 3. When module tcpci is loaded, it will register tcpm port device a=
+nd try
+> > > >    to get tcpm module's reference. The tcpm module will get usb-rol=
+e-switch
+> > > >    which is registered by ci_hdrc.
+> > >
+> > > What do you mean by "will get"?  Do you mean that tcpm will become th=
+e
+> > > driver for the usb_role_switch device?  Or do you mean that it simply
+> > > calls get_device(&usb_role_switch)?
+> > >
+> > > If the latter is the case, how does the tcpm driver learn the address=
+ of
+> > > usb_role_switch in the first place?
+> >
+> > Via
+> > port->role_sw =3D usb_role_switch_get(port->dev)
+> > or
+> > port->role_sw =3D fwnode_usb_role_switch_get(tcpc->fwnode).
+> >
+> > The usb controller will register usb-role-swtich device to the global l=
+ist
+> > of usb_role class. The fwnode of usb-role-swtich device is also set to =
+usb
+> > controller's fwnode. Initially, a fwnode graph between usb controller o=
+f
+> > node and tcpm connector node had already been established. These two
+> > functions will find usb-role-swtich device based on this fwnode graph
+> > and fwnode matching.
+>=20
+> If usb_role_switch_get() gives away references to the usb_role_switch
+> device, it should have a way to take those references back.  But I guess
+> it doesn't.
+>=20
+> >  After usb-role-switce device is found, these two
+> > functions will call: try_module_get(sw->dev.parent->driver->owner).
+>=20
+> You mean usb_role_switch_get() and fwnode_usb_role_switch_get() do this?
+
+Yes.
+
+>=20
+> > Here sw->dev.parent is device ci_hdrc.0. sw->dev.parent->driver is ci_h=
+drc.
+> >
+> > >
+> > > >  In current design, tcpm will also try to
+> > > >    get ci_hdrc module's reference after get usb-role-switch.
+> > >
+> > > This might be a bug.  There should not be any need for the tcpm drive=
+r
+> > > to take a reference to the ci_hdrc module.  But there should be a way
+> > > for the ci_hdrc driver to notify tcpm when the usb_role_switch device=
+ is
+> > > about to be unregistered.  If tcpm is usb_role_switch's driver then t=
+his
+> > > notification happens automatically, by means of the .remove() callbac=
+k.
+> >
+> > I'm not the designer of usb_role class driver. Not sure if this is need=
+ed to get
+> > module reference of its parent device's driver. Maybe need @heikki's in=
+put.
+> >
+> > @heikki.krogerus, can you give some explanations?
+>=20
+> Yes, please, some additional explanation would help.
+>=20
+> > > > 4. Due to no modules depend on ci_hdrc_imx, ci_hdrc_imx can be manu=
+ally
+> > > >    unloaded. Then device ci_hdrc.0 will be removed by ci_hdrc_imx a=
+nd
+> > > >    device usb-role-switch is also unregistered.
+> > >
+> > > At this point, tcpm should learn that it has to drop all its referenc=
+es
+> > > to usb_role_swich.  Since the module which registered usb_role_switch
+> > > isn't tcpm's ancestor, tcpm must not keep _any_ references to the dev=
+ice
+> > > after it is unregistered.
+> >
+> > Yes, I also think so.
+> >
+> > >
+> > > Well, strictly speaking that's not true.  By misusing the driver mode=
+l,
+> > > tcpm could keep a reference to the ci_hdrc module until it was finish=
+ed
+> > > using usb_role_switch.  Is that what you are trying to do?
+> >
+> > No, I'm trying to get module reference of ci_hdrc_imx too. Then,
+> > ci_hdrc_imx can't be unloaded before tcpci module unloaded.
+>=20
+> You shouldn't do this.  Users should be able to unload ci_hdrc_imx
+> whenever they want, even if tcpci is still loaded.
+
+Okay. Understand.
+
+>=20
+> > > > 5. Then, if I try to unload module tcpci, "NULL pointer dereference=
+"
+> > > >    will be shown due to below code:
+> > > >
+> > > >    module_put(sw->dev.parent->driver->owner);
+>=20
+> I forgot to ask: What function makes this call?  Is it part of the
+> usb_role class driver?
+
+usb_role_switch_put() do this.
+Yes, it's a function of usb_role class driver.
+
+>=20
+> > > >    parent->driver is NULL at this time.
+> > >
+> > > What is dev at this point?  And what is dev.parent?  And what did
+> > > dev.parent->driver used to be before it was set to NULL?
+> >
+> > Here sw->dev is usb-role-switch device. sw->dev.parent is ci_hdrc.0 dev=
+ice.
+> > sw->dev.parent->driver was ci_hdrc.
+>=20
+> Which is now gone, right.  I understand.
+>=20
+> Let's see what Heikki has to say.
+>=20
+> However, assuming he wants to continue misusing the driver model in this
+> way, what you should do is add a new field to sw, where you will store
+> sw->dev.parent->driver.owner at the time of the try_module_get() call
+> (but only if the call succeeds!).  Then when the module_put() call runs,
+> have it use the value stored in this new field instead of dereferencing
+> sw->dev.parent->driver.owner.
+
+It sounds like a better solution.=20
+Thanks for the suggestion!
+
+Best Regards,
+Xu Yang
+
 
