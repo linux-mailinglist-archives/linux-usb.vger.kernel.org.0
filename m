@@ -1,104 +1,127 @@
-Return-Path: <linux-usb+bounces-5158-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5159-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69DD48300F8
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 09:04:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CD2C830239
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 10:23:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F1F51F25615
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 08:04:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 801A81C248E1
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 09:23:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC26D26D;
-	Wed, 17 Jan 2024 08:03:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 819BB13FFA;
+	Wed, 17 Jan 2024 09:22:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ilMPdSwl"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hsiikKnH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20BA18821;
-	Wed, 17 Jan 2024 08:03:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F29134C8;
+	Wed, 17 Jan 2024 09:22:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705478638; cv=none; b=Ux4oRpBDmmPXJ+1gme7PrjYIPUyS34BRbhGOLyXqT4db1u7autNa5YCDNyRMIom0ZxEUnq2YSqXgZ85TRPux5Gh/+LUdDLobSkTrtWTaVvV2F28k4wAEF1PoUBOV25GC+ews+8p7S4Fj0/8aKHcH/IqVtX1Tm1Wk+lNOl58P7EQ=
+	t=1705483362; cv=none; b=GuiirdxB5OcugHKNcS+elAF5wSvI4XF53K4ItdhmBERUxjbhgs1fRcn6btm7kirLwHzh3GiaL5FeOs23OA05WhDVUS5HYCjMHXBMC+nrxrCSGmsPgkDWId9x4lacZ5JDo8lLLH5ugdvcfKZccjtnlXcmHd0KhOI4O8+mjhYu6cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705478638; c=relaxed/simple;
-	bh=ETB5AB8avM6Q2+w/QltTg8gAglo6HWM8L7ODmPsQsAk=;
-	h=Received:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=PRFuqXr1c/Dxj/uofgrqFnplgH6GtmhHf+bchz9HWxreHUABO5Xh67cHkL6sz9Cqukxokj2wVt9lSEJxR4rwafHsRTyrU3R19gI6EeL2WMkuFhZt3EvsjiagPUUNO0AxV1XmaPOc1Co6peqQCQeXN5lwtW1jeqoLVy237TD10Xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ilMPdSwl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91BB6C433C7;
-	Wed, 17 Jan 2024 08:03:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705478637;
-	bh=ETB5AB8avM6Q2+w/QltTg8gAglo6HWM8L7ODmPsQsAk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ilMPdSwlug/3WRyCeZo9ze+3bm0nRwbnv4ae9XX+a7TJ9jcKyR7yFQW3Gkd/3Z/3+
-	 bDQhA1zMX1leu54ZL7AVifs+hAA+BbsdIg4R4/6i6O6ANLwr2dSj3nbkiAhouh866R
-	 IqPno0/fk0qyxv8kcpoouQjbTHUXIy12b9ctyFK+2/ju/UWn721h5Rcsv/dhscD80e
-	 w/O6pa6fTJL66TWSA0KVv2vg7Fwa3nG/RCqTgISyUYhyrcfJR+je+cPEWe1Rymm3dx
-	 3DEer0KulBllpqe8nhTvaDdA7WNLnEcnVGCvw/4vRFfGz8933eIFG//pMRaiJIqqVo
-	 rUpFVXyZGb8kg==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1rQ0u1-00050u-1F;
-	Wed, 17 Jan 2024 09:04:01 +0100
-Date: Wed, 17 Jan 2024 09:04:01 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>, gregkh@linuxfoundation.org,
-	hdegoede@redhat.com, fabrice.gasnier@foss.st.com,
-	quic_jackp@quicinc.com, saranya.gopal@intel.com,
-	quic_linyyuan@quicinc.com, andriy.shevchenko@linux.intel.com,
-	minhuadotchen@gmail.com, johan+linaro@kernel.org, robh@kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.7 044/108] usb: typec: ucsi: fix UCSI on buggy
- Qualcomm devices
-Message-ID: <ZaeJ8Sh4JLo5GAQw@hovoldconsulting.com>
-References: <20240116194225.250921-1-sashal@kernel.org>
- <20240116194225.250921-44-sashal@kernel.org>
+	s=arc-20240116; t=1705483362; c=relaxed/simple;
+	bh=8Hq12A3R9kvTLbQkGASmU/vU6L5V1gT75319YCZrdAA=;
+	h=Received:DKIM-Signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:Content-Language:To:CC:
+	 References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Originating-IP:X-ClientProxiedBy:X-QCInternal:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-GUID:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details; b=GN07cMHkHcveypY3M3KaPblAn41i2LhkUqlh6Oo+EpxSzoHe9xas40SBUh8flLkK7Cszi1yOToperxN7F14WkZl5My9LBxF1XqigWd4P/NYshK4QK27npMSmFvvcSi/eI8zI0EIQus0jpvPdEpkKjPIIGnXxbaFIw7HmJwtOGpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=hsiikKnH; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40H3vZhu027266;
+	Wed, 17 Jan 2024 09:22:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=8UyA6B+7jJ0WmY7unNvthyzBcl0PLj9aYF+nuReRk5s=; b=hs
+	iikKnHFB1Jr9hsNvwVEsNmQ7vnDqxuzMu8eTX+3A5lVsDEI9qFVNEm5gVfpfNCg+
+	YHcO0/EHhNFu+nJA+9jgJQrBY3zQ5lMxMhw7/xdW7vjkNlJJvh3txX54xbQOD/q7
+	VtY02lg+u6GFNdULjidTk7y51GQukEoVMcRkD0EId0WIzX0QvlCPRvKEnu6scIDK
+	CLio9bPNFRVcZKo0wHcs9yUnOWOdfGNlXGJ83JdUxG2Zb+Tl0JxebXYoTKcrUHby
+	fuR6HmdRznQU7CTEuHNlf9ylM/HLBE/GnztFFYmHRO6tjG+DKmhXvq7waWRuB882
+	b4koe5Q0qf3wK+7IWIZg==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vnq4t32tx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Jan 2024 09:22:36 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40H9MK53028097
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Jan 2024 09:22:20 GMT
+Received: from [10.218.39.189] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 17 Jan
+ 2024 01:22:18 -0800
+Message-ID: <77ffee9a-cd77-6a09-10ee-bdf17bfca5ec@quicinc.com>
+Date: Wed, 17 Jan 2024 14:52:14 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240116194225.250921-44-sashal@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RFC PATCH] usb: dwc3: gadget: Fix NULL pointer dereference in
+ dwc3_gadget_suspend
+Content-Language: en-US
+To: Kuen-Han Tsai <khtsai@google.com>
+CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20240110095532.4776-1-quic_uaggarwa@quicinc.com>
+ <CAKzKK0qJOz_+pNAVAD8Ub6TZ9uhFOzuDC_bws9MVzxNa7RqYhA@mail.gmail.com>
+From: UTTKARSH AGGARWAL <quic_uaggarwa@quicinc.com>
+In-Reply-To: <CAKzKK0qJOz_+pNAVAD8Ub6TZ9uhFOzuDC_bws9MVzxNa7RqYhA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: u5vagpAXOvoNFeoDLpn6a8j_lY6X_0HA
+X-Proofpoint-ORIG-GUID: u5vagpAXOvoNFeoDLpn6a8j_lY6X_0HA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-17_04,2024-01-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ clxscore=1011 malwarescore=0 suspectscore=0 spamscore=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=470 priorityscore=1501 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2401170065
 
-On Tue, Jan 16, 2024 at 02:39:10PM -0500, Sasha Levin wrote:
-> From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> 
-> [ Upstream commit 1d103d6af241dbfc7e11eb9a46dff65db257a37f ]
-> 
-> On sevral Qualcomm platforms (SC8180X, SM8350, SC8280XP) a call to
-> UCSI_GET_PDOS for non-PD partners will cause a firmware crash with no
-> easy way to recover from it. Since we have no easy way to determine
-> whether the partner really has PD support, shortcut UCSI_GET_PDOS on
-> such platforms. This allows us to enable UCSI support on such devices.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Link: https://lore.kernel.org/r/20231025115620.905538-2-dmitry.baryshkov@linaro.org
-> Signed-off-by: Bjorn Andersson <andersson@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-Correct me if I'm wrong Dmitry, but while the commit message makes this
-sound like a fix, it is not needed unless you backport follow-on patches
-that enable UCSI on these platforms.
+On 1/17/2024 12:47 PM, Kuen-Han Tsai wrote:
+>>          ret = dwc3_gadget_soft_disconnect(dwc);
+>>          if (ret)
+>>                  goto err;
+> For improved readability, we can remove the goto statement and move
+> the error handling logic here.
 
-So this one can be dropped from all stable queues (unless you're
-backporting patches that enable new features and that depend on this
-one).
+Hi Kuen-Han,
 
-Johan
+Thanks for the suggestion.
+Does this looks good to you ?
+
+    int ret = dwc3_gadget_soft_disconnect(dwc);    if (ret) {        if 
+(dwc->softconnect)            dwc3_gadget_soft_connect(dwc);
+
+        return ret;    }    spin_lock_irqsave(&dwc->lock, flags);    if 
+(dwc->gadget_driver)        dwc3_disconnect_gadget(dwc);   
+  spin_unlock_irqrestore(&dwc->lock, flags);
+
+Thanks,
+
+Uttkarsh
+
 
