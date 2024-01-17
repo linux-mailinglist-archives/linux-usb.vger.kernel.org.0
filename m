@@ -1,182 +1,175 @@
-Return-Path: <linux-usb+bounces-5192-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5193-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAEBD830F00
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 23:03:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B415830FEE
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 00:03:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32B261F231F9
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 22:03:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0203B21531
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 23:03:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A4FF2563F;
-	Wed, 17 Jan 2024 22:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NUYBAhrn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAEB622F17;
+	Wed, 17 Jan 2024 23:03:26 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from GBR01-LO4-obe.outbound.protection.outlook.com (mail-lo4gbr01on2119.outbound.protection.outlook.com [40.107.122.119])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4147B22F06;
-	Wed, 17 Jan 2024 22:02:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705528972; cv=none; b=SEQc/PpGbikuLWnU7SERTNeI3S6ZrEzLWWTMR1fyu56qwKCl3YEc2rKXphVdKQ9e7uEvP4H92z6uIBG2bCfg3ue37ms63CPqmg+8h1KrZ5ylwzIn7ZuFRcHFNCH+vQKF4peg5A0E6PH+k/J3IygT/P8+cCx55Nt247c/PrzbgMo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705528972; c=relaxed/simple;
-	bh=kgQKla3MoUXHzzzT31HuzZcE85m0zK9sjA/QXgkGt44=;
-	h=Received:DKIM-Signature:Received:Received:Received:Date:From:To:
-	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-Originating-IP:X-ClientProxiedBy:
-	 X-QCInternal:X-Proofpoint-Virus-Version:X-Proofpoint-GUID:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details; b=hDEx9i+zPA71xJ12oM8W3xIq4gdESlGp2KL3JJ6BGuBNa5dGRfF/DBVVqnro2NL9FTnk5qWPg4Nme7eXOa0/1ioeXQg+NSad7T8WppeQthn35qj6NQWBIYzCSAoEfZ8vx3PK7He7MQIwpb3LKQ7+lGReHZ0m9tdkAOmIolv30D8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=NUYBAhrn; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40HLXETo010240;
-	Wed, 17 Jan 2024 22:01:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=eMRgKtzrvypX5SjMuARx6
-	mbUyoO003lGGNqle6ArHFQ=; b=NUYBAhrn9gJbrTU9kxsg2eCjvhIWy325Xqaq4
-	WJTekCdzsJZLQCuslVeC5XVEjGiA/HrpY7hVKItQPV1WQ29bWlyScmXmK2pMNFmz
-	iLwanMrlL2UeZ2PuuAZiDEZIHd14BK5u/wAjLcN0hNdqWkdqIabnsao+gZWM+KwA
-	YzdAqT8IGgwXGz0IUsnUVE8vrj0ZArjONycC2yTpnFmAIAnKFTiC8Fwx5HCPSpx+
-	B+xBcQkhVLGUxvuxG16WSUpUeevs+lUagswmxR+P2kSgq3EHkHh148aW1+5mEu1I
-	zj5zYhzZ7H5eWJc6IoSHfmiPt1ztddjvKb93ccuD/Rlbi5E9Q==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vpdfgsej2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 22:01:56 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40HM1t9k001475
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 22:01:55 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Wed, 17 Jan 2024 14:01:55 -0800
-Date: Wed, 17 Jan 2024 14:01:53 -0800
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-CC: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
-	<broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Bryan O'Donoghue
-	<bryan.odonoghue@linaro.org>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "Kishon Vijay
- Abraham I" <kishon@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Heikki
- Krogerus" <heikki.krogerus@linux.intel.com>,
-        Philipp Zabel
-	<p.zabel@pengutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-phy@lists.infradead.org>
-Subject: Re: [PATCH v2 13/15] arm64: dts: qcom: pmi632: define USB-C related
- blocks
-Message-ID: <20240117220153.GA649327@hu-bjorande-lv.qualcomm.com>
-References: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org>
- <20240113-pmi632-typec-v2-13-182d9aa0a5b3@linaro.org>
- <1d0d325d-d15e-4e86-b8e3-9f91b99e78bf@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0062F28699
+	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 23:03:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.122.119
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705532606; cv=fail; b=P10IXb6R2o3gk+JcsyYNnEGlRE29kd5sq8bjzEvxibmoSb3TkQ6FiY7bj39TmHUNHwWMkJBx2ArvaL7CIZDBmorazcO/HbOmWGW/v8KWatQ7HMiwkSwuBVgG90BXYv33yHGZX6bOc4eSriA8Wi0nEGVD96TDL/D0DFScBR30m44=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705532606; c=relaxed/simple;
+	bh=rQASbfCwdwIQEj5YO/P/G3RkAC7/Ap/jA61nn3+4WmE=;
+	h=ARC-Message-Signature:ARC-Authentication-Results:Received:
+	 Received:From:To:CC:Subject:Thread-Topic:Thread-Index:Date:
+	 Message-ID:Accept-Language:Content-Language:X-MS-Has-Attach:
+	 X-MS-TNEF-Correlator:msip_labels:x-ms-publictraffictype:
+	 x-ms-traffictypediagnostic:x-ms-office365-filtering-correlation-id:
+	 x-ms-exchange-senderadcheck:x-ms-exchange-antispam-relay:
+	 x-microsoft-antispam:x-microsoft-antispam-message-info:
+	 x-forefront-antispam-report:
+	 x-ms-exchange-antispam-messagedata-chunkcount:
+	 x-ms-exchange-antispam-messagedata-0:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-AuthSource:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-originalarrivaltime:
+	 X-MS-Exchange-CrossTenant-fromentityheader:
+	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
+	 X-MS-Exchange-CrossTenant-userprincipalname:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped; b=YscdXmMlawp9X0VHKJ39m7He3k5MKvRqHwrJgVU8GKNUuEBfNFe25KX9t9UTIbKGgffRQhOpWOmf0WQcrcFr7yJ9qezzVfFWAL3xLXLdqe32yGUyvkD+nFofeBStSEIlq4kt6fi0K7ra39tRGxIsGLSECQLzuiveQzKFfPLLueI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=integrelsolutions.com; spf=pass smtp.mailfrom=integrelsolutions.com; arc=fail smtp.client-ip=40.107.122.119
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=integrelsolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=integrelsolutions.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VqkBy956hdpq9yyr17thYgP7eC2rOCTkkb3MLWvpIhWgla3gFevVbxLrbwQZgfJA9InQLYhgvn60I1V6g6fsRZ+V1Nq/+Tvz+5GCxMJ37r+C69Sc8CaltSS44upliC+Pc2HfDtqFyx4g/4PyQkUXaL/7zdChECJ4aNMzFpJGKBAbmVoDcT66JECJDAnwYXg999b6j7mPOTygbFhH6f4FY8GjjNiquvf6lZMOwylcGhqPBTKRPNKajrcA86Z7iGAIgfvxsLT+UF5gq+fjODDtdTS3YVmPwa7+c+tfeD6pqretf2w6l6ogmUrVo3ooZSyACy/2uUJGGL+nD06aSMhCWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=J+O/tPo3StXkvws6QKTgAYzX0BJ+wYH6LKqVUh/vCkc=;
+ b=WoyAN94GmghEcuiVOZofqIfzCPR9bV935vsfT0ExzunEkdpC0VPmtj8uZG60Kw+mAIBejks8wYx387dqgt5rLDCBMEv0ycIVQStLstS6DTYfZcRNb6OYijl9h+03Izh4XrWBD66k9NpyQtvDBMsEVo8GSWunctMdH4PDHNvLk6rtRcgAGcd3NAArxArkbWlJK8JrIuTmaYS6NaQPxj3iMRvQYiAeSNS9rwS1u4TE5u5qFfioCDTn/J+bzHt3oc84s1Dvr/l8yhIWAdJqsEmyT2FKqrEako+jlMQBet5xrsO4JMKJDMRcipCnI5b4d/nAWeXB0I3sE+3Xsur7GJWUxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=integrelsolutions.com; dmarc=pass action=none
+ header.from=integrelsolutions.com; dkim=pass header.d=integrelsolutions.com;
+ arc=none
+Received: from CWLP123MB6443.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:1d1::12)
+ by LOYP123MB2941.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:eb::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.23; Wed, 17 Jan
+ 2024 23:03:21 +0000
+Received: from CWLP123MB6443.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::89a8:b271:1a13:2ed5]) by CWLP123MB6443.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::89a8:b271:1a13:2ed5%7]) with mapi id 15.20.7181.029; Wed, 17 Jan 2024
+ 23:03:20 +0000
+From: Rob Winn <rob.winn@integrelsolutions.com>
+To: "johan@kernel.org" <johan@kernel.org>
+CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: USB: serial: cp210x: Add VID/PID for Integrel Solutions OEG
+ Controller
+Thread-Topic: USB: serial: cp210x: Add VID/PID for Integrel Solutions OEG
+ Controller
+Thread-Index: AQHaSZemqo1n+uwOvEajnfPvpmLGWQ==
+Date: Wed, 17 Jan 2024 23:03:20 +0000
+Message-ID:
+ <CWLP123MB6443E84799CC3972B5317E589A722@CWLP123MB6443.GBRP123.PROD.OUTLOOK.COM>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=integrelsolutions.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CWLP123MB6443:EE_|LOYP123MB2941:EE_
+x-ms-office365-filtering-correlation-id: 6e98f508-1f0c-4187-3385-08dc17b07ffa
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ XN2Beam2DbICpG8FRp8KqUFE3UFPPNIbgwep4QPfbsF8z0kzG1eNa0KXWnkOhF7m+IPZNA/hLdboV/nHaKcWt2LWOWKn7EAuRoYiKWUHgY4KbIMkmfv+DATdpwRbe8PiOFX1yrr7U6K0FR+92MsBHo75EldRS9FbKDInvxaYVN9JQMSSEwEwleVqHTX8BDM+EigPo9bWzsiOI3F0QMGS/spFynyPlgv1ijuQK9RjtCvuJxBNVG/w2PsF9ytZSTxlDRU65oZ1RK0cIWOIQnQV2pZcD9al10GsjuaLM897gCEFDVW0a+S7CHE1p2i2A9oFzgCa4/CmoIhGBi07OoHOfGA2kPV5ObX/B5A3MYCKy7SgzWXtAH/6pgxftOgATjF1KCKpQphwMDUzeTbF0F00fRNCn6C0dYvhdgN5L/aDyODYRQJ5VADwED7Srjin8gJtCBK9n8hg0JFQIzhyovfIwBF5HL+AJ/6+7cBfHhncIVE1NKj2yfGijb5v7nAbFHtBg9EjqGWOHw6dfMxgfzmiSpBylLPWRc57D/4Kp65W2zUQUm6JiUMnnuJ5XOwFfXGEx2dzwTE28stMufApLXQ2sN+QQH4LIy/ZpRG+PbdHxlcD5qb4ySbbUN3oP/DwUzB7
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB6443.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(39840400004)(366004)(136003)(376002)(346002)(396003)(230922051799003)(451199024)(1800799012)(64100799003)(186009)(83380400001)(26005)(38100700002)(41300700001)(122000001)(8936002)(66446008)(64756008)(8676002)(4326008)(6916009)(66946007)(66556008)(76116006)(52536014)(66476007)(4744005)(2906002)(5660300002)(316002)(44832011)(71200400001)(9686003)(6506007)(7696005)(91956017)(478600001)(38070700009)(33656002)(86362001)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?GtbBdrp3HkTObJTc2aIQQ/7ZtJ6hFqq9Lt3MwNH1pyzTo4gsM5EAASiFXD?=
+ =?iso-8859-1?Q?vLhNwYJoyi8gDEnQWLCAo9nOXAMCLy5HTB487p/2Cj0Xq7+Y1cvCfPZc6v?=
+ =?iso-8859-1?Q?/LMA8NMHfR/Vpj2I4YhnyFHd/CyHLCPfa6LYGkMxBdoiJdL9mQEaYJy1nj?=
+ =?iso-8859-1?Q?XAlA+RCZTvsEZgUCOOHGGncm51DxVuKoYZh5ho4/1Ug7oS5g/KoZxcnaMf?=
+ =?iso-8859-1?Q?TbV2CTD9gDeS6I6BeIV8cCeU1empeRsjCIM1LXRpwYXEYvbmPo87kqy70Y?=
+ =?iso-8859-1?Q?nH0rxYiZqTtdlgtWAf0L+eUnLpeHBzMxATxbV+F3EXV7/3N9gDAjyUuKb7?=
+ =?iso-8859-1?Q?3f59dSDjwFTribVWHOK+lFJ2abvzlOLW9IHBCFUvMU8KnzR4ILyv2vqcrO?=
+ =?iso-8859-1?Q?nKihmxOLReM8cSU2SEvx6tk37Xm03PxOe/qB+xjCWw6KBLjutkCUZ5RxqX?=
+ =?iso-8859-1?Q?bf4F/xVGWtgwDvq6bjx487x6AhjZk+Bin55BrOJZihMXcXt1aOQd3z1Nek?=
+ =?iso-8859-1?Q?ie9pgW+/hNtp8m4lKo0WzCYhHHqktlUsmXhlWS0gTOVZn5tItJ0DPmMHrn?=
+ =?iso-8859-1?Q?HQn1WTjxX3MReZe/KEH8GducMcQeGagmGFxRMzH/XST8DKnYvdn5mIqSAK?=
+ =?iso-8859-1?Q?+7gyVS+/Sape7rXxB+YAUDn+l5SR3117gqdOhK7M5eHiiD1z7IgEANpnEY?=
+ =?iso-8859-1?Q?2K08LR48zi9tswKiMRyRXtEc4vPCjbf6xDeTw8FzTaOaZnEqHL6fPo2jZn?=
+ =?iso-8859-1?Q?CKnU4lxTT5NGLp9TFzwwu4tJajCef5FjyJXrVWFIwPMpXFv5zUPtHCUAdB?=
+ =?iso-8859-1?Q?/Px8DSQ1YjDWtsY+wgDW+5CAuA3HQFj4a4b9nR5jYj20I7E5fS0yexKPwD?=
+ =?iso-8859-1?Q?W+uvGhRQElWCxPmNZ0LodKURPAev4TH+iGg0WUWMm+zWfjVAc9BsAN6srx?=
+ =?iso-8859-1?Q?pHhB3w3awnsYFVP7YEH88kv4fS1GBWbnuvJ89CT9ZB/yNIjfFpRlvyDIkP?=
+ =?iso-8859-1?Q?fYFkNt+cHeqLpk031fAoHd6gGBimHJFBy3r5sEoYPHGvwjVX9SPZecC08y?=
+ =?iso-8859-1?Q?9PvIJFUWRJxc4vB7M3g+QieSnxTqur4aNOi6kK6ZK6PbBTPfaSQT4KTr8F?=
+ =?iso-8859-1?Q?GopdE1M5L0eOvIolIhqX1DNncYVl3lPKKzI3X6+IwhcvpSxeXSh94rfFgT?=
+ =?iso-8859-1?Q?zDqT6tydE+LkIptXuKBJZzQegJieZRxyLS6nlNHFuiX327+kogEz0TYZWg?=
+ =?iso-8859-1?Q?8J6VX7wJ4dDNIJIhGk7eWg7yBGvSi4/vU/qWemTP/sx5Y6hh7UDUpoD3t3?=
+ =?iso-8859-1?Q?K6vf6dNX8OtvR6FUC4smHhqaT0yX4rsbtT+WJqxuN4uYdPYX7PSRItbIY9?=
+ =?iso-8859-1?Q?k6uhVZtdflHi3j5vG2Rfsor85/6H4NkQBFzeIzd/w3XuHhOhmuCxTGuzP6?=
+ =?iso-8859-1?Q?aduOFa4eULFh9yHadYYiFbCQ/snQ6kCSw747Dsr/i34Kq07jeXDxF/0p7u?=
+ =?iso-8859-1?Q?Bx/LFsBzxVr9no49E0eUWI1omhLxj1wD9c1wDyRWFRr3NopHXpCV0wUbRe?=
+ =?iso-8859-1?Q?sxFnJyRv83FnVs1+m15r2JJEfH9CCf5EMAf5Zf8i5O1K8ZDH5f29Dq/iAw?=
+ =?iso-8859-1?Q?w1Grjqr6D1zRThAVJxcyhQi0MqoI49ufg8t8T9HBVNv2ALTCJO5UVg9Q?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1d0d325d-d15e-4e86-b8e3-9f91b99e78bf@linaro.org>
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nmevfx26C7BXCEfOc6jAfSNQG8-LbM15
-X-Proofpoint-ORIG-GUID: nmevfx26C7BXCEfOc6jAfSNQG8-LbM15
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-17_12,2024-01-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- impostorscore=0 lowpriorityscore=0 bulkscore=0 clxscore=1011
- mlxlogscore=621 phishscore=0 malwarescore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2311290000 definitions=main-2401170157
+X-OriginatorOrg: integrelsolutions.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB6443.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e98f508-1f0c-4187-3385-08dc17b07ffa
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2024 23:03:20.8347
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 17ecef28-eca4-4d64-810f-45b5bb01bc36
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: DCxP2rReZwP9Sxqg+e/THB8HIcKOXrWKOnt1FbXC/LotkvrDiNjfCsYM/2m2PcznnomnN3Fi0LVDNP/AhM7zd+9h5/c/WwiZyf4RwJYd0no=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LOYP123MB2941
 
-On Mon, Jan 15, 2024 at 11:00:53AM +0100, Konrad Dybcio wrote:
-> On 13.01.2024 21:55, Dmitry Baryshkov wrote:
-> > Define VBUS regulator and the Type-C handling block as present on the
-> > Quacomm PMI632 PMIC.
-> > 
-> > Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/pmi632.dtsi | 30 ++++++++++++++++++++++++++++++
-> >  1 file changed, 30 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/pmi632.dtsi b/arch/arm64/boot/dts/qcom/pmi632.dtsi
-> > index 4eb79e0ce40a..d6832f0b7b80 100644
-> > --- a/arch/arm64/boot/dts/qcom/pmi632.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/pmi632.dtsi
-> > @@ -45,6 +45,36 @@ pmic@2 {
-> >  		#address-cells = <1>;
-> >  		#size-cells = <0>;
-> >  
-> > +		pmi632_vbus: usb-vbus-regulator@1100 {
-> > +			compatible = "qcom,pmi632-vbus-reg", "qcom,pm8150b-vbus-reg";
-> > +			reg = <0x1100>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		pmi632_typec: typec@1500 {
-> > +			compatible = "qcom,pmi632-typec";
-> > +			reg = <0x1500>;
-> > +			interrupts = <0x2 0x15 0x00 IRQ_TYPE_EDGE_RISING>,
-> > +				     <0x2 0x15 0x01 IRQ_TYPE_EDGE_BOTH>,
-> > +				     <0x2 0x15 0x02 IRQ_TYPE_EDGE_RISING>,
-> > +				     <0x2 0x15 0x03 IRQ_TYPE_EDGE_BOTH>,
-> > +				     <0x2 0x15 0x04 IRQ_TYPE_EDGE_RISING>,
-> > +				     <0x2 0x15 0x05 IRQ_TYPE_EDGE_RISING>,
-> > +				     <0x2 0x15 0x06 IRQ_TYPE_EDGE_BOTH>,
-> > +				     <0x2 0x15 0x07 IRQ_TYPE_EDGE_RISING>;
-> This differs from the downstream irq types:
-> 
-> <0x2 0x15 0x0 IRQ_TYPE_EDGE_BOTH>,
-> <0x2 0x15 0x1 IRQ_TYPE_EDGE_BOTH>,
-> <0x2 0x15 0x2 IRQ_TYPE_EDGE_RISING>,
-> <0x2 0x15 0x3 IRQ_TYPE_EDGE_RISING>,
-> <0x2 0x15 0x4 IRQ_TYPE_EDGE_BOTH>,
-> <0x2 0x15 0x5 IRQ_TYPE_EDGE_RISING>,
-> <0x2 0x15 0x6 IRQ_TYPE_EDGE_RISING>,
-> <0x2 0x15 0x7 IRQ_TYPE_EDGE_RISING>;
-> 
-
-Interrupt 1, 3, and 6 are level interrupts for which it's reasonable to
-act on both edges. Interrupt 0, 2, 4, 5, and 7 are "pulse interrupts",
-for which it seems reasonable to act on only one of the edges.
-
-To me, Dmitry's proposed version makes more sense than downstream.
-
-Regards,
-Bjorn
-
-> Is it intended?
-> 
-> Thanks a lot for working on this!
-> 
-> Konrad
-> 
+Add vid/pid combination for Integrel Solutions OEG Controller to cp210x dri=
+ver=0A=
+=0A=
+Signed-off-by: Robert Winn <rob.winn@integrelsolutions.com>=0A=
+---=0A=
+ drivers/usb/serial/cp210x.c | 1 +=0A=
+ 1 file changed, 1 insertion(+)=0A=
+=0A=
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c=0A=
+index 1e61fe043..d1f993eea 100644=0A=
+--- a/drivers/usb/serial/cp210x.c=0A=
++++ b/drivers/usb/serial/cp210x.c=0A=
+@@ -163,6 +163,7 @@ static const struct usb_device_id id_table[] =3D {=0A=
+        { USB_DEVICE(0x10C4, 0x8A5B) }, /* CEL EM3588 ZigBee USB Stick */=
+=0A=
+        { USB_DEVICE(0x10C4, 0x8A5E) }, /* CEL EM3588 ZigBee USB Stick Long=
+ Range */=0A=
+        { USB_DEVICE(0x10C4, 0x8B34) }, /* Qivicon ZigBee USB Radio Stick *=
+/=0A=
++       { USB_DEVICE(0x10C4, 0x8DDC) }, /* Integrel Solutions Integrel OEG =
+Controller */=0A=
+        { USB_DEVICE(0x10C4, 0xEA60) }, /* Silicon Labs factory default */=
+=0A=
+        { USB_DEVICE(0x10C4, 0xEA61) }, /* Silicon Labs factory default */=
+=0A=
+        { USB_DEVICE(0x10C4, 0xEA63) }, /* Silicon Labs Windows Update (CP2=
+101-4/CP2102N) */=0A=
 
