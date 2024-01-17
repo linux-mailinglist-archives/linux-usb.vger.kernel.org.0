@@ -1,76 +1,76 @@
-Return-Path: <linux-usb+bounces-5185-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5186-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BB5C830B57
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 17:41:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88000830BDE
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 18:23:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B76D6291BF5
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 16:41:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2273F1F22196
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 17:23:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69AA1224D4;
-	Wed, 17 Jan 2024 16:41:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A248C22618;
+	Wed, 17 Jan 2024 17:23:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ILztQ1u3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="X/6PgKE7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E7C21A01
-	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 16:41:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5FE1E863
+	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 17:23:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705509683; cv=none; b=IBZbGHorg+5CFSDBbEDyby7misiFut9xa9CN77dmHJWc144CLs1ZZw5YtR20Kk8aJMyLgBKbIYb/JGYp2NXqHyHwvEYMzLl+koiicvSRbDriVFG3nq6lBy+KMe0QmcyMh31tXP0Nh7XrWtdov7O8zIR7MccJxW6wkx1AGkpip2E=
+	t=1705512208; cv=none; b=rysQTk52OBpzKSsjMMS4tIOU0AGVTFfROzBwlNMk7J1ldzt9P7kt+L43tqLmLKlwhHgxI+8FpgCanuk0tgzKGUOVttk/exTTsDFXITNbjZ2NveE1c6gZhGc31e4kyFXFeLZYnPn7GSRm8yDXLufiIHJ7/eq91kjvt46SbHN5Be8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705509683; c=relaxed/simple;
-	bh=uBzCBYU4HD7qbd4CGMKpqlsUxLuRN0SmEPzuV0BSDx8=;
+	s=arc-20240116; t=1705512208; c=relaxed/simple;
+	bh=ksNwOf1AW+zd0/noaPs2Oap2P6xZdOxTfhNySTwR4Fw=;
 	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:
 	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:
 	 To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding; b=N+n8pCUn7Kth86C//WFeE8UOjjG596j4I12P5nUdktNFyvNPUYtj0LeSHn6WM8ok3fi3HrR1sPvINsSgOOXFvcieIh1bAFTJwKfDsWnBEJiPgtHif2tXIZjCMtdSHEpjkeKE9Q3fmBwZSq1bgHaSdGggRdvmZgTWFvou1I6rfoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ILztQ1u3; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1d51ba18e1bso94078745ad.0
-        for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 08:41:21 -0800 (PST)
+	 Content-Transfer-Encoding; b=MQePxe3Yd3SdyUWJxei0CUXIWeISaZzexi3MYb4PREdHz5oNDoK9Neu/WaSuWnUqNR2CTb1hCedQNrO/NlTAgta82D8yEcqxGy7K8TOQ08aB2AS1u8Ewn82c6wcIs6RGrgSyVJsEeURNVVQ4faozujweDbycF21OTBofKMS/22E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=X/6PgKE7; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-337c536865aso510901f8f.1
+        for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 09:23:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705509681; x=1706114481; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1705512204; x=1706117004; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tbmO9ICMQku4JBf+7Cs9grnT1OAYJm2tzfZY3W6IccU=;
-        b=ILztQ1u379J/DrGWDCud8zOFK3Qw9hZByz0RvGzFmc2TmkLuo6vGFnTK9vaZq2rCK/
-         CUbjXRsZ8a/yO34dQKpLiQZrrCKWLJfDSNEMjC6LeTlmPiFkZlOFmP2CPqP/2iRJg0es
-         1hORzZMJ5ogXphXN/jbmSeog9d6j6j7MxMk4X1JvyEE+XOCsGSsN/zdFbCuR+f/KPhHb
-         UFcdRNozYFMyKvrb6St96Yz+/lkUIFvTzrtdmNt+LZ7mye8cPys88msfVbQcQQbND0Ha
-         oAs4JZAS/eklawxLgvoYuk5ujhGKdfvDmRui3KxVYSUrGTTTBFoBs5U8v48KjQozmDLw
-         gKiw==
+        bh=nTCtMquQwSHvUe3rlom2viCrA/hRn2YuWQ9TWaWnJ4g=;
+        b=X/6PgKE7eQrsnbVdcagsXJOdE5QtjMgic8EgXMQe8O8pkDTpq3UhoFaySNclm3Ks9k
+         C1jX3uawqKbWRBKfkFvJaRG9Wo2BeoO5tL+TlRdOy/Ztq6+kvu8C4YUwZOMLRAnDusKc
+         Fn9egyUrNtavCyKvYBtNvKkjVNQHWf/kcC/Y6AnLPLjiv3M6441g6mGrrj14AexsXVdl
+         UJHy72xqDq295SduBDY5i0/cIV3/z4Lkri/tPyTngLouS9WVtVkAxnpd6ZaNNLGkrYXq
+         Wl10OppT3NTw6xvA7aJ7VdVdWGDXcs1ln+qJ+VCf3nxkxQQNiw2OtLaNNOqjfIHMMj+5
+         feyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705509681; x=1706114481;
+        d=1e100.net; s=20230601; t=1705512204; x=1706117004;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tbmO9ICMQku4JBf+7Cs9grnT1OAYJm2tzfZY3W6IccU=;
-        b=W5jNQUVV+rpwtlpVPnSsHMPe9o24u9TrQHzM/rEzshQPfw8HmONPUKkspOX3qGV/dt
-         aAE1Nfan36/EaWA6L0Zkr+ASnxApPL2o9BCqX4aZv4C8uFrocrmI/Qmc7OzDKNTXbcuW
-         4bMvQavLTxm2DmX6xeh71U6/B4NAYzZN2jaZyUzazHI+epwLqgws8hZEWGYMr8SXxXIQ
-         eVQ8DYWPU9hnW4yK84EAR0m67vd0Afa3W1uVO+SwAWnmAYQlyE2QwN37gdRENS/iG0PX
-         yOzJbNX34V9QY/2rukE8/2Fo4eWj+ehHuhCTtXNEShj5ANP8XIYpaz1t7R50vRyE/oRr
-         f9LQ==
-X-Gm-Message-State: AOJu0YzYR/DkIrpclkje9vvl8JLJ4iy5zgWiPnZIFFA2USt9+EoibzQC
-	D7AWp7czal8iIGplonb80Pc=
-X-Google-Smtp-Source: AGHT+IEE2I58BQbvsNS11+pVCj5ytblslMcGUzH2oTcMBRRkIHKEeSlmkN5bnqGxkXZyKLgqfVR3mg==
-X-Received: by 2002:a17:902:e80d:b0:1d4:6732:1ab8 with SMTP id u13-20020a170902e80d00b001d467321ab8mr12091898plg.83.1705509680746;
-        Wed, 17 Jan 2024 08:41:20 -0800 (PST)
-Received: from [192.168.1.7] ([110.78.142.72])
-        by smtp.googlemail.com with ESMTPSA id m8-20020a1709026bc800b001d60a70809bsm1976924plt.168.2024.01.17.08.41.18
+        bh=nTCtMquQwSHvUe3rlom2viCrA/hRn2YuWQ9TWaWnJ4g=;
+        b=ErZKV4Pq6Th8deTA2iR/n/NahmE/MTaQ9jT3+oxxT7hYo3BWcEyu6RltkK8fwRGZWz
+         X2ZKko05b74ZU8lYvKD8HRLGihjGp1rFugxvAx2Ps/BfAju5D+nCcTln8BU+Y9sFdwhp
+         sLoTXeCUcUs0z6ovu2nxwonqCGGyEZE0NXFLIT4CCrpy9omCX8b5HQfCFS098yVlLOeo
+         jwyyMQtjqOHJRnYuaUS0FLlulpEWEITW3dcjMAi0LZGgZnc/PftZImewsw3Czj/JG72w
+         /+zsMQMpNepH5UFGYyXRxFRWOKyZExXJJ6i7gEi/SI0cCPX4uVetcgSpnmKS7fwkmH4t
+         QiVQ==
+X-Gm-Message-State: AOJu0YzrMk5g8xnww/BJ6Hm5yCIeI539LEVnWW8lEt0uv4P1qSiXJTbV
+	AiHjSDjUQqy52D+UEu7/ZblqLozz8LM6GA==
+X-Google-Smtp-Source: AGHT+IFFlacrehhEntQ4bUfUJOL0yxIor5gjgggfLwRY9ubluouFJBmzUtYn1rnyZRRNO+pA4e2wvw==
+X-Received: by 2002:a05:600c:4d1f:b0:40e:76a3:6e2d with SMTP id u31-20020a05600c4d1f00b0040e76a36e2dmr2960527wmp.4.1705512203552;
+        Wed, 17 Jan 2024 09:23:23 -0800 (PST)
+Received: from [192.168.100.86] ([37.228.218.3])
+        by smtp.gmail.com with ESMTPSA id v21-20020a05600c445500b0040e3bdff98asm26761374wmn.23.2024.01.17.09.23.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jan 2024 08:41:20 -0800 (PST)
-Message-ID: <f7a68087-c4b9-4dfc-b24a-df36bbffde74@gmail.com>
-Date: Wed, 17 Jan 2024 23:41:15 +0700
+        Wed, 17 Jan 2024 09:23:23 -0800 (PST)
+Message-ID: <28e019ce-7612-4b10-8068-17c3fef4dba8@linaro.org>
+Date: Wed, 17 Jan 2024 17:23:22 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,74 +78,108 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: "SilverStone TS16" external SSD enclosing needs an UAS quirk
+Subject: Re: [PATCH v2 13/15] arm64: dts: qcom: pmi632: define USB-C related
+ blocks
 Content-Language: en-US
-To: Bruno Haible <bruno@clisp.org>, Greg KH <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>,
- linux-usb@vger.kernel.org
-References: <3750407.VQhiAETyHQ@nimes>
- <2024011630-convent-slouching-ce10@gregkh>
- <fc14c873-04ee-43cd-8328-b4e5b03e0230@gmail.com> <2270283.o7ts2hSHzF@nimes>
-From: Lars Melin <larsm17@gmail.com>
-In-Reply-To: <2270283.o7ts2hSHzF@nimes>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Guenter Roeck <linux@roeck-us.net>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-phy@lists.infradead.org
+References: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org>
+ <20240113-pmi632-typec-v2-13-182d9aa0a5b3@linaro.org>
+ <1d0d325d-d15e-4e86-b8e3-9f91b99e78bf@linaro.org>
+ <CAA8EJpo7qH43FyvO-N9vFH=6K3rMdPpnGp9w6pGW2cz4bMK+0g@mail.gmail.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <CAA8EJpo7qH43FyvO-N9vFH=6K3rMdPpnGp9w6pGW2cz4bMK+0g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 2024-01-17 14:59, Bruno Haible wrote:
-> Lars Melin wrote:
->> 0bda:9210 is a Realtek USB 3 to pcie chip used by umpteen
->> enclosure manufacturers.
+On 15/01/2024 10:43, Dmitry Baryshkov wrote:
+> On Mon, 15 Jan 2024 at 12:00, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>> On 13.01.2024 21:55, Dmitry Baryshkov wrote:
+>>> Define VBUS regulator and the Type-C handling block as present on the
+>>> Quacomm PMI632 PMIC.
+>>>
+>>> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>> ---
+>>>   arch/arm64/boot/dts/qcom/pmi632.dtsi | 30 ++++++++++++++++++++++++++++++
+>>>   1 file changed, 30 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/pmi632.dtsi b/arch/arm64/boot/dts/qcom/pmi632.dtsi
+>>> index 4eb79e0ce40a..d6832f0b7b80 100644
+>>> --- a/arch/arm64/boot/dts/qcom/pmi632.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/pmi632.dtsi
+>>> @@ -45,6 +45,36 @@ pmic@2 {
+>>>                #address-cells = <1>;
+>>>                #size-cells = <0>;
+>>>
+>>> +             pmi632_vbus: usb-vbus-regulator@1100 {
+>>> +                     compatible = "qcom,pmi632-vbus-reg", "qcom,pm8150b-vbus-reg";
+>>> +                     reg = <0x1100>;
+>>> +                     status = "disabled";
+>>> +             };
+>>> +
+>>> +             pmi632_typec: typec@1500 {
+>>> +                     compatible = "qcom,pmi632-typec";
+>>> +                     reg = <0x1500>;
+>>> +                     interrupts = <0x2 0x15 0x00 IRQ_TYPE_EDGE_RISING>,
+>>> +                                  <0x2 0x15 0x01 IRQ_TYPE_EDGE_BOTH>,
+>>> +                                  <0x2 0x15 0x02 IRQ_TYPE_EDGE_RISING>,
+>>> +                                  <0x2 0x15 0x03 IRQ_TYPE_EDGE_BOTH>,
+>>> +                                  <0x2 0x15 0x04 IRQ_TYPE_EDGE_RISING>,
+>>> +                                  <0x2 0x15 0x05 IRQ_TYPE_EDGE_RISING>,
+>>> +                                  <0x2 0x15 0x06 IRQ_TYPE_EDGE_BOTH>,
+>>> +                                  <0x2 0x15 0x07 IRQ_TYPE_EDGE_RISING>;
+>> This differs from the downstream irq types:
+>>
+>> <0x2 0x15 0x0 IRQ_TYPE_EDGE_BOTH>,
+>> <0x2 0x15 0x1 IRQ_TYPE_EDGE_BOTH>,
+>> <0x2 0x15 0x2 IRQ_TYPE_EDGE_RISING>,
+>> <0x2 0x15 0x3 IRQ_TYPE_EDGE_RISING>,
+>> <0x2 0x15 0x4 IRQ_TYPE_EDGE_BOTH>,
+>> <0x2 0x15 0x5 IRQ_TYPE_EDGE_RISING>,
+>> <0x2 0x15 0x6 IRQ_TYPE_EDGE_RISING>,
+>> <0x2 0x15 0x7 IRQ_TYPE_EDGE_RISING>;
 > 
-> SilverStone TS16 is not the only one that makes problems. There's also
->    - Sabrent NVMe M.2 enclosure (Model EC-SNVE) [1]
->    - UnionSine Dual Protocol M2 NVMe to USB 3.1 [2]
+> I must admit, I copied the IRQs from the pm8150b rather than from the
+> vendor kernel.
 > 
->> I have got one from Orico and it works ok under both linux and MSWin but
->> it can be a bit finicky if it doesn't get enough power, it may for
->> instance work well with an earlier (slower) type of NVME SSD but not
->> with a later faster type unless you provide external power to it (usb
->> hub + power adapter).
-> 
-> So, the Orico one has problems as well. Do these problems disappear when,
-> instead of changing the way it's connected to the computer, you add this
-> quirk?
+> Bryan, any idea which set of flags is more correct?
 
-I can not check that now, the SSD that misbehaved if not connected via a 
-powered USB Type C hub is not available to me now. I don't even know if 
-I  would still have that particular problem now after having updated the 
-firmware in the rtl9210 controller today.
-It is very likely that the powered hub masked the real problem of an 
-early and buggy firmware.
+My € says 1:1 with the downstream pmi632.dtsi
 
->> Slowing down all RTL9120 already in the market with this quirk is in my
->> humble opinion not a realistic solutio.
-> 
-> What else do you propose, for those of us who buy this hardware (€ 50,
-> it wasn't a cheap one), connect it directly to a computer (through the
-> vendor-provided cable, to an USB-C 3.2 Gen.2 connector, as in my case),
-> and then experience 1-2 crashes per day under Linux?
+qcom,typec@1500 {
+     reg = <0x1500 0x100>;
+     interrupts = <0x2 0x15 0x0 IRQ_TYPE_EDGE_BOTH>,
+                  <0x2 0x15 0x1 IRQ_TYPE_EDGE_BOTH>,
+                  <0x2 0x15 0x2 IRQ_TYPE_EDGE_RISING>,
+                  <0x2 0x15 0x3 IRQ_TYPE_EDGE_RISING>,
+                  <0x2 0x15 0x4 IRQ_TYPE_EDGE_BOTH>,
+                  <0x2 0x15 0x5 IRQ_TYPE_EDGE_RISING>,
+                  <0x2 0x15 0x6 IRQ_TYPE_EDGE_RISING>,
+                  <0x2 0x15 0x7 IRQ_TYPE_EDGE_RISING>;
 
-I propose that those who have a uas problem add a local quirk in their 
-system.
-If you google 0bda:9210 then you will find lot of people who have 
-disconnect or no connect problem with their enclosure but you will also 
-find lot of people who say that their enclosure works without any 
-problems. They, and I, don't want your quirk in our systems..
+     interrupt-names = "typec-or-rid-detect-change",
+                       "typec-vpd-detect",
+                       "typec-cc-state-change",
+                       "typec-vconn-oc",
+                       "typec-vbus-change",
+                       "typec-attach-detach",
+                       "typec-legacy-cable-detect",
+                       "typec-try-snk-src-detect";
+};
 
-Another option for you is to ask your mfgr for a firmware upgrade or
-to search for and find one on the net (as I did).
-The release notes especially mention fixes compatibility problems withr 
-Samsung 980 pro and WD Black.
-
-/Lars
-
-
-> Bruno
-> 
-> [1] https://ubuntuforums.org/showthread.php?t=2466059
-> [2] https://forum.level1techs.com/t/nvme-to-usb-3-1-enclosure-buggy-in-linux-rtl9210b-chipset/199752
-> 
-> 
-> 
 
 
