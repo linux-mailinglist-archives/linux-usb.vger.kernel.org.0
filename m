@@ -1,155 +1,151 @@
-Return-Path: <linux-usb+bounces-5184-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5185-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9F12830A5F
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 17:07:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BB5C830B57
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 17:41:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E11871C23D9D
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 16:07:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B76D6291BF5
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 16:41:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD8B222319;
-	Wed, 17 Jan 2024 16:07:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69AA1224D4;
+	Wed, 17 Jan 2024 16:41:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OJOPGU9E"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ILztQ1u3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0292209F;
-	Wed, 17 Jan 2024 16:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E7C21A01
+	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 16:41:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705507651; cv=none; b=bRaKDA9viNh0yDmXpGCaAFVvcUyYogXzndb12zfmdGbbHrguvsPGMvq+dVSTZ8zDIfMHgmQCyDZZwaiqNU+y6KiQ4zh4mmQDti/oXk54czlNhjkbZKHn8xP4OIFVBUiuVsoWcsCaxqZJXzOxd6IeP+1hGVSWPrDZ24doeB7jYV4=
+	t=1705509683; cv=none; b=IBZbGHorg+5CFSDBbEDyby7misiFut9xa9CN77dmHJWc144CLs1ZZw5YtR20Kk8aJMyLgBKbIYb/JGYp2NXqHyHwvEYMzLl+koiicvSRbDriVFG3nq6lBy+KMe0QmcyMh31tXP0Nh7XrWtdov7O8zIR7MccJxW6wkx1AGkpip2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705507651; c=relaxed/simple;
-	bh=Pt6/Laf5caE2AuXw4AhcoXLhTOdqETCSl9vEqaK0dOo=;
+	s=arc-20240116; t=1705509683; c=relaxed/simple;
+	bh=uBzCBYU4HD7qbd4CGMKpqlsUxLuRN0SmEPzuV0BSDx8=;
 	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:MIME-Version:
-	 References:In-Reply-To:From:Date:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding; b=mqVjVBf+2wl4Na1FAGOpDgbwTZSK6BvfeMxw4ETgnqUy4MWOyfr+TermRLsvsejVJjPtqLVjrzio/rOUkjV4nas0/Pr45+vrXsJyTvvcJ0V8hJlpIHcOzeaaxxWB9EBzZK6i9jwHnFwSAjXHKn1B0KLyVBH9xJ4fB6FDRkQFvGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OJOPGU9E; arc=none smtp.client-ip=209.85.221.47
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:
+	 To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding; b=N+n8pCUn7Kth86C//WFeE8UOjjG596j4I12P5nUdktNFyvNPUYtj0LeSHn6WM8ok3fi3HrR1sPvINsSgOOXFvcieIh1bAFTJwKfDsWnBEJiPgtHif2tXIZjCMtdSHEpjkeKE9Q3fmBwZSq1bgHaSdGggRdvmZgTWFvou1I6rfoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ILztQ1u3; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-337b976773fso1864228f8f.0;
-        Wed, 17 Jan 2024 08:07:29 -0800 (PST)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1d51ba18e1bso94078745ad.0
+        for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 08:41:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705507648; x=1706112448; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gOLnXzAsbzKvRY+jTL8FAUZUJfwwLzT0EUqM2CJtgGE=;
-        b=OJOPGU9E6ymHGKWscBNntqz3sA6AXEDpQU4nksYfzu1SRHNqAjY9g+k3Jbe43XIXDD
-         op2kvu9x4bhnZDPw3d6pDVq4XRfEJnYHJfbmQusntFRBzXdUuA+WSOwKPv5l4GuZ39RP
-         Emrhuo/zQshdIPGRLNFqf3Ts7UXLfNB8clvUDwrGOBXwua7CIZYYyJ5NXVynEjXPg4LO
-         Hl0sMOaR6KEEGu6du3nwqsjGmKNd2Acfm8IqP+3miFw/W4cdEsFG3D6pqIH4VKcRhmC2
-         Rmy2Qvlyz67qTHB5tJNELmdis8vcu4dT+2qIpTevBAAWsWD9vZ0xDq+ojJly2iNJXLgh
-         W9eQ==
+        d=gmail.com; s=20230601; t=1705509681; x=1706114481; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tbmO9ICMQku4JBf+7Cs9grnT1OAYJm2tzfZY3W6IccU=;
+        b=ILztQ1u379J/DrGWDCud8zOFK3Qw9hZByz0RvGzFmc2TmkLuo6vGFnTK9vaZq2rCK/
+         CUbjXRsZ8a/yO34dQKpLiQZrrCKWLJfDSNEMjC6LeTlmPiFkZlOFmP2CPqP/2iRJg0es
+         1hORzZMJ5ogXphXN/jbmSeog9d6j6j7MxMk4X1JvyEE+XOCsGSsN/zdFbCuR+f/KPhHb
+         UFcdRNozYFMyKvrb6St96Yz+/lkUIFvTzrtdmNt+LZ7mye8cPys88msfVbQcQQbND0Ha
+         oAs4JZAS/eklawxLgvoYuk5ujhGKdfvDmRui3KxVYSUrGTTTBFoBs5U8v48KjQozmDLw
+         gKiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705507648; x=1706112448;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gOLnXzAsbzKvRY+jTL8FAUZUJfwwLzT0EUqM2CJtgGE=;
-        b=BoLSx/jgszAAZ5Aa4V/IV4AueFF6wqc4Q9J3IWWO5wB+F/EDsOigDj1rjMDy1TuV7s
-         SeYth/5iHRpl/DN1hK+KQfi5ksV/0eIa5ELmGOFHiS3MnjSP9U41EwUIY6zYEr68f6Bx
-         LDv1bbdYsfBNphBLeT+emU1TPcLLggvpur4w2MYD1u6gHzAS/JPVdTgp6D9fyMXx81T0
-         HDUV6C0ePR8sjGRHC94gGMKh0mHT2n0DkdzeBg29s16NLhpPbhYPaniKSQdRbTKUm34E
-         xG0OVyxvnFM9yTh1sKklAg5Zo4LbNjvX38WWUQ1mBW5z8XLaKE/GBjyyKYs63BdMapLE
-         sKlg==
-X-Gm-Message-State: AOJu0YwGbayPaOUrKgSZgaBg6THDJDLZVhpvBKacao+w9TyNBqopMK07
-	HO+zzbltzUEfRVFfVxzbVXwUB3uKbOGeOhvVD/A=
-X-Google-Smtp-Source: AGHT+IGNjx2lbJAgGFge9QaR9KuSRNYSUEkNCrXT26MYHJeTZ4JR6QRl6Ko0TaFSeSiWHuFCOcKamHA/EaRbAcf2+k4=
-X-Received: by 2002:a5d:4e52:0:b0:337:9f44:a0b3 with SMTP id
- r18-20020a5d4e52000000b003379f44a0b3mr3517963wrt.31.1705507647872; Wed, 17
- Jan 2024 08:07:27 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705509681; x=1706114481;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tbmO9ICMQku4JBf+7Cs9grnT1OAYJm2tzfZY3W6IccU=;
+        b=W5jNQUVV+rpwtlpVPnSsHMPe9o24u9TrQHzM/rEzshQPfw8HmONPUKkspOX3qGV/dt
+         aAE1Nfan36/EaWA6L0Zkr+ASnxApPL2o9BCqX4aZv4C8uFrocrmI/Qmc7OzDKNTXbcuW
+         4bMvQavLTxm2DmX6xeh71U6/B4NAYzZN2jaZyUzazHI+epwLqgws8hZEWGYMr8SXxXIQ
+         eVQ8DYWPU9hnW4yK84EAR0m67vd0Afa3W1uVO+SwAWnmAYQlyE2QwN37gdRENS/iG0PX
+         yOzJbNX34V9QY/2rukE8/2Fo4eWj+ehHuhCTtXNEShj5ANP8XIYpaz1t7R50vRyE/oRr
+         f9LQ==
+X-Gm-Message-State: AOJu0YzYR/DkIrpclkje9vvl8JLJ4iy5zgWiPnZIFFA2USt9+EoibzQC
+	D7AWp7czal8iIGplonb80Pc=
+X-Google-Smtp-Source: AGHT+IEE2I58BQbvsNS11+pVCj5ytblslMcGUzH2oTcMBRRkIHKEeSlmkN5bnqGxkXZyKLgqfVR3mg==
+X-Received: by 2002:a17:902:e80d:b0:1d4:6732:1ab8 with SMTP id u13-20020a170902e80d00b001d467321ab8mr12091898plg.83.1705509680746;
+        Wed, 17 Jan 2024 08:41:20 -0800 (PST)
+Received: from [192.168.1.7] ([110.78.142.72])
+        by smtp.googlemail.com with ESMTPSA id m8-20020a1709026bc800b001d60a70809bsm1976924plt.168.2024.01.17.08.41.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Jan 2024 08:41:20 -0800 (PST)
+Message-ID: <f7a68087-c4b9-4dfc-b24a-df36bbffde74@gmail.com>
+Date: Wed, 17 Jan 2024 23:41:15 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240117113806.2584341-1-badhri@google.com>
-In-Reply-To: <20240117113806.2584341-1-badhri@google.com>
-From: =?UTF-8?Q?G=C3=A1bor_Stefanik?= <netrolller.3d@gmail.com>
-Date: Wed, 17 Jan 2024 17:07:20 +0100
-Message-ID: <CA+XFjioEL4ZcdDZgK2N3squudx8T_DJGrwNDCaN-2XJ3Nb4sXQ@mail.gmail.com>
-Subject: Re: [PATCH v1] Revert "usb: typec: tcpm: fix cc role at port reset"
-To: Badhri Jagan Sridharan <badhri@google.com>
-Cc: gregkh@linuxfoundation.org, linux@roeck-us.net, 
-	heikki.krogerus@linux.intel.com, kyletso@google.com, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, rdbabiera@google.com, 
-	amitsd@google.com, stable@vger.kernel.org, stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: "SilverStone TS16" external SSD enclosing needs an UAS quirk
+Content-Language: en-US
+To: Bruno Haible <bruno@clisp.org>, Greg KH <gregkh@linuxfoundation.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>,
+ linux-usb@vger.kernel.org
+References: <3750407.VQhiAETyHQ@nimes>
+ <2024011630-convent-slouching-ce10@gregkh>
+ <fc14c873-04ee-43cd-8328-b4e5b03e0230@gmail.com> <2270283.o7ts2hSHzF@nimes>
+From: Lars Melin <larsm17@gmail.com>
+In-Reply-To: <2270283.o7ts2hSHzF@nimes>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-This will break operation of batteryless devices relying on a USB
-Type-C port for their power needs, as the port reset upon controller
-initialization will cause power to be cut to the device, resulting in
-a boot loop.
-Devices using the FUSB302C port controller are especially severely
-affected, as upon losing power, this controller can retain CC states
-for a very long time (potentially forever if some parasitic source of
-power is present), requiring a full mechanical disconnect-reconnect
-cycle before the device receives power again.
+On 2024-01-17 14:59, Bruno Haible wrote:
+> Lars Melin wrote:
+>> 0bda:9210 is a Realtek USB 3 to pcie chip used by umpteen
+>> enclosure manufacturers.
+> 
+> SilverStone TS16 is not the only one that makes problems. There's also
+>    - Sabrent NVMe M.2 enclosure (Model EC-SNVE) [1]
+>    - UnionSine Dual Protocol M2 NVMe to USB 3.1 [2]
+> 
+>> I have got one from Orico and it works ok under both linux and MSWin but
+>> it can be a bit finicky if it doesn't get enough power, it may for
+>> instance work well with an earlier (slower) type of NVME SSD but not
+>> with a later faster type unless you provide external power to it (usb
+>> hub + power adapter).
+> 
+> So, the Orico one has problems as well. Do these problems disappear when,
+> instead of changing the way it's connected to the computer, you add this
+> quirk?
 
-While the USB Type C specification does require this behavior, I would
-consider this an oversight in the standard (perhaps left over from
-when USB Power Delivery was still going to be USB Battery Charging
-2.0).
+I can not check that now, the SSD that misbehaved if not connected via a 
+powered USB Type C hub is not available to me now. I don't even know if 
+I  would still have that particular problem now after having updated the 
+firmware in the rtl9210 controller today.
+It is very likely that the powered hub masked the real problem of an 
+early and buggy firmware.
 
-Badhri Jagan Sridharan <badhri@google.com> ezt =C3=ADrta (id=C5=91pont: 202=
-4.
-jan. 17., Sze, 12:38):
->
-> This reverts commit 1e35f074399dece73d5df11847d4a0d7a6f49434.
->
-> Given that ERROR_RECOVERY calls into PORT_RESET for Hi-Zing
-> the CC pins, setting CC pins to default state during PORT_RESET
-> breaks error recovery.
->
-> 4.5.2.2.2.1 ErrorRecovery State Requirements
-> The port shall not drive VBUS or VCONN, and shall present a
-> high-impedance to ground (above zOPEN) on its CC1 and CC2 pins.
->
-> Hi-Zing the CC pins is the inteded behavior for PORT_RESET.
-> CC pins are set to default state after tErrorRecovery in
-> PORT_RESET_WAIT_OFF.
->
-> 4.5.2.2.2.2 Exiting From ErrorRecovery State
-> A Sink shall transition to Unattached.SNK after tErrorRecovery.
-> A Source shall transition to Unattached.SRC after tErrorRecovery.
->
-> Cc: stable@kernel.org
-> Fixes: 1e35f074399d ("usb: typec: tcpm: fix cc role at port reset")
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.=
-c
-> index 5945e3a2b0f7..9d410718eaf4 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4876,8 +4876,7 @@ static void run_state_machine(struct tcpm_port *por=
-t)
->                 break;
->         case PORT_RESET:
->                 tcpm_reset_port(port);
-> -               tcpm_set_cc(port, tcpm_default_state(port) =3D=3D SNK_UNA=
-TTACHED ?
-> -                           TYPEC_CC_RD : tcpm_rp_cc(port));
-> +               tcpm_set_cc(port, TYPEC_CC_OPEN);
->                 tcpm_set_state(port, PORT_RESET_WAIT_OFF,
->                                PD_T_ERROR_RECOVERY);
->                 break;
->
-> base-commit: 933bb7b878ddd0f8c094db45551a7daddf806e00
-> --
-> 2.43.0.429.g432eaa2c6b-goog
->
->
+>> Slowing down all RTL9120 already in the market with this quirk is in my
+>> humble opinion not a realistic solutio.
+> 
+> What else do you propose, for those of us who buy this hardware (€ 50,
+> it wasn't a cheap one), connect it directly to a computer (through the
+> vendor-provided cable, to an USB-C 3.2 Gen.2 connector, as in my case),
+> and then experience 1-2 crashes per day under Linux?
+
+I propose that those who have a uas problem add a local quirk in their 
+system.
+If you google 0bda:9210 then you will find lot of people who have 
+disconnect or no connect problem with their enclosure but you will also 
+find lot of people who say that their enclosure works without any 
+problems. They, and I, don't want your quirk in our systems..
+
+Another option for you is to ask your mfgr for a firmware upgrade or
+to search for and find one on the net (as I did).
+The release notes especially mention fixes compatibility problems withr 
+Samsung 980 pro and WD Black.
+
+/Lars
+
+
+> Bruno
+> 
+> [1] https://ubuntuforums.org/showthread.php?t=2466059
+> [2] https://forum.level1techs.com/t/nvme-to-usb-3-1-enclosure-buggy-in-linux-rtl9210b-chipset/199752
+> 
+> 
+> 
+
 
