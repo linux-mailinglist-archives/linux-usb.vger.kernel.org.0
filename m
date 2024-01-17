@@ -1,95 +1,89 @@
-Return-Path: <linux-usb+bounces-5155-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5156-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9CE4830068
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 08:18:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F39DE8300B5
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 08:46:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0A7B1C23A92
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 07:18:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5BCF1F24DCB
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 07:46:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CFCC9465;
-	Wed, 17 Jan 2024 07:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T3wGXtpC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA9EC2C6;
+	Wed, 17 Jan 2024 07:45:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728348C1B
-	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 07:18:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09B36125C0;
+	Wed, 17 Jan 2024 07:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705475905; cv=none; b=p54Q8x6iz2/MMrycg/PDdinzPoFE+3JQp3SpS/iUBRNXwbG7ve1zGMdfrhI7a+CpW7yAl50QNWIwCv2AdRR8Gbtv+rb2pMBFA4igKE0Q9i5k1yzgZ710BFvzg1dblz1jYtgn2lUouSZoMb5vA16A3JuQ6+QBw7P6lNbqdDm226k=
+	t=1705477537; cv=none; b=B0svbNU3az1Ib/USr45Czd4ld+no8iAROie7BpCU7UX1WhAqiHa7a+ai4qe4qOVBAmhnwOtTbqTL+r48AqAyhPxXlV9CjavsGH9QW/iu5UM4Pb9jZZjbfQy6tQ+Y8J0eJqMLA1y3UUywkSTEdqF9SwZQ2BMsEgdsDr9iwh4BcJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705475905; c=relaxed/simple;
-	bh=C7GeLNiGP5bRjIx6Fc77DzlLph77+xnFMKo5ep5RaK8=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:MIME-Version:
-	 References:In-Reply-To:From:Date:Message-ID:Subject:To:Cc:
-	 Content-Type; b=E7xuxRiMoiB67xlcsdfgRDaJElW0XxpLboo5jw/9qnDwEfb8U7QzgJrOAdPDvvOk4hXvo4Hpm5lVAmwEAcRJmgxDLLUZ0sSoz85Uwxf1JynYpVft/ljEwYf4U5ZeAvZ6fQppaDn7mwUa+HqRMFxkS7EZanaltcvH9nq9tPjkbiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T3wGXtpC; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-429d2ebdf05so198681cf.0
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jan 2024 23:18:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1705475903; x=1706080703; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3EQRRw7jZs+7rhvm0pp3ec3+dkHb+ZBu+iZ5gNOr0Ic=;
-        b=T3wGXtpCGfOVD18PsxQ0gk2eF85fKmp+c0MSpCMlWUkC4j/pR4mili5lzfmtEOJ0NU
-         v+ryiAM2RNshko4x0LABuVCSOYezRiA7bS64PtNe38BkHk45Mh0XbqJOVunPmKzr/Np+
-         k3U7JuYvDMY9dBV2+3EV5hzkrUKiAXnn0xbHOkc+jCtlAPWGeON9OXshEEDf0a4bP/xH
-         XycK0sTLb67DPCrQt3dyiN1+kHmySpa2H47D00/EkqL5uz3qJ0mHaaTijTYOUNV9hep/
-         lWKbWwtfmWswqeRBSIMVyQ0LOHxWDUAo/NXygaXFfL+9jX+jqA2XCQMkDflYi38Cp/uR
-         7xNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705475903; x=1706080703;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3EQRRw7jZs+7rhvm0pp3ec3+dkHb+ZBu+iZ5gNOr0Ic=;
-        b=X753U/aDhOe4J8DpogwXxFzfjB8d4/0iNd2a5SpV80G2OHMy397P6oGcNwFkDjBRRh
-         jqHKY3CrBynUk4VJZuzG6yHp0GtlVoWBwMxPdZp/1Et/ACdDzuDMVC+QscTptc76Zpy6
-         ADdiykWhcpaaFMoTdxv7uHOjw2Lhi1dzzhBf+1m4uDZuwsXMpMNbvM8HtkkBArSi73ov
-         ufQG9fjDvYXa+J4VWxOo5Ed8sb7aMKx5hUaVnuqWvWSawExJzJrAuG9arY/YruFiYQ54
-         fFXjSfabzYNyu+lAKbfosSEfz1ar3/T6P36rGhp9DBFYKWI6O6zGPxuHy/fdNp1gGDuu
-         qDnA==
-X-Gm-Message-State: AOJu0YwgLENvOcs4JIUEVCquapxEfxcY5hYbsxahn3jhwAk13p+yQEPd
-	I35MwaIed4VFgVEm+J947btE9SlDjHLlg8yKXJzHKJKjBDfNZOsCw3uVMYijzZk6kfmzKD9hgO0
-	Hsay1TQwAr2kE6L9aWqJESBZwGxeP+7aQ7iz0ksG8xWY0BXcozZHCveo=
-X-Google-Smtp-Source: AGHT+IHisHbbrW+bz2ZL8LW/3fp6Ge8sVTfhJBl8oWT0mBFwMPn6v8LATZsuXbACVPhDN7t1DQkN6aInw8vCPgmVgk0=
-X-Received: by 2002:ac8:6f11:0:b0:42a:220:82f3 with SMTP id
- bs17-20020ac86f11000000b0042a022082f3mr87321qtb.21.1705475903265; Tue, 16 Jan
- 2024 23:18:23 -0800 (PST)
+	s=arc-20240116; t=1705477537; c=relaxed/simple;
+	bh=XTlJMeq1LcRVPc4P3E1fOfdg//1N2HH8XnYT7USTq14=;
+	h=Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To; b=O4/8dr3JjrfZKeMiKepOHGp+1e2V4n4IV8fUVRwU6ZG5Y6wM9dRCzsZKbJq/1F+prZJxk3wW8peay2PVZbUlqUMB7tRqzwQFdYrHyIeEBUaQZ73fsw7gL7V9JexlNDFYEu+pk1S1uX1nDiU9SMlicR1WWf0ODzl1+iKW8sPHR2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 4EE1D140327; Wed, 17 Jan 2024 08:45:32 +0100 (CET)
+Date: Wed, 17 Jan 2024 08:45:32 +0100
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	linux-usb@vger.kernel.org, Dell.Client.Kernel@dell.com,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Jack Pham <quic_jackp@quicinc.com>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: ucsi: Add missing ppm_lock
+Message-ID: <ZaeFnId6Ln3VUE5n@cae.in-ulm.de>
+References: <20240116224041.220740-1-lk@c--e.de>
+ <20240116224041.220740-2-lk@c--e.de>
+ <2024011726-exhaust-writing-29d4@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240110095532.4776-1-quic_uaggarwa@quicinc.com>
-In-Reply-To: <20240110095532.4776-1-quic_uaggarwa@quicinc.com>
-From: Kuen-Han Tsai <khtsai@google.com>
-Date: Wed, 17 Jan 2024 15:17:55 +0800
-Message-ID: <CAKzKK0qJOz_+pNAVAD8Ub6TZ9uhFOzuDC_bws9MVzxNa7RqYhA@mail.gmail.com>
-Subject: Re: [RFC PATCH] usb: dwc3: gadget: Fix NULL pointer dereference in dwc3_gadget_suspend
-To: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2024011726-exhaust-writing-29d4@gregkh>
 
->         ret = dwc3_gadget_soft_disconnect(dwc);
->         if (ret)
->                 goto err;
+On Wed, Jan 17, 2024 at 06:44:40AM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Jan 16, 2024 at 11:40:39PM +0100, Christian A. Ehrhardt wrote:
+> > Calling ->sync_write must be done while holding the PPM lock as the
+> > mailbox logic does not support concurrent commands.
+> > 
+> > Thus protect the only call to ucsi_acknowledge_connector_change
+> > with the PPM lock as it calls ->sync_write. All other calls to
+> > ->sync_write already happen under the PPM lock.
+> > 
+> > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> > ---
+> > NOTE: This is not a theoretical issue. I've seen problems resulting
+> > from the missing lock on real hardware.
+> 
+> What commit id does this fix?
 
-For improved readability, we can remove the goto statement and move
-the error handling logic here.
+It's hard to tell (due to rewrites, logic and API changes). After
+digging a bit more I think it is at least a theoretical issues since
+the introduction of partner tasks.
 
-Thanks,
-Kuen-Han
+I'll wait a bit for additional feedback and fix this and other issues
+noticed by your patch bot (sorry for those) in the next iteration.
+
+> Should it be cc: stable?
+
+Not sure. The race is triggered much more ofter after the quirk added
+in patch 3/3, so this may not be a practical issue before that.
+I'll add the tag in the next iteration, though.
+
+   thanks   Christian
+
 
