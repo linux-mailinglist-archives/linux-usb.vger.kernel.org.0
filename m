@@ -1,179 +1,528 @@
-Return-Path: <linux-usb+bounces-5163-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5164-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A29A98303F7
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 11:55:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C68C8830456
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 12:15:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25DFB1F25BEB
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 10:55:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E814286EAA
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 11:15:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31D511CAB6;
-	Wed, 17 Jan 2024 10:55:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5131DA53;
+	Wed, 17 Jan 2024 11:15:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="Y80toRAW";
-	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="t+n8lC+5"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="s6sQbTqC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D735714AA5;
-	Wed, 17 Jan 2024 10:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.121.71.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EB31CD3C;
+	Wed, 17 Jan 2024 11:15:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705488922; cv=none; b=NW/09ZXO1kdIMweXFCmWwtk+8i3WS8A6bQwGD3CF+B3Br9R5EAORJFw4Lr2blRYcYAr9CWN4oL+g2N9urTyQb8HqLwv7vwz39fQ87yhuemx5N/TCBeNbGYA3qLfNpvDpQCEMgm2Yv/8SKc2tBqrIPhgir8ZaKQ4cft8QbDM5HXQ=
+	t=1705490102; cv=none; b=C1xXiSQmGpVRNZN05PiZN5Z2j2xQ4YvE75F3ld54LSN7N1Koc4sHyYcHJyePPRhiM4dj44nsYgjrzbN09zAEtj4x6hjshOJ7uuxJmbaXutjzYfoo4ZR1/ym+FKd2JxXnka4Eru4+QpGZf+LFDLJWP1L1NRlIBUOHqCRtQhRy46w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705488922; c=relaxed/simple;
-	bh=X7ri6/DC7dQ0k7GmkIF8uzW4YU+DeXLsZrOtnLLUppM=;
-	h=Received:DKIM-Signature:X-Spam-Checker-Version:X-Spam-Level:
-	 X-Spam-Status:Received:DKIM-Signature:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To; b=ehmvPuxaPYzQV4ZxmFiOILtNlKiS1vv8HsDm4smKV7DrH+wNMCS9jzJa0z2qGr4pRWR6FsgGADmxoBVN5CP4IVxZAYV67WLnaHvMfdnwOM4NpWCJv9yXwJ26tf91bsEzUqbABjZNUVDCb5a5wVJKpAKfqEYxypI7y7TV1PcROBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=Y80toRAW; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=t+n8lC+5; arc=none smtp.client-ip=91.121.71.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
-Received: by nautica.notk.org (Postfix, from userid 108)
-	id D3D05C020; Wed, 17 Jan 2024 11:55:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-	t=1705488917; bh=QPQ1kHwkpR/bSo/5dfdZfVGrQA0NVwMsugmiUUBqUUA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y80toRAWRVoIuFVFMKt8O9CH9+xIjHlZIcq0xVi94TZUHBF9cwWdav3kqOXFW9J/U
-	 k8RaIOlzOZc0z/7MJ4MqxnKiO9m0DEQ7TdvvpvcZH44Q1CsJXDOpOfHJaeZrBltCtZ
-	 /ltzVpUFNJpTg75NCLpAVWwTW9IPwiGyXnU+aKDtUbgdmZjb+/mmyg0D3ERy9O3KUL
-	 KeGqo3jtpMDeDZX1JClvR9uGV9vM7BlvpqpEyeeYIXd/mu1sGy8SKUxUKZAo6dhByx
-	 MiTx+tLd2cptwL8pHDLbjQ/gWRnW8h4veeWdpUFffxclpnhYHpYnih2T0l69Ys0XJf
-	 H3NYWSe98cZCw==
-X-Spam-Level: 
-Received: from gaia.codewreck.org (localhost [127.0.0.1])
-	by nautica.notk.org (Postfix) with ESMTPS id 1EC8DC009;
-	Wed, 17 Jan 2024 11:55:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-	t=1705488916; bh=QPQ1kHwkpR/bSo/5dfdZfVGrQA0NVwMsugmiUUBqUUA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=t+n8lC+5sdDFiHuENr4ruAOhrP5KsC2TfPzE81RyUjeCaSeWq1Dg/N1SuVOBLU2wZ
-	 I01/y48CGIUHlPrJqda07B7OR1HfSzbXAy7LnjE3JBYZx0RJdUQtGBx3QNeGyecCee
-	 d8XqzNq5hdZmQHtk0uAnxxBuVXEUiQcK5k9n0dLNk5rDtC9QSK4F78HD0C4r58yLMq
-	 NlHGvCDqQ9UNxn8MdSvQcxv0gn/OxysVNbNSTao35v8v+r12I3GbnpxD4lyu4p9gr4
-	 1YPEFUO6ItprrRyMSqSKD23o+ZU/dQfP8uTFpNqWozhLSRZeynqlqq8oSkp1cbkm5y
-	 JuP4s6mfnz8zw==
-Received: from localhost (gaia.codewreck.org [local])
-	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id 9ed4a2fc;
-	Wed, 17 Jan 2024 10:55:08 +0000 (UTC)
-Date: Wed, 17 Jan 2024 19:54:53 +0900
-From: Dominique Martinet <asmadeus@codewreck.org>
-To: Jan =?utf-8?B?TMO8YmJl?= <jlu@pengutronix.de>
-Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Latchesar Ionkov <lucho@ionkov.net>, linux-usb@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	v9fs@lists.linux.dev,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel@pengutronix.de, Eric Van Hensbergen <ericvh@kernel.org>
-Subject: Re: [PATCH 0/3] usb: gadget: 9pfs transport
-Message-ID: <Zaex_fkKcui7QZd7@codewreck.org>
-References: <20240116-ml-topic-u9p-v1-0-ad8c306f9a4e@pengutronix.de>
- <ZaZsUQUhSlMPLJg0@codewreck.org>
- <0aba51a8be0fb165b44ec956bec7a9698a9518a2.camel@pengutronix.de>
+	s=arc-20240116; t=1705490102; c=relaxed/simple;
+	bh=Jo3cZYS9ZoCvg8NLvrL8giPLaPWqzGYMweHmWuYBNFU=;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding; b=tV6EtM5tWHVgc8+h9fr/PvVTBZJcSB2HE7Onl+kxOnFCMZ0e9EudTOhj7LiSfp6aKN1k1AgjeMLFKo2m7nT9wmvGAEiziQ21Gk4dVrv1pt2WuuGJfjtrujstmhhwHcLfEzhv6cWoVtk+iuLG5jAWy7vtScARxGRt0NfUVxlWOSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=s6sQbTqC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18518C433C7;
+	Wed, 17 Jan 2024 11:15:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1705490102;
+	bh=Jo3cZYS9ZoCvg8NLvrL8giPLaPWqzGYMweHmWuYBNFU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=s6sQbTqCteuiK2z7Gqfiwby5A8PsGckJ8woJxpZfU0ieoBKwpSAK7YNawuPSA0bKg
+	 Ecs+L8c0CDBNUxPSCHy7dui8HbhtLMRmfHv6fgeBMVILae9VD+NRPBi0UMmCdPue+H
+	 k0pYuP+K8EKfUCiRPJ+5mutUV7V2qv7Gyio6wibI=
+Date: Wed, 17 Jan 2024 12:14:59 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB / Thunderbolt changes for 6.8-rc1
+Message-ID: <Zae2swRz7N7Em5-v@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0aba51a8be0fb165b44ec956bec7a9698a9518a2.camel@pengutronix.de>
 
-Jan LÃ¼bbe wrote on Tue, Jan 16, 2024 at 04:51:41PM +0100:
-> > So I didn't have time to look at everything through, just want to make
-> > sure, this series allows sharing data from an usb gadget (e.g. some
-> > device with storage) over 9p as an alternative to things like MTP ?
-> 
-> It's the other way around. :) The USB host exports a filesystem, while the
-> gadget on the USB device side makes it mountable. Our main use-case is to use it
-> as an alternative to NFS root booting during the development of embedded Linux
-> devices. NFS root works in many cases, but has some downsides, which make it
-> cumbersome to use in more and more cases.
+The following changes since commit a39b6ac3781d46ba18193c9dbb2110f31e9bffe9:
 
-Oh!
-Okay, this makes a lot more sense. And that'll need a bit more
-explanations in the commits & Documentation/ as you've concluded :)
+  Linux 6.7-rc5 (2023-12-10 14:33:40 -0800)
 
+are available in the Git repository at:
 
-> NFS root needs correctly configured Ethernet interfaces on both the development
-> host and the target device. On the target, this can interfere with the network
-> configuration that is used for the normal device operation (DHCP client, ...).
-> For the host, configuring a NFS (and perhaps DHCP) server can be an obstacle.
-> 
-> For target devices which don't have a real Ethernet interface, NFS root would
-> also work with the USB Ethernet gadget, but this increases the complexity
-> further.
-> 
-> As many embedded boards have a USB device port anyway, which is used during
-> development for uploading the boot-loader and to flash filesystem images (i.e.
-> via the fastboot protocol), we want to just reuse that single data cable to
-> allow access to the root filesystem as well. 
-> 
-> Compared to flashing images, using a network filesystem like NFS and 9P reduces
-> the time between compiling on the host and running the binary on the target, as
-> no flash and reboot cycle is needed. That can get rid of many minutes of waiting
-> over a day. :)
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.8-rc1
 
-My other hat is on embedded development (dayjob at Atmark Techno[1], the
-only english page linked is about 4 years out of date but I guess it's
-better than no page at all), so I can understand where you're coming
-from -- thanks for the background.
+for you to fetch changes up to 933bb7b878ddd0f8c094db45551a7daddf806e00:
 
-[1] https://www.atmark-techno.com/english
+  usb: typec: tipd: fix use of device-specific init function (2024-01-05 13:52:53 +0100)
 
-That means I'll actually want to test this, but kind of always busy so
-it might take a few weeks...
-Or better, do you happen to know if qemu can create a USB controller
-that supports OTG so it'll be easy to test for folks with no such
-hardware?
-We've got enough 9p protocols that aren't actually tested on a regular
-basis, it'd be great if we could have something that can run anywhere. 
+----------------------------------------------------------------
+USB / Thunderbolt changes for 6.8-rc1
 
+Here is the big set of USB and Thunderbolt changes for 6.8-rc1.
+Included in here are the following:
+  - Thunderbolt subsystem and driver updates for USB 4 hardware and
+    issues reported by real devices
+  - xhci driver updates
+  - dwc3 driver updates
+  - uvc_video gadget driver updates
+  - typec driver updates
+  - gadget string functions cleaned up
+  - other small changes
 
-> diod (9pfs server) and the forwarder are on the development host, where the root
-> filesystem is actually stored. The gadget is initialized during boot (or later)
-> on the embedded board. Then the forwarder will find it on the USB bus and start
-> forwarding requests.
-> 
-> It may seem a bit unusual that in this case the requests come from the device
-> and are handled by the host. The reason is that USB device ports are normally
-> not available on PCs, so a connection in the other direction would not work.
+All of these have been in the linux-next tree for a while with no
+reported issues.
 
-Right, most host PCs won't have OTG available...
-I was also perplexed by the linux foundation (0x1d6b):0x0109 id, that
-might be clearer once it's properly documented -- I'll let someone from
-the usb side chime on this as I have no idea what's appropriate.
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+----------------------------------------------------------------
+Abel Vesa (1):
+      dt-bindings: usb: qcom,dwc3: Add X1E80100 binding
 
-> In the future, the functionality of the forwarder could be integrated into the
-> 9pfs server. Alternatively, an improved forwarder could also react to udev
-> events of gadgets showing up and forward them to different 9PFS server over the
-> network (when you have multiple target devices connected to one USB host).
+Alexander Stein (1):
+      usb: cdns3: Use dev_err_probe
 
-Plenty of potential work ahead :)
-Frankly at this stage I don't think it's much simpler than e.g. CDC
-ethernet gadget and mounting nfs over tcp, but with further improvements
-it can definitely get simpler.
+Andrey Konovalov (1):
+      usb: raw-gadget: update documentation
 
+Andrzej Pietrasiewicz (1):
+      usb: gadget: webcam: Make g_webcam loadable again
 
-> Perhaps, the inverse setup (9PFS server on the USB gadget side, mounted on a PC)
-> also would be useful in the future and could share some of this code. Then,
-> you'd have an alternative to MTP.
+Andy Shevchenko (10):
+      xhci: dbc: Drop duplicate checks for dma_free_coherent()
+      xhci: dbc: Convert to use sysfs_streq()
+      xhci: dbc: Use sysfs_emit() to instead of scnprintf()
+      xhci: dbc: Use ATTRIBUTE_GROUPS()
+      xhci: dbc: Check for errors first in xhci_dbc_stop()
+      xhci: dbc: Don't shadow error codes in store() functions
+      xhci: dbc: Replace custom return value with proper Linux error code
+      xhci: dbc: Use sizeof_field() where it makes sense
+      xhci: dbc: Use sizeof(*pointer) instead of sizeof(type)
+      xhci: dbc: Add missing headers
 
-(Yeah, I'm not actively looking for that -- was just asking because MTP
-has been kind of dead lately and I'm not aware of any potential
-alternative, but I didn't go looking for them either -- let's leave that
-to later)
+Avichal Rakesh (6):
+      usb: gadget: uvc: prevent use of disabled endpoint
+      usb: gadget: uvc: Allocate uvc_requests one at a time
+      usb: gadget: uvc: move video disable logic to its own function
+      usb: gadget: uvc: Fix use-after-free for inflight usb_requests
+      usb: gadget: uvc: Fix use are free during STREAMOFF
+      usb: gadget: uvc: Remove nested locking
 
--- 
-Dominique Martinet | Asmadeus
+Chen Ni (1):
+      usb: misc: eud: Add IRQ check for platform_get_irq()
+
+Christophe JAILLET (2):
+      usb: chipidea: Remove usage of the deprecated ida_simple_xx() API
+      usb: typec: Remove usage of the deprecated ida_simple_xx() API
+
+Chunfeng Yun (3):
+      dt-bindings: usb: mtk-xhci: add a property for Gen1 isoc-in transfer issue
+      usb: xhci-mtk: fix a short packet issue of gen1 isoc-in transfer
+      arm64: dts: mediatek: mt8195: Add 'rx-fifo-depth' for cherry
+
+Colin Ian King (2):
+      thunderbolt: Remove duplicated re-assignment of pointer 'out'
+      USB: misc: iowarrior: remove redundant assignment to variable io_res
+
+Dmitry Antipov (1):
+      usb: gadget: f_fs: fix fortify warning
+
+Dmitry Baryshkov (5):
+      dt-bindings: connector: usb: add altmodes description
+      usb: typec: change altmode SVID to u16 entry
+      arm64: dts: qcom: qrb5165-rb5: use u16 for DP altmode svid
+      dt-bindings: connector: usb: add accessory mode description
+      usb: typec: tcpm: Parse Accessory Mode information
+
+Douglas Anderson (4):
+      usb: core: Don't force USB generic_subclass drivers to define probe()
+      usb: core: Allow subclassed USB drivers to override usb_choose_configuration()
+      r8152: Choose our USB config with choose_configuration() rather than probe()
+      usb: core: Fix crash w/ usb_choose_configuration() if no driver
+
+Fabio Estevam (2):
+      dt-bindings: usb: genesys,gl850g: Document 'peer-hub'
+      dt-bindings: usb: nxp,ptn5110: Fix typos in the title
+
+Frank Li (5):
+      usb: cdns3: skip set TRB_IOC when usb_request: no_interrupt is true
+      usb: cdns3: fix uvc failure work since sg support enabled
+      usb: cdns3: fix iso transfer error when mult is not zero
+      usb: cdns3: Fix uvc fail when DMA cross 4k boundery since sg enabled
+      Revert "usb: gadget: f_uvc: change endpoint allocation in uvc_function_bind()"
+
+Frank Wang (1):
+      usb: dwc3: set pm runtime active before resume common
+
+Frieder Schrempf (3):
+      usb: misc: onboard_usb_hub: Print symbolic error names
+      usb: misc: onboard_usb_hub: Add support for clock input
+      usb: misc: onboard_usb_hub: Add support for Cypress CY7C6563x
+
+Ghanshyam Agrawal (1):
+      usb: typec: fixed a typo
+
+Gil Fine (8):
+      thunderbolt: Handle lane bonding of Gen 4 XDomain links properly
+      thunderbolt: Move width_name() helper to tb.h
+      thunderbolt: Log XDomain link speed and width
+      thunderbolt: Transition link to asymmetric only when both sides support it
+      thunderbolt: Improve logging when DisplayPort resource is added due to hotplug
+      thunderbolt: Make PCIe tunnel setup and teardown follow CM guide
+      thunderbolt: Disable PCIe extended encapsulation upon teardown properly
+      thunderbolt: Keep link as asymmetric if preferred by hardware
+
+Greg Kroah-Hartman (4):
+      Merge 6.7-rc3 into usb-next
+      Merge 6.7-rc5 into usb-next
+      thunderbolt: make tb_bus_type const
+      Merge tag 'thunderbolt-for-v6.8-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into char-misc-next
+
+Guan-Yu Lin (1):
+      usb: typec: tcpm: skip checking port->send_discover in PD3.0
+
+Gui-Dong Han (1):
+      usb: mon: Fix atomicity violation in mon_bin_vma_fault
+
+Hardik Gajjar (4):
+      usb: xhci: Add timeout argument in address_device USB HCD callback
+      usb: new quirk to reduce the SET_ADDRESS request timeout
+      usb: hub: Replace hardcoded quirk value with BIT() macro
+      usb: hub: Add quirk to decrease IN-ep poll interval for Microchip USB491x hub
+
+Harshit Mogalapalli (1):
+      usb: yurex: Fix inconsistent locking bug in yurex_read()
+
+Heikki Krogerus (1):
+      Revert "usb: typec: class: fix typec_altmode_put_partner to put plugs"
+
+Himanshu Bhavani (1):
+      usb: dwc3: imx8mp: Fix smatch warning
+
+Jai Luthra (1):
+      usb: typec: tipd: Separate reset for TPS6598x
+
+Javier Carrasco (7):
+      usb: typec: tps6598x: add reset gpio support
+      dt-bindings: usb: tps6598x: add reset-gpios property
+      usb: typec: tipd: add init and reset functions to tipd_data
+      usb: typec: tipd: add function to request firmware
+      usb: typec: tipd: declare in_data in as const in exec_cmd functions
+      usb: typec: tipd: add patch update support for tps6598x
+      usb: typec: tipd: fix use of device-specific init function
+
+Jayant Chowdhary (1):
+      usb:gadget:uvc Do not use worker thread to pump isoc usb requests
+
+Kees Cook (1):
+      usb: gadget: f_midi: Replace strlcpy() with strscpy()
+
+Kevin Hao (1):
+      usb: ueagle-atm: Use wait_event_freezable_timeout() in uea_wait()
+
+Konrad Dybcio (9):
+      dt-bindings: usb: qcom,dwc3: Fix SDM660 clock description
+      arm64: dts: qcom: msm8916: Drop RPM bus clocks
+      arm64: dts: qcom: msm8996: Drop RPM bus clocks
+      arm64: dts: qcom: qcs404: Drop RPM bus clocks
+      arm64: dts: qcom: sdm630: Drop RPM bus clocks
+      arm64: dts: qcom: msm8939: Drop RPM bus clocks
+      arm64: dts: qcom: msm8998: Remove AGGRE2 clock from SLPI
+      arm64: dts: qcom: msm8996: Remove AGGRE2 clock from SLPI
+      arm64: dts: qcom: msm8996: Remove PNoC clock from MSS
+
+Krishna Kurapati (4):
+      usb: dwc3: core: set force_gen1 bit in USB31 devices if max speed is SS
+      usb: gadget: ncm: Add support to update wMaxSegmentSize via configfs
+      dt-bindings: usb: dwc3: Clean up hs_phy_irq in binding
+      usb: dwc3: qcom: Rename hs_phy_irq to qusb2_phy_irq
+
+Krzysztof Kozlowski (1):
+      dt-bindings: usb: qcom,dwc3: adjust number of interrupts on SM6125
+
+Kyle Tso (3):
+      usb: typec: tcpm: Query Source partner for FRS capability only if it is DRP
+      dt-bindings: connector: Add child nodes for multiple PD capabilities
+      usb: typec: tcpm: Support multiple capabilities
+
+Lad Prabhakar (1):
+      dt-bindings: usb: renesas,usbhs: Document RZ/Five SoC
+
+Lee Jones (17):
+      usb: atm: Remove snprintf() from sysfs call-backs and replace with sysfs_emit()
+      usb: cdnsp: Replace snprintf() with the safer scnprintf() variant
+      usb: fotg210-hcd: Replace snprintf() with the safer scnprintf() variant
+      usb: gadget: Remove snprintf() from sysfs call-backs and replace with sysfs_emit()
+      usb: gadget: f_tcm: Remove snprintf() from sysfs call-backs and replace with sysfs_emit()
+      usb: gadget: configfs: Replace snprintf() with the safer scnprintf() variant
+      usb: gadget: f_uac1: Replace snprintf() with the safer scnprintf() variant
+      usb: gadget: f_uac2: Replace snprintf() with the safer scnprintf() variant
+      usb: gadget: uvc: Replace snprintf() with the safer scnprintf() variant
+      usb: gadget: udc: atmel: Replace snprintf() with the safer scnprintf() variant
+      usb: cdns2: Replace snprintf() with the safer scnprintf() variant
+      usb: host: max3421-hcd: Replace snprintf() with the safer scnprintf() variant
+      usb: yurex: Replace snprintf() with the safer scnprintf() variant
+      usb: mon_stat: Replace snprintf() with the safer scnprintf() variant
+      usb: mon_text: Replace snprintf() with the safer scnprintf() variant
+      usb: phy: twl6030: Remove snprintf() from sysfs call-backs and replace with sysfs_emit()
+      usb: storage: Remove snprintf() from sysfs call-backs and replace with sysfs_emit()
+
+Manan Aurora (1):
+      usb: dwc3: Support EBC feature of DWC_usb31
+
+Mathias Nyman (4):
+      xhci: Reconfigure endpoint 0 max packet size only during endpoint reset
+      xhci: fix possible null pointer deref during xhci urb enqueue
+      xhci: Fix null pointer dereference during S4 resume when resetting ep0
+      xhci: add support to allocate several interrupters
+
+Mika Westerberg (4):
+      thunderbolt: Unwind TMU configuration if tb_switch_set_tmu_mode_params() fails
+      thunderbolt: Disable CL states only when actually needed
+      thunderbolt: Use tb_dp_read_cap() to read DP_COMMON_CAP as well
+      thunderbolt: Add support for Intel Lunar Lake
+
+Neil Armstrong (3):
+      dt-bindings: usb: qcom,dwc3: document the SM8560 SuperSpeed DWC3 USB controller
+      dt-bindings: usb: Document WCD939x USB SubSystem Altmode/Analog Audio Switch
+      usb: typec: mux: add Qualcomm WCD939X USB SubSystem Altmode Mux driver
+
+Niklas Neronin (7):
+      xhci: check if legacy irq is available before using it as fallback
+      xhci: add handler for only one interrupt line
+      xhci: refactor static MSI-X function
+      xhci: refactor static MSI function
+      xhci: change 'msix_count' to encompass MSI or MSI-X vectors
+      xhci: rework 'xhci_try_enable_msi()' MSI and MSI-X setup code
+      xhci: minor coding style cleanup in 'xhci_try_enable_msi()'
+
+Oliver Neukum (1):
+      usb: cdc-acm: return correct error code on unsupported break
+
+Perr Zhang (1):
+      usb: f_uac1: adds support for SS and SSP
+
+Piyush Mehta (2):
+      usb: chipidea: udc: Add revision check of 2.20[CI_REVISION_22]
+      usb: dwc3: xilinx: improve error handling for PM APIs
+
+RD Babiera (3):
+      usb: typec: tcpm: add tcpm_port_error_recovery symbol
+      usb: typec: tcpci: add vconn over current fault handling to maxim_core
+      usb: typec: class: fix typec_altmode_put_partner to put plugs
+
+Randy Dunlap (3):
+      usb: cdns3: starfive: don't misuse /** comment
+      usb: fotg210-udc: fix function kernel-doc comments
+      usb: linux/usb.h: fix Excess kernel-doc description warning
+
+Richard Acayan (1):
+      usb: gadget: u_ether: Re-attach netif device to mirror detachment
+
+Stefan Eichenberger (1):
+      usb: phy: generic: add suspend support for regulator
+
+Stefan Wahren (3):
+      dt-bindings: usb: xhci: Add support for BCM2711
+      usb: xhci: xhci-plat: Add support for BCM2711
+      ARM: dts: bcm2711: Add BCM2711 xHCI support
+
+Thinh Nguyen (2):
+      Revert "usb: dwc3: Soft reset phy on probe for host"
+      Revert "usb: dwc3: don't reset device side if dwc3 was configured as host-only"
+
+Uttkarsh Aggarwal (1):
+      usb: dwc: ep0: Update request status in dwc3_ep0_stall_restart
+
+Uwe Kleine-König (6):
+      USB: usbip: vudc: Convert to platform remove callback returning void
+      usb: gadget: at91_udc: Convert to platform remove callback returning void
+      usb: gadget: fsl_udc: Convert to platform remove callback returning void
+      usb: gadget: gr_udc: Convert to platform remove callback returning void
+      usb: gadget: lpc32xx_udc: Convert to platform remove callback returning void
+      usb: gadget: pxa25x_udc: Convert to platform remove callback returning void
+
+Werner Sembach (1):
+      thunderbolt: Reduce retry timeout to speed up boot for some devices
+
+Wesley Cheng (4):
+      usb: dwc3: gadget: Handle EP0 request dequeuing properly
+      usb: dwc3: gadget: Queue PM runtime idle on disconnect event
+      dt-bindings: usb: xhci: Add num-hc-interrupters definition
+      dt-bindings: usb: dwc3: Limit num-hc-interrupters definition
+
+William Wu (1):
+      usb: dwc2: Disable clock gating feature on Rockchip SoCs
+
+Xu Yang (3):
+      usb: chipidea: ci_hdrc_imx: add wakeup clock and keep it always on
+      usb: chipidea: wait controller resume finished for wakeup irq
+      usb: phy: mxs: remove CONFIG_USB_OTG condition for mxs_phy_is_otg_host()
+
+Yajun Deng (1):
+      USB: core: Use device_driver directly in struct usb_driver and usb_device_driver
+
+Yinbo Zhu (1):
+      usb: xhci-plat: fix usb disconnect issue after s4
+
+liyouhong (1):
+      drivers/usb/gadget/udc: Fix spelling typo in comments(reqest->request)
+
+ Documentation/admin-guide/kernel-parameters.txt    |   3 +
+ .../bindings/connector/usb-connector.yaml          | 124 +++-
+ .../devicetree/bindings/usb/generic-xhci.yaml      |  25 +-
+ .../devicetree/bindings/usb/genesys,gl850g.yaml    |   5 +
+ .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml |  11 +
+ .../devicetree/bindings/usb/nxp,ptn5110.yaml       |   2 +-
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         | 217 +++---
+ .../bindings/usb/qcom,wcd939x-usbss.yaml           | 102 +++
+ .../devicetree/bindings/usb/renesas,usbhs.yaml     |   2 +-
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |   4 +
+ .../devicetree/bindings/usb/ti,tps6598x.yaml       |   6 +
+ .../devicetree/bindings/usb/usb-xhci.yaml          |   6 +
+ Documentation/usb/gadget-testing.rst               |  20 +-
+ Documentation/usb/raw-gadget.rst                   |   3 -
+ arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi        |   5 +
+ arch/arm/boot/dts/broadcom/bcm2711.dtsi            |  14 +
+ arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi    |   2 +
+ arch/arm64/boot/dts/qcom/msm8916.dtsi              |   9 -
+ arch/arm64/boot/dts/qcom/msm8939.dtsi              |  12 -
+ arch/arm64/boot/dts/qcom/msm8996.dtsi              |  43 +-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi              |   5 +-
+ arch/arm64/boot/dts/qcom/qcs404.dtsi               |   9 -
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts           |   2 +-
+ arch/arm64/boot/dts/qcom/sdm630.dtsi               |  53 +-
+ drivers/bluetooth/btusb.c                          |   6 +-
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c       |   2 +-
+ drivers/net/usb/r8152.c                            |  16 +-
+ .../net/wireless/broadcom/brcm80211/brcmfmac/usb.c |   2 +-
+ drivers/net/wireless/marvell/mwifiex/usb.c         |   2 +-
+ drivers/platform/x86/intel/chtwc_int33fe.c         |   2 +-
+ drivers/thunderbolt/domain.c                       |   2 +-
+ drivers/thunderbolt/icm.c                          |   2 +-
+ drivers/thunderbolt/nhi.c                          |   4 +
+ drivers/thunderbolt/nhi.h                          |   2 +
+ drivers/thunderbolt/switch.c                       |  33 +-
+ drivers/thunderbolt/tb.c                           |  74 +-
+ drivers/thunderbolt/tb.h                           |  18 +
+ drivers/thunderbolt/tmu.c                          |   2 +-
+ drivers/thunderbolt/tunnel.c                       |  46 +-
+ drivers/thunderbolt/xdomain.c                      |  54 +-
+ drivers/tty/tty_io.c                               |   3 +
+ drivers/usb/atm/ueagle-atm.c                       |  19 +-
+ drivers/usb/cdns3/cdns3-gadget.c                   | 149 +++-
+ drivers/usb/cdns3/cdns3-gadget.h                   |   3 +
+ drivers/usb/cdns3/cdns3-plat.c                     |  16 +-
+ drivers/usb/cdns3/cdns3-starfive.c                 |   2 +-
+ drivers/usb/cdns3/cdnsp-debug.h                    | 354 +++++-----
+ drivers/usb/chipidea/ci_hdrc_imx.c                 |  17 +-
+ drivers/usb/chipidea/core.c                        |  13 +-
+ drivers/usb/chipidea/udc.c                         |   3 +-
+ drivers/usb/class/cdc-acm.c                        |   3 +
+ drivers/usb/core/driver.c                          |  64 +-
+ drivers/usb/core/generic.c                         |  16 +
+ drivers/usb/core/hub.c                             |  48 +-
+ drivers/usb/core/quirks.c                          |   7 +
+ drivers/usb/core/usb.c                             |   2 +-
+ drivers/usb/core/usb.h                             |   8 +-
+ drivers/usb/dwc2/params.c                          |   1 +
+ drivers/usb/dwc3/core.c                            |  62 +-
+ drivers/usb/dwc3/core.h                            |   6 +
+ drivers/usb/dwc3/dwc3-imx8mp.c                     |   4 +-
+ drivers/usb/dwc3/dwc3-qcom.c                       |  22 +-
+ drivers/usb/dwc3/dwc3-xilinx.c                     |  13 +-
+ drivers/usb/dwc3/ep0.c                             |   5 +-
+ drivers/usb/dwc3/gadget.c                          |  25 +-
+ drivers/usb/dwc3/gadget.h                          |   2 +
+ drivers/usb/fotg210/fotg210-hcd.c                  |  12 +-
+ drivers/usb/fotg210/fotg210-udc.c                  |   6 +-
+ drivers/usb/gadget/configfs.c                      |  13 +-
+ drivers/usb/gadget/function/f_fs.c                 |   5 +-
+ drivers/usb/gadget/function/f_midi.c               |   4 +-
+ drivers/usb/gadget/function/f_ncm.c                |  69 +-
+ drivers/usb/gadget/function/f_tcm.c                |   4 +-
+ drivers/usb/gadget/function/f_uac1.c               |  83 ++-
+ drivers/usb/gadget/function/f_uac2.c               |   6 +-
+ drivers/usb/gadget/function/f_uvc.c                |  68 +-
+ drivers/usb/gadget/function/f_uvc.h                |   2 +-
+ drivers/usb/gadget/function/u_ether.c              |   2 +
+ drivers/usb/gadget/function/u_ncm.h                |   2 +
+ drivers/usb/gadget/function/u_uvc.h                |   6 +
+ drivers/usb/gadget/function/uvc.h                  |  14 +-
+ drivers/usb/gadget/function/uvc_configfs.c         |   2 +-
+ drivers/usb/gadget/function/uvc_v4l2.c             |  16 +-
+ drivers/usb/gadget/function/uvc_video.c            | 449 +++++++++---
+ drivers/usb/gadget/function/uvc_video.h            |   3 +-
+ drivers/usb/gadget/legacy/webcam.c                 | 333 ++++++---
+ drivers/usb/gadget/udc/at91_udc.c                  |  13 +-
+ drivers/usb/gadget/udc/atmel_usba_udc.c            |   3 +-
+ drivers/usb/gadget/udc/cdns2/cdns2-debug.h         | 138 ++--
+ drivers/usb/gadget/udc/fsl_udc_core.c              |  15 +-
+ drivers/usb/gadget/udc/gr_udc.c                    |  13 +-
+ drivers/usb/gadget/udc/lpc32xx_udc.c               |  13 +-
+ drivers/usb/gadget/udc/mv_udc_core.c               |   2 +-
+ drivers/usb/gadget/udc/pxa25x_udc.c                |  12 +-
+ drivers/usb/host/max3421-hcd.c                     |  18 +-
+ drivers/usb/host/xhci-dbgcap.c                     | 132 ++--
+ drivers/usb/host/xhci-dbgcap.h                     |   1 +
+ drivers/usb/host/xhci-debugfs.c                    |   2 +-
+ drivers/usb/host/xhci-mem.c                        | 110 ++-
+ drivers/usb/host/xhci-mtk.c                        |  40 +-
+ drivers/usb/host/xhci-mtk.h                        |   2 +
+ drivers/usb/host/xhci-pci.c                        | 140 ++--
+ drivers/usb/host/xhci-plat.c                       |  26 +-
+ drivers/usb/host/xhci-ring.c                       |  13 +-
+ drivers/usb/host/xhci.c                            | 213 +++---
+ drivers/usb/host/xhci.h                            |  19 +-
+ drivers/usb/misc/iowarrior.c                       |   1 -
+ drivers/usb/misc/onboard_usb_hub.c                 |  26 +-
+ drivers/usb/misc/onboard_usb_hub.h                 |   6 +
+ drivers/usb/misc/qcom_eud.c                        |   3 +
+ drivers/usb/misc/yurex.c                           |  14 +-
+ drivers/usb/mon/mon_bin.c                          |   7 +-
+ drivers/usb/mon/mon_stat.c                         |   6 +-
+ drivers/usb/mon/mon_text.c                         |  28 +-
+ drivers/usb/phy/phy-generic.c                      |  14 +-
+ drivers/usb/phy/phy-mxs-usb.c                      |   3 +-
+ drivers/usb/phy/phy-twl6030-usb.c                  |   8 +-
+ drivers/usb/serial/bus.c                           |   2 +-
+ drivers/usb/serial/usb-serial.c                    |   2 +-
+ drivers/usb/storage/sierra_ms.c                    |  16 +-
+ drivers/usb/storage/uas.c                          |   2 +-
+ drivers/usb/typec/class.c                          |  17 +-
+ drivers/usb/typec/mux/Kconfig                      |  10 +
+ drivers/usb/typec/mux/Makefile                     |   1 +
+ drivers/usb/typec/mux/wcd939x-usbss.c              | 779 +++++++++++++++++++++
+ drivers/usb/typec/pd.c                             |   6 +-
+ drivers/usb/typec/tcpm/tcpci_maxim_core.c          |  20 +-
+ drivers/usb/typec/tcpm/tcpm.c                      | 417 ++++++++---
+ drivers/usb/typec/tipd/core.c                      | 177 ++++-
+ drivers/usb/typec/tipd/tps6598x.h                  |  18 +
+ drivers/usb/usbip/stub_main.c                      |   8 +-
+ drivers/usb/usbip/vudc.h                           |   2 +-
+ drivers/usb/usbip/vudc_dev.c                       |   3 +-
+ drivers/usb/usbip/vudc_main.c                      |   2 +-
+ include/linux/thunderbolt.h                        |   2 +-
+ include/linux/usb.h                                |  31 +-
+ include/linux/usb/gadget.h                         |   1 +
+ include/linux/usb/hcd.h                            |   5 +-
+ include/linux/usb/quirks.h                         |   3 +
+ include/linux/usb/tcpci.h                          |   5 +-
+ include/linux/usb/tcpm.h                           |   1 +
+ include/uapi/linux/usb/functionfs.h                |   6 +-
+ 142 files changed, 3945 insertions(+), 1549 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/qcom,wcd939x-usbss.yaml
+ create mode 100644 drivers/usb/typec/mux/wcd939x-usbss.c
 
