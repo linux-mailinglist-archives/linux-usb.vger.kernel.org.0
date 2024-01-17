@@ -1,126 +1,159 @@
-Return-Path: <linux-usb+bounces-5151-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5152-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7BB2830016
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 07:25:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 626F083002C
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 07:35:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 225EB1C22E3F
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 06:25:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 895E81C23961
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 06:35:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F04B8BFC;
-	Wed, 17 Jan 2024 06:25:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iA2kkQ5r"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B936AA2;
+	Wed, 17 Jan 2024 06:35:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A0D79E0
-	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 06:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1E751FAF;
+	Wed, 17 Jan 2024 06:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705472728; cv=none; b=iKYt8tTc6SvdPooP3AhO0z4q278VCQiDWBBK+yNtqJVQ91xrDddxYvTcBX5COzb3xh64y+oXJNizYAPukwZyiKT4Aa/7rAdxwJxIrhGn1ZojB9D+4872YOIGko+IRE6SdBvS/k3kmKU08KfWwVhFWsWLWfxvkUrdRqcFv9RH2r8=
+	t=1705473330; cv=none; b=Af20X0ChSWRhGukBHpJgVJILTORNxlc80iGKTRCtzXGUnG1RxknZpqkhJJ/3qRuUKkSzWdWBD/u2EPFZKjSeQSWOW0DZJQlzbiAks9NJZ/OwOnW0QJWEPfwO4s6DThw4/Ecw1/DCM65vMoe+q/FrC0i7LJtikdL4CuqF/mo37wU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705472728; c=relaxed/simple;
-	bh=AxY17N6tpXv7QL2h+mjO3AmpdEnxunzRaV43tlpyEK8=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding; b=IEPsy4fct3v54uQjkbkSfiUECZmH16Ns5wCG9GT/SZQ8+jZDOV48MyNjVWHfFLOsXj5IawAFXACNRVgjDvXi14j5+JzdIhTMM+nY620/W0sXXhWVeb3lAcg7COUtMhSzXB7e9SHuB9wSWr0htuIE5doxR70yxYAL6tfpq/t/jdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iA2kkQ5r; arc=none smtp.client-ip=209.85.167.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3bbbc6e51d0so6831615b6e.3
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jan 2024 22:25:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705472726; x=1706077526; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q3vW7onYa07SHFAItoxFt+KVOV9PHt5Vl28tYSI1rM8=;
-        b=iA2kkQ5rl12jQcNIxZHW9EA9nRXEMOaS8qbsou04R7Cp93uLN6CaJ3+7V0PZ2gynzH
-         dPo5iVXR8i0J5ywjhyPJCZ08m27PvukKJsaUHvRq5gJ+omHhHa0KKDM4DE7GeXvqdtre
-         6Pb42D4EShSGUmTH0KkzLJ5byFw5/KksAZD3WCq7MlWWtYY3MqUKJ9lymsOtiWiT4XUY
-         DJZ9f2O+GLNFtVodtfM6HPvYnwf5Qfllzjp3xV6bT2ZDMzB9FM6Dtg2J74Nu/PbmNXeq
-         CKgGaY01d1ojNR+rymS4A4RaHPypNNZ8w3F5GR/E7Li+bMSTJOTlZfSQFRCshQjqmldm
-         4dyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705472726; x=1706077526;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q3vW7onYa07SHFAItoxFt+KVOV9PHt5Vl28tYSI1rM8=;
-        b=WdflxtzLpk/V3pXczwXbhmotRPEqnRPxQve9VBnAiSJw1MeyNQk3TSMkLH6kDaizTg
-         B2ANytWdPLdPDfS4vV9a2T3O1q0Ykops/UkvAjK5pE8VI7Ce0sgPzxFs53G96fPMO4Al
-         ncn4WBAxUGEfAV4p97KnMMLG+AZFG2OMFGHbUYN8ujoNsb/neIVXQYXV49I+ufI4IO2e
-         UR+E5s9SEDTpdJvU4n681owzPaNNdxzYIG2k9QHQ+hOlPEdiDN9Et6wCqrL0ApqYMnwG
-         klGoUUGm4H3/yVsXzBSnqAoDzAy7M1isXcjIoM4jLVfXazrYe9d1xstU2+pnig8juZ6h
-         80RA==
-X-Gm-Message-State: AOJu0Yylhs/ubknDzKjpKOuXLvTMwp5FH6vt4MSJXdVnkwaJWfNi3P0w
-	QoeiQLIaG7ZSm11rxX7cI7QQ0BEbuo7OXlZv7hWPKA==
-X-Google-Smtp-Source: AGHT+IEy8+znIRzZPCrZWHEyl7rrZ715lLMweta7ZPGitbOq0E/crRGwFllVpjEIQIMS++YgFdfYTQ==
-X-Received: by 2002:a05:6808:1526:b0:3bd:381c:18a5 with SMTP id u38-20020a056808152600b003bd381c18a5mr7017230oiw.110.1705472726549;
-        Tue, 16 Jan 2024 22:25:26 -0800 (PST)
-Received: from [192.168.1.7] ([110.78.142.72])
-        by smtp.googlemail.com with ESMTPSA id h13-20020aa79f4d000000b006d92f081d9fsm607304pfr.31.2024.01.16.22.25.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jan 2024 22:25:26 -0800 (PST)
-Message-ID: <fc14c873-04ee-43cd-8328-b4e5b03e0230@gmail.com>
-Date: Wed, 17 Jan 2024 13:25:21 +0700
+	s=arc-20240116; t=1705473330; c=relaxed/simple;
+	bh=4WpP0RvtazlSMb2/5wbc9Q7kdkvYUdvnJl4Gn1aF5AA=;
+	h=Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To; b=sLbp4/e5lbge3kLvgbtxPnnKN7uJmxKGeOmJHPFk+g9TIfT2gy3+HcxoRG3vH1VS7q5IfTG8PVMound3FY3JXLtH2noCVfnfHDMPlQfbaZkFwZrCL0nZm2UbOP30LnFJdpVwGVpSjlmG/jNRQUybQSyR9VDvd64vb1nM9p/cRpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 8A100140327; Wed, 17 Jan 2024 07:35:23 +0100 (CET)
+Date: Wed, 17 Jan 2024 07:35:23 +0100
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Saranya Gopal <saranya.gopal@intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC] Fix stuck UCSI controller on DELL
+Message-ID: <Zad1K5V8mhNiiMWl@cae.in-ulm.de>
+References: <20240103100635.57099-1-lk@c--e.de>
+ <ZZadhlh3q9ZInxvU@kuha.fi.intel.com>
+ <ZaV/kwuh2MBNY5d2@cae.in-ulm.de>
+ <34101c32-65cd-4433-974f-23a16f9981fa@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: "SilverStone TS16" external SSD enclosing needs an UAS quirk
-To: Greg KH <gregkh@linuxfoundation.org>, Bruno Haible <bruno@clisp.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>,
- linux-usb@vger.kernel.org
-References: <3750407.VQhiAETyHQ@nimes>
- <2024011630-convent-slouching-ce10@gregkh>
-Content-Language: en-US
-From: Lars Melin <larsm17@gmail.com>
-In-Reply-To: <2024011630-convent-slouching-ce10@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <34101c32-65cd-4433-974f-23a16f9981fa@amd.com>
 
-On 2024-01-16 21:13, Greg KH wrote:
-> On Tue, Jan 16, 2024 at 12:35:46AM +0100, Bruno Haible wrote:
->> TL;DR
->> -----
->> In my experience, the "SilverStone TS16" external SSD enclosing
->> needs an UAS quirk
->>    usb-storage.quirks=0bda:9210:u
->> as part of the kernel command line. I hope you can add it
->> to the file linux/drivers/usb/storage/unusual_uas.h .
+
+Hi Mario,
+
+On Tue, Jan 16, 2024 at 09:00:03PM -0600, Mario Limonciello wrote:
+> On 1/15/2024 12:55, Christian A. Ehrhardt wrote:
+> > 
+> > Hi Heikki,
+> > 
+> > sorry to bother you again with this but I'm afraid there's
+> > a misunderstanding wrt. the nature of the quirk. See below:
+> > 
+> > On Thu, Jan 04, 2024 at 01:59:02PM +0200, Heikki Krogerus wrote:
+> > > Hi Christian,
+> > > 
+> > > On Wed, Jan 03, 2024 at 11:06:35AM +0100, Christian A. Ehrhardt wrote:
+> > > > I have a DELL Latitude 5431 where typec only works somewhat.
+> > > > After the first plug/unplug event the PPM seems to be stuck and
+> > > > commands end with a timeout (GET_CONNECTOR_STATUS failed (-110)).
+> > > > 
+> > > > This patch fixes it for me but according to my reading it is in
+> > > > violation of the UCSI spec. On the other hand searching through
+> > > > the net it appears that many DELL models seem to have timeout problems
+> > > > with UCSI.
+> > > > 
+> > > > Do we want some kind of quirk here? There does not seem to be a quirk
+> > > > framework for this part of the code, yet. Or is it ok to just send the
+> > > > additional ACK in all cases and hope that the PPM will do the right
+> > > > thing?
+> > > 
+> > > We can use DMI quirks. Something like the attached diff (not tested).
+> > > 
+> > > thanks,
+> > > 
+> > > -- 
+> > > heikki
+> > 
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> > > index 6bbf490ac401..7e8b1fcfa024 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
+> > > +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> > > @@ -113,18 +113,44 @@ ucsi_zenbook_read(struct ucsi *ucsi, unsigned int offset, void *val, size_t val_
+> > >   	return 0;
+> > >   }
+> > > -static const struct ucsi_operations ucsi_zenbook_ops = {
+> > > -	.read = ucsi_zenbook_read,
+> > > -	.sync_write = ucsi_acpi_sync_write,
+> > > -	.async_write = ucsi_acpi_async_write
+> > > -};
+> > > +static int ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
+> > > +				const void *val, size_t val_len)
+> > > +{
+> > > +	u64 ctrl = *(u64 *)val;
+> > > +	int ret;
+> > > +
+> > > +	ret = ucsi_acpi_sync_write(ucsi, offset, val, val_len);
+> > > +	if (ret && (ctrl & (UCSI_ACK_CC_CI | UCSI_ACK_CONNECTOR_CHANGE))) {
+> > > +		ctrl= UCSI_ACK_CC_CI | UCSI_ACK_COMMAND_COMPLETE;
+> > > +
+> > > +		dev_dbg(ucsi->dev->parent, "%s: ACK failed\n", __func__);
+> > > +		ret = ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
+> > > +	}
+> > 
+> > Unfortunately, this has the logic reversed. The quirk (i.e. the
+> > additional UCSI_ACK_COMMAND_COMPLETE) is required after a _successful_
+> > UCSI_ACK_CONNECTOR_CHANGE. Otherwise, _subsequent_ commands will timeout
+> > (usually the next GET_CONNECTOR_CHANGE).
+> > 
+> > This means the quirk must be applied _before_ we detect any failure.
+> > Consequently, the quirk has the potential to break working systems.
+> > 
+> > Sorry, if that wasn't clear from my original mail. Please let me know
+> > if this changes how you want the quirks handled.
+> > 
+> >       Thanks    Christian
+> > 
 > 
-> Can you create a patch for this so that you get credit for the making
-> the fix?
-> 
-> thanks,
-> 
-> greg k-h
+> For the problematic scenario have you tried to play with it a bit to see if
+> it's too short of a timeout (raise timeout) or to output the response bits
+> to see if anything else surprising is sent?
 
-Replying to this since I did not get the original post.
-0bda:9210 is a Realtek USB 3 to pcie chip used by umpteen
-enclosure manufacturers.
-I have got one from Orico and it works ok under both linux and MSWin but 
-it can be a bit finicky if it doesn't get enough power, it may for 
-instance work well with an earlier (slower) type of NVME SSD but not 
-with a later faster type unless you provide external power to it (usb 
-hub + power adapter).
+It is not a problem with the timeout. Waiting forever in this case
+doesn't help. IMHO this is actually a bug in the PPM, i.e. in Dell's
+bios.
 
-Slowing down all RTL9120 already in the market with this quirk is in my 
-humble opinion not a realistic solutio.
+Sending an ack after the timeout fixes things, though.
 
-tnx
+> Does it always fail on the same command, or does it happen to a bunch of
+> them?
 
-/Lars
+It always fails on the first command after UCSI_ACK_CC_CI for a
+connector change. However, there might be no such command if the
+next event is a notification.
+
+I did play around with it a bit more and came up with a way to
+probe for the issue:
+
+    https://lore.kernel.orgorg/all/20240116224041.220740-1-lk@c--e.de/   
+
+regards    Christian
+
 
 
