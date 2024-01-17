@@ -1,164 +1,179 @@
-Return-Path: <linux-usb+bounces-5161-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5163-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50F3A8303CC
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 11:44:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A29A98303F7
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 11:55:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E17BC1F26A24
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 10:44:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25DFB1F25BEB
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 10:55:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB6E419BA2;
-	Wed, 17 Jan 2024 10:44:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31D511CAB6;
+	Wed, 17 Jan 2024 10:55:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DIiCOj/Z"
+	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="Y80toRAW";
+	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="t+n8lC+5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A14614296
-	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 10:44:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D735714AA5;
+	Wed, 17 Jan 2024 10:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.121.71.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705488274; cv=none; b=iU3b6/GNF8W/L6oQLmY1UCWFE6RloiMKwll7sI689MwadMaGYdUyt0BFsZA6QPZqRaxqFq2AQAZ2/YVcPGhPUP16bH7ZNiS5L3UDjOrzrmIEjK+Ek1zXjaFVseOuzRDiMOZiJyWptVlDYCzOEAMTpK8NMoHiMcCMOoUnn/pgm1g=
+	t=1705488922; cv=none; b=NW/09ZXO1kdIMweXFCmWwtk+8i3WS8A6bQwGD3CF+B3Br9R5EAORJFw4Lr2blRYcYAr9CWN4oL+g2N9urTyQb8HqLwv7vwz39fQ87yhuemx5N/TCBeNbGYA3qLfNpvDpQCEMgm2Yv/8SKc2tBqrIPhgir8ZaKQ4cft8QbDM5HXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705488274; c=relaxed/simple;
-	bh=f7bvVGg4ClA0lc3B0+sXSbtzPtfsowE1WV0rFndqT6s=;
-	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
-	 X-IronPort-AV:X-IronPort-AV:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Content-Language:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding; b=t02cXRgatj2OPIV9bU74X7CWfoN/rNyfR8Ns1l8GmNJnPWmR5XwZ+o0QCljQTDkfpWGgWQZvZnZ8tLpJt6sinOVZ1Lyg4+WsokMsu/N50HKcX/1oDXBVewcPJbmuO/suw3vTCGPXqM7KuH/qovWiuuBUO49Bb+8isKy4EQmQfXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DIiCOj/Z; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705488272; x=1737024272;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=f7bvVGg4ClA0lc3B0+sXSbtzPtfsowE1WV0rFndqT6s=;
-  b=DIiCOj/ZjZib1gen3v9lx0GBv50eTzTxhP8Knjd7VzKA2YLvS5vi/SfB
-   WSSTAxj7Tzt3Cl09e/OMGn8PzBl2L+wsmUYrLTo0u3NJFzow8w9X3qXnz
-   oqO0pc6xKFA9k+EiswLkb6OCQw2OoDH3NWGWUOKnuQtMSOuniFdlf1GSS
-   XJCwrhHSX9YGnqBDxWb9FmwjDTRW/auLtoenDimqf2ioGT0dMEnnrc+LR
-   wEHHd4QW8JKraSWyPqqPLllsReeJfxqTCob6BEu4oyw4K8Kiy3GmCJEzM
-   Md+XPw9MZfhltnwIK1dQX2HwDYIP77t1l5GyS53wunQ2bxAb+nkk2VQxg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="7513281"
-X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
-   d="scan'208";a="7513281"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2024 02:44:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="874786839"
-X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
-   d="scan'208";a="874786839"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Jan 2024 02:44:29 -0800
-Message-ID: <f6542354-d6d1-be22-82ed-5dfa57aa8337@linux.intel.com>
-Date: Wed, 17 Jan 2024 12:46:00 +0200
+	s=arc-20240116; t=1705488922; c=relaxed/simple;
+	bh=X7ri6/DC7dQ0k7GmkIF8uzW4YU+DeXLsZrOtnLLUppM=;
+	h=Received:DKIM-Signature:X-Spam-Checker-Version:X-Spam-Level:
+	 X-Spam-Status:Received:DKIM-Signature:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To; b=ehmvPuxaPYzQV4ZxmFiOILtNlKiS1vv8HsDm4smKV7DrH+wNMCS9jzJa0z2qGr4pRWR6FsgGADmxoBVN5CP4IVxZAYV67WLnaHvMfdnwOM4NpWCJv9yXwJ26tf91bsEzUqbABjZNUVDCb5a5wVJKpAKfqEYxypI7y7TV1PcROBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=Y80toRAW; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=t+n8lC+5; arc=none smtp.client-ip=91.121.71.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
+Received: by nautica.notk.org (Postfix, from userid 108)
+	id D3D05C020; Wed, 17 Jan 2024 11:55:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+	t=1705488917; bh=QPQ1kHwkpR/bSo/5dfdZfVGrQA0NVwMsugmiUUBqUUA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y80toRAWRVoIuFVFMKt8O9CH9+xIjHlZIcq0xVi94TZUHBF9cwWdav3kqOXFW9J/U
+	 k8RaIOlzOZc0z/7MJ4MqxnKiO9m0DEQ7TdvvpvcZH44Q1CsJXDOpOfHJaeZrBltCtZ
+	 /ltzVpUFNJpTg75NCLpAVWwTW9IPwiGyXnU+aKDtUbgdmZjb+/mmyg0D3ERy9O3KUL
+	 KeGqo3jtpMDeDZX1JClvR9uGV9vM7BlvpqpEyeeYIXd/mu1sGy8SKUxUKZAo6dhByx
+	 MiTx+tLd2cptwL8pHDLbjQ/gWRnW8h4veeWdpUFffxclpnhYHpYnih2T0l69Ys0XJf
+	 H3NYWSe98cZCw==
+X-Spam-Level: 
+Received: from gaia.codewreck.org (localhost [127.0.0.1])
+	by nautica.notk.org (Postfix) with ESMTPS id 1EC8DC009;
+	Wed, 17 Jan 2024 11:55:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+	t=1705488916; bh=QPQ1kHwkpR/bSo/5dfdZfVGrQA0NVwMsugmiUUBqUUA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=t+n8lC+5sdDFiHuENr4ruAOhrP5KsC2TfPzE81RyUjeCaSeWq1Dg/N1SuVOBLU2wZ
+	 I01/y48CGIUHlPrJqda07B7OR1HfSzbXAy7LnjE3JBYZx0RJdUQtGBx3QNeGyecCee
+	 d8XqzNq5hdZmQHtk0uAnxxBuVXEUiQcK5k9n0dLNk5rDtC9QSK4F78HD0C4r58yLMq
+	 NlHGvCDqQ9UNxn8MdSvQcxv0gn/OxysVNbNSTao35v8v+r12I3GbnpxD4lyu4p9gr4
+	 1YPEFUO6ItprrRyMSqSKD23o+ZU/dQfP8uTFpNqWozhLSRZeynqlqq8oSkp1cbkm5y
+	 JuP4s6mfnz8zw==
+Received: from localhost (gaia.codewreck.org [local])
+	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id 9ed4a2fc;
+	Wed, 17 Jan 2024 10:55:08 +0000 (UTC)
+Date: Wed, 17 Jan 2024 19:54:53 +0900
+From: Dominique Martinet <asmadeus@codewreck.org>
+To: Jan =?utf-8?B?TMO8YmJl?= <jlu@pengutronix.de>
+Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Latchesar Ionkov <lucho@ionkov.net>, linux-usb@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	v9fs@lists.linux.dev,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel@pengutronix.de, Eric Van Hensbergen <ericvh@kernel.org>
+Subject: Re: [PATCH 0/3] usb: gadget: 9pfs transport
+Message-ID: <Zaex_fkKcui7QZd7@codewreck.org>
+References: <20240116-ml-topic-u9p-v1-0-ad8c306f9a4e@pengutronix.de>
+ <ZaZsUQUhSlMPLJg0@codewreck.org>
+ <0aba51a8be0fb165b44ec956bec7a9698a9518a2.camel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: =?UTF-8?Q?Micha=c5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org
-References: <20240115172709.0b6f2bba@foxbook>
- <20240116153618.2527463-1-mathias.nyman@linux.intel.com>
- <20240116232045.76da750b@foxbook>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFT PATCH] xhci: process isoc TD properly when there was an
- error mid TD.
-In-Reply-To: <20240116232045.76da750b@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <0aba51a8be0fb165b44ec956bec7a9698a9518a2.camel@pengutronix.de>
 
-On 17.1.2024 0.20, Michał Pecio wrote:
-> I applied your patch on v6.7 and it appears to be working. It removes
-> the disconnection spam and also handles intermittent transmission errors
-> on UVC without obvious glitches or errors messages, except one xhci_dbg
-> added to confirm that I'm really hitting this edge case.
+Jan Lübbe wrote on Tue, Jan 16, 2024 at 04:51:41PM +0100:
+> > So I didn't have time to look at everything through, just want to make
+> > sure, this series allows sharing data from an usb gadget (e.g. some
+> > device with storage) over 9p as an alternative to things like MTP ?
 > 
-> Anything else that might be worth testing?
+> It's the other way around. :) The USB host exports a filesystem, while the
+> gadget on the USB device side makes it mountable. Our main use-case is to use it
+> as an alternative to NFS root booting during the development of embedded Linux
+> devices. NFS root works in many cases, but has some downsides, which make it
+> cumbersome to use in more and more cases.
+
+Oh!
+Okay, this makes a lot more sense. And that'll need a bit more
+explanations in the commits & Documentation/ as you've concluded :)
+
+
+> NFS root needs correctly configured Ethernet interfaces on both the development
+> host and the target device. On the target, this can interfere with the network
+> configuration that is used for the normal device operation (DHCP client, ...).
+> For the host, configuring a NFS (and perhaps DHCP) server can be an obstacle.
 > 
+> For target devices which don't have a real Ethernet interface, NFS root would
+> also work with the USB Ethernet gadget, but this increases the complexity
+> further.
 > 
-> I have a question, though. What happens if there is no next TD because
-> a mid TD error has occured on the last packet queued by the client? Is
-> there any mechanism to retire that stuck TD on a NEC host which submits
-> one mid TD error event and then goes silent?
-
-In disconnect cases usb core should flush the remaining URBs once
-roothub code notices the disconnect.
-
-But yes, if the last TD in a URB is a multi TRB isoc TD, and it has an error
-MID TD then its stuck until timeout.
-
+> As many embedded boards have a USB device port anyway, which is used during
+> development for uploading the boot-loader and to flash filesystem images (i.e.
+> via the fastboot protocol), we want to just reuse that single data cable to
+> allow access to the root filesystem as well. 
 > 
-> Would it be possible to retire the TD right after the first failed TRB?
-> (I imagine difficulties in determining when exactly the host has moved
-> its internal pointer past the remaining TRBs so they can be reused).
+> Compared to flashing images, using a network filesystem like NFS and 9P reduces
+> the time between compiling on the host and running the binary on the target, as
+> no flash and reboot cycle is needed. That can get rid of many minutes of waiting
+> over a day. :)
 
-Probably not as a normal error handling routine.
-We have the same "Transfer event TRB DMA ptr not part of current TD" issue
-for hosts that do issue an event for the last TRB.
+My other hat is on embedded development (dayjob at Atmark Techno[1], the
+only english page linked is about 4 years out of date but I guess it's
+better than no page at all), so I can understand where you're coming
+from -- thanks for the background.
 
-If the TD is given back immediately we also have a memory issue as the
-DMA address pointed to by that last TRB might be accessed by the controller
-_after_ driver gave back the TD, and possibly freed/unmapped it.
+[1] https://www.atmark-techno.com/english
 
-But for that special case where there are no more TDs queued it might
-make sense
+That means I'll actually want to test this, but kind of always busy so
+it might take a few weeks...
+Or better, do you happen to know if qemu can create a USB controller
+that supports OTG so it'll be easy to test for folks with no such
+hardware?
+We've got enough 9p protocols that aren't actually tested on a regular
+basis, it'd be great if we could have something that can run anywhere. 
 
+
+> diod (9pfs server) and the forwarder are on the development host, where the root
+> filesystem is actually stored. The gadget is initialized during boot (or later)
+> on the embedded board. Then the forwarder will find it on the USB bus and start
+> forwarding requests.
 > 
-> 
->> -			if (!ep->skip ||
->> -			    !usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
->> +			if (ep->skip && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
-> I like this. I would suggest another cleanup: the if(!ep_seg && stuf)
-> right above your change could be pulled inside if(!ep_seg).
+> It may seem a bit unusual that in this case the requests come from the device
+> and are handled by the host. The reason is that USB device ports are normally
+> not available on PCs, so a connection in the other direction would not work.
 
-Noticed the same, but for stable kernel reasons it's probably better to limit
-this patch to mostly fixing this bug.
+Right, most host PCs won't have OTG available...
+I was also perplexed by the linux foundation (0x1d6b):0x0109 id, that
+might be clearer once it's properly documented -- I'll let someone from
+the usb side chime on this as I have no idea what's appropriate.
 
-> 
-> 
->> +			 * if there was an error event mid TD then host may not
->> +			 * give an event for the last TRB on an isoc TD.
->> +			 * This event can be for the next TD, See xHCI 4.9.1.
-> This seems to suggest that 4.9.1 encourages such behavior, but the
-> opposite is the case as far as I understand.
 
-I'll rephrase this.
+> In the future, the functionality of the forwarder could be integrated into the
+> 9pfs server. Alternatively, an improved forwarder could also react to udev
+> events of gadgets showing up and forward them to different 9PFS server over the
+> network (when you have multiple target devices connected to one USB host).
 
-> 
-> 
->> +			if (td->error_mid_td) {
->> +				struct xhci_td *td_next = list_next_entry(td, td_list);
-> This if needs && !list_is_last(&td->td_list, &ep_ring->td_list).
+Plenty of potential work ahead :)
+Frankly at this stage I don't think it's much simpler than e.g. CDC
+ethernet gadget and mounting nfs over tcp, but with further improvements
+it can definitely get simpler.
 
-Thanks, nice catch, good point.
 
-> 
-> Otherwise a serious bug in the host (maybe in the driver too) tricks
-> us into grabbing a pointer to ep_ring instead, filling the subsequent
-> "TRB not part of current TD" message with mystifying garbage numbers.
-> 
-> 
->> +				if (ep_seg) {
->> +					/* give back previous TD, start handling new */
-> Suggested:
->> +					xhci_dbg(xhci, "Missing completion event after mid TD error\n");
+> Perhaps, the inverse setup (9PFS server on the USB gadget side, mounted on a PC)
+> also would be useful in the future and could share some of this code. Then,
+> you'd have an alternative to MTP.
 
-Makes sense.
+(Yeah, I'm not actively looking for that -- was just asking because MTP
+has been kind of dead lately and I'm not aware of any potential
+alternative, but I didn't go looking for them either -- let's leave that
+to later)
 
-Thanks
-Mathias
-
+-- 
+Dominique Martinet | Asmadeus
 
