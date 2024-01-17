@@ -1,240 +1,97 @@
-Return-Path: <linux-usb+bounces-5168-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5169-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B28EB8304F9
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 13:10:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 096CA83050A
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 13:17:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BA8028894F
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 12:10:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA7BD1F2591B
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 12:17:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A5AA1DFE7;
-	Wed, 17 Jan 2024 12:09:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DFB31DFE5;
+	Wed, 17 Jan 2024 12:17:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="U8AlA84k"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YstKBRn8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from aposti.net (aposti.net [89.234.176.197])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBFC1DFCF;
-	Wed, 17 Jan 2024 12:09:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1371DFCD
+	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 12:16:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705493393; cv=none; b=RABArmMrwK/ZJTd3WK5wTPmmjnNGfLPO+OHmu2yLC2ZXPXWUXHFAQ2G1YScATZWqWIWBY21xy0s3OMxuhbLJSNC/zoOT7riGDuuf+v0ju38qBKohDKd7NJATS2u73BV2Yab0YrXGBeOzonGzJJ5ano6IDHsv93bbz86L8hzpOLs=
+	t=1705493821; cv=none; b=YbFY+xfFImBY6MM22DSV0xFTpIE+Vvtm84S0lWdjNQfMqy35ndaxfWkGQw/HbwnXjRE4E7r5FLNzaT4GfZ/0BkXxC85KghePLNoiLunyDrQKJvDr4WwLoZTkrH59VAN3HCuvKwK1UuNzhHxni5RLNdxeJkoFK8I2tRcABmoycXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705493393; c=relaxed/simple;
-	bh=eAUPGmwVUxQVs8BO6mc3v/3UdbiY25Zj8A255TdtQdY=;
-	h=DKIM-Signature:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
-	 References:Autocrypt:Content-Type:Content-Transfer-Encoding:
-	 MIME-Version; b=TB8wtB7GzpmitAwWbVXBzsli0q+CJi80ZmgbVgFo71IIW9kSSWtUTnqXsnYw6FOnlxCRKDhsJW8Adk8zDttBWIB82OANxx7+O0TZR2CSzLkMeNU24OHFJwVXGDunk1KCmi7fLLJkgoabzzEXIcHgqOJ20VUFsPe5tNMXEUY2IUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=U8AlA84k; arc=none smtp.client-ip=89.234.176.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1705493382;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=eAUPGmwVUxQVs8BO6mc3v/3UdbiY25Zj8A255TdtQdY=;
-	b=U8AlA84klRlnjcH59h4TKcN/vh5m4kHbbeoDnBPlx4SFfSyO2UfAU8givJIif68KKEnB4e
-	joC7uWn1VXtL5cOXBoBjAjnfw111Gh4nkicSLgOpJKGRjsWEdUF/crtYEr7ENZpZ+0+6Rr
-	Ic0eHnXR6ZrOLPJHWAuVm9krBvdohdo=
-Message-ID: <35a9d8ae152deea8a79392bb4b2a9b2053daae92.camel@crapouillou.net>
-Subject: Re: [PATCH v3 4/4] Documentation: usb: Document FunctionFS DMABUF
- API
-From: Paul Cercueil <paul@crapouillou.net>
-To: Vegard Nossum <vegard.nossum@oracle.com>, Greg Kroah-Hartman
-	 <gregkh@linuxfoundation.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	Christian =?ISO-8859-1?Q?K=F6nig?=
-	 <christian.koenig@amd.com>, Jonathan Corbet <corbet@lwn.net>
-Cc: Jonathan Cameron <jic23@kernel.org>, Nuno =?ISO-8859-1?Q?S=E1?=
- <noname.nuno@gmail.com>, Michael Hennerich <Michael.Hennerich@analog.com>, 
- Andrzej Pietrasiewicz <andrzej.p@collabora.com>, linux-usb@vger.kernel.org,
- linux-doc@vger.kernel.org,  linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org,  dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org
-Date: Wed, 17 Jan 2024 13:09:40 +0100
-In-Reply-To: <9712abdd-cbca-4ad6-b1e9-ff9bf054b278@oracle.com>
-References: <20240108120056.22165-1-paul@crapouillou.net>
-	 <20240108120056.22165-5-paul@crapouillou.net>
-	 <9712abdd-cbca-4ad6-b1e9-ff9bf054b278@oracle.com>
-Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
- keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZMLQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5UzFZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtNz8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe+rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIPdlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7Urf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KFlBwgAhlGy6nqP7O3u7q23hRW5AQ0EXQqFwQEIAMo+MgvYHsyjX3Ja4Oolg1Txzm8woj30ch2nACFCqaO0R/1kLj2VVeLrDyQUOlXx9PD6IQI4M8wy8m0sR4wV2p/g/paw7k65cjzYYLh+FdLNyO7IW
-	YXndJO+wDPi3aK/YKUYepqlP+QsmaHNYNdXEQDRKqNfJg8t0f5rfzp9ryxd1tCnbV+tG8VHQWiZXNqN7062DygSNXFUfQ0vZ3J2D4oAcIAEXTymRQ2+hr3Hf7I61KMHWeSkCvCG2decTYsHlw5Erix/jYWqVOtX0roOOLqWkqpQQJWtU+biWrAksmFmCp5fXIg1Nlg39v21xCXBGxJkxyTYuhdWyu1yDQ+LSIUAEQEAAYkBNgQYAQoAIBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsMAAoJEHPua9InSr1B4wsH/Az767YCT0FSsMNt1jkkdLCBi7nY0GTW+PLP1a4zvVqFMo/vD6uz1ZflVTUAEvcTi3VHYZrlgjcxmcGu239oruqUS8Qy/xgZBp9KF0NTWQSl1iBfVbIU5VV1vHS6r77W5x0qXgfvAUWOH4gmN3MnF01SH2zMcLiaUGF+mcwl15rHbjnT3Nu2399aSE6cep86igfCAyFUOXjYEGlJy+c6UyT+DUylpjQg0nl8MlZ/7Whg2fAU9+FALIbQYQzGlT4c71SibR9T741jnegHhlmV4WXXUD6roFt54t0MSAFSVxzG8mLcSjR2cLUJ3NIPXixYUSEn3tQhfZj07xIIjWxAYZo=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1705493821; c=relaxed/simple;
+	bh=OpJejToQx4K+knHEYte1vlfrkNX17TwI7s2cvuHEnbQ=;
+	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:MIME-Version:
+	 References:In-Reply-To:From:Date:Message-ID:Subject:To:Cc:
+	 Content-Type; b=CZVpiHYiU5K3qXQMwnyYFdAlrfaqMO33/2Gyebgh0ZWnQUEPKmQHpxfA+rrnwEQW+uxHj0d7HztUmyG4UXL5LNtlM7B82VgzG5Ty2zLRTgjbczPZZFpvp8Ck2WuFHiCdvb0TjkEgVA//Q97/pvTVyCgD9T2igEj34us7r4mvj2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YstKBRn8; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-429bdb17616so229091cf.0
+        for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 04:16:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1705493818; x=1706098618; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OpJejToQx4K+knHEYte1vlfrkNX17TwI7s2cvuHEnbQ=;
+        b=YstKBRn8esyrzF17VqqnquwfPv2J5O7vtIMGZspT39Uun1PgEy2L9ranfmmF5/59x9
+         6XzkZXKkIAi/kTub2n8JddwokjcbOa3z/kqHAIIwhtuQtomw0fc2K1rgVwf/pWewYElA
+         +Ma4AnD7AOqVrOtkKevo5QpxSaYT+GLLuwSN7fjZYf9zY9WyniFwxSC97Lrfi2SLyNew
+         nx8aG/ykmV3Zo0CfUPO5UpkzquAa3n3QnNjBbPJ1Zy034sBK6ZZTRJOURS1j0t3D1et6
+         VNmn3hJl9Gz7kWregzUnWiyFdjHTXTMeN2XAVkCbPYod1IEMZgMUpPkmAxTNiuf36QHi
+         npwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705493818; x=1706098618;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OpJejToQx4K+knHEYte1vlfrkNX17TwI7s2cvuHEnbQ=;
+        b=GY3L6nFpYFFhgjeHUHuq6Y2v9de1tvNh9Tjf1Ix3eCsPvKrLwbLOfsZsLe1gWhJoaO
+         v5nDKc6dN2t9r6N+3PAKre9TA3/6JJbfb8MdwSz9/OkzMyQPOfSCxRyG8hYXIwfOozJl
+         uigKxKCseeO9hNiNwAsjsIOKtwEQClIS0xgnSemv+2rcWXcV7Sgorq93+lz3EmlwYHvH
+         qxUqZMYNuSeVFLpuIkbBQVwJkob8L1DGTSvvutq78y11Pu5nafXTQ4vZUFjJ2SQLyAEo
+         BuBtXUWYHCyF0Sso9TPXzKzkfmPpQSVv0clyXnZVVyRiCa7RBpcxcPVFQcjSRM0dTs39
+         o6vw==
+X-Gm-Message-State: AOJu0YwuTi6KDkuw8uuhu5Q9Xg7lah99qedoZHxdYlx62zSGf/YE60K1
+	0rxQHaczTCekfV2Kz18Kno6MNkgUbDWFn1RaWfA1gRgBrw8Fe4AzZ/aLvWF+J3JlLN3ZSzoDY9e
+	0GP/pEOorrM39Mv4/54QCjnYXWoyTQDZOZlIt
+X-Google-Smtp-Source: AGHT+IGbkTp3VddTsYWxc3HXyEelUto79+MB2m+Pc8xfquBTdyaRHS8AqF3Ed1l4M4vyUINEDy5FtZlhuuyEIyuydLs=
+X-Received: by 2002:a05:622a:40c4:b0:429:c6bc:330c with SMTP id
+ ch4-20020a05622a40c400b00429c6bc330cmr150051qtb.14.1705493818526; Wed, 17 Jan
+ 2024 04:16:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240110095532.4776-1-quic_uaggarwa@quicinc.com>
+ <CAKzKK0qJOz_+pNAVAD8Ub6TZ9uhFOzuDC_bws9MVzxNa7RqYhA@mail.gmail.com>
+ <77ffee9a-cd77-6a09-10ee-bdf17bfca5ec@quicinc.com> <8ba84432-bd07-3e59-3638-924d5fadec30@quicinc.com>
+In-Reply-To: <8ba84432-bd07-3e59-3638-924d5fadec30@quicinc.com>
+From: Kuen-Han Tsai <khtsai@google.com>
+Date: Wed, 17 Jan 2024 20:16:31 +0800
+Message-ID: <CAKzKK0rjSxezNWfFg7gv4yWPga=_P27OA6O0OOVrHbiutJ53og@mail.gmail.com>
+Subject: Re: [RFC PATCH] usb: dwc3: gadget: Fix NULL pointer dereference in dwc3_gadget_suspend
+To: UTTKARSH AGGARWAL <quic_uaggarwa@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Vegard,
+> int ret = dwc3_gadget_soft_disconnect(dwc);
 
-Le mardi 09 janvier 2024 =C3=A0 14:08 +0100, Vegard Nossum a =C3=A9crit=C2=
-=A0:
-> On 08/01/2024 13:00, Paul Cercueil wrote:
-> > Add documentation for the three ioctls used to attach or detach
-> > externally-created DMABUFs, and to request transfers from/to
-> > previously
-> > attached DMABUFs.
-> >=20
-> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> >=20
-> > ---
-> > v3: New patch
-> > ---
-> > =C2=A0 Documentation/usb/functionfs.rst | 36
-> > ++++++++++++++++++++++++++++++++
-> > =C2=A0 1 file changed, 36 insertions(+)
->=20
-> Hi,
->=20
-> I'd like to point out that this file (usb/functionfs.rst) is
-> currently
-> included by Documentation/subsystem-apis.rst, the top-level file for
-> the
-> "Kernel subsystem documentation" set of books, which describe
-> internal
-> APIs: "These books get into the details of how specific kernel
-> subsystems work from the point of view of a kernel developer".
->=20
-> However, functionfs.rst (and especially your new additions) are
-> documenting a userspace API, so it really belongs somewhere in
-> Documentation/userspace-api/ -- that's where /proc, /sys, /dev and
-> ioctl
-> descriptions for userspace programmers belong.
+I'm not sure if the coding style in this line, where the declaration
+and assignment of a variable are combined, is considered good
+practice.
+The other parts look good to me.
 
-Agreed. Even the original content prior to my additions describe a
-userspace API.
-
->=20
-> I'm not NAKing the patch -- I just want to draw attention to this
-> discrepancy. Maybe we can separate the kernel-implementation details
-> (stuff about __init sections and stuff) from the new ioctl() info?
->=20
-> Looking at <https://docs.kernel.org/usb/> I see that there are many
-> other adjacent documents that are also not really documenting kernel
-> implementation details, rough categorization as follows:
->=20
-> USB support
-> -----------
->=20
-> - Linux ACM driver v0.16 =3D=3D> admin/user info
-> - Authorizing (or not) your USB devices to connect to the system =3D=3D>=
-=20
-> admin/user info
-> - ChipIdea Highspeed Dual Role Controller Driver =3D> admin/user info
-> - DWC3 driver =3D=3D> driver TODOs (can be moved into source code?)
-> - EHCI driver =3D=3D> technical info + driver details
-> - How FunctionFS works
-> - Linux USB gadget configured through configfs =3D=3D> userspace API +=
-=20
-> implementation
-> - Linux USB HID gadget driver =3D=3D> implementation + userspace API
-> - Multifunction Composite Gadget =3D=3D> technical + user info
-> - Linux USB Printer Gadget Driver =3D=3D> userspace API
-> - Linux Gadget Serial Driver v2.0 =3D=3D> user/admin + userspace API
-> - Linux UVC Gadget Driver =3D=3D> user/admin + userspace API
-> - Gadget Testing =3D=3D> user/admin + userspace API
-> - Infinity Usb Unlimited Readme =3D=3D> user/admin
-> - Mass Storage Gadget (MSG) =3D=3D> user/admin
-> - USB 7-Segment Numeric Display =3D=3D> user/admin
-> - mtouchusb driver =3D=3D> user/admin
-> - OHCI =3D=3D> technical info
-> - USB Raw Gadget =3D=3D> userspace API
-> - USB/IP protocol =3D=3D> technical info
-> - usbmon =3D=3D> user/admin + userspace API
-> - USB serial =3D=3D> user/admin + technical info
-> - USB references
-> - Linux CDC ACM inf
-> - Linux inf
-> - USB devfs drop permissions source
-> - Credits
->=20
-> By "admin/user info", I mean things that a user would have to do or
-> run
-> (e.g. modprobe + flags) to make use of a driver; "technical info" is
-> more like device specifications (transfer speeds, modes of operation,
-> etc.); "userspace API" is stuff like configfs and ioctls; "driver
-> details" is really implementation details and internal
-> considerations.
->=20
-> The last ones I don't even really know how to categorize.
->=20
-> I'm guessing nobody is really enthralled by the idea of splitting
-> Documentation/usb/ up like this?
->=20
-> =C2=A0=C2=A0 Documentation/admin-guide/usb/
-> =C2=A0=C2=A0 Documentation/driver-api/usb/ (this one actually exists alre=
-ady)
-> =C2=A0=C2=A0 Documentation/userspace-api/usb/
->=20
-> For the stuff that is _actually_ internal to a specific driver (so
-> not
-> useful for end users, not useful for admins, not generic USB info,
-> and
-> not useful for userspace programmers), I would honestly propose to
-> just
-> move it directly into the driver's source code, or, if the text is
-> obsolete, just get rid of it completely.
->=20
-> The distinction between user/admin and userspace API is pretty clear
-> (one is for end users, the other is for userspace _programmers_), but
-> it
-> can sometimes be hard to determine whether something falls in one or
-> the
-> other category.
->=20
-> In any case -- it looks like almost all of the usb/ directory does
-> not
-> document "how specific kernel subsystems work from the point of view
-> of
-> a kernel developer" so maybe we should just move the include to
-> userspace-api/ for now as an obvious improvement (if still not 100%
-> correct):
->=20
-> diff --git a/Documentation/subsystem-apis.rst=20
-> b/Documentation/subsystem-apis.rst
-> index 2d353fb8ea26..fe972f57bf4c 100644
-> --- a/Documentation/subsystem-apis.rst
-> +++ b/Documentation/subsystem-apis.rst
-> @@ -81,7 +81,6 @@ Storage interfaces
-> =C2=A0=C2=A0=C2=A0=C2=A0 security/index
-> =C2=A0=C2=A0=C2=A0=C2=A0 crypto/index
-> =C2=A0=C2=A0=C2=A0=C2=A0 bpf/index
-> -=C2=A0=C2=A0 usb/index
-> =C2=A0=C2=A0=C2=A0=C2=A0 PCI/index
-> =C2=A0=C2=A0=C2=A0=C2=A0 misc-devices/index
-> =C2=A0=C2=A0=C2=A0=C2=A0 peci/index
-> diff --git a/Documentation/userspace-api/index.rst=20
-> b/Documentation/userspace-api/index.rst
-> index 82f9dbd228f5..e60cd9174ada 100644
-> --- a/Documentation/userspace-api/index.rst
-> +++ b/Documentation/userspace-api/index.rst
-> @@ -41,6 +41,7 @@ Subsystem-specific documentation:
-> =C2=A0=C2=A0=C2=A0=C2=A0 tee
-> =C2=A0=C2=A0=C2=A0=C2=A0 isapnp
-> =C2=A0=C2=A0=C2=A0=C2=A0 dcdbas
-> +=C2=A0=C2=A0 ../usb/index
->=20
-> =C2=A0 Kernel ABIs: These documents describe the the ABI between the Linu=
-x
-> =C2=A0 kernel and userspace, and the relative stability of these
-> interfaces.
->=20
->=20
-> Thoughts?
-
-Makes sense to me. There's definitely some cleanup to be done in the
-USB documentation.
-
-> Vegard
-
-Cheers,
--Paul
+Thanks,
+Kuen-Han
 
