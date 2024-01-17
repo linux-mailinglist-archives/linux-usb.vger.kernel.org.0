@@ -1,148 +1,114 @@
-Return-Path: <linux-usb+bounces-5160-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5162-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 101E9830269
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 10:35:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C94B08303CE
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 11:45:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3B46285737
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 09:35:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C4AFB2285C
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jan 2024 10:45:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7818B1428D;
-	Wed, 17 Jan 2024 09:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DA1219BA5;
+	Wed, 17 Jan 2024 10:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="djKypmE2"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="aJf6qqZo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFD214A97;
-	Wed, 17 Jan 2024 09:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD7D14296
+	for <linux-usb@vger.kernel.org>; Wed, 17 Jan 2024 10:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.60.130.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705484120; cv=none; b=m/Z8g+2c7nyHnb2NtVxMS3tdsa9H+UJ4gEy0/lB/hcHitFjY0X7crZW5SjDnmy7aHPGGrRE/OXXfgCn2C4zlloedwg2eMglK7VHS7ED12C5VQx/UZENg5iHjs2524jCPxQZEZUpnyW+c1uXHAOR5hg9Xdpr3jNuZiYtxUKbCiGU=
+	t=1705488299; cv=none; b=hZkI+buAGM1eP3OQXihPzCmK19jYxoyKTDAykq2ZmIH2rzc7GNSic3IWz7NOD86vBoF4wppxEOE3xHrUNEo2aK2Y5yqIQRHSGSZ3XQ74ws1nk/G2XpYCNKQcFJQf0B7XYYK4dXjspbW3HnvdNiD+gpT9TqjDOHkkq3L4XRGyFhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705484120; c=relaxed/simple;
-	bh=x0Kcp/pwxTMh/ECqiJKT11P/bFTpgUJY8Nj46rmjhsQ=;
-	h=Received:DKIM-Signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:Content-Language:From:To:CC:
-	 References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Originating-IP:X-ClientProxiedBy:X-QCInternal:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-GUID:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details; b=DSg9alKAL1JkQoCqO4h/HNmgrm2qYS/axFAZYgFGKaZSxpX+qlJ2F2j5ik59cWQQwheJjDb2iXKyGf/yCf6VCRiWesSX0lyMM3q5dRgcwOU6+ygLirDgCKwIbZdDehXw07X/db6KDdt6SJKTdg0a0sLhMqmp1EHzXB+59Q3B4Zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=djKypmE2; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40H6n0nh000436;
-	Wed, 17 Jan 2024 09:35:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:from:to:cc:references
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=vMOS0DlzBel23A1Z1cIJQ4jSth1nNH9SdwsW3j+1mMY=; b=dj
-	KypmE2zjnI33oLWvCF+4H3OnMNrMKyx3M0PcAiCS3nR7Fx0zvW0HbVIvOFMBr+Ra
-	eKdyZ+UkHGp2O5sGxpgnJ6aR9WXZd/4hl0kn5V6nBzkknrP3HMYZKJc62WglhZeq
-	epTh0hfLhQCWu343un13/FKGynEKOSPadgkxDM0CHmU1phNGeH+WaZSv3sJ8ENym
-	KrI6IuAuEJ49d4w1j0UDIZRx80PCgpqNser2litrmc0IhLXysnhAXBn0nEt9v0Ap
-	Pxx3hov+FJysXrTpBjCgorfTmE4Fc47NiXZt0XpPpFjrzGkt8LV60PoX2xrbI96g
-	oOHtOXWjYfMMWq7MusCA==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vnrndaw1u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 09:35:14 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40H9ZD9N018617
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 09:35:13 GMT
-Received: from [10.218.39.189] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 17 Jan
- 2024 01:35:11 -0800
-Message-ID: <8ba84432-bd07-3e59-3638-924d5fadec30@quicinc.com>
-Date: Wed, 17 Jan 2024 15:05:07 +0530
+	s=arc-20240116; t=1705488299; c=relaxed/simple;
+	bh=hs880b/eAkQ5pFcZXxeUkW5aVNCWnQ9s1kCMMUQ3RDs=;
+	h=DKIM-Signature:Received:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:Content-Language:To:Cc:References:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding; b=gcjyOfKK0kBgF0kmY3PPa2fkunll7wLAwAuBRoTs3X29SVFZFSUDgS1gg919nLPMe94YpGzRZUISd5my/oOtSR1yb8I8EjA/ZkQNqF9extOGeaHKGIULRc8TlPqlCeYmIqoPdoQ4mazQwfkz0j4V2BzQ75oT4Dr3IN/OBzpp/P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=aJf6qqZo; arc=none smtp.client-ip=178.60.130.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=jzjKCLRJpMMgQnO1yLdJ8/DASMBJpbOZnqpwOgziowk=; b=aJf6qqZotKcoF+Z4rUkjVTYUA9
+	MHlbYRUYMevPNJK+Douzov7veVQjEvlvvwbbSULqeSHzSCK5RG8emQPxsKyRDnkZLnKknkdPG5w4n
+	m1eEDp4pLdl1ha6GQ0Akwl419q61NFnKTZMtDVIafczmApbQxe0g2nE4wJfUeWQMYPPh/WC6MhDBW
+	5CggZ7WiObDYqZ8PLeXYyc4LyA015r/cVV+Rr3Pp5l/L1GaSZQZhcT5zpWkNlsjPmHiNG9E85QtCe
+	0v8FsILxvBo5j4PcTRRCXcl61dTBNNOYXeRVtXEZAG0t6havZ5uNnSHDpCgbIh9u0B95OiJkaNyVj
+	b1FjQTTw==;
+Received: from [191.193.161.120] (helo=[192.168.1.60])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1rQ3PX-007Jae-4p; Wed, 17 Jan 2024 11:44:43 +0100
+Message-ID: <8b49285e-46de-c52a-ea8d-542c91ba4128@igalia.com>
+Date: Wed, 17 Jan 2024 07:44:33 -0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC PATCH] usb: dwc3: gadget: Fix NULL pointer dereference in
- dwc3_gadget_suspend
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] usb: dwc3: Fix spurious wakeup when port is on device
+ mode
 Content-Language: en-US
-From: UTTKARSH AGGARWAL <quic_uaggarwa@quicinc.com>
-To: Kuen-Han Tsai <khtsai@google.com>
-CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20240110095532.4776-1-quic_uaggarwa@quicinc.com>
- <CAKzKK0qJOz_+pNAVAD8Ub6TZ9uhFOzuDC_bws9MVzxNa7RqYhA@mail.gmail.com>
- <77ffee9a-cd77-6a09-10ee-bdf17bfca5ec@quicinc.com>
-In-Reply-To: <77ffee9a-cd77-6a09-10ee-bdf17bfca5ec@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _imoAAgSBlqQomJwOPibXrLFUxParQxb
-X-Proofpoint-ORIG-GUID: _imoAAgSBlqQomJwOPibXrLFUxParQxb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-17_04,2024-01-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 mlxscore=0 suspectscore=0 mlxlogscore=481 clxscore=1015
- adultscore=0 impostorscore=0 malwarescore=0 bulkscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401170066
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "balbi@kernel.org" <balbi@kernel.org>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "johan@kernel.org" <johan@kernel.org>,
+ "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+ "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+ "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+ Andrey Smirnov <andrew.smirnov@gmail.com>,
+ Vivek Dasmohapatra <vivek@collabora.com>,
+ "piyush.mehta@amd.com" <piyush.mehta@amd.com>,
+ "ray.huang@amd.com" <ray.huang@amd.com>
+References: <20231122165931.443845-1-gpiccoli@igalia.com>
+ <2dfbf5c9-dd38-c919-c604-618ad08ce456@igalia.com>
+ <20231205012336.mn7b7f4zypwcyv6w@synopsys.com>
+ <9efaed91-d246-cf3c-efc0-e866f88a943d@igalia.com>
+ <d85a5507-4d4a-9e60-fbd1-68b42afb2143@igalia.com>
+ <20240111020119.5u3k3csn3bi2zhtw@synopsys.com>
+ <849d11d9-9302-4d76-01b6-b5046f474fda@igalia.com>
+ <20240113013320.mrqqrdajrnw62kis@synopsys.com>
+ <54a9b6b6-ef41-f76a-43e0-a395adddb455@igalia.com>
+ <20240117003437.mxgo3ebxql4ftwjt@synopsys.com>
+From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20240117003437.mxgo3ebxql4ftwjt@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+On 16/01/2024 21:34, Thinh Nguyen wrote:
+> [...]
+> Please confirm that the STEAM DECK is soft-disconnected when you put it
+> in suspend. That's the current implementation of the dwc3. If not, then
+> it's possible the activity over the wire can wake up the STEAM DECK
+> since the controller is still active.
+> 
+
+Hi Thinh, apologies again but I don't understand the terminology.
+
+What do you mean by soft-disconnected? Do you have any suggestion on how
+should I check that?
 
 
-On 1/17/2024 2:52 PM, UTTKARSH AGGARWAL wrote:
+> If it is soft-disconnected, but the PME is still generated after system
+> suspend, can you check if that's also the case when physically
+> disconnected?
 >
-> On 1/17/2024 12:47 PM, Kuen-Han Tsai wrote:
->>>          ret = dwc3_gadget_soft_disconnect(dwc);
->>>          if (ret)
->>>                  goto err;
->> For improved readability, we can remove the goto statement and move
->> the error handling logic here.
->
-> Hi Kuen-Han,
->
-> Thanks for the suggestion.
-> Does this looks good to you ?
->
->    int ret = dwc3_gadget_soft_disconnect(dwc);if (ret) {        if 
-> (dwc->softconnect)            dwc3_gadget_soft_connect(dwc);
->
->        return ret;    }    spin_lock_irqsave(&dwc->lock, flags);    if 
-> (dwc->gadget_driver)  dwc3_disconnect_gadget(dwc); 
->  spin_unlock_irqrestore(&dwc->lock, flags);
 
-Sorry for the mistake.
+Again, what does it mean "physically disconnected"?
+Thanks,
 
-int ret = dwc3_gadget_soft_disconnect(dwc);
-
-if (ret) {
-
-       if (dwc->softconnect)
-
-                  dwc3_gadget_soft_connect(dwc);
-
-       return ret;
-
-}
-
-spin_lock_irqsave(&dwc->lock, flags);
-
-if (dwc->gadget_driver)
-
-        dwc3_disconnect_gadget(dwc);
-
-spin_unlock_irqrestore(&dwc->lock, flags);
-
+Guilherme
 
