@@ -1,150 +1,285 @@
-Return-Path: <linux-usb+bounces-5221-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5224-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4CAA831AD8
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 14:53:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAE4D831AEA
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 14:56:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 238CE1C2264D
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 13:53:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FACA1F26BE2
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 13:56:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E4402560F;
-	Thu, 18 Jan 2024 13:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECE9225759;
+	Thu, 18 Jan 2024 13:56:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iU/9viVW"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="DCy5RD1X"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075FF25603
-	for <linux-usb@vger.kernel.org>; Thu, 18 Jan 2024 13:53:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B56250EF
+	for <linux-usb@vger.kernel.org>; Thu, 18 Jan 2024 13:56:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705586009; cv=none; b=OlqdfgqIIRCzuHN5XFW1CQnFwU81O0TtdM5YUz6EIMMnH16PEihC4NBqeGo7bDld91M7QlnhlekDIcZ8JmPOIz5/Yqr/qLmhhbeQGjT3KDzW7dkPPB6z2lNHd5at/+dn88jXmPqMBjFqXPx4s8cEdd6GJ/wjR8KTppNkugVyT78=
+	t=1705586197; cv=none; b=jWT6wRjJ7zS0kCPipYb6O8imaSbOXu4hYSrM6cvwLxXIbjInW2IS54vgaDZ/Hun6Y1zJG3sqXn5v2IiCiYIV/BNzXL+yeSKD0F4baA5cctQsmnTbQWbVTo2GbkoYYKEJGkYovwDEade8maQK6K8Ai3quRg3szmHrJ7XyP69vEho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705586009; c=relaxed/simple;
-	bh=0IBU4zGZnYF1zeYc0kCHfKwqxqbcSd6t4RxCP4Aex9M=;
-	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
-	 X-IronPort-AV:X-IronPort-AV:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Content-Language:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding; b=T+5Stwd5k3r5aOmeDAQMyCG+e8rbNHtML3UpK2y/WZcFkF/vOy82dCZ+5Ea0HXK+Sr+VabbyRGKWZ1jE5QnpNQwUWaoTaWeygSw7B+niVIhp+QUS3iFUE+0X3HtefvuXNMevrdFRF3in+MIADHGYMnWMfoXpY1Rd86jt19jd6ww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iU/9viVW; arc=none smtp.client-ip=192.55.52.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705586008; x=1737122008;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=0IBU4zGZnYF1zeYc0kCHfKwqxqbcSd6t4RxCP4Aex9M=;
-  b=iU/9viVWvyK6AIakQwAGAiflWQm32AmagyE0ZMMiGPPfe6hmS3iKYYS7
-   GcqUDltBj0O2s1FrUuSG5FCmu1qet5sbudP+mtq7Etrkr9xc/YrEsKbrG
-   9VErWh5D8ICpRaNEi2czepu/pN8WBVB/v2GNqcSO1iBeHiLbJP6FuI5TM
-   nOIXFJGSCjNoaEsolhUsxrV0xMWqwgtV5bRre83/Jk5GX8iWQQoTG0rH8
-   IlNIWPOGzy2njSWA+no+VD/JRbJGhWBRI+1eXqhuoGoS6JJmG/B6iM+g6
-   lu9vOACZb7TtzPcpwSEQHqYm3MXkPokWyPiFOOMX5VJbAlptC+/hGsHqN
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="486600939"
-X-IronPort-AV: E=Sophos;i="6.05,201,1701158400"; 
-   d="scan'208";a="486600939"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2024 05:53:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="1115967274"
-X-IronPort-AV: E=Sophos;i="6.05,201,1701158400"; 
-   d="scan'208";a="1115967274"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Jan 2024 05:53:25 -0800
-Message-ID: <d9a72d01-0c8c-9dab-f405-268a66f47505@linux.intel.com>
-Date: Thu, 18 Jan 2024 15:54:55 +0200
+	s=arc-20240116; t=1705586197; c=relaxed/simple;
+	bh=XENZZjMay7uqo6mDnLdduSOCFOYnaOJgKY/1mLakCOY=;
+	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Date:
+	 From:To:Cc:Subject:Message-ID:Mail-Followup-To:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To:X-Operating-System; b=R9vGatCOu37iT2kr7w31YW77NYDFkxjZCTTiMPL2V7on+Uwb5kIg77R54iEpcGdeoECMZWId4GTzzUpBDY+05CRPHluvJYJaF2gbO4PRXNEKF3vPE1MXztmSd0gtA1dU6WSd0V39/YcWjeUD4zycflng12AmpkEGWVfL7Q3qvr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch; spf=none smtp.mailfrom=ffwll.ch; dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b=DCy5RD1X; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ffwll.ch
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-55369c59708so2609536a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jan 2024 05:56:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1705586194; x=1706190994; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1IYPJn/a5Pq896DlCmoRRTPqo91KrrT2prswIwfhJB8=;
+        b=DCy5RD1XI45COcXiZwojT9XkqPmRGlC6y7jizBLcLyoiCZc2SitiChNAux4cLHvYzh
+         uUG99ViafNzFniDG4VK/EDJPJJl/lbMMVG0oKFsJvOWfdfiSVj4jE3DK7VkzUPojeqaF
+         w0G1KBz1BNlz2lw3XRv8C8RoZUn7CJ9J33l3g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705586194; x=1706190994;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1IYPJn/a5Pq896DlCmoRRTPqo91KrrT2prswIwfhJB8=;
+        b=rmUvcZGH1g2dfh4BkfgauExFl/gHh0zMMeSc+T3MLrT+M6p5JDtDiX29M4vMN17/xb
+         cfgfCefJKxTKv3udVUdOECopqx87y2UCbsIxfqX5F6FH/Y9B++dQSklK31tXvBiQp4F0
+         SyR9I9AldDGh6JGc94caZMZTejyX4fDTk8uMNJKeLDAydLMl+NMYeBtYC1ik/0BuX95I
+         A0FqI1rontysm80/cfN2g/Qo075u2WfsJ9Mwk7rrsJBFjMqYVguJSeNAxkcSxmG7pTR0
+         9OlMNFGlHrA29UDlfuKDYnnTIAREpZyLTduadJ6lTUOwSxWN4jZ2yTg9RhPDAkrdsFay
+         GJFw==
+X-Gm-Message-State: AOJu0Yw83Arx1hVftxthMAbDAw08yZL2mySh18Nw/EdcSYr3DthH1SWA
+	XOpJbLq77Sjrhv8voEWdYpp8liw6cltAyTlJjvSz1Qlut+JbplmSffbT3Zr4u8c=
+X-Google-Smtp-Source: AGHT+IES5ZV4QCCgLR09qpduhC7CspLXmDi36kNXcd6+V3t2Mgj+wn13qQd63yjm97zOLA50AfGm1A==
+X-Received: by 2002:a17:906:817:b0:a2a:6916:60de with SMTP id e23-20020a170906081700b00a2a691660demr1148453ejd.4.1705586194329;
+        Thu, 18 Jan 2024 05:56:34 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id cd6-20020a170906b34600b00a2c8e9918casm8557605ejb.198.2024.01.18.05.56.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jan 2024 05:56:33 -0800 (PST)
+Date: Thu, 18 Jan 2024 14:56:31 +0100
+From: Daniel Vetter <daniel@ffwll.ch>
+To: Paul Cercueil <paul@crapouillou.net>
+Cc: Daniel Vetter <daniel@ffwll.ch>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+	linaro-mm-sig@lists.linaro.org,
+	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>, linux-media@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] usb: gadget: functionfs: Add DMABUF import
+ interface
+Message-ID: <ZakuD-ns-5UJmrRi@phenom.ffwll.local>
+Mail-Followup-To: Paul Cercueil <paul@crapouillou.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+	linaro-mm-sig@lists.linaro.org,
+	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>, linux-media@vger.kernel.org
+References: <20240108120056.22165-1-paul@crapouillou.net>
+ <20240108120056.22165-4-paul@crapouillou.net>
+ <ZZvtEXL8DLPPdtPs@phenom.ffwll.local>
+ <a44aca93adc60ce56a64c50797a029631900172e.camel@crapouillou.net>
+ <ZZwU827NMHbx7bsO@phenom.ffwll.local>
+ <2c0d4ef1b657c56ea2290fe16d757ce563a3e71b.camel@crapouillou.net>
+ <ZZxKvR9gjH8D5qxj@phenom.ffwll.local>
+ <31e56028b4d865c60b7c01b2a305b3dd8a21ff7a.camel@crapouillou.net>
+ <ZZ1Dx1Jqbi61_Afb@phenom.ffwll.local>
+ <c100b5f75b12de4a331dd36de3573483dbde915f.camel@crapouillou.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: =?UTF-8?Q?Micha=c5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: linux-usb@vger.kernel.org
-References: <20240115172709.0b6f2bba@foxbook>
- <20240116153618.2527463-1-mathias.nyman@linux.intel.com>
- <20240116232045.76da750b@foxbook>
- <f6542354-d6d1-be22-82ed-5dfa57aa8337@linux.intel.com>
- <20240117184905.1800b1cc@foxbook> <20240118120027.5bc498b5@foxbook>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: Isochronous error handling bug on VIA VL805
-In-Reply-To: <20240118120027.5bc498b5@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <c100b5f75b12de4a331dd36de3573483dbde915f.camel@crapouillou.net>
+X-Operating-System: Linux phenom 6.5.0-4-amd64 
 
-On 18.1.2024 13.00, MichaÅ‚ Pecio wrote:
-> I concurrently executed plan B for dealing with my NEC issues, which is
-> to simply order a host controller with other chip (VIA), and now I have
-> two controllers and three problems.
+On Mon, Jan 15, 2024 at 01:54:27PM +0100, Paul Cercueil wrote:
+> Hi Daniel / Sima,
 > 
-> One is that it sometimes "dies" and requires a reboot, probably nothing
-> Linux can do about it.
+> Le mardi 09 janvier 2024 à 14:01 +0100, Daniel Vetter a écrit :
+> > On Tue, Jan 09, 2024 at 12:06:58PM +0100, Paul Cercueil wrote:
+> > > Hi Daniel / Sima,
+> > > 
+> > > Le lundi 08 janvier 2024 à 20:19 +0100, Daniel Vetter a écrit :
+> > > > On Mon, Jan 08, 2024 at 05:27:33PM +0100, Paul Cercueil wrote:
+> > > > > Le lundi 08 janvier 2024 à 16:29 +0100, Daniel Vetter a écrit :
+> > > > > > On Mon, Jan 08, 2024 at 03:21:21PM +0100, Paul Cercueil
+> > > > > > wrote:
+> > > > > > > Hi Daniel (Sima?),
+> > > > > > > 
+> > > > > > > Le lundi 08 janvier 2024 à 13:39 +0100, Daniel Vetter a
+> > > > > > > écrit :
+> > > > > > > > On Mon, Jan 08, 2024 at 01:00:55PM +0100, Paul Cercueil
+> > > > > > > > wrote:
+> > > > > > > > > +static void ffs_dmabuf_signal_done(struct
+> > > > > > > > > ffs_dma_fence
+> > > > > > > > > *dma_fence, int ret)
+> > > > > > > > > +{
+> > > > > > > > > +	struct ffs_dmabuf_priv *priv = dma_fence-
+> > > > > > > > > >priv;
+> > > > > > > > > +	struct dma_fence *fence = &dma_fence->base;
+> > > > > > > > > +
+> > > > > > > > > +	dma_fence_get(fence);
+> > > > > > > > > +	fence->error = ret;
+> > > > > > > > > +	dma_fence_signal(fence);
+> > > > > > > > > +
+> > > > > > > > > +	dma_buf_unmap_attachment(priv->attach,
+> > > > > > > > > dma_fence-
+> > > > > > > > > > sgt,
+> > > > > > > > > dma_fence->dir);
+> > > > > > > > > +	dma_fence_put(fence);
+> > > > > > > > > +	ffs_dmabuf_put(priv->attach);
+> > > > > > > > 
+> > > > > > > > So this can in theory take the dma_resv lock, and if the
+> > > > > > > > usb
+> > > > > > > > completion
+> > > > > > > > isn't an unlimited worker this could hold up completion
+> > > > > > > > of
+> > > > > > > > future
+> > > > > > > > dma_fence, resulting in a deadlock.
+> > > > > > > > 
+> > > > > > > > Needs to be checked how usb works, and if stalling
+> > > > > > > > indefinitely
+> > > > > > > > in
+> > > > > > > > the
+> > > > > > > > io_complete callback can hold up the usb stack you need
+> > > > > > > > to:
+> > > > > > > > 
+> > > > > > > > - drop a dma_fence_begin/end_signalling annotations in
+> > > > > > > > here
+> > > > > > > > - pull out the unref stuff into a separate preallocated
+> > > > > > > > worker
+> > > > > > > > (or at
+> > > > > > > >   least the final unrefs for ffs_dma_buf).
+> > > > > > > 
+> > > > > > > Only ffs_dmabuf_put() can attempt to take the dma_resv and
+> > > > > > > would
+> > > > > > > have
+> > > > > > > to be in a worker, right? Everything else would be inside
+> > > > > > > the
+> > > > > > > dma_fence_begin/end_signalling() annotations?
+> > > > > > 
+> > > > > > Yup. Also I noticed that unlike the iio patches you don't
+> > > > > > have
+> > > > > > the
+> > > > > > dma_buf_unmap here in the completion path (or I'm blind?),
+> > > > > > which
+> > > > > > helps a
+> > > > > > lot with avoiding trouble.
+> > > > > 
+> > > > > They both call dma_buf_unmap_attachment() in the "signal done"
+> > > > > callback, the only difference I see is that it is called after
+> > > > > the
+> > > > > dma_fence_put() in the iio patches, while it's called before
+> > > > > dma_fence_put() here.
+> > > > 
+> > > > I was indeed blind ...
+> > > > 
+> > > > So the trouble is this wont work because:
+> > > > - dma_buf_unmap_attachment() requires dma_resv_lock. This is a
+> > > > somewhat
+> > > >   recent-ish change from 47e982d5195d ("dma-buf: Move
+> > > >   dma_buf_map_attachment() to dynamic locking specification"), so
+> > > > maybe
+> > > >   old kernel or you don't have full lockdep enabled to get the
+> > > > right
+> > > >   splat.
+> > > > 
+> > > > - dma_fence critical section forbids dma_resv_lock
+> > > > 
+> > > > Which means you need to move this out, but then there's the
+> > > > potential
+> > > > cache management issue. Which current gpu drivers just kinda
+> > > > ignore
+> > > > because it doesn't matter for current use-case, they all cache
+> > > > the
+> > > > mapping
+> > > > for about as long as the attachment exists. You might want to do
+> > > > the
+> > > > same,
+> > > > unless that somehow breaks a use-case you have, I have no idea
+> > > > about
+> > > > that.
+> > > > If something breaks with unmap_attachment moved out of the fence
+> > > > handling
+> > > > then I guess it's high time to add separate cache-management only
+> > > > to
+> > > > dma_buf (and that's probably going to be quite some wiring up,
+> > > > not
+> > > > sure
+> > > > even how easy that would be to do nor what exactly the interface
+> > > > should
+> > > > look like).
+> > > 
+> > > Ok. Then I'll just cache the mapping for now, I think.
+> > 
+> > Yeah I think that's simplest. I did ponder a bit and I don't think
+> > it'd be
+> > too much pain to add the cache-management functions for device
+> > attachments/mappings. But it would be quite some typing ...
+> > -Sima
 > 
-> The other is that it reports successful completion of the final TRB and
-> the driver overwrites frame->status set by prior errors. This seems to
-> only affect isochronous again, though I'm not 100% sure.
+> It looks like I actually do have some hardware which requires the cache
+> management. If I cache the mappings in both my IIO and USB code, it
+> works fine on my ZedBoard, but it doesn't work on my ZCU102.
 > 
+> (Or maybe it's something else? What I get from USB in that case is a
+> stream of zeros, I'd expect it to be more like a stream of
+> garbage/stale data).
 > 
-> This change on top of yours takes care of it for transaction errors.
+> So, change of plans; I will now unmap the attachment in the cleanup
+> worker after the fence is signalled, and add a warning comment before
+> the end of the fence critical section about the need to do cache
+> management before the signal.
 > 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index d2fe1f073e38..fce67493dfdf 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -2375,6 +2375,12 @@ static int process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
->   	/* handle completion code */
->   	switch (trb_comp_code) {
->   	case COMP_SUCCESS:
-> +		/* Check for earlier errors; see xHCI 4.9.1 */
-> +		if (td->error_mid_td) {
-> +			xhci_info(xhci, "Got SUCCESS after mid TD error\n");
-> +			/* don't overwrite previously assigned status */
-> +			break;
-> +		}
->   		if (remaining) {
->   			frame->status = short_framestatus;
->   			if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
-> 
-> 
-> Interesting questions arise:
-> 
-> 1. Should this be a separate patch?
+> Does that work for you?
 
-Added this to the original patch.
+The trouble is, I'm not sure this works for you. If you rely on the
+fences, and you have to do cache management in between dma operations,
+then doing the unmap somewhen later will only mostly paper over the issue,
+but not consistently.
 
-> 
-> 2. Are there any errors that may need error_mid_td treatment on NEC?
-> Maybe BABBLE or others, unfortunately it isn't easy for me to produce
-> them and see what happens.
+I think that's really bad because the bugs this will cause are very hard
+to track down and with the current infrastructure impossible to fix.
 
-Need to go through these, Isoc transfers should have as many error options as other types.
+Imo cache the mappings, and then fix the cache management bug properly.
 
-> 
-> 3. Are there any errors that may need "not success" treatment on VIA?
-> Any chance that these error sets aren't equal and I can't get away with
-> reusing your error_mid_td flag here?
-> 
+If you want an interim solution that isn't blocked on the dma-buf cache
+management api addition, the only thing that works is doing the operations
+synchronously in the ioctl call. Then you don't need fences, and you can
+guarantee that the unmap has finished before userspace proceeds.
 
-Need to look at this as well after getting the first patch done.
+With the dma_fences you can't guarantee that, it's just pure luck.
 
-I did play with the "error on last TD case",  patch for that is in a temp branch:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_missing_td_event
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=fix_missing_td_event&id=681415c02f95f6615a4d497df4b202a4f1fb0cc1
-
-But it might just add more code without any real world benefit so I
-think I won't send it upstream.
-
-Thanks
-Mathias
-
+Cheers, Sima
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
 
