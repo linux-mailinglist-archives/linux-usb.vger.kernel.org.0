@@ -1,296 +1,314 @@
-Return-Path: <linux-usb+bounces-5225-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5226-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ABEF831AF3
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 14:59:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC053831B0F
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 15:04:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CFF21C24C51
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 13:59:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D8571F28315
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 14:04:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 053C725765;
-	Thu, 18 Jan 2024 13:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E92C2577E;
+	Thu, 18 Jan 2024 14:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="jtLy3EIg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IrBy1KE5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047F025614
-	for <linux-usb@vger.kernel.org>; Thu, 18 Jan 2024 13:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F8825579;
+	Thu, 18 Jan 2024 14:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705586348; cv=none; b=nsvOlSpHqVyEhuZ+bFPsRUV/NneoSY1QBNvRbDdAMyM/UIPu14TnB50NCEG+Uw/KKOuxL4vcL83hjzIdwF58BYamJ60eYGLelY8JElcTi2NO5TCcTloQzkZclafhK8XEo/FZ0iStYMl2XMur5u+RxC6/QuaWmPIXyzHBWobmo58=
+	t=1705586671; cv=none; b=HdZI4/FFpEh3k3iQ9RRn17YMsVo/b6CARHI5N2i4EtBNPIk7X8nsQ5R/0Vq99fGBAY86++mWiy1sLs6NtYmX4i/TgB+K0QSIm3N0mMUJXjU2FPwwzGdFPZUJ9GzOgqDVLj9gj8l+L75J4VN9OU7T/VD4saGtFNAMfM1M2B6g5E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705586348; c=relaxed/simple;
-	bh=pj6efnGMFMsTwQBnJjUn/DtgXWlfinL+HAvFA6iW4gk=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Date:
-	 From:To:Subject:Message-ID:Mail-Followup-To:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To:X-Operating-System; b=akmHe2ILx1WqNvY7FaBCOUDuxH4eCRK1Ppa5iEGq2aICGRHHxFcx6mCAJIspPjLKOH80aj4o4srpetO7yUj2hmmZ4HUx+oS7OD4VlZ6wL7AslNWpr3jeSdpMLIWBCZSd3ikRVpJ8WF45VQ017OOYA807/Vttl+1iaK3uB7O+DUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch; spf=none smtp.mailfrom=ffwll.ch; dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b=jtLy3EIg; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ffwll.ch
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a2eb3f55e8bso54861966b.0
-        for <linux-usb@vger.kernel.org>; Thu, 18 Jan 2024 05:59:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1705586345; x=1706191145; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qjibwC0Pm0aKsecVEm1CI9Jop+u2Qm2VSXFGfFyZIo8=;
-        b=jtLy3EIg1uTplsxw+UWYJ1tGhoginBbrolTaL3SF4LSR0BIZVWsm/mtY/eZ5To+pwf
-         UCwk77sfrrjmEEvY9VoZ0S/qt4c+g6W1a/ZlTjEPXAios61QhnrjiHQm+za6wfwCh/12
-         KL37c2YKW9dYwwfS3cIjlZJulzZb9zoLVv4Jk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705586345; x=1706191145;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qjibwC0Pm0aKsecVEm1CI9Jop+u2Qm2VSXFGfFyZIo8=;
-        b=b21/svwxDIvpMPZuG3jDRsHENlwXgQuC4HZKIS81pnXXqn53ODj1D+Q9VdlyhWtd4A
-         BZC+rzn4vn33n7dZhOS760ah28ICh3sCYJnDSgMkK0fqacoXA1fOvAng9W03IXVY4fxb
-         7lm+gub/VzTaY3G3qvaP500jkbltG81MOuf427Y+q+xXBrCOuaXJK3r8+qEFSTezqxe8
-         ibAKbvq8fiJbI1e+uaB3jcKKdaFwBnXbFCZ1V4jA25+ZGgYJyk7wpqmWE/RAj+8H3A0C
-         RMdRIrV7yady+DCl8gxU+iZ//W7K0iPFlZSIyn2qdEWhbTTt3Tfijs29eOhH/gLl6J17
-         MPEA==
-X-Gm-Message-State: AOJu0YwVeanyqlNmxobmKAZjctAxaxjVPvz3N7Hz5lhuU4yJr5RlT3p8
-	Uv1/uNPGJ21g3pN6On02bo9kc3rHV/tH+NdpGW4Z0zv640CNn54j99D3ITkdzwrFlr0JsZye8rr
-	w
-X-Google-Smtp-Source: AGHT+IFY8Kxs594jsuK2rUy7WAVPHDnGECZOoMzsVJ25pNzJ9447ocIjSe/xC5v5/5dl598y8kCJ6A==
-X-Received: by 2002:a17:906:c352:b0:a28:ab63:db33 with SMTP id ci18-20020a170906c35200b00a28ab63db33mr1195735ejb.7.1705586345068;
-        Thu, 18 Jan 2024 05:59:05 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id t3-20020a170906608300b00a2c8dfa5c25sm8554918ejj.123.2024.01.18.05.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jan 2024 05:59:04 -0800 (PST)
-Date: Thu, 18 Jan 2024 14:59:02 +0100
-From: Daniel Vetter <daniel@ffwll.ch>
-To: Paul Cercueil <paul@crapouillou.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-	linaro-mm-sig@lists.linaro.org,
-	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
-	Jonathan Cameron <jic23@kernel.org>, linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] usb: gadget: functionfs: Add DMABUF import
- interface
-Message-ID: <Zakupp1GCZMk5aDT@phenom.ffwll.local>
-Mail-Followup-To: Paul Cercueil <paul@crapouillou.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-	linaro-mm-sig@lists.linaro.org,
-	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
-	Jonathan Cameron <jic23@kernel.org>, linux-media@vger.kernel.org
-References: <20240108120056.22165-4-paul@crapouillou.net>
- <ZZvtEXL8DLPPdtPs@phenom.ffwll.local>
- <a44aca93adc60ce56a64c50797a029631900172e.camel@crapouillou.net>
- <ZZwU827NMHbx7bsO@phenom.ffwll.local>
- <2c0d4ef1b657c56ea2290fe16d757ce563a3e71b.camel@crapouillou.net>
- <ZZxKvR9gjH8D5qxj@phenom.ffwll.local>
- <31e56028b4d865c60b7c01b2a305b3dd8a21ff7a.camel@crapouillou.net>
- <ZZ1Dx1Jqbi61_Afb@phenom.ffwll.local>
- <c100b5f75b12de4a331dd36de3573483dbde915f.camel@crapouillou.net>
- <ZakuD-ns-5UJmrRi@phenom.ffwll.local>
+	s=arc-20240116; t=1705586671; c=relaxed/simple;
+	bh=9lVuw0NTSAQ8gz21uvK06l+eBWHooCCeN+14mfp55nQ=;
+	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
+	 X-IronPort-AV:X-IronPort-AV:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=i5Rgc/fcGdYo25cYNoFR1iRkx3eFnw3P0+uoDywG+i7tu9tGYwNQWlDNO2BbFPA9Mf89dwJGbAuvYtlwBxV0bJl4RhO95da4+mMkhY3dsL51fKlpDppF+O9gtb/JlL173VCPjjx6rIzIwEIee81d8LeHyG+V6ZTA4ojouDZQrTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IrBy1KE5; arc=none smtp.client-ip=192.55.52.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705586668; x=1737122668;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9lVuw0NTSAQ8gz21uvK06l+eBWHooCCeN+14mfp55nQ=;
+  b=IrBy1KE5DOMH0Xc8vfSSRAGskUp//vnNGw4RchQkKtQA2S4FhY8PDZYU
+   +NSJqxniPegoFADTQ2G96QcqYkNT0LNzoFLsN+AHk/gIV+PVGm0lb3e4g
+   sZitBPoH8J9pi1o13ZT6L3+aZhsYGoijNa/p7YGNjizOLK4C6ruc8g9Yu
+   /wCJGJPmu11cuKBJkZpvJP4/+CF0RnAoWkaJrtK7ALRYI3pN/dtLiH03r
+   MTL4m5Gln5Y9oScTAvaoFrcqrqUNq3e9nTbdUxkuLqdSL2GOCZLWRjj8b
+   o8Q8h+Ya+OppPrjh6RShpKssuD78EIZNKkxac9rKz7Q9bPdUDd+JU4Z/V
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="431610081"
+X-IronPort-AV: E=Sophos;i="6.05,201,1701158400"; 
+   d="scan'208";a="431610081"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2024 06:04:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="957822907"
+X-IronPort-AV: E=Sophos;i="6.05,203,1701158400"; 
+   d="scan'208";a="957822907"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga005.jf.intel.com with SMTP; 18 Jan 2024 06:04:19 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 18 Jan 2024 16:04:17 +0200
+Date: Thu, 18 Jan 2024 16:04:17 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Haotien Hsu <haotienh@nvidia.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Utkarsh Patel <utkarsh.h.patel@intel.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Sing-Han Chen <singhanc@nvidia.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Wayne Chang <waynec@nvidia.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, WK Tsai <wtsai@nvidia.com>
+Subject: Re: [PATCH v6] ucsi_ccg: Refine the UCSI Interrupt handling
+Message-ID: <Zakv4Z2tWa4R5kOn@kuha.fi.intel.com>
+References: <20240118040034.2798629-1-haotienh@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZakuD-ns-5UJmrRi@phenom.ffwll.local>
-X-Operating-System: Linux phenom 6.5.0-4-amd64 
+In-Reply-To: <20240118040034.2798629-1-haotienh@nvidia.com>
 
-On Thu, Jan 18, 2024 at 02:56:31PM +0100, Daniel Vetter wrote:
-> On Mon, Jan 15, 2024 at 01:54:27PM +0100, Paul Cercueil wrote:
-> > Hi Daniel / Sima,
-> > 
-> > Le mardi 09 janvier 2024 à 14:01 +0100, Daniel Vetter a écrit :
-> > > On Tue, Jan 09, 2024 at 12:06:58PM +0100, Paul Cercueil wrote:
-> > > > Hi Daniel / Sima,
-> > > > 
-> > > > Le lundi 08 janvier 2024 à 20:19 +0100, Daniel Vetter a écrit :
-> > > > > On Mon, Jan 08, 2024 at 05:27:33PM +0100, Paul Cercueil wrote:
-> > > > > > Le lundi 08 janvier 2024 à 16:29 +0100, Daniel Vetter a écrit :
-> > > > > > > On Mon, Jan 08, 2024 at 03:21:21PM +0100, Paul Cercueil
-> > > > > > > wrote:
-> > > > > > > > Hi Daniel (Sima?),
-> > > > > > > > 
-> > > > > > > > Le lundi 08 janvier 2024 à 13:39 +0100, Daniel Vetter a
-> > > > > > > > écrit :
-> > > > > > > > > On Mon, Jan 08, 2024 at 01:00:55PM +0100, Paul Cercueil
-> > > > > > > > > wrote:
-> > > > > > > > > > +static void ffs_dmabuf_signal_done(struct
-> > > > > > > > > > ffs_dma_fence
-> > > > > > > > > > *dma_fence, int ret)
-> > > > > > > > > > +{
-> > > > > > > > > > +	struct ffs_dmabuf_priv *priv = dma_fence-
-> > > > > > > > > > >priv;
-> > > > > > > > > > +	struct dma_fence *fence = &dma_fence->base;
-> > > > > > > > > > +
-> > > > > > > > > > +	dma_fence_get(fence);
-> > > > > > > > > > +	fence->error = ret;
-> > > > > > > > > > +	dma_fence_signal(fence);
-> > > > > > > > > > +
-> > > > > > > > > > +	dma_buf_unmap_attachment(priv->attach,
-> > > > > > > > > > dma_fence-
-> > > > > > > > > > > sgt,
-> > > > > > > > > > dma_fence->dir);
-> > > > > > > > > > +	dma_fence_put(fence);
-> > > > > > > > > > +	ffs_dmabuf_put(priv->attach);
-> > > > > > > > > 
-> > > > > > > > > So this can in theory take the dma_resv lock, and if the
-> > > > > > > > > usb
-> > > > > > > > > completion
-> > > > > > > > > isn't an unlimited worker this could hold up completion
-> > > > > > > > > of
-> > > > > > > > > future
-> > > > > > > > > dma_fence, resulting in a deadlock.
-> > > > > > > > > 
-> > > > > > > > > Needs to be checked how usb works, and if stalling
-> > > > > > > > > indefinitely
-> > > > > > > > > in
-> > > > > > > > > the
-> > > > > > > > > io_complete callback can hold up the usb stack you need
-> > > > > > > > > to:
-> > > > > > > > > 
-> > > > > > > > > - drop a dma_fence_begin/end_signalling annotations in
-> > > > > > > > > here
-> > > > > > > > > - pull out the unref stuff into a separate preallocated
-> > > > > > > > > worker
-> > > > > > > > > (or at
-> > > > > > > > >   least the final unrefs for ffs_dma_buf).
-> > > > > > > > 
-> > > > > > > > Only ffs_dmabuf_put() can attempt to take the dma_resv and
-> > > > > > > > would
-> > > > > > > > have
-> > > > > > > > to be in a worker, right? Everything else would be inside
-> > > > > > > > the
-> > > > > > > > dma_fence_begin/end_signalling() annotations?
-> > > > > > > 
-> > > > > > > Yup. Also I noticed that unlike the iio patches you don't
-> > > > > > > have
-> > > > > > > the
-> > > > > > > dma_buf_unmap here in the completion path (or I'm blind?),
-> > > > > > > which
-> > > > > > > helps a
-> > > > > > > lot with avoiding trouble.
-> > > > > > 
-> > > > > > They both call dma_buf_unmap_attachment() in the "signal done"
-> > > > > > callback, the only difference I see is that it is called after
-> > > > > > the
-> > > > > > dma_fence_put() in the iio patches, while it's called before
-> > > > > > dma_fence_put() here.
-> > > > > 
-> > > > > I was indeed blind ...
-> > > > > 
-> > > > > So the trouble is this wont work because:
-> > > > > - dma_buf_unmap_attachment() requires dma_resv_lock. This is a
-> > > > > somewhat
-> > > > >   recent-ish change from 47e982d5195d ("dma-buf: Move
-> > > > >   dma_buf_map_attachment() to dynamic locking specification"), so
-> > > > > maybe
-> > > > >   old kernel or you don't have full lockdep enabled to get the
-> > > > > right
-> > > > >   splat.
-> > > > > 
-> > > > > - dma_fence critical section forbids dma_resv_lock
-> > > > > 
-> > > > > Which means you need to move this out, but then there's the
-> > > > > potential
-> > > > > cache management issue. Which current gpu drivers just kinda
-> > > > > ignore
-> > > > > because it doesn't matter for current use-case, they all cache
-> > > > > the
-> > > > > mapping
-> > > > > for about as long as the attachment exists. You might want to do
-> > > > > the
-> > > > > same,
-> > > > > unless that somehow breaks a use-case you have, I have no idea
-> > > > > about
-> > > > > that.
-> > > > > If something breaks with unmap_attachment moved out of the fence
-> > > > > handling
-> > > > > then I guess it's high time to add separate cache-management only
-> > > > > to
-> > > > > dma_buf (and that's probably going to be quite some wiring up,
-> > > > > not
-> > > > > sure
-> > > > > even how easy that would be to do nor what exactly the interface
-> > > > > should
-> > > > > look like).
-> > > > 
-> > > > Ok. Then I'll just cache the mapping for now, I think.
-> > > 
-> > > Yeah I think that's simplest. I did ponder a bit and I don't think
-> > > it'd be
-> > > too much pain to add the cache-management functions for device
-> > > attachments/mappings. But it would be quite some typing ...
-> > > -Sima
-> > 
-> > It looks like I actually do have some hardware which requires the cache
-> > management. If I cache the mappings in both my IIO and USB code, it
-> > works fine on my ZedBoard, but it doesn't work on my ZCU102.
-> > 
-> > (Or maybe it's something else? What I get from USB in that case is a
-> > stream of zeros, I'd expect it to be more like a stream of
-> > garbage/stale data).
-> > 
-> > So, change of plans; I will now unmap the attachment in the cleanup
-> > worker after the fence is signalled, and add a warning comment before
-> > the end of the fence critical section about the need to do cache
-> > management before the signal.
-> > 
-> > Does that work for you?
-> 
-> The trouble is, I'm not sure this works for you. If you rely on the
-> fences, and you have to do cache management in between dma operations,
-> then doing the unmap somewhen later will only mostly paper over the issue,
-> but not consistently.
-> 
-> I think that's really bad because the bugs this will cause are very hard
-> to track down and with the current infrastructure impossible to fix.
-> 
-> Imo cache the mappings, and then fix the cache management bug properly.
-> 
-> If you want an interim solution that isn't blocked on the dma-buf cache
-> management api addition, the only thing that works is doing the operations
-> synchronously in the ioctl call. Then you don't need fences, and you can
-> guarantee that the unmap has finished before userspace proceeds.
-> 
-> With the dma_fences you can't guarantee that, it's just pure luck.
+Hi,
 
-Maybe a follow up: Double check you really need the cache management
-between the dma operations from 2 different devices, and not for the cpu
-access that you then probably do to check the result.
+On Thu, Jan 18, 2024 at 12:00:34PM +0800, Haotien Hsu wrote:
+> With the Cypress CCGx Type-C controller the following error is
+> sometimes observed on boot:
+> [   16.087147] ucsi_ccg 1-0008: failed to reset PPM!
+> [   16.087319] ucsi_ccg 1-0008: PPM init failed (-110)
+> 
+> When the above timeout occurs the following happens:
+> 1. The function ucsi_reset_ppm() is called to reset UCSI controller.
+>    This function performs an async write to start reset and then
+>    polls for completion.
+> 2. An interrupt occurs when the reset completes. In the interrupt
+>    handler, the OPM field in the INTR_REG is cleared and this clears
+>    the CCI data in the PPM. Hence, the reset completion status is
+>    cleared.
+> 3. The function ucsi_reset_ppm() continues to poll for the reset
+>    completion, but has missed the reset completion event and
+>    eventually timeouts.
+> 
+> In this patch, we store CCI when handling the interrupt and make
+> reading after async write gets the correct value.
+> 
+> To align with the CCGx UCSI interface guide, this patch updates the
+> driver to copy CCI and MESSAGE_IN before they are reset when UCSI
+> interrupt acknowledged.
+> 
+> When a new command is sent, the driver will clear the old CCI to avoid
+> ucsi_ccg_read() getting wrong CCI after ucsi_ccg_async_write() when
+> the UCSI interrupt is not handled.
+> 
+> Finally, acking the UCSI_READ_INT interrupt before calling complete()
+> in ISR to ensure that the ucsi_ccg_sync_write() would wait for the
+> interrupt handling to complete.
+> 
+> ---
+> V1->V2
+> - Fix uninitialized symbol 'cci'
+> v2->v3
+> - Remove misusing Reported-by tags
+> v3->v4
+> - Add comments for op_lock
+> v4->v5
+> - Specify the endianness of registers in struct op_region
+> - Replace ccg_op_region_read() with inline codes
+> - Replace ccg_op_region_clean() with inline codes
+> - Replace stack memory with GFP_ATOMIC allocated memory in ccg_op_region_update()
+> - Add comments for resetting CCI in ucsi_ccg_async_write()
+> v5->v6
+> - Fix sparse warning: incorrect type in assignment
 
-Because if the issue is just cpu access, then protecting the cpu access
-needs to use the begin/end_cpu_access dma-functions (or the corresponding
-ioctl if you use mmap from userspace) anyway, and that should sort out any
-issues you have for cpu access.
+You need to put the changelog ..
 
-Just to make sure we're not needlessly trying to fix something that isn't
-actually the problem.
--Sima
+> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
+> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
+> ---
+
+.. here.
+
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 92 ++++++++++++++++++++++++++++---
+>  1 file changed, 84 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index 449c125f6f87..dda7c7c94e08 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -192,6 +192,12 @@ struct ucsi_ccg_altmode {
+>  	bool checked;
+>  } __packed;
+>  
+> +#define CCGX_MESSAGE_IN_MAX 4
+> +struct op_region {
+> +	__le32 cci;
+> +	__le32 message_in[CCGX_MESSAGE_IN_MAX];
+> +};
+> +
+>  struct ucsi_ccg {
+>  	struct device *dev;
+>  	struct ucsi *ucsi;
+> @@ -222,6 +228,13 @@ struct ucsi_ccg {
+>  	bool has_multiple_dp;
+>  	struct ucsi_ccg_altmode orig[UCSI_MAX_ALTMODES];
+>  	struct ucsi_ccg_altmode updated[UCSI_MAX_ALTMODES];
+> +
+> +	/*
+> +	 * This spinlock protects op_data which includes CCI and MESSAGE_IN that
+> +	 * will be updated in ISR
+> +	 */
+> +	spinlock_t op_lock;
+> +	struct op_region op_data;
+>  };
+>  
+>  static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
+> @@ -305,12 +318,42 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, const u8 *data, u32 len)
+>  	return 0;
+>  }
+>  
+> +static int ccg_op_region_update(struct ucsi_ccg *uc, u32 cci)
+> +{
+> +	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_MESSAGE_IN);
+> +	struct op_region *data = &uc->op_data;
+> +	unsigned char *buf;
+> +	size_t size = sizeof(data->message_in);
+> +
+> +	buf = kzalloc(size, GFP_ATOMIC);
+> +	if (!buf)
+> +		return -ENOMEM;
+> +	if (UCSI_CCI_LENGTH(cci)) {
+> +		int ret = ccg_read(uc, reg, (void *)buf, size);
+> +
+> +		if (ret) {
+> +			kfree(buf);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	spin_lock(&uc->op_lock);
+> +	data->cci = cpu_to_le32(cci);
+> +	if (UCSI_CCI_LENGTH(cci))
+> +		memcpy(&data->message_in, buf, size);
+> +	spin_unlock(&uc->op_lock);
+> +	kfree(buf);
+> +	return 0;
+> +}
+> +
+>  static int ucsi_ccg_init(struct ucsi_ccg *uc)
+>  {
+>  	unsigned int count = 10;
+>  	u8 data;
+>  	int status;
+>  
+> +	spin_lock_init(&uc->op_lock);
+> +
+>  	data = CCGX_RAB_UCSI_CONTROL_STOP;
+>  	status = ccg_write(uc, CCGX_RAB_UCSI_CONTROL, &data, sizeof(data));
+>  	if (status < 0)
+> @@ -520,9 +563,20 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
+>  	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
+>  	struct ucsi_capability *cap;
+>  	struct ucsi_altmode *alt;
+> -	int ret;
+> +	int ret = 0;
+> +
+> +	if (offset == UCSI_CCI) {
+> +		spin_lock(&uc->op_lock);
+> +		memcpy(val, &(uc->op_data).cci, val_len);
+> +		spin_unlock(&uc->op_lock);
+> +	} else if (offset == UCSI_MESSAGE_IN) {
+> +		spin_lock(&uc->op_lock);
+> +		memcpy(val, &(uc->op_data).message_in, val_len);
+> +		spin_unlock(&uc->op_lock);
+> +	} else {
+> +		ret = ccg_read(uc, reg, val, val_len);
+> +	}
+>  
+> -	ret = ccg_read(uc, reg, val, val_len);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -559,9 +613,18 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
+>  static int ucsi_ccg_async_write(struct ucsi *ucsi, unsigned int offset,
+>  				const void *val, size_t val_len)
+>  {
+> +	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
+>  	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
+>  
+> -	return ccg_write(ucsi_get_drvdata(ucsi), reg, val, val_len);
+> +	/*
+> +	 * UCSI may read CCI instantly after async_write,
+> +	 * clear CCI to avoid caller getting wrong data before we get CCI from ISR
+> +	 */
+> +	spin_lock(&uc->op_lock);
+> +	uc->op_data.cci = 0;
+> +	spin_unlock(&uc->op_lock);
+> +
+> +	return ccg_write(uc, reg, val, val_len);
+>  }
+>  
+>  static int ucsi_ccg_sync_write(struct ucsi *ucsi, unsigned int offset,
+> @@ -615,13 +678,18 @@ static irqreturn_t ccg_irq_handler(int irq, void *data)
+>  	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_CCI);
+>  	struct ucsi_ccg *uc = data;
+>  	u8 intr_reg;
+> -	u32 cci;
+> -	int ret;
+> +	u32 cci = 0;
+> +	int ret = 0;
+>  
+>  	ret = ccg_read(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
+>  	if (ret)
+>  		return ret;
+>  
+> +	if (!intr_reg)
+> +		return IRQ_HANDLED;
+> +	else if (!(intr_reg & UCSI_READ_INT))
+> +		goto err_clear_irq;
+> +
+>  	ret = ccg_read(uc, reg, (void *)&cci, sizeof(cci));
+>  	if (ret)
+>  		goto err_clear_irq;
+> @@ -629,13 +697,21 @@ static irqreturn_t ccg_irq_handler(int irq, void *data)
+>  	if (UCSI_CCI_CONNECTOR(cci))
+>  		ucsi_connector_change(uc->ucsi, UCSI_CCI_CONNECTOR(cci));
+>  
+> -	if (test_bit(DEV_CMD_PENDING, &uc->flags) &&
+> -	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
+> -		complete(&uc->complete);
+> +	/*
+> +	 * As per CCGx UCSI interface guide, copy CCI and MESSAGE_IN
+> +	 * to the OpRegion before clear the UCSI interrupt
+> +	 */
+> +	ret = ccg_op_region_update(uc, cci);
+> +	if (ret)
+> +		goto err_clear_irq;
+>  
+>  err_clear_irq:
+>  	ccg_write(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
+>  
+> +	if (!ret && test_bit(DEV_CMD_PENDING, &uc->flags) &&
+> +	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
+> +		complete(&uc->complete);
+> +
+>  	return IRQ_HANDLED;
+>  }
+>  
+> -- 
+> 2.34.1
+
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+heikki
 
