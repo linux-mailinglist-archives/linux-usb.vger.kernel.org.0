@@ -1,154 +1,275 @@
-Return-Path: <linux-usb+bounces-5206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C4D5831589
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 10:12:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACEB98315A5
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 10:22:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 129931F224D6
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 09:12:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12621B214C8
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 09:22:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54D2E1BDFC;
-	Thu, 18 Jan 2024 09:12:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 190C21CFB7;
+	Thu, 18 Jan 2024 09:22:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Y0pcGrQY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dr2Yw2Cb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2431B96A;
-	Thu, 18 Jan 2024 09:12:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2FF1428A
+	for <linux-usb@vger.kernel.org>; Thu, 18 Jan 2024 09:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705569123; cv=none; b=RxvMxIly+otN/jghSqmBzDNmpSZQ7ziqYOBaKIzD8l5PNLuBZW3gnbgm0ilcjhE0fS9Mxvm4nh0zsTS1WfQiSUZ9Vmfc9k7BOHGWquO6wUEtZlxub+CwjY706vHrxT6mbg6hbzde7KkqCmIP3HSYDul3LiuJF+qktTy/tiJiqXE=
+	t=1705569734; cv=none; b=PlAiwuCj5JkpG+khzEiEmuY2soMYIBAJN5HRMVBvbEggVfuhAJofRZMy/IoPDfJM9zx2tRUt3F339I+b6iOGK3WI9XmBp+zrDnz4xlRUGX7zuZnAmy83yojSr/Why9lYOTHt6EOeGQlmGJUNAcPKHbDLnDSWBV8W2K1yTrBCXeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705569123; c=relaxed/simple;
-	bh=ULtFfcGqT5XGv+KCHCFhylQch68gZp9QuOmFfi0jSLQ=;
-	h=Received:DKIM-Signature:Received:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
-	 X-Originating-IP:X-ClientProxiedBy:X-QCInternal:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details; b=MTHVjGtE2+5M/Y/DYEeEjCoDiYFdMfOtoec3uspIDxsUoSw56p/DmzLt9m6iIH0WJWJSIueWIFWYlOw9xfnGZd6t5b465VHMGXJLDYVWaYzcGN0jx8QZR0iMjajE0jb0mT+TlD8TX3PySMuy3LErZcWRfkbrOyKpgeVdKGFSFeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Y0pcGrQY; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40I5A2PR023821;
-	Thu, 18 Jan 2024 09:11:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type; s=
-	qcppdkim1; bh=RTeWeFc9BGldA+QSl7OVVIf82YSnY2lNKVdyeiEAse8=; b=Y0
-	pcGrQYp7ulsvyE7dzdoMyrtf6XxSZF6DojEEWUHfImG6ODLef25vvXjHeiMK1wRA
-	81Hj8JvXUKMcY2x/z0jjke2FHFrpS+R5soMRfcVxkVtEl9HBYwSTTpIhPyC5JvS/
-	fg0GnBks7BEK7EElSNEakhjDEf5X1QqDfeeK1T6DRuchb99jTZxCAsZrerLTip29
-	LNl585HzGQX6ksCdraLHSVP5c/IrqHgZ1bolSSSjwo8+8+jGa2cDyQz3umptI1ro
-	6j9xiOIjX87V4Seo9Ql51E70OROLv22Kl63AetRANahxy5K30bW/2LkZJp3RllPn
-	uw/vfTLevERyVpQFTL9Q==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vpkjrhrca-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Jan 2024 09:11:59 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40I9Bw2r003203
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Jan 2024 09:11:58 GMT
-Received: from hu-uaggarwa-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Thu, 18 Jan 2024 01:11:55 -0800
-From: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        "Uttkarsh
- Aggarwal" <quic_uaggarwa@quicinc.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: dwc3: gadget: Fix NULL pointer dereference in dwc3_gadget_suspend
-Date: Thu, 18 Jan 2024 14:41:46 +0530
-Message-ID: <20240118091146.3101-1-quic_uaggarwa@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1705569734; c=relaxed/simple;
+	bh=iFZGWuXiZB8vPwOuX+GQviloDFv365EKUeObEFOMOJs=;
+	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
+	 X-IronPort-AV:X-IronPort-AV:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=KJ+sRqDyGyYnkr58tPchOx/bY3whgJmAJJWayv9VGMNPmDDIWA33O/+fMoXa7MxY79gkd9CKZhcKOz4epBNzE/73z6vb7qGERfVXSY2s1t/AyYSX8Odiafl1qT537mtpSQE9338myWd96HiQIQuEfrAH1ocSOkvtbxtoH/T4JRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dr2Yw2Cb; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705569733; x=1737105733;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iFZGWuXiZB8vPwOuX+GQviloDFv365EKUeObEFOMOJs=;
+  b=dr2Yw2CbQ5TkQ3KpPbISkSST7QSRukvteL4ddtnZSVBWEY8+QCzo82/Y
+   +cvxbJKObxuxtyAXRG2ZkI7Kpp4pU5PL00ZmJBevQ0zkqvWz/AmyrYEgn
+   dYoR6kpCwRNKVnBS870FqLxybdCbNnrWQQ8Tpa9yTxsL/r7cqhHFQ5n+Y
+   FQQ0AGVlXLP3qkHVDVAMAWLMX2B7E7uxcja5zEMXIicCY3eqL+BRfTVuR
+   EBfLvyaoZinwH/XOn+I++rwlBAwDoH2MgocvOJZ25ZH1qAQ1TOyyiANHe
+   42sBROUDYHULs+64rnr08ZxvjuQTnBj4buJNY4Qi3OWfAXoig+KWEHJ9Q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="21882133"
+X-IronPort-AV: E=Sophos;i="6.05,201,1701158400"; 
+   d="scan'208";a="21882133"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2024 01:22:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="784754858"
+X-IronPort-AV: E=Sophos;i="6.05,201,1701158400"; 
+   d="scan'208";a="784754858"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga002.jf.intel.com with SMTP; 18 Jan 2024 01:22:07 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 18 Jan 2024 11:22:06 +0200
+Date: Thu, 18 Jan 2024 11:22:06 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	"benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+	"hdegoede@redhat.com" <hdegoede@redhat.com>,
+	"ivan.orlov0322@gmail.com" <ivan.orlov0322@gmail.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>
+Subject: Re: [EXT] Re: [PATCH] usb: roles: try to get/put all relevant modules
+Message-ID: <ZajtviC5hDVEczBN@kuha.fi.intel.com>
+References: <20240112080108.1147450-1-xu.yang_2@nxp.com>
+ <2024011213-situated-augmented-64a4@gregkh>
+ <2024011220-asleep-dragster-1e39@gregkh>
+ <DU2PR04MB8822D9964496E39002D131D98C6F2@DU2PR04MB8822.eurprd04.prod.outlook.com>
+ <2024011214-disbelief-sincere-805e@gregkh>
+ <DU2PR04MB8822B8AD6A6DE873F2F160588C6C2@DU2PR04MB8822.eurprd04.prod.outlook.com>
+ <b1edb397-c06d-4112-b2ed-713e213ac751@rowland.harvard.edu>
+ <DU2PR04MB8822E96E3AFF2EBB587B73BA8C732@DU2PR04MB8822.eurprd04.prod.outlook.com>
+ <d8f379d2-82ee-4567-8323-961cea5fd095@rowland.harvard.edu>
+ <DU2PR04MB8822149F7BBDDD0B59ECDE918C722@DU2PR04MB8822.eurprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GjPwsHW9zhFdjMXcb2JDo2WNoI80MV2Z
-X-Proofpoint-GUID: GjPwsHW9zhFdjMXcb2JDo2WNoI80MV2Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-18_04,2024-01-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=1 phishscore=0
- lowpriorityscore=1 suspectscore=0 adultscore=0 impostorscore=0
- mlxlogscore=659 clxscore=1015 malwarescore=0 priorityscore=1501
- spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401180065
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DU2PR04MB8822149F7BBDDD0B59ECDE918C722@DU2PR04MB8822.eurprd04.prod.outlook.com>
 
-In current scenario if Plug-out and Plug-In performed continuously
-there could be a chance while checking for dwc->gadget_driver in
-dwc3_gadget_suspend, a NULL pointer dereference may occur.
+Hi,
 
-Call Stack:
+On Wed, Jan 17, 2024 at 05:57:02AM +0000, Xu Yang wrote:
+> Hi Alan,
+> 
+> > 
+> > On Tue, Jan 16, 2024 at 05:44:47AM +0000, Xu Yang wrote:
+> > > Hi Alan,
+> > >
+> > > >
+> > > > Those of us unfamiliar with this code need you to explain a lot more
+> > > > about what's going on.
+> > > >
+> > > > On Mon, Jan 15, 2024 at 03:02:06AM +0000, Xu Yang wrote:
+> > > > > Taking below diagram as example:
+> > > > >
+> > > > >      ci_hdrc.0        register   usb    get     tcpm_port
+> > > > >   (driver: ci_hdrc)  --------->  role  <----  (driver: tcpm)
+> > > > >          ^  ^                    switch           |   ^
+> > > > >          |  |                                     |   |
+> > > > >        +1|  |           +1                        |   |+1
+> > > > >          |  +-------------------------------------+   |
+> > > > >          |                                            |
+> > > > >      4c200000.usb                                   1-0050
+> > > > > (driver: ci_hdrc_imx)                            (driver: tcpci)
+> > > > >
+> > > > > 1. Driver ci_hdrc_imx and tcpci are built as module at least.
+> > > > > 2. When module ci_hdrc_imx is loaded, it will register ci_hdrc.0 device
+> > > > >    and try to get ci_hdrc module's reference.
+> > > >
+> > > > This is very confusing.  Normally, a device is registered by the parent
+> > > > module and its driver belongs in the child module.  When the child
+> > > > module is loaded it automatically gets a reference to the parent module,
+> > > > because it calls functions that are defined in the parent.  I don't know
+> > > > of any cases where a parent module takes a reference to one of its
+> > > > children -- this would make it impossible to unload the child module!
+> > > >
+> > > > In your diagram I can't tell whether ci_hdrc is the parent module and
+> > > > ci_hdrc_imx is the child, or vice versa.  I'll guess that ci_hdrc_imx is
+> > > > the child, since it the one which gets a reference to the other.  But
+> > > > now we have the ci_hdrc.0 device being registered by the child module
+> > > > and its driver belonging to the parent module, which is backward!
+> > > >
+> > > > Very difficult to understand.  Please explain more fully.
+> > >
+> > > I checked again and let me correct the words.
+> > >
+> > > 2. When module ci_hdrc_imx is loaded, it will register ci_hdrc.0 device.
+> > >    At the same time, the reference of module ci_hdrc is added by 1
+> > >    automatically due to ci_hdrc_imx calls some functions in module ci_hdrc.
+> > >    ci_hdrc will register usb-role-switch device.
+> > >
+> > > Therefore, module ci_hdrc_imx depends on module ci_hdrc. Device ci_hdrc.0
+> > > is a child of 4c200000.usb.
+> > 
+> > And ci_hdrc_imx is a child module of ci_hdrc.  Got it.
+> > 
+> > > > >  ci_hdrc will register
+> > > > >    usb-role-switch device.
+> > > > > 3. When module tcpci is loaded, it will register tcpm port device and try
+> > > > >    to get tcpm module's reference. The tcpm module will get usb-role-switch
+> > > > >    which is registered by ci_hdrc.
+> > > >
+> > > > What do you mean by "will get"?  Do you mean that tcpm will become the
+> > > > driver for the usb_role_switch device?  Or do you mean that it simply
+> > > > calls get_device(&usb_role_switch)?
+> > > >
+> > > > If the latter is the case, how does the tcpm driver learn the address of
+> > > > usb_role_switch in the first place?
+> > >
+> > > Via
+> > > port->role_sw = usb_role_switch_get(port->dev)
+> > > or
+> > > port->role_sw = fwnode_usb_role_switch_get(tcpc->fwnode).
+> > >
+> > > The usb controller will register usb-role-swtich device to the global list
+> > > of usb_role class. The fwnode of usb-role-swtich device is also set to usb
+> > > controller's fwnode. Initially, a fwnode graph between usb controller of
+> > > node and tcpm connector node had already been established. These two
+> > > functions will find usb-role-swtich device based on this fwnode graph
+> > > and fwnode matching.
+> > 
+> > If usb_role_switch_get() gives away references to the usb_role_switch
+> > device, it should have a way to take those references back.  But I guess
+> > it doesn't.
+> > 
+> > >  After usb-role-switce device is found, these two
+> > > functions will call: try_module_get(sw->dev.parent->driver->owner).
+> > 
+> > You mean usb_role_switch_get() and fwnode_usb_role_switch_get() do this?
+> 
+> Yes.
+> 
+> > 
+> > > Here sw->dev.parent is device ci_hdrc.0. sw->dev.parent->driver is ci_hdrc.
+> > >
+> > > >
+> > > > >  In current design, tcpm will also try to
+> > > > >    get ci_hdrc module's reference after get usb-role-switch.
+> > > >
+> > > > This might be a bug.  There should not be any need for the tcpm driver
+> > > > to take a reference to the ci_hdrc module.  But there should be a way
+> > > > for the ci_hdrc driver to notify tcpm when the usb_role_switch device is
+> > > > about to be unregistered.  If tcpm is usb_role_switch's driver then this
+> > > > notification happens automatically, by means of the .remove() callback.
+> > >
+> > > I'm not the designer of usb_role class driver. Not sure if this is needed to get
+> > > module reference of its parent device's driver. Maybe need @heikki's input.
+> > >
+> > > @heikki.krogerus, can you give some explanations?
+> > 
+> > Yes, please, some additional explanation would help.
+> > 
+> > > > > 4. Due to no modules depend on ci_hdrc_imx, ci_hdrc_imx can be manually
+> > > > >    unloaded. Then device ci_hdrc.0 will be removed by ci_hdrc_imx and
+> > > > >    device usb-role-switch is also unregistered.
+> > > >
+> > > > At this point, tcpm should learn that it has to drop all its references
+> > > > to usb_role_swich.  Since the module which registered usb_role_switch
+> > > > isn't tcpm's ancestor, tcpm must not keep _any_ references to the device
+> > > > after it is unregistered.
+> > >
+> > > Yes, I also think so.
+> > >
+> > > >
+> > > > Well, strictly speaking that's not true.  By misusing the driver model,
+> > > > tcpm could keep a reference to the ci_hdrc module until it was finished
+> > > > using usb_role_switch.  Is that what you are trying to do?
+> > >
+> > > No, I'm trying to get module reference of ci_hdrc_imx too. Then,
+> > > ci_hdrc_imx can't be unloaded before tcpci module unloaded.
+> > 
+> > You shouldn't do this.  Users should be able to unload ci_hdrc_imx
+> > whenever they want, even if tcpci is still loaded.
+> 
+> Okay. Understand.
+> 
+> > 
+> > > > > 5. Then, if I try to unload module tcpci, "NULL pointer dereference"
+> > > > >    will be shown due to below code:
+> > > > >
+> > > > >    module_put(sw->dev.parent->driver->owner);
+> > 
+> > I forgot to ask: What function makes this call?  Is it part of the
+> > usb_role class driver?
+> 
+> usb_role_switch_put() do this.
+> Yes, it's a function of usb_role class driver.
+> 
+> > 
+> > > > >    parent->driver is NULL at this time.
+> > > >
+> > > > What is dev at this point?  And what is dev.parent?  And what did
+> > > > dev.parent->driver used to be before it was set to NULL?
+> > >
+> > > Here sw->dev is usb-role-switch device. sw->dev.parent is ci_hdrc.0 device.
+> > > sw->dev.parent->driver was ci_hdrc.
+> > 
+> > Which is now gone, right.  I understand.
+> > 
+> > Let's see what Heikki has to say.
+> > 
+> > However, assuming he wants to continue misusing the driver model in this
+> > way, what you should do is add a new field to sw, where you will store
+> > sw->dev.parent->driver.owner at the time of the try_module_get() call
+> > (but only if the call succeeds!).  Then when the module_put() call runs,
+> > have it use the value stored in this new field instead of dereferencing
+> > sw->dev.parent->driver.owner.
+> 
+> It sounds like a better solution. 
+> Thanks for the suggestion!
 
-	CPU1:                           CPU2:
-	gadget_unbind_driver            dwc3_suspend_common
-	dw3_gadget_stop                 dwc3_gadget_suspend
-                                        dwc3_disconnect_gadget
+If there is a better way of doing this, then let's use it. I'm happy
+with what ever works.
 
-CPU1 basically clears the variable and CPU2 checks the variable.
-Consider CPU1 is running and right before gadget_driver is cleared
-and in parallel CPU2 executes dwc3_gadget_suspend where it finds
-dwc->gadget_driver which is not NULL and resumes execution and then
-CPU1 completes execution. CPU2 executes dwc3_disconnect_gadget where
-it checks dwc->gadget_driver is already NULL because of which the
-NULL pointer deference occur.
+The only requirement here is that we have some way of preventing the
+role switch provider from being unloaded while it's being used.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 9772b47a4c291 ("usb: dwc3: gadget: Fix suspend/resume during device mode")
-Signed-off-by: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
----
+thanks,
 
-Changes in v2:
-Added cc and fixes tag missing in v1.
-
-Link to v1:
-https://lore.kernel.org/linux-usb/0ef3fb11-a207-2db4-1714-b3bca2ce2cea@quicinc.com/T/#t
-
-drivers/usb/dwc3/gadget.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 019368f8e9c4..564976b3e2b9 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4709,15 +4709,13 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
- 	unsigned long flags;
- 	int ret;
- 
--	if (!dwc->gadget_driver)
--		return 0;
--
- 	ret = dwc3_gadget_soft_disconnect(dwc);
- 	if (ret)
- 		goto err;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
--	dwc3_disconnect_gadget(dwc);
-+	if (dwc->gadget_driver)
-+		dwc3_disconnect_gadget(dwc);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
- 	return 0;
 -- 
-2.17.1
-
+heikki
 
