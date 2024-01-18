@@ -1,164 +1,154 @@
-Return-Path: <linux-usb+bounces-5205-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5206-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACD8483150B
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 09:46:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C4D5831589
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 10:12:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EE9F285DA6
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 08:46:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 129931F224D6
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jan 2024 09:12:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46DF8125B0;
-	Thu, 18 Jan 2024 08:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54D2E1BDFC;
+	Thu, 18 Jan 2024 09:12:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="H81lwFHu"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Y0pcGrQY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3257E11C89;
-	Thu, 18 Jan 2024 08:46:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2431B96A;
+	Thu, 18 Jan 2024 09:12:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705567582; cv=none; b=YbYl5Kdu9tgeNYEKrDcUY2MKO6S5pxoPW5+XN9Yq2eylSc4E8Y7IM/UGg1sd5qE0ZuhhLonhSjYDHbuveZk8i+FnD/0JPU7msrIR9wMO6CbA+ygkQ0iMLcUSOG2SmFmEirgBWn3c/6sSZUezib8/ZTtJX9zNl3nvIGfVm22jB0A=
+	t=1705569123; cv=none; b=RxvMxIly+otN/jghSqmBzDNmpSZQ7ziqYOBaKIzD8l5PNLuBZW3gnbgm0ilcjhE0fS9Mxvm4nh0zsTS1WfQiSUZ9Vmfc9k7BOHGWquO6wUEtZlxub+CwjY706vHrxT6mbg6hbzde7KkqCmIP3HSYDul3LiuJF+qktTy/tiJiqXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705567582; c=relaxed/simple;
-	bh=3py4IxVUyHSKWw0EVz/Y6De2AR5tGiM/bpOlBfeFiG8=;
-	h=Received:DKIM-Signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy:
-	 X-QCInternal:X-Proofpoint-Virus-Version:X-Proofpoint-ORIG-GUID:
+	s=arc-20240116; t=1705569123; c=relaxed/simple;
+	bh=ULtFfcGqT5XGv+KCHCFhylQch68gZp9QuOmFfi0jSLQ=;
+	h=Received:DKIM-Signature:Received:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 X-Originating-IP:X-ClientProxiedBy:X-QCInternal:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-ORIG-GUID:
 	 X-Proofpoint-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details; b=Fwnw0F1DCqGEAZmuBanw0/vEqKd6qrFNhrbnl/7RIRXwkNTOOiopNDNIbBaX8HQ/dHMZBHudlA1F7IURgMXpBUjIn8jGW/zKwkE1UIbOgoLiSWadUDISh3JZ+a02YAetDMVSLwBpRWvyCfF1KzVSSqSBs7vvAepAjfINpDEH7io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=H81lwFHu; arc=none smtp.client-ip=205.220.180.131
+	 X-Proofpoint-Spam-Details; b=MTHVjGtE2+5M/Y/DYEeEjCoDiYFdMfOtoec3uspIDxsUoSw56p/DmzLt9m6iIH0WJWJSIueWIFWYlOw9xfnGZd6t5b465VHMGXJLDYVWaYzcGN0jx8QZR0iMjajE0jb0mT+TlD8TX3PySMuy3LErZcWRfkbrOyKpgeVdKGFSFeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Y0pcGrQY; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40I6FmPk023540;
-	Thu, 18 Jan 2024 08:46:17 GMT
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40I5A2PR023821;
+	Thu, 18 Jan 2024 09:11:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=sIr0uxMxWHk2Z3UsG2tkbx7PQFYJUyRChndnXYqGeVc=; b=H8
-	1lwFHu/A5cnfim8KRFxpmNihYiwD9thKX86unzvxpZrDbKtPqmMVSm0NOse80tjm
-	x0pKr4umyVaA60yjtJ5mbCMYjui5EkhlHFJ+XqJa7S4ItdLEcJloQ0siLDrdiFcE
-	+SYC4PffHKdGX3zic3vhryLnBca9UL58LshfRo1Zn4+JGeHLnvCTLZ0VPfQeo/VX
-	MREHkYrJztqelKA+2GkgVb1MXtr4ygoqVy7VQcXAEJVwFp91SfZPgD1a1xBIvRa+
-	I7yYBSEGU0h9QuA07+1WaTx8Xj9ORh0iOWQyDwbk7eSP/CihEgYx7QKp+DtGFOhR
-	F/MDBiXf90SUMHDU5p9Q==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vpm1fshxy-1
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=RTeWeFc9BGldA+QSl7OVVIf82YSnY2lNKVdyeiEAse8=; b=Y0
+	pcGrQYp7ulsvyE7dzdoMyrtf6XxSZF6DojEEWUHfImG6ODLef25vvXjHeiMK1wRA
+	81Hj8JvXUKMcY2x/z0jjke2FHFrpS+R5soMRfcVxkVtEl9HBYwSTTpIhPyC5JvS/
+	fg0GnBks7BEK7EElSNEakhjDEf5X1QqDfeeK1T6DRuchb99jTZxCAsZrerLTip29
+	LNl585HzGQX6ksCdraLHSVP5c/IrqHgZ1bolSSSjwo8+8+jGa2cDyQz3umptI1ro
+	6j9xiOIjX87V4Seo9Ql51E70OROLv22Kl63AetRANahxy5K30bW/2LkZJp3RllPn
+	uw/vfTLevERyVpQFTL9Q==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vpkjrhrca-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Jan 2024 08:46:17 +0000 (GMT)
+	Thu, 18 Jan 2024 09:11:59 +0000 (GMT)
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40I8kGiD016309
+	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40I9Bw2r003203
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Jan 2024 08:46:16 GMT
-Received: from [10.218.39.189] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 18 Jan
- 2024 00:46:14 -0800
-Message-ID: <0ef3fb11-a207-2db4-1714-b3bca2ce2cea@quicinc.com>
-Date: Thu, 18 Jan 2024 14:16:11 +0530
+	Thu, 18 Jan 2024 09:11:58 GMT
+Received: from hu-uaggarwa-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Thu, 18 Jan 2024 01:11:55 -0800
+From: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        "Uttkarsh
+ Aggarwal" <quic_uaggarwa@quicinc.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v2] usb: dwc3: gadget: Fix NULL pointer dereference in dwc3_gadget_suspend
+Date: Thu, 18 Jan 2024 14:41:46 +0530
+Message-ID: <20240118091146.3101-1-quic_uaggarwa@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC PATCH] usb: dwc3: gadget: Fix NULL pointer dereference in
- dwc3_gadget_suspend
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: Kuen-Han Tsai <khtsai@google.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>
-References: <20240110095532.4776-1-quic_uaggarwa@quicinc.com>
- <CAKzKK0qJOz_+pNAVAD8Ub6TZ9uhFOzuDC_bws9MVzxNa7RqYhA@mail.gmail.com>
- <77ffee9a-cd77-6a09-10ee-bdf17bfca5ec@quicinc.com>
- <8ba84432-bd07-3e59-3638-924d5fadec30@quicinc.com>
- <20240118005641.fpydq2opopbmlnvj@synopsys.com>
-Content-Language: en-US
-From: UTTKARSH AGGARWAL <quic_uaggarwa@quicinc.com>
-In-Reply-To: <20240118005641.fpydq2opopbmlnvj@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: E3ZrRg25Bu8y2dGaCNxBfvu76Ub-LnLg
-X-Proofpoint-GUID: E3ZrRg25Bu8y2dGaCNxBfvu76Ub-LnLg
+X-Proofpoint-ORIG-GUID: GjPwsHW9zhFdjMXcb2JDo2WNoI80MV2Z
+X-Proofpoint-GUID: GjPwsHW9zhFdjMXcb2JDo2WNoI80MV2Z
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-18_04,2024-01-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=665
- suspectscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 mlxscore=0
- phishscore=0 spamscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2311290000
- definitions=main-2401180062
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=1 phishscore=0
+ lowpriorityscore=1 suspectscore=0 adultscore=0 impostorscore=0
+ mlxlogscore=659 clxscore=1015 malwarescore=0 priorityscore=1501
+ spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2401180065
 
+In current scenario if Plug-out and Plug-In performed continuously
+there could be a chance while checking for dwc->gadget_driver in
+dwc3_gadget_suspend, a NULL pointer dereference may occur.
 
-On 1/18/2024 6:26 AM, Thinh Nguyen wrote:
-> On Wed, Jan 17, 2024, UTTKARSH AGGARWAL wrote:
->> On 1/17/2024 2:52 PM, UTTKARSH AGGARWAL wrote:
->>> On 1/17/2024 12:47 PM, Kuen-Han Tsai wrote:
->>>>>           ret = dwc3_gadget_soft_disconnect(dwc);
->>>>>           if (ret)
->>>>>                   goto err;
->>>> For improved readability, we can remove the goto statement and move
->>>> the error handling logic here.
->>> Hi Kuen-Han,
->>>
->>> Thanks for the suggestion.
->>> Does this looks good to you ?
->>>
->>>     int ret = dwc3_gadget_soft_disconnect(dwc);if (ret) {        if
->>> (dwc->softconnect)            dwc3_gadget_soft_connect(dwc);
->>>
->>>         return ret;    }    spin_lock_irqsave(&dwc->lock, flags);    if
->>> (dwc->gadget_driver)  dwc3_disconnect_gadget(dwc);
->>>   spin_unlock_irqrestore(&dwc->lock, flags);
->> Sorry for the mistake.
->>
->> int ret = dwc3_gadget_soft_disconnect(dwc);
->>
->> if (ret) {
->>
->>        if (dwc->softconnect)
->>
->>                   dwc3_gadget_soft_connect(dwc);
->>
->>        return ret;
->>
->> }
->>
->> spin_lock_irqsave(&dwc->lock, flags);
->>
->> if (dwc->gadget_driver)
->>
->>         dwc3_disconnect_gadget(dwc);
->>
->> spin_unlock_irqrestore(&dwc->lock, flags);
->>
-> Please only make one logical fix per change. If any unrelated refactor
-> or style change is needed, keep it to a separate commit.
->
-> Thanks,
-> Thinh
+Call Stack:
 
-Sure Thinh,I’ll only push fix in v2, not refactoring.
+	CPU1:                           CPU2:
+	gadget_unbind_driver            dwc3_suspend_common
+	dw3_gadget_stop                 dwc3_gadget_suspend
+                                        dwc3_disconnect_gadget
 
-Thanks,
+CPU1 basically clears the variable and CPU2 checks the variable.
+Consider CPU1 is running and right before gadget_driver is cleared
+and in parallel CPU2 executes dwc3_gadget_suspend where it finds
+dwc->gadget_driver which is not NULL and resumes execution and then
+CPU1 completes execution. CPU2 executes dwc3_disconnect_gadget where
+it checks dwc->gadget_driver is already NULL because of which the
+NULL pointer deference occur.
 
-Uttkarsh
+Cc: <stable@vger.kernel.org>
+Fixes: 9772b47a4c291 ("usb: dwc3: gadget: Fix suspend/resume during device mode")
+Signed-off-by: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
+---
+
+Changes in v2:
+Added cc and fixes tag missing in v1.
+
+Link to v1:
+https://lore.kernel.org/linux-usb/0ef3fb11-a207-2db4-1714-b3bca2ce2cea@quicinc.com/T/#t
+
+drivers/usb/dwc3/gadget.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 019368f8e9c4..564976b3e2b9 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -4709,15 +4709,13 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
+ 	unsigned long flags;
+ 	int ret;
+ 
+-	if (!dwc->gadget_driver)
+-		return 0;
+-
+ 	ret = dwc3_gadget_soft_disconnect(dwc);
+ 	if (ret)
+ 		goto err;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-	dwc3_disconnect_gadget(dwc);
++	if (dwc->gadget_driver)
++		dwc3_disconnect_gadget(dwc);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+ 	return 0;
+-- 
+2.17.1
 
 
