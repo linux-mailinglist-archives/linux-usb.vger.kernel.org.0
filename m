@@ -1,82 +1,40 @@
-Return-Path: <linux-usb+bounces-5287-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5288-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5629B832B4A
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 15:26:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BD37832BA1
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 15:50:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F2E0B21D17
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 14:26:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6E0B288D45
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 14:50:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE25D53E15;
-	Fri, 19 Jan 2024 14:26:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OMmj7QBa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 972ED53E20;
+	Fri, 19 Jan 2024 14:50:03 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2C94EB30;
-	Fri, 19 Jan 2024 14:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id CDCE44F203
+	for <linux-usb@vger.kernel.org>; Fri, 19 Jan 2024 14:50:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705674377; cv=none; b=eXXYpkwtv+k/Z3QXOKnC85mOjWxRliRu+KHols/CcGO0kWs6R2Wy4ea61XPsoeP4AeFXhGTyfblxsn7ENLadc7IFcdC9jj0PA0MqO8O6WbXSxFYzgfzd+fhO+Im4vUNjG+uSi9Zw/FL7szDsMhtvw0xMrYxmEA5isCQozccJNSQ=
+	t=1705675803; cv=none; b=cAv/hJaWyJ5kTcx4GoDAnS3ZRiv9Aawsqr5Yre0rEUwdSvQYurLZ2R+zoyiqYEp00AywC3qlFvr9DkHkrozeP5SFiBetpfX8/YPXkC3laWoIH2aJS5ENPgLhio2mLyemkWt9tQBAZjpX4IrElH8UBqtLLkm8HFO18JM3fBKMl3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705674377; c=relaxed/simple;
-	bh=6ZyFttJi9Pj6gtg9DPLGs15qvrUf2pvBuDiSTNdqKfw=;
+	s=arc-20240116; t=1705675803; c=relaxed/simple;
+	bh=WrsWeNGSmUOF+t7juNTo63FBT3jTSfGoEXRDYjcMnQ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JlstOQpqFPCVG5DqPmZgFE1IQ8GGxbaZ+ZlUOjo1dfXih/BGfjOU6Ev+tuknkjFK/IJg6MyJkdBnwWyHgtTI2OfU/AINJ8v2cd0Yo1MqTFLYg/lhQjdYMSN6U6UyucAIGwNxMO2Rr0fUDJHO9dpHh4aK69CJ8TH69VyCSHUyGzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OMmj7QBa; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705674375; x=1737210375;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6ZyFttJi9Pj6gtg9DPLGs15qvrUf2pvBuDiSTNdqKfw=;
-  b=OMmj7QBanQO0Joo5tOziK/xwUtyKVg7GUFOhm71kTo/i6RzIfNnXAthk
-   YPb23w7swWFLK2E/mtburyS/AACm1oaB2Mn/Xbp866r1Bw2YpxAbC6TXG
-   4G2X8bbRJfs39jVEvQSB+LTIriSOhZp4OYKS9ohSoiNpfEJgyw8HZOdZ8
-   AKZ/fnaMSXsA2nTs1VosLJ7BKb9MqY9DZzsxK90aOlfnU7bv8y81D9y6V
-   GLsqJtcBePQfwIf8PKE0w2ArQoNC/SONTqqpXbR0bfDVKt51LNYHxkHyv
-   QT9eu5AAPIufKF/NmWA7GIgghR44VwRFtyxKYt26uLz1TNeBCGAFGxCBr
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="7513058"
-X-IronPort-AV: E=Sophos;i="6.05,204,1701158400"; 
-   d="scan'208";a="7513058"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2024 06:26:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="778000589"
-X-IronPort-AV: E=Sophos;i="6.05,204,1701158400"; 
-   d="scan'208";a="778000589"
-Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 19 Jan 2024 06:26:04 -0800
-Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rQpon-000492-2J;
-	Fri, 19 Jan 2024 14:26:01 +0000
-Date: Fri, 19 Jan 2024 22:25:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paul Cercueil <paul@crapouillou.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc: oe-kbuild-all@lists.linux.dev, Paul Cercueil <paul@crapouillou.net>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	linux-doc@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
-	Jonathan Cameron <jic23@kernel.org>, linux-media@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] usb: gadget: functionfs: Add DMABUF import
- interface
-Message-ID: <202401192234.0uzq25ka-lkp@intel.com>
-References: <20240117122646.41616-4-paul@crapouillou.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZocSKfYGKPtOUShReYCEejZSMu+4sYPpvzZGAut3bdv84wa8pwvKOPFxVRuN3ueySK57XRbqnFqvGGrgReWSWXKWrionwibDoFSGEPR/15NZsS25jweZPhs5PQjqeoJPIKTsEL4uq6e0Wac4i0WfvaqPgiI++OhqjvN8f6U5xPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 40869 invoked by uid 1000); 19 Jan 2024 09:49:57 -0500
+Date: Fri, 19 Jan 2024 09:49:57 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: yuan linyu <yuanlinyu@hihonor.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH] usb: udc: run disconnect callback before pull up zero
+Message-ID: <9a483f40-83ef-4476-b94c-21506d94653a@rowland.harvard.edu>
+References: <20240119054813.2851201-1-yuanlinyu@hihonor.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,73 +43,30 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240117122646.41616-4-paul@crapouillou.net>
+In-Reply-To: <20240119054813.2851201-1-yuanlinyu@hihonor.com>
 
-Hi Paul,
+On Fri, Jan 19, 2024 at 01:48:13PM +0800, yuan linyu wrote:
+> When write UDC to empty and unbind gadget driver from gadget device, it is
+> possible that there are many queue failures for mass storage function.
+> 
+> The root cause is on platform like dwc3, if pull down called first, the
+> queue operation from mass storage main thread will fail as it is belong to
+> another thread context and always try to receive a command from host.
+> 
+> In order to fix it, call gadget driver disconnect callback first, mass
+> storage function driver will disable endpoints and clear running flag,
+> so there will be no request queue to UDC.
+> 
+> One note is when call disconnect callback first, it mean function will
+> disable endpoints before stop UDC controller.
 
-kernel test robot noticed the following build errors:
+Exactly.  So instead of getting a bunch of errors on the gadget, now 
+you'll get a bunch of errors on the host.  I don't think that's any 
+better.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus lwn/docs-next linus/master v6.7 next-20240119]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Why don't you change the dwc3 driver instead?  If it allowed ep_queue 
+operations to succeed while the pull-up is off then this problem would 
+go away.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/usb-gadget-Support-already-mapped-DMA-SGs/20240117-203111
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20240117122646.41616-4-paul%40crapouillou.net
-patch subject: [PATCH v4 3/4] usb: gadget: functionfs: Add DMABUF import interface
-config: sh-randconfig-r052-20240119 (https://download.01.org/0day-ci/archive/20240119/202401192234.0uzq25ka-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240119/202401192234.0uzq25ka-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401192234.0uzq25ka-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   sh4-linux-ld: drivers/usb/gadget/function/f_fs.o: in function `ffs_dmabuf_signal_done':
->> f_fs.c:(.text+0x254c): undefined reference to `dma_fence_begin_signalling'
->> sh4-linux-ld: f_fs.c:(.text+0x2560): undefined reference to `dma_fence_signal'
->> sh4-linux-ld: f_fs.c:(.text+0x2564): undefined reference to `dma_fence_end_signalling'
-   sh4-linux-ld: drivers/usb/gadget/function/f_fs.o: in function `ffs_epfile_release':
->> f_fs.c:(.text+0x28a0): undefined reference to `dma_buf_detach'
->> sh4-linux-ld: f_fs.c:(.text+0x28a4): undefined reference to `dma_buf_put'
-   sh4-linux-ld: drivers/usb/gadget/function/f_fs.o: in function `ffs_dmabuf_unmap_work':
->> f_fs.c:(.text+0x2c6c): undefined reference to `dma_buf_unmap_attachment'
->> sh4-linux-ld: f_fs.c:(.text+0x2c70): undefined reference to `dma_resv_reset_max_fences'
->> sh4-linux-ld: f_fs.c:(.text+0x2c84): undefined reference to `dma_buf_detach'
-   sh4-linux-ld: f_fs.c:(.text+0x2c88): undefined reference to `dma_buf_put'
->> sh4-linux-ld: f_fs.c:(.text+0x2c94): undefined reference to `dma_fence_release'
-   sh4-linux-ld: drivers/usb/gadget/function/f_fs.o: in function `ffs_dmabuf_transfer':
->> f_fs.c:(.text+0x2e30): undefined reference to `dma_buf_get'
-   sh4-linux-ld: f_fs.c:(.text+0x2e3c): undefined reference to `dma_buf_put'
->> sh4-linux-ld: f_fs.c:(.text+0x2ef4): undefined reference to `dma_resv_test_signaled'
->> sh4-linux-ld: f_fs.c:(.text+0x2efc): undefined reference to `dma_buf_map_attachment'
->> sh4-linux-ld: f_fs.c:(.text+0x3098): undefined reference to `dma_resv_reserve_fences'
->> sh4-linux-ld: f_fs.c:(.text+0x30bc): undefined reference to `dma_fence_init'
->> sh4-linux-ld: f_fs.c:(.text+0x30c0): undefined reference to `dma_resv_add_fence'
-   sh4-linux-ld: f_fs.c:(.text+0x30c4): undefined reference to `dma_resv_reset_max_fences'
->> sh4-linux-ld: f_fs.c:(.text+0x30d4): undefined reference to `dma_fence_begin_signalling'
-   sh4-linux-ld: f_fs.c:(.text+0x30e0): undefined reference to `dma_fence_end_signalling'
-   sh4-linux-ld: f_fs.c:(.text+0x30f0): undefined reference to `dma_buf_put'
-   sh4-linux-ld: f_fs.c:(.text+0x321c): undefined reference to `dma_fence_release'
->> sh4-linux-ld: f_fs.c:(.text+0x3224): undefined reference to `dma_buf_unmap_attachment'
-   sh4-linux-ld: f_fs.c:(.text+0x3228): undefined reference to `dma_resv_reset_max_fences'
-   sh4-linux-ld: f_fs.c:(.text+0x3230): undefined reference to `dma_buf_detach'
-   sh4-linux-ld: f_fs.c:(.text+0x3234): undefined reference to `dma_buf_put'
-   sh4-linux-ld: drivers/usb/gadget/function/f_fs.o: in function `ffs_epfile_ioctl':
-   f_fs.c:(.text+0x41f0): undefined reference to `dma_buf_get'
->> sh4-linux-ld: f_fs.c:(.text+0x41f4): undefined reference to `dma_buf_attach'
-   sh4-linux-ld: f_fs.c:(.text+0x4200): undefined reference to `dma_buf_detach'
->> sh4-linux-ld: f_fs.c:(.text+0x4210): undefined reference to `dma_fence_context_alloc'
-   sh4-linux-ld: f_fs.c:(.text+0x4220): undefined reference to `dma_buf_put'
-   sh4-linux-ld: f_fs.c:(.text+0x43b0): undefined reference to `dma_buf_detach'
-   sh4-linux-ld: f_fs.c:(.text+0x43b4): undefined reference to `dma_buf_put'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alan Stern
 
