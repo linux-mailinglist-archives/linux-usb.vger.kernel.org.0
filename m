@@ -1,149 +1,83 @@
-Return-Path: <linux-usb+bounces-5292-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5293-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC22A832D02
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 17:18:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C005832D09
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 17:22:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 936961F22F4E
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 16:18:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E55A5282BDC
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 16:22:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A48C54FA8;
-	Fri, 19 Jan 2024 16:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q+eThb5l"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 928BF54F99;
+	Fri, 19 Jan 2024 16:22:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC8654BE3;
-	Fri, 19 Jan 2024 16:18:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id D527452F6F
+	for <linux-usb@vger.kernel.org>; Fri, 19 Jan 2024 16:22:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705681109; cv=none; b=hIrBbSg/aU07lQAzSjMKF0nczF2OIBLYdSBYGhtvz3QHlHS0h2gw+2sEhlnfIsMfvxHoT0KJLohrTMDxKQ+anfl+jODEgZD/9BJAFcyVxieE1+qPFfvDQCOzxWzLEItD8j1/msMHw7f+HlVR/OfEx14r6HumBKH9/MpsrvA3e1M=
+	t=1705681348; cv=none; b=PbDk+JkvJo9hm3RolRnYAULkXmt/bipnDV+gzQWHVr2krXNEO4Xn5D5P84EQFzub65TEVBYkaSdmW8FQ0XcUye7ZHMivCzipUsPPqWVl0jJelWY+Te1LWj+/5FA9vAetHm34OhGRR5CPWJUOikz1DqNmNftK9WgSRjw9kr0gqIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705681109; c=relaxed/simple;
-	bh=PSbkzYeX811ItSViusyC1PoucHT5C5dbiK5s5R+//Rc=;
+	s=arc-20240116; t=1705681348; c=relaxed/simple;
+	bh=N3nDl66knVvipxA6CSmaXfX6Ic9CiIDzcAuWh5t6NIE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EMNL98MLnMnzFAyTqacEIyuKV+nRBl+Bwja1KRpgPhXMdWvuzEf2SbsItpRQB/Yo552QgbkbdDlJnv3uqJhNIsL1mX3tKHILvOsMVVTBYqulVUlEzorROTdZ+Mlu2CQnKIqKYJnBwy1yvzkl85IUfpiJknp5Yak/afo11+8ZtUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q+eThb5l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82990C433F1;
-	Fri, 19 Jan 2024 16:18:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705681109;
-	bh=PSbkzYeX811ItSViusyC1PoucHT5C5dbiK5s5R+//Rc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q+eThb5l7sEce6revVcLqp76lCDQtAaJ13L1qS3uyNOLaVIjk42HLfg7St84Sepo4
-	 HYKvID3ToWBuU7kgFePrtxOZiYym0AC+CEHF5lX5XKd6rdkWawE5a3aLVWOM/LLAAn
-	 0SsJMQzA3AZiZzcel+jVKQWRL3kAisE3rsj6rYNyN6A+GYhIwCi0SmG6VljIaHfs7O
-	 UWzdqbTkifDCK5J4Y6Y26PK0m6CRH64IndM41XNPTCGjkGEW8WSuKrtOhv1+Ocs9XA
-	 inTTLSs6EY8SYEBdGr1HEHgfWaXjTFsr4EdGp2fvBOWwmj8qQjPjim8wNXrPx7RMps
-	 2clVHKzWPOxbg==
-Date: Fri, 19 Jan 2024 16:18:23 +0000
-From: Conor Dooley <conor@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	heikki.krogerus@linux.intel.com, matthias.bgg@gmail.com,
-	dmitry.baryshkov@linaro.org, neil.armstrong@linaro.org,
-	andersson@kernel.org, nathan@kernel.org, luca.weiss@fairphone.com,
-	tianping.fang@mediatek.com, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Introduce ITE IT5205 Alt. Mode
- Passive MUX
-Message-ID: <20240119-remedial-unripe-2a3a46b4f117@spud>
-References: <20240119125812.239197-1-angelogioacchino.delregno@collabora.com>
- <20240119125812.239197-2-angelogioacchino.delregno@collabora.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=KXGn+YZdN5PVDSPWD7cMJf6e2ufzbBePOU1xK/7rzROY8gpAPy+2se3Msy+3dwBgXcwWYKcH0DspQCjVg0bhQs3tonfcT0io35lGTjtjYDmt1yFrgoCKevrJu/oidFHZDIPSrQIYivvX6/zIYjzHr4YMwSkiugtsOaj47kB6HDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 44291 invoked by uid 1000); 19 Jan 2024 11:22:19 -0500
+Date: Fri, 19 Jan 2024 11:22:19 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>,
+  Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+  "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+  "hdegoede@redhat.com" <hdegoede@redhat.com>,
+  "ivan.orlov0322@gmail.com" <ivan.orlov0322@gmail.com>,
+  "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+  dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>
+Subject: Re: [EXT] Re: [PATCH] usb: roles: try to get/put all relevant modules
+Message-ID: <2d25ce4a-13e4-4ec7-b762-e5de56ff4bf5@rowland.harvard.edu>
+References: <DU2PR04MB8822E96E3AFF2EBB587B73BA8C732@DU2PR04MB8822.eurprd04.prod.outlook.com>
+ <d8f379d2-82ee-4567-8323-961cea5fd095@rowland.harvard.edu>
+ <DU2PR04MB8822149F7BBDDD0B59ECDE918C722@DU2PR04MB8822.eurprd04.prod.outlook.com>
+ <ZajtviC5hDVEczBN@kuha.fi.intel.com>
+ <2024011801-chewer-coastline-a16f@gregkh>
+ <Zakb4lHpiS7ty+aF@kuha.fi.intel.com>
+ <2024011842-harpist-password-b965@gregkh>
+ <DU2PR04MB88227057A70E1ED4A6F1CAB88C702@DU2PR04MB8822.eurprd04.prod.outlook.com>
+ <5a16bd56-52f7-4ea0-a2bb-f83fe0e710a7@rowland.harvard.edu>
+ <DU2PR04MB8822D855BD8CA7C4FF41F7538C702@DU2PR04MB8822.eurprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="9xj4ieRRilZigVCK"
-Content-Disposition: inline
-In-Reply-To: <20240119125812.239197-2-angelogioacchino.delregno@collabora.com>
-
-
---9xj4ieRRilZigVCK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <DU2PR04MB8822D855BD8CA7C4FF41F7538C702@DU2PR04MB8822.eurprd04.prod.outlook.com>
 
-On Fri, Jan 19, 2024 at 01:58:11PM +0100, AngeloGioacchino Del Regno wrote:
-> Introduce a binding for the ITE IT5205 Alternate Mode Passive MUX,
-> used for connecting, disconnecting and switching orientation and
-> control the SBU signals for alternate modes on USB Type-C ports.
->=20
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
->  .../devicetree/bindings/usb/ite,it5205.yaml   | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/ite,it5205.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/ite,it5205.yaml b/Docu=
-mentation/devicetree/bindings/usb/ite,it5205.yaml
-> new file mode 100644
-> index 000000000000..36ec4251b5f2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/ite,it5205.yaml
-> @@ -0,0 +1,72 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/ite,it5205.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ITE IT5202 Type-C USB Alternate Mode Passive MUX
-> +
-> +maintainers:
-> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> +  - Tianping Fang <tianping.fang@mediatek.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: ite,it5205
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  vcc-supply:
-> +    description: Power supply for VCC pin (3.3V)
-> +
-> +  mode-switch:
-> +    description: Flag the port as possible handle of altmode switching
-> +    type: boolean
-> +
-> +  orientation-switch:
-> +    description: Flag the port as possible handler of orientation switch=
-ing
-> +    type: boolean
-> +
-> +  ite,ovp-enable:
-> +    description: Enable Over Voltage Protection functionality
-> +    type: boolean
+On Fri, Jan 19, 2024 at 03:23:50PM +0000, Xu Yang wrote:
+> > What happens if the provider module is unloaded but then
+> > usb_role_switch_put() is called after usb_role_switch_unregister()?
+> > Won't there be a NULL pointer dereference inside the put_device() call?
+> 
+> The get_device() will be called after the user successfully get usb_role_switch
+> device. So the resource of sw will continue to exist until usb_role_switch_put()
+> is called.
 
-Bitta devil's advocacy perhaps, but why is this DT property? Is it not
-known whether or not this is supported based on the compatible, and
-whether or not to enable it is a decision for the operating system to
-make?
+But look: Your patch essentially prevents usb_role_switch_set_role() 
+from running after the role-switch device has been unregistered.  But 
+what if someone had already called usb_role_switch_set_role() before the 
+device was unregistered?  Won't that eventually lead to problems if the 
+provider's module is then unloaded from memory?
 
---9xj4ieRRilZigVCK
-Content-Type: application/pgp-signature; name="signature.asc"
+To put it another way, all those try_module_get() and module_put() calls 
+were originally added to prevent a specific problem from occurring.  
+Once you remove them, won't that problem be able to occur again?
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZaqgzwAKCRB4tDGHoIJi
-0jXTAP9VDbyyEoQ1CABhFZkzTHaAveF6g22etA5lGD8yD7UudAEAxgJII9jVF6rG
-10llZjO0yQjzZMumgGCQmHPSOQo7uQs=
-=ASpH
------END PGP SIGNATURE-----
-
---9xj4ieRRilZigVCK--
+Alan Stern
 
