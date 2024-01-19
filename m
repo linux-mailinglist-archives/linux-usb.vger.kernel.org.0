@@ -1,433 +1,183 @@
-Return-Path: <linux-usb+bounces-5276-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5277-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EBC18329D5
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 13:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D3C5832A19
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 14:11:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBEA01F23272
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 12:59:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E018D1F23391
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 13:11:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AB735380B;
-	Fri, 19 Jan 2024 12:58:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A682524CF;
+	Fri, 19 Jan 2024 13:11:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="N2P9Sc6B"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H//34y5P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246DF524BF;
-	Fri, 19 Jan 2024 12:58:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994F433CE9;
+	Fri, 19 Jan 2024 13:11:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705669102; cv=none; b=GR+Zb2C+AZPOwozmJPV2igG341NvsobSn95BbtJAlkjD3B98UtXhRaXzwI/E8CDUWnLIqYuyawHjbLT7z72KuBPTELRGnksTPwaAKo6xowFlFzuU+ubcMH1Igr8nQgCeEVNiN9/M4IAJf5aUM6/pM4/TkpPlqHHv6K1s09qd1HA=
+	t=1705669869; cv=none; b=iPm6IR0Ap5OAKgGPB05UYIV0+EoUGNb/yRqicNhs+Vqhs9XapEz+ZYm0//xa73DMM0fRGBWgxaqscW/47RvUtvKxys4HzikmV5bRDc58KJEIMTutuL/qHMlgLRCzsgTt2CZYuawkCL5oaVwL1d+BRbj1MglP16k7Q6AhpOuE9s0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705669102; c=relaxed/simple;
-	bh=bRnM9eljKI9massoRsV14doqnV7kMIldV5Ltjnszp4I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VrDiO671Ljs0LRm7RDkeFuPbXbuaO6wcvHRUXdd2FowALrFBYlWB29WBsLG9MGlBKSDMveMc0mmE29kjIutpqIjfUAiq3T47nBGlSw6JX2SBtfg7rlKSOu7mKLzWVF55/nPUaEXGTbDG4P1Egf/MEjWXI8wqa6hWZW3cTUjrL+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=N2P9Sc6B; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1705669099;
-	bh=bRnM9eljKI9massoRsV14doqnV7kMIldV5Ltjnszp4I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=N2P9Sc6BGA+TNzE9uQk4cQTWX9iyv+LBSg0ELkU1/f1Qd4Ug3tYuDmM3bJO5P9wn7
-	 iT8ClB2U3NTMPOgMNw/Y5EMVFIcP4EzKXtCpXH4MpTxffTuA9AQsoicDMskiRy5zpO
-	 dRbb7JWm7W+OC9Nj465yM9A4SJnwUFEuaPSB5MV0K/F513GFuDdIhMbs+WpcVYInxy
-	 rVuNFucuoXm4vdRyRsvx7JfESOXOyX39eqzzE6GVNglUNcQZpQGTtqTYQGwSXYaN7P
-	 raDJTMOOiWQeRe322exIU3drq5kNmBf4+sui9a0Gtwu/01eLhw64fyFoxUr0MEswBL
-	 bshMMphGXwDdA==
-Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 331E4378207E;
-	Fri, 19 Jan 2024 12:58:18 +0000 (UTC)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: gregkh@linuxfoundation.org
-Cc: robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	heikki.krogerus@linux.intel.com,
-	matthias.bgg@gmail.com,
-	dmitry.baryshkov@linaro.org,
-	neil.armstrong@linaro.org,
-	andersson@kernel.org,
-	nathan@kernel.org,
-	luca.weiss@fairphone.com,
-	tianping.fang@mediatek.com,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	kernel@collabora.com,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 2/2] usb: typec: mux: Add ITE IT5205 Alternate Mode Passive MUX driver
-Date: Fri, 19 Jan 2024 13:58:12 +0100
-Message-ID: <20240119125812.239197-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240119125812.239197-1-angelogioacchino.delregno@collabora.com>
-References: <20240119125812.239197-1-angelogioacchino.delregno@collabora.com>
+	s=arc-20240116; t=1705669869; c=relaxed/simple;
+	bh=J/z83Xg047XGvf3ennA+Sk+uHgqEASMgOJ1cSPBD8MU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FujAyaH/+fqV5aLho+I/esJTjDgADfBqz6HAKacDO84skOGHNuF2+4h5aXtgSEBUMfF8VxSWOO3aviOtM2zQaB1Z5ANwXTQlPW1ZfbL0zQLGybm3BNENleA4ljxpdjIU7MlV1GJp66V4D9crLZ7Uy10a+BuG9cD9JZ8iSdN6SCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H//34y5P; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705669867; x=1737205867;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J/z83Xg047XGvf3ennA+Sk+uHgqEASMgOJ1cSPBD8MU=;
+  b=H//34y5PgWC1Vla0/wUmWRlQtBE7+jNgXIgoda0QbONjMUK8PixK5MbQ
+   juWwMtjL4g+Fn177LQclu66PAyoWDSskd6LWy3ehUJAv3EO9bFgbdK5km
+   FdYmfpuv/RC026xYl7NfOfby/2Upk0VUJGLlTFjZiqtXb57p7xAykvgjF
+   o31XXVJLnuzV8XcNN6zThQT3cvTPYZrxx6KGFid2No4LZ1dkFdIt04eNE
+   DiXx25jMcRVWG1+HbcN0qJwdShSlK4eHTHeUcMpMrMgFq7KQgRyB+m0AI
+   Qn1X5uV7v/5wPZda3hLhmjqzIwTfU1aKajRW52f558mwZN/LBIgAMp0Tv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="7443367"
+X-IronPort-AV: E=Sophos;i="6.05,204,1701158400"; 
+   d="scan'208";a="7443367"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2024 05:11:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="785069304"
+X-IronPort-AV: E=Sophos;i="6.05,204,1701158400"; 
+   d="scan'208";a="785069304"
+Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 19 Jan 2024 05:11:01 -0800
+Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rQoeA-00044W-37;
+	Fri, 19 Jan 2024 13:10:58 +0000
+Date: Fri, 19 Jan 2024 21:10:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Cercueil <paul@crapouillou.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: oe-kbuild-all@lists.linux.dev, Paul Cercueil <paul@crapouillou.net>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	linux-doc@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>, linux-media@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] usb: gadget: functionfs: Add DMABUF import
+ interface
+Message-ID: <202401192043.6DTnLlKn-lkp@intel.com>
+References: <20240117122646.41616-4-paul@crapouillou.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240117122646.41616-4-paul@crapouillou.net>
 
-The ITE IT5202 is a USB Type-C Alternate Mode Passive MUX, used for
-muxing the SBU lines of a Type-C port with DisplayPort altmode and
-also providing an orientation switch.
+Hi Paul,
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/usb/typec/mux/Kconfig  |  10 ++
- drivers/usb/typec/mux/Makefile |   1 +
- drivers/usb/typec/mux/it5205.c | 294 +++++++++++++++++++++++++++++++++
- 3 files changed, 305 insertions(+)
- create mode 100644 drivers/usb/typec/mux/it5205.c
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-index d2cb5e733e57..399c7b0983df 100644
---- a/drivers/usb/typec/mux/Kconfig
-+++ b/drivers/usb/typec/mux/Kconfig
-@@ -36,6 +36,16 @@ config TYPEC_MUX_INTEL_PMC
- 	  control the USB role switch and also the multiplexer/demultiplexer
- 	  switches used with USB Type-C Alternate Modes.
- 
-+config TYPEC_MUX_IT5205
-+	tristate "ITE IT5205 Type-C USB Alt Mode Passive MUX driver"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  Driver for the ITE IT5205 Type-C USB Alternate Mode Passive MUX
-+	  which provides support for muxing DisplayPort and sideband signals
-+	  on a common USB Type-C connector.
-+	  If compiled as a module, the module will be named it5205.
-+
- config TYPEC_MUX_NB7VPQ904M
- 	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
- 	depends on I2C
-diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
-index 57dc9ac6f8dc..bb96f30267af 100644
---- a/drivers/usb/typec/mux/Makefile
-+++ b/drivers/usb/typec/mux/Makefile
-@@ -4,6 +4,7 @@ obj-$(CONFIG_TYPEC_MUX_FSA4480)		+= fsa4480.o
- obj-$(CONFIG_TYPEC_MUX_GPIO_SBU)	+= gpio-sbu-mux.o
- obj-$(CONFIG_TYPEC_MUX_PI3USB30532)	+= pi3usb30532.o
- obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
-+obj-$(CONFIG_TYPEC_MUX_IT5205)		+= it5205.o
- obj-$(CONFIG_TYPEC_MUX_NB7VPQ904M)	+= nb7vpq904m.o
- obj-$(CONFIG_TYPEC_MUX_PTN36502)	+= ptn36502.o
- obj-$(CONFIG_TYPEC_MUX_WCD939X_USBSS)	+= wcd939x-usbss.o
-diff --git a/drivers/usb/typec/mux/it5205.c b/drivers/usb/typec/mux/it5205.c
-new file mode 100644
-index 000000000000..b68535f80ceb
---- /dev/null
-+++ b/drivers/usb/typec/mux/it5205.c
-@@ -0,0 +1,294 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * ITE IT5205 Type-C USB alternate mode passive mux
-+ *
-+ * Copyright (c) 2020 MediaTek Inc.
-+ * Copyright (c) 2024 Collabora Ltd.
-+ *                    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-+ *
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/usb/tcpm.h>
-+#include <linux/usb/typec.h>
-+#include <linux/usb/typec_dp.h>
-+#include <linux/usb/typec_mux.h>
-+
-+#define IT5205_REG_CHIP_ID(x)	(0x4 + (x))
-+#define IT5205FN_CHIP_ID	0x35323035 /* "5205" */
-+
-+/* MUX power down register */
-+#define IT5205_REG_MUXPDR        0x10
-+#define IT5205_MUX_POWER_DOWN    BIT(0)
-+
-+/* MUX control register */
-+#define IT5205_REG_MUXCR         0x11
-+#define IT5205_POLARITY_INVERTED BIT(4)
-+#define IT5205_DP_USB_CTRL_MASK  GENMASK(3, 0)
-+#define IT5205_DP                0x0f
-+#define IT5205_DP_USB            0x03
-+#define IT5205_USB               0x07
-+
-+/* Vref Select Register */
-+#define IT5205_REG_VSR            0x10
-+#define IT5205_VREF_SELECT_MASK   GENMASK(5, 4)
-+#define IT5205_VREF_SELECT_3_3V   0x00
-+#define IT5205_VREF_SELECT_OFF    0x20
-+
-+/* CSBU Over Voltage Protection Register */
-+#define IT5205_REG_CSBUOVPSR      0x1e
-+#define IT5205_OVP_SELECT_MASK    GENMASK(5, 4)
-+#define IT5205_OVP_3_90V          0x00
-+#define IT5205_OVP_3_68V          0x10
-+#define IT5205_OVP_3_62V          0x20
-+#define IT5205_OVP_3_57V          0x30
-+
-+/* CSBU Switch Register */
-+#define IT5205_REG_CSBUSR         0x22
-+#define IT5205_CSBUSR_SWITCH      BIT(0)
-+
-+/* Interrupt Switch Register */
-+#define IT5205_REG_ISR            0x25
-+#define IT5205_ISR_CSBU_MASK      BIT(4)
-+#define IT5205_ISR_CSBU_OVP       BIT(0)
-+
-+struct it5205 {
-+	struct i2c_client *client;
-+	struct regmap *regmap;
-+	struct typec_switch_dev *sw;
-+	struct typec_mux_dev *mux;
-+};
-+
-+static int it5205_switch_set(struct typec_switch_dev *sw, enum typec_orientation orientation)
-+{
-+	struct it5205 *it = typec_switch_get_drvdata(sw);
-+
-+	switch (orientation) {
-+	case TYPEC_ORIENTATION_NORMAL:
-+		regmap_update_bits(it->regmap, IT5205_REG_MUXCR,
-+				   IT5205_POLARITY_INVERTED, 0);
-+		break;
-+	case TYPEC_ORIENTATION_REVERSE:
-+		regmap_update_bits(it->regmap, IT5205_REG_MUXCR,
-+				   IT5205_POLARITY_INVERTED, IT5205_POLARITY_INVERTED);
-+		break;
-+	case TYPEC_ORIENTATION_NONE:
-+		fallthrough;
-+	default:
-+		regmap_write(it->regmap, IT5205_REG_MUXCR, 0);
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int it5205_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *state)
-+{
-+	struct it5205 *it = typec_mux_get_drvdata(mux);
-+	u8 val;
-+
-+	if (state->mode >= TYPEC_STATE_MODAL &&
-+	    state->alt->svid != USB_TYPEC_DP_SID)
-+		return -EINVAL;
-+
-+	switch (state->mode) {
-+	case TYPEC_STATE_USB:
-+		val = IT5205_USB;
-+		break;
-+	case TYPEC_DP_STATE_C:
-+		fallthrough;
-+	case TYPEC_DP_STATE_E:
-+		val = IT5205_DP;
-+		break;
-+	case TYPEC_DP_STATE_D:
-+		val = IT5205_DP_USB;
-+		break;
-+	case TYPEC_STATE_SAFE:
-+		fallthrough;
-+	default:
-+		val = 0;
-+		break;
-+	}
-+
-+	return regmap_update_bits(it->regmap, IT5205_REG_MUXCR,
-+				  IT5205_DP_USB_CTRL_MASK, val);
-+}
-+
-+static irqreturn_t it5205_irq_handler(int irq, void *data)
-+{
-+	struct it5205 *it = data;
-+	int ret;
-+	u32 val;
-+
-+	ret = regmap_read(it->regmap, IT5205_REG_ISR, &val);
-+	if (ret)
-+		return IRQ_NONE;
-+
-+	if (val & IT5205_ISR_CSBU_OVP) {
-+		dev_warn(&it->client->dev, "Overvoltage detected!\n");
-+
-+		/* Reset CSBU */
-+		regmap_update_bits(it->regmap, IT5205_REG_CSBUSR,
-+				   IT5205_CSBUSR_SWITCH, 0);
-+		regmap_update_bits(it->regmap, IT5205_REG_CSBUSR,
-+				   IT5205_CSBUSR_SWITCH, IT5205_CSBUSR_SWITCH);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void it5205_enable_ovp(struct it5205 *it)
-+{
-+	/* Select Vref 3.3v */
-+	regmap_update_bits(it->regmap, IT5205_REG_VSR,
-+			   IT5205_VREF_SELECT_MASK, IT5205_VREF_SELECT_3_3V);
-+
-+	/* Trigger OVP at 3.68V */
-+	regmap_update_bits(it->regmap, IT5205_REG_CSBUOVPSR,
-+			   IT5205_OVP_SELECT_MASK, IT5205_OVP_3_68V);
-+
-+	/* Unmask OVP interrupt */
-+	regmap_update_bits(it->regmap, IT5205_REG_ISR,
-+			   IT5205_ISR_CSBU_MASK, 0);
-+
-+	/* Enable CSBU Interrupt */
-+	regmap_update_bits(it->regmap, IT5205_REG_CSBUSR,
-+			   IT5205_CSBUSR_SWITCH, IT5205_CSBUSR_SWITCH);
-+}
-+
-+static const struct regmap_config it5205_regmap = {
-+	.max_register = 0x2f,
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+};
-+
-+static int it5205_probe(struct i2c_client *client)
-+{
-+	struct typec_switch_desc sw_desc = { };
-+	struct typec_mux_desc mux_desc = { };
-+	struct device *dev = &client->dev;
-+	struct it5205 *it;
-+	u32 val, chipid = 0;
-+	int i, ret;
-+
-+	it = devm_kzalloc(dev, sizeof(*it), GFP_KERNEL);
-+	if (!it)
-+		return -ENOMEM;
-+
-+	ret = devm_regulator_get_enable(dev, "vcc");
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to get regulator\n");
-+
-+	it->client = client;
-+
-+	it->regmap = devm_regmap_init_i2c(client, &it5205_regmap);
-+	if (IS_ERR(it->regmap))
-+		return dev_err_probe(dev, PTR_ERR(it->regmap),
-+				     "Failed to init regmap\n");
-+
-+	/* IT5205 needs a long time to power up after enabling regulator */
-+	msleep(50);
-+
-+	/* Unset poweroff bit */
-+	ret = regmap_write(it->regmap, IT5205_REG_MUXPDR, 0);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to set power on\n");
-+
-+	/* Read the 32 bits ChipID */
-+	for (i = 3; i >= 0; i--) {
-+		ret = regmap_read(it->regmap, IT5205_REG_CHIP_ID(i), &val);
-+		if (ret)
-+			return ret;
-+
-+		chipid |= val << (i * 8);
-+	}
-+
-+	if (chipid != IT5205FN_CHIP_ID)
-+		return dev_err_probe(dev, -EINVAL,
-+				     "Unknown ChipID 0x%x\n", chipid);
-+
-+	/* Initialize as USB mode with default (non-inverted) polarity */
-+	ret = regmap_write(it->regmap, IT5205_REG_MUXCR, IT5205_USB);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Cannot set mode to USB\n");
-+
-+	sw_desc.drvdata = it;
-+	sw_desc.fwnode = dev_fwnode(dev);
-+	sw_desc.set = it5205_switch_set;
-+
-+	it->sw = typec_switch_register(dev, &sw_desc);
-+	if (IS_ERR(it->sw))
-+		return dev_err_probe(dev, PTR_ERR(it->sw),
-+				     "failed to register typec switch\n");
-+
-+	mux_desc.drvdata = it;
-+	mux_desc.fwnode = dev_fwnode(dev);
-+	mux_desc.set = it5205_mux_set;
-+
-+	it->mux = typec_mux_register(dev, &mux_desc);
-+	if (IS_ERR(it->mux)) {
-+		typec_switch_unregister(it->sw);
-+		return dev_err_probe(dev, PTR_ERR(it->mux),
-+				     "failed to register typec mux\n");
-+	}
-+
-+	i2c_set_clientdata(client, it);
-+
-+	if (of_property_read_bool(dev->of_node, "ite,ovp-enable") && client->irq) {
-+		it5205_enable_ovp(it);
-+
-+		ret = devm_request_threaded_irq(dev, client->irq, NULL,
-+						it5205_irq_handler,
-+						IRQF_ONESHOT, dev_name(dev), it);
-+		if (ret) {
-+			typec_mux_unregister(it->mux);
-+			typec_switch_unregister(it->sw);
-+			return dev_err_probe(dev, ret, "Failed to request irq\n");
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static void it5205_remove(struct i2c_client *client)
-+{
-+	struct it5205 *it = i2c_get_clientdata(client);
-+
-+	typec_mux_unregister(it->mux);
-+	typec_switch_unregister(it->sw);
-+}
-+
-+static const struct i2c_device_id it5205_table[] = {
-+	{ "it5205" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(i2c, it5205_table);
-+
-+static const struct of_device_id it5205_of_table[] = {
-+	{ .compatible = "ite,it5205" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, it5205_match_table);
-+
-+static struct i2c_driver it5205_driver = {
-+	.driver = {
-+		.name = "it5205",
-+		.of_match_table = it5205_of_table,
-+	},
-+	.probe = it5205_probe,
-+	.remove = it5205_remove,
-+	.id_table = it5205_table,
-+};
-+module_i2c_driver(it5205_driver);
-+
-+MODULE_AUTHOR("Tianping Fang <tianping.fang@mediatek.com>");
-+MODULE_AUTHOR("AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>");
-+MODULE_DESCRIPTION("ITE IT5205 alternate mode passive MUX driver");
-+MODULE_LICENSE("GPL");
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus lwn/docs-next linus/master v6.7 next-20240119]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/usb-gadget-Support-already-mapped-DMA-SGs/20240117-203111
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20240117122646.41616-4-paul%40crapouillou.net
+patch subject: [PATCH v4 3/4] usb: gadget: functionfs: Add DMABUF import interface
+config: arm-randconfig-r112-20240119 (https://download.01.org/0day-ci/archive/20240119/202401192043.6DTnLlKn-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce: (https://download.01.org/0day-ci/archive/20240119/202401192043.6DTnLlKn-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401192043.6DTnLlKn-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: dma_buf_get
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_buf_detach
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced 2 more times
+--
+>> ld.lld: error: undefined symbol: dma_fence_init
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_resv_add_fence
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_fence_signal
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_dmabuf_io_complete) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_dmabuf_signal_done) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_fence_release
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(dma_fence_put) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_dmabuf_unmap_work) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_buf_put
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced 2 more times
+--
+>> ld.lld: error: undefined symbol: dma_buf_attach
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_fence_context_alloc
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_resv_test_signaled
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_buf_map_attachment
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+..
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
