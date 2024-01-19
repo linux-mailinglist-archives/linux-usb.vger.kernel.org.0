@@ -1,85 +1,83 @@
-Return-Path: <linux-usb+bounces-5296-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5297-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72C6F83304F
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 22:32:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A12983306F
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 22:49:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BA902847C1
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 21:32:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18CE21F2287C
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 21:49:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55E158AB2;
-	Fri, 19 Jan 2024 21:31:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 725D458237;
+	Fri, 19 Jan 2024 21:49:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="bU/eU2Sw"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="qk0QDtap"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2066.outbound.protection.outlook.com [40.107.104.66])
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2089.outbound.protection.outlook.com [40.107.104.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270AD58210;
-	Fri, 19 Jan 2024 21:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B6258109;
+	Fri, 19 Jan 2024 21:49:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.89
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705699913; cv=fail; b=mz61vg3zjKqw/DUo2O5bDF24xE3Qsi22PHqo9ZLG4yvgmZ+HGQvKk0+z6LPxOKzK4W1S7jc/9zfRkL0Z6k8IFLsIj03ngfik3Sq0aOp1E5ryvS4xu22aBAr7mP5ApGDEHt1EsgjdEKJaBAQhRGUTdfrI2Se/GNUo7pPjYLBNTCA=
+	t=1705700960; cv=fail; b=a0M0/yDHzlgHoFv60OBNDPe9jhc8bMdDADd+O4oEQHQtFzoYfxDtixgAN0weDe9dZY04zjlyc4UHg6ME1dRWrz273fuLRUBozUzcW/OtMfA6m2W6vMVG1Uo1/mhyApDH9Ut6nijjCOynbr6+LxaBCNSTzfkkedPfkFhOwVNNXdI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705699913; c=relaxed/simple;
-	bh=sWn7eNJsv7QevaCwVtRZTZGoKX7P8VRhvgQ1e8fwVw0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MMaZ5AvQKUrGG+iSlgSn8wA2dTw+7zjNupxHRDTT2rGMMsvvkolLVcvb8uAxzmhBkjFxKb6l3yGYyukxy7eh2XeviIcQOghYTWFWkT/aI3xHilqgwx/+4rB7gdPNyNL67yrZuJ4p9T2GMVtXSaqavbtekTyy/tkUhTDlIsVsZtw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=bU/eU2Sw; arc=fail smtp.client-ip=40.107.104.66
+	s=arc-20240116; t=1705700960; c=relaxed/simple;
+	bh=x7dPROjlRkmHwzOyCnZc+EMMKKnGQCiH2+JQ405C/1o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=rXFKqT/7E4wT/Lroj1tIWx3bo4ao37gLZOWyt3Vh4cwiymwT8s5dnl4gGHpNIKQwccQRoMH3f1lQaBg0va4LU3WQYXt//X18leAJRIRv/pKzTg1kc8wocSSecG9s0ztfG40d37VmV7fo5GCvpp01zUVQE82PXZRpDaPWiCmH080=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=qk0QDtap; arc=fail smtp.client-ip=40.107.104.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bgOq/d/0xgI9Ddau4fXGVT0InMDMFyU8NQkLp+CJTiGtUqOIId7wik1fXqb251ef7f7Jt2m5jAOREeJHI0674oIRNIVR9ZAFZtl3XZEpaoKtS8VPZldaWQEeIUbZm21R97hfHnT7EDPrqt7qVovd7bkFTq5uzCFm8EXf9wKjQ8X2nOU70EXa3TzFBq7TaN5t6ZAEOFB70DmLLMoWflmnP3jytzNpljzwAsBboG+Lc+r84CZcxAfgXwd1qxEKHaMxPL+scRkPRzhzfBJSMqN1bJGjIxFWEWVkzhfHWbjlUJ47qApGbq81ChK0x5FbpbsbEyuaaD7yLcfRkT80qvSr2A==
+ b=LYcjOn/r9Oa6ter4DrP1GZ3OlShg7mWfzp7pk+B+12egsIa/2GF62febRZV47Mpnr+ZXk/8DtoAG+r+j3QfpfnbcMmLSFLsVvLgzwnZhNMe5oQhH5a/nIKlq3thTde4Zhh3CNjUWgmtaMJkQSPe9vSbADvuTQwgH4NpRNYQ7GtmiemDSMj+M2PyBRjbp9yxdqWYRW28Vo0ZiTjEidxBI3cltO300ORZPRvoYjiHFIYHIF/EpNbaGTGHfG3NzztTnRpnX1GpQDczpIMn03PDEh7atqgpX1UKDU/uIbg25RlGZdmBosio/sPnuifFeTnQnduRQMCnQ7xOYP4TABYRhtw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3fVOIiSbFLuzbmEiE10O7ufJbCdQqgHUs8529IcsgEM=;
- b=WCNwt/1ypMU0uG8DfIN9OPYfJ2WWzoiGtIvJpI5158ukQ5WBMGs14rJEN5S8kmTHVGQDUUbrg5Fn9sO91rH9Zr3/fpNL7ZjNA/xRznoqCK+9O1+pKn/IYNsp8veXbOXA/BNvuY5YNihZUOgmVgD7maOa19kG+HBjMO6XUiOuzsjaYs7pNJtJXiC5FO35GHMdHM1hxv8ewzVawMMxhUgyOHzmXP86HZnThmYfzB9uXPq6+Y+Zu3vCIbKMv6uG6N2JgRS0kr68kFm/DsnXsnz2ZH4+IVILJzk32QdZ27SXfk4GnQi9ZNe2SMnPITF27vHgSg/o1urNUwuzygz3KEuVwA==
+ bh=8fA5uEhWUXMoyF3WfQmuClTihq31rQl/0jmO9x7xJa8=;
+ b=GQhylPPFbBo6VcZqJTswEY15SjTjmYb2Cqm4C7pThpQgjWKdAkFUbkXnlsjjRGe6Us+lFxXrYjPA5VGHQUowOpfn1kdsXvSiQdQ/4WihHaLNpoSRkS5jNN8G5azlzwe188F7QvUd6yjtPABuljS9wKHMVgcXR9CA8oUtpXPkI/dWiZhD7UXR/x+Go81qFHIhIhe5EvUYy1U/cJFDNn8mcBDwZADjOcKGwsf7e6JEcXdHHhXNl/WrJArSq8s+tO2rvuTLK0Dl/MqlnWaTf3TzWVbb631B8yxQS9zkG3aug5P1/voU/xah0WGVrXXQgTMJJs0PeMKg1AoABJ7eATHG/g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3fVOIiSbFLuzbmEiE10O7ufJbCdQqgHUs8529IcsgEM=;
- b=bU/eU2SwgUbzhWgbwz2JyhX08EMP9QF859VufzKnSue+POYE7FG0e4QYNx+s+eYkEQze+0ILXHoj+XSVFe+xFY5q7ioJXEAIF7MvG4l1k6ce4Jv+rcs61NHCdH3UKlD+ySF1cu47pJh/DCBaNDtRT6wTGht8EweZy8V1QX1FKR8=
+ bh=8fA5uEhWUXMoyF3WfQmuClTihq31rQl/0jmO9x7xJa8=;
+ b=qk0QDtapbTByBgp2Afrlsy1IMvduUz6+WrlXNnGPHnkHnntjeb+plQOtitik9afO/FQyfaKs1LM5EvT1HSL0gwBFZwOKCwg3mYK1R3iL5n0Hxr58Gxv9YABLSIOYxpvla67I6wOLXgK6SKcyQWYAhCudkQyLyGJUWig6p+R+PJ0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by AM9PR04MB8795.eurprd04.prod.outlook.com (2603:10a6:20b:40a::24) with
+ by DB9PR04MB9553.eurprd04.prod.outlook.com (2603:10a6:10:2ed::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.27; Fri, 19 Jan
- 2024 21:31:49 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.24; Fri, 19 Jan
+ 2024 21:49:15 +0000
 Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
  ([fe80::b8af:bfe5:dffd:59a9]) by PAXPR04MB9642.eurprd04.prod.outlook.com
  ([fe80::b8af:bfe5:dffd:59a9%4]) with mapi id 15.20.7202.027; Fri, 19 Jan 2024
- 21:31:49 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: ran.wang_1@nxp.com,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org (open list:DESIGNWARE USB3 DRD IP DRIVER),
-	linux-kernel@vger.kernel.org (open list)
-Cc: balbi@kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	mark.rutland@arm.com,
-	pku.leo@gmail.com,
-	robh+dt@kernel.org,
-	sergei.shtylyov@cogentembedded.com
-Subject: [PATCH 2/2] usb: dwc3: Add workaround for host mode VBUS glitch when boot
-Date: Fri, 19 Jan 2024 16:31:29 -0500
-Message-Id: <20240119213130.3147517-2-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240119213130.3147517-1-Frank.Li@nxp.com>
-References: <20240119213130.3147517-1-Frank.Li@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY3PR05CA0046.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::21) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ 21:49:15 +0000
+Date: Fri, 19 Jan 2024 16:49:07 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: Paul Cercueil <paul@crapouillou.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v4 1/4] usb: gadget: Support already-mapped DMA SGs
+Message-ID: <ZaruU5BpQF8SeZZS@lizhi-Precision-Tower-5810>
+References: <20240117122646.41616-1-paul@crapouillou.net>
+ <20240117122646.41616-2-paul@crapouillou.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240117122646.41616-2-paul@crapouillou.net>
+X-ClientProxiedBy: BYAPR06CA0028.namprd06.prod.outlook.com
+ (2603:10b6:a03:d4::41) To PAXPR04MB9642.eurprd04.prod.outlook.com
  (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -88,197 +86,119 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AM9PR04MB8795:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8aa251c2-5905-4676-28d5-08dc19360b98
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DB9PR04MB9553:EE_
+X-MS-Office365-Filtering-Correlation-Id: 97e874b5-8ed2-4ef4-a54c-08dc19387af9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	temKoJ2utQMN13ebSZ9qfcmwM2n82KmvAnwkRavLZrnhQiQPJARuqRz4HBseTSzRmpPScT4B+sPc4c5FJF0P7kyIJLgJYdoVPFe19XHoW6jBVJGhMPFwtndHaVVd0sZB25/hbPyH9RT9xyQSpZ2HN2izbV7b9KfCcj9WNHV4uqPN/MP9tUl2SzfolKD/iUWWizto5zhsAo+kBROWUmgBgn75AdHU9ctO2Hsy4JzHtva+raH40M//1x7U47z9kODfBl9kl4C3CYQ3lBYeM00JOM52ZckVzLPqrIVzPr/veTvTGimdAIyg5SYYGgAtMnATTRx3OggX1q9AXSKS0hTdEhonMlf1xj195hykn0UGWpPpkskPcBoynIqOd3VS9IUB7fs1XoF7KKOftR4HpsZoXVvbOtzfzz7XI6XnwKsmP9aH00w0nHlQuVnpFOflc06g30alb2qyUotaEVcT23y3Pik5TMOxVF0jMY51kaEj/PAgCmkab07vtMiYm1xoTB8YxqlhyTD3P6cryz2oeEAtzyIHRQa6CKEeoMzwlHlcEUL2cpdjDuu/qqk4jyGPOIG7knOrJYT3V51QhYVrHu14ig8hp4wXT9Ybu09R6T72Z/o=
+	ha/pdxOMA9ZRBUweZDpzZvbbAfF5RMcSyXgpUi+A4YVB6bbPTCxDUfV7qW2gpQ5/ptF+zCwC7GzH7d/x7c5Q4WtY8N+oZnn7OpNXTJ523niwcSF1jwoKstBD2iWKmfVKEe/+HwBTkatodRei4p/YZbh1LN9V1N/OhPW0lFuGYNiINUGhFoRX2JXEf77pP4FtFee/RDAtXRx/nb3k8UAc7/bsBgsyiLWxqqLbS4LHlaMF75JNc4O78i6P9SB9DLDvumCwLEVV+xGxH0WYIQvu0mn9RDksnGktG35ZwfbSNxHcpUkzIrmwgI+zXvbEGVy66lIEAwlwFQvmSEqTuJIC0IZcZdzOigWOCRx0/Npq1yTJyg7UPh1QCKPgGoLkw0i7XKMiXO7Zckl6wXcUlHPC02XxCdb1ZMyiOGdwZW5/0+sYG0ffUnv8AjV0cqjv9QjfBFcmXXZRqkRhN22A8xqbOKKYKA7b4pNbY50YRR/UL2bEN9h5f6qkSQ0zQ84mCASEl4saejtetf4JKinJiurmKL/VghbTqFWeKAz6UBuY6r1+w/NZ003MWfQAcj6IdAZ9JaBU6UANFAYomodX0NToDEfCX3tEbJBrWIamUwNuguZ6bqyrfDKD6QoAITiSelaM
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(376002)(366004)(346002)(39860400002)(230922051799003)(64100799003)(1800799012)(186009)(451199024)(41300700001)(1076003)(5660300002)(38350700005)(7416002)(26005)(4326008)(8676002)(8936002)(2906002)(86362001)(83380400001)(478600001)(6506007)(966005)(52116002)(45080400002)(6512007)(66476007)(6666004)(2616005)(6486002)(36756003)(66556008)(66946007)(316002)(110136005)(38100700002);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(136003)(346002)(39860400002)(396003)(376002)(366004)(230922051799003)(451199024)(186009)(1800799012)(64100799003)(86362001)(4326008)(7416002)(5660300002)(38350700005)(38100700002)(83380400001)(26005)(52116002)(6666004)(6506007)(6512007)(9686003)(478600001)(66556008)(6916009)(66946007)(66476007)(54906003)(6486002)(8676002)(8936002)(316002)(2906002)(33716001)(41300700001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?BH3DqpHaVc0e4N8LclasmiHmnDyKzbFs0Wn7ro0xrUly/+lX9ZREsvE5oErx?=
- =?us-ascii?Q?IbOPaPEpsx0sG6IzfIBRPEbEcjdkS6bwtw1OiGHYmglGr3Q5xQrjRdkjhNEr?=
- =?us-ascii?Q?ayf5aNIkIaSe/EHNfeOccDfy3Fh/mg/++bj9eqcJ/ZCpDJzYnbuTRXwMYbJe?=
- =?us-ascii?Q?X7RXqemzE2RmOBxFv0UdhXNhFu46P9yWSsd18DZQyFB/TtaQNq3E86yLgaTL?=
- =?us-ascii?Q?UnfHLphiat+PT3VNz4XzvWkhluG9UJ0jkSDl6tC9XdjG4dvXvryyODH3U4lI?=
- =?us-ascii?Q?pXQMuvFROc7yLx0LIjqjAL+1NE/WNT5uXGKItaQfJIth4e9TJUSpei4sIRgW?=
- =?us-ascii?Q?+8KBKk3tgl747cK0SvMGi0iz1quxXkDqIPinhjODjFgOgjlFA+wFXdEKo4q1?=
- =?us-ascii?Q?OW8QBAO+cOfkW6X7Y8Doyifu9o1W9imz7yc6jiNEoAvOMoYOt5bSrxnPt6Ad?=
- =?us-ascii?Q?WSObGQvRy+zRY0s2z4X/G2bY5TDNCTkkPb0Ln+yIaj5dUC8z2j2XnGEkGHw9?=
- =?us-ascii?Q?Ldafk0N2g04n/SjfYaGa3wp+obmrBboRPj2MxyvCKP+m//QYem33nAs2t/o4?=
- =?us-ascii?Q?tNlw0XRCUKCwelMby03AyWLQI8hxhnXmlIGK59BKzS+5x6R46eeebkoWaCFX?=
- =?us-ascii?Q?X6sdr2T9FdRxAn+Ha978R5fLHkIOM55zGfUHEulhyFPL1JAZcA64m5K92iTm?=
- =?us-ascii?Q?TawIf8WSHxJjqTB3wSR0dPZI808Xi4wsszLnLCy2+EbpJqrTo2C6p4pusX7e?=
- =?us-ascii?Q?x6komWVda1GKlSRLkpTph0G4Y2X6ffMTMOva8oogNM0oajIKGvEjY1ih+Ulw?=
- =?us-ascii?Q?TAI+5mdQn31q9Jg4ucYCpCrAf5Ebwd74sKDRHzct+D50V3LI+vbUG9jzG8FP?=
- =?us-ascii?Q?dOCLXmzEWK1C9ZIbEOFh/elS+MPtHvYn4hSaqjswNoE2HUsd0+FQxseYM86g?=
- =?us-ascii?Q?IuENq6OGCLZKEmt/p6JUBuisA0XOoWiwsDNi1SPgx97U4WQRVZtP0ALFQtXY?=
- =?us-ascii?Q?uuYT1+Ul9BUszZ0YuajYeLOfiC2TFCrwIAp1INQE7BBEk4J5tnBv1cql+sdH?=
- =?us-ascii?Q?UdxVx8k79gQ2DuOV4cI12NOkTEsFrZiKFTxBPqSHTuABX8RXDMe+tQZ25ZIo?=
- =?us-ascii?Q?SVnsvu5IWG7kPUIufXb3pbutK6pJfqrfbbPaUmjHpBgTnhbD9mITXVT5jdgv?=
- =?us-ascii?Q?Jgi9d6Ub9VkA12ZnHTNIXKbeXczJqyGwRQoKpYRaMP1kaXU+huA2N9hhFri7?=
- =?us-ascii?Q?2mIHusDjtYVlojdP+OebduR3e+pD0U1FSGJRFykZpzKLJDrBI4HVeJeU5Hvd?=
- =?us-ascii?Q?WQauPbfhMACFMLnkxXYkFgHtiWujro814JuKhJWa1vdRbdSThoBvTgyg9ewW?=
- =?us-ascii?Q?dlhN5h4S72Y6FlaDo1lBRE5fXaKjWFgAR1bxLm7BsoUex5HQgJSWow2+W72r?=
- =?us-ascii?Q?QhZ4QEqaW6ltZMkz65FcUgopdL2Hyrsl8gez121WBc8xvpdS+kfhNxEJWbSz?=
- =?us-ascii?Q?iCg6I9jS0a4ent/v2cuKalSZDMprbkCUis7DesHmcylqI49340q7dBcN0cN5?=
- =?us-ascii?Q?+J3b0ycIJQ8HogacXPew+e+DeMEdLj9HagLIk0RT?=
+	=?us-ascii?Q?4w5dt3pffptiHSgwPXBphiAPpuB4nLzEUDZUrvJz6bGAFNVqnUXMQBAlm+6p?=
+ =?us-ascii?Q?QPkME559I6anJLKWRhox32nXgDKtUfSM9kh18s+X5pRgAKOMcUBVnMoREnnR?=
+ =?us-ascii?Q?LXkwGx5fby/qUq6nmoFbwVt9Qs4z7pc5YiksCjsp8seDb/m1rkSk1uRKPxcs?=
+ =?us-ascii?Q?hom5317Mqv7Wng67LZId+EUNltK+4M3ibM6a6vArQjbOU/RDK42jooOZvDh6?=
+ =?us-ascii?Q?4Ak/n2IpsQvDxYaH86/qaUaTIGZ4cEv62tK0FQrrLjzDw8VLfIIhDdC6OgFv?=
+ =?us-ascii?Q?WCAHc64bWFW1D8NRrpohV+MhPRBNalD5YiA1+9+eakec5Im2MJANsJp5vfIP?=
+ =?us-ascii?Q?rMz6cd23Wnv/l86L2dqcihJwEFJ+UCuSYB0uM7ESbp0ZFYgefGKZUum2g2K5?=
+ =?us-ascii?Q?LzUg4xtodzYf3R/1nuRk1fc8WgB2WxeJDPFwD0RSp3hfO0sD4nXch5r4jwex?=
+ =?us-ascii?Q?dfXIyBuFApU1//5CEFLlH4ffqrdPEKWknRnjzlWCv6nuAUDZUn+hvCLOfrNA?=
+ =?us-ascii?Q?nY+/EwL+VtSp25l8frNd292oSM7TVYSxB9vov9s3QGJhRf4zMc4IvKKIbEzD?=
+ =?us-ascii?Q?SNTSTVITXBO1Uq/vIbEerV9RiKVaktE3IlcMBGRpYeA2y4sMfMju547VxBfr?=
+ =?us-ascii?Q?t1iGo175q2O2m4j8wKvvOLIIvIjO/UHesyJTUuAICHSMnnZDH2jX0KSclvGO?=
+ =?us-ascii?Q?TEXFBffo/dyRfdCJvQmbxyTusV+0g0A52V8POQHHHS0TDGhvhOM1MV1HEpz3?=
+ =?us-ascii?Q?CE3DyGNuo0LrQQdpCYGckSMCDM5ylUL6XJVKn5eR9UDotfjqXBwlIbAhi1HG?=
+ =?us-ascii?Q?5cb/Nz1bIdcJiRQv7x78PM1I4kFnD8rm14noc8l9MWTHr5c4MZwRkR41xLYk?=
+ =?us-ascii?Q?T4UWv5l4tyXqtwSqNSlHjBm9wgnzxzycoShACUdXNfsFR9w0tyXf5JEiVREe?=
+ =?us-ascii?Q?lRzDWAaMDu173f6/YRiFXtMFpZjhRT2RPTQ8BeIwL0w6W4WQonFNxxPdbLtO?=
+ =?us-ascii?Q?MDApeR2LtqYXiviMBvgz2Os1pqSwLyiSxDRo3uOD8BEapZEAcFQCBN7rE2Kn?=
+ =?us-ascii?Q?/NplfoyjutTZy+Eatg7SaeRMR+PGOgOpb0RqKilGKCxzP47yjndflyN4dCNS?=
+ =?us-ascii?Q?JbQsE1wbzGJBwfCepYHnCYB9+3OJzkWSgaa2HSiaXPtma5yMn3yc899Wukir?=
+ =?us-ascii?Q?xLc7X7viU1JMqv3eE3mcSbzQJp8dPAGETArfMJX4S8lYoWnHMxrG0IkrRih+?=
+ =?us-ascii?Q?QLD/jsRZi3fMUyBtHtRee6Ns/GnXHb5V2xq2VfBqvBXq1OFzvMh6XqNWw49R?=
+ =?us-ascii?Q?MFSYuofbunkitvsnfKtWrEk8kBOc093viHAC3p1hjoMrqo3NbrK776vxQS8Z?=
+ =?us-ascii?Q?feSBvT9HEzH2+Oo5cYkpHcZ3hP5Xm/zNo0DsLaI7aAmJTixyl/1bVyUnPSq/?=
+ =?us-ascii?Q?b5DhNPrtcfWHUm33eq8JAo/e3YLbIlt4NBUn6lZis4EPkpvtlGvjCgFSYA6n?=
+ =?us-ascii?Q?DlsBkEFt0k1axHuSIrvUzkzUzhC2satKQOhRJIIT0mheXIEMYsevIkb5E+RE?=
+ =?us-ascii?Q?D/aXJmN2t70kiKMloeF8BRmERiju+6aRloHM01V7?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8aa251c2-5905-4676-28d5-08dc19360b98
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97e874b5-8ed2-4ef4-a54c-08dc19387af9
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2024 21:31:49.5361
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2024 21:49:15.4820
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Hmicvz5S5DZiGHZfM3dYc+urNTMsYiK13r14fXl+DbIN2wCSs4FAwVj08t+q+lyer0b3J0LwRCCe9a3HqPkUTQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8795
+X-MS-Exchange-CrossTenant-UserPrincipalName: XjJ89Ryj19M8JnyA3/tBfj3l5tpcfNnrL3RmD/uk2dR3H/Sl7+19Ad6OkRUE8PoSSsCNznmN/yQg+dq4rveRqA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9553
 
-From: Ran Wang <ran.wang_1@nxp.com>
+On Wed, Jan 17, 2024 at 01:26:43PM +0100, Paul Cercueil wrote:
+> Add a new 'sg_was_mapped' field to the struct usb_request. This field
+> can be used to indicate that the scatterlist associated to the USB
+> transfer has already been mapped into the DMA space, and it does not
+> have to be done internally.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  drivers/usb/gadget/udc/core.c | 7 ++++++-
+>  include/linux/usb/gadget.h    | 2 ++
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> index d59f94464b87..9d4150124fdb 100644
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@ -903,6 +903,11 @@ int usb_gadget_map_request_by_dev(struct device *dev,
+>  	if (req->length == 0)
+>  		return 0;
+>  
+> +	if (req->sg_was_mapped) {
+> +		req->num_mapped_sgs = req->num_sgs;
+> +		return 0;
+> +	}
+> +
+>  	if (req->num_sgs) {
+>  		int     mapped;
+>  
+> @@ -948,7 +953,7 @@ EXPORT_SYMBOL_GPL(usb_gadget_map_request);
+>  void usb_gadget_unmap_request_by_dev(struct device *dev,
+>  		struct usb_request *req, int is_in)
+>  {
+> -	if (req->length == 0)
+> +	if (req->length == 0 || req->sg_was_mapped)
+>  		return;
+>  
+>  	if (req->num_mapped_sgs) {
+> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+> index a771ccc038ac..c529e4e06997 100644
+> --- a/include/linux/usb/gadget.h
+> +++ b/include/linux/usb/gadget.h
+> @@ -52,6 +52,7 @@ struct usb_ep;
+>   * @short_not_ok: When reading data, makes short packets be
+>   *     treated as errors (queue stops advancing till cleanup).
+>   * @dma_mapped: Indicates if request has been mapped to DMA (internal)
+> + * @sg_was_mapped: Set if the scatterlist has been mapped before the request
+>   * @complete: Function called when request completes, so this request and
+>   *	its buffer may be re-used.  The function will always be called with
+>   *	interrupts disabled, and it must not sleep.
+> @@ -111,6 +112,7 @@ struct usb_request {
+>  	unsigned		zero:1;
+>  	unsigned		short_not_ok:1;
+>  	unsigned		dma_mapped:1;
+> +	unsigned		sg_was_mapped:1;
 
-When DWC3 is set to host mode by programming register DWC3_GCTL, VBUS
-(or its control signal) will be turned on immediately on related Root Hub
-ports. Then, the VBUS is turned off for a little while(15us) when do xhci
-reset (conducted by xhci driver) and back to normal finally, we can
-observe a negative glitch of related signal happen.
+why not use dma_mapped direclty?
 
-This VBUS glitch might cause some USB devices enumeration fail if kernel
-boot with them connected. Such as LS1012AFWRY/LS1043ARDB/LX2160AQDS
-/LS1088ARDB with Kingston 16GB USB2.0/Kingston USB3.0/JetFlash Transcend
-4GB USB2.0 drives. The fail cases include enumerated as full-speed device
-or report wrong device descriptor, etc.
+Frank
 
-One SW workaround which can fix this is by programing all xhci PORTSC[PP]
-to 0 to turn off VBUS immediately after setting host mode in DWC3 driver
-(per signal measurement result, it will be too late to do it in
-xhci-plat.c or xhci.c). Then, after xhci reset complete in xhci driver,
-PORTSC[PP]s' value will back to 1 automatically and VBUS on at that time,
-no glitch happen and normal enumeration process has no impact.
-
-Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-Reviewed-by: Peter Chen <peter.chen@nxp.com>
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
-
-Notes:
-    Last review at June 06, 2019. Fixed all review comments and sent again.
-    
-    https://lore.kernel.org/linux-kernel/AM5PR0402MB2865979E26017BC5937DBBA5F1170@AM5PR0402MB2865.eurprd04.prod.outlook.com/
-
- drivers/usb/dwc3/core.c |  2 ++
- drivers/usb/dwc3/core.h |  2 ++
- drivers/usb/dwc3/host.c | 46 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 50 insertions(+)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 3e55838c00014..a57adf0c11dd1 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1626,6 +1626,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 	dwc->dis_split_quirk = device_property_read_bool(dev,
- 				"snps,dis-split-quirk");
- 
-+	dwc->host_vbus_glitches = device_property_read_bool(dev, "snps,host-vbus-glitches");
-+
- 	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
- 	dwc->tx_de_emphasis = tx_de_emphasis;
- 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index e3eea965e57bf..0269bacbbf6bd 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1135,6 +1135,7 @@ struct dwc3_scratchpad_array {
-  * @dis_split_quirk: set to disable split boundary.
-  * @wakeup_configured: set if the device is configured for remote wakeup.
-  * @suspended: set to track suspend event due to U3/L2.
-+ * @host_vbus_glitches: set to avoid vbus glitch during xhci reset.
-  * @imod_interval: set the interrupt moderation interval in 250ns
-  *			increments or 0 to disable.
-  * @max_cfg_eps: current max number of IN eps used across all USB configs.
-@@ -1353,6 +1354,7 @@ struct dwc3 {
- 	unsigned		tx_de_emphasis:2;
- 
- 	unsigned		dis_metastability_quirk:1;
-+	unsigned		host_vbus_glitches:1;
- 
- 	unsigned		dis_split_quirk:1;
- 	unsigned		async_callbacks:1;
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index 61f57fe5bb783..af8903ee37c20 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -11,6 +11,7 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
- 
-+#include "../host/xhci.h"
- #include "core.h"
- 
- static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
-@@ -28,6 +29,44 @@ static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
- 		dwc->xhci_resources[1].name = name;
- }
- 
-+#define XHCI_HCSPARAMS1		0x4
-+#define XHCI_PORTSC_BASE	0x400
-+
-+/*
-+ * dwc3_power_off_all_roothub_ports - Power off all Root hub ports
-+ * @dwc3: Pointer to our controller context structure
-+ */
-+static void dwc3_power_off_all_roothub_ports(struct dwc3 *dwc)
-+{
-+	int i, port_num;
-+	u32 reg, op_regs_base, offset;
-+	void __iomem *xhci_regs;
-+
-+	/* xhci regs is not mapped yet, do it temperary here */
-+	if (dwc->xhci_resources[0].start) {
-+		xhci_regs = ioremap(dwc->xhci_resources[0].start,
-+				DWC3_XHCI_REGS_END);
-+		if (IS_ERR(xhci_regs)) {
-+			dev_err(dwc->dev, "Failed to ioremap xhci_regs\n");
-+			return;
-+		}
-+
-+		op_regs_base = HC_LENGTH(readl(xhci_regs));
-+		reg = readl(xhci_regs + XHCI_HCSPARAMS1);
-+		port_num = HCS_MAX_PORTS(reg);
-+
-+		for (i = 1; i <= port_num; i++) {
-+			offset = op_regs_base + XHCI_PORTSC_BASE + 0x10*(i-1);
-+			reg = readl(xhci_regs + offset);
-+			reg &= ~PORT_POWER;
-+			writel(reg, xhci_regs + offset);
-+		}
-+
-+		iounmap(xhci_regs);
-+	} else
-+		dev_err(dwc->dev, "xhci base reg invalid\n");
-+}
-+
- static int dwc3_host_get_irq(struct dwc3 *dwc)
- {
- 	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
-@@ -66,6 +105,13 @@ int dwc3_host_init(struct dwc3 *dwc)
- 	int			ret, irq;
- 	int			prop_idx = 0;
- 
-+	/*
-+	 * We have to power off all Root hub ports immediately after DWC3 set
-+	 * to host mode to avoid VBUS glitch happen when xhci get reset later.
-+	 */
-+	if (dwc->host_vbus_glitches)
-+		dwc3_power_off_all_roothub_ports(dwc);
-+
- 	irq = dwc3_host_get_irq(dwc);
- 	if (irq < 0)
- 		return irq;
--- 
-2.34.1
-
+>  
+>  	void			(*complete)(struct usb_ep *ep,
+>  					struct usb_request *req);
+> -- 
+> 2.43.0
+> 
 
