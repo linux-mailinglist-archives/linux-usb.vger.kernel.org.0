@@ -1,83 +1,132 @@
-Return-Path: <linux-usb+bounces-5293-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5294-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C005832D09
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 17:22:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C45F832D2D
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 17:32:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E55A5282BDC
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 16:22:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DED311F23A71
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jan 2024 16:32:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 928BF54F99;
-	Fri, 19 Jan 2024 16:22:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6393D4F1FA;
+	Fri, 19 Jan 2024 16:32:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gwNaC6E6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id D527452F6F
-	for <linux-usb@vger.kernel.org>; Fri, 19 Jan 2024 16:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83841DFCE;
+	Fri, 19 Jan 2024 16:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705681348; cv=none; b=PbDk+JkvJo9hm3RolRnYAULkXmt/bipnDV+gzQWHVr2krXNEO4Xn5D5P84EQFzub65TEVBYkaSdmW8FQ0XcUye7ZHMivCzipUsPPqWVl0jJelWY+Te1LWj+/5FA9vAetHm34OhGRR5CPWJUOikz1DqNmNftK9WgSRjw9kr0gqIg=
+	t=1705681964; cv=none; b=B8kTgOyrf8olHPDrsNf7NGqEpkDehISF9jPda9cbjr5KP7xE7DwZlpO/DC+KbHqREDMGZ1kEceBk2Ctcg2xWhBwWRh+wWif1bBG1l0sNXFJn3LEbkdDYmy7vaWOH6dcTuuKMYPKwfR3iMcxwMMWpDIuir0eh3Ei90s+g2JXbvQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705681348; c=relaxed/simple;
-	bh=N3nDl66knVvipxA6CSmaXfX6Ic9CiIDzcAuWh5t6NIE=;
+	s=arc-20240116; t=1705681964; c=relaxed/simple;
+	bh=Uyi+TQxKZEL1bmpstEqg5Fp2tSvzVnztn39cu+KNpTE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KXGn+YZdN5PVDSPWD7cMJf6e2ufzbBePOU1xK/7rzROY8gpAPy+2se3Msy+3dwBgXcwWYKcH0DspQCjVg0bhQs3tonfcT0io35lGTjtjYDmt1yFrgoCKevrJu/oidFHZDIPSrQIYivvX6/zIYjzHr4YMwSkiugtsOaj47kB6HDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 44291 invoked by uid 1000); 19 Jan 2024 11:22:19 -0500
-Date: Fri, 19 Jan 2024 11:22:19 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-  Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-  "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-  "hdegoede@redhat.com" <hdegoede@redhat.com>,
-  "ivan.orlov0322@gmail.com" <ivan.orlov0322@gmail.com>,
-  "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-  dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>
-Subject: Re: [EXT] Re: [PATCH] usb: roles: try to get/put all relevant modules
-Message-ID: <2d25ce4a-13e4-4ec7-b762-e5de56ff4bf5@rowland.harvard.edu>
-References: <DU2PR04MB8822E96E3AFF2EBB587B73BA8C732@DU2PR04MB8822.eurprd04.prod.outlook.com>
- <d8f379d2-82ee-4567-8323-961cea5fd095@rowland.harvard.edu>
- <DU2PR04MB8822149F7BBDDD0B59ECDE918C722@DU2PR04MB8822.eurprd04.prod.outlook.com>
- <ZajtviC5hDVEczBN@kuha.fi.intel.com>
- <2024011801-chewer-coastline-a16f@gregkh>
- <Zakb4lHpiS7ty+aF@kuha.fi.intel.com>
- <2024011842-harpist-password-b965@gregkh>
- <DU2PR04MB88227057A70E1ED4A6F1CAB88C702@DU2PR04MB8822.eurprd04.prod.outlook.com>
- <5a16bd56-52f7-4ea0-a2bb-f83fe0e710a7@rowland.harvard.edu>
- <DU2PR04MB8822D855BD8CA7C4FF41F7538C702@DU2PR04MB8822.eurprd04.prod.outlook.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=diOZGM9LcIOsQkNgZqMQecMRrLsmjY8kiK2j2pp1SMrZclTAF6OQDNHksvu2gLrzI9xqh8ox9I+xTZ0q11b3kTMobSbCN6OpfxYgSEtiiNmSXnJcxW46/64/78SPOpa4ftmlZ8qe2m7QPAlFtW5j3Og5wNBzgp2rurOXmh3Z/oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gwNaC6E6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47119C433C7;
+	Fri, 19 Jan 2024 16:32:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705681963;
+	bh=Uyi+TQxKZEL1bmpstEqg5Fp2tSvzVnztn39cu+KNpTE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gwNaC6E6Cwo4i9yG9KcL+67C4UHTf8i7iJ8C0KnIHDMYWmRhaRc8kGrPgwnoHaQ3m
+	 qoMU8FXzdXnmyVpEs9vIPr1bTtk/NXSzoZvPB06jMm0dBJ7UJ58Hc3eZbmNJ7jCu/P
+	 vRo+l6JjPbmG3JEwYHfEH+nV35saGfHcllxorLDiuCoBoWP4lZ+otMvV8OGYXZ8mu4
+	 VDpTK2ccBqS27gqC4hZUAOWhH988jlQnWbVirQQBj7+lKfNEdtxiGU4r2EmMgAMU4H
+	 CrsmCk6rMRfPr5XVSqMZf1+66Gd4gP7Oz+bVU5qEZX4XVGdQy9qT+ysr1yLS2y3FQ+
+	 xOp3qXwSYiidQ==
+Date: Fri, 19 Jan 2024 16:32:37 +0000
+From: Conor Dooley <conor@kernel.org>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, matthias.bgg@gmail.com, linux@roeck-us.net,
+	heikki.krogerus@linux.intel.com, cy_huang@richtek.com,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: mt6360-tcpc: Drop
+ interrupt-names
+Message-ID: <20240119-eldest-discharge-e2d3812be0a9@spud>
+References: <20240119094105.98312-1-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="ToI4F3JwM2kTOdm/"
+Content-Disposition: inline
+In-Reply-To: <20240119094105.98312-1-angelogioacchino.delregno@collabora.com>
+
+
+--ToI4F3JwM2kTOdm/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DU2PR04MB8822D855BD8CA7C4FF41F7538C702@DU2PR04MB8822.eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 19, 2024 at 03:23:50PM +0000, Xu Yang wrote:
-> > What happens if the provider module is unloaded but then
-> > usb_role_switch_put() is called after usb_role_switch_unregister()?
-> > Won't there be a NULL pointer dereference inside the put_device() call?
-> 
-> The get_device() will be called after the user successfully get usb_role_switch
-> device. So the resource of sw will continue to exist until usb_role_switch_put()
-> is called.
+On Fri, Jan 19, 2024 at 10:41:04AM +0100, AngeloGioacchino Del Regno wrote:
+> This IP has only one interrupt, hence interrupt-names is not necessary
+> to have.
+> Since there is no user yet, simply remove interrupt-names.
 
-But look: Your patch essentially prevents usb_role_switch_set_role() 
-from running after the role-switch device has been unregistered.  But 
-what if someone had already called usb_role_switch_set_role() before the 
-device was unregistered?  Won't that eventually lead to problems if the 
-provider's module is then unloaded from memory?
+I'm a bit confused chief. Patch 2 in this series removes a user of this
+property from a driver, so can you explain how this statement is true?
 
-To put it another way, all those try_module_get() and module_put() calls 
-were originally added to prevent a specific problem from occurring.  
-Once you remove them, won't that problem be able to occur again?
+Maybe I need to drink a few cans of Monster and revisit this patchset?
 
-Alan Stern
+Thanks,
+Conor.
+
+> ---
+>  .../devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml        | 5 -----
+>  1 file changed, 5 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.y=
+aml b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> index 053264e60583..339bc9c00ac0 100644
+> --- a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> +++ b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
+> @@ -22,10 +22,6 @@ properties:
+>    interrupts:
+>      maxItems: 1
+> =20
+> -  interrupt-names:
+> -    items:
+> -      - const: PD_IRQB
+> -
+>    connector:
+>      type: object
+>      $ref: ../connector/usb-connector.yaml#
+> @@ -58,7 +54,6 @@ examples:
+>          tcpc {
+>            compatible =3D "mediatek,mt6360-tcpc";
+>            interrupts-extended =3D <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
+> -          interrupt-names =3D "PD_IRQB";
+> =20
+>            connector {
+>              compatible =3D "usb-c-connector";
+> --=20
+> 2.43.0
+>=20
+
+--ToI4F3JwM2kTOdm/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZaqkJQAKCRB4tDGHoIJi
+0re0AP9LNbikp4X8ttFLgxTITUwV8RZsxGtpIStRXArzEiJQtwD+JNTZjIHT5i09
+CSekQiT3QUgqZzXuCTtm+oiY2IL76Ak=
+=mjGn
+-----END PGP SIGNATURE-----
+
+--ToI4F3JwM2kTOdm/--
 
