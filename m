@@ -1,69 +1,69 @@
-Return-Path: <linux-usb+bounces-5307-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5308-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 126B68332C7
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Jan 2024 05:53:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C9A58333B7
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Jan 2024 11:59:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 616B31F22EDD
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Jan 2024 04:53:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 228BF283685
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Jan 2024 10:59:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02D21858;
-	Sat, 20 Jan 2024 04:53:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDE52DDC1;
+	Sat, 20 Jan 2024 10:59:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IEMnr3ES"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PXBBKmqp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B462D15C5;
-	Sat, 20 Jan 2024 04:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC08D304;
+	Sat, 20 Jan 2024 10:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705726414; cv=none; b=uwlX3kXAyhHMTWlazC+CRqud32/Oc+P16gw50uy80IMY+a/E+nm+REw4wiYz/6TsuP4YF43RaGpYxxrIjYwR10qRNxKs4m97aOZPTN7LNgunjMRVaoH9o+/+PEJPjrhVdwBfabo3XfgVV4LABI70YAcV5K8beQyYMhQrdYrQ1D8=
+	t=1705748383; cv=none; b=XYXfDhRpsC9O5o/wmKJuNlxG2foRlIAKsyHEPQZmsZa3jn/Cy1wcY/QEdJBOLi5PnTd9qIa9x/IZpqbpxRDH/8ewORapv8uYEsKOmBT5nvx++1qx1RXIjkWZ/IM/wMUvoQTFA6EBzx2mz4SjYWTyv44K+z9tJb1uxC8OoelU38w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705726414; c=relaxed/simple;
-	bh=ORrLc+xjKGUPxA9uxulNGeyU1mju4Nwt8QJoJJN3VpY=;
+	s=arc-20240116; t=1705748383; c=relaxed/simple;
+	bh=Ilz1xWtpSY/qvW9bs/VOcsKSKWgmpOf2n2Djbw5kftI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=okVPGNpS6Dx70Wttxh0Os76zYlFkyUj0XXvANMYPyCEGPriSSEpAExK0Agsf1WNO115KgZXdEhUBSn7MBNxn6YBgwxmQDYegJ5O/HODckE/fT20Me/MFQQ+Cij9WK4sGDfzUJC3oA2dDv7P34uw45cZ/tv2CIzu7aOuKuU1Ni5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IEMnr3ES; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=epWKp+ual42zyZJJrGiqzK8WXVI5ToaOR5v8Gq5i3OnNbqdflO8KperQyLme2+Btla0kFGfyIJoM9nqaO3rgS6pFa31ATnCXBKl0nonYV+kvBf7WLEECq7kLEcxzUktMh9J+3HX5vjC1xuUB7QkpQ9wEaFnWkABzMlBL5ChuKPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PXBBKmqp; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705726413; x=1737262413;
+  t=1705748382; x=1737284382;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ORrLc+xjKGUPxA9uxulNGeyU1mju4Nwt8QJoJJN3VpY=;
-  b=IEMnr3ESivP9hHPUMXyriSDDjC9RkEGCMi/YwmJxc7P2sFXhPx77t+s5
-   TF5+YABcpEMk0Gt3D2n2MCSyK5ObNnd3P8+c6hbWgHa38k5AUHH3W1/q3
-   kghxjTaWH2ZpypBlSSScCgEEhrpIOEDelYgSHMqjot6hAwJ9m7OZnJs2c
-   FxlIeRgevmigqMIvZCruJ8AIOlo1cvpVDZ6LwMnWqaUX30nZkH9JLdZg0
-   d/5L5bpOi6Pp29Po83Ldin/ho0UgzPdycbiXPwpRcLe823At6A0JuScju
-   mnNkZFKsTmM0CFnltowyyEH2MDHyeMXEuNWADmcQbYjznX8Hm1iF0S46T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10957"; a="821001"
-X-IronPort-AV: E=Sophos;i="6.05,206,1701158400"; 
-   d="scan'208";a="821001"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2024 20:53:32 -0800
+  bh=Ilz1xWtpSY/qvW9bs/VOcsKSKWgmpOf2n2Djbw5kftI=;
+  b=PXBBKmqpeCaYVZt2FyP8ghem0pJt5T2YB7Y7lCQokplZvK4dHxKWsILj
+   h4Y0NcFMwhPuwANf5xTqyyJX15CmkHcwL/S/tFQ2ea/NwC7kkKA6jAuIZ
+   aHGyOTio8q3J1VYzETbhMCjxyeD4ybavBApC9EO5wNs9Lqfl2m+WVLGEp
+   jEbpu2V5B1vkab2cMqqJZPfehme+CSy5sgR3ehsDaTsHbS2aRirs9YXIf
+   kZttgqRKsJmnx6YGEL/7qeHyvwM76GY5GRned35zky9sjkcChLVqIbPHK
+   NYUJXXZBmUcIVY/ebY8PJiD5OQ6XYxb9MwYlpObr7qnv4opE6PSm25zeX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10957"; a="14281719"
+X-IronPort-AV: E=Sophos;i="6.05,207,1701158400"; 
+   d="scan'208";a="14281719"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2024 02:59:41 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10957"; a="928558440"
-X-IronPort-AV: E=Sophos;i="6.05,206,1701158400"; 
-   d="scan'208";a="928558440"
+X-IronPort-AV: E=McAfee;i="6600,9927,10957"; a="904388816"
+X-IronPort-AV: E=Sophos;i="6.05,207,1701158400"; 
+   d="scan'208";a="904388816"
 Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Jan 2024 20:53:27 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 20 Jan 2024 02:59:36 -0800
 Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rR3MC-0004lG-2d;
-	Sat, 20 Jan 2024 04:53:24 +0000
-Date: Sat, 20 Jan 2024 12:52:39 +0800
+	id 1rR94Y-00051W-1d;
+	Sat, 20 Jan 2024 10:59:34 +0000
+Date: Sat, 20 Jan 2024 18:58:50 +0800
 From: kernel test robot <lkp@intel.com>
 To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh+dt@kernel.org,
+Cc: oe-kbuild-all@lists.linux.dev, robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
 	heikki.krogerus@linux.intel.com, matthias.bgg@gmail.com,
 	dmitry.baryshkov@linaro.org, neil.armstrong@linaro.org,
@@ -75,7 +75,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh+dt@kernel.org,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Subject: Re: [PATCH v2 2/2] usb: typec: mux: Add ITE IT5205 Alternate Mode
  Passive MUX driver
-Message-ID: <202401201228.eFyUxBzW-lkp@intel.com>
+Message-ID: <202401201835.bmry790M-lkp@intel.com>
 References: <20240119125812.239197-3-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -101,28 +101,34 @@ url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regn
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
 patch link:    https://lore.kernel.org/r/20240119125812.239197-3-angelogioacchino.delregno%40collabora.com
 patch subject: [PATCH v2 2/2] usb: typec: mux: Add ITE IT5205 Alternate Mode Passive MUX driver
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20240120/202401201228.eFyUxBzW-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240120/202401201228.eFyUxBzW-lkp@intel.com/reproduce)
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20240120/202401201835.bmry790M-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240120/202401201835.bmry790M-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401201228.eFyUxBzW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401201835.bmry790M-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/usb/typec/mux/it5205.c:278:25: error: use of undeclared identifier 'it5205_match_table'; did you mean 'it5205_of_table'?
+   In file included from include/linux/device/driver.h:21,
+                    from include/linux/device.h:32,
+                    from include/linux/acpi.h:14,
+                    from include/linux/i2c.h:13,
+                    from drivers/usb/typec/mux/it5205.c:12:
+>> drivers/usb/typec/mux/it5205.c:278:25: error: 'it5205_match_table' undeclared here (not in a function); did you mean 'it5205_of_table'?
      278 | MODULE_DEVICE_TABLE(of, it5205_match_table);
          |                         ^~~~~~~~~~~~~~~~~~
-         |                         it5205_of_table
-   include/linux/module.h:244:15: note: expanded from macro 'MODULE_DEVICE_TABLE'
+   include/linux/module.h:244:15: note: in definition of macro 'MODULE_DEVICE_TABLE'
      244 | extern typeof(name) __mod_##type##__##name##_device_table               \
-         |               ^
-   drivers/usb/typec/mux/it5205.c:274:34: note: 'it5205_of_table' declared here
-     274 | static const struct of_device_id it5205_of_table[] = {
-         |                                  ^
-   1 error generated.
+         |               ^~~~
+>> include/linux/module.h:244:21: error: '__mod_of__it5205_match_table_device_table' aliased to undefined symbol 'it5205_match_table'
+     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
+         |                     ^~~~~~
+   drivers/usb/typec/mux/it5205.c:278:1: note: in expansion of macro 'MODULE_DEVICE_TABLE'
+     278 | MODULE_DEVICE_TABLE(of, it5205_match_table);
+         | ^~~~~~~~~~~~~~~~~~~
 
 
 vim +278 drivers/usb/typec/mux/it5205.c
