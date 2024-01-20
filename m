@@ -1,238 +1,347 @@
-Return-Path: <linux-usb+bounces-5303-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5304-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0251F833211
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Jan 2024 02:12:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B221683325C
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Jan 2024 03:00:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24CBE1C2114F
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Jan 2024 01:12:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B5901F22A80
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Jan 2024 02:00:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD2CA807;
-	Sat, 20 Jan 2024 01:12:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24B33EC0;
+	Sat, 20 Jan 2024 02:00:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="VrmpNTI2";
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="ewcJB9M3";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="q3q3wGbY"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="kVOO+KTb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2065.outbound.protection.outlook.com [40.107.105.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5568C7F7
-	for <linux-usb@vger.kernel.org>; Sat, 20 Jan 2024 01:12:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.158.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174561366;
+	Sat, 20 Jan 2024 02:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.65
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705713151; cv=fail; b=mFW+tyEMvuYVZkOZUNKDa+k63k9ruOMpK9sYIh4tH4kiMWtGNPZJUTFl3xzaIm1ThHSSNDv70chkhiXbjhqeOUMLWKNMjMp75LkDar/LuXBS/wocuFfEGZ1eTDJZlJik+CJ/0S+Bb8qMTksiRQMkU8LXqH++pDCuHi5ZLQMhY6s=
+	t=1705716017; cv=fail; b=UPl/G5Hmqmac4dvFJwzZcEcjw8EdJqdR4oeXyt2IpAzgJHbio+XDU+VRNQGQaFkq9uo5cfi1vm6IzQPX5PSLhcU5DIZnPQNqAyhir0no4/9UqzV0J0+T1IdGbAWI4ZEj5Pqj05QbFXJwx2jqlwGY44rkNz50PZ13RGdp9Zk5G90=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705713151; c=relaxed/simple;
-	bh=gngGjbfQADDznaORw/cH5oCSRyjcEvm2cxZfRdLddSw=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=PrlibtBdxHXh+4ckE+rUJ0gLzrEgPG+5D5yQC0TQm0z6PlA5BOz3N/p0YHDKautCuaP0Uiy3xmCsAXf738Q0db4Jv6ZYjdcNrwvh8+y4mYz5k+xMZtz3zyTWa0e7ckrOhP6K5o37FLUTm//qClvJHaEFNoTtvXJi0d7K15Oxffo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=VrmpNTI2; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=ewcJB9M3; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=q3q3wGbY reason="signature verification failed"; arc=fail smtp.client-ip=148.163.158.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
-Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
-	by mx0b-00230701.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40K15cUr003489;
-	Fri, 19 Jan 2024 17:12:12 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
-	from:to:cc:subject:date:message-id:references:in-reply-to
-	:content-type:content-id:content-transfer-encoding:mime-version;
-	 s=pfptdkimsnps; bh=gngGjbfQADDznaORw/cH5oCSRyjcEvm2cxZfRdLddSw=; b=
-	VrmpNTI2XEtZO1xlxgJmDdxIg4Tv+H41ULgVb8y3NNmFyHW75CxIm9NP8Alshlby
-	EUAid8piNVNK6IXw3Xitwy3kmixKPFLMi1R4HjpWAlhc03mEgOmQJF5uV/Gq5CXc
-	VMsUIAwwNCvLluMOLImaqu0aPdbVRAaipgFbpll74c0+T2zGw2Opd+r7KIr19fXf
-	Zj43tcwNGBCoRBfK2Cd1dIzhMua/ivnqq5o5xYW/Mtr968wgt5p6LxU0uz/j7B2F
-	LYHNejxEClVSkP4YgQsfEP4l370JbveM6fzmkCBBN+EXuO7YTxzBvbBfoFlrW5gm
-	RJY61Y2Ybjr95LfHsfO4jw==
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-	by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3vkt1g2qge-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Jan 2024 17:12:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-	t=1705713130; bh=gngGjbfQADDznaORw/cH5oCSRyjcEvm2cxZfRdLddSw=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=ewcJB9M3QHc+Jcp7SGaALp0ji95xqthM7KwuxLibEdSF4HvaZKkmWsx/zadFpy8si
-	 IO7AFjTg8rfcQCC0NqBDNmuXdUszFVDh04yGHG1qN741XtVAj6ENnYZJlKe7tS1B41
-	 A7yg/scj1dSVfoG9KjViM1BX0EGkWKLCc+/mdxG2ND4/1TtbXEf9cHf/cTyFME3VVq
-	 Z3OGkLHTXlD0mxMUlDk6xCw9fikjtYgIi/+KY8fjUgTntPwn1kfJK3cRQYlMjIhexI
-	 nm6kyTruTHpFTnPzT9xQJmsM9wANcN2GvpW/qVN2nQUmK2PVv8xTg6034G7VV+0agb
-	 WQ250d3gNq6pA==
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
-	 client-signature RSA-PSS (2048 bits))
-	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B463940407;
-	Sat, 20 Jan 2024 01:12:09 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-	by mailhost.synopsys.com (Postfix) with ESMTPS id 73515A00A8;
-	Sat, 20 Jan 2024 01:12:09 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=q3q3wGbY;
-	dkim-atps=neutral
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-	by o365relay-in.synopsys.com (Postfix) with ESMTPS id AADF1404D4;
-	Sat, 20 Jan 2024 01:12:08 +0000 (UTC)
+	s=arc-20240116; t=1705716017; c=relaxed/simple;
+	bh=pzNcUnCOy8HMswGRlFuzsgks3pH/mhoMSBuNCV/VUYQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=W0tw6JvVg/w58sfbVBtD4c8XkazV8BLftMsxVWtx6ei6fe9ZpvrQ+MCNJD18P0yYdz8NG9V2Pw7lG6IPrvc62DITBJ31IKPLStXV7H2wDNhwyUPzTJgwFEj31O1dZBMt8TeVhRHiN9gTLR0tD4vhaYpcf8Wx3zxOvi1CmjACT7c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=kVOO+KTb; arc=fail smtp.client-ip=40.107.105.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bwGFxNaXw7r5DQyrl/tyvh/QU479eRARTibqEH6FvbqbZfJ013f2d1pAw/HcdYXvISjP6aJllrJVdPZNej3QD7yd3pvFpvmfZ/HvehNWObmAmUJ9uwrc1DXn6xp4V8YEWf3J8OYKdKPMvL8Y5ikgdRrY4Hy5oYW25GWDv9dAkA08h0kv/1uHQSXriWYLNqN06BqlnobUVPAq44qfKv/eFmeJjtldXHPC9Qk1bvQ12vKCoMo04AkaS9SgfB1JynQl32mHzVoLwpQfTZc43sDegcRNvfJhvtvk4HL/9pSU+FsPN/2HlGxLrnqHGDLwb7MLzR3QrtmNZbypIhiyyqOpUQ==
+ b=jdy/ocjtCNOV2st/Zh/8OKUSM2GUnSFth9gCHyobACdgzMXnqNfxr+kwjnz5zxiwY0lCrSs1zhGSSEz6nq8twreTkh2U4nI4MJcim5yjjaWNGrX8RVjo2f20kzYEESGFLmDfKcl8StnoiM2OsczF83HzPv89Y3cIFjY0ZghZiotVQ1V0UzhtzUIMgALMewJATJ1ZNy4gtW6Ny/kKhCMQBKDuFGglWNhfkgIkRHO6NnToZCzDi6iyu/GopPNqBkblukHy87zwjH0KmkRtAaVuR0vAnLo1Zje8ulZiIwyuUctYcjL/p68tB6q4j1zBDYKhLBzGCcGMvl7cq5vbgVSN2w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gngGjbfQADDznaORw/cH5oCSRyjcEvm2cxZfRdLddSw=;
- b=IdQoewPVUJYl/ZwnQTqVF+GAQNiwSJlAYUKhnFfNDf9zgO4PnMPTqws4WG5PJPTVebN10wzLf0C51B2oqp9uSYZQRy3h/FLp/RVbndCtPkKV1yKmP4ml/Agoiqw78NTt+hYPQTxZ4k4D/b5VsgaC8vfxltAEhwEAOZKNPOFVF7Jeg/7e3Rm1spNm6VkGrJjj0IX+29HpeBvkSqrHFB4X9SHACpcDaUfOxt1RUZubjS4S+tmrMyOICIuNF/AL/iaN7ehn/wshFxHoYkSahvwCanWkhcj2jcVK8XL6aDnB1cMyGkJnZ9Zx3N/mIHSZETMiVQGEbkTOEgHWvsWeD/PDNA==
+ bh=o3dkbQ24SftEdaJ7uO6TcLD4VjaG+v0221T8bUpedsI=;
+ b=Hx/foYSwyBnpMSGfYL/REolBZR0H/KFjDgplVo5+r9+l62q/he3XvgbLpw6cSorbBXab2RBqgsGh9mZh7HE7fq6UTC02jKh3QDFEoHpWE214iy8A2lDFwf5wZiEa1Sa+OmZYKPnmzsq8lKB3CPaW+oEOHHLIQyWbq4oOfFie1VWw14wgVdjOmYJE3tEC8GycNxHFX8VnckxxfCHdE02GseySauU3OeTJS8THQ0nIl7Ga+ZM7+lInVGojg6qdo14+PcyNws5d0HbW19iTopWLCRgArWyU0R7ZzZt47/fNH5uF/jKmSF5H+eSUFCZkQQclRWk44uTwsTwl1N/9W4QUaQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gngGjbfQADDznaORw/cH5oCSRyjcEvm2cxZfRdLddSw=;
- b=q3q3wGbYxu6e8Wy5IVO12vZZEIjZMN09CTifocse2EZCWZI2nzdmE+V7hIugui1zlE6L4ydytt84ZRqkzSkCoX9NIXK+80aeYeyQfcT+sn+Z59VB/f1J96A3QC6WAcDkptPD6h/N7Iq4+ROpJTLwyU162/aBRaG4GGaxfvk8OGU=
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com (2603:10b6:408:170::16)
- by MN0PR12MB5954.namprd12.prod.outlook.com (2603:10b6:208:37d::15) with
+ bh=o3dkbQ24SftEdaJ7uO6TcLD4VjaG+v0221T8bUpedsI=;
+ b=kVOO+KTbeGkb7Qr0X4H8nS/uU7yTzspRMCxp6gs4y+hqPWbDo097cRiKs4zR1wPeCrGloUeB2XMNGgFsyfT+UKDMbxlSl0RiHc86EC+dJSXhjhPSE6j3z0fpGkT3IOsMkcKOGNy5JC2DFfMCg29wlmz2b62Pg3qU6or0ca0SxKs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by DBBPR04MB7785.eurprd04.prod.outlook.com (2603:10a6:10:1e7::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.24; Sat, 20 Jan
- 2024 01:12:05 +0000
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::a6b8:3d34:4250:8ae3]) by LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::a6b8:3d34:4250:8ae3%3]) with mapi id 15.20.7202.026; Sat, 20 Jan 2024
- 01:12:04 +0000
-X-SNPS-Relay: synopsys.com
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-CC: yuan linyu <yuanlinyu@hihonor.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>
-Subject: Re: [RFC PATCH] usb: udc: run disconnect callback before pull up zero
-Thread-Topic: [RFC PATCH] usb: udc: run disconnect callback before pull up
- zero
-Thread-Index: AQHaSp3z3ulcuGmZ70aRoOSeDEQrRLDhOE6AgACtv4A=
-Date: Sat, 20 Jan 2024 01:12:04 +0000
-Message-ID: <20240120011149.fbrbunf4l7deckek@synopsys.com>
-References: <20240119054813.2851201-1-yuanlinyu@hihonor.com>
- <9a483f40-83ef-4476-b94c-21506d94653a@rowland.harvard.edu>
-In-Reply-To: <9a483f40-83ef-4476-b94c-21506d94653a@rowland.harvard.edu>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: LV2PR12MB5990:EE_|MN0PR12MB5954:EE_
-x-ms-office365-filtering-correlation-id: 0007d674-0094-4fc3-d189-08dc1954d0ab
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- TMLq8vdq19MwOjA5sgw7bTAgj/jx5/nxSUH6OvnDnPNDDrCGHU4josRDuTp4IAo4J6bH4Nx6xuI2KOjce4VD/bJfAmfZn6UdO8y9iaRQWgOnU0cwNrWB6VerIH5gQVJC7Wde5i/ODBv3E+j1l6sqcq5Plp5YXEddgYfygJsnrT4+6M27DLQWWnWg2Cojoo6Lxxn9wRwXnxTh5mBzL0oby5005PWyKMC2GwbTnUixVhsbdO1gXTsi6NES2SwCb6fP9KbxFxcZIO5UTU0nfRJnFA23tbX8UPqiXNrOh8auhO6PZdqK/n5K2bqKVk58wubG/IJIhf3W0DtZT8VOiXcP+aJ1mt+G9AGcH9uisg9oeVVgjG1qx23nIjux74+uIM9lZuAJHZRPhCkyUzlQ96+2Dl1BIT5YhhlAtroT4JQZz9iMEgFdWv6st5yXe7OLjiSCyh/gZssWmryz1qaGBRoHVKRONC690f/XhGpML75nWW6dl9FLD75jeGCQ8lxM4H5SxQbRTMvrG2Mu91ndHxRdEYWHVUGLSEoACnK0YiSP9f6nxxiw79x7s96xVimankyCFPpNtD0ZLP+DQB13lVl80Fqb8/PhTpZp7a/JKG0H2S72q1RkSgzwEYLQ3ElTGjEE
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(39860400002)(346002)(376002)(366004)(230922051799003)(64100799003)(1800799012)(186009)(451199024)(83380400001)(4326008)(38100700002)(122000001)(2616005)(76116006)(6916009)(66946007)(91956017)(478600001)(54906003)(66556008)(66476007)(66446008)(64756008)(6486002)(1076003)(26005)(6506007)(316002)(8936002)(71200400001)(8676002)(6512007)(86362001)(2906002)(38070700009)(36756003)(5660300002)(41300700001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?utf-8?B?UXAvTXFFZUprMjNrTllHR1M2N2FsZGVTUmZ0NjcrczFSSXVEaWxsZ3liKzFL?=
- =?utf-8?B?WmJIaSthOVVEUVdBNDZyTlREZ1ZhYmJZQWp5M1V1M01KMlk3d3pLZE0yYmww?=
- =?utf-8?B?anAzYmpKV3VvVisvMVlZRnFrMEFWQnIyYXQydDRvV1NmbHpoR3pEZDZocWNr?=
- =?utf-8?B?Z1l3OWcrREpmZTArNGI4RTFLcnhnT1h3V3lOTXBNdmlCZFdCVVFJb3RrbGFr?=
- =?utf-8?B?Ykx3VjQzVGVzSENZcjdEVWJUYS9HSDUwTUhYY21oVW5nM0lLZDM0MlA5Wk1Z?=
- =?utf-8?B?dVZTUlNqWS9ITTlLeDJiTE42Qis3UVRqUjl3dEJLQVJIdTU4NTFOazFuUTJx?=
- =?utf-8?B?UElJdEJDUlkvdGR5M25LeDFPb2ZUaUw3TklTYlJmVlBzcDZyV0YreE41YUVK?=
- =?utf-8?B?b0ZqbHpsYkFWWHNURFdPQzIzK2JiMDZ6a1NRS3hnS1hLRlZBUlhqeExmbnIr?=
- =?utf-8?B?MEp5Nng3eGE5OEFUVU1DbzlZSjhXK0hQYlE0b2s2MGppL0FQOUpJazFwREg3?=
- =?utf-8?B?dGgxdjFRZWNvUlBvQ1l1dDgwYk9yZEFMUnVEZnk1OTRtS2pKa3pGQno2di9Q?=
- =?utf-8?B?N0p1bG16MFRObFl5VVlOOUhBUWlVWGtLQ0E3U0Q0Uk9OK1ZhTVA0SFF2Q21G?=
- =?utf-8?B?SXpPaGFwM20wcXZNK2IyNzFQbmlhME9hczlrNk1yQW5seHVqTHNybklDclNG?=
- =?utf-8?B?U0JMakIvb1ZXZytBdU0zdjNueUJiNEk4Z3MrTnJ2OGh5VWhkRmhPa1d6K1Rx?=
- =?utf-8?B?TGdQNFNka2VNN1lSTGhRZEpKSENFTjJzaERnMFkwVjJwREhzQ3JBYVFUNjR2?=
- =?utf-8?B?dWQyT2ZRNW1DV0xJYmdINXE1Uk9rWVo5TGtKMkthZjhNTTZnYkQzdEdPZUZS?=
- =?utf-8?B?M1U0YUJnb2JrN0tvNkd0MFY0UVpiWVFUdXhYSkxpWmtUTkNRS0t6SHljeVpK?=
- =?utf-8?B?cThkbXV1U1Z4d2pwbkY0dXlac1M2QlBxTE1ySFZiSlNPbSttbktyN3pXbllG?=
- =?utf-8?B?MlJBc0d1SjdBNWRUT1NLbHpVY1RneTJHeWFNNE1RMTNrQjNzTmF0VkdtU0F3?=
- =?utf-8?B?QSt4U3JaSkloUmltcW9jRUNQdmpwYnB2R2RyK293c1Zrd2RveWM4RUdvQUts?=
- =?utf-8?B?UU9JWFpFN3RHamttaDJyeW5pVHpTSHRUaUxaTThDS0xwazVWekR5YlkzTzhn?=
- =?utf-8?B?bGtidlVSSVE5WWM1MGUyUWZnZVVXSE9qNnhWY2FqNm14S3dSMGE2ZW9oaGJD?=
- =?utf-8?B?ZGtiK00rUm9xUDJCUGRUczhjZ3JZK3JDWVhoOGU2QUFheFpycnZhODFhRmcz?=
- =?utf-8?B?NHRlQlBqVGRnMnYrNG5PWVI5b1hXZms4OUdML255YTlKRXlxekk4K2QrT1p5?=
- =?utf-8?B?ZGMyV0pSc2s2bGplMFY0dG1tYjVUSzBCMFNIdHlLSDBjMHp3MTRTQW1vT2VH?=
- =?utf-8?B?MEMzSDN0eUFGZ0V2K014MVFsRjJFSkl3Z09PWGc1eUxJUFRnZ1NTUU1WVElq?=
- =?utf-8?B?RXIxVWFQeWY3MFZiS3RFYVdXeUd0aDloQW5hc3h4bzd5YnFhSGFDc2xGZWU4?=
- =?utf-8?B?QlBvWi9MTUdoUFlqQzF0aVhaMDRPaXJ0RkZtTTE0MU1PZXB4MFdlaGFXMXNG?=
- =?utf-8?B?M1RCY2FIMHNpUWRVQTVYT2JzZ01PU1F3cmx5RFUxY2VHZGM2aEZwUXNCc204?=
- =?utf-8?B?OGRYRUxkRTRQdGFqZXNKdzZVZnZYdnVmT0daVkNaVFBFRlA4YUpVbGJWeVRy?=
- =?utf-8?B?TStuWFU2Q1ZTaEQ2M3RlaFk4MDJoSWV0amxUOHk5TDQ3Yk11aDNYRUZvajJs?=
- =?utf-8?B?UGpwMXNPd3pPakswMkRwYU9HQTV2alRXTzJCQTY5VDJhcUJvcjNBNXQyOVNv?=
- =?utf-8?B?d1dScERQbyt1NFRWYjJPK3lUYXdiOHF2V01US1hRTklFaW90YVRHNzFxMDlE?=
- =?utf-8?B?dEgrdCtseVpLYlFUVjZTY1ZOQ0xqVjFPbVFuMURNRzJ4QkphclJvMXdpaHVG?=
- =?utf-8?B?VTZxc01MZ2FVN21yWmkzQy9uQlVhMFEvaGJQeEFxVEtySS84NnZGdnV1dHgw?=
- =?utf-8?B?Z1k5Nnl3alhkUHBIa0VDNzhPLzFyRWRqZW02YXhpVGs3NjNkZ01ISWZGZEVL?=
- =?utf-8?B?QUpNZkVhYzhwNjFGNnNEQUpETEFaTE9JSFhFdkgzSXpLTGEzQ1hvaDhyUEow?=
- =?utf-8?B?OHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D0DFFCAA5C74954D963739C0DCAC3B5E@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ 2024 02:00:12 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::b8af:bfe5:dffd:59a9]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::b8af:bfe5:dffd:59a9%4]) with mapi id 15.20.7202.027; Sat, 20 Jan 2024
+ 02:00:11 +0000
+Date: Fri, 19 Jan 2024 21:00:04 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "ran.wang_1@nxp.com" <ran.wang_1@nxp.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"open  list:DESIGNWARE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"balbi@kernel.org" <balbi@kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"mark.rutland@arm.com" <mark.rutland@arm.com>,
+	"pku.leo@gmail.com" <pku.leo@gmail.com>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"sergei.shtylyov@cogentembedded.com" <sergei.shtylyov@cogentembedded.com>
+Subject: Re: [PATCH 2/2] usb: dwc3: Add workaround for host mode VBUS glitch
+ when boot
+Message-ID: <ZaspJOFsv8+j7Mp+@lizhi-Precision-Tower-5810>
+References: <20240119213130.3147517-1-Frank.Li@nxp.com>
+ <20240119213130.3147517-2-Frank.Li@nxp.com>
+ <20240120005056.o52hqn2sershhm76@synopsys.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240120005056.o52hqn2sershhm76@synopsys.com>
+X-ClientProxiedBy: BYAPR11CA0037.namprd11.prod.outlook.com
+ (2603:10b6:a03:80::14) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	g9HnhIx4hPQ5tJ2aYXMZLjHSEZm7rEBS8W8ChX1roVWmbbCafZwnIDBer5PvsjhnWtIwoPN6qQJASGxibqxVW6FgVDBt37HvJCDHnKQDhNAMKm6e+2SY5lHDaZBojOBipSg0OvlbnNhJBkzvhPctiBOGPZxgB6FqYv4PuwPp3mqXoGVW9E1naegnwHReBBn3QqEOnox/kQXPG47zl0LjrBuhmGtCEVNiseIgGDISNJsEhtWbWK2Y7e1varJRsRPvoLj5cWxZB/NRjT8UIVtXB7ZQT82TQCz904/FkorQRY4nttnWjdIXyHFDCMmPfcr/JBUVQ3QVWbTNsNmFf0EhRUM6bZIQd4cOdlbDmLQlCCz591sFS28HXzSIUZI4FHs6ZFpGrNXX9BulcfskBeizpXl4418qKNd1CRO3bOEWFnZQsXd24/DX/AiasEJq84A5csPtvNQnzyg91qd/rkXr2zYWWQUzT5GRLlYUaclswoP2Ksi6BQnLX3Oqzr6JRceD82IkFyY3hvsoOJqvCSKt43uVU8Mv65d3CQzL4lx6aKciwlEC33J3XQnyYnTUS9E6Rm1wOQSPTCXKHpeHlyftu6ePs7MtnrVRLgL8UwKjIG6OHcy2melI1JWrqIKofeCWYCD4xp5powPLdGfT+2wsTA==
-X-OriginatorOrg: synopsys.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DBBPR04MB7785:EE_
+X-MS-Office365-Filtering-Correlation-Id: 56f435a7-ecff-460b-921d-08dc195b8949
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	TtNZowom18n6gM9OhK1w71UojHWJ8XzJyJpun/3wvAcseGh+1tYQs6nO+Rf6wZwsRA3qQg6IJmDih4TyKD+p+GI8wBOwOKz9tTwtXXDPKG3V+x96II7HH9iCOIjz5Xb8PrF5yx4hOoEBLe4ONTSYgsMY74+BNU66+xZHwKzIr/5etQ8ovqHTsFzRehjSls+Yw607ZHjoYoKcl3L2jerCdvg3QpIf/1GFYRA640Heo8VjrZMFPmelDZC36w0JvmzzwgUXaDWj/GMybZLP/+zkjatf1d0PN9Eb1e0+FcTH4ZafLQQ16lm4moyuXd09ZfAsrBwq0cdywql5KAg+X3533T2Sx46Uyv5Avy4FaEiXKcRls1AdAAa7MBIyN2dW1v3LEmJKuTmCTNRDvSzZuj925y1rL7NyJh4eMYIJWEh+TXLM4d/W9o64agU+UGmkpzMd0XFmMiQ1BjmFBxNFV3hi/2FqO0rsbcOP3ywP16Czylb84DzZobDc3sotjETRWSvSQkImiItf5Z+6FX2oyRvqUWrNwQZt0xHqSMlQRho7jzegkyPBBTnphlRZ3lFqqKsXvBYEeTqt6Vrs9pjbCe0pKLdD8kwxf7gd7i2kW9Sv3FvpLQmy//8CyyGICpoKuhYHVKXHOOqGnxE2cXxEfWCY9g==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(376002)(366004)(136003)(396003)(346002)(39860400002)(230922051799003)(230173577357003)(230273577357003)(1800799012)(186009)(64100799003)(451199024)(38100700002)(6666004)(41300700001)(45080400002)(966005)(478600001)(6486002)(6506007)(52116002)(83380400001)(26005)(6512007)(9686003)(86362001)(2906002)(316002)(6916009)(7416002)(38350700005)(4326008)(54906003)(8676002)(8936002)(5660300002)(66946007)(66556008)(66476007)(33716001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?gPKOu77hU5HLMlK/GhePvCgxETmmGqS5AqAK6w8v2JabgKrB7kK2/kreVASb?=
+ =?us-ascii?Q?sdaVnudHy40ksf6H+bZX5x7FoKCW7PNbhsJUnTbB0zOzuPhAx5XyryvBaxeL?=
+ =?us-ascii?Q?wRARn0ypdmtUzXpsE4+RpJ4DjtXt/T0qRU4mSRTtKiz3fF7sHQ0w8NTLnyQ7?=
+ =?us-ascii?Q?L6QCdWF/rXRibcMIOjBwNyHsn4Q1h2GhRUzrmJl4haYOnwTpHUPVKqRNk5Rd?=
+ =?us-ascii?Q?uyOBNxnDD0afkxZu2IPdLuurrZEtdX5I3pRD1WqeX1u0R/yVickO+D/GDCbQ?=
+ =?us-ascii?Q?0L8LsRG4tpiNSrSLccbzGcjOykqpwDzTsPbS//c8gyTCU4JZTvTWyvXljgKJ?=
+ =?us-ascii?Q?Bz/4aQWvLtuFTeWHOdOCKBDaHrdhEzEQnMt1kNtpQg5hSClfbJ8ua5kVds1P?=
+ =?us-ascii?Q?8Gvj7o/3Of9Ts3Gt+ePJvib26jIDF+t2iag6DLaotsdKhJv80lCLcRKQDL4+?=
+ =?us-ascii?Q?9jDOasBs0wYhV2IlO5T+NYh7B35q1bLE37MAkC6bzks1zDb+tCjgGc+WrvkL?=
+ =?us-ascii?Q?v3IR7JdiFtMMTguNiTEEFsb69e6iNS+WzIcIHbP3dDQGgULhZ5q8A3gX2Sve?=
+ =?us-ascii?Q?awSdQ1ecrk+Z+TeoFjOvMchwEMQJm1EtFGYI6MGQ3cUya7ggRUFnbWOpsiXi?=
+ =?us-ascii?Q?yzujtKIfGEZvnhIy4uamJNykcjJq6/oUOB0dLj89Tth20U+m2HU0HwIpRpHe?=
+ =?us-ascii?Q?4s1wX5V9omlcwbA9u7wBGg8ih8l8wNX3SOtk1s8/RL8yJc1VlPYQkxf6jwMi?=
+ =?us-ascii?Q?rAT5k5EgG0WriigFavKdI2Amm6mjV1egrRVHLUpq49+YQfwjKUvyqZ83lUN1?=
+ =?us-ascii?Q?HeY/2ytdv6ppNYytPA65esH+YAXTcnGra17yWUQI12NNwzE6U3e+9JK/H2lO?=
+ =?us-ascii?Q?uijV0Fu514SesY8poyNLoo1+FRi82DirypLEITwCLM/EnaTMVW03XYuo5c/B?=
+ =?us-ascii?Q?+LS22dRRk3QZ6DU9cInCKhxcURSdkoV8Mqm6kN4zxq+o0oD6qzdf3H/uYEqT?=
+ =?us-ascii?Q?MNQJ8TQAUMYxN/vpuDEl2it6EoI0NujrmJeiud22GlxgqZVSYLA8vMyGD9EP?=
+ =?us-ascii?Q?8VOxXpdZ1Jg/fNaIhu/7agt4nG81vAF7okZLTRTToYWtJr0AhNA7v24pRM8B?=
+ =?us-ascii?Q?7SeBBiHHzn4PeB4blBUPHIheAo3K7ugXRNb3bowrR/1WYvEgBbPEObVJNsOH?=
+ =?us-ascii?Q?pXs4XcFr0j+EpEnllkbUAxNSXGDtQYBmO1yUMMwEpUN+FvUxrHiZ3IWeJqnO?=
+ =?us-ascii?Q?JH6x8LQHM1J0s09Jw6DvnYtPxzik5r8aOPDmwCpY1fXC4PRRp4peFwaCZVCR?=
+ =?us-ascii?Q?tRRWoiIXIYo2OE866kh2NT1G8f0JnAyiv76W5aBSK3glOHuHlda/+q1/on4+?=
+ =?us-ascii?Q?6StOtFhTVJ3UJbkQ7W8PyUoB7ZR7ZNLTUdD/LL2RzZ05DvK1XLyuf6qa5+iV?=
+ =?us-ascii?Q?qss1acVHibsuj+WZhL5ZxnZD3s0qoXeO95EivFJEEwLAchztU50JQ2v1DdRd?=
+ =?us-ascii?Q?Yn2jV1EvLQEBIK04MVySZORPTA6HtQqlPd07xKyeHg8v22lR0Fvw736puHON?=
+ =?us-ascii?Q?owm6jwR50K3LnyqF09NvJwsodLHddFe2U5JYv51o?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56f435a7-ecff-460b-921d-08dc195b8949
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5990.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0007d674-0094-4fc3-d189-08dc1954d0ab
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jan 2024 01:12:04.8105
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2024 02:00:11.7410
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yz4acZQ+J5Hu5mr9NzYEVqqM+bDDZQ/+z1foA0jJfMCsvaPsaZjiDp7pxswn9IEXOG//i3b5aWk0k541oeBHew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5954
-X-Proofpoint-ORIG-GUID: 1Mp36M6hz3GI0jz0K9huyrp1x_Hc4Nto
-X-Proofpoint-GUID: 1Mp36M6hz3GI0jz0K9huyrp1x_Hc4Nto
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-19_12,2024-01-19_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- phishscore=0 clxscore=1011 adultscore=0 bulkscore=0 malwarescore=0
- spamscore=0 priorityscore=1501 mlxscore=0 impostorscore=0 mlxlogscore=541
- lowpriorityscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2311290000 definitions=main-2401200008
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8+yPsqOmnjZGvujQqThgPG4D9IXyoWj10qUK8TW50PFwNr3NbRIjkESQhhEKVw8WUeHNQwdZ0xmqbniUxmOCZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7785
 
-T24gRnJpLCBKYW4gMTksIDIwMjQsIEFsYW4gU3Rlcm4gd3JvdGU6DQo+IE9uIEZyaSwgSmFuIDE5
-LCAyMDI0IGF0IDAxOjQ4OjEzUE0gKzA4MDAsIHl1YW4gbGlueXUgd3JvdGU6DQo+ID4gV2hlbiB3
-cml0ZSBVREMgdG8gZW1wdHkgYW5kIHVuYmluZCBnYWRnZXQgZHJpdmVyIGZyb20gZ2FkZ2V0IGRl
-dmljZSwgaXQgaXMNCj4gPiBwb3NzaWJsZSB0aGF0IHRoZXJlIGFyZSBtYW55IHF1ZXVlIGZhaWx1
-cmVzIGZvciBtYXNzIHN0b3JhZ2UgZnVuY3Rpb24uDQoNClRoYXQncyBleHBlY3RlZCByaWdodD8N
-Cg0KPiA+IA0KPiA+IFRoZSByb290IGNhdXNlIGlzIG9uIHBsYXRmb3JtIGxpa2UgZHdjMywgaWYg
-cHVsbCBkb3duIGNhbGxlZCBmaXJzdCwgdGhlDQo+ID4gcXVldWUgb3BlcmF0aW9uIGZyb20gbWFz
-cyBzdG9yYWdlIG1haW4gdGhyZWFkIHdpbGwgZmFpbCBhcyBpdCBpcyBiZWxvbmcgdG8NCj4gPiBh
-bm90aGVyIHRocmVhZCBjb250ZXh0IGFuZCBhbHdheXMgdHJ5IHRvIHJlY2VpdmUgYSBjb21tYW5k
-IGZyb20gaG9zdC4NCj4gPiANCj4gPiBJbiBvcmRlciB0byBmaXggaXQsIGNhbGwgZ2FkZ2V0IGRy
-aXZlciBkaXNjb25uZWN0IGNhbGxiYWNrIGZpcnN0LCBtYXNzDQo+ID4gc3RvcmFnZSBmdW5jdGlv
-biBkcml2ZXIgd2lsbCBkaXNhYmxlIGVuZHBvaW50cyBhbmQgY2xlYXIgcnVubmluZyBmbGFnLA0K
-PiA+IHNvIHRoZXJlIHdpbGwgYmUgbm8gcmVxdWVzdCBxdWV1ZSB0byBVREMuDQo+ID4gDQo+ID4g
-T25lIG5vdGUgaXMgd2hlbiBjYWxsIGRpc2Nvbm5lY3QgY2FsbGJhY2sgZmlyc3QsIGl0IG1lYW4g
-ZnVuY3Rpb24gd2lsbA0KPiA+IGRpc2FibGUgZW5kcG9pbnRzIGJlZm9yZSBzdG9wIFVEQyBjb250
-cm9sbGVyLg0KPiANCj4gRXhhY3RseS4gIFNvIGluc3RlYWQgb2YgZ2V0dGluZyBhIGJ1bmNoIG9m
-IGVycm9ycyBvbiB0aGUgZ2FkZ2V0LCBub3cgDQo+IHlvdSdsbCBnZXQgYSBidW5jaCBvZiBlcnJv
-cnMgb24gdGhlIGhvc3QuICBJIGRvbid0IHRoaW5rIHRoYXQncyBhbnkgDQo+IGJldHRlci4NCj4g
-DQo+IFdoeSBkb24ndCB5b3UgY2hhbmdlIHRoZSBkd2MzIGRyaXZlciBpbnN0ZWFkPyAgSWYgaXQg
-YWxsb3dlZCBlcF9xdWV1ZSANCj4gb3BlcmF0aW9ucyB0byBzdWNjZWVkIHdoaWxlIHRoZSBwdWxs
-LXVwIGlzIG9mZiB0aGVuIHRoaXMgcHJvYmxlbSB3b3VsZCANCj4gZ28gYXdheS4NCj4gDQoNCkkg
-ZG9uJ3QgdGhpbmsgd2Ugc2hvdWxkIGRvIHRoYXQgZWl0aGVyLiBXaGVuIHB1bGx1cCBvZmYgb2Nj
-dXJzLCB0aGUNCmRldmljZSBpcyBkaXNjb25uZWN0ZWQgZm9yIGR3YzMuIHVzYl9lcF9xdWV1ZSgp
-IGRvYyBub3RlZCB0aGF0IHdlDQpzaG91bGQgcmV0dXJuIGVycm9yIG9uIGRpc2Nvbm5lY3Rpb24u
-IEJlc2lkZSwgaXQgd2lsbCBhZGQgdW5uZWNlc3NhcnkNCmNvbXBsaWNhdGlvbiB0byBkd2MzIGhh
-bmRsaW5nIHRoaXMuDQoNCkJSLA0KVGhpbmg=
+On Sat, Jan 20, 2024 at 12:51:07AM +0000, Thinh Nguyen wrote:
+> On Fri, Jan 19, 2024, Frank Li wrote:
+> > From: Ran Wang <ran.wang_1@nxp.com>
+> > 
+> > When DWC3 is set to host mode by programming register DWC3_GCTL, VBUS
+> > (or its control signal) will be turned on immediately on related Root Hub
+> > ports. Then, the VBUS is turned off for a little while(15us) when do xhci
+> > reset (conducted by xhci driver) and back to normal finally, we can
+> > observe a negative glitch of related signal happen.
+> > 
+> > This VBUS glitch might cause some USB devices enumeration fail if kernel
+> > boot with them connected. Such as LS1012AFWRY/LS1043ARDB/LX2160AQDS
+> > /LS1088ARDB with Kingston 16GB USB2.0/Kingston USB3.0/JetFlash Transcend
+> > 4GB USB2.0 drives. The fail cases include enumerated as full-speed device
+> > or report wrong device descriptor, etc.
+> > 
+> > One SW workaround which can fix this is by programing all xhci PORTSC[PP]
+> > to 0 to turn off VBUS immediately after setting host mode in DWC3 driver
+> > (per signal measurement result, it will be too late to do it in
+> > xhci-plat.c or xhci.c). Then, after xhci reset complete in xhci driver,
+> > PORTSC[PP]s' value will back to 1 automatically and VBUS on at that time,
+> > no glitch happen and normal enumeration process has no impact.
+> > 
+> > Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> > Reviewed-by: Peter Chen <peter.chen@nxp.com>
+> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > ---
+> > 
+> > Notes:
+> >     Last review at June 06, 2019. Fixed all review comments and sent again.
+> >     
+> >     https://urldefense.com/v3/__https://lore.kernel.org/linux-kernel/AM5PR0402MB2865979E26017BC5937DBBA5F1170@AM5PR0402MB2865.eurprd04.prod.outlook.com/__;!!A4F2R9G_pg!bdutJWi1Tcz8SYscB7Mr96SWYMKIo8ElUKgEILFJfK3_60EbECQHXPBmJYAMMhNwQ4YrjxqMZWHdokXhHB6a$ 
+> > 
+> >  drivers/usb/dwc3/core.c |  2 ++
+> >  drivers/usb/dwc3/core.h |  2 ++
+> >  drivers/usb/dwc3/host.c | 46 +++++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 50 insertions(+)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 3e55838c00014..a57adf0c11dd1 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1626,6 +1626,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+> >  	dwc->dis_split_quirk = device_property_read_bool(dev,
+> >  				"snps,dis-split-quirk");
+> >  
+> > +	dwc->host_vbus_glitches = device_property_read_bool(dev, "snps,host-vbus-glitches");
+> 
+> This is a quirk. The property should be named with "quirk" subfix.
+> But do we need a new quirk? How many different platforms are affected?
+> If it's just 1 or 2, then just use compatible string.
+
+more than 2 platform. I think quirk is more flexible.
+
+Frank
+> 
+> > +
+> >  	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
+> >  	dwc->tx_de_emphasis = tx_de_emphasis;
+> >  
+> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > index e3eea965e57bf..0269bacbbf6bd 100644
+> > --- a/drivers/usb/dwc3/core.h
+> > +++ b/drivers/usb/dwc3/core.h
+> > @@ -1135,6 +1135,7 @@ struct dwc3_scratchpad_array {
+> >   * @dis_split_quirk: set to disable split boundary.
+> >   * @wakeup_configured: set if the device is configured for remote wakeup.
+> >   * @suspended: set to track suspend event due to U3/L2.
+> > + * @host_vbus_glitches: set to avoid vbus glitch during xhci reset.
+> 
+> This is only applicable to the first xhci reset in its initialization
+> and not every xhci reset right? If so, please reword.
+> 
+> Also, please place it correspond to the order of the field.
+> 
+> >   * @imod_interval: set the interrupt moderation interval in 250ns
+> >   *			increments or 0 to disable.
+> >   * @max_cfg_eps: current max number of IN eps used across all USB configs.
+> > @@ -1353,6 +1354,7 @@ struct dwc3 {
+> >  	unsigned		tx_de_emphasis:2;
+> >  
+> >  	unsigned		dis_metastability_quirk:1;
+> > +	unsigned		host_vbus_glitches:1;
+> >  
+> >  	unsigned		dis_split_quirk:1;
+> >  	unsigned		async_callbacks:1;
+> > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> > index 61f57fe5bb783..af8903ee37c20 100644
+> > --- a/drivers/usb/dwc3/host.c
+> > +++ b/drivers/usb/dwc3/host.c
+> > @@ -11,6 +11,7 @@
+> >  #include <linux/of.h>
+> >  #include <linux/platform_device.h>
+> >  
+> > +#include "../host/xhci.h"
+> 
+> Let's not import the entire xhci.h. If we're going to share some macros
+> from xhci.h, please split them from xhci.h and perhaps create
+> xhci-ports.h for dwc3 to share.
+> 
+> >  #include "core.h"
+> >  
+> >  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+> > @@ -28,6 +29,44 @@ static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+> >  		dwc->xhci_resources[1].name = name;
+> >  }
+> >  
+> > +#define XHCI_HCSPARAMS1		0x4
+> > +#define XHCI_PORTSC_BASE	0x400
+> > +
+> > +/*
+> > + * dwc3_power_off_all_roothub_ports - Power off all Root hub ports
+> > + * @dwc3: Pointer to our controller context structure
+> > + */
+> > +static void dwc3_power_off_all_roothub_ports(struct dwc3 *dwc)
+> > +{
+> > +	int i, port_num;
+> > +	u32 reg, op_regs_base, offset;
+> > +	void __iomem *xhci_regs;
+> > +
+> > +	/* xhci regs is not mapped yet, do it temperary here */
+> > +	if (dwc->xhci_resources[0].start) {
+> > +		xhci_regs = ioremap(dwc->xhci_resources[0].start,
+> > +				DWC3_XHCI_REGS_END);
+> > +		if (IS_ERR(xhci_regs)) {
+> > +			dev_err(dwc->dev, "Failed to ioremap xhci_regs\n");
+> > +			return;
+> > +		}
+> > +
+> > +		op_regs_base = HC_LENGTH(readl(xhci_regs));
+> > +		reg = readl(xhci_regs + XHCI_HCSPARAMS1);
+> > +		port_num = HCS_MAX_PORTS(reg);
+> > +
+> > +		for (i = 1; i <= port_num; i++) {
+> > +			offset = op_regs_base + XHCI_PORTSC_BASE + 0x10*(i-1);
+> > +			reg = readl(xhci_regs + offset);
+> > +			reg &= ~PORT_POWER;
+> > +			writel(reg, xhci_regs + offset);
+> > +		}
+> > +
+> > +		iounmap(xhci_regs);
+> > +	} else
+> > +		dev_err(dwc->dev, "xhci base reg invalid\n");
+> > +}
+> > +
+> >  static int dwc3_host_get_irq(struct dwc3 *dwc)
+> >  {
+> >  	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
+> > @@ -66,6 +105,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+> >  	int			ret, irq;
+> >  	int			prop_idx = 0;
+> >  
+> > +	/*
+> > +	 * We have to power off all Root hub ports immediately after DWC3 set
+> > +	 * to host mode to avoid VBUS glitch happen when xhci get reset later.
+> > +	 */
+> > +	if (dwc->host_vbus_glitches)
+> > +		dwc3_power_off_all_roothub_ports(dwc);
+> > +
+> 
+> It's part of the dwc3_host_init(), but don't do this in
+> dwc3_host_get_irq(). Place it where it makes sense.
+> 
+> >  	irq = dwc3_host_get_irq(dwc);
+> >  	if (irq < 0)
+> >  		return irq;
+> > -- 
+> > 2.34.1
+> > 
+> 
+> Please run checkpatch.pl and fix them next time. Regarding
+> PARENTHESIS_ALIGNMENT or line continuation, it can be two indentations
+> or parenthesis aligned, whichever one makes it easier to read.
+> 
+> 
+> From checkpatch:
+> 
+> CHECK:PARENTHESIS_ALIGNMENT: Alignment should match open parenthesis
+> #119: FILE: drivers/usb/dwc3/host.c:48:
+> +		xhci_regs = ioremap(dwc->xhci_resources[0].start,
+> +				DWC3_XHCI_REGS_END);
+> 
+> CHECK:SPACING: spaces preferred around that '*' (ctx:VxV)
+> #130: FILE: drivers/usb/dwc3/host.c:59:
+> +			offset = op_regs_base + XHCI_PORTSC_BASE + 0x10*(i-1);
+>  			                                               ^
+> 
+> CHECK:SPACING: spaces preferred around that '-' (ctx:VxV)
+> #130: FILE: drivers/usb/dwc3/host.c:59:
+> +			offset = op_regs_base + XHCI_PORTSC_BASE + 0x10*(i-1);
+>  			                                                  ^
+> 
+> CHECK:BRACES: Unbalanced braces around else statement
+> #137: FILE: drivers/usb/dwc3/host.c:66:
+> +	} else
+> 
+
+Sorry, I too trust original patch author. Will fix next version
+
+Frank
+
+> total: 0 errors, 0 warnings, 4 checks, 86 lines checked
+> 
+> 
+> Thanks,
+> Thinh
 
