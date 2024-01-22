@@ -1,116 +1,175 @@
-Return-Path: <linux-usb+bounces-5372-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5373-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C396883691E
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 16:54:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0AB8836C3B
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 17:59:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C106F1C236E4
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 15:54:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FE261F26640
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 16:59:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A3167762F;
-	Mon, 22 Jan 2024 15:08:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DAC947F76;
+	Mon, 22 Jan 2024 15:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="ZWOTJm5k";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="ZWOTJm5k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 373757762A
-	for <linux-usb@vger.kernel.org>; Mon, 22 Jan 2024 15:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD95747F5F
+	for <linux-usb@vger.kernel.org>; Mon, 22 Jan 2024 15:35:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705936099; cv=none; b=mGAOYHfYBZcg+m68pStuaCKIlNVnfSL68YkTza1Hs+r/Yy3m35Kk9UR+MBSsOzPXEffAGmiuJmwbxsDxda4pA47bYbuVXtk05A5EEFj9f5IyGL6VbMjDoeMH/rgn92VY3GnfCw6YkT68HlIMJYnivoCRSkHvyOblEcaHJpSXg/Y=
+	t=1705937755; cv=none; b=lHgU3qMjLcdKa5hss0WUsXVanaKv314yvkxabpHVzzMIrQ4lwThuBTBZwzGHG14WLR8wZ03f/BkDGaimoj9uXuzSEQvEnqn4975CUOxM2TBwdbrwh0akUlFrwzgnKoR0j1RZ6r0Jyz3f2erUcs4Rzoh7ume4Xfo2TvS7bA6BXgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705936099; c=relaxed/simple;
-	bh=fPpb09xy8zoO8A6ntqr3S4dPIh3HBR93jJHHoHg0urw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aqe3ltWCOAWKDla8vKX7cWsemCL2ksF8WDSO9HN0WX9lsOXZYm/AXir8uCWOAD0tqrsyeTh57xa695tQd1T0jT8/R420wUrhQi6H4wPkzUQZzpkdl+rspyAw8PsQpUskZHFx5wotK0paH5gqQKIw5tHb/Y6Z7Rflz93H3cFYmTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 137813 invoked by uid 1000); 22 Jan 2024 10:08:12 -0500
-Date: Mon, 22 Jan 2024 10:08:12 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: yuan linyu <yuanlinyu@hihonor.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1] usb: f_mass_storage: forbid async queue when shutdown
- happen
-Message-ID: <1f890a94-0cec-4776-9af3-754f913ee8c4@rowland.harvard.edu>
-References: <20240122105138.3759477-1-yuanlinyu@hihonor.com>
+	s=arc-20240116; t=1705937755; c=relaxed/simple;
+	bh=gbfotE8uRZMENhVqOdxmaID1ywbYDpqE+kW+J/ez3f0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gsxlxe64NaFmssvCPgbpDNaO7Wdd3xjxBc8V7zfzJlxc8KhLDds96o9NO/GqNaoiY5mp9DnoJ2MBIU4k8g4ccBHY6Oz6iUcqbPg+ATRhdm3fypyXnEtEAMCljs1nUBcYamp8xXEBn94/8TVSFg+B6usEGGDYqWDniaqTXwEZr6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=ZWOTJm5k; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=ZWOTJm5k; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 2D5591FC0C;
+	Mon, 22 Jan 2024 15:35:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1705937752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qRog1bfDbNZUkziveZXN2DZnmCR291QpD3OieOymXqs=;
+	b=ZWOTJm5kcR4JWoiH54KOupxgnypv/fgj+I2+CX54Lq3HhtqGYn2BSrqJ+Aq8sz/tBZ1X9B
+	cSeHFOZKobw+HLrVMEvZOElZxTw4VK98jKk8uVYOmFCM0iT86YgljlbT7V/hwuL2FL+OLP
+	OyndRdyKbXBJjABNb+tkt8c2qdbUTk0=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1705937752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qRog1bfDbNZUkziveZXN2DZnmCR291QpD3OieOymXqs=;
+	b=ZWOTJm5kcR4JWoiH54KOupxgnypv/fgj+I2+CX54Lq3HhtqGYn2BSrqJ+Aq8sz/tBZ1X9B
+	cSeHFOZKobw+HLrVMEvZOElZxTw4VK98jKk8uVYOmFCM0iT86YgljlbT7V/hwuL2FL+OLP
+	OyndRdyKbXBJjABNb+tkt8c2qdbUTk0=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E347713995;
+	Mon, 22 Jan 2024 15:35:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id UgRDNVeLrmUKbAAAD6G6ig
+	(envelope-from <oneukum@suse.com>); Mon, 22 Jan 2024 15:35:51 +0000
+From: Oliver Neukum <oneukum@suse.com>
+To: jun.li@freescale.com,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] USB: hub: check for alternate port before enabling A_ALT_HNP_SUPPORT
+Date: Mon, 22 Jan 2024 16:35:32 +0100
+Message-ID: <20240122153545.12284-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240122105138.3759477-1-yuanlinyu@hihonor.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp-out2.suse.de;
+	none
+X-Spam-Level: 
+X-Spam-Score: -0.30
+X-Spamd-Result: default: False [-0.30 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 RCPT_COUNT_THREE(0.00)[4];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 MID_CONTAINS_FROM(1.00)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_TLS_ALL(0.00)[]
+X-Spam-Flag: NO
 
-On Mon, Jan 22, 2024 at 06:51:38PM +0800, yuan linyu wrote:
-> When write UDC to empty and unbind gadget driver from gadget device, it is
-> possible that there are many queue failures for mass storage function.
-> 
-> The root cause is mass storage main thread alaways try to queue request to
-> receive a command from host if running flag is on, on platform like dwc3,
-> if pull down called, it will not queue request again and return
-> -ESHUTDOWN, but it not affect running flag of mass storage function.
-> 
-> Check return code from mass storage function and clear running flag if it
-> is -ESHUTDOWN, also indicate start in/out transfer failure to break loops.
-> 
-> Signed-off-by: yuan linyu <yuanlinyu@hihonor.com>
-> ---
-> v1: follow Alan suggestion, only limit change in f_mass_storage
-> RFC: https://lore.kernel.org/linux-usb/5f4c9d8b6e0e4e73a5b3b1540a500b6a@hihonor.com/T/#t
+The OTG 1.3 spec has the feature A_ALT_HNP_SUPPORT, which tells
+a device that it is connected to the wrong port. Some devices
+refuse to operate if you enable that feature, because it indicates
+to them that they ought to request to be connected to another port.
 
-This is basically okay.  I have a suggestion for improvement, see below.
+According to the spec this feature may be used based only the following
+three conditions:
 
->  drivers/usb/gadget/function/f_mass_storage.c | 28 +++++++++++++++++---
->  1 file changed, 24 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 722a3ab2b337..d5174e066078 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -545,21 +545,41 @@ static int start_transfer(struct fsg_dev *fsg, struct usb_ep *ep,
->  
->  static bool start_in_transfer(struct fsg_common *common, struct fsg_buffhd *bh)
->  {
-> +	int rc;
-> +
->  	if (!fsg_is_set(common))
->  		return false;
->  	bh->state = BUF_STATE_SENDING;
-> -	if (start_transfer(common->fsg, common->fsg->bulk_in, bh->inreq))
-> -		bh->state = BUF_STATE_EMPTY;
-> +	rc = start_transfer(common->fsg, common->fsg->bulk_in, bh->inreq);
-> +	if (!rc)
-> +		return true;
-> +
-> +	bh->state = BUF_STATE_EMPTY;
-> +	if (rc == -ESHUTDOWN) {
-> +		common->running = 0;
-> +		return false;
-> +	}
-> +
->  	return true;
->  }
+6.5.3 a_alt_hnp_support
+Setting this feature indicates to the B-device that it is connected to an A-device port that is not capable of
+HNP, but that the A-device does have an alternate port that is capable of HNP.
+The A-device is required to set this feature under the following conditions:
+• the A-device has multiple receptacles
+• the A-device port that connects to the B-device does not support HNP
+• the A-device has another port that does support HNP
 
-This could be written more cleanly as:
+A check for the third and first condition is missing. Add it.
 
-	rc = start_transfer(common->fsg, common->fsg->bulk_in, bh->inreq);
-	if (rc) {
-		bh->state = BUF_STATE_EMPTY;
-		if (rc == -ESHUTDOWN) {
-			common->running = 0;
-			return false;
-		}
-	}
-	return true;
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Fixes: 7d2d641c44269 ("usb: otg: don't set a_alt_hnp_support feature for OTG 2.0 device")
+---
+ drivers/usb/core/hub.c | 30 +++++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
 
-And the same goes for start_out_transfer().
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index ffd7c99e24a3..d46777479849 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2388,17 +2388,25 @@ static int usb_enumerate_device_otg(struct usb_device *udev)
+ 			}
+ 		} else if (desc->bLength == sizeof
+ 				(struct usb_otg_descriptor)) {
+-			/* Set a_alt_hnp_support for legacy otg device */
+-			err = usb_control_msg(udev,
+-				usb_sndctrlpipe(udev, 0),
+-				USB_REQ_SET_FEATURE, 0,
+-				USB_DEVICE_A_ALT_HNP_SUPPORT,
+-				0, NULL, 0,
+-				USB_CTRL_SET_TIMEOUT);
+-			if (err < 0)
+-				dev_err(&udev->dev,
+-					"set a_alt_hnp_support failed: %d\n",
+-					err);
++			/*
++			 * We are operating on a legacy OTP device
++			 * These should be told that they are operating
++			 * on the wrong port if we have another port that does
++			 * support HNP
++			 */
++			if (bus->otg_port != 0) {
++				/* Set a_alt_hnp_support for legacy otg device */
++				err = usb_control_msg(udev,
++					usb_sndctrlpipe(udev, 0),
++					USB_REQ_SET_FEATURE, 0,
++					USB_DEVICE_A_ALT_HNP_SUPPORT,
++					0, NULL, 0,
++					USB_CTRL_SET_TIMEOUT);
++				if (err < 0)
++					dev_err(&udev->dev,
++						"set a_alt_hnp_support failed: %d\n",
++						err);
++			}
+ 		}
+ 	}
+ #endif
+-- 
+2.43.0
 
-Have you tested this?  Does it do what you want?
-
-Alan Stern
 
