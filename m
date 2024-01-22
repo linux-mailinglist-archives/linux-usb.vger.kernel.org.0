@@ -1,264 +1,210 @@
-Return-Path: <linux-usb+bounces-5363-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5364-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74B6D8363A2
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 13:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 23BB48363F3
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 14:05:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D70E11F27E4D
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 12:47:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D1A41F21B6B
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 13:05:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90D0438FA4;
-	Mon, 22 Jan 2024 12:43:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E08A23C6B3;
+	Mon, 22 Jan 2024 13:05:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="Zz2OMR5V"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K8mp3vq0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2049.outbound.protection.outlook.com [40.107.14.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792093D576;
-	Mon, 22 Jan 2024 12:43:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.14.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705927402; cv=fail; b=NUY17BOFJUkps0uWMDIlgvzjjpGcmfHpJYlBfud8kSJ/IfgdP3YJ94OY5eVdzoqKTmc9J/JfokoziHPwexIBZ8xXyY8tiqtEwRpdPfo6wTGtQX0+f9pWK24kLdNDg/i07KtXpTyPTu+pGHNJBdXktNyx7wd52dcfbvhEuRJegV4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705927402; c=relaxed/simple;
-	bh=XTxNK4WsSjjL0QZpplfgVBS90moeRvsfz3QSwRi248o=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=C2d3qUO1Rn/7EPY5TBCsraX/7wly5kzG0yNe76bv+slH6kR+NnhTbvNIedTE9e/Ct6n9oLjDynnwVXUhdlj3ddVtsNpM+pT33oy3AZyq79QFhgvcm7c2aJZAVAoUkn6qp6+kktixTFCTuHvMf9Dhl5QYT3BOMOZJHjRySPKYn+E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net; spf=pass smtp.mailfrom=wolfvision.net; dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b=Zz2OMR5V; arc=fail smtp.client-ip=40.107.14.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolfvision.net
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b/Z99rL9AqpjXmV4p7d9NeO078W0dK9vcxydWm6CKm7k9ujVzUsXUHP9C44mntF2Vj034TYYVtdW+8YMOy+w6rEe2bGkUVsChibNgbyRVU/NgyAakkutPWjxyBqWW4hV6UXUJtLUvV3NnFJR3ciThNZlKhq2VaaNTl8j+ZXFK4LO11PStBwvGyk7FyZ0j6ns47I5fsbz6fVs8ttr8GE1OjbcfqOTR3BMBSedc29ral3W7XmB69Dsr+j3Wb+U8F/WxiFQ99uCoQyGgImb+ubJ2ZTH8h6fmd7nSumMukUCxiLdCN2+08jygwGeIae+nFxxQMGvmDTitZLUhItKaWrBAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rI8n4/6dI+DVCF6+wXoA5tIjqn3MBN0lKQhXfs1I6yg=;
- b=Ez2xlfVtnCEjWrGrQOoSg9tgFUcHg0OussO6C2Py4hk+P2GLSgt59nSEptlDjsALxi7+Yy0fBXLEWso27u9h9PBSIwRrGIR/JqoYdr1oTKDn8zOUF8iZOPuI43e7ItkHsNCHavDEJT9+ORHXT5iqCh/pyfEk1JpyuRIsq1v0JZcMKIOze8Yk+oibFOlSPGAPb+/ncrU/hOVS0ZGKp5zhW6Nui7LP2lKwUirvBK10EVpoiZFD2zrYhen7tJ1qatJLcGEaXEZg4hSy0iKSdkN08wRT/XtHyBdOkrrpqoGXkFjpNe2sTRQIYa4lQ/Rxt0KB+W3uB2LzEzlIRj637+xRaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rI8n4/6dI+DVCF6+wXoA5tIjqn3MBN0lKQhXfs1I6yg=;
- b=Zz2OMR5Vubf7xxnvYlZXr9slrwf3czB5Hg0fcjijMTYnRWvwVAEFGiUNVVb0oU0JWCT2ax6XSeO82sepkOqRCkBVI8acIXPYG5F8DZq7wN2RWXeliXwcvsftj06Uvl676bzhg5pBZBItrKb+gqLZ+wL7lEs2lG1cv9+4CFE2k9Y=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
- by VI0PR08MB10428.eurprd08.prod.outlook.com (2603:10a6:800:1b9::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.31; Mon, 22 Jan
- 2024 12:43:16 +0000
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::c8ee:9414:a0c6:42ab]) by VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::c8ee:9414:a0c6:42ab%6]) with mapi id 15.20.7202.031; Mon, 22 Jan 2024
- 12:43:16 +0000
-Message-ID: <1c74a991-ccf9-4074-8111-0160ba4e05b4@wolfvision.net>
-Date: Mon, 22 Jan 2024 13:43:13 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] ASoC: dt-bindings: xmos,xvf3500: add bindings for
- XMOS XVF3500
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>
-Cc: Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20240115-feature-xvf3500_driver-v1-0-ed9cfb48bb85@wolfvision.net>
- <20240115-feature-xvf3500_driver-v1-2-ed9cfb48bb85@wolfvision.net>
- <333c2986-c7c2-4a46-90cf-b59ae206e55a@linaro.org>
- <96abddcc-fa65-4f27-84fe-2281fe0fcf1c@wolfvision.net>
- <644f7f02-405d-47fb-bc72-4d54e897255f@linaro.org>
- <5db4b898-93d5-446f-bfed-b57847f9967a@wolfvision.net>
- <435f502c-1e1b-4d40-8dcc-34487905d69c@linaro.org>
- <b7f76546-9998-43e0-abff-a4e73817dbae@wolfvision.net>
- <47bdc31c-50d2-4d33-9339-5132b6364539@linaro.org>
- <16027339-0a82-4dd1-86aa-19fda6e23f88@wolfvision.net>
- <aeeb0dfb-87e2-4024-9d4a-0b9529477315@linaro.org>
- <b888d958-4eb0-4c1f-ace6-b2b85faa5113@wolfvision.net>
- <34a421e3-b11f-4e61-b894-0b42a1330d8f@linaro.org>
-From: Javier Carrasco <javier.carrasco@wolfvision.net>
-In-Reply-To: <34a421e3-b11f-4e61-b894-0b42a1330d8f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR0902CA0055.eurprd09.prod.outlook.com
- (2603:10a6:802:1::44) To VE1PR08MB4974.eurprd08.prod.outlook.com
- (2603:10a6:803:111::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0F773C491;
+	Mon, 22 Jan 2024 13:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705928730; cv=none; b=dZEeabuDk/xW/tgJ5eOpweT6uwifHby9FAgyzLe72RuGG5N3lxa+xoi7JJW0tIkulwDMpqwnZFRcDJCIF6t4j5SurQCVBPGxuq+UhsrLJFrDa2QdynDNUHm898t6IqJMvPX+U5xvzUdy4Ev+xIzFb6DDIzaZ511oyk27an+5oys=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705928730; c=relaxed/simple;
+	bh=VgnrLml8x1cZ0tdRYHJcn8PShS/TzWF0nWfJtsW9134=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qBB3NH+XCaiWWFKP1kfc4eootp4C6LOp4ORMT0dbZGSvMTjQd4XTJ2kIChhF58R/sNwdqOBUigCPBSq+teQJ2owgCiOaUIdEgFc9joAgYV2R0yrDCqQ2mGj2TDnkKhuSHJFWd3scOfFrj0Vldhp+hISyU+jLcHuszRHEiVrkohY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K8mp3vq0; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40e9ef9853bso16575415e9.1;
+        Mon, 22 Jan 2024 05:05:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705928727; x=1706533527; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mp/8xDRCZjv5y4KcPViCiBMqajiVKRc1465woAo3Ngo=;
+        b=K8mp3vq0rnf0f1tfD1EtP5RBOWgL3uTpxnh22BG3IU/0kqe0GWa1XbMLmwW2SfDeaM
+         1swUvHI12866DloEfY5WsEoc1OVY0N62/xtD7niKBZbenT6HwqvMu8cgf6fEeVROsJ6P
+         gKDkqHzHphI6Pnv+DXm/N/G1B7B/Xb+T3iHcgRcoh2YB9nZEvA/0EJE/7pKmnAgFrcF+
+         Bp4aEXX/Xpt/k/XtjrEx1W76cxxvgfsanJxEXRBIlthtuF3BW4ASXEArHzFY4LR1OYAG
+         sZ55lkngMsVr2Paw+rrqCyAIC47DY2S6zjux0fNOHwrCRFD99aMI/4pEWbt9IEyURzve
+         3Yww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705928727; x=1706533527;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mp/8xDRCZjv5y4KcPViCiBMqajiVKRc1465woAo3Ngo=;
+        b=Se2C6QEsK+jrbNdhZr/Om7H/6p70aDvHwSF4OlczqiXtiL7Ic7cuu/dI9U+Aog25zs
+         iCQsLuLZVIn3+/4gNz81zvFO0IHu+N4Xn6dhQupnA1gPW0dY1Sh51zLlhz9i2ZITHQWK
+         pYV9V2cGzehEGN8mmmDagsyJH4vsczqpY3lIYvAhKBWaq/yr76gJsDvf2LDr25TeAr06
+         D+b0pBQuXN2fzAF5q8PLRddOCVRFJAjKbojrkUi2OdbyhcaKcsZWdApll3f5sZTMJlhF
+         fsosqcsej+363WWo/+bzpvXOrEUCSfWkzY78WyNOg6cF9+psYeNdp+OjaQwM86JBdd+6
+         BRxA==
+X-Gm-Message-State: AOJu0Yw2kcVqtZzvqzTkeUO+U7OuM7Ik7GZeI8dn9hviPQJyEsaiErmr
+	oMst1z4KV+Dx5tzPi35oG+3yURrTIU1qot2LW+ZAtQRsy3EL4guj
+X-Google-Smtp-Source: AGHT+IFHmjEmeu7pWua+wi7iLe6qjSDVPRL27NITeBmGF9vpz49mzsF7SGDLAVjMhHv73ZtGi6vZHg==
+X-Received: by 2002:a05:600c:3509:b0:40d:8881:4d1e with SMTP id h9-20020a05600c350900b0040d88814d1emr2236549wmq.66.1705928726767;
+        Mon, 22 Jan 2024 05:05:26 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.161.188])
+        by smtp.gmail.com with ESMTPSA id h10-20020adff4ca000000b0033925aa222dsm6846512wrp.57.2024.01.22.05.05.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jan 2024 05:05:25 -0800 (PST)
+Message-ID: <5339e8b2-8fcd-498a-b9d8-2dc2e3ddb272@gmail.com>
+Date: Mon, 22 Jan 2024 14:05:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|VI0PR08MB10428:EE_
-X-MS-Office365-Filtering-Correlation-Id: b71adfd6-12fc-464d-7b82-08dc1b47b42f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	VucsPJLYKXQIKEATIWHT1HKO7FHTkYUJ96maiG//lQBralL7A+V1oBmUQ7vNQP2wrQQh6RYQTk5OFUzpNpU58EAZgm0ZBeYnyxQ9O+LMmQVmv7dtacuj1Ng1ke/K0qRvRIxDtjWCCzL9tuxbuotaLlj5sC0mnxDodLm1z8AW5HIOgV6Uz+Nk0Zs003byiZAf0QomMjlZ3DXaZt8TAQ3eE5kRf0xuMp2g5vsETVj9WEJ/vPpqVccX88BXmNNNDN/kg7AAPK/uD/CPR/aO6nTnhC4ftc85pSNGYoVwKBln2bUXhQ/m/EiifLGcgz0KMRAo+CAPR/AhFULews3oItcuEAJBEH8SUv+bUGTUhvOOdRcVGCHbX8Q+G5QuVwl50GNu6qcpD+O8LDQ6gtNw3B91EUjfOatZWnkMeorBYUc0ii7abCpVByiYMWiD5PVo+EFpJQVkt6CurUGhI56satO4/3eNU/DbBjEJ7cpcyPUzfJmtToCjJY2YhKcOWxrG4WwLnXMZJs4a1yBPHj9ryGcXawOwaAC+kxINM0mdDPMFBH4sN37f3pZ3paHIWOtFCiK1RnbISA1Meahs3Owp0O/LfqEGfKTRyYHHd7rXzCJcksliPpYjC7+r79NGFBUpJ17lQUdSz4v0Wnc8w1Iw2SFHog==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(396003)(376002)(39850400004)(366004)(230922051799003)(1800799012)(451199024)(186009)(64100799003)(83380400001)(5660300002)(66946007)(38100700002)(4326008)(2616005)(53546011)(8936002)(8676002)(44832011)(478600001)(41300700001)(2906002)(7416002)(66476007)(6666004)(6486002)(6506007)(66556008)(316002)(6512007)(110136005)(31696002)(36756003)(86362001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WFA0b1IvTjRQd0U2TlMxU2srcUJFaG5GaEM1TmdGYzloZlhoNGdpOVpGby9t?=
- =?utf-8?B?bXRXalA0d2YzMWJueFoza2V1SHRLQWZGUW5SekV5cGRpSHdvNkR2NXBaT3c1?=
- =?utf-8?B?RUh2WDBYejZKQVNGTWJNV0kvYTBwZS9od1J3bWVJYXhXcWh6QnZjS2UrQjBy?=
- =?utf-8?B?ZDZGZlQ4VS8rZ2ZpSGU5Rmhsck1ZdFpjL1FTMnBSbGNJUnFZNWhvMXNkcEEy?=
- =?utf-8?B?SzdYWVhBeVU1dmlENk1RbW9yOXFTVTVjb2t1eDBwTjhPdEVXampDMXZMVEF3?=
- =?utf-8?B?Z2pTUHVySlc0U29NZ05abEtjZnZoMU55ZXRmcTBiQVljbVZPWnJsZExvbUVW?=
- =?utf-8?B?bmFmcStzb1MrRkM1T0FQMlp2WjQ3eU9qcUx1SkJxUTc1ZFoxQkduRDh3R1Ir?=
- =?utf-8?B?c0hQTTlUb1UrUUtYYU9EQjJBOEthcWRteVQ4VTN5NGtEOFVzSGhVb09TRVFV?=
- =?utf-8?B?cnVCelB6R2lWS1ZMekFmKzhDRUhxREtlSjI3OExPVzVCVmduUHpCZ2l1VDV6?=
- =?utf-8?B?ME5VY2FHQkd1Z0lxblpxNTFobnorZFAyWjVrWmlrNk5DeEh1M2JoeWM3U1pE?=
- =?utf-8?B?Tyt5aGpOSUI0amZ1aHFtcWRCcTA3M1NQVE1ZQnYySnVHNkRaZ01NNUFEaTBM?=
- =?utf-8?B?R3lDdWp0bnR0Mm9qNWI5Ync5NUZ3bHc2bG11NVE5aXp0SGdUOG1HUVJRRDNY?=
- =?utf-8?B?S2lsRVpCRDdBZDBPcW9ZV3N3MkdJQW5JNW0wM2I1TWhiYjBHSFBBUkZzV3ZW?=
- =?utf-8?B?SUg5ckRnWWdtbngzMFNrTlUxVjBHS292SCtES1dHRmZIeXBrdlVCUDdqOUti?=
- =?utf-8?B?QVQwV1IwR0YwMVYxZWVVSTZNdkZ5cHYzWVF6Umo0RHZqa2VOZ0N0MDlIWWNy?=
- =?utf-8?B?YkR4ZU5kYmJKR1BDWkY4SDdxYkFBcDhQRFNSSEdpMFFvMHRldmFqS2VFVVYr?=
- =?utf-8?B?MFN2SWhJTVl2RTFLT0NRUTQ5RjVtaHI2UnBGQjREbzJhUFExVU1VK2hLS0RD?=
- =?utf-8?B?Z2J1U3lDM21KMkFyRnpOMkZOaHAzWFdhUEhsdlpaYjk5TUZqbDhZNHVmbTFr?=
- =?utf-8?B?U3BhZ3NoZ2dkOFVXT0l2Vm5kNXBRWi9GNTBub3NNeTNJYnlpUlIvQlFrRGxS?=
- =?utf-8?B?ejBiMUFzbDBNUzFXS2Nyc3ZRUCtOMHB0TmJVVWVYZUt5eTU5dlI4VjJEZDl6?=
- =?utf-8?B?WHhDaUM2REJLdmZFajQ5SCtyZFQ3eHF2cnUvVmtiREtCTmpnemlJb0h6WUlY?=
- =?utf-8?B?U1VmWnZnQndYMnRBNldTaXZmUXlIZk4wRW1QUFkrNVBjcGp3ZTh4Y1FCd3RM?=
- =?utf-8?B?NXUwTUMxYlQ1WUswZWhyemZiY3UrU1pKY2M2RnBJRFNaQWRGUzhDNWlhaGxr?=
- =?utf-8?B?cWpOSXRBVmtjZnljNXFZR25XWkNPUVRJK2ZGeERBR0w4R0pHZ1RPYmNQSm9D?=
- =?utf-8?B?OUZ5cm90dmtHbDBVa1ZpbXZhMnJrL281VGVNQ2VXdEFDd3J1OU01V0FqUkxP?=
- =?utf-8?B?OVM5MHFVdDFVN2VselFabUhlWWczL3BzUS9QZmREOTVYY0x5WnBBZEV5YktI?=
- =?utf-8?B?aUJrNHdHRUFwck9Nbk5ZcytxczVEUVZ1bm9WTXF1TEcxZnJoejNVemZENnRl?=
- =?utf-8?B?ZDgxcmRMUjlTRnJLL3VkZ3V5azZMeGxpTUZ6R3JUMDlCWVI3UXlyRm92dEZp?=
- =?utf-8?B?azZybzhXN1lrd1JGcDBNcEdaQ2wxY3Brb0MyTDBacVMvT1pXNUorQkwvNHQ4?=
- =?utf-8?B?dUZzR1NtTi85VHJ5dkdWMTEwWUUxVjk0dXRLeEdDMlZMZVV5TEk0Z0NoUFR5?=
- =?utf-8?B?bjl3dzJXYUIwUC9sazhnaTFUd2pnRmxnaHlGWTNJQ2pWK0ZYUjlrOFdwSENq?=
- =?utf-8?B?M0hYWkZHVTFsYmFuNHp0QkxTemZzK20ySktMMEIzTFo5QWo1bTBHemFLa0Zt?=
- =?utf-8?B?anpjTmhOZFE4MmppaTFCR082dUZUUERKSnRzY0gveDhxOElwSkl4THlmeHFE?=
- =?utf-8?B?YkhySThaSVRYRVJSbFlwYlc0NWdhM3ZKOFhnbk8vR0EwQlFYYlN6YnlENFdk?=
- =?utf-8?B?QU5MR0hsUWNrV0hjd29jSWh4T05OYWFYQ2VpdUhseGZZbWpGUERqaXhGQU1x?=
- =?utf-8?B?alBmWDlwTkdPcTdhaG9SdTY2dWNxY1dUNDUrd01OaFVud1pKQ3UwTEpWclJv?=
- =?utf-8?B?MlhpYzlnNjZiMi9DSzgrWGdoNThJZUlDU2ZDYnFueWY4M2dlUkNFVWtKZ0VH?=
- =?utf-8?Q?e9gaXmZV1gnG0hAj0tQUKU8FudRQ3xafuXUEnD8OPM=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: b71adfd6-12fc-464d-7b82-08dc1b47b42f
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2024 12:43:16.0473
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JLMABFmnhs9Opzw8xDsu1IIfm0xlk+C3IHAAf48V37jjG+DqzEfCt4lukUPoUacaK3ACRSkqe+6skc2fOppWbmNYO3PDFnk1bETnhgZ+BKk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR08MB10428
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] usb: mtu3: Add MT8195 MTU3 ip-sleep wakeup support
+Content-Language: en-US, ca-ES, es-ES
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ chunfeng.yun@mediatek.com
+Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>
+References: <20240122111809.148546-1-angelogioacchino.delregno@collabora.com>
+ <20240122111809.148546-2-angelogioacchino.delregno@collabora.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+Autocrypt: addr=matthias.bgg@gmail.com; keydata=
+ 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
+In-Reply-To: <20240122111809.148546-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 22.01.24 13:29, Krzysztof Kozlowski wrote:
-> On 16/01/2024 08:29, Javier Carrasco wrote:
->> On 15.01.24 21:43, Krzysztof Kozlowski wrote:
->>> On 15/01/2024 20:43, Javier Carrasco wrote:
->>>> On 15.01.24 19:11, Krzysztof Kozlowski wrote:
->>>>> On 15/01/2024 17:24, Javier Carrasco wrote:
->>>>>> Do you mean that the XVF3500 should not be represented as a platform
->>>>>> device and instead it should turn into an USB device represented as a
->>>>>> node of an USB controller? Something like this (Rockchip SoC):
->>>>>>
->>>>>> &usb_host1_xhci {
->>>>>> 	...
->>>>>>
->>>>>> 	xvf3500 {
->>>>>> 		...
->>>>>> 	};
->>>>>> };
->>>>>>
->>>>>> Did I get you right or is that not the correct representation? Thank you
->>>>>> again.
->>>>>
->>>>> I believe it should be just like onboard hub. I don't understand why
->>>>> onboard hub was limited to hub, because other USB devices also could be
->>>>> designed similarly by hardware folks :/
->>>>>
->>>>> And if we talk about Linux drivers, then your current solution does not
->>>>> support suspend/resume and device unbind.
->>>>>
->>>>> Best regards,
->>>>> Krzysztof
->>>>>
->>>>
->>>> Actually this series is an attempt to get rid of a misuse of the
->>>> onboard_usb_hub driver by a device that is not a HUB, but requires the
->>>> platform-part of that driver for the initialization.
->>>
->>> That's just naming issue, isn't it?
->>>
->>>>
->>>> What would be the best approach to provide support upstream? Should I
->>>> turn this driver into a generic USB driver that does what the
->>>> platform-part of the onboard HUB does? Or are we willing to accept
->>>
->>> No, because you did not solve the problems I mentioned. This is neither
->>> accurate hardware description nor proper Linux driver model handling PM
->>> and unbind.
->>>
->> You mentioned the PM handling twice, but I am not sure what you mean.
->> The driver provides callbacks for SIMPLE_DEV_PM_OPS, which I tested in
->> freeze and memory power states with positive results. On the other hand,
->> I suppose that you insisted for a good reason, so I would be grateful if
->> you could show me what I am doing wrong. The macro pattern was taken
->> from other devices under sound/, which also check CONFIG_PM_SLEEP,
->> but maybe I took a bad example or missed something.
-> 
-> You have two Linux devices: USB device and platform device. The platform
-> device controls power of USB device. If platform device goes to some
-> variant of sleep (PRM, system PM) before the USB device, how will USB
-> device react? Will it work? I doubt.
-> 
-> You have no ordering / dependencies / device links between these devices
-> thus possible problems.
-> 
-Thank you for clarifying this point. I only covered the platform device
-and such device links are missing. I will opt for the inclusion in
-onboard_usb_hub, which already covers both devices.
->>>> non-HUB devices in the onboard_usb_hub driver even though it supports
->>>> more operations?
->>>>
->>>> I am adding linux-usb to this thread in case someone has other suggestions.
->>>
->>> I don't see any difference between this device and onboard hub. The
->>> concept and the problem is the same. Therefore either treat it as as
->>> onboard hub or come with USB-version of PCI power sequencing.
->>>
->> I have nothing against adding this device to onboard_usb_hub as long as
->> it is valid upstream, so no conflicts arise with new additions to the
->> list (which was the trigger for all of this with v6.7). That is
-> 
-> I am sorry, but we talk here only about upstream. I don't know therefore
-> what "valid upstream" means. You cannot send a patch which is "not valid
-> upstream". I mean, technically you can, but this would be waste of our
-> time and receive rather annoyed responses.
-> 
-I meant valid upstream, so sending such patch makes sense to the
-community (and not only to us). So far you are the source of feedback
-upstream, so I will follow your advice.
->> obviously the most trivial solution and as you said, it is justs a
->> naming issue because the power sequence is not HUB-specific.
-> 
-> I would ack it. Others? No clue, I also do not remember full story
-> behind onboard USB hub and why it was called "hub" instead of "onboard
-> USB device".
-> 
-> Best regards,
-> Krzysztof
-> 
 
-Thank you and best regards,
-Javier Carrasco
 
+On 22/01/2024 12:18, AngeloGioacchino Del Regno wrote:
+> Add support for the ip-sleep wakeup functionality on the three MTU3
+> controllers found on the MT8195 SoC.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+> ---
+> 
+> Changes in v2:
+>   - Dropped unused definition for WC0_IS_EN_P1_95
+> 
+>   drivers/usb/mtu3/mtu3_host.c | 30 ++++++++++++++++++++++++++++++
+>   1 file changed, 30 insertions(+)
+> 
+> diff --git a/drivers/usb/mtu3/mtu3_host.c b/drivers/usb/mtu3/mtu3_host.c
+> index 9f2be22af844..7c657ea2dabd 100644
+> --- a/drivers/usb/mtu3/mtu3_host.c
+> +++ b/drivers/usb/mtu3/mtu3_host.c
+> @@ -34,6 +34,18 @@
+>   #define WC0_SSUSB0_CDEN		BIT(6)
+>   #define WC0_IS_SPM_EN		BIT(1)
+>   
+> +/* mt8195 */
+> +#define PERI_WK_CTRL0_8195	0x04
+> +#define WC0_IS_P_95		BIT(30)	/* polarity */
+> +#define WC0_IS_C_95(x)		((u32)(((x) & 0x7) << 27))
+> +#define WC0_IS_EN_P3_95		BIT(26)
+> +#define WC0_IS_EN_P2_95		BIT(25)
+> +
+> +#define PERI_WK_CTRL1_8195	0x20
+> +#define WC1_IS_C_95(x)		((u32)(((x) & 0xf) << 28))
+> +#define WC1_IS_P_95		BIT(12)
+> +#define WC1_IS_EN_P0_95		BIT(6)
+> +
+>   /* mt2712 etc */
+>   #define PERI_SSUSB_SPM_CTRL	0x0
+>   #define SSC_IP_SLEEP_EN	BIT(4)
+> @@ -44,6 +56,9 @@ enum ssusb_uwk_vers {
+>   	SSUSB_UWK_V2,
+>   	SSUSB_UWK_V1_1 = 101,	/* specific revision 1.01 */
+>   	SSUSB_UWK_V1_2,		/* specific revision 1.02 */
+> +	SSUSB_UWK_V1_3,		/* mt8195 IP0 */
+> +	SSUSB_UWK_V1_5 = 105,	/* mt8195 IP2 */
+> +	SSUSB_UWK_V1_6,		/* mt8195 IP3 */
+>   };
+>   
+>   /*
+> @@ -70,6 +85,21 @@ static void ssusb_wakeup_ip_sleep_set(struct ssusb_mtk *ssusb, bool enable)
+>   		msk = WC0_SSUSB0_CDEN | WC0_IS_SPM_EN;
+>   		val = enable ? msk : 0;
+>   		break;
+> +	case SSUSB_UWK_V1_3:
+> +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL1_8195;
+> +		msk = WC1_IS_EN_P0_95 | WC1_IS_C_95(0xf) | WC1_IS_P_95;
+> +		val = enable ? (WC1_IS_EN_P0_95 | WC1_IS_C_95(0x1)) : 0;
+> +		break;
+> +	case SSUSB_UWK_V1_5:
+> +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0_8195;
+> +		msk = WC0_IS_EN_P2_95 | WC0_IS_C_95(0x7) | WC0_IS_P_95;
+> +		val = enable ? (WC0_IS_EN_P2_95 | WC0_IS_C_95(0x1)) : 0;
+> +		break;
+> +	case SSUSB_UWK_V1_6:
+> +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0_8195;
+> +		msk = WC0_IS_EN_P3_95 | WC0_IS_C_95(0x7) | WC0_IS_P_95;
+> +		val = enable ? (WC0_IS_EN_P3_95 | WC0_IS_C_95(0x1)) : 0;
+> +		break;
+>   	case SSUSB_UWK_V2:
+>   		reg = ssusb->uwk_reg_base + PERI_SSUSB_SPM_CTRL;
+>   		msk = SSC_IP_SLEEP_EN | SSC_SPM_INT_EN;
 
