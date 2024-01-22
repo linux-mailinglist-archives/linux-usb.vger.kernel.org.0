@@ -1,73 +1,73 @@
-Return-Path: <linux-usb+bounces-5333-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5334-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE90A835C0C
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 08:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D8FC835C30
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 08:59:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D1E2287B52
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 07:53:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D968288C6B
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 07:59:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC691179BA;
-	Mon, 22 Jan 2024 07:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B05417BDB;
+	Mon, 22 Jan 2024 07:58:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aPSsR1OQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W3mrroVC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33F81AAC9;
-	Mon, 22 Jan 2024 07:52:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD3521357;
+	Mon, 22 Jan 2024 07:58:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705909977; cv=none; b=VM5aOap8dCL6oDfHGdfQDvfn1CZyq3+4/RC7zVOCwlKq25GjlQ34ZE4lYaWSjBr0nvSzPzSZGykUCce4/YgV/16JcJ5V/xSFlV3EvxtftoCEPBsHGIkm2mrgXGn1tktOhPnuo3gwppQxu687Y/EL1m122F1gzak3x9KvCTkqHBc=
+	t=1705910325; cv=none; b=bi7y/zlpO116FxAUuvkRZtMiEpgkLB9/DSnRtyDk6u+FuKNSpTy2lTHX8tG26IGYqP6pYe6bfxTA/bojls2p6xUCJz7kmJKtsewpEDoBE9gXIaxoFRiQrFFNv3NbWOyntd8RVlD/Z4uaO8Oi6Eq+6tDSQgGjk6l2swGvsDKhu70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705909977; c=relaxed/simple;
-	bh=4fsuFatDJf5eq+VZeQwEjq1x1pdlrxwMgJEQmPhWH9U=;
+	s=arc-20240116; t=1705910325; c=relaxed/simple;
+	bh=+3IAS6+W/qcg3J4V0kzEHae3ZXvyn9+YYU9OGB9iGxY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oDk69TVqMmZkSaH556rllFQSdo0APnJjJ8YrmI4C983r/0EpWMIu+pQn6atFTwcKv6wpxObTGjoF7RcCz5L5QLfPOGTU3Udamth/I8iiDsJWBERoj7HsnSB1Bd4eGYjtVggIH6AvGGkELJuxlnN4CZrU2zZqKxDNIzsF352lDtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aPSsR1OQ; arc=none smtp.client-ip=209.85.128.47
+	 In-Reply-To:Content-Type; b=q0BhLHTsbZeIGrtPcu77AnvCZwoiXjEs1ZZomAPxo/Z7Fs9mRqeZPYIshi/hgNaBfjKLJ7H1St9V0Lw1rkuSpsSPUCDd4fatCz9jQevgTMwLCH+D3VJYuiBXGJOufZBry/abZp4zd2Cpsb44E0iyjO+oMqekDOJ3+fh98Pkdx78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W3mrroVC; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40e800461baso35150935e9.3;
-        Sun, 21 Jan 2024 23:52:55 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40e9d4ab5f3so31721505e9.2;
+        Sun, 21 Jan 2024 23:58:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705909974; x=1706514774; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705910322; x=1706515122; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xq2E337IRcW0cWdNtXuyvIv8Cc8tASWsvBm9h/Ky4Zc=;
-        b=aPSsR1OQUozgrrJWeRTzV/ZhYk6fEiGfOykK+iyEFkZlWEZ0QPDvJpPwL4qVs+mes9
-         dKUBCvJXr9wVbPde/Mgbe2NCNvCTBsgQ94wP2wv504LgPJIR3zxdvoTZaXb5LortCKXW
-         pZkdKUOsXGGV56lexlKC1hloniRu3rHN/Yw9IzIGY6qUKqwF+qKe9vnqtVeQLtJoEsAx
-         mlcb/kmauxrMUN9Uz2EYFydsUNu0sgEyzNXZOzII/mC8AvgJHfAN0cQivqabb6fInJCe
-         LTXxusOyvNI3ry0NBPE2j99DhKEV+2bC6prsHXWnA9WmkCcY6cxboAMKaQnC/7tTd8b4
-         NNpg==
+        bh=9nVtX6sIVg5JIaktwIHIF/8UXqbp4BOA0LlFNe3QMMA=;
+        b=W3mrroVCVzq6cHnNodR1YKWta7bOeJmp4f9429iusQzgYwPy4OXxPqmbb3u0qR+eQI
+         ZgYx1k46HU/WlFpHpAvpmCDs9gVhQOI9gSrt4CpenNdNNl7Ss1508FsWA4Wc2C2BUvUX
+         fSufYx4o3mPXeHE74kZ4zH+0t64EOt4FHzYuwp95JFFa8Gs3s8CB8cCXOvZWuo3qTtUs
+         wGFpNTUqM88/SPIvy/35YF3VZe2UESINGh3y5s9pp2HhiWRUAY3qv9xVuYa/TFs8te7c
+         MFfMVhPYj2zo/8nzD16BzIi1bZvICag3AIig9OzI1gzSOiNNu6kN59LNT0PUbbC8hKk8
+         6W+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705909974; x=1706514774;
+        d=1e100.net; s=20230601; t=1705910322; x=1706515122;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xq2E337IRcW0cWdNtXuyvIv8Cc8tASWsvBm9h/Ky4Zc=;
-        b=wtUgGixMKAhMMSinFWMhARxzAE65u1HLk0Y48wiFSISJTGUPM25uLYiV/PTCrP9dmt
-         amcfyrL+MuHKB6rGvHB4iUmrrdGiNalk3jkWoF5t8GltyEOHHuymg/QmFLUpB3KS2pmb
-         6TW4NUAQuLv4FR7iWhFxYc87ad3WUYuR0Fnsgx0HYS7kSLHDlc/fG63lKvYU2gvcIFlT
-         MY7lWv3ipj1w1VLzb2aMsXSzOYnoFPxwLgbkDhrGgqIWztvD9+TgCryZEzIMoz2M/nyw
-         We5SWnrMHhNfpi/2nr1C/8UyIL1KS7MMF9owg0oAH+Mj4OpYM/CLzJnslXz5W7IrqV8D
-         MXRg==
-X-Gm-Message-State: AOJu0YyFtiI7qaK4sDRPgtmiDywItjnDea7jGwgLF9LcRRPL522Np4+x
-	HYgI2bVgX9CH492BdarZWPe3fWzg1pqjq4N9zhnCzyV2JLif9Sd9
-X-Google-Smtp-Source: AGHT+IFJHGkQRJaf19kskcpBx7XRwZ3XpSWByp8JSPuZ+7TlwGl7DNPYEZ42exxLImc8MW6iW7JxMA==
-X-Received: by 2002:a05:600c:3d8f:b0:40e:872f:d09f with SMTP id bi15-20020a05600c3d8f00b0040e872fd09fmr1024225wmb.121.1705909973812;
-        Sun, 21 Jan 2024 23:52:53 -0800 (PST)
+        bh=9nVtX6sIVg5JIaktwIHIF/8UXqbp4BOA0LlFNe3QMMA=;
+        b=LZ9/ZKGCaXzUBc8bKFwKoM95HgAHxssSbnjhQwKDFdidOumBw3T/w1zX5njeexq/hn
+         RiOPKy4DMxfQCGmJtXtAuumtqPlvJUVe3J3HZBs5LmLziofbrvNyW2nxsgpEndZatbez
+         oT2iRyLqpSuEM9wYGMNrwij2degmpjWXnklLsMWPFscjJO8DzXGzdgLooLkI4EJDbRoY
+         VRpDuxFykeCe78PIFKmG2/gVxTckR9Ijfzp+RJWPip5YFsCDgzqWIIHMoT/gYdV/Y7xo
+         WR011mHpr1Q19NN22NP3EZtTCKj2lvjIzWgPwFWgq8jt284KxzGGSnIHiQeNjjJ+ha5U
+         JrHA==
+X-Gm-Message-State: AOJu0YwJ84dq9Uau6+9tUool4iIIxDCUILEh5EhNa+7HuPkn6ETGPoGK
+	G7Ri7cRGPzmFvJbB2qeygX2HgkyipHqcxBXDB87ph4jWPsSih3snvkq+rbQg
+X-Google-Smtp-Source: AGHT+IFtddpIUtG+IVjYJjKBn8rjq14p00XlUywXjdfxArHpyN/4Lwp/RrZ0YgkMrSEcgdjBXUlEDw==
+X-Received: by 2002:a05:600c:2353:b0:40e:8999:6c45 with SMTP id 19-20020a05600c235300b0040e89996c45mr2020997wmq.83.1705910321514;
+        Sun, 21 Jan 2024 23:58:41 -0800 (PST)
 Received: from [192.168.2.177] ([207.188.161.188])
-        by smtp.gmail.com with ESMTPSA id f7-20020adff8c7000000b0033921c383b2sm7841170wrq.67.2024.01.21.23.52.52
+        by smtp.gmail.com with ESMTPSA id l34-20020a05600c1d2200b0040e89ade84bsm17815626wms.4.2024.01.21.23.58.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Jan 2024 23:52:52 -0800 (PST)
-Message-ID: <c5898964-819e-473f-94ac-61503db50a0f@gmail.com>
-Date: Mon, 22 Jan 2024 08:52:51 +0100
+        Sun, 21 Jan 2024 23:58:40 -0800 (PST)
+Message-ID: <5bf2910f-c184-4681-a474-69bea8ee7b71@gmail.com>
+Date: Mon, 22 Jan 2024 08:58:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,8 +75,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: usb: mtu3: Add MT8195 MTU3 ip-sleep
- support
+Subject: Re: [PATCH 2/2] usb: mtu3: Add MT8195 MTU3 ip-sleep wakeup support
 Content-Language: en-US, ca-ES, es-ES
 To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
  chunfeng.yun@mediatek.com
@@ -86,6 +85,7 @@ Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
  linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, kernel@collabora.com
 References: <20240112133222.240038-1-angelogioacchino.delregno@collabora.com>
+ <20240112133222.240038-2-angelogioacchino.delregno@collabora.com>
 From: Matthias Brugger <matthias.bgg@gmail.com>
 Autocrypt: addr=matthias.bgg@gmail.com; keydata=
  xsFNBFP1zgUBEAC21D6hk7//0kOmsUrE3eZ55kjc9DmFPKIz6l4NggqwQjBNRHIMh04BbCMY
@@ -130,38 +130,81 @@ Autocrypt: addr=matthias.bgg@gmail.com; keydata=
  +zFJv9fVUpo/bjePOL4PMP1y+PYrp4PmPmRwoklBpy1ep8m8XURv46fGUHUEIsTwPWs2Q87k
  7vjYyrcyAOarX2X5pvMQvpAMADGf2Z3wrCsDdG25w2HztweUNd9QEprtJG8GNNzMOD4cQ82T
  a7eGvPWPeXauWJDLVR9jHtWT9Ot3BQgmApLxACvwvD1a69jaFKov28SPHxUCQ9Y1Y/Ct
-In-Reply-To: <20240112133222.240038-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240112133222.240038-2-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 12/01/2024 14:32, AngeloGioacchino Del Regno wrote:
-> Of the four USB controllers present on the MediaTek MT8195 SoC, three
-> of them (0, 2 and 3) are behind MTU3: add wakeup controls for them.
+> Add support for the ip-sleep wakeup functionality on the three MTU3
+> controllers found on the MT8195 SoC.
 > 
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
 > ---
->   Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
+>   drivers/usb/mtu3/mtu3_host.c | 31 +++++++++++++++++++++++++++++++
+>   1 file changed, 31 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
-> index a59d91243ac8..d4e187c78a0b 100644
-> --- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
-> @@ -185,7 +185,10 @@ properties:
->               2 - used by mt2712 etc, revision 2 with following IPM rule;
->               101 - used by mt8183, specific 1.01;
->               102 - used by mt8192, specific 1.02;
-> -          enum: [1, 2, 101, 102]
-> +            103 - used by mt8195, IP0, specific 1.03;
-> +            105 - used by mt8195, IP2, specific 1.05;
-> +            106 - used by mt8195, IP3, specific 1.06;
-> +          enum: [1, 2, 101, 102, 103, 105, 106]
+> diff --git a/drivers/usb/mtu3/mtu3_host.c b/drivers/usb/mtu3/mtu3_host.c
+> index 9f2be22af844..85f49e00e8db 100644
+> --- a/drivers/usb/mtu3/mtu3_host.c
+> +++ b/drivers/usb/mtu3/mtu3_host.c
+> @@ -34,6 +34,19 @@
+>   #define WC0_SSUSB0_CDEN		BIT(6)
+>   #define WC0_IS_SPM_EN		BIT(1)
 >   
->     mediatek,u3p-dis-msk:
->       $ref: /schemas/types.yaml#/definitions/uint32
+> +/* mt8195 */
+> +#define PERI_WK_CTRL0_8195	0x04
+> +#define WC0_IS_P_95		BIT(30)	/* polarity */
+> +#define WC0_IS_C_95(x)		((u32)(((x) & 0x7) << 27))
+> +#define WC0_IS_EN_P3_95		BIT(26)
+> +#define WC0_IS_EN_P2_95		BIT(25)
+> +#define WC0_IS_EN_P1_95		BIT(24)
+
+Not used, shouldn't we drop that?
+
+Regards,
+Matthias
+
+> +
+> +#define PERI_WK_CTRL1_8195	0x20
+> +#define WC1_IS_C_95(x)		((u32)(((x) & 0xf) << 28))
+> +#define WC1_IS_P_95		BIT(12)
+> +#define WC1_IS_EN_P0_95		BIT(6)
+> +
+>   /* mt2712 etc */
+>   #define PERI_SSUSB_SPM_CTRL	0x0
+>   #define SSC_IP_SLEEP_EN	BIT(4)
+> @@ -44,6 +57,9 @@ enum ssusb_uwk_vers {
+>   	SSUSB_UWK_V2,
+>   	SSUSB_UWK_V1_1 = 101,	/* specific revision 1.01 */
+>   	SSUSB_UWK_V1_2,		/* specific revision 1.02 */
+> +	SSUSB_UWK_V1_3,		/* mt8195 IP0 */
+> +	SSUSB_UWK_V1_5 = 105,	/* mt8195 IP2 */
+> +	SSUSB_UWK_V1_6,		/* mt8195 IP3 */
+>   };
+>   
+>   /*
+> @@ -70,6 +86,21 @@ static void ssusb_wakeup_ip_sleep_set(struct ssusb_mtk *ssusb, bool enable)
+>   		msk = WC0_SSUSB0_CDEN | WC0_IS_SPM_EN;
+>   		val = enable ? msk : 0;
+>   		break;
+> +	case SSUSB_UWK_V1_3:
+> +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL1_8195;
+> +		msk = WC1_IS_EN_P0_95 | WC1_IS_C_95(0xf) | WC1_IS_P_95;
+> +		val = enable ? (WC1_IS_EN_P0_95 | WC1_IS_C_95(0x1)) : 0;
+> +		break;
+> +	case SSUSB_UWK_V1_5:
+> +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0_8195;
+> +		msk = WC0_IS_EN_P2_95 | WC0_IS_C_95(0x7) | WC0_IS_P_95;
+> +		val = enable ? (WC0_IS_EN_P2_95 | WC0_IS_C_95(0x1)) : 0;
+> +		break;
+> +	case SSUSB_UWK_V1_6:
+> +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0_8195;
+> +		msk = WC0_IS_EN_P3_95 | WC0_IS_C_95(0x7) | WC0_IS_P_95;
+> +		val = enable ? (WC0_IS_EN_P3_95 | WC0_IS_C_95(0x1)) : 0;
+> +		break;
+>   	case SSUSB_UWK_V2:
+>   		reg = ssusb->uwk_reg_base + PERI_SSUSB_SPM_CTRL;
+>   		msk = SSC_IP_SLEEP_EN | SSC_SPM_INT_EN;
 
