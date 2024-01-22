@@ -1,142 +1,174 @@
-Return-Path: <linux-usb+bounces-5375-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5376-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FA3E836FDB
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 19:27:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D298837011
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 19:34:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C29391C2614A
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 18:27:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59FFB290F3A
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 18:33:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8116950A6E;
-	Mon, 22 Jan 2024 17:57:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD1AC5EE91;
+	Mon, 22 Jan 2024 18:06:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="G6R6J2Tr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P+44kknI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1B550272;
-	Mon, 22 Jan 2024 17:57:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4825F55F;
+	Mon, 22 Jan 2024 18:06:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705946275; cv=none; b=kwSgKP2oSktTUorTPAg/G6SQYrX0Jrss1tENzC8cXRa6kH0Clwj5iK02CyXPO9T9Xxm15OYcJExMcCxjVA8oD32rscGE6ZfUY+J9PDbsbS81GnLxENwk2SNM41sGXIeKWU1f30GBx91a6ejs7htNaeLVXWydOmWIvhVMOqd6GOY=
+	t=1705946782; cv=none; b=rZTynsweiSFzK6R05MsrQZIQPK4TLtUBFg8qSWMS3ExMC84eRDkg8ucGNLYU5XAO8VqD03lMLZbnkhuaEvm9ZLTmf4HV+xqCcSh99ucejJpZg2hwgG/bqeAH/AkDaUgdkIVhWlXlc6KNRC7f/OGbQ0O/ti7uc4E87Y4WMx3Isdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705946275; c=relaxed/simple;
-	bh=ormRf2c7k0RSk48YWM459e3k1OgtsTd6YXCAGOapFlM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JNtiAjG8g4rVnKpZwpOT3t69anxoK4YXC+iWcEZlrb4NLsZl85G4qAUqG6I4ozR8kXgyZQh6AA+CfYmp27RsnnEfNNmbciH2BVTNvK8oz19r58rSVLTmLHGa/y9ZdTBD7yEkkjoo4dZh749zaCHqjQxWIneSZsvCQsqmxXSUNp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=G6R6J2Tr; arc=none smtp.client-ip=80.12.242.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.18] ([92.140.202.140])
-	by smtp.orange.fr with ESMTPA
-	id RyYJrZyS0CqsFRyYJr2t2P; Mon, 22 Jan 2024 18:57:45 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1705946265;
-	bh=CHlsOFd028+jV0LAUMT3aaajLuOQehNM5ywoohsK5ko=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=G6R6J2Tr0yjFFdDfUw8j4W+vMDSPHcYn7lhH9AsHvWwOS3b2fKv5hQSEnK+v1vEX1
-	 X340Jilt9mvYEM6pn2jHnHMMwco0kxed5Za++jbP/7XuRkzzgBDoetvw4ac7m7CbuJ
-	 v0XwmEa1DdqoP2K+4bf/vaahw7MJJhsMBCKcwXePV7MjqzwRRwAFpNTfMYivbHQc3c
-	 ZW0GAOGyMjn+JKmuzWZpGTpq4ODnItBSjzS3P2k1QvWckVZsQ+PCl6W3bViR54tViM
-	 hF3rLxCHF4Rv41RJnFyCdLaLrmgroDZjbKRkqg4G82K1FrSut3/drmRYD280/lL6vz
-	 a+zdJyvdOZX8A==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 22 Jan 2024 18:57:45 +0100
-X-ME-IP: 92.140.202.140
-Message-ID: <d11852b1-6d9c-4ced-83cb-96e753edd45d@wanadoo.fr>
-Date: Mon, 22 Jan 2024 18:57:42 +0100
+	s=arc-20240116; t=1705946782; c=relaxed/simple;
+	bh=qrDyQthPZZTKjHUK3BaRkyooNaTHr0ABooQXcmIORQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g6yi8ZnfdrBMCoHz5f9GstOrzKMXXGhnSYcVze57s2uRthl9YFBYjCg7vM/jiYm8Y6XOyE52FYq6P6B+fHQ3cpclokdzCr+tffnh46qCvl3kkZs4M1Y/f7xmImC6Tdk9UU/wHYguYHemK1lpIk+66s8/8x4a/o+PD7rIGo5AP7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P+44kknI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8585BC43394;
+	Mon, 22 Jan 2024 18:06:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705946781;
+	bh=qrDyQthPZZTKjHUK3BaRkyooNaTHr0ABooQXcmIORQo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=P+44kknIgGDYv8m/O3mTLyLItJU55Rtb5gFxpjypN10+/ZEXGmmUxwRQjHAlIv/c8
+	 pCx0E/U3QajTejHTcF2O5VxBnLVdEJk2prnWp/3xXGkmB7utitaBIFr5iO5jAsE/o3
+	 OYyTteZjco9WgFPR7gamNwaqutu65BfUGewtFzsysjuGvFz5rfu8Oy7rGRn2Y8iY5s
+	 AQomliXDiCxgKi/N0Q6nJgCeGbSdkfy8phy9qTsdPfsX+mzHX8EWdGhp2EB8PGQEYx
+	 oMwD7KsIVosusXZljtvb6a+JtUyEJzDwUmhfaTbIMPnlDOqZxmTcVLEm/mXIypHtJx
+	 miGEozKLymj3w==
+Date: Mon, 22 Jan 2024 18:06:15 +0000
+From: Conor Dooley <conor@kernel.org>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	heikki.krogerus@linux.intel.com, matthias.bgg@gmail.com,
+	dmitry.baryshkov@linaro.org, neil.armstrong@linaro.org,
+	andersson@kernel.org, nathan@kernel.org, luca.weiss@fairphone.com,
+	tianping.fang@mediatek.com, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Introduce ITE IT5205 Alt. Mode
+ Passive MUX
+Message-ID: <20240122-delouse-popsicle-a6f94cce9fb4@spud>
+References: <20240119125812.239197-1-angelogioacchino.delregno@collabora.com>
+ <20240119125812.239197-2-angelogioacchino.delregno@collabora.com>
+ <20240119-remedial-unripe-2a3a46b4f117@spud>
+ <9605c20a-12ad-49ad-8114-d59f2f772514@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thunderbolt: Remove usage of the deprecated
- ida_simple_xx() API
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Andreas Noever <andreas.noever@gmail.com>,
- Michael Jamet <michael.jamet@intel.com>,
- Yehezkel Bernat <YehezkelShB@gmail.com>, linux-kernel@vger.kernel.org,
- kernel-janitors@vger.kernel.org, linux-usb@vger.kernel.org
-References: <7fce4c8c4345d283dbfadd3cea60fdc49f9ca087.1705007397.git.christophe.jaillet@wanadoo.fr>
- <20240122112922.GH2543524@black.fi.intel.com>
-Content-Language: en-MW
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240122112922.GH2543524@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
-Le 22/01/2024 à 12:29, Mika Westerberg a écrit :
-> On Thu, Jan 11, 2024 at 10:10:21PM +0100, Christophe JAILLET wrote:
->> ida_alloc() and ida_free() should be preferred to the deprecated
->> ida_simple_get() and ida_simple_remove().
->>
->> Note that the upper limit of ida_simple_get() is exclusive, but the one of
->> ida_alloc_range()/ida_alloc_max() is inclusive. So a -1 has been added
->> when needed.
-> 
-> Looks tood to me but wanted to check if you tested this on a real
-> hardware or you just build tested?
-> 
-> 
-
-Hi,
-
-It was compile tested only.
-
-Transformation has been done with the help of the cocci script below.
-
-CJ
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="nmjJ86xFFhBOL+Dl"
+Content-Disposition: inline
+In-Reply-To: <9605c20a-12ad-49ad-8114-d59f2f772514@collabora.com>
 
 
-===
+--nmjJ86xFFhBOL+Dl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-@@
-expression i, gfp;
-@@
--    ida_simple_get(i, 0, 0, gfp)
-+    ida_alloc(i, gfp)
+On Mon, Jan 22, 2024 at 11:27:11AM +0100, AngeloGioacchino Del Regno wrote:
+> Il 19/01/24 17:18, Conor Dooley ha scritto:
+> > On Fri, Jan 19, 2024 at 01:58:11PM +0100, AngeloGioacchino Del Regno wr=
+ote:
+> > > Introduce a binding for the ITE IT5205 Alternate Mode Passive MUX,
+> > > used for connecting, disconnecting and switching orientation and
+> > > control the SBU signals for alternate modes on USB Type-C ports.
+> > >=20
+> > > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@=
+collabora.com>
+> > > ---
+> > >   .../devicetree/bindings/usb/ite,it5205.yaml   | 72 ++++++++++++++++=
++++
+> > >   1 file changed, 72 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/usb/ite,it5205=
+=2Eyaml
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/usb/ite,it5205.yaml b/=
+Documentation/devicetree/bindings/usb/ite,it5205.yaml
+> > > new file mode 100644
+> > > index 000000000000..36ec4251b5f2
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/usb/ite,it5205.yaml
+> > > @@ -0,0 +1,72 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/usb/ite,it5205.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: ITE IT5202 Type-C USB Alternate Mode Passive MUX
+> > > +
+> > > +maintainers:
+> > > +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.=
+com>
+> > > +  - Tianping Fang <tianping.fang@mediatek.com>
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: ite,it5205
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  vcc-supply:
+> > > +    description: Power supply for VCC pin (3.3V)
+> > > +
+> > > +  mode-switch:
+> > > +    description: Flag the port as possible handle of altmode switchi=
+ng
+> > > +    type: boolean
+> > > +
+> > > +  orientation-switch:
+> > > +    description: Flag the port as possible handler of orientation sw=
+itching
+> > > +    type: boolean
+> > > +
+> > > +  ite,ovp-enable:
+> > > +    description: Enable Over Voltage Protection functionality
+> > > +    type: boolean
+> >=20
+> > Bitta devil's advocacy perhaps, but why is this DT property? Is it not
+> > known whether or not this is supported based on the compatible, and
+> > whether or not to enable it is a decision for the operating system to
+> > make?
+> >=20
+> >=20
+>=20
+> AFAIK, not all board designs can use the OVP. On some, this may be unstab=
+le - the
+> use case where this can be safely enabled is when there's nothing in betw=
+een the
+> mux and the controller, and between the mux and the port.
 
+Okay, if it varies based on the configuration that makes sense. Perhaps
+in the future consider mentioning stuff like that in the commit message.
 
-@@
-expression e1, e2, gfp;
-@@
--    ida_simple_get(e1, e2, 0, gfp)
-+    ida_alloc_min(e1, e2, gfp)
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
+Thanks,
+Conor.
 
-@@
-expression e1, e2, gfp;
-@@
--    ida_simple_get(e1, 0, e2, gfp)
-+    ida_alloc_max(e1, e2 - 1, gfp)
+--nmjJ86xFFhBOL+Dl
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-@@
-expression e1, e2, gfp;
-@@
--    ida_simple_get(e1, e2, e2+1, gfp)
-+    ida_alloc_range(e1, e2, e2, gfp)
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZa6ulwAKCRB4tDGHoIJi
+0teFAQDYntozsnG0qrbeJtl0OkXFU7kXZH/5/2m68HTIZLIOKQEA0vZa72Ejv9TG
+DZbeNEl/1O99qdsZnvfvk/zLcQdjyQ4=
+=xdmh
+-----END PGP SIGNATURE-----
 
-
-@@
-expression e1, e2, e3, gfp;
-@@
--    ida_simple_get(e1, e2, e3, gfp)
-+    ida_alloc_range(e1, e2, e3 - 1, gfp)
-
-
-@@
-expression e1, e2;
-@@
--    ida_simple_remove(e1, e2)
-+    ida_free(e1, e2)
-
-
+--nmjJ86xFFhBOL+Dl--
 
