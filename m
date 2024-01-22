@@ -1,168 +1,82 @@
-Return-Path: <linux-usb+bounces-5385-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5381-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D13C837224
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 20:14:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18AB48372B1
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 20:36:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C16E11F314F2
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 19:14:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83B07B333ED
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 19:13:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 606424879E;
-	Mon, 22 Jan 2024 18:56:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="H/fJHhNA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FABD47A48;
+	Mon, 22 Jan 2024 18:53:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E4048780;
-	Mon, 22 Jan 2024 18:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 839013A8C4
+	for <linux-usb@vger.kernel.org>; Mon, 22 Jan 2024 18:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705949764; cv=none; b=pGqDe8wZFPT9OSz2IvipYAXD2OSrO39lFNG7LrlasDYsmBM70W+dH841GgxCuJexrt+3vpdT7YrZXWuVqysFOQNvCTW2OYi+wYZCOGJzFGJwVOwT+8DNX8Z4pjk6QKpr+CVVEjSl568V7AD9eWZh7Eu3VILh85Q04+KXXRjXbpg=
+	t=1705949635; cv=none; b=kWbdULzPEDthRnl7snvS1RCEMDc7nJ1CChc4CZ4IKhBIvXz+b00SuUn26hWI6cGP/d3AJLUgxLKQ53dYnIEP4Z0A4EE/i5e9josDRDMFEi5VpBT2yh8T+Udj+39y7h1zFlVDkjFNh2wL77y0FjyxiANnhphCjv75YdUTtXG7I4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705949764; c=relaxed/simple;
-	bh=bK4Q2EbBc/nuHHjpU5lTiNRDOBSyU7sMPKPNpqyyg8s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jLsiQbgH1jKwA/JXeE/8j/Jz5qRA8Pzmu9tsdPVnjwc+9WqnokRgEVUc6DBP4PL1Rq3coJki0vZ1iE3mqBT3bKZvXo8TE5vwkhVEhu0qINXh6yteCgs92fdWfhkPYhQf5t596vgfPAz7w9mNJzFNWCNYPhhSA7s4BG2FkM55u/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=H/fJHhNA; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1705949762;
-	bh=bK4Q2EbBc/nuHHjpU5lTiNRDOBSyU7sMPKPNpqyyg8s=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=H/fJHhNArVz1m4aahhjDKDMbAHLrTGImjOS6d8WXBOLSU3QHcj+lcol49NLXYXp5b
-	 CyopSGhNUGpL/R8gv7kXjsa0Xkttk21qkISVdly8gShz9gCHWphNffpyXjvg5NzOSp
-	 pimw3bG0TzWrZBgnwnz+wV6Dn9k/DIMajrJzwZNbd6+XO+S+/+n9MQNKSokYut0L9w
-	 T9VZGNDVzZT/4etPJ+tplbSG+zV3lASWBsLH2XNiMMYveIkx6Q94iMCX7NMMK6oW7L
-	 6ns751E6MT+BrpAOUZdB/boLgB+n0qPNEv/JEET95uctoMchB9SEVusByxVqizI4UJ
-	 /cBQJy86FAO9Q==
-Received: from [192.168.0.47] (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id AABFF37820A7;
-	Mon, 22 Jan 2024 18:55:56 +0000 (UTC)
-From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Mon, 22 Jan 2024 15:53:23 -0300
-Subject: [PATCH v4 3/3] kselftest: devices: Add sample board file for XPS
- 13 9300
+	s=arc-20240116; t=1705949635; c=relaxed/simple;
+	bh=piEF+f+AACkRyKM9RN7HnKPDwMsimDLbHduLXROh4B8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KZRJ33VXN5wMtMMLaAn4exPQiFgb6TRC0GxQYLBGD7pGvuSDP8Dtjft0irofLAn6ExF5/Q09okwlJ8zmSl4ZGOq/4UP+4duocFSP2clrtUi95/C6Qpq5785WqNSWT4gHcv6JQebyan/ZNqeLjiKri1PiYbh2pya+tPs4VQL+mbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 146125 invoked by uid 1000); 22 Jan 2024 13:53:51 -0500
+Date: Mon, 22 Jan 2024 13:53:51 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+Subject: Re: [PATCH] usb: storage: freecom: drop useless assignment in
+ init_freecom()
+Message-ID: <0ce435c2-5ee4-4d3b-b6e2-f185f1d34749@rowland.harvard.edu>
+References: <4d3fb70f-bf2f-96cc-a8fb-1ef658a24920@omp.ru>
+ <2023120412-observing-affluent-9432@gregkh>
+ <b96dc0cc-86da-425b-86b8-39566f594d83@omp.ru>
+ <cc7434e0-804c-82d6-3f57-dcceef8b461e@omp.ru>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240122-discoverable-devs-ksft-v4-3-d602e1df4aa2@collabora.com>
-References: <20240122-discoverable-devs-ksft-v4-0-d602e1df4aa2@collabora.com>
-In-Reply-To: <20240122-discoverable-devs-ksft-v4-0-d602e1df4aa2@collabora.com>
-To: Shuah Khan <shuah@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Bjorn Helgaas <bhelgaas@google.com>
-Cc: kernelci@lists.linux.dev, kernel@collabora.com, 
- Tim Bird <Tim.Bird@sony.com>, linux-pci@vger.kernel.org, 
- David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org, 
- Rob Herring <robh+dt@kernel.org>, Doug Anderson <dianders@chromium.org>, 
- linux-usb@vger.kernel.org, Saravana Kannan <saravanak@google.com>, 
- Dan Carpenter <dan.carpenter@linaro.org>, 
- Guenter Roeck <groeck@chromium.org>, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-X-Mailer: b4 0.12.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc7434e0-804c-82d6-3f57-dcceef8b461e@omp.ru>
 
-Add a sample board file describing the file's format and with the list
-of devices expected to be probed on the XPS 13 9300 machine as an
-example x86 platform.
+On Mon, Jan 22, 2024 at 09:26:51PM +0300, Sergey Shtylyov wrote:
+> On 12/7/23 7:16 PM, Sergey Shtylyov wrote:
+> 
+> [...]
+> >>> In init_freecom(), the results of usb_stor_control_msg() calls are stored
+> >>> in the local variable and then printed out by usb_stor_dbg() (if enabled),
+> >>> except for the 1st call, the result of which is completely ignored.  Drop
+> >>> the useless assignment.
+> >>
+> >> Instead, you should check the return value and handle it properly, don't
+> >> just drop the checking entirely, that's not good.
+> > 
+> >    Hmm... I wonder if you'd actually read the patch...
+> >    I'm not dropping any checking because there's none, even at the further
+> > call sites of usb_stor_control_msg() -- the most init_freecom() currently
+> > is doing is printing out the result of the calls...
+> 
+>    Alan, haven't heard your opinion on this patch... What do you think?
 
-Test output:
+Oh, sorry about that.  There's nothing wrong with the patch.  None of 
+the return values in that function are used for anything other than 
+debug log messages.  (It's a little surprising that the original author 
+of this driver didn't put any error checking here.)
 
-TAP version 13
-Using board file: boards/Dell Inc.,XPS 13 9300.yaml
-1..22
-ok 1 /pci-controller/14.0/usb2-controller/9/camera.device
-ok 2 /pci-controller/14.0/usb2-controller/9/camera.0.driver
-ok 3 /pci-controller/14.0/usb2-controller/9/camera.1.driver
-ok 4 /pci-controller/14.0/usb2-controller/9/camera.2.driver
-ok 5 /pci-controller/14.0/usb2-controller/9/camera.3.driver
-ok 6 /pci-controller/14.0/usb2-controller/10/bluetooth.device
-ok 7 /pci-controller/14.0/usb2-controller/10/bluetooth.0.driver
-ok 8 /pci-controller/14.0/usb2-controller/10/bluetooth.1.driver
-ok 9 /pci-controller/2.0/gpu.device
-ok 10 /pci-controller/2.0/gpu.driver
-ok 11 /pci-controller/4.0/thermal.device
-ok 12 /pci-controller/4.0/thermal.driver
-ok 13 /pci-controller/12.0/sensors.device
-ok 14 /pci-controller/12.0/sensors.driver
-ok 15 /pci-controller/14.3/wifi.device
-ok 16 /pci-controller/14.3/wifi.driver
-ok 17 /pci-controller/1d.0/0.0/ssd.device
-ok 18 /pci-controller/1d.0/0.0/ssd.driver
-ok 19 /pci-controller/1d.7/0.0/sdcard-reader.device
-ok 20 /pci-controller/1d.7/0.0/sdcard-reader.driver
-ok 21 /pci-controller/1f.3/audio.device
-ok 22 /pci-controller/1f.3/audio.driver
-Totals: pass:22 fail:0 xfail:0 xpass:0 skip:0 error:0
+Greg, feel free to merge the patch.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
- .../devices/boards/Dell Inc.,XPS 13 9300.yaml      | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-diff --git a/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml b/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml
-new file mode 100644
-index 000000000000..ff932eb19f0b
---- /dev/null
-+++ b/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml	
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# This is the device definition for the XPS 13 9300.
-+# The filename "Dell Inc.,XPS 13 9300" was chosen following the format
-+# "Vendor,Product", where Vendor comes from
-+# /sys/devices/virtual/dmi/id/sys_vendor, and Product comes from
-+# /sys/devices/virtual/dmi/id/product_name.
-+#
-+# See google,spherion.yaml for more information.
-+#
-+- type: pci-controller
-+  # This machine has a single PCI host controller so it's valid to not have any
-+  # key to identify the controller. If it had more than one controller, the UID
-+  # of the controller from ACPI could be used to distinguish as follows:
-+  #acpi-uid: 0
-+  devices:
-+    - path: 14.0
-+      type: usb-controller
-+      usb-version: 2
-+      devices:
-+        - path: 9
-+          name: camera
-+          interfaces: [0, 1, 2, 3]
-+        - path: 10
-+          name: bluetooth
-+          interfaces: [0, 1]
-+    - path: 2.0
-+      name: gpu
-+    - path: 4.0
-+      name: thermal
-+    - path: 12.0
-+      name: sensors
-+    - path: 14.3
-+      name: wifi
-+    - path: 1d.0/0.0
-+      name: ssd
-+    - path: 1d.7/0.0
-+      name: sdcard-reader
-+    - path: 1f.3
-+      name: audio
-
--- 
-2.43.0
-
+Alan Stern
 
