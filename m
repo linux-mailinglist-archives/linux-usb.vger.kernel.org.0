@@ -1,55 +1,73 @@
-Return-Path: <linux-usb+bounces-5345-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5346-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC56E835FC6
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 11:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CED6835FCD
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 11:35:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C7EF1F283FE
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 10:33:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDE2B1F210CB
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 10:35:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9645C3A1BE;
-	Mon, 22 Jan 2024 10:32:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D0743A1BB;
+	Mon, 22 Jan 2024 10:35:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="XM0iSXbg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eKtOjMbB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A372AE90;
-	Mon, 22 Jan 2024 10:32:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 120B8374F1;
+	Mon, 22 Jan 2024 10:35:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705919555; cv=none; b=MhhKaODsuD2cidn5QpzuZQhRBQtpnJ5sPM2dioUjBnb79anaKUhQueAMyrchjs/iIJiKJeVBQMqOFRQ+SYt7R2q0QIZ+OdljR3lQL7PUfv9EF2nkk1+4ew+CDgUL3t5W3MokgYLctdIrnQQANuWFC7/RwNaSy1PMQnS+49ua7g0=
+	t=1705919707; cv=none; b=Wt5whbQ3cqVrkcBA1N6Ep25N2z0Ue685evK1/AG2Gj2W04J7cMW73dusyRtQYhj+EF4yZ/W9SGk46kHzGEQ1/6u6D7+cPuJgtXfFQ++yd6kJwZEwLQtsjNaesORNaCFqF2mCwP1IP1x55440rfbqY/+h1H0xHAMLbYAyCxKDWs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705919555; c=relaxed/simple;
-	bh=3bcuHEEJjol3ORfk+55aI9k34MFRZBBDcr1e/CQUF5Q=;
+	s=arc-20240116; t=1705919707; c=relaxed/simple;
+	bh=pPWGPf9n2O0H4oOsB6zd/ZUH2JpfRiHcPMPlucfBH/8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LatW/e2Gsu6llCYlyeBA5koNmjZDsDBEQQocdqkuZPjY+7pKKpsDZ/ADc31oYIF6TM5rwr1HqOUhFmPruDKsAkXUUIkkj9LMUlwoqGqcgY/EHknd5fLGPQ71If1ehGunr86aam9Vt1lCUFqLiyEZ/NiHvHBdd42i4M4/G5paFj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=XM0iSXbg; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1705919551;
-	bh=3bcuHEEJjol3ORfk+55aI9k34MFRZBBDcr1e/CQUF5Q=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XM0iSXbg2Nziyyd6ztgNjUnTTcdenVcJcypAmL712TiILIukqJ3aBlQUai6mbImwM
-	 01yzQ34o1C01otXnih1MZDJ8xauoAn5del8Yw0VRUD/aEzVr5IsnFLJ7BqIO4opzjG
-	 ffsBvmy4fExNxhIyyuptoYDu/kJXljnGhfqHe1NOYOj32CHFX4XSjx6cCzGaSATVYF
-	 6/Q6i7E402AIZGUgIa0PosgityNEQkFod+gRi86pRxsYZM7TZVGAuQHBf4qYuTXxWT
-	 Eidj2wtfS/ggjRMp15YiZB6s9WL38sQy6f1sXgPUhwbPBvVF0ZI7dLUWgq4+rTBDve
-	 eHLCzX4l2Ef8g==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B3598378045F;
-	Mon, 22 Jan 2024 10:32:30 +0000 (UTC)
-Message-ID: <12b7b339-498b-45c1-bc5e-05e07660aefa@collabora.com>
-Date: Mon, 22 Jan 2024 11:32:30 +0100
+	 In-Reply-To:Content-Type; b=kfyBMVyAx89nhS4O/h6q5Gl42kwpa7YRmWV+wouR8uG0ndjQ/KqVTPKgtxkGu2SVeEOpqTS5bdKLQiPOxxAwg/OFnVzh9OuKp652hsrsowMNHGa67nwrrAIEtdBPJJlsI8pnwk+/eaomWPHDkfGo4dM9pFtk4OTbR5dmDqh58TQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eKtOjMbB; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-40eac352733so10127555e9.0;
+        Mon, 22 Jan 2024 02:35:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705919704; x=1706524504; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wUaBjTF8ze7TJQKlKI0DO8wsNhCqTacpbxQmnNsDib0=;
+        b=eKtOjMbBMub3fdlJeAOu3dBol94W8SU2eRjVTXYitsy+Gnv0ngwy5BbChBDTLp3PPr
+         JksMoPCC1BapKJ5b9AAA6jH3LlycR70FQSEUCAkJQnCCQl2PdJ/zLTfkPs8Dq9jyrODy
+         kekkJ6JKRAwULkYtIwl5Sjbm22rl9WR9lBlXfnzwBtdkioVCFZHxHFlU/idNeGacqD6I
+         p1lcT7YNQ5+0y2BsMrmIzi2g67j2Gr8/yVmevNfAHRhSb7yJ9HWGbMY+LtQ/PH8ebUJ4
+         EMPqthEHub8TPdxJcK2vxayLygmUhFj55BDBdKRR4ncSOecgsQ8b/RzBqpAVpjTnAeNh
+         WNVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705919704; x=1706524504;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wUaBjTF8ze7TJQKlKI0DO8wsNhCqTacpbxQmnNsDib0=;
+        b=es2PT0+Vmwn6U1QgQjOfT1m9aCJsyH/dyu/lIA4kPBNU5uvaX8caIApBHjfkMAu0R9
+         VFrTUCS/KFZag0G5bsWHay2XND8eV02QNATI6kJEyqjrRjl7Wifd69xfgeN6fcD0WAi1
+         h3Mfm6kAFktBQ30vHGqSzqAwdnH+iiptAARN55K49SmYs5tzV87XrW0xpvuEPnL9oksj
+         o6jg3ezqr2MQCkEmPgea5VMz8pL7ZcLnnXY7yzMaykt3FAq3eDmBndChvYls1qupOHWp
+         MwoZSytCkSYRX5nXWDbECxhcnX2SShnMx1lCnJjxvQonMzOCg2DjQAPLtp18GHhZtJte
+         /OzQ==
+X-Gm-Message-State: AOJu0YwxpUu0z9EZJABV4HECu2I4xf6zaniX+vWqVZjbtZmtRhD0yoVY
+	eNr7rDzyJnb3DS6wG1cF8ZrihYallMr4C2Fm8ejkqLQR1NA3+bIS
+X-Google-Smtp-Source: AGHT+IEBg93W5Ic2cq8LVxb2U2hPd7pLRG/nN6Z0J3Udrdl4B95BIKuujofcMkdi+IpBnJPrzbr9Pg==
+X-Received: by 2002:a05:600c:548e:b0:40e:615f:32cc with SMTP id iv14-20020a05600c548e00b0040e615f32ccmr2257718wmb.185.1705919703859;
+        Mon, 22 Jan 2024 02:35:03 -0800 (PST)
+Received: from [10.254.108.81] (munvpn.amd.com. [165.204.72.6])
+        by smtp.gmail.com with ESMTPSA id ay2-20020a05600c1e0200b0040ead97f70dsm3088330wmb.24.2024.01.22.02.35.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jan 2024 02:35:03 -0800 (PST)
+Message-ID: <8035f515-591f-4c87-bf0a-23d5705d9b1c@gmail.com>
+Date: Mon, 22 Jan 2024 11:35:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,78 +75,185 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: mt6360-tcpc: Drop
- interrupt-names
+Subject: Re: [Linaro-mm-sig] [PATCH v5 1/6] dma-buf: Add
+ dma_buf_{begin,end}_access()
 Content-Language: en-US
-To: Conor Dooley <conor@kernel.org>
-Cc: chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- matthias.bgg@gmail.com, linux@roeck-us.net, heikki.krogerus@linux.intel.com,
- cy_huang@richtek.com, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240119094105.98312-1-angelogioacchino.delregno@collabora.com>
- <20240119-eldest-discharge-e2d3812be0a9@spud>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240119-eldest-discharge-e2d3812be0a9@spud>
+To: Paul Cercueil <paul@crapouillou.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jonathan Corbet <corbet@lwn.net>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Jonathan Cameron <jic23@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <noname.nuno@gmail.com>, Michael Hennerich <Michael.Hennerich@analog.com>,
+ linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+References: <20240119141402.44262-1-paul@crapouillou.net>
+ <20240119141402.44262-2-paul@crapouillou.net>
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <20240119141402.44262-2-paul@crapouillou.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Il 19/01/24 17:32, Conor Dooley ha scritto:
-> On Fri, Jan 19, 2024 at 10:41:04AM +0100, AngeloGioacchino Del Regno wrote:
->> This IP has only one interrupt, hence interrupt-names is not necessary
->> to have.
->> Since there is no user yet, simply remove interrupt-names.
-> 
-> I'm a bit confused chief. Patch 2 in this series removes a user of this
-> property from a driver, so can you explain how this statement is true?
-> 
-> Maybe I need to drink a few cans of Monster and revisit this patchset?
-> 
+Am 19.01.24 um 15:13 schrieb Paul Cercueil:
+> These functions should be used by device drivers when they start and
+> stop accessing the data of DMABUF. It allows DMABUF importers to cache
+> the dma_buf_attachment while ensuring that the data they want to access
+> is available for their device when the DMA transfers take place.
 
-What I mean with "there is no user" is that there's no device tree with any
-mt6360-tcpc node upstream yet, so there is no meaningful ABI breakage.
-Different story would be if there was a device tree using this already, in
-which case, you can make a required property optional but not remove it.
+As Daniel already noted as well this is a complete no-go from the 
+DMA-buf design point of view.
 
-Anything wrong?! :-)
+Regards,
+Christian.
 
-Cheers,
-Angelo
-
-
-> Thanks,
-> Conor.
-> 
->> ---
->>   .../devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml        | 5 -----
->>   1 file changed, 5 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
->> index 053264e60583..339bc9c00ac0 100644
->> --- a/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
->> +++ b/Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml
->> @@ -22,10 +22,6 @@ properties:
->>     interrupts:
->>       maxItems: 1
->>   
->> -  interrupt-names:
->> -    items:
->> -      - const: PD_IRQB
->> -
->>     connector:
->>       type: object
->>       $ref: ../connector/usb-connector.yaml#
->> @@ -58,7 +54,6 @@ examples:
->>           tcpc {
->>             compatible = "mediatek,mt6360-tcpc";
->>             interrupts-extended = <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
->> -          interrupt-names = "PD_IRQB";
->>   
->>             connector {
->>               compatible = "usb-c-connector";
->> -- 
->> 2.43.0
->>
+>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>
+> ---
+> v5: New patch
+> ---
+>   drivers/dma-buf/dma-buf.c | 66 +++++++++++++++++++++++++++++++++++++++
+>   include/linux/dma-buf.h   | 37 ++++++++++++++++++++++
+>   2 files changed, 103 insertions(+)
+>
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index 8fe5aa67b167..a8bab6c18fcd 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -830,6 +830,8 @@ static struct sg_table * __map_dma_buf(struct dma_buf_attachment *attach,
+>    *     - dma_buf_mmap()
+>    *     - dma_buf_begin_cpu_access()
+>    *     - dma_buf_end_cpu_access()
+> + *     - dma_buf_begin_access()
+> + *     - dma_buf_end_access()
+>    *     - dma_buf_map_attachment_unlocked()
+>    *     - dma_buf_unmap_attachment_unlocked()
+>    *     - dma_buf_vmap_unlocked()
+> @@ -1602,6 +1604,70 @@ void dma_buf_vunmap_unlocked(struct dma_buf *dmabuf, struct iosys_map *map)
+>   }
+>   EXPORT_SYMBOL_NS_GPL(dma_buf_vunmap_unlocked, DMA_BUF);
+>   
+> +/**
+> + * @dma_buf_begin_access - Call before any hardware access from/to the DMABUF
+> + * @attach:	[in]	attachment used for hardware access
+> + * @sg_table:	[in]	scatterlist used for the DMA transfer
+> + * @direction:  [in]    direction of DMA transfer
+> + */
+> +int dma_buf_begin_access(struct dma_buf_attachment *attach,
+> +			 struct sg_table *sgt, enum dma_data_direction dir)
+> +{
+> +	struct dma_buf *dmabuf;
+> +	bool cookie;
+> +	int ret;
+> +
+> +	if (WARN_ON(!attach))
+> +		return -EINVAL;
+> +
+> +	dmabuf = attach->dmabuf;
+> +
+> +	if (!dmabuf->ops->begin_access)
+> +		return 0;
+> +
+> +	cookie = dma_fence_begin_signalling();
+> +	ret = dmabuf->ops->begin_access(attach, sgt, dir);
+> +	dma_fence_end_signalling(cookie);
+> +
+> +	if (WARN_ON_ONCE(ret))
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(dma_buf_begin_access, DMA_BUF);
+> +
+> +/**
+> + * @dma_buf_end_access - Call after any hardware access from/to the DMABUF
+> + * @attach:	[in]	attachment used for hardware access
+> + * @sg_table:	[in]	scatterlist used for the DMA transfer
+> + * @direction:  [in]    direction of DMA transfer
+> + */
+> +int dma_buf_end_access(struct dma_buf_attachment *attach,
+> +		       struct sg_table *sgt, enum dma_data_direction dir)
+> +{
+> +	struct dma_buf *dmabuf;
+> +	bool cookie;
+> +	int ret;
+> +
+> +	if (WARN_ON(!attach))
+> +		return -EINVAL;
+> +
+> +	dmabuf = attach->dmabuf;
+> +
+> +	if (!dmabuf->ops->end_access)
+> +		return 0;
+> +
+> +	cookie = dma_fence_begin_signalling();
+> +	ret = dmabuf->ops->end_access(attach, sgt, dir);
+> +	dma_fence_end_signalling(cookie);
+> +
+> +	if (WARN_ON_ONCE(ret))
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(dma_buf_end_access, DMA_BUF);
+> +
+>   #ifdef CONFIG_DEBUG_FS
+>   static int dma_buf_debug_show(struct seq_file *s, void *unused)
+>   {
+> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> index 8ff4add71f88..8ba612c7cc16 100644
+> --- a/include/linux/dma-buf.h
+> +++ b/include/linux/dma-buf.h
+> @@ -246,6 +246,38 @@ struct dma_buf_ops {
+>   	 */
+>   	int (*end_cpu_access)(struct dma_buf *, enum dma_data_direction);
+>   
+> +	/**
+> +	 * @begin_access:
+> +	 *
+> +	 * This is called from dma_buf_begin_access() when a device driver
+> +	 * wants to access the data of the DMABUF. The exporter can use this
+> +	 * to flush/sync the caches if needed.
+> +	 *
+> +	 * This callback is optional.
+> +	 *
+> +	 * Returns:
+> +	 *
+> +	 * 0 on success or a negative error code on failure.
+> +	 */
+> +	int (*begin_access)(struct dma_buf_attachment *, struct sg_table *,
+> +			    enum dma_data_direction);
+> +
+> +	/**
+> +	 * @end_access:
+> +	 *
+> +	 * This is called from dma_buf_end_access() when a device driver is
+> +	 * done accessing the data of the DMABUF. The exporter can use this
+> +	 * to flush/sync the caches if needed.
+> +	 *
+> +	 * This callback is optional.
+> +	 *
+> +	 * Returns:
+> +	 *
+> +	 * 0 on success or a negative error code on failure.
+> +	 */
+> +	int (*end_access)(struct dma_buf_attachment *, struct sg_table *,
+> +			  enum dma_data_direction);
+> +
+>   	/**
+>   	 * @mmap:
+>   	 *
+> @@ -606,6 +638,11 @@ void dma_buf_detach(struct dma_buf *dmabuf,
+>   int dma_buf_pin(struct dma_buf_attachment *attach);
+>   void dma_buf_unpin(struct dma_buf_attachment *attach);
+>   
+> +int dma_buf_begin_access(struct dma_buf_attachment *attach,
+> +			 struct sg_table *sgt, enum dma_data_direction dir);
+> +int dma_buf_end_access(struct dma_buf_attachment *attach,
+> +		       struct sg_table *sgt, enum dma_data_direction dir);
+> +
+>   struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info);
+>   
+>   int dma_buf_fd(struct dma_buf *dmabuf, int flags);
 
 
