@@ -1,116 +1,142 @@
-Return-Path: <linux-usb+bounces-5374-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5375-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6E2C836E28
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 18:46:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FA3E836FDB
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 19:27:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E83E286944
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 17:46:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C29391C2614A
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jan 2024 18:27:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6539495F6;
-	Mon, 22 Jan 2024 17:10:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8116950A6E;
+	Mon, 22 Jan 2024 17:57:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EBM+5LgP"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="G6R6J2Tr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88F0495D9
-	for <linux-usb@vger.kernel.org>; Mon, 22 Jan 2024 17:10:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1B550272;
+	Mon, 22 Jan 2024 17:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705943419; cv=none; b=gW86TVUP6luJfwK6RIINODliG5yZ8nlSM75BWgqbn8QF6YAxEk2BTbGGcQWQSY/Y5tiqKvWyMRGNASdgbDhgWl9R9dkxl6TE+XKghz7Q2qJW5wxb0ibH9UQbvCFwzKiYtT6Cejrz4dHy54m1C1mkwwzqdau2aM8Dwe3YxRh1i/Q=
+	t=1705946275; cv=none; b=kwSgKP2oSktTUorTPAg/G6SQYrX0Jrss1tENzC8cXRa6kH0Clwj5iK02CyXPO9T9Xxm15OYcJExMcCxjVA8oD32rscGE6ZfUY+J9PDbsbS81GnLxENwk2SNM41sGXIeKWU1f30GBx91a6ejs7htNaeLVXWydOmWIvhVMOqd6GOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705943419; c=relaxed/simple;
-	bh=eJ63pexoHil/fZJCD6oy1bPMKlW0TcgjGdvbnBcUeMM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sL9oTSlBf3Au4OUnc4R2dqvKiDW1K+ENW/0EfC0GZPdbhqSvumD1UHQbhq28fZeBV68JShM2zZcGJSyorbP48qn5jzqzFmIXrUsB67XkY2Cyh9+EBC6Q9KYKkZAH4jJuJArDgnoFL1rLl9gfMAkJz05rzdhKuZ6+b4r0yTYkVDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EBM+5LgP; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a308db01df6so70262166b.0
-        for <linux-usb@vger.kernel.org>; Mon, 22 Jan 2024 09:10:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705943416; x=1706548216; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=54e3Valwbf8dEV6FJ/hONuvu77grdxwk1Cy89F+4mn0=;
-        b=EBM+5LgPkx7WN6pRvotf8TxVaHOk2DDmL1o6yqZWuQpGef87GykCBo9DD4DSQ0hBAL
-         73iCT1onBnbjvYG7FSan7zhn1eRkkz6bdp9Mh4c7h7R2FzT+p7z9KGZfnHYT0ywBWRC+
-         1jupKmtS7UPtm9HefLQtGt7HmxsPaTvI6FNEbjnUYjyFWFnQtQmAWbitLzrqFrRsitaO
-         +Bfm420RAkK62yeX5QabIPHCqHBUkWTv9uAIncTDf1Gk8Mvf2ENtExe88oVQhpm5riPJ
-         4OTrn1CjdSZQgMw2h3tga0fOYHzJjzquvSOWJF+KimWHb0PxNp/eaes+KT8ULeqkyYPN
-         QGHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705943416; x=1706548216;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=54e3Valwbf8dEV6FJ/hONuvu77grdxwk1Cy89F+4mn0=;
-        b=sW2Xc9Wsp4mCPKQYHzZcwIqUuRliQ7na/rnFjE16Ok1IvtJcGPjpFLDr68yfDa+Z9j
-         2985JraSaRGAiFZrlNEI6pKW/bavXBP8Vd6AUDDpjulCKrDhf1mPF4M8+jfuVi65coDd
-         ZP1AVMdVYhle/w+SdmT4X0ecfGi+hWS0U5f1zriUuXqjsHfQXn1O+abMeerrpVAyQM2z
-         YXGQ+EqXzoy/lHJjko4hXS4C0PIoTyoX9ccR75DvcxHggMUKtK97SwDfna+JNssZd8+2
-         OSvUrrpYxEidK49xJncXvPjySgB8GyPrf75DECtIYFqNAS3DISwfkz744up9qdXSWd2E
-         lAjw==
-X-Gm-Message-State: AOJu0YwVi7pve3PePrx8LPHI4Nt+6bb3f5c4z0acAc1n2H1QflQ/sRXZ
-	lOBKHlZg8poCpBSsw4HPWrWbWI8GoLRRZfh8viLPNFb8ZLkYJfI0IvJR0xXK
-X-Google-Smtp-Source: AGHT+IFN9XFL6dnCx/g+C2DRHBiU6zpRt5gLzQkCGyWJ0A+lgvk06khm0Rb9riCn7XpPbxAT0TZ0cg==
-X-Received: by 2002:a17:907:8a85:b0:a2b:d5a5:719b with SMTP id sf5-20020a1709078a8500b00a2bd5a5719bmr1242784ejc.253.1705943415667;
-        Mon, 22 Jan 2024 09:10:15 -0800 (PST)
-Received: from foxbook (acgj208.neoplus.adsl.tpnet.pl. [83.9.237.208])
-        by smtp.gmail.com with ESMTPSA id qo7-20020a170907874700b00a2f620e158esm4200124ejc.164.2024.01.22.09.10.14
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 22 Jan 2024 09:10:15 -0800 (PST)
-Date: Mon, 22 Jan 2024 18:10:01 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [RTF PATCH v3] xhci: process isoc TD properly when there was an
- error mid TD.
-Message-ID: <20240122181001.1f6027c5@foxbook>
-In-Reply-To: <6413c910-a57a-6d25-7672-18ae34ec674b@linux.intel.com>
-References: <2c2d8711-3d2b-e943-a2a0-75637e725dc3@linux.intel.com>
-	<20240119105835.2637358-1-mathias.nyman@linux.intel.com>
-	<20240119225432.78c2d35d@foxbook>
-	<20240122100332.6341ef1d@foxbook>
-	<6413c910-a57a-6d25-7672-18ae34ec674b@linux.intel.com>
+	s=arc-20240116; t=1705946275; c=relaxed/simple;
+	bh=ormRf2c7k0RSk48YWM459e3k1OgtsTd6YXCAGOapFlM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JNtiAjG8g4rVnKpZwpOT3t69anxoK4YXC+iWcEZlrb4NLsZl85G4qAUqG6I4ozR8kXgyZQh6AA+CfYmp27RsnnEfNNmbciH2BVTNvK8oz19r58rSVLTmLHGa/y9ZdTBD7yEkkjoo4dZh749zaCHqjQxWIneSZsvCQsqmxXSUNp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=G6R6J2Tr; arc=none smtp.client-ip=80.12.242.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.18] ([92.140.202.140])
+	by smtp.orange.fr with ESMTPA
+	id RyYJrZyS0CqsFRyYJr2t2P; Mon, 22 Jan 2024 18:57:45 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1705946265;
+	bh=CHlsOFd028+jV0LAUMT3aaajLuOQehNM5ywoohsK5ko=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=G6R6J2Tr0yjFFdDfUw8j4W+vMDSPHcYn7lhH9AsHvWwOS3b2fKv5hQSEnK+v1vEX1
+	 X340Jilt9mvYEM6pn2jHnHMMwco0kxed5Za++jbP/7XuRkzzgBDoetvw4ac7m7CbuJ
+	 v0XwmEa1DdqoP2K+4bf/vaahw7MJJhsMBCKcwXePV7MjqzwRRwAFpNTfMYivbHQc3c
+	 ZW0GAOGyMjn+JKmuzWZpGTpq4ODnItBSjzS3P2k1QvWckVZsQ+PCl6W3bViR54tViM
+	 hF3rLxCHF4Rv41RJnFyCdLaLrmgroDZjbKRkqg4G82K1FrSut3/drmRYD280/lL6vz
+	 a+zdJyvdOZX8A==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 22 Jan 2024 18:57:45 +0100
+X-ME-IP: 92.140.202.140
+Message-ID: <d11852b1-6d9c-4ced-83cb-96e753edd45d@wanadoo.fr>
+Date: Mon, 22 Jan 2024 18:57:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thunderbolt: Remove usage of the deprecated
+ ida_simple_xx() API
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Andreas Noever <andreas.noever@gmail.com>,
+ Michael Jamet <michael.jamet@intel.com>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>, linux-kernel@vger.kernel.org,
+ kernel-janitors@vger.kernel.org, linux-usb@vger.kernel.org
+References: <7fce4c8c4345d283dbfadd3cea60fdc49f9ca087.1705007397.git.christophe.jaillet@wanadoo.fr>
+ <20240122112922.GH2543524@black.fi.intel.com>
+Content-Language: en-MW
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20240122112922.GH2543524@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-> I'm afraid we end up tuning that original patch forever
-Point taken. This patch is more important, as it fixes total failure
-to deal with trivial bit errors on uPD720200.
-
-
-> Isoc endpoints should use COMP_ISOCH_BUFFER_OVERRUN to indicate
-> endpoint hasn't halted like it does in the COMP_BABBLE_DETECTED_ERROR
-> case.
+Le 22/01/2024 à 12:29, Mika Westerberg a écrit :
+> On Thu, Jan 11, 2024 at 10:10:21PM +0100, Christophe JAILLET wrote:
+>> ida_alloc() and ida_free() should be preferred to the deprecated
+>> ida_simple_get() and ida_simple_remove().
+>>
+>> Note that the upper limit of ida_simple_get() is exclusive, but the one of
+>> ida_alloc_range()/ida_alloc_max() is inclusive. So a -1 has been added
+>> when needed.
 > 
-> See xhci 6.4.5 "TRB completion codes" Footnote 115
-This applies to "TD Babble", which is:
-submitted TD size < data from the device <= ESIT payload
+> Looks tood to me but wanted to check if you tested this on a real
+> hardware or you just build tested?
+> 
+> 
 
-Other babble conditions exist related to blatant device bugs (4.10.2.4)
-and it looks like some may result in a halt or device disconnection even
-on isoch endpoints(?)
+Hi,
 
-Other babbles aren't included in "isoch buffer overrun" per 6.4.5.
+It was compile tested only.
 
-I feel like one would need to systematically go through the whole spec
-to avoid missing important details or special cases.
+Transformation has been done with the help of the cocci script below.
+
+CJ
 
 
-Thanks,
-Michal
+===
+
+@@
+expression i, gfp;
+@@
+-    ida_simple_get(i, 0, 0, gfp)
++    ida_alloc(i, gfp)
+
+
+@@
+expression e1, e2, gfp;
+@@
+-    ida_simple_get(e1, e2, 0, gfp)
++    ida_alloc_min(e1, e2, gfp)
+
+
+@@
+expression e1, e2, gfp;
+@@
+-    ida_simple_get(e1, 0, e2, gfp)
++    ida_alloc_max(e1, e2 - 1, gfp)
+
+
+@@
+expression e1, e2, gfp;
+@@
+-    ida_simple_get(e1, e2, e2+1, gfp)
++    ida_alloc_range(e1, e2, e2, gfp)
+
+
+@@
+expression e1, e2, e3, gfp;
+@@
+-    ida_simple_get(e1, e2, e3, gfp)
++    ida_alloc_range(e1, e2, e3 - 1, gfp)
+
+
+@@
+expression e1, e2;
+@@
+-    ida_simple_remove(e1, e2)
++    ida_free(e1, e2)
+
+
 
