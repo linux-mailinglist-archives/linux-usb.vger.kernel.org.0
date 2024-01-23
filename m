@@ -1,146 +1,117 @@
-Return-Path: <linux-usb+bounces-5394-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5395-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB448838A79
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 10:40:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6587F838AE5
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 10:51:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A35E1C23F98
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 09:40:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58B02280E2C
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 09:51:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ACE059B64;
-	Tue, 23 Jan 2024 09:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45AC5BAE7;
+	Tue, 23 Jan 2024 09:49:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HH0eKI5w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OZXjLuQ5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3AC59B5C
-	for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 09:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D925BAE4;
+	Tue, 23 Jan 2024 09:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706002822; cv=none; b=rNUnJDp3KoiJbZ2V/y2Q69f+kqDflOYnY41rMWDgvutjvE+Dzxj8SekyaPdnvMFDJKMyojpL4o3n4JVxJbhXx4A4HFVFs34wWDZqTHGAvxNj8/cJqCxtmcoXhP7K9JXvp5Br1Km2Vtb9oD4zjpk8Q4V3YCfLeG4Yt6CTtDn7fN4=
+	t=1706003362; cv=none; b=iqY0PJZZ6Y3rPs5cAVm2fPakljCoA+Nk9Eqi4ZlcBl+4FRMgozyVDe0HxlFwvXzkF+OGxd2NnGeE0iW6rUyyVOE3GEAeshhUuSJwms+4nqqjP53lOSy6wuDGESkYXGQcuHAa/+KMIaXPP+9X/rnvbCiWYLDbEgJbpLwDpkmrcFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706002822; c=relaxed/simple;
-	bh=EJ3sW/mCQWqkVnfSlqJV5cD7p+iwDADaEjL6TWjBN1I=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=ebN8PNmKh1CVTaG3CG9pUm+QMOTxyTaAnA+jSphgZGY2uXKGqZuO5jVdnHsXDpzB5s+Pazd9jd8vn8QepSynReIv/MuczEWVFca0L9R4RDQWoJLmaFRI+H0p6jhwz4WjkEmdcGh0p4Fm0S+8vdnYsZuMKONDYJnTN9OQcecTRdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HH0eKI5w; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1d5f252411aso21593155ad.2
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 01:40:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706002821; x=1706607621; darn=vger.kernel.org;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M6pBxH4muU/wCLL3hDuth0skp07NXyCMBwBp6iP4UzE=;
-        b=HH0eKI5wEcpJr9VOH5PEux2UMGISI/xxdOE8fqON8sH6wAhjV1FNEdJe8hb6p2vSFf
-         AwCFh6U+NcvQCANc9iNTj5iZxCVpSiuRmDCvATP97xIJfC70qB8oyrBsPRysZ59xOJKN
-         h4XX0B3qbMaajBBqCtcxNwmG47/zXTHpgqJFoCI6zBIY0NL7AS0kdeqqUv5LeQd4V2r3
-         4DRiiZy64aSA/cUlWlv3YdUaaW07NPm/XrepAelrVs222bsUvZzlyWofCCru9D85sO12
-         HC8BiP18qcuV6Z09GOFQJ1WH7l606q6VVvaf6nbpPuF9IM9iGPS6lDeyielj4jUSHUd0
-         6A7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706002821; x=1706607621;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M6pBxH4muU/wCLL3hDuth0skp07NXyCMBwBp6iP4UzE=;
-        b=bbsV3ryAlDkrHESGCKm6101dDy/pigULEerNe7owmuSVLLGl69l8odZ36u+Qzj9ZI2
-         Sz0mLQH5oOJZ92LiMFI/D83P0BI2y9mPj7QOCTaOM95eAecYfT0NlDWJx18FevyXGI3x
-         JimKqyhD4kFxsRrkmFP7MX6HOBFMgxf7N2rP9hxvjk20T0dKPji5fr3KnmnexY3VuXcb
-         RHM30SJ2aZZeuSAHpml/YPQPrKv/ij/hoJ99pyWCffizmcb8Gf3tAakkdIvVgId1MM8j
-         3QN5RLHoHLN5ivisFVT2A33PtvTlScQzeFjv+IsZmgrJSz06DOMDe/PNxEEoa6qwghXk
-         kQuw==
-X-Gm-Message-State: AOJu0YxBpym52MvFSjcsx0lirH+KNNqD5mmmSgiTIM8wAfPr7AgT0+PQ
-	Scu8/yXyxFq94M/NWN1eYvoVTIwCozKw/38EZ9NrD+fTdnmhrH3H
-X-Google-Smtp-Source: AGHT+IECHuPipsJcdcNldo9j63/RrHw8yHb/JhbFcVF2rGduprnAbQS+YH2gAv5CYpHYOMTO0T3GZw==
-X-Received: by 2002:a17:902:c402:b0:1d4:6429:4e1c with SMTP id k2-20020a170902c40200b001d464294e1cmr3869244plk.4.1706002820783;
-        Tue, 23 Jan 2024 01:40:20 -0800 (PST)
-Received: from localhost ([101.10.10.163])
-        by smtp.gmail.com with ESMTPSA id ix7-20020a170902f80700b001d71c8871e1sm6827043plb.172.2024.01.23.01.40.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 Jan 2024 01:40:20 -0800 (PST)
-From: wojackbb@gmail.com
-To: johan@kernel.org
-Cc: linux-usb@vger.kernel.org,
-	JackBB Wu <wojackbb@gmail.com>
-Subject: [PATCH] USB: serial: qcserial: add new usb-id for Dell Wireless DW5826e
-Date: Tue, 23 Jan 2024 17:39:48 +0800
-Message-Id: <1706002788-19606-1-git-send-email-wojackbb@gmail.com>
-X-Mailer: git-send-email 2.7.4
+	s=arc-20240116; t=1706003362; c=relaxed/simple;
+	bh=Yyl10QeXOzcO2yPsrFasVOzjgjXW3jTi7cHjO/Nx44I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mXPYbQ7WRLaAG6NtbH5q4CB8EAldrPSNlKFHbBPKoZBRHGAL3H01H0bjn1/GcDCw4taVL5bDZXYDDWwmzQeeZvnmEVrJ1V+0mH0x+vfdHujrVnoYd80robFzPFPIcpUgvvyobyDbnGXYDCyy+i/gWmUa3d5KZ1ruKJ7jmSDwsik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OZXjLuQ5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37B7CC43390;
+	Tue, 23 Jan 2024 09:49:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706003361;
+	bh=Yyl10QeXOzcO2yPsrFasVOzjgjXW3jTi7cHjO/Nx44I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OZXjLuQ5TZBtkVv2svdnuxPaRNevJr98sN46NrGgEwEs7OSvRonzS+QZJEY+CNeRt
+	 uYhrkNa54MkZxamLfGcm5+0UZhZ7s9d/UNE8MOunq/depls1M0jwz9xBXfERjEv4tf
+	 k6WjtRBacRVqVHw8OrWRNh/eyK71Bps1+dDIjZvfXz3YEdq8o7RxzsLy9Zd11vlQFO
+	 fzdFv7ohj1FVp78BclzSw1FWz12iG44EHHEBySH2Gkmjqu8G6e0CczQJG2pWX3uzdi
+	 V6JAFJGp1aM9upX4BRci48skKYkYtwtkrQod8Mnyk5pwEUQ27urxLJs0otZ2OPelX6
+	 +2yXX07X3nsPg==
+Date: Tue, 23 Jan 2024 10:49:17 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Magnus Damm <magnus.damm@gmail.com>, linux-staging@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] staging: board: Remove Armadillo-800-EVA board
+ staging code
+Message-ID: <Za-LnZGnIdrHYAVT@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Magnus Damm <magnus.damm@gmail.com>, linux-staging@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+References: <cover.1705932585.git.geert+renesas@glider.be>
+ <6d51e06a8586997b31eecead55a369f01c5696a7.1705932585.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ChcK38yFOv9NM2k9"
+Content-Disposition: inline
+In-Reply-To: <6d51e06a8586997b31eecead55a369f01c5696a7.1705932585.git.geert+renesas@glider.be>
 
-From: JackBB Wu <wojackbb@gmail.com>
 
-Add support for Dell DW5826e with USB-id 0x413c:0x8217 & 0x413c:0x8218.
+--ChcK38yFOv9NM2k9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It is 0x413c:0x8217
-T:  Bus=02 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#=  4 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=413c ProdID=8217 Rev= 5.04
-S:  Manufacturer=DELL
-S:  Product=COMPAL Electronics EXM-G1A
-S:  SerialNumber=359302940050401
-C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=qcserial
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=qcserial
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=qcserial
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E:  Ad=87(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:* If#= 8 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+On Mon, Jan 22, 2024 at 03:24:32PM +0100, Geert Uytterhoeven wrote:
+> Since commits 1399ebacbf590dfb ("drm: renesas: shmobile: Add DT
+> support"), 138588e9fa237f97 ("ARM: dts: renesas: r8a7740: Add LCDC
+> nodes"), and c9a0ed13382660c9 ("ARM: dts: renesas: armadillo800eva: Add
+> LCD panel"), there is no longer any use for the Atmark Techno
+> Armadillo-800-EVA board staging code.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> v2:
+>   - New.
 
-It is 0x413c:0x8218
-T:  Bus=02 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=413c ProdID=8218 Rev= 0.00
-S:  Manufacturer=DELL
-S:  Product=COMPAL Electronics EXM-G1A
-S:  SerialNumber=359302940050401
-C:* #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=  2mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=qcserial
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Hooray! \o/
 
-Signed-off-by: JackBB Wu <wojackbb@gmail.com>
----
- drivers/usb/serial/qcserial.c | 2 ++
- 1 file changed, 2 insertions(+)
+Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-index b1e844b..703a9c5 100644
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -184,6 +184,8 @@ static const struct usb_device_id id_table[] = {
- 	{DEVICE_SWI(0x413c, 0x81d0)},   /* Dell Wireless 5819 */
- 	{DEVICE_SWI(0x413c, 0x81d1)},   /* Dell Wireless 5818 */
- 	{DEVICE_SWI(0x413c, 0x81d2)},   /* Dell Wireless 5818 */
-+	{DEVICE_SWI(0x413c, 0x8217)},	/* Dell Wireless DW5826e */
-+	{DEVICE_SWI(0x413c, 0x8218)},	/* Dell Wireless DW5826e QDL */
- 
- 	/* Huawei devices */
- 	{DEVICE_HWI(0x03f0, 0x581d)},	/* HP lt4112 LTE/HSPA+ Gobi 4G Modem (Huawei me906e) */
--- 
-2.7.4
 
+--ChcK38yFOv9NM2k9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWvi5oACgkQFA3kzBSg
+KbZlsA//du3JHsrTv86wiZZv0IkU+X77svn+qDSIWUfKSJGoyd459WgYjNZiVJiU
+YtYkldgxyVrtjdSKqQLcv3GTap783IZegoyTzKc5SyMovXFzN8ZFSs/LS94UAIXw
+XYH/3XdJ+aLXq6P34HqcbLZUof6OEIyT0BkyWt5wR9CrvLRXLmKwcnEKsFq8Ihyu
+h/v49ceQ03o6h64UXzSdS+ZFOoJAnnpYiKEvl2UD2sw31a2/fjsZYoT1By1dD2/n
+Nfv5ti5V6CCFseKi/Zb0/R7+Okmwksh7Xct5iYCOvU/yyfuUCuECA1CfwjibgsnD
+mvG9JgPz/FAQEkg2ILF4xCwar0qaALrTag3KbD90RxmIoQa2lRlmPhuQ/nU40LLr
+g5/38FO6rKVj+C7KZvKmrUHSSZ85Sl3K2baarhQAJCQRvTNxd5JTmLtEhyPmEUUO
+vtES/mIFji7c9ViDXgqrsH+zaGzzzFa8R12o3HP1XoRlC69uV5ZUAbiAQnK3s6Iw
+Jg12TN+b4k+rtiZlr8vShxdeByvq3agiFEsCJL8zh9GTHUwPIiiTIFmAIsoCtf2O
++CTaok3azBCsTjUxyp4gGFK09NHasr24q3JdmlsJXoJKiLW6cZzPgD+273iotdUK
+LqdGhPb19p6ZMSq8CR83zCISP0BPMf47eAme2pC7O+X6DBXNLzY=
+=llvY
+-----END PGP SIGNATURE-----
+
+--ChcK38yFOv9NM2k9--
 
