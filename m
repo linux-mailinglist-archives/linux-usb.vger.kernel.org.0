@@ -1,142 +1,203 @@
-Return-Path: <linux-usb+bounces-5398-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5399-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A2F7838B9D
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 11:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 78CE3838CFC
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 12:09:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B0A42885AA
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 10:22:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00CB728CE7B
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 11:09:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4DD95A780;
-	Tue, 23 Jan 2024 10:22:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6EA45D75A;
+	Tue, 23 Jan 2024 11:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NSfSfEZi"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="WHSJGS+3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28E159B5B
-	for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 10:22:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6AC5F545;
+	Tue, 23 Jan 2024 11:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706005358; cv=none; b=XA+TIoGrE4zZ+RmcR9qi1XiKxicfn+qZap91+IrTTGv9IhQF9F4yLTOVL7X2YcMSYE5H6sr+gmLpy9/MJpp6/Tu0OPjtA4sLeIK2nBUaWAOVxsoHp+cEHA9V08Z+482DfTGKAC4bB0h+5foqmi8P3gtB029XtTtQpr/gmkRd/yg=
+	t=1706008108; cv=none; b=ZDWCZlYcwbk4AKRIHFCumxrjge64zVNi9erBTg8PZbxOrkAY01kKqctkQ0TyaDcJJ9v4hQzwi6WSIl1lizpph4/suta/GvJvVshGBwhn1u8ps147WZHwkFUOUrZkaAOs4ACUj7s8jQOs/eaDDciK48DQ42Mr2LLlWZ8vHVfVuV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706005358; c=relaxed/simple;
-	bh=1+3AMWPNRTR/WNNHs4A6JjspnAIWExpadkFW32p+7b4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=HxSGLByDQ2Oivrfvzp7JDvQbqC9txy5/erPtU7jUpOFFn8s3+WRqqadwo6EERorAQZ1p+DZHf8ZU+Wq9VSC5rjJJY2xGq6FBYBQgDd2BvOsNNbr5kJPhdMqyLdWg5Wg/4r9Bya6i7utuHF9SGk7oNpqNRXZG/FRTv0iO/H42QDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NSfSfEZi; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-55a539d205aso4409802a12.3
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 02:22:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706005355; x=1706610155; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K4pL+PuGKgJlhrW8Qy1g6fxEnVtUoUbkRxs9LJDf/wY=;
-        b=NSfSfEZi3R+tR0JnFZEJ1lcx8Gc+eJymSf2pqenDooo1uMo4cD9T5iBzIxgf+RsIgP
-         s+l/2YtFp4bb6ps07WGEihw2Adrd1a9n/VO3OE983vcOImKq43trW3Q3Rj+MlzKz1zf/
-         F6+rs9A1Y97Kv816BOr5YXhzuzDlXnwOOownzLEN+/9k2sSMeacGtFkbChSQlJFKZiAl
-         cOD9W0qR3JuyS01A1x0nqHqIjLh62Q/ZIcZJ1HAr25lX00QaLXYR4ROo34gg7hsMHDYP
-         ANonUnI1qa2fjl0vSkmfYsu3FLbmZw/yLNVEIPLlHYmdF+lcfHBMf3fR/t8gfLs5M+dY
-         uH8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706005355; x=1706610155;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K4pL+PuGKgJlhrW8Qy1g6fxEnVtUoUbkRxs9LJDf/wY=;
-        b=T73uRkCtS1AwmpGmTIpHCU9tx3X9i2XgAO+PzB+o8+el9Jj7d0Kv1hkedZTXD7eDcW
-         T67FsidiYLWtuz3zM4nSsac8veCIWtBLuesLBG4hBGavL0K/bZBDbF7/cP55E8wp+lMa
-         IKlY1GYwD/gJOzL9rlhtPS/uhOjY37R6fnYDJj/jZy3mNoliiPpgupcYZijrHAkgBjRQ
-         RndgCbBPXqUj8V4MYkkMUxX6YQOXwvkBCe/YDSPU7E8HRpZg+QEANd0Sb5cGXcQGkW/p
-         w9btXiSnDOzeSrPPHgB4HOXMbDov2GZH+9cSr5dAsr7MMPfHx5Rtg2ePkDWjXSDg7K61
-         WeTA==
-X-Gm-Message-State: AOJu0YzFX44gmkEiiHQX4AmGyVt9rg1PEcp7fq2ZBSpmgDrESEn+XKxe
-	Dod6Lcacqxg1+URZFK2fcUsHdKkaZNtRCcOvx5Xs2hQLP9Z4C3HG
-X-Google-Smtp-Source: AGHT+IHvwqNAaz2s5OiD5tDsG72xzlcjdkM8dMVqMuMpGRONiWLN6gx2UIACZ2hKml1LA6+c6dVbeQ==
-X-Received: by 2002:aa7:c398:0:b0:559:da2d:c24a with SMTP id k24-20020aa7c398000000b00559da2dc24amr762281edq.48.1706005354582;
-        Tue, 23 Jan 2024 02:22:34 -0800 (PST)
-Received: from foxbook (acgj208.neoplus.adsl.tpnet.pl. [83.9.237.208])
-        by smtp.gmail.com with ESMTPSA id a5-20020a50ff05000000b0055bff4843casm3454607edu.49.2024.01.23.02.22.33
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 23 Jan 2024 02:22:34 -0800 (PST)
-Date: Tue, 23 Jan 2024 11:22:30 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: [RFC PATCH] xhci: fix matching completion events with TDs
-Message-ID: <20240123112230.4d9e1ef0@foxbook>
+	s=arc-20240116; t=1706008108; c=relaxed/simple;
+	bh=ePXcq+3ZYklh/Ja9ctOyMj+QSXTswOpfPk1EoxnOuU4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XDms6oNGBbjbFBZHEAKQNWfIG0IgacaoqLLB5DXsD/kfL98f8GT72xgVUuQLbwOfDybIceb37hwjuxOt+2KuvBgs5MIiRCWfUDw5Nb0Qp1f7P7v5hGcSBy24dGUmWc49M6LZDfXdOAWzL4nbRZ6vhZzWbHNqjT8ghwywzSnqxlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=WHSJGS+3; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1706008104;
+	bh=ePXcq+3ZYklh/Ja9ctOyMj+QSXTswOpfPk1EoxnOuU4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=WHSJGS+3u3ESf596ATW3fy0qn2TXktoZ06Uz5ewlpPDDesf2vkDWRY4ohIN1UQU2G
+	 5B520CKex7b/cjHF4YzApi0HsCnwDLfu0N+MKHaV46OWWbL7gXjFGzyr5AI4fmGfWh
+	 LX18pgHn3sZeYDx4HtAsZEdZYMYxgp4QcMBqWqUqFOknwhl961AP9qy1cAJVtjJc0X
+	 Vcu4x/GdUBD21iP3eOWCTWDpw6UxTaUYmGGDLVjM39+ofyez/vvdu3roY7Rm3Q/Jax
+	 jyYby5c7HcVd0z+yH2F21B1DAQqEPuLaVEEaDHmvwzwUcnTt7BEr1sxywPg17uY8mG
+	 rUE1GE3yzdgSw==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0FEB437820AA;
+	Tue, 23 Jan 2024 11:08:23 +0000 (UTC)
+Message-ID: <7aa0df3d-ae9d-414d-ad7f-ed7588e70f3e@collabora.com>
+Date: Tue, 23 Jan 2024 12:08:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/3] kselftest: devices: Add sample board file for XPS
+ 13 9300
+Content-Language: en-US
+To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Bjorn Helgaas <bhelgaas@google.com>
+Cc: kernelci@lists.linux.dev, kernel@collabora.com,
+ Tim Bird <Tim.Bird@sony.com>, linux-pci@vger.kernel.org,
+ David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org,
+ Rob Herring <robh+dt@kernel.org>, Doug Anderson <dianders@chromium.org>,
+ linux-usb@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
+ Dan Carpenter <dan.carpenter@linaro.org>, Guenter Roeck
+ <groeck@chromium.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240122-discoverable-devs-ksft-v4-0-d602e1df4aa2@collabora.com>
+ <20240122-discoverable-devs-ksft-v4-3-d602e1df4aa2@collabora.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240122-discoverable-devs-ksft-v4-3-d602e1df4aa2@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-A trb_in_td() call is used to determine if a completion event matches
-one of the TRBs of the currently executing TD. This function is given
-ep_ring->deq_seg and ep_ring->dequeue as the starting point to search,
-but these have been observed to be out of sync with td->start_seg and
-td->first_trb of the current TD under some circumstances when the EP
-is being stopped.
+Il 22/01/24 19:53, Nícolas F. R. A. Prado ha scritto:
+> Add a sample board file describing the file's format and with the list
+> of devices expected to be probed on the XPS 13 9300 machine as an
+> example x86 platform.
+> 
+> Test output:
+> 
+> TAP version 13
+> Using board file: boards/Dell Inc.,XPS 13 9300.yaml
+> 1..22
+> ok 1 /pci-controller/14.0/usb2-controller/9/camera.device
+> ok 2 /pci-controller/14.0/usb2-controller/9/camera.0.driver
+> ok 3 /pci-controller/14.0/usb2-controller/9/camera.1.driver
+> ok 4 /pci-controller/14.0/usb2-controller/9/camera.2.driver
+> ok 5 /pci-controller/14.0/usb2-controller/9/camera.3.driver
+> ok 6 /pci-controller/14.0/usb2-controller/10/bluetooth.device
+> ok 7 /pci-controller/14.0/usb2-controller/10/bluetooth.0.driver
+> ok 8 /pci-controller/14.0/usb2-controller/10/bluetooth.1.driver
+> ok 9 /pci-controller/2.0/gpu.device
+> ok 10 /pci-controller/2.0/gpu.driver
+> ok 11 /pci-controller/4.0/thermal.device
+> ok 12 /pci-controller/4.0/thermal.driver
+> ok 13 /pci-controller/12.0/sensors.device
+> ok 14 /pci-controller/12.0/sensors.driver
+> ok 15 /pci-controller/14.3/wifi.device
+> ok 16 /pci-controller/14.3/wifi.driver
+> ok 17 /pci-controller/1d.0/0.0/ssd.device
+> ok 18 /pci-controller/1d.0/0.0/ssd.driver
+> ok 19 /pci-controller/1d.7/0.0/sdcard-reader.device
+> ok 20 /pci-controller/1d.7/0.0/sdcard-reader.driver
+> ok 21 /pci-controller/1f.3/audio.device
+> ok 22 /pci-controller/1f.3/audio.driver
+> Totals: pass:22 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>   .../devices/boards/Dell Inc.,XPS 13 9300.yaml      | 40 ++++++++++++++++++++++
+>   1 file changed, 40 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml b/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml
+> new file mode 100644
+> index 000000000000..ff932eb19f0b
+> --- /dev/null
+> +++ b/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml	
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# This is the device definition for the XPS 13 9300.
+> +# The filename "Dell Inc.,XPS 13 9300" was chosen following the format
+> +# "Vendor,Product", where Vendor comes from
+> +# /sys/devices/virtual/dmi/id/sys_vendor, and Product comes from
+> +# /sys/devices/virtual/dmi/id/product_name.
+> +#
+> +# See google,spherion.yaml for more information.
 
-Consequently, spurious completion events have been observed to become
-erroneously associated with an unrelated pending TD.
+What if - instead of taking google,spherion.yaml as an example - you create a new
+file named something like
 
-Since the ring is being searched for the specific purpose of finding
-a match with current TD, always start from current TD's first TRB.
+"example,device.yaml"
 
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
----
+that would be a fantasy device, bringing examples for all .. or most of .. the
+currently supported types/devices?
 
-Questions:
+You would also move the nice documentation that you wrote in spherion.yaml to the
+new example,device.yaml and ask to refer to that instead in all of the real device
+specific definitions.
 
-Is this a good idea? Is it useful? Or am I missing something?
+# SPDX-License-Identifier: GPL-2.0 <--- (GPL-2.0 OR MIT) like device trees perhaps?
+#
+# This is the device definition for the Example Device
+# The filename "Example Device" was chosen following the format
+# "Vendor,Product", where:
+#  - Vendor is "Example" and comes from /sys/devices/virtual/dmi/id/sys_vendor
+#  - Product is "Device" and comes from /sys/devices/virtual/dmi/id/product_name
+#
+# ....the rest of the blurb goes here
+#
 
-Should a diagnostic be emitted when these pointers don't match? Or when
-they don't match AND something else is also wrong?
+- type : .... this that the other
+   devices:
+     - the least amount of device descriptions that you can use for documenting how
+       to write this stuff :-)
 
-And yes, I am observing unexpected completion events when stopping an
-isochronous endpoint on NEC uPD720200. They used to retire the current
-TD and "TRB not in TD" appeared when its true completion arrived, now
-they correctly give "TRB not in TD" right away. I consider it progress,
-though the origin of spurious completions is still unknown.
+Anything against that?
 
+Cheers,
+Angelo
 
- drivers/usb/host/xhci-ring.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+> +#
+> +- type: pci-controller
+> +  # This machine has a single PCI host controller so it's valid to not have any
+> +  # key to identify the controller. If it had more than one controller, the UID
+> +  # of the controller from ACPI could be used to distinguish as follows:
+> +  #acpi-uid: 0
+> +  devices:
+> +    - path: 14.0
+> +      type: usb-controller
+> +      usb-version: 2
+> +      devices:
+> +        - path: 9
+> +          name: camera
+> +          interfaces: [0, 1, 2, 3]
+> +        - path: 10
+> +          name: bluetooth
+> +          interfaces: [0, 1]
+> +    - path: 2.0
+> +      name: gpu
+> +    - path: 4.0
+> +      name: thermal
+> +    - path: 12.0
+> +      name: sensors
+> +    - path: 14.3
+> +      name: wifi
+> +    - path: 1d.0/0.0
+> +      name: ssd
+> +    - path: 1d.7/0.0
+> +      name: sdcard-reader
+> +    - path: 1f.3
+> +      name: audio
+> 
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 9673354d70d5..d9be5023abe6 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2809,7 +2809,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 			td_num--;
- 
- 		/* Is this a TRB in the currently executing TD? */
--		ep_seg = trb_in_td(xhci, ep_ring->deq_seg, ep_ring->dequeue,
-+		ep_seg = trb_in_td(xhci, td->start_seg, td->first_trb,
- 				td->last_trb, ep_trb_dma, false);
- 
- 		/*
-@@ -2877,9 +2877,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 					"part of current TD ep_index %d "
- 					"comp_code %u\n", ep_index,
- 					trb_comp_code);
--				trb_in_td(xhci, ep_ring->deq_seg,
--					  ep_ring->dequeue, td->last_trb,
--					  ep_trb_dma, true);
-+				trb_in_td(xhci, td->start_seg, td->first_trb,
-+					  td->last_trb, ep_trb_dma, true);
- 				return -ESHUTDOWN;
- 			}
- 		}
--- 
-2.43.0
 
