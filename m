@@ -1,139 +1,146 @@
-Return-Path: <linux-usb+bounces-5393-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5394-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AEE9838A03
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 10:11:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB448838A79
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 10:40:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41C8F28A489
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 09:11:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A35E1C23F98
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 09:40:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E48F05812D;
-	Tue, 23 Jan 2024 09:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ACE059B64;
+	Tue, 23 Jan 2024 09:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z5f+bWny"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HH0eKI5w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C524A58124
-	for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 09:10:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3AC59B5C
+	for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 09:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706001060; cv=none; b=L+lIvmlWmuK4svYDfTM6virVMp48sXl0bnBZhyf5kn/kmkCV18M/a+hI2aHB4hi9mFoZYSAcUb7B/PQ3DsaAKtLqkZHVSq5hKXrpRK71DC2gXz7pki11IZ01cCMVSQVo0oriAZRQ+/6HUck3ni2Zt8ZMGni2zVEQHhhycY0Ik98=
+	t=1706002822; cv=none; b=rNUnJDp3KoiJbZ2V/y2Q69f+kqDflOYnY41rMWDgvutjvE+Dzxj8SekyaPdnvMFDJKMyojpL4o3n4JVxJbhXx4A4HFVFs34wWDZqTHGAvxNj8/cJqCxtmcoXhP7K9JXvp5Br1Km2Vtb9oD4zjpk8Q4V3YCfLeG4Yt6CTtDn7fN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706001060; c=relaxed/simple;
-	bh=CNAvhk+ctgZW7S/WDsXnpzUkaaze6ALFXV+DhUrOG6g=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type; b=cMPrpDvJ6vFYg6VmCUD9MmdDGqq541WwopEfzkc4FuyVs5SCCMIxm0uc9fmuPmy9GCYlRbbZqKj5v7UI6AFGSUbblPlTfR92e8o0TBYN5wroNcgPFqoIsGHJaVpZMjEiuxHgykvpq83H64EQltOQp4nJlhTRRM1p8SVQviiMYh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z5f+bWny; arc=none smtp.client-ip=209.85.167.49
+	s=arc-20240116; t=1706002822; c=relaxed/simple;
+	bh=EJ3sW/mCQWqkVnfSlqJV5cD7p+iwDADaEjL6TWjBN1I=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=ebN8PNmKh1CVTaG3CG9pUm+QMOTxyTaAnA+jSphgZGY2uXKGqZuO5jVdnHsXDpzB5s+Pazd9jd8vn8QepSynReIv/MuczEWVFca0L9R4RDQWoJLmaFRI+H0p6jhwz4WjkEmdcGh0p4Fm0S+8vdnYsZuMKONDYJnTN9OQcecTRdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HH0eKI5w; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-50e7c6f0487so4520719e87.3
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 01:10:58 -0800 (PST)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1d5f252411aso21593155ad.2
+        for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 01:40:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706001057; x=1706605857; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:subject:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ERkL/+BOaOSAcv9JaeJ17wcdjLtEvEqVGgqlk6wrhx4=;
-        b=Z5f+bWnyUcDo4H6sYzENsP/2rREGs1p/4I5ilnzu35m7mFrhV7MdvgkCUKlyYuQQiF
-         Lbw+v+LTU7FgqEU86VCa8G/M1QzgkV4ReihDdviDnjVrBaIPq8WH0U15SKuE3MuXAgi7
-         84beoiAiRlmO49mHfws91ErKWMwbI474BMFOtYDK6rkUFH1veVXu6PAdvDJ3ZLavWr0T
-         SYSUpBPdgdUNI3J88GJ76UeJBz7C28G4Ov4hUFfH3T4xYBvXuEaLrzV1GO7niVfLxthZ
-         /h1L3V3KjEFAGL0CpLOjnDWAD40I9aBqm7BioTdJbK0uE3UI5KUHRjKHeK+R3Eav/rV6
-         zCsA==
+        d=gmail.com; s=20230601; t=1706002821; x=1706607621; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M6pBxH4muU/wCLL3hDuth0skp07NXyCMBwBp6iP4UzE=;
+        b=HH0eKI5wEcpJr9VOH5PEux2UMGISI/xxdOE8fqON8sH6wAhjV1FNEdJe8hb6p2vSFf
+         AwCFh6U+NcvQCANc9iNTj5iZxCVpSiuRmDCvATP97xIJfC70qB8oyrBsPRysZ59xOJKN
+         h4XX0B3qbMaajBBqCtcxNwmG47/zXTHpgqJFoCI6zBIY0NL7AS0kdeqqUv5LeQd4V2r3
+         4DRiiZy64aSA/cUlWlv3YdUaaW07NPm/XrepAelrVs222bsUvZzlyWofCCru9D85sO12
+         HC8BiP18qcuV6Z09GOFQJ1WH7l606q6VVvaf6nbpPuF9IM9iGPS6lDeyielj4jUSHUd0
+         6A7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706001057; x=1706605857;
-        h=content-transfer-encoding:mime-version:message-id:subject:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ERkL/+BOaOSAcv9JaeJ17wcdjLtEvEqVGgqlk6wrhx4=;
-        b=pIPF2T+d6rCg1jU1Gql4fnwq8sXFxAjcand/YbO+fF8Qog1f42nZ0i4cxnz3UuVQKv
-         Rxuen+MZqXdYmmtjrcR6hzWe9OYZ/P5/bRrZAoUwqusKi01ILOxxfXGmJpfn/mgZ3/bv
-         gyFQGWUsfdgd+5NK2I8nsb2CtFFRkodYCdnQd7TSrf8M/J1c8szl6qHuak1aDnCcSK4g
-         yUnZOa0RegzYWF+C9LT89OkNCCfFgRdfrYysc1ozzPgYORQj/lE2BnVi0fdAS2JGtTRO
-         lCSaTn5gxBi5AHClef41jTEunPwQ1sdaseM/kEo9yHWthNI4HYjZyo+iubsmsEjFWlmN
-         Xs0Q==
-X-Gm-Message-State: AOJu0Yy3rsricm43leBDtigIA2cHcCkswUJT2Y2GT4h4/YE/CanEqvvp
-	v4Xobn4g3nyQVjjxyAGjnWJtoe+jY1aztvlPCBBd+ftJEoj0/9dmaGy84leh
-X-Google-Smtp-Source: AGHT+IFRgluLHPuMCZ98DOYyg7H0qwa1VhjjmU24NV9fjl5vH4NRinZtAqx6LcSr+pyeGXcP5yYxlg==
-X-Received: by 2002:a05:6512:280b:b0:50e:7b9c:8b1a with SMTP id cf11-20020a056512280b00b0050e7b9c8b1amr1868582lfb.95.1706001056461;
-        Tue, 23 Jan 2024 01:10:56 -0800 (PST)
-Received: from foxbook (acgj208.neoplus.adsl.tpnet.pl. [83.9.237.208])
-        by smtp.gmail.com with ESMTPSA id k11-20020ac24f0b000000b0050e74ec73f6sm2284364lfr.124.2024.01.23.01.10.55
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 23 Jan 2024 01:10:56 -0800 (PST)
-Date: Tue, 23 Jan 2024 10:10:49 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, linux-usb@vger.kernel.org
-Subject: [PATCH] xhci: handle isoc Babble and Buffer Overrun events properly
-Message-ID: <20240123101049.4f76f43f@foxbook>
+        d=1e100.net; s=20230601; t=1706002821; x=1706607621;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M6pBxH4muU/wCLL3hDuth0skp07NXyCMBwBp6iP4UzE=;
+        b=bbsV3ryAlDkrHESGCKm6101dDy/pigULEerNe7owmuSVLLGl69l8odZ36u+Qzj9ZI2
+         Sz0mLQH5oOJZ92LiMFI/D83P0BI2y9mPj7QOCTaOM95eAecYfT0NlDWJx18FevyXGI3x
+         JimKqyhD4kFxsRrkmFP7MX6HOBFMgxf7N2rP9hxvjk20T0dKPji5fr3KnmnexY3VuXcb
+         RHM30SJ2aZZeuSAHpml/YPQPrKv/ij/hoJ99pyWCffizmcb8Gf3tAakkdIvVgId1MM8j
+         3QN5RLHoHLN5ivisFVT2A33PtvTlScQzeFjv+IsZmgrJSz06DOMDe/PNxEEoa6qwghXk
+         kQuw==
+X-Gm-Message-State: AOJu0YxBpym52MvFSjcsx0lirH+KNNqD5mmmSgiTIM8wAfPr7AgT0+PQ
+	Scu8/yXyxFq94M/NWN1eYvoVTIwCozKw/38EZ9NrD+fTdnmhrH3H
+X-Google-Smtp-Source: AGHT+IECHuPipsJcdcNldo9j63/RrHw8yHb/JhbFcVF2rGduprnAbQS+YH2gAv5CYpHYOMTO0T3GZw==
+X-Received: by 2002:a17:902:c402:b0:1d4:6429:4e1c with SMTP id k2-20020a170902c40200b001d464294e1cmr3869244plk.4.1706002820783;
+        Tue, 23 Jan 2024 01:40:20 -0800 (PST)
+Received: from localhost ([101.10.10.163])
+        by smtp.gmail.com with ESMTPSA id ix7-20020a170902f80700b001d71c8871e1sm6827043plb.172.2024.01.23.01.40.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jan 2024 01:40:20 -0800 (PST)
+From: wojackbb@gmail.com
+To: johan@kernel.org
+Cc: linux-usb@vger.kernel.org,
+	JackBB Wu <wojackbb@gmail.com>
+Subject: [PATCH] USB: serial: qcserial: add new usb-id for Dell Wireless DW5826e
+Date: Tue, 23 Jan 2024 17:39:48 +0800
+Message-Id: <1706002788-19606-1-git-send-email-wojackbb@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-xHCI 4.9 explicitly forbids assuming that the xHC has released its
-ownership of a multi-TRB TD when it reports an error on one of the
-early TRBs. Yet the driver makes such assumption and releases the TD,
-allowing the remaining TRBs to be freed or overwritten by new TDs.
+From: JackBB Wu <wojackbb@gmail.com>
 
-The xHC should also report completion of the final TRB due to its IOC
-flag being set by us, regardless of prior errors. This event cannot
-be recognized if the TD has already been freed earlier, resulting in
-"Transfer event TRB DMA ptr not part of current TD" error message.
+Add support for Dell DW5826e with USB-id 0x413c:0x8217 & 0x413c:0x8218.
 
-Fix this by reusing the logic for processing isoc Transaction Errors.
-This also handles hosts which fail to report the final completion.
+It is 0x413c:0x8217
+T:  Bus=02 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#=  4 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=413c ProdID=8217 Rev= 5.04
+S:  Manufacturer=DELL
+S:  Product=COMPAL Electronics EXM-G1A
+S:  SerialNumber=359302940050401
+C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=qcserial
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=qcserial
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=qcserial
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=87(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:* If#= 8 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Fix transfer length reporting on Babble errors. They may be caused by
-device malfunction, no guarantee that the buffer has been filled.
+It is 0x413c:0x8218
+T:  Bus=02 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=413c ProdID=8218 Rev= 0.00
+S:  Manufacturer=DELL
+S:  Product=COMPAL Electronics EXM-G1A
+S:  SerialNumber=359302940050401
+C:* #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=  2mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=qcserial
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+Signed-off-by: JackBB Wu <wojackbb@gmail.com>
 ---
+ drivers/usb/serial/qcserial.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Question:
-
-Will this become a game of whack-a-mole as new cases are reported?
-
-Would it make sense to apply error_mid_td right away to more codes
-that plausibly lead to an abort of the current TD?
-
-Or do it after the initial patches prove themselves in real world?
-
-
-The impact of freeing owned TRBs is unknown. No one appears to have
-ever complained, myself included. The error messages are merely an
-annoyance - next event is a match and all is back to normal.
-
-
- drivers/usb/host/xhci-ring.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 22a4aa65e4c9..9673354d70d5 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2393,9 +2393,13 @@ static int process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 	case COMP_BANDWIDTH_OVERRUN_ERROR:
- 		frame->status = -ECOMM;
- 		break;
--	case COMP_ISOCH_BUFFER_OVERRUN:
- 	case COMP_BABBLE_DETECTED_ERROR:
-+		sum_trbs_for_length = true;
-+		fallthrough;
-+	case COMP_ISOCH_BUFFER_OVERRUN:
- 		frame->status = -EOVERFLOW;
-+		if (ep_trb != td->last_trb)
-+			td->error_mid_td = true;
- 		break;
- 	case COMP_INCOMPATIBLE_DEVICE_ERROR:
- 	case COMP_STALL_ERROR:
+diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+index b1e844b..703a9c5 100644
+--- a/drivers/usb/serial/qcserial.c
++++ b/drivers/usb/serial/qcserial.c
+@@ -184,6 +184,8 @@ static const struct usb_device_id id_table[] = {
+ 	{DEVICE_SWI(0x413c, 0x81d0)},   /* Dell Wireless 5819 */
+ 	{DEVICE_SWI(0x413c, 0x81d1)},   /* Dell Wireless 5818 */
+ 	{DEVICE_SWI(0x413c, 0x81d2)},   /* Dell Wireless 5818 */
++	{DEVICE_SWI(0x413c, 0x8217)},	/* Dell Wireless DW5826e */
++	{DEVICE_SWI(0x413c, 0x8218)},	/* Dell Wireless DW5826e QDL */
+ 
+ 	/* Huawei devices */
+ 	{DEVICE_HWI(0x03f0, 0x581d)},	/* HP lt4112 LTE/HSPA+ Gobi 4G Modem (Huawei me906e) */
 -- 
-2.43.0
+2.7.4
 
 
