@@ -1,250 +1,189 @@
-Return-Path: <linux-usb+bounces-5426-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5427-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F087D839A73
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 21:43:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5C1A839B5D
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 22:46:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20F2E1C278CE
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 20:43:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CF241F2595F
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 21:46:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B695F20F1;
-	Tue, 23 Jan 2024 20:43:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B049941218;
+	Tue, 23 Jan 2024 21:46:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="BerJpIr9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mqFi2wBm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A1D6127
-	for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 20:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977823B2A6
+	for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 21:46:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706042607; cv=none; b=PnLqy12qWUyqFeMqVIZZhgMFW4SITobJqsCKQu2JDMeZyyiAo9QWPLnBdKGHwErAFGA48edfzgGxrZsryAXCxqFQ99HxcD/rgEoTgSeid/fWo2nIOY4YVaPxoook9zyNXjFRda3uHj2xrstMTNWsz65dJ+wKuLmyPQqqOGdCn4c=
+	t=1706046405; cv=none; b=sCdo57Xsghw9cAETQjXni7UPyqDJLPKJ4YD8pZ7NPnWs6qsifdj/qjB52q/URwcOnV3k56aJeDe+r9u5L0V1z3GPT30enitOv6n1Jxd61SYIkgw80WRUuy4w5p2C4a9PC4/5t71/U6ZjaOyDbHgvf2F4Hg8Mnm2PRJ5NSyfZVmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706042607; c=relaxed/simple;
-	bh=8zLb3neS6Jp/AkbUTNX1TpH766GVQBf7lcwO9rCjoBc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=WyG21ckmtSCkGmPHPh5Jj4BwutSxLsmQhie8SBrmZUUcPFEI7XEnG5P3ugMOkjF5yRaw1yTmkcGhMhqlZ310j3PNRw1xcmtTsvE8oWzVWznR4FOZjlOrpo9WSeT7qrbfNDdOmpqfHhsM3qE08kWj54IgdQv51hEBtlboLJ56zuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=BerJpIr9; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-50e5a9bcec9so5328936e87.3
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 12:43:25 -0800 (PST)
+	s=arc-20240116; t=1706046405; c=relaxed/simple;
+	bh=aN4pPExrA0pcXmC/wmth0D8JjPy7LHeuNi0d+Ufs+Kc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jG1EU69G7Qnpb3UrWodQPBckv3CkQA+wJ64LN+CA5bI/tRzG4rf9MVLRGHID7GR6JKc3R/1JDnQdClQ3WxdaTqmaXH5ALqaW72g6Ndl/zpUgH1aptzgm++Y4udbEH6mTJrYoY6K0/PhYLdPAbiiLG2dXqfFa2OLJfAIU+Nzh8lQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mqFi2wBm; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-337b8da1f49so4245901f8f.0
+        for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 13:46:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1706042603; x=1706647403; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NMSor2++UrWhWLE+cIF0EC+iv6dUmbHHRQ/GWZRHrpE=;
-        b=BerJpIr921pS77kpFdigTv24vAL9gpNUefKRSOEo7u8kZVjudXVrSX1rfZFrExDJtH
-         5u82bp/ReLPKVK/1cFpbQx8StMmzrcLq8b8HbEDKjv0ykjgr0tbj6FsTPcxKr0gEKfT9
-         MA8YJuT7R6GbUo66EIa0sMFDgTTyauOmwjvIMa4xxX5XY2VQVlby6EvGAIJU//xhsPQ9
-         8t9jYUMz+8cZ86nDHmoc2cYbbeUhzzczB9hZ7qA41yqtd5vAsq+iPAXIuEIOY2PIs97t
-         HQrsnGEQhooFMVvWfGAH+w7VU0vuPzRAajuPn25WM7IbRzpl6H4o6XraFYov47Dli/BW
-         q4yA==
+        d=linaro.org; s=google; t=1706046402; x=1706651202; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eetqzD8hoLPJnsv0+oWykLmBW6Ei7KC2UVl+wqojJO4=;
+        b=mqFi2wBmT5scQg98SNu6xuWo4tAOtAp5kf+bJ8Y36RoMzwN1fqwCQFQL+0WTASi7B8
+         rEFVFYhN+QbGhji4FMXuQ13S4jv97r64zSwq0hW+1hPeSf0rYeovn9x5hJpJ0RHbYsE/
+         cFz3usoAfX9fTAKQ2DIA3E3nE6eybGvbqb2fXdeqxnQunEe4so0TRp74uIBDxzD/W3Qs
+         9YWkjWIwyV5VD0tEPDuB9HN5DgYVGuAaI9SVDhN02T/OHTd3aoWGoFNsPIb8irjFNjKn
+         QGLVIPwhtKxHjCeGF1AEQL51KzOGp/fu21HM+/W6gTh/Rn0ZN9teDUioipVSYjeXyg7Z
+         NAUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706042603; x=1706647403;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NMSor2++UrWhWLE+cIF0EC+iv6dUmbHHRQ/GWZRHrpE=;
-        b=YWu+9llOCNMTutrq5Id9XR45EiOpm6c38o9yoHNChSv3U2lUEBHyZwPHC6mL75D9oQ
-         U56KhrBVl5hiUaBqhDpGDRddgMtsvAIGVHgfbZ6Tvm/+iRyz/I9DDWV5dS5xCsACS6mq
-         gF5KmIPBHesO/UZLYZ0JTS2xAXDJyHc84rXUqGw/lD/HaTDfJXsptQOX3e2EEOsyhG1X
-         Ir/6Z21USRZo6UNIrlVButndDwBPMAuVe433vhVcatp8hjPsdM5c42zRR33bQRNJC83+
-         Ym9a9yqCnNb/v/qSGxNJ0jzDsds/eoAebXg3Xb4u5+4lyvJehCNh9azpu2Gj/KXN5kqo
-         YMfQ==
-X-Gm-Message-State: AOJu0Yyb6ahHde9VRjUYVJHzIObLN26qzj/+ygDWhoOVnDLI/YEOswGl
-	iipxG0ioTqWKNPaaj1XqXno7LXYYphWMgnW/+R+EslNYlqJYf1WJ5zSuD6WeD3U=
-X-Google-Smtp-Source: AGHT+IEynibo4PgeAij/DM9j4I9iRxSq3WbKkq9FXriiAtlBZCHQna1z27SSGVHIa03u7+oQUhY0FA==
-X-Received: by 2002:a05:6512:12d5:b0:50f:1c90:d3d5 with SMTP id p21-20020a05651212d500b0050f1c90d3d5mr3882137lfg.24.1706042603327;
-        Tue, 23 Jan 2024 12:43:23 -0800 (PST)
-Received: from localhost (mobiledyn-62-240-134-198.mrsn.at. [62.240.134.198])
-        by smtp.gmail.com with ESMTPSA id vg10-20020a170907d30a00b00a3109a492d4sm115755ejc.20.2024.01.23.12.43.21
+        d=1e100.net; s=20230601; t=1706046402; x=1706651202;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eetqzD8hoLPJnsv0+oWykLmBW6Ei7KC2UVl+wqojJO4=;
+        b=rKIePAXqjsK51RDHXqRoMlrSK3l+JsCDH+pL4FgD9GvRCRrgWtpc3BMTX0ECunEc2q
+         srZTrJXQGFj1cEsgT7ZCLVAatwbyRwMBFhxZk9Jssm0ZwZ26r56iPBMD0h8cWq/Aqr87
+         QRL4LCi07BPjFWX/FTp0beR1sJA2SShiz1VdKv+AAbWhgG8YQFsitAJ9CObykpO1FVue
+         nG/uWqVLcXV52b9W720ktqvv0CrCuGjuXoHwI3Ib+zWfx7bvoOe5lgsQr+F3RDppCWIM
+         I00jo2ufxDwBQCNyMsFbVCLfPeWH8siZPGJDhrgIJwzyhtfmI5VDWSg1oR0WljHtUKGV
+         nMhg==
+X-Gm-Message-State: AOJu0Yx1wsHW/uMehK+QNyKCFlkVyRYY7mh3OY8dl3isxq55KgIgaDsf
+	sJxLArWuZb2LgHeTmb0qGhSnvdzrusKQrCNek0AIHoPgLM3f1y9Xt1FQG699utA=
+X-Google-Smtp-Source: AGHT+IGAD7FoSnl7Gvab48FlQfOvLPHehWCIr0ffXmkZEDPiIcN32RgC9y9vkVsgION0bJcxhwr6JQ==
+X-Received: by 2002:a5d:634c:0:b0:337:bcdf:5928 with SMTP id b12-20020a5d634c000000b00337bcdf5928mr2063680wrw.116.1706046401821;
+        Tue, 23 Jan 2024 13:46:41 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.215.66])
+        by smtp.gmail.com with ESMTPSA id h5-20020adf9cc5000000b003368849129dsm17135403wre.15.2024.01.23.13.46.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jan 2024 12:43:23 -0800 (PST)
+        Tue, 23 Jan 2024 13:46:41 -0800 (PST)
+Message-ID: <46781012-2678-4f6c-9aee-b020cabcbb28@linaro.org>
+Date: Tue, 23 Jan 2024 22:46:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Add system bus request info
+Content-Language: en-US
+To: Frank Li <Frank.li@nxp.com>, Conor Dooley <conor@kernel.org>
+Cc: thinh.nguyen@synopsys.com, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, balbi@kernel.org,
+ devicetree@vger.kernel.org, gregkh@linuxfoundation.org, imx@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ mark.rutland@arm.com, mathias.nyman@intel.com, pku.leo@gmail.com,
+ sergei.shtylyov@cogentembedded.com
+References: <20240123170206.3702413-1-Frank.Li@nxp.com>
+ <20240123-poking-geography-33be2b5ae578@spud>
+ <Za/8J8MDJaZEPEKO@lizhi-Precision-Tower-5810>
+ <20240123-anew-lilly-0d645bdbfb30@spud>
+ <Za//LX9U6QG5A5NW@lizhi-Precision-Tower-5810>
+ <20240123-nanometer-atlantic-6465b270043a@spud>
+ <ZbAR/NQvjUnf2At+@lizhi-Precision-Tower-5810>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <ZbAR/NQvjUnf2At+@lizhi-Precision-Tower-5810>
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 23 Jan 2024 21:43:20 +0100
-Message-Id: <CYMDMMXUICGY.21UIRWVXMLART@fairphone.com>
-Subject: Re: [PATCH v2 00/15] usb: typec: qcom-pmic-typec: enable support
- for PMI632 PMIC
-From: "Luca Weiss" <luca.weiss@fairphone.com>
-To: "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>, "Bjorn Andersson"
- <andersson@kernel.org>, "Konrad Dybcio" <konrad.dybcio@linaro.org>, "Liam
- Girdwood" <lgirdwood@gmail.com>, "Mark Brown" <broonie@kernel.org>, "Rob
- Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Wesley Cheng" <quic_wcheng@quicinc.com>, "Bryan O'Donoghue"
- <bryan.odonoghue@linaro.org>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Vinod Koul" <vkoul@kernel.org>, "Kishon
- Vijay Abraham I" <kishon@kernel.org>, "Guenter Roeck" <linux@roeck-us.net>,
- "Heikki Krogerus" <heikki.krogerus@linux.intel.com>, "Philipp Zabel"
- <p.zabel@pengutronix.de>
-Cc: <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-usb@vger.kernel.org>, <linux-phy@lists.infradead.org>, "Vladimir
- Zapolskiy" <vladimir.zapolskiy@linaro.org>
-X-Mailer: aerc 0.15.2
-References: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org>
-In-Reply-To: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org>
+Content-Transfer-Encoding: 7bit
 
-On Sat Jan 13, 2024 at 9:55 PM CET, Dmitry Baryshkov wrote:
-> The Qualcomm PMI632 PMIC (found on Qualcomm Robotics RB2 platform)
-> doesn't support USB Power Delivery. However this PMIC still supports
-> handling of the Type-C port (orientation detection, etc). Reuse exiting
-> qcom-pmic-typec driver to support Type-C related functionality of this
-> PMIC. Use this to enable USB-C connector support on the RB2 platform.
+On 23/01/2024 20:22, Frank Li wrote:
+> On Tue, Jan 23, 2024 at 06:42:27PM +0000, Conor Dooley wrote:
+>> On Tue, Jan 23, 2024 at 01:02:21PM -0500, Frank Li wrote:
+>>> On Tue, Jan 23, 2024 at 05:51:48PM +0000, Conor Dooley wrote:
+>>>> On Tue, Jan 23, 2024 at 12:49:27PM -0500, Frank Li wrote:
+>>>>> On Tue, Jan 23, 2024 at 05:27:13PM +0000, Conor Dooley wrote:
+>>>>>> On Tue, Jan 23, 2024 at 12:02:05PM -0500, Frank Li wrote:
+>>>>>>> Add device tree binding allow platform overwrite default value of *REQIN in
+>>>>>>> GSBUSCFG0.
+>>>>>>
+>>>>>> Why might a platform actually want to do this? Why does this need to be
+>>>>>> set at the board level and being aware of which SoC is in use is not
+>>>>>> sufficient for the driver to set the correct values?
+>>>>>
+>>>>> In snps,dwc3.yaml, there are already similary proptery, such as
+>>>>> snps,incr-burst-type-adjustment. Use this method can keep whole dwc3 usb
+>>>>> driver keep consistent. And not all platform try enable hardware
+>>>>> dma_cohenrence. It is configable for difference platform.
+>>>>
+>>>> When you say "platform", what do you mean? I understand that term to
+>>>> mean a combination of board, soc and firmware.
+>>>
+>>> In my company's environment, "platform" is "board". I will use "board" in
+>>> future. Is it big difference here?
+>>
+>> Nah, that's close enough that it makes no difference here.
+>>
+>> I'd still like an explanation for why a platform would need to actually
+>> set these properties though, and why information about coherency cannot
+>> be determined from whether or not the boss the usb controller is on is
+>> communicated to be dma coherent via the existing devicetree properties
+>> for that purpose.
+> 
+> Actually, I am not very clear about reason. I guest maybe treat off power
+> consumption and performance.
+> 
+> What's your judgement about proptery, which should be in dts. Such as
+> reg, clk, reset, dma and irq, which is tighted with SOC. It is the fixed
+> value for every SOC. The board dts never change these.
 
-Hi Dmitry,
+Then it can be deduced from the compatible and there is no need for new
+properties.
 
-I'm happy to report that testing this series on v6.8-rc1 kernel on
-sdm632-fairphone-fp3 shows that USB role switching is working with this!
-
-It's not extensive testing but plugging in a USB stick and USB headphone
-jack dongle in both directions show up in dmesg as expected, and
-afterwards also USB networking gadget still works to ssh into the
-device.
-
-My .dts part is a bit different to your RB2 dts since
-sdm632-fairphone-fp3 doesn't support USB 3.0, only USB 2.0, but
-otherwise looks pretty similar. I'll send a patch for that once your
-series has landed.
-
-Not sure on which patches it makes sense, but have my:
-
-Tested-by: Luca Weiss <luca.weiss@fairphone.com> # sdm632-fairphone-fp3
-
-And for reference:
-
-Only thing I've noticed here is "Host supports USB 3.0 SuperSpeed" which
-is half true, to my knowledge SDM632 does support USB 3.0 but it's not
-hooked up (for some reason) on most MSM8953/SDM632-based devices.
-
-[   22.986096] xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
-[   22.986273] xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned b=
-us number 1
-[   22.990847] xhci-hcd xhci-hcd.1.auto: hcc params 0x0230f665 hci version =
-0x100 quirks 0x0000000002000010
-[   22.998260] xhci-hcd xhci-hcd.1.auto: irq 57, io mem 0x07000000
-[   23.007684] xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
-[   23.013435] xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned b=
-us number 2
-[   23.019029] xhci-hcd xhci-hcd.1.auto: Host supports USB 3.0 SuperSpeed
-[   23.027696] hub 1-0:1.0: USB hub found
-[   23.033167] hub 1-0:1.0: 1 port detected
-[   23.037538] usb usb2: We don't know the algorithms for LPM for this host=
-, disabling LPM.
-[   23.041853] hub 2-0:1.0: USB hub found
-[   23.049034] hub 2-0:1.0: 1 port detected
-[   23.120301] qcom,pmic-typec 200f000.spmi:pmic@2:typec@1500: vbus vsafe5v=
- fail
-[   23.845537] usb 1-1: new high-speed USB device number 2 using xhci-hcd
-[   23.995466] usb-storage 1-1:1.0: USB Mass Storage device detected
-[   23.996166] scsi host0: usb-storage 1-1:1.0
-[   25.022547] scsi 0:0:0:0: Direct-Access     SanDisk  Ultra            1.=
-00 PQ: 0 ANSI: 6
-[   25.023926] sd 0:0:0:0: [sda] 60062500 512-byte logical blocks: (30.8 GB=
-/28.6 GiB)
-[   25.030873] sd 0:0:0:0: [sda] Write Protect is off
-[   25.037204] sd 0:0:0:0: [sda] Mode Sense: 43 00 00 00
-[   25.042395] sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled=
-, doesn't support DPO or FUA
-[   25.070314]  sda: sda1 sda2 sda3
-[   25.071050] sd 0:0:0:0: [sda] Attached SCSI removable disk
-
-
-[   31.347094] usb 1-1: USB disconnect, device number 2
-[   31.364973] xhci-hcd xhci-hcd.1.auto: remove, state 4
-[   31.365149] usb usb2: USB disconnect, device number 1
-[   31.370427] xhci-hcd xhci-hcd.1.auto: USB bus 2 deregistered
-[   31.374236] xhci-hcd xhci-hcd.1.auto: remove, state 1
-[   31.379906] usb usb1: USB disconnect, device number 1
-[   31.475790] xhci-hcd xhci-hcd.1.auto: USB bus 1 deregistered
-
-Regards
-Luca
-
-
->
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
-> Changes in v2:
-> - Split qcom_pmic_typec_pdphy_set_roles() changes to separate patch
->   (Konrad)
-> - Simplified devm_kzalloc / sizeof() argument (Konrad)
-> - Made start / stop callbacks mandatory (Bryan)
-> - Reworked Type-C port handling into a backend similar to PD PHY (Bryan)
-> - Made more qcom-pmic-typec data static const (Bryan)
-> - Squashed usbc PHY single-lane removal patch (Konrad)
-> - Further usbc PHY cleanup (Konrad)
-> - Fixed order of DT properties in pmi632.dtsi (Konrad)
-> - Instead of specifying bogus PDOs for the port, specify pd-disable and
->   typec-power-opmode properties for the connector
-> - Moved orientation-switch / usb-dual-role properties to sm6115.dtsi
->   (Konrad)
-> - Linked usb_dwc3_ss and usb_qmpphy_usb_ss_in
-> - Link to v1: https://lore.kernel.org/r/20240113-pmi632-typec-v1-0-de7dfd=
-459353@linaro.org
->
-> ---
-> Dmitry Baryshkov (14):
->       dt-bindings: regulator: qcom,usb-vbus-regulator: add support for PM=
-I632
->       dt-bindings: usb: qcom,pmic-typec: add support for the PMI632 block
->       dt-bindings: phy: qcom,msm8998-qmp-usb3-phy: split from sc8280xp PH=
-Y schema
->       dt-bindings: phy: qcom,msm8998-qmp-usb3-phy: support USB-C data
->       usb: typec: tcpm: fix the PD disabled case
->       usb: typec: qcom-pmic-typec: fix arguments of qcom_pmic_typec_pdphy=
-_set_roles
->       usb: typec: qcom-pmic-typec: allow different implementations for th=
-e PD PHY
->       usb: typec: qcom-pmic-typec: allow different implementations for th=
-e port backend
->       usb: typec: qcom-pmic-typec: add support for PMI632 PMIC
->       phy: qcom: qmp-usb: split USB-C PHY driver
->       phy: qcom: qmp-usb: drop dual-lane handling
->       phy: qcom: qmp-usbc: add support for the Type-C handling
->       arm64: dts: qcom: pmi632: define USB-C related blocks
->       arm64: dts: qcom: qrb4210-rb2: enable USB-C port handling
->
-> Vladimir Zapolskiy (1):
->       arm64: dts: qcom: sm6115: drop pipe clock selection
->
->  .../bindings/phy/qcom,msm8998-qmp-usb3-phy.yaml    |  171 +++
->  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        |   22 -
->  .../regulator/qcom,usb-vbus-regulator.yaml         |    9 +-
->  .../devicetree/bindings/usb/qcom,pmic-typec.yaml   |   28 +-
->  arch/arm64/boot/dts/qcom/pmi632.dtsi               |   30 +
->  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts           |   50 +-
->  arch/arm64/boot/dts/qcom/sm6115.dtsi               |   44 +-
->  drivers/phy/qualcomm/Makefile                      |    2 +-
->  drivers/phy/qualcomm/phy-qcom-qmp-usb.c            |  323 +-----
->  drivers/phy/qualcomm/phy-qcom-qmp-usbc.c           | 1169 ++++++++++++++=
-++++++
->  drivers/usb/typec/tcpm/qcom/Makefile               |    3 +-
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c      |  254 +----
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.h      |   27 +
->  .../usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c    |  157 ++-
->  .../usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.h    |   94 +-
->  .../typec/tcpm/qcom/qcom_pmic_typec_pdphy_stub.c   |   80 ++
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c |  290 ++++-
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.h |  172 +--
->  drivers/usb/typec/tcpm/tcpm.c                      |    3 +-
->  19 files changed, 2058 insertions(+), 870 deletions(-)
-> ---
-> base-commit: 9e21984d62c56a0f6d1fc6f76b646212cfd7fe88
-> change-id: 20240112-pmi632-typec-4c7533092387
->
-> Best regards,
+Best regards,
+Krzysztof
 
 
