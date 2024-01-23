@@ -1,63 +1,59 @@
-Return-Path: <linux-usb+bounces-5417-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5418-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EA93839654
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 18:25:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0257839662
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 18:27:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4584A2870EF
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 17:25:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92B041F24A83
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 17:27:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CB518002B;
-	Tue, 23 Jan 2024 17:25:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DFA980044;
+	Tue, 23 Jan 2024 17:27:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SsyQZ1Cl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DNCZ7fRS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21567FBC1;
-	Tue, 23 Jan 2024 17:25:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8118180027;
+	Tue, 23 Jan 2024 17:27:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706030710; cv=none; b=evP4I3YC3BB85wHAlLg9Mj2RtrYTzp8v2D9bdafgf2/ITaqPINJmWnKH6WK/t8HqlpLhwKNUH93oRWCfBpd9jNDX4SwTBFPxC3G+fneRNvRvEUYm7jl4yY7bkkpZIgjW9MFvONYK8D7ZFtcZciADES6yXlVs+Z5hgaJqrfUQFrA=
+	t=1706030839; cv=none; b=PYAXE8pbvybEgLH0HTzWyYtIrz3oXSNsYvWTpH1gbef/YS+kChfjKv1ruSLWJeEcWpVoNmtgWfkEgobda5ZDTHDjWcIbqchfXiu6QbdhV0NO12O2NsIhMwrmwBVJ/EsZxLBNnOn8gthUpUXm9GSrDGRf27SR85w/9o/cwyPiIxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706030710; c=relaxed/simple;
-	bh=/+SkSMXEvZL7JnAfLyB9WU4yUTd/UNiUILkQDm11AUc=;
+	s=arc-20240116; t=1706030839; c=relaxed/simple;
+	bh=x/RapcgkYrZ4n19ONhCZoeWczR9Ix/nCHIHmNGyqH4c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tvh5y+widUkXhpqdbW6I9fNoEzX9NoiOU5e5dvyT0PldXxVejklS5ddCLa+jHSvM5rLYkFm/3NrcTWNaqhG1sF55+pucL7nPZynLPy0zuKH64JcnlPlAcigFTdBkAlpr5eY1iwafj3k7HKj4QDQW9zn5Ybk9yr2Jx5xaA8oelKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SsyQZ1Cl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9239C433C7;
-	Tue, 23 Jan 2024 17:25:06 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DZywm/2PibXjdJDGMgJvZ7w3saNnB2LGtJiNfid0ZkzINp4XOYbp9NQQnoMLiPBXfNpFLztEYMwd9IY4S40cVO1fpjKr8guEs2/yIlMerXvEs+bUBjTwRDtSET5X+URSbFkYb/aDwvxJdbkaYK/aKBO88mUywL1FcXUZenGmTl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DNCZ7fRS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D5BC433C7;
+	Tue, 23 Jan 2024 17:27:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706030710;
-	bh=/+SkSMXEvZL7JnAfLyB9WU4yUTd/UNiUILkQDm11AUc=;
+	s=k20201202; t=1706030839;
+	bh=x/RapcgkYrZ4n19ONhCZoeWczR9Ix/nCHIHmNGyqH4c=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SsyQZ1ClhmUW+4PfVIea5D+atCt9xW/phWP1Ii1PSiS2YlGgTnee/sGoouvb08n27
-	 IQxIk1u6H7IGHU8tvDzFP8iP6hiX7O7H9Jlzo0Jyk0Rp8T+Qa9veHJcoTbuYRdHPZI
-	 JRej4AbG0ztvIkkb5xW1Cwfw8XTYUoq4hbDrIuywtDECiBc8j+2a+VCj3vu3kmM39+
-	 Zv0NTmnqbQ/CFztrkqZjrQlYYcicdi1CDzv0bZV1d3NH0JbcyBL6zRWY3dWMO8rcKY
-	 oBdgxmFjhkwQQDGk1SzUDn+z9bcG7eFRIy6xW41Y5xf76ktmfZjLX7zIqMCwLeMRt5
-	 mZilSAZa+7QKQ==
-Date: Tue, 23 Jan 2024 17:25:04 +0000
+	b=DNCZ7fRSS8wM7eJBgeIxDdpmfWk2pUbMREhEl1lbnJRRtNT+z8AQuz5BbxDjpvQtQ
+	 VhcawpcmgSJYGPrSLFHnfxCBpS3tJSP+FfhXKfNHK3CMcrfQu3cDqZzZbqivUxhSyt
+	 +XY8qgPysam2pvlAkGvXN32dhasHg3Mnb5zBY4QbAD8W+XahQ2rsNagyxHodFBihUK
+	 biwTnXnwlDZzcLwKkUlCQK3Rb/JSsIWqtwk0pKYUZd6KwngGenefDTuOQVh03s4gL7
+	 4g496QDuvH136IIez1h4JSWthsq/D49mc7VMeVwwOu+6Tsymu05912/vPP0cIxXlcy
+	 j+An4F2+MP1dQ==
+Date: Tue, 23 Jan 2024 17:27:13 +0000
 From: Conor Dooley <conor@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
+To: Frank Li <Frank.Li@nxp.com>
+Cc: thinh.nguyen@synopsys.com, robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	heikki.krogerus@linux.intel.com, matthias.bgg@gmail.com,
-	dmitry.baryshkov@linaro.org, neil.armstrong@linaro.org,
-	andersson@kernel.org, nathan@kernel.org, luca.weiss@fairphone.com,
-	tianping.fang@mediatek.com, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v3 1/2] dt-bindings: usb: Introduce ITE IT5205 Alt. Mode
- Passive MUX
-Message-ID: <20240123-doozy-sureness-ce1bb4d555a2@spud>
-References: <20240122110446.140226-1-angelogioacchino.delregno@collabora.com>
- <20240122110446.140226-2-angelogioacchino.delregno@collabora.com>
+	balbi@kernel.org, devicetree@vger.kernel.org,
+	gregkh@linuxfoundation.org, imx@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	mark.rutland@arm.com, mathias.nyman@intel.com, pku.leo@gmail.com,
+	sergei.shtylyov@cogentembedded.com
+Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Add system bus request info
+Message-ID: <20240123-poking-geography-33be2b5ae578@spud>
+References: <20240123170206.3702413-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,39 +61,97 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="/XCj4OvKvckKfaBz"
+	protocol="application/pgp-signature"; boundary="uT6qsPdC97JrYgBl"
 Content-Disposition: inline
-In-Reply-To: <20240122110446.140226-2-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240123170206.3702413-1-Frank.Li@nxp.com>
 
 
---/XCj4OvKvckKfaBz
+--uT6qsPdC97JrYgBl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 22, 2024 at 12:04:45PM +0100, AngeloGioacchino Del Regno wrote:
-> Introduce a binding for the ITE IT5205 Alternate Mode Passive MUX,
-> used for connecting, disconnecting and switching orientation and
-> control the SBU signals for alternate modes on USB Type-C ports.
->=20
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
+On Tue, Jan 23, 2024 at 12:02:05PM -0500, Frank Li wrote:
+> Add device tree binding allow platform overwrite default value of *REQIN =
+in
+> GSBUSCFG0.
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Why might a platform actually want to do this? Why does this need to be
+set at the board level and being aware of which SoC is in use is not
+sufficient for the driver to set the correct values?
 
-Cheers,
+Thanks,
 Conor.
 
---/XCj4OvKvckKfaBz
+>=20
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  .../devicetree/bindings/usb/snps,dwc3.yaml    | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Docum=
+entation/devicetree/bindings/usb/snps,dwc3.yaml
+> index 8f5d250070c78..43e7fea3f6798 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -439,6 +439,42 @@ properties:
+>      items:
+>        enum: [1, 4, 8, 16, 32, 64, 128, 256]
+> =20
+> +  snps,des-wr-reqinfo:
+> +    description: Value for DESEWRREQIN of GSBUSCFG0 register.
+> +      ----------------------------------------------------------------
+> +       MBUS_TYPE| bit[3]       |bit[2]       |bit[1]     |bit[0]
+> +      ----------------------------------------------------------------
+> +       AHB      |Cacheable     |Bufferable   |Privilegge |Data
+> +       AXI3     |Write Allocate|Read Allocate|Cacheable  |Bufferable
+> +       AXI4     |Allocate Other|Allocate     |Modifiable |Bufferable
+> +       AXI4     |Other Allocate|Allocate     |Modifiable |Bufferable
+> +       Native   |Same as AXI   |Same as AXI  |Same as AXI|Same as AXI
+> +      ----------------------------------------------------------------
+> +      The AHB, AXI3, AXI4, and PCIe busses use different names for certa=
+in
+> +      signals, which have the same meaning:
+> +      Bufferable =3D Posted
+> +      Cacheable =3D Modifiable =3D Snoop (negation of No Snoop)
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    maxItem: 15
+> +
+> +  snps,des-rd-reqinfo:
+> +    description: Value for DESRDREQIN of GSBUSCFG0 register. ref
+> +      snps,des-wr-reqinfo
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    maxItem: 15
+> +
+> +  snps,dat-wr-reqinfo:
+> +    description: Value for DATWRREQIN of GSBUSCFG0 register. ref
+> +      snps,des-wr-reqinfo
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    maxItem: 15
+> +
+> +  snps,des-wr-reqinfo:
+> +    description: Value for DATWRREQIN of GSBUSCFG0 register. ref
+> +      snps,des-wr-reqinfo
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    maxItem: 15
+> +
+>    num-hc-interrupters:
+>      maximum: 8
+>      default: 1
+> --=20
+> 2.34.1
+>=20
+
+--uT6qsPdC97JrYgBl
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZa/2cAAKCRB4tDGHoIJi
-0sYQAQDQyqLUgZBdQdVEY6xff7eoCvbdU/jaARvKcKaPn1vdDAEA/hmLVL/fRr56
-YR12yOvgBBZRx4C0x/9NuNpVPSbnbgU=
-=HBIR
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZa/28QAKCRB4tDGHoIJi
+0rqJAQC4jL1FYVAySaeVuLvke0qQEQUpG/jJ7OxO64ZUcXl6nwD+In3AVAC2usfT
+M0thzO+OawvnE9qiNWUlsEyPa511vQY=
+=lZL6
 -----END PGP SIGNATURE-----
 
---/XCj4OvKvckKfaBz--
+--uT6qsPdC97JrYgBl--
 
