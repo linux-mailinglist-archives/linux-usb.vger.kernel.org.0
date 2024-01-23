@@ -1,184 +1,124 @@
-Return-Path: <linux-usb+bounces-5407-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5408-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA13D8391C0
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 15:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DE0F8391C4
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 15:54:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59666284752
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 14:51:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAA26281133
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 14:54:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD2C5EE8E;
-	Tue, 23 Jan 2024 14:51:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="4I66temL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45BF95A110;
+	Tue, 23 Jan 2024 14:54:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083DA50271;
-	Tue, 23 Jan 2024 14:51:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 7A4381C14
+	for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 14:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706021492; cv=none; b=boq8GU4r3MbDya0ztrMMjbljZ+6fhJzA904OL5xNhpSPnfU0z3FNUWj/0bqNqhX1sus/skPi8vuplp7VpKVg1IOnuFB1EiAaQcZETAqUeWGwyMO3Vaj+q6ki0fqREus2HArOrAQuXw8ZN3emp+QeDxyq8sb8I3VTh4GEIw4raAg=
+	t=1706021647; cv=none; b=Tko+tCtUYTwcqbSQH+mJy4SqvIIJXvYt1Nss5RQXYFNQvodAMMs1HxKQUbbBfnrAD6jsmITbtdI+zQWaRG0IjvSvWT2GrCaKV1PncOcXU30mmC1oCqZEWXx7EAIPzqb1PAdxMUUliTd+btIyLtMp7dIyKtweKVDSKQ2vkBqd514=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706021492; c=relaxed/simple;
-	bh=wEw+KYIsI+l2yNlbx9fd4O3Ky0EddoloG2ibdw/iJBA=;
+	s=arc-20240116; t=1706021647; c=relaxed/simple;
+	bh=VYHj1M5T/Bui4JZ9Ta1SZsMff8aHylVjUkZDtFoZCnI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DiuHJE2Z3fb3Qca8MDNYfCNTOuKgtfMc4I4hm8WRQ+gDivpuemNeii6vFTq62NbeL/DaSU1zJ/J+VIYMctjGl11/HKOqzOlPFNbjbbEaul27ZjP/2ZNc8lRyDMiORbSDcPi7LVM9pNZhmeLHFCXerXo/Pl/MlrahSRswKjhNCJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=4I66temL; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706021488;
-	bh=wEw+KYIsI+l2yNlbx9fd4O3Ky0EddoloG2ibdw/iJBA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=4I66temLW7YZ/eOjiSK0m5zzsPhHoocpYfI5SF81LwSYVevO1XceIsj6e4G1UfiJZ
-	 5TqbcaXxf49DgUjaBqJPD5IxKgYkp+2lIUgRUkPx5P2qEudzs/Um4tuAVcxKeEv7nV
-	 CK6sA2J/ieXPk+ufcNaplofq5PW3T6FM6k8vNvFS+6Ej+HUErWAQ9CA9ybCAnu+5Jq
-	 LwS2fzBbOE7o6rl70wV+/3Avr16hg3XuSt8v9xaRuVjOuf7kQhEYwl4c6niegPyh4B
-	 CvrHlDBMMbxi3sz9XFsLOLQ+46Y/PXa++OOFpc2RFJ5gUYCligNHza2A1lNVJUjbEN
-	 uFYyCs25J4qyA==
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 4370337820AD;
-	Tue, 23 Jan 2024 14:51:21 +0000 (UTC)
-Date: Tue, 23 Jan 2024 11:50:49 -0300
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, kernelci@lists.linux.dev,
-	kernel@collabora.com, Tim Bird <Tim.Bird@sony.com>,
-	linux-pci@vger.kernel.org, David Gow <davidgow@google.com>,
-	linux-kselftest@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Doug Anderson <dianders@chromium.org>, linux-usb@vger.kernel.org,
-	Saravana Kannan <saravanak@google.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Guenter Roeck <groeck@chromium.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] kselftest: devices: Add sample board file for XPS
- 13 9300
-Message-ID: <2ea14eb2-d5b3-40b2-af4b-d14fe398886f@notapiano>
-References: <20240122-discoverable-devs-ksft-v4-0-d602e1df4aa2@collabora.com>
- <20240122-discoverable-devs-ksft-v4-3-d602e1df4aa2@collabora.com>
- <7aa0df3d-ae9d-414d-ad7f-ed7588e70f3e@collabora.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=VwSZvSlGya64qWh4Y0jgIWC5lY73nbeniat2Zra42JKhvNu5x1uKon7FUZZkVaUds1gn0KEyNNFcBLtJac8cW8LAexbR1X23TppoqDCepnQtaai14K2MRT0w/kht1QSomVWoB4dVDfqKhVG/DTjJYZQHAy2db3VK+iXY3VfiU1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 177528 invoked by uid 1000); 23 Jan 2024 09:53:57 -0500
+Date: Tue, 23 Jan 2024 09:53:57 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: yuan linyu <yuanlinyu@hihonor.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  linux-usb@vger.kernel.org, stable <stable@kernel.org>
+Subject: Re: [PATCH v3] usb: f_mass_storage: forbid async queue when shutdown
+ happen
+Message-ID: <9255cda3-f7fa-4e33-a0ce-83db6e30cfe0@rowland.harvard.edu>
+References: <20240123034829.3848409-1-yuanlinyu@hihonor.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7aa0df3d-ae9d-414d-ad7f-ed7588e70f3e@collabora.com>
+In-Reply-To: <20240123034829.3848409-1-yuanlinyu@hihonor.com>
 
-On Tue, Jan 23, 2024 at 12:08:22PM +0100, AngeloGioacchino Del Regno wrote:
-> Il 22/01/24 19:53, Nícolas F. R. A. Prado ha scritto:
-> > Add a sample board file describing the file's format and with the list
-> > of devices expected to be probed on the XPS 13 9300 machine as an
-> > example x86 platform.
-> > 
-> > Test output:
-> > 
-> > TAP version 13
-> > Using board file: boards/Dell Inc.,XPS 13 9300.yaml
-> > 1..22
-> > ok 1 /pci-controller/14.0/usb2-controller/9/camera.device
-> > ok 2 /pci-controller/14.0/usb2-controller/9/camera.0.driver
-> > ok 3 /pci-controller/14.0/usb2-controller/9/camera.1.driver
-> > ok 4 /pci-controller/14.0/usb2-controller/9/camera.2.driver
-> > ok 5 /pci-controller/14.0/usb2-controller/9/camera.3.driver
-> > ok 6 /pci-controller/14.0/usb2-controller/10/bluetooth.device
-> > ok 7 /pci-controller/14.0/usb2-controller/10/bluetooth.0.driver
-> > ok 8 /pci-controller/14.0/usb2-controller/10/bluetooth.1.driver
-> > ok 9 /pci-controller/2.0/gpu.device
-> > ok 10 /pci-controller/2.0/gpu.driver
-> > ok 11 /pci-controller/4.0/thermal.device
-> > ok 12 /pci-controller/4.0/thermal.driver
-> > ok 13 /pci-controller/12.0/sensors.device
-> > ok 14 /pci-controller/12.0/sensors.driver
-> > ok 15 /pci-controller/14.3/wifi.device
-> > ok 16 /pci-controller/14.3/wifi.driver
-> > ok 17 /pci-controller/1d.0/0.0/ssd.device
-> > ok 18 /pci-controller/1d.0/0.0/ssd.driver
-> > ok 19 /pci-controller/1d.7/0.0/sdcard-reader.device
-> > ok 20 /pci-controller/1d.7/0.0/sdcard-reader.driver
-> > ok 21 /pci-controller/1f.3/audio.device
-> > ok 22 /pci-controller/1f.3/audio.driver
-> > Totals: pass:22 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > 
-> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > ---
-> >   .../devices/boards/Dell Inc.,XPS 13 9300.yaml      | 40 ++++++++++++++++++++++
-> >   1 file changed, 40 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml b/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml
-> > new file mode 100644
-> > index 000000000000..ff932eb19f0b
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/devices/boards/Dell Inc.,XPS 13 9300.yaml	
-> > @@ -0,0 +1,40 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +#
-> > +# This is the device definition for the XPS 13 9300.
-> > +# The filename "Dell Inc.,XPS 13 9300" was chosen following the format
-> > +# "Vendor,Product", where Vendor comes from
-> > +# /sys/devices/virtual/dmi/id/sys_vendor, and Product comes from
-> > +# /sys/devices/virtual/dmi/id/product_name.
-> > +#
-> > +# See google,spherion.yaml for more information.
+On Tue, Jan 23, 2024 at 11:48:29AM +0800, yuan linyu wrote:
+> When write UDC to empty and unbind gadget driver from gadget device, it is
+> possible that there are many queue failures for mass storage function.
 > 
-> What if - instead of taking google,spherion.yaml as an example - you create a new
-> file named something like
+> The root cause is mass storage main thread alaways try to queue request to
+> receive a command from host if running flag is on, on platform like dwc3,
+> if pull down called, it will not queue request again and return
+> -ESHUTDOWN, but it not affect running flag of mass storage function.
 > 
-> "example,device.yaml"
+> Check return code from mass storage function and clear running flag if it
+> is -ESHUTDOWN, also indicate start in/out transfer failure to break loops.
 > 
-> that would be a fantasy device, bringing examples for all .. or most of .. the
-> currently supported types/devices?
-> 
-> You would also move the nice documentation that you wrote in spherion.yaml to the
-> new example,device.yaml and ask to refer to that instead in all of the real device
-> specific definitions.
-> 
-> # SPDX-License-Identifier: GPL-2.0 <--- (GPL-2.0 OR MIT) like device trees perhaps?
-> #
-> # This is the device definition for the Example Device
-> # The filename "Example Device" was chosen following the format
-> # "Vendor,Product", where:
-> #  - Vendor is "Example" and comes from /sys/devices/virtual/dmi/id/sys_vendor
-> #  - Product is "Device" and comes from /sys/devices/virtual/dmi/id/product_name
-> #
-> # ....the rest of the blurb goes here
-> #
-> 
-> - type : .... this that the other
->   devices:
->     - the least amount of device descriptions that you can use for documenting how
->       to write this stuff :-)
-> 
-> Anything against that?
+> Cc: stable <stable@kernel.org>
+> Signed-off-by: yuan linyu <yuanlinyu@hihonor.com>
+> ---
+> v3: add Cc: stable <stable@kernel.org>
+> v2: fix comments, only change coding style, no function change
+>     https://lore.kernel.org/linux-usb/20240123032641.3846713-1-yuanlinyu@hihonor.com/
+> v1: follow Alan suggestion, only limit change in f_mass_storage
+>     https://lore.kernel.org/linux-usb/20240122105138.3759477-1-yuanlinyu@hihonor.com/
+> RFC: https://lore.kernel.org/linux-usb/5f4c9d8b6e0e4e73a5b3b1540a500b6a@hihonor.com/T/#t
 
-That'd also work. Though I feel like a single example file for both a DT-based
-and an ACPI-based platform might get unnecessarily confusing (given the
-different way for identifying the machine - DMI vs DT compatible - and for
-identifying the root level controller - ACPI UID vs DT MMIO).
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
-I also feel like a real machine example is helpful to have.
-
-In my opinion, your suggestion would make much more sense - and be needed even -
-if we had several machine files in this directory, so that the documentation
-stands out among them. However the feedback that I got from Shuah during
-Plumbers was that maintaining per-machine files in-tree wasn't going to happen.
-So these two files serve as the documentation, with real-life examples, that
-other machines could build upon in a separate repository.
-
-Thanks,
-Nícolas
+>  drivers/usb/gadget/function/f_mass_storage.c | 20 ++++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+> index 722a3ab2b337..c265a1f62fc1 100644
+> --- a/drivers/usb/gadget/function/f_mass_storage.c
+> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> @@ -545,21 +545,37 @@ static int start_transfer(struct fsg_dev *fsg, struct usb_ep *ep,
+>  
+>  static bool start_in_transfer(struct fsg_common *common, struct fsg_buffhd *bh)
+>  {
+> +	int rc;
+> +
+>  	if (!fsg_is_set(common))
+>  		return false;
+>  	bh->state = BUF_STATE_SENDING;
+> -	if (start_transfer(common->fsg, common->fsg->bulk_in, bh->inreq))
+> +	rc = start_transfer(common->fsg, common->fsg->bulk_in, bh->inreq);
+> +	if (rc) {
+>  		bh->state = BUF_STATE_EMPTY;
+> +		if (rc == -ESHUTDOWN) {
+> +			common->running = 0;
+> +			return false;
+> +		}
+> +	}
+>  	return true;
+>  }
+>  
+>  static bool start_out_transfer(struct fsg_common *common, struct fsg_buffhd *bh)
+>  {
+> +	int rc;
+> +
+>  	if (!fsg_is_set(common))
+>  		return false;
+>  	bh->state = BUF_STATE_RECEIVING;
+> -	if (start_transfer(common->fsg, common->fsg->bulk_out, bh->outreq))
+> +	rc = start_transfer(common->fsg, common->fsg->bulk_out, bh->outreq);
+> +	if (rc) {
+>  		bh->state = BUF_STATE_FULL;
+> +		if (rc == -ESHUTDOWN) {
+> +			common->running = 0;
+> +			return false;
+> +		}
+> +	}
+>  	return true;
+>  }
+>  
+> -- 
+> 2.25.1
+> 
 
