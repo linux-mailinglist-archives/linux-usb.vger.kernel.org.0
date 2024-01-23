@@ -1,147 +1,197 @@
-Return-Path: <linux-usb+bounces-5422-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5423-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31FD48397DB
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 19:38:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D600583980A
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 19:43:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5EEFB28868
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 18:38:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 151F91C27204
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 18:43:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE3A82D95;
-	Tue, 23 Jan 2024 18:37:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC69982D63;
+	Tue, 23 Jan 2024 18:42:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k8BjuF13"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QgzdAMJf"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1841F81AAA;
-	Tue, 23 Jan 2024 18:37:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CF2823BC;
+	Tue, 23 Jan 2024 18:42:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706035056; cv=none; b=jO19DbnENaU+a5vEOQ2IeEKgVGLcQHSr2mGB4+3xbhqIuUv9WDT43GMT30hmheNF054PZrzoHzzz1SIxSITnFhlbwMg2mV405G4SBvs+UCLiDHjdwPJ383pQPbHDsAugSFUeOW3cIwYxWBpWJvBcvlGN+uvahIzCBiaAjzWbX7c=
+	t=1706035353; cv=none; b=UcW17QE3e4b0YTpj/rFzozsLa/taHMsmz635zN2JIKxklu1Tm2K80kCe+S57uzj45Pbq2mU/jlc8hVtu8/YgP1TORrZ2IM/ZdJ0JXHRYYdgDU7glCqGfrH3hvjh1PSUd7kZ4jsWETV7I5Or1XbRXk8lFbCu2OQlJfL8bipntkH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706035056; c=relaxed/simple;
-	bh=8m2Zq7ijQyatx8o/IUFi8SWV/Zz6InYrOWTjszWImjM=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=M3uoS4n9q/qR+gS5QfClT/EFMTd3ui/nHe2gDLIJ6rwY+MfAsCKPudEmFL1LKvACw+DLrId5gI6ycpXhFvbuGTGy+ipvJIwLi/OmjB39K8cg8VGKEL3f2GYB4lZT1G/yBzt33Wnh9+2ljKxi7bygI6Alg435V17vjZx9KOaRmj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k8BjuF13; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67BD4C433C7;
-	Tue, 23 Jan 2024 18:37:35 +0000 (UTC)
+	s=arc-20240116; t=1706035353; c=relaxed/simple;
+	bh=L5CiyhJ7VmjD8jqZZfrKBqOIr3FlCEqBLQ1Y4nvSv68=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GNqlk3FRi3/UtTaGrCsKRUWX3FPxRNl2EtitgI9ONcXL4l+kPkhjV73jAShLAGLeJPY/u6oeRcIXOG5GvSCuVJXBrE3c3EvLJGhAcReIcei4ktTBfozbhGck69GFajJ6rcQZrZP1QL3D4o+nx9L/94l2jX8AD3OI91qYXjd7tQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QgzdAMJf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87EC4C433F1;
+	Tue, 23 Jan 2024 18:42:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706035055;
-	bh=8m2Zq7ijQyatx8o/IUFi8SWV/Zz6InYrOWTjszWImjM=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=k8BjuF13zgdh7RVsunlDv9qYUH3Opz/bXKNc5HpdI6t5cM6toGctWAIgC2FQxi1Zy
-	 3C35TX3vzPGjgtW86pQPSJhN33sTVohzSWpMiqaQey85iZEeax8GBG10Y5zGa9tdv0
-	 LLIWKIs1W4ugvkLN2eRz56LqFEE8coosczHfjC0TGeM0YMxaC23JW8HxzDJ9yPuQNm
-	 YmjVpBVKsWi0d3aGyqoPPRpWWRNdJSdj/Av5waFT3p8ybF+NbBmBHDx6LS1ulvJhbV
-	 CFjyUHM9+Oaf/RmaWnAP/WZ9vv4iPwMJ53pzpdAAFkIJhdDqqlYsNE5PqvS0qYICFu
-	 oKlsbkBdBgArw==
-Date: Tue, 23 Jan 2024 12:37:34 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1706035352;
+	bh=L5CiyhJ7VmjD8jqZZfrKBqOIr3FlCEqBLQ1Y4nvSv68=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QgzdAMJfpJGkJP1P9EMq4+0ZzDYohgQmMHPDjUvtqtXyx5DMV15NtBUl0PnG1XST9
+	 beJUdItmGbSaGAIfuZG2DyrcA8oukAqMR7wItzJ3+ut+2T4cV7PJXhKK3ItVmSYw7f
+	 l5nrwQ5CJ64qBT8arwFKilK9Q4E2zkIvTRjRXCgUIh1i9YHKA60Z6IHTgVPOolfIUa
+	 gV0QJ/uxDzFuz/6byKUvH7hH9BD18SrRJtyaERw9At4bbXpPEkoVerXMD1Ny5/2pmk
+	 kzdc153g6ZoydVJyXhi2HUbk5LgyBYuhb0ElD4/fKbP84+7bP3XKPGuOkvAUI7fhrg
+	 NTUHIMlpHqwCg==
+Date: Tue, 23 Jan 2024 18:42:27 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Frank Li <Frank.li@nxp.com>
+Cc: thinh.nguyen@synopsys.com, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	balbi@kernel.org, devicetree@vger.kernel.org,
+	gregkh@linuxfoundation.org, imx@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	mark.rutland@arm.com, mathias.nyman@intel.com, pku.leo@gmail.com,
+	sergei.shtylyov@cogentembedded.com
+Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Add system bus request info
+Message-ID: <20240123-nanometer-atlantic-6465b270043a@spud>
+References: <20240123170206.3702413-1-Frank.Li@nxp.com>
+ <20240123-poking-geography-33be2b5ae578@spud>
+ <Za/8J8MDJaZEPEKO@lizhi-Precision-Tower-5810>
+ <20240123-anew-lilly-0d645bdbfb30@spud>
+ <Za//LX9U6QG5A5NW@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: imx@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org, 
- mark.rutland@arm.com, devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
- robh+dt@kernel.org, conor+dt@kernel.org, balbi@kernel.org, 
- mathias.nyman@intel.com, sergei.shtylyov@cogentembedded.com, 
- thinh.nguyen@synopsys.com, gregkh@linuxfoundation.org, pku.leo@gmail.com, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20240123170206.3702413-1-Frank.Li@nxp.com>
-References: <20240123170206.3702413-1-Frank.Li@nxp.com>
-Message-Id: <170603505074.1430842.17793534991296017470.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Add system bus request
- info
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="gjo83bA3bLxaSiQd"
+Content-Disposition: inline
+In-Reply-To: <Za//LX9U6QG5A5NW@lizhi-Precision-Tower-5810>
 
 
-On Tue, 23 Jan 2024 12:02:05 -0500, Frank Li wrote:
-> Add device tree binding allow platform overwrite default value of *REQIN in
-> GSBUSCFG0.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml    | 36 +++++++++++++++++++
->  1 file changed, 36 insertions(+)
-> 
+--gjo83bA3bLxaSiQd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+On Tue, Jan 23, 2024 at 01:02:21PM -0500, Frank Li wrote:
+> On Tue, Jan 23, 2024 at 05:51:48PM +0000, Conor Dooley wrote:
+> > On Tue, Jan 23, 2024 at 12:49:27PM -0500, Frank Li wrote:
+> > > On Tue, Jan 23, 2024 at 05:27:13PM +0000, Conor Dooley wrote:
+> > > > On Tue, Jan 23, 2024 at 12:02:05PM -0500, Frank Li wrote:
+> > > > > Add device tree binding allow platform overwrite default value of=
+ *REQIN in
+> > > > > GSBUSCFG0.
+> > > >=20
+> > > > Why might a platform actually want to do this? Why does this need t=
+o be
+> > > > set at the board level and being aware of which SoC is in use is not
+> > > > sufficient for the driver to set the correct values?
+> > >=20
+> > > In snps,dwc3.yaml, there are already similary proptery, such as
+> > > snps,incr-burst-type-adjustment. Use this method can keep whole dwc3 =
+usb
+> > > driver keep consistent. And not all platform try enable hardware
+> > > dma_cohenrence. It is configable for difference platform.
+> >=20
+> > When you say "platform", what do you mean? I understand that term to
+> > mean a combination of board, soc and firmware.
+>=20
+> In my company's environment, "platform" is "board". I will use "board" in
+> future. Is it big difference here?
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:447:43: [error] syntax error: mapping values are not allowed here (syntax)
+Nah, that's close enough that it makes no difference here.
 
-dtschema/dtc warnings/errors:
-make[2]: *** Deleting file 'Documentation/devicetree/bindings/usb/snps,dwc3.example.dts'
-Documentation/devicetree/bindings/usb/snps,dwc3.yaml:447:43: mapping values are not allowed in this context
-make[2]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/usb/snps,dwc3.example.dts] Error 1
-make[2]: *** Waiting for unfinished jobs....
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml:
-mapping values are not allowed in this context
-  in "<unicode string>", line 447, column 43
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml:
-mapping values are not allowed in this context
-  in "<unicode string>", line 447, column 43
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml:
-mapping values are not allowed in this context
-  in "<unicode string>", line 447, column 43
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml:
-mapping values are not allowed in this context
-  in "<unicode string>", line 447, column 43
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml:
-mapping values are not allowed in this context
-  in "<unicode string>", line 447, column 43
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml:
-mapping values are not allowed in this context
-  in "<unicode string>", line 447, column 43
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml:
-mapping values are not allowed in this context
-  in "<unicode string>", line 447, column 43
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml:
-mapping values are not allowed in this context
-  in "<unicode string>", line 447, column 43
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml:
-mapping values are not allowed in this context
-  in "<unicode string>", line 447, column 43
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/realtek,rtd-dwc3.yaml:
-mapping values are not allowed in this context
-  in "<unicode string>", line 447, column 43
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/fsl,imx8mq-dwc3.yaml:
-mapping values are not allowed in this context
-  in "<unicode string>", line 447, column 43
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml:
-mapping values are not allowed in this context
-  in "<unicode string>", line 447, column 43
-./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:447:43: mapping values are not allowed in this context
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml: ignoring, error parsing file
-make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1428: dt_binding_check] Error 2
-make: *** [Makefile:240: __sub-make] Error 2
+I'd still like an explanation for why a platform would need to actually
+set these properties though, and why information about coherency cannot
+be determined from whether or not the boss the usb controller is on is
+communicated to be dma coherent via the existing devicetree properties
+for that purpose.
 
-doc reference errors (make refcheckdocs):
+Thanks,
+Conor.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240123170206.3702413-1-Frank.Li@nxp.com
+> > > > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > > > > ---
+> > > > >  .../devicetree/bindings/usb/snps,dwc3.yaml    | 36 +++++++++++++=
+++++++
+> > > > >  1 file changed, 36 insertions(+)
+> > > > >=20
+> > > > > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml=
+ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > > > index 8f5d250070c78..43e7fea3f6798 100644
+> > > > > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > > > @@ -439,6 +439,42 @@ properties:
+> > > > >      items:
+> > > > >        enum: [1, 4, 8, 16, 32, 64, 128, 256]
+> > > > > =20
+> > > > > +  snps,des-wr-reqinfo:
+> > > > > +    description: Value for DESEWRREQIN of GSBUSCFG0 register.
+> > > > > +      ----------------------------------------------------------=
+------
+> > > > > +       MBUS_TYPE| bit[3]       |bit[2]       |bit[1]     |bit[0]
+> > > > > +      ----------------------------------------------------------=
+------
+> > > > > +       AHB      |Cacheable     |Bufferable   |Privilegge |Data
+> > > > > +       AXI3     |Write Allocate|Read Allocate|Cacheable  |Buffer=
+able
+> > > > > +       AXI4     |Allocate Other|Allocate     |Modifiable |Buffer=
+able
+> > > > > +       AXI4     |Other Allocate|Allocate     |Modifiable |Buffer=
+able
+> > > > > +       Native   |Same as AXI   |Same as AXI  |Same as AXI|Same a=
+s AXI
+> > > > > +      ----------------------------------------------------------=
+------
+> > > > > +      The AHB, AXI3, AXI4, and PCIe busses use different names f=
+or certain
+> > > > > +      signals, which have the same meaning:
+> > > > > +      Bufferable =3D Posted
+> > > > > +      Cacheable =3D Modifiable =3D Snoop (negation of No Snoop)
+> > > > > +    $ref: /schemas/types.yaml#/definitions/uint8
+> > > > > +    maxItem: 15
+> > > > > +
+> > > > > +  snps,des-rd-reqinfo:
+> > > > > +    description: Value for DESRDREQIN of GSBUSCFG0 register. ref
+> > > > > +      snps,des-wr-reqinfo
+> > > > > +    $ref: /schemas/types.yaml#/definitions/uint8
+> > > > > +    maxItem: 15
+> > > > > +
+> > > > > +  snps,dat-wr-reqinfo:
+> > > > > +    description: Value for DATWRREQIN of GSBUSCFG0 register. ref
+> > > > > +      snps,des-wr-reqinfo
+> > > > > +    $ref: /schemas/types.yaml#/definitions/uint8
+> > > > > +    maxItem: 15
+> > > > > +
+> > > > > +  snps,des-wr-reqinfo:
+> > > > > +    description: Value for DATWRREQIN of GSBUSCFG0 register. ref
+> > > > > +      snps,des-wr-reqinfo
+> > > > > +    $ref: /schemas/types.yaml#/definitions/uint8
+> > > > > +    maxItem: 15
+> > > > > +
+> > > > >    num-hc-interrupters:
+> > > > >      maximum: 8
+> > > > >      default: 1
+> > > > > --=20
+> > > > > 2.34.1
+> > > > >=20
+> > >=20
+> > >=20
+>=20
+>=20
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+--gjo83bA3bLxaSiQd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+-----BEGIN PGP SIGNATURE-----
 
-pip3 install dtschema --upgrade
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbAIkwAKCRB4tDGHoIJi
+0l5GAP93pP2+n9c7Ngq/2+2ZuBy0n/72VkccR8Xbv37y/t5J7AEA8kXs+aWNxxUF
+VyPexfs8f5y1gAB5zsysERG64YvLhgk=
+=ndMa
+-----END PGP SIGNATURE-----
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+--gjo83bA3bLxaSiQd--
 
