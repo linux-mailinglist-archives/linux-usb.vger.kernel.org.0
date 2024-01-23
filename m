@@ -1,92 +1,129 @@
-Return-Path: <linux-usb+bounces-5390-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5391-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A5AA8385EF
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 04:10:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56E3C8385F8
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 04:27:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 949D3B227AC
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 03:10:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE0C9B22E01
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jan 2024 03:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7393AA47;
-	Tue, 23 Jan 2024 03:10:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 762B71102;
+	Tue, 23 Jan 2024 03:26:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mta21.hihonor.com (mta21.hihonor.com [81.70.160.142])
+Received: from mta22.hihonor.com (mta22.hihonor.com [81.70.192.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D1F810
-	for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 03:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.70.160.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E957811
+	for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 03:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.70.192.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705979447; cv=none; b=uO8z92E73aOz1ijDG5SfBv2OSajVkMmlg9qSxt9mQBM8mqamLVyLSeHXvvpVkDhWsuOF0HDG2/CGJlNoXKmX6VOIqzmH/TCKA4YqJ/aHvwpRYew/qyQE4P+Dviu929Mmj1Nc7GglzVAvlTMoUyXue8FIQmIDv9ZupTtT2dR8Wcc=
+	t=1705980415; cv=none; b=Vo342UD2Olopva3aPFcuD0lgBhM7Ul+QNrOI3EpV4zLYNIG1Im9h6IE9l2svlrUG5Iwb2J6s28ml2J/DyTj/EPwRlUtkegzrR2LGvoDrPdLQg5+fY0xRo8kFPdScupbsu0ZjrSy2742VBsgbaTVcnK7PaMTLwY4Scck3wcz4q6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705979447; c=relaxed/simple;
-	bh=Bea0PbtAXI3/oKnvHO6uTGWIIgCzkjKeDtcxhusDv+I=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=qvq03mr6SQ5/QfVEQeR618eqvOrV7TkZ1U708fikYGecbNku2u4RmjhWDhiLTBh3cSht0hTfOjV4E1YXCnPrjKh3hjoh9CJsdUCdvtJbHYDxhyZxBzI9PQ498PmaY+Q+CyvCsAlCtXzYx06SgMdArMT8CnZBbETa5ciEJuB7HNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hihonor.com; spf=pass smtp.mailfrom=hihonor.com; arc=none smtp.client-ip=81.70.160.142
+	s=arc-20240116; t=1705980415; c=relaxed/simple;
+	bh=GNhbphDXiTh7SUeLjYC9fWIaPmLrTQt1pk8CgdqvKgA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cYsqnQkIt48sNlMaV3lXXaGRRtmegWDOHNzZl2fYUWFWS4m94sTHtIOwvUEaW2dBidEZMEjRdm8e2Mbi3IwzQEDRjB/3AOr0KVJdtIjURCqq4oWPUzAgjOL9h8O3nfS0e3z2AFbyLvKJm1ATn777PKnVEzMuz357uBPtEFkY7/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hihonor.com; spf=pass smtp.mailfrom=hihonor.com; arc=none smtp.client-ip=81.70.192.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hihonor.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hihonor.com
-Received: from w002.hihonor.com (unknown [10.68.28.120])
-	by mta21.hihonor.com (SkyGuard) with ESMTPS id 4TJsXq3G36zYkyMG;
-	Tue, 23 Jan 2024 11:10:35 +0800 (CST)
-Received: from a005.hihonor.com (10.68.18.24) by w002.hihonor.com
- (10.68.28.120) with Microsoft SMTP Server (version=TLS1_2,
+Received: from w013.hihonor.com (unknown [10.68.26.19])
+	by mta22.hihonor.com (SkyGuard) with ESMTPS id 4TJsvQ5CtTzYlXcd;
+	Tue, 23 Jan 2024 11:26:42 +0800 (CST)
+Received: from w025.hihonor.com (10.68.28.69) by w013.hihonor.com
+ (10.68.26.19) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.25; Tue, 23 Jan
- 2024 11:10:36 +0800
-Received: from w025.hihonor.com (10.68.28.69) by a005.hihonor.com
- (10.68.18.24) with Microsoft SMTP Server (version=TLS1_2,
+ 2024 11:26:44 +0800
+Received: from localhost.localdomain (10.144.17.252) by w025.hihonor.com
+ (10.68.28.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.25; Tue, 23 Jan
- 2024 11:10:36 +0800
-Received: from w025.hihonor.com ([fe80::91d6:1999:eb63:3772]) by
- w025.hihonor.com ([fe80::91d6:1999:eb63:3772%14]) with mapi id
- 15.02.1258.025; Tue, 23 Jan 2024 11:10:36 +0800
-From: yuanlinyu <yuanlinyu@hihonor.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v1] usb: f_mass_storage: forbid async queue when shutdown
- happen
-Thread-Topic: [PATCH v1] usb: f_mass_storage: forbid async queue when shutdown
- happen
-Thread-Index: AQHaTSEELdtD4vmH30SnDi4ZJj0K57DlaUMAgAFO1hA=
-Date: Tue, 23 Jan 2024 03:10:36 +0000
-Message-ID: <367a2393807a4c37b3173f05c4a48622@hihonor.com>
-References: <20240122105138.3759477-1-yuanlinyu@hihonor.com>
- <1f890a94-0cec-4776-9af3-754f913ee8c4@rowland.harvard.edu>
-In-Reply-To: <1f890a94-0cec-4776-9af3-754f913ee8c4@rowland.harvard.edu>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ 2024 11:26:44 +0800
+From: yuan linyu <yuanlinyu@hihonor.com>
+To: Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, yuan linyu <yuanlinyu@hihonor.com>
+Subject: [PATCH v2] usb: f_mass_storage: forbid async queue when shutdown happen
+Date: Tue, 23 Jan 2024 11:26:41 +0800
+Message-ID: <20240123032641.3846713-1-yuanlinyu@hihonor.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: w002.hihonor.com (10.68.28.120) To w025.hihonor.com
+ (10.68.28.69)
 
-PiBGcm9tOiBBbGFuIFN0ZXJuIDxzdGVybkByb3dsYW5kLmhhcnZhcmQuZWR1Pg0KPiBTZW50OiBN
-b25kYXksIEphbnVhcnkgMjIsIDIwMjQgMTE6MDggUE0NCj4gVG86IHl1YW5saW55dSA8eXVhbmxp
-bnl1QGhpaG9ub3IuY29tPg0KPiBDYzogR3JlZyBLcm9haC1IYXJ0bWFuIDxncmVna2hAbGludXhm
-b3VuZGF0aW9uLm9yZz47DQo+IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDog
-UmU6IFtQQVRDSCB2MV0gdXNiOiBmX21hc3Nfc3RvcmFnZTogZm9yYmlkIGFzeW5jIHF1ZXVlIHdo
-ZW4NCj4gc2h1dGRvd24gaGFwcGVuDQo+IA0KPiA+IC0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC9m
-dW5jdGlvbi9mX21hc3Nfc3RvcmFnZS5jDQo+ID4gKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1
-bmN0aW9uL2ZfbWFzc19zdG9yYWdlLmMNCj4gPiBAQCAtNTQ1LDIxICs1NDUsNDEgQEAgc3RhdGlj
-IGludCBzdGFydF90cmFuc2ZlcihzdHJ1Y3QgZnNnX2RldiAqZnNnLCBzdHJ1Y3QNCj4gdXNiX2Vw
-ICplcCwNCj4gPg0KPiANCj4gVGhpcyBjb3VsZCBiZSB3cml0dGVuIG1vcmUgY2xlYW5seSBhczoN
-Cj4gDQo+IAlyYyA9IHN0YXJ0X3RyYW5zZmVyKGNvbW1vbi0+ZnNnLCBjb21tb24tPmZzZy0+YnVs
-a19pbiwgYmgtPmlucmVxKTsNCj4gCWlmIChyYykgew0KPiAJCWJoLT5zdGF0ZSA9IEJVRl9TVEFU
-RV9FTVBUWTsNCj4gCQlpZiAocmMgPT0gLUVTSFVURE9XTikgew0KPiAJCQljb21tb24tPnJ1bm5p
-bmcgPSAwOw0KPiAJCQlyZXR1cm4gZmFsc2U7DQo+IAkJfQ0KPiAJfQ0KPiAJcmV0dXJuIHRydWU7
-DQoNClN1cmUsIHdpbGwgc2VuZCB2Mi4NCg0KPiANCj4gQW5kIHRoZSBzYW1lIGdvZXMgZm9yIHN0
-YXJ0X291dF90cmFuc2ZlcigpLg0KPiANCj4gSGF2ZSB5b3UgdGVzdGVkIHRoaXM/ICBEb2VzIGl0
-IGRvIHdoYXQgeW91IHdhbnQ/DQoNClllcywgdGVzdCB0aGUgY2hhbmdlLCBiZWZvcmUgdGhlIGNo
-YW5nZSwgdGhlcmUgYXJlIG1hbnkgbG9ncywgbm93IG9ubHkgb25lIHRpbWUuDQoNCj4gDQo+IEFs
-YW4gU3Rlcm4NCg==
+When write UDC to empty and unbind gadget driver from gadget device, it is
+possible that there are many queue failures for mass storage function.
+
+The root cause is mass storage main thread alaways try to queue request to
+receive a command from host if running flag is on, on platform like dwc3,
+if pull down called, it will not queue request again and return
+-ESHUTDOWN, but it not affect running flag of mass storage function.
+
+Check return code from mass storage function and clear running flag if it
+is -ESHUTDOWN, also indicate start in/out transfer failure to break loops.
+
+Signed-off-by: yuan linyu <yuanlinyu@hihonor.com>
+---
+v2: fix comments, only change coding style, no function change
+v1: follow Alan suggestion, only limit change in f_mass_storage
+    https://lore.kernel.org/linux-usb/20240122105138.3759477-1-yuanlinyu@hihonor.com/
+RFC: https://lore.kernel.org/linux-usb/5f4c9d8b6e0e4e73a5b3b1540a500b6a@hihonor.com/T/#t
+
+ drivers/usb/gadget/function/f_mass_storage.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 722a3ab2b337..c265a1f62fc1 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -545,21 +545,37 @@ static int start_transfer(struct fsg_dev *fsg, struct usb_ep *ep,
+ 
+ static bool start_in_transfer(struct fsg_common *common, struct fsg_buffhd *bh)
+ {
++	int rc;
++
+ 	if (!fsg_is_set(common))
+ 		return false;
+ 	bh->state = BUF_STATE_SENDING;
+-	if (start_transfer(common->fsg, common->fsg->bulk_in, bh->inreq))
++	rc = start_transfer(common->fsg, common->fsg->bulk_in, bh->inreq);
++	if (rc) {
+ 		bh->state = BUF_STATE_EMPTY;
++		if (rc == -ESHUTDOWN) {
++			common->running = 0;
++			return false;
++		}
++	}
+ 	return true;
+ }
+ 
+ static bool start_out_transfer(struct fsg_common *common, struct fsg_buffhd *bh)
+ {
++	int rc;
++
+ 	if (!fsg_is_set(common))
+ 		return false;
+ 	bh->state = BUF_STATE_RECEIVING;
+-	if (start_transfer(common->fsg, common->fsg->bulk_out, bh->outreq))
++	rc = start_transfer(common->fsg, common->fsg->bulk_out, bh->outreq);
++	if (rc) {
+ 		bh->state = BUF_STATE_FULL;
++		if (rc == -ESHUTDOWN) {
++			common->running = 0;
++			return false;
++		}
++	}
+ 	return true;
+ }
+ 
+-- 
+2.25.1
+
 
