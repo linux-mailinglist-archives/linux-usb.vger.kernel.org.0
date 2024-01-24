@@ -1,55 +1,55 @@
-Return-Path: <linux-usb+bounces-5452-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5453-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57C5383A9FB
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 13:38:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1C3A83A9FE
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 13:39:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2251289696
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 12:38:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 005E11C21A1C
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 12:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0394176918;
-	Wed, 24 Jan 2024 12:38:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678AE77632;
+	Wed, 24 Jan 2024 12:39:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="l1BKyYk3"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2INuRfFn"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA8D77F00
-	for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 12:38:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA3763115;
+	Wed, 24 Jan 2024 12:39:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706099923; cv=none; b=XEpGseQXwV5TarV2mlyLT4s84Lg3Jhf6ba9+/C9wqOY1OyHvESI2kUfgsBDsU5oj7cxaTVH8iPGqWwRzhfUEAHVGjARoBmGZwpUW4JrOUuJ5rQSiAyFKQfoWUI1DE7xQlI9eh9C2cDABOneA/Mv0zfF6R9GK3vB95TRv1MSYiVg=
+	t=1706099975; cv=none; b=FMI8pHx3dx8/SJlcnOU6dYOPqYD+zB6TeOFP+6VYmF6daBrS8eZnQ1wil6G79d0dnguBB7IP2hOrfhSisvzsK3/khncd66wEDwC1EG4oRPGOSKuUriSJ5kL7B/Ets5MEsKwUYaSHmHDOGNQHNSRpRjSgvUyyveiH/fpvNq7nbuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706099923; c=relaxed/simple;
-	bh=s/6X1jfbWg5SPsmbbo6NpG2z8YgS6nM1iMLyo/sQf9k=;
+	s=arc-20240116; t=1706099975; c=relaxed/simple;
+	bh=DT2dSfQM53MVse2sH7HvlYHE0fuTvdEgf9x2x1K/5zk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PWMwAekqqgl8bOrZvzgOLfNOpyVUMOADnwBillrybrodzLKj0PpNJrXKtl2zh0ze4UorZTZuoo15Fln1tjS+GzV+yaq8ol4dtyCosp/YhHzwYFLe1SEP4fLt6dnsbFqaVjY4vpsubJ/tlHrWmu6KrH0Dux87WoaUK8/B+Hg6ZoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=l1BKyYk3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA833C433C7;
-	Wed, 24 Jan 2024 12:38:42 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=uMv9WZHsB7JfqEe7ru9YUKEuB65de60yLCqP+FdFodu/fE9PZMqU0/WC3ZI1NHnktL8hiNqlrWUSIttKuD0GztExhU44h61n0ECQJBtRuO7wYIXvkILgaoBdVq78jfvR+vlXm58jri+nxbPwzQAC0smu+hCPP5PiNZ1QVc811m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2INuRfFn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5678BC433C7;
+	Wed, 24 Jan 2024 12:39:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1706099923;
-	bh=s/6X1jfbWg5SPsmbbo6NpG2z8YgS6nM1iMLyo/sQf9k=;
+	s=korg; t=1706099974;
+	bh=DT2dSfQM53MVse2sH7HvlYHE0fuTvdEgf9x2x1K/5zk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l1BKyYk3t3S242RtPVLzYXnfXTp/P13eSHqezd0ABWgop+lPUP5iLv5VRm1kqL9vY
-	 qZe4vZoJmybRn80jhZIGNYwSaoNJ7IWURRY0FL3H6kYd41wBdv4RBmna6eHoQF9iqG
-	 JKsM6JxTJDIHlHUh7yXOlXyyOguWwTbEVQAtCk2s=
-Date: Wed, 24 Jan 2024 04:38:41 -0800
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: benjamin.tissoires@redhat.com, hdegoede@redhat.com,
-	ivan.orlov0322@gmail.com, heikki.krogerus@linux.intel.com,
-	linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com,
-	stern@rowland.harvard.edu
-Subject: Re: [PATCH v2 2/2] usb: roles: don't get/set_role() when
- usb_role_switch is unregistered
-Message-ID: <2024012442-delivery-knee-503a@gregkh>
-References: <20240124064554.1263339-1-xu.yang_2@nxp.com>
- <20240124064554.1263339-2-xu.yang_2@nxp.com>
+	b=2INuRfFn8Qo757RMaamIOHPEYP/YWCCNxCYismqwX1q4MoZr6uLgivNS5keK1iwb8
+	 t7XpkRK3+prykIGdYUumgESTTCx8ILoU0goBIC5JWDC83qQIKwC5LFJaKSvbYoU7bi
+	 9bLGAR9IMN039uYj4PGozMCZB/YfUoKFS+N+sY10=
+Date: Wed, 24 Jan 2024 04:39:33 -0800
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3-of-simple: Stop using
+ of_reset_control_array_get() directly
+Message-ID: <2024012400-subtitle-magnitude-45ff@gregkh>
+References: <20240124-dwc3-of-simple-reset-control-array-fix-v1-1-808182cc3f0e@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,49 +58,25 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240124064554.1263339-2-xu.yang_2@nxp.com>
+In-Reply-To: <20240124-dwc3-of-simple-reset-control-array-fix-v1-1-808182cc3f0e@pengutronix.de>
 
-On Wed, Jan 24, 2024 at 02:45:54PM +0800, Xu Yang wrote:
-> There is a possibility that usb_role_switch device is unregistered before
-> the user put usb_role_switch. In this case, the user may still want to
-> get/set_role() since the user can't sense the changes of usb_role_switch.
+On Wed, Jan 24, 2024 at 12:26:20PM +0100, Philipp Zabel wrote:
+> Use of_reset_control_array_get_optional_exclusive() instead, it is
+> implemented as:
 > 
-> This will add a flag to show if usb_role_switch is already registered and
-> avoid unwanted behaviors.
+>   static inline struct reset_control *
+>   of_reset_control_array_get_optional_exclusive(struct device_node *node)
+>   {
+>           return of_reset_control_array_get(node, false, true, true);
+>   }
 > 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> This makes the code easier to understand and removes the last remaining
+> direct use of of_reset_control_array_get(). No functional changes.
 > 
-> ---
-> Changes in v2:
->  - new patch during test patch 1
->  - add registered flag
-> ---
->  drivers/usb/roles/class.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-> index 2bad038fb9ad..70165dd86b5d 100644
-> --- a/drivers/usb/roles/class.c
-> +++ b/drivers/usb/roles/class.c
-> @@ -23,6 +23,7 @@ struct usb_role_switch {
->  	struct mutex lock; /* device lock*/
->  	struct module *module; /* the module this device depends on */
->  	enum usb_role role;
-> +	bool registered;
->  
->  	/* From descriptor */
->  	struct device *usb2_port;
-> @@ -49,6 +50,9 @@ int usb_role_switch_set_role(struct usb_role_switch *sw, enum usb_role role)
->  	if (IS_ERR_OR_NULL(sw))
->  		return 0;
->  
-> +	if (!sw->registered)
-> +		return -EOPNOTSUPP;
+> Fixes: f4cc91ddd856 ("usb: dwc3: of-simple: remove Amlogic GXL and AXG compatibles")
 
-What's to prevent this from changing right after you check it?
-
-And why is this patch not cc: stable and have a fixes tag if it resolves
-a real issue for people?
+No functional change, but a Fixes: tag?  That doesn't make sense to me,
+sorry.
 
 thanks,
 
