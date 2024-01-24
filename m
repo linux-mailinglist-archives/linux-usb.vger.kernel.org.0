@@ -1,104 +1,133 @@
-Return-Path: <linux-usb+bounces-5450-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5451-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1D3F83A7B4
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 12:26:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 181B183A939
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 13:12:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD180281474
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 11:26:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C63532862FE
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 12:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B081AAD9;
-	Wed, 24 Jan 2024 11:26:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC9D260EE4;
+	Wed, 24 Jan 2024 12:04:18 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2751AAD1
-	for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 11:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B438260BA8;
+	Wed, 24 Jan 2024 12:04:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706095587; cv=none; b=YmXtG01mGP4//wdMyQlpRamIHK5oTW8H/a9cBFT4ksLtHbKywumMnpc0746/iTPTFsoJwCZJLEaBzC1Fd199chL/WMF+l0ERqZMcF6GN45K+jPCHIaa00fAzlL4DNkQHuswvgnPrj12XUC/RZ6DbRbTcMrK8qzmCTosen7iZEpc=
+	t=1706097858; cv=none; b=ARf8Be/7UG1D4kYQNtPDv5irHocRnY/yzQtnQpetsHILgQxJ8AfKQr5gn+LfHufk1O9D8FuC4L37z+gnpUAt3Peot2SeKjmFnhsH+36atVQNf8kpHylkT1Dt6DahmL+jhtkt5nfsMeoufW3SX4JOtGCnF8gXn5vB3O4LLt+07ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706095587; c=relaxed/simple;
-	bh=Q1sHbIivfI+zsL7lmcpRgEA34+6RBDIe5bColoq7y0o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=WmvtIWBz71WN1WWqHqtM1KIilbFV+1wseIMSoClBe1lSLm2MiD0j9j910Hb+Jrgr8NA9hQ9fesEMyku46sA4S8MsvXu3WelHfWOpAgPmWedcx1ZwZngKrhC5pVL5EqoCqypihSff3q8/DnU0WW12zJC9jj7v9V+fpfjjKM/ljXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rSbOe-0003Xk-P4; Wed, 24 Jan 2024 12:26:20 +0100
-From: Philipp Zabel <p.zabel@pengutronix.de>
-Date: Wed, 24 Jan 2024 12:26:20 +0100
-Subject: [PATCH] usb: dwc3-of-simple: Stop using
- of_reset_control_array_get() directly
+	s=arc-20240116; t=1706097858; c=relaxed/simple;
+	bh=McfebLYXAumKQIwkfYKxxs0qSSSveGNcXva0iTP08KI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S1SierxbLKDe8rs36kAEGOoDiu4aSD+8KwM1Rzqefd/JpEYLV/xJsWvPS0f02VrMn3Cv5P33RLj+9j1tGQUutvzlX1uKxjKCjaRcJS6wacdJKhN0LSy+pzJ3CzIy+eWkSvPO3e548A4P1yhbsklg4ThG4K/ekpZolCYrTYWdlik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 8554814033C; Wed, 24 Jan 2024 13:04:06 +0100 (CET)
+Date: Wed, 24 Jan 2024 13:04:06 +0100
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, Dell.Client.Kernel@dell.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Jack Pham <quic_jackp@quicinc.com>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] usb: ucsi: Add missing ppm_lock
+Message-ID: <ZbD8toNjyjiLp8an@cae.in-ulm.de>
+References: <20240121204123.275441-1-lk@c--e.de>
+ <20240121204123.275441-2-lk@c--e.de>
+ <ZbDFoGL1GnxZAXER@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240124-dwc3-of-simple-reset-control-array-fix-v1-1-808182cc3f0e@pengutronix.de>
-X-B4-Tracking: v=1; b=H4sIANvzsGUC/x2NQQrCMBBFr1Jm7UAbs6heRVyE5FcHalJmilVK7
- +7g8n14/+1kUIHRtdtJ8RaTVh2GU0f5meoDLMWZQh9iP4TIZctnbhObvJYZrDCsnFtdtc2cVNO
- XJ/kwIi5jcGsshfxsUfj8D93ux/EDDMqhbngAAAA=
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Felipe Balbi <balbi@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Philipp Zabel <p.zabel@pengutronix.de>
-X-Mailer: b4 0.13-dev-f0463
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZbDFoGL1GnxZAXER@kuha.fi.intel.com>
 
-Use of_reset_control_array_get_optional_exclusive() instead, it is
-implemented as:
 
-  static inline struct reset_control *
-  of_reset_control_array_get_optional_exclusive(struct device_node *node)
-  {
-          return of_reset_control_array_get(node, false, true, true);
-  }
+Hi Heikki,
 
-This makes the code easier to understand and removes the last remaining
-direct use of of_reset_control_array_get(). No functional changes.
+Thanks for looking into this.
 
-Fixes: f4cc91ddd856 ("usb: dwc3: of-simple: remove Amlogic GXL and AXG compatibles")
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
----
- drivers/usb/dwc3/dwc3-of-simple.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On Wed, Jan 24, 2024 at 10:09:04AM +0200, Heikki Krogerus wrote:
+> On Sun, Jan 21, 2024 at 09:41:21PM +0100, Christian A. Ehrhardt wrote:
+> > Calling ->sync_write must be done while holding the PPM lock as
+> > the mailbox logic does not support concurrent commands.
+> > 
+> > At least since the addition of partner task this means that
+> > ucsi_acknowledge_connector_change should be called with the
+> > PPM lock held as it calls ->sync_write.
+> > 
+> > Thus protect the only call to ucsi_acknowledge_connector_change
+> > with the PPM. All other calls to ->sync_write already happen
+> > under the PPM lock.
+> > 
+> > Fixes: b9aa02ca39a4 ("usb: typec: ucsi: Add polling mechanism for partner tasks like alt mode checking")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> > ---
+> >  drivers/usb/typec/ucsi/ucsi.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > index 61b64558f96c..8f9dff993b3d 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > @@ -935,7 +935,9 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+> >  
+> >  	clear_bit(EVENT_PENDING, &con->ucsi->flags);
+> >  
+> > +	mutex_lock(&ucsi->ppm_lock);
+> >  	ret = ucsi_acknowledge_connector_change(ucsi);
+> > +	mutex_unlock(&ucsi->ppm_lock);
+> >  	if (ret)
+> >  		dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
+> 
+> Is this really actually fixing some issue? The function has already
+> taken the connector lock, so what exactly could happen without this?
 
-diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
-index d1539fc9eabd..9cf9ee1b637b 100644
---- a/drivers/usb/dwc3/dwc3-of-simple.c
-+++ b/drivers/usb/dwc3/dwc3-of-simple.c
-@@ -52,8 +52,7 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
- 	if (of_device_is_compatible(np, "rockchip,rk3399-dwc3"))
- 		simple->need_reset = true;
- 
--	simple->resets = of_reset_control_array_get(np, false, true,
--						    true);
-+	simple->resets = of_reset_control_array_get_optional_exclusive(np);
- 	if (IS_ERR(simple->resets)) {
- 		ret = PTR_ERR(simple->resets);
- 		dev_err(dev, "failed to get device resets, err=%d\n", ret);
+I've definitely _seen_ issues with the quirk from PATCH 3/3 if the
+lock is missing. I'm pretty sure from looking at the code that races
+with other connectors can happen without the quirk, too.
 
----
-base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
-change-id: 20240124-dwc3-of-simple-reset-control-array-fix-e4e9822028dd
+The PPM lock protects the Mailbox and the ACK_PENDING/COMMAND_PENDING
+bits and I could observe cases where ucsi_acpi_sync_write() was entered
+with the COMMAND_PENDING bit already set. One possible sequence is this:
 
-Best regards,
--- 
-Philipp Zabel <p.zabel@pengutronix.de>
+ucsi_connector_change() for connector #1
+	=> schedules partner tasks
+	=> Acks the connector change
+	=> Releases locks
+ucsi_connecotr_change() for connector #2
+	=> acquire con lock for #2
+	=> Start to process connector state change
+	=> Processing reaches the point right before 
+	   ucsi_acknowledge_connector_change()
+Connector #1 workqueue starts to process one of the partner tasks
+	=> Acquire con lock for connector #1
+	=> Acquire ppm lock
+	=> Enter ucsi_exec_command()
+	=> ->sync_write() starts to use the mailbox and sets
+	   COMMAND_PENDING
+	=> ->sync_write blocks waiting for the command completion
+	   with wait_for_completion_timeout().
+ucsi_connector_change() for connector #2 continues
+	=> execute ucsi_acknowledge_connector_change() and start using
+	   the mailbox that is still in use.
+	=> BOOM
 
+There is a simpler an much more likely sequence with the dell quirk active.
+
+     regards  Christian
 
