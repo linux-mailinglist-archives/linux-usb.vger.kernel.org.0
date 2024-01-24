@@ -1,99 +1,157 @@
-Return-Path: <linux-usb+bounces-5485-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5486-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD36F83B17D
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 19:52:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 103B083B1A4
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 19:59:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BAB30B26DA4
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 18:51:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96C471F26F17
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 18:59:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E45413175B;
-	Wed, 24 Jan 2024 18:50:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D96C131E36;
+	Wed, 24 Jan 2024 18:59:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="K/VKxFaV"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="aoVUMSOA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8607A12F59B
-	for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 18:50:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1946612AAC0
+	for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 18:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706122245; cv=none; b=Iyys6RYhui/LjxOi2PwldweT8+u+kAR/+6CyHpuWrUjKKvFaJNlbReXNLMILgH289x5EbBxKTXU0yijBosZcfHiVto0PjMTUyG7MnaGITyQ5WIOELmT2jErzFXn6J7aWYlSJeVmOvFBCKBXPFtQlV0buZF9hdUG+nGc2+NNU+EY=
+	t=1706122782; cv=none; b=JZWW5BZmLMGX6kng4uugrsTV8X/uXgiOye2CHvqGz072iDAy8faX/yqiRxa7OrJ0JXjGM+qeCnlr0/euh9pVeYW2GF4ORuYCmX21obBiyexal19odVYRgesBAH546DfTDwcu7sR99onNatciYkmvJfWPjs1TW8H/mNp3cC0A4uQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706122245; c=relaxed/simple;
-	bh=8KUE5Ar4cZJiQdQdzub7Ie8v6YPuyRdfxDbasY7sD34=;
+	s=arc-20240116; t=1706122782; c=relaxed/simple;
+	bh=Yl6yynRwqlzywAWtFeFQqDvgiT8QYAC0mcPkalJ8b2c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oaivqH8bjkixT+oNNG8YbS1Bo16xZpz595SOMvJwWrh6nJwh8HslxUk9qDqoZ8fkGb9YbjA1pHr2WSfYHfONjukH151b6ciZid23hM3aLOHM5dBlQM3+AXm8aS9eNRwfXWLX3u409Ex7idR31FRnprYfQgz0gq9mn2EN6JHA6PY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=K/VKxFaV; arc=none smtp.client-ip=209.85.219.54
+	 To:Cc:Content-Type; b=KYCVO+fglcfuIHYf0sprj/I3bjkxJ2hF9sJpUmm/t/Qmv8t01Bjnatqz8rQhgUqnvRDJVnRTItTkkY7bxK8yL+TSV1un11AkeHoGxzTSAwZGkJnmGt8yGTRJjdt7X6Qe4r6iYQE3XqnRYOtZ+rQUoq6+Mt2sgCW+8EharqFkesk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=aoVUMSOA; arc=none smtp.client-ip=209.85.219.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6818f3cf006so31386066d6.2
-        for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 10:50:43 -0800 (PST)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dc256e97e0aso3801338276.2
+        for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 10:59:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706122242; x=1706727042; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1706122780; x=1706727580; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8KUE5Ar4cZJiQdQdzub7Ie8v6YPuyRdfxDbasY7sD34=;
-        b=K/VKxFaV927A2W6w8W0zuoB+y2N8ThlE/w0UbJE6NbPwTLQLgyUFP2tkcamx0w99Xe
-         v+JCgpZPq3s6i2Q7zYUiZX6/8DEjKu00mivB4ymYS5nQA/JX7a/xfp0lnN+sL07g5smL
-         rN5cdG74vpcxg24of6Itr02QCBd17x/J9/88o=
+        bh=y6PL8UnNoNRmqQyb82Ctczzo51piu7gV+xPgMEYy95g=;
+        b=aoVUMSOA4QF5kBpCwGdc97wd9Od7X/0D8z9MgFxFqazFrF4I1T5tNk4sKesXpMwxU5
+         SATFctCLXjMPOR8riEDyKeaa2TeT9eR0dTSetg03rJK9mGWrtSbj382fYomz9b73sDoG
+         9Yay194Tt26nWzxjwAsqYP+O/jpWEpRoOv8cQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706122242; x=1706727042;
+        d=1e100.net; s=20230601; t=1706122780; x=1706727580;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8KUE5Ar4cZJiQdQdzub7Ie8v6YPuyRdfxDbasY7sD34=;
-        b=jcPC6xFzVb7DMzJpCpNN+1ZFM7B48xbwn4MyOkYshmEGCiYrTjgsD00EgJV5Zh/SXJ
-         crlZnDh/vk07tDe8BqtGPPXgIon7BTfvIgsd+P30aA2E5kbpKtvPQdRU4LF9Nh2E9Ahx
-         6C9vZJdLMvrQeHqI7I4oucf47uxaP258eApWtjD1FyD41MeDJmi0StkGkWI1zQGrk+xM
-         T/E+tjpJD5uy6MlPIvrawNaf7NEeJQTa/BDukLPTqv4kyP7LgBM1guJmcuiV8s8+SFdM
-         QeEe1X4iJDqHz7McVi9FAsUKai61CuglFB2QUJI84Hx9xKedXBW4MkVPn+Bcxru9hVzW
-         9nCQ==
-X-Gm-Message-State: AOJu0Yx+Z6hYyMtRxrOfVcRYSJQMrgrYMJuziqaiKPkRJZSml6r1ChC8
-	UqLjnf0lHYOql6gmwNx1H+d2BnD9PKiB0JEbTWpy+1rfga4RfN1BwuMMwd11/9BvTUeQA1HLBJi
-	SpDRuRYTUUEb7q1+84VHBGrH4owgrszCePCUJ
-X-Google-Smtp-Source: AGHT+IETEgEHVnoBCl6tSd5ly6jPw1LbPISDppDEH/7WrohkBoOXGwU9cZSsg4zzP7dPPUTFxfWxwry3wrim9dTMmcQ=
-X-Received: by 2002:a05:6214:20a6:b0:685:aa5c:5176 with SMTP id
- 6-20020a05621420a600b00685aa5c5176mr3059902qvd.92.1706122242588; Wed, 24 Jan
- 2024 10:50:42 -0800 (PST)
+        bh=y6PL8UnNoNRmqQyb82Ctczzo51piu7gV+xPgMEYy95g=;
+        b=r+6XVYo1QAx8DgmhXuIreFEuBbVHb/C6o0arwBvq2iHKREERyn6UAkwFe3DOAt3/PM
+         XBFoRKMfMB4y1/WpCg9UNBX/zhOoCPq7Wrs92fVwh3EPmsHodxcitJSU/W5/goIV+AJ3
+         qYYepE5qEAUmY5re0/0TY01hbMW6JnJBZjjAB5X6+8PdoUM0QoRootgZgMPtbhj6bYD3
+         /J6cahkQ+VOB6pI1j/NJwhmztUtr0msoxVuxUu/m8qCysiOoR2KKAzQ0tOVPmaheGfop
+         fiCcqcH+S+YJOjmZm1v1Kz+z1ouTSw0By6+R7XiS3ZhS7u2lmQaetGmfZFHFlcVZiQGC
+         Icxg==
+X-Gm-Message-State: AOJu0Yw+Fn1ewXbemHgh6eIlsEdEysmtDxO1Or+I2nIvWOt8C9s6xg19
+	R6Dm2L2ZV6dJ+Sue0mADxbsLmJVbQjf3QdDYaHk/7gn/zsCSvJnAxo6eulmuqeBtMHXuhyAs6Xh
+	jw2F8+2x3L/T2LvaEMCudxGL+vgf6ad56Te+2
+X-Google-Smtp-Source: AGHT+IEK2MoUyyeVyti680IBepHWRvLzn+5AeBV/afLBuANUkn6E3lt+kVYlsVSRbSC5Q2J15QVgz5mEwT37aAUypww=
+X-Received: by 2002:a25:9c03:0:b0:dbe:a209:3305 with SMTP id
+ c3-20020a259c03000000b00dbea2093305mr927061ybo.98.1706122779981; Wed, 24 Jan
+ 2024 10:59:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240123223039.1471557-1-abhishekpandit@google.com> <20240123143026.v1.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid>
-In-Reply-To: <20240123143026.v1.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid>
-From: Prashant Malani <pmalani@chromium.org>
-Date: Wed, 24 Jan 2024 10:50:30 -0800
-Message-ID: <CACeCKadc2P92WTmtkN-SEDeWk7NVOVQhz2FpfgF2eWxXsx4SHA@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] usb: typec: ucsi: Update connector cap and status
-To: Abhishek Pandit-Subedi <abhishekpandit@google.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
-	jthies@google.com, Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, 
+References: <20240123223039.1471557-1-abhishekpandit@google.com>
+ <20240123143026.v1.1.Iacf5570a66b82b73ef03daa6557e2fc0db10266a@changeid>
+ <CACeCKaftJSGba3ebs58=cB5aRLuOnbvhQX2V6+5=t9GPC08_Uw@mail.gmail.com>
+ <ZbEV/qp/EhUkHVhA@kuha.fi.intel.com> <2024012405-stung-freckles-e196@gregkh>
+In-Reply-To: <2024012405-stung-freckles-e196@gregkh>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Wed, 24 Jan 2024 10:59:28 -0800
+Message-ID: <CANFp7mVEF36TCb_4vGbF-0wM-Vn4agT6NXVOrnnDSC0JVpnLmg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] usb: typec: ucsi: Limit read size on v1.2
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Prashant Malani <pmalani@chromium.org>, 
+	Abhishek Pandit-Subedi <abhishekpandit@google.com>, linux-usb@vger.kernel.org, jthies@google.com, 
 	Bjorn Andersson <andersson@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Saranya Gopal <saranya.gopal@intel.com>, 
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>, Hans de Goede <hdegoede@redhat.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Saranya Gopal <saranya.gopal@intel.com>, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Abhishek,
+Ack. Will make dev_dbg on the next iteration.
 
-On Tue, Jan 23, 2024 at 2:30=E2=80=AFPM Abhishek Pandit-Subedi
-<abhishekpandit@google.com> wrote:
->
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->
-> Update the data structures for ucsi_connector_capability and
-> ucsi_connector_status to UCSIv3.
->
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
+This seems like a good addition to the style guide too:
+https://www.kernel.org/doc/html/v6.7/process/coding-style.html#printing-ker=
+nel-messages.
+"When drivers are working properly, they are quiet. Prefer to use
+DEBUG messages unless something is wrong."
 
-BR,
+What do you think Greg?
+
+On Wed, Jan 24, 2024 at 6:17=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Jan 24, 2024 at 03:51:58PM +0200, Heikki Krogerus wrote:
+> > On Wed, Jan 24, 2024 at 12:12:26AM -0800, Prashant Malani wrote:
+> > > Hi Abhishek,
+> > >
+> > > On Tue, Jan 23, 2024 at 2:30=E2=80=AFPM Abhishek Pandit-Subedi
+> > > <abhishekpandit@google.com> wrote:
+> > > >
+> > > > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > > >
+> > > > Between UCSI 1.2 and UCSI 2.0, the size of the MESSAGE_IN region wa=
+s
+> > > > increased from 16 to 256. In order to avoid overflowing reads for o=
+lder
+> > > > systems, add a mechanism to use the read UCSI version to truncate r=
+ead
+> > > > sizes on UCSI v1.2.
+> > > >
+> > > > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > > I have one nit (mentioned in side-band but reproducing here for consi=
+stency),
+> > > but will defer to the maintainer on that.
+> > >
+> > > The above notwithstanding, FWIW:
+> > > Reviewed-by: Prashant Malani<pmalani@chromium.org>
+> > >
+> > > > @@ -1556,6 +1569,15 @@ int ucsi_register(struct ucsi *ucsi)
+> > > >         if (!ucsi->version)
+> > > >                 return -ENODEV;
+> > > >
+> > > > +       /*
+> > > > +        * Version format is JJ.M.N (JJ =3D Major version, M =3D Mi=
+nor version,
+> > > > +        * N =3D sub-minor version).
+> > > > +        */
+> > > > +       dev_info(ucsi->dev, "Registered UCSI interface with version=
+ %x.%x.%x",
+> > > > +                UCSI_BCD_GET_MAJOR(ucsi->version),
+> > > > +                UCSI_BCD_GET_MINOR(ucsi->version),
+> > > > +                UCSI_BCD_GET_SUBMINOR(ucsi->version));
+> > >
+> > > nit: I think this doesn't need to be dev_info() and can be just
+> > > dev_dbg(), but will
+> > > defer to the maintainer.
+> >
+> > I think that's okay.
+> >
+> > Reviewewd-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>
+> No, when drivers are working properly they are quiet, this needs to be
+> dev_dbg().
+>
+> thanks,
+>
+> greg k-h
+>
 
