@@ -1,129 +1,114 @@
-Return-Path: <linux-usb+bounces-5447-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5448-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C69683A3CB
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 09:12:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C2DC83A485
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 09:48:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 719D11C295E2
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 08:12:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B436C1F219DA
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 08:48:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F4917555;
-	Wed, 24 Jan 2024 08:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 324231799D;
+	Wed, 24 Jan 2024 08:48:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YBbty9sG"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BCoTd5gM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23E117542
-	for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 08:12:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E27B17BB5;
+	Wed, 24 Jan 2024 08:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706083960; cv=none; b=AxcrNIX6D5ezMo4zIC0kZeo4NMzYfbZpCPNk7n5vEmVgZY4JTGGhSWIjP6XHMuJ3uIjDyqw4GXGaYJDtny5cDGq58B28dlhYpEW8viVg2kLwJ3VkwEck8g0DLeKercnLMQl19gpeKO94NVSoHuuwSo54c7zeeRys/KPQj98OYis=
+	t=1706086108; cv=none; b=upEJ5zVTjszlINGgmqB0MqKWb9wupxxv00SaG4Umcep3A5X2mm7HpGfLbMeyOiSvBpGhp3heucAlA+0DGT882MbowKGSRHzvmqlOL8k2iFyhQhRbQVGRUcWHS5bwm1FJOcra2CVUSDfDOb+wSsCn3qQtTpWA/EbVn495QcAgAeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706083960; c=relaxed/simple;
-	bh=C8kYfDx/P9hnWkyKHcdyWPTZdI2VSXngwIerXp0qFns=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IhxK+W4lw4BzjHDMPYgma871P5dBudlC40HnhWBgiUVO4vv41IMxvyjVeJWrQY7wRaggSY+fTcHTvc0CEhRR8GRBDYqVXLjfCa4qjFIdere5zIe9GR+dzdLZHFcPzyHHOWLou/O8WTLcYJbMLlWt3Ako+byhHqQ2KaaECwYKoUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YBbty9sG; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-db3a09e96daso4380787276.3
-        for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 00:12:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706083957; x=1706688757; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3nlrvezwsoefYOiDE66ptLKogdw8xj1n98YMDFjoN+M=;
-        b=YBbty9sG7JivTyRuJzpHonuXmx+JIN1C4fibeYvcSg++Z6PyIykvNZnjzH3m29c5FU
-         xBSjAX8Z4Y0cAg/XDe512kDKk6+UO4B1ck2I3hkyD91wRUmfGw0RKM0Pq1XamRPypEo+
-         9Lf7/Rvr3obTej/2lwzBzhojd/ijWYCWszSiE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706083957; x=1706688757;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3nlrvezwsoefYOiDE66ptLKogdw8xj1n98YMDFjoN+M=;
-        b=fjQIW0Q0nXckn/dFtkDNbLV/lnD9amCjPNUpl/eKyA3EUGdtxzISYH6qdpWAjyfsEN
-         vB/Ygp7V2/Z4xiJBlBuEyVOXIrVrLShQKqtFCpJ7h3qLyIYwpkD1vFAewJTv23aSziU4
-         ZV6Bhq8D9abY622XamoxVXYCT+gJ7PV7JQ0Jh/2NqprrmDwiIh3m/hDG3MF1OOBH/9qE
-         NDXDxCXTUzAmCoELy58DrBiiv5AZFxuPpfofjX844LgAlkrWjiKF/R2EXalYy6ny2Mn2
-         qhjDmR+70OEp0ARH1R+iZjxKnOoizHIqCI0URjSSrA4c6YW1f815Pu8IwfGcwe/srJA5
-         tsow==
-X-Gm-Message-State: AOJu0YyqVdbshK7hjNUThKeUKD2EWDLp0V8bMCa5qpADVf8DcErRuU5b
-	5Iq7DBQP5uhfsg5XjbDSdmt96ThLFyO0Vyx1qYmcMboqfuF5978Ww7vRF9TXpRLyPxfcO7F2H+2
-	mcPJGnoanHYBD8LwHWhZLopQ8IGHHuqhHUOGr
-X-Google-Smtp-Source: AGHT+IEXXNpGL3FkHpH7UVTAE98t9kuK82tJy02EY3Po3kf0mUsz/lQ5QYroraVfAgTjUCCe1Q2enF+omVYI5Wnnfpw=
-X-Received: by 2002:a5b:345:0:b0:dbe:d3ef:d54b with SMTP id
- q5-20020a5b0345000000b00dbed3efd54bmr291405ybp.93.1706083957672; Wed, 24 Jan
- 2024 00:12:37 -0800 (PST)
+	s=arc-20240116; t=1706086108; c=relaxed/simple;
+	bh=ekyS4ZOSSZIbtYGGpgL9knQnsxr3+M0NajqbJuU+F1k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PJ2bLyvJhThRYnxDLtap87eu7LG2vprKn/Mw+5rEa2olS9kFbmr4RfcQLN7lLAbf+hB5uiuLV351z8P5iG7PD7WDY8EK1mrH6EKgcpAjU4C1WTdTQKXX/02b2O4QCLuxOT0nvIWPBU7qTGdhIokWBHXjl2AJLaWbDptNYEe/1qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=BCoTd5gM; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1706086105;
+	bh=ekyS4ZOSSZIbtYGGpgL9knQnsxr3+M0NajqbJuU+F1k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BCoTd5gMIKJXbmId+RePuOy78x9TNjz+IVtfVvT8aMoOvt6GFXUMFfiK2evKiYXvb
+	 oZyO0AEFs4Dmavi4mJMbhG5F4NI7ioouzVKGC/NVwuEFsJeVkc0nhffNOnErG725n+
+	 VtKyB0hhyArbCln7dl/FSvP+0nKz/P6X/YkzIwnVFCR4mxTUoH1ucl9082Tsyqo2HN
+	 ICc7ksvioMRnWFs40WWbkN7ey5nw81o90DtxhGOwuLlF5S8LU17lSrTx0Hkk1mH8XR
+	 FvrHj7IpUcE8EFEQjdNOisxGchNMHFqBOSa4cbtHks5G06EP+uMMFJttyKdkxUEagA
+	 lchYKYqg7tOzA==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 89EB137820B7;
+	Wed, 24 Jan 2024 08:48:24 +0000 (UTC)
+Message-ID: <4fdbc3d8-3d44-4c2c-aae6-daa0b431e1c9@collabora.com>
+Date: Wed, 24 Jan 2024 09:48:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240123223039.1471557-1-abhishekpandit@google.com> <20240123143026.v1.1.Iacf5570a66b82b73ef03daa6557e2fc0db10266a@changeid>
-In-Reply-To: <20240123143026.v1.1.Iacf5570a66b82b73ef03daa6557e2fc0db10266a@changeid>
-From: Prashant Malani <pmalani@chromium.org>
-Date: Wed, 24 Jan 2024 00:12:26 -0800
-Message-ID: <CACeCKaftJSGba3ebs58=cB5aRLuOnbvhQX2V6+5=t9GPC08_Uw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] usb: typec: ucsi: Limit read size on v1.2
-To: Abhishek Pandit-Subedi <abhishekpandit@google.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
-	jthies@google.com, Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans de Goede <hdegoede@redhat.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Saranya Gopal <saranya.gopal@intel.com>, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: mt6360-tcpc: Drop
+ interrupt-names
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org
+Cc: chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org,
+ conor+dt@kernel.org, matthias.bgg@gmail.com, linux@roeck-us.net,
+ heikki.krogerus@linux.intel.com, cy_huang@richtek.com,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240119094105.98312-1-angelogioacchino.delregno@collabora.com>
+ <20240119-eldest-discharge-e2d3812be0a9@spud>
+ <12b7b339-498b-45c1-bc5e-05e07660aefa@collabora.com>
+ <20240123-procurer-jumbo-ebbec485505d@spud>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240123-procurer-jumbo-ebbec485505d@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Abhishek,
+Il 23/01/24 18:14, Conor Dooley ha scritto:
+> On Mon, Jan 22, 2024 at 11:32:30AM +0100, AngeloGioacchino Del Regno wrote:
+>> Il 19/01/24 17:32, Conor Dooley ha scritto:
+>>> On Fri, Jan 19, 2024 at 10:41:04AM +0100, AngeloGioacchino Del Regno wrote:
+>>>> This IP has only one interrupt, hence interrupt-names is not necessary
+>>>> to have.
+>>>> Since there is no user yet, simply remove interrupt-names.
+>>>
+>>> I'm a bit confused chief. Patch 2 in this series removes a user of this
+>>> property from a driver, so can you explain how this statement is true?
+>>>
+>>> Maybe I need to drink a few cans of Monster and revisit this patchset?
+>>>
+>>
+>> What I mean with "there is no user" is that there's no device tree with any
+>> mt6360-tcpc node upstream yet, so there is no meaningful ABI breakage.
+>> Different story would be if there was a device tree using this already, in
+>> which case, you can make a required property optional but not remove it.
+> 
+> Not every devicetree lives within the kernel.. If the driver is using
+> it, I'm not inclined to agree that it should be removed.
 
-On Tue, Jan 23, 2024 at 2:30=E2=80=AFPM Abhishek Pandit-Subedi
-<abhishekpandit@google.com> wrote:
->
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->
-> Between UCSI 1.2 and UCSI 2.0, the size of the MESSAGE_IN region was
-> increased from 16 to 256. In order to avoid overflowing reads for older
-> systems, add a mechanism to use the read UCSI version to truncate read
-> sizes on UCSI v1.2.
->
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-I have one nit (mentioned in side-band but reproducing here for consistency=
-),
-but will defer to the maintainer on that.
+I get the point, but as far as I remember, it's not the first time that this
+kind of change is upstreamed.
 
-The above notwithstanding, FWIW:
-Reviewed-by: Prashant Malani<pmalani@chromium.org>
+I'm fine with keeping things as they are but, since my intention is to actually
+introduce an actual user of this binding upstream, and that actually depends on
+if this change is accepted or not (as I have to know whether I can omit adding
+the interrupt-names property or not)....
 
-> @@ -1556,6 +1569,15 @@ int ucsi_register(struct ucsi *ucsi)
->         if (!ucsi->version)
->                 return -ENODEV;
->
-> +       /*
-> +        * Version format is JJ.M.N (JJ =3D Major version, M =3D Minor ve=
-rsion,
-> +        * N =3D sub-minor version).
-> +        */
-> +       dev_info(ucsi->dev, "Registered UCSI interface with version %x.%x=
-.%x",
-> +                UCSI_BCD_GET_MAJOR(ucsi->version),
-> +                UCSI_BCD_GET_MINOR(ucsi->version),
-> +                UCSI_BCD_GET_SUBMINOR(ucsi->version));
-
-nit: I think this doesn't need to be dev_info() and can be just
-dev_dbg(), but will
-defer to the maintainer.
+....may I ask for more feedback/opinions from Rob and/or Krzk?
 
 Thanks,
-
--Prashant
+Angelo
 
