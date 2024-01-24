@@ -1,139 +1,153 @@
-Return-Path: <linux-usb+bounces-5475-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5476-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B01A83AE32
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 17:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 622B383AF61
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 18:14:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3372728DF5D
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 16:18:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C48E282A89
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 17:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BDB47CF29;
-	Wed, 24 Jan 2024 16:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AF8E7F7F7;
+	Wed, 24 Jan 2024 17:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AL3g9UVw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="v2pVfufL"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F34BC7C09A;
-	Wed, 24 Jan 2024 16:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C897E762;
+	Wed, 24 Jan 2024 17:13:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706113111; cv=none; b=VATCj1/NsOopt6X4x8wGX4Njj9AO1VYlTRG3bUHBz23DlZ0HGizq78CDplyZQ3QHkxMlQve6ESwsP4GBQ9BBWtNl2ADn9zCMVcJs9fO3XensUPiPJE9FtZ6PrMitlwZE+bG6uIaoP5Mz8SonyxthNevp8LSHvFaqKwlS3LGf6IY=
+	t=1706116431; cv=none; b=ldVV+G7fdPUxCIS4fpEOMS+Fv6XwlVWrEIAYgJIv9QDfxbyV58XpDgsZnnXBxngYztY/PUz4IRj10hnSZRew86hTNjtcgs+A9zv8uobOEjPc+frQ7U4PHivmRGrr1+nrgrFpqCT1uaW0B5CkQ1VHK+TRaw6Waz95WjNIrtDGgFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706113111; c=relaxed/simple;
-	bh=OnLSAx8iHqQmVY38WPaxSCi80CkhkomZKsuDZXu48po=;
+	s=arc-20240116; t=1706116431; c=relaxed/simple;
+	bh=jvo5IXYlQYdIU6VCmACeGNP4xo23ZIbLfeE2jvqqluI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dF3Y3XlWuI0zuevWtjHJWfiOdYEjxLRA/R1nha8b6Ep9mdmrUIrMsgy3FQ5WXVR4aNwhybVfDvlqJ/k6kReJFMugTpNjRTicGSnUUP4naBlhVxauRL7MDWG8cQs5ueJpW7TqHnpDJiOueX3kx10/Si2hMZy3ZMbhDB84jQsxvSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AL3g9UVw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 874CCC433F1;
-	Wed, 24 Jan 2024 16:18:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706113110;
-	bh=OnLSAx8iHqQmVY38WPaxSCi80CkhkomZKsuDZXu48po=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=fVWsi+KevSWn+BcFviAfQvoVjSaUypMoub+WfWbIRbf9bcZDKr9RZD2lZhBD0I5ikc5Nb6eGoQTJxEbLuHu50ZkmGEUuj600qr79/331zMu57eOlgI3CH80shvpNyCg5bwpPZnfXy2MWJvQ/Iy59YFpDindHDu2AwQFT0sgA3qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=v2pVfufL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B096C43390;
+	Wed, 24 Jan 2024 17:13:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1706116430;
+	bh=jvo5IXYlQYdIU6VCmACeGNP4xo23ZIbLfeE2jvqqluI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AL3g9UVwKWkzvEy921hocGE4NdfXxpHlKC9KPV2EvNjP3wQ9qWOv593UM2GRC4KQh
-	 rX5srmz6IKl2ktp7Bn/ZVrt3iT7XEBzP1wSwLU/6o1pUP4QqpcBy350EkACovOkod3
-	 osvBi8TBzJi5MPHrHbt5aiLHL3Y06INKxt5dnP8yciT89zQY4rTq6tWsIOzeSERRzs
-	 IlX4Q8X9svGLtsjAUNbbMew1ro02xI7jty6bkUXiHQTzYQRL8e/JRUNuKLr6D4Huni
-	 OO7m8lrYUfAKnkM7cuJKZFrTUpCDgAHbq6/3VnO98DjHACKcZoiAbSGfKmi3FH4GXT
-	 kRyLQ3UWUUu7w==
-Date: Wed, 24 Jan 2024 16:18:25 +0000
-From: Conor Dooley <conor@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org,
-	conor+dt@kernel.org, matthias.bgg@gmail.com, linux@roeck-us.net,
-	heikki.krogerus@linux.intel.com, cy_huang@richtek.com,
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: mt6360-tcpc: Drop
- interrupt-names
-Message-ID: <20240124-confining-monologue-22ed69313cef@spud>
-References: <20240119094105.98312-1-angelogioacchino.delregno@collabora.com>
- <20240119-eldest-discharge-e2d3812be0a9@spud>
- <12b7b339-498b-45c1-bc5e-05e07660aefa@collabora.com>
- <20240123-procurer-jumbo-ebbec485505d@spud>
- <4fdbc3d8-3d44-4c2c-aae6-daa0b431e1c9@collabora.com>
+	b=v2pVfufLGd3lCfp0CeG2fpxzUUsvpwbElgNFofM1ZPehhJ3gSyI8DyqjujjS7qB28
+	 HIx8X5ThDTkPR0Ay0PzOQVdIcq5n2pTAL/fkyg4/FCf2V3zKeABMVcc+DS8MIJ/Ztv
+	 A8j4KVPuFkJX9pHjYFH5A/rDYDM6TICeR0rlV7yw=
+Date: Wed, 24 Jan 2024 09:13:49 -0800
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
+	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Alexander Aring <alex.aring@gmail.com>,
+	Stefan Schmidt <stefan@datenfreihafen.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-input@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+	Rayyan Ansari <rayyan@ansari.sh>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Martin Tuma <martin.tuma@digiteqautomotive.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, Sergey Kozlov <serjk@netup.ru>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	linux-mmc@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Rob Herring <robh@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+	Michal Simek <michal.simek@amd.com>,
+	Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>,
+	linux-mtd@lists.infradead.org,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Ronald Wahl <ronald.wahl@raritan.com>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	chrome-platform@lists.linux.dev, Max Filippov <jcmvbkbc@gmail.com>,
+	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-msm@vger.kernel.org,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-mediatek@lists.infradead.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+	linux-staging@lists.linux.dev, Viresh Kumar <vireshk@kernel.org>,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+	greybus-dev@lists.linaro.org, Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org,
+	Herve Codina <herve.codina@bootlin.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-usb@vger.kernel.org, Helge Deller <deller@gmx.de>,
+	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Kalle Valo <kvalo@kernel.org>, Dmitry Antipov <dmantipov@yandex.ru>,
+	libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>, James Clark <james.clark@arm.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 00/33] spi: get rid of some legacy macros
+Message-ID: <2024012417-prissy-sworn-bc55@gregkh>
+References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="4KxYMHS039FHiq27"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <4fdbc3d8-3d44-4c2c-aae6-daa0b431e1c9@collabora.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
 
+On Mon, Jan 22, 2024 at 07:06:55PM +0100, Uwe Kleine-König wrote:
+> Hello,
+> 
+> this is v2 of this patch set.
+> 
+> Changes since (implicit) v1, sent with Message-Id:
+> cover.1705348269.git.u.kleine-koenig@pengutronix.de:
+> 
+>  - Rebase to v6.8-rc1
+>  - Fix a build failure on sh
+>  - Added the tags received in (implicit) v1.
+> 
+> The slave-mt27xx driver needs some more work. The patch presented here
+> is enough however to get rid of the defines handled in patch 32.
+> Cleaning that up is out-of-scope for this series, so I'll delay that
+> until later.
+> 
+> Note that Jonathan Cameron has already applied patch 3 to his tree, it
+> didn't appear in a public tree though yet. I still included it here to
+> make the kernel build bots happy.
 
---4KxYMHS039FHiq27
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Are we supposed to take the individual changes in our different
+subsystem trees, or do you want them all to go through the spi tree?
 
-On Wed, Jan 24, 2024 at 09:48:23AM +0100, AngeloGioacchino Del Regno wrote:
-> Il 23/01/24 18:14, Conor Dooley ha scritto:
-> > On Mon, Jan 22, 2024 at 11:32:30AM +0100, AngeloGioacchino Del Regno wr=
-ote:
-> > > Il 19/01/24 17:32, Conor Dooley ha scritto:
-> > > > On Fri, Jan 19, 2024 at 10:41:04AM +0100, AngeloGioacchino Del Regn=
-o wrote:
-> > > > > This IP has only one interrupt, hence interrupt-names is not nece=
-ssary
-> > > > > to have.
-> > > > > Since there is no user yet, simply remove interrupt-names.
-> > > >=20
-> > > > I'm a bit confused chief. Patch 2 in this series removes a user of =
-this
-> > > > property from a driver, so can you explain how this statement is tr=
-ue?
-> > > >=20
-> > > > Maybe I need to drink a few cans of Monster and revisit this patchs=
-et?
-> > > >=20
-> > >=20
-> > > What I mean with "there is no user" is that there's no device tree wi=
-th any
-> > > mt6360-tcpc node upstream yet, so there is no meaningful ABI breakage.
-> > > Different story would be if there was a device tree using this alread=
-y, in
-> > > which case, you can make a required property optional but not remove =
-it.
-> >=20
-> > Not every devicetree lives within the kernel.. If the driver is using
-> > it, I'm not inclined to agree that it should be removed.
->=20
-> I get the point, but as far as I remember, it's not the first time that t=
-his
-> kind of change is upstreamed.
->=20
-> I'm fine with keeping things as they are but, since my intention is to ac=
-tually
-> introduce an actual user of this binding upstream, and that actually depe=
-nds on
-> if this change is accepted or not (as I have to know whether I can omit a=
-dding
-> the interrupt-names property or not)....
->=20
-> ....may I ask for more feedback/opinions from Rob and/or Krzk?
+Either is fine with me, just need to know.
 
-Sure, I am happy to be overruled if they disagree.
+thanks,
 
---4KxYMHS039FHiq27
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbE4UQAKCRB4tDGHoIJi
-0uPsAQCPgBalBEox9nudpYDysAzqxIikRApwxQAEtWdNrbyE+gEAqe4RKAkPBgg7
-mDOgnpd8nPFf5HFkx98XwG427LjEKgU=
-=cx/V
------END PGP SIGNATURE-----
-
---4KxYMHS039FHiq27--
+greg k-h
 
