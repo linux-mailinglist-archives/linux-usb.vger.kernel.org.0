@@ -1,189 +1,175 @@
-Return-Path: <linux-usb+bounces-5468-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5469-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA95E83ACC8
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 16:08:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDE3783AD37
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 16:26:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A639FB3039E
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 14:43:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DAC9283AB8
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 15:26:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F3BE131E29;
-	Wed, 24 Jan 2024 14:31:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD9377C0B2;
+	Wed, 24 Jan 2024 15:25:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UPR7gDfu"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="mCFO1zh8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2086.outbound.protection.outlook.com [40.107.22.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E46013172C;
-	Wed, 24 Jan 2024 14:31:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.120
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706106664; cv=none; b=CSc2f2Q1vg8Z6mfbrqR5SGTUMj/Ul+Fnh/s1AqAi6hvP2oSwebhsrQo9XG2cJcIOdVxaVT8bbArJovyfzR5eiLYh7uE8fatrrtLwoCOBz4fA/vbuFkrM4dUMBDMds4ry5285LLr2Q6LnkowRxO/+ZFr+tD+dMSaSJkq/xIKPA58=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706106664; c=relaxed/simple;
-	bh=ZvKJm/sldQeRiwuP+FZg5ecSvivsElsr2/SHuRuOzBU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j9v2fFAVybZciOzi50dmTgo4+lDXSsZxGJKX/FPDxBCjnUGBqB/tYTZi3+/A5r/MeQy7hHA4sYFPYtgUDxsxzQgMPNcu/xKccm+IyB4Iyrb9Z8cslJHb7do+dmJjjrSDq/Hk9QYzXLXlgNEZg4TpEB4uWK4KXdulCMo31ksd0x4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UPR7gDfu; arc=none smtp.client-ip=192.55.52.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706106662; x=1737642662;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZvKJm/sldQeRiwuP+FZg5ecSvivsElsr2/SHuRuOzBU=;
-  b=UPR7gDfurQ4/9OqZOUx3+WqVycaNv3qZJyT1nHXI/LrLbPHJ2fI5/v4v
-   2m0qH2dguZP75wYokoy9axZwNTDQEdnFWBvUWTGPkQ0MdDOFm8ZKpZKVb
-   nHs7lb34x31SCokVJPaPyzu6R5z6i+qEFBb6Y8wd4vYf/c+DrT1uiZWHY
-   RN6eB2gbYABWfim8Iijg9cYihuPyNP6oev8J20ERe9YaSrPF8xyx1kILW
-   V4haLtpF8o4/a+PVzbJvtI7i3/RkhtUoDQgTqscD5xn7JtvXvHjqGXR84
-   7tFFeYJGVlZpB+KC0+j8JOQ0Lnbld/1GuC7ef4HxWkcnYnO4Jj0uVVjVc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="400712685"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="400712685"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 06:30:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="929700627"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="929700627"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 24 Jan 2024 06:30:51 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 24 Jan 2024 16:30:50 +0200
-Date: Wed, 24 Jan 2024 16:30:50 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@google.com>
-Cc: linux-usb@vger.kernel.org, pmalani@chromium.org, jthies@google.com,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Saranya Gopal <saranya.gopal@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] usb: typec: ucsi: Get PD revision for partner
-Message-ID: <ZbEfGlrcMX56YvqU@kuha.fi.intel.com>
-References: <20240123223039.1471557-1-abhishekpandit@google.com>
- <20240123143026.v1.3.Idf7d373c3cbb54058403cb951d644f1f09973d15@changeid>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641837A709;
+	Wed, 24 Jan 2024 15:25:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.86
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706109946; cv=fail; b=bSMM15CZ6pqU+YRTPDg3sMTV0/ssEN1XLdzjwrb1XYA+hmqHXXNPjreFWDWlIWolePX5mW0Y1ah//5N5IkzB/qhcbvjzw94x+Ph7jpp5KafKhY8Sshu826opNVEP18rezCIjuDP8kI6H3dtlvDhY3t0M5uoLNyluVKWAzRVbzmc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706109946; c=relaxed/simple;
+	bh=mxcHtkuXf26AVKUZaU+qLwz5dPyB2PaNogj4EjGEECU=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=d2Pj/6f4XDnuig+btktQdHxBFdECw/I7dSiDbnSP3da1IyA/I2q+lQBvBFPywo/LUt6sXD7Gbjfp+641ZkHEKtzCyzeECaGXBBNZWULO1onQrwimaGZlCMBGlKns85qJUHJ9oMLgxjogdqtLJdj2zNNJRJbrIsmO/uiUNXC59j0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=mCFO1zh8; arc=fail smtp.client-ip=40.107.22.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ajmDmu9R+0szrMFrnQ4TopEDUV1SMIkVpOMEg8gguYiOu+s9yXu1wLBUu8tvzzxUYowBubR5yW5/oMU8OnlIQK4y4prYcnb8JPdRumoB/VpWEFNxjdA9QhOavaWt0YcYNgzUiO7Ay4OwdkD2kFMzJpU89l08n8wyDZwypiyc2jw+LVdXt/ffo52qi191enkEC/YMPEBpUF0zqyKEbX2ipYgflkLbBRWmGpS1qsxEJxjhibvTAPeW/DB0SvOTeV5fB5bLHp2L+NY+0r2VzP+sR+a4ck8+OPkjyY924a38HMRsIop6IAbR0Br4pC9Bd3FiQQOonUPDb1guSI1f0/4NdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oX3gDW2DtgtAqALYPPOYNP0q9o2+DhzDRbXP2yhukv0=;
+ b=i50UDDeYjlBxultmVUwZI8bG1vbeTxjoW7zaYyF1sJ/7VYJVjQxNktEcVMPJqdlKIXhpatf892TpWzECxuvBOK7BQ91cf5gY4RhcqP7Nbrxog2M5poS3+NWEgJOwgVEGvav2TTxXRT1/H7GS19hmhN9R3orW7trxstvu/0IBRUBl33YWMsxy+5TFjr23PPsFZOlkbigH9cJQm0/vDfpoBBccX74ogoYuZlgfOuf63ataxX89BnFKLXaTuvTpweCMNDgLwk/G/2rRmGmCt+nkqKTsQq8aCfC1sTts3gvu2nxjqTrkigw86Dzv0S3KajNo36Y9p+y/nuGUVdsFWc4gFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oX3gDW2DtgtAqALYPPOYNP0q9o2+DhzDRbXP2yhukv0=;
+ b=mCFO1zh8CHMLa55yDphfHDBGAix3WRU69EJJAb5oBrMeM5WGdbLHLaVcxYaxJLJq/tMJe4v1E8HP1ZWC//kHsSg/GCltMwQpRZRh9TRH/87LGH+MntW6rZphT1wI4i4euIv9whfXT7jgC9yPoC/Sh0Wms7hX7x8rDogViEE1XOg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by VI1PR04MB10001.eurprd04.prod.outlook.com (2603:10a6:800:1d9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.22; Wed, 24 Jan
+ 2024 15:25:41 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::c8b4:5648:8948:e85c]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::c8b4:5648:8948:e85c%3]) with mapi id 15.20.7202.035; Wed, 24 Jan 2024
+ 15:25:41 +0000
+From: Frank Li <Frank.Li@nxp.com>
+To: thinh.nguyen@synopsys.com
+Cc: Frank.Li@nxp.com,
+	balbi@kernel.org,
+	devicetree@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	imx@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	mark.rutland@arm.com,
+	mathias.nyman@intel.com,
+	pku.leo@gmail.com,
+	ran.wang_1@nxp.com,
+	robh+dt@kernel.org,
+	sergei.shtylyov@cogentembedded.com
+Subject: [PATCH v4 0/3] USB: dwc:  Add workaround for host mode VBUS glitch when boot
+Date: Wed, 24 Jan 2024 10:25:22 -0500
+Message-Id: <20240124152525.3910311-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY5PR04CA0017.namprd04.prod.outlook.com
+ (2603:10b6:a03:1d0::27) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240123143026.v1.3.Idf7d373c3cbb54058403cb951d644f1f09973d15@changeid>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VI1PR04MB10001:EE_
+X-MS-Office365-Filtering-Correlation-Id: 966c184d-0698-42c9-195a-08dc1cf0b96e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Moc7YhRTM1Kdz2RDNwk9jMOLQlnBrk5bgC+K7/225WnYgoQLE1ebujx+FqA6tibfHmwgynzQhpDqWAvoiaDf3XHlKvSlcuxIWG5pePp9/SsuBotWmrHnXdopV9cltbBssCqRfDAUOE+PDKr+nKtJOoBCPUXq/+RLem2WVnoHhziVlX/qigKlxHDQ0n4U6DIA8vO1QLlNXEYqAfr/3x/xqqbbzvabYc48UvDUnEHzg371563reQ5bKpnYJzhGIBCbBo6ofvou9R8Qw6+Mn978UP3IVE/6g3GRui8OTEnLfbhcGydizuKyMDsH3hevRQeMCYKAnguzztpkVuEZc8aExcTUP6b3/dKaRQMcaEiyfYVIv/etJqbJ8pc4DicHsMGQxJGcaoEhXyunFtm7VqDEI6nhkpzG29qg/Ak8n0fodQlz0MPNMkm1c7G9U8mRltvcd7FH+0Q6dv8EhD9YpettnSCVcln7PHpunB3hpQJGs/ADwkDwVbAnGAxRAwuSkrh1KeMXX1OkTG7Zsa3FMPtfl42SMFUZyUXIdLOn7KLRL6UVKBJo1Vd0Ri6PrhVvpzUfC45L7coPRFG3yPJZKmVUcLMP92KdQJAQDVhTFqmDK5wd3pXdfoALWLwDCPy6tHaZEsWPanLEe/zxyozNciOlO6h+7zhrXjuRnofAYFECJys=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(346002)(136003)(396003)(39860400002)(376002)(230922051799003)(230273577357003)(230173577357003)(1800799012)(64100799003)(186009)(451199024)(4326008)(8676002)(5660300002)(8936002)(66556008)(66946007)(316002)(66476007)(6916009)(2906002)(38350700005)(36756003)(86362001)(41300700001)(7416002)(38100700002)(52116002)(6506007)(6512007)(6666004)(83380400001)(26005)(478600001)(6486002)(2616005)(1076003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?/CGpcufWqzV+CcTaiKgCF7BP8u+p+oYyypQU9ODJZ+4v1XtjzrXC2lZUCrZg?=
+ =?us-ascii?Q?jpsFiPtq4lkIM9WIOgSLLPL+LlwJFY+uc+ROcxqt7zs4rZyO+dTsdHiClgtX?=
+ =?us-ascii?Q?7fyeb15L+s+3DW8gzboYFfhzVkuqwJyGBaO05E5LspKFKopjaTmhaqjkVhaz?=
+ =?us-ascii?Q?ja2vtMMflC999vnyyV6qVFvS8XlIegUncVnucTurIsUyO90CCXuwVuNMVdQC?=
+ =?us-ascii?Q?DI96PC+pRirnsO0DSJuqUe4BA4WLyp6Nu58/YlYyW8UmNDtFtjayMtDREEV2?=
+ =?us-ascii?Q?Kxrw7r2K2LY0c9+qmsd+3+q4OHD0GQlcStQRAo2CVf7RgIkDfHst7NQFxlH8?=
+ =?us-ascii?Q?LbWgnxnTBDF05ZMRK5LFA03mJ2BfE+PSn00dZXJAvwqmw0AjMv0/+wULlpZt?=
+ =?us-ascii?Q?x2x5x74DFVG47OUxLufpzRONcGIivw/GoAXPV14HiRcAssvTd/POGidHPRjY?=
+ =?us-ascii?Q?orhmM+cgOnmI71rT7lV4rweUE739j4dBQevBxLnSw340fmcEtYpGJSWRZqM0?=
+ =?us-ascii?Q?Ka0Qy7BZn0YDv3uBzOJb2IewuNWL+UPYRDRv5wrRVfDXbaGDwalKHxUmR/Ez?=
+ =?us-ascii?Q?jTTHyFKF13XLKvwYZP6lEeRZo5Rj24lTXFsfObtY6PvWaI6atm6ZxifwlACJ?=
+ =?us-ascii?Q?J18RUQNbt3YvvzX9nzgM6aNPOmKZxF4qGdjNSIPB7rUTJgKUeE1XI8MHPF3X?=
+ =?us-ascii?Q?XhneqLDgTv5wnUsu1h31KBfnBXm304d4ALkDS1QwuPbloQwOAixlSdCwZtQ4?=
+ =?us-ascii?Q?/IYZoR4rGx9RY2HcnqWReR1BT+mMuL42bzjnTnx5xVlDxDKdV8plhUfO3krf?=
+ =?us-ascii?Q?9UWOnyHA6nHpaMlnyujgaIYik3bbtWQTrbJ/NxB+pn4h5P2hK6kL6KxNrzBP?=
+ =?us-ascii?Q?jVEwxXh5xl0G/Wjd62NB3V77MZcsAaxVF0vKJH1Xsf+uwPqIRZvxy42e+fkL?=
+ =?us-ascii?Q?j273BthXRpeRiny0nd6Zt/jUL+HUFJ3UW43MBntffzqSaqmPN+WXTpHsUHm6?=
+ =?us-ascii?Q?nb+c9/+jR6kpo6mbvg//2JUzwKR3NUaJHbHe8INvogurgnzJ1lU1u+XlcS53?=
+ =?us-ascii?Q?Mfg1ozX3OzvjtcUh+kX3Fulk0HMr7W1jWCvk+qjgeuGD6/+rZtslRR58wiLN?=
+ =?us-ascii?Q?L05fbNpjXu8RM+54CEtc4zG+Isx3ahh33VZWE0snIYzC8nrUhCuV2YDlgvHu?=
+ =?us-ascii?Q?TfaXc+aTYd52WaOF0LFIkGV8ofKq8yu7YHR0R3inE3DSF0VB7T6NTkHEYVFB?=
+ =?us-ascii?Q?cTUJJOtbaFxPKEdHcN1OcYXCYtEmF+8d2iqDZW9vtNJ/agUMSAL2guB9oIx1?=
+ =?us-ascii?Q?8fh9rQnWLZTfB/mT4XSYjsJE5er7ZXdlErOMV3sYXaZ7pHAjhTk4TWfgNtHU?=
+ =?us-ascii?Q?vMuqvlPGBaFyNkzxhFkoY832VgbI8F+3lpbzw+pNeXZTFzv+IyUqqw6/POZD?=
+ =?us-ascii?Q?T8XGDCLi1L8ve0Y6R3GiHbpuXWK/AjViLKpEreJQ14sT01w/QzR5rNCDajt4?=
+ =?us-ascii?Q?D0TkvMwXJkRSDPdQF6wU5lwHos7dlsd1ZEc7xSjJ+l6/M79j9yHMRFkwVosg?=
+ =?us-ascii?Q?WoeoT1XPRi1mJTT+kAA/MPEC0daPAtRO9UWidMe1?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 966c184d-0698-42c9-195a-08dc1cf0b96e
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2024 15:25:41.1747
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SVu2TQorZNupDOPQJp2fVY3Nl2e44u5wxbR9MBS9X2Qtwhqhysw4PnKE4AMPc6UL/UkZM+cA77CRfwgMjLT43g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB10001
 
-Hi Abhishek,
+Chagne from v2 to v3
+- see notes at patch
 
-Few nitpicks for this one.
+Change from v1 to v2:
+- splite xhci.h to xchi-port.h and xhci-caps.h to shared marco.
+- add quirk subfix
+- fixed checkpatch error with --strict.
 
-On Tue, Jan 23, 2024 at 02:30:36PM -0800, Abhishek Pandit-Subedi wrote:
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> 
-> PD major revision for the port partner is described in
-> GET_CONNECTOR_CAPABILITY and is only valid on UCSI 2.0 and newer. Update
-> the pd_revision on the partner if the UCSI version is 2.0 or newer.
-> 
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> ---
-> $ cat /sys/class/typec/port2-partner/usb_power_delivery_revision
-> 3.0
-> 
->  drivers/usb/typec/ucsi/ucsi.c | 25 +++++++++++++++++++++++++
->  drivers/usb/typec/ucsi/ucsi.h |  3 +++
->  2 files changed, 28 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 4edf785d203b..8e0a512853ba 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -782,6 +782,8 @@ static int ucsi_register_partner(struct ucsi_connector *con)
->  	}
->  
->  	desc.usb_pd = pwr_opmode == UCSI_CONSTAT_PWR_OPMODE_PD;
-> +	desc.pd_revision =
-> +		UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags);
+left one warning to align existed code style.
 
-	desc.pd_revision = UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags);
+CHECK: Alignment should match open parenthesis
++	dwc->host_vbus_glitches_quirk = device_property_read_bool(dev,
++				"snps,host-vbus-glitches-quirk");
 
->  	partner = typec_register_partner(con->port, &desc);
->  	if (IS_ERR(partner)) {
-> @@ -856,6 +858,28 @@ static void ucsi_partner_change(struct ucsi_connector *con)
->  			con->num, u_role);
->  }
->  
-> +static int ucsi_check_connector_capability(struct ucsi_connector *con)
-> +{
-> +	u64 command;
-> +	int ret;
-> +
-> +	if (!con->partner && !IS_MIN_VERSION_2_0(con->ucsi))
-> +		return 0;
-> +
-> +	command = UCSI_GET_CONNECTOR_CAPABILITY | UCSI_CONNECTOR_NUMBER(con->num);
-> +	ret = ucsi_send_command(con->ucsi, command, &con->cap, sizeof(con->cap));
-> +	if (ret < 0) {
-> +		dev_err(con->ucsi->dev, "GET_CONNECTOR_CAPABILITY failed (%d)\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	typec_partner_set_pd_revision(
-> +		con->partner,
-> +		UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags));
+Frank Li (1):
+  XHCI: Separate PORT and CAPs macros into dedicated file
 
-	typec_partner_set_pd_revision(con->partner,
-		UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags));
+Ran Wang (2):
+  dt-bindings: usb: dwc3: Add snps,host-vbus-glitches-quirk avoid vbus
+    glitch
+  usb: dwc3: Add workaround for host mode VBUS glitch when boot
 
-> +
-> +	return ret;
-> +}
-> +
->  static int ucsi_check_connection(struct ucsi_connector *con)
->  {
->  	u8 prev_flags = con->status.flags;
-> @@ -925,6 +949,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->  		if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
->  			ucsi_register_partner(con);
->  			ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
-> +			ucsi_partner_task(con, ucsi_check_connector_capability, 1, HZ);
->  
->  			if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
->  			    UCSI_CONSTAT_PWR_OPMODE_PD)
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index 94b373378f63..5e60328f398e 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -36,6 +36,9 @@ struct dentry;
->  #define UCSI_BCD_GET_MINOR(_v_)		(((_v_) >> 4) & 0x0F)
->  #define UCSI_BCD_GET_SUBMINOR(_v_)	((_v_) & 0x0F)
->  
-> +#define IS_MIN_VERSION(ucsi, min_ver)	((ucsi)->version >= min_ver)
-
-Probable better to use brackets also with that min_ver:
-
-#define IS_MIN_VERSION(ucsi, min_ver)	((ucsi)->version >= (min_ver))
-
-> +#define IS_MIN_VERSION_2_0(ucsi)	IS_MIN_VERSION(ucsi, UCSI_VERSION_2_0)
-> +
->  /* Command Status and Connector Change Indication (CCI) bits */
->  #define UCSI_CCI_CONNECTOR(_c_)		(((_c_) & GENMASK(7, 1)) >> 1)
->  #define UCSI_CCI_LENGTH(_c_)		(((_c_) & GENMASK(15, 8)) >> 8)
-> -- 
-> 2.43.0.429.g432eaa2c6b-goog
-
-thanks,
+ .../devicetree/bindings/usb/snps,dwc3.yaml    |   7 +
+ drivers/usb/dwc3/core.c                       |   3 +
+ drivers/usb/dwc3/core.h                       |   2 +
+ drivers/usb/dwc3/host.c                       |  51 ++++
+ drivers/usb/host/xhci-caps.h                  |  85 ++++++
+ drivers/usb/host/xhci-port.h                  | 176 ++++++++++++
+ drivers/usb/host/xhci.h                       | 262 +-----------------
+ 7 files changed, 327 insertions(+), 259 deletions(-)
+ create mode 100644 drivers/usb/host/xhci-caps.h
+ create mode 100644 drivers/usb/host/xhci-port.h
 
 -- 
-heikki
+2.34.1
+
 
