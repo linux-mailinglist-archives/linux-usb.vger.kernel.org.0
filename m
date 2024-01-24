@@ -1,159 +1,95 @@
-Return-Path: <linux-usb+bounces-5482-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5483-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CC7383B09B
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 18:59:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AE6683B0FB
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 19:21:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F0991C22BEA
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 17:59:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DE3D1C2157E
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 18:21:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90EEF129A83;
-	Wed, 24 Jan 2024 17:59:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A178112BEA3;
+	Wed, 24 Jan 2024 18:21:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="keq5e3oG"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WfqY8RNk"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E0D7765D;
-	Wed, 24 Jan 2024 17:59:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3A012BE8F;
+	Wed, 24 Jan 2024 18:21:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706119146; cv=none; b=iOULFCy4PKaeMuAPpEtoKCiSjNvhATpFx+BSBm18xG3yG+A9d3M/CjyoXo+nwwsTdRZ0dyPzKQsB5rR2DRYCN4KpqzhgLNV+q4wyi2bG7/MQOCzcWlk/C262OE0YMDQ+F+A12K61VYhKzyPhPMqNvdnz0FU+VSnaztHmFEAeQfs=
+	t=1706120490; cv=none; b=DBfiiZ92dz3CPMsgiPZ5+8AOeV4c9g1K+2wEWZDRTGeqpOZyufDKXMxMYcuwzE1R9FeJNbGaz0fis7mO6zWCa2V/IOFmQ+ZtaPKx527Bih4Vn+ygmQdWY5xiuMG+TuQ2v114hPTnbTRTXhMkHl2rJk/IY7O70IcQAzmqL7ipeo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706119146; c=relaxed/simple;
-	bh=Cm7BUzwChHap3mEfOgJloaWrqZWdOhIAJHyy+U2xyWo=;
+	s=arc-20240116; t=1706120490; c=relaxed/simple;
+	bh=bAOqor9jVDIe2ro9v+Dr8T0G8/kwV2eE4vt8giEW+18=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KqXkqhCMOuygIK9k6o+ocQTQEqzBN8Ahn96+iBDuPxPBx6SG1uG7A3p2j+v9R45jU2J3g2SHSjC0pVZJEro8OWCNR/w9r71Kgd5fRXygw237LWCYmHEjo3d4A+BNbtAYG3+c01wJaQLpAEOtHO2kR/PlvSoSkqtvbL/DvPm5GhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=keq5e3oG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2925C433C7;
-	Wed, 24 Jan 2024 17:59:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706119145;
-	bh=Cm7BUzwChHap3mEfOgJloaWrqZWdOhIAJHyy+U2xyWo=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=J8d1hCyBk8JcppwfBiXXBlFpEuTsj0OpxSEjtDNxtUmUnTpdriOgsnM4ysti0Ebd+09HFrNRfEDKJmO47ofInL+mDcW4cs0vSfn/RgGendRC9bbaLyxI1dOasit9j7u8XKb02wPwaoSy4CJlO/uJhW3KPmUZXijJa6lOmS1XRO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WfqY8RNk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B09CC433C7;
+	Wed, 24 Jan 2024 18:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1706120489;
+	bh=bAOqor9jVDIe2ro9v+Dr8T0G8/kwV2eE4vt8giEW+18=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=keq5e3oG7YzoqplhWADOaCbnPxZisQAEE8B8Sifw4trHPchjoYKZvIXFsxzs647Fy
-	 ysA1MC8lyGQKGf662tm7oMMRvtDhDDqS4u84Ds+Sk+l5ORJ9deHw0RkgPJLPwLMpJZ
-	 h05iQGZQWzgpiJNUZThPGNQYIgq7sjs1lWFhVPpRovXNC3PvLcb9A7p4RgUulCGrik
-	 bemz4JzwY2hLA0wCM2AL4S1NJMfuduKPMyHjsqQEN/mFMwy0n89Z64nY/LrF7rLjdF
-	 RkAcUcFtxj0gKU39Plq+/n+pv6u4k01huRkZqfgRD/BP9uBhb6MblNdozcWJQUJuC+
-	 HJZabfG0Hk7tg==
-Date: Wed, 24 Jan 2024 17:59:00 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Frank Li <Frank.li@nxp.com>
-Cc: ran.wang_1@nxp.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>, mark.rutland@arm.com,
-	pku.leo@gmail.com, sergei.shtylyov@cogentembedded.com
-Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Add snps,host-vbus-glitches
- avoiding vbus glitch
-Message-ID: <20240124-video-lumpiness-178c4e317f5a@spud>
-References: <20240119213130.3147517-1-Frank.Li@nxp.com>
- <20240124-unclothed-dodgy-c78b1fffa752@spud>
- <ZbFNIvEaAJCxC2VB@lizhi-Precision-Tower-5810>
+	b=WfqY8RNkir20TGHJefjyezhrPNuWOSUmRZVTXPG7Upa9L51rybqgd+LVIm5yvDeHg
+	 XkJB20mTbrsf3evvzwVd/0ZjkCPO1nKNUY4YcWltfBtTeiFgTgWCzm87I249kT8r1w
+	 mVwIqdZS007u9zlmFwH+TSuuML1uah6KHkNOAi3Y=
+Date: Wed, 24 Jan 2024 10:21:18 -0800
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Magnus Damm <magnus.damm@gmail.com>, linux-staging@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] staging: Remove EMMA Mobile USB Gadget and board
+ staging support
+Message-ID: <2024012406-handgun-mutation-86d0@gregkh>
+References: <cover.1705932585.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="nhkkh/uTdZahtS4x"
-Content-Disposition: inline
-In-Reply-To: <ZbFNIvEaAJCxC2VB@lizhi-Precision-Tower-5810>
-
-
---nhkkh/uTdZahtS4x
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <cover.1705932585.git.geert+renesas@glider.be>
 
-On Wed, Jan 24, 2024 at 12:47:14PM -0500, Frank Li wrote:
-> On Wed, Jan 24, 2024 at 05:36:42PM +0000, Conor Dooley wrote:
-> > On Fri, Jan 19, 2024 at 04:31:28PM -0500, Frank Li wrote:
-> > > From: Ran Wang <ran.wang_1@nxp.com>
-> > >=20
-> > > When DWC3 is set to host mode by programming register DWC3_GCTL, VBUS
-> > > (or its control signal) will turn on immediately on related Root Hub
-> > > ports. Then the VBUS will be de-asserted for a little while during xh=
-ci
-> > > reset (conducted by xhci driver) for a little while and back to norma=
-l.
-> > >=20
-> > > This VBUS glitch might cause some USB devices emuration fail if kernel
-> > > boot with them connected. One SW workaround which can fix this is to
-> > > program all PORTSC[PP] to 0 to turn off VBUS immediately after setting
-> > > host mode in DWC3 driver(per signal measurement result, it will be too
-> > > late to do it in xhci-plat.c or xhci.c).
-> > >=20
-> > > Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-> > > Reviewed-by: Peter Chen <peter.chen@nxp.com>
-> > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
-> > >  1 file changed, 7 insertions(+)
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/D=
-ocumentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > index 203a1eb66691f..dbf272b76e0b5 100644
-> > > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > @@ -273,6 +273,13 @@ properties:
-> > >        with an external supply.
-> > >      type: boolean
-> > > =20
-> > > +  snps,host-vbus-glitches:
-> > > +    description:
-> > > +      When set, power off all Root Hub ports immediately after
-> > > +      setting host mode to avoid vbus (negative) glitch happen in la=
-ter
-> > > +      xhci reset. And the vbus will back to 5V automatically when re=
-set done.
+On Mon, Jan 22, 2024 at 03:24:29PM +0100, Geert Uytterhoeven wrote:
+> 	Hi Greg,
+> 
+> Board staging was introduced to host temporarily legacy board support
+> for platforms that are under active conversion to DT.  Currently it
+> hosts:
+>   1. USB Gadget support for the Kyoto Microcomputer Co. KZM-A9-Dual
+>      (KZM9D) development board,
+>   2. Display support for the Atmark Techno Armadillo-800-EVA development
+>      board.
+> 
+> During the last few years, the KZM9D development board didn't receive
+> much love.  Also, no one really cared about the EMMA Mobile USB Gadget
+> driver, which is also hosted under staging.  Recently, the SH-Mobile
+> LCDC DRM driver and Armadillo-800-EVA display support have been
+> converted to DT.
+> 
+> Hence this patch series removes all board staging support, together with
+> the now unused EMMA Mobile USB Gadget driver.
+> 
+> Changes compared to v1:
+>   - Drop RFC, widen audience,
+>   - Drop EMMA Mobile EV2 clkdev registration patch (merged),
+>   - Add Acked-by,
+>   - Remove Armadillo-800-EVA and core board staging code, too.
+> 
+> Thanks!
+> 
+> [1] "[PATCH/RFC 0/3] Remove KZM9D board staging support"
+>     https://lore.kernel.org/all/cover.1686325857.git.geert+renesas@glider.be/
 
-nit: "will return to"
+Nice, thanks for this, all now queued up.
 
-> > > +    type: boolean
-> >=20
-> > Why do we want to have a property for this at all? The commit message
-> > seems to describe a problem that's limited to specific configurations
-> > and appears to be somethng the driver should do unconditionally.
-> >=20
-> > Could you explain why this cannot be done unconditionally please?
->=20
-> It depends on board design, not all system vbus can be controller by root
-> hub port. If it is always on, it will not trigger this issue.
-
-Okay, that seems reasonable to have a property for. Can you add that
-info to the commit message please?
-
-On another note, I like it when the property name explains why you would
-add it, rather than the thing it is trying to solve.
-Named after the disease, rather than the symptoms, if you get me. I
-tried to come up with a name here, but could not really suggest
-something good. If you can think of something, that'd be good, but don't
-stress it.
-
-Thanks,
-Conor.
-
-
---nhkkh/uTdZahtS4x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbFP5AAKCRB4tDGHoIJi
-0jMAAQCp/21Q5979/sF3RN5s/2EsZasO9EBk6OMq7hWHKqQ6bQEAonMgZ+jJ1CwA
-FychGYPa48OqMYsKeXJjFbuS92nlmQM=
-=2AIU
------END PGP SIGNATURE-----
-
---nhkkh/uTdZahtS4x--
+greg k-h
 
