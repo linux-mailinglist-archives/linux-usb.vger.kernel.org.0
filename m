@@ -1,81 +1,81 @@
-Return-Path: <linux-usb+bounces-5438-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5439-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2591C839E19
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 02:16:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31DBE839E61
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 02:44:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5B911F21F1C
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 01:16:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9AB8CB216B2
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 01:44:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAC221396;
-	Wed, 24 Jan 2024 01:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 476461874;
+	Wed, 24 Jan 2024 01:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ElDSDfQH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oiMFEWuC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F4723BE
-	for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 01:16:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 087BB1860
+	for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 01:44:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706059010; cv=none; b=m0TXuYtvH5GNI3IQTRxBrXnJ7nvfGhOuYHJEDc6LJjnBJ48JJjMJY2EMxNK5qrALqQnthPadP+n6cUOotwjkXgNerxkwB6InMBfDGa2jBt9EXxQ021GuWuc0p311Qj2LGrCzgEquJgsnkt9W0ddfvW5XtZ+hQQfYMSvlob3wVLA=
+	t=1706060653; cv=none; b=n1cgVMbubjGvWtqasvhC4sWz/tQMuiajbR5hxgqUY4uzDhOTkqAS+cTJ1TR/1syYfM+wNPNTGeRaRZ7Uwfrf+a9A6X3kJrIYcmmQpMqLsfGTRr/vKiCrHHI2hlvwWNDFmHuTCSjjdx0r4WFsyLTblm0pyMObIalq6XManYW2wNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706059010; c=relaxed/simple;
-	bh=oOMJ+rqQ8wQ5HSdlC+ci8LugSWMAFnY2eQIk2KFhFeI=;
+	s=arc-20240116; t=1706060653; c=relaxed/simple;
+	bh=iL/UCl34gXV8cPmzN0AbfQqu0mpwcIfNM3iDwH9Z8BU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dfYtnq1rtLvyluErn2YMh7Y/xqrZ57w7BT92BKpkALJhW0PbB43qoxKs0WKOXqCSzjW5Y0sLc1tYjmTvZMrn7eWZaowsedhxUPkdVpPRjJCM+wsgPq0LftWI2A1uwq2KIsSWwT1BxLTpZNj27SZA+ZD5+yFE/UkSMiMM3v4XpDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ElDSDfQH; arc=none smtp.client-ip=209.85.219.180
+	 To:Cc:Content-Type; b=cOu5ptPEdpiRdXE2TVjGoECffY0dGEVlQ7xM3n0lwZ82ucamFPR26FrMWjVuoouOcDnuKoQ1FcdnHMN5mCSGkkbph3gJ3m4AzNpb92OSiptDir0PSbPzumN8jLWmENkXJcXqTOF6sYEn0iu7eUCLGgcFSdRVnYJdg+9ZpnkxmEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oiMFEWuC; arc=none smtp.client-ip=209.85.219.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-db3a09e96daso4142303276.3
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 17:16:47 -0800 (PST)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dc372245aefso1319484276.2
+        for <linux-usb@vger.kernel.org>; Tue, 23 Jan 2024 17:44:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706059006; x=1706663806; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706060651; x=1706665451; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XiDZPdJfTfPzimLT8ACIvzkmMThhwDufXcvlEt4ng70=;
-        b=ElDSDfQHFiDEb8fcEAWjeMTY7b7MHRWhoyMxf5RHYJfnIQE3lfhvWiCtigYfRJBUik
-         heCd0MJTdo3e79eWzbsbE8pII0jRQ1MaTapMSlFtlWJiKCjPyM96OYGXhifhP/LTvGH/
-         0KCaB9QxVY9HPGRadnJbmSY7x85N4FJw2Xw1K+KMLom47WqvVeagXWtTJ8i2sOFRrwOp
-         GbeVjHJ+Gal9OmU5UNZNvB75xzsI4aijyI6UO57ljZqozuGY3j5BPbBLNI+cYYPGr7rh
-         99RtCK0TLVX94eoBHum2bx85yPs9VRjkpbIoeDWoLTvgz323SWhYKZdQ8L8E6M9226ce
-         1SIg==
+        bh=+EJ9ZUznar9sJ684CFkqKMAG0mvXQb80PSMhKIErrW0=;
+        b=oiMFEWuCjTX9SEjYRz6xIG2F3tWd0ksb4rWPS+CbNY36xvRCkj4SP3/vxy41qgrqRj
+         TPgxCQzssLWFNCZIJKEgUMGBmqmpRW/QvjdJlV0QN758PynW//LI3DiINhHQZL6ql1Xb
+         OYuSKVuFvhRUhONPa5ld+SbRqHvLqQKndKv9muIXo2DCvfoZuuGi5E1zDBcAwA2x8819
+         7B9/6/oBTt3iMkzBZsR3zJq8yoi/MyAhiJHUVIvMaPRnlqJ+4st2j+5SpjrhICn3s0bw
+         5NW8otymBqLgVbG8x1vL2epvsxRaoDDswHoFO3XYID4IzuVdU7djTbsBuNUd6+A16ot3
+         zM/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706059006; x=1706663806;
+        d=1e100.net; s=20230601; t=1706060651; x=1706665451;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XiDZPdJfTfPzimLT8ACIvzkmMThhwDufXcvlEt4ng70=;
-        b=ORp8vFbA+DygcLgd/3JUpBXOuZPHXk05qPK2U9CG7pX02rkryEmcDduLo8gCHOVV++
-         hWKgRYw7mFtV6A4QV6ZS2EyRiHTARR66kv2jU0sVZX8gKsRJU2nhP/aB90VnvWtEqxp6
-         ydqj9XxwKYgj0O237rYOs6fLZk0jXe31b2SsQRtgk2O10oUto5Yvodk1dH3xd1dIpDbB
-         UW1gFFdDFVHw6pkkQJJRhlsCT9LE5gYhiqzNVttXAKfEjgfPHCWLyoH+3XdDO3ZsWbhf
-         ldAgOihmN9uMyBXQVUgHjs5yR5G56aUg8ffWxn9ehR4glPw3na5pefqouYG2uffMAwHg
-         XH8g==
-X-Gm-Message-State: AOJu0YxLVYzFOyJP/aXQVmInx/Kbkji5JT4ohNgrylcj9GfejfAL38dK
-	5DVR37DoN3q5tIiq+sZgBL6POVLkMy4PCwTykdpMSr90mrnIx+58wilmYi5GALo+9R+75O34Ldc
-	c/E3NoQZg6Q1+xf93zBBu2uBmAY1nJH+CISQj1A==
-X-Google-Smtp-Source: AGHT+IGQ7HCSgRIhv+Wm9LSN6sbjwrzJYjPinkuCo89KnHd0kys9EF4OXMRQPRnVOV1NpPzxcP/YMnpDezw9TivlCAQ=
-X-Received: by 2002:a05:6902:2189:b0:dbc:ab9d:4fab with SMTP id
- dl9-20020a056902218900b00dbcab9d4fabmr78935ybb.60.1706059006416; Tue, 23 Jan
- 2024 17:16:46 -0800 (PST)
+        bh=+EJ9ZUznar9sJ684CFkqKMAG0mvXQb80PSMhKIErrW0=;
+        b=doShmN09+ZRWKx3I4PnzzwIylClpjGJSc1vMAymEpfUV/8dyaJIXarXjFP8+REhluq
+         XXKyhg+xTWrzAWN7p6AOVqsk9iPEyYGO5OQaMeS6EGRigFTe3d5zBfexvHrdJwYkNDYU
+         9hRIW/Zep9WiXzmF75aszU/nh5PIcBp4QPJY2hW33Aec+aAKAdmL627W5qh3QLZal5Un
+         lfXCtRg+3YEYD+TkQbd6TVDsbUAwRFtuHRAaac9WuUsa+1ZnMyf2Kp7MZExnmWD2uQxG
+         O0QOUrE4RG42JMYuat0CFZr19cKB2Urfn8F9SV+abUj5dParyMURhE2Nh+6D57OaTd/U
+         BWdw==
+X-Gm-Message-State: AOJu0YydnF3Vvc6tSpfcuL8p5TTQy0qZKZOISqw6NysxqQmVTGzx+TB5
+	b4vB/CS7ufpx4XqPrBkklwGESKaYE5WOfGA+g3BnorPyRRYm9O5HNOxEOZh7wZgNlORScsYePE2
+	rFyEBmgUqXWUMbXNR4OQ6+0d2dXr+Gt6mzkZPcg==
+X-Google-Smtp-Source: AGHT+IFdFd9XSV1qb3fXFDQRWsSosCJLwTufWRBJrP7gZM8W3AYbECne9ER587NBXf7shK6NbzG7fh2hdunuhmE/fRg=
+X-Received: by 2002:a25:ac03:0:b0:dc2:3d03:bce8 with SMTP id
+ w3-20020a25ac03000000b00dc23d03bce8mr86878ybi.127.1706060650705; Tue, 23 Jan
+ 2024 17:44:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org>
- <20240113-pmi632-typec-v2-15-182d9aa0a5b3@linaro.org> <CYMDEAJZ0TJK.K31XZB3E9QOG@fairphone.com>
-In-Reply-To: <CYMDEAJZ0TJK.K31XZB3E9QOG@fairphone.com>
+References: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org> <CYMDMMXUICGY.21UIRWVXMLART@fairphone.com>
+In-Reply-To: <CYMDMMXUICGY.21UIRWVXMLART@fairphone.com>
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Wed, 24 Jan 2024 03:16:35 +0200
-Message-ID: <CAA8EJpr-a1T_GTfYbUcaXv+mmjfqUYnx+fch-M=0-q89_UmeoQ@mail.gmail.com>
-Subject: Re: [PATCH v2 15/15] arm64: dts: qcom: qrb4210-rb2: enable USB-C port handling
+Date: Wed, 24 Jan 2024 03:43:59 +0200
+Message-ID: <CAA8EJpq3ex7m1ZdV9DeRC+jN9=+RCZ4D_ue3C6ijwdkT9r433g@mail.gmail.com>
+Subject: Re: [PATCH v2 00/15] usb: typec: qcom-pmic-typec: enable support for
+ PMI632 PMIC
 To: Luca Weiss <luca.weiss@fairphone.com>
 Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
 	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
@@ -86,186 +86,156 @@ Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.
 	Kishon Vijay Abraham I <kishon@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
 	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
 	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
+	linux-usb@vger.kernel.org, linux-phy@lists.infradead.org, 
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 23 Jan 2024 at 22:32, Luca Weiss <luca.weiss@fairphone.com> wrote:
+On Tue, 23 Jan 2024 at 22:43, Luca Weiss <luca.weiss@fairphone.com> wrote:
 >
 > On Sat Jan 13, 2024 at 9:55 PM CET, Dmitry Baryshkov wrote:
-> > Plug in USB-C related bits and pieces to enable USB role switching and
-> > USB-C orientation handling for the Qualcomm RB2 board.
-> >
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 50 ++++++++++++++++++++++++++++++++
-> >  arch/arm64/boot/dts/qcom/sm6115.dtsi     | 43 +++++++++++++++++++++++++++
-> >  2 files changed, 93 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-> > index 52f31f3166c2..696d6d43c56b 100644
-> > --- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-> > +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-> > @@ -6,8 +6,10 @@
-> >  /dts-v1/;
-> >
-> >  #include <dt-bindings/leds/common.h>
-> > +#include <dt-bindings/usb/pd.h>
-> >  #include "sm4250.dtsi"
-> >  #include "pm6125.dtsi"
-> > +#include "pmi632.dtsi"
-> >
-> >  / {
-> >       model = "Qualcomm Technologies, Inc. QRB4210 RB2";
-> > @@ -256,6 +258,46 @@ kypd_vol_up_n: kypd-vol-up-n-state {
-> >       };
-> >  };
-> >
-> > +&pmi632_typec {
-> > +     status = "okay";
-> > +
-> > +     connector {
-> > +             compatible = "usb-c-connector";
-> > +
-> > +             power-role = "dual";
-> > +             data-role = "dual";
-> > +             self-powered;
-> > +
-> > +             typec-power-opmode = "default";
-> > +             pd-disable;
-> > +
-> > +             ports {
-> > +                     #address-cells = <1>;
-> > +                     #size-cells = <0>;
-> > +
-> > +                     port@0 {
-> > +                             reg = <0>;
-> > +                             pmi632_hs_in: endpoint {
-> > +                                     remote-endpoint = <&usb_dwc3_hs>;
-> > +                             };
-> > +                     };
-> > +
-> > +                     port@1 {
-> > +                             reg = <1>;
-> > +                             pmi632_ss_in: endpoint {
-> > +                                     remote-endpoint = <&usb_qmpphy_out>;
-> > +                             };
-> > +                     };
-> > +             };
-> > +     };
-> > +};
-> > +
-> > +&pmi632_vbus {
-> > +     regulator-min-microamp = <500000>;
-> > +     regulator-max-microamp = <3000000>;
+> > The Qualcomm PMI632 PMIC (found on Qualcomm Robotics RB2 platform)
+> > doesn't support USB Power Delivery. However this PMIC still supports
+> > handling of the Type-C port (orientation detection, etc). Reuse exiting
+> > qcom-pmic-typec driver to support Type-C related functionality of this
+> > PMIC. Use this to enable USB-C connector support on the RB2 platform.
 >
 > Hi Dmitry,
 >
-> Are you sure vbus can supply 3000mA?
+> I'm happy to report that testing this series on v6.8-rc1 kernel on
+> sdm632-fairphone-fp3 shows that USB role switching is working with this!
 >
-> In Qualcomm's document 80-PF208-77 I see 1000mA is the maximum it can
-> provide, and I see the same value looking into downstream smb5 driver
-> in sdm632 sources.
+> It's not extensive testing but plugging in a USB stick and USB headphone
+> jack dongle in both directions show up in dmesg as expected, and
+> afterwards also USB networking gadget still works to ssh into the
+> device.
+>
+> My .dts part is a bit different to your RB2 dts since
+> sdm632-fairphone-fp3 doesn't support USB 3.0, only USB 2.0, but
+> otherwise looks pretty similar. I'll send a patch for that once your
+> series has landed.
+>
+> Not sure on which patches it makes sense, but have my:
+>
+> Tested-by: Luca Weiss <luca.weiss@fairphone.com> # sdm632-fairphone-fp3
 
-Indeed, you are correct here. It seems I confused vbus current with
-charge current
+Probably this makes sense on pmi632 patches, as you definitely tested
+only those and not RB2 ones.
 
 >
-> https://gerrit-public.fairphone.software/plugins/gitiles/kernel/msm-4.9/+/refs/heads/int/13/fp3/drivers/power/supply/qcom/qpnp-smb5.c#414
+> And for reference:
+>
+> Only thing I've noticed here is "Host supports USB 3.0 SuperSpeed" which
+> is half true, to my knowledge SDM632 does support USB 3.0 but it's not
+> hooked up (for some reason) on most MSM8953/SDM632-based devices.
+
+I suppose it is the same story as SDM660. The SoC supports USB 3.0,
+but device manufacturers at that time didn't care for the sake of
+making them cheaper. So development kits had USB 3.0 (e.g. IFC6560),
+but the actual phones didn't.
+
+>
+> [   22.986096] xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
+> [   22.986273] xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 1
+> [   22.990847] xhci-hcd xhci-hcd.1.auto: hcc params 0x0230f665 hci version 0x100 quirks 0x0000000002000010
+> [   22.998260] xhci-hcd xhci-hcd.1.auto: irq 57, io mem 0x07000000
+> [   23.007684] xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
+> [   23.013435] xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 2
+> [   23.019029] xhci-hcd xhci-hcd.1.auto: Host supports USB 3.0 SuperSpeed
+> [   23.027696] hub 1-0:1.0: USB hub found
+> [   23.033167] hub 1-0:1.0: 1 port detected
+> [   23.037538] usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
+> [   23.041853] hub 2-0:1.0: USB hub found
+> [   23.049034] hub 2-0:1.0: 1 port detected
+> [   23.120301] qcom,pmic-typec 200f000.spmi:pmic@2:typec@1500: vbus vsafe5v fail
+> [   23.845537] usb 1-1: new high-speed USB device number 2 using xhci-hcd
+> [   23.995466] usb-storage 1-1:1.0: USB Mass Storage device detected
+> [   23.996166] scsi host0: usb-storage 1-1:1.0
+> [   25.022547] scsi 0:0:0:0: Direct-Access     SanDisk  Ultra            1.00 PQ: 0 ANSI: 6
+> [   25.023926] sd 0:0:0:0: [sda] 60062500 512-byte logical blocks: (30.8 GB/28.6 GiB)
+> [   25.030873] sd 0:0:0:0: [sda] Write Protect is off
+> [   25.037204] sd 0:0:0:0: [sda] Mode Sense: 43 00 00 00
+> [   25.042395] sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+> [   25.070314]  sda: sda1 sda2 sda3
+> [   25.071050] sd 0:0:0:0: [sda] Attached SCSI removable disk
+>
+>
+> [   31.347094] usb 1-1: USB disconnect, device number 2
+> [   31.364973] xhci-hcd xhci-hcd.1.auto: remove, state 4
+> [   31.365149] usb usb2: USB disconnect, device number 1
+> [   31.370427] xhci-hcd xhci-hcd.1.auto: USB bus 2 deregistered
+> [   31.374236] xhci-hcd xhci-hcd.1.auto: remove, state 1
+> [   31.379906] usb usb1: USB disconnect, device number 1
+> [   31.475790] xhci-hcd xhci-hcd.1.auto: USB bus 1 deregistered
 >
 > Regards
 > Luca
 >
-> > +     status = "okay";
-> > +};
-> > +
-> >  &pon_pwrkey {
-> >       status = "okay";
-> >  };
-> > @@ -607,6 +649,10 @@ &usb {
-> >       status = "okay";
-> >  };
+>
 > >
-> > +&usb_dwc3_hs {
-> > +     remote-endpoint = <&pmi632_hs_in>;
-> > +};
-> > +
-> >  &usb_hsphy {
-> >       vdd-supply = <&vreg_l4a_0p9>;
-> >       vdda-pll-supply = <&vreg_l12a_1p8>;
-> > @@ -622,6 +668,10 @@ &usb_qmpphy {
-> >       status = "okay";
-> >  };
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> > Changes in v2:
+> > - Split qcom_pmic_typec_pdphy_set_roles() changes to separate patch
+> >   (Konrad)
+> > - Simplified devm_kzalloc / sizeof() argument (Konrad)
+> > - Made start / stop callbacks mandatory (Bryan)
+> > - Reworked Type-C port handling into a backend similar to PD PHY (Bryan)
+> > - Made more qcom-pmic-typec data static const (Bryan)
+> > - Squashed usbc PHY single-lane removal patch (Konrad)
+> > - Further usbc PHY cleanup (Konrad)
+> > - Fixed order of DT properties in pmi632.dtsi (Konrad)
+> > - Instead of specifying bogus PDOs for the port, specify pd-disable and
+> >   typec-power-opmode properties for the connector
+> > - Moved orientation-switch / usb-dual-role properties to sm6115.dtsi
+> >   (Konrad)
+> > - Linked usb_dwc3_ss and usb_qmpphy_usb_ss_in
+> > - Link to v1: https://lore.kernel.org/r/20240113-pmi632-typec-v1-0-de7dfd459353@linaro.org
 > >
-> > +&usb_qmpphy_out {
-> > +     remote-endpoint = <&pmi632_ss_in>;
-> > +};
-> > +
-> >  &wifi {
-> >       vdd-0.8-cx-mx-supply = <&vreg_l8a_0p664>;
-> >       vdd-1.8-xo-supply = <&vreg_l16a_1p3>;
-> > diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > index 76c429e8ebab..01dff6641280 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > @@ -878,8 +878,29 @@ usb_qmpphy: phy@1615000 {
-> >                       clock-output-names = "usb3_phy_pipe_clk_src";
+> > ---
+> > Dmitry Baryshkov (14):
+> >       dt-bindings: regulator: qcom,usb-vbus-regulator: add support for PMI632
+> >       dt-bindings: usb: qcom,pmic-typec: add support for the PMI632 block
+> >       dt-bindings: phy: qcom,msm8998-qmp-usb3-phy: split from sc8280xp PHY schema
+> >       dt-bindings: phy: qcom,msm8998-qmp-usb3-phy: support USB-C data
+> >       usb: typec: tcpm: fix the PD disabled case
+> >       usb: typec: qcom-pmic-typec: fix arguments of qcom_pmic_typec_pdphy_set_roles
+> >       usb: typec: qcom-pmic-typec: allow different implementations for the PD PHY
+> >       usb: typec: qcom-pmic-typec: allow different implementations for the port backend
+> >       usb: typec: qcom-pmic-typec: add support for PMI632 PMIC
+> >       phy: qcom: qmp-usb: split USB-C PHY driver
+> >       phy: qcom: qmp-usb: drop dual-lane handling
+> >       phy: qcom: qmp-usbc: add support for the Type-C handling
+> >       arm64: dts: qcom: pmi632: define USB-C related blocks
+> >       arm64: dts: qcom: qrb4210-rb2: enable USB-C port handling
 > >
-> >                       #phy-cells = <0>;
-> > +                     orientation-switch;
+> > Vladimir Zapolskiy (1):
+> >       arm64: dts: qcom: sm6115: drop pipe clock selection
 > >
-> >                       status = "disabled";
-> > +
-> > +                     ports {
-> > +                             #address-cells = <1>;
-> > +                             #size-cells = <0>;
-> > +
-> > +                             port@0 {
-> > +                                     reg = <0>;
-> > +
-> > +                                     usb_qmpphy_out: endpoint {
-> > +                                     };
-> > +                             };
-> > +
-> > +                             port@1 {
-> > +                                     reg = <1>;
-> > +
-> > +                                     usb_qmpphy_usb_ss_in: endpoint {
-> > +                                             remote-endpoint = <&usb_dwc3_ss>;
-> > +                                     };
-> > +                             };
-> > +                     };
-> >               };
+> >  .../bindings/phy/qcom,msm8998-qmp-usb3-phy.yaml    |  171 +++
+> >  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        |   22 -
+> >  .../regulator/qcom,usb-vbus-regulator.yaml         |    9 +-
+> >  .../devicetree/bindings/usb/qcom,pmic-typec.yaml   |   28 +-
+> >  arch/arm64/boot/dts/qcom/pmi632.dtsi               |   30 +
+> >  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts           |   50 +-
+> >  arch/arm64/boot/dts/qcom/sm6115.dtsi               |   44 +-
+> >  drivers/phy/qualcomm/Makefile                      |    2 +-
+> >  drivers/phy/qualcomm/phy-qcom-qmp-usb.c            |  323 +-----
+> >  drivers/phy/qualcomm/phy-qcom-qmp-usbc.c           | 1169 ++++++++++++++++++++
+> >  drivers/usb/typec/tcpm/qcom/Makefile               |    3 +-
+> >  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c      |  254 +----
+> >  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.h      |   27 +
+> >  .../usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c    |  157 ++-
+> >  .../usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.h    |   94 +-
+> >  .../typec/tcpm/qcom/qcom_pmic_typec_pdphy_stub.c   |   80 ++
+> >  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c |  290 ++++-
+> >  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.h |  172 +--
+> >  drivers/usb/typec/tcpm/tcpm.c                      |    3 +-
+> >  19 files changed, 2058 insertions(+), 870 deletions(-)
+> > ---
+> > base-commit: 9e21984d62c56a0f6d1fc6f76b646212cfd7fe88
+> > change-id: 20240112-pmi632-typec-4c7533092387
 > >
-> >               system_noc: interconnect@1880000 {
-> > @@ -1614,6 +1635,28 @@ usb_dwc3: usb@4e00000 {
-> >                               snps,has-lpm-erratum;
-> >                               snps,hird-threshold = /bits/ 8 <0x10>;
-> >                               snps,usb3_lpm_capable;
-> > +
-> > +                             usb-role-switch;
-> > +
-> > +                             ports {
-> > +                                     #address-cells = <1>;
-> > +                                     #size-cells = <0>;
-> > +
-> > +                                     port@0 {
-> > +                                             reg = <0>;
-> > +
-> > +                                             usb_dwc3_hs: endpoint {
-> > +                                             };
-> > +                                     };
-> > +
-> > +                                     port@1 {
-> > +                                             reg = <1>;
-> > +
-> > +                                             usb_dwc3_ss: endpoint {
-> > +                                                     remote-endpoint = <&usb_qmpphy_usb_ss_in>;
-> > +                                             };
-> > +                                     };
-> > +                             };
-> >                       };
-> >               };
-> >
+> > Best regards,
 >
 
 
