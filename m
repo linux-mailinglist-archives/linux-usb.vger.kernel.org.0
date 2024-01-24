@@ -1,123 +1,209 @@
-Return-Path: <linux-usb+bounces-5464-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5465-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF05C83AB67
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 15:10:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C08E483AB71
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 15:14:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1F221C29623
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 14:10:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 98A32B2797E
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 14:14:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A12D7A70B;
-	Wed, 24 Jan 2024 14:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3528D7A739;
+	Wed, 24 Jan 2024 14:14:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PTpM7b4B"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [60.191.123.50])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC1D7A707
-	for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 14:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.191.123.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1E17A728;
+	Wed, 24 Jan 2024 14:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706105430; cv=none; b=DK8EOoXE2SWb28rtcSolzsCFggQGVDBfA4QYa5+PHbGW/5nICZIjtxatrEWA/Vk24NdbEGcxRtHB9AkmK+FwTK/BQ744KD+ax3BOabkw0aLqj4CoqESUzIE1h7ptEvpNUFZgBjrvq/UGqt5wooT1Bdi0tgYXyvo6qrRq7iM1wyU=
+	t=1706105657; cv=none; b=D7i+b/1JL5rC5ZlXm13aQJvESsT/UEYlzEPOPn867TuTDYcUbkEk3nl6/54b76VrPdNbnuj3JvOIBtR3G4mah/raVmgxjatJwiVoh/bKsN0JrqR4CqwHpzfz2Xzwo+dO4doVOD6Kkz/3MoAkOVl4UUMxJsLtA0NkPCYIzYtT59I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706105430; c=relaxed/simple;
-	bh=NUvnWmgX+3a24k0iIz17AV3ecBrcPe29naHgXmptg60=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=u625V8B1HYvTR3xGSs7V0pc8XaN4710ccOUMQLRxViIvOwmT9/bE6hI3h2V4Zlhru4kK9++1dC53SXA/NXDDpmdf9SADXulHRXhVb1pXJZfP3fg32jZPMEAxVVKQXL6gVuJFh43oIKDHgJzuWZg0jAu+p87G+FkLuV9lD+ThEWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com; spf=pass smtp.mailfrom=h3c.com; arc=none smtp.client-ip=60.191.123.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h3c.com
-Received: from mail.maildlp.com ([172.25.15.154])
-	by h3cspam02-ex.h3c.com with ESMTP id 40OE9e2m093953;
-	Wed, 24 Jan 2024 22:09:40 +0800 (GMT-8)
-	(envelope-from zhang.zhansheng@h3c.com)
-Received: from DAG6EX11-BJD.srv.huawei-3com.com (unknown [10.153.34.13])
-	by mail.maildlp.com (Postfix) with ESMTP id A27C02004BA8;
-	Wed, 24 Jan 2024 22:14:22 +0800 (CST)
-Received: from DAG6EX02-IMDC.srv.huawei-3com.com (10.62.14.11) by
- DAG6EX11-BJD.srv.huawei-3com.com (10.153.34.13) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.27; Wed, 24 Jan 2024 22:09:44 +0800
-Received: from DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4])
- by DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4%16]) with
- mapi id 15.02.1258.027; Wed, 24 Jan 2024 22:09:44 +0800
-From: Zhangzhansheng <zhang.zhansheng@h3c.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Ladislav Michl
-	<oss-lists@triops.cz>
-CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Sneeker Yeh
-	<sneeker.yeh@gmail.com>,
-        Wangxiaoqing <wangxiaoqing@h3c.com>, Xinhaining
-	<xinhaining@h3c.com>
-Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTogW0NvbnN1bHRpbmcgYWJvdXQ6IHhI?=
- =?utf-8?Q?CI_host_dies_on_device_unplug]?=
-Thread-Topic: =?utf-8?B?562U5aSNOiDnrZTlpI06IFtDb25zdWx0aW5nIGFib3V0OiB4SENJIGhvc3Qg?=
- =?utf-8?Q?dies_on_device_unplug]?=
-Thread-Index: Ado/deoXRCEZDWeZTvuVrPzYRAXR6wADli6AA1eMzaAAOXddgAAoPNiwABQDsmD//59zAP//egKw
-Date: Wed, 24 Jan 2024 14:09:43 +0000
-Message-ID: <7e00c498947c4efdb8a96f970656ee03@h3c.com>
-References: <7b049561ce33406ab9b5d0cee7fbd497@h3c.com>
- <9e8bebd2-e51a-cd24-3522-a781bb0b237e@linux.intel.com>
- <e7fddc9147af4adc84f76c07b559ed77@h3c.com>
- <57883406-83f3-9956-16c3-2954ab3744ca@linux.intel.com>
- <64e4153a5cd54cf9bc3eaaf823ba0a31@h3c.com>
- <c756521f-ea5b-7816-5d60-0c61f3275305@linux.intel.com>
-In-Reply-To: <c756521f-ea5b-7816-5d60-0c61f3275305@linux.intel.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-sender-location: DAG2
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1706105657; c=relaxed/simple;
+	bh=1WwHCAFVV2NPEEod/8TMiSCLMQEPAuQYnS/MCqWE71s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ez6ZyBb5ghfFQP+7Ab/I6W9JpSa9ikDqmzEFjeYGmlse6KRlcZbtsWzq8s9HXLvCGip45RcgqJaAccbOFRf9kIgfFnHbq8/BV/0ZNuibbX/VGhB+kz7OWY8kzEd+TCBrMcZ5pHCftPediMmBncs6uOBYQbzTLa+qo3krPtGNBsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PTpM7b4B; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706105657; x=1737641657;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1WwHCAFVV2NPEEod/8TMiSCLMQEPAuQYnS/MCqWE71s=;
+  b=PTpM7b4B/TO+B9dlLqazbFGHDluU3mhbG04PvroppKlatU2MAcxHlyRT
+   JpqbImgTbSyV9G8bA+smylfknE2yEoZfPdPmH2E0e7hD8+3A2FflJtC9Y
+   /fpR6PHmdZpbiXbfieRIB0qpQHZnlZ4wVC4E8GN5iR7QlURAcJynNTYxl
+   72x0JxU4+BXrcR6/1IAPWXVt+Xa3uSWga70lcEK6th0nDsZferbesfxjZ
+   xH0ap6vPUYXgpLUc3IUSS0vfTfRJzEaVGYGRwisr0CEwUrD/2AgjsVcxL
+   izssAaX7SQmRWw6/6IQwAQ/5D5XIA+VmTR8luGpOEWBv6D0Qyx9kOIBlJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="15200454"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="15200454"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 06:14:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="929694783"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="929694783"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 24 Jan 2024 06:14:10 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 24 Jan 2024 16:14:10 +0200
+Date: Wed, 24 Jan 2024 16:14:10 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abhishek Pandit-Subedi <abhishekpandit@google.com>
+Cc: linux-usb@vger.kernel.org, pmalani@chromium.org, jthies@google.com,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Saranya Gopal <saranya.gopal@intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] usb: typec: ucsi: Update connector cap and status
+Message-ID: <ZbEbMvzSr4JR3s/9@kuha.fi.intel.com>
+References: <20240123223039.1471557-1-abhishekpandit@google.com>
+ <20240123143026.v1.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:h3cspam02-ex.h3c.com 40OE9e2m093953
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240123143026.v1.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid>
 
-TWF0aGlhc++8mg0KDQpUaGFuayB5b3UgdmVyeSBtdWNoIQ0KDQo+IFRoaXMgaXNzdWUgd2FzIHJl
-c29sdmVkIGluIDUuMTkga2VybmVsIHdpdGggcGF0Y2g6DQo+IDI1MzU1ZTA0NmQyOSB4aGNpOiB1
-c2UgZ2VuZXJpYyBjb21tYW5kIHRpbWVyIGZvciBzdG9wIGVuZHBvaW50IGNvbW1hbmRzLg0KDQo+
-IEFmdGVyIHRoaXMgcGF0Y2ggdGhlIHRpbWVyIGlzIHN0YXJ0ZWQgd2hlbiB4SEMgc3RhcnQgcHJv
-Y2Vzc2luZyB0aGUgY29tbWFuZCwgbm90IHdoZW4gZHJpdmVyIHF1ZXVlcyBpdC4NCj4gSSBzdHJv
-bmdseSByZWNvbW1lbmQgdHJ5aW5nIGEgbW9yZSByZWNlbnQga2VybmVsIHdoZXJlIGFsbCB0aGVz
-ZSBpc3N1ZXMgYXJlIGZpeGVkIGFscmVhZHkuDQogDQpJIHNlZSA1LjE5IGtlcm5lbCBoYXMgZG9u
-ZSB3aGF0IHlvdSBzYXkuDQoNCkJlY2F1c2UgdGhlIGtlcm5lbCB2ZXJzaW9uIG9mIG91ciBjb21w
-YW55IGlzIDQuNjUgLCBJIG5lZWQgdG8gcHV0IHRoZSBwYXRjaCB0byBvdXIgNC42NSBrZXJuZWwg
-d2UgdXNlZC4NCiANClRvZGF5IGNvbXBhcmVkIHRvIHRoZSBsYXRlc3Qga2VybmVsIGlzIDYuNywg
-SSBmb3VuZCB0aGVyZSBhcmUgYSBsb3Qgb2YgY2hhbmdlcyBmb3IgdXNiIG1vZHVsZSBiZXR3ZWVu
-IGtlcm5lbCA0LjY1IGFuZCA2LjcuDQoNCkNvdWxkIHlvdSBwcm92aWRlIG1lIGZvciB0aGUgaXNz
-dWVzIHBhdGNoLg0KDQoNCg0KDQotLS0tLemCruS7tuWOn+S7ti0tLS0tDQrlj5Hku7bkuro6IE1h
-dGhpYXMgTnltYW4gW21haWx0bzptYXRoaWFzLm55bWFuQGxpbnV4LmludGVsLmNvbV0gDQrlj5Hp
-gIHml7bpl7Q6IDIwMjTlubQx5pyIMjTml6UgMjE6NDkNCuaUtuS7tuS6ujogemhhbmd6aGFuc2hl
-bmcgKOaTjeS9nOezu+e7n+W8gOWPkemDqOmDqOmXqCwgUkQpIDx6aGFuZy56aGFuc2hlbmdAaDNj
-LmNvbT47IExhZGlzbGF2IE1pY2hsIDxvc3MtbGlzdHNAdHJpb3BzLmN6Pg0K5oqE6YCBOiBsaW51
-eC11c2JAdmdlci5rZXJuZWwub3JnOyBTbmVla2VyIFllaCA8c25lZWtlci55ZWhAZ21haWwuY29t
-Pjsgd2FuZ3hpYW9xaW5nICjmk43kvZzns7vnu5/lvIDlj5Hpg6gvT00sIFJEKSA8d2FuZ3hpYW9x
-aW5nQGgzYy5jb20+OyB4aW5oYWluaW5nICjmk43kvZzns7vnu5/lvIDlj5Hpg6gvT00sIFJEKSA8
-eGluaGFpbmluZ0BoM2MuY29tPg0K5Li76aKYOiBSZTog562U5aSNOiDnrZTlpI06IFtDb25zdWx0
-aW5nIGFib3V0OiB4SENJIGhvc3QgZGllcyBvbiBkZXZpY2UgdW5wbHVnXQ0KDQpPbiAyNC4xLjIw
-MjQgMTMuNDIsIFpoYW5nemhhbnNoZW5nIHdyb3RlOg0KPiBNYXRoaWFz77yaDQo+IA0KPiANCj4g
-SW4gcmVnYXJkIHRvIHRoZSBxdWVzdGlvbiDigJxXaGF0IHRoZSByZWFzb24gb2YgdGhlIHVzYiBo
-b3N0IGNvbnRyb2xsZXIgaGFuZGluZyB0aGUgc3RvcCBlbmRwb2ludCBjb21tYW5kIHRpbWVvdXQg
-bWF5YmUgdHdvIGEpIGFuZCBiKS7igJ1KdXN0IHRvIGFkZCB0aGUgZm9sbG93ICBvbmUgOg0KPiBX
-aGVuIHRoZSBwcm9ibGVtIGFyaXNpbmcsIHRoZSBmdW5jdGlvbiBvZiDigJx4aGNpX2hhbHQg4oCc
-IG9wZXJhdGVkIHRoZSBob3N0IGNvbnRyb2xsZXIgc3VjY2Vzc2Z1bGx5LiBTbyBJIHRoaW5rIHRo
-ZSB1c2IgaG9zdCBjb250cm9sbGVyIHNob3VsZCBiZSBvay4NCj4gDQo+IFNvLCBJIGd1c3Nlc3Mg
-dGhhdCB0aGUgdXNiIGhvc3QgY29udHJvbGxlciBoYXMgbm8gZW5vdWdoIHRpbWUgdG8gaGFuZGxl
-IHdpdGggYSBsYXJnZSBudW1iZXIgb2YgeGhjaSBjb21tYW5kLg0KPiANCg0KVGhpcyBpc3N1ZSB3
-YXMgcmVzb2x2ZWQgaW4gNS4xOSBrZXJuZWwgd2l0aCBwYXRjaDoNCjI1MzU1ZTA0NmQyOSB4aGNp
-OiB1c2UgZ2VuZXJpYyBjb21tYW5kIHRpbWVyIGZvciBzdG9wIGVuZHBvaW50IGNvbW1hbmRzLg0K
-DQpBZnRlciB0aGlzIHBhdGNoIHRoZSB0aW1lciBpcyBzdGFydGVkIHdoZW4geEhDIHN0YXJ0IHBy
-b2Nlc3NpbmcgdGhlIGNvbW1hbmQsIG5vdCB3aGVuIGRyaXZlciBxdWV1ZXMgaXQuDQoNCkkgc3Ry
-b25nbHkgcmVjb21tZW5kIHRyeWluZyBhIG1vcmUgcmVjZW50IGtlcm5lbCB3aGVyZSBhbGwgdGhl
-c2UgaXNzdWVzIGFyZSBmaXhlZCBhbHJlYWR5Lg0KDQpUaGFua3MNCk1hdGhpYXMNCg==
+On Tue, Jan 23, 2024 at 02:30:35PM -0800, Abhishek Pandit-Subedi wrote:
+> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> 
+> Update the data structures for ucsi_connector_capability and
+> ucsi_connector_status to UCSIv3.
+> 
+> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> ---
+> Connector status has several unaligned bitfields (16-bit) that result in
+> difficult to maintain macros. It may be better if we simply re-define
+> these structs as u8[] and add bit range macros to access and cast these
+> values.
+> 
+> i.e.
+> struct ucsi_connector_status {
+>   u8 raw_data[18];
+> 
+> ...
+> \#define UCSI_CONSTAT_CONNECTOR_STATUS          FIELD(u16, 15, 0)
+> \#define UCSI_CONSTAT_BCD_PD_VER_OPER_MODE      FIELD(u16, 85, 70)
+> }
+> 
+> GET_UCSI_FIELD(con->status, UCSI_CONSTAT_CONNECTOR_STATUS);
+> SET_UCSI_FIELD(con->status, UCSI_CONSTAT_CONNECTOR_STATUS, 0);
+> 
+> I didn't find a clear example of an existing mechanism to do this. Would
+> love some pointers here if it already exists and some feedback from the
+> maintainer if this is a direction you want to go.
+
+I'll ask around if anybody has any ideas on our side, but I think we
+can go forward with this in any case. We can always fine tune these
+later.
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+>  drivers/usb/typec/ucsi/ucsi.h | 50 ++++++++++++++++++++++++++++++++---
+>  1 file changed, 46 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index bec920fa6b8a..94b373378f63 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -3,6 +3,7 @@
+>  #ifndef __DRIVER_USB_TYPEC_UCSI_H
+>  #define __DRIVER_USB_TYPEC_UCSI_H
+>  
+> +#include <asm-generic/unaligned.h>
+>  #include <linux/bitops.h>
+>  #include <linux/device.h>
+>  #include <linux/power_supply.h>
+> @@ -214,9 +215,29 @@ struct ucsi_connector_capability {
+>  #define UCSI_CONCAP_OPMODE_USB2			BIT(5)
+>  #define UCSI_CONCAP_OPMODE_USB3			BIT(6)
+>  #define UCSI_CONCAP_OPMODE_ALT_MODE		BIT(7)
+> -	u8 flags;
+> +	u32 flags;
+>  #define UCSI_CONCAP_FLAG_PROVIDER		BIT(0)
+>  #define UCSI_CONCAP_FLAG_CONSUMER		BIT(1)
+> +#define UCSI_CONCAP_FLAG_SWAP_TO_DFP		BIT(2)
+> +#define UCSI_CONCAP_FLAG_SWAP_TO_UFP		BIT(3)
+> +#define UCSI_CONCAP_FLAG_SWAP_TO_SRC		BIT(4)
+> +#define UCSI_CONCAP_FLAG_SWAP_TO_SINK		BIT(5)
+> +#define UCSI_CONCAP_FLAG_EX_OP_MODE(_f_) \
+> +	(((_f_) & GENMASK(13, 6)) >> 6)
+> +#define   UCSI_CONCAP_EX_OP_MODE_USB4_GEN2	BIT(0)
+> +#define   UCSI_CONCAP_EX_OP_MODE_EPR_SRC	BIT(1)
+> +#define   UCSI_CONCAP_EX_OP_MODE_EPR_SINK	BIT(2)
+> +#define   UCSI_CONCAP_EX_OP_MODE_USB4_GEN3	BIT(3)
+> +#define   UCSI_CONCAP_EX_OP_MODE_USB4_GEN4	BIT(4)
+> +#define UCSI_CONCAP_FLAG_MISC_CAPS(_f_) \
+> +	(((_f_) & GENMASK(17, 14)) >> 14)
+> +#define   UCSI_CONCAP_MISC_CAP_FW_UPDATE	BIT(0)
+> +#define   UCSI_CONCAP_MISC_CAP_SECURITY		BIT(1)
+> +#define UCSI_CONCAP_FLAG_REV_CURR_PROT_SUPPORT	BIT(18)
+> +#define UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV(_f_) \
+> +	(((_f_) & GENMASK(20, 19)) >> 19)
+> +#define UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(_f_) \
+> +	(UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV(_f_) << 8)
+>  } __packed;
+>  
+>  struct ucsi_altmode {
+> @@ -276,15 +297,36 @@ struct ucsi_connector_status {
+>  #define   UCSI_CONSTAT_PARTNER_TYPE_DEBUG	5
+>  #define   UCSI_CONSTAT_PARTNER_TYPE_AUDIO	6
+>  	u32 request_data_obj;
+> -	u8 pwr_status;
+> -#define UCSI_CONSTAT_BC_STATUS(_p_)		((_p_) & GENMASK(2, 0))
+> +
+> +	u8 pwr_status[3];
+> +#define UCSI_CONSTAT_BC_STATUS(_p_)		((_p_[0]) & GENMASK(1, 0))
+>  #define   UCSI_CONSTAT_BC_NOT_CHARGING		0
+>  #define   UCSI_CONSTAT_BC_NOMINAL_CHARGING	1
+>  #define   UCSI_CONSTAT_BC_SLOW_CHARGING		2
+>  #define   UCSI_CONSTAT_BC_TRICKLE_CHARGING	3
+> -#define UCSI_CONSTAT_PROVIDER_CAP_LIMIT(_p_)	(((_p_) & GENMASK(6, 3)) >> 3)
+> +#define UCSI_CONSTAT_PROVIDER_CAP_LIMIT(_p_)	(((_p_[0]) & GENMASK(5, 2)) >> 2)
+>  #define   UCSI_CONSTAT_CAP_PWR_LOWERED		0
+>  #define   UCSI_CONSTAT_CAP_PWR_BUDGET_LIMIT	1
+> +#define UCSI_CONSTAT_PROVIDER_PD_VERSION_OPER_MODE(_p_)	\
+> +	((get_unaligned_le32(_p_) & GENMASK(21, 6)) >> 6)
+> +#define UCSI_CONSTAT_ORIENTATION(_p_)		(((_p_[2]) & GENMASK(6, 6)) >> 6)
+> +#define   UCSI_CONSTAT_ORIENTATION_DIRECT	0
+> +#define   UCSI_CONSTAT_ORIENTATION_FLIPPED	1
+> +#define UCSI_CONSTAT_SINK_PATH_STATUS(_p_)	(((_p_[2]) & GENMASK(7, 7)) >> 7)
+> +#define   UCSI_CONSTAT_SINK_PATH_DISABLED	0
+> +#define   UCSI_CONSTAT_SINK_PATH_ENABLED	1
+> +	u8 pwr_readings[9];
+> +#define UCSI_CONSTAT_REV_CURR_PROT_STATUS(_p_)	((_p_[0]) & 0x1)
+> +#define UCSI_CONSTAT_PWR_READING_VALID(_p_)	(((_p_[0]) & GENMASK(1, 1)) >> 1)
+> +#define UCSI_CONSTAT_CURRENT_SCALE(_p_)		(((_p_[0]) & GENMASK(4, 2)) >> 2)
+> +#define UCSI_CONSTAT_PEAK_CURRENT(_p_) \
+> +	((get_unaligned_le32(_p_) & GENMASK(20, 5)) >> 5)
+> +#define UCSI_CONSTAT_AVG_CURRENT(_p_) \
+> +	((get_unaligned_le32(&(_p_)[2]) & GENMASK(20, 5)) >> 5)
+> +#define UCSI_CONSTAT_VOLTAGE_SCALE(_p_) \
+> +	((get_unaligned_le16(&(_p_)[4]) & GENMASK(8, 5)) >> 5)
+> +#define UCSI_CONSTAT_VOLTAGE_READING(_p_) \
+> +	((get_unaligned_le32(&(_p_)[5]) & GENMASK(16, 1)) >> 1)
+>  } __packed;
+>  
+>  /* -------------------------------------------------------------------------- */
+> -- 
+> 2.43.0.429.g432eaa2c6b-goog
+
+-- 
+heikki
 
