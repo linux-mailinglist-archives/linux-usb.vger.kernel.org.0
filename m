@@ -1,209 +1,120 @@
-Return-Path: <linux-usb+bounces-5465-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5466-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C08E483AB71
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 15:14:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA1A483AB80
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 15:17:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 98A32B2797E
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 14:14:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CAE22838D7
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 14:17:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3528D7A739;
-	Wed, 24 Jan 2024 14:14:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D4857A71A;
+	Wed, 24 Jan 2024 14:17:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PTpM7b4B"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Y1m4Kxua"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1E17A728;
-	Wed, 24 Jan 2024 14:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB7477F2E;
+	Wed, 24 Jan 2024 14:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706105657; cv=none; b=D7i+b/1JL5rC5ZlXm13aQJvESsT/UEYlzEPOPn867TuTDYcUbkEk3nl6/54b76VrPdNbnuj3JvOIBtR3G4mah/raVmgxjatJwiVoh/bKsN0JrqR4CqwHpzfz2Xzwo+dO4doVOD6Kkz/3MoAkOVl4UUMxJsLtA0NkPCYIzYtT59I=
+	t=1706105850; cv=none; b=TlJYsNvAPmUZUbuiER8dxbyU1yAiECIdQwb6zlnSCiChsb5HyyguLlq6HH5X+8GVs41x/Hv693c1iL7dtYBrtstIJzuMF+/xDX3Y54xcqpGdrNlOP/8xuEuzBCJsi5A/Qcot0cqU84tjvW+L3/mSVJMUzw5DTDCHqCLTHw0XTGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706105657; c=relaxed/simple;
-	bh=1WwHCAFVV2NPEEod/8TMiSCLMQEPAuQYnS/MCqWE71s=;
+	s=arc-20240116; t=1706105850; c=relaxed/simple;
+	bh=eVqN57aJT3+vy4UOpfoRo4r0Q0FGTipSEN//MpMMrQo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ez6ZyBb5ghfFQP+7Ab/I6W9JpSa9ikDqmzEFjeYGmlse6KRlcZbtsWzq8s9HXLvCGip45RcgqJaAccbOFRf9kIgfFnHbq8/BV/0ZNuibbX/VGhB+kz7OWY8kzEd+TCBrMcZ5pHCftPediMmBncs6uOBYQbzTLa+qo3krPtGNBsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PTpM7b4B; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706105657; x=1737641657;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1WwHCAFVV2NPEEod/8TMiSCLMQEPAuQYnS/MCqWE71s=;
-  b=PTpM7b4B/TO+B9dlLqazbFGHDluU3mhbG04PvroppKlatU2MAcxHlyRT
-   JpqbImgTbSyV9G8bA+smylfknE2yEoZfPdPmH2E0e7hD8+3A2FflJtC9Y
-   /fpR6PHmdZpbiXbfieRIB0qpQHZnlZ4wVC4E8GN5iR7QlURAcJynNTYxl
-   72x0JxU4+BXrcR6/1IAPWXVt+Xa3uSWga70lcEK6th0nDsZferbesfxjZ
-   xH0ap6vPUYXgpLUc3IUSS0vfTfRJzEaVGYGRwisr0CEwUrD/2AgjsVcxL
-   izssAaX7SQmRWw6/6IQwAQ/5D5XIA+VmTR8luGpOEWBv6D0Qyx9kOIBlJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="15200454"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="15200454"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 06:14:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="929694783"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="929694783"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 24 Jan 2024 06:14:10 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 24 Jan 2024 16:14:10 +0200
-Date: Wed, 24 Jan 2024 16:14:10 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@google.com>
-Cc: linux-usb@vger.kernel.org, pmalani@chromium.org, jthies@google.com,
+	 Content-Type:Content-Disposition:In-Reply-To; b=X6NqY/gk6apc+0Rb84MtAkEpZu1gwsHfM+UANdQ+8IecX30oAQUX7xCOHla+c2duL4nc/ATTdelzVw6+83okbX98ZOMm8V147knUBy5dGxYyey4sjNKWXFfsk8QRgVIEpBB0OwkR8Lt6phbj9sUuIf38ZUqjoTTwc6YtDJYtCR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Y1m4Kxua; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3769C43390;
+	Wed, 24 Jan 2024 14:17:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1706105849;
+	bh=eVqN57aJT3+vy4UOpfoRo4r0Q0FGTipSEN//MpMMrQo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y1m4KxuabkVmac4BIwVougZSrd75bRKG+57PJJiGGNT5+XfwolOarUyv6JcGatQSg
+	 aTop6llwUaw/K5JMe26AOkfsg/tK2vBRJxQl+Yu8g8t5MehOqr2TJ2reHOXp5bIcSR
+	 XQ02F4l1NV/8ZCeK3qp1Nwx3xgLKzC67c0VQAmTY=
+Date: Wed, 24 Jan 2024 06:17:27 -0800
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Prashant Malani <pmalani@chromium.org>,
+	Abhishek Pandit-Subedi <abhishekpandit@google.com>,
+	linux-usb@vger.kernel.org, jthies@google.com,
 	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
 	Bjorn Andersson <andersson@kernel.org>,
 	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
 	Saranya Gopal <saranya.gopal@intel.com>,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] usb: typec: ucsi: Update connector cap and status
-Message-ID: <ZbEbMvzSr4JR3s/9@kuha.fi.intel.com>
+Subject: Re: [PATCH v1 1/3] usb: typec: ucsi: Limit read size on v1.2
+Message-ID: <2024012405-stung-freckles-e196@gregkh>
 References: <20240123223039.1471557-1-abhishekpandit@google.com>
- <20240123143026.v1.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid>
+ <20240123143026.v1.1.Iacf5570a66b82b73ef03daa6557e2fc0db10266a@changeid>
+ <CACeCKaftJSGba3ebs58=cB5aRLuOnbvhQX2V6+5=t9GPC08_Uw@mail.gmail.com>
+ <ZbEV/qp/EhUkHVhA@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240123143026.v1.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZbEV/qp/EhUkHVhA@kuha.fi.intel.com>
 
-On Tue, Jan 23, 2024 at 02:30:35PM -0800, Abhishek Pandit-Subedi wrote:
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+On Wed, Jan 24, 2024 at 03:51:58PM +0200, Heikki Krogerus wrote:
+> On Wed, Jan 24, 2024 at 12:12:26AM -0800, Prashant Malani wrote:
+> > Hi Abhishek,
+> > 
+> > On Tue, Jan 23, 2024 at 2:30 PM Abhishek Pandit-Subedi
+> > <abhishekpandit@google.com> wrote:
+> > >
+> > > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > >
+> > > Between UCSI 1.2 and UCSI 2.0, the size of the MESSAGE_IN region was
+> > > increased from 16 to 256. In order to avoid overflowing reads for older
+> > > systems, add a mechanism to use the read UCSI version to truncate read
+> > > sizes on UCSI v1.2.
+> > >
+> > > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > I have one nit (mentioned in side-band but reproducing here for consistency),
+> > but will defer to the maintainer on that.
+> > 
+> > The above notwithstanding, FWIW:
+> > Reviewed-by: Prashant Malani<pmalani@chromium.org>
+> > 
+> > > @@ -1556,6 +1569,15 @@ int ucsi_register(struct ucsi *ucsi)
+> > >         if (!ucsi->version)
+> > >                 return -ENODEV;
+> > >
+> > > +       /*
+> > > +        * Version format is JJ.M.N (JJ = Major version, M = Minor version,
+> > > +        * N = sub-minor version).
+> > > +        */
+> > > +       dev_info(ucsi->dev, "Registered UCSI interface with version %x.%x.%x",
+> > > +                UCSI_BCD_GET_MAJOR(ucsi->version),
+> > > +                UCSI_BCD_GET_MINOR(ucsi->version),
+> > > +                UCSI_BCD_GET_SUBMINOR(ucsi->version));
+> > 
+> > nit: I think this doesn't need to be dev_info() and can be just
+> > dev_dbg(), but will
+> > defer to the maintainer.
 > 
-> Update the data structures for ucsi_connector_capability and
-> ucsi_connector_status to UCSIv3.
+> I think that's okay.
 > 
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> ---
-> Connector status has several unaligned bitfields (16-bit) that result in
-> difficult to maintain macros. It may be better if we simply re-define
-> these structs as u8[] and add bit range macros to access and cast these
-> values.
-> 
-> i.e.
-> struct ucsi_connector_status {
->   u8 raw_data[18];
-> 
-> ...
-> \#define UCSI_CONSTAT_CONNECTOR_STATUS          FIELD(u16, 15, 0)
-> \#define UCSI_CONSTAT_BCD_PD_VER_OPER_MODE      FIELD(u16, 85, 70)
-> }
-> 
-> GET_UCSI_FIELD(con->status, UCSI_CONSTAT_CONNECTOR_STATUS);
-> SET_UCSI_FIELD(con->status, UCSI_CONSTAT_CONNECTOR_STATUS, 0);
-> 
-> I didn't find a clear example of an existing mechanism to do this. Would
-> love some pointers here if it already exists and some feedback from the
-> maintainer if this is a direction you want to go.
+> Reviewewd-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-I'll ask around if anybody has any ideas on our side, but I think we
-can go forward with this in any case. We can always fine tune these
-later.
+No, when drivers are working properly they are quiet, this needs to be
+dev_dbg().
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+thanks,
 
->  drivers/usb/typec/ucsi/ucsi.h | 50 ++++++++++++++++++++++++++++++++---
->  1 file changed, 46 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index bec920fa6b8a..94b373378f63 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -3,6 +3,7 @@
->  #ifndef __DRIVER_USB_TYPEC_UCSI_H
->  #define __DRIVER_USB_TYPEC_UCSI_H
->  
-> +#include <asm-generic/unaligned.h>
->  #include <linux/bitops.h>
->  #include <linux/device.h>
->  #include <linux/power_supply.h>
-> @@ -214,9 +215,29 @@ struct ucsi_connector_capability {
->  #define UCSI_CONCAP_OPMODE_USB2			BIT(5)
->  #define UCSI_CONCAP_OPMODE_USB3			BIT(6)
->  #define UCSI_CONCAP_OPMODE_ALT_MODE		BIT(7)
-> -	u8 flags;
-> +	u32 flags;
->  #define UCSI_CONCAP_FLAG_PROVIDER		BIT(0)
->  #define UCSI_CONCAP_FLAG_CONSUMER		BIT(1)
-> +#define UCSI_CONCAP_FLAG_SWAP_TO_DFP		BIT(2)
-> +#define UCSI_CONCAP_FLAG_SWAP_TO_UFP		BIT(3)
-> +#define UCSI_CONCAP_FLAG_SWAP_TO_SRC		BIT(4)
-> +#define UCSI_CONCAP_FLAG_SWAP_TO_SINK		BIT(5)
-> +#define UCSI_CONCAP_FLAG_EX_OP_MODE(_f_) \
-> +	(((_f_) & GENMASK(13, 6)) >> 6)
-> +#define   UCSI_CONCAP_EX_OP_MODE_USB4_GEN2	BIT(0)
-> +#define   UCSI_CONCAP_EX_OP_MODE_EPR_SRC	BIT(1)
-> +#define   UCSI_CONCAP_EX_OP_MODE_EPR_SINK	BIT(2)
-> +#define   UCSI_CONCAP_EX_OP_MODE_USB4_GEN3	BIT(3)
-> +#define   UCSI_CONCAP_EX_OP_MODE_USB4_GEN4	BIT(4)
-> +#define UCSI_CONCAP_FLAG_MISC_CAPS(_f_) \
-> +	(((_f_) & GENMASK(17, 14)) >> 14)
-> +#define   UCSI_CONCAP_MISC_CAP_FW_UPDATE	BIT(0)
-> +#define   UCSI_CONCAP_MISC_CAP_SECURITY		BIT(1)
-> +#define UCSI_CONCAP_FLAG_REV_CURR_PROT_SUPPORT	BIT(18)
-> +#define UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV(_f_) \
-> +	(((_f_) & GENMASK(20, 19)) >> 19)
-> +#define UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(_f_) \
-> +	(UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV(_f_) << 8)
->  } __packed;
->  
->  struct ucsi_altmode {
-> @@ -276,15 +297,36 @@ struct ucsi_connector_status {
->  #define   UCSI_CONSTAT_PARTNER_TYPE_DEBUG	5
->  #define   UCSI_CONSTAT_PARTNER_TYPE_AUDIO	6
->  	u32 request_data_obj;
-> -	u8 pwr_status;
-> -#define UCSI_CONSTAT_BC_STATUS(_p_)		((_p_) & GENMASK(2, 0))
-> +
-> +	u8 pwr_status[3];
-> +#define UCSI_CONSTAT_BC_STATUS(_p_)		((_p_[0]) & GENMASK(1, 0))
->  #define   UCSI_CONSTAT_BC_NOT_CHARGING		0
->  #define   UCSI_CONSTAT_BC_NOMINAL_CHARGING	1
->  #define   UCSI_CONSTAT_BC_SLOW_CHARGING		2
->  #define   UCSI_CONSTAT_BC_TRICKLE_CHARGING	3
-> -#define UCSI_CONSTAT_PROVIDER_CAP_LIMIT(_p_)	(((_p_) & GENMASK(6, 3)) >> 3)
-> +#define UCSI_CONSTAT_PROVIDER_CAP_LIMIT(_p_)	(((_p_[0]) & GENMASK(5, 2)) >> 2)
->  #define   UCSI_CONSTAT_CAP_PWR_LOWERED		0
->  #define   UCSI_CONSTAT_CAP_PWR_BUDGET_LIMIT	1
-> +#define UCSI_CONSTAT_PROVIDER_PD_VERSION_OPER_MODE(_p_)	\
-> +	((get_unaligned_le32(_p_) & GENMASK(21, 6)) >> 6)
-> +#define UCSI_CONSTAT_ORIENTATION(_p_)		(((_p_[2]) & GENMASK(6, 6)) >> 6)
-> +#define   UCSI_CONSTAT_ORIENTATION_DIRECT	0
-> +#define   UCSI_CONSTAT_ORIENTATION_FLIPPED	1
-> +#define UCSI_CONSTAT_SINK_PATH_STATUS(_p_)	(((_p_[2]) & GENMASK(7, 7)) >> 7)
-> +#define   UCSI_CONSTAT_SINK_PATH_DISABLED	0
-> +#define   UCSI_CONSTAT_SINK_PATH_ENABLED	1
-> +	u8 pwr_readings[9];
-> +#define UCSI_CONSTAT_REV_CURR_PROT_STATUS(_p_)	((_p_[0]) & 0x1)
-> +#define UCSI_CONSTAT_PWR_READING_VALID(_p_)	(((_p_[0]) & GENMASK(1, 1)) >> 1)
-> +#define UCSI_CONSTAT_CURRENT_SCALE(_p_)		(((_p_[0]) & GENMASK(4, 2)) >> 2)
-> +#define UCSI_CONSTAT_PEAK_CURRENT(_p_) \
-> +	((get_unaligned_le32(_p_) & GENMASK(20, 5)) >> 5)
-> +#define UCSI_CONSTAT_AVG_CURRENT(_p_) \
-> +	((get_unaligned_le32(&(_p_)[2]) & GENMASK(20, 5)) >> 5)
-> +#define UCSI_CONSTAT_VOLTAGE_SCALE(_p_) \
-> +	((get_unaligned_le16(&(_p_)[4]) & GENMASK(8, 5)) >> 5)
-> +#define UCSI_CONSTAT_VOLTAGE_READING(_p_) \
-> +	((get_unaligned_le32(&(_p_)[5]) & GENMASK(16, 1)) >> 1)
->  } __packed;
->  
->  /* -------------------------------------------------------------------------- */
-> -- 
-> 2.43.0.429.g432eaa2c6b-goog
-
--- 
-heikki
+greg k-h
 
