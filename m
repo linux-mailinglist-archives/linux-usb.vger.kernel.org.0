@@ -1,226 +1,190 @@
-Return-Path: <linux-usb+bounces-5488-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5489-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95E7883B222
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 20:19:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09DDC83B22E
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 20:21:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 253731F2314F
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 19:19:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0AD16B2F87F
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jan 2024 19:20:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 521BD13341A;
-	Wed, 24 Jan 2024 19:17:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D0911339B0;
+	Wed, 24 Jan 2024 19:18:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="X7SYcYpr"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XtXzOK/v"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2047.outbound.protection.outlook.com [40.107.247.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CFB6A004;
-	Wed, 24 Jan 2024 19:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706123855; cv=fail; b=h14hccwfUVwJVnb9PDyIn9QNIItxtOAjFuqnhG3gWluoT4DGPGjSUbx0a2cn05eByh5JCci9DBeebEJRmXFjaZNQKwtOKzlIK8cR6pb/jkJLyjJv2rhQxJyvCuqbcIm3b8H9hD7RAXVGLB4HEc/avCnEZX/Mu5DaJ0IAnwGTBwA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706123855; c=relaxed/simple;
-	bh=4sIFmmStZYQDBQe9dphds9sUZcLw/8CDAU9cNkRZ5Jk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=dAGL6nspydBDVpsDFoEXkvUCwUVapf0E4CCf7kOzOZ1X5O2OgGLosc3STCqi5S7ggTtV26PoKtM1YHXHndu1pASOAZ00ij5KrXPK9RuAt6hnP8NK1nB/5hynTgutH8mkRF3AWatlR968k/5y+uqkA1VD3b7aMZR+d80M6T60lac=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=X7SYcYpr; arc=fail smtp.client-ip=40.107.247.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZZi33zKqJMmx8YF/iN4INcd0BL6ECQq6vSh1hhyKoyBH+8ZwbLQVMq2ifLeW9V2JOTLPbn9dsLllZcqkGc4GWrBcRpx0Jo0mNDpjrbIoK6O5EAs5t6ggaEQRXYN9HZpTnn6CvkONhgVYNUWKeID4UHshTnfJWgojs4GyRr5g6l40KZQ4LThbSEhBKTwdNWlw90EfiAGuqYoOCXN5q2D3RNCCpWGsAx2ss6HBDVgZ7ze8nFCUTFKuC9gyhnwknNeJlbfbiXsabTWYb4v7pQvkCBgeHr6MN2TDZsjSoGsKFxz3+a3xkxvBQcoWl2NW0vf4h9cjZyI+OTkzo2IRISe5jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q992kzM/sPoX7UYEyQdJmbbflSDpkchG/s7GDsYQxa0=;
- b=enp/OAhVnHt3oIzoG2l8VLbMjglMZc9a0fMRoXSzNLnKpIPi0aRpEV//rBRRPdk2rsDC4T1iY2KNai/azUI0YuaWWcUGsshS09iOjRjhGS91sESoeqnt/MUkJhxGrJ6S7bcfQXgTl9I81GMMdETXaPR+VDKBSTdAUjEPizBp0zIkEG6TnaT8xwaFsEQAKBZK2I5RGnAUzqtov+M7IbvjyDd86SQXgQoeXXA7jHJvJJj6LDjGjw0bwXer06lM3PHDZyMpSp+4lnbWGiA4ymaoFzO8PZy6kDX5UiQtpgwsUVaZYNoF34iGgG73mlVf+1CahazOA+agQLp/dPWbDQgdLw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q992kzM/sPoX7UYEyQdJmbbflSDpkchG/s7GDsYQxa0=;
- b=X7SYcYpr4EbmtgSWF75F2yEbY1KW8frE0tqbotbg3cSkYsVuw69zC4/9pKkvT+sirppluqX8U3uR9JGGkals4nfXJDqEpnvzOgGjVXp6y+MoM/1Gc1ptfqHkPmTleVktuSrrhG8soUu3djeB9LpoNC2czO906JxU0xT6V8YHUZ0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by VI1PR04MB7006.eurprd04.prod.outlook.com (2603:10a6:803:137::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.22; Wed, 24 Jan
- 2024 19:17:30 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::c8b4:5648:8948:e85c]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::c8b4:5648:8948:e85c%3]) with mapi id 15.20.7202.035; Wed, 24 Jan 2024
- 19:17:30 +0000
-Date: Wed, 24 Jan 2024 14:17:22 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: ran.wang_1@nxp.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>, mark.rutland@arm.com,
-	pku.leo@gmail.com, sergei.shtylyov@cogentembedded.com
-Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Add snps,host-vbus-glitches
- avoiding vbus glitch
-Message-ID: <ZbFiQmD1VRVzFSa+@lizhi-Precision-Tower-5810>
-References: <20240119213130.3147517-1-Frank.Li@nxp.com>
- <20240124-unclothed-dodgy-c78b1fffa752@spud>
- <ZbFNIvEaAJCxC2VB@lizhi-Precision-Tower-5810>
- <20240124-video-lumpiness-178c4e317f5a@spud>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240124-video-lumpiness-178c4e317f5a@spud>
-X-ClientProxiedBy: SJ0PR13CA0166.namprd13.prod.outlook.com
- (2603:10b6:a03:2c7::21) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6CF1339AB
+	for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 19:18:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706123931; cv=none; b=W6AM6rsvPPzgxjKO/9G4afqCug96iJKQGBS09nvT+cVgRR7RJlOKJpPGAYsLbstDH83pNIGB1EyslhaEJ7V23je8R6m/k/XhhyQs8uZdOTPf71zwPVgmmJv1fh++MC7f1HAYrCpGImO7D6/bfq9f0SYX88EZ/V0qtt2z0+FyyKU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706123931; c=relaxed/simple;
+	bh=Kkxze+OHG8vVSjBJo2EbnIrie86i6OnbPjB0P6moSbw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uPtTTUn0nb2D1rSM7bmnXsqyKR1O+Lib2oMoD4SBcKMMpaMb7+hSj1Irtf3qwU/OuOor1kyHsZwHZinXWcwoiAP97uNvvavRTlKBbf6H6egvwdd8RyJ98FtnLauj8whkeEEU+NCF/NFa7rDyetDstc75GMicqhO688T7H2FNMmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=XtXzOK/v; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dc22ae44595so5370246276.1
+        for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 11:18:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1706123929; x=1706728729; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kZihvGpOcawyRovSQi/D7nIlqL4G312PpvkN2EuN+3I=;
+        b=XtXzOK/v9jDb3PlsceMzqI1tK7avYg7ojmf7dSutSOZvCXg8vYpdj5i3rv2RVXRgJ5
+         kbr4HfrKkO5obfe0pxOX4AeJ9KOxqJln95fkEB2pKcImuA3DW5XMugKlVFSv29nEvaup
+         vlI4U4Ya8KA/wFPXs/+iHhw7Zzy6GlTu27V3I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706123929; x=1706728729;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kZihvGpOcawyRovSQi/D7nIlqL4G312PpvkN2EuN+3I=;
+        b=BbkrKe/S/T/4dht4jFcDDsMwjiLaIF8Em8wMI4HHX41sP0Us8sx7630YJmN8SMuufq
+         tM+vW2JchH4XMYOFTDVQ5BN3O/BFBjx6WLIJpqMTXIXVvwRiovO3cnZnd08+WRmt4H5t
+         mEpUDs3ru5qR5PXEjIdDEZIBm5SUDNwzwfnqvFvJ3/2I51dRjIQIXgT3LGYdkEs+W2uL
+         Kcc7mVoLSdRGkanPJuNO07adGqtgpsYWt5NCFKGKS8zT73GIYLwOXC71lHrEbGuq6QB7
+         oHeAChL6Vv3Lx0tuAmOtASC6qMLplNOHA0x4Ggga80z8R5GhXBHEjIwMqjvncMhnY58G
+         1uMQ==
+X-Gm-Message-State: AOJu0Yy/o1Xz37JYeHNixrKeNJxbklI1mLjvCFiR4y3OhHXUYDUHjqqu
+	FpS+4vufAoclTyxN0vSXUJwVv+bP3dbg+Jj38wzv8poOljfBGcxnKLPteaE3yZSeqo8oQKS36Ob
+	DiFlT/F+ux5SVpTyHcpWVLsNiCXrRr+Dz+bTyPxKtlkaX954=
+X-Google-Smtp-Source: AGHT+IEibMEUVjPbM4b9HrbvGiFjg4c/oD0Brje47RUensOcAJVBQPFnVJT823NrigmWf4R2BOq1SzWgGilLglweUkU=
+X-Received: by 2002:a05:6902:48:b0:dc2:404c:7e93 with SMTP id
+ m8-20020a056902004800b00dc2404c7e93mr961119ybh.25.1706123929099; Wed, 24 Jan
+ 2024 11:18:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VI1PR04MB7006:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43ad719a-5efb-48a3-c9a8-08dc1d111c2a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	C36gswx+nbQkqmy3Ojvx3muQGMWhsrPgdxjIua6nYbnVdWrwajBmwk0DjFHBHy6W3HSantm/vaDXgNd2AaTKjKOqDmIHN2SggqywRfDtpp+vrDXC6XfjtehPO8JddzjQiEar3+No5A+Geo+KJ7X713lPESqC4qQmh5vvWFq4+kcM5Wnve+NNrugzDGWeKYuxDRSmggwFIuk/3VBb7m/fUIK2cAIchOCE9BI0U8xypaupIEFNn5IBe8R/+oaTJV0GlEE/O3+a1URxCVVfJwDIu6RUPjDiNCIeHgi12d7V/WoGeo+e0NttwsSkqE9RY82h0AmFjE5apvPgWDjTb3JqlxwwU1M2M9a26m0SWGg6+d77i0cYGHW+66qYcfarvWSO5CgQ6FLDPvTBLUfhosr6cQD00dzS/3dDzR7Orxqt8hH9ofJugnd7H9wFpxuu7gDE1K7ipIFdd2kRd8JSr292xGryXVMUWhHDCKkDd4tP6gIghsCgAwZLUrKMw2TXIH3vj+LJht1nVIIm9JVnp8qX4OFRv2iaYdNBWa8NIroS5YzyP/d9+2wjuWXgkr33jpxY06gNe8/QeATIVp7dEvsNbo2WoFYpP4JrY+5CIumZWOIjZO1RdW1nGH01IPfUX7UZaotA9dahEIo/psHaJUznPw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(376002)(136003)(346002)(366004)(39860400002)(396003)(230922051799003)(230273577357003)(230173577357003)(451199024)(1800799012)(186009)(64100799003)(316002)(54906003)(6916009)(4326008)(66946007)(66476007)(66556008)(83380400001)(38350700005)(5660300002)(7416002)(38100700002)(2906002)(8936002)(8676002)(33716001)(86362001)(41300700001)(478600001)(26005)(966005)(6486002)(6666004)(6506007)(52116002)(6512007)(9686003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?EbMfxEQNwJf/3I5PBvXGN4y4ta+Xa/BO3ejyENQqdDFwpjVssOPzLa+gplPy?=
- =?us-ascii?Q?yvBk4A8vTZxp3JEtF7MNSpiBAxXYsErApqGksIxcVf+rY+lDgjcUIpZ4tUkc?=
- =?us-ascii?Q?528rLftgjF8rax6RA9UEQLMRvhVz+oJMscyWMJ2jKp3JCzaY7w/1wNK2sWZb?=
- =?us-ascii?Q?ZoIzsnR6fL342YpzQl4P4VulzDZj4W+C4nC6J6IjOfinNfUdCZv2aigSlcdH?=
- =?us-ascii?Q?7BxJl7ecbgbfKgruyEW6sOxndn5BcqzjfKfJOe9fIiPtEixxfxBJB8I2JSD+?=
- =?us-ascii?Q?u1/s/FDD/IEY9L/NvDvsk/sqMvI/6d8H2UZV4xPvzdxK56667DGkOO+7lCPL?=
- =?us-ascii?Q?VwFB70fy4fyN3Fj2JMf/king/prVJZ/nyAkfFkHn24iegp3EBTf7NKxoOanU?=
- =?us-ascii?Q?4HJ/OfVusCNlJVFhav+jT3m0Ld08vz55KaXUp4otC+wPmbM6NY8gLGhuQp0R?=
- =?us-ascii?Q?7w0wFFhoknxlJR7JamYL6rk7Z5DKR/mI9ifSLh+6R2L3dkliuCvAIMxEfScr?=
- =?us-ascii?Q?VqnjN2/9gm8/HYXts9QXMH7mSW9jtyB0+rsvprpclMiCPRMmT8AIlDvZhB19?=
- =?us-ascii?Q?vPDfgr4yyOWjKm4YiY5JxSnNi17okp6uxmOa7EXuYGApM6faQoh8iONT5Cd5?=
- =?us-ascii?Q?n1vpAOM0LrecY5oKeXbPVJ/y5L/XB9VHP4mjlN83yGhcH4Dvo9X3/7fziGbP?=
- =?us-ascii?Q?kZb3wEd6fJWRv5UT+UaG7/eOIdA8LwxvzSNmB9FRnI+9H95jeRBWhH+Rg1y7?=
- =?us-ascii?Q?3BoTuezfz0qWmD65xgFfjQ7AJI8mxcrEwBebbQh+m4fSDhYNU7mTbBscAuG0?=
- =?us-ascii?Q?BZXkyNl6rXEIPW2KjKvWwWwpzK/m+yJySFNkgYlGih7gNAFC4t6jRdW32PBx?=
- =?us-ascii?Q?FId8+tkl8xcFQpPYKsSfydBPT7IbLcS/O0qdn/KG3+o5Xu9ePcfviBnCUp+X?=
- =?us-ascii?Q?29gwHaiwBAmZv9na9bYtbeRM6MbsChUbIr0yyz6RkT60CJLqz5oRdVV7U0J5?=
- =?us-ascii?Q?YouKJcb/nLJHZeSYQQ18B2so2B9LmhvK1FhYkmtkoeAMaOYBk04seixCx5aF?=
- =?us-ascii?Q?r6TPNvwXZRo/X4y7wNYTcIksNmUQzPZNU+k+nw9xBXuaXqC9IThkzlAAEcwm?=
- =?us-ascii?Q?q0k0zZkuPZnAuyjiJD0DWqcs48Xvc6X1KrPl4V6Cy65hmU8b160fNm5412H0?=
- =?us-ascii?Q?/Wa0iRD/3Lwqrdh55K6EFeSq5U2zhkXB45O99vEooc4hQZGIx5E0gAILO1V6?=
- =?us-ascii?Q?OtDByBBPwGAB0UXbbxgmQQVjq+yVRb3b7Ov8AamRqNEgbvv65AeU2F8EqV5r?=
- =?us-ascii?Q?CqlALtFDdfTjYMizZ2SQkvHrmJecRvPhNIVkoNHZPW93GfQ3IznZshAr7DSr?=
- =?us-ascii?Q?e5542rxDsflFwbcAba79dkO5q8LVkQNohsxnh/C59GDXMJBqup0OEsn0q4el?=
- =?us-ascii?Q?LzvkcGY+2kpxm9RO13COvjh69iSkqwRQSzsYfGzulAhgmNoBe0ud+67ojSfL?=
- =?us-ascii?Q?tsN+flFPUGvCYpbsB4Zkvn6/zybS3tOn4ZrCPqBYNboYlQTywZkqPaPlatbC?=
- =?us-ascii?Q?Q7RH7zZ0wnMsxHOpObPdA8hvmIdzcMtLnP/hInk3?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43ad719a-5efb-48a3-c9a8-08dc1d111c2a
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2024 19:17:30.5910
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jdqG3q1RqhadmACZMZZyKWgeNCdsn6O8Lu98g/VJIJ4GTWWL3I8CB+p1e8L1//Jll9DxZpBbrtvBNMDOGHcNDw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7006
+References: <20240123223039.1471557-1-abhishekpandit@google.com>
+ <20240123143026.v1.3.Idf7d373c3cbb54058403cb951d644f1f09973d15@changeid> <CACeCKafTBwSgRXLFA3HC7cBe8hD=PSgSmR=TWy1oF3Rkn+hK4g@mail.gmail.com>
+In-Reply-To: <CACeCKafTBwSgRXLFA3HC7cBe8hD=PSgSmR=TWy1oF3Rkn+hK4g@mail.gmail.com>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Wed, 24 Jan 2024 11:18:37 -0800
+Message-ID: <CANFp7mUFvRnb1BF=vzNE+BxMcjZi_o0wwJVw=Ty+zEG+JTzA1w@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] usb: typec: ucsi: Get PD revision for partner
+To: Prashant Malani <pmalani@chromium.org>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@google.com>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
+	jthies@google.com, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Saranya Gopal <saranya.gopal@intel.com>, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 24, 2024 at 05:59:00PM +0000, Conor Dooley wrote:
-> On Wed, Jan 24, 2024 at 12:47:14PM -0500, Frank Li wrote:
-> > On Wed, Jan 24, 2024 at 05:36:42PM +0000, Conor Dooley wrote:
-> > > On Fri, Jan 19, 2024 at 04:31:28PM -0500, Frank Li wrote:
-> > > > From: Ran Wang <ran.wang_1@nxp.com>
-> > > > 
-> > > > When DWC3 is set to host mode by programming register DWC3_GCTL, VBUS
-> > > > (or its control signal) will turn on immediately on related Root Hub
-> > > > ports. Then the VBUS will be de-asserted for a little while during xhci
-> > > > reset (conducted by xhci driver) for a little while and back to normal.
-> > > > 
-> > > > This VBUS glitch might cause some USB devices emuration fail if kernel
-> > > > boot with them connected. One SW workaround which can fix this is to
-> > > > program all PORTSC[PP] to 0 to turn off VBUS immediately after setting
-> > > > host mode in DWC3 driver(per signal measurement result, it will be too
-> > > > late to do it in xhci-plat.c or xhci.c).
-> > > > 
-> > > > Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-> > > > Reviewed-by: Peter Chen <peter.chen@nxp.com>
-> > > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
-> > > >  1 file changed, 7 insertions(+)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > > index 203a1eb66691f..dbf272b76e0b5 100644
-> > > > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > > @@ -273,6 +273,13 @@ properties:
-> > > >        with an external supply.
-> > > >      type: boolean
-> > > >  
-> > > > +  snps,host-vbus-glitches:
-> > > > +    description:
-> > > > +      When set, power off all Root Hub ports immediately after
-> > > > +      setting host mode to avoid vbus (negative) glitch happen in later
-> > > > +      xhci reset. And the vbus will back to 5V automatically when reset done.
-> 
-> nit: "will return to"
-> 
-> > > > +    type: boolean
-> > > 
-> > > Why do we want to have a property for this at all? The commit message
-> > > seems to describe a problem that's limited to specific configurations
-> > > and appears to be somethng the driver should do unconditionally.
-> > > 
-> > > Could you explain why this cannot be done unconditionally please?
-> > 
-> > It depends on board design, not all system vbus can be controller by root
-> > hub port. If it is always on, it will not trigger this issue.
-> 
-> Okay, that seems reasonable to have a property for. Can you add that
-> info to the commit message please?
+On Wed, Jan 24, 2024 at 10:49=E2=80=AFAM Prashant Malani <pmalani@chromium.=
+org> wrote:
+>
+> Hi Abhishek,
+>
+> On Tue, Jan 23, 2024 at 2:30=E2=80=AFPM Abhishek Pandit-Subedi
+> <abhishekpandit@google.com> wrote:
+> >
+> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> >
+> > PD major revision for the port partner is described in
+> > GET_CONNECTOR_CAPABILITY and is only valid on UCSI 2.0 and newer. Updat=
+e
+> > the pd_revision on the partner if the UCSI version is 2.0 or newer.
+> >
+> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > ---
+> > $ cat /sys/class/typec/port2-partner/usb_power_delivery_revision
+> > 3.0
+> >
+> >  drivers/usb/typec/ucsi/ucsi.c | 25 +++++++++++++++++++++++++
+> >  drivers/usb/typec/ucsi/ucsi.h |  3 +++
+> >  2 files changed, 28 insertions(+)
+> >
+> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucs=
+i.c
+> > index 4edf785d203b..8e0a512853ba 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > @@ -782,6 +782,8 @@ static int ucsi_register_partner(struct ucsi_connec=
+tor *con)
+> >         }
+> >
+> >         desc.usb_pd =3D pwr_opmode =3D=3D UCSI_CONSTAT_PWR_OPMODE_PD;
+> > +       desc.pd_revision =3D
+> > +               UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.f=
+lags);
+> >
+> >         partner =3D typec_register_partner(con->port, &desc);
+> >         if (IS_ERR(partner)) {
+> > @@ -856,6 +858,28 @@ static void ucsi_partner_change(struct ucsi_connec=
+tor *con)
+> >                         con->num, u_role);
+> >  }
+> >
+> > +static int ucsi_check_connector_capability(struct ucsi_connector *con)
+> > +{
+> > +       u64 command;
+> > +       int ret;
+> > +
+> > +       if (!con->partner && !IS_MIN_VERSION_2_0(con->ucsi))
+>
+> (Mentioned side-band but reproducing here for consistency)
+> This macro is unnecessary. It's just doing a comparison, which can be inl=
+ined
+> without any perceptible change in readability (actually, I'd argue adding=
+ the !
+> to an english idiom makes things *less* readable):
 
-By the way, I sent v4 at
-https://lore.kernel.org/imx/20240124152525.3910311-1-Frank.Li@nxp.com/T/#t
+I prefer the macro because it makes it easier to search where version
+checks are being done and it keeps the `<` vs `<=3D` consistent. UCSI
+only has a few published revisions: 1.2, 2.0, 2.1 and 3.0 and major
+changes seem to have happened in 2.0 and 3.0 so there should be very
+few of these macros created/used.
 
-How about add below sentence?
+>
+>         if (!con->partner && con->ucsi->version < UCSI_VERSION_2_0)
+>                return 0;
+>
+> Besides that, I think you want an || operator instead of the && operator,=
+ right?
 
-This was only happen when PORTSC[PP} can control vbus. Needn't set it if
-vbus is always on.
+Good catch on that. It should be OR.
+i.e. if (!con->partner || !IS_MIN_VERSION_2_0(con->ucsi))
 
-> 
-> On another note, I like it when the property name explains why you would
-> add it, rather than the thing it is trying to solve.
-> Named after the disease, rather than the symptoms, if you get me. I
-> tried to come up with a name here, but could not really suggest
-> something good. If you can think of something, that'd be good, but don't
-> stress it.
-
-snps,host-vbus-glitches change to snps,host-vbus-glitches-quirk.
-
-How about use below description:
-
-When set, power off all Root Hub ports immediately after
-setting host mode to avoid vbus (negative) glitch happen in later
-xhci reset. That may cause some USB devices emuration fail when kernel boot
-with device connected and PORTSC[PP] control vbus in board desgin.
-
-Frank
-> 
+>
+> > +               return 0;
+> > +
+> > +       command =3D UCSI_GET_CONNECTOR_CAPABILITY | UCSI_CONNECTOR_NUMB=
+ER(con->num);
+> > +       ret =3D ucsi_send_command(con->ucsi, command, &con->cap, sizeof=
+(con->cap));
+> > +       if (ret < 0) {
+> > +               dev_err(con->ucsi->dev, "GET_CONNECTOR_CAPABILITY faile=
+d (%d)\n", ret);
+> > +               return ret;
+> > +       }
+> > +
+> > +       typec_partner_set_pd_revision(
+> > +               con->partner,
+> > +               UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.f=
+lags));
+> > +
+> > +       return ret;
+> > +}
+> > +
+> >  static int ucsi_check_connection(struct ucsi_connector *con)
+> >  {
+> >         u8 prev_flags =3D con->status.flags;
+>
 > Thanks,
-> Conor.
-> 
-
-
 
