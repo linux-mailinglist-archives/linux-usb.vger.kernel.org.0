@@ -1,172 +1,129 @@
-Return-Path: <linux-usb+bounces-5498-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5499-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFE5483B632
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 01:46:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FAB583B65A
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 02:04:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F4D51C223A0
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 00:46:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9353286A0E
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 01:04:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9A4079EC;
-	Thu, 25 Jan 2024 00:45:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mk3yUOT+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B15BFEA9;
+	Thu, 25 Jan 2024 01:04:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [60.191.123.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA58D747D
-	for <linux-usb@vger.kernel.org>; Thu, 25 Jan 2024 00:45:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56FA136F
+	for <linux-usb@vger.kernel.org>; Thu, 25 Jan 2024 01:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.191.123.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706143508; cv=none; b=r6ePytRfpoJ2lopLAIZ+yRKwSfiBRuwNrxSQ4FV2gUNA9OUH+o6lAh5Axil227xG6E6u1na6ZR9WG9ddDTIVlpJCRfA+Mum6I34NVwQMneTuKi0J2n/AbLtd0WFBwYA1zoUQPBf4zkq+Z8vT/n3YwV/ku2tvon2qjhzZ/LUkhTs=
+	t=1706144683; cv=none; b=FV3pwTB0NFFf0+ttkxVnZxJmICRwLuttnQRK8T27CRczuzVefhqHLmwE0Iq0gCztqx9R83RyW5P+Co47KVa04DNuL+0VyZ7a79MUKS9MHQyEQYus8zTmavB4mqTt3cyDYw+WLlUnTztpm7T4xJ7UrmeEQE8oM2rFHucKZ1NZHrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706143508; c=relaxed/simple;
-	bh=LUt4uhKuLzhEnRnMjdtUyO4l1frrpeODKi23vzrA7s8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=FLgh5qRw1O/9VUNq2SQS3dMcqudL5v4mpzwtoBSdZ+Eu2/b7IGIDQu7jPOaxZTIwAK1mTsyjx/K5lKZZcHf9WxxGuqGUplmTHGwwrehidXitLkZmfl70MolzVJbq45tQPszZcOUcfHUDJxPYsglP7uGkytlDHji2YXsbpGcjlN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--abhishekpandit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mk3yUOT+; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--abhishekpandit.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6029c85922dso22730957b3.3
-        for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 16:45:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706143506; x=1706748306; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FTG13zB4Cw+QMij5k9sqfIjmokZzi07qqv8LYcYcXhI=;
-        b=mk3yUOT+B5tSEy60QAtLTr5546Ng7KvLeZP/FfPFLzV6h/ks6S5jPuabgjx3NVCkyB
-         YI3Y1ZaTJDsu7b1oPGetx4Gkvrv0pJc+W6l3ISryy5MPNh+2yo9MqbOMtxjhhf/UgmKV
-         /oXmWSKSYsGynRiYNnBddvw1gqDVg9UFX+lD0MKucw6RzTCEEi30IKgQscYPayK4Ko/b
-         nZSnHhhXQfJNjyx5B7uMRsOXEkDhkxkjeS/w6puD/RQBUOiIxX4R48P3bYEnokRFSTz3
-         S82REcj5IK6iM7gfpwKj/dhVYAbLAJmBZesajxgxa/JAxYIHlKNWgJGJy4fhzQrJF0Ss
-         /cxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706143506; x=1706748306;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FTG13zB4Cw+QMij5k9sqfIjmokZzi07qqv8LYcYcXhI=;
-        b=WKdvX97G7otAMCpLrljpbZZ3rT3bN5EVmNC+np0wzwmMx7HP3u0iGqcS+d2tE50PXq
-         2c6heyA31iqgfwpEfk3aVVEJjij8Za8w6DkNg6KspSHUUpP4dSTaKRQRDkyc0/9yAoH5
-         KXIQ3bvJSzysVZ4Cjpo0LSUSC92RTPKqt5R6r3GMzHdMxknf9AaDMMpUAl5A3ldN34ZP
-         KQJ8q4Kgo+oxgJFsZR4+QcY65m0vvbAbbzT5cl5PT7g5JKOFgCeoTvp/GmjabhB0//Yh
-         v6NWkLk/8Mvd6k+A1p17A/O5g6L4ZWv5YpNG3IIS8tdhgRl7eOd8mbOxmDI+HWGdiqYa
-         m8Eg==
-X-Gm-Message-State: AOJu0Yz3/k0L3zf9A/jkUj1P3s1GcoPFoLstymgy4DEtobru4P/r2+RW
-	uqoR8+irOisoXWvCknLsXbSoE4G+E49H3lrv21Hke6XCClAweleJUNtIUlDGEjuAhVQbXa7A74U
-	Bg5kJwvJj554REaTS5QntFgquVlb5wMa2ow==
-X-Google-Smtp-Source: AGHT+IGExB7gvGZM7JciBviHyowPn/wR9Sv5XLUASVZ2ni/v0X4Gsm4Wc1QEW3P9KXAf/QE5gZWRzR/8S85JAYClMjJfAw==
-X-Received: from abps.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:9b4])
- (user=abhishekpandit job=sendgmr) by 2002:a81:7991:0:b0:5fa:4896:7114 with
- SMTP id u139-20020a817991000000b005fa48967114mr252ywc.5.1706143505848; Wed,
- 24 Jan 2024 16:45:05 -0800 (PST)
-Date: Wed, 24 Jan 2024 16:44:54 -0800
-In-Reply-To: <20240125004456.575891-1-abhishekpandit@google.com>
+	s=arc-20240116; t=1706144683; c=relaxed/simple;
+	bh=3XBrBWwnoycjaj2YbvlMbTvrF293aZgbY8yGIAvnH60=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=E0HFNg4rWRw1AjYrK8DOyzpfKUqTu7aH8vbZ4oFR9adXc5ks0DzlLLvcgTiWqpQYFwcy2ZWAVneLJ1ITWAwkPjTX4Pxem+5toaLkBzFIJaM+BRd/qVDsq4hEoQwZBSSPOSdP8JMzbJspIiEsCVxqlAzUlT0i63EV0emkrRBPglA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com; spf=pass smtp.mailfrom=h3c.com; arc=none smtp.client-ip=60.191.123.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h3c.com
+Received: from mail.maildlp.com ([172.25.15.154])
+	by h3cspam02-ex.h3c.com with ESMTP id 40P12Xni003667;
+	Thu, 25 Jan 2024 09:02:33 +0800 (GMT-8)
+	(envelope-from zhang.zhansheng@h3c.com)
+Received: from DAG6EX06-IMDC.srv.huawei-3com.com (unknown [10.62.14.15])
+	by mail.maildlp.com (Postfix) with ESMTP id 79D8C2004BCE;
+	Thu, 25 Jan 2024 09:07:13 +0800 (CST)
+Received: from DAG6EX02-IMDC.srv.huawei-3com.com (10.62.14.11) by
+ DAG6EX06-IMDC.srv.huawei-3com.com (10.62.14.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.27; Thu, 25 Jan 2024 09:02:34 +0800
+Received: from DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4])
+ by DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4%16]) with
+ mapi id 15.02.1258.027; Thu, 25 Jan 2024 09:02:34 +0800
+From: Zhangzhansheng <zhang.zhansheng@h3c.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Ladislav Michl
+	<oss-lists@triops.cz>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        Sneeker Yeh <sneeker.yeh@gmail.com>,
+        Wangxiaoqing <wangxiaoqing@h3c.com>, Xinhaining <xinhaining@h3c.com>
+Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTog562U5aSNOiBbQ29uc3VsdGluZyBh?=
+ =?utf-8?Q?bout:_xHCI_host_dies_on_device_unplug]?=
+Thread-Topic: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTogW0NvbnN1bHRpbmcgYWJvdXQ6IHhI?=
+ =?utf-8?Q?CI_host_dies_on_device_unplug]?=
+Thread-Index: Ado/deoXRCEZDWeZTvuVrPzYRAXR6wADli6AA1eMzaAAOXddgAAoPNiwABQDsmD//59zAP//egKwgACOYAD//scFMA==
+Date: Thu, 25 Jan 2024 01:02:33 +0000
+Message-ID: <f9a4a3fe96514ab4ade2e4e0dcbd77e6@h3c.com>
+References: <7b049561ce33406ab9b5d0cee7fbd497@h3c.com>
+ <9e8bebd2-e51a-cd24-3522-a781bb0b237e@linux.intel.com>
+ <e7fddc9147af4adc84f76c07b559ed77@h3c.com>
+ <57883406-83f3-9956-16c3-2954ab3744ca@linux.intel.com>
+ <64e4153a5cd54cf9bc3eaaf823ba0a31@h3c.com>
+ <c756521f-ea5b-7816-5d60-0c61f3275305@linux.intel.com>
+ <7e00c498947c4efdb8a96f970656ee03@h3c.com>
+ <2024012415-unleash-john-ff32@gregkh>
+In-Reply-To: <2024012415-unleash-john-ff32@gregkh>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-sender-location: DAG2
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240125004456.575891-1-abhishekpandit@google.com>
-X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240124164443.v2.3.Idf7d373c3cbb54058403cb951d644f1f09973d15@changeid>
-Subject: [PATCH v2 3/3] usb: typec: ucsi: Get PD revision for partner
-From: Abhishek Pandit-Subedi <abhishekpandit@google.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org
-Cc: jthies@google.com, pmalani@chromium.org, 
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans de Goede <hdegoede@redhat.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Saranya Gopal <saranya.gopal@intel.com>, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:h3cspam02-ex.h3c.com 40P12Xni003667
 
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-
-PD major revision for the port partner is described in
-GET_CONNECTOR_CAPABILITY and is only valid on UCSI 2.0 and newer. Update
-the pd_revision on the partner if the UCSI version is 2.0 or newer.
-
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
----
-$ cat /sys/class/typec/port2-partner/usb_power_delivery_revision
-3.0
-
-Changes in v2:
-  - Formatting changes and update macro to use brackets.
-  - Fix incorrect guard condition when checking connector capability.
-
- drivers/usb/typec/ucsi/ucsi.c | 23 +++++++++++++++++++++++
- drivers/usb/typec/ucsi/ucsi.h |  3 +++
- 2 files changed, 26 insertions(+)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index a35056ee3e96..2b7983d2fdae 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -782,6 +782,7 @@ static int ucsi_register_partner(struct ucsi_connector *con)
- 	}
- 
- 	desc.usb_pd = pwr_opmode == UCSI_CONSTAT_PWR_OPMODE_PD;
-+	desc.pd_revision = UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags);
- 
- 	partner = typec_register_partner(con->port, &desc);
- 	if (IS_ERR(partner)) {
-@@ -856,6 +857,27 @@ static void ucsi_partner_change(struct ucsi_connector *con)
- 			con->num, u_role);
- }
- 
-+static int ucsi_check_connector_capability(struct ucsi_connector *con)
-+{
-+	u64 command;
-+	int ret;
-+
-+	if (!con->partner || !IS_MIN_VERSION_2_0(con->ucsi))
-+		return 0;
-+
-+	command = UCSI_GET_CONNECTOR_CAPABILITY | UCSI_CONNECTOR_NUMBER(con->num);
-+	ret = ucsi_send_command(con->ucsi, command, &con->cap, sizeof(con->cap));
-+	if (ret < 0) {
-+		dev_err(con->ucsi->dev, "GET_CONNECTOR_CAPABILITY failed (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	typec_partner_set_pd_revision(con->partner,
-+		UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags));
-+
-+	return ret;
-+}
-+
- static int ucsi_check_connection(struct ucsi_connector *con)
- {
- 	u8 prev_flags = con->status.flags;
-@@ -925,6 +947,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 		if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
- 			ucsi_register_partner(con);
- 			ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
-+			ucsi_partner_task(con, ucsi_check_connector_capability, 1, HZ);
- 
- 			if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
- 			    UCSI_CONSTAT_PWR_OPMODE_PD)
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 94b373378f63..a0c452d09cf6 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -36,6 +36,9 @@ struct dentry;
- #define UCSI_BCD_GET_MINOR(_v_)		(((_v_) >> 4) & 0x0F)
- #define UCSI_BCD_GET_SUBMINOR(_v_)	((_v_) & 0x0F)
- 
-+#define IS_MIN_VERSION(ucsi, min_ver)	((ucsi)->version >= (min_ver))
-+#define IS_MIN_VERSION_2_0(ucsi)	IS_MIN_VERSION(ucsi, UCSI_VERSION_2_0)
-+
- /* Command Status and Connector Change Indication (CCI) bits */
- #define UCSI_CCI_CONNECTOR(_c_)		(((_c_) & GENMASK(7, 1)) >> 1)
- #define UCSI_CCI_LENGTH(_c_)		(((_c_) & GENMASK(15, 8)) >> 8)
--- 
-2.43.0.429.g432eaa2c6b-goog
-
+DQo+ID5CZWNhdXNlIHRoZSBrZXJuZWwgdmVyc2lvbiBvZiBvdXIgY29tcGFueSBpcyA0LjY1ICwg
+SSBuZWVkIHRvIHB1dCB0aGUgcGF0Y2ggdG8gb3VyIDQuNjUga2VybmVsIHdlIHVzZWQuDQoNCj5U
+aGVyZSBpcyBubyBzdWNoIGtlcm5lbCB2ZXJzaW9uLg0KU29ycnksIEkgcmVtZW1iZXJlZCB3cm9u
+Z2x5ICwgdGhlIGtlcm5lbCB2ZXJzaW9uIGlzIDQuNC42NS4NCg0KPiA+VG9kYXkgY29tcGFyZWQg
+dG8gdGhlIGxhdGVzdCBrZXJuZWwgaXMgNi43LCBJIGZvdW5kIHRoZXJlIGFyZSBhIGxvdCBvZiBj
+aGFuZ2VzIGZvciB1c2IgbW9kdWxlIGJldHdlZW4ga2VybmVsIDQuNjUgYW5kIDYuNy4NCj4gPg0K
+PiA+Q291bGQgeW91IHByb3ZpZGUgbWUgZm9yIHRoZSBpc3N1ZXMgcGF0Y2guDQoNCj5JZiB5b3Ug
+YXJlIHN0dWNrIGF0IGFuIG9sZGVyIGtlcm5lbCB2ZXJzaW9uLCB5b3UgYXJlIHJlc3BvbnNpYmxl
+IGZvciBrZWVwaW5nIGl0IHVwIHRvIGRhdGUsIHBsZWFzZSBnZXQgc3VwcG9ydCBmcm9tIHRoZSBw
+ZW9wbGUgd2hvIGFyZSByZXF1aXJpbmcgeW91IHRvIHVzZSBhbiBvbGRlciBhbmQgb2Jzb2xldGUg
+a2VybmVsIHZlcnNpb24sIHRoaXMgaXMgd2hhdCB5b3UgYXJlIHBheWluZyB0aGVtIGZvci4NCg0K
+Pmdvb2QgbHVjayENCiBPayEgDQpUaGFua3MhDQoNCi0tLS0t6YKu5Lu25Y6f5Lu2LS0tLS0NCuWP
+keS7tuS6ujogR3JlZyBLSCBbbWFpbHRvOmdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnXSANCuWP
+kemAgeaXtumXtDogMjAyNOW5tDHmnIgyNOaXpSAyMjoxOQ0K5pS25Lu25Lq6OiB6aGFuZ3poYW5z
+aGVuZyAo5pON5L2c57O757uf5byA5Y+R6YOo6YOo6ZeoLCBSRCkgPHpoYW5nLnpoYW5zaGVuZ0Bo
+M2MuY29tPg0K5oqE6YCBOiBNYXRoaWFzIE55bWFuIDxtYXRoaWFzLm55bWFuQGxpbnV4LmludGVs
+LmNvbT47IExhZGlzbGF2IE1pY2hsIDxvc3MtbGlzdHNAdHJpb3BzLmN6PjsgbGludXgtdXNiQHZn
+ZXIua2VybmVsLm9yZzsgU25lZWtlciBZZWggPHNuZWVrZXIueWVoQGdtYWlsLmNvbT47IHdhbmd4
+aWFvcWluZyAo5pON5L2c57O757uf5byA5Y+R6YOoL09NLCBSRCkgPHdhbmd4aWFvcWluZ0BoM2Mu
+Y29tPjsgeGluaGFpbmluZyAo5pON5L2c57O757uf5byA5Y+R6YOoL09NLCBSRCkgPHhpbmhhaW5p
+bmdAaDNjLmNvbT4NCuS4u+mimDogUmU6IOetlOWkjTog562U5aSNOiDnrZTlpI06IFtDb25zdWx0
+aW5nIGFib3V0OiB4SENJIGhvc3QgZGllcyBvbiBkZXZpY2UgdW5wbHVnXQ0KDQpPbiBXZWQsIEph
+biAyNCwgMjAyNCBhdCAwMjowOTo0M1BNICswMDAwLCBaaGFuZ3poYW5zaGVuZyB3cm90ZToNCj4g
+TWF0aGlhc++8mg0KPiANCj4gVGhhbmsgeW91IHZlcnkgbXVjaCENCj4gDQo+ID4gVGhpcyBpc3N1
+ZSB3YXMgcmVzb2x2ZWQgaW4gNS4xOSBrZXJuZWwgd2l0aCBwYXRjaDoNCj4gPiAyNTM1NWUwNDZk
+MjkgeGhjaTogdXNlIGdlbmVyaWMgY29tbWFuZCB0aW1lciBmb3Igc3RvcCBlbmRwb2ludCBjb21t
+YW5kcy4NCj4gDQo+ID4gQWZ0ZXIgdGhpcyBwYXRjaCB0aGUgdGltZXIgaXMgc3RhcnRlZCB3aGVu
+IHhIQyBzdGFydCBwcm9jZXNzaW5nIHRoZSBjb21tYW5kLCBub3Qgd2hlbiBkcml2ZXIgcXVldWVz
+IGl0Lg0KPiA+IEkgc3Ryb25nbHkgcmVjb21tZW5kIHRyeWluZyBhIG1vcmUgcmVjZW50IGtlcm5l
+bCB3aGVyZSBhbGwgdGhlc2UgaXNzdWVzIGFyZSBmaXhlZCBhbHJlYWR5Lg0KPiAgDQo+IEkgc2Vl
+IDUuMTkga2VybmVsIGhhcyBkb25lIHdoYXQgeW91IHNheS4NCj4gDQo+IEJlY2F1c2UgdGhlIGtl
+cm5lbCB2ZXJzaW9uIG9mIG91ciBjb21wYW55IGlzIDQuNjUgLCBJIG5lZWQgdG8gcHV0IHRoZSBw
+YXRjaCB0byBvdXIgNC42NSBrZXJuZWwgd2UgdXNlZC4NCg0KVGhlcmUgaXMgbm8gc3VjaCBrZXJu
+ZWwgdmVyc2lvbi4NCg0KPiBUb2RheSBjb21wYXJlZCB0byB0aGUgbGF0ZXN0IGtlcm5lbCBpcyA2
+LjcsIEkgZm91bmQgdGhlcmUgYXJlIGEgbG90IG9mIGNoYW5nZXMgZm9yIHVzYiBtb2R1bGUgYmV0
+d2VlbiBrZXJuZWwgNC42NSBhbmQgNi43Lg0KPiANCj4gQ291bGQgeW91IHByb3ZpZGUgbWUgZm9y
+IHRoZSBpc3N1ZXMgcGF0Y2guDQoNCklmIHlvdSBhcmUgc3R1Y2sgYXQgYW4gb2xkZXIga2VybmVs
+IHZlcnNpb24sIHlvdSBhcmUgcmVzcG9uc2libGUgZm9yIGtlZXBpbmcgaXQgdXAgdG8gZGF0ZSwg
+cGxlYXNlIGdldCBzdXBwb3J0IGZyb20gdGhlIHBlb3BsZSB3aG8gYXJlIHJlcXVpcmluZyB5b3Ug
+dG8gdXNlIGFuIG9sZGVyIGFuZCBvYnNvbGV0ZSBrZXJuZWwgdmVyc2lvbiwgdGhpcyBpcyB3aGF0
+IHlvdSBhcmUgcGF5aW5nIHRoZW0gZm9yLg0KDQpnb29kIGx1Y2shDQoNCmdyZWcgay1oDQo=
 
