@@ -1,65 +1,58 @@
-Return-Path: <linux-usb+bounces-5517-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5518-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F64083D027
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 00:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 364BC83D037
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 00:03:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B4C11F21956
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 23:01:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0FC91F223E8
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 23:03:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC7E4125BC;
-	Thu, 25 Jan 2024 23:01:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54EA0125D8;
+	Thu, 25 Jan 2024 23:03:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LHqVUSHd"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PlL9DU6d"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F42111A1
-	for <linux-usb@vger.kernel.org>; Thu, 25 Jan 2024 23:01:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCF2125BA;
+	Thu, 25 Jan 2024 23:03:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706223706; cv=none; b=kRViFtCzki0E30sMQWXfsm2OjKbu2LDinD/KBeUvcQsdyxZBE2lKnIWehhG+evgvkYVbeFAl1tu2gU8Pk/RmoVWVgVz+JGKOsHXj0/qg9IDjrVru/mm5Aq3SPTJDRtxn/pxQQ7toghH/4k1LsLtfDKj1YqulyeFLQ9ZkLlRb3Ho=
+	t=1706223794; cv=none; b=O7ZAHKRpau90URQ4bZj5YAtufmi8NqEQ0ZxaEAHy43zc3kBJ18mteyx2Dwqf30prwumG4YP4r8cYPHpeNBTXw6KVQlEZVPsYKOTd64crZe/qI9DK60YI2Z1Q6n+TWIeGWp1SExXMAAFmyrQgBIUn1bXT+aRp+1vJawlndy53fZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706223706; c=relaxed/simple;
-	bh=pXJ8cEJj5qIdsEqMg4Uyxic/n4QlIxzK9rW37t+oNLY=;
+	s=arc-20240116; t=1706223794; c=relaxed/simple;
+	bh=tRJ6fqwNReN0ReH1CE7vwU2UsOuWhXmcBlJ3BdSDafo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H4fWJo8Npu2dGFMnfjX2USVdfKka9fKLfNqjys2E0DYEggw9BWEirF+aj/XaSnxDD1PrgXOAe6r6Bs8Uj9W1ZViC/9zGiXv5qgMsYQ6uQP+E9Ef8VM+nphFQb+zon64lg3lu3ff7ElG/5f66clH6W8a8LuNFV1xtbA6hFhnEyCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LHqVUSHd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40A81C433C7;
-	Thu, 25 Jan 2024 23:01:45 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=VkVXLaRHFfA0NKMAustfpXB3WjnkPf4pRMMwP53VTyBoOi7bL6xwT6g4ervFYBGghw+TcfXDWEMaOjbaf59sgErPKDwNtHuA3O/JUugw9y+FDSQH3H7uLbzLiBk9mesaiatIDRr1vBMmurrZKsMwIxqaJg8v/rAKt8yrQP6iN3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PlL9DU6d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D6D9C433C7;
+	Thu, 25 Jan 2024 23:03:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1706223705;
-	bh=pXJ8cEJj5qIdsEqMg4Uyxic/n4QlIxzK9rW37t+oNLY=;
+	s=korg; t=1706223794;
+	bh=tRJ6fqwNReN0ReH1CE7vwU2UsOuWhXmcBlJ3BdSDafo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LHqVUSHdrerKwe8JiWHTUn1pp+J/MPK/rkcvMhJV5L06Hv4UCibfj5Gjd5U5BhyJu
-	 z8wPU6h9SAkn3ga88YH8UamqB40lq6AsUrGozHSk6qFiSkNmWy7iB0qJ/6n0ufdvD1
-	 cXQNE37aBKetauUYLVOStI0kbZEa1A0o4CqqTWp0=
-Date: Thu, 25 Jan 2024 15:01:44 -0800
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Zhangzhansheng <zhang.zhansheng@h3c.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Ladislav Michl <oss-lists@triops.cz>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Sneeker Yeh <sneeker.yeh@gmail.com>,
-	Wangxiaoqing <wangxiaoqing@h3c.com>,
-	Xinhaining <xinhaining@h3c.com>
-Subject: Re: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlA==?=
- =?utf-8?B?5aSNOiDnrZTlpI0=?= =?utf-8?Q?=3A?= [Consulting about: xHCI host
- dies on device unplug]
-Message-ID: <2024012550-irritate-rectangle-981f@gregkh>
-References: <7b049561ce33406ab9b5d0cee7fbd497@h3c.com>
- <9e8bebd2-e51a-cd24-3522-a781bb0b237e@linux.intel.com>
- <e7fddc9147af4adc84f76c07b559ed77@h3c.com>
- <57883406-83f3-9956-16c3-2954ab3744ca@linux.intel.com>
- <64e4153a5cd54cf9bc3eaaf823ba0a31@h3c.com>
- <c756521f-ea5b-7816-5d60-0c61f3275305@linux.intel.com>
- <7e00c498947c4efdb8a96f970656ee03@h3c.com>
- <2024012415-unleash-john-ff32@gregkh>
- <f9a4a3fe96514ab4ade2e4e0dcbd77e6@h3c.com>
+	b=PlL9DU6d/j0k4cQxgjYkckuc4LxAsHoyy7EgQh3sy2J58T2QlzbuXPKtnCq1tDNEc
+	 2KdG2F5ILLImhBPddK1Y4R2CNt7TPWPZ8SbjkUI9nDbxA0priIoyks9bZjjEn3dHHN
+	 67QUTBuXj6Ioz0PHpIbT3y44F6BmQdjEjrrDb6gU=
+Date: Thu, 25 Jan 2024 15:03:13 -0800
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Abhishek Pandit-Subedi <abhishekpandit@google.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	linux-usb@vger.kernel.org, jthies@google.com, pmalani@chromium.org,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Rajaram Regupathy <rajaram.regupathy@intel.com>,
+	Saranya Gopal <saranya.gopal@intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] usb: typec: ucsi: Update connector cap and status
+Message-ID: <2024012512-haphazard-mobster-f566@gregkh>
+References: <20240125004456.575891-1-abhishekpandit@google.com>
+ <20240124164443.v2.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,19 +61,26 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f9a4a3fe96514ab4ade2e4e0dcbd77e6@h3c.com>
+In-Reply-To: <20240124164443.v2.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid>
 
-On Thu, Jan 25, 2024 at 01:02:33AM +0000, Zhangzhansheng wrote:
-> 
-> > >Because the kernel version of our company is 4.65 , I need to put the patch to our 4.65 kernel we used.
-> 
-> >There is no such kernel version.
-> Sorry, I remembered wrongly , the kernel version is 4.4.65.
+On Wed, Jan 24, 2024 at 04:44:53PM -0800, Abhishek Pandit-Subedi wrote:
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index bec920fa6b8a..94b373378f63 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -3,6 +3,7 @@
+>  #ifndef __DRIVER_USB_TYPEC_UCSI_H
+>  #define __DRIVER_USB_TYPEC_UCSI_H
+>  
+> +#include <asm-generic/unaligned.h>
 
-That is a very very old and obsolete and totally insecure kernel
-version, you should not be using that at all.
+Do you really need to include a asm/ include file?  This feels very
+wrong.
 
-good luck!
+It's also in the wrong place, AND why "asm-generic"?  That also feels
+wrong.
+
+thanks,
 
 greg k-h
 
