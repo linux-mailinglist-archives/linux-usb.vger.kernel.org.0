@@ -1,203 +1,298 @@
-Return-Path: <linux-usb+bounces-5513-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5514-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0029083CA3B
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 18:43:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5511383CA71
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 19:02:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 336721C24DAC
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 17:43:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A7C81C250AF
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 18:02:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03DF8131E4F;
-	Thu, 25 Jan 2024 17:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23A2F1339B1;
+	Thu, 25 Jan 2024 18:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YmQDML8y"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="WfVb6fK1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7788F1E861;
-	Thu, 25 Jan 2024 17:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1566133426
+	for <linux-usb@vger.kernel.org>; Thu, 25 Jan 2024 18:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706204609; cv=none; b=XCZPSR/ByGaBg6LZkpnVI7DW8zXztxegvSD8MRVYBpQFgFQNwOOAM4bFYzBdl3QYFnaf5ReGaXYpVjfeC54WHlooYvgjKIzN1kRFuo2lDAjmf850iqqhQ91RfMnljIfrrZYL7L6Ty3U0bwaJWi9VDwGnPWaElgDMMuHDsTxNkFw=
+	t=1706205713; cv=none; b=ka4Z+kLeZ16v0foJS04Vn60nQApzIM1OfA+vjp2KjJe2KhM9S17mG3KAqdW0tYvKtwwIVLJ/e1cUIWO42ZdIQffNwUYC2oWiA4/V1eyDQcyzTY0Z2iOwQ5PxVRh+kwS4BHt66AfeylaX+pbMQ3CHn4Vi1WNOmEX/X07onCNwaXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706204609; c=relaxed/simple;
-	bh=H+OmZiH2ZIfXeBeTb+1jrdcr4KMaSl+7lR9ke+VrKy0=;
+	s=arc-20240116; t=1706205713; c=relaxed/simple;
+	bh=XESnMHtt0LmQQMjkF2jzovqST8CyQYQtazuDlGZjIPE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LJhew2Hf2w/qaxtfA2OBEspsUjDGIxpY2+sxP4BG8CO65N6F9DDzcfj4TglbNOU2RmIV/2oF8Zs/Nd1NX4OcQKIaxjbYKU702/4bcQFtINdz4nKwlVDJGcbA2GWHFuwueSfHfmYinikwmGFESlNmW1UflrLcN/xiN5z0uewz4gE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YmQDML8y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49925C433C7;
-	Thu, 25 Jan 2024 17:43:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706204608;
-	bh=H+OmZiH2ZIfXeBeTb+1jrdcr4KMaSl+7lR9ke+VrKy0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YmQDML8ylJ+AIeU/tofb9f8a/gvkWs/jTr4AGstTX0M58zZhpf8ERfvuDHai+1WfG
-	 s1zRusVbvY7jrpEaSitbgN2mkLVMPzbsSxTlaVJv81SH7yqVREN2WhQWDb0M7V8ePv
-	 ffYY816Mm+lVBnJ/4H6Wwez0uB02mFPfWkPgzFTognv1v0hWjVWX716xX/uJhYhnPn
-	 5uAKfRPBFU5VhPbeA29PlUi+aT+hYsR8XdPSV2I4/58AolQqGktqcNuTW4AIDuVpre
-	 /cZ3XuIwp+f8vEl5TMCkSiaTw15MOwNsQexNKij6QPaS1jJYCB/OV00lYJUo8MlS/1
-	 gxssXUbkrTIiQ==
-Date: Thu, 25 Jan 2024 17:43:22 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Frank Li <Frank.li@nxp.com>
-Cc: ran.wang_1@nxp.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>, mark.rutland@arm.com,
-	pku.leo@gmail.com, sergei.shtylyov@cogentembedded.com
-Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Add snps,host-vbus-glitches
- avoiding vbus glitch
-Message-ID: <20240125-appear-unclog-7da879f946e8@spud>
-References: <20240119213130.3147517-1-Frank.Li@nxp.com>
- <20240124-unclothed-dodgy-c78b1fffa752@spud>
- <ZbFNIvEaAJCxC2VB@lizhi-Precision-Tower-5810>
- <20240124-video-lumpiness-178c4e317f5a@spud>
- <ZbFiQmD1VRVzFSa+@lizhi-Precision-Tower-5810>
+	 Content-Type:Content-Disposition:In-Reply-To; b=DBOfeve3phjxjbJvgY2oKjfyUxv2/LyL+RB5uRxCBU/5PZOP2jIAWYZSOa7yQbs5qV1qFZ2nWZJWTQOAX8AQeX4ovkq2DdtmOGAg0QSp7/7GGhTWFPjqN9ikmkJH/dDKXEiWXvWW1mxJeuYqQDRkT8aTOSU3AyrQJkEgHCPzids=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch; spf=none smtp.mailfrom=ffwll.ch; dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b=WfVb6fK1; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ffwll.ch
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a2e633c5365so190594066b.1
+        for <linux-usb@vger.kernel.org>; Thu, 25 Jan 2024 10:01:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1706205710; x=1706810510; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CFqyIQAenEPHTlUKCgxpUzsk/M5i7GUmHQ+F9rSmRts=;
+        b=WfVb6fK1DuZNTTbe+3tJMkWoqbKgTCyQ0MKgIRA9Mc0s4m1OF2lZriml9utS1EQh79
+         LNVrivku/HOjq/FYUhUrT+3RtfmT520wrh6xXToT0gJVkcYlcKaKwHgHBiAXaz7DgSGr
+         ek38T9OWvj9WYSawMsEz/RzkDmcW87IteTnLI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706205710; x=1706810510;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CFqyIQAenEPHTlUKCgxpUzsk/M5i7GUmHQ+F9rSmRts=;
+        b=CPaJ0gmLpYr14UqBJHjzVuo0Ne3JJMi20r+mEr4c8IlMfIp+TPcuj98SXG5CCb+ufG
+         EnXG/ntm5HUlfIXd6KwH9I9oM8Y62ovf8igK+PVyxVcafY5vogo93edPk1D/HnDYlDmg
+         jsf9zykx2xSm6dzbMm8z6hrcz2zzv6q/YeJyhV8KUQqNh7MLdfYPfUMMNhfsxu+NrvHK
+         36bdyjXoTdGDOxWquT8UZ576LCA9d8aohASYn0+Gsz0D/J5dnrmqh5oA7oXzRj1W+7JL
+         Lki544eyxBC/7h8x/FdgbhycmwWKzxNX+78oUyRJk5VeXgL8hdkRcJNXXmPOMTfDYhHy
+         u1LQ==
+X-Gm-Message-State: AOJu0YwVkgwcxQY4qoaKZDWf5Hp8luBILChh+3DrHFLPk7CR5TUYDeDY
+	e8mclPbrQrG36/5FVzui3fvURRjD8j6hFKZRLEDnTHh5RXe7c9UOA7VgHJCaDSU=
+X-Google-Smtp-Source: AGHT+IGRjRpDyNOyGtuJwlJxMN3a/MkViwBNNJWcBYt6eYY1at9oh6gL4DpJYdHp/Lo+PN/TxtWMRw==
+X-Received: by 2002:a17:906:5fd3:b0:a30:e4e7:c54b with SMTP id k19-20020a1709065fd300b00a30e4e7c54bmr1617880ejv.1.1706205706963;
+        Thu, 25 Jan 2024 10:01:46 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id c26-20020a170906529a00b00a2f181266f6sm1261225ejm.148.2024.01.25.10.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jan 2024 10:01:46 -0800 (PST)
+Date: Thu, 25 Jan 2024 19:01:44 +0100
+From: Daniel Vetter <daniel@ffwll.ch>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: Paul Cercueil <paul@crapouillou.net>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+	Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [Linaro-mm-sig] [PATCH v5 1/6] dma-buf: Add
+ dma_buf_{begin,end}_access()
+Message-ID: <ZbKiCPhRvWaz4Icn@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+References: <20240119141402.44262-2-paul@crapouillou.net>
+ <8035f515-591f-4c87-bf0a-23d5705d9b1c@gmail.com>
+ <442f69f31ece6d441f3dc41c3dfeb4dcf52c00b8.camel@crapouillou.net>
+ <0b6b8738-9ea3-44fa-a624-9297bd55778f@amd.com>
+ <e4620acdf24628d904cedcb0030d78b14559f337.camel@crapouillou.net>
+ <85a89505-edeb-4619-86c1-157f7abdd190@amd.com>
+ <0fe2755fb320027234c086bcc88fd107855234c5.camel@crapouillou.net>
+ <577501f9-9d1c-4f8d-9882-7c71090e5ef3@amd.com>
+ <7928c0866ac5b2bfaaa56ad3422bedc9061e0f7b.camel@crapouillou.net>
+ <2ac7562c-d221-409a-bfee-1b3cfcc0f1c6@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="DYnLHzNM1BRheBXO"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZbFiQmD1VRVzFSa+@lizhi-Precision-Tower-5810>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2ac7562c-d221-409a-bfee-1b3cfcc0f1c6@amd.com>
+X-Operating-System: Linux phenom 6.6.11-amd64 
 
+On Thu, Jan 25, 2024 at 04:00:16PM +0100, Christian König wrote:
+> Am 24.01.24 um 11:58 schrieb Paul Cercueil:
+> > [SNIP]
+> > > > The problem was then that dma_buf_unmap_attachment cannot be called
+> > > > before the dma_fence is signaled, and calling it after is already
+> > > > too
+> > > > late (because the fence would be signaled before the data is
+> > > > sync'd).
+> > >   Well what sync are you talking about? CPU sync? In DMA-buf that is
+> > > handled differently.
+> > >   For importers it's mandatory that they can be coherent with the
+> > > exporter. That usually means they can snoop the CPU cache if the
+> > > exporter can snoop the CPU cache.
+> > I seem to have such a system where one device can snoop the CPU cache
+> > and the other cannot. Therefore if I want to support it properly, I do
+> > need cache flush/sync. I don't actually try to access the data using
+> > the CPU (and when I do, I call the sync start/end ioctls).
+> 
+> Usually that isn't a problem as long as you don't access the data with the
+> CPU.
+> 
+> [SNIP]
+> 
+> > > > (and I *think* there is a way to force coherency in the
+> > > > Ultrascale's
+> > > > interconnect - we're investigating it)
+> > >   What you can do is that instead of using udmabuf or dma-heaps is
+> > > that the device which can't provide coherency act as exporters of the
+> > > buffers.
+> > >   The exporter is allowed to call sync_for_cpu/sync_for_device on it's
+> > > own buffers and also gets begin/end CPU access notfications. So you
+> > > can then handle coherency between the exporter and the CPU.
+> > But again that would only work if the importers would call
+> > begin_cpu_access() / end_cpu_access(), which they don't, because they
+> > don't actually access the data using the CPU.
+> 
+> Wow, that is a completely new use case then.
+> 
+> Neither DMA-buf nor the DMA subsystem in Linux actually supports this as far
+> as I can see.
+> 
+> > Unless you mean that the exporter can call sync_for_cpu/sync_for_device
+> > before/after every single DMA transfer so that the data appears
+> > coherent to the importers, without them having to call
+> > begin_cpu_access() / end_cpu_access().
+> 
+> Yeah, I mean the importers don't have to call begin_cpu_access() /
+> end_cpu_access() if they don't do CPU access :)
+> 
+> What you can still do as exporter is to call sync_for_device() and
+> sync_for_cpu() before and after each operation on your non-coherent device.
+> Paired with the fence signaling that should still work fine then.
+> 
+> But taking a step back, this use case is not something even the low level
+> DMA subsystem supports. That sync_for_cpu() does the right thing is
+> coincident and not proper engineering.
+> 
+> What you need is a sync_device_to_device() which does the appropriate
+> actions depending on which devices are involved.
+> 
+> > In which case - this would still demultiply the complexity; my USB-
+> > functionfs interface here (and IIO interface in the separate patchset)
+> > are not device-specific, so I'd rather keep them importers.
+> > >   If you really don't have coherency between devices then that would
+> > > be a really new use case and we would need much more agreement on how
+> > > to do this.
+> > [snip]
+> > 
+> > Agreed. Desiging a good generic solution would be better.
+> > 
+> > With that said...
+> > 
+> > Let's keep it out of this USB-functionfs interface for now. The
+> > interface does work perfectly fine on platforms that don't have
+> > coherency problems. The coherency issue in itself really is a
+> > tangential issue.
+> 
+> Yeah, completely agree.
+> 
+> > So I will send a v6 where I don't try to force the cache coherency -
+> > and instead assume that the attached devices are coherent between
+> > themselves.
+> > 
+> > But it would be even better to have a way to detect non-coherency and
+> > return an error on attach.
+> 
+> Take a look into the DMA subsystem. I'm pretty sure we already have
+> something like this in there.
+> 
+> If nothing else helps you could take a look if the coherent memory access
+> mask is non zero or something like that.
 
---DYnLHzNM1BRheBXO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Jumping in way late and apolgies to everyone since yes I indeed suggested
+this entire mess to Paul in some private thread.
 
-On Wed, Jan 24, 2024 at 02:17:22PM -0500, Frank Li wrote:
-> On Wed, Jan 24, 2024 at 05:59:00PM +0000, Conor Dooley wrote:
-> > On Wed, Jan 24, 2024 at 12:47:14PM -0500, Frank Li wrote:
-> > > On Wed, Jan 24, 2024 at 05:36:42PM +0000, Conor Dooley wrote:
-> > > > On Fri, Jan 19, 2024 at 04:31:28PM -0500, Frank Li wrote:
-> > > > > From: Ran Wang <ran.wang_1@nxp.com>
-> > > > >=20
-> > > > > When DWC3 is set to host mode by programming register DWC3_GCTL, =
-VBUS
-> > > > > (or its control signal) will turn on immediately on related Root =
-Hub
-> > > > > ports. Then the VBUS will be de-asserted for a little while durin=
-g xhci
-> > > > > reset (conducted by xhci driver) for a little while and back to n=
-ormal.
-> > > > >=20
-> > > > > This VBUS glitch might cause some USB devices emuration fail if k=
-ernel
-> > > > > boot with them connected. One SW workaround which can fix this is=
- to
-> > > > > program all PORTSC[PP] to 0 to turn off VBUS immediately after se=
-tting
-> > > > > host mode in DWC3 driver(per signal measurement result, it will b=
-e too
-> > > > > late to do it in xhci-plat.c or xhci.c).
-> > > > >=20
-> > > > > Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-> > > > > Reviewed-by: Peter Chen <peter.chen@nxp.com>
-> > > > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > > > > ---
-> > > > >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
-> > > > >  1 file changed, 7 insertions(+)
-> > > > >=20
-> > > > > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml=
- b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > > > index 203a1eb66691f..dbf272b76e0b5 100644
-> > > > > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > > > > @@ -273,6 +273,13 @@ properties:
-> > > > >        with an external supply.
-> > > > >      type: boolean
-> > > > > =20
-> > > > > +  snps,host-vbus-glitches:
-> > > > > +    description:
-> > > > > +      When set, power off all Root Hub ports immediately after
-> > > > > +      setting host mode to avoid vbus (negative) glitch happen i=
-n later
-> > > > > +      xhci reset. And the vbus will back to 5V automatically whe=
-n reset done.
-> >=20
-> > nit: "will return to"
-> >=20
-> > > > > +    type: boolean
-> > > >=20
-> > > > Why do we want to have a property for this at all? The commit messa=
-ge
-> > > > seems to describe a problem that's limited to specific configuratio=
-ns
-> > > > and appears to be somethng the driver should do unconditionally.
-> > > >=20
-> > > > Could you explain why this cannot be done unconditionally please?
-> > >=20
-> > > It depends on board design, not all system vbus can be controller by =
-root
-> > > hub port. If it is always on, it will not trigger this issue.
-> >=20
-> > Okay, that seems reasonable to have a property for. Can you add that
-> > info to the commit message please?
->=20
-> By the way, I sent v4 at
-> https://lore.kernel.org/imx/20240124152525.3910311-1-Frank.Li@nxp.com/T/#t
+And worse, I think we need it, it's just that we got away without it thus
+far.
 
-I see.
+So way back at the og dma-buf kick-off dma coherency was discussed, and a
+few things where noted:
+- the dma api only supports device<->cpu coherency
+- getting the full coherency model off the ground right away is probably
+  too hard, so we made the decision that where it matters, relevant
+  flushing needs to be done in dma_buf_map/unmap.
 
-> How about add below sentence?
->=20
-> This was only happen when PORTSC[PP} can control vbus. Needn't set it if
-> vbus is always on.
+If you look at the earliest patches for dma-buf we had pretty clear
+language that all dma-operations should be bracketed with map/unmap. Of
+course that didn't work out for drm at all, and we had to first get
+dma_resv_lock and dma_fence landed and then your dynamic exporter/importer
+support in just to get the buffer migration functionality working, which
+was only one of the things discussed that braketing everything with
+map/unmap was supposed to take care of.
 
-"This can only happen when ... controls vbus, if vbus is always on, omit
-this property".
+The other was coherency management. But looking through archives I think
+this was already agreed to be postponed for later in the original kick-off
+meeting and never further discussed on the mailing list.
 
-Just a wee grammatical nitpicking.
+This worked for a fairly long time, because thus far dma-buf was used on
+fairly reaasonable architectures where all participating devices are
+coherent enough.
 
-> > On another note, I like it when the property name explains why you would
-> > add it, rather than the thing it is trying to solve.
-> > Named after the disease, rather than the symptoms, if you get me. I
-> > tried to come up with a name here, but could not really suggest
-> > something good. If you can think of something, that'd be good, but don't
-> > stress it.
->=20
-> snps,host-vbus-glitches change to snps,host-vbus-glitches-quirk.
+We did have to add the cpu access flushing fairly quickly because there's
+a lot of SoC chips (including intel) where that was necessary, but even
+that was added later on, as an opt-in and without fixing every. See
+fc13020e086b ("dma-buf: add support for kernel cpu access").
 
-I don't think adding "quirk" moves the needle.
+The ioctl to allow userspace to do flushing was added even later on, and
+there the entire yolo opt-in situation is even worse. c11e391da2a8
+("dma-buf: Add ioctls to allow userspace to flush") was only in 2016, 5
+years after dma-buf landed.
 
-> How about use below description:
->=20
-> When set, power off all Root Hub ports immediately after
-> setting host mode to avoid vbus (negative) glitch happen in later
-> xhci reset. That may cause some USB devices emuration fail when kernel bo=
-ot
-> with device connected and PORTSC[PP] control vbus in board desgin.
+It looks like it's finally time to add the device side flushing functions
+we've talked about first over 12 years ago :-)
 
-"When set, all root hub ports should be powered off immediately after
-enabling host mode, to avoid Vbus (negative) glitches that may happen
-during xHCI reset. These glitches can cause enumeration of some USB
-devices to fail when PORTSC[PP] controls Vbus. If Vbus is always on,
-omit this property."
+The reason this pops up now is that unlike other dma-buf users on maybe
+somewhat more funky architectures, Paul's patches want to use dma_fence
+for synchronization of the dma operations. Which means you cannot call the
+full dma_buf_map/unmap dance because that takes dma_resv_lock, and
+absolute no-go in a dma_fence critical path.
 
-How's that?
+And yes in those 12 years the dma-api hasn't gained the device2device sync
+support we'd need, but neither has it gained the multiple devices <-> cpu
+sync support we'd strictly need for dma-buf. So yes this is all a terrible
+hodge-podge of hacks, but if we'd require theoretically perfect code we'd
+still have zero dma-buf support in upstream.
 
---DYnLHzNM1BRheBXO
-Content-Type: application/pgp-signature; name="signature.asc"
+This also includes how we landed these extensions, none of them in the
+past have landed with a "update all existing exporters/importers" rule. We
+talked about that every time, and rejected it every time for imo pretty
+good reasons - the perf impact tends to be way too harsh if you impose
+over-flushing on everyone, including the reasonable platforms. And we
+currently can't do less than overflushing with the current dma-api
+interfaces because we dont have the specific flush functions we'd need. So
+really this isn't doing a worse abuse of the dma-api than what we have.
+It's definitely a bit wasteful since the functions we use do in theory
+flush too much. But in practice on the these funky architectures they
+flush enough.
 
------BEGIN PGP SIGNATURE-----
+There's also the very hard issue of actually trying to optimize flushes,
+because a dma operation might only access part of a buffer, and you might
+interleave read/write access by different devices in very innovative ways.
+So I'm firmly on the "make it work first, then fast" side of things.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbKdugAKCRB4tDGHoIJi
-0rW6AP9mEQlUrIIosavfS3kjJIpwvgVbgjfh5fLTZ2BBHxvtcgEAsQ/t921axT9S
-4B+qHdP7RqUk6gTi8US6ykZQjSheCgc=
-=rgw9
------END PGP SIGNATURE-----
+So dma-buf will continue to be a thing that's tested for specific combos,
+and then we'll patch them. It's a decade-plus tradition at this point.
 
---DYnLHzNM1BRheBXO--
+Which is all a very long winded way of saying that yes, I think we need
+this, and we needed this 12 years ago already if we'd have aimed for
+perfect.
+
+I have a bunch of detail comments on the patch itself, but I guess we
+first need to find consensus on whether it's a good idea in the first
+place.
+
+Cheers, Sima
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
 
