@@ -1,132 +1,101 @@
-Return-Path: <linux-usb+bounces-5504-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5505-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B2A483C131
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 12:42:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 340A183C67E
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 16:26:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40E101F286DA
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 11:42:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 676481C2395D
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 15:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC852C699;
-	Thu, 25 Jan 2024 11:42:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A5A06EB71;
+	Thu, 25 Jan 2024 15:26:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="vewYOVwJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O9sRQIbl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5C82C68E;
-	Thu, 25 Jan 2024 11:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAB44F5EC
+	for <linux-usb@vger.kernel.org>; Thu, 25 Jan 2024 15:26:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706182922; cv=none; b=MgRubXibIaMoJes7WdCYlmIm1MJcsbBTldOYiUpdYLwJu4XS9K5jg17bppmoqBabzMrpzfyjbkZosJnk4ZMGGI/Ea6oR+tLNxiizxHz53Atiw5kqNxDrZtMhW1ftThQHdkk75vVyWrQ1H2SMeHydLy018uunsOl1nc6cx/TAjpA=
+	t=1706196372; cv=none; b=ZNKESaPqd6vJHleHwgphH9IgHYCEHg7MjwDK6zXM//WEV/mFvWQNBwIi5nl60i2MEMZFHIBbEu4chKEsBfuSb20wN2jdjDekSFroKZBa2mhTmkXBHJ0hqajeJ7rgfiMyUkIcRn4Mxs+ynbPvRkwEkOvOVjQquoKHrHtxCAjJgzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706182922; c=relaxed/simple;
-	bh=lIMClxazBCbbP0kSsel6jlB5mJrKwckFwpLWr68KnQk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ctefA71HLbGGq2HI1ix+k11gi1pwrkHRP2l7yqAgQBamN7h8WD3ubsazcuhYjzpfFDpDFQhdPrXnh4N9aWT+kRG/H9T2MQZxe68MOgOi8GzNxuz+KGQyojMyz+Ox3bzUbgWcwQabQqBtdk9Q8dVUliWnlpzmOYz5M+i5MJH9xQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=vewYOVwJ; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706182919;
-	bh=lIMClxazBCbbP0kSsel6jlB5mJrKwckFwpLWr68KnQk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vewYOVwJUEiqmlgjNKNPbZKIVEvx1wPn8xyneTSefKDDOj+Zh1gYQtubBg06SAM75
-	 Yj7ndipccxrzQtscnWa4d7x7nETGOvom4Km7rspA1Rmh9jOLXtnXAd19kIFlQYhUGh
-	 1wss5MkNQg/8zVW/HHCaak2qUqh0+oxPi2sIn7KIBVqUb7oEPyL+OQ1U3hFY6q9Ai+
-	 E7A6s26M+Tae8n2PIaeDYzcwlaXFHqmQDs9NcXPDDlaq6bCb8lxPYCbrITb4hA2DXP
-	 ZE+xjAkqaQ1KkKKVAWtgq9na+sJiMccfCTDzkGsWiwWuuF0T7YD2MaDOFdjUpQ1oth
-	 Cg5LK8OuDO3kw==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3A0303781182;
-	Thu, 25 Jan 2024 11:41:58 +0000 (UTC)
-Message-ID: <abbc1135-6d32-421a-baea-123a9f761362@collabora.com>
-Date: Thu, 25 Jan 2024 12:41:57 +0100
+	s=arc-20240116; t=1706196372; c=relaxed/simple;
+	bh=eyrRsLa+IeZSZYEWD1Q5CmR3Y6EDHc0XWK+J3OmXS4o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Y+m97jFPxmsa/+a1U3h0fPLi9oln6rJRFL0YB1fetByD4yt64xR7w+//Wx3RBNjw6CWpBAxs12eG7JyfnootQOld9OmuZx7wbUb5WElPZcSmRYrdrS2XRlwXtqq3Ec8lScwgEU+I2/GU3vxzZ44dK8DW5E2lVdCeJVHBvpRQnmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O9sRQIbl; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706196370; x=1737732370;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eyrRsLa+IeZSZYEWD1Q5CmR3Y6EDHc0XWK+J3OmXS4o=;
+  b=O9sRQIbln1NVIbPxDuObWW1w/qJOOnNo6sCH/881XEAu1XCAgX72XYuE
+   UYAxeJnxEyNSFJdJQaq1wHf0DXAN2/0DlgYHu+gp27EQ6cOyEEj0rtJE2
+   4+R2g8k8k2ZwMB2UbasBW3vq84lrQQmRbbdwb+jEgYf+OqGYc5srVGBfB
+   c25/Mf+mo8N2sDoOlI7l78HxFcMhZLeahen7CD0knsStG8s21hbeLlAL+
+   XPyUPRx2tBbbuIFQD7EXt05GLrKLrcW8+WC00gXCex75RbVUn/nPuj1dD
+   CdP/OqNRgeYk6CaxQ/4SLNZRIOV0mpXhM0EIILzrY03B0UhazW5ZSdBcm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="23651323"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="23651323"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 07:26:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="857099924"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="857099924"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by fmsmga004.fm.intel.com with ESMTP; 25 Jan 2024 07:26:07 -0800
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/4] xhci fixes for usb-linus
+Date: Thu, 25 Jan 2024 17:27:33 +0200
+Message-Id: <20240125152737.2983959-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: mt6360-tcpc: Drop
- interrupt-names
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Conor Dooley <conor@kernel.org>, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org
-Cc: chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org,
- conor+dt@kernel.org, matthias.bgg@gmail.com, linux@roeck-us.net,
- heikki.krogerus@linux.intel.com, cy_huang@richtek.com,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240119094105.98312-1-angelogioacchino.delregno@collabora.com>
- <20240119-eldest-discharge-e2d3812be0a9@spud>
- <12b7b339-498b-45c1-bc5e-05e07660aefa@collabora.com>
- <20240123-procurer-jumbo-ebbec485505d@spud>
- <4fdbc3d8-3d44-4c2c-aae6-daa0b431e1c9@collabora.com>
- <dc9773aa-690f-47b5-b60a-a79c1e2dbaf2@linaro.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <dc9773aa-690f-47b5-b60a-a79c1e2dbaf2@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Il 25/01/24 11:32, Krzysztof Kozlowski ha scritto:
-> On 24/01/2024 09:48, AngeloGioacchino Del Regno wrote:
->> Il 23/01/24 18:14, Conor Dooley ha scritto:
->>> On Mon, Jan 22, 2024 at 11:32:30AM +0100, AngeloGioacchino Del Regno wrote:
->>>> Il 19/01/24 17:32, Conor Dooley ha scritto:
->>>>> On Fri, Jan 19, 2024 at 10:41:04AM +0100, AngeloGioacchino Del Regno wrote:
->>>>>> This IP has only one interrupt, hence interrupt-names is not necessary
->>>>>> to have.
->>>>>> Since there is no user yet, simply remove interrupt-names.
->>>>>
->>>>> I'm a bit confused chief. Patch 2 in this series removes a user of this
->>>>> property from a driver, so can you explain how this statement is true?
->>>>>
->>>>> Maybe I need to drink a few cans of Monster and revisit this patchset?
->>>>>
->>>>
->>>> What I mean with "there is no user" is that there's no device tree with any
->>>> mt6360-tcpc node upstream yet, so there is no meaningful ABI breakage.
->>>> Different story would be if there was a device tree using this already, in
->>>> which case, you can make a required property optional but not remove it.
->>>
->>> Not every devicetree lives within the kernel.. If the driver is using
->>> it, I'm not inclined to agree that it should be removed.
->>
->> I get the point, but as far as I remember, it's not the first time that this
->> kind of change is upstreamed.
->>
->> I'm fine with keeping things as they are but, since my intention is to actually
->> introduce an actual user of this binding upstream, and that actually depends on
->> if this change is accepted or not (as I have to know whether I can omit adding
->> the interrupt-names property or not)....
->>
->> ....may I ask for more feedback/opinions from Rob and/or Krzk?
-> 
-> Driver is the user and this is an old binding (released!), thus there
-> can be out-of-kernel users already.
-> 
-> Minor cleanup is not really a reason to affect ABI. You could deprecate
-> it, though. Driver change is fine.
-> 
+Hi Greg
 
-Thanks for the clarification. If USB maintainers want to take the driver part only
-without me resending this, I'd appreciate that.
+This series fixes gaps discovered in isochronous transfer error
+handling, and a couple small issues in the newly added secondary
+interrupter code (6.8-rc1).
 
-The interrupt-names is not a required property in this binding anyway... :-)
+Thanks
+-Mathias
 
-Thanks again,
-Angelo
+Mathias Nyman (3):
+  xhci: fix possible null pointer dereference at secondary interrupter
+    removal
+  xhci: fix off by one check when adding a secondary interrupter.
+  xhci: process isoc TD properly when there was a transaction error mid
+    TD.
+
+Michal Pecio (1):
+  xhci: handle isoc Babble and Buffer Overrun events properly
+
+ drivers/usb/host/xhci-mem.c  | 14 +++----
+ drivers/usb/host/xhci-ring.c | 80 +++++++++++++++++++++++++++++-------
+ drivers/usb/host/xhci.h      |  1 +
+ 3 files changed, 73 insertions(+), 22 deletions(-)
+
+-- 
+2.25.1
 
 
