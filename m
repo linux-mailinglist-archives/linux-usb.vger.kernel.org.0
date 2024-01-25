@@ -1,131 +1,112 @@
-Return-Path: <linux-usb+bounces-5502-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5503-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 082AA83C069
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 12:11:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 085A383C0C6
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 12:29:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DC3B1F267DA
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 11:11:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B34BB28A148
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 11:29:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34D755BAC4;
-	Thu, 25 Jan 2024 11:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DAEJgJyv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7A6A31743;
+	Thu, 25 Jan 2024 11:29:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B7A4503E;
-	Thu, 25 Jan 2024 11:04:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BAB23172D
+	for <linux-usb@vger.kernel.org>; Thu, 25 Jan 2024 11:29:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706180646; cv=none; b=Z7FASoeo3QhrYh9LSRsd53KyCD8cvwlb9lxONF/UhR+endR74KPU8c85k0PDVD2BEJncTauziQDvaKV38C2zt3Q18wIuVZjWsurnFr+hYr7e4NNQz618uxoI4DGQJXEecFeLLtt4RKZ81n/nLS4VO/XpmKZnbfqE56KVtnLiZnY=
+	t=1706182160; cv=none; b=Mn5YVszVYD/oz4mV6kUyKPbpGIGMjPGqy/of9VcQht5NUsRZSyNuz38IUoN6xOyOzPFMP9ZXBDOPUb6Xr6JP1oFVZ5zPcW0kw6lrPNpIfJotDIBBAJb9tco05JETZLT4IiZkm8MlesP8y7VDGokrDA+V4Dje6qfy8sn3MrRtpdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706180646; c=relaxed/simple;
-	bh=a9NXweH9qUd8G7a734VJZg6C/IWxoVP+919kuw6amkQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RlnBQMjEWVrana1TVr99nA02Z0ZFZGiahHsCSmYedTomyyG5o1uqH14uzu+Diln1xknhAsZdDMqKxaUAKuME8LQ7AIqlABpmK6OFv5MF+JQ/nRPc237lA2CkTfehZprBgdra2F114w5hmli9BKiyqFND64bgJE8MS7Xo64eQjxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DAEJgJyv; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706180645; x=1737716645;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=a9NXweH9qUd8G7a734VJZg6C/IWxoVP+919kuw6amkQ=;
-  b=DAEJgJyvU68LVGL5SVgBAolTUVZMzCa7xgNovNXePwuGoa/lzfSCBznD
-   Ij2izLWiTjtf9Kc9i0O+YcClelP7KWIgGjo7VMUYOOMCs6z6uUhmWTkLN
-   pG4wpj9nRqAVrigkt8oU5gCaBRo60nDB3C+dPygciLEdYxgZ6JCJMNhDW
-   yIa56TT7obNrUEQnJLTaGCk9pEURd55SqadaoAOAv+WdbvDptwr6dGSO1
-   8yFfsRvK6Y2iH5GhpV1ytwEQH+HdaLk3fBu1dTr3rYiBsJKDcCJCMzQjs
-   /Futv0+khgKo5bVQLjaUdcjqUyrhdr52YoqG1h3Vyz3/KjYFETzt+CzRS
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="9509256"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="9509256"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 03:04:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="929985015"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="929985015"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 25 Jan 2024 03:03:55 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 25 Jan 2024 13:03:54 +0200
-Date: Thu, 25 Jan 2024 13:03:54 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
-Subject: Re: [PATCH v2 09/15] usb: typec: qcom-pmic-typec: add support for
- PMI632 PMIC
-Message-ID: <ZbJAGmq6AWxgr47o@kuha.fi.intel.com>
-References: <20240113-pmi632-typec-v2-0-182d9aa0a5b3@linaro.org>
- <20240113-pmi632-typec-v2-9-182d9aa0a5b3@linaro.org>
- <2e07f014-0884-49ca-babd-b89cc90a16b7@linaro.org>
- <CAA8EJpqPqV_nHxxbo2Vzwcp__hvREjF3bhduGhM=7UpuOgBxTQ@mail.gmail.com>
- <ZaaRZ/xi8vyIKD5d@kuha.fi.intel.com>
- <CAA8EJpq3LAzrdTXtnCskc0Md1e39Yo1+AQLHmOBVfgax4HEjKw@mail.gmail.com>
+	s=arc-20240116; t=1706182160; c=relaxed/simple;
+	bh=Nw538rruL/XSyChWFyI5KX1BM2Qj4bt/rXvZNCB5Jxo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=MynluSFI0g/3trAs5dScAv+aKAK1e4C2M5vl6fQxk+J2xwpyGwpqa3DQwfAEZ2+RnrTCcf4zdZl0Hd0FTswoSwnB/XoiqriormE/4c+0HCdZcD1nQHHhwfV0B3FDK0uDLDf/7JWtjlcFLqWI8P3CZil5TbuFBXA5jOAesf6qTNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1rSxuw-0001TG-WB; Thu, 25 Jan 2024 12:29:11 +0100
+From: Philipp Zabel <p.zabel@pengutronix.de>
+Date: Thu, 25 Jan 2024 12:29:08 +0100
+Subject: [PATCH v2] usb: dwc3-of-simple: Stop using
+ of_reset_control_array_get() directly
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpq3LAzrdTXtnCskc0Md1e39Yo1+AQLHmOBVfgax4HEjKw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240125-dwc3-of-simple-reset-control-array-fix-v2-1-1ab6b52cad21@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAANGsmUC/5WNQQ6CMBBFr0K6dkxbWFRX3sOwIO0Ak2BLphUhh
+ Ls7cgOX7+f//3aVkQmzule7YlwoU4oC9lIpP3ZxQKAgrKy2jTa2gfDxNaQeMr3mCYExYwGfYuE
+ 0QcfcbdDTCtjgzVlZuRCUnM2MEp+iZys8Ui6Jt9O7mF/6t2IxYMBpZ5z1vu41PmaMw1takdZrQ
+ NUex/EFujhQZuEAAAA=
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, Felipe Balbi <balbi@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Philipp Zabel <p.zabel@pengutronix.de>
+X-Mailer: b4 0.13-dev-a684c
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Thu, Jan 25, 2024 at 02:07:59AM +0200, Dmitry Baryshkov wrote:
-> On Tue, 16 Jan 2024 at 16:23, Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > On Tue, Jan 16, 2024 at 02:56:11PM +0200, Dmitry Baryshkov wrote:
-> > > On Tue, 16 Jan 2024 at 14:32, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> > > > On 1/13/24 21:55, Dmitry Baryshkov wrote:
-> > > > > The PMI632 PMIC support Type-C port handling, but lacks USB
-> > > > > PowerDelivery support. The TCPM requires all callbacks to be provided
-> > > > > by the implementation. Implement a special, 'stub' Qcom PD PHY
-> > > > > implementation to enable the PMI632 support.
-> > > > >
-> > > > > Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> > > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > ---
-> > > >
-> > > > Still not a fan of stubby stubs :/
-> > >
-> > > Me too. If there are better suggestions, I'll be pleased to implement
-> > > them. Greg, Heikki?
-> >
-> > Guenter, do you have time to look at this?
-> 
-> Heikki, Guenter, just a gracious ping for your opinion.
-> Probably another option is to read pd_supported (or all caps) before
-> checking the callbacks and then instrument all calls to PD with
-> pd_supported checks.
+Use of_reset_control_array_get_optional_exclusive() instead, it is
+implemented as:
 
-I don't have anything to suggest here, but Guenter should really
-comment this one. In any case, FWIW:
+  static inline struct reset_control *
+  of_reset_control_array_get_optional_exclusive(struct device_node *node)
+  {
+          return of_reset_control_array_get(node, false, true, true);
+  }
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+This makes the code easier to understand and removes the last remaining
+direct use of of_reset_control_array_get(). No functional changes.
 
+This change was made possible by commit f4cc91ddd856 ("usb: dwc3:
+of-simple: remove Amlogic GXL and AXG compatibles"), which made the
+parameters passed to of_reset_control_array_get() constant.
+
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+Changes in v2:
+- Drop Fixes tag, adapt commit message.
+- Link to v1: https://lore.kernel.org/r/20240124-dwc3-of-simple-reset-control-array-fix-v1-1-808182cc3f0e@pengutronix.de
+---
+ drivers/usb/dwc3/dwc3-of-simple.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
+index d1539fc9eabd..9cf9ee1b637b 100644
+--- a/drivers/usb/dwc3/dwc3-of-simple.c
++++ b/drivers/usb/dwc3/dwc3-of-simple.c
+@@ -52,8 +52,7 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
+ 	if (of_device_is_compatible(np, "rockchip,rk3399-dwc3"))
+ 		simple->need_reset = true;
+ 
+-	simple->resets = of_reset_control_array_get(np, false, true,
+-						    true);
++	simple->resets = of_reset_control_array_get_optional_exclusive(np);
+ 	if (IS_ERR(simple->resets)) {
+ 		ret = PTR_ERR(simple->resets);
+ 		dev_err(dev, "failed to get device resets, err=%d\n", ret);
+
+---
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+change-id: 20240124-dwc3-of-simple-reset-control-array-fix-e4e9822028dd
+
+Best regards,
 -- 
-heikki
+Philipp Zabel <p.zabel@pengutronix.de>
+
 
