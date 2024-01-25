@@ -1,124 +1,191 @@
-Return-Path: <linux-usb+bounces-5495-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5496-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 783DA83B62C
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 01:45:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37DD883B62E
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 01:45:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16FE1B21968
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 00:45:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A86A91F2557C
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jan 2024 00:45:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8915C80B;
-	Thu, 25 Jan 2024 00:45:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578B41FB4;
+	Thu, 25 Jan 2024 00:45:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O5ilmRpd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DWQx2SE1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A59662B
-	for <linux-usb@vger.kernel.org>; Thu, 25 Jan 2024 00:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BEB80A
+	for <linux-usb@vger.kernel.org>; Thu, 25 Jan 2024 00:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706143502; cv=none; b=IMCO3DxjpJrOTIWfHb7o+41K2sTHNtvm0JxXdCWzzJHSLs1obm2HE76AzoCtCRQlwa43F7F4D62WT81kqZyUX1gYfWYPuBLiT9r0ZbStR92rsr2vRLUnqeMaO65BLMkYFDeUmWs639hn0agLeC1a8OH4ww/DyUZPzimIqgTkvtA=
+	t=1706143503; cv=none; b=g16FqJwxxGn5sn4K+u5WhyFOBLU2pXCPmvTzhxwtmlye23D6Mf/JX98Dvo2O2pVy6KNtKwWfLtBpHX1nwVATiMnlJn/DfLdTD9hiDN+zEuKdyfB3UkdSo5dMkhlCtanxCqFZ0B6V73nqJgzHuNciMHZ7qFj+65rw5662N/hE2MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706143502; c=relaxed/simple;
-	bh=1Ub0qMCSBqSUX8wgOlnHabtJlPqKVHQn2eRwVX1V8h4=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=DdmGpMh7HkXTUuH+UcmQFzhS8lYYOOrW2RFYwDUYkgMyRJCgF7BVYj1fA1PZLbj0ukXNbLb3jA4Uijv/T/ragqTKn30+pTcIkOgS4brioagaHx87Vf9TRhPDPUmw3N5V4rykc5r9T4qVg3M8pQ6JTiFKIKkbca7jYoisVM8jY5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--abhishekpandit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O5ilmRpd; arc=none smtp.client-ip=209.85.219.201
+	s=arc-20240116; t=1706143503; c=relaxed/simple;
+	bh=r6Ufy8qCjB3wudrJmJt1hWXKnwVM0p8XJJRB7q9J22Q=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=s8NF5GLymOFtKAIJwwvW2zrviYor932j2JVlsLqkXdL6Qm2/19au8isxrzgxzhLr8Tj80wURMnI5mxGnwKck0nBUYD/NbXi6NK3J9X6bZCQQPpd08OKtU2is45yST2OlKKazkywsYmKEnHHzoEpdFRrF5ebHQzj7SBtbnfAz47E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--abhishekpandit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DWQx2SE1; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--abhishekpandit.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc24eb17be6so10046931276.1
-        for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 16:45:00 -0800 (PST)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-5cf962e1fcbso5885327a12.3
+        for <linux-usb@vger.kernel.org>; Wed, 24 Jan 2024 16:45:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706143499; x=1706748299; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VJjR2jV5qU9yB/wyVcnR/yaTWQ4dMOB892g68teFZLI=;
-        b=O5ilmRpdS00jIkpr0Mj/tVA/FETxeA+9l2BRZR8nGjkDoPvYPwFQHxClfoKcNPkenq
-         9WowNz6O7UZQWFq53fYNuPN7MonoOefpmDtQMmQWmI8267cZ4MEX1HcBrQH/qsgBQy/R
-         Fa9yvKTGSvdb+T5xapUZEJQnkHVNRjnlPCW7tLqcgPHqiACE7ILiIGHjnl8aj9qX+c7E
-         BNVjI3ZfJsvQZR1vp+oa5AP98/KjRWifkTE116J0ef++LJu301uTKqYIxjrP/Ig8neoO
-         9NxGN/kyoVJccZ08c/hi6Uip3bCddxqWZr5NcW9Nx2Qy7e0ATMOwcx+GVsoe2Vxapxdb
-         2PdQ==
+        d=google.com; s=20230601; t=1706143502; x=1706748302; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EY+HU/Fe9TNSb7NTRiVg3VzIL1w66/uXrMVPpg/61b4=;
+        b=DWQx2SE1BSrj4RwXVuMA0avN+K9LETETDUfL/C+b5Px/CNQQUTNHLOvQiG4QnIdoBB
+         7zkJiUow2ce01+K1UfRtMoV8TLPY/PdvBrVB3z0Qjsjh0dUD+YCy/xT3MxPpfsf1Voos
+         rghh7Ip01EyxmQnlmeQ52hCMvqIEOthzUq0s58ppFjxGj3E61nDfwrN/gwIYWR0EvkxZ
+         1ghGMl9uuHjivMTAhyX07/5Acwe0UjB5ioOePqkGQmCXH/C42wzkGd1GZ5xZ6EuPlwie
+         UfWtRZ8ZKv7aJvaxke7rWwjQgrgVjiJEZeMO4T1lYFHqHJJz6JyuJ6iBj8e0jE9zP9AU
+         NNWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706143499; x=1706748299;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VJjR2jV5qU9yB/wyVcnR/yaTWQ4dMOB892g68teFZLI=;
-        b=JtbqG0ypnHBDiVcnEr2nE5jnYY3Rva4fViV7RI0ZiXVXBFAC+l4O8Nes2DCFiKxapi
-         AyKrxC7Ho9cdYM/LF2iS+wNsi9TG1OrPfKJTdIdTctpwrIjLTvmIR4J7Zfr7ocZQzHCa
-         3/avi65k+Ff6ZWfT5DqpteLZWebAbCyQEdObcGp9BcnidXkfQiekikP9e+QElCG9gSor
-         wAxWii42oJSJU4eywIYtsYRuHehUn5NhpBMj+O1wF42wmfjlUmajlL3PuDB8awiMfIvP
-         8v9zh+JWBEykWrNYkUhEAs8D0Bd0jwLIisAqWVNVHrrwNOkz6yR9mGSeFOHzoW6Wo8KL
-         biZQ==
-X-Gm-Message-State: AOJu0Yy52+MbiYlII+ThBHRTHwI60rTIdKEUIg4EL1fYEqaKIoJuOFgi
-	HUD1bSmsWpPju2EOwn6hG71Z3yjrOw444pJ4akdTPEB+G10SselavnPN53uzbMiDT50qdM5qsDt
-	UnAVCizmEvpOGkw9BLPwE5llFqiVT+O7VEA==
-X-Google-Smtp-Source: AGHT+IFThnUDHcVqOwc/fNcLzTHF6n8GCLiYUBEuW/ph4bODWoDy5/5fW5CM4Ts/6tPSTQGaLmAitsiZ9Vz9gmTMhSpkiA==
+        d=1e100.net; s=20230601; t=1706143502; x=1706748302;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EY+HU/Fe9TNSb7NTRiVg3VzIL1w66/uXrMVPpg/61b4=;
+        b=afa9BiNlQ/VKil1upTS4PDG8dCgRPzIaSJ1tHKYNeVzhwSnjbgYCHwXga3FJCh5XCQ
+         wLT50qeXizvdJnx22hX0wP/FQEkivsJbnX1oRTvw6966NV3P07kevA/J3GyHLLVdnCaU
+         FnT+Xy1Akiiicub5cKVfyRTZAAbulT0mbbZXcvMlYGX8ZNR5oaOpYVdw7Mk+4+J6v7CD
+         SGtvr3906LOQB2IjlCjYaSZCSuHgOwAozbqkXl+ofd7U2Lqu+sWiWKPMU2Wyfu3cJLMF
+         RayRfcUZr/pKp/kzwKYKg2MaT1tIFa5DKuFeZFN54W1Yz87iEjuzb9nLi+JQv7gOoJTt
+         V7Ig==
+X-Gm-Message-State: AOJu0YyVPB7O+PWnbpS4MinWZ9yAgf1zn6SVVQt78Z1R+mAWxCW10qlh
+	ClDhGaOnO1qXcDZ7qKRDk4n2nsZbvFJx2T9xz7QbQjSw7O8xrm2DBpsLaW8qE3kdCCAPQ8nDJEi
+	vBVTKX1PkM6CKLMHo+Gz5kFwy74POFh/nZg==
+X-Google-Smtp-Source: AGHT+IFzW9IxDdcpAbx+P42Lj+RP2SYFzv3TI1T2+ggKXWfs/LWOrLNuaTj24559/1/0KA46MGpUVE0ctWuuih9gPDuaIg==
 X-Received: from abps.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:9b4])
- (user=abhishekpandit job=sendgmr) by 2002:a05:6902:2587:b0:dbe:a5b7:a8d3 with
- SMTP id du7-20020a056902258700b00dbea5b7a8d3mr117632ybb.3.1706143499680; Wed,
- 24 Jan 2024 16:44:59 -0800 (PST)
-Date: Wed, 24 Jan 2024 16:44:51 -0800
+ (user=abhishekpandit job=sendgmr) by 2002:a65:6856:0:b0:5ca:3a8e:7505 with
+ SMTP id q22-20020a656856000000b005ca3a8e7505mr223pgt.2.1706143501636; Wed, 24
+ Jan 2024 16:45:01 -0800 (PST)
+Date: Wed, 24 Jan 2024 16:44:52 -0800
+In-Reply-To: <20240125004456.575891-1-abhishekpandit@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20240125004456.575891-1-abhishekpandit@google.com>
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240125004456.575891-1-abhishekpandit@google.com>
-Subject: [PATCH v2 0/3] usb: typec: ucsi: Adding support for UCSI 3.0
+Message-ID: <20240124164443.v2.1.Iacf5570a66b82b73ef03daa6557e2fc0db10266a@changeid>
+Subject: [PATCH v2 1/3] usb: typec: ucsi: Limit read size on v1.2
 From: Abhishek Pandit-Subedi <abhishekpandit@google.com>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org
 Cc: jthies@google.com, pmalani@chromium.org, 
 	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Bjorn Andersson <andersson@kernel.org>, 
 	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans de Goede <hdegoede@redhat.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Rajaram Regupathy <rajaram.regupathy@intel.com>, 
-	Saranya Gopal <saranya.gopal@intel.com>, linux-kernel@vger.kernel.org
+	Neil Armstrong <neil.armstrong@linaro.org>, Saranya Gopal <saranya.gopal@intel.com>, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
 From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
+Between UCSI 1.2 and UCSI 2.0, the size of the MESSAGE_IN region was
+increased from 16 to 256. In order to avoid overflowing reads for older
+systems, add a mechanism to use the read UCSI version to truncate read
+sizes on UCSI v1.2.
 
-Hi Heikki,
+Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+---
+Tested on 6.6 kernel. Dmesg output from this change:
+[  105.058162] ucsi_um_test ucsi_um_test_device.0: Registered UCSI
+interface with version 3.0.0
 
-This series starts the work adding UCSI 3.0 support to the UCSI driver.
-
-There's a couple of pieces to start here:
-* Add version checks and limit read size on 1.2.
-* Update Connector Status and Connector Capability structures.
-* Expose Partner PD revision from Capability data.
-
-These were tested against on a 6.6 kernel running a usermode PPM against
-a Realtek Evaluation board.
-
-One additional note: there are a lot more unaligned fields in UCSI now
-and the struct definitions are getting a bit out of hand. We can discuss
-alternate mechanisms for defining these structs in the patch that
-changes these structures.
-
-Thanks,
-Abhishek
 
 Changes in v2:
   - Changed log message to DEBUG
-  - Formatting changes and update macro to use brackets.
-  - Fix incorrect guard condition when checking connector capability.
 
-Abhishek Pandit-Subedi (3):
-  usb: typec: ucsi: Limit read size on v1.2
-  usb: typec: ucsi: Update connector cap and status
-  usb: typec: ucsi: Get PD revision for partner
+ drivers/usb/typec/ucsi/ucsi.c | 26 ++++++++++++++++++++++++--
+ drivers/usb/typec/ucsi/ucsi.h | 11 +++++++++++
+ 2 files changed, 35 insertions(+), 2 deletions(-)
 
- drivers/usb/typec/ucsi/ucsi.c | 49 +++++++++++++++++++++++++--
- drivers/usb/typec/ucsi/ucsi.h | 64 ++++++++++++++++++++++++++++++++---
- 2 files changed, 107 insertions(+), 6 deletions(-)
-
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 5392ec698959..a35056ee3e96 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -36,6 +36,19 @@
+  */
+ #define UCSI_SWAP_TIMEOUT_MS	5000
+ 
++static int ucsi_read_message_in(struct ucsi *ucsi, void *buf,
++					  size_t buf_size)
++{
++	/*
++	 * Below UCSI 2.0, MESSAGE_IN was limited to 16 bytes. Truncate the
++	 * reads here.
++	 */
++	if (ucsi->version <= UCSI_VERSION_1_2)
++		buf_size = min_t(size_t, 16, buf_size);
++
++	return ucsi->ops->read(ucsi, UCSI_MESSAGE_IN, buf, buf_size);
++}
++
+ static int ucsi_acknowledge_command(struct ucsi *ucsi)
+ {
+ 	u64 ctrl;
+@@ -72,7 +85,7 @@ static int ucsi_read_error(struct ucsi *ucsi)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = ucsi->ops->read(ucsi, UCSI_MESSAGE_IN, &error, sizeof(error));
++	ret = ucsi_read_message_in(ucsi, &error, sizeof(error));
+ 	if (ret)
+ 		return ret;
+ 
+@@ -170,7 +183,7 @@ int ucsi_send_command(struct ucsi *ucsi, u64 command,
+ 	length = ret;
+ 
+ 	if (data) {
+-		ret = ucsi->ops->read(ucsi, UCSI_MESSAGE_IN, data, size);
++		ret = ucsi_read_message_in(ucsi, data, size);
+ 		if (ret)
+ 			goto out;
+ 	}
+@@ -1556,6 +1569,15 @@ int ucsi_register(struct ucsi *ucsi)
+ 	if (!ucsi->version)
+ 		return -ENODEV;
+ 
++	/*
++	 * Version format is JJ.M.N (JJ = Major version, M = Minor version,
++	 * N = sub-minor version).
++	 */
++	dev_dbg(ucsi->dev, "Registered UCSI interface with version %x.%x.%x",
++		UCSI_BCD_GET_MAJOR(ucsi->version),
++		UCSI_BCD_GET_MINOR(ucsi->version),
++		UCSI_BCD_GET_SUBMINOR(ucsi->version));
++
+ 	queue_delayed_work(system_long_wq, &ucsi->work, 0);
+ 
+ 	ucsi_debugfs_register(ucsi);
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 6478016d5cb8..bec920fa6b8a 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -23,6 +23,17 @@ struct dentry;
+ #define UCSI_CONTROL			8
+ #define UCSI_MESSAGE_IN			16
+ #define UCSI_MESSAGE_OUT		32
++#define UCSIv2_MESSAGE_OUT		272
++
++/* UCSI versions */
++#define UCSI_VERSION_1_2	0x0120
++#define UCSI_VERSION_2_0	0x0200
++#define UCSI_VERSION_2_1	0x0210
++#define UCSI_VERSION_3_0	0x0300
++
++#define UCSI_BCD_GET_MAJOR(_v_)		(((_v_) >> 8) & 0xFF)
++#define UCSI_BCD_GET_MINOR(_v_)		(((_v_) >> 4) & 0x0F)
++#define UCSI_BCD_GET_SUBMINOR(_v_)	((_v_) & 0x0F)
+ 
+ /* Command Status and Connector Change Indication (CCI) bits */
+ #define UCSI_CCI_CONNECTOR(_c_)		(((_c_) & GENMASK(7, 1)) >> 1)
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
