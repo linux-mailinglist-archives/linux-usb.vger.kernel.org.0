@@ -1,86 +1,114 @@
-Return-Path: <linux-usb+bounces-5534-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5535-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5487583DBE0
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 15:29:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAA1A83DECC
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 17:34:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A0FD1F21F99
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 14:29:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 975602865FE
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 16:34:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D7271C2A6;
-	Fri, 26 Jan 2024 14:29:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C15EA1DA2F;
+	Fri, 26 Jan 2024 16:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pROfp1SL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id AAA92D26D
-	for <linux-usb@vger.kernel.org>; Fri, 26 Jan 2024 14:29:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429FD1B954;
+	Fri, 26 Jan 2024 16:34:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706279391; cv=none; b=mMiDecmLStM4sivi+OmXRp+4TOY11SShY4A9lik/ep89Q7rMFb9gu50IUa2F+nWM+WvR89Nc2kl7dHskWJ7qIxDE4/ltMWCh1p2MtxD00bMAdhICjQ7CL5ByTDO6SDucf9ph1z0NSrMqyCmNT89G0ogf8LfGxhLqLCFj1VmZLI0=
+	t=1706286859; cv=none; b=elaw3NDgt9ci/tCM8fWgxNWB3LNIxUQUKoT2qzu9q9c9SmsJNmnKGo7+wQkNCU7bvDOiZK1dDf2/xlhmsIAnhJaHhTmz8JSl3oMl5Q/kFAX/dGmuYL77F5BM6Xar+GQO4gbPGERgK9rCMzrEzx4r6igUE2tc93Jif6H+r0u6bOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706279391; c=relaxed/simple;
-	bh=th1zKaNSdPkD3kmeMrwoKj4+vtw3MMPyjegeZjcjQx0=;
+	s=arc-20240116; t=1706286859; c=relaxed/simple;
+	bh=8LEy4G6CqWr+CSK268QbkSrRkLiJ54WoUVg17J6xvQk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZDOmLXaEyy/iZQnfwp4Qg3QkxH9FkFVwoQiYdOBnx9WOP+bH9H7ioGb7OXqv5Kb7rOnkdq4Q4QnYAmiRfPvewh1y5c8ntsgubEThpbCw79rCf2G8JvhaRCa/J792ghGKe1a67YyxHqrB9bG75GbQq4wwXOivjrmy6TVcUl4KooU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 281702 invoked by uid 1000); 26 Jan 2024 09:29:41 -0500
-Date: Fri, 26 Jan 2024 09:29:41 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Ingyu Jang <ingyujang25@unist.ac.kr>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-  linux-kernel@vger.kernel.org, ysjeon@unist.ac.kr
-Subject: Re: [PATCH] Remove redundant check for usb_generic_driver_probe()
-Message-ID: <42b7cfa2-5ebf-4ef3-9890-4633444bad50@rowland.harvard.edu>
-References: <20240126120313.1362573-1-ingyujang25@unist.ac.kr>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hevurgdeiOd06BJHB4vNkkXJul2jXWCyyAs+I+k+eQ7sxDZI/HahYvJ1du9cdjQez10STP7Vp+6kv1b4S1Cx45yAGNlFgTVrBse4hRr23XqjWf4FHsrCZ+56FXt/juIg2zBrnDmXcEcYx1HafZIvsTKpcdCGDCYFubnwEY9p6ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pROfp1SL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02E2DC433F1;
+	Fri, 26 Jan 2024 16:34:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706286858;
+	bh=8LEy4G6CqWr+CSK268QbkSrRkLiJ54WoUVg17J6xvQk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pROfp1SLgWTIjpkOMYgvKqg+F5zndUaLFuJUt2jWtMc0cOC37SXfg0Koez7yXa8aJ
+	 Yb6+04O2SlhwCtHZZ8gYMzWuFDbxgju0rl6ki6JGcyPBsJuBB86XXh+6jzrj7Kt0NR
+	 m+TE/R7Nfgh7qGeBtIHlB7usMeyE6z5ddQS1jK5mSjACBTO0ki30FSvx43sEvDwgyj
+	 cOvLjv2QRn5/omFtsICWDEJ9ijMzqaBrWTyDWQAFxsxkRRCc7emtjrJEkoIgDxpWzy
+	 krmoB1dAMnW78gTqsToozjUXJZAh3kClYYTOtpstjB9krYAmp3DEzApKreUSxqvR2u
+	 vfaN95UG8Raaw==
+Date: Fri, 26 Jan 2024 16:34:13 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Frank Li <Frank.li@nxp.com>
+Cc: ran.wang_1@nxp.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>, mark.rutland@arm.com,
+	pku.leo@gmail.com, sergei.shtylyov@cogentembedded.com
+Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Add snps,host-vbus-glitches
+ avoiding vbus glitch
+Message-ID: <20240126-starch-puma-49c7dc3e2da8@spud>
+References: <20240119213130.3147517-1-Frank.Li@nxp.com>
+ <20240124-unclothed-dodgy-c78b1fffa752@spud>
+ <ZbFNIvEaAJCxC2VB@lizhi-Precision-Tower-5810>
+ <20240124-video-lumpiness-178c4e317f5a@spud>
+ <ZbFiQmD1VRVzFSa+@lizhi-Precision-Tower-5810>
+ <20240125-appear-unclog-7da879f946e8@spud>
+ <ZbMvsQpBtX88+muU@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="8/kXroQjWzGHZPqs"
+Content-Disposition: inline
+In-Reply-To: <ZbMvsQpBtX88+muU@lizhi-Precision-Tower-5810>
+
+
+--8/kXroQjWzGHZPqs
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240126120313.1362573-1-ingyujang25@unist.ac.kr>
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 26, 2024 at 09:03:13PM +0900, Ingyu Jang wrote:
-> usb_generic_driver_probe() only returns 0.
-> Inside this function, there are only errors that are marked as not fatal.
-> However, drivers/usb/core/driver.c:269 checks
-> if usb_generic_driver_probe() returns error.
-> No need to change usb_generic_driver_probe() to return error,
-> only remove redundant error check.
-> 
-> Signed-off-by: Ingyu Jang <ingyujang25@unist.ac.kr>
-> ---
->  drivers/usb/core/driver.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> index e01b1913d02b..b6274580b7ca 100644
-> --- a/drivers/usb/core/driver.c
-> +++ b/drivers/usb/core/driver.c
-> @@ -266,8 +266,6 @@ static int usb_probe_device(struct device *dev)
->  
->  	if (udriver->generic_subclass)
->  		error = usb_generic_driver_probe(udev);
-> -	if (error)
-> -		return error;
->  
->  	/* Probe the USB device with the driver in hand, but only
->  	 * defer to a generic driver in case the current USB
+On Thu, Jan 25, 2024 at 11:06:09PM -0500, Frank Li wrote:
 
-Don't do this unless you add comments both here _and_ in 
-usb_generic_driver_probe() explaining that the routine never returns 
-anything but 0.  Otherwise, some day in the future someone will change 
-the probe routine to make it return an error code, and won't realize 
-that code here needs to be changed too.
+> > > > On another note, I like it when the property name explains why you =
+would
+> > > > add it, rather than the thing it is trying to solve.
+> > > > Named after the disease, rather than the symptoms, if you get me. I
+> > > > tried to come up with a name here, but could not really suggest
+> > > > something good. If you can think of something, that'd be good, but =
+don't
+> > > > stress it.
+> > >=20
+> > > snps,host-vbus-glitches change to snps,host-vbus-glitches-quirk.
+> >=20
+> > I don't think adding "quirk" moves the needle.
+>=20
+> I think "quirk" is reasonable because it is workaround.
 
-Better yet, don't make this change at all.  It's a trivial matter and 
-it's not on a hot path.
+Workaround is what the software will do. In the binding we just describe
+what the problem is.
 
-Alan Stern
+--8/kXroQjWzGHZPqs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbPfBQAKCRB4tDGHoIJi
+0mBXAQD45CC2nv7KtLh6RjMARCAWlJkP0kVmV/E5HGTKIgKViAEA9FBorkCrPPXN
+Q6HIpRR8RC39OqVDO9Z8Bs0BE8YqPAE=
+=CLn9
+-----END PGP SIGNATURE-----
+
+--8/kXroQjWzGHZPqs--
 
