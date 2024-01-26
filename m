@@ -1,180 +1,178 @@
-Return-Path: <linux-usb+bounces-5543-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5544-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CAC183E1CF
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 19:43:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DBE883E2D3
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 20:47:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 249391F2781E
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 18:43:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6290A1C22A68
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 19:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 035B355C36;
-	Fri, 26 Jan 2024 18:39:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A6E22606;
+	Fri, 26 Jan 2024 19:47:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GM59ius0"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="B9F2mmXk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1038A53E19
-	for <linux-usb@vger.kernel.org>; Fri, 26 Jan 2024 18:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC290225AC;
+	Fri, 26 Jan 2024 19:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706294383; cv=none; b=s50lNRsWR5udCbmshmjZ58wNJEB4TgxrfJEvvR1RlPfcreNpd2kMyFXtK1bGJOsolr0vWX/S0yiFde6L450lN108NrIbeykm1g4CU1jzXWxnBV/udfoAy/d5Y6vyNtCsRZGuYE37RIlZFsAzgqEWWJdClyRM+H/B7vrE7s0Long=
+	t=1706298447; cv=none; b=bV1llpwcGA9sISpmebVzGoAz9tXm3PqvMnnhdG6CiEHfIiklIOV9IIWjGCQ3lbPoIu2tIeNoaFAEPh+CtmmgMl+DvVe/JHL2Pt8xg3BCdDYQDk6kiHJQVFcNRAgPiswqr0eAF6D5eYPGOUVjzvmYqcdrffbKfga5iv2gr11/eU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706294383; c=relaxed/simple;
-	bh=qQ20mYMsYljxRmFVBXSfi1rqbWNANcAPCdD/+60IY8U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eGl4SVjKyJitnTA+5ZqtfCvq0PotQheLX4+HQFmSpSwmpIvQgS/sEMJ+xecETJRQFhZyVzdPMzdhdhwAyfcTjkwQXFN8NdzQrpcuroJtO1E8DATE/8QtYhWbQ2GPrIL5r/lDnot2lQ8zBROSREJfyBJdtTDyz/BthAaEofV7f7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=GM59ius0; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6dddc5e34e2so509962b3a.0
-        for <linux-usb@vger.kernel.org>; Fri, 26 Jan 2024 10:39:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706294381; x=1706899181; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2QQrn5zdRS2vcBUSW5uiCOjM9d8+vCQMueTf6c01I2Q=;
-        b=GM59ius04vzCGUnLQqoAZYoXawSxOLreTdynV8WlIX6u/2ngpd+RqUUfnCbNs31OAd
-         ubXnSzMA8bAH1LcXFnq8oSRnw1vOxgEyA9KOnAx3+zMiZLZVYurhiB/5Gj/7gil9iRii
-         leZ/yVFHuScREQQ7O1MM8j1RyuQlTsB8UyJPE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706294381; x=1706899181;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2QQrn5zdRS2vcBUSW5uiCOjM9d8+vCQMueTf6c01I2Q=;
-        b=QuAEJhvbii4eGTFyinbQcGtpD3u5eRiD/ucpVyLqWFZtJTGrumP9SWr/wTQ6Oi7M48
-         6RvxZguXp3FlOcAZtCZc6As0+4XjsfUw/cg4FbVPdTkqAvcAoRyQi+T2ft0BJDf3yQFK
-         8QsD9C+JAa3PISrNsVETUnqBCe8/chXer96pyRnuYMm4WQZHgGrDQa8Fnlo1lu6IOEeC
-         kJKx5yUfgHG+5EZTDxqW58hr0KUaLFigpJRMRK3iFelaPSq/N6atwwtI8/LrfZ9EiCLc
-         LmH7mAkbOKC3Kf/jyVbux/MnGlq9mUmlvdKuUCFusiluob2zfHsBp/pAN3KJd4IAE+ff
-         w/sQ==
-X-Gm-Message-State: AOJu0Yy60Q0d4y162T297YTi/PnBi7wQ5uvxKs/8blA3z6/ojQfUpt4j
-	rafOag+LpMuJ33saW0Of0dG2v1OXAcJ+KP6K3MJJ7X+1wg6/CN1DpLPR/nz7wg==
-X-Google-Smtp-Source: AGHT+IGuK34NiLpOOMCCCv9sSURoiq/Fovr+GwFX0Ab0ow/PfAf2KIPLV7lCTMqtiQuamaiiyJaafQ==
-X-Received: by 2002:aa7:8b97:0:b0:6da:af47:95f0 with SMTP id r23-20020aa78b97000000b006daaf4795f0mr272875pfd.27.1706294380577;
-        Fri, 26 Jan 2024 10:39:40 -0800 (PST)
-Received: from localhost (209.148.168.34.bc.googleusercontent.com. [34.168.148.209])
-        by smtp.gmail.com with UTF8SMTPSA id r25-20020aa78b99000000b006dbda9a4e6bsm1410678pfd.44.2024.01.26.10.39.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jan 2024 10:39:40 -0800 (PST)
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	linux-usb@vger.kernel.org
-Cc: pmalani@chromium.org,
-	jthies@google.com,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Rajaram Regupathy <rajaram.regupathy@intel.com>,
-	Saranya Gopal <saranya.gopal@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] usb: typec: ucsi: Get PD revision for partner
-Date: Fri, 26 Jan 2024 10:39:09 -0800
-Message-ID: <20240126103859.v3.3.Idf7d373c3cbb54058403cb951d644f1f09973d15@changeid>
-X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-In-Reply-To: <20240126183930.1170845-1-abhishekpandit@chromium.org>
-References: <20240126183930.1170845-1-abhishekpandit@chromium.org>
+	s=arc-20240116; t=1706298447; c=relaxed/simple;
+	bh=mpaehXT92oEyt7WvFKlN6cee4Uxho3u/Xaiy2EFAXr4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dXSigL4z1pGn32G7sfTk34IkO4f0NqV2JwXRkKbQKmzi5EnYowIrTmk3jIMjpE1ZZHF3hUIiSy1BKfXeFghePi3z3XybQpNqZtbWSzqNzJ5lo3MCWMA05MyvN3XHYMyzMTR00iKjcdpG8V6KOQYAOy2F4oKjnaOUPu1ZB8AVrPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=B9F2mmXk; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1706298443;
+	bh=mpaehXT92oEyt7WvFKlN6cee4Uxho3u/Xaiy2EFAXr4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=B9F2mmXkx+PFEFu5mWIP8bluZ6K7yEz+4debiEWRLDhzgM+haHQ+58AMt0kU9LO+C
+	 zGLowxhe0OlYY5LK7DcPNfoR9W+gZjAfD9LERc5xAro5FQrMfhuKr9f4f2pmzml62L
+	 Fk0bwEift428nbXwp40Zszo42RgdQNEcFOkwCviXZ+Go9BqA+5/vxTifHCaFYRWiuk
+	 IgsZ2MNjSeso1B20yB5TeSKLsMSwmR7Mxlx+n+Ki9311lETDnAFmc14rNQCeucAcSi
+	 RCUOm3ghgskmXAEqnIjHgnlsKwPvhe3b8i5aOaXyciHoYq3kV7nt+PEcDa3miPJvQC
+	 adyqg3vJkrcnA==
+Received: from [100.95.196.182] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: andrzej.p)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3D0963780629;
+	Fri, 26 Jan 2024 19:47:23 +0000 (UTC)
+Message-ID: <80c4e788-65df-4a82-8453-74683289abcb@collabora.com>
+Date: Fri, 26 Jan 2024 20:47:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] usb: gadget: 9pfs transport
+To: Dominique Martinet <asmadeus@codewreck.org>,
+ =?UTF-8?Q?Jan_L=C3=BCbbe?= <jlu@pengutronix.de>
+Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>,
+ Latchesar Ionkov <lucho@ionkov.net>, linux-usb@vger.kernel.org,
+ Jonathan Corbet <corbet@lwn.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, v9fs@lists.linux.dev,
+ Christian Schoenebeck <linux_oss@crudebyte.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+ Eric Van Hensbergen <ericvh@kernel.org>
+References: <20240116-ml-topic-u9p-v1-0-ad8c306f9a4e@pengutronix.de>
+ <ZaZsUQUhSlMPLJg0@codewreck.org>
+ <0aba51a8be0fb165b44ec956bec7a9698a9518a2.camel@pengutronix.de>
+ <Zaex_fkKcui7QZd7@codewreck.org>
+Content-Language: en-US
+From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <Zaex_fkKcui7QZd7@codewreck.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-PD major revision for the port partner is described in
-GET_CONNECTOR_CAPABILITY and is only valid on UCSI 2.0 and newer. Update
-the pd_revision on the partner if the UCSI version is 2.0 or newer.
+Hi,
 
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
----
-$ cat /sys/class/typec/port2-partner/usb_power_delivery_revision
-3.0
+W dniu 17.01.2024 o 11:54, Dominique Martinet pisze:
+> Jan Lübbe wrote on Tue, Jan 16, 2024 at 04:51:41PM +0100:
+>>> So I didn't have time to look at everything through, just want to make
+>>> sure, this series allows sharing data from an usb gadget (e.g. some
+>>> device with storage) over 9p as an alternative to things like MTP ?
+>>
+>> It's the other way around. :) The USB host exports a filesystem, while the
+>> gadget on the USB device side makes it mountable. Our main use-case is to use it
+>> as an alternative to NFS root booting during the development of embedded Linux
+>> devices. NFS root works in many cases, but has some downsides, which make it
+>> cumbersome to use in more and more cases.
+> 
+> Oh!
+> Okay, this makes a lot more sense. And that'll need a bit more
+> explanations in the commits & Documentation/ as you've concluded :)
+> 
+> 
+>> NFS root needs correctly configured Ethernet interfaces on both the development
+>> host and the target device. On the target, this can interfere with the network
+>> configuration that is used for the normal device operation (DHCP client, ...).
+>> For the host, configuring a NFS (and perhaps DHCP) server can be an obstacle.
+>>
+>> For target devices which don't have a real Ethernet interface, NFS root would
+>> also work with the USB Ethernet gadget, but this increases the complexity
+>> further.
+>>
+>> As many embedded boards have a USB device port anyway, which is used during
+>> development for uploading the boot-loader and to flash filesystem images (i.e.
+>> via the fastboot protocol), we want to just reuse that single data cable to
+>> allow access to the root filesystem as well.
+>>
+>> Compared to flashing images, using a network filesystem like NFS and 9P reduces
+>> the time between compiling on the host and running the binary on the target, as
+>> no flash and reboot cycle is needed. That can get rid of many minutes of waiting
+>> over a day. :)
+> 
+> My other hat is on embedded development (dayjob at Atmark Techno[1], the
+> only english page linked is about 4 years out of date but I guess it's
+> better than no page at all), so I can understand where you're coming
+> from -- thanks for the background.
+> 
+> [1] https://www.atmark-techno.com/english
+> 
+> That means I'll actually want to test this, but kind of always busy so
+> it might take a few weeks...
+> Or better, do you happen to know if qemu can create a USB controller
+> that supports OTG so it'll be easy to test for folks with no such
+> hardware?
 
-(no changes since v2)
+Maybe dummy_hcd is what you want?
 
-Changes in v2:
-  - Formatting changes and update macro to use brackets.
-  - Fix incorrect guard condition when checking connector capability.
+Regards,
 
- drivers/usb/typec/ucsi/ucsi.c | 23 +++++++++++++++++++++++
- drivers/usb/typec/ucsi/ucsi.h |  3 +++
- 2 files changed, 26 insertions(+)
+Andrzej
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index a35056ee3e96..2b7983d2fdae 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -782,6 +782,7 @@ static int ucsi_register_partner(struct ucsi_connector *con)
- 	}
- 
- 	desc.usb_pd = pwr_opmode == UCSI_CONSTAT_PWR_OPMODE_PD;
-+	desc.pd_revision = UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags);
- 
- 	partner = typec_register_partner(con->port, &desc);
- 	if (IS_ERR(partner)) {
-@@ -856,6 +857,27 @@ static void ucsi_partner_change(struct ucsi_connector *con)
- 			con->num, u_role);
- }
- 
-+static int ucsi_check_connector_capability(struct ucsi_connector *con)
-+{
-+	u64 command;
-+	int ret;
-+
-+	if (!con->partner || !IS_MIN_VERSION_2_0(con->ucsi))
-+		return 0;
-+
-+	command = UCSI_GET_CONNECTOR_CAPABILITY | UCSI_CONNECTOR_NUMBER(con->num);
-+	ret = ucsi_send_command(con->ucsi, command, &con->cap, sizeof(con->cap));
-+	if (ret < 0) {
-+		dev_err(con->ucsi->dev, "GET_CONNECTOR_CAPABILITY failed (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	typec_partner_set_pd_revision(con->partner,
-+		UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags));
-+
-+	return ret;
-+}
-+
- static int ucsi_check_connection(struct ucsi_connector *con)
- {
- 	u8 prev_flags = con->status.flags;
-@@ -925,6 +947,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 		if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
- 			ucsi_register_partner(con);
- 			ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
-+			ucsi_partner_task(con, ucsi_check_connector_capability, 1, HZ);
- 
- 			if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
- 			    UCSI_CONSTAT_PWR_OPMODE_PD)
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 1bae4cf8ecdc..d1d0e11b0704 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -36,6 +36,9 @@ struct dentry;
- #define UCSI_BCD_GET_MINOR(_v_)		(((_v_) >> 4) & 0x0F)
- #define UCSI_BCD_GET_SUBMINOR(_v_)	((_v_) & 0x0F)
- 
-+#define IS_MIN_VERSION(ucsi, min_ver)	((ucsi)->version >= (min_ver))
-+#define IS_MIN_VERSION_2_0(ucsi)	IS_MIN_VERSION(ucsi, UCSI_VERSION_2_0)
-+
- /* Command Status and Connector Change Indication (CCI) bits */
- #define UCSI_CCI_CONNECTOR(_c_)		(((_c_) & GENMASK(7, 1)) >> 1)
- #define UCSI_CCI_LENGTH(_c_)		(((_c_) & GENMASK(15, 8)) >> 8)
--- 
-2.43.0.429.g432eaa2c6b-goog
+
+> We've got enough 9p protocols that aren't actually tested on a regular
+> basis, it'd be great if we could have something that can run anywhere.
+> 
+> 
+>> diod (9pfs server) and the forwarder are on the development host, where the root
+>> filesystem is actually stored. The gadget is initialized during boot (or later)
+>> on the embedded board. Then the forwarder will find it on the USB bus and start
+>> forwarding requests.
+>>
+>> It may seem a bit unusual that in this case the requests come from the device
+>> and are handled by the host. The reason is that USB device ports are normally
+>> not available on PCs, so a connection in the other direction would not work.
+> 
+> Right, most host PCs won't have OTG available...
+> I was also perplexed by the linux foundation (0x1d6b):0x0109 id, that
+> might be clearer once it's properly documented -- I'll let someone from
+> the usb side chime on this as I have no idea what's appropriate.
+> 
+> 
+>> In the future, the functionality of the forwarder could be integrated into the
+>> 9pfs server. Alternatively, an improved forwarder could also react to udev
+>> events of gadgets showing up and forward them to different 9PFS server over the
+>> network (when you have multiple target devices connected to one USB host).
+> 
+> Plenty of potential work ahead :)
+> Frankly at this stage I don't think it's much simpler than e.g. CDC
+> ethernet gadget and mounting nfs over tcp, but with further improvements
+> it can definitely get simpler.
+> 
+> 
+>> Perhaps, the inverse setup (9PFS server on the USB gadget side, mounted on a PC)
+>> also would be useful in the future and could share some of this code. Then,
+>> you'd have an alternative to MTP.
+> 
+> (Yeah, I'm not actively looking for that -- was just asking because MTP
+> has been kind of dead lately and I'm not aware of any potential
+> alternative, but I didn't go looking for them either -- let's leave that
+> to later)
+> 
 
 
