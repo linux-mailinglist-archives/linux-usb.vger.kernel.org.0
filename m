@@ -1,103 +1,159 @@
-Return-Path: <linux-usb+bounces-5547-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5548-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB83383E33C
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 21:19:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E88DC83E34C
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 21:23:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57CCB1F26F35
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 20:19:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A305B22F39
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 20:23:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C3E122F00;
-	Fri, 26 Jan 2024 20:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RrPOJ0Qg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 534E822EFC;
+	Fri, 26 Jan 2024 20:23:02 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377CB22EF4
-	for <linux-usb@vger.kernel.org>; Fri, 26 Jan 2024 20:19:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1FE22EF4
+	for <linux-usb@vger.kernel.org>; Fri, 26 Jan 2024 20:22:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706300361; cv=none; b=PkM8OZ3UJ+DfuC2oSQM4HljdZ9XlF/bWVD8mgOpvFAqXRy4DLtXXrLCpGPCU1ssnT590UUQ43ZBhouEpwljo9PgjJclynnIq89gJPFgVDGcFRGDvTOmFKa9CP7rFptd3+yTfa9ILdzZsF9Sr9sMCA3/dHqJv9oltu4CV4GcaDZA=
+	t=1706300582; cv=none; b=kZ2eXF5ckaAITB88AMITrPDeJTDbFBAbwGw5tBXo5roNFLTbGbCltOuLIRy3zN1PWmLpYgKd+RM1xgmmE4mQdpIBLIse9VnOG9rOQKEyNGcwB+Y+oDpLON2KVen2Uil2TTw86MyUnjnZ8mmHBbWU0DQs2LlCdF88JqSzHmVtcr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706300361; c=relaxed/simple;
-	bh=AveOdH/2OoQNEsucWyIJ+OME7OtrwMk18a5xqllqfxc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NdIUgsWdrlfAE8BZNjljenGO96K2ZuPc5V06xTR/34k3veh+UcpCD7DcThram2vtE3vK7kFv3KubiYEVc0jZXDQWgykXBVg69qEWrBYroCjJIUELpi8XqMC/Yzw8APkSgBytFrjpbvK3WwiF7hCM7IkZ7mL/yDSiEMSEVlAprtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=RrPOJ0Qg; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-783e22a16d4so2555785a.0
-        for <linux-usb@vger.kernel.org>; Fri, 26 Jan 2024 12:19:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706300359; x=1706905159; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AveOdH/2OoQNEsucWyIJ+OME7OtrwMk18a5xqllqfxc=;
-        b=RrPOJ0Qg2qZ0/GMv/akJWVSTbIeNvyMait0BMb0Nw3BpJ6TmAiUSsOMdDnMGJnuBJT
-         AAzEzlcbfr1Fyl+IXXkKsdsSwTjb19ovu0X0F0tcbBTfELY/6aslkoTYhBCOWZ53tZsQ
-         rxhEpmp1meVA5aJ7b5SmJAiyPn4uxRETjzfo8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706300359; x=1706905159;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AveOdH/2OoQNEsucWyIJ+OME7OtrwMk18a5xqllqfxc=;
-        b=uL8s+TdGbzOgia8Hj3FHab2ze3LUiCZpbYThTf6jOYcv0pOHvkjzYBhjBG5V57u03L
-         AyA5g2NkPNdSs3qMpFnNw3XT3GyuFrN1C3qMFESEdvLMpGHNf+ihdfZbXqemCS/59f/w
-         tgCTG6wsSAcIQiqg/BTvnvitl4omN83pVkDAW4OoXXiWhPpy7QlNqaLGtyO/T/NRSSKS
-         6gL06gGGzP4EB/gaGnvCF91EsiXX4vwwmGDvPPQprq5SHYuONY2wjXqsUe7agbwm51Fs
-         0BQr9HnGAu4oE1oqciGJ67y9aZzT04fmMvXftKAMjtTsUt7lPFhJuiby0pA2xxp2r8KU
-         Phtg==
-X-Gm-Message-State: AOJu0Yzm9OWj7T9EIiyhVS43UnHBovH+hK+atdEkSeft0mq9XRuNPCQe
-	6iIiVAp2LL8fb+Q6h5YrJki8DLMyjMbOYDSUPhtKeVu+aJs6TNjRX6sAlWqC8d1gMDOxErln8k9
-	U6EV3gA/L+hHFo9FBEeOP1cLUG3b8f3ENl8KU
-X-Google-Smtp-Source: AGHT+IE6kufSJQsRyqNQemNAhb7CnZLNSDSuYgnGuGGQVgwdz3tGQ2/seVVUOU+NAbGqhSZQQooN96AW2K6r3nUs5tg=
-X-Received: by 2002:a05:620a:3623:b0:781:b188:c7ec with SMTP id
- da35-20020a05620a362300b00781b188c7ecmr2083538qkb.74.1706300359078; Fri, 26
- Jan 2024 12:19:19 -0800 (PST)
+	s=arc-20240116; t=1706300582; c=relaxed/simple;
+	bh=+fZ+k7qbAjPWqQ9kl+L37M52c8/+JfCn6T9BzKS9zlg=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=IpDGRAFT5VqU0JXANN0ETHg2IFNFjgQDaz4TxhSovgGRY1Y6Iy/y9OnWwsnM+Nix9rN8mubkh8VOpkDOp0Sf5j/lxYNL+tEnUNbS9g+02M+rgAHVztuneIBpMSxehShV9POegNv1HJiXKUuY8+QMV6UHf843pB+MtYaXox3o3zM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5D5A5FF802;
+	Fri, 26 Jan 2024 20:22:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+	(envelope-from <peter@korsgaard.com>)
+	id 1rTSj0-00AOTG-23;
+	Fri, 26 Jan 2024 21:22:54 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: linux-usb@vger.kernel.org,  Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>,  Michal Nazarewicz <mina86@mina86.com>
+Subject: Re: [PATCH v3] usb: gadget: f_fs: expose ready state in configfs
+References: <20240118144808.4010679-1-peter@korsgaard.com>
+	<fc910229-81f6-48eb-acc9-f4899ccecc5d@collabora.com>
+Date: Fri, 26 Jan 2024 21:22:54 +0100
+In-Reply-To: <fc910229-81f6-48eb-acc9-f4899ccecc5d@collabora.com> (Andrzej
+	Pietrasiewicz's message of "Fri, 26 Jan 2024 21:01:53 +0100")
+Message-ID: <878r4b3kv5.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240126183930.1170845-1-abhishekpandit@chromium.org> <20240126103859.v3.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid>
-In-Reply-To: <20240126103859.v3.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid>
-From: Prashant Malani <pmalani@chromium.org>
-Date: Fri, 26 Jan 2024 12:19:07 -0800
-Message-ID: <CACeCKadGF2=LytNbit_uyHm8jQ72K+1s3NbO=n5tJNjdtBg9aw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] usb: typec: ucsi: Update connector cap and status
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
-	jthies@google.com, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rajaram Regupathy <rajaram.regupathy@intel.com>, Saranya Gopal <saranya.gopal@intel.com>, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: peter@korsgaard.com
 
-Hi Abhishek,
+>>>>> "Andrzej" =3D=3D Andrzej Pietrasiewicz <andrzej.p@collabora.com> writ=
+es:
 
-On Fri, Jan 26, 2024 at 10:39=E2=80=AFAM Abhishek Pandit-Subedi
-<abhishekpandit@chromium.org> wrote:
->
-> Update the data structures for ucsi_connector_capability and
-> ucsi_connector_status to UCSIv3.
->
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+ > Hi Peter,
+ > W dniu 18.01.2024 o=C2=A015:48, Peter Korsgaard pisze:
+ >> When a USB gadget is configured through configfs with 1 or more f_fs
+ >> functions, then the logic setting up the gadget configuration has to wa=
+it
+ >> until the user space code (typically separate applications) responsible=
+ for
+ >> those functions have written their descriptors before the gadget can be
+ >> activated.
+ >> The f_fs instance already knows if this has been done, so expose it
+ >> through
+ >> a "ready" attribute in configfs for easier synchronization.
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> Changes since v2:
+ >> - Add ABI documentation as requested by Greg
+ >> Changes since v1:
+ >> - Add documentation snippet as requested by Greg.
+ >> Documentation/ABI/testing/configfs-usb-gadget-ffs | 12
+ >> ++++++++++--
+ >> Documentation/usb/gadget-testing.rst              |  8 ++++++++
+ >> drivers/usb/gadget/function/f_fs.c                | 15 +++++++++++++++
+ >> 3 files changed, 33 insertions(+), 2 deletions(-)
+ >> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-ffs
+ >> b/Documentation/ABI/testing/configfs-usb-gadget-ffs
+ >> index e39b27653c65..bf8936ff6d38 100644
+ >> --- a/Documentation/ABI/testing/configfs-usb-gadget-ffs
+ >> +++ b/Documentation/ABI/testing/configfs-usb-gadget-ffs
+ >> @@ -4,6 +4,14 @@ KernelVersion:	3.13
+ >> Description:	The purpose of this directory is to create and remove it.
+ >> A corresponding USB function instance is
+ >> created/removed.
+ >> -		There are no attributes here.
+ >> -		All parameters are set through FunctionFS.
+ >> +		All attributes are read only:
+ >> +
+ >> +		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ >> +		ready		1 if the function is ready to be used, E.G.
+ >> +				if userspace has written descriptors and
+ >> +				strings to ep0, so the gadget can be
+ >> +				enabled - 0 otherwise.
+ >> +		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ >> +
+ >> +		All other parameters are set through FunctionFS.
+ >> diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/g=
+adget-testing.rst
+ >> index 29072c166d23..fcbd8bb22db4 100644
+ >> --- a/Documentation/usb/gadget-testing.rst
+ >> +++ b/Documentation/usb/gadget-testing.rst
+ >> @@ -206,6 +206,14 @@ the standard procedure for using FunctionFS (mount=
+ it, run the userspace
+ >> process which implements the function proper). The gadget should be ena=
+bled
+ >> by writing a suitable string to usb_gadget/<gadget>/UDC.
+ >> +The FFS function provides just one attribute in its function
+ >> directory:
+ >> +
+ >> +	ready
+ >> +
+ >> +The attribute is read-only and signals if the function is ready (1) to=
+ be
+ >> +used, E.G. if userspace has written descriptors and strings to ep0, so
+ >> +the gadget can be enabled.
+ >> +
+ >> Testing the FFS function
+ >> ------------------------
+ >> diff --git a/drivers/usb/gadget/function/f_fs.c
+ >> b/drivers/usb/gadget/function/f_fs.c
+ >> index fdd0fc7b8f25..ae44dd5f3a94 100644
+ >> --- a/drivers/usb/gadget/function/f_fs.c
+ >> +++ b/drivers/usb/gadget/function/f_fs.c
+ >> @@ -3446,6 +3446,20 @@ static inline struct f_fs_opts *to_ffs_opts(stru=
+ct config_item *item)
+ >> func_inst.group);
+ >> }
+ >> +static ssize_t f_fs_opts_ready_show(struct config_item *item,
+ >> char *page)
+ >> +{
+ >> +	struct f_fs_opts *opts =3D to_ffs_opts(item);
+ >> +
+ >> +	return sprintf(page, "%d\n", opts->dev->desc_ready);
 
-Same comment as Patch 2/3: Please collect review tags that you've
-received on previous
-versions, unless the patchset is significantly different (which it
-isn't in this case).
-Or, if you're choosing to drop the tags, please explain why in the changelo=
-g.
+ > Don't we need some locking here? "desc_ready" seems to be manipulated
+ > always under ffs_dev_lock().
 
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
+Ups, indeed. It is just a boolean, but the instance could disappear from
+under us.
+
+I'll send an update, thanks.
+
+--=20
+Bye, Peter Korsgaard
 
