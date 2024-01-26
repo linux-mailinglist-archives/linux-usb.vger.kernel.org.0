@@ -1,66 +1,86 @@
-Return-Path: <linux-usb+bounces-5533-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5534-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6E1983DBD2
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 15:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5487583DBE0
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 15:29:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B5391F2437F
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 14:27:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A0FD1F21F99
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 14:29:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E3781CD1A;
-	Fri, 26 Jan 2024 14:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rAngwDjN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D7271C2A6;
+	Fri, 26 Jan 2024 14:29:51 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B87F1CD11;
-	Fri, 26 Jan 2024 14:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id AAA92D26D
+	for <linux-usb@vger.kernel.org>; Fri, 26 Jan 2024 14:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706279151; cv=none; b=FGmV7nLdLz2idfVSFJyaEAXsDNriRgkHMcs+nlF9tVPJy1sbvQrSRfpFvIDUnVCSfA080Fw7vYm4ROHmXnqiGt8+4eSP0kMfUs34LfLBt9BPaGHkn2ecmUYC4VBH+0a1uQ6mR1JGz6qt9j3/S8E+ShxIfSDp1PlbnfvOFcaI1cU=
+	t=1706279391; cv=none; b=mMiDecmLStM4sivi+OmXRp+4TOY11SShY4A9lik/ep89Q7rMFb9gu50IUa2F+nWM+WvR89Nc2kl7dHskWJ7qIxDE4/ltMWCh1p2MtxD00bMAdhICjQ7CL5ByTDO6SDucf9ph1z0NSrMqyCmNT89G0ogf8LfGxhLqLCFj1VmZLI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706279151; c=relaxed/simple;
-	bh=G9UWeEu2Mt5sY8I+msdhUg6UDBFIjXplzptsVgTucNg=;
+	s=arc-20240116; t=1706279391; c=relaxed/simple;
+	bh=th1zKaNSdPkD3kmeMrwoKj4+vtw3MMPyjegeZjcjQx0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D+A9ZS4CieUxuz7slVbFpav3bVV/O2BVNC9f3GIi/11mdwXn631zCwbXh99mcIQUj6y4kN9HfJwHCbEk+vL87X/JwVH5aOsLyPylckwQFw42nOk7ElFKpN/5gbgz+HjWkWP9lC/lk/dMzqNYYSa55aaTh0AybeLWjfXZiEb8E1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rAngwDjN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76234C43390;
-	Fri, 26 Jan 2024 14:25:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1706279150;
-	bh=G9UWeEu2Mt5sY8I+msdhUg6UDBFIjXplzptsVgTucNg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rAngwDjNu3mx6fw/gElMNmYO7owmXonORD5wW2R4krHZNzTvA/CRYOmwit035qnaL
-	 3hfVAFl5iTLigu+72x86QG3dKFshLt2BNafHy1KZEkEB2nS2gC2Jac5Tctz6v54ZIr
-	 JYyPNDFNOZnszl1mTTSeYhudZafGMPpcFtdtsqfc=
-Date: Fri, 26 Jan 2024 06:25:49 -0800
-From: Greg KH <gregkh@linuxfoundation.org>
-To: =?utf-8?B?KO2VmeyDnSkg7J6l7J246recICjsu7Ttk6jthLDqs7XtlZnqs7wp?= <ingyujang25@unist.ac.kr>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	ysjeon@unist.ac.kr
-Subject: Re: Recall: [PATCH] Remove redundant check for
- usb_generic_driver_probe
-Message-ID: <2024012641-sustained-ascent-efd4@gregkh>
-References: <3RI8B60J4MU4.B8HML3SKIYJ31@se1p216mb1336>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZDOmLXaEyy/iZQnfwp4Qg3QkxH9FkFVwoQiYdOBnx9WOP+bH9H7ioGb7OXqv5Kb7rOnkdq4Q4QnYAmiRfPvewh1y5c8ntsgubEThpbCw79rCf2G8JvhaRCa/J792ghGKe1a67YyxHqrB9bG75GbQq4wwXOivjrmy6TVcUl4KooU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 281702 invoked by uid 1000); 26 Jan 2024 09:29:41 -0500
+Date: Fri, 26 Jan 2024 09:29:41 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Ingyu Jang <ingyujang25@unist.ac.kr>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+  linux-kernel@vger.kernel.org, ysjeon@unist.ac.kr
+Subject: Re: [PATCH] Remove redundant check for usb_generic_driver_probe()
+Message-ID: <42b7cfa2-5ebf-4ef3-9890-4633444bad50@rowland.harvard.edu>
+References: <20240126120313.1362573-1-ingyujang25@unist.ac.kr>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3RI8B60J4MU4.B8HML3SKIYJ31@se1p216mb1336>
+In-Reply-To: <20240126120313.1362573-1-ingyujang25@unist.ac.kr>
 
-On Fri, Jan 26, 2024 at 11:42:15AM +0000, (학생) 장인규 (컴퓨터공학과) wrote:
-> ingyujang25@unist.ac.kr would like to recall the message, "[PATCH] Remove redundant check for usb_generic_driver_probe".
+On Fri, Jan 26, 2024 at 09:03:13PM +0900, Ingyu Jang wrote:
+> usb_generic_driver_probe() only returns 0.
+> Inside this function, there are only errors that are marked as not fatal.
+> However, drivers/usb/core/driver.c:269 checks
+> if usb_generic_driver_probe() returns error.
+> No need to change usb_generic_driver_probe() to return error,
+> only remove redundant error check.
 > 
+> Signed-off-by: Ingyu Jang <ingyujang25@unist.ac.kr>
+> ---
+>  drivers/usb/core/driver.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> index e01b1913d02b..b6274580b7ca 100644
+> --- a/drivers/usb/core/driver.c
+> +++ b/drivers/usb/core/driver.c
+> @@ -266,8 +266,6 @@ static int usb_probe_device(struct device *dev)
+>  
+>  	if (udriver->generic_subclass)
+>  		error = usb_generic_driver_probe(udev);
+> -	if (error)
+> -		return error;
+>  
+>  	/* Probe the USB device with the driver in hand, but only
+>  	 * defer to a generic driver in case the current USB
 
-That's not how email works :(
+Don't do this unless you add comments both here _and_ in 
+usb_generic_driver_probe() explaining that the routine never returns 
+anything but 0.  Otherwise, some day in the future someone will change 
+the probe routine to make it return an error code, and won't realize 
+that code here needs to be changed too.
+
+Better yet, don't make this change at all.  It's a trivial matter and 
+it's not on a hot path.
+
+Alan Stern
 
