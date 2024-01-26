@@ -1,162 +1,222 @@
-Return-Path: <linux-usb+bounces-5550-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5551-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EA5E83E367
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 21:32:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37B4083E3BD
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 22:14:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C2CC286ABB
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 20:32:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAE21282458
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 21:14:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B83F22374D;
-	Fri, 26 Jan 2024 20:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4E3724A04;
+	Fri, 26 Jan 2024 21:14:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="orqk+L+p"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D4C249FE
-	for <linux-usb@vger.kernel.org>; Fri, 26 Jan 2024 20:32:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAB7249E4;
+	Fri, 26 Jan 2024 21:14:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706301150; cv=none; b=lN2s/tTwJ/wBrdJuIZs/tl+ZLLtcQqxYvj51l+k9x+C0OAvYTwg0Y8SrdTFb5vpa8JhwgySjc2fPL5usO3y79EoBQS/K1g9WU65jUQL8rqP9MBbrJ5OguMIiCnItkBZ6gJvu8ShrdVyoT9pnB+o/LTk+gFq0M+3jKFS/Sul5N8o=
+	t=1706303653; cv=none; b=A5WJG9nDf3qtrQKnzHuSV15PYd30hjNytscUbkrfxV8xYaftBhN4KlYoY+T3aJFwGmPRSWzkZHin+EywMPz9LEvwmc+dBG1s8SNqSARVsSihU+/mP+4tq0m6lBFDGBbUJC5YuDvmq/eq8W/vzJBTdvASeQ0Xaa/3JlBhqwr3ffc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706301150; c=relaxed/simple;
-	bh=bf0py/Sz/+cRckqC2tlIzhYtdKG60TTCP+Np4esMzss=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WGB9AR30WagHrWgnFOS2KjC/g90uKYxVz9vnD/tniwsXuBdcorkc/799fXiGyQ1vb5JPiTB+FkHWJDnOSBMEPDyADTJaVwKu4OBbZhmq1TB6FAW9c8cNKZjd68A2/5wPk9jY0ntXfDVc8Vp3bFI/YnBCyqLf6Xo2x8shcxRiGwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=48ers.dk; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=48ers.dk
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0BFD8240002;
-	Fri, 26 Jan 2024 20:32:23 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
-	(envelope-from <peko@48ers.dk>)
-	id 1rTSsB-00APq3-0v;
-	Fri, 26 Jan 2024 21:32:23 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Michal Nazarewicz <mina86@mina86.com>,
-	Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Subject: [PATCH v4] usb: gadget: f_fs: expose ready state in configfs
-Date: Fri, 26 Jan 2024 21:32:08 +0100
-Message-Id: <20240126203208.2482573-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1706303653; c=relaxed/simple;
+	bh=L7tkL9uE+dRQ6qVIAnwoFuhEHoFvU/FCcUmVi/Mw6js=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=nvUxTIfZSK+C78GrYO+Yz8Aubue3tHOcH3OOMx0e80yrQgpK5m3t+iIaV53nN242wmhAlFtiXccHPJL71xXwsni+1qHO4WTo7vWwGDjyYhY/RQJ+ZcW+NWrVTQu4oL96IZS9kGxnEoHmmOo3qSg3cZ4WMd3J/cl7BacUZGDdgI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=orqk+L+p; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40QKmJDx009339;
+	Fri, 26 Jan 2024 21:13:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:from:to:cc:references
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=FdQCEZSsPbYF4wExTxJzqosdxpMvq4tdD2TBXxuJrco=; b=or
+	qk+L+pL3QA4piAhppzLwHmqfZ88vZ/bbYFUO8nCN45Uqpe0XcHo+U56Z5YxReXds
+	zBHCMOynbRKDCJaQTAdPJ82rEPaIfcVohv8aCJTW512o62Zj4uD/b2sGxbf5owpV
+	JspzVaCbHrBxrKs/a7WumcJoZzfq1rilp+rM5q+cum5bgthSBcDDEL70GQdOekEW
+	dUJf1bbGovmGaj+ZW7RCvfG3GqCA3xGyd9TiiUNJQ+PXvIcApc0vtjzHBhzAhjvL
+	DFgG6UpsDqhH1+fRyvyhW1zakjZaQFoNyy7VuglDzZglGC+fZEbRwAgtgfy39RZh
+	NVv6OlP3K4/Ytvmn1VXA==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vv8e89km3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 26 Jan 2024 21:13:46 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40QLDj5R020019
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 26 Jan 2024 21:13:45 GMT
+Received: from [10.110.17.111] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 26 Jan
+ 2024 13:13:44 -0800
+Message-ID: <ff0bff8b-f26a-87bd-9762-9f2af98abcca@quicinc.com>
+Date: Fri, 26 Jan 2024 13:13:38 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v12 04/41] usb: host: xhci-mem: Cleanup pending secondary
+ event ring events
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <gregkh@linuxfoundation.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@linaro.org>, <Thinh.Nguyen@synopsys.com>,
+        <broonie@kernel.org>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
+        <robh+dt@kernel.org>, <agross@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20240102214549.22498-1-quic_wcheng@quicinc.com>
+ <20240102214549.22498-5-quic_wcheng@quicinc.com>
+ <734591a1-50b4-6dc7-0b93-077355ec12e4@linux.intel.com>
+ <7b2ec96b-b72f-c848-7c35-36e61a4072ac@quicinc.com>
+ <b254f73b-a1bc-3dd4-f485-a3acf556835d@quicinc.com>
+ <2178e799-2068-7443-59b2-310dfdd1ddee@linux.intel.com>
+ <ae64ce69-dc1b-1534-7950-0a35c4a56f58@quicinc.com>
+In-Reply-To: <ae64ce69-dc1b-1534-7950-0a35c4a56f58@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-GND-Sasl: peter@korsgaard.com
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: I_bCQhXJsASqTNITaMpPE3gvQJrskugz
+X-Proofpoint-ORIG-GUID: I_bCQhXJsASqTNITaMpPE3gvQJrskugz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-25_14,2024-01-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ spamscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=820
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0
+ clxscore=1011 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401190000 definitions=main-2401260157
 
-When a USB gadget is configured through configfs with 1 or more f_fs
-functions, then the logic setting up the gadget configuration has to wait
-until the user space code (typically separate applications) responsible for
-those functions have written their descriptors before the gadget can be
-activated.
+Hi Mathias,
 
-The f_fs instance already knows if this has been done, so expose it through
-a "ready" attribute in configfs for easier synchronization.
+On 1/16/2024 12:24 PM, Wesley Cheng wrote:
+> Hi Mathias,
+> 
+> On 1/15/2024 6:01 AM, Mathias Nyman wrote:
+>> On 10.1.2024 1.42, Wesley Cheng wrote:
+>>> Hi Mathias,
+>>>
+>>> On 1/8/2024 12:51 PM, Wesley Cheng wrote:
+>>>> Hi Mathias,
+>>>>
+>>>> On 1/4/2024 6:48 AM, Mathias Nyman wrote:
+>>>>> On 2.1.2024 23.45, Wesley Cheng wrote:
+>>>>>> As part of xHCI bus suspend, the XHCI is halted.  However, if 
+>>>>>> there are
+>>>>>> pending events in the secondary event ring, it is observed that 
+>>>>>> the xHCI
+>>>>>> controller stops responding to further commands upon host or device
+>>>>>> initiated bus resume.  Iterate through all pending events and 
+>>>>>> update the
+>>>>>> dequeue pointer to the beginning of the event ring.
+>>>>>>
+>>>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>>>> ...
+>>>>>> +/*
+>>>>>> + * Move the event ring dequeue pointer to skip events kept in the 
+>>>>>> secondary
+>>>>>> + * event ring.  This is used to ensure that pending events in the 
+>>>>>> ring are
+>>>>>> + * acknowledged, so the XHCI HCD can properly enter 
+>>>>>> suspend/resume. The
+>>>>>> + * secondary ring is typically maintained by an external component.
+>>>>>> + */
+>>>>>> +void xhci_skip_sec_intr_events(struct xhci_hcd *xhci,
+>>>>>> +    struct xhci_ring *ring,    struct xhci_interrupter *ir)
+>>>>>> +{
+>>>>>> +    union xhci_trb *erdp_trb, *current_trb;
+>>>>>> +    u64 erdp_reg;
+>>>>>> +    u32 iman_reg;
+>>>>>> +    dma_addr_t deq;
+>>>>>> +
+>>>>>> +    /* disable irq, ack pending interrupt and ack all pending 
+>>>>>> events */
+>>>>>> +    xhci_disable_interrupter(ir);
+>>>>>> +    iman_reg = readl_relaxed(&ir->ir_set->irq_pending);
+>>>>>> +    if (iman_reg & IMAN_IP)
+>>>>>> +        writel_relaxed(iman_reg, &ir->ir_set->irq_pending);
+>>>>>> +
+>>>>>> +    /* last acked event trb is in erdp reg  */
+>>>>>> +    erdp_reg = xhci_read_64(xhci, &ir->ir_set->erst_dequeue);
+>>>>>> +    deq = (dma_addr_t)(erdp_reg & ERST_PTR_MASK);
+>>>>>> +    if (!deq) {
+>>>>>> +        xhci_err(xhci, "event ring handling not required\n");
+>>>>>> +        return;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    erdp_trb = current_trb = ir->event_ring->dequeue;
+>>>>>> +    /* read cycle state of the last acked trb to find out CCS */
+>>>>>> +    ring->cycle_state = le32_to_cpu(current_trb->event_cmd.flags) 
+>>>>>> & TRB_CYCLE;
+>>>>>> +
+>>>>>> +    while (1) {
+>>>>>> +        inc_deq(xhci, ir->event_ring);
+>>>>>> +        erdp_trb = ir->event_ring->dequeue;
+>>>>>> +        /* cycle state transition */
+>>>>>> +        if ((le32_to_cpu(erdp_trb->event_cmd.flags) & TRB_CYCLE) !=
+>>>>>> +            ring->cycle_state)
+>>>>>> +            break;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    xhci_update_erst_dequeue(xhci, ir, current_trb, true);
+>>>>>> +}
+>>>>>
+>>>>> Code above is very similar to the existing event ring processing 
+>>>>> parts of xhci_irq()
+>>>>> and xhci_handle_event()
+>>>>>
+>>>>> I'll see if I can refactor the existing event ring processing, 
+>>>>> decouple it from
+>>>>> event handling so that it could be used by primary and secondary 
+>>>>> interrupters with
+>>>>> handlers, and this case where we just want to clear the event ring.
+>>>>>
+>>>>
+>>>> Thanks, that makes sense.  Will take a look as well.
+>>>>
+>>>
+>>> How about something like the below?  Tested this on my set up and 
+>>> everything looks to be working fine.  Had to add another param to 
+>>> struct xhci_interrupters to tell the XHCI interrupt handler to say if 
+>>> that particular interrupter wants to skip_events (handling).  This 
+>>> way, its something that the class driver utilizing the interrupter 
+>>> will have to tell XHCI sideband.  It would allow the user to 
+>>> determine if they want to use the interrupter to actually handle 
+>>> events or not on the proc running Linux.
+>>>
+>>
+>> Yes, I have something similar.
+>> I'll share it soon, just need to
+>> clean it up a bit fist.
+>>
+> 
+> Sure, no worries.  Will test it when its available.  Thanks!
+> 
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
-Changes since v3:
-- Take ffs_dev_lock as requested by Andrzej.
+Was just wondering if you had the time to clean up the changes?  If not, 
+maybe you can provide a patch with whatever you have, and I can try my 
+best to clean it up to your liking?  Thanks!
 
-Changes since v2:
-- Add ABI documentation as requested by Greg.
-
-Changes since v1:
-- Add documentation snippet as requested by Greg.
-
- .../ABI/testing/configfs-usb-gadget-ffs       | 12 +++++++++--
- Documentation/usb/gadget-testing.rst          |  8 ++++++++
- drivers/usb/gadget/function/f_fs.c            | 20 +++++++++++++++++++
- 3 files changed, 38 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-ffs b/Documentation/ABI/testing/configfs-usb-gadget-ffs
-index e39b27653c65..bf8936ff6d38 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-ffs
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-ffs
-@@ -4,6 +4,14 @@ KernelVersion:	3.13
- Description:	The purpose of this directory is to create and remove it.
- 
- 		A corresponding USB function instance is created/removed.
--		There are no attributes here.
- 
--		All parameters are set through FunctionFS.
-+		All attributes are read only:
-+
-+		=============	============================================
-+		ready		1 if the function is ready to be used, E.G.
-+				if userspace has written descriptors and
-+				strings to ep0, so the gadget can be
-+				enabled - 0 otherwise.
-+		=============	============================================
-+
-+		All other parameters are set through FunctionFS.
-diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-index 8cd62c466d20..4ec6b775ebba 100644
---- a/Documentation/usb/gadget-testing.rst
-+++ b/Documentation/usb/gadget-testing.rst
-@@ -206,6 +206,14 @@ the standard procedure for using FunctionFS (mount it, run the userspace
- process which implements the function proper). The gadget should be enabled
- by writing a suitable string to usb_gadget/<gadget>/UDC.
- 
-+The FFS function provides just one attribute in its function directory:
-+
-+	ready
-+
-+The attribute is read-only and signals if the function is ready (1) to be
-+used, E.G. if userspace has written descriptors and strings to ep0, so
-+the gadget can be enabled.
-+
- Testing the FFS function
- ------------------------
- 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 6bff6cb93789..be3851cffb73 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -3445,6 +3445,25 @@ static inline struct f_fs_opts *to_ffs_opts(struct config_item *item)
- 			    func_inst.group);
- }
- 
-+static ssize_t f_fs_opts_ready_show(struct config_item *item, char *page)
-+{
-+	struct f_fs_opts *opts = to_ffs_opts(item);
-+	int ready;
-+
-+	ffs_dev_lock();
-+	ready = opts->dev->desc_ready;
-+	ffs_dev_unlock();
-+
-+	return sprintf(page, "%d\n", ready);
-+}
-+
-+CONFIGFS_ATTR_RO(f_fs_opts_, ready);
-+
-+static struct configfs_attribute *ffs_attrs[] = {
-+	&f_fs_opts_attr_ready,
-+	NULL,
-+};
-+
- static void ffs_attr_release(struct config_item *item)
- {
- 	struct f_fs_opts *opts = to_ffs_opts(item);
-@@ -3458,6 +3477,7 @@ static struct configfs_item_operations ffs_item_ops = {
- 
- static const struct config_item_type ffs_func_type = {
- 	.ct_item_ops	= &ffs_item_ops,
-+	.ct_attrs	= ffs_attrs,
- 	.ct_owner	= THIS_MODULE,
- };
- 
--- 
-2.39.2
-
+Thanks
+Wesley Cheng
 
