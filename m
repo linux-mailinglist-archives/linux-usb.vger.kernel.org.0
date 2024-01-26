@@ -1,348 +1,255 @@
-Return-Path: <linux-usb+bounces-5523-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5524-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79B6783D2C5
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 04:01:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F21EA83D2EB
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 04:23:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 065991F26FB6
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 03:01:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A950728CDF0
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jan 2024 03:23:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B44B4946C;
-	Fri, 26 Jan 2024 03:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16512A944;
+	Fri, 26 Jan 2024 03:23:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Ztj1tSc+"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="jA682AF1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2048.outbound.protection.outlook.com [40.107.93.48])
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2089.outbound.protection.outlook.com [40.107.105.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1EA79DF;
-	Fri, 26 Jan 2024 03:01:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8B78831
+	for <linux-usb@vger.kernel.org>; Fri, 26 Jan 2024 03:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.89
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706238108; cv=fail; b=tTe+QQjtfE8H/yVL8U80nPlHom0AhfNMWZ/5aNExgwH8KQNXZIGpk+liLlWyPb3auSC/ZyLTfHy2W1SnZ+9Qwt2mHpTd147wc+4TuLbgXW10fQnKLXUFs6e+dd8gQlVl6OnHHyns8p+NOBAiJV2hpZG6WrPK+plWikVmpsBEz/g=
+	t=1706239389; cv=fail; b=iYbuUGo2b+gcYU8MaRKi4N/oUgiamXTbAQhKElfWmrTC3BgXgyCnVc2DkzOOB4i8X8Gss+JyPgHzEBJiHJxbx+RbcCKlX4+JOs8jbqyEya80njPO3TFxtQyYFjrajiBMsR91jGLP5mkn7JQRfoe4zz5CLdg1dv0nKuvhUyNRCgk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706238108; c=relaxed/simple;
-	bh=Ug94k1YQF5LM/qUAvZSroNh9F6WmJsjzS3GwENR5UUM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XTZW+NWLyc3YjZzY+gbnqloHKcfPmNMCX4i9HasJrThJkKFrarMJ6y1pZNJGWOr/H4tKiZASiTdNc80Q7vz4rzFQLwQwvaUg6FiSAz8l0fqZaj8xC44PTwlGv7xdZCW9e9a6YUTZs2z5gCnexR5Ie1rxRBSp17aeZLHULK/Wzz0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Ztj1tSc+; arc=fail smtp.client-ip=40.107.93.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1706239389; c=relaxed/simple;
+	bh=k+Tr02hKK/Ost/Gcq7xgPIetmd8EigpX8AurXRgXWlQ=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=iPSoHIW+3Xvc0LeTHRvksQgKZ3V+yt5LlLedkA3GCsF+FIe6VQ+MqiBqxymAqbQPNTecgdjJNTVbpElomqJs7f71k97BWz/E2vmeXVbg73F1hx0KeCNH4phWh8x3P42OPFutXVny/612E/jqeE42YLS6AUVyTov/IZpKH/NyA7I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=jA682AF1; arc=fail smtp.client-ip=40.107.105.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e0Ke8/EuDd2XywLt6EXLXRbW/K0rhvyPGYl4TjEjCCRxkw3U++kNHUv+BpN7q01+Ecd+3iIHzlgGI6kBMR4TKppwjxDHh49y9KWu7q1T2/x+esZZal8Doo2bLEhC10duf0NANjBMH/mesiNqc5i1YX+nG9ota01T0t/9tJSeufx+JGOeJSifEC1M3mcZ5DQ5C6WIwJoOw3E1R07wqqmfQF9SIykUOhSK6jUhvtfZt9cPI90IkGygi0WqvStQEvJixzr1v1+w+Q5dKftePFa8pwGdOCbDf0kiIAoSR7fPEmrwOwYQMFxLNTyPaQEbmRJ0e5cTTNi4WncxaSxrIkh0Ag==
+ b=VpWbo/69EZKt9kfdxwMljRF69GaVLPyA+OO6wp8n4g6LXvr7CRLpAOWz2ZdG2SO539mrZlL1FxhcbOg81oT83uiCoKNRSQqtFiIcF8r/OiXQ3heuW4J8DW9nTY2/11NSw7X7icSHjxqnafkNG1V0yTvHT6TVmJMfPluW/ysBeGtUhzFnoBFUISvSJ0wfgz6dQkre7ivwPttSlYYfOqy01C4qV8BEGjeoo7wAWRBvIc8HmGptqt8E9wutwtAvPR86pUQH1XFCTjp1mLQunHgBgel7EihD4dSa8VUAnUd3tf+EhBAzH8CRg83nKPhhT16XoifSNX+Iz/DWEUAwsxtWOw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4rvNg5v1WZFVs3/ZWnV5jVztNEeVe5+6W1GheKFI0Dw=;
- b=gdVD+0SU+TNtAguD3P/J9woDlyrD95iZQhFQlM9BM4A7AZAurSQe6r2M1p7jJLQSs9Uht0BwgNqoSjgoJsfr6e63DNlZZ3WARn+hoV458L/K+ido9jrlYM+zKkH3uXdi763tWR1Bn6qc8nn4CdKOv0zn9+0e5+RTyWUKS8GAC/gmPrpIPe6vdNjfVmsZS7T67erjVuzXDelA1eeufIlTyiGYIPMmUY+Fhps3LBHxcTTsYzs74Ml3vekTmeOy65T437UZoWFmwzGwgH/xX41Gga60zOBX1MmEcLzc+Az3tX62Gw3gOMg5XDFVCqY/ZgnnoHcRgxyolInxcN9ptpt0jg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=MIeYn8VusQw8HOK6q9n+I+BiPb218uk5v1xgdFpb6zc=;
+ b=i+vNpvBHXyA86BsfCMe4ykr/y0vAAkMJeFPjA9oWlt1BHdd8+7jF/KDZfJopE8mOy0HJJoyyp25K2ZqmvbHl8tAKVoj0gTg8jos19TgYAGkij45IHI2XK15vd48vjug0xQvdwU+oxwSplsL/M/FiQo/YyZnH/2kcLV3Xrw9bO/XhoSSdliklnypv3F2iRTokZGlkEPgp7XZqEcLATbQZA/pNjCa+dyo9Yfr4gcYLf4VUkKLtmRrwxx/qbeiJ3a1vAVv4T6Sf6PZ4BX4FSaXv8moYzo9m6gbUKK9wgDb89E3ntoUVhXC6/ZXkqc/Df2sRzSp/H9JkL/+3V+1HBVjbbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4rvNg5v1WZFVs3/ZWnV5jVztNEeVe5+6W1GheKFI0Dw=;
- b=Ztj1tSc+fIdxCkMSN+L5AxGGFYsDxeI8zfZCfTqDIXFnOGccbe+Akuh88pthR/oYFX3Xf7biayG+vJGAoTd7u1szUVjI8ksShxGGTu14tP0nfdig0Y89c6FaiMrvBCWcxrbLvLUpOFdP5ezCQgQJkZwBd39LaEg2a2iiyYZoMOvYzvW153r4xjqsPCCa+fRAl+vQBjbmEdRC+8ugT1Hb+Tx5Kwh1ZPDl5BV9Z+w3ZQ/rJOPuRQTO6JsJx6Tc4YS5cVoTGMIX73OoUhKePmZbCe+OmhlbCeB4rfN622Xlc/2kOHfKBZeRymgcZ6MtTn1ZyXdkAwQN8YjLr9/sHQ/s2Q==
-Received: from BN9PR03CA0774.namprd03.prod.outlook.com (2603:10b6:408:13a::29)
- by BL3PR12MB6547.namprd12.prod.outlook.com (2603:10b6:208:38e::6) with
+ bh=MIeYn8VusQw8HOK6q9n+I+BiPb218uk5v1xgdFpb6zc=;
+ b=jA682AF1uvJJMeMlo6Pb7y8bp9j3i0+dytUTRKIcSf0lOldeeQcY9zZCiZQf0BpymHZCoxl1eJw8No1pmsa3flkmEl2BgYugGLwiICP2erFOrBPqIZuws0+95yAQ12O8uAAOY/fVooM0Dk3M/6udzzIOJqUv+jnzs2mcdlR8Wlw=
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by AS5PR04MB9828.eurprd04.prod.outlook.com (2603:10a6:20b:678::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.26; Fri, 26 Jan
- 2024 03:01:43 +0000
-Received: from BN2PEPF000044A1.namprd02.prod.outlook.com
- (2603:10b6:408:13a:cafe::6e) by BN9PR03CA0774.outlook.office365.com
- (2603:10b6:408:13a::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.27 via Frontend
- Transport; Fri, 26 Jan 2024 03:01:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN2PEPF000044A1.mail.protection.outlook.com (10.167.243.152) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7228.16 via Frontend Transport; Fri, 26 Jan 2024 03:01:42 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 25 Jan
- 2024 19:01:27 -0800
-Received: from e558209-lcelt.nvidia.com (10.126.231.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Thu, 25 Jan 2024 19:01:25 -0800
-From: Haotien Hsu <haotienh@nvidia.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
-CC: Utkarsh Patel <utkarsh.h.patel@intel.com>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Sing-Han Chen <singhanc@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>,
-	Wayne Chang <waynec@nvidia.com>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, WK Tsai <wtsai@nvidia.com>, Haotien Hsu
-	<haotienh@nvidia.com>
-Subject: [PATCH v8] ucsi_ccg: Refine the UCSI Interrupt handling
-Date: Fri, 26 Jan 2024 11:01:15 +0800
-Message-ID: <20240126030115.3791554-1-haotienh@nvidia.com>
-X-Mailer: git-send-email 2.34.1
+ 2024 03:23:03 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::d45f:4483:c11:68b0]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::d45f:4483:c11:68b0%7]) with mapi id 15.20.7228.027; Fri, 26 Jan 2024
+ 03:23:03 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+	"hdegoede@redhat.com" <hdegoede@redhat.com>, "ivan.orlov0322@gmail.com"
+	<ivan.orlov0322@gmail.com>, "heikki.krogerus@linux.intel.com"
+	<heikki.krogerus@linux.intel.com>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, dl-linux-imx <linux-imx@nxp.com>, Jun Li
+	<jun.li@nxp.com>, "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
+Subject: RE: [EXT] Re: [PATCH v2 2/2] usb: roles: don't get/set_role() when
+ usb_role_switch is unregistered
+Thread-Topic: [EXT] Re: [PATCH v2 2/2] usb: roles: don't get/set_role() when
+ usb_role_switch is unregistered
+Thread-Index: AQHaTpAaiJf9VtcwHES+n0m/bMBudLDo52WAgAJ9YtA=
+Date: Fri, 26 Jan 2024 03:23:03 +0000
+Message-ID:
+ <DU2PR04MB882283EB45C4329A021D5C148C792@DU2PR04MB8822.eurprd04.prod.outlook.com>
+References: <20240124064554.1263339-1-xu.yang_2@nxp.com>
+ <20240124064554.1263339-2-xu.yang_2@nxp.com>
+ <2024012442-delivery-knee-503a@gregkh>
+In-Reply-To: <2024012442-delivery-knee-503a@gregkh>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU2PR04MB8822:EE_|AS5PR04MB9828:EE_
+x-ms-office365-filtering-correlation-id: a8e5eb14-87ac-4523-ec8a-08dc1e1e1b74
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ Uro3tVHVpHed2mYfbavCfGTNVHS5ldcATJw7CDf+0Qa3lYHQupt0NSR0BebUrLglr+0GZVQPKlrTTHLNJkn80WhyanOKEV0lCodKqTfrqbmCBcUxYn6bqPMvHqVT49elKLc+WUkqF8ow7mbrOmtNIBspCTpW07aSNaYrrZsCkc9PYAUlCTIltZ0uK58azKYwvEzdlP3Hd+rg2BBkFnIG8O9fpjTyRYsuuyqQgkdBBaXMvLBPG4Lecl3Y6eIFeRC817hvR0nsHF20BU8JtNG5Afgv85RVh0AHApTBCRaPqW8wmOOZq/7B+EPDf+i9jSBSuiMJQAwyy2FZy/tisMgzWJeuJxg7mZszAztmeOL6iuJxM9gY1wPwaaMlXz7ZKtOKUQlZwv1W0WOJy+P5cUbR4o4DtEocXn3qmCSGpKQ/TLk/KW4YM77lP10nVAaqagfScTjoDyXTbQ2bXEcfCTdcKyP5up5ZfCZ/bpOOndZ5Ny/QUnKNUKp8OQFkvMKBnjns+9eYKrar2AKM9vq7oxDN+1KZKcQYnfITxOlv4fvY1zYfOnVcgfyzumdZ7FWX5MxxFLQALjTVVo8VhAVfGzQgf3cirFo7ePL+m3YqZLd/8x9HoM4gTwnwnaKL/4VYKvkN
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(366004)(39860400002)(376002)(396003)(346002)(230922051799003)(64100799003)(451199024)(186009)(1800799012)(33656002)(83380400001)(2906002)(5660300002)(52536014)(122000001)(4326008)(38070700009)(41300700001)(38100700002)(478600001)(71200400001)(26005)(55016003)(86362001)(54906003)(66946007)(76116006)(66476007)(6916009)(64756008)(316002)(66446008)(8936002)(8676002)(9686003)(66556008)(6506007)(7696005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?4jpxJOaWemjKUWJILB6g5S9M9UBkqyR696DbiYwmlKxMInME+g0Tgfr6XIcU?=
+ =?us-ascii?Q?RwX19LhtKNPFyUBmIPki5qBig9QGHBJdovqRfEpluhGBEylpoWmbDxhE/bIh?=
+ =?us-ascii?Q?b2SzDCXyTNutFUmJVYwWpe9iDyzO7WIyCsfdw1fFQ9BigiazmUeoo4uamB1n?=
+ =?us-ascii?Q?BQBrwoFOgXQAKrtPGLfEXgkyfCVIEpW8ZFPk3SIwIjs0Nmi3WA7mlUdAokjg?=
+ =?us-ascii?Q?RbPfN9aCAV5hID5t9yhGStnhzn3LbmKHyLJ6uGW2a8PROkLJ/6MsL2fz3eGl?=
+ =?us-ascii?Q?OVmjlLaMiUI12KaO8+SimZZNbfLO2QkMebhW0/YXvxhCd21q0NRXhqAJ8n+g?=
+ =?us-ascii?Q?ry80zc5nwD+yA6Lu6AgfcAXPkcBJA5ZBrjTTInVWLP2s6HMv+5v36RMQbVeW?=
+ =?us-ascii?Q?EayNMWYTdY9AsdGuY4Js+n5LzIAVVr04tuFXUaqFFlVwNNXVOyAYPGFhUh6h?=
+ =?us-ascii?Q?gvE677gMBrXm4UXMgKwxwDopFBsdybijyBZdu4yBdiVr20f63ax0lq3tcj+U?=
+ =?us-ascii?Q?/Zx/cG5mW0XnlYIIpih3L0r6L1SyptyFCNEqJgKrFFZfCZY5GpMiIKvvdlDi?=
+ =?us-ascii?Q?/iW33pMUW6dY3MWfhj15zuV2exGSsDEBBZsCS/l+9LuH9dKRyuOJwYj8bcLW?=
+ =?us-ascii?Q?Cd0+Q19g6p7XnYqAmsDwH0eF0qfB92aDDxg7XEY/eaM6UkQGhpaofGC0tDRW?=
+ =?us-ascii?Q?NNS6qFKet5TrXdUiW2609UqaiR69Fw+U/uvl11B+RvTxuOBwn7AZzqzymvam?=
+ =?us-ascii?Q?keBT5smzb5YG7SZg3Q0MB7aseWyHi4J6gzDNTPUQenZoI9bvEPwUdnLjwHAU?=
+ =?us-ascii?Q?izB47/5cAArkki0PoCtw7rA9ZfCd5kjRfnkzoZgNb0o7V1JntNUt7cre18SM?=
+ =?us-ascii?Q?9xMg3OebvGiL9ZSt09x8adQbFCKoB16BRnB5vHpDTXVJ/cDvPwC1hhgeeVVC?=
+ =?us-ascii?Q?iUscJhIGrRLd6k8Y9ZdF2P7RGoZhEnMMKVk192vjPm38afrjxKfcCg0vIaSv?=
+ =?us-ascii?Q?cunydDCxpgbLECfm9Eqxi00hCRBqzDwoCV0mKxd30Spf6jfh7sgCkOTq1KJv?=
+ =?us-ascii?Q?x6s+gnfaR/3kkETZlHS29T+kd09bF7fkclH3iF+kGjSp43N3bCM85Epuc5/I?=
+ =?us-ascii?Q?fXO0CyqJLMssh8tObBbfMaBecaIJ7iEOwpa98fbKtdaArU/0AYtI9fM0y59r?=
+ =?us-ascii?Q?QWgFdySdNrw3U8QSIs2eNCHqyXd/zMSRwhor4wogLCi8j6h3k1wjpoYl4zjC?=
+ =?us-ascii?Q?MGyML82TgJqn+oag9HjjXEpsZtb25djw/WtU5UB3DiXEkKEP8KhCXxuZAfEE?=
+ =?us-ascii?Q?hYcIaNIHvwSlekirt+rSHsrJ9Tu6f8pQEpPaB2WsSkRRpupS4X8ACo3xlQMK?=
+ =?us-ascii?Q?EeSxjqXcy1wgWVrEHAhHG/L464fuFPmTIMcroO5JkWXiJzIKdR+ACWZ8DD6e?=
+ =?us-ascii?Q?X1o3McvxFr66JsAYrSyyX69J24si6Gb9kVqQZ8dcardHK3/69qLtBBLUJrI/?=
+ =?us-ascii?Q?mL4ZYT4KL/DkbhsWbPoz+oPY7BzdzXNABKCN+v2Bnbzg+jCQsgzcGuYN8gSm?=
+ =?us-ascii?Q?Bbf7DpMQJABnZKJJuDc=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF000044A1:EE_|BL3PR12MB6547:EE_
-X-MS-Office365-Filtering-Correlation-Id: 697b165b-b469-494e-f895-08dc1e1b1ff3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	JEEAiZtFREVjeczvHn26u68f5lYUjSS6Sfiow9agueBAl9FqFqAcLJbN+0rRCY/roMcRvndxDh39Dv372sS6XM1X9/V/JLg6VFGVtCCe505kKtNzZ35SbdqowjDVaT06AthzPCz1cYnDKMzxDqEJpw7GRaOFd7loJ3lkq78lIm3HcDx938lyGVvMTyjtKtpZlkkV0aVT3HX0Y4RcfidYy2kmII+ZxIgIL1jYNHJgK7lRWyjasOvcRaUZPBRE2vE22ms+7fIyXinYy08s4C7Xv+jnLVhfwQKiZdj4UspWbsszcdFxEgVi95qTfJGDn7UjRtPlEq/LiT5IA7f57C2o85QGR0fA23W9Ib7Gi/FNmwfL1NJLlxFeEptPbIZyq2M4HY7U6xlErKBC4R+cB6omIpU+aaqerhMBvHa7FJXOGUFnSVTCmVibvZhUdc/A59c09olEFnp08fDKBltoBxdbdZw8no5SSJEh5ZP+SX94WcmlDLqaticTmoifkGqL+omE1Tws3GD76e6SeZ2+0DKYrneim6FEredGaZSuTL3uvXKw44K3JLrXFTlKBxmFb2hy3jpsX2KRX7CgGKRBPC6Y1WWVUCkN7KlX73eKTsIJwrq8NGWN7xdHfF51WS33I/+pCRUmN9yCFV7yEq/IVCzF4MlhrLFuF4/97k8UtJ7oTBqnRMYO+J746LyiXkxuP/7z82SxsxkwDDKwiPyYqhAteT/79emExO9VfDtw8jztzc6HKWpYxgAFjMBuC6Xrn+YyHEmclXq9cD8JwWNqZvbu6IyuSjaJci6kAShEB3UVzbo=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(346002)(396003)(136003)(376002)(39860400002)(230922051799003)(230273577357003)(230173577357003)(451199024)(64100799003)(186009)(82310400011)(1800799012)(46966006)(40470700004)(36840700001)(2906002)(36860700001)(36756003)(4326008)(5660300002)(26005)(6666004)(1076003)(16526019)(426003)(336012)(2616005)(107886003)(47076005)(316002)(70586007)(70206006)(54906003)(478600001)(40460700003)(110136005)(86362001)(8936002)(8676002)(7696005)(83380400001)(41300700001)(82740400003)(40480700001)(7636003)(356005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2024 03:01:42.6769
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8e5eb14-87ac-4523-ec8a-08dc1e1e1b74
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2024 03:23:03.8032
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 697b165b-b469-494e-f895-08dc1e1b1ff3
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF000044A1.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6547
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1NKAwNjTFzPYdihVBkgSHUu+ymITQgUGgpKyvUEasiB9Trroxl7AyLcIzwXiScGCTEGz54PMibhGEFpoa+wELw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB9828
 
-With the Cypress CCGx Type-C controller the following error is
-sometimes observed on boot:
-[   16.087147] ucsi_ccg 1-0008: failed to reset PPM!
-[   16.087319] ucsi_ccg 1-0008: PPM init failed (-110)
+Hi Greg,
 
-When the above timeout occurs the following happens:
-1. The function ucsi_reset_ppm() is called to reset UCSI controller.
-   This function performs an async write to start reset and then
-   polls for completion.
-2. An interrupt occurs when the reset completes. In the interrupt
-   handler, the OPM field in the INTR_REG is cleared and this clears
-   the CCI data in the PPM. Hence, the reset completion status is
-   cleared.
-3. The function ucsi_reset_ppm() continues to poll for the reset
-   completion, but has missed the reset completion event and
-   eventually timeouts.
+>=20
+> On Wed, Jan 24, 2024 at 02:45:54PM +0800, Xu Yang wrote:
+> > There is a possibility that usb_role_switch device is unregistered befo=
+re
+> > the user put usb_role_switch. In this case, the user may still want to
+> > get/set_role() since the user can't sense the changes of usb_role_switc=
+h.
+> >
+> > This will add a flag to show if usb_role_switch is already registered a=
+nd
+> > avoid unwanted behaviors.
+> >
+> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> >
+> > ---
+> > Changes in v2:
+> >  - new patch during test patch 1
+> >  - add registered flag
+> > ---
+> >  drivers/usb/roles/class.c | 12 ++++++++++--
+> >  1 file changed, 10 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
+> > index 2bad038fb9ad..70165dd86b5d 100644
+> > --- a/drivers/usb/roles/class.c
+> > +++ b/drivers/usb/roles/class.c
+> > @@ -23,6 +23,7 @@ struct usb_role_switch {
+> >       struct mutex lock; /* device lock*/
+> >       struct module *module; /* the module this device depends on */
+> >       enum usb_role role;
+> > +     bool registered;
+> >
+> >       /* From descriptor */
+> >       struct device *usb2_port;
+> > @@ -49,6 +50,9 @@ int usb_role_switch_set_role(struct usb_role_switch *=
+sw, enum usb_role role)
+> >       if (IS_ERR_OR_NULL(sw))
+> >               return 0;
+> >
+> > +     if (!sw->registered)
+> > +             return -EOPNOTSUPP;
+>=20
+> What's to prevent this from changing right after you check it?
 
-In this patch, we store CCI when handling the interrupt and make
-reading after async write gets the correct value.
+Usually , the usb_role_switch device is unregistered after usb controller
+device is removed.=20
 
-To align with the CCGx UCSI interface guide, this patch updates the
-driver to copy CCI and MESSAGE_IN before they are reset when UCSI
-interrupt acknowledged.
+Such as dwc3 platform, if the usb controller is in device mode at first,
+dwc3_gadget_exit() will be called when removing dwc3 controller device
+by unbind the device. If typec port changes to DFP, tcpm will set usb role
+to host mode and usb_role_switch_set_role() is called. Then dwc3 controller
+driver will call dwc3_gadget_exit() again to switch from gadget to host mod=
+e.
+But this time kernel will dump NULL pointer issue since gadget resource is
+already released.
 
-When a new command is sent, the driver will clear the old CCI to avoid
-ucsi_ccg_read() getting wrong CCI after ucsi_ccg_async_write() when
-the UCSI interrupt is not handled.
+[   46.065015] Unable to handle kernel NULL pointer dereference at virtual =
+address 0000000000000008
+[   46.074030] Mem abort info:
+[   46.076915]   ESR =3D 0x0000000096000045
+[   46.080742]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+[   46.086155]   SET =3D 0, FnV =3D 0
+...
+[   46.272542] Call trace:
+[   46.274986]  usb_del_gadget+0x44/0xac
+[   46.278651]  dwc3_gadget_exit+0x20/0x7c
+[   46.282490]  __dwc3_set_mode+0x280/0x3ec
+[   46.286408]  process_one_work+0x138/0x248
+[   46.290421]  worker_thread+0x320/0x438
+[   46.294173]  kthread+0x110/0x114
+[   46.297406]  ret_from_fork+0x10/0x20
+[   46.300992] Code: f94186a4 d2802002 f9418aa3 f2fbd5a2 (f9000483)
+[   46.307079] ---[ end trace 0000000000000000 ]---
 
-Finally, acking the UCSI_READ_INT interrupt before calling complete()
-in ISR to ensure that the ucsi_ccg_sync_write() would wait for the
-interrupt handling to complete.
+In chipidea platform, I also get below kernel dump.
 
-Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+[   78.499672] Unable to handle kernel paging request at virtual address ff=
+ff8000822a51a4
+[   78.507588] Mem abort info:
+[   78.510366]   ESR =3D 0x0000000096000007
+[   78.514102]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+[   78.519397]   SET =3D 0, FnV =3D 0
+...
+[   78.705713] Call trace:
+[   78.708149]  hw_read_otgsc+0x8/0xf4
+[   78.711632]  ci_usb_role_switch_set+0x94/0x2c4
+[   78.716069]  usb_role_switch_set_role+0x44/0x98
+[   78.720593]  tcpm_mux_set+0x5c/0x80
+[   78.724069]  tcpm_set_roles+0x64/0xd4
+[   78.727717]  tcpm_state_machine_work+0x2350/0x2ff4
+[   78.732502]  kthread_worker_fn+0xc4/0x174
+[   78.736506]  kthread+0x110/0x114
+[   78.739721]  ret_from_fork+0x10/0x20
+[   78.743295] Code: 88dffc21 88dffc00 f9405c02 aa0003e3 (b9400042)
+[   78.749377] ---[ end trace 0000000000000000 ]---
 
----
-V1->V2
-- Fix uninitialized symbol 'cci'
-v2->v3
-- Remove misusing Reported-by tags
-v3->v4
-- Add comments for op_lock
-v4->v5
-- Specify the endianness of registers in struct op_region
-- Replace ccg_op_region_read() with inline codes
-- Replace ccg_op_region_clean() with inline codes
-- Replace stack memory with GFP_ATOMIC allocated memory in ccg_op_region_update()
-- Add comments for resetting CCI in ucsi_ccg_async_write()
-v5->v6
-- Fix sparse warning: incorrect type in assignment
-v6->v7
-- Move changelog to below
-v7->v8
-- Add Heikki's Reviewed-by tag
----
- drivers/usb/typec/ucsi/ucsi_ccg.c | 92 ++++++++++++++++++++++++++++---
- 1 file changed, 84 insertions(+), 8 deletions(-)
+Maybe these platforms lack some checks about the resources. But, first of a=
+ll,
+ ->set_role() should not be called at all when usb_role_switch device is
+Unregistered.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 449c125f6f87..dda7c7c94e08 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -192,6 +192,12 @@ struct ucsi_ccg_altmode {
- 	bool checked;
- } __packed;
- 
-+#define CCGX_MESSAGE_IN_MAX 4
-+struct op_region {
-+	__le32 cci;
-+	__le32 message_in[CCGX_MESSAGE_IN_MAX];
-+};
-+
- struct ucsi_ccg {
- 	struct device *dev;
- 	struct ucsi *ucsi;
-@@ -222,6 +228,13 @@ struct ucsi_ccg {
- 	bool has_multiple_dp;
- 	struct ucsi_ccg_altmode orig[UCSI_MAX_ALTMODES];
- 	struct ucsi_ccg_altmode updated[UCSI_MAX_ALTMODES];
-+
-+	/*
-+	 * This spinlock protects op_data which includes CCI and MESSAGE_IN that
-+	 * will be updated in ISR
-+	 */
-+	spinlock_t op_lock;
-+	struct op_region op_data;
- };
- 
- static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
-@@ -305,12 +318,42 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, const u8 *data, u32 len)
- 	return 0;
- }
- 
-+static int ccg_op_region_update(struct ucsi_ccg *uc, u32 cci)
-+{
-+	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_MESSAGE_IN);
-+	struct op_region *data = &uc->op_data;
-+	unsigned char *buf;
-+	size_t size = sizeof(data->message_in);
-+
-+	buf = kzalloc(size, GFP_ATOMIC);
-+	if (!buf)
-+		return -ENOMEM;
-+	if (UCSI_CCI_LENGTH(cci)) {
-+		int ret = ccg_read(uc, reg, (void *)buf, size);
-+
-+		if (ret) {
-+			kfree(buf);
-+			return ret;
-+		}
-+	}
-+
-+	spin_lock(&uc->op_lock);
-+	data->cci = cpu_to_le32(cci);
-+	if (UCSI_CCI_LENGTH(cci))
-+		memcpy(&data->message_in, buf, size);
-+	spin_unlock(&uc->op_lock);
-+	kfree(buf);
-+	return 0;
-+}
-+
- static int ucsi_ccg_init(struct ucsi_ccg *uc)
- {
- 	unsigned int count = 10;
- 	u8 data;
- 	int status;
- 
-+	spin_lock_init(&uc->op_lock);
-+
- 	data = CCGX_RAB_UCSI_CONTROL_STOP;
- 	status = ccg_write(uc, CCGX_RAB_UCSI_CONTROL, &data, sizeof(data));
- 	if (status < 0)
-@@ -520,9 +563,20 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
- 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
- 	struct ucsi_capability *cap;
- 	struct ucsi_altmode *alt;
--	int ret;
-+	int ret = 0;
-+
-+	if (offset == UCSI_CCI) {
-+		spin_lock(&uc->op_lock);
-+		memcpy(val, &(uc->op_data).cci, val_len);
-+		spin_unlock(&uc->op_lock);
-+	} else if (offset == UCSI_MESSAGE_IN) {
-+		spin_lock(&uc->op_lock);
-+		memcpy(val, &(uc->op_data).message_in, val_len);
-+		spin_unlock(&uc->op_lock);
-+	} else {
-+		ret = ccg_read(uc, reg, val, val_len);
-+	}
- 
--	ret = ccg_read(uc, reg, val, val_len);
- 	if (ret)
- 		return ret;
- 
-@@ -559,9 +613,18 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
- static int ucsi_ccg_async_write(struct ucsi *ucsi, unsigned int offset,
- 				const void *val, size_t val_len)
- {
-+	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
- 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
- 
--	return ccg_write(ucsi_get_drvdata(ucsi), reg, val, val_len);
-+	/*
-+	 * UCSI may read CCI instantly after async_write,
-+	 * clear CCI to avoid caller getting wrong data before we get CCI from ISR
-+	 */
-+	spin_lock(&uc->op_lock);
-+	uc->op_data.cci = 0;
-+	spin_unlock(&uc->op_lock);
-+
-+	return ccg_write(uc, reg, val, val_len);
- }
- 
- static int ucsi_ccg_sync_write(struct ucsi *ucsi, unsigned int offset,
-@@ -615,13 +678,18 @@ static irqreturn_t ccg_irq_handler(int irq, void *data)
- 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_CCI);
- 	struct ucsi_ccg *uc = data;
- 	u8 intr_reg;
--	u32 cci;
--	int ret;
-+	u32 cci = 0;
-+	int ret = 0;
- 
- 	ret = ccg_read(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
- 	if (ret)
- 		return ret;
- 
-+	if (!intr_reg)
-+		return IRQ_HANDLED;
-+	else if (!(intr_reg & UCSI_READ_INT))
-+		goto err_clear_irq;
-+
- 	ret = ccg_read(uc, reg, (void *)&cci, sizeof(cci));
- 	if (ret)
- 		goto err_clear_irq;
-@@ -629,13 +697,21 @@ static irqreturn_t ccg_irq_handler(int irq, void *data)
- 	if (UCSI_CCI_CONNECTOR(cci))
- 		ucsi_connector_change(uc->ucsi, UCSI_CCI_CONNECTOR(cci));
- 
--	if (test_bit(DEV_CMD_PENDING, &uc->flags) &&
--	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
--		complete(&uc->complete);
-+	/*
-+	 * As per CCGx UCSI interface guide, copy CCI and MESSAGE_IN
-+	 * to the OpRegion before clear the UCSI interrupt
-+	 */
-+	ret = ccg_op_region_update(uc, cci);
-+	if (ret)
-+		goto err_clear_irq;
- 
- err_clear_irq:
- 	ccg_write(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
- 
-+	if (!ret && test_bit(DEV_CMD_PENDING, &uc->flags) &&
-+	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
-+		complete(&uc->complete);
-+
- 	return IRQ_HANDLED;
- }
- 
--- 
-2.34.1
+>=20
+> And why is this patch not cc: stable and have a fixes tag if it resolves
+> a real issue for people?
+
+Sorry, I forget that. Will add it in next version.
+
+Thanks,
+Xu Yang
+
 
 
