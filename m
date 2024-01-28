@@ -1,53 +1,57 @@
-Return-Path: <linux-usb+bounces-5555-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5556-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A18D683F28F
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 01:32:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 351B783F295
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 01:34:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3E751C22151
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 00:32:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 22A9AB20E63
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 00:34:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F216EDF;
-	Sun, 28 Jan 2024 00:31:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D14A10E4;
+	Sun, 28 Jan 2024 00:34:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ABrX08xz"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GIlyJFvw"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF875639;
-	Sun, 28 Jan 2024 00:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8423645;
+	Sun, 28 Jan 2024 00:34:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706401916; cv=none; b=eV6uCh7ayzipOqEiOmVCBxgfuBR3EcAF5uLfOoO9v1/w59CkcnTWwVszZeruzuyMfu4u+2rMvcM/noFmOhUNjTe1X7gKVV0V3NLrOK7vzK69hVeL8FvayZmmRjFAhFlQrgzc6O7F+RujxMDzK7cKPtooZc2G422EDkU6sf2tUxI=
+	t=1706402055; cv=none; b=Y5Uu5geeldD3kWVcSPE0AFNh56s6l2xp8UIFaP2w0QYyEY6w0g0sDgYQ9l8kR/nTIphtBrQphjUxj1kV/rv6RpT6k8uL9X6ZOyigfYFg8ZxiwWcvdl1cTFYPpclNBzg+S+BebMl4Ojcl4eZmmaekhxI2EExAxliXL0wVWmP9JJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706401916; c=relaxed/simple;
-	bh=qlP6n9v3TH0FxuwrZQvfnV/2QUxKUnDCrI81F/8GsXE=;
+	s=arc-20240116; t=1706402055; c=relaxed/simple;
+	bh=spRHzYMhJX+uS5Ja/p6wMFDEhvTvQP4Bof3uxeB4/Mk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Miu/dJiS1FqKzqsGWfMUu88suW5/fDlbjLHwKcBj0gI39OgK02jLDBjvc1OJlZRpowWGQP7b3U3fprKnX6mlYI0AEnR0zSCJvU5bcu2tPTTVXlxFl/liRqxHwmTo9DbAoPLBq7o9/W0TufPQV4gaRCbFTt0YUZBifmzwOzQdTlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ABrX08xz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A0F0C433C7;
-	Sun, 28 Jan 2024 00:31:55 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=mBQnEB0VtP/vLZ5fbDx74MALcqz4zG0P0dhgXVf/Le7VcDiMbnoxlyEguDh9d4seLXqcTqizulSRCKUj9K6oc5niNGZqz6iNcGdHX1UOrjXW9busz2XUKzuPg+tRGhVuGVAWXU329CEgEbIrgGZCzkZvImkfF3ObJTfCrJM4LF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GIlyJFvw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DB24C433F1;
+	Sun, 28 Jan 2024 00:34:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1706401915;
-	bh=qlP6n9v3TH0FxuwrZQvfnV/2QUxKUnDCrI81F/8GsXE=;
+	s=korg; t=1706402055;
+	bh=spRHzYMhJX+uS5Ja/p6wMFDEhvTvQP4Bof3uxeB4/Mk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ABrX08xzseQcFjvDZHmY30jsyrZJPBNn+8+2nR822eGRHkvcYPI2OxYb61Ap/Fllj
-	 3Ksd7FopmLxZgkJdfxb2WrfGMBaEAOcpYQ/am0vYjXTwbaSzMS4zI4hnRLKAJofsSo
-	 begEJdfVeevxp3Lr3gHKbUTzo+RNrkhjsj2QXvyg=
-Date: Sat, 27 Jan 2024 16:31:54 -0800
+	b=GIlyJFvwLUJ9L59b98MMX8QDD4y7RhC9GOAdfNj1RsNvoVVPeAlC+NFcQxFUr8xsP
+	 zxMNwQHkojO1UoQztCzHZOGWpBEARSiLxvdcJZ1a5ptsI5H4wW6xPwTORr86TgayA0
+	 2dEthDUc09h1B1GzGlJ1Q7qulKrkQVCtpAPjfaGQ=
+Date: Sat, 27 Jan 2024 16:34:14 -0800
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Andreas Larsson <andreas@gaisler.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-	Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-	software@gaisler.com
-Subject: Re: [PATCH] usb: uhci-grlib: Explicitly include
- linux/platform_device.h
-Message-ID: <2024012740-amaretto-unvarying-465a@gregkh>
-References: <20240122082225.984523-1-andreas@gaisler.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3-of-simple: Stop using
+ of_reset_control_array_get() directly
+Message-ID: <2024012705-pantry-synapse-749a@gregkh>
+References: <20240124-dwc3-of-simple-reset-control-array-fix-v1-1-808182cc3f0e@pengutronix.de>
+ <2024012400-subtitle-magnitude-45ff@gregkh>
+ <63a1bfa2acb84bc24b87a8dbd60b665c733d13cd.camel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,24 +60,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240122082225.984523-1-andreas@gaisler.com>
+In-Reply-To: <63a1bfa2acb84bc24b87a8dbd60b665c733d13cd.camel@pengutronix.de>
 
-On Mon, Jan 22, 2024 at 09:22:25AM +0100, Andreas Larsson wrote:
-> This fixes relying upon linux/of_platform.h to include
-> linux/platform_device.h, which it no longer does, thereby fixing
-> compilation problems like:
+On Wed, Jan 24, 2024 at 01:56:18PM +0100, Philipp Zabel wrote:
+> On Mi, 2024-01-24 at 04:39 -0800, Greg Kroah-Hartman wrote:
+> > On Wed, Jan 24, 2024 at 12:26:20PM +0100, Philipp Zabel wrote:
+> > > Use of_reset_control_array_get_optional_exclusive() instead, it is
+> > > implemented as:
+> > > 
+> > >   static inline struct reset_control *
+> > >   of_reset_control_array_get_optional_exclusive(struct device_node *node)
+> > >   {
+> > >           return of_reset_control_array_get(node, false, true, true);
+> > >   }
+> > > 
+> > > This makes the code easier to understand and removes the last remaining
+> > > direct use of of_reset_control_array_get(). No functional changes.
+> > > 
+> > > Fixes: f4cc91ddd856 ("usb: dwc3: of-simple: remove Amlogic GXL and AXG compatibles")
+> > 
+> > No functional change, but a Fixes: tag?  That doesn't make sense to me,
+> > sorry.
 > 
-> In file included from drivers/usb/host/uhci-hcd.c:850:
-> drivers/usb/host/uhci-grlib.c: In function 'uhci_hcd_grlib_probe':
-> drivers/usb/host/uhci-grlib.c:92:29: error: invalid use of undefined type 'struct platform_device'
->    92 |  struct device_node *dn = op->dev.of_node;
->       |                             ^~
-> 
-> Fixes: 0d18bcdebb2f ("of: Stop circularly including of_device.h and of_platform.h")
+> The referenced patch made the boolean parameters const but missed that
+> there is a static inline wrapper for this combination. I can drop the
+> Fixes: tag and describe this in the text.
 
-I don't see this commit id in Linus's tree, where is it?
-
-thanks,
+That would be best, thanks.
 
 greg k-h
 
