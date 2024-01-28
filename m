@@ -1,55 +1,54 @@
-Return-Path: <linux-usb+bounces-5559-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5560-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C31383F2C3
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 02:34:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D77F283F2C9
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 02:50:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3891E284E6E
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 01:34:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9661F1F22870
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 01:50:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46AD11367;
-	Sun, 28 Jan 2024 01:34:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8393915C0;
+	Sun, 28 Jan 2024 01:50:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="A9AMkG+f"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N//n48oY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD1D3C17
-	for <linux-usb@vger.kernel.org>; Sun, 28 Jan 2024 01:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AD51362;
+	Sun, 28 Jan 2024 01:50:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706405676; cv=none; b=A7V4Ygbo1FKBRHiZgCKY44AyxSQoyAqOWNqik/21jIrbRSGJiBJ/wLbzJHrHZO7pSLDpFae95Z0oTm1WPBeXu5pVBvmllaSO6NgbdAW65eGQyQ5ZZRF1kKJm1ph028KhpR/7RwiyfaOujP6LK2VPcaBAuy+D5OQvBXEhSp/uuWA=
+	t=1706406609; cv=none; b=h3EzvtcBl585bkkmKJP00NVGw9FgoHy1yXkLoM1jkEU2beDMXUACHzKQRubzEMbwYP7Xd6JfjwHKqbV5Ut/KA5a3N60gkGvxMv7xy9sBVzYFtI6S5ZcrJ+VEWxrwwOnk5ZczsOjxwFbNjTx6k2JUVhp7Dbwx9n04Qs1qXmny4kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706405676; c=relaxed/simple;
-	bh=np5K1REvEvmNEJnKg04n0qEvHnlZZa3bolM0i6h/Rp8=;
+	s=arc-20240116; t=1706406609; c=relaxed/simple;
+	bh=SYut84D1SsmE34WN82G+H0xoo0YRKUwAO6HyDU0GEGU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GyPfvQIQUN/nO8eavxonRKZlWW8hPhjdTcvxKFEnV3GRToR+yKTD4mBjOHH1Z7WeP6BQuUSjXw5NUgwGeQwm3H45U8uZqT1V2pE9ZanIHEUTbXdWEF+iPz588BNUurMlN5tfWjxQNOl2L9jwP8MFYopJ1lF6YV7LvTIflNPL7zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=A9AMkG+f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E30CC433F1;
-	Sun, 28 Jan 2024 01:34:36 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nw9LTlXSUxYXvjRdpbyqAFgOzettCf4AdeCCOX49aqe+G66NHTtFX74Qb3HOOvpcuK+Qpb3gvAC+seU7cBEsCm+tahq6kyBjU4xNPqykYQbgnFt9fZmxJlo2OiMfXVphkpoiHXnb2JCCky12JcOTVqYnpnDhB/FcB/4Z3bG/2Os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N//n48oY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B04C433F1;
+	Sun, 28 Jan 2024 01:50:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1706405676;
-	bh=np5K1REvEvmNEJnKg04n0qEvHnlZZa3bolM0i6h/Rp8=;
+	s=korg; t=1706406608;
+	bh=SYut84D1SsmE34WN82G+H0xoo0YRKUwAO6HyDU0GEGU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A9AMkG+f8ugNSNs5k77jxS+Tc+WwuYTIkmUrviyzmNJAjSWRVRR3GUgdo9vFRWcM5
-	 0k82pzbVPlxRwbPfW24dBgRI1QFN8Of0KCwd7epVEeJPY1gTQq2+t8m0qGw8NNk+3M
-	 WLujW6EJ/4UD1vxbAMGZ86IGtjFUqBAAXHlPU9Vg=
-Date: Sat, 27 Jan 2024 17:34:34 -0800
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Vicki Pfau <vi@endrift.com>
-Cc: linux-usb@vger.kernel.org,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	Maxim Devaev <mdevaev@gmail.com>,
-	David Sands <david.sands@biamp.com>
-Subject: Re: [PATCH v2 1/3] USB: gadget: Move gadget-related ioctl codes to
- gadget-ioctl.h
-Message-ID: <2024012712-eskimo-rockiness-fa9e@gregkh>
-References: <20240118003758.1870691-1-vi@endrift.com>
- <20240118003758.1870691-2-vi@endrift.com>
+	b=N//n48oYvmeLyTEhOrGKToaMnL5VSe20rcdr/t5NveopbPzwBq220bdf9TwbaFS7e
+	 B9DOLH+jMJ8P/sxJ6PDxglj9WrLLu85rgS6xEYoXkHBzZ6mO2STCt+50/bL07CNA7n
+	 ng6SDF6ov0FpjdUAM4xa5EWjhD+CJTvcNcBRDMiw=
+Date: Sat, 27 Jan 2024 17:50:06 -0800
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Milan Broz <gmazyland@gmail.com>
+Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+	linux-scsi@vger.kernel.org, stern@rowland.harvard.edu,
+	oneukum@suse.com
+Subject: Re: [PATCH v6] usb-storage,uas: use host helper to generate driver
+ info
+Message-ID: <2024012744-ungreased-retention-4e84@gregkh>
+References: <20231103201709.124372-1-gmazyland@gmail.com>
+ <20231105182047.166007-1-gmazyland@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,54 +57,52 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240118003758.1870691-2-vi@endrift.com>
+In-Reply-To: <20231105182047.166007-1-gmazyland@gmail.com>
 
-On Wed, Jan 17, 2024 at 04:37:55PM -0800, Vicki Pfau wrote:
-> Since multiple different gadget types use similar ranges of ioctl IDs,
-> put all of them in the same file to avoid accidentally creating
-> overlaps.
+On Sun, Nov 05, 2023 at 07:20:47PM +0100, Milan Broz wrote:
+> The USB mass storage quirks flags can be stored in driver_info in
+> a 32-bit integer (unsigned long on 32-bit platforms).
+> As this attribute cannot be enlarged, we need to use some form
+> of translation of 64-bit quirk bits.
 > 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Vicki Pfau <vi@endrift.com>
-> ---
->  include/uapi/linux/usb/g_printer.h    | 23 ++----------------
->  include/uapi/linux/usb/g_uvc.h        |  4 +--
->  include/uapi/linux/usb/gadget-ioctl.h | 35 +++++++++++++++++++++++++++
->  include/uapi/linux/usb/gadgetfs.h     | 27 +--------------------
->  4 files changed, 39 insertions(+), 50 deletions(-)
->  create mode 100644 include/uapi/linux/usb/gadget-ioctl.h
+> This problem was discussed on the USB list
+> https://lore.kernel.org/linux-usb/f9e8acb5-32d5-4a30-859f-d4336a86b31a@gmail.com/
 > 
-> diff --git a/include/uapi/linux/usb/g_printer.h b/include/uapi/linux/usb/g_printer.h
-> index 7fc20e4b82f5..fc411ee3f5cc 100644
-> --- a/include/uapi/linux/usb/g_printer.h
-> +++ b/include/uapi/linux/usb/g_printer.h
-> @@ -3,34 +3,15 @@
->   * g_printer.h -- Header file for USB Printer gadget driver
->   *
->   * Copyright (C) 2007 Craig W. Nadler
-> - *
-> - * This program is free software; you can redistribute it and/or modify
-> - * it under the terms of the GNU General Public License as published by
-> - * the Free Software Foundation; either version 2 of the License, or
-> - * (at your option) any later version.
-> - *
-> - * This program is distributed in the hope that it will be useful,
-> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> - * GNU General Public License for more details.
-> - *
-> - * You should have received a copy of the GNU General Public License
-> - * along with this program; if not, write to the Free Software
-> - * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
->   */
+> The initial solution to use a static array extensively increased the size
+> of the kernel module, so I decided to try the second suggested solution:
+> generate a table by host-compiled program and use bit 31 to indicate
+> that the value is an index, not the actual value.
+> 
+> This patch adds a host-compiled program that processes unusual_devs.h
+> (and unusual_uas.h) and generates files usb-ids.c and usb-ids-uas.c
+> (for pre-processed USB device table with 32-bit device info).
+> These files also contain a generated translation table for driver_info
+> to 64-bit values.
+> 
+> The translation function is used only in usb-storage and uas modules; all
+> other USB storage modules store flags directly, using only 32-bit flags.
+> 
+> For 64-bit platforms, where unsigned long is 64-bit, we do not need to
+> convert quirk flags to 32-bit index; the translation function there uses
+> flags directly.
+> 
+> Signed-off-by: Milan Broz <gmazyland@gmail.com>
 
-Note, this "boiler-plate" text should be removed, you are right, but not
-in this commit, as it has nothing to do with it, and should be a
-stand-alone change.
+I see the need for this, but why now?  We haven't run out of ids yet
+have we?  Do we need to add another one?
 
-So can you please split this out?
+Also, after building, I get the following files marked by git as needed
+to be added to the tree, so perhaps you also need a .gitignore file:
 
-Otherwise, nice work,
+$ git status
+On branch work-testing
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	drivers/usb/storage/mkflags
+	drivers/usb/storage/usb-ids-uas.c
+	drivers/usb/storage/usb-ids.c
+
+thanks,
 
 greg k-h
 
