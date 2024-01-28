@@ -1,95 +1,136 @@
-Return-Path: <linux-usb+bounces-5582-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5583-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BBB283F8A2
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 18:46:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67FFF83F990
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 20:57:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2459B283E28
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 17:46:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0ADEB213F5
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 19:57:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3CF23C082;
-	Sun, 28 Jan 2024 17:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98EA23B7A0;
+	Sun, 28 Jan 2024 19:57:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jJdWUUtJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BXG8zA/D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163B0341BE;
-	Sun, 28 Jan 2024 17:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD1C2D61A;
+	Sun, 28 Jan 2024 19:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706463963; cv=none; b=VM1QFaPBBSG4JXGuzfP+g+SQkzh3sZcfaAWXR9xsRCXfzGSg4YazjIN2Q9ZBCVvf1wA+vHXdbBbMKmxFbX6lh9q5Cc3J4I8XLanHNxB0U0JWqAJRvobDcu/OMmngygy0f2hOilzAuUW92HmbFFXHw/bFTJJ882jTo9ZlvuQDUcI=
+	t=1706471863; cv=none; b=bTMuPxgWaJrF+tjXWg3v/yAuku8FveUSvR+54Ug1/rN3CKw/jcHj+l3U60DZ8bcml9sGKTNlZSGNw1udXr2xdqDw/NVFcJ/wjP568VESUz2NUAuJD2BLN5AwzoYq5DQGdVCl5L9UmjRNdxL/kVYSHnDb9lGrp/Wo5tP+C9AVgPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706463963; c=relaxed/simple;
-	bh=sIO3wHHo39yAt+Sx4SEMSlpQbOV/aWbYQX9jy+xoqSU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Bg6xRJS2FCn6qlB3093J15FLMazlavVEClM9bs+eZrTNyr6PYoHM3Jn+GqbIPwPdMbMMlFpt8Ky3U4cOyqMz4ycLKjpuKpH6QR7joK/poeZgxsreNqFEKDT+BjY1NOOK3cm8dPx8x6NdCwVVI6S8OIgdS6VH+iU78uU27jHkqhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jJdWUUtJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2BBC433F1;
-	Sun, 28 Jan 2024 17:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706463962;
-	bh=sIO3wHHo39yAt+Sx4SEMSlpQbOV/aWbYQX9jy+xoqSU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jJdWUUtJCzaGZXb64/lhGNvJxUJg79qynYhztyDX7X/mWwacnn/J9hTegrVUA7Ni4
-	 GOztKYiG1JEGoo/zTHd67395Q+w8+pEmy0c3ssxe2Wmtf69lCcb02KlFLi02cb3dwU
-	 0Z+30eD57wngdWDI4bYmklWERQCf2wTOP0WTkPZJPo5gjvufITLCH5dCOkCNK9XlZU
-	 BS9WbP4Kr4X5txyy8RivxuQsoO1H0cWvYJq2VGMb0QUqKFB2ZSedGpzTe/nES3wZjC
-	 vh3Ig6AdoWSwd4WQd8AerkrJRy6dOQMkgUPw5m64cM8jB8u1Lr6UoIvxQyOchbQReT
-	 zze27KmWTIwLg==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	cros-qcom-dts-watchers@chromium.org,
-	Luca Weiss <luca.weiss@fairphone.com>
-Cc: ~postmarketos/upstreaming@lists.sr.ht,
-	phone-devel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	s=arc-20240116; t=1706471863; c=relaxed/simple;
+	bh=/QPR/qDfKOcrRm87Xiko56xF+rk8CX4zS8nZ1M+uiRQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DueldzJyyUsRzLoZMK0PoKXdtvh2YrUZzK9dnN/jQP7PTi8xRi2ugujJPafPBscCLPqUoVHEJ5GDd4U2BzVwklJueFIrNJcuNXMEBrexc6uVHlTscbvBLtycigvb1/gLSHwPGCVfA5oNfBdRa618CYQcGbGwbFDauO9qbIWexVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BXG8zA/D; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1d76671e5a4so15934305ad.0;
+        Sun, 28 Jan 2024 11:57:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706471861; x=1707076661; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=W5rvBIjZB6f/l7eWENYMQezAWoxVgyOQwzg5bdH8Pi0=;
+        b=BXG8zA/DhJLW5CZCfCm+gs3W6vs+2j7OAZhAaS4ZKmHSCfAoqGjppCiQhv6meS3Aqy
+         c7DjeP6Js7AEMr54rzi5FMforfWNTB7bV2wVJHBu3BP4k7kcDuTRuqpNFH0OaWzPjylG
+         wYrE4KAu+hEh5ykJdf5haVqJFRRRPQGN8EzfkjgGn3xhvVSGyLlY81oNJ7Bf0b+oWF4S
+         kXgutm7PRZ9q21JL1rRQLvJyPlx0FwcUmTxyefbhrNwUYFq1TYWzYQgCcW9P5m+aVfy6
+         qFdRSD1iMWDZudLKdlHMt7k2/hYMe4S8wN4qYNmCQd+i0Iv2FPeXcMDEUjwCfFsrcqQE
+         hEAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706471861; x=1707076661;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W5rvBIjZB6f/l7eWENYMQezAWoxVgyOQwzg5bdH8Pi0=;
+        b=qEXigE0DOqaOvAxTU8+dUnCltn//2hnRxoK1mi+gq5ggl3H5qOkHIVP20qkUG18p+d
+         X3srX4xvatVw9A8MosX6U/xXe9rYEBPeOlb+KvK+L7u39zW7Une8W6e2dPeAwhXRxKyZ
+         TzOHOvO34GpEQgC/QWKiApr8oanGCEvVVCQYXTP+CPkdveDfDAeMIVTbm+UFGQ9ELtxD
+         gOTVV4m1SYfuG+LQrRJphv2ChTMJU+NtSpZ0N/OHCb3K3RAj+a1F2gyG/n3sLPVhyA/D
+         onFDCPlD1tP3312gXkvMukQDfUgX4PwoWeqxk5985qJ6KLDad5QktqK7OFi7pQzrvQcz
+         2xTQ==
+X-Gm-Message-State: AOJu0YzOLjza6ONDZvy9YVTn0K/5+D8gq7vjRQ5e4RVjUklAlseZQ9YD
+	N/GHakGWW0EP2ndfBNaDV8IIrxr40jwubpkzp0cFdrwiuGaxNMT2
+X-Google-Smtp-Source: AGHT+IF8LNP683ZdD/msPWljI3oDdXkEgvLJE+R0BVknqxo0xfx6cWTXK7UsQFjH7TI9GBziHWtryQ==
+X-Received: by 2002:a17:902:7845:b0:1d8:ca24:d654 with SMTP id e5-20020a170902784500b001d8ca24d654mr2260474pln.100.1706471860894;
+        Sun, 28 Jan 2024 11:57:40 -0800 (PST)
+Received: from kohshi54-ThinkCentre-M715q.. ([2404:7a80:c880:6500:7f79:d78c:e8ac:f086])
+        by smtp.gmail.com with ESMTPSA id g10-20020a170902c98a00b001d5e340d979sm1113365plc.6.2024.01.28.11.57.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Jan 2024 11:57:40 -0800 (PST)
+From: Kohshi Yamaguchi <kohshi54.yam@gmail.com>
+To: gregkh@linuxfoundation.org,
+	corbet@lwn.net
+Cc: Kohshi Yamaguchi <kohshi54.yam@gmail.com>,
+	linux-usb@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: (subset) [PATCH 0/3] Fairphone 5 PMIC-GLINK support (USB-C, charger, fuel gauge)
-Date: Sun, 28 Jan 2024 11:45:45 -0600
-Message-ID: <170646395045.64610.4594577290385724212.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231220-fp5-pmic-glink-v1-0-2a1f8e3c661c@fairphone.com>
-References: <20231220-fp5-pmic-glink-v1-0-2a1f8e3c661c@fairphone.com>
+	skhan@linuxfoundation.org
+Subject: [PATCH] doc: Fix malformed table in gadget-testing.rst
+Date: Mon, 29 Jan 2024 04:57:31 +0900
+Message-Id: <20240128195731.40003-1-kohshi54.yam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
+The table describing the NCM function attributes in gadget-testing.rst
+was malformed, causing Sphinx build warnings. This patch fixes the table
+format to align with the reStructuredText specifications.
 
-On Wed, 20 Dec 2023 11:02:55 +0100, Luca Weiss wrote:
-> This series adds all the necessary bits to enable USB-C role switching,
-> charger and fuel gauge (all via pmic-glink) on Fairphone 5.
-> 
-> One thing that could be made different is the pmic-glink compatible.
-> I've chosen to use qcm6490 compatible for it and not sc7280 since
-> there's plenty of firmware variety on sc7280-based platforms and they
-> might require different quirks in the future, so limit this PDOS quirk
-> to just qcm6490 for now.
-> 
-> [...]
+The border lines of the table were not properly aligned with the column
+headers, which was corrected by adjusting the border line lengths to
+match the headers.
 
-Applied, thanks!
+Signed-off-by: Kohshi Yamaguchi <kohshi54.yam@gmail.com>
+---
+ Documentation/usb/gadget-testing.rst | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-[3/3] arm64: dts: qcom: qcm6490-fairphone-fp5: Add PMIC GLINK
-      commit: 4cc920ed7899de91ea39b6c9bdb0ebb6860e8b47
-
-Best regards,
+diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+index 8cd62c466d20..1d1737f246df 100644
+--- a/Documentation/usb/gadget-testing.rst
++++ b/Documentation/usb/gadget-testing.rst
+@@ -448,17 +448,17 @@ Function-specific configfs interface
+ The function name to use when creating the function directory is "ncm".
+ The NCM function provides these attributes in its function directory:
+ 
+-	===============   ==================================================
+-	ifname		  network device interface name associated with this
+-			  function instance
+-	qmult		  queue length multiplier for high and super speed
+-	host_addr	  MAC address of host's end of this
+-			  Ethernet over USB link
+-	dev_addr	  MAC address of device's end of this
+-			  Ethernet over USB link
+-	max_segment_size  Segment size required for P2P connections. This
+-			  will set MTU to (max_segment_size - 14 bytes)
+-	===============   ==================================================
++	================   ==================================================
++	ifname		   network device interface name associated with this
++			   function instance
++	qmult		   queue length multiplier for high and super speed
++	host_addr	   MAC address of host's end of this
++			   Ethernet over USB link
++	dev_addr	   MAC address of device's end of this
++			   Ethernet over USB link
++	max_segment_size   Segment size required for P2P connections. This
++			   will set MTU to (max_segment_size - 14 bytes)
++	================   ==================================================
+ 
+ and after creating the functions/ncm.<instance name> they contain default
+ values: qmult is 5, dev_addr and host_addr are randomly selected.
 -- 
-Bjorn Andersson <andersson@kernel.org>
+2.34.1
+
 
