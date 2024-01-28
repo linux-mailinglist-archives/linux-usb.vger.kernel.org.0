@@ -1,58 +1,54 @@
-Return-Path: <linux-usb+bounces-5557-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5558-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D829283F297
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 01:38:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08FCC83F2BB
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 02:29:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66314B20EA2
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 00:38:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C0AE1C20CB0
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 01:29:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC2F21109;
-	Sun, 28 Jan 2024 00:38:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F23A15C0;
+	Sun, 28 Jan 2024 01:29:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yJF0FdT0"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WWQu0ndt"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4AF38B;
-	Sun, 28 Jan 2024 00:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112211113;
+	Sun, 28 Jan 2024 01:29:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706402293; cv=none; b=izCoFG/dU6/kqgD9xY/k8Mh8An24+LNQ1yCqa1KJI/ywoJFu/4Z924ht6Od+yyX/MBKM05luLTM+05u5CVou71JG2p62v4fcN48jY2dFnIpU5Ya2iKlR7d+WzpsWRz5KZMdvUIlE0gVTD1MzlLo1md/ZA7tPb3alw6MYt0FB904=
+	t=1706405386; cv=none; b=hq3i15swHjp+q+4eWZyHpxu57Vi0tcu32tc620aTW4AIIfNTEXQw2shW0FLD8u7XyM2eEUZxKSmEjrQyvI/8kdhboyGL5YVDkTCSY80sG/WJtgMyHHwRS/TW/qxGJFu8twQVeOlSVR52qFRBPwuEzLsgP1i3MhnFYFLHLDy6qxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706402293; c=relaxed/simple;
-	bh=f1JwIbdBjUssU7NR7CQ0VJJn3U/J1RElaxkhWnn95rU=;
+	s=arc-20240116; t=1706405386; c=relaxed/simple;
+	bh=iPTcSpldKderHfTJOkFotGkZbDgZ0cvvdpUsSLEh7zo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P3Xvxk/N5men/pa9ZG5ui6IcFrsGKgQGUmrFvpHsgQpok6kaXTQ/ZdF5p640RVH32ngV/YaFDpGYIQwFybh5YK8E2/uY0povW/miL0JL3M7RwgAyGQ4jtU4UAkQV5ldXDfKl+6Ar4i0mCwPoHbOlbJXy/0kJMvcL/R+1cFyn3c0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yJF0FdT0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A5A5C433F1;
-	Sun, 28 Jan 2024 00:38:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MFIKq/0bPvvShUPORPW3GtK1xMrIK5rM1qAnYVx5hlb/qApSFZ+RhAw4mGuf+OvQF5AdqBf6cZxfNY7p+r3OxazhhfLc16IRcK9pbu56mRURYryf7IlXSz7gAGzn4W7NYhgCij8sVcUllz/k2A1JCkMoc5rEvW5Ec9GnpWp+BU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WWQu0ndt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C809C433C7;
+	Sun, 28 Jan 2024 01:29:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1706402292;
-	bh=f1JwIbdBjUssU7NR7CQ0VJJn3U/J1RElaxkhWnn95rU=;
+	s=korg; t=1706405385;
+	bh=iPTcSpldKderHfTJOkFotGkZbDgZ0cvvdpUsSLEh7zo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=yJF0FdT0GiVwZjD718RftAjYV6JM07PCxik3HhvJlojlA6KSfWKEJ8cj7tH7OgUKm
-	 IAqC5+AkjgKKn/MnwMe66xAiqBYu4huu+zuhaj44mOh2AF4LmJstMJJbnG0vo/PsAo
-	 x87RtBj/qZelGTOwxatEMQz28hVZpQ6VqlPULzWI=
-Date: Sat, 27 Jan 2024 16:38:11 -0800
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3-of-simple: Stop using
- of_reset_control_array_get() directly
-Message-ID: <2024012705-rabid-slighting-8d50@gregkh>
-References: <20240124-dwc3-of-simple-reset-control-array-fix-v1-1-808182cc3f0e@pengutronix.de>
- <2024012400-subtitle-magnitude-45ff@gregkh>
- <63a1bfa2acb84bc24b87a8dbd60b665c733d13cd.camel@pengutronix.de>
- <2024012705-pantry-synapse-749a@gregkh>
+	b=WWQu0ndtlfL0E4lf7y8G3LZpKWF/0SDnXDILj175K62E4y/nqw6+1jL1MR64AmCXx
+	 jMi3LRMdQ4nsgMVEHmFUz2ZL3r9bNPJTXnrgDS9v+xoXW6ZFm8/0W2J5kiQXOd/OQt
+	 4AlBMD8/RN8AS2oE3vkBA3taVfjsWhrK/+hiBy4w=
+Date: Sat, 27 Jan 2024 17:29:43 -0800
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Kuen-Han Tsai <khtsai@google.com>, quic_prashk@quicinc.com,
+	stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: u_serial: Add null pointer checks after
+ RX/TX submission
+Message-ID: <2024012724-chirpy-google-51bb@gregkh>
+References: <20240116141801.396398-1-khtsai@google.com>
+ <02bec7b8-7754-4b9d-84ae-51621d6aa7ec@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,34 +57,29 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2024012705-pantry-synapse-749a@gregkh>
+In-Reply-To: <02bec7b8-7754-4b9d-84ae-51621d6aa7ec@kernel.org>
 
-On Sat, Jan 27, 2024 at 04:34:14PM -0800, Greg Kroah-Hartman wrote:
-> On Wed, Jan 24, 2024 at 01:56:18PM +0100, Philipp Zabel wrote:
-> > On Mi, 2024-01-24 at 04:39 -0800, Greg Kroah-Hartman wrote:
-> > > On Wed, Jan 24, 2024 at 12:26:20PM +0100, Philipp Zabel wrote:
-> > > > Use of_reset_control_array_get_optional_exclusive() instead, it is
-> > > > implemented as:
-> > > > 
-> > > >   static inline struct reset_control *
-> > > >   of_reset_control_array_get_optional_exclusive(struct device_node *node)
-> > > >   {
-> > > >           return of_reset_control_array_get(node, false, true, true);
-> > > >   }
-> > > > 
-> > > > This makes the code easier to understand and removes the last remaining
-> > > > direct use of of_reset_control_array_get(). No functional changes.
-> > > > 
-> > > > Fixes: f4cc91ddd856 ("usb: dwc3: of-simple: remove Amlogic GXL and AXG compatibles")
-> > > 
-> > > No functional change, but a Fixes: tag?  That doesn't make sense to me,
-> > > sorry.
+On Thu, Jan 18, 2024 at 10:27:54AM +0100, Jiri Slaby wrote:
+> On 16. 01. 24, 15:16, Kuen-Han Tsai wrote:
+> > Commit ffd603f21423 ("usb: gadget: u_serial: Add null pointer check in
+> > gs_start_io") adds null pointer checks to gs_start_io(), but it doesn't
+> > fully fix the potential null pointer dereference issue. While
+> > gserial_connect() calls gs_start_io() with port_lock held, gs_start_rx()
+> > and gs_start_tx() release the lock during endpoint request submission.
+> > This creates a window where gs_close() could set port->port_tty to NULL,
+> > leading to a dereference when the lock is reacquired.
 > > 
-> > The referenced patch made the boolean parameters const but missed that
-> > there is a static inline wrapper for this combination. I can drop the
-> > Fixes: tag and describe this in the text.
+> > This patch adds a null pointer check for port->port_tty after RX/TX
+> > submission, and removes the initial null pointer check in gs_start_io()
+> > since the caller must hold port_lock and guarantee non-null values for
+> > port_usb and port_tty.
 > 
-> That would be best, thanks.
+> Or you switch to tty_port refcounting and need not fiddling with this at all
+> ;).
 
-Ah you already did so, thanks!
+I agree, Kuen-Han, why not do that instead?
+
+thanks,
+
+greg k-h
 
