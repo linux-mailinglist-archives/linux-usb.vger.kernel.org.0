@@ -1,60 +1,61 @@
-Return-Path: <linux-usb+bounces-5569-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5570-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D83783F6C5
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 17:17:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8541183F706
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 17:23:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2A961F25561
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 16:17:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E81DDB20A28
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 16:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C54752F68;
-	Sun, 28 Jan 2024 16:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96CEE3C684;
+	Sun, 28 Jan 2024 16:13:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jzDFgHKp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A8/dH8Y1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFDE2524CC;
-	Sun, 28 Jan 2024 16:12:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5B35B211;
+	Sun, 28 Jan 2024 16:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706458327; cv=none; b=m5qKnB4VeAde83Zk+g5VFuQ09MvDHvMYSBU2VTU5k1fPtn1SzXYckwgbA93yffzB2zuE1pl1WAXy0IMdTDCVLPreBVxpSUb9KoRERxWVRiOv7Nmy0o5ifJms+5LShOuA0HAiQYo3f1VrNE+6ao2ZyZZq+UEjgNJrQgCbB9xn8rs=
+	t=1706458403; cv=none; b=SWppDSv1EEPTo5RS3/vf/xXbdCcGZqMX2nfbegJJJQXSDRnloCUSRbmnhY7gasATiYWQwc6Ys3DbzkbVStobVvGfAki2RxTo8H0dwgg4k/wkIlEYrbxJX/HX+xQA3m7tbTlZ8bnmYVkQ//d1G1hgTO+CXPp9HX1FEFg1bcj30M4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706458327; c=relaxed/simple;
-	bh=ix8XBCGUm23P7dIAwb+lQE/fHDfnA07Y2g69GvMJYpU=;
+	s=arc-20240116; t=1706458403; c=relaxed/simple;
+	bh=IIE6rK5b2ck2c5U9EOv80xRLq3JhUK13cGioQvyBkoo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mo2CzbuMlH8DolGafKijQRcMl0XIf83aVVFsOCvfiHgmir6O9zvVsTpdDJ1YB9XbGpBB4JNmafOx3eSUH0esMGa5JbwmLwEasZAd7zpj5wImnwMJBa5ZGNdwSdbRpwXHOw/aN7g3DPzSaZd1HLKUBNQCwtiwdLcZOp7bz35K/FU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jzDFgHKp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2541C433B2;
-	Sun, 28 Jan 2024 16:12:05 +0000 (UTC)
+	 MIME-Version; b=nbCRSamw/i3wA+WbV2Pewkyglcsdk7PV9o5pvtZvyWdf5dBwkJsiaPy8Jr29TRiXb/WhROzbIWmIjxD3t28RiNhvRPN7P0yeSq+GoNdu+qFERhjiyW+omGj3+KinS/ZM/dEBNRbnITg3gZ7Z+QQbXSXi85RSM4t8rP1jZ/xoxfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A8/dH8Y1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6AC6C43390;
+	Sun, 28 Jan 2024 16:13:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706458326;
-	bh=ix8XBCGUm23P7dIAwb+lQE/fHDfnA07Y2g69GvMJYpU=;
+	s=k20201202; t=1706458402;
+	bh=IIE6rK5b2ck2c5U9EOv80xRLq3JhUK13cGioQvyBkoo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jzDFgHKpoBhdxNKBHijKbQPj/rtRnky77mXtQGkBiWkS/rG/vdff2FlXmdhHiTBZm
-	 13k1PPCdjW8x69XQThZ7RBmigLeo8w6Fx2IrlnVe2AorM9B8JT+6v6IKAYBZEX31N0
-	 ayPPw9JUHMJA9YTttu80FEuUhNvVkFqiGzm3gvnprmkiOdK8fF3zYVi0iFAogA0B0g
-	 Wti4IAZiNk6OIoiam1OEVIagSDMP/tbFKCNi0fJHDPjbHQ/f2fSyJ7QiDN0YOua73F
-	 ZImn9+VRi7x3rNTd7Bkx9RoBBM4BIvkHfp1qR9UrAGT4cBdacE+LKO02IHs+ZyFVqB
-	 a+6a52K074yxw==
+	b=A8/dH8Y1KQPzTOKd10VuVEGhI/tvS4s4YzBOE4eLsIgRQu0Jz7ryiHJdXuH4Jdzog
+	 NLvpS5vJ43/vCYNbzfhB/x69ewu368wvtQQN1qDRpHoIiOe+RibHJLqVMJ8ZaQXtKQ
+	 YsxIjgOmSJyvJq/NmKhQKMrlWleksyBu6AJ24nSkB2X9nFLoM4V6uxmLndOXTcNR1b
+	 RNcv8zbSXJaiN5F5ndF6dsWHDELoygU8SWiCegEyow6dUhmbR+HoFFQysbwXZxZPXP
+	 NX9ihskK9ToWAmso/FEyubjZc7Q6sGJ3vdBUN8TJxm5Njjp7sY3Uz1W783ekTtQa1G
+	 JwerPtpb0pREw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Yinbo Zhu <zhuyinbo@loongson.cn>,
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Kuen-Han Tsai <khtsai@google.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
 	mathias.nyman@intel.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.7 20/39] usb: xhci-plat: fix usb disconnect issue after s4
-Date: Sun, 28 Jan 2024 11:10:40 -0500
-Message-ID: <20240128161130.200783-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 04/31] xhci: fix possible null pointer deref during xhci urb enqueue
+Date: Sun, 28 Jan 2024 11:12:34 -0500
+Message-ID: <20240128161315.201999-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240128161130.200783-1-sashal@kernel.org>
-References: <20240128161130.200783-1-sashal@kernel.org>
+In-Reply-To: <20240128161315.201999-1-sashal@kernel.org>
+References: <20240128161315.201999-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,90 +64,99 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7.2
+X-stable-base: Linux 6.6.14
 Content-Transfer-Encoding: 8bit
 
-From: Yinbo Zhu <zhuyinbo@loongson.cn>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-[ Upstream commit 6d6887c42e946f43bed2e64571a40c8476a1e4a9 ]
+[ Upstream commit e2e2aacf042f52854c92775b7800ba668e0bdfe4 ]
 
-The xhci retaining bogus hardware states cause usb disconnect devices
-connected before hibernation(s4) and refer to the commit 'f3d478858be
-("usb: ohci-platform: fix usb disconnect issue after s4")' which set
-flag "hibernated" as true when resume-from-hibernation and that the
-drivers will reset the hardware to get rid of any existing state and
-make sure resume from hibernation re-enumerates everything for xhci.
+There is a short gap between urb being submitted and actually added to the
+endpoint queue (linked). If the device is disconnected during this time
+then usb core is not yet aware of the pending urb, and device may be freed
+just before xhci_urq_enqueue() continues, dereferencing the freed device.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Link: https://lore.kernel.org/r/20231228071113.1719-1-zhuyinbo@loongson.cn
+Freeing the device is protected by the xhci spinlock, so make sure we take
+and keep the lock while checking that device exists, dereference it, and
+add the urb to the queue.
+
+Remove the unnecessary URB check, usb core checks it before calling
+xhci_urb_enqueue()
+
+Suggested-by: Kuen-Han Tsai <khtsai@google.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20231201150647.1307406-20-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-plat.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
+ drivers/usb/host/xhci.c | 40 +++++++++++++++++++++++-----------------
+ 1 file changed, 23 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 732cdeb73920..f0853c4478f5 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -433,7 +433,7 @@ void xhci_plat_remove(struct platform_device *dev)
- }
- EXPORT_SYMBOL_GPL(xhci_plat_remove);
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 132b76fa7ca6..e39c5ba9b7c7 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1498,24 +1498,7 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ 	struct urb_priv	*urb_priv;
+ 	int num_tds;
  
--static int __maybe_unused xhci_plat_suspend(struct device *dev)
-+static int xhci_plat_suspend(struct device *dev)
- {
- 	struct usb_hcd	*hcd = dev_get_drvdata(dev);
- 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-@@ -461,7 +461,7 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
- 	return 0;
- }
+-	if (!urb)
+-		return -EINVAL;
+-	ret = xhci_check_args(hcd, urb->dev, urb->ep,
+-					true, true, __func__);
+-	if (ret <= 0)
+-		return ret ? ret : -EINVAL;
+-
+-	slot_id = urb->dev->slot_id;
+ 	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
+-	ep_state = &xhci->devs[slot_id]->eps[ep_index].ep_state;
+-
+-	if (!HCD_HW_ACCESSIBLE(hcd))
+-		return -ESHUTDOWN;
+-
+-	if (xhci->devs[slot_id]->flags & VDEV_PORT_ERROR) {
+-		xhci_dbg(xhci, "Can't queue urb, port error, link inactive\n");
+-		return -ENODEV;
+-	}
  
--static int __maybe_unused xhci_plat_resume(struct device *dev)
-+static int xhci_plat_resume_common(struct device *dev, struct pm_message pmsg)
- {
- 	struct usb_hcd	*hcd = dev_get_drvdata(dev);
- 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-@@ -483,7 +483,7 @@ static int __maybe_unused xhci_plat_resume(struct device *dev)
- 	if (ret)
- 		goto disable_clks;
+ 	if (usb_endpoint_xfer_isoc(&urb->ep->desc))
+ 		num_tds = urb->number_of_packets;
+@@ -1554,12 +1537,35 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
  
--	ret = xhci_resume(xhci, PMSG_RESUME);
-+	ret = xhci_resume(xhci, pmsg);
- 	if (ret)
- 		goto disable_clks;
+ 	spin_lock_irqsave(&xhci->lock, flags);
  
-@@ -502,6 +502,16 @@ static int __maybe_unused xhci_plat_resume(struct device *dev)
- 	return ret;
- }
- 
-+static int xhci_plat_resume(struct device *dev)
-+{
-+	return xhci_plat_resume_common(dev, PMSG_RESUME);
-+}
++	ret = xhci_check_args(hcd, urb->dev, urb->ep,
++			      true, true, __func__);
++	if (ret <= 0) {
++		ret = ret ? ret : -EINVAL;
++		goto free_priv;
++	}
 +
-+static int xhci_plat_restore(struct device *dev)
-+{
-+	return xhci_plat_resume_common(dev, PMSG_RESTORE);
-+}
++	slot_id = urb->dev->slot_id;
 +
- static int __maybe_unused xhci_plat_runtime_suspend(struct device *dev)
- {
- 	struct usb_hcd  *hcd = dev_get_drvdata(dev);
-@@ -524,7 +534,12 @@ static int __maybe_unused xhci_plat_runtime_resume(struct device *dev)
- }
- 
- const struct dev_pm_ops xhci_plat_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(xhci_plat_suspend, xhci_plat_resume)
-+	.suspend = pm_sleep_ptr(xhci_plat_suspend),
-+	.resume = pm_sleep_ptr(xhci_plat_resume),
-+	.freeze = pm_sleep_ptr(xhci_plat_suspend),
-+	.thaw = pm_sleep_ptr(xhci_plat_resume),
-+	.poweroff = pm_sleep_ptr(xhci_plat_suspend),
-+	.restore = pm_sleep_ptr(xhci_plat_restore),
- 
- 	SET_RUNTIME_PM_OPS(xhci_plat_runtime_suspend,
- 			   xhci_plat_runtime_resume,
++	if (!HCD_HW_ACCESSIBLE(hcd)) {
++		ret = -ESHUTDOWN;
++		goto free_priv;
++	}
++
++	if (xhci->devs[slot_id]->flags & VDEV_PORT_ERROR) {
++		xhci_dbg(xhci, "Can't queue urb, port error, link inactive\n");
++		ret = -ENODEV;
++		goto free_priv;
++	}
++
+ 	if (xhci->xhc_state & XHCI_STATE_DYING) {
+ 		xhci_dbg(xhci, "Ep 0x%x: URB %p submitted for non-responsive xHCI host.\n",
+ 			 urb->ep->desc.bEndpointAddress, urb);
+ 		ret = -ESHUTDOWN;
+ 		goto free_priv;
+ 	}
++
++	ep_state = &xhci->devs[slot_id]->eps[ep_index].ep_state;
++
+ 	if (*ep_state & (EP_GETTING_STREAMS | EP_GETTING_NO_STREAMS)) {
+ 		xhci_warn(xhci, "WARN: Can't enqueue URB, ep in streams transition state %x\n",
+ 			  *ep_state);
 -- 
 2.43.0
 
