@@ -1,65 +1,61 @@
-Return-Path: <linux-usb+bounces-5576-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5577-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F03B83F76C
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 17:33:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDA4083F7AF
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 17:39:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70DC91C224BF
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 16:33:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C4771C22AC1
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 16:39:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C386BB3B;
-	Sun, 28 Jan 2024 16:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFE5512BF17;
+	Sun, 28 Jan 2024 16:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e5tOMvaj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W0OQR/mO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257396BB21;
-	Sun, 28 Jan 2024 16:14:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EF212BF03;
+	Sun, 28 Jan 2024 16:15:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706458478; cv=none; b=r/i42GDreUYvB3WID3AGpWfqa+NJNKbTc5V4DVna02ayH0Bj1B+YwvcK2lSPkqILisI/TbtruvBoDAKfX4PxV277aap56s2v03aRsfwQQUenS8/PrmDjH29S8voYQg6503x3nhr0y9s/bfxo6bEEjOx6fsA73WunZsYDtwMj+FU=
+	t=1706458532; cv=none; b=IWAfZM/xnbLnV4ivkhUYY3rDxinXIeXMuBeFydLd2miPm6mF2QNE2DfOOjQLDqc19J6WTXjZOaSg3oAvDeztJ9fWaRd0EndghZ6nKoHoGreXDudgDbVYQZ3QuWXNbX6Fga/je2Dcxmtxhk3gwhP7tbVYD6izr5t6Ur08/KXDg3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706458478; c=relaxed/simple;
-	bh=uC0Hs3C0WtDUEDquvWouJ2BURg+YI1K4dtBYkDHKCOA=;
+	s=arc-20240116; t=1706458532; c=relaxed/simple;
+	bh=o4xzHRBMA12JJMcNnt3IiYQvBBwbOUYyVDvqcLYgOUc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OnYLKzB32GiMsb6bKZz8ChBnzC2eaaiSrfV2l9l++VIw8WeezmZ0rYzcr74llEjmfB7X7eEUaxxWevq1znREJPyT/5pMyMqIqLFjsnuhoRlnmWRkPTI39DrJwXBBUH0d1Zpc/c9ZaLGew4btJh4mJdkl7RWZ7mG9ryOes5Ksx+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e5tOMvaj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E9ADC433F1;
-	Sun, 28 Jan 2024 16:14:36 +0000 (UTC)
+	 MIME-Version; b=GXwwNSoqB+dj+k3TUr/byU8YnPvk+Zkz2P98z+zbQZ/JHi9PtqtEBLgEBX5py+6AaYU7E5Y2UTKpP9FtRZBJ7HDN3Yt4afyKYHzR/02kK7aoalKj7JjkFo8XKRWqNC/oSpHQivn1x2QyCEBZTmu/c4kxR76QaGRc65X4TJYIwjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W0OQR/mO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E217AC43390;
+	Sun, 28 Jan 2024 16:15:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706458477;
-	bh=uC0Hs3C0WtDUEDquvWouJ2BURg+YI1K4dtBYkDHKCOA=;
+	s=k20201202; t=1706458531;
+	bh=o4xzHRBMA12JJMcNnt3IiYQvBBwbOUYyVDvqcLYgOUc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=e5tOMvajTdCzueptwId7GAvhmnH/vUaR++cZSYfbaqQFKPvz1mMIdRZeAvN3ZTaZI
-	 XStM0nCoQNtJUeE6KX6PRW6COLDZ3PnSAH+Si3DzolGr0d/jKC3N/Nb1WvuHAXeMaH
-	 BIKYQ6KwDVPuYJXc0SUPoAYy1LSCGdaTtdITGf+ZqVmDzfVr39DQKBnaMl6/RUxOlX
-	 4FF6bFZxQdX/O325Ei8zJAgNQJ2D1nw8HLZ4WrXl+ZEQwfik/WVMxS592pbdtiefV4
-	 rpv1YiSP4fFPeZRxXqBTUEnOLqeHsI2HymfTgOxZii98YZMT6FvHtrD8LvoFjT63gg
-	 JHewdss8CdTMQ==
+	b=W0OQR/mO9KfpYIXImhNNiS5e7bu/em4GkAYOPYkiK9aha5lxdF3tf6+Bbak3iKHXm
+	 pqmFPKw4LcaaJamuRncDQN0gV4hDYXqmxbHBigRJ3Gq72nJLFmiftknWEZXStmnI4+
+	 pRHHrVsanQmjW4HozFthB2poAxQBjsLkp5HlL8i84jge/kBNWHkJ7PJh157GFVhZrv
+	 k1sM3iidLDK8GZp+oxGnZbndO28TNIBJ28bez5m/3lPdsyAHEHWlZxIOFmuYa1aJWe
+	 nRulqTHpZhvv8/i2pFPNGbIwBSGm0UkXfx1JiRbqB46tyj4l1OP/EBzO0rP/ZUygcz
+	 OLLWGA/pmcsLA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Hardik Gajjar <hgajjar@de.adit-jv.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Kuen-Han Tsai <khtsai@google.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	mathias.nyman@linux.intel.com,
-	stanley_chang@realtek.com,
-	johan+linaro@kernel.org,
-	royluo@google.com,
-	ricardo.canuelo@collabora.com,
+	mathias.nyman@intel.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 06/27] usb: hub: Add quirk to decrease IN-ep poll interval for Microchip USB491x hub
-Date: Sun, 28 Jan 2024 11:13:51 -0500
-Message-ID: <20240128161424.203600-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 04/19] xhci: fix possible null pointer deref during xhci urb enqueue
+Date: Sun, 28 Jan 2024 11:15:01 -0500
+Message-ID: <20240128161524.204182-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240128161424.203600-1-sashal@kernel.org>
-References: <20240128161424.203600-1-sashal@kernel.org>
+In-Reply-To: <20240128161524.204182-1-sashal@kernel.org>
+References: <20240128161524.204182-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,98 +64,99 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.75
+X-stable-base: Linux 5.15.148
 Content-Transfer-Encoding: 8bit
 
-From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-[ Upstream commit 855d75cf8311fee156fabb5639bb53757ca83dd4 ]
+[ Upstream commit e2e2aacf042f52854c92775b7800ba668e0bdfe4 ]
 
-There is a potential delay in notifying Linux USB drivers of downstream
-USB bus activity when connecting a high-speed or superSpeed device via the
-Microchip USB491x hub. This delay is due to the fixed bInterval value of
-12 in the silicon of the Microchip USB491x hub.
+There is a short gap between urb being submitted and actually added to the
+endpoint queue (linked). If the device is disconnected during this time
+then usb core is not yet aware of the pending urb, and device may be freed
+just before xhci_urq_enqueue() continues, dereferencing the freed device.
 
-Microchip requested to ignore the device descriptor and decrease that
-value to 9 as it was too late to modify that in silicon.
+Freeing the device is protected by the xhci spinlock, so make sure we take
+and keep the lock while checking that device exists, dereference it, and
+add the urb to the queue.
 
-This patch speeds up the USB enummeration process that helps to pass
-Apple Carplay certifications and improve the User experience when utilizing
-the USB device via Microchip Multihost USB491x Hub.
+Remove the unnecessary URB check, usb core checks it before calling
+xhci_urb_enqueue()
 
-A new hub quirk HUB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL speeds up
-the notification process for Microchip USB491x hub by limiting
-the maximum bInterval value to 9.
-
-Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/20231205181829.127353-2-hgajjar@de.adit-jv.com
+Suggested-by: Kuen-Han Tsai <khtsai@google.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20231201150647.1307406-20-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/hub.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/usb/host/xhci.c | 40 +++++++++++++++++++++++-----------------
+ 1 file changed, 23 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 9163fd5af046..4f181110d00d 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -47,12 +47,18 @@
- #define USB_VENDOR_TEXAS_INSTRUMENTS		0x0451
- #define USB_PRODUCT_TUSB8041_USB3		0x8140
- #define USB_PRODUCT_TUSB8041_USB2		0x8142
-+#define USB_VENDOR_MICROCHIP			0x0424
-+#define USB_PRODUCT_USB4913			0x4913
-+#define USB_PRODUCT_USB4914			0x4914
-+#define USB_PRODUCT_USB4915			0x4915
- #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	BIT(0)
- #define HUB_QUIRK_DISABLE_AUTOSUSPEND		BIT(1)
-+#define HUB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL	BIT(2)
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 5c9d3be136d2..6c8c9cbcd05d 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1644,24 +1644,7 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ 	struct urb_priv	*urb_priv;
+ 	int num_tds;
  
- #define USB_TP_TRANSMISSION_DELAY	40	/* ns */
- #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
- #define USB_PING_RESPONSE_TIME		400	/* ns */
-+#define USB_REDUCE_FRAME_INTR_BINTERVAL	9
+-	if (!urb)
+-		return -EINVAL;
+-	ret = xhci_check_args(hcd, urb->dev, urb->ep,
+-					true, true, __func__);
+-	if (ret <= 0)
+-		return ret ? ret : -EINVAL;
+-
+-	slot_id = urb->dev->slot_id;
+ 	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
+-	ep_state = &xhci->devs[slot_id]->eps[ep_index].ep_state;
+-
+-	if (!HCD_HW_ACCESSIBLE(hcd))
+-		return -ESHUTDOWN;
+-
+-	if (xhci->devs[slot_id]->flags & VDEV_PORT_ERROR) {
+-		xhci_dbg(xhci, "Can't queue urb, port error, link inactive\n");
+-		return -ENODEV;
+-	}
  
- /* Protect struct usb_device->state and ->children members
-  * Note: Both are also protected by ->dev.sem, except that ->state can
-@@ -1904,6 +1910,14 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
- 		usb_autopm_get_interface_no_resume(intf);
- 	}
+ 	if (usb_endpoint_xfer_isoc(&urb->ep->desc))
+ 		num_tds = urb->number_of_packets;
+@@ -1700,12 +1683,35 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
  
-+	if ((id->driver_info & HUB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL) &&
-+	    desc->endpoint[0].desc.bInterval > USB_REDUCE_FRAME_INTR_BINTERVAL) {
-+		desc->endpoint[0].desc.bInterval =
-+			USB_REDUCE_FRAME_INTR_BINTERVAL;
-+		/* Tell the HCD about the interrupt ep's new bInterval */
-+		usb_set_interface(hdev, 0, 0);
+ 	spin_lock_irqsave(&xhci->lock, flags);
+ 
++	ret = xhci_check_args(hcd, urb->dev, urb->ep,
++			      true, true, __func__);
++	if (ret <= 0) {
++		ret = ret ? ret : -EINVAL;
++		goto free_priv;
 +	}
 +
- 	if (hub_configure(hub, &desc->endpoint[0].desc) >= 0) {
- 		onboard_hub_create_pdevs(hdev, &hub->onboard_hub_devs);
- 
-@@ -5885,6 +5899,21 @@ static const struct usb_device_id hub_id_table[] = {
-       .idVendor = USB_VENDOR_TEXAS_INSTRUMENTS,
-       .idProduct = USB_PRODUCT_TUSB8041_USB3,
-       .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
-+	{ .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-+			| USB_DEVICE_ID_MATCH_PRODUCT,
-+	  .idVendor = USB_VENDOR_MICROCHIP,
-+	  .idProduct = USB_PRODUCT_USB4913,
-+	  .driver_info = HUB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL},
-+	{ .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-+			| USB_DEVICE_ID_MATCH_PRODUCT,
-+	  .idVendor = USB_VENDOR_MICROCHIP,
-+	  .idProduct = USB_PRODUCT_USB4914,
-+	  .driver_info = HUB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL},
-+	{ .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-+			| USB_DEVICE_ID_MATCH_PRODUCT,
-+	  .idVendor = USB_VENDOR_MICROCHIP,
-+	  .idProduct = USB_PRODUCT_USB4915,
-+	  .driver_info = HUB_QUIRK_REDUCE_FRAME_INTR_BINTERVAL},
-     { .match_flags = USB_DEVICE_ID_MATCH_DEV_CLASS,
-       .bDeviceClass = USB_CLASS_HUB},
-     { .match_flags = USB_DEVICE_ID_MATCH_INT_CLASS,
++	slot_id = urb->dev->slot_id;
++
++	if (!HCD_HW_ACCESSIBLE(hcd)) {
++		ret = -ESHUTDOWN;
++		goto free_priv;
++	}
++
++	if (xhci->devs[slot_id]->flags & VDEV_PORT_ERROR) {
++		xhci_dbg(xhci, "Can't queue urb, port error, link inactive\n");
++		ret = -ENODEV;
++		goto free_priv;
++	}
++
+ 	if (xhci->xhc_state & XHCI_STATE_DYING) {
+ 		xhci_dbg(xhci, "Ep 0x%x: URB %p submitted for non-responsive xHCI host.\n",
+ 			 urb->ep->desc.bEndpointAddress, urb);
+ 		ret = -ESHUTDOWN;
+ 		goto free_priv;
+ 	}
++
++	ep_state = &xhci->devs[slot_id]->eps[ep_index].ep_state;
++
+ 	if (*ep_state & (EP_GETTING_STREAMS | EP_GETTING_NO_STREAMS)) {
+ 		xhci_warn(xhci, "WARN: Can't enqueue URB, ep in streams transition state %x\n",
+ 			  *ep_state);
 -- 
 2.43.0
 
