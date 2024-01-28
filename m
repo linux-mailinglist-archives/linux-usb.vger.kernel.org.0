@@ -1,108 +1,110 @@
-Return-Path: <linux-usb+bounces-5560-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5561-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D77F283F2C9
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 02:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8935E83F3ED
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 05:54:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9661F1F22870
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 01:50:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F3CE1F223C0
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Jan 2024 04:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8393915C0;
-	Sun, 28 Jan 2024 01:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BE6B6ABF;
+	Sun, 28 Jan 2024 04:53:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N//n48oY"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="1gFmqsBx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AD51362;
-	Sun, 28 Jan 2024 01:50:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646E46116;
+	Sun, 28 Jan 2024 04:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706406609; cv=none; b=h3EzvtcBl585bkkmKJP00NVGw9FgoHy1yXkLoM1jkEU2beDMXUACHzKQRubzEMbwYP7Xd6JfjwHKqbV5Ut/KA5a3N60gkGvxMv7xy9sBVzYFtI6S5ZcrJ+VEWxrwwOnk5ZczsOjxwFbNjTx6k2JUVhp7Dbwx9n04Qs1qXmny4kg=
+	t=1706417633; cv=none; b=eM0zjTPv7YxiKEUc8S2wuoiSmWBtscH0OuELLLNHpWBjgxHXiG5a+9sUOFJ/zeFQNWX9xiBRTTjos/hng3kvwtMVSiVoW5YLYjaXlSBp4ZpyxCwY0mdQr60zQBcwH9+5RwMi9AWePZ4EAvpBl0zeebql1HtO25yelkpUJXoEWaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706406609; c=relaxed/simple;
-	bh=SYut84D1SsmE34WN82G+H0xoo0YRKUwAO6HyDU0GEGU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nw9LTlXSUxYXvjRdpbyqAFgOzettCf4AdeCCOX49aqe+G66NHTtFX74Qb3HOOvpcuK+Qpb3gvAC+seU7cBEsCm+tahq6kyBjU4xNPqykYQbgnFt9fZmxJlo2OiMfXVphkpoiHXnb2JCCky12JcOTVqYnpnDhB/FcB/4Z3bG/2Os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N//n48oY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B04C433F1;
-	Sun, 28 Jan 2024 01:50:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1706406608;
-	bh=SYut84D1SsmE34WN82G+H0xoo0YRKUwAO6HyDU0GEGU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N//n48oYvmeLyTEhOrGKToaMnL5VSe20rcdr/t5NveopbPzwBq220bdf9TwbaFS7e
-	 B9DOLH+jMJ8P/sxJ6PDxglj9WrLLu85rgS6xEYoXkHBzZ6mO2STCt+50/bL07CNA7n
-	 ng6SDF6ov0FpjdUAM4xa5EWjhD+CJTvcNcBRDMiw=
-Date: Sat, 27 Jan 2024 17:50:06 -0800
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Milan Broz <gmazyland@gmail.com>
-Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-	linux-scsi@vger.kernel.org, stern@rowland.harvard.edu,
-	oneukum@suse.com
-Subject: Re: [PATCH v6] usb-storage,uas: use host helper to generate driver
- info
-Message-ID: <2024012744-ungreased-retention-4e84@gregkh>
-References: <20231103201709.124372-1-gmazyland@gmail.com>
- <20231105182047.166007-1-gmazyland@gmail.com>
+	s=arc-20240116; t=1706417633; c=relaxed/simple;
+	bh=N8OAfAAMd64feZpXPmfhCadvsAZERJxQmTW0JK/hyXM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y9oVjaIHvC/gzL7zi4kjuw9kMBo23vhya5vkoSghNEGL/6A2DY2c2OJuRXM2JqmKqNuN0TGrOyCQ2gEUgMyXoNIS+NOyPqSa+2o3u5kcRiD8iGvu4EnVXrVxyf8sfwBTysa6qS2or5ljWvkwRfkVO2e7vbJA5f67la0+AlLRLE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=1gFmqsBx; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=Jhwv+0/QNmEjIq4GNRuX+cmD/88pv8YEVncUT+Cq1So=; b=1gFmqsBx4D2AYNJpbqL8sLgZO9
+	n9iKt2Z100zcdDyEYD6MGmW8i+7ftVcnbCfKWoF7Iguf8rSlPz8ULyz4UTR2kK5cq0QVdC3dpiewj
+	7qm2abZZ9bWjXEbnKknRlJb+/9XT5aLIZZS2GwpIUr5CncMhCHjNsJs+C0oLGRyeBFMUiGWM0RzEC
+	MdwpmJf5NaZKgIjyDFHwnroASFlDaEHagWkimlz1BJYGOwviOf32P5E1uxOkAqjrcLLwszu4RBip6
+	hFhgAw0qSJDIBEVHnkzBWCc4+g29cBPknnaK/bb/+ZYyeswb2E9sq3uABeyy3PvMwP6rcS56Y0V+m
+	OaKUWEpw==;
+Received: from [50.53.50.0] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rTxAz-00000008jQB-29YC;
+	Sun, 28 Jan 2024 04:53:49 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Krishna Kurapati <quic_kriskura@quicinc.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org,
+	Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Subject: [PATCH v2] usb: gadget: fix max_segment_size malformed table
+Date: Sat, 27 Jan 2024 20:53:47 -0800
+Message-ID: <20240128045347.25909-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231105182047.166007-1-gmazyland@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Nov 05, 2023 at 07:20:47PM +0100, Milan Broz wrote:
-> The USB mass storage quirks flags can be stored in driver_info in
-> a 32-bit integer (unsigned long on 32-bit platforms).
-> As this attribute cannot be enlarged, we need to use some form
-> of translation of 64-bit quirk bits.
-> 
-> This problem was discussed on the USB list
-> https://lore.kernel.org/linux-usb/f9e8acb5-32d5-4a30-859f-d4336a86b31a@gmail.com/
-> 
-> The initial solution to use a static array extensively increased the size
-> of the kernel module, so I decided to try the second suggested solution:
-> generate a table by host-compiled program and use bit 31 to indicate
-> that the value is an index, not the actual value.
-> 
-> This patch adds a host-compiled program that processes unusual_devs.h
-> (and unusual_uas.h) and generates files usb-ids.c and usb-ids-uas.c
-> (for pre-processed USB device table with 32-bit device info).
-> These files also contain a generated translation table for driver_info
-> to 64-bit values.
-> 
-> The translation function is used only in usb-storage and uas modules; all
-> other USB storage modules store flags directly, using only 32-bit flags.
-> 
-> For 64-bit platforms, where unsigned long is 64-bit, we do not need to
-> convert quirk flags to 32-bit index; the translation function there uses
-> flags directly.
-> 
-> Signed-off-by: Milan Broz <gmazyland@gmail.com>
+Sphinx reports a malformed table due to the table begin/end line
+segments being too short for the word "max_segment_size", so
+extend them by one more '=' character to prevent the error.
 
-I see the need for this, but why now?  We haven't run out of ids yet
-have we?  Do we need to add another one?
+Documentation/usb/gadget-testing.rst:459: ERROR: Malformed table.
+Text in column margin in table line 9.
 
-Also, after building, I get the following files marked by git as needed
-to be added to the tree, so perhaps you also need a .gitignore file:
+Fixes: 1900daeefd3e ("usb: gadget: ncm: Add support to update wMaxSegmentSize via configfs")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+---
+v2: s /to error/the error/ in the patch description.
 
-$ git status
-On branch work-testing
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	drivers/usb/storage/mkflags
-	drivers/usb/storage/usb-ids-uas.c
-	drivers/usb/storage/usb-ids.c
+ Documentation/usb/gadget-testing.rst |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-thanks,
-
-greg k-h
+diff -- a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+--- a/Documentation/usb/gadget-testing.rst
++++ b/Documentation/usb/gadget-testing.rst
+@@ -448,7 +448,7 @@ Function-specific configfs interface
+ The function name to use when creating the function directory is "ncm".
+ The NCM function provides these attributes in its function directory:
+ 
+-	===============   ==================================================
++	================  ==================================================
+ 	ifname		  network device interface name associated with this
+ 			  function instance
+ 	qmult		  queue length multiplier for high and super speed
+@@ -458,7 +458,7 @@ The NCM function provides these attribut
+ 			  Ethernet over USB link
+ 	max_segment_size  Segment size required for P2P connections. This
+ 			  will set MTU to (max_segment_size - 14 bytes)
+-	===============   ==================================================
++	================  ==================================================
+ 
+ and after creating the functions/ncm.<instance name> they contain default
+ values: qmult is 5, dev_addr and host_addr are randomly selected.
 
