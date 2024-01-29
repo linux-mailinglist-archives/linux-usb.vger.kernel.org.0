@@ -1,316 +1,126 @@
-Return-Path: <linux-usb+bounces-5585-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5586-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A290F83FB29
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jan 2024 01:13:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A00283FC68
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jan 2024 03:59:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C614A1C21429
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jan 2024 00:13:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3699E282109
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jan 2024 02:59:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF47738F;
-	Mon, 29 Jan 2024 00:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7B8F9EA;
+	Mon, 29 Jan 2024 02:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nis9F4us"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="kC1Y7HR+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D0119E
-	for <linux-usb@vger.kernel.org>; Mon, 29 Jan 2024 00:12:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FDC101CF;
+	Mon, 29 Jan 2024 02:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706487177; cv=none; b=N80/ELknpbNPxXrQPMl/TGqCXHwxwIevO/+MuDiIY8E5AWVUSDRF0u1XlsxY2PopfoHHttLJb2uqId+CE1a01GwYCuoNoFKZ79vT6HEjZF6gabujuR3a2TM0Af5c0wCTwUBTGVtg39VsmLDzihfzQfBdt2FphlsEHh6HFHHCUiM=
+	t=1706497162; cv=none; b=cl8NgUdxjdsiU1rQ6kS8K6iwdE56cxUgNb5/If4RljAdAsO+VqQL2nzmh2qITz9v/9M8e8Zy7rCFKm0aJCkvYVpljAvjjxeLrRXO3JBvXQ0tNoyC67YBpvelEKYxyDALaMWSWuSUzA1xDIUB1S4ZkSZBZNsr7HgQgQaTJLV2XUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706487177; c=relaxed/simple;
-	bh=vvy7EoQpBy4n1KzJtCk6MmdRHSmZ6CNWRzrqqDj8ry4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=en7qc8y0NjFfNfofso3i0htZDhj/JkfkI5jtJdAMFp/3MeYMhHqP6lGsn/uWaBczPec6v9ViSxEylT9Di2Tt10KWjzwAbbbJWYBufKGJMKR/PDSNqZhK4f91Wbjqx6U9T58J2wNS/M3hSsBIfk0MvgvE/wWuBx5alluadMvEG1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nis9F4us; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706487175; x=1738023175;
-  h=date:from:to:cc:subject:message-id;
-  bh=vvy7EoQpBy4n1KzJtCk6MmdRHSmZ6CNWRzrqqDj8ry4=;
-  b=Nis9F4ustU5Zf+xI8aBD0m+MQ20XocM8bZFJFeJue+gsQyVlSts0njra
-   m5ASTvc7cUNXHRDfiZeqrCj5+d1F1yZwWvqlMDtDDAlelKEnuoJ1zdi6U
-   zu+iHSr7fKzt0tXOApNxji8XWaguWEv9fQj1KAuEKEy3CW2dBXxUrob6o
-   3l+UgwtUUb80Tm+5ExZL6r+F+Ov8HXDW17TbLuxaQ4yXXMAB0Hxvo+8FB
-   9hj8CC6HghugYdDgAnxVaxFRC1UXWUMojFdexwmR44MXulLBHoJom7FvL
-   dWXMvO1pjn4tKG5TsjaIxlTdn2JOjFSgSShyfJPmvCLGXGncEfwlFp76D
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="16343014"
-X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
-   d="scan'208";a="16343014"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 16:12:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="1118772134"
-X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
-   d="scan'208";a="1118772134"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jan 2024 16:12:51 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rUFGb-0003sS-1i;
-	Mon, 29 Jan 2024 00:12:49 +0000
-Date: Mon, 29 Jan 2024 08:11:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- f2e5d3de7e1fbf24483e7f996e519b3ebc3935a1
-Message-ID: <202401290854.0zwEzOzc-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1706497162; c=relaxed/simple;
+	bh=AkL5XMHJxqpGdKkQ02KZlPaEAtTmtXYjDpIdOGl2vpY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WSwIky2g4vsW6YQ0iApAoswO6No20TQkTAN1EYt4XYAPJvX3ClMACHdmBVh36rfzLjzkMWHJcnN5gOiDTPaZj8xZPpuZoAof3wcWV6JHBmJY5tKtopFiohYliZ8g51kQOf9i2hWBn3bumdZVy8OiwIhkqS7kJM+cxex24rZDqFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=kC1Y7HR+; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=mXt373LIr+R+kMq9PxELhBz9gRcfeFLyy87k0vEnszM=; b=kC1Y7HR+j3sEae2B4rPzzklhuX
+	L/gqcVtT9yPhY46B89SDcUYmeqfUWaL8dsxHFQjhwEPFiqkJ6R9ZKeBGeB8gf3l/N3dEBtPIYEOvF
+	XuAPwECCjkQ4lcxbmo/z0sKCOK7wCyHPsBROz81821zpOg3CeRCIJmHDRFCnO/wNio5jfu/Hmf+kW
+	laAmgpj1ZGgHBPik+IyiAey3CFv4tWP0cZ5JsTr+KGnVtBfgp/SMPTQS822GPtOeqelTNsDfLMCxY
+	njLLD9W6RwQIXW6/1fASmdx4vd50dfhHNiDiHZjRMmOVh5dsCOqPFGJAKV+kx+pTmnfagKX8ljTnZ
+	q/h7NGZQ==;
+Received: from [50.53.50.0] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rUHrg-0000000B4Rl-2r2u;
+	Mon, 29 Jan 2024 02:59:16 +0000
+Message-ID: <d3bc8995-b0bc-4d9e-b811-fccdbaf426c5@infradead.org>
+Date: Sun, 28 Jan 2024 18:59:16 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] doc: Fix malformed table in gadget-testing.rst
+Content-Language: en-US
+To: Kohshi Yamaguchi <kohshi54.yam@gmail.com>, gregkh@linuxfoundation.org,
+ corbet@lwn.net
+Cc: linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
+References: <20240128195731.40003-1-kohshi54.yam@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20240128195731.40003-1-kohshi54.yam@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: f2e5d3de7e1fbf24483e7f996e519b3ebc3935a1  usb: typec: tcpm: fix the PD disabled case
+Hi,
 
-elapsed time: 1331m
+On 1/28/24 11:57, Kohshi Yamaguchi wrote:
+> The table describing the NCM function attributes in gadget-testing.rst
+> was malformed, causing Sphinx build warnings. This patch fixes the table
+> format to align with the reStructuredText specifications.
+> 
+> The border lines of the table were not properly aligned with the column
+> headers, which was corrected by adjusting the border line lengths to
+> match the headers.
+> 
+> Signed-off-by: Kohshi Yamaguchi <kohshi54.yam@gmail.com>
+> ---
+>  Documentation/usb/gadget-testing.rst | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+> index 8cd62c466d20..1d1737f246df 100644
+> --- a/Documentation/usb/gadget-testing.rst
+> +++ b/Documentation/usb/gadget-testing.rst
+> @@ -448,17 +448,17 @@ Function-specific configfs interface
+>  The function name to use when creating the function directory is "ncm".
+>  The NCM function provides these attributes in its function directory:
+>  
+> -	===============   ==================================================
+> -	ifname		  network device interface name associated with this
+> -			  function instance
+> -	qmult		  queue length multiplier for high and super speed
+> -	host_addr	  MAC address of host's end of this
+> -			  Ethernet over USB link
+> -	dev_addr	  MAC address of device's end of this
+> -			  Ethernet over USB link
+> -	max_segment_size  Segment size required for P2P connections. This
+> -			  will set MTU to (max_segment_size - 14 bytes)
+> -	===============   ==================================================
+> +	================   ==================================================
+> +	ifname		   network device interface name associated with this
+> +			   function instance
+> +	qmult		   queue length multiplier for high and super speed
+> +	host_addr	   MAC address of host's end of this
+> +			   Ethernet over USB link
+> +	dev_addr	   MAC address of device's end of this
+> +			   Ethernet over USB link
+> +	max_segment_size   Segment size required for P2P connections. This
+> +			   will set MTU to (max_segment_size - 14 bytes)
+> +	================   ==================================================
+>  
+>  and after creating the functions/ncm.<instance name> they contain default
+>  values: qmult is 5, dev_addr and host_addr are randomly selected.
 
-configs tested: 226
-configs skipped: 3
+or like this:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+https://lore.kernel.org/lkml/20240128045347.25909-1-rdunlap@infradead.org/
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                 nsimosci_hs_smp_defconfig   gcc  
-arc                   randconfig-001-20240128   gcc  
-arc                   randconfig-001-20240129   gcc  
-arc                   randconfig-002-20240128   gcc  
-arc                   randconfig-002-20240129   gcc  
-arc                           tb10x_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         assabet_defconfig   gcc  
-arm                         at91_dt_defconfig   gcc  
-arm                                 defconfig   clang
-arm                            hisi_defconfig   gcc  
-arm                   randconfig-001-20240129   gcc  
-arm                   randconfig-002-20240129   gcc  
-arm                   randconfig-003-20240129   gcc  
-arm                   randconfig-004-20240129   gcc  
-arm                         s3c6400_defconfig   gcc  
-arm                        shmobile_defconfig   gcc  
-arm                           tegra_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240129   gcc  
-arm64                 randconfig-002-20240129   gcc  
-arm64                 randconfig-003-20240129   gcc  
-arm64                 randconfig-004-20240129   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240128   gcc  
-csky                  randconfig-001-20240129   gcc  
-csky                  randconfig-002-20240128   gcc  
-csky                  randconfig-002-20240129   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20240128   clang
-i386         buildonly-randconfig-002-20240128   clang
-i386         buildonly-randconfig-003-20240128   clang
-i386         buildonly-randconfig-004-20240128   clang
-i386         buildonly-randconfig-005-20240128   clang
-i386         buildonly-randconfig-006-20240128   clang
-i386                                defconfig   gcc  
-i386                  randconfig-001-20240128   clang
-i386                  randconfig-002-20240128   clang
-i386                  randconfig-003-20240128   clang
-i386                  randconfig-004-20240128   clang
-i386                  randconfig-005-20240128   clang
-i386                  randconfig-006-20240128   clang
-i386                  randconfig-011-20240128   gcc  
-i386                  randconfig-012-20240128   gcc  
-i386                  randconfig-013-20240128   gcc  
-i386                  randconfig-014-20240128   gcc  
-i386                  randconfig-015-20240128   gcc  
-i386                  randconfig-016-20240128   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240128   gcc  
-loongarch             randconfig-001-20240129   gcc  
-loongarch             randconfig-002-20240128   gcc  
-loongarch             randconfig-002-20240129   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5208evb_defconfig   gcc  
-m68k                            mac_defconfig   gcc  
-m68k                        mvme147_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                         bigsur_defconfig   gcc  
-mips                       bmips_be_defconfig   gcc  
-mips                     decstation_defconfig   gcc  
-mips                      fuloong2e_defconfig   gcc  
-mips                           gcw0_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240128   gcc  
-nios2                 randconfig-001-20240129   gcc  
-nios2                 randconfig-002-20240128   gcc  
-nios2                 randconfig-002-20240129   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240128   gcc  
-parisc                randconfig-001-20240129   gcc  
-parisc                randconfig-002-20240128   gcc  
-parisc                randconfig-002-20240129   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                       holly_defconfig   gcc  
-powerpc                      mgcoge_defconfig   gcc  
-powerpc               randconfig-001-20240129   gcc  
-powerpc               randconfig-002-20240129   gcc  
-powerpc               randconfig-003-20240129   gcc  
-powerpc                     redwood_defconfig   gcc  
-powerpc                    sam440ep_defconfig   gcc  
-powerpc                     tqm8548_defconfig   gcc  
-powerpc64             randconfig-001-20240129   gcc  
-powerpc64             randconfig-002-20240129   gcc  
-powerpc64             randconfig-003-20240129   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20240129   gcc  
-riscv                 randconfig-002-20240129   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20240128   gcc  
-s390                  randconfig-002-20240128   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                        apsh4ad0a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sh                ecovec24-romimage_defconfig   gcc  
-sh                        edosk7760_defconfig   gcc  
-sh                    randconfig-001-20240128   gcc  
-sh                    randconfig-001-20240129   gcc  
-sh                    randconfig-002-20240128   gcc  
-sh                    randconfig-002-20240129   gcc  
-sh                          sdk7786_defconfig   gcc  
-sh                           se7721_defconfig   gcc  
-sh                             sh03_defconfig   gcc  
-sh                     sh7710voipgw_defconfig   gcc  
-sh                  sh7785lcr_32bit_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240128   gcc  
-sparc64               randconfig-001-20240129   gcc  
-sparc64               randconfig-002-20240128   gcc  
-sparc64               randconfig-002-20240129   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240129   gcc  
-um                    randconfig-002-20240129   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           alldefconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240128   clang
-x86_64       buildonly-randconfig-001-20240129   gcc  
-x86_64       buildonly-randconfig-002-20240128   clang
-x86_64       buildonly-randconfig-002-20240129   gcc  
-x86_64       buildonly-randconfig-003-20240128   clang
-x86_64       buildonly-randconfig-003-20240129   gcc  
-x86_64       buildonly-randconfig-004-20240128   clang
-x86_64       buildonly-randconfig-004-20240129   gcc  
-x86_64       buildonly-randconfig-005-20240128   clang
-x86_64       buildonly-randconfig-005-20240129   gcc  
-x86_64       buildonly-randconfig-006-20240128   clang
-x86_64       buildonly-randconfig-006-20240129   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                randconfig-011-20240128   clang
-x86_64                randconfig-011-20240129   gcc  
-x86_64                randconfig-012-20240128   clang
-x86_64                randconfig-012-20240129   gcc  
-x86_64                randconfig-013-20240128   clang
-x86_64                randconfig-013-20240129   gcc  
-x86_64                randconfig-014-20240128   clang
-x86_64                randconfig-014-20240129   gcc  
-x86_64                randconfig-015-20240128   clang
-x86_64                randconfig-015-20240129   gcc  
-x86_64                randconfig-016-20240128   clang
-x86_64                randconfig-016-20240129   gcc  
-x86_64                randconfig-071-20240128   clang
-x86_64                randconfig-071-20240129   gcc  
-x86_64                randconfig-072-20240128   clang
-x86_64                randconfig-072-20240129   gcc  
-x86_64                randconfig-073-20240128   clang
-x86_64                randconfig-073-20240129   gcc  
-x86_64                randconfig-074-20240128   clang
-x86_64                randconfig-074-20240129   gcc  
-x86_64                randconfig-075-20240128   clang
-x86_64                randconfig-075-20240129   gcc  
-x86_64                randconfig-076-20240128   clang
-x86_64                randconfig-076-20240129   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                randconfig-001-20240128   gcc  
-xtensa                randconfig-001-20240129   gcc  
-xtensa                randconfig-002-20240128   gcc  
-xtensa                randconfig-002-20240129   gcc  
-
+Thanks.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+#Randy
 
