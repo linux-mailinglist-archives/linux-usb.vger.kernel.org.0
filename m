@@ -1,93 +1,199 @@
-Return-Path: <linux-usb+bounces-5600-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5601-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90B658409CE
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jan 2024 16:24:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCBC8840A5C
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jan 2024 16:44:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C2FFB22CF5
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jan 2024 15:24:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9376128A4EC
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jan 2024 15:44:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C06153BC7;
-	Mon, 29 Jan 2024 15:24:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F8A155319;
+	Mon, 29 Jan 2024 15:43:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YaHMf/DA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A6BQG4Rw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93265153512
-	for <linux-usb@vger.kernel.org>; Mon, 29 Jan 2024 15:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE07D154C07;
+	Mon, 29 Jan 2024 15:43:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706541850; cv=none; b=Q6nnSyvDPG4Otc59bU8bOhHBK+7BUQUOV0INgEoki6BdOWFZTlpyyY1QQjNTChRZuFObyglO/IIADoNq435Wbg6Io0nUvPSQIGpdVjjogecVA7WJwbBC9QQofDJA0HW7qYP9pw6EQwzrZWXKGF/q3ob5SkjSPplOka9fv49JtX0=
+	t=1706543019; cv=none; b=hyraUHWUxhktfGnycxuRz4DV1wOFC/ktVhEKTtMAExRhG7VqP+CIYZBOXE7hKAkMsVanxbi+VX3O9+Gkp5tGy4wfFpSi+b4VHvlhTXvkgiM8vjCPDYixfXOA4fzEKfLAEXdk0B0PP0YP77nkTq3+YPnn0HyVv+TE6rQYnV0zj+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706541850; c=relaxed/simple;
-	bh=TxXDHgr8OPrXwIZjf1VZJXYp8SLhOeE+p8hHrBngbcc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=q3/2impziBZ+4dQ+VkM5J6IHiZoI3iYqp38KUS/0coA9hJWp2I8rVrE+AFdYf/A1/Ih1XSGaXRaQAhv+vKY10TivPB5kUHMz7E2+fyZRYFNdjQwcjqznaHByw3Bx8UI92UsvTck3ZNteZpVGQjC5PBhnF1vr//65x7yKMnsy/0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YaHMf/DA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 15ECFC43394
-	for <linux-usb@vger.kernel.org>; Mon, 29 Jan 2024 15:24:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706541850;
-	bh=TxXDHgr8OPrXwIZjf1VZJXYp8SLhOeE+p8hHrBngbcc=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=YaHMf/DATHQEtCkLXrd3i6+doAoTN0T1ZYRF89n8fzQ4D05NMfEQbWFizm1MhL1hf
-	 bih2bBKPwOls9v+gWyICSMva9Hazu0VNggw9dI1k2NaLpR7nmC6z1tN37BHK5SD4PH
-	 yeidbbZAgw04O8CoGHMXM6suoNrW3gJOdRBOnJM1hy38tY4zNH20qO77ZYbAp4rnbD
-	 RgymgfVIBete56E9wStZwOTaE/Wm1ugATZO5n6qwtSw7yLqs5TqAG+c5u7yN+y9CjQ
-	 iR1cK7aYNNbuvP4Z8t+jejTE3EpY6sL33flCb9fGWZ5iflHnlpb4E3dy1SYb/hNlKY
-	 i643aW1yfg1dg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id F02D3C53BCD; Mon, 29 Jan 2024 15:24:09 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 217314] Mackie Profx12v3 not working, showing unable to find
- clock source
-Date: Mon, 29 Jan 2024 15:24:09 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: alexander@tsoy.me
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217314-208809-8Z87rtixq7@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217314-208809@https.bugzilla.kernel.org/>
-References: <bug-217314-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1706543019; c=relaxed/simple;
+	bh=n8a6DcN34MCg2EL+T3oLmFAy3UeopUFYPMC/oHMiox8=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=tJQHLkf0+wz6VVFlXlwMntx6130f1IylE8swOY1yh5kUjQiTAH5pk/o3F80r8qt6406yDLk9jQx2gxyCYoo3SApbE3hyyDk7aPIkspzldu1cJYAo//O+WsWFrnf4VceKLfFWd03AUnZ9EIfENrGaAnhXrptPdnWzyaOnCuHsmw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A6BQG4Rw; arc=none smtp.client-ip=192.55.52.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706543016; x=1738079016;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=n8a6DcN34MCg2EL+T3oLmFAy3UeopUFYPMC/oHMiox8=;
+  b=A6BQG4RwneBFN8Q4gWtiXBLKGTsuaebuepLrO3TglQ93JZ3mevmg9oRm
+   EmgU5AwqtyssKKIAXrEnmIio4ghC5e0mXkmJ4YzujE5ba2Q+VCBLJSvZF
+   iFryVKhwFL1kI+5LXp5HwJKPTQfMNtPmku4NTHlr5Ups+6oSNmw34JnUM
+   W8yNIZvOVq5I7kjyOA/tVr8lsU/9lMPF06KTYAeHc5cFTB8Mlt3bPwr4l
+   yUJf7JAHD0G+CB+fm1zd+U6/QRVOUEf6AmsLb9Mn9unh8datVb41pH7tI
+   FrfDoUu/EgyH9tjl/YL+sCIQWKnlgneyF5dCUULtRK1A1YSfgMOdfGxeU
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="434159615"
+X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
+   d="scan'208";a="434159615"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 07:43:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="960921358"
+X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
+   d="scan'208";a="960921358"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga005.jf.intel.com with ESMTP; 29 Jan 2024 07:43:25 -0800
+Message-ID: <44a3d4db-7759-dd93-782a-1efbebfdb22c@linux.intel.com>
+Date: Mon, 29 Jan 2024 17:44:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
+ mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+ corbet@lwn.net, gregkh@linuxfoundation.org, lgirdwood@gmail.com,
+ andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ konrad.dybcio@linaro.org, Thinh.Nguyen@synopsys.com, broonie@kernel.org,
+ bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org, agross@kernel.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
+ alsa-devel@alsa-project.org, "Neronin, Niklas" <niklas.neronin@intel.com>
+References: <20240102214549.22498-1-quic_wcheng@quicinc.com>
+ <20240102214549.22498-5-quic_wcheng@quicinc.com>
+ <734591a1-50b4-6dc7-0b93-077355ec12e4@linux.intel.com>
+ <7b2ec96b-b72f-c848-7c35-36e61a4072ac@quicinc.com>
+ <b254f73b-a1bc-3dd4-f485-a3acf556835d@quicinc.com>
+ <2178e799-2068-7443-59b2-310dfdd1ddee@linux.intel.com>
+ <ae64ce69-dc1b-1534-7950-0a35c4a56f58@quicinc.com>
+ <ff0bff8b-f26a-87bd-9762-9f2af98abcca@quicinc.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v12 04/41] usb: host: xhci-mem: Cleanup pending secondary
+ event ring events
+In-Reply-To: <ff0bff8b-f26a-87bd-9762-9f2af98abcca@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217314
+On 26.1.2024 23.13, Wesley Cheng wrote:
+> Hi Mathias,
+> 
+> On 1/16/2024 12:24 PM, Wesley Cheng wrote:
+>> Hi Mathias,
+>>
+>> On 1/15/2024 6:01 AM, Mathias Nyman wrote:
+>>> On 10.1.2024 1.42, Wesley Cheng wrote:
+>>>> Hi Mathias,
+>>>>
+>>>> On 1/8/2024 12:51 PM, Wesley Cheng wrote:
+>>>>> Hi Mathias,
+>>>>>
+>>>>> On 1/4/2024 6:48 AM, Mathias Nyman wrote:
+>>>>>> On 2.1.2024 23.45, Wesley Cheng wrote:
+>>>>>>> As part of xHCI bus suspend, the XHCI is halted.  However, if there are
+>>>>>>> pending events in the secondary event ring, it is observed that the xHCI
+>>>>>>> controller stops responding to further commands upon host or device
+>>>>>>> initiated bus resume.  Iterate through all pending events and update the
+>>>>>>> dequeue pointer to the beginning of the event ring.
+>>>>>>>
+>>>>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>>>>> ...
+>>>>>>> +/*
+>>>>>>> + * Move the event ring dequeue pointer to skip events kept in the secondary
+>>>>>>> + * event ring.  This is used to ensure that pending events in the ring are
+>>>>>>> + * acknowledged, so the XHCI HCD can properly enter suspend/resume. The
+>>>>>>> + * secondary ring is typically maintained by an external component.
+>>>>>>> + */
+>>>>>>> +void xhci_skip_sec_intr_events(struct xhci_hcd *xhci,
+>>>>>>> +    struct xhci_ring *ring,    struct xhci_interrupter *ir)
+>>>>>>> +{
+>>>>>>> +    union xhci_trb *erdp_trb, *current_trb;
+>>>>>>> +    u64 erdp_reg;
+>>>>>>> +    u32 iman_reg;
+>>>>>>> +    dma_addr_t deq;
+>>>>>>> +
+>>>>>>> +    /* disable irq, ack pending interrupt and ack all pending events */
+>>>>>>> +    xhci_disable_interrupter(ir);
+>>>>>>> +    iman_reg = readl_relaxed(&ir->ir_set->irq_pending);
+>>>>>>> +    if (iman_reg & IMAN_IP)
+>>>>>>> +        writel_relaxed(iman_reg, &ir->ir_set->irq_pending);
+>>>>>>> +
+>>>>>>> +    /* last acked event trb is in erdp reg  */
+>>>>>>> +    erdp_reg = xhci_read_64(xhci, &ir->ir_set->erst_dequeue);
+>>>>>>> +    deq = (dma_addr_t)(erdp_reg & ERST_PTR_MASK);
+>>>>>>> +    if (!deq) {
+>>>>>>> +        xhci_err(xhci, "event ring handling not required\n");
+>>>>>>> +        return;
+>>>>>>> +    }
+>>>>>>> +
+>>>>>>> +    erdp_trb = current_trb = ir->event_ring->dequeue;
+>>>>>>> +    /* read cycle state of the last acked trb to find out CCS */
+>>>>>>> +    ring->cycle_state = le32_to_cpu(current_trb->event_cmd.flags) & TRB_CYCLE;
+>>>>>>> +
+>>>>>>> +    while (1) {
+>>>>>>> +        inc_deq(xhci, ir->event_ring);
+>>>>>>> +        erdp_trb = ir->event_ring->dequeue;
+>>>>>>> +        /* cycle state transition */
+>>>>>>> +        if ((le32_to_cpu(erdp_trb->event_cmd.flags) & TRB_CYCLE) !=
+>>>>>>> +            ring->cycle_state)
+>>>>>>> +            break;
+>>>>>>> +    }
+>>>>>>> +
+>>>>>>> +    xhci_update_erst_dequeue(xhci, ir, current_trb, true);
+>>>>>>> +}
+>>>>>>
+>>>>>> Code above is very similar to the existing event ring processing parts of xhci_irq()
+>>>>>> and xhci_handle_event()
+>>>>>>
+>>>>>> I'll see if I can refactor the existing event ring processing, decouple it from
+>>>>>> event handling so that it could be used by primary and secondary interrupters with
+>>>>>> handlers, and this case where we just want to clear the event ring.
+>>>>>>
+>>>>>
+>>>>> Thanks, that makes sense.  Will take a look as well.
+>>>>>
+>>>>
+>>>> How about something like the below?  Tested this on my set up and everything looks to be working fine.  Had to add another param to struct xhci_interrupters to tell the XHCI interrupt handler to say if that particular interrupter wants to skip_events (handling).  This way, its something that the class driver utilizing the interrupter will have to tell XHCI sideband.  It would allow the user to determine if they want to use the interrupter to actually handle events or not on the proc running Linux.
+>>>>
+>>>
+>>> Yes, I have something similar.
+>>> I'll share it soon, just need to
+>>> clean it up a bit fist.
+>>>
+>>
+>> Sure, no worries.  Will test it when its available.  Thanks!
+>>
+> 
+> Was just wondering if you had the time to clean up the changes?  If not, maybe you can provide a patch with whatever you have, and I can try my best to clean it up to your liking?  Thanks!
 
---- Comment #3 from Alexander Tsoy (alexander@tsoy.me) ---
-Please try the following:
+Sure, got stuck fixing other issues.
 
-modprobe -r snd_usb_audio
-modprobe snd_usb_audio vid=3D0x0a73 pid=3D0x0023 quirk_flags=3D0x20
+Code is not yet cleaned up, commit messages are not ready etc, but current work is in
+a fix_eventhandling branch:
 
---=20
-You may reply to this email to add a comment.
+git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git  fix_eventhandling
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=fix_eventhandling
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+I was in the middle of figuring out when and where the ip_autoclear and interrupt
+moderation values should be set for secondary interrupters
+
+Thanks
+Mathias
+
 
