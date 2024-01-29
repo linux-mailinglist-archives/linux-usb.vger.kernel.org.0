@@ -1,102 +1,90 @@
-Return-Path: <linux-usb+bounces-5589-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5590-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DBC383FF42
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jan 2024 08:51:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 273D783FF45
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jan 2024 08:51:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B01C61C2360A
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jan 2024 07:51:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A1711C235E5
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jan 2024 07:51:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60B304EB53;
-	Mon, 29 Jan 2024 07:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD344F1E7;
+	Mon, 29 Jan 2024 07:51:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="IKCOIRHl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pb1jPdmw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880B34EB3D;
-	Mon, 29 Jan 2024 07:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A594EB23
+	for <linux-usb@vger.kernel.org>; Mon, 29 Jan 2024 07:51:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706514683; cv=none; b=nIn6A8FNpC4/so8HyFI27ZXJdI+NuA5oUHOSAataSdlqgUbVb7Tg4IH81yJzfMZjYnfNjrNWrMFf3EG6knGrUd6lRSZZAdvK9Krpr4dxd6H/H8PcvPeIfvDdIXKVXGTdbOXC7H7dUcKl5rrz/RrTALgcx1BZVeY0of2pXFAIk+A=
+	t=1706514707; cv=none; b=ubZkQe7w4t6KyvmLQaR4VFtK4zO5Oin/1jNRAwC/Uprzm1eFI227KHNFibIKJTX0zWf3aw5YtZRDVbLhaRyMGqRO+7riz9sqtNrqSuHyiPGjyDbzmEO7Ot5X1Pv2YCjYu9qQYhqo5DyPcxnNfbuQZQMJswaP826lSH4HnXs1hzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706514683; c=relaxed/simple;
-	bh=iAhMw5TqYSRo4aVrVeK/fdRJjl4Oy9WJcyP5Hh89bgM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=coiua4ZeVkKD7Fi3E301+zP5XyHG91C8Gw6Gctlrt1jklG7ElHfYEeTv7TBE5z2HNZkLWz3MAOVpAMWurDvPMGlLHuwmwaPjqyrkgWaA4dHz8ioYxGHdxjFJrBIi2uL+5f+tStapnyw4ueB5uPB5ebjzjm9Jaoqnxzx2UlSn0AI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=pass (1024-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=IKCOIRHl; arc=none smtp.client-ip=94.231.106.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gaisler.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
-Received: from localhost (localhost [127.0.0.1])
-	by smtp.simply.com (Simply.com) with ESMTP id 4TNgTy65Csz681p;
-	Mon, 29 Jan 2024 08:51:18 +0100 (CET)
-Received: from andreas.got.gaisler.com (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
-	by smtp.simply.com (Simply.com) with ESMTPA id 4TNgTs3vDWz6825;
-	Mon, 29 Jan 2024 08:51:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
-	s=unoeuro; t=1706514678;
-	bh=REe3zM9H0lwUxZ2BIr7JXuDrLpxdjjZWFjcYYPPgQXM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=IKCOIRHlpbUk3hI5mDpYxbsrB6zyNUsSuBF9JiLxo/M43zE3leX7DasYdVy8+fdi1
-	 eYRHaF3FtAvqC3aOocsBfzT2DycEMTCC4QE3FCjgFwsfzkxstuy72yCXzjK7JAq7qK
-	 M5QR85S+wXBX1wT7u+3rjzTC3NEH+WvKs/AjvX5k=
-From: Andreas Larsson <andreas@gaisler.com>
-To: Alan Stern <stern@rowland.harvard.edu>,
-	linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Rob Herring <robh@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	software@gaisler.com
-Subject: [PATCH v2] usb: uhci-grlib: Explicitly include linux/platform_device.h
-Date: Mon, 29 Jan 2024 08:50:56 +0100
-Message-Id: <20240129075056.1511630-1-andreas@gaisler.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <b6b66bed-10f1-421a-a561-3e07dcbd6781@gaisler.com>
-References: <b6b66bed-10f1-421a-a561-3e07dcbd6781@gaisler.com>
+	s=arc-20240116; t=1706514707; c=relaxed/simple;
+	bh=ewzVJYLXdf1tKyGBrucR6tAkrlzjtgEf0X7b6szVZLI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=em+dxqdz/aidlKG881D/JGOUS35iLOn0+Nq7UmqA4TQAF7ZogJwTPbegQb7yGFY1ducNt+pQGO63R+jUvn66LYV8wmP0Mn93MBisDsyv5IXmSFwuA/rEw8wIsXUtfkmiRLP7B88ih1PBtd3DQEbees5tvPGY5Pt4nbykmfg/SWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pb1jPdmw; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706514706; x=1738050706;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ewzVJYLXdf1tKyGBrucR6tAkrlzjtgEf0X7b6szVZLI=;
+  b=Pb1jPdmw8R38klNq416057TdVZC+r0QaR9qWg30C5dcafBxqEer0KMJe
+   KdV6aj0wasRCU9HCBG7jHFGH9E/l3x7wq2B+t6xWarR1ue7FVJNDj5q6g
+   MGFLJqwFueokb9xsyCHbdVoHIF4WFgw3ZHL6mhtEjfQPC5fAwtEEOd5BK
+   RR9/auGi4YzTIZQAuWZvGkF83lZQfWHZZyzSB4LoOnW/2/MkyVyladzy9
+   6qIl8+Nj1x0h0l6jXUADvfQqaEnH+pkvNm0THMt02UcuP1Akxzmn6v8D7
+   BChHyRAy+xfd/ED2AJyUmO5yqk9ja8BRvtk7EA4WOF92wt++CWyWKRYGt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="9988735"
+X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
+   d="scan'208";a="9988735"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 23:51:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="931012261"
+X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
+   d="scan'208";a="931012261"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Jan 2024 23:51:43 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 8F6F6263; Mon, 29 Jan 2024 09:51:42 +0200 (EET)
+Date: Mon, 29 Jan 2024 09:51:42 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+Cc: andreas.noever@gmail.com, michael.jamet@intel.com,
+	YehezkelShB@gmail.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Fix setting the CNS bit in ROUTER_CS_5
+Message-ID: <20240129075142.GT2543524@black.fi.intel.com>
+References: <20240127032628.29606-1-rahimi.mhmmd@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240127032628.29606-1-rahimi.mhmmd@gmail.com>
 
-This fixes relying upon linux/of_platform.h to include
-linux/platform_device.h, which it no longer does, thereby fixing
-compilation problems like:
+On Sat, Jan 27, 2024 at 11:26:28AM +0800, Mohammad Rahimi wrote:
+> The bit 23, CM TBT3 Not Supported (CNS), in ROUTER_CS_5 indicates
+> whether a USB4 Connection Manager is TBT3-Compatible and should be:
+>     0b for TBT3-Compatible
+>     1b for Not TBT3-Compatible
 
-In file included from drivers/usb/host/uhci-hcd.c:850:
-drivers/usb/host/uhci-grlib.c: In function 'uhci_hcd_grlib_probe':
-drivers/usb/host/uhci-grlib.c:92:29: error: invalid use of undefined type 'struct platform_device'
-   92 |  struct device_node *dn = op->dev.of_node;
-      |                             ^~
+I'm sure at some point of the spec it was called C3S and the meaning was
+opposite ;-) Nice catch though!
 
-Fixes: ef175b29a242 ("of: Stop circularly including of_device.h and of_platform.h")
-Signed-off-by: Andreas Larsson <andreas@gaisler.com>
----
-v2:
-- Fix commit ID in Fixes reference
+> Signed-off-by: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
 
- drivers/usb/host/uhci-grlib.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/host/uhci-grlib.c b/drivers/usb/host/uhci-grlib.c
-index ac3fc5970315..cfebb833668e 100644
---- a/drivers/usb/host/uhci-grlib.c
-+++ b/drivers/usb/host/uhci-grlib.c
-@@ -22,6 +22,7 @@
- #include <linux/of_irq.h>
- #include <linux/of_address.h>
- #include <linux/of_platform.h>
-+#include <linux/platform_device.h>
- 
- static int uhci_grlib_init(struct usb_hcd *hcd)
- {
--- 
-2.34.1
-
+Tagged for stable and applied to thunderbolt.git/fixes, thanks!
 
