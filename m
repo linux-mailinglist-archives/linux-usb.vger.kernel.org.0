@@ -1,222 +1,290 @@
-Return-Path: <linux-usb+bounces-5618-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5619-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62982841F3F
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 10:21:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5CF9842019
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 10:50:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71BB4B2FE21
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 09:15:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CA2E2919F0
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 09:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2356566B4C;
-	Tue, 30 Jan 2024 09:13:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E89C65BBF;
+	Tue, 30 Jan 2024 09:48:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GFiV49F6"
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="GaMkHCku"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from aposti.net (aposti.net [89.234.176.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61FAD65BDB;
-	Tue, 30 Jan 2024 09:13:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CF560BB0;
+	Tue, 30 Jan 2024 09:48:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706605995; cv=none; b=GbcEqmXyPK5a98QzO/ifS/z8i4ZpWF5VJFsa2YdFHNPtLmmbDdiQL8xrZ/AKp+qtsorl0isg0vaoF9l96GGSyEfh3BJ5w+SMpNHqYLaQ5HlZBbaa4ROPkQxnxEX5qKRKTMoE+nvdxhE6vI/XN4Jq6t1kDoW6mjP/008MzpZwP1M=
+	t=1706608115; cv=none; b=cRJ5vhiUhaTWW4Rc3TjG62YTMQK1c6uLibz+XbLNBuOxbvvbp/1mYZEwhcNhQGO/DMox8Fk3H0f4xp4th9Y174Vd1mHsZfqat+lZXpObR3836Xyqfst60iqLwvxvANvDzyJV3b/rg9EwJyxpqhNFLXdrs51jn3GNO85DF1x7leg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706605995; c=relaxed/simple;
-	bh=iJp3fdu0fy1eOcOxILeo5Du4UmNzi0oWDAcs0eGthNE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IdYvenNs4w+3kZnwM/TTDyAhJcblUpzc2bA5YlGaRkad/sFCmXHds1qb8GFgHo/o9gkuNjV+GlsCwRJtiGnnonSoejof3SSeNjKMhIbZFZmK7k8oAd1sNXW1XDunVjmkbkXpaINWh2fglm5MnXDPT5kpNIaSMRy4REXq7Sq6AgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GFiV49F6; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6ddc2a78829so1488057b3a.3;
-        Tue, 30 Jan 2024 01:13:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706605993; x=1707210793; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/gc+JDMFysloX3bLK8Ab7sB4XneQUnO5q2M+huTrtLI=;
-        b=GFiV49F6h5R4OGXpQK5XMZXTdT4NQxzpZFKzF7QM5JCOk6EzvAssV/XqFXGImmgFWk
-         6UYzgLBeYAM5WrDnm4lojr1BBspy/T0EFh3WkolCb6FbhlKQOsQzXdi5O3tSZszzQi6b
-         gdBY0A34V6beQID1ggHF0D/k1Hv1UIjogq358Ke5JrezFi7PtTgS9fwveoC9CAnb6eTh
-         QDy+RwjHVaW5sjwbCIV/xNBelQAdpgd0KEx1PpuC41N3L0cCcPqlzuGJxQMRdqp2eHD7
-         hwfT16RgSJ32piTkzjWgX4qLYj98YXKBo8GMhYlY2JPfQ1eYzRNyvxsQmUSadnwkLOwC
-         i+vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706605993; x=1707210793;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/gc+JDMFysloX3bLK8Ab7sB4XneQUnO5q2M+huTrtLI=;
-        b=pHB5J3PziQSChswpslwjigd7CNZk5IBSOaR/jDAQHDpJeUOf822QQrYp7gth3SnlMQ
-         Ovqkt5JpDhl901wQFb+gxXtlZzqxCFUL9ut5fBqstSRkauYnk8SsK1kUjdN596dJcvCO
-         jqzqnI3hxyjX5NZFOgibG2EEkgIz1AbxRmVk6dUQn/om2DjQ6+8H0LDam6bLLD68t7Qw
-         gT6YRfaZ1PiNHYQTlzJcb/duG5zI6BATti9nX3/ieSBFNFJpClb1hQGvc5s2yn9P37l0
-         PowRctx/WrgYzx2J1YjpmL76Sch8yPjfXUYYDCGBBCgMrzFfGx2MQOUGruozoXSgNq/N
-         km+A==
-X-Gm-Message-State: AOJu0Yz7/loOMtMKvzcdcLdtWCVu9wsEDi9g+VfhaqXVvjNmpTQpQIDZ
-	8uPjxQsze58h7FIddam0dOvVAp+2xXgjixe5xy1ORESm6uZ+6oYy
-X-Google-Smtp-Source: AGHT+IEMPeN+mDQxL1EgLPRL8abGu/7KopEZVJSkRj9KwItNcvpwt/WNottFX3ZGHhox/BltgpoPPA==
-X-Received: by 2002:a05:6a00:cce:b0:6de:2f36:8284 with SMTP id b14-20020a056a000cce00b006de2f368284mr3510669pfv.3.1706605992637;
-        Tue, 30 Jan 2024 01:13:12 -0800 (PST)
-Received: from localhost (dhcp-141-239-144-21.hawaiiantel.net. [141.239.144.21])
-        by smtp.gmail.com with ESMTPSA id lo18-20020a056a003d1200b006dde0b7d633sm7301241pfb.77.2024.01.30.01.13.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 01:13:12 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-From: Tejun Heo <tj@kernel.org>
-To: torvalds@linux-foundation.org,
-	mpatocka@redhat.com
-Cc: linux-kernel@vger.kernel.org,
-	dm-devel@lists.linux.dev,
-	msnitzer@redhat.com,
-	ignat@cloudflare.com,
-	damien.lemoal@wdc.com,
-	bob.liu@oracle.com,
-	houtao1@huawei.com,
-	peterz@infradead.org,
-	mingo@kernel.org,
-	netdev@vger.kernel.org,
-	allen.lkml@gmail.com,
-	kernel-team@meta.com,
-	Tejun Heo <tj@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH 5/8] usb: core: hcd: Convert from tasklet to BH workqueue
-Date: Mon, 29 Jan 2024 23:11:52 -1000
-Message-ID: <20240130091300.2968534-6-tj@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240130091300.2968534-1-tj@kernel.org>
-References: <20240130091300.2968534-1-tj@kernel.org>
+	s=arc-20240116; t=1706608115; c=relaxed/simple;
+	bh=SlW9j0GS/bTylATTXJKG9UE7eebmUXJ8gRyL6UopHj0=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=kJwpxkGW02rVxTU0G/AhCGcIDJ6jr4GJ9aEAgKUygAs+j+Uy69g0YkhMFkW6EYFUYUh7qYitR3/TOQwzsj67xLTzMVYWy7YIcvppA95/HFSWtUD6a8LwKy2etcKKimarSosSsC2r9JM9/BGy5oN8yc2Kor94547QB6vfWlBkFZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=GaMkHCku; arc=none smtp.client-ip=89.234.176.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+	s=mail; t=1706608105;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=fzKqsStcb36iopomlKgRGs7SQG0sReHnAQLYp7HEgu0=;
+	b=GaMkHCkutXjW0L4/XyIxRz73MLclQ9Ia3j5M6z+wdTwSCEYHwYtDikGSv2r4x81YUBlihy
+	QNgViGuhWALFT+qoow9WmzoaLW6sGAyeHKwWZOXHki0Imxc1Be5O6lJMrdpERSf/Ek21hg
+	BCU+bC9oV4o447lijAoa0537XEiQazA=
+Message-ID: <7eec45a95808afe94ac65a8518df853356ecf117.camel@crapouillou.net>
+Subject: Re: [Linaro-mm-sig] Re: [PATCH v5 1/6] dma-buf: Add
+ dma_buf_{begin,end}_access()
+From: Paul Cercueil <paul@crapouillou.net>
+To: Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>, 
+ Christian =?ISO-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Jonathan Corbet
+ <corbet@lwn.net>, Sumit Semwal <sumit.semwal@linaro.org>, Jonathan Cameron
+ <jic23@kernel.org>, Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+ Michael Hennerich <Michael.Hennerich@analog.com>, 
+ linux-usb@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, Christoph
+ Hellwig <hch@lst.de>
+Date: Tue, 30 Jan 2024 10:48:23 +0100
+In-Reply-To: <a2346244-e22b-4ff6-b6cd-1da7138725ae@amd.com>
+References: <442f69f31ece6d441f3dc41c3dfeb4dcf52c00b8.camel@crapouillou.net>
+	 <0b6b8738-9ea3-44fa-a624-9297bd55778f@amd.com>
+	 <e4620acdf24628d904cedcb0030d78b14559f337.camel@crapouillou.net>
+	 <85a89505-edeb-4619-86c1-157f7abdd190@amd.com>
+	 <0fe2755fb320027234c086bcc88fd107855234c5.camel@crapouillou.net>
+	 <577501f9-9d1c-4f8d-9882-7c71090e5ef3@amd.com>
+	 <7928c0866ac5b2bfaaa56ad3422bedc9061e0f7b.camel@crapouillou.net>
+	 <2ac7562c-d221-409a-bfee-1b3cfcc0f1c6@amd.com>
+	 <ZbKiCPhRvWaz4Icn@phenom.ffwll.local>
+	 <c97e38ee-b860-4990-87f1-3e59d7d9c999@amd.com>
+	 <Zbi6zQYtnfOZu5Wh@phenom.ffwll.local>
+	 <a2346244-e22b-4ff6-b6cd-1da7138725ae@amd.com>
+Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
+ keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZMLQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5UzFZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtNz8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe+rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIPdlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7Urf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KFlBwgAhlGy6nqP7O3u7q23hRW5AQ0EXQqFwQEIAMo+MgvYHsyjX3Ja4Oolg1Txzm8woj30ch2nACFCqaO0R/1kLj2VVeLrDyQUOlXx9PD6IQI4M8wy8m0sR4wV2p/g/paw7k65cjzYYLh+FdLNyO7IW
+	YXndJO+wDPi3aK/YKUYepqlP+QsmaHNYNdXEQDRKqNfJg8t0f5rfzp9ryxd1tCnbV+tG8VHQWiZXNqN7062DygSNXFUfQ0vZ3J2D4oAcIAEXTymRQ2+hr3Hf7I61KMHWeSkCvCG2decTYsHlw5Erix/jYWqVOtX0roOOLqWkqpQQJWtU+biWrAksmFmCp5fXIg1Nlg39v21xCXBGxJkxyTYuhdWyu1yDQ+LSIUAEQEAAYkBNgQYAQoAIBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsMAAoJEHPua9InSr1B4wsH/Az767YCT0FSsMNt1jkkdLCBi7nY0GTW+PLP1a4zvVqFMo/vD6uz1ZflVTUAEvcTi3VHYZrlgjcxmcGu239oruqUS8Qy/xgZBp9KF0NTWQSl1iBfVbIU5VV1vHS6r77W5x0qXgfvAUWOH4gmN3MnF01SH2zMcLiaUGF+mcwl15rHbjnT3Nu2399aSE6cep86igfCAyFUOXjYEGlJy+c6UyT+DUylpjQg0nl8MlZ/7Whg2fAU9+FALIbQYQzGlT4c71SibR9T741jnegHhlmV4WXXUD6roFt54t0MSAFSVxzG8mLcSjR2cLUJ3NIPXixYUSEn3tQhfZj07xIIjWxAYZo=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The only generic interface to execute asynchronously in the BH context is
-tasklet; however, it's marked deprecated and has some design flaws. To
-replace tasklets, BH workqueue support was recently added. A BH workqueue
-behaves similarly to regular workqueues except that the queued work items
-are executed in the BH context.
+Hi Christian,
 
-This patch converts usb hcd from tasklet to BH workqueue.
+(Your email software is configured for HTML btw)
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb@vger.kernel.org
----
- drivers/usb/core/hcd.c  | 23 ++++++++++++-----------
- include/linux/usb/hcd.h |  2 +-
- 2 files changed, 13 insertions(+), 12 deletions(-)
+Le mardi 30 janvier 2024 =C3=A0 10:23 +0100, Christian K=C3=B6nig a =C3=A9c=
+rit=C2=A0:
+> =C2=A0Am 30.01.24 um 10:01 schrieb Daniel Vetter:
+> =C2=A0
+> > =C2=A0
+> > On Fri, Jan 26, 2024 at 05:42:50PM +0100, Christian K=C3=B6nig wrote:
+> > =C2=A0
+> > > [SNIP]=20
+> > > Well I think we should have some solution, but I'm not sure if it
+> > > should be
+> > > part of DMA-buf.
+> > >=20
+> > > Essentially a DMA-buf exports the buffers as he uses it and the
+> > > importer (or
+> > > the DMA-buf subsystem) is then the one who says ok I can use this
+> > > or I can't
+> > > use this or I need to call extra functions to use this or
+> > > whatever.
+> > >=20
+> > > It's not the job of the exporter to provide the coherency for the
+> > > importer,
+> > > cause otherwise we would have a lot of code in the exporter which
+> > > can only
+> > > be tested when you have the right importer around. And I strongly
+> > > think that
+> > > this is a no-go for having a reliable solution.
+> > > =C2=A0
+> > =C2=A0
+> > The trouble is, that if you have other memory than stuff allocated
+> > by the
+> > dma-api or mapped using the dma-api, then by necessity the exporter
+> > has to
+> > deal with this.
+> > =C2=A0
+> =C2=A0
+> =C2=A0Yes, I was thinking about that as well.
+> =C2=A0
+> =C2=A0
+> > =C2=A0
+> > Which is the exact same reason we also force the exporters to deal
+> > with
+> > the cpu cache flushing - you're argument that it's not great to
+> > replicate
+> > this everywhere holds there equally.
+> > =C2=A0
+> =C2=A0
+> =C2=A0And I'm not really happy with that either.
+> =C2=A0
+> =C2=A0
+> > =C2=A0
+> > The other thing is that right now the exporter is the only one who
+> > actually knows what kind of dma coherency rules apply for a certain
+> > piece
+> > of memory. E.g. on i915-gem even if it's dma_map_sg mapped the
+> > underlying
+> > i915-gem buffer might be non-coherent, and i915-gem makes it all
+> > work by
+> > doing the appropriate amount of clflush.
+> > =C2=A0
+> =C2=A0
+> =C2=A0Yeah, exactly that's the reason why I think that this stuff doesn't
+> belong into exporters/drivers.
+> =C2=A0
+> =C2=A0Looking at what kind of hacks and workarounds we have in both amdgp=
+u
+> as well as i915 it's pretty clear that we need to improve this design
+> somehow.
+> =C2=A0
+> =C2=A0
+> > =C2=A0
+> > Similar funky things happen in other cases.
+> >=20
+> > So unless we add an interface which allows importers to figure out
+> > how
+> > much flushing is needed, currently the exporter is the only one who
+> > knows
+> > (because it can inspect the struct device at dma_buf_attach time).
+> >=20
+> > We could flip this around, but it would be a rather serious
+> > depature from
+> > the dma-buf design approach thus far.
+> > =C2=A0
+> =C2=A0
+> =C2=A0Well clients already give the DMA-direction to exporters when
+> creating the mapping and get an appropriate sg_table in return.
+> =C2=A0
+> =C2=A0All we need to do is getting the information what flushing is neede=
+d
+> into the object returned here so that the DMA API can work with it.
+> =C2=A0
+> =C2=A0Christoph Hellwig pretty much nailed it when he said that the
+> problem with the sg_table is that it mixes input and output
+> parameters of the DMA-API.
+> =C2=A0
+> =C2=A0I would extend that and say that we need a mapping object the DMA-
+> API can work with so that it can know what needs to be done when
+> devices request that data is made coherent between them or the CPU.
+> =C2=A0
+> =C2=A0
+> > =C2=A0
+> > > =C2=A0
+> > > That's why I think the approach of having DMA-buf callbacks is
+> > > most likely
+> > > the wrong thing to do.
+> > >=20
+> > > What should happen instead is that the DMA subsystem provides
+> > > functionality
+> > > which to devices which don't support coherency through it's
+> > > connection to
+> > > say I want to access this data, please make sure to flush the
+> > > appropriate
+> > > catches. But that's just a very very rough design idea.
+> > >=20
+> > > This will become more with CXL at the horizon I think.
+> > > =C2=A0
+> > =C2=A0
+> > Yeah CXL will make this all even more fun, but we are firmly there
+> > already
+> > with devices deciding per-buffer (or sometimes even per-access with
+> > intel's MOCS stuff) what coherency mode to use for a buffer.
+> >=20
+> > Also arm soc generally have both coherent and non-coherent device
+> > interconnects, and I think some devices can switch with runtime
+> > flags too
+> > which mode they use for a specific transition.
+> >=20
+> > CXL just extends this to pcie devices.
+> >=20
+> > So the mess is here, how do we deal with it?
+> > =C2=A0
+> =C2=A0
+> =C2=A0I would say we start with the DMA-API by getting away from sg_table=
+s
+> to something cleaner and state oriented.=C2=A0
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 12b6dfeaf658..edf74458474a 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -1664,9 +1664,10 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
- 	usb_put_urb(urb);
- }
- 
--static void usb_giveback_urb_bh(struct tasklet_struct *t)
-+static void usb_giveback_urb_bh(struct work_struct *work)
- {
--	struct giveback_urb_bh *bh = from_tasklet(bh, t, bh);
-+	struct giveback_urb_bh *bh =
-+		container_of(work, struct giveback_urb_bh, bh);
- 	struct list_head local_list;
- 
- 	spin_lock_irq(&bh->lock);
-@@ -1691,9 +1692,9 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
- 	spin_lock_irq(&bh->lock);
- 	if (!list_empty(&bh->head)) {
- 		if (bh->high_prio)
--			tasklet_hi_schedule(&bh->bh);
-+			queue_work(system_bh_highpri_wq, &bh->bh);
- 		else
--			tasklet_schedule(&bh->bh);
-+			queue_work(system_bh_wq, &bh->bh);
- 	}
- 	bh->running = false;
- 	spin_unlock_irq(&bh->lock);
-@@ -1706,7 +1707,7 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
-  * @status: completion status code for the URB.
-  *
-  * Context: atomic. The completion callback is invoked in caller's context.
-- * For HCDs with HCD_BH flag set, the completion callback is invoked in tasklet
-+ * For HCDs with HCD_BH flag set, the completion callback is invoked in BH
-  * context (except for URBs submitted to the root hub which always complete in
-  * caller's context).
-  *
-@@ -1725,7 +1726,7 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
- 	struct giveback_urb_bh *bh;
- 	bool running;
- 
--	/* pass status to tasklet via unlinked */
-+	/* pass status to BH via unlinked */
- 	if (likely(!urb->unlinked))
- 		urb->unlinked = status;
- 
-@@ -1747,9 +1748,9 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
- 	if (running)
- 		;
- 	else if (bh->high_prio)
--		tasklet_hi_schedule(&bh->bh);
-+		queue_work(system_bh_highpri_wq, &bh->bh);
- 	else
--		tasklet_schedule(&bh->bh);
-+		queue_work(system_bh_wq, &bh->bh);
- }
- EXPORT_SYMBOL_GPL(usb_hcd_giveback_urb);
- 
-@@ -2540,7 +2541,7 @@ static void init_giveback_urb_bh(struct giveback_urb_bh *bh)
- 
- 	spin_lock_init(&bh->lock);
- 	INIT_LIST_HEAD(&bh->head);
--	tasklet_setup(&bh->bh, usb_giveback_urb_bh);
-+	INIT_WORK(&bh->bh, usb_giveback_urb_bh);
- }
- 
- struct usb_hcd *__usb_create_hcd(const struct hc_driver *driver,
-@@ -2926,7 +2927,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
- 			&& device_can_wakeup(&hcd->self.root_hub->dev))
- 		dev_dbg(hcd->self.controller, "supports USB remote wakeup\n");
- 
--	/* initialize tasklets */
-+	/* initialize BHs */
- 	init_giveback_urb_bh(&hcd->high_prio_bh);
- 	hcd->high_prio_bh.high_prio = true;
- 	init_giveback_urb_bh(&hcd->low_prio_bh);
-@@ -3036,7 +3037,7 @@ void usb_remove_hcd(struct usb_hcd *hcd)
- 	mutex_unlock(&usb_bus_idr_lock);
- 
- 	/*
--	 * tasklet_kill() isn't needed here because:
-+	 * flush_work() isn't needed here because:
- 	 * - driver's disconnect() called from usb_disconnect() should
- 	 *   make sure its URBs are completed during the disconnect()
- 	 *   callback
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index 00724b4f6e12..f698aac71de3 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -55,7 +55,7 @@ struct giveback_urb_bh {
- 	bool high_prio;
- 	spinlock_t lock;
- 	struct list_head  head;
--	struct tasklet_struct bh;
-+	struct work_struct bh;
- 	struct usb_host_endpoint *completing_ep;
- };
- 
--- 
-2.43.0
+FYI I am already adding a 'dma_vec' object in my IIO DMABUF patchset,
+which is just a dead simple
+
+struct dma_vec {
+  dma_addr_t addr;
+  size_t len;
+};
+
+(The rationale for introducing it in the IIO DMABUF patchset was that
+the "scatterlist" wouldn't allow me to change the transfer size.)
+
+So I believe a new "sg_table"-like could just be an array of struct
+dma_vec + flags.
+
+Cheers,
+-Paul
+
+> > =C2=A0
+> >=20
+> > My take is that the opt-in callback addition is far from great, but
+> > it's
+> > in line with how we extended dma-buf the past decade plus too. So
+> > unless
+> > someone's volunteering to pour some serious time into re-
+> > engineering this
+> > all (including testing all the different device/driver<-
+> > >device/driver
+> > interactions) I think there's only really one other option: To not
+> > support
+> > these cases at all. And I don't really like that, because it means
+> > people
+> > will hack together something even worse in their drivers.
+> >=20
+> > By adding it to dma-buf it'll stare us in our faces at least :-/
+> > =C2=A0
+> =C2=A0
+> =C2=A0Yeah, it's the way of the least resistance. But with CXL at the
+> horizon and more and more drivers using it I think it's predictable
+> that this will sooner or later blow up.
+> =C2=A0
+> =C2=A0Cheers,
+> =C2=A0Christian.=20
+> =C2=A0
+> =C2=A0
+> > =C2=A0
+> >=20
+> > Cheers, Sima
+> >=20
+> > =C2=A0
+> > > =C2=A0
+> > > Regards,
+> > > Christian.
+> > >=20
+> > > =C2=A0
+> > > > =C2=A0
+> > > > Cheers, Sima
+> > > > =C2=A0
+> > > =C2=A0
+> > > _______________________________________________
+> > > Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
+> > > To unsubscribe send an email to linaro-mm-sig-
+> > > leave@lists.linaro.org
+> > > =C2=A0
+> > =C2=A0=C2=A0
+> =C2=A0
+> =C2=A0
 
 
