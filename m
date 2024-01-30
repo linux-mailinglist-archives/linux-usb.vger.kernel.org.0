@@ -1,72 +1,73 @@
-Return-Path: <linux-usb+bounces-5638-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5639-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3059A8426C4
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 15:19:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B20888426C5
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 15:20:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93734B2302B
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 14:19:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 695EE1F28D8E
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 14:20:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC776DD00;
-	Tue, 30 Jan 2024 14:19:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6B66DD02;
+	Tue, 30 Jan 2024 14:19:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mybY5PtC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EKzXVhDh"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAEA06DCFC
-	for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 14:19:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104836DCF4
+	for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 14:19:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706624366; cv=none; b=XMHoQoEdt7mFz/TV6YKw/KEcfxy7Yf+vm71knQEZN2g7kINlrmmmiRWWvkR19YKkocK5LvtZLI7QGajNBpaX/5SQaLedWD2rSOav2mUal+E9Qf1AHlljry/96Jul/DiamnBhzCV5k8DF79+ZjACz5KUPCWeAnXYmQfqi9XKrn0s=
+	t=1706624398; cv=none; b=XfDhsa/WdygULqXQPx1E2UmhV5CtrGwXNxmEcthKt+1A8FCPqa9ehj4BecVpRrdVUPUT00f0U6StyMYw1+jfaNtK6LkaVTIdR2Iph3gq5G0510I4/dEaet5z8JmeP56uG49PMnZaSXtot4qNErXqya7KIj3rgeegzDxjjBQ0yEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706624366; c=relaxed/simple;
-	bh=zAvJgC4+6+4cppDSnnEDAWkmLeSAJ4CakwawFRydD88=;
+	s=arc-20240116; t=1706624398; c=relaxed/simple;
+	bh=Q1SI42N7k3N4aqUjhfGqW7TbGrF1oka+Zww77frpYlI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=utXUrsKSVrr2lz2XqVn3dg83ZkROIVR/iqXM45LssZhS/fz+3P6IYSU4c/cn8QwdivbaM7B0FdekFROcvyIvQDKgAHxEzNPuG0IXgRARsqAoLwksVqndwJHZsHt99C1Be9NUkKLJcVp07rivSZZ4DKqxKvpm6WJsi8hlEY6j21g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mybY5PtC; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZTN9Mc+svMhbEEhC5duKjoCPuQ7b3WPdcNGwUPjA/iIQKfibV78Zbvq7pycKpj01h7ZeXwYbbx2FagntiaUQOMYmbeGGO/1z5u2hFwAyhs//3oYbDR1brBT1nRnWYasfG+JmmKM1ktaHyX9mIHz3YdFvfqoOj2Jt/8kjt3soMvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EKzXVhDh; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706624365; x=1738160365;
+  t=1706624398; x=1738160398;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zAvJgC4+6+4cppDSnnEDAWkmLeSAJ4CakwawFRydD88=;
-  b=mybY5PtCRvfhaRvCSs4NKsz2btDGoJ595tLLHd7GgScwSvdrxBzFUnEk
-   JkgA/AXldp0yUVRu507+asYdVQRjiPZB65jW3PBpuWCtUxxNPPbmcKcZh
-   jLWH3UBvJXwHqHo92c1Ob7tTwgpqgjChsBsElLvHkgk7adSex1KBeB9Mk
-   Jlj6/mU1uhNa34bv63lhwH7CHwjggZdla9zDxQOMMAf7xwkEauIUApZM6
-   ks/ooJeQIHRFzMQvzMo1Wjkxgcox3yDRvZSsyLl+MYr3LYZiiD9pL4/iZ
-   CHkSot19tESRFd6hZmEngHlqhVlLMAukEnptsP2MiTtDywYeHomT5v2v/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="21809866"
+  bh=Q1SI42N7k3N4aqUjhfGqW7TbGrF1oka+Zww77frpYlI=;
+  b=EKzXVhDh+g2d3jInZ7LQ70yR+zBgvyWl+zGDcwQCw3PcHieGzWx7Du+g
+   qqyCNoYQlErgm376x238Ful9Cz0NSllhQPSSJs+362itt5OjGlK5SZZLK
+   IHu3484vpCGlR6D1DRXmXqGxZKjfb7s5auyQNTwMBC4WDGn6hhuwZBFD1
+   WOCbbD0kcgJ2s2uNoclxiFpgBY/q9XsVHgfBEdlEXCseMSv/B2qKvfHBB
+   onFVhV/hntLn0jd+W+E7+PowHOoyuUSY/QOvb9M1MM2NMoea7FtL3nizo
+   VZAX7uAROqplxbMTONRVPjU74xl72nb8CgxbxfWBpaXtF+SMoRWJmcPid
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="21809917"
 X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
-   d="scan'208";a="21809866"
+   d="scan'208";a="21809917"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 06:19:25 -0800
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 06:19:57 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="931464122"
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="931464231"
 X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
-   d="scan'208";a="931464122"
+   d="scan'208";a="931464231"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 30 Jan 2024 06:19:20 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 30 Jan 2024 16:19:20 +0200
-Date: Tue, 30 Jan 2024 16:19:20 +0200
+  by fmsmga001.fm.intel.com with SMTP; 30 Jan 2024 06:19:53 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 30 Jan 2024 16:19:52 +0200
+Date: Tue, 30 Jan 2024 16:19:52 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Xu Yang <xu.yang_2@nxp.com>
 Cc: gregkh@linuxfoundation.org, benjamin.tissoires@redhat.com,
 	hdegoede@redhat.com, ivan.orlov0322@gmail.com,
 	linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com,
 	stern@rowland.harvard.edu
-Subject: Re: [PATCH v3 1/2] usb: roles: fix NULL pointer issue when put
- module's reference
-Message-ID: <ZbkFaAlrsKXy2XTB@kuha.fi.intel.com>
+Subject: Re: [PATCH v3 2/2] usb: roles: don't get/set_role() when
+ usb_role_switch is unregistered
+Message-ID: <ZbkFiIbF5MFciTO8@kuha.fi.intel.com>
 References: <20240129093739.2371530-1-xu.yang_2@nxp.com>
+ <20240129093739.2371530-2-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,20 +76,17 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240129093739.2371530-1-xu.yang_2@nxp.com>
+In-Reply-To: <20240129093739.2371530-2-xu.yang_2@nxp.com>
 
-On Mon, Jan 29, 2024 at 05:37:38PM +0800, Xu Yang wrote:
-> In current design, usb role class driver will get usb_role_switch parent's
-> module reference after the user get usb_role_switch device and put the
-> reference after the user put the usb_role_switch device. However, the
-> parent device of usb_role_switch may be removed before the user put the
-> usb_role_switch. If so, then, NULL pointer issue will be met when the user
-> put the parent module's reference.
+On Mon, Jan 29, 2024 at 05:37:39PM +0800, Xu Yang wrote:
+> There is a possibility that usb_role_switch device is unregistered before
+> the user put usb_role_switch. In this case, the user may still want to
+> get/set_role() since the user can't sense the changes of usb_role_switch.
 > 
-> This will save the module pointer in structure of usb_role_switch. Then,
-> we don't need to find module by iterating long relations.
+> This will add a flag to show if usb_role_switch is already registered and
+> avoid unwanted behaviors.
 > 
-> Fixes: 5c54fcac9a9d ("usb: roles: Take care of driver module reference counting")
+> Fixes: fde0aa6c175a ("usb: common: Small class for USB role switches")
 > cc: <stable@vger.kernel.org>
 > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
@@ -96,82 +94,66 @@ Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
 > Changes in v2:
->  - save module pointer as a member of usb_role_switch as suggested by Alan
+>  - new patch during test patch 1
+>  - add registered flag
 > Changes in v3:
->  - no changes
+>  - add fix tag and stable list
 > ---
->  drivers/usb/roles/class.c | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
+>  drivers/usb/roles/class.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-> index ae41578bd014..2bad038fb9ad 100644
+> index 2bad038fb9ad..70165dd86b5d 100644
 > --- a/drivers/usb/roles/class.c
 > +++ b/drivers/usb/roles/class.c
-> @@ -21,6 +21,7 @@ static const struct class role_class = {
->  struct usb_role_switch {
->  	struct device dev;
+> @@ -23,6 +23,7 @@ struct usb_role_switch {
 >  	struct mutex lock; /* device lock*/
-> +	struct module *module; /* the module this device depends on */
+>  	struct module *module; /* the module this device depends on */
 >  	enum usb_role role;
+> +	bool registered;
 >  
 >  	/* From descriptor */
-> @@ -135,7 +136,7 @@ struct usb_role_switch *usb_role_switch_get(struct device *dev)
->  						  usb_role_switch_match);
+>  	struct device *usb2_port;
+> @@ -49,6 +50,9 @@ int usb_role_switch_set_role(struct usb_role_switch *sw, enum usb_role role)
+>  	if (IS_ERR_OR_NULL(sw))
+>  		return 0;
 >  
->  	if (!IS_ERR_OR_NULL(sw))
-> -		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
-> +		WARN_ON(!try_module_get(sw->module));
+> +	if (!sw->registered)
+> +		return -EOPNOTSUPP;
+> +
+>  	mutex_lock(&sw->lock);
 >  
->  	return sw;
->  }
-> @@ -157,7 +158,7 @@ struct usb_role_switch *fwnode_usb_role_switch_get(struct fwnode_handle *fwnode)
->  		sw = fwnode_connection_find_match(fwnode, "usb-role-switch",
->  						  NULL, usb_role_switch_match);
->  	if (!IS_ERR_OR_NULL(sw))
-> -		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
-> +		WARN_ON(!try_module_get(sw->module));
->  
->  	return sw;
->  }
-> @@ -172,7 +173,7 @@ EXPORT_SYMBOL_GPL(fwnode_usb_role_switch_get);
->  void usb_role_switch_put(struct usb_role_switch *sw)
+>  	ret = sw->set(sw, role);
+> @@ -74,7 +78,7 @@ enum usb_role usb_role_switch_get_role(struct usb_role_switch *sw)
 >  {
->  	if (!IS_ERR_OR_NULL(sw)) {
-> -		module_put(sw->dev.parent->driver->owner);
-> +		module_put(sw->module);
->  		put_device(&sw->dev);
+>  	enum usb_role role;
+>  
+> -	if (IS_ERR_OR_NULL(sw))
+> +	if (IS_ERR_OR_NULL(sw) || !sw->registered)
+>  		return USB_ROLE_NONE;
+>  
+>  	mutex_lock(&sw->lock);
+> @@ -357,6 +361,8 @@ usb_role_switch_register(struct device *parent,
+>  		return ERR_PTR(ret);
 >  	}
->  }
-> @@ -189,15 +190,18 @@ struct usb_role_switch *
->  usb_role_switch_find_by_fwnode(const struct fwnode_handle *fwnode)
+>  
+> +	sw->registered = true;
+> +
+>  	/* TODO: Symlinks for the host port and the device controller. */
+>  
+>  	return sw;
+> @@ -371,8 +377,10 @@ EXPORT_SYMBOL_GPL(usb_role_switch_register);
+>   */
+>  void usb_role_switch_unregister(struct usb_role_switch *sw)
 >  {
->  	struct device *dev;
-> +	struct usb_role_switch *sw = NULL;
->  
->  	if (!fwnode)
->  		return NULL;
->  
->  	dev = class_find_device_by_fwnode(&role_class, fwnode);
-> -	if (dev)
-> -		WARN_ON(!try_module_get(dev->parent->driver->owner));
-> +	if (dev) {
-> +		sw = to_role_switch(dev);
-> +		WARN_ON(!try_module_get(sw->module));
+> -	if (!IS_ERR_OR_NULL(sw))
+> +	if (!IS_ERR_OR_NULL(sw)) {
+> +		sw->registered = false;
+>  		device_unregister(&sw->dev);
 > +	}
->  
-> -	return dev ? to_role_switch(dev) : NULL;
-> +	return sw;
 >  }
->  EXPORT_SYMBOL_GPL(usb_role_switch_find_by_fwnode);
+>  EXPORT_SYMBOL_GPL(usb_role_switch_unregister);
 >  
-> @@ -338,6 +342,7 @@ usb_role_switch_register(struct device *parent,
->  	sw->set = desc->set;
->  	sw->get = desc->get;
->  
-> +	sw->module = parent->driver->owner;
->  	sw->dev.parent = parent;
->  	sw->dev.fwnode = desc->fwnode;
->  	sw->dev.class = &role_class;
 > -- 
 > 2.34.1
 
