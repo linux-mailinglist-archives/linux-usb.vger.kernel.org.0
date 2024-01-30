@@ -1,100 +1,129 @@
-Return-Path: <linux-usb+bounces-5654-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5655-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 080CE842B55
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 18:58:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95FEA842B7F
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 19:13:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B3371C2558B
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 17:58:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30D4828BFBA
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 18:13:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 236BB157E61;
-	Tue, 30 Jan 2024 17:58:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01CFD156968;
+	Tue, 30 Jan 2024 18:13:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B5dAbHzq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qgkb0wBW"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5685C14E2D1;
-	Tue, 30 Jan 2024 17:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725991292DB;
+	Tue, 30 Jan 2024 18:13:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706637519; cv=none; b=pbcs6CzPV4MwtDjTyHpTNl3r+qqQDdQPX5dMwBCoFaqdxLPJStSWuT1nvIe9rrIZdZ45xfqFd8RmRBVkmQtHqmObnWkjKmyuvrjyH+s+2AjWwQ8t7YLqlwFz/9LdYNoIEvs4A4YBPp7y+0FiY2rUhPkyzOmVn2Gv2cJu4IT9V6s=
+	t=1706638405; cv=none; b=VfHkn6H6yzUneDE/TUQVDOPF7cMNUtYfyL4u2qH9iscTo+NKsqUnJRi+6nDT/FJnGFtutxKyubbU/IEjfspUshCkCyYl9PyRDUX3pprFgoQo4s+IWQSVSpCGNL3E3h9HofN7vVVhTisLr02k7aToKJhKEcikP0es+EXCo1ooW0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706637519; c=relaxed/simple;
-	bh=eRO58rhLkDC3XGVDbdIcragPqA1KWB4/whLzh4oIseI=;
+	s=arc-20240116; t=1706638405; c=relaxed/simple;
+	bh=tvb6k0t50n+XwnKfJ0/ZnnU9tJS9kWB+9f5a4l0aPGo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D9GNVC01K0Apm/KKvLBV1BobxzWwHVfP00VraxsevVGnKupd9QMwCRlAgJrlQAOYriVa2UzP/LEPCPoqvdcQaPpMrjLmFy7pfphd8YSZV5ExZT8RXxpDdvsV3vtgF6FxJ7pjTKeF1ZDTf6+VgjUb3yxdXcUw9fxSEK51oD3/Qrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B5dAbHzq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6185AC433C7;
-	Tue, 30 Jan 2024 17:58:36 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=KHbChy9MLi8phvUevQIxXkSndEVHSjlL/oZCYi8hCkeoI+SjA1M7/EAAVSNlxoKysHgBl87ZaGqzZ22WGPCJLo3Ak53kCkcyRErHBwDPcslxCtIaEIxxkhJwcPbRMwl/O5O9sBg/bQaiC7HCY3oJXJqUyey6A/4Iyl4VlBHekr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qgkb0wBW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89652C433C7;
+	Tue, 30 Jan 2024 18:13:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706637518;
-	bh=eRO58rhLkDC3XGVDbdIcragPqA1KWB4/whLzh4oIseI=;
+	s=k20201202; t=1706638404;
+	bh=tvb6k0t50n+XwnKfJ0/ZnnU9tJS9kWB+9f5a4l0aPGo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B5dAbHzqxmhoTlyK9egPKCyXc5D9IJkcVjxVLzsvwumOCy+fmTd70T8BqBUcKBcxf
-	 bXLUphvCq5sUVr8q+gCuumt2latEVIbQHW24HnhUCJOC8mKNGE25dDINl/25e/JBSX
-	 7WFcb5SGyWTCp2swIobZJ+RWEbD4qspuLrdUcrtEFToO7K9FHqA32jLtP2RiJOBLgp
-	 bA2oLO4tHLjGd5bGxO/qJrpoRjGcz9WDr+IOn6ey3F5+UVA6EsGDeOGVMSIHHrai3l
-	 a5szKTjg60P4WUbQjyyEq/BjJrrU7GgBnFGioPiQ4by+dWj83zNbP69Dw4BEoZcrBS
-	 ubWb6JbvNzKtg==
-Date: Tue, 30 Jan 2024 17:58:34 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Stefan Eichenberger <eichest@gmail.com>
-Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	piyush.mehta@amd.com, michal.simek@amd.com,
-	francesco.dolcini@toradex.com, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>
-Subject: Re: [PATCH] dt-bindings: usb: microchip,usb5744: Remove peer-hub as
- requirement
-Message-ID: <20240130-blazing-jovial-8c15bbfd9ca1@spud>
-References: <20240130073505.8916-1-eichest@gmail.com>
+	b=qgkb0wBW35JPQhOvoprJ5i6MGC1/cO6mUu0OQ8i3/IjxgmeSsZ2XgUgiDPAWFDORX
+	 fllBj2iiO0Li0X2xPRTsGuoG11bFoSupI2HHRbQxVvLTjBA+TbfZ8s1cCKHZviI0ca
+	 lYQ1gedydbSDG8JDt/cuWMC3FsfEQtLK0LbOMcAPp2aFVJXC4S4EMYMUTAUdLAJxMp
+	 Jwc4eFUTYdUKF6jjpBPF7zTYfhd0WhEAg1PnrJzeMLMtUNE5sZFFbmGTEF0ovlFSd5
+	 +SfwoidLU5nO0+f9TyS9WZfhQhIKHYKX5M3j9aaIVmGV79zUO//1g12+nz+VahY3cb
+	 iiX6foTCrwqOw==
+Date: Tue, 30 Jan 2024 12:13:22 -0600
+From: Rob Herring <robh@kernel.org>
+To: Conor Dooley <conor@kernel.org>, Frank Li <Frank.li@nxp.com>
+Cc: ran.wang_1@nxp.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>, mark.rutland@arm.com,
+	pku.leo@gmail.com, sergei.shtylyov@cogentembedded.com
+Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Add snps,host-vbus-glitches
+ avoiding vbus glitch
+Message-ID: <20240130181322.GA2079185-robh@kernel.org>
+References: <20240119213130.3147517-1-Frank.Li@nxp.com>
+ <20240124-unclothed-dodgy-c78b1fffa752@spud>
+ <ZbFNIvEaAJCxC2VB@lizhi-Precision-Tower-5810>
+ <20240124-video-lumpiness-178c4e317f5a@spud>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="wUsBcy9YsbXTTG7j"
-Content-Disposition: inline
-In-Reply-To: <20240130073505.8916-1-eichest@gmail.com>
-
-
---wUsBcy9YsbXTTG7j
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240124-video-lumpiness-178c4e317f5a@spud>
 
-On Tue, Jan 30, 2024 at 08:35:05AM +0100, Stefan Eichenberger wrote:
-> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
->=20
-> The peer-hub is used to model the relationship between the USB 2 and USB
-> 3 hub. However, it is possible to only connect USB 2 without having
-> USB 3. Therefore, the peer-hub property should not be marked as required.
->=20
-> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+On Wed, Jan 24, 2024 at 05:59:00PM +0000, Conor Dooley wrote:
+> On Wed, Jan 24, 2024 at 12:47:14PM -0500, Frank Li wrote:
+> > On Wed, Jan 24, 2024 at 05:36:42PM +0000, Conor Dooley wrote:
+> > > On Fri, Jan 19, 2024 at 04:31:28PM -0500, Frank Li wrote:
+> > > > From: Ran Wang <ran.wang_1@nxp.com>
+> > > > 
+> > > > When DWC3 is set to host mode by programming register DWC3_GCTL, VBUS
+> > > > (or its control signal) will turn on immediately on related Root Hub
+> > > > ports. Then the VBUS will be de-asserted for a little while during xhci
+> > > > reset (conducted by xhci driver) for a little while and back to normal.
+> > > > 
+> > > > This VBUS glitch might cause some USB devices emuration fail if kernel
+> > > > boot with them connected. One SW workaround which can fix this is to
+> > > > program all PORTSC[PP] to 0 to turn off VBUS immediately after setting
+> > > > host mode in DWC3 driver(per signal measurement result, it will be too
+> > > > late to do it in xhci-plat.c or xhci.c).
+> > > > 
+> > > > Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> > > > Reviewed-by: Peter Chen <peter.chen@nxp.com>
+> > > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
+> > > >  1 file changed, 7 insertions(+)
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > > index 203a1eb66691f..dbf272b76e0b5 100644
+> > > > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > > > @@ -273,6 +273,13 @@ properties:
+> > > >        with an external supply.
+> > > >      type: boolean
+> > > >  
+> > > > +  snps,host-vbus-glitches:
+> > > > +    description:
+> > > > +      When set, power off all Root Hub ports immediately after
+> > > > +      setting host mode to avoid vbus (negative) glitch happen in later
+> > > > +      xhci reset. And the vbus will back to 5V automatically when reset done.
+> 
+> nit: "will return to"
+> 
+> > > > +    type: boolean
+> > > 
+> > > Why do we want to have a property for this at all? The commit message
+> > > seems to describe a problem that's limited to specific configurations
+> > > and appears to be somethng the driver should do unconditionally.
+> > > 
+> > > Could you explain why this cannot be done unconditionally please?
+> > 
+> > It depends on board design, not all system vbus can be controller by root
+> > hub port. If it is always on, it will not trigger this issue.
+> 
+> Okay, that seems reasonable to have a property for. Can you add that
+> info to the commit message please?
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+But if vbus is always on, then applying the work-around would be a NOP, 
+right? So you could just apply this unconditionally.
 
-Cheers,
-Conor.
-
---wUsBcy9YsbXTTG7j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbk4ygAKCRB4tDGHoIJi
-0nQ7AQC2snoup2KWag8GoxVgNdDzgpVNDKIv6nxn8T1ciJa76AEAq9OtUNaVd1zk
-8GIFEffIl8Iyh/5I125yK0Ex4BScYgU=
-=6jsI
------END PGP SIGNATURE-----
-
---wUsBcy9YsbXTTG7j--
+Rob
 
