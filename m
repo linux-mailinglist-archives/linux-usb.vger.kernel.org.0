@@ -1,239 +1,84 @@
-Return-Path: <linux-usb+bounces-5615-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5616-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97838841CC9
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 08:40:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E5C4841EA9
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 10:04:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CE182835B7
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 07:40:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9049AB27CD8
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 08:50:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 669F552F6D;
-	Tue, 30 Jan 2024 07:40:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE0E657883;
+	Tue, 30 Jan 2024 08:50:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vk+NtIjN"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="Fpz+rEj0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2288452F6F
-	for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 07:40:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879E052F62;
+	Tue, 30 Jan 2024 08:50:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706600434; cv=none; b=tiCBF9YFPm+hZHUeEFiXPpCwn+FFJwsEBrEMUn1I1lzcljeeUaxRMRKnCHei3NpTLFysMqzrWcUIsQskaBTS9mENTux92Dm8ufCfmvs1vuOQjhoSzK4CFaH513dxzUUB4yrjZ8qQNNfyfrbL8WwXpdLGrBj3Zt+11aSlp64JgG0=
+	t=1706604621; cv=none; b=jYYCLxGXCsYd0MLE0zIILTQz3GLJe2F0OAeVvonplics8QUphepW0Oh50vqAJGAPuGJDKFHgfui7pcmQIBAMNO//UpwWJWedYXyyPmy2iO7haoLOWlY5Dgt8/h4xKD4oGK0EvgsQT4rxJ9sQDRYHNXDFkjF2g4wPuklPM0ec2vI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706600434; c=relaxed/simple;
-	bh=X8V9pvpV0JNRuDhoPRdTK4TGozcDMk3G0rZ4Q7XMqic=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l9v/8d1Ow9SgzLjrUuh8Thri/IsI030euNEB0Hd3RvEMiH6dEnnOnv/eQr3hdEhxcfUr6svMhTfnkZsq5+KxAg615xWnG6dLeENh3+sHcZznzqnqQpHboFCjOpI2MPgUZbU9z2gBTBtAFRMoiIbs7y1VmLiKlV7bXkd3R9wrixo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vk+NtIjN; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-55f19a3ca7aso2231842a12.1
-        for <linux-usb@vger.kernel.org>; Mon, 29 Jan 2024 23:40:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706600431; x=1707205231; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uPe60IzTNRhQ8xdKXhrI1YkRrC86QmovGAq/H+j7848=;
-        b=vk+NtIjN+424w+N92139h8KhT8HBQ/8yTi3vrGJwq01a/6Y7BpF8Q3R3229TSm2WLZ
-         knwYwGosb+O4DvdHXuIMjt7qEkncwa6nuz9ZOGKGeNPOUKiVf1rYCgJjTWnW0u/8qzzb
-         /jp04m99871RNPRZM1KRKEfY01Dt11bq0/f0G2TjG4doYfWEQWQSZd6aew6dEx6IUFw/
-         vXelMLculQEeO6bvCf1i78UqRVE/2VmeUHE2K1UVXAPCRu1+vDPMmfBbZoBHeVtU1X0Q
-         zb8+00+QfT448vrHapS+mqhnDeM6qcqJlumH4hgfKYYWbZff0XUfkNuxxxoY0CYEGW8/
-         y+Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706600431; x=1707205231;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uPe60IzTNRhQ8xdKXhrI1YkRrC86QmovGAq/H+j7848=;
-        b=wogD3mb8T9B9AkJE76Fjwg3OPyEX/+HPmqFdq5qbLpyxUP8IUCOPRcIkXqwFlIPIx5
-         kI0pQZAEEusufwNmPBOK0d9ysqN+zkGuAk3zm4mWkOkhBZaKedeW1GfP4lBY/Y55p/3x
-         +N4i6EFIdg9TLcQK0jVpIxMoLVN8izH/+HG3242wkl5BzgtFqfL26AnEJqf/AvUhRo16
-         /DAVqvhfY4Kiqyjc0/cuYsrJRkgi4AwFa+i5Mdolo/CgqVhnz6nF2sHZY4eUg8ZRdEH5
-         9df19x0ZMQAAtlUC2Nbum9BMzypPNGDbfwvpS1654KB3z76KIzmSt8MQ4YAJTW7kNIRp
-         fh3g==
-X-Gm-Message-State: AOJu0YzfmMSXTAewD/Ucz1KuJQgi9isRtOp5rvIbshzvNYjCvXSWKTJZ
-	GyzJ6ODvxIlWDNZkAm2YDEhlZOq7rD9bLCR4o3fDNkdeBv5auBQhh9hjZWKRW6c=
-X-Google-Smtp-Source: AGHT+IFOW1yMVhj72oFmD37Hzaqe45ko6oyFddynA0fudFTsS0/WukBC5Pbd5ko3gKlDIwPzaYErdA==
-X-Received: by 2002:a17:906:d110:b0:a35:991e:5085 with SMTP id b16-20020a170906d11000b00a35991e5085mr737177ejz.30.1706600431327;
-        Mon, 29 Jan 2024 23:40:31 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.62])
-        by smtp.gmail.com with ESMTPSA id sf5-20020a1709078a8500b00a353bfdd411sm3690334ejc.59.2024.01.29.23.40.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jan 2024 23:40:30 -0800 (PST)
-Message-ID: <f3811c1f-eff2-4c7b-8cea-6d3115525235@linaro.org>
-Date: Tue, 30 Jan 2024 08:40:29 +0100
+	s=arc-20240116; t=1706604621; c=relaxed/simple;
+	bh=ZsubLEjPBiTlfUd936iAo4PuZaNtpRmxWj6Wk42XDJs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UQOhChNIS4gPJeUZzwElEofGY3x6TZA7XTIjfM+WOPGxmkUHFTnFLWByw8Pec8IwOmPo6I83PbrLcKob7Vx64JBMnA9e/QKYVPqoJT47bCjzpAWGGIE0x6CbhbO6QyTdz18mtBWVO3ecxVVdPKuh7r5RYhjx2XU2wdxyRBvovNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=Fpz+rEj0; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 34F4920B42;
+	Tue, 30 Jan 2024 09:50:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1706604611;
+	bh=3lN3zuSgHYMooD1pKa70hIdez5M/4wV0gmFofKkTA3c=; h=From:To:Subject;
+	b=Fpz+rEj0xU2+fAzOpWyp7F3uPPVOi29B2k7AbVfeHmnVvZDpgf3ldJCFZfeCnyGCW
+	 5rZMHQ+nWp5PjxDyLntzvMyjIN3zsV/tTF2xFHpzaHGzEriE5g/lu8HwmzSnXN2m/l
+	 YllJ5ERkM3gcuri8Z/KfjRY0KPNbZ+1TG4PhUg2xLIHs+ipARXGNDPb3Splvs92V09
+	 HyNf8MQ4oF8I21wKQeXX4lZx5jWzsnqL2jERI847JZ3IQrh0Qi1J8Cka7dtX0za3iL
+	 +bg46qmYooIV83182zbkykzWHil/l1//xSf43KqQtDIj+OuJAkChAHbupMCwB4qiqm
+	 V1KDW8KlzXtOg==
+Date: Tue, 30 Jan 2024 09:50:06 +0100
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Stefan Eichenberger <eichest@gmail.com>
+Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	piyush.mehta@amd.com, michal.simek@amd.com,
+	francesco.dolcini@toradex.com, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Subject: Re: [PATCH] dt-bindings: usb: microchip,usb5744: Remove peer-hub as
+ requirement
+Message-ID: <20240130085006.GA4068@francesco-nb>
+References: <20240130073505.8916-1-eichest@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Add system bus request info
-Content-Language: en-US
-To: Frank Li <Frank.li@nxp.com>, Conor Dooley <conor@kernel.org>
-Cc: thinh.nguyen@synopsys.com, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, balbi@kernel.org,
- devicetree@vger.kernel.org, gregkh@linuxfoundation.org, imx@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- mark.rutland@arm.com, mathias.nyman@intel.com, pku.leo@gmail.com,
- sergei.shtylyov@cogentembedded.com
-References: <20240123-poking-geography-33be2b5ae578@spud>
- <Za/8J8MDJaZEPEKO@lizhi-Precision-Tower-5810>
- <20240123-anew-lilly-0d645bdbfb30@spud>
- <Za//LX9U6QG5A5NW@lizhi-Precision-Tower-5810>
- <20240123-nanometer-atlantic-6465b270043a@spud>
- <ZbAR/NQvjUnf2At+@lizhi-Precision-Tower-5810>
- <46781012-2678-4f6c-9aee-b020cabcbb28@linaro.org>
- <ZbA8ea9Ex+hMdDDZ@lizhi-Precision-Tower-5810>
- <ZbfB/KT+fzO/F2e5@lizhi-Precision-Tower-5810>
- <20240129-encode-catchable-f5712d561a47@spud>
- <ZbfjZoHiH7BsKyzl@lizhi-Precision-Tower-5810>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <ZbfjZoHiH7BsKyzl@lizhi-Precision-Tower-5810>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240130073505.8916-1-eichest@gmail.com>
 
-On 29/01/2024 18:41, Frank Li wrote:
-> On Mon, Jan 29, 2024 at 04:49:21PM +0000, Conor Dooley wrote:
->> On Mon, Jan 29, 2024 at 10:19:24AM -0500, Frank Li wrote:
->>> On Tue, Jan 23, 2024 at 05:23:53PM -0500, Frank Li wrote:
->>>> On Tue, Jan 23, 2024 at 10:46:39PM +0100, Krzysztof Kozlowski wrote:
->>>>> On 23/01/2024 20:22, Frank Li wrote:
->>>>>> On Tue, Jan 23, 2024 at 06:42:27PM +0000, Conor Dooley wrote:
->>>>>>> On Tue, Jan 23, 2024 at 01:02:21PM -0500, Frank Li wrote:
->>>>>>>> On Tue, Jan 23, 2024 at 05:51:48PM +0000, Conor Dooley wrote:
->>>>>>>>> On Tue, Jan 23, 2024 at 12:49:27PM -0500, Frank Li wrote:
->>>>>>>>>> On Tue, Jan 23, 2024 at 05:27:13PM +0000, Conor Dooley wrote:
->>>>>>>>>>> On Tue, Jan 23, 2024 at 12:02:05PM -0500, Frank Li wrote:
->>>>>>>>>>>> Add device tree binding allow platform overwrite default value of *REQIN in
->>>>>>>>>>>> GSBUSCFG0.
->>>>>>>>>>>
->>>>>>>>>>> Why might a platform actually want to do this? Why does this need to be
->>>>>>>>>>> set at the board level and being aware of which SoC is in use is not
->>>>>>>>>>> sufficient for the driver to set the correct values?
->>>>>>>>>>
->>>>>>>>>> In snps,dwc3.yaml, there are already similary proptery, such as
->>>>>>>>>> snps,incr-burst-type-adjustment. Use this method can keep whole dwc3 usb
->>>>>>>>>> driver keep consistent. And not all platform try enable hardware
->>>>>>>>>> dma_cohenrence. It is configable for difference platform.
->>>>>>>>>
->>>>>>>>> When you say "platform", what do you mean? I understand that term to
->>>>>>>>> mean a combination of board, soc and firmware.
->>>>>>>>
->>>>>>>> In my company's environment, "platform" is "board". I will use "board" in
->>>>>>>> future. Is it big difference here?
->>>>>>>
->>>>>>> Nah, that's close enough that it makes no difference here.
->>>>>>>
->>>>>>> I'd still like an explanation for why a platform would need to actually
->>>>>>> set these properties though, and why information about coherency cannot
->>>>>>> be determined from whether or not the boss the usb controller is on is
->>>>>>> communicated to be dma coherent via the existing devicetree properties
->>>>>>> for that purpose.
->>>>>>
->>>>>> Actually, I am not very clear about reason. I guest maybe treat off power
->>>>>> consumption and performance.
->>>>>>
->>>>>> What's your judgement about proptery, which should be in dts. Such as
->>>>>> reg, clk, reset, dma and irq, which is tighted with SOC. It is the fixed
->>>>>> value for every SOC. The board dts never change these.
->>>>>
->>>>> Then it can be deduced from the compatible and there is no need for new
->>>>> properties.
->>>>
->>>> Okay, I think "*reqinfo" match this. When new Soc(using compatible dwc usb
->>>> controller) appear regardless dma-cohorence or not, connect by AXI3 or
->>>> AXI4, needn't add new propterties. 
->>>
->>> Anyone have objection? I will prepare v2 to fix rob's bot error.
->>
->> I'm not sure what you want me to object to/not object to.
->> Your last message said "needn't add new propterties", seemingly in
->> agreement with Krzysztoff saying that it can be deduced from the
->> compatible. That seems like a good way forward for me.
+On Tue, Jan 30, 2024 at 08:35:05AM +0100, Stefan Eichenberger wrote:
+> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 > 
-> Okay, let me clear it again. dwc usb is quite common IP. The below is
-> what reason why need "*reginfo* instead of using compatible string.
-> 
-> 1. *reginfo* property is decscript hardware behevior, which will be changed
-> at difference SOC.
-> 2. it may change at board level according to if enable dma coherence.
+> The peer-hub is used to model the relationship between the USB 2 and USB
+> 3 hub. However, it is possible to only connect USB 2 without having
+> USB 3. Therefore, the peer-hub property should not be marked as required.
 
-dma coherence is not a board property. Anyway, you said it will never
-change in the board.
+This was noticed while adding this HUB in the DTS on a board in which
+USB3 is not supported. To some extent this is fix.
 
-> 3. dwc core part is quite common, all SOC using common "snps, dwc3" as
-> core-part, all soc specific "nxp, dwc3 *", "qcom, dwc3*" is used for glue
-> logic part.
+> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Reviewed-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-And all should be having dedicated compatibles.
-
-> 4. using *reginfo* can reduce add more strange compatible string such as
-> "nxp, dwc3-core" ...
-> 5. *reginfo* property likes "reg", "clk", and align what Kryzystoff said.
-> "reg", "clk" is fixed for specfic SOC. These can help reduce "compatible"
-> string number. "reginfo" do the same work as "reg", "clk" ..
-
-So again, reginfo is fixed for specific SoC? So it can be deduced from
-compatible.
-
-I don't know what to say more here... so let's be clear that you
-understood me:
-
-NAK
-
-Best regards,
-Krzysztof
+Francesco
 
 
