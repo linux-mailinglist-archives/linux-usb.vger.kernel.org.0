@@ -1,76 +1,74 @@
-Return-Path: <linux-usb+bounces-5669-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5670-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2D19842CEC
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 20:34:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 253D1842D24
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 20:43:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98F552889FF
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 19:34:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2A4D286254
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 19:43:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25E8178B53;
-	Tue, 30 Jan 2024 19:33:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26FCB69E1E;
+	Tue, 30 Jan 2024 19:42:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aTsBM1HJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="P6nZjW2W"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3897B3FD
-	for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 19:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E951E539
+	for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 19:42:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706643196; cv=none; b=fnFB+KX3PT44Fq4tHuH+Y4m0f/P+NN7Mqg6y2SfvIPpzIABv3r1ru+C2AYfYYiinyD3K6To5kBXsBxrqFg8l1txxNXsma9I31K5ot1b9gAnON09Ibm81N68e8ljJautHE+5GSGn3tm/DMTFNwN4dWpXk1q3D79Uk9Zoq1Ivkhyw=
+	t=1706643778; cv=none; b=NciQAERYosrccdD1KMeH4Gm1PWOF/UNUw6W67EbJTjSaTrth8oHM9+mMubkZNdIshof7Pw696bv4cvkbTw8PJmIrZrxIEVXUOLciNbEsh0ZXHbW7JGLtdFC9hAzuhabePdDAV5mgELd4Ezmi2fmwvvVNytrAKiT3QLEGAZ1xaD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706643196; c=relaxed/simple;
-	bh=YbJxbniUvZ2znwhQdVnnHP7RPDLL9PQ/9YgOwMvOdms=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RDytAjDrGG7DBck1LIngo0HlLW/IvcH6NsJYSrG04ET7dsv3qhrH2I6xGDOCimfQ+sLPZL+bJqh8JQMJb0CmUlZI0WV5Wm6BD2gBcsZfpKeDoPuECRIqANCL4NFb80ifDgQYxbqM+tdv/YqJpVsITnDxUCCVTkpiP+EHT7taxKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aTsBM1HJ; arc=none smtp.client-ip=209.85.167.49
+	s=arc-20240116; t=1706643778; c=relaxed/simple;
+	bh=8Z5BmS24X5tLLWjTuRpodf6heaUgSKvg43jPQHOk2A4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DGW9Zkt4Nydz6rRPZenFEw6UhadyH7YQONTyNETen2zxstttLq8SqRuOs2nel0R7yt689GKSxXAZDoQZZ9qz3L4ryHW4c5/mNIVwQoddVnlVFDFa7PNiQtWdQe4A4Z84vNzaSSykWAHyvZ3ce4yjk65iTR9n+ubtmBnYGWbRuaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=P6nZjW2W; arc=none smtp.client-ip=209.85.167.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5111f40b8beso1004492e87.2
-        for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 11:33:14 -0800 (PST)
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-510221ab3ebso6014830e87.1
+        for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 11:42:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706643192; x=1707247992; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=npFpjUqBQIf0VOW9142O+6ls59GJzjW57cq62091hkw=;
-        b=aTsBM1HJ3ybzyso8rlkcyXleQFLxqQcFB8kZ/2U6B5U7b1HcgilWo6HMT/aQK3T3Kw
-         HSAjJQ3vEOMeMQhVR7119d0HmGmLFzeFXXcpKcs4SjRZfuEbYOS9dRssVPXBtiq1DJib
-         eF194UoAt3IXOO3Byz9mCE/QxGSG63+iViWpcE8wrgtqkoJ2u3HY19NwZKrasTrH/GKQ
-         CfMZOPcCxe6CsPiJr/Z6JKngtG+nX4qdHY6jl5nzN03+siq1n68GTm96Y8gMrQ2DcEbu
-         3MpS3cYCQ0ovxksJDdou7wG3rBgRbdJCvX7CL6F7FYYDC9i9yFlimE5PJ+6tjh10kwoI
-         7qDA==
+        d=linaro.org; s=google; t=1706643774; x=1707248574; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xZZ/IjAGrG4aEkz2PzCtESz3DMt0HbnwCgbZRXQA31Y=;
+        b=P6nZjW2WJYEKK0G6tpTfLvBcmi8kWpg7Z4nrM73XfphvTH5FOMFyOaxSZuPIFsAtFV
+         AXvNpftpo++qosWHkNrOebPZKPakcHnJ8ALclDMWy/NitMh0q4Jrh7iW77HbCCulwJLo
+         TYuDnt2obf3OOru4JObFWRdoNec83vwod1f3xeklhHu1Ej8HE+23V8BLTDATxUnn6JFI
+         BdSbDhxhAIGR8ruf2MokaSfv4kuzlq5rGatXl1t96Q1NH818qGzjuNv9IZ+H0pkKMNGS
+         nCyFO2Q0bBZPW/TqPpiQkBz/yflgcbU0HC03xdQtwNborjT1Cs9qgw88a8ldjrDMkiF6
+         HXzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706643192; x=1707247992;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=npFpjUqBQIf0VOW9142O+6ls59GJzjW57cq62091hkw=;
-        b=D/S5NnHrDsYOHcSzrbiH5HjBZXWgWQehBeg8nlpm1IQum7A9HnaFCNEIeWjlrUTrrs
-         mMxNvXZD1pQKCwWrIH9QLqqJZP3DGg+oJeafPt4/u26cNvaBtaI6lj6vitVyZUUO6NVZ
-         WYOewpdfK9AVYzHiV1qzDkS3yEQzxD8h4JyR6ycVbbFiqxLr8RiZPyDOjyVtkc6ZHQOI
-         7i1L8pYBqw/zAlxR0qXv22WYbISoB+IboIGzgr4hExyoW3kAoV4YeCvmsX9Tg/oKsqBA
-         eSoYIaxx7Uy7qOs4+HtLoz3nZmsDtlt8LRBkUeg/HFJKTZsOhYhh6DBfFxr2KmEl+/m5
-         fQsQ==
-X-Gm-Message-State: AOJu0YzaKCxjfrdHVjKyvJXWZlv8DkA/Fb79WTVzyZyOjXI1ICVjK6IS
-	fYWpJk0KEX0oxejcYKjgHz/Xuqfcp7XDeSSMe8hp5eq1olS0sHOCHjp88d0pYVg=
-X-Google-Smtp-Source: AGHT+IHUP1ABqsZ6nXpGibVLqqJMZsucIp6CxCj/NrOOIjsjUMw8sINviWHWc7EiFPsQVq1flA5Tiw==
-X-Received: by 2002:a05:6512:2247:b0:511:b42:1711 with SMTP id i7-20020a056512224700b005110b421711mr6489732lfu.29.1706643192636;
-        Tue, 30 Jan 2024 11:33:12 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUSqZ4Pp0+rGe3h1XuVfHnXuz9flYBJ2RgG3iZrkS3SGbmR2kP5hwwv5auDro9ELAr58+GqR8q9IvHXUNU8w6FLCAN6IkF4+ynfEGH6yXOqBn42iedWu23M9CXa3KUCOpCMhJCk5mdkSmc7d9EPKkjl56mN3iltZ6MQQ9x1xTZXXVZ4pPfBInOTL7FxVM4rgDuXsJqqDImWxONCLDTk6bUx86tZNIvqtjcQJyU7PtK8zc+yK5EVfvitbMnBSgOPwuekE6yUAf5b/TrKODytSlkhyJjwaL14epagecv5tDe9/VceOR//OZlAVEWOs4sPWJ6rd1bG4uO9hUn02DYsuL2h/NG6dIvZcNv24n9eTYNaDde6P6dfCNha63ISVCuBOu96sYyMk0ZkeCIVk6W/SrottyDH9/clGTRWOUEgeU66aQd7bnclaQXae9hmmzIg4oh4fAdfzcHj55jSycxdIEcyo6UxM9tCPuUg4A3l9YsWfZrEWL+J+ia8Dn+CbqvUMH+hb2VjIGx846iyVgtWwVwpy+gZKsWfes+VHILxzYN4qEMslinLh7VmQQ9Q7EDRUiKUWZkGSAyuZXSlj90BKmpb9dIDDQOZ4+35J3i4qPqt
+        d=1e100.net; s=20230601; t=1706643774; x=1707248574;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xZZ/IjAGrG4aEkz2PzCtESz3DMt0HbnwCgbZRXQA31Y=;
+        b=MdiBHdl7sNGcnxDvorLKGgWCk+Dcq5GO7mih4R4bA7vDfvkJN+A5by9JwKFBPkjxAl
+         yeX3pdK/rai5AwwICjxGurWxAFD5lRaRzjfEX3/Q/ApihejNxtuuv12OgpHtv7cWyTZ1
+         Rc6c8D+HyP6swbCngtbi0Kz60kvrKVyLbSwvqUdvSIgx0wECIdhUu1h0PFidAbJ0pVWp
+         YHGktNkCyZh6nbqNmh0U7/KFmArXEtqHJvpjejYswpbF5WkHOvGdKRS3Nfcg/rgq+EYA
+         PTuaq070+DdZUs2egHv1ES+HgPXKM5JGpZrfc5gTNjElKNAQ77qapOM6leBWJT7GfWhT
+         RsKg==
+X-Gm-Message-State: AOJu0YyzprNoV3YHqRpo84m8yz5HyFf9pfmxE5ZZzR8dvBJzMotJ2agU
+	u7U9qP4XFda9Gg/1p53pncxG9WTevK/rZnGoJU2M0Uuhokr59JrQzMwbsafJQP8=
+X-Google-Smtp-Source: AGHT+IEPaXx6yRdNg9tDN1gAk1OvOK3B2JGlk8/T8ofgyC5zYLJ5dH11E/iIDDtNMPNGSUIpH40jRw==
+X-Received: by 2002:a19:7609:0:b0:511:1b3b:c45 with SMTP id c9-20020a197609000000b005111b3b0c45mr1759529lff.1.1706643774363;
+        Tue, 30 Jan 2024 11:42:54 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCU+9C1V7WhIrefpiX6/NLamAInAce0JJmGvLsV73Ms18xDld7IOp51XQOMpplBWyX+zSUNqHJL4OxGwv++7vO7mFNHK+3SFUzC0nopz/nv+BBiFD4UWmlAbSK/VcqTimdUUToaMPiTn4N35ZAK2sTj7P3OxCrg35h3zDO6PEx5+YQE3kK0VcZqRvQb7D7EwtQAuTzkW6RATPGE+P3hW+gBxhV4+cRbMd5wZ+0QzYNzK47mGzAqI9XnNiMKMoYc5ItCaJJi17nUihE/V9uDYFDsXtTzTvl+yyNasM2tVM4o0y4mw/Q5bdxgdmFZhZAD2iIR1pjEU/F//061GwG/34oOTYtSyAF3CExh0doU/YhikD9GfgvHBAi+9uIad9m/lkkdAyu5ZucKVOo1kQaHg59bsL9ma3bW4lfyS+3BJQRz/M4scE6eP
 Received: from umbar.lan ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id u25-20020a05651220d900b0051119371e7csm366525lfr.120.2024.01.30.11.33.11
+        by smtp.gmail.com with ESMTPSA id j16-20020ac253b0000000b0051021a9febdsm1552145lfh.153.2024.01.30.11.42.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 11:33:12 -0800 (PST)
+        Tue, 30 Jan 2024 11:42:54 -0800 (PST)
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Tue, 30 Jan 2024 21:32:59 +0200
-Subject: [PATCH v3 6/6] arm64: dts: qcom: qrb4210-rb2: enable USB-C port
- handling
+Subject: [PATCH 0/4] arm64: dts: qcom: qrb2210-rb1: enable Type-C support
+Date: Tue, 30 Jan 2024 21:42:51 +0200
+Message-Id: <20240130-pm4125-typec-v1-0-e8d0097e2991@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,9 +77,9 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240130-pmi632-typec-v3-6-b05fe44f0a51@linaro.org>
-References: <20240130-pmi632-typec-v3-0-b05fe44f0a51@linaro.org>
-In-Reply-To: <20240130-pmi632-typec-v3-0-b05fe44f0a51@linaro.org>
+X-B4-Tracking: v=1; b=H4sIADtRuWUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDQ0Nz3YJcE0MjU92SyoLUZF0LCwODFMtkA8vE1GQloJaCotS0zAqwcdG
+ xtbUAa9Yd814AAAA=
 To: Bjorn Andersson <andersson@kernel.org>, 
  Konrad Dybcio <konrad.dybcio@linaro.org>, 
  Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
@@ -89,186 +87,51 @@ To: Bjorn Andersson <andersson@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
  Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
  Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Guenter Roeck <linux@roeck-us.net>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- Luca Weiss <luca.weiss@fairphone.com>
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-usb@vger.kernel.org
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3453;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1241;
  i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=YbJxbniUvZ2znwhQdVnnHP7RPDLL9PQ/9YgOwMvOdms=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBluU7ys02dGfoXOH6zWBHf56+8dD3I7yrm5IOYp
- noffzriEvGJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZblO8gAKCRCLPIo+Aiko
- 1ZscB/0TM6+7mWmBslzwMev5SmlCLwN6InfSSgJL5GL4i4T/3fc5AP1OYV+bD0lbPQ62rujoGtu
- 0Pcerd1WXTQpWLNXf0K090n7jxCUj0Bk7vqOz3tmq6DzJgT7tGXHqH05e6DFWNd3NzKoNhqQCM7
- uPYleNhS83xRJPony2dycfRa6X6ZVp1MZ/QwtyYPqIBq2sU1ddlbswQ2Zgz053TDgtvxtbW0M8Z
- WxvPsTxfGXFdvNBIaTIbt6CzULWhulfu6SD5AKaTpmwrJiMZKUDU4itzmHHx2IMELHPgxSH8QTl
- +rwdyTUfQAi/U1/YLyMM44p6iyuXcrX9RpiOYBt0UoH7+lXu
+ bh=8Z5BmS24X5tLLWjTuRpodf6heaUgSKvg43jPQHOk2A4=;
+ b=owGbwMvMwMXYbdNlx6SpcZXxtFoSQ+rOQJv/MwrY7a5e4FJksnq4ycNbY89Eo5ebbwlV+71SU
+ F2vYH6qk9GYhYGRi0FWTJHFp6Blasym5LAPO6bWwwxiZQKZwsDFKQATmc7N/j/BxSjw1/TG3luH
+ k/vv8l/ySvqSe+2Um+DalIS/v+7Zt7TbBFz8I8Z0946ZvcjnK2lWy7wyT4QuTH/5zSF6eo67Ou/
+ GPduDNq68q8snocZyZemsfQ4Va08kXNHcUc7qkHBIt65sXasiz7yUBGkpUbnOG3y8Mm0XNnAZfy
+ vr+Ki1bHuCnsl5F8+r/AmeCqcZCuQ+G0zzWfAwRV4vqXh2w6vce5EGm2/ZrZh/1rY28agJS5CzY
+ avsqrp5BS4hjYJxYrKGmU2VKhuVV0mIT7A+azxPoGe6j/jVs31q+eorMo63vNrCICj/jel7iMDc
+ h4crXF9EJVxYseK9/bQTUzntfZ9LLSg+ubW/ItEn4s5MAA==
 X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
  fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
-Plug in USB-C related bits and pieces to enable USB role switching and
-USB-C orientation handling for the Qualcomm RB2 board.
+Reuse Type-C support implemented for the PMI632 PMIC (found on Qualcomm
+Robotics RB2 platform) and implement Type-C handling for the Qualcomm
+Robotics RB1 platform.
 
-Tested-by: Luca Weiss <luca.weiss@fairphone.com> # sdm632-fairphone-fp3
+Dependencies: [1]
+
+[1] https://lore.kernel.org/linux-arm-msm/20240130-pmi632-typec-v3-0-b05fe44f0a51@linaro.org/
+
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 50 ++++++++++++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sm6115.dtsi     | 43 +++++++++++++++++++++++++++
- 2 files changed, 93 insertions(+)
+Dmitry Baryshkov (4):
+      dt-bindings: regulator: qcom,usb-vbus-regulator: add support for PM4125
+      dt-bindings: usb: qcom,pmic-typec: add support for the PM4125 block
+      arm64: dts: qcom: pm4125: define USB-C related blocks
+      arm64: dts: qcom: qrb2210-rb1: enable USB-C port handling
 
-diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-index 52f31f3166c2..696d6d43c56b 100644
---- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-@@ -6,8 +6,10 @@
- /dts-v1/;
- 
- #include <dt-bindings/leds/common.h>
-+#include <dt-bindings/usb/pd.h>
- #include "sm4250.dtsi"
- #include "pm6125.dtsi"
-+#include "pmi632.dtsi"
- 
- / {
- 	model = "Qualcomm Technologies, Inc. QRB4210 RB2";
-@@ -256,6 +258,46 @@ kypd_vol_up_n: kypd-vol-up-n-state {
- 	};
- };
- 
-+&pmi632_typec {
-+	status = "okay";
-+
-+	connector {
-+		compatible = "usb-c-connector";
-+
-+		power-role = "dual";
-+		data-role = "dual";
-+		self-powered;
-+
-+		typec-power-opmode = "default";
-+		pd-disable;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+				pmi632_hs_in: endpoint {
-+					remote-endpoint = <&usb_dwc3_hs>;
-+				};
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+				pmi632_ss_in: endpoint {
-+					remote-endpoint = <&usb_qmpphy_out>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&pmi632_vbus {
-+	regulator-min-microamp = <500000>;
-+	regulator-max-microamp = <3000000>;
-+	status = "okay";
-+};
-+
- &pon_pwrkey {
- 	status = "okay";
- };
-@@ -607,6 +649,10 @@ &usb {
- 	status = "okay";
- };
- 
-+&usb_dwc3_hs {
-+	remote-endpoint = <&pmi632_hs_in>;
-+};
-+
- &usb_hsphy {
- 	vdd-supply = <&vreg_l4a_0p9>;
- 	vdda-pll-supply = <&vreg_l12a_1p8>;
-@@ -622,6 +668,10 @@ &usb_qmpphy {
- 	status = "okay";
- };
- 
-+&usb_qmpphy_out {
-+	remote-endpoint = <&pmi632_ss_in>;
-+};
-+
- &wifi {
- 	vdd-0.8-cx-mx-supply = <&vreg_l8a_0p664>;
- 	vdd-1.8-xo-supply = <&vreg_l16a_1p3>;
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index e151b874eaf3..dd3d97ef5cc7 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -879,8 +879,29 @@ usb_qmpphy: phy@1615000 {
- 			clock-output-names = "usb3_phy_pipe_clk_src";
- 
- 			#phy-cells = <0>;
-+			orientation-switch;
- 
- 			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					usb_qmpphy_out: endpoint {
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					usb_qmpphy_usb_ss_in: endpoint {
-+						remote-endpoint = <&usb_dwc3_ss>;
-+					};
-+				};
-+			};
- 		};
- 
- 		system_noc: interconnect@1880000 {
-@@ -1620,6 +1641,28 @@ usb_dwc3: usb@4e00000 {
- 				snps,has-lpm-erratum;
- 				snps,hird-threshold = /bits/ 8 <0x10>;
- 				snps,usb3_lpm_capable;
-+
-+				usb-role-switch;
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+
-+						usb_dwc3_hs: endpoint {
-+						};
-+					};
-+
-+					port@1 {
-+						reg = <1>;
-+
-+						usb_dwc3_ss: endpoint {
-+							remote-endpoint = <&usb_qmpphy_usb_ss_in>;
-+						};
-+					};
-+				};
- 			};
- 		};
- 
+ .../regulator/qcom,usb-vbus-regulator.yaml         |  1 +
+ .../devicetree/bindings/usb/qcom,pmic-typec.yaml   | 13 +++--
+ arch/arm64/boot/dts/qcom/pm4125.dtsi               | 30 +++++++++++
+ arch/arm64/boot/dts/qcom/qcm2290.dtsi              | 42 +++++++++++++++
+ arch/arm64/boot/dts/qcom/qrb2210-rb1.dts           | 60 +++++++++++++++++++---
+ 5 files changed, 135 insertions(+), 11 deletions(-)
+---
+base-commit: 246311c88c992ed675141212cbf19ebe6d11cad5
+change-id: 20240117-pm4125-typec-8800d9c09aec
 
+Best regards,
 -- 
-2.39.2
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 
