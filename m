@@ -1,269 +1,95 @@
-Return-Path: <linux-usb+bounces-5674-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5675-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3903842D2F
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 20:43:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4636842E80
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 22:12:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 818321F259F7
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 19:43:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12DACB21A1A
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 21:12:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DEB371B55;
-	Tue, 30 Jan 2024 19:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 035E5762D7;
+	Tue, 30 Jan 2024 21:12:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B5zmhHiG"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="W8Z0Ly5y"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD90A5B5CA
-	for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 19:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491D86D1D0;
+	Tue, 30 Jan 2024 21:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706643781; cv=none; b=V7wcSzkfljMUqVUpPPYJFh5yYMaTxqNuqS5n1l9WeuWYU/SsANS+PdeJDYcn7rUjrFY5URdHE+I/ynOdzyKM+/3O3ug3YQ32ruLTnPeIj891JzZv+i53913bZVMcJqvicYTidGYDSyHkH7QfZz+H7jN8SDg9j4jFap8hH8OnJNY=
+	t=1706649136; cv=none; b=uuB7bDE1ayWploTWdjCQ0/B89m1na1245r+6afMGjPM1n4PVqVkGoUHfNIp13Kzntl7E8Z1A8WQseT5XYqCOAk+JFwwYxocvR3Kp6aHFuuOZlw21LBCMDMivIba9rw7wVeVY+0teFoK6Nxgsrqk/wHqfbkyTdUSiVIBp2fYM+Q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706643781; c=relaxed/simple;
-	bh=SD6UUFtI+FrYWwRFXzuabrqwuSDciUQyW6zeuGZeagc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kQBr80muqKMG+aJokWZ7Nh1/cPQRM1cGnjTx2DwWfUNVEuz5UjmnynUT7QZ9laeMo9cxkt396E2EyOx/2XMDi4MIzZFSb9QThITbV71rg3GDyW+xDYKNpM6QEC3yTHiVKn/ZjpHArqnxUChUMRU6JAoRUl37YvjJFX1Rr/7uKmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=B5zmhHiG; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5101f2dfdadso7426463e87.2
-        for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 11:42:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706643778; x=1707248578; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MfLAPid7VDK1PAEPiQCRMcHMVr/os/p3blKtpfELzqM=;
-        b=B5zmhHiGC5WfcpUD3UAxzV85JurDNRsmWCPa/2GarcYZuSG7wx1y+GH8CeyPbakayf
-         PbE1uS3xUCC/A2VbgFEujCneF9EtH2nz7h1KiX1RPbbjXVjIPsOG6v8Q8mIRNPvifly8
-         csHCHdB2pKopyAGe5XpVXhM9NZHHS+or7mFYKrqTUm2zWw8nM2dqu01H09PrqmojkMFz
-         LarQ5TTQRB3ewhrfPQ+dlhQ+rqKiW4AJ3VFhnxYMhqnIeIZKfCnGzc3hOVOftMnU52EN
-         OlatVluv1fi34vi3w9LhDLyP/Pg5T5IxqdVVrxetmz+8t0Y1qQiB/8jcC1kD+OkYAc3q
-         W0mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706643778; x=1707248578;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MfLAPid7VDK1PAEPiQCRMcHMVr/os/p3blKtpfELzqM=;
-        b=LXj3zg5oEFhZMm3sd3qWOZUpfebpTdVpSgNNg+e6g4hB67DW2tQEaP3ZERgnfgI/Ig
-         GZ32xgs+6eGEd7eymrAmJ5jR8XZs3pOsgGyoLvevEWQqP08m4Ypzl0Ei3j8/DiYePeML
-         9QI/Q1Qs6bEdVWC1lu18kc3I0nl0gc1yKMkgZABamDNaOVPe762TNBWj1LLOgE3zbRLS
-         hHgI9PCJ9EXDDabffEfgRq54axAwSdi9nbuqIdUKAxMdcxPZY5mKc1ZIj0bT2ub2n/Df
-         goUX1Z4zxP1OW3gHjEQBEVfOo/6maxNdVi0PxJHTamWdAPDq1D3Z8ebVRigGt7GIG3OZ
-         IwuQ==
-X-Gm-Message-State: AOJu0YwZW7cTLX03DSKsLRZLvfPWkFTa8JFMVeyg/Qp1kSAqUE6fY5xk
-	FMu289F3+hj0BtBVQ7VeIyZGRb+4xQoMJVZiKo3RsBmVeRiwsDS46vEpCrHTxzk=
-X-Google-Smtp-Source: AGHT+IHeoIXaYNBsUUv+fe79H1KB6EJw8xDWRHxgZDs441eUwoCCek8zCVtawcdZToqN9UH2MCXD/w==
-X-Received: by 2002:a05:6512:2315:b0:511:e76:6f1f with SMTP id o21-20020a056512231500b005110e766f1fmr5688546lfu.43.1706643777864;
-        Tue, 30 Jan 2024 11:42:57 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWPQmzdu8fdjl96ajOCNfaoF6z4qGiTS/hWiaZlRAfWNUYtfURGCC7A6rQN5yZ9dw1lnhgrQAKQQIWbFMQYp/zI7YvOWI8PpWatt6wZENysU351hhBxOAWPlCnLNq9W033YOUiZL0kn1MdlfAg4705tbQS/Hlep2dwVwAZ6cqmfzVnyUicCyzyZeAhdTbsP/YfrRDtg6CrEswdm+2DIR/ckiF5/5OLzDVJKaHTxBAhjuH13bzTuNPIOk8aHRzBZIkuX4NICKQMHrzN2EdGoNJM3DP3w7MjTeegTa58BG5QEIr97h4ILQjX1eYOLiJZ3bKasRP/fkWurYfcmSD5LgFci9hqwChHeqza1HT3F5NtSy13cyCmEplHwaOn/7gY9WJvXZhXwa1pQgzK/xgoDM5SeUAzMxjVuUI7wvRtZuszxLqVH3p3U
-Received: from umbar.lan ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id j16-20020ac253b0000000b0051021a9febdsm1552145lfh.153.2024.01.30.11.42.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 11:42:57 -0800 (PST)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Tue, 30 Jan 2024 21:42:55 +0200
-Subject: [PATCH 4/4] arm64: dts: qcom: qrb2210-rb1: enable USB-C port
- handling
+	s=arc-20240116; t=1706649136; c=relaxed/simple;
+	bh=no+za9y9P/8+260SExAlGKhL9xW7ZZB8GrD6eZTJ9m8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=HPzJBCHd0+1o+kjpMuF5epSMPPHRtZen+j1mbQGWhY+oYibBrfxbnI8y4SjGko2dFWzQeebeFgXuCNATxvH+vZsRvHZsYsA+s/fSIjQgJaQLa6gQkAbAg/bYyMHjXp+zmVv0vmiRaJqwaTIS4+FaX2OFO03N65g5fI3C1qdTo9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=W8Z0Ly5y; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 782BE41A47
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1706649134; bh=feI9SeP4VYJn59VIlhZ3NpsSzXCYwJA8/l0T6od0SQk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=W8Z0Ly5yt4RYjEDOCpdUXGYbFI66/1W3OxeDuXP/NqYb/q8wAKAIri6F6kOq+ifsv
+	 Y3hhcXbpfV2Gil0dKAsjKxxKJ7AnAtDy0p5AgwPK54hSZ6VgBPg8TqiAMnhuY8Ssol
+	 zOuY+KR42NpjE9HLQmGXXW/fjG9aKVwZbijxOYMRi4zyIhvvr4GJs1zcqW3ODlXOfw
+	 WvHi2zqJ3ZDykN9vgUgVtfJsnAet9u4rPbLSBOZk9bS9b5K0SEQcl6Cd9AA295hIDI
+	 nqPmpG72sfyFvqQiRmBrctjCbUZrR0yxH7Kel0isk+zGn7W8oE1VbPT7n4IJ3EtSWk
+	 TUFSGldb4ejsQ==
+Received: from localhost (unknown [IPv6:2601:280:5e00:7e19::646])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id 782BE41A47;
+	Tue, 30 Jan 2024 21:12:14 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>, Krishna Kurapati
+ <quic_kriskura@quicinc.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-doc@vger.kernel.org, Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Subject: Re: [PATCH v2] usb: gadget: fix max_segment_size malformed table
+In-Reply-To: <20240128045347.25909-1-rdunlap@infradead.org>
+References: <20240128045347.25909-1-rdunlap@infradead.org>
+Date: Tue, 30 Jan 2024 14:12:13 -0700
+Message-ID: <877cjqa5le.fsf@meer.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240130-pm4125-typec-v1-4-e8d0097e2991@linaro.org>
-References: <20240130-pm4125-typec-v1-0-e8d0097e2991@linaro.org>
-In-Reply-To: <20240130-pm4125-typec-v1-0-e8d0097e2991@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-usb@vger.kernel.org
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3313;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=SD6UUFtI+FrYWwRFXzuabrqwuSDciUQyW6zeuGZeagc=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBluVE9kkqMLKfbaX1ipK08gr3+CK2Afcwvm1voG
- zQGc+8nooGJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZblRPQAKCRCLPIo+Aiko
- 1ff3B/4yWQ3f+JTyg8s/rzYHNW9PjzotYy7Z7EzIFh7SdM/3RhRZ8dG1IqkFtroo1bIsXXQoEJ8
- RBk5ehNcHGFJi+fGaNN07thCsbxThc5aundRGXtdjn3g0oTQvIvPW+8ir8WsBdZ0VyW/N72RrfD
- ugJRbarapPGJN2dpLJLSvZlYVgwA7n8KGdIY9a+Yc3IHEkuJhZG5QoPczljTef5C46yguRykZ3e
- DIQqYIc4NJChLQzw0XgdkzlAyjSk1lmp2WBfN1dpoqxr1kJm2W7pV5dkA9tARy8yjsV4rCqIOiI
- N/RwfWLRVJPHxtKxi5gMkIjTt7IjRGZfaqXMgg/OOnayF6CB
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+Content-Type: text/plain
 
-Plug in USB-C related bits and pieces to enable USB role switching and
-USB-C orientation handling for the Qualcomm RB1 board.
+Randy Dunlap <rdunlap@infradead.org> writes:
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm64/boot/dts/qcom/qcm2290.dtsi    | 42 ++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/qrb2210-rb1.dts | 60 +++++++++++++++++++++++++++-----
- 2 files changed, 94 insertions(+), 8 deletions(-)
+> Sphinx reports a malformed table due to the table begin/end line
+> segments being too short for the word "max_segment_size", so
+> extend them by one more '=' character to prevent the error.
+>
+> Documentation/usb/gadget-testing.rst:459: ERROR: Malformed table.
+> Text in column margin in table line 9.
+>
+> Fixes: 1900daeefd3e ("usb: gadget: ncm: Add support to update wMaxSegmentSize via configfs")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Cc: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+> ---
+> v2: s /to error/the error/ in the patch description.
+>
+>  Documentation/usb/gadget-testing.rst |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/qcm2290.dtsi b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-index 0911fb08ed63..6e9a92556423 100644
---- a/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-@@ -689,8 +689,29 @@ usb_qmpphy: phy@1615000 {
- 			clock-output-names = "usb3_phy_pipe_clk_src";
- 
- 			#phy-cells = <0>;
-+			orientation-switch;
- 
- 			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					usb_qmpphy_out: endpoint {
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					usb_qmpphy_usb_ss_in: endpoint {
-+						remote-endpoint = <&usb_dwc3_ss>;
-+					};
-+				};
-+			};
- 		};
- 
- 		system_noc: interconnect@1880000 {
-@@ -1373,6 +1394,27 @@ usb_dwc3: usb@4e00000 {
- 				snps,usb3_lpm_capable;
- 				maximum-speed = "super-speed";
- 				dr_mode = "otg";
-+				usb-role-switch;
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+
-+						usb_dwc3_hs: endpoint {
-+						};
-+					};
-+
-+					port@1 {
-+						reg = <1>;
-+
-+						usb_dwc3_ss: endpoint {
-+							remote-endpoint = <&usb_qmpphy_usb_ss_in>;
-+						};
-+					};
-+				};
- 			};
- 		};
- 
-diff --git a/arch/arm64/boot/dts/qcom/qrb2210-rb1.dts b/arch/arm64/boot/dts/qcom/qrb2210-rb1.dts
-index 64b2ab286279..00fcc01326ff 100644
---- a/arch/arm64/boot/dts/qcom/qrb2210-rb1.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb2210-rb1.dts
-@@ -244,6 +244,46 @@ &pm4125_resin {
- 	status = "okay";
- };
- 
-+&pm4125_typec {
-+	status = "okay";
-+
-+	connector {
-+		compatible = "usb-c-connector";
-+
-+		power-role = "dual";
-+		data-role = "dual";
-+		self-powered;
-+
-+		typec-power-opmode = "default";
-+		pd-disable;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+				pm4125_hs_in: endpoint {
-+					remote-endpoint = <&usb_dwc3_hs>;
-+				};
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+				pm4125_ss_in: endpoint {
-+					remote-endpoint = <&usb_qmpphy_out>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&pm4125_vbus {
-+	regulator-min-microamp = <500000>;
-+	regulator-max-microamp = <500000>;
-+	status = "okay";
-+};
-+
- &qupv3_id_0 {
- 	status = "okay";
- };
-@@ -517,14 +557,8 @@ &usb {
- 	status = "okay";
- };
- 
--&usb_qmpphy {
--	vdda-phy-supply = <&pm4125_l12>;
--	vdda-pll-supply = <&pm4125_l13>;
--	status = "okay";
--};
--
--&usb_dwc3 {
--	dr_mode = "host";
-+&usb_dwc3_hs {
-+	remote-endpoint = <&pm4125_hs_in>;
- };
- 
- &usb_hsphy {
-@@ -534,6 +568,16 @@ &usb_hsphy {
- 	status = "okay";
- };
- 
-+&usb_qmpphy {
-+	vdda-phy-supply = <&pm4125_l12>;
-+	vdda-pll-supply = <&pm4125_l13>;
-+	status = "okay";
-+};
-+
-+&usb_qmpphy_out {
-+	remote-endpoint = <&pm4125_ss_in>;
-+};
-+
- &wifi {
- 	vdd-0.8-cx-mx-supply = <&pm4125_l7>;
- 	vdd-1.8-xo-supply = <&pm4125_l13>;
+Applied, thanks.
 
--- 
-2.39.2
-
+jon
 
