@@ -1,95 +1,148 @@
-Return-Path: <linux-usb+bounces-5675-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5676-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4636842E80
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 22:12:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2719842FB4
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 23:31:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12DACB21A1A
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 21:12:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D40621F21B4F
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 22:31:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 035E5762D7;
-	Tue, 30 Jan 2024 21:12:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC9BF78674;
+	Tue, 30 Jan 2024 22:31:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="W8Z0Ly5y"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Po/F5nmz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491D86D1D0;
-	Tue, 30 Jan 2024 21:12:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA267BB1E
+	for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 22:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706649136; cv=none; b=uuB7bDE1ayWploTWdjCQ0/B89m1na1245r+6afMGjPM1n4PVqVkGoUHfNIp13Kzntl7E8Z1A8WQseT5XYqCOAk+JFwwYxocvR3Kp6aHFuuOZlw21LBCMDMivIba9rw7wVeVY+0teFoK6Nxgsrqk/wHqfbkyTdUSiVIBp2fYM+Q8=
+	t=1706653862; cv=none; b=hiq7R6VoihebiZ2Du3+ey5idb7V/OWPF4LkoWxZW/hTRK2AYEAAdSyFbj/tmk5FMXzXs7TJcg8MyQLThZkfF5nknL8hgJqw8ZcfVSYEI3Hk7hJhojEgKnxGaj/wHE6tdTmerKOyi7CEsY+7QWIC/NwpA9fvYbDuQX7kSCpGsnmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706649136; c=relaxed/simple;
-	bh=no+za9y9P/8+260SExAlGKhL9xW7ZZB8GrD6eZTJ9m8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=HPzJBCHd0+1o+kjpMuF5epSMPPHRtZen+j1mbQGWhY+oYibBrfxbnI8y4SjGko2dFWzQeebeFgXuCNATxvH+vZsRvHZsYsA+s/fSIjQgJaQLa6gQkAbAg/bYyMHjXp+zmVv0vmiRaJqwaTIS4+FaX2OFO03N65g5fI3C1qdTo9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=W8Z0Ly5y; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 782BE41A47
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1706649134; bh=feI9SeP4VYJn59VIlhZ3NpsSzXCYwJA8/l0T6od0SQk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=W8Z0Ly5yt4RYjEDOCpdUXGYbFI66/1W3OxeDuXP/NqYb/q8wAKAIri6F6kOq+ifsv
-	 Y3hhcXbpfV2Gil0dKAsjKxxKJ7AnAtDy0p5AgwPK54hSZ6VgBPg8TqiAMnhuY8Ssol
-	 zOuY+KR42NpjE9HLQmGXXW/fjG9aKVwZbijxOYMRi4zyIhvvr4GJs1zcqW3ODlXOfw
-	 WvHi2zqJ3ZDykN9vgUgVtfJsnAet9u4rPbLSBOZk9bS9b5K0SEQcl6Cd9AA295hIDI
-	 nqPmpG72sfyFvqQiRmBrctjCbUZrR0yxH7Kel0isk+zGn7W8oE1VbPT7n4IJ3EtSWk
-	 TUFSGldb4ejsQ==
-Received: from localhost (unknown [IPv6:2601:280:5e00:7e19::646])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 782BE41A47;
-	Tue, 30 Jan 2024 21:12:14 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>, Krishna Kurapati
- <quic_kriskura@quicinc.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- linux-doc@vger.kernel.org, Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: fix max_segment_size malformed table
-In-Reply-To: <20240128045347.25909-1-rdunlap@infradead.org>
-References: <20240128045347.25909-1-rdunlap@infradead.org>
-Date: Tue, 30 Jan 2024 14:12:13 -0700
-Message-ID: <877cjqa5le.fsf@meer.lwn.net>
+	s=arc-20240116; t=1706653862; c=relaxed/simple;
+	bh=5HmmswglN9pKy7g/0osHBxBGg837xJKysUQuN28gYCo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MALQZzIC9iFRyQ/yxK2hCP+27L8+HALGuUu+TGUFI2lCZwhIOBqR9KKC9/oWf6vUORXedZlF5CtLxP9jHsLz330Vv0b1Lsf/pO63zWiTWDK2X2VNVMckW7SyaU5X+Lop/KL0ru1tVKLf53ciukhWN+Lw4INFFO22Z5L1SciYwcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Po/F5nmz; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5ffb07bed9bso39921757b3.0
+        for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 14:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1706653859; x=1707258659; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CHsI7G6NUmy3rPPwHz9CEuB456j8VcvU1g80bBBdmy4=;
+        b=Po/F5nmzXFvpYSgc3N8xcqQCr64afyVWlKhdEXHpxsEx6HIQadDbOn1QpC/lKAwyIo
+         i+B+PcFZJko7gfD94/o6DWj9lDuOYhLpy00jVQ7AXSLBJGA0Ovm+f2FQDq9ro9tVQq6M
+         dnW6OEebcGPsKEtVr1m/s3TNZrA5aEGmwCgQQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706653859; x=1707258659;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CHsI7G6NUmy3rPPwHz9CEuB456j8VcvU1g80bBBdmy4=;
+        b=RNu2ZxAwAQMKOxwWe0us+q1PLbpfgkEx2aSqxffwEZJWExLWT0rrwEDFWViQ+u5CqR
+         BUq8WO/gjawQO2ChrbPTXunWyGiz1AAgp1HZcDbltzj5RnApQcxYGYLVlSPyrSVEifo4
+         cvvGXvGBzBan5gmrg6EwEQtaWGFxIDuAw+/jEUEoLWyr+23mmTu+O2Nc3anyYjIfdQoZ
+         qBds7oOLVBB4rq+qqCNFRVi5p8rDC9He6/yijeo8uzhH3TYmQmyMp//tz+llq3kJFe0o
+         gw01mBAoUip08nt5PSOI7BGMfT2rabZoC8fsoDsr4+Pw7nmtab9OQM1WWq0bP+v3u5tY
+         YiIg==
+X-Gm-Message-State: AOJu0Yw4Al+nZdNaxvvA5DR34Q6tz0SkuUorifUNiDp2dqxPuzvjnFqN
+	qaN299nAqf5ziMrMFqHpSl6RSp3LXb+kCHLsSmkpCz7ToKveJGLWsD5SnNBRO/FQEo2zoiep+eK
+	ce6424opxQXaGgCybkqL0vvlNjYS/JciYIGI6
+X-Google-Smtp-Source: AGHT+IHMScdK7mGPuwHixhxjRCDpmBCo5GXuOWgJu/vIpXO032ijbHWpSLsxWPzpaIR1UM/1sJfFdkxClOeiOaSYPlM=
+X-Received: by 2002:a81:eb0e:0:b0:5ff:6084:421e with SMTP id
+ n14-20020a81eb0e000000b005ff6084421emr6945261ywm.32.1706653858789; Tue, 30
+ Jan 2024 14:30:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20240126183930.1170845-1-abhishekpandit@chromium.org> <8cf38c26-c8ec-401e-8aab-527ef811af90@amd.com>
+In-Reply-To: <8cf38c26-c8ec-401e-8aab-527ef811af90@amd.com>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Tue, 30 Jan 2024 14:30:47 -0800
+Message-ID: <CANFp7mV-DiHq_aZZNF0E4e=-aQUupxg+ECwj5dsaG-n4epa4CA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] usb: typec: ucsi: Adding support for UCSI 3.0
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
+	pmalani@chromium.org, jthies@google.com, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Prashanth K <quic_prashk@quicinc.com>, 
+	Rajaram Regupathy <rajaram.regupathy@intel.com>, Saranya Gopal <saranya.gopal@intel.com>, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Randy Dunlap <rdunlap@infradead.org> writes:
-
-> Sphinx reports a malformed table due to the table begin/end line
-> segments being too short for the word "max_segment_size", so
-> extend them by one more '=' character to prevent the error.
+On Sun, Jan 28, 2024 at 8:06=E2=80=AFAM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> Documentation/usb/gadget-testing.rst:459: ERROR: Malformed table.
-> Text in column margin in table line 9.
+> On 1/26/2024 12:39, Abhishek Pandit-Subedi wrote:
+> >
+> > Hi Heikki,
+> >
+> > This series starts the work adding UCSI 3.0 support to the UCSI driver.
+> >
+> > There's a couple of pieces to start here:
+> > * Add version checks and limit read size on 1.2.
+> > * Update Connector Status and Connector Capability structures.
+> > * Expose Partner PD revision from Capability data.
+> >
+> > These were tested against on a 6.6 kernel running a usermode PPM agains=
+t
+> > a Realtek Evaluation board.
+> >
+> > One additional note: there are a lot more unaligned fields in UCSI now
+> > and the struct definitions are getting a bit out of hand. We can discus=
+s
+> > alternate mechanisms for defining these structs in the patch that
+> > changes these structures.
 >
-> Fixes: 1900daeefd3e ("usb: gadget: ncm: Add support to update wMaxSegmentSize via configfs")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-> ---
-> v2: s /to error/the error/ in the patch description.
+> On the Windows side I notice that Microsoft explicitly checks the UCSI
+> version to decide what data structures to use.
 >
->  Documentation/usb/gadget-testing.rst |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/ucsi#uc=
+m-ucsi-acpi-device-for-ucsi-20-and-greater
+>
+> Perhaps doing something similar makes sense in Linux?
 
-Applied, thanks.
+That probably belongs in `ucsi_acpi` and would be good to add there. I
+don't have a Windows device reporting a UCSI version 2.0 but wanting
+1.2 so I can't add or test this patch.
 
-jon
+>
+> >
+> > Thanks,
+> > Abhishek
+> >
+> > Changes in v3:
+> >    - Change include to asm/unaligned.h and reorder include.
+> >
+> > Changes in v2:
+> >    - Changed log message to DEBUG
+> >    - Formatting changes and update macro to use brackets.
+> >    - Fix incorrect guard condition when checking connector capability.
+> >
+> > Abhishek Pandit-Subedi (3):
+> >    usb: typec: ucsi: Limit read size on v1.2
+> >    usb: typec: ucsi: Update connector cap and status
+> >    usb: typec: ucsi: Get PD revision for partner
+> >
+> >   drivers/usb/typec/ucsi/ucsi.c | 49 +++++++++++++++++++++++++--
+> >   drivers/usb/typec/ucsi/ucsi.h | 64 ++++++++++++++++++++++++++++++++--=
+-
+> >   2 files changed, 107 insertions(+), 6 deletions(-)
+> >
+>
 
