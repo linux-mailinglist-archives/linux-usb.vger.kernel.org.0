@@ -1,57 +1,46 @@
-Return-Path: <linux-usb+bounces-5651-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5652-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16E7B842A82
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 18:10:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B548842A91
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 18:12:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 489161C24CF2
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 17:10:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 065C8285262
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 17:12:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0250C129A95;
-	Tue, 30 Jan 2024 17:10:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uOAoU27o"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B0E01292DB;
+	Tue, 30 Jan 2024 17:12:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7424376C6A;
-	Tue, 30 Jan 2024 17:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id D371B383B5
+	for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 17:12:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706634626; cv=none; b=XvlbItcCjRPyN9wwlpHTqCEjkhJ2k88Kg3w984RLV9a4GlhM56huZn7k6dTfxqHF/RicnsIdhV3KVoqvZatIANTF/ffm5dGOOnd+DcZBcCPgAOJl9ZhQi34+/ZvxVZeXQB0z/abMrvLk09kRGH6Z410jKidSSxrk9aoWu29y5bY=
+	t=1706634747; cv=none; b=WmYfiEvlh5YN7bXNgjT8DaMU2R5fhXaMi1PiQuhjQ8LZYLlHjHr/GA5+5wh1mJ9pwPvOeGo0Sc36Flg4XIxgYNCTIv5qil9UhT9SPa+0sOPY3ry5BdaDeUBgAcMR91ZOB9Mlnj/v3zSVOuhNH7C0I4TPl+nA+vIymxJy5m+kZuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706634626; c=relaxed/simple;
-	bh=og6jQJBHeHMmvk9NQZFiuw3bMyKwy04HOIksyUv5hDo=;
+	s=arc-20240116; t=1706634747; c=relaxed/simple;
+	bh=hR47GmGj2RdK1d7gKYDeYQwmG0DVJI+5y0VYDSSUr5M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eXMABRkv0gU1o3EuZxJcfc6ZEK2Wd67UoykuAX1wHOsIovgsJzccq9jknpCM+SO4a0zSGlH0CPwYpknSTHZXKg7X4MqUkx1IHMV04rUges+9vnotDFjqmuaj2vU6gJeNsgwion1V3qSbMYOADtdWkx5zaYnYoNfMrCtGF/gSFhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uOAoU27o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32125C43394;
-	Tue, 30 Jan 2024 17:10:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706634625;
-	bh=og6jQJBHeHMmvk9NQZFiuw3bMyKwy04HOIksyUv5hDo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uOAoU27oTREcKJoZUokKd9l4sXYb/pYwbZ4/1YTK115qFzgbJylQ55n4pbUp7XYT9
-	 vdmaHDKn3EYlB0FGXAaYhiFC0Kzt2uEig3IBzhcEVmOrl7qr7vgslyTXBJqOTDexAT
-	 0jlVNHGkr6o1a19siVrDKDFcjGHcGIs+CyuXm6uSZsXO7GmVr2/i85cvDtwzxe4xu6
-	 97dYrEAyrvPizmIs85TtGQEn/oKh2kFKH1TSw4QnuK4EgmCotTKlocmKtPQNJgDFmi
-	 BAQjXot3dAvJJzPGNUjM/A566m4pe/Chcl/im1poUwww9YOhbXN/UXeuB8hbExi/X4
-	 zq1UKVgcxA+BQ==
-Date: Tue, 30 Jan 2024 22:40:21 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: Vincent Shih <vincent.sunplus@gmail.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-phy@lists.infradead.org
-Subject: Re: [PATCH] phy: sunplus: Fix a memory leak in update_disc_vol()
-Message-ID: <ZbktfWM3bzuRrMok@matsya>
-References: <451016052782f18c8b52ed0f836d7ab5c69bac3d.1706431643.git.christophe.jaillet@wanadoo.fr>
+	 Content-Type:Content-Disposition:In-Reply-To; b=heHxMyv983lW+L3FBS0ZXWbXtTRHwljxcTbjJkqjSWpyfFO3ghCiL16oVzpW5c0ucyTUHQwaaekMUWvIrVWoFAAftDD/r+Wy6K+D9qJ2p2BxvtmjIwtFGoFNai1WquW64EeoZppTQQZ24iyQv5x1YR8Frce8AswYSpTU3uoi1WE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 410195 invoked by uid 1000); 30 Jan 2024 12:12:19 -0500
+Date: Tue, 30 Jan 2024 12:12:19 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Guan-Yu Lin <guanyulin@google.com>
+Cc: gregkh@linuxfoundation.org, mathias.nyman@intel.com, royluo@google.com,
+  hadess@hadess.net, benjamin.tissoires@redhat.com,
+  heikki.krogerus@linux.intel.com, oneukum@suse.com, grundler@chromium.org,
+  yajun.deng@linux.dev, dianders@chromium.org, linux-kernel@vger.kernel.org,
+  linux-usb@vger.kernel.org, badhri@google.com, albertccwang@google.com,
+  pumahsu@google.com
+Subject: Re: [PATCH] [RFC] usb: host: Allow userspace to control usb suspend
+ flows
+Message-ID: <0e4221b5-bafe-4bea-b533-0ed8add81ef1@rowland.harvard.edu>
+References: <20240130064819.1362642-1-guanyulin@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,45 +49,40 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <451016052782f18c8b52ed0f836d7ab5c69bac3d.1706431643.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20240130064819.1362642-1-guanyulin@google.com>
 
-On 28-01-24, 09:47, Christophe JAILLET wrote:
-> 'otp_v', allocated by nvmem_cell_read(), is leaking.
-> It must be freed before leaving the function to avoid a leak.
-> 
-> Fixes: 99d9ccd97385 ("phy: usb: Add USB2.0 phy driver for Sunplus SP7021")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> This patch is speculative and based on comparison on the usage of
-> nvmem_cell_read() in other driver.
-> 
-> Review with care.
-> ---
->  drivers/phy/sunplus/phy-sunplus-usb2.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/phy/sunplus/phy-sunplus-usb2.c b/drivers/phy/sunplus/phy-sunplus-usb2.c
-> index 637a5fbae6d9..50f1f91ac052 100644
-> --- a/drivers/phy/sunplus/phy-sunplus-usb2.c
-> +++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
-> @@ -105,6 +105,8 @@ static int update_disc_vol(struct sp_usbphy *usbphy)
->  	val = (val & ~J_DISC) | set;
->  	writel(val, usbphy->phy_regs + CONFIG7);
->  
-> +	kfree(otp_v);
+On Tue, Jan 30, 2024 at 06:47:13AM +0000, Guan-Yu Lin wrote:
+> In a system with sub-system engaged, the controllers are controlled by
 
-Looking at documentation, this should be nvmem_cell_put() see:
-Documentation/driver-api/nvmem.rst
+What is a sub-system and how does it become engaged?
 
-What do you suggest Srini?
+> both the main processor and the co-processor. Chances are when the main
+> processor decides to suspend the USB device, the USB device might still
+> be used by the co-processor. In this scenario, we need a way to let
+> system know whether it can suspend the USB device or not. We introduce a
+> new sysfs entry "deprecate_device_pm" to allow userspace to control the
+> device power management functionality on demand. As the userspace should
+> possess the information of both the main processor and the co-processor,
+> it should be able to address the conflict mentioned above.
 
-> +
->  	return 0;
->  }
->  
-> -- 
-> 2.43.0
+This description and the comments and documentation in the patch all
+talk about "device power management".  But in fact the patch only
+affects system power management; it does not affect runtime power
+management.
 
--- 
-~Vinod
+Also, "deprecate_device_pm" does not seem like a very good name.
+You're not deprecating power management; you're just disabling it
+temporarily.  You should find a better name.
+
+Do you really want your new flag to affect device suspend during
+hibernation?  Does the co-processor remain powered when the system is
+powered off and unplugged?
+
+Do you really want the new sysfs flag to be present even on systems
+that don't have a co-processor?
+
+Why does this affect only the USB subsystem?  Can't the co-processor
+use other, non-USB, devices on the system?
+
+Alan Stern
 
