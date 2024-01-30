@@ -1,214 +1,150 @@
-Return-Path: <linux-usb+bounces-5658-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5659-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48B98842C16
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 19:48:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47B5B842C2F
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 19:56:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1F1F1F25A89
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 18:48:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CEC21C21FFD
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 18:56:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF91E762C4;
-	Tue, 30 Jan 2024 18:47:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4584E7993F;
+	Tue, 30 Jan 2024 18:56:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="yeelb3OS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GOuziRe0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2052.outbound.protection.outlook.com [40.107.6.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0EF3762C0;
-	Tue, 30 Jan 2024 18:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.6.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706640446; cv=fail; b=TIJy3nsNfaB8DHTfG+RO3GhRZeFn7grwcNZ9Etk+VyHtotN3ZxRNy+tiDTRaVPpfPIn6HOUI+d+/sK6mMuyjQ8VDmWojcIj8pt14daTE/lJ/reK90n4Seifh1a7TMbvjPVxhpEKnoRkTdL69OwXbnDoNvozlZ+PLDlkoyY6HLSY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706640446; c=relaxed/simple;
-	bh=HpBBY2K190BjQs/M73ocrACa/+i6MpJpuNmgsivMtaA=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=uelhgyTYq4qTVbdBAiz2D0NzNyRqVKs0uusKTuoQSBmNPEUCBBwgTyEmdFmNHgmKXyvu8KnU2QP6FXHYcI0Apxhx08lkzNYpiGYk191t9qzv/7V0oV5AhcJ8ioBpMo0DjEPYaElaA16N+Bkwu/Sdwhjlaa9B5lkuqkm1vtIKPtk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net; spf=pass smtp.mailfrom=wolfvision.net; dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b=yeelb3OS; arc=fail smtp.client-ip=40.107.6.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolfvision.net
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QuDpobiic/ykCq1qgwhjHIGBjNYQfmrXyU2yceev1WJBYZPzfGhxzONv4pLydVUE7yJp/AdfJk9QPRf2QekHK8RzvAw03vfbIJ+EnvTXwIn5ZJR0RsD0ex2i1Vqz4NyXI4kVlQv3ioN4Ge8ds3eXvbVe/j8QBViX1tufa68A8XaQwMKVLm1RdW4F6fEcxLUFJknlGXXNSOnadHgNle+oWqoJnM6o5ZsbTPVIGuiwbmROYveo4XJyFErILW5SjqeWvaTayHI5OLNzoNjIt60w/OSEqFFYvl+y3U0WvXKd5Eq/IoPDwpOv4vQTtykCDxPGu7iEtKkWS1KPJkQVjmEtWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KcdtC12bNWrNYeV7PUILagdiHRWNbV/VJliOjsTZeEo=;
- b=J2dkG8c2bE0OL8awYg2knf14Jqaz7/1xawPriX4UHRSIBoVvLP+Wd1+uzulUE+LrKvq9VMtZWbE340vwpMdZC052GQV6dI1/MDrCM+NMZWiW3dZrtsBL/NYL43WTaOhUtOquZ/2I+dkDQzqSn6svX+sAeyZL82BXIEf1fy9PyVr47lhRZrVLqdZcz5k4XMxl4H+3DhIbIk55WWnolqEUINF6IsDFinfIUZNGHbIivb5zws/OaJNiwunzETT85ulfslQ2jghH2WVeeMtA8z+7YqwMAQfLjat4uHQXwL/xzPJvqjOmWEmQosQoqRpEh0+sVQ7MKCpiW0U5MKfmeY2nFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KcdtC12bNWrNYeV7PUILagdiHRWNbV/VJliOjsTZeEo=;
- b=yeelb3OSr1m+65TnVD6GDyfgNCM8CJHvW4zp4i5iZLXZC81eIf26A2wMg75cfUWZgpPUrpcUlx8Y4KvJUEpvznfn/B6pKTG9YxBlnhO0n1OfdbGPJNgF/3s/TSTxzoWzw37xvIRSKEUQ5K+ABMSsrkcptRDlIjlT9ggmxByhTRQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
- by PAVPR08MB9795.eurprd08.prod.outlook.com (2603:10a6:102:31f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.32; Tue, 30 Jan
- 2024 18:47:20 +0000
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::c8ee:9414:a0c6:42ab]) by VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::c8ee:9414:a0c6:42ab%7]) with mapi id 15.20.7228.029; Tue, 30 Jan 2024
- 18:47:20 +0000
-Message-ID: <4413be17-467f-4c3e-9cba-2bcb51371799@wolfvision.net>
-Date: Tue, 30 Jan 2024 19:47:17 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: misc: onboard_hub: add support for XMOS XVF3500
-To: Matthias Kaehlcke <mka@chromium.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-sound@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20240130-onboard_xvf3500-v1-0-51b5398406cb@wolfvision.net>
- <20240130-onboard_xvf3500-v1-2-51b5398406cb@wolfvision.net>
- <ZbkfsVr-1pOTa1ic@google.com> <2024013024-borax-enjoying-beb5@gregkh>
- <ZbkxUlFSKlUkcHaC@google.com>
-Content-Language: en-US
-From: Javier Carrasco <javier.carrasco@wolfvision.net>
-In-Reply-To: <ZbkxUlFSKlUkcHaC@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0203.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:e5::6) To VE1PR08MB4974.eurprd08.prod.outlook.com
- (2603:10a6:803:111::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E73D7993D
+	for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 18:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706641003; cv=none; b=R49H0GSjuW3LW3/vUptuYqocWw6X/duO8WD2/si3Z4iv5NDftawAsh0goxM0KZUn5rBt4ivzUnHZUlHtaU4SD/KqX9snLbpWj3SNDNs+NvmFM6H/dApcLyZaDkMszjUqUEXKnR5u33Hjz9qgD+ki2V9mF8HhqfPIBIHH0bl+vuQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706641003; c=relaxed/simple;
+	bh=5Dws1mz1XNbLrM8JL55q/tA/5yEt1fNiujcPapBJ3sY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AJs64kKeDC2u9FkHUvTfOYzyujeE3tCtTFS/tOMQos4PD/OBOqmI4688tWrONJZZiXyAjGuUKYIVJVcyvRBS2/ZVvFJu7p36QK7YbsoikTtgHWu1qN16wr2Jk3A3BBYtoxysLHXiTdicG3BZmUUD95hlT+vFH2hWMBeucq+XUtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GOuziRe0; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-55eda7c5bffso1146a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 10:56:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706641000; x=1707245800; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WtWxv5dxUX2xZrkhPchT110iH8pzn+CImZrkrmnden4=;
+        b=GOuziRe01xDmWQ2n+3fK6yFdb6wnKLTdrpOm+4mJ32xuy2GuMmAvPcDsCMiw0i/CRT
+         ScyaHKWj0LWTrVitapPK3euU0cyk4W6BFkSoW9dPa4yJ1Wdcklo4Fi5MSL4IG+Qx7dnM
+         4vWtsCs4k/7YuGeyNDywAf1bMsr4lLjbRwiyT7GMXX+AkLNP+10j2bXGMz1ixdvjB5sd
+         2s5Qq1TYUIrmOZOtDPEqbaUDOJe8NxqUSdc0a06081kMRkgpQl5l87WpQNwcu077AHQt
+         AK7j58Z/eacuweHEPEXko1QWzVcSTNPvo7j/xeeL5QMrQlLdVD7hk7uXOW4FZeXLEYb9
+         bV7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706641000; x=1707245800;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WtWxv5dxUX2xZrkhPchT110iH8pzn+CImZrkrmnden4=;
+        b=dvFdrpzooE+IzwdoUKmloirknugrEMZ5T6FfdTdimsCUAUMAR4QzDahWnTlyxwBA0V
+         UsPS8foVgKS7ZchNNkK/MafL2oOuF+16VS8mM8m2O2B9+iytQq9wu2umglSw3MuezMFr
+         VHlzN7ISZHwTnMihzd7Vx1DM7ls4/a+2XERtVodc5DVAptDC6beOCL5S06xFzhtkfhWj
+         QSTeV4xQMugDuEEMPcKOQ5In9vf6RHUayw4L/uqX+7yht+At/oacF5EjKErkrLiUfh2q
+         E3UEeumecSWygCu20LQOtTU9H2YBiAzzlEYjPQ5GzZbNLuTJgl/Y/gqVmFQzRTgYEtul
+         wdpA==
+X-Gm-Message-State: AOJu0Yx5MLh+O5LNmUkluR189ZFUTZ/3su8GwTg2Bce/qdccGUTXyv2V
+	ZlELnJ7zNpuoITnbAxDNlLnH8EW0YXiWu+k6YBq9KTdeSm4INa2yVPe63qN6MvBlGXrgMPpbsdT
+	WI6iO8/J1/8B9/zgy3EIeUTZJJcqtNAR5l9dQ
+X-Google-Smtp-Source: AGHT+IHzcTWMuf26PAdqRPEoByLWAK7S8tfJjASi55f5TVszDCd7YJ+jT8PxvX3g//2ZzC2hDAxGJqwUKhHjAUJii18=
+X-Received: by 2002:a05:6402:22a2:b0:55c:ebca:e69e with SMTP id
+ cx2-20020a05640222a200b0055cebcae69emr194485edb.5.1706641000113; Tue, 30 Jan
+ 2024 10:56:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|PAVPR08MB9795:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e091281-0308-465e-1892-08dc21c3e389
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	NQwktNw15T7Ljsem842BSYZu3uzYVn6RTZD1sN3u3ytuMOybmMiJ58L+04L5j1u7aOnttLi/0HtYDnsYQuIYtV6DjOVVoQTRzvGIFHBpE+xjdUXvzM9g/jb4dOh3ZHBFQz3EkS4wa0raJKAFftH5PZQP541MA/qAdKQ6VrScV/8Ro8Sc42uVPodtIAbecHG+to7VdxCNkWYwC+TlJt4jUh+qYjHhNbFfAP69I6720XO8Zb9vYuvg1BmD8GNhiG13Qq1rrzffRJhvio/FyCHvxc++9hZX6kO2KvZhZLFlvGeqfCXDO6FjVoSssYLyeRiV3JOwN3WQfIPS8lFqzCyqwjA8yJfosq2z1AaWAWg9pl+eu3PCrpYMMd3f7LgphXYW8/FaLae7t7L2c92MnSqWjuu5tE5tx7i0UAvf+ZP4BnSwywlNHYFiSk5mbL8nHP7lpakwnpVrh3VbyWlfKnU4lEtcVpp3Ald1laOJZVUk1EA0+K9aI0q2g1W4ZG5CdOiqb9uevlP5y87YeJzJpXr2GulE3b1ULMjMT2C7oHlsL0U5b8aaE4t8f2vgYtz5qohodCc6lhYsq5bm8XVq2XgkJGSPZE+5CEnrwdn/ZbmaALQBgqCXtXsoqd7IZUkDLgcbP+e1m0GuTpAWrMQdRsv6Og==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(396003)(366004)(376002)(136003)(346002)(230922051799003)(451199024)(186009)(1800799012)(64100799003)(41300700001)(2616005)(31686004)(316002)(66476007)(6512007)(54906003)(36756003)(6666004)(110136005)(6506007)(6486002)(53546011)(83380400001)(478600001)(38100700002)(66556008)(8936002)(86362001)(2906002)(31696002)(4326008)(44832011)(66946007)(5660300002)(7416002)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MjJBMGlaSnZPYzEvMkVhVjRJRDRrM0dKZlBZMDhWZ2c4NkJ5eGlKcFp1Z3ZE?=
- =?utf-8?B?UHI0MnFzMnYzRmJEbWZhUis0TDhVd3YrSnVKY1ZZaGFzNXNLdWI5N2daREZh?=
- =?utf-8?B?SHpKS1lMNlh6UVY2Szl4ZEJpTURmd1ZINXZMUzAxM3dkK3JlVFBOT1Z4THBh?=
- =?utf-8?B?R1dsVVpXT1BCR256YnN2akV2VFFHemlTdHNBaDlKU2NXcUVJMFR3VXlUbktt?=
- =?utf-8?B?SEV4TDV3Zml6SFBQRVR5L1ZXTTNJaVcyUkpXNlZUYnRaZDEzZ2h1RmZRWnpC?=
- =?utf-8?B?ZEJPWmJQeC9LdUhUa3AzNXJjM25MNTM1ZGpNL0hKM25aa0ZhdHlvSDdmbFNs?=
- =?utf-8?B?dS9wUHdsamQ1bmNoU1R3UjZzbDBuRTdhMW5yVjNXWXRjQXdaclJQelBKbk81?=
- =?utf-8?B?czY3SExiOEg2aGN0K2p3TEFjVmZUVEhCTXhaS1hjRytpcWhqVVY1NDd3eHIw?=
- =?utf-8?B?cmhUWGNVaWdVRkhlemZuZmhBUUF3N2NwaElsV2pQTXdnbjR2KzVoSlQrQW5J?=
- =?utf-8?B?Q3NNTGdzVlpTWWhvRUJsVjlmc1RmejZRSHJ6TnlUNHpXbWVSZEZuRWdxT2hD?=
- =?utf-8?B?MEtmQTczbFlkSlc4NThNK1hJeWQ1OUgxTEZubmlaeUFhaWhvVUJoV2doZGZC?=
- =?utf-8?B?Mnd1RGE0azBPV1d2Qm1EYk1MNEFVWHYxSFRHZCs2TGpwNVh4T201a00wZ0FP?=
- =?utf-8?B?OTRwaXkyR1BZVUJsY0o1UGxDN3hVTlAwVWlHYVpqSi9TcGFlQTlIakxIZzVH?=
- =?utf-8?B?R1JPZ2NNYVU0VXY3QVc3RnREdEhycUpHME9EYWU0emtLdWR2Y1VON01hbVZm?=
- =?utf-8?B?ejJTekJIRllraE9vL3FVbE1mKzFYSXA1MVExWDZzenhHN2J4OHJzdWswbmpW?=
- =?utf-8?B?Qk53NnVCSDJJQk1JY1pkMWMySGhneWMrcjY4Zkx5NTlxY1VEMzZqRVh3RVZN?=
- =?utf-8?B?eWJHcEtDRkVvb2pOeE1aQzZJSVR1RWJQeS83bkNDN2FUekM1WEVZdm8xVzlT?=
- =?utf-8?B?Y0NjNHF1TG8rK3BHS3d2Vjl5VzNFWFltS0U0WC85TzcybXhpSEZab3BjUWJt?=
- =?utf-8?B?S1Vpc1RwdCsrVmY5eGROTUQ0Nm93VHA2amVqMFg1c003M1R2dTZMYlBPcDFx?=
- =?utf-8?B?OVo3ek5jRjY3dlhXem1mZkxuUFAyQi8vMjlUSzRZUCtoUDh2WWxvbk1DbWUy?=
- =?utf-8?B?L3B5TCtWSVpQNUZDQnllM0g2c0gvRllBaFdCOVBYTnhQUkRQV0R5M0JWeDNq?=
- =?utf-8?B?VndEZEI1RnNhSUcxS0pieTRyT0xSYkFGZDZHRzg3YW1DQ0YvNHNxS1lndEZs?=
- =?utf-8?B?UFdObE4wU3h3Q3lMUk9IS0VaMC96UWFHeGFGdTVmbGE3SDhFR2Jqam1ubUpw?=
- =?utf-8?B?VnJKbCtydC92QXZqcThrdXBob3pkQjRnbzlZcENRZmtsaG1lNHJ6NURNK0Zj?=
- =?utf-8?B?ZXMzeTVDdFUxT1BBa28ybG82VnhwMEFiaVlHUGlldWlHNUxHS0c4QTM3Umcv?=
- =?utf-8?B?Rlp4S0Jlc1o0bVJKVllMdzZZazdhV1ZwN1VhQSsvNkczQldBQ3BpellWaVhB?=
- =?utf-8?B?OGlBYzZGSDBKUnJtZVBrWFRScTd2ZUN5K08rZitGWjlYODJuelQ4WTlzMlNZ?=
- =?utf-8?B?Y0p6cS9mbHU4bmlFNHN1VHJHaEZSVGNnRnNTbEdScEdWVVAxZFJPVGJyZnND?=
- =?utf-8?B?N3RlOHNHT0JFS25kdk54T3F6WU8xMzdZSzNvQTNpbTFBSDBNYk1Vd2srMGtj?=
- =?utf-8?B?QTFyZkV6MzhlQml6VmpzNytsUmFlUWY0aHFyRkNXT1hqRERwQzVFUlJvbXpN?=
- =?utf-8?B?SjNwalJzK3VPUHBvMS9QRUtUWUxoWENFR3k0Snp6WTl2RTBFNlNlZTRta2ta?=
- =?utf-8?B?VzJXaVdLbTN6Nk9uU25ta0tzZDUyYzI1UlR6YVhJZVZRemlSMUVWbVFnb0JG?=
- =?utf-8?B?cnRNRVpjUnRsT2ZvZnZNOTNaallDOHNqQ25iRHpKQ1BzRzRwbjFzazArUEc0?=
- =?utf-8?B?Tk14UjJWQW56NklCVHNXSkliTXIvS1JxNmp5Rnpudkx1ODIxTzhTT2NxV0tH?=
- =?utf-8?B?S0wvNkFtdnJieGhtZklKQUVKZDRUOWhRRDZtU0hlT2dJZGtpQi84L0lCU3dn?=
- =?utf-8?B?bHB6V2taakxYQm1TbU1WaWJnTCt4NldHcGpaYmFUNzZ5NkhZZE5rc3ZvNkFw?=
- =?utf-8?B?UTlpWjBMa3JLQ0R4NGlmYWRienZXNXI0T3daUkR3M0UyRlBDUFpCRWplMUdZ?=
- =?utf-8?Q?QvdJjBm2WpQW3RbtPnQeXQJfP8wf2GydqTgOoiJT5Y=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e091281-0308-465e-1892-08dc21c3e389
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2024 18:47:20.1310
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lOQKQ8A/YTgDzlomlYClKq/HphR0mVU3mJlvJ8ieRjuKP+Q6uzzZFvVCAjo6d5yh1PVWPlCqZhI9jaRK/bcYUKBKeOdnZtW23fRz6cssDtM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB9795
+References: <a432603b-b801-4001-b309-247dded707d3@moroto.mountain>
+In-Reply-To: <a432603b-b801-4001-b309-247dded707d3@moroto.mountain>
+From: RD Babiera <rdbabiera@google.com>
+Date: Tue, 30 Jan 2024 10:56:28 -0800
+Message-ID: <CALzBnUHA985sgWfw1tAiNxWH=6Dw-Evnk8kAY-XFS1eDJJfmLQ@mail.gmail.com>
+Subject: Re: [bug report] usb: typec: tcpm: add discover identity support for SOP'
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 30.01.24 18:26, Matthias Kaehlcke wrote:
-> On Tue, Jan 30, 2024 at 08:19:40AM -0800, Greg Kroah-Hartman wrote:
->> On Tue, Jan 30, 2024 at 04:11:29PM +0000, Matthias Kaehlcke wrote:
->>> Hi Javier,
->>>
->>> I understand your motivation for using the onboard_usb_hub driver
->>> for powering up a non-hub device, it feels a bit hacky to use it
->>> as is though. Re-using the driver might be the right thing to do,
->>> but then it should probably be renamed to onboard_usb_dev (or
->>> similar) and do the hub specific bits as special case.
->>>
->>> Greg, do you have any thoughts on this?
->>
->> Yeah, this worries me, adding non-hub support to this driver feels odd.
-> 
-> It is odd as long as this driver claims to be hub-specific, but truth
-> is that the hub-specific bits are a small part of the driver, I think
-> it might be worthwhile to consider adapting the driver to other devices
-> if there is no clear better solution.
+Hi Dan,
 
-The driver was programmed for hubs from the beginning, and that makes
-non-hub additions look weird, but I wonder if the other way round would
-have been seen less odd: a generic onboard_usb_dev that ended up being
-extended to support hub-specific capabilities. As Matthias pointed out,
-most of the driver is generic, but I have to admit that adding a non-hub
-device directly (without any renaming) does not look 100% right.
+On Tue, Jan 30, 2024 at 3:16=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro=
+.org> wrote:
+> svdm_version is uninitialized if port->cable isn't a valid pointer.
+>
+>     1898                 break;
+>     1899         case TCPC_TX_SOP:
+>     1900                 modep =3D &port->mode_data;
+>     1901                 pdev =3D typec_match_altmode(port->partner_altmo=
+de,
+>     1902                                            ALTMODE_DISCOVERY_MAX=
+,
+>     1903                                            PD_VDO_VID(p[0]),
+>     1904                                            PD_VDO_OPOS(p[0]));
+>     1905                 svdm_version =3D typec_get_negotiated_svdm_versi=
+on(typec);
+>     1906                 if (svdm_version < 0)
+>     1907                         return 0;
+>     1908                 break;
+>     1909         default:
+>     1910                 modep =3D &port->mode_data;
+>     1911                 pdev =3D typec_match_altmode(port->partner_altmo=
+de,
+>     1912                                            ALTMODE_DISCOVERY_MAX=
+,
+>     1913                                            PD_VDO_VID(p[0]),
+>     1914                                            PD_VDO_OPOS(p[0]));
+>     1915                 svdm_version =3D typec_get_negotiated_svdm_versi=
+on(typec);
+>     1916                 if (svdm_version < 0)
+>     1917                         return 0;
+>     1918                 break;
+>     1919         }
+>     1920
+>     1921         switch (cmd_type) {
+>     1922         case CMDT_INIT:
+>     1923                 switch (cmd) {
+>     1924                 case CMD_DISCOVER_IDENT:
+>     1925                         if (PD_VDO_VID(p[0]) !=3D USB_SID_PD)
+>     1926                                 break;
+>     1927
+>     1928                         if (IS_ERR_OR_NULL(port->partner))
+>     1929                                 break;
+>     1930
+> --> 1931                         if (PD_VDO_SVDM_VER(p[0]) < svdm_version=
+) {
+>                                                              ^^^^^^^^^^^^
 
-> A possible alternative could be a separate onboard_usb_dev driver for
-> non-hub devices, with a similar structure as the onboard_hub driver,
-> but without the hub-specific bits.
-> 
+In regards to the Type-C specification, a cable plug cannot initialize
+SVDMs themselves
+and will only respond to SVDMs initiated by a port, so this block
+should never run when
+receiving an SOP' message.
 
-I was thinking about that possibility too, but the new driver would be a
-renamed onboard_usb_hub with less functionality. Its only added value
-would be that it keeps onboard_usb_hub only for hubs. But if that is
-exactly the goal, I have nothing against an onboard_usb_dev driver for
-the next patch version. Adding a device-specific driver for such a
-generic power sequence and resume/suspend support might not be the best
-approach, though, especially if more USB devices with similar needs arise.
+However, I could see how this block could run if the port partner on
+the other end thinks
+it is allowed to communicate over SOP' when it isn't and initializes
+an SVDM, leading to
+the tcpm_port into running this sequence. So, I'll add a check to make sure=
+ SOP'
+messages never process the CMDT_INIT case. Thanks for the heads up!
 
->> Why can't this all just be done in an individual driver for this device
->> itself?
-> 
-> I suppose the reason is the good old chicken-egg situation that the (USB)
-> driver is only instantiated after the device has bee powered on, which is
-> what the driver is supposed to take care of. For the onboard_hub driver
-> this was solved by having a platform driver that is instantiated by the
-> parent hub if the onboard hub has a device tree entry. Probably something
-> similar would be needed for an individual driver, and the generic hub
-> driver would have to call the equivalent of onboard_hub_create_pdevs()
-> for all drivers of this type (or a wrapper that does this).
-> 
-> m.
-
-The XVF3500 does not have kernel support so far, and once it reaches
-normal operation and registers itself as a USB device, the communication
-is achieved in userspace. What this device needs from a driver is only
-the power sequence and eventually the resume/suspend support, which
-makes it a good candidate for generic implementations.
-
-Best regards,
-Javier Carrasco
+---
+best,
+rd
 
