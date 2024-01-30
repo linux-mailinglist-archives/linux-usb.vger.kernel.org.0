@@ -1,215 +1,163 @@
-Return-Path: <linux-usb+bounces-5660-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5661-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6FBA842CA4
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 20:26:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2183D842CBD
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 20:28:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 740AE1F24444
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 19:26:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5485D1C22249
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jan 2024 19:28:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BEA27B3C5;
-	Tue, 30 Jan 2024 19:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 890C27B3DE;
+	Tue, 30 Jan 2024 19:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="MoZ2CrlM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jQz7ksEt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2044.outbound.protection.outlook.com [40.107.6.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C287B3C2;
-	Tue, 30 Jan 2024 19:25:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.6.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706642758; cv=fail; b=jbx+7FxflkPVF9xTJY6XfZOF0qWgXfypHBepPDyYXAydq3QePMVv+jY+BhfQMbVZPibd7Ns5JREwAK/mG9E6kjk+0Xj23o88AFeZmuwq/gEuPSGk7LeXQc3VlrdGrx5bQU/j4GPRgiawRhTZpSX2twSTRhcSmOV7tAyW/K5sJ2w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706642758; c=relaxed/simple;
-	bh=5y7vwlY9H04RteIv6+UFiuemQPCLYb0lTTJXw/LgHQY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=N3F92V7HIxNt7er/BTe0n8POWqh8p5/tq4a8OS00Gs1Njh09abOzpwoszk+rHgIRfqo0VbtKTHCYHg48gFrh5wxe7motQoR+fHi78JcWMleAkzr2fcNUb6EVfBTO043dT3/65Lp5MYRGUAJUxHabFTRr24QLUnaUD1/3OHeYPzA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=MoZ2CrlM; arc=fail smtp.client-ip=40.107.6.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eLWAecHVu+rcMTLyKRJY02T5o3PlDBCQtLRa8E03iddpX8iuWit3KmZJQDva/3pm/KbZRLyKy+NA7Xst9S+lUR0ZS8+G8km/Oef4I0v/UELsbXqUQ59idSE4V7CUXA2c3axynnYhanohYVWVN6uPT9M1jt2hRWgoKt6OD90Btogoh2f7IUDI1jqm2PVJathH4bZ+AdLvMW3G41eQ3uB+2Uht8mGbnPltlVKJqBfx2sUs+7VfGdEVccsLwj4jC5Vhv3+q+JFZ/T8RLftOHbNbOzqDJh/4VY3R6GbKMpf+6zt16RlaMKhjkWKo7D5v0zdw+WO0tRLu+I9BPXWrvMJ3lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iYjGtEwNFNF9+RrArSaw9HdhaPGquPWsAA7Sv4kngic=;
- b=TK8ZzW+aGqs48aViAAgGpvj9wTtvjZylU+KlSn4vJUaytTo4zQUie5PZRAd4IybNoSE1USl6J8FDaXLaR0oztzAcKmU/NvTjFDv5HQv0lcqqM2jHDLxTGipHejg7L+fE3XOfCnS3PdfdG+DjRy3HON5DR8mjkBqQmvnH6Rl3HYWtgWKq5DSlHQF3gb+Qe4o34slKUGS1i5ktRWwSFLlY/qgMEYHfGlCrgwUOhN5zkmATPfMbok8V47+eWgvpFFebvtG9hJ3702b04K0WIBzHs9LrEtuQ7DRjCd1vsB2ZTS5Z4MzBZMgfhcnIVs8Rrm+YsPMrOm8+uTO/lP/NI100yQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iYjGtEwNFNF9+RrArSaw9HdhaPGquPWsAA7Sv4kngic=;
- b=MoZ2CrlM4E/fMHAHDZh73K4EUMH5iC22tDWCdoUolcu7KZAA2EGS8sBMzi9xtq8hfwXlGT/5sn7FQbRGcArDzhJGGq4HLQHW8+ukS7b0JLTNcZnnbCUEKJJFKaP25Wk0Wj7XyCEWff9sCn8KagxS597Poug1664NiI3zqVFYSD0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by VE1PR04MB7487.eurprd04.prod.outlook.com (2603:10a6:800:1a2::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.23; Tue, 30 Jan
- 2024 19:25:52 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::c8b4:5648:8948:e85c]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::c8b4:5648:8948:e85c%3]) with mapi id 15.20.7228.029; Tue, 30 Jan 2024
- 19:25:52 +0000
-Date: Tue, 30 Jan 2024 14:25:43 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: thinh.nguyen@synopsys.com, balbi@kernel.org, devicetree@vger.kernel.org,
-	gregkh@linuxfoundation.org, imx@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	mark.rutland@arm.com, mathias.nyman@intel.com, pku.leo@gmail.com,
-	ran.wang_1@nxp.com, robh+dt@kernel.org,
-	sergei.shtylyov@cogentembedded.com
-Subject: Re: [PATCH v4 2/3] dt-bindings: usb: dwc3: Add
- snps,host-vbus-glitches-quirk avoid vbus glitch
-Message-ID: <ZblNN6SyuSKhconu@lizhi-Precision-Tower-5810>
-References: <20240124152525.3910311-1-Frank.Li@nxp.com>
- <20240124152525.3910311-3-Frank.Li@nxp.com>
- <20240130-eligible-barrette-5b2258e150f5@spud>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240130-eligible-barrette-5b2258e150f5@spud>
-X-ClientProxiedBy: BYAPR05CA0017.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::30) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D163762D2
+	for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 19:26:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706642813; cv=none; b=dsnriGzc1CCwFkQsS9XHrCNsOctOGPqDGygPRiBlXjBTe+XiTxSFzxLw4CgsBc4NDcYHxR/ZQwFb1QKK43TX7re0a4Nyj70U/MrAA/eMaW91zArzcWo1NLYU/9qxT/MwUIwH24mesZGND2rMeAzzwzqwpcUyAWL/5yNoICLXrP4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706642813; c=relaxed/simple;
+	bh=B2kjYhFbSp4GX9YZwdN8eIiOyb3LTIyipZNOAiaztKA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=D4X2RQ8nTQl/SQH9McXRtUbN5io6fodVuR+Z5l3ThSKiMxdJBQ2o+Qnh23ysqCnn53mrNmD6OlVsLKNAU1x7tX3wOW0V//H8x+24nRbFCJLFo0+FaKmyENMsKiMgvxKj8R0d6aEsWq3eg8xKDMiD94IWHBH4XvwBKbKwq8dkXBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jQz7ksEt; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-6dde06c6ab0so3540991b3a.1
+        for <linux-usb@vger.kernel.org>; Tue, 30 Jan 2024 11:26:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706642811; x=1707247611; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=DLNcddy21SBz7KyeQPUGhNdRXI+N/Fl5AuS+wQy0vi4=;
+        b=jQz7ksEt62MNFesKRuKqre79VxAZ5IqSVefXUflsI0dF+mUKo14pysm0PCMhWz41gk
+         Bf0ikAaY9aMTKH/RFMENn5QICy0EGS62Qzd0djEBZb00zwRGaPYxgtxhIdxPN5fU7SMu
+         bi7qnyxnbAMpz7JT7HBAKRMdFGcvhjOW+HR0DZsbdXjiO+Qydl6f7QbTCasxGkXzxCOz
+         FRYYOY05/YHFfwwNv9o98CRh1cIHK5Bi9PXB4Y5OysEq2ypzMPfv+HjMFXghgD6GN2Dd
+         ZXWQYE4R3R/690hPPGUtbjeaz/RLdcjhKeFGCODI+yLlrWolvwIxHm14poCPBUA6DePf
+         SIrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706642811; x=1707247611;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DLNcddy21SBz7KyeQPUGhNdRXI+N/Fl5AuS+wQy0vi4=;
+        b=QTBLDZtCqAQTkmhzTZ6tyYx39AnJT8ahrDKVcMqfoLknnVPztcJlcj2Wi0NPYWfnhl
+         XIYoJqP0xwIZdPKQNW27Z7bvRfCnYUyxEajQTDtYHm/nX+fhQ7K905PNGbLebaXAMkiM
+         Jp6i4QGfFeOlUv6BmvmyGNLMie8HXmL+P8jPFS7N5nZMyNEFf7tdTrbov1DJZmANm9xS
+         Egm362tpTvVGzaGjaV4ClOjC/8dvuZB2R+KAnitUapjLBlgddIZa3wRg50TMoYlixsl8
+         l5U3/HRBWdfflH90mO14nNo9o24xUEljt9lsTXzq09o3r4OMi55hQKUuR0k2cz5yHGFY
+         anvQ==
+X-Gm-Message-State: AOJu0YzBSVWRxWCzvT2WuuOm+/JHg5UzcdtHl5DAMjxvKp1a4Y9YUz+p
+	Nc1QbE27Es4xRPjfWVp8R5xMuUxW3Gu9/l14zz9kT0kq/nm1I54+eYsHADw8TREWyJknzQ6lwFf
+	bLO339RdTGe62KA==
+X-Google-Smtp-Source: AGHT+IGzyqpHDnMzaRV+nS2+r1StE8p1R6XAs2/YV+zXv2KaMvdh3kwztGtHSqhYXdO4zpbBnD2dX6We83IfeZ0=
+X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
+ (user=rdbabiera job=sendgmr) by 2002:a05:6a00:4503:b0:6db:c6a5:da3e with SMTP
+ id cw3-20020a056a00450300b006dbc6a5da3emr1109506pfb.5.1706642810832; Tue, 30
+ Jan 2024 11:26:50 -0800 (PST)
+Date: Tue, 30 Jan 2024 19:26:39 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VE1PR04MB7487:EE_
-X-MS-Office365-Filtering-Correlation-Id: b32bbc3c-eee0-4fe9-a2a0-08dc21c945da
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	2e9cNboE4sHIZ7v7FLJWmiuJsOBo53KR0jyXI8TAxcCr1bv/PYC804V0l0lTG4APNTzBrYHCw9zS15qoDKsaMSY0bjlX4xGOsUv6olZpWP3EWlPYRsSHeEIRRxgt4xPXqi5rNZR6whGHF/1eFGX8HjkNVPowkn3Qj4FYCsEmQq7kEzoe+WICeZr10I/R2ZOIvyGUbX0/44dktB3utd7Aw5l/fVLBo88jyG7eEmzOFKaPkPrcA22jop3yU+o2+B6Eq5GYRzFQmqnOiXKqgmbhVMo30Go2ICbaXSDyGJT5EqgOwFkB8hebQxc+jl9ukK62niSIhoxb+qRrj37QtWozeg0E36pGrPapWt9Sj0Eq0oVItR01WASU9/dlHVuaTY9EwcKyyRr9FhuOFFvKCBFxnpGChfMpey1i4W0xkJn7HS4jzJS5BunB1UQAvgHoIsAc3OLLruYu+g9hD/PyjEh7wZcqhSGZo/apgzzXSIeEmIazCgMgNtItWHwU8/W+TNpZGjw/r9nOuX3zD0UDK0893Ee1YXAyCvqlMF76CAJ5d3EYdUYhogmLgTSwx4K0Gc5LzWxE3ujeVdep/WvdWPxCX65zDRK+X8FL6Tus9M2ViiC/sLLUoEaVJTztwpWMSmaPnwE6IVB7QpUBgjis0JBqyA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(366004)(396003)(346002)(376002)(136003)(39860400002)(230173577357003)(230922051799003)(230273577357003)(451199024)(186009)(1800799012)(64100799003)(5660300002)(41300700001)(7416002)(6506007)(38100700002)(6666004)(52116002)(9686003)(26005)(6512007)(83380400001)(966005)(6486002)(8936002)(8676002)(4326008)(478600001)(316002)(38350700005)(86362001)(2906002)(66556008)(66476007)(6916009)(66946007)(33716001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?6T1q9lNhmjpYSSfIh+zIeaTc4RQXSsFw/kH09y+xqM2AkghioafhQ2lpi4Bf?=
- =?us-ascii?Q?6RFYaZzqV/VZg6qpVtasMAdCGAH0PGjDyWemiKTkGAM17yawU/OBHjn9jZdD?=
- =?us-ascii?Q?NbHfkeCmT8eOSC/0Ry1UYx2dcCFtGDGJj/MDq/62puFPFcEngzQsxzLGMnvy?=
- =?us-ascii?Q?z781ubyg61zE0t/DBfL9ZalyMGMYilfHDi1YiWNXWCq+VO74x9k+z1RKDRzm?=
- =?us-ascii?Q?jg0vHIfRJzdmEoXzzEnQx4pzrzA8plo1BK1Y9BBIoSNTz7OwFGYP3Bt+zMbY?=
- =?us-ascii?Q?PYVevZVZpomMuyqlWdNZAY4OpfB6i+H1PPt2HHq/1ggaJ5nxidT18JB/7saZ?=
- =?us-ascii?Q?lrJIjlYFAoLMdrSBrgffuHfDlSI+aYuLo6kfblGHrOr5EcIHjflqTy1Ugd4B?=
- =?us-ascii?Q?so1kR4Af9ZoPf5MGyarLUk/dnMabU/jqYOXxDQi6rbmTz7gGfHKUSkSfNMe6?=
- =?us-ascii?Q?ucaKbAlrsiRX4Hp+Vb62yUoRKpXTPxXLm9u+qTghro/0KahzoY7OTy0lnQM9?=
- =?us-ascii?Q?Apmf38r3nJV+ckg2RFAiNsgORiliIeEOquBX+fFRewH9YFrBcJk7x9YHotOP?=
- =?us-ascii?Q?MapezWggpk7Rp32by+5UxYESJi+eCUdax1tBzusb/5ZyHhORsHGlqlQDkTV/?=
- =?us-ascii?Q?JAJw8BdZGr2qGgfzyP8YmdBMozyG/m/6nooBCktLkOtNX/BH9FmOss+9ATc+?=
- =?us-ascii?Q?3q/cj0bWHsYFTknA9pID0r3LBMwpXymUv52mWBWw0JG7L75EnNhcHaxxhHDw?=
- =?us-ascii?Q?6mdwXdYQQrUk/4/C5YpFp0xjqwlmqMSeQ8NqGzRA7SEw291rQl6dOa/WPdn7?=
- =?us-ascii?Q?QP5tRI6ByJQvLZDX2FUKaWARKEjTHhA342y60gce4oqSyJ6QJl7KZHXqtL2j?=
- =?us-ascii?Q?+VBJB/w3K4iqWGKAcNk5uf/rAwm1gFKlZ47tTxg+kviMKf3KgoWE7+q97Msk?=
- =?us-ascii?Q?dGTQDkBi3tQqwiIbq9G5nGywT4xIW7TCwatvpckzVXf7rgbazkPwC5vo/TvO?=
- =?us-ascii?Q?N9SO2toH7wqM+toEsr11okHaokLOtLwlsSS+GxQZ5lMy++4tzwHh/akUzDd0?=
- =?us-ascii?Q?CH1lOfS0VwjOQpMYMoqgifmxvVWzGtrcaZWtx7JR4pg3wrkt1v8c7DTJWYcQ?=
- =?us-ascii?Q?S8O6imUUl5VOxCY71oGPeA5WjCSSa9oI2JECmvMptGyKspB8FDBnGL0IbXQl?=
- =?us-ascii?Q?lSH3bp9umP3fxaI1Zy3j/j42G80dcNBi6obFS9KZ7OsMCjZtlOKaxMDZbd89?=
- =?us-ascii?Q?uYQWvQtLL3vf2dJaUXuvgPLOb4JCpmpHVZcvp6W1T76hlFoNha9n9DBD1SeN?=
- =?us-ascii?Q?HhcU6WD56ZTnGigYQ53wDxaYSKwriu9oeIbpNyn169MKBAlqbAht1cP3RiGZ?=
- =?us-ascii?Q?Act5/9oCvAd6XsvnJR9U5HtfbeTvIIG9MJK0FfkHxnc0itZSLDal/tSlPZo/?=
- =?us-ascii?Q?hkJopEWRG73/pPUh1wYmiOM129ru0c1ztvIrio6AsCvM1hDetw+1xmMBYqzl?=
- =?us-ascii?Q?uv0SZtsCT8YQztWTD59JNgTwJwM02nGANeIWzLO0PkQi3DiIUG2mTDYRxu7L?=
- =?us-ascii?Q?mn5vXYTmqARcNE20jdhEQBx5UaBULanTF85Y8rje?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b32bbc3c-eee0-4fe9-a2a0-08dc21c945da
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2024 19:25:52.6194
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: s8wzYKLa94XosgJ44eeYS4YBNy18aJEhCSczZaEEbL8JqTAT0Z20p5bADOlIVWp5IYWCP6J1/EhlMRQIojJ5pw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7487
+Mime-Version: 1.0
+X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2174; i=rdbabiera@google.com;
+ h=from:subject; bh=B2kjYhFbSp4GX9YZwdN8eIiOyb3LTIyipZNOAiaztKA=;
+ b=owGbwMvMwCFW0bfok0KS4TbG02pJDKk7ffM60yYd+Lhl7s6oww+lN4scPhCRv2uN2+mdVaHLu
+ PJ04l7O7ChlYRDjYJAVU2TR9c8zuHEldcsczhpjmDmsTCBDGLg4BWAin98wMvyM+/HxveTGZr7Z
+ eyfIn1z480L5hIvGsScvC7ZJfWF9X/eIkWGRTL7e9FreQ1I5WwubPlhl6tTz7xXsPbjTsi0ze9b XSbwA
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
+Message-ID: <20240130192638.3557409-2-rdbabiera@google.com>
+Subject: [PATCH v1] usb: typec: altmodes/displayport: add null pointer check
+ for sysfs nodes
+From: RD Babiera <rdbabiera@google.com>
+To: rdbabiera@google.com, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org
+Cc: badhri@google.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jan 30, 2024 at 06:28:25PM +0000, Conor Dooley wrote:
-> Hey,
-> 
-> This version seems to be the lastest (v4) for this binding, but went out
-> prior to discussion actually finishing on the v1!! of this patch, even
-> ignoring Rob's comment today.
-> Please wait for conversations to resolve before sending new versions.
-> I, at least, do not get paid for what I do here, so I often need well
-> more than a day before I can get around to clearing my review queue.
-> On Wed, Jan 24, 2024 at 10:25:24AM -0500, Frank Li wrote:
-> 
-> > From: Ran Wang <ran.wang_1@nxp.com>
-> > 
-> > When DWC3 is set to host mode by programming register DWC3_GCTL, VBUS
-> > (or its control signal) will turn on immediately on related Root Hub
-> > ports. Then the VBUS will be de-asserted for a little while during xhci
-> > reset (conducted by xhci driver) for a little while and back to normal.
-> > 
-> > This VBUS glitch might cause some USB devices emuration fail if kernel
-> > boot with them connected. One SW workaround which can fix this is to
-> > program all PORTSC[PP] to 0 to turn off VBUS immediately after setting
-> > host mode in DWC3 driver(per signal measurement result, it will be too
-> > late to do it in xhci-plat.c or xhci.c).
-> > 
-> > Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-> > Reviewed-by: Peter Chen <peter.chen@nxp.com>
-> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > ---
-> 
-> Where is your changelog?
+The DisplayPort driver's sysfs nodes may be present to the userspace before
+typec_altmode_set_drvdata() completes in dp_altmode_probe. This means that
+a sysfs read can trigger a NULL pointer error by deferencing dp->hpd in
+hpd_show or dp->lock in pin_assignment_show, as dev_get_drvdata() returns
+NULL in those cases.
 
-Sorry forget add it this patch.
+Verify dp drvdata is present in sysfs reads and writes before proceeding.
 
-> 
-> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > index 203a1eb66691f..8f5d250070c78 100644
-> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > @@ -273,6 +273,13 @@ properties:
-> >        with an external supply.
-> >      type: boolean
-> >  
-> > +  snps,host-vbus-glitches-quirk:
-> 
-> I specifically recall saying no to adding "-quirk" here, but that
-> might've been after this patch was sent.
+Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
+Cc: stable@vger.kernel.org
+Signed-off-by: RD Babiera <rdbabiera@google.com>
+---
+ drivers/usb/typec/altmodes/displayport.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Your comment is at v0 version. I told you there are v4. 
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index 5a80776c7255..0423326219d8 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -518,6 +518,9 @@ configuration_store(struct device *dev, struct device_attribute *attr,
+ 	int con;
+ 	int ret = 0;
+ 
++	if (!dp)
++		return -ENODEV;
++
+ 	con = sysfs_match_string(configurations, buf);
+ 	if (con < 0)
+ 		return con;
+@@ -563,6 +566,9 @@ static ssize_t configuration_show(struct device *dev,
+ 	u8 cur;
+ 	int i;
+ 
++	if (!dp)
++		return -ENODEV;
++
+ 	mutex_lock(&dp->lock);
+ 
+ 	cap = DP_CAP_CAPABILITY(dp->alt->vdo);
+@@ -615,6 +621,9 @@ pin_assignment_store(struct device *dev, struct device_attribute *attr,
+ 	u32 conf;
+ 	int ret;
+ 
++	if (!dp)
++		return -ENODEV;
++
+ 	ret = sysfs_match_string(pin_assignments, buf);
+ 	if (ret < 0)
+ 		return ret;
+@@ -666,6 +675,9 @@ static ssize_t pin_assignment_show(struct device *dev,
+ 	u8 cur;
+ 	int i;
+ 
++	if (!dp)
++		return -ENODEV;
++
+ 	mutex_lock(&dp->lock);
+ 
+ 	cur = get_count_order(DP_CONF_GET_PIN_ASSIGN(dp->data.conf));
+@@ -698,6 +710,9 @@ static ssize_t hpd_show(struct device *dev, struct device_attribute *attr, char
+ {
+ 	struct dp_altmode *dp = dev_get_drvdata(dev);
+ 
++	if (!dp)
++		return -ENODEV;
++
+ 	return sysfs_emit(buf, "%d\n", dp->hpd);
+ }
+ static DEVICE_ATTR_RO(hpd);
 
-> 
-> > +    description:
-> > +      When set, power off all Root Hub ports immediately after
-> > +      setting host mode to avoid vbus (negative) glitch happen in later
-> > +      xhci reset. And the vbus will back to 5V automatically when reset done.
-> > +    type: boolean
-> 
-> Rob commented today on the v1 conversation:
-> https://lore.kernel.org/all/20240130181322.GA2079185-robh@kernel.org/
-> 
-> Please respond (there) to his comment.
-
-Okay I will reply at v1 thread.
-
-> 
-> Thanks,
-> Conor.
-> 
-> >    snps,is-utmi-l1-suspend:
-> >      description:
-> >        True when DWC3 asserts output signal utmi_l1_suspend_n, false when
-> > -- 
-> > 2.34.1
-> > 
-
+base-commit: f1a27f081c1fa1eeebf38406e45f29636114470f
+-- 
+2.43.0.429.g432eaa2c6b-goog
 
 
