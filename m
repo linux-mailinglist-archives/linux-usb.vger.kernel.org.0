@@ -1,124 +1,143 @@
-Return-Path: <linux-usb+bounces-5712-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5713-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A755A8447D8
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 20:16:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0A4E844A27
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 22:37:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 383421F243FF
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 19:16:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABCE228A5C4
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 21:37:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F8FA3770C;
-	Wed, 31 Jan 2024 19:16:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C1C039AEB;
+	Wed, 31 Jan 2024 21:37:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="R+3UsVQ4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YteWpJAR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63653E479
-	for <linux-usb@vger.kernel.org>; Wed, 31 Jan 2024 19:16:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796F639AD0;
+	Wed, 31 Jan 2024 21:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706728597; cv=none; b=t3p2doLIJ0Dq2FUl7Yg4gFSsAIwjjm4COemfC8gVGcylcAU2V1a9DBBNUCzwGqrTNWnxXqjHcO2umL3G+bHEU+OEb05x9y/cvf/ZSdAIBBtKJ5GaKAnK2FUtTQxY+kcy3YJZqT86UfCBLEIllSst64CKioLf0LKNL5OIMMDvUzs=
+	t=1706737047; cv=none; b=H7KzhbaH/SExzoa4OOdSMfey+NA+ApD4jPXv9uBNW9k7WlzUftN4BuAfYYEgMtCuqnxROPuSGEqB4sF29etSPVj32XX+KpnenMLNPenX7xJg5AkXG/sR1olGLd+NApIfEB/ChJujQKjJBOH8nNLDDRhB20ysMs0MH1snMmGiW70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706728597; c=relaxed/simple;
-	bh=XWUy7YtxmrfP5omRSPV+uanADqOlM2OMzYTi5/C9v3M=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=N9ZleYDMVLGU9AnO1nRfi+GxI6VMLt6Ddn/G+afwUuxnHBBB9yT4IeRyq8CHq1biM9+dyBCtqkhXBFQVfGaGdgvtpL4So0sOMX5xRLQbi1eiVT4Ulqw4IYVo2K//Qb1DSyecwVmyABl2yXja6gJ9/h2KELCuQwD/jrW1P+rm00E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=R+3UsVQ4; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=AysmXUx4qd1V9m+b7E8hOLgGPAMV9C7I8szryF3o/VY=; b=R+3UsVQ4V6xodCtXDQIgCiK7px
-	T8srOPtgkhjEYYsHwyQL1GCWydKLIhkQdhMbynQOC7vAFw5wClpBZYo8Jdj4OhvGhz59Dba6qkjiY
-	xJFP+ylRUjWSpRm6kCDWiWlf+vsSMEuoim7m9GBQQ3HjVorIMfAb1Dpl6tJB/e3XAI48BTztqT4xO
-	eVhddum/iw60OY1OodFnI0FoRyjD5m+M1XBI0cIiYHbCYuyt1keuk8d6MiI0pzGZySO//1Yq92JCK
-	hYUPIATUXkqh63TjNNC3HX17IcFGMtpCzZfUJNC92ZBCG/iXBHgve01NSx4+Jjwo55WLwZkpKRorx
-	EYntEt2Q==;
-Received: from [187.90.178.235] (helo=[192.168.1.60])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1rVG4S-00CEP8-DQ; Wed, 31 Jan 2024 20:16:28 +0100
-Message-ID: <9e21fe04-6571-2c29-e40d-4d16b55ae46e@igalia.com>
-Date: Wed, 31 Jan 2024 16:16:22 -0300
+	s=arc-20240116; t=1706737047; c=relaxed/simple;
+	bh=QHYllCIGxd1fjN/1dMkGWsl3/gWwu0OX4RZLlXlxc7s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LbOEvoVyCGyoAg76A8hMyH10yR5GJv1bfQglI+a1XD67IvVYNHPN6zbRzm7+wHxz6C05L+Wt72UV5IBa+GXKy+aTgY35ROTvDUrBrnfIHet+VmZqxIuw3qBB23g2YXsKfh7JGWVHqRxWjToXL6tBf96TKdMt9V6AjAn7jFuZ1w4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YteWpJAR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97085C43390;
+	Wed, 31 Jan 2024 21:37:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706737046;
+	bh=QHYllCIGxd1fjN/1dMkGWsl3/gWwu0OX4RZLlXlxc7s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YteWpJARLEUBMao0ZpwP3Ffr9YUO9eD4UBe+MMrzEgKMZ/wifiivArxXcgh08eoym
+	 JU5G6ptyI3kkUiaK8W5yhUFmq28v8y/ilJAw6e7grquE+ykKxp4HOq4cKvmcAf6qKo
+	 zSQaDfGmtwBH2kNgWis+59bVGSzp17AuHsu/KblzOFXlxX9i+4jOQVka915iKKpOZD
+	 CRVuMgfkXPEi87H56y7avZWVKdZFxgZ20+OwDeayiuO6r1lJ+I07wqxR+v1SrCWxoO
+	 hYry8yiWxnN2xplwgIXToM3oVkh545jkLagxOM2pAu264XigQ0N1R25/decthPdh7y
+	 VDHOrXY7Q0AYQ==
+Date: Wed, 31 Jan 2024 15:37:24 -0600
+From: Rob Herring <robh@kernel.org>
+To: Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/2] ASoC: dt-bindings: xmos,xvf3500: add XMOS XVF3500
+ voice processor
+Message-ID: <20240131213724.GA2334002-robh@kernel.org>
+References: <20240130-onboard_xvf3500-v1-0-51b5398406cb@wolfvision.net>
+ <20240130-onboard_xvf3500-v1-1-51b5398406cb@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] usb: dwc3: Fix spurious wakeup when port is on device
- mode
-From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "balbi@kernel.org" <balbi@kernel.org>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "johan@kernel.org" <johan@kernel.org>,
- "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
- "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
- "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
- Andrey Smirnov <andrew.smirnov@gmail.com>,
- Vivek Dasmohapatra <vivek@collabora.com>,
- "piyush.mehta@amd.com" <piyush.mehta@amd.com>,
- "ray.huang@amd.com" <ray.huang@amd.com>
-References: <20240111020119.5u3k3csn3bi2zhtw@synopsys.com>
- <849d11d9-9302-4d76-01b6-b5046f474fda@igalia.com>
- <20240113013320.mrqqrdajrnw62kis@synopsys.com>
- <54a9b6b6-ef41-f76a-43e0-a395adddb455@igalia.com>
- <20240117003437.mxgo3ebxql4ftwjt@synopsys.com>
- <8b49285e-46de-c52a-ea8d-542c91ba4128@igalia.com>
- <20240118003949.tmw3uq76hvwe4ylz@synopsys.com>
- <e2d02355-b47b-8298-c5c9-8c6d199b2728@igalia.com>
- <20240123021237.hyckfhsxvem7ydqv@synopsys.com>
- <dd3339b0-75ac-b64e-4dac-d9394e91baef@igalia.com>
- <20240130021704.ndbkkyksauku7nwr@synopsys.com>
- <29ebf575-e09b-4452-ed60-41a667e78c5f@igalia.com>
-Content-Language: en-US
-In-Reply-To: <29ebf575-e09b-4452-ed60-41a667e78c5f@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240130-onboard_xvf3500-v1-1-51b5398406cb@wolfvision.net>
 
-On 31/01/2024 15:16, Guilherme G. Piccoli wrote:
-> [...]
->>> And ftrace timestamps unfortunately don't help with that, it's not
->>> showing how much time the device stay suspended, so it might be
->>> confusing and both cases could appear as the same exact scenario, even
->>> if they are completely different (fail vs success cases).
->>
->> That's odd.. my assumption was the timestamps to be valid. Were you able
->> to confirm that it's the issue with the timestamps? Perhaps check if the
->> other devices in the system also wakeup at the approximately same
->> time printed in the timestamps?
->>
+On Tue, Jan 30, 2024 at 01:26:56PM +0100, Javier Carrasco wrote:
+> The XMOS XVF3500 VocalFusion Voice Processor[1] is a low-latency, 32-bit
+> multicore controller for voice processing.
 > 
-> Hi Thinh, indeed - this a bit odd right? I guess this is maybe related
-> with the way kernel keeps track of clocks on suspend - despite TSC keeps
-> accounting on suspend (at least for all modern x86 processors IIUC), the
-> timestamps in both tracing buffer or dmesg do not reflect suspend time.
+> Add new bindings to define the device properties.
 > 
-> Is it different in your x86 systems? Or maybe in other architectures you
-> have experience with?
+> [1] https://www.xmos.com/xvf3500/
 > 
-> I've done a test on Steam Deck, take a look in both attachments - seems
-> to be aligned with my perception. Also checked dmesg on my Intel laptop
-> (i5-6300U, with "nonstop_tsc" capability) and the timestamps do not
-> reflect the time spent in S3 suspend...
+> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+> ---
+>  .../devicetree/bindings/sound/xmos,xvf3500.yaml    | 51 ++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/sound/xmos,xvf3500.yaml b/Documentation/devicetree/bindings/sound/xmos,xvf3500.yaml
+> new file mode 100644
+> index 000000000000..d7d5bda23b1b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/xmos,xvf3500.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/xmos,xvf3500.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: XMOS XVF3500 VocalFusion Voice Processor
+> +
+> +maintainers:
+> +  - Javier Carrasco <javier.carrasco@wolfvision.net>
+> +
+> +description:
+> +  The XMOS XVF3500 VocalFusion Voice Processor is a low-latency, 32-bit
+> +  multicore controller for voice processing.
+> +  https://www.xmos.com/xvf3500/
+> +
+> +properties:
+> +  compatible:
+> +    const: usb20b1,0013
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +
+> +  vdd-supply:
+> +    description:
+> +      Regulator for the 1V0 supply.
+> +
+> +  vdd2-supply:
+> +    description:
+> +      Regulator for the 3V3 supply.
+> +
+> +required:
+> +  - compatible
+> +  - reset-gpios
+> +  - vdd-supply
+> +  - vdd2-supply
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    xvf3500 {
+> +      compatible = "usb20b1,0013";
+> +      reset-gpios = <&gpio 5 GPIO_ACTIVE_LOW>;
+> +      vdd-supply = <&vcc1v0>;
+> +      vdd2-supply = <&vcc3v3>;
+> +    };
 
-Just a heads-up: just noticed that on s2idle sleep, the timestamps seems
-to reflect the suspended time - just tested here. But on S3/deep sleep,
-they don't...
+A USB device should hang off a USB hub (or root hub). Looks like you 
+just have a random node here. You should also have a $ref to 
+usb-device.yaml. You'll see you need a reg property for example.
 
-Cheers!
+Rob
 
