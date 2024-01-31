@@ -1,280 +1,179 @@
-Return-Path: <linux-usb+bounces-5690-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5691-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97C22843A66
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 10:10:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBD45843AAC
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 10:15:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 228ED1F22E14
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 09:10:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8419028F2EC
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 09:15:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F280D69DF8;
-	Wed, 31 Jan 2024 09:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C889976047;
+	Wed, 31 Jan 2024 09:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="fb3O1GhV"
+	dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b="vPAT51IM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2097.outbound.protection.outlook.com [40.107.255.97])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915EA69D07
-	for <linux-usb@vger.kernel.org>; Wed, 31 Jan 2024 09:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706692049; cv=none; b=a2WOs4YGy7b6ie6PShY2/xZvtA4OvqLgapVxyAYU9MLBhhZ09a2RRhNChkShzBVIveTUz5vH6u7C8IG7MAzFCVIYDi+khlZl/Fx+qaV2iq/pA9LE6C3S9/eaGK8dX38EiZJv9+mD4kLNFVo6PDnNVQA06hY9J9dgiNoMYfPaD/g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706692049; c=relaxed/simple;
-	bh=CNY1jwS//2OUw7TH3RtzNPnemi/+4THQBdABUHTcnXg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OEjJCIuODiDxeCPpLYh4eEQYGJP7wgS306wfjhu2B4SqZ/9wxdLK14KxUwOkz0vk7snjm0vv0SXqbk+n6+z8vBi0tpNNvNVUxsYUs0hAXeknaeup/bnggDLOV4T+CSlNqrmbl2dmJfG8ukDbUBLkQxTdWVOX6CwkYqKyA6FqbUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch; spf=none smtp.mailfrom=ffwll.ch; dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b=fb3O1GhV; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ffwll.ch
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a31846fd10cso90830066b.0
-        for <linux-usb@vger.kernel.org>; Wed, 31 Jan 2024 01:07:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049A56F066;
+	Wed, 31 Jan 2024 09:12:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.97
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706692363; cv=fail; b=nx8XySJrLCzjvq3fikul1Sv/A989E4pt8wwBWH3eewVQUR0P+7glsSquD76E83fycnykAK/Lc99WtAMW9IhBAYHO5jqYsg7ipFiWJHbwerDjFypNCXmQkFdY15zxMdrrgj7oWJEgp9rzDjJxtP21T+riL6Nbcf6W19uvzEU6QTU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706692363; c=relaxed/simple;
+	bh=Vcn/272q9Fsc9S/AGX9VO+P7Q37CJ6Cgjv4A4VGblF4=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=Qay9pETtl75oN6JxC3Tb0+ZqCduVDQO4sD71b3qwWMdWDVDhPtbCuouwZBcnsF/1WjlrW4HhavmG97u4Az3iR53mskeiGkop9Wj6WDk44u/HENXUfC6KoNguHmXdl6ggNs5gXyORJvjqzpuf0zgxaybT5d8XuKXZA9z2VeaRKJ4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fibocom.com; spf=pass smtp.mailfrom=fibocom.com; dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b=vPAT51IM; arc=fail smtp.client-ip=40.107.255.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fibocom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fibocom.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lLVQl4o5WtyvYyvwEu67kJDuefAR2IJAmBDb8ePgz5Tuf+anm8AcSCVyTOu2wwNXWXpDklxbDn18FwkH/MvCOpDTXPsZcL4yM93D1CbRV+Ia06ECSMypUhF/99b/IHFh7roUlH9SpLAkXa0LolBUjGcUjdTpt5POAz/ukIOojZLRfcWFQyZ0M2dNP21nedYVN+TDCX6C03ptCaeIaXT/i4ire1enoeS+9zix2IAoADXTvXq+LlZWaAyFofeWkvz6zgs2PPfKY41N4/OzZtLgxx4no2kU545ug8/qRRXz5NXYlEmxkY6MZVhUS/8YJ3pslXhCrqAO2mfSqragCxPyLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Qbfzc8NLSnzxJeWKqi8t6fFb2t0G3jJRCH0/9Z0XhUM=;
+ b=dTOURN6eUe9IO2PZWWXGw2bVJUieccMl7LCaqrdBe+MPR4S7swSb5PaoBmM3GUlLJmBmSCbE0pU/AstwrtJdDrDzyrbo6BAeQztflnhQOpfiZPg4/s6hWMdafA1Zzok96F5owICtV6A1qyZYl5YEJV+nw12+05ivYri2zPTTsS0VvY98z0d0ws+Cj9mcMRkBwFgFqs9Ilk9uwKiLoGsQHfUR1q2wy9+wpt0iI6YZfgRjyzePWf2ohmZ7px0rtA8UjqeAmeXVVA7ot0ZNSXz/rAj8Gx9l8F0dOUjfDzwi4Vj0El2Est60ls7XaJT5C/jq1pIkWMfmitHxmL2LWttT4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fibocom.com; dmarc=pass action=none header.from=fibocom.com;
+ dkim=pass header.d=fibocom.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1706692046; x=1707296846; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1nyHmju9XQ/E8K2Rl2IixeUYmuUjABoJpLGoEfLLyas=;
-        b=fb3O1GhVCOJIT0/NiqRye3fR1pgpFidpxGqY/qBpNLDo3E+0JhQ00juY/zoOSN7VFW
-         m6BkUzU4iRrgxwhKEWnM08asZwfgYJpwyLcZRUh2EfzKv/IMcw9StSb4gsZkoq/itJsc
-         h8IbKY6UihmNyFTMOkEcQUXGJa+9LSCfzjXoQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706692046; x=1707296846;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1nyHmju9XQ/E8K2Rl2IixeUYmuUjABoJpLGoEfLLyas=;
-        b=Ecq96cIIt/wRbKIzDnCYl4YdumeUlyZjp7lvAh63RMJ5KwwvtPmEG4FLesD86IF8hz
-         0Des57qSvLwoWyTeXWJz5oz7NXjrJMHlEWu0IlLrTlikPvMqLbKJnLNBwLCWnUnAdFrw
-         EX1b2Btb9uLetWcDsnqfuKxw/WOBEM2zcNY8M4tKvSih8jJ+Ns/6WAALI8eOU9duRjyS
-         XyTRgmNfixg3saApGVLPwT1f1gz0IKoJg9zjYmMuyrJo/bVThBTn1fVy/fgzx/zUTP+X
-         3p9uuxx5puWi1RyAKeQ26vSCvuHUsD9e+KQ7lFp9INWQMkoasPqRuQEETEv6gu0TnjmC
-         Y+mw==
-X-Forwarded-Encrypted: i=0; AJvYcCVATkGdkVwKCibGIQcpeCyDnWaK+x5LehsuHeiyrGXFazdrBqiFJa9RMc23jK0ACqwr5gD7Rg/PIKHLlignS2PFO+9Z3XnUbL2e
-X-Gm-Message-State: AOJu0YxdiwPl+8XUkbCbYG5HY1xrI7+fjbCyHB36+BApCW4zXpCDKmcU
-	0O+xfx3hIOEjuPVW1TYyCjrB+n1LG93XdmKNN9caSiZIm/CWoeLDn6nZOJX0tQs=
-X-Google-Smtp-Source: AGHT+IHB5eqCZmKzcjc2g7JPPAdNArJ7kHHK+OzqhPuyUPAp6vhMz/LdxOxvFmt5K7lTdhhiKUG0EQ==
-X-Received: by 2002:a17:906:4887:b0:a36:63d6:2886 with SMTP id v7-20020a170906488700b00a3663d62886mr583896ejq.3.1706692045444;
-        Wed, 31 Jan 2024 01:07:25 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id rs6-20020a170907890600b00a26d20a48dasm5966647ejc.125.2024.01.31.01.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jan 2024 01:07:24 -0800 (PST)
-Date: Wed, 31 Jan 2024 10:07:22 +0100
-From: Daniel Vetter <daniel@ffwll.ch>
-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc: Paul Cercueil <paul@crapouillou.net>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-	Christoph Hellwig <hch@lst.de>
-Subject: Re: [Linaro-mm-sig] Re: [PATCH v5 1/6] dma-buf: Add
- dma_buf_{begin,end}_access()
-Message-ID: <ZboNyju8h4vfSd7v@phenom.ffwll.local>
-Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-	Christoph Hellwig <hch@lst.de>
-References: <577501f9-9d1c-4f8d-9882-7c71090e5ef3@amd.com>
- <7928c0866ac5b2bfaaa56ad3422bedc9061e0f7b.camel@crapouillou.net>
- <2ac7562c-d221-409a-bfee-1b3cfcc0f1c6@amd.com>
- <ZbKiCPhRvWaz4Icn@phenom.ffwll.local>
- <c97e38ee-b860-4990-87f1-3e59d7d9c999@amd.com>
- <Zbi6zQYtnfOZu5Wh@phenom.ffwll.local>
- <a2346244-e22b-4ff6-b6cd-1da7138725ae@amd.com>
- <7eec45a95808afe94ac65a8518df853356ecf117.camel@crapouillou.net>
- <ZbjSJi07gQhZ4WMC@phenom.ffwll.local>
- <1d912523-b980-4386-82b2-8d79808398c1@amd.com>
+ d=fibocomcorp.onmicrosoft.com; s=selector1-fibocomcorp-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Qbfzc8NLSnzxJeWKqi8t6fFb2t0G3jJRCH0/9Z0XhUM=;
+ b=vPAT51IMEjtadLwtP7Wkzw8U0sd7jwk0+KiXSHsYfEmS21WyrLCCuzpVSLd8J8/pKiz3eQ+/v1oQSm14EYd3QDzK33CQbb83JXUqXysXCm2e4SDG2X+3xldzbwtW5lRMluA08ZiKL7wHcHxrGTNwCxx/gpm55viy8zrGEGbZkVY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fibocom.com;
+Received: from TYZPR02MB5088.apcprd02.prod.outlook.com (2603:1096:400:71::13)
+ by KL1PR02MB5137.apcprd02.prod.outlook.com (2603:1096:820:7a::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.32; Wed, 31 Jan
+ 2024 09:12:36 +0000
+Received: from TYZPR02MB5088.apcprd02.prod.outlook.com
+ ([fe80::dcd4:944:72ae:1f3d]) by TYZPR02MB5088.apcprd02.prod.outlook.com
+ ([fe80::dcd4:944:72ae:1f3d%4]) with mapi id 15.20.7228.029; Wed, 31 Jan 2024
+ 09:12:36 +0000
+From: Puliang Lu <puliang.lu@fibocom.com>
+To: johan@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Puliang Lu <puliang.lu@fibocom.com>
+Subject: [PATCH] USB: serial: option: add Fibocom FM101-GL variant
+Date: Wed, 31 Jan 2024 17:12:24 +0800
+Message-Id: <20240131091224.30064-1-puliang.lu@fibocom.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0017.apcprd02.prod.outlook.com
+ (2603:1096:4:194::17) To TYZPR02MB5088.apcprd02.prod.outlook.com
+ (2603:1096:400:71::13)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1d912523-b980-4386-82b2-8d79808398c1@amd.com>
-X-Operating-System: Linux phenom 6.6.11-amd64 
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR02MB5088:EE_|KL1PR02MB5137:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7804d68d-0f9d-4ca6-f0e7-08dc223cc400
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	e+QMhHMM/h3nOxhT41AdgcXC0QRd5Nq2Re0NARN6iriKBZPHRYYINgX2BOLieh3xCVvaUj3z7DJC5wTmr9NiInouhxejCD5LonHl4xE1xO7N1S6s6oFkK6BRtHxkms5+3msqeRGG8+xzC0nXgHZEPs+ggifJoO0st3D6qt6lxV1gLl/Vm1UDvMrscj+wO0HAo1R63uXEilQflVkE/d8OsrfL8twDPpKEfN6RSQyY1wbpTy5D0z76xtirV99PlcbOAVoyWYJtWBTOnnGDgHECLJW/c0Ri804aeQ7yO8cZxjiUNQwtGIMuNpgHEYTbCgx6hSec7TfepnM7NguDAGlveeNIqxwQHhBBwxQYugHbftxYyJkCFL08tSRYAU8KgRLkY5KMpY6zV1H/PpzYzLy3WHkFnp+VlyXeTKtXTof21FR6yE+WG+MzFyoZAlT2r0eB6d/3EhWPZaN1tM40o2AQ6BuezcUcKEhiS1nyHulzvNTsnAoSSrJ6dqfWYAKXA6oiJotzyJEchsqjnPk/wsXpcgDPS0hFKxBJDwTj25TEVKc50WInARXY80Ex7qGhSXq8BjNAapgYMT5n3ZWUx8kUfksEC6Q9DRy8LixF8VvIv+/MhhoMWbyjOfz/ZXxzYpEE
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR02MB5088.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(136003)(376002)(366004)(346002)(396003)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(83380400001)(86362001)(36756003)(38350700005)(41300700001)(26005)(107886003)(1076003)(38100700002)(6512007)(2616005)(6506007)(52116002)(6486002)(2906002)(478600001)(316002)(66946007)(66556008)(66476007)(8936002)(4326008)(8676002)(44832011)(5660300002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?iMdEqilOvTPZIXImN7s1cx+aTjtJ75YY+xqaen+cHhdso8E7PkG/dlgKZyCI?=
+ =?us-ascii?Q?KUC0Edx7vug4IxJFREBVUhxOq6f2urgJ9RrpMdpl0G7YhqNln161cqRCLfEj?=
+ =?us-ascii?Q?zBKrz6PoWuHosEwHG54SidxSVFFyqsnQhrJPsxEox0waJ8UhqBQC3ngaMTnM?=
+ =?us-ascii?Q?LWMJkBcqUd28zE0qTQqbuF7JruDM/ITReuuazQ5g+u7c6g1u1QvVgmybn904?=
+ =?us-ascii?Q?yMrBNc3GYfYIPr3leyqgOtc/ZxEf/sRJr0/EOeeL21tds5Ke+qxb7ksRCfKP?=
+ =?us-ascii?Q?T1MVv0aMHRsGYroG3MYzic4uOCLWjUlLrhvK1G5Tr4SFEbyqI6ztcztPJQyz?=
+ =?us-ascii?Q?UU8o/RFWdGxoMSrIti3VjlTkINBtp85ADybh6B3Uzlyn922KnawdvMewCjfv?=
+ =?us-ascii?Q?lzqOib1V5lRzjce6RVh5K11YDbIVthXkmdZ/Bw6yY0/U6DCbXxbWPVbZd68s?=
+ =?us-ascii?Q?TxU/Qalhk7h3al30UNpP94FwKWis6QEg7KrTEDoF4XB/Xj/icHMGbuSCKUg2?=
+ =?us-ascii?Q?7v0OXb4qZvDniBpxu17o5vtY1mJZpMrdzTOY3hXCXphCve9jWkwp8LJmOmIk?=
+ =?us-ascii?Q?LwUEJtNPzg917f9Nq2xYJnMWVXB3AlFsV+UL9LRQZlRaeSPOc7+3ziYNZVAW?=
+ =?us-ascii?Q?FkYmXfJ28pLzHtpBZzvYx2M6kdYsvAA9GI40sRZdiDHpSghJuLloGKKwHge5?=
+ =?us-ascii?Q?S9ePm1LzMajKoUl02iFRkIfjngJT4w2vsF1nsYgR1VzNrqmnBGy6/iExywXc?=
+ =?us-ascii?Q?UK0YqCijHiRgYQ8avEYOnzT/Adsg2McaMxRj7+11SKuy8jKFqNDKhkI6Aa5f?=
+ =?us-ascii?Q?Seji0zVeQoy988wJWcgxCnMwz098QaDk4AWXmLbGADbRnwnb317OlpX8uLqH?=
+ =?us-ascii?Q?k/NhFAq/of470YyszLaB41+ed5jVc8Mq6p1jII3ADZL0tNuEt1gWyHysWiOg?=
+ =?us-ascii?Q?SqGlB6FRNPmmIrdOLRkpx+WbC/nMYTuT1ebW6MC2P+qggL1RDLkXwPTDRn7W?=
+ =?us-ascii?Q?Qll2vLkVfTEVrGOBaf21iPpsWsz2+AvFO8/ffOdEal7nM5nl4mj+xb9oVYpX?=
+ =?us-ascii?Q?e9dlVOUb2sI7vcnbKHHVM3Z/TsofTRxaIvFmWpequXKm4CxE1NwqQ2uwcEBq?=
+ =?us-ascii?Q?D/5QWR8niUo+Ob1DSfRF6fG8gwQQW546S6EKGpB2AHnmyfSMxQVPyyCkP4oU?=
+ =?us-ascii?Q?PfJdNMH1ue69S3ThDlYpAd6TrDNS67G9uzEiVdvqiA8uZ1FmeBB2ca5a16Mi?=
+ =?us-ascii?Q?/dB3Wxobf9lZz4SBrlDwyvyA+RKUC4iVsA4nnNG8E7ejnXoHLC9SXAjbbRoq?=
+ =?us-ascii?Q?XpxqIKRd/e0e4zGXGAXjeP8FLhIhciB+7IshmVDCsGsRigj//uFa/YDYUz4B?=
+ =?us-ascii?Q?Xatv/oUguJ8ky+l/NdyLLb2xd8xTMYCgs9bf3md6GfSlawM54l2asGXTJXaP?=
+ =?us-ascii?Q?vBN9LBILkzEICl/A4mKBQG+Hr116GV16dN/VLUt39hLP+Vk60qd0AFq5e1YE?=
+ =?us-ascii?Q?FooqWEGPMowLl4YF8na/4I1fygajVLz7LANLRw8+FC1hdXUkS3EYtWkY4uJQ?=
+ =?us-ascii?Q?MX6CAwAQt4EdN/UhtjmDFxtPsry+UReGA5uTgbrhZEn/9QCcj5Wt/FOF225z?=
+ =?us-ascii?Q?/A=3D=3D?=
+X-OriginatorOrg: fibocom.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7804d68d-0f9d-4ca6-f0e7-08dc223cc400
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR02MB5088.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2024 09:12:36.3716
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 889bfe61-8c21-436b-bc07-3908050c8236
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R17MMX+9bghq858tf5PlPP8ieooFiFXGiGvzFjoQelnWP+Qreknu4xkNXYo49/7K31RPretb+SllGsCEhnwlxg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR02MB5137
 
-On Tue, Jan 30, 2024 at 02:09:45PM +0100, Christian König wrote:
-> Am 30.01.24 um 11:40 schrieb Daniel Vetter:
-> > On Tue, Jan 30, 2024 at 10:48:23AM +0100, Paul Cercueil wrote:
-> > > Le mardi 30 janvier 2024 à 10:23 +0100, Christian König a écrit :
-> > > >   I would say we start with the DMA-API by getting away from sg_tables
-> > > > to something cleaner and state oriented.
-> > > FYI I am already adding a 'dma_vec' object in my IIO DMABUF patchset,
-> > > which is just a dead simple
-> > > 
-> > > struct dma_vec {
-> > >    dma_addr_t addr;
-> > >    size_t len;
-> > > };
-> > > 
-> > > (The rationale for introducing it in the IIO DMABUF patchset was that
-> > > the "scatterlist" wouldn't allow me to change the transfer size.)
-> > > 
-> > > So I believe a new "sg_table"-like could just be an array of struct
-> > > dma_vec + flags.
-> > Yeah that's pretty much the proposal I've seen, split the sg table into
-> > input data (struct page + len) and output data (which is the dma_addr_t +
-> > len you have above).
-> 
-> I would extend that a bit and say we have an array with
-> dma_addr+power_of_two_order and a header structure with lower bit offset and
-> some DMA transaction flags.
-> 
-> But this is something which can be worked as an optimization later on. For a
-> start this proposal here looks good to me as well.
-> 
-> > The part I don't expect to ever happen, because it hasn't the past 20 or
-> > so years, is that the dma-api will give us information about what is
-> > needed to keep the buffers coherency between various devices and the cpu.
-> 
-> Well maybe that's what we are doing wrong.
-> 
-> Instead of asking the dma-api about the necessary information we should give
-> the API the opportunity to work for us.
-> 
-> In other words we don't need the information about buffer coherency what we
-> need is that the API works for as and fulfills the requirements we have.
-> 
-> So the question is really what should we propose to change on the DMA-api
-> side to get this working as expected?
+Update the USB serial option driver support for the Fibocom
+FM101-GL
+LTE modules as there are actually several different variants.
+- VID:PID 2cb7:01a3, FM101-GL are laptop M.2 cards (with
+MBIM interfaces for /Linux/Chrome OS)
 
-So one thing I've been pondering, kinda picking up your point about CXL,
-is that we do make the coherency protocol more explicit by adding a
-coherency mode to dma_buf that the exporter sets. Some ideas for values
-this could have:
+0x01a3:mbim,gnss
 
-- ATTOMIC_COHERENT: Fully cache coherent, including device/cpu atomis.
-  This would be for CXL. Non-CXL devices could still participate with the
-  old model using explicit devices flushes, but must at comply with
-  CPU_COHERENT.
+Here are the outputs of usb-devices:
 
-  There's also the power9-only nvlink that would fit here, but I guess
-  going forward CXL (and cache-coherent integrated gpu) would really be
-  the only users of this flag.
+T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P:  Vendor=2cb7 ProdID=01a3 Rev=05.04
+S:  Manufacturer=Fibocom Wireless Inc.
+S:  Product=Fibocom FM101-GL Module
+S:  SerialNumber=5ccd5cd4
+C:  #Ifs= 3 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
 
-  Peer2peer would have the same rules, otherwise doesn't really make
-  sense. Also we might want to forbib non-CXL imports for these buffers
-  maybe even? Not sure on that.
+Signed-off-by: Puliang Lu <puliang.lu@fibocom.com>
+---
+ drivers/usb/serial/option.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-- CPU_COHERENT: device transactions do snoop cpu devices caches, but
-  devices might do their own caching which isn't snooped by the cpu and
-  needs explicit device-side invalidate/flushing. This means pcie
-  importers are not allowed to use pcie no-snoop transactions, intel igpu
-  wouldn't be allowed to use MOCS that do the same, similar for arm
-  integrated devices.
-
-  Importers can skip all explicit cache management apis like
-  dma_buf_begin/end_cpu_access, or the newly proposed
-  dma_buf_begin/end_device_access here.
-
-  We'd need to figure out what exactly this means for peer2peer
-  transactions, I have no idea whether the no-snoop flag even does
-  anything for those.
-
-  We might also want to split up CPU_COHERENT into CPU_COHERENT_WB and
-  CPU_WOHERENT_WC, so that importers know whether cpu reads are going to
-  be crawling or not.
-
-- MEMORY_COHERENT: devices transactions do not snoop any caches, but
-  promise that all transactions are fully flushed to system memory. Any
-  devices transactions which do fill cpu caches must call the proposed
-  dma_buf_begin/end_device_access functions proposed here. Any cpu access
-  must be braketed by calls to dma_buf_begin/end_cpu_access.
-
-  If your device does fill cpu caches, then essentially you'd not be able
-  to import such buffers. Not sure whether we need to put the
-  responsibility of checking that onto importers or exporters. Ideally
-  core dma-buf.c code would check this.
-
-  Also maybe the cpu WC mapping mode would actually need to be a sub-mode
-  for MEMORY_COHERENT, because all cpu wc achieves is to avoid the need to
-  call dma_buf_begin/end_cpu_access, you would still need your devices to
-  be memory coherent. And if they're not, then you cannot use that
-  dma-buf.
-
-  Or maybe alternatively we need to guarantee that exporters which set
-  MEMORY_COHERENT implement dma_buf_begin/end_device_access to make things
-  work for these cpu-coherent but not memory-coherent devices. This
-  becomes very tricky with device/arch/bus specific details I think.
-
-- DMA_API_COHERENT: The memory is allocated or mapped by the dma-api, and
-  the exact coherency mode is not know. Importers _must_ braket all cpu
-  and device access with the respective dma_buf functions. This is
-  essentially the "we have no idea" default.
-
-  Note that exporters might export memory allocated with dma_map_alloc
-  with MEMORY_COHERENT or CPU_COHERENT if they know how the memory exactly
-  works. E.g. for most arm soc gpu/display drivers we can assume that the
-  dma-api gives us MEMORY_COHERENT or CPU_COHERENT_WC, and just use that.
-  Essentially this would make the current implicit assumptions explicit.
-
-  udmabuf would need to set this, definitely if Paul's patches to add the
-  explicit device flushes land.
-
-- DEFAULT_COHERENT: This would be the backwards compat legacy yolo
-  behvaior. I'm not sure whether we should alias that with
-  DMA_API_COHERENT or leave it as a special value to mark exporters which
-  haven't been updated for the much more explicit coherency handling yet.
-
-  The specification for this coherency mode would be a flat out "who
-  knows, just don't break existing use-cases with actual users".
-  Essentially the only reason we'd have this would be to make sure we can
-  avoid regressions of these existing use-cases, by keeping whatever
-  horrible heuristics we have in current exporters.
-
-  It would also allow us to convert exporters and importers on a case by
-  case basis.
-
-Note that all these coherency modes are defined in terms of bus-sepecific
-device access and in terms of dma_buf apis the importer must call or can
-skip. This way we'd avoid having to change the dma-api in a first step,
-and if this all works out properly we could then use the resulting dma-api
-as a baseline to propose dma-api extensions.
-
-I think starting right out with designing dma-api extension is a few
-bridges too far. Both from a "how do we convince upstream" pov, but maybe
-even more from a "how do we figure out what we even need" pov.
-
-> Regards,
-> Christian.
-> 
-> 
-> 
-> 
-> 
-> > -Sima
-> 
-> _______________________________________________
-> Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
-> To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
-
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 72390dbf0769..2ae124c49d44 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2269,6 +2269,7 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0111, 0xff) },			/* Fibocom FM160 (MBIM mode) */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a0, 0xff) },			/* Fibocom NL668-AM/NL652-EU (laptop MBIM) */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a2, 0xff) },			/* Fibocom FM101-GL (laptop MBIM) */
++	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a3, 0xff) },			/* Fibocom FM101-GL (laptop MBIM) */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a4, 0xff),			/* Fibocom FM101-GL (laptop MBIM) */
+ 	  .driver_info = RSVD(4) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2df3, 0x9d03, 0xff) },			/* LongSung M5710 */
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.34.1
+
 
