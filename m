@@ -1,138 +1,187 @@
-Return-Path: <linux-usb+bounces-5707-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5708-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD9FA844699
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 18:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C95208446C4
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 19:09:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 435E31F232C8
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 17:57:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DD281F24E4C
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 18:09:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340B912F597;
-	Wed, 31 Jan 2024 17:57:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 585F012FF92;
+	Wed, 31 Jan 2024 18:08:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gnuage.org header.i=@gnuage.org header.b="c45iazXv"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cnQcIM6T"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.techno-city.fr (techno-city.fr [95.216.245.165])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493EA12DDBA
-	for <linux-usb@vger.kernel.org>; Wed, 31 Jan 2024 17:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.216.245.165
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166F712DDB6;
+	Wed, 31 Jan 2024 18:08:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706723822; cv=none; b=b96Ua+2UcyvrygUoMnnkLc3fg5BvorYSDc79g6+q036hywZYfrTSbFyMBKHtvkd6uJrRstshjibBF9oaxFjeBKBSEhG93XoDahVad9RiqJb1GjIOENcEU839Ig6Qk5IJLjtHFF9gekCIgxnZG9uoUqWcUWBoJSxzZ4dpOYQ07Xg=
+	t=1706724522; cv=none; b=r6HmkHn5fJcvfixAFW25IzFjQrxYil86h/P6MWQO7wUWfvZFQqfCaHQnfSigydEMwFCUZDIuI4m9EdMK696wu5Lq4OU110h2DFIOnUMZVz6cF6msQdYi1ugbjLVAZIqQZgfxLqaVv0/WT4bRWEUk8NDC1jAEmr19A8l0ApTNinA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706723822; c=relaxed/simple;
-	bh=1G05z0zOLKjMzMt/j0HBkkUliu1g8iEZr6DpNeaA06Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GLZcw4HN3mbNDFbGX+7r4GQvZvBYMuWyc5iQ9WE+Wt/PDTK1VOFESa9mPg/A6LRxU/qpjDjm+uyIBVkxcrKORwSMiQu2kyCphb7/aiSLGpXuAAT+XbLkbGtR7OKAeRRb2EbSY4P0LEUq+wb/Tk489ge00B/T9LRqPdhWr4Fi5t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=gnuage.org; spf=fail smtp.mailfrom=gnuage.org; dkim=fail (0-bit key) header.d=gnuage.org header.i=@gnuage.org header.b=c45iazXv reason="key not found in DNS"; arc=none smtp.client-ip=95.216.245.165
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=gnuage.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gnuage.org
-Received: from pc-aurel.techno-city.fr (unknown [IPv6:2a05:6e02:1076:6010::230])
-	by mail.techno-city.fr (Postfix) with ESMTP id 310E1AA3E2;
-	Wed, 31 Jan 2024 18:49:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gnuage.org; s=2019;
-	t=1706723372;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sXIUFkTe1dz1NoHORlgSyUJAH2ZBAi89CEsWHTD7uqk=;
-	b=c45iazXvLCVe0cZ1Wtzm6N5zMprGS+uG58iAxPY52UFVS8x1qHYMFFM8JOv6P+40PoE/Nk
-	pZ5NFbHGe3w/XUGFPZWBS+ylE9pLz72T8IIkBk+owlDoJqh8zzCSO7ojMlFG73M7iQH47d
-	BC1nGPdQSutwY3iqfLGuTGGX5FHMAB1EEO0UR+aTAAxBufhgmS54sH6odmE7LUctGBLLp2
-	k2e8txNJj9pfv54ldiMSDbTmaotk/0jh45vVPP/w5Kfam0jLFg3Xzrb+/j2zvP6mW/XIbE
-	f0F0exDReC8VZRUlKhymVR7U7ifFgvseqk6LIK92DAaSYlsEyPUC35z6P6HPOg==
-From: =?UTF-8?q?Aur=C3=A9lien=20Jacobs?= <aurel@gnuage.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: linux-usb@vger.kernel.org,
-	Aurelien Jacobs <aurel@gnuage.org>
-Subject: [PATCH] USB: serial: option: add MeiG Smart SLM320 product
-Date: Wed, 31 Jan 2024 18:49:17 +0100
-Message-ID: <20240131174921.2097403-1-aurel@gnuage.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <D0XE7S.X6XGW1CB307A2@gnuage.org>
-References: <D0XE7S.X6XGW1CB307A2@gnuage.org>
+	s=arc-20240116; t=1706724522; c=relaxed/simple;
+	bh=qo55Ya1zrMut/Ge9/eEA9XjoOSaLw2btqX7Iod2jOuk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=M15XzhLLwR/P0Na+tNCqp0b+OW+n8xNIdlXo4Ts+1R0QX7XcwaPTwizFEOzHdp4nap6dIclBhH3d3EtaAv+yPd9z/4lUvEstqaTMkd1fnwK2Q9BzmNawUD9wQfOKhLYGGerl6Es08ejQOxm1a/D0oQkeAKzxt6Fgt3k4xC1AEhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=cnQcIM6T; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40VHvOti024450;
+	Wed, 31 Jan 2024 18:08:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=K988A/nCvY7++Ns1OTEX4DSJbSLU9SSwyLn1Bd2jd5E=; b=cn
+	QcIM6TKbIyhDlbdSrs4mqm0RnHiSd+J1nvGHEEA+MzfmerKheIyh1R6hhUa4JlxK
+	/Sys+DfUFEhke51NpUur1ICx6EvvR5YEJ1EowAK0kAH7Bjz2I1s08Vuqb5Ql3C52
+	YxAeSTbBi4dUyqzvoDiUGJY0bNzXtqqq+XgE9hMwClfeFn5l5YOmqwz089o6flZf
+	9iRqDPjxu6l0xu6G5ggI0talwMJQ00G88BmcId01IYnUcpzsXDMSNj7glUHs2+po
+	qkd5QZxofbn6JdHYdwkHycPlFi6oA7KGYi6Gkzqi2jrispHKUG7Jq5k884u0PEFi
+	PFBomjTsJKO+zDNsX/Ug==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vypaq0rke-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 31 Jan 2024 18:08:35 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40VI8Z4f014192
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 31 Jan 2024 18:08:35 GMT
+Received: from [10.216.50.212] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 31 Jan
+ 2024 10:08:31 -0800
+Message-ID: <47bf719c-a5c1-473b-9fa0-8cad84f0721c@quicinc.com>
+Date: Wed, 31 Jan 2024 23:38:26 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: gadget: ncm: Avoid dropping datagrams of properly
+ parsed NTBs
+To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hardik Gajjar
+	<hgajjar@de.adit-jv.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>
+References: <20240131150332.1326523-1-quic_kriskura@quicinc.com>
+ <CANP3RGeHXmEcDN=-h1uGBzu_Ur2UcmiEuFDXAEr0Z2ptXnHq=Q@mail.gmail.com>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <CANP3RGeHXmEcDN=-h1uGBzu_Ur2UcmiEuFDXAEr0Z2ptXnHq=Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: z4UMFwPYct1wO3N9o3unHjTu6_3PUFNS
+X-Proofpoint-GUID: z4UMFwPYct1wO3N9o3unHjTu6_3PUFNS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-31_10,2024-01-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ lowpriorityscore=0 priorityscore=1501 mlxscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=826 phishscore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401190000 definitions=main-2401310140
 
-Update the USB serial option driver to support MeiG Smart SLM320.
 
-ID 2dee:4d41 UNISOC UNISOC-8910
 
-T: Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 9 Spd=480 MxCh= 0
-D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
-P: Vendor=2dee ProdID=4d41 Rev=00.00
-S: Manufacturer=UNISOC
-S: Product=UNISOC-8910
-C: #Ifs= 8 Cfg#= 1 Atr=e0 MxPwr=400mA
-I: If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E: Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I: If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E: Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I: If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E: Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I: If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E: Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I: If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E: Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I: If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E: Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I: If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E: Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I: If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E: Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+On 1/31/2024 10:33 PM, Maciej Żenczykowski wrote:
+>>
+>> diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+>> index ca5d5f564998..8c314dc98952 100644
+>> --- a/drivers/usb/gadget/function/f_ncm.c
+>> +++ b/drivers/usb/gadget/function/f_ncm.c
+>> @@ -1338,11 +1338,17 @@ static int ncm_unwrap_ntb(struct gether *port,
+>>               "Parsed NTB with %d frames\n", dgram_counter);
+>>
+>>          to_process -= block_len;
+>> -       if (to_process != 0) {
+>> +
+>> +       if (to_process == 1 &&
+>> +           (block_len % 512 == 0) &&
+>> +           (*(unsigned char *)(ntb_ptr + block_len) == 0x00)) {
+> 
 
-Tested successfully a PPP LTE connection using If#= 0.
-Not sure of the purpose of every other serial interfaces.
+Hi Maciej,
 
-Signed-off-by: Aurélien Jacobs <aurel@gnuage.org>
----
- drivers/usb/serial/option.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+> I'm unconvinced this (block_len % 512) works right...
+> imagine you have 2 ntbs back to back (for example 400 + 624) that
+> together add up to 1024,
+> and then a padding null byte.
+> I think block_len will be 624 then and not 1024.
+>
+> perhaps this actually needs to be:
+>    (ntp_ptr + block_len - skb->data) % 512 == 0
+> 
+> The point is that AFAICT the multiple of 512/1024 that matters is in
+> the size of the USB transfer,
+> not the NTB block size itself.
+> 
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 72390dbf0769..b5468f51e0f8 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -613,6 +613,11 @@ static void option_instat_callback(struct urb *urb);
- /* Luat Air72*U series based on UNISOC UIS8910 uses UNISOC's vendor ID */
- #define LUAT_PRODUCT_AIR720U			0x4e00
- 
-+/* MeiG Smart Technology products */
-+#define MEIGSMART_VENDOR_ID			0x2dee
-+/* MeiG Smart SLM320 based on UNISOC UIS8910 */
-+#define MEIGSMART_PRODUCT_SLM320		0x4d41
-+
- /* Device flags */
- 
- /* Highest interface number which can be used with NCTRL() and RSVD() */
-@@ -2281,6 +2286,7 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, LUAT_PRODUCT_AIR720U, 0xff, 0, 0) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SLM320, 0xff, 0, 0) },
- 	{ } /* Terminating entry */
- };
- MODULE_DEVICE_TABLE(usb, option_ids);
--- 
-2.43.0
+Ahh !!  So you mean, since this comes because the host doesn't want to 
+send packets of size wMaxPacketSize on the wire, we need to consider the 
+length of data parsed so far to be checked against 512/1024 and not 
+block length.
 
+But either ways, the implementation in the patch also the same thing in 
+a different way right ? Process all NTB's present iteratively and while 
+doing so, check if there is one byte left. So if there are multiple 
+NTB's mixed up to form a packet of size 1024, even then, both the logics 
+would converge onto the point where they find that one byte is left.
+
+>> +               goto done;
+>> +       } else if (to_process > 0) {
+>>                  ntb_ptr = (unsigned char *)(ntb_ptr + block_len);
+> 
+> note that ntb_ptr moves forward by block_len here,
+> so it's *not* always the start of the packet, so block_len is not
+> necessarily the actual on the wire size.
+> 
+
+Apologies, I didn't understand this comment. By moving the ntb_ptr by 
+block length, we are pointing to the (last byte/ start of the next NTB) 
+right as we are fixing in [1] ?
+
+>>                  goto parse_ntb;
+>>          }
+>>
+>> +done:
+>>          dev_consume_skb_any(skb);
+>>
+>>          return 0;
+>> --
+>> 2.34.1
+>>
+> 
+> But it would perhaps be worth confirming in the MS driver source what
+> exactly they're doing...
+> (maybe they never even generate multiple ntbs per usb segment...)
+> 
+
+Yes they do and we made a fix for that in [1].
+
+
+> You may also want to mention in the commit message that 512 comes from
+> USB2 block size, and also works for USB3 block size of 1024.
+> 
+
+Sure. Will update the commit message accordingly.
+
+[1]: 
+https://lore.kernel.org/all/20230927105858.12950-1-quic_kriskura@quicinc.com/
+
+Regards,
+Krishna,
 
