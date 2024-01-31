@@ -1,250 +1,170 @@
-Return-Path: <linux-usb+bounces-5693-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5694-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FC86843C75
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 11:27:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EE53843E82
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 12:37:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03110296289
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 10:27:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 932811C25724
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Jan 2024 11:37:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3312278670;
-	Wed, 31 Jan 2024 10:22:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5972879958;
+	Wed, 31 Jan 2024 11:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="V4ilotLA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2062.outbound.protection.outlook.com [40.107.20.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5EC69D16
-	for <linux-usb@vger.kernel.org>; Wed, 31 Jan 2024 10:22:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706696561; cv=none; b=QyPODjRssWSEx7mFX/YBms40MjGveKIRzgNef2HMC9QzftpRI/2Bb6udlCbevDShckVrbBqy9hPNH3SY5jBUOPNF7Gw0yfolMOsD1pFmy5ewDWJa9OGwK8fNFfXk+rIlZtWwyhV9k4snjDrGFVpoQcPT2l9IuqqTqcRZn0VmJAo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706696561; c=relaxed/simple;
-	bh=STJ+RItGOkSEEg0GUrI9fiiQBxRmzMTlARJy2C8F5gQ=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=Y9DgHk0YYy9Cm25sbXImhguVKvFEnrxAH1HJp565LJu4x/vEUl8M8s+pAo610CsMUD1IJNsWFuv24FfCcWrvSmWSfTxUe5f3Cvj7WnbDjRIRousDM9iGoW9OsTMVbLAhG/vKIqwSmrbdPlGt7PWXPvV6s+8Wjd7mDN+aNHw54jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3638e475deaso10661765ab.1
-        for <linux-usb@vger.kernel.org>; Wed, 31 Jan 2024 02:22:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706696559; x=1707301359;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Khdd7I6fdVlhvPhocwYCvULRzqoVieX6zZAUNRny58=;
-        b=CGjY5/Ltdw1qlpggwiYZuEtpN94SE++FeQksxxoz7Jouf54BRn/DjzqwSeQiB/Q7H7
-         gOJOIpSuFCqMO5oWTrAzh5e6OZeUyMyp/mL5PKCXoH7QE97OfM2liVrmDvuxuIECHq2y
-         6NIX2li0v501iTvKnxqWN6vuJ34TChYKP/5GEgGo7Fp2wMmI/soYV+1DZB44eyZI3Q+6
-         fy8d386I0o6EwNvwVhYhIttvP9iaVSHFp2v4YuMQ6lFy/Vaud6gzjf6/8G1D7Z+TLXJp
-         cISALMeoNUirxLZuKOd2vmGLS5HyC3inuCvoZSGhA8g3NN8GbePagtWXxPnsqK2VpbEI
-         iRlw==
-X-Gm-Message-State: AOJu0YxZhNhRXPcqWi1TJHZRMdadaz4KFAsTuGdbianE9hiE09zjPjiP
-	zhigDaFvSp9jBM3lwVYVOeovQXgASP8Nzi4ZsH/D60k/s4i8dtYIx2m2/XhdzMRIfmGey0O3VU3
-	lq8Ugz7ayEyZQcAxccLDxlf1qFN809Tr4OHJAZVKLTXs/27IrUYl/bpQ=
-X-Google-Smtp-Source: AGHT+IFlNOmhN/+hWbCyAU5hIbOCv0Mu5ysQi4v3Y33P7/8609xx69WjqA5HLmKzirf1hgxKLR5qGtbA3hHIZAGjTm5PKIO3Np1n
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4A579930;
+	Wed, 31 Jan 2024 11:36:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.62
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706701018; cv=fail; b=icavDmVeC3MUwmtsL2ud3pNDFtbZChwJ+qbVGth/J0kZfhXW+oHCzi3SEQGgI+xpiUiwsdewMScX7q0I5RMh2zf6VR8EU1nMfPXLv2w0zTZ9hwPzz24gxHyEI+gx4KtoH5H1xl9hMkzjkH7aYDshIiTL5LOCziYqM312r2kFYvE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706701018; c=relaxed/simple;
+	bh=PkvpnXkZU/L5TXCW/SLJ9SFy80jOjmOhsAc0afuoIfY=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=ufJrq7HNXoC0D+0Z/DW/8/etZfAiN4JCqlQIKtYW9UrcO81X/jUEUaTFV4XCnKO+AunWzI8ESvSd4H6JDXZtrTk1Lf2pzhB0tJg0c6jns9JYgJVlkGOveklFIqaoOzgSR8LdZDT+dgJCR56YcGeiahgWVkOM85dS64/kmtdG2+g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=V4ilotLA; arc=fail smtp.client-ip=40.107.20.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z/5OgbWqH3EOMT2n7yk2nHZl85Qc6Uy5wgUsNya9sCDBCnFZs8DcRAoy0ynZTkswk+zUbh/e17lDMFUSt+HxFMcKo3xlg448lQy5Z9LEFHBd4TZCqn2nO4Ogtu++lKcu4inQ+Nbtmvnza16vuZbS/HqGeE68WAboynrZhYkQJhBaoXekN+kHVBwC/zz53TOfOvO9a+VKL5klsrspMBNTIjlpNCtKaMjdv0BLoSKhLNID9WN8AoxgyEgUUexz1RJF4ofttq7alFmW1YAk5xiQF7JBtRXQ1RAgwSJVVA7e7MFJduSp9Zs62t2Py0NlaurbJiVh9pQq3W4hB8qUzJ5Utw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cwcokNXtW0NcNrCuQS7Lzvdxm0bZayGRGa67HmaZkmw=;
+ b=jCFdn7XXb8uU2toL8vnt7BTdqMIH5yGh+2QVLZNb5/Ssgt/UJrg/8DyridBIW7nXaLDpDhl9WTSePY4GIHW5Uy0CwqxVnBWWqZJ5wLQ3zZeQ+mO274VSy+WpQqWo2s8EjxuKorwTOQQHXatJFECaLz9Jn7L58RtaM7fhKHqs0v8ynvhb3gwFFPp40R0dywSVNnQrw1SMGmdgL7FiDNDPYR9FBUhn2oFgZLlE2OAtf7mM+Xv9icJm2HymGKHkW/HdeWN2JBapQcwsRBn5QsSCqumufMjpVoeFN0VUspOFm5R36HuwUT9IgIcNUBCurTF5p6IeK3lFXP+1fgcAL8qn9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cwcokNXtW0NcNrCuQS7Lzvdxm0bZayGRGa67HmaZkmw=;
+ b=V4ilotLAu9f6eyhoSXExxxDaRq8QjndCZTjmOdCC/A5IjBOwiozgfBU3RYgnx0jWNSNZ2500KnGuzDsOnJjBsydhFZw3BfdJ2354pWHtNY5IQ0gky/HjLOdUbRqCW8w8YHUTCcoaFz/M0P3GKXHvI1BTqq3n5RI09Z62Ms8qF9s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by AS8PR04MB9093.eurprd04.prod.outlook.com (2603:10a6:20b:444::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.23; Wed, 31 Jan
+ 2024 11:36:53 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::d45f:4483:c11:68b0]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::d45f:4483:c11:68b0%7]) with mapi id 15.20.7228.029; Wed, 31 Jan 2024
+ 11:36:53 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: gregkh@linuxfoundation.org,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	peter.chen@kernel.org
+Cc: linux-imx@nxp.com,
+	jun.li@nxp.com,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v5 1/8] dt-bindings: usb: usbmisc-imx: add fsl,imx8ulp-usbmisc compatible
+Date: Wed, 31 Jan 2024 19:43:17 +0800
+Message-Id: <20240131114324.3722428-1-xu.yang_2@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0107.apcprd02.prod.outlook.com
+ (2603:1096:4:92::23) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:cdab:0:b0:363:91a3:4b60 with SMTP id
- g11-20020a92cdab000000b0036391a34b60mr110019ild.4.1706696559340; Wed, 31 Jan
- 2024 02:22:39 -0800 (PST)
-Date: Wed, 31 Jan 2024 02:22:39 -0800
-In-Reply-To: <mailman.217.1706634262.2961.pvrusb2@isely.net>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000028b68806103b4266@google.com>
-Subject: Re: [syzbot] [pvrusb2?] KASAN: slab-use-after-free Read in
- pvr2_context_set_notify (2)
-From: syzbot <syzbot+ce750e124675d4599449@syzkaller.appspotmail.com>
-To: isely@pobox.com, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, pvrusb2-owner@isely.net, 
-	pvrusb2@isely.net, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AS8PR04MB9093:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1567f9e-1cd8-4f42-7f03-08dc2250ebb2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Mp2ClbVmCNIxdgd/9oQuhY55Y+usJFfJS9kT8VfcMda4DthQauWT/xMjG75zy3TS8bceOx/CzpC24EnJA/7Izwja2n7mp+9T/om8vBVObo6ax63ar8r6UuoXnPr+LALDKacQKA7CCFMv5+Ush74vj6SDBEb/1D8Ho0zxUyADPmNHHjnvEcvCL/xbHeV+VNIQLqUHQC63I/SkOcK489EvvKlgdl41gTCEWOR/GzAim8Bv/GQpXbaIl0qDO3uAcLPKdDCpV0Q4ZScgM4csEv2m5uu/gqindlaZfYtZUpg8946fjCBH9vI6lR7uMl5OO3fwD33LkOVm1haooQls0YUNZcTHPejLvHRHQcz5RRcAsCdDyQ+jOnqGvPmWkub8t+r5g2bHtn2mMtGGzmKcoouXb2Y35bb0llOfhTtSAJPYKD9wnOLvUteElkvtHQXfn6rC9JZVBGDFL0vfGtvG27tbltiJj57HZNUtCQLdEwT8I+OvBO4mhy/A65p25xb/CTQd+OWk7TxhgWAUO7T03Un/UQ8mJhafdasPgjVeZmG9h/pkN5SUAYwlX/QKqsBjCw8ml6walgmYdm8sPPrqirH5sim+oWe6RAUialjRJ1vs9TjIWq5Pia9XKQ5YCVRjXzo7
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(346002)(376002)(396003)(39860400002)(366004)(230922051799003)(186009)(64100799003)(1800799012)(451199024)(26005)(1076003)(2616005)(41300700001)(38350700005)(316002)(66476007)(66556008)(478600001)(36756003)(6512007)(52116002)(6506007)(6666004)(6486002)(38100700002)(66946007)(5660300002)(8936002)(4744005)(7416002)(2906002)(86362001)(8676002)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?xcjrlYfbRdu79pvxmvWH0eeP+zZMxaj0+eRFCnwagZ0j01Ic1n8omr5nG+n7?=
+ =?us-ascii?Q?rU4M7pVzIetzutNNDV+UqHr6trVVvfaHgJjFwgQvBb/vgBizOz1wAJwDj1Z5?=
+ =?us-ascii?Q?vrIxJN6CgKCL9Us/aBsmK90zMJl3IxDbmlt2nOeNNayHRKQv76Eqq5tn4iDP?=
+ =?us-ascii?Q?n4XcQLWkRcK2ZJzE8sG1FgHNSeteSWAMAs2LlpBI0Seox5/0gTVvi8bndi1P?=
+ =?us-ascii?Q?1hrihOxD9lsLRXnJSluAZvkAeUkG8yxi/2xfArvAvhng7KNrLnRL+FWeMwqN?=
+ =?us-ascii?Q?bGFLzX6/C98+p0Pk0nr/1cyIvc8NTqbknMTA554c46flOHP1IKpL5v1jwmkh?=
+ =?us-ascii?Q?lnl36Ae/VG+vYD8284zUh4IyunryPmmC1B+5FZqXAgw48qrIlO0Yex8Z0cKH?=
+ =?us-ascii?Q?q7ssELeJnLj7iERxSrwQct4W9yOcNvL8kB85tk/V68hL/kMM9zK0mM7UTAOi?=
+ =?us-ascii?Q?909jvkXYJzA1drGwUGzRhJ3rEEgL6pHvPbfeukY86VzxsV1y493iHBK+Tkd6?=
+ =?us-ascii?Q?jEB1ef+ii7fMU00tr6UmtQLbrshl0fVAlK+TY+apa1YP7vziXxYVpthXKRvg?=
+ =?us-ascii?Q?rAKt/4YL/TKD2cKt+sljr32Dc6DSY1C5nkmVwvJnLXLxajbY4l0Vm7xv7WyT?=
+ =?us-ascii?Q?Y5UHTXr0xPyMLlWJcfqohZfYws+dvQTJ/X9PsvzuiJP/mXzfQhFYXrUHeaDq?=
+ =?us-ascii?Q?f89pfq1fQCfGrT+KCu2gK9HDDDvg7lZDHMCCY95wWuKShYFLXp5Du/V1D4hq?=
+ =?us-ascii?Q?dBtxlZDn9QEoGpZBAY8F0ksHW40JSzDZHMOaJ3YJvrheB2Nfp9jLEg+56CQj?=
+ =?us-ascii?Q?5WBlFImLph1iIwAciOSwbfV6Mb3DLqwjWw4aQoMp913J3nbs95i2/VypiMEy?=
+ =?us-ascii?Q?pXqhQ8hm1+E/na/4kx/UyzKABscK0c99HMcmAr8Y9xKVKPW3R94J+d6Ebd09?=
+ =?us-ascii?Q?TeLE5CN773+5as85pimnMfFYJefmWChNkra3I8mQnlf64OOqk4AFLvjkJ2df?=
+ =?us-ascii?Q?DhQXWHdzSSaRakdtsZOj3sCHfHbwe6+e7iDO4s1K2g60ZRRJ37qsP6rhQ6u1?=
+ =?us-ascii?Q?XE+ZVVfVvGVdB4EAIVha/JzUyULTAlEghbp3z5BkPLvQIowH8No0XwP1YIYu?=
+ =?us-ascii?Q?iS7B5pKxVfYtWYBPtbHKcVAnfxBP4+lMXnwqsJS51J5eJzb/7rcf8Z1n3ByZ?=
+ =?us-ascii?Q?pm8hNytZlFJZWhmaJxmuQRdgbrJhf2DxDZSxaU7kJz1um1gSPemVLuBXY9+c?=
+ =?us-ascii?Q?6aBzZp+nWSio+zh7pJyIhxjYRyFkwDhkZF/TERiFJlceWaXgYR8Td0tgNtGZ?=
+ =?us-ascii?Q?UaKAIe6wSqV5oZIOmm+WJmCu40AeDayUeSpCpKzhiFX9kYdbUFtwDXIF1XUq?=
+ =?us-ascii?Q?+/UOJzfoJvVeat9XjwqneqUmhF0o0wOmLkNsUpp8mwqzaOViwPf9NTho9RdJ?=
+ =?us-ascii?Q?LnG8CrvpxHy+n+sX7nWiJO7bAjIbZIbXzrxz3RYQFcCh5oXS/DuFNHj6ySnG?=
+ =?us-ascii?Q?3Qo+2x1kF1VQlkrqqXcgHpURLSwcZA4mesowDz1L0TrLzjK8TfjyMYkrqyU4?=
+ =?us-ascii?Q?Le7jakL5ytQ9zUAv/skEQmGY6GzgBSfmva0m62bO?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1567f9e-1cd8-4f42-7f03-08dc2250ebb2
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2024 11:36:52.9808
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IgsfvhfBfD0QqjfUhKvTN5jZR2ajxe/NQeRuzNCtn3Bv4wVhzXshfitDlTGaipNFKwScwb051qjU/kxZFVvslg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9093
 
-syzbot has found a reproducer for the following issue on:
+Add "fsl,imx8ulp-usbmisc" compatible.
 
-HEAD commit:    f1a27f081c1f usb: typec: qcom-pmic-typec: allow different ..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=14800bdfe80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=986ce9258c6856ff
-dashboard link: https://syzkaller.appspot.com/bug?extid=ce750e124675d4599449
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17c7cad3e80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1429ed40180000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c77efcf770e8/disk-f1a27f08.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a827d6ba40bf/vmlinux-f1a27f08.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9d21d228bf73/bzImage-f1a27f08.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ce750e124675d4599449@syzkaller.appspotmail.com
-
-pvrusb2: Device being rendered inoperable
-==================================================================
-BUG: KASAN: slab-use-after-free in pvr2_context_set_notify+0x2c4/0x310 drivers/media/usb/pvrusb2/pvrusb2-context.c:35
-Read of size 4 at addr ffff888112202ad8 by task kworker/0:1/9
-
-CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.8.0-rc1-syzkaller-00046-gf1a27f081c1f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/17/2023
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:377 [inline]
- print_report+0xc4/0x620 mm/kasan/report.c:488
- kasan_report+0xda/0x110 mm/kasan/report.c:601
- pvr2_context_set_notify+0x2c4/0x310 drivers/media/usb/pvrusb2/pvrusb2-context.c:35
- pvr2_context_notify drivers/media/usb/pvrusb2/pvrusb2-context.c:95 [inline]
- pvr2_context_disconnect+0x94/0xb0 drivers/media/usb/pvrusb2/pvrusb2-context.c:272
- pvr_disconnect+0x80/0xf0 drivers/media/usb/pvrusb2/pvrusb2-main.c:79
- usb_unbind_interface+0x1e5/0x960 drivers/usb/core/driver.c:461
- device_remove drivers/base/dd.c:569 [inline]
- device_remove+0x11f/0x170 drivers/base/dd.c:561
- __device_release_driver drivers/base/dd.c:1272 [inline]
- device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1295
- bus_remove_device+0x22c/0x420 drivers/base/bus.c:574
- device_del+0x39a/0xa50 drivers/base/core.c:3814
- usb_disable_device+0x36c/0x7f0 drivers/usb/core/message.c:1416
- usb_disconnect+0x2e1/0x910 drivers/usb/core/hub.c:2286
- hub_port_connect drivers/usb/core/hub.c:5334 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5634 [inline]
- port_event drivers/usb/core/hub.c:5794 [inline]
- hub_event+0x1be0/0x4f40 drivers/usb/core/hub.c:5876
- process_one_work+0x886/0x15d0 kernel/workqueue.c:2633
- process_scheduled_works kernel/workqueue.c:2706 [inline]
- worker_thread+0x8b9/0x1290 kernel/workqueue.c:2787
- kthread+0x2c6/0x3a0 kernel/kthread.c:388
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:242
- </TASK>
-
-Allocated by task 9:
- kasan_save_stack+0x33/0x50 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- poison_kmalloc_redzone mm/kasan/common.c:372 [inline]
- __kasan_kmalloc+0x87/0x90 mm/kasan/common.c:389
- kmalloc include/linux/slab.h:590 [inline]
- kzalloc include/linux/slab.h:711 [inline]
- pvr2_context_create+0x53/0x2a0 drivers/media/usb/pvrusb2/pvrusb2-context.c:207
- pvr_probe+0x25/0xe0 drivers/media/usb/pvrusb2/pvrusb2-main.c:54
- usb_probe_interface+0x307/0x9c0 drivers/usb/core/driver.c:399
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
- device_add+0x117e/0x1aa0 drivers/base/core.c:3625
- usb_set_configuration+0x10cb/0x1c40 drivers/usb/core/message.c:2207
- usb_generic_driver_probe+0xad/0x110 drivers/usb/core/generic.c:254
- usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:294
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
- device_add+0x117e/0x1aa0 drivers/base/core.c:3625
- usb_new_device+0xd80/0x19f0 drivers/usb/core/hub.c:2625
- hub_port_connect drivers/usb/core/hub.c:5494 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5634 [inline]
- port_event drivers/usb/core/hub.c:5794 [inline]
- hub_event+0x2e62/0x4f40 drivers/usb/core/hub.c:5876
- process_one_work+0x886/0x15d0 kernel/workqueue.c:2633
- process_scheduled_works kernel/workqueue.c:2706 [inline]
- worker_thread+0x8b9/0x1290 kernel/workqueue.c:2787
- kthread+0x2c6/0x3a0 kernel/kthread.c:388
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:242
-
-Freed by task 901:
- kasan_save_stack+0x33/0x50 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- kasan_save_free_info+0x3f/0x60 mm/kasan/generic.c:640
- poison_slab_object mm/kasan/common.c:241 [inline]
- __kasan_slab_free+0x106/0x1b0 mm/kasan/common.c:257
- kasan_slab_free include/linux/kasan.h:184 [inline]
- slab_free_hook mm/slub.c:2121 [inline]
- slab_free mm/slub.c:4299 [inline]
- kfree+0x105/0x340 mm/slub.c:4409
- pvr2_context_check drivers/media/usb/pvrusb2/pvrusb2-context.c:137 [inline]
- pvr2_context_thread_func+0x69d/0x960 drivers/media/usb/pvrusb2/pvrusb2-context.c:158
- kthread+0x2c6/0x3a0 kernel/kthread.c:388
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:242
-
-The buggy address belongs to the object at ffff888112202a00
- which belongs to the cache kmalloc-256 of size 256
-The buggy address is located 216 bytes inside of
- freed 256-byte region [ffff888112202a00, ffff888112202b00)
-
-The buggy address belongs to the physical page:
-page:ffffea0004488080 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x112202
-head:ffffea0004488080 order:1 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-anon flags: 0x200000000000840(slab|head|node=0|zone=2)
-page_type: 0xffffffff()
-raw: 0200000000000840 ffff888100041b40 ffffea0004498080 0000000000000005
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 7680321640, free_ts 0
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0x2d0/0x350 mm/page_alloc.c:1533
- prep_new_page mm/page_alloc.c:1540 [inline]
- get_page_from_freelist+0x139c/0x3470 mm/page_alloc.c:3311
- __alloc_pages+0x228/0x2250 mm/page_alloc.c:4567
- __alloc_pages_node include/linux/gfp.h:238 [inline]
- alloc_pages_node include/linux/gfp.h:261 [inline]
- alloc_slab_page mm/slub.c:2190 [inline]
- allocate_slab mm/slub.c:2354 [inline]
- new_slab+0xcc/0x3a0 mm/slub.c:2407
- ___slab_alloc+0x4b0/0x1860 mm/slub.c:3540
- __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3625
- __slab_alloc_node mm/slub.c:3678 [inline]
- slab_alloc_node mm/slub.c:3850 [inline]
- __do_kmalloc_node mm/slub.c:3980 [inline]
- __kmalloc_node_track_caller+0x171/0x420 mm/slub.c:4001
- __do_krealloc mm/slab_common.c:1187 [inline]
- krealloc+0x5d/0xf0 mm/slab_common.c:1220
- add_sysfs_param+0xca/0x960 kernel/params.c:654
- kernel_add_sysfs_param kernel/params.c:817 [inline]
- param_sysfs_builtin kernel/params.c:856 [inline]
- param_sysfs_builtin_init+0x2ca/0x450 kernel/params.c:990
- do_one_initcall+0x11c/0x650 init/main.c:1236
- do_initcall_level init/main.c:1298 [inline]
- do_initcalls init/main.c:1314 [inline]
- do_basic_setup init/main.c:1333 [inline]
- kernel_init_freeable+0x682/0xc10 init/main.c:1551
- kernel_init+0x1c/0x2a0 init/main.c:1441
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:242
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff888112202980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888112202a00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff888112202a80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                    ^
- ffff888112202b00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888112202b80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Changes in v3:
+ - new patch due to missed this little one
+Changes in v4:
+ - no changes
+Changes in v5:
+ - add Acked-by tag
+---
+ Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+index 2d3589d284b2..0a6e7ac1b37e 100644
+--- a/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
++++ b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+@@ -33,6 +33,7 @@ properties:
+               - fsl,imx7ulp-usbmisc
+               - fsl,imx8mm-usbmisc
+               - fsl,imx8mn-usbmisc
++              - fsl,imx8ulp-usbmisc
+           - const: fsl,imx7d-usbmisc
+           - const: fsl,imx6q-usbmisc
+       - items:
+-- 
+2.34.1
+
 
