@@ -1,126 +1,122 @@
-Return-Path: <linux-usb+bounces-5724-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5725-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8C7E845420
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Feb 2024 10:37:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92E61845440
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Feb 2024 10:40:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E7A81F2AE9B
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Feb 2024 09:37:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CA301F20F09
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Feb 2024 09:40:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B0D15DBB0;
-	Thu,  1 Feb 2024 09:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2FE15B10F;
+	Thu,  1 Feb 2024 09:38:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GYUMW38Z"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UTydyzgl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2210715D5C2
-	for <linux-usb@vger.kernel.org>; Thu,  1 Feb 2024 09:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5521115D5A7
+	for <linux-usb@vger.kernel.org>; Thu,  1 Feb 2024 09:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706780018; cv=none; b=F36Jbv66EQrAhXAhM92Jp1uNyRoFuFq7pkMbGmYe7/0yQpjWl3ZNsiJ8d8nABcpdx6H54P+jOzWNzV04NIS2xHq9CZ7p5hmtx+bGBNpDla6yBL8ycy+6FLxIxQj0bG2FyyUnuDMsao9u9S8MVrzr6lx53UzWPqsO0X6BYgEYqn0=
+	t=1706780330; cv=none; b=Zc6oXqNgUH+iz9g8J9cRsayPe1yGFuQJkoN2zauYsGtJRdETqdoVdVwzIT5k8voOrM4uuh3lgzz4eCnU5bDCJh8G6aNsuTkNBIk/kKLYfjb49n+mcd0cKLB8fq6AvjVX9mIm94yq2zabPuC7E6q07VrqYnVCOLOUZx3wLs7qr0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706780018; c=relaxed/simple;
-	bh=dzwr54Imo8KdIC2HTZKzuFkEvaNhFDLHKM29prLnxw0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Aiv7KCP2+kMXq+Y8tbOC3NaQyZryVXlYreJWjC7cu8/dV36dV6fjDBMAUxqVb0QDBQ1MAlKVnTUSxT8oek18leqnn2GVQ6W7KqJxCSs7VmnWz8rk04TPDJfZhZv1lkSndiz1niAFqN7pPEFK7olgOfrQRnCNNkqHJMuZU2CfolY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GYUMW38Z; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-55a9008c185so1189919a12.1
-        for <linux-usb@vger.kernel.org>; Thu, 01 Feb 2024 01:33:36 -0800 (PST)
+	s=arc-20240116; t=1706780330; c=relaxed/simple;
+	bh=9l/wcXT+bs/WGiyv1cRps49ciJ9TEQfO/iHpcmKSk20=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rDyK8tQ4z988PcwAjhNodRG6KmLhSt8vXxu/ay8zyzA0KQwolVE9iJrJjhkFrM9BkwnEj/W9UmNGcuGQroROfUtWkqeOAQSEC346tka3hE7jEoRfoNymBwJvaxFkMDgtLNQLowopF/KOH/6zGRF4qUzJZRMMfjBmADWCBwouiH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UTydyzgl; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a366ad7ad45so78306166b.3
+        for <linux-usb@vger.kernel.org>; Thu, 01 Feb 2024 01:38:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706780015; x=1707384815; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KsF6drDKBiFvygmM6xKh0Ey6+0M0HGg4vhCX5aum/LU=;
-        b=GYUMW38ZV8SEPzsf7eT88Z4kTn8Y+Zfjp6Q0pLLYidogieNO1M3IxZ0kar1EOTl0Br
-         xeWijMlNKBO18KFB08QOhd1m2LVqzmr6+BJp3bw/fA8fmxmNiCso0i73N5kosT/QPyW7
-         e4NAQf+RYAY7GfNrokHA7jqC8lZddnpVx2iUQTpTFmbrp+mziu3KFtIcoz5c2YKr3XRF
-         GPRmx++ibvA8aE14NjFuUrSujyxKS1l76xkM8fpbxSObEQp43eqHx22JW/1XsorNDJ19
-         7I/LkSa5HVuw4chA0hjJPr8kqfKfkR/NZx21/xxdCz1S5asrV1N0SGh1gOMHEzux6pMt
-         EJGQ==
+        d=suse.com; s=google; t=1706780326; x=1707385126; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ETrdbaHyveHNyICbP2DXqhvu68zNHBWwdNewWmRtz18=;
+        b=UTydyzglxjJxAhMsW1gDk+FG3EiXNSuEQaqXcodPIqr46Yz1vJJXJLQU2GM42pqPsR
+         wk1BgVO/DybEnV3/8yAnFETHBe08ZIeArnkutsuDV5EJAOCzx/2cY8w2y+9nXgHGNyx+
+         d7RuejNI0kS5RY/rWXRODyBxSMFck58x7EbeMV5bQJk7oAhgimxaM0gi9xOCuAZqw47v
+         mBbq5E7l1zLXldKNUA7QXqZ6qWdVG0NrUZ7xhiiwQnx8Puo2G/tJhJN0lODHXIHRzAGd
+         rH2I/XCCosdiJptYNwUI8EOITzDNVpETOE3FrgoG70DOon0/g7YmVDpMtC3flSNhuNNp
+         U4dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706780015; x=1707384815;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KsF6drDKBiFvygmM6xKh0Ey6+0M0HGg4vhCX5aum/LU=;
-        b=WvrEbHRgGWI3VNn4TyQqkibyu3rom+9ipu+4OpJo2jJ5yDWvzmoiviVyLUVqwztVpc
-         vfl/xWcBGGWVTkrATtybitebAijkoW5kCOpYLLfWO7Icq9Xqk3LiCrDORFQT7NUVoObs
-         Ix16dDXxRY8Fh10j/dctejXDevLyAkeERR3ZoOq799ewb9BL2Oh9BxPqpt6f6zDfX1mv
-         f8JOtyAo6yGztHIYxZ2GXSBd23lLbPLw6BOe/GhsShgdGZu+LIjKcnLVPs0R832HZgpt
-         keMFd/GhKiSW3QoPo+cBCrB0iRU6xNVzIM8l6oWdgC+ZVAduuqnZF4JANV47hZN4nRn4
-         jgJA==
-X-Gm-Message-State: AOJu0YwEYi+c+jlvetLIit3h1vF152e73FlLi4HNWPw5AH9+tjLAD/m1
-	ajbuogDDN3a/Oe/RusGPNIvn0E01Vi3BW8Ta/7Vbr6+B8iF7OV3GXndawEMIaNLXIjxGS7DA2oi
-	l
-X-Google-Smtp-Source: AGHT+IEJitm27XUEd7aZMsJvcMXLkerKnnZ+EBv4HHRiw3++cHWQvk1eyADPdNPH/WXpvZvU6YrMZQ==
-X-Received: by 2002:a50:9f43:0:b0:55f:ccb4:ec84 with SMTP id b61-20020a509f43000000b0055fccb4ec84mr65683edf.1.1706780015103;
-        Thu, 01 Feb 2024 01:33:35 -0800 (PST)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id v6-20020aa7d646000000b0055f129cea52sm3426846edr.49.2024.02.01.01.33.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Feb 2024 01:33:34 -0800 (PST)
-Date: Thu, 1 Feb 2024 12:33:30 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: linux-usb@vger.kernel.org,
-	Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: Re: [bug report] usb: ucsi_acpi: Quirk to ack a connector change ack
- cmd
-Message-ID: <24758ac7-4be4-4312-9254-f7ea71a4ec8c@moroto.mountain>
-References: <dbaf3630-6284-4ef6-b471-43c3885e16b0@moroto.mountain>
- <ZbtEmyHMBKnPU01A@cae.in-ulm.de>
+        d=1e100.net; s=20230601; t=1706780326; x=1707385126;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ETrdbaHyveHNyICbP2DXqhvu68zNHBWwdNewWmRtz18=;
+        b=bHkzNd27qc7SBpB3DJXx+zs6QDGfaWWM7FLCevAq1kDnJbBHNOnDKvUdYJ/tA7UKgo
+         NcBVMe39U42H/wBrAdRTsowxyMe9vx9Hz64wQYY7ThDxVoD9MJDDx1bgnOqFFm6AZdm6
+         VSIY+GRP2kCYvwLUnYPezyWy1awhr1BjG421EKroG+0eZaIDYleNqEB81RrJg4swB0XI
+         woUW5hC3+TBc7JT3mUDrjpiFobL3UeuFdSM3jZ8+8fxC3Z5vPiT+xLgqjdlFbN5XRPBf
+         vuWcSct2FH5fkTpUTysnsh01WNBH+AQx3Ss5Pjog3RjnZMPgqkGHQ+SucdwNT13+riQP
+         v5mA==
+X-Gm-Message-State: AOJu0YxJClNBaDZGlHRTS7zeDbRZ8t+7v9pftKCrNSC8tODPBoLE6AJ/
+	VMK+NHQ9aT9YRx2l5+HQCkmvovbiXYH9fWUrqvGxKpjVIt9/Q7TMouDCjtfnQOo=
+X-Google-Smtp-Source: AGHT+IHxmn0xHdwcOe8J8slylRP8BO1emqCK/Lm1LnQPUY17Fiyt3TUyFc0RlSUnQc7x52p7IIlldg==
+X-Received: by 2002:a17:906:5fca:b0:a35:fe4c:e76b with SMTP id k10-20020a1709065fca00b00a35fe4ce76bmr3021090ejv.66.1706780326536;
+        Thu, 01 Feb 2024 01:38:46 -0800 (PST)
+Received: from ?IPV6:2001:a61:1366:6801:7ce4:a9a1:7f22:a638? ([2001:a61:1366:6801:7ce4:a9a1:7f22:a638])
+        by smtp.gmail.com with ESMTPSA id rs6-20020a170907890600b00a26d20a48dasm7002102ejc.125.2024.02.01.01.38.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Feb 2024 01:38:46 -0800 (PST)
+Message-ID: <09fce208-72b1-49e8-988e-ea149fbaf0b5@suse.com>
+Date: Thu, 1 Feb 2024 10:38:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZbtEmyHMBKnPU01A@cae.in-ulm.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] [RFC] usb: host: Allow userspace to control usb suspend
+ flows
+To: Guan-Yu Lin <guanyulin@google.com>, Alan Stern <stern@rowland.harvard.edu>
+Cc: gregkh@linuxfoundation.org, mathias.nyman@intel.com, royluo@google.com,
+ hadess@hadess.net, benjamin.tissoires@redhat.com,
+ heikki.krogerus@linux.intel.com, oneukum@suse.com, grundler@chromium.org,
+ yajun.deng@linux.dev, dianders@chromium.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, badhri@google.com, albertccwang@google.com,
+ pumahsu@google.com
+References: <20240130064819.1362642-1-guanyulin@google.com>
+ <0e4221b5-bafe-4bea-b533-0ed8add81ef1@rowland.harvard.edu>
+ <CAOuDEK2VSBcQdLKt27VrLUxH2S22275ffbe5mdVM=vBZDhceQA@mail.gmail.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <CAOuDEK2VSBcQdLKt27VrLUxH2S22275ffbe5mdVM=vBZDhceQA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Ah, thanks for the explanation.  I misread the code.  To be honest we
-spent an embarrasing long time looking at this code.  At first that
-Smatch was wrong and that ret could be -ETIMEDOUT and went down a whole
-long rabbit hole trying to debug that.  :P  What about if we did this
-instead?
 
-I can send this as a proper patch if you're okay with it.
 
-regards,
-dan carpenter
+On 01.02.24 10:02, Guan-Yu Lin wrote:
+> On Wed, Jan 31, 2024 at 1:12 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+>>
+>> On Tue, Jan 30, 2024 at 06:47:13AM +0000, Guan-Yu Lin wrote:
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-index 928eacbeb21a..5251132cb35b 100644
---- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-+++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-@@ -153,6 +153,9 @@ ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
- 	if (ack == 0)
- 		return ret;
- 
-+	if (ua->dell_quirk_probed && !ua->dell_quirk_active)
-+		return 0;
-+
- 	if (!ua->dell_quirk_probed) {
- 		ua->dell_quirk_probed = true;
- 
-@@ -170,9 +173,6 @@ ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
- 		dev_err(ua->dev, "Firmware bug: Enabling workaround\n");
- 	}
- 
--	if (!ua->dell_quirk_active)
--		return ret;
--
- 	return ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &ack, sizeof(ack));
- }
- 
+>> Why does this affect only the USB subsystem?  Can't the co-processor
+>> use other, non-USB, devices on the system?
+>>
+> In our use case, the co-processor only supports USB subsystem. There might be
+> other co-processors support more subsystems, but we're not sure about how they
+> will interact with the system.
 
+Hi,
+
+it would be very good if you decided this now, before we add attributes.
+
+The reason is that if this feature is needed for multiple subsystems,
+the attribute should be added to the generic device structure, so that
+the naming and semantics are consistent.
+You really don't want to repeat this discussion for every subsystem.
+
+	Regards
+		Oliver
 
 
