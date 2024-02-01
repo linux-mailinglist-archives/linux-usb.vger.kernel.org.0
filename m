@@ -1,175 +1,97 @@
-Return-Path: <linux-usb+bounces-5739-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5740-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDFFC846063
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Feb 2024 19:52:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D32E6846084
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Feb 2024 20:00:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75C032898A9
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Feb 2024 18:52:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11E661C24C0F
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Feb 2024 19:00:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3831184037;
-	Thu,  1 Feb 2024 18:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="JkrLJTrI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 755FB8526A;
+	Thu,  1 Feb 2024 18:59:49 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB247C6C9;
-	Thu,  1 Feb 2024 18:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B33FB85296
+	for <linux-usb@vger.kernel.org>; Thu,  1 Feb 2024 18:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706813571; cv=none; b=Z9tKGkpNoYwO6j2PnNzqVBf+eg8FCgcdfzRzV/TRKhWfTqfmRZ9DyvfBNe9/QEzCyQg9l1D6VbIGoRha76N4drTwITQSGqQebgHWWBkHTCA0pnfiVa4SO0x3cth+NDIKqwKjgXoxF2FVg7DuwzNA/dtGDperVFwIR2kaSLoYMzU=
+	t=1706813989; cv=none; b=kcvzDiIwRnY1xkmBhdaWE8VJNSP2oOJtMvu2Hjv8IP3vCLzanj/k2BMeWQMVv7Rto5YwFnH9Kxxuf2IgU9qcIrey7K2Q8V8DSNg2LN4/BcmcXQ5V+CeS2yEbaCwe1CGBWZO8NOdPAf8v45b6nkbtKY5IBQkNJdZQ7lBGCrnoCpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706813571; c=relaxed/simple;
-	bh=R5SmCeK0evbt6CgDNri/AvrJT0Z6FxRIC4DoIPbyKrU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=cxIv55zOFUuo3YpLafRhfYth1tipS9KipCCbCxYdppbTMg7qr4oTuhcKnXLlksiatP7lmz/ClX184sUYgyn357u6lHfonekwAH9P2LpLfou2l/jy2UQKJ2+k14gL/+xCyoZYue0Dtxxv1jRthOIcCQPsWLY0rvQbGfBoosGq07k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=JkrLJTrI; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 411IqinY071422;
-	Thu, 1 Feb 2024 12:52:44 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1706813564;
-	bh=RDeqVbvlaRb9r9JoZeLA/s6aNs4VyHfgLVh0geU0jXY=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=JkrLJTrIDtrP7JE6+6oRn6UJWjtns3Bpy4NLGXywDFK7/GvnIG0BcGnRFiq4wmJp/
-	 Q56+U8lADZpDWyJCm6ZEEOdTauiL1b2+XsVYUxKdQm1eDBVBwo+2dFfICZo9F00IGn
-	 LIwtlxycn9IGXzfyixVyMcGYvqVIUNuwZhed3GLI=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 411IqiAW002093
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 1 Feb 2024 12:52:44 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 1
- Feb 2024 12:52:44 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 1 Feb 2024 12:52:44 -0600
-Received: from [10.249.42.149] ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 411IqiPC121096;
-	Thu, 1 Feb 2024 12:52:44 -0600
-Message-ID: <f35a729b-ff00-474f-903b-ada2704b0382@ti.com>
-Date: Thu, 1 Feb 2024 12:52:44 -0600
+	s=arc-20240116; t=1706813989; c=relaxed/simple;
+	bh=mu6Su8/q2NaqJVDJQ2JP/A6xmuURL5cPtxthPKoOAxY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F95UrhuHZOS0NQYnpIEgMpPI6IJv5QqEAoyU6HkAhjUT8/5EK9TZgq419qEAvI+Us0OSnEZtOQpCnjVd2LWZUadcgPLqOUB6u0tcwPu95xafksY7DJtn3nReAK/bs1n7C8X/Y7BbOk8jbcKxQRD4/7MjId1fK92eRzHLGbDJyp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id AA7F91403E6; Thu,  1 Feb 2024 19:59:42 +0100 (CET)
+Date: Thu, 1 Feb 2024 19:59:42 +0100
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: linux-usb@vger.kernel.org,
+	Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: Re: [bug report] usb: ucsi_acpi: Quirk to ack a connector change ack
+ cmd
+Message-ID: <ZbvqHtYjn3GK2GPo@cae.in-ulm.de>
+References: <dbaf3630-6284-4ef6-b471-43c3885e16b0@moroto.mountain>
+ <ZbtEmyHMBKnPU01A@cae.in-ulm.de>
+ <24758ac7-4be4-4312-9254-f7ea71a4ec8c@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] usb: dwc3-am62: add workaround for Errata i2409
-Content-Language: en-US
-To: Roger Quadros <rogerq@kernel.org>, <Thinh.Nguyen@synopsys.com>
-CC: <gregkh@linuxfoundation.org>, <r-gunasekaran@ti.com>, <b-liu@ti.com>,
-        <srk@ti.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20240201121220.5523-1-rogerq@kernel.org>
- <20240201121220.5523-5-rogerq@kernel.org>
-From: Andrew Davis <afd@ti.com>
-In-Reply-To: <20240201121220.5523-5-rogerq@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <24758ac7-4be4-4312-9254-f7ea71a4ec8c@moroto.mountain>
 
-On 2/1/24 6:12 AM, Roger Quadros wrote:
-> All AM62 devices have Errata i2409 [1] due to which
-> USB2 PHY may lock up due to short suspend.
+
+Hi Dan,
+
+On Thu, Feb 01, 2024 at 12:33:30PM +0300, Dan Carpenter wrote:
+> Ah, thanks for the explanation.  I misread the code.  To be honest we
+> spent an embarrasing long time looking at this code.  At first that
+> Smatch was wrong and that ret could be -ETIMEDOUT and went down a whole
+> long rabbit hole trying to debug that.  :P  What about if we did this
+> instead?
 > 
-> Workaround involves setting bit 5 and 4 PLL_REG12
-> in PHY2 register space after USB controller is brought
-> out of LPSC reset but before controller initialization.
+> I can send this as a proper patch if you're okay with it.
 > 
-> Handle this workaround.
+> regards,
+> dan carpenter
 > 
-> [1] - https://www.ti.com/lit/er/sprz487d/sprz487d.pdf
-> 
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> ---
->   drivers/usb/dwc3/dwc3-am62.c | 29 +++++++++++++++++++++++++++++
->   1 file changed, 29 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
-> index af1ce934e7fb..35d7a2fb128e 100644
-> --- a/drivers/usb/dwc3/dwc3-am62.c
-> +++ b/drivers/usb/dwc3/dwc3-am62.c
-> @@ -101,11 +101,17 @@
->   #define PHY_CORE_VOLTAGE_MASK	BIT(31)
->   #define PHY_PLL_REFCLK_MASK	GENMASK(3, 0)
->   
-> +/* USB PHY2 register offsets */
-> +#define	USB_PHY_PLL_REG12		0x130
-> +#define	USB_PHY_PLL_LDO_REF_EN		BIT(5)
-> +#define	USB_PHY_PLL_LDO_REF_EN_EN	BIT(4)
+> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> index 928eacbeb21a..5251132cb35b 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> @@ -153,6 +153,9 @@ ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
+>  	if (ack == 0)
+>  		return ret;
+>  
+> +	if (ua->dell_quirk_probed && !ua->dell_quirk_active)
+> +		return 0;
 > +
->   #define DWC3_AM62_AUTOSUSPEND_DELAY	100
->   
->   struct dwc3_am62 {
->   	struct device *dev;
->   	void __iomem *usbss;
-> +	void __iomem *phy;
+>  	if (!ua->dell_quirk_probed) {
+>  		ua->dell_quirk_probed = true;
+>  
+> @@ -170,9 +173,6 @@ ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
+>  		dev_err(ua->dev, "Firmware bug: Enabling workaround\n");
+>  	}
+>  
+> -	if (!ua->dell_quirk_active)
+> -		return ret;
+> -
+>  	return ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &ack, sizeof(ack));
+>  }
 
-Why do you need this in the driver data? You only use it in probe(),
-just have it be a local variable.
+It's not my preferred solution but it looks correct, so go ahead.
+I will review the final patch.
 
->   	struct clk *usb2_refclk;
->   	int rate_code;
->   	struct regmap *syscon;
-> @@ -140,6 +146,16 @@ static inline void dwc3_ti_writel(struct dwc3_am62 *am62, u32 offset, u32 value)
->   	writel(value, (am62->usbss) + offset);
->   }
->   
-> +static inline u32 dwc3_ti_phy_readl(struct dwc3_am62 *am62, u32 offset)
-> +{
+Thanks  Christian
 
-Do you really need these one line functions? They add more code than
-they save and just hide a single deference? Just do that directly.
-
-Andrew
-
-> +	return readl((am62->phy) + offset);
-> +}
-> +
-> +static inline void dwc3_ti_phy_writel(struct dwc3_am62 *am62, u32 offset, u32 value)
-> +{
-> +	writel(value, (am62->phy) + offset);
-> +}
-> +
->   static int phy_syscon_pll_refclk(struct dwc3_am62 *am62)
->   {
->   	struct device *dev = am62->dev;
-> @@ -201,6 +217,12 @@ static int dwc3_ti_probe(struct platform_device *pdev)
->   		return PTR_ERR(am62->usbss);
->   	}
->   
-> +	am62->phy = devm_platform_ioremap_resource(pdev, 1);
-> +	if (IS_ERR(am62->phy)) {
-> +		dev_err(dev, "can't map PHY IOMEM resource. Won't apply i2409 fix.\n");
-> +		am62->phy = NULL;
-> +	}
-> +
->   	am62->usb2_refclk = devm_clk_get(dev, "ref");
->   	if (IS_ERR(am62->usb2_refclk)) {
->   		dev_err(dev, "can't get usb2_refclk\n");
-> @@ -227,6 +249,13 @@ static int dwc3_ti_probe(struct platform_device *pdev)
->   	if (ret)
->   		return ret;
->   
-> +	/* Workaround Errata i2409 */
-> +	if (am62->phy) {
-> +		reg = dwc3_ti_phy_readl(am62, USB_PHY_PLL_REG12);
-> +		reg |= USB_PHY_PLL_LDO_REF_EN | USB_PHY_PLL_LDO_REF_EN_EN;
-> +		dwc3_ti_phy_writel(am62, USB_PHY_PLL_REG12, reg);
-> +	}
-> +
->   	/* VBUS divider select */
->   	am62->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
->   	reg = dwc3_ti_readl(am62, USBSS_PHY_CONFIG);
 
