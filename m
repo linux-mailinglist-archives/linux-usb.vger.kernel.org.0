@@ -1,97 +1,183 @@
-Return-Path: <linux-usb+bounces-5720-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5721-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DF9A84516D
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Feb 2024 07:34:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF5878451CF
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Feb 2024 08:13:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D5651C2821A
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Feb 2024 06:34:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CCDB1F279AB
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Feb 2024 07:13:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAAF61586C8;
-	Thu,  1 Feb 2024 06:34:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=logitech.com header.i=@logitech.com header.b="jeUfjxiW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE1501586E2;
+	Thu,  1 Feb 2024 07:13:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3E8157E83
-	for <linux-usb@vger.kernel.org>; Thu,  1 Feb 2024 06:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 890BA157E9B
+	for <linux-usb@vger.kernel.org>; Thu,  1 Feb 2024 07:13:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706769283; cv=none; b=e3Qvm/9GT72mcOcdW1O/Tpq0+8tweWBSJy4OFUxMxWuYgZ319+jCHPCsry+2idd/iUsoIMR8NUct8mrErL2IwBfXL3NLoLNU9Y9/m8Sndpuf25KQ+icEReVofeCGT0X03mpVNlydt/2d3ydbuGErJGmexkzh0OPJWJCrQTAP+3c=
+	t=1706771623; cv=none; b=pau//R+i+Ybsyal0wnQJi3FFxotjqDCCYM32cl+YjT5J2RhiN9Uj+1/jCTNZosUIPlw3RgP3VMb/wCSnOtcs/IKYTMj032LNKiZ8f4UZEJvxaAu8bHME52WU6jo7sQpd4RSMYOIE1h9TwFlJve+TilLc08rc+SoE8Wv+x1k8DsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706769283; c=relaxed/simple;
-	bh=OOi6m/ttx03p4JB3XlrP+TgknydbKLEPBpB8WTlFoAI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DvdpMHGOn8d0/TCaBUuUsDSh76Y9/ZCH6Mm+aLR4by0cE1BS1Bx8nbsdHU5IMYPwprc45s83PxbVB2OhFjqn4VBV2++KoF/6BholLGRdypOigigZbeUDl56qLnF9i2ez++BFI2ZtmdgFU6FoxmyOxIH5qxNnvXFXjaAVKHJzz4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=logitech.com; spf=pass smtp.mailfrom=logitech.com; dkim=pass (2048-bit key) header.d=logitech.com header.i=@logitech.com header.b=jeUfjxiW; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=logitech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=logitech.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1d93b525959so8206045ad.0
-        for <linux-usb@vger.kernel.org>; Wed, 31 Jan 2024 22:34:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=logitech.com; s=google; t=1706769280; x=1707374080; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OOi6m/ttx03p4JB3XlrP+TgknydbKLEPBpB8WTlFoAI=;
-        b=jeUfjxiWVvwC0akOjDFRZ2aOfv2F6P0kqzLugTXYorz/N2+EDv+Kp9JJCLUdjDbrHi
-         p66VC6sPXePAp563CU6igSyT+DY/hSoTPJDir4A3VxB/uumN/U3+HxbxbhzMVphwXw/J
-         3wxtq9CifoEet486x/hl/3G6WwHLMlR4sz7NAWFSvLm4AkJcT9zrR5xmIKcWJkUsevLK
-         hu5pjI2v6pXm5btmnnRFfWA9i8loZ8ijn1R5+AD69n2zzwafAfAWRY/IiNEsdYQGMDS/
-         Wcf7DgKgSjbImUciSXcAyTgQUcnZDFDnRIgu1bqn1PoBcW64ExHti+bkRY0fKZ1/9MQQ
-         Vcig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706769280; x=1707374080;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OOi6m/ttx03p4JB3XlrP+TgknydbKLEPBpB8WTlFoAI=;
-        b=b0nhc1VgF2O4p6AjWSwufJKTRYSyTW6BKOWIqk4GdcOfO02at+bx3ACPzn7/KSdh3I
-         WlLnKI7438KopOkape0lidBX2jVvsnLVbFsU95yrUr6IadNS5sG6gP9mtvmpd6W3RdXW
-         iw9QLoAeJjTTObTNcqRzQlTY5IQye8OalHbhSgTgmOJBaMQ91Fly5YZnEhwwVZ+0tT6k
-         6b6fOtdGHmgrTxPONFzaESk88J/ZC9mGZPd2oZlckcwEWBYABnE6J1m2iDWLP6fSIQLR
-         sIZqTPIw3/3UA3OAQZq4wQaO5N5tMkoJaZwICslcHyCUC1R1pPYRZI+j/RMp2jQmZXnj
-         44yQ==
-X-Gm-Message-State: AOJu0YzMZA8C+CHNA5OAPxBlqa4ExrsRi43f5ll3PjmYN7IIpsVIQqZ+
-	o8rO8wOLz3+SVyoqaL5cZSB3hP/gctEiSRyVAgdsYe4D7mGSnIZ+a33k9QADqg==
-X-Google-Smtp-Source: AGHT+IF+BIapmET8K1YuIr3YNHU9VKDFO3qFzb93Bi9ssE+FVQu2m3Uau0P0mXDAR3GlVL3YM4L4PA==
-X-Received: by 2002:a17:902:6946:b0:1d7:407e:418d with SMTP id k6-20020a170902694600b001d7407e418dmr7481989plt.26.1706769279726;
-        Wed, 31 Jan 2024 22:34:39 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWTXW8bn7Ly8+VvVNH1D/rMmKcZji33FXGnhsXD1I/e6k4Jkd4rusj4aQ3J/TXxDfYCMmeqiOhgKmSBArO5izXy4QqOxP+HX/AD7+eEVPR9yAHSHBaKs0kJAZ7WW5ACCXtgkuXuPqm059JdS+9h0Ee5BOH8BM01CTtx/7qjx1yM4GCmAPUFPDrcVIinoVuuaNFMF4Dc7IB96cQEfk36ARwsgoo5FYeO/neskIRccI5tENpDw1ZbJds2YNWgfG8hDCe+lvJB0rTcLrJotaUuawGwDWudrnc7ZCcq/J13D+atMB3t3XdxoGIrDONsvPntUSZU7Fyf9V3hQTP1hfdYPn3gRZENBn/8U2qywzm6ggFJNvBWXGtmYEqhKXo=
-Received: from localhost.localdomain (c-71-193-234-98.hsd1.wa.comcast.net. [71.193.234.98])
-        by smtp.gmail.com with ESMTPSA id kj4-20020a17090306c400b001d88f0359c1sm6740612plb.278.2024.01.31.22.34.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jan 2024 22:34:39 -0800 (PST)
-From: Devinder Khroad <dkhroad@logitech.com>
-To: senozhatsky@chromium.org
-Cc: gregkh@linuxfoundation.org,
-	laurent.pinchart@ideasonboard.com,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	mchehab@kernel.org,
-	ribalda@chromium.org,
-	stable@vger.kernel.org,
-	stern@rowland.harvard.edu,
-	Devinder Khroad <dkhroad@logitech.com>
-Subject: Re: [PATCH v4] media: ucvideo: Add quirk for Logitech Rally Bar
-Date: Wed, 31 Jan 2024 22:34:20 -0800
-Message-Id: <20240201063420.46495-1-dkhroad@logitech.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240109124838.GB1012017@google.com>
-References: <20240109124838.GB1012017@google.com>
+	s=arc-20240116; t=1706771623; c=relaxed/simple;
+	bh=HnpSOysStgYCwaJiJRmOyLwmVi3C39AnAeeqU9/Gi0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qnBoBulD4nFK0O0YejNTyd197jhAtB1gr9lPMpond1ovDDSwHcGKiXfJD93Xcz5MiP984rpsUNNHbt98mTW+Q3eStusS5BRT+G9sHGLRj97WG9QiiiRxcp8Qlp5EwBbxDxBHckFacDeMqr172MT0VltOheOwQlF8uQwbffxEgiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id DFEF41403E6; Thu,  1 Feb 2024 08:13:31 +0100 (CET)
+Date: Thu, 1 Feb 2024 08:13:31 +0100
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: linux-usb@vger.kernel.org,
+	Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: Re: [bug report] usb: ucsi_acpi: Quirk to ack a connector change ack
+ cmd
+Message-ID: <ZbtEmyHMBKnPU01A@cae.in-ulm.de>
+References: <dbaf3630-6284-4ef6-b471-43c3885e16b0@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dbaf3630-6284-4ef6-b471-43c3885e16b0@moroto.mountain>
 
-Reviewed-by: Devinder Khroad <dkhroad@logitech.com>
+
+Hi Dan,
+
+On Wed, Jan 31, 2024 at 09:59:43AM +0300, Dan Carpenter wrote:
+> Hello Christian A. Ehrhardt,
+> 
+> The patch f3be347ea42d: "usb: ucsi_acpi: Quirk to ack a connector
+> change ack cmd" from Jan 21, 2024 (linux-next), leads to the
+> following Smatch static checker warning:
+> 
+> 	drivers/usb/typec/ucsi/ucsi_acpi.c:174 ucsi_dell_sync_write()
+> 	warn: missing error code? 'ret'
+> 
+> drivers/usb/typec/ucsi/ucsi_acpi.c
+>     138 static int
+>     139 ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
+>     140                      const void *val, size_t val_len)
+>     141 {
+>     142         struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+>     143         u64 cmd = *(u64 *)val, ack = 0;
+>     144         int ret;
+>     145 
+>     146         if (UCSI_COMMAND(cmd) == UCSI_ACK_CC_CI &&
+>     147             cmd & UCSI_ACK_CONNECTOR_CHANGE)
+>     148                 ack = UCSI_ACK_CC_CI | UCSI_ACK_COMMAND_COMPLETE;
+>     149 
+>     150         ret = ucsi_acpi_sync_write(ucsi, offset, val, val_len);
+>     151         if (ret != 0)
+>     152                 return ret;
+>     153         if (ack == 0)
+>     154                 return ret;
+> 
+> This would be better as "return 0;"
+
+While it is technically true that this could be written as "return 0;"
+it was written in this way intentionally. The ucsi_dell_sync_write
+quirk function is a wrapper around this call to ucsi_acpi_sync_write.
+These if-statements handle the cases where nothing needs to be done
+after that call and we just return with whatever ucsi_acpi_sync_write
+returned.
+
+>     155 
+>     156         if (!ua->dell_quirk_probed) {
+>     157                 ua->dell_quirk_probed = true;
+>     158 
+>     159                 cmd = UCSI_GET_CAPABILITY;
+>     160                 ret = ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &cmd,
+>     161                                            sizeof(cmd));
+>     162                 if (ret == 0)
+>     163                         return ucsi_acpi_sync_write(ucsi, UCSI_CONTROL,
+>     164                                                     &ack, sizeof(ack));
+>     165                 if (ret != -ETIMEDOUT)
+>     166                         return ret;
+>     167 
+>     168                 ua->dell_quirk_active = true;
+> 
+> Here we set ->dell_quirk_active to true;
+> 
+>     169                 dev_err(ua->dev, "Firmware bug: Additional ACK required after ACKing a connector change.\n");
+>     170                 dev_err(ua->dev, "Firmware bug: Enabling workaround\n");
+>     171         }
+>     172 
+>     173         if (!ua->dell_quirk_active)
+> --> 174                 return ret;
+> 
+> So this is basically an else statement and ret is zero.  Smatch thinks
+> it should be an error code but I think it's intentional.  Why reverse
+> the if statement, return a literal, and pull the code in a tab.  You
+> could delete the ua->dell_quirk_active variable.  Or is the concern
+> here that we'll be probing two of these quirky things concurrently?
+> It's a bit strange and probably needs some cleanup or comments.
+> 
+> 	if (ua->dell_quirk_probed)
+> 		return 0;
+
+This is not correct. ->dell_quirk_active may have been set in a
+previous run and that's the whole point of the probe: Setting
+->dell_quirk_active to the correct value for future calls to this
+function.
+
+> 	ua->dell_quirk_probed = true;
+> 
+> 	cmd = UCSI_GET_CAPABILITY;
+> 	ret = ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
+> 	...
+
+So this code should only be executed once.
+
+> 
+>     175 
+>     176         return ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &ack, sizeof(ack));
+>     177 }
+
+This additional call is the actual quirk. It should not be neccessary
+according to the spec but if the probe determines that it is required
+it must be done each time an ack for an async event is sent. If the
+quirk is not neccessary we just return whatever the above call to
+ucsi_acpi_sync_write() returned.
+
+So in summary, I don't think there's a bug here.
+
+However, it is possible to silence smatch with the diff below
+(or with the second hunk alone) and I'd be ok with this. I can
+give this a try on the real hardware and send a patch later this
+week.
+
+     regards   Christian
+
+
+diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+index 928eacbeb21a..99fbc7ae0f1e 100644
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+@@ -151,7 +151,7 @@ ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
+ 	if (ret != 0)
+ 		return ret;
+ 	if (ack == 0)
+-		return ret;
++		return 0;
+ 
+ 	if (!ua->dell_quirk_probed) {
+ 		ua->dell_quirk_probed = true;
+@@ -171,7 +171,7 @@ ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
+ 	}
+ 
+ 	if (!ua->dell_quirk_active)
+-		return ret;
++		return 0;
+ 
+ 	return ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &ack, sizeof(ack));
+ }
+
 
