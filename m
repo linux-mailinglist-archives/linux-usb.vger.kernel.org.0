@@ -1,70 +1,53 @@
-Return-Path: <linux-usb+bounces-5780-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5781-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 732F98479EB
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Feb 2024 20:50:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 639EB847B5E
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Feb 2024 22:10:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FECD28947B
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Feb 2024 19:50:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A6291C20DFE
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Feb 2024 21:10:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020218060C;
-	Fri,  2 Feb 2024 19:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9917512C815;
+	Fri,  2 Feb 2024 21:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mi5Bb+P3"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Tj1yMQjl"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1F915E5AE;
-	Fri,  2 Feb 2024 19:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083542943C;
+	Fri,  2 Feb 2024 21:08:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706903427; cv=none; b=eq/qwHq/0oNY6AL0ouTKMZysZG2I+d/j1qCMT9uRW/lUy4ZUJSw9Qr3bJxDiYf9k+cuRYc7+j4ONIytAmGx8BbVaI2zfZ2zZXBOFO8xRElTl2a6Ewbw7AbWX4LtOgSMF7Y2Bpfvs2WD6/dAXzvS8GeOTszsmmXe5TH83xTsURaw=
+	t=1706908107; cv=none; b=R6ODt0b9sLeXoKgqdUlM1MLZJxxgBr2mrvtBY/gkGHkN1QKbQNdGb9N3QrAErrTjatGIgq/Rm/diii6ArCc1T/b5Hzmsm6TJFBk8bXoVzT20+O1mRbb2kv7hXmfuQzsWOyThXy9bb7iA+EAXUbd0KlUiTVHmPE/9uq+MCB5XMvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706903427; c=relaxed/simple;
-	bh=9A36iG8VpIfsmP3VT0ZetlwfDDDTLMTUJULYO7BI59Y=;
+	s=arc-20240116; t=1706908107; c=relaxed/simple;
+	bh=VQEt1tclJnbwsG/JM/lHlnPhAjZO+SHy1RP/vw1fzTM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P5K0A3pTkBGSTR22/DUXwbAQ0+IyL1hK+4Yj/UNcm7qNb8fRrP4C2ATovqD0uBZd02+UIk9eZf95TthH5kRCzA5Ij8WkUZ+In72Ch5dtn27ROYogVijGbVujK7bqVTp+NHN7QuiH/JMsVzolSo9bG7ZvL43BtAdYJT4lt+Mwtwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mi5Bb+P3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E25DAC433C7;
-	Fri,  2 Feb 2024 19:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706903427;
-	bh=9A36iG8VpIfsmP3VT0ZetlwfDDDTLMTUJULYO7BI59Y=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZVzdf8WgbrQ1BTkKUK4aJ5HgVwmUjam7S1EEPFtnT0Cdc8jvKRENfQ8o6Tr4zubPimrmvt2TzwHfPCJEmqiiRhKEy1TlXp0bV4v0yD/HvyClaIWx+OghhDqbUT77jai6v5awcOT6VkeVdRad20f5gQXJemHzrjU2r1k/YqylVi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Tj1yMQjl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA98CC433C7;
+	Fri,  2 Feb 2024 21:08:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1706908106;
+	bh=VQEt1tclJnbwsG/JM/lHlnPhAjZO+SHy1RP/vw1fzTM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mi5Bb+P3HTcfmhTyIpvsitzBOeVbiY1xZe4fhEbQ4xyRlb67VjswOtUK2ZAowS0MN
-	 w/Y+KOQhlZDpO7ZsJZGBg0xrCtBQLcILjX5mAa6tK6vaEgSYHstEneMrKW2q45wGpO
-	 wd5Mzom/O7NGxWXnf2Xjw3wa03mLLLwRYh/YmKq01tiwnI16i/9q8CFW+kssgfQx1h
-	 chW0j5aah/6e8nfIP4QUUP7eJ2m0JriMRAYtnOiR9JKghC+MEJYQV398h7UP5XRwLz
-	 M1eFGgIsGhOL3/JqgqozlD5Bc53kWAfmhDPdxVmtmtNHmZ7MZMZ5eVh20j9XBUWpz0
-	 d+B+NJXMka7xQ==
-Date: Fri, 2 Feb 2024 13:50:24 -0600
-From: Rob Herring <robh@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Xu Yang <xu.yang_2@nxp.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"shawnguo@kernel.org" <shawnguo@kernel.org>,
-	"s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>,
-	"festevam@gmail.com" <festevam@gmail.com>,
-	"peter.chen@kernel.org" <peter.chen@kernel.org>,
-	dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [EXT] Re: [PATCH v5 4/8] dt-bindings: usb: ci-hdrc-usb2: add
- restrictions for reg, interrupts, clock and clock-names properties
-Message-ID: <20240202195024.GA846913-robh@kernel.org>
-References: <20240131114324.3722428-1-xu.yang_2@nxp.com>
- <20240131114324.3722428-4-xu.yang_2@nxp.com>
- <a0134089-a283-488b-8d7f-3f59dd938b60@linaro.org>
- <DU2PR04MB88221602EB986D2C2A5BBF8D8C422@DU2PR04MB8822.eurprd04.prod.outlook.com>
- <f62289f2-0f37-4e27-bc27-ab6d70dcc898@linaro.org>
+	b=Tj1yMQjlyeVhgOuYHjFCLB6GLEAxsEEr0UX7jViahTVnO99GTz0Swoa+e3Zw2d4bG
+	 0U3+tPVbrWuhjdKd3uyZzWB2zlYe+u17oqGFh0afOEuFtGfHIOIZnLxc7ewm4Ok5te
+	 VdO2twfYvEfiiQ93HQ5OEADcPbs7fyDNrvfmEuhM=
+Date: Fri, 2 Feb 2024 13:08:25 -0800
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Chenyuan Yang <chenyuan0y@gmail.com>
+Cc: azeemshaikh38@gmail.com, ivan.orlov0322@gmail.com,
+	benjamin.tissoires@redhat.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, syzkaller@googlegroups.com,
+	Zijie Zhao <zzjas98@gmail.com>
+Subject: Re: [Linux Kernel Bug][usb/f_printer] WARNING in usb_ep_queue
+Message-ID: <2024020256-contented-concave-92d0@gregkh>
+References: <CALGdzurBnMztPW1Q8mujfYaopVQ8MkSUXUvnAqJcLGu5ROSU4Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -73,84 +56,69 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f62289f2-0f37-4e27-bc27-ab6d70dcc898@linaro.org>
+In-Reply-To: <CALGdzurBnMztPW1Q8mujfYaopVQ8MkSUXUvnAqJcLGu5ROSU4Q@mail.gmail.com>
 
-On Fri, Feb 02, 2024 at 12:04:51PM +0100, Krzysztof Kozlowski wrote:
-> On 02/02/2024 10:10, Xu Yang wrote:
-> > Hi Krzysztof,
-> > 
-> >>
-> >> On 31/01/2024 12:43, Xu Yang wrote:
-> >>> Change reg, interrupts, clock and clock-names as common properties and add
-> >>> restrictions on them for different compatibles.
-> >>>
-> >>> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> >>>
-> >>> ---
-> >>> Changes in v4:
-> >>>  - new patch since v3's discussion
-> >>>  - split the reg, interrupts, clock and clock-names properties into
-> >>>    common part and device-specific
-> >>> Changes in v5:
-> >>>  - keep common property unchanged
-> >>>  - make if-then more readable
-> >>>  - remove non imx part
-> >>> ---
-> >>>  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 118 ++++++++++++++++++
-> >>>  1 file changed, 118 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-
-> >> hdrc-usb2.yaml
-> >>> index 3b56e0edb1c6..6ad3582051b8 100644
-> >>> --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> >>> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> >>> @@ -412,6 +412,124 @@ allOf:
-> >>>          samsung,picophy-pre-emp-curr-control: false
-> >>>          samsung,picophy-dc-vol-level-adjust: false
-> >>>
-> >>> +  - if:
-> >>> +      properties:
-> >>> +        compatible:
-> >>> +          const: fsl,imx27-usb
-> >>> +    then:
-> >>> +      properties:
-> >>> +        clocks:
-> >>> +          minItems: 3
-> >>> +          maxItems: 3
-> >>> +        clock-names:
-> >>> +          minItems: 3
-> >>> +          maxItems: 3
-> >>> +          items:
-> >>> +            anyOf:
-> >>> +              - const: ipg
-> >>> +              - const: ahb
-> >>> +              - const: per
-> >>
-> >> This would be just: enum: [ipg, ahb, per], but in both cases I question
-> >> why the order should be flexible? Nothing in commit msg explains it.
-> > 
-> > The driver will get the clock by clock-name, then the order should not
-> > matter. However, these three clock-names should be present at the same
-> > time. I should use enum then.
-> > 
-> >>
-> >> Plus I will repeat myself from your v4. I don't think this is helping,
-> >> because the file will soon grow to umnanageable chunk. I prefer to fix
-> >> it at beginning, before we reach snps-schema level of complexities.
-> >>
-> >> Please define common schema, reference in this file and move IMX to own
-> >> file.
-> > 
-> > I'm not that familiar with dt-bindings architecture. If I define a common
-> > schema, then should I create imx, qcom, nvidia and other dt-binding files
-> > too? 
+On Fri, Feb 02, 2024 at 12:59:31PM -0600, Chenyuan Yang wrote:
+> Dear Linux Developers for F_printer,
 > 
-> No, the rest you can leave here. Someone, maybe me, will move them some
-> time. The point is to move at least IMX to its own file.
+> We encountered "WARNING in usb_ep_queue" when testing the f_printer driver with
+> Syzkaller and our generated specifications.
+> 
+> I attached the report and C/syz reproducers for this crash.
+> 
+> ```
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 10395 at drivers/usb/gadget/udc/core.c:295
+> usb_ep_queue+0xa0/0x300 linux/drivers/usb/gadget/udc/core.c:295
+> Modules linked in:
+> CPU: 1 PID: 10395 Comm: syz-executor364 Not tainted 6.6.0-gd2f51b3516da #1
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+> RIP: 0010:usb_ep_queue+0xa0/0x300 linux/drivers/usb/gadget/udc/core.c:295
+> Code: 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 31 02 00 00 0f b6
+> 5d 35 31 ff 89 de e8 da 51 08 fa 84 db 74 11 e8 01 56 08 fa 90 <0f> 0b
+> 90 41 bd 94 ff ff ff eb 56 e8 f0 55 08 fa 48 8d 7d 10 48 b8
+> RSP: 0018:ffffc900075cfc00 EFLAGS: 00010093
+> RAX: 0000000000000000 RBX: 0000000000000081 RCX: ffffffff8786e5a6
+> RDX: ffff88801cd59e00 RSI: ffffffff8786e5af RDI: 0000000000000001
+> RBP: ffff8880173d80e0 R08: 0000000000000001 R09: 0000000000000000
+> R10: 0000000000000081 R11: 0000000000000000 R12: ffff888019236e10
+> R13: 0000000000000820 R14: 0000000000000000 R15: ffff888019236e58
+> FS:  000055555591d3c0(0000) GS:ffff88807ec00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000020c55000 CR3: 0000000024d03000 CR4: 0000000000350ef0
+> Call Trace:
+>  <TASK>
+>  printer_write+0x650/0xf30 linux/drivers/usb/gadget/function/f_printer.c:669
+>  vfs_write+0x2ae/0xd80 linux/fs/read_write.c:582
+>  ksys_write+0x127/0x250 linux/fs/read_write.c:637
+>  do_syscall_x64 linux/arch/x86/entry/common.c:51 [inline]
+>  do_syscall_64+0x40/0x110 linux/arch/x86/entry/common.c:82
+>  entry_SYSCALL_64_after_hwframe+0x63/0x6b
+> RIP: 0033:0x7f1c4a60e3bd
+> Code: c3 e8 87 20 00 00 0f 1f 80 00 00 00 00 f3 0f 1e fa 48 89 f8 48
+> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+> 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffd3d68a858 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+> RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007f1c4a60e3bd
+> RDX: 000000000000004f RSI: 00000000200000c0 RDI: 0000000000000003
+> RBP: 0000000000000000 R08: 00007f1c4a663cd5 R09: 00007f1c4a663cd5
+> R10: 00237265746e6972 R11: 0000000000000246 R12: 0000000000000001
+> R13: 00007ffd3d68aab8 R14: 00007ffd3d68a880 R15: 00007ffd3d68a870
+>  </TASK>
+> ```
+> 
+> It seems that the `WARN_ON_ONCE(!ep->enabled && ep->address)` in
+> usb_ep_queue (https://elixir.bootlin.com/linux/v6.7/source/drivers/usb/gadget/udc/core.c#L290),
+> which is invoked by `printer_write`
+> (https://elixir.bootlin.com/linux/v6.7/source/drivers/usb/gadget/function/f_printer.c#L669).
+> 
+> If you have any questions or require more information, please feel
+> free to contact us.
 
-That will only work as long as i.MX doesn't define any extra properties 
-which it already has. We have to have at a minium common, imx, and 
-everything else schema docs.
+Do you have a proposed patch that fixes this issue?  That's the simplest
+way to get this resolved and to get credit for making the fix.
 
-Rob
+thanks,
+
+greg k-h
 
