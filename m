@@ -1,74 +1,74 @@
-Return-Path: <linux-usb+bounces-5763-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5764-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00875846EA8
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Feb 2024 12:07:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7C36846EAF
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Feb 2024 12:09:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FF851F2951D
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Feb 2024 11:07:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 059801C26F4A
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Feb 2024 11:09:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 100B513BEAE;
-	Fri,  2 Feb 2024 11:07:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6932413BEBD;
+	Fri,  2 Feb 2024 11:09:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SpXH16jT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="y0LKSOLD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC57813D4E4
-	for <linux-usb@vger.kernel.org>; Fri,  2 Feb 2024 11:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1707995B
+	for <linux-usb@vger.kernel.org>; Fri,  2 Feb 2024 11:09:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706872032; cv=none; b=Iq8ci4jMAoWjGeXduIdUphP0fqWj1nFvPAWu6K9BWol8JPHtbwyUWd20wDpEy2k5E+8w/IZikaJ3rmFkPPadQRJRwuYi2KM/LR7G71u5c1iGqqZrxdDtATsnxq0nV8kcBPnzHFlI5oIYoYbZEHlO25xLqh+b05mbrs5wZjioTtk=
+	t=1706872174; cv=none; b=OyHW5ePq2cjLiLrA/cRuh2gXKBTqd+euscwr+WhbGwvu86a7xM43rG6sYy0M6Kvq6ZShtqKCt0ZDCppYmnyUwDVW7ljbheEEPptNsUMG5ODJ1qfsNOer8R8ltvearWAhgDCeGjpkvkLCXI9KZND/mvYm1d30oD7/+psOq4oPIhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706872032; c=relaxed/simple;
-	bh=LejB3ccJWTExN9bpLvElMGTr7pRQEVT+0jJIcnZKV2c=;
+	s=arc-20240116; t=1706872174; c=relaxed/simple;
+	bh=Eu8VoJ9ElRl4Ti4H7L7mr+pD0JyjB1NFMiib0/jTe6Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RLv9ADqWXtdUiyl/bWEgij/U2hV4HydxpRR1bANSG72VhO/jIpEi9Jcq7MKsfSToN4dGoFslSc74LRHCzEnvbbfzE62xeU9SQhgDnSJBEu0e9Mz8yVXn7iRDNuaPS2kiQc9kUOzFvWuAqLGvfxMo+wckWRkDqUysDRd5hlDgi5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SpXH16jT; arc=none smtp.client-ip=209.85.208.52
+	 In-Reply-To:Content-Type; b=lhkFZzkZia5I83zQTSxw6RiuZ1l0fiSbFnAhqjM7MbmLAh1Z8jI7MQqxEQhzZASkP39xAVB2WR2SrGPQDGOtNGU8U9ppPcSBRZTfr3UlCtZyT0QZpPdYqy0y4DgmBTy3xVbnsx5G4cgaSE5F19Pr595r5P5SL+5Aw56hsd5mNHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=y0LKSOLD; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-55a8fd60af0so2742952a12.1
-        for <linux-usb@vger.kernel.org>; Fri, 02 Feb 2024 03:07:10 -0800 (PST)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a354408e6bfso522939966b.1
+        for <linux-usb@vger.kernel.org>; Fri, 02 Feb 2024 03:09:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706872029; x=1707476829; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706872170; x=1707476970; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=l6Kq2nOy4Vcr8k38qRtcVbkqWPpQJBUVq348AmwKe6Q=;
-        b=SpXH16jT0P1iDlhTQxUJbbZfifnJQmvAeF+DK8b8OdnVJAA4kSbZY9FIDOOpNO3SSR
-         Ev+oWE5Z3EQ0+lqhhSqaVbk2SXyAdm8I0L7oHbX7e04PGcgdK/rAgpIZpmvgbUwSUmEx
-         ygB2I8BY0AZOJHAwWB1b0dKMznSU4pXWX8q+HDGFHJOv4UshozdWpl2bvGLjto3ObNfZ
-         Z9iRq8CAHwJIXiMB1QICTFXhTFv0q8RTQt6Z5rckSotdujMGs/TGLT5ME6CWj+yUUGCB
-         nGFHDN1f9UhB+YkfphPBEspAUfiU4Sq0iBaTqQ/NJN8NQWfTiAnwiV/GAaNpopRDEUfw
-         aSbQ==
+        bh=Xn698sT3hqowVoFBpOH49ecidIHK5lYcw6cxpLypKrA=;
+        b=y0LKSOLDbQU8k/0tZKBA4fa/ZNAt9YIYZiT4UPwHeEaXyQL7l8P2qCO6o+XqPAj1Bi
+         lZOOQz4zZBcXPAwoIUpExrE55kF496QoDk9tyyI/76obM1tagFVFHftDdhTFkkjgvR0s
+         hR0aeOTdaFMtz0yFBUh3q8cfPjLwP9gqa41+UH2ryCvyFv6EBnCfmARSkcAh7ocKzHOT
+         StUBHKIWfwr/VvrDLcr/o/DXzScf1wmpyXGRrEQsl5uTq3OhE0vrCNsto3m+5/IYdzZY
+         33dzFQR3QUPdmZbaMfT0SF9JloIsCeqVsFHXWhskC0IZy8WDRzziPUFOISfoPzrRMpUX
+         fAdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706872029; x=1707476829;
+        d=1e100.net; s=20230601; t=1706872170; x=1707476970;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l6Kq2nOy4Vcr8k38qRtcVbkqWPpQJBUVq348AmwKe6Q=;
-        b=tHcz29bN9Brrw8KijsiUmfGWsr4hAE9hKvNp3S0t4o2GHOMOuHtuPYeig6P3fLuN/2
-         IhG7s1N7zLIsF0p9chEkekiLkz5LTjCjVTLQ+MYRLP6PPS4+6JArlgYsdD2omgp/hR7o
-         hJz388jHls4wLk7D5fYNQi4AhF/568o1o7OMJVJnsZQzrXlFNSu4I9nmjWW/xK8BAegb
-         tmWahKHPDXEjkOPU5wfXoB67RCgGz2gSTNvjDw7vWFNCIia30J5aYcHLzBIwHfb5gGq3
-         YnDaQsA2JYmdK09T8AqpveGQyLE9EbxKT2pMVqpNrGNUWWfD/dDZynDJml29yw0sGaW2
-         TpEg==
-X-Gm-Message-State: AOJu0YzJbTymop6VVXOgdZtmUzNMMQw7KGm6H9/hRC93Ut/WgEm2XrL7
-	urCfHJXc1DZRAwPWhDECErTTot4CDHcsqLN/gbcuie4cfTjxWyM8t4Qq1yPPK7Y=
-X-Google-Smtp-Source: AGHT+IEst/TsjvVAOU/vVVt1OPgkSvqsx9Y8wEYTKYDbYgoqmGZi0fjunuVwsS7Izpu+ufZC6SS5ag==
-X-Received: by 2002:a05:6402:3588:b0:55f:11cf:ee53 with SMTP id y8-20020a056402358800b0055f11cfee53mr8070163edc.31.1706872028974;
-        Fri, 02 Feb 2024 03:07:08 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVoyD1ldgjH2feNIenbeNK2twyFwG+4qSx1Fkqu4/h8a0SXLmAzpqSVYsLxN3Vr0Q7NB3T1xrvSRsRys1nc05/AnmSYZWAcx9QR7WgTeIvVR+yBMdWAaAt+9dIe7d3uBL9YB8NYkGjQldWoyCKpAamKa2daAEvEmQl7lq/NdrgwMoCHIfR+79cUUek7ZMUnYqpi8sog9DZH1XNfW5wgOzyHGOhPhSxnCdUqyy4Nd40Qn8t1HaxyIUrFfxoftghTfohWuUahfm8tQLTmBGaMDFdFVxJRoTt09hxGwmcNRvWzohKVMTM3/0BQI4KBfLMmXFsp04iJc6Hbtkt94yThhELnDsDlaQdIg2oD/xLMH0Pms3I94azVtoVtVngUsqmJtFqYcsZOBpQynWri1pNGbqKNxYvpENCwq+RTvNy0tWrOS6E3soMS56fcngjoG9hGoc/g4G9kQxJKxyQfg9MXc8+TM8CTzz32urxaFUMi3LMjuDrF
+        bh=Xn698sT3hqowVoFBpOH49ecidIHK5lYcw6cxpLypKrA=;
+        b=p9cQbSvXwk0ru/vHL8byhQHGVBBGOgM5/MkQUS6xOZv5tMlEVv4nAr3CUkRvfK92Hk
+         dQxz72jjtU9mWjSoAYUfqho2QSaCdZ7PlGkfQ1EWhmqhIdfnlF0eKiWmZhBduNpm+vLU
+         WnXJP/oI1eABzmgYbAk35LVvcdWXiGYyGcLHmj40RslIe2rlQ2IzyRU93MZjJoSb+Xae
+         G/URJjUSk1x2GO85ilY8EbgAeqGLm2k/mjUd4FrbOKVGLc5YllJRJ6/AkN46+W3J7/qA
+         XGg2/KSqpY5I2/jiyyAdR0W3ysLvO0AlTN7627qeNH6EXc0S3/GdwD8kCxkY8x/vc3bK
+         y5bw==
+X-Gm-Message-State: AOJu0YzCA7pYnHiKvpzjdvY/zeyof9TiU0Wj5a/Zv0EifNRbyQc1NCwR
+	vlDR/aNT93+GBW1E5xlSfJgCBtA6Lc9ZUgRFp0KIF30B2Pt6XFjPQnpgxr7l9gk=
+X-Google-Smtp-Source: AGHT+IG8YXNN1Ln7KIQkoz9wo8mDWAprRyXk1RZs8xLt/r5QYO493GyhTlCiJLFSiQD7frrReXbXJw==
+X-Received: by 2002:a17:906:6a13:b0:a36:877a:edde with SMTP id qw19-20020a1709066a1300b00a36877aeddemr1779373ejc.11.1706872169866;
+        Fri, 02 Feb 2024 03:09:29 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCVXdMVQGhdL/6RJjX/3ZdM1BwfXILvpLZGEDFPAzWDCo/+sm+xfSei/Mi9HvNKlYPnnf1/auQEnLmW0g8vK+DCebwY45lS/5VWRpohKmdrzUNYdgCaqyG1LTCglZQIf4TUeT54g8RGI1Pm0ZTqSmbHsaPD76D82ImJoSRAzrIuLAuidxNgNtAuXC9LkLCJP0J7wcWYWZjlFLysgJ68hliWJ9JoVKTaRCsy6qMlWJYFjqYp2ylrc9oUe1rydo7fWNmIOz16VoNE9427/R0Om+Veuzlny2R5P3K7f+GzmvCM7mmdo0vw0egHlc875IrwmX7cz/y5+3aBe26qnLM/qFxHaEjoRzHGW45hgJx1E5+LhyY/yH8sOzMS+IOXBJxvKgi5R8aIZySwdAYjEmXDW1II9Uayc0DXHtTOqNuG2UcvzqLUftJqZ6thXcuMxWpdOCL+t5wnqUOUPFPgM2Q==
 Received: from [192.168.1.20] ([178.197.222.62])
-        by smtp.gmail.com with ESMTPSA id fe9-20020a056402390900b0055d312732dbsm706500edb.5.2024.02.02.03.07.07
+        by smtp.gmail.com with ESMTPSA id z22-20020a170906241600b00a31805b4165sm781731eja.11.2024.02.02.03.09.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Feb 2024 03:07:08 -0800 (PST)
-Message-ID: <bcd733ab-ea9e-4ef0-a521-8e6c2023479f@linaro.org>
-Date: Fri, 2 Feb 2024 12:07:06 +0100
+        Fri, 02 Feb 2024 03:09:29 -0800 (PST)
+Message-ID: <97a52b03-3317-41e3-8cbb-c5feb6e12095@linaro.org>
+Date: Fri, 2 Feb 2024 12:09:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,27 +76,22 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [EXT] Re: [PATCH v5 4/8] dt-bindings: usb: ci-hdrc-usb2: add
- restrictions for reg, interrupts, clock and clock-names properties
+Subject: Re: [PATCH v2 2/4] dt-bindings: usb: qcom,pmic-typec: add support for
+ the PM4125 block
 Content-Language: en-US
-To: Xu Yang <xu.yang_2@nxp.com>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "robh+dt@kernel.org" <robh+dt@kernel.org>,
- "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "shawnguo@kernel.org" <shawnguo@kernel.org>,
- "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
- "kernel@pengutronix.de" <kernel@pengutronix.de>,
- "festevam@gmail.com" <festevam@gmail.com>,
- "peter.chen@kernel.org" <peter.chen@kernel.org>
-Cc: dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-References: <20240131114324.3722428-1-xu.yang_2@nxp.com>
- <20240131114324.3722428-4-xu.yang_2@nxp.com>
- <a0134089-a283-488b-8d7f-3f59dd938b60@linaro.org>
- <DU2PR04MB88221602EB986D2C2A5BBF8D8C422@DU2PR04MB8822.eurprd04.prod.outlook.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood
+ <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20240202-pm4125-typec-v2-0-12771d85700d@linaro.org>
+ <20240202-pm4125-typec-v2-2-12771d85700d@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -142,79 +137,37 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <DU2PR04MB88221602EB986D2C2A5BBF8D8C422@DU2PR04MB8822.eurprd04.prod.outlook.com>
+In-Reply-To: <20240202-pm4125-typec-v2-2-12771d85700d@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 02/02/2024 10:10, Xu Yang wrote:
-> Hi Krzysztof,
-> 
->>
->> On 31/01/2024 12:43, Xu Yang wrote:
->>> Change reg, interrupts, clock and clock-names as common properties and add
->>> restrictions on them for different compatibles.
->>>
->>> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
->>>
->>> ---
->>> Changes in v4:
->>>  - new patch since v3's discussion
->>>  - split the reg, interrupts, clock and clock-names properties into
->>>    common part and device-specific
->>> Changes in v5:
->>>  - keep common property unchanged
->>>  - make if-then more readable
->>>  - remove non imx part
->>> ---
->>>  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 118 ++++++++++++++++++
->>>  1 file changed, 118 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-
->> hdrc-usb2.yaml
->>> index 3b56e0edb1c6..6ad3582051b8 100644
->>> --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->>> @@ -412,6 +412,124 @@ allOf:
->>>          samsung,picophy-pre-emp-curr-control: false
->>>          samsung,picophy-dc-vol-level-adjust: false
->>>
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          const: fsl,imx27-usb
->>> +    then:
->>> +      properties:
->>> +        clocks:
->>> +          minItems: 3
->>> +          maxItems: 3
->>> +        clock-names:
->>> +          minItems: 3
->>> +          maxItems: 3
->>> +          items:
->>> +            anyOf:
->>> +              - const: ipg
->>> +              - const: ahb
->>> +              - const: per
->>
->> This would be just: enum: [ipg, ahb, per], but in both cases I question
->> why the order should be flexible? Nothing in commit msg explains it.
-> 
-> The driver will get the clock by clock-name, then the order should not
-> matter. However, these three clock-names should be present at the same
-> time. I should use enum then.
+On 02/02/2024 00:55, Dmitry Baryshkov wrote:
+> The PM4125 PMIC has the same Type-C register block as the PMI632.
 
-Forgot to answer to this.
+...
 
-Which driver? U-boot? OpenBSD? The one in my custom Linux kernel fork
-(open-source and published on github)? Did you check all of them?
+> @@ -14,9 +14,15 @@ description:
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - qcom,pmi632-typec
+> -      - qcom,pm8150b-typec
+> +    oneOf:
+> +      - enum:
+> +          - qcom,pmi632-typec
+> +          - qcom,pm8150b-typec
+> +      - items:
+> +          - enum:
+> +              - qcom,pm4125-typec
+> +          - const: qcom,pmi632-typec
+> +
+>  
 
-The order should be strict (or "fixed" as in non-flexible), unless there
-is some reason against. If one driver does not care about order, is not
-the reason.
+If there is going to be a new version, please drop redundant blank line
+(so only one).
 
-This comment applies to all bindings so to all your future
-contributions. I really keep repeating it...
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
