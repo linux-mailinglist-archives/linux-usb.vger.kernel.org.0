@@ -1,249 +1,145 @@
-Return-Path: <linux-usb+bounces-5836-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5837-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 275F28487D8
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Feb 2024 18:08:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FDC484882A
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Feb 2024 19:18:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A7A61C22707
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Feb 2024 17:08:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 22FBCB2480A
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Feb 2024 18:18:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F7D62169;
-	Sat,  3 Feb 2024 17:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C71855FBA8;
+	Sat,  3 Feb 2024 18:18:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S5E1HbTZ"
+	dkim=pass (1024-bit key) header.d=xff.cz header.i=@xff.cz header.b="y3ZNKGcF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B973461674
-	for <linux-usb@vger.kernel.org>; Sat,  3 Feb 2024 17:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68CC85FB8D;
+	Sat,  3 Feb 2024 18:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.181.215.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706979995; cv=none; b=rIJr7jHhAtRxeaiTNMzU8Xiv3Do+Ck7K0+glu+CohEBJhUl4Rb71zQNcpCII74wAdqec7T6SQgNgSrLM2/EtO4++Ko6Luxn2/FsCjY626m7UZGtghO0iaFPdZjjUUAhJ1BONPxS8tIDLQn2dwEqOkpgJqv7EpqVSWRpotA/Om+k=
+	t=1706984307; cv=none; b=oIkYgNwWXzhBcjzyMQHu3pX3ZC0z6qOWEKDm+6yfqqthyBQA2ByH/BIxuy6t05WOWjHQn4DlXvy0DWY0M/SknHvXGKIMFKpzy8K9XpFWU0S29njGlh0x/8ST61grZ0WeiabPJUXrioJgrJMngaFFTh5YRHDTklxCoPYlMjgB7y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706979995; c=relaxed/simple;
-	bh=r1kpAm05agiLpFg3rTEbHum1WWO4STHbAxa7fN79zH4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=s69eVmaEmsObLkPhtDiSJ283dU2x0Ut+4pJOX71h+zPvdBnCLC+bZyoyx/PnkD5Bq5OJq+AyogElLVkmcydGZYvJH9tCpPhc9EsfvI1t+ReXDa8+Iwz5HK5yMSI3nt6K8RwzJhHN/u+wVZ0OiRVux+f1mLF/4v7I8SzEGbvvCCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S5E1HbTZ; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706979994; x=1738515994;
-  h=date:from:to:cc:subject:message-id;
-  bh=r1kpAm05agiLpFg3rTEbHum1WWO4STHbAxa7fN79zH4=;
-  b=S5E1HbTZieoilE34jQktRoCR5DCf6P2TuxXgltvJVLBIzujEspZFcvvt
-   5xqNCVu/tmPZ/DsxAv1YF4CHXSp0FdIWRrmkWxGYsAkctAlKcAil8y6+q
-   8Wce7BpZFRBWb9Q7w1caBsWouJPivLyDMPkNosFi3c85cftfIqGrurxbY
-   32u+kjsVC2iTLMYcTs6LiYiC3sD7cxWJv6FQkmCS3pl5+mX8WMTsynYEQ
-   G/9XZCYtA1VwEMgSRuFJ81X/RoQmh9Bj3kOd/JU33toEi9nzH/+56+RP1
-   iw+2IBdCVEClVXIlH2HK6UtKdFdkNiwcCsrBi6bZCipyTfKmpgPe3TlnV
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="247325"
-X-IronPort-AV: E=Sophos;i="6.05,240,1701158400"; 
-   d="scan'208";a="247325"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 09:06:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,240,1701158400"; 
-   d="scan'208";a="37778173"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 03 Feb 2024 09:06:32 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rWJTJ-0005Mi-0g;
-	Sat, 03 Feb 2024 17:06:29 +0000
-Date: Sun, 04 Feb 2024 01:04:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- ad834c7c8e4a74dd6cd4397848aa255e473d4a63
-Message-ID: <202402040100.jhKQNaJu-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1706984307; c=relaxed/simple;
+	bh=v18Uq25xFd0lAYlqmeeW1rPPUfvDN/gZuKrB7cBLNgk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J1lXNUUiL4aBXovL0VKGeNnz6qBWk57l8p4euQSWSq4Qlhg4Nu1MyfcVtParGCXDGcZgx9yj1hLL21djHbhjdmW1NDgg/XBrU8yAwuzfAolwFB0LCGIm2n6oQ4oLQWP7sMk6XZVieeNmbWTfL+tQxCE/krPQT+CTjFwTce4bpok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xff.cz; spf=pass smtp.mailfrom=xff.cz; dkim=pass (1024-bit key) header.d=xff.cz header.i=@xff.cz header.b=y3ZNKGcF; arc=none smtp.client-ip=195.181.215.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xff.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xff.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+	t=1706984294; bh=v18Uq25xFd0lAYlqmeeW1rPPUfvDN/gZuKrB7cBLNgk=;
+	h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+	b=y3ZNKGcFub4QSs9xq0iVNFE7+KJSaXXYyWbxvggkDoGYxo6ADvmOOyh3q97eGngaY
+	 7NqT787d2NhDpOozFjmHwAAiNLLNbVsbNOK/8+dYHxKsKZ8if65gNuI2FO5qbw8JSd
+	 8NRQYdjVNQAUC89HwrkKZJAbGcCaiysmIsGTVWWE=
+Date: Sat, 3 Feb 2024 19:18:13 +0100
+From: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To: Pavel Machek <pavel@ucw.cz>
+Cc: phone-devel@vger.kernel.org, 
+	kernel list <linux-kernel@vger.kernel.org>, fiona.klute@gmx.de, martijn@brixit.nl, samuel@sholland.org, 
+	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: anx7688: Add driver for ANX7688 USB-C HDMI
+ bridge
+Message-ID: <iikhv7e2z3pk7nr6bvtuepwyrmukym5fjtc2xspsmhxzz5jlwe@5vfs4i3w66kc>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>, 
+	Pavel Machek <pavel@ucw.cz>, phone-devel@vger.kernel.org, 
+	kernel list <linux-kernel@vger.kernel.org>, fiona.klute@gmx.de, martijn@brixit.nl, samuel@sholland.org, 
+	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <Zbt1dIByBZ2stzjm@mobian>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zbt1dIByBZ2stzjm@mobian>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: ad834c7c8e4a74dd6cd4397848aa255e473d4a63  Merge tag 'usb-serial-6.8-rc3' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+Hi Pavel,
 
-elapsed time: 1459m
+On Thu, Feb 01, 2024 at 11:41:56AM +0100, Pavel Machek wrote:
+> From: Ondrej Jirman <megi@xff.cz>
+> 
+> This is driver for ANX7688 USB-C HDMI, with flashing and debugging
+> features removed. ANX7688 is rather criticial piece on PinePhone,
+> there's no display and no battery charging without it.
 
-configs tested: 160
-configs skipped: 3
+Don't remove the flashing part. Some Pinephones come without the firmware
+in the past. Even recently, I've seen some people in the Pine chat
+asking how to flash the firmware on some old PinePhone.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+It's a safe operation that can be done at any time and can only be done
+from the kernel driver.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     nsimosci_hs_defconfig   gcc  
-arc                   randconfig-001-20240203   gcc  
-arc                   randconfig-002-20240203   gcc  
-arc                    vdk_hs38_smp_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                       aspeed_g5_defconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-003-20240203   gcc  
-arm                        shmobile_defconfig   gcc  
-arm                         socfpga_defconfig   gcc  
-arm                           u8500_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-003-20240203   gcc  
-arm64                 randconfig-004-20240203   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240203   gcc  
-csky                  randconfig-002-20240203   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-002-20240203   gcc  
-i386         buildonly-randconfig-006-20240203   gcc  
-i386                                defconfig   clang
-i386                  randconfig-002-20240203   gcc  
-i386                  randconfig-004-20240203   gcc  
-i386                  randconfig-006-20240203   gcc  
-i386                  randconfig-012-20240203   gcc  
-i386                  randconfig-013-20240203   gcc  
-i386                  randconfig-014-20240203   gcc  
-i386                  randconfig-015-20240203   gcc  
-i386                  randconfig-016-20240203   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240203   gcc  
-loongarch             randconfig-002-20240203   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                         apollo_defconfig   gcc  
-m68k                       bvme6000_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5475evb_defconfig   gcc  
-m68k                          multi_defconfig   gcc  
-m68k                        mvme147_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-microblaze                      mmu_defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                  maltasmvp_eva_defconfig   gcc  
-nios2                            alldefconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240203   gcc  
-nios2                 randconfig-002-20240203   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240203   gcc  
-parisc                randconfig-002-20240203   gcc  
-parisc64                         alldefconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                     kmeter1_defconfig   gcc  
-powerpc                    mvme5100_defconfig   gcc  
-powerpc                         ps3_defconfig   gcc  
-powerpc                    sam440ep_defconfig   gcc  
-powerpc64             randconfig-002-20240203   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                          debug_defconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240203   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                        dreamcast_defconfig   gcc  
-sh                ecovec24-romimage_defconfig   gcc  
-sh                          landisk_defconfig   gcc  
-sh                          lboxre2_defconfig   gcc  
-sh                          polaris_defconfig   gcc  
-sh                    randconfig-001-20240203   gcc  
-sh                    randconfig-002-20240203   gcc  
-sh                          rsk7201_defconfig   gcc  
-sh                          rsk7203_defconfig   gcc  
-sh                           se7780_defconfig   gcc  
-sh                        sh7763rdp_defconfig   gcc  
-sh                        sh7785lcr_defconfig   gcc  
-sh                            titan_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240203   gcc  
-sparc64               randconfig-002-20240203   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-003-20240203   clang
-x86_64                randconfig-013-20240203   clang
-x86_64                randconfig-014-20240203   clang
-x86_64                randconfig-015-20240203   clang
-x86_64                randconfig-016-20240203   clang
-x86_64                randconfig-071-20240203   clang
-x86_64                randconfig-073-20240203   clang
-x86_64                randconfig-074-20240203   clang
-x86_64                randconfig-075-20240203   clang
-x86_64                randconfig-076-20240203   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                randconfig-001-20240203   gcc  
-xtensa                randconfig-002-20240203   gcc  
+> There's likely more work to be done here, but having basic support
+> in mainline is needed to be able to work on the other stuff
+> (networking, cameras, power management).
+> 
+> Signed-off-by: Ondrej Jirman <megi@xff.cz>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I should be second in order of sign-offs. Martijn wrote a non-working skeleton
+https://megous.com/git/linux/commit/?h=pp-5.7&id=30e33cefd7956a2b49fb27008b4af9d868974e58
+driver. Then I picked it up and developed it over years to a working thing.
+Almost none of the skeleton remains.
+
+License is GPLv2.
+
+> Signed-off-by: Martijn Braam <martijn@brixit.nl>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> Signed-off-by: Pavel Machek <pavel@ucw.cz>
+> 
+> [...]
+>
+> +static int anx7688_i2c_probe(struct i2c_client *client)
+> +{
+> +        struct anx7688 *anx7688;
+> +        struct device *dev = &client->dev;
+> +        struct typec_capability typec_cap = { };
+> +        int i, vid_h, vid_l;
+> +        int irq_cabledet;
+> +        int ret = 0;
+> +
+> +        anx7688 = devm_kzalloc(dev, sizeof(*anx7688), GFP_KERNEL);
+> +        if (!anx7688)
+> +                return -ENOMEM;
+> +
+> +        i2c_set_clientdata(client, anx7688);
+> +        anx7688->client = client;
+> +        anx7688->dev = &client->dev;
+> +        mutex_init(&anx7688->lock);
+> +        INIT_DELAYED_WORK(&anx7688->work, anx7688_work);
+> +	anx7688->last_extcon_state = -1;
+> +
+> +	ret = of_property_read_variable_u32_array(dev->of_node, "source-caps",
+> +						  anx7688->src_caps,
+> +						  1, ARRAY_SIZE(anx7688->src_caps));
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to get source-caps from DT\n");
+> +		return ret;
+> +	}
+> +	anx7688->n_src_caps = ret;
+> +
+> +	ret = of_property_read_variable_u32_array(dev->of_node, "sink-caps",
+> +						  anx7688->snk_caps,
+> +						  1, ARRAY_SIZE(anx7688->snk_caps));
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to get sink-caps from DT\n");
+> +		return ret;
+> +	}
+
+^^^ The driver will need to follow usb-c-connector bindings and it will need
+a bindings documentation for itself.
+
+That's one of the missing things that I did not implement, yet.
+
+Kind regards,
+	o.
 
