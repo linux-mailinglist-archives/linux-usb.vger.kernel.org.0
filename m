@@ -1,151 +1,175 @@
-Return-Path: <linux-usb+bounces-5838-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5839-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 766F68488D1
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Feb 2024 21:48:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C483848905
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Feb 2024 22:49:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 780FA1C21C34
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Feb 2024 20:48:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 036E91F232E6
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Feb 2024 21:49:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC78C134B6;
-	Sat,  3 Feb 2024 20:47:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D35B12E63;
+	Sat,  3 Feb 2024 21:49:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GN/4T/Rq"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KEserLf4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B6811C8B;
-	Sat,  3 Feb 2024 20:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF35E12E48;
+	Sat,  3 Feb 2024 21:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706993264; cv=none; b=jlHohH7yfiqm1aODvTEoRzozoJHyHq1DQ7ES2BOcq9dVz2b+4SNndJB+s/+bk8J3g6DofQPr4y1npog3G2IG4G4mHLUVM2cxA/h4uk/6BMUqOIDNV7ie7I63ID0ZT2BZisuax44gcmHw1qfETMPElhTTUaUPmIWMGa7B90w/jjg=
+	t=1706996961; cv=none; b=OcgP75FjI2wfCD1A8mcksfS7rb8xGHosrKJIAKpBiJCF3OD636QhD7LcVgkbRXMGld7xgaugtT4ONi5bK1nnpoth5hQ2JuUisjhu0d0hK5ZKF38v4iSum59GrIS35m9kXoM7g+hGQzQkLpLHIxmC41AQVJH7GbQ9UeVa00lmLEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706993264; c=relaxed/simple;
-	bh=f2I8gWEzkwSZbGGlhrQHuwLADXjkshYxOtnScKHw11s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M2ieEU5QHTImoDhGtfYNa29Wywi7gIvfmRQDOwqtEX7rQU3S70ZYCAa0Q37NDayfaw5QzJSdzRrwKGUDkcG+c0mOxfiuM6qN9KQ/GLWe4Kk9MBpW7RMnsPttj1gIs8KJjDm2MNRl4GAsJXdiHVc2GPNXG4wN40yX/1kkA+4unpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GN/4T/Rq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2F8C433F1;
-	Sat,  3 Feb 2024 20:47:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706993263;
-	bh=f2I8gWEzkwSZbGGlhrQHuwLADXjkshYxOtnScKHw11s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GN/4T/RqtAM5pPUfQihjK3Wa8sAV3pUsmPhYvA/cg2Mt2nro2ZyjanWbrJsFNV3X0
-	 z5BUbR+pQSMZAeHOP3sXKHIURcwPfLXvK10KTL7JVV6BMqAtJcWeBZZaUNH8BgEZwr
-	 WzCvc/4pSyEOOKjimaGiYIRPvzhm5cFZkClqVzDoxmb/PXTafnKB5XS5SvdpzINgmK
-	 q/IJVnPabe73UT5UmIzBjjFDfb7yi95qtdPjsD2ng69sNJ9Ox97m8liHEvjdKMoKE0
-	 QcQjfDe1BO9oUeMuwNyLPZn3s3kiyHosGSbJT7/8lpjlfsPnQ91fjVkcMwRyGM/tUl
-	 QPqwMl+qAzuzA==
-Date: Sat, 3 Feb 2024 21:47:39 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc: Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-	herbert@gondor.apana.org.au, davem@davemloft.net,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, alexandre.torgue@foss.st.com, vkoul@kernel.org,
-	jic23@kernel.org, olivier.moysan@foss.st.com,
-	arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
-	fabrice.gasnier@foss.st.com, andi.shyti@kernel.org,
-	ulf.hansson@linaro.org, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, hugues.fruchet@foss.st.com, lee@kernel.org,
-	will@kernel.org, catalin.marinas@arm.com, arnd@kernel.org,
-	richardcochran@gmail.com, Frank Rowand <frowand.list@gmail.com>,
-	peng.fan@oss.nxp.com, lars@metafoo.de, rcsekar@samsung.com,
-	wg@grandegger.com, mkl@pengutronix.de, linux-crypto@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-	linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-	netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+	s=arc-20240116; t=1706996961; c=relaxed/simple;
+	bh=+FBMOQB3faUW4Rvc94zSO2OIMH3ZaGb/MEhF9zaVYXY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KBo5cH+apK5Tb7yW5aor5Hk7lMVEsx6Q9RhrrK3R0RhIM32zhYqPQb2znuKkk1oVKCDdk1txMX0S1xFLz3HT/y0WXAtE3TzmjTMjKx0V27ZJXnZ795CZUZzywLEls1YdSXrEnGAjAxIQxBxgm8pxgfoq/1n/E+sVqDH7oIyl3K0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KEserLf4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E35FC433F1;
+	Sat,  3 Feb 2024 21:49:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1706996961;
+	bh=+FBMOQB3faUW4Rvc94zSO2OIMH3ZaGb/MEhF9zaVYXY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=KEserLf4PdPMyHfeSAsvmnZVsVrbRoWYJC4BIUfRCKVKAmZkLWz4KQCBFsdiCUAjH
+	 m7BQWPIlSsG8MpVxjChOrK9GAaVqhc/XS4421U819WiP6v8BWIUEo7m7rZD0LVfS9H
+	 i6+EXcAs5XGgeYAeGfXbQSaIGgN15qK0UvGfr9jk=
+Date: Sat, 3 Feb 2024 13:49:20 -0800
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 02/13] dt-bindings: treewide: add access-controllers
- description
-Message-ID: <Zb6ma9lHMu3SAe0U@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Gatien Chevallier <gatien.chevallier@foss.st.com>,
-	Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-	herbert@gondor.apana.org.au, davem@davemloft.net,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, alexandre.torgue@foss.st.com, vkoul@kernel.org,
-	jic23@kernel.org, olivier.moysan@foss.st.com,
-	arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
-	fabrice.gasnier@foss.st.com, andi.shyti@kernel.org,
-	ulf.hansson@linaro.org, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, hugues.fruchet@foss.st.com, lee@kernel.org,
-	will@kernel.org, catalin.marinas@arm.com, arnd@kernel.org,
-	richardcochran@gmail.com, Frank Rowand <frowand.list@gmail.com>,
-	peng.fan@oss.nxp.com, lars@metafoo.de, rcsekar@samsung.com,
-	wg@grandegger.com, mkl@pengutronix.de, linux-crypto@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-	linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-	netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-usb@vger.kernel.org
-References: <20231212152356.345703-1-gatien.chevallier@foss.st.com>
- <20231212152356.345703-3-gatien.chevallier@foss.st.com>
+Subject: [GIT PULL] USB driver fixes for 6.8-rc3
+Message-ID: <Zb604Bt0_l-KUvkg@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="VPm+VxExOC+V7OZ+"
-Content-Disposition: inline
-In-Reply-To: <20231212152356.345703-3-gatien.chevallier@foss.st.com>
-
-
---VPm+VxExOC+V7OZ+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 12, 2023 at 04:23:45PM +0100, Gatien Chevallier wrote:
-> access-controllers is an optional property that allows a peripheral to
-> refer to one or more domain access controller(s).
->=20
-> Description of this property is added to all peripheral binding files of
-> the peripheral under the STM32 firewall controller. It allows an accurate
-> representation of the hardware, where various peripherals are connected
-> to a firewall bus. The firewall can then check the peripheral accesses
-> before allowing its device to probe.
->=20
-> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com> # for I2C
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
 
+are available in the Git repository at:
 
---VPm+VxExOC+V7OZ+
-Content-Type: application/pgp-signature; name="signature.asc"
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.8-rc3
 
------BEGIN PGP SIGNATURE-----
+for you to fetch changes up to ad834c7c8e4a74dd6cd4397848aa255e473d4a63:
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmW+pmsACgkQFA3kzBSg
-KbY64RAAof4Gx7h4jhXu9UFvGgxDMB7nucJwU2vnrWAQqslpX78IIuHnDzQGSdx4
-YeqQnv3x5PquSqBz8x/rnE1ptR0LqnAgeJdEOQB0AAicQ+VFy75kPngr9dtiCJuf
-SrCwaIYQ13qIhhC6pa7HTEUSQN/KX6DVSffmeJmOJoHIqGa1L1ldEH5tujF71Plb
-q5ugpGi2Jkmb+UU5/EaXadNKZ5b3BSp/xWur8Eemy9Z4DqqoipzJRzSJHufFNZDR
-pRdNn14JQlzQ948vT+YdpGqPE6jrVpd48rygAjaXsPx3cVQx7ouU6tKPnFLjtgyp
-tb0R2ZIQNXVaQV36XLwhvv0qFqHEiY36q+GjYSEbMHbO1b0+zneKgmZXNSwCclEp
-WQ8DrD3UEKTXcDHmoRV5GVgzZyk7wmK8zq3jofTemYyfKhSvsmAiufzZCQLV/9GI
-ScuNib34aJrsiIXiD40DsFNcutPh2v+aBXQmtfpkA++3ZvY9aBQa5KeEqzrKPaa0
-AVXFtXPN4hnNkUzTogCTHEvL7dYtbi0h7W5fun3D5kOLdZuewR8vFAotIaDRG7tB
-S7AWJDu+x2RT2xAs2yJEfSHMwoBZRdq3nJVugmRDb+VELZmIDBdN4vwBRXfi+cHr
-ouzPgt76DcQhfF6JGRUhloWtVuWW3QRQ1uYMpWUrKztG+3WiqBU=
-=nMRV
------END PGP SIGNATURE-----
+  Merge tag 'usb-serial-6.8-rc3' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2024-02-02 08:36:38 -0800)
 
---VPm+VxExOC+V7OZ+--
+----------------------------------------------------------------
+USB driver fixes for 6.8-rc3
+
+Here are a bunch of small USB driver fixes for 6.8-rc3.  Included in
+here are:
+  - new usb-serial driver ids
+  - new dwc3 driver id added
+  - typec driver change revert
+  - ncm gadget driver endian bugfix
+  - xhci bugfixes for a number of reported issues
+  - usb hub bugfix for alternate settings
+  - ulpi driver debugfs memory leak fix
+  - chipidea driver bugfix
+  - usb gadget driver fixes
+
+All of these have been in linux-next for a while with no reported
+issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Badhri Jagan Sridharan (1):
+      Revert "usb: typec: tcpm: fix cc role at port reset"
+
+Christian A. Ehrhardt (3):
+      usb: ucsi: Add missing ppm_lock
+      usb: ucsi_acpi: Fix command completion handling
+      usb: ucsi_acpi: Quirk to ack a connector change ack cmd
+
+Dmitry Baryshkov (1):
+      usb: typec: tcpm: fix the PD disabled case
+
+Greg Kroah-Hartman (1):
+      Merge tag 'usb-serial-6.8-rc3' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+
+Heikki Krogerus (1):
+      usb: dwc3: pci: add support for the Intel Arrow Lake-H
+
+JackBB Wu (1):
+      USB: serial: qcserial: add new usb-id for Dell Wireless DW5826e
+
+Krishna Kurapati (1):
+      usb: gadget: ncm: Fix endianness of wMaxSegmentSize variable in ecm_desc
+
+Leonard Dallmayr (1):
+      USB: serial: cp210x: add ID for IMST iM871A-USB
+
+Mathias Nyman (3):
+      xhci: fix possible null pointer dereference at secondary interrupter removal
+      xhci: fix off by one check when adding a secondary interrupter.
+      xhci: process isoc TD properly when there was a transaction error mid TD.
+
+Michal Pecio (1):
+      xhci: handle isoc Babble and Buffer Overrun events properly
+
+Oliver Neukum (1):
+      USB: hub: check for alternate port before enabling A_ALT_HNP_SUPPORT
+
+Prashanth K (2):
+      usb: dwc3: host: Set XHCI_SG_TRB_CACHE_SIZE_QUIRK
+      usb: host: xhci-plat: Add support for XHCI_SG_TRB_CACHE_SIZE_QUIRK
+
+Puliang Lu (1):
+      USB: serial: option: add Fibocom FM101-GL variant
+
+Randy Dunlap (1):
+      usb: gadget: pch_udc: fix an Excess kernel-doc warning
+
+Sean Anderson (1):
+      usb: ulpi: Fix debugfs directory leak
+
+Udipto Goswami (2):
+      usb: gadget: ncm: Fix indentations in documentation of NCM section
+      usb: core: Prevent null pointer dereference in update_port_device_state
+
+Uttkarsh Aggarwal (1):
+      usb: dwc3: gadget: Fix NULL pointer dereference in dwc3_gadget_suspend
+
+Xu Yang (1):
+      usb: chipidea: core: handle power lost in workqueue
+
+yuan linyu (1):
+      usb: f_mass_storage: forbid async queue when shutdown happen
+
+ Documentation/usb/gadget-testing.rst         | 22 +++----
+ drivers/usb/chipidea/ci.h                    |  2 +
+ drivers/usb/chipidea/core.c                  | 44 +++++++-------
+ drivers/usb/common/ulpi.c                    |  2 +-
+ drivers/usb/core/hub.c                       | 46 ++++++++++-----
+ drivers/usb/dwc3/dwc3-pci.c                  |  4 ++
+ drivers/usb/dwc3/gadget.c                    |  6 +-
+ drivers/usb/dwc3/host.c                      |  4 +-
+ drivers/usb/gadget/function/f_mass_storage.c | 20 ++++++-
+ drivers/usb/gadget/function/f_ncm.c          |  8 +--
+ drivers/usb/gadget/udc/pch_udc.c             |  1 -
+ drivers/usb/host/xhci-mem.c                  | 14 ++---
+ drivers/usb/host/xhci-plat.c                 |  3 +
+ drivers/usb/host/xhci-ring.c                 | 80 ++++++++++++++++++++-----
+ drivers/usb/host/xhci.h                      |  1 +
+ drivers/usb/serial/cp210x.c                  |  1 +
+ drivers/usb/serial/option.c                  |  1 +
+ drivers/usb/serial/qcserial.c                |  2 +
+ drivers/usb/typec/tcpm/tcpm.c                |  6 +-
+ drivers/usb/typec/ucsi/ucsi.c                |  2 +
+ drivers/usb/typec/ucsi/ucsi_acpi.c           | 88 +++++++++++++++++++++++++---
+ 21 files changed, 267 insertions(+), 90 deletions(-)
 
