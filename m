@@ -1,175 +1,245 @@
-Return-Path: <linux-usb+bounces-5839-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5840-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C483848905
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Feb 2024 22:49:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC343848B60
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Feb 2024 07:03:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 036E91F232E6
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Feb 2024 21:49:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1490285A97
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Feb 2024 06:03:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D35B12E63;
-	Sat,  3 Feb 2024 21:49:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 927456FC5;
+	Sun,  4 Feb 2024 06:03:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KEserLf4"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="WoeHsUIx";
+	dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b="iacbfKCy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF35E12E48;
-	Sat,  3 Feb 2024 21:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706996961; cv=none; b=OcgP75FjI2wfCD1A8mcksfS7rb8xGHosrKJIAKpBiJCF3OD636QhD7LcVgkbRXMGld7xgaugtT4ONi5bK1nnpoth5hQ2JuUisjhu0d0hK5ZKF38v4iSum59GrIS35m9kXoM7g+hGQzQkLpLHIxmC41AQVJH7GbQ9UeVa00lmLEQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706996961; c=relaxed/simple;
-	bh=+FBMOQB3faUW4Rvc94zSO2OIMH3ZaGb/MEhF9zaVYXY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KBo5cH+apK5Tb7yW5aor5Hk7lMVEsx6Q9RhrrK3R0RhIM32zhYqPQb2znuKkk1oVKCDdk1txMX0S1xFLz3HT/y0WXAtE3TzmjTMjKx0V27ZJXnZ795CZUZzywLEls1YdSXrEnGAjAxIQxBxgm8pxgfoq/1n/E+sVqDH7oIyl3K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KEserLf4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E35FC433F1;
-	Sat,  3 Feb 2024 21:49:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1706996961;
-	bh=+FBMOQB3faUW4Rvc94zSO2OIMH3ZaGb/MEhF9zaVYXY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=KEserLf4PdPMyHfeSAsvmnZVsVrbRoWYJC4BIUfRCKVKAmZkLWz4KQCBFsdiCUAjH
-	 m7BQWPIlSsG8MpVxjChOrK9GAaVqhc/XS4421U819WiP6v8BWIUEo7m7rZD0LVfS9H
-	 i6+EXcAs5XGgeYAeGfXbQSaIGgN15qK0UvGfr9jk=
-Date: Sat, 3 Feb 2024 13:49:20 -0800
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 6.8-rc3
-Message-ID: <Zb604Bt0_l-KUvkg@kroah.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07CB8F47;
+	Sun,  4 Feb 2024 06:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=60.244.123.138
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707026618; cv=fail; b=i2NPHVhv6XTVN6vKDzQUKrCErApQaKeRk+gTJoyjiMAHxKFLS9aaEhEaOTUKpK03pii6XkXOG+5IFHeaOEw6X/mi03/3rfois3paWrQvM8umWPGMYV03f73ZudSdYDlIP946IKGCiHZVWx7pwTnk9rq7zS0q2TnoD+MUyZ2NdG4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707026618; c=relaxed/simple;
+	bh=gYSqLCj5J6woVOYsUOqL6Z6RffECVOCWZY6kFl6LS9I=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=iqdmyO8ZqJWWkQMVajcwL2HARt6LvfDmAQM4TlOk9FKi6o5U17yhvIst9LD9BFVobyOAYJozhBg0Lky21mr+QaY7zJBqInCSZaiR/mkMub59uYxlDXatxEQ+PDxW4WyxGzZGUjTA8IC+bMK8LkJCgdHrLhhnf1BzkV7lw/7eKOg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=WoeHsUIx; dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b=iacbfKCy; arc=fail smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 1b9d5d90c32311ee9e680517dc993faa-20240204
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=gYSqLCj5J6woVOYsUOqL6Z6RffECVOCWZY6kFl6LS9I=;
+	b=WoeHsUIxqDEja3l/ZgsWUKP87cwxmCi7kb6M8Kwbtwt/wIszdrHlpfQAl2FbY8zbsn7xacdavwoPzfZxjlq0xAky2viWX1x13YUjT3wpc3VN+ITwdK9r+RbZjslqD40zZNFGIMhC9lbVh/WgfcVmtbO17WXq9fIy/i5ym6ny2yc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.36,REQID:f3930714-2043-411f-ab12-9e77c539c434,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6e16cf4,CLOUDID:5ebcfe8e-e2c0-40b0-a8fe-7c7e47299109,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 1b9d5d90c32311ee9e680517dc993faa-20240204
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+	(envelope-from <chunfeng.yun@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1910705514; Sun, 04 Feb 2024 14:03:24 +0800
+Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Sun, 4 Feb 2024 14:03:23 +0800
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Sun, 4 Feb 2024 14:03:23 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E5pCJvpQk8nMlNUVY/Yjd2TSSDY7B+ol0IwhkOpBRYKmQ/VNAZASOki4Wa/7P9NFdQK9VzOzmJQQC4t8bTj2XY15hHu0wg7NLijdj8RBAof2VvkIKdHJW/HzPScv2nAvcqj9T43v8Buz01kAR0xG/GTZYBAqb8U9MHB1gR7G5TjO0FKFDPLp3ETc6OJvdO6meAcLyV61lPXlrEI2aJlIdNcC7JRBJOdqCYU4m3N5DQ1KwtPmCWFzhAsVq2E3O+aHuP9YCCtlWJU/kLW7LvIRXKfLK8PelXrUO4lhPuvcmigBCLxgkp91YZRYq2IpzNt3JQBMSLhMoD/Hdgd1jKxNOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gYSqLCj5J6woVOYsUOqL6Z6RffECVOCWZY6kFl6LS9I=;
+ b=YGeiWmJOCc+QRDeH3I+MMjokxIhenOn8iVXDYXG8ByotcZPHeaYdO14UtuQmPMKaYSbS4MXyGvvnhGinAtpJfiVEIi4rV7wykxmG6dv7Perr/gBfcPCubJxYZtvJGG7zikXhhZ4n+ilry8HEoqTstl1MDWA38fLz/YKVQOXUf2+IacXfaw3wuhrflypDrgxebVFWx4j4VKaJJy6f8rK0rw2+86gs2FFuTNmGVREERyefSH9rr//4SNuEGBvrrKsAoIF2/lVRsuZaMSiKdDVFZndhbz20ISDc9Mf2VhU91yH3lW3UUM6aFPdwlN8eNs9rRTwIR7UKUSGgnfrFVpyK2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gYSqLCj5J6woVOYsUOqL6Z6RffECVOCWZY6kFl6LS9I=;
+ b=iacbfKCyOjbjtFxE3A4iBu6CSquGufX7vdI53gz2ouWpjH3oc/NZaQ5p2aF4CA2ya57Fd+kEqzV4BjT2zjHblFRky7BrMAEc7SFgiwY9jhNxf4st+pW6OwC4KgXhk3E7rvq9NVgqbx7u1VzL2NFUHZeDAurjaT5JnTS0Yhof4JI=
+Received: from TYZPR03MB7153.apcprd03.prod.outlook.com (2603:1096:400:33c::6)
+ by SEZPR03MB7245.apcprd03.prod.outlook.com (2603:1096:101:a8::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.31; Sun, 4 Feb
+ 2024 06:03:18 +0000
+Received: from TYZPR03MB7153.apcprd03.prod.outlook.com
+ ([fe80::8146:6419:98ce:83a2]) by TYZPR03MB7153.apcprd03.prod.outlook.com
+ ([fe80::8146:6419:98ce:83a2%6]) with mapi id 15.20.7249.027; Sun, 4 Feb 2024
+ 06:03:18 +0000
+From: =?utf-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= <Chunfeng.Yun@mediatek.com>
+To: "angelogioacchino.delregno@collabora.com"
+	<angelogioacchino.delregno@collabora.com>
+CC: "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "conor.dooley@microchip.com"
+	<conor.dooley@microchip.com>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "gregkh@linuxfoundation.org"
+	<gregkh@linuxfoundation.org>, "krzysztof.kozlowski+dt@linaro.org"
+	<krzysztof.kozlowski+dt@linaro.org>, "matthias.bgg@gmail.com"
+	<matthias.bgg@gmail.com>
+Subject: Re: [PATCH v2 2/2] usb: mtu3: Add MT8195 MTU3 ip-sleep wakeup support
+Thread-Topic: [PATCH v2 2/2] usb: mtu3: Add MT8195 MTU3 ip-sleep wakeup
+ support
+Thread-Index: AQHaTSTHKySgsdH8UEyCZEa9lE7hgLD5xWYA
+Date: Sun, 4 Feb 2024 06:03:18 +0000
+Message-ID: <0f96aac2ee16c31808f22853fdf746678f5284e8.camel@mediatek.com>
+References: <20240122111809.148546-1-angelogioacchino.delregno@collabora.com>
+	 <20240122111809.148546-2-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240122111809.148546-2-angelogioacchino.delregno@collabora.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR03MB7153:EE_|SEZPR03MB7245:EE_
+x-ms-office365-filtering-correlation-id: e88b3033-b877-41b0-ae19-08dc2546fbb7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zs7nSkVWyhsgTf/2DA995Hi1Z978H+Cp6o46Mg3HZmu4NSxOR2C2hzqMuTKvyUA4oCGOHF49BWXx4EpLGoBvk2D44Yosg0WqISm2pFjGGzE/wFMCLTnkgtkSH68pXeqUmWqFBSHvtTLbF8Gr6Hz5Vl/AVaKyRXtsohNe9diLeXqzIQ0TvNue5MAwZBJumwRnY2AvvYynNl4tS4PT80CMqv2FBP+do4NSGfupqDXBxzvfXdqobDuw/OXggTbYaEdSddY/kk5dcwUVVD2/+LSAEHO/w00n39p8x6OVnPVupTgNEeZ4LN6ktJf8HztPdRPq2EeEPqICINEOJ31FMxwWoGhhIV0td1XJhESkK5YNVHJYOculK1ZPdjeAKuzDdCaRGPvd8W1HhW2AkV82L5NDNWJ3Pd+H+R+BGR6sCfajnMNKUL8HDb760C8KnsBfH/ThYwPn4+O+aNOPFvKcZ0sbP+NpWrIl0NZr59Swgt8Bo9dYL3q38ZE5uv5mMqvZgrdQoQVf76EZMhv4G1HKJ0kWxkYWz00Bi1s9y/KPWxt0Y0uYNljfIMzlaouMDnmr5406NcsANaj+oUCYTA8kx/pM4F0EF0hLZT20migW9NtYg2olM6Xw6S47QrV/Hj51th8a42X2S+lOr2IwwMr0UkUNvg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB7153.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(136003)(376002)(366004)(396003)(230922051799003)(1800799012)(451199024)(186009)(64100799003)(83380400001)(26005)(2616005)(38100700002)(76116006)(6916009)(8936002)(4326008)(8676002)(122000001)(71200400001)(54906003)(66476007)(66946007)(316002)(66446008)(66556008)(64756008)(5660300002)(2906002)(7416002)(6506007)(6486002)(6512007)(478600001)(38070700009)(85182001)(36756003)(86362001)(41300700001)(99106002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?U0ZDaXNNSUhCV0k5bm1EWlZEdGhDbDZtVC9GYVBtVjJ6Q3BGSzVGS0JpYUZF?=
+ =?utf-8?B?ZzdabGY0OUZiTjBGYWNFNFpVcGpYc2F5b1htUjVGVHZBc0VQZ28vdmtSNmpO?=
+ =?utf-8?B?RUJCNy9ScWRBRWpRYjltL3dDZkk3SS9raDRqQi9EWi9mZlVMYTRnYTlGWDk5?=
+ =?utf-8?B?VCtYcDQyeGQ2ZENMenlrNllMeWpqaGx1eExoY2xPL0oyQWE3NFhJQStQWWl3?=
+ =?utf-8?B?S25Rc2taVnJNaXkrZWJZbVJNWHVROHBDV0hmbThHZ3FicG9VMHM3WFg0SnFt?=
+ =?utf-8?B?U2VJYTNySFhaVm9ycDlRdnlGZWhSSXhaRUI2R3psd0hDSTZxbHBIRHAzV1Y1?=
+ =?utf-8?B?bWhoZlpqOEMxSy9Mc1RucStvSkpvb0NJREZNY21ZV2hEVmhYRXdZdVEwQmVm?=
+ =?utf-8?B?dWVyS3lMT25GQVBoMXhsekRVWXVnZklaVEdkME1xR0M3NDVPc0pkSjJjUnF6?=
+ =?utf-8?B?RWN0MlJjaFYrWjMzRXA3YndIQStkbWl6TGhaY2lwT1I5bjhXUC91c2V5akx3?=
+ =?utf-8?B?NVdPUGJEMXg2ejBlTW8zOWNVMllqdCtlU256L0ZDSnFxamJ4YWQ5d2llSFQv?=
+ =?utf-8?B?ajJJTk92QTA1UlN6NHFXQ05RRytZRlBDZmYweGljSk1kand6MUVCbjJmWjZ0?=
+ =?utf-8?B?ZTJSbEZwMmpRa1F3OWhrSld6OEdwN1VKSkVhdTlZNXgydXBWaDZhVm1SZU9x?=
+ =?utf-8?B?b0hnQWRkRHI3N0hDM1R4ZWVySElCSUk2WmxYY0dkTm5NbmhneWU1dEIzUXFZ?=
+ =?utf-8?B?SStObmN5VnRnNEkzbHRMT1o1RUNXdTNtbjF2WG9tTWMvWlpJQ0M0Qk1ZbWRL?=
+ =?utf-8?B?a08rbGRjRHdqaTk0UmlBNUVFTUIrS0V6SzlHYm1ZSUEyeXlicW8yNEFpbXF6?=
+ =?utf-8?B?QnlvY0RrRmhLcFROMXhiMWlIQ2JjV0JmRzBjeWpSeGZUaE9WWk9WaFVIWWMz?=
+ =?utf-8?B?RzExeENDTnVnbzRjL25NelB5QndCM0o0NkpZL2J3WmVPcTV5VHQ1Qzd2QXU3?=
+ =?utf-8?B?NVNhVSsvMEVBRUVucDdjUUxRelVVNytUZXJkL3JCMDNESmZaRHh2SkdQMjF2?=
+ =?utf-8?B?d2tHZW5sM01XYm84QWJYMnRqVlI3LzNjRERHVVlBVFRLc3VvTHlscWlDVlgx?=
+ =?utf-8?B?YnRGSVNDbEwvKys0em4rK0F5clE2VDR6WUZ5NElpZC9hekhRNUVWUWVMR2lW?=
+ =?utf-8?B?MjF4V0MvYm01UGpUb01TTUg4Y1h0Ky9zdU9oaHE5VDhwVWhLTGhhZzV2aHhD?=
+ =?utf-8?B?WCtDaWp2d3A5QXJ2c0xWaVYvdFJTNTNmcXZnRnIvTk5QQVRydTdEVFNId09v?=
+ =?utf-8?B?UTJkVDR0V1JmSmRqcFhTdXF6cTEvZWxFZzNRK3c4MkgrSlJ0UzhORHJrQTI5?=
+ =?utf-8?B?RTJVVCtNU1U5NGV2NTljcnlzMWhscEY3dWhBR3dBZ2taK0dOTi9SV2VYOGw5?=
+ =?utf-8?B?UzhES1dNbnVFMG9sYlFjZVgwUGV2Y3pkbWFiODdTbGJYMUMzSlRpTzU3eTZJ?=
+ =?utf-8?B?cW5IRkR2Q2ZSdEp5Y2F6Y3Z6UU5CcDhOQVVUaW14YnYybVI5WkhIVGlIODls?=
+ =?utf-8?B?TldnZ0RrcTlIbU1SRFJRSTdYRDRlY3Y2Rmo4eW82K1RCQjlza0NibU90ZVRF?=
+ =?utf-8?B?b1dYZEZhS0VCUmk4VVpwcFZnSStyVkp1R2I4b3BaSndsbnRYT1pMakNiRTRZ?=
+ =?utf-8?B?YXFUTXM5ZVU5bUMrY1FqV3p5bXkvUW80bWRjVlBJandOV042N21YRjllOWJo?=
+ =?utf-8?B?Vkk5bmxhaDc0NWluazd2V1lCR0VQc3dhVDZySnJjQW5zbXpzNkd5N3ZEOXpQ?=
+ =?utf-8?B?SjA0cWlkYWJ0dU9RNkRUSHJ0UERiZTc5M0lRRmVSMGRiSXIwRlFncmtGNVJJ?=
+ =?utf-8?B?bGIzbm5CUzFwTDFXSHhlYTFlaFZqdDdIalJRVmhMeWhhWUZlOFA5aTBweWFv?=
+ =?utf-8?B?OEJYcUVpOVIvVjVPdjQzeG5DVmVRT2JiSEMzbStVbEdROEwvTVZtbXl0Snor?=
+ =?utf-8?B?VVNteUpaQi9qWTlMRUNQQlVTQm9EMnlOOVoxaEZ2Vy9hWVJHOUM0SHY1ZStC?=
+ =?utf-8?B?ZjZQMXZkUGNYaWtQeEJlSjdBUFZKeEpvTFA0bTVObDNyUnJDcnJhU3REQ1FP?=
+ =?utf-8?B?YUx2QkFuWjBVc1g4dldvY2ZHYTZhNnlTMDBDN2lZMzIycVMwSjQ1NzlBcFVu?=
+ =?utf-8?B?dlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <17F533986FD799408581ECB78B79E0AC@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB7153.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e88b3033-b877-41b0-ae19-08dc2546fbb7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Feb 2024 06:03:18.0337
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yzSmdIQKwS9qZ7gaypHbEJLJOMJds2aUwYJm/PwJrkXmZflXGlbcdn3lPd+2W8vNAzIzpOos6/TmeW12VleJMtmGNDL7H8jAaI/SnM5+M/8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR03MB7245
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--10.643100-8.000000
+X-TMASE-MatchedRID: Y6GLOewO+JjUL3YCMmnG4t7SWiiWSV/1YefZ7F9kLgsNcckEPxfz2AVM
+	9kPsaYx4DSs3+GspeOpg62EFNWAoiEROfDUX+zmlu72KpAktHS/t/okBLaEo+A6QlBHhBZuwYRW
+	GTChXyt39W4F6Nyvtfk/SoXfxRM/ULZbtj42l31Huykw7cfAoICseSAhqf1rRyWCL+8tLbvb3dH
+	/rswi8nMvpIkRZEXgrx0bGMM22HMGPaFHMfVTC4NIFVVzYGjNKWQy9YC5qGvz6APa9i04WGCq2r
+	l3dzGQ1l3+bAt/YFVS8Rw8wY6AowfTNM9UP6q4ea8RrZYjUF9KreyiFjLPy3mgGZNLBHGNe
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--10.643100-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP:
+	2D96B9BBC29F7CCA3D2A63FC849B89E58845F8680CCE4C03923D4985B33923922000:8
+X-MTK: N
 
-The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
-
-  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.8-rc3
-
-for you to fetch changes up to ad834c7c8e4a74dd6cd4397848aa255e473d4a63:
-
-  Merge tag 'usb-serial-6.8-rc3' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2024-02-02 08:36:38 -0800)
-
-----------------------------------------------------------------
-USB driver fixes for 6.8-rc3
-
-Here are a bunch of small USB driver fixes for 6.8-rc3.  Included in
-here are:
-  - new usb-serial driver ids
-  - new dwc3 driver id added
-  - typec driver change revert
-  - ncm gadget driver endian bugfix
-  - xhci bugfixes for a number of reported issues
-  - usb hub bugfix for alternate settings
-  - ulpi driver debugfs memory leak fix
-  - chipidea driver bugfix
-  - usb gadget driver fixes
-
-All of these have been in linux-next for a while with no reported
-issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Badhri Jagan Sridharan (1):
-      Revert "usb: typec: tcpm: fix cc role at port reset"
-
-Christian A. Ehrhardt (3):
-      usb: ucsi: Add missing ppm_lock
-      usb: ucsi_acpi: Fix command completion handling
-      usb: ucsi_acpi: Quirk to ack a connector change ack cmd
-
-Dmitry Baryshkov (1):
-      usb: typec: tcpm: fix the PD disabled case
-
-Greg Kroah-Hartman (1):
-      Merge tag 'usb-serial-6.8-rc3' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-
-Heikki Krogerus (1):
-      usb: dwc3: pci: add support for the Intel Arrow Lake-H
-
-JackBB Wu (1):
-      USB: serial: qcserial: add new usb-id for Dell Wireless DW5826e
-
-Krishna Kurapati (1):
-      usb: gadget: ncm: Fix endianness of wMaxSegmentSize variable in ecm_desc
-
-Leonard Dallmayr (1):
-      USB: serial: cp210x: add ID for IMST iM871A-USB
-
-Mathias Nyman (3):
-      xhci: fix possible null pointer dereference at secondary interrupter removal
-      xhci: fix off by one check when adding a secondary interrupter.
-      xhci: process isoc TD properly when there was a transaction error mid TD.
-
-Michal Pecio (1):
-      xhci: handle isoc Babble and Buffer Overrun events properly
-
-Oliver Neukum (1):
-      USB: hub: check for alternate port before enabling A_ALT_HNP_SUPPORT
-
-Prashanth K (2):
-      usb: dwc3: host: Set XHCI_SG_TRB_CACHE_SIZE_QUIRK
-      usb: host: xhci-plat: Add support for XHCI_SG_TRB_CACHE_SIZE_QUIRK
-
-Puliang Lu (1):
-      USB: serial: option: add Fibocom FM101-GL variant
-
-Randy Dunlap (1):
-      usb: gadget: pch_udc: fix an Excess kernel-doc warning
-
-Sean Anderson (1):
-      usb: ulpi: Fix debugfs directory leak
-
-Udipto Goswami (2):
-      usb: gadget: ncm: Fix indentations in documentation of NCM section
-      usb: core: Prevent null pointer dereference in update_port_device_state
-
-Uttkarsh Aggarwal (1):
-      usb: dwc3: gadget: Fix NULL pointer dereference in dwc3_gadget_suspend
-
-Xu Yang (1):
-      usb: chipidea: core: handle power lost in workqueue
-
-yuan linyu (1):
-      usb: f_mass_storage: forbid async queue when shutdown happen
-
- Documentation/usb/gadget-testing.rst         | 22 +++----
- drivers/usb/chipidea/ci.h                    |  2 +
- drivers/usb/chipidea/core.c                  | 44 +++++++-------
- drivers/usb/common/ulpi.c                    |  2 +-
- drivers/usb/core/hub.c                       | 46 ++++++++++-----
- drivers/usb/dwc3/dwc3-pci.c                  |  4 ++
- drivers/usb/dwc3/gadget.c                    |  6 +-
- drivers/usb/dwc3/host.c                      |  4 +-
- drivers/usb/gadget/function/f_mass_storage.c | 20 ++++++-
- drivers/usb/gadget/function/f_ncm.c          |  8 +--
- drivers/usb/gadget/udc/pch_udc.c             |  1 -
- drivers/usb/host/xhci-mem.c                  | 14 ++---
- drivers/usb/host/xhci-plat.c                 |  3 +
- drivers/usb/host/xhci-ring.c                 | 80 ++++++++++++++++++++-----
- drivers/usb/host/xhci.h                      |  1 +
- drivers/usb/serial/cp210x.c                  |  1 +
- drivers/usb/serial/option.c                  |  1 +
- drivers/usb/serial/qcserial.c                |  2 +
- drivers/usb/typec/tcpm/tcpm.c                |  6 +-
- drivers/usb/typec/ucsi/ucsi.c                |  2 +
- drivers/usb/typec/ucsi/ucsi_acpi.c           | 88 +++++++++++++++++++++++++---
- 21 files changed, 267 insertions(+), 90 deletions(-)
+T24gTW9uLCAyMDI0LTAxLTIyIGF0IDEyOjE4ICswMTAwLCBBbmdlbG9HaW9hY2NoaW5vIERlbCBS
+ZWdubyB3cm90ZToNCj4gQWRkIHN1cHBvcnQgZm9yIHRoZSBpcC1zbGVlcCB3YWtldXAgZnVuY3Rp
+b25hbGl0eSBvbiB0aGUgdGhyZWUgTVRVMw0KPiBjb250cm9sbGVycyBmb3VuZCBvbiB0aGUgTVQ4
+MTk1IFNvQy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEFuZ2Vsb0dpb2FjY2hpbm8gRGVsIFJlZ25v
+IDwNCj4gYW5nZWxvZ2lvYWNjaGluby5kZWxyZWdub0Bjb2xsYWJvcmEuY29tPg0KPiAtLS0NCj4g
+DQo+IENoYW5nZXMgaW4gdjI6DQo+ICAtIERyb3BwZWQgdW51c2VkIGRlZmluaXRpb24gZm9yIFdD
+MF9JU19FTl9QMV85NQ0KPiANCj4gIGRyaXZlcnMvdXNiL210dTMvbXR1M19ob3N0LmMgfCAzMCAr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gIDEgZmlsZSBjaGFuZ2VkLCAzMCBpbnNl
+cnRpb25zKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvbXR1My9tdHUzX2hvc3Qu
+Yw0KPiBiL2RyaXZlcnMvdXNiL210dTMvbXR1M19ob3N0LmMNCj4gaW5kZXggOWYyYmUyMmFmODQ0
+Li43YzY1N2VhMmRhYmQgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL210dTMvbXR1M19ob3N0
+LmMNCj4gKysrIGIvZHJpdmVycy91c2IvbXR1My9tdHUzX2hvc3QuYw0KPiBAQCAtMzQsNiArMzQs
+MTggQEANCj4gICNkZWZpbmUgV0MwX1NTVVNCMF9DREVOCQlCSVQoNikNCj4gICNkZWZpbmUgV0Mw
+X0lTX1NQTV9FTgkJQklUKDEpDQo+ICANCj4gKy8qIG10ODE5NSAqLw0KPiArI2RlZmluZSBQRVJJ
+X1dLX0NUUkwwXzgxOTUJMHgwNA0KPiArI2RlZmluZSBXQzBfSVNfUF85NQkJQklUKDMwKQkvKiBw
+b2xhcml0eSAqLw0KPiArI2RlZmluZSBXQzBfSVNfQ185NSh4KQkJKCh1MzIpKCgoeCkgJiAweDcp
+IDw8IDI3KSkNCj4gKyNkZWZpbmUgV0MwX0lTX0VOX1AzXzk1CQlCSVQoMjYpDQo+ICsjZGVmaW5l
+IFdDMF9JU19FTl9QMl85NQkJQklUKDI1KQ0KPiArDQo+ICsjZGVmaW5lIFBFUklfV0tfQ1RSTDFf
+ODE5NQkweDIwDQo+ICsjZGVmaW5lIFdDMV9JU19DXzk1KHgpCQkoKHUzMikoKCh4KSAmIDB4Zikg
+PDwgMjgpKQ0KPiArI2RlZmluZSBXQzFfSVNfUF85NQkJQklUKDEyKQ0KPiArI2RlZmluZSBXQzFf
+SVNfRU5fUDBfOTUJCUJJVCg2KQ0KPiArDQo+ICAvKiBtdDI3MTIgZXRjICovDQo+ICAjZGVmaW5l
+IFBFUklfU1NVU0JfU1BNX0NUUkwJMHgwDQo+ICAjZGVmaW5lIFNTQ19JUF9TTEVFUF9FTglCSVQo
+NCkNCj4gQEAgLTQ0LDYgKzU2LDkgQEAgZW51bSBzc3VzYl91d2tfdmVycyB7DQo+ICAJU1NVU0Jf
+VVdLX1YyLA0KPiAgCVNTVVNCX1VXS19WMV8xID0gMTAxLAkvKiBzcGVjaWZpYyByZXZpc2lvbiAx
+LjAxICovDQo+ICAJU1NVU0JfVVdLX1YxXzIsCQkvKiBzcGVjaWZpYyByZXZpc2lvbiAxLjAyICov
+DQo+ICsJU1NVU0JfVVdLX1YxXzMsCQkvKiBtdDgxOTUgSVAwICovDQo+ICsJU1NVU0JfVVdLX1Yx
+XzUgPSAxMDUsCS8qIG10ODE5NSBJUDIgKi8NCj4gKwlTU1VTQl9VV0tfVjFfNiwJCS8qIG10ODE5
+NSBJUDMgKi8NCj4gIH07DQo+ICANCj4gIC8qDQo+IEBAIC03MCw2ICs4NSwyMSBAQCBzdGF0aWMg
+dm9pZCBzc3VzYl93YWtldXBfaXBfc2xlZXBfc2V0KHN0cnVjdA0KPiBzc3VzYl9tdGsgKnNzdXNi
+LCBib29sIGVuYWJsZSkNCj4gIAkJbXNrID0gV0MwX1NTVVNCMF9DREVOIHwgV0MwX0lTX1NQTV9F
+TjsNCj4gIAkJdmFsID0gZW5hYmxlID8gbXNrIDogMDsNCj4gIAkJYnJlYWs7DQo+ICsJY2FzZSBT
+U1VTQl9VV0tfVjFfMzoNCj4gKwkJcmVnID0gc3N1c2ItPnV3a19yZWdfYmFzZSArIFBFUklfV0tf
+Q1RSTDFfODE5NTsNCj4gKwkJbXNrID0gV0MxX0lTX0VOX1AwXzk1IHwgV0MxX0lTX0NfOTUoMHhm
+KSB8IFdDMV9JU19QXzk1Ow0KPiArCQl2YWwgPSBlbmFibGUgPyAoV0MxX0lTX0VOX1AwXzk1IHwg
+V0MxX0lTX0NfOTUoMHgxKSkgOg0KPiAwOw0KPiArCQlicmVhazsNCj4gKwljYXNlIFNTVVNCX1VX
+S19WMV81Og0KPiArCQlyZWcgPSBzc3VzYi0+dXdrX3JlZ19iYXNlICsgUEVSSV9XS19DVFJMMF84
+MTk1Ow0KPiArCQltc2sgPSBXQzBfSVNfRU5fUDJfOTUgfCBXQzBfSVNfQ185NSgweDcpIHwgV0Mw
+X0lTX1BfOTU7DQo+ICsJCXZhbCA9IGVuYWJsZSA/IChXQzBfSVNfRU5fUDJfOTUgfCBXQzBfSVNf
+Q185NSgweDEpKSA6DQo+IDA7DQo+ICsJCWJyZWFrOw0KPiArCWNhc2UgU1NVU0JfVVdLX1YxXzY6
+DQo+ICsJCXJlZyA9IHNzdXNiLT51d2tfcmVnX2Jhc2UgKyBQRVJJX1dLX0NUUkwwXzgxOTU7DQo+
+ICsJCW1zayA9IFdDMF9JU19FTl9QM185NSB8IFdDMF9JU19DXzk1KDB4NykgfCBXQzBfSVNfUF85
+NTsNCj4gKwkJdmFsID0gZW5hYmxlID8gKFdDMF9JU19FTl9QM185NSB8IFdDMF9JU19DXzk1KDB4
+MSkpIDoNCj4gMDsNCj4gKwkJYnJlYWs7DQo+ICAJY2FzZSBTU1VTQl9VV0tfVjI6DQo+ICAJCXJl
+ZyA9IHNzdXNiLT51d2tfcmVnX2Jhc2UgKyBQRVJJX1NTVVNCX1NQTV9DVFJMOw0KPiAgCQltc2sg
+PSBTU0NfSVBfU0xFRVBfRU4gfCBTU0NfU1BNX0lOVF9FTjsNCg0Kd2hpY2ggcHJvamVjdCB3aWxs
+IHVzZSBpcC1zbGVlcCB3YWtldXAgZm9yIG10ODE5NT8gb25seSB1c2UgZGV2aWNlDQptb2RlPw0K
+DQpBcyBJIGtub3csIHdoZW4gdXNlIHVwc3RyZWFtIGNvZGUgdG8gc3VwcG9ydCBkdWFsLXJvbGUg
+bW9kZSBvbiBtdDgxOTUsDQp0aGVyZSBpcyBhIGJ1ZyBjYXVzZWQgYnkgaHcgbGltaXRhdGlvbjsN
+Cg0KDQo=
 
