@@ -1,197 +1,107 @@
-Return-Path: <linux-usb+bounces-5846-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5847-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41958848CF9
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Feb 2024 11:53:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3287849016
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Feb 2024 20:22:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A26211F22269
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Feb 2024 10:53:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83BAA1F236EC
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Feb 2024 19:22:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82DFF21A0D;
-	Sun,  4 Feb 2024 10:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC70250E2;
+	Sun,  4 Feb 2024 19:22:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="WROrUUsb"
+	dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="H64FwgkV";
+	dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="80V/cH2H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mailrelay2-1.pub.mailoutpod2-cph3.one.com (mailrelay2-1.pub.mailoutpod2-cph3.one.com [46.30.211.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F28E21364;
-	Sun,  4 Feb 2024 10:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E7F250F4
+	for <linux-usb@vger.kernel.org>; Sun,  4 Feb 2024 19:22:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.30.211.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707043992; cv=none; b=V+917TnP0ectAKolVd2UwsUC/peCApB5fToLVJHdq6LGfp3uNYK2Zrpz8esa+jL312AvQ0/KKnsCrPxAYukWWJPFW/zgL50CWj3Dyge6BkxfTXz3wWRF1Ok1YwBu4ltSd0g2k624B7nIrvPUvO/Jp4EgpYqtkREH0p3v+ISNE4c=
+	t=1707074567; cv=none; b=MsuIqXzNQBghkSHHBU8iDbFf1/wbfC5LfU/CR6Dp/ngmWwhZANJpG3bPMqZ0UZjWzo7TmEhRTlcy7+lZ30rVFA20zWpGST4d19koiNhU5hJt6RWuM6QzCKSqzv2Ifp2am3qrPJKg9gjg/v5PRar+sxxvZLhSCSmQHWf8WqFFMbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707043992; c=relaxed/simple;
-	bh=upEribLcp6+Tfi0UR9lL0L23B6NQVSwiCpyWQ95lDXE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W9Yc8ENJJogCfFomeIgMxFJZD0YbyS5lfUNI11j/n3hAS8KPlDpV6dNRPE25cIIHegwQa628bUzDw78p/iKg+Q25q2hBP1VEyXL9VgJhEQI+9/oZFmBCiePSsAhePisy7tPRLfxhlsHYNCXZda34mwfcJvZECbI+U/2LFPJLIe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=WROrUUsb; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (unknown [109.128.141.99])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A51C9720;
-	Sun,  4 Feb 2024 11:51:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1707043900;
-	bh=upEribLcp6+Tfi0UR9lL0L23B6NQVSwiCpyWQ95lDXE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WROrUUsb6wvs8/C7BW++Y7YeAhavpUr0tbYayZh2yzkgBdIvlesejiPAtMxEFsFLX
-	 GniaF4qkoxJYd4gnmDZoewVfP3kqpafImtpQOqoT6KaSJUauE/3jaLV6RgZK4ZB6D2
-	 0wkIjiNQ7uYaDZeHKBw3gQf+ERS/FX6njdGGPZO8=
-Date: Sun, 4 Feb 2024 12:52:27 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	s=arc-20240116; t=1707074567; c=relaxed/simple;
+	bh=BhS7llerz0XxSfqMKsPaxpwBnH6uQCzYexdrBKauA7c=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lv4vd2sgTWK4cZWyfbBkbUrS91a/oziIObDthUXKxEj+OOzzjOW/xGdApH7IljR3EMKrj5CzUKK5crn4tl2lT2g+G0pYLJfQBvWDm34ozq4vvKpcz6Ci5RztpJghOfwrQkAjdtGSmvhLu4Cc3ZTXveOa+7KYX1ZhyUaCjHEwF3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org; spf=none smtp.mailfrom=ravnborg.org; dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=H64FwgkV; dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=80V/cH2H; arc=none smtp.client-ip=46.30.211.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ravnborg.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=ravnborg.org; s=rsa2;
+	h=in-reply-to:content-type:mime-version:references:message-id:subject:to:from:
+	 date:from;
+	bh=fpJe+ZWxuYGRqiTWDJhGrptuD0C5OKl3hDjFax0lIjw=;
+	b=H64FwgkV5WZ4jw3sVS4I3jHDmdQheACk3uS6z+GzDDnTxABipZMyPZqiiDkP95NduZDXM5Yv/53Yo
+	 1I1QRB/kF8RIohD6zt2MgYsB0H0mT5fu37fHJfGFZejhH8Kc6EYpqtD+9jD1J8ZBYKC0wkUjPB3kZz
+	 eyJpZHIOUTb1s9oYe+tOYOWjgSCkx7KSe8ox3F3ct2CYEiMlwE1uJq+doULNvx43AllqL+GeKqUnLT
+	 2b6l0cXMDNCN024IsspAijbf/ZEfs6nXpAQPFFkosmOGKsyMTQKp1WI5m1mqnNTHNiRdTEtc+u6xXN
+	 Arn8bHYgBZopHj8qCQZxPbRBFUs5EHQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+	d=ravnborg.org; s=ed2;
+	h=in-reply-to:content-type:mime-version:references:message-id:subject:to:from:
+	 date:from;
+	bh=fpJe+ZWxuYGRqiTWDJhGrptuD0C5OKl3hDjFax0lIjw=;
+	b=80V/cH2HNCxHVLy7b/Oi7n46poVf24quLfcg0PY17uNn3UYE7AtbM/m5JYa7O28gsIXzj9K8gf0D4
+	 IuBv35bAg==
+X-HalOne-ID: 9c002278-c392-11ee-980a-b520e3c7e1da
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+	by mailrelay2.pub.mailoutpod2-cph3.one.com (Halon) with ESMTPSA
+	id 9c002278-c392-11ee-980a-b520e3c7e1da;
+	Sun, 04 Feb 2024 19:21:35 +0000 (UTC)
+Date: Sun, 4 Feb 2024 20:21:34 +0100
+From: Sam Ravnborg <sam@ravnborg.org>
+To: "David S. Miller" <davem@davemloft.net>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>, Helge Deller <deller@gmx.de>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Alan Stern <stern@rowland.harvard.edu>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v4] media: ucvideo: Add quirk for Logitech Rally Bar
-Message-ID: <20240204105227.GB25334@pendragon.ideasonboard.com>
-References: <20240108-rallybar-v4-1-a7450641e41b@chromium.org>
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-sound@vger.kernel.org
+Subject: Re: [PATCH 00/27] sparc32: sunset sun4m and sun4d
+Message-ID: <20240204192134.GB896678@ravnborg.org>
+References: <20231219-sam-sparc32-sunset-v3-v1-0-64bb44b598c5@ravnborg.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240108-rallybar-v4-1-a7450641e41b@chromium.org>
+In-Reply-To: <20231219-sam-sparc32-sunset-v3-v1-0-64bb44b598c5@ravnborg.org>
 
-Hi Ricardo,
+Hi Andreas.
 
-Thank you for the patch.
+Congratulation being the new sparc co-maintainer!
 
-On Mon, Jan 08, 2024 at 08:17:46AM +0000, Ricardo Ribalda wrote:
-> Logitech Rally Bar devices, despite behaving as UVC cameras, have a
-> different power management system that the other cameras from Logitech.
-> 
-> USB_QUIRK_RESET_RESUME is applied to all the UVC cameras from Logitech
-> at the usb core. Unfortunately, USB_QUIRK_RESET_RESUME causes undesired
-> USB disconnects, that make them completely unusable.
-> 
-> Instead of creating a list for this family of devices in the core, let's
-> create a quirk in the UVC driver.
-> 
-> Fixes: e387ef5c47dd ("usb: Add USB_QUIRK_RESET_RESUME for all Logitech UVC webcams")
-> Cc: stable@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
-> Tested with a Rallybar Mini with an Acer Chromebook Spin 513
-> ---
-> Changes in v4:
-> - Include Logi Rally Bar Huddle (Thanks Kyle!)
-> - Link to v3: https://lore.kernel.org/r/20240102-rallybar-v3-1-0ab197ce4aa2@chromium.org
-> 
-> Changes in v3:
-> - Move quirk to uvc driver
-> - Link to v2: https://lore.kernel.org/r/20231222-rallybar-v2-1-5849d62a9514@chromium.org
-> 
-> Changes in v2:
-> - Add Fixes tag
-> - Add UVC maintainer as Cc
-> - Link to v1: https://lore.kernel.org/r/20231222-rallybar-v1-1-82b2a4d3106f@chromium.org
-> ---
->  drivers/media/usb/uvc/uvc_driver.c | 30 ++++++++++++++++++++++++++++++
->  drivers/media/usb/uvc/uvcvideo.h   |  1 +
->  2 files changed, 31 insertions(+)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index 08fcd2ffa727..9663bcac6843 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -14,6 +14,7 @@
->  #include <linux/module.h>
->  #include <linux/slab.h>
->  #include <linux/usb.h>
-> +#include <linux/usb/quirks.h>
->  #include <linux/usb/uvc.h>
->  #include <linux/videodev2.h>
->  #include <linux/vmalloc.h>
-> @@ -2233,6 +2234,8 @@ static int uvc_probe(struct usb_interface *intf,
->  	}
->  
->  	uvc_dbg(dev, PROBE, "UVC device initialized\n");
-> +	if (dev->quirks & UVC_QUIRK_FORCE_RESUME)
-> +		udev->quirks &= ~USB_QUIRK_RESET_RESUME;
+On Tue, Dec 19, 2023 at 11:03:05PM +0100, Sam Ravnborg via B4 Relay wrote:
+> This is the second attempt to sunset sun4m and sun4d.
+> See [1] for the inital attempt.
 
-If you don't mind, I'll move this above the debug message.
+I have now verified that the kernel can boot with qemu.
+There was a bug in the uart driver that is fixed and upstream, and then
+using the instructions you provided I could use buildroot with an
+external kernel tree to get a booting kernel.
 
->  	usb_enable_autosuspend(udev);
->  	return 0;
->  
-> @@ -2574,6 +2577,33 @@ static const struct usb_device_id uvc_ids[] = {
->  	  .bInterfaceSubClass	= 1,
->  	  .bInterfaceProtocol	= 0,
->  	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_RESTORE_CTRLS_ON_INIT) },
-> +	/* Logitech Rally Bar Huddle */
-> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-> +				| USB_DEVICE_ID_MATCH_INT_INFO,
-> +	  .idVendor		= 0x046d,
-> +	  .idProduct		= 0x087c,
-> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
-> +	  .bInterfaceSubClass	= 1,
-> +	  .bInterfaceProtocol	= 0,
-> +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
-> +	/* Logitech Rally Bar */
-> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-> +				| USB_DEVICE_ID_MATCH_INT_INFO,
-> +	  .idVendor		= 0x046d,
-> +	  .idProduct		= 0x089b,
-> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
-> +	  .bInterfaceSubClass	= 1,
-> +	  .bInterfaceProtocol	= 0,
-> +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
-> +	/* Logitech Rally Bar Mini */
-> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-> +				| USB_DEVICE_ID_MATCH_INT_INFO,
-> +	  .idVendor		= 0x046d,
-> +	  .idProduct		= 0x08d3,
-> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
-> +	  .bInterfaceSubClass	= 1,
-> +	  .bInterfaceProtocol	= 0,
-> +	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_RESUME) },
+Assuming you agree with the patchset how do you want me to move forward?
+I can rebase on top of the latest -rc and collect acks if that helps.
 
-In an ideal world we would get a list of all devices that require the
-reset resume quirk from Logitech, and restrict the quirk to those
-devices only in the USB core. In the real world, this seems fine for
-now, we'll worry about this approach not scaling when we'll need to make
-it scale.
+Arnd promised to pick up the patches until you got a git tree up,
+but I do not expect Arnd to pick up anything unless you have acked or
+reviewed said patch(es).
 
->  	/* Chicony CNF7129 (Asus EEE 100HE) */
->  	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
->  				| USB_DEVICE_ID_MATCH_INT_INFO,
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index 6fb0a78b1b00..fa59a21d2a28 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -73,6 +73,7 @@
->  #define UVC_QUIRK_FORCE_Y8		0x00000800
->  #define UVC_QUIRK_FORCE_BPP		0x00001000
->  #define UVC_QUIRK_WAKE_AUTOSUSPEND	0x00002000
-> +#define UVC_QUIRK_FORCE_RESUME		0x00004000
+If I rebase the patch-set I will likely include a few bug-fix patches that
+was prepared in the meantime.
+I can also send them as a separate series, no worries.
 
-Let's name this UVC_QUICK_NO_RESET_RESUME, as that's what the quirk
-does.
-
-I'll make these small changes when applying, no need to resend.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
->  
->  /* Format flags */
->  #define UVC_FMT_FLAG_COMPRESSED		0x00000001
-> 
-
--- 
-Regards,
-
-Laurent Pinchart
+	Sam
 
