@@ -1,57 +1,58 @@
-Return-Path: <linux-usb+bounces-5860-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5861-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F9158492FD
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 05:43:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BEC4849313
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 05:52:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E74C1F21950
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 04:43:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BC841F2282A
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 04:52:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAF5EAD5A;
-	Mon,  5 Feb 2024 04:43:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B565BB653;
+	Mon,  5 Feb 2024 04:52:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cFoaRlo1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CnhPjGgF"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46AFBAD35;
-	Mon,  5 Feb 2024 04:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3720AB64A;
+	Mon,  5 Feb 2024 04:52:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707108191; cv=none; b=Z3mUgsmO6EvKu2IVw3wCH0QkM+2aLrq92xRMHiObW8hKJQ9Nj/gPuVe5raJEoyVqFVtbMTzFcwd5rm9MUr68bKX/Zybaor7pipUEcspLpMuHdrnliNkqQSr25+HEDYLpv3YDgI/vYKblYfGWtSNv1kqOeRym6BWwFGd8mcQXkII=
+	t=1707108759; cv=none; b=h2n4xQXHCg82eQZ3Ot3SAXTBxUFyKQElMAoZk07LcnzXJR1DldXFNsRColoyOeGiQ4oWT8N7XGUYnfrOoFKti/kKczHVEJan+QaR+hLmIREFuF71KAhs+Y7Yhy1MeEfz+4Pujnt6lp43cU9fOtmA+x8p7KrTenaBD9V3WHtEq3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707108191; c=relaxed/simple;
-	bh=RazI1DUzXrPjybeXX8DdkT1uiCDNG+C8ylGopmTebKk=;
+	s=arc-20240116; t=1707108759; c=relaxed/simple;
+	bh=HhfVX9BYq7tXbakLwJPIqNA5VK+k8QfcCLl9is71Btw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FCZ0Pv9/xrAZj5K5btOj2BhR6mgUBPfbmxsCsoX6muLreZHnnH4nZVOWADPRinOHeP7N6IaZAYT/rcY5sey/FMI0Dp06OilwVZzxewwwKkbQNDXIyu4gvhFuzKT1y8tZGoUm63lLQ5Lkd+tXjXL1aYwx1CxUH4Wvst9oAkBXIPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cFoaRlo1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC1FC433C7;
-	Mon,  5 Feb 2024 04:43:08 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=UTXclpzwzN8aypA+rSqSDtGZtvg8lE6qrTcPA0yCbKQ8xtnfgXD3C0Fe6c7pGgYtAeQ9WrswO2hriGxeEJ/KCHMpC2OdrMAX5icltoyKvB+SWkJadiCnD/DZ00VRyx4DKJRBdtIIZhXIX5OMmz4ApbjkIoMa5VatWoylEjbt/MY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CnhPjGgF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DB08C433F1;
+	Mon,  5 Feb 2024 04:52:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707108190;
-	bh=RazI1DUzXrPjybeXX8DdkT1uiCDNG+C8ylGopmTebKk=;
+	s=k20201202; t=1707108758;
+	bh=HhfVX9BYq7tXbakLwJPIqNA5VK+k8QfcCLl9is71Btw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cFoaRlo1JzPeUewJM1lz8X+vuOgB84K/ZlRuV1/+ocDyDxGnj33JJj8+KRacsr37/
-	 K3Kea32+/lvE0xo+mfooBPR6UePCIQs/rlxSOwt5d7Jrn4i28BPJDMrzVJbmA49ZpK
-	 rwPjmLADwmUj/3FY55VEq+uWF78xQBYpu7JsJvI858B+Z5mcnQl3Ggh26zXMSJqCYy
-	 5Ftf4uLhYjUwpIOxAn+K0wMZbQw3ncIXWRGtdkgQSy3cOTQNa/4IxAAiEeAQ34FzkE
-	 XZCunPqbatmsjWicgrdbQgHu5cPHn5pwRPp0rVJ/6w/p4Urq8Sy2dw/BnK5JXLRWbT
-	 ai2maeCvL58UA==
-Date: Mon, 5 Feb 2024 12:43:00 +0800
+	b=CnhPjGgFyQhyuQROGwOdLLBeT4oA12tLKttw3ALePE6WEt5r6N1S/oT5DqWI2UJmr
+	 cDha40mGE4hpMAWU7OU2F5aEVU1DwbqE4JPMUwNIFsUogmCfILErgFHmonh6JAJlPw
+	 SU+rAT2zvHYtebukTj9XiNuBXw+S4N0LgtZT3feln2JSB1gOg09qDW0P6sMYubT6cv
+	 BQjcCnzMDOVJ987LoSFX2Xh/UX8uuC5qOH4loInt5EjdGQRkDgWWoZvBmaD1ujQVKR
+	 BXeGb/ZW2RngcjwIFPpe2NsfPJbccSK1ci6x48yD59ajzVAK4RZ+57mocJoyOk0zp+
+	 WaXH4op24+DrQ==
+Date: Mon, 5 Feb 2024 12:52:27 +0800
 From: Peter Chen <peter.chen@kernel.org>
 To: Frank Li <Frank.Li@nxp.com>
 Cc: rogerq@kernel.org, felipe.balbi@linux.intel.com,
 	gregkh@linuxfoundation.org, imx@lists.linux.dev,
 	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
 	pawell@cadence.com
-Subject: Re: [PATCH v2 1/2] usb: cdns3: fixed memory use after free at
- cdns3_gadget_ep_disable()
-Message-ID: <20240205044300.GC1200221@nchen-desktop>
+Subject: Re: [PATCH v2 2/2] usb: cdns3: fix memory double free when handle
+ zero packet
+Message-ID: <20240205045227.GD1200221@nchen-desktop>
 References: <20240202154217.661867-1-Frank.Li@nxp.com>
+ <20240202154217.661867-2-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,58 +61,63 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240202154217.661867-1-Frank.Li@nxp.com>
+In-Reply-To: <20240202154217.661867-2-Frank.Li@nxp.com>
 
-On 24-02-02 10:42:16, Frank Li wrote:
->   ...
->   cdns3_gadget_ep_free_request(&priv_ep->endpoint, &priv_req->request);
->   list_del_init(&priv_req->list);
->   ...
+On 24-02-02 10:42:17, Frank Li wrote:
+> 829  if (request->complete) {
+> 830          spin_unlock(&priv_dev->lock);
+> 831          usb_gadget_giveback_request(&priv_ep->endpoint,
+> 832                                    request);
+> 833          spin_lock(&priv_dev->lock);
+> 834  }
+> 835
+> 836  if (request->buf == priv_dev->zlp_buf)
+> 837      cdns3_gadget_ep_free_request(&priv_ep->endpoint, request);
 > 
-> 'priv_req' actually free at cdns3_gadget_ep_free_request(). But
-> list_del_init() use priv_req->list after it.
+> Driver append an additional zero packet request when queue a packet, which
+> length mod max packet size is 0. When transfer complete, run to line 831,
+> usb_gadget_giveback_request() will free this requestion. 836 condition is
+> true, so cdns3_gadget_ep_free_request() free this request again.
 > 
-> [ 1542.642868][  T534] BUG: KFENCE: use-after-free read in __list_del_entry_valid+0x10/0xd4
-> [ 1542.642868][  T534]
-> [ 1542.653162][  T534] Use-after-free read at 0x000000009ed0ba99 (in kfence-#3):
-> [ 1542.660311][  T534]  __list_del_entry_valid+0x10/0xd4
-> [ 1542.665375][  T534]  cdns3_gadget_ep_disable+0x1f8/0x388 [cdns3]
-> [ 1542.671571][  T534]  usb_ep_disable+0x44/0xe4
-> [ 1542.675948][  T534]  ffs_func_eps_disable+0x64/0xc8
-> [ 1542.680839][  T534]  ffs_func_set_alt+0x74/0x368
-> [ 1542.685478][  T534]  ffs_func_disable+0x18/0x28
+> Log:
 > 
-> Move list_del_init() before cdns3_gadget_ep_free_request() to resolve this
-> problem.
+> [ 1920.140696][  T150] BUG: KFENCE: use-after-free read in cdns3_gadget_giveback+0x134/0x2c0 [cdns3]
+> [ 1920.140696][  T150]
+> [ 1920.151837][  T150] Use-after-free read at 0x000000003d1cd10b (in kfence-#36):
+> [ 1920.159082][  T150]  cdns3_gadget_giveback+0x134/0x2c0 [cdns3]
+> [ 1920.164988][  T150]  cdns3_transfer_completed+0x438/0x5f8 [cdns3]
+> 
+> Add check at line 829, skip call usb_gadget_giveback_request() if it is
+> additional zero length packet request. Needn't call
+> usb_gadget_giveback_request() because it is allocated in this driver.
 > 
 > Cc: <stable@vger.kernel.org>
 > Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
 > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
 Acked-by: Peter Chen <peter.chen@kernel.org>
 
 > ---
->  drivers/usb/cdns3/cdns3-gadget.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/usb/cdns3/cdns3-gadget.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index aeca902ab6cc4..d6723d31fc6e2 100644
+> index d6723d31fc6e2..fd1beb10bba72 100644
 > --- a/drivers/usb/cdns3/cdns3-gadget.c
 > +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -2540,11 +2540,11 @@ static int cdns3_gadget_ep_disable(struct usb_ep *ep)
->  
->  	while (!list_empty(&priv_ep->wa2_descmiss_req_list)) {
->  		priv_req = cdns3_next_priv_request(&priv_ep->wa2_descmiss_req_list);
-> +		list_del_init(&priv_req->list);
->  
->  		kfree(priv_req->request.buf);
->  		cdns3_gadget_ep_free_request(&priv_ep->endpoint,
->  					     &priv_req->request);
-> -		list_del_init(&priv_req->list);
->  		--priv_ep->wa2_counter;
+> @@ -828,7 +828,11 @@ void cdns3_gadget_giveback(struct cdns3_endpoint *priv_ep,
+>  			return;
 >  	}
 >  
+> -	if (request->complete) {
+> +	/*
+> +	 * zlp request is appended by driver, needn't call usb_gadget_giveback_request() to notify
+> +	 * gadget composite driver.
+> +	 */
+> +	if (request->complete && request->buf != priv_dev->zlp_buf) {
+>  		spin_unlock(&priv_dev->lock);
+>  		usb_gadget_giveback_request(&priv_ep->endpoint,
+>  					    request);
 > -- 
 > 2.34.1
 > 
