@@ -1,94 +1,102 @@
-Return-Path: <linux-usb+bounces-5871-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5872-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FB34849C8C
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 15:04:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96CC3849CAC
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 15:12:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33CE1B28A56
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 14:04:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B9FA1F25CF4
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 14:12:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A88D24A03;
-	Mon,  5 Feb 2024 14:03:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57CD24A19;
+	Mon,  5 Feb 2024 14:12:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Xc02vhhA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PYRzJgSV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9118D23753;
-	Mon,  5 Feb 2024 14:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8912C18E;
+	Mon,  5 Feb 2024 14:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707141838; cv=none; b=TOwLcgwLWB36JwLhOjPWa5dlRF4pa/CSn0tf9JW5MPgSJT+Pvl23HXaNF2l5FOx8crM6MvENTO8qtejTHa+cRjE13nshv398Wxayv0Mfy5lbWuP+HNVsbzRJzkYNguRZAX9QVkJLIGtyOWT92VDzNNMPvkie7/NVW1FzgBMCk88=
+	t=1707142348; cv=none; b=pNX0vmJ/E5gtBt38qy0Z3ekip/MzqGXH+eBP5z73qnCTY7iYOhiy4dWCxadFof0h3Ie+iGW3BUzUKBgGDhfUBQYj8AWJg9ctRqiTTEgbONlDmpXAKKYACTrOJy2oSuIgWCTAAYosaW3CHCMUsh8KoQ69q7R9n8MGZfIgUkZM2qM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707141838; c=relaxed/simple;
-	bh=R9m0seibPqVjuMRXRCtFH8OBXcYn9UV3bCtWarP4u4U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cmfNUKpIO3eTy0zCFqO1bFzrkoHGgA8loee0jROtI11SSfDbapNoBkMJbanGyL0GhdGtIaA3B4cOnfttQ0zBto3vuGXSrxsrfLeOTAYv48z/Xe9GviIMOm1SxpH2DR1khP9he4LFZsbW9IUL82KNdbpLAaT68fLszTw9cxMa/ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Xc02vhhA; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=T9hBFBJxGOqEN46Rzq3IDVzYp56XQV1MU7sVARX8R3k=; b=Xc02vhhAaIX2iWZ94yDZOmR6CY
-	Uu5VlriWFu85b//G2mCV1xXSsllr8YEVdKyh5S+ym+eBG3c4j4u9aiSo4zuiRYjQ6zLxHBOt3d+U3
-	0HS69k/gU8sE5I5u9Xa5kCKG/xxCMy8KsqP9ZEkB4O2esPT5lFonAnzdKTMmAfA98U6g=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rWzZZ-0072Jq-Ms; Mon, 05 Feb 2024 15:03:45 +0100
-Date: Mon, 5 Feb 2024 15:03:45 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Christian Hewitt <christianshewitt@gmail.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Grant Grundler <grundler@chromium.org>, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] net: asix: add 0b95:1790 to AX88179A device list
-Message-ID: <ea413b7f-2086-482c-b2e6-77817acf4168@lunn.ch>
-References: <20240205104049.48900-1-christianshewitt@gmail.com>
+	s=arc-20240116; t=1707142348; c=relaxed/simple;
+	bh=Z7UE+UjmnElfbXTukoN7uu9PUfOC/LbXaWbsCBJt50Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JmmTf2OhYK2UxTE8UPMFIxpekyP/WIe5LMfkxtMBoSQGm2aKVIFFTu0TDJ0O8/Pe7UdwMxB5jFM7Xob1JlTcS8B5KgIdXYyK+3DK7uqJOdESn0355LSv7wQrqiis7czuMQiBVAft4GSUTJcsZ9JE0TT050TA9tk4b29gAddM0yY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PYRzJgSV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B7FC433C7;
+	Mon,  5 Feb 2024 14:12:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707142347;
+	bh=Z7UE+UjmnElfbXTukoN7uu9PUfOC/LbXaWbsCBJt50Q=;
+	h=From:To:Cc:Subject:Date:From;
+	b=PYRzJgSVYyc3jDL7sDkRouoNvnBhd2I0OncuQSl4QJMsJ5oEADz016+edOqHCRaes
+	 YHwk/e7qTmMQKzuE0283U/gAPc0LBq6zW5hfSqm2YJoAap515AQdgE+hZaAnJZDLso
+	 7EzqRMXJqNW1R0h6P/aH4SahOt+Oq3b3p8ekPTPR1v0jCNy30UxXv2R4qBYkzkhnk/
+	 g9oQTqxjmX0/vLZvgYT6DBXmM7fYYbUQtPMwLqsUwK1++7bd5tX3UpWU6iMXG3WlX5
+	 NUewxboMPCNx+Iuxhl34PPIqeys404GVd/tsD2SQ0qzX2LssreRE2KxlkIJkYcEDWY
+	 GBMfAW1pYXy1g==
+From: Roger Quadros <rogerq@kernel.org>
+To: Thinh.Nguyen@synopsys.com
+Cc: gregkh@linuxfoundation.org,
+	r-gunasekaran@ti.com,
+	b-liu@ti.com,
+	afd@ti.com,
+	nm@ti.com,
+	srk@ti.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Roger Quadros <rogerq@kernel.org>
+Subject: [PATCH v2 0/5] usb: dwc3-am62: module removal and errata fixes
+Date: Mon,  5 Feb 2024 16:12:16 +0200
+Message-Id: <20240205141221.56076-1-rogerq@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240205104049.48900-1-christianshewitt@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Feb 05, 2024 at 10:40:48AM +0000, Christian Hewitt wrote:
-> Add a generic AX88179A entry for the 0b95:1790 device id:
-> 
-> kernel: usb 2-1: New USB device found, idVendor=0b95, idProduct=1790, bcdDevice= 2.00
-> kernel: usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> kernel: usb 2-1: Product: AX88179A
-> kernel: usb 2-1: Manufacturer: ASIX
-> kernel: usb 2-1: SerialNumber: 00D24DC0
-> kernel: asix 2-1:1.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -32
-> kernel: asix: probe of 2-1:1.0 failed with error -32
-> kernel: ax88179_178a 2-1:1.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0040: -32
-> kernel: ax88179_178a 2-1:1.0 eth1: register 'ax88179_178a' at usb-0000:01:00.0-1, ASIX AX88179 USB 3.0 Gigabit Ethernet, 20:7b:d2:d2:4d:c0
-> 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
-> The change is tested by a LibreELEC (distro) user who reports the NIC to be working
-> fine (and logs support this) but the "Failed to read reg index 0x0000: -32" errors
-> suggest ax88178_info might not be the correct choice. I'm not a serious coder so I
-> need to "ask the audience" for suggestions on what more might be needed?
+Hi,
 
-I would probably start by determining what ax88179_read_cmd() is
-causing that print. Maybe print in addition cmd, and value. Or add a
-WARN() so you get a stack trace.
+This series fixes errors during module removal. It also
+implements PHY core voltage selection as per TI recommendation
+and workaround for Errata i2409 [1].
 
-It might be possible to figure it out by just looking at the code. How
-many places actually pass index=0?
+The workaround needs PHY2 region to be present in device node.
+The device tree patch will be sent later after the DT binding doc
+is merged.
 
-       Andrew
+[1] - https://www.ti.com/lit/er/sprz487d/sprz487d.pdf
+
+Changelog in each file
+
+v1: https://lore.kernel.org/all/20240201121220.5523-1-rogerq@kernel.org/
+
+cheers,
+-roger
+
+
+Roger Quadros (5):
+  usb: dwc3-am62: call of_platform_depopulate in .remove()
+  usb: dwc3-am62: fix error on module removal
+  usb: dwc3-am62: Fix PHY core voltage selection
+  dt-bindings: usb/ti,am62-usb.yaml: Add PHY2 register space
+  usb: dwc3-am62: add workaround for Errata i2409
+
+ .../devicetree/bindings/usb/ti,am62-usb.yaml  |  8 +++-
+ drivers/usb/dwc3/dwc3-am62.c                  | 47 ++++++++++++++-----
+ 2 files changed, 41 insertions(+), 14 deletions(-)
+
+
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+-- 
+2.34.1
+
 
