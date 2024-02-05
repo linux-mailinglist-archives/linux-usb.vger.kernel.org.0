@@ -1,181 +1,225 @@
-Return-Path: <linux-usb+bounces-5863-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5864-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7D8A8494BF
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 08:47:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A78E18494DA
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 08:50:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 773B1B23457
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 07:47:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 330D71F2110F
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 07:50:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0CC10A1E;
-	Mon,  5 Feb 2024 07:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E7EF10A33;
+	Mon,  5 Feb 2024 07:50:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Rq/K7jZl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kFebaLoi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E9D11190;
-	Mon,  5 Feb 2024 07:47:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3270C10A1E
+	for <linux-usb@vger.kernel.org>; Mon,  5 Feb 2024 07:50:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707119253; cv=none; b=b9yJ6CzRjkVDgT5Qhbhd07hMhwfhgFR/8njLCp4QytciFirbbmBOt5dwtcROCuO1aexuEh28cRqCGraDG53L4+NI+fxIJ3yWKeYZ8DJ5pVfWIs5nPrDLCXOag1BsXmujnS70DsnZZulwVn26h3rv1DYJg9ABFCGxFPo4PVZFKfk=
+	t=1707119443; cv=none; b=pJNIjTH8E1Cnv1WQi+JYdzRJn2VTBIOz5x35LD74zvYEbObow8Ovkbv2ikJpAK8Re7lRn2mYAyYmLmCb1l1ZPCdO/4SnGUfr5ifTJ6f1F9ndpFmz4xQMGQApRRwrqwVAjx0Ll+hVG6Uj9HotJq1k93BdgJbJL4gOCAt3BHr/8OY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707119253; c=relaxed/simple;
-	bh=gvdIDaltTS0ihBKlSJXlAE64b+5OpymAOgP9TR84kks=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pNnxujajShlwZHUzLNMDHwxKmfMM5ZAbS+jgx1H6m1d2cmup9zp5SqALs7uaEGRUNJDESKF9c9EEJrCVwU6A3haL7jeq5NX8PUZG+inW85U68wCq07+LugQqo26w0zfh356W9X7J7lhPnRPN+pLSaBoahabdn0h6BrNJ5TC0Z9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Rq/K7jZl; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4154xFFo003831;
-	Mon, 5 Feb 2024 07:47:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=qcppdkim1; bh=H43mdPT
-	LvVJVPRl+DPOkCMfp+JmkCA5TA8E3ZocTvR4=; b=Rq/K7jZl97cLFk5SHgDRy6A
-	2CbFshNw5hthllYCRL+1iRS0LwNeliX4IiSJ8d3uypwGVVu+CIou+89QbgrOnz+q
-	K6lmF/Q32AMst5o35Ts3DX2TLHzcO94jWxZscljeNWZCv24qlC6yzgdyB8ezqHNS
-	K9/08w8/jr5GIaoacq6kAhf6uvF2AbYXY4yXvoj41fJQeEHaYkV6Xt0CuLK7AJXH
-	JPnDGf2W3Wqj3obsXH6WDvPAYvLrW0tSm4sAUhIePBZBqH5xpQ+8yg61c+jwaxyY
-	2Jd7gsVRrg3mJxKjXPyg7CWFR/zaeEr4ocn0n8q3w90XuIOIpch7C+iOXxE/hGA=
-	=
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w2rvj89m4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 05 Feb 2024 07:47:20 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4157l5YL002700
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 5 Feb 2024 07:47:05 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Sun, 4 Feb 2024 23:47:02 -0800
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
-        Hardik Gajjar
-	<hgajjar@de.adit-jv.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, Krishna Kurapati <quic_kriskura@quicinc.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v3] usb: gadget: ncm: Avoid dropping datagrams of properly parsed NTBs
-Date: Mon, 5 Feb 2024 13:16:50 +0530
-Message-ID: <20240205074650.200304-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1707119443; c=relaxed/simple;
+	bh=lwSrMmOjwPC91lnSiVSA3srT2ZRIN0dI4FdceHGIDQg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Gta6EZdBUyz+hD1+CwmnKaLRLsJQ5+zWc1Rgmn1bejzwxgSl7El4xRj9eWhOQvnMcYn7vwkCfhiY0fgugc5d1OfZLuA6NpS5tzDw2CWrVAcSwMzK+6Fd5YK3WxKqgx0KZgUicsa5afk1kKv0B/CR+XJXqrGSdaGWrX9uOcLmiVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kFebaLoi; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5600c43caddso1943095a12.2
+        for <linux-usb@vger.kernel.org>; Sun, 04 Feb 2024 23:50:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707119439; x=1707724239; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zDNzB6806s+YPd0B8ZwsEbQr+QuziTaXidB2+L8zPzI=;
+        b=kFebaLoiJr4Oql3y01DbMbVqtGkU+9pjA9yM0+ZvYdzXHrhx3TzD0xnJskATmMdi2K
+         8iRVkOkjEVzBFDQW6MFMfGCjjFQBCHYhAdIqDPmabtulXLcXnHLY8x9gr4ZJ7d9mHol2
+         D9j2rYTwoBB8SQBlPQzX6SHGxmqbNw/SJACLXyyu5NiXhnk1V7ZlFzIg+an99CgXYDT4
+         YvU11EClMg8SP+U7edKIt/4d9+2sOp4zZGm1/xdx9oUezSaKpaMcyu4VbQq+XFWLL5mg
+         OFXO21cOPCt+Ye5rKrwM5zjBG84TMEgqFtSnxPt4nN9MA67GWavx1v5+CBPKl+eKQeOf
+         vJ3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707119439; x=1707724239;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zDNzB6806s+YPd0B8ZwsEbQr+QuziTaXidB2+L8zPzI=;
+        b=gHr4U0JgVTRltBrFOrZm6JqqrkfdQkoGkwQR7mGU23m+8nx00s6F+40hzUkMcGcHHC
+         nJ2Hxg2vhUovTIi1+qJ/9+mOljWQPeYdZafnKXIKcRg8ONsvkZ4JBGHXVFmYNVa4gQZs
+         cGW9vAJPpX6IiXsmOB1NImq62A6oHfWItuDUqc/6c4djHmib66UgnvKRS0mdTC/vVeEZ
+         5KdUH4fRBPxZh30rTDYxTDDyKCTDTTqMJEeDEFWubAPmQI3yinZe/F4lu+RLvRe11Q5Y
+         /a5Bpfj0ptKsP6nYNqKZxjpnm5sWXw1gLdssIvbnIRI5TVywDR2vpexsj+sypIK5XkKH
+         6xkQ==
+X-Gm-Message-State: AOJu0Yz9ijNQC+I7hyvQCN+vFZqw3M92CdFf7Pgovnl3iVsJvjqFIH8q
+	r3ygz7lylwtW6XikJEaRfPminbK+CcN05llf1DwMqyQayEzltx1O98FdF1COL64=
+X-Google-Smtp-Source: AGHT+IETFUwkrooLbqPV1xj26+22aHKZj+7oPOQZOa0xZ6l0cwfd4wsfFx3gdDkOduyP4fg+r5H+9Q==
+X-Received: by 2002:aa7:d58b:0:b0:55f:832f:97da with SMTP id r11-20020aa7d58b000000b0055f832f97damr4288530edq.23.1707119439428;
+        Sun, 04 Feb 2024 23:50:39 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWGrFjitMKrsjm8vRNScZq1+w9A4UpzIq5DZK7ZRYUP1G2fwkiu3jyzQ8KN0tKdo99VGydvxDaBSfX3+SDvcTlmBvT7skZsZZIB2YzIvx661cRVB45QEidyRrDup1o2YQ5YIa+SOL9H40i7n5jvGRH7ExSEVrt8JuX3P5AEjMf7sIpAUpxAdQMl8qYMwuJPfbB9U8BYDTJR4Tj2kUKqUzIAWYiJRxFe/ZkVBIhpiqD99fcrxMwCCbcESgsjNLarfc0xwb3YF7iArL4c73bWgsYnNVo89+AFyJ+eY/OJn4Q5YjcgSNSOQ2jffFM7ckVRcWE/WbP7UJxNciDc5TcH91D+DnCtr0EvQ0mlqyTFdEd0wdGrizM/7kf+gZ6lkhFo9hcSSk/vTtLCSIfemoXb2vPHXZ1HjFqwspK0+yO41dtipRJr1mQ8g43ItcxlxeuR/A62nksvy5FXQfcAk1ONzJkGEDjjKsdDWc+R9LIc//g7EJv3
+Received: from [192.168.1.20] ([178.197.222.62])
+        by smtp.gmail.com with ESMTPSA id i23-20020a056402055700b0055fba4996d9sm3610777edx.71.2024.02.04.23.50.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Feb 2024 23:50:38 -0800 (PST)
+Message-ID: <454616d4-19f6-408c-ba12-fa48cc04bce6@linaro.org>
+Date: Mon, 5 Feb 2024 08:50:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 4-tTLD6_E1V8ZOQTbSjRVm22jzLoejB1
-X-Proofpoint-GUID: 4-tTLD6_E1V8ZOQTbSjRVm22jzLoejB1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-05_03,2024-01-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- phishscore=0 mlxlogscore=485 bulkscore=0 mlxscore=0 clxscore=1011
- suspectscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401310000 definitions=main-2402050059
+User-Agent: Mozilla Thunderbird
+Subject: Re: [EXT] Re: [PATCH v5 4/8] dt-bindings: usb: ci-hdrc-usb2: add
+ restrictions for reg, interrupts, clock and clock-names properties
+Content-Language: en-US
+To: Xu Yang <xu.yang_2@nxp.com>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "robh+dt@kernel.org" <robh+dt@kernel.org>,
+ "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "shawnguo@kernel.org" <shawnguo@kernel.org>,
+ "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+ "kernel@pengutronix.de" <kernel@pengutronix.de>,
+ "festevam@gmail.com" <festevam@gmail.com>,
+ "peter.chen@kernel.org" <peter.chen@kernel.org>
+Cc: dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+References: <20240131114324.3722428-1-xu.yang_2@nxp.com>
+ <20240131114324.3722428-4-xu.yang_2@nxp.com>
+ <a0134089-a283-488b-8d7f-3f59dd938b60@linaro.org>
+ <DU2PR04MB88221602EB986D2C2A5BBF8D8C422@DU2PR04MB8822.eurprd04.prod.outlook.com>
+ <bcd733ab-ea9e-4ef0-a521-8e6c2023479f@linaro.org>
+ <DU2PR04MB88221841F66A22B5A5DE47258C402@DU2PR04MB8822.eurprd04.prod.outlook.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <DU2PR04MB88221841F66A22B5A5DE47258C402@DU2PR04MB8822.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-It is observed sometimes when tethering is used over NCM with Windows 11
-as host, at some instances, the gadget_giveback has one byte appended at
-the end of a proper NTB. When the NTB is parsed, unwrap call looks for
-any leftover bytes in SKB provided by u_ether and if there are any pending
-bytes, it treats them as a separate NTB and parses it. But in case the
-second NTB (as per unwrap call) is faulty/corrupt, all the datagrams that
-were parsed properly in the first NTB and saved in rx_list are dropped.
+On 04/02/2024 07:56, Xu Yang wrote:
+> 
+>>
+>> On 02/02/2024 10:10, Xu Yang wrote:
+>>> Hi Krzysztof,
+>>>
+>>>>
+>>>> On 31/01/2024 12:43, Xu Yang wrote:
+>>>>> Change reg, interrupts, clock and clock-names as common properties and add
+>>>>> restrictions on them for different compatibles.
+>>>>>
+>>>>> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+>>>>>
+>>>>> ---
+>>>>> Changes in v4:
+>>>>>  - new patch since v3's discussion
+>>>>>  - split the reg, interrupts, clock and clock-names properties into
+>>>>>    common part and device-specific
+>>>>> Changes in v5:
+>>>>>  - keep common property unchanged
+>>>>>  - make if-then more readable
+>>>>>  - remove non imx part
+>>>>> ---
+>>>>>  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 118 ++++++++++++++++++
+>>>>>  1 file changed, 118 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-
+>>>> hdrc-usb2.yaml
+>>>>> index 3b56e0edb1c6..6ad3582051b8 100644
+>>>>> --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+>>>>> @@ -412,6 +412,124 @@ allOf:
+>>>>>          samsung,picophy-pre-emp-curr-control: false
+>>>>>          samsung,picophy-dc-vol-level-adjust: false
+>>>>>
+>>>>> +  - if:
+>>>>> +      properties:
+>>>>> +        compatible:
+>>>>> +          const: fsl,imx27-usb
+>>>>> +    then:
+>>>>> +      properties:
+>>>>> +        clocks:
+>>>>> +          minItems: 3
+>>>>> +          maxItems: 3
+>>>>> +        clock-names:
+>>>>> +          minItems: 3
+>>>>> +          maxItems: 3
+>>>>> +          items:
+>>>>> +            anyOf:
+>>>>> +              - const: ipg
+>>>>> +              - const: ahb
+>>>>> +              - const: per
+>>>>
+>>>> This would be just: enum: [ipg, ahb, per], but in both cases I question
+>>>> why the order should be flexible? Nothing in commit msg explains it.
+>>>
+>>> The driver will get the clock by clock-name, then the order should not
+>>> matter. However, these three clock-names should be present at the same
+>>> time. I should use enum then.
+>>
+>> Forgot to answer to this.
+>>
+>> Which driver? U-boot? OpenBSD? The one in my custom Linux kernel fork
+>> (open-source and published on github)? Did you check all of them?
+> 
+> I mean below driver in linux kernel tree.
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/tree/drivers/usb/chipidea/ci_hdrc_imx.c?h=linux-6.1.y#n191
 
-Adding a few custom traces showed the following:
-[002] d..1  7828.532866: dwc3_gadget_giveback: ep1out:
-req 000000003868811a length 1025/16384 zsI ==> 0
-[002] d..1  7828.532867: ncm_unwrap_ntb: K: ncm_unwrap_ntb toprocess: 1025
-[002] d..1  7828.532867: ncm_unwrap_ntb: K: ncm_unwrap_ntb nth: 1751999342
-[002] d..1  7828.532868: ncm_unwrap_ntb: K: ncm_unwrap_ntb seq: 0xce67
-[002] d..1  7828.532868: ncm_unwrap_ntb: K: ncm_unwrap_ntb blk_len: 0x400
-[002] d..1  7828.532868: ncm_unwrap_ntb: K: ncm_unwrap_ntb ndp_len: 0x10
-[002] d..1  7828.532869: ncm_unwrap_ntb: K: Parsed NTB with 1 frames
+What about others? How about driver in other upstream projects? My
+comment should make you think...
 
-In this case, the giveback is of 1025 bytes and block length is 1024.
-The rest 1 byte (which is 0x00) won't be parsed resulting in drop of
-all datagrams in rx_list.
-
-Same is case with packets of size 2048:
-[002] d..1  7828.557948: dwc3_gadget_giveback: ep1out:
-req 0000000011dfd96e length 2049/16384 zsI ==> 0
-[002] d..1  7828.557949: ncm_unwrap_ntb: K: ncm_unwrap_ntb nth: 1751999342
-[002] d..1  7828.557950: ncm_unwrap_ntb: K: ncm_unwrap_ntb blk_len: 0x800
-
-Lecroy shows one byte coming in extra confirming that the byte is coming
-in from PC:
-
-Transfer 2959 - Bytes Transferred(1025)  Timestamp((18.524 843 590)
-- Transaction 8391 - Data(1025 bytes) Timestamp(18.524 843 590)
---- Packet 4063861
-      Data(1024 bytes)
-      Duration(2.117us) Idle(14.700ns) Timestamp(18.524 843 590)
---- Packet 4063863
-      Data(1 byte)
-      Duration(66.160ns) Time(282.000ns) Timestamp(18.524 845 722)
-
-According to Windows driver, no ZLP is needed if wBlockLength is non-zero,
-because the non-zero wBlockLength has already told the function side the
-size of transfer to be expected. However, there are in-market NCM devices
-that rely on ZLP as long as the wBlockLength is multiple of wMaxPacketSize.
-To deal with such devices, it pads an extra 0 at end so the transfer is no
-longer multiple of wMaxPacketSize.
-
-Cc: <stable@vger.kernel.org>
-Fixes: 9f6ce4240a2b ("usb: gadget: f_ncm.c added")
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
-Link to v2:
-https://lore.kernel.org/all/20240131150332.1326523-1-quic_kriskura@quicinc.com/
-
-Changes in v2:
-Added check to see if the padded byte is 0x00.
-
-Changes in v3:
-Removed wMaxPacketSize check from v2.
-
- drivers/usb/gadget/function/f_ncm.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-index ca5d5f564998..e2a059cfda2c 100644
---- a/drivers/usb/gadget/function/f_ncm.c
-+++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -1338,7 +1338,15 @@ static int ncm_unwrap_ntb(struct gether *port,
- 	     "Parsed NTB with %d frames\n", dgram_counter);
- 
- 	to_process -= block_len;
--	if (to_process != 0) {
-+
-+	/*
-+	 * Windows NCM driver avoids USB ZLPs by adding a 1-byte
-+	 * zero pad as needed.
-+	 */
-+	if (to_process == 1 &&
-+	    (*(unsigned char *)(ntb_ptr + block_len) == 0x00)) {
-+		to_process--;
-+	} else if (to_process > 0) {
- 		ntb_ptr = (unsigned char *)(ntb_ptr + block_len);
- 		goto parse_ntb;
- 	}
--- 
-2.34.1
+Best regards,
+Krzysztof
 
 
