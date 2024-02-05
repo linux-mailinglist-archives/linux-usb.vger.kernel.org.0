@@ -1,112 +1,148 @@
-Return-Path: <linux-usb+bounces-5897-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5898-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A29E84A831
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 22:55:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4BEF84A8A7
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 23:08:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA08C28C043
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 21:55:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23A8B1C25252
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 22:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6057F13AA36;
-	Mon,  5 Feb 2024 20:59:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A05BD55E47;
+	Mon,  5 Feb 2024 21:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="E0XU/KjY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8E41350F8
-	for <linux-usb@vger.kernel.org>; Mon,  5 Feb 2024 20:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E634E1BC;
+	Mon,  5 Feb 2024 21:27:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707166772; cv=none; b=p2KMx6EuOvjDwCdD8R4a9hD/i0y7YX8CBvI0tPQvK46zcEW1YQuu2ZK+fgGvaHQHjp7OpuD1bVae90ZM9Uf+BatehyY+wuM+PymKVh74ColFvCW9JmgEcxhKxrwY6CFp0X4N1RjzIRCmkkvo//JaLF7x9iiWkF12o78lYBHGG7s=
+	t=1707168451; cv=none; b=FD0W0X9SWcRGhuyL2fxAM24qOIYOmy+tS36jEt/GP6VOCo8bA8+4I78hvHnAeAuz0VNlbKoW2ENX5zyVo4IOOBtqYaPYLmkUy6/4GcaaZJSOtJGu6CZbImEamvkw/imUBzMnY/U8ZszFhIGp1EqL5uKBcrESFBFQAzXfojKxUz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707166772; c=relaxed/simple;
-	bh=LV+vgzqgX4bSPC3ZSNZIykuj2CrnyVWEDZdsPOar0AI=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=tFZUe4VuTQ6r5o3eBaKBs7hFbic8mBCF5WCgNWqi+aN2AzM02j/1iKQ4wHDLShtRt871Q6ORJI6O68914Yw/QZ0TdyU0OMM8A/VeZaARLvx/6EJKyDiW9V7OTJU42FqczbZBuxSv8F2UGMccu1CuL5P7Fym2NJnef0Kp/LrvEtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7bc2b7bef65so410010739f.0
-        for <linux-usb@vger.kernel.org>; Mon, 05 Feb 2024 12:59:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707166770; x=1707771570;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qdk2OXx+00WvakL8qEtDlM2Y2YDJtRedEifNmm7F+7E=;
-        b=WtZzvje0fZxWZuSRc/fth6zoVjyYT3nhZdRTV7nNL6Lf5kj5dOFZxVvm7MyyxkloTu
-         a6qUs8RkM071KBQhxG5NzxMjj48iUjPRdxJVq5BjAkG06lieAYx6o8zEHJXNp2jisLxD
-         bDCNCq5nO1HAqk5DYlvV6BMpHtmZY86hpsQzgRPKvpCJF1RSbJ6E+HPPH1DT0kNRHHzZ
-         AYT5wqG7QJJBYt93Yg1hk98HsjbYtU8YGhJPTUkTnl0bbHuJlCmlfmpXBGrjy38kTk3j
-         gGXD9Rc8/WYjlL1S3VPobaNNCngFGmHaWqDaE/Q//7DZ2oL2Zz+iA1niApSRgus+8r5E
-         6YSA==
-X-Gm-Message-State: AOJu0YyYv0MOnszK7Cia9ozsOv7W5GgFb+FLndBkRDUbOOxO/XZofyIA
-	OcJbFO2DEvP9yEQFmaYJmaGWLtITpa7+OChu+XFR4iRQt51aq5Y7cXUYzHD3Dq0pJ9vwD8J6d/I
-	1EklQ57J3y4AR1ob39fKiaBPDjdc/F30MzGhfPHMMHPTIZlGzfF8hdXk=
-X-Google-Smtp-Source: AGHT+IG2IptJzG8ztHzoyy897n1MsxT4UD0l7OufVE/rw2jySvLNL11tCmS+/8HJRlk1QKAdb/DQzcPA1JPVULpfadUXfeksLjnl
+	s=arc-20240116; t=1707168451; c=relaxed/simple;
+	bh=WF79LcyptTYwzEhU/Gz6Jrq78t2eREqNKLqqvgDivhE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Zdtj2ME9RP4WNDmJ8XKyuhoNetlB/PxI/uM41Xqaz/zXuT4EKeKNJHGqrJ5r2oqCkwLI5ub1kB9//1DB1cF/LjcQVHtX99Ovm9sEi2eSHpxBEDh7i+DPeS/VA7ljR4prjQDNZFv52TNKnlEIIiNwtZ1H5I0qSbdZp15L78IHKig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=E0XU/KjY; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 415KZpZL013684;
+	Mon, 5 Feb 2024 21:27:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=80XiqQagWrXSjkbFB7IZMeTVBIcws+/+UsrZOrDK37I=; b=E0
+	XU/KjYVh5bclOJjOXgEj6T88+d0afhkJxj5YaelqQJ+m8FOEjWzsdu3CIHAI+ZIk
+	jcwrtkEBcGhxNA9Qho3kXxKyzNE3HbI8qLUZdGrl89ScoD8hFJP8p29DjDZH0D4W
+	SxB1pWPjN7t6dxhNPoX46jk/J3EPisOLhOpOYtlSSzUhHHdJqS3SmY9I25oCMAmt
+	mnpp5hbnmSXzctKtYbTmgxpSvAxDIpfRvXa9fQtWdh7Rrs08s3L07CJ7ac5suS9R
+	TGMIs2jrQk94HnbFTsZLYD7+JvjMU438r/HQ9KxgsNcp4fDa7/oAaZrym2m5ZysC
+	NSkqWMWXECqDA8u+dnOw==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w32s1rqj6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 05 Feb 2024 21:27:07 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 415LR6JQ011461
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 5 Feb 2024 21:27:06 GMT
+Received: from [10.110.7.251] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 5 Feb
+ 2024 13:27:05 -0800
+Message-ID: <c5e9419d-1d16-4816-4fd0-c23c5eb358e1@quicinc.com>
+Date: Mon, 5 Feb 2024 13:26:59 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1c95:b0:471:2afc:63f2 with SMTP id
- dp21-20020a0566381c9500b004712afc63f2mr7766jab.5.1707166769761; Mon, 05 Feb
- 2024 12:59:29 -0800 (PST)
-Date: Mon, 05 Feb 2024 12:59:29 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e257bc0610a8bcb3@google.com>
-Subject: [syzbot] Monthly usb report (Feb 2024)
-From: syzbot <syzbot+lista48d6b8e8e1b33217dd9@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v13 20/53] ASoC: Add SOC USB APIs for adding an USB
+ backend
+Content-Language: en-US
+To: =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?=
+	<amadeuszx.slawinski@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <lgirdwood@gmail.com>, <andersson@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <konrad.dybcio@linaro.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20240203023645.31105-1-quic_wcheng@quicinc.com>
+ <20240203023645.31105-21-quic_wcheng@quicinc.com>
+ <2abb6c0b-ea66-4649-b205-bafe49340aee@linux.intel.com>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <2abb6c0b-ea66-4649-b205-bafe49340aee@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: kbmUi6lAuyvjf1WEfxhQ6nHGodNDySsr
+X-Proofpoint-ORIG-GUID: kbmUi6lAuyvjf1WEfxhQ6nHGodNDySsr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-05_15,2024-01-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ suspectscore=0 bulkscore=0 phishscore=0 adultscore=0 spamscore=0
+ mlxlogscore=756 malwarescore=0 lowpriorityscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402050160
 
-Hello usb maintainers/developers,
+Hi Amadeusz,
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+On 2/5/2024 12:20 AM, Amadeusz Sławiński wrote:
+> On 2/3/2024 3:36 AM, Wesley Cheng wrote:
+>> Some platforms may have support for offloading USB audio devices to a
+>> dedicated audio DSP.  Introduce a set of APIs that allow for 
+>> management of
+>> USB sound card and PCM devices enumerated by the USB SND class driver.
+>> This allows for the ASoC components to be aware of what USB devices are
+>> available for offloading.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+> 
+> ...
+> 
+>> +
+>> +/**
+>> + * snd_soc_usb_add_port() - Add a USB backend port
+>> + * @dev: USB backend device
+>> + * @priv: private data
+>> + * @connection_cb: connection status callback
+>> + *
+>> + * Register a USB backend device to the SND USB SOC framework.  
+>> Memory is
+>> + * allocated as part of the USB backend device.
+>> + *
+>> + */
+>> +int snd_soc_usb_add_port(struct snd_soc_usb *usb)
+>> +{
+>> +
+>> +
+> 
+> Cosmetic, but why is there white space between start of function and 
+> body of function?
+> 
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 59 issues are still open and 332 have been fixed so far.
+Thanks for catching this.  Will fix it.
 
-Some of the still happening issues:
-
-Ref  Crashes Repro Title
-<1>  3116    Yes   WARNING in firmware_fallback_sysfs
-                   https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
-<2>  949     Yes   WARNING in implement
-                   https://syzkaller.appspot.com/bug?extid=38e7237add3712479d65
-<3>  864     Yes   general protection fault in ir_raw_event_store_with_filter
-                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
-<4>  862     Yes   INFO: task hung in usb_get_descriptor (2)
-                   https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
-<5>  567     Yes   INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
-<6>  460     Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<7>  387     Yes   INFO: task hung in r871xu_dev_remove
-                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
-<8>  304     Yes   KASAN: use-after-free Read in v4l2_fh_init
-                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
-<9>  253     No    INFO: task hung in hub_event (3)
-                   https://syzkaller.appspot.com/bug?extid=a7edecbf389d11a369d4
-<10> 247     Yes   INFO: task hung in get_bMaxPacketSize0
-                   https://syzkaller.appspot.com/bug?extid=f7ac46d91cf13b4591a4
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+Thanks
+Wesley Cheng
 
