@@ -1,527 +1,231 @@
-Return-Path: <linux-usb+bounces-5882-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5883-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 073D5849ECB
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 16:52:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31005849F40
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 17:06:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A096B2450B
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 15:52:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CC9AB21FF5
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 16:06:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A4A52E629;
-	Mon,  5 Feb 2024 15:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C07032C92;
+	Mon,  5 Feb 2024 16:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="rvzL9t1K";
-	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="Fvhfn2Bb"
+	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="Ok/Xzk3O";
+	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="AAF0nJqr";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="paQ9wH2e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.ivitera.com (smtp.ivitera.com [88.101.85.59])
+Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0BF35EF1
-	for <linux-usb@vger.kernel.org>; Mon,  5 Feb 2024 15:52:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.101.85.59
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707148346; cv=none; b=i5xa/2AGXxdTlQm1rSG3X3rCCLku0BevvZ8P3TyXO7hhfayevtFOzQ4uDRq4jn6+1b6iEuoLEs/7R3LoOHziAevJiYVTFNXnU0ocLhy4d277hGEBSc55JONNJNWmz4adNtMsJzvZ9lrV1P/R5Xbm6ECh2tZOPANlxgoUxmqBzOQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707148346; c=relaxed/simple;
-	bh=4/6WUgilSx61wslkGnlmBz8jDkOE0rDSMZd5uqGYtlU=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=afBEV2THs7t/HTLybAbLsFh2OAyNgmp56ETRBzYeSmkEhvaUJrm9ygS6XKGmOj2xdIEHqgNepL0AklpBLwZHja+Onrnlgi9PtlNQDnEHpUfT6GcH1adJD8Ja4xaBXzEs27q2yXpIYhfEDe1P+vbRxzjygNeLn/MOJsXej214fY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ivitera.com; spf=pass smtp.mailfrom=ivitera.com; dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b=rvzL9t1K; dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b=Fvhfn2Bb; arc=none smtp.client-ip=88.101.85.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ivitera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ivitera.com
-Received: from localhost (localhost [127.0.0.1])
-	by smtp.ivitera.com (Postfix) with ESMTP id 55FE015B611;
-	Mon,  5 Feb 2024 16:52:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-	t=1707148339; bh=4/6WUgilSx61wslkGnlmBz8jDkOE0rDSMZd5uqGYtlU=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=rvzL9t1KgUKNKtkkS+m9cWiV7P+HPzgM2eNevLmder/3s17xdGKpIVLjRdZZ3/DMv
-	 yl/rcdYPy7JnalQstpwhKQ1ipvNfF3Nyh8uEQJue1mGXSpyXfo4cvjpICf8k4X6aDB
-	 XSxENWFNJXnn9HBjdCv9u6P9NyKlb2pgJSb6C1vk=
-Received: from smtp.ivitera.com ([127.0.0.1])
-	by localhost (localhost [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GQLfE-C3Thlj; Mon,  5 Feb 2024 16:52:18 +0100 (CET)
-Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
-	(Authenticated sender: pavel)
-	by smtp.ivitera.com (Postfix) with ESMTPSA id 870EB15B884;
-	Mon,  5 Feb 2024 16:52:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-	t=1707148338; bh=4/6WUgilSx61wslkGnlmBz8jDkOE0rDSMZd5uqGYtlU=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=Fvhfn2BblBRbZwzwOqunOnUeUMNOq5BdRwDrPGUahXXyLecvWGLTuRwy4krtx5hkM
-	 TcPYqSbtEhJ1C21wBf5bYomuil3CvG+ZVLpKSeVIOUNA2xbEVwA2v+ywwzo4r6TbyV
-	 NR6AoVw1oEoNdRuW/Pl0MeFPpbj6XmoR226bVKuI=
-Message-ID: <4c198e2b-72fe-f21c-77a0-7c011ace3c6d@ivitera.com>
-Date: Mon, 5 Feb 2024 16:52:18 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BC83FE48
+	for <linux-usb@vger.kernel.org>; Mon,  5 Feb 2024 16:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.156.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707149158; cv=fail; b=Gl6w6IZ3x+C0DAWB73Owy+pbBwIAy4G2qJDtG51h6AG8fq1t/UqtHhFfTGaABrZVvY8nyuKuXDWpdfcaMYsPprYbJecCMJlso46tWdp5KbCA00YihjoZ7PExfD/J0jVqV/tJgKF6tsJdH3MFRLJbR801LmfWCkxRVCiKCkCJf7E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707149158; c=relaxed/simple;
+	bh=Pud+jTkLWWmdqguOu6wSOvkpbSyfb5Wc78zkMr4wdpo=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=F3sQFqrDcW8Ua1wYYcGUoZn02/0802e7h5+5l54ww0D+1CoLezUqyOesPkCjGfYZPfMYp07dEx39V1PkSS4XT2Dv38gFjIpqO993+D06vZuJtwRh+7CMLKc99+Qy3BvLhLJPW+TNiyNmhlNZbNWNQaS6EGTqK8gR7LohPFVAYIE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=Ok/Xzk3O; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=AAF0nJqr; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=paQ9wH2e reason="signature verification failed"; arc=fail smtp.client-ip=148.163.156.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
+Received: from pps.filterd (m0098571.ppops.net [127.0.0.1])
+	by mx0a-00230701.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 415Fsk2S014882;
+	Mon, 5 Feb 2024 08:05:52 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
+	from:to:cc:subject:date:message-id:references:in-reply-to
+	:content-type:content-id:content-transfer-encoding:mime-version;
+	 s=pfptdkimsnps; bh=Pud+jTkLWWmdqguOu6wSOvkpbSyfb5Wc78zkMr4wdpo=; b=
+	Ok/Xzk3Op/6vtRLA27o/XZuOFBV2TqO68QJUajKrb1rjtLdpPd/MTTZ0qiU/5WKF
+	vVOusH7Rv7jnUxb2a5Ss+8Srl5iTmEy/IYrYW0NMfy+bHglS7rYB3iofzhPQpu92
+	UIcU4u43FXzr4ecU5FBNjPZgYZihY6iht9HS+uTExhQBghVuMi7OyFGTDU02JZST
+	QX23Hdpr03eb4fryQukJvZWlDcxHdVbw0Q97cttq3qq2XLe27PwQLJbgOpUIk3Dk
+	JZxjMicRbCl6cgWhUnSoL5rIvasgfuraV8/FfF51ba3bAP8m2SEcpIRX9SOPjBoe
+	/Okl7AujpBAu43/uGZt54A==
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
+	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3w1ncp70pa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 05 Feb 2024 08:05:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+	t=1707149142; bh=Pud+jTkLWWmdqguOu6wSOvkpbSyfb5Wc78zkMr4wdpo=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=AAF0nJqr97ShSqi92dtq+OoAASXCFn/CoGo01JBLww0hzLGctiILzlRvchLuERW/e
+	 cSbnVyNrZGjEOSRnqbStWjoIV26dya/4LYv3lQvv8GfFlT1KpGm52WexlBuh1G/Zwz
+	 8l/+Sdwde4+5OC/hyaZkxNpufBuftGGmM+TgWEEmTh2cpMOSruz7i7Oe/h2hc+7bTf
+	 P9eb0yTyAlrkUfaOkoFoemEXHnXGuHPfsRjsShObIsSYoB+JPNB8+7wWQYsbTp7M2h
+	 3mxittC/fZY+MvvnPHCnUfS4pRNKcqNJnxeWpKt3R0/5iSFpA4OFZsWWMB8X5Xqj+o
+	 /PuZtOAUskDzg==
+Received: from mailhost.synopsys.com (us03-mailhost1.synopsys.com [10.4.17.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
+	 client-signature RSA-PSS (2048 bits))
+	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 3826F4035A;
+	Mon,  5 Feb 2024 16:05:42 +0000 (UTC)
+Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+	by mailhost.synopsys.com (Postfix) with ESMTPS id 1C98FA0077;
+	Mon,  5 Feb 2024 16:05:42 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=paQ9wH2e;
+	dkim-atps=neutral
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2040.outbound.protection.outlook.com [104.47.57.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+	by o365relay-in.synopsys.com (Postfix) with ESMTPS id A2C9F404F3;
+	Mon,  5 Feb 2024 16:05:41 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VfM1EAcPEFUQU5hPy4WNVRoZpTkTycHSAULuo/bz3q2M4lrHvbGOHDkZrnvYvIR7EEw3UQsikWz6Jvofi+3T/xsGrtb1dRxthfhEiK1KlK61IHkb5iKy4biTgKGL4S+0y2xamgPC7kjAmF9/GplXU/WAMzfSMshT3AYI2IETdiGRX2QxNMu8XgRP9Ks3GCAFzdGQFMYQ8zrkIpq2qti4ImifiR8nJ+w/21AYlCUPvjQJzePuJww0qaJ7nwyGWsm3tGS3RNPlCiTaOcmYwnuIL4QLK6nxirlI+pL/wVqbrJDQA73OSBE3yN6B6OFFfhGCrBUO/xuvkkfA6QRdPFRWkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Pud+jTkLWWmdqguOu6wSOvkpbSyfb5Wc78zkMr4wdpo=;
+ b=ivLbTKp4dhV2NhKRs6je8AoxOdIRLlX75djE/ormGU+ntwQDu81NrE7WMTaMI9xtAkKtB6MwgWvZggUmd/ehaFN/+oQok9/Ckx8JTtDY13m9d2GrMH/7vheE4cnSfJIa8+YvSPXV7FsyFWTTI1GzFz9dPJs6Gp2HRa7d6V3ndg0vewkxgCTbmNxu4RdRKd4WQ1FF+TN2sQmVpi/Q+tm3vT/7XAZJlLq/6hSqZC7dMwa1G75jTF0cY8aJ6MNAkUCU1z1O/G4X8knlaQw1wvovcpYi3sPZvJEogEunffOm2M3+zsWvvIxJH6wvWEy7uChEGBjfPK2iFvG6SvBM3l7RWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pud+jTkLWWmdqguOu6wSOvkpbSyfb5Wc78zkMr4wdpo=;
+ b=paQ9wH2eh5GRfbhS7jZ7iwhTI9jfkQkK4uWkDZii/DJJERcVurgQeZUaAlk8kHIa4S52vw0UISd4LDNXC3r3ZO9JGbuZFO9aRoAgbUch1rKmR0u4OBvlgwE3x1paT5H5NwzBHUrTZ88Ne6ZP9aCtw1/qDXaUaeWt2BJRhPwBom8=
+Received: from PH7PR12MB8796.namprd12.prod.outlook.com (2603:10b6:510:272::22)
+ by MN0PR12MB5834.namprd12.prod.outlook.com (2603:10b6:208:379::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.15; Mon, 5 Feb
+ 2024 16:05:37 +0000
+Received: from PH7PR12MB8796.namprd12.prod.outlook.com
+ ([fe80::5866:efa0:7f40:cd66]) by PH7PR12MB8796.namprd12.prod.outlook.com
+ ([fe80::5866:efa0:7f40:cd66%3]) with mapi id 15.20.7270.016; Mon, 5 Feb 2024
+ 16:05:37 +0000
+X-SNPS-Relay: synopsys.com
+From: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+To: Pavel Hofman <pavel.hofman@ivitera.com>
+CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: usb: gadget: dwc2: RK3308: Transmission to EP OUT stalls at
+ larger packet size
+Thread-Topic: usb: gadget: dwc2: RK3308: Transmission to EP OUT stalls at
+ larger packet size
+Thread-Index: AQHaWDlYK+JmFGKVjk6y9CgXZKFNMbD70I+AgAAVlgCAAAO2gA==
+Date: Mon, 5 Feb 2024 16:05:37 +0000
+Message-ID: <0efd145e-eacd-412d-a937-7c7a91790de7@synopsys.com>
+References: <91811ad2-991e-bd34-b3ec-2b92229bdd8b@ivitera.com>
+ <758d6e5d-d5b4-2bcc-bd51-fb7b49356532@ivitera.com>
+ <4c198e2b-72fe-f21c-77a0-7c011ace3c6d@ivitera.com>
+In-Reply-To: <4c198e2b-72fe-f21c-77a0-7c011ace3c6d@ivitera.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR12MB8796:EE_|MN0PR12MB5834:EE_
+x-ms-office365-filtering-correlation-id: dc270be6-a935-4cef-b93f-08dc26644ad8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ izqTvGFIwHQNeDf+DUfy8o+/wNHwAqc7z/oc040O8Qv6CCoWAkxtP3i6wL1JhIMEimF1duidK7UGBIgI2ZS6gE05Ul6Eree+qkxNhBRoEMoCWC5klOCLTeX6OPdFQ1uPBwYaLhonm+SSnEZzTN/YdL0CwzVQcenfHFqfAlAgZI+qvVMbVpAQewuo361kUb3UKE83bs/Hs2hb6DneN8c8z1C9RZefnZRFUlGeBj4ob0V+CGayG97Rd+D42VhEFjeJu8wx3i5VLFegabtwslSsUBSAjq1wu/i10n2BRXmAM5FYhjs4OY55AHxN4mLqrAPnZiT0Lfz2wUjsbLW1ZDTsQ1WFd7+a9GBVCCnnA7q9VcCY8X8ElZhE3oDNunuXsNn+h5cUfugedWwhlujGPCigiuw+eLFaAObTcCWEbQzSHzCb8+jFHSzWvuYDTyygnEA8+Yeiii0Zv9hmYavXu6mVB5sIEOGak+PLflWO9hD2lnnbJLcf1yt+Eo2mTlV/udmjKZGDO2T7SWuTVtXXTM284giolyOqUJ/UyN+hLbnIN/nbfrnSnAuL5hRZxdGR2A6r7GvJpm2hLZDU8eafTE3EkEHnspmJJExeelq6o9D+/17E86+NkEkEnyw6U43/iOYo62faFkxY6i6b0qbTPSWIYvmc784mnlgNbdNCWFGEdGKHupGvBvoCnGT/56k+xqP5
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB8796.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(39860400002)(366004)(346002)(376002)(230922051799003)(186009)(451199024)(1800799012)(64100799003)(41300700001)(6506007)(26005)(38100700002)(64756008)(71200400001)(8676002)(66446008)(31686004)(4326008)(66946007)(86362001)(5660300002)(6512007)(2906002)(478600001)(6486002)(53546011)(31696002)(316002)(83380400001)(6916009)(122000001)(76116006)(2616005)(66556008)(36756003)(66476007)(8936002)(38070700009)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?utf-8?B?ZWlOV3FJWUxVeURxamcwa2lwWTNIdG5nSkRDdk8vOWZlczJKY2hWYlVZUytp?=
+ =?utf-8?B?TitFTHlGclFabElrUTQrckw0RUlzTnRBRnhJYjRkVWI1SVRtcmxZN0l0K1Zi?=
+ =?utf-8?B?cjNLN1piVmZaZndweUcybzFhQ3l6VmFaQ0FPWjc5Qi9OQ3RpTEtDcTN1S3dK?=
+ =?utf-8?B?VXhVcEdDVUhtZ2ZtVVpLUGppK2p2UVB0L25WdG5JOW1RajZHWC95eXhrMkpt?=
+ =?utf-8?B?OEh4bUN4ZzMyK1BwenNlQllYeUkrTmdGSys5NVBlNmZPMTR5dnRiU1BmZWl4?=
+ =?utf-8?B?QjZ5YWdpTVIxUG5qSTErc1YyWFh2VjJUWDQ1VFZ1N2RPZGNpS1UwTUxjOWxF?=
+ =?utf-8?B?ZnF1am4xbEdBZzRrYXE0L2ZzcjV6aGR0eE4rWHNOMEZYbFU5bUdBd05aM0Vi?=
+ =?utf-8?B?bURmZXF4bXZxZHBpcHdpd3pXNm9lU3JBZlV2ejJjYkhSWkhRRjU0VzJkakJU?=
+ =?utf-8?B?RHIvc0p6SkpEWUltSFllM3l1ck03Mk83YklZV3VCUTByN0M3TXVnMzU0SCtG?=
+ =?utf-8?B?QXZ5MmZxT2loT0NHbENNemZRRmg2K2NrVm9qd3MrcGxPc0VNNFloN0ZjeHhP?=
+ =?utf-8?B?Nk9kMnF5alZFbmZQQVNFYVRGZ0VDb2c5TzVOemZsTmprZDFtV2NhcENzbGg0?=
+ =?utf-8?B?T2xVcXcvM0dQZWF2U0FvRzdsWTRmMmlleGNjN09Jc0NTUUp4RURzSHVkWmla?=
+ =?utf-8?B?SElQMG02dnV2R1ZwanF3M00xZ3RwR0YrWmhBdHkwa1pMVjhQSEMreUFYQ1By?=
+ =?utf-8?B?aHluMitNbEdlYlphV2Vsbi9DUmZoQXgyQ0hobzdIY2pKYW8wTnc4RElsQUpR?=
+ =?utf-8?B?RVkwQ2E1czJyaUZaTERxUmlFb0xyOUdFUzdTR1cxN0plNlA3d1E1bVJ6cUdy?=
+ =?utf-8?B?YnZWVE9ySzQ0NjBqV2RRNFI5REFnNmcvT00rSGl2S2ZiLzRYQ0JZSDZlVkk3?=
+ =?utf-8?B?MFp3MkUrL3d5U2xjOW1ZRUVlTWxnV1JDR0E0bGE4NXY0U09Ed3JVL2hiS2ov?=
+ =?utf-8?B?ejhkSy9lVnRTQWQ4dkFDb1JLQjc1R2x4Z000eXhhOFgrRkpGeTYvL0VSYk5o?=
+ =?utf-8?B?QzNVcUNidTJXUFZvbWVKZjE3djNMSVhXZU02VU5IbGJUTnlERU0rQ1VmU2Zr?=
+ =?utf-8?B?YmZ6ZGVlKzdpaTJrTlRrSEo1ZEYvOWFRUzhWTWxqZFRSWVJxa08rMkQ3QzM1?=
+ =?utf-8?B?ZG5MZGx2a2F3aFV2T0c1YlJJUzA4dVVnQ01nK3RtNElhOTV1citUMFJXUGF4?=
+ =?utf-8?B?UHg4RG41K3ZWUFJoTStKcUJPNmtESFduNC9WTE1haTRvK1RRUCtsVW1tTTNF?=
+ =?utf-8?B?RmNzZlVrcGNVS2hRWnZBV2FXczhtSUdzVGVza1l1bFVKbDNlbUNKUVFxaU93?=
+ =?utf-8?B?QUgwVEJHN2pZeHNxOTc4ZXc3Q1BFbDhuak5KR2laYVVvYklBR3ZaOWp0NUVE?=
+ =?utf-8?B?TVB1QUhheFpZd0xkSzdjaWh6aEpFdXVXVlJOQml5b0k3MmhZTm1hdVRDd3J2?=
+ =?utf-8?B?ajBlUHNhZVVDOE1qZWtPRG4rQkF0dTdVUUw5YWZTNGJhQWRaL0JOR2dTWk1F?=
+ =?utf-8?B?OHVvSXgxODBpYVhmMGVKeC9ZVzk4Y3BYUXdURFladk5WMlhkZ08vY2lJT1RN?=
+ =?utf-8?B?QTFKdUdkeDdkN3hZQjFPQ3RqRUxJdnBiSWk2UkRwMm1paFJHeFJGSVpSYUcy?=
+ =?utf-8?B?RFpNM1BidXgrMkZiektZclNpTzgydHFabVlJV3JEcUtIREJJQnNNY0V0a2lt?=
+ =?utf-8?B?RnNISk5JbVh5cGVRT2FuOU9sWUk1ZDlTaXIvanI5VGFNYWRZdVhFeXR5VG5Y?=
+ =?utf-8?B?MEhMU3c5b1FDa3RFdnJIOWwxb1p3K3hRNVpZVktEU3pTdTJjTmJncXdqbExl?=
+ =?utf-8?B?YThpR25FRzgrR29GMlh2WStheHFsOWdFcXZWMU1OcXlBcnBkcStleFA3RWxP?=
+ =?utf-8?B?WTRDRGFGZGY2UWdSY1FpWldTL3pGSy9JNnQ0UEpmcGVrblEzY1dhNGlyQ3M3?=
+ =?utf-8?B?eWU4MTJKaFQrL1FpY09NT25UcjVBTWNCc1RRWDNEc3BlY0RJQm82QzRzeTdW?=
+ =?utf-8?B?Wjk2QmRBeG5oQVdOTmk5ZXN5UEFjb1JKVDZNM0pVVFdPTFNRenF5WFlubWJQ?=
+ =?utf-8?Q?76TYWbDFz/8XMJdwvrGrXaj8K?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D482E39B8856A84787B2AA87A27F2EBE@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: usb: gadget: dwc2: RK3308: Transmission to EP OUT stalls at
- larger packet size
-Content-Language: en-US
-From: Pavel Hofman <pavel.hofman@ivitera.com>
-To: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <91811ad2-991e-bd34-b3ec-2b92229bdd8b@ivitera.com>
- <758d6e5d-d5b4-2bcc-bd51-fb7b49356532@ivitera.com>
-In-Reply-To: <758d6e5d-d5b4-2bcc-bd51-fb7b49356532@ivitera.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	vmtThvY6hzXCZa8PzYo0wKkz6nvt1Zx/P2HMh/oLJW9qj+68fJyfQsya/7mCD/pKtF3c2KitFZYk2c5KwJPxRP0C36rZjZWL4Yh2We+GMQEBMykKDUY8bas6Gq3MoaCYzbCkv21XyfMVpK+WAsRsUvZyp0SRKagZNJE46GEjkvvKg4oW9q4tiNZ/AVAFhhHR7cigAqeEszs5ybTm7S9sNfsLGfmJo/s2XZRYZLP7yIqvJzQQti77tJM3sxIHiy1wDXYCeeS00VW4QtEJxcGvZnGnPulgYMhMlXosrcOrp6qaWVflbwawePkstGehkQbohlf0BvSdo7+IminZvrL8i7QIaBX2Aor+GEvOr85UEF57QJK1bKFKPW1L5DRfr1ei0YAcQeWxlFx966Z9UoCzr3+v35H4HhVLIadvzo8ZIQ6+xPQFDp8gPv3k5+2ajJaKZ+gDav3ZI/ESi1OcV9Vut+xAOTSeap1byzbWYeO34BlFhdn0NVihcOMbVslJvCwGO/4QqY2z//vGuF5a3TgcprN+OcF+TAgrS+Y/w6M+yLx1ExITa/4fUjYUzRkGJQhq+4lc8PGd2f1ifnkQON8YI4Qas4OyEoTcB9Y+zsKc3EqwCYmOE8vlZudFDdDD6WyCbZDE4CxpANscOB/r9De1/A==
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB8796.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc270be6-a935-4cef-b93f-08dc26644ad8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Feb 2024 16:05:37.3860
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PwOChWcCVc0x9wfXIVapo1HGbUQw3c2GmTpkhpTdRik3ey0LMDYHdaCLj7U4YnkX5o6Syxd5EGfA9u9eH96hhA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5834
+X-Proofpoint-GUID: e4LRpxDOAeg1utFXXPqjxfK78nzkg3Eq
+X-Proofpoint-ORIG-GUID: e4LRpxDOAeg1utFXXPqjxfK78nzkg3Eq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-05_10,2024-01-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
+ clxscore=1015 malwarescore=0 lowpriorityscore=0 mlxlogscore=461
+ spamscore=0 adultscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ suspectscore=0 mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2401310000 definitions=main-2402050122
 
-
-
-Dne 05. 02. 24 v 15:35 Pavel Hofman napsal(a):
-> 
-> Dne 05. 02. 24 v 14:43 Pavel Hofman napsal(a):
->> Hi Minas,
->>
->> I am having issues with dwc2 gadget on RK3308 (Rock Pi S). Kernel 6.6.2.
->>
->> When lightly loading EP OUT with UAC2, EP OUT works OK. When 
->> increasing the packet size (960 bytes in the iso packet), the data 
->> delivery stops completely. Method u_audio.c:u_audio_iso_complete stops 
->> being called, it's like as if the incoming stream reception got stuck.
->>
->> Only the function f_uac2 is used on the gadget.
->>
->> Debug log from gadget.c + u_audio.c (logging all calls of 
->> u_audio_iso_complete including !req->status) is attached. Starts of 
->> playback on the host are marked with this logs in the dump:
->>
->> g_audio gadget.0: start capture with rate 192000
->>
->>
-
->>
->> root@rock-pi-s:/sys/kernel/debug/usb/ff400000.usb# cat hw_params
->> op_mode                       : 0
->> arch                          : 2
->> dma_desc_enable               : 1
->> enable_dynamic_fifo           : 1
->> en_multiple_tx_fifo           : 1
->> rx_fifo_size                  : 1024
->> host_nperio_tx_fifo_size      : 0
->> dev_nperio_tx_fifo_size       : 16
->> host_perio_tx_fifo_size       : 0
->> nperio_tx_q_depth             : 4
->> host_perio_tx_q_depth         : 4
->> dev_token_q_depth             : 8
->> max_transfer_size             : 524287
->> max_packet_count              : 1023
->> host_channels                 : 9
->> hs_phy_type                   : 1
->> fs_phy_type                   : 0
->> i2c_enable                    : 0
->> num_dev_ep                    : 9
->> num_dev_perio_in_ep           : 0
->> total_fifo_size               : 972
->> power_optimized               : 1
->> utmi_phy_data_width           : 1
->> snpsid                        : 0x4f54310a
->> dev_ep_dirs                   : 0x6664
->>
->>
->> root@rock-pi-s:/sys/kernel/debug/usb/ff400000.usb# cat params
->> otg_caps.hnp_support          : 0
->> otg_caps.srp_support          : 0
->> otg_caps.otg_rev              : 0
->> dma_desc_enable               : 0
->> dma_desc_fs_enable            : 0
->> speed                         : 0
->> enable_dynamic_fifo           : 1
->> en_multiple_tx_fifo           : 1
->> host_rx_fifo_size             : 525
->> host_nperio_tx_fifo_size      : 128
->> host_perio_tx_fifo_size       : 256
->> max_transfer_size             : 524287
->> max_packet_count              : 1023
->> host_channels                 : 0
->> phy_type                      : 1
->> phy_utmi_width                : 16
->> phy_ulpi_ddr                  : 0
->> phy_ulpi_ext_vbus             : 0
->> i2c_enable                    : 0
->> ipg_isoc_en                   : 0
->> ulpi_fs_ls                    : 0
->> host_support_fs_ls_low_power  : 0
->> host_ls_low_power_phy_clk     : 0
->> activate_stm_fs_transceiver   : 0
->> activate_stm_id_vb_detection  : 0
->> ts_dline                      : 0
->> reload_ctl                    : 1
->> ahbcfg                        : 0xe
->> uframe_sched                  : 1
->> external_id_pin_ctl           : 0
->> power_down                    : 0
->> lpm                           : 0
->> lpm_clock_gating              : 0
->> besl                          : 0
->> hird_threshold_en             : 0
->> hird_threshold                : 4
->> service_interval              : 0
->> host_dma                      : 0
->> g_dma                         : 1
->> g_dma_desc                    : 1
->> g_rx_fifo_size                : 310
->> g_np_tx_fifo_size             : 16
->> g_tx_fifo_size[0]             : 0
->> g_tx_fifo_size[1]             : 256
->> g_tx_fifo_size[2]             : 128
->> g_tx_fifo_size[3]             : 128
->> g_tx_fifo_size[4]             : 64
->> g_tx_fifo_size[5]             : 32
->> g_tx_fifo_size[6]             : 16
->> g_tx_fifo_size[7]             : 0
->> g_tx_fifo_size[8]             : 0
->> g_tx_fifo_size[9]             : 0
->> g_tx_fifo_size[10]            : 0
->> g_tx_fifo_size[11]            : 0
->> g_tx_fifo_size[12]            : 0
->> g_tx_fifo_size[13]            : 0
->> g_tx_fifo_size[14]            : 0
->> g_tx_fifo_size[15]            : 0
->>
->>
->> root@rock-pi-s:/sys/kernel/debug/usb/ff400000.usb# cat regdump
->> GOTGCTL = 0x000d0000
->> GOTGINT = 0x00000000
->> GAHBCFG = 0x0000002f
->> GUSBCFG = 0x4000140f
->> GRSTCTL = 0x40000000
->> GINTSTS = 0x0438c0ba
->> GINTMSK = 0xd88c3c44
->> GRXSTSR = 0x51643c02
->> GRXFSIZ = 0x00000136
->> GNPTXFSIZ = 0x00100136
->> GNPTXSTS = 0x00080010
->> GI2CCTL = 0x00000000
->> GPVNDCTL = 0x00000000
->> GGPIO = 0x00000000
->> GUID = 0x32000001
->> GSNPSID = 0x4f54310a
->> GHWCFG1 = 0x00006664
->> GHWCFG2 = 0x228e2450
->> GHWCFG3 = 0x03cc90e8
->> GHWCFG4 = 0xdbf04030
->> GLPMCFG = 0x00000000
->> GPWRDN = 0x00600010
->> GDFIFOCFG = 0x03b603cc
->> ADPCTL = 0x00000000
->> HPTXFSIZ = 0x00000000
->> DPTXFSIZN(1) = 0x01000146
->> DPTXFSIZN(2) = 0x00800246
->> DPTXFSIZN(3) = 0x008002c6
->> DPTXFSIZN(4) = 0x00400346
->> DPTXFSIZN(5) = 0x00200386
->> DPTXFSIZN(6) = 0x001003a6
->> DPTXFSIZN(7) = 0x00200386
->> DPTXFSIZN(8) = 0x001003a6
->> DPTXFSIZN(9) = 0x01000146
->> DPTXFSIZN(10) = 0x00800246
->> DPTXFSIZN(11) = 0x008002c6
->> DPTXFSIZN(12) = 0x00400346
->> DPTXFSIZN(13) = 0x00200386
->> DPTXFSIZN(14) = 0x001003a6
->> DPTXFSIZN(15) = 0x00200386
->> DCFG = 0x008402f0
->> DCTL = 0x00000000
->> DSTS = 0x001ef900
->> DIEPMSK = 0x0000220f
->> DOEPMSK = 0x0000023f
->> DAINT = 0x02140000
->> DAINTMSK = 0x0005000b
->> DTKNQR1 = 0x00000000
->> DTKNQR2 = 0x00000000
->> DTKNQR3 = 0x0c100020
->> DTKNQR4 = 0x00000000
->> DVBUSDIS = 0x00000b8f
->> DVBUSPULSE = 0x000002c6
->> DIEPCTL(0) = 0x00028000
->> DIEPCTL(1) = 0x018c8006
->> DIEPCTL(2) = 0x00000400
->> DIEPCTL(3) = 0x01448004
->> DIEPCTL(4) = 0x00000400
->> DIEPCTL(5) = 0x004603e8
->> DIEPCTL(6) = 0x00000400
->> DIEPCTL(7) = 0x00000400
->> DIEPCTL(8) = 0x00000400
->> DIEPCTL(9) = 0x00000400
->> DIEPCTL(10) = 0x00000400
->> DIEPCTL(11) = 0x00000400
->> DIEPCTL(12) = 0x00000400
->> DIEPCTL(13) = 0x00000400
->> DIEPCTL(14) = 0x00000400
->> DIEPCTL(15) = 0x00000400
->> DOEPCTL(0) = 0x80028000
->> DOEPCTL(1) = 0x00000400
->> DOEPCTL(2) = 0x800483e8
->> DOEPCTL(3) = 0x00000400
->> DOEPCTL(4) = 0x00000400
->> DOEPCTL(5) = 0x00000400
->> DOEPCTL(6) = 0x00000400
->> DOEPCTL(7) = 0x00000400
->> DOEPCTL(8) = 0x00000400
->> DOEPCTL(9) = 0x00000400
->> DOEPCTL(10) = 0x00000400
->> DOEPCTL(11) = 0x00000400
->> DOEPCTL(12) = 0x00000400
->> DOEPCTL(13) = 0x00000400
->> DOEPCTL(14) = 0x00000400
->> DOEPCTL(15) = 0x00000400
->> DIEPINT(0) = 0x00000090
->> DIEPINT(1) = 0x00000090
->> DIEPINT(2) = 0x000002a0
->> DIEPINT(3) = 0x00000090
->> DIEPINT(4) = 0x000002a0
->> DIEPINT(5) = 0x000000c0
->> DIEPINT(6) = 0x000002a0
->> DIEPINT(7) = 0x00000080
->> DIEPINT(8) = 0x00000080
->> DIEPINT(9) = 0x00000080
->> DIEPINT(10) = 0x000002a0
->> DIEPINT(11) = 0x000002a0
->> DIEPINT(12) = 0x000002a0
->> DIEPINT(13) = 0x000002a0
->> DIEPINT(14) = 0x000002a0
->> DIEPINT(15) = 0x000002a0
->> DOEPINT(0) = 0x00002000
->> DOEPINT(1) = 0x00000000
->> DOEPINT(2) = 0x00002010
->> DOEPINT(3) = 0x00000000
->> DOEPINT(4) = 0x00000020
->> DOEPINT(5) = 0x00000000
->> DOEPINT(6) = 0x00000000
->> DOEPINT(7) = 0x00000000
->> DOEPINT(8) = 0x00000000
->> DOEPINT(9) = 0x00000220
->> DOEPINT(10) = 0x00000000
->> DOEPINT(11) = 0x00000000
->> DOEPINT(12) = 0x00000000
->> DOEPINT(13) = 0x00000000
->> DOEPINT(14) = 0x00000000
->> DOEPINT(15) = 0x00000000
->> DIEPTSIZ(0) = 0x00080052
->> DIEPTSIZ(1) = 0x00000000
->> DIEPTSIZ(2) = 0x00000000
->> DIEPTSIZ(3) = 0x11d81ef7
->> DIEPTSIZ(4) = 0x00000000
->> DIEPTSIZ(5) = 0x00000000
->> DIEPTSIZ(6) = 0x00000000
->> DIEPTSIZ(7) = 0x00000000
->> DIEPTSIZ(8) = 0x00000000
->> DIEPTSIZ(9) = 0x00000000
->> DIEPTSIZ(10) = 0x00000000
->> DIEPTSIZ(11) = 0x00000000
->> DIEPTSIZ(12) = 0x00000000
->> DIEPTSIZ(13) = 0x00000000
->> DIEPTSIZ(14) = 0x00000000
->> DIEPTSIZ(15) = 0x00000000
->> DOEPTSIZ(0) = 0x2000005e
->> DOEPTSIZ(1) = 0x00000000
->> DOEPTSIZ(2) = 0x1f27b8c0
->> DOEPTSIZ(3) = 0x00000000
->> DOEPTSIZ(4) = 0x00000000
->> DOEPTSIZ(5) = 0x00000000
->> DOEPTSIZ(6) = 0x00000000
->> DOEPTSIZ(7) = 0x00000000
->> DOEPTSIZ(8) = 0x00000000
->> DOEPTSIZ(9) = 0x00000000
->> DOEPTSIZ(10) = 0x00000000
->> DOEPTSIZ(11) = 0x00000000
->> DOEPTSIZ(12) = 0x00000000
->> DOEPTSIZ(13) = 0x00000000
->> DOEPTSIZ(14) = 0x00000000
->> DOEPTSIZ(15) = 0x00000000
->> DIEPDMA(0) = 0x0e693000
->> DIEPDMA(1) = 0x86711010
->> DIEPDMA(2) = 0x92b8b5a4
->> DIEPDMA(3) = 0x1ba02008
->> DIEPDMA(4) = 0x92b8b5a4
->> DIEPDMA(5) = 0x2fae0710
->> DIEPDMA(6) = 0x92b8b5a4
->> DIEPDMA(7) = 0x43c7ba7f
->> DIEPDMA(8) = 0x0cc64000
->> DIEPDMA(9) = 0x57447266
->> DIEPDMA(10) = 0x92b8b5a4
->> DIEPDMA(11) = 0x92b8b5a4
->> DIEPDMA(12) = 0x92b8b5a4
->> DIEPDMA(13) = 0x92b8b5a4
->> DIEPDMA(14) = 0x92b8b5a4
->> DIEPDMA(15) = 0x92b8b5a4
->> DOEPDMA(0) = 0x1ba01000
->> DOEPDMA(1) = 0xa8800c26
->> DOEPDMA(2) = 0x1ba01008
->> DOEPDMA(3) = 0xa8800c26
->> DOEPDMA(4) = 0x6db46af8
->> DOEPDMA(5) = 0xa8800c26
->> DOEPDMA(6) = 0x1291dfd8
->> DOEPDMA(7) = 0xa8800c26
->> DOEPDMA(8) = 0x82d9ef90
->> DOEPDMA(9) = 0x0309d816
->> DOEPDMA(10) = 0xa8800c26
->> DOEPDMA(11) = 0xa8800c26
->> DOEPDMA(12) = 0xa8800c26
->> DOEPDMA(13) = 0xa8800c26
->> DOEPDMA(14) = 0xa8800c26
->> DOEPDMA(15) = 0xa8800c26
->> DTXFSTS(0) = 0x00000010
->> DTXFSTS(1) = 0x00000010
->> DTXFSTS(2) = 0x00000010
->> DTXFSTS(3) = 0x00000020
->> DTXFSTS(4) = 0x00000010
->> DTXFSTS(5) = 0x00000100
->> DTXFSTS(6) = 0x00000010
->> DTXFSTS(7) = 0x00000010
->> DTXFSTS(8) = 0x00000010
->> DTXFSTS(9) = 0x00000010
->> DTXFSTS(10) = 0x00000010
->> DTXFSTS(11) = 0x00000010hofman
->> DTXFSTS(12) = 0x00000010
->> DTXFSTS(13) = 0x00000010
->> DTXFSTS(14) = 0x00000010
->> DTXFSTS(15) = 0x00000010
->> PCGCTL = 0x00000000
->> HCFG = 0x008402f0
->> HFIR = 0x00000b8f
->> HFNUM = 0x0b1803df
->> HPTXSTS = 0x00080100
->> HAINT = 0x00000002
->> HAINTMSK = 0x00000007
->> HFLBADDR = 0x00000000
->> HPRT0 = 0x00000000
->> HCCHAR(0) = 0x018c8006
->> HCCHAR(1) = 0x00000400
->> HCCHAR(2) = 0x800483e8
->> HCCHAR(3) = 0x00000400
->> HCCHAR(4) = 0x00000400
->> HCCHAR(5) = 0x00000400
->> HCCHAR(6) = 0x00000400
->> HCCHAR(7) = 0x00000400
->> HCCHAR(8) = 0x00000400
->> HCCHAR(9) = 0x00000400
->> HCCHAR(10) = 0x00000400
->> HCCHAR(11) = 0x00000400
->> HCCHAR(12) = 0x00000400
->> HCCHAR(13) = 0x00000400
->> HCCHAR(14) = 0x00000400
->> HCCHAR(15) = 0x00000400
->> HCSPLT(0) = 0x00000000
->> HCSPLT(1) = 0x00000000
->> HCSPLT(2) = 0x00000000
->> HCSPLT(3) = 0x00000000
->> HCSPLT(4) = 0x00000000
->> HCSPLT(5) = 0x00000000
->> HCSPLT(6) = 0x00000000
->> HCSPLT(7) = 0x00000000
->> HCSPLT(8) = 0x00000000
->> HCSPLT(9) = 0x00000000
->> HCSPLT(10) = 0x00000000
->> HCSPLT(11) = 0x00000000
->> HCSPLT(12) = 0x00000000
->> HCSPLT(13) = 0x00000000
->> HCSPLT(14) = 0x00000000
->> HCSPLT(15) = 0x00000000
->> HCINT(0) = 0x00000010
->> HCINT(1) = 0x00000000
->> HCINT(2) = 0x00002010
->> HCINT(3) = 0x00000000
->> HCINT(4) = 0x00000020
->> HCINT(5) = 0x00000000
->> HCINT(6) = 0x00000000
->> HCINT(7) = 0x00000000
->> HCINT(8) = 0x00000000
->> HCINT(9) = 0x00000220
->> HCINT(10) = 0x00000000
->> HCINT(11) = 0x00000000
->> HCINT(12) = 0x00000000
->> HCINT(13) = 0x00000000
->> HCINT(14) = 0x00000000
->> HCINT(15) = 0x00000000
->> HCINTMSK(0) = 0x0000020f
->> HCINTMSK(1) = 0x00000000
->> HCINTMSK(2) = 0x00000000
->> HCINTMSK(3) = 0x00000000
->> HCINTMSK(4) = 0x00000000
->> HCINTMSK(5) = 0x00000000
->> HCINTMSK(6) = 0x00000000
->> HCINTMSK(7) = 0x00000000
->> HCINTMSK(8) = 0x00000000
->> HCINTMSK(9) = 0x00000000
->> HCINTMSK(10) = 0x00000000
->> HCINTMSK(11) = 0x00000000
->> HCINTMSK(12) = 0x00000000
->> HCINTMSK(13) = 0x00000000
->> HCINTMSK(14) = 0x00000000
->> HCINTMSK(15) = 0x00000000
->> HCTSIZ(0) = 0x00000000
->> HCTSIZ(1) = 0x00000000
->> HCTSIZ(2) = 0x1f27b8c0
->> HCTSIZ(3) = 0x00000000
->> HCTSIZ(4) = 0x00000000
->> HCTSIZ(5) = 0x00000000
->> HCTSIZ(6) = 0x00000000
->> HCTSIZ(7) = 0x00000000
->> HCTSIZ(8) = 0x00000000
->> HCTSIZ(9) = 0x00000000
->> HCTSIZ(10) = 0x00000000
->> HCTSIZ(11) = 0x00000000
->> HCTSIZ(12) = 0x00000000
->> HCTSIZ(13) = 0x00000000
->> HCTSIZ(14) = 0x00000000
->> HCTSIZ(15) = 0x00000000
->> HCDMA(0) = 0x1ba01000
->> HCDMA(1) = 0xa8800c26
->> HCDMA(2) = 0x1ba01008
->> HCDMA(3) = 0xa8800c26
->> HCDMA(4) = 0x6db46af8
->> HCDMA(5) = 0xa8800c26
->> HCDMA(6) = 0x1291dfd8
->> HCDMA(7) = 0xa8800c26
->> HCDMA(8) = 0x82d9ef90
->> HCDMA(9) = 0x0309d816
->> HCDMA(10) = 0xa8800c26
->> HCDMA(11) = 0xa8800c26
->> HCDMA(12) = 0xa8800c26
->> HCDMA(13) = 0xa8800c26
->> HCDMA(14) = 0xa8800c26
->> HCDMA(15) = 0xa8800c26
->> HCDMAB(0) = 0x069e9ff0
->> HCDMAB(1) = 0xa8800c26
->> HCDMAB(2) = 0x05eaf3c0
->> HCDMAB(3) = 0xa8800c26
->> HCDMAB(4) = 0x1f0d193f
->> HCDMAB(5) = 0xa8800c26
->> HCDMAB(6) = 0x7f72548c
->> HCDMAB(7) = 0xa8800c26
->> HCDMAB(8) = 0x7795e924
->> HCDMAB(9) = 0xc36c019a
->> HCDMAB(10) = 0xa8800c26
->> HCDMAB(11) = 0xa8800c26
->> HCDMAB(12) = 0xa8800c26
->> HCDMAB(13) = 0xa8800c26
->> HCDMAB(14) = 0xa8800c26
->> HCDMAB(15) = 0xa8800c26
->>
-> It really looks like some DMA performance issue. Stream 980 bytes/ 250us 
-> (bInterval=2) is bitperfect, no dropped packets. While 24 bytes/125us 
-> (bInterval=1) gets stuck. IIUC the DMA is not capable of copying packets 
-> every 125us. Please is there any chance to tweak the performance to 
-> handle the 125us packets reliably?
-> 
-
-I tried increasing f_uac2 req_number/UAC2_DEF_REQ_NUM from 2 to 8 and 
-streaming seems to run stable at 125us microframes now (in both 
-directions simultaneously). Please is there any other gadget tweak which 
-could potentially reduce the risk of dropped packets? Something like 
-using plain DMA instead of desc DMA (no idea :-) )...
-
-Thanks a lot for your expert opinion.
+SGkgUGF2ZWwsDQoNCk9uIDIvNS8yNCAxOTo1MiwgUGF2ZWwgSG9mbWFuIHdyb3RlOg0KPiANCj4g
+DQo+IERuZSAwNS4gMDIuIDI0IHYgMTU6MzUgUGF2ZWwgSG9mbWFuIG5hcHNhbChhKToNCj4+DQo+
+Pj4NCj4+IEl0IHJlYWxseSBsb29rcyBsaWtlIHNvbWUgRE1BIHBlcmZvcm1hbmNlIGlzc3VlLiBT
+dHJlYW0gOTgwIGJ5dGVzLyANCj4+IDI1MHVzIChiSW50ZXJ2YWw9MikgaXMgYml0cGVyZmVjdCwg
+bm8gZHJvcHBlZCBwYWNrZXRzLiBXaGlsZSAyNCANCj4+IGJ5dGVzLzEyNXVzIChiSW50ZXJ2YWw9
+MSkgZ2V0cyBzdHVjay4gSUlVQyB0aGUgRE1BIGlzIG5vdCBjYXBhYmxlIG9mIA0KPj4gY29weWlu
+ZyBwYWNrZXRzIGV2ZXJ5IDEyNXVzLiBQbGVhc2UgaXMgdGhlcmUgYW55IGNoYW5jZSB0byB0d2Vh
+ayB0aGUgDQo+PiBwZXJmb3JtYW5jZSB0byBoYW5kbGUgdGhlIDEyNXVzIHBhY2tldHMgcmVsaWFi
+bHk/DQo+Pg0KPiANCj4gSSB0cmllZCBpbmNyZWFzaW5nIGZfdWFjMiByZXFfbnVtYmVyL1VBQzJf
+REVGX1JFUV9OVU0gZnJvbSAyIHRvIDggYW5kIA0KPiBzdHJlYW1pbmcgc2VlbXMgdG8gcnVuIHN0
+YWJsZSBhdCAxMjV1cyBtaWNyb2ZyYW1lcyBub3cgKGluIGJvdGggDQo+IGRpcmVjdGlvbnMgc2lt
+dWx0YW5lb3VzbHkpLiBQbGVhc2UgaXMgdGhlcmUgYW55IG90aGVyIGdhZGdldCB0d2VhayB3aGlj
+aCANCj4gY291bGQgcG90ZW50aWFsbHkgcmVkdWNlIHRoZSByaXNrIG9mIGRyb3BwZWQgcGFja2V0
+cz8gU29tZXRoaW5nIGxpa2UgDQo+IHVzaW5nIHBsYWluIERNQSBpbnN0ZWFkIG9mIGRlc2MgRE1B
+IChubyBpZGVhIDotKSApLi4uDQo+IA0KPiBUaGFua3MgYSBsb3QgZm9yIHlvdXIgZXhwZXJ0IG9w
+aW5pb24uDQoNCg0KWWVzLCBpdCdzIG1hbmRhdG9yeSB0byBpbmNyZWFzZSBmX3VhYzJfcmVxX251
+bWJlciwgYXQgbGVhc3QgNC4gT2J2aW91c2x5IA0KMiBpcyBub3QgZW5vdWdoIGZvciBkZXNjcmlw
+dG9yIGxpc3QgYW5kIG1haW4gY2F1c2Ugb2YgQk5BIGludGVycnVwdC4NCkFub3RoZXIgc3VnZ2Vz
+dGlvbiB0byBjaGFuZ2UgRE1BIG1vZGUgZnJvbSBERE1BIHRvIEJETUEgYXMgSSBzdWdnZXN0ZWQg
+DQppbiBwcmV2aW91cyBlbWFpbC4NCg0KVGhhbmtzLA0KTWluYXM=
 
