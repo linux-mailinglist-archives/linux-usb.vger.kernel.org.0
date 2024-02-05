@@ -1,54 +1,57 @@
-Return-Path: <linux-usb+bounces-5859-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5860-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AF0D8492F9
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 05:40:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F9158492FD
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 05:43:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CB631C2100A
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 04:40:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E74C1F21950
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 04:43:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8984B9463;
-	Mon,  5 Feb 2024 04:40:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAF5EAD5A;
+	Mon,  5 Feb 2024 04:43:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="awhYFygf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cFoaRlo1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A33AD32
-	for <linux-usb@vger.kernel.org>; Mon,  5 Feb 2024 04:40:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46AFBAD35;
+	Mon,  5 Feb 2024 04:43:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707108048; cv=none; b=oQWPAPL8deo+k3fj2shpp0sOToxgZ4f7aTjc6AR+dpNEux5wyCMstkFc/lFpFjx5LaGiLFfnkEzjxA0EbDE3W1wbiF9OpWp15X/5ijeE+0VkBgpIulwrKZivGv7jLqW6Flhfberv1yh3mpA/4oWkzs9vYK/bjB+z52RTVxNLuak=
+	t=1707108191; cv=none; b=Z3mUgsmO6EvKu2IVw3wCH0QkM+2aLrq92xRMHiObW8hKJQ9Nj/gPuVe5raJEoyVqFVtbMTzFcwd5rm9MUr68bKX/Zybaor7pipUEcspLpMuHdrnliNkqQSr25+HEDYLpv3YDgI/vYKblYfGWtSNv1kqOeRym6BWwFGd8mcQXkII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707108048; c=relaxed/simple;
-	bh=1b5YjNP1oFiZMCbM5bHHWqZ2n6FRBMJ/jybtcztkDw0=;
+	s=arc-20240116; t=1707108191; c=relaxed/simple;
+	bh=RazI1DUzXrPjybeXX8DdkT1uiCDNG+C8ylGopmTebKk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KetMfJGkV8sw6U67ugfJjGzQG4+qfSArbV4E1fmuqlSy0DfvPk+Ogl6XIEerXsLGhNvWA7QQtMreQre212fwLMxk/429viu1ccJClwTOEwuGgH9KIG4LtbUo+v8SWcwjq+m7Ay6luj56J4ymoPk1qavvEm2s6hceOEwnCWzTAbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=awhYFygf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FFB7C433C7;
-	Mon,  5 Feb 2024 04:40:45 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=FCZ0Pv9/xrAZj5K5btOj2BhR6mgUBPfbmxsCsoX6muLreZHnnH4nZVOWADPRinOHeP7N6IaZAYT/rcY5sey/FMI0Dp06OilwVZzxewwwKkbQNDXIyu4gvhFuzKT1y8tZGoUm63lLQ5Lkd+tXjXL1aYwx1CxUH4Wvst9oAkBXIPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cFoaRlo1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC1FC433C7;
+	Mon,  5 Feb 2024 04:43:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707108047;
-	bh=1b5YjNP1oFiZMCbM5bHHWqZ2n6FRBMJ/jybtcztkDw0=;
+	s=k20201202; t=1707108190;
+	bh=RazI1DUzXrPjybeXX8DdkT1uiCDNG+C8ylGopmTebKk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=awhYFygfWfQG8soSNTFYxe/ibUkcnpcLm//jXMYSxMGAXZ/8tnj3D6H7W/XVwhszj
-	 G68bu6rCNVPZNi+Q08o0BAzWt5HcfyhvG8FIR3G4FoV98b7clwtNBLjcT4jYBKppbV
-	 2mJhdnTpBo+FFHViB7+Gee6IygGcgaEEATjq7JydvM6b5NlxxhQh9f2xWiE6LGgIiY
-	 kTMlTLtr8chZaOPy+pci1gnmnmLlAj94D8H6+Nfp541rIlQi9SwccPLBGIfg32ONfn
-	 0PGGScKr2ev7/+J8cJtfUHmrHtG+2Tmj+cZAb4Q8V3ehIhKTqgyML8gfz8pOqAAEOC
-	 G8FiUNA+XozrA==
-Date: Mon, 5 Feb 2024 12:40:37 +0800
+	b=cFoaRlo1JzPeUewJM1lz8X+vuOgB84K/ZlRuV1/+ocDyDxGnj33JJj8+KRacsr37/
+	 K3Kea32+/lvE0xo+mfooBPR6UePCIQs/rlxSOwt5d7Jrn4i28BPJDMrzVJbmA49ZpK
+	 rwPjmLADwmUj/3FY55VEq+uWF78xQBYpu7JsJvI858B+Z5mcnQl3Ggh26zXMSJqCYy
+	 5Ftf4uLhYjUwpIOxAn+K0wMZbQw3ncIXWRGtdkgQSy3cOTQNa/4IxAAiEeAQ34FzkE
+	 XZCunPqbatmsjWicgrdbQgHu5cPHn5pwRPp0rVJ/6w/p4Urq8Sy2dw/BnK5JXLRWbT
+	 ai2maeCvL58UA==
+Date: Mon, 5 Feb 2024 12:43:00 +0800
 From: Peter Chen <peter.chen@kernel.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, jun.li@nxp.com,
-	linux-imx@nxp.com
-Subject: Re: [PATCH] usb: chipidea: core: handle power lost in workqueue
-Message-ID: <20240205044037.GB1200221@nchen-desktop>
-References: <20240119123537.3614838-1-xu.yang_2@nxp.com>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: rogerq@kernel.org, felipe.balbi@linux.intel.com,
+	gregkh@linuxfoundation.org, imx@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	pawell@cadence.com
+Subject: Re: [PATCH v2 1/2] usb: cdns3: fixed memory use after free at
+ cdns3_gadget_ep_disable()
+Message-ID: <20240205044300.GC1200221@nchen-desktop>
+References: <20240202154217.661867-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,133 +60,60 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240119123537.3614838-1-xu.yang_2@nxp.com>
+In-Reply-To: <20240202154217.661867-1-Frank.Li@nxp.com>
 
-On 24-01-19 20:35:37, Xu Yang wrote:
-> When power is recycled in usb controller during system power management,
-> the controller will recognize it and switch role if role has been changed
-> during power lost. In current design, it will be completed in resume()
-> function. However, this may bring issues since usb class devices have
-> their pm operations too and these device's resume() functions are still
-> not being called at this point. When usb controller recognized host role
-> should be stopped, these usb class devices will be removed at this point.
-> But these usb class devices can't be removed in some cases, such as scsi
-> devices. Since scsi driver may sync data to U-disk, however it will block
-> there because scsi drvier can only handle pm request when is in suspended
-> state. Therefore, there may exist a dependency between ci_resume() and usb
-> class device's resume(). To break this potential dependency, we need to
-> handle power lost work in a workqueue.
+On 24-02-02 10:42:16, Frank Li wrote:
+>   ...
+>   cdns3_gadget_ep_free_request(&priv_ep->endpoint, &priv_req->request);
+>   list_del_init(&priv_req->list);
+>   ...
 > 
-> Fixes: 74494b33211d ("usb: chipidea: core: add controller resume support when controller is powered off")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> 'priv_req' actually free at cdns3_gadget_ep_free_request(). But
+> list_del_init() use priv_req->list after it.
+> 
+> [ 1542.642868][  T534] BUG: KFENCE: use-after-free read in __list_del_entry_valid+0x10/0xd4
+> [ 1542.642868][  T534]
+> [ 1542.653162][  T534] Use-after-free read at 0x000000009ed0ba99 (in kfence-#3):
+> [ 1542.660311][  T534]  __list_del_entry_valid+0x10/0xd4
+> [ 1542.665375][  T534]  cdns3_gadget_ep_disable+0x1f8/0x388 [cdns3]
+> [ 1542.671571][  T534]  usb_ep_disable+0x44/0xe4
+> [ 1542.675948][  T534]  ffs_func_eps_disable+0x64/0xc8
+> [ 1542.680839][  T534]  ffs_func_set_alt+0x74/0x368
+> [ 1542.685478][  T534]  ffs_func_disable+0x18/0x28
+> 
+> Move list_del_init() before cdns3_gadget_ep_free_request() to resolve this
+> problem.
+> 
+> Cc: <stable@vger.kernel.org>
+> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
 Acked-by: Peter Chen <peter.chen@kernel.org>
 
 > ---
->  drivers/usb/chipidea/ci.h   |  2 ++
->  drivers/usb/chipidea/core.c | 44 ++++++++++++++++++++-----------------
->  2 files changed, 26 insertions(+), 20 deletions(-)
+>  drivers/usb/cdns3/cdns3-gadget.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
-> index d9bb3d3f026e..2a38e1eb6546 100644
-> --- a/drivers/usb/chipidea/ci.h
-> +++ b/drivers/usb/chipidea/ci.h
-> @@ -176,6 +176,7 @@ struct hw_bank {
->   * @enabled_otg_timer_bits: bits of enabled otg timers
->   * @next_otg_timer: next nearest enabled timer to be expired
->   * @work: work for role changing
-> + * @power_lost_work: work for power lost handling
->   * @wq: workqueue thread
->   * @qh_pool: allocation pool for queue heads
->   * @td_pool: allocation pool for transfer descriptors
-> @@ -226,6 +227,7 @@ struct ci_hdrc {
->  	enum otg_fsm_timer		next_otg_timer;
->  	struct usb_role_switch		*role_switch;
->  	struct work_struct		work;
-> +	struct work_struct		power_lost_work;
->  	struct workqueue_struct		*wq;
+> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+> index aeca902ab6cc4..d6723d31fc6e2 100644
+> --- a/drivers/usb/cdns3/cdns3-gadget.c
+> +++ b/drivers/usb/cdns3/cdns3-gadget.c
+> @@ -2540,11 +2540,11 @@ static int cdns3_gadget_ep_disable(struct usb_ep *ep)
 >  
->  	struct dma_pool			*qh_pool;
-> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-> index 41014f93cfdf..835bf2428dc6 100644
-> --- a/drivers/usb/chipidea/core.c
-> +++ b/drivers/usb/chipidea/core.c
-> @@ -856,6 +856,27 @@ static int ci_extcon_register(struct ci_hdrc *ci)
->  	return 0;
->  }
+>  	while (!list_empty(&priv_ep->wa2_descmiss_req_list)) {
+>  		priv_req = cdns3_next_priv_request(&priv_ep->wa2_descmiss_req_list);
+> +		list_del_init(&priv_req->list);
 >  
-> +static void ci_power_lost_work(struct work_struct *work)
-> +{
-> +	struct ci_hdrc *ci = container_of(work, struct ci_hdrc, power_lost_work);
-> +	enum ci_role role;
-> +
-> +	disable_irq_nosync(ci->irq);
-> +	pm_runtime_get_sync(ci->dev);
-> +	if (!ci_otg_is_fsm_mode(ci)) {
-> +		role = ci_get_role(ci);
-> +
-> +		if (ci->role != role) {
-> +			ci_handle_id_switch(ci);
-> +		} else if (role == CI_ROLE_GADGET) {
-> +			if (ci->is_otg && hw_read_otgsc(ci, OTGSC_BSV))
-> +				usb_gadget_vbus_connect(&ci->gadget);
-> +		}
-> +	}
-> +	pm_runtime_put_sync(ci->dev);
-> +	enable_irq(ci->irq);
-> +}
-> +
->  static DEFINE_IDA(ci_ida);
+>  		kfree(priv_req->request.buf);
+>  		cdns3_gadget_ep_free_request(&priv_ep->endpoint,
+>  					     &priv_req->request);
+> -		list_del_init(&priv_req->list);
+>  		--priv_ep->wa2_counter;
+>  	}
 >  
->  struct platform_device *ci_hdrc_add_device(struct device *dev,
-> @@ -1045,6 +1066,8 @@ static int ci_hdrc_probe(struct platform_device *pdev)
->  
->  	spin_lock_init(&ci->lock);
->  	mutex_init(&ci->mutex);
-> +	INIT_WORK(&ci->power_lost_work, ci_power_lost_work);
-> +
->  	ci->dev = dev;
->  	ci->platdata = dev_get_platdata(dev);
->  	ci->imx28_write_fix = !!(ci->platdata->flags &
-> @@ -1396,25 +1419,6 @@ static int ci_suspend(struct device *dev)
->  	return 0;
->  }
->  
-> -static void ci_handle_power_lost(struct ci_hdrc *ci)
-> -{
-> -	enum ci_role role;
-> -
-> -	disable_irq_nosync(ci->irq);
-> -	if (!ci_otg_is_fsm_mode(ci)) {
-> -		role = ci_get_role(ci);
-> -
-> -		if (ci->role != role) {
-> -			ci_handle_id_switch(ci);
-> -		} else if (role == CI_ROLE_GADGET) {
-> -			if (ci->is_otg && hw_read_otgsc(ci, OTGSC_BSV))
-> -				usb_gadget_vbus_connect(&ci->gadget);
-> -		}
-> -	}
-> -
-> -	enable_irq(ci->irq);
-> -}
-> -
->  static int ci_resume(struct device *dev)
->  {
->  	struct ci_hdrc *ci = dev_get_drvdata(dev);
-> @@ -1446,7 +1450,7 @@ static int ci_resume(struct device *dev)
->  		ci_role(ci)->resume(ci, power_lost);
->  
->  	if (power_lost)
-> -		ci_handle_power_lost(ci);
-> +		queue_work(system_freezable_wq, &ci->power_lost_work);
->  
->  	if (ci->supports_runtime_pm) {
->  		pm_runtime_disable(dev);
 > -- 
 > 2.34.1
-> 
 > 
 
 -- 
