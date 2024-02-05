@@ -1,162 +1,187 @@
-Return-Path: <linux-usb+bounces-5899-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5900-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9C5784A8AF
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 23:09:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74AA384A900
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 23:17:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52E8C1F2D8A8
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 22:09:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 001D31F2D313
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 22:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B109756B89;
-	Mon,  5 Feb 2024 21:28:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 362DA48CCF;
+	Mon,  5 Feb 2024 22:05:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="iaXU7vLr"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Qf8DHVmu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9885756B60;
-	Mon,  5 Feb 2024 21:28:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A2528DD8
+	for <linux-usb@vger.kernel.org>; Mon,  5 Feb 2024 22:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707168495; cv=none; b=Szn3ZqsKh/2BYep+KagLjtioNXIuM1lR62j3GjXy7kUQYPHhf3LiwA+tagMyh86s2SHUY7tw2rv5Yscsjpc9pSU8llU4yb/OVF/YeNmcNJp5GJ1a0KOQvDB7S070y1UKmEKQkIbiFiJnec/37o7j1812L5EpNUqVgV08ozCDoJs=
+	t=1707170753; cv=none; b=SYdLSXyH6W64Rr3f1U2dqRlq0KD6BXrXSM9OfQon5eu/8Fw+Tj2zTcdxTdJOmWplk7oVPv/ZZ1jNE0NtI6gfr3Qt2ijjOayrJxCzw4MJPW/TcPGEwOK3adPHL2E0wm2JVPf9pPStoN4y7l4AzZ1/Dyj8IzPI5yUXEvLJGGbvwMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707168495; c=relaxed/simple;
-	bh=5lrum/AjuJwqk20RkwGk9tqExlYNgPl6td00iapqChA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=BE+fhy6CXg7b2qGcyc0C5cVUpLo3OmwXjcgJekA1I+ebCh2CsnwC1MX2UPErE+1goqizmH5G9+RPEQmEC7rxPpPDQYMeu8bQDeeUP29URQLNBGG183QwUIeOZ9m5ouab8j8rokWV6IFPCOAXvQDx9XZGClTqsyw2pkwVxvWvPuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=iaXU7vLr; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 415LASOj014430;
-	Mon, 5 Feb 2024 21:27:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=zUMiOKcNb14lRNC0PHgjnPf539O7z/gNiVeRfyHYiCg=; b=ia
-	XU7vLrUjhuLqT39+iCG6Wem2p9KvnCKurTv96O1oN1ZPATRdOwCtKTWtyauoxOz+
-	y1pASrsqIrWMpXq+GiYzsF/S7iRE1XTX1JOLv9Zj/8UeY7NyqthiOMXSKj6ZLjUg
-	dIDxFBsTyRgcDR/fHFyKo+zDwKcI6pAav/6wFjD2sTZqSovIbrSI4pSlMjSuJRMW
-	vJhkZKxQwtnmfBSGduZux9uMHXSthdWo8btz8/60el/vHuYE/5M24vSlGmU7AC0X
-	KW9vJaAtNARfIkxC2HiE1pnHIMDlp0NRIQrbOq10qx1qc0Yg2Jr4IskqRo3YMEHd
-	Cl/BZWSpmj9jfgzZYTYg==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w2t9wswnt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 05 Feb 2024 21:27:54 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 415LRsX1010093
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 5 Feb 2024 21:27:54 GMT
-Received: from [10.110.7.251] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 5 Feb
- 2024 13:27:52 -0800
-Message-ID: <4d03b2cf-3b97-a066-15a5-245228813253@quicinc.com>
-Date: Mon, 5 Feb 2024 13:27:52 -0800
+	s=arc-20240116; t=1707170753; c=relaxed/simple;
+	bh=/yC6ukCR6M9OWDOAQofhpPWkpb0+7yFSlv5kx0Xd2yY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Qh94chqp1VPw/2uefwMCP+/TVh3GoxpCwQzcTzOeXyhAy7/iootZ4nCTqaajEazILEN9g7ddKrp0f9lhRE9Rnr2BgjL6ocx9ZbUfIFbzvhepDrjuoBXCrxpqVO8UzJKitmBBP/ZO99vIpP2TuZXmY2D2P2vjByZ0SweSHi50sHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Qf8DHVmu; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-dc6d8bd612dso4628287276.1
+        for <linux-usb@vger.kernel.org>; Mon, 05 Feb 2024 14:05:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1707170750; x=1707775550; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+uyM7Qy9ebYgtc0T1FfcjgiWLInu4H67aNLCBp8izTI=;
+        b=Qf8DHVmufNeX4fR9YPGoVxlpcuXXutYOFLjXGtJze/yMGBmlAhiNw1fPPtwioEp1Ib
+         msJPhNHGIzoVfcXNtI43JyTVOfkLRTXZsby/qN1C5Rh84evuFOpa/OzBKe4brYB90wxZ
+         CJX8DSbRxVc1iWzjyw+0GrZN+OEBtq1nWRBoI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707170750; x=1707775550;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+uyM7Qy9ebYgtc0T1FfcjgiWLInu4H67aNLCBp8izTI=;
+        b=g9eqtewlX0DkFMg1IxyyitANCMkKpcKi2MiaKj3KpeT6tHFV251fEjW2ja/iQTRWpo
+         X5jqB/0kQPUacRD4aZoaekpE1UrsVB73SXwD7uNQAFxgUFCCGRArzCiLZgKoRW0U43R6
+         QkmdCAlFCbz5i3zqgpjb8M5zKRbpanBNEO1JIUBhUe8DT8NCrgdKM+4CKPMoE35vH2TO
+         pEIfvuA3PrdZ+UbLGgYnsUExbype7iTMdKdEEM0XKOYAFwMoOycCP/wrbWYCaynfvMBQ
+         7CeiMLoQJvq2YiwfYzf22dgq4jKX8aSWkcRHZWGNVfW6Vm63BiN9x6W9OLQ0WpY/zWbM
+         6/LQ==
+X-Gm-Message-State: AOJu0Ywl2UqeszD+Dxn5tVwaF+noQztuUQR0mXva/lQwoY3iSlO5+O1b
+	7NwHWbbwQFoi80v3+ZZYzusWGUBofdfbSynUKZBKrooSl8x/xjcAA4HUohfpwobS4ZQkluE1C64
+	mHYBWt/XShmj83ZlNKsHbTDYeXO/H+THgIzPZ/aKtwAIP7dM=
+X-Google-Smtp-Source: AGHT+IE1dY0Dgu+RNNAwM80SRYg80MTyc6l94UjLiuC8rBB3isPt7AhJZ2B2k3REppaMwM/8wOjM5t6SUG0eRFTfdY4=
+X-Received: by 2002:a25:ace1:0:b0:dc2:28b1:2e8b with SMTP id
+ x33-20020a25ace1000000b00dc228b12e8bmr713829ybd.15.1707170749681; Mon, 05 Feb
+ 2024 14:05:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v13 50/53] ALSA: usb-audio: Allow for rediscovery of
- connected USB SND devices
-Content-Language: en-US
-To: =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?=
-	<amadeuszx.slawinski@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <konrad.dybcio@linaro.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-References: <20240203023645.31105-1-quic_wcheng@quicinc.com>
- <20240203023645.31105-51-quic_wcheng@quicinc.com>
- <aaa76d7a-4299-4e1c-83f1-cbbea763927f@linux.intel.com>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <aaa76d7a-4299-4e1c-83f1-cbbea763927f@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Fhx4-0QTJ2jvgXTCbibMBpUNgQgwTlk5
-X-Proofpoint-ORIG-GUID: Fhx4-0QTJ2jvgXTCbibMBpUNgQgwTlk5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-05_15,2024-01-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 spamscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
- malwarescore=0 suspectscore=0 phishscore=0 impostorscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401310000 definitions=main-2402050161
+References: <20240126183930.1170845-1-abhishekpandit@chromium.org>
+ <20240126103859.v3.3.Idf7d373c3cbb54058403cb951d644f1f09973d15@changeid> <CACeCKaeVtU3ckmGU932d-pPn=eOnt6KjAavNY3rSOUgrJNriDg@mail.gmail.com>
+In-Reply-To: <CACeCKaeVtU3ckmGU932d-pPn=eOnt6KjAavNY3rSOUgrJNriDg@mail.gmail.com>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Mon, 5 Feb 2024 14:05:38 -0800
+Message-ID: <CANFp7mXOXc6TzLJ+EJ9VYxqGHcjW099oBhDctarUdM5eJGz5bg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] usb: typec: ucsi: Get PD revision for partner
+To: Prashant Malani <pmalani@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
+	jthies@google.com, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Rajaram Regupathy <rajaram.regupathy@intel.com>, 
+	Saranya Gopal <saranya.gopal@intel.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Amadeusz,
+Hi Heikki,
 
-On 2/5/2024 1:01 AM, Amadeusz Sławiński wrote:
-> On 2/3/2024 3:36 AM, Wesley Cheng wrote:
->> In case of notifying SND platform drivers of connection events, some of
->> these use cases, such as offloading, require an ASoC USB backend 
->> device to
->> be initialized before the events can be handled.  If the USB backend 
->> device
->> has not yet been probed, this leads to missing initial USB audio device
->> connection events.
->>
->> Expose an API that traverses the usb_chip array for connected devices, 
->> and
->> to call the respective connection callback registered to the SND platform
->> driver.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> ---
->>   sound/usb/card.c                  | 19 +++++++++++++++++++
->>   sound/usb/card.h                  |  2 ++
->>   sound/usb/qcom/qc_audio_offload.c |  2 ++
->>   3 files changed, 23 insertions(+)
->>
->> diff --git a/sound/usb/card.c b/sound/usb/card.c
->> index 11b827b7a2a5..995b2df676ab 100644
->> --- a/sound/usb/card.c
->> +++ b/sound/usb/card.c
->> @@ -202,6 +202,25 @@ struct snd_usb_stream 
->> *snd_usb_find_suppported_substream(int card_idx,
->>   }
->>   EXPORT_SYMBOL_GPL(snd_usb_find_suppported_substream);
->> +/*
->> + * in case the platform driver was not ready at the time of USB SND
->> + * device connect, expose an API to discover all connected USB devices
->> + * so it can populate any dependent resources/structures.
->> + */
->> +void snd_usb_rediscover_devices(void)
->> +{
->> +    int i;
->> +
->> +    mutex_lock(&register_mutex);
->> +    for (i = 0; i < SNDRV_CARDS; i++) {
->> +        if (usb_chip[i])
->> +            if (platform_ops && platform_ops->connect_cb)
->> +                platform_ops->connect_cb(usb_chip[i]);
-> 
-> if inside if, it can just be && or maybe move callback check before 
-> mutex lock and just return early if it is not present?
-> 
+Friendly ping to review this patch (I see you added Reviewed-by to the
+other two in this series).
 
-Thanks for pointing that out.  Makes sense, and will update it.
+Thanks,
+Abhishek
 
-Thanks
-Wesley Cheng
+On Fri, Jan 26, 2024 at 12:25=E2=80=AFPM Prashant Malani <pmalani@chromium.=
+org> wrote:
+>
+> Hi Abhishek,
+>
+> On Fri, Jan 26, 2024 at 10:39=E2=80=AFAM Abhishek Pandit-Subedi
+> <abhishekpandit@chromium.org> wrote:
+> >
+> > PD major revision for the port partner is described in
+> > GET_CONNECTOR_CAPABILITY and is only valid on UCSI 2.0 and newer. Updat=
+e
+> > the pd_revision on the partner if the UCSI version is 2.0 or newer.
+> >
+> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > ---
+> > $ cat /sys/class/typec/port2-partner/usb_power_delivery_revision
+> > 3.0
+> >
+> > (no changes since v2)
+> >
+> > Changes in v2:
+> >   - Formatting changes and update macro to use brackets.
+> >   - Fix incorrect guard condition when checking connector capability.
+> >
+> >  drivers/usb/typec/ucsi/ucsi.c | 23 +++++++++++++++++++++++
+> >  drivers/usb/typec/ucsi/ucsi.h |  3 +++
+> >  2 files changed, 26 insertions(+)
+> >
+> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucs=
+i.c
+> > index a35056ee3e96..2b7983d2fdae 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > @@ -782,6 +782,7 @@ static int ucsi_register_partner(struct ucsi_connec=
+tor *con)
+> >         }
+> >
+> >         desc.usb_pd =3D pwr_opmode =3D=3D UCSI_CONSTAT_PWR_OPMODE_PD;
+> > +       desc.pd_revision =3D UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_B=
+CD(con->cap.flags);
+> >
+> >         partner =3D typec_register_partner(con->port, &desc);
+> >         if (IS_ERR(partner)) {
+> > @@ -856,6 +857,27 @@ static void ucsi_partner_change(struct ucsi_connec=
+tor *con)
+> >                         con->num, u_role);
+> >  }
+> >
+> > +static int ucsi_check_connector_capability(struct ucsi_connector *con)
+> > +{
+> > +       u64 command;
+> > +       int ret;
+> > +
+> > +       if (!con->partner || !IS_MIN_VERSION_2_0(con->ucsi))
+>
+> I'll reiterate my comment from a previous version, since this series
+> has been revv-ed a few
+> times since and it may have gotten lost; no need to respond to it if
+> you don't want to,
+> since I believe we left it to the maintainer(s) to decide [1]:
+>
+> This macro is unnecessary. Since the version is in BCD format and we
+> already have the
+> macros for versions, just a simple comparison is enough:
+>          if (!con-partner || con->ucsi->version < UCSI_VERSION_2_0)
+>                  return 0;
+>
+> I'll add that Patch 1 of this series [2] is also using the same style
+> for comparing version numbers.
+>
+> > +               return 0;
+> > +
+> > +       command =3D UCSI_GET_CONNECTOR_CAPABILITY | UCSI_CONNECTOR_NUMB=
+ER(con->num);
+> > +       ret =3D ucsi_send_command(con->ucsi, command, &con->cap, sizeof=
+(con->cap));
+> > +       if (ret < 0) {
+> > +               dev_err(con->ucsi->dev, "GET_CONNECTOR_CAPABILITY faile=
+d (%d)\n", ret);
+>
+> nit: I know this is being done elsewhere in this file, but we should
+> avoid putting error
+> numbers in parentheses [3]. Perhaps something for a separate cleanup patc=
+h.
+>
+> [1] https://lore.kernel.org/linux-usb/CANFp7mXP=3DaN8bQi4akKKcoMZE8RaCBuF=
+nwTa5hbp0MZvZe0hYQ@mail.gmail.com/
+> [2] https://lore.kernel.org/linux-usb/20240126103859.v3.1.Iacf5570a66b82b=
+73ef03daa6557e2fc0db10266a@changeid/
+> [3] https://www.kernel.org/doc/html/latest/process/coding-style.html#prin=
+ting-kernel-messages
 
