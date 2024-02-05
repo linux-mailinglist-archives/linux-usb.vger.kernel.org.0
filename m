@@ -1,61 +1,62 @@
-Return-Path: <linux-usb+bounces-5865-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5866-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D89E3849542
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 09:20:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B11148495C5
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 10:01:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1ABA9B22EA9
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 08:20:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F3801F2504D
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 09:01:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD1A11CBF;
-	Mon,  5 Feb 2024 08:20:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8138125A4;
+	Mon,  5 Feb 2024 09:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M26sS6Pi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FdKnnOnG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12FDE11185;
-	Mon,  5 Feb 2024 08:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B9D125BC;
+	Mon,  5 Feb 2024 09:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707121234; cv=none; b=Vm0c0AMVylIlSDtR1iwmxSqCelGrXdGpwooB5j2FAUWDmaep3kV5Mr5U37p8cbN9M2tor22tw/akOLuKi+1Dwlk481X5BElvKhTnzUi93dl2P2hh26cDq3+PhPP6a+Kp05HHfBxLm424rlSXYI4m7+HEC2/0crQmGfcSjF5a9+k=
+	t=1707123674; cv=none; b=EwbM/oX0G691LsOpVQ3oDA0AqP1hVpbzPmkzNvTlXiHkSBdVyMPDrYSKM5Yn/ULl7jHVwC/bkBsJZUsC2JNHP6TO5fOp8Q8P1k9t3ZvJ7TU02WiBEVvv5f0/GrxCAjTRfx8GKDEvoOdtx7jRsTHo72Dv5EryOK1LPFrIu9RhU/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707121234; c=relaxed/simple;
-	bh=p7VIl6MhCIqATnPphkUNjx22KAhNDEK+6bbzQyPLhPQ=;
+	s=arc-20240116; t=1707123674; c=relaxed/simple;
+	bh=MtCVmkyd73igsHfqhm9GVwH5JT8L8I7oiOceUhAzTic=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eqjuflvAarAdrPCkHHiZZg3LDFH7gFf8Q4lboiOikXmJzpR0aREtxBKsR6ROUis57v7GXUNbICzfiPQgYdMlBGDYaZzGORAWuIwSsw1mmXIMDR/Tc4Fk9F3iBU41qnGOvrWAPCacdT3ou6jB8utYW/3DpOu8PWpocoim72MF8MQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M26sS6Pi; arc=none smtp.client-ip=198.175.65.13
+	 In-Reply-To:Content-Type; b=s6NfbmA0+ZRwO8Qma/ijtP0UFKqsrmFGw1wBVbV1fjPt23VmwwZRr92qHwiImtTcgZDbLMXKXl7qXsyQpqgUlKET3b7RCiD1+Wl43tEK1dDItMLw7hhczekq9ZXxOTNKRaXutz4y831fWhZh4zv4HILkK97cBuL51SPX85iB3qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FdKnnOnG; arc=none smtp.client-ip=192.55.52.88
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707121234; x=1738657234;
+  t=1707123672; x=1738659672;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=p7VIl6MhCIqATnPphkUNjx22KAhNDEK+6bbzQyPLhPQ=;
-  b=M26sS6PiLtaeWB9+F4n6nNXW2tIfN9gF3OHGZyMocr1nk3NHQhzj24Vl
-   phdvCu38+8yEXhE5JVtLQ5JI+5TGRQgM6QaDNRa9nFJlKkn0eVFfyXPpB
-   N6AMhhEFAVPSPqe9zNYfgOmAhFL+HairrUZQCPAjTpqY97Sq9bLPX+324
-   wokcQGQfbYTgrdVy34X+oknBJX4IfjFBGg3YkAjkgNH3P8COciKb3m8rl
-   ShzBq1WKQJZbPBMIenUjDnh0pR8pp+u9XPKuUQ88u0umDoMrq/qlsYiHn
-   x5ST5cb64kYMD+hTB92wHHm6PG9dXOyWnEMIH5QLW1q4gdH4sfx6EKx7X
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10974"; a="11566172"
+  bh=MtCVmkyd73igsHfqhm9GVwH5JT8L8I7oiOceUhAzTic=;
+  b=FdKnnOnGi7I6RLoz9/EUW4nBr2skpAaowep/Wh5vu1v1KVslKXs9vuZy
+   8pGLCL5+bRcIt35a9JJ3ccHMB8qxfxIw3V42e8TyLD5dkTvwGEj1vs33b
+   WHAcfXqznxiZAzZU2cyJ2AkDu5pjNgsIwTdmU//X6Xe2av3hAaruFu1E3
+   x/AvHp6aYzr1Isaz8/Egl/SVyo9+UjiOdW2BBigMFGrzcLqRLvBd/e44t
+   fNRxWbIqlhcVMr2Wv/phUQ7/xdMJftcG6z0MLBM+tP2AGT/h64C22HZoo
+   eXMUFnOcx9xLO3y7t354Z8i0bCv1j/jdww0zl2sW8omTWQyXbxo+b5H20
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10974"; a="435614850"
 X-IronPort-AV: E=Sophos;i="6.05,242,1701158400"; 
-   d="scan'208";a="11566172"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 00:20:29 -0800
+   d="scan'208";a="435614850"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 01:01:10 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10974"; a="933099575"
 X-IronPort-AV: E=Sophos;i="6.05,242,1701158400"; 
-   d="scan'208";a="5401061"
+   d="scan'208";a="933099575"
 Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.94.8.107]) ([10.94.8.107])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 00:20:23 -0800
-Message-ID: <2abb6c0b-ea66-4649-b205-bafe49340aee@linux.intel.com>
-Date: Mon, 5 Feb 2024 09:20:20 +0100
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 01:01:05 -0800
+Message-ID: <aaa76d7a-4299-4e1c-83f1-cbbea763927f@linux.intel.com>
+Date: Mon, 5 Feb 2024 10:01:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,8 +64,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 20/53] ASoC: Add SOC USB APIs for adding an USB
- backend
+Subject: Re: [PATCH v13 50/53] ALSA: usb-audio: Allow for rediscovery of
+ connected USB SND devices
 Content-Language: en-US
 To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
  mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
@@ -77,51 +78,96 @@ Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
  linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
  alsa-devel@alsa-project.org
 References: <20240203023645.31105-1-quic_wcheng@quicinc.com>
- <20240203023645.31105-21-quic_wcheng@quicinc.com>
+ <20240203023645.31105-51-quic_wcheng@quicinc.com>
 From: =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
  <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <20240203023645.31105-21-quic_wcheng@quicinc.com>
+In-Reply-To: <20240203023645.31105-51-quic_wcheng@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 2/3/2024 3:36 AM, Wesley Cheng wrote:
-> Some platforms may have support for offloading USB audio devices to a
-> dedicated audio DSP.  Introduce a set of APIs that allow for management of
-> USB sound card and PCM devices enumerated by the USB SND class driver.
-> This allows for the ASoC components to be aware of what USB devices are
-> available for offloading.
+> In case of notifying SND platform drivers of connection events, some of
+> these use cases, such as offloading, require an ASoC USB backend device to
+> be initialized before the events can be handled.  If the USB backend device
+> has not yet been probed, this leads to missing initial USB audio device
+> connection events.
+> 
+> Expose an API that traverses the usb_chip array for connected devices, and
+> to call the respective connection callback registered to the SND platform
+> driver.
 > 
 > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 > ---
-
-...
-
-> +
-> +/**
-> + * snd_soc_usb_add_port() - Add a USB backend port
-> + * @dev: USB backend device
-> + * @priv: private data
-> + * @connection_cb: connection status callback
-> + *
-> + * Register a USB backend device to the SND USB SOC framework.  Memory is
-> + * allocated as part of the USB backend device.
-> + *
+>   sound/usb/card.c                  | 19 +++++++++++++++++++
+>   sound/usb/card.h                  |  2 ++
+>   sound/usb/qcom/qc_audio_offload.c |  2 ++
+>   3 files changed, 23 insertions(+)
+> 
+> diff --git a/sound/usb/card.c b/sound/usb/card.c
+> index 11b827b7a2a5..995b2df676ab 100644
+> --- a/sound/usb/card.c
+> +++ b/sound/usb/card.c
+> @@ -202,6 +202,25 @@ struct snd_usb_stream *snd_usb_find_suppported_substream(int card_idx,
+>   }
+>   EXPORT_SYMBOL_GPL(snd_usb_find_suppported_substream);
+>   
+> +/*
+> + * in case the platform driver was not ready at the time of USB SND
+> + * device connect, expose an API to discover all connected USB devices
+> + * so it can populate any dependent resources/structures.
 > + */
-> +int snd_soc_usb_add_port(struct snd_soc_usb *usb)
+> +void snd_usb_rediscover_devices(void)
 > +{
+> +	int i;
 > +
-> +
+> +	mutex_lock(&register_mutex);
+> +	for (i = 0; i < SNDRV_CARDS; i++) {
+> +		if (usb_chip[i])
+> +			if (platform_ops && platform_ops->connect_cb)
+> +				platform_ops->connect_cb(usb_chip[i]);
 
-Cosmetic, but why is there white space between start of function and 
-body of function?
+if inside if, it can just be && or maybe move callback check before 
+mutex lock and just return early if it is not present?
 
-> +	mutex_lock(&ctx_mutex);
-> +	list_add_tail(&usb->list, &usb_ctx_list);
-> +	mutex_unlock(&ctx_mutex);
-> +
-> +	return 0;
+> +	}
+> +	mutex_unlock(&register_mutex);
 > +}
-> +EXPORT_SYMBOL_GPL(snd_soc_usb_add_port);
+> +EXPORT_SYMBOL_GPL(snd_usb_rediscover_devices);
 > +
+>   /*
+>    * disconnect streams
+>    * called from usb_audio_disconnect()
+> diff --git a/sound/usb/card.h b/sound/usb/card.h
+> index 6d59995440c3..3a0d68f453a1 100644
+> --- a/sound/usb/card.h
+> +++ b/sound/usb/card.h
+> @@ -222,11 +222,13 @@ int snd_usb_unregister_platform_ops(void);
+>   #if IS_ENABLED(CONFIG_SND_USB_AUDIO)
+>   struct snd_usb_stream *snd_usb_find_suppported_substream(int card_idx,
+>   			struct snd_pcm_hw_params *params, int direction);
+> +void snd_usb_rediscover_devices(void);
+>   #else
+>   static struct snd_usb_stream *snd_usb_find_suppported_substream(int card_idx,
+>   			struct snd_pcm_hw_params *params, int direction)
+>   {
+>   	return NULL;
+>   }
+> +static void snd_usb_rediscover_devices(void) { }
+>   #endif /* IS_ENABLED(CONFIG_SND_USB_AUDIO) */
+>   #endif /* __USBAUDIO_CARD_H */
+> diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
+> index 08af82ec22ad..9b0f98600e58 100644
+> --- a/sound/usb/qcom/qc_audio_offload.c
+> +++ b/sound/usb/qcom/qc_audio_offload.c
+> @@ -1867,6 +1867,8 @@ static int __init qc_usb_audio_offload_init(void)
+>   	if (ret < 0)
+>   		goto release_qmi;
+>   
+> +	snd_usb_rediscover_devices();
+> +
+>   	return 0;
+>   
+>   release_qmi:
+> 
 
 
