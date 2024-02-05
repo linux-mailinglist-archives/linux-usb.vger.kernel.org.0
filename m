@@ -1,187 +1,323 @@
-Return-Path: <linux-usb+bounces-5900-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5901-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74AA384A900
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 23:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6928684AABC
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 00:41:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 001D31F2D313
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 22:17:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E75691F23C05
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Feb 2024 23:41:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 362DA48CCF;
-	Mon,  5 Feb 2024 22:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Qf8DHVmu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72C1C4CE11;
+	Mon,  5 Feb 2024 23:40:36 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A2528DD8
-	for <linux-usb@vger.kernel.org>; Mon,  5 Feb 2024 22:05:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FEF4E1A3
+	for <linux-usb@vger.kernel.org>; Mon,  5 Feb 2024 23:40:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707170753; cv=none; b=SYdLSXyH6W64Rr3f1U2dqRlq0KD6BXrXSM9OfQon5eu/8Fw+Tj2zTcdxTdJOmWplk7oVPv/ZZ1jNE0NtI6gfr3Qt2ijjOayrJxCzw4MJPW/TcPGEwOK3adPHL2E0wm2JVPf9pPStoN4y7l4AzZ1/Dyj8IzPI5yUXEvLJGGbvwMo=
+	t=1707176436; cv=none; b=jk3alPPhi6hKbSgo4gRdUTHdbl/c5mFXC4Y6Qkm5kWRdIPEWqC9eeokkZ0MFMLUgOPS+5Z4Y8lcjJX59K9PlYij2m55AZL863EI/YshEYQMBTLKOp1m9ve1NhfLti5sRIvoIHfBf3JDCyI7SkM58jTIk3Rtkbv32j+5tCCkK5WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707170753; c=relaxed/simple;
-	bh=/yC6ukCR6M9OWDOAQofhpPWkpb0+7yFSlv5kx0Xd2yY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qh94chqp1VPw/2uefwMCP+/TVh3GoxpCwQzcTzOeXyhAy7/iootZ4nCTqaajEazILEN9g7ddKrp0f9lhRE9Rnr2BgjL6ocx9ZbUfIFbzvhepDrjuoBXCrxpqVO8UzJKitmBBP/ZO99vIpP2TuZXmY2D2P2vjByZ0SweSHi50sHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Qf8DHVmu; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-dc6d8bd612dso4628287276.1
-        for <linux-usb@vger.kernel.org>; Mon, 05 Feb 2024 14:05:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1707170750; x=1707775550; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+uyM7Qy9ebYgtc0T1FfcjgiWLInu4H67aNLCBp8izTI=;
-        b=Qf8DHVmufNeX4fR9YPGoVxlpcuXXutYOFLjXGtJze/yMGBmlAhiNw1fPPtwioEp1Ib
-         msJPhNHGIzoVfcXNtI43JyTVOfkLRTXZsby/qN1C5Rh84evuFOpa/OzBKe4brYB90wxZ
-         CJX8DSbRxVc1iWzjyw+0GrZN+OEBtq1nWRBoI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707170750; x=1707775550;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+uyM7Qy9ebYgtc0T1FfcjgiWLInu4H67aNLCBp8izTI=;
-        b=g9eqtewlX0DkFMg1IxyyitANCMkKpcKi2MiaKj3KpeT6tHFV251fEjW2ja/iQTRWpo
-         X5jqB/0kQPUacRD4aZoaekpE1UrsVB73SXwD7uNQAFxgUFCCGRArzCiLZgKoRW0U43R6
-         QkmdCAlFCbz5i3zqgpjb8M5zKRbpanBNEO1JIUBhUe8DT8NCrgdKM+4CKPMoE35vH2TO
-         pEIfvuA3PrdZ+UbLGgYnsUExbype7iTMdKdEEM0XKOYAFwMoOycCP/wrbWYCaynfvMBQ
-         7CeiMLoQJvq2YiwfYzf22dgq4jKX8aSWkcRHZWGNVfW6Vm63BiN9x6W9OLQ0WpY/zWbM
-         6/LQ==
-X-Gm-Message-State: AOJu0Ywl2UqeszD+Dxn5tVwaF+noQztuUQR0mXva/lQwoY3iSlO5+O1b
-	7NwHWbbwQFoi80v3+ZZYzusWGUBofdfbSynUKZBKrooSl8x/xjcAA4HUohfpwobS4ZQkluE1C64
-	mHYBWt/XShmj83ZlNKsHbTDYeXO/H+THgIzPZ/aKtwAIP7dM=
-X-Google-Smtp-Source: AGHT+IE1dY0Dgu+RNNAwM80SRYg80MTyc6l94UjLiuC8rBB3isPt7AhJZ2B2k3REppaMwM/8wOjM5t6SUG0eRFTfdY4=
-X-Received: by 2002:a25:ace1:0:b0:dc2:28b1:2e8b with SMTP id
- x33-20020a25ace1000000b00dc228b12e8bmr713829ybd.15.1707170749681; Mon, 05 Feb
- 2024 14:05:49 -0800 (PST)
+	s=arc-20240116; t=1707176436; c=relaxed/simple;
+	bh=xPE7313tGa36WXt8zAWU+JWd3UaGL/fTkOi3lRYG8Qs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bkpCnp4KqTQKvz+t4xmyEVOYTKBM3+v8BvcT/sq6T5QtvtWOpe4CC7s3xUVocuF9bpMPP1gMzoVdpkGdzPDAa0kvZfmyMxOOKX0Up9QdYFC+0MgCDVjyR5x6Nhws8Bnf4Je3Ye19SOGaBWblxaYwomUN0JMedfVF9O2iO3mPNHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1rX8Zh-00082y-3L; Tue, 06 Feb 2024 00:40:29 +0100
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1rX8Zg-004ifQ-7E; Tue, 06 Feb 2024 00:40:28 +0100
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1rX8Zg-00CtLW-0R;
+	Tue, 06 Feb 2024 00:40:28 +0100
+Date: Tue, 6 Feb 2024 00:40:28 +0100
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: duplicate requests on host side while streaming via uvcvideo gadget
+Message-ID: <ZcFx7P30Su_Mx4AV@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240126183930.1170845-1-abhishekpandit@chromium.org>
- <20240126103859.v3.3.Idf7d373c3cbb54058403cb951d644f1f09973d15@changeid> <CACeCKaeVtU3ckmGU932d-pPn=eOnt6KjAavNY3rSOUgrJNriDg@mail.gmail.com>
-In-Reply-To: <CACeCKaeVtU3ckmGU932d-pPn=eOnt6KjAavNY3rSOUgrJNriDg@mail.gmail.com>
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date: Mon, 5 Feb 2024 14:05:38 -0800
-Message-ID: <CANFp7mXOXc6TzLJ+EJ9VYxqGHcjW099oBhDctarUdM5eJGz5bg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] usb: typec: ucsi: Get PD revision for partner
-To: Prashant Malani <pmalani@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
-	jthies@google.com, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Bjorn Andersson <andersson@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans de Goede <hdegoede@redhat.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Rajaram Regupathy <rajaram.regupathy@intel.com>, 
-	Saranya Gopal <saranya.gopal@intel.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="DBDd8WemaKPkFy1h"
+Content-Disposition: inline
+X-URL: http://www.pengutronix.de/
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+
+
+--DBDd8WemaKPkFy1h
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Heikki,
+Hi Thinh
 
-Friendly ping to review this patch (I see you added Reviewed-by to the
-other two in this series).
+I found some strange situation while streaming via uvc-gadget to some
+usb host. It happens when some requests are missed due to higher load on
+the gadget machine. In some cases some requests will reach the host
+twice. In my special case, I added the following changes [1] for the
+host and gadget side.
 
-Thanks,
-Abhishek
+When applying the patches you will find all requests marked as errors on
+the host and gadget side reported. However, the odd thing is that the
+error counter on the host side will rise higher than the number of
+requests we have actually marked as errornous on the gadget side. You
+check the number of errors found on the host by looking in the
+statistics and compare it with the numer of requests that are actually
+marked with UVC_STREAM_ERR.
 
-On Fri, Jan 26, 2024 at 12:25=E2=80=AFPM Prashant Malani <pmalani@chromium.=
-org> wrote:
->
-> Hi Abhishek,
->
-> On Fri, Jan 26, 2024 at 10:39=E2=80=AFAM Abhishek Pandit-Subedi
-> <abhishekpandit@chromium.org> wrote:
-> >
-> > PD major revision for the port partner is described in
-> > GET_CONNECTOR_CAPABILITY and is only valid on UCSI 2.0 and newer. Updat=
-e
-> > the pd_revision on the partner if the UCSI version is 2.0 or newer.
-> >
-> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> > ---
-> > $ cat /sys/class/typec/port2-partner/usb_power_delivery_revision
-> > 3.0
-> >
-> > (no changes since v2)
-> >
-> > Changes in v2:
-> >   - Formatting changes and update macro to use brackets.
-> >   - Fix incorrect guard condition when checking connector capability.
-> >
-> >  drivers/usb/typec/ucsi/ucsi.c | 23 +++++++++++++++++++++++
-> >  drivers/usb/typec/ucsi/ucsi.h |  3 +++
-> >  2 files changed, 26 insertions(+)
-> >
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucs=
-i.c
-> > index a35056ee3e96..2b7983d2fdae 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > @@ -782,6 +782,7 @@ static int ucsi_register_partner(struct ucsi_connec=
-tor *con)
-> >         }
-> >
-> >         desc.usb_pd =3D pwr_opmode =3D=3D UCSI_CONSTAT_PWR_OPMODE_PD;
-> > +       desc.pd_revision =3D UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_B=
-CD(con->cap.flags);
-> >
-> >         partner =3D typec_register_partner(con->port, &desc);
-> >         if (IS_ERR(partner)) {
-> > @@ -856,6 +857,27 @@ static void ucsi_partner_change(struct ucsi_connec=
-tor *con)
-> >                         con->num, u_role);
-> >  }
-> >
-> > +static int ucsi_check_connector_capability(struct ucsi_connector *con)
-> > +{
-> > +       u64 command;
-> > +       int ret;
-> > +
-> > +       if (!con->partner || !IS_MIN_VERSION_2_0(con->ucsi))
->
-> I'll reiterate my comment from a previous version, since this series
-> has been revv-ed a few
-> times since and it may have gotten lost; no need to respond to it if
-> you don't want to,
-> since I believe we left it to the maintainer(s) to decide [1]:
->
-> This macro is unnecessary. Since the version is in BCD format and we
-> already have the
-> macros for versions, just a simple comparison is enough:
->          if (!con-partner || con->ucsi->version < UCSI_VERSION_2_0)
->                  return 0;
->
-> I'll add that Patch 1 of this series [2] is also using the same style
-> for comparing version numbers.
->
-> > +               return 0;
-> > +
-> > +       command =3D UCSI_GET_CONNECTOR_CAPABILITY | UCSI_CONNECTOR_NUMB=
-ER(con->num);
-> > +       ret =3D ucsi_send_command(con->ucsi, command, &con->cap, sizeof=
-(con->cap));
-> > +       if (ret < 0) {
-> > +               dev_err(con->ucsi->dev, "GET_CONNECTOR_CAPABILITY faile=
-d (%d)\n", ret);
->
-> nit: I know this is being done elsewhere in this file, but we should
-> avoid putting error
-> numbers in parentheses [3]. Perhaps something for a separate cleanup patc=
-h.
->
-> [1] https://lore.kernel.org/linux-usb/CANFp7mXP=3DaN8bQi4akKKcoMZE8RaCBuF=
-nwTa5hbp0MZvZe0hYQ@mail.gmail.com/
-> [2] https://lore.kernel.org/linux-usb/20240126103859.v3.1.Iacf5570a66b82b=
-73ef03daa6557e2fc0db10266a@changeid/
-> [3] https://www.kernel.org/doc/html/latest/process/coding-style.html#prin=
-ting-kernel-messages
+[1] applied hunks:
+
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/functio=
+n/uvc.h
+index 6bdcf3bdd62a9..63515fc949880 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -91,6 +91,8 @@ struct uvc_video {
+         struct work_struct pump;
+         struct workqueue_struct *async_wq;
+
++       int errorcount;
++
+         /* Frame parameters */
+         u8 bpp;
+         u32 fcc;
+
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/f=
+unction/uvc_video.c
+index eb1f7cee4a0af..f45dd53fde7ef 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -35,6 +35,12 @@ uvc_video_encode_header(struct uvc_video *video, struct =
+uvc_buffer *buf,
+
+         data[1] =3D UVC_STREAM_EOH | video->fid;
+
++       if (video->queue.flags & UVC_QUEUE_DROP_INCOMPLETE) {
++               video->errorcount++;
++               printk("dropping frame! %d\n", video->errorcount);
++               data[1] |=3D UVC_STREAM_ERR;
++       }
++
+         if (video->queue.buf_used =3D=3D 0 && ts.tv_sec) {
+                 /* dwClockFrequency is 48 MHz */
+                 u32 pts =3D ((u64)ts.tv_sec * USEC_PER_SEC + ts.tv_nsec / =
+NSEC_PER_USEC) * 48;
+
+@@ -47,6 +47,8 @@ uvc_video_encode_header(struct uvc_video *video, struct u=
+vc_buffer *buf,
+ =20
+                 data[1] |=3D UVC_STREAM_PTS;
+                 put_unaligned_le32(pts, &data[pos]);
++               if (data[1] & UVC_STREAM_ERR)
++                       trace_printk("PTS: %u\n", data[pos]);
+                 pos +=3D 4;
+         }
+ =20
+@@ -60,6 +62,10 @@ uvc_video_encode_header(struct uvc_video *video, struct =
+uvc_buffer *buf,
+                 data[1] |=3D UVC_STREAM_SCR;
+                 put_unaligned_le32(stc, &data[pos]);
+                 put_unaligned_le16(sof, &data[pos+4]);
++               if (data[1] & UVC_STREAM_ERR) {
++                       trace_printk("SCR: %u\n", data[pos]);
++                       trace_printk("SCR: %hu\n", data[pos+4]);
++               }
+                 pos +=3D 6;
+         }
+ =20
+
+@@ -731,6 +734,7 @@ int uvcg_video_enable(struct uvc_video *video)
+         struct usb_gadget *gadget =3D cdev->gadget;
+         int ret;
+
++       video->errorcount =3D 0;
+         if (video->ep =3D=3D NULL) {
+                 uvcg_info(&video->uvc->func,
+                           "Video enable failed, device is uninitialized.\n=
+");
+
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_=
+video.c
+index 28dde08ec6c5d..40eafe43d1888 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -916,8 +916,24 @@ static void uvc_video_stats_decode(struct uvc_streamin=
+g *stream,
+         if (len <=3D header_size)
+                 stream->stats.frame.nb_empty++;
+
+-       if (data[1] & UVC_STREAM_ERR)
++       if (data[1] & UVC_STREAM_ERR) {
+                 stream->stats.frame.nb_errors++;
++               printk("error on uvc package!\n");
++               if (data[1] & UVC_STREAM_PTS) {
++                       printk("PTS: %u\n", data[2]);
++                       if (data[1] & UVC_STREAM_SCR) {
++                               printk("SCR: %u\n", data[6]);
++                               printk("SCR: %hu\n", data[10]);
++                       }
++               } else {
++                       if (data[1] & UVC_STREAM_SCR) {
++                               printk("SCR: %u\n", data[2]);
++                               printk("SCR: %hu\n", data[6]);
++                       }
++               }
++
++
++       }
+  }
+
+-- Host:
+
+[ 1769.213387] error on uvc package!
+[ 1769.213396] PTS: 16
+[ 1769.213400] SCR: 64
+[ 1769.213402] SCR: 229
+
+[ 1769.461386] error on uvc package!
+[ 1769.461394] PTS: 96
+[ 1769.461398] SCR: 80
+[ 1769.461401] SCR: 33
+
+[ 1769.461405] error on uvc package! <- duplicate
+[ 1769.461408] PTS: 96
+[ 1769.461410] SCR: 80
+[ 1769.461413] SCR: 33
+
+[ 1769.657405] error on uvc package!
+[ 1769.657442] PTS: 224
+[ 1769.657449] SCR: 64
+[ 1769.657453] SCR: 81
+
+[ 1769.657460] error on uvc package! <- duplicate
+[ 1769.657465] PTS: 224
+[ 1769.657470] SCR: 64
+[ 1769.657476] SCR: 81
+
+[ 1779.525368] error on uvc package!
+[ 1779.525374] PTS: 128
+[ 1779.525378] SCR: 224
+[ 1779.525380] SCR: 157
+
+[ 1784.637359] error on uvc package!
+[ 1784.637367] PTS: 0
+[ 1784.637371] SCR: 208
+[ 1784.637374] SCR: 89
+
+[ 1784.825357] error on uvc package!
+[ 1784.825394] PTS: 224
+[ 1784.825401] SCR: 192
+[ 1784.825406] SCR: 63
+
+[ 1784.841362] error on uvc package!
+[ 1784.841394] PTS: 144
+[ 1784.841403] SCR: 48
+[ 1784.841410] SCR: 186
+
+[ 1784.841418] error on uvc package! <- duplicate
+[ 1784.841424] PTS: 144
+[ 1784.841430] SCR: 48
+[ 1784.841436] SCR: 186
+
+host$ grep errors /sys/kernel/debug/usb/uvcvideo/*/stats
+/sys/kernel/debug/usb/uvcvideo/4-81-1/stats:errors:  10
+
+
+-- Gadget:
+
+[=A0 126.826517] dropping frame! 1
+[=A0 126.829658] PTS: 16
+[=A0 126.831761] SCR: 64
+[=A0 126.833858] SCR: 229
+
+[=A0 127.090069] dropping frame! 2
+[=A0 127.093059] PTS: 96
+[=A0 127.095164] SCR: 80
+[=A0 127.097261] SCR: 33
+
+[=A0 127.288045] dropping frame! 3
+[=A0 127.291041] PTS: 224
+[=A0 127.293233] SCR: 64
+[=A0 127.295330] SCR: 81
+
+[=A0 137.153499] dropping frame! 4
+[=A0 137.156494] PTS: 128
+[=A0 137.158687] SCR: 224
+[=A0 137.160871] SCR: 157
+
+[=A0 142.265135] dropping frame! 5
+[=A0 142.268131] PTS: 0
+[=A0 142.270148] SCR: 208
+[=A0 142.272332] SCR: 89
+
+[=A0 142.453636] dropping frame! 6
+[=A0 142.456634] PTS: 224
+[=A0 142.458825] SCR: 192
+[=A0 142.461009] SCR: 63
+
+[=A0 142.469131] dropping frame! 7
+[=A0 142.472118] PTS: 144
+[=A0 142.474310] SCR: 48
+[=A0 142.476407] SCR: 186
+
+Now I am totally unsure what could cause such error, but would expect
+the issue to be somewhere in the gadget driver and the mapped trb memory
+content. For the uvc_video layer, I compared and tested the enqueued
+request list for duplicates but could not find any. I also reverted all
+recent patches that changed request handling in the past year. I still
+find these request duplicates on the host side show up.
+
+Any Ideas?
+
+Regards,
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--DBDd8WemaKPkFy1h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmXBcewACgkQC+njFXoe
+LGTcoQ/8CH+HMxAw3N8p4z+XyEEb0Z4OnD7ICOQE/1EoFoi5MY83gfzS+vDVEb0k
+yqCYcLTLZfzAciPQpFWmvwaQeNy8A9yjFbcQ6d5vzWE2NdPuctcgfynZenCCx7pF
+QyWcOlJRS72esk/mk++gHuS297piTAUDofTJGfzkrNb6iYTppA/IFEgpPcx+kjuU
+S/3MwuTK3VdlK42SDtrT0HfTYLrvMXyMfa38ya/DC2HSdjUiBj7IQFHWQJNJAIiY
+eeHYlYubiMWfZktIF+/Vj9UdtFcKR4WYGJePPj62YvUX1Xokgve5GiwJRllU7Q9g
+zMYuUZTmIHOa7+f9kCw0NLh6qhWGyiARJyld5x+IsK9MiV8OPK12Eudko2iqNWvU
+5z6IYh0ohWZXlGtdGosJZz1roENfTBq0R768C1heD0Gkga77k4pxONXzagbZNM/i
+E+GIWzOZ1rA3kjLoW7heOF+yRVFmDPG0rhIEg2QZqHHAtp9S2U1P2XftA7hgJgKM
+6E6/r8w/xwGrixJg2SOHMy74hvlwIhF4mnr+ENfNk8OIhU+ayzQscWQPz7ENRdJl
+rMKb9RtJdXHREtzQSOotnlr1kJlQd9GmBt4VjUksux3yclY13dxWDdcKjBEESKlz
+OYGUOoeVCa7ahldUSt2oesH9L/Yt9sRsaIu/Qh0ekwrhBcgCrRI=
+=5xjG
+-----END PGP SIGNATURE-----
+
+--DBDd8WemaKPkFy1h--
 
