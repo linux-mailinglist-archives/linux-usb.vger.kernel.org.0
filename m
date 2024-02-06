@@ -1,89 +1,113 @@
-Return-Path: <linux-usb+bounces-5950-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5951-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68CF884B7D4
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 15:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 788D784B7FE
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 15:33:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 161711F247F3
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 14:26:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 266701F26BBD
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 14:33:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA24C132C24;
-	Tue,  6 Feb 2024 14:26:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E37A132C0D;
+	Tue,  6 Feb 2024 14:32:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="b7vrV39A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q7jNBJ38"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901DB132C09;
-	Tue,  6 Feb 2024 14:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE11133402;
+	Tue,  6 Feb 2024 14:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707229561; cv=none; b=l60z6sr4oDVXCv2HmwJRhdWtpsgj78vKquZT09/0t2jFOLXgZrxKDX0l3N2/ON5tPXrz66QEJdw0RcwPqsHDFKUKdUSroldBGkoCyzyknUEG8xEHVvz98Mv+qnPmpIOozWRXK0fXvXAvn9jWJ1j62TYXnzUGtueKUFUY/IaVFx4=
+	t=1707229978; cv=none; b=m3LQZREYKsPivkYW8Vy9FgdWYtCKebFfXk5oxmIefkqlX7QAvPklHEFSlsK4qkKnnF88nt3I8MZxrmNXwbBwkaM2k9CxqXfTsxZOhEhZe5wTOS1SSWV5MvtOOHpJfejZBKpgi1IoCWWt+4h3EkQnpXnOx6IjuAy+kiss93uv1SI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707229561; c=relaxed/simple;
-	bh=5J1DHXhtJMQ4CbzsyxiP+MOl0UOFuDY+e2LH/+A+T00=;
+	s=arc-20240116; t=1707229978; c=relaxed/simple;
+	bh=9UD8b+TFEEK4uaC9hJArAphziHujlpaWwwUyIgLBMxM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=StAGX7qCjC2gx5SierhdhSfmqdqbCySkt7njTfOSIEELTqSPEvpDMMllhLHiqvyPtRzO8pKMPQSoGBHGL/F/BAncZBvDR4sHRY9gPNkvTZJr6q8haq7VZWVSj4Myvo5O84CKlDE69Akty04+I9qowv+xaHWROKRrimI0BwRGoqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=b7vrV39A; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=v9k+wXSjFP1gf2hdsJ6BF7YhNnlmP4KyBwDgOaZfcbI=; b=b7vrV39A71XHo6t/G+sJWupZJm
-	Iaveyf5gWkytLfoRXY2yzy15yPlqA9DSPGb72mGmuMsrpJVQOSFtmPKx8LhiPF18kSZY4OHH51UfY
-	EwS/sUZpA7wyPzfy4Z1N/rOUhayCf15zB7y6UHnKIqzkMnCAjluSKRxLreZtmgl61rks=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rXMOD-0078nm-UA; Tue, 06 Feb 2024 15:25:33 +0100
-Date: Tue, 6 Feb 2024 15:25:33 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Ariel Elior <aelior@marvell.com>,
-	Manish Chopra <manishc@marvell.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH 7/8] net: intel: igb: Use linkmode helpers for EEE
-Message-ID: <a476df99-d6f9-43ad-8af1-afc858bcd3a8@lunn.ch>
-References: <20240204-keee-u32-cleanup-v1-0-fb6e08329d9a@lunn.ch>
- <20240204-keee-u32-cleanup-v1-7-fb6e08329d9a@lunn.ch>
- <20240206103425.28e64a8f@device-28.home>
+	 Content-Type:Content-Disposition:In-Reply-To; b=WhlpqjEEjE4emdEyizvScn+xMxS8q8vK24Z+Lva08VObi57BBxBPQhcWASFQtpMa9QjEl7sEI69IwIrjvAC/Tbhdxbp5f5+M5am5TAcxbZOfqMSzfT5eT55ZtcGOZbO1YD8LKTXOgc0j2GO8Ne5seoQ6JkslE+yP/bR6IP96qII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q7jNBJ38; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91ADC433C7;
+	Tue,  6 Feb 2024 14:32:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707229978;
+	bh=9UD8b+TFEEK4uaC9hJArAphziHujlpaWwwUyIgLBMxM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=q7jNBJ38XIV3H3zCuCxJsKOiGWqCQhJwh2J4ojbgeQQlLzZ9I39+4pY+LK5QR5UJD
+	 KVk6U7n6+3DRXpTHA4fzjgSdepmDinVheDwDpOKJM50iSKlp27Fw5WH9KfztmuPae0
+	 i4Wc8DUZMspWmB2dIn0ZTmtSxbtxASicKnXisYz+/GNTTCAb1mncM7lrhR39vA/jA/
+	 qQE8r/wWcI+/1a9ALjyMFhCJ6oRsGps1mmNAiscAAfwI7WTBxENuVYlu7wAzZ/ixJW
+	 tr54XmjUxaB8ymcwokWfi8gMDLuVU5fjAzlUSAm58lE3rK/1rQUdxeh50sWfmwGYug
+	 YWVifAk5sTWsw==
+Date: Tue, 6 Feb 2024 14:32:54 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 6/7] ASoC: dt-bindings: xmos,xvf3500: add XMOS XVF3500
+ voice processor
+Message-ID: <ZcJDFi+iIQOWzgYw@finisterre.sirena.org.uk>
+References: <20240206-onboard_xvf3500-v3-0-f85b04116688@wolfvision.net>
+ <20240206-onboard_xvf3500-v3-6-f85b04116688@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="09qaS/n52Yq+UYa2"
+Content-Disposition: inline
+In-Reply-To: <20240206-onboard_xvf3500-v3-6-f85b04116688@wolfvision.net>
+X-Cookie: You might have mail.
+
+
+--09qaS/n52Yq+UYa2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240206103425.28e64a8f@device-28.home>
 
-> > -		adv100m_eee = !!(edata->advertised_u32 & ADVERTISE_100_FULL);
-> > -		adv1g_eee = !!(edata->advertised_u32 & ADVERTISE_1000_FULL);
-> > +		adv100m_eee = linkmode_test_bit(
-> > +			ETHTOOL_LINK_MODE_100baseT_Full_BIT,
-> > +			edata->advertised);
-> > +		adv1g_eee = linkmode_test_bit(
-> > +			ETHTOOL_LINK_MODE_100baseT_Full_BIT,
-> 
-> Probably a typo, I think it should be ETHTOOL_LINK_MODE_1000baseT_Full_BIT
-> here :)
+On Tue, Feb 06, 2024 at 02:59:34PM +0100, Javier Carrasco wrote:
 
-Yes, good catch. Thanks.
+> The XMOS XVF3500 VocalFusion Voice Processor[1] is a low-latency, 32-bit
+> multicore controller for voice processing.
 
-    Andrew
+Acked-by: Mark Brown <broonie@kernel.org>
 
----
-pw-bot: cr
+though...
+
+> +  vdd-supply:
+> +    description:
+> +      Regulator for the 1V0 supply.
+> +
+> +  vdd2-supply:
+> +    description:
+> +      Regulator for the 3V3 supply.
+
+...it's a bit weird that the supplies are named like this, usually
+there'd be some sort of meaningful name (even if it's just VDD_1V0 and
+VDD_3V3 or something).  Are you sure these are the actual names?
+
+--09qaS/n52Yq+UYa2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXCQxYACgkQJNaLcl1U
+h9BNHgf+JiPymHHAj2dWCTh3dcHIcsDDkVwzN5R4Ue5BSiQ+iVD4G0zQZHA9KlEc
+7TNtUN+LdLUnPZ9DldK5GMEfoNJAflLR5MSyICkP3YPJl+9pcMaT98l9asluFMqS
+Qex5uI3PwAMH9vqgj+xvk2OJM0Bp8LvTD9thGRXXh6N0QukDwovKqtVTLEVSUTkb
+/v5VhN6YhrOGy6Mlo27m0otmD2ERRhK2uGMHbf5Ghgp8qObCCHXVmEeRNRs8fulC
+WKjunt8FUP48V18SRPNKAxZl6bFJPzPer/IAF2CXd/crpUP5EdBxTbke8aJwe0vm
+JHzm5NTNpB9v+Ou15VrdXNWi1iPXHA==
+=6G9h
+-----END PGP SIGNATURE-----
+
+--09qaS/n52Yq+UYa2--
 
