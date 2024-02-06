@@ -1,209 +1,108 @@
-Return-Path: <linux-usb+bounces-5971-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5972-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2181884BC94
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 18:55:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4885784BCA6
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 19:05:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46D641C24032
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 17:55:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EFF48B22FDA
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 18:04:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32971DDD9;
-	Tue,  6 Feb 2024 17:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83DC0134BC;
+	Tue,  6 Feb 2024 18:04:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XY9ZOgm5"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ix20IlZA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B340DF59
-	for <linux-usb@vger.kernel.org>; Tue,  6 Feb 2024 17:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73242DF42
+	for <linux-usb@vger.kernel.org>; Tue,  6 Feb 2024 18:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707242145; cv=none; b=j7Dlbb9j7LZZd/umZrpn6PvsMn7yC83hfy2P1b5v0OYcSIqlapiY/RPmfjlUiwyIvbL+6qTg2kWIcFNPuYr45jkCdpRb0sBh2g8tlNH1ukPbT/61K513WjNB3hDUtAC3Q7mFSBZI2nFOLAVDbiSteP8FY9PRD2cEKAxl5kfq7eA=
+	t=1707242690; cv=none; b=Xni6fmdxQtFtCOyPGdyifBm/LSNeUO74CCxI0+eXWFh3PMUw7+NXJyvRuHpwF4UMDPgf55qsDsXTAUXO7vixJPG3pJAcA0LAvRMzAn0Icsa/J4xFyBEQSG+usJxTTt3LFMe/3gT6F+bT3sRmhQbs1JthjQydF8vpOIY6ev1tX68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707242145; c=relaxed/simple;
-	bh=8lFdlTAXaMQYKNjhcwZCI4u14lmHP8FD8O7vw6uNBZ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ttvNXkEgERqctl0DqJ9UVISD7vhj7Z037ZF4n/ZV8T4YkQHu9zEuXoMRe9zqXn9yNQFPciOe5icYJNH2F7h0cI7p5rtxF042IMNopZpv0RhkLhdQ4NbvWT9FJHnTrTe65+GkiS7XiY5AM94hUJ4LOduvh+B+0VSlr5Xxcu8xkoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=XY9ZOgm5; arc=none smtp.client-ip=209.85.166.43
+	s=arc-20240116; t=1707242690; c=relaxed/simple;
+	bh=LHhTCuH4A/0wFtRKTVPMRZgG2il7EIGIfjfqz07u/cI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l5OLY3+pjZF8Iys4hAUNA5n3/3FS9/DSTuqQkQywWk7mlg1PAUhFNSxVI9Dk5E9CHDDobbdPsNcH1dIpOt/lxNrJ7iPUKWThoulmGiQRj2UO2r1vPsRFWpLMR9IVKmlCFDcSczLolCJ1otJD28V51Ls/wDc2FL+OPJpMoAvROyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ix20IlZA; arc=none smtp.client-ip=209.85.219.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7bade847536so51734039f.0
-        for <linux-usb@vger.kernel.org>; Tue, 06 Feb 2024 09:55:43 -0800 (PST)
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-68c444f9272so26981756d6.3
+        for <linux-usb@vger.kernel.org>; Tue, 06 Feb 2024 10:04:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1707242143; x=1707846943; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NoNQuT/2/fYcMZPqf8XcAEgjNV4wPgIdnAAOu6x91K0=;
-        b=XY9ZOgm5/p7f0cITAw5R5STD9/m4vztf2a+1CbtByPFPW4j+9031Ca8qbMzqbc9pFY
-         tB3zm7aNwrgxQP4hSWeGJ7+ESvHaEMzzhCeOUCoV2FiI9UeWFPgWNymA5Q5CAcAMaXS+
-         JRFnrI3K4b4tcY6/th8HQX6nXTCdsGFauBYnI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707242143; x=1707846943;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1707242686; x=1707847486; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NoNQuT/2/fYcMZPqf8XcAEgjNV4wPgIdnAAOu6x91K0=;
-        b=BqkUrHwr2zpFNPU2eNRP0V7gm5rVSR4kIhLMNn8B/6bH8HFBbdaiZcWAW4DtrUvdHC
-         PQ/+8h2317AYBR6PZN7bxKkcjwq7Gvwj1fyZ2gKfAL7PBJJMj6z25WLW62qfJnaE4naL
-         rUarg5EWpLdMoZNy1kdsbCBrnDGGjSim0oP5zAKIRjxK4EViWZKe8WCoik5O4n/Ms2uM
-         iCJfX30looHa3NMXPzCbxitYhK45vHWTMT6rMn1R3QRecWsQnrH1Ln76yT9eRQgLGLwF
-         C9FuSEqDv4mxiwnRloOgoWcTWWbpv1zNQUMzNcpYJ7PLUQoc/UxEPPdnHCEa60L4S30U
-         GeBQ==
-X-Gm-Message-State: AOJu0YxTC0Dg/PRJHx/NRf+SvMcvBZGt5SZZBUb3c9wlbExutCECbcJ8
-	ILlLfR8gopTZLsh21CV3Lf0XuG0ZomlgY/UrEq10KInh9ktNTbuf5xZjnS8JJg==
-X-Google-Smtp-Source: AGHT+IEVs438WCFZF1kK2HB0aGcq/yB68iTGDfvVSMMD5jxwmp/5TBU9sTW45w4vD83h4xkb1nJHJg==
-X-Received: by 2002:a92:dac6:0:b0:363:d92b:1059 with SMTP id o6-20020a92dac6000000b00363d92b1059mr552805ilq.32.1707242143168;
-        Tue, 06 Feb 2024 09:55:43 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVOv6k/uIi6TER3yW5X2CcHQLUchbsdeMDRUV2ZGVMnoARCp25REp8WK6CAX9YqMnO6ShNlLthKZ9iwBKPq490/nWwCLp9kvcBFXxXmwwUJZ2hhdH+YDcR0bIf50QwoAq2nRrIM7vJDlnnZOoQfRta9GxbZ9k7TQVgMQDSZJtpUsm5PjGrizdSkIkWrt2oQln1BeCt4I/wP5mTJF6+8Ab70K8OXP7Y2TKopBXCWjPHP5atheHWwSCezVxXe7zLXNxBY3l2r3epPRGylAhsLcfUnSQFgjvqJHg2ujlMKZ56QN+2c84h+wejIrmX7abD30vPbrtoyftcgLElq+bDdnECAbCEzbAvJU+tZS76XWBsaEBiz3dFt51WWcaBv5SnY9mZ/SntevpBmGR4L2w+POVquK8mqAO3IJuy9D5szMJ6U+IPyKA==
-Received: from localhost (147.220.222.35.bc.googleusercontent.com. [35.222.220.147])
-        by smtp.gmail.com with UTF8SMTPSA id l2-20020a922902000000b0036381c9572fsm644000ilg.43.2024.02.06.09.55.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Feb 2024 09:55:42 -0800 (PST)
-Date: Tue, 6 Feb 2024 17:55:42 +0000
-From: Matthias Kaehlcke <mka@chromium.org>
-To: Javier Carrasco <javier.carrasco@wolfvision.net>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	Matthias Kaehlcke <matthias@kaehlcke.net>
-Subject: Re: [PATCH v3 1/7] usb: misc: onboard_hub: rename to onboard_dev
-Message-ID: <ZcJynrwp7zcs-aIT@google.com>
-References: <20240206-onboard_xvf3500-v3-0-f85b04116688@wolfvision.net>
- <20240206-onboard_xvf3500-v3-1-f85b04116688@wolfvision.net>
+        bh=LHhTCuH4A/0wFtRKTVPMRZgG2il7EIGIfjfqz07u/cI=;
+        b=ix20IlZA8Du6dARbz/uQ9oJv3f5fy10dOqo7uaLtVIGyXq9jtNgYd+jWgCN+/Ab0Wx
+         C/I1U1FCK3DVSPMCHcvCEDzWKLTBe3lVpznbY7PH3fzoQn0cy43hbwSG2ZHe887+UbN2
+         bP5brBgWGMhLLIJVT9izhI9W/yevQzh5Jn8jY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707242686; x=1707847486;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LHhTCuH4A/0wFtRKTVPMRZgG2il7EIGIfjfqz07u/cI=;
+        b=VTkvfo6eEDr+CdqFyVo2XbcKVKxVS+ecYhuACiFylz9qiP0GrYbF7Xxa5k2mRMvQ5X
+         0oT/xWLSbgPTsESHuS6rXmSW1eRdl0egU6c2z0QFvE1pyZ5d9poKG3+k/Uj/4zMBYOMM
+         uqbWz8ZfdOrxxmoY+Fm5jZD97f3cROp16X1N7r87Ayh9EfgOeTHc8g3GrrZBuBIMX9zx
+         RYg+tdka4L6EldGm2VlRY7JZjwgbL9ufaRrFfTI4ELk6ZjV3pBTlcBd4G9Aphb+FiTM0
+         aUI+jd43YBCcaMthUlE6TzIoNJbVa27k5ThcUTdiUgRjeaA5SXSImP+ITCMxrtPLAGdB
+         fPAQ==
+X-Gm-Message-State: AOJu0YxWfPj7o2Cg9IUSh0GJO0EHvT/QNItdLDbkvh+Js8eiiLB2V6HQ
+	Q5zRPWdG+53Y7mE2oleBf3k6ltLDqgKDq18dp1dXnIHK70DiSsXGS1MXsGYq6M3hhRprRcX0Rxr
+	QnCqgP7kw0gtDgc1yM6wjKvnk+SM0MvYMn6m7
+X-Google-Smtp-Source: AGHT+IFUlTRnDijctSI2MtUfRs5X3q8MZ8/UBu5rOlOOICbk1W0bwDf8CTes6qhfmyTO+dacWNRZQ4t7SBk3NvQeld8=
+X-Received: by 2002:ad4:4ee1:0:b0:68c:8d67:fce0 with SMTP id
+ dv1-20020ad44ee1000000b0068c8d67fce0mr2870871qvb.26.1707242686276; Tue, 06
+ Feb 2024 10:04:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240206-onboard_xvf3500-v3-1-f85b04116688@wolfvision.net>
+References: <20240126183930.1170845-1-abhishekpandit@chromium.org>
+ <20240126103859.v3.3.Idf7d373c3cbb54058403cb951d644f1f09973d15@changeid>
+ <CACeCKaeVtU3ckmGU932d-pPn=eOnt6KjAavNY3rSOUgrJNriDg@mail.gmail.com>
+ <CANFp7mXOXc6TzLJ+EJ9VYxqGHcjW099oBhDctarUdM5eJGz5bg@mail.gmail.com> <ZcIHePkgN2in5AAX@kuha.fi.intel.com>
+In-Reply-To: <ZcIHePkgN2in5AAX@kuha.fi.intel.com>
+From: Prashant Malani <pmalani@chromium.org>
+Date: Tue, 6 Feb 2024 10:04:34 -0800
+Message-ID: <CACeCKad_ODKKa1QY2O=VOdYZ0MHOrLH5aOte_bPaY-10aRh1YA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] usb: typec: ucsi: Get PD revision for partner
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, linux-usb@vger.kernel.org, 
+	jthies@google.com, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Rajaram Regupathy <rajaram.regupathy@intel.com>, 
+	Saranya Gopal <saranya.gopal@intel.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Javier,
-
-a few comments inline
-
-On Tue, Feb 06, 2024 at 02:59:29PM +0100, Javier Carrasco wrote:
-> This patch prepares onboad_hub to support non-hub devices by renaming
-> the driver files and their content, the headers and their references.
-> 
-> The comments and descriptions have been slightly modified to keep
-> coherence and account for the specific cases that only affect onboard
-> hubs (e.g. peer-hub).
-> 
-> The "hub" variables in functions where "dev" (and similar names) variables
-> already exist have been renamed to onboard_dev for clarity, which adds a
-> few lines in cases where more than 80 characters are used.
-> 
-> No new functionality has been added.
-> 
-> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
-
-> diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
-> new file mode 100644
-> index 000000000000..e2e1e1e30c1e
-> --- /dev/null
-> +++ b/drivers/usb/misc/onboard_usb_dev.c
+On Tue, Feb 6, 2024 at 2:18=E2=80=AFAM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
 >
-> ...
+> Hi Abhishek,
 >
-> +/*
-> + * Use generic names, as the actual names might differ between cevices. If a new
-
-s/cevices/devices/
-
-<snip>
-
-> +static int __maybe_unused onboard_dev_suspend(struct device *dev)
-> +{
-> +	struct onboard_dev *onboard_dev = dev_get_drvdata(dev);
-> +	struct usbdev_node *node;
-> +	bool power_off = true;
-> +
-> +	if (onboard_dev->always_powered_in_suspend)
-> +		return 0;
-> +
-> +	mutex_lock(&onboard_dev->lock);
-> +
-> +	list_for_each_entry(node, &onboard_dev->udev_list, list) {
-> +		if (!device_may_wakeup(node->udev->bus->controller))
-> +			continue;
-> +
-> +		if (usb_wakeup_enabled_descendants(node->udev)) {
-> +			power_off = false;
-> +			break;
-> +		}
-
-The above branch should probably be limited to hub devices (though in practice it
-shouldn't make a difference). This should be done by "usb: misc: onboard_dev:
-add support for non-hub devices", commenting here since this patch includes the
-code.
-
-> +static struct onboard_dev *_find_onboard_dev(struct device *dev)
-> +{
-> +	struct platform_device *pdev;
-> +	struct device_node *np;
-> +	struct onboard_dev *onboard_dev;
-> +
-> +	pdev = of_find_device_by_node(dev->of_node);
-> +	if (!pdev) {
-> +		np = of_parse_phandle(dev->of_node, "peer-hub", 0);
-> +		if (!np) {
-> +			dev_err(dev, "failed to find device node for peer hub\n");
-> +			return ERR_PTR(-EINVAL);
-> +		}
-> +
-> +		pdev = of_find_device_by_node(np);
-> +		of_node_put(np);
-> +
-> +		if (!pdev)
-> +			return ERR_PTR(-ENODEV);
-> +	}
-
-The above branch should probably be guarded by 'if (!onboard_dev->pdata->is_hub)',
-this is also a change for ""usb: misc: onboard_dev: add support for non-hub devices"
-
-> diff --git a/drivers/usb/misc/onboard_usb_hub_pdevs.c b/drivers/usb/misc/onboard_usb_dev_pdevs.c
-> similarity index 68%
-> rename from drivers/usb/misc/onboard_usb_hub_pdevs.c
-> rename to drivers/usb/misc/onboard_usb_dev_pdevs.c
-> index ed22a18f4ab7..fce860b65958 100644
-> --- a/drivers/usb/misc/onboard_usb_hub_pdevs.c
-> +++ b/drivers/usb/misc/onboard_usb_dev_pdevs.c
+> On Mon, Feb 05, 2024 at 02:05:38PM -0800, Abhishek Pandit-Subedi wrote:
+> > Hi Heikki,
+> >
+> > Friendly ping to review this patch (I see you added Reviewed-by to the
+> > other two in this series).
 >
-> ...
->
->  /**
-> - * onboard_hub_create_pdevs -- create platform devices for onboard USB hubs
-> - * @parent_hub	: parent hub to scan for connected onboard hubs
-> - * @pdev_list	: list of onboard hub platform devices owned by the parent hub
-> + * onboard_dev_create_pdevs -- create platform devices for onboard USB devices
-> + * @parent_hub	: parent hub to scan for connected onboard devices
-> + * @pdev_list	: list of onboard platform devices owned by the parent hub
->   *
-> - * Creates a platform device for each supported onboard hub that is connected to
-> - * the given parent hub. The platform device is in charge of initializing the
-> - * hub (enable regulators, take the hub out of reset, ...) and can optionally
-> - * control whether the hub remains powered during system suspend or not.
-> + * Creates a platform device for each supported onboard device that is connected
-> + * to * the given parent hub. The platform device is in charge of initializing
-> + * the * device (enable regulators, take the device out of reset, ...) and can
-> + * optionally * control whether the device remains powered during system suspend
+> I think Prashant said that he prefers macros with those version checks,
+> and I kinda agree. But I'll leave this to you to decide. I think
+> that's also something that can be improved later.
 
-Remove '*'s in the above 3 lines.
+Yeah, the macro strikes me as unnecessary here. Anyhow, for the rest of it:
 
-I'm doubting whether the option to power down the device during system suspend
-should be limited to hubs. In particular I'm concerned about the default of
-powering the device down, which could be unexpected. Then again, it might be
-desired to power down a device if it consumes significant power during  suspend
-on a battery powered system.
+Reviewed-by: Prashant Malani <pmalani@chromium.org>
 
