@@ -1,62 +1,62 @@
-Return-Path: <linux-usb+bounces-5934-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5931-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E03A84B5E9
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 14:04:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4664E84B5E7
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 14:04:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 394011F26BB5
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 13:04:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF1CEB2231C
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 13:04:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F35212F382;
-	Tue,  6 Feb 2024 13:04:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EB31130AC5;
+	Tue,  6 Feb 2024 13:04:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jcm57zI+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lsx5pjKp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA98C130AD5
-	for <linux-usb@vger.kernel.org>; Tue,  6 Feb 2024 13:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4036712FF68
+	for <linux-usb@vger.kernel.org>; Tue,  6 Feb 2024 13:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707224643; cv=none; b=PB3R3EwEqlqxTsE+pCdpjJxMGSG3wviMHEePCF7jUvqkqBRLJVYFP8j0Waia4CHY9oAx9/w9kzCoxVtMHRWm4W3AcocVtwQoCSw3rMDiupYy03JxoWQBNQiBNp6A1CrLTRi5JDpuSzd3a/Ae5OcEV3/wxLAHZuCK6W8sfdtNm3s=
+	t=1707224640; cv=none; b=QxNBfFzaNPDCYOtUTFHPQNivvb1FBExiw03g/5qo7mML+u7rIcusCQ3q2of5FwdkaTIEFquGZD8Gz1XET+dHMM1l+tHZ7XqGnmjuchKzJAlfHBAfR0OQvhVLJT83rxOwkgT0/osraECC3jIwAJb7EbR1Lj47S9SnSnFf3WTJrDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707224643; c=relaxed/simple;
-	bh=BMpyZSB+/DXjAyPNqf20LCTgX2m6iZ4bG6DG0g0gck0=;
+	s=arc-20240116; t=1707224640; c=relaxed/simple;
+	bh=DG2ETpLs4dhZ4JwGEa3PYT8ZwSlOq4693Qx5hX3e8iE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XhJK0T+1clKehOLMz70E9Hrq1phpdwIEnnNkM9Tqfa28Xtp6Cv8HV7PbR+oQtxVxYFFsLWWiufB0/jQokyRJbXHjRaedeCHIBh/GKnY6NFqySaMRBC6Yn6V7JbBxx4TlNUfYlT/9OmOAKwP8/3APKXTdLQClH6fNbsZQWwAif40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jcm57zI+; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version; b=UbYJTnpSdYkH/R/iFxW/bKcX0FdWs/GHLiGksLik7i4J31tXvDI12hAwaSPVINEkZZOVkVn2cWlcbazT7+rQV7BQQxHarqRxHysqK6bhOis9Z4rt1MXN+E3LbEntQl1GIFHwaNZfITKtN1xtZQ7agPYU+a38KUlBF/iEG+XnVeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lsx5pjKp; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707224641; x=1738760641;
+  t=1707224639; x=1738760639;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=BMpyZSB+/DXjAyPNqf20LCTgX2m6iZ4bG6DG0g0gck0=;
-  b=jcm57zI+ljGQY4H05SzvmkhF00ZZBfrvuEeDu1I6ccVXlzL4TPsTPqAD
-   NVVCX2XNyj1mC+y6IlhBiKFu8FIzVV3C1P/nKW/1zVb70F67ZChPXcgfr
-   Ene8qLMXI/QLKImVhksWIL0+R4C0LzooI0eBg4BjNPwaxNamwZjhdUNVw
-   9L/2l1m7S42C7v1RMsNQd9le62QCbytrWNR39TE4bvxPzPD+u4MCfnV/B
-   B4eh93y+Rht9lWjbqHjt+C6t8lR2dHviQVRLNMlF155ZljWKKi1O+NGfl
-   t/5ZSLazBvGrSevA+NhWErMJwq/wGhveln2QuTeMGVgi9L1nYAPSPcZWb
+  bh=DG2ETpLs4dhZ4JwGEa3PYT8ZwSlOq4693Qx5hX3e8iE=;
+  b=lsx5pjKpnio8OgJSmVuwef5D8ufnZXmL8sHlUZ0VtQDO0Jh+Q/xR0yQM
+   AlyfJuAPqyaRlqmNMseloVxC08HCEuodkpZqOcSX+lmYDrYTkIjQDg5zH
+   thctUIVapF3atqYf1HIqjJSdMmmFlXBGRHWLLQ53QXXUzeTHIlL/cGUOx
+   c9nX+I7DV0Ch8FSTA6XsttmLGGbyuH9GSY1zdT2txBue/PO9blUxsHLhE
+   iEPcBH3vi9Jx70rrxfSuzLUU3J+CVD/bGuOCbvmXMsKmG2axjfi/8q2Bc
+   dX/YI0aQgIUtUnU7YLjZ5O5+J//leTyYY9EKshSoDtNNT+cKJ747O2ogC
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="26185054"
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="642154"
 X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="26185054"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 05:03:58 -0800
+   d="scan'208";a="642154"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 05:03:58 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="909631994"
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="933455849"
 X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="909631994"
+   d="scan'208";a="933455849"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Feb 2024 05:03:56 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 06 Feb 2024 05:03:56 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 04A7EB84; Tue,  6 Feb 2024 15:03:54 +0200 (EET)
+	id 17062F4D; Tue,  6 Feb 2024 15:03:55 +0200 (EET)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -66,9 +66,9 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Sanath S <Sanath.S@amd.com>,
 	Mario Limonciello <mario.limonciello@amd.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 1/3] thunderbolt: Reset only non-USB4 host routers in resume
-Date: Tue,  6 Feb 2024 15:03:52 +0200
-Message-ID: <20240206130354.1208816-2-mika.westerberg@linux.intel.com>
+Subject: [PATCH 3/3] thunderbolt: Correct typo in host_reset parameter
+Date: Tue,  6 Feb 2024 15:03:54 +0200
+Message-ID: <20240206130354.1208816-4-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240206130354.1208816-1-mika.westerberg@linux.intel.com>
 References: <20240206130354.1208816-1-mika.westerberg@linux.intel.com>
@@ -80,37 +80,26 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There is no need to reset the USB4 host routers on resume because they
-are reset already and this may cause problems if the link does not come
-up soon enough. For this reason limit this to happen in non-USB4 host
-routers only (that's Apple systems with Intel Thunderbolt controllers).
+It should say USB4 now since we reset by default all USB4 host routers.
 
-Fixes: 59a54c5f3dbd ("thunderbolt: Reset topology created by the boot firmware")
-Cc: Sanath S <Sanath.S@amd.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/tb.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/thunderbolt/nhi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 9a261560d0f4..f127088b6ebd 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -2710,8 +2710,12 @@ static int tb_resume_noirq(struct tb *tb)
+diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+index 91e26b982b0b..7af2642b97cb 100644
+--- a/drivers/thunderbolt/nhi.c
++++ b/drivers/thunderbolt/nhi.c
+@@ -48,7 +48,7 @@
  
- 	tb_dbg(tb, "resuming...\n");
+ static bool host_reset = true;
+ module_param(host_reset, bool, 0444);
+-MODULE_PARM_DESC(host_reset, "reset USBv2 host router (default: true)");
++MODULE_PARM_DESC(host_reset, "reset USB4 host router (default: true)");
  
--	/* remove any pci devices the firmware might have setup */
--	tb_switch_reset(tb->root_switch);
-+	/*
-+	 * For non-USB4 hosts (Apple systems) remove any PCIe devices
-+	 * the firmware might have setup.
-+	 */
-+	if (!tb_switch_is_usb4(tb->root_switch))
-+		tb_switch_reset(tb->root_switch);
- 
- 	tb_switch_resume(tb->root_switch);
- 	tb_free_invalid_tunnels(tb);
+ static int ring_interrupt_index(const struct tb_ring *ring)
+ {
 -- 
 2.43.0
 
