@@ -1,54 +1,55 @@
-Return-Path: <linux-usb+bounces-5920-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5921-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD2A084B0A6
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 10:03:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD38784B0B1
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 10:05:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49AAF1F24297
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 09:03:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 766CC2886BB
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 09:05:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B42A12D755;
-	Tue,  6 Feb 2024 09:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3A9A12D765;
+	Tue,  6 Feb 2024 09:02:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GK7HOMgu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WkYdiL7R"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E986D12D776
-	for <linux-usb@vger.kernel.org>; Tue,  6 Feb 2024 09:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA6212E1FF
+	for <linux-usb@vger.kernel.org>; Tue,  6 Feb 2024 09:02:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707210056; cv=none; b=Up6HlOYIox+iA0IJMybycYtDwvOo/CQbK34KL+PLOa3GCcJzurmcOjfcmQBGXr95Y1Mb3IlurQmzh81vBvPDuqoW6HiIXHV48U2S1mwUsnj4k2p4CIR9GH7sM01JGeBthbhNQ8V4GnO9hWlvE0QWhKQDIZl1m+OHRdI1NP0yXHE=
+	t=1707210121; cv=none; b=kJRt+yUSD9n/ABY/llvDmVk5rV3P9aHedJYgOOnZAMUHLN3z4B4yo63k/GdejU23fzfTEHyHNUCzdqx3rzNRwUIhQZI9o/RDeBDep7CIHkLNI2Tn1rHc3VdOemUskqjiwgHp4y/jDN4ulqQTd6c2BMrGcMQyBznGDbk2TbLx6RI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707210056; c=relaxed/simple;
-	bh=ELTXnkXBxJWYQCoZM5i9V3EelQzt3T8cmksYVM5nrHI=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Gg5y4E8WZos/4RJ9Nmeiu32JtEXgzBiaJWSJg20inw656r4DvLhYSFPFlWFQaaXm79GDgS9N0v55JuaH4ahUkNI30pPbHCIzdMCW+BBbyj9ozn2nxX8rbfEeHvvqc7alBF99+0hdJrWYB5zXk+GxIH0JbVRIOcIE+62rvEokWbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GK7HOMgu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 63E00C43390
-	for <linux-usb@vger.kernel.org>; Tue,  6 Feb 2024 09:00:55 +0000 (UTC)
+	s=arc-20240116; t=1707210121; c=relaxed/simple;
+	bh=TJ5eIvSh2kacJNBiZeXugilB1CfkBuRDlAqsU2qCTRw=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MNVtjxSjIcuNNZZ8Z36xifYyu+SFvt3SBgiecpFsdEKLuxdI42z9mXBRu1iUKuQKHWWQCbqHg9gxLEjYwOMV9QY8gQthSRAHGvDmptWD5D/rY/XGFSue3pxDGi9NTnCMtANoDTI0m5AnOi9GN/DiAJwhXxmIxjc+pmNnmSaay8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WkYdiL7R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C3303C43390
+	for <linux-usb@vger.kernel.org>; Tue,  6 Feb 2024 09:02:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707210055;
-	bh=ELTXnkXBxJWYQCoZM5i9V3EelQzt3T8cmksYVM5nrHI=;
-	h=From:To:Subject:Date:From;
-	b=GK7HOMgucKoYxmCSxL5gWNA1whiXr1q3bMAF3jc5CpnxI+BCa6l3191wN/wBuWlqJ
-	 q8BXG1fwmgqDxbu0ROxgBB4GgBQVufzWuQ5r9C5OyO/dofR+Y6qlxjcHJIHJKBXmrh
-	 ZV0/FnLYoi3eTxpVsPoA3U4i9knoKFrsOVV5RwrF021opCeCKlplZEQlWctnJeqeH9
-	 CCXKuTlZMRcLpY/JGZQnX/e2v/UUTJyA7RrMD2oAfzhFqRnj7R/gqeB+Upozsblxds
-	 cBvJmckOf6djMhoGWOkwoKdJS2L70jhkQjXSByOaekxZc5bLukenUqcN9ek3bVOPVY
-	 Gs+Mr1Gbq4Xmw==
+	s=k20201202; t=1707210120;
+	bh=TJ5eIvSh2kacJNBiZeXugilB1CfkBuRDlAqsU2qCTRw=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=WkYdiL7RDOzIm/j1NYd3NoEIRUvtivLyb0Fkg21KExTdUq7/n9ZijLKx+MqQgB90W
+	 J9vDMLX6aoMEi3evVQVo4WIuMgGs8d2K1NRJPKObkXOy2TPTfOo1JFqgRsSCJHbxV7
+	 xQg1zFapN+kq8GGKv7UsJd8OOy5+OZPTnxQGUKphjSl3oFy9+LQ1p3D7gA5T1KSwTq
+	 59WiU/477CeVTm2Bp3VlIsV4JexMQxducuWXlEwtRGu5IjW/VnAHy1UMD2iH8zPQ0d
+	 ELitFQNmxd4cyQZ0wcI7frS+VU5djTZD+ezyp9K74170RhkJX0+fEliN7FS49WBh1K
+	 6SWSI+HGCHW9w==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 4618CC53BD0; Tue,  6 Feb 2024 09:00:55 +0000 (UTC)
+	id B2184C53BD0; Tue,  6 Feb 2024 09:02:00 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
-Subject: [Bug 218465] New: Linux warning `usb: port power management may be
+Subject: [Bug 218465] Linux warning `usb: port power management may be
  unreliable` on Dell XPS 13 9360
-Date: Tue, 06 Feb 2024 09:00:55 +0000
+Date: Tue, 06 Feb 2024 09:02:00 +0000
 X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Product: Drivers
 X-Bugzilla-Component: USB
@@ -61,10 +62,10 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-218465-208809@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-218465-208809-IF4xKXMbLy@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218465-208809@https.bugzilla.kernel.org/>
+References: <bug-218465-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Bugzilla-URL: https://bugzilla.kernel.org/
@@ -78,28 +79,11 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218465
 
-            Bug ID: 218465
-           Summary: Linux warning `usb: port power management may be
-                    unreliable` on Dell XPS 13 9360
-           Product: Drivers
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: pmenzel+bugzilla.kernel.org@molgen.mpg.de
-        Regression: No
-
-This issue is to attach files to debug the Linux warning reported to linux-=
-usb
-[1].
-
-[1]:
-https://lore.kernel.org/linux-usb/e595bcb8-bfc0-aa12-a5c1-a62c5fe9e950@linu=
-x.intel.com/T/#t
+--- Comment #1 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
+ ---
+Created attachment 305840
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305840&action=3Dedit
+Output of `acpidump` with system firmware 1.21.0
 
 --=20
 You may reply to this email to add a comment.
