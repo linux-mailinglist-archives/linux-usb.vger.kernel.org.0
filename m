@@ -1,236 +1,155 @@
-Return-Path: <linux-usb+bounces-5957-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5958-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10B7084B8BB
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 16:02:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8A3A84B8B2
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 16:00:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE1CBB2F384
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 14:55:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D2FD1F26664
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 15:00:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 128111332B9;
-	Tue,  6 Feb 2024 14:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Gd8XC4jH";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="KlIBRPwB";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Gd8XC4jH";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="KlIBRPwB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20681135403;
+	Tue,  6 Feb 2024 14:57:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75FD131E40;
-	Tue,  6 Feb 2024 14:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BE0134CDB
+	for <linux-usb@vger.kernel.org>; Tue,  6 Feb 2024 14:57:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707231228; cv=none; b=bOheV+cEtcACrHeEY02/BeBb7Z6fSETI7TucQOUvqWFGBBg3pOjpVR+ojav6qWVyFZyTwcYLWSc0vMI/RN0b5d8oVI0OoGTRzjNWHNHAg9ipLmk7JDm3iyXIE6vMBP6co8gDoaJaauf3lWL7ysRccaRmhACV9ofWSkkHvPM+x5s=
+	t=1707231464; cv=none; b=GRV0q5L+bgBexJvTDqfVJtHDc+ZcpiLF3FocwVKFFqyEzsnefzokbsPfuhqLUNncxAMVDBrOE8/6ClMWRkgWTCVtI9XdN3QdOpLAoZ5FjH+QZn2hmXAXodzossCLovWMSeedTDUH7Vn8eew0nqPQ6ND/u7WQPkCuunVSwnY4IE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707231228; c=relaxed/simple;
-	bh=6imiZNz13DtNsVm7OhjM91Tu6n6+upch3RjcbTaBXbo=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Xo0s8OlMXUSr3/VFrf7GUAHVWrnDJ5Sg36Im770oJdFgQcpZRi1bKj6kMO3cJ9CtzrlPOkZo1gsp9EXDq0oS68sB8AX10gRo9ulbSRXVVaRCcXnP6M5HvYo7JqUKPqY4baLaVev3V4DXwDjYOQZxczQW7jLuIaInVyhRbaYdMBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Gd8XC4jH; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=KlIBRPwB; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Gd8XC4jH; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=KlIBRPwB; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 890D8220AD;
-	Tue,  6 Feb 2024 14:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1707231224; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AEGImGG0Ff6z25ekPfLY3b5KTypKA7hNz0dlcxRASQs=;
-	b=Gd8XC4jHmAO2wIh9frwlto9XxCy5MYvJewPaeif1JTc76zhIL49XXS+ftX3Nrk5y5F+0Ib
-	kb8zevdT/b2sOVr+QUkTw6EwrWVxuckdhiafBvDzV0N9OaXfGzC/QBrFNDJJRGXPG3Gu2Q
-	6w5NhzyGSL+gLom0GAbnm4gRoV5pe20=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1707231224;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AEGImGG0Ff6z25ekPfLY3b5KTypKA7hNz0dlcxRASQs=;
-	b=KlIBRPwBqPNyqo9m1MMtV8YIVgZTYkqY4/WYuTbYOsetUNgX+vC8/51oPkoo8pHPgzYyZX
-	CNIYGmYF15FKqCCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1707231224; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AEGImGG0Ff6z25ekPfLY3b5KTypKA7hNz0dlcxRASQs=;
-	b=Gd8XC4jHmAO2wIh9frwlto9XxCy5MYvJewPaeif1JTc76zhIL49XXS+ftX3Nrk5y5F+0Ib
-	kb8zevdT/b2sOVr+QUkTw6EwrWVxuckdhiafBvDzV0N9OaXfGzC/QBrFNDJJRGXPG3Gu2Q
-	6w5NhzyGSL+gLom0GAbnm4gRoV5pe20=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1707231224;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AEGImGG0Ff6z25ekPfLY3b5KTypKA7hNz0dlcxRASQs=;
-	b=KlIBRPwBqPNyqo9m1MMtV8YIVgZTYkqY4/WYuTbYOsetUNgX+vC8/51oPkoo8pHPgzYyZX
-	CNIYGmYF15FKqCCg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 46FC3139D8;
-	Tue,  6 Feb 2024 14:53:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id K0myEPhHwmUiVwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Tue, 06 Feb 2024 14:53:44 +0000
-Date: Tue, 06 Feb 2024 15:53:43 +0100
-Message-ID: <87sf25wsnc.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Wesley Cheng <quic_wcheng@quicinc.com>,
-	srinivas.kandagatla@linaro.org,
-	mathias.nyman@intel.com,
-	perex@perex.cz,
-	conor+dt@kernel.org,
-	corbet@lwn.net,
-	lgirdwood@gmail.com,
-	andersson@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	Thinh.Nguyen@synopsys.com,
-	broonie@kernel.org,
-	bgoswami@quicinc.com,
-	tiwai@suse.com,
-	robh+dt@kernel.org,
-	konrad.dybcio@linaro.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	alsa-devel@alsa-project.org
-Subject: Re: [PATCH v13 32/53] ALSA: usb-audio: Check for support for requested audio format
-In-Reply-To: <2024020617-limb-name-f852@gregkh>
-References: <20240203023645.31105-1-quic_wcheng@quicinc.com>
-	<20240203023645.31105-33-quic_wcheng@quicinc.com>
-	<87wmrhvir7.wl-tiwai@suse.de>
-	<2024020617-limb-name-f852@gregkh>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1707231464; c=relaxed/simple;
+	bh=A9nNSZrt4hurMz6xLomG7N1/raJg7y8TWifVzUduITw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dwcA9xPAZWjdb4vutNexlIejxq2/3n8jaD0hSdD+uoUIsOgBewz6uKNk48pE8z3vN2X7AOphGEKV4jkgrpJzASoQqOHXC+UoLsjRI7odDMRVT91J4ytha4IskVWcqQ37NepiW9R5is8thI2DFZshw5pQjQuszFY/BWEZzP3kZRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1rXMtH-0006zs-Eu; Tue, 06 Feb 2024 15:57:39 +0100
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1rXMtG-004qYw-N3; Tue, 06 Feb 2024 15:57:38 +0100
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1rXMtG-00EG1G-1y;
+	Tue, 06 Feb 2024 15:57:38 +0100
+Date: Tue, 6 Feb 2024 15:57:38 +0100
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: devicetree@vger.kernel.org, conor+dt@kernel.org,
+	heikki.krogerus@linux.intel.com, kernel@pengutronix.de,
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net
+Subject: Re: [PATCH 1/4] dt-bindings: usb: typec-tcpci: add tcpci compatible
+ binding
+Message-ID: <20240206145738.kchqgzpigfq5ryli@pengutronix.de>
+References: <20240205164316.805408-1-m.felsch@pengutronix.de>
+ <20240205164316.805408-2-m.felsch@pengutronix.de>
+ <004dbeb3-f863-416c-a4e4-18739302ae58@linaro.org>
+ <20240206145253.u555h3rvtetv3qaf@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Gd8XC4jH;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=KlIBRPwB
-X-Spamd-Result: default: False [2.11 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 BAYES_HAM(-0.08)[63.26%];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 TAGGED_RCPT(0.00)[dt];
-	 MIME_GOOD(-0.10)[text/plain];
-	 R_RATELIMIT(0.00)[to_ip_from(RLe67txhfobum3fqdb5xx8e3au)];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 DKIM_TRACE(0.00)[suse.de:+];
-	 MX_GOOD(-0.01)[];
-	 RCPT_COUNT_TWELVE(0.00)[23];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 FREEMAIL_CC(0.00)[quicinc.com,linaro.org,intel.com,perex.cz,kernel.org,lwn.net,gmail.com,synopsys.com,suse.com,vger.kernel.org,alsa-project.org];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Score: 2.11
-X-Rspamd-Queue-Id: 890D8220AD
-X-Spam-Level: **
-X-Spam-Flag: NO
-X-Spamd-Bar: ++
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240206145253.u555h3rvtetv3qaf@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Tue, 06 Feb 2024 15:50:21 +0100,
-Greg KH wrote:
+On 24-02-06, Marco Felsch wrote:
+> On 24-02-06, Krzysztof Kozlowski wrote:
+> > On 05/02/2024 17:43, Marco Felsch wrote:
+> > > This binding descripes the generic TCPCI specification [1]. So add the
+> > 
+> > Typo: describes.
 > 
-> On Tue, Feb 06, 2024 at 02:12:44PM +0100, Takashi Iwai wrote:
-> > On Sat, 03 Feb 2024 03:36:24 +0100,
-> > Wesley Cheng wrote:
-> > > 
-> > > Allow for checks on a specific USB audio device to see if a requested PCM
-> > > format is supported.  This is needed for support when playback is
-> > > initiated by the ASoC USB backend path.
-> > > 
-> > > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> > 
-> > Just cosmetic:
-> > 
-> > > +struct snd_usb_stream *snd_usb_find_suppported_substream(int card_idx,
-> > > +			struct snd_pcm_hw_params *params, int direction)
-> > > +{
-> > > +	struct snd_usb_audio *chip;
-> > > +	struct snd_usb_substream *subs;
-> > > +	struct snd_usb_stream *as;
-> > > +	const struct audioformat *fmt;
-> > > +
-> > > +	/*
-> > > +	 * Register mutex is held when populating and clearing usb_chip
-> > > +	 * array.
-> > > +	 */
-> > > +	mutex_lock(&register_mutex);
-> > > +	chip = usb_chip[card_idx];
-> > > +	if (!chip) {
-> > > +		mutex_unlock(&register_mutex);
-> > > +		return NULL;
-> > > +	}
-> > > +
-> > > +	if (enable[card_idx]) {
-> > > +		list_for_each_entry(as, &chip->pcm_list, list) {
-> > > +			subs = &as->substream[direction];
-> > > +			fmt = snd_usb_find_substream_format(subs, params);
-> > > +			if (fmt) {
-> > > +				mutex_unlock(&register_mutex);
-> > > +				return as;
-> > > +			}
-> > > +		}
-> > > +	}
-> > > +	mutex_unlock(&register_mutex);
-> > 
-> > I prefer having the single lock/unlock call pair, e.g.
-> > 
-> > 	struct snd_usb_stream *as, *ret;
-> > 
-> > 	ret = NULL;
-> > 	mutex_lock(&register_mutex);
-> > 	chip = usb_chip[card_idx];
-> > 	if (chip && enable[card_idx]) {
-> > 		list_for_each_entry(as, &chip->pcm_list, list) {
-> > 			subs = &as->substream[direction];
-> > 			if (snd_usb_find_substream_format(subs, params)) {
-> > 				ret = as;
-> > 				break;
-> > 			}
-> > 		}
-> > 	}
-> > 	mutex_unlock(&register_mutex);
-> > 	return ret;
-> > }
-> > 
-> > In this case, we shouldn't reuse "as" for the return value since it
-> > can be non-NULL after the loop end.
+> Argh.
 > 
-> Why not just use guard(mutex) for this, making it all not an issue?
+> > No, this binding describes PTN5110, not generic TCPCI. This is not
+> > accurate commit description.
+> 
+> This binding is currently missued if another TCPCI conform chip is used
 
-Heh, it's too new ;)
-That should work gracefully, yes.
+/missused/misused/
 
-
-Takashi
+> which requires no special handling. I could have dropped this commit
+> since the 'tcpci' is already present at i2c-device-id level.
+> 
+> > 
+> > > generic binding support since which can be used if an different TCPC is
+> > > used compatible which is compatible to [1].
+> > 
+> > Sorry, cannot parse it. Please run it through native speaker, Google
+> > grammar check, ChatGPT or some other way.
+> 
+> Argh.. you're right, sorry. I will rephrase it.
+> 
+> > > [1] https://www.usb.org/sites/default/files/documents/usb-port_controller_specification_rev2.0_v1.0_0.pdf
+> > > 
+> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > > ---
+> > >  Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
+> > > index eaedb4cc6b6c..7bd7bbbac9e0 100644
+> > > --- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
+> > > +++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
+> > > @@ -11,7 +11,9 @@ maintainers:
+> > >  
+> > >  properties:
+> > >    compatible:
+> > > -    const: nxp,ptn5110
+> > > +    enum:
+> > > +      - nxp,ptn5110
+> > > +      - tcpci
+> > 
+> > I don't think this is correct. First, this is binding for NXP chip, so
+> > why generic implementation should be here? I would expect it in its own
+> > dedicated binding.
+> 
+> The nxp,ptn5110 device was the first driver which implements an TCPCI
+> conform driver. The driver already support the tcpci binding for i2c-id
+> devices as I mentioned above. IMHO this whole binding (file) should be
+> converted and the nxp,ptn5110 compatible should be marked as deprecated.
+> 
+> > Second, we rarely want generic compatibles. Care to share more details?
+> 
+> As said above this particular NXP chip is an TCPCI conform chip. There
+> is nothing special about it. There are other vendors like OnSemi (in my
+> case) which implement also an TCPCI conform chip. The (Linux) driver
+> already binds to the generic tcpci compatible if the i2c-core falls back
+> to the i2c-device id. It's even more confusing that the i2c-id supports
+> only the generic binding the of-compatible support only the specifc one.
+> 
+> > Are all details expected to follow spec, without need of quirks?
+> 
+> Please see above, I hope this helps.
+> 
+> Regards,
+>   Marco
+> 
+> > 
+> > Best regards,
+> > Krzysztof
+> > 
+> > 
+> 
+> 
 
