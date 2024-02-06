@@ -1,50 +1,50 @@
-Return-Path: <linux-usb+bounces-5969-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5970-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3223C84BAD0
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 17:24:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5621484BB19
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 17:36:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76BEBB291B6
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 16:23:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2031B2580B
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 16:36:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E8151353E0;
-	Tue,  6 Feb 2024 16:22:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A928AD56;
+	Tue,  6 Feb 2024 16:35:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MrodTBgO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kGkku+lM"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742EB1350EB;
-	Tue,  6 Feb 2024 16:22:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBFFC1373;
+	Tue,  6 Feb 2024 16:35:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707236564; cv=none; b=i3GJgsLuxgBCv9lFmosFZn+QVPXgufhsxK45PoVJmZFwYQFeRtYFv27s2o+Kg5KfayQ4d8wR90tE38TkR4gJQfdBxP2WDKm1cjVCtrGWNl8C9EAZkZFHeUenaZ9T5J14jFYLnWQPwrJfos/UzsO+PDcmk37G/2AQaYyuAzdK2rg=
+	t=1707237321; cv=none; b=bHYIhMSpxByHc/cCO6TrXIFVzxJ5JOygRUfCzHSoYOFsth1PTKyALq3olQU+fJwpUMgjEuOxfFqFsjHWpQ1KvvAvr6PHGlbAIz8vRXiGRqSNVcDyIa085Rj60IemuZwLo+Ota6VvGw2K0P5FAr7Mrs6BDCFdw6N4HRdKfI7ngRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707236564; c=relaxed/simple;
-	bh=KJ0tC6AYLto0c9nvm5TeupoYIt+wLpWcfBirBcMc89E=;
+	s=arc-20240116; t=1707237321; c=relaxed/simple;
+	bh=Pd5hbjeUaw0bXpSMvlmew8SMjBMs2/PcDGfitcRRlrw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ddhh384g7TiYRaiIcKvxwMM96f8QWXXCJ+vFhXKU91gyLnq6dMAvnNjv1GGW22T/zH1Ys2t0dzJgkECCBlsxwqyhqIqZ1m8rv4jtP982MJnUXVLavrVjPdKsjFkCooXBqE9XTy2g5NGMdA/4Rxved1ZfaROR2PseOk/cwxbPxbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MrodTBgO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F306C433A6;
-	Tue,  6 Feb 2024 16:22:42 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=rHVkWq4pLXB8E71UiRwD3/eLWZA7tvDTtrDrY7E7CDyihEZtRTXhf1Gw0aPjECKb9JiK4OWSF4+BvqVssiG+ptE4aWLKEmXNq0q6c0vF4O5NoO9ZoValckFnaOm0IXXl6bLfCrbX7SF5ffbRfYtuuLcJmQsFmefsTutmkR9kfDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kGkku+lM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F05FC433F1;
+	Tue,  6 Feb 2024 16:35:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707236564;
-	bh=KJ0tC6AYLto0c9nvm5TeupoYIt+wLpWcfBirBcMc89E=;
+	s=k20201202; t=1707237321;
+	bh=Pd5hbjeUaw0bXpSMvlmew8SMjBMs2/PcDGfitcRRlrw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MrodTBgO7BcAPmmQrUC7NLTnQFj5LXXjbOnIjbdn8KM6fym7v73kzrkqETfdxg5Y2
-	 j3VRvnb+iBCYD4n6UGPGrz4IIWc8tAgx9rEGUyd6bvBy0MgsjyGMepp2ZPaA3xnaWj
-	 AOnRTrwwppYhRX2QI7GHyM4BWVijkQx5as6smAGtGpLEcp/YjzbN6b5wd0RbVDdo9M
-	 1YBHPxSGhX5T/hB4ycpcIol1dLQAiiCfbhhBWJqwhqyBySOtV32Is/7z2yKBBpsAZp
-	 LDPaKiBpTsIGJxvmd9iPw1dsbvvst+lpQgGnZBp5yDK1tSiriITF3gY8McIltkOBP2
-	 GCzS5sRFwE3Ng==
-Date: Tue, 6 Feb 2024 16:22:40 +0000
+	b=kGkku+lMjJ1CIPEJIoX1+Fv3byTzutiXUE2/v9sOQPIeA1z2ozWWBdlFlN1d/U3cl
+	 5gsSV9vGqZMqYOc2q4ppul4FRFV5eD4YQgjiuqmjTKoDDgccyW4RjQrkm9NfNb4aSX
+	 I1je7RWXkXcV3NL4Z2aGdFu2H1IOfZUcPme5Ci5qWNvWbLlHmApVGBco4Dh8ulLohc
+	 DTu7tUFwyxEFzJp+gxyEv5oUTJNZ3c7MXQgZK4YyNSjuNjaF9HbgQ6nscSsnzejYwC
+	 HGeTUSo2lDmKVDUzFWiQk/c2j4T8oZqJtcNZMZT9lNq3xV1Nxei+zSY662HiCEZvJi
+	 bMoqNwKXDSmqQ==
+Date: Tue, 6 Feb 2024 16:35:17 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Javier Carrasco <javier.carrasco@wolfvision.net>
-Cc: Matthias Kaehlcke <mka@chromium.org>,
+To: Matthias Kaehlcke <mka@chromium.org>
+Cc: Javier Carrasco <javier.carrasco@wolfvision.net>,
 	Liam Girdwood <lgirdwood@gmail.com>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -54,13 +54,13 @@ Cc: Matthias Kaehlcke <mka@chromium.org>,
 	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Subject: Re: [PATCH v3 6/7] ASoC: dt-bindings: xmos,xvf3500: add XMOS XVF3500
  voice processor
-Message-ID: <ZcJc0JVr0nOGYK0B@finisterre.sirena.org.uk>
+Message-ID: <ZcJfxRgysxLWAOIH@finisterre.sirena.org.uk>
 References: <20240206-onboard_xvf3500-v3-0-f85b04116688@wolfvision.net>
  <20240206-onboard_xvf3500-v3-6-f85b04116688@wolfvision.net>
  <ZcJDFi+iIQOWzgYw@finisterre.sirena.org.uk>
  <7b472cb2-6658-446a-ae47-411d08798cca@wolfvision.net>
- <ZcJOrvmbukDubcuM@google.com>
- <42106e0c-109c-4ba2-a703-f95df92db5e3@wolfvision.net>
+ <ZcJR0LrwaS5GAf5h@finisterre.sirena.org.uk>
+ <ZcJVD4CGhlWRwgfM@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,42 +68,49 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5oDTt8oCWPvri2Kt"
+	protocol="application/pgp-signature"; boundary="ZQT/yRHuU/ihg6na"
 Content-Disposition: inline
-In-Reply-To: <42106e0c-109c-4ba2-a703-f95df92db5e3@wolfvision.net>
+In-Reply-To: <ZcJVD4CGhlWRwgfM@google.com>
 X-Cookie: You might have mail.
 
 
---5oDTt8oCWPvri2Kt
+--ZQT/yRHuU/ihg6na
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Feb 06, 2024 at 04:35:54PM +0100, Javier Carrasco wrote:
+On Tue, Feb 06, 2024 at 03:49:35PM +0000, Matthias Kaehlcke wrote:
 
-> I took a look at its datasheet and there is no vdd2 as such, so I think
-> we are in a similar situation here. Actually that device requires five
-> supplies and they have been grouped into vdd and vdd2 according to their
-> voltage level.
+> Initially the driver targeted a device with a single supply, the name
+> 'vdd' was kept generic since it was expected that other devices would be
+> supported (except for a couple of minor bits the driver is not device
+> specific). Later support for a device with two supplies was added, with
+> the generic name 'vdd2' to support other devices with multiple regulators.
 
-That binding is just broken then and should be updated to reflect the
-reality of the hardware.  The current thing just won't work if any of
-those supplies come from different regulators.  It's really hard to
-understand how bindings like this get written :/
+It's generally always going to be a problem to add generic names that
+don't reflect the actual hardware names, you still end up needing to
+define the mapping from the real names to the generic names that have
+been define when you end up with the regulators being controllable.
 
---5oDTt8oCWPvri2Kt
+> Using the correct naming would be doable, with the caveat that the old
+> naming still needs to be supported for backwards compatibility.
+
+Yes, the existing bindings need to be supported as a legacy/fallback
+thing.
+
+--ZQT/yRHuU/ihg6na
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXCXM8ACgkQJNaLcl1U
-h9CEkAf+O+edtJoQQbKZQMUgn6R7Jnmv8S64Lw5F7AsjcZzhjs6xeOZSl3Jgkl6l
-9+zZSQIe1jle3MYvVMQUP14S61wnXGV6oMS7N1f6Xxx//3msJ/ZUCNS3WzY6t+AQ
-Erxn2Au8obDlgJLqEEDgIYYuuZjqGr2SDlywLeiGXXWu/MOdoadYWDhfsk3HZcDY
-AjzfJ/zYMJIQR2PhZEVmzfSiEWLoQqYgn8R/7P/OHMhy+p1g7kRvr78TzzXr229Q
-b41WMdQ9BH9kX32VvkRc/I6/HYbvLjYRcAtDQF1CjQoKVCj3e/A+dzSjwVyhTzee
-QuijC6NAilFuC42FgnFQzvHVNSJiiQ==
-=kQmE
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXCX8QACgkQJNaLcl1U
+h9DdNwf9Gyj9Sld7yROz9aRLyvoxIR6qEWLHzv+LnbbvL4odas62FJj65Wxn3aun
+MvYZguIF7TY8NpMlCLoSXQBkhCWECnBSe7ayBjXXW/fVGN6pQKX56bQFzG0K2GEe
+Y31/cQ7J8iAdUHauvZJzihpekgsRZLCS2VOKyff9oxyllFyIjn+S3egZo1C+m82J
+OwE8GBVceOPOzYusyZ5J5mPrR8nEQz+SOy9aThjfY9t3EvppfQqA6zt08fIPw2PZ
+afz9T3F878AdZ2tkPIujPrfbCyI0dDuMRLLn5NfYGY42jqgBjQ/J4nwKstZwTJ5x
+sg27o4dCPT0Z0UqF1o4NK9IKRo5rsw==
+=Hkgg
 -----END PGP SIGNATURE-----
 
---5oDTt8oCWPvri2Kt--
+--ZQT/yRHuU/ihg6na--
 
