@@ -1,126 +1,112 @@
-Return-Path: <linux-usb+bounces-5960-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5961-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F087984B96E
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 16:27:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 293D184B99C
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 16:31:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB5BB290165
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 15:27:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D955529308B
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 15:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA5FF135A70;
-	Tue,  6 Feb 2024 15:22:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A09F21332A8;
+	Tue,  6 Feb 2024 15:31:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="G+XBZfa0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DCv7W5KU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96D113474F
-	for <linux-usb@vger.kernel.org>; Tue,  6 Feb 2024 15:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD79513173E
+	for <linux-usb@vger.kernel.org>; Tue,  6 Feb 2024 15:31:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707232947; cv=none; b=XigB3oAjVXm5uhU5qqOOvRQyK4UXtChzCOqjCLYyXcUo4WV5JEanZlUsNWAgh0XY3Y3N6N/N0ajTuRpfLbkI/sLvSQU9UTshjzo5F53hkndUF7e6Ko90KUWYjUDFSpN3Gu4J3gZWyIWokATNBbQiqe30buMxtMDbh56tvltDHKU=
+	t=1707233475; cv=none; b=YgP+ouN0JB9/FmuFOI/rkBuHA1HXx8RjBRtBlm3wfijrCBOkQUVuy6/ln0zKfCuckITFwA17AVj+PHcucRgTT60CN0UmQYLI2Xd3N5sexn/NwVhvT15CIMbjb3PHm4EpoEuss0F6K0Wto0drDl7uvWRLfoaPQU4TLVOioH2kKMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707232947; c=relaxed/simple;
-	bh=nvJry5XMvOGWR4v6LHIjeh7txW2SFojhPzOYPJtGQR8=;
+	s=arc-20240116; t=1707233475; c=relaxed/simple;
+	bh=WUEUzrdH+fXW1eTkgU9X7ItqGGy0V9g3jw0xYYW+W4U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KVmiLSGGJD4RazcfM/7TSDqUGZTUKPvPvsHcG/8Jo8qazHlzCz2a404mMwHIJKaVrYNGoakQz7mRhJ/sIXOPWr5HacgX5zh5wiSihEoLkf+NOySNDS5p7fb2e0/QolTjfu3O/FX7arf7/68J+PBDz1M/mpm2+s9cCuF6j3PXuSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=G+XBZfa0; arc=none smtp.client-ip=209.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-7c3e01a7fe0so40670339f.2
-        for <linux-usb@vger.kernel.org>; Tue, 06 Feb 2024 07:22:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1707232944; x=1707837744; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W7Flz4v7O5pMtKrdNKsWuyF1XlOrY9AWIcQRQ7rMTsk=;
-        b=G+XBZfa0qhFEtTJYcSUZiK8QQXw7edU4kF2TgAXcuX4zznwZ6cNRwMxdCJREamUCux
-         14jrNkDweTXDFl6sBprm6330YgX4N4TaiYAQMisY7t42Jnn2LzYmDEoFPyQiAdKHZGA1
-         QZc5XQ0nGKVhX9xvTyELi/gnHUmTdlPuHvOsE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707232944; x=1707837744;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W7Flz4v7O5pMtKrdNKsWuyF1XlOrY9AWIcQRQ7rMTsk=;
-        b=g58J4jofRIxCLsGOAuoR2tmDMmbhyIQa+fPp6AklnXyCNosjPt3FRJDqC0P3mbuOEi
-         ahoiRRWF8E1pQLYGo+sWdJifomRoAlhgl6LFIgxOulTsiA4Q4WP4plHBgJRqGm3tTzEu
-         hC3O3fKu3civI8qNudxOY8IuPBohLBMBS67jFN6MDh6zn5ePiOrcmzFB6pSY5EiSKUid
-         vtDNQbD65UYZMsvhYtiHWv4T/jhSXjFYumL46Tb06mMvO4HLNonFQtZ6rZ2ai7D2vYbh
-         0U71T8VUcU7wXEAyAoly0xe+7fy9k5M5T3Bs6oThbVr4SQTAhxEjK1CL7vr45XwUHY3r
-         vR5w==
-X-Gm-Message-State: AOJu0YyeIkIJThmTV36yxvTYaR1VrfGmlvKDYieYspCA3qXZsqdFmwQI
-	qxBx2eoW4xkLwPlUfUV4y2hTPzBKo32c93Rw3wc9MNl8PGBJA3LR1bzaj7CpOA==
-X-Google-Smtp-Source: AGHT+IFt8q7waVjwHUEsyUKsyJ5E3OYGC68VOhih9cdX2E35mExkKRqYgj2KVdzABWDIhUKRGNZtpg==
-X-Received: by 2002:a6b:7319:0:b0:7bc:3ceb:6552 with SMTP id e25-20020a6b7319000000b007bc3ceb6552mr3404257ioh.5.1707232944013;
-        Tue, 06 Feb 2024 07:22:24 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCX3CFmAG2qqDVjX7edvfHDozcYjd2Q9/kfUUXMnd1crgQxL+I8zeu7ZXzFWWo3l3A2LGuQcM5Uqp98cp1vXEkhvqTxGTZAKW6JuHi3LpkSjp4SLrx7Nxu2eNswYr4dDmsk24feSSYQrGwuA7ZixROi82WAljuN+NgIOh7gSkhJiok3cha9BhLGWq8quRNKxEO6PDPWf56czAJayyJDhWp9t2jrkT5uwFzMMhZYLylqafnHvt15fN6N4bmGE8v49Vjje34dI2csBOc8qFRawQ8DNC1Bul8ZziZs3FIgmoeoFCRGIkOTWWz8bi3PpBxf1tNKqta3C5gbkD7iNMFN2yUwsvTRXOCsaP3eaE0rCmp1jdQgH8iYIM7R0LLXsfqwfvgk5yumrelfeqb6XH7Ve
-Received: from localhost (147.220.222.35.bc.googleusercontent.com. [35.222.220.147])
-        by smtp.gmail.com with UTF8SMTPSA id q17-20020a0566380ed100b004713f0fbe4fsm451881jas.75.2024.02.06.07.22.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Feb 2024 07:22:23 -0800 (PST)
-Date: Tue, 6 Feb 2024 15:22:22 +0000
-From: Matthias Kaehlcke <mka@chromium.org>
-To: Javier Carrasco <javier.carrasco@wolfvision.net>
-Cc: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 6/7] ASoC: dt-bindings: xmos,xvf3500: add XMOS XVF3500
- voice processor
-Message-ID: <ZcJOrvmbukDubcuM@google.com>
-References: <20240206-onboard_xvf3500-v3-0-f85b04116688@wolfvision.net>
- <20240206-onboard_xvf3500-v3-6-f85b04116688@wolfvision.net>
- <ZcJDFi+iIQOWzgYw@finisterre.sirena.org.uk>
- <7b472cb2-6658-446a-ae47-411d08798cca@wolfvision.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kD/Qyay/4tLa7APkfW95VkZQu1UrzYRuDsHiUIvo++9L70TaVb0N0Am0zcvw8ub5zvBI4gKrZALYFqZa767k7zk9ModwWmRP/9C2BEPFZBWbJxKYnGnoL+UEfeGjO2VzW/Gs1bAgZQKOKP8O920jsDYgpPIjyc92zIhLnTmQ0Xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DCv7W5KU; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707233473; x=1738769473;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WUEUzrdH+fXW1eTkgU9X7ItqGGy0V9g3jw0xYYW+W4U=;
+  b=DCv7W5KUyF/EiTT/f7vSRRjIL3jUblfsE8BxczkCX1cIgbHMguX2EI9p
+   5lDzFMKrwjez/30msREVxH3sNLx5aq4VxTGo+NpnIBFqx83g0YNc9LNJe
+   ymkMecx4fdAk6xGQdQauU6OF9ThVos7emEFWW03jOTLgq8Ixwjrb/5IeY
+   ZaHxYXzJeQGgKiZU69m8yrUoYYRsUTktbzSLGjue1VdiFSD4XS1uCQmEQ
+   Qt1HpTliB75aRsJftorG3knFtjLOCjybowMIO1LRusBG99MA9Z3Tw9TWc
+   hea1MRHC/um3ketX8jVx1q6MrfuXETIbj1Vr7SVcjmn/XZiegSnMMBro0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="11354721"
+X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
+   d="scan'208";a="11354721"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 07:31:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="933495494"
+X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
+   d="scan'208";a="933495494"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 06 Feb 2024 07:31:08 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 06 Feb 2024 17:31:07 +0200
+Date: Tue, 6 Feb 2024 17:31:07 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+	linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com
+Subject: Re: [PATCH] usb: common: add driver for USB Billboard devices
+Message-ID: <ZcJQuwfXctmzZ+HX@kuha.fi.intel.com>
+References: <20240206125623.1208161-1-niklas.neronin@linux.intel.com>
+ <2024020641-relation-embattled-1fb5@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7b472cb2-6658-446a-ae47-411d08798cca@wolfvision.net>
+In-Reply-To: <2024020641-relation-embattled-1fb5@gregkh>
 
-On Tue, Feb 06, 2024 at 04:05:15PM +0100, Javier Carrasco wrote:
-> On 06.02.24 15:32, Mark Brown wrote:
-> > On Tue, Feb 06, 2024 at 02:59:34PM +0100, Javier Carrasco wrote:
-> > 
-> >> The XMOS XVF3500 VocalFusion Voice Processor[1] is a low-latency, 32-bit
-> >> multicore controller for voice processing.
-> > 
-> > Acked-by: Mark Brown <broonie@kernel.org>
-> > 
-> > though...
-> > 
-> >> +  vdd-supply:
-> >> +    description:
-> >> +      Regulator for the 1V0 supply.
-> >> +
-> >> +  vdd2-supply:
-> >> +    description:
-> >> +      Regulator for the 3V3 supply.
-> > 
-> > ...it's a bit weird that the supplies are named like this, usually
-> > there'd be some sort of meaningful name (even if it's just VDD_1V0 and
-> > VDD_3V3 or something).  Are you sure these are the actual names?
+On Tue, Feb 06, 2024 at 02:47:04PM +0000, Greg KH wrote:
+> On Tue, Feb 06, 2024 at 02:56:23PM +0200, Niklas Neronin wrote:
+> > This patch introduces the USB Billboard Driver. Its purpose is to display,
+> > via debugfs, basic information about connected Billboard devices.
 > 
-> The names in the datasheet are vdd for the 1V0 supply and vddio for the
-> 3V3 supply. I named the latter vdd2 instead because this device does not
-> have its own driver and instead it uses the onboard_usb_hub generic
-> driver, where the supplies are named vdd and vdd2.
+> Very cool, I was wondering if/when someone was going to write a kernel
+> driver for this type of hardware.
 > 
-> Those are the names used for devm_regulator_bulk_get(). Is that not the
-> right way to match them?
+> But why debugfs?  Normally that is locked down for root-access-only by
+> the system (rightfully so), why is this information restricted?
+> 
+> And why is this a kernel driver at all?  Why can't you just do this in
+> userspace and add support to 'lsusb' for it?
 
-If desired the driver could be extended to support device specific regulator
-names through struct onboard_hub/dev_pdata.
+I'm to blame for that. I wanted a way to see the billboard information
+when something goes wrong with the alt mode entry in an environment
+where I don't necessarily have tools like lsusb - I think I need to
+include usbtools package to my Buildroot to get that app. I also
+proposed debugfs, because for me this would be purely for debugging
+purposes.
+
+Later I was hoping to use this information in the Type-C drivers to
+help in situations where the alt mode entry fails and UCSI does not
+give any information about the partner (which unfortunately is the
+reality on several platforms).
+
+This is really just a proposal - perhaps we should have started with
+RFC first. But I think Niklas has done a great job in any case.
+
+
+thanks,
+
+-- 
+heikki
 
