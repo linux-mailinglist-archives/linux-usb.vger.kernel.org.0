@@ -1,281 +1,275 @@
-Return-Path: <linux-usb+bounces-5903-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5904-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AA2884ACCF
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 04:23:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C55784ADE3
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 06:19:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C052D1C22FC4
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 03:23:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27A79284D6D
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 05:19:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FA01745F0;
-	Tue,  6 Feb 2024 03:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 613857F467;
+	Tue,  6 Feb 2024 05:18:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="psF+K8mn";
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="AeBXE6Gn";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="fMsVU9mT"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="oNSDj3oH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874DE745D8;
-	Tue,  6 Feb 2024 03:23:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.156.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707189814; cv=fail; b=W4IyJxjKtrMguFnIYpr2i64n9ht6gr83yybvQVCK+Af6445D2HBDNn5+wAY/tEEcyFYG5nXJKlpq7aJFXC93kt9Url5XcBxP9qe35bQJTxXeITxtzXZsNYYIuPZL2RD1nw7O7Rds0WwUybxpM9RvHSdbw7bhDXJUCo92oEB36eo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707189814; c=relaxed/simple;
-	bh=eatwfPdiIQtCypYtSyCvuba5jEa6J73zgOpEIh3mDXY=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=j48M4xdM8ltb+7ct9q3GrCgYoXLMUANLwE4j5JoPWrUoI3sQYNnaYNmDH0hA8s6D9cAsXY1A6dIGRljiLtkUOdUB4R1VgMsmN7XtSyM92+r5Jg6K4KCLAOFf/Nfi/NYASQVvzqajotEmWrGB56yU8dUk5gHKVwPJQxNKAiSNNHU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=psF+K8mn; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=AeBXE6Gn; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=fMsVU9mT reason="signature verification failed"; arc=fail smtp.client-ip=148.163.156.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
-Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
-	by mx0a-00230701.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 415KYQ5O022766;
-	Mon, 5 Feb 2024 19:23:24 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
-	from:to:cc:subject:date:message-id:references:in-reply-to
-	:content-type:content-id:content-transfer-encoding:mime-version;
-	 s=pfptdkimsnps; bh=eatwfPdiIQtCypYtSyCvuba5jEa6J73zgOpEIh3mDXY=; b=
-	psF+K8mnPN50WlSLbW7zODV4tcU4q4EfvbHxNRadUUR8YfdY4zRf7Qd9OUiAtcQf
-	NoN46GfuEB0xjf7e7gzaE6NOWHRazxQve+9pg3hTLeVGjUh7fBq99S9U3QWcOaeE
-	/rbaUo/XPdSAa4f3LFbueaqEevDXjwpYBn8os0eHEY6Ep/byckVbmaMsl/dWRDTS
-	bLbxKngDh7KzpxC+L4Rp/oNgDUhmwAKqeENj28tbC4Ks0X0Scr/NmiI4iQxyMk6f
-	8hO82A05XO5EzUzVJRp7NcgGwDDnhhyV9Y9VgygtLQdNe4FYRWoWZqXmctiRzjax
-	GqhtvQR3clzF0n+VXChh0g==
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
-	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3w1nm6sepc-1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F59B7E78B;
+	Tue,  6 Feb 2024 05:18:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707196731; cv=none; b=K+2bxXCHdd4ceDUcvRMFKJWZYkcnRXSRa3e1uNiyzs0AY7qvJqiZj6RY1HF7NsKJqQq8biL0B7ubZi9YYx+BM9f4parzd+0b8eEffffEqLMLUqFWu7ORJj8GGxpDUoxu5BUJljnJTNqubqZcD2qpDX3/Z+JuTXKfb/czXwid/n8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707196731; c=relaxed/simple;
+	bh=b9f0KafgMv3GviOTUJU6XVHmOCjmzbUoK501o8vy2+8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=htUzJ4GLFWi+5uu93vERi+qzB5blhLubCQX4HSJ9k5WIhFloo6HtnwRj6/xYlJ2YEF5fV++V61filBqQdoFDmCwJ+l0rYla+43gOM4AfVVXwjvrk2rugbWVkxPJ3+GBsAkY8Pf2n1joh6MpYGYHwMXevgetCf1coGCqhXOzjPqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=oNSDj3oH; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 416409ZF021498;
+	Tue, 6 Feb 2024 05:18:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=fJDqfjS
+	vfVJX6zShg6Wanji5jnm+HAw9wDNPWUIkw5M=; b=oNSDj3oH3g8TZA5LCLYT8mm
+	YnVgTllqU5GEjLlpUxfn4RoX26uyUFQVSH9Oy2NSqcXW6IiKCyfhv/k3wVJ+lASZ
+	OAT1FHguTOb5/4lY8nGO2nNboOgUz0zqBVtdpMiA9X6w3t8hwTaU5YgshXhww/EK
+	QWqwK+4cQi/GYaxKOmxZVvXHCR8OhcnqV4UPGjtIUePBM8sPGMqDRVquiKEvhFxu
+	y/2CSWZeuzJZSoyeEnDHAYWhiDf3LJmtRnZGZPTxC+0SHIGN/VSRSbONVlt0OjKE
+	tSA5Hj+dejIfxb6Y2G1O1UjxXy8mY7mKvIyunevNytcj5HdGoMCyc05ls6725yw=
+	=
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w3cafr780-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 05 Feb 2024 19:23:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-	t=1707189803; bh=eatwfPdiIQtCypYtSyCvuba5jEa6J73zgOpEIh3mDXY=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=AeBXE6Gnj+rKvygM3qdssrjDQc0uRctvJzVNgtLo1ysAv/lu9oxMuuf2JcdeK7YAs
-	 j1zgIuDp0sroU9LZ2uj+Q0wqzx/T5AqPqQz2KhhejIZAkVnsW0Edb6+YLPPD/gqhSv
-	 1np2zfTykwzWhJgwxC7P9l89KaWAYZpp+HcSuVLsLzNWnCs08DG+PuTo80UzGtyX/A
-	 UobHrEwmop+U2EEZIOvziYwzskbrcr3uqd7ABQQcXOKBIJ955bm/FwJuT2PEBDRYei
-	 52rZIWWtEmV5CmpdQ7tGBep7PkU2K52ZvbWUYokELKa5ftNQCqBfMWAO9qTbVSs2he
-	 LSX7m81IEEzjg==
-Received: from mailhost.synopsys.com (us03-mailhost1.synopsys.com [10.4.17.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
-	 client-signature RSA-PSS (2048 bits))
-	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 5F1764064B;
-	Tue,  6 Feb 2024 03:23:22 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-	by mailhost.synopsys.com (Postfix) with ESMTPS id A789CA0077;
-	Tue,  6 Feb 2024 03:23:22 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=fMsVU9mT;
-	dkim-atps=neutral
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2041.outbound.protection.outlook.com [104.47.56.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-	by o365relay-in.synopsys.com (Postfix) with ESMTPS id DD4F440138;
-	Tue,  6 Feb 2024 03:23:21 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G2yLRM0K3po2tK7ckQdZZsTyRpl32BhYYcqWsWRaEe87ME87u9/fwpy8fRHVFKzVnPjQKR00qenowb2jUZnQkctf16J8V38EnSsFHeYfMZtOGOQNe9QpiSBkhWTligTeGJyz9nb80E1vST94ky3F67F1fCxqfxtte66zEyWls5nRwJXISi33jIkY+UOaAfTlJEQGqeAPIYUhZOXQy4twkulTIrowaFNcRdP0EPHJ2zi2rDVD8o/glyHSDjsBZEX/w/VRCDlddBLIsHQueAQyyPNrbXJ7kpNh6pcnBSvX/nmQyJn6nxpbnnBe69KVcDM6Jpi7ghSoPqKszIV36F/NeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eatwfPdiIQtCypYtSyCvuba5jEa6J73zgOpEIh3mDXY=;
- b=VYT/N7wPWxN73DXAIOTKIRWEmXx1cP3p6Yk59GJ8Kxdi1nHCco45pHY94DUWPehmz3o5AMKh1mWzIjF3a2BFXuyyIvcFrXwvG3TVTiFaz1vaoSVHDcEj9ag1OVRxFBl1gtlndhElurrOlMTCfMF0JI9hcrNEiHBfhBxiY+n4KJNOzwb1VGYrjtDSvJYq/Py2+9YIoUoa9aqLev4/XZhbUVeVyJFA9gZT6ckQGE/bQhWic9lKbdonDTI6Udbvnr8oCgRhZN9H5AtdTOE1AmvkL0QKitZmMQKQAQMSTcOxDWb+XOdCpWq4vk7KicBjS1XW4Y+MONm904MXOfJeGvpADg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eatwfPdiIQtCypYtSyCvuba5jEa6J73zgOpEIh3mDXY=;
- b=fMsVU9mT76a+qw0Xz44vlAUUTXXJAzdXitaLVEwm2gekfhpTrLX6WNAMCP2Ac9u09LB4YPRB4jsHdbTpUReGXQMMeH/qGRjZlW0OTPRiIsCA420uJm0Eh/H7IUC9DWv5r1QPF6Fiictpnufv10Am0v7Ti0+UvaumbU+gQ1vZ3jE=
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com (2603:10b6:408:170::16)
- by DM4PR12MB5820.namprd12.prod.outlook.com (2603:10b6:8:64::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7270.14; Tue, 6 Feb 2024 03:23:18 +0000
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::a6b8:3d34:4250:8ae3]) by LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::a6b8:3d34:4250:8ae3%3]) with mapi id 15.20.7270.009; Tue, 6 Feb 2024
- 03:23:17 +0000
-X-SNPS-Relay: synopsys.com
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>
-CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: duplicate requests on host side while streaming via uvcvideo
- gadget
-Thread-Topic: duplicate requests on host side while streaming via uvcvideo
- gadget
-Thread-Index: AQHaWIy4+bRzcAJsc0KCNz3P73sMPLD8pnqA
-Date: Tue, 6 Feb 2024 03:23:17 +0000
-Message-ID: <20240206032301.6e4tmbvmk7vs72gg@synopsys.com>
-References: <ZcFx7P30Su_Mx4AV@pengutronix.de>
-In-Reply-To: <ZcFx7P30Su_Mx4AV@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: LV2PR12MB5990:EE_|DM4PR12MB5820:EE_
-x-ms-office365-filtering-correlation-id: e79d2249-e1a6-4cc1-8f47-08dc26c2f626
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- NGBQ6ioYvWtTamVTvczfB3xcRQDX7hticuvEqhe4LMU7yCQeOnf3o1EWzN9yVOWH2PvyhEDaN0p+kmUJnIr2tnC92+ELCFPwgD9BYh5dCX7krmLfGMp1bMLlUlMjPdd7X+H6DvLtP8t7PtG6J0yGgBR5hAEvr6GnJUNSO7o865bq5VSyb64i5MZjSN6Rmsr4GWvBbxTSYLmLE5TjqfpLZdLuDqP9hgwI2+nsCbg8VMyTThJoKNOBAnPHvagm9VK+yz7Xg+AbBt8k+9Vks60NdhBTmEjfEvt7HEzko0QGY4sBe3GVp1/lfpY0+PRpT3+39n/14UmT5GG9oGQMM+/3f900HGi1yZri5y6r7OosmGmwUXw25GSoxf51muX2NvWDFTGDN0VcziTmzmL7r3k8gk0W68G4CmMDByTC8zYBG89Ipj8XfwznfW8GKWdG2IVBuU9kUFa1ImUYm1N7BBnok5s7PQ1rfQ0GakGmU/VPGXgg2TM+1zhRmicNbpaMeAItWF51gTsEf94Ajlx0lZR1ucqmJ7YUn1ODJpZcQscGEo3k/jO5lwCFYQmVlEzJRFR1ba9ZeOCKp3NbLxDVNkOnXAWhi2YAhLt0Oxz2Ooi0e9zJ4Kb2zZSRyf9Drn4S0FCu
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(346002)(376002)(39860400002)(136003)(230922051799003)(451199024)(64100799003)(186009)(1800799012)(478600001)(86362001)(41300700001)(6486002)(83380400001)(38100700002)(122000001)(26005)(66476007)(8936002)(71200400001)(6512007)(6506007)(6916009)(36756003)(64756008)(66556008)(66446008)(8676002)(4326008)(5660300002)(76116006)(54906003)(316002)(38070700009)(2906002)(66946007)(1076003)(2616005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?utf-8?B?eWdFWEprS3ZZWHBvL2U4c3lLU3JvQm5aOTIxTXljeUxZcmRnQnkyTXhUaDZO?=
- =?utf-8?B?MXNTVVJXL2wvelRYcS9qZDBKQ29HdTZDeEdTZEpjd0N5Q1R1cUw5VGRNSUhL?=
- =?utf-8?B?UjV1NTRFallFYUplSDlNZE5nUjhYYlQvMjd3anhET1VQL3VZZzNGRFBNblQx?=
- =?utf-8?B?R0xHdkE2UThFczFKTk9wWFZidjZSclI2cmlzYTJCZnZrQzNkUXdTUC9ENUhL?=
- =?utf-8?B?OVpseG5lbXUyWnRuWDIzdjZ4bnFTQjcyaHdVRE56dUFHRStrdjNVRXpaVjdp?=
- =?utf-8?B?Nzd2OWl4TWRLRHljNEYrVU1VdUI3ajd0ekNGL2p2eVgyK0RHUG1zWXdkcUpq?=
- =?utf-8?B?aXZOdFhKRTJ6RU5CcnJ0dmthMUFmMTVwTjBXOG9abG1BS0Vic0VGTFZrM0hP?=
- =?utf-8?B?aDN2emRLQnFwS2xYejB6TUcxb2xDYi9EZDBIT3oycENmTkJjamhmOVZzSzVE?=
- =?utf-8?B?TDl5cEVPS01WaVdPSU0xYmpvei9JVTUxbkhZZHkxaEZ2dnE1cEM5MU8ybkY1?=
- =?utf-8?B?RzJ2ZTBTQXhlYk5zcGxyaExDU3FhcTVubGpTc1lBSW5CNnY2VEU3SkZFejQr?=
- =?utf-8?B?V3h0blorTTVGZzhCZllRVUI2cGhIdjBDMWpWaFIwOCtZMitwV3UySzVtTmFM?=
- =?utf-8?B?eGQ2ZDlwVyt0TXYwYnlEbkx3OEE3cXlwd2N4eGF2TWRGT094UHd3amg2SWVw?=
- =?utf-8?B?bHBSMFZtZ1ZkZFFRS0xHdHBwVGdYWkM4aFlFMnR5azRQQTdZT0ltbnpOM2Uw?=
- =?utf-8?B?RmlCbTZqTzJsSnFnQmFuSXl6bFhzeFJpeXo2MDhSMHpOSDhrTW0zNlU4YzZR?=
- =?utf-8?B?SzlhNTlGUFc3QXVleWdFVjNPTGtsSEZaVEFRcFo1VFBMbFJvK1hiMDgvVm5F?=
- =?utf-8?B?cEFMcVpNSHplMGdva0ZSM0N5YWdFa3hpYmF6V1poaG1ZWjkraE9VMElLQVcr?=
- =?utf-8?B?VEJMM3ErK0Q5K1ptWHg0YlQ2V3JNMi9pbVZ5N2ZBWFBBTWpjL0hjUC8xbHVy?=
- =?utf-8?B?cE5CQzFtaFZXUnl1bGsralFCTjZ5cDNCMFBCR0tZSGtkc1dFeGdGLzVxR3Qy?=
- =?utf-8?B?MjIrbFhEZGpEZjI5UXBtcFVWM1UxRVhqSnJ4RHYrbUlRY0E0dHd2VWJ3SWNB?=
- =?utf-8?B?bWJHS2pacHJ0VWZKb0diODVreWRrOE52VDFlaGdzNjBzZEVCOVNiYkczd1hX?=
- =?utf-8?B?VWxXdFlYVzNXcmZNbjRRS1I4U1JkMFJHTzYrREVLeWFsKzl4aUJZQzBsL1lM?=
- =?utf-8?B?akxHang4OFY1LytOdDdTdC8zVms0WlhPK2RKZWJJRXpxOXJ2cnZhNWxCeUlD?=
- =?utf-8?B?YnhvMGJ3YkxybW1DSmpRSlRSdjBQVGNWQkRYZVQ2NDVhNCtrbXVUck5TNzh4?=
- =?utf-8?B?cE1tQVpLS09CTEdWakJzOVl5aldPaEk0MnQ0M1AvRmQ5dXJqOGFnOUdBN243?=
- =?utf-8?B?eFlBQUtRVDdXVUhpelp2MDZCNk9EaHhiUGFwckd0ajFrTjVpcU9lNlpTalZm?=
- =?utf-8?B?aHpKcklnNmpZNEpSRE1NTGZ0U2tQeCtGQm1JUkN4TExod0k3Rm43czhwYWZs?=
- =?utf-8?B?M2ZGdFBFVENSNkhmcXhjaDhweVBONzRFcVZTVTBKTko0L2NiZ2JwbE1mVXQ5?=
- =?utf-8?B?N2U2YlpIdlNFVVVxL2JpbmFZa2pmQndVTUhlUHJSa0hDQ3NCMWZDZW9sMnJ5?=
- =?utf-8?B?T2RtSE9Yblh2eFM4TWlnSGl1RWZQeTFKbG5ESW80K25TZTJlNmdab0tGLzI3?=
- =?utf-8?B?V0JKWlZmc1V0MGhKdEdkU0Z6M2doRnBBajdUaWU1MTVMMFMwQWN3S2xTTGFC?=
- =?utf-8?B?WjM4ODA1b05pa0toY1MxN0U1S21lZmpaNkRJTHdMZW9IZjhTSW1RVHo0QkVU?=
- =?utf-8?B?eGMxWXdrL2l5ODhEbVUxSEtML2loZUNneS8zMFlZdGtXcFpRcHM3ZDI1NXlv?=
- =?utf-8?B?bW1POTBHcmRKVStKbERXT1FrYmNtRE93c3NrOVpCNjB4VlBudWJCeWJiSWpI?=
- =?utf-8?B?bW9lakRTVms4bmdwbVBGbkVLL0paUXI1bmJKSi9nNUNNTWRBZUlnZnJkODNY?=
- =?utf-8?B?K3BpUWxyMmdENEFRajdkaVlHOUFQbTkvSVMzRmorZXJuelVzU3pGZ3B4dEtl?=
- =?utf-8?B?ZnR3YUZHVmQ4dXVvL001cE1FN0pKQy91QytSeVRGeHNHQk1qcHFMNml5UWZS?=
- =?utf-8?B?a2c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DD1E6C4EC7AD6C4C9E41A3BE845C8262@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	Tue, 06 Feb 2024 05:18:41 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4165Ie6w007100
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 6 Feb 2024 05:18:40 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Mon, 5 Feb 2024 21:18:35 -0800
+From: Krishna Kurapati <quic_kriskura@quicinc.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring
+	<robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi
+	<balbi@kernel.org>
+CC: <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        Krishna Kurapati
+	<quic_kriskura@quicinc.com>
+Subject: [PATCH v14 0/9] Add multiport support for DWC3 controllers
+Date: Tue, 6 Feb 2024 10:48:16 +0530
+Message-ID: <20240206051825.1038685-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	gSWoJsMSyNW1kBYh+ZZ2DfewUWLVQUGLaII6ow8Qc0uD2jP/FJ4hg/PPXrhvZ2CF+pVGhIj3BxJXCoQ29GM1AfxH0FZzvgT/UIQ2Bkx+25li6cNQP8FD+3NMmbhu4GnYUIcEhpPMnppMD8Edv0pTz9MeZ5B2MJ2/klsh9+7MJp8TU92C7gqfPZuwhKqMGKFc3aANsxxkvYCyFteoj3WJ8yIyTdc58koRZi94iSlen5gWsdQV7Os/wWnA1WKBCAL2HUtTZzXRWIt0LwZAt0qqIENpK61gz8mSUGvuoiKS0GNLUceE4p+tp41ledZ4KHP9+kW03HyIE4NA+1XW5DVclNF9il94IxRxCSD0qhvgvPIDSo4k4nFfeeKh3cV0/hw7N5vYeGGo/gBPw4uNbdd94ioLn0+fS7ckXGTuH1I+1KVvahaDR7+t654Wqu8k2UDIFVUqI6jXutS/Zi8t3CbU0PAX3wcM8BHrlXph2Wf4WIFws0f7CXvGmNt9NKpk3TjIeTnHWhwYEznqcjsHjWu7Wdc36U6fIs6E/DlQ3MTKCw0W3WK9DARvwglXWpkp6jgZYaCRY6NnX5wDmuKF5tHI9ivyMoOuo4fBrOXk1C+yaRUSPey8B2eOIzKBA4hYi3dCW2kz+5Ee32kJztOG55ChKg==
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5990.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e79d2249-e1a6-4cc1-8f47-08dc26c2f626
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Feb 2024 03:23:17.4766
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: s+Lm/r7lCwJWzdKJrRAfqkakP0VW6FwHOzjp03HydB9+kc7mkvQkko+nlE3S10wbuQoW4RI61mBKQoj8ndgGew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5820
-X-Proofpoint-ORIG-GUID: OnVaTCC_X7x6pAxUawlJYWHrc8EH1M1v
-X-Proofpoint-GUID: OnVaTCC_X7x6pAxUawlJYWHrc8EH1M1v
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: pvTZ-DUi0xef4zqhq8noVrlOdiNj-_ES
+X-Proofpoint-GUID: pvTZ-DUi0xef4zqhq8noVrlOdiNj-_ES
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-05_18,2024-01-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- priorityscore=1501 spamscore=0 clxscore=1011 mlxscore=0 malwarescore=0
- adultscore=0 lowpriorityscore=0 phishscore=0 bulkscore=0 suspectscore=0
- mlxlogscore=662 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2401310000 definitions=main-2402060022
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ mlxscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0 clxscore=1011
+ bulkscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
+ mlxlogscore=703 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402060035
 
-T24gVHVlLCBGZWIgMDYsIDIwMjQsIE1pY2hhZWwgR3J6ZXNjaGlrIHdyb3RlOg0KPiBIaSBUaGlu
-aA0KPiANCj4gSSBmb3VuZCBzb21lIHN0cmFuZ2Ugc2l0dWF0aW9uIHdoaWxlIHN0cmVhbWluZyB2
-aWEgdXZjLWdhZGdldCB0byBzb21lDQo+IHVzYiBob3N0LiBJdCBoYXBwZW5zIHdoZW4gc29tZSBy
-ZXF1ZXN0cyBhcmUgbWlzc2VkIGR1ZSB0byBoaWdoZXIgbG9hZCBvbg0KPiB0aGUgZ2FkZ2V0IG1h
-Y2hpbmUuIEluIHNvbWUgY2FzZXMgc29tZSByZXF1ZXN0cyB3aWxsIHJlYWNoIHRoZSBob3N0DQo+
-IHR3aWNlLiBJbiBteSBzcGVjaWFsIGNhc2UsIEkgYWRkZWQgdGhlIGZvbGxvd2luZyBjaGFuZ2Vz
-IFsxXSBmb3IgdGhlDQo+IGhvc3QgYW5kIGdhZGdldCBzaWRlLg0KDQpEb2VzIHRoaXMgb25seSBo
-YXBwZW4gdG8gc29tZSBzcGVjaWZpYyBob3N0cz8NCg0KQXJlIGFsbCB0aGUgZGF0YSBvZiB0aGUg
-ZHVwbGljYXRlIHJlcXVlc3RzIG1hdGNoaW5nIG9yIGp1c3Qgc29tZSBiaXRzIG9mDQp0aGUgdHJh
-bnNmZXI/IFdlcmUgeW91IGFibGUgdG8gY29uZmlybSBmcm9tIHNvbWUgdXNiIGFuYWx5emVyL3Nu
-aWZmZXINCnRoYXQgdGhlIGRhdGEgb3V0IHRoZSB3aXJlIGlzIGFjdHVhbGx5IGR1cGxpY2F0ZT8N
-Cg0KPiANCj4gV2hlbiBhcHBseWluZyB0aGUgcGF0Y2hlcyB5b3Ugd2lsbCBmaW5kIGFsbCByZXF1
-ZXN0cyBtYXJrZWQgYXMgZXJyb3JzIG9uDQo+IHRoZSBob3N0IGFuZCBnYWRnZXQgc2lkZSByZXBv
-cnRlZC4gSG93ZXZlciwgdGhlIG9kZCB0aGluZyBpcyB0aGF0IHRoZQ0KPiBlcnJvciBjb3VudGVy
-IG9uIHRoZSBob3N0IHNpZGUgd2lsbCByaXNlIGhpZ2hlciB0aGFuIHRoZSBudW1iZXIgb2YNCj4g
-cmVxdWVzdHMgd2UgaGF2ZSBhY3R1YWxseSBtYXJrZWQgYXMgZXJyb3Jub3VzIG9uIHRoZSBnYWRn
-ZXQgc2lkZS4gWW91DQo+IGNoZWNrIHRoZSBudW1iZXIgb2YgZXJyb3JzIGZvdW5kIG9uIHRoZSBo
-b3N0IGJ5IGxvb2tpbmcgaW4gdGhlDQo+IHN0YXRpc3RpY3MgYW5kIGNvbXBhcmUgaXQgd2l0aCB0
-aGUgbnVtZXIgb2YgcmVxdWVzdHMgdGhhdCBhcmUgYWN0dWFsbHkNCj4gbWFya2VkIHdpdGggVVZD
-X1NUUkVBTV9FUlIuDQo+IA0KDQpbc25pcF0NCg0KPiANCj4gLS0gSG9zdDoNCj4gDQo+IFsgMTc2
-OS4yMTMzODddIGVycm9yIG9uIHV2YyBwYWNrYWdlIQ0KPiBbIDE3NjkuMjEzMzk2XSBQVFM6IDE2
-DQo+IFsgMTc2OS4yMTM0MDBdIFNDUjogNjQNCj4gWyAxNzY5LjIxMzQwMl0gU0NSOiAyMjkNCj4g
-DQo+IFsgMTc2OS40NjEzODZdIGVycm9yIG9uIHV2YyBwYWNrYWdlIQ0KPiBbIDE3NjkuNDYxMzk0
-XSBQVFM6IDk2DQo+IFsgMTc2OS40NjEzOThdIFNDUjogODANCj4gWyAxNzY5LjQ2MTQwMV0gU0NS
-OiAzMw0KPiANCj4gWyAxNzY5LjQ2MTQwNV0gZXJyb3Igb24gdXZjIHBhY2thZ2UhIDwtIGR1cGxp
-Y2F0ZQ0KPiBbIDE3NjkuNDYxNDA4XSBQVFM6IDk2DQo+IFsgMTc2OS40NjE0MTBdIFNDUjogODAN
-Cj4gWyAxNzY5LjQ2MTQxM10gU0NSOiAzMw0KPiANCj4gWyAxNzY5LjY1NzQwNV0gZXJyb3Igb24g
-dXZjIHBhY2thZ2UhDQo+IFsgMTc2OS42NTc0NDJdIFBUUzogMjI0DQo+IFsgMTc2OS42NTc0NDld
-IFNDUjogNjQNCj4gWyAxNzY5LjY1NzQ1M10gU0NSOiA4MQ0KPiANCj4gWyAxNzY5LjY1NzQ2MF0g
-ZXJyb3Igb24gdXZjIHBhY2thZ2UhIDwtIGR1cGxpY2F0ZQ0KPiBbIDE3NjkuNjU3NDY1XSBQVFM6
-IDIyNA0KPiBbIDE3NjkuNjU3NDcwXSBTQ1I6IDY0DQo+IFsgMTc2OS42NTc0NzZdIFNDUjogODEN
-Cj4gDQo+IFsgMTc3OS41MjUzNjhdIGVycm9yIG9uIHV2YyBwYWNrYWdlIQ0KPiBbIDE3NzkuNTI1
-Mzc0XSBQVFM6IDEyOA0KPiBbIDE3NzkuNTI1Mzc4XSBTQ1I6IDIyNA0KPiBbIDE3NzkuNTI1Mzgw
-XSBTQ1I6IDE1Nw0KPiANCj4gWyAxNzg0LjYzNzM1OV0gZXJyb3Igb24gdXZjIHBhY2thZ2UhDQo+
-IFsgMTc4NC42MzczNjddIFBUUzogMA0KPiBbIDE3ODQuNjM3MzcxXSBTQ1I6IDIwOA0KPiBbIDE3
-ODQuNjM3Mzc0XSBTQ1I6IDg5DQo+IA0KPiBbIDE3ODQuODI1MzU3XSBlcnJvciBvbiB1dmMgcGFj
-a2FnZSENCj4gWyAxNzg0LjgyNTM5NF0gUFRTOiAyMjQNCj4gWyAxNzg0LjgyNTQwMV0gU0NSOiAx
-OTINCj4gWyAxNzg0LjgyNTQwNl0gU0NSOiA2Mw0KPiANCj4gWyAxNzg0Ljg0MTM2Ml0gZXJyb3Ig
-b24gdXZjIHBhY2thZ2UhDQo+IFsgMTc4NC44NDEzOTRdIFBUUzogMTQ0DQo+IFsgMTc4NC44NDE0
-MDNdIFNDUjogNDgNCj4gWyAxNzg0Ljg0MTQxMF0gU0NSOiAxODYNCj4gDQo+IFsgMTc4NC44NDE0
-MThdIGVycm9yIG9uIHV2YyBwYWNrYWdlISA8LSBkdXBsaWNhdGUNCj4gWyAxNzg0Ljg0MTQyNF0g
-UFRTOiAxNDQNCj4gWyAxNzg0Ljg0MTQzMF0gU0NSOiA0OA0KPiBbIDE3ODQuODQxNDM2XSBTQ1I6
-IDE4Ng0KPiANCj4gaG9zdCQgZ3JlcCBlcnJvcnMgL3N5cy9rZXJuZWwvZGVidWcvdXNiL3V2Y3Zp
-ZGVvLyovc3RhdHMNCj4gL3N5cy9rZXJuZWwvZGVidWcvdXNiL3V2Y3ZpZGVvLzQtODEtMS9zdGF0
-czplcnJvcnM6ICAxMA0KPiANCj4gDQo+IC0tIEdhZGdldDoNCj4gDQo+IFvCoCAxMjYuODI2NTE3
-XSBkcm9wcGluZyBmcmFtZSEgMQ0KPiBbwqAgMTI2LjgyOTY1OF0gUFRTOiAxNg0KPiBbwqAgMTI2
-LjgzMTc2MV0gU0NSOiA2NA0KPiBbwqAgMTI2LjgzMzg1OF0gU0NSOiAyMjkNCj4gDQo+IFvCoCAx
-MjcuMDkwMDY5XSBkcm9wcGluZyBmcmFtZSEgMg0KPiBbwqAgMTI3LjA5MzA1OV0gUFRTOiA5Ng0K
-PiBbwqAgMTI3LjA5NTE2NF0gU0NSOiA4MA0KPiBbwqAgMTI3LjA5NzI2MV0gU0NSOiAzMw0KPiAN
-Cj4gW8KgIDEyNy4yODgwNDVdIGRyb3BwaW5nIGZyYW1lISAzDQo+IFvCoCAxMjcuMjkxMDQxXSBQ
-VFM6IDIyNA0KPiBbwqAgMTI3LjI5MzIzM10gU0NSOiA2NA0KPiBbwqAgMTI3LjI5NTMzMF0gU0NS
-OiA4MQ0KPiANCj4gW8KgIDEzNy4xNTM0OTldIGRyb3BwaW5nIGZyYW1lISA0DQo+IFvCoCAxMzcu
-MTU2NDk0XSBQVFM6IDEyOA0KPiBbwqAgMTM3LjE1ODY4N10gU0NSOiAyMjQNCj4gW8KgIDEzNy4x
-NjA4NzFdIFNDUjogMTU3DQo+IA0KPiBbwqAgMTQyLjI2NTEzNV0gZHJvcHBpbmcgZnJhbWUhIDUN
-Cj4gW8KgIDE0Mi4yNjgxMzFdIFBUUzogMA0KPiBbwqAgMTQyLjI3MDE0OF0gU0NSOiAyMDgNCj4g
-W8KgIDE0Mi4yNzIzMzJdIFNDUjogODkNCj4gDQo+IFvCoCAxNDIuNDUzNjM2XSBkcm9wcGluZyBm
-cmFtZSEgNg0KPiBbwqAgMTQyLjQ1NjYzNF0gUFRTOiAyMjQNCj4gW8KgIDE0Mi40NTg4MjVdIFND
-UjogMTkyDQo+IFvCoCAxNDIuNDYxMDA5XSBTQ1I6IDYzDQo+IA0KPiBbwqAgMTQyLjQ2OTEzMV0g
-ZHJvcHBpbmcgZnJhbWUhIDcNCj4gW8KgIDE0Mi40NzIxMThdIFBUUzogMTQ0DQo+IFvCoCAxNDIu
-NDc0MzEwXSBTQ1I6IDQ4DQo+IFvCoCAxNDIuNDc2NDA3XSBTQ1I6IDE4Ng0KPiANCj4gTm93IEkg
-YW0gdG90YWxseSB1bnN1cmUgd2hhdCBjb3VsZCBjYXVzZSBzdWNoIGVycm9yLCBidXQgd291bGQg
-ZXhwZWN0DQo+IHRoZSBpc3N1ZSB0byBiZSBzb21ld2hlcmUgaW4gdGhlIGdhZGdldCBkcml2ZXIg
-YW5kIHRoZSBtYXBwZWQgdHJiIG1lbW9yeQ0KPiBjb250ZW50LiBGb3IgdGhlIHV2Y192aWRlbyBs
-YXllciwgSSBjb21wYXJlZCBhbmQgdGVzdGVkIHRoZSBlbnF1ZXVlZA0KPiByZXF1ZXN0IGxpc3Qg
-Zm9yIGR1cGxpY2F0ZXMgYnV0IGNvdWxkIG5vdCBmaW5kIGFueS4gSSBhbHNvIHJldmVydGVkIGFs
-bA0KPiByZWNlbnQgcGF0Y2hlcyB0aGF0IGNoYW5nZWQgcmVxdWVzdCBoYW5kbGluZyBpbiB0aGUg
-cGFzdCB5ZWFyLiBJIHN0aWxsDQo+IGZpbmQgdGhlc2UgcmVxdWVzdCBkdXBsaWNhdGVzIG9uIHRo
-ZSBob3N0IHNpZGUgc2hvdyB1cC4NCj4gDQo+IEFueSBJZGVhcz8NCj4gDQoNCkknbSBub3QgZmFt
-aWxpYXIgd2l0aCBVVkMsIGNhbiB5b3UgZ2l2ZSBtb3JlIGNvbnRleHQgb24geW91ciB2YWxpZGF0
-aW9uDQphbmQgZXJyb3IgY291bnQ/IFdoYXQncyBQVFMvU0NSPyBJcyB0aGUgZGV2aWNlIHNlbmRp
-bmcgc29tZSBlcnJvciBzdGF0dXMNCmJhY2sgYXMgbmV3IHJlcXVlc3Qgd2hlbmV2ZXIgdGhlcmUn
-cyAtRVhERVY/DQoNClRoYW5rcywNClRoaW5o
+Currently the DWC3 driver supports only single port controller which
+requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
+DWC3 controller with multiple ports that can operate in host mode.
+Some of the port supports both SS+HS and other port supports only HS
+mode.
+
+This change primarily refactors the Phy logic in core driver to allow
+multiport support with Generic Phy's.
+
+Changes have been tested on  QCOM SoC SA8295P which has 4 ports (2
+are HS+SS capable and 2 are HS only capable).
+
+Changes in v14:
+Moved wrapper binding update to 5th patch in the series as it deals
+with only wakeup and not enumeration. The first part of the series
+deals with enumeration and the next part deals with wakeup.
+Updated commit text for wrapper driver patches.
+Added error checks in get_port_index and setup_irq call which were
+missing in v13.
+Added SOB and CDB tags appropriately for the patches.
+Rebased code on top of latest usb next.
+DT changes have been removed and will be sent as a seperate series.
+
+Changes in v13:
+This series is a subset of patches in v11 as the first 3 patches in v11
+have been mereged into usb-next.
+Moved dr_mode property from platform specific files to common sc8280xp DT.
+Fixed function call wrapping, added comments and replaced #defines with
+enum in dwc3-qcom for identifying IRQ index appropriately.
+Fixed nitpicks pointed out in v11 for suspend-resume handling.
+Added reported-by tag for phy refactoring patch as a compile error was
+found by kernel test bot [1].
+Removed reviewed-by tag of maintainer for phy refactoring patch as a minor
+change of increasing phy-names array size by 2-bytes was done to fix
+compilation issue mentioned in [1].
+
+Changes in v12:
+Pushed as a subset of acked but no-yet-merged patches of v11 with intent
+of making rebase of other patches easy. Active reviewers from community
+suggested that it would be better to push the whole series in one go as it
+would give good clarity and context for all the patches in the series.
+So pushed v13 for the same addressing comments received in v11.
+
+Changes in v11:
+Implemented port_count calculation by reading interrupt-names from DT.
+Refactored IRQ handling in dwc3-qcom.
+Moving of macros to xhci-ext-caps.h made as a separate patch.
+Names of interrupts to be displayed on /proc/interrupts set to the ones
+present in DT.
+
+Changes in v10:
+Refactored phy init/exit/power-on/off functions in dwc3 core
+Refactored dwc3-qcom irq registration and handling
+Implemented wakeup for multiport irq's
+Moved few macros from xhci.h to xhci-ext-caps.h
+Fixed nits pointed out in v9
+Fixed Co-developed by and SOB tags in patches 5 and 11
+
+Changes in v9:
+Added IRQ support for DP/DM/SS MP Irq's of SC8280
+Refactored code to read port count by accessing xhci registers
+
+Changes in v8:
+Reorganised code in patch-5
+Fixed nitpicks in code according to comments received on v7
+Fixed indentation in DT patches
+Added drive strength for pinctrl nodes in SA8295 DT
+
+Changes in v7:
+Added power event irq's for Multiport controller.
+Udpated commit text for patch-9 (adding DT changes for enabling first
+port of multiport controller on sa8540-ride).
+Fixed check-patch warnings for driver code.
+Fixed DT binding errors for changes in snps,dwc3.yaml
+Reabsed code on top of usb-next
+
+Changes in v6:
+Updated comments in code after.
+Updated variables names appropriately as per review comments.
+Updated commit text in patch-2 and added additional info as per review
+comments.
+The patch header in v5 doesn't have "PATHCH v5" notation present. Corrected
+it in this version.
+
+Changes in v5:
+Added DT support for first port of Teritiary USB controller on SA8540-Ride
+Added support for reading port info from XHCI Extended Params registers.
+
+Changes in RFC v4:
+Added DT support for SA8295p.
+
+Changes in RFC v3:
+Incase any PHY init fails, then clear/exit the PHYs that
+are already initialized.
+
+Changes in RFC v2:
+Changed dwc3_count_phys to return the number of PHY Phandles in the node.
+This will be used now in dwc3_extract_num_phys to increment num_usb2_phy 
+and num_usb3_phy.
+Added new parameter "ss_idx" in dwc3_core_get_phy_ny_node and changed its
+structure such that the first half is for HS-PHY and second half is for
+SS-PHY.
+In dwc3_core_get_phy, for multiport controller, only if SS-PHY phandle is
+present, pass proper SS_IDX else pass -1.
+
+Tested enumeration and wakeup on all ports:
+
+/ # lsusb
+Bus 001 Device 001: ID 1d6b:0002
+Bus 001 Device 018: ID 0781:5567
+Bus 001 Device 020: ID 03f0:134a
+Bus 002 Device 002: ID 18d1:4ee1
+Bus 002 Device 001: ID 1d6b:0003
+/ #
+/ # dmesg | grep ports
+[    0.224450] hub 1-0:1.0: 4 ports detected
+[    0.230479] hub 2-0:1.0: 2 ports detecte/ #
+/ #
+/ # cat /proc/interrupts  |grep phy
+158:          1          0          0          0          0          0          0          0       PDC 127 Edge      dp_hs_phy_1
+159:          2          0          0          0          0          0          0          0       PDC 126 Edge      dm_hs_phy_1
+160:          6          0          0          0          0          0          0          0       PDC 129 Edge      dp_hs_phy_2
+161:          3          0          0          0          0          0          0          0       PDC 128 Edge      dm_hs_phy_2
+162:          1          0          0          0          0          0          0          0       PDC 131 Edge      dp_hs_phy_3
+163:          2          0          0          0          0          0          0          0       PDC 130 Edge      dm_hs_phy_3
+164:          2          0          0          0          0          0          0          0       PDC 133 Edge      dp_hs_phy_4
+165:          3          0          0          0          0          0          0          0       PDC 132 Edge      dm_hs_phy_4
+166:          0          0          0          0          0          0          0          0       PDC  16 Level     ss_phy_1
+167:          0          0          0          0          0          0          0          0       PDC  17 Level     ss_phy_2
+
+Links to previous versions:
+Link to v13: https://lore.kernel.org/all/20231007154806.605-1-quic_kriskura@quicinc.com/
+Link to v12: https://lore.kernel.org/all/20231004165922.25642-1-quic_kriskura@quicinc.com/
+Link to v11: https://lore.kernel.org/all/20230828133033.11988-1-quic_kriskura@quicinc.com/
+Link to v10: https://lore.kernel.org/all/20230727223307.8096-1-quic_kriskura@quicinc.com/
+Link to v9: https://lore.kernel.org/all/20230621043628.21485-1-quic_kriskura@quicinc.com/
+Link to v8: https://lore.kernel.org/all/20230514054917.21318-1-quic_kriskura@quicinc.com/
+Link to v7: https://lore.kernel.org/all/20230501143445.3851-1-quic_kriskura@quicinc.com/
+Link to v6: https://lore.kernel.org/all/20230405125759.4201-1-quic_kriskura@quicinc.com/
+Link to v5: https://lore.kernel.org/all/20230310163420.7582-1-quic_kriskura@quicinc.com/
+Link to RFC v4: https://lore.kernel.org/all/20230115114146.12628-1-quic_kriskura@quicinc.com/
+Link to RFC v3: https://lore.kernel.org/all/1654709787-23686-1-git-send-email-quic_harshq@quicinc.com/#r
+Link to RFC v2: https://lore.kernel.org/all/1653560029-6937-1-git-send-email-quic_harshq@quicinc.com/#r
+
+Harsh Agarwal (1):
+  usb: dwc3: core: Refactor PHY logic to support Multiport Controller
+
+Krishna Kurapati (8):
+  dt-bindings: usb: Add bindings for multiport properties on DWC3
+    controller
+  usb: dwc3: core: Access XHCI address space temporarily to read port
+    info
+  usb: dwc3: core: Skip setting event buffers for host only controllers
+  dt-bindings: usb: qcom,dwc3: Add bindings for SC8280 Multiport
+  usb: dwc3: qcom: Add helper function to request wakeup interrupts
+  usb: dwc3: qcom: Refactor IRQ handling in glue driver
+  usb: dwc3: qcom: Enable wakeup for applicable ports of multiport
+  usb: dwc3: qcom: Add multiport suspend/resume support for wrapper
+
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |  33 ++
+ .../devicetree/bindings/usb/snps,dwc3.yaml    |  13 +-
+ drivers/usb/dwc3/core.c                       | 326 +++++++++++++----
+ drivers/usb/dwc3/core.h                       |  19 +-
+ drivers/usb/dwc3/drd.c                        |  15 +-
+ drivers/usb/dwc3/dwc3-qcom.c                  | 329 ++++++++++++------
+ 6 files changed, 534 insertions(+), 201 deletions(-)
+
+-- 
+2.34.1
+
 
