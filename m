@@ -1,216 +1,220 @@
-Return-Path: <linux-usb+bounces-5928-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5929-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70F5E84B31B
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 12:08:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2542584B5C3
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 13:58:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25D9428BD8C
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 11:08:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95A2BB2618C
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 12:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 843B5131720;
-	Tue,  6 Feb 2024 11:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DAE7130ACB;
+	Tue,  6 Feb 2024 12:57:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="jvY6ggHR";
-	dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b="ZdfxD+D0"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Vu0o+OOJ";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="so+rAKsH";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Vu0o+OOJ";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="so+rAKsH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F22B130AF0;
-	Tue,  6 Feb 2024 11:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.86.201.193
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707217561; cv=fail; b=tRCKk9sVm1dH2JEwwies4XDrDXbRuFLdnY4g7HbQviQmnyFN2an3C0VJH4TljmD35lEwVbw1UvK3OEXiYbW3ASlep7quUkAWdTpfY47lLjtEeTHZvThDmTsY9MP9WECETHltJkv5D3P/hNzmIiOP90urNHyaIIgIuk8goCt5CBs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707217561; c=relaxed/simple;
-	bh=p7V75UMlZCbxe6UohQvRSQ4W+ZcdeBdh6F5AKkVhwfc=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mPdvE4+jo18UnW5Qfz+5HCi5ZeH3gb4Z/m2Y0mJ2xunCCPNjFXRungooB0pc4yucQ5Kdx4i1UC4rsGx9FYXxbkFDx4z90FpK6b6wbcKWhyCMRNB7/lxfLj1EPDgs4pzot/n+IljTpowCgWDKRgr9wDAm/ttCvTceoILuJ/KoyRY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cadence.com; spf=pass smtp.mailfrom=cadence.com; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=jvY6ggHR; dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b=ZdfxD+D0; arc=fail smtp.client-ip=208.86.201.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cadence.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cadence.com
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-	by mx0b-0014ca01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4164N59p004618;
-	Tue, 6 Feb 2024 02:40:31 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=proofpoint; bh=jfec4i
-	vPAaLg3Gek215m6DeZ6OYIbZs3U9P2su3wLmc=; b=jvY6ggHRI3gcOhs+aPovQ/
-	02As3nQwlhNYxBUycG9MUccqs0DpE1AmVPnsBkQ3QBE4xamRVLgQ17nm2wDOkLHn
-	DnTPyL4eh8mGpLoc4OkFugw4fS3xlrXziXtxU0W2mShouER11vVNO9/T5pKvcAhD
-	Wi+KR1pIQBYQUjd0HTt1lraj2GaAbROzDdkJ7dozyWZ+T5vkLP3gjVC7XbM2Rpfq
-	hTemEQcXhaznsqOvdtP1hTY86EPvFD+p6p5bud5RYbtOzpbo9EGqlbfTVtaoYFZA
-	qi3GUo3/xpBWirwKCWWoT0EXIACHFLCzaIfF8gJCA/9C/+DbikymlDk6XpkB+s9g
-	==
-Received: from sn4pr2101cu001.outbound.protection.outlook.com (mail-southcentralusazlp17010000.outbound.protection.outlook.com [40.93.14.0])
-	by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3w3dpqh5xn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 06 Feb 2024 02:40:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fyLkWYtatZWq+P2hfsGIuvcEGxCAK5LUO02SVpnlFT9LRriYeTPs7YXXticzTAwGC8zkxFmqjSu4s8Ptk9ZoYnkJPlMOzOeb6k3KB6pFpulrFuqj+0Ir/Q7dU69cVotRdfAdRTnurGCKuCu5PzIlwsRXQFV/PAh/ulWbBy3wJI4XSkInEYtQgs3dSQ9UQ5BBTb/ssBKo+8v9cE/pf7IMHH3Q1oomziX13YZgVWKu+RMsi5i/o2r17NYCWhGMASoskAiVUkBAOjdbDdzgr/0o6iFLOx826M0smuy3QNfI7mXdThA3GHTL8bEwGFTt32+yrt6sH2hQyHgUt46XtnViaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jfec4ivPAaLg3Gek215m6DeZ6OYIbZs3U9P2su3wLmc=;
- b=eegclXLIUVVf7kehI7WZDh11s4YUTBnCNO4Iu5U8Y3sCi5l1gI8NLCy52Kvj+iiHYRnKiPpQV5xJIIA2IvXCyz/jD3pt3KOa3L3ZbSfyAWFmcsEiCMMziHk+3MepDryqS5ucDR15YEqqaRzdbrI9ZGrchK+2CnJwS4XN5NBJRSJzaBenXPDVTWox8wzswuPZ6oAMywoR0TcyuRyP7X9sP1bKH0p3CqtQSD1RDbmfl1d1LTe9C44FzdkTAQ1mVkL6fiw7VcZtpE4119EHt6TpKfFb4qmAP55uyAgwWziHBYAJ8bRFtsAUcnHi89gbebpauPaRyvf02LzwGtrpNY4vDA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 64.207.220.244) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jfec4ivPAaLg3Gek215m6DeZ6OYIbZs3U9P2su3wLmc=;
- b=ZdfxD+D0jVCX+1bRf5jL2TdwMQeEzh2GK0MZgasF62OZ1kjLuut4erqbzDCS2ilICgEqWdMkP0jtLXMWZkSJz8MIVsKY6Ys9OBmA16TlMhzYu1G9yAIi7Za2HR957x4guNEPJdF61dy9ojarHFYHAjecuSWzRv4pPhVKyjj2+zk=
-Received: from MW4PR03CA0194.namprd03.prod.outlook.com (2603:10b6:303:b8::19)
- by CH2PR07MB8188.namprd07.prod.outlook.com (2603:10b6:610:68::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.36; Tue, 6 Feb
- 2024 10:40:28 +0000
-Received: from MW2NAM12FT106.eop-nam12.prod.protection.outlook.com
- (2603:10b6:303:b8:cafe::3b) by MW4PR03CA0194.outlook.office365.com
- (2603:10b6:303:b8::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.36 via Frontend
- Transport; Tue, 6 Feb 2024 10:40:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 64.207.220.244)
- smtp.mailfrom=cadence.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 64.207.220.244 as permitted sender) receiver=protection.outlook.com;
- client-ip=64.207.220.244; helo=wcmailrelayl01.cadence.com; pr=C
-Received: from wcmailrelayl01.cadence.com (64.207.220.244) by
- MW2NAM12FT106.mail.protection.outlook.com (10.13.180.208) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7270.11 via Frontend Transport; Tue, 6 Feb 2024 10:40:26 +0000
-Received: from maileu5.global.cadence.com (eudvw-maileu5.cadence.com [10.160.110.202])
-	by wcmailrelayl01.cadence.com (8.14.7/8.14.4) with ESMTP id 416AeOLr062797
-	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-	Tue, 6 Feb 2024 02:40:25 -0800
-Received: from maileu5.global.cadence.com (10.160.110.202) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 6 Feb 2024 11:40:24 +0100
-Received: from eu-cn01.cadence.com (10.160.89.184) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24 via Frontend Transport; Tue, 6 Feb 2024 11:40:24 +0100
-Received: from eu-cn01.cadence.com (localhost.localdomain [127.0.0.1])
-	by eu-cn01.cadence.com (8.14.7/8.14.7) with ESMTP id 416AeNen048487;
-	Tue, 6 Feb 2024 11:40:23 +0100
-Received: (from pawell@localhost)
-	by eu-cn01.cadence.com (8.14.7/8.14.7/Submit) id 416AeNKP048482;
-	Tue, 6 Feb 2024 11:40:23 +0100
-From: Pawel Laszczak <pawell@cadence.com>
-To: <peter.chen@kernel.org>
-CC: <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <pawell@cadence.com>,
-        <peter.chen@cixtech.com>, <stable@vger.kernel.org>
-Subject: [PATCH] usb: cdnsp: blocked some cdns3 specific code
-Date: Tue, 6 Feb 2024 11:40:18 +0100
-Message-ID: <20240206104018.48272-1-pawell@cadence.com>
-X-Mailer: git-send-email 2.30.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B5D12F386;
+	Tue,  6 Feb 2024 12:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707224271; cv=none; b=Y8R7QqJTwgNdf+6uh4WU1Pi+pfI8QGtPrw/ciYFN6rsSF1uHsuyQmuGl23hs1RLwWySWpzVXH0vDAjlwK1iLrrZU4WG6wfUVEk/wP2h9opfSVBITnkJkQUByuWod5bYbpzPwwsys67wQ2VJKSSjydi5Vsiwgso/Ih+BKBkIs4AE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707224271; c=relaxed/simple;
+	bh=iL0HRojAzYDaeWoChYZcGEd6ts/epCRxUVQaIOugMFE=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KFOxX6movHkMkcO8CwNthfGh4Kup1SabrWzCcOaV+tPGXkyKZ7WWC/Lr5p9bHOby8z5nhU6lraFCbq6XRnmA2VXJnH25Mza0GmpM1YFNi08ONDDSXndA4O3U3OgRa/3uJhJJL4Np4TTDLSXsKt7Oe4C8eP8EYcb0fg++X7901oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Vu0o+OOJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=so+rAKsH; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Vu0o+OOJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=so+rAKsH; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 63FFE21F97;
+	Tue,  6 Feb 2024 12:57:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1707224267; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hrPdcscD82ZUY6PH9OM5wcI+tI4zDbEnOTR3kzNVpoY=;
+	b=Vu0o+OOJCFymyujwpECX00A2LCtfKTRvohJSFlRp2HCQDi2ASSyoXDk1TRT9PKwu321lSM
+	DQQMpThrEAdi3gZ19WRBx0XyssIohW0LukqZnIfCIJJNNC5o5z/QvL6R32M7/sAqM4cQR1
+	EAoGKcKPoWnRCVoChWgr7HnZqBqnH7E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1707224267;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hrPdcscD82ZUY6PH9OM5wcI+tI4zDbEnOTR3kzNVpoY=;
+	b=so+rAKsHbAGYwYUwwIrZetLGZ3KJ5tk2kB6NITrgOAmtmPCU6vhDIr769baVDdI9a+KnWu
+	RA/S6XqmGkLW6GDA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1707224267; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hrPdcscD82ZUY6PH9OM5wcI+tI4zDbEnOTR3kzNVpoY=;
+	b=Vu0o+OOJCFymyujwpECX00A2LCtfKTRvohJSFlRp2HCQDi2ASSyoXDk1TRT9PKwu321lSM
+	DQQMpThrEAdi3gZ19WRBx0XyssIohW0LukqZnIfCIJJNNC5o5z/QvL6R32M7/sAqM4cQR1
+	EAoGKcKPoWnRCVoChWgr7HnZqBqnH7E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1707224267;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hrPdcscD82ZUY6PH9OM5wcI+tI4zDbEnOTR3kzNVpoY=;
+	b=so+rAKsHbAGYwYUwwIrZetLGZ3KJ5tk2kB6NITrgOAmtmPCU6vhDIr769baVDdI9a+KnWu
+	RA/S6XqmGkLW6GDA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1A5CB139D8;
+	Tue,  6 Feb 2024 12:57:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id jP2zBcsswmXfMwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Tue, 06 Feb 2024 12:57:47 +0000
+Date: Tue, 06 Feb 2024 13:57:46 +0100
+Message-ID: <871q9pwy0l.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: <srinivas.kandagatla@linaro.org>,
+	<mathias.nyman@intel.com>,
+	<perex@perex.cz>,
+	<conor+dt@kernel.org>,
+	<corbet@lwn.net>,
+	<lgirdwood@gmail.com>,
+	<andersson@kernel.org>,
+	<krzysztof.kozlowski+dt@linaro.org>,
+	<gregkh@linuxfoundation.org>,
+	<Thinh.Nguyen@synopsys.com>,
+	<broonie@kernel.org>,
+	<bgoswami@quicinc.com>,
+	<tiwai@suse.com>,
+	<robh+dt@kernel.org>,
+	<konrad.dybcio@linaro.org>,
+	<linux-kernel@vger.kernel.org>,
+	<devicetree@vger.kernel.org>,
+	<linux-sound@vger.kernel.org>,
+	<linux-usb@vger.kernel.org>,
+	<linux-arm-msm@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>,
+	<alsa-devel@alsa-project.org>
+Subject: Re: [PATCH v13 48/53] ALSA: usb-audio: mixer: Add USB offloading mixer control
+In-Reply-To: <20240203023645.31105-49-quic_wcheng@quicinc.com>
+References: <20240203023645.31105-1-quic_wcheng@quicinc.com>
+	<20240203023645.31105-49-quic_wcheng@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-CrossPremisesHeadersFilteredBySendConnector: maileu5.global.cadence.com
-X-OrganizationHeadersPreserved: maileu5.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW2NAM12FT106:EE_|CH2PR07MB8188:EE_
-X-MS-Office365-Filtering-Correlation-Id: d05344e2-15bc-47f3-93c7-08dc2700081a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	JQ+tF3vTqX6RIBmPx7dDNbvLUzzgmdXqCRilXyXeRFvEW7agRBqPxWczbuZrpNCKpYoQ/yPWEEB5Tsg4/0sOdioHw5jo0ebGSFujhnPObJ25UHB4LbENwO8g8Ptc+q6HKfdZvlOiZmq3cicsD/2o87ZX6W3FYGxLur39GTwulBbydQWlzbWSvthMFaKls40SCn7LCWYDncYHzgx80pCFPu1A5K+H3e65YKci7u3JYk3up44gGfrvCd+t4NRAj8PjMyyShZvoWokp07Wtht9KHdnQSKyQHYKywFGAHocY7xSmcswEiAr0zwHpv7rKOeF9dzJRSVQY+9Fr+RJ7M/opHeb3+q+uDVTo9/DuDPQ0c9Em3Pf1th1sn57HOtUMFOqNV71JZgsQdW+Nf7reT1spFZ4QdCSEX/2iBwZHYz5oJPCZjjUJR63mDH5SKcHbVrPJr1eRNIt4CknHpzUoi/N6ZaAiOct2yxRYgc0rwdVXjo94S/bTxYeN0/euW2FgZxl9VlnKPMZ7g/zb0Tx+HbYiHdFITOjJY1ymwoZ5m6Z4SGIECSJARV8UrkzUEft7nsVYt2AtEjhE9Jqgo2Oyq4GtXpXYvooeGrdSb9B/OYMEea2V5HKBaTdkNKZVL/5EuQlFj/9mSQ+oAW9fYXmTaorIcqquKMEGLswVMjrT3qbg0ADo7vXv3fZhemkfnk8HF7qatfr9PDoTHkpxLiQzj82iuXMcJ2tcjS3LuvB0tGQJA7K7oJiHo7pOnGNJ/a0fHvM0WYoJLmKajULg+cC6YvQ1LQ==
-X-Forefront-Antispam-Report: 
-	CIP:64.207.220.244;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:wcmailrelayl01.cadence.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230031)(4636009)(136003)(376002)(39860400002)(346002)(396003)(230922051799003)(451199024)(1800799012)(64100799003)(82310400011)(186009)(46966006)(40470700004)(36840700001)(47076005)(41300700001)(86362001)(8936002)(8676002)(4326008)(336012)(426003)(478600001)(36756003)(5660300002)(2616005)(6666004)(1076003)(26005)(70586007)(316002)(6916009)(42186006)(70206006)(54906003)(2906002)(83380400001)(40480700001)(40460700003)(36860700001)(81166007)(356005)(82740400003)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2024 10:40:26.8585
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d05344e2-15bc-47f3-93c7-08dc2700081a
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[64.207.220.244];Helo=[wcmailrelayl01.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: 
-	MW2NAM12FT106.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR07MB8188
-X-Proofpoint-ORIG-GUID: kbH1Tq2PjrhUDvFO606fTouTE0atqc1Y
-X-Proofpoint-GUID: kbH1Tq2PjrhUDvFO606fTouTE0atqc1Y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-06_04,2024-01-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 mlxscore=0
- lowpriorityscore=0 clxscore=1011 impostorscore=0 malwarescore=0
- bulkscore=0 adultscore=0 priorityscore=1501 suspectscore=0 spamscore=0
- mlxlogscore=902 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2401310000 definitions=main-2402060075
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: 
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Vu0o+OOJ;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=so+rAKsH
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-2.60 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 TO_DN_SOME(0.00)[];
+	 R_RATELIMIT(0.00)[to_ip_from(RLe67txhfobum3fqdb5xx8e3au)];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_TRACE(0.00)[suse.de:+];
+	 MX_GOOD(-0.01)[];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 BAYES_HAM(-0.09)[64.59%];
+	 ARC_NA(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 FROM_HAS_DN(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 TAGGED_RCPT(0.00)[dt];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 DWL_DNSWL_HI(-3.50)[suse.de:dkim];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 RCPT_COUNT_TWELVE(0.00)[23];
+	 MID_CONTAINS_FROM(1.00)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,quicinc.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FREEMAIL_CC(0.00)[linaro.org,intel.com,perex.cz,kernel.org,lwn.net,gmail.com,linuxfoundation.org,synopsys.com,quicinc.com,suse.com,vger.kernel.org,alsa-project.org];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Score: -2.60
+X-Rspamd-Queue-Id: 63FFE21F97
+X-Spam-Flag: NO
 
-host.c file has some parts of code that were introduced for CDNS3 driver
-and should not be used with CDNSP driver.
-This patch blocks using these parts of codes by CDNSP driver.
-These elements include:
-- xhci_plat_cdns3_xhci object
-- cdns3 specific XECP_PORT_CAP_REG register
-- cdns3 specific XECP_AUX_CTRL_REG1 register
+On Sat, 03 Feb 2024 03:36:40 +0100,
+Wesley Cheng wrote:
+> 
+> In order to allow userspace/applications know about USB offloading status,
+> expose a sound kcontrol that fetches information about which sound card
+> index is associated with the ASoC platform card supporting offloading.  In
+> the USB audio offloading framework, the ASoC BE DAI link is the entity
+> responsible for registering to the SOC USB layer.  SOC USB will expose more
+> details about the current offloading status, which includes the USB sound
+> card and USB PCM device indexes currently being used.
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 
-cc: <stable@vger.kernel.org>
-Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
- drivers/usb/cdns3/host.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+The concept is understandable, but the control element name ("SNDUSB
+OFFLD playback available") looks non-intrusive and non-conformant.
+Use a bit more understandable name instead.
 
-diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
-index 6164fc4c96a4..ceca4d839dfd 100644
---- a/drivers/usb/cdns3/host.c
-+++ b/drivers/usb/cdns3/host.c
-@@ -18,6 +18,11 @@
- #include "../host/xhci.h"
- #include "../host/xhci-plat.h"
- 
-+/*
-+ * The XECP_PORT_CAP_REG and XECP_AUX_CTRL_REG1 exist only
-+ * in Cadence USB3 dual-role controller, so it can't be used
-+ * with Cadence CDNSP dual-role controller.
-+ */
- #define XECP_PORT_CAP_REG	0x8000
- #define XECP_AUX_CTRL_REG1	0x8120
- 
-@@ -57,6 +62,8 @@ static const struct xhci_plat_priv xhci_plat_cdns3_xhci = {
- 	.resume_quirk = xhci_cdns3_resume_quirk,
- };
- 
-+static const struct xhci_plat_priv xhci_plat_cdnsp_xhci;
-+
- static int __cdns_host_init(struct cdns *cdns)
- {
- 	struct platform_device *xhci;
-@@ -81,8 +88,13 @@ static int __cdns_host_init(struct cdns *cdns)
- 		goto err1;
- 	}
- 
--	cdns->xhci_plat_data = kmemdup(&xhci_plat_cdns3_xhci,
--			sizeof(struct xhci_plat_priv), GFP_KERNEL);
-+	if (cdns->version < CDNSP_CONTROLLER_V2)
-+		cdns->xhci_plat_data = kmemdup(&xhci_plat_cdns3_xhci,
-+				sizeof(struct xhci_plat_priv), GFP_KERNEL);
-+	else
-+		cdns->xhci_plat_data = kmemdup(&xhci_plat_cdnsp_xhci,
-+				sizeof(struct xhci_plat_priv), GFP_KERNEL);
-+
- 	if (!cdns->xhci_plat_data) {
- 		ret = -ENOMEM;
- 		goto err1;
--- 
-2.37.2
+This provides a card number where the offload driver is bound, and the
+name should indicate something about that.
 
+Also, about the implementation:
+
+> +static int
+> +snd_usb_offload_create_mixer(struct usb_mixer_interface *mixer,
+> +		       const struct snd_kcontrol_new *new_kctl)
+> +{
+> +	struct snd_kcontrol *kctl;
+> +	struct usb_mixer_elem_info *elem;
+> +
+> +	elem = kzalloc(sizeof(struct usb_mixer_elem_info), GFP_KERNEL);
+> +	if (!elem)
+> +		return -ENOMEM;
+> +
+> +	elem->head.mixer = mixer;
+> +	elem->val_type = USB_MIXER_S32;
+> +	elem->control = 0;
+> +	elem->head.id = 0;
+> +	elem->channels = 1;
+> +
+> +	kctl = snd_ctl_new1(new_kctl, elem);
+> +	if (!kctl) {
+> +		kfree(elem);
+> +		return -ENOMEM;
+> +	}
+> +	kctl->private_free = snd_usb_mixer_elem_free;
+> +
+> +	return snd_usb_mixer_add_control(&elem->head, kctl);
+
+This control has almost little to do with the standard USB interface,
+and it'll be much simpler if you create a raw control element.
+Pass the bus or the sysdev to private_data, and that's all you need in
+the get callback.
+
+Also, don't forget to set the proper access bits (it's read-only).
+
+
+thanks,
+
+Takashi
 
