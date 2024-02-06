@@ -1,116 +1,209 @@
-Return-Path: <linux-usb+bounces-5970-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5971-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5621484BB19
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 17:36:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2181884BC94
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 18:55:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2031B2580B
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 16:36:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46D641C24032
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 17:55:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A928AD56;
-	Tue,  6 Feb 2024 16:35:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32971DDD9;
+	Tue,  6 Feb 2024 17:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kGkku+lM"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XY9ZOgm5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBFFC1373;
-	Tue,  6 Feb 2024 16:35:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B340DF59
+	for <linux-usb@vger.kernel.org>; Tue,  6 Feb 2024 17:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707237321; cv=none; b=bHYIhMSpxByHc/cCO6TrXIFVzxJ5JOygRUfCzHSoYOFsth1PTKyALq3olQU+fJwpUMgjEuOxfFqFsjHWpQ1KvvAvr6PHGlbAIz8vRXiGRqSNVcDyIa085Rj60IemuZwLo+Ota6VvGw2K0P5FAr7Mrs6BDCFdw6N4HRdKfI7ngRI=
+	t=1707242145; cv=none; b=j7Dlbb9j7LZZd/umZrpn6PvsMn7yC83hfy2P1b5v0OYcSIqlapiY/RPmfjlUiwyIvbL+6qTg2kWIcFNPuYr45jkCdpRb0sBh2g8tlNH1ukPbT/61K513WjNB3hDUtAC3Q7mFSBZI2nFOLAVDbiSteP8FY9PRD2cEKAxl5kfq7eA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707237321; c=relaxed/simple;
-	bh=Pd5hbjeUaw0bXpSMvlmew8SMjBMs2/PcDGfitcRRlrw=;
+	s=arc-20240116; t=1707242145; c=relaxed/simple;
+	bh=8lFdlTAXaMQYKNjhcwZCI4u14lmHP8FD8O7vw6uNBZ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rHVkWq4pLXB8E71UiRwD3/eLWZA7tvDTtrDrY7E7CDyihEZtRTXhf1Gw0aPjECKb9JiK4OWSF4+BvqVssiG+ptE4aWLKEmXNq0q6c0vF4O5NoO9ZoValckFnaOm0IXXl6bLfCrbX7SF5ffbRfYtuuLcJmQsFmefsTutmkR9kfDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kGkku+lM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F05FC433F1;
-	Tue,  6 Feb 2024 16:35:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707237321;
-	bh=Pd5hbjeUaw0bXpSMvlmew8SMjBMs2/PcDGfitcRRlrw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kGkku+lMjJ1CIPEJIoX1+Fv3byTzutiXUE2/v9sOQPIeA1z2ozWWBdlFlN1d/U3cl
-	 5gsSV9vGqZMqYOc2q4ppul4FRFV5eD4YQgjiuqmjTKoDDgccyW4RjQrkm9NfNb4aSX
-	 I1je7RWXkXcV3NL4Z2aGdFu2H1IOfZUcPme5Ci5qWNvWbLlHmApVGBco4Dh8ulLohc
-	 DTu7tUFwyxEFzJp+gxyEv5oUTJNZ3c7MXQgZK4YyNSjuNjaF9HbgQ6nscSsnzejYwC
-	 HGeTUSo2lDmKVDUzFWiQk/c2j4T8oZqJtcNZMZT9lNq3xV1Nxei+zSY662HiCEZvJi
-	 bMoqNwKXDSmqQ==
-Date: Tue, 6 Feb 2024 16:35:17 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Matthias Kaehlcke <mka@chromium.org>
-Cc: Javier Carrasco <javier.carrasco@wolfvision.net>,
-	Liam Girdwood <lgirdwood@gmail.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=ttvNXkEgERqctl0DqJ9UVISD7vhj7Z037ZF4n/ZV8T4YkQHu9zEuXoMRe9zqXn9yNQFPciOe5icYJNH2F7h0cI7p5rtxF042IMNopZpv0RhkLhdQ4NbvWT9FJHnTrTe65+GkiS7XiY5AM94hUJ4LOduvh+B+0VSlr5Xxcu8xkoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=XY9ZOgm5; arc=none smtp.client-ip=209.85.166.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7bade847536so51734039f.0
+        for <linux-usb@vger.kernel.org>; Tue, 06 Feb 2024 09:55:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1707242143; x=1707846943; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NoNQuT/2/fYcMZPqf8XcAEgjNV4wPgIdnAAOu6x91K0=;
+        b=XY9ZOgm5/p7f0cITAw5R5STD9/m4vztf2a+1CbtByPFPW4j+9031Ca8qbMzqbc9pFY
+         tB3zm7aNwrgxQP4hSWeGJ7+ESvHaEMzzhCeOUCoV2FiI9UeWFPgWNymA5Q5CAcAMaXS+
+         JRFnrI3K4b4tcY6/th8HQX6nXTCdsGFauBYnI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707242143; x=1707846943;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NoNQuT/2/fYcMZPqf8XcAEgjNV4wPgIdnAAOu6x91K0=;
+        b=BqkUrHwr2zpFNPU2eNRP0V7gm5rVSR4kIhLMNn8B/6bH8HFBbdaiZcWAW4DtrUvdHC
+         PQ/+8h2317AYBR6PZN7bxKkcjwq7Gvwj1fyZ2gKfAL7PBJJMj6z25WLW62qfJnaE4naL
+         rUarg5EWpLdMoZNy1kdsbCBrnDGGjSim0oP5zAKIRjxK4EViWZKe8WCoik5O4n/Ms2uM
+         iCJfX30looHa3NMXPzCbxitYhK45vHWTMT6rMn1R3QRecWsQnrH1Ln76yT9eRQgLGLwF
+         C9FuSEqDv4mxiwnRloOgoWcTWWbpv1zNQUMzNcpYJ7PLUQoc/UxEPPdnHCEa60L4S30U
+         GeBQ==
+X-Gm-Message-State: AOJu0YxTC0Dg/PRJHx/NRf+SvMcvBZGt5SZZBUb3c9wlbExutCECbcJ8
+	ILlLfR8gopTZLsh21CV3Lf0XuG0ZomlgY/UrEq10KInh9ktNTbuf5xZjnS8JJg==
+X-Google-Smtp-Source: AGHT+IEVs438WCFZF1kK2HB0aGcq/yB68iTGDfvVSMMD5jxwmp/5TBU9sTW45w4vD83h4xkb1nJHJg==
+X-Received: by 2002:a92:dac6:0:b0:363:d92b:1059 with SMTP id o6-20020a92dac6000000b00363d92b1059mr552805ilq.32.1707242143168;
+        Tue, 06 Feb 2024 09:55:43 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCVOv6k/uIi6TER3yW5X2CcHQLUchbsdeMDRUV2ZGVMnoARCp25REp8WK6CAX9YqMnO6ShNlLthKZ9iwBKPq490/nWwCLp9kvcBFXxXmwwUJZ2hhdH+YDcR0bIf50QwoAq2nRrIM7vJDlnnZOoQfRta9GxbZ9k7TQVgMQDSZJtpUsm5PjGrizdSkIkWrt2oQln1BeCt4I/wP5mTJF6+8Ab70K8OXP7Y2TKopBXCWjPHP5atheHWwSCezVxXe7zLXNxBY3l2r3epPRGylAhsLcfUnSQFgjvqJHg2ujlMKZ56QN+2c84h+wejIrmX7abD30vPbrtoyftcgLElq+bDdnECAbCEzbAvJU+tZS76XWBsaEBiz3dFt51WWcaBv5SnY9mZ/SntevpBmGR4L2w+POVquK8mqAO3IJuy9D5szMJ6U+IPyKA==
+Received: from localhost (147.220.222.35.bc.googleusercontent.com. [35.222.220.147])
+        by smtp.gmail.com with UTF8SMTPSA id l2-20020a922902000000b0036381c9572fsm644000ilg.43.2024.02.06.09.55.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Feb 2024 09:55:42 -0800 (PST)
+Date: Tue, 6 Feb 2024 17:55:42 +0000
+From: Matthias Kaehlcke <mka@chromium.org>
+To: Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 6/7] ASoC: dt-bindings: xmos,xvf3500: add XMOS XVF3500
- voice processor
-Message-ID: <ZcJfxRgysxLWAOIH@finisterre.sirena.org.uk>
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	Matthias Kaehlcke <matthias@kaehlcke.net>
+Subject: Re: [PATCH v3 1/7] usb: misc: onboard_hub: rename to onboard_dev
+Message-ID: <ZcJynrwp7zcs-aIT@google.com>
 References: <20240206-onboard_xvf3500-v3-0-f85b04116688@wolfvision.net>
- <20240206-onboard_xvf3500-v3-6-f85b04116688@wolfvision.net>
- <ZcJDFi+iIQOWzgYw@finisterre.sirena.org.uk>
- <7b472cb2-6658-446a-ae47-411d08798cca@wolfvision.net>
- <ZcJR0LrwaS5GAf5h@finisterre.sirena.org.uk>
- <ZcJVD4CGhlWRwgfM@google.com>
+ <20240206-onboard_xvf3500-v3-1-f85b04116688@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ZQT/yRHuU/ihg6na"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZcJVD4CGhlWRwgfM@google.com>
-X-Cookie: You might have mail.
+In-Reply-To: <20240206-onboard_xvf3500-v3-1-f85b04116688@wolfvision.net>
 
+Hi Javier,
 
---ZQT/yRHuU/ihg6na
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+a few comments inline
 
-On Tue, Feb 06, 2024 at 03:49:35PM +0000, Matthias Kaehlcke wrote:
+On Tue, Feb 06, 2024 at 02:59:29PM +0100, Javier Carrasco wrote:
+> This patch prepares onboad_hub to support non-hub devices by renaming
+> the driver files and their content, the headers and their references.
+> 
+> The comments and descriptions have been slightly modified to keep
+> coherence and account for the specific cases that only affect onboard
+> hubs (e.g. peer-hub).
+> 
+> The "hub" variables in functions where "dev" (and similar names) variables
+> already exist have been renamed to onboard_dev for clarity, which adds a
+> few lines in cases where more than 80 characters are used.
+> 
+> No new functionality has been added.
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
 
-> Initially the driver targeted a device with a single supply, the name
-> 'vdd' was kept generic since it was expected that other devices would be
-> supported (except for a couple of minor bits the driver is not device
-> specific). Later support for a device with two supplies was added, with
-> the generic name 'vdd2' to support other devices with multiple regulators.
+> diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
+> new file mode 100644
+> index 000000000000..e2e1e1e30c1e
+> --- /dev/null
+> +++ b/drivers/usb/misc/onboard_usb_dev.c
+>
+> ...
+>
+> +/*
+> + * Use generic names, as the actual names might differ between cevices. If a new
 
-It's generally always going to be a problem to add generic names that
-don't reflect the actual hardware names, you still end up needing to
-define the mapping from the real names to the generic names that have
-been define when you end up with the regulators being controllable.
+s/cevices/devices/
 
-> Using the correct naming would be doable, with the caveat that the old
-> naming still needs to be supported for backwards compatibility.
+<snip>
 
-Yes, the existing bindings need to be supported as a legacy/fallback
-thing.
+> +static int __maybe_unused onboard_dev_suspend(struct device *dev)
+> +{
+> +	struct onboard_dev *onboard_dev = dev_get_drvdata(dev);
+> +	struct usbdev_node *node;
+> +	bool power_off = true;
+> +
+> +	if (onboard_dev->always_powered_in_suspend)
+> +		return 0;
+> +
+> +	mutex_lock(&onboard_dev->lock);
+> +
+> +	list_for_each_entry(node, &onboard_dev->udev_list, list) {
+> +		if (!device_may_wakeup(node->udev->bus->controller))
+> +			continue;
+> +
+> +		if (usb_wakeup_enabled_descendants(node->udev)) {
+> +			power_off = false;
+> +			break;
+> +		}
 
---ZQT/yRHuU/ihg6na
-Content-Type: application/pgp-signature; name="signature.asc"
+The above branch should probably be limited to hub devices (though in practice it
+shouldn't make a difference). This should be done by "usb: misc: onboard_dev:
+add support for non-hub devices", commenting here since this patch includes the
+code.
 
------BEGIN PGP SIGNATURE-----
+> +static struct onboard_dev *_find_onboard_dev(struct device *dev)
+> +{
+> +	struct platform_device *pdev;
+> +	struct device_node *np;
+> +	struct onboard_dev *onboard_dev;
+> +
+> +	pdev = of_find_device_by_node(dev->of_node);
+> +	if (!pdev) {
+> +		np = of_parse_phandle(dev->of_node, "peer-hub", 0);
+> +		if (!np) {
+> +			dev_err(dev, "failed to find device node for peer hub\n");
+> +			return ERR_PTR(-EINVAL);
+> +		}
+> +
+> +		pdev = of_find_device_by_node(np);
+> +		of_node_put(np);
+> +
+> +		if (!pdev)
+> +			return ERR_PTR(-ENODEV);
+> +	}
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXCX8QACgkQJNaLcl1U
-h9DdNwf9Gyj9Sld7yROz9aRLyvoxIR6qEWLHzv+LnbbvL4odas62FJj65Wxn3aun
-MvYZguIF7TY8NpMlCLoSXQBkhCWECnBSe7ayBjXXW/fVGN6pQKX56bQFzG0K2GEe
-Y31/cQ7J8iAdUHauvZJzihpekgsRZLCS2VOKyff9oxyllFyIjn+S3egZo1C+m82J
-OwE8GBVceOPOzYusyZ5J5mPrR8nEQz+SOy9aThjfY9t3EvppfQqA6zt08fIPw2PZ
-afz9T3F878AdZ2tkPIujPrfbCyI0dDuMRLLn5NfYGY42jqgBjQ/J4nwKstZwTJ5x
-sg27o4dCPT0Z0UqF1o4NK9IKRo5rsw==
-=Hkgg
------END PGP SIGNATURE-----
+The above branch should probably be guarded by 'if (!onboard_dev->pdata->is_hub)',
+this is also a change for ""usb: misc: onboard_dev: add support for non-hub devices"
 
---ZQT/yRHuU/ihg6na--
+> diff --git a/drivers/usb/misc/onboard_usb_hub_pdevs.c b/drivers/usb/misc/onboard_usb_dev_pdevs.c
+> similarity index 68%
+> rename from drivers/usb/misc/onboard_usb_hub_pdevs.c
+> rename to drivers/usb/misc/onboard_usb_dev_pdevs.c
+> index ed22a18f4ab7..fce860b65958 100644
+> --- a/drivers/usb/misc/onboard_usb_hub_pdevs.c
+> +++ b/drivers/usb/misc/onboard_usb_dev_pdevs.c
+>
+> ...
+>
+>  /**
+> - * onboard_hub_create_pdevs -- create platform devices for onboard USB hubs
+> - * @parent_hub	: parent hub to scan for connected onboard hubs
+> - * @pdev_list	: list of onboard hub platform devices owned by the parent hub
+> + * onboard_dev_create_pdevs -- create platform devices for onboard USB devices
+> + * @parent_hub	: parent hub to scan for connected onboard devices
+> + * @pdev_list	: list of onboard platform devices owned by the parent hub
+>   *
+> - * Creates a platform device for each supported onboard hub that is connected to
+> - * the given parent hub. The platform device is in charge of initializing the
+> - * hub (enable regulators, take the hub out of reset, ...) and can optionally
+> - * control whether the hub remains powered during system suspend or not.
+> + * Creates a platform device for each supported onboard device that is connected
+> + * to * the given parent hub. The platform device is in charge of initializing
+> + * the * device (enable regulators, take the device out of reset, ...) and can
+> + * optionally * control whether the device remains powered during system suspend
+
+Remove '*'s in the above 3 lines.
+
+I'm doubting whether the option to power down the device during system suspend
+should be limited to hubs. In particular I'm concerned about the default of
+powering the device down, which could be unexpected. Then again, it might be
+desired to power down a device if it consumes significant power during  suspend
+on a battery powered system.
 
