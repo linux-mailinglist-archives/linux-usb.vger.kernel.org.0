@@ -1,93 +1,191 @@
-Return-Path: <linux-usb+bounces-5924-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5925-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C74284B177
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 10:38:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B44E84B25E
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 11:19:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F13B1F23813
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 09:38:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50B3A1C23FBC
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Feb 2024 10:19:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B23312D16D;
-	Tue,  6 Feb 2024 09:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7661812E1D9;
+	Tue,  6 Feb 2024 10:18:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dKXLtGPR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z88lnJLw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7FE12D148;
-	Tue,  6 Feb 2024 09:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7393212B14E;
+	Tue,  6 Feb 2024 10:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707212327; cv=none; b=GgoN7f/HqddlxvYCgnxbf6LNeqtJr8ge6zXSul483yItAA81zgMXECvZb600LtFFhhr9HHxsigLmHUi0kgdB5FEPYNn5bhq5xhE1X5exuWx1+ijy2sKNGhm7bJNR98jTiND8qfopzNK5t00thHi5t2JlojlnrcAyv8OL/dQwLoA=
+	t=1707214721; cv=none; b=NWGQa/WhSFbT+Glkj+qPK3oBXp8n+S+uSpJWXaoCPX9lIpoCq3uZ9ZXg0fh7mu6y2hsoeUt0jPwXt1A9ep7pzrCFeMrPZAhYMm+oUnmghP8xh+aaP8vFJ7al+rM5ljeGkkrAbE7kjiVbpLjjsAkYMuqmLantfJRrLXvkEnIPdso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707212327; c=relaxed/simple;
-	bh=R1JkbkHYZjBJccdGuVGW2VQafUHeELVUbK2T3y/y9DU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NmeyYu621HewxSKlRSi80Ey6KEvpAplVjFC7o+eRQNxeJGY3gnqaNOF3L7sEs6joXb0et4+x93IKSnYj/QN3F1NsGeyA9E+I8I4aDrX7HhRFIbyTT58RPbX6IDhhhX6/F/9y+yS4KIKiDN+lPDw7C48gcIZPGELn3MgJse2sD5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dKXLtGPR; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 26B2E1C0004;
-	Tue,  6 Feb 2024 09:38:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1707212323;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=R1JkbkHYZjBJccdGuVGW2VQafUHeELVUbK2T3y/y9DU=;
-	b=dKXLtGPRXyrAMOrPTXbdEyI20UREUIhUzE+Mf1Z5vpipNPJdGYMVPkrsUQeoigC1hwWnkb
-	+sM/Si7s/HdqTv9NJGKDnsV0uLZobsBHMzgjmbD4K2wnudQJXaLBCBra8zBnv8j0xNA7kC
-	8vGEoiOuRG5cnA6VA9PtfySl3RUAvBpgybPSqe+1fsUeivB74y2RiRnOcRwyMSPcRb032N
-	hOtgA17p2NVRic19T0+WnJSj06W4R2W6/zdYQQ1bcLS98kh3PkmcXJdgUjfn03M3Zfql6B
-	Kb1Rtjq5ghJdvaH+4DpXNXzP2XvEKZl5yXAe4j3mW0eXFWOMNUP9ZRiKbIWvbg==
-Date: Tue, 6 Feb 2024 10:38:42 +0100
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Ariel Elior <aelior@marvell.com>, Manish Chopra
- <manishc@marvell.com>, Jesse Brandeburg <jesse.brandeburg@intel.com>, Tony
- Nguyen <anthony.l.nguyen@intel.com>, linux-usb@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH 0/8] drivers: net: Convert EEE handling to use linkmode
- bitmaps
-Message-ID: <20240206103842.0a72ed27@device-28.home>
-In-Reply-To: <20240204-keee-u32-cleanup-v1-0-fb6e08329d9a@lunn.ch>
-References: <20240204-keee-u32-cleanup-v1-0-fb6e08329d9a@lunn.ch>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.39; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1707214721; c=relaxed/simple;
+	bh=8oScLxzw3aBc2CthwbejXgtiSm9NvZ9+lZg+kx+hQzs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NQ7RoumjzQUvg9186GhOj5rbGnESmNGKOWuxLt5iBxr7lnddIa55hm0oW6Hvq19dg5OStpwtX2+NoFESVF4iLdff8x5E3VvnHvd5SQICSxTRTSMUcGjWwQzO4wo58t8XYJmNCgh1cV4g5fDEWbPXGqyG5JcPyNeE2yk5EP4DfVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z88lnJLw; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707214719; x=1738750719;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=8oScLxzw3aBc2CthwbejXgtiSm9NvZ9+lZg+kx+hQzs=;
+  b=Z88lnJLwojXrUze5ZzJniBDdGZU4KuQt/saa4AMEb5eZUHIIGHbX+huA
+   Ov/LSyiDGfWvjzPuljVSDIjN2uz7VZXttvd9N5a5wUnzap5u/sZEY1J2T
+   3lqcPHZ9GSICokJbl6tDKxGfhUxJZ7WBeESbHWB/0cQRUzO2jqcbQuXlQ
+   vIWmeoz30PwdTJhSMUaX+FE7AJodVzjR7rGVdmXMT8bXY2j8a8IFc6048
+   QD74h1x45dsM0jJlGDRbiNzOZRtAVWsxlsFmiPk1+dtg5dbGGlVjrjLdU
+   9DyGJjs+cX1h2+FCr+xMUg42rOxIPQwfXVeUw79GD8bZJYrFhoHreOuer
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="598377"
+X-IronPort-AV: E=Sophos;i="6.05,246,1701158400"; 
+   d="scan'208";a="598377"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 02:18:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="933419597"
+X-IronPort-AV: E=Sophos;i="6.05,246,1701158400"; 
+   d="scan'208";a="933419597"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 06 Feb 2024 02:18:33 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 06 Feb 2024 12:18:32 +0200
+Date: Tue, 6 Feb 2024 12:18:32 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Cc: Prashant Malani <pmalani@chromium.org>, linux-usb@vger.kernel.org,
+	jthies@google.com,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Rajaram Regupathy <rajaram.regupathy@intel.com>,
+	Saranya Gopal <saranya.gopal@intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] usb: typec: ucsi: Get PD revision for partner
+Message-ID: <ZcIHePkgN2in5AAX@kuha.fi.intel.com>
+References: <20240126183930.1170845-1-abhishekpandit@chromium.org>
+ <20240126103859.v3.3.Idf7d373c3cbb54058403cb951d644f1f09973d15@changeid>
+ <CACeCKaeVtU3ckmGU932d-pPn=eOnt6KjAavNY3rSOUgrJNriDg@mail.gmail.com>
+ <CANFp7mXOXc6TzLJ+EJ9VYxqGHcjW099oBhDctarUdM5eJGz5bg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: maxime.chevallier@bootlin.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANFp7mXOXc6TzLJ+EJ9VYxqGHcjW099oBhDctarUdM5eJGz5bg@mail.gmail.com>
 
-Hello Andrew,
+Hi Abhishek,
 
-On Sun, 04 Feb 2024 17:40:17 -0600
-Andrew Lunn <andrew@lunn.ch> wrote:
+On Mon, Feb 05, 2024 at 02:05:38PM -0800, Abhishek Pandit-Subedi wrote:
+> Hi Heikki,
+> 
+> Friendly ping to review this patch (I see you added Reviewed-by to the
+> other two in this series).
 
-> EEE has until recently been limited to lower speeds due to the use of
-> the legacy u32 for link speeds. This restriction has been lifted, with
-> the use of linkmode bitmaps. This patchset convert some MAC drivers
-> still using the old _u32 to link modes, with the aim of soon being
-> able to remove the legacy _u32 members in the keee structure.
+I think Prashant said that he prefers macros with those version checks,
+and I kinda agree. But I'll leave this to you to decide. I think
+that's also something that can be improved later.
 
-Although I don't have proper hardware to test all these, I've read
-the patches and I didn't find any obvious issues besides the typo in
-patch 7.
+> On Fri, Jan 26, 2024 at 12:25 PM Prashant Malani <pmalani@chromium.org> wrote:
+> >
+> > Hi Abhishek,
+> >
+> > On Fri, Jan 26, 2024 at 10:39 AM Abhishek Pandit-Subedi
+> > <abhishekpandit@chromium.org> wrote:
+> > >
+> > > PD major revision for the port partner is described in
+> > > GET_CONNECTOR_CAPABILITY and is only valid on UCSI 2.0 and newer. Update
+> > > the pd_revision on the partner if the UCSI version is 2.0 or newer.
+> > >
+> > > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
-Regards,
+So this okay by me:
 
-Maxime
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> > > ---
+> > > $ cat /sys/class/typec/port2-partner/usb_power_delivery_revision
+> > > 3.0
+> > >
+> > > (no changes since v2)
+> > >
+> > > Changes in v2:
+> > >   - Formatting changes and update macro to use brackets.
+> > >   - Fix incorrect guard condition when checking connector capability.
+> > >
+> > >  drivers/usb/typec/ucsi/ucsi.c | 23 +++++++++++++++++++++++
+> > >  drivers/usb/typec/ucsi/ucsi.h |  3 +++
+> > >  2 files changed, 26 insertions(+)
+> > >
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > > index a35056ee3e96..2b7983d2fdae 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > > @@ -782,6 +782,7 @@ static int ucsi_register_partner(struct ucsi_connector *con)
+> > >         }
+> > >
+> > >         desc.usb_pd = pwr_opmode == UCSI_CONSTAT_PWR_OPMODE_PD;
+> > > +       desc.pd_revision = UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags);
+> > >
+> > >         partner = typec_register_partner(con->port, &desc);
+> > >         if (IS_ERR(partner)) {
+> > > @@ -856,6 +857,27 @@ static void ucsi_partner_change(struct ucsi_connector *con)
+> > >                         con->num, u_role);
+> > >  }
+> > >
+> > > +static int ucsi_check_connector_capability(struct ucsi_connector *con)
+> > > +{
+> > > +       u64 command;
+> > > +       int ret;
+> > > +
+> > > +       if (!con->partner || !IS_MIN_VERSION_2_0(con->ucsi))
+> >
+> > I'll reiterate my comment from a previous version, since this series
+> > has been revv-ed a few
+> > times since and it may have gotten lost; no need to respond to it if
+> > you don't want to,
+> > since I believe we left it to the maintainer(s) to decide [1]:
+> >
+> > This macro is unnecessary. Since the version is in BCD format and we
+> > already have the
+> > macros for versions, just a simple comparison is enough:
+> >          if (!con-partner || con->ucsi->version < UCSI_VERSION_2_0)
+> >                  return 0;
+> >
+> > I'll add that Patch 1 of this series [2] is also using the same style
+> > for comparing version numbers.
+> >
+> > > +               return 0;
+> > > +
+> > > +       command = UCSI_GET_CONNECTOR_CAPABILITY | UCSI_CONNECTOR_NUMBER(con->num);
+> > > +       ret = ucsi_send_command(con->ucsi, command, &con->cap, sizeof(con->cap));
+> > > +       if (ret < 0) {
+> > > +               dev_err(con->ucsi->dev, "GET_CONNECTOR_CAPABILITY failed (%d)\n", ret);
+> >
+> > nit: I know this is being done elsewhere in this file, but we should
+> > avoid putting error
+> > numbers in parentheses [3]. Perhaps something for a separate cleanup patch.
+> > 
+> > [1] https://lore.kernel.org/linux-usb/CANFp7mXP=aN8bQi4akKKcoMZE8RaCBuFnwTa5hbp0MZvZe0hYQ@mail.gmail.com/
+> > [2] https://lore.kernel.org/linux-usb/20240126103859.v3.1.Iacf5570a66b82b73ef03daa6557e2fc0db10266a@changeid/
+> > [3] https://www.kernel.org/doc/html/latest/process/coding-style.html#printing-kernel-messages
+
+thanks,
+
+-- 
+heikki
 
