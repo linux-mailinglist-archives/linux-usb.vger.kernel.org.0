@@ -1,119 +1,111 @@
-Return-Path: <linux-usb+bounces-6006-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6004-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44ACD84CBB6
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 14:37:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C65684CAFF
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 14:05:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF5561F2134E
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 13:37:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFC2C1C21CEB
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 13:05:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4580776034;
-	Wed,  7 Feb 2024 13:37:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBF6217C65;
+	Wed,  7 Feb 2024 13:05:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B8W0wRux"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Joxw6dC+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDF45A782
-	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 13:37:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7C859178;
+	Wed,  7 Feb 2024 13:04:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707313042; cv=none; b=eJv1rSv8j7wgCt7/gM8oVgADtdVKHxuioEpbyNVk6VpLa6M8r1Sbuonu4LJ3onOMb2haCHwDo2p/LphT7fdzQQQ8ErWfvziibRqUgGB8a2CQVsHq1ZmbioiZ2MlfNne4CihaS/6fPFRMEtVh5xHl4MB/6Ndma97V5u34v1CMQIs=
+	t=1707311100; cv=none; b=JerZZzpe+NEUvVxOHG9yHMcLdaIgcfOC4xkq4jwMFoJTvp3ByAq4OTtDd7a5xtyX6JaYPsnLfQLbeXnmJaR1ExWcaLpVkLpxjfY1CKRPNmMG/tq20jKPdnHLrNwWONestIiUAYdI8QtW2EkxYto5GbGXdElL4/bBpSy/0WziX/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707313042; c=relaxed/simple;
-	bh=+DujwZlr/1wDPIjgj9ybKGjheEDuRA+H2YGe6MkI++o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E/48e/N3oVLprW0tF1pwMkGnilkFbvKeqdUKUSB0OkJtzmDCgVI2h/5H0bwTmfHCyRpr3EUKA0r6AICAax6K9yHaoDGVwQoiNdirkGbUuQYEeOLUf46gkjRb811c8GXPnITm/2dKFWQzEdG8yjX5S6DwLgN7i/uxgtFMigmFMGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B8W0wRux; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707313041; x=1738849041;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=+DujwZlr/1wDPIjgj9ybKGjheEDuRA+H2YGe6MkI++o=;
-  b=B8W0wRuxksZjkv1gOx2Gat6vE5Re8aqh50i0yXUTbv08s+4lKHGQ0xf5
-   linY49lS1HZHk94p9GAX9shpHa76sF679wS5Z9zTk5f3096bOnfzXfdbZ
-   n0cr+5LQED2rCaVuBIyHuwJvxqcdOmSwV/xcRtNOUUu01ktd5m3IQXkph
-   77hwOhNNazPdrjzrFvMiPOqwQy2c4qz6nMD/IToD5IeiyvMn5YZ4Swccl
-   kNhjl86OEKen40HMZjJs2ilaQzaibcMplEc7c9S7RkBvzwOFCBw5+vPqm
-   pAK3ravKcPlxXtlx3s3a+Nem0d51bAXQyrqef7u+2A0k168zQL5mb/iut
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="12345530"
-X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="12345530"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 05:37:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="909996006"
-X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="909996006"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Feb 2024 05:37:18 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id EBF194C4; Wed,  7 Feb 2024 11:21:52 +0200 (EET)
-Date: Wed, 7 Feb 2024 11:21:52 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Cc: Olliver Schinagl <oliver@schinagl.nl>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	linux-usb <linux-usb@vger.kernel.org>
-Subject: Re: kernel NULL pointer dereference on hotplug
-Message-ID: <20240207092152.GQ8454@black.fi.intel.com>
-References: <c24c7882-6254-4e68-8f22-f3e8f65dc84f@schinagl.nl>
- <20240204064049.GD8454@black.fi.intel.com>
- <705fd33a-18af-44b2-b6ee-57e3169b7032@leemhuis.info>
- <b0388b9e-5ec2-422d-94ce-192b33fef16d@leemhuis.info>
+	s=arc-20240116; t=1707311100; c=relaxed/simple;
+	bh=ous0MH1KPZJPfO8wzVGi7xPdc7ON7llYysO4R/VPbGc=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=EaZCHQAE4PRaSQ1cYy4YPRpR/2aS92id1pnMFd8oHcwNGSzpdruEKPAllHOq7gIG6ZwiOB+nC2C5O2mWRbCOOafjcy56qMh+AEKfkOlX8Y2fDfHoBD+QN+U3kCPpJFgE0npEY7jt8PzmHN4ttZrJ6v3VdCoCmugsnajYAc+qQtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Joxw6dC+; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A38DEA27;
+	Wed,  7 Feb 2024 14:03:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1707311007;
+	bh=ous0MH1KPZJPfO8wzVGi7xPdc7ON7llYysO4R/VPbGc=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=Joxw6dC+Kf6+vZVGbKclT283ZdQpJOdh2McfsJ7j9hSwJrzWJ0mCFzNp40kguAZSq
+	 d+P3gY5wwbOHjQvgkliFGKw0g8lTBan1YyTzl+xYjrpsXfPv47FHTdEDMXXcu28wao
+	 2h6QqHA042qlUNs3q14ux6pXti9Cj61yCoC2at9I=
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b0388b9e-5ec2-422d-94ce-192b33fef16d@leemhuis.info>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <ZcKk6QJXfGGo2DH9@pengutronix.de>
+References: <ZcFx7P30Su_Mx4AV@pengutronix.de> <20240206032301.6e4tmbvmk7vs72gg@synopsys.com> <ZcKk6QJXfGGo2DH9@pengutronix.de>
+Subject: Re: duplicate requests on host side while streaming via uvcvideo gadget
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc: linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org <linux-usb@vger.kernel.org>
+To: Michael Grzeschik <mgr@pengutronix.de>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Date: Wed, 07 Feb 2024 13:04:48 +0000
+Message-ID: <170731108881.252503.6282895768429052406@ping.linuxembedded.co.uk>
+User-Agent: alot/0.10
 
-Hi,
+Hi Michael,
 
-On Wed, Feb 07, 2024 at 10:12:07AM +0100, Thorsten Leemhuis wrote:
-> On 07.02.24 07:13, Linux regression tracking (Thorsten Leemhuis) wrote:
-> > 
-> > On 04.02.24 07:40, Mika Westerberg wrote:
-> >> On Fri, Feb 02, 2024 at 05:47:01PM +0100, Olliver Schinagl wrote:
-> >>>
-> >>> I noticed this nasty kernel NULL pointer dereference yesterday on
-> >>> 6.7.2-arch1-1 (haven't done this in a while) but also today, after updating
-> >>> to 6.7.3-arch1-1 it's still there, so dumping the panic here. Hopefully
-> >>> it'll be resolved by 6.7.4-arch1-1.
+Quoting Michael Grzeschik (2024-02-06 21:30:17)
+> On Tue, Feb 06, 2024 at 03:23:17AM +0000, Thinh Nguyen wrote:
+> >On Tue, Feb 06, 2024, Michael Grzeschik wrote:
+> >> Hi Thinh
 > >>
-> >> Thanks for the report.
-> >>
-> >>> The thunderbolt gbit adapter always worked in the past, so this seems like a
-> >>> regression. Anyway, here's the log.
-> 
-> FWIW, Leon Weiß (BCCed) just posted another NULL pointer deference issue
-> in 6.7 and found the culprit; for details see:
-> https://lore.kernel.org/all/38c253ea42072cc825dc969ac4e6b9b600371cc8.camel@ruhr-uni-bochum.de/
->
-> Sadly Leon's report lacks a backtrace we had in this thread (
-> https://lore.kernel.org/all/c24c7882-6254-4e68-8f22-f3e8f65dc84f@schinagl.nl/
-> ), so it might be something totally different. Leon's problem afaics
-> also happens on unplug while this one on hotplug. But well, I thought I
-> better quickly mention it here anyway so everyone is aware of it.
+> >> I found some strange situation while streaming via uvc-gadget to some
+> >> usb host. It happens when some requests are missed due to higher load =
+on
+> >> the gadget machine. In some cases some requests will reach the host
+> >> twice. In my special case, I added the following changes [1] for the
+> >> host and gadget side.
+> >
+> >Does this only happen to some specific hosts?
+>=20
+> >Are all the data of the duplicate requests matching or just some bits of
+> >the transfer? Were you able to confirm from some usb analyzer/sniffer
+> >that the data out the wire is actually duplicate?
+>=20
+> Turns out, this duplicates are just misinterpretations.
 
-Thanks for the information. 
+I'm glad there's no deeper issue to worry about here.
 
-As you mention, this seems to be unrelated. The one above is about DRM
-and graphics, the one Olliver reported is about Thunderbolt (okay there
-is Thunderbolt device involved in both but this one seems to be purely
-DP thing).
+> The linux uvcvideo driver will parse the uvc header payload twice. (If
+> the FID was incremented inbetween). This led to those double misleading
+> outputs. Although this means that there is a bug in
+> uvc_video_stats_decode for incrementing the error count.
+
+Do you plan/are you able to submit a patch to fix this?  Hopefully that
+would prevent anyone else following the same rabbit-hole.
+
+--
+Kieran
+
+
+>=20
+> Anyway, so just ignore this whole thread and be thanked for even having a=
+ny
+> thoghts on this.
+>=20
+> Regards,
+> Michael
+>=20
+> --=20
+> Pengutronix e.K.                           |                             |
+> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
