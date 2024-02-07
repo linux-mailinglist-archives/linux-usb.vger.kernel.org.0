@@ -1,194 +1,213 @@
-Return-Path: <linux-usb+bounces-6018-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6019-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F287A84D273
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 20:54:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9009584D3D4
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 22:26:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 682AE1F25A20
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 19:54:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4D9E1C20B49
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 21:26:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9825A126F0A;
-	Wed,  7 Feb 2024 19:54:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E922E1353E1;
+	Wed,  7 Feb 2024 21:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gn7FaBlP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865C3126F00
-	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 19:54:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66CCA1350ED;
+	Wed,  7 Feb 2024 21:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707335675; cv=none; b=BbEKogzLuHzC5LnzLvlrEiSe6vt+uuxyZvgItY8rtAxAbo4Pvby7MX/4+F8wcc1RFqJwfheHtz8PJZNlRYmSNBbFOv1MSEh1ilcMvaeCoV+jK8OxJlcFB1xPi7VanzEkaQJjqSdlFOn6j45KC/BOWHPME0JDv9LbFdU2WlCEVT4=
+	t=1707340930; cv=none; b=h8wUHiPvjp0v4llwMcimanEPHNinycruoRfh8oA9YqpWbMGd/LK0uqHu9oPtF0pgm2KtTL9kv+zV0F7JSMUzl9WfGuHJ/M3yX3ELWHpxpuZc9JsvEswUUtJt/SwRz1oya6333q+wB2PzebeZd2qT13g7ySpg+r9gzBGHPioQulk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707335675; c=relaxed/simple;
-	bh=hYThMK1Xf4I8228RVeu4sPoLLzyiRmJ6EGR1xxc8cw8=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=QnRkObLo0eD6eHL4ahi191iiozHrFatSy9f/bQpfOozAVBiHJ5aBouT2Bt14uqxZhWNN/c+lm//uW6ND1gWh5UGp/hDr+KmozFGrz6+d5idcy292eEqA6T9TbCh1YzowNYWV79OV3kWnVBfCcF6nModKOjAeBHV06Tzf9aPP+GM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-363c6714987so9051025ab.3
-        for <linux-usb@vger.kernel.org>; Wed, 07 Feb 2024 11:54:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707335672; x=1707940472;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yXijhnJSqfNwRwrMz0wxJxUultHKEFeKw9S9BLLYx9E=;
-        b=Qs3e/6cRx1skr6Q7kugSSM9FoUfczekBwyWK+WYHrbHQwEEi3scJy1kZSBtuN1Eaia
-         zoRBYIXAJh9ujyPB5n7mIINeC80YqSzaG3BzT3uTLc53dmMnILJf9XBWnXBG2kj+ew/u
-         Jc5SDzWsHiVEO2OgxfrWlU0fgh5kK6+VlZDKsRyh9c1slX+SVarIsM7zOPpu+eFvwGRW
-         YvN3ZUD4i8g65Z0QDHzKJKw1+q7BnvSKbDIstYXIburjGcdNK18x6qw1IXX8W9e5tBE/
-         hhQNmtbGh1tuuirvKX/ftNJAAOyho6DAOYsqW41wKAd2nbe4NkhsSUwlTwCd6sP/vmSV
-         rwtA==
-X-Forwarded-Encrypted: i=1; AJvYcCVMkM3lheb8ZHBspSYFB1HHIvBThrg5crMzvSjVhIx8r2CudFCpuki86iY5IZ7opWgPbuMuDsmBCbmx4fni23jKWjKUjuYFg5AJ
-X-Gm-Message-State: AOJu0YzedMvg0PShvCpVWZu1SIvRVyWLTS/CquYNBi0fqHxLy+um6836
-	fNnFVA6qZVCZSxICbErz99W0FZTcchIaPO97m6CFXyzA0JcWKfU+BH6To1T6cNIcrIfUmCKIHeG
-	0rpK1mmb1K1Ohw8IWy4OC3aFtnm1G/tnYuRzFlL63qZvikqOjq1XExgo=
-X-Google-Smtp-Source: AGHT+IH/XqaXynFOhnl6JjLdwgwpGFSyoyWSeUneNpuf0CWOlEs7ALO3CLjyu77yoB49oO++8shLP8/OkYyfLkMxHAQMBT2LYHVY
+	s=arc-20240116; t=1707340930; c=relaxed/simple;
+	bh=Hav5XU/ufGWZZTYwIIjUlWY2a99hvIRioXXqPJlqCRc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=V7+s9qRoB/y/NGNhUgZlv8FU5zdMnvH1kubvujuty8F4jXHEb08sglibFhkbohInCWVGePkLNqNneqhsUsgftlbkTwDq0qMNfS0kl5FhdGW6wQUqruft8iR8rCOVEyPjDSTFNc1erBZd5einpSfw9MuuMXANtBbQYom9xr8p60Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gn7FaBlP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4DA3C433C7;
+	Wed,  7 Feb 2024 21:22:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707340930;
+	bh=Hav5XU/ufGWZZTYwIIjUlWY2a99hvIRioXXqPJlqCRc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=gn7FaBlPRmfyvfWXBjT9Gu6mD6UuxIB2kAs7UHRTwBbSE3DJ+jYofl5zXtIr1rkG7
+	 U4TmZ9Tb8T72q3pQOfL0B4BChZmcl25sdypvej8kcaxfnGcBFDzSe5B+oKREgdy9xi
+	 2PQTUs7g8TBkSWs+z8oLB/pTJMTCi7eAtuQukQATLlEekbT4P9F11h27GJSYmWxb4x
+	 IqEsTVsCC1p0dzaRQKB+zLc3DQzwlr2ZcT5MSfjqs8YH5vTFpq7/Vk/DMRoyTsvOL6
+	 QlTWtXA5hdOn2fVTGW5pTjLBIVzXalrFF7j/9dLs6S9UvbDiARXpT9TklRr7hnerwh
+	 ThpVkcAPM9Fww==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	hdegoede@redhat.com,
+	samuel@cavoj.net,
+	u.kleine-koenig@pengutronix.de,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.7 14/44] usb: ucsi_acpi: Quirk to ack a connector change ack cmd
+Date: Wed,  7 Feb 2024 16:20:41 -0500
+Message-ID: <20240207212142.1399-14-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240207212142.1399-1-sashal@kernel.org>
+References: <20240207212142.1399-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1bc4:b0:363:cc27:74c with SMTP id
- x4-20020a056e021bc400b00363cc27074cmr540192ilv.4.1707335672617; Wed, 07 Feb
- 2024 11:54:32 -0800 (PST)
-Date: Wed, 07 Feb 2024 11:54:32 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000047631d0610d010c1@google.com>
-Subject: [syzbot] [input?] [usb?] WARNING in input_register_device (2)
-From: syzbot <syzbot+8e41bb0c055b209ebbf4@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, rafael@kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.7.4
+Content-Transfer-Encoding: 8bit
 
-Hello,
+From: "Christian A. Ehrhardt" <lk@c--e.de>
 
-syzbot found the following issue on:
+[ Upstream commit f3be347ea42dbb0358cd8b2d8dc543a23b70a976 ]
 
-HEAD commit:    6613476e225e Linux 6.8-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
-console output: https://syzkaller.appspot.com/x/log.txt?x=15ca9224180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=877e61347079aad5
-dashboard link: https://syzkaller.appspot.com/bug?extid=8e41bb0c055b209ebbf4
-compiler:       riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-userspace arch: riscv64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10b32118180000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17dab048180000
+The PPM on some Dell laptops seems to expect that the ACK_CC_CI
+command to clear the connector change notification is in turn
+followed by another ACK_CC_CI to acknowledge the ACK_CC_CI command
+itself. This is in violation of the UCSI spec that states:
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/a741b348759c/non_bootable_disk-6613476e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/33ea806d02dd/vmlinux-6613476e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/33195f72f823/Image-6613476e.xz
+    "The only notification that is not acknowledged by the OPM is
+     the command completion notification for the ACK_CC_CI or the
+     PPM_RESET command."
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8e41bb0c055b209ebbf4@syzkaller.appspotmail.com
+Add a quirk to send this ack anyway.
+Apply the quirk to all Dell systems.
 
-WARNING: CPU: 0 PID: 8 at lib/kobject_uevent.c:671 add_uevent_var+0x282/0x296 lib/kobject_uevent.c:671
-Modules linked in:
-CPU: 0 PID: 8 Comm: kworker/0:0 Not tainted 6.8.0-rc1-syzkaller #0
-Hardware name: riscv-virtio,qemu (DT)
-Workqueue: usb_hub_wq hub_event
-epc : add_uevent_var+0x282/0x296 lib/kobject_uevent.c:671
- ra : add_uevent_var+0x282/0x296 lib/kobject_uevent.c:671
-epc : ffffffff858325ec ra : ffffffff858325ec sp : ff20000000049b20
- gp : ffffffff8863e320 tp : ff6000000c29ce00 t0 : ccb0ea972aeb292d
- t1 : ffe3ffff000092d8 t2 : ff6000000c29d8f8 s0 : ff20000000049c00
- s1 : ff60000016d76000 a0 : 0000000000000001 a1 : 0000000000000000
- a2 : 0000000000000002 a3 : ffffffff800b66fa a4 : 0000000000000000
- a5 : 0000000000000000 a6 : 0000000000000003 a7 : ff200000000496c7
- s2 : 0000000000000004 s3 : 1fe4000000009368 s4 : 1fec000002daec43
- s5 : ff60000016d76218 s6 : 0000000000000006 s7 : 00000000000007fc
- s8 : ff60000016d76a1c s9 : 1fec000002daed43 s10: ffffffff885377c0
- s11: ffffffff86b9c560 t3 : 0000000000000004 t4 : ffe3ffff000092d8
- t5 : ffe3ffff000092d9 t6 : ff200000000496d8
-status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
-[<ffffffff858325ec>] add_uevent_var+0x282/0x296 lib/kobject_uevent.c:671
-[<ffffffff85833cdc>] kobject_uevent_env+0xb0c/0x1378 lib/kobject_uevent.c:602
-[<ffffffff8583456a>] kobject_uevent+0x22/0x2e lib/kobject_uevent.c:642
-[<ffffffff82542b12>] device_add+0x10d2/0x186e drivers/base/core.c:3606
-[<ffffffff837032c4>] input_register_device+0x606/0xe9a drivers/input/input.c:2379
-[<ffffffff83faba00>] hidinput_connect+0x4c72/0x88a4 drivers/hid/hid-input.c:2355
-[<ffffffff83f9d330>] hid_connect+0x11e0/0x15e0 drivers/hid/hid-core.c:2194
-[<ffffffff83f9d7e6>] hid_hw_start drivers/hid/hid-core.c:2309 [inline]
-[<ffffffff83f9d7e6>] hid_hw_start+0xb6/0x13c drivers/hid/hid-core.c:2300
-[<ffffffff840255a0>] ms_probe+0x15e/0x4f0 drivers/hid/hid-microsoft.c:391
-[<ffffffff83f9de94>] __hid_device_probe drivers/hid/hid-core.c:2633 [inline]
-[<ffffffff83f9de94>] hid_device_probe+0x2a4/0x3f2 drivers/hid/hid-core.c:2670
-[<ffffffff8254cd2e>] call_driver_probe drivers/base/dd.c:579 [inline]
-[<ffffffff8254cd2e>] really_probe+0x234/0xbbc drivers/base/dd.c:658
-[<ffffffff8254d88a>] __driver_probe_device+0x1d4/0x458 drivers/base/dd.c:800
-[<ffffffff8254db6e>] driver_probe_device+0x60/0x1ce drivers/base/dd.c:830
-[<ffffffff8254dec0>] __device_attach_driver+0x1e4/0x2fe drivers/base/dd.c:958
-[<ffffffff82547562>] bus_for_each_drv+0x142/0x1da drivers/base/bus.c:457
-[<ffffffff8254eae2>] __device_attach+0x1c4/0x462 drivers/base/dd.c:1030
-[<ffffffff8254f108>] device_initial_probe+0x1c/0x26 drivers/base/dd.c:1079
-[<ffffffff82549fe4>] bus_probe_device+0x15c/0x192 drivers/base/bus.c:532
-[<ffffffff82542b6c>] device_add+0x112c/0x186e drivers/base/core.c:3625
-[<ffffffff83f96c5c>] hid_add_device+0x374/0x9b2 drivers/hid/hid-core.c:2816
-[<ffffffff840dc3f2>] usbhid_probe+0xa50/0xf84 drivers/hid/usbhid/hid-core.c:1429
-[<ffffffff830a18c0>] usb_probe_interface+0x2d4/0x8a2 drivers/usb/core/driver.c:399
-[<ffffffff8254cd2e>] call_driver_probe drivers/base/dd.c:579 [inline]
-[<ffffffff8254cd2e>] really_probe+0x234/0xbbc drivers/base/dd.c:658
-[<ffffffff8254d88a>] __driver_probe_device+0x1d4/0x458 drivers/base/dd.c:800
-[<ffffffff8254db6e>] driver_probe_device+0x60/0x1ce drivers/base/dd.c:830
-[<ffffffff8254dec0>] __device_attach_driver+0x1e4/0x2fe drivers/base/dd.c:958
-[<ffffffff82547562>] bus_for_each_drv+0x142/0x1da drivers/base/bus.c:457
-[<ffffffff8254eae2>] __device_attach+0x1c4/0x462 drivers/base/dd.c:1030
-[<ffffffff8254f108>] device_initial_probe+0x1c/0x26 drivers/base/dd.c:1079
-[<ffffffff82549fe4>] bus_probe_device+0x15c/0x192 drivers/base/bus.c:532
-[<ffffffff82542b6c>] device_add+0x112c/0x186e drivers/base/core.c:3625
-[<ffffffff8309b2b4>] usb_set_configuration+0xfe0/0x1b10 drivers/usb/core/message.c:2207
-[<ffffffff830c3d56>] usb_generic_driver_probe+0xae/0x128 drivers/usb/core/generic.c:254
-[<ffffffff830a0606>] usb_probe_device+0xd6/0x340 drivers/usb/core/driver.c:294
-[<ffffffff8254cd2e>] call_driver_probe drivers/base/dd.c:579 [inline]
-[<ffffffff8254cd2e>] really_probe+0x234/0xbbc drivers/base/dd.c:658
-[<ffffffff8254d88a>] __driver_probe_device+0x1d4/0x458 drivers/base/dd.c:800
-[<ffffffff8254db6e>] driver_probe_device+0x60/0x1ce drivers/base/dd.c:830
-[<ffffffff8254dec0>] __device_attach_driver+0x1e4/0x2fe drivers/base/dd.c:958
-[<ffffffff82547562>] bus_for_each_drv+0x142/0x1da drivers/base/bus.c:457
-[<ffffffff8254eae2>] __device_attach+0x1c4/0x462 drivers/base/dd.c:1030
-[<ffffffff8254f108>] device_initial_probe+0x1c/0x26 drivers/base/dd.c:1079
-[<ffffffff82549fe4>] bus_probe_device+0x15c/0x192 drivers/base/bus.c:532
-[<ffffffff82542b6c>] device_add+0x112c/0x186e drivers/base/core.c:3625
-[<ffffffff830777fe>] usb_new_device+0x960/0x1648 drivers/usb/core/hub.c:2596
-[<ffffffff8307dc48>] hub_port_connect drivers/usb/core/hub.c:5465 [inline]
-[<ffffffff8307dc48>] hub_port_connect_change drivers/usb/core/hub.c:5605 [inline]
-[<ffffffff8307dc48>] port_event drivers/usb/core/hub.c:5765 [inline]
-[<ffffffff8307dc48>] hub_event+0x2954/0x4756 drivers/usb/core/hub.c:5847
-[<ffffffff801231ea>] process_one_work+0x7ce/0x179c kernel/workqueue.c:2633
-[<ffffffff80124c94>] process_scheduled_works kernel/workqueue.c:2706 [inline]
-[<ffffffff80124c94>] worker_thread+0xadc/0x10f8 kernel/workqueue.c:2787
-[<ffffffff80144154>] kthread+0x28c/0x3a6 kernel/kthread.c:388
-[<ffffffff85928722>] ret_from_fork+0xe/0x1c arch/riscv/kernel/entry.S:229
+On the first command that acks a connector change send a dummy
+command to determine if it runs into a timeout. Only activate
+the quirk if it does. This ensure that we do not break Dell
+systems that do not need the quirk.
 
-
+Signed-off-by: "Christian A. Ehrhardt" <lk@c--e.de>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Link: https://lore.kernel.org/r/20240121204123.275441-4-lk@c--e.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/typec/ucsi/ucsi_acpi.c | 71 ++++++++++++++++++++++++++++--
+ 1 file changed, 68 insertions(+), 3 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+index 6bbf490ac401..5fbd5a218341 100644
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+@@ -25,6 +25,8 @@ struct ucsi_acpi {
+ 	unsigned long flags;
+ 	guid_t guid;
+ 	u64 cmd;
++	bool dell_quirk_probed;
++	bool dell_quirk_active;
+ };
+ 
+ static int ucsi_acpi_dsm(struct ucsi_acpi *ua, int func)
+@@ -119,12 +121,73 @@ static const struct ucsi_operations ucsi_zenbook_ops = {
+ 	.async_write = ucsi_acpi_async_write
+ };
+ 
+-static const struct dmi_system_id zenbook_dmi_id[] = {
++/*
++ * Some Dell laptops expect that an ACK command with the
++ * UCSI_ACK_CONNECTOR_CHANGE bit set is followed by a (separate)
++ * ACK command that only has the UCSI_ACK_COMMAND_COMPLETE bit set.
++ * If this is not done events are not delivered to OSPM and
++ * subsequent commands will timeout.
++ */
++static int
++ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
++		     const void *val, size_t val_len)
++{
++	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
++	u64 cmd = *(u64 *)val, ack = 0;
++	int ret;
++
++	if (UCSI_COMMAND(cmd) == UCSI_ACK_CC_CI &&
++	    cmd & UCSI_ACK_CONNECTOR_CHANGE)
++		ack = UCSI_ACK_CC_CI | UCSI_ACK_COMMAND_COMPLETE;
++
++	ret = ucsi_acpi_sync_write(ucsi, offset, val, val_len);
++	if (ret != 0)
++		return ret;
++	if (ack == 0)
++		return ret;
++
++	if (!ua->dell_quirk_probed) {
++		ua->dell_quirk_probed = true;
++
++		cmd = UCSI_GET_CAPABILITY;
++		ret = ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &cmd,
++					   sizeof(cmd));
++		if (ret == 0)
++			return ucsi_acpi_sync_write(ucsi, UCSI_CONTROL,
++						    &ack, sizeof(ack));
++		if (ret != -ETIMEDOUT)
++			return ret;
++
++		ua->dell_quirk_active = true;
++		dev_err(ua->dev, "Firmware bug: Additional ACK required after ACKing a connector change.\n");
++		dev_err(ua->dev, "Firmware bug: Enabling workaround\n");
++	}
++
++	if (!ua->dell_quirk_active)
++		return ret;
++
++	return ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &ack, sizeof(ack));
++}
++
++static const struct ucsi_operations ucsi_dell_ops = {
++	.read = ucsi_acpi_read,
++	.sync_write = ucsi_dell_sync_write,
++	.async_write = ucsi_acpi_async_write
++};
++
++static const struct dmi_system_id ucsi_acpi_quirks[] = {
+ 	{
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
+ 		},
++		.driver_data = (void *)&ucsi_zenbook_ops,
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++		},
++		.driver_data = (void *)&ucsi_dell_ops,
+ 	},
+ 	{ }
+ };
+@@ -151,6 +214,7 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
+ {
+ 	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
+ 	const struct ucsi_operations *ops = &ucsi_acpi_ops;
++	const struct dmi_system_id *id;
+ 	struct ucsi_acpi *ua;
+ 	struct resource *res;
+ 	acpi_status status;
+@@ -180,8 +244,9 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
+ 	init_completion(&ua->complete);
+ 	ua->dev = &pdev->dev;
+ 
+-	if (dmi_check_system(zenbook_dmi_id))
+-		ops = &ucsi_zenbook_ops;
++	id = dmi_first_match(ucsi_acpi_quirks);
++	if (id)
++		ops = id->driver_data;
+ 
+ 	ua->ucsi = ucsi_create(&pdev->dev, ops);
+ 	if (IS_ERR(ua->ucsi))
+-- 
+2.43.0
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
