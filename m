@@ -1,115 +1,128 @@
-Return-Path: <linux-usb+bounces-5992-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5994-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF27284C86B
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 11:18:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4415684C8C6
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 11:39:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E269E1C21DAB
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 10:18:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 012C928627D
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 10:39:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE7242561B;
-	Wed,  7 Feb 2024 10:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC0C14A9D;
+	Wed,  7 Feb 2024 10:39:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kkrn/6Ah"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i0dbnjRo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C4D2560C;
-	Wed,  7 Feb 2024 10:18:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB751429A;
+	Wed,  7 Feb 2024 10:39:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707301118; cv=none; b=WYQoH/zY2swSQcgyYIpaMHcUW8wqYspRHjjb8nL8fe8AH2Tv3FPHa4LLPJniEyxRsPWMpPAPfBuiYys22IY4IfX319RAoVcUv51it1BRr6Mf8FmS+JpPBS5XnftDyhJ8UkXkxksgwwsoMJsW/uAzTKlnpwFMFSHZoeBmApaB6h0=
+	t=1707302367; cv=none; b=ntl9CbECRmxONQqZd2mjRT7y6dkSg7SsEJzlEzSbDKlxVKI/pLIBeH6SALVmgn02RykJrZGLbEpqmhPwaA6VQwRdd8t8ATOlqXPdA/Tw+fSSgr7/1mwksRxa1i7fr2rfdNcbaYL4hdBLhPbIHa3s5e58KG2G8YiphOagdSGVGQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707301118; c=relaxed/simple;
-	bh=rYCzRom9fn/h+G7iLC9GyFKbGOK0LFNpk4LSplc7INs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=pEoKX4FxGIkA306nuiPrRwL0/ZEp2EdOfkwlHury6Uw9mTEi+p3WH8nsV/MakOhsYnPuYwcCtDGtOqwKzzRAQSzvXUpw+SJDWY0B/zbVMA6Fq1gyFQ0LVdhSsOCpS82AoJyTW2+kg4JEclo+3sbspI4wSH0F1pOmeKmnfboqKWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kkrn/6Ah; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4101d096c92so595725e9.1;
-        Wed, 07 Feb 2024 02:18:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707301115; x=1707905915; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DuqJU1WwYzrM0YOnFnIci0yeB3MaXmMpyMCTJ0LMXCk=;
-        b=kkrn/6AhsAMps0totkND93sr9qejKCPAIV8MEyHqw6oY82MPgHwGR4hngAT2tklYWr
-         Qf94qAR7c7913GSpzpR7oNgIoHNwUiEIII2I+p5KPz8X2ttpZJ50TrpHTvUXrtJQmQHR
-         U2hjvRs7WORQYrp3Q9IOhqsb1RO3BTf1SOA1yFeP9B8k3ONgWCBCHzIGvuLpuea+F57O
-         QuPEpwp1C/YybPUW/YCwv67foeolJpP0qacN0W6PaBPou1zuA+euBA1stDZaxyAw3CZf
-         o/hFwIKx2BzYNQA1zL9ylAM/xj2ZlRvluIpgVLR7yupcK28pQQ7GX2pS7XqakmCnUnYw
-         i/7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707301115; x=1707905915;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DuqJU1WwYzrM0YOnFnIci0yeB3MaXmMpyMCTJ0LMXCk=;
-        b=TXttT2VswnQuo18L6BPmFYft19l0yyLDX7tZa/Sm/FP7TQXH4X5Z3vLT7IdrZJ0zrU
-         O4kPnxWXW6Kx1HH6Zj4YlKQ0eiJSPJoGauct23TLmBY8G05ZyAe2tSUciRxXW23yXzFl
-         7HcZdHKsrxqtEX1o7ftCgTPefw/Vce9S3unvW6tfBWYKvhwND1pq7GTGTQnyf3LAwWKd
-         5MXRlyVnL8SLHT6nbIFij322jT7MKgELJkTuYvk3HoO7ql17Juu8O3C/1khRNnuy+QyB
-         mUYVOMBIzZvcWqQjAeRWkIhd6j57QEiKyRpo1J2OR9YJe6notJmChIJdlU/IpMKRZwYh
-         pUCg==
-X-Gm-Message-State: AOJu0YwmWrkekG0eoxooX4OT6n5ezSePL7yIJBVm4KfnqOijABDzerjE
-	2DnWFspQ8yYUeBq1OEQ1onigzBtcru3xEcAW9tsMcMdoObCTRkPxGGKkWFDZzhY=
-X-Google-Smtp-Source: AGHT+IHe3M6vD+bjtr4ODMUp4ueyRrD+kN8Hr9V8XPA+ISSpcZuJVCdXEXadlMx21kpnFRwhEYHHMQ==
-X-Received: by 2002:a05:600c:468f:b0:40f:bad2:72ed with SMTP id p15-20020a05600c468f00b0040fbad272edmr3953733wmo.4.1707301114581;
-        Wed, 07 Feb 2024 02:18:34 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVzqfBJGahtWOsT0vua+jRnCDjn6edUptEoU7HQaQlhjo0xttUqNtZ3DUSyJ1EkyhGYdj43ZF2CtLVyUA3yXofoqhTzCIpY8pFhq/gQnD/Y3Er5RM0ZS+Ra5hZ7+5lqTTSZyQd45c5+F/lo2tciAIv/TdPAkq2ejbbh1l7OK6bic2NGVULUMeuKBRrRunY5t9IzKuMsqSjBvjGC8w==
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id h16-20020a05600c315000b0040efbdd2376sm1559430wmo.41.2024.02.07.02.18.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Feb 2024 02:18:34 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] USB: serial: oti6858: Remove redundant assignment to variable divisor
-Date: Wed,  7 Feb 2024 10:18:33 +0000
-Message-Id: <20240207101833.2440799-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1707302367; c=relaxed/simple;
+	bh=6Lh2sf+u9C2LnxdPcmlX2E9wL8aJD0elq4IyaQrMH+A=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=e+cDB05WZP4J/vyXgcmPFLStCMgcViXeNO29JgQqfHeO2JyWIWrudTMGeQv7xDlY2wFblpsEZviUjeWtn/PZcuDe0TrBUpSokV9/2sHdex90uGRyuXnQbKCXJW/1jX7FCbgThgqQ/5xxlZArSFh25nYuxLIWCztJ86CA/iTXdM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i0dbnjRo; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707302366; x=1738838366;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=6Lh2sf+u9C2LnxdPcmlX2E9wL8aJD0elq4IyaQrMH+A=;
+  b=i0dbnjRo8uo8bamfuIM/wnCM0Mcry8wE8qqISpPmjULFPFKn93wvGAg8
+   nhvKeMQTZsuNS6fbBWW2/bLjGk1G2MNkNT++z8l1D2XhJk01IqLaVQNHN
+   lwr0iKY1WWW3JMw/2EdpXFrCV0T0fZfS74pYQ9oCUsBfNfWXUxoqcKenW
+   bJOb2/ZuZbG5n8bpvglr2U4hYHa2v88Fk5eg0Gk+mSN5sSTFs9w3OKpVf
+   pupi7Wx2g6rm6xpUpR2g/eNDaHk5EoqOTxAniMtzyyHJ9m7OybfARk8Vy
+   yjD0FnI6PMxBLHZ322jmezxk/MYnZ8HDExosDuKMmGTYtS3dG8Buzz/3F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="870385"
+X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
+   d="scan'208";a="870385"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 02:39:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="933738390"
+X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
+   d="scan'208";a="933738390"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Feb 2024 02:39:22 -0800
+Message-ID: <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
+Date: Wed, 7 Feb 2024 12:40:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com,
+ Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+ Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
+ <Zb6D/5R8nNrxveAP@cae.in-ulm.de> <Zb/30qOGYAH4j6Mn@cae.in-ulm.de>
+ <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
+ <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com>
+ <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: =?UTF-8?Q?Re=3a_This_is_the_fourth_time_I=e2=80=99ve_tried_to_find_?=
+ =?UTF-8?Q?what_led_to_the_regression_of_outgoing_network_speed_and_each_tim?=
+ =?UTF-8?Q?e_I_find_the_merge_commit_8c94ccc7cd691472461448f98e2372c75849406?=
+ =?UTF-8?Q?c?=
+In-Reply-To: <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-The variable divisor is being assigned a value that is not being
-read afterward, it is being re-assigned later in both paths of an if
-statement.  The assignment is redundant and can be removed.
+On 6.2.2024 18.12, Mikhail Gavrilov wrote:
+> On Tue, Feb 6, 2024 at 4:24 PM Mathias Nyman
+> <mathias.nyman@linux.intel.com> wrote:
+> 
+> I confirm after reverting all listed commits and 57e153dfd0e7
+> performance of the network returned to theoretical maximum.
+> 
+>> That patch changes how we request MSI/MSI-X interrupt(s) for xhci.
+>>
+>> Is there any change is /proc/interrupts between a good and bad case?
+>> Such as xhci_hcd using MSI-X instead of MSI, or eth0 and xhci_hcd
+>> interrupting on the same CPU?
+> 
+> On the good kernel I have - 32 xhci_hcd, and bad only - 4.
+> In both scenarios using PCI-MSIX.
+> I attached both interrupt output as archives to this message.
+> 
 
-Cleans up clang scan warning:
-drivers/usb/serial/oti6858.c:412:2: warning: Value stored to 'divisor'
-is never read [deadcode.DeadStores]
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/usb/serial/oti6858.c | 1 -
- 1 file changed, 1 deletion(-)
+Thanks,
 
-diff --git a/drivers/usb/serial/oti6858.c b/drivers/usb/serial/oti6858.c
-index 6365cfe5402c..fa07f6ff9ecc 100644
---- a/drivers/usb/serial/oti6858.c
-+++ b/drivers/usb/serial/oti6858.c
-@@ -409,7 +409,6 @@ static void oti6858_set_termios(struct tty_struct *tty,
- 	cflag = tty->termios.c_cflag;
- 
- 	spin_lock_irqsave(&priv->lock, flags);
--	divisor = priv->pending_setup.divisor;
- 	frame_fmt = priv->pending_setup.frame_fmt;
- 	control = priv->pending_setup.control;
- 	spin_unlock_irqrestore(&priv->lock, flags);
--- 
-2.39.2
+Looks like your network adapter ends up interrupting CPU0 in the bad case due
+to the change in how many interrupts are requested by xhci_hcd before it.
+
+bad case:
+	CPU0	CPU1	...	CPU31
+87:	18213809 0	... 	0	IR-PCI-MSIX-0000:0e:00.0    0-edge      enp14s0
+
+Does manually changing it to some other CPU help? picking one that doesn't already
+handle a lot of interrupts. CPU0 could also in general be more busy, possibly spending
+more time with interrupts disabled.
+
+For example change to CPU23 in the bad case:
+
+echo 800000 > /proc/irq/87/smp_affinity
+
+Check from proc/interrupts that enp14s0 interrupts actually go to CPU23 after this.
+
+Thanks
+Mathias
 
 
