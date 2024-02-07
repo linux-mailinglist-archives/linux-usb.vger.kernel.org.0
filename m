@@ -1,132 +1,104 @@
-Return-Path: <linux-usb+bounces-6016-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6017-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DA7884D21F
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 20:15:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A7F784D238
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 20:27:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 492B3282C5C
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 19:15:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9AE0B25B60
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 19:27:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B1A98564B;
-	Wed,  7 Feb 2024 19:15:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66B5985946;
+	Wed,  7 Feb 2024 19:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CDlba+cu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZopGZsHs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E3B85286;
-	Wed,  7 Feb 2024 19:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4EF622065
+	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 19:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707333301; cv=none; b=a8LMcn8F1sZ+I8MDHknlSCyQPguuIlo7NVyuuXJ/Yci8YVNzcQsgbI+QlfA3lBfYixsyB5mgLWEak6EDZqq6NcMCLuh7FJkya2XF5S92hTPlzaYy8QWRwU4SOtur51K2xG8smr50bsVsydvnYlLND31ivD0Q7spYKHKvGqweL5c=
+	t=1707334046; cv=none; b=bui8jNcS4w2acywokXD1nvpzjMZuKk7dnawKswt8e78vGWkiRVEEKoKSAMgBLPnUkKp3Xe/S7s+uwpwk5Y9BvDpDEKSlQtut3LmWJ/Gkvg2eQQ3ltJzQzlR8ENEmQhuQlQMxzlowEbBtMDJIqDkR8Jpjdph5/wCRj8fALuY9OV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707333301; c=relaxed/simple;
-	bh=W5k1pVrv5LT4aNFcxZhVlTsA53EzW+dLt1NS9jhtrtM=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=hC3782fUkmGw1IjNKPAdoXXIKi6PV3uPBpd3TCtI0pNMqPxGTBiNBCmf+ey0+o/8AHGroClt+rcWIphoYta8QyWwiUat9TLM00TLYecA4s8ruDhNDwdVpNQ/tQXnHU12kqx0LqpJ3Dg7T9zEVNVrwZ0mU0AydiaMBysHEIF76yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CDlba+cu; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5116643c64eso1784454e87.3;
-        Wed, 07 Feb 2024 11:14:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707333297; x=1707938097; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X+zCCH6HGB9saSmIAWX6wClWcswuwqRqYjvjldtPTEU=;
-        b=CDlba+cuUfRuJE9pqgkXHQanIQxAAJK2Lgx9mkKE7wbRUfWMCu0XMTqnHYwviioVND
-         BsY2/d1EdKOPuc5g5LAbkhqRzG7Rj+yPB1PNPCIeGgzzZlZUx8wTqbgtr/zIXs3X6Thy
-         DVNCmfvaGKHTln8qjfNCkckR3mb7VcvdK0t6wYw8j6ac4vcEmBIe9Z0EBWlv7f8Jq9eR
-         W/g+dPwPWGjp9MTiueGHrLzgmUsF0qXpJ7aQROjQ5lEZbS8XX/u1IDPQZHBLYobdzxdb
-         sAeIi9k7pVE3zTvS03IEB3YelQaJX5bdQb3d25+8oa/L8MOVSoYYIJnMUN45MA1inDrN
-         dm9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707333297; x=1707938097;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X+zCCH6HGB9saSmIAWX6wClWcswuwqRqYjvjldtPTEU=;
-        b=LYsbGNceIEJyXXinEXEdtjDC6RkGhRnkhmVZteYU2Ux1bXUJnLMx1ucwJEIpD7JEj3
-         NZe/P0E0X5KzMpNND1Nt7TN3zsHxiFWjT+8HYlZdr2UqNP7o++3kR8ia54Cmg2xHFvef
-         +DB5cY1qWYKCCR2VJqHlzQuN80OTT/dcoKOw5HgGzlS6pHotmGnZOT/RYhDcM9XKZzv1
-         Ydknn37Tv2XYidU+Z+Hqmv+HYgdOLrlPjuRvJX/FTGdiY19wX0HOhqeRTjaXp5Oj78Je
-         KPC3HYhha+YvYPdJP4zx2jOpfzoWjHNURCEaZclHm15YS4awJg6t7fLA95Bx82tDLPA7
-         Vz5A==
-X-Gm-Message-State: AOJu0YwIliP7rkaY+Rj+4rVaA2MxQp01OAkR1gaB6VND8rYCjuFFKbGp
-	Kz7rWJeCMwqfybHNszul6h9GvtC8+zE82nnKasgRA+6LUe4d4kzW
-X-Google-Smtp-Source: AGHT+IHKcU4DfAYC+ybYnEs2gLTCHxySWNSBciYIelNeHYnUZ8fPh5fzMREyBiwbBGy3clFkEm9THA==
-X-Received: by 2002:ac2:5e9b:0:b0:511:484a:dacf with SMTP id b27-20020ac25e9b000000b00511484adacfmr4036038lfq.30.1707333297152;
-        Wed, 07 Feb 2024 11:14:57 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVJaf54joY5YOnJj/Ss0Nd4hGJAqbezIWP2b1kTCrTyJg/4kpV5SggnJoOmsqVTGPnvnHvEnferyiH4GbdzBG4LQm6pn1iv5BDIMNxUvBv8VJNm5N/lsBsxwJlU2jGPAXj99f37HvrMGAhcqUqsHlqSaMLf9B9mFARdFI3KYtOcBzv2VrnLMcW1GP09qRny/f/1QMGzophtFIEHK81I9Jm+bAEUXLyGy02Cx51YApKq4yUsS6xGpdIcDZcN5uLo0nJqvgm5ffecpOmPbapHhRS6FYUFZv5zUO7xBo0pqspczxgnOn7H83ParBlVQJTnltkFQikDVnT5Caxo5F3+rDzhbqQ4kEF4fbH8Ebt9l6aVY+tqMx7MvyHX2BKeif1ecj1CUK2UZ8WaihZYC8VVckXwl6PWXhC8Go07t/NE0Jmx4rziXLS7lqofKKfwUlNYF7av+h6hnlLknUWNTKC7d/p9PE56nMIFTG6SBWwApe+Y7PyjgIw=
-Received: from [192.168.1.105] ([178.176.76.58])
-        by smtp.gmail.com with ESMTPSA id v29-20020ac25b1d000000b005115365c4aesm285924lfn.292.2024.02.07.11.14.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Feb 2024 11:14:56 -0800 (PST)
-Subject: Re: [PATCH 2/2] platform/chrome: cros_ec_typec: Make sure the USB
- role switch has PLD
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Prashant Malani <pmalani@chromium.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
- Guenter Roeck <groeck@chromium.org>, Emilie Roberts <hadrosaur@google.com>,
- "Nyman, Mathias" <mathias.nyman@intel.com>,
- "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
- "Radjacoumar, Shyam Sundar" <ssradjacoumar@google.com>,
- Samuel Jacob <samjaco@google.com>, linux-usb@vger.kernel.org,
- chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
- Uday Bhat <uday.m.bhat@intel.com>
-References: <20240207145851.1603237-1-heikki.krogerus@linux.intel.com>
- <20240207145851.1603237-3-heikki.krogerus@linux.intel.com>
-From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <338756c8-af83-c023-c5b7-757d57c76fa2@gmail.com>
-Date: Wed, 7 Feb 2024 22:14:54 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	s=arc-20240116; t=1707334046; c=relaxed/simple;
+	bh=2E3opWgFxYNhGx3/bYjPiP39wqTIv0ShhoYTfU1KDTE=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=tos8vRMVjuOqime5Kz6B8uUJ5wMOQGDSMTCsQ6IT9ovEH1shxWvrDDNBmixEQX+Knev8EDwoKyMyyOCqtWbVD/JLfhf1k2kXHUcJdO+Pvrra1q/QctgBrXOLK8ezmNO+w6UaND8AUlNrHH4OFVWqQaP4SFbBairLleCboixyX6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZopGZsHs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6C740C433C7
+	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 19:27:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707334045;
+	bh=2E3opWgFxYNhGx3/bYjPiP39wqTIv0ShhoYTfU1KDTE=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ZopGZsHsMelHSijO0JXuoEWhGpCvXhYLbjYhp5QgicrX69dkEnalwOxQK68HrPhHI
+	 PhvH0RpYYRseSrNxubAPY/6QDM4rYB19go0RvaDnmqVtQd2ECx9sp1lylVcOFzedp6
+	 G8AXApS5oIZVIvlRsgrGTK/p2BD4Cb+YXjnAP1Na2WzOyqgwoXprwoFrk2i/Bl6npC
+	 7sPjRPNCK5imkbB/Pek0yu4GUD9Lls9NQdlwrRe3MruLarrVIcX9wk9hpRtDVizUoI
+	 ehwKI1WdncrVsCZL2qj3h7d2nnE8vFWCOhWumOcPgpLynJjzQEvQxFNVObbfn1MlxH
+	 zqor6X8Ks6IgA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 562A6C53BD3; Wed,  7 Feb 2024 19:27:25 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 216474] Dell XPS 13 9360/Dell DA300: USB Type-C: PCIe Bus
+ Error: severity=Corrected, type=Data Link Layer, (Receiver ID)
+Date: Wed, 07 Feb 2024 19:27:25 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-216474-208809-GWxzlpXgrj@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216474-208809@https.bugzilla.kernel.org/>
+References: <bug-216474-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240207145851.1603237-3-heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 
-On 2/7/24 5:58 PM, Heikki Krogerus wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216474
 
-> The USB role switch does not always have the _PLD (Physical
-> Location of Device) in ACPI tables. If it's missing,
-> assigning the PLD hash of the port to the switch. That
-> should guarantee that the USB Type-C port mapping code is
-> always able to find the connection between the two (the port
-> and the switch).
-> 
-> Tested-by: Uday Bhat <uday.m.bhat@intel.com>
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->  drivers/platform/chrome/cros_ec_typec.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> index 2b2f14a1b711..5c14e8db08b5 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-[...]
-> @@ -66,6 +67,16 @@ static int cros_typec_parse_port_props(struct typec_capability *cap,
->  		cap->prefer_role = ret;
->  	}
->  
-> +	/* Assing the USB role switch the correct pld_crc if it's missing. */
+Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de) changed:
 
-   Doing what?! :-P Maybe assign?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |bjorn.helgaas@gmail.com
 
-[...]
+--- Comment #6 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
+ ---
+I am still seeing this with Linux 6.6.
 
-MBR, Sergey
+> I am going to test with `pcie_aspm=3Doff` next week.
+
+`pcie_aspm=3Doff` gets rid of the warnings.
+
+Should a quirk be added for the device to enable `pcie_aspm=3Doff` by defau=
+lt?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
