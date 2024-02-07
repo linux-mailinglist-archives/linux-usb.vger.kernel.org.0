@@ -1,249 +1,116 @@
-Return-Path: <linux-usb+bounces-6001-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6002-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 619C484CA12
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 12:59:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A78084CA22
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 13:03:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18BC22866A4
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 11:59:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A50EAB279E9
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 12:03:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D229D59B6A;
-	Wed,  7 Feb 2024 11:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B63559B67;
+	Wed,  7 Feb 2024 12:03:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="lpJz2eoM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HENe6pA0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDF71CD28
-	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 11:59:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2153859B54;
+	Wed,  7 Feb 2024 12:03:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707307176; cv=none; b=vCSDedGPrg45qTqbETpUf8J5rDCfyEsqz/HWYPRuz7evXPrguZuQuOL01RkWpr520shAlHFKUWLuQgkRKRV5TkCa5hrCjzkUYYwFVTboEQXGLKPDb9VFqu1KGWqD3+kSg16QbrDJlLkCRxMzzIydYtaBXPmqwNEITngT9yLCXmA=
+	t=1707307404; cv=none; b=YzPkFSSjqcS4HF8Hb0eJddhE30qiOWobszqzagoGjufNLOyE4jPiPXEDi1fs1kdsQlBNNIPBX/JcNTRtSvVBm2HQW+04mBCtJOWFJ33QnpmRp1SA2DTUxChS1xiKKm9KTLWjuyqxlYXv32FC2AQq1qHMzrYt4UnjNDKS3Ob/sVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707307176; c=relaxed/simple;
-	bh=4Dzuc4ozpYlQxuD8azhA0pj38vOTx6H5p1tDERc3qF0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=P+yR3QbjUjnK0jUxK5pyXeaGDTfKOZEhbQFKbo6weFjwdD/ss2IiylCrt71hYMAV4/Q4BNPIi7P50eb9vg9NGLfOkNKVByLp5+NfKnYpiD01vWFJ3a+kHH5vG08XO8rKJAXT73db5wGwPJ4BWlYktWFEHyZJRol0oYrS1neky+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=lpJz2eoM; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240207115930euoutp027d1dcec70caefa6c98d52802bce025a2~xktNoCtKt1958419584euoutp02e
-	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 11:59:30 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240207115930euoutp027d1dcec70caefa6c98d52802bce025a2~xktNoCtKt1958419584euoutp02e
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1707307170;
-	bh=ynbj17t33/+bqH1PNF8D/EuPAXN1vfaZJ7FwjG8sFdc=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=lpJz2eoMJsKbo0D/d2NM6Emf0oWWHkOR0pwtzo/mOKvKR4cniVlN13YLwp/T/ukDq
-	 95Nh8kRFMzLghfUJw7UFxWiJY8Usn0ISjmbcABjiOs2BykOD3TpdH5F8O+13GpHTmt
-	 BmUXU/ETryUYH3F8cUhSKPkaREuvFWz+l3IWAV/s=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240207115930eucas1p1c3fb19c28c5e442370aae05cab84d8b7~xktNa7EEZ0109101091eucas1p1I;
-	Wed,  7 Feb 2024 11:59:30 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id 2E.FF.09552.2A073C56; Wed,  7
-	Feb 2024 11:59:30 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240207115929eucas1p1dc7c6bb3f9aa2ac983dd95d345661aec~xktNCDyoX0983609836eucas1p13;
-	Wed,  7 Feb 2024 11:59:29 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240207115929eusmtrp1a3aa4ad5ba4659fa30592e1a707c87c4~xktNBbbt-2420724207eusmtrp1q;
-	Wed,  7 Feb 2024 11:59:29 +0000 (GMT)
-X-AuditID: cbfec7f5-853ff70000002550-13-65c370a2a715
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id 64.69.10702.1A073C56; Wed,  7
-	Feb 2024 11:59:29 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240207115929eusmtip2281373b5b758a06bd4b18bfcfb788580~xktMcpQHz0589105891eusmtip2M;
-	Wed,  7 Feb 2024 11:59:29 +0000 (GMT)
-Message-ID: <4b5683cc-8e61-43c5-be0f-b5378639276a@samsung.com>
-Date: Wed, 7 Feb 2024 12:59:28 +0100
+	s=arc-20240116; t=1707307404; c=relaxed/simple;
+	bh=uReOIAUr3yxIpe3V/+0Z1QbKOOO0Li8w6pbjd5rWadM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=F8dKr3eSGxFLYAdLS6KFsY+8YvK97n7qupD3bvP1Cug1ChwuRRB2V+2vqq5HCn4O83n5gs/IVIt36w5k9wpRm4qaE61sgXtdIo6FVhR+vwEWQC9fryg5pg5NGVdh0i4zrsCf7M9IbeetYxbLH6fdc9iCnTJ/xpC8gimOcQhx8Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HENe6pA0; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-33b28aadb28so415131f8f.3;
+        Wed, 07 Feb 2024 04:03:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707307401; x=1707912201; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mQGin1dTgZWE68jPKB5i3Z1XPabW/tMTQJ4NouFdDP8=;
+        b=HENe6pA0NBpO+l+JNgQW37HbDDOvyyqe0UcVWwEeRDHVlUrGQ4WD4iTr4pMmWM0x9b
+         S9SA53S9Y7SzWucntCpRKczkN/APJNkLFA2DKvs5DpSjDQmHbRjYyuoa87vE5CfN7a8M
+         E4yLNrrhcOXfBN+BUr1nwYUEGk8dYen43KBDY8d1xBoBwVUrcEDkQwmhYZoyjzlX7Vfk
+         qGONRGIOOyM1Ca1PPcVvHkvajXPaOg2qyaVeTINS0yDjim+cu8lAlfSRaAGLepxeLTYu
+         JHMRWyw59MYikX+ptP70oVGR/qYsvAqZUSofHBXQHxUjHdwvH9llKJBJW4TP7D7AttrY
+         rBiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707307401; x=1707912201;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mQGin1dTgZWE68jPKB5i3Z1XPabW/tMTQJ4NouFdDP8=;
+        b=r7QiBkTKL8PwahOSvGBa7jpZuVmzmgqsctutrhh6AShQYEdhlFSq+QrTzl3Wwujpf3
+         gYzoRWtfzy3QpHszlfyQyerXUNRd8sMTpeo2c3tfTrEWOlEjZsTFRAYqVW8c8uDv4IPy
+         ZJkWfRT5hBe0oUaUZYUOpZhJgA7FddiJ3S+GjDgUHAuwu+08rV8KAm4DKQzV5HxMPDq2
+         nLfT8C/nGe4njReFfO53eTwufO0u3B2trxCE7AuTT7coTQs3kdIAcUvTylVmQil6ExkO
+         CMwOTxxo4l5nGGnUmYGA0G3kh6Lx76E7B9DUcbxoMNtOzUEUo/PMinkLXRPaOhZnJYpQ
+         ik1A==
+X-Gm-Message-State: AOJu0YyLS1Jt6nRTzx6A2tnFvxHwIltmJwqJEDJbiH7zHG5WMKa9bX1H
+	YdjVPSWMlXAjJhTwL7v7CZm6PHjf5bR1BDZzSkJ5++MWoIMwQEH/
+X-Google-Smtp-Source: AGHT+IGQtfZ92Xdh3R8wY/pBqwf8Y1LmilebBMiQCFtTVWT8gKQNkK8GSJng9MSP9/MbliBN+Zg+sQ==
+X-Received: by 2002:adf:f3ca:0:b0:33b:26c4:ca3 with SMTP id g10-20020adff3ca000000b0033b26c40ca3mr3185263wrp.22.1707307400899;
+        Wed, 07 Feb 2024 04:03:20 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXez9PNj+4Sh47lOny7j7IfJx7AlwS8BY1LUaLBPsFCyF3uFlyFO9Zm1f/x6a0eYcGtgEBaERydvsubvgcJIwrznw/4gH5ZG03ip60+Ke+aF97kwx31myaxjwy3RHQXvemBZDVjs8Ba+EDdiWIvSpZjoYLuiUf09ZJvo5aRkfT5SiYFf9JelRwjrloxqDtx9tWqAXBC0WkSEeQQFw==
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id g16-20020adfa490000000b0033b50ed5f98sm626338wrb.72.2024.02.07.04.03.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Feb 2024 04:03:20 -0800 (PST)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH][next] usb: dwc3: gadget: Remove redundant assignment to pointer trb
+Date: Wed,  7 Feb 2024 12:03:19 +0000
+Message-Id: <20240207120319.2445123-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: dwc3: gadget: Fix NULL pointer dereference in
- dwc3_gadget_suspend
-Content-Language: en-US
-To: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>, Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	stable@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20240119094825.26530-1-quic_uaggarwa@quicinc.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLKsWRmVeSWpSXmKPExsWy7djP87qLCg6nGpw8z2JxrO0Ju0Xz4vVs
-	Fpd3zWGzWLSsldli44anLBYLNj5itFi14AC7A7vHplWdbB77565h95i4p85jy/7PjB6fN8kF
-	sEZx2aSk5mSWpRbp2yVwZTzesI6xYK9qRdM03gbGXvkuRk4OCQETiePL3zF3MXJxCAmsYJT4
-	/WcNI4TzhVHiy+zFbBDOZ0aJOf/mMMO0PD2yiRUisZxR4uR8mJaPjBKP9h5lAaniFbCTWHTm
-	MjuIzSKgIjGhtZ8VIi4ocXLmE7AaUQF5ifu3ZoDVCAskSBy82Q0WZxYQl7j1ZD4TyFARgT5G
-	idsbJgAVcQAlyiQ+blYEqWETMJToetvFBmJzCthLdLzpZITolZdo3job7CEJgRscEkuvTmGF
-	ONtF4sHBjUwQtrDEq+Nb2CFsGYnTk3tYIBraGSUW/L7PBOFMYJRoeH6LEaLKWuLOuV9sEFdo
-	SqzfpQ8RdpT4vv8CWFhCgE/ixltBiCP4JCZtm84MEeaV6GgTgqhWk5h1fB3c2oMXLjFPYFSa
-	hRQss5C8PwvJO7MQ9i5gZFnFKJ5aWpybnlpsnJdarlecmFtcmpeul5yfu4kRmIJO/zv+dQfj
-	ilcf9Q4xMnEwHmKU4GBWEuE123EgVYg3JbGyKrUoP76oNCe1+BCjNAeLkjivaop8qpBAemJJ
-	anZqakFqEUyWiYNTqoGpeuf5RQWOjU5VH4UUXTl3T+pL2z/77RQR+ZbAczl1s412pi0SS9n5
-	39iq8PHSmYWLVv0LCxOwTpTSd+D7P4/TcpvZ/6V8HlWXJk6M91Ti0sjUWqowY15n889WTRbl
-	BWf6dj+qkDjZ+0mdr8bsotV2v/N5nzYG/A5/aOr3fuaFyRUux9lfL9j37iLDcSmdQrnvEvuc
-	d5cYc16xuvRD/srsrYniGYyHmH5d+nl/vlHrJmXJA1EPT/Ev5a1ZWbo6/oSrYMvt+XemrFc0
-	NJau7Ci3NdJpP6srv+ZzuMtpT/ewiuv/pymm/J/rkdOiKVWWGxq18lKYRkpfTPxz3WVcu7Q5
-	Mj6Vv5ZZYP7p0umcBGElluKMREMt5qLiRAACspp/sAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHIsWRmVeSWpSXmKPExsVy+t/xe7oLCw6nGjSu07Q41vaE3aJ58Xo2
-	i8u75rBZLFrWymyxccNTFosFGx8xWqxacIDdgd1j06pONo/9c9ewe0zcU+exZf9nRo/Pm+QC
-	WKP0bIryS0tSFTLyi0tslaINLYz0DC0t9IxMLPUMjc1jrYxMlfTtbFJSczLLUov07RL0Mh5v
-	WMdYsFe1omkabwNjr3wXIyeHhICJxNMjm1hBbCGBpYwSDy6wQsRlJE5Oa4CyhSX+XOti62Lk
-	Aqp5zyixqmcyG0iCV8BOYtGZy+wgNouAisSE1n5WiLigxMmZT1hAbFEBeYn7t2aA1QgLJEgc
-	vNkNFmcWEJe49WQ+E8hQEYEJjBJ7P19lh0iUSXy78YYN4iI7iZ0v+xhBbDYBQ4mut11gcU4B
-	e4mON52MEPVmEl1bu6BseYnmrbOZJzAKzUJyxywk+2YhaZmFpGUBI8sqRpHU0uLc9NxiI73i
-	xNzi0rx0veT83E2MwIjbduznlh2MK1991DvEyMTBeIhRgoNZSYTXbMeBVCHelMTKqtSi/Pii
-	0pzU4kOMpsDAmMgsJZqcD4z5vJJ4QzMDU0MTM0sDU0szYyVxXs+CjkQhgfTEktTs1NSC1CKY
-	PiYOTqkGpkXm/dv3vgxOcrPdELA5JtUyMufTUw4F+b03FhyYrvDqUNbqck4P79cy/Ms5Pj1y
-	rtS489HBmGPREvXplVdzlCu+b3uyuVjqx/8NT2atnP30WJyq12fpHdvXarQfcv5rWlS5db4B
-	e8szG96qxhnpSzpC75msXe/eatCz4Mkeww8vL87/EZeQ8/DAGQ/J+J5jDu9mfHmi0/HCsNt6
-	Vkci11JVJYFrgmdeOn5oPB8SX58X9TFFxnGFrdxZ73M6x4PCpzyTNnd9p6tlmvZFVfDzr7Ad
-	U498znKLy/dkXMy4wao/bavYnLI3thcylWuXfrSYenbRR86Ek7cYGrclrLU9v6ZW33e7ytzb
-	PnWnOQO+hiuxFGckGmoxFxUnAgBvL4jzQQMAAA==
-X-CMS-MailID: 20240207115929eucas1p1dc7c6bb3f9aa2ac983dd95d345661aec
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240207115929eucas1p1dc7c6bb3f9aa2ac983dd95d345661aec
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240207115929eucas1p1dc7c6bb3f9aa2ac983dd95d345661aec
-References: <20240119094825.26530-1-quic_uaggarwa@quicinc.com>
-	<CGME20240207115929eucas1p1dc7c6bb3f9aa2ac983dd95d345661aec@eucas1p1.samsung.com>
+Content-Transfer-Encoding: 8bit
 
-Dear All,
+The pointer trb is being assigned a value that is not being
+read afterwards, it is being re-assigned later inside a for_each_sg
+loop. The assignment is redundant and can be removed.
 
-On 19.01.2024 10:48, Uttkarsh Aggarwal wrote:
-> In current scenario if Plug-out and Plug-In performed continuously
-> there could be a chance while checking for dwc->gadget_driver in
-> dwc3_gadget_suspend, a NULL pointer dereference may occur.
->
-> Call Stack:
->
-> 	CPU1:                           CPU2:
-> 	gadget_unbind_driver            dwc3_suspend_common
-> 	dwc3_gadget_stop                dwc3_gadget_suspend
->                                          dwc3_disconnect_gadget
->
-> CPU1 basically clears the variable and CPU2 checks the variable.
-> Consider CPU1 is running and right before gadget_driver is cleared
-> and in parallel CPU2 executes dwc3_gadget_suspend where it finds
-> dwc->gadget_driver which is not NULL and resumes execution and then
-> CPU1 completes execution. CPU2 executes dwc3_disconnect_gadget where
-> it checks dwc->gadget_driver is already NULL because of which the
-> NULL pointer deference occur.
->
-> Cc: <stable@vger.kernel.org>
-> Fixes: 9772b47a4c29 ("usb: dwc3: gadget: Fix suspend/resume during device mode")
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> Signed-off-by: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
+Cleans up clang scan warning:
+drivers/usb/dwc3/gadget.c:3432:19: warning: Value stored to 'trb'
+during its initialization is never read [deadcode.DeadStores]
 
-This patch landed some time ago in linux-next as commit 61a348857e86 
-("usb: dwc3: gadget: Fix NULL pointer dereference in 
-dwc3_gadget_suspend"). Recently I found that it causes the following 
-warning when no USB gadget is bound to the DWC3 driver and a system 
-suspend/resume cycle is performed:
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/usb/dwc3/gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-dwc3 12400000.usb: wait for SETUP phase timed out
-dwc3 12400000.usb: failed to set STALL on ep0out
-------------[ cut here ]------------
-WARNING: CPU: 4 PID: 604 at drivers/usb/dwc3/ep0.c:289 
-dwc3_ep0_out_start+0xc8/0xcc
-Modules linked in:
-CPU: 4 PID: 604 Comm: rtcwake Not tainted 6.8.0-rc3-next-20240207 #7979
-Hardware name: Samsung Exynos (Flattened Device Tree)
-  unwind_backtrace from show_stack+0x10/0x14
-  show_stack from dump_stack_lvl+0x58/0x70
-  dump_stack_lvl from __warn+0x7c/0x1bc
-  __warn from warn_slowpath_fmt+0x1a0/0x1a8
-  warn_slowpath_fmt from dwc3_ep0_out_start+0xc8/0xcc
-  dwc3_ep0_out_start from dwc3_gadget_soft_disconnect+0x16c/0x230
-  dwc3_gadget_soft_disconnect from dwc3_gadget_suspend+0xc/0x90
-  dwc3_gadget_suspend from dwc3_suspend_common+0x44/0x30c
-  dwc3_suspend_common from dwc3_suspend+0x14/0x2c
-  dwc3_suspend from dpm_run_callback+0x94/0x288
-  dpm_run_callback from device_suspend+0x130/0x6d0
-  device_suspend from dpm_suspend+0x124/0x35c
-  dpm_suspend from dpm_suspend_start+0x64/0x6c
-  dpm_suspend_start from suspend_devices_and_enter+0x134/0xbd8
-  suspend_devices_and_enter from pm_suspend+0x2ec/0x380
-  pm_suspend from state_store+0x68/0xc8
-  state_store from kernfs_fop_write_iter+0x110/0x1d4
-  kernfs_fop_write_iter from vfs_write+0x2e8/0x430
-  vfs_write from ksys_write+0x5c/0xd4
-  ksys_write from ret_fast_syscall+0x0/0x1c
-Exception stack(0xf1421fa8 to 0xf1421ff0)
-...
-irq event stamp: 14304
-hardirqs last  enabled at (14303): [<c01a599c>] console_unlock+0x108/0x114
-hardirqs last disabled at (14304): [<c0c229d8>] 
-_raw_spin_lock_irqsave+0x64/0x68
-softirqs last  enabled at (13030): [<c010163c>] __do_softirq+0x318/0x4f4
-softirqs last disabled at (13025): [<c012dd40>] __irq_exit_rcu+0x130/0x184
----[ end trace 0000000000000000 ]---
-
-IMHO dwc3_gadget_soft_disconnect() requires some kind of a check if 
-dwc->gadget_driver is present or not, as it really makes no sense to do 
-any ep0 related operations if there is no gadget driver at all.
-
-
-> ---
->
-> changes in v3:
-> Corrected fixes tag and typo mistake in commit message dw3_gadget_stop -> dwc3_gadget_stop.
->
-> Link to v2:
-> https://lore.kernel.org/linux-usb/CAKzKK0r8RUqgXy1o5dndU21KuTKtyZ5rn5Fb9sZqTPZqAjT_9A@mail.gmail.com/T/#t
->
-> Changes in v2:
-> Added cc and fixes tag missing in v1.
->
-> Link to v1:
-> https://lore.kernel.org/linux-usb/20240110095532.4776-1-quic_uaggarwa@quicinc.com/T/#u
->
->   drivers/usb/dwc3/gadget.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 019368f8e9c4..564976b3e2b9 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -4709,15 +4709,13 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
->   	unsigned long flags;
->   	int ret;
->   
-> -	if (!dwc->gadget_driver)
-> -		return 0;
-> -
->   	ret = dwc3_gadget_soft_disconnect(dwc);
->   	if (ret)
->   		goto err;
->   
->   	spin_lock_irqsave(&dwc->lock, flags);
-> -	dwc3_disconnect_gadget(dwc);
-> +	if (dwc->gadget_driver)
-> +		dwc3_disconnect_gadget(dwc);
->   	spin_unlock_irqrestore(&dwc->lock, flags);
->   
->   	return 0;
-
-Best regards
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 564976b3e2b9..6e47259f2c4f 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3429,7 +3429,7 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dwc3_ep *dep,
+ 		struct dwc3_request *req, const struct dwc3_event_depevt *event,
+ 		int status)
+ {
+-	struct dwc3_trb *trb = &dep->trb_pool[dep->trb_dequeue];
++	struct dwc3_trb *trb;
+ 	struct scatterlist *sg = req->sg;
+ 	struct scatterlist *s;
+ 	unsigned int num_queued = req->num_queued_sgs;
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.39.2
 
 
