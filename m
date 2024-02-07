@@ -1,114 +1,166 @@
-Return-Path: <linux-usb+bounces-5999-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6000-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACF7D84C9B2
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 12:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EC2D84CA03
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 12:55:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4DEFAB27462
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 11:37:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 605B5B25AF1
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 11:55:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BD091B5BF;
-	Wed,  7 Feb 2024 11:37:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADB691D526;
+	Wed,  7 Feb 2024 11:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qm1HqhDw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B4TA6o+c"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9A619BBA;
-	Wed,  7 Feb 2024 11:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D271D524;
+	Wed,  7 Feb 2024 11:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707305855; cv=none; b=KXjAXvIzBf1j+l5EZyDm3fLtApSP6FIs+zLycXyWuVf0O1fN3nBsDeKtuyW6yGkVCfBIpe+ndKKlDfSLKdPcF1neV1FnlFXcYUWUfN9Z+YRBNjgqAt8NYzMvmlM97o8ju+qQZCgqVJxllMNKnFheYkJTPlPOzLNBrz1cNUvTjo0=
+	t=1707306931; cv=none; b=T2N/yXY8XKE9xvp6Ssi16JgS5NPVG51EVHambZNixbNEef8PXLy+h7etD1jcaBr/RFL5VcNCGUUpP6ljnqGdbb4XlAySu70Wc3jWUjWJGWNY9Hp5ZVKywYlMB5iYpibLojWRl10lqnNsUCydCzvFgfN/pmZhmPE/drOuF6+U27s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707305855; c=relaxed/simple;
-	bh=83PVRJcxzAA2WbczYT0DNaElV8eyxg5A/J+MvaxcW0E=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=gUQRu8WzDqLUoP12cNIJXHnHvQh85LSjXN6ai3BiM7vasGfcwacd7qCoBrPy19EPHwtEEItvcb1ky0RMnvV8/ZbboDoPSmCczMvUFY1waO9XhiKimMAnWI2dRx87xXaDJYuksw5hfcksUmYBpHzT9oRDuYCK1ngqfl0AGhilmMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qm1HqhDw; arc=none smtp.client-ip=209.85.128.45
+	s=arc-20240116; t=1707306931; c=relaxed/simple;
+	bh=lHf+OWDLZDGg6pLM+bTSB+6Bvo2/35m7PoQGalQGx5o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BcJGr4QqDahcim53ayLJxXHqJOnpu30SPI3AWmi1VN8aa4wRQSoHwuUSo9TMRBoSMM7NGEeM7y0LkXf0oSmdZwLO+QpK7pJT5XRcDcH6dhSitpuWutTf3CFLj6xtCUOGLggaxCkkhQWc3mFHJumi++pBtQtiOZ9y/iDbv9DA1To=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B4TA6o+c; arc=none smtp.client-ip=209.85.219.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40fe79f1aaaso4342495e9.0;
-        Wed, 07 Feb 2024 03:37:33 -0800 (PST)
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-68c9711344bso1000226d6.0;
+        Wed, 07 Feb 2024 03:55:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707305852; x=1707910652; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dlcGl3niyrqEgqteXegO7t1b/+0Yl2m8/0ksFX1JNYk=;
-        b=Qm1HqhDwCr5wOIQQ69zC1Zo3ORDg280cjli0YjypQKw2NoT95LTPuDj1DxYP0K7EsP
-         tsvnF/cxDopBdaWcrYoLEIMIKgoogeSAB6HrXheCMFLPL+I9g8s0+vX5khS+8bvn7CD0
-         iR9m80UDF8yNK4ewlaTRQwzpyEAGinKFPv/0jL6p5qkmzxO8sjdlyWrdZgkebjD+5jlq
-         DZVCEjeN8YDvNmS1jFQFt7oxzp3ChObc1wLCUjg9Gpbvh44TNXoDC6X+fwNqBKVkkhPc
-         daDHT/q8saSiFmfwmUgWFK14B72xrRGHF6CA944oeDYcGbImFYYqyhzNIbS/w6wv+qeF
-         lYbA==
+        d=gmail.com; s=20230601; t=1707306928; x=1707911728; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TMWJy3Ykt18rUU55JyWersH8Lc1FhDRKaenhhpPJe88=;
+        b=B4TA6o+cHBKEidI2bb7Ksby2TpBlbblJfBQNR2kaqXAe+JRHGzEmY6H3lSaoAKQznA
+         pFo2AQ4Vlzv6jT8UaK11j3egtpkzBB2VHAT7nYdpqVNzKC/gJoUWYbhINoGAafPkrftH
+         Q+zqHz4neqD8FMrbKBRsKwr+xX+YdlJqKl5AAxToqcEqe9Ss/aa/EV2SKtYfVnNSlfdZ
+         gW+cMqk58O64BMwU8o/u4HYSxuTEGv6qbEWIhHJaSBZQzl3SmwYQl1kFUlf6CoHLKSnu
+         SzmPnxYOZ9AC8ePsfBo3A6Y2DAEYkoS524cG/w2PhWh0KojHV1lRk8ytFDZgWlUxe9av
+         /DSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707305852; x=1707910652;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dlcGl3niyrqEgqteXegO7t1b/+0Yl2m8/0ksFX1JNYk=;
-        b=ctQqzXeixRFgIeXkBeDuA7H2719+jX5zPGCVFcIqS0TB3lbcgvT3u/weaWlPpWshGo
-         Eobua6pgNaLNbKMfpwyasmNUHVM6jdvHvHuRR7KctySKgwTHDJentB/bEKMH+3neUF/l
-         SE+aAYvSVgsY2lwxBwoIh5iZ//CchjkuBK+iSRDcfW3QHt9aTRshD0vNwwPQ4wBFWe0Y
-         mY/T8iu58uAjaRtTaIYIybmBiCvo4+ePqFqEZjFofb+78oaVVXNLgKu+fE5q2uRuNLFA
-         OwAKFZmLEYyHQ9lfU8v0FCnQcUTyic8hirzbTLmpUMhWd0MyAYLkjJqg2pLbAYcnLNWa
-         RdYg==
-X-Gm-Message-State: AOJu0YwSz6W1BODeuJDQ9A71bVNaWIKXKmS46zVivYYkdBCDG+zrhWG0
-	VDIjhoqHtHaXfq+LCCmVGgM29emgut7H+HQkbVUNLEPIg6NKfOga
-X-Google-Smtp-Source: AGHT+IHhCUX2jjAkPgubFzMyy76hD0Xxlq2ESogbUyYzpNFEBgb67F+Ta6WRyJY0bGIudfZoiE7p+A==
-X-Received: by 2002:a05:600c:4fce:b0:40e:fc20:b574 with SMTP id o14-20020a05600c4fce00b0040efc20b574mr4281438wmq.10.1707305851884;
-        Wed, 07 Feb 2024 03:37:31 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVXfFqoZvMNzjNtuEk2FBBeq/zo+aauQxSicOM2td9a+tz8NUXIwEzc8t4NV/BC+ZYMZoGmlcHTt54JzNMAPsTA5WD7Yb5q6FPdrW+63d+see3Dp91Yfn2agcmN48l6WmXvz5zidUzed4YyDsWXhY6ZpQPdNSgyXj8a0tWRbeFj
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id bd24-20020a05600c1f1800b0041004826669sm2081907wmb.42.2024.02.07.03.37.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Feb 2024 03:37:31 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] usb: image: mdc800: Remove redundant assignment to variable retval
-Date: Wed,  7 Feb 2024 11:37:30 +0000
-Message-Id: <20240207113730.2444296-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20230601; t=1707306928; x=1707911728;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TMWJy3Ykt18rUU55JyWersH8Lc1FhDRKaenhhpPJe88=;
+        b=wiYtk6d+J3F+66Lo63rw+R+ZWcTH0WZvrXotkBGFJ4R1stRDuwhWCgSlngLb0d74K8
+         TpnnE6Q4dE3ts1fasZD71B85DfCnCVja9D4oKXOjfaxjntTOVsRqxb9BfuB6rNN/tcPt
+         WP8aGLfjAtQgDVTDtTmr3UDwgyKX33crNgYtDyz7gwegk1K9/5nVO3nqVlPJ+YhPyqi7
+         4+G65KMzrim33R1Tu2gHLyHHB/xflSWvbpsKEysF2ZmXJjg0H6tU0Knv3nf4hrZduWbi
+         GeiZk1Z1JT1/gct5BoE13eIBh+UPZ4z8lXpf9MAsuoDAoPr/6wP3nwWSK9/6DJwuKbhZ
+         Hc1w==
+X-Forwarded-Encrypted: i=1; AJvYcCW2zILPLMQ0Rjbsj3wwW0Ih3J4iJksf9ABVlqDmSHKS4Yl0PJzQnbTU1NiZV6S+m1gYfMgrrOoOkTJEA0UDuhAO6J/uPKeZsAVTlG6hGX/nPfn8tiCm6Lo1nrYrD6t4VoaB3yOPYrhO
+X-Gm-Message-State: AOJu0YxhHqpeKYQzC0giWFLAAg3b5lvyivUSefx4XZ283GVltwI90YqK
+	syLuBIVS1A5uL9DQRevw20l7pIpx4cd9fsESPbx2HBQv8ZLERtPFPVXpD63G50ZDjVd2aQKl2ow
+	PY7rsVqCzh/t0rQBoCbOFIwmCnqc=
+X-Google-Smtp-Source: AGHT+IEaKEVeALso9mpbzrfe2iESCrF5uQjBYRgZMns5CCECuRK3cc97D/TtYfARyrGbR40gD84+QW77z/73uxDoISQ=
+X-Received: by 2002:ad4:5d49:0:b0:68c:b1a4:ecc with SMTP id
+ jk9-20020ad45d49000000b0068cb1a40eccmr4690112qvb.6.1707306928386; Wed, 07 Feb
+ 2024 03:55:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
+ <Zb6D/5R8nNrxveAP@cae.in-ulm.de> <Zb/30qOGYAH4j6Mn@cae.in-ulm.de>
+ <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
+ <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com> <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
+ <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
+In-Reply-To: <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
+From: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date: Wed, 7 Feb 2024 16:55:17 +0500
+Message-ID: <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
+Subject: =?UTF-8?Q?Re=3A_This_is_the_fourth_time_I=E2=80=99ve_tried_to_find_wha?=
+	=?UTF-8?Q?t_led_to_the_regression_of_outgoing_network_speed_and_each_t?=
+	=?UTF-8?Q?ime_I_find_the_merge_commit_8c94ccc7cd691472461448f98e2372c7?=
+	=?UTF-8?Q?5849406c?=
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com, 
+	Linux List Kernel Mailing <linux-kernel@vger.kernel.org>, Greg KH <gregkh@linuxfoundation.org>, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The variable retval is being assigned a value that is not being read
-and is being re-assigned a new value a couple of statements later.
-The assignment is redundant and can be removed.
+On Wed, Feb 7, 2024 at 3:39=E2=80=AFPM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+>
+> Thanks,
+>
+> Looks like your network adapter ends up interrupting CPU0 in the bad case=
+ due
+> to the change in how many interrupts are requested by xhci_hcd before it.
+>
+> bad case:
+>         CPU0    CPU1    ...     CPU31
+> 87:     18213809 0      ...     0       IR-PCI-MSIX-0000:0e:00.0    0-edg=
+e      enp14s0
+>
+> Does manually changing it to some other CPU help? picking one that doesn'=
+t already
+> handle a lot of interrupts. CPU0 could also in general be more busy, poss=
+ibly spending
+> more time with interrupts disabled.
+>
+> For example change to CPU23 in the bad case:
+>
+> echo 800000 > /proc/irq/87/smp_affinity
+>
+> Check from proc/interrupts that enp14s0 interrupts actually go to CPU23 a=
+fter this.
+>
+> Thanks
+> Mathias
+>
 
-Cleans up clang scan warning:
-drivers/usb/image/mdc800.c:634:2: warning: Value stored to 'retval'
-is never read [deadcode.DeadStores]
+root@secondary-ws ~# iperf3 -c primary-ws.local -t 5 -p 5000 -P 1
+Connecting to host primary-ws.local, port 5000
+[  5] local 192.168.1.130 port 49152 connected to 192.168.1.96 port 5000
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  70.9 MBytes   594 Mbits/sec    0    376 KBytes
+[  5]   1.00-2.00   sec  72.4 MBytes   607 Mbits/sec    0    431 KBytes
+[  5]   2.00-3.00   sec  73.1 MBytes   613 Mbits/sec    0    479 KBytes
+[  5]   3.00-4.00   sec  72.4 MBytes   607 Mbits/sec    0    501 KBytes
+[  5]   4.00-5.00   sec  73.2 MBytes   614 Mbits/sec    0    501 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec   362 MBytes   607 Mbits/sec    0             sende=
+r
+[  5]   0.00-5.00   sec   360 MBytes   603 Mbits/sec                  recei=
+ver
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/usb/image/mdc800.c | 1 -
- 1 file changed, 1 deletion(-)
+iperf Done.
+root@secondary-ws ~# echo 800000 > /proc/irq/87/smp_affinity
+root@secondary-ws ~# iperf3 -c primary-ws.local -t 5 -p 5000 -P 1
+Connecting to host primary-ws.local, port 5000
+[  5] local 192.168.1.130 port 37620 connected to 192.168.1.96 port 5000
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   111 MBytes   934 Mbits/sec    0    621 KBytes
+[  5]   1.00-2.00   sec   109 MBytes   913 Mbits/sec    0    621 KBytes
+[  5]   2.00-3.00   sec   110 MBytes   920 Mbits/sec    0    621 KBytes
+[  5]   3.00-4.00   sec   110 MBytes   924 Mbits/sec    0    621 KBytes
+[  5]   4.00-5.00   sec   109 MBytes   917 Mbits/sec    0    621 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-5.00   sec   549 MBytes   921 Mbits/sec    0             sende=
+r
+[  5]   0.00-5.00   sec   547 MBytes   916 Mbits/sec                  recei=
+ver
 
-diff --git a/drivers/usb/image/mdc800.c b/drivers/usb/image/mdc800.c
-index 67f098579fb4..7b7e1554ea20 100644
---- a/drivers/usb/image/mdc800.c
-+++ b/drivers/usb/image/mdc800.c
-@@ -631,7 +631,6 @@ static int mdc800_device_open (struct inode* inode, struct file *file)
- 	mdc800->camera_busy=0;
- 	mdc800->camera_request_ready=0;
- 
--	retval=0;
- 	mdc800->irq_urb->dev = mdc800->dev;
- 	retval = usb_submit_urb (mdc800->irq_urb, GFP_KERNEL);
- 	if (retval) {
--- 
-2.39.2
+iperf Done.
 
+Very interesting, is CPU0 slower than CPU23 by 30%?
+
+--=20
+Best Regards,
+Mike Gavrilov.
 
