@@ -1,94 +1,107 @@
-Return-Path: <linux-usb+bounces-5987-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5988-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3057584C6F9
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 10:12:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A76184C7D4
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 10:47:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEC6E2876A2
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 09:12:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8EB21F2AF14
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 09:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D62A620B0E;
-	Wed,  7 Feb 2024 09:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35CCE224EF;
+	Wed,  7 Feb 2024 09:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="P6YFPP/P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCCA21106;
-	Wed,  7 Feb 2024 09:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F87225D6
+	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 09:46:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707297135; cv=none; b=Ik2iYYKfLS0FSR2feLdDyBub2ZcfsCtYcdqZrhvEKJTlO2IqJ5ayEoiyjaR/DVOk828Inmwtsa8tnB29IAg731WdYU30fGbGp0+fv8vAFTt4h9GYcBqzo0mlBI41oh7eas6UhN4OinZaaq5gfyy2ZiskpTYlPF8DjHQFn/nwSdU=
+	t=1707299203; cv=none; b=YTz6Zr6WgwwoaTfqbpyrN7kgqjIGp69exXMLODPg7i5p+seVBpLfXXMEeWoANOIHsuF33Axa7sCn2slC4VstZ5Lc2QDRcs8PaZ0ZMgaXVksK+cJDbLNQSeDzSWOOzCDfTRZ5xudZsL659tPDybed1bcTzcHTRo46wz30LU6CoAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707297135; c=relaxed/simple;
-	bh=U4yqjF9Qkz7xKWRLQercCjsXrQsl0I3MKjhXB65d8ao=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=aSkWTPVjSWdFw1qNo+JGQ2t0hMlv0xp54xgm+99bkoByKK6Hl8ZYifVFCNkHZ8Ps1z3m5YpD65VN1PBevVOVZX1wBQ/D51U5NLa/h62kON1839sUsnYIDd0kIsa8BVKBVyvJ7tUu0apuIqojc7CJWCa2hIk3/ZBOb0eJEgWnzqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1rXdyS-0001x7-Ih; Wed, 07 Feb 2024 10:12:08 +0100
-Message-ID: <b0388b9e-5ec2-422d-94ce-192b33fef16d@leemhuis.info>
-Date: Wed, 7 Feb 2024 10:12:07 +0100
+	s=arc-20240116; t=1707299203; c=relaxed/simple;
+	bh=iofSn4cHL8UGUn06Qwr8czhO8Kqd3IWpLgmmWqCBnoc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VbhRNSkczfH7NpVoplMk4VztDTEgo4zumSzhYC4Px99WLWAa93VV+ZwGoXy2LtwHd/lNK1jvuaonQYI8CHgvtoOdcoWN3V29xgphZ8OkGHurQTyMh8IyG2dOXO4Qzsq+9hAAM5sz6THkQB9VqFXGtEqcztBlwgDyqP5D28ESit8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=P6YFPP/P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF235C433F1;
+	Wed,  7 Feb 2024 09:46:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1707299203;
+	bh=iofSn4cHL8UGUn06Qwr8czhO8Kqd3IWpLgmmWqCBnoc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=P6YFPP/PpeZFjNJplzzTeRXNtpgcJKetwKeVrVFedPIcPMPeRM+KLYpKzVGBY+NuD
+	 GmKZmae3XRMByxqw8l8ADHnzkEn+Q68mgD/nug9lpgOTr7DfehgDg1k5Oq34pm/H17
+	 QUVOeLhS/XEYMXxIa8GdL7ayuWsORKabcyGac3ls=
+Date: Wed, 7 Feb 2024 09:46:40 +0000
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+	linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com
+Subject: Re: [PATCH] usb: common: add driver for USB Billboard devices
+Message-ID: <2024020712-trimming-moonlit-8ca1@gregkh>
+References: <20240206125623.1208161-1-niklas.neronin@linux.intel.com>
+ <2024020641-relation-embattled-1fb5@gregkh>
+ <ZcJQuwfXctmzZ+HX@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: kernel NULL pointer dereference on hotplug
-Content-Language: en-US, de-DE
-From: Thorsten Leemhuis <regressions@leemhuis.info>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>,
- Olliver Schinagl <oliver@schinagl.nl>
-Cc: Andreas Noever <andreas.noever@gmail.com>,
- Michael Jamet <michael.jamet@intel.com>,
- Yehezkel Bernat <YehezkelShB@gmail.com>,
- linux-usb <linux-usb@vger.kernel.org>,
- Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-References: <c24c7882-6254-4e68-8f22-f3e8f65dc84f@schinagl.nl>
- <20240204064049.GD8454@black.fi.intel.com>
- <705fd33a-18af-44b2-b6ee-57e3169b7032@leemhuis.info>
-In-Reply-To: <705fd33a-18af-44b2-b6ee-57e3169b7032@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1707297133;5c7c1cde;
-X-HE-SMSGID: 1rXdyS-0001x7-Ih
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZcJQuwfXctmzZ+HX@kuha.fi.intel.com>
 
-On 07.02.24 07:13, Linux regression tracking (Thorsten Leemhuis) wrote:
+On Tue, Feb 06, 2024 at 05:31:07PM +0200, Heikki Krogerus wrote:
+> On Tue, Feb 06, 2024 at 02:47:04PM +0000, Greg KH wrote:
+> > On Tue, Feb 06, 2024 at 02:56:23PM +0200, Niklas Neronin wrote:
+> > > This patch introduces the USB Billboard Driver. Its purpose is to display,
+> > > via debugfs, basic information about connected Billboard devices.
+> > 
+> > Very cool, I was wondering if/when someone was going to write a kernel
+> > driver for this type of hardware.
+> > 
+> > But why debugfs?  Normally that is locked down for root-access-only by
+> > the system (rightfully so), why is this information restricted?
+> > 
+> > And why is this a kernel driver at all?  Why can't you just do this in
+> > userspace and add support to 'lsusb' for it?
 > 
-> On 04.02.24 07:40, Mika Westerberg wrote:
->> On Fri, Feb 02, 2024 at 05:47:01PM +0100, Olliver Schinagl wrote:
->>>
->>> I noticed this nasty kernel NULL pointer dereference yesterday on
->>> 6.7.2-arch1-1 (haven't done this in a while) but also today, after updating
->>> to 6.7.3-arch1-1 it's still there, so dumping the panic here. Hopefully
->>> it'll be resolved by 6.7.4-arch1-1.
->>
->> Thanks for the report.
->>
->>> The thunderbolt gbit adapter always worked in the past, so this seems like a
->>> regression. Anyway, here's the log.
+> I'm to blame for that. I wanted a way to see the billboard information
+> when something goes wrong with the alt mode entry in an environment
+> where I don't necessarily have tools like lsusb - I think I need to
+> include usbtools package to my Buildroot to get that app. I also
+> proposed debugfs, because for me this would be purely for debugging
+> purposes.
 
-FWIW, Leon Weiß (BCCed) just posted another NULL pointer deference issue
-in 6.7 and found the culprit; for details see:
-https://lore.kernel.org/all/38c253ea42072cc825dc969ac4e6b9b600371cc8.camel@ruhr-uni-bochum.de/
+But you are also going to want this info in lsusb for all of the
+non-root users, so why not just do it in one place?
 
-Sadly Leon's report lacks a backtrace we had in this thread (
-https://lore.kernel.org/all/c24c7882-6254-4e68-8f22-f3e8f65dc84f@schinagl.nl/
-), so it might be something totally different. Leon's problem afaics
-also happens on unplug while this one on hotplug. But well, I thought I
-better quickly mention it here anyway so everyone is aware of it.
+> Later I was hoping to use this information in the Type-C drivers to
+> help in situations where the alt mode entry fails and UCSI does not
+> give any information about the partner (which unfortunately is the
+> reality on several platforms).
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+Sure, but this is just debugfs, no interaction with any other kernel
+code at the moment, so we have no hint anyone else might want it :(
+
+> This is really just a proposal - perhaps we should have started with
+> RFC first. But I think Niklas has done a great job in any case.
+
+RFC might have been nice :)
+
+Anyway, patches for lsusb are gladly accepted, let's keep this out of
+debugfs for now as again, almost no one has access to it.  But if you do
+want it in debugfs, please fix up the code and resubmit it with some
+more justification.
+
+thanks,
+
+greg k-h
 
