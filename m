@@ -1,95 +1,194 @@
-Return-Path: <linux-usb+bounces-5983-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5984-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9221184C5BC
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 08:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 680E684C67D
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 09:44:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35ED71F2521A
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 07:47:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7FB21F258BC
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 08:44:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C5061F932;
-	Wed,  7 Feb 2024 07:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AzEYKvKO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E229420B0C;
+	Wed,  7 Feb 2024 08:44:24 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20A2200A4
-	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 07:47:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5AA5208B4
+	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 08:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707292056; cv=none; b=hPOqlYBYk9UhwpmZ2Rjz1U4R91g0DwVGzgXBCzTH6wwNDHWlj5NouCPg/e31W50vZG+SmcoOGxi+wzg6e6Z4nyYpuEDj2fCb2VRiDcXLU3WTybEyW87XhR6Awxm4x1KWIBHc65exPVHELfwGg3mh4tCkMpSV38O2JRHPMonLrtY=
+	t=1707295464; cv=none; b=RnzMNuBEyfpPHuyG4XQwV5SAcqQuvoki8kwCee0GFYVI/sI0bE8R8+UPf2yZCxf6tX5X+XDqJsgemRX7Y/4oHhFHUYudPrWJwrvyiKoH17DU3ZnI+apO6Pu+veI2Sg0HmNg3rUcIZ5+1rSwwuBlh9GyubVTzZRgCCe3AG9KKGEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707292056; c=relaxed/simple;
-	bh=4xayYUXh0t13H1KOnYmMsPTGwcOnRhw9wZLfwwzj1TQ=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=eBSFvSwBY1jYTL0HubvAJji6Bo6Lpg3+qsNi9Y0mbTHMok1RwAGp/TeJchT1GdsmtpZdtOaIJKbbaj0lZ1j/wykvkneheCJ8doTLPtVtghV+2CC/lMB+PAHALeqrUrVVkznza7zocRpLKPASHjos3H4lHdJBtmrJnfGxMq6VtII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AzEYKvKO; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707292055; x=1738828055;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=4xayYUXh0t13H1KOnYmMsPTGwcOnRhw9wZLfwwzj1TQ=;
-  b=AzEYKvKOQ6YueigwXvp7goDVUCUgeAmH7oedeVRKUev0Sk2ffTRGYVYG
-   GSrinebOcgBIB8HfSdQX02lVKEAZWCjbxySnQUBuUZQAafSF5zZ0MHxVL
-   RVx0nZay+lJlDUZerbwJFidnjWhwV+izfF4ZGYFm0LrHk6Lx1M7bqdPHM
-   pak+fkyiH811Xl6z/yjcDb/J66knMAHSnHM11CMnX3AA6w1dbibEk3Xyw
-   3praA8Bk/8XrI2yDVdjI8Jnc44suNPx4TQydih/94R+N3Yd1f9uVVnapf
-   IbNtFHMnWkPKLCKb1MBz9ByRVm9N0K7D/ldWzAmMFKewDL0aKSKHjuBhX
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="23410625"
-X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
-   d="scan'208";a="23410625"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 23:47:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="824421763"
-X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
-   d="scan'208";a="824421763"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 06 Feb 2024 23:47:23 -0800
-Message-ID: <8c9d7456-8c0c-04e1-0ae6-dbd5032c8a06@linux.intel.com>
-Date: Wed, 7 Feb 2024 09:48:58 +0200
+	s=arc-20240116; t=1707295464; c=relaxed/simple;
+	bh=eIlROG4B7EcDoLKh81C4IKrc0N6l4onNNKJepMb4FYg=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=dAiR8bQwYk37nUPHLpat82G5OT6fsrz/SwVKpkjU+wjLkAymb2sUck41XzJDmjS0BbQb1pKaBIU+RDVvYMgqoNU5yxvjMzz6EOlAZFonPsBYFg3wTLLhDgMeN8+8PLHf/NT0XHcduo9Bo+YSzZ/noD5AXvCncASD1de6U2lrg74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7bbb3de4dcbso43241039f.1
+        for <linux-usb@vger.kernel.org>; Wed, 07 Feb 2024 00:44:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707295462; x=1707900262;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yTU86qj7si/4Pn1nPUigCFSYaL0c1/3ps+DVLuqddlA=;
+        b=Vlx3Xnmoec8vufFkBWm8DOH1/f6OTDHhahmw/EvsAYSUGIl8tGTWa8DxB7EMNNFDEC
+         ZgU42jCJFNjMuuSmmHrs9ihTY0lhty59wbrpLQgI9fNdKL84sbDwOQwNNhdtL1qUA2zo
+         sm9VjTkdI41LVRsymzCBLHU19PfEGo4VLXnWGWgdpD+9VSClzSFNr1xE7oLNmDR8prZX
+         fkdORlQd9pyM9DEXmquOUdsWDpdSFNxkqMBqFtuHPwBzVV3xtjWtPIOApbX3htpbUdfp
+         pfFYJvS76FA5N4TKqE1JE6njJgRNKxq2wikfZ9n/3mE47a6NTiOO7QNEbuUUejfOwiSK
+         IB0w==
+X-Gm-Message-State: AOJu0YxMRzV5zHs/n5gLxFuvpCFOeqBe8X4r8Pf5p1YTzdtLcF3d8/72
+	2CybCHnQwjJM5matbtjyMsu/HWIq1EcUes/zRyRloRLKXxIY1nPv7AWQd4T5XHzcP+3pfVNjYtu
+	QnRbSwwAQVDxcRXf+teUVuEuMEKb7VBDsvvHlk62X9I8TIrZYBXdaREk=
+X-Google-Smtp-Source: AGHT+IHnhhpmRjLY4XytKwgZN/toC6Zm16q/YGvCONoGoYwuTNbQo15GrTcFly/ahghkj6dNG2hLmkQaOG9Tw9gXJau9ScLBQnrU
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Greg KH <gregkh@linuxfoundation.org>,
- Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com
-References: <20240206125623.1208161-1-niklas.neronin@linux.intel.com>
- <2024020641-relation-embattled-1fb5@gregkh>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] usb: common: add driver for USB Billboard devices
-In-Reply-To: <2024020641-relation-embattled-1fb5@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6602:2dcc:b0:7c3:e384:d8a8 with SMTP id
+ l12-20020a0566022dcc00b007c3e384d8a8mr178309iow.2.1707295462099; Wed, 07 Feb
+ 2024 00:44:22 -0800 (PST)
+Date: Wed, 07 Feb 2024 00:44:22 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008b96230610c6b3fe@google.com>
+Subject: [syzbot] [usb?] [media?] possible deadlock in vb2_video_unregister_device
+From: syzbot <syzbot+3b1d4b3d5f7a358bf9a9@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, m.szyprowski@samsung.com, mchehab@kernel.org, 
+	syzkaller-bugs@googlegroups.com, tfiga@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    ed5551279c91 Merge 6.8-rc3 into usb-next
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=16940d7be80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=28a3704ea90ef255
+dashboard link: https://syzkaller.appspot.com/bug?extid=3b1d4b3d5f7a358bf9a9
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14450a38180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1603629fe80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/10b543a7171a/disk-ed555127.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/dc10f27643e8/vmlinux-ed555127.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/bb6389e754b9/bzImage-ed555127.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3b1d4b3d5f7a358bf9a9@syzkaller.appspotmail.com
+
+usb 1-1: SerialNumber: syz
+usb 1-1: config 0 descriptor??
+usbtv 1-1:0.0: Fushicai USBTV007 Audio-Video Grabber
+usb 1-1: USB disconnect, device number 2
+============================================
+WARNING: possible recursive locking detected
+6.8.0-rc3-syzkaller-00047-ged5551279c91 #0 Not tainted
+--------------------------------------------
+kworker/0:2/694 is trying to acquire lock:
+ffff888109f20b70 (&usbtv->vb2q_lock){+.+.}-{3:3}, at: vb2_video_unregister_device drivers/media/common/videobuf2/videobuf2-v4l2.c:1269 [inline]
+ffff888109f20b70 (&usbtv->vb2q_lock){+.+.}-{3:3}, at: vb2_video_unregister_device+0x12b/0x2d0 drivers/media/common/videobuf2/videobuf2-v4l2.c:1245
+
+but task is already holding lock:
+ffff888109f20b70 (&usbtv->vb2q_lock){+.+.}-{3:3}, at: usbtv_video_free+0x28/0x70 drivers/media/usb/usbtv/usbtv-video.c:966
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&usbtv->vb2q_lock);
+  lock(&usbtv->vb2q_lock);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+7 locks held by kworker/0:2/694:
+ #0: ffff888106ad2138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x789/0x15d0 kernel/workqueue.c:2608
+ #1: ffffc90001c0fd80 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x7eb/0x15d0 kernel/workqueue.c:2609
+ #2: ffff88810af2f190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:990 [inline]
+ #2: ffff88810af2f190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1be/0x4f40 drivers/usb/core/hub.c:5840
+ #3: ffff888107799190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:990 [inline]
+ #3: ffff888107799190 (&dev->mutex){....}-{3:3}, at: usb_disconnect+0x10a/0x910 drivers/usb/core/hub.c:2287
+ #4: ffff88810779a160 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:990 [inline]
+ #4: ffff88810779a160 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1095 [inline]
+ #4: ffff88810779a160 (&dev->mutex){....}-{3:3}, at: device_release_driver_internal+0xa4/0x610 drivers/base/dd.c:1292
+ #5: ffff888109f20b70 (&usbtv->vb2q_lock){+.+.}-{3:3}, at: usbtv_video_free+0x28/0x70 drivers/media/usb/usbtv/usbtv-video.c:966
+ #6: ffff888109f20ae0 (&usbtv->v4l2_lock){+.+.}-{3:3}, at: usbtv_video_free+0x32/0x70 drivers/media/usb/usbtv/usbtv-video.c:967
+
+stack backtrace:
+CPU: 0 PID: 694 Comm: kworker/0:2 Not tainted 6.8.0-rc3-syzkaller-00047-ged5551279c91 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
+ check_deadlock kernel/locking/lockdep.c:3062 [inline]
+ validate_chain kernel/locking/lockdep.c:3856 [inline]
+ __lock_acquire+0x210a/0x3b30 kernel/locking/lockdep.c:5137
+ lock_acquire kernel/locking/lockdep.c:5754 [inline]
+ lock_acquire+0x1ae/0x520 kernel/locking/lockdep.c:5719
+ __mutex_lock_common kernel/locking/mutex.c:608 [inline]
+ __mutex_lock+0x175/0x9d0 kernel/locking/mutex.c:752
+ vb2_video_unregister_device drivers/media/common/videobuf2/videobuf2-v4l2.c:1269 [inline]
+ vb2_video_unregister_device+0x12b/0x2d0 drivers/media/common/videobuf2/videobuf2-v4l2.c:1245
+ usbtv_video_free+0x4a/0x70 drivers/media/usb/usbtv/usbtv-video.c:970
+ usbtv_disconnect+0x5c/0xd0 drivers/media/usb/usbtv/usbtv-core.c:138
+ usb_unbind_interface+0x1e5/0x960 drivers/usb/core/driver.c:461
+ device_remove drivers/base/dd.c:569 [inline]
+ device_remove+0x11f/0x170 drivers/base/dd.c:561
+ __device_release_driver drivers/base/dd.c:1272 [inline]
+ device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1295
+ bus_remove_device+0x22c/0x420 drivers/base/bus.c:574
+ device_del+0x39a/0xa50 drivers/base/core.c:3814
+ usb_disable_device+0x36c/0x7f0 drivers/usb/core/message.c:1416
+ usb_disconnect+0x2e1/0x910 drivers/usb/core/hub.c:2296
+ hub_port_connect drivers/usb/core/hub.c:5352 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5652 [inline]
+ port_event drivers/usb/core/hub.c:5812 [inline]
+ hub_event+0x1be0/0x4f40 drivers/usb/core/hub.c:5894
+ process_one_work+0x886/0x15d0 kernel/workqueue.c:2633
+ process_scheduled_works kernel/workqueue.c:2706 [inline]
+ worker_thread+0x8b9/0x1290 kernel/workqueue.c:2787
+ kthread+0x2c6/0x3a0 kernel/kthread.c:388
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:242
+ </TASK>
 
 
-> I'm not going to actually review this patch, as you didn't follow the
-> rules that all Intel kernel developers need to follow, sorry.  Please
-> work with your Linux kernel team to do this correctly, otherwise I have
-> can't do anything with it even if I did want to merge it :(
-> 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Sorry about this.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-I should at least have added my tags as we did do internal review rounds
-of this patch, and told Niklas that it now looks upstream ready and can be
-submitted.
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-Thanks
-Mathias
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
