@@ -1,184 +1,95 @@
-Return-Path: <linux-usb+bounces-5979-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5980-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D27084C1DE
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 02:25:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 229BC84C4DC
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 07:14:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF82B1F255EC
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 01:25:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB8E01F25C92
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 06:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77334D27D;
-	Wed,  7 Feb 2024 01:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Bwt5UhpS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B50161CD26;
+	Wed,  7 Feb 2024 06:14:06 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD9ADF44;
-	Wed,  7 Feb 2024 01:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AAE71BDE7;
+	Wed,  7 Feb 2024 06:14:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707269113; cv=none; b=eP3Hv84hNWH8h9XS7p6LZ/FyTBEw1OpDctx7ksBKD7sVZolNQMYF8lv7e5pb0Yfv4kQ4Aw8n29wsQeFrxzRiXO0rBCE2wbwpx5mUbxIkxePkc8pewWYCWmUXIB7HM0chJsAuAGPBQajhTVyLSFwiO9Sl4yr5cR7MXHb6xOAo6Jo=
+	t=1707286446; cv=none; b=ci2H5V95n9ab2dvA2h575rmDOBWjNN9TM3SaBjadzl2H1aaFVSTW/tWuH60sX4cCOid0/mkG20mRtzTgvsKnVrkA2fWCCjbP1z9aicAABOgNGnINad9KPm+g/N58zJo0JalLH7amUUsqmjST+8LoUCMX/tu2WvUSwBYX+kwTBQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707269113; c=relaxed/simple;
-	bh=YNWm7VCwUiMbQ4q8yVKywcJhspzvtPPmE2IpmVn/494=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SWhJHLViH1NqaELIPvgpNKusgfJq/xnsVjwWu7+RUQLKUI9XzmL6eXl3GF7UFo/d8qnOwrTIMcFgscTZOiapIDy0JMdo6+4iFGLSRL86OGtNOtvPtTGp/Ey+MHl1NQoGGs6PhaggZgepndAblqtx/ae1p2zQXJbTd3yFCSmU1Eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Bwt5UhpS; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 416N9VN0028901;
-	Wed, 7 Feb 2024 01:24:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=IgPl62Ica5DUxeR7iWfeniS7QkgQTS2Ho8V6ORfH3XA=; b=Bw
-	t5UhpSEDOH4ZP8oIiK5+UqhoT8yL35uL3wgR2YDVILcXOFHxpkgzm2HDIBItbNec
-	FCow4tRU+0pYxlA4ZZnC/Sj1eIWKb5afDzpODwBQ8W0Fu5HcAKm+0RWGORHiM6AA
-	0PB/2k+TKStetZoxOEmYvNSTxoWfXHXQFWX1OQ50NsGEMPAE18bswMIZyeDoGR2+
-	s7ClufMfQ9Fh1OhGJsNHkIgmJqwMUy0Kbp1H5TCx4QMgahhqPP6CMh+maGKybssQ
-	aYosRASaNeW0XR0s/+w5vPhqaPkX97mu8G5KxKRgVx7mLoybtvhwxAXgW+peGxAL
-	Ej5F7DeHuGoYO3eVGgJA==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w3ub6gh8j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 07 Feb 2024 01:24:49 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4171Ol18029927
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 7 Feb 2024 01:24:47 GMT
-Received: from [10.110.7.251] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 6 Feb
- 2024 17:24:47 -0800
-Message-ID: <dbe544de-dc04-59a8-6642-883fc00214f3@quicinc.com>
-Date: Tue, 6 Feb 2024 17:24:46 -0800
+	s=arc-20240116; t=1707286446; c=relaxed/simple;
+	bh=GYDfQsfL1MNM892yj8XH8lDpUFsNeRA0UwuaV6bh1us=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N+89D+VIYXMTefszVb4lLQxfXGXE0tW40vtqiZJDD7yKPkXB2hGijCkKzI+GC/tZa1y8CfR/8LSSH+Szicd34hd3jje4CRHMOnQv8/9Kj6+5FJ6uyzfhndH4XmnBaSDeoMY2cGg9DgmmmP3EDi5ackENahgfqq7Ki5YdFRlUpc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1rXbBy-0005JF-8A; Wed, 07 Feb 2024 07:13:54 +0100
+Message-ID: <705fd33a-18af-44b2-b6ee-57e3169b7032@leemhuis.info>
+Date: Wed, 7 Feb 2024 07:13:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v13 48/53] ALSA: usb-audio: mixer: Add USB offloading
- mixer control
-Content-Language: en-US
-To: Takashi Iwai <tiwai@suse.de>
-CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>
-References: <20240203023645.31105-1-quic_wcheng@quicinc.com>
- <20240203023645.31105-49-quic_wcheng@quicinc.com>
- <871q9pwy0l.wl-tiwai@suse.de>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <871q9pwy0l.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla Thunderbird
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: kernel NULL pointer dereference on hotplug
+Content-Language: en-US, de-DE
+To: Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Olliver Schinagl <oliver@schinagl.nl>
+Cc: Andreas Noever <andreas.noever@gmail.com>,
+ Michael Jamet <michael.jamet@intel.com>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>,
+ linux-usb <linux-usb@vger.kernel.org>,
+ Linux kernel regressions list <regressions@lists.linux.dev>
+References: <c24c7882-6254-4e68-8f22-f3e8f65dc84f@schinagl.nl>
+ <20240204064049.GD8454@black.fi.intel.com>
+From: "Linux regression tracking (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+In-Reply-To: <20240204064049.GD8454@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: bVpCbC7ibiiisGB-GI8oyNyTNgqoj7sy
-X-Proofpoint-ORIG-GUID: bVpCbC7ibiiisGB-GI8oyNyTNgqoj7sy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-06_16,2024-01-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- spamscore=0 bulkscore=0 priorityscore=1501 phishscore=0 clxscore=1015
- malwarescore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401310000 definitions=main-2402070009
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1707286444;67e4569d;
+X-HE-SMSGID: 1rXbBy-0005JF-8A
 
-Hi Takashi,
+[CCing the regression list, as it should be in the loop for regressions:
+https://docs.kernel.org/admin-guide/reporting-regressions.html]
 
-On 2/6/2024 4:57 AM, Takashi Iwai wrote:
-> On Sat, 03 Feb 2024 03:36:40 +0100,
-> Wesley Cheng wrote:
+On 04.02.24 07:40, Mika Westerberg wrote:
+> On Fri, Feb 02, 2024 at 05:47:01PM +0100, Olliver Schinagl wrote:
 >>
->> In order to allow userspace/applications know about USB offloading status,
->> expose a sound kcontrol that fetches information about which sound card
->> index is associated with the ASoC platform card supporting offloading.  In
->> the USB audio offloading framework, the ASoC BE DAI link is the entity
->> responsible for registering to the SOC USB layer.  SOC USB will expose more
->> details about the current offloading status, which includes the USB sound
->> card and USB PCM device indexes currently being used.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> I noticed this nasty kernel NULL pointer dereference yesterday on
+>> 6.7.2-arch1-1 (haven't done this in a while) but also today, after updating
+>> to 6.7.3-arch1-1 it's still there, so dumping the panic here. Hopefully
+>> it'll be resolved by 6.7.4-arch1-1.
 > 
-> The concept is understandable, but the control element name ("SNDUSB
-> OFFLD playback available") looks non-intrusive and non-conformant.
-> Use a bit more understandable name instead.
+> Thanks for the report.
 > 
-> This provides a card number where the offload driver is bound, and the
-> name should indicate something about that.
+>> The thunderbolt gbit adapter always worked in the past, so this seems like a
+>> regression. Anyway, here's the log.
 > 
+> Can you try to bisect this, preferably using the mainline kernel? Let me
+> know if you need instructions how to do this.
 
-Hmmm, does USB sound have a naming convention that it usually follows 
-for mixer/control interfaces?
+Olliver, did you try a bisection?
 
-For something that is more closely related, how about:
-"USB offload capable card"
+BTW, I'm working on a document for the Linux kernel sources that
+explains a Linux kernel bisection. Might be helpful:
 
-> Also, about the implementation:
-> 
->> +static int
->> +snd_usb_offload_create_mixer(struct usb_mixer_interface *mixer,
->> +		       const struct snd_kcontrol_new *new_kctl)
->> +{
->> +	struct snd_kcontrol *kctl;
->> +	struct usb_mixer_elem_info *elem;
->> +
->> +	elem = kzalloc(sizeof(struct usb_mixer_elem_info), GFP_KERNEL);
->> +	if (!elem)
->> +		return -ENOMEM;
->> +
->> +	elem->head.mixer = mixer;
->> +	elem->val_type = USB_MIXER_S32;
->> +	elem->control = 0;
->> +	elem->head.id = 0;
->> +	elem->channels = 1;
->> +
->> +	kctl = snd_ctl_new1(new_kctl, elem);
->> +	if (!kctl) {
->> +		kfree(elem);
->> +		return -ENOMEM;
->> +	}
->> +	kctl->private_free = snd_usb_mixer_elem_free;
->> +
->> +	return snd_usb_mixer_add_control(&elem->head, kctl);
-> 
-> This control has almost little to do with the standard USB interface,
-> and it'll be much simpler if you create a raw control element.
-> Pass the bus or the sysdev to private_data, and that's all you need in
-> the get callback.
-> 
+https://www.leemhuis.info/files/misc/How%20to%20bisect%20a%20Linux%20kernel%20regression%20%e2%80%94%20The%20Linux%20Kernel%20documentation.html
 
-Sure, I'll remove the need to register over the SND USB mixer API, and 
-just use the core SND control APIs.
-
-> Also, don't forget to set the proper access bits (it's read-only).
-> 
-
-Thanks for pointing this out, will fix.
-
-Thanks
-Wesley Cheng
-
-> 
-> thanks,
-> 
-> Takashi
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
