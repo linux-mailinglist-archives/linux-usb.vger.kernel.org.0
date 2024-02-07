@@ -1,110 +1,132 @@
-Return-Path: <linux-usb+bounces-6014-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6016-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BC8E84D18F
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 19:46:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DA7884D21F
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 20:15:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B81D1C22723
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 18:46:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 492B3282C5C
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 19:15:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC64312C545;
-	Wed,  7 Feb 2024 18:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B1A98564B;
+	Wed,  7 Feb 2024 19:15:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CDlba+cu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167748593B
-	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 18:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E3B85286;
+	Wed,  7 Feb 2024 19:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707331408; cv=none; b=Bl5nM4xDfas6Q2rvjBw2Hg1OjeMUsRDAUtdns/2ckgLpwmPkXxplgQMPzA7qqTkVk1AfI6OYxFaTv3qUWqmsDjU8gRgOG/mqLuKCDcrHzJjoLa3M3IaUzpcV/2g8ph++nDYWFYMoYIIDTf7q2fqtluU+UKY+lZAKU9+alAobvFg=
+	t=1707333301; cv=none; b=a8LMcn8F1sZ+I8MDHknlSCyQPguuIlo7NVyuuXJ/Yci8YVNzcQsgbI+QlfA3lBfYixsyB5mgLWEak6EDZqq6NcMCLuh7FJkya2XF5S92hTPlzaYy8QWRwU4SOtur51K2xG8smr50bsVsydvnYlLND31ivD0Q7spYKHKvGqweL5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707331408; c=relaxed/simple;
-	bh=99DDKinv2mNpVy8WsuExRMgppG6Feg6EIY4nGansGMc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nT4/3u5wt2cGDcOQpvxYNFbr2llnyvD/b+nrGiM5F2lzuQBaXHUFa/DilouNltrZ+E4o5fKY2G+V+6giFDLagZ4HNu9ILMu/G8BU2WZyt5RKgew8elYoO3/RUpKPog57yUQmvUp6lwVWPcrh1ZYNA9lyLE0xcO0S/WIu9lFIoss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rXmtD-00080z-6a; Wed, 07 Feb 2024 19:43:19 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rXmtC-0054YX-Er; Wed, 07 Feb 2024 19:43:18 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rXmtC-00HRtd-1C;
-	Wed, 07 Feb 2024 19:43:18 +0100
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Mark Brown <broonie@kernel.org>
-Cc: kernel@pengutronix.de,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v3 27/32] usb: gadget: max3420_udc: Follow renaming of SPI "master" to "controller"
-Date: Wed,  7 Feb 2024 19:40:41 +0100
-Message-ID:  <5caf03b6f321a9870aabb9282f1f22211d052740.1707324794.git.u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
-References: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
+	s=arc-20240116; t=1707333301; c=relaxed/simple;
+	bh=W5k1pVrv5LT4aNFcxZhVlTsA53EzW+dLt1NS9jhtrtM=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=hC3782fUkmGw1IjNKPAdoXXIKi6PV3uPBpd3TCtI0pNMqPxGTBiNBCmf+ey0+o/8AHGroClt+rcWIphoYta8QyWwiUat9TLM00TLYecA4s8ruDhNDwdVpNQ/tQXnHU12kqx0LqpJ3Dg7T9zEVNVrwZ0mU0AydiaMBysHEIF76yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CDlba+cu; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5116643c64eso1784454e87.3;
+        Wed, 07 Feb 2024 11:14:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707333297; x=1707938097; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X+zCCH6HGB9saSmIAWX6wClWcswuwqRqYjvjldtPTEU=;
+        b=CDlba+cuUfRuJE9pqgkXHQanIQxAAJK2Lgx9mkKE7wbRUfWMCu0XMTqnHYwviioVND
+         BsY2/d1EdKOPuc5g5LAbkhqRzG7Rj+yPB1PNPCIeGgzzZlZUx8wTqbgtr/zIXs3X6Thy
+         DVNCmfvaGKHTln8qjfNCkckR3mb7VcvdK0t6wYw8j6ac4vcEmBIe9Z0EBWlv7f8Jq9eR
+         W/g+dPwPWGjp9MTiueGHrLzgmUsF0qXpJ7aQROjQ5lEZbS8XX/u1IDPQZHBLYobdzxdb
+         sAeIi9k7pVE3zTvS03IEB3YelQaJX5bdQb3d25+8oa/L8MOVSoYYIJnMUN45MA1inDrN
+         dm9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707333297; x=1707938097;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X+zCCH6HGB9saSmIAWX6wClWcswuwqRqYjvjldtPTEU=;
+        b=LYsbGNceIEJyXXinEXEdtjDC6RkGhRnkhmVZteYU2Ux1bXUJnLMx1ucwJEIpD7JEj3
+         NZe/P0E0X5KzMpNND1Nt7TN3zsHxiFWjT+8HYlZdr2UqNP7o++3kR8ia54Cmg2xHFvef
+         +DB5cY1qWYKCCR2VJqHlzQuN80OTT/dcoKOw5HgGzlS6pHotmGnZOT/RYhDcM9XKZzv1
+         Ydknn37Tv2XYidU+Z+Hqmv+HYgdOLrlPjuRvJX/FTGdiY19wX0HOhqeRTjaXp5Oj78Je
+         KPC3HYhha+YvYPdJP4zx2jOpfzoWjHNURCEaZclHm15YS4awJg6t7fLA95Bx82tDLPA7
+         Vz5A==
+X-Gm-Message-State: AOJu0YwIliP7rkaY+Rj+4rVaA2MxQp01OAkR1gaB6VND8rYCjuFFKbGp
+	Kz7rWJeCMwqfybHNszul6h9GvtC8+zE82nnKasgRA+6LUe4d4kzW
+X-Google-Smtp-Source: AGHT+IHKcU4DfAYC+ybYnEs2gLTCHxySWNSBciYIelNeHYnUZ8fPh5fzMREyBiwbBGy3clFkEm9THA==
+X-Received: by 2002:ac2:5e9b:0:b0:511:484a:dacf with SMTP id b27-20020ac25e9b000000b00511484adacfmr4036038lfq.30.1707333297152;
+        Wed, 07 Feb 2024 11:14:57 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVJaf54joY5YOnJj/Ss0Nd4hGJAqbezIWP2b1kTCrTyJg/4kpV5SggnJoOmsqVTGPnvnHvEnferyiH4GbdzBG4LQm6pn1iv5BDIMNxUvBv8VJNm5N/lsBsxwJlU2jGPAXj99f37HvrMGAhcqUqsHlqSaMLf9B9mFARdFI3KYtOcBzv2VrnLMcW1GP09qRny/f/1QMGzophtFIEHK81I9Jm+bAEUXLyGy02Cx51YApKq4yUsS6xGpdIcDZcN5uLo0nJqvgm5ffecpOmPbapHhRS6FYUFZv5zUO7xBo0pqspczxgnOn7H83ParBlVQJTnltkFQikDVnT5Caxo5F3+rDzhbqQ4kEF4fbH8Ebt9l6aVY+tqMx7MvyHX2BKeif1ecj1CUK2UZ8WaihZYC8VVckXwl6PWXhC8Go07t/NE0Jmx4rziXLS7lqofKKfwUlNYF7av+h6hnlLknUWNTKC7d/p9PE56nMIFTG6SBWwApe+Y7PyjgIw=
+Received: from [192.168.1.105] ([178.176.76.58])
+        by smtp.gmail.com with ESMTPSA id v29-20020ac25b1d000000b005115365c4aesm285924lfn.292.2024.02.07.11.14.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Feb 2024 11:14:56 -0800 (PST)
+Subject: Re: [PATCH 2/2] platform/chrome: cros_ec_typec: Make sure the USB
+ role switch has PLD
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Prashant Malani <pmalani@chromium.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ Guenter Roeck <groeck@chromium.org>, Emilie Roberts <hadrosaur@google.com>,
+ "Nyman, Mathias" <mathias.nyman@intel.com>,
+ "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+ "Radjacoumar, Shyam Sundar" <ssradjacoumar@google.com>,
+ Samuel Jacob <samjaco@google.com>, linux-usb@vger.kernel.org,
+ chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Uday Bhat <uday.m.bhat@intel.com>
+References: <20240207145851.1603237-1-heikki.krogerus@linux.intel.com>
+ <20240207145851.1603237-3-heikki.krogerus@linux.intel.com>
+From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <338756c8-af83-c023-c5b7-757d57c76fa2@gmail.com>
+Date: Wed, 7 Feb 2024 22:14:54 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1155; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=99DDKinv2mNpVy8WsuExRMgppG6Feg6EIY4nGansGMc=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlw87X8CKBfJjQGw7enWV1NiZW9ae6aJm5SZX0A 6IU4fm3qOeJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZcPO1wAKCRCPgPtYfRL+ ThjrCAC5mKskhxvokh2bDTPbrEWwQHQL2udrv2F2tbNGDRfK3H5Sg0fbxkkUQiCl7qgmwjWnRfk 8hdp9ewzr1WSo4I8H+BE6rr95JoAyNZG23RZ75FbHqYVyKibyWsI6yNbUrL9dEydkHiHtEylUYP H+DbVe5GsDtp+ZTuphAXnnTb8CK0oRIFOoYaDZFb2IBHIR0anc7twBDsVSXkFa0CR2w1znTUIdi 33fOIuG5sGHoKLoMpKnEoBEnX7Df36NpPKFtkN1ZrihwzCWxvMLCkPTuZEoPmdVbzjWkRSVePHM MHb5LZGnhaO6+g/N+wOTqPtrvEFuwKMXk+huED+ENkKNbvIT
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20240207145851.1603237-3-heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
-some functions and struct members were renamed. To not break all drivers
-compatibility macros were provided.
+On 2/7/24 5:58 PM, Heikki Krogerus wrote:
 
-To be able to remove these compatibility macros push the renaming into
-this driver.
+> The USB role switch does not always have the _PLD (Physical
+> Location of Device) in ACPI tables. If it's missing,
+> assigning the PLD hash of the port to the switch. That
+> should guarantee that the USB Type-C port mapping code is
+> always able to find the connection between the two (the port
+> and the switch).
+> 
+> Tested-by: Uday Bhat <uday.m.bhat@intel.com>
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  drivers/platform/chrome/cros_ec_typec.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> index 2b2f14a1b711..5c14e8db08b5 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+[...]
+> @@ -66,6 +67,16 @@ static int cros_typec_parse_port_props(struct typec_capability *cap,
+>  		cap->prefer_role = ret;
+>  	}
+>  
+> +	/* Assing the USB role switch the correct pld_crc if it's missing. */
 
-Reviewed-by: Herve Codina <herve.codina@bootlin.com>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/usb/gadget/udc/max3420_udc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+   Doing what?! :-P Maybe assign?
 
-diff --git a/drivers/usb/gadget/udc/max3420_udc.c b/drivers/usb/gadget/udc/max3420_udc.c
-index 89e8cf2a2a7d..7349ea774adf 100644
---- a/drivers/usb/gadget/udc/max3420_udc.c
-+++ b/drivers/usb/gadget/udc/max3420_udc.c
-@@ -1201,7 +1201,7 @@ static int max3420_probe(struct spi_device *spi)
- 	int err, irq;
- 	u8 reg[8];
- 
--	if (spi->master->flags & SPI_CONTROLLER_HALF_DUPLEX) {
-+	if (spi->controller->flags & SPI_CONTROLLER_HALF_DUPLEX) {
- 		dev_err(&spi->dev, "UDC needs full duplex to work\n");
- 		return -EINVAL;
- 	}
--- 
-2.43.0
+[...]
 
+MBR, Sergey
 
