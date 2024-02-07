@@ -1,116 +1,119 @@
-Return-Path: <linux-usb+bounces-6003-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6006-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4222A84CAD6
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 13:48:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44ACD84CBB6
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 14:37:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 674081C25A61
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 12:48:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF5561F2134E
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 13:37:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A4B776044;
-	Wed,  7 Feb 2024 12:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4580776034;
+	Wed,  7 Feb 2024 13:37:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eEgkQTp8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B8W0wRux"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5022030F
-	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 12:48:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDF45A782
+	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 13:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707310099; cv=none; b=CySV/n6CT9WZ2S5EJjEYlKg5mE/VoCsmLOs/mjv/O4mSssHl9KWXlKR1qVUZgO+q22b3cXJmhrSvw7SmCGerh1tVrN5B90/mX5S7U8ny022EDuE6zq10GW3gmfwOn5DSjm1XSlXz4vF331JOmuz/dYza85WW3CtUfyEUMv7sESo=
+	t=1707313042; cv=none; b=eJv1rSv8j7wgCt7/gM8oVgADtdVKHxuioEpbyNVk6VpLa6M8r1Sbuonu4LJ3onOMb2haCHwDo2p/LphT7fdzQQQ8ErWfvziibRqUgGB8a2CQVsHq1ZmbioiZ2MlfNne4CihaS/6fPFRMEtVh5xHl4MB/6Ndma97V5u34v1CMQIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707310099; c=relaxed/simple;
-	bh=UWLZu71OwMizV75jU3WWzPF4tDVtS071fe3fly4GTjE=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=RBqDsawSbOgvcVHF8MK6+KJLGFJVY+Uyw75HCxoKOt02b5bVVH+oITTCU0Vo3oXD2A8qMAH6YE2Uc14MesRPuRbGB21zXNrbGrHP5m6Fbwc7proVEtfulQU5FbcygjqnmwOxP/LOdNKX9E5G5UeTRfVNt9TDpzftYcSFLzQSzSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eEgkQTp8; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6e05f6c7f50so340853b3a.3
-        for <linux-usb@vger.kernel.org>; Wed, 07 Feb 2024 04:48:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707310097; x=1707914897; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:content-language:to
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xdgnEiFisG6doq+tFpUV0nJHSWC2e+rbQS3z7NWXE8w=;
-        b=eEgkQTp8p+t63cUhkLMm5aE1zaca+r9S9cUjo8PZeZnKueAJUeel4emR6z3XIbxRsa
-         9oqSbGcSlCcbhX0XIiNi2uIPzbPUk8Hhlq0Q9Egn5grqOTIe6l2f8j77HBr/eNmGUkHS
-         8Yr7EJlaoMaJcsC929JrUJC6Y2HuLuCttQ9MsCpgs5WShMeM51/TBPctB7MHVT3H0Izb
-         ef0IiT14RqLyDPKCG+uY42F0u2n3xykGTRLVRsU2ldX3zxjbJRa1brgDl+EkfGg/5Oo2
-         79fpjyLNYtBvBuDbTZqPdTCJ6DIQex2c7bFoiBb677H5somkcYmS3VNAxgcgo+iKo8ht
-         8u3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707310097; x=1707914897;
-        h=content-transfer-encoding:subject:from:content-language:to
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xdgnEiFisG6doq+tFpUV0nJHSWC2e+rbQS3z7NWXE8w=;
-        b=VCB9cmqF3mWJz2gbPEqZPxvrLJcvGQAIvDFa9DrGs+e7C9/Y446x5MndMAUBZKwyn6
-         bGa94tbFQbWboceNBxoSGvEFiM7pBtHC3BrlAHDnStk2nQyN1qmDl8FSuA0j3DCu/TAs
-         TclAPs+SO9j+PSbt8T55PxycyGWO3Up8hXOgXPVxpQqTqpp7TKjlyY9aLrUHunwdJlUr
-         tqdy4y3cncSpn17krjrS72azij2GTxuTLzr+Om8nELEFj6W4VpngXsMK6M5oBvIJiKzt
-         7QQmx5e0VrfIQBFwuqGnQ70c72qcdfiax/LKvMbe1jmmFG9cuwM0JH8R6ebAKZufvpL/
-         JXhQ==
-X-Gm-Message-State: AOJu0YxqjIZlJu6lbZqIKuRMMjN31MfmNfBujOo9SIbeaZx9iaHowJQd
-	oRXpkCDXCvquk3SAmATOC/1CeOC54yzNV7Ifj3kEEb3hDpzEyJ9Ro1Bd4uxh
-X-Google-Smtp-Source: AGHT+IEkPgrAvYBG0D/SsoGpJfkQD5bnrYo+bysHaOmEi/velhE6SRhxYPiTyx+xm5crbPGnDjcz0g==
-X-Received: by 2002:a62:5fc6:0:b0:6e0:5281:e0d1 with SMTP id t189-20020a625fc6000000b006e05281e0d1mr2402653pfb.1.1707310097383;
-        Wed, 07 Feb 2024 04:48:17 -0800 (PST)
-Received: from [192.168.1.120] ([58.7.160.150])
-        by smtp.gmail.com with ESMTPSA id t189-20020a6281c6000000b006e047a34834sm1466879pfd.182.2024.02.07.04.48.15
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Feb 2024 04:48:16 -0800 (PST)
-Message-ID: <b133097f-0793-47bb-953f-4c31a721a5c6@gmail.com>
-Date: Wed, 7 Feb 2024 20:48:12 +0800
+	s=arc-20240116; t=1707313042; c=relaxed/simple;
+	bh=+DujwZlr/1wDPIjgj9ybKGjheEDuRA+H2YGe6MkI++o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E/48e/N3oVLprW0tF1pwMkGnilkFbvKeqdUKUSB0OkJtzmDCgVI2h/5H0bwTmfHCyRpr3EUKA0r6AICAax6K9yHaoDGVwQoiNdirkGbUuQYEeOLUf46gkjRb811c8GXPnITm/2dKFWQzEdG8yjX5S6DwLgN7i/uxgtFMigmFMGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B8W0wRux; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707313041; x=1738849041;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=+DujwZlr/1wDPIjgj9ybKGjheEDuRA+H2YGe6MkI++o=;
+  b=B8W0wRuxksZjkv1gOx2Gat6vE5Re8aqh50i0yXUTbv08s+4lKHGQ0xf5
+   linY49lS1HZHk94p9GAX9shpHa76sF679wS5Z9zTk5f3096bOnfzXfdbZ
+   n0cr+5LQED2rCaVuBIyHuwJvxqcdOmSwV/xcRtNOUUu01ktd5m3IQXkph
+   77hwOhNNazPdrjzrFvMiPOqwQy2c4qz6nMD/IToD5IeiyvMn5YZ4Swccl
+   kNhjl86OEKen40HMZjJs2ilaQzaibcMplEc7c9S7RkBvzwOFCBw5+vPqm
+   pAK3ravKcPlxXtlx3s3a+Nem0d51bAXQyrqef7u+2A0k168zQL5mb/iut
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="12345530"
+X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
+   d="scan'208";a="12345530"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 05:37:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="909996006"
+X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
+   d="scan'208";a="909996006"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 07 Feb 2024 05:37:18 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id EBF194C4; Wed,  7 Feb 2024 11:21:52 +0200 (EET)
+Date: Wed, 7 Feb 2024 11:21:52 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Linux regressions mailing list <regressions@lists.linux.dev>
+Cc: Olliver Schinagl <oliver@schinagl.nl>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	linux-usb <linux-usb@vger.kernel.org>
+Subject: Re: kernel NULL pointer dereference on hotplug
+Message-ID: <20240207092152.GQ8454@black.fi.intel.com>
+References: <c24c7882-6254-4e68-8f22-f3e8f65dc84f@schinagl.nl>
+ <20240204064049.GD8454@black.fi.intel.com>
+ <705fd33a-18af-44b2-b6ee-57e3169b7032@leemhuis.info>
+ <b0388b9e-5ec2-422d-94ce-192b33fef16d@leemhuis.info>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: linux-usb@vger.kernel.org
-Content-Language: en-US
-From: Mike Miller <u492758@gmail.com>
-Subject: Tell linux-usb@vger.kernel.org to add your device to a proper driver
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b0388b9e-5ec2-422d-94ce-192b33fef16d@leemhuis.info>
 
-Hello,
+Hi,
 
-I am only doing this because dmesg has told me to :).
+On Wed, Feb 07, 2024 at 10:12:07AM +0100, Thorsten Leemhuis wrote:
+> On 07.02.24 07:13, Linux regression tracking (Thorsten Leemhuis) wrote:
+> > 
+> > On 04.02.24 07:40, Mika Westerberg wrote:
+> >> On Fri, Feb 02, 2024 at 05:47:01PM +0100, Olliver Schinagl wrote:
+> >>>
+> >>> I noticed this nasty kernel NULL pointer dereference yesterday on
+> >>> 6.7.2-arch1-1 (haven't done this in a while) but also today, after updating
+> >>> to 6.7.3-arch1-1 it's still there, so dumping the panic here. Hopefully
+> >>> it'll be resolved by 6.7.4-arch1-1.
+> >>
+> >> Thanks for the report.
+> >>
+> >>> The thunderbolt gbit adapter always worked in the past, so this seems like a
+> >>> regression. Anyway, here's the log.
+> 
+> FWIW, Leon Weiß (BCCed) just posted another NULL pointer deference issue
+> in 6.7 and found the culprit; for details see:
+> https://lore.kernel.org/all/38c253ea42072cc825dc969ac4e6b9b600371cc8.camel@ruhr-uni-bochum.de/
+>
+> Sadly Leon's report lacks a backtrace we had in this thread (
+> https://lore.kernel.org/all/c24c7882-6254-4e68-8f22-f3e8f65dc84f@schinagl.nl/
+> ), so it might be something totally different. Leon's problem afaics
+> also happens on unplug while this one on hotplug. But well, I thought I
+> better quickly mention it here anyway so everyone is aware of it.
 
-I am struggling to get a cheap arse Chinese knock-off Arduino Nano 
-working on my
+Thanks for the information. 
 
-Linux MyLinux 6.5.0-15-generic #15~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC 
-Fri Jan 12 18:54:30 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
-
-and I get the message
-
-[ 2840.099780] usb 2-1.2: new low-speed USB device number 8 using ehci-pci
-[ 2840.210523] usb 2-1.2: New USB device found, idVendor=16d0, 
-idProduct=0753, bcdDevice= 2.02
-[ 2840.210537] usb 2-1.2: New USB device strings: Mfr=0, Product=0, 
-SerialNumber=0
-[ 2840.211335] usbserial_generic 2-1.2:1.0: The "generic" usb-serial 
-driver is only for testing and one-off prototypes.
-[ 2840.211338] usbserial_generic 2-1.2:1.0: Tell 
-linux-usb@vger.kernel.org to add your device to a proper driver.
-[ 2840.211340] usbserial_generic 2-1.2:1.0: device has no bulk endpoints
-mike@MyLinux:~/Arduino$
-
-This something you really can address?
-
-Cheers
-
-Mike
-
-
+As you mention, this seems to be unrelated. The one above is about DRM
+and graphics, the one Olliver reported is about Thunderbolt (okay there
+is Thunderbolt device involved in both but this one seems to be purely
+DP thing).
 
