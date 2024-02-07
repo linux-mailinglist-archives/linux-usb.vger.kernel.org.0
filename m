@@ -1,116 +1,90 @@
-Return-Path: <linux-usb+bounces-5996-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5997-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11B2E84C8F4
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 11:49:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D00884C8F9
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 11:51:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1CAC28A019
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 10:49:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A16D2818AE
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Feb 2024 10:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723B417582;
-	Wed,  7 Feb 2024 10:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CEEF168DC;
+	Wed,  7 Feb 2024 10:51:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SLDG4Fqa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HwDXh/ZF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423EC182A7;
-	Wed,  7 Feb 2024 10:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6BE171B4
+	for <linux-usb@vger.kernel.org>; Wed,  7 Feb 2024 10:51:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707302982; cv=none; b=JCStCxA0S5azDfOs5wABiYFRJHHsgpOwlxm/TJn6SGSQalxd6VJectuFpjtiR8oA0Xdjv71MmKaKstvo9erIsWRvDHrZ/ZZb2aQbp+Ekmyf0NFoXS8wbHwx+XO0qhC07zBpg6TpS5ntDY/oCQiTPaJ0H5H+DWiKtM1+SYkZ7Y34=
+	t=1707303070; cv=none; b=Ryr4GpkCmT+nvILY/hqsqe2DEfbOZX6Y4mYJ/ydijJNQZRgwb67Hg/pxHyzHR9cQTDfgdJnnAOa2Ly/Dp973251falikr4V801GNIE1dMDjqZOfMyLlpAH8/mAx+b5P5EXGoUIdpCUBlsbqP4ichfv1RjTHcCyRbkwVAPOeub74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707302982; c=relaxed/simple;
-	bh=kt0zOLTcL1HWHJnw6yZryV/wCuD7xd1Hb506uXxvfuo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=cyPsMinuwDQnNBT/rkBxPPRNHybdDO/lZ9rShCKn+DR6PUHhhzQdPtsr/RlVNaUc+5XgAMfing+xOAurs7bGdWTVzuJdZvRDc2PFuvGoM9jMpsyGAguQwUc4/OBcMlkXn0V447GA2dL2mwcXIQfJp8Pp8DALfxcDo3E1Ut9DOK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SLDG4Fqa; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3394bec856fso922575f8f.0;
-        Wed, 07 Feb 2024 02:49:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707302977; x=1707907777; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DI3W1hyqaNPdQCStHZpWr3XfLdJcYQ1oBBj7o4zZK5c=;
-        b=SLDG4Fqam5VFt6KXe+6E42+cWV/LZmj3bhH7Yqkb+i4/fcF1FOdqlweO5eOAA7fSIL
-         KGfSkSE0gl5Jn4fMz6uklqz6zvCHtaeGp1mNNLaX9B76cMtes4zLrElEPUHj2dDJGPcz
-         PSZIudf/11phJPnazlzzOWginpC1m3E5397Zjh/5J/xUZEh/GMMUw43PR8KjPVPDFxuK
-         1LfAN52rinZRNeHo9f8DHCZR5rvih/DU2ZrXWcrz8B2C2Sz6IYOEAcal5VpHIUTR99iM
-         dIe0WYFMid0EbDpgjKCQSz+PJTK0OzCSKsv8//v2LJUlswoAIqA29hisQDq3/EqRdOUB
-         KyZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707302977; x=1707907777;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DI3W1hyqaNPdQCStHZpWr3XfLdJcYQ1oBBj7o4zZK5c=;
-        b=oY1yqSop/VP2D0Wgyr0fM0L0nf/itEzS9F+l3bVyzmLs89sA7B0chpVZgW/BSZ9FHQ
-         t//4UPdRj76x8JJDoSIMhDE4M1uwEUV5O4aDeCossv2DfAXjqS4ob/YaVoDI8soAceUs
-         Husj8SD/D6Ec2QVvYzkhAwYNzNEQoYZ/4ZQxtpZug8AQpBp+J/Ea1AOrc/6gkfbUYq0l
-         +p57qIEI0EeA5c29NMofsF/HT76RZAs1Kk3+o5faz/U7/yacV1cDVkVqPoC2isaoau2C
-         CLnvx0CxdQyow63oAz0Qi8Nj1kDhBfXMpTMmd+77s2RXF2TQBAq/0EABEX+CE2gQt+jw
-         steg==
-X-Gm-Message-State: AOJu0Yx6pYQMmLthhVIQD8q77XxlqApTXiRBFFsze7ycizUGBJNjETMZ
-	UhKPdZ4L5tCeX8DTdGBC7puruGauUpQBLvm875WJ10NhwDd78OEe9bVzrP4emeY=
-X-Google-Smtp-Source: AGHT+IFBxJGUQtRyWwApXmHdgtgFEploDEBoyVbUXb2bfaM1oo+4vxt3Cr8vTBEkawOWZBKcIYEIBg==
-X-Received: by 2002:adf:ea01:0:b0:33b:26c3:4fe0 with SMTP id q1-20020adfea01000000b0033b26c34fe0mr3412621wrm.6.1707302977122;
-        Wed, 07 Feb 2024 02:49:37 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWChfYQ26ruVxK/0C+NL6FTtor+PbyhCshRbuHxK8X0y5jjJGNtBwOsezz1J/QSknBbupMQafAMH5HR1fwBQTR9ZKXjzkn2Stmdw2BwqlXJrqXbvMF0snzT9/NxqOPZuWESxjPQ68s/aVGtbXEJN7iSJrxQ7e5O+qSjtmK/8cSk+NxHhdJmEQVj16sBBtPgnePJ8z3di+uhYiBEPQ==
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id q18-20020a05600c46d200b0040ff2933959sm1689595wmo.7.2024.02.07.02.49.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Feb 2024 02:49:36 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] USB: serial: ftdi_sio: Remove redundant assignment to variable cflag
-Date: Wed,  7 Feb 2024 10:49:36 +0000
-Message-Id: <20240207104936.2441424-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1707303070; c=relaxed/simple;
+	bh=wcUGdlLADKaRdwkTzF+TtBpqwM4GNDRYl+VBFYH0H8k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RWJeubAuKmMtCVrjkY5/XmTkJ9vmDnpGLDHw1W/7i+PoL4CAnBbOzkYp6htF/juCx7rHX4Y2ZRXSLhAlF3ORd932Y308vcwvljy79KVRwyS/MldPhriMxS6TftqKUDc8qu7KsTduDDb/+Y1lEJHlWtuP3ighbyd3co7O3q6GWac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HwDXh/ZF; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707303068; x=1738839068;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wcUGdlLADKaRdwkTzF+TtBpqwM4GNDRYl+VBFYH0H8k=;
+  b=HwDXh/ZFoZb/j5J3reNj/rkUaDugbfmsND69XwIXbHWeBGbTiVhhECps
+   XRMvf3b5rXfNXtc92eqoe1NVYCVHWgsYTulX5uYALu4m7TiZvG0JyzvI7
+   a7Kb+YjAuHk644qsOhGGlzGKy2Ty/BLvm2StwzwWRr0DtE16acxHXvPRX
+   wArbEjgkyZ2wyc700U9EksuLBxNSXQPRFGyk4Jo6UxGo+cmmxqmn1LSI9
+   F6mBi3CsBvYt5UFkLNeNs2JzaATTcq3EkS0iziFvjyNtF5hlBCufzCM9O
+   URPyzgWz1IlmCkVGrZn4Skls0lrBdTuR/k9UG7NICEkuhWxRYKn9mvHey
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="12317805"
+X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
+   d="scan'208";a="12317805"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 02:51:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
+   d="scan'208";a="32113524"
+Received: from nneronin-mobl1.ger.corp.intel.com (HELO [10.249.42.87]) ([10.249.42.87])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 02:51:05 -0800
+Message-ID: <ca6d6a0f-e5bf-492a-8e6d-dc22c1f0518a@linux.intel.com>
+Date: Wed, 7 Feb 2024 12:51:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: common: add driver for USB Billboard devices
+Content-Language: en-US
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com,
+ heikki.krogerus@linux.intel.com
+References: <20240206125623.1208161-1-niklas.neronin@linux.intel.com>
+ <2024020641-relation-embattled-1fb5@gregkh>
+From: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
+In-Reply-To: <2024020641-relation-embattled-1fb5@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The variable cflag is being assigned a value that is not being read
-afterwards, it is being re-assigned later on. The assignment is
-redundant and can be removed.
-
-Cleans up clang scan warning:
-drivers/usb/serial/ftdi_sio.c:2613:15: warning: Value stored to 'cflag'
-during its initialization is never read [deadcode.DeadStores]
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/usb/serial/ftdi_sio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 13a56783830d..c634d345a652 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -2610,7 +2610,7 @@ static void ftdi_set_termios(struct tty_struct *tty,
- 	struct device *ddev = &port->dev;
- 	struct ftdi_private *priv = usb_get_serial_port_data(port);
- 	struct ktermios *termios = &tty->termios;
--	unsigned int cflag = termios->c_cflag;
-+	unsigned int cflag;
- 	u16 value, index;
- 	int ret;
  
--- 
-2.39.2
+> I'm not going to actually review this patch, as you didn't follow the
+> rules that all Intel kernel developers need to follow, sorry.  Please
+> work with your Linux kernel team to do this correctly, otherwise I have
+> can't do anything with it even if I did want to merge it :(
+> 
 
+Thank you for the feedback and apologies for my mistakes.
+I will make sure that subsequent patches are up to code.
+
+Thanks,
+Niklas
 
