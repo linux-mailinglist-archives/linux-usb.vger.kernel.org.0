@@ -1,237 +1,216 @@
-Return-Path: <linux-usb+bounces-6054-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6055-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBF1984EA35
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 22:20:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E42ED84EA58
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 22:23:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15BE51C21FF0
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 21:20:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBEF0B2BD70
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 21:22:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C1874EB53;
-	Thu,  8 Feb 2024 21:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95E014F21E;
+	Thu,  8 Feb 2024 21:21:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="RrB8dbXz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L5BmvqcR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2046.outbound.protection.outlook.com [40.107.21.46])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02264EB4D;
-	Thu,  8 Feb 2024 21:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707427235; cv=fail; b=BNncKBT4RbMtGqN8ZyLu4gWC1Me+86EQai4lPdXJr1o1IkU9Ih+W+IRvkF36eEqo7y+CinfOm4bWRlsEvgsyUbrp3xzpQfbifeFR4xffwx/lkJnYBj8gWGrM1+jdVmvgClshIcQaoNPvtqPZUFsXeY9lzdU2wDu0Hkbo4y8LCyU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707427235; c=relaxed/simple;
-	bh=cc1iHiV68777SmlzAAoR0nbyU5mZql2eY+aNf1bciNs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=qL3ecDn4g9XZz3Y887/8BtyJn0RQ5vhIjHo1ei6kFU3KJB6ZdB3ufHb/Tu9jXMWF30PlD04pUxfg5WzGlqz1CjGtHFvT9Hsesr/D/Y3zUTHPubJ7KtFgHI+FB/IvH4aGRVyej42At8ODapJs18y2F4AQ9x0/MaKXPxvkJP+Dn64=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=RrB8dbXz; arc=fail smtp.client-ip=40.107.21.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iAMsWamgcrnXnEuCjQA2KLntqr1IpCwRoWozowJQegMp50e2WgiUhEiJpABIzLQVq1Qr9UfUUt0DRLFPucD5I/akNVfiaf6+E/Ou5xq1ITQOSTVyufS2Pk/zguSO2JHHWBnzW5clkitowkwLTl566ipHxrq+S62mDwXGcD0QYyhpso0zHcnFrWaVcZTvgBWswKp+6++CFbQZVw2KIcBAgFnsiDMrbcFrCvz9djhuLJ0tZkNhkNBOHaqOw0pvCIBA1MqtVrHuCot/gPZ3rKbkH6cWfOkStp+3QVR1e/LUry4rTVQzgnXE3po3YwPJ+Yag8XGgENgfxUQQJIvcJzwzdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hfZSRuS6VtMTUatiM/Djf3dz9pztTXzJxWmnOuu8dgM=;
- b=RXOXJfk/OfJMXniA0T68FSjPRJzOQs/CzsXlFTg3hE4jymOwnkiZn+2Hx84esI/9NgivjdqQ6VdlOiVzbZ6BJoaNySXHszeEDWyckKU9R3wwUPzxdRWL/7KZjhTJxx5zbHiRlIvOxkUMxaDfgvkK+TlVkMLTuMaxtKrNd0N36bsZNkRBCvmARIdj4bPS5LrEyZtTvf3sfZRhOUCJsmCnZZTyNBDxr2Wutkp/K8HgOXgL0PNk3hmnYQiYTm1X1apcUuim3kJPhEjEB8U8J92ryN3ZvIy1wdzyjzRc41CUxE9nhsYjv1MKij1YxKQc8vH8I0OAj6QQP5KTP99HdrBZvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hfZSRuS6VtMTUatiM/Djf3dz9pztTXzJxWmnOuu8dgM=;
- b=RrB8dbXzpJVOe/kg2qUMgpITvpTciCyt/kzHCVshJleiq5EfweGhln5bVf2b/1NmCBIixtX6mB96RoyiK5wzpW6sGVjLomOsa3yBfTsOvUWI3qAm7sRi0uLhKbS5ZHfaN0r2j2i9UPgFS2DpOGjQ3ixW7zqB1vxVxGhQ6qGUkNE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by PA4PR04MB7935.eurprd04.prod.outlook.com (2603:10a6:102:b8::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.24; Thu, 8 Feb
- 2024 21:20:30 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::c8b4:5648:8948:e85c]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::c8b4:5648:8948:e85c%3]) with mapi id 15.20.7249.035; Thu, 8 Feb 2024
- 21:20:30 +0000
-Date: Thu, 8 Feb 2024 16:20:21 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Conor Dooley <conor@kernel.org>, thinh.nguyen@synopsys.com,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, balbi@kernel.org, devicetree@vger.kernel.org,
-	gregkh@linuxfoundation.org, imx@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	mark.rutland@arm.com, mathias.nyman@intel.com, pku.leo@gmail.com,
-	sergei.shtylyov@cogentembedded.com
-Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc3: Add system bus request info
-Message-ID: <ZcVFlRug4ATBcH9R@lizhi-Precision-Tower-5810>
-References: <20240123-nanometer-atlantic-6465b270043a@spud>
- <ZbAR/NQvjUnf2At+@lizhi-Precision-Tower-5810>
- <46781012-2678-4f6c-9aee-b020cabcbb28@linaro.org>
- <ZbA8ea9Ex+hMdDDZ@lizhi-Precision-Tower-5810>
- <ZbfB/KT+fzO/F2e5@lizhi-Precision-Tower-5810>
- <20240129-encode-catchable-f5712d561a47@spud>
- <ZbfjZoHiH7BsKyzl@lizhi-Precision-Tower-5810>
- <f3811c1f-eff2-4c7b-8cea-6d3115525235@linaro.org>
- <ZbkTvu0Q85zyieXr@lizhi-Precision-Tower-5810>
- <0be231a2-0c3d-4f18-8de2-3e4f1fe1cd29@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0be231a2-0c3d-4f18-8de2-3e4f1fe1cd29@linaro.org>
-X-ClientProxiedBy: SJ0PR13CA0099.namprd13.prod.outlook.com
- (2603:10b6:a03:2c5::14) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06E14EB41;
+	Thu,  8 Feb 2024 21:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707427314; cv=none; b=fxdd+HHzJHTxaghotfTMXvAzN8CGf6b7cV6hX4h//TwZB0/vRJFu+RYLna5+Cz+ZIJJ2StsXI7SHOBpnmDDk0sU+HA4C4qMnWsWP7zZiylhnliXKiEXcAb3MjmTMZ1nEpnsZ4ncrMoCpQt2DlT0aoKGW4uBhR7Y8k1eFcr4F4w8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707427314; c=relaxed/simple;
+	bh=oqvxtofftemHVkqCtUvTHWJMUcVkNerevyhL33rOVTg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=kFm9B1Bt+I4Sv0mkNHoT2A1hykScHR2o9Fc0wJbIJe6SR7bihC/v7ye0rQ71a6D/sLT2mkiM79M3Q3HZbu9cuW0Tq1U5pp77e3nHLblaq7avENDbs7GltNiuxizVdmUjwvw/yb/5FP3TVX9w0xkSKZe81MeFQEAth3Q45exXITY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5BmvqcR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 289CDC433F1;
+	Thu,  8 Feb 2024 21:21:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707427313;
+	bh=oqvxtofftemHVkqCtUvTHWJMUcVkNerevyhL33rOVTg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=L5BmvqcRkgnwQazmD6GNbT/V4WhBK5Jh6gNZcDqvZtq3vD3bjm4E5j4iLEoOGBSf2
+	 9F9jyrrWriCDl5Wu0BAXPhkb1g056buOTe2Ztq7rnNXkEo1LQlxR/MS5DrRDwOGECL
+	 PzXvkI3prpHFsJQ85rgk8WagJHAGPijl/nL+cwohJK5pgSdWN4EVlzkTj2GSjD78+U
+	 Do4/ScbKYtsrkZ/UX5X3+BMEO6gp6SsFMVnpleSnv3fJUOOdIaypIpDthmOW76tyzt
+	 Evsw5NI06O+Mh6/qIrxzDT3P++ocGhgYPwbeQwHydxaTl96OS/0UKdfbCWCgOU5q38
+	 wcv+IJzWFU9dQ==
+From: Mark Brown <broonie@kernel.org>
+To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: kernel@pengutronix.de, Moritz Fischer <mdf@kernel.org>, 
+ Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>, 
+ Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Alexander Aring <alex.aring@gmail.com>, 
+ Stefan Schmidt <stefan@datenfreihafen.org>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ linux-wpan@vger.kernel.org, netdev@vger.kernel.org, 
+ Lars-Peter Clausen <lars@metafoo.de>, 
+ Michael Hennerich <Michael.Hennerich@analog.com>, 
+ Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, linux-input@vger.kernel.org, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, 
+ Martin Tuma <martin.tuma@digiteqautomotive.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, 
+ Sergey Kozlov <serjk@netup.ru>, Arnd Bergmann <arnd@arndb.de>, 
+ Yang Yingliang <yangyingliang@huawei.com>, linux-mmc@vger.kernel.org, 
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Rob Herring <robh@kernel.org>, 
+ Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
+ Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>, 
+ linux-mtd@lists.infradead.org, Simon Horman <horms@kernel.org>, 
+ Ronald Wahl <ronald.wahl@raritan.com>, Benson Leung <bleung@chromium.org>, 
+ Tzung-Bi Shih <tzungbi@kernel.org>, Guenter Roeck <groeck@chromium.org>, 
+ chrome-platform@lists.linux.dev, Michal Simek <michal.simek@amd.com>, 
+ Max Filippov <jcmvbkbc@gmail.com>, linux-spi@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, linux-arm-msm@vger.kernel.org, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ linux-mediatek@lists.infradead.org, Thomas Zimmermann <tzimmermann@suse.de>, 
+ Javier Martinez Canillas <javierm@redhat.com>, 
+ Sam Ravnborg <sam@ravnborg.org>, dri-devel@lists.freedesktop.org, 
+ linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev, 
+ Viresh Kumar <vireshk@kernel.org>, Rui Miguel Silva <rmfrfs@gmail.com>, 
+ Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>, 
+ greybus-dev@lists.linaro.org, Peter Huewe <peterhuewe@gmx.de>, 
+ Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
+ linux-integrity@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ linux-usb@vger.kernel.org, Helge Deller <deller@gmx.de>, 
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>, 
+ Kalle Valo <kvalo@kernel.org>, Dmitry Antipov <dmantipov@yandex.ru>, 
+ libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org, 
+ Jonathan Corbet <corbet@lwn.net>, Bjorn Helgaas <bhelgaas@google.com>, 
+ James Clark <james.clark@arm.com>, linux-doc@vger.kernel.org
+In-Reply-To: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
+References: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v3 00/32] spi: get rid of some legacy macros
+Message-Id: <170742729486.2266792.11643460714402047207.b4-ty@kernel.org>
+Date: Thu, 08 Feb 2024 21:21:34 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|PA4PR04MB7935:EE_
-X-MS-Office365-Filtering-Correlation-Id: aea9e770-7c3e-4c7d-5553-08dc28ebc6e3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	D39u9THoZ1FYRUVZ2xZekoezWkEB45vwv5d2mFLJbZJyHQ1HsFMCTDW5TuhnTIZC6brIWs263KYEqe5hpCOd1zj6wdW22Hrct7L/gOa42FR6IvSVz+LeYBJNV7i6H9FVOziV0NPtKYr05AmFG4WXFQrWjwEYovzdz7JQTMEQmcZGRb6n24txXLdug4o+dqVyouTJmN8tNlXjUGY+HS8lVs9Vg2OTqHHijfQKAhTYGTSrbhCtQ2sz0ssdwohh/GxEbRdBLoh2ti/0qHUuGHtu8TQiu2KAADAdEj8hUrH4OygflKB47l7HEN6h6pbqIDW9Co4YpeoaBXEPwcqD4a5SH+rKmyT90e6YZxf+L8xEFLQ7Eqr+0y1YrQSx6yRwKcdGoN6IwUGRmy1M44tXXf6ZNEAGgMRNGUocNpcZPtj99l1slZjLgTAnVj5Pnr9pRu6iSU0KLlSZt4qnhIs+DXKLU5TpHj7BsyKRsXAUCT0UBPPwCGFqTFFoSo/Ejre2PRC1NcxtJImoEvmS2Hke+8FH9dZPwaFIxh4Du/toAWl868sD1ArujQKO9O7flXukO2qQMFCPsejmxUoY55cDVc9jEJRZ6G7aE3/40GQ4yz5zGAABkCC7PQl7VoJkBPjQTX2v
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(396003)(376002)(136003)(39860400002)(346002)(366004)(230922051799003)(64100799003)(451199024)(186009)(1800799012)(38350700005)(33716001)(316002)(6666004)(86362001)(66476007)(66556008)(6916009)(9686003)(4326008)(66946007)(6486002)(6506007)(478600001)(5660300002)(53546011)(2906002)(7416002)(52116002)(38100700002)(6512007)(26005)(8676002)(8936002)(41300700001)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?jX6cUAjZnvPeOXd/17CkBosQpSTs0Djx2R5vdz8kwlfc5llScxRvftsdA3k6?=
- =?us-ascii?Q?zEP6WAKzfrSW/vkhMRE/gBQXt9lGHB5r+hNONi3LugHGU5XjIkpqOYUGXB0a?=
- =?us-ascii?Q?APw1GoHywhRPdhIiF/7daR5Zpd0w3GmowrL41Ru/jTDAv6bt1HCmJ6nYleYh?=
- =?us-ascii?Q?E2WSM6JeeAWCRNx17tHbkdWza9wz5RVzkwJIigE3qgYzXZkbhHiml73SkJUL?=
- =?us-ascii?Q?5GBJq6ulvvZoeZnlvT5AgvdhVwa18gLlPEtEIBeEO8Ce8GKeQLOl/gWVGum9?=
- =?us-ascii?Q?pe6clz9l5f1n2OQM+cFoMMyVb0E1JeCnudnU+kslM67a3QDOU4xlMZrI7l9m?=
- =?us-ascii?Q?G+YMFmvi3Lbudx8ZQag1M2NcDaMS+2FeKtFM56xG3eJjs4e++Mlk/e20NopY?=
- =?us-ascii?Q?jya+hXoPRcK650Q+5Ti1l1xD+iqMXf/2tbgJbBDRIsya+D09gSf0Fo5qY5ZT?=
- =?us-ascii?Q?hRduvi2NrSGlPLduwhL+d99a1lwFiOWoJbIRwVE6cQpQ0VYn0U83XEf6Qx+k?=
- =?us-ascii?Q?eik3WP2WVAnlGCK7m0pzjR2dm9VyEyOp93zmMxH2hONtk4WMIzpeXUFf6nH3?=
- =?us-ascii?Q?HFnq3AjWdr3umRhtgFugi6C7rI+Cn0y4FwX94BxhuAD2Dc6G/xONqnw+E6oC?=
- =?us-ascii?Q?nCm5xfESe8HTZY+IQ/op3xE+8yL4VuXlFT1IyPmYjw04KfLNURa2OBY7svxz?=
- =?us-ascii?Q?i0AIFz7feJyy6KaF783OzlDWERikz/sLHEAEVkQfvE+oOig4FS2yYM6T10ER?=
- =?us-ascii?Q?VXjH5H1B/qS6iyFaiWRlP5ACN42JH/GuC0SUjbzsQAOjBfR/unM7k7+E9JSX?=
- =?us-ascii?Q?ZE62W44YMyf2IaEkvzaiSmSAzoDYG85LO6JFkW1APf36MpFJKMvSWUrIslaO?=
- =?us-ascii?Q?IID4tXqrc1/Y0ltve4Tl7nxRywTnlkYuAIXqkJHQfCDPCyjJMdmx5rOlVqbB?=
- =?us-ascii?Q?5fjoumRatMct0nS7KB6AD0lRrhmCtRSHRoVjvk/rKrb1agRTpnTs2jwpKSbr?=
- =?us-ascii?Q?a2HRcSBhlgW7f6wEZAkGToUssx2tp0kwZ78SatIupUHjcI7mUwcMFBqOKiHw?=
- =?us-ascii?Q?zTQkIu9eyDGKZcQzdBIdyGk7i/Ljkv/I00N+q5Bml6q4wXRIohL43+mFsHMo?=
- =?us-ascii?Q?Tkbwqvfhf3Qg9MCp3TesAw3uPAIxMcdcl3SWHGPtctsFz5s5C9msWISF3GRZ?=
- =?us-ascii?Q?Wz889HUa1K613hGn2bO6eItNfyY1Le2nxYQZLEoRo4R2F5FPbX2xNbAC9FTv?=
- =?us-ascii?Q?OPPVQAHGSJWs0oxtw876Xg3safgc8pCgtU9wN1tF/OZxTsW9zOWxq4NPycta?=
- =?us-ascii?Q?KFuKNEnzfP4uT15dl3SqP7PJtYWhNftF1OXac49311rnGaHmFLeCI4cFriYG?=
- =?us-ascii?Q?8yKwUivjZcd0fhm8EoqUdb1e8RJUJhyLKHbXB8E0w7n2RJg+PZrl3xC9viE8?=
- =?us-ascii?Q?SxE4K6ZRHcjbjDeH1GOm5VgJUdc9sSM2iyz/zbK1ikBY6mFHmeEoK1Lfpgdg?=
- =?us-ascii?Q?3Bp1EacH2hyhdwzAZ4odj+sCZYD5n6DqyBhnLEatsLtOais+thdGkrDbNA4g?=
- =?us-ascii?Q?Yq7CDHqAxEKsEDz8GW4=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aea9e770-7c3e-4c7d-5553-08dc28ebc6e3
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2024 21:20:30.0210
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CfbmCVmMz3eAceJd3VP9UQtLzvn5hcn8uIIuKOSVPCCHksa+XQDtvJdVB6hdqiRokiGIbt225FY+86cZYCjLbg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7935
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13-dev-0438c
 
-On Tue, Jan 30, 2024 at 05:10:54PM +0100, Krzysztof Kozlowski wrote:
-> On 30/01/2024 16:20, Frank Li wrote:
-> > On Tue, Jan 30, 2024 at 08:40:29AM +0100, Krzysztof Kozlowski wrote:
-> >> On 29/01/2024 18:41, Frank Li wrote:
-> >>> On Mon, Jan 29, 2024 at 04:49:21PM +0000, Conor Dooley wrote:
-> >>>> On Mon, Jan 29, 2024 at 10:19:24AM -0500, Frank Li wrote:
-> >>>>> On Tue, Jan 23, 2024 at 05:23:53PM -0500, Frank Li wrote:
-> >>>>>> On Tue, Jan 23, 2024 at 10:46:39PM +0100, Krzysztof Kozlowski wrote:
-> >>>>>>> On 23/01/2024 20:22, Frank Li wrote:
-> >>>>>>>> On Tue, Jan 23, 2024 at 06:42:27PM +0000, Conor Dooley wrote:
-> >>>>>>>>> On Tue, Jan 23, 2024 at 01:02:21PM -0500, Frank Li wrote:
-> >>>>>>>>>> On Tue, Jan 23, 2024 at 05:51:48PM +0000, Conor Dooley wrote:
-> >>>>>>>>>>> On Tue, Jan 23, 2024 at 12:49:27PM -0500, Frank Li wrote:
-> >>>>>>>>>>>> On Tue, Jan 23, 2024 at 05:27:13PM +0000, Conor Dooley wrote:
-> >>>>>>>>>>>>> On Tue, Jan 23, 2024 at 12:02:05PM -0500, Frank Li wrote:
-> >>>>>>>>>>>>>> Add device tree binding allow platform overwrite default value of *REQIN in
-> >>>>>>>>>>>>>> GSBUSCFG0.
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> Why might a platform actually want to do this? Why does this need to be
-> >>>>>>>>>>>>> set at the board level and being aware of which SoC is in use is not
-> >>>>>>>>>>>>> sufficient for the driver to set the correct values?
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> In snps,dwc3.yaml, there are already similary proptery, such as
-> >>>>>>>>>>>> snps,incr-burst-type-adjustment. Use this method can keep whole dwc3 usb
-> >>>>>>>>>>>> driver keep consistent. And not all platform try enable hardware
-> >>>>>>>>>>>> dma_cohenrence. It is configable for difference platform.
-> >>>>>>>>>>>
-> >>>>>>>>>>> When you say "platform", what do you mean? I understand that term to
-> >>>>>>>>>>> mean a combination of board, soc and firmware.
-> >>>>>>>>>>
-> >>>>>>>>>> In my company's environment, "platform" is "board". I will use "board" in
-> >>>>>>>>>> future. Is it big difference here?
-> >>>>>>>>>
-> >>>>>>>>> Nah, that's close enough that it makes no difference here.
-> >>>>>>>>>
-> >>>>>>>>> I'd still like an explanation for why a platform would need to actually
-> >>>>>>>>> set these properties though, and why information about coherency cannot
-> >>>>>>>>> be determined from whether or not the boss the usb controller is on is
-> >>>>>>>>> communicated to be dma coherent via the existing devicetree properties
-> >>>>>>>>> for that purpose.
-> >>>>>>>>
-> >>>>>>>> Actually, I am not very clear about reason. I guest maybe treat off power
-> >>>>>>>> consumption and performance.
-> >>>>>>>>
-> >>>>>>>> What's your judgement about proptery, which should be in dts. Such as
-> >>>>>>>> reg, clk, reset, dma and irq, which is tighted with SOC. It is the fixed
-> >>>>>>>> value for every SOC. The board dts never change these.
-> >>>>>>>
-> >>>>>>> Then it can be deduced from the compatible and there is no need for new
-> >>>>>>> properties.
-> >>>>>>
-> >>>>>> Okay, I think "*reqinfo" match this. When new Soc(using compatible dwc usb
-> >>>>>> controller) appear regardless dma-cohorence or not, connect by AXI3 or
-> >>>>>> AXI4, needn't add new propterties. 
-> >>>>>
-> >>>>> Anyone have objection? I will prepare v2 to fix rob's bot error.
-> >>>>
-> >>>> I'm not sure what you want me to object to/not object to.
-> >>>> Your last message said "needn't add new propterties", seemingly in
-> >>>> agreement with Krzysztoff saying that it can be deduced from the
-> >>>> compatible. That seems like a good way forward for me.
-> >>>
-> >>> Okay, let me clear it again. dwc usb is quite common IP. The below is
-> >>> what reason why need "*reginfo* instead of using compatible string.
-> >>>
-> >>> 1. *reginfo* property is decscript hardware behevior, which will be changed
-> >>> at difference SOC.
-> >>> 2. it may change at board level according to if enable dma coherence.
-> >>
-> >> dma coherence is not a board property. Anyway, you said it will never
-> >> change in the board.
-> > 
-> > Sorry, let's correct what my previous said. There are two kinds bus in
-> > system, one is dma_coherence, the other is none dma_coherence. There are
-> > some dwc usb core ip, which is the exact the same. Some connect to
-> > dma_coherence bus, some connect to non-dma_coherence bus.
-> > 
-> > So dma_coherence will be varible for this case. we need set *reginfo* for
-> > dwc usb core, which connnect to dma_coherence bus.  not set "reginfo* for
-> > the dwc usb core, which connect to none dma_coherence bus.
+On Wed, 07 Feb 2024 19:40:14 +0100, Uwe Kleine-König wrote:
+> Changes since v2
+> (https://lore.kernel.org/linux-spi/cover.1705944943.git.u.kleine-koenig@pengutronix.de):
 > 
-> OK, that makes sense. Please provide link to upstream DTS
-> (mainline/next/lore link/other upstream projects) showing this.
-
-Look like I still have not found the real case yet. But I think it is
-existed (maybe not upstream yet). Can I forward using this method?
-
-Frank
-
+>  - Drop patch "mtd: rawnand: fsl_elbc: Let .probe retry if local bus is
+>    missing" which doesn't belong into this series.
+>  - Fix a build failure noticed by the kernel build bot in
+>    drivers/spi/spi-au1550.c. (I failed to catch this because this driver
+>    is mips only, but not enabled in a mips allmodconfig. That's a bit
+>    unfortunate, but not easily fixable.)
+>  - Add the Reviewed-by: and Acked-by: tags I received for v2.
 > 
-> Best regards,
-> Krzysztof
-> 
+> [...]
+
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[01/32] fpga: ice40-spi: Follow renaming of SPI "master" to "controller"
+        commit: 227ab73b89d66e3064b3c2bcb5fe382b1815763d
+[02/32] ieee802154: ca8210: Follow renaming of SPI "master" to "controller"
+        commit: 167b78446706bb4d19f7dd93ca320aed25ae1bbd
+[03/32] iio: adc: ad_sigma_delta: Follow renaming of SPI "master" to "controller"
+        commit: 2780e7b716a605781dbee753ef4983d775a65427
+[04/32] Input: pxspad - follow renaming of SPI "master" to "controller"
+        commit: a78acec53b8524593afeed7258a442adc3450818
+[05/32] Input: synaptics-rmi4 - follow renaming of SPI "master" to "controller"
+        commit: 1245633c61baf159fcc1303d7f0855f49831b9c1
+[06/32] media: mgb4: Follow renaming of SPI "master" to "controller"
+        commit: 2c2f93fbfba7186cc081e23120f169eac3b5b62a
+[07/32] media: netup_unidvb: Follow renaming of SPI "master" to "controller"
+        commit: cfa13a64bd631d8f04a1c385923706fcef9a63ed
+[08/32] media: usb/msi2500: Follow renaming of SPI "master" to "controller"
+        commit: dd868ae646d5770f80f90dc056d06eb2e6d39c62
+[09/32] media: v4l2-subdev: Follow renaming of SPI "master" to "controller"
+        commit: d920b3a672b7f79cd13b341234aebd49233f836c
+[10/32] misc: gehc-achc: Follow renaming of SPI "master" to "controller"
+        commit: 26dcf09ee5d9ceba2c627ae3ba174a229f25638f
+[11/32] mmc: mmc_spi: Follow renaming of SPI "master" to "controller"
+        commit: b0a6776e53403aa380411f2a43cdefb9f00ff50a
+[12/32] mtd: dataflash: Follow renaming of SPI "master" to "controller"
+        commit: 44ee998db9eef84bf005c39486566a67cb018354
+[13/32] net: ks8851: Follow renaming of SPI "master" to "controller"
+        commit: 1cc711a72ae7fd44e90839f0c8d3226664de55a2
+[14/32] net: vertexcom: mse102x: Follow renaming of SPI "master" to "controller"
+        commit: 7969b98b80c0332f940c547f84650a20aab33841
+[15/32] platform/chrome: cros_ec_spi: Follow renaming of SPI "master" to "controller"
+        commit: 85ad0ec049a771c4910c8aebb2d0bd9ce9311fd9
+[16/32] spi: bitbang: Follow renaming of SPI "master" to "controller"
+        commit: 2259233110d90059187c5ba75537eb93eba8417b
+[17/32] spi: cadence-quadspi: Don't emit error message on allocation error
+        commit: e71011dacc3413bed4118d2c42f10736ffcd762c
+[18/32] spi: cadence-quadspi: Follow renaming of SPI "master" to "controller"
+        commit: 28e59d8bf1ace0ddf05f989a48d6824d75731267
+[19/32] spi: cavium: Follow renaming of SPI "master" to "controller"
+        commit: 1747fbdedba8b6b3fd459895ed5d57e534549884
+[20/32] spi: geni-qcom: Follow renaming of SPI "master" to "controller"
+        commit: 14cea92338a0776c1615994150e738ac0f5fbb2c
+[21/32] spi: loopback-test: Follow renaming of SPI "master" to "controller"
+        commit: 2c2310c17fac13aa7e78756d7f3780c7891f9397
+[22/32] spi: slave-mt27xx: Follow renaming of SPI "master" to "controller"
+        commit: 8197b136bbbe64a7cab1020a4b067020e5977d98
+[23/32] spi: spidev: Follow renaming of SPI "master" to "controller"
+        commit: d934cd6f0e5d0052772612db4b07df60cb9da387
+[24/32] staging: fbtft: Follow renaming of SPI "master" to "controller"
+        commit: bbd25d7260eeeaef89f7371cbadcd33dd7f7bff9
+[25/32] staging: greybus: spi: Follow renaming of SPI "master" to "controller"
+        commit: ee3c668dda3d2783b0fff4091461356fe000e4d8
+[26/32] tpm_tis_spi: Follow renaming of SPI "master" to "controller"
+        commit: b6af14eacc8814b0986e20507df423cebe9fd859
+[27/32] usb: gadget: max3420_udc: Follow renaming of SPI "master" to "controller"
+        commit: 8c716f4a3d4fcbec976247e3443d36cbc24c0512
+[28/32] video: fbdev: mmp: Follow renaming of SPI "master" to "controller"
+        commit: b23031e730e72ec9067b7c38c25e776c5e27e116
+[29/32] wifi: libertas: Follow renaming of SPI "master" to "controller"
+        commit: 30060d57cee194d6b70283f2faf787e2fdc61b6e
+[30/32] spi: fsl-lib: Follow renaming of SPI "master" to "controller"
+        commit: 801185efa2402dce57828930e9684884fc8d62da
+[31/32] spi: Drop compat layer from renaming "master" to "controller"
+        commit: 620d269f29a569ba37419cc03cf1da2d55f6252a
+[32/32] Documentation: spi: Update documentation for renaming "master" to "controller"
+        commit: 76b31eb4c2da3ddb3195cc14f6aad24908adf524
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
