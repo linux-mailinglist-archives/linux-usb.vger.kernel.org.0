@@ -1,119 +1,108 @@
-Return-Path: <linux-usb+bounces-6048-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6049-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F310184E163
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 14:06:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8173884E42D
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 16:42:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEBFF28D3A5
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 13:06:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EF0C28E3B4
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 15:42:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49B237640A;
-	Thu,  8 Feb 2024 13:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E5F7D3E0;
+	Thu,  8 Feb 2024 15:42:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LNt0guO+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dpUTJHmm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7189763E4
-	for <linux-usb@vger.kernel.org>; Thu,  8 Feb 2024 13:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FE97CF3B;
+	Thu,  8 Feb 2024 15:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707397537; cv=none; b=DXDsUX1GpsDlIbnUk3lw6wsGyqO697mphCZ9wo73Vtzskuk1MMkp4XKWLxa3/nuUPo/NxXj8G2bp3A8YNp6R0Sm7dlTU6Jm8GilWWb6kfi1HIZEY8ZE2Yu24kfXIRdn1Yg876SsnBSud3PE0lj76nXTtGcqFNq+4YQBZE8Oh2e0=
+	t=1707406933; cv=none; b=HJ9lKbDye+VH+CKFcHh5psy+Ajg1oag8kPosmYOH+1oxL9mtxk+ZRhYdtkP12ILjSzNOfdvD/BGo9I2MFWR59WyM9dMeeh3zxXlzhZxyz76VBnZaYrBXlNdw7LGJtoQWW0aqJqjTOAtr028qDVvk1JWfa0atMr65o4+RrRmvjHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707397537; c=relaxed/simple;
-	bh=OOm3KwQlSkpx/aQ0RD1Q/n3/Iu+q+deGUZmDwakoQcE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G7/WpJbIhpyqv8Xt7P6Mg/NHrj5rSxTp//Mmf67u5QbW/vQTRlhp8EAAsJwv4kljvd7aBTmaYxDAUyNfPgFa59gwH+O7zfeA9UOSAqa3auc83bPUQAhY+u/vbZll9mz0/UUp+VrIUMaGJ0fWjOZCwZ9+fQ87llglvNAzsyOx89s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LNt0guO+; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-60492a2593fso17289817b3.2
-        for <linux-usb@vger.kernel.org>; Thu, 08 Feb 2024 05:05:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707397534; x=1708002334; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yaonEZUtkmkL4+4T+nM7QfSGszePSMsGy31jLocXPig=;
-        b=LNt0guO+zv8N1hp1QGPKyIX2TOshE8/9Sz7v+1IQDLCx1F9j1tv33TSSgeyxeWUVgl
-         ak3B2gzAKOeK8z5JlQvUxng39OusDMd/IN7Lz7yr+1v6D3bysAZ81xZlMGA2MG2kCktR
-         lvqeHM2zia7I0/PloRbzLKN/tFbawD1wO3OtjnVH/Unv6PaUWIk7ho6qrBxiVcLRscMI
-         +mkSsx1d/VPAhrGk79dDhfAgiclb6BTAsMx2UdT9AkQiad+bZneN1TJweJDgilTXFfAc
-         FTypQZj6pvj5YXamY/Q+hX2YX317WoMZh8g7Ni9zVGABCP0k822JWFlmpla8fCzTVfl9
-         qnVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707397534; x=1708002334;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yaonEZUtkmkL4+4T+nM7QfSGszePSMsGy31jLocXPig=;
-        b=T4ebtbrYDFe2gdKfxIi7f7gj4aolPFRHLxGtv1p5PeickG5025+FbDJig370YoquxF
-         6Zdfz0oz1lU+AjQqQgeVOloEYs8eGJm7JRfH4QFlP5vMGnybB2VVMbnr3BDbIPzZJQjb
-         aputI/8Tq25NKc8gGxt/sT7Ji5OzCq5oPZpx/ibWsIi2VvT/L0OOqN6pje0aJe0GzRlq
-         lFCAIxVQh0bQLXxLdQCpYqpRrfJNDoJlJ5u2JqjAPMNlprbXdmure0G0pWc5gZot/Ip7
-         g/fFn+736o5GmJl+zklF5k5JIoH7DwE6oT5HP1DhD1pP4P2W5NJFtT4K0I+LWX2QEGl4
-         zE2w==
-X-Gm-Message-State: AOJu0Yxz/DoE2ZEFi5NYxEeccP+iz1rU8cINf7au6R5gP11Jr48gOPqG
-	G9El4w46XdGfKb5YNWHxr/dPNi1DHHN/F3/KhIencw0l3cNZn5L7/9LvMZu1pdCLncEV33qWhlv
-	u48AHmAZ9JAfvAED9B+eDW0NM/YmNWCtSZv5+vQ==
-X-Google-Smtp-Source: AGHT+IGfphzyQv/EWtNvXSUhZkKTokLhrAXhw2QIgrex5Lkm5/2iiFvKEz8iowkI5t4PsE48NVTAvoH79ulzgHlzIPY=
-X-Received: by 2002:a0d:c545:0:b0:604:71b3:2021 with SMTP id
- h66-20020a0dc545000000b0060471b32021mr8488916ywd.3.1707397533831; Thu, 08 Feb
- 2024 05:05:33 -0800 (PST)
+	s=arc-20240116; t=1707406933; c=relaxed/simple;
+	bh=Gq/MeCq8tAdioyMIzNGvwfo3UL2xJNXqTKNa0zXA520=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oR0Ay0Uf6GUbOmbPKXjpw8xIzd/t2BsrGgaXV88am6Z22sUj0v0GHJn3H542bmpZYumksypHOjewchUM7G5tqCgiZ6TlmiCU3k3jK+6F7hjpu1ujRw52WlLp867g7Z2PlbhRLQ5sWxXOT96p7wQLOZLsEl6Ozt2CY4dcxNJua5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dpUTJHmm; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707406932; x=1738942932;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Gq/MeCq8tAdioyMIzNGvwfo3UL2xJNXqTKNa0zXA520=;
+  b=dpUTJHmmx+tUbSiGY3PZ+brOzgFB4qFXAT41Rq2edum36yCT/lWSJCbP
+   1TL3Rb2EviiZZ3LvvYW7SmkQ2lfi+cK+3n46gxf/O/FlBX9shEAYWtt7s
+   heskK0oTM/aczEy1lcG6RtP3u03mNkkuEeVmR125fUf6CSSYBq3huSKUp
+   CdfIUXH+DFaCEN1k41lurlQdrWx56aOXUZCscUW8O6kE2Umng+kra8kc+
+   EpAEMykH7u87Og+C77uavz4geBiG8eiDlMksmy01cXX3efy9HelexuIRS
+   7iP8WgIbXlFtEHStzQ3uvdldCp0uDPUjNsZY91CIITT3zzH2sRN53WFsw
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="23721935"
+X-IronPort-AV: E=Sophos;i="6.05,254,1701158400"; 
+   d="scan'208";a="23721935"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 07:42:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="934162468"
+X-IronPort-AV: E=Sophos;i="6.05,254,1701158400"; 
+   d="scan'208";a="934162468"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Feb 2024 07:42:08 -0800
+Message-ID: <a026ecd8-6fba-017d-d673-0d0759a37ed8@linux.intel.com>
+Date: Thu, 8 Feb 2024 17:43:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130-pmi632-typec-v3-0-b05fe44f0a51@linaro.org>
- <20240130-pmi632-typec-v3-3-b05fe44f0a51@linaro.org> <CAA8EJpqhfWsmUxwmBLtdtx-aFOmTo24erdNfRyz2ymi_y=yidw@mail.gmail.com>
- <ZcTA5hbcladmKuLh@kuha.fi.intel.com>
-In-Reply-To: <ZcTA5hbcladmKuLh@kuha.fi.intel.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Thu, 8 Feb 2024 15:05:22 +0200
-Message-ID: <CAA8EJpqf_iQz5JWwEsZmUOV=VSY5y_RrO6JqEztr9Q2Fc2J-FA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] usb: typec: qcom-pmic-typec: add support for
- PMI632 PMIC
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Guenter Roeck <linux@roeck-us.net>, 
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Luca Weiss <luca.weiss@fairphone.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: =?UTF-8?Q?Re=3a_This_is_the_fourth_time_I=e2=80=99ve_tried_to_find_?=
+ =?UTF-8?Q?what_led_to_the_regression_of_outgoing_network_speed_and_each_tim?=
+ =?UTF-8?Q?e_I_find_the_merge_commit_8c94ccc7cd691472461448f98e2372c75849406?=
+ =?UTF-8?Q?c?=
+Content-Language: en-US
+To: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com,
+ Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+ Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
+ <Zb6D/5R8nNrxveAP@cae.in-ulm.de> <Zb/30qOGYAH4j6Mn@cae.in-ulm.de>
+ <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
+ <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com>
+ <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
+ <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
+ <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
+ <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
+ <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, 8 Feb 2024 at 13:54, Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Wed, Feb 07, 2024 at 11:54:50AM +0200, Dmitry Baryshkov wrote:
-> > On Tue, 30 Jan 2024 at 21:33, Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > The PMI632 PMIC support Type-C port handling, but lacks USB
-> > > PowerDelivery support. The TCPM requires all callbacks to be provided
-> > > by the implementation. Implement a special, 'stub' Qcom PD PHY
-> > > implementation to enable the PMI632 support.
-> > >
-> > > Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > Tested-by: Luca Weiss <luca.weiss@fairphone.com> # sdm632-fairphone-fp3
-> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >
-> > Heikki, Gunter, Gret, is there anything left on my side to get these patches in?
->
-> Nothing from me. Do you want Greg to pick these?
+On 8.2.2024 12.32, Mikhail Gavrilov wrote:
+> On Thu, Feb 8, 2024 at 2:23 PM Mathias Nyman
+> <mathias.nyman@linux.intel.com> wrote:
+>>
+>> My guess is that CPU0 spends more time with interrupts disabled than other CPUs.
+>> Either because it's handling interrupts from some other hardware, or running
+>> code that disables interrupts (for example kernel code inside spin_lock_irq),
+>> and thus not able to handle network adapter interrupts at the same rate as CPU23
+>>
+> 
+> Can this be fixed?
 
-Yes, please.
+Not sure, I'm not that familiar with this area.
+Maybe running irqbalance could help?
 
--- 
-With best wishes
-Dmitry
+Thanks
+Mathias
 
