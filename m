@@ -1,75 +1,93 @@
-Return-Path: <linux-usb+bounces-6040-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6041-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1510D84DE9A
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 11:47:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41B8C84DEE2
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 11:57:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 625F8B2822F
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 10:47:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A626D1F2C3E4
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 10:57:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A6166E2B3;
-	Thu,  8 Feb 2024 10:47:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ACD774E31;
+	Thu,  8 Feb 2024 10:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="ac6vJ6/s"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LdzTlN1h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A8C6D1CA;
-	Thu,  8 Feb 2024 10:47:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1E76A347
+	for <linux-usb@vger.kernel.org>; Thu,  8 Feb 2024 10:53:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707389233; cv=none; b=ZFgf7Xz9SGb9Gwlh29JNHpr/ccgG2Jm+EYVz9WSqcBnTifC2uPHyubjpWO9FfJh8Soay9wwBClBNOmJOz585IbXQRw4vd+GFGdik4ST8+B57Wa6luUF7pmdxFCOAcALwQDliGLP6heyxwMwDuIXD22CbZrhjCdCdcGfBjQT2kcc=
+	t=1707389614; cv=none; b=ZJW9Jqhscsn5Moyk7HVqrHhlwfq3ZWbpA38UeAwXS5deaJ/xlZfbXnUJo9sVxHupbBuaaI9eBdUxRNYL2XhnIFHJGELZxnXBRjNnL536qjRnKDLLkgk4ghnHUbejYkpamd3lM0XIqPbJDtSQiKaYPNQ4MTcOy7HPh/Lvq60io4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707389233; c=relaxed/simple;
-	bh=h7tpdDW4CcqCKn6XE4h5OZ+mpFGC6zQVQuoEeBaQ7bs=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=iSWZ0fA8h8abFlN3CZ9zKBZzbVjxjwnPh+ubGAbnyVDzRXjqAJCn8Js2rjwyzrQfZeJ5BgL8ZvuZ+0MELtAeWn6IxkAzyfTxvTpC5V2OENaTzyXgVny58xZ+7TDKSXNKfJ/G4XOmIaPPRJjj55IqXgOaDKz4k9SLA1+ki96CY08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=ac6vJ6/s; arc=none smtp.client-ip=203.205.221.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1707389218; bh=hcbbJhAls5Uesp7NyjBSOyZ/XNieAhW/QJoPzNlPnlQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ac6vJ6/sCj8BTEThK4epPx9UY1M539mgYjxNZeZLBmCAJXTI2kxgox85oxT6Dk8Th
-	 wvOsO5koDxJl9IgHxzXdKZ3h2+1RcgO29os9V2lhvZr22/3Miqpef/K7ypv2xj15Gl
-	 0JwDH8DJjhbQXI7PaWILj5gT13DixyDTIimvINik=
-Received: from pek-lxu-l1.wrs.com ([117.61.184.234])
-	by newxmesmtplogicsvrsza1-0.qq.com (NewEsmtp) with SMTP
-	id BB7060B2; Thu, 08 Feb 2024 18:46:55 +0800
-X-QQ-mid: xmsmtpt1707389215tzz8xjd5x
-Message-ID: <tencent_AF9E941B3D4BEF1B2625D4BA18BBDA332108@qq.com>
-X-QQ-XMAILINFO: OG0c0cMNDXpT/PABBA6BB72RIf0nVSzum1KsQAwIrzegiKAVPbaEAo0EP8zB5O
-	 j11mS800jDnC53o4K1MxB1EwZHZL+dKnHTHScDmIuOtCyH0fTAd5tOsvte1bGE7iA9B4AzmeiHBw
-	 263vSIt3ZMrTfjhjo8i0grrzCPzhCfe/5pzWLgva+0fTIVNk3n7vY+919WjSxbU73yjX1mf/kx3x
-	 Tnp/lEN7NtFo79eQcJv+KYdFl+CypOiuuSMhkjXqXGLgK2E12GhZqJmAsH5yfBygYW57QCknmA+R
-	 G5JtVoXkJQ0jFNAd51SW7cZtebBV6zpeUBXFmS8sRd8ILo2I2UxJ/GMaMdrgks9SNRYkULS3/vL7
-	 vipOxx6B8onz9GPZhfpAvkedCHj0YCSmbTNFzzqb11XUNrHOt2Tg6QmogUw/lkIelwkVhtxRQNQC
-	 8rsJ0oE70dfDiBEsA76N1AiXwEtoiGkm54k+liMJzcoQDIKXN0sQ/xHEA2AY0MU007GpoYIEi3Nu
-	 iqQcXXmrmi8Jf+Rq+Q5pewdbbTCycy29SvqxsDvUqI1EzdLt1l1MrzqQ43WCCVWnI2cKogLwAs/7
-	 N6T7zZZKaxtO4/iwkntrQCgMIzSrE6vXPL+6vblb4MqB7gNVrXoqjiU5l1CTlEb1Fq717LlI7vKn
-	 lckAJBO6nomDL+nyWaXFgbrK7BXWvbbZIPEDhD9WtSvcb2Tb5aC5Gmhc0aShJ0MAxl6LWXVPUfD6
-	 lowP1P/TJdrjdL/0SHFvujr2eXeYqT/pcdBDr5tWTH82sSF+vho4J2lAB9i2I6FIB3Sp4fLndRY4
-	 I9hxllZgp5iPOyZi1iLRf+1krkTOKLZJrF3+rhBBn5N5Pjhgq0fLDqSPsjmqTmtwG6+YNL5zBXtm
-	 GlL7YSG90usv4QEhWyyTtcI2gk7/A8cRoQYZtUqcYGQrSr/nI7n7XM877A4w4CiA==
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-From: Edward Adam Davis <eadavis@qq.com>
-To: syzbot+8e41bb0c055b209ebbf4@syzkaller.appspotmail.com
-Cc: gregkh@linuxfoundation.org,
-	linux-input@vger.kernel.org,
+	s=arc-20240116; t=1707389614; c=relaxed/simple;
+	bh=Yak4cFjMHPZmLSpzj5mNffL7x3y3cDltdS0WVHZOEzk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jm6CXRDZdffGyqWwDClg/Rro8S5ZTmregf9BIR4oUg6PmT3dZXQfdk+ytT6PpKis95ZVMov7o0wTmAaZkB/f5zXGgz37SufXoYM+bDRrt6y6w3Wc8uJ+LDRlbAPxBzoHLw70RQzb68DOGHLzeBZSM7fu7tLDifhegoM+ytbRI4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LdzTlN1h; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-511616b73ddso2860447e87.0
+        for <linux-usb@vger.kernel.org>; Thu, 08 Feb 2024 02:53:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707389610; x=1707994410; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jPbaHNpdgRM2voFhkmhteYkFLuMSfGggj9pZ2tYQahA=;
+        b=LdzTlN1hUIqHqT5L5/jBEJc1wkIZL5hW0kTD/69px5dENE823nf4WSe6vThq0Fk40d
+         AHtsR0TLyUmrs2ISVd+4wUExhz687XALkZZWi+a1y9JmbaeE4hfrU2CvzqYPTlrv+wKo
+         i2GsYyTDlOZPc5ZHHC37lWuwoklOfyFKRyH+9qW3hjOaK2Z9mLxT7nI1ZnNpTSF9J2Mb
+         +VttzGA8v3aYYNeUAxk8nuNjVWkOwe+Qu2xQywGwEnPGQnxY55C7/wG6/Jq1yIf8rTjR
+         lLugGaZ/j+dlV7tEDJVRobhJbcjSKzYXNfDWRezL0txK3xWY6fr+xruJ28FarU5eA9CM
+         M92A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707389610; x=1707994410;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jPbaHNpdgRM2voFhkmhteYkFLuMSfGggj9pZ2tYQahA=;
+        b=uCxumsBgCxo9YnJDNwk0cosszkIzttQCx/z3CDiIwnLGM89BdXV/gJk0cZWmk31EE5
+         d2ylQ0xa6dOWZ2/Kpd6w23VOlpCXrTs2oVx1I9cFTH1guGE+jlvzmd7vKia4OT3VDgsB
+         ZFSYvX4GhwiOlZ80soGnCJ3WN03N74JgrHBM1Vsa6ZU+Wygq8WsI6QjoPlM7MKoJ9lkS
+         UGRLDUtLMb7ldBRnQ7Y6eV3MKI/5MhCS+vB8k0nn3vJWW0r4jrr6HkFT/XcKqnHRB4MH
+         7J0tdQIaTeAT3dcHU0Hi+NTuJxFyzRh6ANyZW0SYq2qJGiISoCaZF9yh9eIIbb76R07r
+         ynmg==
+X-Gm-Message-State: AOJu0Yz4vO0FwBUqwWvS8ybs8CMgIov4kTHcz/jnvEDNFhPJco9GJ16r
+	P3vt1S/ZyyJEX7EPjSRUieTllOkQZpbvUR0m1Nda/k5t96EJ1eW2OG2v9bt0/ic=
+X-Google-Smtp-Source: AGHT+IE6hoYZwYD0dWVmAGmKkSd9PFPDghU6N/6PiAFFxP0tnFnQHDz4xtisHPCpPSjEHYZbbvqINw==
+X-Received: by 2002:ac2:5de5:0:b0:511:5036:8e9f with SMTP id z5-20020ac25de5000000b0051150368e9fmr5870212lfq.12.1707389610461;
+        Thu, 08 Feb 2024 02:53:30 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUMWuVQrY8stnoRFivkfykW9gfoU0KgAA0ARDUMH41jJObwrwK24UxqnmtnhIh7HuLi36zZF47bUqwTj5/iDe3BgX1D+neH/suGK98ikRsEayZc3frc75Ba8Fxkvlxze2U+vEhHXd0WNHXHobVIL9WGPZ32vWOGgb74yaRruhPZaMWSy0grEws+eImfbxq9E/IMa3BchtzPwYKvf8l3jQV01BoqDCezhbd+Er+vqIHG24dehg7PE3abjSYP8VaJmFPYTI8/Z5BrQzpNQ3Y82uFMdOsTBTIGbKjvn1FwpEiyVWOg1nCTaNswIbhAmOluIBlJQQWrlV0Dq1ssIxvVDMVrqaumY4iiDn2qfZ66Mg0Z05CkG5TRxnQIV09wt/fnmEX2tsDu+/oLfQj66YG6B53ePfamdT9eQ2ykHOnWBFlsxhRcoL4HblQcp5YM7e28N9NoAwISAhmmb3C/TVIvLfKIkTnEAabzfUsgyU5j3t0MPH3NbpJM4MshCNBQsY9uKkBuLUkZV9wV6n3BL5Itk1ZWJpSJH+sqWohItBFunGc=
+Received: from krzk-bin.. ([178.197.222.62])
+        by smtp.gmail.com with ESMTPSA id s10-20020a05600c044a00b004100b3c41absm1212129wmb.30.2024.02.08.02.53.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Feb 2024 02:53:30 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <quic_jesszhan@quicinc.com>,
+	Sam Ravnborg <sam@ravnborg.org>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Benjamin Bara <benjamin.bara@skidata.com>,
+	dri-devel@lists.freedesktop.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	rafael@kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: [PATCH riscv64] kobject: fix WARNING in input_register_device
-Date: Thu,  8 Feb 2024 18:46:55 +0800
-X-OQ-MSGID: <20240208104654.3757719-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <00000000000047631d0610d010c1@google.com>
-References: <00000000000047631d0610d010c1@google.com>
+	linux-usb@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: use capital "OR" for multiple licenses in SPDX
+Date: Thu,  8 Feb 2024 11:53:27 +0100
+Message-Id: <20240208105327.129159-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,30 +96,48 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The input_add_uevent_modalias_var()->input_print_modalias() will add 1684 bytes
-of data to env, which will result in insufficient memory allocated to the buf 
-members of env.
+Documentation/process/license-rules.rst and checkpatch expect the SPDX
+identifier syntax for multiple licenses to use capital "OR".  Correct it
+to keep consistent format and avoid copy-paste issues.
 
-Reported-and-tested-by: syzbot+8e41bb0c055b209ebbf4@syzkaller.appspotmail.com
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- include/linux/kobject.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/display/panel/visionox,r66451.yaml      | 2 +-
+ Documentation/devicetree/bindings/usb/cypress,hx3.yaml          | 2 +-
+ include/dt-bindings/power/amlogic,c3-pwrc.h                     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-index c30affcc43b4..74b37b6459cd 100644
---- a/include/linux/kobject.h
-+++ b/include/linux/kobject.h
-@@ -30,7 +30,7 @@
- 
- #define UEVENT_HELPER_PATH_LEN		256
- #define UEVENT_NUM_ENVP			64	/* number of env pointers */
--#define UEVENT_BUFFER_SIZE		2048	/* buffer for the variables */
-+#define UEVENT_BUFFER_SIZE		2560	/* buffer for the variables */
- 
- #ifdef CONFIG_UEVENT_HELPER
- /* path to the userspace helper executed on an event */
+diff --git a/Documentation/devicetree/bindings/display/panel/visionox,r66451.yaml b/Documentation/devicetree/bindings/display/panel/visionox,r66451.yaml
+index 6ba323683921..187840bb76c7 100644
+--- a/Documentation/devicetree/bindings/display/panel/visionox,r66451.yaml
++++ b/Documentation/devicetree/bindings/display/panel/visionox,r66451.yaml
+@@ -1,4 +1,4 @@
+-# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+ %YAML 1.2
+ ---
+ $id: http://devicetree.org/schemas/display/panel/visionox,r66451.yaml#
+diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+index 47add0d85fb8..28096619a882 100644
+--- a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
++++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+@@ -1,4 +1,4 @@
+-# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+ %YAML 1.2
+ ---
+ $id: http://devicetree.org/schemas/usb/cypress,hx3.yaml#
+diff --git a/include/dt-bindings/power/amlogic,c3-pwrc.h b/include/dt-bindings/power/amlogic,c3-pwrc.h
+index 1d98a25b08a4..61759df4b2e7 100644
+--- a/include/dt-bindings/power/amlogic,c3-pwrc.h
++++ b/include/dt-bindings/power/amlogic,c3-pwrc.h
+@@ -1,4 +1,4 @@
+-/* SPDX-License-Identifier: (GPL-2.0+ or MIT) */
++/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+ /*
+  * Copyright (c) 2023 Amlogic, Inc.
+  * Author: hongyu chen1 <hongyu.chen1@amlogic.com>
 -- 
-2.43.0
+2.34.1
 
 
