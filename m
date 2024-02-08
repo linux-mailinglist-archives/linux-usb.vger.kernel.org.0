@@ -1,129 +1,159 @@
-Return-Path: <linux-usb+bounces-6034-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6035-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 537A684DC89
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 10:13:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8B7284DCE1
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 10:28:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 072E91F22164
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 09:13:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBDA81C262D1
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 09:28:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACFC66BB42;
-	Thu,  8 Feb 2024 09:13:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A57176BFD6;
+	Thu,  8 Feb 2024 09:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F4KF6dyu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JcJ27kWS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533D4535DC;
-	Thu,  8 Feb 2024 09:13:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958DA6BB5B;
+	Thu,  8 Feb 2024 09:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707383588; cv=none; b=BlLLLg2HUbur/+8pDhma5fLvQGW/hFhHVZA+U97pWO1lNqkkdDihlXTjmDY24Z5iBHEoAdeSidHhQuOosasMDlBXiFhi0ui32r2LIu04uPD8fdHFcKz7YtCoym5XaIt/zQIzlb21wkLyo41tP0Iv7vg+wYPcn80CGgu99eyZcpM=
+	t=1707384229; cv=none; b=mhlNT4ghs3kNABX28kxtMkbtj7GSZnChR2e30zy/tnEkYcH/W3UBJV+Pyn5ZTTfT5rZoP2Ioh3GZDQYOKkgcdwJZdjr/g55phZAz9fciuXMVqOs4jWL5ByTcJxMwp06lopJFE4FKxRWrAtGzzsUSEjg+rWsOlwW2BN1mfZEPHLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707383588; c=relaxed/simple;
-	bh=Cmqaj8sgs7iWeMHaQKt5n5zPWvccQgeBanow+ePMb3Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BXvy99I2z1QIpn/8DHDvDaPlOC+cemSjPcwgCvL97pel8/Rl1xw0sM3suvqqIkNsRKq/TWl7z27plZKRXalJyWMPutDqIZ1TSrpiRIW2cE3Ic9pE1+vMZXYMu1VV6BImGG5fy7raxExzCtC24MeKeS/CII7gynZER4PfNIDbTto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F4KF6dyu; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1707384229; c=relaxed/simple;
+	bh=FjB8knGU2+4T4/a7gzKnYsp/3ZyeYcYxARRsy/pFxzw=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=bIzwq0HilX6/WveE4rrblgpaduc713K/RXVLWYrjosDk6ViP0gtwFk1AH0qBk8DhacpdaSUH1ArSrqMUobMLgzvqnPSxuP7/+fJSxLchd5fMNRsX+hkScHnENRDO6+8Hx4KoGnlSMdVt7E8ijoF6Aeh57xExD8dPDq92ijIka+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JcJ27kWS; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707383586; x=1738919586;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Cmqaj8sgs7iWeMHaQKt5n5zPWvccQgeBanow+ePMb3Y=;
-  b=F4KF6dyuNauh0LweZ+0DfDPDsgalwXU1HdCHOVxkh9KkQ5l5bE7YzKem
-   NRZ4cjtQzVhhMW/XvRFtXts3+yt9dCft4z2u+JilLvWBOLksnPH1jOTW3
-   QjGhk6kw1aaIHaW7V0V+FSr2cxI/bz9ay5Dp2X+RzxDM6rGmXoD+SnzS+
-   ChDK3zg1upIglslv2h2ePGohBt3+3JEzPJ46M2YrT6gswK7Licdv2eBZW
-   O/PEFpHDhY0hBmhRSeCJBh76jl0YoiER10FF/3CsHtvAluyQwH0JYaV7e
-   YJAaMWu+nUKrkBWoQcAdt32Vdg7j58iZr1KDj67t38+QN4thCXFt5j6zW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="1324250"
+  t=1707384227; x=1738920227;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=FjB8knGU2+4T4/a7gzKnYsp/3ZyeYcYxARRsy/pFxzw=;
+  b=JcJ27kWSyqTBc1uqCbFrt1u8uU1CY0ybq3SLjwZYwXihSlvdUutHVKr2
+   MpfgBsKk9F3gts4JGJKh30JrtDUibi+r1aMM1ohvc1jazn0E2Ojpk8FMe
+   GxmXe/9BpgwP4AIEMGO76+dC9twcSZgK7/oYUxDS2t7sLcNJ4yZ7N9EFz
+   wfot4O8/k+DU0PTXA+Im8y/UwJWg2JszNdv4Sr+o15lkbCe61KPNcUT8s
+   pYkIfDHu0TS2XPwOMuBFS/xWFwM5HSWv1cs6rcsvEfp6w3OYPc71oBnXl
+   w25whTerGgbB4GosYh6zt87/3V/XxL0IO399OROKGTPVfDWkNgqocZyYX
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="1079490"
 X-IronPort-AV: E=Sophos;i="6.05,253,1701158400"; 
-   d="scan'208";a="1324250"
+   d="scan'208";a="1079490"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 01:13:05 -0800
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 01:23:46 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="934072190"
+X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="934074730"
 X-IronPort-AV: E=Sophos;i="6.05,253,1701158400"; 
-   d="scan'208";a="934072190"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 08 Feb 2024 01:12:57 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Feb 2024 11:12:56 +0200
-Date: Thu, 8 Feb 2024 11:12:56 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Prashant Malani <pmalani@chromium.org>,
-	Uday Bhat <uday.m.bhat@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	oe-kbuild-all@lists.linux.dev, Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Emilie Roberts <hadrosaur@google.com>,
-	"Nyman, Mathias" <mathias.nyman@intel.com>,
-	"Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-	"Radjacoumar, Shyam Sundar" <ssradjacoumar@google.com>,
-	Samuel Jacob <samjaco@google.com>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] platform/chrome: cros_ec_typec: Make sure the USB
- role switch has PLD
-Message-ID: <ZcSbGIBt1BtFQd36@kuha.fi.intel.com>
-References: <20240207145851.1603237-3-heikki.krogerus@linux.intel.com>
- <202402081136.sve0cViZ-lkp@intel.com>
+   d="scan'208";a="934074730"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Feb 2024 01:23:44 -0800
+Message-ID: <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
+Date: Thu, 8 Feb 2024 11:25:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202402081136.sve0cViZ-lkp@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com,
+ Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+ Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
+ <Zb6D/5R8nNrxveAP@cae.in-ulm.de> <Zb/30qOGYAH4j6Mn@cae.in-ulm.de>
+ <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
+ <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com>
+ <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
+ <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
+ <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: =?UTF-8?Q?Re=3a_This_is_the_fourth_time_I=e2=80=99ve_tried_to_find_?=
+ =?UTF-8?Q?what_led_to_the_regression_of_outgoing_network_speed_and_each_tim?=
+ =?UTF-8?Q?e_I_find_the_merge_commit_8c94ccc7cd691472461448f98e2372c75849406?=
+ =?UTF-8?Q?c?=
+In-Reply-To: <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 08, 2024 at 12:07:40PM +0800, kernel test robot wrote:
-> Hi Heikki,
+On 7.2.2024 13.55, Mikhail Gavrilov wrote:
+> On Wed, Feb 7, 2024 at 3:39 PM Mathias Nyman
+> <mathias.nyman@linux.intel.com> wrote:
+>>
+>> Thanks,
+>>
+>> Looks like your network adapter ends up interrupting CPU0 in the bad case due
+>> to the change in how many interrupts are requested by xhci_hcd before it.
+>>
+>> bad case:
+>>          CPU0    CPU1    ...     CPU31
+>> 87:     18213809 0      ...     0       IR-PCI-MSIX-0000:0e:00.0    0-edge      enp14s0
+>>
+>> Does manually changing it to some other CPU help? picking one that doesn't already
+>> handle a lot of interrupts. CPU0 could also in general be more busy, possibly spending
+>> more time with interrupts disabled.
+>>
+>> For example change to CPU23 in the bad case:
+>>
+>> echo 800000 > /proc/irq/87/smp_affinity
+>>
+>> Check from proc/interrupts that enp14s0 interrupts actually go to CPU23 after this.
+>>
+>> Thanks
+>> Mathias
+>>
 > 
-> kernel test robot noticed the following build errors:
+> root@secondary-ws ~# iperf3 -c primary-ws.local -t 5 -p 5000 -P 1
+> Connecting to host primary-ws.local, port 5000
+> [  5] local 192.168.1.130 port 49152 connected to 192.168.1.96 port 5000
+> [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+> [  5]   0.00-1.00   sec  70.9 MBytes   594 Mbits/sec    0    376 KBytes
+> [  5]   1.00-2.00   sec  72.4 MBytes   607 Mbits/sec    0    431 KBytes
+> [  5]   2.00-3.00   sec  73.1 MBytes   613 Mbits/sec    0    479 KBytes
+> [  5]   3.00-4.00   sec  72.4 MBytes   607 Mbits/sec    0    501 KBytes
+> [  5]   4.00-5.00   sec  73.2 MBytes   614 Mbits/sec    0    501 KBytes
+> - - - - - - - - - - - - - - - - - - - - - - - - -
+> [ ID] Interval           Transfer     Bitrate         Retr
+> [  5]   0.00-5.00   sec   362 MBytes   607 Mbits/sec    0             sender
+> [  5]   0.00-5.00   sec   360 MBytes   603 Mbits/sec                  receiver
 > 
-> [auto build test ERROR on usb/usb-testing]
-> [also build test ERROR on usb/usb-next usb/usb-linus chrome-platform/for-next chrome-platform/for-firmware-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.8-rc3 next-20240207]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> iperf Done.
+> root@secondary-ws ~# echo 800000 > /proc/irq/87/smp_affinity
+> root@secondary-ws ~# iperf3 -c primary-ws.local -t 5 -p 5000 -P 1
+> Connecting to host primary-ws.local, port 5000
+> [  5] local 192.168.1.130 port 37620 connected to 192.168.1.96 port 5000
+> [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+> [  5]   0.00-1.00   sec   111 MBytes   934 Mbits/sec    0    621 KBytes
+> [  5]   1.00-2.00   sec   109 MBytes   913 Mbits/sec    0    621 KBytes
+> [  5]   2.00-3.00   sec   110 MBytes   920 Mbits/sec    0    621 KBytes
+> [  5]   3.00-4.00   sec   110 MBytes   924 Mbits/sec    0    621 KBytes
+> [  5]   4.00-5.00   sec   109 MBytes   917 Mbits/sec    0    621 KBytes
+> - - - - - - - - - - - - - - - - - - - - - - - - -
+> [ ID] Interval           Transfer     Bitrate         Retr
+> [  5]   0.00-5.00   sec   549 MBytes   921 Mbits/sec    0             sender
+> [  5]   0.00-5.00   sec   547 MBytes   916 Mbits/sec                  receiver
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Heikki-Krogerus/usb-roles-Link-the-switch-to-its-connector/20240207-230017
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> patch link:    https://lore.kernel.org/r/20240207145851.1603237-3-heikki.krogerus%40linux.intel.com
-> patch subject: [PATCH 2/2] platform/chrome: cros_ec_typec: Make sure the USB role switch has PLD
-> config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20240208/202402081136.sve0cViZ-lkp@intel.com/config)
-> compiler: m68k-linux-gcc (GCC) 13.2.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240208/202402081136.sve0cViZ-lkp@intel.com/reproduce)
+> iperf Done.
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202402081136.sve0cViZ-lkp@intel.com/
+> Very interesting, is CPU0 slower than CPU23 by 30%?
 > 
-> All errors (new ones prefixed by >>):
-> 
->    drivers/platform/chrome/cros_ec_typec.c: In function 'cros_typec_parse_port_props':
-> >> drivers/platform/chrome/cros_ec_typec.c:75:34: error: invalid use of undefined type 'struct acpi_device'
->       75 |                 if (adev && !adev->pld_crc)
->          |                                  ^~
->    drivers/platform/chrome/cros_ec_typec.c:76:29: error: invalid use of undefined type 'struct acpi_device'
->       76 |                         adev->pld_crc = to_acpi_device_node(fwnode)->pld_crc;
->          |                             ^~
->    drivers/platform/chrome/cros_ec_typec.c:76:68: error: invalid use of undefined type 'struct acpi_device'
->       76 |                         adev->pld_crc = to_acpi_device_node(fwnode)->pld_crc;
->          |                                                                    ^~
 
-Oh, so this has to be wrapped in ifdef CONFIG_ACPI :(
+My guess is that CPU0 spends more time with interrupts disabled than other CPUs.
+Either because it's handling interrupts from some other hardware, or running
+code that disables interrupts (for example kernel code inside spin_lock_irq),
+and thus not able to handle network adapter interrupts at the same rate as CPU23
 
--- 
-heikki
+Thanks
+Mathias
+
 
