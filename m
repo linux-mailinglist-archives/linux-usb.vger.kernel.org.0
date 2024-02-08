@@ -1,248 +1,517 @@
-Return-Path: <linux-usb+bounces-6114-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6083-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3712684EE0D
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 00:50:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64D0484ECF8
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 00:20:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E33D1288784
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 23:50:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E45021F2142F
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 23:20:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C345026E;
-	Thu,  8 Feb 2024 23:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1A6657864;
+	Thu,  8 Feb 2024 23:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="PkhLmw2I";
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="ZS8bMPML";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="o38VUJGe"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="euVW8uCT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80E3F50254;
-	Thu,  8 Feb 2024 23:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.156.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707436229; cv=fail; b=CvVSE1bEOWr4TM0KjrUMoQFKnfuofz1taf0SJ9z2Eo1UX4N54kjBuusnpBRf4QMsiaUfwKiNAoz3eBcRtdiDb1+Qj6F5xDOof8A4sIIMUcWeTsNQdCINfeMZa9foockPsx0lIc4niprAWGTnAD0TmdPEmTKFn3zTiaUsTzluIHg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707436229; c=relaxed/simple;
-	bh=vY9qPf1zuV+XlzYaVfBeaf6jUL/wCqr1oDqNvT97aVA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=priEAvvbhhKShAvpxtVcSqlVYhWdqpM7eQqs576Ey5L4TSjI2rQ8TOhiZlnCqb/yr+7xLT/XCGm47j5wyRBsVzjLXaOURId++yORT/7pAE1dH2EgKCyFHLsH0pJRA2UwlUcQJ+bpAXjbihIzg1mo8xFkv5yPkTxUt105w5GTdY0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=PkhLmw2I; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=ZS8bMPML; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=o38VUJGe reason="signature verification failed"; arc=fail smtp.client-ip=148.163.156.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
-Received: from pps.filterd (m0098571.ppops.net [127.0.0.1])
-	by mx0a-00230701.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 418M6Lnt032433;
-	Thu, 8 Feb 2024 14:28:29 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
-	from:to:cc:subject:date:message-id:references:in-reply-to
-	:content-type:content-id:content-transfer-encoding:mime-version;
-	 s=pfptdkimsnps; bh=vY9qPf1zuV+XlzYaVfBeaf6jUL/wCqr1oDqNvT97aVA=; b=
-	PkhLmw2IINLi+SYTY4yW/BSBGR776Qm6j99xQW70uP6uojv1dzOIJQNW7wCJqBtz
-	e1Nw9t3r6ATBeAvIo9OhfsCZXapDsRY2slATJ25BswzEFGm5BSUeYHxhKyUYWzdZ
-	VkGxyRhXSvwd5m1XRr1lPuqN2IpwXDcPoffjUAD7ajk2DRjDkP2sk4Gl5pY1vVb6
-	u7RB0MmeW6OQjcwmhBCrnOzF7wdzMUknsXFo/FAKtW2rtk6qdcGbfO8W4JoS1y2N
-	DBvnzeA5fJBhmXBPXjBz8427YlqjHpPa9L9aJOMPhqw8xjbFBw7pzDTK/GXM1QCF
-	tbbqSBBy/XLA+D9Ge1ntfg==
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
-	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3w1ncprxxx-1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D7E50260;
+	Thu,  8 Feb 2024 23:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707434085; cv=none; b=odlEExKhs4NMYSJVun2+doumJpNWoIeb1GJl1ASVuxuyD0eaOGtyDwJkB78uS+MxTa2OFGVo0XzVv3uNd5k+OyvMGVyvz/UK9bCJ6GqqDA85Q/u2Jxqn+kqgxtOE9hydiI31+tNA5CDobzvkJB7OfVEw6bJADYtpi+RB3OJyWNM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707434085; c=relaxed/simple;
+	bh=GSnV9NbZDQQiEIKWpGDSjxDVdDFB8kw8FQb7Fz0f2LU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ixm63wFlkCPPut2K6rhUemBZLDIbqKeemONXBBAVplCCXPIqmNMbsD2cjyDiozn4Hx6eYftQaF+AnRDLrfqPM21K9DH/4PrRX4aFyqHNOKMu7qolzb+1iwZ0rNB+GxlS+Lh/Tx9Bo/pNC2MACO2ybbHu0qayCFWgZj4F5fd+TSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=euVW8uCT; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 418NBVfa014682;
+	Thu, 8 Feb 2024 23:14:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=QyQPMXLP13EKLVffr3UUM/QfDBklEwLU7SLKcGFv/vI=; b=eu
+	VW8uCTMgwPiXuFFFlxu/GIh7QaDhSIWof6zTnENCpV5kaV65yDtHpaBsiEIK65dg
+	xHe8ydFqIY/uqC+s6zb51wrZGKTE1LamtFqlIXdmFC1HGkDwpY3iLI77gQQ10uPy
+	IoGl+c7pZGgRORprrllXvoKvtzttSHk4bY+3KBbDZoOsgKrsOlLqolPNedLWucGz
+	ZjZppC9vT25jPWGFKvCvNdza3HaAcB9nfR0MgzhMIZHi4XO6aLVYUk1/NF0AWeZg
+	eUPbx+5IOObU7KN0+zo7n69wR7nbY3+u+Y5NzWR1nrlPCEVm5yag9q/Q8YWZ5h7N
+	kQlXgnzkB3mOame/RkOQ==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w4pavjryx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 08 Feb 2024 14:28:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-	t=1707431309; bh=vY9qPf1zuV+XlzYaVfBeaf6jUL/wCqr1oDqNvT97aVA=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=ZS8bMPML3wTwUctEKq/T4v1RdHZ8OLcTFam3KQY2x5t0KHkP6YUN/BNt/iKH+SVvV
-	 Hdi4WT7tMj56Y4j+HmxAZXxDlHGWbtc78/+O1OTPClo7HITgIVvKA43psEKhLgUBUA
-	 uVkBvvnVgVj25f27tLZJsU441uOjczjMXAPIo3tm53m93N58+lzS5nii+PtX2MP0/C
-	 WGDRoz0QP9Wm5hRHi7dGP/OAdpTfGElQTjykCHTQllArEwqJplbh0192WCVznkIlwb
-	 ms2wRyrJaWRZhAMJWccc/Z99c6TJ3WqbNOAx/mOilkHY8YrGYMc6bMQ2CTMcETayVk
-	 tAxkLIo3+JA7A==
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
-	 client-signature RSA-PSS (2048 bits))
-	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7623640524;
-	Thu,  8 Feb 2024 22:28:28 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-	by mailhost.synopsys.com (Postfix) with ESMTPS id 0B1DEA0063;
-	Thu,  8 Feb 2024 22:28:28 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=o38VUJGe;
-	dkim-atps=neutral
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-	by o365relay-in.synopsys.com (Postfix) with ESMTPS id 5A30B404D4;
-	Thu,  8 Feb 2024 22:28:27 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iPnc5dUZyneqZ8E738OklMA2+3VANVfBkxF8yZDCdRQ3sHTxxfExpWLkny8mKeSJm871GlF+vEDFSGJ/hkeb3IAQFshqeFpw1lPCq3g7GgT8tmNguiFXoTCdLdpeX5KTupf0cZrLiz5lYLfg2eiLW2vPY3lsqiYK/VTpgluKyps1r/KyWK5KjU0EJBIMUwN6CiU07m9qTzTTRvKodqXO8FVqKzyXQti0tViwuxbtqXFiqsL7E2GsHAZ8jb7EmTyeWpU3H8wTIL/JUyKaXsBVSAtfRegStSWpUHEYhM915vTRWq8eM/vleasi8Wjkkzn0svH6NO6lk5vcjfL2rNM75g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vY9qPf1zuV+XlzYaVfBeaf6jUL/wCqr1oDqNvT97aVA=;
- b=PvjBWCKDsgFIDsktAsUht9afLSWAoMYivTXzxWQ59VcwMjCqOuNhaDPxb1+n2T3riXMEuOMsWHOISWaVcKb+2RsyWWRIhKQ1ks81Z3jof/2VN49x8O6TXmV5HNuDYwfgwvXqcSS9198LoxplIaAYRLw4Pt7EQi4Hmxb7jrszYXfJH0te7fdjlWVBF6POJOseEDO8EKF1fevwLw1WnrFqqjRnJ4nsZ0cLV8YF4G6pCscrQCfY+EYaKYTsrIhJxDPyYiic3VKKFhI6jKtv9jgbq+S4yAMza6sGhln+cOBoUOM84g4DdFCaRk0wrHygepVjdMP7MkuB3WwKwpFO/duqVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vY9qPf1zuV+XlzYaVfBeaf6jUL/wCqr1oDqNvT97aVA=;
- b=o38VUJGekvI+58+kezuCPcl5noFtQ2clabs6S1dJk/XnleuezbT4WcNxnfYbTTbBjJjRkR4dG5ZDKV6i2WWxWY358hNqXrFql1o4ovH8FmYhX2WRfN2ZDR+6etRAlkrihSWHo8bTfJag3LIHrQ/Xy7SZtC2IlaMZzHtAC0m3Dc8=
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com (2603:10b6:408:170::16)
- by SA1PR12MB7173.namprd12.prod.outlook.com (2603:10b6:806:2b4::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.11; Thu, 8 Feb
- 2024 22:28:24 +0000
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::a6b8:3d34:4250:8ae3]) by LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::a6b8:3d34:4250:8ae3%3]) with mapi id 15.20.7270.009; Thu, 8 Feb 2024
- 22:28:23 +0000
-X-SNPS-Relay: synopsys.com
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To: Conor Dooley <conor@kernel.org>
-CC: Frank Li <Frank.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>
-Subject: Re: [PATCH 0/2] usb: dwc3: drop 'quirk' suffix at
- snps,host-vbus-glitches-quirk
-Thread-Topic: [PATCH 0/2] usb: dwc3: drop 'quirk' suffix at
- snps,host-vbus-glitches-quirk
-Thread-Index: AQHaWhEfRhf51KoSiUePcxfNoeJAb7D/b1yAgAACaYCAAYDGAIAAFWkA
-Date: Thu, 8 Feb 2024 22:28:22 +0000
-Message-ID: <20240208222748.cc2eodhtqpt2jmpf@synopsys.com>
-References: <20240207-vbus-glitch-v1-0-7be87099461d@nxp.com>
- <20240207-settling-drone-90e6f10a3476@spud>
- <ZcQAqVViPHcbgn52@lizhi-Precision-Tower-5810>
- <20240208-unquote-palace-83edc6220acd@spud>
-In-Reply-To: <20240208-unquote-palace-83edc6220acd@spud>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: LV2PR12MB5990:EE_|SA1PR12MB7173:EE_
-x-ms-office365-filtering-correlation-id: 451c72a8-b9e4-48e3-7354-08dc28f542a7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- +OlYTelt3N68jBGArX/zIMkkH5P3uojU199gkAvp0dSRp2IjPS4EE1gK68/UabKuwk2znyH6xXYNmCIs2RhDV6vu7s95jd2bOLsqlhmpbqevGXp+inv/yT3PbzMwOyYdBg2gXN84kjdQdLIJfBh3MCK331tMk9YrUeKH7+LMyQQwD3xbXUABzRXYx5ocMakvizreTZ5sGyVOovf6ZGj/GPHj8xwTNtqt8UAxHeNI6/AwB2DdwboHC6pPYBObB6P4jkoMCRtKc7WZtzOHIgzFevUJn6XnWWaIV7HphHyAiIIFbXow7Z41fa1/qxs131eWUCnC5QUNnexuefVA4Ans3dNDBWtVSThkLVPmWOUaWEuboLgEJHO4LyoFgq9b/07HrdsNBR6ksgEuOXznP43Ct1nduYjJbGI72yhIxUWKDgrXkUqM2S6vxFpjMX60G7QYmmS5fsbZdW8fjCOpuINyRnT0uExgZE+ElhcwU6eSC7hnzuVzfI4RW1+CrMQKWwqQbzJdmySrB5MdcT9zq+dK3fGO8+mHZr6YoNv6Azj//j27ZVtaEAkE7kUxtuI0WcY9v9RVKty1codelp3CMBFtlM1igf7pc5qA1ysan+RcZbM=
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(136003)(376002)(396003)(39860400002)(346002)(230922051799003)(451199024)(1800799012)(64100799003)(186009)(83380400001)(86362001)(38100700002)(54906003)(6486002)(6916009)(478600001)(316002)(66556008)(66946007)(2616005)(26005)(66446008)(64756008)(66476007)(1076003)(966005)(122000001)(71200400001)(6506007)(76116006)(6512007)(38070700009)(36756003)(7416002)(8936002)(5660300002)(41300700001)(8676002)(4326008)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?utf-8?B?SEpZSTlRcnQ4eTNYMGhJUFhZR1RpQTB2SEtzWkV4b1oxYmZTd1NuV0dwWEQy?=
- =?utf-8?B?MnA4S0FjL2MvRjRnMWlJNzBhSk96MVlMNVBRNmdSVFBKM1QvaHduWFk4azFr?=
- =?utf-8?B?dCs3cWtQQnBGWkxSck5Wb09VMmF6dHJRWmhVeW9ZbEZybmsvR1ZFUTFHblRm?=
- =?utf-8?B?b3dTcDlUL29yWDh4SFdOTEtiMTVadStnVlAzUS9jVHR5dGIwams5Ymh4eUtP?=
- =?utf-8?B?dEFSdUNaTnYzbzkwdW0xSXluaEI0YkkvckJxSlVTNFJpcEZ1dTdpcEVBOEhO?=
- =?utf-8?B?Y2wxcTM3cjdCa3FJWlJPMnhGd2oyQ1UrbHpvdDREdllvSmRUeG43bk00QXc0?=
- =?utf-8?B?Ti9MZDVqeVVDWjZkTk9jOFA5NDhoTXdjVUpJNFJDYW1PeGxNRzNvblQyQURK?=
- =?utf-8?B?aE9VZlVDTnZlM0VKOHhRWGFxazU0WjdzaGdIRUc3dU9rOXJpMkFUS1lLSUkz?=
- =?utf-8?B?d1liNlBaUGEzZlhpU2lhdVNLR3p6QXFxNGJ0Tlo1UVR0MWxadEtqUTltUk5X?=
- =?utf-8?B?MEFEV3lDMkd5Rk5tT1Z2bTJBa0hyQlluTXZYUFN1amtoOVNpMllEcjZ2RlNR?=
- =?utf-8?B?NklCZVdHNHh6RTJuaVgvQ0JYTStxeHRVTm82ZmYzaXl0Yms1ajVuQlRheEVD?=
- =?utf-8?B?cTlVSHZTS2h4ditmTFNDVExFY080S3I2ZzdnVjlML21DbkZIUVIwUjFidCtM?=
- =?utf-8?B?eVk0Z1lGWGE2dzNzSjR2N3ExVm1MdExCM1l1dk42eWZDYzdXY1hncVFiY3BZ?=
- =?utf-8?B?cklFQzRxbzZ4aEc0OGtlNmIvajFTdUZBZmVobC9ZcXZjSWFEK1kxOXRTOGVk?=
- =?utf-8?B?TmxLcUt4Y1ZjMlNGK01qbzNBc3BOZnRpRFBhSDZnZ2FycFFhQ0h3WDFFM3I0?=
- =?utf-8?B?TEZrR1dRSXNGWlMrcEJVRFBhNlhZZ2NScDRXb1FmYnVsWWY4dHRYNCt0UWU2?=
- =?utf-8?B?dTg2Mkc1RENSYnVVWEZST1RIaEdoL1FiZVppR0lPNHZuY1Ntaksvb2R2N2Zy?=
- =?utf-8?B?M2ptRktrcHVaV29iVTFadDlwWnBTbXQ4b3BLd0tNRi9mb3hlcVBEbUlSMGdq?=
- =?utf-8?B?emJNNGFzQzBXdHZvZVEyM1lyWEZjR3JFaHFMdmxvd3M2YWQ4RlpLNFVZcVZD?=
- =?utf-8?B?OUdqaUFQbmFwbWVDeGxibnBzTzl2c0xNdk5sM3FQQUsxVDczYW02Yk5EZ29v?=
- =?utf-8?B?SlNnZldVbXRtdjZXV0cxaUlTMm1MenBBcDZiOUZLanlvVFpjVCsxNTIyWkcx?=
- =?utf-8?B?dWRNRVVvMk5UZ1ZuTTBOYkhQVGtLdXdIWEI0UEdkbXJoTXp2alRidmZnUnpx?=
- =?utf-8?B?OHdhQTlib1FLL21OUnpTNFcxSit1YmllSzNBK2JZdFNtWVZJQTRRTSszbzBX?=
- =?utf-8?B?cUVQM2ljdGtMV2JFbnF4M21QSG5PdDJYTjRHSFBWUERMVlZmWmdDSmRPTE1Q?=
- =?utf-8?B?V0NhL3JGWGhYTW5keGlUZWZZM1loQkN0OUVEcWJhZ254ZWdndGZtcUd6Mmhi?=
- =?utf-8?B?Y0t5cXVuUGZMTXFlWkloWk5FVHB2TE9LQ3ZlaUJhNWJnQWZoYTVsSUlwTTBz?=
- =?utf-8?B?OXdmUTRSNUZzRy82Q3BocnBNaXlYY2x1WHFuc2hxYThJek95anM3NzdPd0Zm?=
- =?utf-8?B?a2lxeGJuZkw0YkdIakJtSVdnNXdXN1hkVHI5V1ZkZm02NlB4dGZBNms3aW1a?=
- =?utf-8?B?SVpnUnBvYWhRdUxjWGJOdlhCZ0FCUm9xWFdHN3F2cGlQMm9BaU1sNU1aaEVT?=
- =?utf-8?B?ajMzTVVVdGEySVE5WkRHakFNVERMdXB0WUprMkVtRzRXNnhMUDYwK1U5TlJj?=
- =?utf-8?B?Z3kwL0pTUmxwc29ZcENLNW91NGEybzRhaGxBL1duQ1NWMDJJcVBnYVpCWFJ3?=
- =?utf-8?B?Y1QxWDhkWEFVdHkzTjduak9CaExuWmpDVlJqaFZtOXNpTmU4VU1Cb1ZnS0Fo?=
- =?utf-8?B?ejFLb3lpVENuY0VwWXE4RXpvTlZGQTRhTmpHeDFpY1haTDh2NGQ5aW1EYWdx?=
- =?utf-8?B?OWJSZVRENngzb2ROZm55dWVyd1Y3YnBZM0VqemlMNTBGZkozc28waWpkNlFH?=
- =?utf-8?B?LzB1T0hlOXo3MzYxN1lQd0VlWGdYdmFvSHYyTG1VNzlBWTY3SUlSaHlXL1Nz?=
- =?utf-8?Q?3LNbpslvhQi9+jVByPOIW4O3c?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3D2AB7487AE9EE4F96450368198C065D@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	Thu, 08 Feb 2024 23:14:17 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 418NEGkM013073
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 8 Feb 2024 23:14:16 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Thu, 8 Feb 2024 15:14:15 -0800
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <lgirdwood@gmail.com>, <andersson@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <konrad.dybcio@linaro.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v14 00/53] Introduce QC USB SND audio offloading support
+Date: Thu, 8 Feb 2024 15:13:13 -0800
+Message-ID: <20240208231406.27397-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	Qt1T5N8E+dcPMXQFt01/w8bigZG3Bva6OGWr5IAQkKuMBgIYepH5fbbcgIKCA66kgSkOz1zFn7QcNej8LaAgxVMbXGtHmnYn09xugJUnOTe45IVZR4tUqyNyQJdqfTmWNkI+iGI51wrFQYhSTMAUe2xzNHRmIqJYkxuAUHRNDFhiqHgSEbIVa1Q1X5TyxIfwXRf2XAy3ZcIDIIq9tW6fg4v0jOJ0K2psEER9bhP7q+r5Yx5IaHGZZK5Regf+/MwEvcTbyNmYXTAjhUsxVcmWKQ/vI+CIPR6AdEnzM677GE7wKoRHK+2i3vmWSSLTdUhh3f1lKyxtDSCpOGHgvXMaLQR0RMnMvCNCIWVJBPiaMVbGHGXFhBLLO/+hXU0S+0A3XiIZlDKqI1oIqifXnYboSEVXQAxiKZDU+MUHKX1JrJDfuElloyclDtkCnTmhr7lCWOQH9YkieIUUruaji8GQcW9ObpgPYqJ3/adNbhmVZaS9NPg2c1xYGjeMhONa3xuuIC8GlRWJXVxsqPqi2qGn0+yG7vdpEcSjlhl9+f4orHkAq65whYggEFusQ+eboijCZdDNLUchG3F9wAlX6i6FtNdB+m/pwpBN/7F2ofsyq1jKeQl5ItP3KwHGplhkPaX2eVcJEzQIzNaO02ngOEhtAg==
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5990.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 451c72a8-b9e4-48e3-7354-08dc28f542a7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2024 22:28:22.9783
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XoDRfLflLZsCfhsrLOZOnbdXwhlaMm3s9Atd16OwLt3OTB8YQt36p10HackjTd7J5HYAf6ROTmu0yL5f8335DA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7173
-X-Proofpoint-GUID: b7UR8flQUOVjMUm_x_M7mxeqZetrDcM2
-X-Proofpoint-ORIG-GUID: b7UR8flQUOVjMUm_x_M7mxeqZetrDcM2
+Content-Type: text/plain
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 1Lz5TBOGgq50RkG20AGO1N-lr2gBRZUU
+X-Proofpoint-GUID: 1Lz5TBOGgq50RkG20AGO1N-lr2gBRZUU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-08_11,2024-02-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- clxscore=1011 malwarescore=0 lowpriorityscore=0 mlxlogscore=579
- spamscore=0 adultscore=0 phishscore=0 priorityscore=1501 impostorscore=0
- suspectscore=0 mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2401310000 definitions=main-2402080125
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 malwarescore=0
+ mlxlogscore=999 phishscore=0 bulkscore=0 adultscore=0 clxscore=1015
+ suspectscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2401310000 definitions=main-2402080131
 
-T24gVGh1LCBGZWIgMDgsIDIwMjQsIENvbm9yIERvb2xleSB3cm90ZToNCj4gT24gV2VkLCBGZWIg
-MDcsIDIwMjQgYXQgMDU6MTQ6MDFQTSAtMDUwMCwgRnJhbmsgTGkgd3JvdGU6DQo+ID4gT24gV2Vk
-LCBGZWIgMDcsIDIwMjQgYXQgMTA6MDU6MjNQTSArMDAwMCwgQ29ub3IgRG9vbGV5IHdyb3RlOg0K
-PiA+ID4gT24gV2VkLCBGZWIgMDcsIDIwMjQgYXQgMDU6MDA6MTdQTSAtMDUwMCwgRnJhbmsgTGkg
-d3JvdGU6DQo+ID4gPiA+IFNpbmNlIGR0IG1haW50YWluZXIgZ2l2ZSBjb21tZW50cyBhdCBvbGQg
-dGhyZWFkDQo+ID4gPiA+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LXVzYi8yMDI0MDEx
-OTIxMzEzMC4zMTQ3NTE3LTEtRnJhbmsuTGlAbnhwLmNvbS8NCj4gPiA+ID4gDQo+ID4gPiA+IFRo
-ZSBwYXRjaCB2NCBhbHJlYWR5IG1lcmdlZC4NCj4gPiA+ID4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
-cmcvbGludXgtdXNiLzIwMjQwMTI0MTUyNTI1LjM5MTAzMTEtMS1GcmFuay5MaUBueHAuY29tLw0K
-PiA+ID4gPiANCj4gPiA+ID4gU28gc3VibWl0IG5ldyBwYXRjaCB0byByZW5hbWUgc25wcyxob3N0
-LXZidXMtZ2xpdGNoZXMtcXVpcmsgdG8NCj4gPiA+ID4gc25wcyxob3N0LXZidXMtZ2xpdGNoZXMg
-dG8gYWxpZ24gZHQgbWFpbnRhaW5lcidzIGNvbW1lbnRzLg0KPiA+ID4gDQo+ID4gPiBJIHRob3Vn
-aHQgdGhlIGxhc3QgY29tbWVudCBsZWZ0IG9uIHRoZSB2MSB3YXMgVGhpbmggYWdyZWVpbmcgdGhh
-dCBhDQo+ID4gPiBEVCBwcm9wZXJ0eSB3YXMgbm90IG5lZWRlZCBoZXJlIGFuZCB3ZSBzaG91bGQg
-YmUgYWJsZSB0byBhcHBseSB0aGlzDQo+ID4gPiBjb25kaXRpb25hbGx5Pw0KPiA+IA0KPiA+IEkg
-ZG9uJ3QgdGhpbmsgc28uIFRoaXMgaXMgd29ya2Fyb3VuZC4gV2UgY2FuIHVzZSB0aGlzIHRyYWNr
-IHdoaWNoIGNoaXANCj4gPiBhY3R1YWxseSBuZWVkIHRoaXMuIElmIHNvbWUgeWVhciBsYXRlciwg
-c3VjaCBjaGlwcyBhbHJlYWR5IGVuZCBvZiBsaWZlLg0KPiA+IFdlIGhhdmUgY2hhbmNlIHRvIGNs
-ZWFyIHVwIHRoZXNlIGNvZGUuIE90aGVyd2lzZSwgaXQgd2lsbCBrZWVwIHRoZXJlIGZvcg0KPiA+
-IGV2ZXIuDQo+IA0KPiA+IEFuZCBJIGFtIG5vdCBzdXJlIHRoYXQgdGhlIHNpZGUgZWZmZWN0IGZv
-ciBvdGhlciBjaGlwcy4gV29ya2Fyb3VuZCBzaG91bGQNCj4gPiBiZSBhcHBsaWVkIGFzIGxlc3Mg
-YXMgcG9zc2libGUuDQo+IA0KPiBJJ2QgcmF0aGVyIGRvIGl0IHVuY29uZGl0aW9uYWxseSBpZiB3
-ZSBjYW4sIGJ1dCBpZiB5b3UgYW5kIFRoaW5oIHRoaW5rDQo+IHRoYXQgd2UgY2Fubm90IGRvIGl0
-IHVuY29uZGl0aW9uYWxseSB0aGVuIHN1cmUsIGtlZXAgdGhlIHByb3BlcnR5Lg0KPiANCg0KUGVy
-aGFwcyBJIHdhc24ndCBjbGVhci4gSSBtZWFudCBJIGFncmVlIHRoYXQgd2UgZG9uJ3QgbmVlZCBh
-IG5ldyBxdWlyaw0KcHJvcGVydHkuIElmIGFueXRoaW5nLCBpdCBzaG91bGQgYmUgc2FmZXIgdG8g
-a2VlcCB2YnVzIGRpc2FibGVkIGJlZm9yZQ0KaGFuZGluZyBvdmVyIHRvIHhoY2kgZHJpdmVyLiBX
-ZSBzaG91bGQgYmUgYWJsZSB0byBkbyB0aGlzDQp1bmNvbmRpdGlvbmFsbHkuDQoNCkJSLA0KVGhp
-bmg=
+Several Qualcomm based chipsets can support USB audio offloading to a
+dedicated audio DSP, which can take over issuing transfers to the USB
+host controller.  The intention is to reduce the load on the main
+processors in the SoC, and allow them to be placed into lower power modes.
+There are several parts to this design:
+  1. Adding ASoC binding layer
+  2. Create a USB backend for Q6DSP
+  3. Introduce XHCI interrupter support
+  4. Create vendor ops for the USB SND driver
+
+      USB                          |            ASoC
+--------------------------------------------------------------------
+                                   |  _________________________
+                                   | |sm8250 platform card     |
+                                   | |_________________________|
+                                   |         |           |
+                                   |      ___V____   ____V____
+                                   |     |Q6USB   | |Q6AFE    |  
+                                   |     |"codec" | |"cpu"    |
+                                   |     |________| |_________|
+                                   |         ^  ^        ^
+                                   |         |  |________|
+                                   |      ___V____    |
+                                   |     |SOC-USB |   |
+   ________       ________               |        |   |
+  |USB SND |<--->|QC offld|<------------>|________|   |
+  |(card.c)|     |        |<----------                |
+  |________|     |________|___     | |                |
+      ^               ^       |    | |    ____________V_________
+      |               |       |    | |   |APR/GLINK             |
+   __ V_______________V_____  |    | |   |______________________|
+  |USB SND (endpoint.c)     | |    | |              ^
+  |_________________________| |    | |              |
+              ^               |    | |   ___________V___________
+              |               |    | |->|audio DSP              |
+   ___________V_____________  |    |    |_______________________|
+  |XHCI HCD                 |<-    |
+  |_________________________|      |
+
+
+Adding ASoC binding layer:
+soc-usb: Intention is to treat a USB port similar to a headphone jack.
+The port is always present on the device, but cable/pin status can be
+enabled/disabled.  Expose mechanisms for USB backend ASoC drivers to
+communicate with USB SND.
+
+Create a USB backend for Q6DSP:
+q6usb: Basic backend driver that will be responsible for maintaining the
+resources needed to initiate a playback stream using the Q6DSP.  Will
+be the entity that checks to make sure the connected USB audio device
+supports the requested PCM format.  If it does not, the PCM open call will
+fail, and userpsace ALSA can take action accordingly.
+
+Introduce XHCI interrupter support:
+XHCI HCD supports multiple interrupters, which allows for events to be routed
+to different event rings.  This is determined by "Interrupter Target" field
+specified in Section "6.4.1.1 Normal TRB" of the XHCI specification.
+
+Events in the offloading case will be routed to an event ring that is assigned
+to the audio DSP.
+
+Create vendor ops for the USB SND driver:
+qc_audio_offload: This particular driver has several components associated
+with it:
+- QMI stream request handler
+- XHCI interrupter and resource management
+- audio DSP memory management
+
+When the audio DSP wants to enable a playback stream, the request is first
+received by the ASoC platform sound card.  Depending on the selected route,
+ASoC will bring up the individual DAIs in the path.  The Q6USB backend DAI
+will send an AFE port start command (with enabling the USB playback path), and
+the audio DSP will handle the request accordingly.
+
+Part of the AFE USB port start handling will have an exchange of control
+messages using the QMI protocol.  The qc_audio_offload driver will populate the
+buffer information:
+- Event ring base address
+- EP transfer ring base address
+
+and pass it along to the audio DSP.  All endpoint management will now be handed
+over to the DSP, and the main processor is not involved in transfers.
+
+Overall, implementing this feature will still expose separate sound card and PCM
+devices for both the platorm card and USB audio device:
+ 0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
+                      SM8250-MTP-WCD9380-WSA8810-VA-DMIC
+ 1 [Audio          ]: USB-Audio - USB Audio
+                      Generic USB Audio at usb-xhci-hcd.1.auto-1.4, high speed
+
+This is to ensure that userspace ALSA entities can decide which route to take
+when executing the audio playback.  In the above, if card#1 is selected, then
+USB audio data will take the legacy path over the USB PCM drivers, etc...
+
+This feature was validated using:
+- tinymix: set/enable the multimedia path to route to USB backend
+- tinyplay: issue playback on platform card
+
+Changelog
+--------------------------------------------
+Changes in v14:
+- Cleaned up some USB SND related feedback:
+  - Renamed SNDUSB OFFLD playback available --> USB offload capable card
+  - Fixed locking while checking if stream is in use
+  - Replaced some mutex pairs with guard(mutex)
+
+Changes in v13:
+- Pulled in secondary/primary interrupter rework from Mathias from:
+  https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/drivers/usb/host?h=fix_eventhandling
+  - Did some cleanup and commit message updates, and tested on current code base.
+- Added mutex locking to xhci sideband to help prevent any race conditions, esp. for when accessing shared
+  references.
+- Addresed concerns from Hillf about gfp_flags and locking used in qc_usb_audio_offload.
+- Rebased onto usb-next
+
+Changes in v12:
+- Updated copyright year to 2024.  Happy new years!
+- Fixed newline format on mixer offload driver.
+
+Changes in v11:
+- Modified QMI format structures to be const
+
+Changes in v10:
+- Added new mixer for exposing kcontrol for sound card created by USB SND.  This
+allows for applications to know which platform sound card has offload support.
+Will return the card number.
+- Broke down and cleaned up some functions/APIs within qc_audio_offload driver.
+- Exported xhci_initialize_ring_info(), and modified XHCI makefile to allow for
+the XHCI sideband to exist as a module.
+- Reworked the jack registration and moved it to the QCOM platform card driver,
+ie sm8250.
+- Added an SOC USB API to fetch a standard component tag that can be appended to
+the platform sound card.  Added this tag to sm8250 if any USB path exists within
+the DT node.
+- Moved kcontrols that existed in the Q6USB driver, and made it a bit more generic,
+so that naming can be standardized across solutions.  SOC USB is now responsible
+for creation of these kcontrols.
+- Added a SOC USB RST document explaining some code flows and implementation details
+so that other vendors can utilize the framework.
+- Addressed a case where USB device connection events are lost if usb offload driver
+(qc_audio_offload) is not probed when everything else has been initialized, ie 
+USB SND, SOC USB and ASoC sound card.  Add a rediscover device call during module
+init, to ensure that connection events will be propagated.
+- Rebased to usb-next.
+
+Changes in v9:
+- Fixed the dt binding check issue with regards to num-hc-interrupters.
+
+Changes in v8:
+- Cleaned up snd_soc_usb_find_priv_data() based on Mark's feedback.  Removed some of
+the duplicate looping code that was present on previous patches.  Also renamed the API.
+- Integrated Mathias' suggestions on his new sideband changes:
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
+- Addressed some of Mathias' fixme tags, such as:
+ - Resetting transfer ring dequeue/enqueue pointers
+ - Issuing stop endpoint command during ep removal
+ - Reset ERDP properly to first segment ring during interrupter removal. (this is currently
+   just being cleared to 0, but should be pointing to a valid segment if controller is still
+   running.
+
+Changes in v7:
+- Fixed dt check error for q6usb bindings
+- Updated q6usb property from qcom,usb-audio-intr-num --> qcom,usb-audio-intr-idx
+- Removed separate DWC3 HC interrupters num property, and place limits to XHCI one.
+- Modified xhci_ring_to_sgtable() to use assigned IOVA/DMA address to fetch pages, as
+it is not ensured event ring allocated is always done in the vmalloc range.
+
+Changes in v6:
+- Fixed limits and description on several DT bindings (XHCI and Q6USB)
+- Fixed patch subjects to follow other ALSA/ASoC notations.
+
+USB SND
+- Addressed devices which expose multiple audio (UAC) interfaces.  These devices will
+create a single USB sound card with multiple audio streams, and receive multiple
+interface probe routines.  QC offload was not properly considering cases with multiple
+probe calls.
+- Renamed offload module name and kconfig to fit within the SND domain.
+- Renamed attach/detach endpoint API to keep the hw_params notation.
+
+Changes in v5:
+- Removed some unnescessary files that were included
+- Fixed some typos mentioned
+- Addressed dt-binding issues and added hc-interrupters definition to usb-xhci.yaml
+
+XHCI:
+- Moved secondary skip events API to xhci-ring and updated implementation
+   - Utilized existing XHCI APIs, such as inc_deq and xhci_update_erst_dequeue()
+
+USB SND
+- Renamed and reworked the APIs in "sound: usb: Export USB SND APIs for modules" patch to
+include suggestions to utilize snd_usb_hw_params/free and to avoid generic naming.
+- Added a resume_cb() op for completion sake.
+- Addressed some locking concerns with regards to when registering for platform hooks.
+- Added routine to disconnect all offloaded devices during module unbind.
+
+ASoC
+- Replaced individual PCM parameter arguments in snd_soc_usb_connect() with new
+snd_soc_usb_device structure to pass along PCM info.
+- Modified snd_jack set report to notify HEADPHONE event, as we do not support record path.
+
+Changes in v4:
+- Rebased to xhci/for-usb-next
+- Addressed some dt-bindings comments
+
+XHCI:
+- Pulled in latest changes from Mathias' feature_interrupters branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
+
+- Fixed commit text and signage for the XHCI sideband/interrupter related changes
+- Added some logic to address the FIXME tags mentioned throughout the commits, such
+as handling multi segment rings and building the SGT, locking concerns, and ep
+cleanup operations.
+- Removed some fixme tags for conditions that may not be needed/addressed.
+- Repurposed the new endpoint stop sync API to be utilized in other places.
+- Fixed potential compile issue if XHCI sideband config is not defined.
+
+ASoC:
+- Added sound jack control into the Q6USB driver.  Allows for userpsace to know when
+an offload capable device is connected.
+
+USB SND:
+- Avoided exporting _snd_pcm_hw_param_set based on Takashi's recommendation.
+- Split USB QMI packet header definitions into a separate commit.  This is used to
+properly allow the QMI interface driver to parse and route QMI packets accordingly
+- Added a "depends on" entry when enabling QC audio offload to avoid compile time
+issues.
+
+Changes in v3:
+- Changed prefix from RFC to PATCH
+- Rebased entire series to usb-next
+- Updated copyright years
+
+XHCI:
+- Rebased changes on top of XHCI changes merged into usb-next, and only added
+changes that were still under discussion.
+- Added change to read in the "num-hc-interrupters" device property.
+
+ASoC:
+- qusb6 USB backend
+  - Incorporated suggestions to fetch iommu information with existing APIs
+  - Added two new sound kcontrols to fetch offload status and offload device
+    selection.
+    - offload status - will return the card and pcm device in use
+        tinymix -D 0 get 1 --> 1, 0 (offload in progress on card#1 pcm#0)
+
+    - device selection - set the card and pcm device to enable offload on. Ex.:
+        tinymix -D 0 set 1 2 0  --> sets offload on card#2 pcm#0
+                                    (this should be the USB card)
+
+USB SND:
+- Fixed up some locking related concerns for registering platform ops.
+   - Moved callbacks under the register_mutex, so that 
+- Modified APIs to properly pass more information about the USB SND device, so
+that the Q6USB backend can build a device list/map, in order to monitor offload
+status and device selection.
+
+Changes in v2:
+
+XHCI:
+- Replaced XHCI and HCD changes with Mathias' XHCI interrupter changes
+in his tree:
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters
+
+Adjustments made to Mathias' changes:
+  - Created xhci-intr.h to export/expose interrupter APIs versus exposing xhci.h.
+    Moved dependent structures to this file as well. (so clients can parse out
+    information from "struct xhci_interrupter")
+  - Added some basic locking when requesting interrupters.
+  - Fixed up some sanity checks.
+  - Removed clearing of the ERSTBA during freeing of the interrupter. (pending
+    issue where SMMU fault occurs if DMA addr returned is 64b - TODO)
+
+- Clean up pending events in the XHCI secondary interrupter.  While testing USB
+bus suspend, it was seen that on bus resume, the xHCI HC would run into a command
+timeout.
+- Added offloading APIs to xHCI to fetch transfer and event ring information.
+
+ASoC:
+- Modified soc-usb to allow for multiple USB port additions.  For this to work,
+the USB offload driver has to have a reference to the USB backend by adding
+a "usb-soc-be" DT entry to the device saved into XHCI sysdev.
+- Created separate dt-bindings for defining USB_RX port.
+- Increased APR timeout to accommodate the situation where the AFE port start
+command could be delayed due to having to issue a USB bus resume while
+handling the QMI stream start command.
+
+USB SND:
+- Added a platform ops during usb_audio_suspend().  This allows for the USB
+offload driver to halt the audio stream when system enters PM suspend.  This
+ensures the audio DSP is not issuing transfers on the USB bus.
+- Do not override platform ops if they are already populated.
+- Introduce a shared status variable between the USB offload and USB SND layers,
+to ensure that only one path is active at a time.  If the USB bus is occupied,
+then userspace is notified that the path is busy.
+
+Mathias Nyman (13):
+  xhci: fix possible null pointer dereference at secondary interrupter
+    removal
+  xhci: fix off by one check when adding a secondary interrupter.
+  xhci: Add interrupt pending autoclear flag to each interrupter
+  xhci: Add helper to set an interrupters interrupt moderation interval
+  xhci: make isoc_bei_interval variable interrupter specific.
+  xhci: remove unnecessary event_ring_deq parameter from
+    xhci_handle_event()
+  xhci: update event ring dequeue pointer position to controller
+    correctly
+  xhci: move event processing for one interrupter to a separate function
+  xhci: add helper that checks for unhandled events on a event ring
+  xhci: Don't check if the event ring is valid before every event TRB
+  xhci: Decouple handling an event from checking for unhandled events
+  xhci: add helper to stop endpoint and wait for completion
+  xhci: sideband: add initial api to register a sideband entity
+
+Wesley Cheng (40):
+  usb: host: xhci: Export enable and disable interrupter APIs
+  usb: host: xhci: Repurpose event handler for skipping interrupter
+    events
+  xhci: export XHCI IMOD setting helper for interrupters
+  usb: host: xhci-sideband: Expose a sideband interrupter enable API
+  usb: host: xhci-mem: Cleanup pending secondary event ring events
+  usb: host: xhci-mem: Allow for interrupter clients to choose specific
+    index
+  ASoC: Add SOC USB APIs for adding an USB backend
+  ASoC: dt-bindings: qcom,q6dsp-lpass-ports: Add USB_RX port
+  ASoC: qcom: qdsp6: Introduce USB AFE port to q6dsp
+  ASoC: qdsp6: q6afe: Increase APR timeout
+  ASoC: qcom: qdsp6: Add USB backend ASoC driver for Q6
+  ALSA: usb-audio: Introduce USB SND platform op callbacks
+  ALSA: usb-audio: Export USB SND APIs for modules
+  ALSA: usb-audio: Save UAC sample size information
+  usb: dwc3: Specify maximum number of XHCI interrupters
+  usb: host: xhci-plat: Set XHCI max interrupters if property is present
+  ALSA: usb-audio: qcom: Add USB QMI definitions
+  ALSA: usb-audio: qcom: Introduce QC USB SND offloading support
+  ALSA: usb-audio: Check for support for requested audio format
+  ASoC: usb: Add PCM format check API for USB backend
+  ASoC: qcom: qdsp6: Ensure PCM format is supported by USB audio device
+  ALSA: usb-audio: Prevent starting of audio stream if in use
+  ALSA: usb-audio: Do not allow USB offload path if PCM device is in use
+  ASoC: dt-bindings: Add Q6USB backend
+  ASoC: dt-bindings: Update example for enabling USB offload on SM8250
+  ALSA: usb-audio: qcom: Populate PCM and USB chip information
+  ASoC: qcom: qdsp6: Add support to track available USB PCM devices
+  ASoC: Introduce SND kcontrols to select sound card and PCM device
+  ASoC: qcom: qdsp6: Add SOC USB offload select get/put callbacks
+  ASoC: Add SND kcontrol for fetching USB offload status
+  ASoC: qcom: qdsp6: Add PCM ops to track current state
+  ASoC: usb: Create SOC USB SND jack kcontrol
+  ASoC: qcom: qdsp6: Add headphone jack for offload connection status
+  ASoC: usb: Fetch ASoC sound card information
+  ALSA: usb-audio: mixer: Add USB offloading mixer control
+  ALSA: usb-audio: qcom: Use card and PCM index from QMI request
+  ALSA: usb-audio: Allow for rediscovery of connected USB SND devices
+  ASoC: usb: Rediscover USB SND devices on USB port add
+  ASoC: qcom: Populate SoC components string
+  ASoC: doc: Add documentation for SOC USB
+
+ .../devicetree/bindings/sound/qcom,q6usb.yaml |   55 +
+ .../bindings/sound/qcom,sm8250.yaml           |   15 +
+ Documentation/sound/soc/index.rst             |    1 +
+ Documentation/sound/soc/usb.rst               |  611 ++++++
+ drivers/usb/dwc3/core.c                       |   12 +
+ drivers/usb/dwc3/core.h                       |    2 +
+ drivers/usb/dwc3/host.c                       |    5 +-
+ drivers/usb/host/Kconfig                      |    9 +
+ drivers/usb/host/Makefile                     |    2 +
+ drivers/usb/host/xhci-mem.c                   |   53 +-
+ drivers/usb/host/xhci-plat.c                  |    2 +
+ drivers/usb/host/xhci-ring.c                  |  240 ++-
+ drivers/usb/host/xhci-sideband.c              |  439 ++++
+ drivers/usb/host/xhci.c                       |   97 +-
+ drivers/usb/host/xhci.h                       |   21 +-
+ .../sound/qcom,q6dsp-lpass-ports.h            |    1 +
+ include/linux/usb/xhci-sideband.h             |   70 +
+ include/sound/q6usboffload.h                  |   20 +
+ include/sound/soc-usb.h                       |   90 +
+ sound/soc/Makefile                            |    2 +-
+ sound/soc/qcom/Kconfig                        |    4 +
+ sound/soc/qcom/common.c                       |   41 +
+ sound/soc/qcom/common.h                       |    4 +-
+ sound/soc/qcom/qdsp6/Makefile                 |    1 +
+ sound/soc/qcom/qdsp6/q6afe-dai.c              |   60 +
+ sound/soc/qcom/qdsp6/q6afe.c                  |  193 +-
+ sound/soc/qcom/qdsp6/q6afe.h                  |   36 +-
+ sound/soc/qcom/qdsp6/q6dsp-lpass-ports.c      |   23 +
+ sound/soc/qcom/qdsp6/q6dsp-lpass-ports.h      |    1 +
+ sound/soc/qcom/qdsp6/q6routing.c              |    9 +
+ sound/soc/qcom/qdsp6/q6usb.c                  |  401 ++++
+ sound/soc/qcom/sm8250.c                       |   14 +-
+ sound/soc/soc-usb.c                           |  538 +++++
+ sound/usb/Kconfig                             |   19 +
+ sound/usb/Makefile                            |    3 +-
+ sound/usb/card.c                              |  109 +
+ sound/usb/card.h                              |   24 +
+ sound/usb/endpoint.c                          |    1 +
+ sound/usb/format.c                            |    1 +
+ sound/usb/helper.c                            |    1 +
+ sound/usb/mixer.c                             |    5 +
+ sound/usb/mixer_usb_offload.c                 |   72 +
+ sound/usb/mixer_usb_offload.h                 |   17 +
+ sound/usb/pcm.c                               |  104 +-
+ sound/usb/pcm.h                               |   11 +
+ sound/usb/qcom/Makefile                       |    2 +
+ sound/usb/qcom/qc_audio_offload.c             | 1910 +++++++++++++++++
+ sound/usb/qcom/usb_audio_qmi_v01.c            |  892 ++++++++
+ sound/usb/qcom/usb_audio_qmi_v01.h            |  162 ++
+ 49 files changed, 6228 insertions(+), 177 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6usb.yaml
+ create mode 100644 Documentation/sound/soc/usb.rst
+ create mode 100644 drivers/usb/host/xhci-sideband.c
+ create mode 100644 include/linux/usb/xhci-sideband.h
+ create mode 100644 include/sound/q6usboffload.h
+ create mode 100644 include/sound/soc-usb.h
+ create mode 100644 sound/soc/qcom/qdsp6/q6usb.c
+ create mode 100644 sound/soc/soc-usb.c
+ create mode 100644 sound/usb/mixer_usb_offload.c
+ create mode 100644 sound/usb/mixer_usb_offload.h
+ create mode 100644 sound/usb/qcom/Makefile
+ create mode 100644 sound/usb/qcom/qc_audio_offload.c
+ create mode 100644 sound/usb/qcom/usb_audio_qmi_v01.c
+ create mode 100644 sound/usb/qcom/usb_audio_qmi_v01.h
+
 
