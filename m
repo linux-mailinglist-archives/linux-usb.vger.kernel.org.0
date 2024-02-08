@@ -1,114 +1,107 @@
-Return-Path: <linux-usb+bounces-6039-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6040-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7DF784DE5F
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 11:32:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1510D84DE9A
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 11:47:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D6A31F23F8C
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 10:32:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 625F8B2822F
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 10:47:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B23962E3F2;
-	Thu,  8 Feb 2024 10:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A6166E2B3;
+	Thu,  8 Feb 2024 10:47:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YPHhS4ob"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="ac6vJ6/s"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBFE1DFF2;
-	Thu,  8 Feb 2024 10:32:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A8C6D1CA;
+	Thu,  8 Feb 2024 10:47:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707388339; cv=none; b=TLzFTBSUJnsrrFgOxAlEde6z6G4ha7RkH2/0xbusawl9vQMzVyrJMag+cP6HKfA4Ny2mZgtMp1hgG3g525BuEx4HigpGly6OTwP/UoJW50t5uYEFCOyhv3Kcca3j01mLXHiWp8gdeK8bxDUQT2t7S8AhoPqIf5NhKciVVyGZb7A=
+	t=1707389233; cv=none; b=ZFgf7Xz9SGb9Gwlh29JNHpr/ccgG2Jm+EYVz9WSqcBnTifC2uPHyubjpWO9FfJh8Soay9wwBClBNOmJOz585IbXQRw4vd+GFGdik4ST8+B57Wa6luUF7pmdxFCOAcALwQDliGLP6heyxwMwDuIXD22CbZrhjCdCdcGfBjQT2kcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707388339; c=relaxed/simple;
-	bh=ct2XFvWhqpfoUsfCy+F5xMjFMJpQ0jg6R8meoFXaZyQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PJ75iC4wicMH0sQWvPMGcSYwokvRkQkMRTNLTBEn+ZCYovSxGEQOSr+zdZmW7O5Ay6TAAIrTxBnq35noC8x/b0sfph2TJLrjDIpxsV4NeLrYcd38jtsax7wlSdh4WcgqFG3XdIFO7VCT+tg5ZSxTGvU9BOdLJFowfp4EIOQdCC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YPHhS4ob; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-dc6dbac5fd1so547072276.0;
-        Thu, 08 Feb 2024 02:32:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707388337; x=1707993137; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ct2XFvWhqpfoUsfCy+F5xMjFMJpQ0jg6R8meoFXaZyQ=;
-        b=YPHhS4obmlfkzs9IbmbaJ1/OhEzshA8OpaNlRdZdamVKCPaaZIrvj9JjLudBFuRcyq
-         VY5Ml+Nee06ccDbsMazFKfM8aKjkLl0wWBJi8Y7wWAxBnQZCQwu2wcEBucUGAmJSbXLU
-         FTkdLS97yh1IxeAEcaspJDk7kwc1CRcZDkodp6HueFRRgxIG9yJjKoAxb8/mF6uDdQw0
-         25hAnLgu+GppMW/U4lb7Rmd0/3tUJRIGL3y7ZBPSaAuggmvB4pneHTYABcb+s2CUujYA
-         bOSt0nwV7JuLjoi+88HEFjvDSFXUOCmzYB12SwDDR+YmoKvcrmQUQl+/G8JBoVJJYYfY
-         7yug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707388337; x=1707993137;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ct2XFvWhqpfoUsfCy+F5xMjFMJpQ0jg6R8meoFXaZyQ=;
-        b=XR6dKi8NK2CUmmE9Gldak2Bap5DqFUmiboW2yX91N2h9hmAmBx1P5drSCO6lqTOoCw
-         G9WNR+tnrIFVlyqTxvz8f/yYKqcPkLkkpgBUv1I5Yzen4yqpmJ5prKs67/gvXE94IjEs
-         T837jjoJwFOGm5wK/rA6ZwUK6U/W9KnEuCIQ+W7D+rEEVbe6HQPNJfvZSbA+4chpQBJn
-         3kZBvR+DaQ8IseJes4OUG2zqD8sDff/hzPltiD02V4neTbV3jLQpRzYAjUDR1TPxRipk
-         z12gxxFeQWeET6UuiXZeh07NPbt45Z6LV7HUI34s0fYZv7CTxz/iqFvKNMLcCff3xPz6
-         2pWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXCAMiDqvz5rXzEvvmWO6AX4fPMNySk2cZYrFWSYJ2id5BEjGb4gq0/ucuXr9zCNfu4aQkO6MVfNlli6FEvNrhKo01BBUP3qzZpfAZ6RQZ+a586d/DLMPU+5zkRYPhXHjaxU4VuoJIf
-X-Gm-Message-State: AOJu0YyJxEiDLBNJqjiyL82M9FaJLNHcHJ8qivoY2jFEC+VQYHKte+12
-	qmsH6rRyBS1M3kdcCu4gsPHdkOZBNZ/rc4dZTLKkyuWFnVAdkaV7zz+rbk3BkJOeO6hwSWgDFbU
-	3CCIPKAD/Fd5oAcTIQjcNmfqHRAh6YDY+vdQkHUPzBkQ=
-X-Google-Smtp-Source: AGHT+IE6boa42YcgBsEDGRBfyjaqIyemxo4ljX/7BDmTidXqujpn8bc6Ol/zQxc9UfNiRHVnb4GNFyU6wGFd9TgPMYs=
-X-Received: by 2002:a25:8389:0:b0:dc2:294d:5adc with SMTP id
- t9-20020a258389000000b00dc2294d5adcmr6701737ybk.0.1707388336606; Thu, 08 Feb
- 2024 02:32:16 -0800 (PST)
+	s=arc-20240116; t=1707389233; c=relaxed/simple;
+	bh=h7tpdDW4CcqCKn6XE4h5OZ+mpFGC6zQVQuoEeBaQ7bs=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=iSWZ0fA8h8abFlN3CZ9zKBZzbVjxjwnPh+ubGAbnyVDzRXjqAJCn8Js2rjwyzrQfZeJ5BgL8ZvuZ+0MELtAeWn6IxkAzyfTxvTpC5V2OENaTzyXgVny58xZ+7TDKSXNKfJ/G4XOmIaPPRJjj55IqXgOaDKz4k9SLA1+ki96CY08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=ac6vJ6/s; arc=none smtp.client-ip=203.205.221.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1707389218; bh=hcbbJhAls5Uesp7NyjBSOyZ/XNieAhW/QJoPzNlPnlQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=ac6vJ6/sCj8BTEThK4epPx9UY1M539mgYjxNZeZLBmCAJXTI2kxgox85oxT6Dk8Th
+	 wvOsO5koDxJl9IgHxzXdKZ3h2+1RcgO29os9V2lhvZr22/3Miqpef/K7ypv2xj15Gl
+	 0JwDH8DJjhbQXI7PaWILj5gT13DixyDTIimvINik=
+Received: from pek-lxu-l1.wrs.com ([117.61.184.234])
+	by newxmesmtplogicsvrsza1-0.qq.com (NewEsmtp) with SMTP
+	id BB7060B2; Thu, 08 Feb 2024 18:46:55 +0800
+X-QQ-mid: xmsmtpt1707389215tzz8xjd5x
+Message-ID: <tencent_AF9E941B3D4BEF1B2625D4BA18BBDA332108@qq.com>
+X-QQ-XMAILINFO: OG0c0cMNDXpT/PABBA6BB72RIf0nVSzum1KsQAwIrzegiKAVPbaEAo0EP8zB5O
+	 j11mS800jDnC53o4K1MxB1EwZHZL+dKnHTHScDmIuOtCyH0fTAd5tOsvte1bGE7iA9B4AzmeiHBw
+	 263vSIt3ZMrTfjhjo8i0grrzCPzhCfe/5pzWLgva+0fTIVNk3n7vY+919WjSxbU73yjX1mf/kx3x
+	 Tnp/lEN7NtFo79eQcJv+KYdFl+CypOiuuSMhkjXqXGLgK2E12GhZqJmAsH5yfBygYW57QCknmA+R
+	 G5JtVoXkJQ0jFNAd51SW7cZtebBV6zpeUBXFmS8sRd8ILo2I2UxJ/GMaMdrgks9SNRYkULS3/vL7
+	 vipOxx6B8onz9GPZhfpAvkedCHj0YCSmbTNFzzqb11XUNrHOt2Tg6QmogUw/lkIelwkVhtxRQNQC
+	 8rsJ0oE70dfDiBEsA76N1AiXwEtoiGkm54k+liMJzcoQDIKXN0sQ/xHEA2AY0MU007GpoYIEi3Nu
+	 iqQcXXmrmi8Jf+Rq+Q5pewdbbTCycy29SvqxsDvUqI1EzdLt1l1MrzqQ43WCCVWnI2cKogLwAs/7
+	 N6T7zZZKaxtO4/iwkntrQCgMIzSrE6vXPL+6vblb4MqB7gNVrXoqjiU5l1CTlEb1Fq717LlI7vKn
+	 lckAJBO6nomDL+nyWaXFgbrK7BXWvbbZIPEDhD9WtSvcb2Tb5aC5Gmhc0aShJ0MAxl6LWXVPUfD6
+	 lowP1P/TJdrjdL/0SHFvujr2eXeYqT/pcdBDr5tWTH82sSF+vho4J2lAB9i2I6FIB3Sp4fLndRY4
+	 I9hxllZgp5iPOyZi1iLRf+1krkTOKLZJrF3+rhBBn5N5Pjhgq0fLDqSPsjmqTmtwG6+YNL5zBXtm
+	 GlL7YSG90usv4QEhWyyTtcI2gk7/A8cRoQYZtUqcYGQrSr/nI7n7XM877A4w4CiA==
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+From: Edward Adam Davis <eadavis@qq.com>
+To: syzbot+8e41bb0c055b209ebbf4@syzkaller.appspotmail.com
+Cc: gregkh@linuxfoundation.org,
+	linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	rafael@kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: [PATCH riscv64] kobject: fix WARNING in input_register_device
+Date: Thu,  8 Feb 2024 18:46:55 +0800
+X-OQ-MSGID: <20240208104654.3757719-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <00000000000047631d0610d010c1@google.com>
+References: <00000000000047631d0610d010c1@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
- <Zb6D/5R8nNrxveAP@cae.in-ulm.de> <Zb/30qOGYAH4j6Mn@cae.in-ulm.de>
- <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
- <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com> <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
- <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com> <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
- <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
-In-Reply-To: <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
-From: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date: Thu, 8 Feb 2024 15:32:05 +0500
-Message-ID: <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
-Subject: =?UTF-8?Q?Re=3A_This_is_the_fourth_time_I=E2=80=99ve_tried_to_find_wha?=
-	=?UTF-8?Q?t_led_to_the_regression_of_outgoing_network_speed_and_each_t?=
-	=?UTF-8?Q?ime_I_find_the_merge_commit_8c94ccc7cd691472461448f98e2372c7?=
-	=?UTF-8?Q?5849406c?=
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com, 
-	Linux List Kernel Mailing <linux-kernel@vger.kernel.org>, Greg KH <gregkh@linuxfoundation.org>, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 8, 2024 at 2:23=E2=80=AFPM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> My guess is that CPU0 spends more time with interrupts disabled than othe=
-r CPUs.
-> Either because it's handling interrupts from some other hardware, or runn=
-ing
-> code that disables interrupts (for example kernel code inside spin_lock_i=
-rq),
-> and thus not able to handle network adapter interrupts at the same rate a=
-s CPU23
->
+The input_add_uevent_modalias_var()->input_print_modalias() will add 1684 bytes
+of data to env, which will result in insufficient memory allocated to the buf 
+members of env.
 
-Can this be fixed?
-Can I help you here with anything else?
+Reported-and-tested-by: syzbot+8e41bb0c055b209ebbf4@syzkaller.appspotmail.com
+Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+---
+ include/linux/kobject.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
-Best Regards,
-Mike Gavrilov.
+diff --git a/include/linux/kobject.h b/include/linux/kobject.h
+index c30affcc43b4..74b37b6459cd 100644
+--- a/include/linux/kobject.h
++++ b/include/linux/kobject.h
+@@ -30,7 +30,7 @@
+ 
+ #define UEVENT_HELPER_PATH_LEN		256
+ #define UEVENT_NUM_ENVP			64	/* number of env pointers */
+-#define UEVENT_BUFFER_SIZE		2048	/* buffer for the variables */
++#define UEVENT_BUFFER_SIZE		2560	/* buffer for the variables */
+ 
+ #ifdef CONFIG_UEVENT_HELPER
+ /* path to the userspace helper executed on an event */
+-- 
+2.43.0
+
 
