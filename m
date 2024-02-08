@@ -1,159 +1,126 @@
-Return-Path: <linux-usb+bounces-6035-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6036-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8B7284DCE1
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 10:28:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BE2D84DD4D
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 10:53:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBDA81C262D1
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 09:28:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B067D1C244FC
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 09:53:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A57176BFD6;
-	Thu,  8 Feb 2024 09:23:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0865D6A8BB;
+	Thu,  8 Feb 2024 09:53:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JcJ27kWS"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="dZiajh4e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958DA6BB5B;
-	Thu,  8 Feb 2024 09:23:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C786BFB2
+	for <linux-usb@vger.kernel.org>; Thu,  8 Feb 2024 09:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707384229; cv=none; b=mhlNT4ghs3kNABX28kxtMkbtj7GSZnChR2e30zy/tnEkYcH/W3UBJV+Pyn5ZTTfT5rZoP2Ioh3GZDQYOKkgcdwJZdjr/g55phZAz9fciuXMVqOs4jWL5ByTcJxMwp06lopJFE4FKxRWrAtGzzsUSEjg+rWsOlwW2BN1mfZEPHLA=
+	t=1707385995; cv=none; b=pXboZbDW4VFXJXgoR7n/CYdRVfpNcLNkY2htLnm8SQz8JW90maMk4NVWvCT6KBATIop/7bHrzYZ2ZO0XJMO02Lp7yFM8GDoS8jkJy0p9Ym5yIMQbbhKEYNlShEH6CHduRDMuARsrDuzcbptKvgR1jWtXLI8lWxTkklEoOECnk98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707384229; c=relaxed/simple;
-	bh=FjB8knGU2+4T4/a7gzKnYsp/3ZyeYcYxARRsy/pFxzw=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=bIzwq0HilX6/WveE4rrblgpaduc713K/RXVLWYrjosDk6ViP0gtwFk1AH0qBk8DhacpdaSUH1ArSrqMUobMLgzvqnPSxuP7/+fJSxLchd5fMNRsX+hkScHnENRDO6+8Hx4KoGnlSMdVt7E8ijoF6Aeh57xExD8dPDq92ijIka+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JcJ27kWS; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707384227; x=1738920227;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=FjB8knGU2+4T4/a7gzKnYsp/3ZyeYcYxARRsy/pFxzw=;
-  b=JcJ27kWSyqTBc1uqCbFrt1u8uU1CY0ybq3SLjwZYwXihSlvdUutHVKr2
-   MpfgBsKk9F3gts4JGJKh30JrtDUibi+r1aMM1ohvc1jazn0E2Ojpk8FMe
-   GxmXe/9BpgwP4AIEMGO76+dC9twcSZgK7/oYUxDS2t7sLcNJ4yZ7N9EFz
-   wfot4O8/k+DU0PTXA+Im8y/UwJWg2JszNdv4Sr+o15lkbCe61KPNcUT8s
-   pYkIfDHu0TS2XPwOMuBFS/xWFwM5HSWv1cs6rcsvEfp6w3OYPc71oBnXl
-   w25whTerGgbB4GosYh6zt87/3V/XxL0IO399OROKGTPVfDWkNgqocZyYX
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="1079490"
-X-IronPort-AV: E=Sophos;i="6.05,253,1701158400"; 
-   d="scan'208";a="1079490"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 01:23:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="934074730"
-X-IronPort-AV: E=Sophos;i="6.05,253,1701158400"; 
-   d="scan'208";a="934074730"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Feb 2024 01:23:44 -0800
-Message-ID: <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
-Date: Thu, 8 Feb 2024 11:25:20 +0200
+	s=arc-20240116; t=1707385995; c=relaxed/simple;
+	bh=18SG6NUCNLXQLNqsHtsTIjssjOlE4YxcB1dl/F3+n7I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uMVykfwcD0jHlmkWBf7EKFAdCNqW26ZEo4cMakGJo5Zs0FYdB7xreTYWByXQhHKi465kRA9nRg1tQ+w+XJcP/n06oiu3MXsd1+0QSwQdWYMOqkIPDoFtqadTHMQKTDTP82LDGjNN+XxJ7skPhzGzgPrd7t1Y16JLIGbpzUeJlCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=dZiajh4e; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2d0d100336cso7459371fa.2
+        for <linux-usb@vger.kernel.org>; Thu, 08 Feb 2024 01:53:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1707385992; x=1707990792; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MMggITsyUYXMSRsj+SW8m9RDh5vOxy0FBhM5/mNSO2c=;
+        b=dZiajh4eiJ0thdU632hgS3e1Q+TVpkryOPbvlK1Mzx/RQItTRNWuHzXtH37fgMaBdq
+         zxhtu6AsHsxz1ZQLWLx9kRSAGKbw2WBpdE55Vy+ICnNxYtnrEWw5ChnZC4lrLZwb1IGN
+         X/n7sNQKJtoHsgbydiOqAOFpdXlz+M8DXBeikg8JSGPjL3BqEZJPdoLGHE+k1DMnxFHJ
+         XCkFz3JM0LmMHGQJtBDq2xvFpUwMzdhsmlkcAvr6K7zxe+nJXwuszbCzFD4OlVnyoTW5
+         raDxG6oNWjdN49yNnbUUzd8xGk1SYD4xvkDDiOB/9Sh/ysHPo4bpeekf/cUARY7rbbMW
+         xHqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707385992; x=1707990792;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MMggITsyUYXMSRsj+SW8m9RDh5vOxy0FBhM5/mNSO2c=;
+        b=VFSK+R2xHws7KOjnk9n820S5f8aHHenFcZzHK7ODC8hek/9uw2GID+AQzXKNjv9HuZ
+         OhhKWR1eMQsY3q6qkwOMENy64eZ04ghz6gabhNEepqoYzVnOk7x9XYfdc7htTAPIVv9M
+         WQxMjzLr6+WugafvKjYPgOLFxrmBZsgPO93Qnv4j1WZejhG6bfZe3Adz7rwlo8lyCiWk
+         sue5JjqAIix6qAJcKEpqjB0j3aTFNMkEAM8Mq7Rm8FHmZMOILgOiv2fT3vtXhIsv4mAN
+         GU3F3EpJJHsEZaUMCbBaiiwvILyRGrEitX/6aFvCw0cEZctQ4mI75g2oBm24PLMxrIzU
+         30Wg==
+X-Forwarded-Encrypted: i=1; AJvYcCXYTR+fEmgOESZgq6yckAaOZcW5S0vLsTv++jz2MWupHrCmH9cjoFstcG+AhLhIiGsiWGjHEJfaCRQ6fglVfajZzOUAOT2I3FBd
+X-Gm-Message-State: AOJu0Yz7X5b9CWMpKIztUgOWU3/JrkAS+ac01F8b5va62mZ5OvaOnmrd
+	LiP8a4Zm6LOfOKZF8EomJo0xw9fcaGgu4OwD8G59Eax/VgONm87caVoPdcvfj40=
+X-Google-Smtp-Source: AGHT+IHTG9d+/k61DJi/OYmrjvhF8N+qrNdTM1lT+zbdR8F2YzeqnMoHHX0Vopf1tTkA2OP4lzO/nQ==
+X-Received: by 2002:a2e:be0f:0:b0:2d0:ca58:c434 with SMTP id z15-20020a2ebe0f000000b002d0ca58c434mr3365433ljq.21.1707385991846;
+        Thu, 08 Feb 2024 01:53:11 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVq4867nsyS3k44XuZpjhQuprdpRzUlIs5dAgaRGDus76kjjj+vmZhE1+mUV8ttj4EivYRE9/IHF5TW/u0vU8blw58Iv4bwiQ9DNkkZ7BG+al1DgK7cZ6esd66HSuXwDNg5MtTJigxvgBqP8BwRbo/f/p7FpSskyVueyck7uBZrD4Ivhaiquty0L9CRwoqqUhBF81oEG8EPpSSyYqKGEaf7TsEa2mS38UuL4TX1HM+HOPWUwG2CHXbFcIAzT0d5XkqIU/82QEH/8BMTjo8pYKF59r01FlUGL66vC18MnR/PAFv6SOOAA8M27EN85L5i1lH7nVTwSo/74mZ1uG01DWJ9iiLCGzf4P2t8Fdgl/Yj+L21TIJuIt93zBmnF8E4UZe9R5NW3+fz4sa2kDP71I1uXFuQjhk28frJgqDGC22K4otGaeGqtoU8lp9ebCG2V4UXcMehqvM6KGCq5YU0+NB9Z1ibwO9m76PfGAO6uTJlgQj9dIUPgT2804uSFjrPMInB14nZ0fPeEDhuLZ7g4CTnf9nMFDwR6DcPYR7BMr7PlwYfNm6MHYeT5dT1h8kAGgE3rfccbquMVi/18FSj//v/SWcjTNsq/Sw+0D892+gX/LmOmuW2pRGuD5oQxsLcw5u2FyxwxgzN3+L5zP3EJOAQ=
+Received: from otso.luca.vpn.lucaweiss.eu (ip-185-104-137-32.ptr.icomera.net. [185.104.137.32])
+        by smtp.gmail.com with ESMTPSA id d20-20020a170903209400b001d8f111804asm2956685plc.113.2024.02.08.01.52.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Feb 2024 01:53:11 -0800 (PST)
+From: Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH v2 0/2] Fairphone 5 PMIC-GLINK support (USB-C, charger,
+ fuel gauge)
+Date: Thu, 08 Feb 2024 10:52:31 +0100
+Message-Id: <20240208-fp5-pmic-glink-v2-0-4837d4abd5a4@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com,
- Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
- Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
- <Zb6D/5R8nNrxveAP@cae.in-ulm.de> <Zb/30qOGYAH4j6Mn@cae.in-ulm.de>
- <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
- <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com>
- <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
- <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
- <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: =?UTF-8?Q?Re=3a_This_is_the_fourth_time_I=e2=80=99ve_tried_to_find_?=
- =?UTF-8?Q?what_led_to_the_regression_of_outgoing_network_speed_and_each_tim?=
- =?UTF-8?Q?e_I_find_the_merge_commit_8c94ccc7cd691472461448f98e2372c75849406?=
- =?UTF-8?Q?c?=
-In-Reply-To: <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGCkxGUC/3XMQQrCMBCF4auUWTuSSbWKK+8hXcR00g7aJCRSl
+ JK7G7t3+T943wqZk3CGS7NC4kWyBF9D7xqwk/Ejowy1QSvdktYKXTxinMXi+BT/wLui4eAM2RM
+ bqKeY2Ml7A2997UnyK6TP5i/0W/9SC6FCbcidubVdR/bqjKQ4Bc97G2boSylf5oBZKrAAAAA=
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ cros-qcom-dts-watchers@chromium.org, Rob Herring <robh@kernel.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ Luca Weiss <luca.weiss@fairphone.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+X-Mailer: b4 0.12.4
 
-On 7.2.2024 13.55, Mikhail Gavrilov wrote:
-> On Wed, Feb 7, 2024 at 3:39 PM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
->>
->> Thanks,
->>
->> Looks like your network adapter ends up interrupting CPU0 in the bad case due
->> to the change in how many interrupts are requested by xhci_hcd before it.
->>
->> bad case:
->>          CPU0    CPU1    ...     CPU31
->> 87:     18213809 0      ...     0       IR-PCI-MSIX-0000:0e:00.0    0-edge      enp14s0
->>
->> Does manually changing it to some other CPU help? picking one that doesn't already
->> handle a lot of interrupts. CPU0 could also in general be more busy, possibly spending
->> more time with interrupts disabled.
->>
->> For example change to CPU23 in the bad case:
->>
->> echo 800000 > /proc/irq/87/smp_affinity
->>
->> Check from proc/interrupts that enp14s0 interrupts actually go to CPU23 after this.
->>
->> Thanks
->> Mathias
->>
-> 
-> root@secondary-ws ~# iperf3 -c primary-ws.local -t 5 -p 5000 -P 1
-> Connecting to host primary-ws.local, port 5000
-> [  5] local 192.168.1.130 port 49152 connected to 192.168.1.96 port 5000
-> [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
-> [  5]   0.00-1.00   sec  70.9 MBytes   594 Mbits/sec    0    376 KBytes
-> [  5]   1.00-2.00   sec  72.4 MBytes   607 Mbits/sec    0    431 KBytes
-> [  5]   2.00-3.00   sec  73.1 MBytes   613 Mbits/sec    0    479 KBytes
-> [  5]   3.00-4.00   sec  72.4 MBytes   607 Mbits/sec    0    501 KBytes
-> [  5]   4.00-5.00   sec  73.2 MBytes   614 Mbits/sec    0    501 KBytes
-> - - - - - - - - - - - - - - - - - - - - - - - - -
-> [ ID] Interval           Transfer     Bitrate         Retr
-> [  5]   0.00-5.00   sec   362 MBytes   607 Mbits/sec    0             sender
-> [  5]   0.00-5.00   sec   360 MBytes   603 Mbits/sec                  receiver
-> 
-> iperf Done.
-> root@secondary-ws ~# echo 800000 > /proc/irq/87/smp_affinity
-> root@secondary-ws ~# iperf3 -c primary-ws.local -t 5 -p 5000 -P 1
-> Connecting to host primary-ws.local, port 5000
-> [  5] local 192.168.1.130 port 37620 connected to 192.168.1.96 port 5000
-> [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
-> [  5]   0.00-1.00   sec   111 MBytes   934 Mbits/sec    0    621 KBytes
-> [  5]   1.00-2.00   sec   109 MBytes   913 Mbits/sec    0    621 KBytes
-> [  5]   2.00-3.00   sec   110 MBytes   920 Mbits/sec    0    621 KBytes
-> [  5]   3.00-4.00   sec   110 MBytes   924 Mbits/sec    0    621 KBytes
-> [  5]   4.00-5.00   sec   109 MBytes   917 Mbits/sec    0    621 KBytes
-> - - - - - - - - - - - - - - - - - - - - - - - - -
-> [ ID] Interval           Transfer     Bitrate         Retr
-> [  5]   0.00-5.00   sec   549 MBytes   921 Mbits/sec    0             sender
-> [  5]   0.00-5.00   sec   547 MBytes   916 Mbits/sec                  receiver
-> 
-> iperf Done.
-> 
-> Very interesting, is CPU0 slower than CPU23 by 30%?
-> 
+This series adds all the necessary bits to enable USB-C role switching,
+charger and fuel gauge (all via pmic-glink) on Fairphone 5.
 
-My guess is that CPU0 spends more time with interrupts disabled than other CPUs.
-Either because it's handling interrupts from some other hardware, or running
-code that disables interrupts (for example kernel code inside spin_lock_irq),
-and thus not able to handle network adapter interrupts at the same rate as CPU23
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+Changes in v2:
+- Rebase on -next, drop applied patch
+- Pick up tags
+- Link to v1: https://lore.kernel.org/r/20231220-fp5-pmic-glink-v1-0-2a1f8e3c661c@fairphone.com
 
-Thanks
-Mathias
+---
+Luca Weiss (2):
+      dt-bindings: soc: qcom: qcom,pmic-glink: document QCM6490 compatible
+      usb: typec: ucsi: Add qcm6490-pmic-glink as needing PDOS quirk
+
+ Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml | 1 +
+ drivers/usb/typec/ucsi/ucsi_glink.c                             | 1 +
+ 2 files changed, 2 insertions(+)
+---
+base-commit: d36e89e4c25c15302eb1820d45680f765847dad9
+change-id: 20231220-fp5-pmic-glink-b01d4fa1c7ea
+
+Best regards,
+-- 
+Luca Weiss <luca.weiss@fairphone.com>
 
 
