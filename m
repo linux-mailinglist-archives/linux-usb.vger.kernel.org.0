@@ -1,123 +1,112 @@
-Return-Path: <linux-usb+bounces-6043-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6044-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9293E84E007
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 12:52:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41DBF84E00D
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 12:54:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E4F7DB2A203
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 11:50:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73DE01C22A66
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 11:54:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 421E06F526;
-	Thu,  8 Feb 2024 11:49:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 004D06F535;
+	Thu,  8 Feb 2024 11:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="HMIe6CKV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kgn/J5XC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7007C6F07B;
-	Thu,  8 Feb 2024 11:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B03935427E;
+	Thu,  8 Feb 2024 11:54:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707392950; cv=none; b=tcG6Mfd19o+adxGVzfy01zRXAs5O6wXRBxM3P/cbwx1noJTxx5MkIeP0KFl6v8ZWnNBqazi9SPUX/vVyhFbiXr1XaA1zRleOuEUb6Wcmvqtt6Z+PqfMxiRyUk3jUogX/4rr9KYc9SvpK2uvG+2pCk9U/Y3SNlJlAUuv51yAb1r0=
+	t=1707393262; cv=none; b=KcAfxgFyjaA/YVXwEBUU+tT4f9OaFcKZ8H6TvBMOtOW+l+d0rhpTXz0HV0RLG0g6Ktrc83ueSq+hX1aqEu36vN74ZcIWbmk+RrJWjhqJaQdJOSO9WoY57IOxvYgnZtNtxBcKRJD/vIA79x+QtT//Drgl+wKY77Oe10H7Bb01YMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707392950; c=relaxed/simple;
-	bh=VuFwjgSAbf+dr0FZrqLBZ8yK5NB/XhAxZze2d60h6ws=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=HVaYj14HdG2hvnh0KDzvPMgOOtDIMPZb4vpuy3I9+nJRjunKktY3AlCAYPXN3jJcgTyAhnkfHAkJfoUshFGjIHD/dg5+a+BVMgVZutgSVlNPF62xloTQglVf4FU0v0Q3jAXbFdN/OGAKd050+Bsa+ArQw0IGzbqYZCyXGg7QZns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=HMIe6CKV; arc=none smtp.client-ip=162.62.58.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1707392641; bh=Gkj5XFeU5b5pKCS25vXKF7CydQoxzA6b2Os6pGuw5Fg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=HMIe6CKVRTJFkAoJR4uS2SoRNp+RkimsKjFcTZjXA5YWcDtmPJOL+ryGCM60DM6eZ
-	 d+eR5hadbScbVTxNtVQNHYHxsWsKOLzMwmeDpKhEFVCQ27a29z+2+Qz9IBL4yC2mTf
-	 fEcO3/PHclIPb7TIotJKC2aYEopgaRZNrotSAuWc=
-Received: from pek-lxu-l1.wrs.com ([117.61.184.234])
-	by newxmesmtplogicsvrszb9-1.qq.com (NewEsmtp) with SMTP
-	id 97824E67; Thu, 08 Feb 2024 19:37:56 +0800
-X-QQ-mid: xmsmtpt1707392276twmcn2erk
-Message-ID: <tencent_6C6ACF8878B26D482FE56F649498E90EEF0A@qq.com>
-X-QQ-XMAILINFO: MtZ4zLDUQmWf9rinpoXhvRYK7PO+Za+NxaIR9gDee9WMiJAZEi0XVP7WEfXTLA
-	 Uw5RLxWmvr6RKJf1GgzJs5fXQ3jd5bu1DXhz1t5zFhaWnet+M3E5SY5GLGPrxH6o4SwBj4Ab+3TG
-	 6lwFcnxMldQqH7hzXw4MN3cezqfS1/EBNvjVJtch9frYYV4GA57uhOwo/jSiwo/M9PHbIffHicpz
-	 buzwCJXliSscL8s6bZGXwzXfDYmtH3z/ijHAnz2c8XD4j4D0k1ahZXYNjPq1c5N0VRbrZV/6vwqL
-	 OHBzDVCrSJQGke/+FJS+NvZCKoOQfKy98p5G720ByOmVvQxpb4tdmnCMZKhV2EeW/TBerFutdwAK
-	 dwddubXl1P22ggsFR3VZoAP5kd4/D6cXp5yIuuSaXdsu50LAEUDOCwqVp1wsz0eUG2yvnF/k6R0Y
-	 Ay5OVk0ehvAdP/osx9aqpPOjAfv04zHtODj7FLQi+d2CcHz7sk+KqsVXw7eUQXXymb6gEu9JQ6tX
-	 qtvgwOBm8MmiYbzNXRAFq9Bgir4DAcufGkwTYIjKZVfOVGnz3AU8ehwnsBbbu6IqxNbnxmr18XHT
-	 JGFy2JPHTipZORCrIv0hg8aNeFg7tAGUfz3JznaKCIHhRp/P80yau9KAjzhM5p2ZJ6tK8AL5WE9G
-	 qMi3X/4QmI8et6UhK5cniqwgV8Vu8ylGDTmvzO2AsHpkkMq/bz2lA4D1GXQ069SNa2K09dLWx7yD
-	 DGJYIbNFLfXApIiXKtWJsD5/XDAS2MW6YHQffLixjofiCbPOvd2WWxMnOxKVUYG5P8cmJQQ+M7KP
-	 pcYMGNsGoTNNdo/IXBvoQKMdjtYgBREJQ63qdz5gRAwJWpWAuf8FaZiaNqFJKgHNf8mdqnMN+OCH
-	 Y+xGTczJWUeN3APNH7LDPJ9+wQJiVnuZqN7H4lDH9CLD3YzjTy7Na+SPPEmlBnAslk0Z6+VaSFBW
-	 m+1wOHv9wUf/Mr1B4H1ZDkWkNHrIkR23DjRqe8uVEP6r2kHKOOog==
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-From: Edward Adam Davis <eadavis@qq.com>
-To: gregkh@linuxfoundation.org
-Cc: eadavis@qq.com,
-	linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	rafael@kernel.org,
-	syzbot+8e41bb0c055b209ebbf4@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH riscv64] kobject: fix WARNING in input_register_device
-Date: Thu,  8 Feb 2024 19:37:56 +0800
-X-OQ-MSGID: <20240208113755.3815370-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <2024020812-snowbound-version-6bfa@gregkh>
-References: <2024020812-snowbound-version-6bfa@gregkh>
+	s=arc-20240116; t=1707393262; c=relaxed/simple;
+	bh=uXOrZiz482AvVYpv/HDQooQIBOQg2tudhsP5/yy4RpM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cbcKvE93dqcEL9rFQJugQQMToTWuRHv1k8wGBx+z8IJ1sipLarKuM8cgiLWFyv402TZPzia+ACLie7iZgiJrX4HY0+H/L3LRVW1q0Q0KQpARCCoIc6aDl1NXAjyIdOxvER7Tv36WijoTadZShP9te4HahCORuiEaxvCA6uZ2tXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kgn/J5XC; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707393261; x=1738929261;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uXOrZiz482AvVYpv/HDQooQIBOQg2tudhsP5/yy4RpM=;
+  b=Kgn/J5XCM+QdutdSms2CcakI0fYPMl0F951dhdRqb0Zt/NIMZ9eIMvH+
+   qQbo4CKBL8+86bu2l+Xu4RUsJ5RO6DjHVK5nrFnsx/Gp2+2pVuHaLyudS
+   dffK1kCRUlQvWoEBUCauQcp1niVSoNhPep6StkQJN5hdCYpIGNoKbCf++
+   LRt5cHrs92fGkFm7tGFygs3Ul6oKqoJArGDfZ3QlnQVu3TSKUIH+zGv5T
+   /DZtMSXHGOrw8Uvceje9ZJ6Eo/js9KvezfrhWFzg44R49TVcGBdBfBmu1
+   1rpnJYpxsveUoJOHA20ULJYv1WXDuEfAHIH/s6srLsOqG7TXMPIStbD6/
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="4985163"
+X-IronPort-AV: E=Sophos;i="6.05,253,1701158400"; 
+   d="scan'208";a="4985163"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 03:54:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="934111721"
+X-IronPort-AV: E=Sophos;i="6.05,253,1701158400"; 
+   d="scan'208";a="934111721"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 08 Feb 2024 03:54:14 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Feb 2024 13:54:14 +0200
+Date: Thu, 8 Feb 2024 13:54:14 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>
+Subject: Re: [PATCH v3 3/6] usb: typec: qcom-pmic-typec: add support for
+ PMI632 PMIC
+Message-ID: <ZcTA5hbcladmKuLh@kuha.fi.intel.com>
+References: <20240130-pmi632-typec-v3-0-b05fe44f0a51@linaro.org>
+ <20240130-pmi632-typec-v3-3-b05fe44f0a51@linaro.org>
+ <CAA8EJpqhfWsmUxwmBLtdtx-aFOmTo24erdNfRyz2ymi_y=yidw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpqhfWsmUxwmBLtdtx-aFOmTo24erdNfRyz2ymi_y=yidw@mail.gmail.com>
 
-On Thu, 8 Feb 2024 10:56:00, Greg KH wrote:
-> > The input_add_uevent_modalias_var()->input_print_modalias() will add 1684 bytes
-> > of data to env, which will result in insufficient memory allocated to the buf
-> > members of env.
-> 
-> What is "env"?  And can you wrap your lines at 72 columns please?
-env is an instance of struct kobj_uevent_env.
-> 
-> > Reported-and-tested-by: syzbot+8e41bb0c055b209ebbf4@syzkaller.appspotmail.com
-> > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
-> > ---
-> >  include/linux/kobject.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Feb 07, 2024 at 11:54:50AM +0200, Dmitry Baryshkov wrote:
+> On Tue, 30 Jan 2024 at 21:33, Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
 > >
-> > diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-> > index c30affcc43b4..74b37b6459cd 100644
-> > --- a/include/linux/kobject.h
-> > +++ b/include/linux/kobject.h
-> > @@ -30,7 +30,7 @@
+> > The PMI632 PMIC support Type-C port handling, but lacks USB
+> > PowerDelivery support. The TCPM requires all callbacks to be provided
+> > by the implementation. Implement a special, 'stub' Qcom PD PHY
+> > implementation to enable the PMI632 support.
 > >
-> >  #define UEVENT_HELPER_PATH_LEN		256
-> >  #define UEVENT_NUM_ENVP			64	/* number of env pointers */
-> > -#define UEVENT_BUFFER_SIZE		2048	/* buffer for the variables */
-> > +#define UEVENT_BUFFER_SIZE		2560	/* buffer for the variables */
+> > Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Tested-by: Luca Weiss <luca.weiss@fairphone.com> # sdm632-fairphone-fp3
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > 
-> That's an odd number, why that?  Why not just a page?  What happens if
-> some other path wants more?
-An increase of 512 bytes is sufficient for the current issue. Do not consider
-the problem of hypothetical existence.
-> 
-> And what's causing the input stack to have so many variables all of a
-> sudden, what changed to cause this?  Is this a bugfix for a specific
-> commit that needs to be backported to older kernels?  Why did this
-> buffer size all of a sudden be too small?
-The result of my analysis is that several members of struct input_dev are too
-large, such as its member keybit.
+> Heikki, Gunter, Gret, is there anything left on my side to get these patches in?
+
+Nothing from me. Do you want Greg to pick these?
 
 thanks,
-edward.
 
+-- 
+heikki
 
