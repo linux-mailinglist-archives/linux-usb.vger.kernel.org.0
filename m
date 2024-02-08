@@ -1,125 +1,114 @@
-Return-Path: <linux-usb+bounces-6038-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6039-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D4F684DD56
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 10:54:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7DF784DE5F
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 11:32:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE65B1C2612B
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 09:54:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D6A31F23F8C
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 10:32:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193B56D1C6;
-	Thu,  8 Feb 2024 09:53:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B23962E3F2;
+	Thu,  8 Feb 2024 10:32:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="Y27UAvjK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YPHhS4ob"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BCB6BFD9
-	for <linux-usb@vger.kernel.org>; Thu,  8 Feb 2024 09:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBFE1DFF2;
+	Thu,  8 Feb 2024 10:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707386028; cv=none; b=bafEnzVPHBXkkZ6s7srotlFIhAvCz4VvHMlT7N2Nuzw0PfpLSav6FUgPgs6kAEsBPy3WheIiwM31BwmLXASYoM7+vHHk6ldErG58STgGvXZMCY5u1tZo7piYwK+FMyyO5okBNdXOnsDRZxuQ/ZWZGCcXYrPjSAFXZHOBy3sF9Ng=
+	t=1707388339; cv=none; b=TLzFTBSUJnsrrFgOxAlEde6z6G4ha7RkH2/0xbusawl9vQMzVyrJMag+cP6HKfA4Ny2mZgtMp1hgG3g525BuEx4HigpGly6OTwP/UoJW50t5uYEFCOyhv3Kcca3j01mLXHiWp8gdeK8bxDUQT2t7S8AhoPqIf5NhKciVVyGZb7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707386028; c=relaxed/simple;
-	bh=nneSNwEDwWC5ZCN/Y9jDymQQYLA3++FvlbPfJ9Qdtsw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=F6bcQnKI+xWnIqGa/767kF/kDxFIWcI3KuO+OBRMVc0Iqew4658N33ITXtGZf2xKJN4sK9J1kOmrSAppr3FaZfeHDCshGlNKamv4qvouxaa2/QxZYEEre/PpR36Hvf1oNqvYCBc4T9OS4+M0y8DRFrQhCf1soTNTZe3Te20AAsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=Y27UAvjK; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2d066b532f0so24557931fa.1
-        for <linux-usb@vger.kernel.org>; Thu, 08 Feb 2024 01:53:46 -0800 (PST)
+	s=arc-20240116; t=1707388339; c=relaxed/simple;
+	bh=ct2XFvWhqpfoUsfCy+F5xMjFMJpQ0jg6R8meoFXaZyQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PJ75iC4wicMH0sQWvPMGcSYwokvRkQkMRTNLTBEn+ZCYovSxGEQOSr+zdZmW7O5Ay6TAAIrTxBnq35noC8x/b0sfph2TJLrjDIpxsV4NeLrYcd38jtsax7wlSdh4WcgqFG3XdIFO7VCT+tg5ZSxTGvU9BOdLJFowfp4EIOQdCC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YPHhS4ob; arc=none smtp.client-ip=209.85.219.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-dc6dbac5fd1so547072276.0;
+        Thu, 08 Feb 2024 02:32:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1707386025; x=1707990825; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ksTPGKy9XnG6Wf0pky3mdloJMv6LFXQiqMfviW2zv8Q=;
-        b=Y27UAvjK2nq8JFezrj1T07iClK5t7YuquF5M8hAob80we0qr2nfglbBBgGGlcLdRak
-         FjNCrlHEArcOBM5KuiSvp1+y91iTaXLu4t22IIwieI9MWi0ESxqT/dAP9OLbJv7ltsC7
-         Yo1zvFPAUXol6PABrough19n9ZFWOa/LkECe7Ndfdg3xNK8JMxHKIRJQZJp1hW1KdacO
-         35/Y4+TnTTFv7oYkI9Y/NP0rAbcW41PVaXLgNladI2DA1EKeZweXnzZDTAXTZI3xG4+e
-         KuCRFWiTxWwAvFkE8zWisZP10AD/IP3xcZC/PKyGGz/1YcL33OUPH1AQskt7LL1MA5+O
-         36Aw==
+        d=gmail.com; s=20230601; t=1707388337; x=1707993137; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ct2XFvWhqpfoUsfCy+F5xMjFMJpQ0jg6R8meoFXaZyQ=;
+        b=YPHhS4obmlfkzs9IbmbaJ1/OhEzshA8OpaNlRdZdamVKCPaaZIrvj9JjLudBFuRcyq
+         VY5Ml+Nee06ccDbsMazFKfM8aKjkLl0wWBJi8Y7wWAxBnQZCQwu2wcEBucUGAmJSbXLU
+         FTkdLS97yh1IxeAEcaspJDk7kwc1CRcZDkodp6HueFRRgxIG9yJjKoAxb8/mF6uDdQw0
+         25hAnLgu+GppMW/U4lb7Rmd0/3tUJRIGL3y7ZBPSaAuggmvB4pneHTYABcb+s2CUujYA
+         bOSt0nwV7JuLjoi+88HEFjvDSFXUOCmzYB12SwDDR+YmoKvcrmQUQl+/G8JBoVJJYYfY
+         7yug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707386025; x=1707990825;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1707388337; x=1707993137;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ksTPGKy9XnG6Wf0pky3mdloJMv6LFXQiqMfviW2zv8Q=;
-        b=EBp44TEgjBrcmkXdgT7/VZ/ESDU1mU3mYOqAxEKIo+K59Hd/jqUUmUPwdCd1Ip5BDP
-         lSCt7MV7g5d+gwMNOAbp3dbJtYTr1idZghCuIgSUvK+g1LZIbU7L4PUgQkxz0UVjG5bG
-         Ny31FDXWFno6786I5B0k7niZDHoA7mZK2SNvwzH6njWT8bFSxstOuj3qBcaao6uKvR89
-         mtKLZx832GdsVXqUzGnYAhdhsLOGDIOKspdZheThWCtF7T/Hm+ISx7+7FVz7WwadPJ4X
-         ydEXAG72qpkBKsLNLWvZYKnCGDhNF6QteF27Xr7lk4vLyK4t7OZFrWIKMj8iFy+eLD/M
-         yDPg==
-X-Gm-Message-State: AOJu0YygQ5k28kkAw7oeL7xthCAqb6+BsO1GNdfV5Xyo5AtHRA9+5MVZ
-	FG0b10w2zKjKxA2+ksJX6B4wASoY3RVxr0C81/c9rxmKyR1aVADcmUay3wQ2NmQ=
-X-Google-Smtp-Source: AGHT+IFWvGSfzcJsgH0NmS0q30//h4o1bz4oK1DzwknC/88mXTmK4arnj3DuccwMH7306W/1IHttSA==
-X-Received: by 2002:a05:651c:1548:b0:2d0:d802:8592 with SMTP id y8-20020a05651c154800b002d0d8028592mr171156ljp.25.1707386025257;
-        Thu, 08 Feb 2024 01:53:45 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUWQclMxhiDbdB5v3FN884PUDZ7Ixl0M3bttKHmdqzUAJuoh81Z0AwC8Rwa9vYCr6y2Ru8eLuFyOT+nteP0uPfPDo/6xBitevVKGm/UkHx9CNlowPwnl46u/x85hK31T8PMWaJRtFKp6pj20vZOrPklHesxZxIFwdcbGPnDVTRo+o1Lx1krfBlqlvfG9l1Rs+eu8YGHYmsoxeux8jdMJ2/DguJiQStBVxg9kkMxHhJ1xn2DsgJFab4gUolVwmFDA+yWHaI/aPGLB7PfvUV4tMNnjK46FCsWP3e213CNAaD9+7G2VGxOUG87hTPCV/MdLJQC3RHJU28+/qeK374iyuypQ1/EDiNVG77vKZktAJNGZ9QjjhNxZxQ8uo0lIHaFMrbm1K++Kzd04Dqf/m2FihtK88LD/05zwRVamisEFCpJIWl1NIzlo0W6hfp+J8J4fyATOaAvvx+RSoqzmpwjYkXroTZaZJ2asu4FOIBTv+J4vHX0n5rRMPgZ3EI2XQS7MT6ODFoabudQhexQAATiz+btCGAat4EsPARk13p5Sd+pKjqrcG/YPOSUrDz2NQTlGE3BpQsXVhgPWpAECMINpFh3stPW30TqUR4rvZbO2i0B
-Received: from otso.luca.vpn.lucaweiss.eu (ip-185-104-137-32.ptr.icomera.net. [185.104.137.32])
-        by smtp.gmail.com with ESMTPSA id d20-20020a170903209400b001d8f111804asm2956685plc.113.2024.02.08.01.53.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Feb 2024 01:53:44 -0800 (PST)
-From: Luca Weiss <luca.weiss@fairphone.com>
-Date: Thu, 08 Feb 2024 10:52:33 +0100
-Subject: [PATCH v2 2/2] usb: typec: ucsi: Add qcm6490-pmic-glink as needing
- PDOS quirk
+        bh=ct2XFvWhqpfoUsfCy+F5xMjFMJpQ0jg6R8meoFXaZyQ=;
+        b=XR6dKi8NK2CUmmE9Gldak2Bap5DqFUmiboW2yX91N2h9hmAmBx1P5drSCO6lqTOoCw
+         G9WNR+tnrIFVlyqTxvz8f/yYKqcPkLkkpgBUv1I5Yzen4yqpmJ5prKs67/gvXE94IjEs
+         T837jjoJwFOGm5wK/rA6ZwUK6U/W9KnEuCIQ+W7D+rEEVbe6HQPNJfvZSbA+4chpQBJn
+         3kZBvR+DaQ8IseJes4OUG2zqD8sDff/hzPltiD02V4neTbV3jLQpRzYAjUDR1TPxRipk
+         z12gxxFeQWeET6UuiXZeh07NPbt45Z6LV7HUI34s0fYZv7CTxz/iqFvKNMLcCff3xPz6
+         2pWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXCAMiDqvz5rXzEvvmWO6AX4fPMNySk2cZYrFWSYJ2id5BEjGb4gq0/ucuXr9zCNfu4aQkO6MVfNlli6FEvNrhKo01BBUP3qzZpfAZ6RQZ+a586d/DLMPU+5zkRYPhXHjaxU4VuoJIf
+X-Gm-Message-State: AOJu0YyJxEiDLBNJqjiyL82M9FaJLNHcHJ8qivoY2jFEC+VQYHKte+12
+	qmsH6rRyBS1M3kdcCu4gsPHdkOZBNZ/rc4dZTLKkyuWFnVAdkaV7zz+rbk3BkJOeO6hwSWgDFbU
+	3CCIPKAD/Fd5oAcTIQjcNmfqHRAh6YDY+vdQkHUPzBkQ=
+X-Google-Smtp-Source: AGHT+IE6boa42YcgBsEDGRBfyjaqIyemxo4ljX/7BDmTidXqujpn8bc6Ol/zQxc9UfNiRHVnb4GNFyU6wGFd9TgPMYs=
+X-Received: by 2002:a25:8389:0:b0:dc2:294d:5adc with SMTP id
+ t9-20020a258389000000b00dc2294d5adcmr6701737ybk.0.1707388336606; Thu, 08 Feb
+ 2024 02:32:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240208-fp5-pmic-glink-v2-2-4837d4abd5a4@fairphone.com>
-References: <20240208-fp5-pmic-glink-v2-0-4837d4abd5a4@fairphone.com>
-In-Reply-To: <20240208-fp5-pmic-glink-v2-0-4837d4abd5a4@fairphone.com>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- cros-qcom-dts-watchers@chromium.org, Rob Herring <robh@kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- Luca Weiss <luca.weiss@fairphone.com>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-X-Mailer: b4 0.12.4
+References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
+ <Zb6D/5R8nNrxveAP@cae.in-ulm.de> <Zb/30qOGYAH4j6Mn@cae.in-ulm.de>
+ <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
+ <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com> <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
+ <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com> <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
+ <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
+In-Reply-To: <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
+From: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date: Thu, 8 Feb 2024 15:32:05 +0500
+Message-ID: <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
+Subject: =?UTF-8?Q?Re=3A_This_is_the_fourth_time_I=E2=80=99ve_tried_to_find_wha?=
+	=?UTF-8?Q?t_led_to_the_regression_of_outgoing_network_speed_and_each_t?=
+	=?UTF-8?Q?ime_I_find_the_merge_commit_8c94ccc7cd691472461448f98e2372c7?=
+	=?UTF-8?Q?5849406c?=
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com, 
+	Linux List Kernel Mailing <linux-kernel@vger.kernel.org>, Greg KH <gregkh@linuxfoundation.org>, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The QCM6490 Linux Android firmware needs this workaround as well. Add it
-to the list.
+On Thu, Feb 8, 2024 at 2:23=E2=80=AFPM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+>
+> My guess is that CPU0 spends more time with interrupts disabled than othe=
+r CPUs.
+> Either because it's handling interrupts from some other hardware, or runn=
+ing
+> code that disables interrupts (for example kernel code inside spin_lock_i=
+rq),
+> and thus not able to handle network adapter interrupts at the same rate a=
+s CPU23
+>
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- drivers/usb/typec/ucsi/ucsi_glink.c | 1 +
- 1 file changed, 1 insertion(+)
+Can this be fixed?
+Can I help you here with anything else?
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index 53a7ede8556d..0bd3f6dee678 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -298,6 +298,7 @@ static void pmic_glink_ucsi_destroy(void *data)
- }
- 
- static const struct of_device_id pmic_glink_ucsi_of_quirks[] = {
-+	{ .compatible = "qcom,qcm6490-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
- 	{ .compatible = "qcom,sc8180x-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
- 	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
- 	{ .compatible = "qcom,sm8350-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
-
--- 
-2.43.0
-
+--=20
+Best Regards,
+Mike Gavrilov.
 
