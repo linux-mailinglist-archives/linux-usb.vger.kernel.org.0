@@ -1,100 +1,236 @@
-Return-Path: <linux-usb+bounces-6051-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6052-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6219884E91D
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 20:48:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AE9584E98B
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 21:19:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 123E61F31494
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 19:48:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D77D1C21629
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 20:19:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EEA5381CD;
-	Thu,  8 Feb 2024 19:48:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A26638DFA;
+	Thu,  8 Feb 2024 20:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WmFpBefF"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="k+2O+Jy9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFB2364AA
-	for <linux-usb@vger.kernel.org>; Thu,  8 Feb 2024 19:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EB5381CD;
+	Thu,  8 Feb 2024 20:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707421723; cv=none; b=NL+XLiIQhloFLgPdby6KhghZm7eNleY7BHm1/v5r1HPjnjEjMiGKccKpiE7zQBakaKDtnl0AV0lpdYt6/tCcPOXpxkB5q6P7gAZ925BzNmS/384vtFCvfLR3kJNRKg03RYEVSFZP+vjNZ6bW4lw8u8P3A87Gcp/Y5mebw+S7lWE=
+	t=1707423581; cv=none; b=ALtz/4uYFCYy6WrOZHaD8WRSpJ+9ycuVj3PJk3JKL6vnC3P3EoGLfAmP8EZ4TUxTw5ZXCsJ2qUfFWUF7BOY1QiTgkTJs47ylfwlFgVdPbzeBbDZkKIf5/MXD66NhwjTkXROFkni36n9bbRJvPq+Nn6VdKjN8JSdY3862zoyc63Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707421723; c=relaxed/simple;
-	bh=QRHcsfNL5CodrBloEE4Fot31u6FMaHiMM28bKZysteY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JdXdfwVJwL5xXZYPYRFcMn58RksK0tgZ9G9fGzugR9nhAXkXnKGd940e+xrdRFjTW9LPzOIL7SVhWk63hbvKDtQQw3gMw7xKmnMolDIxgMlzU6ti+O0GW4vjq+0cSJ0DTFWEYC0U1RUt2P/n/bjZj41Usaq+IpqU7vQq0C1R9mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WmFpBefF; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40f0218476aso102595e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 08 Feb 2024 11:48:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707421720; x=1708026520; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0o3ZX+cYKVcvLxzGSXiG/iTbM06IS54gjI2VxBYvRQQ=;
-        b=WmFpBefFfkZZ9ZjvABNEvdDOkxlO1c87CBrbzhYQnkbeQbfG7Lo8jusUCajauY2Mtz
-         B/xgIgVce59JHg1b6MZA76IHWs5IgAviUlc3VfTdKoRm8s0q8y9xH0Hl9stg0lnMkPOz
-         +vXSOkLblssh5RCkhAsuZGEWuJeXvARk5IwgndcavQjxyVKAO3zOQ/UyTmWBIflR4quT
-         MLiCXRjVa2b4vOq3WzcjifG4oe9cdOi7g0acXQdQfsgbnGyDswV16nuP/Pqy7WrYDIPH
-         llrPYqgzsw0MnbRR9g/zMozvQjHbmm7mohBTdMKPkr8SnZIW6he3gFd5CWC/fzot9dRx
-         R5gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707421720; x=1708026520;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0o3ZX+cYKVcvLxzGSXiG/iTbM06IS54gjI2VxBYvRQQ=;
-        b=QDE06H1yedqFViS91J5gAEPrCmZYQBgIdO411DW83bFiEygWUu15sfpxBoSbUpw3Ss
-         tGlpJ7Uezd3CsUudh1Z+B9OZBLvOykWX0L0X+/AETABwfY/VIX1/jbdcwcNLdjP5wOXn
-         RzuTvTy4E0IuS7TqUFGA/dyzGaEve8deXKVn2OtGKqGPmUkUrkB4Psm4mu45IQy7YUaA
-         LqE0O3XJ7d9CC9ChtSEXzGH9iMWpex3WjtDrC9jcCAZqo/m4rADy4rebhfXmzk1KqM5m
-         yTERRIUl06jAYskKF9KSdGI1aRMFIpCYRyJqamt3hB/wQtyLXNEFzEG5qjF+5UQSRscf
-         4mog==
-X-Forwarded-Encrypted: i=1; AJvYcCU9RTtW/RkLglGL0uudIo2Ad/O6Na0j1eFkS7Bv/CFSBS1P5wwDRe5VR0i1RyCZuV8+WsxPzse6w6cp1WzoA3tLkDNQI6vOBwyE
-X-Gm-Message-State: AOJu0YwcsZPpoUJNca9q0M0gJhOvYgMnFPtfIfvfxblj2LdskE8JOA/p
-	bj6AkQ9sfxOEX/yzSZOIueWN+bbUpCzyU5Yf2FiRUkvV7VdCsPpX2Nhj2vOpSu1npEq3M5HQejT
-	o941xC4heZgSQcSoO9d3Jl0cxN0pUNpz9b21D
-X-Google-Smtp-Source: AGHT+IEXamVgx0wZWlhAd5Fj3QmrOnuWMtU8C9KH0ASLbQMIPjYokiSlmVY0iMyuos0B8k3rP6Ck4ssoLiC5dnkJmi8=
-X-Received: by 2002:a05:600c:1e08:b0:410:2267:47c7 with SMTP id
- ay8-20020a05600c1e0800b00410226747c7mr25521wmb.3.1707421720329; Thu, 08 Feb
- 2024 11:48:40 -0800 (PST)
+	s=arc-20240116; t=1707423581; c=relaxed/simple;
+	bh=KoX6/dH/ZO/n9dDUKYIGb1+9d9iUc6gih8G9MENNf8Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Wb+SEcUqWSoBK0MiKKXj0Dw0iPwXGkmrWFBLT8UXmabjDaN5ataK6AS5CV62MsojsITGhdcz2nbTlwILjbEHmLToYxHgxCGgIb/QrIkPjuaTTrBTng6TrDV4+IBGogeUE7PsIIBvwrQYQ+BdtHv39AKrK3AQrkwGI9xPmjvbZyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=k+2O+Jy9; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 418JMagL007228;
+	Thu, 8 Feb 2024 20:19:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=zgbdh6muC5CIDlTbm/Olgojw+ypqBJvtgGxGHbGnTuU=; b=k+
+	2O+Jy9WJdxhhcSdIoNwTqlHcsec5kUGzZGxNGGE1BYEwvA0OrMbRrDObvRuLJrfd
+	5YbMeg4gy4UTRX2NvqxZYGJ0jnkAQr2+Gb5hfwvJG7YNwmNqq/AQkKR2m1B0KbXo
+	0rSQt4oR7rww7kTuLfoSJm06gkV0ayw13cPE6cAsQOnajqt695lzWZa/4Qbv0B1Z
+	UL9deOPAiIN2Yr5j7RCHCf75RG4yeMbOyZmvn6sy7Meuz7RPv8xHm00hfSfcJeCC
+	md+AyWuI9UXy2TxB0xO1S+AGeN8t6WbDkElPFXl+64MS79eLciPcCOtloXqLgDgK
+	rDyurEzUYmQydjhGvalA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w4uphsn8j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 08 Feb 2024 20:19:16 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 418KJFn9002954
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 8 Feb 2024 20:19:15 GMT
+Received: from [10.71.114.174] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 8 Feb
+ 2024 12:19:14 -0800
+Message-ID: <cfcedbc9-e176-754a-9a34-cfca8d6a3984@quicinc.com>
+Date: Thu, 8 Feb 2024 12:19:11 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240125004456.575891-1-abhishekpandit@google.com> <20240124164443.v2.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid>
-In-Reply-To: <20240124164443.v2.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid>
-From: Jameson Thies <jthies@google.com>
-Date: Thu, 8 Feb 2024 11:48:28 -0800
-Message-ID: <CAMFSARfCPbbDviaVoZMvftp1PdXFHKv9ouzG==XnCP9Wrzuv-Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] usb: typec: ucsi: Update connector cap and status
-To: Abhishek Pandit-Subedi <abhishekpandit@google.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
-	pmalani@chromium.org, Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Rajaram Regupathy <rajaram.regupathy@intel.com>, Saranya Gopal <saranya.gopal@intel.com>, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v13 35/53] ALSA: usb-audio: Prevent starting of audio
+ stream if in use
+Content-Language: en-US
+To: Takashi Iwai <tiwai@suse.de>
+CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <lgirdwood@gmail.com>, <andersson@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <konrad.dybcio@linaro.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>
+References: <20240203023645.31105-1-quic_wcheng@quicinc.com>
+ <20240203023645.31105-36-quic_wcheng@quicinc.com>
+ <87y1bxvj0o.wl-tiwai@suse.de>
+ <ef83036f-6605-1db3-d962-ac28a10711ac@quicinc.com>
+ <877cjg7o0k.wl-tiwai@suse.de>
+ <810161b3-4d98-755f-163f-fdfc9fe37063@quicinc.com>
+ <0cb39613-ec01-50aa-807f-b537f201dac0@quicinc.com>
+ <87zfwb4ao9.wl-tiwai@suse.de>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <87zfwb4ao9.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: W_MHakuDFKPLnhTMumi8mAzEgAPqJOjJ
+X-Proofpoint-GUID: W_MHakuDFKPLnhTMumi8mAzEgAPqJOjJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-08_10,2024-02-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ impostorscore=0 malwarescore=0 bulkscore=0 clxscore=1015 spamscore=0
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 mlxlogscore=800
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402080108
 
-Hi Abhishek,
+Hi Takashi,
 
-> +#define UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(_f_) \
-> +       (UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV(_f_) << 8)
+On 2/8/2024 12:33 AM, Takashi Iwai wrote:
+> On Thu, 08 Feb 2024 02:12:00 +0100,
+> Wesley Cheng wrote:
+>>
+>> Hi Takashi,
+>>
+>> On 2/7/2024 4:02 PM, Wesley Cheng wrote:
+>>> Hi Takashi,
+>>>
+>>> On 2/6/2024 11:05 PM, Takashi Iwai wrote:
+>>>> On Wed, 07 Feb 2024 01:08:00 +0100,
+>>>> Wesley Cheng wrote:
+>>>>>
+>>>>> Hi Takashi,
+>>>>>
+>>>>> On 2/6/2024 5:07 AM, Takashi Iwai wrote:
+>>>>>> On Sat, 03 Feb 2024 03:36:27 +0100,
+>>>>>> Wesley Cheng wrote:
+>>>>>>>
+>>>>>>> With USB audio offloading, an audio session is started from the ASoC
+>>>>>>> platform sound card and PCM devices.  Likewise, the USB SND path
+>>>>>>> is still
+>>>>>>> readily available for use, in case the non-offload path is
+>>>>>>> desired.  In
+>>>>>>> order to prevent the two entities from attempting to use the USB bus,
+>>>>>>> introduce a flag that determines when either paths are in use.
+>>>>>>>
+>>>>>>> If a PCM device is already in use, the check will return an error to
+>>>>>>> userspace notifying that the stream is currently busy.  This
+>>>>>>> ensures that
+>>>>>>> only one path is using the USB substream.
+>>>>>>>
+>>>>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>>>>>
+>>>>>> Hm, I'm not sure whether it's safe to hold chip->mutex there for the
+>>>>>> long code path.  It even kicks off the auto-resume, which may call
+>>>>>> various functions at resuming, and some of them may re-hold
+>>>>>> chip->mutex.
+>>>>>>
+>>>>>
+>>>>> That's a good point.
+>>>>>
+>>>>>> If it's only about the open flag, protect only the flag access with
+>>>>>> the mutex, not covering the all open function.  At least the re-entry
+>>>>>> can be avoided by that.
+>>>>>>
+>>>>>
+>>>>> Sure, let me re-order the check/assignment and the mutex locking.
+>>>>> Since this is now checked here in USB PCM and the QC offload driver,
+>>>>> we want to make sure that if there was some application attempting to
+>>>>> open both at the same time, we prevent any possible races.
+>>>>>
+>>>>> I think the best way to address this would be something like:
+>>>>>
+>>>>> static int snd_usb_pcm_open(struct snd_pcm_substream *substream)
+>>>>> {
+>>>>> ...
+>>>>>      mutex_lock(&chip->mutex);
+>>>>>      if (subs->opened) {
+>>>>>          mutex_unlock(&chip->mutex);
+>>>>>          return -EBUSY;
+>>>>>      }
+>>>>>      subs->opened = 1;
+>>>>>      mutex_unlock(&chip->mutex);
+>>>>>
+>>>>> //Execute bulk of PCM open routine
+>>>>> ...
+>>>>>      return 0;
+>>>>>
+>>>>> // If any errors are seen, unwind
+>>>>> err_resume:
+>>>>>      snd_usb_autosuspend(subs->stream->chip);
+>>>>> err_open:
+>>>>>      mutex_lock(&chip->mutex);
+>>>>>      subs->opened = 0;
+>>>>>      mutex_unlock(&chip->mutex);
+>>>>>
+>>>>>      return ret;
+>>>>> }
+>>>>>
+>>>>> Set the opened flag first, so that if QC offload checks it, it can
+>>>>> exit early and vice versa.  Otherwise, if we set the opened flag at
+>>>>> the same position as the previous patch, we may be calling the other
+>>>>> routines in parallel to the QC offload enable stream routine.  The
+>>>>> only thing with this patch is that we'd need some error handling
+>>>>> unwinding.
+>>>>
+>>>> The above is what I had in mind.
+>>>>
+>>>> But, thinking on this again, you might be able to get the same result
+>>>> by using the ALSA PCM core substream open_mutex and hw_opened flag.
+>>>> This is already held and set at snd_pcm_core() (the hw_opened flag is
+>>>> set after open callback, though).  The offload driver can use those
+>>>> instead of the own lock and flag, too, although it's not really
+>>>> well-mannered behavior (hence you need proper comments).
+>>>>
+>>>
+>>> I think I had looked into this as well previously, and it was
+>>> difficult to achieve, because from the USB offloading perspective,
+>>> we don't ever call: snd_usb_pcm_open()
+>>>
+>>> This is actually where we populate the pcm_substream parameter
+>>> within struct snd_usb_substream based on when userspace opens the
+>>> USB SND PCM device (which is not the case for offloading).  So the
+>>> offload driver doesn't have a way to fetch the struct snd_pcm that
+>>> is allocated to the PCM device created by the USB SND card.
+>>>
+>>
+>> Sorry, took a look at it again, and found a way.  Although not pretty,
+>> we can access it using:
+>> subs->stream->pcm->streams[direction].substream->hw_opened
+> 
+> Yes, it's not easy to follow it.  So if we want to this path, worth
+> for a detailed comment.  That said, I don't mind to introduce the new
+> local mutex and flag as you did if the above became too messy in the
+> end.
+> 
 
-Can you replace this with a common HEADER_REV_AS_BCD macro that can be
-used for both GET_CONNECTOR_CAPABILTY and GET_CABLE_PROPERTY?
-Also, the USB PD major revision value in the message header is one less than the
-revision (PD Spec section 6.2.1.1.5). So, we need to add 1 before shifting.
+If you don't mind, I prefer to keep it the way it was with the local 
+mutex and flag.  It makes it a lot easier to follow, and for other users 
+to adopt as well compared to the long equation above :).
 
-Thanks,
-Jameson
+Thanks
+Wesley Cheng
 
