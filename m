@@ -1,108 +1,142 @@
-Return-Path: <linux-usb+bounces-6049-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6050-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8173884E42D
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 16:42:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D1A084E77C
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 19:14:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EF0C28E3B4
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 15:42:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE35F1F23547
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 18:14:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E5F7D3E0;
-	Thu,  8 Feb 2024 15:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F10E85C56;
+	Thu,  8 Feb 2024 18:14:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dpUTJHmm"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EOloWcLe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FE97CF3B;
-	Thu,  8 Feb 2024 15:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3641823C2
+	for <linux-usb@vger.kernel.org>; Thu,  8 Feb 2024 18:14:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707406933; cv=none; b=HJ9lKbDye+VH+CKFcHh5psy+Ajg1oag8kPosmYOH+1oxL9mtxk+ZRhYdtkP12ILjSzNOfdvD/BGo9I2MFWR59WyM9dMeeh3zxXlzhZxyz76VBnZaYrBXlNdw7LGJtoQWW0aqJqjTOAtr028qDVvk1JWfa0atMr65o4+RrRmvjHY=
+	t=1707416076; cv=none; b=YShCOkt+qtwxfw+utzBAkXm+LONNNYFfwRSaKsY7bytv5l2dtIziBh6Kaj7HLVTUWASLA0ZIuWCQiMMi/q1bBVnHryGHdGig9iZYf3DCX2lLjUoks5NVBrWWX99x/2QKQeE1DMlxYvig61yUWZq2A9dv9sCGYAUdzPWbr9WEkD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707406933; c=relaxed/simple;
-	bh=Gq/MeCq8tAdioyMIzNGvwfo3UL2xJNXqTKNa0zXA520=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oR0Ay0Uf6GUbOmbPKXjpw8xIzd/t2BsrGgaXV88am6Z22sUj0v0GHJn3H542bmpZYumksypHOjewchUM7G5tqCgiZ6TlmiCU3k3jK+6F7hjpu1ujRw52WlLp867g7Z2PlbhRLQ5sWxXOT96p7wQLOZLsEl6Ozt2CY4dcxNJua5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dpUTJHmm; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707406932; x=1738942932;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Gq/MeCq8tAdioyMIzNGvwfo3UL2xJNXqTKNa0zXA520=;
-  b=dpUTJHmmx+tUbSiGY3PZ+brOzgFB4qFXAT41Rq2edum36yCT/lWSJCbP
-   1TL3Rb2EviiZZ3LvvYW7SmkQ2lfi+cK+3n46gxf/O/FlBX9shEAYWtt7s
-   heskK0oTM/aczEy1lcG6RtP3u03mNkkuEeVmR125fUf6CSSYBq3huSKUp
-   CdfIUXH+DFaCEN1k41lurlQdrWx56aOXUZCscUW8O6kE2Umng+kra8kc+
-   EpAEMykH7u87Og+C77uavz4geBiG8eiDlMksmy01cXX3efy9HelexuIRS
-   7iP8WgIbXlFtEHStzQ3uvdldCp0uDPUjNsZY91CIITT3zzH2sRN53WFsw
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="23721935"
-X-IronPort-AV: E=Sophos;i="6.05,254,1701158400"; 
-   d="scan'208";a="23721935"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 07:42:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="934162468"
-X-IronPort-AV: E=Sophos;i="6.05,254,1701158400"; 
-   d="scan'208";a="934162468"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Feb 2024 07:42:08 -0800
-Message-ID: <a026ecd8-6fba-017d-d673-0d0759a37ed8@linux.intel.com>
-Date: Thu, 8 Feb 2024 17:43:44 +0200
+	s=arc-20240116; t=1707416076; c=relaxed/simple;
+	bh=raktRbRT/30YboSLtBUFxeNmuuB0czI5c0h//xAnajU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bJ+JWNNeylchXRfZ8tTXpE0D6jJkEDjVAnHWIZ5HJj0FApU7r3RnIJkhTn7zJch+GSDOU1wDWjIo7zVmlcoKhL4rrh6aL+DW6mzp9aVupqFfNmLSteJ9jI51oJ+YR2QwL6XBeuIShEKnwvSfeomArFaz5PHF/x8FaGCB9zpSXT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=EOloWcLe; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6e0f43074edso38399a34.1
+        for <linux-usb@vger.kernel.org>; Thu, 08 Feb 2024 10:14:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1707416073; x=1708020873; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XP2DrPejZ4y9GWeuess5B/7wBkV0f7f91rTBUzRBkq8=;
+        b=EOloWcLe2sSpma/uytSR9jojn0HW5vuD6NvtwWR08B+qRnuhO/4aeo+46IzydWlxvs
+         zL/5M6+7AkxfZyXpCspWs8xYyM4beU+aXcPISD/NJ2mq6JV63ZvrrALbKwahBhZy16p+
+         f5jmdV2aHMM47buGbIzRZd7upOKm8qbODDyO0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707416073; x=1708020873;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XP2DrPejZ4y9GWeuess5B/7wBkV0f7f91rTBUzRBkq8=;
+        b=ffID4TYIvWtR0n7xir1dQ/sZNlRlQwACeuoah4wOp8Nhi9sWfvULyXSCDQasOJRS2m
+         N+4/M8sLLFtQ9tyChjxW5kvZuieiOcqr4PMxS3uiQc0vP94Nzr0LASLJqw8+NICzu32H
+         ZCI1iTAj1Kb1zYMDWj6oxrkigZEX7HDiVabzr0jdbViWAVGiwL0geSioxtsRc+f85ut2
+         EZod91sM10pbD2FwA9qMbBj2cv5KCkcv/vMYxAIIZMlNP/6mEE41Kk5MER4aqSL4DXVv
+         sAtNBiP1fn5va63wPstpIkuLAHWbeS+ufocJySVUq9HzV7g0U2cTia04C7pA9n56yDOL
+         FObg==
+X-Gm-Message-State: AOJu0YxeACSpuG3xC01S6dTjy3sRfqIlOy0lfAu66a3p7waWIoOB8xy8
+	fM9+WTmnDZcg1GkjZRaax+t3f7XzyPWye6/VMUHDlLHqKzAAuLphWj/uJ9BCwZo3kCP/Q1nAm32
+	8lTVbnIBwycku7LOgdDoDQlDordzDbRVTnGur
+X-Google-Smtp-Source: AGHT+IH+qDHRnUdLJutzlN4b7pMy+thkGoe7hkl8pgXZ0zfa7tKazwCMgVBQmcEjJITTaGbfbAm+SCOgcOTd2UDmzy0=
+X-Received: by 2002:a05:6830:1248:b0:6e1:d90:c429 with SMTP id
+ s8-20020a056830124800b006e10d90c429mr323749otp.7.1707416072966; Thu, 08 Feb
+ 2024 10:14:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: =?UTF-8?Q?Re=3a_This_is_the_fourth_time_I=e2=80=99ve_tried_to_find_?=
- =?UTF-8?Q?what_led_to_the_regression_of_outgoing_network_speed_and_each_tim?=
- =?UTF-8?Q?e_I_find_the_merge_commit_8c94ccc7cd691472461448f98e2372c75849406?=
- =?UTF-8?Q?c?=
-Content-Language: en-US
-To: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com,
- Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
- Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
- <Zb6D/5R8nNrxveAP@cae.in-ulm.de> <Zb/30qOGYAH4j6Mn@cae.in-ulm.de>
- <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
- <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com>
- <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
- <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
- <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
- <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
- <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240207145851.1603237-1-heikki.krogerus@linux.intel.com> <20240207145851.1603237-3-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20240207145851.1603237-3-heikki.krogerus@linux.intel.com>
+From: Prashant Malani <pmalani@chromium.org>
+Date: Thu, 8 Feb 2024 10:14:21 -0800
+Message-ID: <CACeCKaffZBPA0Q_Bqs1hjKJB4HCj=VKrqO21dXj4AF5C5VwtVQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] platform/chrome: cros_ec_typec: Make sure the USB
+ role switch has PLD
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Benson Leung <bleung@chromium.org>, 
+	Tzung-Bi Shih <tzungbi@kernel.org>, Guenter Roeck <groeck@chromium.org>, 
+	Emilie Roberts <hadrosaur@google.com>, "Nyman, Mathias" <mathias.nyman@intel.com>, 
+	"Regupathy, Rajaram" <rajaram.regupathy@intel.com>, 
+	"Radjacoumar, Shyam Sundar" <ssradjacoumar@google.com>, Samuel Jacob <samjaco@google.com>, linux-usb@vger.kernel.org, 
+	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Uday Bhat <uday.m.bhat@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8.2.2024 12.32, Mikhail Gavrilov wrote:
-> On Thu, Feb 8, 2024 at 2:23 PM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
->>
->> My guess is that CPU0 spends more time with interrupts disabled than other CPUs.
->> Either because it's handling interrupts from some other hardware, or running
->> code that disables interrupts (for example kernel code inside spin_lock_irq),
->> and thus not able to handle network adapter interrupts at the same rate as CPU23
->>
-> 
-> Can this be fixed?
+Hi Heikki,
 
-Not sure, I'm not that familiar with this area.
-Maybe running irqbalance could help?
+On Wed, Feb 7, 2024 at 6:59=E2=80=AFAM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> The USB role switch does not always have the _PLD (Physical
+> Location of Device) in ACPI tables. If it's missing,
+> assigning the PLD hash of the port to the switch. That
+> should guarantee that the USB Type-C port mapping code is
+> always able to find the connection between the two (the port
+> and the switch).
+>
+> Tested-by: Uday Bhat <uday.m.bhat@intel.com>
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  drivers/platform/chrome/cros_ec_typec.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/c=
+hrome/cros_ec_typec.c
+> index 2b2f14a1b711..5c14e8db08b5 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -28,6 +28,7 @@ static int cros_typec_parse_port_props(struct typec_cap=
+ability *cap,
+>                                        struct fwnode_handle *fwnode,
+>                                        struct device *dev)
+>  {
+> +       struct fwnode_handle *sw_fwnode;
+>         const char *buf;
+>         int ret;
+>
+> @@ -66,6 +67,16 @@ static int cros_typec_parse_port_props(struct typec_ca=
+pability *cap,
+>                 cap->prefer_role =3D ret;
+>         }
+>
+> +       /* Assing the USB role switch the correct pld_crc if it's missing=
+. */
+> +       sw_fwnode =3D fwnode_find_reference(fwnode, "usb-role-switch", 0)=
+;
+> +       if (!IS_ERR_OR_NULL(sw_fwnode)) {
+> +               struct acpi_device *adev =3D to_acpi_device_node(sw_fwnod=
+e);
+> +
+> +               if (adev && !adev->pld_crc)
+> +                       adev->pld_crc =3D to_acpi_device_node(fwnode)->pl=
+d_crc;
+> +               fwnode_handle_put(sw_fwnode);
+Can this be in common Type-C code (maybe typec_register_port())?
+It doesn't strike me as ChromeOS specific, but perhaps I am missing somethi=
+ng.
 
-Thanks
-Mathias
+Thanks,
 
