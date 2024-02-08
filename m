@@ -1,216 +1,156 @@
-Return-Path: <linux-usb+bounces-6055-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6056-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E42ED84EA58
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 22:23:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70FFF84EB0F
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 23:01:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBEF0B2BD70
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 21:22:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D51529011B
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Feb 2024 22:01:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95E014F21E;
-	Thu,  8 Feb 2024 21:21:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31C464F612;
+	Thu,  8 Feb 2024 22:01:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L5BmvqcR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OI8dmYlj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06E14EB41;
-	Thu,  8 Feb 2024 21:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7364F5F2;
+	Thu,  8 Feb 2024 22:01:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707427314; cv=none; b=fxdd+HHzJHTxaghotfTMXvAzN8CGf6b7cV6hX4h//TwZB0/vRJFu+RYLna5+Cz+ZIJJ2StsXI7SHOBpnmDDk0sU+HA4C4qMnWsWP7zZiylhnliXKiEXcAb3MjmTMZ1nEpnsZ4ncrMoCpQt2DlT0aoKGW4uBhR7Y8k1eFcr4F4w8=
+	t=1707429665; cv=none; b=QUJFChV61LV1mYYpQdUwbs0z6WBmEU3H26fUyyQZRx3eAPFWePtnBP2SS/m2jBUJhjcNQ62efPN75FwX6Z8J2uYU5/YgUmo/Al29ysuaPGgNcPn+CfrKmKN/nMaxU/+cCQtel1UfJmtvvEMmYFkW1QMD7eT/k/V0trTz5LSO9jA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707427314; c=relaxed/simple;
-	bh=oqvxtofftemHVkqCtUvTHWJMUcVkNerevyhL33rOVTg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=kFm9B1Bt+I4Sv0mkNHoT2A1hykScHR2o9Fc0wJbIJe6SR7bihC/v7ye0rQ71a6D/sLT2mkiM79M3Q3HZbu9cuW0Tq1U5pp77e3nHLblaq7avENDbs7GltNiuxizVdmUjwvw/yb/5FP3TVX9w0xkSKZe81MeFQEAth3Q45exXITY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5BmvqcR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 289CDC433F1;
-	Thu,  8 Feb 2024 21:21:34 +0000 (UTC)
+	s=arc-20240116; t=1707429665; c=relaxed/simple;
+	bh=8o6YNAeT/tziwxPCb43CHtTeCsR1HTefiU0zavxatS8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZrGM8LRshrR6k/2C+qLpUDlUjgaUEZivpE+SaDe38mIu18b897g/Yf6SXwR5Ij7fBwGwTEib1TjJX0qLqDi5+MJpqdHStrArFvOW6QY6Q0vk/KvRojTCMsD1uh65t71cegV4SwtO28eOZQd4NpcqHYgLX/y5xwEz/yYmPxii9n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OI8dmYlj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD48CC43390;
+	Thu,  8 Feb 2024 22:01:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707427313;
-	bh=oqvxtofftemHVkqCtUvTHWJMUcVkNerevyhL33rOVTg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=L5BmvqcRkgnwQazmD6GNbT/V4WhBK5Jh6gNZcDqvZtq3vD3bjm4E5j4iLEoOGBSf2
-	 9F9jyrrWriCDl5Wu0BAXPhkb1g056buOTe2Ztq7rnNXkEo1LQlxR/MS5DrRDwOGECL
-	 PzXvkI3prpHFsJQ85rgk8WagJHAGPijl/nL+cwohJK5pgSdWN4EVlzkTj2GSjD78+U
-	 Do4/ScbKYtsrkZ/UX5X3+BMEO6gp6SsFMVnpleSnv3fJUOOdIaypIpDthmOW76tyzt
-	 Evsw5NI06O+Mh6/qIrxzDT3P++ocGhgYPwbeQwHydxaTl96OS/0UKdfbCWCgOU5q38
-	 wcv+IJzWFU9dQ==
+	s=k20201202; t=1707429665;
+	bh=8o6YNAeT/tziwxPCb43CHtTeCsR1HTefiU0zavxatS8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OI8dmYljat2y9Xo9Z7wa/MVYiUX5CsJS4r2BHJ90HRXDFkCz2k7KR2XnFQk4BTs9G
+	 dbQLTRrBAxiYb1mhF0VhbMhzQFzGbkzntdGYF3haXly6Saa52B2mG03pc8QTHWZN6r
+	 3BLupCSvfCyFRB4ossTBGE5wbRbIpXNmrbwmM5ZZXP53CDS2Pvwn4TEVerWN3jkM1U
+	 eU6Vsmh7kYnuxzvoNTbWQoXz+0NyQcEDvbEK9/SAChB1H+BvsS898nmXXFYtrhblv1
+	 eLMxDyGZbx1BCrpeB851cHsOb0uZveCegXKuRQyy7zapVaatQ4dfJV5vMjTeCgX47z
+	 YP3Epak519G+Q==
+Date: Thu, 8 Feb 2024 22:01:02 +0000
 From: Mark Brown <broonie@kernel.org>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: kernel@pengutronix.de, Moritz Fischer <mdf@kernel.org>, 
- Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>, 
- Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Alexander Aring <alex.aring@gmail.com>, 
- Stefan Schmidt <stefan@datenfreihafen.org>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- linux-wpan@vger.kernel.org, netdev@vger.kernel.org, 
- Lars-Peter Clausen <lars@metafoo.de>, 
- Michael Hennerich <Michael.Hennerich@analog.com>, 
- Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Jonathan Cameron <Jonathan.Cameron@huawei.com>, linux-input@vger.kernel.org, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Ulf Hansson <ulf.hansson@linaro.org>, 
- Martin Tuma <martin.tuma@digiteqautomotive.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, 
- Sergey Kozlov <serjk@netup.ru>, Arnd Bergmann <arnd@arndb.de>, 
- Yang Yingliang <yangyingliang@huawei.com>, linux-mmc@vger.kernel.org, 
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Rob Herring <robh@kernel.org>, 
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
- Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>, 
- linux-mtd@lists.infradead.org, Simon Horman <horms@kernel.org>, 
- Ronald Wahl <ronald.wahl@raritan.com>, Benson Leung <bleung@chromium.org>, 
- Tzung-Bi Shih <tzungbi@kernel.org>, Guenter Roeck <groeck@chromium.org>, 
- chrome-platform@lists.linux.dev, Michal Simek <michal.simek@amd.com>, 
- Max Filippov <jcmvbkbc@gmail.com>, linux-spi@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, linux-arm-msm@vger.kernel.org, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- linux-mediatek@lists.infradead.org, Thomas Zimmermann <tzimmermann@suse.de>, 
- Javier Martinez Canillas <javierm@redhat.com>, 
- Sam Ravnborg <sam@ravnborg.org>, dri-devel@lists.freedesktop.org, 
- linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev, 
- Viresh Kumar <vireshk@kernel.org>, Rui Miguel Silva <rmfrfs@gmail.com>, 
- Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>, 
- greybus-dev@lists.linaro.org, Peter Huewe <peterhuewe@gmx.de>, 
- Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
- linux-integrity@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- linux-usb@vger.kernel.org, Helge Deller <deller@gmx.de>, 
- Dario Binacchi <dario.binacchi@amarulasolutions.com>, 
- Kalle Valo <kvalo@kernel.org>, Dmitry Antipov <dmantipov@yandex.ru>, 
- libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org, 
- Jonathan Corbet <corbet@lwn.net>, Bjorn Helgaas <bhelgaas@google.com>, 
- James Clark <james.clark@arm.com>, linux-doc@vger.kernel.org
-In-Reply-To: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
-References: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH v3 00/32] spi: get rid of some legacy macros
-Message-Id: <170742729486.2266792.11643460714402047207.b4-ty@kernel.org>
-Date: Thu, 08 Feb 2024 21:21:34 +0000
+To: Badhri Jagan Sridharan <badhri@google.com>
+Cc: gregkh@linuxfoundation.org, linux@roeck-us.net,
+	heikki.krogerus@linux.intel.com, kyletso@google.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rdbabiera@google.com, amitsd@google.com, stable@vger.kernel.org,
+	frank.wang@rock-chips.com, regressions@leemhuis.info
+Subject: Re: [PATCH v2] Revert "usb: typec: tcpm: fix cc role at port reset"
+Message-ID: <ZcVPHtPt2Dppe_9q@finisterre.sirena.org.uk>
+References: <20240117114742.2587779-1-badhri@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13-dev-0438c
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="8svY+Xz+hFFp4U70"
+Content-Disposition: inline
+In-Reply-To: <20240117114742.2587779-1-badhri@google.com>
+X-Cookie: Measure twice, cut once.
 
-On Wed, 07 Feb 2024 19:40:14 +0100, Uwe Kleine-König wrote:
-> Changes since v2
-> (https://lore.kernel.org/linux-spi/cover.1705944943.git.u.kleine-koenig@pengutronix.de):
-> 
->  - Drop patch "mtd: rawnand: fsl_elbc: Let .probe retry if local bus is
->    missing" which doesn't belong into this series.
->  - Fix a build failure noticed by the kernel build bot in
->    drivers/spi/spi-au1550.c. (I failed to catch this because this driver
->    is mips only, but not enabled in a mips allmodconfig. That's a bit
->    unfortunate, but not easily fixable.)
->  - Add the Reviewed-by: and Acked-by: tags I received for v2.
-> 
-> [...]
 
-Applied to
+--8svY+Xz+hFFp4U70
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Wed, Jan 17, 2024 at 11:47:42AM +0000, Badhri Jagan Sridharan wrote:
+> This reverts commit 1e35f074399dece73d5df11847d4a0d7a6f49434.
+>=20
+> Given that ERROR_RECOVERY calls into PORT_RESET for Hi-Zing
+> the CC pins, setting CC pins to default state during PORT_RESET
+> breaks error recovery.
 
-Thanks!
+Between -rc2 and -rc3 I started seeing boot issues in mainline on
+rk3399-roc-pc running arm64 defconfig, a bisection identified this patch
+as having broken things.  The issues manifest as a hang while loading
+modules from the initd, you can see a full boot log at:
 
-[01/32] fpga: ice40-spi: Follow renaming of SPI "master" to "controller"
-        commit: 227ab73b89d66e3064b3c2bcb5fe382b1815763d
-[02/32] ieee802154: ca8210: Follow renaming of SPI "master" to "controller"
-        commit: 167b78446706bb4d19f7dd93ca320aed25ae1bbd
-[03/32] iio: adc: ad_sigma_delta: Follow renaming of SPI "master" to "controller"
-        commit: 2780e7b716a605781dbee753ef4983d775a65427
-[04/32] Input: pxspad - follow renaming of SPI "master" to "controller"
-        commit: a78acec53b8524593afeed7258a442adc3450818
-[05/32] Input: synaptics-rmi4 - follow renaming of SPI "master" to "controller"
-        commit: 1245633c61baf159fcc1303d7f0855f49831b9c1
-[06/32] media: mgb4: Follow renaming of SPI "master" to "controller"
-        commit: 2c2f93fbfba7186cc081e23120f169eac3b5b62a
-[07/32] media: netup_unidvb: Follow renaming of SPI "master" to "controller"
-        commit: cfa13a64bd631d8f04a1c385923706fcef9a63ed
-[08/32] media: usb/msi2500: Follow renaming of SPI "master" to "controller"
-        commit: dd868ae646d5770f80f90dc056d06eb2e6d39c62
-[09/32] media: v4l2-subdev: Follow renaming of SPI "master" to "controller"
-        commit: d920b3a672b7f79cd13b341234aebd49233f836c
-[10/32] misc: gehc-achc: Follow renaming of SPI "master" to "controller"
-        commit: 26dcf09ee5d9ceba2c627ae3ba174a229f25638f
-[11/32] mmc: mmc_spi: Follow renaming of SPI "master" to "controller"
-        commit: b0a6776e53403aa380411f2a43cdefb9f00ff50a
-[12/32] mtd: dataflash: Follow renaming of SPI "master" to "controller"
-        commit: 44ee998db9eef84bf005c39486566a67cb018354
-[13/32] net: ks8851: Follow renaming of SPI "master" to "controller"
-        commit: 1cc711a72ae7fd44e90839f0c8d3226664de55a2
-[14/32] net: vertexcom: mse102x: Follow renaming of SPI "master" to "controller"
-        commit: 7969b98b80c0332f940c547f84650a20aab33841
-[15/32] platform/chrome: cros_ec_spi: Follow renaming of SPI "master" to "controller"
-        commit: 85ad0ec049a771c4910c8aebb2d0bd9ce9311fd9
-[16/32] spi: bitbang: Follow renaming of SPI "master" to "controller"
-        commit: 2259233110d90059187c5ba75537eb93eba8417b
-[17/32] spi: cadence-quadspi: Don't emit error message on allocation error
-        commit: e71011dacc3413bed4118d2c42f10736ffcd762c
-[18/32] spi: cadence-quadspi: Follow renaming of SPI "master" to "controller"
-        commit: 28e59d8bf1ace0ddf05f989a48d6824d75731267
-[19/32] spi: cavium: Follow renaming of SPI "master" to "controller"
-        commit: 1747fbdedba8b6b3fd459895ed5d57e534549884
-[20/32] spi: geni-qcom: Follow renaming of SPI "master" to "controller"
-        commit: 14cea92338a0776c1615994150e738ac0f5fbb2c
-[21/32] spi: loopback-test: Follow renaming of SPI "master" to "controller"
-        commit: 2c2310c17fac13aa7e78756d7f3780c7891f9397
-[22/32] spi: slave-mt27xx: Follow renaming of SPI "master" to "controller"
-        commit: 8197b136bbbe64a7cab1020a4b067020e5977d98
-[23/32] spi: spidev: Follow renaming of SPI "master" to "controller"
-        commit: d934cd6f0e5d0052772612db4b07df60cb9da387
-[24/32] staging: fbtft: Follow renaming of SPI "master" to "controller"
-        commit: bbd25d7260eeeaef89f7371cbadcd33dd7f7bff9
-[25/32] staging: greybus: spi: Follow renaming of SPI "master" to "controller"
-        commit: ee3c668dda3d2783b0fff4091461356fe000e4d8
-[26/32] tpm_tis_spi: Follow renaming of SPI "master" to "controller"
-        commit: b6af14eacc8814b0986e20507df423cebe9fd859
-[27/32] usb: gadget: max3420_udc: Follow renaming of SPI "master" to "controller"
-        commit: 8c716f4a3d4fcbec976247e3443d36cbc24c0512
-[28/32] video: fbdev: mmp: Follow renaming of SPI "master" to "controller"
-        commit: b23031e730e72ec9067b7c38c25e776c5e27e116
-[29/32] wifi: libertas: Follow renaming of SPI "master" to "controller"
-        commit: 30060d57cee194d6b70283f2faf787e2fdc61b6e
-[30/32] spi: fsl-lib: Follow renaming of SPI "master" to "controller"
-        commit: 801185efa2402dce57828930e9684884fc8d62da
-[31/32] spi: Drop compat layer from renaming "master" to "controller"
-        commit: 620d269f29a569ba37419cc03cf1da2d55f6252a
-[32/32] Documentation: spi: Update documentation for renaming "master" to "controller"
-        commit: 76b31eb4c2da3ddb3195cc14f6aad24908adf524
+   https://lava.sirena.org.uk/scheduler/job/558789
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+which shows a bunch of video drivers loading at the end of the log but I
+suspect that's not related the actual failure.  A successful boot can be
+seen here:
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+   https://lava.sirena.org.uk/scheduler/job/559222
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+I do note that the board is powered by USB PD, I've got it connected to
+a PD power supply which seems potentially relevant to the commit.  The
+board had been working for a long time, at least as far as boot to
+initrd goes.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Full bisect log:
 
-Thanks,
-Mark
+git bisect start
+# status: waiting for both good and bad commits
+# bad: [54be6c6c5ae8e0d93a6c4641cb7528eb0b6ba478] Linux 6.8-rc3
+git bisect bad 54be6c6c5ae8e0d93a6c4641cb7528eb0b6ba478
+# status: waiting for good commit(s), bad commit known
+# good: [41bccc98fb7931d63d03f326a746ac4d429c1dd3] Linux 6.8-rc2
+git bisect good 41bccc98fb7931d63d03f326a746ac4d429c1dd3
+# good: [4f18d3fd2975c943be91522d86257806374881b9] Merge tag 'iommu-fixes-v=
+6.8-rc2' of git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu
+git bisect good 4f18d3fd2975c943be91522d86257806374881b9
+# good: [6b89b6af459fdd6f2741d0c2e33c67af8193697e] Merge tag 'gfs2-v6.8-rc2=
+-revert' of git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2
+git bisect good 6b89b6af459fdd6f2741d0c2e33c67af8193697e
+# good: [bdda52cc664caaf030fdaf51dd715ef5d1f14a26] Merge tag 'i2c-for-6.8-r=
+c3' of git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux
+git bisect good bdda52cc664caaf030fdaf51dd715ef5d1f14a26
+# bad: [0214960971939697f1499239398874cfc3a52d69] Merge tag 'tty-6.8-rc3' o=
+f git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty
+git bisect bad 0214960971939697f1499239398874cfc3a52d69
+# bad: [3caf2b2ad7334ef35f55b95f3e1b138c6f77b368] usb: ulpi: Fix debugfs di=
+rectory leak
+git bisect bad 3caf2b2ad7334ef35f55b95f3e1b138c6f77b368
+# good: [7c4650ded49e5b88929ecbbb631efb8b0838e811] xhci: handle isoc Babble=
+ and Buffer Overrun events properly
+git bisect good 7c4650ded49e5b88929ecbbb631efb8b0838e811
+# good: [cc509b6a47e7c8998d9e41c273191299d5d9d631] usb: chipidea: core: han=
+dle power lost in workqueue
+git bisect good cc509b6a47e7c8998d9e41c273191299d5d9d631
+# good: [b2d2d7ea0dd09802cf5a0545bf54d8ad8987d20c] usb: f_mass_storage: for=
+bid async queue when shutdown happen
+git bisect good b2d2d7ea0dd09802cf5a0545bf54d8ad8987d20c
+# bad: [b717dfbf73e842d15174699fe2c6ee4fdde8aa1f] Revert "usb: typec: tcpm:=
+ fix cc role at port reset"
+git bisect bad b717dfbf73e842d15174699fe2c6ee4fdde8aa1f
+# good: [032178972f8e992b90f9794a13265fec8c8314b0] usb: gadget: pch_udc: fi=
+x an Excess kernel-doc warning
+git bisect good 032178972f8e992b90f9794a13265fec8c8314b0
+# first bad commit: [b717dfbf73e842d15174699fe2c6ee4fdde8aa1f] Revert "usb:=
+ typec: tcpm: fix cc role at port reset"
 
+--8svY+Xz+hFFp4U70
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXFTx0ACgkQJNaLcl1U
+h9CX5gf9EbKGGM1ko9HMo9mS3/UGzMOECrFkz8hxo+Ym5OweBAUpcHlq0+LGV3/j
+P1nbV3l51yY8VlTVxIopF57qfag4US2NvHRIkP0iXfFsNPM9j/bsfDnc6FQd5cUA
+ppLLUPbYeFg3vDiM8J35iYWT3GOWnOGzHdu9s6fdKQmDyvw6BlhI+th2LGLGHcDz
+G14cUM/KCfPXwUCPEGyDiMwEj64G1zopwjEBpUqemnHxe5dEiWTUETGRHjFMuzvT
+2a0tqQfoJVAH9TMsJEdItCQ3TeQS8XtUHZF55nZ73vZu5NqAkEAzNMV22pfw6gOm
+RxqQkMC/EcrkK3/Pzd/PrLZb6pezkg==
+=rxBM
+-----END PGP SIGNATURE-----
+
+--8svY+Xz+hFFp4U70--
 
