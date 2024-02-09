@@ -1,149 +1,142 @@
-Return-Path: <linux-usb+bounces-6180-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6181-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EA72850031
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 23:43:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10395850020
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 23:38:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC4E6B2DBE0
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 22:35:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 420EF1C227DB
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 22:38:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1639328370;
-	Fri,  9 Feb 2024 22:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C20653;
+	Fri,  9 Feb 2024 22:38:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TyS7bt6p"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GByAOdzw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CD272134B
-	for <linux-usb@vger.kernel.org>; Fri,  9 Feb 2024 22:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D0524A18
+	for <linux-usb@vger.kernel.org>; Fri,  9 Feb 2024 22:38:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707518054; cv=none; b=KUlTKpdLbKv+NglsjOIrbhOkR4iXiNeM6OPc5dzoiDR/LsurNEbhE4CaLfwvR3YPPMeTOkmpNcY9kWkQdtxIMezRxTlRUHvTpm3+GRRK0Bsorh6l10bphbAEF8hZ3GFcuq6lK7hn5xFZefmzAnHUNJuvNA82IOTcV7FyLn6GaVU=
+	t=1707518308; cv=none; b=o4OXejiyJbApJ4CfKCrMetISYMh3EE563JDbJIG7fZvn2FNmkN7kCROUhGbzPUGX7QAbycGy2n1YIFvEvGzhDNfWwiHZ/rcYcuNKfshqFwq75Mo4fyCd9sVP0Tjj0n4L7569m8RPszEmOKsrf+8ZSIdtRJBHMmhU2BCp4axDrz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707518054; c=relaxed/simple;
-	bh=4h7WJ4BT+GJLocVAc06kxKXfu/9WVi543Y6ttRuJ7oU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HPhOYWEuC2WSS5L0+tx9F0+zOE4ZEzsSS2TjsNPfnxpYKGHjV3dl2bYMVv0UQesrIu8efTkp6v+NsGpL2tfdUQC1VKA7yeuWLcacarj3jVOn6GSfJGF5rmTEWAw/nYN0P9O6GGO8tpor+/zswaXTdmBg31bOz5dUA5CMvtF104c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=TyS7bt6p; arc=none smtp.client-ip=209.85.128.181
+	s=arc-20240116; t=1707518308; c=relaxed/simple;
+	bh=CneQkxAM2XFwm/rlwWTx78xUpKNPxGdJmojiYb4Db4o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IhjiVMC0qhUxH0yjbFap9tH1Vnwdf5hGzDSw0aa1WrjFlJoGf6yaW8CDuYrN1M6wyx+/whzJZR+UVpxluA08a657LxRqKf9ZQs9UZ/z7G17lF4psi7jCKRvn2Ui8TX/dxRFtCtktiSdbuQd5aJoQa8E+YvcpAr3tUBKIWwZb9WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=GByAOdzw; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-604aab67616so16100217b3.2
-        for <linux-usb@vger.kernel.org>; Fri, 09 Feb 2024 14:34:12 -0800 (PST)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d7881b1843so13514535ad.3
+        for <linux-usb@vger.kernel.org>; Fri, 09 Feb 2024 14:38:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1707518052; x=1708122852; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EOsPZzNjTKMmb1hLhWGHgsYjPAZfnhQ0s7pVdVmGej4=;
-        b=TyS7bt6pHXhrZwcidRDAljsnYLWULP3JeBRSw73DhTkTavGj2I8HH7ylz/5tcPGAqd
-         itknjYmKlEoDe64ZcAZ4aYPefsxFG7mBybiwkgC7Z5Pz8HLIqOA9SO8PRu2FU5PUr8jZ
-         fgXY0RjpQwMiF/tNq0i6+IVxMm4dTu6jn67V0=
+        d=chromium.org; s=google; t=1707518306; x=1708123106; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BA088edQE9MyZoucoNS82KLHl0uttqfXtdVNBUsV2lw=;
+        b=GByAOdzwmthaDqZUTnExg+oy8CofOA2jJJjgTazwDHYgPiFwALA1OZGs0/Ftr2VfdV
+         88FgIKXL+JsDo2X1eIjhOJ1uyq00IosBYNnK1WKvCGuNj1eWl/X0TxsHOjeGSiFSVNQ0
+         hAnuIOhhzFVAVHLDy5ySXZRgS7Poo/KZTaYsY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707518052; x=1708122852;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EOsPZzNjTKMmb1hLhWGHgsYjPAZfnhQ0s7pVdVmGej4=;
-        b=LFtFdyznQComgTbRFXk3PVlUROSQyekMYJPNtM3V/0yS9Xx7sJ+df86HznKSqer5K5
-         8t1F6qQ1YnPb6ADdwNhvzYuyG5AF69jFHiEV0kRs0gDQAutHYT1+yEfSl6+paROyBJRi
-         mgk2oA7lQyCbR+bQFPkKTD7xIlpEMmNY73FnvyGo1O1UZ7zw5nJVbt5y9lwMEil828VB
-         f5CfPVDROPD40Rg2/ep42R/8cWlvXhgEXTm0XXltc58PUsT3KyHXVv8TV29oQk5w3GUq
-         ZELCkwUDVJVpRC8ccU7l2vfISnv0iP0BGulQu1KMGFhhlz+zJsBubpXnBg6hwhMu12wG
-         KZPQ==
-X-Gm-Message-State: AOJu0Yz3aMT6NPfzwKlHov0uklesHL718aq2RIIROJTdxWQ5i4tvhsuh
-	lCUsWYXavdn4/X6i/hJ5qKV09kX/P1v5EjpQ3ZFSdgzFzMt8W1ap9Gc6ih0pYhLRCf1GKinxXSx
-	+TqRFeq8zR6pP00GFqkdlJdoiuJ9On9O7Zadq
-X-Google-Smtp-Source: AGHT+IElCJUqExUwUAO5y9FRujH1kMeB0B3NaJ3+IJcu/O0XGCv5BfaoFl6DNxM3Gr+qhIhZCIjPS+Kj+bcnmMXoDlM=
-X-Received: by 2002:a81:4fcd:0:b0:5ee:65b3:f289 with SMTP id
- d196-20020a814fcd000000b005ee65b3f289mr672977ywb.3.1707518051975; Fri, 09 Feb
- 2024 14:34:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1707518306; x=1708123106;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BA088edQE9MyZoucoNS82KLHl0uttqfXtdVNBUsV2lw=;
+        b=WPG9PUPR8HM4WUILgTDTd7xZ/eO2eX1NgUOM/LGavv/vkPdJO+EXrYRs0oMOiwm1/N
+         k3LqavCv9LMYCKAk5f77oGJl9+C1Jg3VDC4WxwsaqRZIfHJgEvdfOPoNpzjw0Za7N5M4
+         hTYwY32R0UA19BWRZCf39I+QTCmM6AEl8gvLf4BngpNfBr491vGj1b6dBwbZk2Fp/Gh7
+         N/zrGyUIZaWW7TmWpuQOOjT0wGEOWRGLiil6QfXAeZ7Rbkr5Hs1VQ+hvFQdortCYiQ9Z
+         dH2h8E2tpAngrXr95rCVTEJuc/NLmSLubKoE9FJzt0xBZDo8EAwcf4bCW99cG7pkO0kZ
+         BkTg==
+X-Forwarded-Encrypted: i=1; AJvYcCWHhqnnB1eoh1ty0rYXModY4i0Uv87qVYorDs+ZXM8/DqwhRy0Of8avxqh7frZ9lWW2/sPaBNzu7dMv/b9RlH768kOGPwY0yELR
+X-Gm-Message-State: AOJu0YwDfU/k8e5yMevGJdQkuvPpzo7x26kkRve/eFVczN5ABj1IeTIR
+	cBRza3vkFRJJ1hK/oVFqxlC2dHoU8inY6OaGl9lyGynP5nSOYgukgd8XtgpvEg==
+X-Google-Smtp-Source: AGHT+IEA3550bJ+etF7eGHcMPiX34Guc3JFJMpIfWrFe4F00ei6dA1OBzcWR24+np1q6tAbPxeq/uA==
+X-Received: by 2002:a17:902:e9c4:b0:1d9:c367:205d with SMTP id 4-20020a170902e9c400b001d9c367205dmr673735plk.53.1707518305843;
+        Fri, 09 Feb 2024 14:38:25 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUNwf5J35fIQTKYNTgsrUnV7uFWXD9RJWfJMZKiwwVifVxjnQQpf2B+juXGvKo8dQhfYRmHkq7P0oVE9Zg03BproOfY9UzECgRnn7cO4uHIpf9ZvjJFQ0nFbs9P38ArSbagR9XTYHkipPRprWto9ValfkEMoc58O49ZJJwJRwGgRtg6PIPviL7TCYs9+yIfabxavBugXRoVTKVzVxKubOtDXose1e7A4YjueEERXqS7XYFdrcYbSCGv35aMHDEVwzxS4tsnmyB1gND6dd9/CMBDIm2PNXDqQKFysgAY+QmbLxLmTiqtZ0eJAwooohkpTE+XEnjJL3TPOjzBd2T4x9RUFbVVhJFo9h0Pt8WUpi44S5FEemoHhwgT+STjIT6EpdasfwjzLtYT02VLRhTWOEn+YKn1K8n32eN/Jt1S+iuHky3uaXlcvyiIqmm/n1aPCrLrqZjLTTqhuSAeORFng5k=
+Received: from localhost (209.148.168.34.bc.googleusercontent.com. [34.168.148.209])
+        by smtp.gmail.com with UTF8SMTPSA id jc9-20020a17090325c900b001d9f4c562b2sm1990156plb.23.2024.02.09.14.38.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Feb 2024 14:38:25 -0800 (PST)
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	linux-usb@vger.kernel.org
+Cc: pmalani@chromium.org,
+	jthies@google.com,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Rajaram Regupathy <rajaram.regupathy@intel.com>,
+	Saranya Gopal <saranya.gopal@intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/3] usb: typec: ucsi: Adding support for UCSI 3.0
+Date: Fri,  9 Feb 2024 14:37:29 -0800
+Message-ID: <20240209223824.622869-1-abhishekpandit@chromium.org>
+X-Mailer: git-send-email 2.43.0.687.g38aa6559b0-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240209060353.6613-1-abhishekpandit@chromium.org>
- <20240208220230.v4.1.Iacf5570a66b82b73ef03daa6557e2fc0db10266a@changeid>
- <ZcY2kVlUn7SJ5pW8@smile.fi.intel.com> <CANFp7mW0F_zyaKJg0LusT6Cp4h0_8Z4jq+R1GUGtpyZrv99iVw@mail.gmail.com>
- <ZcZ_he1jYx8w57mK@smile.fi.intel.com>
-In-Reply-To: <ZcZ_he1jYx8w57mK@smile.fi.intel.com>
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date: Fri, 9 Feb 2024 14:34:00 -0800
-Message-ID: <CANFp7mUzXCvdKKGoBZys5KqW8ZD_3Bhy3R1aunrSmJWxd7RcLw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] usb: typec: ucsi: Limit read size on v1.2
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
-	jthies@google.com, pmalani@chromium.org, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans de Goede <hdegoede@redhat.com>, 
-	Rajaram Regupathy <rajaram.regupathy@intel.com>, Saranya Gopal <saranya.gopal@intel.com>, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 9, 2024 at 11:39=E2=80=AFAM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Feb 09, 2024 at 10:01:07AM -0800, Abhishek Pandit-Subedi wrote:
-> > On Fri, Feb 9, 2024 at 6:28=E2=80=AFAM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Thu, Feb 08, 2024 at 10:02:38PM -0800, Abhishek Pandit-Subedi wrot=
-e:
->
-> ...
->
-> > > > +     if (ucsi->version <=3D UCSI_VERSION_1_2)
-> > > > +             buf_size =3D min_t(size_t, 16, buf_size);
-> > >
-> > > Please, avoid using min_t(). Here the clamp() can be used.
-> > I think this is likely the 4th time I've been tripped up by an
-> > undocumented practice in this patch series. <linux/minmax.h> says
-> > nothing about avoiding min_t -- why prefer clamp()?
->
-> While in this case it will work correctly, the size_t is unsigned type an=
-d 16
-> is signed, while buf_size is unknown in this context. It means if buf_siz=
-e is
-> signed, the min_t gives wrong result. clamp() is better choice.
->
-> See also, e.g., https://lore.kernel.org/all/20231004064220.31452-1-biju.d=
-as.jz@bp.renesas.com/.
->
-> > Please add the
-> > recommendation here
-> > (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
-e/include/linux/minmax.h#n10)
-> > and I am more than happy to change it after.
->
-> It's not my recommendation :-)
->
-> https://lore.kernel.org/all/CAHk-=3DwhwEAc22wm8h9FESPB5X+P4bLDgv0erBQMa1b=
-uTNQW7tA@mail.gmail.com/
->
-> Feel free to submit a patch.
->
 
-Ack, will send up a PATCH v5. And add to my backlog of foot-gun
-checkpatch and docs fixes I need to send up :)
+Hi Heikki,
 
-> ...
->
-> > > Shouldn't magic number be defined?
-> > The comment right above this line documents the number.
-> > As this is the only use right now, I don't see a need to make it a
-> > macro/constant yet.
->
-> OK.
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+This series starts the work adding UCSI 3.0 support to the UCSI driver.
+
+There's a couple of pieces to start here:
+* Add version checks and limit read size on 1.2.
+* Update Connector Status and Connector Capability structures.
+* Expose Partner PD revision from Capability data.
+
+These were tested against on a 6.6 kernel running a usermode PPM against
+a Realtek Evaluation board.
+
+One additional note: there are a lot more unaligned fields in UCSI now
+and the struct definitions are getting a bit out of hand. We can discuss
+alternate mechanisms for defining these structs in the patch that
+changes these structures.
+
+Thanks,
+Abhishek
+
+Changes in v5:
+  - Change min_t to clamp
+
+Changes in v4:
+  - Added missing Tested-By tags from v1 and reviewed-by tags.
+  - Fix BCD translation of PD Major Rev
+  - Replace IS_MIN_VERSION macro and just compare version directly.
+
+Changes in v3:
+  - Change include to asm/unaligned.h and reorder include.
+
+Changes in v2:
+  - Changed log message to DEBUG
+  - Formatting changes and update macro to use brackets.
+  - Fix incorrect guard condition when checking connector capability.
+
+Abhishek Pandit-Subedi (3):
+  usb: typec: ucsi: Limit read size on v1.2
+  usb: typec: ucsi: Update connector cap and status
+  usb: typec: ucsi: Get PD revision for partner
+
+ drivers/usb/typec/ucsi/ucsi.c | 49 +++++++++++++++++++++++--
+ drivers/usb/typec/ucsi/ucsi.h | 67 ++++++++++++++++++++++++++++++++---
+ 2 files changed, 110 insertions(+), 6 deletions(-)
+
+-- 
+2.43.0.687.g38aa6559b0-goog
+
 
