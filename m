@@ -1,139 +1,147 @@
-Return-Path: <linux-usb+bounces-6173-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6174-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 671AD84FD01
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 20:40:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6406984FD18
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 20:44:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A28741C21647
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 19:40:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A0691F23EFE
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 19:44:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA5AB84A36;
-	Fri,  9 Feb 2024 19:39:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684318528E;
+	Fri,  9 Feb 2024 19:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jIx2O0BX"
+	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="sTmoAfGk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5097F496;
-	Fri,  9 Feb 2024 19:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D179B81AA5;
+	Fri,  9 Feb 2024 19:44:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707507598; cv=none; b=ERXZp+jqKoMJArZrpyX3fwPL5tRTqmg7aA3LP3+ECVewxThGI5XVNSMTXKpPlwDfgpGEzzvhsKCiblx0xeTHmk3paFJpqPYc9EkchHvvQC7KTj0yWgPGoYz/FVbJ8VNG41MSOqZyZga7SNtVrCzUDCav+EmpvZ65URjaRVO//IQ=
+	t=1707507853; cv=none; b=Cw0l7GzK0RDmZl4zudEm927sujgUoPG9gPypLkVB7tc+zYLAby5DpBbPh/90kG5ioMAOV9rC+Q2qdezdnSuth2SuQEj1KNSdfBvHuZ/ek11RkI+mYhaDuRCfINx35VNT6eIRa/CH0B7BdP5DyRBeaPM2LQAaP0nG4Bo1vXygjkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707507598; c=relaxed/simple;
-	bh=p50ceEzr8fqyzxu4AYepp96pYziEc9mrmHTAdFEP5TY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R8z00J/wvi7qpH9CVdou6oRoVJvEzpSWsq/ztCoxqBpbH/TqDr/9vYQtyTbbLJPH0RpQyLebtIB/IN+wnMQzm4D0U475iyEePCJ5cekvJ9p8pmU4NMb4j8kl3GtwJR1E39jIs4Gg7b6Gz6tr1tjT25VRGpGC3TKq0Z8t7yOgOwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jIx2O0BX; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707507596; x=1739043596;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=p50ceEzr8fqyzxu4AYepp96pYziEc9mrmHTAdFEP5TY=;
-  b=jIx2O0BXNkciG2GxUjN8SgYF2iMv5eaJIAXYe/t25cEIjfu1iCUXeuqB
-   nJPrc00/BYpIG0HhMt4vOvAVTzjCvkgdtQ9wh+iYJ/7bLn5gZjPvrG4F+
-   qqo6d2cAjQEh9h9v/ztJ6G8yCY6tfpj/K2jrmGtaJY4barXuZUdxZgbgF
-   3L/Viw3MxR5MWKAX67NoWEWnJtdNrDUsw4P+UkQfq9XsvwWK6YkL5t7TA
-   3uSvxsuW7aFO3Logj18aJRnLTHX0GrsmT+D1vt0FMw75oCDYpDxDZBxkc
-   FX6Z4EO8udvTo1u+HdVzUgGmTkKAzaYla2hwOqC5igs02My0PJcvmScBy
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="5341077"
-X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
-   d="scan'208";a="5341077"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 11:39:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="910802533"
-X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
-   d="scan'208";a="910802533"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 11:39:52 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rYWiz-00000003GSs-2G2A;
-	Fri, 09 Feb 2024 21:39:49 +0200
-Date: Fri, 9 Feb 2024 21:39:49 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	linux-usb@vger.kernel.org, jthies@google.com, pmalani@chromium.org,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Rajaram Regupathy <rajaram.regupathy@intel.com>,
-	Saranya Gopal <saranya.gopal@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] usb: typec: ucsi: Limit read size on v1.2
-Message-ID: <ZcZ_he1jYx8w57mK@smile.fi.intel.com>
-References: <20240209060353.6613-1-abhishekpandit@chromium.org>
- <20240208220230.v4.1.Iacf5570a66b82b73ef03daa6557e2fc0db10266a@changeid>
- <ZcY2kVlUn7SJ5pW8@smile.fi.intel.com>
- <CANFp7mW0F_zyaKJg0LusT6Cp4h0_8Z4jq+R1GUGtpyZrv99iVw@mail.gmail.com>
+	s=arc-20240116; t=1707507853; c=relaxed/simple;
+	bh=Y5NzkBo9Pss0qlsTCcbI1qPnckcndo6/QONgzTvCArw=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EdGa4ggKR/vAZOplE0W9MxtfyyuLZS1XzH0f8UQ26y5JihuMl4mxanfXe7BV87diRftHDRkQkdWutTRnaW4QPOFUFYuBCVnqT4r8wZj/WLS5gl+cjDHqTNICZ7FH7nJN5f09OKr9apv5n6u7lgrtefmqPIsQrfXWxu6xtyH8YP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz; spf=pass smtp.mailfrom=ucw.cz; dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b=sTmoAfGk; arc=none smtp.client-ip=46.255.230.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucw.cz
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+	id 73BA71C007B; Fri,  9 Feb 2024 20:44:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+	t=1707507842;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ONTTT+r/HyquDcQPq/M190iHbV9h/M5HxT6bxZXpo3k=;
+	b=sTmoAfGkTBI6qeSlUPGA9ehBSnsDJq6stffOparvSkIozVnvZLsSQ1AF4bk+v3Qxck81L8
+	01hquF6Y6b+plX+GlouzUDuVLZW09yUj2PA/sumYWFRIGt86r4juy1+OWggEUT18cA2Ggg
+	dDYocnP54ybJZ/xw2czDFOcy76mIk7E=
+Date: Fri, 9 Feb 2024 20:44:01 +0100
+From: Pavel Machek <pavel@ucw.cz>
+To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
+	phone-devel@vger.kernel.org,
+	kernel list <linux-kernel@vger.kernel.org>, fiona.klute@gmx.de,
+	martijn@brixit.nl, samuel@sholland.org,
+	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: anx7688: Add driver for ANX7688 USB-C HDMI
+ bridge
+Message-ID: <ZcaAgXwmpTxISn3t@duo.ucw.cz>
+References: <Zbt1dIByBZ2stzjm@mobian>
+ <iikhv7e2z3pk7nr6bvtuepwyrmukym5fjtc2xspsmhxzz5jlwe@5vfs4i3w66kc>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="TjKZTdICc2XbU5ZB"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANFp7mW0F_zyaKJg0LusT6Cp4h0_8Z4jq+R1GUGtpyZrv99iVw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-
-On Fri, Feb 09, 2024 at 10:01:07AM -0800, Abhishek Pandit-Subedi wrote:
-> On Fri, Feb 9, 2024 at 6:28 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Thu, Feb 08, 2024 at 10:02:38PM -0800, Abhishek Pandit-Subedi wrote:
-
-...
-
-> > > +     if (ucsi->version <= UCSI_VERSION_1_2)
-> > > +             buf_size = min_t(size_t, 16, buf_size);
-> >
-> > Please, avoid using min_t(). Here the clamp() can be used.
-> I think this is likely the 4th time I've been tripped up by an
-> undocumented practice in this patch series. <linux/minmax.h> says
-> nothing about avoiding min_t -- why prefer clamp()?
-
-While in this case it will work correctly, the size_t is unsigned type and 16
-is signed, while buf_size is unknown in this context. It means if buf_size is
-signed, the min_t gives wrong result. clamp() is better choice.
-
-See also, e.g., https://lore.kernel.org/all/20231004064220.31452-1-biju.das.jz@bp.renesas.com/.
-
-> Please add the
-> recommendation here
-> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/minmax.h#n10)
-> and I am more than happy to change it after.
-
-It's not my recommendation :-)
-
-https://lore.kernel.org/all/CAHk-=whwEAc22wm8h9FESPB5X+P4bLDgv0erBQMa1buTNQW7tA@mail.gmail.com/
-
-Feel free to submit a patch.
-
-...
-
-> > Shouldn't magic number be defined?
-> The comment right above this line documents the number.
-> As this is the only use right now, I don't see a need to make it a
-> macro/constant yet.
-
-OK.
-
--- 
-With Best Regards,
-Andy Shevchenko
+In-Reply-To: <iikhv7e2z3pk7nr6bvtuepwyrmukym5fjtc2xspsmhxzz5jlwe@5vfs4i3w66kc>
 
 
+--TjKZTdICc2XbU5ZB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+> > From: Ondrej Jirman <megi@xff.cz>
+> >=20
+> > This is driver for ANX7688 USB-C HDMI, with flashing and debugging
+> > features removed. ANX7688 is rather criticial piece on PinePhone,
+> > there's no display and no battery charging without it.
+>=20
+> Don't remove the flashing part. Some Pinephones come without the firmware
+> in the past. Even recently, I've seen some people in the Pine chat
+> asking how to flash the firmware on some old PinePhone.
+>=20
+> It's a safe operation that can be done at any time and can only be done
+> from the kernel driver.
+
+I can re-add it later, but initial merge will be tricky enough as-is.
+
+> > There's likely more work to be done here, but having basic support
+> > in mainline is needed to be able to work on the other stuff
+> > (networking, cameras, power management).
+> >=20
+> > Signed-off-by: Ondrej Jirman <megi@xff.cz>
+>=20
+> I should be second in order of sign-offs. Martijn wrote a non-working ske=
+leton
+> https://megous.com/git/linux/commit/?h=3Dpp-5.7&id=3D30e33cefd7956a2b49fb=
+27008b4af9d868974e58
+> driver. Then I picked it up and developed it over years to a working thin=
+g.
+> Almost none of the skeleton remains.
+
+I believe From: should match First signed-off. I guess Martijn should
+be marked as co-developed-by or something like that?
+
+> License is GPLv2.
+
+Ok.
+
+> > +	ret =3D of_property_read_variable_u32_array(dev->of_node, "sink-caps",
+> > +						  anx7688->snk_caps,
+> > +						  1, ARRAY_SIZE(anx7688->snk_caps));
+> > +	if (ret < 0) {
+> > +		dev_err(dev, "failed to get sink-caps from DT\n");
+> > +		return ret;
+> > +	}
+>=20
+> ^^^ The driver will need to follow usb-c-connector bindings and it will n=
+eed
+> a bindings documentation for itself.
+>=20
+> That's one of the missing things that I did not implement, yet.
+
+Yep, I fought with device trees for few days. I should have yaml
+ready.
+
+Best regards,
+								Pavel
+
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--TjKZTdICc2XbU5ZB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZcaAgQAKCRAw5/Bqldv6
+8hVHAJwKdrMSwlHGJgCePaiwKzXOXwsYGQCgmaWFSFHZOLEP8pMfPXnkuU8afj8=
+=zDar
+-----END PGP SIGNATURE-----
+
+--TjKZTdICc2XbU5ZB--
 
