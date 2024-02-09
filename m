@@ -1,102 +1,116 @@
-Return-Path: <linux-usb+bounces-6154-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6155-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DDFB84F60C
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 14:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 93F3C84F6ED
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 15:16:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B55691C21408
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 13:34:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B772E1C23901
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 14:15:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB0B383B9;
-	Fri,  9 Feb 2024 13:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E7969E09;
+	Fri,  9 Feb 2024 14:13:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ocXzfvxL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K5qLZ56K"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EF737700;
-	Fri,  9 Feb 2024 13:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1A66A006
+	for <linux-usb@vger.kernel.org>; Fri,  9 Feb 2024 14:13:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707485661; cv=none; b=CmpkKyY8tp9NTtU8kfPCUXlX7LK89v/7U5RrGcvCXg3WIyOkM+DnrxsXDmLzYWW7R6+eCRADTjsq7Nmx/fyq8ObVfrrxGAXCn+rlUv6C4eaZWcj1OKX/LWYh2EpYAH3S6eQWaQMMjjfLIgxZVStBz5SdIAhPnqZq2Qr/8i873zo=
+	t=1707488021; cv=none; b=QlQ228FbSGZfZqO95/pvRc2Zc67oqUG4SsPjnbcmmMBNdJJ+OemE0/tXIyzFNIUUfsstDGGvr8dDxvcXWNt2E278O5Wt+pqyFPalBgLoEfqNoVeilXQccx6Km81Uiwq25SbO5QPeKwgdbB5wu1cCeth4rnd9lPpktIfpVLSOmfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707485661; c=relaxed/simple;
-	bh=M8z63cOFXZYPxqtw6vNUVaneKTcxkItbWEwJHaqQhjc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l+wfPG+wLJhuH39H2YPqAM3nysqbibiOEI1dlBaau9Atz8P91q73UHSpjnHHLC192ykSVnJzyfJ3OoFBxsp017rx+F6J1QZwBrIBmMm+OmVcBvtqTqxMc6iAkGpgDyp1u9dHfaMruaRzRVGT2KEleCtV4h6PZRpmUONHwNMukEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ocXzfvxL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B92AC43394;
-	Fri,  9 Feb 2024 13:34:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1707485659;
-	bh=M8z63cOFXZYPxqtw6vNUVaneKTcxkItbWEwJHaqQhjc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ocXzfvxLB49LlLRgHEkKS+h/E3fEnum+P6FVTCAjPCCXVLRQD2NgdHPBmI7UFnAQm
-	 vTuvIYpMgN7c9L0p80fFTwS+lTDqTIIP+AU4jUsYz8kHVZ+o+4jndS3qc+VIdFjbnJ
-	 uMxefVEJRUYS1c5QhxBufF44EbWglEzFEIHOTFec=
-Date: Fri, 9 Feb 2024 13:34:17 +0000
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Niko Mauno <niko.mauno@vaisala.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	vesa.jaaskelainen@vaisala.com, geert@linux-m68k.org
-Subject: Re: [PATCH v3 1/2] usb: core: Amend initial authorized_default value
-Message-ID: <2024020911-utilize-etching-595a@gregkh>
-References: <20240209094651.5379-1-niko.mauno@vaisala.com>
- <2024020903-october-placidly-20cc@gregkh>
- <65582610-72ba-4644-9032-91c09f50a6bf@vaisala.com>
+	s=arc-20240116; t=1707488021; c=relaxed/simple;
+	bh=zXFLDOB7E7AgOzhP3mjKzq5D/29krHq+22i76rFNW1E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FtcL2aI+O64HVmv2aDewMHyIhkFqZoIvv3Es9nR2l7rKgNoXwn3PmV4F7WE6EGUhGdjufWZoiSiN4Gc5G8/fIyygl5x70Pf3Jn0ozhMZSY9v/4TGCB5HCUs8K/v3xUUo3/z9QdGJABU0Ef30u91Y5AdvJPlu1HKRn5xHChVzAWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K5qLZ56K; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707488019; x=1739024019;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zXFLDOB7E7AgOzhP3mjKzq5D/29krHq+22i76rFNW1E=;
+  b=K5qLZ56KhnNuglTWrc46P2XcJt7Rnh73+seoLkwVkEl5c8VUo0g/Y98q
+   ruVHYyn7mAG6JqisIC/P9l2Ssg0MRrMhuCzLOIkaP/idqaIGyhwUOZ5re
+   9wdrtWL0wp+pNuAvlYy/vP81948gVI83rNIxawfDauju/5pMhMnvgxBUN
+   0U1Q0aid1e0cwHJZcLeHspFseoF6MePWhZLkmzLiUkAEwoFz5Y08v/Sn/
+   ybWf2YGk/Sv7yxGyio2ZwLx5sOVy2sAenYkGooPo3O6xIuFJriQkBJEFG
+   I/jrIeLI7i9e8lcBCYNdesIEiKixyaNYJZste/nd/8M73ZqyY8ZvdsU7a
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="12082110"
+X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
+   d="scan'208";a="12082110"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 06:13:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="934434410"
+X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
+   d="scan'208";a="934434410"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Feb 2024 06:13:36 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id A3B17159; Fri,  9 Feb 2024 16:13:35 +0200 (EET)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Gil Fine <gil.fine@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 00/10] thunderbolt: DisplayPort and bandwidth allocation mode improvements
+Date: Fri,  9 Feb 2024 16:13:25 +0200
+Message-ID: <20240209141335.2286786-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <65582610-72ba-4644-9032-91c09f50a6bf@vaisala.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 09, 2024 at 02:39:01PM +0200, Niko Mauno wrote:
-> On 9.2.2024 12.47, Greg KH wrote:
-> > On Fri, Feb 09, 2024 at 11:46:50AM +0200, niko.mauno@vaisala.com wrote:
-> > > From: Niko Mauno <niko.mauno@vaisala.com>
-> > > 
-> > > Since the wireless USB implementation has been removed and since the
-> > > behavior with authorized_default values -1 and 1 is now effectively
-> > > same, change the initial value to latter in order to stop using the
-> > > leftover value. The former value can still be passed as a module
-> > > parameter to retain backwards compatibility.
-> > > 
-> > > Signed-off-by: Niko Mauno <niko.mauno@vaisala.com>
-> > > ---
-> > >   drivers/usb/core/hcd.c | 6 ++----
-> > >   1 file changed, 2 insertions(+), 4 deletions(-)
-> > 
-> > Isn't this series already in my tree?
-> > 
-> > confused,
-> > 
-> > greg k-h
-> 
-> Hi Greg, apologies for any confusion I may have caused,
-> 
-> Geert requested some further clarification in the new Kconfig help section,
-> please see:
-> https://marc.info/?l=linux-usb&m=170747246528305&w=2
+Hi all,
 
-Great, but I can't take patches that are already in my tree, right?
+This series improves bandwidth allocation mode support to follow the
+USB4 spec more closely. In addition to that DisplayPort tunneling is
+made more robust so that if a tunnel does not come up properly (for
+example on a discrete controller the DisplayPort source from the
+graphics is not connected to the DisplayPort sink of the controller) we
+tear it down and continue pairing.
 
-Please submit a new one on top of what I currently have.
+This series improves bandwidth allocation mode support and DisplayPort
+tunneling to follow the USB4 spec more closely.
 
-> (There shouldn't be any functional change introduced between v2 and v3)
+Gil Fine (2):
+  thunderbolt: Calculate DisplayPort tunnel bandwidth after DPRX capabilities read
+  thunderbolt: Improve DisplayPort tunnel setup process to be more robust
 
-That always needs to be listed, as my bot says, otherwise we have no
-idea what is going on here.  Remember, some of us get 1000+ emails a day
-to do something with (review, apply, delete, ignore...)
+Mika Westerberg (8):
+  thunderbolt: Use DP_LOCAL_CAP for maximum bandwidth calculation
+  thunderbolt: Re-calculate estimated bandwidth when allocation mode is enabled
+  thunderbolt: Handle bandwidth allocation mode disable request
+  thunderbolt: Log an error if DPTX request is not cleared
+  thunderbolt: Fail the failed bandwidth request properly
+  thunderbolt: Re-order bandwidth group functions
+  thunderbolt: Introduce tb_tunnel_direction_downstream()
+  thunderbolt: Reserve released DisplayPort bandwidth for a group for 10 seconds
 
-thanks,
+ drivers/thunderbolt/domain.c |   4 +
+ drivers/thunderbolt/tb.c     | 898 +++++++++++++++++++++--------------
+ drivers/thunderbolt/tb.h     |  10 +
+ drivers/thunderbolt/tunnel.c |  96 ++--
+ drivers/thunderbolt/tunnel.h |   6 +
+ drivers/thunderbolt/usb4.c   |   4 +-
+ 6 files changed, 596 insertions(+), 422 deletions(-)
 
-greg k-h
+-- 
+2.43.0
+
 
