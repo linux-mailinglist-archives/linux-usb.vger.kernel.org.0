@@ -1,114 +1,123 @@
-Return-Path: <linux-usb+bounces-6130-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6131-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BABC584EF2A
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 04:00:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD8CC84EFA2
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 05:35:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A5B31F26652
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 03:00:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCC1F1C2263F
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 04:35:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74DD04C6F;
-	Fri,  9 Feb 2024 03:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796D5525E;
+	Fri,  9 Feb 2024 04:35:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c0RvK6BJ"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ur+OLccj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E89394C61;
-	Fri,  9 Feb 2024 03:00:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A20C5672
+	for <linux-usb@vger.kernel.org>; Fri,  9 Feb 2024 04:35:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707447614; cv=none; b=jXzZWb7yc9vIsXkd91ECqeKNVWfFyK/lBP31G0Ng0upr3u+pTdLuphhcraNoJ88tNtoccZeiCE46Knlu4FS8Tl7+ytrpTmsylGHKqaMH9OQIxPinMIzrBW1Au1er7+0G134unFnR53WMpZnD2ASkcW4V3dYhwaO27XYqzDCR77A=
+	t=1707453331; cv=none; b=SNLLqbJi2S0XQ74xinr5bqym+jiQP348HSNtR/xIoLLuhoqsPMMRTn9M9wkWo1+c45ICGYVIWfwNPURewhGPJl2VGcdzW43OcxyOwEHSeSofZ/1Wx5lLM9PaSyFOeuMUCH5txraqAy5YdDbJ2nMbsqkzfZJke3FKWisi3EDbuqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707447614; c=relaxed/simple;
-	bh=YWSXk4gg3iRUPrFxk01vbso3R2LXES4Zpy2uWOn8ZRE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jLdceKlT6jiL23kazd/0wvSVDovBl0eVzMz+mkUCLT64oQot730oY2tkx8I2eOjoxl/BBpmFiiasRSUQRaOskTtDxP4pC/qv//Isp0chonTgAhVFaUvlY9kvt8lZrZiwa9/tDoQEYZynP2/PzXCNZL/jVYJuM6I+THN8kZ7V1Po=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c0RvK6BJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C046C433F1;
-	Fri,  9 Feb 2024 03:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707447613;
-	bh=YWSXk4gg3iRUPrFxk01vbso3R2LXES4Zpy2uWOn8ZRE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c0RvK6BJYc+i0eo4kPitnWN56L8nyAEUoRXfFPqmwIF6WdpQInOmsPnEgAdXvMwpN
-	 VEGRXWU5prRW1XkylT/VR5TPM1XJZVn6x39iCYFjC+2wbA1sgbX53NL0eINgjcpX3K
-	 ysgjTDfOh6a+hy+Rdf0/dHeWIOBk3JQMHjVu1myLdjFQOD/oHPlgDna+j5715fZAaL
-	 UbjSBnQO+hmNaV3PdrNEsqAsI4ydIltEx+D4T8ieWx9mqORcAKZkCKIimBvOMPWOpP
-	 MBFMNe1j+bf/Q7QtMCdMyudvincnyvyHBuGgZVlNa8npF0PQQgih6XnsQVkaGHA8L0
-	 AbJIr28u8ZS7A==
-Date: Thu, 8 Feb 2024 21:00:10 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Rob Herring <robh+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com, 
-	quic_jackp@quicinc.com
-Subject: Re: [PATCH v14 1/9] dt-bindings: usb: Add bindings for multiport
- properties on DWC3 controller
-Message-ID: <wrki53fjc45ercxecxadq72p66diui4l4oklsk3nomsmshg3i4@5lrhk3fmjkal>
-References: <20240206051825.1038685-1-quic_kriskura@quicinc.com>
- <20240206051825.1038685-2-quic_kriskura@quicinc.com>
+	s=arc-20240116; t=1707453331; c=relaxed/simple;
+	bh=hTYAUXCmIabUW5HKsILrnw6rDD9lUI/Srw4C705HR5o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eBRxB6B8bO1l5+EgDuDDwD7ZvpHZ5IOU4XfJ+YVG82mni7WCW5CS/jkRx26O7vGV8Pale+eblIkeTCByqXtx4+Hln39jTJ8odPzYSP4wYgnfjMKHV+sC8zP2sqo0lhi8WvPNyAdVpvsFORo2GokfUzghDSIFIdEX87ieLYE4ii0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Ur+OLccj; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dc74435c428so539369276.2
+        for <linux-usb@vger.kernel.org>; Thu, 08 Feb 2024 20:35:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1707453328; x=1708058128; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jF0LVyKfW9zrsYG7qAJeA0jKroE+BQWSh2P7D/n91V4=;
+        b=Ur+OLccj8/+CUb8GKtf/xsBNddRAUmejqr0s4j+DYSIiexHyuCrygDNErtqMig6oxA
+         y/UgbbrEXKzd0pXGiTe1FftGMyFRI7Sj1ZF5juO2lS76k8mJZG/vQPW8ckjssJRSOapY
+         YsKDj6fvhV6c8jp7roKkhO6zCSDenPIW7SxnU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707453328; x=1708058128;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jF0LVyKfW9zrsYG7qAJeA0jKroE+BQWSh2P7D/n91V4=;
+        b=NPZKshMzbhI1A6Ol6iffkEHh/1Vgu30a3Hmwnx+iYKj1Y9qDHXU4AVdVL4srqU2s7J
+         SOSUgxY7Ccd9oDFHOGH/tjPa0JOjiTqnrKGnr3XuhnGogt9zA0NKEvEb7/CfGpB0UypK
+         jpTQvWPDqtQy0JwDxaZkkHD/DmchiKeJicf9hqvS0u63iSbkwVc5/Xl9eTSg/X66sEv1
+         RaOgUfpkI6zUeGjHlWex/uagGNdDnAh0SGBFL7HN5zP461xNz2YMR3T1Sbn969Ft2cx7
+         RqmWvxOAbMUNlyc4+fmLeUAG4f6rpsghuMhPQpIuzoJXqcHDhVEB6CU5lpgFWPmu2Gpa
+         GNgg==
+X-Forwarded-Encrypted: i=1; AJvYcCWSq+Ai+FwkwL6RDLF0iscmbi6f1XTofzKzWGc3602Iz6tUWmYFQ5DiWnm3I2rWq7Jv5RTq2det7+IfBw/3oqRuP8GASGp82z0+
+X-Gm-Message-State: AOJu0Yy5lHLk9KKl4OODYu4po0CNiDIq+a7dlv0s4Gko8aDmjLZgEffq
+	Im0tcn3VClb7TK8DJOrXfCqRKg67JodL0eWP/7YNVzJzU3YLcOkzGSM/5gw7mhcD2ObZPgg2IMC
+	vfv2MyQqw8tGzH95dVZsIV0VcPbINiCAoCu0Q
+X-Google-Smtp-Source: AGHT+IGXu2IH3GWDKxukCv+Zi1peMLvcDM/JtXX9yIQavVOTxcNTQbsTSh7G8Y6+SqIc+ST/ZSD8ldlQhnv+PWjXkGE=
+X-Received: by 2002:a25:3607:0:b0:dc6:4e33:10bb with SMTP id
+ d7-20020a253607000000b00dc64e3310bbmr382362yba.58.1707453328472; Thu, 08 Feb
+ 2024 20:35:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240206051825.1038685-2-quic_kriskura@quicinc.com>
+References: <20240125004456.575891-1-abhishekpandit@google.com>
+ <20240124164443.v2.2.I3d909e3c9a200621e3034686f068a3307945fd87@changeid> <CAMFSARfCPbbDviaVoZMvftp1PdXFHKv9ouzG==XnCP9Wrzuv-Q@mail.gmail.com>
+In-Reply-To: <CAMFSARfCPbbDviaVoZMvftp1PdXFHKv9ouzG==XnCP9Wrzuv-Q@mail.gmail.com>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Thu, 8 Feb 2024 20:35:17 -0800
+Message-ID: <CANFp7mWz1cs3jwCHqf6Ku_RcQ6HmC9QHazoie=xxz8E6Rj2_QQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] usb: typec: ucsi: Update connector cap and status
+To: Jameson Thies <jthies@google.com>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@google.com>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
+	pmalani@chromium.org, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Rajaram Regupathy <rajaram.regupathy@intel.com>, Saranya Gopal <saranya.gopal@intel.com>, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 06, 2024 at 10:48:17AM +0530, Krishna Kurapati wrote:
-> Add bindings to indicate properties required to support multiport
-> on Synopsys DWC3 controller.
-> 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+On Thu, Feb 8, 2024 at 11:48=E2=80=AFAM Jameson Thies <jthies@google.com> w=
+rote:
+>
+> Hi Abhishek,
+>
+> > +#define UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(_f_) \
+> > +       (UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV(_f_) << 8)
+>
+> Can you replace this with a common HEADER_REV_AS_BCD macro that can be
+> used for both GET_CONNECTOR_CAPABILTY and GET_CABLE_PROPERTY?
+> Also, the USB PD major revision value in the message header is one less t=
+han the
+> revision (PD Spec section 6.2.1.1.5). So, we need to add 1 before shiftin=
+g.
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Jameson and I talked briefly and I discovered that PD assigns the
+following values for the major rev:
+* 00 =3D 1
+* 01 =3D 2
+* 10 =3D 3
+* 11 =3D Reserved/Invalid
 
-Regards,
-Bjorn
+From PD 3 onwards, there's a new Get_Revision message that can be
+queried from UCSI using GET_PD_MESSAGE. In future patches adding
+support for Discover Identity (also using GET_PD_MESSAGE), we will
+need to check this major revision to see whether we should also query
+Get Revision.
 
-> ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml          | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index 8f5d250070c7..9227e200bcab 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -85,15 +85,16 @@ properties:
->  
->    phys:
->      minItems: 1
-> -    maxItems: 2
-> +    maxItems: 8
->  
->    phy-names:
->      minItems: 1
-> -    maxItems: 2
-> -    items:
-> -      enum:
-> -        - usb2-phy
-> -        - usb3-phy
-> +    maxItems: 8
-> +    oneOf:
-> +      - items:
-> +          enum: [ usb2-phy, usb3-phy ]
-> +      - items:
-> +          pattern: "^usb[23]-[0-3]$"
->  
->    power-domains:
->      description:
-> -- 
-> 2.34.1
-> 
+Since this code is incorrect, I will send up a PATCH v4 with the
+correct BCD version as Jameson suggested. I'll also fix up some of the
+minor nits in that patch series.
+
+>
+> Thanks,
+> Jameson
 
