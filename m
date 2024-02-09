@@ -1,248 +1,167 @@
-Return-Path: <linux-usb+bounces-6139-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6140-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 314CB84F26A
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 10:41:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96F5A84F286
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 10:47:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE2D7281827
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 09:41:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21F061F230F4
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 09:47:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23E31679FE;
-	Fri,  9 Feb 2024 09:41:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABD6D67C5D;
+	Fri,  9 Feb 2024 09:47:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="bmjJuNIe"
+	dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b="QmMGxGzV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2113.outbound.protection.outlook.com [40.107.20.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6787B679E2
-	for <linux-usb@vger.kernel.org>; Fri,  9 Feb 2024 09:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707471686; cv=none; b=plDM1I0p25aGee8i02ftkyWsT6CxcDVt5PlNrnsPBtkDtp0nr52JT6gvAxkdXcn5Yw99K47sfoHMDpyR0HMs7Ve7Y3NFGXQVmkvSvfiTmBrxKHbItdQn2qvy4FtQ6a54LFSzUM6S5IrnXfURsnMQFx6vj1np5UYkHIm7Fa1CSYU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707471686; c=relaxed/simple;
-	bh=oWEmMBTGiNvL9yQtN+r090K337WkWzdHP+zNHBXpTKw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=a5rUDVU2jbjHDPCHiejcSk74u3xZbj9v4DP4yjHdh/wnB59fg8cqormGMSzuAzxXTJrfWHSc5Zg7L7f5KRKzN6o5RPUihjlfm/QX9WHGpAYdNwUXkHxSfynNor8jUzM8TeZ/nwhknOV9qz1wkqHLSPjWWk3vwe3K5BUFCyYpH9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=bmjJuNIe; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240209094121euoutp01221578d26a525a3aaf54fe4ad74b6d92~yKHKLCR8L3101931019euoutp01n
-	for <linux-usb@vger.kernel.org>; Fri,  9 Feb 2024 09:41:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240209094121euoutp01221578d26a525a3aaf54fe4ad74b6d92~yKHKLCR8L3101931019euoutp01n
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1707471681;
-	bh=mZ6dOajC4BmQglcSLlWCGzdZBLyDJUYRGvJyIpUfgEo=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=bmjJuNIeqCQNRV3sswRZC0ITvdK5w3vF/j2Z3L1OueRrbVHrSFmryF+r5bXp3+axF
-	 07IDsKTlgAINtA4CxlWVt/1jMT+xvfK25Nf8MBa3FW4cb9KN87ng64I2IGrrDZbQnk
-	 qffcqZk0znulIfSc26pO4r+BJCiH9wXd5Z+hzmK8=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20240209094120eucas1p2cb9b256dbee76a0a65ccf777cb8721f8~yKHJ90uvW1039510395eucas1p25;
-	Fri,  9 Feb 2024 09:41:20 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges2new.samsung.com (EUCPMTA) with SMTP id AB.67.09814.043F5C56; Fri,  9
-	Feb 2024 09:41:20 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240209094120eucas1p191178d28da0f0dcae85f951fd9589f8b~yKHJuFS1T0522605226eucas1p18;
-	Fri,  9 Feb 2024 09:41:20 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240209094120eusmtrp2c6fefe0fa14282ea213c79f56bf22495~yKHJtha-k2066020660eusmtrp2T;
-	Fri,  9 Feb 2024 09:41:20 +0000 (GMT)
-X-AuditID: cbfec7f4-711ff70000002656-77-65c5f3408da4
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id 0A.D2.10702.043F5C56; Fri,  9
-	Feb 2024 09:41:20 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240209094120eusmtip1d3c309897edbe524265b6e942d7bf19f~yKHJTIzMI2623826238eusmtip1V;
-	Fri,  9 Feb 2024 09:41:20 +0000 (GMT)
-Message-ID: <2cc401dc-bfeb-402e-967e-bd1653640949@samsung.com>
-Date: Fri, 9 Feb 2024 10:41:19 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB546679E2;
+	Fri,  9 Feb 2024 09:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.113
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707472057; cv=fail; b=DuJbZI9vkR2Zm824L4R4e91cLxxEhv0hfHrXxY+Pd0kgZfHU5W4XUXgepUKfIr4IQXRaahWc1uuf/h3OodyYnN+RIJ/B795jO2/0IGN8CQdpymLWz3lAr5vmTpFxUY7XRsA4Peo7RvYW3zHvWTnZ/pkKAx+0UjzRc7BeY6Rw614=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707472057; c=relaxed/simple;
+	bh=Jrb+H65+LfHEjIP/QvJE79Sa3p3fFXsIYWZbP/LOtjM=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=h6/Fjo3w3BJNrchazzsXThiSIg2M7bhB1iBl+6/S1z8Aj9hbJra/hkZztXk6idl21gRNItH8vgZY5OIHV5Bwqzu4RL8Xm7GMlwhPh1KWl7i5L6/13Du1KGv6GizlmK2h7Gkct1dQKBtaw0T9SzEIv6puGDoRpwYh6zRw0jWFbtQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vaisala.com; spf=pass smtp.mailfrom=vaisala.com; dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b=QmMGxGzV; arc=fail smtp.client-ip=40.107.20.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vaisala.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vaisala.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GNb4fjUQBX10EJ7adQibWhMEzkR/+xlrTnTzv45N8HdtDkcbOeOtg1Z34dJpkbDIuG5E+6Y1lx4OWB+iICDcqEO1AgCaV6G6wDD/qiqOCjGmf6aOjuIWwC+Ij7FQzBIF2BifoEXPck00R8CeWMD6yqNxxTx8bMUIwQUMAT0v3oJzmY3kYwL0C+AJJGdsLcUivpqbp8Jb5KvKqkwqZ05rvYHGJyDEzXrUU1VMq01e+K6nGHXdFuH6WI6FiRdXwQD6JSEgemFVun+6S6lH0bwF50e+KP7A96q7rd961KyKy8SVXz+sgJHVXcAQ7ADKyY8NjeimzuwpOyA1XOcg/PtQ9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AdMhVx5W4qmt1DoI9yagQDMLzbzAPKsTpLntPZZFH5I=;
+ b=jQPDFeXcxPEa0BNOQHXZfLQxd556VwVv2O65zKVClARDF3dAxGD4Z7XfzkCel10i3GO7gAzJdJ9y2aRFQ7k9E4EUXrRAfNICt3Abbv1cGlcM3OwzPnJG8vhqVWmXcI21mu8Nlzh7HTbux1SntdNtCMx4y/0J36Zeguyu/ndv5BgNexKRF4evSgNqkZYmT/UC+PwuT4vvUnJNYROn3k7k6e34V3AEfJsZSUFM4KAOuG/PJcvNGW9xLq+0jDcvPpdlqNpur4WqAaKvDKg7WiQCBWGkU7NQwS1pI+H3Ar4JJUmWpQAgHsR4/KHT71s9b5PMG9/JMukTibzoHrPZmgT6iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vaisala.com; dmarc=pass action=none header.from=vaisala.com;
+ dkim=pass header.d=vaisala.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vaisala.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AdMhVx5W4qmt1DoI9yagQDMLzbzAPKsTpLntPZZFH5I=;
+ b=QmMGxGzVhGLfqm72vcZSOMamVOG24rUzE8GBl2BHbT3f2WWVLSIe0PQ5dn7FJTniFLTuiauGFZq29VpM2h5sdklB+lKhDQAdgBJwxNgIRD7ZJGafPXkYyQ+kGwHcs08HNWXTwcn/5Z0c86Tvxz2WsO8nWlPdtEUWsk82Su4YJ2C2Hc1y4iimqiv0O36TA9QSckyuEvONqKoOH3xX9nN43+nb6xlUmfNI7/PGUDPJFoDeMz1xBSlDQhD2NQJgcxw/kre6Cym6inGpfUyzmvPFOCO23Bhop/OpGRWeaAdiLMORGxqVb3UbSdbhS7/FhkgiiWyl19815SDRxMkqIkbuzw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vaisala.com;
+Received: from AS4PR06MB8447.eurprd06.prod.outlook.com (2603:10a6:20b:4e2::11)
+ by AM0PR06MB6578.eurprd06.prod.outlook.com (2603:10a6:208:199::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.27; Fri, 9 Feb
+ 2024 09:47:30 +0000
+Received: from AS4PR06MB8447.eurprd06.prod.outlook.com
+ ([fe80::b5ae:8355:acaf:29e0]) by AS4PR06MB8447.eurprd06.prod.outlook.com
+ ([fe80::b5ae:8355:acaf:29e0%4]) with mapi id 15.20.7270.025; Fri, 9 Feb 2024
+ 09:47:29 +0000
+From: niko.mauno@vaisala.com
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	vesa.jaaskelainen@vaisala.com,
+	geert@linux-m68k.org,
+	Niko Mauno <niko.mauno@vaisala.com>
+Subject: [PATCH v3 1/2] usb: core: Amend initial authorized_default value
+Date: Fri,  9 Feb 2024 11:46:50 +0200
+Message-Id: <20240209094651.5379-1-niko.mauno@vaisala.com>
+X-Mailer: git-send-email 2.39.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: GV3P280CA0043.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:9::7)
+ To AS4PR06MB8447.eurprd06.prod.outlook.com (2603:10a6:20b:4e2::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: dwc3: gadget: Fix NULL pointer dereference in
- dwc3_gadget_suspend
-Content-Language: en-US
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "stable@vger.kernel.org"
-	<stable@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20240208225359.pvnunirbzh32zjop@synopsys.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SfSyUcRzvd889L9TZ42i+1KIrrCYvrZdrqdiq3WZUZr2uuNwzWdy155Be
-	tCvz0lGJLB1iyEkvnMk4DNdFylCqE0mhtW60cbWmmuo8Kv99Pp/v9/P7fj/f/ShMWIi7UNHy
-	OIaVS2NEhC2/rn26Z02A5RHj23xpvbg9dYwUJ5dWEeI+fQEhLilPwcS66g98cbFuBIkri1vJ
-	AFJSU3mRkLQU3iUlV5vOSWpbLEhiqVm2Gz9o6y9jYqITGNZna4TtsewP5ejEbc/E8lFfFap0
-	UyMbCuh1MGLJJNTIlhLSFQh6VUYeR74gyCxrJDliQfAjIxVXI2rWoisDTtci6NbexDkyiSDN
-	mIZb3xXQW6E+w8CzYj69Eu4VDs3p9tB5Y4xvxYtpVxgeyCOt2IGOgLbXGbM6RjvBwFjRrNeR
-	9oLWxz2zK2F0HQ+6pwYxa4Gg/UA9oSas2IbeDKXjn0jO7ArJD/IxqwHofgr097JwLul2yMuv
-	Qhx2AHNHLcnhpfCroYjHGdIQFP8YniNZCFQfB+Ycm+FN93fCegCMXgVVeh9ODoRvLb0Edxc7
-	6J+w55awg+y66xgnCyA9Vch1e4Cm4/6/sW29z7EsJNLMu4tmXn7NvDia/3OLEb8SOTHxytgo
-	RrlWzpz0VkpjlfHyKO9IRWwN+vODns50fKlHWvOktwHxKGRAQGEiR0FYmZERCmTSU6cZVhHO
-	xscwSgNaQvFFTgJ3mSsjpKOkccxxhjnBsH+rPMrGRcXLOb1tuc0hv7yJ2x6lQ0EhHj0nTfZ7
-	px22vw+sH1V0Ou6cUMTtr/AfDDnSnF6SUu+yYkfMXcCc3XYtujYCb+z0YXveDTxjTYObnLui
-	/QM+f21LfIsnRq7PYBcmzITsSzg8nc1QBaGpnlHPfqVnsuNsRJJzQ2RTcFKyvH9vo2d6d3ap
-	bspw5oWjyrTz8hE813RlMW0Ms1TkhPYZz8sPTaUEv9hQrTMNvxJO1nQMacfDys6Ce3hu34WX
-	R2Xth6larwPYLbeNppx3sWuCtF2ZZ77xvzYeMAe79w/iJgV5Rb9ftuDJp8AdQXdGc70fJkXY
-	bVhImX3Mmm1b+mY6R39W26/6LuIrj0n9VmOsUvob/vV26rADAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHIsWRmVeSWpSXmKPExsVy+t/xu7oOn4+mGtxfqWJxrO0Ju0Xz4vVs
-	Fpd3zWGzWLSsldli44anLBYLNj5itFi14AC7A7vHplWdbB77565h95i4p85jy/7PjB6fN8kF
-	sEbp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXoZUx6
-	uoyxYKV6xbLHBg2MqxS6GDk4JARMJDYukehi5OIQEljKKLH77xamLkZOoLiMxMlpDawQtrDE
-	n2tdbBBF7xklPrzZCpbgFbCT2NF9CKyBRUBFYu3cu1BxQYmTM5+wgNiiAvIS92/NYAexhQUS
-	JA7e7AaLMwuIS9x6Mh+sV0RAR+LAifNMEPEdTBL3JipDLPvBKLFs20SwoWwChhJdb0Gu4OTg
-	FLCWWPzmJTtEg5lE19YuRghbXqJ562zmCYxCs5DcMQvJvllIWmYhaVnAyLKKUSS1tDg3PbfY
-	SK84Mbe4NC9dLzk/dxMjMOK2Hfu5ZQfjylcf9Q4xMnEwHmKU4GBWEuENWXIkVYg3JbGyKrUo
-	P76oNCe1+BCjKTAwJjJLiSbnA2M+ryTe0MzA1NDEzNLA1NLMWEmc17OgI1FIID2xJDU7NbUg
-	tQimj4mDU6qBaXKk1prMU2lnrDzu9qbdsmoPSzJ+EtSlsc7bZS9/EbPkyU6/75vuysxas/9E
-	zmz+Sf7lPvOOLqhm5K0TVLI0bhQRV+5a8KkyZmP8jtBWmUrhHLnzRzYs+JD0IWp+6oqEy8vi
-	L6uujMz5s/fgpx+er/Vslh3i2xgxYc3MtZdEPVT37nqWvCWQP+jwdOYljmo8PK2zJlsJ39lu
-	9XX3NocvfF/nMyTIe4vz/QnZ+HrW9B13JrOzLC85mL1LcZpH6IIrzmXtT67drP55rFgmM85e
-	MuB+nNRUYd955f8kjh5ZU/BK/nJEv873VV+7da8HiNUfSdv01GVJ3BNGvxNqjisEPr47prXH
-	JW1X3pzU7QKFDUosxRmJhlrMRcWJAIR1K2hBAwAA
-X-CMS-MailID: 20240209094120eucas1p191178d28da0f0dcae85f951fd9589f8b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240207115929eucas1p1dc7c6bb3f9aa2ac983dd95d345661aec
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240207115929eucas1p1dc7c6bb3f9aa2ac983dd95d345661aec
-References: <20240119094825.26530-1-quic_uaggarwa@quicinc.com>
-	<CGME20240207115929eucas1p1dc7c6bb3f9aa2ac983dd95d345661aec@eucas1p1.samsung.com>
-	<4b5683cc-8e61-43c5-be0f-b5378639276a@samsung.com>
-	<20240208225359.pvnunirbzh32zjop@synopsys.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS4PR06MB8447:EE_|AM0PR06MB6578:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d74ac23-9766-4fce-fa7a-08dc295421a9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	B87nbPPLIwFdTkUNhZ793Zz89m7wHks8D+i5zKftr0OUQguELW0kDVn5tZt2Csril5cPUFlD6vxS1bSoVP2Q9fkvrmEiN1A9Z5kwhhr+5ZUuLJDdnY4wJVVVq7pJ/V4zv1J9fMunvEdd4Y6/3urg5DLOgyvg+hnbeLE2m0D248prb1SsD4IchlTSt77lZUi+YXS6JMT0rK2ABBh0SuMYQLkjvZN99ZkOFeFJxY/fE2K8K9OkF21IoqWcejS/9OI16bW9gHwnFdIIeKBGOBhP6sm5TWIeozzpdfzGs2BgliJdgNfwjPQJ418sN3kpmBm9Ap3Y4HZ6S/SXTwhclJTqZqGAfwEDcqTTxGHGyZFu2TKXAratdgTKhipqZfOtcJWZCPQfyaSpu33DTx1dF/SoYFOo4OL+5Si65s703BTIILGgr1MhUniryN6cf7w6+1Ky5QLFLwQ0Kozvs79+WTllHGsbeRATnm6jfY+6Yu6aTnIhLuNE2Vl0YPHhZumBj4N0vTlHuCN6+Lg7hMjyNW5uFvBSv2HdV+FVCdjaU/rHc4jvztMOmKI6t82BQLfVkl/mOnuQvOUSs0FkVe3QwM8GP74g3rFa8jY7CcmyMrKN0aUF7ClOjniTb6sg11h3zA9i
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR06MB8447.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(376002)(346002)(136003)(396003)(39860400002)(230922051799003)(451199024)(186009)(1800799012)(64100799003)(5660300002)(66946007)(6916009)(4326008)(66556008)(8936002)(8676002)(66476007)(2906002)(83380400001)(107886003)(26005)(1076003)(36756003)(38100700002)(86362001)(38350700005)(6666004)(316002)(41300700001)(2616005)(478600001)(6512007)(6506007)(6486002)(52116002)(9686003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?o9Dn83gXU+7jUw4yLtUTQxymhJPHwsZc0EW/sIvQ0xgSPlI3FzaMhEuMxN/l?=
+ =?us-ascii?Q?pmtdZqskhXmandJSJPgrDItbLk/ZlgP/rTV59kgEqcEh2s+Bxn5HweFrtFWr?=
+ =?us-ascii?Q?TljY86znvbfTyQWoZSWtzvBmjGy0Kxa7M2Muk8i1ZQ0f1ghMv/NNJlie2mJK?=
+ =?us-ascii?Q?Zfy3D/Dvub5PiClvRQYbHEnBw+/QDQ34M84KW8HrTP78Ot4YSX94JENkbSe9?=
+ =?us-ascii?Q?ISUX4SwZSf5G6bO8iK7TP803KoXXoEHQvNclRhofmhpuclHRpClajVYKQQ6Q?=
+ =?us-ascii?Q?NyXInDC8kgjK2n1p02a4GJIlSNvWtQVTtm1DeLkYWI8xO4Q2cOcizXdOmKQU?=
+ =?us-ascii?Q?pTGQX9YN66DUst+NYw0Zzq5KGQ5VDHUeQ7fvetn9UiHDADlWB0NLIkz2Tm8v?=
+ =?us-ascii?Q?mgM/xs6KmhnwL+v39XTEZr+VD1RzAzM7NlEdQgjaFbwkBnH9PSlDLyCBEr8B?=
+ =?us-ascii?Q?So0tat73ShDt8tDLEqJITGBydgYiDl5jzGDZkYD0d0d9rKSoqVOWytzbgHSN?=
+ =?us-ascii?Q?tMLm/i7VMQwziQphtiX+UurfiC5HYo7iQgsD5E/D1X8/GtJ1G3jv2Pi8GTpK?=
+ =?us-ascii?Q?/3cAKoUMN5aAL20oqQTY09VxKkspGu30h5XS+gKPPHMmAw7esP22zFE+wbgm?=
+ =?us-ascii?Q?qo1rvqOTxJmdXwQ3hV9DISgDP9vk9BQg0fdh+AHknextX64YQlSwTEWA3kqN?=
+ =?us-ascii?Q?aemTq5DmQM8DQnCxEpqGCXs+7Nlau/5k4UHSMlb84eNBIxbYhYfLAxRY4sjD?=
+ =?us-ascii?Q?5VxdvN5XnXQp3tSMy2NlcGW52EEa3O42+rNyRfRT4jkVJcIuVk4YQ8MMHSDR?=
+ =?us-ascii?Q?HcdqAXnfvS8k/WG77oe0gFJ58F1zsH4rptrB+h6istPCov4tr8tBfhcfGEt7?=
+ =?us-ascii?Q?Uh3/C28iszB/9sOk+W5wDoou03nQjD/YBvqv1tz+Cv1odC8KvVIM/dd3lR9V?=
+ =?us-ascii?Q?nzQywPNWsyx+molXTbo/A/M8xsXLqwaAJmZRTa5m4TT3vsNKebdp+KVHH9eH?=
+ =?us-ascii?Q?GOWkAw/aBP+4WrK6mIP62lwmYmpCIkdPfacgOL+K7SW4NHbMlXXziVKsCiZ8?=
+ =?us-ascii?Q?st4Ko/wB4SjIGj7xI+2X3IrxaHGo/FbovLZ9BDII2imBtPUlXB1AF7I3WRpH?=
+ =?us-ascii?Q?ql2nJshms5QUS3+r9U/OlCMxtK/DnP8OSYHVK6pwscsKIkWBOaczXsToJ1Yq?=
+ =?us-ascii?Q?lhpXpm794nsS6F/jA/f6LV3K0DDafRCwKl/TI1c9yzLgjrsWqt8nJMFR3BLE?=
+ =?us-ascii?Q?yMOcjVPV7bwWjNO+gBuc+U6W3rgSmVDf5dhsCd1HKXc/DhOLofzLZf9CWJcD?=
+ =?us-ascii?Q?PsCyn7ekfsR8v/JJjy1MM/J8VKsS6V+PELar1SGsxEbEsGa4frATkMMsNqiu?=
+ =?us-ascii?Q?wq/lLW/yVLVLvJeqjDMKfwtRgwxoCJmK/P4JOuIERO39L3PxieJDYyrqK8er?=
+ =?us-ascii?Q?x8wtoro5axiqtG16fdVbIzQX4H/7e0iO57idTkoZa6F8LCDxFqikPxOqW+aw?=
+ =?us-ascii?Q?VGz9kEmBIIpq4Yi49dIczMC6i/Wm4QRvRRRSpdHEE5BdNnAbaVzDdKvwK5Vs?=
+ =?us-ascii?Q?ig3/kUzdJ564j+pJ9lG9dM3gNx+Y8sYsFEKn9FFoEuXoftTplQqSHLc4A91A?=
+ =?us-ascii?Q?vQ=3D=3D?=
+X-OriginatorOrg: vaisala.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d74ac23-9766-4fce-fa7a-08dc295421a9
+X-MS-Exchange-CrossTenant-AuthSource: AS4PR06MB8447.eurprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2024 09:47:29.9512
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uJDAgq6GGHlQUyrNMc/Xv2YHTCVRRSm4CJROIuxtY9rrpVKSlbbrVf8XTGgBY2ZocOx1k1VONITrW3pHWhT0uQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR06MB6578
 
-On 08.02.2024 23:54, Thinh Nguyen wrote:
-> On Wed, Feb 07, 2024, Marek Szyprowski wrote:
->> On 19.01.2024 10:48, Uttkarsh Aggarwal wrote:
->>> In current scenario if Plug-out and Plug-In performed continuously
->>> there could be a chance while checking for dwc->gadget_driver in
->>> dwc3_gadget_suspend, a NULL pointer dereference may occur.
->>>
->>> Call Stack:
->>>
->>> 	CPU1:                           CPU2:
->>> 	gadget_unbind_driver            dwc3_suspend_common
->>> 	dwc3_gadget_stop                dwc3_gadget_suspend
->>>                                           dwc3_disconnect_gadget
->>>
->>> CPU1 basically clears the variable and CPU2 checks the variable.
->>> Consider CPU1 is running and right before gadget_driver is cleared
->>> and in parallel CPU2 executes dwc3_gadget_suspend where it finds
->>> dwc->gadget_driver which is not NULL and resumes execution and then
->>> CPU1 completes execution. CPU2 executes dwc3_disconnect_gadget where
->>> it checks dwc->gadget_driver is already NULL because of which the
->>> NULL pointer deference occur.
->>>
->>> Cc: <stable@vger.kernel.org>
->>> Fixes: 9772b47a4c29 ("usb: dwc3: gadget: Fix suspend/resume during device mode")
->>> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->>> Signed-off-by: Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>
->> This patch landed some time ago in linux-next as commit 61a348857e86
->> ("usb: dwc3: gadget: Fix NULL pointer dereference in
->> dwc3_gadget_suspend"). Recently I found that it causes the following
->> warning when no USB gadget is bound to the DWC3 driver and a system
->> suspend/resume cycle is performed:
->>
->> dwc3 12400000.usb: wait for SETUP phase timed out
->> dwc3 12400000.usb: failed to set STALL on ep0out
->> ------------[ cut here ]------------
->> WARNING: CPU: 4 PID: 604 at drivers/usb/dwc3/ep0.c:289
->> dwc3_ep0_out_start+0xc8/0xcc
->> Modules linked in:
->> CPU: 4 PID: 604 Comm: rtcwake Not tainted 6.8.0-rc3-next-20240207 #7979
->> Hardware name: Samsung Exynos (Flattened Device Tree)
->>    unwind_backtrace from show_stack+0x10/0x14
->>    show_stack from dump_stack_lvl+0x58/0x70
->>    dump_stack_lvl from __warn+0x7c/0x1bc
->>    __warn from warn_slowpath_fmt+0x1a0/0x1a8
->>    warn_slowpath_fmt from dwc3_ep0_out_start+0xc8/0xcc
->>    dwc3_ep0_out_start from dwc3_gadget_soft_disconnect+0x16c/0x230
->>    dwc3_gadget_soft_disconnect from dwc3_gadget_suspend+0xc/0x90
->>    dwc3_gadget_suspend from dwc3_suspend_common+0x44/0x30c
->>    dwc3_suspend_common from dwc3_suspend+0x14/0x2c
->>    dwc3_suspend from dpm_run_callback+0x94/0x288
->>    dpm_run_callback from device_suspend+0x130/0x6d0
->>    device_suspend from dpm_suspend+0x124/0x35c
->>    dpm_suspend from dpm_suspend_start+0x64/0x6c
->>    dpm_suspend_start from suspend_devices_and_enter+0x134/0xbd8
->>    suspend_devices_and_enter from pm_suspend+0x2ec/0x380
->>    pm_suspend from state_store+0x68/0xc8
->>    state_store from kernfs_fop_write_iter+0x110/0x1d4
->>    kernfs_fop_write_iter from vfs_write+0x2e8/0x430
->>    vfs_write from ksys_write+0x5c/0xd4
->>    ksys_write from ret_fast_syscall+0x0/0x1c
->> Exception stack(0xf1421fa8 to 0xf1421ff0)
->> ...
->> irq event stamp: 14304
->> hardirqs last  enabled at (14303): [<c01a599c>] console_unlock+0x108/0x114
->> hardirqs last disabled at (14304): [<c0c229d8>]
->> _raw_spin_lock_irqsave+0x64/0x68
->> softirqs last  enabled at (13030): [<c010163c>] __do_softirq+0x318/0x4f4
->> softirqs last disabled at (13025): [<c012dd40>] __irq_exit_rcu+0x130/0x184
->> ---[ end trace 0000000000000000 ]---
->>
->> IMHO dwc3_gadget_soft_disconnect() requires some kind of a check if
->> dwc->gadget_driver is present or not, as it really makes no sense to do
-> I don't think checking that is sufficient, and I don't think that's the
-> case here.
->
->> any ep0 related operations if there is no gadget driver at all.
->>
-> If there's indeed no gadget_driver present, then we wouldn't get this
-> stack trace. (ie. dwc3_ep0_out_start should occurs when gadget_driver is
-> present). This is a race happened between binding + suspend.
+From: Niko Mauno <niko.mauno@vaisala.com>
 
-I have no gadget compiled into the kernel and no such created via 
-configfs, so how can this be caused by a race?
+Since the wireless USB implementation has been removed and since the
+behavior with authorized_default values -1 and 1 is now effectively
+same, change the initial value to latter in order to stop using the
+leftover value. The former value can still be passed as a module
+parameter to retain backwards compatibility.
 
+Signed-off-by: Niko Mauno <niko.mauno@vaisala.com>
+---
+ drivers/usb/core/hcd.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-
-> I think something like this should be sufficient. Would you mind giving
-> it a try?
->
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 564976b3e2b9..1990d6371066 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -2656,6 +2656,11 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
->   	int ret;
->   
->   	spin_lock_irqsave(&dwc->lock, flags);
-> +	if (!dwc->pullups_connected) {
-> +		spin_unlock_irqrestore(&dwc->lock, flags);
-> +		return 0;
-> +	}
-> +
->   	dwc->connected = false;
->   
->   	/*
->
-This patch fixes the reported issue. Feel free to add:
-
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-
-
-Best regards
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 12b6dfeaf658..9aa5e6bf9b9d 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -357,12 +357,10 @@ static const u8 ss_rh_config_descriptor[] = {
+ #define USB_AUTHORIZE_ALL	1
+ #define USB_AUTHORIZE_INTERNAL	2
+ 
+-static int authorized_default = USB_AUTHORIZE_WIRED;
++static int authorized_default = USB_AUTHORIZE_ALL;
+ module_param(authorized_default, int, S_IRUGO|S_IWUSR);
+ MODULE_PARM_DESC(authorized_default,
+-		"Default USB device authorization: 0 is not authorized, 1 is "
+-		"authorized, 2 is authorized for internal devices, -1 is "
+-		"authorized (default, same as 1)");
++		"Default USB device authorization: 0 is not authorized, 1 is authorized (default), 2 is authorized for internal devices, -1 is authorized (same as 1)");
+ /*-------------------------------------------------------------------------*/
+ 
+ /**
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.39.2
 
 
