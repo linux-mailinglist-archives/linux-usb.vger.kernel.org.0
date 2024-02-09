@@ -1,124 +1,102 @@
-Return-Path: <linux-usb+bounces-6185-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6186-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7EE7850088
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 00:00:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D37348500BC
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 00:25:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFF87B22CBE
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 23:00:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DEBE1F23F8F
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 23:25:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6391374CF;
-	Fri,  9 Feb 2024 23:00:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 651F838DED;
+	Fri,  9 Feb 2024 23:25:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pwg24t6H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VXeEL+c5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D024125625;
-	Fri,  9 Feb 2024 23:00:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D935681;
+	Fri,  9 Feb 2024 23:25:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707519638; cv=none; b=RAt+1jzy+gFdC00Nj178/+A4o5e1aLSYkj9DlxWna5ngcgQhjF9mfTSDMEIVQGe/l3Ypo4CuwE46NCnVn6NNPy7XWlTrAFDustYQQXP21FdLCjekWWnb5KxtFMVEJB7RboHNe5Zauumy87kRLpQ/FMcsi9IaGsalRJ96UxTFRM0=
+	t=1707521146; cv=none; b=o5ZvjxZY6IZzI0mJCP5R6xMOWrJ5yutZc8/ztQ0mN6CUpneL/RQ5JQcLZ9u6xjRVWgE2gTe7575qI/YrZ0BbfBA9x6KDbv+N0pHEDkzOncPzJVoTfWEcERq4BHqLdsmYmf2zTwKX3iefi/BibQf7dyDHHy7Dov6pOG1nbxyDkVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707519638; c=relaxed/simple;
-	bh=T+PvjDwY/Hn8AAPu8/4akRrXz4Nvc83esFAymZg5xBE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=eunA/9msoPQ9YwjKMs1WkGl+hTtoc5dnt8XsvECAJFscdRruQr/jEhqYEBRowxVx4qVRDTV4LquPIj1+wa9lyrIQl8CrPuQbZHsytr8zN5PpKFWNSPHcdtwfldqOZ0gEK6ldaoIcGMMnwtuDEUKNhuNmjrvtZ0FFNNRiKVvTyJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pwg24t6H; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 419MwhK4030804;
-	Fri, 9 Feb 2024 23:00:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=2zBR+IkjLHI1yS66YvjnS+R0KDHeCNMM9/4VVTgmt+w=; b=pw
-	g24t6HHnMn0j+J6ME9wvDXyEKWj1xyG+lbFP6QIta1/bbzoxo6aQ+1J/Z0BZH8W7
-	H5FnzpLPL8/qMJ/FtVqdz/GaFrpdqoQKO7D8U0XbBLsTslV372ddnRJKoncFjUk7
-	jdNqXnLFVVrHkWJENXLl/aSfy5I0cgnsEi/0P89X7FI67CAYhmA9+/iqwzS5Utsy
-	3MvKp2eeO+95yZ7NJeXhGMyd9F9a5ghYkpdAXb0bZtAVNzDR7jhyU7Op0DTJzwl0
-	3SNlVz9VvVT/ZhxNkK1gZcXtTdqfkoNkYUpCJM+ndi/k3ENfybKI7R1Fu9SGvwDl
-	nL2dl2Rl2kWiYOIEUqEg==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w5gk2hqf3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 09 Feb 2024 23:00:16 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 419N0F7I010813
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 9 Feb 2024 23:00:15 GMT
-Received: from [10.110.93.252] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 9 Feb
- 2024 15:00:14 -0800
-Message-ID: <cc9500fb-1d31-6878-4feb-595a67947991@quicinc.com>
-Date: Fri, 9 Feb 2024 15:00:13 -0800
+	s=arc-20240116; t=1707521146; c=relaxed/simple;
+	bh=YjYh59NyNLxveT0n0gaRWjC/sGWqJ+ue3luZIoGiKRI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=maDPapL8jjBILLRtu5UQFd0BB4oz7qDCv2n4EtJYUQrKvVLHYFpgGauLAcvU5BrXymRxXyxiSnEWk9hdP8ZbxHm2w0TR/yfEgLCO5Yj1E3HFDMBRww3tzQeDiArA8pCt8qKchsUbJZzoeLFBThBWY9E92AZqqVtNpUeFIfQJuuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VXeEL+c5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7819C433F1;
+	Fri,  9 Feb 2024 23:25:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707521145;
+	bh=YjYh59NyNLxveT0n0gaRWjC/sGWqJ+ue3luZIoGiKRI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=VXeEL+c5vf/2DhtylAwKH1BL0K9ClK7yeu2THpNuOc05fAePm+YMsYcDdWq0Z/TP8
+	 2zMEexxPMuqEj2pZDV21BlFw6m0z77fnRcxWEuoX52Idul84eXrbugHG7M0mMecYon
+	 6J7eCQsNUTUbY58XMJ30DFOj6IgFrN4dNEWM0dYcohtWUROGMl/3mjJ8ko+VzmTXFT
+	 hZLgOhTC//PxtJvQIYxlbC6pjqWptx3+puBTIN4lcL9MdZ5KidX6hG+gv1n2McE0aM
+	 vKzJinGmdgIPz1DGn3dHmy3zx+zXl1EGgbHGF+7+X79oUi2PebJ9LWZvPBTZn2FtKh
+	 6PveylI/ptk4g==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Luca Weiss <luca.weiss@fairphone.com>,
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Subject: Re: (subset) [PATCH v3 0/6] usb: typec: qcom-pmic-typec: enable support for PMI632 PMIC
+Date: Fri,  9 Feb 2024 17:25:41 -0600
+Message-ID: <170752113829.579753.17045888138787272852.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240130-pmi632-typec-v3-0-b05fe44f0a51@linaro.org>
+References: <20240130-pmi632-typec-v3-0-b05fe44f0a51@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v14 45/53] ASoC: usb: Create SOC USB SND jack kcontrol
-Content-Language: en-US
-To: Takashi Iwai <tiwai@suse.de>
-CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>
-References: <20240208231406.27397-1-quic_wcheng@quicinc.com>
- <20240208231406.27397-46-quic_wcheng@quicinc.com>
- <87plx5294p.wl-tiwai@suse.de>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <87plx5294p.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 3Of01_LhwD_a14Q1kLsldSnmg9_zfk3q
-X-Proofpoint-GUID: 3Of01_LhwD_a14Q1kLsldSnmg9_zfk3q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-09_18,2024-02-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 malwarescore=0 mlxlogscore=447 spamscore=0 impostorscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 priorityscore=1501 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2401310000
- definitions=main-2402090168
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Takashi,
 
-On 2/9/2024 3:02 AM, Takashi Iwai wrote:
-> On Fri, 09 Feb 2024 00:13:58 +0100,
-> Wesley Cheng wrote:
->>
->> Expose API for creation of a jack control for notifying of available
->> devices that are plugged in/discovered, and that support offloading.  This
->> allows for control names to be standardized across implementations of USB
->> audio offloading.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+On Tue, 30 Jan 2024 21:32:53 +0200, Dmitry Baryshkov wrote:
+> The Qualcomm PMI632 PMIC (found on Qualcomm Robotics RB2 platform)
+> doesn't support USB Power Delivery. However this PMIC still supports
+> handling of the Type-C port (orientation detection, etc). Reuse exiting
+> qcom-pmic-typec driver to support Type-C related functionality of this
+> PMIC. Use this to enable USB-C connector support on the RB2 platform.
 > 
-> Again, use a more intuitive control element name.
 > 
+> [...]
 
-Sorry, missed these.  Will fix.
+Applied, thanks!
 
-Thanks
-Wesley Cheng
+[4/6] arm64: dts: qcom: pmi632: define USB-C related blocks
+      commit: f69b3e40f46e8cf568809eb05a2e07bfea45b672
+[5/6] arm64: dts: qcom: sm6115: drop pipe clock selection
+      commit: 7e3a1f6470f7243c81156d2ead60f87da1184225
+[6/6] arm64: dts: qcom: qrb4210-rb2: enable USB-C port handling
+      commit: a06a2f12f9e2fa9628a942efd916cf388b19c6ce
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
