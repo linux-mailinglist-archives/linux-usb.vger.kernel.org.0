@@ -1,110 +1,125 @@
-Return-Path: <linux-usb+bounces-6171-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6172-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30AAE84F8B5
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 16:38:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0331784FB6F
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 19:02:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88FA4283DD6
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 15:38:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1422D1C27426
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 18:02:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA17A74E12;
-	Fri,  9 Feb 2024 15:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAFDF7F490;
+	Fri,  9 Feb 2024 18:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iJiRiBSR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 72CCA69E07
-	for <linux-usb@vger.kernel.org>; Fri,  9 Feb 2024 15:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64CE7E770
+	for <linux-usb@vger.kernel.org>; Fri,  9 Feb 2024 18:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707493079; cv=none; b=uKad8HZElgLUkymfZ6uRCF9eUq5othAuxYQk8T7hdzL7Y8ufFGLQZVhY/2+WHfXJ/08XRT/3aAWF0/UPQRcIz5YyzYjiwtPSiH6dRAXPoYLhjJZQSK6EE27V2/K+GAwfjMrMyK4MvequUB4CQ/dQJwJ1Mo7cgGFWqnCwzkap/7M=
+	t=1707501681; cv=none; b=FeVAa69uSP9OuSYw4Bjnce7o7folsYquhprpRNJ4M9lB0E9dgQ1s1OIOdx6rjiihBBEjjjBeLvMbOa5PTOCKyFTO74ZVrvxB19V+r0/dU+4/ojP2Z3HrZ8vacOOp+WtPW2zrhie+YrM9MbztzixBnP3kAMR+dgM54egbF1djfA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707493079; c=relaxed/simple;
-	bh=Yiez5BLk19XCyjr5ZMEN818vLzIHQKcpWeL8VekEEL4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YAYirPHpLj81RPdJE2T7FSE/whdDLyYmWvPnOlh29Iolp6AF1NeqgALyB4M7m2F8vTZkXw4WSXB67Reboy+agntFEkxUDsu9DiUe+As6s1ide8hroRXqRzYHozbBCf2NEDoxeiCnboKxFGZtXpsUQZbsEcNZHyBpP2h3d2Ds550=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 263963 invoked by uid 1000); 9 Feb 2024 10:31:14 -0500
-Date: Fri, 9 Feb 2024 10:31:14 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Tasos Sahanidis <tasos@tasossah.com>
-Cc: linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
-Subject: Re: [PATCH] usb-storage: Ignore UAS for LaCie Rugged FW USB3
-Message-ID: <b16e72ad-3f2d-46a8-8361-2641088694df@rowland.harvard.edu>
-References: <20240209151121.1004985-1-tasos@tasossah.com>
+	s=arc-20240116; t=1707501681; c=relaxed/simple;
+	bh=tWnDDTX6hjvn4zZMWScUR1a3jczggxxhhlZFG78n9SA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pgkQID4JPROj3vIBJE11CfsK73QLQFe+9MLu6eWeyqwY9y9GggdBsCY+qwnm7uC2U6WjLDOrsOxwChWike5OjHqlfBNvUzQWYfbwvlynYtDwXli4GvBfZx+/D5KtYyLvmmzSolDRL/GyvAadBaWuUZiBnnzK1SC+5CalbIb7uq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=iJiRiBSR; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dc6c0dc50dcso1065547276.2
+        for <linux-usb@vger.kernel.org>; Fri, 09 Feb 2024 10:01:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1707501679; x=1708106479; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DxAXd9578hDdusxvxqROEMfzhHSW5iLGGo5hRVlkaFc=;
+        b=iJiRiBSRIncIsn3DVJ3tybiJ+sQA+7Bo4C9dA7k4FZy+QZLxXnRINZ/f9SR1DWhd5/
+         NHDhBlALK6qguizN8lwDn9SMBRvnD5mq+WraiRliah9nM31AXpcgM0vC5Zk4va+xuIZV
+         S5XZgZwsgRrJM+NDv86NLYComeWGhcp3nRE5o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707501679; x=1708106479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DxAXd9578hDdusxvxqROEMfzhHSW5iLGGo5hRVlkaFc=;
+        b=YlSpTWcBX5BpzKk8qjmB4WwmQjsTuvr9vwrF5IwD2PoW4OtIhMZyU7DZFYZuK15y+P
+         YkNnxKSlmo/e/dEVjLMfVTT4D0a2ohAfhMZCJux0upcJdT7s3We6fRP3Cs12Ap+MClAH
+         mu3w6vOXclMkIOqCiZUqcjrITLneEdXbuWGfHzqpbJAC+Jgb+oejM65e+ugIiWTviZPb
+         VBjnGWWdhjTwC5uOVjwMCovVuvCPZwTQBzo+B3m140VlFfw6FqZgWLE2u8y0tsoAuJFf
+         YvM6HZ1p7m+TivClHT7YxZSTXQiPJCnNLtOCKioPG6kvkWX2yqfvNQZ0BctKnDh9yPNu
+         UXQw==
+X-Gm-Message-State: AOJu0YyZvQcgHADjxUM87Ysdtf6fYmIeUoisQwi/hE4qbLkaITL3ZXoU
+	qbes4gCe9AK4LluS3Gvlev/bWd5tqNLKJr/ep3a3EQpEGy72ReNZR4e9ZpaCw8A52u3fqs+WBoo
+	Mf5czg0XnsLBUI8TWr+ocpTQnOwpak7h2GE+6
+X-Google-Smtp-Source: AGHT+IGn0jV1pZIEIiivUmj+U1vOUnk7Ltih/wE24bOuFmmcWlsGf0dF5J3/tWHDdX/y20KgLcQrUQao7heE0UcjZN0=
+X-Received: by 2002:a25:9cc8:0:b0:dc6:19ea:9204 with SMTP id
+ z8-20020a259cc8000000b00dc619ea9204mr1878634ybo.61.1707501678528; Fri, 09 Feb
+ 2024 10:01:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240209151121.1004985-1-tasos@tasossah.com>
+References: <20240209060353.6613-1-abhishekpandit@chromium.org>
+ <20240208220230.v4.1.Iacf5570a66b82b73ef03daa6557e2fc0db10266a@changeid> <ZcY2kVlUn7SJ5pW8@smile.fi.intel.com>
+In-Reply-To: <ZcY2kVlUn7SJ5pW8@smile.fi.intel.com>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Fri, 9 Feb 2024 10:01:07 -0800
+Message-ID: <CANFp7mW0F_zyaKJg0LusT6Cp4h0_8Z4jq+R1GUGtpyZrv99iVw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] usb: typec: ucsi: Limit read size on v1.2
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, linux-usb@vger.kernel.org, 
+	jthies@google.com, pmalani@chromium.org, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Rajaram Regupathy <rajaram.regupathy@intel.com>, Saranya Gopal <saranya.gopal@intel.com>, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 09, 2024 at 05:11:21PM +0200, Tasos Sahanidis wrote:
-> This external HDD fails when plugged in to a USB 3 port. Ignoring UAS and
-> falling back to mass storage resolves this issue.
+On Fri, Feb 9, 2024 at 6:28=E2=80=AFAM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Feb 08, 2024 at 10:02:38PM -0800, Abhishek Pandit-Subedi wrote:
+> > Between UCSI 1.2 and UCSI 2.0, the size of the MESSAGE_IN region was
+> > increased from 16 to 256. In order to avoid overflowing reads for older
+> > systems, add a mechanism to use the read UCSI version to truncate read
+> > sizes on UCSI v1.2.
+>
+> ...
+>
+> > +     if (ucsi->version <=3D UCSI_VERSION_1_2)
+> > +             buf_size =3D min_t(size_t, 16, buf_size);
+>
+> Please, avoid using min_t(). Here the clamp() can be used.
+I think this is likely the 4th time I've been tripped up by an
+undocumented practice in this patch series. <linux/minmax.h> says
+nothing about avoiding min_t -- why prefer clamp()? Please add the
+recommendation here
+(https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/in=
+clude/linux/minmax.h#n10)
+and I am more than happy to change it after.
 
-What happens when it is plugged into a USB-2 port?
+> Shouldn't magic number be defined?
+The comment right above this line documents the number.
+As this is the only use right now, I don't see a need to make it a
+macro/constant yet.
 
-> [   56.338088] scsi 4:0:0:0: Direct-Access     LaCie    Rugged FW USB3   1081 PQ: 0 ANSI: 4
-> [   56.339162] sd 4:0:0:0: Attached scsi generic sg2 type 0
-> [   56.343484] sd 4:0:0:0: [sdc] 976773153 512-byte logical blocks: (500 GB/466 GiB)
-> [   56.343600] sd 4:0:0:0: [sdc] Write Protect is off
-> [   56.343604] sd 4:0:0:0: [sdc] Mode Sense: 47 00 10 08
-> [   87.365885] sd 4:0:0:0: tag#26 uas_eh_abort_handler 0 uas-tag 1 inflight: IN
-> [   87.365897] sd 4:0:0:0: tag#26 CDB: Mode Sense(6) 1a 00 08 00 04 00
-> [   87.381852] scsi host4: uas_eh_device_reset_handler start
-> [   87.514256] usb 3-1: reset SuperSpeed USB device number 2 using xhci_hcd
-> [   87.538153] usb 3-1: LPM exit latency is zeroed, disabling LPM.
-> [   87.539720] scsi host4: uas_eh_device_reset_handler success
-> [  118.102578] scsi host4: uas_eh_device_reset_handler start
-> [  118.102733] sd 4:0:0:0: tag#26 uas_zap_pending 0 uas-tag 1 inflight:
-> [  118.102745] sd 4:0:0:0: tag#26 CDB: Mode Sense(6) 1a 00 08 00 04 00
-> [  118.231029] usb 3-1: reset SuperSpeed USB device number 2 using xhci_hcd
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
-Have you checked to see if any of the quirk flags can prevent this 
-problem?  It looks like the only issue might be that one Mode Sense(6) 
-command.
-
-Falling back from uas to usb-storage could reduce the throughput 
-considerably.  We would like to avoid doing this if possible.
-
-Alan Stern
-
-> Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
-> ---
->  drivers/usb/storage/unusual_uas.h | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-> index 1f8c9b16a0fb..b1d99c57cf8a 100644
-> --- a/drivers/usb/storage/unusual_uas.h
-> +++ b/drivers/usb/storage/unusual_uas.h
-> @@ -45,6 +45,17 @@ UNUSUAL_DEV(0x059f, 0x105f, 0x0000, 0x9999,
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->  		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
->  
-> +/*
-> + * Patch by Tasos Sahanidis <tasos@tasossah.com>
-> + * UAS hangs during Mode Sense(6). The quirks for the similar "Rugged USB3-FW"
-> + * disk (US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME) do not resolve the issue.
-> + */
-> +UNUSUAL_DEV(0x059f, 0x104b, 0x0000, 0x9999,
-> +		"LaCie",
-> +		"Rugged FW USB3",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_IGNORE_UAS),
-> +
->  /* Reported-by: Julian Sikorski <belegdol@gmail.com> */
->  UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
->  		"LaCie",
-> -- 
-> 2.25.1
-> 
-> 
+Cheers,
+Abhishek
 
