@@ -1,62 +1,62 @@
-Return-Path: <linux-usb+bounces-6164-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6162-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D897C84F6F7
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 15:16:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07F8284F6F5
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 15:16:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3DBB9B23143
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 14:16:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CD741F228BA
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 14:16:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B997473181;
-	Fri,  9 Feb 2024 14:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5535A745C8;
+	Fri,  9 Feb 2024 14:13:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c676u/ex"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FKs/TPh1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773046A8A2
-	for <linux-usb@vger.kernel.org>; Fri,  9 Feb 2024 14:13:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229796A8AB
+	for <linux-usb@vger.kernel.org>; Fri,  9 Feb 2024 14:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707488028; cv=none; b=b3uR2+EpoeRbmlaUDlmNskOg7SU1K6mTju7y3f7zfY1a1n1i+OMltZzzMTf/gT1OcXYxedpUy+s9gVNsUna1AA77eO8bulR5p8rZkhgWtQYN7juQZ1iAS6ZNlvHw0ODOlPI8ip1RFx3impenRyRSxIVxNzRzc+H8e6Htj8agBYE=
+	t=1707488026; cv=none; b=d6oKWLZnuCEWDkDC/1bNE3Q/aWWKNB2xyUmMcglQhj91TzNYiWpBdT2wy9pQW5K9pq5v7guEPEcw+k3mjTvKn7Us+xc3MygHteroj7+gfKPI85VWEx4M60Dcxmzfas+FNp2K848Jf0WAYwKMIkj1K6odSFVkCJq6lMDSZjJpzcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707488028; c=relaxed/simple;
-	bh=antzI5cxyctRSp9XaM5d1CCzMssgryozW9f3L9pwDCc=;
+	s=arc-20240116; t=1707488026; c=relaxed/simple;
+	bh=iTDKHIBodDKuw0g9lRLNElQMT2IsQWp6pRpcPWav0AE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ev+PjVx8wbdHPeJ0PNgREbVsAvr4BKvy8HUL1ePtszncpQeIdIDhZ3JNb1LYw6l1oX/2i8+3/ku05FYDNnv8YrmV7KpvUwp0iIYIDM3/e8oEpSWyHEnY7mIX1JOSerRC2o/nqWDBhfdpQllZAjJqZCa3tC25Us2EVs+Sj5pya0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c676u/ex; arc=none smtp.client-ip=192.198.163.11
+	 MIME-Version; b=sWy0LbigMTWYdBQNUDkTpIBxc7lhQvmYDLqiMh0Xzslj0sinlIsWM0/JZe5wc2uJj5TRGM3dZe3u361IMEz4EZs75qEq6L5nZFHvetZkofhTRMDvcQqvtlRyZKQQu3xm43KMxjhvG/X4XwOOMmTYd6PMYFy6kjsp0Bz7o9WAu3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FKs/TPh1; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707488026; x=1739024026;
+  t=1707488025; x=1739024025;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=antzI5cxyctRSp9XaM5d1CCzMssgryozW9f3L9pwDCc=;
-  b=c676u/exPmA9/fQHEYs41tNCtDEI+PFjRhD2/OeeYdYqZGAkDbFyjIVP
-   mfV0L6pTESHGCRXCBeDTQs9JSX6v8C7Hs4ZIyago/PLX69/Iu/bTTgrm/
-   et6Aphkjph3Xbj2NqNsziJB57DxqtUV0NdQPE1Ywr81r0VEkMyni6AIub
-   KB8b/5eHSV6dJm2TnmVxCz1ShjKrx0bsR4TVkWxva/V4hkz7sJrTIhQ6T
-   /9tNnAgyej6OI+J+Lf5kF/5ySj/GzuPU/FNOzqpqdyZv1NIxetEAIoxCo
-   baarLuag5HX+Dpgnfo+PbXgTU2fsmCelo/fHQJePIKuuMdBChUXY0pk5g
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="12082135"
+  bh=iTDKHIBodDKuw0g9lRLNElQMT2IsQWp6pRpcPWav0AE=;
+  b=FKs/TPh19UvJQuJDj75TRKuRht8X9rM01xqzW+jVyGLJjVA6cKu1aH/i
+   s35BHs6GOuSFaQUEgePLaxPVyjkVaGj8xNSSl66giRDnDSpQJ3/UK6gA9
+   /IYQSPA02u6vYKIoZuhA03JjDhlJhQNIePn6cwfdpUiYROBcqnQF/G9td
+   3PRc2qa303uzWSxnaNQH+tKhG8JAUjelTC13iULVpseHalOtDLrzZb6Yx
+   zj3iosqzk754rleFYnj/fCGKQsohN9YTP4082NDorjTLRGCxyoVB2hQu7
+   f4zi/bMwx2eaFlEBCjfGZWBhj1hjUqtq1AhSohviJzdbiaGm9xi7Asb5O
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="12082132"
 X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
-   d="scan'208";a="12082135"
+   d="scan'208";a="12082132"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 06:13:42 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="934434450"
+X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="934434446"
 X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
-   d="scan'208";a="934434450"
+   d="scan'208";a="934434446"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga001.fm.intel.com with ESMTP; 09 Feb 2024 06:13:40 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 06FC7B84; Fri,  9 Feb 2024 16:13:36 +0200 (EET)
+	id 10FD1F23; Fri,  9 Feb 2024 16:13:36 +0200 (EET)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -65,9 +65,9 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Andreas Noever <andreas.noever@gmail.com>,
 	Gil Fine <gil.fine@linux.intel.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 09/10] thunderbolt: Calculate DisplayPort tunnel bandwidth after DPRX capabilities read
-Date: Fri,  9 Feb 2024 16:13:34 +0200
-Message-ID: <20240209141335.2286786-10-mika.westerberg@linux.intel.com>
+Subject: [PATCH 10/10] thunderbolt: Improve DisplayPort tunnel setup process to be more robust
+Date: Fri,  9 Feb 2024 16:13:35 +0200
+Message-ID: <20240209141335.2286786-11-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240209141335.2286786-1-mika.westerberg@linux.intel.com>
 References: <20240209141335.2286786-1-mika.westerberg@linux.intel.com>
@@ -81,47 +81,152 @@ Content-Transfer-Encoding: 8bit
 
 From: Gil Fine <gil.fine@linux.intel.com>
 
-According to USB4 Connection Manager guide, after DisplayPort tunnel was
-setup, the DPRX capabilities read is performed by the DPTX. According to
-VESA spec, this shall be completed within 5 seconds after the DisplayPort
-tunnel was setup. Hence, if the bit: DPRX Capabilities Read Done, was
-not set to '1' by this time, we timeout and fail calculating DisplayPort
-tunnel consumed bandwidth.
+After DisplayPort tunnel setup, we add verification that the DPRX
+capabilities read process completed. Otherwise, we bail out, teardown
+the tunnel, and try setup another DisplayPort tunnel using next
+available DP IN adapter. We do so till all DP IN adapters tried. This
+way, we avoid allocating DP IN adapter and (bandwidth for it) for
+unusable tunnel.
 
 Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/tunnel.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ drivers/thunderbolt/tb.c | 84 ++++++++++++++++++++--------------------
+ 1 file changed, 43 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
-index e02b34654d29..cb6609a56a03 100644
---- a/drivers/thunderbolt/tunnel.c
-+++ b/drivers/thunderbolt/tunnel.c
-@@ -1184,17 +1184,13 @@ static int tb_dp_consumed_bandwidth(struct tb_tunnel *tunnel, int *consumed_up,
- 		/*
- 		 * Then see if the DPRX negotiation is ready and if yes
- 		 * return that bandwidth (it may be smaller than the
--		 * reduced one). Otherwise return the remote (possibly
--		 * reduced) caps.
-+		 * reduced one). According to VESA spec, the DPRX
-+		 * negotiation shall compete in 5 seconds after tunnel
-+		 * established. We give it 100ms extra just in case.
- 		 */
--		ret = tb_dp_wait_dprx(tunnel, 150);
--		if (ret) {
--			if (ret == -ETIMEDOUT)
--				ret = tb_dp_read_cap(tunnel, DP_REMOTE_CAP,
--						     &rate, &lanes);
--			if (ret)
--				return ret;
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index eda53567fa4a..306c62c35a05 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -1821,48 +1821,14 @@ static struct tb_port *tb_find_dp_out(struct tb *tb, struct tb_port *in)
+ 	return NULL;
+ }
+ 
+-static bool tb_tunnel_one_dp(struct tb *tb)
++static bool tb_tunnel_one_dp(struct tb *tb, struct tb_port *in,
++			     struct tb_port *out)
+ {
+ 	int available_up, available_down, ret, link_nr;
+ 	struct tb_cm *tcm = tb_priv(tb);
+-	struct tb_port *port, *in, *out;
+ 	int consumed_up, consumed_down;
+ 	struct tb_tunnel *tunnel;
+ 
+-	/*
+-	 * Find pair of inactive DP IN and DP OUT adapters and then
+-	 * establish a DP tunnel between them.
+-	 */
+-	tb_dbg(tb, "looking for DP IN <-> DP OUT pairs:\n");
+-
+-	in = NULL;
+-	out = NULL;
+-	list_for_each_entry(port, &tcm->dp_resources, list) {
+-		if (!tb_port_is_dpin(port))
+-			continue;
+-
+-		if (tb_port_is_enabled(port)) {
+-			tb_port_dbg(port, "DP IN in use\n");
+-			continue;
 -		}
-+		ret = tb_dp_wait_dprx(tunnel, 5100);
-+		if (ret)
-+			return ret;
- 		ret = tb_dp_read_cap(tunnel, DP_COMMON_CAP, &rate, &lanes);
- 		if (ret)
- 			return ret;
+-
+-		in = port;
+-		tb_port_dbg(in, "DP IN available\n");
+-
+-		out = tb_find_dp_out(tb, port);
+-		if (out)
+-			break;
+-	}
+-
+-	if (!in) {
+-		tb_dbg(tb, "no suitable DP IN adapter available, not tunneling\n");
+-		return false;
+-	}
+-	if (!out) {
+-		tb_dbg(tb, "no suitable DP OUT adapter available, not tunneling\n");
+-		return false;
+-	}
+-
+ 	/*
+ 	 * This is only applicable to links that are not bonded (so
+ 	 * when Thunderbolt 1 hardware is involved somewhere in the
+@@ -1923,15 +1889,19 @@ static bool tb_tunnel_one_dp(struct tb *tb)
+ 		goto err_free;
+ 	}
+ 
++	/* If fail reading tunnel's consumed bandwidth, tear it down */
++	ret = tb_tunnel_consumed_bandwidth(tunnel, &consumed_up, &consumed_down);
++	if (ret)
++		goto err_deactivate;
++
+ 	list_add_tail(&tunnel->list, &tcm->tunnel_list);
+-	tb_reclaim_usb3_bandwidth(tb, in, out);
+ 
++	tb_reclaim_usb3_bandwidth(tb, in, out);
+ 	/*
+ 	 * Transition the links to asymmetric if the consumption exceeds
+ 	 * the threshold.
+ 	 */
+-	if (!tb_tunnel_consumed_bandwidth(tunnel, &consumed_up, &consumed_down))
+-		tb_configure_asym(tb, in, out, consumed_up, consumed_down);
++	tb_configure_asym(tb, in, out, consumed_up, consumed_down);
+ 
+ 	/* Update the domain with the new bandwidth estimation */
+ 	tb_recalc_estimated_bandwidth(tb);
+@@ -1943,6 +1913,8 @@ static bool tb_tunnel_one_dp(struct tb *tb)
+ 	tb_increase_tmu_accuracy(tunnel);
+ 	return true;
+ 
++err_deactivate:
++	tb_tunnel_deactivate(tunnel);
+ err_free:
+ 	tb_tunnel_free(tunnel);
+ err_reclaim_usb:
+@@ -1962,13 +1934,43 @@ static bool tb_tunnel_one_dp(struct tb *tb)
+ 
+ static void tb_tunnel_dp(struct tb *tb)
+ {
++	struct tb_cm *tcm = tb_priv(tb);
++	struct tb_port *port, *in, *out;
++
+ 	if (!tb_acpi_may_tunnel_dp()) {
+ 		tb_dbg(tb, "DP tunneling disabled, not creating tunnel\n");
+ 		return;
+ 	}
+ 
+-	while (tb_tunnel_one_dp(tb))
+-		;
++	/*
++	 * Find pair of inactive DP IN and DP OUT adapters and then
++	 * establish a DP tunnel between them.
++	 */
++	tb_dbg(tb, "looking for DP IN <-> DP OUT pairs:\n");
++
++	in = NULL;
++	out = NULL;
++	list_for_each_entry(port, &tcm->dp_resources, list) {
++		if (!tb_port_is_dpin(port))
++			continue;
++
++		if (tb_port_is_enabled(port)) {
++			tb_port_dbg(port, "DP IN in use\n");
++			continue;
++		}
++
++		in = port;
++		tb_port_dbg(in, "DP IN available\n");
++
++		out = tb_find_dp_out(tb, port);
++		if (out)
++			tb_tunnel_one_dp(tb, in, out);
++		else
++			tb_port_dbg(in, "no suitable DP OUT adapter available, not tunneling\n");
++	}
++
++	if (!in)
++		tb_dbg(tb, "no suitable DP IN adapter available, not tunneling\n");
+ }
+ 
+ static void tb_dp_resource_unavailable(struct tb *tb, struct tb_port *port)
 -- 
 2.43.0
 
