@@ -1,79 +1,81 @@
-Return-Path: <linux-usb+bounces-6141-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6142-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43AEA84F289
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 10:48:06 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBDAD84F2CA
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 10:55:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6845E1C243A2
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 09:48:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16CD3B27F68
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Feb 2024 09:55:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC9469308;
-	Fri,  9 Feb 2024 09:47:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 214CC67E67;
+	Fri,  9 Feb 2024 09:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b="2ecyflnS"
+	dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b="vImKsyhY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2113.outbound.protection.outlook.com [40.107.20.113])
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2130.outbound.protection.outlook.com [40.107.21.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4372D67A18;
-	Fri,  9 Feb 2024 09:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CF7664CC;
+	Fri,  9 Feb 2024 09:55:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.130
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707472061; cv=fail; b=ehNWXU0MTEFzxukRva26PWhATp1Wn1XRGSiGlJ/XCZPuZXkJG+WOC/q0yLxnoo/CgRtX2dwjE2EcNu7JFYZ1EgPZ6ftiOsFdJ3Sca8uDaiKU++nEdqjzWXVyKhfKwfJbK3EsbU8GLW09c2otREzReUJHJC8Wm2eW5cQ48eMwNS0=
+	t=1707472548; cv=fail; b=UKDtBFisSKyYtHSj1z08yA/WpR3NEQ+7ud+jM8LkJqr5JmAiGccUC83WHXMShe2kTEM2UNPr4syOXoSFaTyLjqQfQz9xG2R6ioz2sSUTm8XIFYc/qHqsKMnBpYtCcufvuqFn3AKPSZcCjw7fy5DC0vces5PCg+mxYs/V/fLsMhY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707472061; c=relaxed/simple;
-	bh=vOhchZ/R3lpT5SLM2iqQwtRTw0jHWop3yJA4VK2aDG8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=s7XVWaNl+UHTqWhALkdPKYe2hCOw+ax8Pa4oOMRtclh9Wy6ZZWSR0s7bwupuJk1wbAoea9x4vGe7WzuKXQ3tmGlfyinENB2DlAlf7anis8wf+roUD8raBarA3eHsGHkm/RGBofBfgNtmEkSRWYQtleHZhP8/nICw1kRuZOEtP4Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vaisala.com; spf=pass smtp.mailfrom=vaisala.com; dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b=2ecyflnS; arc=fail smtp.client-ip=40.107.20.113
+	s=arc-20240116; t=1707472548; c=relaxed/simple;
+	bh=3yQGCLwFIonXvJgBuAFKRBsKCuGxIBNQcn/+QXlp8YU=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=QUurLdmyWComkiMskyqeMkWf/RyPjvMEtW7aGg5Azmitt8XXOl/mdcLAblIWdGdDmzxESyfTvDLtQR5fKT95AiSsorUfO5v1RyumP4ZRPJPjdtQccnvb+JGWZFFznmgj8haW5fkZB/NvvpDRUdbQy8Pdj0Kzmb0eSHzSr7rN1/Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vaisala.com; spf=pass smtp.mailfrom=vaisala.com; dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b=vImKsyhY; arc=fail smtp.client-ip=40.107.21.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vaisala.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vaisala.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bEc/Ej3iQQSzIstT0i+WHbUna4AaeWHW91cDXyRtoC25SI/Y96uTxvzx4BU0i6uVGv3uqvMdqSOUva1Y7tBRHXxZVfA1BF66V5ikd4+JeIp0X92l9kYLdbvSsOBztDn5KXXTcj4x2c3rx5MjCwJ5aWtBq6Rh9JPO05dA0larL9pXODHRAmOuqLz0xHes4svivEtYplpqa8hCACSV45yIlSfkP2/hiQ2y8xONAZ0KW7i7v7pto2OYjjk43a7hhQJahWkM+ImG6HczMwT5AHHQSR6A4Bk1kR8f0c0RKCO6oG15i2qRejUkux0oZ+XOiILBjrzBjtvbpo5x77UZK78Seg==
+ b=euYR7cFEdXe6+7YEtEPoPkR7zob5PCkBdsbPiKXI5so6it5hwaDsDV+TaaPKibJkWy4zNMKX/pny0Mjio5IIHhis1Lbu2bd0IIdGmZLeh2iRmKifUHS82tu7x8KCiM7lEiBToFUfGuGIwjbsocxjZD9VS9UPm+WTPnFgwOQf0Wu3U2iEMajYMrXEW9RTEC2T5Xlgl3GD5weNBltoPIpP3nG8M+HyqckgueEZpNNnRwOzhP9MgghHQPv+9dEDC4TthkKKciiMCbNhlX28Z8jkOswIosiTsM6BzPiZY9m48DLirJ1/JH+5OBN9pQX9fGU1MwzBMahzZ+K5q51XU/rtsA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=acJ8HZIWJZ+ezTcst3aQC8CI9IpO6/Z98Iu26Hb9/+Y=;
- b=giep1Jy088oKVgjQRah5kqcsVifZ55bj9ji8BH+H+OCPBduNwkpvTLQI1Qzo5xpdfDRH3SM2T7McYlGByMYkLmY8dxIPQaZ4qo8/AZuSc5QqFmKs3qb4eSzsEBCj6c2KKVupZgrQ8FhjzrkPsP0t3gH021W7OlNG3AMVkykHl2VkT8yIUZ0IoshWvFT5GZAdhDKJvBOlrCOIKxvQmhHx0CWpJ41RJz/GbozPLHedafyRn8EnlyRqA+LGGIKWkSiiN8AD9cNXbu78V6m4ZLldow7ISn5htLSmF46hdreN8aNPwjaM3lZ2cTw/CrQswtgueXAzrtxnYEgcHHSp7evPOA==
+ bh=Pv0kjk2O6kI/rnTvn2aaW+dT+3choQclYzbCXho3JCg=;
+ b=NwQimp5il1ZsaBJZDJ3r6CTdJgykv46OOI96KWKmXaANriyHhOityARAuBD8/r8awEH201fJbd83ACDB2vP/p55Cjsk+Vo3OLYhTYZJT26l248ZzOtfL9yiEaoDFTjAAH3UJDW254dtw0tJEDoc6TkwWx93XJPS6A9QhKSOy+oIf8rT8ghQooq32BghIBHF5TuvlORIiQB0xWdQCUwrORpPgDQfceTEmg60XmrA6WF8vOmFeqni8jmMvOOs42G0azkqxiYXFGJLMdcE9JmvTwpIqx8e8pLgCM8Nd1mJbH3xenx//jg+ihZuD/N7Bq0iDBgEfs+dhF++TXGIwB70FfA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vaisala.com; dmarc=pass action=none header.from=vaisala.com;
  dkim=pass header.d=vaisala.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vaisala.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=acJ8HZIWJZ+ezTcst3aQC8CI9IpO6/Z98Iu26Hb9/+Y=;
- b=2ecyflnSgWmpK9HoBJ1RS1toYKsxWUVHg+0Nu2IqB7f+grB/Ht3LEx8Lb1hgpWGky/OA/SMfbeMCsbdiYL4oS/RYzFITkcwHHkxgc5I6sJHPbPsKLW269s8HUUFv5fzHa/1WrtWx9DTZoUnYYSsosif2fTjGLGAmj/qnHpLYf92JhF1CovBcu/1xSmNyhfWiJa2EyXZbHG8P/FCrgc0sR0cBezgLxVFqRYFgpi8ruxVyOJZ4CHyhyxQ4ZU5Ihg9W5qPVfQdlFaqBNZTkkqERa5kVp2ffI99clBhfP/EY6PjaxlXygJeBI69miXjT6fePhKM5eUD6HqUKFBSOHYyYvQ==
+ bh=Pv0kjk2O6kI/rnTvn2aaW+dT+3choQclYzbCXho3JCg=;
+ b=vImKsyhYqlRxhFy170YCkCOK2GcS1y0IhR8noO+1rE2tjajYnulRtFJep2Hcakh6njaViOlNxtNhhlZW0qshto1lUBhAsRovMlPaTLdKmLnyAoWGDbLoXfcP66kUg3m4KTAKulqwX7v5mOr2b7WcyQK8By4ErMA3qzCTwaUOPQgln2kT4zm7TbPGvbO965RzLAhLMO0UvKDynxRD9ER1KNitIkZ9RwFRFpUdHrymbUE0gQUGAx6yU1py4wet3YDs1nQyeiVvG0HXWu6GgYZw4+d0P1smJU+8w+ymT7Akx1tc+OyRDAAsJJD/G+AQf7tDBtltyvuS5Z9gZTiiGemAsQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vaisala.com;
 Received: from AS4PR06MB8447.eurprd06.prod.outlook.com (2603:10a6:20b:4e2::11)
- by AM0PR06MB6578.eurprd06.prod.outlook.com (2603:10a6:208:199::17) with
+ by PR3PR06MB6970.eurprd06.prod.outlook.com (2603:10a6:102:87::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.27; Fri, 9 Feb
- 2024 09:47:34 +0000
+ 2024 09:55:42 +0000
 Received: from AS4PR06MB8447.eurprd06.prod.outlook.com
  ([fe80::b5ae:8355:acaf:29e0]) by AS4PR06MB8447.eurprd06.prod.outlook.com
  ([fe80::b5ae:8355:acaf:29e0%4]) with mapi id 15.20.7270.025; Fri, 9 Feb 2024
- 09:47:33 +0000
-From: niko.mauno@vaisala.com
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	vesa.jaaskelainen@vaisala.com,
-	geert@linux-m68k.org,
-	Niko Mauno <niko.mauno@vaisala.com>
-Subject: [PATCH v3 2/2] usb: core: Make default authorization mode configurable
-Date: Fri,  9 Feb 2024 11:46:51 +0200
-Message-Id: <20240209094651.5379-2-niko.mauno@vaisala.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240209094651.5379-1-niko.mauno@vaisala.com>
-References: <20240209094651.5379-1-niko.mauno@vaisala.com>
+ 09:55:42 +0000
+Message-ID: <3fdd409f-25de-4a5e-875a-8b59a1a0c0cc@vaisala.com>
+Date: Fri, 9 Feb 2024 11:55:40 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] usb: core: Make default authorization mode
+ configurable
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, vesa.jaaskelainen@vaisala.com
+References: <20240105114956.30714-1-niko.mauno@vaisala.com>
+ <20240105114956.30714-2-niko.mauno@vaisala.com>
+ <CAMuHMdUy793gzDVR0jfNnx5TUdJ_2MKH5NPGSgHkytAhArtqmw@mail.gmail.com>
+Content-Language: en-US
+From: Niko Mauno <niko.mauno@vaisala.com>
+In-Reply-To: <CAMuHMdUy793gzDVR0jfNnx5TUdJ_2MKH5NPGSgHkytAhArtqmw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: GV3P280CA0043.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:9::7)
- To AS4PR06MB8447.eurprd06.prod.outlook.com (2603:10a6:20b:4e2::11)
+X-ClientProxiedBy: GV3P280CA0046.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:9::17) To AS4PR06MB8447.eurprd06.prod.outlook.com
+ (2603:10a6:20b:4e2::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,120 +83,83 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR06MB8447:EE_|AM0PR06MB6578:EE_
-X-MS-Office365-Filtering-Correlation-Id: 11aba808-819b-4f8d-6bb6-08dc29542406
+X-MS-TrafficTypeDiagnostic: AS4PR06MB8447:EE_|PR3PR06MB6970:EE_
+X-MS-Office365-Filtering-Correlation-Id: d7ee3309-f6a2-45ab-fe0c-08dc2955473e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	h9Lha8mAk9QIoXnebedRcVQF4VLptSFvsvdw9H0OcRWuYX486k9cEujkYz+1nc1gQI28Q30QCyirokzfmS4FxFMl5vN1gHSgrtxxw8jyGutfqaNh8hd7pGRirsik0kCZ8ICM4t4jTcj9LBux9w7fX255k+BCv83SZSXcI2WXHek0UGDJNp7hNX1HlL3o4vAvbCSHfeOkA675Ud9Dp0Rh3oyPXWZnuYFMgvKeSq3xsxTwAM80+0xq2GPk/q8ql5dKHmRoPIcitsgqQDasThhSPHEUF6VRm9uO4GnADYB+U5kPy7hJhQKh+96lNjHMykZ9vHrCgW7lYSrRK2JJU7JLPHqrkkEVwe0wZuENjaSoeepKNu/gX1dLHGuwfTnxQrCt7M+my1iSQyt3nMb8YRI6iUCe9eSzatQBzZO+l0BCOyoa3cxYjwgx5CIxtBIBoQe5We9//KuG9Xrk5XdI121P+f4TneW5X2r7VQ3qdp+PLGXkb6uYOb4dnrroACB5+WSenk7PjidH6yAmIpIOcwtNoBq7kOT0k0z0tEmBBo713HF7bRpvN/a0Q21XQVtTf3M5Np9JaS85LxUpE4gqNlrjWo3NwcWuRQQYpZmjpVNYnPKQVAEp30QcbyIU6B6m0D/9
+	UgvkU7vJ3cMzHMiFUL9op7G18ykIhaSeF4s/8v/1xU7LnFo0sPHwhRY9BzvVnH7AJr+APV8mJm8QP+AVchilz8ZSuqS9Ly6BEk0fmD7uLxZiYQ015R3F6ehoPPYDz7oU9CVVhJUNwYEV8cNvg5/4sdo+b+2huztywcR9gcRPlpcA/IHkk0iznnI3MbmVT/VuwTB4bdIU+nqN1KUeQCpZ741fkbSQZLjjvldg/FvwlrDetb9RoeFehvcN+G1T/VV6UxCHM5eU7jx0nseTOuNP0MVKAt7BjgEXETAAYLmrleczViSJrnbOA2g5ExabZG/XELIKt7IENazqDiux3F4QxdWw+aSl6PXIxE8b0Vqtio0AcMS4KBwPUVggWbZgnTV4ULz5cPiIHgN5mCsc6UIPkW5BfGPkzUAegjzA2z73agblDHAKYf195mblqBELzfuSmMjJF920CoN+XYAC2e0nwuox+JvnXffVKBVKqJfrx2qk4CX2Z3c55LLOt803sPQr4EznyHt3jGrzWQpb76MCjPGCFiYIDLS36nVwr/G6et31xEWIP7GhKk4p5w9RJeWy
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR06MB8447.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(376002)(346002)(136003)(396003)(39860400002)(230273577357003)(230922051799003)(451199024)(186009)(1800799012)(64100799003)(5660300002)(66946007)(6916009)(4326008)(66556008)(8936002)(8676002)(66476007)(2906002)(83380400001)(107886003)(26005)(1076003)(36756003)(38100700002)(86362001)(38350700005)(6666004)(316002)(41300700001)(2616005)(478600001)(6512007)(6506007)(6486002)(52116002)(9686003);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR06MB8447.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(346002)(396003)(366004)(39860400002)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(6506007)(53546011)(6512007)(6486002)(478600001)(83380400001)(26005)(107886003)(5660300002)(44832011)(2906002)(2616005)(4744005)(66476007)(6916009)(316002)(66556008)(66946007)(8676002)(8936002)(4326008)(36756003)(38100700002)(31696002)(86362001)(41300700001)(31686004);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?S932HNzDKiFPagAyChql44PWXwcvu0nzxp50S9oQycQsOvrUdcTSUUvnjB+6?=
- =?us-ascii?Q?Dt6aTZY6CatvNVf7OCxnqLibP6uppmRWhEs79FWdCzEF1KHe7KQyQXaV+avm?=
- =?us-ascii?Q?U4x3WLRlMiqQ4yhLcMBhLDwaU6GFV6IxW+mLj7Bp7picvha2cAu+gTUXSrBx?=
- =?us-ascii?Q?iSL4PxLAw8ZC8XlO85gSo4qFdQyDQHQm/VXIJm4jM3ZGj42SuzDgwAeuOvkh?=
- =?us-ascii?Q?Dy2KkOtLUF65n6mIDUHjGzmbluwkCagxRJdSMVAG/schXKS6TAJMs9leTLmu?=
- =?us-ascii?Q?kobtK6vycVvd/UsIdNr3PPIfIRf5nRrDHacerwqFAnlSu+THb3omw/mZCTdF?=
- =?us-ascii?Q?xCtBccSRikWPnKt8benV1UzYBSC9u6lI49av2q2qdw4nem+zfApALkGOAF9s?=
- =?us-ascii?Q?/G3Q+VQGDxtQQ7SVvsRjXfPTyHCVk4PsdZMcw/ZobGqfil+uhzzJJqUQfBo0?=
- =?us-ascii?Q?EA5W+ZELoThaf3xVOPJwnajvl7WXbMp1UY1c/zBchFrxoflAKap/hWplGS3I?=
- =?us-ascii?Q?uyq/mqnaFy59h7rjjMNFCaH2RktvUkhfEasNjkADxcFlUi5J61bcDtW7SznO?=
- =?us-ascii?Q?FlnVq9YaFHn4CdaD201DVQahkAEnA+5+fos0HsuC3FHXwQ0esCOdJY4xdrH6?=
- =?us-ascii?Q?Z59SHCcjlN5JFaDH+RQm31iHocmcKV28CBhz1yq1lCK9sGoO3G4D/T8498LR?=
- =?us-ascii?Q?/RmKRCBfDNH08NdsxFb90HxECCi824znSNUTZu/1T1H7+/vWZtwwcFmGxXFn?=
- =?us-ascii?Q?WMiQ31UD6nJ+4Ts0EY5vqUUkHTn13sV+Q2TnhJHquJV4breuse0MGM5dHb5w?=
- =?us-ascii?Q?S6KbuVDreRJi6J1PyPHf/X29OXJi9VjsqxoW03mjwQkyQKjidAey1oMPUd30?=
- =?us-ascii?Q?mxc8iHf+9dzyN177PIP4mPbu7oisQS/k0YE2IjP2CSanjOUep3fBRyZonb7A?=
- =?us-ascii?Q?INSKZf3MUaEY5nzwUt9yfp2XbFAh1mC0g5wne76YdgYpvQ+yHsF+BCtbtgto?=
- =?us-ascii?Q?oLmAD2DFl5WrBFM/jZ3lV58vAzi5w8O8N3dSrz49akgXoczv9R8HW/f7LM8H?=
- =?us-ascii?Q?nM3Xddq/91T8BOemvB2BXlOHurjdn4klQ0detEiDyHIVu8RFzH+HYN+wTr4z?=
- =?us-ascii?Q?9xP0Q07LXUA6ZSIDylH2DYlkIJk+92F3RU9NwFIonlx5MDeJWsV/HiVTkyz6?=
- =?us-ascii?Q?trNGZPsxvV6gCrcF8QO1vlkiDlXVeO8o/AKBlwhR1d9lorO4JeNweApZIfPS?=
- =?us-ascii?Q?C8OLyFfvcPc7/O0+YpJPUxJg+H56RtuIwRGeuySB0JzD/FufLITiXyv6O35e?=
- =?us-ascii?Q?LO5wEkFk2staR9jiHw3A8Y4vtcH0iSMuHcUw8Ja5+dwbwE7cxC9CYG6aOvG7?=
- =?us-ascii?Q?EtR1vYJ39SceUAN+sVJ3Y+JnLnXlF5EW+WdpsfXeZCKmWG3r3oZ6r0C0Gqee?=
- =?us-ascii?Q?MMcZT6JUhWrhDmAE/ppj8rLPINEa6Dg8XRFgf4GD4dzLMpwamUaHHguULlA/?=
- =?us-ascii?Q?rTgX3gvwy4oItMvURV3OJOR6JSCVHeLaEJlpHjB1TuZhUIzblFDxNRUy/AH3?=
- =?us-ascii?Q?xMSULdp5j7XLqalMvzQuAyE1hlR3V0GluVbvsTCgpVU5VOrgEkSqqX3cIQXS?=
- =?us-ascii?Q?Ag=3D=3D?=
+	=?utf-8?B?UHl6VUdKekNLblNzWHl2bkJXVUxsWjFHUk1UMytyaG8xb0J1eDRXMXJDenZo?=
+ =?utf-8?B?MDBZM0QwM0ZJck1DeHZDb3h0N3NqSnJuaGNxc01ZR3Eya0dqN2YrbG9XdDg0?=
+ =?utf-8?B?MXorSFNDdmhVS3luZHlFc2dNalhwUTRWaHpGSThaWWNEYUl4Yk9sUFZUUVBE?=
+ =?utf-8?B?UFhzYTZSZmZLSDlGR2xYN0VMenRJVGY1MklFcXZYM0NNT0FyT3JHcFA0czlW?=
+ =?utf-8?B?bDh3cFFJVDRVZStuL0o0dlF0elBEZVBSc3JEQS8zcFozOTJGWVl1aStYNlUy?=
+ =?utf-8?B?RXordWhZSzJPMmlveHBNZjE0RDIySmdSZXRXMEpDbjExaDQzaDNsNncvY3lJ?=
+ =?utf-8?B?Um8rUlNhZ3JvbVNGVU9QcC9CZHorS3FJTnN3eUdFbXlaZktqUDNLa3liM29M?=
+ =?utf-8?B?TjhNNmlNd2FKQnZ0RkowVkdEUTI3VUhjaHJqSXBpbzV0Q1djb2hoTDlBNzAx?=
+ =?utf-8?B?bk9EME91Y2wrTGhqblRzcXZ6TnI5YndGdFc0UjgvcThvVVpJcWM4cWQ5ZFUz?=
+ =?utf-8?B?K25hc2phdXcwTTE4YW55M2NqM1NtUjg4SkJqL0dpYTd1YjFmZ3JFTk5abW1H?=
+ =?utf-8?B?Ris5clhRRjVRcXBabVRac3g1WFlTcFo5R2RWRUE5Tm5mUWdLN3RyY2w0d0cx?=
+ =?utf-8?B?T2tIZlE3aFN4eVIzNWZSaHRlc2VKRVpNTVVIcnhvZy8rdm9DWDJMNm0vbms0?=
+ =?utf-8?B?VC9OcWc1NGlzc0VUSDZvYkdYaGRCK2R2R2tuRWlMcEVHKzYweVkvOWZVSWZw?=
+ =?utf-8?B?UUNISENwb3Y5Z0o4T2djYnU0Qk5zSXQwY05xczRMSG9BNjlLeXk3dG9KNFpN?=
+ =?utf-8?B?ekVTN0c1S1FRNW4zT0Q3OGx5dVZva2l6L01mSHVGTTcxaWpKYWU3Mk9RVkgw?=
+ =?utf-8?B?U05DWE15M1BudHVueXRnSVUraGpOcVAzcDlhTXNUMUUwNDhlbzRad0xjR2hO?=
+ =?utf-8?B?TEZuRXVJTzNlaU5QWjN4c1NlcXZoaEUveG1IaWtneUk2MEtjWGE4S0Z5bVJN?=
+ =?utf-8?B?QWMyQmhQUW5oVmEyRy9BRjVUMStHclNxWVJld3lIQktLMk1qVW1SN3hRQVdK?=
+ =?utf-8?B?Q2MyMjZhVVhTNDBpRGZLejZZQVcyVWdqMmdRMktvdkdxZS9uT05Ra2pwb0dZ?=
+ =?utf-8?B?ZTBrMGpNbE4vay9FT05QeHBrVnp2dGV4T0pKY1puUnY5WUQ3VHpjV29OMEJC?=
+ =?utf-8?B?TXpBMWlDTCtFWWRtRHVqbGxwWllqTm9DRTU5dnM2Sm9FYWV0VjZCQzN5d0dz?=
+ =?utf-8?B?c0ZYOEJrR0NJSHp2cnZpRnNzZ0VaaHRhQ2RlSTE4dmpNc0hZV1hJYUJlVy9Y?=
+ =?utf-8?B?T3RFUm41NThsOFV2aDYzZmE4Vy9ndGoxU1hlZmN0akZwZGFkai9ITGdiclNH?=
+ =?utf-8?B?QXZuZVBoemJ6S3AybkRmMzZUeDJMM0Vkc3lpSVRyTVg1S3hDZFMwakQrSWJh?=
+ =?utf-8?B?KzNONWU1WVFmME5LSVpYNFAxWTNPUFBWeUZXcjlEb3cyQTZJazRGUGRLNFl3?=
+ =?utf-8?B?cVBoSVJMSHR2N2tUYlI3b2k2dU1scnFwaDJqMzdpOCtZMG5tcm43SUppS3dm?=
+ =?utf-8?B?cTFHajlSbDNPclowS0JweC91QkJEOEJoMmJ0cWtGRDluVVV5UDc2WGZRL0Yv?=
+ =?utf-8?B?NjUySkFOZjFvNmM5NTFFZGpCdm5KNStsL1ZtbnNWSmQyN2p2WXkzV0dsNzlZ?=
+ =?utf-8?B?elYxUlVUclJyekYyY0laaWl0MVU1dVRZanpRWTJlaU45OTd6dU03M0ZuTVpN?=
+ =?utf-8?B?Q0ErdVYxckVqSFhiVElldWtacE5CRFFMZzFiU0hac2VBcUdKblE0T0ltRWJ4?=
+ =?utf-8?B?a2psS1YzWVorNm5tVWlsNEFpYTg4OStlcC9VbWRqcTljbTNLUGRFNUgvZnd1?=
+ =?utf-8?B?bGljbW1DWkk5WUdiTXZydEhXSVVKK2pIcVY1dlBVZVA3UmNEUTV6WnFHbWVq?=
+ =?utf-8?B?ZTZLWVJKSG1jN2Q1UjlvQ3FUUVdoMHh0eGd2OHQxcHNoazdQSUwzYko4dTNa?=
+ =?utf-8?B?NVlVaHY0NjlxTXRmMnF6YWIxNThNN3NYSExTbW9Za2x2TlFPcldTN0Vmbytp?=
+ =?utf-8?B?ZDhNRXJRclZ0ZHZpbW05RUxZM0tYM2owdkZ3d0tWcEtTdUZVMUJXSXF5ZDFM?=
+ =?utf-8?B?UzVQUk5vZ3QraWQ0RFhZRHN2VWJrM2xMcmxlSmMxcHJEUXNad2lYVlFaNHBD?=
+ =?utf-8?B?Unc9PQ==?=
 X-OriginatorOrg: vaisala.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11aba808-819b-4f8d-6bb6-08dc29542406
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7ee3309-f6a2-45ab-fe0c-08dc2955473e
 X-MS-Exchange-CrossTenant-AuthSource: AS4PR06MB8447.eurprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2024 09:47:33.9017
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2024 09:55:42.5723
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E5tVmplTtPnK+vszcWTHMmbOsjWu549yFYanppZAxT0nfZNWFjWpLhSsQgoY46V7I1j7LGHpG0MtfnsO8gUvSw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR06MB6578
+X-MS-Exchange-CrossTenant-UserPrincipalName: ewUqsjHHPd7QIYlUmlrCCyPVMXT/A6+HcoQTosijBHWpAk5N2gX1illJO4GwOPCTgEGrgZNpDntBYx01T3hEaw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR06MB6970
 
-From: Niko Mauno <niko.mauno@vaisala.com>
+On 6.2.2024 16.33, Geert Uytterhoeven wrote:
+> On Fri, Jan 5, 2024 at 12:51 PM <niko.mauno@vaisala.com> wrote:
+...
+>> +         The available values have the following meanings:
+>> +               0 is unauthorized for all devices
+>> +               1 is authorized for all devices (default)
+>> +               2 is authorized for internal devices
+>> +
+>> +         If the default value is too permissive but you are unsure which mode
+>> +         to use, say 2.
+> 
+> I'm sorry, but I don't have any clue about what to answer to this question.
+> Usually, you are (or are not) authorized to do _something_, but the
+> /something/ is not mentioned at all here.
+> Can you please make this a bit more clear?
+> Thanks!
 
-Make the default USB device authorization mode configurable at build
-time. This is useful for systems that require a mode that is stricter
-than the standard setting, as it avoids relying on the kernel command
-line being properly set.
-
-Signed-off-by: Niko Mauno <niko.mauno@vaisala.com>
----
- drivers/usb/core/Kconfig | 28 ++++++++++++++++++++++++++++
- drivers/usb/core/hcd.c   |  2 +-
- 2 files changed, 29 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
-index 351ede4b5de2..0bf425889c10 100644
---- a/drivers/usb/core/Kconfig
-+++ b/drivers/usb/core/Kconfig
-@@ -116,3 +116,31 @@ config USB_AUTOSUSPEND_DELAY
- 	  The default value Linux has always had is 2 seconds.  Change
- 	  this value if you want a different delay and cannot modify
- 	  the command line or module parameter.
-+
-+config USB_DEFAULT_AUTHORIZATION_MODE
-+	int "Default authorization mode for USB devices"
-+	range 0 2
-+	default 1
-+	depends on USB
-+	help
-+	  Select the default USB device authorization mode. Can be overridden
-+	  with usbcore.authorized_default command line or module parameter.
-+
-+	  This option allows you to choose whether USB devices that are
-+	  connected to the system can be used by default, or if they are
-+	  locked down.
-+
-+	  With value 0 all connected USB devices with the exception of root
-+	  hub require user space authorization before they can be used.
-+
-+	  With value 1 (default) no user space authorization is required to
-+	  use connected USB devices.
-+
-+	  With value 2 all connected USB devices with exception of internal
-+	  USB devices require user space authorization before they can be
-+	  used. Note that in this mode the differentiation between internal
-+	  and external USB devices relies on ACPI, and on systems without
-+	  ACPI selecting value 2 is analogous to selecting value 0.
-+
-+	  If the default value is too permissive but you are unsure which
-+	  mode to use, say 2.
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 9aa5e6bf9b9d..d56597dc7d42 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -357,7 +357,7 @@ static const u8 ss_rh_config_descriptor[] = {
- #define USB_AUTHORIZE_ALL	1
- #define USB_AUTHORIZE_INTERNAL	2
- 
--static int authorized_default = USB_AUTHORIZE_ALL;
-+static int authorized_default = CONFIG_USB_DEFAULT_AUTHORIZATION_MODE;
- module_param(authorized_default, int, S_IRUGO|S_IWUSR);
- MODULE_PARM_DESC(authorized_default,
- 		"Default USB device authorization: 0 is not authorized, 1 is authorized (default), 2 is authorized for internal devices, -1 is authorized (same as 1)");
--- 
-2.39.2
-
+Thanks, submitted v3 which is hopefully better in this respect.
+-Niko
 
