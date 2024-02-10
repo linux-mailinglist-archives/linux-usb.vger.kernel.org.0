@@ -1,278 +1,85 @@
-Return-Path: <linux-usb+bounces-6191-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6192-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5652485030F
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 08:12:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AD7685034B
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 08:39:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFB6DB23CAE
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 07:12:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95BD51F2375D
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 07:39:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B3639AE7;
-	Sat, 10 Feb 2024 07:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="jz/ArCb7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB67B28DBF;
+	Sat, 10 Feb 2024 07:39:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D478F38F94
-	for <linux-usb@vger.kernel.org>; Sat, 10 Feb 2024 07:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1401B7472;
+	Sat, 10 Feb 2024 07:39:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707548995; cv=none; b=du/0Utu9nWfdHDXEnHnin69j/nbHkv7jBwFadNvdXlh0gzApgiS1RbjXQc3xagPp7siDLhwemSXTdp/P8D4nCOmiWPKczPXddbvUF9gpcZ2PcEp1g1i1fTNU4aP1WD33tMAtgjq7YtJ+akLtY5ra8o8LxEkHtPd+fk1onbjqzKA=
+	t=1707550747; cv=none; b=aQ0hpwVXtF/iGx11X27tclNpndkeyjz5UFInpg4KiVjZzEWedT+2cbKBrdS7OC/5xK59d+yF3V2uqaltYn8RwLc0D1C4ptsWygef/2YxSvWdA002ofuDbhRWXYcz8arY1UenOiGBcsmgLStWFfb+fCqXBgaqd+9Xh8JI0aMLIMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707548995; c=relaxed/simple;
-	bh=Mzv0e8b5maH+R5VJl6DotCRRWAOOTWYpXPhTaIdR8Cs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bPa+xCSmQxmRwYtOrjVeNK2kgiFX3ytv5PL0c6LDJ7ZBjqgE6KzxA6TYMww0Rc1j0DsQwOrBWkrizRGY3R9sQdjnVjx7A/CmmeTUEECTmNwVpZ6ZLChO+k7xMhCy6ib+WyPZWy1LEc/4q7Kf3DvgFNTxlaykQMzzKKzvOUdeBzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=jz/ArCb7; arc=none smtp.client-ip=209.85.210.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6e2d49ec431so338099a34.2
-        for <linux-usb@vger.kernel.org>; Fri, 09 Feb 2024 23:09:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1707548992; x=1708153792; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3zER2Ilw0QhxMBzy8PRis9D7e+HIgnB5hYCQzM4YYso=;
-        b=jz/ArCb7aEf0XnTaxG1zjmhkLoFwyxZZaMLIe+xtmyAQQnbAY24szJImOrWBYYXqYQ
-         s2fWTnNfG1703YCto5g2pF4m5/7itmj/NfS1smC/ix2iJ008hcD/8TM2hqOmKGEIhwLU
-         e9tJQTKxexhottbvJNZsp8nD7CmBkB87TuaME=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707548992; x=1708153792;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3zER2Ilw0QhxMBzy8PRis9D7e+HIgnB5hYCQzM4YYso=;
-        b=F7UXzWl7cgmdIyUzJsbaEvEJI1GY57qB4mrr+BYf4alQvnEIn3RRUNq7qqDKfh8iu2
-         JjT2tTBRMJCE54bpEtnLlzhAl3kBCJtYsCdBKKlv0iCsOq0x99dL8SYlRUECrNYeYx7P
-         YkudtZKEuP0PMo+pjOUvHDXbtoq5Z4NU8suAkKPhZn9tQZz9oDw2xJ8H8z37uUKydUF3
-         Up5J2w5LYSZW6VScCE4t2UyXcqzfIRoN4zuGgi05o0COLE8cIhKJmoQVs5ry5jnBhAF8
-         2qJ+YGdFnzSdNuCWrQ7p9CPNVY6/+hBAwJFN2okPuWlJD/SY8pyl7dp5S8zucZjV44KM
-         r0yw==
-X-Forwarded-Encrypted: i=1; AJvYcCUI8S02tz9mHLtr4+a3uLJ/0u7So1j9Aye0zYggEj7qbbkKD31OkTHd+pDyWylkHkci8ERJF98bl6BDGdV0MFMoEpupX2vgEhU0
-X-Gm-Message-State: AOJu0Yx/LQfiwy2HMHxuHvL23qZn6Wfe8jqWKTbt+L9dmovZ91l+iJSm
-	d34MefmNbrQqP8CRSOV2wYvl6onGgZMcxQIPNsvpkcBiIf53z/jINlHPkr4B4w==
-X-Google-Smtp-Source: AGHT+IGycCUB3DMpwmXjgXOSlrrSzr1olN6zo2Ub4XCvqi0LH8LyLdUzUKkoFY+1tflxHElqI+m7OA==
-X-Received: by 2002:a9d:76d6:0:b0:6dd:dd86:ad81 with SMTP id p22-20020a9d76d6000000b006dddd86ad81mr1490798otl.14.1707548992033;
-        Fri, 09 Feb 2024 23:09:52 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWItJfkduQ4ZlMb/4WI7wMAHcsdDlwLJlkD/syq6yJf1sHeXjYYBIe/frbmiy2XGR50jAWFjh9GanqxX17f+9vt7lUWBccaf/pksRS1ZUnaOkGP4dsQwnsx4zPGeqe43Z6C2X4iWLb/Q42Ko20wMp5+d7KTL4cQ0T9VPc0Z0x02Q6Dx+CIG4ziunVGuwntKCgGgDiMcyfUKwU01vEtnRrfZLHGsZYtXzK1umwuiFrXDznvJZnpN1VFqnk5qw9F5CIHJXQ1cNUpESF9mPy5SkuKua+aAdxO81ycYVQ5ClhPOQzHr0mfcZyUwh1ey7EDduqAuq8v/zJkwd3HDl1vSknkzlzPO7ws3fFF/Y2v5CZTUXwtR5EqYwwhLJWXoBzwaCdlC/28MFNSXvMPPPRS7GI0YN9O/JgHHx4MIJV0YthaE583CCVMKPD+5cQolzSPifOhy/9eGQxmb6hzwiZvi6CIRfuQj0SobOxZPh36DEJ68I7dl368YlcYb8kCiQAG7fmsAbs7ru8zRdnRsnNg1IU3FltumjwDbfwJBAj2zz0JksLQHKZL5Co94BVGmDzEL63lWOxFLaBnGEPWOW3aYiRUfa8JGVlNmH2cAikNC+tptaFMse3Aqg5sDg8eq1nQur7Ss0h+xuFfTmw3DIvxVR35+3g983eWVTucCBMlQeVx9fuGCIEgJ4+4zhcPsG3j/oVi1hhfegECRwMJ0NePewQjjHsJnyBsiGvmWFdp4RQfFg/wj6T7sZdPV0KdSPX93F2ZbOok58pOGEzxthPwChtL+GP4mm0ENWmjuf8+xS6KNk/rlaETSsg3C5saKLtn8j9epQEnkJQ==
-Received: from localhost (175.199.125.34.bc.googleusercontent.com. [34.125.199.175])
-        by smtp.gmail.com with UTF8SMTPSA id y30-20020a63b51e000000b005dc5289c4edsm2717207pge.64.2024.02.09.23.09.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Feb 2024 23:09:51 -0800 (PST)
-From: Stephen Boyd <swboyd@chromium.org>
-To: chrome-platform@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Pin-yen Lin <treapking@chromium.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Ivan Orlov <ivan.orlov0322@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-usb@vger.kernel.org,
-	linux-acpi@vger.kernel.org
-Subject: [PATCH 07/22] device property: Add remote endpoint to devcon matcher
-Date: Fri,  9 Feb 2024 23:09:18 -0800
-Message-ID: <20240210070934.2549994-8-swboyd@chromium.org>
-X-Mailer: git-send-email 2.43.0.687.g38aa6559b0-goog
-In-Reply-To: <20240210070934.2549994-1-swboyd@chromium.org>
-References: <20240210070934.2549994-1-swboyd@chromium.org>
+	s=arc-20240116; t=1707550747; c=relaxed/simple;
+	bh=46eoq7MhMARovYT7U9qx122WZ4h+fYnnHqT6CRXyX8M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oksI0OHQ9kC1DnH38h0uRyc1pWsIDPfQj0/5vZduM5AxZED+MYpeDz9LuF2bgDW2VFBgk6UAW61HIC2mzMumJHRTbTKiX3NOJ0bL2G0MgBdhRSXB3P1cWc7nLhKcg53irKXZMjHq3+sfXTqhgGjbydIf3/V0XvmSchKpvjIDdEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1rYhwu-0000EU-UZ; Sat, 10 Feb 2024 08:38:56 +0100
+Message-ID: <04fc959a-4a50-4c84-88a5-fa0d79c008b3@leemhuis.info>
+Date: Sat, 10 Feb 2024 08:38:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] Revert "usb: typec: tcpm: fix cc role at port reset"
+Content-Language: en-US, de-DE
+To: Linux kernel regressions list <regressions@lists.linux.dev>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240117114742.2587779-1-badhri@google.com>
+ <ZcVPHtPt2Dppe_9q@finisterre.sirena.org.uk>
+From: "Linux regression tracking #adding (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <ZcVPHtPt2Dppe_9q@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1707550745;17f83627;
+X-HE-SMSGID: 1rYhwu-0000EU-UZ
 
-When a single DT node has a graph connected to more than one
-usb-c-connector node we can't differentiate which typec switch
-registered for the device is associated with the USB connector because
-the devcon matcher code assumes a 1:1 relationship between remote node
-and typec switch. Furthermore, we don't have a #typec-switch-cells
-property so there can only be one node per typec switch.
+On 08.02.24 23:01, Mark Brown wrote:
+> On Wed, Jan 17, 2024 at 11:47:42AM +0000, Badhri Jagan Sridharan wrote:
+>> This reverts commit 1e35f074399dece73d5df11847d4a0d7a6f49434.
+>>
+>> Given that ERROR_RECOVERY calls into PORT_RESET for Hi-Zing
+>> the CC pins, setting CC pins to default state during PORT_RESET
+>> breaks error recovery.
+> 
+> Between -rc2 and -rc3 I started seeing boot issues in mainline on
+> rk3399-roc-pc running arm64 defconfig, a bisection identified this patch
+> as having broken things.  The issues manifest as a hang while loading
+> modules from the initd, you can see a full boot log at:
 
-Support multiple USB typec switches exposed by one node by passing the
-remote endpoint node in addition to the remote node to the devcon
-matcher function (devcon_match_fn_t). With this change, typec switch
-drivers can register switches with the device node pointer for a graph
-endpoint so that they can support more than one typec switch if
-necessary. Either way, a DT property like 'mode-switch' is always in the
-graph's parent node and not in the endpoint node.
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
 
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Daniel Scally <djrscally@gmail.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Ivan Orlov <ivan.orlov0322@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: <devicetree@vger.kernel.org>
-Cc: <linux-usb@vger.kernel.org>
-Cc: <linux-acpi@vger.kernel.org>
-Cc: Pin-yen Lin <treapking@chromium.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/base/property.c     | 7 +++++--
- drivers/usb/roles/class.c   | 4 ++--
- drivers/usb/typec/mux.c     | 8 ++++++++
- drivers/usb/typec/retimer.c | 7 ++++++-
- include/linux/property.h    | 5 +++--
- 5 files changed, 24 insertions(+), 7 deletions(-)
+#regzbot ^introduced b717dfbf73e842d15174699fe2c6ee4fdde8a
+#regzbot title usb: typec: boot issues on rk3399-roc-pc due to revert
+#regzbot ignore-activity
 
-diff --git a/drivers/base/property.c b/drivers/base/property.c
-index 8c40abed7852..cae81ed4e298 100644
---- a/drivers/base/property.c
-+++ b/drivers/base/property.c
-@@ -1289,6 +1289,7 @@ static unsigned int fwnode_graph_devcon_matches(const struct fwnode_handle *fwno
- {
- 	struct fwnode_handle *node;
- 	struct fwnode_handle *ep;
-+	struct fwnode_handle *remote_ep;
- 	unsigned int count = 0;
- 	void *ret;
- 
-@@ -1304,7 +1305,9 @@ static unsigned int fwnode_graph_devcon_matches(const struct fwnode_handle *fwno
- 			continue;
- 		}
- 
--		ret = match(node, con_id, data);
-+		remote_ep = fwnode_graph_get_remote_endpoint(ep);
-+		ret = match(node, remote_ep, con_id, data);
-+		fwnode_handle_put(remote_ep);
- 		fwnode_handle_put(node);
- 		if (ret) {
- 			if (matches)
-@@ -1334,7 +1337,7 @@ static unsigned int fwnode_devcon_matches(const struct fwnode_handle *fwnode,
- 		if (IS_ERR(node))
- 			break;
- 
--		ret = match(node, NULL, data);
-+		ret = match(node, NULL, NULL, data);
- 		fwnode_handle_put(node);
- 		if (ret) {
- 			if (matches)
-diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-index ae41578bd014..9a0ef5fa0a19 100644
---- a/drivers/usb/roles/class.c
-+++ b/drivers/usb/roles/class.c
-@@ -89,8 +89,8 @@ enum usb_role usb_role_switch_get_role(struct usb_role_switch *sw)
- }
- EXPORT_SYMBOL_GPL(usb_role_switch_get_role);
- 
--static void *usb_role_switch_match(const struct fwnode_handle *fwnode, const char *id,
--				   void *data)
-+static void *usb_role_switch_match(const struct fwnode_handle *fwnode, const struct fwnode_handle *endpoint,
-+				   const char *id, void *data)
- {
- 	struct device *dev;
- 
-diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-index 80dd91938d96..3eabd0d62f47 100644
---- a/drivers/usb/typec/mux.c
-+++ b/drivers/usb/typec/mux.c
-@@ -33,6 +33,7 @@ static int switch_fwnode_match(struct device *dev, const void *fwnode)
- }
- 
- static void *typec_switch_match(const struct fwnode_handle *fwnode,
-+				const struct fwnode_handle *endpoint,
- 				const char *id, void *data)
- {
- 	struct device *dev;
-@@ -55,6 +56,9 @@ static void *typec_switch_match(const struct fwnode_handle *fwnode,
- 	 */
- 	dev = class_find_device(&typec_mux_class, NULL, fwnode,
- 				switch_fwnode_match);
-+	if (!dev)
-+		dev = class_find_device(&typec_mux_class, NULL, endpoint,
-+				switch_fwnode_match);
- 
- 	return dev ? to_typec_switch_dev(dev) : ERR_PTR(-EPROBE_DEFER);
- }
-@@ -263,6 +267,7 @@ static int mux_fwnode_match(struct device *dev, const void *fwnode)
- }
- 
- static void *typec_mux_match(const struct fwnode_handle *fwnode,
-+			     const struct fwnode_handle *endpoint,
- 			     const char *id, void *data)
- {
- 	struct device *dev;
-@@ -280,6 +285,9 @@ static void *typec_mux_match(const struct fwnode_handle *fwnode,
- 
- 	dev = class_find_device(&typec_mux_class, NULL, fwnode,
- 				mux_fwnode_match);
-+	if (!dev)
-+		dev = class_find_device(&typec_mux_class, NULL, endpoint,
-+					mux_fwnode_match);
- 
- 	return dev ? to_typec_mux_dev(dev) : ERR_PTR(-EPROBE_DEFER);
- }
-diff --git a/drivers/usb/typec/retimer.c b/drivers/usb/typec/retimer.c
-index 4a7d1b5c4d86..eb74abee6619 100644
---- a/drivers/usb/typec/retimer.c
-+++ b/drivers/usb/typec/retimer.c
-@@ -22,7 +22,9 @@ static int retimer_fwnode_match(struct device *dev, const void *fwnode)
- 	return is_typec_retimer(dev) && device_match_fwnode(dev, fwnode);
- }
- 
--static void *typec_retimer_match(const struct fwnode_handle *fwnode, const char *id, void *data)
-+static void *typec_retimer_match(const struct fwnode_handle *fwnode,
-+				 const struct fwnode_handle *endpoint,
-+				 const char *id, void *data)
- {
- 	struct device *dev;
- 
-@@ -31,6 +33,9 @@ static void *typec_retimer_match(const struct fwnode_handle *fwnode, const char
- 
- 	dev = class_find_device(&retimer_class, NULL, fwnode,
- 				retimer_fwnode_match);
-+	if (!dev)
-+		dev = class_find_device(&retimer_class, NULL, endpoint,
-+					retimer_fwnode_match);
- 
- 	return dev ? to_typec_retimer(dev) : ERR_PTR(-EPROBE_DEFER);
- }
-diff --git a/include/linux/property.h b/include/linux/property.h
-index 9f2585d705a8..0f20df1f0a49 100644
---- a/include/linux/property.h
-+++ b/include/linux/property.h
-@@ -455,8 +455,9 @@ unsigned int fwnode_graph_get_endpoint_count(const struct fwnode_handle *fwnode,
- int fwnode_graph_parse_endpoint(const struct fwnode_handle *fwnode,
- 				struct fwnode_endpoint *endpoint);
- 
--typedef void *(*devcon_match_fn_t)(const struct fwnode_handle *fwnode, const char *id,
--				   void *data);
-+typedef void *(*devcon_match_fn_t)(const struct fwnode_handle *fwnode,
-+				   const struct fwnode_handle *endpoint,
-+				   const char *id, void *data);
- 
- void *fwnode_connection_find_match(const struct fwnode_handle *fwnode,
- 				   const char *con_id, void *data,
--- 
-https://chromeos.dev
-
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
 
