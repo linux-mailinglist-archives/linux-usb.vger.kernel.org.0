@@ -1,156 +1,164 @@
-Return-Path: <linux-usb+bounces-6203-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6204-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17A8E850626
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 20:40:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D70C0850680
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 22:35:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 993DEB22CF8
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 19:40:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8DD6B284839
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 21:35:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B315F57E;
-	Sat, 10 Feb 2024 19:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mXx4L30f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69EC85FDB0;
+	Sat, 10 Feb 2024 21:35:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046A75F47E
-	for <linux-usb@vger.kernel.org>; Sat, 10 Feb 2024 19:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A095F47C
+	for <linux-usb@vger.kernel.org>; Sat, 10 Feb 2024 21:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.202.254.214
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707594029; cv=none; b=A2xO2bAtSrwPDXiQYyXfCbzO8O4+Pot6Mwc4r8otUAg7c20ua+ml339k2ynPgD2fl9TtsGUoTTsx1HkDZASfpSrgRhLtan7yDW89DDoCXEeA8TrpcjVbnDae138TPOzZScoVv209/c/Wkz2o6tqKt5VONMPfZOSITVuJ0SIweGw=
+	t=1707600928; cv=none; b=GxpgGyqLtDcLFQ3zLhyZd4sCTNDq3ha9cmqrRklsBFPxu8x9pziAeOrJqFGZzdG9ruQtrL/WDyKX4oaOQKs7m3QGV8PfWL1PekES3m6m91I0Wbs1s95PGxoPgMvEVhz+MqKPzZbI8TYaClo5tiXDL9kXQ+5EVPd2/AvlSacsdnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707594029; c=relaxed/simple;
-	bh=r5wrUd3um7uKkGJHnNNGznYfB7o1Ys8ms184CE0FLBQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XWbePjJhZMg3JK5S/+LERyCAepObM01a3N59U+afCiCtamUkp+yj36DDWdEfo2KCdg/vnhEELQktLjoeHiCNwDv7+2WxpEaoRke9UrtqKYKIgG8lT+12IatU7g8dHkbA7sLcI248OBmMMiRrch16etzmHnucJYgPY7Qca1Bvj8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mXx4L30f; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1da120617c7so76775ad.1
-        for <linux-usb@vger.kernel.org>; Sat, 10 Feb 2024 11:40:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707594027; x=1708198827; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xzcidhCo+F6gBLxwDgBelCvN5KH6EoPstq5oHIcbBjc=;
-        b=mXx4L30fVuIttR+MUym3IODTtq46W/9Lw0IayjuaD3L3pTcJUQoyOBCct3ssixBUKK
-         HWB9mW+5m6w+QjSJCx9YURQDXUVgMJMn0A0MqsiZOVTPjpl4S9Aq3TBbPuE0ZfeexAlC
-         tJFk+L5dHcDg1BOmkMebyJpGAeQICFEqpWGfpcyZPpNHUwIL2f2FsoHc12TBdSZ5xHtJ
-         tIYfD3o/E26s+FPj/SqTWTnBvow7qj33CdKQLmaqBVE6r/yr+M/m/tu6EME0xRicWxHh
-         BAEzva6t58CcjDcENG3stwFhpjyvCtjBjUcipWUEZe7viLGmzA5z5doZp1CgUzNZjyIr
-         0ECg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707594027; x=1708198827;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xzcidhCo+F6gBLxwDgBelCvN5KH6EoPstq5oHIcbBjc=;
-        b=QANO30reznx2vMSzOwMro7YnuUHRhLi+0CKFsYriI3PfGnRDH/0SFLx+jLEphUMqGM
-         uHNSiKIIDX8bnOv0ILkRC9kO/fT2kaJooTXhq3Dlas5wM+NykQAX2CElvejKWwFNYc6F
-         d5YAztF+aAFZf00wiCiR0X/3oP0BlS37rCliHxydj9blVJthHZkRvwWrpWNINGkQQIqi
-         cFcy+WqWZ8o5h6wm6aZWC4iDO8+pGQVVKW4bcRGJIXRLMkiuXVmFv9XOQMOjtC5SOB6a
-         9Cvj2L8snYa6zTrisY2+DpZPHqX1O1OxrxY06VpWKdoftieH5Yo5xNBhwX4mMZGoR2RC
-         CEQw==
-X-Forwarded-Encrypted: i=1; AJvYcCVXW/TU/TsjD2bfKjwBCgTGlEfWDDjJmUpd4iK1v6v3jtLgzgS7vyWBUBFaU4kMezeuKvlUE4iqACU4u5G++KUrIyRjf3psQqH1
-X-Gm-Message-State: AOJu0YyLxHzuFe/GQztDJPNRZBuD2NPyN2ZgjTWGeize8Ek9tBaGFrgt
-	WBh7jn9vkgpVprAgCEkHHRGIlIVM/tV7usCl4Dr5CcVX44RR8zsbJjpeBLUeZORCDwuQYI3dYCQ
-	gDgbBUJXM9VRzeosO/g0eTby6vXQ8TJbhgBw7
-X-Google-Smtp-Source: AGHT+IFZ4C4xgGhqwC1b1miGoFAeYDo6i0L6CdiMbluMyqeXV7IszQAynLz5F/Dd0JbjeLEjLloiOr0bc5aw4FCeeNs=
-X-Received: by 2002:a17:902:b194:b0:1d8:eac9:bbfc with SMTP id
- s20-20020a170902b19400b001d8eac9bbfcmr66589plr.15.1707594027047; Sat, 10 Feb
- 2024 11:40:27 -0800 (PST)
+	s=arc-20240116; t=1707600928; c=relaxed/simple;
+	bh=gbPK1vrM/eNWbA2ruy1g4YPqJGhXh146TwYNMQZnOuU=;
+	h=To:From:Subject:Date:Message-ID:References:Mime-Version:
+	 Content-Type:Cc:In-Reply-To; b=DOJ28+AtJrGbj8jpbSFB8dmSK6WufgpGlTvSet44oVQHRQt0PLnSR7RRq4Thgqz9QNaK6DmjCcxFq0Cq9ev4tOqEhMtUCrxeOFVJkzdgEnKsBqm/avuhP5IVqjWpyoQGeQ2qcjDLQA6K/sDZO9oGs9y1Zl7+seGOPafSC0IO458=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=m.gmane-mx.org; arc=none smtp.client-ip=116.202.254.214
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=m.gmane-mx.org
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+	(envelope-from <glug-linux-usb@m.gmane-mx.org>)
+	id 1rYv0M-000AYR-Hx
+	for linux-usb@vger.kernel.org; Sat, 10 Feb 2024 22:35:22 +0100
+X-Injected-Via-Gmane: http://gmane.org/
+To: linux-usb@vger.kernel.org
+From: Julian Sikorski <belegdol@gmail.com>
+Subject: Re: [PATCH] usb-storage: Ignore UAS for LaCie Rugged FW USB3
+Date: Sat, 10 Feb 2024 22:35:17 +0100
+Message-ID: <b6dcf71b-f094-4664-8d43-7d8c0173f51f@gmail.com>
+References: <20240209151121.1004985-1-tasos@tasossah.com>
+ <b16e72ad-3f2d-46a8-8361-2641088694df@rowland.harvard.edu>
+ <2978efa3-e83f-4ef5-907d-8232e4b692a5@tasossah.com>
+ <6d4b1f55-09df-47e9-945d-fa38cd36588c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240205104049.48900-1-christianshewitt@gmail.com>
- <CANEJEGuVPfdteBfY_LyQ+D=t4HGHLvDut-Vj2xFjRM4e8kgh=Q@mail.gmail.com> <D050DF05-8745-42E8-8ED1-890A4DC0380B@gmail.com>
-In-Reply-To: <D050DF05-8745-42E8-8ED1-890A4DC0380B@gmail.com>
-From: Grant Grundler <grundler@google.com>
-Date: Sat, 10 Feb 2024 11:40:13 -0800
-Message-ID: <CANEJEGtidrEyS9UvmgmBVJRG6hVqJ4ha-evzHoeoAKMn7omGTg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] net: asix: add 0b95:1790 to AX88179A device list
-To: Christian Hewitt <christianshewitt@gmail.com>
-Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Grant Grundler <grundler@chromium.org>, linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Cc: linux-usb-u79uwXL29TY76Z2rM5mHXA-XMD5yJDbdMReXY1tMh2IBg@public.gmane.org,
+ gregkh-hQyY1W1yCW8ekmWlsbkhG0B+6BGkLq7r-XMD5yJDbdMReXY1tMh2IBg@public.gmane.org
+Content-Language: en-US
+In-Reply-To: <6d4b1f55-09df-47e9-945d-fa38cd36588c@gmail.com>
 
-On Sat, Feb 10, 2024 at 11:11=E2=80=AFAM Christian Hewitt
-<christianshewitt@gmail.com> wrote:
-...
-> > 1) The USB output is telling you this device is a AX88179A : the
-> > changes most likely should be in ax88179_178a.c using the
-> > ax881798_info:
-> >   https://elixir.bootlin.com/linux/latest/source/drivers/net/usb/ax8817=
-9_178a.c#L1690
->
-> Yup, having sent the patch some git grep=E2=80=99ing showed me the newer =
-driver
-> already has the ID for the card included.
->
-> > 2) What Andrew Lunn said. I'll add the asix driver should not be
-> > probing (or claiming) this device - or at least be quiet about it when
-> > it does.
->
-> So the problem now is .. I have both drivers enabled in kernel config:
->
-> https://github.com/LibreELEC/LibreELEC.tv/blob/master/projects/RPi/device=
-s/RPi5/linux/linux.aarch64.conf#L2324-L2325
+Am 10.02.24 um 15:21 schrieb Julian Sikorski:
+> Am 10.02.24 um 14:24 schrieb Tasos Sahanidis:
+>> On 2024-02-09 17:31, Alan Stern wrote:
+>>> On Fri, Feb 09, 2024 at 05:11:21PM +0200, Tasos Sahanidis wrote:
+>>>> This external HDD fails when plugged in to a USB 3 port. Ignoring 
+>>>> UAS and
+>>>> falling back to mass storage resolves this issue.
+>>>
+>>> What happens when it is plugged into a USB-2 port?
+>>
+>> It works without any quirks over USB 2.0 with uas, however asking for
+>> cache data fails gracefully.
+>>
+>> [  520.829840] scsi host4: uas
+>> [  521.024643] scsi 4:0:0:0: Direct-Access     LaCie    Rugged FW 
+>> USB3   1081 PQ: 0 ANSI: 4
+>> [  521.026370] sd 4:0:0:0: Attached scsi generic sg2 type 0
+>> [  521.030096] sd 4:0:0:0: [sdc] 976773153 512-byte logical blocks: 
+>> (500 GB/466 GiB)
+>> [  521.030369] sd 4:0:0:0: [sdc] Write Protect is off
+>> [  521.030373] sd 4:0:0:0: [sdc] Mode Sense: 47 00 10 08
+>> [  521.030507] sd 4:0:0:0: [sdc] Asking for cache data failed
+>> [  521.030512] sd 4:0:0:0: [sdc] Assuming drive cache: write through
+>> [  521.065916]  sdc: sdc1
+>> [  521.067783] sd 4:0:0:0: [sdc] Attached SCSI disk
+>> [  521.699380] EXT4-fs (sdc1): recovery complete
+>> [  521.699388] EXT4-fs (sdc1): mounted filesystem with ordered data 
+>> mode. Opts: errors=remount-ro. Quota mode: none.
+>>
+>>> Have you checked to see if any of the quirk flags can prevent this
+>>> problem?  It looks like the only issue might be that one Mode Sense(6)
+>>> command.
+>>
+>> I have tried various combinations of all the available quirks and I
+>> couldn't get it to not hang. Without any quirks it keeps retrying Mode
+>> Sense(6) constantly.
+>>
+>> I tested US_FL_ALWAYS_SYNC as it sets sdev->skip_ms_page_8 (both with
+>> and without US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME), and it hung at an
+>> ATA passthrough command; presumably the next step afterwards.
+>>
+>> 30 seconds and one USB reset later, the disk is recognised, but I
+>> do not know if it is reliable.
+>>
+>> [  329.161316] scsi 4:0:0:0: Direct-Access     LaCie    Rugged FW 
+>> USB3   1081 PQ: 0 ANSI: 4
+>> [  329.162228] sd 4:0:0:0: Attached scsi generic sg2 type 0
+>> [  329.166650] sd 4:0:0:0: [sdc] 976773153 512-byte logical blocks: 
+>> (500 GB/466 GiB)
+>> [  329.166654] sd 4:0:0:0: [sdc] Assuming Write Enabled
+>> [  329.166655] sd 4:0:0:0: [sdc] Assuming drive cache: write back
+>> [  329.197983]  sdc: sdc1
+>> [  329.198521] sd 4:0:0:0: [sdc] Attached SCSI disk
+>> [  359.553806] sd 4:0:0:0: [sdc] tag#3 uas_eh_abort_handler 0 uas-tag 
+>> 1 inflight: IN
+>> [  359.553816] sd 4:0:0:0: [sdc] tag#3 CDB: ATA command pass 
+>> through(12)/Blank a1 08 2e 00 01 00 00 00 00 ec 00 00
+>> [  359.573771] scsi host4: uas_eh_device_reset_handler start
+>> [  359.702116] usb 3-1: reset SuperSpeed USB device number 3 using 
+>> xhci_hcd
+>> [  359.722068] usb 3-1: LPM exit latency is zeroed, disabling LPM.
+>> [  359.724348] scsi host4: uas_eh_device_reset_handler success
+>> [  360.582975] EXT4-fs (sdc1): recovery complete
+>> [  360.633098] EXT4-fs (sdc1): mounted filesystem with ordered data 
+>> mode. Opts: errors=remount-ro. Quota mode: none.
+>>
+>> My assumption is that something goes wrong during init and that makes it
+>> hang in general. Perhaps the Mode Sense(6) is broken in addition to
+>> whatever else is misbehaving. I don't believe the XHCI controller is at
+>> fault.
+>>
+>>> Falling back from uas to usb-storage could reduce the throughput
+>>> considerably.  We would like to avoid doing this if possible.
+>>
+>> Absolutely, but at the same time I am not sure how much it matters for
+>> an old mechanical hard disk. Granted, someone can use the same enclosure
+>> and install an SSD internally, so perhaps that makes it worth it.
+>>
+>> Thanks
+>>
+>> -- 
+>> Tasos
+>>
+>>
+>>
+> This seems to be similar to the issue I am facing with a similar LaCie 
+> Rugged USB3-FW 059f:1061. Initially we patched it to IGNORE_UAS but it 
+> then turned out to be working with US_FL_NO_REPORT_OPCODES and 
+> US_FL_NO_SAME. This was back in September 2021. In August 2023 I 
+> reported a similar issue as you, I am still seeing it in 6.7.3. The good 
+> news is that after initial problems it seems to be working fine once the 
+> USB connection is established.
+
+I have now narrowed it down to having broken between 5.18.19 and 5.19.4 
+kernels. Tasos, if you are interested, you might want to check if you 
+can get the drive working with US_FL_NO_REPORT_OPCODES and
+US_FL_NO_SAME alone (fk) quirks alone on Fedora 36 live, which ships 
+5.17.5 kernel. Exercise caution as it is an EOL system.
+I will see if I can narrow down the regression further.
+
+Best regards,
+Julian
 
 
-You have:
-CONFIG_USB_NET_AX8817X=3Dm
-CONFIG_USB_NET_AX88179_178A=3Dm
- CONFIG_NET_VENDOR_ASIX=3Dy
-
-and
-   CONFIG_INPUT_MOUSEDEV=3Dy
-
-But also loads of other modules ("=3Dm").
-
-> And This is a Linux 6.6.10 kernel boot (without this patch):
-> https://paste.libreelec.tv/oriented-mastodon.log
->
-> The card is visible on the USB bus but why isn=E2=80=99t the correct (new=
-er)
-> driver probing? =C2=AF\_(=E3=83=84)_/=C2=AF
-
-I'm a bit confused too since the original email showed both asix and
-ax88179_178a drivers getting invoked. You should have seen the same
-previous failure with "Failed to read reg index 0x0040: -32". But
-since the kernel timestamps were clipped in that email, I'm now
-assuming the two messages were not printed at boot time (but rather
-much later). Perhaps someone forgot to load the ax88179_178a driver
-module after rebooting to their latest kernel build?
-
-My guess is the root file system (linux distro?) doesn't include udev
-at the moment. Normally, udev (user space) will "discover" the USB
-device and load the appropriate device driver *module* (based on
-device IDs listed in e.g. "modinfo ax88179_178a")
-
-Note that asix driver is built-in. If CONFIG_USB_NET_AX88179_178A=3Dy
-were used instead, the system won't depend on udev.
-
-If my guess is correct, you might want to review the entire list of
-CONFIG...=3Dm entries and determine which ones udev can help
-automatically load (I would not assume all of them) and which ones
-should always be loaded anyway (make them "=3Dy").
-
-cheers,
-grant
-
->
-> Christian
->
 
