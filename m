@@ -1,185 +1,156 @@
-Return-Path: <linux-usb+bounces-6202-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6203-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E187850612
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 20:11:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17A8E850626
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 20:40:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 536121C23BE9
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 19:11:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 993DEB22CF8
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 19:40:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55C935F86B;
-	Sat, 10 Feb 2024 19:11:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B315F57E;
+	Sat, 10 Feb 2024 19:40:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f64Zw5KF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mXx4L30f"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275845F57A;
-	Sat, 10 Feb 2024 19:11:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046A75F47E
+	for <linux-usb@vger.kernel.org>; Sat, 10 Feb 2024 19:40:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707592298; cv=none; b=HTJuOlQwJxZB0Br4nka16MU0ShGBq3fJxiP8U4pBsQFw0p+hJqu87UlKi4tzzTWqxbsv/1o6njA2+8y9oIn57GyEDWKob+ZmJ4DbAMqQmTdKZnxJzSdE2uECBjx2EwD+HhZAf3c4nezsAKswXVCS2ccM2c5kgyON1SB4PJjdKhQ=
+	t=1707594029; cv=none; b=A2xO2bAtSrwPDXiQYyXfCbzO8O4+Pot6Mwc4r8otUAg7c20ua+ml339k2ynPgD2fl9TtsGUoTTsx1HkDZASfpSrgRhLtan7yDW89DDoCXEeA8TrpcjVbnDae138TPOzZScoVv209/c/Wkz2o6tqKt5VONMPfZOSITVuJ0SIweGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707592298; c=relaxed/simple;
-	bh=wPeUBhUW2kGlW/V/wnA9rBebGr/4opFq9eXbSXTtkLw=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=iL3GaqkpxhEy57O8Kjr3CGGCC7CEDgVH7/YMy2sWdH6J5jhi6p5YADqPAnfKQ6D0P8STjlf0IxZL0gBEV7xTdgMjzJs8Eu6fx9uUHvtL8cmjU4BPNsLHJkcyHDyzIj+0+QC7or1yFIxENdI5cwa2Qf3WZrOgSCJpBNFAfDLaZcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f64Zw5KF; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3392b12dd21so1133297f8f.0;
-        Sat, 10 Feb 2024 11:11:36 -0800 (PST)
+	s=arc-20240116; t=1707594029; c=relaxed/simple;
+	bh=r5wrUd3um7uKkGJHnNNGznYfB7o1Ys8ms184CE0FLBQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XWbePjJhZMg3JK5S/+LERyCAepObM01a3N59U+afCiCtamUkp+yj36DDWdEfo2KCdg/vnhEELQktLjoeHiCNwDv7+2WxpEaoRke9UrtqKYKIgG8lT+12IatU7g8dHkbA7sLcI248OBmMMiRrch16etzmHnucJYgPY7Qca1Bvj8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mXx4L30f; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1da120617c7so76775ad.1
+        for <linux-usb@vger.kernel.org>; Sat, 10 Feb 2024 11:40:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707592295; x=1708197095; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1707594027; x=1708198827; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QW25N2uFVlcGVDUOyFnfK3R2q7dwZNGEqtVFP6wqDnQ=;
-        b=f64Zw5KF9BTmaIUORXZEqLSyZTvg8B0ikdMjEzAe/JfzlCMhSFgmGataAGH8ufOZC8
-         XXX15eBvvAialYedAbNBuWBlAWmWAsM+FE3xUlLhnnVX3v4NYbIdbeVeqfMZqgIMxEah
-         swY33F5hIqTE8TpMkFU4PFdoDroMI3TeOZfKVn4v4LsAOm0ipaLSYiQ8A/wXEhqk2967
-         rmU7P6coizAwchIf5y3mXqXdA/W/RaXCLX39zX8AdZM66KdVCT7/rg/hKUvOkTurpQ2h
-         rVLs2b5K7vPaEbw8GKg8NOf3z/yXCd0Afu6mh359PAinN+WEdgnpSpzeTsnixtPatNqg
-         xjKw==
+        bh=xzcidhCo+F6gBLxwDgBelCvN5KH6EoPstq5oHIcbBjc=;
+        b=mXx4L30fVuIttR+MUym3IODTtq46W/9Lw0IayjuaD3L3pTcJUQoyOBCct3ssixBUKK
+         HWB9mW+5m6w+QjSJCx9YURQDXUVgMJMn0A0MqsiZOVTPjpl4S9Aq3TBbPuE0ZfeexAlC
+         tJFk+L5dHcDg1BOmkMebyJpGAeQICFEqpWGfpcyZPpNHUwIL2f2FsoHc12TBdSZ5xHtJ
+         tIYfD3o/E26s+FPj/SqTWTnBvow7qj33CdKQLmaqBVE6r/yr+M/m/tu6EME0xRicWxHh
+         BAEzva6t58CcjDcENG3stwFhpjyvCtjBjUcipWUEZe7viLGmzA5z5doZp1CgUzNZjyIr
+         0ECg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707592295; x=1708197095;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1707594027; x=1708198827;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QW25N2uFVlcGVDUOyFnfK3R2q7dwZNGEqtVFP6wqDnQ=;
-        b=RWVsfoWqpjK/k7yEAjBxIu7JKvRtM3CE6lxgLABrHqiXaAc81/hoHyg84Qi+E9C/t+
-         9OHlfZE7avnrVMlFf9cYHYAt2tc221rPhrRAEi4JwfcoBm8yY1kFNcfR20u/2PxvZ2ku
-         nh5H7XlXncDLXVBsn51wiRGlBNUGuDRS0x3eNMRseOcW410dyHoEg12EUs8ILlJCY4lu
-         kL8urtuw2oxT/T1DaVHQ7O1lKVyx4zZUfwUJUGyY5dDkNYXfUWP7bQuUPT/X1g5M/txv
-         mu64RcHZA3mnphAsLxD3q9rqIjsfrOH7FUIxnDybL2g3c1OriYtHaGxVehWPVWePDG9X
-         HJIA==
-X-Forwarded-Encrypted: i=1; AJvYcCVX8iyIjCqnVkOeTbWA8IWncAsyvvfT/zav14p/sGVjbm+t+Qv94S0/MJuqLGXcySWP7dLVOV9egAO/FC/FfBpHaMuh54liAGmWAnjeYlDQRPTD30R0jUPZo7WbUkPEBUWx5doV+5kNp2qwPN4Go1obIUbG1G4jmnrNmMK9ApYO
-X-Gm-Message-State: AOJu0YyKiYGtXfObIDPL7eV4eX5vZRx26na76FEQ/YXdfJLqWmDS9UHy
-	7mV1zHCXpzuJpC75muWOqVPPn92hc6uAQcrWnYDeLcWB3WhT0j0R
-X-Google-Smtp-Source: AGHT+IEryM5P8h6J3uUG3S+tq0f18GWvILq30FogFBn9Xv7zPtHu2+tMusX3jagyXFqcA4h+zbhGFQ==
-X-Received: by 2002:a5d:64ca:0:b0:33b:6d3a:acf6 with SMTP id f10-20020a5d64ca000000b0033b6d3aacf6mr2483948wri.2.1707592295004;
-        Sat, 10 Feb 2024 11:11:35 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUVuPzPLq6vPk+5Yu46weucEEQHTQ71FQHvz0000d38MLBx1o1ZRQjqlEQb4N3WJjaYp115IQkVyUiupBndFVpBtxhkn/Zd9ryu4I/aC2WgMNKoHj0DZsqWj4vhXRhDnbJ8gKx4cFK6SedC04JdMvdnmbQR6IoL7xcs2WosNQtBSFuYPZ1RkFj6byzrU9SKE5yWxg92LHYrIRxzZeaUcug2EfsjpZEH+VG7yTup8HjWIWOo6m/TMbio4Hg39M2V00O/AIXjtAEMw/p3x4BOSno=
-Received: from smtpclient.apple ([167.99.200.149])
-        by smtp.gmail.com with ESMTPSA id bp21-20020a5d5a95000000b0033afcc899c1sm2540508wrb.13.2024.02.10.11.11.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 10 Feb 2024 11:11:34 -0800 (PST)
-Content-Type: text/plain;
-	charset=utf-8
+        bh=xzcidhCo+F6gBLxwDgBelCvN5KH6EoPstq5oHIcbBjc=;
+        b=QANO30reznx2vMSzOwMro7YnuUHRhLi+0CKFsYriI3PfGnRDH/0SFLx+jLEphUMqGM
+         uHNSiKIIDX8bnOv0ILkRC9kO/fT2kaJooTXhq3Dlas5wM+NykQAX2CElvejKWwFNYc6F
+         d5YAztF+aAFZf00wiCiR0X/3oP0BlS37rCliHxydj9blVJthHZkRvwWrpWNINGkQQIqi
+         cFcy+WqWZ8o5h6wm6aZWC4iDO8+pGQVVKW4bcRGJIXRLMkiuXVmFv9XOQMOjtC5SOB6a
+         9Cvj2L8snYa6zTrisY2+DpZPHqX1O1OxrxY06VpWKdoftieH5Yo5xNBhwX4mMZGoR2RC
+         CEQw==
+X-Forwarded-Encrypted: i=1; AJvYcCVXW/TU/TsjD2bfKjwBCgTGlEfWDDjJmUpd4iK1v6v3jtLgzgS7vyWBUBFaU4kMezeuKvlUE4iqACU4u5G++KUrIyRjf3psQqH1
+X-Gm-Message-State: AOJu0YyLxHzuFe/GQztDJPNRZBuD2NPyN2ZgjTWGeize8Ek9tBaGFrgt
+	WBh7jn9vkgpVprAgCEkHHRGIlIVM/tV7usCl4Dr5CcVX44RR8zsbJjpeBLUeZORCDwuQYI3dYCQ
+	gDgbBUJXM9VRzeosO/g0eTby6vXQ8TJbhgBw7
+X-Google-Smtp-Source: AGHT+IFZ4C4xgGhqwC1b1miGoFAeYDo6i0L6CdiMbluMyqeXV7IszQAynLz5F/Dd0JbjeLEjLloiOr0bc5aw4FCeeNs=
+X-Received: by 2002:a17:902:b194:b0:1d8:eac9:bbfc with SMTP id
+ s20-20020a170902b19400b001d8eac9bbfcmr66589plr.15.1707594027047; Sat, 10 Feb
+ 2024 11:40:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.400.31\))
-Subject: Re: [PATCH 1/2] net: asix: add 0b95:1790 to AX88179A device list
-From: Christian Hewitt <christianshewitt@gmail.com>
-In-Reply-To: <CANEJEGuVPfdteBfY_LyQ+D=t4HGHLvDut-Vj2xFjRM4e8kgh=Q@mail.gmail.com>
-Date: Sat, 10 Feb 2024 23:11:21 +0400
-Cc: "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>,
- Grant Grundler <grundler@chromium.org>,
- linux-usb@vger.kernel.org,
- netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <D050DF05-8745-42E8-8ED1-890A4DC0380B@gmail.com>
+MIME-Version: 1.0
 References: <20240205104049.48900-1-christianshewitt@gmail.com>
- <CANEJEGuVPfdteBfY_LyQ+D=t4HGHLvDut-Vj2xFjRM4e8kgh=Q@mail.gmail.com>
-To: Grant Grundler <grundler@google.com>
-X-Mailer: Apple Mail (2.3774.400.31)
+ <CANEJEGuVPfdteBfY_LyQ+D=t4HGHLvDut-Vj2xFjRM4e8kgh=Q@mail.gmail.com> <D050DF05-8745-42E8-8ED1-890A4DC0380B@gmail.com>
+In-Reply-To: <D050DF05-8745-42E8-8ED1-890A4DC0380B@gmail.com>
+From: Grant Grundler <grundler@google.com>
+Date: Sat, 10 Feb 2024 11:40:13 -0800
+Message-ID: <CANEJEGtidrEyS9UvmgmBVJRG6hVqJ4ha-evzHoeoAKMn7omGTg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] net: asix: add 0b95:1790 to AX88179A device list
+To: Christian Hewitt <christianshewitt@gmail.com>
+Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Grant Grundler <grundler@chromium.org>, linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> On 10 Feb 2024, at 10:20=E2=80=AFpm, Grant Grundler =
-<grundler@google.com> wrote:
->=20
-> On Mon, Feb 5, 2024 at 2:40=E2=80=AFAM Christian Hewitt
-> <christianshewitt@gmail.com> wrote:
->>=20
->> Add a generic AX88179A entry for the 0b95:1790 device id:
->>=20
->> kernel: usb 2-1: New USB device found, idVendor=3D0b95, =
-idProduct=3D1790, bcdDevice=3D 2.00
->> kernel: usb 2-1: New USB device strings: Mfr=3D1, Product=3D2, =
-SerialNumber=3D3
->> kernel: usb 2-1: Product: AX88179A
->> kernel: usb 2-1: Manufacturer: ASIX
->> kernel: usb 2-1: SerialNumber: 00D24DC0
->> kernel: asix 2-1:1.0 (unnamed net_device) (uninitialized): Failed to =
-read reg index 0x0000: -32
->> kernel: asix: probe of 2-1:1.0 failed with error -32
->> kernel: ax88179_178a 2-1:1.0 (unnamed net_device) (uninitialized): =
-Failed to read reg index 0x0040: -32
->> kernel: ax88179_178a 2-1:1.0 eth1: register 'ax88179_178a' at =
-usb-0000:01:00.0-1, ASIX AX88179 USB 3.0 Gigabit Ethernet, =
-20:7b:d2:d2:4d:c0
->>=20
->> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
->> ---
->> The change is tested by a LibreELEC (distro) user who reports the NIC =
-to be working
->> fine (and logs support this) but the "Failed to read reg index =
-0x0000: -32" errors
->> suggest ax88178_info might not be the correct choice. I'm not a =
-serious coder so I
->> need to "ask the audience" for suggestions on what more might be =
-needed?
->>=20
->> drivers/net/usb/asix_devices.c | 4 ++++
->> 1 file changed, 4 insertions(+)
->>=20
->> diff --git a/drivers/net/usb/asix_devices.c =
-b/drivers/net/usb/asix_devices.c
->> index f7cff58fe044..9a7b1136cd98 100644
->> --- a/drivers/net/usb/asix_devices.c
->> +++ b/drivers/net/usb/asix_devices.c
->> @@ -1506,6 +1506,10 @@ static const struct usb_device_id        =
-products [] =3D {
->>        // ASIX AX88178 10/100/1000
->>        USB_DEVICE (0x0b95, 0x1780),
->>        .driver_info =3D (unsigned long) &ax88178_info,
->> +}, {
->> +       // ASIX AX88179A 10/100/1000
->> +       USB_DEVICE(0x0b95, 0x1790),
->> +       .driver_info =3D (unsigned long)&ax88178_info,
->> }, {
->=20
-> Hi Christian!
-> Seems like there are two problems here:
-> 1) The USB output is telling you this device is a AX88179A : the
-> changes most likely should be in ax88179_178a.c using the
-> ax881798_info:
->   =
-https://elixir.bootlin.com/linux/latest/source/drivers/net/usb/ax88179_178=
-a.c#L1690
-
-Yup, having sent the patch some git grep=E2=80=99ing showed me the newer =
+On Sat, Feb 10, 2024 at 11:11=E2=80=AFAM Christian Hewitt
+<christianshewitt@gmail.com> wrote:
+...
+> > 1) The USB output is telling you this device is a AX88179A : the
+> > changes most likely should be in ax88179_178a.c using the
+> > ax881798_info:
+> >   https://elixir.bootlin.com/linux/latest/source/drivers/net/usb/ax8817=
+9_178a.c#L1690
+>
+> Yup, having sent the patch some git grep=E2=80=99ing showed me the newer =
 driver
-already has the ID for the card included.
+> already has the ID for the card included.
+>
+> > 2) What Andrew Lunn said. I'll add the asix driver should not be
+> > probing (or claiming) this device - or at least be quiet about it when
+> > it does.
+>
+> So the problem now is .. I have both drivers enabled in kernel config:
+>
+> https://github.com/LibreELEC/LibreELEC.tv/blob/master/projects/RPi/device=
+s/RPi5/linux/linux.aarch64.conf#L2324-L2325
 
-> 2) What Andrew Lunn said. I'll add the asix driver should not be
-> probing (or claiming) this device - or at least be quiet about it when
-> it does.
 
-So the problem now is .. I have both drivers enabled in kernel config:
+You have:
+CONFIG_USB_NET_AX8817X=3Dm
+CONFIG_USB_NET_AX88179_178A=3Dm
+ CONFIG_NET_VENDOR_ASIX=3Dy
 
-=
-https://github.com/LibreELEC/LibreELEC.tv/blob/master/projects/RPi/devices=
-/RPi5/linux/linux.aarch64.conf#L2324-L2325
+and
+   CONFIG_INPUT_MOUSEDEV=3Dy
 
-And This is a Linux 6.6.10 kernel boot (without this patch):
+But also loads of other modules ("=3Dm").
 
-https://paste.libreelec.tv/oriented-mastodon.log
+> And This is a Linux 6.6.10 kernel boot (without this patch):
+> https://paste.libreelec.tv/oriented-mastodon.log
+>
+> The card is visible on the USB bus but why isn=E2=80=99t the correct (new=
+er)
+> driver probing? =C2=AF\_(=E3=83=84)_/=C2=AF
 
-The card is visible on the USB bus but why isn=E2=80=99t the correct =
-(newer)
-driver probing? =C2=AF\_(=E3=83=84)_/=C2=AF=20
+I'm a bit confused too since the original email showed both asix and
+ax88179_178a drivers getting invoked. You should have seen the same
+previous failure with "Failed to read reg index 0x0040: -32". But
+since the kernel timestamps were clipped in that email, I'm now
+assuming the two messages were not printed at boot time (but rather
+much later). Perhaps someone forgot to load the ax88179_178a driver
+module after rebooting to their latest kernel build?
 
-Christian
+My guess is the root file system (linux distro?) doesn't include udev
+at the moment. Normally, udev (user space) will "discover" the USB
+device and load the appropriate device driver *module* (based on
+device IDs listed in e.g. "modinfo ax88179_178a")
 
+Note that asix driver is built-in. If CONFIG_USB_NET_AX88179_178A=3Dy
+were used instead, the system won't depend on udev.
+
+If my guess is correct, you might want to review the entire list of
+CONFIG...=3Dm entries and determine which ones udev can help
+automatically load (I would not assume all of them) and which ones
+should always be loaded anyway (make them "=3Dy").
+
+cheers,
+grant
+
+>
+> Christian
+>
 
