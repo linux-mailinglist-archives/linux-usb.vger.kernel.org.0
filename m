@@ -1,306 +1,314 @@
-Return-Path: <linux-usb+bounces-6187-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6188-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6888F850123
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 01:31:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 187308502F4
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 08:10:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9BEB1F285B9
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 00:31:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D7C7B237D3
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Feb 2024 07:10:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7986B1FDB;
-	Sat, 10 Feb 2024 00:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD3E2E64E;
+	Sat, 10 Feb 2024 07:09:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="lDV1ToMc"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="M7AYcW0o"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF6737A;
-	Sat, 10 Feb 2024 00:31:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143EA24A1C
+	for <linux-usb@vger.kernel.org>; Sat, 10 Feb 2024 07:09:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707525107; cv=none; b=iCLgD71Lmw3BhqvFE9XxIwd1CAz1t/7/ZcJXA6gvPZptrLOwW+xJ3TJBXvSCqv6dGVG0wArGwdx6HRp6vtIg7BDNy4G4w1YV6rj7/rSF3wyGApGva5VCLrsEEFnHngDvP+i6GSOxFqfRhi3B7yV4gwDot+qAACU165D8M0JbZQ0=
+	t=1707548983; cv=none; b=mdY9j075vN6qlJ9n9Wl1JXqEpAekUh40lDtuQ7e39+aRxXNAj/cuZoDlpahMeSX949MfEGUVd8O+K+ARUIkSbWl5fCKe0n9r/dbKSclf8iMThB6jF5QkHjddJ5nz+GunR/PG1iOl0vFoV5fh4GkKiVPmHBf4sRTE2+UGntODnsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707525107; c=relaxed/simple;
-	bh=wCW3zFW/+d1IVAWJlYeFqcCbESpjv/UqBXVGgoe5JIw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=YOZ8FkQtr0ZObwRLtHiPyiIBMnCHx5WwYa7aehAMUiyvnYGH72Gbd7q4nGTVmvszy6Px+3m+O5AUqNHo/QueDivcIMz9GsYb4YmMjIVfbLfJFSpcoxXYv9oExrMBWS2Q6uY0eF2XPhxhqYT/hP2sk0PxgnfoS6pMosOqUQZIg/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=lDV1ToMc; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41A0Jtde019670;
-	Sat, 10 Feb 2024 00:31:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=EPlrOpZcg7RkI/G3TQS7CRq1UauaWKip5XIBMtpCMdI=; b=lD
-	V1ToMcNuHWUMK2sRmRjELeyICKvcd1iFgLKdVVnCFiJA6K+HMm8gwoDf2vRToov9
-	LVRH4i1ySk/6SX3PMlNqVPTDEW6Awxl53kd2VgONmviD5GMullo1xJjVeMgxHzxk
-	NUjPbAgU66FeVCbGXtecjXrlhjstR85s6HZWPGElqA3x4M0xcT9Ad/OGHPgoSPJs
-	pxNeKepUMNcvPylLqriFJPmOvWR+1pGnI1Pm54Tv8Cu5er8RG6BN+7SkVw16uhX7
-	s//TKg7ycszxHmGT5JabbGHfD120nGtIhQk+DDVEsSh/CdWkzEHEGHM770oua6Hg
-	BJVmnP8fSnv+HBdTvRXg==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w5gk2hudt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 10 Feb 2024 00:31:23 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41A0VMin029048
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 10 Feb 2024 00:31:22 GMT
-Received: from [10.110.93.252] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 9 Feb
- 2024 16:31:21 -0800
-Message-ID: <43aa48a5-fab2-8d1c-a1c9-1553b47fe72c@quicinc.com>
-Date: Fri, 9 Feb 2024 16:31:20 -0800
+	s=arc-20240116; t=1707548983; c=relaxed/simple;
+	bh=mbC0DB1VSkueSEIQOEMgbsEihDdd9hh6PSWoWxt8Hnc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JwSQqC6qxgl0BSqQE0J1PP4N3VcvudB+54IeWGvq7l1h8YkmpoS0/gLtj1UOiKZSpCoyYcKqGnZZGFtAHK/IMgzsPho6gx97Gtbog3J1HRz84Bo4ITNjAOzfOrGHB1pMmu9tNQ9Xv30uBGrd8m4iDeWzvF9rNGiIeSJWdFfv3ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=M7AYcW0o; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6e09493eb8eso805636b3a.1
+        for <linux-usb@vger.kernel.org>; Fri, 09 Feb 2024 23:09:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1707548979; x=1708153779; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b9ybKrfRhqeTAtLZZp91eR3wd0aV+0gDZsFZ2lmBVz4=;
+        b=M7AYcW0owUafXlSINTxSwXRVOvKMlq1eUfzM53hxC9gDoNcvNYGfZ3plR+P7mXdfuH
+         osdgd4sa88rYqBoEA+pNbTLSZx6wXfWug9kRdgMWdAmVM0QV2CF8CuWTcUwxLolQvQY3
+         /41hu6R3rEvLxiiYK3ibnJO1YFlCnWQa6AK+E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707548979; x=1708153779;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b9ybKrfRhqeTAtLZZp91eR3wd0aV+0gDZsFZ2lmBVz4=;
+        b=c1z4HfcBnb6iaxQFGWtEbFUNHsjxIbOTD9WlncEFZpaoDsdFqJzu427ngY+Xy6unfY
+         qG8tIeRQNOrZiWYtqDf0Lda678gX48AYrLBiPgEMmflUFN1EKZLGnTUlMZhTEGX1H15/
+         S58aEfTW5B/CE9jqTyH1fY9sdA+wqhNokUJOXQvZF8KLctCL4p2DQLHB2a3fwbvMyvXW
+         k+nfjBLhENwqojvQIpiuyTj8ZJYkh1s/QSdZ0rRRItRTqzRhSGDSH8s7hYzCFdqKmDc/
+         RSjWDKmc10MI+YtO49o1v0Rvy8Ttf4zA7jSmTJIs5ud78D5sFZiISa5UtfinI2GSGgUY
+         +F/w==
+X-Gm-Message-State: AOJu0YwWsRSa9BSpBHG1++cj4e2l1ZEwlJPkyC3D5ZoHMtJuXU22xxhQ
+	ZfvJNHlP8eo5uafEjm8W/Ckll0+V15LxcIwhY1IBGvw5ioJ9I1UgxXVrssa9fA==
+X-Google-Smtp-Source: AGHT+IHHFtmTz4F6HkKCsABtdOtMPEvj2ixjc3Xu597pI5qeBktFMLaxG/9FeC2ZBzrgjmMIjMeamQ==
+X-Received: by 2002:a05:6a20:2d11:b0:19e:8a29:5e81 with SMTP id g17-20020a056a202d1100b0019e8a295e81mr2125042pzl.20.1707548979163;
+        Fri, 09 Feb 2024 23:09:39 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXukExwyisG683fg4h7pCl9rSIdxSMepDxpCM5dZ1O3HwsoS+nhng0ZD5rEZzlXs9GCVBcrtR2ahVrw9Tq+G75+AcxYBu6xzpYBwlSgTvre9uLLLINyC1uDx8QMFg/Uwvh/rDuEY6zof6+m901UXuFLunQ6MEYVEz1MqrsyoJUCTA5RP9w4WcwgUljdNy8efAMFoQ3lk332aFb0Aij/BoEM568msE7RR61tbj4Fm1ppOvvk28c/NG+kX2C5FvqrVZHFNH7SEc6+30VdeVE1i1DCaFPL1xa6vRJuKsNMvRTI1y/HM+Ggrp9HxUfaz3znu1b8St9e7okrMQovFcoDIZtjECCVRm9AsuDVMftg7VRs02tsnYOuyIs+qclbP7wPH9CqTe4Mienk8CICB7cqX7bWbOb7bV0TYRqo58lHQmWoY6RYVjENzX+rKP2mDr6fi0KedWE0ZIz+eRJF1chQWDHwWeUYN6AY9CndeAYz/Onb+wIvtNbOZmRidiilc8mQ55QRLsxnRMofAz2lzhdElSVJQxfET9ygcLKUE/qdRMnCAhgc3y3ZSdUJN4FsA203B6Q924VAQqVZmi+no22dFJaG5PRF8Y6idsNMD6wss+zhCYywwCmyMpxp/i1irUam42Cps33RK49GIGC4XGkFu/UI6Bg/C4pi7vaHwMcK40bmBHFtLheoVGghflGzfTmaKDKjKS8bPS9LZW0QkIpHysEK0ijpRhaUAP9OeGgWDwZyqEciZQPAZjYPHER2AEQa8jFV+4brprEP/zRKa6EsBOjtSDjia+33bkj+LSgZ/fge9XnptZN7snWBopOstR8OAUxdvjHP1bh7w9BzOu9tYQW7qh5DcS5kNqszUtb61B0GyTd9jWX4QB9W3aRvRk7BBbcqeJhc5zzBnK9FmFtyE4QVWxtfVJPc01IidMb9NDIZKNvox38te7RJ6caZ8R8nIjIstp
+ 4lGz0SjfgHZwjWvR2r9qWWj8HnjqDNj1y46zO15w2RjzLoQ0s/7gVZf+XqC5fea2YnxjCsFQO340QTn5W4+MFayh2Az1o4vV/QSz6cxraHru/ru5sePzI8qWlLfG5zUGPjko4maXtW8PMN7gihFpXWcbgPZ0FQrr5ceC74vIWunIVHs0Am6nU6ozeW19l0665suTVqD7L1WolrlSpKKiRjpp/lHwyyxVJB7QMPkcN5ZnKjv0ET2uvp60Ls246xA9kNT3qcmRuqqNoarBUMlI+A5l1EUu2CY6L9wJDH8y83qCg/8OvSVs3CTBz5pzF7Q1r+kO1qm+DPnUl2nTlhUSxZZxgFiIqAYDfECac0aalVi9KxfYb6VyjfCFgH/ui5zqs5WNFCWCvxexV+SAWxhW4qfMH6ALqq3t8PQIGuKvpzWFiOKOZdMoJiSQ3canXFCdRyNHh1R04AXBwPQaW95JZK0Nrrzix11McAxOdnbXFfmWycBbh2dK5W3GPdiShdLqa3MsarkGA0lGvSp7oDN+225ESySKGvIap3lLcCdHyh4m/eDAupHMH+0hUv/Zx2HiBF5/gR3EVjbKaqASOP71qFbazz5BGUGh4p1TgaSLJPm2yIxKpCgyxE/C5ja6PnOLTjlx2LDh7ss4pKSWoOnPKpzqP7dfzaNWJvw8O0STC36DwN
+Received: from localhost (175.199.125.34.bc.googleusercontent.com. [34.125.199.175])
+        by smtp.gmail.com with UTF8SMTPSA id y26-20020a63495a000000b005ce998b9391sm2846522pgk.67.2024.02.09.23.09.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Feb 2024 23:09:38 -0800 (PST)
+From: Stephen Boyd <swboyd@chromium.org>
+To: chrome-platform@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Pin-yen Lin <treapking@chromium.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Andy Gross <agross@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Benson Leung <bleung@chromium.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	cros-qcom-dts-watchers@chromium.org,
+	Daniel Scally <djrscally@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	David Airlie <airlied@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Ivan Orlov <ivan.orlov0322@gmail.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Lee Jones <lee@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-acpi@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	maciek swiech <drmasquatch@google.com>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Prashant Malani <pmalani@chromium.org>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Robert Foss <rfoss@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 00/22] platform/chrome: Add DT USB/DP muxing/topology to Trogdor
+Date: Fri,  9 Feb 2024 23:09:11 -0800
+Message-ID: <20240210070934.2549994-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.43.0.687.g38aa6559b0-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v14 48/53] ALSA: usb-audio: mixer: Add USB offloading
- mixer control
-Content-Language: en-US
-To: Takashi Iwai <tiwai@suse.de>
-CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>
-References: <20240208231406.27397-1-quic_wcheng@quicinc.com>
- <20240208231406.27397-49-quic_wcheng@quicinc.com>
- <87y1bt2acg.wl-tiwai@suse.de>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <87y1bt2acg.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: lXQuVPmFc1WXS-_N4GcNV_ReH1aK5jL-
-X-Proofpoint-GUID: lXQuVPmFc1WXS-_N4GcNV_ReH1aK5jL-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-09_20,2024-02-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 malwarescore=0 mlxlogscore=999 spamscore=0 impostorscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 priorityscore=1501 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2401310000
- definitions=main-2402100002
+Content-Transfer-Encoding: 8bit
 
-Hi Takashi,
+This series adds support for fully describing the USB/DP topology on
+ChromeOS Trogdor devices in DT. Trogdor devices have a single DP phy in
+the AP that is muxed to one of two usb type-c connectors depending on
+which port asserts HPD first to the EC. We'd like to know which port is
+connected to an external monitor to provide a better experience to the
+user about things like which type-c port is displaying DP or which
+type-c hub is acting up, etc. Describing the connection all the way from
+the source to the connector will allow us to do this. There will be some
+more work to do after this to wire up sysfs connections, but that work
+has already started or finished so it should be mostly minor changes to
+support DT there.
 
-On 2/9/2024 2:36 AM, Takashi Iwai wrote:
-> On Fri, 09 Feb 2024 00:14:01 +0100,
-> Wesley Cheng wrote:
->>
->> In order to allow userspace/applications know about USB offloading status,
->> expose a sound kcontrol that fetches information about which sound card
->> index is associated with the ASoC platform card supporting offloading.  In
->> the USB audio offloading framework, the ASoC BE DAI link is the entity
->> responsible for registering to the SOC USB layer.  SOC USB will expose more
->> details about the current offloading status, which includes the USB sound
->> card and USB PCM device indexes currently being used.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> 
-> Now looking at this again, I noticed that this will bring the
-> hard-dependency on ASoC stuff to USB-audio driver, since it adds the
-> call of snd_soc_usb_device_offload_available().
-> 
-> Maybe we can let the add-on platform adding/removing the control
-> element on the fly instead?
-> 
+This patch series is large, unfortunately, and is ordered in logical
+groups: gpio, USB, DRM, typec, and finally dts to put it all together.
+There's more that could be put in here, e.g. supporting ChromeOS Corsola
+devices, but I wanted to get something out there early instead of
+waiting to make this work with everything that exists today and posting
+it then.
 
-Sure, I'll move it into the QC offload driver.  As long as we have a 
-standard API within USB SND that other vendors can also add to their 
-offload drivers, I think that is sufficient.
+Onto the patches: 
 
-Thanks
-Wesley Cheng
+First is the EC GPIO driver, which is dependency free and can be merged
+at any time. It's only needed to provide information about which port
+the EC is steering DP to, because the EC had a bug where it never told
+the AP about which port has HPD asserted or not.
 
-> 
-> thanks,
-> 
-> Takashi
-> 
->> ---
->>   sound/usb/Kconfig             |  4 ++
->>   sound/usb/Makefile            |  1 +
->>   sound/usb/mixer.c             |  5 +++
->>   sound/usb/mixer_usb_offload.c | 72 +++++++++++++++++++++++++++++++++++
->>   sound/usb/mixer_usb_offload.h | 17 +++++++++
->>   5 files changed, 99 insertions(+)
->>   create mode 100644 sound/usb/mixer_usb_offload.c
->>   create mode 100644 sound/usb/mixer_usb_offload.h
->>
->> diff --git a/sound/usb/Kconfig b/sound/usb/Kconfig
->> index 4c842fbe6365..3e7be258d0e3 100644
->> --- a/sound/usb/Kconfig
->> +++ b/sound/usb/Kconfig
->> @@ -176,10 +176,14 @@ config SND_BCD2000
->>   	  To compile this driver as a module, choose M here: the module
->>   	  will be called snd-bcd2000.
->>   
->> +config SND_USB_OFFLOAD_MIXER
->> +	bool
->> +
->>   config SND_USB_AUDIO_QMI
->>   	tristate "Qualcomm Audio Offload driver"
->>   	depends on QCOM_QMI_HELPERS && SND_USB_AUDIO && USB_XHCI_SIDEBAND
->>   	select SND_PCM
->> +	select SND_USB_OFFLOAD_MIXER
->>   	help
->>   	  Say Y here to enable the Qualcomm USB audio offloading feature.
->>   
->> diff --git a/sound/usb/Makefile b/sound/usb/Makefile
->> index 246788268ddd..8c54660a11b0 100644
->> --- a/sound/usb/Makefile
->> +++ b/sound/usb/Makefile
->> @@ -22,6 +22,7 @@ snd-usb-audio-objs := 	card.o \
->>   			stream.o \
->>   			validate.o
->>   
->> +snd-usb-audio-$(CONFIG_SND_USB_OFFLOAD_MIXER) += mixer_usb_offload.o
->>   snd-usb-audio-$(CONFIG_SND_USB_AUDIO_MIDI_V2) += midi2.o
->>   snd-usb-audio-$(CONFIG_SND_USB_AUDIO_USE_MEDIA_CONTROLLER) += media.o
->>   
->> diff --git a/sound/usb/mixer.c b/sound/usb/mixer.c
->> index 409fc1164694..09229e623469 100644
->> --- a/sound/usb/mixer.c
->> +++ b/sound/usb/mixer.c
->> @@ -48,6 +48,7 @@
->>   #include "mixer.h"
->>   #include "helper.h"
->>   #include "mixer_quirks.h"
->> +#include "mixer_usb_offload.h"
->>   #include "power.h"
->>   
->>   #define MAX_ID_ELEMS	256
->> @@ -3609,6 +3610,10 @@ int snd_usb_create_mixer(struct snd_usb_audio *chip, int ctrlif)
->>   	if (err < 0)
->>   		goto _error;
->>   
->> +	err = snd_usb_offload_init_mixer(mixer);
->> +	if (err < 0)
->> +		goto _error;
->> +
->>   	err = snd_device_new(chip->card, SNDRV_DEV_CODEC, mixer, &dev_ops);
->>   	if (err < 0)
->>   		goto _error;
->> diff --git a/sound/usb/mixer_usb_offload.c b/sound/usb/mixer_usb_offload.c
->> new file mode 100644
->> index 000000000000..61b17359b987
->> --- /dev/null
->> +++ b/sound/usb/mixer_usb_offload.c
->> @@ -0,0 +1,72 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright (c) 2022-2024 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +#include <linux/usb.h>
->> +
->> +#include <sound/core.h>
->> +#include <sound/control.h>
->> +#include <sound/soc-usb.h>
->> +
->> +#include "card.h"
->> +#include "mixer.h"
->> +#include "mixer_usb_offload.h"
->> +#include "usbaudio.h"
->> +
->> +static int
->> +snd_usb_offload_create_mixer(struct usb_mixer_interface *mixer,
->> +		       const struct snd_kcontrol_new *new_kctl)
->> +{
->> +	struct snd_usb_audio *chip = mixer->chip;
->> +	struct usb_device *udev = chip->dev;
->> +
->> +	return snd_ctl_add(chip->card,
->> +			   snd_ctl_new1(new_kctl, udev->bus->sysdev));
->> +}
->> +
->> +static int
->> +snd_usb_offload_available_get(struct snd_kcontrol *kcontrol,
->> +		      struct snd_ctl_elem_value *ucontrol)
->> +{
->> +	struct device *sysdev = snd_kcontrol_chip(kcontrol);
->> +	int ret;
->> +
->> +	ret = snd_soc_usb_device_offload_available(sysdev);
->> +	ucontrol->value.integer.value[0] = ret < 0 ? -1 : ret;
->> +
->> +	return ret < 0 ? ret : 0;
->> +}
->> +
->> +static int snd_usb_offload_available_info(struct snd_kcontrol *kcontrol,
->> +			      struct snd_ctl_elem_info *uinfo)
->> +{
->> +	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
->> +	uinfo->count = 1;
->> +	uinfo->value.integer.min = -1;
->> +	uinfo->value.integer.max = SNDRV_CARDS;
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct snd_kcontrol_new snd_usb_offload_available_ctl = {
->> +	.iface = SNDRV_CTL_ELEM_IFACE_CARD,
->> +	.access = SNDRV_CTL_ELEM_ACCESS_READ,
->> +	.name = "USB Offload Playback Capable Card",
->> +	.info = snd_usb_offload_available_info,
->> +	.get = snd_usb_offload_available_get,
->> +};
->> +
->> +/**
->> + * snd_usb_offload_init_mixer() - Add USB offload bounded mixer
->> + * @mixer - USB mixer
->> + *
->> + * Creates a sound control for a USB audio device, so that applications can
->> + * query for if there is an available USB audio offload path, and which
->> + * card is managing it.
->> + */
->> +int snd_usb_offload_init_mixer(struct usb_mixer_interface *mixer)
->> +{
->> +	return snd_usb_offload_create_mixer(mixer, &snd_usb_offload_available_ctl);
->> +}
->> +EXPORT_SYMBOL_GPL(snd_usb_offload_init_mixer);
->> diff --git a/sound/usb/mixer_usb_offload.h b/sound/usb/mixer_usb_offload.h
->> new file mode 100644
->> index 000000000000..fb88e872d8fa
->> --- /dev/null
->> +++ b/sound/usb/mixer_usb_offload.h
->> @@ -0,0 +1,17 @@
->> +/* SPDX-License-Identifier: GPL-2.0
->> + *
->> + * Copyright (c) 2022-2024 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +#ifndef __USB_OFFLOAD_MIXER_H
->> +#define __USB_OFFLOAD_MIXER_H
->> +
->> +#if IS_ENABLED(CONFIG_SND_USB_OFFLOAD_MIXER)
->> +int snd_usb_offload_init_mixer(struct usb_mixer_interface *mixer);
->> +#else
->> +static int snd_usb_offload_init_mixer(struct usb_mixer_interface *mixer)
->> +{
->> +	return 0;
->> +}
->> +#endif
->> +#endif /* __USB_OFFLOAD_MIXER_H */
+Second is the USB binding and hub patches. These are used to describe
+how the USB hub is wired up on all the Trogdor devices, and make the
+connect_type be something besides "unknown" on DT devices. ACPI has
+supported setting a proper connect_type for some time now. These can
+also be merged pretty much dependency free, except that the dt binding
+will be needed to avoid DT binding check failures. I don't think those
+checks are fatal though, so probably also fine to take this part
+independently.
+
+Third is the DRM bridge patches. These are used to implement lane
+assignment for DP altmode configurations through the drm_bridge code.
+The typec code will use this to tell the DP phy how many lanes of DP to
+drive and which lanes to drive out to the USB type-c connector. Adding
+support for lane assignment allows us to implement DP muxing as well,
+physically splitting the DP lanes on the DP phy so that hardware doesn't
+have to use an analog mux to steer two DP lanes to one or the other
+type-c port. These are a hard dependency for the typec code.
+
+Fourth is the typec patches, that ties together everything that comes
+before it in this series. The EC typec switch driver implements a
+drm_bridge that can signal HPD from the type-c connector through the
+bridge chain, mux the DP phy in software so that we don't have to use an
+analog mux, and implement orientation control for boards like Kukui that
+directly connect the DP phy to the type-c port, necessitating lane
+assignment to flip the lanes to match the cable orientation.
+
+Finally, the dts patches wire everything up to fully describe the USB/DT
+topology on Trogdor. This includes the USB hub, the EC gpios, the DP
+controller, and the external connectors like the usb-c and usb-a
+connectors.
+
+After this initial version I will probably split this series and send
+parts in pieces to more rapidly send new versions. Those parts will
+refer back to this version in the cover letter so we can all get the
+full context. I don't expect to merge this through one maintainer tree
+immediately, so I set the 'To' line to chrome-platform to reflect the
+overall target audience.
+
+Prashant Malani (1):
+  platform/chrome: cros_ec_typec: Purge blocking switch devlinks
+
+Stephen Boyd (21):
+  dt-bindings: gpio: Add binding for ChromeOS EC GPIO controller
+  gpio: Add ChromeOS EC GPIO driver
+  dt-bindings: usb: Add downstream facing ports to realtek binding
+  usb: core: Set connect_type of ports based on DT node
+  drm/atomic-helper: Introduce lane remapping support to bridges
+  drm/bridge: Verify lane assignment is going to work during
+    atomic_check
+  device property: Add remote endpoint to devcon matcher
+  platform/chrome: cros_typec_switch: Use read_poll_timeout helper
+  platform/chrome: cros_typec_switch: Move port creation code to
+    sub-function
+  platform/chrome: cros_typec_switch: Use fwnode instead of ACPI APIs
+  platform/chrome: cros_typec_switch: Use dev_err_probe()
+  dt-bindings: chrome: Add google,cros-ec-typec-switch binding
+  platform/chrome: cros_typec_switch: Add support for signaling HPD to
+    drm_bridge
+  platform/chrome: cros_typec_switch: Support DP muxing via DRM lane
+    assignment
+  platform/chrome: cros_typec_switch: Support orientation-switch
+  platform/chrome: cros_typec_switch: Handle lack of HPD information
+  dt-bindings: chrome: Add binding for ChromeOS Pogo pin connector
+  arm64: dts: qcom: sc7180: quackingstick: Disable instead of delete
+    usb_c1
+  arm64: dts: qcom: sc7180: pazquel: Add missing comment header
+  arm64: dts: qcom: sc7180-trogdor: Make clamshell/detachable fragments
+  arm64: dts: qcom: sc7180-trogdor: Wire up USB and DP to
+    usb-c-connectors
+
+ .../chrome/google,cros-ec-typec-switch.yaml   | 365 ++++++++++++
+ .../chrome/google,pogo-pin-connector.yaml     |  61 ++
+ .../bindings/gpio/google,cros-ec-gpio.yaml    |  49 ++
+ .../bindings/mfd/google,cros-ec.yaml          |   8 +
+ .../bindings/usb/realtek,rts5411.yaml         |  50 ++
+ .../dts/qcom/sc7180-trogdor-clamshell.dtsi    |  30 +
+ .../boot/dts/qcom/sc7180-trogdor-coachz.dtsi  |  52 +-
+ .../dts/qcom/sc7180-trogdor-detachable.dtsi   |  25 +
+ .../dts/qcom/sc7180-trogdor-homestar.dtsi     |  54 +-
+ .../dts/qcom/sc7180-trogdor-kingoftown.dts    |  57 +-
+ .../boot/dts/qcom/sc7180-trogdor-lazor.dtsi   |  58 +-
+ .../boot/dts/qcom/sc7180-trogdor-pazquel.dtsi |  59 +-
+ .../boot/dts/qcom/sc7180-trogdor-pompom.dtsi  |  46 +-
+ .../qcom/sc7180-trogdor-quackingstick.dtsi    |  46 +-
+ .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |   2 +-
+ .../dts/qcom/sc7180-trogdor-wormdingler.dtsi  |  52 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 175 ++++++
+ drivers/base/property.c                       |   7 +-
+ drivers/gpio/Kconfig                          |  10 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-cros-ec.c                   | 218 +++++++
+ drivers/gpu/drm/drm_atomic_state_helper.c     |   2 +
+ drivers/gpu/drm/drm_bridge.c                  |  50 ++
+ drivers/platform/chrome/Kconfig               |   3 +-
+ drivers/platform/chrome/cros_ec_typec.c       |  10 +
+ drivers/platform/chrome/cros_typec_switch.c   | 555 +++++++++++++++---
+ drivers/usb/core/port.c                       |  37 ++
+ drivers/usb/roles/class.c                     |   4 +-
+ drivers/usb/typec/mux.c                       |   8 +
+ drivers/usb/typec/retimer.c                   |   7 +-
+ include/drm/drm_atomic.h                      |  31 +
+ include/drm/drm_bridge.h                      |   4 +
+ include/linux/property.h                      |   5 +-
+ 33 files changed, 2026 insertions(+), 115 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/chrome/google,cros-ec-typec-switch.yaml
+ create mode 100644 Documentation/devicetree/bindings/chrome/google,pogo-pin-connector.yaml
+ create mode 100644 Documentation/devicetree/bindings/gpio/google,cros-ec-gpio.yaml
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-clamshell.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-detachable.dtsi
+ create mode 100644 drivers/gpio/gpio-cros-ec.c
+
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+Cc: Andy Gross <agross@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Benson Leung <bleung@chromium.org>
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: <chrome-platform@lists.linux.dev>
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: <cros-qcom-dts-watchers@chromium.org>
+Cc: Daniel Scally <djrscally@gmail.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: David Airlie <airlied@gmail.com>
+Cc: <devicetree@vger.kernel.org>
+Cc: <dri-devel@lists.freedesktop.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Ivan Orlov <ivan.orlov0322@gmail.com>
+Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc: Jonas Karlman <jonas@kwiboo.se>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc: Lee Jones <lee@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: <linux-acpi@vger.kernel.org>
+Cc: <linux-arm-msm@vger.kernel.org>
+Cc: <linux-gpio@vger.kernel.org>
+Cc: <linux-usb@vger.kernel.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: maciek swiech <drmasquatch@google.com>
+Cc: Matthias Kaehlcke <mka@chromium.org>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Pin-yen Lin <treapking@chromium.org>
+Cc: Prashant Malani <pmalani@chromium.org>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: Robert Foss <rfoss@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>
+
+base-commit: 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+-- 
+https://chromeos.dev
 
