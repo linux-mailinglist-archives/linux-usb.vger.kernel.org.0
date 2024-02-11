@@ -1,243 +1,76 @@
-Return-Path: <linux-usb+bounces-6221-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6222-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5E2C850B82
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 21:51:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95622850B97
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 21:58:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E70DBB22016
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 20:51:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 513282835A3
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 20:58:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0BDF5DF31;
-	Sun, 11 Feb 2024 20:51:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B1245EE8B;
+	Sun, 11 Feb 2024 20:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fV5/4WTL"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uCreMs31"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6DA5D8E4;
-	Sun, 11 Feb 2024 20:51:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D828FBF3;
+	Sun, 11 Feb 2024 20:58:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707684699; cv=none; b=Cq8nSoCb7LXsrbih5pvrbE8KLgpE0BVXuXYVs6sIjvxf6HxX9634g5HknZUjh9DtDmqNuKDohRXaJSEHYvtkID2lGipCf4Cj1hrCQ+THiorHiu2/1XBK2rBqSM9wnOUrZ230TmlyndMkRo7E7SmQilhsH4b51vsEGAMc/AdUWTQ=
+	t=1707685087; cv=none; b=LvmZ2HyrjZ0ThMIovXb++SqHihlfr6o7Lb08W42s2QE4gEh2cVKjbR99MN+ZholGPRjHxLlsMLzlUi4rmkhN4uKtDDN17Y3tVmCl0Jlnsev4EPq68fxGfq34I0UonjIRZdpfa8JNGKq8kn0O1LTOaaQdTAwLfb2mzdVZXgA0wGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707684699; c=relaxed/simple;
-	bh=CIElKw+z06Pdsu4fkYlY/n6HWaZ+cbA2k98ips1ekVM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YxBxmEoVXfSF1Cm1JAK3AEUbgAK4B70x76dr5N/JZ+bWXPiahjEURqtSrFtZCSr4/OrYYpLcT+MmOMDtlowoI06+patx+bRVzsm6z2vRCQNPhg6tycJppjwH5cSTNcPwmigljHUkoHz5dNhcsKFN0itaEViBSd6nxnHxEcJ+rSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fV5/4WTL; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a3566c0309fso299719166b.1;
-        Sun, 11 Feb 2024 12:51:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707684696; x=1708289496; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/vfTY4s1kp8rGWonG5tuUYS2FDi1EQ7SmfmNR8zlibc=;
-        b=fV5/4WTLsuKlnur2gVTUzJYShe+AlEX5yTnwsczhBU/PGVVEWoGt/aFEfUfeVTxyBq
-         tK3c0aWBvcK9gDIy+z8flMXPF6Yjq9iORwivYMdETttCvuDQFR/IVDsP0wN0K624VIPo
-         gm+hijrjaje7R6AI1wopYxLRRoE0R4VAvq1ipS1W9H3eSkdD9sbXq/5wL5CAM4Y9GV+W
-         CQ8j27jclaF5y0TmKoPOF0ong+CZAss+V2wlfuSspUOwxHznFh30+/YWWOo3ElMtts/0
-         QP1lFTwdAb33kVKb54scNVTnHaHLViK/0bWx8mqVcVHQk/xpW09Alezd5aSPDpxdQWj6
-         DsjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707684696; x=1708289496;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/vfTY4s1kp8rGWonG5tuUYS2FDi1EQ7SmfmNR8zlibc=;
-        b=VIu5n/bSJpn3YBmsFgosAwGlXrBN/j78UFd2U2lNUz/HpIV6Df2ubXc8V931i1K75c
-         4JFMa21Ecynb555zF8DzlE2LY+pyMYQdfaS3sGKX7Nan2lJ0Npk7j2HbiuoZMcSJizoe
-         oOc++wlxZ9qEUUXbugFhvGGi5GUz2NjGHCxjO/e5nqAqY2YgopJZrgdnjKE0gtR9JZrZ
-         WAiuu7tq5uf61HAhklcRmfJq5ms3vsh06hL7Th47kiTsEtya1hOyn0Pfo67dIoaK39IL
-         GhE3oLJbGUB1Ufh5NapEG7F2MfK0Kh0DzKyb8/l+OGNb89YQFczHTzvt5mAPjZvsv5B9
-         aQ1A==
-X-Gm-Message-State: AOJu0Yy6yl9MECwm39n3fLRfYrEiM9akHxxRkkhIYmVNZT2xg9NQNM9T
-	0rW2VW5YHV/P3nBiTyQ4fGmLfPkqxL4sI+ArJCfWTBykuf85rodYUb//FtVl1/ol4UIU5yBwns1
-	3jvv2hAndcifNfqpy+Oiu4Ehoh9g=
-X-Google-Smtp-Source: AGHT+IF9myHOjHSTslwV9fgXhbqRAJXJKwyk+8mOot5o7L7h3n+3WZY6nrXr175Zc+08NFftlwK+2V17gENXZIaTNbk=
-X-Received: by 2002:a17:906:6606:b0:a35:d634:ed71 with SMTP id
- b6-20020a170906660600b00a35d634ed71mr3421555ejp.23.1707684695829; Sun, 11 Feb
- 2024 12:51:35 -0800 (PST)
+	s=arc-20240116; t=1707685087; c=relaxed/simple;
+	bh=RrzSXXk7UtVwrZ1/WZdD3UuUAO/VH8ivj2LiH6i78pI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GyFt3QTzrNOi94kJ4qApgXEMDwwgcormQX4qdwp5uJSDARNax1hs3YItdORIdI1K+c7gTvGlXn4pnK2j4fQ5m1h1kBRKmYaHb4jOYQXClgMmBFZrZeUbp2nFFxVgop6HDpZ1vjt61v1zHKPxfkZnXP27kEoO8uLtO3NMrcFz/7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uCreMs31; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22AC1C433C7;
+	Sun, 11 Feb 2024 20:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1707685086;
+	bh=RrzSXXk7UtVwrZ1/WZdD3UuUAO/VH8ivj2LiH6i78pI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uCreMs31bJp9DZQJdLJ6VTtdM57bYaq+dRdPIb4UXHb6g4uDbYcbmgQMm3vQU5rwY
+	 xuUBE9e+S7itmXZ8vgmoYzqA6B/T5QFPZVfnWQshuDdntOEhx+F1EWsih20D3updw/
+	 0SBkcvaWJsK+UbxedyXaq1qgeWRLvvFWJ/n//uWY=
+Date: Sun, 11 Feb 2024 20:57:54 +0000
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Shresth Prasad <shresthprasad7@gmail.com>
+Cc: corbet@lwn.net, linux-doc@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH] Fix malformed table error in gadget-testing.rst
+Message-ID: <2024021158-rewire-duplicity-c31c@gregkh>
+References: <2024021159-banner-dramatic-af88@gregkh>
+ <74d67b62-6fa4-4218-b51f-f0d33f19c422@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240211195307.158956-1-hdegoede@redhat.com>
-In-Reply-To: <20240211195307.158956-1-hdegoede@redhat.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sun, 11 Feb 2024 22:50:59 +0200
-Message-ID: <CAHp75VdSWwntsEh5xBz3jzXGi_QRuaRhcSs1-MwG3QYHW=wMtQ@mail.gmail.com>
-Subject: Re: [PATCH] platform/x86: Add new MeeGoPad ANX7428 Type-C Cross
- Switch driver
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Andy Shevchenko <andy@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <74d67b62-6fa4-4218-b51f-f0d33f19c422@gmail.com>
 
-On Sun, Feb 11, 2024 at 9:53=E2=80=AFPM Hans de Goede <hdegoede@redhat.com>=
- wrote:
->
-> Some MeeGoPad top-set boxes have an ANX7428 Type-C Switch for USB3.1 Gen =
-1
-> and DisplayPort over Type-C alternate mode support.
->
-> The ANX7428 has a microcontroller which takes care of the PD negotiation
-> and automatically sets the builtin Crosspoint Switch to send the right
-> signal to the 4 highspeed pairs of the Type-C connector. It also takes
-> care of HPD and AUX channel routing for DP alternate mode.
->
-> IOW the ANX7428 operates fully autonomous and to the x5-Z8350 SoC
-> things look like there simple is a USB-3 Type-A connector and a
-> separate DipslayPort connector. Except that the BIOS does not
+On Sun, Feb 11, 2024 at 06:24:24PM +0530, Shresth Prasad wrote:
+> I see, sorry about that. I will try some other way to fix the error.
 
-DisplayPort
+What error, sorry I see no context here (remember, some of us get 1000+
+emails a day to do something with, context is key...)
 
-> power on the ANX7428 at boot (meh).
->
-> Add a driver to power on the ANX7428. This driver is added under
-> drivers/platform/x86 rather then under drivers/usb/typec for 2 reasons:
+> Also, as mentioned in this thread: https://lore.kernel.org/all/877cjqa5le.fsf@meer.lwn.net/ has the patch already been applied, fixing the issue?
 
-than
+What issue?  Always look in linux-next to see what has been accepted by
+maintainers as that tree merges all of them together daily.
 
-> 1. This driver is specificly written to work with how the ANX7428 is
+thanks,
 
-specifically
-
-> described in the ACPI tables of the MeeGoPad x86 (Cherry Trail) devices.
->
-> 2. This driver only powers on the ANX7428 and does not do anything wrt
-> its Type-C functionality. It should be possible to tell the controller
-> which data- and/or power-role to negotiate and to swap the role(s) after
-> negotiation but the MeeGoPad top-set boxes always draw their power from
-> a separate power-connector and they only support USB host-mode. So this
-> functionality is unnecessary and due to lack of documenation this
-
-documentation
-
-> is tricky to support.
-
-...
-
-> +/*
-> + * meegopad_anx7428.c - Driver to power on the Analogix ANX7428
-
-Keeping a filename inside the file is a burden in case the file gets
-renamed in the future.
-
-> + * USB Type-C crosspoint switch on MeeGoPad top-set boxes.
-> + *
-> + * The MeeGoPad T8 and T9 are Cherry Trail top-set boxes which
-> + * use an ANX7428 to provide a Type-C port with USB3.1 Gen 1 and
-> + * DisplayPort over Type-C alternate mode support.
-> + *
-> + * The ANX7428 has a microcontroller which takes care of the PD
-> + * negotiation and automatically sets the builtin Crosspoint Switch
-> + * to send the right signal to the 4 highspeed pairs of the Type-C
-> + * connector. It also takes care of HPD and AUX channel routing for
-> + * DP alternate mode.
-> + *
-> + * IOW the ANX7428 operates fully autonomous and to the x5-Z8350 SoC
-> + * things look like there simple is a USB-3 Type-A connector and a
-> + * separate DipslayPort connector. Except that the BIOS does not
-
-DisplayPort
-
-> + * power on the ANX7428 at boot. This driver takes care of powering
-> + * on the ANX7428.
-> + *
-> + * It should be possible to tell the micro-controller which data- and/or
-> + * power-role to negotiate and to swap the role(s) after negotiation
-> + * but the MeeGoPad top-set boxes always draw their power from a separat=
-e
-> + * power-connector and they only support USB host-mode. So this function=
-ality
-> + * is unnecessary and due to lack of documenation this is tricky to supp=
-ort.
-
-documentation
-
-> + * For a more complete ANX7428 driver see drivers/usb/misc/anx7418/ of
-> + * the LineageOS kernel for the LG G5 (International) aka the LG H850:
-> + * https://github.com/LineageOS/android_kernel_lge_msm8996/
-> + *
-> + * (C) Copyright 2024 Hans de Goede <hansg@kernel.org>
-> + */
-> +
-> +#include <linux/acpi.h>
-
-+ bits.h
-
-> +#include <linux/delay.h>
-> +#include <linux/dmi.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-
-...
-
-> +#define VENDOR_ID_L                    0x00
-> +#define VENDOR_ID_H                    0x01
-> +#define DEVICE_ID_L                    0x02
-> +#define DEVICE_ID_H                    0x03
-
-You use word (16-bit) access, why do we need to know these?
-Just define them without suffixes (and if you want add a comment that
-they are 16-bit LE).
-
-...
-
-> +       usleep_range(10000, 15000);
-
-fsleep() ?
-
-...
-
-> +       /* Wait for the OCM (On Chip Microcontroller) to start */
-> +       for (i =3D 0; i < max_tries; i++) {
-> +               usleep_range(5000, 10000);
-> +
-> +               ret =3D i2c_smbus_read_byte_data(client, TX_STATUS);
-> +               if (ret < 0)
-> +                       dev_err_probe(dev, ret, "reading status register\=
-n");
-> +               else if (ret & OCM_STARTUP)
-> +                       break;
-> +       }
-> +       if (i =3D=3D max_tries)
-> +               return dev_err_probe(dev, -EIO,
-> +                                    "On Chip Microcontroller did not sta=
-rt, status: 0x%02x\n",
-> +                                    ret);
-
-Why not use read_poll_timeout() / readx_poll_timeout() (whichever suits bet=
-ter)?
-
-...
-
-> +static struct i2c_driver anx7428_driver =3D {
-> +       .driver =3D {
-> +               .name =3D KBUILD_MODNAME,
-
-Strictly speaking this is an ABI and we don't want it to be changed in
-case of filename change. Personally I _always_ prefer it be open
-coded.
-
-> +               .acpi_match_table =3D anx7428_acpi_match,
-> +       },
-> +       .probe =3D anx7428_probe,
-> +};
-
---=20
-With Best Regards,
-Andy Shevchenko
+greg k-h
 
