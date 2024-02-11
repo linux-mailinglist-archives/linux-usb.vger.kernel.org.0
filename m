@@ -1,242 +1,310 @@
-Return-Path: <linux-usb+bounces-6219-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6220-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84B52850B3A
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 20:29:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 903EA850B4A
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 20:53:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13E39281B39
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 19:29:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE02F1C218B9
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 19:53:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92A795DF0D;
-	Sun, 11 Feb 2024 19:29:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35ED75DF34;
+	Sun, 11 Feb 2024 19:53:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="a4BTclVL"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FyKCGUuj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A395D904
-	for <linux-usb@vger.kernel.org>; Sun, 11 Feb 2024 19:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739D4AD2D
+	for <linux-usb@vger.kernel.org>; Sun, 11 Feb 2024 19:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707679762; cv=none; b=JCz3M9LMDpTLzxxbiwyVt++cYmz2cZnr2VMW2Vp556mJMBnIKV3iLRiTMytyhCfeyoG3q8e/GAJEvbmk9cm0ng484RI9Yyxd6X/e7oCXtyEvISxmZvwQYeu1NtXUgEygDhg/ZH2GhGLw3fBJE6OOWXnvejIPySZO7uLfHedbPFo=
+	t=1707681195; cv=none; b=XcrmfzKs8ckOtO4eBv++SinW/NkenXzgGju2MfEn3CR5DckKDWVeI4NEnVPZJ/Mj9aKbdyJKjDj0HU5rWHwngTS9yemoO6graskXMEOB3WDAck9Dm+ar2L24X6TPLPBvWdpXLdrcoEclPsrzAwga7QW6Vuh5n3/Hb4xR2PDEiSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707679762; c=relaxed/simple;
-	bh=+Zb8bamCtLicaeu4poS1aXR+HhWfYaoB0OpmtlP2pxY=;
-	h=MIME-Version:Content-Type:Date:From:To:Cc:Subject:Message-ID; b=hihsVzYGbFVQ+p9oRHHD8sKIqeBNZuqqPmcFmXH/mHAcpoTJcbp2/wKLMX9Vxtn58cmXZNzg3/KYvi207zbNNx88sJRhc9KoIKLBcz7YF2q9bHShcNg5GVAj/BVxocU1MpbZyMm2FrVe10KLhVGG7H5TY3Qm+pVIvldAnnj//nY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=a4BTclVL; arc=none smtp.client-ip=185.67.36.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.de
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id B261F240028
-	for <linux-usb@vger.kernel.org>; Sun, 11 Feb 2024 20:29:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-	t=1707679751; bh=+Zb8bamCtLicaeu4poS1aXR+HhWfYaoB0OpmtlP2pxY=;
-	h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:
-	 Cc:Subject:Message-ID:From;
-	b=a4BTclVL+Sn5JeYD/YjU2QJ5NCE/maqV4zLERUuBNF78rYcUv0cj8nJ3LGEk9NATz
-	 0qB5AUt4niwA/r+0hD8fs4+wfbaKCMQ6TGH6r6+dERYNJZ3YFnjc1a++KpGIv2n6C1
-	 oNx2SwDphxMtAPMLNWBNagYXgbpmxef1/4ZNFi1uRf9WS62AG6pHasAnwEDk5AsQNa
-	 QgwYNfGLRaVkUd54OqsI6c3MwogjT/dM4DhrAqmhbafWDv+iNCl/C5RCOivXt8LYld
-	 YaP89Pf2SueoqeWa9lDv7OQpXqm0hPmM4NeY9X1uWNANcuAydIyaYU7k0FKwBBUi0K
-	 6S+Dhuzc9mU1A==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4TXyMB4rGWz6tm8;
-	Sun, 11 Feb 2024 20:29:10 +0100 (CET)
+	s=arc-20240116; t=1707681195; c=relaxed/simple;
+	bh=PgtDglXaC4B+gRsFxrg9/dbd4fKpBISkYAZ0jRUv4Rs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ml4PiRNIji04Ol/1fKjJbJoLWyKfh7V6o0JJTtAScoOTb2hFkL9OtSMzUX204SwYiFxdwBKiu1OmPIw7SduET/4iz6/Orct8OTOoz23MVLMwIqe+kYj3W+rzYAB3EmMrjxoduWDhn1nhqGUw/dKHTGbvBwZObrBmSR+2vOI21TA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FyKCGUuj; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707681192;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iIW0cH/D35yhx2e3x4nWUadPl2x2tmsi83yh7eQYdaI=;
+	b=FyKCGUuj7T18yhwHgcToNrn2bhUhcorZyqZx7nrlQyDX0B23tlPedZq7ie8e4+R6UL03uP
+	Ys2pTzxNtg5IigYmLjrUleI9qCO2q8CCEMcqIdJ3CX5kdrzV/N5DX1bQi9Arci9HWckqCu
+	+FUhhhcu4YXXUVaO4xMKqN3WI41Y6kk=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-510-B4yFQTPXPS2s_kUMxTz_4Q-1; Sun,
+ 11 Feb 2024 14:53:09 -0500
+X-MC-Unique: B4yFQTPXPS2s_kUMxTz_4Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2496538143AE;
+	Sun, 11 Feb 2024 19:53:09 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.75])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3C9AEC185C0;
+	Sun, 11 Feb 2024 19:53:08 +0000 (UTC)
+From: Hans de Goede <hdegoede@redhat.com>
+To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	platform-driver-x86@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] platform/x86: Add new MeeGoPad ANX7428 Type-C Cross Switch driver
+Date: Sun, 11 Feb 2024 20:53:07 +0100
+Message-ID: <20240211195307.158956-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date: Sun, 11 Feb 2024 19:29:10 +0000
-From: ffp@posteo.de
-To: lduncan@suse.com, cleech@redhat.com, michael.christie@oracle.com,
- phil@philpotter.co.uk, oneukum@suse.com
-Cc: open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
- linux-usb@vger.kernel.org
-Subject: Optical drive (CD/DVD/Blu-ray), connected via USB, passed-through
- SCSI, distributed via iSCSI, error messages in dmesg every second, slower
- average read speed at 2 MB/s, normal behavior with Microsoft Initiator
-Message-ID: <1e0495285aa5a8041da884c2f1621cbd@posteo.de>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
-[1.] One line summary of the problem:
+Some MeeGoPad top-set boxes have an ANX7428 Type-C Switch for USB3.1 Gen 1
+and DisplayPort over Type-C alternate mode support.
 
-Optical drive (CD/DVD/Blu-ray), connected via USB, passed-through SCSI, 
-distributed via iSCSI, error messages in dmesg every second, slower 
-average read speed at 2 MB/s, normal behavior with Microsoft Initiator
+The ANX7428 has a microcontroller which takes care of the PD negotiation
+and automatically sets the builtin Crosspoint Switch to send the right
+signal to the 4 highspeed pairs of the Type-C connector. It also takes
+care of HPD and AUX channel routing for DP alternate mode.
 
-[2.] Full description of the problem/report:
+IOW the ANX7428 operates fully autonomous and to the x5-Z8350 SoC
+things look like there simple is a USB-3 Type-A connector and a
+separate DipslayPort connector. Except that the BIOS does not
+power on the ANX7428 at boot (meh).
 
-Hello everyone,
+Add a driver to power on the ANX7428. This driver is added under
+drivers/platform/x86 rather then under drivers/usb/typec for 2 reasons:
 
-I hope I am writing to the right people and describing the problem 
-reasonably well, this is my first bug report. I have been trying to find 
-a solution at program level for two months now, which is unfortunately 
-proving difficult. I think that the error can be narrowed down to the 
-kernel, there are indications of this, but I can't prove it with 100% 
-certainty as I don't understand the C language myself.
+1. This driver is specificly written to work with how the ANX7428 is
+described in the ACPI tables of the MeeGoPad x86 (Cherry Trail) devices.
 
-Let me break down the current structure:
-optical drive---> via USB3---> ESXi8 host---> pass-through to VM---> 
-Debian 12 with kernel 6.1.0 and self-compiled kernel 6.7.4--->tgt iSCSI 
-target---> SCSI pass-through---> Ethernet/ WiFi with TCP---> Debian 12 
-Stable or Testing with open-iscsi Initiator---> Programs
+2. This driver only powers on the ANX7428 and does not do anything wrt
+its Type-C functionality. It should be possible to tell the controller
+which data- and/or power-role to negotiate and to swap the role(s) after
+negotiation but the MeeGoPad top-set boxes always draw their power from
+a separate power-connector and they only support USB host-mode. So this
+functionality is unnecessary and due to lack of documenation this
+is tricky to support.
 
-(drive already removed from enclosure and connected to physical PC with 
-mini-SATA, tgt set up, same error pattern)
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/platform/x86/Kconfig            |  11 ++
+ drivers/platform/x86/Makefile           |   3 +
+ drivers/platform/x86/meegopad_anx7428.c | 155 ++++++++++++++++++++++++
+ 3 files changed, 169 insertions(+)
+ create mode 100644 drivers/platform/x86/meegopad_anx7428.c
 
-Problem description:
-
-I search for the target via iscsiadm and log in. The optical drive is 
-recognized and initialized, see dmesg:
-
-[ 6204.436754] scsi host0: iSCSI Initiator over TCP/IP
-[ 6204.452976] scsi 0:0:0:0: RAID              IET      Controller       
-0001 PQ: 0 ANSI: 5
-[ 6204.483159] scsi 0:0:0:0: Attached scsi generic sg0 type 12
-[ 6204.486988] scsi 0:0:0:1: CD-ROM            NECVMWar VMware SATA CD00 
-1.00 PQ: 0 ANSI: 5
-[ 6204.534459] sr 0:0:0:1: [sr0] scsi-1 drive
-[ 6204.598759] sr 0:0:0:1: Attached scsi CD-ROM sr0
-[ 6204.598905] sr 0:0:0:1: Attached scsi generic sg1 type 5
-[ 6208.550055] sr 0:0:0:1: [sr0] tag#96 FAILED Result: hostbyte=DID_OK 
-driverbyte=DRIVER_OK cmd_age=0s
-[ 6208.550064] sr 0:0:0:1: [sr0] tag#96 Sense Key : Hardware Error 
-[current]
-[ 6208.550067] sr 0:0:0:1: [sr0] tag#96 Add. Sense: Internal target 
-failure
-[ 6208.550071] sr 0:0:0:1: [sr0] tag#96 CDB: Read(10) 28 00 00 00 00 82 
-00 00 7e 00
-[ 6208.550073] critical target error, dev sr0, sector 520 op 0x0:(READ) 
-flags 0x80700 phys_seg 63 prio class 2
-[ 6208.763308] sr 0:0:0:1: [sr0] tag#96 FAILED Result: hostbyte=DID_OK 
-driverbyte=DRIVER_OK cmd_age=0s
-[ 6208.763316] sr 0:0:0:1: [sr0] tag#96 Sense Key : Hardware Error 
-[current]
-[ 6208.763319] sr 0:0:0:1: [sr0] tag#96 Add. Sense: Internal target 
-failure
-[ 6208.763322] sr 0:0:0:1: [sr0] tag#96 CDB: Read(10) 28 00 01 65 d3 00 
-00 00 80 00
-[ 6208.763324] critical target error, dev sr0, sector 93801472 op 
-0x0:(READ) flags 0x80700 phys_seg 64 prio class 2
-[ 6212.108642] sr 0:0:0:1: [sr0] tag#98 FAILED Result: hostbyte=DID_OK 
-driverbyte=DRIVER_OK cmd_age=0s
-[ 6212.108650] sr 0:0:0:1: [sr0] tag#98 Sense Key : Hardware Error 
-[current]
-[ 6212.108653] sr 0:0:0:1: [sr0] tag#98 Add. Sense: Internal target 
-failure
-[ 6212.108656] sr 0:0:0:1: [sr0] tag#98 CDB: Read(10) 28 00 01 65 d3 80 
-00 00 80 00
-[ 6212.108658] critical target error, dev sr0, sector 93801984 op 
-0x0:(READ) flags 0x80700 phys_seg 64 prio class 2
-
-At first it seems as if it is recognized and initialized without any 
-problems, about 3-5 seconds after connection the first error messages 
-are thrown.
-For example, when I run rsync -av -P on the mounted drive, dmesg is 
-flooded with this kind of error message and the transfer rate is 2.0 - 
-2.5 MB/s. This behavior does NOT continue to occur when I use dd 
-if=/dev/sr0 of=/test.img to read the disc bit by bit. To my surprise, 
-the disc is then read at the full speed of the drive (between 20.0 and 
-24.0 MB/s).
-
-In principle, this is also the complete error pattern, with open-iscsi 
-as the initiator.
-
-I have now run some tests to find a solution at program level, which has 
-not been found.
-Among other things, I have counter-tested with Windows (10/11/Server 
-2022) and the initiator used there can establish a connection with 
-default settings and mount the drive into the system. Completely 
-error-free. The programs there can read it at full speed.
-
-I have also tested another Debian-based distribution (virtualized), 
-Ubuntu 22.04, which also has this error.I have also tested various 
-kernel versions, namely kernel 6.7.4 (self-compiled), 6.6.13, 6.5.0, 
-4.19.306 and 4.0.0 (Debian Stretch Alpha).
-This error occurs in all kernel versions mentioned. In the first four, 
-exactly the same. With kernel 4.0.0 the drive is initialized in dmesg 
-apparently without errors, only when I start a read operation (e.g. with 
-rsync) is dmesg flooded.
-I also read the disc on the VM on which tgt is running with dd 1:1 and 
-wrote it to a hard disk. I then entered the hard disk in targets.conf 
-using SCSI passthrough and mounted it on the client with 
-open-iscsi-initiator.
-Now I have used various programs to read out this created image on the 
-client and copied it to file level. This worked without any problems, 
-neither in dmesg nor with the speed, which means for me that the error 
-is not generally due to open-iscsi.
-On Friday I bought a brand new optical drive which also works fine on 
-Windows to rule out the error of an unlikely hardware defect.
-
-IMPORTANT NOTE: Both drives work flawlessly when I connect them to my 
-Linux clients via USB(2/3) OR pass them through to a guest VM via ESXi8.
-
-How can the error be reproduced?
-
-Set up tgt, connect a DVD/Blu-ray-capable drive via USB/SATA.
-Enter it in /etc/tgt/conf.d/targets.conf:
-
-default-driver iscsi
-
-<target iqn.1993-08.org.brd-srv:vbrd.target1>
-   <backing-store "/dev/sg1">
-       device-type pt
-       bs-type sg
-   </backing-store>
-</target>
-
-Restart tgt: systemctl restart tgt
-
-On the client:
-
-iscsiadm --mode discovery --portal target_ip --type sendtargets
-iscsiadm -m node --targetname=targetname --login
-
-The configuration file: /etc/iscsi/node/target-iqn/ip-address/default
-can be left unchanged, the change of various parameters did not affect 
-the error.
-
-Mount the drive and the disk:
-mount /dev/sr0 /cdrom/
-
-Start a copy process such as rsync -av -P /cdrom /home/user/disc/
-and run dmesg -w at the same time.
-
-I hope this report is enough to get you started, please contact me if 
-you need more information.
-
-Best regards
-
-[3.] Keywords (i.e., modules, networking, kernel):
-
-Networking, SCSI, iSCSI, Kernel, cdrom, sr, tgt
-
-[4.] Kernel information
-[4.1.] Kernel version (from /proc/version):
-[4.2.] Kernel .config file:
-[5.] Most recent kernel version which did not have the bug:
-[6.] Output of Oops.. message (if applicable) with symbolic information
-      resolved (see Documentation/admin-guide/oops-tracing.rst)
-[7.] A small shell script or example program which triggers the
-      problem (if possible)
-[8.] Environment
-[8.1.] Software (add the output of the ver_linux script here)
-[8.2.] Processor information (from /proc/cpuinfo):
-[8.3.] Module information (from /proc/modules):
-[8.4.] Loaded driver and hardware information (/proc/ioports, 
-/proc/iomem)
-[8.5.] PCI information ('lspci -vvv' as root)
-[8.6.] SCSI information (from /proc/scsi/scsi)
-[8.7.] Other information that might be relevant to the problem
-        (please look in /proc and include all information that you
-        think to be relevant):
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index 6dbd40e2aeda..87946a7a51fe 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -641,6 +641,17 @@ config THINKPAD_LMI
+ 
+ source "drivers/platform/x86/intel/Kconfig"
+ 
++config MEEGOPAD_ANX7428
++	tristate "MeeGoPad ANX7428 Type-C Switch"
++	depends on ACPI && GPIOLIB && I2C
++	help
++	  Some MeeGoPad top-set boxes have an ANX7428 Type-C Switch for
++	  USB3.1 Gen 1 and DisplayPort over Type-C alternate mode support.
++
++	  This driver takes care of powering on the ANX7428 on supported
++	  MeeGoPad top-set boxes. After this the ANX7428 takes care of Type-C
++	  connector orientation and PD alternate mode switching autonomously.
++
+ config MSI_EC
+ 	tristate "MSI EC Extras"
+ 	depends on ACPI
+diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+index 1de432e8861e..e05b9eb280b1 100644
+--- a/drivers/platform/x86/Makefile
++++ b/drivers/platform/x86/Makefile
+@@ -70,6 +70,9 @@ obj-$(CONFIG_YOGABOOK)		+= lenovo-yogabook.o
+ # Intel
+ obj-y				+= intel/
+ 
++# MeeGoPad
++obj-$(CONFIG_MEEGOPAD_ANX7428)	+= meegopad_anx7428.o
++
+ # MSI
+ obj-$(CONFIG_MSI_EC)		+= msi-ec.o
+ obj-$(CONFIG_MSI_LAPTOP)	+= msi-laptop.o
+diff --git a/drivers/platform/x86/meegopad_anx7428.c b/drivers/platform/x86/meegopad_anx7428.c
+new file mode 100644
+index 000000000000..b4cd5f8317fa
+--- /dev/null
++++ b/drivers/platform/x86/meegopad_anx7428.c
+@@ -0,0 +1,155 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * meegopad_anx7428.c - Driver to power on the Analogix ANX7428
++ * USB Type-C crosspoint switch on MeeGoPad top-set boxes.
++ *
++ * The MeeGoPad T8 and T9 are Cherry Trail top-set boxes which
++ * use an ANX7428 to provide a Type-C port with USB3.1 Gen 1 and
++ * DisplayPort over Type-C alternate mode support.
++ *
++ * The ANX7428 has a microcontroller which takes care of the PD
++ * negotiation and automatically sets the builtin Crosspoint Switch
++ * to send the right signal to the 4 highspeed pairs of the Type-C
++ * connector. It also takes care of HPD and AUX channel routing for
++ * DP alternate mode.
++ *
++ * IOW the ANX7428 operates fully autonomous and to the x5-Z8350 SoC
++ * things look like there simple is a USB-3 Type-A connector and a
++ * separate DipslayPort connector. Except that the BIOS does not
++ * power on the ANX7428 at boot. This driver takes care of powering
++ * on the ANX7428.
++ *
++ * It should be possible to tell the micro-controller which data- and/or
++ * power-role to negotiate and to swap the role(s) after negotiation
++ * but the MeeGoPad top-set boxes always draw their power from a separate
++ * power-connector and they only support USB host-mode. So this functionality
++ * is unnecessary and due to lack of documenation this is tricky to support.
++ *
++ * For a more complete ANX7428 driver see drivers/usb/misc/anx7418/ of
++ * the LineageOS kernel for the LG G5 (International) aka the LG H850:
++ * https://github.com/LineageOS/android_kernel_lge_msm8996/
++ *
++ * (C) Copyright 2024 Hans de Goede <hansg@kernel.org>
++ */
++
++#include <linux/acpi.h>
++#include <linux/delay.h>
++#include <linux/dmi.h>
++#include <linux/gpio/consumer.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++
++/* Register addresses and fields */
++#define VENDOR_ID_L			0x00
++#define VENDOR_ID_H			0x01
++#define DEVICE_ID_L			0x02
++#define DEVICE_ID_H			0x03
++
++#define TX_STATUS			0x16
++#define STATUS_SUCCESS			BIT(0)
++#define STATUS_ERROR			BIT(1)
++#define OCM_STARTUP			BIT(7)
++
++static bool force;
++module_param(force, bool, 0444);
++MODULE_PARM_DESC(force, "Force the driver to probe on unknown boards");
++
++static const struct acpi_gpio_params enable_gpio = { 0, 0, false };
++static const struct acpi_gpio_params reset_gpio = { 1, 0, true };
++
++static const struct acpi_gpio_mapping meegopad_anx7428_gpios[] = {
++	{ "enable-gpios", &enable_gpio, 1 },
++	{ "reset-gpios", &reset_gpio, 1 },
++	{ }
++};
++
++static const struct dmi_system_id meegopad_anx7428_ids[] = {
++	{
++		/* Meegopad T08 */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Default string"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Default string"),
++			DMI_MATCH(DMI_BOARD_NAME, "T3 MRD"),
++			DMI_MATCH(DMI_BOARD_VERSION, "V1.1"),
++		},
++	},
++	{ }
++};
++
++static int anx7428_probe(struct i2c_client *client)
++{
++	struct device *dev = &client->dev;
++	const int max_tries = 10;
++	struct gpio_desc *gpio;
++	int i, ret, vendor;
++
++	if (!dmi_check_system(meegopad_anx7428_ids) && !force) {
++		dev_warn(dev, "Not probing unknown board, pass meegopad_anx7428.force=1 to probe");
++		return -ENODEV;
++	}
++
++	ret = devm_acpi_dev_add_driver_gpios(dev, meegopad_anx7428_gpios);
++	if (ret)
++		return ret;
++
++	/*
++	 * Set GPIOs to desired values while getting them, they are not needed
++	 * afterwards. Ordering and delays come from android_kernel_lge_msm8996.
++	 */
++	gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_HIGH);
++	if (IS_ERR(gpio))
++		return dev_err_probe(dev, PTR_ERR(gpio), "getting enable GPIO\n");
++
++	usleep_range(10000, 15000);
++
++	gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
++	if (IS_ERR(gpio))
++		return dev_err_probe(dev, PTR_ERR(gpio), "getting reset GPIO\n");
++
++	/* Wait for the OCM (On Chip Microcontroller) to start */
++	for (i = 0; i < max_tries; i++) {
++		usleep_range(5000, 10000);
++
++		ret = i2c_smbus_read_byte_data(client, TX_STATUS);
++		if (ret < 0)
++			dev_err_probe(dev, ret, "reading status register\n");
++		else if (ret & OCM_STARTUP)
++			break;
++	}
++	if (i == max_tries)
++		return dev_err_probe(dev, -EIO,
++				     "On Chip Microcontroller did not start, status: 0x%02x\n",
++				     ret);
++
++	ret = i2c_smbus_read_word_data(client, VENDOR_ID_L);
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "reading vendor-id register\n");
++	vendor = ret;
++
++	ret = i2c_smbus_read_word_data(client, DEVICE_ID_L);
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "reading device-id register\n");
++
++	dev_info(dev, "Powered on ANX7428 id %04x:%04x\n", vendor, ret);
++	return 0;
++}
++
++static const struct acpi_device_id anx7428_acpi_match[] = {
++	{ "ANXO7418" }, /* ACPI says 7418 (max 2 DP lanes version) but HW is 7428 */
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, anx7428_acpi_match);
++
++static struct i2c_driver anx7428_driver = {
++	.driver = {
++		.name = KBUILD_MODNAME,
++		.acpi_match_table = anx7428_acpi_match,
++	},
++	.probe = anx7428_probe,
++};
++
++module_i2c_driver(anx7428_driver);
++
++MODULE_AUTHOR("Hans de Goede <hansg@kernel.org>");
++MODULE_DESCRIPTION("MeeGoPad ANX7428 driver");
++MODULE_LICENSE("GPL");
+-- 
+2.43.0
 
 
