@@ -1,103 +1,266 @@
-Return-Path: <linux-usb+bounces-6210-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6211-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39A6C8509AA
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 15:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5490B850A14
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 16:42:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 639951C20BBA
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 14:50:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 783FD1C20D8D
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 15:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38F5F5A11C;
-	Sun, 11 Feb 2024 14:50:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=chaospixel.com header.i=@chaospixel.com header.b="EVilCSBD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F4875B668;
+	Sun, 11 Feb 2024 15:42:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.chaospixel.com (mail.chaospixel.com [78.46.244.255])
+Received: from mail.lichtvoll.de (luna.lichtvoll.de [194.150.191.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF501DFD8
-	for <linux-usb@vger.kernel.org>; Sun, 11 Feb 2024 14:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.46.244.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF9D5B673;
+	Sun, 11 Feb 2024 15:42:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.150.191.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707663053; cv=none; b=jFl2aCEe/gw5NSvmIeuMhEWRI2hXR1nnE9fcPhIlBFQXNtDNt1PGiPrSOJ4t0mefw4s5qpDQOIWyWDWVqN39kZDunsnYUfPX3c+W0pY+kwU1UbGw4RvS7OjIbgGb4yFnJHcocTOD6Uzu5gwu2ajA3RhvnmUJ4a0st2WesrTRteY=
+	t=1707666139; cv=none; b=j4N0H4NxENXGPDHuPBLtVF9LWtw1efmn7CjR26ilauuJ+kX11OXV0v8I8WtOm2Q5x3Ha+A688B9sCaU4oxZTQFMynCxHSBWgrPW/qK6xft324kfJJdW7Dege2t3k4vpYh2byWl7Ub0mh7BCfKgTagYIaTPphrvcApIQ6QKQ28R4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707663053; c=relaxed/simple;
-	bh=4/Z9Tj/do4wTaQtICFjnYk6QCQXfe/t2K42/lPtCVtU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Yp3YLeSfGZtoBN+JhuIbtd+2I3xw3jwRXV67+uHtojTJqfGoPQRWUQsqdRCmmYRbF60z2GsmwZpxGN1/ydjyUaf7RWkcZT6toNK7XhchlLIQLgB5fRcPdYlv//bt60dLnsWHyAc+BS2IE6fE1EWOALFCUoNKd0p8d6zBxq/wt1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chaospixel.com; spf=pass smtp.mailfrom=chaospixel.com; dkim=pass (2048-bit key) header.d=chaospixel.com header.i=@chaospixel.com header.b=EVilCSBD; arc=none smtp.client-ip=78.46.244.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chaospixel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chaospixel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=chaospixel.com;
-	s=201811; t=1707662684;
-	bh=4/Z9Tj/do4wTaQtICFjnYk6QCQXfe/t2K42/lPtCVtU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=EVilCSBDq14AUeE1s6sTbItRZk2wuYJiEVt3xdnDEdejBJ6K4Mkut00pSk2YvDB7f
-	 J2g/UcuAQG4nMwCC6rDNoc/gyI1vVxT1rMIUBy4dTF6TLHmpssPEv2InxdACBj45F2
-	 cz8BaskQ1XS//Sv+wtF+6ukyf1a11Wtz7GwwprlViVQnfbFplq5PM97DgTpKx1pFWK
-	 Re6lG5G3r/UAXbQuIECLesJzWAGCmuzBliQ/dwkPrCRpSKnWYh0FTRPWv/eGgaZ2+c
-	 gzSs/zb85gk0U81RZd0ahEb3I5G1RaHpNXbAzM8TZgwoQ4COmnLY5Ea2acYEul/fFR
-	 +DS8hZEVleEEA==
-Received: from pollux.home.lan (unknown [IPv6:2a02:8071:b87:ca21:1d0:1416:ba0d:8e8c])
-	by mail.chaospixel.com (Postfix) with ESMTPSA id BAFCA49EF97D;
-	Sun, 11 Feb 2024 15:44:44 +0100 (CET)
-From: Daniel Vogelbacher <daniel@chaospixel.com>
-To: johan@kernel.org
-Cc: linux-usb@vger.kernel.org,
-	Daniel Vogelbacher <daniel@chaospixel.com>
-Subject: [PATCH] ftdi_sio: Support for GMC Z216C Adapter IR-USB
-Date: Sun, 11 Feb 2024 15:42:46 +0100
-Message-Id: <20240211144245.2469439-1-daniel@chaospixel.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1707666139; c=relaxed/simple;
+	bh=rgaMA3FkZSxtEScGCwmEjxUH8bFBiNFv/875fNpb65E=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P0VdKpR5ptFvmBw/UDuchKFAUmNx2we50zhiSycFspYKsnAaYhyeTGCCMLIr/kEbHu/2EU8tQWFrOD2HobOId2XTd00le15VuM2wkrmsJLY43PGtPDVGE4bRv0vLYBpUE34yRmb2FIEhlms64ezLVILAuUFAh6LBgvqTfZ8mlkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de; spf=pass smtp.mailfrom=lichtvoll.de; arc=none smtp.client-ip=194.150.191.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lichtvoll.de
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
+	(No client certificate requested)
+	by mail.lichtvoll.de (Postfix) with ESMTPSA id 7C51E8963D6;
+	Sun, 11 Feb 2024 16:42:14 +0100 (CET)
+Authentication-Results: mail.lichtvoll.de;
+	auth=pass smtp.auth=martin smtp.mailfrom=martin@lichtvoll.de
+From: Martin Steigerwald <martin@lichtvoll.de>
+To: stable@vger.kernel.org, regressions@lists.linux.dev,
+ linux-usb@vger.kernel.org
+Subject: I/O errors while writing to external Transcend XS-2000 4TB SSD
+Date: Sun, 11 Feb 2024 16:42:14 +0100
+Message-ID: <1854085.atdPhlSkOF@lichtvoll.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 
-GMC IR-USB adapter cable utilizes FTDI FT232R chip.
+Hi!
 
-This patch adds VID/PID for this adapter so it can be used
-as serial device via ftdi_sio.
+This is not exactly a regression, as I am not aware of a prior working
+state, but kernel documentation advises me to CC regressions list anyway=C2=
+=B9.
 
-Signed-off-by: Daniel Vogelbacher <daniel@chaospixel.com>
----
- drivers/usb/serial/ftdi_sio.c     | 2 ++
- drivers/usb/serial/ftdi_sio_ids.h | 6 ++++++
- 2 files changed, 8 insertions(+)
+I am trying to put data on an external Kingston XS-2000 4 TB SSD using
+self-compiled Linux 6.7.4 kernel and encrypted BCacheFS. I do not think
+BCacheFS has any part in the errors I see, but if you disagree feel free
+to CC the BCacheFS mailing list as you reply.
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 13a56783830d..22d01a0f10fb 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1077,6 +1077,8 @@ static const struct usb_device_id id_table_combined[] = {
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
- 	{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_JTAG_UNBUF_PID),
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-+	/* GMC devices */
-+	{ USB_DEVICE(GMC_VID, GMC_Z216C_PID) },
- 	{ }					/* Terminating entry */
- };
- 
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index 21a2b5a25fc0..5ee60ba2a73c 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -1606,3 +1606,9 @@
- #define UBLOX_VID			0x1546
- #define UBLOX_C099F9P_ZED_PID		0x0502
- #define UBLOX_C099F9P_ODIN_PID		0x0503
-+
-+/*
-+ * GMC devices
-+ */
-+#define GMC_VID				0x1cd7
-+#define GMC_Z216C_PID			0x0217 /* GMC Z216C Adapter IR-USB */
--- 
-2.39.2
+I am using a ThinkPad T14 AMD Gen 1 with AMD Ryzen 7 PRO 4750U and 32
+GiB of RAM.
+
+I connected the SSD onto USB-C port directly with the ThinkPad. lsusb
+lists it as:
+
+Bus 007 Device 004: ID 0951:176b Kingston Technology XS2000
+
+The SSD is detected as follows:
+
+[20303.913644] usb 7-1: new SuperSpeed Plus Gen 2x1 USB device number 9 usi=
+ng xhci_hcd
+[20303.926616] usb 7-1: New USB device found, idVendor=3D0951, idProduct=3D=
+176b, bcdDevice=3D 1.00
+[20303.926633] usb 7-1: New USB device strings: Mfr=3D1, Product=3D2, Seria=
+lNumber=3D3
+[20303.926641] usb 7-1: Product: XS2000
+[20303.926647] usb 7-1: Manufacturer: Kingston
+[20303.926652] usb 7-1: SerialNumber: [=E2=80=A6]
+[20303.929078] scsi host0: uas
+[20303.983859] scsi 0:0:0:0: Direct-Access     Kingston XS2000           10=
+00 PQ: 0 ANSI: 6
+[20303.984426] sd 0:0:0:0: Attached scsi generic sg0 type 0
+[20303.985197] sd 0:0:0:0: [sda] 8001573552 512-byte logical blocks: (4.10 =
+TB/3.73 TiB)
+[20303.985331] sd 0:0:0:0: [sda] Write Protect is off
+[20303.985341] sd 0:0:0:0: [sda] Mode Sense: 43 00 00 00
+[20303.985579] sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled=
+, doesn't support DPO or FUA
+[20303.989516]  sda: sda1
+[20303.989611] sd 0:0:0:0: [sda] Attached SCSI disk
+
+BCacheFS is mounted as follows =E2=80=93 but I suspect BCacheFS is not invo=
+lved in
+those errors anyway:
+
+[20310.437864] bcachefs (sda1): mounting version 1.3: rebalance_work opts=
+=3Dmetadata_checksum=3Dxxhash,data_checksum=3Dxxhash,compression=3Dlz4
+[20310.437895] bcachefs (sda1): recovering from clean shutdown, journal seq=
+ 5094
+[20310.450813] bcachefs (sda1): alloc_read... done
+[20310.450851] bcachefs (sda1): stripes_read... done
+[20310.450855] bcachefs (sda1): snapshots_read... done
+[20310.470815] bcachefs (sda1): journal_replay... done
+[20310.470824] bcachefs (sda1): resume_logged_ops... done
+[20310.470835] bcachefs (sda1): going read-write
+
+
+During rsync'ing about 1,4 TB of data after eventually a hour I got
+things like this:
+
+[33963.462694] sd 0:0:0:0: [sda] tag#10 uas_zap_pending 0 uas-tag 1 infligh=
+t: CMD=20
+[33963.462708] sd 0:0:0:0: [sda] tag#10 CDB: Write(16) 8a 00 00 00 00 00 82=
+ c1 bc 00 00 00 04 00 00 00
+[33963.462718] sd 0:0:0:0: [sda] tag#11 uas_zap_pending 0 uas-tag 2 infligh=
+t: CMD=20
+[33963.462725] sd 0:0:0:0: [sda] tag#11 CDB: Write(16) 8a 00 00 00 00 00 82=
+ c1 c8 00 00 00 04 00 00 00
+[33963.462733] sd 0:0:0:0: [sda] tag#15 uas_zap_pending 0 uas-tag 3 infligh=
+t: CMD=20
+[33963.462740] sd 0:0:0:0: [sda] tag#15 CDB: Write(16) 8a 00 00 00 00 00 82=
+ c1 d2 4c 00 00 01 2f 00 00
+[33963.462748] sd 0:0:0:0: [sda] tag#12 uas_zap_pending 0 uas-tag 4 infligh=
+t: CMD=20
+[33963.462754] sd 0:0:0:0: [sda] tag#12 CDB: Write(16) 8a 00 00 00 00 00 82=
+ c1 d0 00 00 00 02 4c 00 00
+[33963.462762] sd 0:0:0:0: [sda] tag#13 uas_zap_pending 0 uas-tag 5 infligh=
+t: CMD=20
+[33963.462769] sd 0:0:0:0: [sda] tag#13 CDB: Write(16) 8a 00 00 00 00 00 82=
+ c1 d4 00 00 00 00 ff 00 00
+[33963.462777] sd 0:0:0:0: [sda] tag#14 uas_zap_pending 0 uas-tag 6 infligh=
+t: CMD=20
+[33963.462783] sd 0:0:0:0: [sda] tag#14 CDB: Write(16) 8a 00 00 00 00 00 82=
+ c1 ce 00 00 00 00 cc 00 00
+[33963.576991] usb 7-1: reset SuperSpeed Plus Gen 2x1 USB device number 9 u=
+sing xhci_hcd
+[33963.590793] scsi host0: uas_eh_device_reset_handler success
+[33963.592857] sd 0:0:0:0: [sda] tag#10 timing out command, waited 180s
+[33963.592872] sd 0:0:0:0: [sda] tag#10 FAILED Result: hostbyte=3DDID_RESET=
+ driverbyte=3DDRIVER_OK cmd_age=3D182s
+[33963.592881] sd 0:0:0:0: [sda] tag#10 CDB: Write(16) 8a 00 00 00 00 00 82=
+ c1 bc 00 00 00 04 00 00 00
+[33963.592886] I/O error, dev sda, sector 2193734656 op 0x1:(WRITE) flags 0=
+x104000 phys_seg 773 prio class 2
+[33963.592898] bcachefs (sda1 inum 1073761281 offset 265216): data write er=
+ror: I/O
+[33963.592925] bcachefs (sda1 inum 1073761281 offset 467456): data write er=
+ror: I/O
+[33963.592933] bcachefs (sda1 inum 1073761281 offset 470016): data write er=
+ror: I/O
+[33963.592939] bcachefs (sda1 inum 1073761281 offset 471552): data write er=
+ror: I/O
+[33963.592949] bcachefs (sda1 inum 1073761281 offset 514560): data write er=
+ror: I/O
+[33963.592956] bcachefs (sda1 inum 1073761281 offset 517120): data write er=
+ror: I/O
+[33963.592963] bcachefs (sda1 inum 1073761281 offset 519168): data write er=
+ror: I/O
+[33963.592969] bcachefs (sda1 inum 1073761281 offset 521728): data write er=
+ror: I/O
+[33963.592976] bcachefs (sda1 inum 1073761281 offset 523776): data write er=
+ror: I/O
+[33963.592983] bcachefs (sda1 inum 1073761281 offset 526336): data write er=
+ror: I/O
+
+The rsync completed but I did not trust the result, even tough
+"bcachefs fsck" told me the filesystem structure is okay.
+
+Thus I reran rsync with option "-c" for checksumming. After a long time
+with data that did match, it started to transfer a file again which should
+not happen if data would have been identical. As it ran into I/O errors
+again, I stopped the rsync process.
+
+I looked for that UAS error message and according to the article=C2=B2 I
+found I disabled UAS as follows:
+
+% cat /etc/modprobe.d/disable-uas.conf
+# Does not work with external SSD Transcend XS2000 4TB
+options usb-storage quirks=3D0951:176b:u
+
+The quirk was applied as I reconnected the devices after unloading
+both usb-storage and uas modules:
+
+[   55.871301] usb 7-1: UAS is ignored for this device, using usb-storage i=
+nstead
+[   55.871310] usb-storage 7-1:1.0: USB Mass Storage device detected
+[   55.871559] usb-storage 7-1:1.0: Quirks match for vid 0951 pid 176b: 800=
+000
+
+I recreated the BCacheFS filesystem and tried again. This time it did
+not take more than 10 minutes for the first I/O error to appear. Unless
+with UAS it made rsync stop with an I/O error immediately. Before that
+there were several USB resets. Here is the excerpt from dmesg:
+
+[  795.768306] usb 7-1: reset SuperSpeed Plus Gen 2x1 USB device number 4 u=
+sing xhci_hcd
+[  932.976677] usb 7-1: reset SuperSpeed Plus Gen 2x1 USB device number 4 u=
+sing xhci_hcd
+[  963.189438] usb 7-1: reset SuperSpeed Plus Gen 2x1 USB device number 4 u=
+sing xhci_hcd
+[ 1000.057333] usb 7-1: reset SuperSpeed Plus Gen 2x1 USB device number 4 u=
+sing xhci_hcd
+[ 1036.917137] usb 7-1: reset SuperSpeed Plus Gen 2x1 USB device number 4 u=
+sing xhci_hcd
+[ 1073.782876] usb 7-1: reset SuperSpeed Plus Gen 2x1 USB device number 4 u=
+sing xhci_hcd
+[ 1110.647786] usb 7-1: reset SuperSpeed Plus Gen 2x1 USB device number 4 u=
+sing xhci_hcd
+[ 1117.163693] sd 0:0:0:0: [sda] tag#0 FAILED Result: hostbyte=3DDID_ABORT =
+driverbyte=3DDRIVER_OK cmd_age=3D214s
+[ 1117.163718] sd 0:0:0:0: [sda] tag#0 CDB: Write(16) 8a 00 00 00 00 00 02 =
+72 20 00 00 00 08 00 00 00
+[ 1117.163725] I/O error, dev sda, sector 41033728 op 0x1:(WRITE) flags 0x1=
+04000 phys_seg 1551 prio class 2
+[ 1117.163739] bcachefs (sda1 inum 1879048481 offset 2572800): data write e=
+rror: I/O
+[ 1117.163763] bcachefs (sda1 inum 1879048481 offset 2576384): data write e=
+rror: I/O
+[ 1117.163771] bcachefs (sda1 inum 1879048481 offset 2578432): data write e=
+rror: I/O
+[ 1117.163779] bcachefs (sda1 inum 1879048481 offset 2580480): data write e=
+rror: I/O
+[ 1117.163786] bcachefs (sda1 inum 1879048481 offset 2582528): data write e=
+rror: I/O
+[ 1117.163794] bcachefs (sda1 inum 1879048481 offset 2584576): data write e=
+rror: I/O
+[ 1117.163803] bcachefs (sda1 inum 1879048481 offset 2586624): data write e=
+rror: I/O
+[ 1117.163811] bcachefs (sda1 inum 1879048481 offset 2588672): data write e=
+rror: I/O
+[ 1117.163818] bcachefs (sda1 inum 1879048481 offset 2590720): data write e=
+rror: I/O
+[ 1117.163824] bcachefs (sda1 inum 1879048481 offset 2592768): data write e=
+rror: I/O
+
+So even without UAS the device does not seem to like to write data on
+Linux.
+
+Next steps may involve looking for a firmware update for the external SSD
+as well as trying to obtain its SMART status. So far I did not succeed in
+finding the right options for smartctl. In case there is enough evidence
+that the device is defective I'd try to RMA it.
+
+I will keep a copy of kernel log and I could do some further tests as time
+permits. So let me know whether you need anything else, but for now
+the mail is long enough as it is.
+
+
+[1] https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+
+[2] How to disable USB Attached Storage (UAS)
+Last edited on 4 December 2022, at 14:00
+
+https://leo.leung.xyz/wiki/How_to_disable_USB_Attached_Storage_(UAS)
+
+Ciao,
+=2D-=20
+Martin
+
 
 
