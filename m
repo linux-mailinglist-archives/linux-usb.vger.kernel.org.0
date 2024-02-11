@@ -1,72 +1,114 @@
-Return-Path: <linux-usb+bounces-6214-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6213-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38BC6850A35
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 17:03:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E93C9850A31
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 17:02:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E89972841FE
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 16:02:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91A6CB2213C
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Feb 2024 16:02:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F18E5B67B;
-	Sun, 11 Feb 2024 16:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 839F55BAF4;
+	Sun, 11 Feb 2024 16:02:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="kd86+i6P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.itouring.de (mail.itouring.de [85.10.202.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7815B689;
-	Sun, 11 Feb 2024 16:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.202.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C090B2AE74;
+	Sun, 11 Feb 2024 16:01:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707667361; cv=none; b=E/5Wb4Fhmgt7LQrvWYwc1kUKH8w0MmPHEJ8HqzRogVE3PEZgZkecGUem8SjO56Nyyt+L8ULjI3tkhU3WoH3Qozx50oDjHkSmpauXCwZ4v5RQLRHUT+PK4k6yFjDwIMNXZA8hdHhkztCfYSdQCF2pm2CnVmL/oSwEdDxiqLJXpzo=
+	t=1707667321; cv=none; b=nYsiogJvSdZ46USkK6ZVMdc3BNWx/5ExRxIpIKOUV9TMW1pw9M1n65NgP97tBP8o+eUvT5MtpEL1hs1Mu6DVeHVSoIiypsuyAzmVkvDcRYKSYMFiBIB4UWtHV+eyyCkI8fYBysbhASp0rUci+j/XO7Yn84NuHx3rZLzrMlawT6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707667361; c=relaxed/simple;
-	bh=b/FTp5wr7CP8Mhnbmc++m9Krji2RO/vpS0OpJ7CX8NE=;
-	h=Subject:To:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=f19i66PJ/RIuE5WwcGYOYhxex5zYv8BIUzHh9i2h7MtnGGCSQmmt64jl03QvWF/Jq/fkobDOQlMC+tNAUHJbSZtz5E6CovNdfkiMjnUQDpr7EBk0iU+7ugjG3wBsH3ALUTW/03URS6Cc5sbPEWQNMwo5wR6bPhEHYLkz9Nsqbjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=applied-asynchrony.com; spf=pass smtp.mailfrom=applied-asynchrony.com; arc=none smtp.client-ip=85.10.202.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=applied-asynchrony.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=applied-asynchrony.com
-Received: from tux.applied-asynchrony.com (p5ddd7ec8.dip0.t-ipconnect.de [93.221.126.200])
-	by mail.itouring.de (Postfix) with ESMTPSA id 86AAF103702;
-	Sun, 11 Feb 2024 17:02:29 +0100 (CET)
-Received: from [192.168.100.221] (hho.applied-asynchrony.com [192.168.100.221])
-	by tux.applied-asynchrony.com (Postfix) with ESMTP id 31DCBF01605;
-	Sun, 11 Feb 2024 17:02:29 +0100 (CET)
-Subject: Re: I/O errors while writing to external Transcend XS-2000 4TB SSD
-To: Martin Steigerwald <martin@lichtvoll.de>, stable@vger.kernel.org,
- regressions@lists.linux.dev, linux-usb@vger.kernel.org
-References: <1854085.atdPhlSkOF@lichtvoll.de>
-From: =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>
-Organization: Applied Asynchrony, Inc.
-Message-ID: <5264d425-fc13-6a77-2dbf-6853479051a0@applied-asynchrony.com>
-Date: Sun, 11 Feb 2024 17:02:29 +0100
+	s=arc-20240116; t=1707667321; c=relaxed/simple;
+	bh=iC+JbRILc1eLrWSfxvm521SmQ6znWeU6jUzyc+yCpCw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MmjNJlrn4TBY8LRWXe8kvQSrJJpWn79T5N8Vl6eg7AjbpmTZ5G7PJ5wjyzMZecIFI6k3vyayNV34gop1ryLIHSOBMOmTQUWNanpYOtgo7G61ijqFuOWp5o6PI03nh2cf5F6w3SJQeJZw7wo9qzZy6r/7o3dZo5Lb1uftnrKCWxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=kd86+i6P; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1d91397bd22so18614095ad.0;
+        Sun, 11 Feb 2024 08:01:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707667319; x=1708272119;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:dkim-signature:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=enTZ7yPBGcyh9V3V7UZj+oDbi/s8GRugq5pckUIXny8=;
+        b=Lsi2n8fUYSycq35aGCiYgG3oetK2eBoKZQsWl5GCsggl+GvhTG5F95p6/uNnP0joLt
+         +ch3u2qZKLjiF8eRImimey6q1GkJXcX9IjvFUD/8UKXkz+nJkT/max8Ef+s5BY/4EQgm
+         JJK/QoPGs21vNpa9gGihJhpuL/PMh9CXMm1y0cJ4lGNjifdn+EdDJKFSmcbZgJlr1IOu
+         tfNZ2e6n2sEBhuTfpISpSnwkB+aDq7H+f74rYn7TGubFNdgpOtJFyG8JsNrwTXr1B2cN
+         Vm7hETHx+TQ7e1yuibQf/Fs/rIdyGcz5GNUuu+IFj2pQoJUf8KM9UaerooMj9XHHhY/R
+         rPng==
+X-Gm-Message-State: AOJu0YzQJM/biJEBb6Kwvq4/hACAKS/seZEQ2GP/tC1A5FzxB8+kbOh1
+	8BEia+oFJNowbdx82k7qEsS3FCZwpb1EB2zTlUCj90nuDfYby5Rd5jhi2vlMUMIPVg==
+X-Google-Smtp-Source: AGHT+IGV6aw/103BpNKJyhhVIc2nslgu+kV7vfCuKhF1hSUzTLM7MV8eSROCrqi5pl6aV7pDmBVKIw==
+X-Received: by 2002:a17:902:b906:b0:1da:1e83:b961 with SMTP id bf6-20020a170902b90600b001da1e83b961mr3286505plb.63.1707667319031;
+        Sun, 11 Feb 2024 08:01:59 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX5AlRHgfc4qix+2oX3sHxdq09tV/fuUxgBjPdxnMGHBzofdopUGDqP7OtWc1y072phEhcCpPSF3p/b0/sJ1eAJ0vbSxpJSdTDAqj0P9Yk7zE26V6Q+TOySsExAu8Z7k4XGmcTBUS5ye8SnXURL0mCVpE3HoZ2FBMGKf7bPRzXkN3dqBmWNNPwRFTwAjqr9aeNxODTVEBbF4f+SGqyLKx1zQd3XjkNxhViIfzAGgVqf3WdAvmt5w49FHstkkBz0hwILQ0/dDbrCseLKCxyc7re/iZ5WsuyC52UbUrS2xw==
+Received: from mail.marliere.net ([24.199.118.162])
+        by smtp.gmail.com with ESMTPSA id o3-20020a170902d4c300b001d987771271sm4418503plg.123.2024.02.11.08.01.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Feb 2024 08:01:58 -0800 (PST)
+Date: Sun, 11 Feb 2024 13:02:34 -0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=2024; t=1707667316;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=enTZ7yPBGcyh9V3V7UZj+oDbi/s8GRugq5pckUIXny8=;
+	b=kd86+i6P8fyNFqDFvEkSzF819/p9sP+e3B2DuIHzeK1gERxnVQkkmEfwsMKwQENXP9bsmq
+	j5YJsZbTlxFZrVBqmkAzYee1wBM/1e6lQsaBT4RKIlnkgmjM8EmOzSd5WAIvumiHtgwJ7M
+	ymILgOfYS7S58PCOiKlK31QvzFyTN0tv4CZ1lzX9J4AtaZ2ftR5DJMWFLsxeLOzxCLGJnC
+	qVdVlOdynVLIr/eScILSwrajjmG9RzgLaUuUfALJRLZ0SJXXGtdSSkyDzi1JqzqtEcc2W9
+	16JbLGaKcXwzf++nOepIEskVeCnKS2WjbQ5eRWhCAIgf17ImTLQJAReLlpiF4A==
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
+From: "Ricardo B. Marliere" <ricardo@marliere.net>
+To: Shresth Prasad <shresthprasad7@gmail.com>
+Cc: gregkh@linuxfoundation.org, corbet@lwn.net, linux-doc@vger.kernel.org, 
+	linux-kernel-mentees@lists.linuxfoundation.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH] Fix malformed table error in gadget-testing.rst
+Message-ID: <qhnapkrcmqvpagzii46be362iyaelcbodo6vh7v3sem3ww5kpl@nw65w7gbyjij>
+References: <2024021159-banner-dramatic-af88@gregkh>
+ <74d67b62-6fa4-4218-b51f-f0d33f19c422@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <1854085.atdPhlSkOF@lichtvoll.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <74d67b62-6fa4-4218-b51f-f0d33f19c422@gmail.com>
 
-On 2024-02-11 16:42, Martin Steigerwald wrote:
-> Hi!
-> I am trying to put data on an external Kingston XS-2000 4 TB SSD using
-> self-compiled Linux 6.7.4 kernel and encrypted BCacheFS. I do not think
-> BCacheFS has any part in the errors I see, but if you disagree feel free
-> to CC the BCacheFS mailing list as you reply.
+Hi Shresth,
 
-This is indeed a known bug with bcachefs on USB-connected devices.
-Apply the following commit:
+On 11 Feb 18:24, Shresth Prasad wrote:
+> I see, sorry about that. I will try some other way to fix the error.
+> 
+> Also, as mentioned in this thread: https://lore.kernel.org/all/877cjqa5le.fsf@meer.lwn.net/ has the patch already been applied, fixing the issue?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/fs/bcachefs?id=3e44f325f6f75078cdcd44cd337f517ba3650d05
+Yes, that seems to be the case. In the future, make sure to split your
+patches into individual "logical" changes. In this case you would have
+one patch to fix the warnings and another to change tabs to space (even
+though this should not be done, as you know now).
 
-This and some other commits are already scheduled for -stable.
+Refer to https://www.kernel.org/doc/html/latest/process/submitting-patches.html
 
-Holger
+Best regards,
+-	Ricardo.
+
+
+
+> 
+> Regards,
+> Shresth
+> 
 
