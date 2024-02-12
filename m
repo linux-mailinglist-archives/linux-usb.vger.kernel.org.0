@@ -1,93 +1,125 @@
-Return-Path: <linux-usb+bounces-6235-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6237-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92BE085135F
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 13:17:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EC22851378
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 13:22:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23843B26A37
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 12:17:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F50F1C2151F
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 12:22:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93E1439AF6;
-	Mon, 12 Feb 2024 12:16:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E6639AFC;
+	Mon, 12 Feb 2024 12:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sgpi9m1A"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HzxojYNF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1959939AE6
-	for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 12:16:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C05639AFE
+	for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 12:22:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707740181; cv=none; b=gAq3CBMZb5WhXPMmFB1Ga5lMFeLtDQYzsL7WepSYjlTEtr0ggLoirJR/Jhq0H+Fmi9DpcA//fzjAGTEWoASTOd1Mx93lhHKiJXu9kv5HC16Kiu+Ylc0xNrXFj72uBvmM23m9IaKCDWQQAft6QISSFkTFc9cXrUT4wPxGf9/9LqM=
+	t=1707740568; cv=none; b=LFVhEgK07hMjnY08JdDPAf6AA70SrLNss+2FZRiTQCbXUhwO2dmIwS+U96LJhbyHHy+FnQwHKr8snDnsmYLwBuLe4lX3bZXurTcdlcbGy6EETP/Mr5Jlf2Yoyafwn/GxttyqkTAGqRjYeEBK3zhWK/LFA9tlc1IwOwwlB4eWSRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707740181; c=relaxed/simple;
-	bh=8j7BMALNkBPZPLzurvxA93M2LsoCMuhVN7J5qcqdreY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HslPWpFT1OZ44Apwvnz81Q1YDP1/XkYJxPhPGZjx/4Ho3M0UI7S91KZkdhCIUaJEgHK7TUu+vpraZr/gOUuYmQTtGdkNpd+wqg4M16BFEH+TIecuJgNpmTEy7e/vpe4+i2KF8SkSA179HylZZ+JFL+neZtCCvd2e9luDVU+OKOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sgpi9m1A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7DBC3C433C7
-	for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 12:16:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707740180;
-	bh=8j7BMALNkBPZPLzurvxA93M2LsoCMuhVN7J5qcqdreY=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Sgpi9m1AK7iI+yTdsjI/XetofzF0MC8C6YtrVf14MKpSSipw2z8SipfJNt7VKqPsJ
-	 FQPTl7W3++ONkZHgyCw+gj7LTPIGBdUdVFb3gO6tcbiXg9xMeU1s7rbl/jA7+MpdLd
-	 SlVT6NHTx3t78i04VzZZRF8pnOpQ8KC8wlcdNJyTcpBxWVaG75EtwFA3GcVFRBAg4g
-	 Hqd3HWyNHDGSV5CcEuvYaMt0BRDn42CFO1IngiFRh8TaJLguZ8b9ls+Q/7wwvvVulD
-	 81g3+FYDqjD450dWCsv854bZSAzS8h/3HThLsilmjXcQhJ82S8HaX60TyF0x3G4hlo
-	 0AfVpQkNXUdfQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 69F65C53BC6; Mon, 12 Feb 2024 12:16:20 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218465] Linux warning `usb: port power management may be
- unreliable` on Dell XPS 13 9360
-Date: Mon, 12 Feb 2024 12:16:20 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218465-208809-q6Z8Q2ZYgO@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218465-208809@https.bugzilla.kernel.org/>
-References: <bug-218465-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1707740568; c=relaxed/simple;
+	bh=qR9lDFDeKPAo0DiFqn/cvL6ikhz+xZCI83InXXUT9Us=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D21sC8tU3cC5CeVG41ZHaXCxPfpmcmhyaJ3vAuHdTFl9Ehr3fwSH6lbG7JBOmbQSgRh8guk1+Zky1qQTFHphc1H1gmeJna3avPZL+qSQ9QCUxvuBM6jdTkr4PbIS6fap7SRomjvi+v/oooXpmWVnDfx5TBCAWaGVsRWFJCjR1J4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HzxojYNF; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-40fb3b5893eso24773335e9.0
+        for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 04:22:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1707740564; x=1708345364; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VSmpE+8yO23g+6K8r9vt9Aj1csyqHY8mxoubaVkXygM=;
+        b=HzxojYNFva6BC1gaeAGmjBHhoHb0EbJddMQK9L0VGx0kd1LuYYoMDeLuDU3quxQAn+
+         IIZ3qDHaSP3abc6rPpsx7WhP9ZMQdOpXvmMWJqHcypnNDim/WKRjfq/Ip79UlsEFVLUW
+         GUp3pfefI8LLmvHN7jqfxvxoaJ0JIe4AzKS5GaiRhCENGTefSn9v9/fcrbyFIOCFkpNb
+         jL2tec/iLpDElwKBns69B7ikv6NLzq4fd3YT7QGHpAOtD4uuwRW7v5vyqUNUXTLB7fC0
+         SOg5Nz2pduo1mLfNcgN6t+t691aOhAlMC1885YqUs63XR0/PRhmpTgVU0RaRp2GxswTr
+         wvsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707740564; x=1708345364;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VSmpE+8yO23g+6K8r9vt9Aj1csyqHY8mxoubaVkXygM=;
+        b=Ep/pw+3gZotRuaAVEe4MRfhgdks52ogrii3v4pYbgMaqGSWwlqkr+gHCQrZz0xOAfq
+         t6dVQ+xy4rVwP36GAjG7Gqs0n+ayhAMpOxGmXFwXb1xX63rTNvqMqOMw8FEUzekbctzX
+         qVHE20YKYeMcxNbgB9UluZ8Qd3EJW1ciSWV2KTrWe+UMMFgsnGN088ASqTUO/KF/BOhj
+         EJMAkoxOeuLCWcOjotR0qyevIzSJ5GJtvPPnFdRXMH4lBkWVayV+gthv4rQmPVgCXexq
+         5DzP42uR1FumeYIp2xS2PUiNTg27s458XOh1oVvryn7dxjekLB3uP4Gqfs7pcplRLG1j
+         isMw==
+X-Gm-Message-State: AOJu0YxxuHXz0yjd0ru1b+9BHR7bnrKntKTn8+xyi8PfUudAJ4xNnfce
+	70Iut/0z+62ebg35GJgO8fOosJyzu+LJ2F7BMG9lX6Soil8KW5O1Gvjf50t8Q83bNNQHFM93Aaj
+	w
+X-Google-Smtp-Source: AGHT+IEMZeyONDchq2UzhKfL03sb3Oz1idn2TcW6TYgzx8z5XM5YwzWmRZASiv6oNZHhGiNDr59fEA==
+X-Received: by 2002:a05:600c:6014:b0:410:df4b:f769 with SMTP id az20-20020a05600c601400b00410df4bf769mr1460899wmb.24.1707740564468;
+        Mon, 12 Feb 2024 04:22:44 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVjFVn4MaKmiUXEDqozFhQLCpOTa5RJGTa4hA8nm4BpYdwWD6pKfGG4CsvmTKzfIBpcz0NwO7ChEvdW1gYOFd2jFpAeb+9r2TkTs3JmrY34Y8lbT9S9daAnfm5uqB4AAaCfuXJ12Q0XVCEOIAeSzoogIUeuJIj/XNsmuxPsOYZUFiS4bYGRWBCx2qkGLWuHUDznKId5o+C1vz2h+I09WjLBkG4KvakqyBa8FZ/HbwaoFqKMGT3bC9iFq+CG8sXvXzJ8481TOxwUUR2po2XjF5AfBw0pnOqZRwmhS1/Qml62TbY=
+Received: from ?IPV6:2001:a61:1366:6801:b2db:904d:e0b0:46ec? ([2001:a61:1366:6801:b2db:904d:e0b0:46ec])
+        by smtp.gmail.com with ESMTPSA id k9-20020a05600c1c8900b00410d7e55e5asm2630204wms.3.2024.02.12.04.22.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Feb 2024 04:22:44 -0800 (PST)
+Message-ID: <ca89eb86-a566-422c-9448-d8d5254d54b8@suse.com>
+Date: Mon, 12 Feb 2024 13:22:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] media: ucvideo: Add quirk for Logitech Rally Bar
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Ricardo Ribalda <ribalda@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alan Stern <stern@rowland.harvard.edu>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20240108-rallybar-v4-1-a7450641e41b@chromium.org>
+ <20240204105227.GB25334@pendragon.ideasonboard.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20240204105227.GB25334@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218465
+On 04.02.24 11:52, Laurent Pinchart wrote:
+> Hi Ricardo,
+> 
+> Thank you for the patch.
 
---- Comment #3 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
- ---
-Thank you for the analysis. Excuse my ignorance, but does this mean it=E2=
-=80=99s a
-firmware issue, or Linux=E2=80=99 assumptions are incorrect?
+Hi,
 
---=20
-You may reply to this email to add a comment.
+sorry for commenting on this late, but this patch has
+a fundamental issue. In fact this issue is the reason the
+handling for quirks is in usbcore at all.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+If you leave the setting/clearing of this flag to a driver you
+are introducing a race condition. The driver may or may not be
+present at the time a device is enumerated. And you have
+no idea how long the autosuspend delay is on a system
+and what its default policy is regarding suspending
+devices.
+That means that a device can have been suspended and
+resumed before it is probed. On a device that needs
+RESET_RESUME, we are in trouble.
+The inverse issue will arise if a device does not react
+well to RESET_RESUME. You cannot rule out that a device
+that must not be reset will be reset.
+
+I am sorry, but it seems to me that the exceptions need
+to go into usbcore.
+
+	Regards
+		Oliver
 
