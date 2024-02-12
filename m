@@ -1,152 +1,250 @@
-Return-Path: <linux-usb+bounces-6230-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6231-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 016B985114A
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 11:44:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55F478511B4
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 12:02:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C3BF1F22912
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 10:44:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1215328269E
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 11:02:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2F0422067;
-	Mon, 12 Feb 2024 10:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A99328DDE;
+	Mon, 12 Feb 2024 11:02:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YPHKyeff"
+	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="b8QQ0vrK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8F438F86
-	for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 10:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D035848E;
+	Mon, 12 Feb 2024 11:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707734657; cv=none; b=lxmJZ6B+7xldkhqN/S7r/baVkTH2CgqDMfhQumgZfQajGIJwFfV95DV/nVeqW6Qc8todDoVtPAuNO5sqRc4SRC5zEZFQ2Um8xphiS5cxW2L5Haqdhya0ZVpPFla1WrlzFQ9V8KGzzCAW7vN+64weUfJ3n4x5XfN5Uf5kPCTfv5Y=
+	t=1707735741; cv=none; b=caI35A458Pm06A2e0mTOe/QnS7VPSrArtyZDLPMS5u3qp6uT7b1zsdsYV8ZTPbaJvie2tYFW7gIWuOLbLyU3hlh0gpaEj29GAMWR6P/FWTNJOx+p7fujLK5uF9S2iz7CTvN9KpfRDCdDseBQR9XwZPvdQAl8V2XspIcvZoLGi30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707734657; c=relaxed/simple;
-	bh=A9PxXJIW/AqhYzu5pFTcPUvEF3YHKHWmr57gefX56Uo=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lOEhc0COMyPoLkcC2ye/yIilJLjHSxlLUBMy3NBOwFNcXIFbGtNyOA0Hp5Yn+y5VCTVFJgZUrytgHoNKgJeC3GU7W+E8ya3mjDx1Fsa2Lan4VrrQ3zG2m+AYZwI8n3CxCyg1ATV3n4SJ0Qt2pF35/E30ppkIuy2rHwxiOeUGwL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YPHKyeff; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B4C76C433C7
-	for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 10:44:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707734656;
-	bh=A9PxXJIW/AqhYzu5pFTcPUvEF3YHKHWmr57gefX56Uo=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=YPHKyeff6uQXGzUayZJpaTXXo9hAulXsV74vWOrT8E/Wf+8dM55LpnY24EQrk2p+g
-	 yXxnJE6ZQHLp1g1+hyr0/qf7tL1nniYYWlTN8wFpPKkU+Kh02Fm04gfP2M3XfkgCa6
-	 bNNbTya4REVqDDxRv6bv/XON5jgP6kVZhIspcUd5MqxHqeBceJ5Z0r91uOOFeSDMVw
-	 /yGrPjK4iOonSUGntHxRatrtp4QGZZ6PtRJnhrDL58t1BKcHzNKM1/7Wbv844kpLm0
-	 8rdF+qM9pmkeC1jKtn3GQ8YAYVSjgLI4YC1Ga9KXD87eDhv1kCRYP1P19cBEpCQtj/
-	 SMb6e5X2vryiw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 9C535C53BCD; Mon, 12 Feb 2024 10:44:16 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218465] Linux warning `usb: port power management may be
- unreliable` on Dell XPS 13 9360
-Date: Mon, 12 Feb 2024 10:44:16 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218465-208809-4wush0TSHm@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218465-208809@https.bugzilla.kernel.org/>
-References: <bug-218465-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1707735741; c=relaxed/simple;
+	bh=6iNftqy+LpvtlMyVb8d/nUzm5YWyNegu0BDiFscW17E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PMfHfGAR9M3dJpU56ZsHuEDjod5WucnhrjK8wlCJNoA8AjykGFmDotspgY2ICzXqB3/OvCmixEEb8m/bQ9pQjW/2Yh76PNav27qPIFwMvjt9B7HzA48wfcQNblUAq4dBj+h/+N78T91fd2v720S/q3uuq7tUeH4wWR7ZBtaipP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz; spf=pass smtp.mailfrom=ucw.cz; dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b=b8QQ0vrK; arc=none smtp.client-ip=46.255.230.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucw.cz
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+	id E337F1C006B; Mon, 12 Feb 2024 12:02:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+	t=1707735729;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=c5mAcojUSjY2ipf+E8fz6wuoXQVlOWqLNtkwBoyCzlM=;
+	b=b8QQ0vrK4C17kFaIIJql7BUMI6i8eKkP/0odbnpnYzmw8IAiHybKesWDYv06yd4AhMJip6
+	lB8x6MjoiQCRtCZ7q1TU9i9Q1aHW65vbTFOdg3PJS95zKVrDro4/4gxbjyPjblIoA5hxgL
+	LRr3vT75CGJdeNoojpEl5vuOUF8sCyE=
+Date: Mon, 12 Feb 2024 12:02:09 +0100
+From: Pavel Machek <pavel@ucw.cz>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: phone-devel@vger.kernel.org, kernel list <linux-kernel@vger.kernel.org>,
+	fiona.klute@gmx.de, martijn@brixit.nl, samuel@sholland.org,
+	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+	megi@xff.cz
+Subject: Re: [PATCH] dt-bindings: usb: typec: anx7688: start a binding
+ document
+Message-ID: <Zcn6sSOqb+QpZtCC@duo.ucw.cz>
+References: <ZcaCXYOf6o4VNneu@duo.ucw.cz>
+ <3a662ef2-1888-4f24-bebe-3ce32da9d277@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="za5YJkWmS+Xk6BYI"
+Content-Disposition: inline
+In-Reply-To: <3a662ef2-1888-4f24-bebe-3ce32da9d277@linaro.org>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218465
 
---- Comment #2 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-High-speed (HS) ans SuperSpeed (SS) ports are peered based on their Physical
-Location Description (_PLD) object in ACPI tables.
+--za5YJkWmS+Xk6BYI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The SSDT7 ACPI table dump shows that _PLD is created by calling a GPLD
-helper method with some parameters. For High-Speed ports (HS0x) this seems
-to be called with increasing port numer up to HS port 5. From port 6 onwards
-all parameters are 0.
+Hi!
+> > Add binding for anx7688 usb type-c bridge. I don't have a datasheet,
+> > but I did best I could.
+> >=20
+> > Signed-off-by: Pavel Machek <pavel@ucw.cz>
+> >=20
+>=20
+> You miss proper diffstat which makes reviewing difficult.
 
-Scope (\_SB.PCI0.XHC.RHUB.HS01)
-    Method (_PLD, 0, NotSerialized)  // _PLD: Physical Location of Device
-        Return (GPLD (One, One))
+> Actually entire patch is corrupted and impossible to apply.
 
-Scope (\_SB.PCI0.XHC.RHUB.HS02)
-    Method (_PLD, 0, NotSerialized)  // _PLD: Physical Location of Device
-        Return (GPLD (One, 0x02))
-...
-Scope (\_SB.PCI0.XHC.RHUB.HS05)
-    Method (_PLD, 0, NotSerialized)  // _PLD: Physical Location of Device
-        Return (GPLD (Zero, 0x05))
+Sorry about that.
 
-Scope (\_SB.PCI0.XHC.RHUB.HS06)
-    Method (_PLD, 0, NotSerialized)  // _PLD: Physical Location of Device
-        Return (GPLD (Zero, Zero))
+> Anyway, where is any user of this? Nothing in commit msg explains
+>  this.
 
-Scope (\_SB.PCI0.XHC.RHUB.HS07)
-    Method (_PLD, 0, NotSerialized)  // _PLD: Physical Location of Device
-        Return (GPLD (Zero, Zero))
+User being is worked on:
 
-For SuperSpeed ports (SS0x) the same is true. Ports 1-
+https://lore.kernel.org/lkml/2024020126-emote-unsubtly-3394@gregkh/T/
 
-Scope (\_SB.PCI0.XHC.RHUB.SS01)
-    Method (_PLD, 0, NotSerialized)  // _PLD: Physical Location of Device
-        Return (GPLD (One, One))
+Thanks for comments. I'll go through them and try to improve things.
 
-Scope (\_SB.PCI0.XHC.RHUB.SS02)
-    Method (_PLD, 0, NotSerialized)  // _PLD: Physical Location of Device
-        Return (GPLD (One, 0x02))
+Best regards,
+								Pavel
 
-Scope (\_SB.PCI0.XHC.RHUB.SS03)
-    Method (_PLD, 0, NotSerialized)  // _PLD: Physical Location of Device
-        Return (GPLD (Zero, Zero))
-
-Scope (\_SB.PCI0.XHC.RHUB.SS04)
-    Method (_UPC, 0, NotSerialized)  // _UPC: USB Port Capabilities
-        Return (GPLD (Zero, Zero))
-
-Basically all HS port from 6 upwards and SS ports from 3 upwards report the
-same _PLD, this messes up port peering and results in the following messages
-during boot:=20=20
-
-usb usb2-port1: peered to usb1-port1
-usb usb2-port2: peered to usb1-port2
-usb usb2-port3: peered to usb1-port6
-usb: failed to peer usb2-port4 and usb1-port6 by location (usb2-port4:none)
-(usb1-port6:usb2-port3)
-usb usb2-port4: failed to peer to usb1-port6 (-16)
-usb: port power management may be unreliable
-usb: failed to peer usb2-port5 and usb1-port6 by location (usb2-port5:none)
-(usb1-port6:usb2-port3)
-usb usb2-port5: failed to peer to usb1-port6 (-16)
-usb: failed to peer usb2-port6 and usb1-port6 by location (usb2-port6:none)
-(usb1-port6:usb2-port3)
-usb usb2-port6: failed to peer to usb1-port6 (-16)
+>=20
+> > diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7688.yam=
+l b/Documentation/devicetree/bindings/usb/analogix,anx7688.yaml
+> > new file mode 100644
+> > index 000000000000..b9d60586937f
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/analogix,anx7688.yaml
+> > @@ -0,0 +1,140 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/analogix,anx7688.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Analogix ANX7688 Type-C controller
+> > +
+> > +maintainers:
+> > +  - Pavel Machek <pavel@ucw.cz>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - analogix,anx7688
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  reset-gpios:
+> > +    maxItems: 1
+>=20
+> blank line
+>=20
+> > +  enable-gpios:
+> > +    maxItems: 1
+> > +  cabledet-gpios:
+> > +    maxItems: 1
+> > +
+> > +  avdd10-supply:
+> > +    description:
+> > +      1.0V power supply
+>=20
+> Keep description in one line and add a blank line. This code is not that
+> readable.
+>=20
+> > +  dvdd10-supply:
+> > +    description:
+> > +      1.0V power supply
+> > +  avdd18-supply:
+> > +    description:
+> > +      1.8V power supply
+> > +  dvdd18-supply:
+> > +    description:
+> > +      1.8V power supply
+> > +  avdd33-supply:
+> > +    description:
+> > +      3.3V power supply
+> > +  i2c-supply:
+> > +    description:
+> > +      Power supply
+>=20
+> Drop all useless descriptions (so : true)
+>=20
+> > +  vconn-supply:
+> > +    description:
+> > +      Power supply
+> > +  hdmi_vt-supply:
+> > +    description:
+> > +      Power supply
+> > +
+> > +  vbus-supply:
+> > +    description:
+> > +      Power supply
+> > +  vbus_in-supply:
+>=20
+> No underscores in property names.
+>=20
+> > +    description:
+> > +      Power supply
+> > +
+> > +  connector:
+> > +    type: object
+> > +    $ref: ../connector/usb-connector.yaml
+>=20
+> Full path, so /schemas/connector/......
+>=20
+> > +    unevaluatedProperties: false
+>=20
+> Drop
+>=20
+> > +
+> > +    description:
+> > +      Properties for usb c connector.
+>=20
+> > +
+> > +    properties:
+> > +      compatible:
+> > +        const: usb-c-connector
+> > +
+> > +      power-role: true
+> > +
+> > +      data-role: true
+> > +
+> > +      try-power-role: true
+>=20
+> I don't understand why do you have here properties. Do you see any
+> binding like this?
+>=20
+> > +
+> > +    required:
+> > +      - compatible
+>=20
+> Drop, why is it needed?
+>=20
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - connector
+> > +
+> > +additionalProperti
+>=20
+> I don't know what's further but this patch is not a patch... Please read
+> submitting-patches, organize your patchset correctly into manageable
+> logical chunks and send them as proper patchset, not one junk.
+>=20
+> b4 helps here a lot...
+>=20
+> >=20
+>=20
+> Best regards,
+> Krzysztof
 
 --=20
-You may reply to this email to add a comment.
+People of Russia, stop Putin before his war on Ukraine escalates.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+--za5YJkWmS+Xk6BYI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZcn6sQAKCRAw5/Bqldv6
+8q4MAKCs0lVJVkjm4x4MFHurUFu5tmbWGACgv9eckvxYpEmf2RO8FsiX/FvLRgc=
+=ZJDH
+-----END PGP SIGNATURE-----
+
+--za5YJkWmS+Xk6BYI--
 
