@@ -1,250 +1,172 @@
-Return-Path: <linux-usb+bounces-6231-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6232-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55F478511B4
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 12:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D2728511F7
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 12:16:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1215328269E
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 11:02:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C85A1281FB1
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 11:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A99328DDE;
-	Mon, 12 Feb 2024 11:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C14AF38F8F;
+	Mon, 12 Feb 2024 11:16:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="b8QQ0vrK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GHr9nCBy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D035848E;
-	Mon, 12 Feb 2024 11:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB0C2BAF0
+	for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 11:16:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707735741; cv=none; b=caI35A458Pm06A2e0mTOe/QnS7VPSrArtyZDLPMS5u3qp6uT7b1zsdsYV8ZTPbaJvie2tYFW7gIWuOLbLyU3hlh0gpaEj29GAMWR6P/FWTNJOx+p7fujLK5uF9S2iz7CTvN9KpfRDCdDseBQR9XwZPvdQAl8V2XspIcvZoLGi30=
+	t=1707736602; cv=none; b=XeoOd9p5RLocy8qievzaHAsbdQWFkdGwib7/4/ENX7HXhNapcdKDte6QkjD/Sgmk/h4dirZPDemMAhxdyOV/KWflA1QYGzsNvriT6JrtugUO+bn0Wl5DOjnwkp3Bw8pFXJFYwrxe4mvogdpgWawQDUPQriDOHkpbRdQF3kFBqro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707735741; c=relaxed/simple;
-	bh=6iNftqy+LpvtlMyVb8d/nUzm5YWyNegu0BDiFscW17E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PMfHfGAR9M3dJpU56ZsHuEDjod5WucnhrjK8wlCJNoA8AjykGFmDotspgY2ICzXqB3/OvCmixEEb8m/bQ9pQjW/2Yh76PNav27qPIFwMvjt9B7HzA48wfcQNblUAq4dBj+h/+N78T91fd2v720S/q3uuq7tUeH4wWR7ZBtaipP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz; spf=pass smtp.mailfrom=ucw.cz; dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b=b8QQ0vrK; arc=none smtp.client-ip=46.255.230.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucw.cz
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id E337F1C006B; Mon, 12 Feb 2024 12:02:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-	t=1707735729;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=c5mAcojUSjY2ipf+E8fz6wuoXQVlOWqLNtkwBoyCzlM=;
-	b=b8QQ0vrK4C17kFaIIJql7BUMI6i8eKkP/0odbnpnYzmw8IAiHybKesWDYv06yd4AhMJip6
-	lB8x6MjoiQCRtCZ7q1TU9i9Q1aHW65vbTFOdg3PJS95zKVrDro4/4gxbjyPjblIoA5hxgL
-	LRr3vT75CGJdeNoojpEl5vuOUF8sCyE=
-Date: Mon, 12 Feb 2024 12:02:09 +0100
-From: Pavel Machek <pavel@ucw.cz>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: phone-devel@vger.kernel.org, kernel list <linux-kernel@vger.kernel.org>,
-	fiona.klute@gmx.de, martijn@brixit.nl, samuel@sholland.org,
-	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-	megi@xff.cz
-Subject: Re: [PATCH] dt-bindings: usb: typec: anx7688: start a binding
- document
-Message-ID: <Zcn6sSOqb+QpZtCC@duo.ucw.cz>
-References: <ZcaCXYOf6o4VNneu@duo.ucw.cz>
- <3a662ef2-1888-4f24-bebe-3ce32da9d277@linaro.org>
+	s=arc-20240116; t=1707736602; c=relaxed/simple;
+	bh=+/dv/rjnTdZRDkLIWwNl3OVUhyJ/TnHTE0m66DG81mo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kMVXagM9+Gg/ZDxs9SNj+smDMe7deLJiqg/0c3wptI/KZhK/ye7NjGo3A4PPzgSjjgU5db82tjWjeGDLFZ7H9zf1fDLFkRE28hqiWI1TlRXYVU8Ho/5AZNBGz6O0yNt9p6Y52AFBNANBF716AgLggn7Yz8fl0Q2wafTOHPsL1Mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GHr9nCBy; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-410980dfddeso12297415e9.1
+        for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 03:16:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707736599; x=1708341399; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OhJlFfknc7JfVoq7noZrf9tAfPeenqXQkKrMu3gZlEQ=;
+        b=GHr9nCByuvGtKNmJbJzkgiBs+RYNksn3oM9LIsa7ZR8PbQ2MAf21ds0ALdD8WX0iEJ
+         4qzb9486BzGI1zUc7i/xf8DPP4CAKgiavXM9xkvt3/1IEUb+OgEPtcKA5CRH1cnfsCCz
+         vNRUhzepSGft85HZrS3PkEJFfoot8BB8m+sDlLE5FZnoK9nlF/8rfqSFO7Q7h+mVbDFo
+         VwlSrJh4eIgTOoqZrlzRLeWMAI79ZA5XJc/OmZkRbjcbKtyMkpVI5RJFcbRMZrhq+WVJ
+         dUBhENL+W+tNpRlwTPWzX09OmQ/BO0ySGYtNqgch4/VJfwBBIE699X0AO2THdyh1L498
+         T5gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707736599; x=1708341399;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OhJlFfknc7JfVoq7noZrf9tAfPeenqXQkKrMu3gZlEQ=;
+        b=Uv3Q+auspbbPgkFRQSiUrwhydpQmaQxRe9rr1bPPSxJUZCensPEVrY7VjFgF++HqYo
+         fUPRK98ljKxa3vOhjFbGRB6qFKCQQNVBFoTJegOESavm+0fM4TYdasTyUttyBWDXfibx
+         HZMxH49CTGkgWrMEOj22dhj8PBuO/4YZpLihiVmH1hRNl2q1sriuoM0aiZsmpA1LIFDT
+         E6pFv2LkF+PykAjr+vyk+/EIi0sCZTegkZZ/q66ycusicNZi5UWtot9qBJ/PcoKCKLdq
+         +9T1WauulBfBPeZe0sMvc5R+oifiJepuorWhitgF8VS8BCwRcmid1SSwd/RAD5a206YN
+         915g==
+X-Forwarded-Encrypted: i=1; AJvYcCVs+mn0QcAKg0zcC+DRj1ccF3RiSycAKIqDve7ZXrpl9CLKAu4jKbNeY6gyaIUVUlyPetROtTa5E/x108BHvPVmNm3kEmVLppLK
+X-Gm-Message-State: AOJu0Yxd7LTye7cJJ2eeTgeP3FnY6MeA0LHmyxZdHndDT5cobmkvJd25
+	nvrkmZ1qIhWTVlUk36gVFzgLitiMqUIHyeaNbjaOHhcnsYlpoIp1U1GHgob/yr0=
+X-Google-Smtp-Source: AGHT+IFpAuLt1rb2QXW7m15x5ZnRaszV16GeULOePJs1dUDRnz4ues0/eHXNmd/xmA3d49MPrNUtWg==
+X-Received: by 2002:a05:600c:6018:b0:410:c0d5:ffe4 with SMTP id az24-20020a05600c601800b00410c0d5ffe4mr2527727wmb.36.1707736598746;
+        Mon, 12 Feb 2024 03:16:38 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUnZgs0QRj6ByPtSYirwVOpHF6IwlnTsUSXOKKPNqNUEKwh/PN8Sokad/JL8GjPSBu7o2SJxbJVMy87obmTi5pOWiSrup/qrrI/dOb5mD6Nqwf3sV5jfKrZ7OX8DHZVOLsguhVpbGz8FEeyzWstuOZWnoIuFRKH2OgPkSH2s9nNaqe3S0GxAUvScAJQIVN2k/mUg7ltOTvK2WbTxtIf5CHBvtKrgyLvVxXed2tu0eUlwnDLKfp/hqCZUSbt4FvjogKoHME5smtzzQw71IJiUyTH1lCJWHyjNX8zz6zaSE59/K2c6M+kQ7aytnPfFcwTodSG8FDQxGO3FTKIdW5/HN9qPnYsBFvZ+Xz2tiRlJ6n3hAyC3j4L7UrHbzE25ELkYG+yGJCLJoopdMgF7vvnGXmd93cFC4m4R8WIvUdQFljqmQ==
+Received: from [192.168.1.20] ([178.197.223.6])
+        by smtp.gmail.com with ESMTPSA id jr6-20020a05600c560600b0041079d336c7sm8295768wmb.39.2024.02.12.03.16.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Feb 2024 03:16:38 -0800 (PST)
+Message-ID: <db0d9666-796b-48e1-b830-2c9817a92b4f@linaro.org>
+Date: Mon, 12 Feb 2024 12:16:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="za5YJkWmS+Xk6BYI"
-Content-Disposition: inline
-In-Reply-To: <3a662ef2-1888-4f24-bebe-3ce32da9d277@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: usb: typec: anx7688: start a binding
+ document
+Content-Language: en-US
+To: Pavel Machek <pavel@ucw.cz>
+Cc: phone-devel@vger.kernel.org, kernel list <linux-kernel@vger.kernel.org>,
+ fiona.klute@gmx.de, martijn@brixit.nl, samuel@sholland.org,
+ heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org, megi@xff.cz
+References: <ZcaCXYOf6o4VNneu@duo.ucw.cz>
+ <3a662ef2-1888-4f24-bebe-3ce32da9d277@linaro.org>
+ <Zcn6sSOqb+QpZtCC@duo.ucw.cz>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <Zcn6sSOqb+QpZtCC@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 12/02/2024 12:02, Pavel Machek wrote:
+> Hi!
+>>> Add binding for anx7688 usb type-c bridge. I don't have a datasheet,
+>>> but I did best I could.
+>>>
+>>> Signed-off-by: Pavel Machek <pavel@ucw.cz>
+>>>
+>>
+>> You miss proper diffstat which makes reviewing difficult.
+> 
+>> Actually entire patch is corrupted and impossible to apply.
+> 
+> Sorry about that.
+> 
+>> Anyway, where is any user of this? Nothing in commit msg explains
+>>  this.
+> 
+> User being is worked on:
+> 
+> https://lore.kernel.org/lkml/2024020126-emote-unsubtly-3394@gregkh/T/
+> 
+> Thanks for comments. I'll go through them and try to improve things.
 
---za5YJkWmS+Xk6BYI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi!
-> > Add binding for anx7688 usb type-c bridge. I don't have a datasheet,
-> > but I did best I could.
-> >=20
-> > Signed-off-by: Pavel Machek <pavel@ucw.cz>
-> >=20
->=20
-> You miss proper diffstat which makes reviewing difficult.
-
-> Actually entire patch is corrupted and impossible to apply.
-
-Sorry about that.
-
-> Anyway, where is any user of this? Nothing in commit msg explains
->  this.
-
-User being is worked on:
-
-https://lore.kernel.org/lkml/2024020126-emote-unsubtly-3394@gregkh/T/
-
-Thanks for comments. I'll go through them and try to improve things.
+OK, please send bindings patch in the same patchset as the driver.
+Preferably first bindings patch, then driver patch(es). The bindings
+document ABI exposed by driver, so we expect to see and apply both of
+them together (apply through subsystem, so USB in this case).
 
 Best regards,
-								Pavel
+Krzysztof
 
->=20
-> > diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7688.yam=
-l b/Documentation/devicetree/bindings/usb/analogix,anx7688.yaml
-> > new file mode 100644
-> > index 000000000000..b9d60586937f
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/analogix,anx7688.yaml
-> > @@ -0,0 +1,140 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/analogix,anx7688.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Analogix ANX7688 Type-C controller
-> > +
-> > +maintainers:
-> > +  - Pavel Machek <pavel@ucw.cz>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - analogix,anx7688
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  reset-gpios:
-> > +    maxItems: 1
->=20
-> blank line
->=20
-> > +  enable-gpios:
-> > +    maxItems: 1
-> > +  cabledet-gpios:
-> > +    maxItems: 1
-> > +
-> > +  avdd10-supply:
-> > +    description:
-> > +      1.0V power supply
->=20
-> Keep description in one line and add a blank line. This code is not that
-> readable.
->=20
-> > +  dvdd10-supply:
-> > +    description:
-> > +      1.0V power supply
-> > +  avdd18-supply:
-> > +    description:
-> > +      1.8V power supply
-> > +  dvdd18-supply:
-> > +    description:
-> > +      1.8V power supply
-> > +  avdd33-supply:
-> > +    description:
-> > +      3.3V power supply
-> > +  i2c-supply:
-> > +    description:
-> > +      Power supply
->=20
-> Drop all useless descriptions (so : true)
->=20
-> > +  vconn-supply:
-> > +    description:
-> > +      Power supply
-> > +  hdmi_vt-supply:
-> > +    description:
-> > +      Power supply
-> > +
-> > +  vbus-supply:
-> > +    description:
-> > +      Power supply
-> > +  vbus_in-supply:
->=20
-> No underscores in property names.
->=20
-> > +    description:
-> > +      Power supply
-> > +
-> > +  connector:
-> > +    type: object
-> > +    $ref: ../connector/usb-connector.yaml
->=20
-> Full path, so /schemas/connector/......
->=20
-> > +    unevaluatedProperties: false
->=20
-> Drop
->=20
-> > +
-> > +    description:
-> > +      Properties for usb c connector.
->=20
-> > +
-> > +    properties:
-> > +      compatible:
-> > +        const: usb-c-connector
-> > +
-> > +      power-role: true
-> > +
-> > +      data-role: true
-> > +
-> > +      try-power-role: true
->=20
-> I don't understand why do you have here properties. Do you see any
-> binding like this?
->=20
-> > +
-> > +    required:
-> > +      - compatible
->=20
-> Drop, why is it needed?
->=20
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - connector
-> > +
-> > +additionalProperti
->=20
-> I don't know what's further but this patch is not a patch... Please read
-> submitting-patches, organize your patchset correctly into manageable
-> logical chunks and send them as proper patchset, not one junk.
->=20
-> b4 helps here a lot...
->=20
-> >=20
->=20
-> Best regards,
-> Krzysztof
-
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---za5YJkWmS+Xk6BYI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZcn6sQAKCRAw5/Bqldv6
-8q4MAKCs0lVJVkjm4x4MFHurUFu5tmbWGACgv9eckvxYpEmf2RO8FsiX/FvLRgc=
-=ZJDH
------END PGP SIGNATURE-----
-
---za5YJkWmS+Xk6BYI--
 
