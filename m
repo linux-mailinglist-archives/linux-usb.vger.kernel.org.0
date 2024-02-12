@@ -1,95 +1,149 @@
-Return-Path: <linux-usb+bounces-6254-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6255-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16B99851D8F
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 20:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D9D1851EAD
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 21:30:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75D181F2642D
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 19:04:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8562A1F21219
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 20:30:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9824779D;
-	Mon, 12 Feb 2024 19:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83862482CA;
+	Mon, 12 Feb 2024 20:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oDX/6dP0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 775114644F
-	for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 19:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0859846551
+	for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 20:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707764679; cv=none; b=mc8NxCSsNkv9Lj6E7JlCNfLYocQJI421MwvswcKrLktrPMDPTtF+RcYuwMZHb8J7yMF9EkqOT94uKADeSkrx55NVAoEvcbVQUqwVqKKmWXssnX0fsab5CxxC27Mrgq2b5xOYmg2pG1FgKEsO0PJlfTM4XFIE/NiY1q7S2h7FprA=
+	t=1707769782; cv=none; b=XaLS+0MRsdWtePY8isVtabnnqfd/nMAeJ0CkRFcACYaHWEEWDzDThc5P6DHYHt+glvKHd/a3Nb3vtCriWmCXDlHzqerWaJeQxa7Nh72z9rCZWgFp5OoRjCHfvAI5mmOjtNR4ZkjPIkPYCHflP3FZikQQhPW7Wid6PzzCup6wcS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707764679; c=relaxed/simple;
-	bh=L88DGTxBYgIkeriiYxq9PZjYUYpswT+GoOTTkCN5DvQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UD2f5FHIwFeD+DYCe9614zvo8iISaaP5lnZgssv9GxBxxrtEB1yut/IWPZ5DyOgDirLI/0FEAeXnkSWXQHnYGWAwCz70/l33pt5QFW6M9vKyo2GkIg9w0FCSi4Nr6QDsqFrsDfqZoLDl+5d0VU/clLPsWR7KRq6uuXkImsB7hnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
-Received: (qmail 345404 invoked by uid 1000); 12 Feb 2024 14:04:31 -0500
-Date: Mon, 12 Feb 2024 14:04:31 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-  Ricardo Ribalda <ribalda@chromium.org>,
-  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-  Mauro Carvalho Chehab <mchehab@kernel.org>, linux-usb@vger.kernel.org,
-  linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-  stable@vger.kernel.org
-Subject: Re: [PATCH v4] media: ucvideo: Add quirk for Logitech Rally Bar
-Message-ID: <6aade777-d97c-4c65-b542-14ce5b39abb6@rowland.harvard.edu>
-References: <20240108-rallybar-v4-1-a7450641e41b@chromium.org>
- <20240204105227.GB25334@pendragon.ideasonboard.com>
- <ca89eb86-a566-422c-9448-d8d5254d54b8@suse.com>
+	s=arc-20240116; t=1707769782; c=relaxed/simple;
+	bh=1+24rsFzdRqFOx1G07G8fWYGWLa5C3ni8qm4djzhuN0=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=phVMPPgkphJTia2AMjqeg5HSc0Z0w9MSe75GKi25tj9wiWK/usbkO1F4YO93xY79IIeBmltUrCPZPGgRUpxEfgDoCiuDdZaKueiTQCWoynuB0m0XHQ2sXmla22TUpD6kYxSiRKcbsh4gqeKLB4dNev9k7EXgLi6ZioPJ1gt88Z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oDX/6dP0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 65947C43330
+	for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 20:29:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707769781;
+	bh=1+24rsFzdRqFOx1G07G8fWYGWLa5C3ni8qm4djzhuN0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=oDX/6dP013anzroWAlwXo16D1atBdv2wb44xfBlE9YjE0sfTuAQnxKS3WR+n7l7XI
+	 54ww6AzL4rYyLTeNtax6FD9DIN+8qbZGyukK0DXNqpaLK6uYRMEcZxB1PiNQv5qnt9
+	 PtC2Je+cPjomXaPqThM0So8nqWMFmLdgR/lNQ9HskU3ABL4myjxo4IROoe1V6d4Dx+
+	 qd63kCO98E5G9L97A+mP0TzbHwpa5T2W6j2+FRZKvYLr+aUTUkUh1Ucy2N61MlyKAZ
+	 9cRsrnpUGvWCoooqVq6cX0VsawyNC9krx/n3oyjaais4FGxgPqrlNWhQYUy4ZZLY7r
+	 +sP36Iahdwysg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 53F86C53BD3; Mon, 12 Feb 2024 20:29:41 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
+ CometLake platform
+Date: Mon, 12 Feb 2024 20:29:40 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: rustamabd@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-216728-208809-iDSU74O8W9@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
+References: <bug-216728-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ca89eb86-a566-422c-9448-d8d5254d54b8@suse.com>
 
-On Mon, Feb 12, 2024 at 01:22:42PM +0100, Oliver Neukum wrote:
-> On 04.02.24 11:52, Laurent Pinchart wrote:
-> > Hi Ricardo,
-> > 
-> > Thank you for the patch.
-> 
-> Hi,
-> 
-> sorry for commenting on this late, but this patch has
-> a fundamental issue. In fact this issue is the reason the
-> handling for quirks is in usbcore at all.
-> 
-> If you leave the setting/clearing of this flag to a driver you
-> are introducing a race condition. The driver may or may not be
-> present at the time a device is enumerated. And you have
-> no idea how long the autosuspend delay is on a system
-> and what its default policy is regarding suspending
-> devices.
-> That means that a device can have been suspended and
-> resumed before it is probed. On a device that needs
-> RESET_RESUME, we are in trouble.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
 
-Not necessarily.  If the driver knows that one of these devices may 
-already have been suspend and resumed, it can issue its own preemptive 
-reset at probe time.
+Rustam Abdullaev (rustamabd@gmail.com) changed:
 
-> The inverse issue will arise if a device does not react
-> well to RESET_RESUME. You cannot rule out that a device
-> that must not be reset will be reset.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |rustamabd@gmail.com
 
-That's a separate issue, with its own list of potential problems.
+--- Comment #45 from Rustam Abdullaev (rustamabd@gmail.com) ---
+So, on my system, Lenovo X1 Extreme Gen 5, the commit
+e8b908146d44310473e43b3382eca126e12d279c does not fix the disappearing
+Thunderbolt issue and instead adds a 65-second delay when resuming from sle=
+ep.
+Could it be that such a wait is too long? After upgrading to 6.4.1+ the wait
+after each resume is excruciating.
+And can anything be done to fix the Thunderbolt issue on my system?
 
-> I am sorry, but it seems to me that the exceptions need
-> to go into usbcore.
+[   49.135899] pcieport 0000:21:02.0: Unable to change power state from D3c=
+old
+to D0, device inaccessible
+[   51.415400] xhci_hcd 0000:56:00.0: not ready 1023ms after resume; waiting
+[   51.415407] thunderbolt 0000:22:00.0: not ready 1023ms after resume; wai=
+ting
+[   52.471401] xhci_hcd 0000:56:00.0: not ready 2047ms after resume; waiting
+[   52.471406] thunderbolt 0000:22:00.0: not ready 2047ms after resume; wai=
+ting
+[   54.743394] xhci_hcd 0000:56:00.0: not ready 4095ms after resume; waiting
+[   54.743399] thunderbolt 0000:22:00.0: not ready 4095ms after resume; wai=
+ting
+[   59.095398] xhci_hcd 0000:56:00.0: not ready 8191ms after resume; waiting
+[   59.095403] thunderbolt 0000:22:00.0: not ready 8191ms after resume; wai=
+ting
+[   67.543405] xhci_hcd 0000:56:00.0: not ready 16383ms after resume; waiti=
+ng
+[   67.543410] thunderbolt 0000:22:00.0: not ready 16383ms after resume;
+waiting
+[   85.207405] xhci_hcd 0000:56:00.0: not ready 32767ms after resume; waiti=
+ng
+[   85.207409] thunderbolt 0000:22:00.0: not ready 32767ms after resume;
+waiting
+[  120.023396] xhci_hcd 0000:56:00.0: not ready 65535ms after resume; givin=
+g up
+[  120.023401] thunderbolt 0000:22:00.0: not ready 65535ms after resume; gi=
+ving
+up
+[  120.023570] xhci_hcd 0000:56:00.0: Unable to change power state from D3c=
+old
+to D0, device inaccessible
+[  120.023628] thunderbolt 0000:22:00.0: Unable to change power state from
+D3cold to D0, device inaccessible
+[  120.092723] ACPI: EC: event unblocked
+[  120.094771] pcieport 0000:00:1d.0: pciehp: Slot(8): Card not present
+[  120.095141] xhci_hcd 0000:56:00.0: Unable to change power state from D3c=
+old
+to D0, device inaccessible
+[  120.095163] xhci_hcd 0000:56:00.0: Controller not ready at resume -19
+[  120.095166] xhci_hcd 0000:56:00.0: PCI post-resume error -19!
+[  120.095167] xhci_hcd 0000:56:00.0: HC died; cleaning up
+[  120.095175] xhci_hcd 0000:56:00.0: PM: dpm_run_callback():
+pci_pm_resume+0x0/0x110 returns -19
+[  120.095200] xhci_hcd 0000:56:00.0: PM: failed to resume async: error -19
+[  120.110113] xhci_hcd 0000:56:00.0: remove, state 4
+[  120.110120] usb usb3: USB disconnect, device number 1
 
-If we do then we may want to come up with a better scheme for seeing 
-which devices need to have a quirk flag set.  A static listing probably 
-won't be good enough; the decision may have to be made dynamically.
+--=20
+You may reply to this email to add a comment.
 
-Alan Stern
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
