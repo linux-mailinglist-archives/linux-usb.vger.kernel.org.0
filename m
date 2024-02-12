@@ -1,125 +1,146 @@
-Return-Path: <linux-usb+bounces-6237-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6238-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EC22851378
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 13:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 390C8851383
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 13:26:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F50F1C2151F
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 12:22:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C6031C219E5
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Feb 2024 12:26:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E6639AFC;
-	Mon, 12 Feb 2024 12:22:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1036F39FCD;
+	Mon, 12 Feb 2024 12:25:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HzxojYNF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eGu7m8CC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C05639AFE
-	for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 12:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B2F5235
+	for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 12:25:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707740568; cv=none; b=LFVhEgK07hMjnY08JdDPAf6AA70SrLNss+2FZRiTQCbXUhwO2dmIwS+U96LJhbyHHy+FnQwHKr8snDnsmYLwBuLe4lX3bZXurTcdlcbGy6EETP/Mr5Jlf2Yoyafwn/GxttyqkTAGqRjYeEBK3zhWK/LFA9tlc1IwOwwlB4eWSRY=
+	t=1707740754; cv=none; b=kXnWzMZrlnpJuZ+o5oEp2pAX5eCfRQ1FW9JBOedqqyuSzm4hEodFXy0jpuQ4ZYORed892ambGYVmTVB8z8Cj/jUmWvKgOHZqo7Xx6OJDPKCyPwGVNreEPsD6dbP89sEteGRu6cPg2PLOF20kFdxkvuS1Rixf2mtW3JneiSVMsKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707740568; c=relaxed/simple;
-	bh=qR9lDFDeKPAo0DiFqn/cvL6ikhz+xZCI83InXXUT9Us=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D21sC8tU3cC5CeVG41ZHaXCxPfpmcmhyaJ3vAuHdTFl9Ehr3fwSH6lbG7JBOmbQSgRh8guk1+Zky1qQTFHphc1H1gmeJna3avPZL+qSQ9QCUxvuBM6jdTkr4PbIS6fap7SRomjvi+v/oooXpmWVnDfx5TBCAWaGVsRWFJCjR1J4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HzxojYNF; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-40fb3b5893eso24773335e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 12 Feb 2024 04:22:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1707740564; x=1708345364; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VSmpE+8yO23g+6K8r9vt9Aj1csyqHY8mxoubaVkXygM=;
-        b=HzxojYNFva6BC1gaeAGmjBHhoHb0EbJddMQK9L0VGx0kd1LuYYoMDeLuDU3quxQAn+
-         IIZ3qDHaSP3abc6rPpsx7WhP9ZMQdOpXvmMWJqHcypnNDim/WKRjfq/Ip79UlsEFVLUW
-         GUp3pfefI8LLmvHN7jqfxvxoaJ0JIe4AzKS5GaiRhCENGTefSn9v9/fcrbyFIOCFkpNb
-         jL2tec/iLpDElwKBns69B7ikv6NLzq4fd3YT7QGHpAOtD4uuwRW7v5vyqUNUXTLB7fC0
-         SOg5Nz2pduo1mLfNcgN6t+t691aOhAlMC1885YqUs63XR0/PRhmpTgVU0RaRp2GxswTr
-         wvsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707740564; x=1708345364;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VSmpE+8yO23g+6K8r9vt9Aj1csyqHY8mxoubaVkXygM=;
-        b=Ep/pw+3gZotRuaAVEe4MRfhgdks52ogrii3v4pYbgMaqGSWwlqkr+gHCQrZz0xOAfq
-         t6dVQ+xy4rVwP36GAjG7Gqs0n+ayhAMpOxGmXFwXb1xX63rTNvqMqOMw8FEUzekbctzX
-         qVHE20YKYeMcxNbgB9UluZ8Qd3EJW1ciSWV2KTrWe+UMMFgsnGN088ASqTUO/KF/BOhj
-         EJMAkoxOeuLCWcOjotR0qyevIzSJ5GJtvPPnFdRXMH4lBkWVayV+gthv4rQmPVgCXexq
-         5DzP42uR1FumeYIp2xS2PUiNTg27s458XOh1oVvryn7dxjekLB3uP4Gqfs7pcplRLG1j
-         isMw==
-X-Gm-Message-State: AOJu0YxxuHXz0yjd0ru1b+9BHR7bnrKntKTn8+xyi8PfUudAJ4xNnfce
-	70Iut/0z+62ebg35GJgO8fOosJyzu+LJ2F7BMG9lX6Soil8KW5O1Gvjf50t8Q83bNNQHFM93Aaj
-	w
-X-Google-Smtp-Source: AGHT+IEMZeyONDchq2UzhKfL03sb3Oz1idn2TcW6TYgzx8z5XM5YwzWmRZASiv6oNZHhGiNDr59fEA==
-X-Received: by 2002:a05:600c:6014:b0:410:df4b:f769 with SMTP id az20-20020a05600c601400b00410df4bf769mr1460899wmb.24.1707740564468;
-        Mon, 12 Feb 2024 04:22:44 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVjFVn4MaKmiUXEDqozFhQLCpOTa5RJGTa4hA8nm4BpYdwWD6pKfGG4CsvmTKzfIBpcz0NwO7ChEvdW1gYOFd2jFpAeb+9r2TkTs3JmrY34Y8lbT9S9daAnfm5uqB4AAaCfuXJ12Q0XVCEOIAeSzoogIUeuJIj/XNsmuxPsOYZUFiS4bYGRWBCx2qkGLWuHUDznKId5o+C1vz2h+I09WjLBkG4KvakqyBa8FZ/HbwaoFqKMGT3bC9iFq+CG8sXvXzJ8481TOxwUUR2po2XjF5AfBw0pnOqZRwmhS1/Qml62TbY=
-Received: from ?IPV6:2001:a61:1366:6801:b2db:904d:e0b0:46ec? ([2001:a61:1366:6801:b2db:904d:e0b0:46ec])
-        by smtp.gmail.com with ESMTPSA id k9-20020a05600c1c8900b00410d7e55e5asm2630204wms.3.2024.02.12.04.22.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Feb 2024 04:22:44 -0800 (PST)
-Message-ID: <ca89eb86-a566-422c-9448-d8d5254d54b8@suse.com>
-Date: Mon, 12 Feb 2024 13:22:42 +0100
+	s=arc-20240116; t=1707740754; c=relaxed/simple;
+	bh=syeoiYY68RhglyC+I5OgQ8qMhaDh+ppH6fpxzn0jT9Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J2rSSlUiNrkL5j1b8FCcRZRIioMiwBtkt7Sapvy6Qrwc/8iBWRrXunnkTVgfBZt07flBhgKk+taS9zZSB/R6DoQxJzFuhq4XvpVc8JECQVgMNLoYPDRDBTghLBvKYDNjdZrZ893VHHOwULaA0B1Cpczt3c7MPNykRH0yTGm9skg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eGu7m8CC; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707740753; x=1739276753;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=syeoiYY68RhglyC+I5OgQ8qMhaDh+ppH6fpxzn0jT9Y=;
+  b=eGu7m8CCpAZ0ALcNAQQ5zoreBxpzESYAlWgKWAf8xdQieBUC0mRTEx3M
+   tAlkMFkS+3X6QJEm7nGXZZsmNbvrIpNTo/xZPUHVcI6p5dL8hRW7lvkqn
+   ViLQYm9N0zMirI3/14AJOTApVemcwvzymIB/wimn6xdNEYn5Fqln5VB2i
+   J/rmsV+NtCYJsJpsQsjZCAsQzdF6jMr3BLLTTo8gnVEmXLfKZ9w+03CAR
+   edRudv8OaHD0wL1AuGfgVHV/rmRIlOAvSlHpzwcC4G1HdxElGBOlODols
+   tJP8fz3r9auegfG1+gYYUagxTTIY2kv08oLhTv5UpBKw/gZEOi6E8ZFXq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="1867444"
+X-IronPort-AV: E=Sophos;i="6.06,263,1705392000"; 
+   d="scan'208";a="1867444"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 04:25:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="935057546"
+X-IronPort-AV: E=Sophos;i="6.06,263,1705392000"; 
+   d="scan'208";a="935057546"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Feb 2024 04:25:49 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 39A30F7; Mon, 12 Feb 2024 14:25:48 +0200 (EET)
+Date: Mon, 12 Feb 2024 14:25:48 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Olliver Schinagl <oliver@schinagl.nl>
+Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Gil Fine <gil.fine@linux.intel.com>,
+	Linux kernel regressions list <regressions@lists.linux.dev>,
+	Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [PATCH] thunderbolt: Fix NULL pointer dereference in
+ tb_port_update_credits()
+Message-ID: <20240212122548.GX8454@black.fi.intel.com>
+References: <20240212115132.2630125-1-mika.westerberg@linux.intel.com>
+ <0172d016-0421-4671-822e-262b2ebfc636@schinagl.nl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] media: ucvideo: Add quirk for Logitech Rally Bar
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Ricardo Ribalda <ribalda@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alan Stern <stern@rowland.harvard.edu>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- stable@vger.kernel.org
-References: <20240108-rallybar-v4-1-a7450641e41b@chromium.org>
- <20240204105227.GB25334@pendragon.ideasonboard.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20240204105227.GB25334@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0172d016-0421-4671-822e-262b2ebfc636@schinagl.nl>
 
-On 04.02.24 11:52, Laurent Pinchart wrote:
-> Hi Ricardo,
+On Mon, Feb 12, 2024 at 01:15:18PM +0100, Olliver Schinagl wrote:
+> Hey Mika,
 > 
-> Thank you for the patch.
+> On 12-02-2024 12:51, Mika Westerberg wrote:
+> > Olliver reported that his system crashes when plugging in Thunderbolt 1
+> > device:
+> > 
+> >   BUG: kernel NULL pointer dereference, address: 0000000000000020
+> >   #PF: supervisor read access in kernel mode
+> >   #PF: error_code(0x0000) - not-present page
+> >   PGD 0 P4D 0
+> >   Oops: 0000 [#1] PREEMPT SMP NOPTI
+> >   RIP: 0010:tb_port_do_update_credits+0x1b/0x130 [thunderbolt]
+> >   Call Trace:
+> >    <TASK>
+> >    ? __die+0x23/0x70
+> >    ? page_fault_oops+0x171/0x4e0
+> >    ? exc_page_fault+0x7f/0x180
+> >    ? asm_exc_page_fault+0x26/0x30
+> >    ? tb_port_do_update_credits+0x1b/0x130
+> >    ? tb_switch_update_link_attributes+0x83/0xd0
+> >    tb_switch_add+0x7a2/0xfe0
+> >    tb_scan_port+0x236/0x6f0
+> >    tb_handle_hotplug+0x6db/0x900
+> >    process_one_work+0x171/0x340
+> >    worker_thread+0x27b/0x3a0
+> >    ? __pfx_worker_thread+0x10/0x10
+> >    kthread+0xe5/0x120
+> >    ? __pfx_kthread+0x10/0x10
+> >    ret_from_fork+0x31/0x50
+> >    ? __pfx_kthread+0x10/0x10
+> >    ret_from_fork_asm+0x1b/0x30
+> >    </TASK>
+> > 
+> > This is due the fact that some Thunderbolt 1 devices only have one lane
+> > adapter. Fix this by checking for the lane 1 before we read its credits.
+> > 
+> > Reported-by: Olliver Schinagl <oliver@schinagl.nl>
+> > Closes: https://lore.kernel.org/linux-usb/c24c7882-6254-4e68-8f22-f3e8f65dc84f@schinagl.nl/
+> > Fixes: 81af2952e606 ("thunderbolt: Add support for asymmetric link")
+> > Cc: stable@vger.kernel.org
+> > Cc: Gil Fine <gil.fine@linux.intel.com>
+> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > ---
+> > Hi Olliver,
+> > 
+> > I managed to reproduce this with a Thunderbolt 1 device. I wonder if you
+> > can try this patch and see if it fixes your issue too?
+> 
+> That sounds reasonable, as it's an old Macbook (Should be TB2) with an old
+> ethernet dongle (probably TB1?) or simply because it doesn't need that much
+> speed (gbit adapter only). Sadly patching my kernel is not something I can
+> do at the moment.
 
-Hi,
+Right, if you plug in a TB1 device into TB2 host, that's also same issue
+(TB1 devices don't always have two lane adapters).
 
-sorry for commenting on this late, but this patch has
-a fundamental issue. In fact this issue is the reason the
-handling for quirks is in usbcore at all.
-
-If you leave the setting/clearing of this flag to a driver you
-are introducing a race condition. The driver may or may not be
-present at the time a device is enumerated. And you have
-no idea how long the autosuspend delay is on a system
-and what its default policy is regarding suspending
-devices.
-That means that a device can have been suspended and
-resumed before it is probed. On a device that needs
-RESET_RESUME, we are in trouble.
-The inverse issue will arise if a device does not react
-well to RESET_RESUME. You cannot rule out that a device
-that must not be reset will be reset.
-
-I am sorry, but it seems to me that the exceptions need
-to go into usbcore.
-
-	Regards
-		Oliver
+It's fine if you cannot test this (but let me know if you want
+instructions). I can pick this into my fixes branch and send for -rc. It
+should land the arch Linux kernel tree at some point too, so you get it
+by upgrading the kernel.
 
