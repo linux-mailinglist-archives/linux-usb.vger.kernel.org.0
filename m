@@ -1,118 +1,127 @@
-Return-Path: <linux-usb+bounces-6316-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6317-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84875852CFB
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 10:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B0850852D48
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 11:00:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40CA42895E0
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 09:52:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D06A287FA2
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 10:00:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FD4122EE3;
-	Tue, 13 Feb 2024 09:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A0A3250F6;
+	Tue, 13 Feb 2024 09:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1bJrnhf6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HXpHJn1F"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B0922618;
-	Tue, 13 Feb 2024 09:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329FD2421F;
+	Tue, 13 Feb 2024 09:58:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707817563; cv=none; b=ml2XW4UNc3UflbmwGAjpvhSSx97CqRA7JSlQzVmTTk6lVFfPkzGdC+zWlUESnZGlZeibulb9kYoOlfE8onXo/wpLtCfmaRWlmqH7p6FT2t94crrLizP5xrU6T4hHoamvwJewC9G4ykRVLs89EyaDHT7PgVgdkn7Grbs9npSIn+o=
+	t=1707818298; cv=none; b=tIFfoPDwe2XwLe6ovgMU6JKqZ3yGMfZb7UHIK6eoX2a+1BcXrnvGdEYFdSYSU1VhdXqFRI4SqjEGmV73kwYjoQgEO8+Lk07boA/hWMNtaD8hitklthWhN9sFkrRj/mfZLvAqO2Bsoj4pm9fm1BYcPVD9vzfLvtmDEa1xWU2rIvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707817563; c=relaxed/simple;
-	bh=qFyWFT85f614iAFVoIyVBn+WeMGQK8ZHRIFpwhElMOM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PxE/RtqjfskAzFxj2F0xL6frdpS/XSYe40yPDzD7OH2KhYSwrqeBcVBeBB9NaC5Dai6PBMFTjA91+SkpPhXjWGJjNGh/+jH53fStg24T2J0jlycuHyQvr8uhLjjOMAQ8u1d84jBxaZZwjE9fMhKDPInQGpC3p6INO1wAp0m0FOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1bJrnhf6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF90CC433C7;
-	Tue, 13 Feb 2024 09:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1707817562;
-	bh=qFyWFT85f614iAFVoIyVBn+WeMGQK8ZHRIFpwhElMOM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1bJrnhf67DJLiTD21dPyaLZBO99GI8qVzt0hG0n9s+xdf7+MdTft/ljiZVvgjPieW
-	 26lzJ8vihGFIdd+rITru5+NP7rmbb4uJcJG65k9/cwu29rEf4a4ZEVV1ECNCoyYr/p
-	 die5ImPOelWX1U4ifC9iI116QEDPjO/TKnfWKcds=
-Date: Tue, 13 Feb 2024 10:45:59 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: fsa4480: Check if the chip is really there
-Message-ID: <2024021327-slapping-causing-c0ef@gregkh>
-References: <20240212-topic-fs4480_check-v1-1-d9969e4d6f9a@linaro.org>
- <2024021210-bacteria-camping-7e48@gregkh>
- <99749541-25bd-4cd7-be5d-e440472c6f0f@linaro.org>
+	s=arc-20240116; t=1707818298; c=relaxed/simple;
+	bh=VuVC5DVt6OYP+BgQzXBubGFYfL8/9v3YgwDCs/6JVh4=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=ASJ+HrK91iMLa92+j9PdCJwjKFNbMAiFkDda74+zIPyc6dqFO7QkwWJlju7WdB9r7hXtJifUUYBTwUgK8BBPDHLN3e1TetA6qg4afPU5A14cVycYW1xtMIrlJE7NYonI9DKpJuFvi2p1rniirjxqf72ePXjHW4wafYaegCyz9wU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HXpHJn1F; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707818297; x=1739354297;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=VuVC5DVt6OYP+BgQzXBubGFYfL8/9v3YgwDCs/6JVh4=;
+  b=HXpHJn1FAx8ut6o+LEtPasX8vz5jR6IHcbmbFyJtoGjz92xU59edeoYT
+   n+G7XXj7lCGJuZQSkiMN1YPq3nYHzenGETH71nl6JEMf41clm4ebinbVF
+   UE4P5wS7fQEOjDJh71mkF7tK3LE7HDDHS4C7lPJKvwDuWUvCUhznntzpy
+   hb2+T55aOCgt0gnwa4Jh5AcokY1SY8F1q37c9rTJTyQWMj53JeVZIwPmY
+   wGCt7iHK4AVa5yPVBn6F20E8hSwVQzAsv62v81054mA33s88e0P/zEqwU
+   eqqTJaZSqo5vw8kMHQRbb9Sf8TzdHc0t3g4XGUNOQe4muqw3t7u2ZD3Pu
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1686484"
+X-IronPort-AV: E=Sophos;i="6.06,156,1705392000"; 
+   d="scan'208";a="1686484"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 01:58:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="935313672"
+X-IronPort-AV: E=Sophos;i="6.06,156,1705392000"; 
+   d="scan'208";a="935313672"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Feb 2024 01:58:14 -0800
+Message-ID: <1b2558f7-94ea-123e-dd3f-b43ecd85c2ef@linux.intel.com>
+Date: Tue, 13 Feb 2024 11:59:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <99749541-25bd-4cd7-be5d-e440472c6f0f@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Jan Henrik Weinstock <jan@mwa.re>, mathias.nyman@intel.com,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: =?UTF-8?Q?Lukas_J=c3=bcnger?= <lukas@mwa.re>
+References: <CANi1PHh4W7KPagKkvZW6cNAQqgAeG3zxaaTJKkg3KiTbsFRMdg@mail.gmail.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: XHCI without USB2 ports
+In-Reply-To: <CANi1PHh4W7KPagKkvZW6cNAQqgAeG3zxaaTJKkg3KiTbsFRMdg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Feb 12, 2024 at 01:59:42PM +0100, Konrad Dybcio wrote:
-> On 12.02.2024 13:48, Greg Kroah-Hartman wrote:
-> > On Mon, Feb 12, 2024 at 01:01:30PM +0100, Konrad Dybcio wrote:
-> >> Currently, the driver will happily register the switch/mux devices, and
-> >> so long as the i2c master doesn't complain, the user would never know
-> >> there's something wrong.
-> >>
-> >> Add a device id check (based on [1]) and return -ENODEV if the read
-> >> fails or returns nonsense.
-> >>
-> >> Checking the value on a Qualcomm SM6115P-based Lenovo Tab P11 tablet,
-> >> the ID mentioned in the datasheet does indeed show up:
-> >>  fsa4480 1-0042: Found FSA4480 v1.1 (Vendor ID = 0)
-> >>
-> >> [1] https://www.onsemi.com/pdf/datasheet/fsa4480-d.pdf
-> >>
-> >> Fixes: 1dc246320c6b ("usb: typec: mux: Add On Semi fsa4480 driver")
-> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >> ---
-> >>  drivers/usb/typec/mux/fsa4480.c | 14 ++++++++++++++
-> >>  1 file changed, 14 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
-> >> index cb7cdf90cb0a..d622f4f3bd54 100644
-> >> --- a/drivers/usb/typec/mux/fsa4480.c
-> >> +++ b/drivers/usb/typec/mux/fsa4480.c
-> >> @@ -13,6 +13,10 @@
-> >>  #include <linux/usb/typec_dp.h>
-> >>  #include <linux/usb/typec_mux.h>
-> >>  
-> >> +#define FSA4480_DEVICE_ID	0x00
-> >> + #define DEVICE_ID_VENDOR_ID	GENMASK(7, 6)
-> >> + #define DEVICE_ID_VERSION_ID	GENMASK(5, 3)
-> >> + #define DEVICE_ID_REV_ID	GENMASK(2, 0)
-> > 
-> > Why the indent?
+On 12.2.2024 20.39, Jan Henrik Weinstock wrote:
+> Hi all,
 > 
-> In many places across the kernel, bitfields or possible values of a
-> register are defined with an indentation to emphasize the relation between
-> the defines
-
-Ah, that wasn't obvious here because:
-
-> > And those are _VERY_ generic #defines, please give a better name for
-> > these so you don't conflict with other stuff in the kernel accidentally.
+> I am currently working on an XHCI platform device simulation model. I
+> noticed that the Linux driver (Linux 6.5.6 xhci-hcd) stops working
+> when I configure the model without any USB2 ports. During an interrupt
+> (TRB_PORT_STATUS), I only get "xhci-hcd 12100000.usb: ignore port
+> event for removed USB3 hcd."
 > 
-> If you don't mind them becoming very long, I can prepend them with FSA4480_,
-> and I suppose shrink 'VENDOR' to "VEN" and "VERSION" to "VER" to compensate
+> During xhci_irq, in handle_port_status, xhci->shared_hcd is NULL [1],
+> so the interrupt gets ignored. However, shared_hcd would only ever be
+> allocated during xhci_plat_probe [2], if the device has both USB2 and
+> USB3 ports, i.e. xhci_has_one_roothub returns false [3].
+> 
+> Without any USB2 ports, a shared_hcd will never be allocated in the
+> first place, and handle_port_status will always exit early.
 
-Yes, prepend them pleaase.  And no need to shorten the word, we have
-plenty of space.
+This is true.
+That port handling code is from a time before xhci driver supported single
+roothub setups.
 
-thanks,
+I think all single roothub cases so far have been xHC hosts with only USB2
+ports. This is probably the first one with only USB3 ports.
 
-greg k-h
+I have a vague memory that USB3 specification would require USB3 ports to
+be backwards compatible, and support USB2.
+
+But xhci driver could still support it, does this change help:
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index f0d8a607ff21..6ef081f5ef05 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1893,7 +1893,8 @@ static void handle_port_status(struct xhci_hcd *xhci,
+         }
+  
+         /* We might get interrupts after shared_hcd is removed */
+-       if (port->rhub == &xhci->usb3_rhub && xhci->shared_hcd == NULL) {
++       if (!xhci_has_one_roothub(xhci) && xhci->shared_hcd == NULL &&
++           port->rhub == &xhci->usb3_rhub) {
+                 xhci_dbg(xhci, "ignore port event for removed USB3 hcd\n");
+                 bogus_port_status = true;
+                 goto cleanup;
+
+Thanks
+Mathias
+
 
