@@ -1,167 +1,180 @@
-Return-Path: <linux-usb+bounces-6331-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6332-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1A978530CD
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 13:45:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 773678530D3
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 13:46:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00ED81C265E9
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 12:45:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EC0E285FB2
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 12:46:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54F283FE58;
-	Tue, 13 Feb 2024 12:43:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EECD543AC8;
+	Tue, 13 Feb 2024 12:45:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=tsoy.me header.i=@tsoy.me header.b="NBat4QhS"
+	dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b="NLmkG9rW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from puleglot.ru (puleglot.ru [195.201.32.202])
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2092.outbound.protection.outlook.com [40.107.249.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2946355794;
-	Tue, 13 Feb 2024 12:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.201.32.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707828193; cv=none; b=jmDBP/kNBMbC7YmbO0Nq8I6O8ZvtM4Gf4AT48aRRrb4gjNU0La4XfDDqUCbxwMe7v+kpj4aEVcP90k+NNVkRN+IeptOSotzr0SlvI3Elka2YM4/LPZhwjP4U/puso8A4EU6q/Iqw5eGCjblJMh3qiJEa94fhZNxAeh9FV9QKro8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707828193; c=relaxed/simple;
-	bh=isVT3swz7BX2lSLns3AewMrJcOXQ42RCXPUYDhjUlgM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DS8zJpOSkfr5K5IHKVy874gQzGE/c5Cm4ijfwN4nsTa4kjAMylRc4hQmRX5hu7I/i0jei/EtM5fTG4cyC8yLF3RHSTpAVAPzCuqmYjslw2bu47iWzzj6ZzqKmkjvev6dMzjTM2wG1VzpfyexoU6OZwspFj22Fr/KNf68+Wp3+e0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tsoy.me; spf=pass smtp.mailfrom=puleglot.ru; dkim=pass (1024-bit key) header.d=tsoy.me header.i=@tsoy.me header.b=NBat4QhS; arc=none smtp.client-ip=195.201.32.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tsoy.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=puleglot.ru
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tsoy.me;
-	s=mymail; h=Sender:MIME-Version:Content-Transfer-Encoding:Content-Type:
-	References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Reply-To:Content-ID
-	:Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-	Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-	:List-Post:List-Owner:List-Archive;
-	bh=aapO+1NwCqHDBlHbx8Ce0IIDPV5ZOXBr3A2aFyBpNAQ=; b=NBat4QhSU7CU+g68EzUOH3nH2H
-	Nai1+JWcpXa3qQmxJ4utVW5AflijC41zg118pDIHRLAMDm1NJzIBfhB547ThIqEu3tiVS2rk0HwVV
-	IGxBwl6wXDbu3FUoKX0HQkMxyurU3ZJmiw4dYVPZFM1iOaW+QK3cA/CYnj0NXOhKmjQ0=;
-Received: from [2a00:1370:819a:f1b4:f5a8:7291:14f0:548b]
-	by puleglot.ru with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.97.1)
-	(envelope-from <puleglot@puleglot.ru>)
-	id 1rZs7s-00000002MQX-2pHo;
-	Tue, 13 Feb 2024 15:43:04 +0300
-Message-ID: <4cf2602f203dc960a70751c48a22f73b3548f04d.camel@tsoy.me>
-Subject: Re: [PATCH] USB: Always select config with the highest supported
- UAC version
-From: Alexander Tsoy <alexander@tsoy.me>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-sound@vger.kernel.org, 
-	alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela
-	 <perex@perex.cz>, Nikolay Yakimov <root@livid.pp.ru>, Saranya Gopal
-	 <saranya.gopal@intel.com>
-Date: Tue, 13 Feb 2024 15:42:51 +0300
-In-Reply-To: <2024021353-reversing-waltz-7402@gregkh>
-References: <20240212152848.44782-1-alexander@tsoy.me>
-	 <2024021353-reversing-waltz-7402@gregkh>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A608A4EB20;
+	Tue, 13 Feb 2024 12:45:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.249.92
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707828355; cv=fail; b=a4SvPouk7fVgknMqlCC1jMV6kepTfJwlwJ5yPztIth0cJe8+UquJ+764umYpbO6pt+sfxT/j/gxPHjU7P3i87B9SD8RPmYjJbyMqeYu52+J9CnXZxyg9AdXjQj/G6xv/KgeXQYE4kNiRVeQp2bV/s7V9YwPztIgSf1AebX44lw4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707828355; c=relaxed/simple;
+	bh=us+BUkNVcc5WAPRpDxMwjmjf8a/FF1kxb6OC5y4LrLE=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=thcrBhSmAE0RqgOqUxBp1HTx2+PitNdQJaIo7N4JXsmCJE8tPqxqin5c0tmW1vsO7+xeu1LLHmJoTNPFw94MlnE6IngGGN85AT5m7d55FZUZ++pD2ssEYjfgOV8nPRzH9DZa2wnWGdWfuqZrsyTlZNEeQ9bTsIqInFp4IQEPdH8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vaisala.com; spf=pass smtp.mailfrom=vaisala.com; dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b=NLmkG9rW; arc=fail smtp.client-ip=40.107.249.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vaisala.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vaisala.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DPYQC4fPIwFFNWBvf37ZaWEmS8pmH87TWfJTiFd9UFWPjNwhVVicSXzOI1LE33TDd5EMsx7WwqxbEYfTeZ2turmpuJYWNDz/BXuWqOMa19mZ7kKrscWUb0zqFohtCLFWrRgq5I2DyBWMq97LJqLq4Wv/c7uC6Ve2aNzggXvrwpL79VrxMqpTBWLcNK6bECzCKb/Wysg+hn4B59I3UoyZ59oBeDGr3O1ASfezhUEq+oN74TT3eZECyQKQG4nkl26DCXdtBRcCsNFh9rVHtqia+J9beGr+3rwoEq/nQPmqhk+kfwg3uLcnEtSFI0iODhtPKCfjAlz/GVsLPUL24aRFwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GzJ8/X8FpytL3jJzosCG7gaTwOwA8zcEUgZ5mj7NTDw=;
+ b=RA/BlCeR39MhapqyVeXfG7rNwMFk9K7dzsJs9hKtbI1cjMXYDdxSfOz7/U5axIFuTrQIVq7TYAhYWN8Y1t/NqRlmrALl1Ersu3rNfDaN7h+gGoG82xVc/faNd7haSyoLtCwIDbA5WIrV/iBny2q8dkQ7AwSI06PTxQsIQMeI1SSAvRWSPctJUvijo8jKXovmBogvhdoSsw1Gbb/hqbZ07p0x6OXXMAOHYYQfw8oKkb2xP1BmP9QFRae6gvpAKV6BTTnaZ0J21bJ8MzOCKReL0RUvpNNZr43GhFgorqqAGc+VyBeuRukAUPU3B53AW5igEtK1XjC0hx/OB4jboRF+CA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vaisala.com; dmarc=pass action=none header.from=vaisala.com;
+ dkim=pass header.d=vaisala.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vaisala.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GzJ8/X8FpytL3jJzosCG7gaTwOwA8zcEUgZ5mj7NTDw=;
+ b=NLmkG9rWhbWx18IgQT19tFjhko8YG6P2GZvsD+45+3lMcO+guP438BR2ATHu0slSzw6gwty+2gTxvtYTgZdmg9k6/4/g2ffo5vUBSQ8iBxmIGB9MrwM19hYJWHKe7im1MTS+bawy4jggm9Uk5e80IL34+R6HP9L7RPSItsAmgWPLKygRHO0SSVdcxbsN/8VomJhPwf3O1R0MJ+YHCVVZRgKdM3y67c0Qtx8zMVyzEHHSdZ7Ura4Wg+VvVlagbhNjZ3aAoVucAZqdclW3VklJRfL2HKr6Tkhre514409/8IKBvtIidV1KgeOM0yfIfw/PsGrXelIW+RhMr2i9+PgN4A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vaisala.com;
+Received: from AS4PR06MB8447.eurprd06.prod.outlook.com (2603:10a6:20b:4e2::11)
+ by AS8PR06MB8330.eurprd06.prod.outlook.com (2603:10a6:20b:441::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.39; Tue, 13 Feb
+ 2024 12:45:46 +0000
+Received: from AS4PR06MB8447.eurprd06.prod.outlook.com
+ ([fe80::b5ae:8355:acaf:29e0]) by AS4PR06MB8447.eurprd06.prod.outlook.com
+ ([fe80::b5ae:8355:acaf:29e0%4]) with mapi id 15.20.7270.036; Tue, 13 Feb 2024
+ 12:45:46 +0000
+From: niko.mauno@vaisala.com
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	vesa.jaaskelainen@vaisala.com,
+	geert@linux-m68k.org,
+	Niko Mauno <niko.mauno@vaisala.com>
+Subject: [PATCH v2] usb: core: Kconfig: Improve USB authorization mode help
+Date: Tue, 13 Feb 2024 14:45:18 +0200
+Message-Id: <20240213124518.20231-1-niko.mauno@vaisala.com>
+X-Mailer: git-send-email 2.39.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: GVX0EPF00011B5B.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:144:1:0:8:0:11) To AS4PR06MB8447.eurprd06.prod.outlook.com
+ (2603:10a6:20b:4e2::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Sender: puleglot@puleglot.ru
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS4PR06MB8447:EE_|AS8PR06MB8330:EE_
+X-MS-Office365-Filtering-Correlation-Id: 454384b3-4b54-48e4-7375-08dc2c91b304
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	2NgihREqnRog3lFtDlKswvkccFwRHaTxygAMpsNY5Uy2DX/4CpVvIdvb62Iwh/RBT+gNUNWsn4PUNuDGp+zUcbf45uFupzE0/V6hZ9uiD3uBr3iRtHlvh/yVM5IalYxLiy5euROn6vIti8/fohVqWS1W+IZ8hVXUC/25hYZ4q/xy3/ygW64rgNLOCHZQaHprbjXFBFgsK6vpTNYokAHtpGp73X99AcotVmImsJ9YjlBkN9Xkq301ndepwFVK9SerlBIhNK0bpJPWtItwobqnOSAKrZTVmJUNlSF3jG9tJgaMBu9zU2fy79zAepT1CWhIB7j6/Uw0Ihc38TR+ub47W8Qi7bQjebNW1jF6Jb5RBnfXHPTXmVOsyeyxJOxDwnjF589jPZoWtOWpza1XLDLS6kYJ/0OR4cMs8K5bkw9qpN/GqD1soH1Vo/TPStdy1j/EYzGkwe2XOlyE/doTKKDb4OknjE0kVmX/65wmv35+lXLzmxQBPpjNoXV2XPwx3Fwvx5GuecdtvLsUjb/F17QGRPNAsbN2ho7vTG3NaLe65RifUpmVBNshWSX2Fpr3MBF40wgjGNeg+Pus0B1Kg/Fs+kGwiX7ZZVVxa/mMrSS+zVo=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR06MB8447.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(366004)(376002)(396003)(136003)(346002)(230273577357003)(230922051799003)(186009)(451199024)(1800799012)(64100799003)(2906002)(5660300002)(26005)(9686003)(52116002)(6512007)(6506007)(107886003)(2616005)(36756003)(478600001)(38350700005)(6666004)(1076003)(38100700002)(86362001)(66476007)(6916009)(66556008)(4326008)(8936002)(316002)(83380400001)(8676002)(66946007)(966005)(6486002)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?z9v/U/bvvkTqi+Seqwqw99m1hrUtlUduz72G7g1UuoDVUH9Nv1ESPk1pBo3q?=
+ =?us-ascii?Q?SMtuv/WeX3hIx5OBB+LboloIYsFcnql7VHnab63OUzxzRC1LUKNlH0PZxHm8?=
+ =?us-ascii?Q?dUhnzESdkO+Phd9N2U+kbr5Te2+n4AtS8AXlRBbpD7ztYLYQ0Q3vUdbwOkGG?=
+ =?us-ascii?Q?ttJReMfELMCOUAGKr0pI0UDqSrxK0oAAJ5cYL6UHsZ4nZoKv9Dquwn+ElQ72?=
+ =?us-ascii?Q?w6POEuZJq7yx8gj9A44g7C2KOJkM5gR0zlxejIJJW5qEh6jsCf5AGbYAfKQ5?=
+ =?us-ascii?Q?z8vd0esg9SeUKt8gfoDlfRuG8jIJ2cbZsA6I80YJA38+VTw1CXJCW1wTbWSZ?=
+ =?us-ascii?Q?9b3o8+qUYcgmJ3YdZ/ddCJFTFoOlu06DMVPwhoGe2KAADp00ZLHcCg4xLSyj?=
+ =?us-ascii?Q?D/sJ7btfyGss4q9dX23hUm8hw7ssIhTFChvswvAMBbxULJNeTuTlHJWii7qZ?=
+ =?us-ascii?Q?i/thFy8Tlzd+z6eaONSzNeXriAJrHI6nm0GLOhZkpcVcOXTriDRnD3HVR+aJ?=
+ =?us-ascii?Q?MgyfFBuV9CUE2yjW9Jueam+SRGe+s1Sw2w+Yxp0BBrjaZe3/MO+dT9SJFXO7?=
+ =?us-ascii?Q?fzZi+5yC3OQdP3YgiiGSCT5kNzjVD3mbzzQYoqSghrEbQvV0oygP9d0ZtIAo?=
+ =?us-ascii?Q?U9Kh70qPGaxrS69+kgkBpVJZW5mQ813Vt98IMaWOV8hvF7HaHCXH51RyvjO3?=
+ =?us-ascii?Q?1uG5Ogf95/wa+q956K0lTDqTcucJxFBfYr/NsfNCP6G0g2vTgwIUCKwsuGvI?=
+ =?us-ascii?Q?fux5+Pzjx8WkAx28U6vl9lNSJUUSaf3PN3515GbEJZs+r/ZktdbDxL4mG9MX?=
+ =?us-ascii?Q?fcM3Plnql9AseqLxtn6zMe9nCHvCXyUuEttULR5CsSdp9IwwGvGER/pKhz0c?=
+ =?us-ascii?Q?zshmQZKX9qgOtpqxRZnk1bsZjOvHzL98SbRtbnnutZhFYcjJBZrq0WY8XKjC?=
+ =?us-ascii?Q?mFLruAOJsmHjk6GKDoytpyh0s0Vnp47DWxpy82N6L8rVqXw2c12XTnVGpkl+?=
+ =?us-ascii?Q?0Fv9UbWaSmHTbhrTMCTO4yh+as0O32ZvDBAa01/0k9ZoZ0OseCvgRwJ7ErOX?=
+ =?us-ascii?Q?SFv7ztItZ7/3mlzzPUoLDDTQe6NcW0inw26jooIkqO/aiudRyVpTX2Wq+pYv?=
+ =?us-ascii?Q?ZuR7MTbCh3In2obySWyoTenKCqg5sJx6WfVhu2+fBWS0vfAnnk3D9EMeEmA4?=
+ =?us-ascii?Q?m+EZDupJNSUF9Nu+QJn6cIG5OpyQF1FtKQgoqhAmEjmvwF9UiNW7sn0AuFB5?=
+ =?us-ascii?Q?JdRlxIa0KVW48hR4Bj5g54FebqN9Ffcio5eDf/WWx1LnLWuRCGmm8R/WsPg6?=
+ =?us-ascii?Q?rYbCaBCh+H4n4/72ns2O0RvuWBMMF6NHm7Dz2EGtxRikPGWXbSKq4PcNqEoB?=
+ =?us-ascii?Q?AW927bNZwTSXfOMhfvC843nmDV3di3ZmXGVG9pG2io9JAo33nye5QbvXOPvf?=
+ =?us-ascii?Q?u1LzYoJXfjopDkirEaH+xryMAgpzZwKLSD7mC/nOYL/nnd2JXbH0YZZlxX92?=
+ =?us-ascii?Q?e2eKDg9j1qjUi9ITGksVCt1fCAtGro1TiyV4JV2Zua8yS0V+RQ/a6Ra3Lv5w?=
+ =?us-ascii?Q?jRlBDNyYGfSyim5rpx+nB8zYoRQt9KeMfds7idJMGkGHFmtModfd2itPRSK+?=
+ =?us-ascii?Q?aw=3D=3D?=
+X-OriginatorOrg: vaisala.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 454384b3-4b54-48e4-7375-08dc2c91b304
+X-MS-Exchange-CrossTenant-AuthSource: AS4PR06MB8447.eurprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2024 12:45:46.6079
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YuLX7Px8F+hTE+ifJos/7Cxm6X1eLUDYQcqLqHo+P1d354wHI64P/Mef4/Wz1PtYjsWabLy9CTreDwTgoRESVQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR06MB8330
 
-=D0=92 =D0=92=D1=82, 13/02/2024 =D0=B2 12:05 +0100, Greg Kroah-Hartman =D0=
-=BF=D0=B8=D1=88=D0=B5=D1=82:
-> On Mon, Feb 12, 2024 at 06:28:48PM +0300, Alexander Tsoy wrote:
-> > Config with the highest supported UAC version is always preferable
-> > because
-> > it usually provides more features.
-> >=20
-> > Main motivation for this change is to improve support for several
-> > UAC2
-> > devices which have UAC1 config as the first one for compatibility
-> > reasons.
-> > UAC2 mode provides a wider range of supported sampling rates on
-> > these
-> > devices. Also when UAC4 support is implemented, it will need just
-> > one
-> > additional case line without changing the logic.
-> >=20
-> > Signed-off-by: Alexander Tsoy <alexander@tsoy.me>
-> > ---
-> > =C2=A0drivers/usb/core/generic.c | 39 +++++++++++++++++++++++++--------=
--
-> > ----
-> > =C2=A01 file changed, 26 insertions(+), 13 deletions(-)
-> >=20
-> > diff --git a/drivers/usb/core/generic.c
-> > b/drivers/usb/core/generic.c
-> > index b134bff5c3fe..8aeb180e1cf9 100644
-> > --- a/drivers/usb/core/generic.c
-> > +++ b/drivers/usb/core/generic.c
-> > @@ -48,9 +48,16 @@ static bool is_audio(struct
-> > usb_interface_descriptor *desc)
-> > =C2=A0	return desc->bInterfaceClass =3D=3D USB_CLASS_AUDIO;
-> > =C2=A0}
-> > =C2=A0
-> > -static bool is_uac3_config(struct usb_interface_descriptor *desc)
-> > +static bool is_supported_uac(struct usb_interface_descriptor
-> > *desc)
-> > =C2=A0{
-> > -	return desc->bInterfaceProtocol =3D=3D UAC_VERSION_3;
-> > +	switch(desc->bInterfaceProtocol) {
-> > +	case UAC_VERSION_1:
-> > +	case UAC_VERSION_2:
-> > +	case UAC_VERSION_3:
-> > +		return true;
-> > +	default:
-> > +		return false;
-> > +	}
-> > =C2=A0}
-> > =C2=A0
-> > =C2=A0int usb_choose_configuration(struct usb_device *udev)
-> > @@ -135,22 +142,28 @@ int usb_choose_configuration(struct
-> > usb_device *udev)
-> > =C2=A0		}
-> > =C2=A0
-> > =C2=A0		/*
-> > -		 * Select first configuration as default for audio
-> > so that
-> > -		 * devices that don't comply with UAC3 protocol
-> > are supported.
-> > -		 * But, still iterate through other configurations
-> > and
-> > -		 * select UAC3 compliant config if present.
-> > +		 * Iterate through audio configurations and select
-> > the first of
-> > +		 * the highest supported UAC versions. Select the
-> > first config
-> > +		 * if no supported UAC configs are found.
-> > =C2=A0		 */
-> > =C2=A0		if (desc && is_audio(desc)) {
-> > -			/* Always prefer the first found UAC3
-> > config */
-> > -			if (is_uac3_config(desc)) {
-> > -				best =3D c;
-> > -				break;
-> > -			}
-> > +			struct
-> > usb_interface_descriptor	*best_desc =3D NULL;
-> > +
-> > +			if (best)
-> > +				best_desc =3D &best->intf_cache[0]-
-> > >altsetting->desc;
->=20
-> Are you sure you always have a intf_cache[0] pointer?=C2=A0 What about
-> altsetting?=C2=A0 Remember, invalid descriptors happen all the time, and
-> are
-> a known "attack vector" against the USB stack.
->=20
->=20
+From: Niko Mauno <niko.mauno@vaisala.com>
 
-Well, similar code exists at the beginning of the loop. But I just
-discovered that according to the Backwards Compatibility sections of
-UAC 3.0 and UAC 4.0 specs, we need to look at the bFunctionProtocol
-field of the Interface Association descriptor. So the current code that
-selects UAC3 configuration is also not entirely correct AFAIS.
+Update the default USB device authorization mode help text so that the
+meaning of the option and it's available values are described more
+accurately.
+
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Closes: https://lore.kernel.org/linux-usb/CAMuHMdUy793gzDVR0jfNnx5TUdJ_2MKH5NPGSgHkytAhArtqmw@mail.gmail.com/
+Signed-off-by: Niko Mauno <niko.mauno@vaisala.com>
+---
+ drivers/usb/core/Kconfig | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
+index f337aaea7604..58e3ca7e4793 100644
+--- a/drivers/usb/core/Kconfig
++++ b/drivers/usb/core/Kconfig
+@@ -126,10 +126,20 @@ config USB_DEFAULT_AUTHORIZATION_MODE
+ 	  Select the default USB device authorization mode. Can be overridden
+ 	  with usbcore.authorized_default command line or module parameter.
+ 
+-	  The available values have the following meanings:
+-		0 is unauthorized for all devices
+-		1 is authorized for all devices (default)
+-		2 is authorized for internal devices
++	  This option allows you to choose whether USB devices that are
++	  connected to the system can be used by default, or if they are
++	  locked down.
+ 
+-	  If the default value is too permissive but you are unsure which mode
+-	  to use, say 2.
++	  With value 0 all connected USB devices with the exception of root
++	  hub require user space authorization before they can be used.
++
++	  With value 1 (default) no user space authorization is required to
++	  use connected USB devices.
++
++	  With value 2 all connected USB devices with exception of internal
++	  USB devices require user space authorization before they can be
++	  used. Note that in this mode the differentiation between internal
++	  and external USB devices relies on ACPI, and on systems without
++	  ACPI selecting value 2 is analogous to selecting value 0.
++
++	  If unsure, keep the default value.
+-- 
+2.39.2
+
 
