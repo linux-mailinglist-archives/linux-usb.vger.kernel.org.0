@@ -1,31 +1,30 @@
-Return-Path: <linux-usb+bounces-6381-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6385-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFB57854014
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 00:28:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C136D854034
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 00:38:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3638B1F25EB3
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 23:28:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5132A286649
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 23:38:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CE8A63402;
-	Tue, 13 Feb 2024 23:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CC0B63402;
+	Tue, 13 Feb 2024 23:38:06 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C368763064
-	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 23:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B65463107
+	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 23:38:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707866905; cv=none; b=IIOllSbt7gwsDJT3rDiz50HxNV2R7tkMMc6MCfG8v/4FxpWGib4Hw4rLKiHMgDUpcUssClq7HHheKkKoS3bvm6UBPYbL+H6x2QXxGiXJpaNUZensQbYRNFqokPIEpd2v6Qp8tG+dLDHII1drsbCnAMa8lelSRpDxgcL7Ylzm/pY=
+	t=1707867485; cv=none; b=Spku/KlYkUygQ31qivzzrshx+FDWdQCmuo++pBInGJq/MVwVKSW491kmQdSThc9ln/nc9LidBPda+hjSmihw9wh8q05z3D29cfe4dk+NbhLKCGHJDS/WHr4bIzOUGG5yB6FnKgzY5UmmyX1ECbsI+ifANOyP0HIvp+1Tj8yg4VI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707866905; c=relaxed/simple;
-	bh=IQ3Y/e/zPuJO66WvMrusL0LrQcoWvCq272yYuoXcg8I=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SnUq4at8De0kbww9/Ghi9c30r3D48iVo5DfeROrDuYdioSVEgDm2+Q0Ic7B59pqBn5mjFcZGZg+8N94nlbpTHED0NbGZ9j6Bi1Jo5leM6MxCGyZ63+jDgUADajV92Ve6SpVNyYpKaT1+je8eGUD2Ekt8LgTcGD4zn0TJu3qxkR8=
+	s=arc-20240116; t=1707867485; c=relaxed/simple;
+	bh=BaS/LDmT6doANyq4gk8E+Sg9Eq8IsEg++C7h6qSGKsU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DXd9cHWhTpX0NdUelrZkcQqMqbQ/tYPfU++aHfmSeWqyOt7L6t0rIBTr895rNj0qZ78GeFfxmVpBpePZ5Xk2xLDA+qnEF0iG9lG7er8LgwEZC+YCoPju9Li/bklFbh7gl4yrfm15sifAUUKD4igG8w94tuwdL/WiL/Ah5jcTkZQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,20 +32,21 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1ra2CI-0000eU-Ih; Wed, 14 Feb 2024 00:28:18 +0100
+	id 1ra2Lg-00013L-2r; Wed, 14 Feb 2024 00:38:00 +0100
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1ra2CH-000Zcq-V8; Wed, 14 Feb 2024 00:28:17 +0100
+	id 1ra2Lf-000ZgZ-JR; Wed, 14 Feb 2024 00:37:59 +0100
 Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
 	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
 	(envelope-from <m.grzeschik@pengutronix.de>)
-	id 1ra2CH-002uYW-2u;
-	Wed, 14 Feb 2024 00:28:17 +0100
+	id 1ra2Lf-0032pb-1j;
+	Wed, 14 Feb 2024 00:37:59 +0100
 From: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Date: Wed, 14 Feb 2024 00:28:02 +0100
-Subject: [PATCH 3/3] usb: gadget: uvc: rework complete handler
+Subject: [PATCH 0/2] usb: gadget: uvc: improve tagging transmit errors
+Date: Wed, 14 Feb 2024 00:37:53 +0100
+Message-Id: <20240214-uvc-error-tag-v1-0-37659a3877fe@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,30 +55,30 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240214-uvc-gadget-cleanup-v1-3-de6d78780459@pengutronix.de>
-References: <20240214-uvc-gadget-cleanup-v1-0-de6d78780459@pengutronix.de>
-In-Reply-To: <20240214-uvc-gadget-cleanup-v1-0-de6d78780459@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAFH9y2UC/x2NwQqDMBAFf0X23AUNFkt/RTwk8UUXJJZNFUH8d
+ xePMzDMSQUqKPStTlLsUmTNBs2rojj7PIFlNCZXu7Z2TcvbHhmqq/LfT9yFbnTv+AFSImuCL+C
+ gPsfZqrwti8mfIsnxTPrhum4MRXQ1dAAAAA==
 To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
  Daniel Scally <dan.scally@ideasonboard.com>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Michael Grzeschik <m.grzeschik@pengutronix.de>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5140;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=880;
  i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
- bh=IQ3Y/e/zPuJO66WvMrusL0LrQcoWvCq272yYuoXcg8I=;
- b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBly/sRqPjQgnXhsPN6K1krJXPbN4oO0gMIjSHDh
- ODyESfaFlCJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZcv7EQAKCRC/aVhE+XH0
- q/CaEACMk8xx1roCJwuAZ81Qtu6o3wB2rl5GyAJ4TGAKUYLFtMwIMvqir785IWJBD5ddVQqosrW
- 9AmHSNjTDXGpvYDLg5QjBwffQ/49LmMYf+Mrlsk/In1oRHlnFCIdN9geB4tFvClyzHf0H315nQa
- SjCyO62cqg/XRccWR+iJTyiD76bvAxHhWQDYr/UAWy4uei2gM48q2qYK4V3fVtMsfGqpihMBkjM
- VL+aOLY7UEPz3AG2l2CtdKF3/BrVROox+N3BMnuREWleGZua1UXL0YAuHoxwW66GVZbBYWSlbJr
- JsjkX4cnVOFb5bIdQZP1ljgCss2dFsYoI/QAv+gbWDLCRIfKKRNGE+uYIJ7D7eDMt/nmCr1nS6h
- DjjkpfqWil5Hxr6N9L21BBWmPSV6lTG7OAE7tF4+zyvAL802Bj1tbJQFr0lJ48D5dlklKS93+X2
- HGA44nijWDtmAiL43lHs4CDVMMA3juRa4rQazbVo9KsWP3m2PORNs1aktfGlMjZbFbGlhqS77NZ
- imRt0DdYrCsK+dISSMAR+Di2DXMiVsrlsxmAq7UWZw74yo49LkFclNVjGTMaU5zGe6sDAL/QkfA
- kEAgkORQJe3uR9ZdEgblKvQQprgjcFvIhTCOwlP8z8VpbhZ4MAanquiH1+ZCGyXuElIo2xzYhE9
- 0y7ceOz4sHl6/gA==
+ bh=BaS/LDmT6doANyq4gk8E+Sg9Eq8IsEg++C7h6qSGKsU=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBly/1TiHAEaBtYlsWu5sPIVYw2S2Hj8gn6VkDlh
+ N7zCWQ++WyJAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZcv9UwAKCRC/aVhE+XH0
+ q9i9D/0cN97B/pYGrXtWzqIp+tg5E7dfGN1GOw2RI8J9cQjiiUSb604/0G2kNlhYLWeYQaWJxp+
+ VtmK8EB4kszSMK2hhnmfSE1yEyWFE2JADoF+lTi1H1T9EgDiNnmvUTL4KTxPzExAbSbjgh6qDqL
+ iKOvvKZZ1OEE4Sn3+2UUMGi6BeeiD76slrSCI+Koc8I9NfmZQcga85VMLnciLcgBURWfcVYqwSB
+ jux8qeaOK7XgC4RHHETA/SWNO3K0659yQWbDqqc1/CKSZ8Swi+UPYvK6P7buIHQTGTNRkhGxSgD
+ wPheNS65muaFDIEdESKu5WEAcg7gDOzxqH2f4RJKXYsPy99SPX24h7pAuSA7SacY1/um4xraIjv
+ 1Wz9m0PZ35cORUZznEUEhUBpCEPYSf9OJyJ91obW4w7/D7Rdo+cps0QxNKEk2kTm/2wU+ElxRVD
+ GzMXgcgO8mLWWMb6mC6vf7RkkIyO4NCgH+XqM66GSdoFci72FK83YpdKD8Inw2PVj9/RhGPlY2U
+ 7ZAhAVPz2yqJs96K70Y2bBalcP22y5squePPkNRqqvoNbNAEb68OcH4eueDNbNfDCbxt6jk6sbr
+ qQx8UIOLQMDP4eX1RmgjH2jo3l8tnx+bPPzlwvZ6vHYcHr0KZTk07vC5pS1pB8AzRc+jAW7uHOa
+ Y5zQiY6RFKloSlw==
 X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
  fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -86,137 +86,27 @@ X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-We refactor the complete handler since the return path with the
-locking are really difficult to follow. Just simplify the function by
-switching the logic return it on an disabled endpoint early. This way
-the second level of indentation can be removed.
+This series contains patches to improve signaling of transmit errors on
+gadget and host side. The gadget now will tag an frame with
+UVC_STREAM_ERROR in the header for the host to know that the transferred
+frame has errors. The gadget will also skip tagging the frame erroneous
+if the request that got not transmitted to the host did not contain any
+data.
 
 Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 ---
- drivers/usb/gadget/function/uvc_video.c | 95 +++++++++++++++++----------------
- 1 file changed, 48 insertions(+), 47 deletions(-)
+Michael Grzeschik (2):
+      usb: gadget: uvc: dont drop frames if zero length packages are late
+      usb: gadget: uvc: mark incomplete frames with UVC_STREAM_ERR
 
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index b4f3b3c784218..ff7c1fa5c48f3 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -370,6 +370,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 	struct uvc_video *video = ureq->video;
- 	struct uvc_video_queue *queue = &video->queue;
- 	struct uvc_buffer *last_buf;
-+	struct usb_request *to_queue = req;
- 	unsigned long flags;
- 	bool is_bulk = video->max_payload_size;
- 	int ret = 0;
-@@ -425,59 +426,59 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 	 * we're still streaming before queueing the usb_request
- 	 * back to req_free
- 	 */
--	if (video->is_enabled) {
-+	if (!video->is_enabled) {
-+		uvc_video_free_request(ureq, ep);
-+		spin_unlock_irqrestore(&video->req_lock, flags);
-+		uvcg_queue_cancel(queue, 0);
-+
-+		return;
-+	}
-+
-+	/*
-+	 * Here we check whether any request is available in the ready
-+	 * list. If it is, queue it to the ep and add the current
-+	 * usb_request to the req_free list - for video_pump to fill in.
-+	 * Otherwise, just use the current usb_request to queue a 0
-+	 * length request to the ep. Since we always add to the req_free
-+	 * list if we dequeue from the ready list, there will never
-+	 * be a situation where the req_free list is completely out of
-+	 * requests and cannot recover.
-+	 */
-+	to_queue->length = 0;
-+	if (!list_empty(&video->req_ready)) {
-+		to_queue = list_first_entry(&video->req_ready,
-+			struct usb_request, list);
-+		list_del(&to_queue->list);
-+		list_add_tail(&req->list, &video->req_free);
- 		/*
--		 * Here we check whether any request is available in the ready
--		 * list. If it is, queue it to the ep and add the current
--		 * usb_request to the req_free list - for video_pump to fill in.
--		 * Otherwise, just use the current usb_request to queue a 0
--		 * length request to the ep. Since we always add to the req_free
--		 * list if we dequeue from the ready list, there will never
--		 * be a situation where the req_free list is completely out of
--		 * requests and cannot recover.
-+		 * Queue work to the wq as well since it is possible that a
-+		 * buffer may not have been completely encoded with the set of
-+		 * in-flight usb requests for whih the complete callbacks are
-+		 * firing.
-+		 * In that case, if we do not queue work to the worker thread,
-+		 * the buffer will never be marked as complete - and therefore
-+		 * not be returned to userpsace. As a result,
-+		 * dequeue -> queue -> dequeue flow of uvc buffers will not
-+		 * happen.
- 		 */
--		struct usb_request *to_queue = req;
--
--		to_queue->length = 0;
--		if (!list_empty(&video->req_ready)) {
--			to_queue = list_first_entry(&video->req_ready,
--				struct usb_request, list);
--			list_del(&to_queue->list);
--			list_add_tail(&req->list, &video->req_free);
--			/*
--			 * Queue work to the wq as well since it is possible that a
--			 * buffer may not have been completely encoded with the set of
--			 * in-flight usb requests for whih the complete callbacks are
--			 * firing.
--			 * In that case, if we do not queue work to the worker thread,
--			 * the buffer will never be marked as complete - and therefore
--			 * not be returned to userpsace. As a result,
--			 * dequeue -> queue -> dequeue flow of uvc buffers will not
--			 * happen.
--			 */
--			queue_work(video->async_wq, &video->pump);
--		}
-+		queue_work(video->async_wq, &video->pump);
-+	}
-+	/*
-+	 * Queue to the endpoint. The actual queueing to ep will
-+	 * only happen on one thread - the async_wq for bulk endpoints
-+	 * and this thread for isoc endpoints.
-+	 */
-+	ret = uvcg_video_usb_req_queue(video, to_queue, !is_bulk);
-+	if (ret < 0) {
- 		/*
--		 * Queue to the endpoint. The actual queueing to ep will
--		 * only happen on one thread - the async_wq for bulk endpoints
--		 * and this thread for isoc endpoints.
-+		 * Endpoint error, but the stream is still enabled.
-+		 * Put request back in req_free for it to be cleaned
-+		 * up later.
- 		 */
--		ret = uvcg_video_usb_req_queue(video, to_queue, !is_bulk);
--		if (ret < 0) {
--			/*
--			 * Endpoint error, but the stream is still enabled.
--			 * Put request back in req_free for it to be cleaned
--			 * up later.
--			 */
--			list_add_tail(&to_queue->list, &video->req_free);
--		}
--	} else {
--		uvc_video_free_request(ureq, ep);
--		ret = 0;
-+		list_add_tail(&to_queue->list, &video->req_free);
- 	}
-+
- 	spin_unlock_irqrestore(&video->req_lock, flags);
--	if (ret < 0)
--		uvcg_queue_cancel(queue, 0);
- }
- 
- static int
+ drivers/usb/gadget/function/uvc_video.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+---
+base-commit: 88bae831f3810e02c9c951233c7ee662aa13dc2c
+change-id: 20240214-uvc-error-tag-7b7d25c8eeff
 
+Best regards,
 -- 
-2.39.2
+Michael Grzeschik <m.grzeschik@pengutronix.de>
 
 
