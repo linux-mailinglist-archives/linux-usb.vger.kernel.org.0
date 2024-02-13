@@ -1,176 +1,190 @@
-Return-Path: <linux-usb+bounces-6319-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6320-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A31DF852D84
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 11:10:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE2B4852E07
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 11:36:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C54D51C20D03
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 10:10:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BB8C1F22AE4
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 10:36:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3F99224FD;
-	Tue, 13 Feb 2024 10:10:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B06C6288DB;
+	Tue, 13 Feb 2024 10:36:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3zY1m6ZK"
+	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="q5vxIuYd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2090.outbound.protection.outlook.com [40.107.247.90])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD34D2260B
-	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 10:09:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707819000; cv=none; b=DzfKmdZi7lfg20NDkt+j0d6e2bAV4coOINhGJj12BYNvcYRo96AVdLLFjoqoP2O9/ydysU5oXL9uJbCnRFrvQi5VkOX9S4NbWUmpQWmZSKO2IG4gqNbh2RuRnql6xapHuP45H8FA54d38O3Rkr5hXQT2FkA2Q0tuB54lsKCchzo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707819000; c=relaxed/simple;
-	bh=iV0LNlu09L+usvqCOo1VRBf+A61/7Q4YqPsN6h9xJrs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T0v9dJgVmZApReYzvj5WYej/IM4UezYTSFH0qcdVRb01nh0tQeXRDp/Ox5P5i1Xw90jYPQsQqA6A/UmGvcGcOVU+Zq0UmvDec0rkjPgkrTUHz3mrEdTHL3bAR484VN35HjDIFnC4DT7Qnr+h3vxyqBQHvhYgTb/ttru3xhKisMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3zY1m6ZK; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6e09143c7bdso2105596b3a.3
-        for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 02:09:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707818998; x=1708423798; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1gCHmuatdsgry8k30N4puCgoRyQDLlrHu4bpm0vi5/U=;
-        b=3zY1m6ZK3msONF5aOHtyxp5yhMulnBt5mBsbsG/eVhufWc/WRZAxc9jIFcu7kDqoyh
-         F/HYC+kgqYFtAtCP4FNkvZYjkhPCVaHTlbAayY3Uh5BubB65usdfJ8tua1S3wz+rQj+D
-         f5cCVhvjCtc7zpBQDS4s/ossAtWhfONdxnfM02VSxiUgVYSMvimR/OrtEmrZESDiWOI6
-         IIHe1PJ6NUaiE7rNlhTTXF1FjD+PrfFGVcuWu3/3XQIXVXuQufgXkYHdw1AvDmnNhbly
-         UscxeZ8ol6BYcCkEwYaerisBAZH7Pf3kPvqsgZbgelSTWfZU3TmSpGN2m6b9jmZIdngi
-         PUVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707818998; x=1708423798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1gCHmuatdsgry8k30N4puCgoRyQDLlrHu4bpm0vi5/U=;
-        b=qFgKDJK++Q9RnW66tkwomWqKl3WcI+D0VdWHi2jHfEgwap6rkxakCN33x88KLDHcLv
-         GASj8yqWHwXqejGUtHTUz4xQv8GMHhZR9gxcrjE+VmAdmDGf0cqukxPQjzyPSFRtVgha
-         d9oZ/1XQhut2t2aRN1mwQ0qkB6pGc/sCPxJMD5wqAAlYXAzonr/+CpWMif565XYdD1Im
-         hqFrTttd85I8tHX0XZQSfL2ppIBITaXkaHRVDHlSmsmShJu6ElSmE+oapa3gLF1G7g+7
-         +eEk+sIh3oKPK9Y8unAkdAcHQ4nX3kZGNiZdpvu+Sy/n6nBjg6Mh6dRcjzCeCM6Dtltd
-         3JBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW5zQS57LGszaLWcynq7GmUyBJRtY93shoPlaX4rV9uwEJu5OG2bf7+PP4GIGwhJg4rMJ5X1z3hs19d6oSiNU7cw7rRBe2re7NX
-X-Gm-Message-State: AOJu0YxWUNLQ8lTbh9mm11ez9Pb6yiUA3aKCu7/qDydVKc9jrQYRb2Ky
-	cch4OuqSNPhUtTjxlmBuI6sW9rb+yEHmK1wheqk40zmZRjD3xCIG7mtOqHolFf2cYjr19Rjq69o
-	zSYxQ64zmUARKrlEmcZvpfStzuSSnsUPQnsMQ
-X-Google-Smtp-Source: AGHT+IFbcgWLigGId4RU9uYlUZvt9W4RnnU69Uv78HX3R5mO1+ACmJmHNus7LLTVSoHLMIVgHNTJiSKijjkUYLw42n8=
-X-Received: by 2002:a05:6a20:94cb:b0:19e:3a94:6272 with SMTP id
- ht11-20020a056a2094cb00b0019e3a946272mr8092548pzb.44.1707818998063; Tue, 13
- Feb 2024 02:09:58 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5373023754;
+	Tue, 13 Feb 2024 10:36:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.90
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707820592; cv=fail; b=TNMoB9g71wAaEPcF1oeUm9SB3BbBZW4R7NqO277rVqcHyEaMOujjqyBGmyny5O6yoP2jL5FdSZeB7vITRIr34FEbOzLJ2LglHlG8xVi0iAvkUW9NBFOakZSudtmPOzdpl/OkqIB+bdAEinq00fzR4l4uX4/e0ABeuAWU06FUYiM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707820592; c=relaxed/simple;
+	bh=eCh60O+D8G3e6vyOWJlLgbd9PB0XT3G3IZzNcmVY7Vk=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Rb36fZuyUL4jJ+8J2w3r5mrHhilfft9ktqqM7buc1JL0EAR2tc9JMhzfnFitYnIzd3iTvTGb4qNWTo7FIlMUYTYDFeVNHxoYqC2hhiN0kTcaMkf/06T61zjkiQNizns7FEBkSSjivYHobkLKgbCe8IHhKr9VoCqjd8aoxJ7PPms=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net; spf=pass smtp.mailfrom=wolfvision.net; dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b=q5vxIuYd; arc=fail smtp.client-ip=40.107.247.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolfvision.net
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fC6tJr+rkpXlV+DKJZCrl1wtAOIHtpitACWihS72gGhcoEXE+/A3saBUiE7h+3/zTAlabhbHIlMErzn3aVpsp0Yd2ZxOTzhXpC3DhDDz4xTOAUsVvJFwMlnSVDhmw5v1q9ypItF9DZnDXg2SzmEX4f8Jp7/NWRmsm5MPBU4Zh7b2fMoi3JgXaFKgPM+AQcUuduBBhEb0CUin5MqI9CEEga1o0Q43glZQL4xgG0vAuUG4A40lSaPvelNN25dqHNRKsa1Dul/mRkKUVMk0uMZip4XvNHLclFJBWMs9/IwT3fyslf2TrGeNTwGYzHsCk/UT9EVmdiNwtJM7SZ7skZvFfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4imtw8GQBpYNjDrhDMFARn02wWhnL4xlSFDmy8PAae4=;
+ b=PQXKW+3RZzVAUijMY8Hr2N3d7kQVlKapamkD9q8tJVbX3ke3k+t6J+/Y5RATWzojH5yZOze0HipSCrmXvZfI4Iea/l4emO/i8pzo7lno1hyeiBBQwaGJH+SR71lvf5MXwvfKHloxOS0lNdu8DIcGvazQuNg1P76g+RHAljUlfFdzUNXplfPlOT+xqSdX3Rei9Ve00cjxgLqq7BHcLG4sc1Yk0aidjuvLYZZfF1VrL4pwuHkqJkiFth3l2cPj7qgSRR247DPEmjNEh75FDKJxptMFH1Oe5tzOxTjpupn1rTnRKc0hh45WYVTqoSs1NyzF8TEgyMRYedvwuEKPa1ecGA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4imtw8GQBpYNjDrhDMFARn02wWhnL4xlSFDmy8PAae4=;
+ b=q5vxIuYdNhyRw3cWUwxxz4q1t7iDkRpbubGtPdXVGrs8GwZAogEW2+R/jaubyOcUtx1iLU1qUNdDJfnfvShTR4MgVfuOb9ftULQwTCTK98ghv5FqiO8Rve79NUoF6mZDs3vo08YoMnq4RHBdZCcJnVVYDhJyFtxx5LehQQrVvUA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
+ by AM9PR08MB5890.eurprd08.prod.outlook.com (2603:10a6:20b:281::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.39; Tue, 13 Feb
+ 2024 10:36:27 +0000
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::e661:f010:4f67:a6c]) by VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::e661:f010:4f67:a6c%6]) with mapi id 15.20.7270.031; Tue, 13 Feb 2024
+ 10:36:27 +0000
+Message-ID: <36b813ad-fdcb-495b-9d27-3573b6177831@wolfvision.net>
+Date: Tue, 13 Feb 2024 11:36:25 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/7] usb: misc: onboard_hub: rename to onboard_dev
+Content-Language: en-US
+To: Matthias Kaehlcke <mka@chromium.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ Matthias Kaehlcke <matthias@kaehlcke.net>
+References: <20240206-onboard_xvf3500-v3-0-f85b04116688@wolfvision.net>
+ <20240206-onboard_xvf3500-v3-1-f85b04116688@wolfvision.net>
+ <ZcJynrwp7zcs-aIT@google.com>
+From: Javier Carrasco <javier.carrasco@wolfvision.net>
+In-Reply-To: <ZcJynrwp7zcs-aIT@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1PR06CA0097.eurprd06.prod.outlook.com
+ (2603:10a6:803:8c::26) To VE1PR08MB4974.eurprd08.prod.outlook.com
+ (2603:10a6:803:111::15)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240212-usb-fix-renegade-v1-1-22c43c88d635@kernel.org>
-In-Reply-To: <20240212-usb-fix-renegade-v1-1-22c43c88d635@kernel.org>
-From: Badhri Jagan Sridharan <badhri@google.com>
-Date: Tue, 13 Feb 2024 02:09:16 -0800
-Message-ID: <CAPTae5LOresaK3Epd4R_ifpx2kw21tubQDENg4OMrhJWsar-oA@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: tpcm: Fix issues with power being removed
- during reset
-To: Mark Brown <broonie@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?Q?G=C3=A1bor_Stefanik?= <netrolller.3d@gmail.com>, 
-	rdbabiera@google.com, amitsd@google.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|AM9PR08MB5890:EE_
+X-MS-Office365-Filtering-Correlation-Id: 263a7a03-1672-4feb-0c3b-08dc2c7fa1e6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Kab9DsSA0hnpY7gzaKlUmq3Uu9uh/iaN180WphB9bL3X6p/wF5szGdt9L4YLPyTCC7ZPiKxMEEU7SkD1H86Qfp5lvRlR5XZ1KTcaTbqoys2iSpKvQ9qnMv7Et6Ujodkwe2h+s8b9ujfD//2VhRir3vOXy4KbiQPZdDPNmYVKsAQRyoO5d9hOL2hw+Ylk/5iTTu4bOAob/GaMmJ3Y36656B/xhAGGpdL6JoMvyeQuzJlLEAMEqOFpMdLgEc66+wn+/7OovCOaSwKaMaSNmEqAbnlTYHqvi5SdV7gFfX9vU/mG6BSqLhdXkqDxE8HAqsq5owGchLlitoYoe2w8UEsnsSfT9xHQu8K0QJqTIHEAXqbmn8VpsqihttL1IDQUurTrURC1JlaGb1n5yM4MbMAFYuqNeclDRgibkArTLm62xieRy4kVtv0caWKByS1KS+3nDBakpJbu82ayde2kCx5Re9JTKcJzzhRwK1VlsipCJDAfwho/ZuJhIIIoQ5F8UAVbsDg0yTEaCd9otcEN0aan5+ZFp4+UMqeRKZAVlhpM8Tc6en3mu70R93jesYbw2xEi
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(136003)(376002)(39850400004)(346002)(396003)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(31686004)(86362001)(36756003)(38100700002)(31696002)(5660300002)(2906002)(44832011)(7416002)(26005)(66476007)(54906003)(66556008)(66946007)(316002)(8936002)(6916009)(8676002)(4326008)(478600001)(6512007)(6486002)(6506007)(53546011)(41300700001)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ejIzdVRTTkhmbVRyd2o0a0YwMzJab1kvTXJsNmRRRDJ0RGNKa3dKa05kQTlu?=
+ =?utf-8?B?RG1HelhnR216WG9ydjRrL01kbVpOS05BZWltRFRCU1RLUGRtcmhwMklvWHpm?=
+ =?utf-8?B?VDR2OWltamt6d1h1b0FudUNyYVBsdE5mZEJsOUw3NnBTT0pYcW0yVE5YSFdp?=
+ =?utf-8?B?UGs3eEFvU1Y0M0h6cEhFQjE5ZnpWNWt2VElwYnRBeXg2ek9zY21xNFN5ZXRU?=
+ =?utf-8?B?eStVTGNmN0Y5WmhiVS9qOGRLWWRWdHZwRExPSlFNblEyNmhKSlpNNGVENU52?=
+ =?utf-8?B?OTFHZHJBS2krdE5za3g5dkthZ3VZQ1p6Z2thQTVQZTQycHdZNmdaNTh0NU80?=
+ =?utf-8?B?NGYxNW03YjhRQTRaZVdRelpUdVBvT25TeGhySzBwNWpYRWR2cUJQUnYrbDUv?=
+ =?utf-8?B?cG4xYVZRQndHMGZaSGI4eFFXSGxTbVAxQStRaGMvbWliN3pydjRjTytLQjds?=
+ =?utf-8?B?WDhWQUlPOUhVVm1vSzI1TmVUY3owWGlOWVJYVzUvUXhoa2x5OUdqcFZRNXJK?=
+ =?utf-8?B?WHB0bzVCTGN1NnljMnpaZy9zTWxiMmZlSC9DdWtEUVpDREZXeU1tVTR2MVFX?=
+ =?utf-8?B?MFRkR1lWS3NlME0vNG1OSmJGemh0aUNYMGp4MkJKU2pLanV1ZTNnajFob2ZK?=
+ =?utf-8?B?OHhreUxaOTcyaWo3UDdvTDJ0d0lsTWhLeWNvaklXV2w4WCtXVzVCL0czZ29m?=
+ =?utf-8?B?VDliMk1OSG5qMEEzeGJQSDNLYnN5UzN2RThLUU9HSjVVbVgvTzUvMUtWZ3Vo?=
+ =?utf-8?B?OVZSNTAwc2luNTd1YzlZdktrSEo1YUdXSFU4UDZaeVpYUWswNHBXaHZXdmtZ?=
+ =?utf-8?B?T2p4NU5TN01LcjYySHRqNXMvQ3Y2N0swYmovcDRDZEpnSjVaY3piV2dwWjBq?=
+ =?utf-8?B?WmxtOVM5Vjc1d1U5UktwYWtZR2xzN3R4UHdJTElSUmlKWkc5Q1YrWDUwNXpE?=
+ =?utf-8?B?UTlCdzM3K1dhNUN6SWNSaFRKZXRWQVNiclVTU25PcEhOVVN6Rm4zUXVaNjds?=
+ =?utf-8?B?dStRRHk0cFNmOHVMOXIrcVlqVmpMUXJFZjdoTEdvTFV3NXMrakllYVh1Zjhi?=
+ =?utf-8?B?MEkwWDAyTk5JRlNSOTJhT0dHeW5GTFkxQ3VxWXM5QkFVWVdGQ2ZSK2F0bWkz?=
+ =?utf-8?B?emxwMjl1V2d1Z2lNNnFKQWZWUXgvaGhUTWVucGhnSVR4Sm9MTUl5alBtSU9w?=
+ =?utf-8?B?WDNoN0RFb3lUc2M1SndMdGhkUVk1ZTNKY1ovZEYwbXkxZUpqVnpzc2RpK2c1?=
+ =?utf-8?B?TmYvL3NHeXREcGx0OXpwTVZvclhOK0JqRk80QjJsVVhPQkowSmhLdStxb043?=
+ =?utf-8?B?dVIzVTF2NTJISEFyNjU5aXFObm1sZjhOc2h2d3FpeDhsWjZMNzB5WDRtd215?=
+ =?utf-8?B?R1lCTWdMVFROV2MvYnZnNlU0WEpWY09OeVhDZWhoMXRtM2JLK0taQkhYeG92?=
+ =?utf-8?B?K1ZtSFdvR2FRU0g0UmtPVVRrVXlEK3JJMG14N2MxR2krQzY3a3VsQmh6YWxT?=
+ =?utf-8?B?ZUxpM1o0SVQ1LzVFUUlOL1JLLzZsTlpPTCt5eWJHWHlsdStnWEZsbXRucHU4?=
+ =?utf-8?B?RGZ1ajdINFVvKytpMnh6d2FLTHcwdE5LT3JoNnE3RmdWRk9FUWRJSE9OcWFC?=
+ =?utf-8?B?RFdGNjlTMWVaNFdxQ0grZW9YMWk4amJNb1NIUURheEpvNUtQTUFUek5jSm55?=
+ =?utf-8?B?VmN1a2RIUjBHRE9sNXo5NDZob3hSa2I4a2MrTDRNeUQ2NXBCdDFraVlDaHQ1?=
+ =?utf-8?B?Q2ZuQWZWbGc2dWc4VHdWZFNTMUN3ZzFYRzVkZWZtaFhvTG9xVWV2Z25aUzk4?=
+ =?utf-8?B?NFZvUGdsQUNaYy9WNDBTcXJYUGFLTUZMSlBZanlzVENMQWhiRHVuYWVQbjM2?=
+ =?utf-8?B?emdvMjh6T3lCL3VIRzVBMXFNY2tHUUpGcU9KbENoV2U1a01UbDlEVWx6cTE2?=
+ =?utf-8?B?WkRIREU4WmU2Zk1GN0FacHhZc2tJTkdqZzh1OXZ5T1FHOW5CMTkraGUyUDNa?=
+ =?utf-8?B?cTFxMm5Ed0tWZGxtQTlvTlhZdzVYRlNRQjA3S3I0MnlPZUFwZHJLVURWaGJI?=
+ =?utf-8?B?TVE2MFVsYjVKeHpOWEt0ZGhQRHhDZ3hLWU1VQjF6N080SDAwZTVoQmxUd0lJ?=
+ =?utf-8?B?dlpjdW1VWmhSWko0ZURKM1pIdGp2NmdhaEYyWERRemJxZzMvbld3Y0JjSUdT?=
+ =?utf-8?Q?6yxN1AEN4oBkxgZtybQzwKg=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 263a7a03-1672-4feb-0c3b-08dc2c7fa1e6
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2024 10:36:26.9553
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: njt+9cwpukEYG9s5Ad6KLwVGi6b7UXKQNp6ylSxAG6VrEZWp2UxoDobvkF4PN2jR2Vc32q8jhjQigwXKArtifoYpiDR3y3BGIfs8yQxJM/8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR08MB5890
 
-Hi Mark,
+Hi Matthias,
 
-While HI-Zing CC pins disrupts power for batteryless devices, not
-Hi-Zing CC pins would prevent clean error recovery for self powered
-devices which is why "usb: typec: tcpm: fix cc role at port reset" was reve=
-rted.
-Please note that the breakage in error recovery behavior is a
-regression as well.
-Hi-Zing CC pins would make the port partner recognize it as disconnect
-and will result in bringup the connection back cleanly.
+On 06.02.24 18:55, Matthias Kaehlcke wrote:
+> Hi Javier,
+>
+> a few comments inline
+>
+> On Tue, Feb 06, 2024 at 02:59:29PM +0100, Javier Carrasco wrote:
+>> +static struct onboard_dev *_find_onboard_dev(struct device *dev)
+>> +{
+>> +	struct platform_device *pdev;
+>> +	struct device_node *np;
+>> +	struct onboard_dev *onboard_dev;
+>> +
+>> +	pdev = of_find_device_by_node(dev->of_node);
+>> +	if (!pdev) {
+>> +		np = of_parse_phandle(dev->of_node, "peer-hub", 0);
+>> +		if (!np) {
+>> +			dev_err(dev, "failed to find device node for peer hub\n");
+>> +			return ERR_PTR(-EINVAL);
+>> +		}
+>> +
+>> +		pdev = of_find_device_by_node(np);
+>> +		of_node_put(np);
+>> +
+>> +		if (!pdev)
+>> +			return ERR_PTR(-ENODEV);
+>> +	}
+>
+> The above branch should probably be guarded by 'if (!onboard_dev->pdata->is_hub)',
+> this is also a change for ""usb: misc: onboard_dev: add support for non-hub devices"
+>
+I am not sure how to guard the branch like that because onboard_dev is
+retrieved by means of pdev->dev, which is not available if
+of_find_device_by_node returns NULL. The non-hub device will not have a
+peer-hub property according to its bindings anyway, right?
 
-How about leveraging "self-powered" device tree property and Hi-Zing
-CC pins only when using "self-powered" ?
-This should help devices which don't have batteries while NOT regressing
-the error recovery behavior for the self powered devices.
-
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -4897,7 +4897,11 @@ static void run_state_machine(struct tcpm_port *port=
-)
-                break;
-        case PORT_RESET:
-                tcpm_reset_port(port);
--               tcpm_set_cc(port, TYPEC_CC_OPEN);
-+               if (port->self_powered)
-+                       tcpm_set_cc(port, TYPEC_CC_OPEN);
-+               else
-+                       tcpm_set_cc(port, tcpm_default_state(port) =3D=3D
-SNK_UNATTACHED ?
-+                               TYPEC_CC_RD : tcpm_rp_cc(port));
-                tcpm_set_state(port, PORT_RESET_WAIT_OFF,
-                               PD_T_ERROR_RECOVERY);
-
-Thanks,
-Badhri
-
-
-On Mon, Feb 12, 2024 at 10:42=E2=80=AFAM Mark Brown <broonie@kernel.org> wr=
-ote:
->
-> Since the merge of b717dfbf73e8 ("Revert "usb: typec: tcpm: fix
-> cc role at port reset"") into mainline the LibreTech Renegade
-> Elite/Firefly has died during boot, the main symptom observed in testing
-> is a sudden stop in console output.  G=C3=A1bor Stefanik identified in re=
-view
-> that the patch would cause power to be removed from devices without
-> batteries (like this board), observing that while the patch is correct
-> according to the spec this appears to be an oversight in the spec.
->
-> Given that the change makes previously working systems unusable let's
-> revert it, there was some discussion of identifying systems that have
-> alternative power and implementing the standards conforming behaviour in
-> only that case.
->
-> Fixes: b717dfbf73e8 ("Revert "usb: typec: tcpm: fix cc role at port reset=
-"")
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.=
-c
-> index f7d7daa60c8d..a0978ed1a257 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4876,7 +4876,8 @@ static void run_state_machine(struct tcpm_port *por=
-t)
->                 break;
->         case PORT_RESET:
->                 tcpm_reset_port(port);
-> -               tcpm_set_cc(port, TYPEC_CC_OPEN);
-> +               tcpm_set_cc(port, tcpm_default_state(port) =3D=3D SNK_UNA=
-TTACHED ?
-> +                           TYPEC_CC_RD : tcpm_rp_cc(port));
->                 tcpm_set_state(port, PORT_RESET_WAIT_OFF,
->                                PD_T_ERROR_RECOVERY);
->                 break;
->
-> ---
-> base-commit: 841c35169323cd833294798e58b9bf63fa4fa1de
-> change-id: 20240212-usb-fix-renegade-837d35cfc0c2
->
-> Best regards,
-> --
-> Mark Brown <broonie@kernel.org>
->
+Thanks again for your feedback and best regards,
+Javier Carrasco
 
