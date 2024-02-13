@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-6352-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6353-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E64B85348A
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 16:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B584853496
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 16:27:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29BE2285D69
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 15:25:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBBC0282EE2
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 15:27:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DDB25DF1D;
-	Tue, 13 Feb 2024 15:25:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 289975DF26;
+	Tue, 13 Feb 2024 15:27:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P5tb+zoh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ONmhUEsr"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1726422066
-	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 15:25:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A355543AC7
+	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 15:27:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707837943; cv=none; b=RF5Vj9YGSmXGZ7hiTjfhiHQvHiTaulecu2JgvjjjYou8Ud8OQFPZrNKJJSUMcOUcVtIvgfj5ndor6IW6zhuqewjT+Od7Jra1Y3PH3vZkcXmS2e8t8/OVEw+vXz44AhrL86nO8mBvobijMf3ktYuu6I1/iwwPVJvfWKklYl6yW1Y=
+	t=1707838066; cv=none; b=fDKnAMUfeW7RMOLVGimFYE5idZfsO4DCYJLtLTDBe19JAd4gpLGmcCwnv+H2fG7e+aOBoA2EK9xgs3NeOdLgnOxbmT/RcWe7R2t8sZ21vAJSyWSb/RzcuBGM5au2/Dmb9x5tFeCIKDANahUNajQaJPS+WqNQTedDdEiePjpn/wY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707837943; c=relaxed/simple;
-	bh=cNVkgf6sYODIyxMYzRumJJvsaXqpnU7FEvtgjYtTAl0=;
+	s=arc-20240116; t=1707838066; c=relaxed/simple;
+	bh=qYLg7MEn8WnbZpcBmTONWsM2bJq4cGpTeEVHNL3jWYg=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nOYj3BC6CtHdGFSbrZ6Y3b9SFiaVj/i9wD446J8snEsiKAvYc3aqskHQkWPinPR4jec5Wmi8TsVUITMqNg/vw9ITFjV9pFv8VG/kPkCZoFNBQOs8dg0XZzbgulr+FXT9LEYo9eff39M2AP/f3ZwdaHOdE3icqIZCStBhn/seUQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P5tb+zoh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9247BC43399
-	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 15:25:42 +0000 (UTC)
+	 Content-Type:MIME-Version; b=EQyNSyRmjgaGefz0AUa4wzntXu+rnLot/9ltiPhrcZtE8soeaUamapmbvINk/ixDwuR3XzIHKrlVj/sJQP+GkP1V1Ceu6gmnPLfhmA1Ec4UR3ZfS6xNH3ECru+Yu4UZquCOdF9LZi7mIR8k6bAOq2/DRa2ML4HLr3GM2foOjstM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ONmhUEsr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 320E8C433C7
+	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 15:27:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707837942;
-	bh=cNVkgf6sYODIyxMYzRumJJvsaXqpnU7FEvtgjYtTAl0=;
+	s=k20201202; t=1707838066;
+	bh=qYLg7MEn8WnbZpcBmTONWsM2bJq4cGpTeEVHNL3jWYg=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=P5tb+zohA6xgCq6I4A6hCled9B6JxjJsJG4Ln/3J2JT71HTw0ccUD85NG/HaE1f0D
-	 NWAkGqumuJW0JbApnQIMrK73zHtNSZI92u4zMEcPc9CcuRu4XXP4DOjQ/QG9oaDMnC
-	 J2Z7O7LcUXn6HTpoFsxZOP3vygWjfnVyZ8y9irz1LQWZ+16S3dYdW1P5Z3ciNDq/J1
-	 F06/JRRHyUC/JxEjyjj9dd8EHK1cVGg3ZiQWEnygeMnF/wZeqG6874PClD2a/3zo2e
-	 Bi6180jqRJyaftN2xioTfKbT6v6aL78pqpet1TDKSJwHx73IOXpS8oqMuTHIPUAs0W
-	 HosWwRIkZewSA==
+	b=ONmhUEsrE8MfGFjm50krrnK8Xw9lsBFU+oXda18MRwxXwaoxwmb/6B/JWaXY50wcR
+	 JxSQzDt8t31wB54Ifb1TVxopyBpYpoZcqK48gjgRtP6oenjyXdDgPxx82mvbZrXVWd
+	 AIzQZrm6u/i5fDPe9/NcKXky11XI7Gjz2PTEs0UFNwzCXnvQ6Vs0874eW7R0TDJQbS
+	 OgYyleMZwFhA1kyMwYJ/u+96AjIHqPgcG1HY3j+mWwcdAIoETW6sezwPANhdwYpeAT
+	 RenE8sSIuLLTDJ0o6LYzq0XQzcCmSFN3q/qoiYTJlTQ0XjpiC3/Cv1NrX/IOqpu1aO
+	 HDhDPrNqEFoVg==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 81247C53BD0; Tue, 13 Feb 2024 15:25:42 +0000 (UTC)
+	id 13383C53BCD; Tue, 13 Feb 2024 15:27:46 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 218488] Linux warning `usb: port power management may be
  unreliable` on OptiPlex Small Form Factor Plus 7010
-Date: Tue, 13 Feb 2024 15:25:42 +0000
+Date: Tue, 13 Feb 2024 15:27:45 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -62,8 +62,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc attachments.created
-Message-ID: <bug-218488-208809-GswHPIFb8v@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218488-208809-bQqEifYS8A@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-218488-208809@https.bugzilla.kernel.org/>
 References: <bug-218488-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,18 +79,9 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218488
 
-Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de) changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |pmenzel+bugzilla.kernel.org
-                   |                            |@molgen.mpg.de
-
---- Comment #1 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
+--- Comment #2 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
  ---
-Created attachment 305864
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305864&action=3Dedit
-Output of `acpidump` with system firmware 1.7.1
+(This device still has Dell support until September 2026.)
 
 --=20
 You may reply to this email to add a comment.
