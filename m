@@ -1,170 +1,234 @@
-Return-Path: <linux-usb+bounces-6340-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6341-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61A5F853133
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 14:03:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90E4585314C
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 14:07:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 187F028BF91
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 13:03:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F31B31F247FA
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 13:07:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD66151C51;
-	Tue, 13 Feb 2024 13:02:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YcW+hVLs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A62D050A7C;
+	Tue, 13 Feb 2024 13:06:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E4151C21;
-	Tue, 13 Feb 2024 13:02:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D5150254
+	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 13:06:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.202.254.214
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707829369; cv=none; b=PG5JpUVpfELSftoqeJ1V7zFD9lHkmy8Y69bs+jP2EvpAKSAihXAxqRoaZlXKSd4BUd7n2I33aMOkRpQY8vOihkAOdz2vJZN9ko6YAn+vSBVFzs+S0b72Y0ipDr9sHOxVH3YuUDfC3ELocxeoU/7Xm2aCTemF7kyoMELT9ITOlZQ=
+	t=1707829605; cv=none; b=U9/YK0APm86PWgmFpg6OhgMfB14sqsHCe+O/i4w5suCDy9ZQrRWNfVRVzUBtIfICieSJsdSibEuCdCb8IMhS5yvft61oqrBoGR8r+OgfXr5M9xAO63U87DeRriSQPoVURH0eReru5HKnDaL7aay/faYv9Z/KKqOkfp5YNG6CCdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707829369; c=relaxed/simple;
-	bh=28DdTYEVF+5wxUwB+sr99no14Iop58sGq02oHT+28+I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tMIVsNO7LS4mP/eefOrSIQCmy0Rg2NtVm+E/dPQtLyyIp/B0v/9M8qqqCZOzbBGjB/Kujk2LX2ppaKzcGB8rTgKQ/mnb1okeGzZkweM0A9YPcymNcsl8Iu9dazM1ckx4yTKoYOIMDV8tGwWZViVUvcYlBbZ+oLd7eJdrc6Ueq2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YcW+hVLs; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5610cc8cc1aso4762187a12.1;
-        Tue, 13 Feb 2024 05:02:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707829366; x=1708434166; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9Cq+iI48CDe+5VO7sSMk/e7qj86AX8EMGUWgbiDs5Ns=;
-        b=YcW+hVLsjGCOpGmrlia+QuAiTdsNOHUKbQskDh2z3F2jgxasPMgylT5v7SpnxDn1nS
-         gTegyldYwRKf336Gkc/cFTSi9NWMZdGr6eBwkrLjdZxzk4Mhg6R8c7+YVDT8fsNXK1Dn
-         W9f/EowMLVKtjl0fzRVIAjCa4DMtUWcpCsdN8aHwZ/DOlT6XJaPaAl2PqbbvyzkIbj2U
-         2AVLDtpBgasRv/M3L2TeOVQLyTB9GeabdqyC1AqE3Lc92wRI5Kb2+6LTpyVvieT3CbqM
-         J8fmR7X4iuFNRlA0vbQowMZwYX3vfyr2Uz1tflIBNvPfIhbPoW18CH2ksyWt48Et2gyN
-         6Kew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707829366; x=1708434166;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9Cq+iI48CDe+5VO7sSMk/e7qj86AX8EMGUWgbiDs5Ns=;
-        b=CQoN+z5XE7+wwFmfhgsj/IBGdYmfcuWXXa4majYig0d58WgJdNTpiR6gTTS6llT9OE
-         udV102iPNwMhl8a8+g/K5eLXLc6fF7KECzuHfBzdCdGGhOSZ720FHFwkPR+3+Sss0XCh
-         Tt1mmD7KYFG/gCGuXs9ubaQ5OpDUP/Ot36Fqemdr/ys4o1a2+Wx0f2fICRzI3d7/sEnd
-         Wjm7bjO+dn+tq+BrxnsOMQg5cwwh8yEdqYZDoAPfCRXr5X5btwA290PPpMFeVOXVh4Iz
-         oMmBa+k5ZbB+fHuirYP3bb6lwBD0Ycyp1gsr/z59fzKfpywvT08uBKK67fUBRsFvNwxT
-         pHRw==
-X-Forwarded-Encrypted: i=1; AJvYcCUYS0Y5ZIldHC4bEtnVpz8+luD1eY/EjTEy74vH+buPUqMSritsWdWgM8we33drA8Nt3x0hqmUdXUKHzlMhdl8EWB5PS7PFn0rmyvyS99SwJgUn4dxMM3GsSf1a5VPuUaLJwBaLBvIUeCsqLDV3viHt6FlfyIbPEFdmYOQa6a05uE0/RA==
-X-Gm-Message-State: AOJu0Yw9yLI5/wyivlO+q8BecidIXyVrzekoS7nHbupYVQF08oVP9Dos
-	K79cfGQRmjd/kAMMhnJ88hOvsd4QuZ0TisaVUlXp9xqkv7bCakqX
-X-Google-Smtp-Source: AGHT+IGwFZ/B7NIFFcOnp2yFup95b+UeJUZ6E+6zkb73wGvSwm0cn063bkqvcUbgz2zWlqx3KDTONA==
-X-Received: by 2002:a17:906:f88c:b0:a3c:8770:3795 with SMTP id lg12-20020a170906f88c00b00a3c87703795mr4365644ejb.15.1707829365845;
-        Tue, 13 Feb 2024 05:02:45 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUQd7FhW+1Uji0/Kw8nyU5iosaUylTYW21ZHKoUoT9ZyjzXWSFkwAIhE6Op8Ai/8id8BMsPSYCUjv/0QPqvImddI3pTh5U3rNX76vbsxis4r65rvE9S4ka4TixwJvOdwq94CbIxE7qh+NgiRyva159qE7FTL0xCmmLMleU7R1sknZS/ZZatTKaJGqqo+iI6b657bbo6hBx/G/cAGOzfGRxZcGNxoXZ2t0i2uxmQ7TpiLASQJxbBX9BJ599Ksk2UCqJZrbtQDsuIlDmw943oOQDrMfaRxHTGsJAgC8dAN3c7bLNZwIfp5udFq1Qmc4PGKcO7RbRvzRbUy5DaRcujhAcakboeIaiUrBnCcE9Is7TEn2KGwALWXK1Ao7e98mNC3rH6mbNiyequTN/yiFmfDmE5KbLBgjO44/c1JDuGj2YuLx3wlwbOSSeLDEC4WwjutfpiTecOlOZKeCAA2hWGinRelblNGFcmaFlTLfRaUpH0ifPBICKQgcAm87xGbrGjhILR+66YG2HkRzR20wBYbFwmRI2pATXlTDvdBISYEnxyBQ==
-Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
-        by smtp.gmail.com with ESMTPSA id cw15-20020a170907160f00b00a3d004237ebsm633078ejd.212.2024.02.13.05.02.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 05:02:45 -0800 (PST)
-From: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To: Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Daniel Golle <daniel@makrotopia.org>,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH 2/2] arm64: dts: mediatek: mt7988: add XHCI controllers
-Date: Tue, 13 Feb 2024 14:00:44 +0100
-Message-Id: <20240213130044.1976-2-zajec5@gmail.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20240213130044.1976-1-zajec5@gmail.com>
-References: <20240213130044.1976-1-zajec5@gmail.com>
+	s=arc-20240116; t=1707829605; c=relaxed/simple;
+	bh=Tjcyyqnsle0pWXHD9sQjVFWXbeqMpGlAGL+H/lXJst8=;
+	h=To:From:Subject:Date:Message-ID:References:Mime-Version:
+	 Content-Type:In-Reply-To:Cc; b=P4slWJNakx2VJMj31gVO/f1J0hoaqzu+vLLsu4siGZlnzQc0LzYqcI26U0ytsvE1mfRWQRL31a5AQvuwxCrEBxE5NXx5UV0YR65bcB1SNeV3QwCAskJCwGFL0CkB7psmNHhvu7hggFrppaXoDeFb82TFoge4XlvLZQOPDoaYEtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=m.gmane-mx.org; arc=none smtp.client-ip=116.202.254.214
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=m.gmane-mx.org
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+	(envelope-from <glug-linux-usb@m.gmane-mx.org>)
+	id 1rZsUd-0007Kr-UQ
+	for linux-usb@vger.kernel.org; Tue, 13 Feb 2024 14:06:35 +0100
+X-Injected-Via-Gmane: http://gmane.org/
+To: linux-usb@vger.kernel.org
+From: Julian Sikorski <belegdol@gmail.com>
+Subject: Re: [PATCH] usb-storage: Ignore UAS for LaCie Rugged FW USB3
+Date: Tue, 13 Feb 2024 14:06:30 +0100
+Message-ID: <0cf5ea13-6472-47e1-a32f-b9f332656c6a@gmail.com>
+References: <20240209151121.1004985-1-tasos@tasossah.com>
+ <b16e72ad-3f2d-46a8-8361-2641088694df@rowland.harvard.edu>
+ <2978efa3-e83f-4ef5-907d-8232e4b692a5@tasossah.com>
+ <6d4b1f55-09df-47e9-945d-fa38cd36588c@gmail.com>
+ <b6dcf71b-f094-4664-8d43-7d8c0173f51f@gmail.com>
+ <c21f9649-30be-462a-b9ec-f7c96ead30cf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+In-Reply-To: <c21f9649-30be-462a-b9ec-f7c96ead30cf@gmail.com>
+Cc: linux-scsi@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+Am 10.02.24 um 22:43 schrieb Julian Sikorski:
+> Am 10.02.24 um 22:35 schrieb Julian Sikorski:
+>> Am 10.02.24 um 15:21 schrieb Julian Sikorski:
+>>> Am 10.02.24 um 14:24 schrieb Tasos Sahanidis:
+>>>> On 2024-02-09 17:31, Alan Stern wrote:
+>>>>> On Fri, Feb 09, 2024 at 05:11:21PM +0200, Tasos Sahanidis wrote:
+>>>>>> This external HDD fails when plugged in to a USB 3 port. Ignoring 
+>>>>>> UAS and
+>>>>>> falling back to mass storage resolves this issue.
+>>>>>
+>>>>> What happens when it is plugged into a USB-2 port?
+>>>>
+>>>> It works without any quirks over USB 2.0 with uas, however asking for
+>>>> cache data fails gracefully.
+>>>>
+>>>> [  520.829840] scsi host4: uas
+>>>> [  521.024643] scsi 4:0:0:0: Direct-Access     LaCie    Rugged FW 
+>>>> USB3   1081 PQ: 0 ANSI: 4
+>>>> [  521.026370] sd 4:0:0:0: Attached scsi generic sg2 type 0
+>>>> [  521.030096] sd 4:0:0:0: [sdc] 976773153 512-byte logical blocks: 
+>>>> (500 GB/466 GiB)
+>>>> [  521.030369] sd 4:0:0:0: [sdc] Write Protect is off
+>>>> [  521.030373] sd 4:0:0:0: [sdc] Mode Sense: 47 00 10 08
+>>>> [  521.030507] sd 4:0:0:0: [sdc] Asking for cache data failed
+>>>> [  521.030512] sd 4:0:0:0: [sdc] Assuming drive cache: write through
+>>>> [  521.065916]  sdc: sdc1
+>>>> [  521.067783] sd 4:0:0:0: [sdc] Attached SCSI disk
+>>>> [  521.699380] EXT4-fs (sdc1): recovery complete
+>>>> [  521.699388] EXT4-fs (sdc1): mounted filesystem with ordered data 
+>>>> mode. Opts: errors=remount-ro. Quota mode: none.
+>>>>
+>>>>> Have you checked to see if any of the quirk flags can prevent this
+>>>>> problem?  It looks like the only issue might be that one Mode Sense(6)
+>>>>> command.
+>>>>
+>>>> I have tried various combinations of all the available quirks and I
+>>>> couldn't get it to not hang. Without any quirks it keeps retrying Mode
+>>>> Sense(6) constantly.
+>>>>
+>>>> I tested US_FL_ALWAYS_SYNC as it sets sdev->skip_ms_page_8 (both with
+>>>> and without US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME), and it hung at an
+>>>> ATA passthrough command; presumably the next step afterwards.
+>>>>
+>>>> 30 seconds and one USB reset later, the disk is recognised, but I
+>>>> do not know if it is reliable.
+>>>>
+>>>> [  329.161316] scsi 4:0:0:0: Direct-Access     LaCie    Rugged FW 
+>>>> USB3   1081 PQ: 0 ANSI: 4
+>>>> [  329.162228] sd 4:0:0:0: Attached scsi generic sg2 type 0
+>>>> [  329.166650] sd 4:0:0:0: [sdc] 976773153 512-byte logical blocks: 
+>>>> (500 GB/466 GiB)
+>>>> [  329.166654] sd 4:0:0:0: [sdc] Assuming Write Enabled
+>>>> [  329.166655] sd 4:0:0:0: [sdc] Assuming drive cache: write back
+>>>> [  329.197983]  sdc: sdc1
+>>>> [  329.198521] sd 4:0:0:0: [sdc] Attached SCSI disk
+>>>> [  359.553806] sd 4:0:0:0: [sdc] tag#3 uas_eh_abort_handler 0 
+>>>> uas-tag 1 inflight: IN
+>>>> [  359.553816] sd 4:0:0:0: [sdc] tag#3 CDB: ATA command pass 
+>>>> through(12)/Blank a1 08 2e 00 01 00 00 00 00 ec 00 00
+>>>> [  359.573771] scsi host4: uas_eh_device_reset_handler start
+>>>> [  359.702116] usb 3-1: reset SuperSpeed USB device number 3 using 
+>>>> xhci_hcd
+>>>> [  359.722068] usb 3-1: LPM exit latency is zeroed, disabling LPM.
+>>>> [  359.724348] scsi host4: uas_eh_device_reset_handler success
+>>>> [  360.582975] EXT4-fs (sdc1): recovery complete
+>>>> [  360.633098] EXT4-fs (sdc1): mounted filesystem with ordered data 
+>>>> mode. Opts: errors=remount-ro. Quota mode: none.
+>>>>
+>>>> My assumption is that something goes wrong during init and that 
+>>>> makes it
+>>>> hang in general. Perhaps the Mode Sense(6) is broken in addition to
+>>>> whatever else is misbehaving. I don't believe the XHCI controller is at
+>>>> fault.
+>>>>
+>>>>> Falling back from uas to usb-storage could reduce the throughput
+>>>>> considerably.  We would like to avoid doing this if possible.
+>>>>
+>>>> Absolutely, but at the same time I am not sure how much it matters for
+>>>> an old mechanical hard disk. Granted, someone can use the same 
+>>>> enclosure
+>>>> and install an SSD internally, so perhaps that makes it worth it.
+>>>>
+>>>> Thanks
+>>>>
+>>>> -- 
+>>>> Tasos
+>>>>
+>>>>
+>>>>
+>>> This seems to be similar to the issue I am facing with a similar 
+>>> LaCie Rugged USB3-FW 059f:1061. Initially we patched it to IGNORE_UAS 
+>>> but it then turned out to be working with US_FL_NO_REPORT_OPCODES and 
+>>> US_FL_NO_SAME. This was back in September 2021. In August 2023 I 
+>>> reported a similar issue as you, I am still seeing it in 6.7.3. The 
+>>> good news is that after initial problems it seems to be working fine 
+>>> once the USB connection is established.
+>>
+>> I have now narrowed it down to having broken between 5.18.19 and 
+>> 5.19.4 kernels. Tasos, if you are interested, you might want to check 
+>> if you can get the drive working with US_FL_NO_REPORT_OPCODES and
+>> US_FL_NO_SAME alone (fk) quirks alone on 36 live, which ships 5.17.5 
+>> kernel. Exercise caution as it is an EOL system.
+>> I will see if I can narrow down the regression further.
+>>
+>> Best regards,
+>> Julian
+>>
+> Oddly enough, with 5.19.4 the device starts working after one reset 
+> instead of after four:
+> 
+> Feb 10 22:36:56 kernel: usb 2-4: new SuperSpeed USB device number 3 
+> using xhci_hcd
+> Feb 10 22:36:56 kernel: usb 2-4: New USB device found, idVendor=059f, 
+> idProduct=1061, bcdDevice= 0.01
+> Feb 10 22:36:56 kernel: usb 2-4: New USB device strings: Mfr=2, 
+> Product=3, SerialNumber=1
+> Feb 10 22:36:56 kernel: usb 2-4: Product: Rugged USB3-FW
+> Feb 10 22:36:56 kernel: usb 2-4: Manufacturer: LaCie
+> Feb 10 22:36:56 kernel: usb 2-4: SerialNumber: 00000000157f928920fa
+> Feb 10 22:36:56 kernel: scsi host6: uas
+> Feb 10 22:36:56 kernel: scsi 6:0:0:0: Direct-Access     LaCie    Rugged 
+> FW USB3   051E PQ: 0 ANSI: 6
+> Feb 10 22:36:56 kernel: sd 6:0:0:0: Attached scsi generic sg1 type 0
+> Feb 10 22:36:56 kernel: sd 6:0:0:0: [sda] 1953525168 512-byte logical 
+> blocks: (1.00 TB/932 GiB)
+> Feb 10 22:36:56 kernel: sd 6:0:0:0: [sda] Write Protect is off
+> Feb 10 22:36:56 kernel: sd 6:0:0:0: [sda] Mode Sense: 43 00 00 00
+> Feb 10 22:36:56 kernel: sd 6:0:0:0: [sda] Write cache: enabled, read 
+> cache: enabled, doesn't support DPO or FUA
+> Feb 10 22:36:56 kernel: sd 6:0:0:0: [sda] Preferred minimum I/O size 512 
+> bytes
+> Feb 10 22:36:56 kernel: sd 6:0:0:0: [sda] Optimal transfer size 33553920 
+> bytes
+> Feb 10 22:37:26 kernel: sd 6:0:0:0: [sda] tag#23 uas_eh_abort_handler 0 
+> uas-tag 1 inflight: IN
+> Feb 10 22:37:26 kernel: sd 6:0:0:0: [sda] tag#23 CDB: Inquiry 12 01 b9 
+> 00 04 00
+> Feb 10 22:37:26 kernel: scsi host6: uas_eh_device_reset_handler start
+> Feb 10 22:37:26 kernel: usb 2-4: reset SuperSpeed USB device number 3 
+> using xhci_hcd
+> Feb 10 22:37:26 kernel: scsi host6: uas_eh_device_reset_handler success
+> Feb 10 22:37:26 kernel:  sda: sda1 sda2
+> Feb 10 22:37:26 kernel: sd 6:0:0:0: [sda] Attached SCSI disk
+> 
+> Further bisecting is going to be difficult as there are no built kernels 
+> left. I will see if the time effort is manageable.
+> 
+> Best regards,
+> Julian
 
-Add bindings of two on-SoC XHCI controllers.
+So I have good news and bad news. The good news is that I have managed 
+to bisect the issue down to commit
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- arch/arm64/boot/dts/mediatek/mt7988a.dtsi | 32 ++++++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c92a6b5d6335
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt7988a.dtsi b/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
-index bba97de4fb44..3eb5396dea22 100644
---- a/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt7988a.dtsi
-@@ -1,6 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0-only OR MIT
- 
-+#include <dt-bindings/clock/mediatek,mt7988-clk.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/phy/phy.h>
- 
- / {
- 	compatible = "mediatek,mt7988a";
-@@ -78,7 +80,7 @@ gic: interrupt-controller@c000000 {
- 			#interrupt-cells = <3>;
- 		};
- 
--		clock-controller@10001000 {
-+		infracfg: clock-controller@10001000 {
- 			compatible = "mediatek,mt7988-infracfg", "syscon";
- 			reg = <0 0x10001000 0 0x1000>;
- 			#clock-cells = <1>;
-@@ -103,6 +105,34 @@ clock-controller@1001e000 {
- 			#clock-cells = <1>;
- 		};
- 
-+		usb@11190000 {
-+			compatible = "mediatek,mt7988-xhci", "mediatek,mtk-xhci";
-+			reg = <0 0x11190000 0 0x2e00>,
-+			      <0 0x11193e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 173 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&infracfg CLK_INFRA_USB_SYS>,
-+				 <&infracfg CLK_INFRA_USB_REF>,
-+				 <&infracfg CLK_INFRA_66M_USB_HCK>,
-+				 <&infracfg CLK_INFRA_133M_USB_HCK>,
-+				 <&infracfg CLK_INFRA_USB_XHCI>;
-+			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck", "xhci_ck";
-+		};
-+
-+		usb@11200000 {
-+			compatible = "mediatek,mt7988-xhci", "mediatek,mtk-xhci";
-+			reg = <0 0x11200000 0 0x2e00>,
-+			      <0 0x11203e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 172 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&infracfg CLK_INFRA_USB_SYS_CK_P1>,
-+				 <&infracfg CLK_INFRA_USB_CK_P1>,
-+				 <&infracfg CLK_INFRA_66M_USB_HCK_CK_P1>,
-+				 <&infracfg CLK_INFRA_133M_USB_HCK_CK_P1>,
-+				 <&infracfg CLK_INFRA_USB_XHCI_CK_P1>;
-+			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck", "xhci_ck";
-+		};
-+
- 		clock-controller@11f40000 {
- 			compatible = "mediatek,mt7988-xfi-pll";
- 			reg = <0 0x11f40000 0 0x1000>;
--- 
-2.35.3
+With c92a6b5d6335 and with e60ac0b9e445, the drive requires multiple 
+resets in the VM. With 7fb019c46eee onwards, it only requires one reset.
+The bad news is that I am not able to fix it with BLIST_NO_VPD_SIZE:
+
+$ echo "LaCie:Rugged FW USB3:0x2000" | sudo tee /proc/scsi/device_info
+
+This is despite this being used to fix problems with some other devices:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4b1a2c2a8e0ddcb89c5f6c5003bd9b53142f69e3
+
+I am cross-posting this to scsi list, maybe someone there would be able 
+to understand what is going on.
+Out of interest, why is the device called "Rugged FW USB3" by scsi but 
+"Rugged USB3-FW" by usb?
+
+Best regards,
+Julian
 
 
