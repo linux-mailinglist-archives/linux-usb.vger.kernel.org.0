@@ -1,153 +1,111 @@
-Return-Path: <linux-usb+bounces-6379-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6383-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B168853F54
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 23:59:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77F0F854019
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 00:29:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D8E9B25ECE
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 22:59:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FB0428FCF1
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 23:29:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7645C629E3;
-	Tue, 13 Feb 2024 22:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DbTtKKru"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63C51634F3;
+	Tue, 13 Feb 2024 23:28:26 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B999627EA;
-	Tue, 13 Feb 2024 22:59:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D7A63103
+	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 23:28:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707865147; cv=none; b=fObLvVW1DlbXwj3heH/fCNmKrrgy+EU2j5dRv97cQE34PJ9urv3cyhDJGG08u8DIvzgVJbwXxoeoEtDnkRuaLQoZrjHa5Phun9M/hAWAlmjTB5Un5pzNmpJUO2I8HYLivCJcc5KuD/E3bLoxnidIjZIUK27bEqEiZ4ARP9s/Hno=
+	t=1707866906; cv=none; b=HUEwiC/ZBywpgetkp/URLh7enQToNa7zT30LE/REbWdvVbSgKf90CNkzmE+RT3eQCIj60hxT0iir8JwwHPK6SA71iYf1owcayasW3k/1Ob/m7wJvGoEEy5tXAeuS1xw9I8rng6n08XDB7fKj+oSUksCX1uvMOM9HHZqhY/iJ79k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707865147; c=relaxed/simple;
-	bh=5GZjg5DkIYbt13jrl4mBTCYCb0dRu3ZBmp2agCG9D2k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=i8xWHh5fKkD9+MPGXhAPI2Pr6411d3l2rtMG7c0i0vNVHcHu4YuMBLnYdPBM4lqt8YSI2Wr0tzP1quAhXrZLKXN7lNUYe8yw7INcH1+NfJFBpIkTBNyoRQqhhlgjYcooHKl7zYh9LRPZtMUfPRVGN/UNf/WQ/dojZ+cu/J446do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DbTtKKru; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41DK9qi9014988;
-	Tue, 13 Feb 2024 22:58:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=6EmYNtRmbGEYRyUXFF7l3ex2WkY1Ic6WX4gLszPjpLM=; b=Db
-	TtKKruMCpWe0Wa0h3biQsBw0j1apSzb6VjG+VXXpr8Eo51b7jFOai58wY4o/+dEL
-	3fkso2QAwrRpphdGJAWaF2ig9kpGY70ogk11tNMnkkdC32logT82XGyLD0PbC8dG
-	bHvR/1/5m3OVEVNUe3za2JC5rzBaxZ/1V5OKwosmrfritWqWOSpHMNzAWn0e4Q/M
-	rhZXm+2cv7AEiWiZVxBfAZApt+FW+IGWknk3RFAmy+tFoQ9D7RosP9hIX9WLTLKC
-	iUqJ8HEdQ2T+lVmUBWYKzhcKWjJ2YQMKa2uL78ViPVa97K0VjZgk7VGlBFtbi76i
-	RVV+x/fSQLQaCm+xTPwA==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w7gse45hs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Feb 2024 22:58:43 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41DMwgYg021602
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Feb 2024 22:58:42 GMT
-Received: from [10.110.76.255] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 13 Feb
- 2024 14:58:41 -0800
-Message-ID: <5b7af169-1fc0-265c-5253-c82010388e82@quicinc.com>
-Date: Tue, 13 Feb 2024 14:58:40 -0800
+	s=arc-20240116; t=1707866906; c=relaxed/simple;
+	bh=2XHPW0IeDzyoUhCFA+2qg9dfudNUT0CpxgadG/4rkZE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dlrZHEXZ2JSJQtmoLPjR+dUSOCi73ouEA0qK3UGPckn0vKo8d9FeQ53oySuXIjheo6kxF35D2qxP6wchHYPJahp3wHyjmQDMBLQQonyCSJa9X/Uf+b31cNgP4m46LWj97fJFOrSKK6U5rUAiTL6VvYUJ+/ZBa9Zo45CxDmKJxtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1ra2CI-0000eS-Ig; Wed, 14 Feb 2024 00:28:18 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1ra2CH-000Zcn-UO; Wed, 14 Feb 2024 00:28:17 +0100
+Received: from localhost ([::1] helo=dude04.red.stw.pengutronix.de)
+	by dude04.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <m.grzeschik@pengutronix.de>)
+	id 1ra2CH-002uYW-2r;
+	Wed, 14 Feb 2024 00:28:17 +0100
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: [PATCH 0/3] usb: gadget: uvc: refactor and cleanup the pump and
+ complete handlers
+Date: Wed, 14 Feb 2024 00:27:59 +0100
+Message-Id: <20240214-uvc-gadget-cleanup-v1-0-de6d78780459@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v15 41/50] ASoC: Add SND kcontrol for fetching USB offload
- status
-Content-Language: en-US
-To: Takashi Iwai <tiwai@suse.de>
-CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>
-References: <20240213005422.3121-1-quic_wcheng@quicinc.com>
- <20240213005422.3121-42-quic_wcheng@quicinc.com>
- <87plx0y37z.wl-tiwai@suse.de>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <87plx0y37z.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4LQsJgrgUhNL98vd3cVNsTKE56avszOU
-X-Proofpoint-ORIG-GUID: 4LQsJgrgUhNL98vd3cVNsTKE56avszOU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-13_14,2024-02-12_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 adultscore=0 spamscore=0 clxscore=1015 phishscore=0
- malwarescore=0 mlxscore=0 bulkscore=0 mlxlogscore=939 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401310000 definitions=main-2402130181
+X-B4-Tracking: v=1; b=H4sIAP/6y2UC/x2N0QqDMAwAf0XyvICWbpP9ythDjLEGSibtKgPx3
+ xf2eAfHHVClqFR4dAcU2bXq2xyGSwe8kiVBnZ0h9CH2YYjYdsZEc5IPchaytqGMcYzL7X7lQOD
+ hRFVwKmS8emotZ5dbkUW//9PzdZ4/cKxtsnkAAAA=
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Daniel Scally <dan.scally@ideasonboard.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Michael Grzeschik <m.grzeschik@pengutronix.de>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=793;
+ i=m.grzeschik@pengutronix.de; h=from:subject:message-id;
+ bh=2XHPW0IeDzyoUhCFA+2qg9dfudNUT0CpxgadG/4rkZE=;
+ b=owEBbQKS/ZANAwAKAb9pWET5cfSrAcsmYgBly/sN+xx0LGEW9HGwwH094+bPtpfsSrcdxPADI
+ 795T6oH9w2JAjMEAAEKAB0WIQQV2+2Fpbqd6fvv0Gi/aVhE+XH0qwUCZcv7DQAKCRC/aVhE+XH0
+ qzdzD/4s8xWWvujBAqeGrs9leLb+3uZe+etQd8yJMCCikhv8XmiUNzOBDeC5LaHaz6iGyo/Fbby
+ uvtg+d8tW20/liJVKihR3BCs+WszQ3Z6YNc4pDoDXIEjXt5F0isDWl+J5e40D5QsdgHTQyN/ALv
+ xHg26SyIDBz8bf4AMjYlQqrAFeY23gbzcWCNm3zDQyY4BM2SEea1OGWwSZab6bZLFoYC0/65yHh
+ CYg2/7RJTsO3vt+OpEvwAL+rCLYDNuiBv9IQ2ID0zRVzozmUtPr2YV+1vAPNt6v1zJhSpKlAjRj
+ nDqlJdMT3weks9wooTxok2UhcGqX9dMt9Y7yev+g7U3L0A/bXeOLk4NrLCZ9e442oiEE0ZmzPFD
+ 3PS8L/e45mSBkoKkxeVJ3jTK0mlb+w1gHrZZOTkXYq8mpFvSMlFc0+LxLXBCUsEpY6xgjhwF6oD
+ FSx6iyUw5fJ4D6ocjgk1KLKZjujAYDjD+uo7x4Z975qVMBGNGavwtk70i8IPhoW/vW4j0SnGjpk
+ 4P9l+4H5XLTHxH9QJ1QQYwualyPwRFR+hR+5VEYMSuDIeSRr85LNNk+2EKOJqgn4L7P07s2K9ag
+ bJLNBxsy8LEoSwfZCcfEAFci9yjivrY8lmXbVzqnpPP3C3WsmbZz5FX0oq862+3mwZkfLoYwUwO
+ B72wUYnJNDp1CYQ==
+X-Developer-Key: i=m.grzeschik@pengutronix.de; a=openpgp;
+ fpr=957BC452CE953D7EA60CF4FC0BE9E3157A1E2C64
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: m.grzeschik@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Hi Takashi,
+This series is cleaning the complete and pump handler to improve
+the code quality. It got really hard to follow the locking and escape
+cases since the recently introduced patches.
 
-On 2/13/2024 4:10 AM, Takashi Iwai wrote:
-> On Tue, 13 Feb 2024 01:54:13 +0100,
-> Wesley Cheng wrote:
->>
->> Add a kcontrol to the platform sound card to fetch the current offload
->> status.  This can allow for userspace to ensure/check which USB SND
->> resources are actually busy versus having to attempt opening the USB SND
->> devices, which will result in an error if offloading is active.
->>
->> An example of fetching the USB offloading status would look like:
->> tinymix -D 0 get 'USB Offload Playback Route Status'
->> -1, -1 (range -1->32) --> [Offload is idle]
->>
->> tinymix -D 0 get 'USB Offload Playback Route Status'
->> 1, 0 (range -1->32)  --> [Offload active on card#1 pcm#0]
-> 
-> Ah, I didn't notice until now that the second value is the PCM index.
-> 
->> +static int snd_soc_usb_offload_status_info(struct snd_kcontrol *kcontrol,
->> +			      struct snd_ctl_elem_info *uinfo)
->> +{
->> +	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
->> +	struct snd_soc_usb *ctx = snd_soc_find_usb_ctx(component->dev->of_node);
->> +
->> +	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
->> +	uinfo->count = 2*ctx->num_supported_streams;
->> +	uinfo->value.integer.min = -1;
->> +	uinfo->value.integer.max = SNDRV_CARDS;
-> 
-> Then it's bogus to set SNDRV_CARDS as max.  The PCM index number is
-> independent from the card number.  In theory, it can be even more than
-> the card max (very unlikely, though).
-> 
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+Michael Grzeschik (3):
+      usb: gadget: uvc: drop unnecessary check for always set req
+      usb: gadget: uvc: refactor the check for a valid buffer in the pump worker
+      usb: gadget: uvc: rework complete handler
 
-I don't think its technically capped anywhere :).  I just used 
-SNDRV_CARDS to cap the sound card number.  If I split this as a separate 
-entity, then I'll need to change the max value for the PCM dev.
+ drivers/usb/gadget/function/uvc_video.c | 109 +++++++++++++++-----------------
+ 1 file changed, 51 insertions(+), 58 deletions(-)
+---
+base-commit: 88bae831f3810e02c9c951233c7ee662aa13dc2c
+change-id: 20240214-uvc-gadget-cleanup-e8484f675c2a
 
-> Wouldn't it be more intuitive to provide two different controls, one
-> for card number and one for PCM index number?
-> 
+Best regards,
+-- 
+Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-Sure, I can split this up.
-
-Thanks
-Wesley Cheng
 
