@@ -1,89 +1,89 @@
-Return-Path: <linux-usb+bounces-6322-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6323-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5AA6852E4C
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 11:48:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6118A852E70
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 11:55:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 170401C2276B
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 10:48:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E12E31F25532
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 10:55:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5BE928E3E;
-	Tue, 13 Feb 2024 10:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FC2D32C84;
+	Tue, 13 Feb 2024 10:55:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1rKgP++3";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="apC07bjj";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1rKgP++3";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="apC07bjj"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ptWaMmHC";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="utgGMOWR";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ptWaMmHC";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="utgGMOWR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945671775C;
-	Tue, 13 Feb 2024 10:48:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0635532C60;
+	Tue, 13 Feb 2024 10:54:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707821288; cv=none; b=CK9Xc24Jesjke+xTiNbcheNSWHQR3BPxmNyCpztjVcRBQlevnEqhWb0NUfUYqfB4+UZksgMOSRZl49cvl3Vcb0EaPaCNig05RJtjNWe7mqFZ7wdKvm88sRodyum9vbaw+DTxPivl1pYEngskrj+x9Gi3GQ4iV6acRuqhDflIips=
+	t=1707821699; cv=none; b=Q9rlhBAfiTZ4+VkOPxVkidekELaii/W+iP722QshF9XDTpTyCuRBhBNbK90GIOBVJTwGR/6UzwVKUsS5WbT837ydQM1v4pyfqcfeTHpRczt6DWDJlRgFyINEKBEyWuC4JwqTJj7FF7pRoqRumMNzK8MAHLmuTjMUeVSkPL0qHVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707821288; c=relaxed/simple;
-	bh=3U05UCAq1LKPx4ylCJPyDo9lukWD3K8+5PwEuPQdu/o=;
+	s=arc-20240116; t=1707821699; c=relaxed/simple;
+	bh=K3t6IqIKVeRKOMmSmTLavxByRukWLKFnqr8MqyIR7DE=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qpvHEiNbjuEiQkRmcr3M7oY2P0P3V3w1uhFo+mozrDRkjt0B3u4Mvl1tE0/YboqaoEtbuBRby4MByFB7yiwHNlHFX+oEEfqlnNeXoUckmYOizRUwqRNv6mm8WOnBCGS1PsyoOsUzPCV1q2XtGPGPvoL1VZ94PqS0ZBE8fiwr1fM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1rKgP++3; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=apC07bjj; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1rKgP++3; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=apC07bjj; arc=none smtp.client-ip=195.135.223.131
+	 MIME-Version:Content-Type; b=t1T+KmhCKPyPSiTWCwo+8VXi+eAv4umXsKDwZcLhQtg/77OHoz8piX4AqKfwuI3ElDe2m2hOUs8Y119HcvqV4rgJi/bf1KnElfUaavm3GwJhSpZpnALeyc2N4lClJRsCk4C47UCHUwgGt+DJdOp3Tf+fmF+BV5/9Cs6HWmck20w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ptWaMmHC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=utgGMOWR; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ptWaMmHC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=utgGMOWR; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id ABE8C1FC81;
-	Tue, 13 Feb 2024 10:48:04 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 193D01FC81;
+	Tue, 13 Feb 2024 10:54:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1707821284; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1707821696; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+fmGgJEKlpIBOZTyUzn23meJGrW/K86RdyX8/Qka9Pc=;
-	b=1rKgP++34WbapWVIwZ/rbpaWLAathMQ69A9jkI+8TeMSM1V655GQzx/fNAGI3rmPnSiHQG
-	wDtb2rQw0jW0ygX8ONm/gMH0LwMvAFgO451zB1aZzeYx52SrU8wspbS7aowj7Nh2qydvH8
-	dmoVyZoaC+6yB7yybtUo9TlLyRIB07c=
+	bh=cBmU54n2WXwfimAjDCe1BZ77s/sceqYcDk/8NeTsA4A=;
+	b=ptWaMmHCu0WmXUctmHEU4mCeId9zOiG5a0iQQBRxFuY8QC/GafoaKTiU1V2jEmQDgCPwCQ
+	VTR3JZyPeesRR0C8sdcg3xYe2D1HV5oPut5gyCIuGktzlytdfqvGffdACMFJQEwvVMZmzN
+	K5pD4u0APQoNHkN/ZmV7xEtABWhhXJM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1707821284;
+	s=susede2_ed25519; t=1707821696;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+fmGgJEKlpIBOZTyUzn23meJGrW/K86RdyX8/Qka9Pc=;
-	b=apC07bjjmW4Lg467s45A6nN999r+fIhfE3gNN8cBieQvW8QpZZNf5UBjN9PlnWr1TLnRih
-	DLmg6gKN5pQ2a6AQ==
+	bh=cBmU54n2WXwfimAjDCe1BZ77s/sceqYcDk/8NeTsA4A=;
+	b=utgGMOWRS0M2GQZ6TPczOuJhSlppGUoiB+pe2BYHst1BPNtqP56qiBOaCPVFDbN+u4MGVy
+	yLrTGGdjCV86kaAw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1707821284; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1707821696; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+fmGgJEKlpIBOZTyUzn23meJGrW/K86RdyX8/Qka9Pc=;
-	b=1rKgP++34WbapWVIwZ/rbpaWLAathMQ69A9jkI+8TeMSM1V655GQzx/fNAGI3rmPnSiHQG
-	wDtb2rQw0jW0ygX8ONm/gMH0LwMvAFgO451zB1aZzeYx52SrU8wspbS7aowj7Nh2qydvH8
-	dmoVyZoaC+6yB7yybtUo9TlLyRIB07c=
+	bh=cBmU54n2WXwfimAjDCe1BZ77s/sceqYcDk/8NeTsA4A=;
+	b=ptWaMmHCu0WmXUctmHEU4mCeId9zOiG5a0iQQBRxFuY8QC/GafoaKTiU1V2jEmQDgCPwCQ
+	VTR3JZyPeesRR0C8sdcg3xYe2D1HV5oPut5gyCIuGktzlytdfqvGffdACMFJQEwvVMZmzN
+	K5pD4u0APQoNHkN/ZmV7xEtABWhhXJM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1707821284;
+	s=susede2_ed25519; t=1707821696;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+fmGgJEKlpIBOZTyUzn23meJGrW/K86RdyX8/Qka9Pc=;
-	b=apC07bjjmW4Lg467s45A6nN999r+fIhfE3gNN8cBieQvW8QpZZNf5UBjN9PlnWr1TLnRih
-	DLmg6gKN5pQ2a6AQ==
+	bh=cBmU54n2WXwfimAjDCe1BZ77s/sceqYcDk/8NeTsA4A=;
+	b=utgGMOWRS0M2GQZ6TPczOuJhSlppGUoiB+pe2BYHst1BPNtqP56qiBOaCPVFDbN+u4MGVy
+	yLrTGGdjCV86kaAw==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6B66413404;
-	Tue, 13 Feb 2024 10:48:04 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D2B4C13404;
+	Tue, 13 Feb 2024 10:54:55 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([10.150.64.162])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id gvaAGeRIy2XcbQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Tue, 13 Feb 2024 10:48:04 +0000
-Date: Tue, 13 Feb 2024 11:48:04 +0100
-Message-ID: <87zfw4y717.wl-tiwai@suse.de>
+	id PNvnMn9Ky2WsbwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Tue, 13 Feb 2024 10:54:55 +0000
+Date: Tue, 13 Feb 2024 11:54:55 +0100
+Message-ID: <87y1boy6ps.wl-tiwai@suse.de>
 From: Takashi Iwai <tiwai@suse.de>
 To: Wesley Cheng <quic_wcheng@quicinc.com>
 Cc: <srinivas.kandagatla@linaro.org>,
@@ -108,10 +108,10 @@ Cc: <srinivas.kandagatla@linaro.org>,
 	<linux-arm-msm@vger.kernel.org>,
 	<linux-doc@vger.kernel.org>,
 	<alsa-devel@alsa-project.org>
-Subject: Re: [PATCH v15 18/50] ASoC: Add SOC USB APIs for adding an USB backend
-In-Reply-To: <20240213005422.3121-19-quic_wcheng@quicinc.com>
+Subject: Re: [PATCH v15 39/50] ASoC: Introduce SND kcontrols to select sound card and PCM device
+In-Reply-To: <20240213005422.3121-40-quic_wcheng@quicinc.com>
 References: <20240213005422.3121-1-quic_wcheng@quicinc.com>
-	<20240213005422.3121-19-quic_wcheng@quicinc.com>
+	<20240213005422.3121-40-quic_wcheng@quicinc.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -121,9 +121,9 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=1rKgP++3;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=apC07bjj
-X-Spamd-Result: default: False [1.10 / 50.00];
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=ptWaMmHC;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=utgGMOWR
+X-Spamd-Result: default: False [0.88 / 50.00];
 	 RCVD_VIA_SMTP_AUTH(0.00)[];
 	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
 	 TO_DN_SOME(0.00)[];
@@ -133,7 +133,7 @@ X-Spamd-Result: default: False [1.10 / 50.00];
 	 MX_GOOD(-0.01)[];
 	 FROM_EQ_ENVFROM(0.00)[];
 	 MIME_TRACE(0.00)[0:+];
-	 BAYES_HAM(-0.09)[64.62%];
+	 BAYES_HAM(-0.31)[75.28%];
 	 ARC_NA(0.00)[];
 	 R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	 FROM_HAS_DN(0.00)[];
@@ -151,50 +151,50 @@ X-Spamd-Result: default: False [1.10 / 50.00];
 	 RCVD_TLS_ALL(0.00)[];
 	 SUSPICIOUS_RECIPS(1.50)[]
 X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Score: 1.10
-X-Rspamd-Queue-Id: ABE8C1FC81
-X-Spam-Level: *
+X-Spam-Score: 0.88
+X-Rspamd-Queue-Id: 193D01FC81
+X-Spam-Level: 
 X-Spam-Flag: NO
-X-Spamd-Bar: +
+X-Spamd-Bar: /
 
-On Tue, 13 Feb 2024 01:53:50 +0100,
+On Tue, 13 Feb 2024 01:54:11 +0100,
 Wesley Cheng wrote:
 > 
-> --- a/sound/soc/Kconfig
-> +++ b/sound/soc/Kconfig
-> @@ -76,6 +76,15 @@ config SND_SOC_UTILS_KUNIT_TEST
->  config SND_SOC_ACPI
->  	tristate
->  
-> +config SND_SOC_USB
-> +	bool "SoC based USB audio offloading"
-> +	help
-> +	  Enable this option if an ASoC platform card has support to handle
-> +	  USB audio offloading.  This enables the SoC USB layer, which will
-> +	  notifies the ASoC USB DPCM backend DAI link about available USB audio
-> +	  devices.  Based on the notifications, sequences to enable the audio
-> +	  stream can be taken based on the design.
+> +static int soc_usb_get_offload_dev(struct snd_kcontrol *kcontrol,
+> +				   struct snd_ctl_elem_value *ucontrol)
+> +{
+> +	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
+> +	struct snd_soc_usb *ctx = snd_soc_usb_find_priv_data(component->dev);
+> +	int ret = 0;
+> +
+> +	mutex_lock(&ctx_mutex);
+> +	if (ctx && ctx->get_offload_dev)
+> +		ret = ctx->get_offload_dev(kcontrol, ucontrol);
+> +	mutex_unlock(&ctx_mutex);
 
-This should be tristate, and...
+It might be safer to initialize the values with -1 in case when the
+callback isn't available?
 
-> --- a/sound/soc/Makefile
-> +++ b/sound/soc/Makefile
-> @@ -31,6 +31,10 @@ endif
->  
->  obj-$(CONFIG_SND_SOC_ACPI) += snd-soc-acpi.o
->  
-> +ifneq ($(CONFIG_SND_SOC_USB),)
-> +snd-soc-core-objs += soc-usb.o
-> +endif
+>  /**
+>   * snd_soc_usb_get_components_tag() - Retrieve SOC USB component tag
+>   * @playback: direction of audio stream
+> @@ -157,6 +218,12 @@ EXPORT_SYMBOL_GPL(snd_soc_usb_free_port);
+>   */
+>  int snd_soc_usb_add_port(struct snd_soc_usb *usb)
+>  {
+> +	int ret;
+> +
+> +	ret = snd_soc_usb_control_init(usb->component);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	mutex_lock(&ctx_mutex);
+>  	list_add_tail(&usb->list, &usb_ctx_list);
+>  	mutex_unlock(&ctx_mutex);
 
-... split it to an individual module, i.e.:
-
-snd-soc-usb-objs := soc-usb.o
-obj-$(CONFIG_SND_SOC_USB) += snd-soc-usb.o
-
-Otherwise it'll lead to a hard-dependency to snd-soc-core on
-snd-usb-audio, which is utterly unnecessary for most of other
-devices.
+We may need to remove the control element upon the driver removal,
+too?  In theory, you can unload the offload stuff while snd-usb-audio
+is still active.
 
 
 thanks,
