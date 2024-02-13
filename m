@@ -1,95 +1,160 @@
-Return-Path: <linux-usb+bounces-6311-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6312-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2783852992
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 08:08:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 609E185299E
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 08:21:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 103291C2285C
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 07:08:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F34771F24CA2
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 07:21:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F185171BF;
-	Tue, 13 Feb 2024 07:08:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B5321755B;
+	Tue, 13 Feb 2024 07:20:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="faP+YWhZ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fCtJFE6l"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBE214F7A
-	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 07:08:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C806AD6;
+	Tue, 13 Feb 2024 07:20:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707808116; cv=none; b=FD7L/tRVo6+4bmK/e0lklhLc6yN5lZCOL9TCAqu+wO3pBKRVdkBQaGHzH9d6g9pP4eEON/VCjMRTfa6kTt7mH6HjnCk5FghaI18bhpfG71+lqLP2vtq/BiXIVzCvGjKGQzc964ULSKD30LNOH3opLSRdxmvm//ZIGCcEE+3XqIo=
+	t=1707808856; cv=none; b=dJSgXvm3VdJemJ33Kxsh66D/0kKerRKKDOm2iz7o064TxG1eifD7GVzisiIorSoiHbv8tBH1nn/BDSW5UPyXs1zqoTsZvtWKyDwuCU5oW8aSvMmLUYcactLzl5C8kaHEG1spxbVu3O7PjBp9rv+WJwkXsdv/twuxGeAbV4zcMmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707808116; c=relaxed/simple;
-	bh=cHcpa3RDjQoRNyrCyvieqWZf84BIkhOg8Eea4s59OC8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iphdElfokdmFkofAKrTv14NW2VG8wJ90dQwBvG1+DJmQXwgcU3PP7/qvTmWUaDD6wWKXq7z5Bz1UuJG2xxX1OL+SxkAa3z19Y0srcbEtMFNEglbI+bDQk/k51nbid3Qne9utZrMxcXU94v/sjhnUWJAesfZyAkW95QdZh3GamDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=faP+YWhZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 01AD2C43330
-	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 07:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707808116;
-	bh=cHcpa3RDjQoRNyrCyvieqWZf84BIkhOg8Eea4s59OC8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=faP+YWhZUg1kwmHBq2n5kMfowtbV4JUebTW/fF9vJnuVLTUka1WfLk/kSAOIzb9Z/
-	 Un11s1OMpIBJI8nqoqwuLQV8H8KCi9mBKy/lP4jfov8mI0z9Vz357Ne+nUPLsLPyeh
-	 1iQuutcRi/rqw53cxSFScV+727xe7JXUKChY4Pr/D95LVqNC4veGhEw5DEJ1WttLz5
-	 e3/NXAYM2PRlOm99u2jaFfNHaTSuGKSFpYbKDh6fsWqHrk6kJm0LLK6M+oqvRxm6UK
-	 YXi8SgKaQJcuo2Hc//aGX1sYe4pFVUN2mpikK3NJ2uoJxCYEPfE8viWDQvU4uOB77V
-	 wOr7SUYKT5TSQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id E7141C53BD1; Tue, 13 Feb 2024 07:08:35 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
- CometLake platform
-Date: Tue, 13 Feb 2024 07:08:35 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: mika.westerberg@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216728-208809-OsfHN85YUB@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
-References: <bug-216728-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1707808856; c=relaxed/simple;
+	bh=I5/rXdcTUUyXEyrSQOUtTC1H1Xv29zk2GLcUmcp5FbE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BmEzf/SLuT/3y3M6/qGH2vN8imTlDq6LCBpUV7mq/4zRI5cAaP1xu6cZtNoiKCqjE45A7rAhHtKLOGTDG0NCzQHI9U6xR3A6jM10Q12nZ+ibuKviE8EMlsyQumFX0gF1TcQoHzV2vmC5VwakPBuPdaOm3DhEkEgc3UhlFHUslrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fCtJFE6l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F94C433F1;
+	Tue, 13 Feb 2024 07:20:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1707808856;
+	bh=I5/rXdcTUUyXEyrSQOUtTC1H1Xv29zk2GLcUmcp5FbE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fCtJFE6lQWGjAn9TWrFAy0reZmo13YUQeRBm5+3hg7yNB6oIqBcRdHcJhbA9QDgVw
+	 /dBMV+CWTTPflBx4a9JkWaT7pCWX5LBtCGaNcthD1dL6ddFIeQGSHavHgRYgdq+GVE
+	 T+wL1D21OlJ3/gPOLEkiOIE25vBDtMGtUV3FvK5E=
+Date: Tue, 13 Feb 2024 08:20:52 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Edward Adam Davis <eadavis@qq.com>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, rafael@kernel.org,
+	syzbot+8e41bb0c055b209ebbf4@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH riscv64] kobject: fix WARNING in input_register_device
+Message-ID: <2024021316-nuclei-botany-5446@gregkh>
+References: <2024020836-flypaper-relapse-5c97@gregkh>
+ <tencent_DDCFB377C3642974A3A3A44D176B776DA605@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <tencent_DDCFB377C3642974A3A3A44D176B776DA605@qq.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
+On Tue, Feb 13, 2024 at 08:43:26AM +0800, Edward Adam Davis wrote:
+> On Thu, 8 Feb 2024 12:25:10 +0000, Greg KH wrote:
+> > On Thu, Feb 08, 2024 at 07:37:56PM +0800, Edward Adam Davis wrote:
+> > > On Thu, 8 Feb 2024 10:56:00, Greg KH wrote:
+> > > > > The input_add_uevent_modalias_var()->input_print_modalias() will add 1684 bytes
+> > > > > of data to env, which will result in insufficient memory allocated to the buf
+> > > > > members of env.
+> > > >
+> > > > What is "env"?  And can you wrap your lines at 72 columns please?
+> > > env is an instance of struct kobj_uevent_env.
+> > 
+> > Ok, be specific please in your changelog text, otherwise we can't really
+> > understand what is happening.
+> > 
+> > > > > Reported-and-tested-by: syzbot+8e41bb0c055b209ebbf4@syzkaller.appspotmail.com
+> > > > > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> > > > > ---
+> > > > >  include/linux/kobject.h | 2 +-
+> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/include/linux/kobject.h b/include/linux/kobject.h
+> > > > > index c30affcc43b4..74b37b6459cd 100644
+> > > > > --- a/include/linux/kobject.h
+> > > > > +++ b/include/linux/kobject.h
+> > > > > @@ -30,7 +30,7 @@
+> > > > >
+> > > > >  #define UEVENT_HELPER_PATH_LEN		256
+> > > > >  #define UEVENT_NUM_ENVP			64	/* number of env pointers */
+> > > > > -#define UEVENT_BUFFER_SIZE		2048	/* buffer for the variables */
+> > > > > +#define UEVENT_BUFFER_SIZE		2560	/* buffer for the variables */
+> > > >
+> > > > That's an odd number, why that?  Why not just a page?  What happens if
+> > > > some other path wants more?
+> > > An increase of 512 bytes is sufficient for the current issue. Do not consider
+> > > the problem of hypothetical existence.
+> > 
+> > Why is this 512 bytes sufficient now?  What changed to cause this?
+> There is the following code in input_print_modalias():
+> 
+> drivers/input/input.c
+>    1         len += input_print_modalias_bits(buf + len, size - len,
+> 1403                                 'k', id->keybit, KEY_MIN_INTERESTING, KEY_MAX);
+> This code will add up to 2608 bytes of data to env at most.
+> (KEY_MAX - KEY_MIN_INTERESTING) * 4 = (256 * 3 - 1 - 113 ) * 4 = (765 - 113) * 4 = 652 * 4 = 2608 bytes。
+> Note: In the expression, 4 represents 3 bytes of hexadecimal data and 1 byte of comma.
 
---- Comment #47 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
-Hi Rustam,
+So your change above is wrong and will not work for the max size?
 
-Can you open a new bugzilla about your issue where you describe the exact s=
-teps
-you do, the results you get vs. expectation and attach full dmesg (with
-thunderbolt.dyndbg=3D+p in the kernel command line)?
+Why not restrict the modalias here to fit instead of overflowing?  Odds
+are we should be checking this properly no matter what the value is
+changed to, right?
 
---=20
-You may reply to this email to add a comment.
+> include/uapi/linux/input-event-codes.h
+> 188 #define KEY_MUTE                113
+> 807 #define KEY_MIN_INTERESTING     KEY_MUTE
+> 808 #define KEY_MAX                 0x2ff
+> During my actual testing process, I found that a total of 1684 bytes were
+> contributed in input_print_modalias().
+> > 
+> > And how can we detect this automatically in the future?  Shouldn't we
+> > just be truncating the buffer instead of having an overflow?
+> > 
+> > > > And what's causing the input stack to have so many variables all of a
+> > > > sudden, what changed to cause this?  Is this a bugfix for a specific
+> > > > commit that needs to be backported to older kernels?  Why did this
+> > > > buffer size all of a sudden be too small?
+> > > The result of my analysis is that several members of struct input_dev are too
+> > > large, such as its member keybit.
+> > 
+> > And when did that change?  What commit id?  What prevents it from
+> > growing again and us needing to change this again?
+> The code that caused this issue has been introduced for a long time, and it is
+> speculated that it was due to the fact that the warning in add_uevent_var() was
+> returned directly to ENOMEM without being taken seriously.
+> 
+> lib/kobject_uevent.c
+>   2         if (len >= (sizeof(env->buf) - env->buflen)) { 
+>   1                 WARN(1, KERN_ERR "add_uevent_var: buffer size too small\n");
+> 672                 return -ENOMEM;                                                                                                                                                                        
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Odd line numbers?
+
+Anyway, we should get rid of the WARN() as that will cause crashes, and
+just handle it properly there.
+
+
+>   1         }
+> 
+> I believe that this issue was introduced by:
+> 7eff2e7a8b65 - Driver core: change add_ueventvar to use a struct.
+
+In 2007?  And never been actually hit since then?  So is this a real
+issue? :)
+
+thanks,
+
+greg k-h
 
