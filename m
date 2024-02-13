@@ -1,126 +1,170 @@
-Return-Path: <linux-usb+bounces-6356-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6357-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53F608534F0
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 16:41:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD08F853551
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 16:54:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D72DF281E05
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 15:41:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 924C91F22555
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 15:54:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5479D5EE72;
-	Tue, 13 Feb 2024 15:41:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA35F5F47E;
+	Tue, 13 Feb 2024 15:54:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iBcRM02X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d0L/7yqC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15345EE62;
-	Tue, 13 Feb 2024 15:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4390E5EE76
+	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 15:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707838871; cv=none; b=QJn5h8rvOkmEjN2aNlVcLEFHV9sEyHf4Mht5pU6crpBNSK5oqXGvEEidIr6ikayv8WPULsjfoz7K8xvU7A2FXJugdsvLS8JMlyjDxiOyZB93tTSMBetfDw5Y/+IKfu8dbI7Pl8KzJWuM5InYKDFmqemiWXrNktioOjB5k7qsucc=
+	t=1707839679; cv=none; b=ucUU2+WWAD/Sf3nKeAlHgQQzw6HW1iRFR7kmq6eiK5BoYSdl+Fld1VaBm9UxUgUvG6cqubXerFh8nyukUgO1H7mIeFIpJnEAHN3+1i6R5gJZUoapwrZGMk86nhzDsitCDLzSQyIrwYLDdUZm2CR28HtbwdWWEeoT4Idf8IiY1Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707838871; c=relaxed/simple;
-	bh=pmt8LBlGQ72tRLTCtSSKT8KBTn44RMC9sRMvMykqm9w=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=qrwPO8zreOB1UtHp3kfSVRz6W15GjKuAv+ML6TnrtGkPTOCI50JXK+NW8s+5f3aAKGk6K2QMh275OoBd8w0Gz6oZ0n8yI4IOfqMPK34KHjY+dplyCtddTx4kN2x1MujV7bO9jt4bwQNlKTiMmyGKz3wrrcgdjZ4wnEQFA4QhC6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iBcRM02X; arc=none smtp.client-ip=192.55.52.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707838869; x=1739374869;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=pmt8LBlGQ72tRLTCtSSKT8KBTn44RMC9sRMvMykqm9w=;
-  b=iBcRM02XJ65txIFqK/Jaw+3L3/aBK3H16TgUZkOCdPyqX6D0YNxu53IX
-   YZbZX3jhZ9CWHtEswPcvGTUkN/mceIsYmncqS+4OghVO9tNJq8MHmevRd
-   dgF+OJqfnfiu+g46U6Q/RAdux8PlfxqShyuV/tw27R/dNkR3NFRl9tziz
-   asOuI3jLPRQwNqQED+AtLDs8L2kFcC60Y+wElZ3BGgkMHlpkOvQdB+u8p
-   PFKfjZiVT8X6Zse6ldUQ480pcigkMk0wv18vLzTScdP/0S5mq3K8IB39h
-   lE5bC4hdRU1pnjTp+qqOB9BXmicocAYtV1Aqt4ld5srVJfK69OsAAH38b
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="436997103"
-X-IronPort-AV: E=Sophos;i="6.06,157,1705392000"; 
-   d="scan'208";a="436997103"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 07:41:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="935370607"
-X-IronPort-AV: E=Sophos;i="6.06,157,1705392000"; 
-   d="scan'208";a="935370607"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Feb 2024 07:41:07 -0800
-Message-ID: <a715f138-079c-0d45-6bba-ab88097ae678@linux.intel.com>
-Date: Tue, 13 Feb 2024 17:42:44 +0200
+	s=arc-20240116; t=1707839679; c=relaxed/simple;
+	bh=2fXKxpDg6vRbjEFf1oUx9Dj91fMWHcCU53dQaWQ/hBU=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=rg4Zil70E4P5AwJao1YMdKQrSvCQX965bZe1Aopuac6XbYIZnxgfdAzc3LWDziJOh9oNlpqTqFiIK0YXR3/4zvDJjFX4v7JMXnExavCEb8ong3QgpDseZ57zhqcLWaYMP4rdSsp6nZK1dsrwccpVk38Ly3IuZ1iUX81qTpPzbns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d0L/7yqC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BFCBFC433C7
+	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 15:54:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707839678;
+	bh=2fXKxpDg6vRbjEFf1oUx9Dj91fMWHcCU53dQaWQ/hBU=;
+	h=From:To:Subject:Date:From;
+	b=d0L/7yqCB58sM30xxvDng5mL54yNC5iukN3D+H7Oum6LxbRnHaobIrgweqXQAOkWj
+	 eLFAN4CLO/4d7ht40P87sBElnf1yJmo8xx/Z6sgO1NghkYSGY6obTSnVI/ReWB3pI2
+	 ZR2GmGba5CQrEg5r0bZiBEwhXZDX5U9UEIJPyZbQ2xV2ApU8Ceil2uLjpZn+nLk4Y2
+	 gokGYYkz3TwjZKOIWdsDEUpbRSZaaViztpfLRG/i2IlhJDFQ4QXIxI1yvS//2JHib1
+	 k1OCKEMjW7CgjQGOwBAimW/ekVEva2UoBPheRcXS7Abf+PsSVIYbu6QlAaA38yjyzu
+	 ivawfgoc7iiYg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id A8823C53BD0; Tue, 13 Feb 2024 15:54:38 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218490] New: Linux warning `usb: port power management may be
+ unreliable` on Dell PowerEdge T440
+Date: Tue, 13 Feb 2024 15:54:38 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression attachments.created
+Message-ID: <bug-218490-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Jan Henrik Weinstock <jan@mwa.re>, mathias.nyman@intel.com,
- gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: =?UTF-8?Q?Lukas_J=c3=bcnger?= <lukas@mwa.re>
-References: <CANi1PHh4W7KPagKkvZW6cNAQqgAeG3zxaaTJKkg3KiTbsFRMdg@mail.gmail.com>
- <1b2558f7-94ea-123e-dd3f-b43ecd85c2ef@linux.intel.com>
- <CANi1PHhY67HZxivA9mCoNXfM4YUOjm=tCZsnhrrcu4E6dqDYUQ@mail.gmail.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: XHCI without USB2 ports
-In-Reply-To: <CANi1PHhY67HZxivA9mCoNXfM4YUOjm=tCZsnhrrcu4E6dqDYUQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-> Is it so unusual to have an XHCI that has only USB3 ports?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218490
 
-Yes, this is the first one I've heard of.
+            Bug ID: 218490
+           Summary: Linux warning `usb: port power management may be
+                    unreliable` on Dell PowerEdge T440
+           Product: Drivers
+           Version: 2.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: pmenzel+bugzilla.kernel.org@molgen.mpg.de
+        Regression: No
 
-> 
-> My understanding was that a port can either be USB3 or USB2 (assigned
-> via the Supported Protocol Capability).
+Created attachment 305865
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305865&action=3Dedit
+Linux 5.15.112 messages (output of `dmesg`) with system firmware 2.12.1
 
-Each USB3 host connector has both a USB3 and USB2 port in the Supported
-Protocol Capability.
-See xHCI specification 7.2.2.1 "USB Protocols" note:
+On the Dell PowerEdge T440 with at least system firmware version , Linux wa=
+rns:
 
-"Note: To support USB3 device certification requirements for USB2 user attached
-  devices, USB 2.0 and USB 3.x Supported Protocol Capabilities shall be declared
-  if any USB3 connectors are associated with xHCI Root Hub ports that enable user
-  attached devices. Refer to sections 11.1 and 11.3 in the USB3 spec"
-> 
-> This would mean that in order to work correctly with Linux, all XHCIs
-> right now would have to support at least one USB2 port in addition to
-> their USB3 ports.
+    $ dmesg | grep "may be unreliable"
+    [   12.130289] usb: port power management may be unreliable
+    $ dmesg | grep -e "DMI:" -e "Linux version" -e microcode
+    [    0.000000] Linux version 5.15.112.mx64.449
+(root@theinternet.molgen.mpg.de) (gcc (GCC) 10.4.0, GNU ld (GNU Binutils) 2=
+.40)
+#1 SMP Tue May 23 12:51:43 CEST 2023
+    [    0.000000] DMI: Dell Inc. PowerEdge T440/021KCD, BIOS 2.12.2 07/09/=
+2021
+    [    2.185611] MMIO Stale Data: Vulnerable: Clear CPU buffers attempted=
+, no
+microcode
+    [   12.269955] microcode: sig=3D0x50657, pf=3D0x80, revision=3D0x5003103
+    [   12.276243] microcode: Microcode Update Driver: v2.2.
+    $ usb-devices
 
-Yes, that is currently the case.
-But normally each USB3 connector has a matching USB3 and USB2 port pair.
+    T:  Bus=3D01 Lev=3D00 Prnt=3D00 Port=3D00 Cnt=3D00 Dev#=3D  1 Spd=3D480=
+ MxCh=3D16
+    D:  Ver=3D 2.00 Cls=3D09(hub  ) Sub=3D00 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
+    P:  Vendor=3D1d6b ProdID=3D0002 Rev=3D05.15
+    S:  Manufacturer=3DLinux 5.15.112.mx64.449 xhci-hcd
+    S:  Product=3DxHCI Host Controller
+    S:  SerialNumber=3D0000:00:14.0
+    C:  #Ifs=3D 1 Cfg#=3D 1 Atr=3De0 MxPwr=3D0mA
+    I:  If#=3D0x0 Alt=3D 0 #EPs=3D 1 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 Dri=
+ver=3Dhub
 
-USB 3.2 specification section 11.1 dictates that:
+    T:  Bus=3D01 Lev=3D01 Prnt=3D01 Port=3D13 Cnt=3D01 Dev#=3D  2 Spd=3D480=
+ MxCh=3D 4
+    D:  Ver=3D 2.00 Cls=3D09(hub  ) Sub=3D00 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
+    P:  Vendor=3D1604 ProdID=3D10c0 Rev=3D00.00
+    C:  #Ifs=3D 1 Cfg#=3D 1 Atr=3Dc0 MxPwr=3D100mA
+    I:  If#=3D0x0 Alt=3D 0 #EPs=3D 1 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 Dri=
+ver=3Dhub
 
-11.1 USB 3.2 Host Support for USB 2.0
-"USB 3.2-capable ports on hosts shall also support USB 2.0 operation in order
-  to enable backward compatibility with USB 2.0 devices. It should be noted,
-  however, that USB 3.2-capable hosts are not required to support Enhanced
-  SuperSpeed operation on all of the ports available on the host, i.e.,
-  some USB 3.2-capable hosts may have a mix of USB 2.0-only and USB 3.2-capable
-  ports."
+    T:  Bus=3D01 Lev=3D02 Prnt=3D02 Port=3D00 Cnt=3D01 Dev#=3D  3 Spd=3D480=
+ MxCh=3D 4
+    D:  Ver=3D 2.00 Cls=3D09(hub  ) Sub=3D00 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
+    P:  Vendor=3D1604 ProdID=3D10c0 Rev=3D00.00
+    C:  #Ifs=3D 1 Cfg#=3D 1 Atr=3Dc0 MxPwr=3D100mA
+    I:  If#=3D0x0 Alt=3D 0 #EPs=3D 1 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 Dri=
+ver=3Dhub
 
-(Similar statement exists in older USB 3.0 specification)
+    T:  Bus=3D01 Lev=3D02 Prnt=3D02 Port=3D03 Cnt=3D02 Dev#=3D  4 Spd=3D480=
+ MxCh=3D 4
+    D:  Ver=3D 2.00 Cls=3D09(hub  ) Sub=3D00 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
+    P:  Vendor=3D1604 ProdID=3D10c0 Rev=3D00.00
+    C:  #Ifs=3D 1 Cfg#=3D 1 Atr=3Dc0 MxPwr=3D100mA
+    I:  If#=3D0x0 Alt=3D 0 #EPs=3D 1 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 Dri=
+ver=3Dhub
 
-xHC with just one USB3 port could maybe be possible in some built in SSIC device
-case without user attachable ports, or some setup with several host controllers
-where one handles the USB3 traffic and the other the USB2 traffic of the same USB3
-connector.
+    T:  Bus=3D02 Lev=3D00 Prnt=3D00 Port=3D00 Cnt=3D00 Dev#=3D  1 Spd=3D500=
+0 MxCh=3D10
+    D:  Ver=3D 3.00 Cls=3D09(hub  ) Sub=3D00 Prot=3D03 MxPS=3D 9 #Cfgs=3D  1
+    P:  Vendor=3D1d6b ProdID=3D0003 Rev=3D05.15
+    S:  Manufacturer=3DLinux 5.15.112.mx64.449 xhci-hcd
+    S:  Product=3DxHCI Host Controller
+    S:  SerialNumber=3D0000:00:14.0
+    C:  #Ifs=3D 1 Cfg#=3D 1 Atr=3De0 MxPwr=3D0mA
+    I:  If#=3D0x0 Alt=3D 0 #EPs=3D 1 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 Dri=
+ver=3Dhub
 
-Thanks
-Mathias
+--=20
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
