@@ -1,234 +1,190 @@
-Return-Path: <linux-usb+bounces-6341-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6343-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90E4585314C
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 14:07:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27F5A853189
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 14:16:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F31B31F247FA
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 13:07:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93F67B22937
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 13:16:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A62D050A7C;
-	Tue, 13 Feb 2024 13:06:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D22155784;
+	Tue, 13 Feb 2024 13:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="inDrKRFm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+Received: from out203-205-251-72.mail.qq.com (out203-205-251-72.mail.qq.com [203.205.251.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D5150254
-	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 13:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.202.254.214
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABBE29CE4;
+	Tue, 13 Feb 2024 13:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.251.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707829605; cv=none; b=U9/YK0APm86PWgmFpg6OhgMfB14sqsHCe+O/i4w5suCDy9ZQrRWNfVRVzUBtIfICieSJsdSibEuCdCb8IMhS5yvft61oqrBoGR8r+OgfXr5M9xAO63U87DeRriSQPoVURH0eReru5HKnDaL7aay/faYv9Z/KKqOkfp5YNG6CCdo=
+	t=1707830154; cv=none; b=JWsSs/misDe5Sz+VTXn0zy3EENilIlZKzmZBwa5YKBV2Z0sUcVqJAeu1/61yNCw+/X1kKEl+B3KeCRqvp+oS1dR3N9s0hO3kl81s2QYG4gth6psq2edcPY7zqZBOoHKxw3sZNvuMFJzdhzfRD5GUPifMLVO7Q0uqlbMXHCqcbMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707829605; c=relaxed/simple;
-	bh=Tjcyyqnsle0pWXHD9sQjVFWXbeqMpGlAGL+H/lXJst8=;
-	h=To:From:Subject:Date:Message-ID:References:Mime-Version:
-	 Content-Type:In-Reply-To:Cc; b=P4slWJNakx2VJMj31gVO/f1J0hoaqzu+vLLsu4siGZlnzQc0LzYqcI26U0ytsvE1mfRWQRL31a5AQvuwxCrEBxE5NXx5UV0YR65bcB1SNeV3QwCAskJCwGFL0CkB7psmNHhvu7hggFrppaXoDeFb82TFoge4XlvLZQOPDoaYEtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=m.gmane-mx.org; arc=none smtp.client-ip=116.202.254.214
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=m.gmane-mx.org
-Received: from list by ciao.gmane.io with local (Exim 4.92)
-	(envelope-from <glug-linux-usb@m.gmane-mx.org>)
-	id 1rZsUd-0007Kr-UQ
-	for linux-usb@vger.kernel.org; Tue, 13 Feb 2024 14:06:35 +0100
-X-Injected-Via-Gmane: http://gmane.org/
-To: linux-usb@vger.kernel.org
-From: Julian Sikorski <belegdol@gmail.com>
-Subject: Re: [PATCH] usb-storage: Ignore UAS for LaCie Rugged FW USB3
-Date: Tue, 13 Feb 2024 14:06:30 +0100
-Message-ID: <0cf5ea13-6472-47e1-a32f-b9f332656c6a@gmail.com>
-References: <20240209151121.1004985-1-tasos@tasossah.com>
- <b16e72ad-3f2d-46a8-8361-2641088694df@rowland.harvard.edu>
- <2978efa3-e83f-4ef5-907d-8232e4b692a5@tasossah.com>
- <6d4b1f55-09df-47e9-945d-fa38cd36588c@gmail.com>
- <b6dcf71b-f094-4664-8d43-7d8c0173f51f@gmail.com>
- <c21f9649-30be-462a-b9ec-f7c96ead30cf@gmail.com>
+	s=arc-20240116; t=1707830154; c=relaxed/simple;
+	bh=gxpXc33c0/tivVgSIAJHqg/XR8543C4zbAojXjlXODA=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ka8ev9oXOYnrYPw8MZ4theyBZaejlPUy/tJ5YTcIW8kgQTF81Ed2lXTh7IXJ3LG5EOfPU5FLrXhX66/wyLfNT0Vu2z8OS6O5dor4HSTtrFwlcbkAlms9UCawCkaW7LV7FYPeELOOauzGxnxrIAgCiwpj3S+Mu7NIy6E1HroHhnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=inDrKRFm; arc=none smtp.client-ip=203.205.251.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1707829841; bh=bkKyuqkAwr4sG3hZNQo0E5KcA8LMWQh9y91i0CS2DG0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=inDrKRFmll8R+yYYY0ftDPrWIm0WucaYoqI0Ga56vMTs+tUBXBYsSF85WhFWWujeI
+	 E3zyBYj+dlqwtryJCF18OLKniYpapYhRjQz1hCN6ahKl6bZlyhf+LUtV2Q29nOGYtp
+	 eLoDTEn7wjQR+fo/10kRVQZDoJD0XSDKbwKVZQLc=
+Received: from pek-lxu-l1.wrs.com ([36.129.58.158])
+	by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+	id 2A63AECA; Tue, 13 Feb 2024 21:10:38 +0800
+X-QQ-mid: xmsmtpt1707829838toask8lu6
+Message-ID: <tencent_1755B769F77446DC1379E362296083BF0405@qq.com>
+X-QQ-XMAILINFO: NafziRg7Bx69/VRWICJG/HVsVWgnLmPvroYF2fGmjhVx6dncrzPuT8+LDaDWSs
+	 3n0h1nb2CVwyaCRYXwDloJFxK+8Mbd9TPKtbImqRzbFpZoInlh6STMyEm7Sd4yj6MhWH8pZZwNnv
+	 8klZ6hpx70GfD4pokKZAsMqMVYJLS8NVLRsfSTpOZDH6SMmXWzPZ2PFkbE91gj+w4WTQ7P2suhb5
+	 Ao30tj7jq5yjlUrJOxcwr7bUk7Sem7Ed8fkQ6pBlasdVI9igCitZuHRIB0AcRItpFFsOzwUD8FFG
+	 PwbjzkFVHNt7JQ4YWCBg6ov5YOtlPMmw93bBHpm5O2KtaJbtpwxNC9l1VfqcMzzq/cFS71Jv1fnc
+	 axXopahYqGGDcxPnx19xiGNVqevMUH80A5wIk9BF0U7nbV5lyNQxcvlOXBT1vdONXL9vifncrpKA
+	 euauM5LGJEHnvz8u6D4MahEdC2ypHGbxftRehTROvY4aNXhyqBbLiXwKVbFAboU8+QoHMy+616+1
+	 3NOue9/H6uZsurf/4LlUWKwTPUJizdfhD0Z/Z43hotake0W6RDdbtrIEjiGCrKvN2uqozDnx74dp
+	 05kf12F0gMlLe9NQgH1NEcFaqu8owAzNTvK7xAw18jWkd3BxTo8MLQ3j6klN+YrOVgC/bEE1cJbz
+	 bjZYJlpKZ5TQDLOCynsMfNDEofJWscVn1Rum+wvQ3uoA+fTY4K+xPtEtpTluvL2OsqJxa6v5LC5P
+	 INN2bsw7o6PEYQ2PLd3JOZ6Hw3zsh7p7JkmhbjdEYqG+AjHl8zRSfXk338snhCstuLa1ZPiPZfe0
+	 YVZmeAET7/D3uU7qDogfok5j7c1QAwKQm8pIT+Sh51vgayXpSs7V/ODhSl5CBGhEQ2AudKzpI6HM
+	 hSQEIlcEoWUAhVZr+8Gqj+9bewIvmRHRhTs7caF7WKKYeuF4mWsJlaa/S6GptoRhOZbaPL1YcqRz
+	 jx1YxZdqA=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+From: Edward Adam Davis <eadavis@qq.com>
+To: gregkh@linuxfoundation.org
+Cc: eadavis@qq.com,
+	linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	rafael@kernel.org,
+	syzbot+8e41bb0c055b209ebbf4@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH riscv64] kobject: fix WARNING in input_register_device
+Date: Tue, 13 Feb 2024 21:10:37 +0800
+X-OQ-MSGID: <20240213131037.1139171-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <2024021316-nuclei-botany-5446@gregkh>
+References: <2024021316-nuclei-botany-5446@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-In-Reply-To: <c21f9649-30be-462a-b9ec-f7c96ead30cf@gmail.com>
-Cc: linux-scsi@vger.kernel.org
 
-Am 10.02.24 um 22:43 schrieb Julian Sikorski:
-> Am 10.02.24 um 22:35 schrieb Julian Sikorski:
->> Am 10.02.24 um 15:21 schrieb Julian Sikorski:
->>> Am 10.02.24 um 14:24 schrieb Tasos Sahanidis:
->>>> On 2024-02-09 17:31, Alan Stern wrote:
->>>>> On Fri, Feb 09, 2024 at 05:11:21PM +0200, Tasos Sahanidis wrote:
->>>>>> This external HDD fails when plugged in to a USB 3 port. Ignoring 
->>>>>> UAS and
->>>>>> falling back to mass storage resolves this issue.
->>>>>
->>>>> What happens when it is plugged into a USB-2 port?
->>>>
->>>> It works without any quirks over USB 2.0 with uas, however asking for
->>>> cache data fails gracefully.
->>>>
->>>> [  520.829840] scsi host4: uas
->>>> [  521.024643] scsi 4:0:0:0: Direct-Access     LaCie    Rugged FW 
->>>> USB3   1081 PQ: 0 ANSI: 4
->>>> [  521.026370] sd 4:0:0:0: Attached scsi generic sg2 type 0
->>>> [  521.030096] sd 4:0:0:0: [sdc] 976773153 512-byte logical blocks: 
->>>> (500 GB/466 GiB)
->>>> [  521.030369] sd 4:0:0:0: [sdc] Write Protect is off
->>>> [  521.030373] sd 4:0:0:0: [sdc] Mode Sense: 47 00 10 08
->>>> [  521.030507] sd 4:0:0:0: [sdc] Asking for cache data failed
->>>> [  521.030512] sd 4:0:0:0: [sdc] Assuming drive cache: write through
->>>> [  521.065916]  sdc: sdc1
->>>> [  521.067783] sd 4:0:0:0: [sdc] Attached SCSI disk
->>>> [  521.699380] EXT4-fs (sdc1): recovery complete
->>>> [  521.699388] EXT4-fs (sdc1): mounted filesystem with ordered data 
->>>> mode. Opts: errors=remount-ro. Quota mode: none.
->>>>
->>>>> Have you checked to see if any of the quirk flags can prevent this
->>>>> problem?  It looks like the only issue might be that one Mode Sense(6)
->>>>> command.
->>>>
->>>> I have tried various combinations of all the available quirks and I
->>>> couldn't get it to not hang. Without any quirks it keeps retrying Mode
->>>> Sense(6) constantly.
->>>>
->>>> I tested US_FL_ALWAYS_SYNC as it sets sdev->skip_ms_page_8 (both with
->>>> and without US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME), and it hung at an
->>>> ATA passthrough command; presumably the next step afterwards.
->>>>
->>>> 30 seconds and one USB reset later, the disk is recognised, but I
->>>> do not know if it is reliable.
->>>>
->>>> [  329.161316] scsi 4:0:0:0: Direct-Access     LaCie    Rugged FW 
->>>> USB3   1081 PQ: 0 ANSI: 4
->>>> [  329.162228] sd 4:0:0:0: Attached scsi generic sg2 type 0
->>>> [  329.166650] sd 4:0:0:0: [sdc] 976773153 512-byte logical blocks: 
->>>> (500 GB/466 GiB)
->>>> [  329.166654] sd 4:0:0:0: [sdc] Assuming Write Enabled
->>>> [  329.166655] sd 4:0:0:0: [sdc] Assuming drive cache: write back
->>>> [  329.197983]  sdc: sdc1
->>>> [  329.198521] sd 4:0:0:0: [sdc] Attached SCSI disk
->>>> [  359.553806] sd 4:0:0:0: [sdc] tag#3 uas_eh_abort_handler 0 
->>>> uas-tag 1 inflight: IN
->>>> [  359.553816] sd 4:0:0:0: [sdc] tag#3 CDB: ATA command pass 
->>>> through(12)/Blank a1 08 2e 00 01 00 00 00 00 ec 00 00
->>>> [  359.573771] scsi host4: uas_eh_device_reset_handler start
->>>> [  359.702116] usb 3-1: reset SuperSpeed USB device number 3 using 
->>>> xhci_hcd
->>>> [  359.722068] usb 3-1: LPM exit latency is zeroed, disabling LPM.
->>>> [  359.724348] scsi host4: uas_eh_device_reset_handler success
->>>> [  360.582975] EXT4-fs (sdc1): recovery complete
->>>> [  360.633098] EXT4-fs (sdc1): mounted filesystem with ordered data 
->>>> mode. Opts: errors=remount-ro. Quota mode: none.
->>>>
->>>> My assumption is that something goes wrong during init and that 
->>>> makes it
->>>> hang in general. Perhaps the Mode Sense(6) is broken in addition to
->>>> whatever else is misbehaving. I don't believe the XHCI controller is at
->>>> fault.
->>>>
->>>>> Falling back from uas to usb-storage could reduce the throughput
->>>>> considerably.  We would like to avoid doing this if possible.
->>>>
->>>> Absolutely, but at the same time I am not sure how much it matters for
->>>> an old mechanical hard disk. Granted, someone can use the same 
->>>> enclosure
->>>> and install an SSD internally, so perhaps that makes it worth it.
->>>>
->>>> Thanks
->>>>
->>>> -- 
->>>> Tasos
->>>>
->>>>
->>>>
->>> This seems to be similar to the issue I am facing with a similar 
->>> LaCie Rugged USB3-FW 059f:1061. Initially we patched it to IGNORE_UAS 
->>> but it then turned out to be working with US_FL_NO_REPORT_OPCODES and 
->>> US_FL_NO_SAME. This was back in September 2021. In August 2023 I 
->>> reported a similar issue as you, I am still seeing it in 6.7.3. The 
->>> good news is that after initial problems it seems to be working fine 
->>> once the USB connection is established.
->>
->> I have now narrowed it down to having broken between 5.18.19 and 
->> 5.19.4 kernels. Tasos, if you are interested, you might want to check 
->> if you can get the drive working with US_FL_NO_REPORT_OPCODES and
->> US_FL_NO_SAME alone (fk) quirks alone on 36 live, which ships 5.17.5 
->> kernel. Exercise caution as it is an EOL system.
->> I will see if I can narrow down the regression further.
->>
->> Best regards,
->> Julian
->>
-> Oddly enough, with 5.19.4 the device starts working after one reset 
-> instead of after four:
+On Tue, 13 Feb 2024 08:20:52 +0100, Greg KH wrote:
+> On Thu, 8 Feb 2024 10:56:00, Greg KH wrote:
+> On Tue, Feb 13, 2024 at 08:43:26AM +0800, Edward Adam Davis wrote:
+> > On Thu, 8 Feb 2024 12:25:10 +0000, Greg KH wrote:
+> > > On Thu, Feb 08, 2024 at 07:37:56PM +0800, Edward Adam Davis wrote:
+> > > > On Thu, 8 Feb 2024 10:56:00, Greg KH wrote:
+> > > > > > The input_add_uevent_modalias_var()->input_print_modalias() will add 1684 bytes
+> > > > > > of data to env, which will result in insufficient memory allocated to the buf
+> > > > > > members of env.
+> > > > >
+> > > > > What is "env"?  And can you wrap your lines at 72 columns please?
+> > > > env is an instance of struct kobj_uevent_env.
+> > >
+> > > Ok, be specific please in your changelog text, otherwise we can't really
+> > > understand what is happening.
+> > >
+> > > > > > Reported-and-tested-by: syzbot+8e41bb0c055b209ebbf4@syzkaller.appspotmail.com
+> > > > > > Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+> > > > > > ---
+> > > > > >  include/linux/kobject.h | 2 +-
+> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > >
+> > > > > > diff --git a/include/linux/kobject.h b/include/linux/kobject.h
+> > > > > > index c30affcc43b4..74b37b6459cd 100644
+> > > > > > --- a/include/linux/kobject.h
+> > > > > > +++ b/include/linux/kobject.h
+> > > > > > @@ -30,7 +30,7 @@
+> > > > > >
+> > > > > >  #define UEVENT_HELPER_PATH_LEN		256
+> > > > > >  #define UEVENT_NUM_ENVP			64	/* number of env pointers */
+> > > > > > -#define UEVENT_BUFFER_SIZE		2048	/* buffer for the variables */
+> > > > > > +#define UEVENT_BUFFER_SIZE		2560	/* buffer for the variables */
+> > > > >
+> > > > > That's an odd number, why that?  Why not just a page?  What happens if
+> > > > > some other path wants more?
+> > > > An increase of 512 bytes is sufficient for the current issue. Do not consider
+> > > > the problem of hypothetical existence.
+> > >
+> > > Why is this 512 bytes sufficient now?  What changed to cause this?
+> > There is the following code in input_print_modalias():
+> >
+> > drivers/input/input.c
+> >    1         len += input_print_modalias_bits(buf + len, size - len,
+> > 1403                                 'k', id->keybit, KEY_MIN_INTERESTING, KEY_MAX);
+> > This code will add up to 2608 bytes of data to env at most.
+> > (KEY_MAX - KEY_MIN_INTERESTING) * 4 = (256 * 3 - 1 - 113 ) * 4 = (765 - 113) * 4 = 652 * 4 = 2608 bytes。
+> > Note: In the expression, 4 represents 3 bytes of hexadecimal data and 1 byte of comma.
 > 
-> Feb 10 22:36:56 kernel: usb 2-4: new SuperSpeed USB device number 3 
-> using xhci_hcd
-> Feb 10 22:36:56 kernel: usb 2-4: New USB device found, idVendor=059f, 
-> idProduct=1061, bcdDevice= 0.01
-> Feb 10 22:36:56 kernel: usb 2-4: New USB device strings: Mfr=2, 
-> Product=3, SerialNumber=1
-> Feb 10 22:36:56 kernel: usb 2-4: Product: Rugged USB3-FW
-> Feb 10 22:36:56 kernel: usb 2-4: Manufacturer: LaCie
-> Feb 10 22:36:56 kernel: usb 2-4: SerialNumber: 00000000157f928920fa
-> Feb 10 22:36:56 kernel: scsi host6: uas
-> Feb 10 22:36:56 kernel: scsi 6:0:0:0: Direct-Access     LaCie    Rugged 
-> FW USB3   051E PQ: 0 ANSI: 6
-> Feb 10 22:36:56 kernel: sd 6:0:0:0: Attached scsi generic sg1 type 0
-> Feb 10 22:36:56 kernel: sd 6:0:0:0: [sda] 1953525168 512-byte logical 
-> blocks: (1.00 TB/932 GiB)
-> Feb 10 22:36:56 kernel: sd 6:0:0:0: [sda] Write Protect is off
-> Feb 10 22:36:56 kernel: sd 6:0:0:0: [sda] Mode Sense: 43 00 00 00
-> Feb 10 22:36:56 kernel: sd 6:0:0:0: [sda] Write cache: enabled, read 
-> cache: enabled, doesn't support DPO or FUA
-> Feb 10 22:36:56 kernel: sd 6:0:0:0: [sda] Preferred minimum I/O size 512 
-> bytes
-> Feb 10 22:36:56 kernel: sd 6:0:0:0: [sda] Optimal transfer size 33553920 
-> bytes
-> Feb 10 22:37:26 kernel: sd 6:0:0:0: [sda] tag#23 uas_eh_abort_handler 0 
-> uas-tag 1 inflight: IN
-> Feb 10 22:37:26 kernel: sd 6:0:0:0: [sda] tag#23 CDB: Inquiry 12 01 b9 
-> 00 04 00
-> Feb 10 22:37:26 kernel: scsi host6: uas_eh_device_reset_handler start
-> Feb 10 22:37:26 kernel: usb 2-4: reset SuperSpeed USB device number 3 
-> using xhci_hcd
-> Feb 10 22:37:26 kernel: scsi host6: uas_eh_device_reset_handler success
-> Feb 10 22:37:26 kernel:  sda: sda1 sda2
-> Feb 10 22:37:26 kernel: sd 6:0:0:0: [sda] Attached SCSI disk
+> So your change above is wrong and will not work for the max size?
+Yes.
 > 
-> Further bisecting is going to be difficult as there are no built kernels 
-> left. I will see if the time effort is manageable.
+> Why not restrict the modalias here to fit instead of overflowing?  Odds
+> are we should be checking this properly no matter what the value is
+> changed to, right?
+Right.
+It may be necessary to deepen our understanding of this piece of code before
+fixing this issue internally.
 > 
-> Best regards,
-> Julian
+> > include/uapi/linux/input-event-codes.h
+> > 188 #define KEY_MUTE                113
+> > 807 #define KEY_MIN_INTERESTING     KEY_MUTE
+> > 808 #define KEY_MAX                 0x2ff
+> > During my actual testing process, I found that a total of 1684 bytes were
+> > contributed in input_print_modalias().
+> > >
+> > > And how can we detect this automatically in the future?  Shouldn't we
+> > > just be truncating the buffer instead of having an overflow?
+> > >
+> > > > > And what's causing the input stack to have so many variables all of a
+> > > > > sudden, what changed to cause this?  Is this a bugfix for a specific
+> > > > > commit that needs to be backported to older kernels?  Why did this
+> > > > > buffer size all of a sudden be too small?
+> > > > The result of my analysis is that several members of struct input_dev are too
+> > > > large, such as its member keybit.
+> > >
+> > > And when did that change?  What commit id?  What prevents it from
+> > > growing again and us needing to change this again?
+> > The code that caused this issue has been introduced for a long time, and it is
+> > speculated that it was due to the fact that the warning in add_uevent_var() was
+> > returned directly to ENOMEM without being taken seriously.
+> >
+> > lib/kobject_uevent.c
+> >   2         if (len >= (sizeof(env->buf) - env->buflen)) {
+> >   1                 WARN(1, KERN_ERR "add_uevent_var: buffer size too small\n");
+> > 672                 return -ENOMEM;
+> 
+> Odd line numbers?
+> 
+> Anyway, we should get rid of the WARN() as that will cause crashes, and
+> just handle it properly there.
+> 
+> 
+> >   1         }
+> >
+> > I believe that this issue was introduced by:
+> > 7eff2e7a8b65 - Driver core: change add_ueventvar to use a struct.
+> 
+> In 2007?  And never been actually hit since then?  So is this a real
+> issue? :)
+Yes. But as I mentioned earlier, in add_uevent_var(), it will exit directly after
+a warning, so this issue has not been given enough attention, perhaps it has
+happened many times.
 
-So I have good news and bad news. The good news is that I have managed 
-to bisect the issue down to commit
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c92a6b5d6335
-
-With c92a6b5d6335 and with e60ac0b9e445, the drive requires multiple 
-resets in the VM. With 7fb019c46eee onwards, it only requires one reset.
-The bad news is that I am not able to fix it with BLIST_NO_VPD_SIZE:
-
-$ echo "LaCie:Rugged FW USB3:0x2000" | sudo tee /proc/scsi/device_info
-
-This is despite this being used to fix problems with some other devices:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4b1a2c2a8e0ddcb89c5f6c5003bd9b53142f69e3
-
-I am cross-posting this to scsi list, maybe someone there would be able 
-to understand what is going on.
-Out of interest, why is the device called "Rugged FW USB3" by scsi but 
-"Rugged USB3-FW" by usb?
-
-Best regards,
-Julian
+thanks,
+edward.
 
 
