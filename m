@@ -1,230 +1,170 @@
-Return-Path: <linux-usb+bounces-6349-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6350-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D14685333D
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 15:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 57690853390
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 15:51:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E1B42875B8
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 14:33:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 100D128BE3D
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 14:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 909AB53367;
-	Tue, 13 Feb 2024 14:33:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C4F758AC5;
+	Tue, 13 Feb 2024 14:50:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="OLAbKPnD"
+	dkim=pass (2048-bit key) header.d=mwa.re header.i=@mwa.re header.b="XltMvdij"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8141DFE3;
-	Tue, 13 Feb 2024 14:33:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F5E95EE6A
+	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 14:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707834800; cv=none; b=OX5hzEYQZqgmI+HLRGv9xsLBALP7oI9w4Rq1kGapYQ1IIBdNzSy895PNSfebZMauJz8x8wADfNeRXTEh+Y1MFVQrMyd6qO6Z/e0TtNxA+KPteWktsVbYyfhctlNRfF5OaW7ofEBC3MTcx6qJpzM+PABlkNQbTh55RvdWYqjEF2k=
+	t=1707835837; cv=none; b=F8Sf3ox3pYkDtZ64X4Ca2hpO19+pmOavhq5Mq+IatFK3Q6mhZydRjbHucw5c+biXDanhp0j+7rpHLZvfeo7S+MaC+DI3AhS6PWgUz8Fq/WZk2J9Uh0sFa8nQhAC9N1dNxVR2uizgJQHCxYKa6zGl5jHpaQsGtAvgSKytAGQsJnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707834800; c=relaxed/simple;
-	bh=xBIYg43+Vy06LaQwzpL5eJyJ7exe9LOWLiuZ7iNlXZ0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=agQYPwvPksitSSrhtfWu/FExC6kiVJx29jnB519GjLWGFWjHBbhXOXu3VKJ0fcXNO5Wt7ZtjhYa4NBC8ubqQOBaLNOkbpDLKsfH+562ERF/D+zkahfmznYDQDt2q2UkpozGe654oONDwfvZmjmE75+Ldgu+TioSE6CN1oSNXWDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=OLAbKPnD; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41DDojE0014163;
-	Tue, 13 Feb 2024 14:33:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-11-20; bh=RWCCo/GkrKf2x4jMdXGak7qX7g7APn1oHCzI7veQcRE=;
- b=OLAbKPnD37c6mU5JIOR98wSCU6CTu0mlys9yPETz1Z0TgaryeL1H30PBGkGsESrcyDGs
- I5o7jScdyB9W4gJRC2KQmXYqLrsOtkMYL+t4FWFuHVgieEPzsv5FMv+NWaTxkTQgUgKT
- CJ6woNiDiZpyTaYg6qwSDO1xsl6y1DQ67PVmLi0g935itQb8pLLXcKh7i8DlaKUoO7sk
- /o7uucO/xysVjvLP4fnwAhr9whnFU+5nqwhY/KhXNEKnD2nUOlPNgYmuXqV/COYsCBge
- Xj7KfVDIs6a1odgbwfpgnRAx4QPVaLRVuepGQ/8/bwTQu/b/u4/GJfUOjnXfFXuPZRLp 7w== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3w87nxggj5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 13 Feb 2024 14:33:13 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 41DDjKjD015098;
-	Tue, 13 Feb 2024 14:33:12 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3w5yk7dwn6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 13 Feb 2024 14:33:12 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41DEXCgg029359;
-	Tue, 13 Feb 2024 14:33:12 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3w5yk7dwm3-1;
-	Tue, 13 Feb 2024 14:33:12 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org
-Cc: belegdol@gmail.com, "Martin K. Petersen" <martin.petersen@oracle.com>,
-        stable@vger.kernel.org, Tasos Sahanidis <tasos@tasossah.com>
-Subject: [PATCH] scsi: sd: usb_storage: uas: Access media prior to querying device properties
-Date: Tue, 13 Feb 2024 09:33:06 -0500
-Message-ID: <20240213143306.2194237-1-martin.petersen@oracle.com>
-X-Mailer: git-send-email 2.42.1
+	s=arc-20240116; t=1707835837; c=relaxed/simple;
+	bh=CZoN3i7XJzre4jd4qikn3fslxobuEEEJDNql/BAQ0/Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aAbeqZNGsPBi36Qy7aKl6rSsmhFjJENw9sZBDU3XG/qOH/QcmqGtj2AQ39V47/rttLE4HQizVtzgdvk3dZxtndoI5etOhDuA0Wf6Tlpi8oLm8zUmK4JLRAN5Tpig4fiflniynp6qyvWa+SZsEoAv9lxctJFup+gupuTZfQVx21E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mwa.re; spf=pass smtp.mailfrom=mwa.re; dkim=pass (2048-bit key) header.d=mwa.re header.i=@mwa.re header.b=XltMvdij; arc=none smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mwa.re
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mwa.re
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2d10d2da73dso6812391fa.1
+        for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 06:50:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mwa.re; s=google; t=1707835833; x=1708440633; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DIriFNrO5RwDl0i8OFgd8O5e6yhYA4cnaSts661zHg4=;
+        b=XltMvdijGPwlIJbJKI9asq1MbMVkCeNT6bgaLoL9drYtnRSDorpL62fRPTcdXFMK1y
+         ZcGbuaEjW/qqnhxKkWYmU6agO9KzyE14mcAYP8tXhaXytqzeHg1r/YTRAmP4zFd9w1Zf
+         CD9gpTpQ2f72nqCWfoKpO7tQ7j4ly7KQDixtgCkPIdavEpTlaRKCJaYpS8dRs4J+o97B
+         eFXpFVE9SBB7H1L7dp6peC6RpT/CIdfZUDJPu9fRpJqj54V7nPObg2COnUx/w4lbozs1
+         OU2s9Pl2s+iMeVUA5uLIJE9iNqy0Gc2If3aERiSIyJ0biLuVQ72Ir/AODdmb47T29hJI
+         vRHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707835833; x=1708440633;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DIriFNrO5RwDl0i8OFgd8O5e6yhYA4cnaSts661zHg4=;
+        b=kJnuQK+Pl+WQJeLwYET1q11U0+XIT6cvmPE8B/PQJEiNNQMdEwpFJ8SgD0X56l0WPP
+         CA1Sh+WayDuHfT0PoWpUaJ8j61fgxQilfwZYNZeGLOLdhzh1AV0IssK1zcx3xPSw/1VQ
+         0vmhnc6GnJ52ZZ0n7DGBaSXVhNYZ/5MTOLt8M88UVUETEjvy6bq54pllD7btxLZtHcWP
+         v16K4Ua+IUzDBJU4hrcyFpPaRwMJGIIB04aohlX9uDI/ggnk71Pgs2Lv2OU/wjV2gN/+
+         1/Ni48WcrpyspMpffn4GOQO3bRHFec6+kj3H5a0FxtZ7VYgCRuPQyvbThZclMrjq+JXF
+         Db3g==
+X-Forwarded-Encrypted: i=1; AJvYcCXvpCydksctpKxNB/sHGMp+XhXVYi1B8LAwcWjwSiLF6pqzL3sWF3OqJjM7TytyLPZWQHhIMiFARwtsqApJqESLuaiqgkJXhmUH
+X-Gm-Message-State: AOJu0Yxjcp+6IzD8bIruMAjjvvpeuVDfrW/XJqnkY8zdWN8Q9She0qCt
+	d5UJMiIfQe6Oaj91mmtDSyXurajtzighqJgx6f3EpmU9DlXE54iKWSA95Bb/4Ol9vBDm03AGWKW
+	ESB11qkL5jFej3f6WbsxZ74Y5rgpXJp2BObXDcg==
+X-Google-Smtp-Source: AGHT+IHxYSwVhZhFR6FRJarX3HSiuN0jewWaPBZ+hlua2hMm5m6FSUCCwcoPApsKWpjN0PEEMuG0WfXqcLCGiOPO4pg=
+X-Received: by 2002:ac2:41ca:0:b0:511:1ed7:61b8 with SMTP id
+ d10-20020ac241ca000000b005111ed761b8mr6948902lfi.30.1707835833350; Tue, 13
+ Feb 2024 06:50:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-13_08,2024-02-12_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=0
- phishscore=0 adultscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2402130115
-X-Proofpoint-GUID: ob5vS-P4vZ8CmFwp3t-Bj23xpNkbo7GK
-X-Proofpoint-ORIG-GUID: ob5vS-P4vZ8CmFwp3t-Bj23xpNkbo7GK
+References: <CANi1PHh4W7KPagKkvZW6cNAQqgAeG3zxaaTJKkg3KiTbsFRMdg@mail.gmail.com>
+ <1b2558f7-94ea-123e-dd3f-b43ecd85c2ef@linux.intel.com>
+In-Reply-To: <1b2558f7-94ea-123e-dd3f-b43ecd85c2ef@linux.intel.com>
+From: Jan Henrik Weinstock <jan@mwa.re>
+Date: Tue, 13 Feb 2024 15:50:22 +0100
+Message-ID: <CANi1PHhY67HZxivA9mCoNXfM4YUOjm=tCZsnhrrcu4E6dqDYUQ@mail.gmail.com>
+Subject: Re: XHCI without USB2 ports
+To: Mathias Nyman <mathias.nyman@linux.intel.com>, mathias.nyman@intel.com, 
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Cc: =?UTF-8?Q?Lukas_J=C3=BCnger?= <lukas@mwa.re>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-It has been observed that some USB/UAS devices return generic
-properties hardcoded in firmware for mode pages and vital product data
-for a period of time after a device has been discovered. The reported
-properties are either garbage or they do not accurately reflect the
-properties of the physical storage device attached in the case of a
-bridge.
+Am Di., 13. Feb. 2024 um 10:58 Uhr schrieb Mathias Nyman
+<mathias.nyman@linux.intel.com>:
+>
+> On 12.2.2024 20.39, Jan Henrik Weinstock wrote:
+> > Hi all,
+> >
+> > I am currently working on an XHCI platform device simulation model. I
+> > noticed that the Linux driver (Linux 6.5.6 xhci-hcd) stops working
+> > when I configure the model without any USB2 ports. During an interrupt
+> > (TRB_PORT_STATUS), I only get "xhci-hcd 12100000.usb: ignore port
+> > event for removed USB3 hcd."
+> >
+> > During xhci_irq, in handle_port_status, xhci->shared_hcd is NULL [1],
+> > so the interrupt gets ignored. However, shared_hcd would only ever be
+> > allocated during xhci_plat_probe [2], if the device has both USB2 and
+> > USB3 ports, i.e. xhci_has_one_roothub returns false [3].
+> >
+> > Without any USB2 ports, a shared_hcd will never be allocated in the
+> > first place, and handle_port_status will always exit early.
+>
+> This is true.
+> That port handling code is from a time before xhci driver supported singl=
+e
+> roothub setups.
+>
+> I think all single roothub cases so far have been xHC hosts with only USB=
+2
+> ports. This is probably the first one with only USB3 ports.
+>
+> I have a vague memory that USB3 specification would require USB3 ports to
+> be backwards compatible, and support USB2.
+>
+> But xhci driver could still support it, does this change help:
+>
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index f0d8a607ff21..6ef081f5ef05 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -1893,7 +1893,8 @@ static void handle_port_status(struct xhci_hcd *xhc=
+i,
+>          }
+>
+>          /* We might get interrupts after shared_hcd is removed */
+> -       if (port->rhub =3D=3D &xhci->usb3_rhub && xhci->shared_hcd =3D=3D=
+ NULL) {
+> +       if (!xhci_has_one_roothub(xhci) && xhci->shared_hcd =3D=3D NULL &=
+&
+> +           port->rhub =3D=3D &xhci->usb3_rhub) {
+>                  xhci_dbg(xhci, "ignore port event for removed USB3 hcd\n=
+");
+>                  bogus_port_status =3D true;
+>                  goto cleanup;
+>
+> Thanks
+> Mathias
+>
 
-Prior to commit 1e029397d12f ("scsi: sd: Reorganize DIF/DIX code to
-avoid calling revalidate twice") we would call revalidate several
-times during device discovery. As a result, incorrect values would
-eventually get replaced with ones accurately describing the attached
-storage. When we did away with the redundant revalidate pass, several
-cases were reported where devices reported nonsensical values or would
-end up in write-protected state.
+Yes, this patch fixes the problem for me. Thanks!
 
-An initial attempt at addressing this issue involved introducing a
-delayed second revalidate invocation. However, this approach still
-left some devices reporting incorrect characteristics.
+Is it so unusual to have an XHCI that has only USB3 ports?
 
-Tasos Sahanidis debugged the problem further and identified that
-introducing a READ operation prior to MODE SENSE fixed the problem and
-that it wasn't a timing issue. Issuing a READ appears to cause the
-devices to update their SCSI pages to reflect the actual properties of
-the storage media. Device properties like vendor, model, and storage
-capacity appear to be correctly reported from the get-go. It is
-unclear why these device defer populating the remaining
-characteristics.
+My understanding was that a port can either be USB3 or USB2 (assigned
+via the Supported Protocol Capability).
 
-Match the behavior of a well known commercial operating system and
-trigger a READ operation prior to querying device characteristics to
-force the device to populate mode pages and VPDs.
+This would mean that in order to work correctly with Linux, all XHCIs
+right now would have to support at least one USB2 port in addition to
+their USB3 ports.
 
-The additional READ is triggered by a flag set in the USB storage and
-UAS drivers. We avoid issuing the READ for other transport classes
-since some storage devices identify Linux through our particular
-discovery command sequence.
+Best regards
+Jan
 
-Cc: <stable@vger.kernel.org>
-Fixes: 1e029397d12f ("scsi: sd: Reorganize DIF/DIX code to avoid calling revalidate twice")
-Reported-by: Tasos Sahanidis <tasos@tasossah.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
----
- drivers/scsi/sd.c              | 27 ++++++++++++++++++++++++++-
- drivers/usb/storage/scsiglue.c |  7 +++++++
- drivers/usb/storage/uas.c      |  7 +++++++
- include/scsi/scsi_device.h     |  1 +
- 4 files changed, 41 insertions(+), 1 deletion(-)
+--=20
+Dr.-Ing. Jan Henrik Weinstock
+Managing Director
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 530918cbfce2..c284628f702c 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -3405,6 +3405,24 @@ static bool sd_validate_opt_xfer_size(struct scsi_disk *sdkp,
- 	return true;
- }
- 
-+static void sd_read_block_zero(struct scsi_disk *sdkp)
-+{
-+	unsigned int buf_len = sdkp->device->sector_size;
-+	char *buffer, cmd[10] = { };
-+
-+	buffer = kmalloc(buf_len, GFP_KERNEL);
-+	if (!buffer)
-+		return;
-+
-+	cmd[0] = READ_10;
-+	put_unaligned_be32(0, &cmd[2]); /* Logical block address 0 */
-+	put_unaligned_be16(1, &cmd[7]);	/* Transfer 1 logical block */
-+
-+	scsi_execute_cmd(sdkp->device, cmd, REQ_OP_DRV_IN, buffer, buf_len,
-+			 SD_TIMEOUT, sdkp->max_retries, NULL);
-+	kfree(buffer);
-+}
-+
- /**
-  *	sd_revalidate_disk - called the first time a new disk is seen,
-  *	performs disk spin up, read_capacity, etc.
-@@ -3444,7 +3462,14 @@ static int sd_revalidate_disk(struct gendisk *disk)
- 	 */
- 	if (sdkp->media_present) {
- 		sd_read_capacity(sdkp, buffer);
--
-+		/*
-+		 * Some USB/UAS devices return generic values for mode pages
-+		 * and VPDs until the media has been accessed. Trigger a READ
-+		 * operation to force the device to populate mode pages and
-+		 * VPDs.
-+		 */
-+		if (sdp->read_before_ms)
-+			sd_read_block_zero(sdkp);
- 		/*
- 		 * set the default to rotational.  All non-rotational devices
- 		 * support the block characteristics VPD page, which will
-diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
-index c54e9805da53..12cf9940e5b6 100644
---- a/drivers/usb/storage/scsiglue.c
-+++ b/drivers/usb/storage/scsiglue.c
-@@ -179,6 +179,13 @@ static int slave_configure(struct scsi_device *sdev)
- 		 */
- 		sdev->use_192_bytes_for_3f = 1;
- 
-+		/*
-+		 * Some devices report generic values until the media has been
-+		 * accessed. Force a READ(10) prior to querying device
-+		 * characteristics.
-+		 */
-+		sdev->read_before_ms = 1;
-+
- 		/*
- 		 * Some devices don't like MODE SENSE with page=0x3f,
- 		 * which is the command used for checking if a device
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 696bb0b23599..299a6767b7b3 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -878,6 +878,13 @@ static int uas_slave_configure(struct scsi_device *sdev)
- 	if (devinfo->flags & US_FL_CAPACITY_HEURISTICS)
- 		sdev->guess_capacity = 1;
- 
-+	/*
-+	 * Some devices report generic values until the media has been
-+	 * accessed. Force a READ(10) prior to querying device
-+	 * characteristics.
-+	 */
-+	sdev->read_before_ms = 1;
-+
- 	/*
- 	 * Some devices don't like MODE SENSE with page=0x3f,
- 	 * which is the command used for checking if a device
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index 10480eb582b2..cb019c80763b 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -202,6 +202,7 @@ struct scsi_device {
- 	unsigned use_10_for_rw:1; /* first try 10-byte read / write */
- 	unsigned use_10_for_ms:1; /* first try 10-byte mode sense/select */
- 	unsigned set_dbd_for_ms:1; /* Set "DBD" field in mode sense */
-+	unsigned read_before_ms:1;   	/* perform a READ before MODE SENSE */
- 	unsigned no_report_opcodes:1;	/* no REPORT SUPPORTED OPERATION CODES */
- 	unsigned no_write_same:1;	/* no WRITE SAME command */
- 	unsigned use_16_for_rw:1; /* Use read/write(16) over read/write(10) */
--- 
-2.42.1
+MachineWare GmbH | www.machineware.de
+H=C3=BChnermarkt 19, 52062 Aachen, Germany
+Amtsgericht Aachen HRB25734
 
+Gesch=C3=A4ftsf=C3=BChrung
+Lukas J=C3=BCnger
+Dr.-Ing. Jan Henrik Weinstock
 
