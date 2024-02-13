@@ -1,94 +1,118 @@
-Return-Path: <linux-usb+bounces-6315-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6316-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B557852C00
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 10:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 84875852CFB
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 10:52:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB823281D52
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 09:11:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40CA42895E0
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Feb 2024 09:52:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4881C20B02;
-	Tue, 13 Feb 2024 09:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FD4122EE3;
+	Tue, 13 Feb 2024 09:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eejXIA46"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1bJrnhf6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB4722EE3
-	for <linux-usb@vger.kernel.org>; Tue, 13 Feb 2024 09:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B0922618;
+	Tue, 13 Feb 2024 09:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707815469; cv=none; b=C4UywtE5LETNbfZYjXXz66p2HOXH1JKSt8QHw13B/RN0xIwHPMn5fP5KBddriIerTUHioA9NoU7X5tVRYtzQi1yQ4XcqyUSOr9136tKyhkJTwkzFSjdltnb3jYHqVXOcVvWQR6xmcQz4UNUXWhU/FNOhp/Cd8A9gYtZnV2xqbgU=
+	t=1707817563; cv=none; b=ml2XW4UNc3UflbmwGAjpvhSSx97CqRA7JSlQzVmTTk6lVFfPkzGdC+zWlUESnZGlZeibulb9kYoOlfE8onXo/wpLtCfmaRWlmqH7p6FT2t94crrLizP5xrU6T4hHoamvwJewC9G4ykRVLs89EyaDHT7PgVgdkn7Grbs9npSIn+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707815469; c=relaxed/simple;
-	bh=VRt7eZ+iisR+aeqmlH4IvI7GAwfnnWvRdtN/Vjyv5YE=;
+	s=arc-20240116; t=1707817563; c=relaxed/simple;
+	bh=qFyWFT85f614iAFVoIyVBn+WeMGQK8ZHRIFpwhElMOM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EdHdEU1MiigYxTs6JRXb+GPS3mSn61FZ7tg5hKm7oPqiBmLGoGJ69EOD2btXe1zZX+GN2PMG6Ddc0E6w4CDBA4KJPUlx+6E+MS3HdFPq6s3Jip9S5GcfmRaITibbV16jg3yLdY3m4Z2krXcW4nl0nnqbroYT5LDkYyZeDtyKw2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eejXIA46; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707815468; x=1739351468;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VRt7eZ+iisR+aeqmlH4IvI7GAwfnnWvRdtN/Vjyv5YE=;
-  b=eejXIA46ULqQN/cQaHjF92npDR/OjySiFeP0H38fVYHl9SQa/3mfM75N
-   NZe/2LavYks3eNMox/0jCgOme30gUkHUby2TvJM2FnJksMvHBs3Btmec4
-   5UFnoegJoHEYS7UI6sqLvd49QesN4XWaoq/yiy5z7hvb7+mOcIGmrxkFs
-   GUrtbVCOsWiN5jfvp54VjdNgiA41l5hZYTWPoN7eZ6sHSIkIXngCvP7Zg
-   YOTxmwWOCsMKT86qNAAIj9DjNd92vVX7bMP20164OezfJg/CiPwMJNcSe
-   BYd6R4d2xuu+srvXy+VD3QpzcjAKEbouiwFYXdztmsA63nQFGG7fqmDrr
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1957958"
-X-IronPort-AV: E=Sophos;i="6.06,156,1705392000"; 
-   d="scan'208";a="1957958"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 01:11:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="935306207"
-X-IronPort-AV: E=Sophos;i="6.06,156,1705392000"; 
-   d="scan'208";a="935306207"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Feb 2024 01:11:05 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id E2318184; Tue, 13 Feb 2024 11:11:03 +0200 (EET)
-Date: Tue, 13 Feb 2024 11:11:03 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Sanath S <Sanath.S@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH 0/3] thunderbolt: Host router reset improvements
-Message-ID: <20240213091103.GZ8454@black.fi.intel.com>
-References: <20240206130354.1208816-1-mika.westerberg@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PxE/RtqjfskAzFxj2F0xL6frdpS/XSYe40yPDzD7OH2KhYSwrqeBcVBeBB9NaC5Dai6PBMFTjA91+SkpPhXjWGJjNGh/+jH53fStg24T2J0jlycuHyQvr8uhLjjOMAQ8u1d84jBxaZZwjE9fMhKDPInQGpC3p6INO1wAp0m0FOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1bJrnhf6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF90CC433C7;
+	Tue, 13 Feb 2024 09:46:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1707817562;
+	bh=qFyWFT85f614iAFVoIyVBn+WeMGQK8ZHRIFpwhElMOM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=1bJrnhf67DJLiTD21dPyaLZBO99GI8qVzt0hG0n9s+xdf7+MdTft/ljiZVvgjPieW
+	 26lzJ8vihGFIdd+rITru5+NP7rmbb4uJcJG65k9/cwu29rEf4a4ZEVV1ECNCoyYr/p
+	 die5ImPOelWX1U4ifC9iI116QEDPjO/TKnfWKcds=
+Date: Tue, 13 Feb 2024 10:45:59 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: fsa4480: Check if the chip is really there
+Message-ID: <2024021327-slapping-causing-c0ef@gregkh>
+References: <20240212-topic-fs4480_check-v1-1-d9969e4d6f9a@linaro.org>
+ <2024021210-bacteria-camping-7e48@gregkh>
+ <99749541-25bd-4cd7-be5d-e440472c6f0f@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240206130354.1208816-1-mika.westerberg@linux.intel.com>
+In-Reply-To: <99749541-25bd-4cd7-be5d-e440472c6f0f@linaro.org>
 
-On Tue, Feb 06, 2024 at 03:03:51PM +0200, Mika Westerberg wrote:
-> Hi all,
+On Mon, Feb 12, 2024 at 01:59:42PM +0100, Konrad Dybcio wrote:
+> On 12.02.2024 13:48, Greg Kroah-Hartman wrote:
+> > On Mon, Feb 12, 2024 at 01:01:30PM +0100, Konrad Dybcio wrote:
+> >> Currently, the driver will happily register the switch/mux devices, and
+> >> so long as the i2c master doesn't complain, the user would never know
+> >> there's something wrong.
+> >>
+> >> Add a device id check (based on [1]) and return -ENODEV if the read
+> >> fails or returns nonsense.
+> >>
+> >> Checking the value on a Qualcomm SM6115P-based Lenovo Tab P11 tablet,
+> >> the ID mentioned in the datasheet does indeed show up:
+> >>  fsa4480 1-0042: Found FSA4480 v1.1 (Vendor ID = 0)
+> >>
+> >> [1] https://www.onsemi.com/pdf/datasheet/fsa4480-d.pdf
+> >>
+> >> Fixes: 1dc246320c6b ("usb: typec: mux: Add On Semi fsa4480 driver")
+> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >> ---
+> >>  drivers/usb/typec/mux/fsa4480.c | 14 ++++++++++++++
+> >>  1 file changed, 14 insertions(+)
+> >>
+> >> diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
+> >> index cb7cdf90cb0a..d622f4f3bd54 100644
+> >> --- a/drivers/usb/typec/mux/fsa4480.c
+> >> +++ b/drivers/usb/typec/mux/fsa4480.c
+> >> @@ -13,6 +13,10 @@
+> >>  #include <linux/usb/typec_dp.h>
+> >>  #include <linux/usb/typec_mux.h>
+> >>  
+> >> +#define FSA4480_DEVICE_ID	0x00
+> >> + #define DEVICE_ID_VENDOR_ID	GENMASK(7, 6)
+> >> + #define DEVICE_ID_VERSION_ID	GENMASK(5, 3)
+> >> + #define DEVICE_ID_REV_ID	GENMASK(2, 0)
+> > 
+> > Why the indent?
 > 
-> This series improves the host router reset support for both USB4 v1 and
-> v2 routers.
-> 
-> Mika Westerberg (3):
->   thunderbolt: Reset only non-USB4 host routers in resume
->   thunderbolt: Skip discovery also in USB4 v2 host
->   thunderbolt: Correct typo in host_reset parameter
+> In many places across the kernel, bitfields or possible values of a
+> register are defined with an indentation to emphasize the relation between
+> the defines
 
-All applied to thunderbolt.git/next.
+Ah, that wasn't obvious here because:
+
+> > And those are _VERY_ generic #defines, please give a better name for
+> > these so you don't conflict with other stuff in the kernel accidentally.
+> 
+> If you don't mind them becoming very long, I can prepend them with FSA4480_,
+> and I suppose shrink 'VENDOR' to "VEN" and "VERSION" to "VER" to compensate
+
+Yes, prepend them pleaase.  And no need to shorten the word, we have
+plenty of space.
+
+thanks,
+
+greg k-h
 
