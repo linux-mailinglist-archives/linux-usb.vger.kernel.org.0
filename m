@@ -1,112 +1,100 @@
-Return-Path: <linux-usb+bounces-6406-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6407-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71A13854A90
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 14:34:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 708E8854B1C
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 15:09:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97A061C26DFC
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 13:34:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DDA21B21DAB
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 14:09:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76B5554BC4;
-	Wed, 14 Feb 2024 13:34:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F57F54FB8;
+	Wed, 14 Feb 2024 14:09:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=systec-electronic.com header.i=@systec-electronic.com header.b="R9gRfktJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oxxk8g7s"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.systec-electronic.com (mail.systec-electronic.com [77.220.239.22])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF0E54673;
-	Wed, 14 Feb 2024 13:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.220.239.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D18FD54672;
+	Wed, 14 Feb 2024 14:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707917674; cv=none; b=kdzaYAH1NoEuaHLZSXDVXBqpjZea6DL6NjnzGW30cP14ZGOu6fIaxmKsA6Lx82CYpUkSkvvv35BiBs4GkhxZgs1tDlHxJ1BoTQEeJsZGOijGcS8slO3IkiO2lUhYk3t8vtz7M7HipTOAi8sQiV9+YZ+Xmvkl/vF8N2WHRs5KbJ0=
+	t=1707919773; cv=none; b=ccnA/YTODp6WKSbfYCUfwRR0/37q5iiPpxLbk5ud/c176SnnhTMJiSdnKBSKwI7Z5/0DKGrY0xob7V7enkR2NnKwYdQBZTmPsAiN2ETBkcZ0QDc0FSRSsZ74tcjaY/Idy6owj4Gjzxr/rvw34padKiIXuKaOkXB14URZM/dLowU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707917674; c=relaxed/simple;
-	bh=KhJWijdD+8bkUZJ+O/XoQfTsdzvUphRJ1CzBA4p1eBU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PDhkg0K+UKdb2rwJgbH2j8AizYG1zVvt+7m7LU8npwppLDMjTk3iUf5eIxXfCOvCEDfWTt30Ah039TZJmk5aad7RAL3Hz30HuMsRUKhOZb4hSZRbH3D8hsH7nBrCHdS20PwG3vf9br0uU6lfp4Uar8Rf00RBfsVTN8zrDF8JK4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=systec-electronic.com; spf=pass smtp.mailfrom=systec-electronic.com; dkim=pass (2048-bit key) header.d=systec-electronic.com header.i=@systec-electronic.com header.b=R9gRfktJ; arc=none smtp.client-ip=77.220.239.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=systec-electronic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=systec-electronic.com
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.systec-electronic.com (Postfix) with ESMTP id 7F34F940010D;
-	Wed, 14 Feb 2024 14:25:32 +0100 (CET)
-Received: from mail.systec-electronic.com ([127.0.0.1])
- by localhost (mail.systec-electronic.com [127.0.0.1]) (amavis, port 10032)
- with ESMTP id S3te8OplpbRY; Wed, 14 Feb 2024 14:25:32 +0100 (CET)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.systec-electronic.com (Postfix) with ESMTP id 547AE9400115;
-	Wed, 14 Feb 2024 14:25:32 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.systec-electronic.com 547AE9400115
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=systec-electronic.com; s=B34D3B04-5DC7-11EE-83E3-4D8CAB78E8CD;
-	t=1707917132; bh=SB9gUP4B3cFgEKKjgiQRSSTPQoKGv/D855xgKNgmWR8=;
-	h=From:To:Date:Message-ID:MIME-Version;
-	b=R9gRfktJpIhAcnTjvaKDb8tQTldck+pIgTD5EybwhQzdMWRw2L3n5aJf9NCgE0hj7
-	 m1FC24NyR/zqM4ts2yd4mZkQtn6ONQbIqeWa18aksWAMdH6c/IA4eT/rTRvLavwTnJ
-	 DHQ2wncl8NSN8UHaAaQQu11II5vHremvEUPLYS4aO6ww/RFjgIbtPxDpChI0/hS8jP
-	 bYW+R0B+rmaLYH+LCHEV0mhxhbIJFJR1j+G4mYarPpda46UjwJaYOzq2NoYBd3cTL1
-	 LRoUbg2NREO5jTxqRGNS0NoHjc/WWYiOA+GrAIukVk7CDtr+60fJq2HLFL6sXCUf2f
-	 Arkwx2tuAUDQA==
-X-Virus-Scanned: amavis at systec-electronic.com
-Received: from mail.systec-electronic.com ([127.0.0.1])
- by localhost (mail.systec-electronic.com [127.0.0.1]) (amavis, port 10026)
- with ESMTP id NXURZRmmlb0Q; Wed, 14 Feb 2024 14:25:32 +0100 (CET)
-Received: from ws-565760.systec.local (unknown [212.185.67.148])
-	by mail.systec-electronic.com (Postfix) with ESMTPSA id E87DA940010D;
-	Wed, 14 Feb 2024 14:25:31 +0100 (CET)
-From: Andre Werner <andre.werner@systec-electronic.com>
-To: steve.glendinning@shawell.net,
-	UNGLinuxDriver@microchip.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com
-Cc: netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	daniel.krueger@systec-electronic.com,
-	Andre Werner <andre.werner@systec-electronic.com>
-Subject: [PATCH net-next] net: smsc95xx: add support for SYS TEC USB-SPEmodule1
-Date: Wed, 14 Feb 2024 14:25:07 +0100
-Message-ID: <20240214132507.28072-1-andre.werner@systec-electronic.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1707919773; c=relaxed/simple;
+	bh=prrU+2rb8WSBlJKg4/DaFqxlc6JwuwO2bPcuZ3Ze08k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kAAMLMNhKI7hvdNaaSVjtsmHl/6/TYM8ANl5IM6I3g8yfzdEXCKMvE/co1nkG9VfSM1WbHmHiSg984ZnSBv7vrF0VxulRZQ6g6bIG2vpty8N0heGz8CPS0Fpyn//92zz6mkGJX/bHv5jh/9CxmKhOOmUNcXJcsvjzLQei2Bw+8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oxxk8g7s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 212ACC43390;
+	Wed, 14 Feb 2024 14:09:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707919773;
+	bh=prrU+2rb8WSBlJKg4/DaFqxlc6JwuwO2bPcuZ3Ze08k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oxxk8g7sB7afAAW/gxhROlk2joqPCmi6oLP7cD4lpuJD4tTP0LsMm9BQHGuHGwk5+
+	 gukv+3lWrnu8m/vZaKr4PURClWA0OrPaZGMup5ko8BZmAZA+fBaZ73FdVrPBKDGu6l
+	 bYAGijLpQ0RBt4m3SR5xmt/KMAMy8aakxXd5FfqVqICLOk14S9QmVRtO61/+KdNpSs
+	 N6jqRqN4sOy9gp72ihb/ETq+71AIY2JJ7Ei20odHIfv3fcxUvDIpDPLHxFselFE0S4
+	 XiNU8gElC74TBDEj+xw4kzULx6xdNdwC4CiRmVtrC5YgdNfxj10BgKSlElcTCKk2n3
+	 V2zzIxjjovR1Q==
+Date: Wed, 14 Feb 2024 08:09:31 -0600
+From: Rob Herring <robh@kernel.org>
+To: Roger Quadros <rogerq@kernel.org>
+Cc: Conor Dooley <conor+dt@kernel.org>, nm@ti.com,
+	devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	francesco@dolcini.it, linux-usb@vger.kernel.org, b-liu@ti.com,
+	afd@ti.com, srk@ti.com, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, r-gunasekaran@ti.com
+Subject: Re: [PATCH v3 4/5] dt-bindings: usb/ti,am62-usb.yaml: Add PHY2
+ register space
+Message-ID: <170791976957.762179.4700463999378462794.robh@kernel.org>
+References: <20240214-for-v6-9-am62-usb-errata-3-0-v3-0-147ec5eae18c@kernel.org>
+ <20240214-for-v6-9-am62-usb-errata-3-0-v3-4-147ec5eae18c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240214-for-v6-9-am62-usb-errata-3-0-v3-4-147ec5eae18c@kernel.org>
 
-This patch adds support for the SYS TEC USB-SPEmodule1 10Base-T1L
-ethernet device to the existing smsc95xx driver by adding the new
-USB VID/PID pair.
 
-Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>
----
- drivers/net/usb/smsc95xx.c | 5 +++++
- 1 file changed, 5 insertions(+)
+On Wed, 14 Feb 2024 11:46:48 +0200, Roger Quadros wrote:
+> Add PHY2 register space to DT binding documentation.
+> 
+> We use minItems: 1 as DT update will come later and we don't
+> want warnings for existing DTs.
+> 
+> So far this register space was not required but due to the
+> newly identified Errata i2409 [1] we need to poke this
+> register space.
+> 
+> [1] https://www.ti.com/lit/er/sprz487d/sprz487d.pdf
+> 
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> ---
+> Changelog:
+> 
+> v3: no change
+> 
+> v2: add minItems and update commit log
+> 	https://lore.kernel.org/all/20240205141221.56076-5-rogerq@kernel.org/
+> 
+> v1: was sent as part of different series
+> https://lore.kernel.org/all/20240201120332.4811-5-rogerq@kernel.org/
+> ---
+>  Documentation/devicetree/bindings/usb/ti,am62-usb.yaml | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
 
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index a530f20ee257..bb4e62a93d96 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -2109,6 +2109,11 @@ static const struct usb_device_id products[] =3D {
- 		USB_DEVICE(0x184F, 0x0051),
- 		.driver_info =3D (unsigned long)&smsc95xx_info,
- 	},
-+	{
-+		/* SYSTEC USB-SPEmodule1 10BASE-T1L Ethernet Device */
-+		USB_DEVICE(0x0878, 0x1400),
-+		.driver_info =3D (unsigned long)&smsc95xx_info,
-+	},
- 	{ },		/* END */
- };
- MODULE_DEVICE_TABLE(usb, products);
---=20
-2.43.0
+Acked-by: Rob Herring <robh@kernel.org>
 
 
