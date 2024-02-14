@@ -1,184 +1,170 @@
-Return-Path: <linux-usb+bounces-6425-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6426-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10F9F855598
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 23:14:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5815385566D
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 23:58:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AAC71F240F0
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 22:14:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D912628A692
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 22:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 352C1141997;
-	Wed, 14 Feb 2024 22:14:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC7F61419AD;
+	Wed, 14 Feb 2024 22:58:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="TG40N4FN"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="b0TWz7o/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81EB141989;
-	Wed, 14 Feb 2024 22:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D6057872;
+	Wed, 14 Feb 2024 22:58:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707948874; cv=none; b=k4i1TOQcuYRgP/6CyYJBzETMn6L0evNbFzPOQKuMHCwSAQZ3tPp1Xe0YQ4uAE9wzkGHuTrfOcm3GfHm3prvE0Qbj7+/qAz/fF8+IZGevbowotxjr7yRGI2aQDzqLpx80dTHvkNvDTaxE7n6rnLxdUmkKgqH80QtdTi8akvvkVVU=
+	t=1707951498; cv=none; b=EhLKQ3AFOWmfqNF9W+iMZ9FAlRCrjfcKbEC+p7Jv9S5qB9CXG/XRrkJC2QbsmwhZqBg9wFtHr63Jyh6RYT84vHICzPywPdNihAvVMxnNyqzkzFP2x5u3sS4zhsy1WflKmGHKwR7DTnhvy/yaSLefNf/Zyrpj3KZPmS/79/sCgSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707948874; c=relaxed/simple;
-	bh=MBNyoTNrMFm88MBdz2XN+cxJ+NbJO9blJRPLgTBPtDk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nnl/sKKrdV6Uhhf8/nxmQlgiM569BME7/00CCsGcdiiCrxV3GEdBDnwfWidaFY7bj+4z5syEZbqRFInwv7LZQAWYlIJVI5pI0jKH8jmsLSQOfpGqdGfFrUNe7/Cs27Tz7u9Aw3Mo6Xrs5tennlxVsyc+oDr+KM7Lh+xCL8icPIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=TG40N4FN; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41ELiWJ4022704;
-	Wed, 14 Feb 2024 22:14:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-11-20; bh=6xQXk51zyAc/FJVeHYLZ/+JdxhV5quNYw+01DQcVd5M=;
- b=TG40N4FNlDOT7ZFvxte3ufnEvTokR5mCkLEyLnTqAY8EQse0cc8H0xA5nXIloiu8CBTy
- o+21h0lKx1SHDkqoW8bUVZk3li8XCX+n3gTSeT58mRduvPC88zwNzSDoCRjIHb7vM0WS
- U0ZZo0XFze0w+6kMaLonaacLycbU0fTjMoUPqv9UG8iFPib61kI0EJdcuYXXOlYXxjaE
- otXKjS16K6ME4hGl1HTOf/MY+KGdahnPNumJ5Y7qHy2tnGZkAjb7vaxjJ+vnvvmMWMNe
- PZEEi2Dhgu4dRXO8bbwyLe9L0YVFxZuxWtOzzw/0hiI6nkenw4AYfMtG2hjUK+O6cxih TQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3w92ppgghp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 14 Feb 2024 22:14:21 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 41EM7PWJ000598;
-	Wed, 14 Feb 2024 22:14:19 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3w5yk9mmsk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 14 Feb 2024 22:14:19 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41EMEJIU031042;
-	Wed, 14 Feb 2024 22:14:19 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3w5yk9mms8-1;
-	Wed, 14 Feb 2024 22:14:19 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org
-Cc: belegdol@gmail.com, "Martin K. Petersen" <martin.petersen@oracle.com>,
-        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH v2] scsi: core: Consult supported VPD page list prior to fetching page
-Date: Wed, 14 Feb 2024 17:14:11 -0500
-Message-ID: <20240214221411.2888112-1-martin.petersen@oracle.com>
-X-Mailer: git-send-email 2.42.1
+	s=arc-20240116; t=1707951498; c=relaxed/simple;
+	bh=gSUvTrZr3rXl9rxa9h+n04kX3glePcNe2dBEl2CvPt4=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
+	 In-Reply-To:Content-Type; b=hp+7g7h6SbsZIvaxzzznNjUZL49xFkTxqQXf5PwzCOm0gclBd7pmrkFyRFGbMUZwl0L5bljuFbNpSB/yI1ZdRRC158GEUm/Ea1rFaZKFFK+HCHC8+KKaCuW9clj/h7Q1k5nzOl/fTzqDsXlAQAx0lMV4BZC+wj2240soanIQBfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=b0TWz7o/; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41ELrHsR010715;
+	Wed, 14 Feb 2024 22:57:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:from:subject:to:cc:references
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=P3WE3lMB3U1jVjyqfIrkGAFwODySyS5IO0j1eUTCPyk=; b=b0
+	TWz7o/x3N8/AZ1opgEr/avUwTe6jB8c4OuL3f6079KX9ut38Qho6sMnDxX0/NXRl
+	HF9luXKQE71ywu7/88LW1oFOxyhL4GgW3w37hUAn8grY5IK6NIxHgxtQkCcIcGvB
+	/ROTjG1H+NIDuw05+h5w8TL+iMduX8yzNMv1Dcxhtf0CGb0n7QzBMnl+V2i2GnTu
+	bGgQGVYb/vt9h8ydnmspVOxAbq5g3dcVhRW/397fx3YS2Cy23oRZvFKIaNBNlAiR
+	XeWUvyRouBn57ifET7HUpot6IpyddxUxOylXbX5DTuwTJKoJ4uDgDZdUuDUV9ccf
+	q4lMtWv3KqmsFRiSHLzQ==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w92fxghd3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 22:57:52 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41EMvpng005245
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 22:57:51 GMT
+Received: from [10.71.114.103] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 14 Feb
+ 2024 14:57:50 -0800
+Message-ID: <f2952acb-4f9e-9283-a5bc-1b62164df9bc@quicinc.com>
+Date: Wed, 14 Feb 2024 14:57:46 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: Re: [PATCH v15 39/50] ASoC: Introduce SND kcontrols to select sound
+ card and PCM device
+To: Takashi Iwai <tiwai@suse.de>
+CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <lgirdwood@gmail.com>, <andersson@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <konrad.dybcio@linaro.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>
+References: <20240213005422.3121-1-quic_wcheng@quicinc.com>
+ <20240213005422.3121-40-quic_wcheng@quicinc.com>
+ <87y1boy6ps.wl-tiwai@suse.de>
+Content-Language: en-US
+In-Reply-To: <87y1boy6ps.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: iiFOt1LHNH-vK7dJGiW2u-pqhV-t6b_L
+X-Proofpoint-ORIG-GUID: iiFOt1LHNH-vK7dJGiW2u-pqhV-t6b_L
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-14_14,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0 mlxscore=0
- bulkscore=0 spamscore=0 malwarescore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2402140167
-X-Proofpoint-ORIG-GUID: zQ8k94iFH4zMb3RUJmygo0uic13atvkN
-X-Proofpoint-GUID: zQ8k94iFH4zMb3RUJmygo0uic13atvkN
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ mlxscore=0 bulkscore=0 impostorscore=0 spamscore=0 phishscore=0
+ priorityscore=1501 clxscore=1015 mlxlogscore=999 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402140174
 
-Commit c92a6b5d6335 ("scsi: core: Query VPD size before getting full
-page") removed the logic which checks whether a VPD page is present on
-the supported pages list before asking for the page itself. That was
-done because SPC helpfully states "The Supported VPD Pages VPD page
-list may or may not include all the VPD pages that are able to be
-returned by the device server". Testing had revealed a few devices
-that supported some of the 0xBn pages but didn't actually list them in
-page 0.
+Hi Takashi,
 
-Julian Sikorski bisected a problem with his drive resetting during
-discovery to the commit above. As it turns out, this particular drive
-firmware will crash if we attempt to fetch page 0xB9.
+On 2/13/2024 2:54 AM, Takashi Iwai wrote:
+> On Tue, 13 Feb 2024 01:54:11 +0100,
+> Wesley Cheng wrote:
+>>
+>> +static int soc_usb_get_offload_dev(struct snd_kcontrol *kcontrol,
+>> +				   struct snd_ctl_elem_value *ucontrol)
+>> +{
+>> +	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
+>> +	struct snd_soc_usb *ctx = snd_soc_usb_find_priv_data(component->dev);
+>> +	int ret = 0;
+>> +
+>> +	mutex_lock(&ctx_mutex);
+>> +	if (ctx && ctx->get_offload_dev)
+>> +		ret = ctx->get_offload_dev(kcontrol, ucontrol);
+>> +	mutex_unlock(&ctx_mutex);
+> 
+> It might be safer to initialize the values with -1 in case when the
+> callback isn't available?
+> 
 
-Various approaches were attempted to work around this. In the end,
-reinstating the logic that consults VPD page 0 before fetching any
-other page was the path of least resistance. A firmware update for the
-devices which originally compelled us to remove the check has since
-been released.
+Make sense, will do.
 
-Cc: stable@vger.kernel.org
-Cc: Bart Van Assche <bvanassche@acm.org>
-Fixes: c92a6b5d6335 ("scsi: core: Query VPD size before getting full page")
-Reported-by: Julian Sikorski <belegdol@gmail.com>
-Tested-by: Julian Sikorski <belegdol@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+>>   /**
+>>    * snd_soc_usb_get_components_tag() - Retrieve SOC USB component tag
+>>    * @playback: direction of audio stream
+>> @@ -157,6 +218,12 @@ EXPORT_SYMBOL_GPL(snd_soc_usb_free_port);
+>>    */
+>>   int snd_soc_usb_add_port(struct snd_soc_usb *usb)
+>>   {
+>> +	int ret;
+>> +
+>> +	ret = snd_soc_usb_control_init(usb->component);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>>   	mutex_lock(&ctx_mutex);
+>>   	list_add_tail(&usb->list, &usb_ctx_list);
+>>   	mutex_unlock(&ctx_mutex);
+> 
+> We may need to remove the control element upon the driver removal,
+> too?  In theory, you can unload the offload stuff while snd-usb-audio
+> is still active.
+> 
 
----
+This is managing the control for the ASoC platform card that supports 
+offloading.  If we compile the different kernel entities as modules, we 
+see that the soc_usb layer has the following users:
 
-v2: Address Bart's comments.
----
- drivers/scsi/scsi.c        | 22 ++++++++++++++++++++--
- include/scsi/scsi_device.h |  4 ----
- 2 files changed, 20 insertions(+), 6 deletions(-)
+soc_usb 16384 3 q6usb,snd_usb_audio_qmi,snd_soc_qcom_offload_utils
 
-diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index 76d369343c7a..8cad9792a562 100644
---- a/drivers/scsi/scsi.c
-+++ b/drivers/scsi/scsi.c
-@@ -328,21 +328,39 @@ static int scsi_vpd_inquiry(struct scsi_device *sdev, unsigned char *buffer,
- 	return result + 4;
- }
- 
-+enum scsi_vpd_parameters {
-+	SCSI_VPD_HEADER_SIZE = 4,
-+	SCSI_VPD_LIST_SIZE = 36,
-+};
-+
- static int scsi_get_vpd_size(struct scsi_device *sdev, u8 page)
- {
--	unsigned char vpd_header[SCSI_VPD_HEADER_SIZE] __aligned(4);
-+	unsigned char vpd[SCSI_VPD_LIST_SIZE] __aligned(4);
- 	int result;
- 
- 	if (sdev->no_vpd_size)
- 		return SCSI_DEFAULT_VPD_LEN;
- 
-+	/*
-+	 * Fetch the supported pages VPD and validate that the requested page
-+	 * number is present.
-+	 */
-+	if (page != 0) {
-+		result = scsi_vpd_inquiry(sdev, vpd, 0, sizeof(vpd));
-+		if (result < SCSI_VPD_HEADER_SIZE)
-+			return 0;
-+
-+		result -= SCSI_VPD_HEADER_SIZE;
-+		if (!memchr(&vpd[SCSI_VPD_HEADER_SIZE], page, result))
-+			return 0;
-+	}
- 	/*
- 	 * Fetch the VPD page header to find out how big the page
- 	 * is. This is done to prevent problems on legacy devices
- 	 * which can not handle allocation lengths as large as
- 	 * potentially requested by the caller.
- 	 */
--	result = scsi_vpd_inquiry(sdev, vpd_header, page, sizeof(vpd_header));
-+	result = scsi_vpd_inquiry(sdev, vpd, page, SCSI_VPD_HEADER_SIZE);
- 	if (result < 0)
- 		return 0;
- 
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index cb019c80763b..72a6b3923fc7 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -100,10 +100,6 @@ struct scsi_vpd {
- 	unsigned char	data[];
- };
- 
--enum scsi_vpd_parameters {
--	SCSI_VPD_HEADER_SIZE = 4,
--};
--
- struct scsi_device {
- 	struct Scsi_Host *host;
- 	struct request_queue *request_queue;
--- 
-2.42.1
+So we'd need to remove all these modules before we can unload soc_usb. 
+The entity which would be related to the kcontrols created for the ASoC 
+sound card would be the q6usb module.  Since the q6usb module is tightly 
+coupled with the platform soundcard itself in our design, for the q6usb 
+module to be removed, we have to remove the entire ASoC sound card. (in 
+which the kcontrols will also be removed)
+
+However, that might not always be the case...so its a good idea to just 
+manually remove the kcontrols in soc-usb as you guided.
+
+Thanks
+Wesley Cheng
 
 
