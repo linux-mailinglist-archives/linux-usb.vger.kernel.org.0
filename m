@@ -1,100 +1,100 @@
-Return-Path: <linux-usb+bounces-6407-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6408-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 708E8854B1C
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 15:09:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C036854B7F
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 15:35:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DDA21B21DAB
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 14:09:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C3D31C21B24
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 14:35:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F57F54FB8;
-	Wed, 14 Feb 2024 14:09:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFFDB5A4ED;
+	Wed, 14 Feb 2024 14:35:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oxxk8g7s"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="demHyXtC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D18FD54672;
-	Wed, 14 Feb 2024 14:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9A55914A
+	for <linux-usb@vger.kernel.org>; Wed, 14 Feb 2024 14:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707919773; cv=none; b=ccnA/YTODp6WKSbfYCUfwRR0/37q5iiPpxLbk5ud/c176SnnhTMJiSdnKBSKwI7Z5/0DKGrY0xob7V7enkR2NnKwYdQBZTmPsAiN2ETBkcZ0QDc0FSRSsZ74tcjaY/Idy6owj4Gjzxr/rvw34padKiIXuKaOkXB14URZM/dLowU=
+	t=1707921300; cv=none; b=fTGjtPbjNGvx+VdCAi2JwedhHGsU2NZ1rG93JmFXGQuDvrwrYSZXOkXoPRHi8Rpal2yzeYKtug8kVDWJsW76/eq+CFOuoOaFGWm4jVOYQGjqqtzxpudfCJKFd1O1TsWJ3BPM92XVkYJOb7B/HW0/XRbnJFy99J2lsYip3jIpTwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707919773; c=relaxed/simple;
-	bh=prrU+2rb8WSBlJKg4/DaFqxlc6JwuwO2bPcuZ3Ze08k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kAAMLMNhKI7hvdNaaSVjtsmHl/6/TYM8ANl5IM6I3g8yfzdEXCKMvE/co1nkG9VfSM1WbHmHiSg984ZnSBv7vrF0VxulRZQ6g6bIG2vpty8N0heGz8CPS0Fpyn//92zz6mkGJX/bHv5jh/9CxmKhOOmUNcXJcsvjzLQei2Bw+8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oxxk8g7s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 212ACC43390;
-	Wed, 14 Feb 2024 14:09:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707919773;
-	bh=prrU+2rb8WSBlJKg4/DaFqxlc6JwuwO2bPcuZ3Ze08k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oxxk8g7sB7afAAW/gxhROlk2joqPCmi6oLP7cD4lpuJD4tTP0LsMm9BQHGuHGwk5+
-	 gukv+3lWrnu8m/vZaKr4PURClWA0OrPaZGMup5ko8BZmAZA+fBaZ73FdVrPBKDGu6l
-	 bYAGijLpQ0RBt4m3SR5xmt/KMAMy8aakxXd5FfqVqICLOk14S9QmVRtO61/+KdNpSs
-	 N6jqRqN4sOy9gp72ihb/ETq+71AIY2JJ7Ei20odHIfv3fcxUvDIpDPLHxFselFE0S4
-	 XiNU8gElC74TBDEj+xw4kzULx6xdNdwC4CiRmVtrC5YgdNfxj10BgKSlElcTCKk2n3
-	 V2zzIxjjovR1Q==
-Date: Wed, 14 Feb 2024 08:09:31 -0600
-From: Rob Herring <robh@kernel.org>
-To: Roger Quadros <rogerq@kernel.org>
-Cc: Conor Dooley <conor+dt@kernel.org>, nm@ti.com,
-	devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	francesco@dolcini.it, linux-usb@vger.kernel.org, b-liu@ti.com,
-	afd@ti.com, srk@ti.com, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, r-gunasekaran@ti.com
-Subject: Re: [PATCH v3 4/5] dt-bindings: usb/ti,am62-usb.yaml: Add PHY2
- register space
-Message-ID: <170791976957.762179.4700463999378462794.robh@kernel.org>
-References: <20240214-for-v6-9-am62-usb-errata-3-0-v3-0-147ec5eae18c@kernel.org>
- <20240214-for-v6-9-am62-usb-errata-3-0-v3-4-147ec5eae18c@kernel.org>
+	s=arc-20240116; t=1707921300; c=relaxed/simple;
+	bh=1whvm6SwoMVO0hP8q2dpi9WSsRQKQSxxaxsFoEZfL7E=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=SOoJ3vgLa0cjb5vjbMB8YfW8eFAOsVSCFqVsjr/XjlaahExnbgUYOR0vijYrjkb9rCL0v07nuXMicj/jzlqHd/426tzLVssL9jD1Wl1GbzB9XwwFWr92KOfjjD42mUMp1yYRaFOvt/ErfILrh3OIsLk3jZm5KDXzBQPo+rRU7k8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=demHyXtC; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6077a1d441eso24117997b3.1
+        for <linux-usb@vger.kernel.org>; Wed, 14 Feb 2024 06:34:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707921298; x=1708526098; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=o53oChH2dA8Tqp7G6yMRsPjZnp5bLyU1vAtA0LCu1CM=;
+        b=demHyXtCBPKp7Z89fpLyTCBiQWvenb0CMSlaw7rWlTm4aG4JVC/U5X30rbwF+exD39
+         BbKhzuAGmAommVecCBBWvaRMCrPhp8n5I2jFdtL1+9c3MbUMi5WMqUNdZ+CihzqmzYiB
+         TQ06xVBVrzVdcfWdy5K7lezAWGA9fPDHuTrJ3QjwOgJKcHEYjrSUldv7etdMu0gjCvZv
+         Gg1oZR/eVQCK5GBY9FGNakUUVVz6wdoeupWasUSpG4jOgGoaMJTwvawZh80JymS6xKrC
+         ENtdf4bGEi1Q+2xEIkSuf/Hm7IqUZ56FiHyTaZ6UQlydqB51Jdf1fJyC+00sM2NSO1i8
+         kc7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707921298; x=1708526098;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o53oChH2dA8Tqp7G6yMRsPjZnp5bLyU1vAtA0LCu1CM=;
+        b=BCPW5nwm1btblxHk/84hMQKjDk44ojpWQ5QRXM9M7HDgSS8ZvPihT6bAn7zRMJnaON
+         FEhVQv1gkzaJbhuyjrJH4lGrAkWIdmrdVBWKLQOeMgodwvsGje2UfksnGmP4+hXzLadV
+         mCJE69stti8khEgk3q5ppltzP83WwBQqCGRv7xhfs4qfiSqrHxYwmzpD9nBWcABRo9ha
+         xlvm7weXVEaCCq+KbxLYKbjE2WN4nBY3AHcOSS5Pd62nqLhjF8tWdsJDH8qU25erL1uT
+         xg7mXhNTNj8RSE3wF4iw5yafTfp4jEZU+0JpNJWZxsUYZT3M2a40dKG7GjzKBa57fYWV
+         h9YQ==
+X-Gm-Message-State: AOJu0YzN2KWwbgLF4mTdR3dLIEtup5wirytTZH3bpF+qry5iragxql9G
+	V5viEdDRBvsF8F5OE2xL7NlcbDpNOkFRBin8XpGnFUfs2UsRqtz8/KXWmL1ITodUQaxiPAiDraa
+	cdnie5WZwh7HYR6agLgiLfI2Bko8LcH1EvHM=
+X-Google-Smtp-Source: AGHT+IFpDohuZcirFKGNX6IjgUbjsYMWEWhbFoq0G68/hMWPDDBawyDqf5j0LWnZ+909Dv5A3hxL3nlymdCO6gPnOxo=
+X-Received: by 2002:a81:9c42:0:b0:607:7e50:1a11 with SMTP id
+ n2-20020a819c42000000b006077e501a11mr2394698ywa.19.1707921297844; Wed, 14 Feb
+ 2024 06:34:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240214-for-v6-9-am62-usb-errata-3-0-v3-4-147ec5eae18c@kernel.org>
+From: Muni Sekhar <munisekharrms@gmail.com>
+Date: Wed, 14 Feb 2024 20:04:46 +0530
+Message-ID: <CAHhAz+isQ5gUDBAPv3WkK6QQL6d4d0Zk4U9VCrKwKaS1RrQX+g@mail.gmail.com>
+Subject: usb: read interface string descriptor(iInterface) from linux service
+To: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+
+HI all,
+
+USB devices can have multiple interfaces (functional units) that serve
+different purposes (e.g., data transfer, control, audio, etc.).
+
+Each interface can have an associated string descriptor (referred to
+as iInterface). The string descriptor provides a human-readable name
+or description for the interface.
+
+From user space service utility, How to scan all the USB devices
+connected to the system and read each interface string
+descriptor(iInterface)  and check whether it matches "Particular
+String" or not.
+
+The service program should trigger scanning all the USB devices on any
+USB device detection or removal. Can libusb be used for it?
+
+Any input would be appreciated.
 
 
-On Wed, 14 Feb 2024 11:46:48 +0200, Roger Quadros wrote:
-> Add PHY2 register space to DT binding documentation.
-> 
-> We use minItems: 1 as DT update will come later and we don't
-> want warnings for existing DTs.
-> 
-> So far this register space was not required but due to the
-> newly identified Errata i2409 [1] we need to poke this
-> register space.
-> 
-> [1] https://www.ti.com/lit/er/sprz487d/sprz487d.pdf
-> 
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> ---
-> Changelog:
-> 
-> v3: no change
-> 
-> v2: add minItems and update commit log
-> 	https://lore.kernel.org/all/20240205141221.56076-5-rogerq@kernel.org/
-> 
-> v1: was sent as part of different series
-> https://lore.kernel.org/all/20240201120332.4811-5-rogerq@kernel.org/
-> ---
->  Documentation/devicetree/bindings/usb/ti,am62-usb.yaml | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-
-Acked-by: Rob Herring <robh@kernel.org>
-
+-- 
+Thanks,
+Sekhar
 
