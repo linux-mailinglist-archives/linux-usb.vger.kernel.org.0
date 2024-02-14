@@ -1,113 +1,133 @@
-Return-Path: <linux-usb+bounces-6401-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6402-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 712ED8548D4
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 12:59:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7399485491B
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 13:22:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D7A3288034
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 11:59:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF6041F2A4D4
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Feb 2024 12:22:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34E631AADF;
-	Wed, 14 Feb 2024 11:59:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4149E1BC4A;
+	Wed, 14 Feb 2024 12:21:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oDLBHJYL"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=devnull.tasossah.com header.i=@devnull.tasossah.com header.b="cuX/gMZj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from devnull.tasossah.com (devnull.tasossah.com [91.121.165.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202971AAD4;
-	Wed, 14 Feb 2024 11:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB73E1B81A;
+	Wed, 14 Feb 2024 12:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.121.165.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707911953; cv=none; b=LK1wsQ0unVmXvZXzLMPsR0+Q/LvPLGpkcUwLgIsMXBmBWU/kCcw6FiH4HBUOECKG2dRzfqQAIFpwy98NDYOBywocOrpRIpdPGtyUHyNge6lGTXdhMkTVlCkqjZXlrIpTAckqwakl1SLvDq+eCyZxzIztB3kCMKiczh2AYkCssEg=
+	t=1707913313; cv=none; b=nnLyQmFBY+9DJr42/I7HC6X/ZnLQU/0tm+kNVve6NG+fUI0RZY+J35kgExaGnEi/CKN2vz++Od0AgiA5flGdkmdfJg0xdA9TF9cZm8JMD8FRKsJgoVMbe3ZQi2NGXe1y3DJh/LvCakDMijdwvL1ZMBLz7WQtpe+3fDu4kRtMkq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707911953; c=relaxed/simple;
-	bh=w4uXVUfh72WhrIt47Fr/6saEOm4ZhJrZnrpH4HCXooE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FYt6Wew03yh1am8qi03ZghWUIio6r3ma/LprXB2sGdrwxCZ1HZqUqK4OpAT1oX8z7LK449VmmV6M43BFnq0iE4WLJ5PK7dAATXHQUxOO1p6kwJq8UrCjVrFkuAGepYv8+ZofGrWE+A53XKO4dqFaEpGQJo2yepv4LWypqSiO5Nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oDLBHJYL; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707911952; x=1739447952;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w4uXVUfh72WhrIt47Fr/6saEOm4ZhJrZnrpH4HCXooE=;
-  b=oDLBHJYL6rvCiOmK8i/V+MMJPGrg/DTgDCGvutFG15ZUN5763M1iucar
-   qB6Sut3B6Yt5XNOXGFo9bQz+cpqdBXS/+f5iFS/bXhzlCizfCXOvUG6DH
-   s5RyMlX28BeSuB7Rg4NtcluGBCndpr4jXDC+8QsIfioXQs1XJqpi77mcL
-   FUppmfHbiBFOY1QIJfEoe7Z40klnJWY6EWPr0IrpNdHr/nOLX0fHXbZi6
-   kqxFBq9iehYWMcF0vP1qX5tmqOtq6kbXAuArgRr9aE1pDSBIUHHRTQMu+
-   gmH2Yhdt6tG0MollkNyLs8NTzG3aDSP844iTAm8ZLEG698QYlHPHb2CjV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="13045263"
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="13045263"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 03:59:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="935616225"
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="935616225"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 14 Feb 2024 03:59:07 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 14 Feb 2024 13:59:06 +0200
-Date: Wed, 14 Feb 2024 13:59:06 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Emilie Roberts <hadrosaur@google.com>
-Cc: Prashant Malani <pmalani@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	"Nyman, Mathias" <mathias.nyman@intel.com>,
-	"Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-	"Radjacoumar, Shyam Sundar" <ssradjacoumar@google.com>,
-	Samuel Jacob <samjaco@google.com>,
-	Uday Bhat <uday.m.bhat@intel.com>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] platform/chrome: cros_ec_typec: Make sure the USB
- role switch has PLD
-Message-ID: <ZcyrCosNDXxGZh9O@kuha.fi.intel.com>
-References: <20240213130018.3029991-1-heikki.krogerus@linux.intel.com>
- <20240213130018.3029991-3-heikki.krogerus@linux.intel.com>
- <CACeCKadLKg89c8s68QD6VsqiKBMms6765O7mFFihqtET30pUyQ@mail.gmail.com>
- <ZcyUblecufzeso17@kuha.fi.intel.com>
- <CAAuZZi9h=d2_CM4tU4-H9wJfhLZbw99X2dGSddiCeDFDdb+kjw@mail.gmail.com>
+	s=arc-20240116; t=1707913313; c=relaxed/simple;
+	bh=S1X0Mrkhc1/eoO8nCsORmtBd8Av5gB6rLBM32VNDBq8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z5c/2u2TJVu/X9Afy9x2HMnylZdu4z2DnoAkMVqvDPu/1/nq3GG4asJWN3ZKpNqooEplVZXC87kuF4KdZYTPP7Ss+hx/gK7dLJqeEQz0gMvnVa/uWnXynhc+t9wiCBOKx36Sp+TaGHc6sRFsKPiNwIMxpTHU3Yfzg4aqQMBIMo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tasossah.com; spf=pass smtp.mailfrom=tasossah.com; dkim=pass (1024-bit key) header.d=devnull.tasossah.com header.i=@devnull.tasossah.com header.b=cuX/gMZj; arc=none smtp.client-ip=91.121.165.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tasossah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tasossah.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=devnull.tasossah.com; s=vps; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=uMTTpA3ex/tasYG5jcUWjHuUgalpX560MSu3l8bptPs=; b=cuX/gMZj1+bxWV15tuawTCfTag
+	Q2WomxkN9wqXnIr59LCvaycBcfOZBSYb2Vg6zCblh4V3mxSlZ+jnolbYj7T/Ta9V/zapVCtKoQWng
+	EqJqAIXR7yTbJ3R807W/2H3rvAYXXiMdulmxK3ldWG0qbnt2hsrPwTvpdTRZQzA3OWtE=;
+Received: from [2a02:587:6a0e:de00::d54]
+	by devnull.tasossah.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <tasos@tasossah.com>)
+	id 1raEGk-008qr8-7l; Wed, 14 Feb 2024 14:21:42 +0200
+Message-ID: <b597d766-6e05-48a3-9d4c-6a1ebf8899bf@tasossah.com>
+Date: Wed, 14 Feb 2024 14:21:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAuZZi9h=d2_CM4tU4-H9wJfhLZbw99X2dGSddiCeDFDdb+kjw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] scsi: sd: usb_storage: uas: Access media prior to
+ querying device properties
+Content-Language: el-GR, en-GB
+To: "Martin K. Petersen" <martin.petersen@oracle.com>,
+ linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org
+Cc: belegdol@gmail.com, stable@vger.kernel.org
+References: <20240213143306.2194237-1-martin.petersen@oracle.com>
+From: Tasos Sahanidis <tasos@tasossah.com>
+Autocrypt: addr=tasos@tasossah.com; keydata=
+ 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
+In-Reply-To: <20240213143306.2194237-1-martin.petersen@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Emilie,
+On 2024-02-13 16:33, Martin K. Petersen wrote:
+> Match the behavior of a well known commercial operating system and
+> trigger a READ operation prior to querying device characteristics to
+> force the device to populate mode pages and VPDs.
 
-On Wed, Feb 14, 2024 at 12:04:22PM +0100, Emilie Roberts wrote:
-> My understanding is that this is related to the wiring spec and not
-> ChromeOS specific. It seems possible that OEMs making non-ChromeOS devices
-> may have this same issue. Or are we certain that only Chromebooks will ever
-> see this?
+Applied the patch, reverted the Kingston quirk, and:
 
-Non-ChromeOS platforms do not have this issue.
+[  447.655130] usb-storage 3-2:1.0: USB Mass Storage device detected
+[  447.664875] scsi host10: usb-storage 3-2:1.0
+[  448.690959] scsi 10:0:0:0: Direct-Access     Kingston DT Ultimate G3   PMAP PQ: 0 ANSI: 6
+[  448.709502] sd 10:0:0:0: Attached scsi generic sg1 type 0
+[  448.837376] sd 10:0:0:0: [sdb] 61472768 512-byte logical blocks: (31.5 GB/29.3 GiB)
+[  448.847489] sd 10:0:0:0: [sdb] Write Protect is off
+[  448.852593] sd 10:0:0:0: [sdb] Mode Sense: 2b 00 00 08
+[  448.854221] sd 10:0:0:0: [sdb] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
 
-The issue is with the ACPI tables - the USB role switch ACPI device
-nodes don't have the _PLD object on these systems. Ideally this could
-be fixed there by simply adding the _PLD to those ACPI device objects,
-but I understood that that is not an option.
+Thanks!
 
-But maybe I misunderstood... Can the ACPI tables on these platforms
-still be updated?
+Tested-by: Tasos Sahanidis <tasos@tasossah.com>
 
-thanks,
-
--- 
-heikki
+--
+Tasos
 
