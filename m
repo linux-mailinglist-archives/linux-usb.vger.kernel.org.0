@@ -1,100 +1,134 @@
-Return-Path: <linux-usb+bounces-6448-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6450-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2191A855E58
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 10:39:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA89C855F0C
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 11:20:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53E991C22521
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 09:39:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63D1B28701C
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 10:20:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C723B19BA2;
-	Thu, 15 Feb 2024 09:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b5U56Izf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB7696995F;
+	Thu, 15 Feb 2024 10:20:41 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FE3182B3
-	for <linux-usb@vger.kernel.org>; Thu, 15 Feb 2024 09:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1609A69D01;
+	Thu, 15 Feb 2024 10:20:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707989842; cv=none; b=kjKs9Mt1ABS66wtLdyyXBzVgdm2Wwq9LisLJveLRwyo0CVtO/SL8mkxY0ovDsOOXtkmlm/ALs0TlrKrTx/QWYJNtMcv7GshF9Qog9vJbPh/ivNhAvh31FXpmno+EPF1ZkncwoMhAHdw7nJ16koHsc56JoCIE8b7kKcI2nFDAIjY=
+	t=1707992441; cv=none; b=l72mBWus2NGu0JRJzPvhDlwOGbXnlQnlx40wd0umcUUBDsvlntEfzAzs3JP5MKAubJlBQynrxLZ7wZOTrKnbz1WNZexL3RArArZwlCUfHA+cXw8jElwIKUYDEetPDU11sDOHNbaXxc2wXHi+AKzsogJPHrAjc+lz+siRTC4tT6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707989842; c=relaxed/simple;
-	bh=KN1cFDuqCvpdJc9z3ae7sAHCTynNWJLmVpNzmTxnqjw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=eT34GvmVETfh7HDZuRmssdDpEgr21+X207MAv8gR0rNEDjV8BbKmPmSkYmRXFQHvjz/4t5Mjhgwow9DSQOOZd9X36RPJ0pYRPU+IMQG08mfbG+uozxaAHH/Rh1ld23DgdxIlrt6hgVmBhTFCy6YpYgC9lWXckepwOirpB9UJVxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b5U56Izf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C9FD6C43143
-	for <linux-usb@vger.kernel.org>; Thu, 15 Feb 2024 09:37:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707989841;
-	bh=KN1cFDuqCvpdJc9z3ae7sAHCTynNWJLmVpNzmTxnqjw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=b5U56IzfdMbt5q7WM9/2rWmSJgeXyzeHV/aDip/JykGS3siraf6I6Ox1JTeyzdiC/
-	 5Yk6W9LEz47kdlZ9ja0Yk6PZGSbl8dxmOJXppVG5MB7EGXmrtxiPU3AAgEIBMfZPsh
-	 q+R1g7LZ4a53MahyASLWM4hnc5D4iumcYLIrRLD6j8bYgysyBRXvVYxIuHObAiOt8L
-	 76/Q73hYjTytAMMUrpINuxETOt9bjJyTVhuTVFzOBYBnrW+YvRVpLiuuX/8nyNhq7n
-	 lIkjiq0Kn4mqj4nAL/9UMstacLC5Mp1TYRVjWdr6uzJcZ32liH605m51/xfUNyXJof
-	 T5Fi4ljuEt1tg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id AAFD7C53BD0; Thu, 15 Feb 2024 09:37:21 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218465] Linux warning `usb: port power management may be
- unreliable` on Dell XPS 13 9360
-Date: Thu, 15 Feb 2024 09:37:21 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DUPLICATE
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218465-208809-ZMDr0huLuU@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218465-208809@https.bugzilla.kernel.org/>
-References: <bug-218465-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1707992441; c=relaxed/simple;
+	bh=MNzjTQVy8i+SjCyYirVZZm1jgkX/BUR/FaONBXox8oA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dk/YR2Bj/CD+KLZ0FMVdpGEiYYxpljC7KUcpVSB4doMsD6s4aYDK6uSgUsvNYkqL2wagRTiJDZlYhhqHam27tJ25AJ4ZXFfcV+X282rJTc4rtG2GvpRGTPuHFppkNBhfOM0O6dxjj5zCSre2aZe/cifjQsoGZpu2s6gEp8rhi2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 1F8F61402E9; Thu, 15 Feb 2024 11:10:41 +0100 (CET)
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Sing-Han Chen <singhanc@nvidia.com>,
+	Haotien Hsu <haotienh@nvidia.com>,
+	Utkarsh Patel <utkarsh.h.patel@intel.com>,
+	"Jonathan Hunter" <jonathanh@nvidia.com>,
+	"Wayne Chang" <waynec@nvidia.com>,
+	"WK Tsai" <wtsai@nvidia.com>
+Subject: [PATCH CFT] usb: ucsi_ccg: Fix command completion handling
+Date: Thu, 15 Feb 2024 11:10:24 +0100
+Message-Id: <20240215101024.764444-1-lk@c--e.de>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218465
+In case of a spurious or otherwise delayed interrupt
+it is possible that CCI still reports the previous completion.
+For this reason the UCSI spec provides different completion
+bits for normal commands and for UCSI_ACK_CC_CI.
 
---- Comment #5 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-This DELL machine has ACPI entries for USB ports that are not usable.
-These ports are supported by xHCI host hardware but are not internally or
-externally connected anywhere.  They have _UPC (USB port capability) ACPI
-objects stating they are not connectable, and _PLD (Physical Location of
-Device) that just returns 0 for their group token group position.
+Only complete a sync command if the correct completion bit
+is set.
 
-So all unusable USB2 and USB3 ports have similar _PLD entries, which then
-confuses Linux when trying to pair together USB2 and USB3 ports.=20
+This should avoid the need to clear out CCI before starting
+a command. Thus remove this code.
 
-Linux could probably ignore printing any warning messages for ports that
-have _PLD entries but _UPC shows they are not connectable
+Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+Fixes: e32fd989ac1c ("usb: typec: ucsi: ccg: Move to the new API")
+---
+Additional information:
+A similar change for ucsi_acpi.c is here:
+  https://lore.kernel.org/all/20240121204123.275441-3-lk@c--e.de/
+This restores behaviour that ucsi.c had before moving to the new API.
+I've seen timeouts with ucsi_acpi.c without that fix, often if there
+were many port events (plug/unplug).
 
---=20
-You may reply to this email to add a comment.
+I do _not_ have CCG hardware to test this. So someone else will have to
+provide a Tested-By tag or similar (hence the CFT in the subject).
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+But from looking at the code I think this change is needed for CCG,
+too. Additionally, the recent change to CCG here
+  https://lore.kernel.org/all/20240126030115.3791554-1-haotienh@nvidia.com/
+seems to work around the same problem.
+
+Clearing the cached CCI value should not be necessary with this
+anymore and I suspect that it can potentially cause other problems.
+However, I can send an update patch without this hunk if desired.
+
+
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+index dda7c7c94e08..9442307e0abd 100644
+--- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -616,14 +616,6 @@ static int ucsi_ccg_async_write(struct ucsi *ucsi, unsigned int offset,
+ 	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
+ 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
+ 
+-	/*
+-	 * UCSI may read CCI instantly after async_write,
+-	 * clear CCI to avoid caller getting wrong data before we get CCI from ISR
+-	 */
+-	spin_lock(&uc->op_lock);
+-	uc->op_data.cci = 0;
+-	spin_unlock(&uc->op_lock);
+-
+ 	return ccg_write(uc, reg, val, val_len);
+ }
+ 
+@@ -708,9 +700,14 @@ static irqreturn_t ccg_irq_handler(int irq, void *data)
+ err_clear_irq:
+ 	ccg_write(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
+ 
+-	if (!ret && test_bit(DEV_CMD_PENDING, &uc->flags) &&
+-	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
+-		complete(&uc->complete);
++	if (!ret && test_bit(DEV_CMD_PENDING, &uc->flags)) {
++		bool ack = UCSI_COMMAND(uc->last_cmd_sent) == UCSI_ACK_CC_CI;
++
++		if (ack && (cci & UCSI_CCI_ACK_COMPLETE))
++			complete(&uc->complete);
++		if (!ack && (cci & UCSI_CCI_COMMAND_COMPLETE))
++			complete(&uc->complete);
++	}
+ 
+ 	return IRQ_HANDLED;
+ }
+-- 
+2.40.1
+
 
