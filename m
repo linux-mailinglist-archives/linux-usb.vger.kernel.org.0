@@ -1,124 +1,111 @@
-Return-Path: <linux-usb+bounces-6452-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6453-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 727A6856104
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 12:11:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8498D856111
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 12:12:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A48161C20F95
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 11:11:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 419542927BB
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 11:12:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CED1712CD97;
-	Thu, 15 Feb 2024 11:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 128FC24B26;
+	Thu, 15 Feb 2024 11:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OjVyf8Tw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.lichtvoll.de (luna.lichtvoll.de [194.150.191.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04158127B6D;
-	Thu, 15 Feb 2024 11:09:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.150.191.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F7A1756B
+	for <linux-usb@vger.kernel.org>; Thu, 15 Feb 2024 11:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707995372; cv=none; b=NPSglT9Tv88+cDwq+NJ/cCpHUaOrs+WsZHvCsTTTdplO3hQ/r5UFUrE0MvzYZoZnXI8rGaVtNSJe3KLJNzxqVPS7ycThBXWU5bS0vw45c7NeiDzUDLaX3U/UsMJrfo7Nsq7y9pnAFchWAE1XzkuoYFQIPRvVZKK2MzxFScfk18c=
+	t=1707995455; cv=none; b=vBxSCa7vtV3rQYkxR0d6/q4dQr9gR0EcPh4fs0uZhcxwch3r8bYvytX+Fnm01yRtuGHqNpp441UJFH9RyyhLZjscqfXNK1XfrOtjHlM2OzOFovcFWYe/D6BHCnZZBmbyyR/0EQHJ2c1vgKbJT+aSS13SABWQ82EkV5MFbUNBKQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707995372; c=relaxed/simple;
-	bh=Y2pGpvd23nSIXN6OktBS6/0YBWljbrMTHz18LGF/8m8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Maa+PXmriJ22Xsyaa3nZmUa/LTAZN4Q7vW0nCtOWQxHgleuWvaixjBZYqV++XH4CdWhA+MtG3usckR4fEac4MW6I/9h7Iv7Uc3SgjFSopue/hjGdGgg7459kZTHp9YU0Jf5PuS74nNZ+rRbIZtkp7MaW5/YyhKu5RA3919ugpQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de; spf=pass smtp.mailfrom=lichtvoll.de; arc=none smtp.client-ip=194.150.191.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lichtvoll.de
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
-	(No client certificate requested)
-	by mail.lichtvoll.de (Postfix) with ESMTPSA id BF16C89B671;
-	Thu, 15 Feb 2024 12:09:20 +0100 (CET)
-Authentication-Results: mail.lichtvoll.de;
-	auth=pass smtp.auth=martin smtp.mailfrom=martin@lichtvoll.de
-From: Martin Steigerwald <martin@lichtvoll.de>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: stable@vger.kernel.org, regressions@lists.linux.dev,
- linux-usb@vger.kernel.org,
- Holger =?ISO-8859-1?Q?Hoffst=E4tte?= <holger@applied-asynchrony.com>,
- linux-bcachefs@vger.kernel.org, linux-block@vger.kernel.org
-Subject: Re: I/O errors while writing to external Transcend XS-2000 4TB SSD
-Date: Thu, 15 Feb 2024 12:09:20 +0100
-Message-ID: <1979818.usQuhbGJ8B@lichtvoll.de>
-In-Reply-To: <ypeck262h6ccdnsxzo46vydzygh2y6coe3d4mvgermaaeo5ygg@4nvailbg7ay3>
-References:
- <1854085.atdPhlSkOF@lichtvoll.de> <6599603.G0QQBjFxQf@lichtvoll.de>
- <ypeck262h6ccdnsxzo46vydzygh2y6coe3d4mvgermaaeo5ygg@4nvailbg7ay3>
+	s=arc-20240116; t=1707995455; c=relaxed/simple;
+	bh=8FtNOjalLANYC7eUmvetPD8WdDl0lrseCr0LxvYZ1eQ=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=JJPaeUJoYhlnom1wQwr9gsJRuteNs55TiscbYNDxnpiiEmkSbarJ85B7lB5DveD40Q1sQgDMj3q1LFdRdLjI/01uXB3I8r43mjQNOcnZGl80tuX0TVx7T/OZ/G9sfTFWIsi8doRritEAzGWGD0iu8s6JjA3SatDPq5suBH2QAbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OjVyf8Tw; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707995454; x=1739531454;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=8FtNOjalLANYC7eUmvetPD8WdDl0lrseCr0LxvYZ1eQ=;
+  b=OjVyf8TwsoRUqCMQUIiz0FYMU+EPK780Tnksj73BcLDjH3sdgmeb0Xdp
+   3cIXqTlRpsmw+m5maaVeb1+Vw/C80d35ueS0mN1Nqchks+8bYyIlSFUq2
+   oIDYOJxq5nOODj3EGG6I2AIf/S6GLIaYgdG3cCG3EQXQ4fpeu6RU6gQwV
+   Gs+2JmDPJeN1PFOsyS1oxsEzPFLIsxPFYHjPviP8xETQP0Un2lcsUCp2R
+   Afmd04U0Gk3PDiPViVO1HVPTEAHO6fLQ4Ash2aSlJ445f/dm+pCN4ICxJ
+   O8+skiuH1TEyiW7Te03DWNFL1KTRlaCfNDhQd6RkEgGgaxTEj4YG8FRps
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10984"; a="5904777"
+X-IronPort-AV: E=Sophos;i="6.06,161,1705392000"; 
+   d="scan'208";a="5904777"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 03:10:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10984"; a="935647553"
+X-IronPort-AV: E=Sophos;i="6.06,161,1705392000"; 
+   d="scan'208";a="935647553"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Feb 2024 03:10:51 -0800
+Message-ID: <9c53ec38-812f-f701-d2f6-91e28367bb82@linux.intel.com>
+Date: Thu, 15 Feb 2024 13:12:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Paul Menzel <pmenzel@molgen.mpg.de>, Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+ "Artem S. Tashkinov" <aros@gmx.com>
+References: <5406d361-f5b7-4309-b0e6-8c94408f7d75@molgen.mpg.de>
+ <7efc3c5b-3237-30c9-1ff2-88747897ed57@linux.intel.com>
+ <0cd07b3e-148f-9d0b-7ef4-917b0ed23cbd@linux.intel.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: Linux warns `usb: port power management may be unreliable` on
+ several systems
+In-Reply-To: <0cd07b3e-148f-9d0b-7ef4-917b0ed23cbd@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Kent Overstreet - 12.02.24, 21:42:26 CET:
+On 14.2.2024 15.00, Mathias Nyman wrote:
+> On 14.2.2024 14.58, Mathias Nyman wrote:
+>> On 14.2.2024 11.31, Paul Menzel wrote:
+>>> Dear Linux folks,
+>>>
+>>> As a follow-up to *Linux warning `usb: port power management may be unreliable` on Dell XPS 13 9360* [1][2], Linux warns about this on Dell laptops, desktops, and servers, and also on devices from other manufacturers [3].
+>>>
+>>> Is this a firmware issue or a Linux one? As a user I am unsure what to do, and ignoring warnings sounds wrong to me.
+>>
+>> At a fist glance it looks like a firmware issue.
+>>
+>> USB2 and USB3 ports are in this case matched and peered based on the ports
+>> ACPI _PLD (Physical Device Location) entries.
+>> Usually there is only one USB2 and one USB3 port with exactly the same _PLD values,
+>> but here it appears more ports return similar _PLD values.
 
-[thoughts about whether a cache flush / FUA request with write caches=20
-disabled would be a no-op anyway]
+Looks like these machines have _PLD ACPI objects for all USB ports, including
+unusable USB host ports that are not wired to any connector or internal device.
 
-> > I may test the Transcend XS2000 with BTRFS to see whether it makes a
-> > difference, however I really like to use it with BCacheFS and I do not
-> > really like to use LUKS for external devices. According to the kernel
-> > log I still don't really think those errors at the block layer were
-> > about anything filesystem specific, but what  do I know?
->=20
-> It's definitely not unheard of for one specific filesystem to be
-> tickling driver/device bugs and not others.
->=20
-> I wonder what it would take to dump the outstanding requests on device
-> timeout.
+All these unusable ports return similar _PLD objects, with zeroes in their group
+token and position fields. This confuses the port peering code pairing USB2 and
+USB3 ports that are wired to the same connector.
 
-I got some reply back from Transcend support.
+These unusable ports have a ACPI _UPC object stating they are not connectable.
+We could probably tune the port peering code for those. At least skip
+the warning messages.
 
-They brought up two possible issues:
-
-1) Copied to many files at once. I am not going to accept that one. An=20
-external 4 TB SSD should handle writing 1,4 TB in about 215000 files,=20
-coming from a slower Toshiba Canvio Basics external HD, just fine. About=20
-90000 files was larger files like sound and video files or installation=20
-archives. The rest is from a Linux system backup, so smaller files. I=20
-likely move those elsewhere before I try again as I do not need these on=20
-flash anyway. However if the amount of files or data matters I could never=
-=20
-know what amount of data I could write safely in one go. That is not=20
-acceptable to me.
-
-2) Power management related to USB port. Cause I am using a laptop. It may=
-=20
-have been that the Linux kernel decided to put the USB port the SSD was=20
-connected to into some kind of sleep state. However it was a constant=20
-rsync based copy workload. Yes, the kernel buffers data and the reads from=
-=20
-Toshiba HD should be quite a bit slower than the Transcend SSD could=20
-handle the writes. I saw now more than 80-90 MiB/s coming from the hard=20
-disk. However I would doubt this lead to pauses of write activity of more=20
-than 30 seconds. Still it could be a thing.
-
-Regarding further testing I am unsure whether to first test with BTRFS on=20
-top of LUKS =E2=80=93 I do not like to store clear text data on the SSD =E2=
-=80=93 or with=20
-BCacheFS plus fixes which are 6.7.5 or 6.8-rc4 in just in the case the flus=
-h=20
-handling fixes would still have an influence on the issue at hand.
-
-=46irst I will have a look on how to see what USB power management options=
-=20
-may be in place and how to tell Linux to keep the USB port the SSD is=20
-connected to at all times.
-
-Let's see how this story unfolds. At least I am in no hurry about it.
-
-Best,
-=2D-=20
-Martin
-
-
+Thanks
+Mathias
 
