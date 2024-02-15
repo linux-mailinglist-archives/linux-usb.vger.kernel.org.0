@@ -1,86 +1,124 @@
-Return-Path: <linux-usb+bounces-6451-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6452-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DA8F8560ED
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 12:09:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 727A6856104
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 12:11:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A08C91C20BCC
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 11:09:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A48161C20F95
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 11:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 310AE12BE89;
-	Thu, 15 Feb 2024 11:07:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Zef6unym"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CED1712CD97;
+	Thu, 15 Feb 2024 11:09:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.lichtvoll.de (luna.lichtvoll.de [194.150.191.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A810D12A142;
-	Thu, 15 Feb 2024 11:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04158127B6D;
+	Thu, 15 Feb 2024 11:09:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.150.191.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707995244; cv=none; b=YYLG3LlfvPwHLjES6+BR/FhNE/ywGSO43oqGMO/rL79PTm+ZZLiy0TW2WzZV2PJ/fLIo78TPcGT1DzqYP/Pjxz1THv94pAjLY/wpGRgDnP2y0hp1f/LWbHhsCYi+2ULc24aiQ0LlHduIIspJNAOkoOSDrySrLgrvefh/VRvavdM=
+	t=1707995372; cv=none; b=NPSglT9Tv88+cDwq+NJ/cCpHUaOrs+WsZHvCsTTTdplO3hQ/r5UFUrE0MvzYZoZnXI8rGaVtNSJe3KLJNzxqVPS7ycThBXWU5bS0vw45c7NeiDzUDLaX3U/UsMJrfo7Nsq7y9pnAFchWAE1XzkuoYFQIPRvVZKK2MzxFScfk18c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707995244; c=relaxed/simple;
-	bh=ipndqY9nxNMul3gLMF2c2rmj5102VFlC9qbLx+KDy1A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OHdy9m33z4oX6GnhJFdu3pMqLDl69IBl1WYw0ZXySlaBZhAYw42RblTTQzkq3pQb2SabrCJig1N1NlzFBWLnfH5wG5aJhUGsuE0s74iZCO+jWf3NoTU/BG+MEZkUCAYlFUxubJb3KjirTEntL4JyjHICzf+1d6Id8mrnoQAGG/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Zef6unym; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D735C433F1;
-	Thu, 15 Feb 2024 11:07:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1707995243;
-	bh=ipndqY9nxNMul3gLMF2c2rmj5102VFlC9qbLx+KDy1A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Zef6unymmtg2xVd8EVCwZRlYMiB9Se8NDapY1MlfKXQbufriMTfEJz6POwaKTma2L
-	 whytBk4ezUboR0thm0CqCh+WMbnKKmXOp3B7YXqnZ1MduMnncazOOipB3ai5vQYXda
-	 zDjzudIqwca5ct7xDSpqMkjxU0my2EYf7QxEuOUk=
-Date: Thu, 15 Feb 2024 12:07:20 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Sing-Han Chen <singhanc@nvidia.com>,
-	Haotien Hsu <haotienh@nvidia.com>,
-	Utkarsh Patel <utkarsh.h.patel@intel.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Wayne Chang <waynec@nvidia.com>, WK Tsai <wtsai@nvidia.com>
-Subject: Re: [PATCH CFT] usb: ucsi_ccg: Fix command completion handling
-Message-ID: <2024021504-oven-worst-5c15@gregkh>
-References: <20240215101024.764444-1-lk@c--e.de>
+	s=arc-20240116; t=1707995372; c=relaxed/simple;
+	bh=Y2pGpvd23nSIXN6OktBS6/0YBWljbrMTHz18LGF/8m8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Maa+PXmriJ22Xsyaa3nZmUa/LTAZN4Q7vW0nCtOWQxHgleuWvaixjBZYqV++XH4CdWhA+MtG3usckR4fEac4MW6I/9h7Iv7Uc3SgjFSopue/hjGdGgg7459kZTHp9YU0Jf5PuS74nNZ+rRbIZtkp7MaW5/YyhKu5RA3919ugpQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de; spf=pass smtp.mailfrom=lichtvoll.de; arc=none smtp.client-ip=194.150.191.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lichtvoll.de
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
+	(No client certificate requested)
+	by mail.lichtvoll.de (Postfix) with ESMTPSA id BF16C89B671;
+	Thu, 15 Feb 2024 12:09:20 +0100 (CET)
+Authentication-Results: mail.lichtvoll.de;
+	auth=pass smtp.auth=martin smtp.mailfrom=martin@lichtvoll.de
+From: Martin Steigerwald <martin@lichtvoll.de>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: stable@vger.kernel.org, regressions@lists.linux.dev,
+ linux-usb@vger.kernel.org,
+ Holger =?ISO-8859-1?Q?Hoffst=E4tte?= <holger@applied-asynchrony.com>,
+ linux-bcachefs@vger.kernel.org, linux-block@vger.kernel.org
+Subject: Re: I/O errors while writing to external Transcend XS-2000 4TB SSD
+Date: Thu, 15 Feb 2024 12:09:20 +0100
+Message-ID: <1979818.usQuhbGJ8B@lichtvoll.de>
+In-Reply-To: <ypeck262h6ccdnsxzo46vydzygh2y6coe3d4mvgermaaeo5ygg@4nvailbg7ay3>
+References:
+ <1854085.atdPhlSkOF@lichtvoll.de> <6599603.G0QQBjFxQf@lichtvoll.de>
+ <ypeck262h6ccdnsxzo46vydzygh2y6coe3d4mvgermaaeo5ygg@4nvailbg7ay3>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240215101024.764444-1-lk@c--e.de>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 15, 2024 at 11:10:24AM +0100, Christian A. Ehrhardt wrote:
-> In case of a spurious or otherwise delayed interrupt
-> it is possible that CCI still reports the previous completion.
-> For this reason the UCSI spec provides different completion
-> bits for normal commands and for UCSI_ACK_CC_CI.
-> 
-> Only complete a sync command if the correct completion bit
-> is set.
-> 
-> This should avoid the need to clear out CCI before starting
-> a command. Thus remove this code.
-> 
-> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-> Fixes: e32fd989ac1c ("usb: typec: ucsi: ccg: Move to the new API")
+Kent Overstreet - 12.02.24, 21:42:26 CET:
 
-What does "CFT" in your subject line mean?
+[thoughts about whether a cache flush / FUA request with write caches=20
+disabled would be a no-op anyway]
 
-thanks,
+> > I may test the Transcend XS2000 with BTRFS to see whether it makes a
+> > difference, however I really like to use it with BCacheFS and I do not
+> > really like to use LUKS for external devices. According to the kernel
+> > log I still don't really think those errors at the block layer were
+> > about anything filesystem specific, but what  do I know?
+>=20
+> It's definitely not unheard of for one specific filesystem to be
+> tickling driver/device bugs and not others.
+>=20
+> I wonder what it would take to dump the outstanding requests on device
+> timeout.
 
-greg k-h
+I got some reply back from Transcend support.
+
+They brought up two possible issues:
+
+1) Copied to many files at once. I am not going to accept that one. An=20
+external 4 TB SSD should handle writing 1,4 TB in about 215000 files,=20
+coming from a slower Toshiba Canvio Basics external HD, just fine. About=20
+90000 files was larger files like sound and video files or installation=20
+archives. The rest is from a Linux system backup, so smaller files. I=20
+likely move those elsewhere before I try again as I do not need these on=20
+flash anyway. However if the amount of files or data matters I could never=
+=20
+know what amount of data I could write safely in one go. That is not=20
+acceptable to me.
+
+2) Power management related to USB port. Cause I am using a laptop. It may=
+=20
+have been that the Linux kernel decided to put the USB port the SSD was=20
+connected to into some kind of sleep state. However it was a constant=20
+rsync based copy workload. Yes, the kernel buffers data and the reads from=
+=20
+Toshiba HD should be quite a bit slower than the Transcend SSD could=20
+handle the writes. I saw now more than 80-90 MiB/s coming from the hard=20
+disk. However I would doubt this lead to pauses of write activity of more=20
+than 30 seconds. Still it could be a thing.
+
+Regarding further testing I am unsure whether to first test with BTRFS on=20
+top of LUKS =E2=80=93 I do not like to store clear text data on the SSD =E2=
+=80=93 or with=20
+BCacheFS plus fixes which are 6.7.5 or 6.8-rc4 in just in the case the flus=
+h=20
+handling fixes would still have an influence on the issue at hand.
+
+=46irst I will have a look on how to see what USB power management options=
+=20
+may be in place and how to tell Linux to keep the USB port the SSD is=20
+connected to at all times.
+
+Let's see how this story unfolds. At least I am in no hurry about it.
+
+Best,
+=2D-=20
+Martin
+
+
 
