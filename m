@@ -1,119 +1,115 @@
-Return-Path: <linux-usb+bounces-6445-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6447-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEAD6855BD6
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 08:50:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DA07855E03
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 10:27:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A29991F245BA
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 07:50:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58F0928B550
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 09:27:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9147C11190;
-	Thu, 15 Feb 2024 07:50:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA7F31A58E;
+	Thu, 15 Feb 2024 09:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="npF2tKCx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RXcCXpZ1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64752DDC4;
-	Thu, 15 Feb 2024 07:50:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58731B27D;
+	Thu, 15 Feb 2024 09:26:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707983406; cv=none; b=TfxJdp8PNlIv39K9zQpN7rGYHQliLPpDBQ7+LFN4sRpCMIcBJ4HE+7NXuuQQHF1tHiUZxrBzlWSYofr0CpRO6KBI/YkDy2FjGQ7t3Bg+aWUzwouGbKMwnZ6FxhSE6hhPTG8r8IOsmZGgpwMEnNC+IbwoI/5e0qebWKyRnysP/2M=
+	t=1707989217; cv=none; b=IsfWyy9iKfT0vNoVojGOLRb00dsmc1bXIjXbpouXgOwwISj5aGL2LESHCDQFbYvjY59gFIRA7Z2IIy5pp+fpVzDO9K/mYcA6ZwUlaS2VCNbVqdccq5L2jrzdzN7TLxV6reKVA92ADBCAAwsSLkKOg8jNt7F0dzb/uJCN2EqOXHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707983406; c=relaxed/simple;
-	bh=cClc/BHqEEQLZlTHoU6oL+CwJAPdn6RRW3EZ32kBRAI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ImK4dRdeIWlo2CRTNN1CsvGGtYkk1cOQJMPS+xZRoabbz78/5y0MOeD3fDrp8xKYNw2goR5yjcSBLDFk1u91t4SJ3QsVBQPSL9hzVdxg5W2uWLFJBGTgRHi59A11AemCmeOmSLof3a4p9PNQ9Wj+x4eQHk4wwokSr0qAPlCB4ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=npF2tKCx; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+	s=arc-20240116; t=1707989217; c=relaxed/simple;
+	bh=E2v6VkpFCx1HDTq9sKiAbC9tdSDEbT2SS+fM9nv71m4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J5J7I5KOapwCveRNmeqly12ALi7K6Hhjckbhb0zw/OIvnade5KXc1mTsuxmkd2wGVFmcT/7/FiUNEcp34gEEAhMfS/Qj572xdHE/05EqYX51aVImPR6Jjyxi4qvKrbKLE6bP2hnLQCGtZ7zcVZXU9NT3HoUCQTaY7VwkQ4o8/HU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RXcCXpZ1; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1d953fa3286so5296995ad.2;
+        Thu, 15 Feb 2024 01:26:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1707983402; x=1739519402;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4uD0jh6dOnNgJjxhLQXnDzApRHPfgs2VTFWcjQE9Sxg=;
-  b=npF2tKCxYW/dj31sPPN5xsfySGaqO0gpx5cF8n9rhEfJLYpHCKiXsKX1
-   AJb1Zi+ZUc8mYq0ZlQu+I2Cn/3TWRyYFRxA7ysRtuR0lab+12bl0xEFx0
-   4R0w7GopVb8lgXc6Yq6RdWf32vEXtdl1Wr9PO+yqgqbrzVZ6ylYMT7Br3
-   CNObL6FELs2/FtGdiQ2JJGy3x47E3kKVW/36WYh5KFQ4OcAoNvb3Q0p2t
-   LTSx9ONYf1Azx70Jjb8xHD8nlj+o9zVOPUsut7UKzXggst39lO4j0NoI1
-   QHfSgbwBgXoiLP5lJwoD8aBCP2eyvo8WeF3oFQ8QHWqsk59pVjkIfLSl7
-   w==;
-X-IronPort-AV: E=Sophos;i="6.06,161,1705359600"; 
-   d="scan'208";a="35416455"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 15 Feb 2024 08:49:58 +0100
-Received: from steina-w.localnet (steina-w.tq-net.de [10.123.53.25])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 27CCE280075;
-	Thu, 15 Feb 2024 08:49:58 +0100 (CET)
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, Andre Werner <andre.werner@systec-electronic.com>
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, daniel.krueger@systec-electronic.com, Andre Werner <andre.werner@systec-electronic.com>
-Subject: Re: [PATCH net-next] net: smsc95xx: add support for SYS TEC USB-SPEmodule1
-Date: Thu, 15 Feb 2024 08:50:00 +0100
-Message-ID: <13454529.uLZWGnKmhe@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20240214132507.28072-1-andre.werner@systec-electronic.com>
-References: <20240214132507.28072-1-andre.werner@systec-electronic.com>
+        d=gmail.com; s=20230601; t=1707989215; x=1708594015; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OWfMmIfGsKwjYTHONZVgXvpgh2ggyJHKL+IgNdm0LAY=;
+        b=RXcCXpZ1wpypDGIOdOK/Mjt2m6wvWvaDU00+Ha010rY5hutwK528Hun96aEtBkvN/3
+         Zia585ezsifeNNcqXSu4ateRmllSXJTv2utuPG+mvMr4Ankao1INUvjEazBYKqw0PvUB
+         nAPTdEmsRDhXGMsbGB/Kpvv6A/NdXgPAX7+D/oIz4LIGlLMGgYkNPm8cdM4huVjKEPj+
+         /Pk/pgJTYqdTqRmGqTqSTXQbgu1Q2MR6Hd5d9Tb8S5i+NvOPm9xiW6m6ghuJfISAhusq
+         liQKwEOW/4smKDUDMU84VRb6l7gc7HtlH9uLvtG56nnjV7qfqWt7xvpQnjUCgwTcIGOr
+         tL5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707989215; x=1708594015;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OWfMmIfGsKwjYTHONZVgXvpgh2ggyJHKL+IgNdm0LAY=;
+        b=RHtCJitcMm0W/M5ghWe2G/+z0/w5xjltGLmOUg0NEPh+ogmwBc044wTIU5RcDggmsi
+         SAQxYpcN8oE8wyqXoGwocDc44nxi+lssg5tcvy0sF73YXIOgYahPwQzomfzfg3Gz/DYR
+         HDYwJDu+4P2EGS/bYxPtn4bMee4A6tVlYMzYTm1a1etArJpyTJXARbZdL+8RjqdIamqX
+         SoMJ5txScWsER8vZ+qhnenhszutdPGOGamKLUdiGkKCI4OMtya0h2XW9pI+M1o/YrR3c
+         gtenZUCrnw7XImyA7s+tuVt/pGJwzOgshxnLW443Q22ezNnlqODPXUvB7p1STtkKiz2z
+         2qnw==
+X-Forwarded-Encrypted: i=1; AJvYcCWDlg8oeWOuPwr4tf/uLilZehwqmA8boDfHoeCRGkAltyq3CkMqhlMQpluw30znyAjo+sCVCNpb94jzCFCUEo2rzp0KoFcNsKirhAri
+X-Gm-Message-State: AOJu0Ywhh3wICPrY9jQe83CUrIc+9zz6rUkWPt7ltKqYJ74KxcChznKv
+	Iec+MPa34YFqrKTfoNfy++X/wzXQvBt99YlilP16PpQatx+0dPg2
+X-Google-Smtp-Source: AGHT+IGA7VG87vWnvTRdUejlRRl0NjQJAvdQO98FlbNM1in/gDmV3+bRwGIDKxfp9PsHi92cu9VEZQ==
+X-Received: by 2002:a17:903:2601:b0:1d9:aa5d:a50 with SMTP id jd1-20020a170903260100b001d9aa5d0a50mr1017745plb.25.1707989214966;
+        Thu, 15 Feb 2024 01:26:54 -0800 (PST)
+Received: from pairface.. ([111.18.198.117])
+        by smtp.gmail.com with ESMTPSA id ko4-20020a17090307c400b001d7137acad9sm838088plb.57.2024.02.15.01.26.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Feb 2024 01:26:54 -0800 (PST)
+From: Pairman Guo <pairmanxlr@gmail.com>
+To: valentina.manea.m@gmail.com,
+	shuah@kernel.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Pairman Guo <pairmanxlr@gmail.com>
+Subject: [PATCH] USBIP: Use fallthrough pseudo-keyword
+Date: Thu, 15 Feb 2024 17:26:30 +0800
+Message-ID: <20240215092630.148917-1-pairmanxlr@gmail.com>
+X-Mailer: git-send-email 2.43.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
 
-Hi Andre,
+Hi maintainers,
 
-Am Mittwoch, 14. Februar 2024, 14:25:07 CET schrieb Andre Werner:
-> This patch adds support for the SYS TEC USB-SPEmodule1 10Base-T1L
-> ethernet device to the existing smsc95xx driver by adding the new
-> USB VID/PID pair.
->=20
-> Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>
-> ---
->  drivers/net/usb/smsc95xx.c | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-> index a530f20ee257..bb4e62a93d96 100644
-> --- a/drivers/net/usb/smsc95xx.c
-> +++ b/drivers/net/usb/smsc95xx.c
-> @@ -2109,6 +2109,11 @@ static const struct usb_device_id products[] =3D {
->  		USB_DEVICE(0x184F, 0x0051),
->  		.driver_info =3D (unsigned long)&smsc95xx_info,
->  	},
-> +	{
-> +		/* SYSTEC USB-SPEmodule1 10BASE-T1L Ethernet Device */
-> +		USB_DEVICE(0x0878, 0x1400),
-> +		.driver_info =3D (unsigned long)&smsc95xx_info,
-> +	},
+There is a usage of ``/* FALLTHRU */`` in a switch statement in main()
+that have long been untouched. This patch replaced it with the
+better and proper pseudo-keyword ``fallthrough;``.
 
-IMHO entries should be sorted by USB Vendor ID. So this goes before=20
-Microchip's EVB-LAN8670-USB.
+Please merge if it is the case. Thank you in advance.
 
-Best regards,
-Alexander
+Signed-off-by: Pairman Guo <pairmanxlr@gmail.com>
+---
+ tools/usb/usbip/src/usbip.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->  	{ },		/* END */
->  };
->  MODULE_DEVICE_TABLE(usb, products);
-
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
+diff --git a/tools/usb/usbip/src/usbip.c b/tools/usb/usbip/src/usbip.c
+index f7c7220d9..ddcafb5c7 100644
+--- a/tools/usb/usbip/src/usbip.c
++++ b/tools/usb/usbip/src/usbip.c
+@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
+ 		case '?':
+ 			printf("usbip: invalid option\n");
+ 			/* Terminate after printing error */
+-			/* FALLTHRU */
++			fallthrough;
+ 		default:
+ 			usbip_usage();
+ 			goto out;
+-- 
+2.43.1
 
 
