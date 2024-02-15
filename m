@@ -1,210 +1,415 @@
-Return-Path: <linux-usb+bounces-6461-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6462-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EEF1856A93
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 18:08:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76725856C59
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 19:21:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD65B1F21209
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 17:08:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B4E41C218F8
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 18:21:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A3C012DD9A;
-	Thu, 15 Feb 2024 17:08:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C6B71386B5;
+	Thu, 15 Feb 2024 18:21:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZP6Yn1Hz"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="cMgRwyI8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2075.outbound.protection.outlook.com [40.107.94.75])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 113811353FE
-	for <linux-usb@vger.kernel.org>; Thu, 15 Feb 2024 17:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708016920; cv=none; b=JkYBRFfnqlXkcmxKuu6/AFuM+CftDna2iuz8iE7lvMtWPjVzHpY3YrmfrZZm86wtm46COrKhTbaHO8wlE23POG972OLjmiy/sWQ0fZdnbLVGp5gHNPL6i3VNU5gCCEZ6KWieLwM8aOaj0pbuXymR8C4W7dAC3lKECnDmtYAHPjY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708016920; c=relaxed/simple;
-	bh=5xjHV4VA7h9WQ0Wlidu/Bvn8BrSU7MdlpCGg+GNR83c=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Ev4TRQNsZK4CIAQfy2/UJ5WB3vfSf6qRK5bh25Zt0AjyXQ551WSWR0v06GuVki8swdt0vHCDW60BZ0Hh1m7wBB+JanekciwC1OBZH8Bbwyj3XnPggwuIia6ldCZD+MV6EPjWQ6a81ChImQyDtMmXr0l7vpF8YdeXmng3k1LdCw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZP6Yn1Hz; arc=none smtp.client-ip=209.85.210.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6e2df04c812so528368a34.3
-        for <linux-usb@vger.kernel.org>; Thu, 15 Feb 2024 09:08:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708016917; x=1708621717; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=bZ6lce93Zoub+5MwopTnPKgZGAOgXfru1yxrlIhfqq0=;
-        b=ZP6Yn1HzACgIaEYx8tdQ49JhplCP+OhpCh2FqBJZRIdD+7KYuF6akmLRID7cO8hEBN
-         1XVxJ7kecVw1p2FeF+3+VeOlQbPYCodNwZLyQSwqSkeFr4HVrEJBwIoCdHQ94VhTHGuX
-         GBtBJOM2tf/ulTUy9+fK4ZF0OXMBOcr1XyGOwHMQ5vkXuMPIDpPLXxSRtr96AqbzJK6x
-         jYKwX9442TAHaf47rmsSinjR/ZvUcEaWL6nLpNZdp0MDUKP7UWkYHiHJilZBBblkWSve
-         cqJfIGQNz4HLlTI6RTQBiT4KqtCvudG6VbGDuJ6K+Nj8BwXeoHyhcX5HNSkUASFLKQVm
-         gp4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708016917; x=1708621717;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bZ6lce93Zoub+5MwopTnPKgZGAOgXfru1yxrlIhfqq0=;
-        b=GhM1UnZLOPvQjd6P+8N0BK1gbNoBjsNRimNlHy3V7JQERvImTyAO2mlz44hkoOiZJP
-         bWdfNUa1JXc2gG6i04BYVdC+wMyOB8dt6smV1bSvJxVkHL82urbl+WiacIO9dCGHnd9v
-         LwRKVgTQdxdb1M9TfeUxTPjhUK5I5oEae9u14kOO6xszcZqnuUbYNARpoBdHeOOUVKc3
-         FcyIR2RS/pb3nNTUOzbbOBSa/QGMN0/0sPckWb9TWoTt1muypEzHw0o19O8AdkCxaWp2
-         NEeVgREBMDS7VPTpx3v1mQK0OY/3nAJrfffokRJz4ZU4CGk2oxxKtQxRVbUkhZwXyGuP
-         iOGA==
-X-Gm-Message-State: AOJu0YyxhyLyDTPhcnjenZ9Rj34IvXyk4FKvoBCXDlHcDi7Wm+fr8uUX
-	yA5GA1tUFfMt+eGLOUFCyUYoEKHDKTVvHCkEyCvGy/wuXp/N8YIKXlt4+cLGCy6DJYD94xHZ6Lm
-	oca0UGd3/0hZFZBhcco63Km/QWjE02Z8ee5w=
-X-Google-Smtp-Source: AGHT+IGspo9g/u1BuJ2WoKqDJxaEECxMKkgnJBiE4esClyz2FO+7BUZ/zCn2B0P8SDy5KOlfcXp9WRswHzsmtZN+S78=
-X-Received: by 2002:a05:6870:f153:b0:21e:579f:a4f3 with SMTP id
- l19-20020a056870f15300b0021e579fa4f3mr595459oac.47.1708016917464; Thu, 15 Feb
- 2024 09:08:37 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC221384AF;
+	Thu, 15 Feb 2024 18:21:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.75
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708021264; cv=fail; b=fcNG9uIXlLehOY4VSdQHTOtSoiXe+HpI0EUItaFp7BJ3sGyLAutFk9cO3OfsFHjVMt5/4zBQOVrN303EvJ9tBkkiNssGdIeAlc4HrmMqK39ioOSbGOMK17k7V0NN+6EC4qVsUwgTf5sfM4QI65FJSejvrmIx5NHlrYTWFus0xNU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708021264; c=relaxed/simple;
+	bh=1Rqfi9tHAdizRNt0wD54ZVkKaACrqB/hj8GKJnlASnA=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=PURRqtrNYzgZ2DZ6vrUdEOwhRMMBfaOGqISz6Tx+UZpYNTQWqsglJqZMvSzK08SZ4YcYC4sA0MDxqYbbIcCIzbc8bmk5e+t5w2MMxgO26xZPDq3p+HMcT1M8t0x1/SfxOxnT/S/TaHhh2natbggrOyTj2XONV6SXEhbaMKhNFpg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=cMgRwyI8; arc=fail smtp.client-ip=40.107.94.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kMpDUPtpt0WGTZwZ9S9IVc2M693FP+GqMXSGJHLz6m9NwfeK02cUZbQCRNZ2o4AE0TvOXCWUQuxGtFK4TSaUY9x0F029619OdDzu4fCOgkBhkLmcoaJ9yCi4fCOt4TJNptjeijGR49SpdRCKy+lwB00s49lLabTAVECxA020XSsB78BdPsfP0UTHkT55V/AK2QLTg6elu5xFaw2FRnk90lmQBZPxeFs19ooQDM8YSX9zoDixKgYn6jDDQmoLnOPnslL0fvmHaxdfowi+yesyMN7Kr2gSRZ/NTJDEKjN39a4Fxfo9CRWk4tp/LcBWHTDxxEOUmXBNBlW4vAwfu3MKaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1r6gLBZefAC96kU3hPSZuqgTeztWnPCUBD3QWEyHtv4=;
+ b=IAVsg4+1EEPHliyLtK48pO+85YM8w1MZdCvaRrYMnYf9Ak/TSwXnBPfO7VVXjpwo9FDfyUQRTkoOSGNJUigiCbHAQCE18YJ3kHCQ3PNYYEJQ5BA16fbRMreaI9GNoNwUENUHDrgH4kW02cs3n/BXWWjgD/1JFY0ohHzR9HbU++pEMkPMEg8c3qrDo1qMttvfZ4fE99EtBk//xlZf8LOjiTYBGAUJCiFHaL9McvAArxjh6iKRHO8Y9RQuwesquUn5HnyhC1xJuNWc8+VqE3QupfJMyoZlqMNj28O6HGg3v7IBaJEf/0Mfy0pgkB4FCZxiVOCp07GX/bAtzukb3LrGfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1r6gLBZefAC96kU3hPSZuqgTeztWnPCUBD3QWEyHtv4=;
+ b=cMgRwyI88rkJYm3d4ymXMBY/4HbR+lPZXtfglmfHMaiQklhgWp/7iKJ9/g5emkGKraWFwuLWAA62MTqebeaRaWcg6iGd6EYGBhR64xPxe3YFeM7aNiAErb0o5nyB/sBytEvHDkWKh8vix/efvj8dmq/Pf6KDH4xdrEGyw8OGgyw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by CH3PR12MB8459.namprd12.prod.outlook.com (2603:10b6:610:139::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.25; Thu, 15 Feb
+ 2024 18:20:59 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::dd00:9ab5:4d11:2d1a]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::dd00:9ab5:4d11:2d1a%7]) with mapi id 15.20.7316.012; Thu, 15 Feb 2024
+ 18:20:59 +0000
+Message-ID: <9831e9bc-d55f-4a72-950a-684a757af59c@amd.com>
+Date: Thu, 15 Feb 2024 12:20:56 -0600
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 3/5] drm: Add support to get EDID from ACPI
+Content-Language: en-US
+To: =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>, Jani Nikula
+ <jani.nikula@linux.intel.com>, Alex Deucher <alexander.deucher@amd.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+ amd-gfx@lists.freedesktop.org,
+ "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+ linux-fbdev@vger.kernel.org, nouveau@lists.freedesktop.org,
+ intel-gfx@lists.freedesktop.org, platform-driver-x86@vger.kernel.org,
+ intel-xe@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+ "open list:ACPI" <linux-acpi@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>, Melissa Wen <mwen@igalia.com>,
+ Mark Pearson <mpearson-lenovo@squebb.ca>
+References: <20240214215756.6530-1-mario.limonciello@amd.com>
+ <20240214215756.6530-4-mario.limonciello@amd.com>
+ <Zc1JEg5mC0ww_BeU@intel.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <Zc1JEg5mC0ww_BeU@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SN7PR04CA0227.namprd04.prod.outlook.com
+ (2603:10b6:806:127::22) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Federico L <flicfloc@gmail.com>
-Date: Thu, 15 Feb 2024 18:08:01 +0100
-Message-ID: <CAGNgjthcKZEUdFvhHKmkAdwYFTNi5-VZWoXO3DdTyn4v5CNTvw@mail.gmail.com>
-Subject: Driver bug (?): dwc2 used by bcm2835 (compatible=brcm,bcm2835-usb) -
- please, kindly support
-To: linux-usb@vger.kernel.org
-Cc: hminas@synopsys.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CH3PR12MB8459:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1c45bc0-72d5-41d3-4f3b-08dc2e52dbf7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	R5sNtKshCleh/IeS5tewx7heFcTqJ1vMwDGT3JpqZrblq2IbZfspWcRvqmJX2kWqgjjTKF5CeCuXKKKoFKH3rLshY8fut2Mo9Y+4g32LjOvDEdLZAAAUKvtxQd+wblBNIsGIS0sDQcxieQ+uWjImMdfoCSWR3qJbzC7QMD8Be6i8QaPmSTtrZA688WIS4sZis7YDBYD67FBV17cRWSBDqCZUDDFl4PUjCHAn5JJPfZRe5PmRj42r2kevZ597nCBRaePjDs64Lhrtv4zHKHz64n6yJPfgcXKXQeq7kThXVk1MFb2inDdSHMVkmEmYwtL/RMUzmNsbEVMk8U05PAAr+RNIaBDqpKipOQ6JAN1J5WjEO4v7m8q6quSB9+U7hAmHoquyQBuU5XlAxbwKjfebprkmZgyQr/SvYZkq2i1CwWVVkUWoBc4O6Za2yKQwnRX+2Ql8cuKTriyNwBZBRmPzq9HMUBQosCXZAe/RTPWENXTb5vR1cCQb6LaNKeyYQ8yLIEQNGHki1LjpB9OCEFr8VR895kmPnJgNbKB8OEKQNs0=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(39860400002)(366004)(136003)(396003)(230922051799003)(186009)(1800799012)(64100799003)(451199024)(83380400001)(66899024)(31696002)(86362001)(66476007)(6916009)(316002)(66946007)(66556008)(2616005)(6506007)(6512007)(54906003)(53546011)(966005)(6486002)(44832011)(478600001)(66574015)(5660300002)(7416002)(2906002)(6666004)(8676002)(8936002)(4326008)(31686004)(36756003)(38100700002)(26005)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bHdkamxOYTgxd1B2Kzg0OU9jSkkvY3hEVktRTHZYSk8vbUc1UWp4U0VwdUVp?=
+ =?utf-8?B?OXhZQUFiQlhXNVBFVVhZOXZEeWpuTkRPNk0zSmkwU0dYN2M3dEl2R3RRK0o1?=
+ =?utf-8?B?dGsyb211anVrK3J2R3hOZnlvQWVSRE1IVG9hbkpRcFJhMWpURTRFcmpLc2Ja?=
+ =?utf-8?B?cmtIVzJTM0d4NVZodmdQZVViMW1rR2g4MHpVcXNaczBoVzRuajhKckZLOVE1?=
+ =?utf-8?B?SzJDWm1WTTMwUGhScEVIQyt3NzQraEpWUllPVk42RkUzRE5OOGU2VzZtbFdY?=
+ =?utf-8?B?dFdwMkxpMHBTYzhzc2FyeE9Hbzl5YzJ4dFFzUW1mOFFtZjlvYnJiaGJzemJS?=
+ =?utf-8?B?TlkwckFkUlp1ZFhnR1FxcEEyVmhJYjdoR1ZZdytjaVJRZlNwbk9weUdkdk9q?=
+ =?utf-8?B?aExwWi93TDUrd0VERzBtcTdLMkZoa2NzQVJzY2hjTEpDSTVtMGticjhyK05Z?=
+ =?utf-8?B?SXlzSVBrNXBadm51bXJLL3dITWVwMTQrN3l4bUhyQ1ZRN2pPK1NYTGpPeVVC?=
+ =?utf-8?B?QU5oNW5TM1dURGczbE5hWDhNa0V6blUwb0VyU0hKNWlJaWJPTEhTUWRaOVhB?=
+ =?utf-8?B?NXZadTQ1dVVMYWlGT2ZPNFBNNUcvcWFNTFpQSzJtMFBjUFRQa0tNOXpiQTZU?=
+ =?utf-8?B?N0pGNG5hMzJQNExPQVNFbXlqR2g1MUErbnhocHY4WDMyMVFwb0VseVNpQit1?=
+ =?utf-8?B?Mmx4Y0g5OExDandqVnJ3QldHaGZqQnd2UFNUK3k0aHFGT2ROdzAvMmJTaEs2?=
+ =?utf-8?B?cDBBWjZ0U0d0WXg3R3R1akk1RG1yY2FzVks1aXJxTDdIMDZBQjY2eDhiOGE2?=
+ =?utf-8?B?RmNRZU5Wd1FCZmxVSVBuTVhON1hjOG50M20wMlAxeEVaOXVoZGkxVW94by9q?=
+ =?utf-8?B?czNxbHNXMkYvV1d2VG8xWmtSNUZhZDNIeXFMNHd5Q0VBNVBPSTlYRklWTC8v?=
+ =?utf-8?B?NmtBMTJRV0t5cjl2Nzc1OG9ra21QeVhMdHg1LzNpa3NPV2c0bkhQbm9YcGps?=
+ =?utf-8?B?REVaMy9wTjBWTVJIc2RmMDhwOUVYRnlnWHd0WUpvbVdrdVFFTlVoek84MjhS?=
+ =?utf-8?B?bkYxRlVyOUFUNUpYYktWd2RDUWFTRTA4MlZNdEJ2THNnYU5udTBKbGNpR2Vr?=
+ =?utf-8?B?ZXNra1VzT2lsemVhZEd0WkRTQ2xNUGEyMk9QNkQ4bkhpV2FYT3AwUEI1bWFW?=
+ =?utf-8?B?TC85VUNrb2xqZjJhL2ozV01Tc2NsNlFEdXdzaWZSM1pSd3I2YTJWREZzUnV5?=
+ =?utf-8?B?MzcvK1lHbWlRUnloUnhRd1g2SDdHUm1pbnNVVURGSjdmc0pzano5WWxJT1RW?=
+ =?utf-8?B?TVE4Vm9IYVFpcXZyT3k3dE9LZFVxdUY1TjhBYzl6TkxncGhTVkxBUkttNERl?=
+ =?utf-8?B?ODZ0dGhiYnRjeEhTQ3BiYWp3aVIvV3VEdW0wbXdKSTF6ZnMyLzVIWENZUXB6?=
+ =?utf-8?B?Q3d0R2lDRlkrQzhIMFlIL2JpNU93c1VkSWZDWWdHdWdLUmtpVjJFaHNGVzJR?=
+ =?utf-8?B?U3h2UGFTbXJ6U2thK3ZTcE4rNGRBbkJOazFKMU11Zy9oVG5OcUs1N0F5M3R2?=
+ =?utf-8?B?WnpXSzg3elF0UC9HQk5SYnFFajlGemhsYzBXdk1oOHpub3ZPM21FTGM4TE9D?=
+ =?utf-8?B?SDE0OEhRNWh4a1A1VENoMTlIU2RBMzRtY0pkUFI3NjJjeU5PRlEwYVNuQ0Fh?=
+ =?utf-8?B?SkJZWEF4TVNKWUF4b0NpUFQ2dTVrN3BqUCtWZ3U1enRyaUk0SEp3NzFnOGV0?=
+ =?utf-8?B?WjI3VDQvYW1Cak5qNENEeGppcnVTNEFxVXB1UlZvMFQvdlVRZ2VacFVjdmZT?=
+ =?utf-8?B?Z2xNWTZCNDVaSWE0Q2F2aVFVNERRWnFWUFdsd0FoUjVGdVprQ0hmSy85OUR6?=
+ =?utf-8?B?eVB1bVNmWHljeUNjZnU0WlBMckdjbmV4ay9PUlBHOUx5SDZiNDlxazdZZGNw?=
+ =?utf-8?B?c1dmaTVZSkplaU5pN0lUWVRnU3EydHo0dTlJUjVyclpOWmxmOWMyYytqYXE0?=
+ =?utf-8?B?eVNwVHM1NUpNTzllQWRucCs4M1RUNGhTWUZxVk5WeHVudFQ1d1R3UnJUdkNp?=
+ =?utf-8?B?czZjOHJvMDZzbXZ2TGVKcEdyNHZDNXBBSEU1cC9WaGRYUzNLRUx2Q213cnN0?=
+ =?utf-8?Q?H8p77uOsl0/mGGjNSY10kR8ua?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1c45bc0-72d5-41d3-4f3b-08dc2e52dbf7
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2024 18:20:59.4610
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nOsqDl9/LArWFLEdw5E7GBmm76U6jDHZ6RMfHO1wFDSZc/Txyx7TbryelGDC3TV7c9YFe8E2tAprR8tKHEu5Qw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8459
 
-Hello,
+On 2/14/2024 17:13, Ville Syrjälä wrote:
+> On Wed, Feb 14, 2024 at 03:57:54PM -0600, Mario Limonciello wrote:
+>> Some manufacturers have intentionally put an EDID that differs from
+>> the EDID on the internal panel on laptops.  Drivers that prefer to
+>> fetch this EDID can set a bit on the drm_connector to indicate that
+>> the DRM EDID helpers should try to fetch it and it is preferred if
+>> it's present.
+>>
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>> ---
+>>   drivers/gpu/drm/Kconfig     |   1 +
+>>   drivers/gpu/drm/drm_edid.c  | 109 +++++++++++++++++++++++++++++++++---
+>>   include/drm/drm_connector.h |   6 ++
+>>   include/drm/drm_edid.h      |   1 +
+>>   4 files changed, 109 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+>> index 872edb47bb53..3db89e6af01d 100644
+>> --- a/drivers/gpu/drm/Kconfig
+>> +++ b/drivers/gpu/drm/Kconfig
+>> @@ -8,6 +8,7 @@
+>>   menuconfig DRM
+>>   	tristate "Direct Rendering Manager (XFree86 4.1.0 and higher DRI support)"
+>>   	depends on (AGP || AGP=n) && !EMULATED_CMPXCHG && HAS_DMA
+>> +	depends on (ACPI_VIDEO || ACPI_VIDEO=n)
+>>   	select DRM_PANEL_ORIENTATION_QUIRKS
+>>   	select DRM_KMS_HELPER if DRM_FBDEV_EMULATION
+>>   	select FB_CORE if DRM_FBDEV_EMULATION
+>> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+>> index 923c4423151c..cdc30c6d05d5 100644
+>> --- a/drivers/gpu/drm/drm_edid.c
+>> +++ b/drivers/gpu/drm/drm_edid.c
+>> @@ -28,6 +28,7 @@
+>>    * DEALINGS IN THE SOFTWARE.
+>>    */
+>>   
+>> +#include <acpi/video.h>
+>>   #include <linux/bitfield.h>
+>>   #include <linux/cec.h>
+>>   #include <linux/hdmi.h>
+>> @@ -2188,6 +2189,58 @@ drm_do_probe_ddc_edid(void *data, u8 *buf, unsigned int block, size_t len)
+>>   	return ret == xfers ? 0 : -1;
+>>   }
+>>   
+>> +/**
+>> + * drm_do_probe_acpi_edid() - get EDID information via ACPI _DDC
+>> + * @data: struct drm_connector
+>> + * @buf: EDID data buffer to be filled
+>> + * @block: 128 byte EDID block to start fetching from
+>> + * @len: EDID data buffer length to fetch
+>> + *
+>> + * Try to fetch EDID information by calling acpi_video_get_edid() function.
+>> + *
+>> + * Return: 0 on success or error code on failure.
+>> + */
+>> +static int
+>> +drm_do_probe_acpi_edid(void *data, u8 *buf, unsigned int block, size_t len)
+>> +{
+>> +	struct drm_connector *connector = data;
+>> +	struct drm_device *ddev = connector->dev;
+>> +	struct acpi_device *acpidev = ACPI_COMPANION(ddev->dev);
+>> +	unsigned char start = block * EDID_LENGTH;
+>> +	void *edid;
+>> +	int r;
+>> +
+>> +	if (!acpidev)
+>> +		return -ENODEV;
+>> +
+>> +	switch (connector->connector_type) {
+>> +	case DRM_MODE_CONNECTOR_LVDS:
+>> +	case DRM_MODE_CONNECTOR_eDP:
+>> +		break;
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+> 
+> We could have other types of connectors that want this too.
+> I don't see any real benefit in having this check tbh. Drivers
+> should simply notset the flag on connectors where it won't work,
+> and only the driver can really know that.
 
-I put in place a "USB mass storage gadget"
-and basically the device works like a charm.
-For an entire day no issues at all, with my "dumb" device (a regular
-soundbar), the USB-Host, access to it (USB mass storage gadget) just
-like a regular "usb pen drive" without any kind of problem all the day
-long.
-The issue arises when the USB-host stops to access the usb mass
-storage gadget for hours;
-of course, during the night, the bar is powered off and does not play
-sounds, but next morning when I turn it on again, there is no way to
-let the bar access USB mass storage gadget
-until I force a reboot of my Linux machine.
+Ack.
 
-Analyzing logs (dmesg mainly) does not show any kind of issue, error,
-traceback or other, so I tried to investigate more in details, and I
-discovered that the "virtual" usb port created by dwc2 driver (named,
-in my case "fe980000.usb") hangs in "not attached" state forever;
-finally found thanks to this command:
+> 
+>> +	/* fetch the entire edid from BIOS */
+>> +	r = acpi_video_get_edid(acpidev, ACPI_VIDEO_DISPLAY_LCD, -1, &edid);
+>> +	if (r < 0) {
+>> +		DRM_DEBUG_KMS("Failed to get EDID from ACPI: %d\n", r);
+>> +		return r;
+>> +	}
+>> +	if (len > r || start > r || start + len > r) {
+>> +		r = -EINVAL;
+>> +		goto cleanup;
+>> +	}
+>> +
+>> +	memcpy(buf, edid + start, len);
+>> +	r = 0;
+>> +
+>> +cleanup:
+>> +	kfree(edid);
+>> +
+>> +	return r;
+>> +}
+>> +
+>>   static void connector_bad_edid(struct drm_connector *connector,
+>>   			       const struct edid *edid, int num_blocks)
+>>   {
+>> @@ -2621,7 +2674,8 @@ EXPORT_SYMBOL(drm_probe_ddc);
+>>    * @connector: connector we're probing
+>>    * @adapter: I2C adapter to use for DDC
+>>    *
+>> - * Poke the given I2C channel to grab EDID data if possible.  If found,
+>> + * If the connector allows it, try to fetch EDID data using ACPI. If not found
+>> + * poke the given I2C channel to grab EDID data if possible.  If found,
+>>    * attach it to the connector.
+>>    *
+>>    * Return: Pointer to valid EDID or NULL if we couldn't find any.
+>> @@ -2629,20 +2683,50 @@ EXPORT_SYMBOL(drm_probe_ddc);
+>>   struct edid *drm_get_edid(struct drm_connector *connector,
+>>   			  struct i2c_adapter *adapter)
+>>   {
+>> -	struct edid *edid;
+>> +	struct edid *edid = NULL;
+>>   
+>>   	if (connector->force == DRM_FORCE_OFF)
+>>   		return NULL;
+>>   
+>> -	if (connector->force == DRM_FORCE_UNSPECIFIED && !drm_probe_ddc(adapter))
+>> -		return NULL;
+>> +	if (connector->acpi_edid_allowed)
+>> +		edid = _drm_do_get_edid(connector, drm_do_probe_acpi_edid, connector, NULL);
+>> +
+>> +	if (!edid) {
+>> +		if (connector->force == DRM_FORCE_UNSPECIFIED && !drm_probe_ddc(adapter))
+>> +			return NULL;
+>> +		edid = _drm_do_get_edid(connector, drm_do_probe_ddc_edid, adapter, NULL);
+>> +	}
+>>   
+>> -	edid = _drm_do_get_edid(connector, drm_do_probe_ddc_edid, adapter, NULL);
+>>   	drm_connector_update_edid_property(connector, edid);
+>>   	return edid;
+>>   }
+>>   EXPORT_SYMBOL(drm_get_edid);
+>>   
+>> +/**
+>> + * drm_edid_read_acpi - get EDID data, if available
+>> + * @connector: connector we're probing
+>> + *
+>> + * Use the BIOS to attempt to grab EDID data if possible.
+>> + *
+>> + * The returned pointer must be freed using drm_edid_free().
+>> + *
+>> + * Return: Pointer to valid EDID or NULL if we couldn't find any.
+>> + */
+>> +const struct drm_edid *drm_edid_read_acpi(struct drm_connector *connector)
+>> +{
+>> +	const struct drm_edid *drm_edid;
+>> +
+>> +	if (connector->force == DRM_FORCE_OFF)
+>> +		return NULL;
+>> +
+>> +	drm_edid = drm_edid_read_custom(connector, drm_do_probe_acpi_edid, connector);
+>> +
+>> +	/* Note: Do *not* call connector updates here. */
+>> +
+>> +	return drm_edid;
+>> +}
+>> +EXPORT_SYMBOL(drm_edid_read_acpi);
+>> +
+>>   /**
+>>    * drm_edid_read_custom - Read EDID data using given EDID block read function
+>>    * @connector: Connector to use
+>> @@ -2727,10 +2811,11 @@ const struct drm_edid *drm_edid_read_ddc(struct drm_connector *connector,
+>>   EXPORT_SYMBOL(drm_edid_read_ddc);
+>>   
+>>   /**
+>> - * drm_edid_read - Read EDID data using connector's I2C adapter
+>> + * drm_edid_read - Read EDID data using BIOS or connector's I2C adapter
+>>    * @connector: Connector to use
+>>    *
+>> - * Read EDID using the connector's I2C adapter.
+>> + * Read EDID from BIOS if allowed by connector or by using the connector's
+>> + * I2C adapter.
+>>    *
+>>    * The EDID may be overridden using debugfs override_edid or firmware EDID
+>>    * (drm_edid_load_firmware() and drm.edid_firmware parameter), in this priority
+>> @@ -2742,10 +2827,18 @@ EXPORT_SYMBOL(drm_edid_read_ddc);
+>>    */
+>>   const struct drm_edid *drm_edid_read(struct drm_connector *connector)
+>>   {
+>> +	const struct drm_edid *drm_edid = NULL;
+>> +
+>>   	if (drm_WARN_ON(connector->dev, !connector->ddc))
+>>   		return NULL;
+>>   
+>> -	return drm_edid_read_ddc(connector, connector->ddc);
+>> +	if (connector->acpi_edid_allowed)
+> 
+> That should probably be called 'prefer_acpi_edid' or something
+> since it's the first choice when the flag is set.
 
-cat /sys/class/udc/fe980000.usb/state
-not attached
+OK.
 
-I tried several Linux embedded utilities as well as, reset scripts
-found on the the web,
-in order to "reset" the device, the port, the hub, and even the full
-usb-stack, but no way to
-"restore" the right functionality of the virtual usb port, unless
-you do a full fresh reboot.
-After the reboot, the port goes in "not attached" and
-immediately, when I power-on the USB host it goes in "configured" state and
-works like a charm again.
+> 
+> But I'm not so sure there's any real benefit in having this
+> flag at all. You anyway have to modify the driver to use this,
+> so why not just have the driver do the call directly instead of
+> adding this extra detour via the flag?
 
-Among my several tests, I performed:
-1)
-unbind/bind
+This was proposed by Maxime Ripard during v4.
 
-2)
-modprobe -r dwc2
-modprobe dwc2
+https://lore.kernel.org/dri-devel/ysm2e3vczov7z7vezmexe35fjnkhsakud3elsgggedhk2lknlz@cx7j44y354db/
 
-3)
-modprobe -r g_mass_storage
-modprobe g_mass_storage file=/piusb.bin stall=0 removable=y
+> 
+>> +		drm_edid = drm_edid_read_acpi(connector);
+>> +
+>> +	if (!drm_edid)
+>> +		drm_edid = drm_edid_read_ddc(connector, connector->ddc);
+>> +
+>> +	return drm_edid;
+>>   }
+>>   EXPORT_SYMBOL(drm_edid_read);
+>>   
+>> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+>> index fe88d7fc6b8f..74ed47f37a69 100644
+>> --- a/include/drm/drm_connector.h
+>> +++ b/include/drm/drm_connector.h
+>> @@ -1886,6 +1886,12 @@ struct drm_connector {
+>>   
+>>   	/** @hdr_sink_metadata: HDR Metadata Information read from sink */
+>>   	struct hdr_sink_metadata hdr_sink_metadata;
+>> +
+>> +	/**
+>> +	 * @acpi_edid_allowed: Get the EDID from the BIOS, if available.
+>> +	 * This is only applicable to eDP and LVDS displays.
+>> +	 */
+>> +	bool acpi_edid_allowed;
+> 
+> Aren't there other bools/small stuff in there for tighter packing?
 
-watching the results in the logs, and every command returns and performs
-right, without any error, but the port still remains, always  "not attached".
+Does the compiler automatically do the packing if you put bools nearby 
+in a struct?  If so; TIL.
 
-In the end, I tried to create, by myself, a python script with this
-content, and I was
-pretty confident, to get the right result, cause I got in the dmesg logs,
-almost the same identical output I get during a standard reboot:
+> 
+>>   };
+>>   
+>>   #define obj_to_connector(x) container_of(x, struct drm_connector, base)
+>> diff --git a/include/drm/drm_edid.h b/include/drm/drm_edid.h
+>> index 7923bc00dc7a..1c1ee927de9c 100644
+>> --- a/include/drm/drm_edid.h
+>> +++ b/include/drm/drm_edid.h
+>> @@ -459,5 +459,6 @@ bool drm_edid_is_digital(const struct drm_edid *drm_edid);
+>>   
+>>   const u8 *drm_find_edid_extension(const struct drm_edid *drm_edid,
+>>   				  int ext_id, int *ext_index);
+>> +const struct drm_edid *drm_edid_read_acpi(struct drm_connector *connector);
+>>   
+>>   #endif /* __DRM_EDID_H__ */
+>> -- 
+>> 2.34.1
+> 
 
-SyntaxEditor Code Snippet
-
-CMD_UNMOUNT1 = "modprobe -r g_mass_storage"
-CMD_SYNC2 = "sync"
-CMD_UNMOUNT3 = " modprobe -r dwc2"
-CMD_MOUNT4 = "modprobe dwc2"
-CMD_MOUNT5 = "modprobe g_mass_storage file=/piusb.bin stall=0 removable=y"
-
-os.system(CMD_UNMOUNT1)
-time.sleep(30)
-os.system(CMD_SYNC2)
-time.sleep(30)
-os.system(CMD_UNMOUNT3)
-time.sleep(30)
-os.system(CMD_MOUNT4)
-time.sleep(30)
-os.system(CMD_MOUNT5)
-
-With this python script I get this log from dmesg, and, this is really
-almost identical to what I get from dmesg during a reboot:
-
-[Feb14 10:35] dwc2 fe980000.usb: remove, state 4
-[  +0.000052] usb usb3: USB disconnect, device number 1
-[  +0.004965] dwc2 fe980000.usb: USB bus 3 deregistered
-[Feb14 10:36] dwc2 fe980000.usb: supply vusb_d not found, using dummy
-regulator
-[  +0.000972] dwc2 fe980000.usb: supply vusb_a not found, using dummy
-regulator
-[  +0.207690] dwc2 fe980000.usb: EPs: 8, dedicated fifos, 4080 entries in
-SPRAM
-[  +0.000173] dwc2 fe980000.usb: DWC OTG Controller
-[  +0.000014] dwc2 fe980000.usb: new USB bus registered, assigned bus
-number 3
-[  +0.000023] dwc2 fe980000.usb: irq 38, io mem 0xfe980000
-[  +0.000155] usb usb3: New USB device found, idVendor=1d6b,
-idProduct=0002, bcdDevice= 6.01
-[  +0.000008] usb usb3: New USB device strings: Mfr=3, Product=2,
-SerialNumber=1
-[  +0.000005] usb usb3: Product: DWC OTG Controller
-[  +0.000005] usb usb3: Manufacturer: Linux 6.1.0-rpi7-rpi-v8 dwc2_hsotg
-[  +0.000005] usb usb3: SerialNumber: fe980000.usb
-[  +0.000315] hub 3-0:1.0: USB hub found
-[  +0.000028] hub 3-0:1.0: 1 port detected
-[ +30.033766] Mass Storage Function, version: 2009/09/11
-[  +0.000033] LUN: removable file: (no medium)
-[  +0.000132] LUN: removable file: /piusb.bin
-[  +0.000016] Number of LUNs=1
-[  +0.000271] g_mass_storage gadget.0: Mass Storage Gadget, version:
-2009/09/11
-[  +0.000020] g_mass_storage gadget.0: userspace failed to provide
-iSerialNumber
-[  +0.000013] g_mass_storage gadget.0: g_mass_storage ready
-[  +0.000019] dwc2 fe980000.usb: bound driver g_mass_storage
-[  +0.297414] dwc2 fe980000.usb: new device is full-speed
-[  +0.363083] dwc2 fe980000.usb: new device is full-speed
-[  +0.964163] dwc2 fe980000.usb: new device is full-speed
-[  +0.964170] dwc2 fe980000.usb: new device is full-speed
-
-Looking at the log, I was pretty confident, but unfortunately, "cat
-/sys/class/udc/fe980000.usb/state" still returns "not attached"
-and power-on the soundbar has no change, it starts blinking as nothing is
-attached.
-Even running the script with the bar powered-on, you can see every
-"cycle", as if you
-manually, remove the cable, and at a time, you put the cable again
-etc.. but no change, it starts blinking and "cat
-/sys/class/udc/fe980000.usb/state" reamins "not attached".
-
-Something is still missing, so I asked some Linux expert and he told me to write
-to the mailing list cause maybe a bug and, to complete, if I do the same action
-with a regular usb-key mass storage pendrive, one hundred times, the
-USB-host (soundbar) recognizes it immediately and starts playing with
-no fault at all.
-
-Thank you very much in advance,
-Best regards
-Federico
 
