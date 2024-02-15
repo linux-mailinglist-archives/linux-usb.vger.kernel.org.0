@@ -1,74 +1,116 @@
-Return-Path: <linux-usb+bounces-6455-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6456-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5293785634A
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 13:35:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 977C985642A
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 14:19:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F7EB1C220DB
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 12:35:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83744B2C190
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 13:14:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52B2712CD88;
-	Thu, 15 Feb 2024 12:35:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2B0F12FF7C;
+	Thu, 15 Feb 2024 13:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U3np+r2W"
+	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="DTsfJQQ4";
+	dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b="vcbeKchR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16637869B
-	for <linux-usb@vger.kernel.org>; Thu, 15 Feb 2024 12:35:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708000541; cv=none; b=umbRVq39beRr4PUER5+pZ7bg57KRJp7YzUus8+S73WfZuZ1YMtbf/XxncrSZRjBdIB5pD6cNag7TrZRx7iFZAP/z1rrs8y8sepy4NSItapK1hL58PGmuCNA/nzO65E5nrlpyina8SiUu++15AAl1kidgb4HtVnqgYw/adLusigY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708000541; c=relaxed/simple;
-	bh=juLX0SLKcx9RAX5iROGyrX0/TEQd7b17cFCcSOtgUG8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OE/rWt/xLF0ee/fDbhM6sNwQ2AtVmdONxkrpvUGdsAL+qZoMzYB+FZOuaJbZhVb20C08kpdqEvbpNi4wMtzUwH4jqnVat7kS9Qd1pRD87pIp3HDmBgaDkti8DZN/26aEvQ1Tn09tNqDRtyM/j1IJHCF1TPouFcKlb6h/m38Ag4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U3np+r2W; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708000540; x=1739536540;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=juLX0SLKcx9RAX5iROGyrX0/TEQd7b17cFCcSOtgUG8=;
-  b=U3np+r2WkpVS2tUIDHMcD+TgbM5fFm1xP5KuQXOPPGsJPaHuOBO+GeqI
-   qXyyGV0sE9jNlcxmhfpB2o5lZCtw7BWpGky9DvdnctqH3g6Arghdip2B8
-   90CJ3+cnaQkbvxmWq/w8sjbaMt8d+JvgN4KI/AhcTt0d8qsb3dR2tkh8E
-   7bBnoOPoaGTnUX4dDfsnI6G+5hfVLKS1O3Z4K9Midr13PEyKsvAhpjFRO
-   K9Op8d/2OdrVIR3V12Cksna31TrprQwYuicsjhRD/D5wCrETP0maq4Df4
-   fCtuGWOXN+ewhhfU1tLwRPriMW9wL5qq6X6zyo1GYfSh/rnN3DsB+c+fy
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10984"; a="5051747"
-X-IronPort-AV: E=Sophos;i="6.06,161,1705392000"; 
-   d="scan'208";a="5051747"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 04:35:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10984"; a="912159267"
-X-IronPort-AV: E=Sophos;i="6.06,161,1705392000"; 
-   d="scan'208";a="912159267"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Feb 2024 04:35:36 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 9129D204; Thu, 15 Feb 2024 14:35:35 +0200 (EET)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Gil Fine <gil.fine@linux.intel.com>,
-	Greg KH <gregkh@linuxfoundation.org>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v3] thunderbolt: Add trace events support for the control channel
-Date: Thu, 15 Feb 2024 14:35:35 +0200
-Message-ID: <20240215123535.137840-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9443212F582;
+	Thu, 15 Feb 2024 13:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.84.65.235
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708002838; cv=fail; b=Ml6iRezDzp+xA3SAN5RO6EGiFURADR3K4oJLCl9bG6W0huCQ9x7KfU841pWXKyooEHFSf/zWfORpBKqPEaglmMrOmKq471wGaw6VZYo3Cm31oADhU6SW2SHPE7OiOkUk3S4sReDUdTbeC3UJpExx2FVjahIcsRnwFbUwy/z5/uc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708002838; c=relaxed/simple;
+	bh=EexJT4jFWaEPB2e7MtMAm1XWm6+Spf+mxas/O7X/hU0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OK3AYLeLuolP/5wfVVWAgcdT1NnI1QxC56Nv80jcdA4gPXk9dW+PhJVhtPhzIl9iVjj0rQpEear+fnT7x+7aGDhNOFEP7IJ5gfnzScFfcLF5hqfGkwAA1fKAA2db9AVdmZ+/q03GR7mKZKmLh8V219I9cxPT/7J8YxskDWoaMo8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cadence.com; spf=pass smtp.mailfrom=cadence.com; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=DTsfJQQ4; dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b=vcbeKchR; arc=fail smtp.client-ip=208.84.65.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cadence.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cadence.com
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+	by mx0a-0014ca01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41F3fvnV031565;
+	Thu, 15 Feb 2024 04:16:28 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=proofpoint; bh=ZfMXSC
+	L0BrDiHN3JJbGkJNx0MnD5467RvxiBDQeoHqI=; b=DTsfJQQ47h6lpc38zY5gfO
+	omd47nJji6pRW8n9Cm7eFV4QjvA87xD8p8JalUHliM9MPuS0KMfR8Hvm9QOM6b71
+	stIJPhSLbGxmSAkhSEgXa0v5WIPyavmlAIYqUGOgsb5VFt5RA1Itk3WYgDKotn9C
+	qVCfmHRG3e9ldn4JcChtjYaqXf5Pyxr12ny5BEAN9BIrOxv4GEKx3kQZE7qwkZo+
+	g9zXKy5Ca+/L1Y1WFV5N05wv1VwqPyVp8getbXuSqdKj87+wxb0tDEBrVNG2Nr0v
+	18J770YtnWqyynHl5G73lDCxw1V3n+/h++T6zGdQeJHZaJk5KA64CG5ZjEIRy53w
+	==
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+	by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 3w9axd1b7m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Feb 2024 04:16:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YMVRPmZxJxk0q95Jf+Xs4llsF9kpps2qvdZzVASlgPp3i09x72LNdyzIivnoYcsZi/NThGjKMPUpRAi1dl1TIsWFFj2G2M4GPMprk0jQ5WxnmMUbPv+aF5zzwvPk9C/sNlOTLXBQWztCU+Dbvyj8MJf4U5d93BwMPMb0g2DNn/qbwG3qQzNvzeiKPMFK15L3vT62tEG55/cVCYFFThlNUtXHJIuQ/yS5NKvbYRHzu/9i3EEee0GFwOz8UPwQwbZoDlQEmBepX6DCwlYUlr53xJj+njljNXtwQAQEPEi5/3VFQ3AxyLmt8MLP7PpLW4a018tgs9CLszU4fvSFvllYZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZfMXSCL0BrDiHN3JJbGkJNx0MnD5467RvxiBDQeoHqI=;
+ b=f7P0/K1tSubTYdkjVGnasysJ6UU5RrecV5iB8TkOGeToc7poCm/cnTMKaP+tE5028AQ8zGJpZWSuIka3cDusFjZfXLUGJSW2+s4lplSW3iL8FWU2yRkL3LmMtqR0HgOXIlb8ISD36XTQ3e/YHdGKRdEx8mRf+AjpGWuYyKwVjTzh0KNmRd2OjqUow3g2NBs7vVPr2nc6ukKYBgE0VI7fg1g1Rk2Ke+Ud7sMO8W9naZCXpnMYoiBljKzB+wiE4tp5oTcE6/0akQbSLOwQg022iJVtoCGzbBXBlmoVfJyy5ifeaiKvc9QGB4dtATZ8fQ9FeT+EX9R1odL7p1/sZM7xHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 158.140.1.147) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZfMXSCL0BrDiHN3JJbGkJNx0MnD5467RvxiBDQeoHqI=;
+ b=vcbeKchRgbQFxCtTYNIzEz6HeYRldeLFqPhwZJoXDQYRQBuMothdsseo0Tjg9FsySQlSEsYxICbK51jsD7tmiNUxcvy+/UN9YuCNRrExL4WW8l0wOZtVUy3lNTGbi55MrEJf5q2nLjZ1BDtupJ+a8jnVgXkLv1LRaB2TOJ3hhi4=
+Received: from BN8PR04CA0007.namprd04.prod.outlook.com (2603:10b6:408:70::20)
+ by SJ0PR07MB8418.namprd07.prod.outlook.com (2603:10b6:a03:335::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.28; Thu, 15 Feb
+ 2024 12:16:26 +0000
+Received: from BN8NAM12FT115.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:408:70:cafe::d5) by BN8PR04CA0007.outlook.office365.com
+ (2603:10b6:408:70::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.26 via Frontend
+ Transport; Thu, 15 Feb 2024 12:16:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.147)
+ smtp.mailfrom=cadence.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 158.140.1.147 as permitted sender) receiver=protection.outlook.com;
+ client-ip=158.140.1.147; helo=sjmaillnx1.cadence.com; pr=C
+Received: from sjmaillnx1.cadence.com (158.140.1.147) by
+ BN8NAM12FT115.mail.protection.outlook.com (10.13.182.156) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7316.14 via Frontend Transport; Thu, 15 Feb 2024 12:16:25 +0000
+Received: from maileu5.global.cadence.com (eudvw-maileu5.cadence.com [10.160.110.202])
+	by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 41FCGLjt012652
+	(version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 15 Feb 2024 04:16:22 -0800
+Received: from maileu5.global.cadence.com (10.160.110.202) by
+ maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 15 Feb 2024 13:16:21 +0100
+Received: from eu-cn01.cadence.com (10.160.89.184) by
+ maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24 via Frontend Transport; Thu, 15 Feb 2024 13:16:21 +0100
+Received: from eu-cn01.cadence.com (localhost.localdomain [127.0.0.1])
+	by eu-cn01.cadence.com (8.14.7/8.14.7) with ESMTP id 41FCGKE2259946;
+	Thu, 15 Feb 2024 13:16:20 +0100
+Received: (from pawell@localhost)
+	by eu-cn01.cadence.com (8.14.7/8.14.7/Submit) id 41FCGK7c259942;
+	Thu, 15 Feb 2024 13:16:20 +0100
+From: Pawel Laszczak <pawell@cadence.com>
+To: <peter.chen@kernel.org>
+CC: <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <pawell@cadence.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] usb: cdnsp: fixed issue with incorrect detecting CDNSP family controllers
+Date: Thu, 15 Feb 2024 13:16:09 +0100
+Message-ID: <20240215121609.259772-1-pawell@cadence.com>
+X-Mailer: git-send-email 2.30.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,357 +118,136 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-CrossPremisesHeadersFilteredBySendConnector: maileu5.global.cadence.com
+X-OrganizationHeadersPreserved: maileu5.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM12FT115:EE_|SJ0PR07MB8418:EE_
+X-MS-Office365-Filtering-Correlation-Id: b5876c7a-ba8b-42bd-c053-08dc2e1fee13
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	FSpBstMc56VivpOzLDU0uI1+G7oq6NBg+SEynWDLr7GOanH7aWksYCQbH9Xkv6tW5wT+ePoE9rvATKRXGlfSBwR/7uLcP0c2PHhprCS4VQTWtxYHfMn4S7bGBQFCkNRSYodpC3IzifviJCsX6hDcRkdHGDQ06sw/ytvgrBH4QyajyvuKHbIU2084g7akRfV8YkpjBF+nnw6gOxhq31UgmMoPzxwFBb16/+IS3u7dsutRC3VWDasT9/AMfD085kA68xvG3Su5ZKqqpnmIHfXZBCwuGfgxKj0nEqlXVHDZhh5544hYEpZSHOBujo2NcXf3wTyY8Ra517uiZUEyUC15H7G0seeb7mqHpo7/9qqSJ3XWCLTEq8+MYpEnyHpUgVrDs+Tj9ZXGkdB1Zhpb5Iw8587bIK/UMxwIPjA/TFmIXHYhBdKYOJteoT82TV1+4vn1AtCQwtxLtpHDHb/sq72ttTHIiuKhvm8pNYjmKjDm/hDUVsV0AXdf4djAC8qjvBjK72DgaphxQ7ExGxCQ72gwUWcoiko2yr0TNximiyiuopjG+NHbrXAWh5ebAJDpOMpW/DOyBXeUeuG7H+iVa7lGqOhyt4IdZWH3ey2FuIDb6E+WmBJ/eCZkfh5DWeZIetPOCVVpfWXjzKRu+khCOpFRtXVi11yJWqLtLIrCt1/2oAY=
+X-Forefront-Antispam-Report: 
+	CIP:158.140.1.147;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx1.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230031)(4636009)(396003)(346002)(136003)(39860400002)(376002)(230922051799003)(1800799012)(451199024)(36860700004)(186009)(82310400011)(64100799003)(46966006)(40470700004)(5660300002)(8936002)(8676002)(6916009)(4326008)(70586007)(2906002)(83380400001)(26005)(1076003)(82740400003)(336012)(426003)(7636003)(356005)(36756003)(86362001)(42186006)(316002)(54906003)(6666004)(41300700001)(2616005)(478600001)(70206006);DIR:OUT;SFP:1102;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2024 12:16:25.1497
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5876c7a-ba8b-42bd-c053-08dc2e1fee13
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.147];Helo=[sjmaillnx1.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: 
+	BN8NAM12FT115.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR07MB8418
+X-Proofpoint-GUID: TAesQK7eAcvTwTydkzvpeom-I8ASJge9
+X-Proofpoint-ORIG-GUID: TAesQK7eAcvTwTydkzvpeom-I8ASJge9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-15_11,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 suspectscore=0
+ mlxlogscore=475 malwarescore=0 spamscore=0 lowpriorityscore=0 phishscore=0
+ impostorscore=0 adultscore=0 mlxscore=0 clxscore=1015 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402150098
 
-From: Gil Fine <gil.fine@linux.intel.com>
+Cadence have several controllers from 0x000403xx family but current
+driver suuport detecting only one with DID equal 0x0004034E.
+It causes that if someone uses different CDNSP controller then driver
+will use incorrect version and register space.
+Patch fix this issue.
 
-Sometimes it is useful to see the traffic happening inside the control
-channel, especially when debugging a possible problem. This adds
-tracepoints close to the hardware which can be enabled dynamically as
-needed using the standard Linux trace events facility.
-
-Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
-Co-developed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+cc: <stable@vger.kernel.org>
+Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 ---
-Changes from v2:
+Changlog:
+v2:
+- typo have been removed
 
- - Move "index" at the end of the structure to avoid creating a hole.
+ drivers/usb/cdns3/core.c |  1 -
+ drivers/usb/cdns3/drd.c  | 13 +++++++++----
+ drivers/usb/cdns3/drd.h  |  6 +++++-
+ 3 files changed, 14 insertions(+), 6 deletions(-)
 
-Changes from v1:
-
- - Add domain number to the trace so we can distinquish from which
-   host controller the record is coming in case there are more than one.
- - Correct the year in copyright
-
-v2: https://lore.kernel.org/linux-usb/20240212090604.2551237-1-mika.westerberg@linux.intel.com/
-v1: https://lore.kernel.org/linux-usb/20240209142609.2288471-1-mika.westerberg@linux.intel.com/
-
- drivers/thunderbolt/Makefile |   1 +
- drivers/thunderbolt/ctl.c    |  19 +++-
- drivers/thunderbolt/ctl.h    |   4 +-
- drivers/thunderbolt/domain.c |   2 +-
- drivers/thunderbolt/trace.h  | 188 +++++++++++++++++++++++++++++++++++
- 5 files changed, 209 insertions(+), 5 deletions(-)
- create mode 100644 drivers/thunderbolt/trace.h
-
-diff --git a/drivers/thunderbolt/Makefile b/drivers/thunderbolt/Makefile
-index c8b3d7b78098..b44b32dcb832 100644
---- a/drivers/thunderbolt/Makefile
-+++ b/drivers/thunderbolt/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+ccflags-y := -I$(src)
- obj-${CONFIG_USB4} := thunderbolt.o
- thunderbolt-objs := nhi.o nhi_ops.o ctl.o tb.o switch.o cap.o path.o tunnel.o eeprom.o
- thunderbolt-objs += domain.o dma_port.o icm.o property.o xdomain.o lc.o tmu.o usb4.o
-diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
-index d997a4c545f7..4bdb2d45e0bf 100644
---- a/drivers/thunderbolt/ctl.c
-+++ b/drivers/thunderbolt/ctl.c
-@@ -15,6 +15,8 @@
- 
- #include "ctl.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include "trace.h"
- 
- #define TB_CTL_RX_PKG_COUNT	10
- #define TB_CTL_RETRIES		4
-@@ -32,6 +34,7 @@
-  * @timeout_msec: Default timeout for non-raw control messages
-  * @callback: Callback called when hotplug message is received
-  * @callback_data: Data passed to @callback
-+ * @index: Domain number. This will be output with the trace record.
-  */
- struct tb_ctl {
- 	struct tb_nhi *nhi;
-@@ -47,6 +50,8 @@ struct tb_ctl {
- 	int timeout_msec;
- 	event_cb callback;
- 	void *callback_data;
-+
-+	int index;
- };
- 
- 
-@@ -369,6 +374,9 @@ static int tb_ctl_tx(struct tb_ctl *ctl, const void *data, size_t len,
- 	pkg->frame.size = len + 4;
- 	pkg->frame.sof = type;
- 	pkg->frame.eof = type;
-+
-+	trace_tb_tx(ctl->index, type, data, len);
-+
- 	cpu_to_be32_array(pkg->buffer, data, len / 4);
- 	*(__be32 *) (pkg->buffer + len) = tb_crc(pkg->buffer, len);
- 
-@@ -384,6 +392,7 @@ static int tb_ctl_tx(struct tb_ctl *ctl, const void *data, size_t len,
- static bool tb_ctl_handle_event(struct tb_ctl *ctl, enum tb_cfg_pkg_type type,
- 				struct ctl_pkg *pkg, size_t size)
- {
-+	trace_tb_event(ctl->index, type, pkg->buffer, size);
- 	return ctl->callback(ctl->callback_data, type, pkg->buffer, size);
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index 33548771a0d3..465e9267b49c 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -395,7 +395,6 @@ static int cdns_role_set(struct usb_role_switch *sw, enum usb_role role)
+ 	return ret;
  }
  
-@@ -489,6 +498,9 @@ static void tb_ctl_rx_callback(struct tb_ring *ring, struct ring_frame *frame,
- 	 * triggered from messing with the active requests.
- 	 */
- 	req = tb_cfg_request_find(pkg->ctl, pkg);
-+
-+	trace_tb_rx(pkg->ctl->index, frame->eof, pkg->buffer, frame->size, !req);
-+
- 	if (req) {
- 		if (req->copy(req, pkg))
- 			schedule_work(&req->work);
-@@ -614,6 +626,7 @@ struct tb_cfg_result tb_cfg_request_sync(struct tb_ctl *ctl,
+-
  /**
-  * tb_ctl_alloc() - allocate a control channel
-  * @nhi: Pointer to NHI
-+ * @index: Domain number
-  * @timeout_msec: Default timeout used with non-raw control messages
-  * @cb: Callback called for plug events
-  * @cb_data: Data passed to @cb
-@@ -622,14 +635,16 @@ struct tb_cfg_result tb_cfg_request_sync(struct tb_ctl *ctl,
-  *
-  * Return: Returns a pointer on success or NULL on failure.
+  * cdns_wakeup_irq - interrupt handler for wakeup events
+  * @irq: irq number for cdns3/cdnsp core device
+diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
+index 04b6d12f2b9a..ee917f1b091c 100644
+--- a/drivers/usb/cdns3/drd.c
++++ b/drivers/usb/cdns3/drd.c
+@@ -156,7 +156,8 @@ bool cdns_is_device(struct cdns *cdns)
   */
--struct tb_ctl *tb_ctl_alloc(struct tb_nhi *nhi, int timeout_msec, event_cb cb,
--			    void *cb_data)
-+struct tb_ctl *tb_ctl_alloc(struct tb_nhi *nhi, int index, int timeout_msec,
-+			    event_cb cb, void *cb_data)
+ static void cdns_otg_disable_irq(struct cdns *cdns)
  {
- 	int i;
- 	struct tb_ctl *ctl = kzalloc(sizeof(*ctl), GFP_KERNEL);
- 	if (!ctl)
- 		return NULL;
-+
- 	ctl->nhi = nhi;
-+	ctl->index = index;
- 	ctl->timeout_msec = timeout_msec;
- 	ctl->callback = cb;
- 	ctl->callback_data = cb_data;
-diff --git a/drivers/thunderbolt/ctl.h b/drivers/thunderbolt/ctl.h
-index eec5c953c743..bf930a191472 100644
---- a/drivers/thunderbolt/ctl.h
-+++ b/drivers/thunderbolt/ctl.h
-@@ -21,8 +21,8 @@ struct tb_ctl;
- typedef bool (*event_cb)(void *data, enum tb_cfg_pkg_type type,
- 			 const void *buf, size_t size);
+-	writel(0, &cdns->otg_irq_regs->ien);
++	if (cdns->version)
++		writel(0, &cdns->otg_irq_regs->ien);
+ }
  
--struct tb_ctl *tb_ctl_alloc(struct tb_nhi *nhi, int timeout_msec, event_cb cb,
--			    void *cb_data);
-+struct tb_ctl *tb_ctl_alloc(struct tb_nhi *nhi, int index, int timeout_msec,
-+			    event_cb cb, void *cb_data);
- void tb_ctl_start(struct tb_ctl *ctl);
- void tb_ctl_stop(struct tb_ctl *ctl);
- void tb_ctl_free(struct tb_ctl *ctl);
-diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
-index d7abb8c445aa..1d915a6c61a4 100644
---- a/drivers/thunderbolt/domain.c
-+++ b/drivers/thunderbolt/domain.c
-@@ -397,7 +397,7 @@ struct tb *tb_domain_alloc(struct tb_nhi *nhi, int timeout_msec, size_t privsize
- 	if (!tb->wq)
- 		goto err_remove_ida;
+ /**
+@@ -422,15 +423,20 @@ int cdns_drd_init(struct cdns *cdns)
  
--	tb->ctl = tb_ctl_alloc(nhi, timeout_msec, tb_domain_event_cb, tb);
-+	tb->ctl = tb_ctl_alloc(nhi, tb->index, timeout_msec, tb_domain_event_cb, tb);
- 	if (!tb->ctl)
- 		goto err_destroy_wq;
+ 		cdns->otg_regs = (void __iomem *)&cdns->otg_v1_regs->cmd;
  
-diff --git a/drivers/thunderbolt/trace.h b/drivers/thunderbolt/trace.h
-new file mode 100644
-index 000000000000..4dccfcf7af6a
---- /dev/null
-+++ b/drivers/thunderbolt/trace.h
-@@ -0,0 +1,188 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Thunderbolt tracing support
-+ *
-+ * Copyright (C) 2024, Intel Corporation
-+ * Author: Mika Westerberg <mika.westerberg@linux.intel.com>
-+ *	   Gil Fine <gil.fine@intel.com>
-+ */
+-		if (readl(&cdns->otg_cdnsp_regs->did) == OTG_CDNSP_DID) {
++		state = readl(&cdns->otg_cdnsp_regs->did);
 +
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM thunderbolt
++		if (OTG_CDNSP_CHECK_DID(state)) {
+ 			cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem *)
+ 					      &cdns->otg_cdnsp_regs->ien;
+ 			cdns->version  = CDNSP_CONTROLLER_V2;
+-		} else {
++		} else if (OTG_CDNS3_CHECK_DID(state)) {
+ 			cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem *)
+ 					      &cdns->otg_v1_regs->ien;
+ 			writel(1, &cdns->otg_v1_regs->simulate);
+ 			cdns->version  = CDNS3_CONTROLLER_V1;
++		} else {
++			dev_err(cdns->dev, "not supporte DID=0x%08x\n", state);
++			return -EINVAL;
+ 		}
+ 
+ 		dev_dbg(cdns->dev, "DRD version v1 (ID: %08x, rev: %08x)\n",
+@@ -483,7 +489,6 @@ int cdns_drd_exit(struct cdns *cdns)
+ 	return 0;
+ }
+ 
+-
+ /* Indicate the cdns3 core was power lost before */
+ bool cdns_power_is_lost(struct cdns *cdns)
+ {
+diff --git a/drivers/usb/cdns3/drd.h b/drivers/usb/cdns3/drd.h
+index cbdf94f73ed9..d72370c321d3 100644
+--- a/drivers/usb/cdns3/drd.h
++++ b/drivers/usb/cdns3/drd.h
+@@ -79,7 +79,11 @@ struct cdnsp_otg_regs {
+ 	__le32 susp_timing_ctrl;
+ };
+ 
+-#define OTG_CDNSP_DID	0x0004034E
++/* CDNSP driver supports 0x000403xx Cadence USB controller family. */
++#define OTG_CDNSP_CHECK_DID(did) (((did) & GENMASK(31, 8)) == 0x00040300)
 +
-+#if !defined(TB_TRACE_H_) || defined(TRACE_HEADER_MULTI_READ)
-+#define TB_TRACE_H_
-+
-+#include <linux/trace_seq.h>
-+#include <linux/tracepoint.h>
-+
-+#include "tb_msgs.h"
-+
-+#define tb_cfg_type_name(type)		{ type, #type }
-+#define show_type_name(val)					\
-+	__print_symbolic(val,					\
-+		tb_cfg_type_name(TB_CFG_PKG_READ),		\
-+		tb_cfg_type_name(TB_CFG_PKG_WRITE),		\
-+		tb_cfg_type_name(TB_CFG_PKG_ERROR),		\
-+		tb_cfg_type_name(TB_CFG_PKG_NOTIFY_ACK),	\
-+		tb_cfg_type_name(TB_CFG_PKG_EVENT),		\
-+		tb_cfg_type_name(TB_CFG_PKG_XDOMAIN_REQ),	\
-+		tb_cfg_type_name(TB_CFG_PKG_XDOMAIN_RESP),	\
-+		tb_cfg_type_name(TB_CFG_PKG_OVERRIDE),		\
-+		tb_cfg_type_name(TB_CFG_PKG_RESET),		\
-+		tb_cfg_type_name(TB_CFG_PKG_ICM_EVENT),		\
-+		tb_cfg_type_name(TB_CFG_PKG_ICM_CMD),		\
-+		tb_cfg_type_name(TB_CFG_PKG_ICM_RESP))
-+
-+#ifndef TB_TRACE_HELPERS
-+#define TB_TRACE_HELPERS
-+static inline const char *show_data_read_write(struct trace_seq *p,
-+					       const u32 *data)
-+{
-+	const struct cfg_read_pkg *msg = (const struct cfg_read_pkg *)data;
-+	const char *ret = trace_seq_buffer_ptr(p);
-+
-+	trace_seq_printf(p, "offset=%#x, len=%u, port=%d, config=%#x, seq=%d, ",
-+			 msg->addr.offset, msg->addr.length, msg->addr.port,
-+			 msg->addr.space, msg->addr.seq);
-+
-+	return ret;
-+}
-+
-+static inline const char *show_data_error(struct trace_seq *p, const u32 *data)
-+{
-+	const struct cfg_error_pkg *msg = (const struct cfg_error_pkg *)data;
-+	const char *ret = trace_seq_buffer_ptr(p);
-+
-+	trace_seq_printf(p, "error=%#x, port=%d, plug=%#x, ", msg->error,
-+			 msg->port, msg->pg);
-+
-+	return ret;
-+}
-+
-+static inline const char *show_data_event(struct trace_seq *p, const u32 *data)
-+{
-+	const struct cfg_event_pkg *msg = (const struct cfg_event_pkg *)data;
-+	const char *ret = trace_seq_buffer_ptr(p);
-+
-+	trace_seq_printf(p, "port=%d, unplug=%#x, ", msg->port, msg->unplug);
-+
-+	return ret;
-+}
-+
-+static inline const char *show_route(struct trace_seq *p, const u32 *data)
-+{
-+	const struct tb_cfg_header *header = (const struct tb_cfg_header *)data;
-+	const char *ret = trace_seq_buffer_ptr(p);
-+
-+	trace_seq_printf(p, "route=%llx, ", tb_cfg_get_route(header));
-+
-+	return ret;
-+}
-+
-+static inline const char *show_data(struct trace_seq *p, u8 type,
-+				    const u32 *data, u32 length)
-+{
-+	const char *ret = trace_seq_buffer_ptr(p);
-+	const char *prefix = "";
-+	int i;
-+
-+	show_route(p, data);
-+
-+	switch (type) {
-+	case TB_CFG_PKG_READ:
-+	case TB_CFG_PKG_WRITE:
-+		show_data_read_write(p, data);
-+		break;
-+
-+	case TB_CFG_PKG_ERROR:
-+		show_data_error(p, data);
-+		break;
-+
-+	case TB_CFG_PKG_EVENT:
-+		show_data_event(p, data);
-+		break;
-+
-+	default:
-+		break;
-+	}
-+
-+	trace_seq_printf(p, "data=[");
-+	for (i = 0; i < length; i++) {
-+		trace_seq_printf(p, "%s0x%08x", prefix, data[i]);
-+		prefix = ", ";
-+	}
-+	trace_seq_printf(p, "]");
-+	trace_seq_putc(p, 0);
-+
-+	return ret;
-+}
-+#endif
-+
-+DECLARE_EVENT_CLASS(tb_raw,
-+	TP_PROTO(int index, u8 type, const void *data, size_t size),
-+	TP_ARGS(index, type, data, size),
-+	TP_STRUCT__entry(
-+		__field(int, index)
-+		__field(u8, type)
-+		__field(size_t, size)
-+		__dynamic_array(u32, data, size / 4)
-+	),
-+	TP_fast_assign(
-+		__entry->index = index;
-+		__entry->type = type;
-+		__entry->size = size / 4;
-+		memcpy(__get_dynamic_array(data), data, size);
-+	),
-+	TP_printk("type=%s, size=%zd, domain=%d, %s",
-+		  show_type_name(__entry->type), __entry->size, __entry->index,
-+		  show_data(p, __entry->type, __get_dynamic_array(data),
-+			    __entry->size)
-+	)
-+);
-+
-+DEFINE_EVENT(tb_raw, tb_tx,
-+	TP_PROTO(int index, u8 type, const void *data, size_t size),
-+	TP_ARGS(index, type, data, size)
-+);
-+
-+DEFINE_EVENT(tb_raw, tb_event,
-+	TP_PROTO(int index, u8 type, const void *data, size_t size),
-+	TP_ARGS(index, type, data, size)
-+);
-+
-+TRACE_EVENT(tb_rx,
-+	TP_PROTO(int index, u8 type, const void *data, size_t size, bool dropped),
-+	TP_ARGS(index, type, data, size, dropped),
-+	TP_STRUCT__entry(
-+		__field(int, index)
-+		__field(u8, type)
-+		__field(size_t, size)
-+		__dynamic_array(u32, data, size / 4)
-+		__field(bool, dropped)
-+	),
-+	TP_fast_assign(
-+		__entry->index = index;
-+		__entry->type = type;
-+		__entry->size = size / 4;
-+		memcpy(__get_dynamic_array(data), data, size);
-+		__entry->dropped = dropped;
-+	),
-+	TP_printk("type=%s, dropped=%u, size=%zd, domain=%d, %s",
-+		  show_type_name(__entry->type), __entry->dropped,
-+		  __entry->size, __entry->index,
-+		  show_data(p, __entry->type, __get_dynamic_array(data),
-+			    __entry->size)
-+	)
-+);
-+
-+#endif /* TB_TRACE_H_ */
-+
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH .
-+
-+#undef TRACE_INCLUDE_FILE
-+#define TRACE_INCLUDE_FILE trace
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
++/* CDNS3 driver supports 0x000402xx Cadence USB controller family. */
++#define OTG_CDNS3_CHECK_DID(did) (((did) & GENMASK(31, 8)) == 0x00040200)
+ 
+ /*
+  * Common registers interface for both CDNS3 and CDNSP version of DRD.
 -- 
-2.43.0
+2.37.2
 
 
