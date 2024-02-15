@@ -1,115 +1,100 @@
-Return-Path: <linux-usb+bounces-6447-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6448-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DA07855E03
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 10:27:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2191A855E58
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 10:39:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58F0928B550
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 09:27:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53E991C22521
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 09:39:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA7F31A58E;
-	Thu, 15 Feb 2024 09:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C723B19BA2;
+	Thu, 15 Feb 2024 09:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RXcCXpZ1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b5U56Izf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58731B27D;
-	Thu, 15 Feb 2024 09:26:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FE3182B3
+	for <linux-usb@vger.kernel.org>; Thu, 15 Feb 2024 09:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707989217; cv=none; b=IsfWyy9iKfT0vNoVojGOLRb00dsmc1bXIjXbpouXgOwwISj5aGL2LESHCDQFbYvjY59gFIRA7Z2IIy5pp+fpVzDO9K/mYcA6ZwUlaS2VCNbVqdccq5L2jrzdzN7TLxV6reKVA92ADBCAAwsSLkKOg8jNt7F0dzb/uJCN2EqOXHQ=
+	t=1707989842; cv=none; b=kjKs9Mt1ABS66wtLdyyXBzVgdm2Wwq9LisLJveLRwyo0CVtO/SL8mkxY0ovDsOOXtkmlm/ALs0TlrKrTx/QWYJNtMcv7GshF9Qog9vJbPh/ivNhAvh31FXpmno+EPF1ZkncwoMhAHdw7nJ16koHsc56JoCIE8b7kKcI2nFDAIjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707989217; c=relaxed/simple;
-	bh=E2v6VkpFCx1HDTq9sKiAbC9tdSDEbT2SS+fM9nv71m4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J5J7I5KOapwCveRNmeqly12ALi7K6Hhjckbhb0zw/OIvnade5KXc1mTsuxmkd2wGVFmcT/7/FiUNEcp34gEEAhMfS/Qj572xdHE/05EqYX51aVImPR6Jjyxi4qvKrbKLE6bP2hnLQCGtZ7zcVZXU9NT3HoUCQTaY7VwkQ4o8/HU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RXcCXpZ1; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1d953fa3286so5296995ad.2;
-        Thu, 15 Feb 2024 01:26:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707989215; x=1708594015; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OWfMmIfGsKwjYTHONZVgXvpgh2ggyJHKL+IgNdm0LAY=;
-        b=RXcCXpZ1wpypDGIOdOK/Mjt2m6wvWvaDU00+Ha010rY5hutwK528Hun96aEtBkvN/3
-         Zia585ezsifeNNcqXSu4ateRmllSXJTv2utuPG+mvMr4Ankao1INUvjEazBYKqw0PvUB
-         nAPTdEmsRDhXGMsbGB/Kpvv6A/NdXgPAX7+D/oIz4LIGlLMGgYkNPm8cdM4huVjKEPj+
-         /Pk/pgJTYqdTqRmGqTqSTXQbgu1Q2MR6Hd5d9Tb8S5i+NvOPm9xiW6m6ghuJfISAhusq
-         liQKwEOW/4smKDUDMU84VRb6l7gc7HtlH9uLvtG56nnjV7qfqWt7xvpQnjUCgwTcIGOr
-         tL5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707989215; x=1708594015;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OWfMmIfGsKwjYTHONZVgXvpgh2ggyJHKL+IgNdm0LAY=;
-        b=RHtCJitcMm0W/M5ghWe2G/+z0/w5xjltGLmOUg0NEPh+ogmwBc044wTIU5RcDggmsi
-         SAQxYpcN8oE8wyqXoGwocDc44nxi+lssg5tcvy0sF73YXIOgYahPwQzomfzfg3Gz/DYR
-         HDYwJDu+4P2EGS/bYxPtn4bMee4A6tVlYMzYTm1a1etArJpyTJXARbZdL+8RjqdIamqX
-         SoMJ5txScWsER8vZ+qhnenhszutdPGOGamKLUdiGkKCI4OMtya0h2XW9pI+M1o/YrR3c
-         gtenZUCrnw7XImyA7s+tuVt/pGJwzOgshxnLW443Q22ezNnlqODPXUvB7p1STtkKiz2z
-         2qnw==
-X-Forwarded-Encrypted: i=1; AJvYcCWDlg8oeWOuPwr4tf/uLilZehwqmA8boDfHoeCRGkAltyq3CkMqhlMQpluw30znyAjo+sCVCNpb94jzCFCUEo2rzp0KoFcNsKirhAri
-X-Gm-Message-State: AOJu0Ywhh3wICPrY9jQe83CUrIc+9zz6rUkWPt7ltKqYJ74KxcChznKv
-	Iec+MPa34YFqrKTfoNfy++X/wzXQvBt99YlilP16PpQatx+0dPg2
-X-Google-Smtp-Source: AGHT+IGA7VG87vWnvTRdUejlRRl0NjQJAvdQO98FlbNM1in/gDmV3+bRwGIDKxfp9PsHi92cu9VEZQ==
-X-Received: by 2002:a17:903:2601:b0:1d9:aa5d:a50 with SMTP id jd1-20020a170903260100b001d9aa5d0a50mr1017745plb.25.1707989214966;
-        Thu, 15 Feb 2024 01:26:54 -0800 (PST)
-Received: from pairface.. ([111.18.198.117])
-        by smtp.gmail.com with ESMTPSA id ko4-20020a17090307c400b001d7137acad9sm838088plb.57.2024.02.15.01.26.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Feb 2024 01:26:54 -0800 (PST)
-From: Pairman Guo <pairmanxlr@gmail.com>
-To: valentina.manea.m@gmail.com,
-	shuah@kernel.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Pairman Guo <pairmanxlr@gmail.com>
-Subject: [PATCH] USBIP: Use fallthrough pseudo-keyword
-Date: Thu, 15 Feb 2024 17:26:30 +0800
-Message-ID: <20240215092630.148917-1-pairmanxlr@gmail.com>
-X-Mailer: git-send-email 2.43.1
+	s=arc-20240116; t=1707989842; c=relaxed/simple;
+	bh=KN1cFDuqCvpdJc9z3ae7sAHCTynNWJLmVpNzmTxnqjw=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eT34GvmVETfh7HDZuRmssdDpEgr21+X207MAv8gR0rNEDjV8BbKmPmSkYmRXFQHvjz/4t5Mjhgwow9DSQOOZd9X36RPJ0pYRPU+IMQG08mfbG+uozxaAHH/Rh1ld23DgdxIlrt6hgVmBhTFCy6YpYgC9lWXckepwOirpB9UJVxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b5U56Izf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C9FD6C43143
+	for <linux-usb@vger.kernel.org>; Thu, 15 Feb 2024 09:37:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707989841;
+	bh=KN1cFDuqCvpdJc9z3ae7sAHCTynNWJLmVpNzmTxnqjw=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=b5U56IzfdMbt5q7WM9/2rWmSJgeXyzeHV/aDip/JykGS3siraf6I6Ox1JTeyzdiC/
+	 5Yk6W9LEz47kdlZ9ja0Yk6PZGSbl8dxmOJXppVG5MB7EGXmrtxiPU3AAgEIBMfZPsh
+	 q+R1g7LZ4a53MahyASLWM4hnc5D4iumcYLIrRLD6j8bYgysyBRXvVYxIuHObAiOt8L
+	 76/Q73hYjTytAMMUrpINuxETOt9bjJyTVhuTVFzOBYBnrW+YvRVpLiuuX/8nyNhq7n
+	 lIkjiq0Kn4mqj4nAL/9UMstacLC5Mp1TYRVjWdr6uzJcZ32liH605m51/xfUNyXJof
+	 T5Fi4ljuEt1tg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id AAFD7C53BD0; Thu, 15 Feb 2024 09:37:21 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218465] Linux warning `usb: port power management may be
+ unreliable` on Dell XPS 13 9360
+Date: Thu, 15 Feb 2024 09:37:21 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: DUPLICATE
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218465-208809-ZMDr0huLuU@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218465-208809@https.bugzilla.kernel.org/>
+References: <bug-218465-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Hi maintainers,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218465
 
-There is a usage of ``/* FALLTHRU */`` in a switch statement in main()
-that have long been untouched. This patch replaced it with the
-better and proper pseudo-keyword ``fallthrough;``.
+--- Comment #5 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+This DELL machine has ACPI entries for USB ports that are not usable.
+These ports are supported by xHCI host hardware but are not internally or
+externally connected anywhere.  They have _UPC (USB port capability) ACPI
+objects stating they are not connectable, and _PLD (Physical Location of
+Device) that just returns 0 for their group token group position.
 
-Please merge if it is the case. Thank you in advance.
+So all unusable USB2 and USB3 ports have similar _PLD entries, which then
+confuses Linux when trying to pair together USB2 and USB3 ports.=20
 
-Signed-off-by: Pairman Guo <pairmanxlr@gmail.com>
----
- tools/usb/usbip/src/usbip.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Linux could probably ignore printing any warning messages for ports that
+have _PLD entries but _UPC shows they are not connectable
 
-diff --git a/tools/usb/usbip/src/usbip.c b/tools/usb/usbip/src/usbip.c
-index f7c7220d9..ddcafb5c7 100644
---- a/tools/usb/usbip/src/usbip.c
-+++ b/tools/usb/usbip/src/usbip.c
-@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
- 		case '?':
- 			printf("usbip: invalid option\n");
- 			/* Terminate after printing error */
--			/* FALLTHRU */
-+			fallthrough;
- 		default:
- 			usbip_usage();
- 			goto out;
--- 
-2.43.1
+--=20
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
