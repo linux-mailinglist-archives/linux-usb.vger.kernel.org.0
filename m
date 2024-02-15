@@ -1,130 +1,171 @@
-Return-Path: <linux-usb+bounces-6442-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6443-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ABE7855AFA
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 08:02:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94436855B76
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 08:16:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33853B22B16
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 07:02:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E1D4285B80
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Feb 2024 07:16:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37CF1D51D;
-	Thu, 15 Feb 2024 07:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08279DDA5;
+	Thu, 15 Feb 2024 07:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MhBDojdl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C09BA3F;
-	Thu, 15 Feb 2024 07:02:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2BB33C5;
+	Thu, 15 Feb 2024 07:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707980531; cv=none; b=CEYDMdzaNlMJ7KUQr2aThN9ub8ci5R+UTR3kJLLXsAF+MkdqbmNpoXCdF2YC9p0o5HP2ze21DjFPNsoPRuFTKzg8TYUhnBU4q/Y9v+5zOMBQ/4oFF4tLQ0hQ5nJSKmx7LSPTrLF4jJnpMrxnNl5EfnK4k9DjuihOC1mlLHaUz/8=
+	t=1707981383; cv=none; b=nRpfNzLahTsMmUaeN2iqA9e3RgqibcRYEa5cEV0lpnrxR7FzUMY7pWgHo2MJgXRV6IQB3UxyiXzJcqinPpFy+hW/9x2K7Gl8akJ7KtK4/XHzQ66Pz3Po7PfcHLCWmwhSfv7jKfp7IX+u2fA9OCpAWk+I/ibWF7V+8JT+xXuTkTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707980531; c=relaxed/simple;
-	bh=c1eutWs/h7+zqMutLtkSQP4xND8+gBTwO84eSFmq2Vg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QHl0HQsP1DT/Ga0MSYK2y3gFx+JOd/w5rSP8tb57MbPBot34K8BNP3kTnY4FyyDTA765FQraYn/uKQSuKC59X6NdckyjYZDCf9kL7FogTatGwPK8TCDE9bFw4zRs7ASGNEd8ZQ7cjTPNzmefjKanKfRz/YbKalauxTrZi2tJ/6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.224] (ip5f5aeca7.dynamic.kabel-deutschland.de [95.90.236.167])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id A176561E5FE01;
-	Thu, 15 Feb 2024 08:00:55 +0100 (CET)
-Message-ID: <fc1be95d-b34b-4153-ba0b-f124180a33ec@molgen.mpg.de>
-Date: Thu, 15 Feb 2024 08:00:54 +0100
+	s=arc-20240116; t=1707981383; c=relaxed/simple;
+	bh=zwf/v9ehW4cFJdu8wIHwRPfcAJT+SRSX3JvxeAL8Fqg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MnddSgFxhOC2yCxEV85eGXYC2YN7UfpvZEGBpfjo6I55h7mEX/ukSveNAL2xKk/TSRQcIiTe1aSPRcxSU2776iRWVSX2qBC0+ITJR/205c0xlhi43bp4aVgb2/XhMYvPUfs9swXjhb/GrF83duhCjNxsB3ZLnBGVYj89+6z7krU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MhBDojdl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B0ADC433F1;
+	Thu, 15 Feb 2024 07:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707981382;
+	bh=zwf/v9ehW4cFJdu8wIHwRPfcAJT+SRSX3JvxeAL8Fqg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MhBDojdlLk13ZLeX/38gxdo8+tFWxfrLbHZzfVmPs6ZfvxlNA29dSN0FGj/Bk9hdH
+	 /0vlXfph4rwspX0Hj9F18zPgJVCp7kXWO1dSwJMaUcsS8eZw/pWTyX2XBP8HLb3EMY
+	 Tp0e/BO218uvTJABLZnKFYPyGpBYBQnu8AswWeP3/V35xm3EP4MfJIfOb8gqdouJCY
+	 K9zp9d63Fiu90s2vFCmboJ52ujsfVuxSgWMyLBH7xBSiKIOtIoRP07RQlNmxpryu3+
+	 mU8s7Oz3AxHQJaO5EVJcPM9OLURPFRsZ+f9zzaszI8UdG0yU2XwE8piIp61CAXXzyo
+	 f4K7av7rH+hpg==
+Date: Thu, 15 Feb 2024 15:16:13 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: Pawel Laszczak <pawell@cadence.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, peter.chen@cixtech.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usb: cdnsp: fixed issue with incorrect detecting CDNSP
+ family controllers
+Message-ID: <20240215071613.GA1256251@nchen-desktop>
+References: <20240206104325.55456-1-pawell@cadence.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Intel-wired-lan] [PATCH net-next v2 0/8] drivers: net: Convert
- EEE handling to use linkmode bitmaps
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Ariel Elior <aelior@marvell.com>,
- Manish Chopra <manishc@marvell.com>,
- Jesse Brandeburg <jesse.brandeburg@intel.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>, netdev@vger.kernel.org,
- linux-usb@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- linux-kernel@vger.kernel.org
-References: <20240214-keee-u32-cleanup-v2-0-4ac534b83d66@lunn.ch>
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20240214-keee-u32-cleanup-v2-0-4ac534b83d66@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240206104325.55456-1-pawell@cadence.com>
 
-Dear Andrew,
+On 24-02-06 11:43:25, Pawel Laszczak wrote:
+> Cadence have several controllers from 0x000403xx family but current
+> driver suuport detecting only one with DID equal 0x0004034E.
+> It causes that if someone use different CDNSP controller then driver
 
+%s/use/uses
 
-Thank you very much for this patch-set.
-
-
-Am 15.02.24 um 12:13 AM schrieb Andrew Lunn:
-> EEE has until recently been limited to lower speeds due to the use of
-> the legacy u32 for link speeds. This restriction has been lifted, with
-> the use of linkmode bitmaps. This patchset convert some MAC drivers
-
-Maybe reference the commit introducing them?
-
-One small nit: convert*s*
-
-> still using the old _u32 to link modes, with the aim of soon being
-> able to remove the legacy _u32 members in the keee structure.
+> will use incorrect version and register space.
+> Patch fix this issue.
 > 
-> A couple of Intel drivers do odd things with EEE, setting the autoneg
-> bit. It is unclear why, no other driver does, ethtool does not display
-> it, and EEE is always negotiated. One patch in this series deletes
-> this code. Comments on why its actually useful and should be kept are
-> gratefully received.
-
-Nice find.
-
-
-Kind regards,
-
-Paul
-
-
-> Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+> cc: <stable@vger.kernel.org>
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 > ---
-> Changes in v2:
-> - igb: Fix type 100BaseT to 1000BaseT.
-> - Link to v1: https://lore.kernel.org/r/20240204-keee-u32-cleanup-v1-0-fb6e08329d9a@lunn.ch
+>  drivers/usb/cdns3/core.c |  1 -
+>  drivers/usb/cdns3/drd.c  | 13 +++++++++----
+>  drivers/usb/cdns3/drd.h  |  6 +++++-
+>  3 files changed, 14 insertions(+), 6 deletions(-)
 > 
-> ---
-> Andrew Lunn (8):
->        net: usb: r8152: Use linkmode helpers for EEE
->        net: usb: ax88179_178a: Use linkmode helpers for EEE
->        net: qlogic: qede: Use linkmode helpers for EEE
->        net: ethernet: ixgbe: Convert EEE to use linkmodes
->        net: intel: i40e/igc: Remove setting Autoneg in EEE capabilities
->        net: intel: e1000e: Use linkmode helpers for EEE
->        net: intel: igb: Use linkmode helpers for EEE
->        net: intel: igc: Use linkmode helpers for EEE
+> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+> index 33548771a0d3..465e9267b49c 100644
+> --- a/drivers/usb/cdns3/core.c
+> +++ b/drivers/usb/cdns3/core.c
+> @@ -395,7 +395,6 @@ static int cdns_role_set(struct usb_role_switch *sw, enum usb_role role)
+>  	return ret;
+>  }
+>  
+> -
+>  /**
+>   * cdns_wakeup_irq - interrupt handler for wakeup events
+>   * @irq: irq number for cdns3/cdnsp core device
+> diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
+> index 04b6d12f2b9a..ee917f1b091c 100644
+> --- a/drivers/usb/cdns3/drd.c
+> +++ b/drivers/usb/cdns3/drd.c
+> @@ -156,7 +156,8 @@ bool cdns_is_device(struct cdns *cdns)
+>   */
+>  static void cdns_otg_disable_irq(struct cdns *cdns)
+>  {
+> -	writel(0, &cdns->otg_irq_regs->ien);
+> +	if (cdns->version)
+> +		writel(0, &cdns->otg_irq_regs->ien);
+>  }
+>  
+>  /**
+> @@ -422,15 +423,20 @@ int cdns_drd_init(struct cdns *cdns)
+>  
+>  		cdns->otg_regs = (void __iomem *)&cdns->otg_v1_regs->cmd;
+>  
+> -		if (readl(&cdns->otg_cdnsp_regs->did) == OTG_CDNSP_DID) {
+> +		state = readl(&cdns->otg_cdnsp_regs->did);
+
+Use a meaningful variable.
+
+> +
+> +		if (OTG_CDNSP_CHECK_DID(state)) {
+>  			cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem *)
+>  					      &cdns->otg_cdnsp_regs->ien;
+>  			cdns->version  = CDNSP_CONTROLLER_V2;
+> -		} else {
+> +		} else if (OTG_CDNS3_CHECK_DID(state)) {
+>  			cdns->otg_irq_regs = (struct cdns_otg_irq_regs __iomem *)
+>  					      &cdns->otg_v1_regs->ien;
+>  			writel(1, &cdns->otg_v1_regs->simulate);
+>  			cdns->version  = CDNS3_CONTROLLER_V1;
+> +		} else {
+> +			dev_err(cdns->dev, "not supporte DID=0x%08x\n", state);
+> +			return -EINVAL;
+>  		}
+>  
+>  		dev_dbg(cdns->dev, "DRD version v1 (ID: %08x, rev: %08x)\n",
+> @@ -483,7 +489,6 @@ int cdns_drd_exit(struct cdns *cdns)
+>  	return 0;
+>  }
+>  
+> -
+>  /* Indicate the cdns3 core was power lost before */
+>  bool cdns_power_is_lost(struct cdns *cdns)
+>  {
+> diff --git a/drivers/usb/cdns3/drd.h b/drivers/usb/cdns3/drd.h
+> index cbdf94f73ed9..d72370c321d3 100644
+> --- a/drivers/usb/cdns3/drd.h
+> +++ b/drivers/usb/cdns3/drd.h
+> @@ -79,7 +79,11 @@ struct cdnsp_otg_regs {
+>  	__le32 susp_timing_ctrl;
+>  };
+>  
+> -#define OTG_CDNSP_DID	0x0004034E
+> +/* CDNSP driver supports 0x000403xx Cadence USB controller family. */
+> +#define OTG_CDNSP_CHECK_DID(did) (((did) & GENMASK(31, 8)) == 0x00040300)
+
+GENMASK(19, 8)?
+
+> +
+> +/* CDNS3 driver supports 0x000402xx Cadence USB controller family. */
+> +#define OTG_CDNS3_CHECK_DID(did) (((did) & GENMASK(31, 8)) == 0x00040200)
+>  
+>  /*
+>   * Common registers interface for both CDNS3 and CDNSP version of DRD.
+> -- 
+> 2.37.2
 > 
->   drivers/net/ethernet/intel/e1000e/ethtool.c      | 17 +++++--
->   drivers/net/ethernet/intel/i40e/i40e_ethtool.c   |  7 +--
->   drivers/net/ethernet/intel/igb/igb_ethtool.c     | 33 ++++++++-----
->   drivers/net/ethernet/intel/igc/igc_ethtool.c     | 13 ++---
->   drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c | 48 ++++++++++---------
->   drivers/net/ethernet/qlogic/qede/qede_ethtool.c  | 60 +++++++++++++++---------
->   drivers/net/usb/Kconfig                          |  1 +
->   drivers/net/usb/ax88179_178a.c                   |  9 ++--
->   drivers/net/usb/r8152.c                          | 31 ++++++------
->   9 files changed, 123 insertions(+), 96 deletions(-)
-> ---
-> base-commit: d1d77120bc2867b3e449e07ee656a26b2fb03d1e
-> change-id: 20240204-keee-u32-cleanup-b86d68458d80
-> 
-> Best regards,
+
+-- 
+
+Thanks,
+Peter Chen
 
