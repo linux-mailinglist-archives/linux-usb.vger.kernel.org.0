@@ -1,39 +1,39 @@
-Return-Path: <linux-usb+bounces-6553-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6554-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 804BD8575E4
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 07:15:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD16385764F
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 07:58:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B440285737
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 06:15:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E97B1F22B4A
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 06:58:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01C9313FF5;
-	Fri, 16 Feb 2024 06:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B2714A9D;
+	Fri, 16 Feb 2024 06:57:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768A6134A9;
-	Fri, 16 Feb 2024 06:15:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1211914AA0;
+	Fri, 16 Feb 2024 06:57:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708064150; cv=none; b=oRY1RMBX75sn/5swBH3FqwORphsTilDQVtOtfo9DYgx3ESKPADhUkr1qADxOpt9GKeHlIQYSKbd1EwxJxyAIVpw3aw1efGfBXwaAVfJkuO4cxqYP+6TfeZCqsUbyP9bnpqSHU/4UogTq5FO8I6G2PIW8eh04psjG3s3El4VxAS4=
+	t=1708066632; cv=none; b=WxVy8TLgFt+ctug6QQWHgcfh3BzbaN/pkLAVLIlGixJ8ouPZm6mPI+xQcKmLdVGFOMjo4qsfPNQalNztz7ISEjMRPW5LYecLPOUxYTA7X+R/DNKOczZM/V15BfY7Jq9oC+dKKDdTap4d7zPicaE/ua8oyx5cOrsV2AXn3Qnpcvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708064150; c=relaxed/simple;
-	bh=Ubc/MvalYUWkd+30i+jxBtN9hVIKtcmQjeQHCy0qO6g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ua9UQPCSkiKaf4BFcM5GdhwpYMvcuSc0Cons1RIQaJ0McrOMiamJY5V0BTvdXVHZ6iJiXaxvn9PMJdgA19WouOSD2GfZPvnGwNCGlmE2r3cS2g5wiClNJO7feUqhjYQLINdPYxaqlf7QTgiaNiiHYatSEDgnnR1+tvvjrDnfFSA=
+	s=arc-20240116; t=1708066632; c=relaxed/simple;
+	bh=DcfqJeb/CLtSUd3Zo3dx5ue5k4+gqON9RTbFiSVUqsM=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=afqBSsJD4PpbWse2wlx/TlulgmFuOaLQhB/M43PPEVNam6mQ7QAPGe4619x8DIYP6HqE3OgkjK3ysDQdxsWw0bTjgFLNanoFg8qT4Jv5XpQ0WmObPpyR7ckr3tL5EVdl1AmfmRVATmVXFRFhBDCHTlMRJ5OT+9l8eHa4DQlBtQU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; arc=none smtp.client-ip=80.237.130.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
 Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
 	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1rarVh-00045P-0e; Fri, 16 Feb 2024 07:15:45 +0100
-Message-ID: <379b81ae-b95e-4a55-ab42-597c58c3fe35@leemhuis.info>
-Date: Fri, 16 Feb 2024 07:15:44 +0100
+	id 1ras9j-0003WS-TV; Fri, 16 Feb 2024 07:57:07 +0100
+Message-ID: <8e7f9d37-ab18-419f-9641-287412a5cb4a@leemhuis.info>
+Date: Fri, 16 Feb 2024 07:56:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -41,63 +41,57 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: =?UTF-8?Q?Re=3A_This_is_the_fourth_time_I=C3=A2ve_tried_to_find_wha?=
- =?UTF-8?Q?t_led_to_the_regression_of_outgoing_network_speed_and_each_time_I?=
- =?UTF-8?Q?_find_the_merge_commit_8c94ccc7cd691472461448f98e2372c75849406c?=
+Subject: Re: [PATCH v2] Revert "usb: typec: tcpm: fix cc role at port reset"
 Content-Language: en-US, de-DE
-To: Mathias Nyman <mathias.nyman@linux.intel.com>,
- Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com,
- Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
- Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- Linux kernel regressions list <regressions@lists.linux.dev>
-References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
- <Zb6D/5R8nNrxveAP@cae.in-ulm.de> <Zb/30qOGYAH4j6Mn@cae.in-ulm.de>
- <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
- <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com>
- <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
- <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
- <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
- <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
- <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
- <a026ecd8-6fba-017d-d673-0d0759a37ed8@linux.intel.com>
-From: "Linux regression tracking (Thorsten Leemhuis)"
+From: "Linux regression tracking #update (Thorsten Leemhuis)"
  <regressions@leemhuis.info>
-In-Reply-To: <a026ecd8-6fba-017d-d673-0d0759a37ed8@linux.intel.com>
+To: Linux kernel regressions list <regressions@lists.linux.dev>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+ Linux regressions mailing list <regressions@lists.linux.dev>
+References: <20240117114742.2587779-1-badhri@google.com>
+ <ZcVPHtPt2Dppe_9q@finisterre.sirena.org.uk>
+ <04fc959a-4a50-4c84-88a5-fa0d79c008b3@leemhuis.info>
+In-Reply-To: <04fc959a-4a50-4c84-88a5-fa0d79c008b3@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1708064148;76dc59d5;
-X-HE-SMSGID: 1rarVh-00045P-0e
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1708066630;11e64ac6;
+X-HE-SMSGID: 1ras9j-0003WS-TV
 
-[CCing the regression list, as it should be in the loop for regressions:
-https://docs.kernel.org/admin-guide/reporting-regressions.html]
 
-On 08.02.24 16:43, Mathias Nyman wrote:
-> On 8.2.2024 12.32, Mikhail Gavrilov wrote:
->> On Thu, Feb 8, 2024 at 2:23 PM Mathias Nyman
->> <mathias.nyman@linux.intel.com> wrote:
+
+On 10.02.24 08:38, Linux regression tracking #adding (Thorsten Leemhuis)
+wrote:
+> On 08.02.24 23:01, Mark Brown wrote:
+>> On Wed, Jan 17, 2024 at 11:47:42AM +0000, Badhri Jagan Sridharan wrote:
+>>> This reverts commit 1e35f074399dece73d5df11847d4a0d7a6f49434.
 >>>
->>> My guess is that CPU0 spends more time with interrupts disabled than
->>> other CPUs.
->>> Either because it's handling interrupts from some other hardware, or
->>> running
->>> code that disables interrupts (for example kernel code inside
->>> spin_lock_irq),
->>> and thus not able to handle network adapter interrupts at the same
->>> rate as CPU23
+>>> Given that ERROR_RECOVERY calls into PORT_RESET for Hi-Zing
+>>> the CC pins, setting CC pins to default state during PORT_RESET
+>>> breaks error recovery.
 >>
->> Can this be fixed?
+>> Between -rc2 and -rc3 I started seeing boot issues in mainline on
+>> rk3399-roc-pc running arm64 defconfig, a bisection identified this patch
+>> as having broken things.  The issues manifest as a hang while loading
+>> modules from the initd, you can see a full boot log at:
 > 
-> Not sure, I'm not that familiar with this area.
-> Maybe running irqbalance could help?
+> Thanks for the report. To be sure the issue doesn't fall through the
+> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+> tracking bot:
+> 
+> #regzbot ^introduced b717dfbf73e842d15174699fe2c6ee4fdde8a
+> #regzbot title usb: typec: boot issues on rk3399-roc-pc due to revert
+> #regzbot ignore-activity
 
-Mikhail, what's the status of this? I wonder if I should track this as a
-regression to ensure Linus is aware of this.
+#regzbot monitor:
+https://lore.kernel.org/all/20240212-usb-fix-renegade-v1-1-22c43c88d635@kernel.org/
+#regzbot fix: usb: typec: tpcm: Fix issues with power being removed
+during reset
+#regzbot ignore-activity
 
 Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 --
 Everything you wanna know about Linux kernel regression tracking:
 https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+That page also explains what to do if mails like this annoy you.
 
