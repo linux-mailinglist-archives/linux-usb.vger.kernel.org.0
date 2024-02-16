@@ -1,223 +1,269 @@
-Return-Path: <linux-usb+bounces-6551-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6552-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72E3A85757B
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 06:04:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95E8A8575B9
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 06:46:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E150A280FAF
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 05:04:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C549D1F22DF9
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 05:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D358012E71;
-	Fri, 16 Feb 2024 05:04:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 736FD134B2;
+	Fri, 16 Feb 2024 05:46:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jEbKhf86"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="VikvTVZ4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2383646;
-	Fri, 16 Feb 2024 05:04:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C07A1426D
+	for <linux-usb@vger.kernel.org>; Fri, 16 Feb 2024 05:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708059864; cv=none; b=rz8pAkDqEdvHnRtcW0Utus4K0+HNvcSLV5ZXEZ/VYDOJrBBZUb8S2BAkyMqccnitIj73ci0jmWU/Mp+DXTF92LPuU+klsBF18b6Ar+ixMtqDdELH+/FfNZ/Tb4IyWhL9oQni0oOthedlg0z7LRa3FhBzP1xxlBar1Zynv4GTNqk=
+	t=1708062371; cv=none; b=NXlREHJx273dhozTVtUu+1PtXuOPIIFZ+Xv3E6DcRkVwZzZI4vGNKxBWusiqrEJQK58i2ZmUhGETjkeYvX45JdPdlErJqqe1gzbm0Wmo/rhL8mMs6gJa5omA/Xi3V8v/vELPwgZ0YXS6tg9jpY5Is9GQf3MGkPe6I+cEgZY0fh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708059864; c=relaxed/simple;
-	bh=mvd4+ES9H4+E9FF2CWmYJA4SeFWwPFFspFFuFegVVh4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qdjgfXXgUuFqprvRckaF2KcvlqBYyLK2HPHIeNoKnCo5fLDEcBZ5qS6TSQRk2wp8K6bvyVr8gJQ3DKsacO+6JsMuRNbRou/gIKfgHi8tEJbQwUKnobPe+kkmjn6A06xmPG/lgI9i2P+DuS78NEQirgE8CSKV5mEsQq8qoCrEBx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jEbKhf86; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708059862; x=1739595862;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mvd4+ES9H4+E9FF2CWmYJA4SeFWwPFFspFFuFegVVh4=;
-  b=jEbKhf862ItoEj6j4DWJjHfsp5k5FAWZ48quhUD0oDFQAaTjjXjgBGPB
-   JXyu7B3nZ/VmoE3nSN3SElQrRGK+3c5pKtP6ZM7eTHU+mO2Quo88o43bS
-   pH9rh4TBE4CKkdbcRdnDl9PllfcfEHlOTz8p3KzFkOFnpGT60lHnl/uGD
-   p90qCT9cH2Le8IhhF4p3JRv2QfACioPHWz6wPrMTgMed3aOuYtn0JQqT7
-   HtPZCGjplAUH4ECYu/ZiADyb3JoxrZvHm4d5Sgu/vpoL8fSb7nKvpoNwL
-   gFefVdO5B0Gqh8yo+pERSC0oXT/vt/WQgzOUw7ii+JONYZ8g8f3jCviap
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="5148363"
-X-IronPort-AV: E=Sophos;i="6.06,163,1705392000"; 
-   d="scan'208";a="5148363"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 21:04:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,163,1705392000"; 
-   d="scan'208";a="34532258"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 15 Feb 2024 21:04:15 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1raqOT-00010S-0h;
-	Fri, 16 Feb 2024 05:04:13 +0000
-Date: Fri, 16 Feb 2024 13:03:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>
-Cc: Paul Gazzillo <paul@pgazz.com>,
-	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-	oe-kbuild-all@lists.linux.dev, amd-gfx@lists.freedesktop.org,
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-	linux-fbdev@vger.kernel.org, nouveau@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org,
-	platform-driver-x86@vger.kernel.org, intel-xe@lists.freedesktop.org,
-	linux-renesas-soc@vger.kernel.org,
-	"open list:ACPI" <linux-acpi@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	Melissa Wen <mwen@igalia.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v6 1/5] drm: Stop using `select ACPI_VIDEO` in all drivers
-Message-ID: <202402161205.v9d7IYpg-lkp@intel.com>
-References: <20240214215756.6530-2-mario.limonciello@amd.com>
+	s=arc-20240116; t=1708062371; c=relaxed/simple;
+	bh=R0KCav4SBl9GvGgw+8QcoFmIYdIjb1VCg/aRrAEv/Xg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IUwDqNeoSUK/xslIbTXTXmW1N3RRLzRczZqKdzGrIG+msaBXOzdkY1+Ekpb0N/nOAj5eGBknRWrKTnFUPjlzqQk4A1oLDQaq8dwoKox8cOWDqmCFxEb2VGJzMl8SYQn7MyZ0yX2+Ct9qoRsuAD8xEetXGxCfYEFzirSeK800Ih0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=VikvTVZ4; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a3d6d160529so43046566b.0
+        for <linux-usb@vger.kernel.org>; Thu, 15 Feb 2024 21:46:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1708062366; x=1708667166; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OkqqhJ7YhNw/r5K4OKJ0M5Gv5GBbPK3jd5hErO5/nXs=;
+        b=VikvTVZ4tiAB2XSnTmh9GOP6Mk6drmf5DfxpJVhC1HAWz0cHDNmPlJWtCI+DXCfFkc
+         9WZ0PQAlVpqEe3+sLRzvC1nhuBhcE1H+x0FVDr9uhDEL+ft+SbQ55l8FH98oiM4RJNUp
+         gqRk/ktsjGRybF4PtF4QqXGcvMe7JGHCktFNM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708062366; x=1708667166;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OkqqhJ7YhNw/r5K4OKJ0M5Gv5GBbPK3jd5hErO5/nXs=;
+        b=FBEbQQZ6DCjP0F9oKNb6PPGSdTa1pw6NcqV4LeiAI0kA6XNuZJXUYzVnLxd1pAVe2j
+         jSP2mIXu7MZCmxu2pVlEDk4xzvuwIbY8nMcEQvrCRFf/ED7JoKHiOK/0fRvkX8Gdxo3v
+         8vH04cmBqbJuvl4+yU/hWkX7n0jiYTx0mZ+LH3zAMz8SFrotdn07RV/aCoA6tYHEjy1i
+         jg45qC3R1wHlwElV+HeU5yQbHvxRUmoJ44FWDvOfBmZPwrJj1exIOlw3obVr4H3ZUy20
+         mMXt2mqcaXB7KbvgeP536xyJAFAiJbTSBLOkaUlHYUyxOEJtaaOmrmilXFqztkK8qX3v
+         dQLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXPgmmwv3oYvxW3JPJYe+OrCbfx6UckTeF5sIM9X4CVKzKvlEAlyP7cqJ+HBaUurkMxvjEmAWsX55xBG+ZKsLv/4ZmYD1g7hoUn
+X-Gm-Message-State: AOJu0YxHBLZVs9g+fKQggXqbJHN5VipPekT8HK+TLhQW4dBGCm/1bPHG
+	jppBTxyktYRalN5QSDDDVTAbT8TjVngc8U9XfobuTYc2/w/hUlNxw9mSHDWkmGhZubNXl02LOwI
+	dzg==
+X-Google-Smtp-Source: AGHT+IH47MiGXFXCrMP99LXTAXU+JPlQ2zSs99h/oVaIcXEneXgOdsvtZCdeiiC3DPYZAi3qQcR7Rw==
+X-Received: by 2002:a17:906:f80e:b0:a3d:eec8:6679 with SMTP id kh14-20020a170906f80e00b00a3deec86679mr23940ejb.54.1708062366519;
+        Thu, 15 Feb 2024 21:46:06 -0800 (PST)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
+        by smtp.gmail.com with ESMTPSA id hw18-20020a170907a0d200b00a3c7fb8cc74sm1205525ejc.154.2024.02.15.21.46.05
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Feb 2024 21:46:05 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-41243d19ecaso1583405e9.3
+        for <linux-usb@vger.kernel.org>; Thu, 15 Feb 2024 21:46:05 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVICh6IZkVNrSAlp7rgvtw8pHEoRLPIjOsgbdysGFy3Cc/9my/OSaz3r0fVxYC46rKFAev/7nPGvRilBbqSzNlMUEokB9n3QL/H
+X-Received: by 2002:a05:600c:1da6:b0:411:c45a:38fc with SMTP id
+ p38-20020a05600c1da600b00411c45a38fcmr3258760wms.3.1708062364654; Thu, 15 Feb
+ 2024 21:46:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240214215756.6530-2-mario.limonciello@amd.com>
+References: <0000000000008b96230610c6b3fe@google.com>
+In-Reply-To: <0000000000008b96230610c6b3fe@google.com>
+From: Tomasz Figa <tfiga@chromium.org>
+Date: Fri, 16 Feb 2024 14:45:44 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5Afg2=8wfcQt_+rqJdSEOuWZXfjNE0bzcVN+AnN5EGYng@mail.gmail.com>
+Message-ID: <CAAFQd5Afg2=8wfcQt_+rqJdSEOuWZXfjNE0bzcVN+AnN5EGYng@mail.gmail.com>
+Subject: Re: [syzbot] [usb?] [media?] possible deadlock in vb2_video_unregister_device
+To: syzbot <syzbot+3b1d4b3d5f7a358bf9a9@syzkaller.appspotmail.com>, 
+	Hans Verkuil <hverkuil@xs4all.nl>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	mchehab@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, m.szyprowski@samsung.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mario,
+On Wed, Feb 7, 2024 at 5:44=E2=80=AFPM syzbot
+<syzbot+3b1d4b3d5f7a358bf9a9@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    ed5551279c91 Merge 6.8-rc3 into usb-next
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/us=
+b.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D16940d7be8000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D28a3704ea90ef=
+255
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D3b1d4b3d5f7a358=
+bf9a9
+> compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for D=
+ebian) 2.40
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D14450a38180=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1603629fe8000=
+0
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/10b543a7171a/dis=
+k-ed555127.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/dc10f27643e8/vmlinu=
+x-ed555127.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/bb6389e754b9/b=
+zImage-ed555127.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+3b1d4b3d5f7a358bf9a9@syzkaller.appspotmail.com
+>
+> usb 1-1: SerialNumber: syz
+> usb 1-1: config 0 descriptor??
+> usbtv 1-1:0.0: Fushicai USBTV007 Audio-Video Grabber
+> usb 1-1: USB disconnect, device number 2
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> WARNING: possible recursive locking detected
+> 6.8.0-rc3-syzkaller-00047-ged5551279c91 #0 Not tainted
+> --------------------------------------------
+> kworker/0:2/694 is trying to acquire lock:
+> ffff888109f20b70 (&usbtv->vb2q_lock){+.+.}-{3:3}, at: vb2_video_unregiste=
+r_device drivers/media/common/videobuf2/videobuf2-v4l2.c:1269 [inline]
+> ffff888109f20b70 (&usbtv->vb2q_lock){+.+.}-{3:3}, at: vb2_video_unregiste=
+r_device+0x12b/0x2d0 drivers/media/common/videobuf2/videobuf2-v4l2.c:1245
+>
+> but task is already holding lock:
+> ffff888109f20b70 (&usbtv->vb2q_lock){+.+.}-{3:3}, at: usbtv_video_free+0x=
+28/0x70 drivers/media/usb/usbtv/usbtv-video.c:966
+>
 
-kernel test robot noticed the following build warnings:
+Looking at usbtv_video_free [1], it calls
+vb2_video_unregister_device() with the queue mutex locked, which is
+just wrong. I wonder how (and if) it even worked before. Laurent,
+Hans, Mauro, any idea who is maintaining this driver? I don't see a
+matching entry in the MAINTAINERS file.
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.8-rc4 next-20240215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[1] https://elixir.bootlin.com/linux/v6.8-rc4/source/drivers/media/usb/usbt=
+v/usbtv-video.c#L964
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/drm-Stop-using-select-ACPI_VIDEO-in-all-drivers/20240215-055936
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20240214215756.6530-2-mario.limonciello%40amd.com
-patch subject: [PATCH v6 1/5] drm: Stop using `select ACPI_VIDEO` in all drivers
-config: alpha-kismet-CONFIG_FB_BACKLIGHT-CONFIG_FB_ATY128-0-0 (https://download.01.org/0day-ci/archive/20240216/202402161205.v9d7IYpg-lkp@intel.com/config)
-reproduce: (https://download.01.org/0day-ci/archive/20240216/202402161205.v9d7IYpg-lkp@intel.com/reproduce)
+Best regards,
+Tomasz
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402161205.v9d7IYpg-lkp@intel.com/
-
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for FB_BACKLIGHT when selected by FB_ATY128
-   .config:233:warning: symbol value 'n' invalid for SATA_MOBILE_LPM_POLICY
-   .config:335:warning: symbol value 'n' invalid for AIC79XX_DEBUG_MASK
-   .config:336:warning: symbol value 'n' invalid for PSTORE_BLK_MAX_REASON
-   .config:437:warning: symbol value 'n' invalid for KFENCE_SAMPLE_INTERVAL
-   .config:511:warning: symbol value 'n' invalid for INPUT_MOUSEDEV_SCREEN_Y
-   .config:613:warning: symbol value 'n' invalid for DRM_XE_JOB_TIMEOUT_MIN
-   .config:620:warning: symbol value 'n' invalid for CRYPTO_DEV_QCE_SW_MAX_LEN
-   .config:705:warning: symbol value 'n' invalid for AIC79XX_CMDS_PER_DEVICE
-   .config:719:warning: symbol value 'n' invalid for PANEL_LCD_CHARSET
-   .config:766:warning: symbol value 'n' invalid for XEN_MEMORY_HOTPLUG_LIMIT
-   .config:774:warning: symbol value 'n' invalid for PANEL_LCD_PIN_SDA
-   .config:791:warning: symbol value 'n' invalid for SND_AC97_POWER_SAVE_DEFAULT
-   .config:825:warning: symbol value 'n' invalid for MAGIC_SYSRQ_DEFAULT_ENABLE
-   .config:840:warning: symbol value 'n' invalid for DRM_I915_MAX_REQUEST_BUSYWAIT
-   .config:871:warning: symbol value 'n' invalid for USB_GADGET_STORAGE_NUM_BUFFERS
-   .config:875:warning: symbol value 'n' invalid for SND_AT73C213_TARGET_BITRATE
-   .config:894:warning: symbol value 'n' invalid for DRM_XE_PREEMPT_TIMEOUT_MIN
-   .config:903:warning: symbol value 'n' invalid for NET_EMATCH_STACK
-   .config:905:warning: symbol value 'n' invalid for VMCP_CMA_SIZE
-   .config:1160:warning: symbol value 'n' invalid for MTDRAM_ERASE_SIZE
-   .config:1246:warning: symbol value 'n' invalid for SERIAL_UARTLITE_NR_UARTS
-   .config:1287:warning: symbol value 'n' invalid for PANEL_LCD_PIN_E
-   .config:1411:warning: symbol value 'n' invalid for LEGACY_PTY_COUNT
-   .config:1517:warning: symbol value 'n' invalid for SERIAL_ALTERA_UART_BAUDRATE
-   .config:1543:warning: symbol value 'n' invalid for WATCHDOG_OPEN_TIMEOUT
-   .config:1547:warning: symbol value 'n' invalid for AIC7XXX_RESET_DELAY_MS
-   .config:1739:warning: symbol value 'n' invalid for IBM_EMAC_POLL_WEIGHT
-   .config:1833:warning: symbol value 'n' invalid for DRM_I915_STOP_TIMEOUT
-   .config:1972:warning: symbol value 'n' invalid for KCOV_IRQ_AREA_SIZE
-   .config:2263:warning: symbol value 'n' invalid for DRM_XE_TIMESLICE_MAX
-   .config:2304:warning: symbol value 'n' invalid for PANEL_LCD_BWIDTH
-   .config:2383:warning: symbol value 'n' invalid for AIC79XX_RESET_DELAY_MS
-   .config:2500:warning: symbol value 'n' invalid for SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST_NUM
-   .config:2535:warning: symbol value 'n' invalid for PANEL_PARPORT
-   .config:2622:warning: symbol value 'n' invalid for NOUVEAU_DEBUG_DEFAULT
-   .config:2808:warning: symbol value 'n' invalid for KCSAN_REPORT_ONCE_IN_MS
-   .config:2904:warning: symbol value 'n' invalid for PSTORE_BLK_CONSOLE_SIZE
-   .config:2906:warning: symbol value 'n' invalid for KCSAN_UDELAY_INTERRUPT
-   .config:2928:warning: symbol value 'n' invalid for PANEL_LCD_PIN_BL
-   .config:2945:warning: symbol value 'n' invalid for DEBUG_OBJECTS_ENABLE_DEFAULT
-   .config:2952:warning: symbol value 'n' invalid for INITRAMFS_ROOT_GID
-   .config:3033:warning: symbol value 'n' invalid for MTD_REDBOOT_DIRECTORY_BLOCK
-   .config:3058:warning: symbol value 'n' invalid for ATM_FORE200E_TX_RETRY
-   .config:3075:warning: symbol value 'n' invalid for BOOKE_WDT_DEFAULT_TIMEOUT
-   .config:3098:warning: symbol value 'n' invalid for FB_OMAP2_DSS_MIN_FCK_PER_PCK
-   .config:3339:warning: symbol value 'n' invalid for KCSAN_UDELAY_TASK
-   .config:3430:warning: symbol value 'n' invalid for MMC_BLOCK_MINORS
-   .config:3434:warning: symbol value 'n' invalid for INET_TABLE_PERTURB_ORDER
-   .config:3476:warning: symbol value 'n' invalid for SCSI_NCR53C8XX_SYNC
-   .config:3596:warning: symbol value 'n' invalid for UCLAMP_BUCKETS_COUNT
-   .config:3678:warning: symbol value 'n' invalid for SERIAL_MCF_BAUDRATE
-   .config:3697:warning: symbol value 'n' invalid for VERBOSE_MCHECK_ON
-   .config:3699:warning: symbol value 'n' invalid for STACK_MAX_DEFAULT_SIZE_MB
-   .config:3745:warning: symbol value 'n' invalid for DE2104X_DSL
-   .config:3756:warning: symbol value 'n' invalid for BLK_DEV_RAM_COUNT
-   .config:4000:warning: symbol value 'n' invalid for IP_VS_SH_TAB_BITS
-   .config:4019:warning: symbol value 'n' invalid for FTRACE_RECORD_RECURSION_SIZE
-   .config:4118:warning: symbol value 'n' invalid for CMA_AREAS
-   .config:4145:warning: symbol value 'n' invalid for USBIP_VHCI_HC_PORTS
-   .config:4176:warning: symbol value 'n' invalid for INPUT_MOUSEDEV_SCREEN_X
-   .config:4290:warning: symbol value 'n' invalid for RIONET_RX_SIZE
-   .config:4465:warning: symbol value 'n' invalid for RADIO_TYPHOON_PORT
-   .config:4574:warning: symbol value 'n' invalid for SERIAL_TXX9_NR_UARTS
-   .config:4596:warning: symbol value 'n' invalid for IBM_EMAC_TXB
-   .config:4702:warning: symbol value 'n' invalid for IP_VS_MH_TAB_INDEX
-   .config:4979:warning: symbol value 'n' invalid for ARCH_MMAP_RND_BITS
-   .config:5060:warning: symbol value 'n' invalid for DRM_I915_FENCE_TIMEOUT
-   .config:5079:warning: symbol value 'n' invalid for TTY_PRINTK_LEVEL
-   .config:5216:warning: symbol value 'n' invalid for PANEL_LCD_PIN_RW
-   .config:5237:warning: symbol value 'n' invalid for MIPS_EJTAG_FDC_KGDB_CHAN
-   .config:5330:warning: symbol value 'n' invalid for KDB_DEFAULT_ENABLE
-   .config:5347:warning: symbol value 'n' invalid for SERIAL_ALTERA_UART_MAXPORTS
-   .config:5434:warning: symbol value 'n' invalid for PPC_EARLY_DEBUG_EHV_BC_HANDLE
-   .config:5517:warning: symbol value 'n' invalid for CRYPTO_DEV_FSL_CAAM_INTC_TIME_THLD
-   .config:5609:warning: symbol value 'n' invalid for PANEL_LCD_HWIDTH
-   .config:5638:warning: symbol value 'n' invalid for LOCKDEP_CHAINS_BITS
-   .config:5728:warning: symbol value 'n' invalid for DRM_I915_HEARTBEAT_INTERVAL
-   .config:5736:warning: symbol value 'n' invalid for KCSAN_SKIP_WATCH
-   .config:5759:warning: symbol value 'n' invalid for PSTORE_BLK_KMSG_SIZE
-   .config:5922:warning: symbol value 'n' invalid for RCU_BOOST_DELAY
-   .config:5956:warning: symbol value 'n' invalid for SERIAL_8250_RUNTIME_UARTS
-   .config:6051:warning: symbol value 'n' invalid for ARCH_MMAP_RND_COMPAT_BITS
-   .config:6218:warning: symbol value 'n' invalid for RADIO_TRUST_PORT
-   .config:6236:warning: symbol value 'n' invalid for SERIAL_SH_SCI_NR_UARTS
-   .config:6337:warning: symbol value 'n' invalid for DRM_XE_PREEMPT_TIMEOUT_MAX
-   .config:6588:warning: symbol value 'n' invalid for CMA_SIZE_PERCENTAGE
-   .config:6732:warning: symbol value 'n' invalid for DRM_XE_TIMESLICE_MIN
-   .config:6783:warning: symbol value 'n' invalid for DVB_MAX_ADAPTERS
-   .config:6793:warning: symbol value 'n' invalid for SCSI_NCR53C8XX_MAX_TAGS
-   .config:6801:warning: symbol value 'n' invalid for SCSI_SYM53C8XX_DMA_ADDRESSING_MODE
-   .config:6860:warning: symbol value 'n' invalid for SCSI_SYM53C8XX_MAX_TAGS
-   .config:6968:warning: symbol value 'n' invalid for RIONET_TX_SIZE
-   .config:6999:warning: symbol value 'n' invalid for ZSMALLOC_CHAIN_SIZE
-   .config:7132:warning: symbol value 'n' invalid for SCSI_MESH_RESET_DELAY_MS
-   .config:7173:warning: symbol value 'n' invalid for IBM_EMAC_RXB
-   .config:7195:warning: symbol value 'n' invalid for LOCKDEP_BITS
-   .config:7306:warning: symbol value 'n' invalid for OMAP2_DSS_MIN_FCK_PER_PCK
-   .config:7367:warning: symbol value 'n' invalid for SCSI_MPT3SAS_MAX_SGE
-   .config:7497:warning: symbol value 'n' invalid for PSTORE_DEFAULT_KMSG_BYTES
-   .config:7540:warning: symbol value 'n' invalid for PANEL_LCD
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> other info that might help us debug this:
+>  Possible unsafe locking scenario:
+>
+>        CPU0
+>        ----
+>   lock(&usbtv->vb2q_lock);
+>   lock(&usbtv->vb2q_lock);
+>
+>  *** DEADLOCK ***
+>
+>  May be due to missing lock nesting notation
+>
+> 7 locks held by kworker/0:2/694:
+>  #0: ffff888106ad2138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: proces=
+s_one_work+0x789/0x15d0 kernel/workqueue.c:2608
+>  #1: ffffc90001c0fd80 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: =
+process_one_work+0x7eb/0x15d0 kernel/workqueue.c:2609
+>  #2: ffff88810af2f190 (&dev->mutex){....}-{3:3}, at: device_lock include/=
+linux/device.h:990 [inline]
+>  #2: ffff88810af2f190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1be/0x4f=
+40 drivers/usb/core/hub.c:5840
+>  #3: ffff888107799190 (&dev->mutex){....}-{3:3}, at: device_lock include/=
+linux/device.h:990 [inline]
+>  #3: ffff888107799190 (&dev->mutex){....}-{3:3}, at: usb_disconnect+0x10a=
+/0x910 drivers/usb/core/hub.c:2287
+>  #4: ffff88810779a160 (&dev->mutex){....}-{3:3}, at: device_lock include/=
+linux/device.h:990 [inline]
+>  #4: ffff88810779a160 (&dev->mutex){....}-{3:3}, at: __device_driver_lock=
+ drivers/base/dd.c:1095 [inline]
+>  #4: ffff88810779a160 (&dev->mutex){....}-{3:3}, at: device_release_drive=
+r_internal+0xa4/0x610 drivers/base/dd.c:1292
+>  #5: ffff888109f20b70 (&usbtv->vb2q_lock){+.+.}-{3:3}, at: usbtv_video_fr=
+ee+0x28/0x70 drivers/media/usb/usbtv/usbtv-video.c:966
+>  #6: ffff888109f20ae0 (&usbtv->v4l2_lock){+.+.}-{3:3}, at: usbtv_video_fr=
+ee+0x32/0x70 drivers/media/usb/usbtv/usbtv-video.c:967
+>
+> stack backtrace:
+> CPU: 0 PID: 694 Comm: kworker/0:2 Not tainted 6.8.0-rc3-syzkaller-00047-g=
+ed5551279c91 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
+oogle 01/25/2024
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
+>  check_deadlock kernel/locking/lockdep.c:3062 [inline]
+>  validate_chain kernel/locking/lockdep.c:3856 [inline]
+>  __lock_acquire+0x210a/0x3b30 kernel/locking/lockdep.c:5137
+>  lock_acquire kernel/locking/lockdep.c:5754 [inline]
+>  lock_acquire+0x1ae/0x520 kernel/locking/lockdep.c:5719
+>  __mutex_lock_common kernel/locking/mutex.c:608 [inline]
+>  __mutex_lock+0x175/0x9d0 kernel/locking/mutex.c:752
+>  vb2_video_unregister_device drivers/media/common/videobuf2/videobuf2-v4l=
+2.c:1269 [inline]
+>  vb2_video_unregister_device+0x12b/0x2d0 drivers/media/common/videobuf2/v=
+ideobuf2-v4l2.c:1245
+>  usbtv_video_free+0x4a/0x70 drivers/media/usb/usbtv/usbtv-video.c:970
+>  usbtv_disconnect+0x5c/0xd0 drivers/media/usb/usbtv/usbtv-core.c:138
+>  usb_unbind_interface+0x1e5/0x960 drivers/usb/core/driver.c:461
+>  device_remove drivers/base/dd.c:569 [inline]
+>  device_remove+0x11f/0x170 drivers/base/dd.c:561
+>  __device_release_driver drivers/base/dd.c:1272 [inline]
+>  device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1295
+>  bus_remove_device+0x22c/0x420 drivers/base/bus.c:574
+>  device_del+0x39a/0xa50 drivers/base/core.c:3814
+>  usb_disable_device+0x36c/0x7f0 drivers/usb/core/message.c:1416
+>  usb_disconnect+0x2e1/0x910 drivers/usb/core/hub.c:2296
+>  hub_port_connect drivers/usb/core/hub.c:5352 [inline]
+>  hub_port_connect_change drivers/usb/core/hub.c:5652 [inline]
+>  port_event drivers/usb/core/hub.c:5812 [inline]
+>  hub_event+0x1be0/0x4f40 drivers/usb/core/hub.c:5894
+>  process_one_work+0x886/0x15d0 kernel/workqueue.c:2633
+>  process_scheduled_works kernel/workqueue.c:2706 [inline]
+>  worker_thread+0x8b9/0x1290 kernel/workqueue.c:2787
+>  kthread+0x2c6/0x3a0 kernel/kthread.c:388
+>  ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+>  ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:242
+>  </TASK>
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> If the report is already addressed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+>
+> If you want syzbot to run the reproducer, reply with:
+> #syz test: git://repo/address.git branch-or-commit-hash
+> If you attach or paste a git patch, syzbot will apply it before testing.
+>
+> If you want to overwrite report's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+>
+> If the report is a duplicate of another one, reply with:
+> #syz dup: exact-subject-of-another-report
+>
+> If you want to undo deduplication, reply with:
+> #syz undup
 
