@@ -1,135 +1,192 @@
-Return-Path: <linux-usb+bounces-6562-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6563-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C932D857DE7
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 14:44:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FB2E857EE1
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 15:11:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AF04282196
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 13:44:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 725821C23D23
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 14:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9172112BE97;
-	Fri, 16 Feb 2024 13:44:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0DB312D763;
+	Fri, 16 Feb 2024 14:11:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kl5L6pNm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m6Ri5nEG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF03A1292E1;
-	Fri, 16 Feb 2024 13:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3C112CDB5
+	for <linux-usb@vger.kernel.org>; Fri, 16 Feb 2024 14:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708091090; cv=none; b=KgashKEWWxeZiDLu4kAzg1vgHIbkeJgHpOh+R4ZuGxt7HZNKnmw8VE9YSZxtX2JdRSPOb7Ry0ya+QLGMEFTPZPnxEDjCurJGzrXAvHv/QcvpJejP0b4MEJZvK+wkhWqf6ApasT0qpBhZyxZvEGD/DirKDjUGmsA+G7ChrBBVtw0=
+	t=1708092663; cv=none; b=rxfgZJrIwOpjW6Lvzv/ZGfIYbjMhXlk7kDskgCKyg9JafifivoAwx65Jwi7ZsoRysS72dDTIlcNWh6WNLSy10Shu+IuLOUrKor4TjHdA/DklrdffJa3uH+8V20iq6T+uaFIn7hp1GuLCUu/D40Y0+q9btb5+xuwbXsTZ8UV1OjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708091090; c=relaxed/simple;
-	bh=S4L92NZefLEC20yFJLLOf9G1GvTAmeD77uKPAtDEInU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yyrb0g2co5kOUeTmdgra5IytzxLFn+aMZG/btiLO7Yiu/oD2XnEmeIv0XDeOR6FtjqwdpjNcI6Gcvx7ZttWaEP6jxJvFkvurzfdPSl8wJ57qE004WIxqjg200Y5nz9Ck8UguYE/bD7y7lRenX9oj04wjW2Tf9fdeElCwbMhRCuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kl5L6pNm; arc=none smtp.client-ip=209.85.160.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-206689895bfso502027fac.1;
-        Fri, 16 Feb 2024 05:44:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708091088; x=1708695888; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=coY0/edAbFAUsr5sc75rIWJqDfxEuZndNgC2ac1TWf0=;
-        b=Kl5L6pNm8WRaBF9pMzqOOnX4Utia2gymKiQTQohl/tPrVU+lZPTxxVcriA5PybwuXU
-         MQENf3q8xWJwuN7Us9rIMpKQhyb/k5NPBXH3GoZnka0avZ9MNLqdkSGa4IzOWdiJ56yO
-         bWJwLFT2v8AwqRjBnmnFVZJip3Zx1LosA02P+iinXFC497fSjXl6+vtD60tiKZGwnIcc
-         qIZCwFUaUR53FQZdQ8hr/lxC9pp1DtucWbn4oZfxi1MTOHQ3w/faWIfcICXBGBSkxqrc
-         V6jkuPYkYwP44EQ5Sy67mHAi1Q48O434EqHBUfOaFBr6Z4rSQI9ZenrTTX6CSuCCHpgf
-         6cQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708091088; x=1708695888;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=coY0/edAbFAUsr5sc75rIWJqDfxEuZndNgC2ac1TWf0=;
-        b=obL02OJgVLIA4py66YAPqhfWNqlFDcWpGpZbsSAmHisfoTXl4Wk4nzJtWdv5ONVSJq
-         9xMFnr51j2P7JsoIUKONqR5SFgGbhz1De5YKIi4+aHlLB+8vgqk/SZt1HggNZmBRzil6
-         B5QimRf+kfvCOuUgxwZz6zh0qRqZdI24+bJlmx733i5VoP4G8C+6Pz7nZVVNDKyo4a1v
-         RzkSpxnZSbzSt9G97q2NMeznqdTLVapIx/rnv9e5TIgAw7gi7blYjSeKRjphudzMKnyM
-         pwkd4VEBDbPNuVB00pH19XYBaogNij5GWGxiKteEz+hEfbtuiYIcn3uygZdgh7EHQLZa
-         80Jg==
-X-Forwarded-Encrypted: i=1; AJvYcCX/6h5UIzZoFe+uZhXIY9snFybnr+fVQZVtWRjYfqDn2c3Q9g7InY/tuGKEdlaM7EgBwN7fgqRHNvAc77sLVM76ZRPZNMup4XVuaUkGtU0FZ0Km2MVa3qonYVEqYdCJHpYzX9fBy93w
-X-Gm-Message-State: AOJu0YzaOpZlmtsxArc0FSPb6NOTYmM5ZUbbfxbDrHx8ODF44QL1M1BL
-	x0uwSmqjVlXAgZhAGgaTHY75D+KV7qvZYfKqKH+2XuZzOAoDNvRR
-X-Google-Smtp-Source: AGHT+IElgS92FK4m1DLWIi46UcX2f1EmeSGSn87CJJzItyfhuyEmA1PDbtcANh4MI1yqwPzl+LS7+A==
-X-Received: by 2002:a05:6871:152:b0:21a:3542:2ab5 with SMTP id z18-20020a056871015200b0021a35422ab5mr4479651oab.41.1708091087679;
-        Fri, 16 Feb 2024 05:44:47 -0800 (PST)
-Received: from archie.me ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id m20-20020a63f614000000b005dab535fac2sm3249117pgh.90.2024.02.16.05.44.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Feb 2024 05:44:46 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id 3BB9C18483F4A; Fri, 16 Feb 2024 20:44:42 +0700 (WIB)
-Date: Fri, 16 Feb 2024 20:44:41 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Linux USB <linux-usb@vger.kernel.org>
-Cc: pmalani@chromium.org, jthies@google.com,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Saranya Gopal <saranya.gopal@intel.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 3/3] usb: typec: ucsi: Get PD revision for partner
-Message-ID: <Zc9myZ-1oE_qsSQB@archie.me>
-References: <20240209223824.622869-1-abhishekpandit@chromium.org>
- <20240209143723.v5.3.Idf7d373c3cbb54058403cb951d644f1f09973d15@changeid>
+	s=arc-20240116; t=1708092663; c=relaxed/simple;
+	bh=MYhJmUYoR6KpnzZ611Z7lQ6Ux9rM8D7z/zGPdHHpRYA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=JmlRBvgSzxtW5AfnNtYmzbY+TSHj8PpirhV9zSAtUduPzwXgyMIxrewPHr2OezzFe2S6rOtZOBtNH5o/6sHbJMAOoMEy1vr6CAd8C2hX/rZM2Wp9uk2/2TKZe4+FKrYdeJ4BZjboEFbWFVu1GWz1HdE5EslKm88ZnmPaLEKB86g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m6Ri5nEG; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708092661; x=1739628661;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MYhJmUYoR6KpnzZ611Z7lQ6Ux9rM8D7z/zGPdHHpRYA=;
+  b=m6Ri5nEGJAVRyKCPENEVfgBYJrkzWVPScUA1jzr2Jmn8G5UMFT6HpPVm
+   7YObiRngHeoOtWRLJ8Kk0mMZLBxHwoDFY7zVOpUYoKkBioHK7ChXkq0B9
+   B65rEfEOa67CrX38ag2r8x5CoEaw9vwKLlzyS+ZA3ksgvlDO+fTuccJTR
+   gNa05I47+V/Lj2yRvK8kwrRdEZmTSi/iQCgVbihZ3r5Qy/2dIUbuXUMPy
+   OFK+7EXbABo97SIQIvZ9UDz1pJBJpwPy+nVuUZbaJCgU32MTSP4+cAQj1
+   OsmH4cmwGJHCuVl6pNw1glSWVDmlNtz0eipHgAUG4eNxfEYHsN7vGsOWq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="2126882"
+X-IronPort-AV: E=Sophos;i="6.06,164,1705392000"; 
+   d="scan'208";a="2126882"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 06:11:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="935852243"
+X-IronPort-AV: E=Sophos;i="6.06,164,1705392000"; 
+   d="scan'208";a="935852243"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Feb 2024 06:10:58 -0800
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: pmenzel@molgen.mpg.de
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	aros@gmx.com,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [RFT PATCH 1/2] usb: usb-acpi: Set port connect type of not connectable ports correctly
+Date: Fri, 16 Feb 2024 16:12:29 +0200
+Message-Id: <20240216141230.3924677-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <9c53ec38-812f-f701-d2f6-91e28367bb82@linux.intel.com>
+References: <9c53ec38-812f-f701-d2f6-91e28367bb82@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xmkz5NkVvM5TFQTX"
-Content-Disposition: inline
-In-Reply-To: <20240209143723.v5.3.Idf7d373c3cbb54058403cb951d644f1f09973d15@changeid>
+Content-Transfer-Encoding: 8bit
 
+Ports with  _UPC (USB Port Capability) ACPI objects stating they are
+"not connectable" are not wired to any connector or internal device.
+They only exists inside the host controller.
 
---xmkz5NkVvM5TFQTX
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+These ports may not have a ACPI _PLD (Physical Location of Device) object
 
-On Fri, Feb 09, 2024 at 02:37:32PM -0800, Abhishek Pandit-Subedi wrote:
-> +	command =3D UCSI_GET_CONNECTOR_CAPABILITY | UCSI_CONNECTOR_NUMBER(con->=
-num);
-> +	ret =3D ucsi_send_command(con->ucsi, command, &con->cap, sizeof(con->ca=
-p));
-> +	if (ret < 0) {
-> +		dev_err(con->ucsi->dev, "GET_CONNECTOR_CAPABILITY failed (%d)\n", ret);
-> +		return ret;
-> +	}
+Rework the code so that _UPC is read even if _PLD does not exist, and
+make sure the port->connect_type is set to "USB_PORT_NOT_USED" instead of
+"USB_PORT_CONNECT_TYPE_UNKNOWN".
 
-Did you mean that above error is raised when the connector capability
-isn't recognized?
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/core/usb-acpi.c | 46 ++++++++++++++++++-------------------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
 
-Confused...
+diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
+index a34b22537d7c..f250dfc3b14d 100644
+--- a/drivers/usb/core/usb-acpi.c
++++ b/drivers/usb/core/usb-acpi.c
+@@ -142,12 +142,19 @@ int usb_acpi_set_power_state(struct usb_device *hdev, int index, bool enable)
+ }
+ EXPORT_SYMBOL_GPL(usb_acpi_set_power_state);
+ 
+-static enum usb_port_connect_type usb_acpi_get_connect_type(acpi_handle handle,
+-		struct acpi_pld_info *pld)
++/*
++ * Private to usb-acpi, all the core needs to know is that
++ * port_dev->location is non-zero when it has been set by the firmware.
++ */
++#define USB_ACPI_LOCATION_VALID (1 << 31)
++
++static void
++usb_acpi_get_connect_type(struct usb_port *port_dev, acpi_handle *handle)
+ {
+ 	enum usb_port_connect_type connect_type = USB_PORT_CONNECT_TYPE_UNKNOWN;
+ 	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+ 	union acpi_object *upc = NULL;
++	struct acpi_pld_info *pld;
+ 	acpi_status status;
+ 
+ 	/*
+@@ -158,6 +165,12 @@ static enum usb_port_connect_type usb_acpi_get_connect_type(acpi_handle handle,
+ 	 * a usb device is directly hard-wired to the port. If no visible and
+ 	 * no connectable, the port would be not used.
+ 	 */
++
++	status = acpi_get_physical_device_location(handle, &pld);
++	if (ACPI_SUCCESS(status) && pld)
++		port_dev->location = USB_ACPI_LOCATION_VALID |
++			pld->group_token << 8 | pld->group_position;
++
+ 	status = acpi_evaluate_object(handle, "_UPC", NULL, &buffer);
+ 	if (ACPI_FAILURE(status))
+ 		goto out;
+@@ -166,25 +179,22 @@ static enum usb_port_connect_type usb_acpi_get_connect_type(acpi_handle handle,
+ 	if (!upc || (upc->type != ACPI_TYPE_PACKAGE) || upc->package.count != 4)
+ 		goto out;
+ 
++	/* UPC states port is connectable */
+ 	if (upc->package.elements[0].integer.value)
+-		if (pld->user_visible)
++		if (!pld)
++			; /* keep connect_type as unknown */
++		else if (pld->user_visible)
+ 			connect_type = USB_PORT_CONNECT_TYPE_HOT_PLUG;
+ 		else
+ 			connect_type = USB_PORT_CONNECT_TYPE_HARD_WIRED;
+-	else if (!pld->user_visible)
++	else
+ 		connect_type = USB_PORT_NOT_USED;
+ out:
++	port_dev->connect_type = connect_type;
+ 	kfree(upc);
+-	return connect_type;
++	ACPI_FREE(pld);
+ }
+ 
+-
+-/*
+- * Private to usb-acpi, all the core needs to know is that
+- * port_dev->location is non-zero when it has been set by the firmware.
+- */
+-#define USB_ACPI_LOCATION_VALID (1 << 31)
+-
+ static struct acpi_device *
+ usb_acpi_get_companion_for_port(struct usb_port *port_dev)
+ {
+@@ -222,22 +232,12 @@ static struct acpi_device *
+ usb_acpi_find_companion_for_port(struct usb_port *port_dev)
+ {
+ 	struct acpi_device *adev;
+-	struct acpi_pld_info *pld;
+-	acpi_handle *handle;
+-	acpi_status status;
+ 
+ 	adev = usb_acpi_get_companion_for_port(port_dev);
+ 	if (!adev)
+ 		return NULL;
+ 
+-	handle = adev->handle;
+-	status = acpi_get_physical_device_location(handle, &pld);
+-	if (ACPI_SUCCESS(status) && pld) {
+-		port_dev->location = USB_ACPI_LOCATION_VALID
+-			| pld->group_token << 8 | pld->group_position;
+-		port_dev->connect_type = usb_acpi_get_connect_type(handle, pld);
+-		ACPI_FREE(pld);
+-	}
++	usb_acpi_get_connect_type(port_dev, adev->handle);
+ 
+ 	return adev;
+ }
+-- 
+2.25.1
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---xmkz5NkVvM5TFQTX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZc9mxgAKCRD2uYlJVVFO
-o4zwAP4oR4MoDeAuM/4kruIg8A3QFNP39W25pV7k9DiiprHnsAD/cmXqIp4eEyzP
-g2tnAN+Z4hBZ05uI4CtQwV1FLWWM3wU=
-=oYH6
------END PGP SIGNATURE-----
-
---xmkz5NkVvM5TFQTX--
 
