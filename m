@@ -1,207 +1,223 @@
-Return-Path: <linux-usb+bounces-6572-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6573-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17C128584C8
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 19:04:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BBBE8587E4
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 22:19:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB910B25369
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 18:04:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A84591F22C3A
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 21:19:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B7D9134CFD;
-	Fri, 16 Feb 2024 18:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60CE214601E;
+	Fri, 16 Feb 2024 21:19:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=trendmicro.com header.i=@trendmicro.com header.b="RRrW3b+O"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dwnhhII5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from edc2-mailout4.edc.trendmicro.com (edc2vmout04.edc.trendmicro.com [216.104.20.48])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95544133997;
-	Fri, 16 Feb 2024 18:04:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=216.104.20.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708106645; cv=fail; b=CF+VkYRXbtuXE7g4nhlPX/vvpwOE8aBkKPUXHI49ItnQo62tSwQ8P4qQ+PiAZtfoEsIh4Q0zIQNG93RmrGCGGxeH95UsgY/HIj7cTNMHsJPsFu1lUXKZplJGVDbhcSVKjnI87vIh4/NDd/whLeC5qGWmRSuZnm69wZHB+eR/bHU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708106645; c=relaxed/simple;
-	bh=g/5G/CY7sEIP5u/uF1xtIfiYpmv86AIN2KPnI2WwFkE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=LFvNj20cYlHpkDnh6QpmW0esgEjLEk3beUo7HXyGmxXPMRy0mKkR1FUgaNmBkOkP5ANvoSXmIwsOUQOb8Rodmiy9hI9pNZZ39FKikpkGsds0OEQVUXjBkCJjX97kyu7CX5LdiLbP1IPB1mp4bzYzhOtuEERnW+38cH8945OX56Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trendmicro.com; spf=pass smtp.mailfrom=trendmicro.com; dkim=pass (1024-bit key) header.d=trendmicro.com header.i=@trendmicro.com header.b=RRrW3b+O; arc=fail smtp.client-ip=216.104.20.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trendmicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trendmicro.com
-Received: from edc2-mailout4.edc.trendmicro.com (unknown [127.0.0.1])
-	by DDEI (Postfix) with ESMTP id 69ADC427C74;
-	Fri, 16 Feb 2024 17:58:25 +0000 (UTC)
-Received: from edc2-mailout4.edc.trendmicro.com (unknown [127.0.0.1])
-	by DDEI (Postfix) with ESMTP id 56348426C2F;
-	Fri, 16 Feb 2024 17:58:25 +0000 (UTC)
-X-TM-AS-ERS: 10.34.72.183-127.5.254.253
-X-TM-AS-SMTP: 1.0 RURDMi1FWENIMDIuZXUudHJlbmRuZXQub3Jn emRpLWRpc2Nsb3N1cmVzQ
-	HRyZW5kbWljcm8uY29t
-X-DDEI-TLS-USAGE: Used
-Received: from EDC2-EXCH02.eu.trendnet.org (unknown [10.34.72.183])
-	by edc2-mailout4.edc.trendmicro.com (Postfix) with ESMTPS;
-	Fri, 16 Feb 2024 17:58:25 +0000 (UTC)
-Received: from EDC2-EXCH02.eu.trendnet.org (10.34.72.183) by
- EDC2-EXCH02.eu.trendnet.org (10.34.72.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 16 Feb 2024 09:58:23 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
- by exhybridemea.trendmicro.com (10.34.72.184) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Fri, 16 Feb 2024 09:58:23 -0800
-Received: from DM5PR0102MB3477.prod.exchangelabs.com (2603:10b6:4:a1::19) by
- CH0PR01MB7019.prod.exchangelabs.com (2603:10b6:610:108::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7270.40; Fri, 16 Feb 2024 17:58:20 +0000
-Received: from DM5PR0102MB3477.prod.exchangelabs.com
- ([fe80::62f9:a52f:7777:ce4e]) by DM5PR0102MB3477.prod.exchangelabs.com
- ([fe80::62f9:a52f:7777:ce4e%4]) with mapi id 15.20.7292.029; Fri, 16 Feb 2024
- 17:58:20 +0000
-From: "zdi-disclosures@trendmicro.com" <zdi-disclosures@trendmicro.com>
-To: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"valentina.manea.m@gmail.com" <valentina.manea.m@gmail.com>,
-	"shuah@kernel.org" <shuah@kernel.org>, "i@zenithal.me" <i@zenithal.me>
-Subject: RE: ZDI-CAN-22273: New Vulnerability Report
-Thread-Topic: ZDI-CAN-22273: New Vulnerability Report
-Thread-Index: AdoDaZfX1Pq+Y8aLRweLJ8giuYn76QAnSoKAFz2O8lAAAHKGgAAALldg
-Content-Class:
-Date: Fri, 16 Feb 2024 17:58:20 +0000
-Message-ID: <DM5PR0102MB3477B499A8A3292D6BFFBE80804C2@DM5PR0102MB3477.prod.exchangelabs.com>
-References: <DM5PR0102MB347711AF2F5655852AC60BEB80DBA@DM5PR0102MB3477.prod.exchangelabs.com>
- <2023102134-reflux-saddling-c750@gregkh>
- <DM5PR0102MB3477B594C9D018BC884DF3E4804C2@DM5PR0102MB3477.prod.exchangelabs.com>
- <2024021605-disloyal-overlying-ed56@gregkh>
-In-Reply-To: <2024021605-disloyal-overlying-ed56@gregkh>
-Accept-Language: en-US, es-ES
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels: MSIP_Label_fb50d67e-2428-41a1-85f0-bee73fd61572_ActionId=c44f7461-1107-46df-a12f-d72c1d6224a5;MSIP_Label_fb50d67e-2428-41a1-85f0-bee73fd61572_ContentBits=0;MSIP_Label_fb50d67e-2428-41a1-85f0-bee73fd61572_Enabled=true;MSIP_Label_fb50d67e-2428-41a1-85f0-bee73fd61572_Method=Privileged;MSIP_Label_fb50d67e-2428-41a1-85f0-bee73fd61572_Name=Public
- Information - no
- protection;MSIP_Label_fb50d67e-2428-41a1-85f0-bee73fd61572_SetDate=2024-02-16T17:44:28Z;MSIP_Label_fb50d67e-2428-41a1-85f0-bee73fd61572_SiteId=3e04753a-ae5b-42d4-a86d-d6f05460f9e4;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM5PR0102MB3477:EE_|CH0PR01MB7019:EE_
-x-ms-office365-filtering-correlation-id: 67e0f5e3-4c9d-439a-673d-08dc2f18dcb3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2Kj9pB47e2pYPqgVEOVpdgsMECz7uafgfgkXR38B2FA+LKIbaCKMtrrzx2snGZQaIFYuhuVGJXS6k77ottF7FHX2/m/bLi35emdCTBIVAbPK9RSsvdKKkEn23CK03Xk0exw1PqkH3mJOLSkYko4K8Ps8VEr9t9inOFafwTFKLj5ctyovgUnNrhYhTACjGQ98qsCGweLkWCtfD8czkGbScE8GNz+FBLJQ32aTRE6TvirmNeDEAIsoOut+pkeErLEfC630bdr8qJenoi7//qQog1YzAD73yO4y32MIqo2pMKv4zqA1eygzCzb/uoQtxYE/qFpOppWdoxIaf/ui4P/kmIGvSNmvJBNLE9eUxTBTQ/iZ+ZvrCA5xYTrqB4xvjCcheTSVGnCzJTaOEVAMEnUSieac1zsi1c+q3SxnSdlcaGhMza5r65ol4HvvoFbe/6kddAd7kWbx5cyFICMiveoloYgAQbyeVGPNoknJfALVMXqpD65dn292It/knQ8Bec1U1wh+NtmsC5YWzXHEKrw5ty8cQL95Dz6zWw3vpa3VBgBswgdUix69mrJ6YPw3Oo5pYp65frF9mWHRgN3xhW0RN6pEGf3Vk/vN2+vexJje6t5JJ5x8bJGWpFn8HtPBGP/r
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3477.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(396003)(346002)(136003)(39860400002)(230922051799003)(1800799012)(451199024)(186009)(64100799003)(5660300002)(4744005)(2906002)(55016003)(8936002)(26005)(66946007)(41300700001)(8676002)(4326008)(52536014)(6506007)(64756008)(66476007)(66556008)(66446008)(83380400001)(76116006)(6916009)(53546011)(7696005)(38070700009)(71200400001)(9686003)(33656002)(316002)(54906003)(478600001)(122000001)(86362001)(82960400001)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zhuvhrzwXhyzoOIGtJPA8GcZAK3g+lxTwpINUB0HUiLws9YgAmhj3j+aXlH2?=
- =?us-ascii?Q?uRweh2ye5lpLSGKK2SE1Uh7lPSKSNac1bjVuNFfpKgazeu1gAIgnBJWshcQI?=
- =?us-ascii?Q?y67SCJ2d0NuoYOL/TksYNg3iMC7QsxZknNiIhqQA0bLY5xvFSwMHK3L0v9Wo?=
- =?us-ascii?Q?Ef7GDW/LASsHqEhD5IIhdEw9REOJrIiO+b+5bUmKL8s3/Ed4y0SDKxX7pF8X?=
- =?us-ascii?Q?KRhV9GX7hIPUHm2+WwyYZk9BUFtR7Zc70OEB/YgnH8HEQ0EMDb2zivhcYEkI?=
- =?us-ascii?Q?qomkWWdHkwm/QGgg5r8PiH2fS6OC1MUTIP3p1WZmQW2ijmql3tWrgEKIetT6?=
- =?us-ascii?Q?mwnBjUver+z6t12rxhyD9PQXt9X3CvA0rDh1s2jQhKsTcVYcClwgqaFnkECj?=
- =?us-ascii?Q?a2ibokeBUbLE9nmMpFtAmUDRbTJJXDOznVxmxkMDwMeM/XQS/De5pHbk//Kk?=
- =?us-ascii?Q?he9PEM7mYL77JXV4QnC02xiF7OeHDrfrBa2EPxDE1nKQfmetY7VsJ1rrfd5I?=
- =?us-ascii?Q?u78rgGcKAnxk8zl3r2LqJf2W7jrvgW6AKaRvovlCqIAV60oSyuHG3k0JiGwD?=
- =?us-ascii?Q?nsqGgfvOpLI2I1GRNyXZLt8QCkJYzWxSmU8bMghBTu+aGRJk80JMxRYjnaCZ?=
- =?us-ascii?Q?xXMqMAXAQnN3qBcHxTNHHgvk0N/aTKYjMsZowc/+S79hNovAlecz5MUt5Gkk?=
- =?us-ascii?Q?NeXhy6EAW7VOn7vLUFlS6RuhstShTl1nXs3qOG5C/XqXNc55B7v+jehyUM1T?=
- =?us-ascii?Q?T+fbw49sKQQ9sbyZTV/IGRkATODAt6YCpP2sJ6+3X6SR7S2EGHs+yj3AE2Jb?=
- =?us-ascii?Q?ckQ/TJH0DrbMBr55BKlUCB1K9dC17utP+MozQ4SdF503F0sXFAlKCfdNPv64?=
- =?us-ascii?Q?wff3rlIKYZnSRDwdEprY5WvCUq2nOfBfTsmtIxBCDaEOTYNeRhQC93TKRhlI?=
- =?us-ascii?Q?11K5PpEpr176NSuqdRw6dbmnoRs1hylhzcpf7wuG9eASoFBL9woX8i48vWYG?=
- =?us-ascii?Q?opV9fCvCT/c4i/kzGKDBzVlkAE/kjZ3JPcJ1fzpdT4aXSeOyEwRXC7NcIf6/?=
- =?us-ascii?Q?TqQsLuDt9pjiuRYyoNm6fsvT8o/r6GM/rNGKMQ35e9rjqlejs+FsIppT6Fk9?=
- =?us-ascii?Q?gQJzsdYcU+DomfGnEUoQ/VUzwhiN3j9oziTN1Z9nikY1OWDJa93bDN5w4CU8?=
- =?us-ascii?Q?hvf+cLg30xAPIH5saqzSo5GOIT5sgmCBfwyWZrUAdcf2HTx/S1tywbz5N+YB?=
- =?us-ascii?Q?JzfH+GFLkNw3EwLwNlglx4OQDvyNruRQ+OHC6kteyZ7AVHHWO+XfVR/q0WSF?=
- =?us-ascii?Q?sEyilPtYkysvf4/PCFAmQ8cqjltV+ftvAoBdPk3MTy+MaX41i/C+6ftrN38K?=
- =?us-ascii?Q?F9LCZRqbm3BW606GTCQ7IEi+lxzDQbbonP4uAGa/0169GSZCN+5IW2JDY7O1?=
- =?us-ascii?Q?Yoi8i+qawJ/d2YIzULvpC6eNxcmJTQ51x6HfdVQgK+RvvHWh9PbqIYNkrDV9?=
- =?us-ascii?Q?MDRcs1Luk8bW8GDXXtc8iJJcQdXPhndsSnCP5DJK4d5jrBlHcLDNaP6c6ICj?=
- =?us-ascii?Q?WWY6Gt/79IMFzhgLwFXpNfh/AXTvxLNHVYsMfKCQ/XWGmC2ZUqcmpqjWzdas?=
- =?us-ascii?Q?CQ=3D=3D?=
-arc-seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XpXcA5wmh0s5Ieg//nQuOIoAFY/6qwPikyllE6TLhpoTFErZlex7w9CbvQay9niWrdEtSc/DdeYPOu5/baijEQaSoyKt2KGbNb7QvHfEYEhIpDipHZ2LixOXBVeVr8O3dd+aK7TwWLRTOjGO+Qja651i4kPQQL5eGbbKyU3UlDsIMO3ifGWb8LlH6bFArbXdUrrNkzva5tR81w+LZE5LFwv+Ku5cSk8sCUstOjSriFRnDXCKczBOJVDkg/RVZBGWriySYbpG3LNlwrK31LqubKkQlgT1ztzNblu2RsOrZx4StR53ew+WRBAShEyC92MQOpYR2PRXpRApOXSG+zUcsA==
-arc-message-signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xAwcjUJIfWKPGPbSELy1iPEHIqUPhPSFETpWEyqwW8g=;
- b=FXI3Of3OaghjfOykAm6RG7ngBCb1ZeDdgOxZGOXXfioq/ZyCQdchS58bG5Amxshbc3vCM9jkBv0+S2XdwyXrvY4DRQ3M+XUP4/BB9Xol60/TkbA2nbs4fEYsaRjGNaPLg0RjdZSwEjKUhHx8+KyDFg/NNCgefkj0kuBvxR98xR1SesjpKj00xUhhO+b/kVeUNxDlSlL1wRbjYrJRCAngyRhTUBMCZTvNhMKp85HxptYM87omsPti3UK4h+cAJPvCyfATPvsY8K2i73skkcjyk4608p1Nd+upaWL5ZC3Yd0XBE9uFfdizn2Z3avXcjHe6LfPpajcwq+y8Vhp5F6fUoQ==
-arc-authentication-results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=trendmicro.com; dmarc=pass action=none
- header.from=trendmicro.com; dkim=pass header.d=trendmicro.com; arc=none
-x-ms-exchange-crosstenant-authas: Internal
-x-ms-exchange-crosstenant-authsource: DM5PR0102MB3477.prod.exchangelabs.com
-x-ms-exchange-crosstenant-network-message-id: 67e0f5e3-4c9d-439a-673d-08dc2f18dcb3
-x-ms-exchange-crosstenant-originalarrivaltime: 16 Feb 2024 17:58:20.7761 (UTC)
-x-ms-exchange-crosstenant-fromentityheader: Hosted
-x-ms-exchange-crosstenant-id: 3e04753a-ae5b-42d4-a86d-d6f05460f9e4
-x-ms-exchange-crosstenant-mailboxtype: HOSTED
-x-ms-exchange-crosstenant-userprincipalname: pkpMGre4pQxb5B1gze40hdqNItFBBX6OtnjA/cNpzOK0unbi3Wb6SSnZebdQLn4cZxxZcUlPhg8c5NrAy89RaRlZwVWWPVyJ5Ac28Cqgtx0=
-x-ms-exchange-transport-crosstenantheadersstamped: CH0PR01MB7019
-x-originatororg: trendmicro.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02AB145FE7;
+	Fri, 16 Feb 2024 21:19:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708118345; cv=none; b=THKJX+sYfkiXwcYToiv870579OVW3hZ+j2BCXyQ/3VXTbb1bRsNI1YnrZzLekryJSgRuBKO/Yj+1dUCcCkr2S+cmyQuuvm25fWtOBg6jinefEMS3pGKDu7O1g2vn2dEgllbkqVyzZcJtVC091y/TbpSnaX9Z6fgO6qWBQNFlrFQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708118345; c=relaxed/simple;
+	bh=Wew+CW4tKdINP5Tg/pRZDgVR1S7k1tpLboeBWPBTKIE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=shJr8hF6To7MfkioRhPNQw6rQX5SJfuGiApx/DyDCQv+UlfnXs39aiCoQFEuoLafs5IbPKBaZqNXSyumkts7aSegvSSptGDAddaTGiaQVt8KXrnYx6kumNM5Irk2CIN/VepJu/f+oDhHuqKMTr//ZrcLEvxGzid8qQ8tMmvDV0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dwnhhII5; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708118344; x=1739654344;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Wew+CW4tKdINP5Tg/pRZDgVR1S7k1tpLboeBWPBTKIE=;
+  b=dwnhhII5MEBCt0/s8cIOsPXAP+pSPlGGqs4704Y3hPh+5MxzRLzTM84U
+   1NmqTAl693Wq33Ywv3r5MX1f4Lz/KtieurHMwuxhRxtuPfR9AZcLt4WT6
+   LShmU+5iChCjpTnvt0Ic6SqqFddCcmFmoWf6B/NJs2iG741UATt7fRCpN
+   3EfYAp5bKjchy+locPJHIb3Ci8dLL++cQGCj06MpfHXNnpuHwAZMkZX8g
+   OKAMj5Fnwf3GZRSUrbuWxJ25Qmp4ChsQi+GdqEH34Nib/VvuAHpRUJQko
+   saMkV90Prjo/GP2t/vqWe++mCp9HCnEqwSqAacENmil0fPlZlX/yBmnnw
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10986"; a="2377620"
+X-IronPort-AV: E=Sophos;i="6.06,165,1705392000"; 
+   d="scan'208";a="2377620"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 13:19:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,165,1705392000"; 
+   d="scan'208";a="3996861"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 16 Feb 2024 13:18:58 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rb5bj-0001cC-1f;
+	Fri, 16 Feb 2024 21:18:55 +0000
+Date: Sat, 17 Feb 2024 05:18:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>
+Cc: Paul Gazzillo <paul@pgazz.com>,
+	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+	oe-kbuild-all@lists.linux.dev, amd-gfx@lists.freedesktop.org,
+	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+	linux-fbdev@vger.kernel.org, nouveau@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org,
+	platform-driver-x86@vger.kernel.org, intel-xe@lists.freedesktop.org,
+	linux-renesas-soc@vger.kernel.org,
+	"open list:ACPI" <linux-acpi@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Melissa Wen <mwen@igalia.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v6 1/5] drm: Stop using `select ACPI_VIDEO` in all drivers
+Message-ID: <202402170543.qd0JRj6h-lkp@intel.com>
+References: <20240214215756.6530-2-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-ERS: 10.34.72.183-127.5.254.253
-X-TM-AS-SMTP: 1.0 RURDMi1FWENIMDIuZXUudHJlbmRuZXQub3Jn emRpLWRpc2Nsb3N1cmVzQ
-	HRyZW5kbWljcm8uY29t
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=trendmicro.com;
-	s=tmoutbound; t=1708106305;
-	bh=g/5G/CY7sEIP5u/uF1xtIfiYpmv86AIN2KPnI2WwFkE=; l=1647;
-	h=From:To:Date;
-	b=RRrW3b+OdFXbCcWFbIMHoX0k4riGVEkkJFJ4ksC1SGHXPQm2YiiueA8o7yJrBeqjP
-	 /Y1nkNnci5Bz9775qOS8SOWZFQTqdJtcYm25gIMoJcEA4dC2GvaP/8/TeOeru4Jw4W
-	 RkuslsqYbytKIVg370ZQeLiZXrcv1bYwPPlLCWXs=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240214215756.6530-2-mario.limonciello@amd.com>
 
-Hi Greg,
-Thanks for the update :)
+Hi Mario,
 
-Cheers,
-Rebecca
+kernel test robot noticed the following build warnings:
 
------Original Message-----
-From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
-Sent: Friday, February 16, 2024 12:37 PM
-To: ZDI Disclosures Mailbox <zdi-disclosures@trendmicro.com>
-Cc: linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org; valentina.mane=
-a.m@gmail.com; shuah@kernel.org; i@zenithal.me
-Subject: Re: ZDI-CAN-22273: New Vulnerability Report
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.8-rc4 next-20240216]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On Fri, Feb 16, 2024 at 05:27:57PM +0000, zdi-disclosures@trendmicro.com wr=
-ote:
-> Hello,
-> Do you have any updates to share regarding this vulnerability? The 120-da=
-y deadline for this case was January 31, 2024. We will publish this soon in=
- accordance with the ZDI 120-day Disclosure policy if there is not an avail=
-able fix.
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/drm-Stop-using-select-ACPI_VIDEO-in-all-drivers/20240215-055936
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20240214215756.6530-2-mario.limonciello%40amd.com
+patch subject: [PATCH v6 1/5] drm: Stop using `select ACPI_VIDEO` in all drivers
+config: alpha-kismet-CONFIG_FB_BACKLIGHT-CONFIG_FB_SH_MOBILE_LCDC-0-0 (https://download.01.org/0day-ci/archive/20240217/202402170543.qd0JRj6h-lkp@intel.com/config)
+reproduce: (https://download.01.org/0day-ci/archive/20240217/202402170543.qd0JRj6h-lkp@intel.com/reproduce)
 
-I asked some questions to this, a few hours after you sent this to us,
-yet we recieved no response and as such it did not go anywhere.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402170543.qd0JRj6h-lkp@intel.com/
 
-So this is all on you now.
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for FB_BACKLIGHT when selected by FB_SH_MOBILE_LCDC
+   .config:92:warning: symbol value 'n' invalid for AIC7XXX_DEBUG_MASK
+   .config:218:warning: symbol value 'n' invalid for RAPIDIO_DISC_TIMEOUT
+   .config:242:warning: symbol value 'n' invalid for SATA_MOBILE_LPM_POLICY
+   .config:259:warning: symbol value 'n' invalid for FAT_DEFAULT_CODEPAGE
+   .config:339:warning: symbol value 'n' invalid for PSTORE_BLK_MAX_REASON
+   .config:341:warning: symbol value 'n' invalid for PANEL_PROFILE
+   .config:352:warning: symbol value 'n' invalid for AIC79XX_DEBUG_MASK
+   .config:432:warning: symbol value 'n' invalid for KFENCE_SAMPLE_INTERVAL
+   .config:610:warning: symbol value 'n' invalid for DRM_XE_JOB_TIMEOUT_MIN
+   .config:616:warning: symbol value 'n' invalid for CRYPTO_DEV_QCE_SW_MAX_LEN
+   .config:717:warning: symbol value 'n' invalid for PANEL_LCD_CHARSET
+   .config:755:warning: symbol value 'n' invalid for AIC79XX_CMDS_PER_DEVICE
+   .config:784:warning: symbol value 'n' invalid for SND_AC97_POWER_SAVE_DEFAULT
+   .config:805:warning: symbol value 'n' invalid for PANEL_LCD_PIN_SDA
+   .config:807:warning: symbol value 'n' invalid for MAGIC_SYSRQ_DEFAULT_ENABLE
+   .config:825:warning: symbol value 'n' invalid for DRM_I915_MAX_REQUEST_BUSYWAIT
+   .config:864:warning: symbol value 'n' invalid for SND_AT73C213_TARGET_BITRATE
+   .config:886:warning: symbol value 'n' invalid for DRM_XE_PREEMPT_TIMEOUT_MIN
+   .config:894:warning: symbol value 'n' invalid for NET_EMATCH_STACK
+   .config:896:warning: symbol value 'n' invalid for VMCP_CMA_SIZE
+   .config:988:warning: symbol value 'n' invalid for INPUT_MOUSEDEV_SCREEN_Y
+   .config:1124:warning: symbol value 'n' invalid for RCU_CPU_STALL_TIMEOUT
+   .config:1150:warning: symbol value 'n' invalid for MTDRAM_ERASE_SIZE
+   .config:1237:warning: symbol value 'n' invalid for SERIAL_UARTLITE_NR_UARTS
+   .config:1303:warning: symbol value 'n' invalid for USB_GADGET_STORAGE_NUM_BUFFERS
+   .config:1396:warning: symbol value 'n' invalid for LEGACY_PTY_COUNT
+   .config:1533:warning: symbol value 'n' invalid for AIC7XXX_RESET_DELAY_MS
+   .config:1723:warning: symbol value 'n' invalid for IBM_EMAC_POLL_WEIGHT
+   .config:1759:warning: symbol value 'n' invalid for PANEL_LCD_PIN_E
+   .config:1805:warning: symbol value 'n' invalid for DRM_I915_STOP_TIMEOUT
+   .config:1981:warning: symbol value 'n' invalid for KCOV_IRQ_AREA_SIZE
+   .config:2132:warning: symbol value 'n' invalid for RCU_FANOUT_LEAF
+   .config:2232:warning: symbol value 'n' invalid for DRM_XE_TIMESLICE_MAX
+   .config:2278:warning: symbol value 'n' invalid for PANEL_LCD_BWIDTH
+   .config:2512:warning: symbol value 'n' invalid for PANEL_PARPORT
+   .config:2520:warning: symbol value 'n' invalid for SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST_NUM
+   .config:2599:warning: symbol value 'n' invalid for NOUVEAU_DEBUG_DEFAULT
+   .config:2785:warning: symbol value 'n' invalid for KCSAN_REPORT_ONCE_IN_MS
+   .config:2883:warning: symbol value 'n' invalid for PSTORE_BLK_CONSOLE_SIZE
+   .config:2884:warning: symbol value 'n' invalid for KCSAN_UDELAY_INTERRUPT
+   .config:2894:warning: symbol value 'n' invalid for AIC79XX_RESET_DELAY_MS
+   .config:2908:warning: symbol value 'n' invalid for PANEL_LCD_PIN_BL
+   .config:2924:warning: symbol value 'n' invalid for DEBUG_OBJECTS_ENABLE_DEFAULT
+   .config:2931:warning: symbol value 'n' invalid for INITRAMFS_ROOT_GID
+   .config:3032:warning: symbol value 'n' invalid for ATM_FORE200E_TX_RETRY
+   .config:3059:warning: symbol value 'n' invalid for BOOKE_WDT_DEFAULT_TIMEOUT
+   .config:3068:warning: symbol value 'n' invalid for FB_OMAP2_DSS_MIN_FCK_PER_PCK
+   .config:3282:warning: symbol value 'n' invalid for KCSAN_UDELAY_TASK
+   .config:3397:warning: symbol value 'n' invalid for MMC_BLOCK_MINORS
+   .config:3400:warning: symbol value 'n' invalid for INET_TABLE_PERTURB_ORDER
+   .config:3410:warning: symbol value 'n' invalid for MTD_REDBOOT_DIRECTORY_BLOCK
+   .config:3443:warning: symbol value 'n' invalid for SCSI_NCR53C8XX_SYNC
+   .config:3560:warning: symbol value 'n' invalid for UCLAMP_BUCKETS_COUNT
+   .config:3580:warning: symbol value 'n' invalid for SCSI_MESH_RESET_DELAY_MS
+   .config:3610:warning: symbol value 'n' invalid for SERIAL_MCF_BAUDRATE
+   .config:3668:warning: symbol value 'n' invalid for STACK_MAX_DEFAULT_SIZE_MB
+   .config:3680:warning: symbol value 'n' invalid for DE2104X_DSL
+   .config:3693:warning: symbol value 'n' invalid for BLK_DEV_RAM_COUNT
+   .config:3752:warning: symbol value 'n' invalid for SERIAL_ALTERA_UART_BAUDRATE
+   .config:3932:warning: symbol value 'n' invalid for IP_VS_SH_TAB_BITS
+   .config:4071:warning: symbol value 'n' invalid for USBIP_VHCI_HC_PORTS
+   .config:4138:warning: symbol value 'n' invalid for INPUT_MOUSEDEV_SCREEN_X
+   .config:4250:warning: symbol value 'n' invalid for RIONET_RX_SIZE
+   .config:4394:warning: symbol value 'n' invalid for RADIO_TYPHOON_PORT
+   .config:4425:warning: symbol value 'n' invalid for FTRACE_RECORD_RECURSION_SIZE
+   .config:4508:warning: symbol value 'n' invalid for SERIAL_TXX9_NR_UARTS
+   .config:4550:warning: symbol value 'n' invalid for IBM_EMAC_TXB
+   .config:4931:warning: symbol value 'n' invalid for ARCH_MMAP_RND_BITS
+   .config:5013:warning: symbol value 'n' invalid for DRM_I915_FENCE_TIMEOUT
+   .config:5035:warning: symbol value 'n' invalid for TTY_PRINTK_LEVEL
+   .config:5172:warning: symbol value 'n' invalid for IP_VS_MH_TAB_INDEX
+   .config:5188:warning: symbol value 'n' invalid for MIPS_EJTAG_FDC_KGDB_CHAN
+   .config:5279:warning: symbol value 'n' invalid for KDB_DEFAULT_ENABLE
+   .config:5297:warning: symbol value 'n' invalid for SERIAL_ALTERA_UART_MAXPORTS
+   .config:5359:warning: symbol value 'n' invalid for CRYPTO_DEV_FSL_CAAM_INTC_TIME_THLD
+   .config:5361:warning: symbol value 'n' invalid for PPC_EARLY_DEBUG_EHV_BC_HANDLE
+   .config:5550:warning: symbol value 'n' invalid for PANEL_LCD_HWIDTH
+   .config:5576:warning: symbol value 'n' invalid for PANEL_LCD_PIN_RW
+   .config:5583:warning: symbol value 'n' invalid for LOCKDEP_CHAINS_BITS
+   .config:5677:warning: symbol value 'n' invalid for DRM_I915_HEARTBEAT_INTERVAL
+   .config:5683:warning: symbol value 'n' invalid for KCSAN_SKIP_WATCH
+   .config:5706:warning: symbol value 'n' invalid for PSTORE_BLK_KMSG_SIZE
+   .config:6004:warning: symbol value 'n' invalid for ARCH_MMAP_RND_COMPAT_BITS
+   .config:6113:warning: symbol value 'n' invalid for SND_MAX_CARDS
+   .config:6170:warning: symbol value 'n' invalid for SERIAL_SH_SCI_NR_UARTS
+   .config:6171:warning: symbol value 'n' invalid for RADIO_TRUST_PORT
+   .config:6246:warning: symbol value 'n' invalid for RCU_BOOST_DELAY
+   .config:6545:warning: symbol value 'n' invalid for CMA_SIZE_PERCENTAGE
+   .config:6684:warning: symbol value 'n' invalid for DRM_XE_TIMESLICE_MIN
+   .config:6702:warning: symbol value 'n' invalid for DRM_XE_PREEMPT_TIMEOUT_MAX
+   .config:6725:warning: symbol value 'n' invalid for SCSI_NCR53C8XX_MAX_TAGS
+   .config:6734:warning: symbol value 'n' invalid for DVB_MAX_ADAPTERS
+   .config:6747:warning: symbol value 'n' invalid for SCSI_SYM53C8XX_DMA_ADDRESSING_MODE
+   .config:6873:warning: symbol value 'n' invalid for ZSMALLOC_CHAIN_SIZE
+   .config:7082:warning: symbol value 'n' invalid for LOCKDEP_BITS
+   .config:7112:warning: symbol value 'n' invalid for IBM_EMAC_RXB
+   .config:7150:warning: symbol value 'n' invalid for SCSI_SYM53C8XX_MAX_TAGS
+   .config:7153:warning: symbol value 'n' invalid for SERIAL_ARC_NR_PORTS
+   .config:7244:warning: symbol value 'n' invalid for MTD_UBI_WL_THRESHOLD
+   .config:7262:warning: symbol value 'n' invalid for RIONET_TX_SIZE
 
-Also note, you are talking on a public mailing list, there is not much
-left to "disclose" :)
-
-thanks,
-
-greg k-h
-TREND MICRO EMAIL NOTICE
-
-The information contained in this email and any attachments is confidential=
- and may be subject to copyright or other intellectual property protection.=
- If you are not the intended recipient, you are not authorized to use or di=
-sclose this information, and we request that you notify us by reply mail or=
- telephone and delete the original message from your mail system.
-
-For details about what personal information we collect and why, please see =
-our Privacy Notice on our website at: Read privacy policy<http://www.trendm=
-icro.com/privacy>
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
