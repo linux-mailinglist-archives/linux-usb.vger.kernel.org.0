@@ -1,223 +1,222 @@
-Return-Path: <linux-usb+bounces-6573-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6574-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BBBE8587E4
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 22:19:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99328858A38
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 00:37:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A84591F22C3A
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 21:19:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F4DF2897D5
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Feb 2024 23:37:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60CE214601E;
-	Fri, 16 Feb 2024 21:19:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40705148FF6;
+	Fri, 16 Feb 2024 23:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dwnhhII5"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IWjmm4Fy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02AB145FE7;
-	Fri, 16 Feb 2024 21:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0627E13541B;
+	Fri, 16 Feb 2024 23:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708118345; cv=none; b=THKJX+sYfkiXwcYToiv870579OVW3hZ+j2BCXyQ/3VXTbb1bRsNI1YnrZzLekryJSgRuBKO/Yj+1dUCcCkr2S+cmyQuuvm25fWtOBg6jinefEMS3pGKDu7O1g2vn2dEgllbkqVyzZcJtVC091y/TbpSnaX9Z6fgO6qWBQNFlrFQ=
+	t=1708126621; cv=none; b=in8ry8XyP2kEVcx5t6ERUMB3R+JahJRyktlcDAB2BU5mehS18PvdF7whX+BEXg2mD+U5ANj5qqNF/0pe+RdAMJSvB7DifbdDmyq/0EwwnJLGmJs66sTWvVKRcOTZK9LU4TjJwOKEAoCoMGc9y6kTlsnhST9gNNS14CArq/AjFAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708118345; c=relaxed/simple;
-	bh=Wew+CW4tKdINP5Tg/pRZDgVR1S7k1tpLboeBWPBTKIE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=shJr8hF6To7MfkioRhPNQw6rQX5SJfuGiApx/DyDCQv+UlfnXs39aiCoQFEuoLafs5IbPKBaZqNXSyumkts7aSegvSSptGDAddaTGiaQVt8KXrnYx6kumNM5Irk2CIN/VepJu/f+oDhHuqKMTr//ZrcLEvxGzid8qQ8tMmvDV0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dwnhhII5; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708118344; x=1739654344;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Wew+CW4tKdINP5Tg/pRZDgVR1S7k1tpLboeBWPBTKIE=;
-  b=dwnhhII5MEBCt0/s8cIOsPXAP+pSPlGGqs4704Y3hPh+5MxzRLzTM84U
-   1NmqTAl693Wq33Ywv3r5MX1f4Lz/KtieurHMwuxhRxtuPfR9AZcLt4WT6
-   LShmU+5iChCjpTnvt0Ic6SqqFddCcmFmoWf6B/NJs2iG741UATt7fRCpN
-   3EfYAp5bKjchy+locPJHIb3Ci8dLL++cQGCj06MpfHXNnpuHwAZMkZX8g
-   OKAMj5Fnwf3GZRSUrbuWxJ25Qmp4ChsQi+GdqEH34Nib/VvuAHpRUJQko
-   saMkV90Prjo/GP2t/vqWe++mCp9HCnEqwSqAacENmil0fPlZlX/yBmnnw
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10986"; a="2377620"
-X-IronPort-AV: E=Sophos;i="6.06,165,1705392000"; 
-   d="scan'208";a="2377620"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2024 13:19:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,165,1705392000"; 
-   d="scan'208";a="3996861"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 16 Feb 2024 13:18:58 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rb5bj-0001cC-1f;
-	Fri, 16 Feb 2024 21:18:55 +0000
-Date: Sat, 17 Feb 2024 05:18:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>
-Cc: Paul Gazzillo <paul@pgazz.com>,
-	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-	oe-kbuild-all@lists.linux.dev, amd-gfx@lists.freedesktop.org,
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-	linux-fbdev@vger.kernel.org, nouveau@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org,
-	platform-driver-x86@vger.kernel.org, intel-xe@lists.freedesktop.org,
-	linux-renesas-soc@vger.kernel.org,
-	"open list:ACPI" <linux-acpi@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	Melissa Wen <mwen@igalia.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v6 1/5] drm: Stop using `select ACPI_VIDEO` in all drivers
-Message-ID: <202402170543.qd0JRj6h-lkp@intel.com>
-References: <20240214215756.6530-2-mario.limonciello@amd.com>
+	s=arc-20240116; t=1708126621; c=relaxed/simple;
+	bh=zvtJ/goEXl78uXi/CkTnmJLWqFaobtHaj24advs/UyU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=SDaXe/pYFD1UrltM2mwhHzNQizi+hCLBWjuTTCh9sv8OEoSlrqzEdBuPvsy7HZGnsWcf31xyiyzOzTBhC+u3xQhk+n9CMp5Syizh3FG0kwUlZ7w4mTInOue7tJzFLpE4ynSvH+rI6wSykqoL/C1Cumv55/faIdsFUck7LZXwHbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=IWjmm4Fy; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41GN1RTd028772;
+	Fri, 16 Feb 2024 23:36:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=/Kp/ON2+FVNkC5NRIxIJBRrJsNuKYQMnRLjSnkzi+Oc=; b=IW
+	jmm4FyOKbHvPh61NOvHsMMrtd1HY66gUjRUP/O6xukRSTaHnlf4SKxkRC0dURs+Z
+	L2JrPGMKGmBlbZZ/1hM89XECcMRaYTYQUpI8a8mPE9RKiPo/WYx1SFs9XevK+Ery
+	bimwm4hzXlYjnX6l3jXXUGhlgODN7Q5m0kcZBadF2UayYUmYhXAEGX/+O3q49Ya2
+	jrNki28V2Rkg3UNzOdbAq5UNUSyT0FyAlvtmChAK3CWEQxrGxYbYnQPhW/C100cD
+	UMZwP2E9R2E4WiP/wSozADmY4nsIuR/ZTHxOvgLqfD+eG9FWN02KVb/K2MYg0EJ+
+	4D4BoxCeF8cW3lqejwFw==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wabeerqhx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 23:36:36 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41GNaYJD020839
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 23:36:34 GMT
+Received: from [10.110.4.141] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 16 Feb
+ 2024 15:36:33 -0800
+Message-ID: <03f71225-5450-a7c7-5f8c-9b275c1a37f1@quicinc.com>
+Date: Fri, 16 Feb 2024 15:36:33 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240214215756.6530-2-mario.limonciello@amd.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v16 00/50] Introduce QC USB SND audio offloading support
+Content-Language: en-US
+To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
+        <lgirdwood@gmail.com>, <andersson@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <konrad.dybcio@linaro.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>
+References: <20240216035923.23392-1-quic_wcheng@quicinc.com>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <20240216035923.23392-1-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _EJn_PmWx1C-2tjP_V0vsB4c74ZlKlXO
+X-Proofpoint-GUID: _EJn_PmWx1C-2tjP_V0vsB4c74ZlKlXO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-16_23,2024-02-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0
+ clxscore=1015 impostorscore=0 suspectscore=0 mlxlogscore=999 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402160185
 
-Hi Mario,
 
-kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.8-rc4 next-20240216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On 2/15/2024 7:58 PM, Wesley Cheng wrote:
+> Several Qualcomm based chipsets can support USB audio offloading to a
+> dedicated audio DSP, which can take over issuing transfers to the USB
+> host controller.  The intention is to reduce the load on the main
+> processors in the SoC, and allow them to be placed into lower power modes.
+> There are several parts to this design:
+>    1. Adding ASoC binding layer
+>    2. Create a USB backend for Q6DSP
+>    3. Introduce XHCI interrupter support
+>    4. Create vendor ops for the USB SND driver
+> 
+>        USB                          |            ASoC
+> --------------------------------------------------------------------
+>                                     |  _________________________
+>                                     | |sm8250 platform card     |
+>                                     | |_________________________|
+>                                     |         |           |
+>                                     |      ___V____   ____V____
+>                                     |     |Q6USB   | |Q6AFE    |
+>                                     |     |"codec" | |"cpu"    |
+>                                     |     |________| |_________|
+>                                     |         ^  ^        ^
+>                                     |         |  |________|
+>                                     |      ___V____    |
+>                                     |     |SOC-USB |   |
+>     ________       ________               |        |   |
+>    |USB SND |<--->|QC offld|<------------>|________|   |
+>    |(card.c)|     |        |<----------                |
+>    |________|     |________|___     | |                |
+>        ^               ^       |    | |    ____________V_________
+>        |               |       |    | |   |APR/GLINK             |
+>     __ V_______________V_____  |    | |   |______________________|
+>    |USB SND (endpoint.c)     | |    | |              ^
+>    |_________________________| |    | |              |
+>                ^               |    | |   ___________V___________
+>                |               |    | |->|audio DSP              |
+>     ___________V_____________  |    |    |_______________________|
+>    |XHCI HCD                 |<-    |
+>    |_________________________|      |
+> 
+> 
+> Adding ASoC binding layer:
+> soc-usb: Intention is to treat a USB port similar to a headphone jack.
+> The port is always present on the device, but cable/pin status can be
+> enabled/disabled.  Expose mechanisms for USB backend ASoC drivers to
+> communicate with USB SND.
+> 
+> Create a USB backend for Q6DSP:
+> q6usb: Basic backend driver that will be responsible for maintaining the
+> resources needed to initiate a playback stream using the Q6DSP.  Will
+> be the entity that checks to make sure the connected USB audio device
+> supports the requested PCM format.  If it does not, the PCM open call will
+> fail, and userpsace ALSA can take action accordingly.
+> 
+> Introduce XHCI interrupter support:
+> XHCI HCD supports multiple interrupters, which allows for events to be routed
+> to different event rings.  This is determined by "Interrupter Target" field
+> specified in Section "6.4.1.1 Normal TRB" of the XHCI specification.
+> 
+> Events in the offloading case will be routed to an event ring that is assigned
+> to the audio DSP.
+> 
+> Create vendor ops for the USB SND driver:
+> qc_audio_offload: This particular driver has several components associated
+> with it:
+> - QMI stream request handler
+> - XHCI interrupter and resource management
+> - audio DSP memory management
+> 
+> When the audio DSP wants to enable a playback stream, the request is first
+> received by the ASoC platform sound card.  Depending on the selected route,
+> ASoC will bring up the individual DAIs in the path.  The Q6USB backend DAI
+> will send an AFE port start command (with enabling the USB playback path), and
+> the audio DSP will handle the request accordingly.
+> 
+> Part of the AFE USB port start handling will have an exchange of control
+> messages using the QMI protocol.  The qc_audio_offload driver will populate the
+> buffer information:
+> - Event ring base address
+> - EP transfer ring base address
+> 
+> and pass it along to the audio DSP.  All endpoint management will now be handed
+> over to the DSP, and the main processor is not involved in transfers.
+> 
+> Overall, implementing this feature will still expose separate sound card and PCM
+> devices for both the platorm card and USB audio device:
+>   0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
+>                        SM8250-MTP-WCD9380-WSA8810-VA-DMIC
+>   1 [Audio          ]: USB-Audio - USB Audio
+>                        Generic USB Audio at usb-xhci-hcd.1.auto-1.4, high speed
+> 
+> This is to ensure that userspace ALSA entities can decide which route to take
+> when executing the audio playback.  In the above, if card#1 is selected, then
+> USB audio data will take the legacy path over the USB PCM drivers, etc...
+> 
+> This feature was validated using:
+> - tinymix: set/enable the multimedia path to route to USB backend
+> - tinyplay: issue playback on platform card
+> 
+> Changelog
+> --------------------------------------------
+> Changes in v16:
+> - Modified some code layer dependencies so that soc usb can be split as a separate
+>    module.
+>    - Split the kcontrols from ASoC QCOM common layer into a separate driver
+> - Reworked SOC USB kcontrols for controlling card + pcm offload routing and status
+>    so that there are individual controls for card and pcm devices.
+> - Added a kcontrol remove API in SOC USB to remove the controls on the fly.  This
+>    required to add some kcontrol management to SOC USB.
+> - Removed the disconnect work and workqueue for the QC USB offload as it is not
+>    required, since QMI interface driver ensures events are handled in its own WQ.
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/drm-Stop-using-select-ACPI_VIDEO-in-all-drivers/20240215-055936
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20240214215756.6530-2-mario.limonciello%40amd.com
-patch subject: [PATCH v6 1/5] drm: Stop using `select ACPI_VIDEO` in all drivers
-config: alpha-kismet-CONFIG_FB_BACKLIGHT-CONFIG_FB_SH_MOBILE_LCDC-0-0 (https://download.01.org/0day-ci/archive/20240217/202402170543.qd0JRj6h-lkp@intel.com/config)
-reproduce: (https://download.01.org/0day-ci/archive/20240217/202402170543.qd0JRj6h-lkp@intel.com/reproduce)
+Sorry for sending a bad series.  Please ignore this version, as its 
+missing some changes made.  Will resend as v17.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402170543.qd0JRj6h-lkp@intel.com/
-
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for FB_BACKLIGHT when selected by FB_SH_MOBILE_LCDC
-   .config:92:warning: symbol value 'n' invalid for AIC7XXX_DEBUG_MASK
-   .config:218:warning: symbol value 'n' invalid for RAPIDIO_DISC_TIMEOUT
-   .config:242:warning: symbol value 'n' invalid for SATA_MOBILE_LPM_POLICY
-   .config:259:warning: symbol value 'n' invalid for FAT_DEFAULT_CODEPAGE
-   .config:339:warning: symbol value 'n' invalid for PSTORE_BLK_MAX_REASON
-   .config:341:warning: symbol value 'n' invalid for PANEL_PROFILE
-   .config:352:warning: symbol value 'n' invalid for AIC79XX_DEBUG_MASK
-   .config:432:warning: symbol value 'n' invalid for KFENCE_SAMPLE_INTERVAL
-   .config:610:warning: symbol value 'n' invalid for DRM_XE_JOB_TIMEOUT_MIN
-   .config:616:warning: symbol value 'n' invalid for CRYPTO_DEV_QCE_SW_MAX_LEN
-   .config:717:warning: symbol value 'n' invalid for PANEL_LCD_CHARSET
-   .config:755:warning: symbol value 'n' invalid for AIC79XX_CMDS_PER_DEVICE
-   .config:784:warning: symbol value 'n' invalid for SND_AC97_POWER_SAVE_DEFAULT
-   .config:805:warning: symbol value 'n' invalid for PANEL_LCD_PIN_SDA
-   .config:807:warning: symbol value 'n' invalid for MAGIC_SYSRQ_DEFAULT_ENABLE
-   .config:825:warning: symbol value 'n' invalid for DRM_I915_MAX_REQUEST_BUSYWAIT
-   .config:864:warning: symbol value 'n' invalid for SND_AT73C213_TARGET_BITRATE
-   .config:886:warning: symbol value 'n' invalid for DRM_XE_PREEMPT_TIMEOUT_MIN
-   .config:894:warning: symbol value 'n' invalid for NET_EMATCH_STACK
-   .config:896:warning: symbol value 'n' invalid for VMCP_CMA_SIZE
-   .config:988:warning: symbol value 'n' invalid for INPUT_MOUSEDEV_SCREEN_Y
-   .config:1124:warning: symbol value 'n' invalid for RCU_CPU_STALL_TIMEOUT
-   .config:1150:warning: symbol value 'n' invalid for MTDRAM_ERASE_SIZE
-   .config:1237:warning: symbol value 'n' invalid for SERIAL_UARTLITE_NR_UARTS
-   .config:1303:warning: symbol value 'n' invalid for USB_GADGET_STORAGE_NUM_BUFFERS
-   .config:1396:warning: symbol value 'n' invalid for LEGACY_PTY_COUNT
-   .config:1533:warning: symbol value 'n' invalid for AIC7XXX_RESET_DELAY_MS
-   .config:1723:warning: symbol value 'n' invalid for IBM_EMAC_POLL_WEIGHT
-   .config:1759:warning: symbol value 'n' invalid for PANEL_LCD_PIN_E
-   .config:1805:warning: symbol value 'n' invalid for DRM_I915_STOP_TIMEOUT
-   .config:1981:warning: symbol value 'n' invalid for KCOV_IRQ_AREA_SIZE
-   .config:2132:warning: symbol value 'n' invalid for RCU_FANOUT_LEAF
-   .config:2232:warning: symbol value 'n' invalid for DRM_XE_TIMESLICE_MAX
-   .config:2278:warning: symbol value 'n' invalid for PANEL_LCD_BWIDTH
-   .config:2512:warning: symbol value 'n' invalid for PANEL_PARPORT
-   .config:2520:warning: symbol value 'n' invalid for SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST_NUM
-   .config:2599:warning: symbol value 'n' invalid for NOUVEAU_DEBUG_DEFAULT
-   .config:2785:warning: symbol value 'n' invalid for KCSAN_REPORT_ONCE_IN_MS
-   .config:2883:warning: symbol value 'n' invalid for PSTORE_BLK_CONSOLE_SIZE
-   .config:2884:warning: symbol value 'n' invalid for KCSAN_UDELAY_INTERRUPT
-   .config:2894:warning: symbol value 'n' invalid for AIC79XX_RESET_DELAY_MS
-   .config:2908:warning: symbol value 'n' invalid for PANEL_LCD_PIN_BL
-   .config:2924:warning: symbol value 'n' invalid for DEBUG_OBJECTS_ENABLE_DEFAULT
-   .config:2931:warning: symbol value 'n' invalid for INITRAMFS_ROOT_GID
-   .config:3032:warning: symbol value 'n' invalid for ATM_FORE200E_TX_RETRY
-   .config:3059:warning: symbol value 'n' invalid for BOOKE_WDT_DEFAULT_TIMEOUT
-   .config:3068:warning: symbol value 'n' invalid for FB_OMAP2_DSS_MIN_FCK_PER_PCK
-   .config:3282:warning: symbol value 'n' invalid for KCSAN_UDELAY_TASK
-   .config:3397:warning: symbol value 'n' invalid for MMC_BLOCK_MINORS
-   .config:3400:warning: symbol value 'n' invalid for INET_TABLE_PERTURB_ORDER
-   .config:3410:warning: symbol value 'n' invalid for MTD_REDBOOT_DIRECTORY_BLOCK
-   .config:3443:warning: symbol value 'n' invalid for SCSI_NCR53C8XX_SYNC
-   .config:3560:warning: symbol value 'n' invalid for UCLAMP_BUCKETS_COUNT
-   .config:3580:warning: symbol value 'n' invalid for SCSI_MESH_RESET_DELAY_MS
-   .config:3610:warning: symbol value 'n' invalid for SERIAL_MCF_BAUDRATE
-   .config:3668:warning: symbol value 'n' invalid for STACK_MAX_DEFAULT_SIZE_MB
-   .config:3680:warning: symbol value 'n' invalid for DE2104X_DSL
-   .config:3693:warning: symbol value 'n' invalid for BLK_DEV_RAM_COUNT
-   .config:3752:warning: symbol value 'n' invalid for SERIAL_ALTERA_UART_BAUDRATE
-   .config:3932:warning: symbol value 'n' invalid for IP_VS_SH_TAB_BITS
-   .config:4071:warning: symbol value 'n' invalid for USBIP_VHCI_HC_PORTS
-   .config:4138:warning: symbol value 'n' invalid for INPUT_MOUSEDEV_SCREEN_X
-   .config:4250:warning: symbol value 'n' invalid for RIONET_RX_SIZE
-   .config:4394:warning: symbol value 'n' invalid for RADIO_TYPHOON_PORT
-   .config:4425:warning: symbol value 'n' invalid for FTRACE_RECORD_RECURSION_SIZE
-   .config:4508:warning: symbol value 'n' invalid for SERIAL_TXX9_NR_UARTS
-   .config:4550:warning: symbol value 'n' invalid for IBM_EMAC_TXB
-   .config:4931:warning: symbol value 'n' invalid for ARCH_MMAP_RND_BITS
-   .config:5013:warning: symbol value 'n' invalid for DRM_I915_FENCE_TIMEOUT
-   .config:5035:warning: symbol value 'n' invalid for TTY_PRINTK_LEVEL
-   .config:5172:warning: symbol value 'n' invalid for IP_VS_MH_TAB_INDEX
-   .config:5188:warning: symbol value 'n' invalid for MIPS_EJTAG_FDC_KGDB_CHAN
-   .config:5279:warning: symbol value 'n' invalid for KDB_DEFAULT_ENABLE
-   .config:5297:warning: symbol value 'n' invalid for SERIAL_ALTERA_UART_MAXPORTS
-   .config:5359:warning: symbol value 'n' invalid for CRYPTO_DEV_FSL_CAAM_INTC_TIME_THLD
-   .config:5361:warning: symbol value 'n' invalid for PPC_EARLY_DEBUG_EHV_BC_HANDLE
-   .config:5550:warning: symbol value 'n' invalid for PANEL_LCD_HWIDTH
-   .config:5576:warning: symbol value 'n' invalid for PANEL_LCD_PIN_RW
-   .config:5583:warning: symbol value 'n' invalid for LOCKDEP_CHAINS_BITS
-   .config:5677:warning: symbol value 'n' invalid for DRM_I915_HEARTBEAT_INTERVAL
-   .config:5683:warning: symbol value 'n' invalid for KCSAN_SKIP_WATCH
-   .config:5706:warning: symbol value 'n' invalid for PSTORE_BLK_KMSG_SIZE
-   .config:6004:warning: symbol value 'n' invalid for ARCH_MMAP_RND_COMPAT_BITS
-   .config:6113:warning: symbol value 'n' invalid for SND_MAX_CARDS
-   .config:6170:warning: symbol value 'n' invalid for SERIAL_SH_SCI_NR_UARTS
-   .config:6171:warning: symbol value 'n' invalid for RADIO_TRUST_PORT
-   .config:6246:warning: symbol value 'n' invalid for RCU_BOOST_DELAY
-   .config:6545:warning: symbol value 'n' invalid for CMA_SIZE_PERCENTAGE
-   .config:6684:warning: symbol value 'n' invalid for DRM_XE_TIMESLICE_MIN
-   .config:6702:warning: symbol value 'n' invalid for DRM_XE_PREEMPT_TIMEOUT_MAX
-   .config:6725:warning: symbol value 'n' invalid for SCSI_NCR53C8XX_MAX_TAGS
-   .config:6734:warning: symbol value 'n' invalid for DVB_MAX_ADAPTERS
-   .config:6747:warning: symbol value 'n' invalid for SCSI_SYM53C8XX_DMA_ADDRESSING_MODE
-   .config:6873:warning: symbol value 'n' invalid for ZSMALLOC_CHAIN_SIZE
-   .config:7082:warning: symbol value 'n' invalid for LOCKDEP_BITS
-   .config:7112:warning: symbol value 'n' invalid for IBM_EMAC_RXB
-   .config:7150:warning: symbol value 'n' invalid for SCSI_SYM53C8XX_MAX_TAGS
-   .config:7153:warning: symbol value 'n' invalid for SERIAL_ARC_NR_PORTS
-   .config:7244:warning: symbol value 'n' invalid for MTD_UBI_WL_THRESHOLD
-   .config:7262:warning: symbol value 'n' invalid for RIONET_TX_SIZE
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks
+Wesley Cheng
 
