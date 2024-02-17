@@ -1,63 +1,81 @@
-Return-Path: <linux-usb+bounces-6665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6666-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E37C08591CE
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 19:41:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 662C3859206
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 20:21:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FDB3282A99
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 18:41:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2ABB6284608
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 19:21:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47F237E107;
-	Sat, 17 Feb 2024 18:41:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 728887E577;
+	Sat, 17 Feb 2024 19:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="ZtD2Uk8G"
+	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="kfD29qcX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C69134BC;
-	Sat, 17 Feb 2024 18:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708195281; cv=none; b=JbSKRRXpinI7aQ8FQvuVEI/SKhoNxvI7lFZcBHcUuYGcvJPQ0RZx/a4wP6bQgJu6GoChdDStu5X5bmJxVJVhQmThF/UWOMsyCWCaKyxw3DB62zajmdOs2ANnnbIP/JLKZlK019BIYI/dHlU4pBkb6MYXE/cD85r/M5M4iBt7K1A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708195281; c=relaxed/simple;
-	bh=yl8fhiCb+vkQsPoBRBnmk75Ky1snUKjgnNsT75mEJrQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IoS8y2dv86WsnFusXPi1qKAIqAsmwapdEMo1XfL26jzusOBvA6uflpW/BNSBMrwTb5niesuelRcp49+HULPDBrz+LUvP4rnz37+LMswU76B4P4s1nd5oAgcpvPw5VGCEcHoDv8SghMgizANW1DcAF4eW0na55RxqkV529bslVy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=ZtD2Uk8G; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=hN8mFTdhqEE8m94XzHYn7TPoFI/jGHsVtmjgAXHWDME=; b=ZtD2Uk8GlwP1MZCTBW0+7Et45s
-	eh95E/EJKgFOuESha/N7GN9PFa8N5NFE2FDEHgC+7u9PWVatz4zb+m9bRHAVGzwsqjTyau5s3gNcU
-	djwQjVJghFhtgApnqwk0a5jivl3rS0OVSO5LVCnQrKA3vJ3siQdRh+i6VBE4t6LlxvsI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rbPcp-0084vd-PD; Sat, 17 Feb 2024 19:41:23 +0100
-Date: Sat, 17 Feb 2024 19:41:23 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Ariel Elior <aelior@marvell.com>,
-	Manish Chopra <manishc@marvell.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH net-next v3 1/8] net: usb: r8152: Use linkmode helpers
- for EEE
-Message-ID: <3fec8501-9b63-4749-9191-7c3ab1c2d923@lunn.ch>
-References: <20240217-keee-u32-cleanup-v3-0-fcf6b62a0c7f@lunn.ch>
- <20240217-keee-u32-cleanup-v3-1-fcf6b62a0c7f@lunn.ch>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB0F1E501;
+	Sat, 17 Feb 2024 19:20:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708197658; cv=pass; b=O4dd63XKyAael0lRQ+EQ4d5791gtiCLGAd9Mr3xaWgP41mv1CrSb1NEiu8Yph9Bv/XnhRiqk2h19e8DOcP1hksT/13LHujvtIQmlHOyGlqGRf4F0PEeNxW/fhF3qUIv3pP2wGer2Noh/ZWYaDo3V8LRaS5n6NXERGne3rZe/adc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708197658; c=relaxed/simple;
+	bh=gSZiMw/JdccfEF888jNXjmGWzVZVbOk4rZZD6o7WT1U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ljdp1kWckOvjrZeIsnv6F55/Mu1SmSdcunrG5xyxSj2X6hZ+MX12orJXRfwtx0FUbBFGVYhpXXb8n5DG4a3azP9mIo5sN/lwUel0AI5+lGJ/SXyj5CzHyTk5YlEqJDXW7M8cQ3cOBqa5faNNcuU/vHpBpaV7WX1PwnIm6o89Ou4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=kfD29qcX; arc=pass smtp.client-ip=185.185.170.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+Received: from darkstar.musicnaut.iki.fi (85-76-160-177-nat.elisa-mobile.fi [85.76.160.177])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: aaro.koskinen)
+	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4Tcdth3zD3z49PwQ;
+	Sat, 17 Feb 2024 21:20:44 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+	t=1708197645;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=q3yGZu/JG+xsk0nTtCSjCIfmV3w7H/r4e5NbPCar4jM=;
+	b=kfD29qcXha2RiOhKDfUTmfzwRR5aHSvESALcwnDWZojdzSpCeETceAmVmzVDjBhE9rI4Ok
+	Nip2rnOiOn7tw5UuhciLhtKIZCl1rUvaM9vclyf4rJjs98dKfMLHZESgcKIazwSOFH0AkD
+	JMH8bFP/pKIhpKDDkgcXE9J15Ygg8fTb5moCGoAWZESIpSb4gMFLfwXcTMvj3fbe6KyQXW
+	B+p75GELGxjXCer0U6zT2+rCcJveCt/0XM8T1fwZamSzO3Zb7nflpCt/cl1FNidfj4xf51
+	oWgJ8NMnyT7F6KnjtWFz70idEzdyWc7hE4tLUdJwgWV9QPTUQqG5PbYjQ9cP+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=lahtoruutu; t=1708197645;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=q3yGZu/JG+xsk0nTtCSjCIfmV3w7H/r4e5NbPCar4jM=;
+	b=rvAXoYaC1Ka9SUo4TQ8VkprPmVER0X/+/7CFdQXOWv19JwALpUU8nQwmFPgvlu8FUtB5dX
+	nv/9aLVM5nMMmLLWKGVHUmYLFg2fyg8mwf46W3FQvyJvaPWSgkrb5dCnHaCJgLWAKRsL3s
+	Tso+o4BVBFTp/y+iOt94EMeis9+KfbzAo4HRY1zu67bh3pPoehEbvHxOeXIRrp7o7kZY3R
+	3WRSL2zNuhXyKWsHEptQadkarN2jkioUFf+LzPGUjO3kfWQSj3eBeU9LoF2k/bkdkjspAZ
+	HO7pg5x4+1XQLohoWBbWc+SmvBoMKCJl4ojOSzdliqz8k2zlb1G1BFjsYNFOXw==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1708197645; a=rsa-sha256;
+	cv=none;
+	b=bgB639vCp3ZFRvhLSvai8wvnLGmHLtPeinE/Fr4oOoYgMwkjKajgSQLSffLO0ArSl2pnSs
+	62an//MkPL4G7y/VXNm5w1M2gBr6H9W6V6hcsG5Ws6IKq2L5pfgypz+Jj2VsuyeTGAAFdR
+	PSOBjf5xUyWkx6QNGs0x8ml5lQP7NSDgaW16AfKKQeGO+QZqleCf+t6OvcIQcYmzn80HzC
+	sKzpMXs4JHImLwdh+SPlubud7WDRcBr5v7Kr9GgYsEgIwyDUHQvU86CYW7M/6SO0T8fcSZ
+	Gb3U8e7zAZ5jIBMNvaOQfLeFsLLpre3oxk0H3u83nT89gvqXP2asEQIXZuAtiA==
+Date: Sat, 17 Feb 2024 21:20:42 +0200
+From: Aaro Koskinen <aaro.koskinen@iki.fi>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org
+Cc: Aaro Koskinen <aaro.koskinen@iki.fi>, linux-kernel@vger.kernel.org,
+	linux-omap@vger.kernel.org
+Subject: [PATCH] usb: gadget: omap_udc: fix USB gadget regression on Palm TE
+Message-ID: <20240217192042.GA372205@darkstar.musicnaut.iki.fi>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,28 +84,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240217-keee-u32-cleanup-v3-1-fcf6b62a0c7f@lunn.ch>
 
-On Sat, Feb 17, 2024 at 12:08:22PM -0600, Andrew Lunn wrote:
-> Make use of the existing linkmode helpers for converting PHY EEE
-> register values into links modes, now that ethtool_keee uses link
-> modes, rather than u32 values.
-> 
-> Rework determining if EEE is active to make is similar as to how
-> phylib decides, and make use of a phylib helper to validate if EEE is
-> valid in for the current link mode. This then requires that PHYLIB is
-> selected.
+When upgrading from 6.1 LTS to 6.6 LTS, I noticed the ethernet gadget
+stopped working on Palm TE.
 
-I started on the next step to remove the _u32 values. And found i
-missed a conversion in this file.
+Commit 8825acd7cc8a ("ARM: omap1: remove dead code") deleted Palm TE from
+machine_without_vbus_sense(), although the board is still used. Fix that.
 
-v4 tomorrow.
-
-
-    Andrew
-
+Fixes: 8825acd7cc8a ("ARM: omap1: remove dead code")
+Signed-off-by: Aaro Koskinen <aaro.koskinen@iki.fi>
 ---
-pw-bot: cr
+ drivers/usb/gadget/udc/omap_udc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-
+diff --git a/drivers/usb/gadget/udc/omap_udc.c b/drivers/usb/gadget/udc/omap_udc.c
+index 10c5d7f726a1..f90eeecf27de 100644
+--- a/drivers/usb/gadget/udc/omap_udc.c
++++ b/drivers/usb/gadget/udc/omap_udc.c
+@@ -2036,7 +2036,8 @@ static irqreturn_t omap_udc_iso_irq(int irq, void *_dev)
+ 
+ static inline int machine_without_vbus_sense(void)
+ {
+-	return  machine_is_omap_osk() || machine_is_sx1();
++	return  machine_is_omap_osk() || machine_is_omap_palmte() ||
++		machine_is_sx1();
+ }
+ 
+ static int omap_udc_start(struct usb_gadget *g,
+-- 
+2.39.2
 
