@@ -1,156 +1,98 @@
-Return-Path: <linux-usb+bounces-6638-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6639-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C06BB858F3A
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 13:01:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FD75859066
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 16:13:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77918283BCA
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 12:01:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4939B21075
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 15:13:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A3A7171A4;
-	Sat, 17 Feb 2024 12:01:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17DDA7C0BA;
+	Sat, 17 Feb 2024 15:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CBC4Blh5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EEE69E03
-	for <linux-usb@vger.kernel.org>; Sat, 17 Feb 2024 12:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717837A726;
+	Sat, 17 Feb 2024 15:13:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708171286; cv=none; b=Yy2s/PoumqMqHTuEQdEDYEGS7D9ic/ZwtAXYpAiOI5H/8tj8GDDUnTyZwQY/gvmAKRaKhlJ233dYSS36Up0wttxEe3p45cfGK4lsyalIj8ECiYcGRnGjYj/p1twRDYzVJ4whiOSJh7O/eyiSJq+RS8kFFFYYqQjjt9WyrUYDtyU=
+	t=1708182808; cv=none; b=sNWNI3fwx+hymSKg4fDN0u4gy38TcRqSrwm2r/UfV86hK/rnErGQLwVdc2JfB4cC6BGzOpy0u8xNOoshwzXbL8pcFNcfTr5+xSpOQd33Gw2FB90bICcC6Y9OOj2jcT1OX/IDkoaO83iJ9lX3KrM2wF0ewnlhca1jfdXYpyjadW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708171286; c=relaxed/simple;
-	bh=TKNDTk6cDfx4Tfo2sfcKfBCYJUV1fslPCCnc6uKRgHw=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=W9GX/xQBbSOyR1BxrBjMVd4ksGJISWJ3bNmneTafEp4kx7TwD7NwMUL5duXo1KSjWqX4xSgsxNXRFQHV/AhL3q3J8YC6+lJGgJ619to5l7OBoPxASOM6Aul2m7VFlyThrxL16Y2NzFCb9ABd+5BRKtkC+Rzq0TZbjK/Gdwkj1/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-36520abf45eso405105ab.2
-        for <linux-usb@vger.kernel.org>; Sat, 17 Feb 2024 04:01:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708171284; x=1708776084;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NCUkGWydL6iOVrCaNdXAVKDKwK1uPVYLhmNtgDugTwk=;
-        b=HUza12k38t06BnObTmwV4cqNl9WWy5zhSyobQz4RuJjaHx6xtA/CF0e+CcivhDCnnl
-         sL3ZOse1oWHBSY52BUo1L+46FbRNbMGER96DlK5rhDtS/7XpXcwR0/OGNlLTZkVkWuQC
-         6ualP/JgX4Efhzo99waqGOj+tQCo51bcYGY/DnvwQ3s3f4qCmvaogTUsC+v5cGGkZO2i
-         P88LnUzvK1qY4wQKz2XM4tHbYSlyVtIu/oeMC/CCNQyDpOxSDijFdS/BViLqwbkeCWcL
-         ZJZ0zoxdtOloZimt0SxZ+QzEByzqMAqgrn22fSdarly5AzTo9YZDGj+tK/KwrnAAx2wY
-         3gmA==
-X-Forwarded-Encrypted: i=1; AJvYcCUIfHmJiD6egc9RRlzimLNU+qe6HRWeMfcWKYIJ4/NvyT/JX/d7kkJwMlhgj8MRkxne0Le6PeSKCmCVdLSLG+ERyCSgSyHlr/1c
-X-Gm-Message-State: AOJu0YwsvTFrw0sE/wJ+BHTYQXYgBdxQRQ7efh1gX5Y3AN/oSoTghxPS
-	QpM8mRNMv+UZg5MV4Haw6TyQHkyNIHje/cF0myp+kPYAPdmK/hoJ/kjxhcFjYZByfgrq85X1IJY
-	mLQDN6K/SQdX3O5YhqlCwjnAhJFI+Foqhjf3eHVh3c/HV8wpGR8t/kYo=
-X-Google-Smtp-Source: AGHT+IEEJceRsj6HUwp0xXY4QnLafQ5Y621FM+VV+kmu6aMGtzzhbyI7k5DgbRVnzgL6w5PhvJGwC5yDN/zc90oT+Z7jVYf2sJXa
+	s=arc-20240116; t=1708182808; c=relaxed/simple;
+	bh=GnG4gSB9PZheNU8B6ac1pNf6EmgDWkzBzNZVkg7jyiE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OsvxqnVelLMM879Lqg/VthUC+3MkHSGw3d0bM4Guy0W59yR9KqA5R589+KSE/xlM6jFHNrBuuOui5o1qPn7L+TlMvkfUtJFaq7fr0cgIGUQiqxZRVk0tt2Pd2sdPUKs5sURZOCJJ9JK/bYPNOb+MWcuXhs9xudiVJqIQpVQKAYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CBC4Blh5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842CAC433C7;
+	Sat, 17 Feb 2024 15:13:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1708182808;
+	bh=GnG4gSB9PZheNU8B6ac1pNf6EmgDWkzBzNZVkg7jyiE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=CBC4Blh5JJc5qcOnDSnrDaMkEOSMLypwiZAsM5J9ycFEqzRFyvOohqT1W58Y4xCsT
+	 RQccF+01KPz3avrYQh6/KwPpZy8xkGCDg0NMBbzOUG5qgZ6TC+EvKXmmE8VebzYTkc
+	 zKlBbHepHClJXWpyf+R4FYenf1XlhKk20tvnXAsc=
+Date: Sat, 17 Feb 2024 16:13:25 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 6.8-rc5
+Message-ID: <ZdDNFfwclvmprBoR@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a6a:b0:363:8396:a068 with SMTP id
- w10-20020a056e021a6a00b003638396a068mr460601ilv.5.1708171283081; Sat, 17 Feb
- 2024 04:01:23 -0800 (PST)
-Date: Sat, 17 Feb 2024 04:01:23 -0800
-In-Reply-To: <0000000000004b841a060e876595@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008b34440611929e64@google.com>
-Subject: Re: [syzbot] [usb?] [input?] WARNING in input_unregister_device (2)
-From: syzbot <syzbot+617f4ccb03b9869f6494@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, rafael@kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-syzbot has found a reproducer for the following issue on:
+The following changes since commit 54be6c6c5ae8e0d93a6c4641cb7528eb0b6ba478:
 
-HEAD commit:    c1ca10ceffbb Merge tag 'scsi-fixes' of git://git.kernel.or..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15159df0180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d7c92dd8d5c7a1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=617f4ccb03b9869f6494
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11f415fc180000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ecf362180000
+  Linux 6.8-rc3 (2024-02-04 12:20:36 +0000)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/842b77f831b0/disk-c1ca10ce.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/057da06d8a4b/vmlinux-c1ca10ce.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d4382274a169/bzImage-c1ca10ce.xz
+are available in the Git repository at:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+617f4ccb03b9869f6494@syzkaller.appspotmail.com
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.8-rc5
 
-input: HID 045e:07da as /devices/platform/dummy_hcd.0/usb1/1-1/1-1:0.0/0003:045E:07DA.0060/input/input100
-microsoft 0003:045E:07DA.0060: input,hidraw0: USB HID v0.00 Device [HID 045e:07da] on usb-dummy_hcd.0-1/input0
-usb 1-1: USB disconnect, device number 97
-------------[ cut here ]------------
-add_uevent_var: buffer size too small
-WARNING: CPU: 0 PID: 782 at lib/kobject_uevent.c:671 add_uevent_var+0x2d5/0x450 lib/kobject_uevent.c:671
-Modules linked in:
-CPU: 0 PID: 782 Comm: kworker/0:2 Not tainted 6.8.0-rc4-syzkaller-00331-gc1ca10ceffbb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:add_uevent_var+0x2d5/0x450 lib/kobject_uevent.c:671
-Code: 0f b6 04 27 84 c0 0f 85 28 01 00 00 48 8b 44 24 18 01 18 31 c0 eb 2b e8 09 07 39 f6 90 48 c7 c7 60 e3 c5 8c e8 0c 12 fd f5 90 <0f> 0b 90 90 b8 f4 ff ff ff 49 bc 00 00 00 00 00 fc ff df 4c 8b 6c
-RSP: 0018:ffffc90003d3ef20 EFLAGS: 00010246
-RAX: 7e434c7b33a2b100 RBX: 00000000000007f5 RCX: ffff88801fd91dc0
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: ffffc90003d3f050 R08: ffffffff81577992 R09: 1ffff920007a7d84
-R10: dffffc0000000000 R11: fffff520007a7d85 R12: 000000000000000b
-R13: 000000000000000b R14: 1ffff1100fc77443 R15: 1ffff1100fc77543
-FS:  0000000000000000(0000) GS:ffff8880b9400000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc10ead20f0 CR3: 000000002db96000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kobject_uevent_env+0x520/0x8f0 lib/kobject_uevent.c:588
- device_del+0x812/0xa30 drivers/base/core.c:3832
- input_unregister_device+0xa3/0x100 drivers/input/input.c:2440
- hidinput_disconnect+0x26c/0x300 drivers/hid/hid-input.c:2388
- hid_disconnect drivers/hid/hid-core.c:2280 [inline]
- hid_hw_stop+0x75/0x1e0 drivers/hid/hid-core.c:2329
- ms_remove+0x23/0xa0 drivers/hid/hid-microsoft.c:409
- hid_device_remove+0x225/0x370
- device_remove drivers/base/dd.c:567 [inline]
- __device_release_driver drivers/base/dd.c:1272 [inline]
- device_release_driver_internal+0x4a9/0x7c0 drivers/base/dd.c:1295
- bus_remove_device+0x34f/0x420 drivers/base/bus.c:574
- device_del+0x580/0xa30 drivers/base/core.c:3814
- hid_remove_device drivers/hid/hid-core.c:2867 [inline]
- hid_destroy_device+0x68/0x100 drivers/hid/hid-core.c:2887
- usbhid_disconnect+0x9e/0xc0 drivers/hid/usbhid/hid-core.c:1456
- usb_unbind_interface+0x1d4/0x850 drivers/usb/core/driver.c:461
- device_remove drivers/base/dd.c:569 [inline]
- __device_release_driver drivers/base/dd.c:1272 [inline]
- device_release_driver_internal+0x503/0x7c0 drivers/base/dd.c:1295
- bus_remove_device+0x34f/0x420 drivers/base/bus.c:574
- device_del+0x580/0xa30 drivers/base/core.c:3814
- usb_disable_device+0x3bf/0x850 drivers/usb/core/message.c:1416
- usb_disconnect+0x340/0x950 drivers/usb/core/hub.c:2267
- hub_port_connect drivers/usb/core/hub.c:5323 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5623 [inline]
- port_event drivers/usb/core/hub.c:5783 [inline]
- hub_event+0x1e62/0x50f0 drivers/usb/core/hub.c:5865
- process_one_work kernel/workqueue.c:2633 [inline]
- process_scheduled_works+0x913/0x1420 kernel/workqueue.c:2706
- worker_thread+0xa5f/0x1000 kernel/workqueue.c:2787
- kthread+0x2ef/0x390 kernel/kthread.c:388
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:242
- </TASK>
+for you to fetch changes up to 7d708c145b2631941b8b0b4a740dc2990818c39c:
 
+  Revert "usb: dwc3: Support EBC feature of DWC_usb31" (2024-02-09 10:26:08 +0000)
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+----------------------------------------------------------------
+USB/Thunderbolt fixes for 6.8-rc5
+
+Here are 2 small fixes for 6.8-rc5:
+  - thunderbolt to fix a reported issue on many platforms
+  - dwc3 driver revert of a commit that caused problems in -rc1
+
+Both of these changes have been in linux-next for over a week with no
+reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Greg Kroah-Hartman (1):
+      Merge tag 'thunderbolt-for-v6.8-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
+
+Mohammad Rahimi (1):
+      thunderbolt: Fix setting the CNS bit in ROUTER_CS_5
+
+Thinh Nguyen (1):
+      Revert "usb: dwc3: Support EBC feature of DWC_usb31"
+
+ drivers/thunderbolt/tb_regs.h | 2 +-
+ drivers/thunderbolt/usb4.c    | 2 +-
+ drivers/usb/dwc3/core.h       | 1 -
+ drivers/usb/dwc3/gadget.c     | 6 ------
+ drivers/usb/dwc3/gadget.h     | 2 --
+ include/linux/usb/gadget.h    | 1 -
+ 6 files changed, 2 insertions(+), 12 deletions(-)
 
