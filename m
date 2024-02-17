@@ -1,224 +1,299 @@
-Return-Path: <linux-usb+bounces-6634-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6635-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFA40858E77
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 10:52:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14C5F858E93
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 11:08:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95833282CAE
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 09:52:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 628EDB2173A
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 10:08:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B671DA37;
-	Sat, 17 Feb 2024 09:52:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17C31DDDB;
+	Sat, 17 Feb 2024 10:08:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MPqEP7JZ"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TurgWrWS";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="nBmFB/jt";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TurgWrWS";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="nBmFB/jt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68DDB1D526;
-	Sat, 17 Feb 2024 09:52:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6566F1C15;
+	Sat, 17 Feb 2024 10:08:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708163530; cv=none; b=V1XWA28hOUiaacMwT+grgwfv1oo+EffcFPcPYKEvFdrL2j6Rbd74Gh12XwKMAHdZODmi7VlcDr+p5fSU/7DAOlZoUcgjpJ9b0pOEyUvwtXWAKfB92RMWxKm/xpiajq3qqXYnZNagQuUgMKF5tKdB7k4LHQawpdc46JhZoepCnUM=
+	t=1708164504; cv=none; b=Mb5uroxbVDJ7KGC04EaDZfy7iWGMt1j3AHUOvPYgwZrPGrdPdUJ6BgGVi41KlG1LmlRMJmi597MNIeZpwVD4LqvfGsmHbDwyWrnPgOY8psmh1UlHmTlgbbZOzzJa2+QohNZ6dHuSQ+xGt2SyYwTqfHrjDZq6NnkaoxqGoAVuxiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708163530; c=relaxed/simple;
-	bh=1YL0IucvWTkie2pHwoVyF1SG1FtwSaiJi2Wu2eQoHms=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C4aPFcjs53HuuhjL3kQLkJvt3GV24JC8dF46BzcBr2CZzKNqzFPpAbM+vpQ/+v0C07JsQvPWnAtzijgETSy3VV23TubzU6jq4JlHCfYVReDySKst3dtqdNRJ7pMmm8RKpEpYgnP1M31dIwOuq9xGZ8byXnZUHm7GjSIWxVtpXz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MPqEP7JZ; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708163525; x=1739699525;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1YL0IucvWTkie2pHwoVyF1SG1FtwSaiJi2Wu2eQoHms=;
-  b=MPqEP7JZKqLBPfEpQEFRu+zTS0YkM+FttaQhOpkeeAeCRlIGFIb8okIV
-   1WpRyQjYZIB0O1DILTidK2BF5f5biyoTsTh4sxVX8/F3/QO8lHXjw23g3
-   3l8VRFZN8/tMLJZOodBzsb6KT5CKpCU4MFdpWYSiRyIVe4ytcBggqcIaw
-   mvRy37Ce1W7vXYeBrSkPXu833ghuZnbkj3FHHU53v4vPeP4uNhrikO9Hy
-   Skbor7LSlWXgLdSiL6XoZrY5aU8uLXa362UQ3BVWfIEztXmG1Na1tNtdM
-   ntmfzvhP+ljmb9sux8j9yVAFmh0w7HwjGgly2TgyhmjecWrT0N0RE9Tk1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10986"; a="12844065"
-X-IronPort-AV: E=Sophos;i="6.06,166,1705392000"; 
-   d="scan'208";a="12844065"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2024 01:52:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10986"; a="935978120"
-X-IronPort-AV: E=Sophos;i="6.06,166,1705392000"; 
-   d="scan'208";a="935978120"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Feb 2024 01:51:58 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rbHMS-00021M-0B;
-	Sat, 17 Feb 2024 09:51:56 +0000
-Date: Sat, 17 Feb 2024 17:51:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>
-Cc: Paul Gazzillo <paul@pgazz.com>,
-	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-	oe-kbuild-all@lists.linux.dev, amd-gfx@lists.freedesktop.org,
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-	linux-fbdev@vger.kernel.org, nouveau@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org,
-	platform-driver-x86@vger.kernel.org, intel-xe@lists.freedesktop.org,
-	linux-renesas-soc@vger.kernel.org,
-	"open list:ACPI" <linux-acpi@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	Melissa Wen <mwen@igalia.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v6 1/5] drm: Stop using `select ACPI_VIDEO` in all drivers
-Message-ID: <202402171727.maolcPXi-lkp@intel.com>
-References: <20240214215756.6530-2-mario.limonciello@amd.com>
+	s=arc-20240116; t=1708164504; c=relaxed/simple;
+	bh=5yOrl7ejMhiYLXAozx5kVTkg0b8+HpBur90WSH3AXco=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=J1S0VvDmU3efaQF1DysTJ/UXLYsIQIAhiLuTiqtR5Ral7p9rRhk8DFu4N0wfRkZeFsgrHEyqxw0Xacq0JEQ7JEWv8W7R4+EOf7/qVRdWGt0CsXaqkiK6SJY5OICKNaUMxq5Vrq/YKKyQ4KRt7UEQwhALwpS1Dm/kh7wu1Zictrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TurgWrWS; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=nBmFB/jt; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TurgWrWS; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=nBmFB/jt; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 4E5B91F7B9;
+	Sat, 17 Feb 2024 10:08:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1708164500; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rRWhyrNas2ODukH8hQrcMU98AhP1T7F4SpR72WFtrc4=;
+	b=TurgWrWSWcb/osb//n0APh3TG7biuluETL6+NAmXRJdiEywHbYvYtQkP5moBy39K9ZTb+a
+	lwNW1R8tUrJsHHp7mUGG9RTvhMsN1jJ7C3RnF0Sl5zdJP+l9l4UyM6YBwPfGLoXx4yUjbu
+	+3Nh266T0ViYlUg9REBTXCvMR+RjK6U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1708164500;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rRWhyrNas2ODukH8hQrcMU98AhP1T7F4SpR72WFtrc4=;
+	b=nBmFB/jt4FpRyUSvQfBP4fDZWAnf/yFyC00wcyQogqtxiKJktLn7+U5D+xjFkyVUJT0QF/
+	u3MXX+2LHXy7V9BA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1708164500; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rRWhyrNas2ODukH8hQrcMU98AhP1T7F4SpR72WFtrc4=;
+	b=TurgWrWSWcb/osb//n0APh3TG7biuluETL6+NAmXRJdiEywHbYvYtQkP5moBy39K9ZTb+a
+	lwNW1R8tUrJsHHp7mUGG9RTvhMsN1jJ7C3RnF0Sl5zdJP+l9l4UyM6YBwPfGLoXx4yUjbu
+	+3Nh266T0ViYlUg9REBTXCvMR+RjK6U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1708164500;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rRWhyrNas2ODukH8hQrcMU98AhP1T7F4SpR72WFtrc4=;
+	b=nBmFB/jt4FpRyUSvQfBP4fDZWAnf/yFyC00wcyQogqtxiKJktLn7+U5D+xjFkyVUJT0QF/
+	u3MXX+2LHXy7V9BA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A05C21370C;
+	Sat, 17 Feb 2024 10:08:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id U3N8JZOF0GV+JgAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Sat, 17 Feb 2024 10:08:19 +0000
+Date: Sat, 17 Feb 2024 11:08:19 +0100
+Message-ID: <87y1bjpfn0.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: <srinivas.kandagatla@linaro.org>,
+	<mathias.nyman@intel.com>,
+	<perex@perex.cz>,
+	<conor+dt@kernel.org>,
+	<corbet@lwn.net>,
+	<lgirdwood@gmail.com>,
+	<andersson@kernel.org>,
+	<krzysztof.kozlowski+dt@linaro.org>,
+	<gregkh@linuxfoundation.org>,
+	<Thinh.Nguyen@synopsys.com>,
+	<broonie@kernel.org>,
+	<bgoswami@quicinc.com>,
+	<tiwai@suse.com>,
+	<robh+dt@kernel.org>,
+	<konrad.dybcio@linaro.org>,
+	<linux-kernel@vger.kernel.org>,
+	<devicetree@vger.kernel.org>,
+	<linux-sound@vger.kernel.org>,
+	<linux-usb@vger.kernel.org>,
+	<linux-arm-msm@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>,
+	<alsa-devel@alsa-project.org>
+Subject: Re: [PATCH v14 32/53] ALSA: usb-audio: Check for support for requested audio format
+In-Reply-To: <7f0c4f85-5a63-4643-8553-e3f5d6af67ec@quicinc.com>
+References: <20240208231406.27397-1-quic_wcheng@quicinc.com>
+	<20240208231406.27397-33-quic_wcheng@quicinc.com>
+	<87v86x2a27.wl-tiwai@suse.de>
+	<cb3b7857-dc6c-80db-4fa7-6772a856f328@quicinc.com>
+	<7f0c4f85-5a63-4643-8553-e3f5d6af67ec@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240214215756.6530-2-mario.limonciello@amd.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=TurgWrWS;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="nBmFB/jt"
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_TRACE(0.00)[suse.de:+];
+	 MX_GOOD(-0.01)[];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 BAYES_HAM(-3.00)[100.00%];
+	 ARC_NA(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 FROM_HAS_DN(0.00)[];
+	 DWL_DNSWL_MED(-2.00)[suse.de:dkim];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 TAGGED_RCPT(0.00)[dt];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 RCPT_COUNT_TWELVE(0.00)[23];
+	 MID_CONTAINS_FROM(1.00)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,quicinc.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FREEMAIL_CC(0.00)[linaro.org,intel.com,perex.cz,kernel.org,lwn.net,gmail.com,linuxfoundation.org,synopsys.com,quicinc.com,suse.com,vger.kernel.org,alsa-project.org];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Score: -4.01
+X-Rspamd-Queue-Id: 4E5B91F7B9
+X-Spam-Flag: NO
 
-Hi Mario,
+On Sat, 17 Feb 2024 00:42:18 +0100,
+Wesley Cheng wrote:
+> 
+> Hi Takashi,
+> 
+> On 2/9/2024 1:34 PM, Wesley Cheng wrote:
+> > Hi Takashi,
+> > 
+> > On 2/9/2024 2:42 AM, Takashi Iwai wrote:
+> >> On Fri, 09 Feb 2024 00:13:45 +0100,
+> >> Wesley Cheng wrote:
+> >>> 
+> >>> Allow for checks on a specific USB audio device to see if a
+> >>> requested PCM
+> >>> format is supported.  This is needed for support when playback is
+> >>> initiated by the ASoC USB backend path.
+> >>> 
+> >>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> >>> ---
+> >>>   sound/usb/card.c | 31 +++++++++++++++++++++++++++++++
+> >>>   sound/usb/card.h | 11 +++++++++++
+> >>>   2 files changed, 42 insertions(+)
+> >>> 
+> >>> diff --git a/sound/usb/card.c b/sound/usb/card.c
+> >>> index 7dc8007ba839..1ad99a462038 100644
+> >>> --- a/sound/usb/card.c
+> >>> +++ b/sound/usb/card.c
+> >>> @@ -155,6 +155,37 @@ int snd_usb_unregister_platform_ops(void)
+> >>>   }
+> >>>   EXPORT_SYMBOL_GPL(snd_usb_unregister_platform_ops);
+> >>> +/*
+> >>> + * Checks to see if requested audio profile, i.e sample rate, # of
+> >>> + * channels, etc... is supported by the substream associated to the
+> >>> + * USB audio device.
+> >>> + */
+> >>> +struct snd_usb_stream *snd_usb_find_suppported_substream(int card_idx,
+> >>> +            struct snd_pcm_hw_params *params, int direction)
+> >>> +{
+> >>> +    struct snd_usb_audio *chip;
+> >>> +    struct snd_usb_substream *subs;
+> >>> +    struct snd_usb_stream *as;
+> >>> +
+> >>> +    /*
+> >>> +     * Register mutex is held when populating and clearing usb_chip
+> >>> +     * array.
+> >>> +     */
+> >>> +    guard(mutex)(&register_mutex);
+> >>> +    chip = usb_chip[card_idx];
+> >>> +
+> >>> +    if (chip && enable[card_idx]) {
+> >>> +        list_for_each_entry(as, &chip->pcm_list, list) {
+> >>> +            subs = &as->substream[direction];
+> >>> +            if (snd_usb_find_substream_format(subs, params))
+> >>> +                return as;
+> >>> +        }
+> >>> +    }
+> >>> +
+> >>> +    return NULL;
+> >>> +}
+> >>> +EXPORT_SYMBOL_GPL(snd_usb_find_suppported_substream);
+> >>> +
+> >>>   /*
+> >>>    * disconnect streams
+> >>>    * called from usb_audio_disconnect()
+> >>> diff --git a/sound/usb/card.h b/sound/usb/card.h
+> >>> index 02e4ea898db5..ed4a664e24e5 100644
+> >>> --- a/sound/usb/card.h
+> >>> +++ b/sound/usb/card.h
+> >>> @@ -217,4 +217,15 @@ struct snd_usb_platform_ops {
+> >>>   int snd_usb_register_platform_ops(struct snd_usb_platform_ops *ops);
+> >>>   int snd_usb_unregister_platform_ops(void);
+> >>> +
+> >>> +#if IS_ENABLED(CONFIG_SND_USB_AUDIO)
+> >>> +struct snd_usb_stream *snd_usb_find_suppported_substream(int card_idx,
+> >>> +            struct snd_pcm_hw_params *params, int direction);
+> >>> +#else
+> >>> +static struct snd_usb_stream
+> >>> *snd_usb_find_suppported_substream(int card_idx,
+> >>> +            struct snd_pcm_hw_params *params, int direction)
+> >>> +{
+> >>> +    return NULL;
+> >>> +}
+> >>> +#endif /* IS_ENABLED(CONFIG_SND_USB_AUDIO) */
+> >> 
+> >> The usefulness of ifdef guard here is doubtful, IMO.  This header is
+> >> only for USB-audio driver enablement, and not seen as generic
+> >> helpers.  So, just add the new function declarations without dummy
+> >> definitions.
+> >> 
+> > 
+> > Got it, will remove it.  We also have a dependency in place for the
+> > qc_audio_offload driver and SND USB AUDIO in the Kconfig.
+> > 
+> 
+> Looking at this again after trying some mixed Kconfig settings.  These
+> declarations aren't specific for USB-audio.  They are helpers that are
+> exposed to soc usb, so that it can do some basic verification with soc
+> usb before allowing the enable stream to continue.
 
-kernel test robot noticed the following build warnings:
+Then rather the question is why snd-soc-usb calls those functions
+*unconditionally*.  No matter whether we have dependencies in Kconfig,
+calling the function means that the callee shall be drug when the
+corresponding code is running.
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.8-rc4 next-20240216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If it were generic core API stuff such as power-management or ACPI,
+it'd make sense to define dummy functions without the enablement, as
+many code may have optional calls.  If the API is enabled, it's anyway
+in the core.  If not, it's optional.  That'll be fine.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/drm-Stop-using-select-ACPI_VIDEO-in-all-drivers/20240215-055936
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20240214215756.6530-2-mario.limonciello%40amd.com
-patch subject: [PATCH v6 1/5] drm: Stop using `select ACPI_VIDEO` in all drivers
-config: alpha-kismet-CONFIG_FB_BACKLIGHT-CONFIG_HT16K33-0-0 (https://download.01.org/0day-ci/archive/20240217/202402171727.maolcPXi-lkp@intel.com/config)
-reproduce: (https://download.01.org/0day-ci/archive/20240217/202402171727.maolcPXi-lkp@intel.com/reproduce)
+OTOH, the stuff you're calling certainly belongs to snd-usb-audio.
+Even if the call is really optional, it means that you'll have a hard
+dependency when snd-usb-audio is built, no matter whether you need or
+not.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402171727.maolcPXi-lkp@intel.com/
+> Since the ASoC
+> layer doesn't have insight on what audio profiles are supported by the
+> usb device, this API will ensure that the request profile is
+> supported.
+>
+> Issues are seen when we disable SND USB audio config and enable the
+> ASoC parts.
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for FB_BACKLIGHT when selected by HT16K33
-   .config:210:warning: symbol value 'n' invalid for INPUT_MOUSEDEV_SCREEN_Y
-   .config:243:warning: symbol value 'n' invalid for SATA_MOBILE_LPM_POLICY
-   .config:338:warning: symbol value 'n' invalid for PSTORE_BLK_MAX_REASON
-   .config:435:warning: symbol value 'n' invalid for KFENCE_SAMPLE_INTERVAL
-   .config:437:warning: symbol value 'n' invalid for AIC79XX_DEBUG_MASK
-   .config:521:warning: symbol value 'n' invalid for USB_GADGET_STORAGE_NUM_BUFFERS
-   .config:618:warning: symbol value 'n' invalid for DRM_XE_JOB_TIMEOUT_MIN
-   .config:632:warning: symbol value 'n' invalid for CRYPTO_DEV_QCE_SW_MAX_LEN
-   .config:739:warning: symbol value 'n' invalid for PANEL_LCD_CHARSET
-   .config:759:warning: symbol value 'n' invalid for SERIAL_ALTERA_UART_BAUDRATE
-   .config:771:warning: symbol value 'n' invalid for SCSI_MESH_RESET_DELAY_MS
-   .config:796:warning: symbol value 'n' invalid for SND_AC97_POWER_SAVE_DEFAULT
-   .config:834:warning: symbol value 'n' invalid for MAGIC_SYSRQ_DEFAULT_ENABLE
-   .config:851:warning: symbol value 'n' invalid for DRM_I915_MAX_REQUEST_BUSYWAIT
-   .config:890:warning: symbol value 'n' invalid for SND_AT73C213_TARGET_BITRATE
-   .config:892:warning: symbol value 'n' invalid for AIC79XX_CMDS_PER_DEVICE
-   .config:907:warning: symbol value 'n' invalid for DRM_XE_PREEMPT_TIMEOUT_MIN
-   .config:913:warning: symbol value 'n' invalid for NET_EMATCH_STACK
-   .config:915:warning: symbol value 'n' invalid for VMCP_CMA_SIZE
-   .config:973:warning: symbol value 'n' invalid for PANEL_LCD_PIN_SDA
-   .config:1006:warning: symbol value 'n' invalid for PANEL_LCD_PIN_E
-   .config:1142:warning: symbol value 'n' invalid for RCU_CPU_STALL_TIMEOUT
-   .config:1170:warning: symbol value 'n' invalid for MTDRAM_ERASE_SIZE
-   .config:1431:warning: symbol value 'n' invalid for LEGACY_PTY_COUNT
-   .config:1581:warning: symbol value 'n' invalid for WATCHDOG_OPEN_TIMEOUT
-   .config:1588:warning: symbol value 'n' invalid for AIC7XXX_RESET_DELAY_MS
-   .config:1752:warning: symbol value 'n' invalid for IBM_EMAC_POLL_WEIGHT
-   .config:1867:warning: symbol value 'n' invalid for DRM_I915_STOP_TIMEOUT
-   .config:2098:warning: symbol value 'n' invalid for AIC79XX_RESET_DELAY_MS
-   .config:2129:warning: symbol value 'n' invalid for SND_HDA_PREALLOC_SIZE
-   .config:2176:warning: symbol value 'n' invalid for RCU_FANOUT_LEAF
-   .config:2186:warning: symbol value 'n' invalid for KCOV_IRQ_AREA_SIZE
-   .config:2307:warning: symbol value 'n' invalid for DRM_XE_TIMESLICE_MAX
-   .config:2321:warning: symbol value 'n' invalid for PANEL_LCD_BWIDTH
-   .config:2386:warning: symbol value 'n' invalid for XEN_MEMORY_HOTPLUG_LIMIT
-   .config:2439:warning: symbol value 'n' invalid for VERBOSE_MCHECK_ON
-   .config:2559:warning: symbol value 'n' invalid for PANEL_PARPORT
-   .config:2645:warning: symbol value 'n' invalid for NOUVEAU_DEBUG_DEFAULT
-   .config:2744:warning: symbol value 'n' invalid for MTD_REDBOOT_DIRECTORY_BLOCK
-   .config:2803:warning: symbol value 'n' invalid for SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST_NUM
-   .config:2831:warning: symbol value 'n' invalid for KCSAN_REPORT_ONCE_IN_MS
-   .config:2928:warning: symbol value 'n' invalid for KCSAN_UDELAY_INTERRUPT
-   .config:2952:warning: symbol value 'n' invalid for PANEL_LCD_PIN_BL
-   .config:2969:warning: symbol value 'n' invalid for DEBUG_OBJECTS_ENABLE_DEFAULT
-   .config:2977:warning: symbol value 'n' invalid for INITRAMFS_ROOT_GID
-   .config:3081:warning: symbol value 'n' invalid for ATM_FORE200E_TX_RETRY
-   .config:3120:warning: symbol value 'n' invalid for FB_OMAP2_DSS_MIN_FCK_PER_PCK
-   .config:3186:warning: symbol value 'n' invalid for PSTORE_BLK_CONSOLE_SIZE
-   .config:3335:warning: symbol value 'n' invalid for BOOKE_WDT_DEFAULT_TIMEOUT
-   .config:3389:warning: symbol value 'n' invalid for KCSAN_UDELAY_TASK
-   .config:3453:warning: symbol value 'n' invalid for MMC_BLOCK_MINORS
-   .config:3499:warning: symbol value 'n' invalid for SCSI_NCR53C8XX_SYNC
-   .config:3620:warning: symbol value 'n' invalid for UCLAMP_BUCKETS_COUNT
-   .config:3726:warning: symbol value 'n' invalid for SERIAL_MCF_BAUDRATE
-   .config:3794:warning: symbol value 'n' invalid for DE2104X_DSL
-   .config:3806:warning: symbol value 'n' invalid for BLK_DEV_RAM_COUNT
-   .config:3811:warning: symbol value 'n' invalid for FTRACE_RECORD_RECURSION_SIZE
-   .config:3980:warning: symbol value 'n' invalid for STACK_MAX_DEFAULT_SIZE_MB
-   .config:4203:warning: symbol value 'n' invalid for USBIP_VHCI_HC_PORTS
-   .config:4204:warning: symbol value 'n' invalid for INPUT_MOUSEDEV_SCREEN_X
-   .config:4317:warning: symbol value 'n' invalid for RIONET_RX_SIZE
-   .config:4529:warning: symbol value 'n' invalid for RADIO_TYPHOON_PORT
-   .config:4624:warning: symbol value 'n' invalid for IBM_EMAC_TXB
-   .config:4651:warning: symbol value 'n' invalid for SERIAL_TXX9_NR_UARTS
-   .config:5012:warning: symbol value 'n' invalid for ARCH_MMAP_RND_BITS
-   .config:5033:warning: symbol value 'n' invalid for PANEL_LCD_PIN_RW
-   .config:5093:warning: symbol value 'n' invalid for DRM_I915_FENCE_TIMEOUT
-   .config:5115:warning: symbol value 'n' invalid for TTY_PRINTK_LEVEL
-   .config:5272:warning: symbol value 'n' invalid for MIPS_EJTAG_FDC_KGDB_CHAN
-   .config:5367:warning: symbol value 'n' invalid for KDB_DEFAULT_ENABLE
-   .config:5384:warning: symbol value 'n' invalid for SERIAL_ALTERA_UART_MAXPORTS
-   .config:5517:warning: symbol value 'n' invalid for PPC_EARLY_DEBUG_EHV_BC_HANDLE
-   .config:5619:warning: symbol value 'n' invalid for SND_MAX_CARDS
-   .config:5648:warning: symbol value 'n' invalid for PANEL_LCD_HWIDTH
-   .config:5678:warning: symbol value 'n' invalid for LOCKDEP_CHAINS_BITS
-   .config:5766:warning: symbol value 'n' invalid for DRM_I915_HEARTBEAT_INTERVAL
-   .config:5772:warning: symbol value 'n' invalid for KCSAN_SKIP_WATCH
-   .config:5780:warning: symbol value 'n' invalid for RCU_BOOST_DELAY
-   .config:5796:warning: symbol value 'n' invalid for PSTORE_BLK_KMSG_SIZE
-   .config:5897:warning: symbol value 'n' invalid for CRYPTO_DEV_FSL_CAAM_INTC_TIME_THLD
-   .config:6089:warning: symbol value 'n' invalid for ARCH_MMAP_RND_COMPAT_BITS
-   .config:6238:warning: symbol value 'n' invalid for DRM_XE_PREEMPT_TIMEOUT_MAX
-   .config:6254:warning: symbol value 'n' invalid for RADIO_TRUST_PORT
-   .config:6321:warning: symbol value 'n' invalid for SERIAL_SH_SCI_NR_UARTS
-   .config:6627:warning: symbol value 'n' invalid for CMA_SIZE_PERCENTAGE
-   .config:6743:warning: symbol value 'n' invalid for SCSI_SYM53C8XX_MAX_TAGS
-   .config:6771:warning: symbol value 'n' invalid for DRM_XE_TIMESLICE_MIN
-   .config:6873:warning: symbol value 'n' invalid for SCSI_NCR53C8XX_MAX_TAGS
-   .config:6875:warning: symbol value 'n' invalid for DVB_MAX_ADAPTERS
-   .config:6886:warning: symbol value 'n' invalid for RIONET_TX_SIZE
-   .config:6892:warning: symbol value 'n' invalid for SCSI_SYM53C8XX_DMA_ADDRESSING_MODE
-   .config:7206:warning: symbol value 'n' invalid for OMAP2_DSS_MIN_FCK_PER_PCK
-   .config:7237:warning: symbol value 'n' invalid for ZSMALLOC_CHAIN_SIZE
-   .config:7239:warning: symbol value 'n' invalid for SERIAL_ARC_NR_PORTS
-   .config:7258:warning: symbol value 'n' invalid for IBM_EMAC_RXB
-   .config:7412:warning: symbol value 'n' invalid for SCSI_MPT3SAS_MAX_SGE
-   .config:7466:warning: symbol value 'n' invalid for LOCKDEP_BITS
-   .config:7543:warning: symbol value 'n' invalid for PSTORE_DEFAULT_KMSG_BYTES
-   .config:7588:warning: symbol value 'n' invalid for RCU_FANOUT
-   .config:7637:warning: symbol value 'n' invalid for PANEL_LCD
+If snd-usb-audio is disabled, what snd-soc-usb would serve at all?
+Does it still make sense to keep it enabled? 
+That said, the statement above (building snd-soc-usb without
+snd-usb-audio) looks already dubious; isn't it better to have a proper
+dependency in Kconfig, instead?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+thanks,
+
+Takashi
 
