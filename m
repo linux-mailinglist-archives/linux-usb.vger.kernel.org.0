@@ -1,137 +1,106 @@
-Return-Path: <linux-usb+bounces-6663-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6664-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 217218591A2
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 19:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E20768591AA
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 19:18:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 470AA1C20D06
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 18:12:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 208461C20E39
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Feb 2024 18:18:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D51808004B;
-	Sat, 17 Feb 2024 18:09:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 697217E0F6;
+	Sat, 17 Feb 2024 18:18:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="h+uWf32b"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uJowWFHS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F1D80038;
-	Sat, 17 Feb 2024 18:09:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FBB7D3F6
+	for <linux-usb@vger.kernel.org>; Sat, 17 Feb 2024 18:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708193379; cv=none; b=PxMj/WYZ1VEVqWv1aImTVx9K8+1EnsQXFcnyZKM3MLYiDh71//XAyMOtTpgEAhrAbMxPfKRMmo4/s+FmytXIyBOdFqU5j0CdkGKZrnrKRysxZYGaFZRIoziNElwdk50flXFllF5+gLUGTEfscHHhhjUNXmb80ql7F20STIPPazA=
+	t=1708193888; cv=none; b=Po/+de47SivGQyJBf8sAqzXFAeImEswAjHlNSWkiP1KtqATpVO1LbV26240f7Xsob/O5mv6YhAqzMJEIlnlg+A1quFOlYZrMcR5cTkUgelp1Vpvje9qozX4UevVeptc3lsTwr6izVQOFEohxW8IY5WW6AIzALFAuXqdaEHemWSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708193379; c=relaxed/simple;
-	bh=JUBlNHQ9KEInXfv/Ts82d6LWLEYOujFvKhAve8sOAdY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=i5AtO0D1x/2y0QbUXc3Hro4HdjNEmTM8mA/X80en1JbQlV2Ydxkn+L6zrLTSpY6Hl4QxNAkdOSqYYZ7xnYF82zJ9GWyUDYS+7sotmF81sAsXpzvBM3PjGC7Wnu2WdviNoEysUp/qauLzm0d7QCiPeITt8BQsr3o0VMzqZHIIdsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=h+uWf32b; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-	In-Reply-To:References; bh=VwM8omFAb/USTaaRR/I+p2JFbh5V/UtXkfhHiw9cl4I=; b=h+
-	uWf32bDXfJHQJlMFbKO6z40qckTpR053ZZDrThpza8HPRCmYD5+qyuRiRGDdmFlLv8TlW8ISUbj6l
-	boeUJRLC17kMIxYbNl8R5RR3C0kThhxypeYpnT0A5tY+DOel5jDpbWI0BrBzZ/v2tEPqfPj3jiOSD
-	M5wzXybhUhJhe5Q=;
-Received: from c-76-156-36-110.hsd1.mn.comcast.net ([76.156.36.110] helo=thinkpad.home.lunn.ch)
-	by vps0.lunn.ch with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rbP8D-0084hf-KD; Sat, 17 Feb 2024 19:09:45 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-Date: Sat, 17 Feb 2024 12:08:29 -0600
-Subject: [PATCH net-next v3 8/8] net: intel: igc: Use linkmode helpers for
- EEE
+	s=arc-20240116; t=1708193888; c=relaxed/simple;
+	bh=Qzb3J1w292mYeic6Z5BobktYBhZzdTBYI73MRYlqTkY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Uje+BKWPQTVdv+5+GF8rPZQZCsu+I+F7AxCPifBM0b9lG2yEHC+Ha/iUTcfT8moMM2xuzoQxsJIQSACjutKsm7vbplRTonfSCb296Ex7iDD0A77Guokmhyh+fXsahdtvZxJcmj4JbqYmh9v+VJwUKQsXrUE4rR3ri8slyklKMYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uJowWFHS; arc=none smtp.client-ip=209.85.219.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dc742543119so1845979276.0
+        for <linux-usb@vger.kernel.org>; Sat, 17 Feb 2024 10:18:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708193886; x=1708798686; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jbyO0DKsw6wXpJbxjwS7LuEbfeSrnfaky7pY4pa8Iro=;
+        b=uJowWFHSJ1P2USUNXbh/zxGJ/QO55sPlMfi/4QkaKQLURCJgqMlbZJnwy2RryLTxWQ
+         YrEe9z8OP+yYWARHRuCN+LS2m3hZn85H9SGmP3SLx89Cr+Pp4Hy514hsAoa4UX2Toh/O
+         +ojjUSS1DX120V81zQC3xDlKz0CjRiNlEa8urvFtB15hoV0CUZDZMUhkSxkpIpWkiSPf
+         EtU5D3Lzj0LKKc6PbmahFHMSxob0NocBjuYZwsi9sohSi4sHXJ2bV1KR6I1JCYrpdfNf
+         kYAX/K6/5DL2KeWzlHsg21aAql8CD0uKFlnpplicBGJ/z7c3uv7osJ2cRDQprg5cfQbi
+         ViZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708193886; x=1708798686;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jbyO0DKsw6wXpJbxjwS7LuEbfeSrnfaky7pY4pa8Iro=;
+        b=weJ8InYBVYomojxwAxH68zvWMfCsJx/2pEWgED5oaZkbQo4O+3DrVycIIoBnNgI3dm
+         8vkdQboesDqcePvWFiD37/uq3x+nwySEQ6RupGPCxxNlJtYSS6gb6BhnQAlsi2wqgz+7
+         nTuWT/nrg90fX5BFlhYKoDc21DKB9DWPpOq4lm/yxs0aQPk0m/i4QsS5ERQ+71Zb4W/J
+         szgc4a1DyZsUQUnOnawbAqVpfT6nVVO46G5/cbSFRbO/B3qDgV+nLGE3A6D2UhMjXvyw
+         TW4qMqWsT7G6Bz9eYiBXa63DSsl4ev75SlBtQkDtdeJd7PxlFfOPCHTHruFsltBYHuSY
+         5bgA==
+X-Forwarded-Encrypted: i=1; AJvYcCXJ1FanD3IgB6uJ/8XpYCGJ7PD5EyZt67BRkrj8BkOamq206BZ594fhlGOjeHLk/xnqkr8nFQ9HWqHbMfeDzVUCaCoOlCBcTQ+f
+X-Gm-Message-State: AOJu0YxV0Ll3W/96ijNf8a+l7gNzSu3N+DJmNZZTagLrl/2/pH3+3o9x
+	yZuvJky0omvzNEawaD9f7MtfwrBAmQzkl0iFf5t3fDQch+gxKHregU3xdBmmnGqKLc//8UZO0eJ
+	w8dEmJCz8wfwLuaa5IKjpucFtLsN5RLAr6AAdBA==
+X-Google-Smtp-Source: AGHT+IHR2aw5Fq9+f+b6J2C+oHZ3lJAwIW+/0JnzTfJsNAWuf5xhYkTrzi03iYoBr9x5+9kp7hFsJqSP9BmXYDW/Jdg=
+X-Received: by 2002:a25:ac93:0:b0:dcc:2da:e44e with SMTP id
+ x19-20020a25ac93000000b00dcc02dae44emr6454894ybi.61.1708193886191; Sat, 17
+ Feb 2024 10:18:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240217-keee-u32-cleanup-v3-8-fcf6b62a0c7f@lunn.ch>
-References: <20240217-keee-u32-cleanup-v3-0-fcf6b62a0c7f@lunn.ch>
-In-Reply-To: <20240217-keee-u32-cleanup-v3-0-fcf6b62a0c7f@lunn.ch>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Ariel Elior <aelior@marvell.com>, 
- Manish Chopra <manishc@marvell.com>, 
- Jesse Brandeburg <jesse.brandeburg@intel.com>, 
- Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
- Andrew Lunn <andrew@lunn.ch>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1638; i=andrew@lunn.ch;
- h=from:subject:message-id; bh=JUBlNHQ9KEInXfv/Ts82d6LWLEYOujFvKhAve8sOAdY=;
- b=owEBbQKS/ZANAwAKAea/DcumaUyEAcsmYgBl0PY8QswMZXFgclyrmiaG6Mz5z1C9NpM6VoMTr
- 6lMSfGhKCqJAjMEAAEKAB0WIQRh+xAly1MmORb54bfmvw3LpmlMhAUCZdD2PAAKCRDmvw3LpmlM
- hOLjEADIAYAUBqeIHdM2i1gNP2BQ6NHP0THsFP5kUpdF+K1kenJv0qXrOFtwSiazeWwckU8rDDa
- iU7BFilBn0lFc8ts4/NhsGYy6xlEsCk8k7aRc9OzEnsQMm/YzEutyHJ273avPL+41R8aMG9/e7+
- TazrzAWDTXwBi1VPIQlb38Oim45OPghmPCAIfbd287xo/AFoQjT5jeITBBO/WE3/Y6LolrMLxK5
- YXcWxlJaL7J1r1wKMp6U99icOY6tid1XdxZ7J3Ue5jiPmZxsDgSeIzT4VRaYbfJ+NpjuL+sdrqT
- Hh1FImogd5Ebu0vwkSB6fTt32/FR8+w2R4WFYkqNP8esEDlWabLkPFwBP00S5icCAz3KvdodWet
- G7PyjZPBC9CP+w2CIYs3FOL4G2JlTDRnqb0as5Oyx1Zn9FGQucl17WqV7nA5itVuOxFT8KS53d/
- ysLkTQL6B8GetPqlskK1uSTbFkYDFKknZPsvtD3Uq20RjywJ4ILmEIWcNLGh04XhZAjAlZQr8Yd
- 63V0Gmq+nmEWZ3bE/vZrbf8382A9gzYMNjq4T5tlo2fApr1jj2T38h25dr1gfERwjaG9qkh6Cnl
- lvhAvXj9DyYwb0ZWcOSAqGLl5tyXkIZ8Y3Ip3U4Jp2CaMCalhsJ1nL7f4yNdOpBQgVfh1EfssjZ
- rghfWW6fjwdPtCQ==
-X-Developer-Key: i=andrew@lunn.ch; a=openpgp;
- fpr=61FB1025CB53263916F9E1B7E6BF0DCBA6694C84
+References: <20240217163201.32989-1-danila@jiaxyga.com> <20240217163201.32989-4-danila@jiaxyga.com>
+In-Reply-To: <20240217163201.32989-4-danila@jiaxyga.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Sat, 17 Feb 2024 20:17:55 +0200
+Message-ID: <CAA8EJpqRZiUU8fmGswwvegq3uTR_8RGu4L=LHiT5TRsShQHgWQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: pm6150: define USB-C related blocks
+To: Danila Tikhonov <danila@jiaxyga.com>
+Cc: andersson@kernel.org, konrad.dybcio@linaro.org, lgirdwood@gmail.com, 
+	broonie@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	conor+dt@kernel.org, bryan.odonoghue@linaro.org, gregkh@linuxfoundation.org, 
+	quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Make use of the existing linkmode helpers for converting PHY EEE
-register values into links modes, now that ethtool_keee uses link
-modes, rather than u32 values.
+On Sat, 17 Feb 2024 at 18:32, Danila Tikhonov <danila@jiaxyga.com> wrote:
+>
+> Define VBUS regulator and the Type-C handling block as present on the
+> Quacomm PM6150 PMIC.
+>
+> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/net/ethernet/intel/igc/igc_ethtool.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-diff --git a/drivers/net/ethernet/intel/igc/igc_ethtool.c b/drivers/net/ethernet/intel/igc/igc_ethtool.c
-index ac92d10a3e97..1a64f1ca6ca8 100644
---- a/drivers/net/ethernet/intel/igc/igc_ethtool.c
-+++ b/drivers/net/ethernet/intel/igc/igc_ethtool.c
-@@ -1630,8 +1630,8 @@ static int igc_ethtool_get_eee(struct net_device *netdev,
- 	u32 eeer;
- 
- 	if (hw->dev_spec._base.eee_enable)
--		edata->advertised_u32 =
--			mmd_eee_adv_to_ethtool_adv_t(adapter->eee_advert);
-+		mii_eee_cap1_mod_linkmode_t(edata->advertised,
-+					    adapter->eee_advert);
- 
- 	*edata = adapter->eee;
- 
-@@ -1653,7 +1653,7 @@ static int igc_ethtool_get_eee(struct net_device *netdev,
- 		edata->eee_enabled = false;
- 		edata->eee_active = false;
- 		edata->tx_lpi_enabled = false;
--		edata->advertised_u32 &= ~edata->advertised_u32;
-+		linkmode_zero(edata->advertised);
- 	}
- 
- 	return 0;
-@@ -1695,7 +1695,8 @@ static int igc_ethtool_set_eee(struct net_device *netdev,
- 		return -EINVAL;
- 	}
- 
--	adapter->eee_advert = ethtool_adv_to_mmd_eee_adv_t(edata->advertised_u32);
-+	adapter->eee_advert = linkmode_to_mii_eee_cap1_t(edata->advertised);
-+
- 	if (hw->dev_spec._base.eee_enable != edata->eee_enabled) {
- 		hw->dev_spec._base.eee_enable = edata->eee_enabled;
- 		adapter->flags |= IGC_FLAG_EEE;
+> ---
+>  arch/arm64/boot/dts/qcom/pm6150.dtsi | 46 ++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+
+
 
 -- 
-2.43.0
-
+With best wishes
+Dmitry
 
