@@ -1,114 +1,130 @@
-Return-Path: <linux-usb+bounces-6711-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6712-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C426F8599A0
-	for <lists+linux-usb@lfdr.de>; Sun, 18 Feb 2024 22:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E4808599AE
+	for <lists+linux-usb@lfdr.de>; Sun, 18 Feb 2024 23:07:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8172C281602
-	for <lists+linux-usb@lfdr.de>; Sun, 18 Feb 2024 21:47:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEC302816B8
+	for <lists+linux-usb@lfdr.de>; Sun, 18 Feb 2024 22:07:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE719745CA;
-	Sun, 18 Feb 2024 21:47:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C23674E03;
+	Sun, 18 Feb 2024 22:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QFAYK2mi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mgJf9XqW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE4AEAD7;
-	Sun, 18 Feb 2024 21:47:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7C174E12
+	for <linux-usb@vger.kernel.org>; Sun, 18 Feb 2024 22:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708292844; cv=none; b=V7bFo2p20KNMGorIF5N9DeYaK5/xYCcd/XFBRIITreyIJK7DRdmkxf59hPH2nmIcg1kelhqKukLsoraSHxZiO7EHCg0g7U2R5xJGl3sBzAM6G05hHUB8+zBoqnagVIyn/dXHVZi4JREV4MeasWZXUd/QUktSbv1C5PeCjGHUpOU=
+	t=1708294064; cv=none; b=gj+Aju4fsOrNdY1ocY/mSlotknwajnYNlPvJrN16netfWflRY3sYJEqx6DrLnTlbc2x8vjJjhRcRsVPVewNXzAveWsyOuadIbUiHqXSPe8ha+mbGx3ypB2aSDXf0AnK6JljHGlKt3eYrP2uVdxKTN2gkxdopYAac+P9Ok5DrDD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708292844; c=relaxed/simple;
-	bh=He296CGuCmElTiY1KTWvPzuztsoIaHP2KjB4JkUw2Rs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ioi260F44trRg2u7kVIZM3fLOS9rnqNzSa+NSayuurIEjtvoty2BHSHmz2O+o7YIdCrwuMI1RMLL6wDKZUf/27T121F6NkMSgYTDFKJz7q+GPlTS1zA0KPrZtp4UaH0SCdE1F/WeUtVw36DK7A95VpjY3Z0KzCQHUWS1/00BQwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QFAYK2mi; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5cdf76cde78so3080258a12.1;
-        Sun, 18 Feb 2024 13:47:22 -0800 (PST)
+	s=arc-20240116; t=1708294064; c=relaxed/simple;
+	bh=noyT0NVbOw9JrKezMpMB75c/1hxZ5UzrFj4VHYRvb7M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JnhTaFNZfwdhdP4QDEmdRH12R65aB+a1ioVO2vWbwY+b9QohLmrSEF3l3QbQgfJTeWVVO6OqQ0Po9hgwBCXmID8cA+FC7ZeN6/K6qbTTlDsxFnrS6otYOg+IOiDV6iZiULCFFKYapGlnfOoxmWk0d/sNSg+g7vBHcBfk6u8gERY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mgJf9XqW; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dc745927098so3207365276.3
+        for <linux-usb@vger.kernel.org>; Sun, 18 Feb 2024 14:07:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708292842; x=1708897642; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2h7w3PICpgc66DOd0GBlKCF5dayhoEba8xQNx0hBJWY=;
-        b=QFAYK2mi3NROshGtkgi2zYr4bWZzvWrcRK4kVVlcFJijJvUUK+J/fTx19zkztEcquj
-         IJOgTI00OQglpNwrxsG+epvY5ldH+uzltgbS7EvI6y+SYM2N/iUg5wXsz+iipTW42fjZ
-         u6fSKJbbO60UwHZGhDaz+MWotuhdwXmH8wqsBHbKZTQZp3tca+IV7AMXwy5MvX1TxWZJ
-         xYbuDE34XHz19yqp7TITQUjkyRufy07pzHfnY737HwlOwsYXH47llBNbmUq/u6dYTleG
-         1vQQkLkO0Tp97wVRR9skbY32OTMqv+W6osSFaci3h/XJLXksf1RMHdXfCgCU7FOnXT1p
-         4wrw==
+        d=linaro.org; s=google; t=1708294045; x=1708898845; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=w/A2VqH3T77p5BaaLS4Ba0fiwlO0C0XzwKCCFd7AcBU=;
+        b=mgJf9XqWGUumAC+UNXonICacLre696tHk+hJsYaLF7sJ6x/bEtcK6DUC0/6nP3/IBg
+         qyfTzye5aMjFKYCAMX5XGbMCcbdWZPMvEV9zLzwlhV/0URrdFIHHKjB4vaoBD2gT/dgy
+         cGiivjyKiEzSzg/aDXSs8UX6S0/wbP2y02PntYndRAtU080d9vrshuVtt6pNVMVgSQVA
+         dgqlyvmfRTwt89cWHf8QnuOsx2EPp35CATQ9sa14ZCqgSQg8oFwTkvCAE+LtHqaBCcQ+
+         NG1Z2/Ld/PSm72h5uH21ddClzCzv8NsDRz/CsnE/QCwQkPrFFHFBYWsEWK/n3hKD6iAv
+         RO8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708292842; x=1708897642;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2h7w3PICpgc66DOd0GBlKCF5dayhoEba8xQNx0hBJWY=;
-        b=hqyjJcOOrxPOkumJWN6XUh42gRtE4zFj2r/LJR1D9dEXeXCbS078xrJzeEPCz6bFE6
-         Rbde9DipI2AySfnOHup7RO9eHkbKFl+TWi2QNLJ6t1P8zwAlLh7ofrv97hIYSBmFl2XJ
-         v33yk+X06/4uJYHr+L6t4pNOJ1L/Ay9IQrv5U39D1BYwVXOaG4ItxvhtfHIGE9DUzbAu
-         cjbR+DOEHVwIzozVUD/wfNQ9rjkv+WZhCvTlgfTjLZs9LVI2jnV0nBavaF4CUd+0em1s
-         INaHX/73O9yX/svj7bKvqGN1mw8a+qtcC4B3KH3MDCsf/dlDOFZ9hY06UUC9+Kx/s8y/
-         KfyA==
-X-Forwarded-Encrypted: i=1; AJvYcCWVv2GBPt/bT1WbVdvaneNvv2bVsl9hwxFk+fIrILjHs5WPm3k9dsOxdmaT6frDZTMNDraVvBFwBihQ6MbugqlOteoOqnJWWQFXDdu3RhCowme7rnC97pR2t98UfFkRmKyvo++Ayc0ZhFXpfTdqomKBfdupff+GhSGKJdiuy2Lhmo87
-X-Gm-Message-State: AOJu0YzZ/iIYISkFGbTQWBktWuVenJ6me58qZH2n5Ea+sHApZ1J7z+US
-	M/FZOc3w+FOGXpWOngovVMxHjqaoAZT5jWO+AaCLRdsk/1jmSQz7
-X-Google-Smtp-Source: AGHT+IHHsrNNaqhzpWEb7ZSZlMvmO/EGN3DdEK1PReUEdPvWQ75O4Nwi52lCklFmN/BpftZW2qDLAw==
-X-Received: by 2002:a17:902:76ca:b0:1d9:b739:a5aa with SMTP id j10-20020a17090276ca00b001d9b739a5aamr9080407plt.42.1708292842210;
-        Sun, 18 Feb 2024 13:47:22 -0800 (PST)
-Received: from ?IPV6:2600:8802:b00:ba1:b1a2:78a5:4a29:e334? ([2600:8802:b00:ba1:b1a2:78a5:4a29:e334])
-        by smtp.gmail.com with ESMTPSA id lb14-20020a170902fa4e00b001d9558689cfsm3107629plb.111.2024.02.18.13.46.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Feb 2024 13:47:20 -0800 (PST)
-Message-ID: <ce36b9ac-6a32-4b97-98e5-dde72ef2b99b@gmail.com>
-Date: Sun, 18 Feb 2024 13:46:37 -0800
+        d=1e100.net; s=20230601; t=1708294045; x=1708898845;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w/A2VqH3T77p5BaaLS4Ba0fiwlO0C0XzwKCCFd7AcBU=;
+        b=ISLElPl+btPnmrEY+56uPQcuR6cyiyH5nD0s6369mW73GjOo2lKVggVzC5PcsyfmQr
+         82TxcDRAzUyXVWRCBlGqKm/HFRoToKCsHFLejMPbqKEHXompN4h9OZMbazXJokjQewUK
+         I3tIJVW3vflo5qbOnkgZsPBm80G1UB49Kq2HEH8LCEA0LJ0982Zy418fwG2pzCFDllsw
+         qj8xhkpmQvkJOtztO8pZvvljjQhkzR7wTYLWwNIJgLaKQksmDDiXh6SKgRNH6r/j8U7D
+         CjtcrX0CQDP5dw0rZjDxTNCbf3qpqKzYkTjP8OpXDtk0h4dbUVGqweAMzV5oGntttPH8
+         N1Jw==
+X-Forwarded-Encrypted: i=1; AJvYcCVHOZfMwWd2WzczRCevsfqjuEKsYADrSGiKAxaVmt9eWJcfBkDr2xJkpsWi1Ndn3Vc4njX8hSS0U5ZjnorcEI/3exNWlGrp9M/9
+X-Gm-Message-State: AOJu0YyZV3NcilMac27gXCMwn/mZzRtUZPMtRR3jFRzshXhJYtVTQotN
+	zqC+e7ViKnVSL498kERBsvFXtgYFbBiqNvTf5xdXLtqKVmBwWqOXBgn/E74kEmW4Ge4NUlUVOLu
+	YML/6Ns8YZUzbyi9+Zjs2wfTNI0mU2GUI2cXmpQ==
+X-Google-Smtp-Source: AGHT+IELeLyIUJs5SAO08A3FKHyNU3pAuY4NxArUAv+xkFbNbCBUKbAWybGbjMfZ1EVD+aa6gQDaSPl5tjX9WAb5sEI=
+X-Received: by 2002:a0d:ca12:0:b0:607:84d9:9820 with SMTP id
+ m18-20020a0dca12000000b0060784d99820mr9366084ywd.24.1708294044760; Sun, 18
+ Feb 2024 14:07:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/12] net: dsa: constify the struct device_type usage
-To: "Ricardo B. Marliere" <ricardo@marliere.net>,
- Oliver Neukum <oneukum@suse.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
- Vladimir Oltean <olteanv@gmail.com>, Roopa Prabhu <roopa@nvidia.com>,
- Nikolay Aleksandrov <razor@blackwall.org>,
- Loic Poulain <loic.poulain@linaro.org>,
- Sergey Ryazanov <ryazanov.s.a@gmail.com>,
- Johannes Berg <johannes@sipsolutions.net>
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, bridge@lists.linux.dev,
- linux-ppp@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20240217-device_cleanup-net-v1-0-1eb31fb689f7@marliere.net>
- <20240217-device_cleanup-net-v1-2-1eb31fb689f7@marliere.net>
-Content-Language: en-US
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20240217-device_cleanup-net-v1-2-1eb31fb689f7@marliere.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240217163201.32989-1-danila@jiaxyga.com> <20240217163201.32989-4-danila@jiaxyga.com>
+ <6bf11ccd-ff08-369b-913f-277c189afb76@linaro.org> <b0b732b8-456a-4021-8277-cd51f01ead17@jiaxyga.com>
+ <44c669a0-3722-4a58-be78-0c91f0573ca1@linaro.org> <60728953-bdf0-4a06-a90a-d1191d41962b@jiaxyga.com>
+In-Reply-To: <60728953-bdf0-4a06-a90a-d1191d41962b@jiaxyga.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Mon, 19 Feb 2024 00:07:13 +0200
+Message-ID: <CAA8EJpqxoCwqOWuWe4B63swO_hvREhN2czOpe0wM5mt-FaWUgQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: pm6150: define USB-C related blocks
+To: Danila Tikhonov <danila@jiaxyga.com>
+Cc: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, andersson@kernel.org, 
+	konrad.dybcio@linaro.org, lgirdwood@gmail.com, broonie@kernel.org, 
+	robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+	gregkh@linuxfoundation.org, quic_wcheng@quicinc.com, 
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+
+On Sun, 18 Feb 2024 at 20:53, Danila Tikhonov <danila@jiaxyga.com> wrote:
+>
+> You are referring to Dmitry Baryshkov, as I see. But Dmitry has already
+> reviewed my patch (message above).
+> So it would be rude to change anything without his knowledge. Let's wait
+> for his answer.
+
+I missed this point, so please update the IRQ flags accordingly to
+PM8150B, as Bryan has pointed out.
+
+>
+> ---
+> Best wishes
+> Danila
+>
+> On 2/18/24 20:14, Bryan O'Donoghue wrote:
+> > On 18/02/2024 8:05 a.m., Danila Tikhonov wrote:
+> >> I know that some interrupts have both for PM8150B, but for PM6150 all
+> >> interrupts are rising.
+> >> Please look at the downstream kernel:
+> >> https://git.codelinaro.org/clo/la/kernel/msm-4.14/-/blob/187022f2721d584ac4ec92c0ac1af77da487521d/arch/arm64/boot/dts/qcom/pm6150.dtsi#L319
+> >>
+> >> https://git.codelinaro.org/clo/la/kernel/msm-4.14/-/blob/187022f2721d584ac4ec92c0ac1af77da487521d/arch/arm64/boot/dts/qcom/pm8150b.dtsi#L292
+> >>
+> >>
+> >
+> >
+> > Please take a look here, I think the same logic should apply to your
+> > patchset.
+> >
+> > https://www.spinics.net/lists/devicetree/msg665558.html
+> >
+> > ---
+> > bod
+>
 
 
-
-On 2/17/2024 12:13 PM, Ricardo B. Marliere wrote:
-> Since commit aed65af1cc2f ("drivers: make device_type const"), the driver
-> core can properly handle constant struct device_type. Move the dsa_type
-> variable to be a constant structure as well, placing it into read-only
-> memory which can not be modified at runtime.
-> 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
-
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 -- 
-Florian
+With best wishes
+Dmitry
 
