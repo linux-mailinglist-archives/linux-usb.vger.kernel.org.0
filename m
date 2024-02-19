@@ -1,119 +1,117 @@
-Return-Path: <linux-usb+bounces-6750-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6751-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A438B85A7D1
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 16:50:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A191485A8D4
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 17:24:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D75D21C22C33
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 15:50:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D39961C21186
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 16:23:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D3FD3AC08;
-	Mon, 19 Feb 2024 15:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 414523CF63;
+	Mon, 19 Feb 2024 16:23:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="D473HamS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QBdlZSZ3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6553A3D384;
-	Mon, 19 Feb 2024 15:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE9FB3C082;
+	Mon, 19 Feb 2024 16:23:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708357792; cv=none; b=PdDckWB4dhXy6dHYiZ0fTVgSQ98oZoCSQm7kNaM0BgMKaggu/UzVKySgDcajebwXZabJGes2WF+WXEuTJOtmIWbN/6KvgDSspzh846ARrySgOF2mXK5jeR8or356FpJTHnjUPFYbMVl8wGiHwV3BpUlN2//wYtSdJUu+yb9Z1CQ=
+	t=1708359829; cv=none; b=eOA1Kc6THdeYaR6KPj+CyCMTc+MIyRr3lnEQrkG1LMdHkpGL0qT8Yf0CPewgOygohnmSKTHyl/PtVVyD6x/jOdR10akeFmgAXumcV1TzfjYmJr1c9h+DD5Q+fX0uaD7Q8IEqhu7AC1z71l2PHpP4RLiSIq1fggy3LIiBvycVbE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708357792; c=relaxed/simple;
-	bh=YvFC4xI4AtllwaPrtCPa62a3WM3IH2L8FS7AqLwAqog=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=OCFFANUjexEgY+Wix4ckMjDpUgoO0ZT0+PIYU2+fIUIwA+Q2Ya5cy8dhSM+ZPtiIAgo89nO6k0KGbafoHdE8LkQN/jiKPYT1SwGXpys9u0zd0MO3n/kyocvCEoi2mW+rUOdByJJj4GdP/eYPEXff82mx82Q/6ri7D3A7N0p2WQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=D473HamS; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1708357788;
-	bh=YvFC4xI4AtllwaPrtCPa62a3WM3IH2L8FS7AqLwAqog=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=D473HamSNqxxUwlodm4+NXMHH4i3et8L5Eanivq2TgH0na34j7OpM3+QBWz3hHv+x
-	 udmmz4urcPqFJUoIwVmnJBJyk7oyoNpA14mPlKws/h22aMPfvmdMrxqdpDFQzTbsjd
-	 xQc36rD6ccflLWlppJPb9q7/a1TvkcKqLV0BwQnVtbOwGZaR2cQ03e4Qzi6753VzOH
-	 Ie7gq7yMqn8cv0DNTz61/Wac73yIjUTMREKPHne2rLC8vJ6WmZRtHdV3CrKSYdmrbG
-	 h3wr5afdN1ynF8mGWTqO7AoPjg+6TJdtTWiP5K//7FEiKvAK+QpCcCFZoE42U02djw
-	 y3TucHIaNzT3g==
-Received: from [100.93.89.217] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: benjamin.gaignard)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D7DBE3782080;
-	Mon, 19 Feb 2024 15:49:47 +0000 (UTC)
-Message-ID: <98b81fbf-4905-4b45-a8c0-33e7399ef84a@collabora.com>
-Date: Mon, 19 Feb 2024 16:49:47 +0100
+	s=arc-20240116; t=1708359829; c=relaxed/simple;
+	bh=3TaEMNwc1sACneFvya4ZgRhN24IEHV8XP900tswpqOU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=eBy01xf0a/TfRRtjM9AcomSXViPrIHoyPLkIxor6/bwVbyZN0n9+45c6/QZepdUmMZQiQ75hMg66p4GUFwKTBw0862rhf9Q+SDdt8/fC7aL7HNhG4Fcg3IT8elYiwF8q98cF7/vOuZUCWA84+ieeO60vwDgkHTmBkvPzmgelaAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QBdlZSZ3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05658C433F1;
+	Mon, 19 Feb 2024 16:23:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708359829;
+	bh=3TaEMNwc1sACneFvya4ZgRhN24IEHV8XP900tswpqOU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=QBdlZSZ3/jh0t5RrjsMfWFAd8OECarSKuRBgKWCIQv31MZqKChPKwlLazCFZ6T5YF
+	 11dFD41YY33Ki3ZhTy1Fm9jBmArtxi6RFa1CNWMIXi6UAwQ2SdXMa+z1ywpv09ft7k
+	 KLe3SSwhuNW9+be6rm08IdoICuoFiL80aajLLOhFXRl9VTXIBISnWcMFsvsMVSLLl1
+	 GqQ4HKDme3x5BnRP1cFQ5hKxssAG3Mtad+D4jxQfbqIBIw3WwHP5WuU8NP8ZDCknFm
+	 4Jd8yPc9k4v8bp9oAmqLwIzqFQKs/0ygQUKo1d5aHTcgcLdKT/nLNj3UgoU/j5i4eT
+	 d2D+cmXBcT90g==
+From: Mark Brown <broonie@kernel.org>
+To: andersson@kernel.org, konrad.dybcio@linaro.org, lgirdwood@gmail.com, 
+ robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+ bryan.odonoghue@linaro.org, gregkh@linuxfoundation.org, 
+ quic_wcheng@quicinc.com, Danila Tikhonov <danila@jiaxyga.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org
+In-Reply-To: <20240217163201.32989-1-danila@jiaxyga.com>
+References: <20240217163201.32989-1-danila@jiaxyga.com>
+Subject: Re: (subset) [PATCH 0/3] arm64: dts: qcom: pm6150: Add typec
+ support for PM6150
+Message-Id: <170835982675.1195521.16416838868807847765.b4-ty@kernel.org>
+Date: Mon, 19 Feb 2024 16:23:46 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [usb?] [media?] possible deadlock in
- vb2_video_unregister_device
-To: syzbot <syzbot+3b1d4b3d5f7a358bf9a9@syzkaller.appspotmail.com>,
- hdanton@sina.com, hverkuil-cisco@xs4all.nl, hverkuil@xs4all.nl,
- laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
- m.szyprowski@samsung.com, mchehab@kernel.org,
- syzkaller-bugs@googlegroups.com, tfiga@chromium.org
-References: <000000000000cb40790611bbcffd@google.com>
-Content-Language: en-US
-From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <000000000000cb40790611bbcffd@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
+On Sat, 17 Feb 2024 19:31:58 +0300, Danila Tikhonov wrote:
+> This series adds typec support for PM6150. Was tested on SM7150
+> (xiaomi-surya).
+> 
+> To: Bjorn Andersson <andersson@kernel.org>
+> To: Konrad Dybcio <konrad.dybcio@linaro.org>
+> To: Liam Girdwood <lgirdwood@gmail.com>
+> To: Mark Brown <broonie@kernel.org>
+> To: Rob Herring <robh@kernel.org>
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> To: Conor Dooley <conor+dt@kernel.org>
+> To: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> To: Wesley Cheng <quic_wcheng@quicinc.com>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
+> 
+> [...]
 
-Le 19/02/2024 à 14:10, syzbot a écrit :
-> syzbot has bisected this issue to:
->
-> commit c838530d230bc638d79b78737fc4488ffc28c1ee
-> Author: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> Date:   Thu Nov 9 16:34:59 2023 +0000
->
->      media: media videobuf2: Be more flexible on the number of queue stored buffers
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=166dc872180000
-> start commit:   b401b621758e Linux 6.8-rc5
-> git tree:       upstream
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=156dc872180000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=116dc872180000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=eff9f3183d0a20dd
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3b1d4b3d5f7a358bf9a9
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ffaae8180000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ef909c180000
->
-> Reported-by: syzbot+3b1d4b3d5f7a358bf9a9@syzkaller.appspotmail.com
-> Fixes: c838530d230b ("media: media videobuf2: Be more flexible on the number of queue stored buffers")
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Applied to
 
-Hans,
-I think the issue occur because of this part of the commit:
-@@ -1264,7 +1264,7 @@ void vb2_video_unregister_device(struct video_device *vdev)
-          */
-         get_device(&vdev->dev);
-         video_unregister_device(vdev);
--       if (vdev->queue && vdev->queue->owner) {
-+       if (vdev->queue) {
-                 struct mutex *lock = vdev->queue->lock ?
-                         vdev->queue->lock : vdev->lock;
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-but I wonder if the correction shouldn't be to remove usbtv->vb2q_lock mutex in usbtv_video_free().
+Thanks!
 
-Any opinion ?
+[1/3] dt-bindings: regulator: qcom,usb-vbus-regulator: Add PM6150 compatible
+      commit: ec29a4d9b7c7329afc61e7932cb91e9b292b2b74
 
-Regards,
-Benjamin
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
->
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
