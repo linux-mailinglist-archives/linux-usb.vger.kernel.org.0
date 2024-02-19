@@ -1,104 +1,119 @@
-Return-Path: <linux-usb+bounces-6738-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6739-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F296D85A193
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 12:02:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB92885A243
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 12:43:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F502B21105
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 11:02:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B677B22F9A
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 11:43:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85A482C19A;
-	Mon, 19 Feb 2024 11:02:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79D4A2C856;
+	Mon, 19 Feb 2024 11:43:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iI3AdxuQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BzddOlzg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B7C1C10;
-	Mon, 19 Feb 2024 11:01:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADEE22C19E
+	for <linux-usb@vger.kernel.org>; Mon, 19 Feb 2024 11:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708340521; cv=none; b=HGRPBixG31K7+BlnDrVE8Lg3N3wjMQQ7vH+OwNowV3X0+7FAL1zv0ZdUWMPPzdCYZwpQ51ffQSEEtbgn9D++4f6mJ9omrxedSwiM0EM6Yn1gmHzXFXZlSTTepEI2k+EsMiR8agMRIytkpOGZIn++OJ+sQl8X61p2mvV/GRnz6cU=
+	t=1708343021; cv=none; b=ljb/p6oy3IRbxsaCyfE/wgWH3jHcrFoC77IShE1/+cifukMUX2rYTdJ0qGtt3kYmdvYSpzvzwfFXlArq6qr1W8i5phUBsm1Qzktmod2SMk39vZ2OrNy4UCs39+UO7adgVtxT5GJkQeidnLYOu3aPcY8FIfEjqBbst6VNkj3INhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708340521; c=relaxed/simple;
-	bh=FYHwUjv0CBOVE/UvV6qkWI5k+uNh+6/RQIoNRoiJaqg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S+cGZ/rTpG2hCZcaYuT0/KpyxyQSCLGNvnhNccGYYxPBPZC/tBgib1Oni+SAYA/2VRpp8yQi89IiDSzpL8DXeAvS6AVTRPx32MDoVb7Zi5ewnjBJ1ZbRF1t/iPece53la1218c6UrgDMn8A87DG+TgxfzP4uIXhVj6aSeHFmqNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iI3AdxuQ; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708340519; x=1739876519;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FYHwUjv0CBOVE/UvV6qkWI5k+uNh+6/RQIoNRoiJaqg=;
-  b=iI3AdxuQLJ85BdNTv3LccBvTl5WpMvi7xNNIB/S4qC0txlEEhksTTF4t
-   PObXqnZpH7B9civwnocqwQqi7C93tDCK7ntMrdlosEgtv4GHRtZmFZkrR
-   hbPSMYpk0z9IrOc7SQR6DN22A6iklWlgKP08i1akbwVjBrxa435dC7s4x
-   /ZOs19P1TCMAx+2atJl7CfGGimudpfoBiW6s89tAoHFzMM5CkQF7HtsN7
-   bJBRifBbJ+X798YVCRjVfVX+CYt5s7HVfH/oRB8cg1l9HYEvMsSKgdEVY
-   zeHxFy6koLkwkj4IChSaQMcnrJ5v0xh7a4bypUyV8zwLUpOJFFSb9fVMK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10988"; a="2276106"
-X-IronPort-AV: E=Sophos;i="6.06,170,1705392000"; 
-   d="scan'208";a="2276106"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2024 03:01:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10988"; a="936276332"
-X-IronPort-AV: E=Sophos;i="6.06,170,1705392000"; 
-   d="scan'208";a="936276332"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Feb 2024 03:01:53 -0800
-Message-ID: <d82c8955-6793-7544-0013-1033abd9f1e9@linux.intel.com>
-Date: Mon, 19 Feb 2024 13:03:31 +0200
+	s=arc-20240116; t=1708343021; c=relaxed/simple;
+	bh=UT1lPa/2yb85M5r4o3D5dus2HraX5x5mzr0FhmB6TGc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jgYN6oo2VL/FVIV3WnsioxCJenCqA+upnnjKJTkQfIQ6SnxYk3zddOTs6UMsSmy48vNn4q1RK++sa7E96LUiEJQJ6NrSh7KUpNVwuFg/85f7yICQYznB8E+nkDQlqzid07eDxfmQfA6aNkvgrzkhslhdtCc6xJfArYdfyG3Y8iI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BzddOlzg; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708343017;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UT1lPa/2yb85M5r4o3D5dus2HraX5x5mzr0FhmB6TGc=;
+	b=BzddOlzg6j9TlmdTRLejMmv7U9U21i9uGd98fsVZd3pFR0a/jMlD1BI6TNZ8rkCYbKZUsN
+	kIp8EpbJY6VlcuMQUC/YMu7TgCO9oGP+fugQ5ckXVXuNdf7B0Mxp/mKCu+kxry2hYW12lO
+	8qeWVsgvtvJb0j84Og3yHmz3QsfrmWM=
+Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
+ [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-695-4mANBqVhNdacGY3gBMp5ZA-1; Mon, 19 Feb 2024 06:43:36 -0500
+X-MC-Unique: 4mANBqVhNdacGY3gBMp5ZA-1
+Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-7d2d72f7965so1952007241.2
+        for <linux-usb@vger.kernel.org>; Mon, 19 Feb 2024 03:43:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708343016; x=1708947816;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UT1lPa/2yb85M5r4o3D5dus2HraX5x5mzr0FhmB6TGc=;
+        b=obUj7dbR7Mk79GtMmKN4eL75ZCfSY6EN8usOzRkOXsYNZpc6mncKfBc0uYy0UK/PfX
+         Dw7OV18MOPbwJKsHj0rqUiCWO9b6WxDBu3+46jU990ENxy1usVsrz73NpJkVfzM2m8fP
+         KYA6NBMyFcQqmKn89KD3C9reU/B59eQWjp3BLXm5QiqCvaBHiDvEl4eur1v90tXg4Cxy
+         LTc7mUUDhU2VmwlLXVkdzR9NIMuiBcL0eGvAovIhf0H2dyrIAp9oMCOkMHjEoCvemYkI
+         sVnG4Z3DLk26hT60dIpsaqETTFaPqfZg0KNuMwa++ar6uUfHV5NExCnQVUtXhN/bnAUj
+         AOyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXGr8ov28Oj+TOXnAxoWKDc/jn2Xjmil8/KVHGBFHdQO0N5GWRNC3NZs7hYQ1j/xDNBiiX9atL3Un7KmpHhVi1prz54ToUZesoh
+X-Gm-Message-State: AOJu0YyPgk2+QrAjajwcxiWip2Bp/q9s1RbIXMVeLgqmdFiBJQ8dkikI
+	MxT3LB6FpaEr0H66jE3T9b+mG88z/Z1NR5G8brrbNFfoCR58PYNERM1fchRz0IgWXiGHQEKlEke
+	O5rrwCSENf9TrBZ2gSOeRFUKFwqIkBMLvBqExbmrn+v/KXrE2+w7Bp7zl0Q==
+X-Received: by 2002:a05:6102:c4f:b0:470:5d2b:d3af with SMTP id y15-20020a0561020c4f00b004705d2bd3afmr1232158vss.32.1708343015890;
+        Mon, 19 Feb 2024 03:43:35 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHcM4hsvYF0Fkc6wNPR39b7BLYIzpcoNtkCS5Zhj9FBZ5j1bMr2hWobtFDKi/HpuXRX7eZKug==
+X-Received: by 2002:a05:6102:c4f:b0:470:5d2b:d3af with SMTP id y15-20020a0561020c4f00b004705d2bd3afmr1232149vss.32.1708343015592;
+        Mon, 19 Feb 2024 03:43:35 -0800 (PST)
+Received: from debian (2a01cb058d23d600e55283140c56efd3.ipv6.abo.wanadoo.fr. [2a01:cb05:8d23:d600:e552:8314:c56:efd3])
+        by smtp.gmail.com with ESMTPSA id kk12-20020a05622a2c0c00b0042c7145fd19sm2473479qtb.12.2024.02.19.03.43.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Feb 2024 03:43:35 -0800 (PST)
+Date: Mon, 19 Feb 2024 12:43:30 +0100
+From: Guillaume Nault <gnault@redhat.com>
+To: "Ricardo B. Marliere" <ricardo@marliere.net>
+Cc: Oliver Neukum <oneukum@suse.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	Roopa Prabhu <roopa@nvidia.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Loic Poulain <loic.poulain@linaro.org>,
+	Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+	Johannes Berg <johannes@sipsolutions.net>, netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bridge@lists.linux.dev, linux-ppp@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 04/12] net: vxlan: constify the struct device_type usage
+Message-ID: <ZdM+4uKE83V2j4o8@debian>
+References: <20240217-device_cleanup-net-v1-0-1eb31fb689f7@marliere.net>
+ <20240217-device_cleanup-net-v1-4-1eb31fb689f7@marliere.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [PATCH v17 00/51] Introduce QC USB SND audio offloading support
-Content-Language: en-US
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- corbet@lwn.net, lgirdwood@gmail.com, andersson@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, Thinh.Nguyen@synopsys.com,
- broonie@kernel.org, bgoswami@quicinc.com, tiwai@suse.com,
- robh+dt@kernel.org, konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-doc@vger.kernel.org, alsa-devel@alsa-project.org
-References: <20240217001017.29969-1-quic_wcheng@quicinc.com>
- <2024021754-unengaged-saggy-6ab1@gregkh>
- <96ab6033-2cb9-daa7-ddad-090138896739@linux.intel.com>
- <2024021922-privatize-runt-495e@gregkh>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <2024021922-privatize-runt-495e@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240217-device_cleanup-net-v1-4-1eb31fb689f7@marliere.net>
 
->>
->> Patch 10/10 is based on an old POC patch by me, but it's heavily modified.
->>
->> It looks like it does a few minor things that are not optimal, like extra
->> spinlock/unlock, and wait_for_completion_timeout() with magical timeout value.
->> I haven't tested this version, but I guess any fixes or cleanups can be done
->> later on top of it.
-> 
-> I can revert it now if you want, just let me know.
-> 
+On Sat, Feb 17, 2024 at 05:13:26PM -0300, Ricardo B. Marliere wrote:
+> Since commit aed65af1cc2f ("drivers: make device_type const"), the driver
+> core can properly handle constant struct device_type. Move the vxlan_type
+> variable to be a constant structure as well, placing it into read-only
+> memory which can not be modified at runtime.
 
-Maybe reverting it would be better yes.
+Reviewed-by: Guillaume Nault <gnault@redhat.com>
 
-Thanks
-Mathias
+Note: To help maintainers (and potentially reviewers) work please
+write in the subject prefix which tree you're targetting. For this
+series, it should be "[PATCH net-next xx/yy]".
+
 
