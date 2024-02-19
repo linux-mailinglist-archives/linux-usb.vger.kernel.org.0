@@ -1,121 +1,118 @@
-Return-Path: <linux-usb+bounces-6731-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6732-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98549859D2B
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 08:42:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C682E859DE0
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 09:13:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 543E92810A2
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 07:42:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 056F31C21BFC
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 08:13:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7BFB20DC1;
-	Mon, 19 Feb 2024 07:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D544820DF6;
+	Mon, 19 Feb 2024 08:13:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FolWSSs5"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jhfZg1UW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85ADE208DF
-	for <linux-usb@vger.kernel.org>; Mon, 19 Feb 2024 07:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459A52135C;
+	Mon, 19 Feb 2024 08:13:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708328566; cv=none; b=ILCBvpC17T+9GL1SiEz5WRk2l773CCy8RP+Rj+0NrFKz5Ge3X9cKS6OgcOr1wlev0VZe2Ws/aP4ezggpZ/YKK4wTYO5IBbenGpgSfB1YAUKh038IbXdlyHubtcfBVAu7oN8SjmeH30QXEIeMWCuTNVKI/cU/5NCXOmNjzZTUYFI=
+	t=1708330387; cv=none; b=ZVO0Vh8ACLTsOSgcqDsgtRDIo21pK060sDfQdLksZ4IemqS/sGxhSn9fKIoemeNKDXIejnT2Av/lScyHL1bcvk/Q0WN3+eIwk+iRvT+5mz1jjycr14nzL7eRRp51kfs1y2FZH15D5UjwVSH1OsJAKHVNa+clIk2ETsK0BxHF8L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708328566; c=relaxed/simple;
-	bh=DTBpji9YvTRgky54RoqikA4L7QxdWmk/32ar5ohkYis=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=KpbXaSRK77BMP942If/qdA75EB3fAROo5Zdy5T5CgxYSblCffltcuaZJtw61uahh9AqNjhYm9A6NmSR7SGHt6DVKpAiibDoBqfmRfr9oxQamSgjuqeINyLU7VNNirb1ZGURkuuCBWZ/yWvswZWN1/5MWzAA6Wvfc3vY8+VjfYQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FolWSSs5; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708328564; x=1739864564;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=DTBpji9YvTRgky54RoqikA4L7QxdWmk/32ar5ohkYis=;
-  b=FolWSSs5IUqnMeKaggdyLNqBgCIaMA+bKDRXghYaWG5SBvhgoVIurojn
-   0xi/B/CnfBi4rcFQqy8h9LSl6kffDI2Y58uC+3VAcQ/khY3O4ZXYJen3i
-   nCh6CALUx/7Z4KHIItUTaWzIJy+89QBYSn4wha4wqoZ+ziG6L5iN/nT6S
-   pIATA9vMdFKcGHDGS5coWEodAWcpz5h9xFRymgepV6ztsxBACthmFye2m
-   1v2slCBPDMV39cz1F4c/C1APdcBXqxdeKcDOB2hwwa5SBiaqcTHcmUzut
-   8OedSJB0ubVvXIVvZik9RgM4C+uuDHrZR3guRzQKBWJ2+5rVz/rm3wobn
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10988"; a="6217944"
-X-IronPort-AV: E=Sophos;i="6.06,170,1705392000"; 
-   d="scan'208";a="6217944"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2024 23:42:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10988"; a="936245123"
-X-IronPort-AV: E=Sophos;i="6.06,170,1705392000"; 
-   d="scan'208";a="936245123"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Feb 2024 23:42:42 -0800
-Message-ID: <1075b61e-d380-8e45-61e2-33d181444594@linux.intel.com>
-Date: Mon, 19 Feb 2024 09:44:20 +0200
+	s=arc-20240116; t=1708330387; c=relaxed/simple;
+	bh=1w3J45VRLDLeMHSNQ1LNWwVGXu9vFKXbgM2hR+lw2cU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K+6q6uEs7CqInmV+xi6GVVX0wCB/k8RDgzZiq51uTI9J1XDXbsH4i+HxFvY8sAI3pcSdTMuTcrQc/2Qg1vrefjzRBOj6FZFXrNgVOTTVSHjgsyAAo4oWoCjSXIhbPcLiS1KKXOkL8e71Jnm/W0tKWj87ab+syIO/l9zFKH0ZSHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jhfZg1UW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59439C433C7;
+	Mon, 19 Feb 2024 08:13:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1708330386;
+	bh=1w3J45VRLDLeMHSNQ1LNWwVGXu9vFKXbgM2hR+lw2cU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jhfZg1UWk/gIXkIAdbPlphVgddgqd1ksAhGXvha+wO8pNKb1DMovmkeVam5cOXg4V
+	 ZjobisTZkClepNOBnY4pK1TvUg5MRJ46gK7Jb8S9Dh+4mNUj2diDLWUzWREqyw4PD8
+	 PzqZuInLMj6WOi48A3lXFEc8a0b7BDAuxcmKG4ao=
+Date: Mon, 19 Feb 2024 09:13:03 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Michael Grzeschik <mgr@pengutronix.de>
+Cc: Eric Van Hensbergen <ericvh@kernel.org>,
+	Latchesar Ionkov <lucho@ionkov.net>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	Jonathan Corbet <corbet@lwn.net>, v9fs@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v2 3/4] usb: gadget: legacy: add 9pfs multi gadget
+Message-ID: <2024021911-facelift-graveyard-0760@gregkh>
+References: <20240116-ml-topic-u9p-v2-0-b46cbf592962@pengutronix.de>
+ <20240116-ml-topic-u9p-v2-3-b46cbf592962@pengutronix.de>
+ <2024021757-geography-hacksaw-3022@gregkh>
+ <ZdKze80oFj0PRkkZ@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: pmenzel@molgen.mpg.de, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org, aros@gmx.com
-References: <9c53ec38-812f-f701-d2f6-91e28367bb82@linux.intel.com>
- <20240216141230.3924677-1-mathias.nyman@linux.intel.com>
- <20240216141230.3924677-2-mathias.nyman@linux.intel.com>
- <0fd81580-a01d-48a1-8265-337cfd843dfe@rowland.harvard.edu>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFT PATCH 2/2] usb: port: Don't block port power-off on false
- peer failures
-In-Reply-To: <0fd81580-a01d-48a1-8265-337cfd843dfe@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZdKze80oFj0PRkkZ@pengutronix.de>
 
-On 16.2.2024 17.20, Alan Stern wrote:
-> On Fri, Feb 16, 2024 at 04:12:30PM +0200, Mathias Nyman wrote:
->> Several unused ports may share the same bogus location data in ACPI
->> PLD tables. This causes port peering failures as these several unused
->> USB2 and USB3 ports suddenly match based on their location.
->>
->> Don't print the "usb: port power management may be unreliable" warning,
->> or block port power-off in case peering failed for two ports with
->> connect type set to USB_PORT_NOT_USED.
+On Mon, Feb 19, 2024 at 02:48:43AM +0100, Michael Grzeschik wrote:
+> On Sat, Feb 17, 2024 at 04:59:28PM +0100, Greg Kroah-Hartman wrote:
+> > On Fri, Feb 02, 2024 at 01:05:12AM +0100, Michael Grzeschik wrote:
+> > > Add the newly introduced 9pfs transport gadget interface with an new
+> > > multi composed gadget together with acm and eem.
+> > > 
+> > > When using this legacy module, it is also possible to
+> > > mount the 9PFS usb dir as root filesystem. Just follow the
+> > > instrucitons from Documentation/filesystems/9p.rst
+> > 
+> > Why are we adding new "legacy" gadgets?  What's wrong with the "correct"
+> > api instead?  You need a lot of justification here to add something to
+> > an api we want to one day just delete.
 > 
-> What if one port is marked USB_PORT_NOT_USED but its bogus location data
-> causes the system to think it should peer with a port that _is_ in use
-> (and maybe is already peered with a different port)?
+> Without the legacy gadget there is no real solution to mount
+> the 9pfs via the gadget as rootfs. The "correct" api is configfs
+> which will need the user to have some filesystem to mount it to.
+
+That's what your initramfs is for.  Why can't you just use that?
+
+> There is the relatively new concept of bootconfig which sounds
+> promising to describe an complete configfs tree from system boot.
+
+Great, but until that happens, again, just use initramfs.
+
+> However this is some future talk for now, so we would like to
+> stick with the legacy setup to be able to mount the 9pfs rootfs.
+
+I'd prefer to NOT add new legacy gadget drivers, and do everything
+possible to delete them all from the tree "soon".
+
+> > > +/*
+> > > + * Gadget usb9pfs only needs two bulk endpoints, and will use the usb9pfs usb
+> > > + * transport to mount host filesystem via usb gadget. This driver will
+> > > + * also add one ACM and NCM interface.
+> > 
+> > Why "also"?  What are those interfaces going to be used for and what do
+> > they have to do with 9pfs?
 > 
+> They are not necessary to be used with 9pfs. But since we introduce an
+> new legacy module which is fully claiming the UDC, it would make sense
+> to leave the other endpoints unavailable but instead add some common
+> interfaces like ecm and acm.
 
-This could happen, but based on the DELL case it seems unlikely.
+But if no one needs/wants them, why make this complex?  Again, configfs
+can handle the composition of this if you need it, which is why that
+"new" interface was created.
 
-The bogus location entries are filled with zeroes, while the usable ports
-start their location group position with a "1".
+thanks,
 
-If neither is peered and one is marked USB_PORT_NOT_USED, and their location match,
-then they will peer successfully. No change due to this patch.
-
-If one port is already peered to some other port then peering will fail,
-warning message is printed and usb_port_block_power_off = 1; is set.
-No change here either.
-
-Also two USB_PORT_NOT_USED ports with bogus matching location will
-peer successfully as long as neither one is peered with some other port.
-No change here either.
-
-Could make sense to skip both peering and matching with ports that are
-not used.
-
-Thanks
-Mathias
-  
-  
+greg k-h
 
