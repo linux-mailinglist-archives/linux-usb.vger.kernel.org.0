@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-6744-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6745-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 930F685A308
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 13:18:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8244F85A314
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 13:22:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C60AB1C2317A
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 12:18:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A68931C230CC
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 12:22:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261872E3EB;
-	Mon, 19 Feb 2024 12:18:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087952D611;
+	Mon, 19 Feb 2024 12:21:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fctb0g3u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJ76bSpw"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C07A2D608;
-	Mon, 19 Feb 2024 12:18:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF492D046;
+	Mon, 19 Feb 2024 12:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708345099; cv=none; b=iwUjCfxDhyokADo9q2aErHH09ng6xK29fV1hBd6hj5f1TChgTtKffh3c3XwU2ZDr6VCLJUbC6cdBuXXid1XFCOhzdZewGGBXdVD64Ork8k/vlr8wDtrk8dy8Wa53P/kLgg3iqjFcAmpGFeYxdgDhf/kR/i4T8DZrdgZQdBdqs8c=
+	t=1708345317; cv=none; b=KfsaT4G3XJXvywNCuODVkkW6m8tVPkgg09FwYF/r68a1tKv12mWdukFuYJq2/jSz3LjLNNmvbWp6Ujc+5OHRSMR/takMKFofzXta0hDWGT1HkfRJNAOTQqxa27S/aRUga4Rm6NXsJa/GnFhCweS+VkEruLKXxQLOrfZIZ0yjWn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708345099; c=relaxed/simple;
-	bh=SI4DlrhOGz6M5DT7VRcKdAQia2lvU/yGx2zQ8fTxd+Q=;
+	s=arc-20240116; t=1708345317; c=relaxed/simple;
+	bh=6flA8ZvRjaZ71CFJ3kj4db2BE67saNYipRMtxrzSZ5I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J5pvR1hrc7JVQithYS+ORMSjl8dYa7RcgzHfD8AMgRuZAEW3E6RkJpU+KkRf5EHlbfmp+xVqultP34vw+81CkseZgwI0oRSjgJmQgzPsaWDU+SZ7spaoVe+Oseixdk2UpRh1DBnXx0vKMaQKW4MzMCeRCKFP0FCKk3yISaUaW2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fctb0g3u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2277AC433C7;
-	Mon, 19 Feb 2024 12:18:15 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=t7r5I2gUMp+QXjXUY4mSAoUiXyjWMfxMI9QayPbBqb1Bc5LezwYj7WppNHi+zYi0OAAZteJ3xI9wRWYDfdC+9zGqnLkcD3OGJprFC3G1CSNxlqkxXCXvWcnnAHQDCBfEAPosqg2zYSyR18NkBwmLjE/pG7HSCnw7pkZ/wOyyu7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJ76bSpw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9F10C433C7;
+	Mon, 19 Feb 2024 12:21:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708345098;
-	bh=SI4DlrhOGz6M5DT7VRcKdAQia2lvU/yGx2zQ8fTxd+Q=;
+	s=k20201202; t=1708345317;
+	bh=6flA8ZvRjaZ71CFJ3kj4db2BE67saNYipRMtxrzSZ5I=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fctb0g3ut0wFPjpLw4PSuWcLuL0+6kpjfT1Qnf6vabW9fb+7s82kp/uaNh9LJzsux
-	 JaKtWtRyHjo1oFYLOHIUiymJLCYX0ynPU/oGAoUtXe4D0BI4sJ+nPZPP1fqtIF6AGz
-	 Bjip5rTKviKO02SoxOrj/5HyYB/hUmMSH4L15uO5jOxDeQNQwPiUfNWK8RZrJPSmD2
-	 XHrtM3N0hCGzLH6DHmV29fhPUob/4sy7nk7tHWej9U9Glqv7r4ZdWYyraY1UXTAta9
-	 NYTabE3P56ZgOQ2vCOXkOzMR0Gfg+b6pSUcHN7uCdMcqjXj4MokNo3Co3DsWMXNHym
-	 LON08zVPWjChA==
-Message-ID: <eeb97fc2-326c-4d0c-97a8-7973e95f8047@kernel.org>
-Date: Mon, 19 Feb 2024 13:18:12 +0100
+	b=iJ76bSpw1PvQfe+AEUTn1lRTMq6w7ce4Yq4mtOtjA/CffofGJptLjFvUlDjBi0/61
+	 b1n1YEfu6tXRzOhZSCv8+r4etCooTj827qehitIjg8yGJUN+sacHlVbqP6MbcR/o2d
+	 GHLOI/Xp0ZAlzb5q5DGg74lbG5m0uXKnNZdOYa+TLwnCZHpYtB11UEi0zENdJekvDl
+	 IDRr8gJpX4e+NLKR52krXSwiosQG/CjUX/FGIpShsI9W+RpRcAsJjlXme+GmRLrl2Z
+	 iEzHFoWiSFp++KrWDEyo++unNHHjm2XKMIJ3mfjEmyh4aXRgnJJ/0FQKKtZe5hlUmz
+	 bOw+xPnta2t/w==
+Message-ID: <0b4464eb-631e-4c9f-a7c8-3451be15d8b4@kernel.org>
+Date: Mon, 19 Feb 2024 13:21:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,15 +50,15 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: usb: Add xhci glue driver support
+Subject: Re: [PATCH 2/3] usb: xhci: Add support for Google XHCI controller
+Content-Language: en-US
 To: Puma Hsu <pumahsu@google.com>, mathias.nyman@intel.com,
  gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com
 Cc: badhri@google.com, royluo@google.com, howardyen@google.com,
  albertccwang@google.com, raychi@google.com, linux-kernel@vger.kernel.org,
  linux-usb@vger.kernel.org
 References: <20240219061008.1761102-1-pumahsu@google.com>
- <20240219061008.1761102-2-pumahsu@google.com>
-Content-Language: en-US
+ <20240219061008.1761102-3-pumahsu@google.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -103,37 +103,57 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240219061008.1761102-2-pumahsu@google.com>
+In-Reply-To: <20240219061008.1761102-3-pumahsu@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 19/02/2024 07:10, Puma Hsu wrote:
-> Currently the dwc3 driver always probes xhci-plat driver
-
-Not a DT property, at least at first glance. NAK.
-
-> by hardcode in driver. Introduce a property to make this
-> flexible that a user can probe a xhci glue driver by the
-> generic dwc3 driver.
+> In our SoC platform, we support allocating dedicated memory spaces
+> other than system memory for XHCI, which also requires IOMMU mapping.
+> The rest of driver probing and executing will use the generic
+> xhci-plat driver.
 > 
-> Signed-off-by: Puma Hsu <pumahsu@google.com>
+> We support USB dual roles and switch roles by generic dwc3 driver,
+> the dwc3 driver always probes xhci-plat driver now, so we introduce
+> a device tree property to probe a XHCI glue driver.
+> 
+> Sample:
+>   xhci_dma: xhci_dma@99C0000 {
+>     compatible = "shared-dma-pool";
+>     reg = <0x00000000 0x99C0000 0x00000000 0x40000>;
+>     no-map;
+>   };
+> 
+>   dwc3: dwc3@c400000 {
+>     compatible = "snps,dwc3";
+>     reg = <0 0x0c400000  0 0x10000>;
+>     xhci-glue = "xhci-hcd-goog";
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
+NAK, that's not DWC3 hardware in such case.
 
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline), work on fork of kernel
-(don't, instead use mainline) or you ignore some maintainers (really
-don't). Just use b4 and everything should be fine, although remember
-about `b4 prep --auto-to-cc` if you added new patches to the patchset.
+...
 
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time, thus I will skip this patch entirely till you follow
-the process allowing the patch to be tested.
+>  		return -ENOMEM;
+> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+> index 4448d0ab06f0..1c1613c548d9 100644
+> --- a/drivers/usb/host/Kconfig
+> +++ b/drivers/usb/host/Kconfig
+> @@ -61,6 +61,12 @@ config USB_XHCI_PLATFORM
+>  
+>  	  If unsure, say N.
+>  
+> +config USB_XHCI_GOOG
+> +	tristate "xHCI support for Google Tensor SoCs"
+> +	help
+
+Please always Cc Google Tensor SoC maintainers and Samsung SoC
+maintainers on your contributions around Google Tensor SoC.
+
+Anyway you just tried to push vendor code to upstream without aligning
+it to usptream code style and to proper driver model. That's not good.
+Please work with your colleagues in Google to explain how to upstream
+vendor code. There were many, many trainings and presentations. One
+coming from Dmitry will be in EOSS24 in two months.
 
 Best regards,
 Krzysztof
