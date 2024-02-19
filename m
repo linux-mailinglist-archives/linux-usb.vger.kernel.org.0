@@ -1,505 +1,413 @@
-Return-Path: <linux-usb+bounces-6719-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6720-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F52E8599CB
-	for <lists+linux-usb@lfdr.de>; Sun, 18 Feb 2024 23:22:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EAE0859A97
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 02:49:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71AF01C20D50
-	for <lists+linux-usb@lfdr.de>; Sun, 18 Feb 2024 22:22:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C34B31C208CE
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 01:49:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24B97762CC;
-	Sun, 18 Feb 2024 22:21:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 627EE3D69;
+	Mon, 19 Feb 2024 01:49:11 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8667B745EB;
-	Sun, 18 Feb 2024 22:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9164B1FC4
+	for <linux-usb@vger.kernel.org>; Mon, 19 Feb 2024 01:49:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708294874; cv=none; b=rKrzwyjaJRt1PDm8tTfsjCN5CnDohEgGgS/stmqDKMucD6D6XG3PgoALot2a5YaidIEJ39EqHHRdT72DT2GFo6OwjrptfHtKPl6pbTAIB24wJ/w3YNUZFbaZJSHInPViOXq/7axMi9c7MFWYDfpeXr+RuDcNZPjrev0sJ5IZ7vQ=
+	t=1708307351; cv=none; b=LSNwDncr08sM2Tblw/1Qfda17u9ZVxKL3Slm6LaIO/BeZjZHa9IscmAeBrUCoWkp4moFZkEYAcAei2Qveo08soN2mJ88y9bHYy1Lamjic/maxM9I05UqaPtA34pkRaUe7IM+vLHKhW46vRTJUXSIei3YQ3Dv06NI8os4LqZAhyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708294874; c=relaxed/simple;
-	bh=CKhmIXx5mHmzqsOaPWv1xp25HBv8ABXQGCOtwj7iCO8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kHAcvsJIHW59Suyc625x7lDWGbhvwr7NQsobZi1h0nuebi564KI99OqC5PTDyehqLDA5j3SYaHhJL7wPVkfRSrXXIsOfLlnrPRifet+mXWavKiFK+1bVex5I3ghRB+A//vjwg92J24CYnyUBCW6ebDlngTh5DTPp2RTabNt+sg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-	id B2FCA140938; Sun, 18 Feb 2024 23:21:09 +0100 (CET)
-From: "Christian A. Ehrhardt" <lk@c--e.de>
-To: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	=?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Prashanth K <quic_prashk@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Saranya Gopal <saranya.gopal@intel.com>,
-	Haotien Hsu <haotienh@nvidia.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Utkarsh Patel <utkarsh.h.patel@intel.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Luca Weiss <luca.weiss@fairphone.com>,
-	Min-Hua Chen <minhuadotchen@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Rajaram Regupathy <rajaram.regupathy@intel.com>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Subject: [RFC PATCH 6/6] usb: typec: ucsi: Convert a?sync_write to a?sync_cmd
-Date: Sun, 18 Feb 2024 23:20:39 +0100
-Message-Id: <20240218222039.822040-7-lk@c--e.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240218222039.822040-1-lk@c--e.de>
-References: <20240218222039.822040-1-lk@c--e.de>
+	s=arc-20240116; t=1708307351; c=relaxed/simple;
+	bh=/+A2x1jMwrF0kaNIZ7nVmUvk0x4kJI9kCjxVuYXxOFM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KtPzQhGyy9WevzkmbFHLA6MenkBAw0GNWMm9grXwZ9JfYddkhtUeSHpWezRnNlZ/V3sRaW9T2focBNq4o5ETmRX1FRR8JnAALgFs0dXciRwL6ASLc71M/InrlrWEzDTfIcSPUFTlTnCIS7h79bcCD1Aj776fbJs9JnEKatgI+tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1rbslz-0004De-Vq; Mon, 19 Feb 2024 02:48:47 +0100
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1rbslv-001YPK-QO; Mon, 19 Feb 2024 02:48:43 +0100
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1rbslv-00FiMX-2I;
+	Mon, 19 Feb 2024 02:48:43 +0100
+Date: Mon, 19 Feb 2024 02:48:43 +0100
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Eric Van Hensbergen <ericvh@kernel.org>,
+	Latchesar Ionkov <lucho@ionkov.net>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	Jonathan Corbet <corbet@lwn.net>, v9fs@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v2 3/4] usb: gadget: legacy: add 9pfs multi gadget
+Message-ID: <ZdKze80oFj0PRkkZ@pengutronix.de>
+References: <20240116-ml-topic-u9p-v2-0-b46cbf592962@pengutronix.de>
+ <20240116-ml-topic-u9p-v2-3-b46cbf592962@pengutronix.de>
+ <2024021757-geography-hacksaw-3022@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hmLwYFImqzne253t"
+Content-Disposition: inline
+In-Reply-To: <2024021757-geography-hacksaw-3022@gregkh>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-The ->sync_write an ->async_write callbacks are only used to write to
-the UCSI_CONTROL field and start a command, now.
 
-Rename them accordingly and remove parameters and code that are no
-longer used. While there note that the command passed in from the
-UCSI core is in host byte order but the command sent to UCSI must
-be in little endian byte order.
+--hmLwYFImqzne253t
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
----
- drivers/usb/typec/ucsi/ucsi.c         | 29 ++++++-------------
- drivers/usb/typec/ucsi/ucsi.h         | 14 ++++-----
- drivers/usb/typec/ucsi/ucsi_acpi.c    | 41 ++++++++++++---------------
- drivers/usb/typec/ucsi/ucsi_ccg.c     | 35 +++++++++++------------
- drivers/usb/typec/ucsi/ucsi_glink.c   | 18 ++++++------
- drivers/usb/typec/ucsi/ucsi_stm32g0.c | 16 +++++------
- 6 files changed, 67 insertions(+), 86 deletions(-)
+On Sat, Feb 17, 2024 at 04:59:28PM +0100, Greg Kroah-Hartman wrote:
+>On Fri, Feb 02, 2024 at 01:05:12AM +0100, Michael Grzeschik wrote:
+>> Add the newly introduced 9pfs transport gadget interface with an new
+>> multi composed gadget together with acm and eem.
+>>
+>> When using this legacy module, it is also possible to
+>> mount the 9PFS usb dir as root filesystem. Just follow the
+>> instrucitons from Documentation/filesystems/9p.rst
+>
+>Why are we adding new "legacy" gadgets?  What's wrong with the "correct"
+>api instead?  You need a lot of justification here to add something to
+>an api we want to one day just delete.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index df3fe04cb9cd..5bec98381be6 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -51,22 +51,16 @@ static int ucsi_read_message_in(struct ucsi *ucsi, void *buf,
- 
- static int ucsi_acknowledge_command(struct ucsi *ucsi)
- {
--	u64 ctrl;
-+	u64 cmd = UCSI_ACK_CC_CI | UCSI_ACK_COMMAND_COMPLETE;
- 
--	ctrl = UCSI_ACK_CC_CI;
--	ctrl |= UCSI_ACK_COMMAND_COMPLETE;
--
--	return ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
-+	return ucsi->ops->sync_cmd(ucsi, cmd);
- }
- 
- static int ucsi_acknowledge_connector_change(struct ucsi *ucsi)
- {
--	u64 ctrl;
--
--	ctrl = UCSI_ACK_CC_CI;
--	ctrl |= UCSI_ACK_CONNECTOR_CHANGE;
-+	u64 cmd = UCSI_ACK_CC_CI | UCSI_ACK_CONNECTOR_CHANGE;
- 
--	return ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
-+	return ucsi->ops->sync_cmd(ucsi, cmd);
- }
- 
- static int ucsi_exec_command(struct ucsi *ucsi, u64 command);
-@@ -137,7 +131,7 @@ static int ucsi_exec_command(struct ucsi *ucsi, u64 cmd)
- 	u32 cci;
- 	int ret;
- 
--	ret = ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
-+	ret = ucsi->ops->sync_cmd(ucsi, cmd);
- 	if (ret)
- 		return ret;
- 	cci = READ_ONCE(ucsi->cci);
-@@ -1014,15 +1008,13 @@ static int ucsi_reset_connector(struct ucsi_connector *con, bool hard)
- 
- static int ucsi_reset_ppm(struct ucsi *ucsi)
- {
--	u64 command = UCSI_PPM_RESET;
- 	unsigned long tmo;
- 	u32 cci;
- 	int ret;
- 
- 	mutex_lock(&ucsi->ppm_lock);
- 
--	ret = ucsi->ops->async_write(ucsi, UCSI_CONTROL, &command,
--				     sizeof(command));
-+	ret = ucsi->ops->async_cmd(ucsi, UCSI_PPM_RESET);
- 	if (ret < 0)
- 		goto out;
- 
-@@ -1041,9 +1033,7 @@ static int ucsi_reset_ppm(struct ucsi *ucsi)
- 
- 		/* If the PPM is still doing something else, reset it again. */
- 		if (cci & ~UCSI_CCI_RESET_COMPLETE) {
--			ret = ucsi->ops->async_write(ucsi, UCSI_CONTROL,
--						     &command,
--						     sizeof(command));
-+			ret = ucsi->ops->async_cmd(ucsi, UCSI_PPM_RESET);
- 			if (ret < 0)
- 				goto out;
- 		}
-@@ -1549,7 +1539,7 @@ struct ucsi *ucsi_create(struct device *dev, const struct ucsi_operations *ops)
- 	struct ucsi *ucsi;
- 
- 	if (!ops || !ops->poll_cci || !ops->read_data || !ops->write_data ||
--	    !ops->sync_write || !ops->async_write)
-+	    !ops->sync_cmd || !ops->async_cmd)
- 		return ERR_PTR(-EINVAL);
- 
- 	ucsi = kzalloc(sizeof(*ucsi), GFP_KERNEL);
-@@ -1612,7 +1602,6 @@ EXPORT_SYMBOL_GPL(ucsi_register);
-  */
- void ucsi_unregister(struct ucsi *ucsi)
- {
--	u64 cmd = UCSI_SET_NOTIFICATION_ENABLE;
- 	int i;
- 
- 	/* Make sure that we are not in the middle of driver initialization */
-@@ -1620,7 +1609,7 @@ void ucsi_unregister(struct ucsi *ucsi)
- 	cancel_work_sync(&ucsi->resume_work);
- 
- 	/* Disable notifications */
--	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
-+	ucsi->ops->async_cmd(ucsi, UCSI_SET_NOTIFICATION_ENABLE);
- 
- 	if (!ucsi->connector)
- 		return;
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 2ad68124511b..3cce83d1e70c 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -58,22 +58,20 @@ struct dentry;
-  * @poll_cci: Update the cached CCI value from hardware. Required for reset.
-  * @read_data: Read MESSAGE_IN data
-  * @write_data: Write MESSAGE_OUT data
-- * @sync_write: Blocking write operation
-- * @async_write: Non-blocking write operation
-+ * @sync_cmd: Blocking command execution
-+ * @async_cmd: Non-blocking command execution
-  * @update_altmodes: Squashes duplicate DP altmodes
-  *
-- * Read and write routines for UCSI interface. @sync_write must wait for the
-- * Command Completion Event from the PPM before returning, and @async_write must
-+ * Read and write routines for UCSI interface. @sync_cmd must wait for the
-+ * Command Completion Event from the PPM before returning, and @async_cmd must
-  * return immediately after sending the data to the PPM.
-  */
- struct ucsi_operations {
- 	int (*poll_cci)(struct ucsi *ucsi);
- 	int (*read_data)(struct ucsi *ucsi, void *val, size_t val_len);
- 	int (*write_data)(struct ucsi *ucsi, const void *val, size_t val_len);
--	int (*sync_write)(struct ucsi *ucsi, unsigned int offset,
--			  const void *val, size_t val_len);
--	int (*async_write)(struct ucsi *ucsi, unsigned int offset,
--			   const void *val, size_t val_len);
-+	int (*sync_cmd)(struct ucsi *ucsi, u64 cmd);
-+	int (*async_cmd)(struct ucsi *ucsi, u64 cmd);
- 	bool (*update_altmodes)(struct ucsi *ucsi, struct ucsi_altmode *orig,
- 				struct ucsi_altmode *updated);
- };
-diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-index 79b47b433e35..e6f67aa102d2 100644
---- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-+++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-@@ -77,21 +77,20 @@ static int ucsi_acpi_write_data(struct ucsi *ucsi, const void *val,
- 	return 0;
- }
- 
--static int ucsi_acpi_async_write(struct ucsi *ucsi, unsigned int offset,
--				 const void *val, size_t val_len)
-+static int ucsi_acpi_async_cmd(struct ucsi *ucsi, u64 cmd)
- {
- 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-+	__le64 __cmd = cpu_to_le64(cmd);
- 
--	memcpy(ua->base + offset, val, val_len);
-+	memcpy(ua->base + UCSI_CONTROL, &__cmd, sizeof(__cmd));
- 
- 	return ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_WRITE);
- }
- 
--static int ucsi_acpi_sync_write(struct ucsi *ucsi, unsigned int offset,
--				const void *val, size_t val_len)
-+static int ucsi_acpi_sync_cmd(struct ucsi *ucsi, u64 cmd)
- {
- 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
--	bool ack = UCSI_COMMAND(*(u64 *)val) == UCSI_ACK_CC_CI;
-+	bool ack = UCSI_COMMAND(cmd) == UCSI_ACK_CC_CI;
- 	int ret;
- 
- 	if (ack)
-@@ -99,7 +98,7 @@ static int ucsi_acpi_sync_write(struct ucsi *ucsi, unsigned int offset,
- 	else
- 		set_bit(COMMAND_PENDING, &ua->flags);
- 
--	ret = ucsi_acpi_async_write(ucsi, offset, val, val_len);
-+	ret = ucsi_acpi_async_cmd(ucsi, cmd);
- 	if (ret)
- 		goto out_clear_bit;
- 
-@@ -119,8 +118,8 @@ static const struct ucsi_operations ucsi_acpi_ops = {
- 	.poll_cci = ucsi_acpi_poll_cci,
- 	.read_data = ucsi_acpi_read_data,
- 	.write_data = ucsi_acpi_write_data,
--	.sync_write = ucsi_acpi_sync_write,
--	.async_write = ucsi_acpi_async_write
-+	.sync_cmd = ucsi_acpi_sync_cmd,
-+	.async_cmd = ucsi_acpi_async_cmd
- };
- 
- /*
-@@ -131,32 +130,28 @@ static const struct ucsi_operations ucsi_acpi_ops = {
-  * subsequent commands will timeout.
-  */
- static int
--ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
--		     const void *val, size_t val_len)
-+ucsi_dell_sync_cmd(struct ucsi *ucsi, u64 cmd)
- {
- 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
--	u64 cmd = *(u64 *)val, ack = 0;
-+	u64 ack = 0;
- 	int ret;
- 
- 	if (UCSI_COMMAND(cmd) == UCSI_ACK_CC_CI &&
- 	    cmd & UCSI_ACK_CONNECTOR_CHANGE)
- 		ack = UCSI_ACK_CC_CI | UCSI_ACK_COMMAND_COMPLETE;
- 
--	ret = ucsi_acpi_sync_write(ucsi, offset, val, val_len);
-+	ret = ucsi_acpi_sync_cmd(ucsi, cmd);
- 	if (ret != 0)
- 		return ret;
- 	if (ack == 0)
--		return ret;
-+		return 0;
- 
- 	if (!ua->dell_quirk_probed) {
- 		ua->dell_quirk_probed = true;
- 
--		cmd = UCSI_GET_CAPABILITY;
--		ret = ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &cmd,
--					   sizeof(cmd));
-+		ret = ucsi_acpi_sync_cmd(ucsi, UCSI_GET_CAPABILITY);
- 		if (ret == 0)
--			return ucsi_acpi_sync_write(ucsi, UCSI_CONTROL,
--						    &ack, sizeof(ack));
-+			return ucsi_acpi_sync_cmd(ucsi, ack);
- 		if (ret != -ETIMEDOUT)
- 			return ret;
- 
-@@ -166,17 +161,17 @@ ucsi_dell_sync_write(struct ucsi *ucsi, unsigned int offset,
- 	}
- 
- 	if (!ua->dell_quirk_active)
--		return ret;
-+		return 0;
- 
--	return ucsi_acpi_sync_write(ucsi, UCSI_CONTROL, &ack, sizeof(ack));
-+	return ucsi_acpi_sync_cmd(ucsi, ack);
- }
- 
- static const struct ucsi_operations ucsi_dell_ops = {
- 	.poll_cci = ucsi_acpi_poll_cci,
- 	.read_data = ucsi_acpi_read_data,
- 	.write_data = ucsi_acpi_write_data,
--	.sync_write = ucsi_dell_sync_write,
--	.async_write = ucsi_acpi_async_write
-+	.sync_cmd = ucsi_dell_sync_cmd,
-+	.async_cmd = ucsi_acpi_async_cmd
- };
- 
- static const struct dmi_system_id ucsi_acpi_quirks[] = {
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index d6026f61a0ed..5c60816e608f 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -605,23 +605,22 @@ static int ucsi_ccg_write_data(struct ucsi *ucsi, const void *val,
- 	return ccg_write(uc, reg, val, val_len);
- }
- 
--static int ucsi_ccg_async_write(struct ucsi *ucsi, unsigned int offset,
--				const void *val, size_t val_len)
-+static int ucsi_ccg_async_cmd(struct ucsi *ucsi, u64 cmd)
- {
- 	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
--	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
-+	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_CONTROL);
-+	__le64 __cmd = cpu_to_le64(cmd);
- 
- 	/*
--	 * UCSI may read CCI instantly after async_write,
-+	 * UCSI may read CCI instantly after async_cmd,
- 	 * clear CCI to avoid caller getting wrong data before we get CCI from ISR
- 	 */
- 	WRITE_ONCE(ucsi->cci, 0);
- 
--	return ccg_write(uc, reg, val, val_len);
-+	return ccg_write(uc, reg, (u8 *)&__cmd, sizeof(__cmd));
- }
- 
--static int ucsi_ccg_sync_write(struct ucsi *ucsi, unsigned int offset,
--			       const void *val, size_t val_len)
-+static int ucsi_ccg_sync_cmd(struct ucsi *ucsi, u64 cmd)
- {
- 	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
- 	struct ucsi_connector *con;
-@@ -632,19 +631,17 @@ static int ucsi_ccg_sync_write(struct ucsi *ucsi, unsigned int offset,
- 	pm_runtime_get_sync(uc->dev);
- 	set_bit(DEV_CMD_PENDING, &uc->flags);
- 
--	if (offset == UCSI_CONTROL && val_len == sizeof(uc->last_cmd_sent)) {
--		uc->last_cmd_sent = *(u64 *)val;
-+	uc->last_cmd_sent = cmd;
- 
--		if (UCSI_COMMAND(uc->last_cmd_sent) == UCSI_SET_NEW_CAM &&
--		    uc->has_multiple_dp) {
--			con_index = (uc->last_cmd_sent >> 16) &
--				    UCSI_CMD_CONNECTOR_MASK;
--			con = &uc->ucsi->connector[con_index - 1];
--			ucsi_ccg_update_set_new_cam_cmd(uc, con, (u64 *)val);
--		}
-+	if (UCSI_COMMAND(uc->last_cmd_sent) == UCSI_SET_NEW_CAM &&
-+	    uc->has_multiple_dp) {
-+		con_index = (uc->last_cmd_sent >> 16) &
-+			    UCSI_CMD_CONNECTOR_MASK;
-+		con = &uc->ucsi->connector[con_index - 1];
-+		ucsi_ccg_update_set_new_cam_cmd(uc, con, &cmd);
- 	}
- 
--	ret = ucsi_ccg_async_write(ucsi, offset, val, val_len);
-+	ret = ucsi_ccg_async_cmd(ucsi, cmd);
- 	if (ret)
- 		goto err_clear_bit;
- 
-@@ -663,8 +660,8 @@ static const struct ucsi_operations ucsi_ccg_ops = {
- 	.poll_cci = ucsi_ccg_poll_cci,
- 	.read_data = ucsi_ccg_read_data,
- 	.write_data = ucsi_ccg_write_data,
--	.sync_write = ucsi_ccg_sync_write,
--	.async_write = ucsi_ccg_async_write,
-+	.sync_cmd = ucsi_ccg_sync_cmd,
-+	.async_cmd = ucsi_ccg_async_cmd,
- 	.update_altmodes = ucsi_ccg_update_altmodes
- };
- 
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index 9dab1b428ad9..1535877a9a41 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -186,23 +186,24 @@ static int pmic_glink_ucsi_locked_write(struct pmic_glink_ucsi *ucsi, unsigned i
- 	return 0;
- }
- 
--static int pmic_glink_ucsi_async_write(struct ucsi *__ucsi, unsigned int offset,
--				       const void *val, size_t val_len)
-+static int pmic_glink_ucsi_async_cmd(struct ucsi *__ucsi, u64 cmd)
- {
- 	struct pmic_glink_ucsi *ucsi = ucsi_get_drvdata(__ucsi);
-+	__le64 __cmd = cpu_to_le64(cmd);
- 	int ret;
- 
- 	mutex_lock(&ucsi->lock);
--	ret = pmic_glink_ucsi_locked_write(ucsi, offset, val, val_len);
-+	ret = pmic_glink_ucsi_locked_write(ucsi, UCSI_CONTROL,
-+					   &__cmd, sizeof(__cmd));
- 	mutex_unlock(&ucsi->lock);
- 
- 	return ret;
- }
- 
--static int pmic_glink_ucsi_sync_write(struct ucsi *__ucsi, unsigned int offset,
--				      const void *val, size_t val_len)
-+static int pmic_glink_ucsi_sync_cmd(struct ucsi *__ucsi, u64 cmd)
- {
- 	struct pmic_glink_ucsi *ucsi = ucsi_get_drvdata(__ucsi);
-+	__le64 __cmd = cpu_to_le64(cmd);
- 	unsigned long left;
- 	int ret;
- 
-@@ -212,7 +213,8 @@ static int pmic_glink_ucsi_sync_write(struct ucsi *__ucsi, unsigned int offset,
- 	ucsi->sync_val = 0;
- 	reinit_completion(&ucsi->sync_ack);
- 	ucsi->sync_pending = true;
--	ret = pmic_glink_ucsi_locked_write(ucsi, offset, val, val_len);
-+	ret = pmic_glink_ucsi_locked_write(ucsi, UCSI_CONTROL,
-+					   &__cmd, sizeof(__cmd));
- 	mutex_unlock(&ucsi->lock);
- 
- 	left = wait_for_completion_timeout(&ucsi->sync_ack, 5 * HZ);
-@@ -232,8 +234,8 @@ static const struct ucsi_operations pmic_glink_ucsi_ops = {
- 	.poll_cci = pmic_glink_ucsi_poll_cci,
- 	.read_data = pmic_glink_ucsi_read_data,
- 	.write_data = pmic_glink_ucsi_write_data,
--	.sync_write = pmic_glink_ucsi_sync_write,
--	.async_write = pmic_glink_ucsi_async_write
-+	.sync_cmd = pmic_glink_ucsi_sync_cmd,
-+	.async_cmd = pmic_glink_ucsi_async_cmd
- };
- 
- static void pmic_glink_ucsi_read_ack(struct pmic_glink_ucsi *ucsi, const void *data, int len)
-diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-index d68aca118e41..0847e00163e8 100644
---- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-+++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-@@ -421,23 +421,23 @@ static int ucsi_stm32g0_write_data(struct ucsi *ucsi,
- 	return ucsi_stm32g0_write_to_hw(g0, UCSI_MESSAGE_OUT, val, len);
- }
- 
--static int ucsi_stm32g0_async_write(struct ucsi *ucsi, unsigned int offset,
--				    const void *val, size_t len)
-+static int ucsi_stm32g0_async_cmd(struct ucsi *ucsi, u64 cmd)
- {
- 	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-+	__le64 __cmd = cpu_to_le64(cmd);
- 
--	return ucsi_stm32g0_write_to_hw(g0, offset, val, len);
-+	return ucsi_stm32g0_write_to_hw(g0, UCSI_CONTROL,
-+					&__cmd, sizeof(__cmd));
- }
- 
--static int ucsi_stm32g0_sync_write(struct ucsi *ucsi, unsigned int offset, const void *val,
--				   size_t len)
-+static int ucsi_stm32g0_sync_cmd(struct ucsi *ucsi, u64 cmd)
- {
- 	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
- 	int ret;
- 
- 	set_bit(COMMAND_PENDING, &g0->flags);
- 
--	ret = ucsi_stm32g0_async_write(ucsi, offset, val, len);
-+	ret = ucsi_stm32g0_async_cmd(ucsi, cmd);
- 	if (ret)
- 		goto out_clear_bit;
- 
-@@ -480,8 +480,8 @@ static const struct ucsi_operations ucsi_stm32g0_ops = {
- 	.poll_cci = ucsi_stm32g0_poll_cci,
- 	.read_data = ucsi_stm32g0_read_data,
- 	.write_data = ucsi_stm32g0_write_data,
--	.sync_write = ucsi_stm32g0_sync_write,
--	.async_write = ucsi_stm32g0_async_write,
-+	.sync_cmd = ucsi_stm32g0_sync_cmd,
-+	.async_cmd = ucsi_stm32g0_async_cmd,
- };
- 
- static int ucsi_stm32g0_register(struct ucsi *ucsi)
--- 
-2.40.1
+Without the legacy gadget there is no real solution to mount
+the 9pfs via the gadget as rootfs. The "correct" api is configfs
+which will need the user to have some filesystem to mount it to.
 
+There is the relatively new concept of bootconfig which sounds
+promising to describe an complete configfs tree from system boot.
+
+However this is some future talk for now, so we would like to
+stick with the legacy setup to be able to mount the 9pfs rootfs.
+
+I will improve the commit message to make this clear.
+
+>And can you wrap your changelog at 72 columns?
+
+Sure
+
+>
+>>
+>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>>
+>> ---
+>> v1 -> v2:
+>>   - deleted the usbg 9pfs detailed instruction from commit message
+>>   - added depends on net for NET_9P dependency
+>> ---
+>>  drivers/usb/gadget/legacy/9pfs.c   | 268 ++++++++++++++++++++++++++++++=
++++++++
+>>  drivers/usb/gadget/legacy/Kconfig  |  16 +++
+>>  drivers/usb/gadget/legacy/Makefile |   2 +
+>>  3 files changed, 286 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/legacy/9pfs.c b/drivers/usb/gadget/legac=
+y/9pfs.c
+>> new file mode 100644
+>> index 0000000000000..3ac7f2e92c5a3
+>> --- /dev/null
+>> +++ b/drivers/usb/gadget/legacy/9pfs.c
+>> @@ -0,0 +1,268 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * usb9pfs.c -- Gadget usb9pfs
+>> + *
+>> + * Copyright (C) 2023 Michael Grzeschik
+>> + */
+>> +
+>> +/*
+>> + * Gadget usb9pfs only needs two bulk endpoints, and will use the usb9p=
+fs usb
+>> + * transport to mount host filesystem via usb gadget. This driver will
+>> + * also add one ACM and NCM interface.
+>
+>Why "also"?  What are those interfaces going to be used for and what do
+>they have to do with 9pfs?
+
+They are not necessary to be used with 9pfs. But since we introduce an
+new legacy module which is fully claiming the UDC, it would make sense
+to leave the other endpoints unavailable but instead add some common
+interfaces like ecm and acm.
+
+I will also improve the comment and the commit message to point this
+out.
+
+>> + */
+>> +
+>> +#include <linux/kernel.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/device.h>
+>> +#include <linux/module.h>
+>> +#include <linux/err.h>
+>> +#include <linux/usb/composite.h>
+>> +#include <linux/netdevice.h>
+>> +
+>> +#include "u_eem.h"
+>> +#include "u_ether.h"
+>> +
+>> +/*---------------------------------------------------------------------=
+----*/
+>> +USB_GADGET_COMPOSITE_OPTIONS();
+>> +
+>> +USB_ETHERNET_MODULE_PARAMETERS();
+>> +
+>> +/* Defines */
+>> +
+>> +#define DRIVER_VERSION_STR "v1.0"
+>> +#define DRIVER_VERSION_NUM 0x1000
+>> +
+>> +#define DRIVER_DESC	"Composite Gadget (9P + ACM + NCM)"
+>> +
+>> +/*---------------------------------------------------------------------=
+----*/
+>> +
+>> +#define DRIVER_VENDOR_NUM	0x1d6b		/* Linux Foundation */
+>> +#define DRIVER_PRODUCT_NUM	0x0109		/* Linux-USB 9PFS Gadget */
+>> +
+>> +/*---------------------------------------------------------------------=
+----*/
+>> +
+>> +static struct usb_device_descriptor device_desc =3D {
+>> +	.bLength =3D		sizeof(device_desc),
+>> +	.bDescriptorType =3D	USB_DT_DEVICE,
+>> +
+>> +	/* .bcdUSB =3D DYNAMIC */
+>> +
+>> +	.bDeviceClass =3D		USB_CLASS_MISC,
+>> +	.bDeviceSubClass =3D	2,
+>> +	.bDeviceProtocol =3D	1,
+>> +
+>> +	/* .bMaxPacketSize0 =3D f(hardware) */
+>> +
+>> +	/* Vendor and product id can be overridden by module parameters.  */
+>> +	.idVendor =3D		cpu_to_le16(DRIVER_VENDOR_NUM),
+>> +	.idProduct =3D		cpu_to_le16(DRIVER_PRODUCT_NUM),
+>> +	/* .bcdDevice =3D f(hardware) */
+>> +	/* .iManufacturer =3D DYNAMIC */
+>> +	/* .iProduct =3D DYNAMIC */
+>> +	/* NO SERIAL NUMBER */
+>> +	/*.bNumConfigurations =3D	DYNAMIC*/
+>> +};
+>> +
+>> +static const struct usb_descriptor_header *otg_desc[2];
+>> +
+>> +static struct usb_string strings_dev[] =3D {
+>> +	[USB_GADGET_MANUFACTURER_IDX].s =3D "",
+>> +	[USB_GADGET_PRODUCT_IDX].s =3D DRIVER_DESC,
+>> +	[USB_GADGET_SERIAL_IDX].s =3D "",
+>> +	{  }			/* end of list */
+>> +};
+>> +
+>> +static struct usb_gadget_strings stringtab_dev =3D {
+>> +	.language	=3D 0x0409,	/* en-us */
+>> +	.strings	=3D strings_dev,
+>> +};
+>> +
+>> +static struct usb_gadget_strings *dev_strings[] =3D {
+>> +	&stringtab_dev,
+>> +	NULL,
+>> +};
+>> +
+>> +static struct usb_configuration cdc_driver_conf =3D {
+>> +	.label          =3D DRIVER_DESC,
+>> +	.bConfigurationValue =3D 1,
+>> +	/* .iConfiguration =3D DYNAMIC */
+>> +	.bmAttributes   =3D USB_CONFIG_ATT_SELFPOWER,
+>> +};
+>> +
+>> +static struct usb_function *f_9pfs;
+>> +static struct usb_function_instance *fi_9pfs;
+>> +
+>> +static struct usb_function *f_acm;
+>> +static struct usb_function_instance *fi_acm;
+>> +
+>> +static struct usb_function *f_eem;
+>> +static struct usb_function_instance *fi_eem;
+>> +
+>> +static int cdc_do_config(struct usb_configuration *c)
+>> +{
+>> +	int ret;
+>> +
+>> +	if (gadget_is_otg(c->cdev->gadget)) {
+>> +		c->descriptors =3D otg_desc;
+>> +		c->bmAttributes |=3D USB_CONFIG_ATT_WAKEUP;
+>> +	}
+>> +
+>> +	f_9pfs =3D usb_get_function(fi_9pfs);
+>> +	if (IS_ERR(f_9pfs))
+>> +		return PTR_ERR(f_9pfs);
+>> +
+>> +	ret =3D usb_add_function(c, f_9pfs);
+>> +	if (ret < 0)
+>> +		goto err_func_9pfs;
+>> +
+>> +	f_acm =3D usb_get_function(fi_acm);
+>> +	if (IS_ERR(f_acm)) {
+>> +		ret =3D PTR_ERR(f_acm);
+>> +		goto err_func_acm;
+>> +	}
+>> +
+>> +	ret =3D usb_add_function(c, f_acm);
+>> +	if (ret)
+>> +		goto err_conf;
+>> +
+>> +	f_eem =3D usb_get_function(fi_eem);
+>> +	if (IS_ERR(f_eem)) {
+>> +		ret =3D PTR_ERR(f_eem);
+>> +		goto err_eem;
+>> +	}
+>> +
+>> +	ret =3D usb_add_function(c, f_eem);
+>> +	if (ret)
+>> +		goto err_run;
+>> +
+>> +	return 0;
+>> +err_run:
+>> +	usb_put_function(f_eem);
+>> +err_eem:
+>> +	usb_remove_function(c, f_acm);
+>> +err_conf:
+>> +	usb_put_function(f_acm);
+>> +err_func_acm:
+>> +	usb_remove_function(c, f_9pfs);
+>> +err_func_9pfs:
+>> +	usb_put_function(f_9pfs);
+>> +	return ret;
+>> +}
+>> +
+>> +static int usb9pfs_bind(struct usb_composite_dev *cdev)
+>> +{
+>> +	struct f_eem_opts	*eem_opts =3D NULL;
+>> +	int status;
+>> +
+>> +	fi_9pfs =3D usb_get_function_instance("usb9pfs");
+>> +	if (IS_ERR(fi_9pfs)) {
+>> +		if (PTR_ERR(fi_9pfs) =3D=3D -ENOENT)
+>> +			return -EPROBE_DEFER;
+>> +		return PTR_ERR(fi_9pfs);
+>> +	}
+>> +
+>> +	/* set up serial link layer */
+>> +	fi_acm =3D usb_get_function_instance("acm");
+>> +	if (IS_ERR(fi_acm)) {
+>> +		if (PTR_ERR(fi_9pfs) =3D=3D -ENOENT)
+>> +			return -EPROBE_DEFER;
+>> +		status =3D PTR_ERR(fi_acm);
+>> +		goto err_conf_acm;
+>> +	}
+>> +
+>> +	fi_eem =3D usb_get_function_instance("eem");
+>> +	if (IS_ERR(fi_eem)) {
+>> +		if (PTR_ERR(fi_9pfs) =3D=3D -ENOENT)
+>> +			return -EPROBE_DEFER;
+>> +		status =3D PTR_ERR(fi_eem);
+>> +		goto err_conf_eem;
+>> +	}
+>> +
+>> +	eem_opts =3D container_of(fi_eem, struct f_eem_opts, func_inst);
+>> +
+>> +	gether_set_qmult(eem_opts->net, qmult);
+>> +	if (!gether_set_host_addr(eem_opts->net, host_addr))
+>> +		pr_info("using host ethernet address: %s", host_addr);
+>> +	if (!gether_set_dev_addr(eem_opts->net, dev_addr))
+>> +		pr_info("using self ethernet address: %s", dev_addr);
+>> +
+>> +	/* Allocate string descriptor numbers ... note that string
+>> +	 * contents can be overridden by the composite_dev glue.
+>> +	 */
+>> +	status =3D usb_string_ids_tab(cdev, strings_dev);
+>> +	if (status < 0)
+>> +		return status;
+>> +
+>> +	device_desc.iManufacturer =3D strings_dev[USB_GADGET_MANUFACTURER_IDX]=
+=2Eid;
+>> +	device_desc.iProduct =3D strings_dev[USB_GADGET_PRODUCT_IDX].id;
+>> +	device_desc.iSerialNumber =3D strings_dev[USB_GADGET_SERIAL_IDX].id;
+>> +
+>> +	/* support OTG systems */
+>> +	if (gadget_is_otg(cdev->gadget)) {
+>> +		if (!otg_desc[0]) {
+>> +			struct usb_descriptor_header *usb_desc;
+>> +
+>> +			usb_desc =3D usb_otg_descriptor_alloc(cdev->gadget);
+>> +			if (!usb_desc) {
+>> +				status =3D -ENOMEM;
+>> +				goto err_conf_otg;
+>> +			}
+>> +			usb_otg_descriptor_init(cdev->gadget, usb_desc);
+>> +			otg_desc[0] =3D usb_desc;
+>> +			otg_desc[1] =3D NULL;
+>> +		}
+>> +	}
+>> +
+>> +	status =3D usb_add_config(cdev, &cdc_driver_conf, cdc_do_config);
+>> +	if (status)
+>> +		goto err_free_otg_desc;
+>> +
+>> +	usb_ep_autoconfig_reset(cdev->gadget);
+>> +	usb_composite_overwrite_options(cdev, &coverwrite);
+>> +
+>> +	dev_info(&cdev->gadget->dev, DRIVER_DESC " version: " DRIVER_VERSION_S=
+TR "\n");
+>
+>When drivers are working properly, they are quiet.
+
+Right, I will fix that.
+
+Thanks,
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--hmLwYFImqzne253t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmXSs3UACgkQC+njFXoe
+LGRxbQ/7BYgYye1JCQtKM2lwhdqY75Nya3hWcCw66xFW6MyuIjh/wXsfMXZDC3dK
+/19EfJQplNzSMCwDZFeA7HgJ8wxfl8ayjv90JZ7a66UJ1BYmXmojkLiDrn7LzUpa
+MBFZJfEQrZHGW/3YF0ifrbkov9wkSf6LXyS8MoVCbSgl9eL60JNDqD82VbZC+HQg
+1BYWYnorUQULrqYPB1FEg/N0QMBXyadXAu7EdG6nV/Zxlown5hhOXeB4aAvnguxe
+BXVwVV63rIMUwAtFfK8/RX6PhOLrNZTQ/z/ol1LvilWFlJ6mxNH6CHiWUeJw1vn3
+kodbANq4oadIvrInLL65woZp+4tyffMgIdnA/c8TyNgG1HwSlTwWlDvPi2zsB8gH
+P/tlRLmv0VUCbUXx+xtdfDdWCSX2cDsAQgnSvXKOFTDt84lfjCO9LNpRs6OjuvTP
+PvHO5IUziH9wIi1Q9VFFoXd38be4V6N26w90LL4WefMzeVx4Fo935Nb8gklO6ZYW
+izwqdY9wnccy40nSKXbPDUxHg6P/YbbcWp/z2z9mrT9S4e/LqvwYrQsJyZrbcKj8
+47NZmc2bXJUc+AjfGk8NwfLsk8vkEdDLjp9jQeIDHTOd0sq/59gs10gLNFm8pjw4
+hcBmryl9RgQk3OOWtys/hShrztriLxEFpewUwZLPCziWqq3EaLY=
+=WfB2
+-----END PGP SIGNATURE-----
+
+--hmLwYFImqzne253t--
 
