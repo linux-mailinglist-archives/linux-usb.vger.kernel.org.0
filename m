@@ -1,145 +1,245 @@
-Return-Path: <linux-usb+bounces-6746-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6747-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16DFC85A31F
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 13:24:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D915C85A3B0
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 13:45:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C045B22985
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 12:24:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A1AE1C21732
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 12:45:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB272D046;
-	Mon, 19 Feb 2024 12:24:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E20E62E83C;
+	Mon, 19 Feb 2024 12:45:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SpKOWzp5"
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="pmcgNQpe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736C32D05D
-	for <linux-usb@vger.kernel.org>; Mon, 19 Feb 2024 12:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A5A2D610;
+	Mon, 19 Feb 2024 12:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708345453; cv=none; b=p0dihuj34Qm465SbMVSINusonuImW87wfJa17eP80byDGrw1NAs5+PjyaJhFTeHr/bAtWQevyol3G4Bmk0ACTj1l+1nie9+CA1EDE29QQbKJlYb2ZkBCiORySpbiwDldCGC8R9UojeoOBnvlFi64QU+THn+gOG+SJzg/Q8lcVJA=
+	t=1708346712; cv=none; b=pw6+2ZGkLJyLY/Lj/ggAo5uuedCJ7oI2KL1aHk5A73Y550H52lQVMzexJK+1udJfAjvfBBG0SxRgDB5HgcOMHpEr0QV1pG5UbbejoVuzPYve5mVnApRD0MA1b8HHsla3jd5BMfX6ueoPeav1nYhVk8J0B09VPWaE/nDaSFJ1Qhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708345453; c=relaxed/simple;
-	bh=q7kf0whgXcirJVeruAHMZBr5UEsfnDtk33GcQY+sNuw=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To; b=on2sLG3Px2UK68/Pu3VCQkdkRueMI+f5qcTuwfOXYsacD91K4B8AHqAv7cRlVcd7s9NUkHNmhCbS0hPyRkCoi+9rdRAv0SagOzORuySMiD3dZf/zQsR0Ids1H0ky7U5syev1BodsyGJ6V1/3Ij+qtwS6SBVsGeFP/gqujqIQh5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SpKOWzp5; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4126104e28eso10454335e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 19 Feb 2024 04:24:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1708345450; x=1708950250; darn=vger.kernel.org;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TruoVls7dqvGRsbKe5zz3jfKgNKKjOR8b53xJSvDp4s=;
-        b=SpKOWzp5o3Z4v6lTjNcgbDOnwEB+csDUirkmLsxJNGplFcBACZJOblu0rl+IMNSkUG
-         7rbKcWgvHarb5h7G247Rhz+mbbXDVq8w/Va+x1w3ZyRxjO9xtqjl/4+5az06zuH68oxR
-         KsCsDMY3jQIDGyj86mRs18UW1Q6T9vr83LxoMxFLoDNeDrGSTZ/WNzew+wJhHyVYI9Fn
-         mjy+WFijd77bKZI2lLJurfLfSFYRpAs++lB7dHdZq11EicD1uUdfvqT6q3VPAX//h/xJ
-         fiLEfSgytjo1P238901YDvKpcjQC3sE2tcCP4XONDlN0QQBl9kYit4hqDoH1fb1RzyAp
-         aFAA==
+	s=arc-20240116; t=1708346712; c=relaxed/simple;
+	bh=+qGfhiVCyV9q7WZjG4VEtZjEWGbusXpLGOzf0leGW0M=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KPRG+L5SiJZKuH5jrFKlvxTykWE6cPspTtwcvJIZTsWBUGmVy4CeyGy0NOUqCT58LjJmtvh5kWyrrTID2qK0kQ5re8WP8ErGO0Z4RuUmNIDE7KWVqwHeXCKl0nSpJoXYcjpD7hR0t5rrVgS6IAllCYx3DQxQWsT0cr057ZSHjDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=pmcgNQpe; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6e22e63abf1so920555b3a.3;
+        Mon, 19 Feb 2024 04:45:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708345450; x=1708950250;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TruoVls7dqvGRsbKe5zz3jfKgNKKjOR8b53xJSvDp4s=;
-        b=TkL3+XMLwOW3NDRX2ZVgYDf2oigaJpll1wa351mTDtYXIW1nIMXIA5l8c+4N7TZbny
-         +gx0fHObGQfCo+ZH94AaTUK8XXKuE4u0hldn13rp5GIZewOQ8ChCvmFd4E3dGrgPA9OV
-         uy9bHxclu9B0xhi+JkRrve/haE0hqBVD8VjQezKGKyq+PhQ+u04hQDoqLi0R4lv57CzS
-         s6aMfQWDjbDXad85JT42A6u9L+7xdXE5JddVj2qPpDcqCc7w4sZZDL9d7rAYGN/kham/
-         LR1tKDhtSSKMXlgcX2lqcUwgVKS7AIbc+UqZP7YfTwpmFK8q/aEnvpgnSJv1fsK+lCY/
-         2cLg==
-X-Forwarded-Encrypted: i=1; AJvYcCX6aqIkqFlBfup3hW/kY2c59ry9SPJmesSKgoT0IkJr0iCDjSDvim4qVde8GB5RDJmvoGa/n+Mx2pbW1I3NpYIyd8uBKqHJBpbc
-X-Gm-Message-State: AOJu0YybC1RCgBDadSA6328Ot6V0u7zOqXewI9vPrCYGexYSd8ZHtCL3
-	e5UUEeLPEzHu6K6AoilNHZM+7TdGR5A2CLP78u2B/lgHYFGK4yNYD8WsUXQ3c4c=
-X-Google-Smtp-Source: AGHT+IHj35qyr5InXd+1elMWoLQLFt4ASBpVvjFHXab1GcPX7vglcCTKTBvwUNfNtUbdBxa/wXkSTA==
-X-Received: by 2002:adf:fcc8:0:b0:33d:146a:d74a with SMTP id f8-20020adffcc8000000b0033d146ad74amr8812506wrs.22.1708345449766;
-        Mon, 19 Feb 2024 04:24:09 -0800 (PST)
-Received: from ?IPV6:2001:a61:1366:6801:d8:8490:cf1a:3274? ([2001:a61:1366:6801:d8:8490:cf1a:3274])
-        by smtp.gmail.com with ESMTPSA id m2-20020a5d6a02000000b0033d071c0477sm10173526wru.59.2024.02.19.04.24.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Feb 2024 04:24:09 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------t9GZuSDJlD9zIs0PpIOh3i30"
-Message-ID: <b0a28cf4-93f4-47a6-b9fe-af82eacfd970@suse.com>
-Date: Mon, 19 Feb 2024 13:24:07 +0100
+        d=1e100.net; s=20230601; t=1708346709; x=1708951509;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:dkim-signature:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F3d+lJrHnThtsf8pUVLxKYnnmGUoQxCJeQhGw1ipwrk=;
+        b=iFUNVog/5XEeraoAVQUo/qNOcLjOeqGOLr6v+CAPz2vJxwJe/9iOR46NrarMPHO5HH
+         XQSVQvfheNbPDAvgena6vqSCdtDegu/dWSlo4gTlYTv4bzIsC1BGKMroqGZoikpao7se
+         B8FRgY7SNIxTBbJN5hqLTY73Qw3qUR2kOImSPVem8DzZwq3DeZ339FC0NPaBnvY5m8WR
+         6oEYrRTT3Y8Db+uY6n76HfSceQDmjUT9khrkr7FmXuvs/hsOa4ggDhTdw6QAWTMlCM9s
+         1hnZrZxaj4NkpOIyJcY5Wvw749j4S1Dn7R3s6zUSI6ykbBMW3AIENpVXWNrQedTVQiVs
+         cA3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVLf9duHDEATHdCyAYxK78DzBmw4iiqvTMJqgb2r9VyxvSq6cqCb4HpsKPbtgg6ZVoXvcCFaFrO6uZohepAKUohuW542n8A8bPRT63p
+X-Gm-Message-State: AOJu0Yz3InZZqWDBA1GOPE6Wb0T+e6dCUZGzz3BIg59Ii5yMevZRNnq3
+	Bo2/EyOz1xodem9s9D6maLBaJaZA71ErhOWbptZI6lwefUzTZQKH
+X-Google-Smtp-Source: AGHT+IGWP7wCo7AVG7o3NF8lKLZJpOzUrUMnCQZ7wnQWllz39e6iIFKod1hUclsB6ASZvJHd7YC3Mg==
+X-Received: by 2002:a05:6a20:9e4b:b0:1a0:9010:92ad with SMTP id mt11-20020a056a209e4b00b001a0901092admr4780055pzb.31.1708346709194;
+        Mon, 19 Feb 2024 04:45:09 -0800 (PST)
+Received: from mail.marliere.net ([24.199.118.162])
+        by smtp.gmail.com with ESMTPSA id p27-20020a056a0026db00b006e4648059b6sm1685205pfw.26.2024.02.19.04.45.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Feb 2024 04:45:08 -0800 (PST)
+From: "Ricardo B. Marliere" <ricardo@marliere.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=2024; t=1708346707;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=F3d+lJrHnThtsf8pUVLxKYnnmGUoQxCJeQhGw1ipwrk=;
+	b=pmcgNQpeawXYM49pRCTVvbGqUdnBQMVROUywws/Uj4dnRg7pseGdsNUEE979QGn0hNIBbh
+	lj5cqkdYkSHR9qhMHclnHpIy7GmHV10jNPcJMSxSxer2xly1911IkgQDNIkED5Pzy9GXGJ
+	rf00efGliok8BpZQ3XhldGvUQpyC8qmof9d/oxuwh3EVCRdIHEO8OhOqjBP+6VKWNi0rtT
+	vozKUuXn7+Q94MZB6ipwnOuXEmSg6o3h03bEXM1bYv48KNlL+mNSTEfsYakQCcYTH/+eaJ
+	DOAZW03IuoYg/F9zLyyWBt0+84RNUr/r91CDVp4SOhnByTiTUC/BHUknLuZXvA==
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
+Date: Mon, 19 Feb 2024 09:45:50 -0300
+Subject: [PATCH] thunderbolt: constify the struct device_type usage
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: ZDI-CAN-22273: New Vulnerability Report
-Content-Language: en-US
-To: "zdi-disclosures@trendmicro.com" <zdi-disclosures@trendmicro.com>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "valentina.manea.m@gmail.com" <valentina.manea.m@gmail.com>,
- "shuah@kernel.org" <shuah@kernel.org>, "i@zenithal.me" <i@zenithal.me>
-References: <DM5PR0102MB347711AF2F5655852AC60BEB80DBA@DM5PR0102MB3477.prod.exchangelabs.com>
- <2023102134-reflux-saddling-c750@gregkh>
- <DM5PR0102MB3477B594C9D018BC884DF3E4804C2@DM5PR0102MB3477.prod.exchangelabs.com>
- <2024021605-disloyal-overlying-ed56@gregkh>
- <DM5PR0102MB3477B499A8A3292D6BFFBE80804C2@DM5PR0102MB3477.prod.exchangelabs.com>
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <DM5PR0102MB3477B499A8A3292D6BFFBE80804C2@DM5PR0102MB3477.prod.exchangelabs.com>
-
-This is a multi-part message in MIME format.
---------------t9GZuSDJlD9zIs0PpIOh3i30
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20240219-device_cleanup-thunderbolt-v1-1-7890787f1ec5@marliere.net>
+X-B4-Tracking: v=1; b=H4sIAH1N02UC/x3MQQqAIBBA0avErBNUKqirRMSkYw2IhVYE4d2Tl
+ g8+/4VEkSnBUL0Q6ebEeyhQdQVmw7CSYFsMWupGatULWyJDs/GE4TrEuV3BUlx2f4pe6dbYTiE
+ 6hDI4Ijl+/vk45fwB7uaMnWwAAAA=
+To: Andreas Noever <andreas.noever@gmail.com>, 
+ Michael Jamet <michael.jamet@intel.com>, 
+ Mika Westerberg <mika.westerberg@linux.intel.com>, 
+ Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Ricardo B. Marliere" <ricardo@marliere.net>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5022; i=ricardo@marliere.net;
+ h=from:subject:message-id; bh=+qGfhiVCyV9q7WZjG4VEtZjEWGbusXpLGOzf0leGW0M=;
+ b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBl002Csy5N7M/mDcAaLsxV3VsnAlxjZPjc+Npqr
+ K8kYtVqmuKJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZdNNggAKCRDJC4p8Y4ZY
+ plsCD/wNjI47Zjz6WoONWQ8IbQhvJ3ls9fMibAiFTn9QnQuCpKaXgkUz5gpJzyHGx+wWfzvhmCA
+ U5ZfWHO01omlxCtb38lwXQ/CihkxV3A7I1XwBNfKtcLSEv/JaRivYY8AoqQrEw0lxr0FcGZv2hO
+ vhFwJKCczHESP2btoim7OJ+CREu9Wuc1vCzdk71HiSvKEbUlPkKMHeiFxqq8rV087jvmsq5urW/
+ KeP/IkkJZ+d2lwCmhp92LJb/lkly7csMu2MxRurq2yELtfjB3GGU7NpBXzzq/cGK1ZObWRlooA2
+ bTy7y95G83JXnGhzhc/9W+Lu+TZoTc/tLZf73/WVzQ6oatQMPnNCtAZlhBHT7VysE0ym2FUpxJL
+ +aF5K27aj6Exe5cZ69Tqc7nOJ5eQE8kuImDDySOxcCXkyZOiU7wOd8+8GeUwlHG7mZdc70mqzyA
+ nfOcrHmbNFRVPzHoBEdTeuRTAxkY2Hrl4TE+NgwuzNey5VO9MDLtBfskU0bKIOAnrhsaEaHlKqT
+ URPguBHE6jx+TPUbtJccBNY43zh1lDJN4plzxV6jZ+ODnJuyTEJEkTv0eScOgXU+6gMcYvxwWSh
+ J5KlGFpk4Jw7DpEtwaZMuGo7/YEIWrPVgrDDmy44zSLcIsJUCr7/DtNsT6fNc+ZDwOO0HMSYKiy
+ DTgZ3fi4o28PF+Q==
+X-Developer-Key: i=ricardo@marliere.net; a=openpgp;
+ fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
 
+Since commit aed65af1cc2f ("drivers: make device_type const"), the driver
+core can properly handle constant struct device_type. Move the
+tb_domain_type, tb_retimer_type, tb_switch_type, usb4_port_device_type,
+tb_service_type and tb_xdomain_type variables to be constant structures as
+well, placing it into read-only memory which can not be modified at
+runtime.
 
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
+---
+ drivers/thunderbolt/domain.c    | 2 +-
+ drivers/thunderbolt/retimer.c   | 2 +-
+ drivers/thunderbolt/switch.c    | 2 +-
+ drivers/thunderbolt/tb.h        | 8 ++++----
+ drivers/thunderbolt/usb4_port.c | 2 +-
+ drivers/thunderbolt/xdomain.c   | 4 ++--
+ include/linux/thunderbolt.h     | 4 ++--
+ 7 files changed, 12 insertions(+), 12 deletions(-)
 
-On 16.02.24 18:58, zdi-disclosures@trendmicro.com wrote:
-> Hi Greg,
-> Thanks for the update :)
+diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
+index d7abb8c445aa..6a7ec53ddc44 100644
+--- a/drivers/thunderbolt/domain.c
++++ b/drivers/thunderbolt/domain.c
+@@ -326,7 +326,7 @@ static void tb_domain_release(struct device *dev)
+ 	kfree(tb);
+ }
+ 
+-struct device_type tb_domain_type = {
++const struct device_type tb_domain_type = {
+ 	.name = "thunderbolt_domain",
+ 	.release = tb_domain_release,
+ };
+diff --git a/drivers/thunderbolt/retimer.c b/drivers/thunderbolt/retimer.c
+index d49d6628dbf2..6bb49bdcd6c1 100644
+--- a/drivers/thunderbolt/retimer.c
++++ b/drivers/thunderbolt/retimer.c
+@@ -356,7 +356,7 @@ static void tb_retimer_release(struct device *dev)
+ 	kfree(rt);
+ }
+ 
+-struct device_type tb_retimer_type = {
++const struct device_type tb_retimer_type = {
+ 	.name = "thunderbolt_retimer",
+ 	.groups = retimer_groups,
+ 	.release = tb_retimer_release,
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index bca6f28c553b..5a617ea285a7 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -2327,7 +2327,7 @@ static const struct dev_pm_ops tb_switch_pm_ops = {
+ 			   NULL)
+ };
+ 
+-struct device_type tb_switch_type = {
++const struct device_type tb_switch_type = {
+ 	.name = "thunderbolt_device",
+ 	.release = tb_switch_release,
+ 	.uevent = tb_switch_uevent,
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 1bbbeb034e0e..5e93c02d37b3 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -745,10 +745,10 @@ static inline int tb_port_write(struct tb_port *port, const void *buffer,
+ struct tb *icm_probe(struct tb_nhi *nhi);
+ struct tb *tb_probe(struct tb_nhi *nhi);
+ 
+-extern struct device_type tb_domain_type;
+-extern struct device_type tb_retimer_type;
+-extern struct device_type tb_switch_type;
+-extern struct device_type usb4_port_device_type;
++extern const struct device_type tb_domain_type;
++extern const struct device_type tb_retimer_type;
++extern const struct device_type tb_switch_type;
++extern const struct device_type usb4_port_device_type;
+ 
+ int tb_domain_init(void);
+ void tb_domain_exit(void);
+diff --git a/drivers/thunderbolt/usb4_port.c b/drivers/thunderbolt/usb4_port.c
+index e355bfd6343f..5150879888ca 100644
+--- a/drivers/thunderbolt/usb4_port.c
++++ b/drivers/thunderbolt/usb4_port.c
+@@ -243,7 +243,7 @@ static void usb4_port_device_release(struct device *dev)
+ 	kfree(usb4);
+ }
+ 
+-struct device_type usb4_port_device_type = {
++const struct device_type usb4_port_device_type = {
+ 	.name = "usb4_port",
+ 	.groups = usb4_port_device_groups,
+ 	.release = usb4_port_device_release,
+diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
+index b48df88981bd..940ae97987ff 100644
+--- a/drivers/thunderbolt/xdomain.c
++++ b/drivers/thunderbolt/xdomain.c
+@@ -1002,7 +1002,7 @@ static void tb_service_release(struct device *dev)
+ 	kfree(svc);
+ }
+ 
+-struct device_type tb_service_type = {
++const struct device_type tb_service_type = {
+ 	.name = "thunderbolt_service",
+ 	.groups = tb_service_attr_groups,
+ 	.uevent = tb_service_uevent,
+@@ -1893,7 +1893,7 @@ static const struct dev_pm_ops tb_xdomain_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(tb_xdomain_suspend, tb_xdomain_resume)
+ };
+ 
+-struct device_type tb_xdomain_type = {
++const struct device_type tb_xdomain_type = {
+ 	.name = "thunderbolt_xdomain",
+ 	.release = tb_xdomain_release,
+ 	.pm = &tb_xdomain_pm_ops,
+diff --git a/include/linux/thunderbolt.h b/include/linux/thunderbolt.h
+index 2c835e5c41f6..4338ea9ac4fd 100644
+--- a/include/linux/thunderbolt.h
++++ b/include/linux/thunderbolt.h
+@@ -87,8 +87,8 @@ struct tb {
+ };
+ 
+ extern const struct bus_type tb_bus_type;
+-extern struct device_type tb_service_type;
+-extern struct device_type tb_xdomain_type;
++extern const struct device_type tb_service_type;
++extern const struct device_type tb_xdomain_type;
+ 
+ #define TB_LINKS_PER_PHY_PORT	2
+ 
 
-Hi,
+---
+base-commit: b4734507ac55cc7ea1380e20e83f60fcd7031955
+change-id: 20240219-device_cleanup-thunderbolt-9125cd61aafa
 
-does this do the job?
+Best regards,
+-- 
+Ricardo B. Marliere <ricardo@marliere.net>
 
-	Regards
-		Oliver
-
---------------t9GZuSDJlD9zIs0PpIOh3i30
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-usbip-get-new-count-before-dropping-the-old.patch"
-Content-Disposition: attachment;
- filename="0001-usbip-get-new-count-before-dropping-the-old.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSBmN2VkODIxZGExM2ZhZTZjODBkNjVmOWMwZGJhNGM5MjY5NzA1MzVlIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29t
-PgpEYXRlOiBNb24sIDE5IEZlYiAyMDI0IDEzOjIxOjQ0ICswMTAwClN1YmplY3Q6IFtQQVRD
-SF0gdXNiaXA6IGdldCBuZXcgY291bnQgYmVmb3JlIGRyb3BwaW5nIHRoZSBvbGQKClRob3Nl
-IGRldmljZXMgY2FuIGJlIGlkZW50aWNhbC4gSW4gdGhhdCBjYXNlIGRyb3BwaW5nCnRoZSBv
-bGQgcmVmZXJlbmNlIGZpcnN0IGxlYWRzIHRvIGEgdXNlIGFmdGVyIGZyZWUuCgpTaWduZWQt
-b2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgotLS0KIGRyaXZlcnMv
-dXNiL3VzYmlwL3ZoY2lfaGNkLmMgfCAzICsrLQogMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0
-aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL3VzYmlw
-L3ZoY2lfaGNkLmMgYi9kcml2ZXJzL3VzYi91c2JpcC92aGNpX2hjZC5jCmluZGV4IDgyNjUw
-YzExZTQ1MS4uNzZmNjI5MDMxMDA1IDEwMDY0NAotLS0gYS9kcml2ZXJzL3VzYi91c2JpcC92
-aGNpX2hjZC5jCisrKyBiL2RyaXZlcnMvdXNiL3VzYmlwL3ZoY2lfaGNkLmMKQEAgLTc1Nywx
-MiArNzU3LDEzIEBAIHN0YXRpYyBpbnQgdmhjaV91cmJfZW5xdWV1ZShzdHJ1Y3QgdXNiX2hj
-ZCAqaGNkLCBzdHJ1Y3QgdXJiICp1cmIsIGdmcF90IG1lbV9mbGFnCiAKIAkJc3dpdGNoIChj
-dHJscmVxLT5iUmVxdWVzdCkgewogCQljYXNlIFVTQl9SRVFfU0VUX0FERFJFU1M6CisJCQlz
-dHJ1Y3QgdXNiX2RldmljZSAqdWQgPSB2ZGV2LT51ZGV2OwogCQkJLyogc2V0X2FkZHJlc3Mg
-bWF5IGNvbWUgd2hlbiBhIGRldmljZSBpcyByZXNldCAqLwogCQkJZGV2X2luZm8oZGV2LCAi
-U2V0QWRkcmVzcyBSZXF1ZXN0ICglZCkgdG8gcG9ydCAlZFxuIiwKIAkJCQkgY3RybHJlcS0+
-d1ZhbHVlLCB2ZGV2LT5yaHBvcnQpOwogCi0JCQl1c2JfcHV0X2Rldih2ZGV2LT51ZGV2KTsK
-IAkJCXZkZXYtPnVkZXYgPSB1c2JfZ2V0X2Rldih1cmItPmRldik7CisJCQl1c2JfcHV0X2Rl
-dih1ZCk7CiAKIAkJCXNwaW5fbG9jaygmdmRldi0+dWQubG9jayk7CiAJCQl2ZGV2LT51ZC5z
-dGF0dXMgPSBWREVWX1NUX1VTRUQ7Ci0tIAoyLjQzLjAKCg==
-
---------------t9GZuSDJlD9zIs0PpIOh3i30--
 
