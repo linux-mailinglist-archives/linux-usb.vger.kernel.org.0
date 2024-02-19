@@ -1,118 +1,123 @@
-Return-Path: <linux-usb+bounces-6732-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6733-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C682E859DE0
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 09:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 996F2859E69
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 09:36:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 056F31C21BFC
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 08:13:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCB181C21F08
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 08:36:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D544820DF6;
-	Mon, 19 Feb 2024 08:13:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95594210FD;
+	Mon, 19 Feb 2024 08:36:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jhfZg1UW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YdDr/1Oz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459A52135C;
-	Mon, 19 Feb 2024 08:13:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7123221357
+	for <linux-usb@vger.kernel.org>; Mon, 19 Feb 2024 08:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708330387; cv=none; b=ZVO0Vh8ACLTsOSgcqDsgtRDIo21pK060sDfQdLksZ4IemqS/sGxhSn9fKIoemeNKDXIejnT2Av/lScyHL1bcvk/Q0WN3+eIwk+iRvT+5mz1jjycr14nzL7eRRp51kfs1y2FZH15D5UjwVSH1OsJAKHVNa+clIk2ETsK0BxHF8L8=
+	t=1708331777; cv=none; b=RdvV/4Olct6me0I9gggiHk3riBQT8AG2DWVBonapGceBdG9erSV6BrazGTu5hP+6cT774nTY3Xfoay3XsEd/23/w8pP6tem25MqW/li6c6LPCX2b57teROzq7mTUA7b4v+lm3/6CNBP6TL+uWXVSSzLHvEnTPnaTSbM+wI5+sfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708330387; c=relaxed/simple;
-	bh=1w3J45VRLDLeMHSNQ1LNWwVGXu9vFKXbgM2hR+lw2cU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K+6q6uEs7CqInmV+xi6GVVX0wCB/k8RDgzZiq51uTI9J1XDXbsH4i+HxFvY8sAI3pcSdTMuTcrQc/2Qg1vrefjzRBOj6FZFXrNgVOTTVSHjgsyAAo4oWoCjSXIhbPcLiS1KKXOkL8e71Jnm/W0tKWj87ab+syIO/l9zFKH0ZSHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jhfZg1UW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59439C433C7;
-	Mon, 19 Feb 2024 08:13:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1708330386;
-	bh=1w3J45VRLDLeMHSNQ1LNWwVGXu9vFKXbgM2hR+lw2cU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jhfZg1UWk/gIXkIAdbPlphVgddgqd1ksAhGXvha+wO8pNKb1DMovmkeVam5cOXg4V
-	 ZjobisTZkClepNOBnY4pK1TvUg5MRJ46gK7Jb8S9Dh+4mNUj2diDLWUzWREqyw4PD8
-	 PzqZuInLMj6WOi48A3lXFEc8a0b7BDAuxcmKG4ao=
-Date: Mon, 19 Feb 2024 09:13:03 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Michael Grzeschik <mgr@pengutronix.de>
-Cc: Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	Jonathan Corbet <corbet@lwn.net>, v9fs@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v2 3/4] usb: gadget: legacy: add 9pfs multi gadget
-Message-ID: <2024021911-facelift-graveyard-0760@gregkh>
-References: <20240116-ml-topic-u9p-v2-0-b46cbf592962@pengutronix.de>
- <20240116-ml-topic-u9p-v2-3-b46cbf592962@pengutronix.de>
- <2024021757-geography-hacksaw-3022@gregkh>
- <ZdKze80oFj0PRkkZ@pengutronix.de>
+	s=arc-20240116; t=1708331777; c=relaxed/simple;
+	bh=Rx9ZJKs/bR/usyBx3lVmlWkCDToMSZHSILyEGGUJ6aI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Izmuxfvu3dBYp7GCv7c6J3FLTKwl68Nrx05fWqQ1EVKrQFGOgL1u0bUlwY9q8OIKhNGiVg/doUi59sBfbsybKPGksNn4T2UU+BYYHyZRunNOYxF/IXrgv0lYkZdmV+J8d3/cTgAs+XLTv2rygNmiDcxQFOe8O1/JhUwYyuIYBkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YdDr/1Oz; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-563dd5bd382so10699a12.1
+        for <linux-usb@vger.kernel.org>; Mon, 19 Feb 2024 00:36:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708331774; x=1708936574; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i8QoRFayjt/6bleBBpTu5vM12K7hqxhYDmZf5s1lnAg=;
+        b=YdDr/1Oz8JYDQ2flZsPaGpxoiBdsL8C8Zev9YL3hR0wsj5LRUUqQAnIuSSFVIFfk5m
+         COjJKQ2uYf5INL02sVySv+0ec2YckJFvrqS8c11Dix9oEPwywPZ3Q7b7cWqvnCNpJgPo
+         QeeGAOzgLfkMirb4ZOzryiy1M/r9MKyy2dvGbsozNr7VqjGi9XdG1eBel4GqD8P1eWJJ
+         WQqbJ6bGiRGv2EzA0n3z5vBL6XRpFX6OH14eActBy/anKnfvM/2p4NerlVeQamyyKxtw
+         iMghrU/KvzlvUBGj1ROGm3SFV0ScgVzsHSwrF7XmxOL3PVk4h5DUkoXss1455ObA3LBG
+         pj+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708331774; x=1708936574;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i8QoRFayjt/6bleBBpTu5vM12K7hqxhYDmZf5s1lnAg=;
+        b=Vv6/N6W2w7+R/CtyBJumILXfBV4KbgRG/aw9VXyq0P0HnvnyPoTYDrsNKC9WEs2V66
+         N/wUHXSJUtuKazVbgHL5rz2FiBUR/bucrvfkuqjFHUyOtL2DuLOvXLKKm2BFbDiE3cJP
+         jj7Gve6TNPJe20NpEtLmu/qoaR5Tiy1AkqksSzgrEPLJYxWNxr5/bT2XNmHpozKxJb9p
+         F/UPpNz6Ol1vpO6L3GwwmRiuAkIZGW5NOc2pJ1L5GEfvPnYVRKaKX5adT3Xh0ASuem5q
+         1u+Mb5kz+wdXVCJqalRKJwqj76cXx+J2gWoW9IplsgeZ6pFC1HCfvUFCP7CTEREDsl1w
+         dsIg==
+X-Forwarded-Encrypted: i=1; AJvYcCU9qg1+D0gypjM9U3ITCExpHPNuxXSEg6yo6As38auV1h4QBNW6XHVlq0/MCVWpy93GxSBAX+ft6BVDlwlEVQOrv4TkiUJd1Iil
+X-Gm-Message-State: AOJu0Yz7kIdGLBAobwD2yoGdzE6cNvHVzPRoxb8oQnnKFzpDTcZaWO/l
+	pozYnL2azxWWkTZ1kjDXZlHIJWr2BixYh5jh1a91S6ncB/9ZIPZeO/pJ87stURzqzvZf1PlQO39
+	7Q6Pm3wQCBIWk+ab4DbL2Rc4zmlK/RhQkSuVH
+X-Google-Smtp-Source: AGHT+IHY6CT7bVLUITQoLpctqBSsq7nAekyPp9XNaT4BIubHaz9rpg4bjl/zXDzr3cCzpfHEsPfJO1FNnKV5xNnneeU=
+X-Received: by 2002:a50:9555:0:b0:563:c0e0:667c with SMTP id
+ v21-20020a509555000000b00563c0e0667cmr221141eda.0.1708331773467; Mon, 19 Feb
+ 2024 00:36:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZdKze80oFj0PRkkZ@pengutronix.de>
+References: <20240219061008.1761102-1-pumahsu@google.com> <20240219061008.1761102-4-pumahsu@google.com>
+ <2024021951-coping-ferment-2023@gregkh>
+In-Reply-To: <2024021951-coping-ferment-2023@gregkh>
+From: Puma Hsu <pumahsu@google.com>
+Date: Mon, 19 Feb 2024 16:35:36 +0800
+Message-ID: <CAGCq0LasRTLQA59g+kPekWb5ZKzeHSX9c4C8LCsHwFNfT0JHTw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] MAINTAINERS: Add maintainer for Google USB XHCI driver
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: mathias.nyman@intel.com, Thinh.Nguyen@synopsys.com, badhri@google.com, 
+	royluo@google.com, howardyen@google.com, albertccwang@google.com, 
+	raychi@google.com, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 19, 2024 at 02:48:43AM +0100, Michael Grzeschik wrote:
-> On Sat, Feb 17, 2024 at 04:59:28PM +0100, Greg Kroah-Hartman wrote:
-> > On Fri, Feb 02, 2024 at 01:05:12AM +0100, Michael Grzeschik wrote:
-> > > Add the newly introduced 9pfs transport gadget interface with an new
-> > > multi composed gadget together with acm and eem.
-> > > 
-> > > When using this legacy module, it is also possible to
-> > > mount the 9PFS usb dir as root filesystem. Just follow the
-> > > instrucitons from Documentation/filesystems/9p.rst
-> > 
-> > Why are we adding new "legacy" gadgets?  What's wrong with the "correct"
-> > api instead?  You need a lot of justification here to add something to
-> > an api we want to one day just delete.
-> 
-> Without the legacy gadget there is no real solution to mount
-> the 9pfs via the gadget as rootfs. The "correct" api is configfs
-> which will need the user to have some filesystem to mount it to.
+On Mon, Feb 19, 2024 at 2:31=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Mon, Feb 19, 2024 at 02:10:08PM +0800, Puma Hsu wrote:
+> > Add Google USB XHCI driver and maintainer.
+> >
+> > Signed-off-by: Puma Hsu <pumahsu@google.com>
+> > ---
+> >  MAINTAINERS | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 960512bec428..dc0e32a3c250 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -9081,6 +9081,12 @@ F:     arch/arm64/boot/dts/exynos/google/
+> >  F:   drivers/clk/samsung/clk-gs101.c
+> >  F:   include/dt-bindings/clock/google,gs101.h
+> >
+> > +GOOGLE USB XHCI DRIVER
+> > +M:   Puma Hsu <pumahsu@google.com>
+> > +L:   linux-usb@vger.kernel.org
+> > +S:   Maintained
+> > +F:   drivers/usb/host/xhci-goog.c
+>
+> You are not paid to look after this?  That sounds odd, can you work with
+> your managers to do this, otherwise this is going to be tough to do over
+> time, right?
+>
+> thanks,
+>
+> greg k-h
 
-That's what your initramfs is for.  Why can't you just use that?
-
-> There is the relatively new concept of bootconfig which sounds
-> promising to describe an complete configfs tree from system boot.
-
-Great, but until that happens, again, just use initramfs.
-
-> However this is some future talk for now, so we would like to
-> stick with the legacy setup to be able to mount the 9pfs rootfs.
-
-I'd prefer to NOT add new legacy gadget drivers, and do everything
-possible to delete them all from the tree "soon".
-
-> > > +/*
-> > > + * Gadget usb9pfs only needs two bulk endpoints, and will use the usb9pfs usb
-> > > + * transport to mount host filesystem via usb gadget. This driver will
-> > > + * also add one ACM and NCM interface.
-> > 
-> > Why "also"?  What are those interfaces going to be used for and what do
-> > they have to do with 9pfs?
-> 
-> They are not necessary to be used with 9pfs. But since we introduce an
-> new legacy module which is fully claiming the UDC, it would make sense
-> to leave the other endpoints unavailable but instead add some common
-> interfaces like ecm and acm.
-
-But if no one needs/wants them, why make this complex?  Again, configfs
-can handle the composition of this if you need it, which is why that
-"new" interface was created.
-
-thanks,
-
-greg k-h
+I misunderstand the definitions between Supported and Maintained,
+will update to Supported in next revision. Thanks for advising.
 
