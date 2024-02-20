@@ -1,121 +1,96 @@
-Return-Path: <linux-usb+bounces-6803-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6804-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C92AB85C318
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 18:56:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 748A285C328
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 18:58:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A706B249F2
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 17:56:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98F5E1C22050
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 17:58:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82A3B77F1B;
-	Tue, 20 Feb 2024 17:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17B3778685;
+	Tue, 20 Feb 2024 17:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Ab81jJE7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s9tOlNph"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFFE776C9C
-	for <linux-usb@vger.kernel.org>; Tue, 20 Feb 2024 17:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8853476C6C;
+	Tue, 20 Feb 2024 17:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708451751; cv=none; b=cSGF3UBVUpmAt7mOG+ePV9BHV/vxClKcI/YOl0iN28VkME3xIOIpYICQMZTyYGtc5JC7xWqhTkWc3W6J5QGkgOPPkj7x/8bAYPJDxTlajgEnMLpo+N+tuKcjwpjeuRHGP+s6aPRfbZsd2RYoclbcNBU30rbYWjr5NPf2X1nefbc=
+	t=1708451869; cv=none; b=MQjsU70ilr3dLnhmgHvI28bpNB/iCJ4+WiBhbYRPvilAmn8lF2NKh8b5kd8x1Z8TLxk1d3YDsofcmtS0YmrnfB5a63G6BK/r3dh4ESO/bCDiAJ4BR5+/TjKWfbJj2KHQdgfQrkhPwKh68dJaGfT4gAqVMEm/RQYaKSBCZ4SAyqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708451751; c=relaxed/simple;
-	bh=hqb1KpK8idTkVHw05D9DaOecFdA77V8n0hYYGqZ4o2Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=qsUQN1CTyB76sfwuVnsClpyfwuq3bxvBdZAu2LMlbLLv1lH8sO7+je3eXjw3R3syBl502OcfdeRJhThz+IHbaJMagjB58082FMOl8caPHyXQ+4v3CWSFGcg8pR0yBOckCJl+zGqTv8YSETXlJqyiQD5YWmI0CCL2pTl0fvJYPY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Ab81jJE7; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-55c2cf644f3so7811136a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 20 Feb 2024 09:55:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1708451747; x=1709056547; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cs7a6JxSri8UPMBfIFAC6zzBgd9E4B30piovcQly+DY=;
-        b=Ab81jJE7kpciDnJ5EwJA/C9473hy/PJMieFJXVoELmOQlHN1kdZlXBvBYeg2yMEo52
-         g+epCK1CX+nDxaDfjoUwaKrsYvPUvFx4APPM2hylpTX4ZmOcQrSh+a49/xP4JllLSA48
-         zGk7z6o9SYtKONS0sKuhAc8IB/5+tLtazoVno=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708451747; x=1709056547;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cs7a6JxSri8UPMBfIFAC6zzBgd9E4B30piovcQly+DY=;
-        b=GulXhI+XLxnUjAnWk0O9N/mDpIqoFsahOMG8rk8KZYuyVfk02rgi3GP+D2IYOq3Y5Y
-         nWat42vnV5j/ce98A7nP9D7jnc3YfJAND+kAEqQ8Tht2ktbT7coWKQoxLBiwN267TZ6n
-         dvGYIys2E26MJDrm6xZ/QDJjp4fPPJAZpt9pRr99eRJG2rktCOZCU3akejyiHKop5bhR
-         qXQgTBfwZJFez/obyIONr9RF/6sCeIU8u2ROeeeFod23dC+0qYWRItJa1CSNHLPEQlWh
-         zKjUk2UA8NRJK0U2hRU0Sv4cLmCwO4Iy4gnWBojq443Oc+dbq4utD1mr/xC3dJR2fMsx
-         n5sQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUPK40YWAf6BtjRqHVgLQZi1xemR6kOZPvN0zZwomqbeHo91Dvb7AEQ71jwsQXdsczadheh4aYeNyZmi+K3Vds+A/Pl15nAFl2F
-X-Gm-Message-State: AOJu0YzXLslCbpqhndd/xX/1LzrD+0avCnIgChtPfAd+q+yVTff1zcBp
-	czh+T7knkVKVUQIvpKEbEPyBbTxBaVwqcywewb18TkYdF5LmFFmov0+3+Nf7TFtTdSo26PnKS8x
-	XAq9m/g==
-X-Google-Smtp-Source: AGHT+IHuMHKc4F5eEF8DkkYQelT3hd1G8n+cvSa289PJ/U1JsySfexaC341ijHmfbSrptR41xaHWnQ==
-X-Received: by 2002:a17:906:1cc5:b0:a3e:98ee:765d with SMTP id i5-20020a1709061cc500b00a3e98ee765dmr3902836ejh.60.1708451747153;
-        Tue, 20 Feb 2024 09:55:47 -0800 (PST)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id s14-20020a17090699ce00b00a3f218aed03sm189199ejn.120.2024.02.20.09.55.46
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Feb 2024 09:55:47 -0800 (PST)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-563e6131140so5488461a12.2
-        for <linux-usb@vger.kernel.org>; Tue, 20 Feb 2024 09:55:46 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWqI77gnrx20yvV4/tQAMymVVpNR8KpSFBJDVh9ZAairHczUCTqvZMkGyM5KLRTtDysT5RJmdvV4Q5vdGPWu4YGR4PjJ0vTGHlh
-X-Received: by 2002:aa7:d393:0:b0:564:3d68:55f5 with SMTP id
- x19-20020aa7d393000000b005643d6855f5mr5518556edq.5.1708451746591; Tue, 20 Feb
- 2024 09:55:46 -0800 (PST)
+	s=arc-20240116; t=1708451869; c=relaxed/simple;
+	bh=niU0e3YYXa8nKs0bptXFagevwIy6zWw8W8j5BfvgpWU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CFgVSJ0ENg6CLaw427fgWVUBHOPyXoeOv0yDsEhkyNAP9Chuz2PobD8oCGpY6fddoxecQpYxeRhdIwrcK2SgAGjqCrAYSzpWT0M8SvAMdCtgVtW3ISZgts74e9ufE0ihmkt1NB1OemMkWv9+EhNeyVkknKv6eIkmfaBzv6JAg5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s9tOlNph; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04FA2C433C7;
+	Tue, 20 Feb 2024 17:57:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708451869;
+	bh=niU0e3YYXa8nKs0bptXFagevwIy6zWw8W8j5BfvgpWU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=s9tOlNphyB1KcCqAiLhfn9eQVOuKTO8p3H1b6SGtA+rlMHnesuq43aSDVkJh8rtZ8
+	 AE1+ojcA7o4Re9rRlk/RLxrxXXvrHx5QbE+1ieTFuLH94DGZHoUoVIBLPSBC60kEGm
+	 RVe3V+C9vMavyk+WkaO+81u4XIVycySNquJWDiXN6i8fuc8DlaTRrmwZD3Ej0hw4uG
+	 Ln2VvBuFxQEkRABSENvL5rW/M8ZZzsS2cjrgryCDk1/czcyQQ359JWoqNcnL/bEvkS
+	 UpU+4zwmbeyPtWaiBIJnYO14Sc4o3/n+cHCzggJJ7oMCxxLn50QYnAjyZtE9Uq4MW6
+	 J6MngogkXnV+Q==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH v2 0/4] arm64: dts: qcom: qrb2210-rb1: enable Type-C support
+Date: Tue, 20 Feb 2024 11:57:39 -0600
+Message-ID: <170845186085.159943.14965896524132330811.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240202-pm4125-typec-v2-0-12771d85700d@linaro.org>
+References: <20240202-pm4125-typec-v2-0-12771d85700d@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130091300.2968534-1-tj@kernel.org> <20240130091300.2968534-6-tj@kernel.org>
- <bckroyio6l2nt54refuord4pm6mqylt3adx6z2bg6iczxkbnyk@bb5447rqahj5>
-In-Reply-To: <bckroyio6l2nt54refuord4pm6mqylt3adx6z2bg6iczxkbnyk@bb5447rqahj5>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 20 Feb 2024 09:55:30 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whqae-+7Q7wbtnEj7YmR8vsx6skTj6j-srV2Fz7cBZ2ag@mail.gmail.com>
-Message-ID: <CAHk-=whqae-+7Q7wbtnEj7YmR8vsx6skTj6j-srV2Fz7cBZ2ag@mail.gmail.com>
-Subject: Re: [PATCH 5/8] usb: core: hcd: Convert from tasklet to BH workqueue
-To: Tejun Heo <tj@kernel.org>, torvalds@linux-foundation.org, mpatocka@redhat.com, 
-	linux-kernel@vger.kernel.org, dm-devel@lists.linux.dev, msnitzer@redhat.com, 
-	ignat@cloudflare.com, damien.lemoal@wdc.com, bob.liu@oracle.com, 
-	houtao1@huawei.com, peterz@infradead.org, mingo@kernel.org, 
-	netdev@vger.kernel.org, allen.lkml@gmail.com, kernel-team@meta.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, 20 Feb 2024 at 09:25, Davidlohr Bueso <dave@stgolabs.net> wrote:
->
-> In the past this tasklet removal was held up by Mauro's device not properly
-> streaming - hopefully this no longer the case. Cc'ing.
->
-> https://lore.kernel.org/all/20180216170450.yl5owfphuvltstnt@breakpoint.cc/
 
-Oh, lovely - an actual use-case where the old tasklet code has known
-requirements.
+On Fri, 02 Feb 2024 01:55:07 +0200, Dmitry Baryshkov wrote:
+> Reuse Type-C support implemented for the PMI632 PMIC (found on Qualcomm
+> Robotics RB2 platform) and implement Type-C handling for the Qualcomm
+> Robotics RB1 platform.
+> 
+> Dependencies: [1]
+> 
+> [1] https://lore.kernel.org/linux-arm-msm/20240130-pmi632-typec-v3-0-b05fe44f0a51@linaro.org/
+> 
+> [...]
 
-Mauro - the BH workqueue should provide the same kind of latency as
-the tasklets, and it would be good to validate early that yes, this
-workqueue conversion works well in practice. Since you have an actual
-real-life test-case, could you give it a try?
+Applied, thanks!
 
-You can find the work in
+[3/4] arm64: dts: qcom: pm4125: define USB-C related blocks
+      commit: 46ea59235c4f00bbca6955cf05d7cc0fccde7a64
+[4/4] arm64: dts: qcom: qrb2210-rb1: enable USB-C port handling
+      (no commit info)
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git
-refs/heads/for-6.9-bh-conversions
-
-although it's possible that Tejun has a newer version in some other
-branch. Tejun - maybe point Mauro at something he can try out if you
-have updated the conversion since?
-
-                Linus
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
