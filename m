@@ -1,167 +1,249 @@
-Return-Path: <linux-usb+bounces-6756-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6757-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6FE885B1FF
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 05:51:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F369E85B3E5
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 08:24:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6115F283D2B
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 04:51:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49072B20D08
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 07:24:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F0B456777;
-	Tue, 20 Feb 2024 04:50:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 413235A795;
+	Tue, 20 Feb 2024 07:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="oLI2nsWA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gnIGnxia"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4810456759
-	for <linux-usb@vger.kernel.org>; Tue, 20 Feb 2024 04:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF815A780;
+	Tue, 20 Feb 2024 07:24:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708404634; cv=none; b=Iz731nSCfN882b1gfFt388PtGUEPnKwswCJ0+thZdRyuRU+vTzLgqCfTX58/rH/IjEubr74IbwCln9Th3/xzDyJUWnNPLu4ZEmvzFCVQv21XajvFVXUYp1BNxI2qFTtzP4FMLdhDwG9VibsWHyJQ0wCkfJtxr6UwHf/KvEdRwFE=
+	t=1708413867; cv=none; b=EDih0hlGYmJZWgocav8va7Eo9tISs0UW3bzwwzDBNQR6jlbtgS/71m45pqKupMGgl2Qttn6s8yL8V9fsB/rtpwPIwoL1Kqk/yFkwXU4jerxa7X9d3mrO7NyNFXXe8xw+XHBPr19sbeD3lEBagFUOMrIs1zYGBlcEGZ+0TSmE9Mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708404634; c=relaxed/simple;
-	bh=gnYTVEhLa2UI/BXFUj5DRblz/ShatFGmeSySyZRlwEs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PyRL4dGxfN4HNgvR6M/4Tf00nM/Kuy+BR2GlBkNCZiT734ilSeriO51S9OU7c/L+Y+CneEZJDq//4rxSbwfnDSQ3v4Bio5BedKiL/NdHc8r8T+8JZP2VJIjuFw09NPbQAjfk6ujVD7q/GDb3NCr8eVxv+AgXEDUhKXnb5DRpltU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=oLI2nsWA; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-563f675be29so4267634a12.0
-        for <linux-usb@vger.kernel.org>; Mon, 19 Feb 2024 20:49:52 -0800 (PST)
+	s=arc-20240116; t=1708413867; c=relaxed/simple;
+	bh=EeE4AlogZWmof4+1Rdj/5hdch7Ym4f/hZzssGvkV88Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Zo10cRXawXYqxkDJ36Ddz3j5iEXGTVcuGicVNA1q2v+FAt0kJXjM9Y0HNSWxp4nhMqUIc6IoLVeKGHN801veRr27mxsH0GMeq7QEApP78qzo4RHwLAmqudAKu+qyHWfCQSwl013MHg1s2B1qyilEg/PaSCJfAKXLXzwFqvbZw/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gnIGnxia; arc=none smtp.client-ip=209.85.214.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-1d7354ba334so46559955ad.1;
+        Mon, 19 Feb 2024 23:24:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708404589; x=1709009389; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JBhO9GN51pgFt/DHFo2a0IcTSs/s3/od7X4R5TK/fL0=;
-        b=oLI2nsWAk2u4tJZ11LOn1pGymu9wIL0kYfzpzXPEnpuHM78lZl0YjezwVMXHvNRk/9
-         fg9BDdiDVh7pv9szb3DmBCrAXqD7FFwJ+dVKoJN3pnqVBi9koZt6d26mFd7AxFOLpohe
-         PxrbZdbAHY8gVSettOPYJiS2Uavxfo1pxYrq0=
+        d=gmail.com; s=20230601; t=1708413865; x=1709018665; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RwZPEQqi5vRm0n5e0HWhps0mr3zdrb62kOUW5wKsWDs=;
+        b=gnIGnxia1XlDhsMD6rrZoqPNLmX9b2Vi5a+rQXXbqunu3VEZq/ucw3WQr5GLWHj5IY
+         Cc8CgEJ3Cpgfx3qR1N0pA84gFf07QFx6L4Ej20EULVJIQ0yQv04PCOwtLu7ZWxL+Gxym
+         dMn+XhAFqno6y3I/UULr37FIRscoyo9tLXf6pWSMYovpwP3spX0BfUgRfQIAPjp277/3
+         x3znMU/PVN/QmJ6I3MAwDkzWvKNz3lNDgG4VyI3MgdFUFU59UtFeIcnGh9pGOCpairKX
+         YDDw2oWE3P3k7GjSUlEi6U6wuVUhWokD1jS1uGPTxmrk6nKIWD1NtNnJ6++J1aAYyNIL
+         l1nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708404589; x=1709009389;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JBhO9GN51pgFt/DHFo2a0IcTSs/s3/od7X4R5TK/fL0=;
-        b=g1c6gnn8AdwDBf0yDiCBOrcXWFeyDWr+pAzDFRD0C7DukFfFpze7pZHau/MQis6pFt
-         agpeLyUSbJu0NpPrEJLUd25vqlaFE27MkiNZfidc80PkCtt2HitBLloIiGF7liDfeTUh
-         tfINAM8Hq+hd/w8MtdpsmLbINyzIaBA9f90Xu74U1gLDMWW3pPHaCkXxD+jOFt/LSoFP
-         h6HEpET5dLwlHkHdYLtiN/PEzpqKkerpqs8cpWbAr3Z9JoaGXcWfnkFCukFsmC+aQPIj
-         GHMuu6gm8Q1HF7qLqstYBt+sbAuEuCPt6G0u5mFN1/kyCnF4cyRDFmFX7suJDiiwOuCS
-         vClw==
-X-Forwarded-Encrypted: i=1; AJvYcCWvr3AjqZ15iK0oKhDEaDp8AQnVteDNS1oejNNMAAbUo22rcYVQpIQaOW763PghKCBQw3z1BN2HA26IvtfVOCqKsQXDKwWaVfVI
-X-Gm-Message-State: AOJu0YzuLIUwlb/JGiZe55zCcBbY0Y5pmKhSh/Y/lFTNxEsYoELRTN3o
-	s4E5Bmxis/Kje39xB0mc0PwLSr9CB/4LHUyh4jTMO8W49iWoaUUGITyixEDSkBVzgEof/iPmKbb
-	YyA==
-X-Google-Smtp-Source: AGHT+IF4Kvw+onQowCYe9W5SeFCRpsMoEjXvkl73BuNm+fVx/UWs1zMUiIX2PuW7v/FcfU9OFPIllQ==
-X-Received: by 2002:a05:6402:234b:b0:563:c54e:f1 with SMTP id r11-20020a056402234b00b00563c54e00f1mr11488231eda.2.1708404589798;
-        Mon, 19 Feb 2024 20:49:49 -0800 (PST)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id y24-20020aa7ccd8000000b00564063a3391sm3296627edt.4.2024.02.19.20.49.48
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Feb 2024 20:49:48 -0800 (PST)
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-33d6f1f17e5so36813f8f.3
-        for <linux-usb@vger.kernel.org>; Mon, 19 Feb 2024 20:49:48 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUKFl/yXkX13F9LlGGIskinZ2/w2Bg+zAV0LpdlZEqjmGUHdBc4WWL/8zaaaJ3HMq2sNVD3gaslgL5TUccLuJdhDDtYNczKVQfB
-X-Received: by 2002:a5d:44cd:0:b0:33d:3893:838a with SMTP id
- z13-20020a5d44cd000000b0033d3893838amr5261433wrr.56.1708404587902; Mon, 19
- Feb 2024 20:49:47 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708413865; x=1709018665;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RwZPEQqi5vRm0n5e0HWhps0mr3zdrb62kOUW5wKsWDs=;
+        b=iWdz6m+pN9XVZNCXNK9MBHDUEKXbhY/pdRsDsOjgbM66yyv3ZralVUYzUeek1tw1cX
+         wUH5IPKUyEtHLET9dz8zw2wqp2eDkqJH17dFc+awi1WNTyZ3tGcdHBzEMOA3y/K1XzNi
+         fEeIGOfleMFlRgQjeTD1UtvaCoteOaWFAzyg5w8/v25IkRmqpsKwhWoTib+MGYBpVHOn
+         Y5SwgM1QfZA5/zY3i1xwb3xhGAcLDmguphTSa6YN0rQYEEKLko2BZ0wtVxKCHC4EH+4V
+         TrLZ1/67MejyKSq1jnHdwiI9jeh43DC+r3/c45rnNmcaUUY5r7Ce4rw8eEAow0kevLEF
+         kHGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVw6f2swiZWReJ4tIfK1KnJFFgaA9KuKUETKZhADcjMCiJpsVFPItntZ5q1wHU8yD6Yj4dzUW3IOqEdx0Leyic9GJnhobusaeTN/j4R
+X-Gm-Message-State: AOJu0Yzfz6P+zuIYK/rOjEeHBBfQ0ozyzk0M5tcoXq+kalbtx/ew1Pbz
+	sSuTexJZCKZ7NQsf4geo4o8rvs3kuzWYZ+9NUFFOfQkrE4R2S34D
+X-Google-Smtp-Source: AGHT+IFDZ1Vn5gvkuFy1Y9kEprmwgAErRRmtPW/kCryRk5tmCB/kjftganFKTAr9l4OZRYwMhiRmUw==
+X-Received: by 2002:a17:903:11cd:b0:1db:82e3:8d7f with SMTP id q13-20020a17090311cd00b001db82e38d7fmr19448176plh.16.1708413864548;
+        Mon, 19 Feb 2024 23:24:24 -0800 (PST)
+Received: from ubuntu.localdomain ([137.220.142.132])
+        by smtp.gmail.com with ESMTPSA id h7-20020a170902748700b001d9ef367c85sm5510053pll.104.2024.02.19.23.24.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Feb 2024 23:24:24 -0800 (PST)
+From: buckzhangwh@gmail.com
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	weihui zhang <buckzhangwh@gmail.com>
+Subject: [PATCH] drivers:usb:disable usb hub&port async suspend to avoid block system PM
+Date: Mon, 19 Feb 2024 23:24:13 -0800
+Message-Id: <20240220072413.4026-1-buckzhangwh@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <000000000000cb40790611bbcffd@google.com> <98b81fbf-4905-4b45-a8c0-33e7399ef84a@collabora.com>
-In-Reply-To: <98b81fbf-4905-4b45-a8c0-33e7399ef84a@collabora.com>
-From: Tomasz Figa <tfiga@chromium.org>
-Date: Tue, 20 Feb 2024 13:49:30 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5Cs-eeHsCZ6VWrzChTJqd4FSqBS4z6ncd8tPQPNMdN68Q@mail.gmail.com>
-Message-ID: <CAAFQd5Cs-eeHsCZ6VWrzChTJqd4FSqBS4z6ncd8tPQPNMdN68Q@mail.gmail.com>
-Subject: Re: [syzbot] [usb?] [media?] possible deadlock in vb2_video_unregister_device
-To: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc: syzbot <syzbot+3b1d4b3d5f7a358bf9a9@syzkaller.appspotmail.com>, hdanton@sina.com, 
-	hverkuil-cisco@xs4all.nl, hverkuil@xs4all.nl, 
-	laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-usb@vger.kernel.org, 
-	m.szyprowski@samsung.com, mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 20, 2024 at 12:49=E2=80=AFAM Benjamin Gaignard
-<benjamin.gaignard@collabora.com> wrote:
->
->
-> Le 19/02/2024 =C3=A0 14:10, syzbot a =C3=A9crit :
-> > syzbot has bisected this issue to:
-> >
-> > commit c838530d230bc638d79b78737fc4488ffc28c1ee
-> > Author: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> > Date:   Thu Nov 9 16:34:59 2023 +0000
-> >
-> >      media: media videobuf2: Be more flexible on the number of queue st=
-ored buffers
-> >
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D166dc872=
-180000
-> > start commit:   b401b621758e Linux 6.8-rc5
-> > git tree:       upstream
-> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D156dc872=
-180000
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D116dc872180=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Deff9f3183d0=
-a20dd
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D3b1d4b3d5f7a3=
-58bf9a9
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D13ffaae81=
-80000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D13ef909c180=
-000
-> >
-> > Reported-by: syzbot+3b1d4b3d5f7a358bf9a9@syzkaller.appspotmail.com
-> > Fixes: c838530d230b ("media: media videobuf2: Be more flexible on the n=
-umber of queue stored buffers")
-> >
-> > For information about bisection process see: https://goo.gl/tpsmEJ#bise=
-ction
->
-> Hans,
-> I think the issue occur because of this part of the commit:
-> @@ -1264,7 +1264,7 @@ void vb2_video_unregister_device(struct video_devic=
-e *vdev)
->           */
->          get_device(&vdev->dev);
->          video_unregister_device(vdev);
-> -       if (vdev->queue && vdev->queue->owner) {
-> +       if (vdev->queue) {
->                  struct mutex *lock =3D vdev->queue->lock ?
->                          vdev->queue->lock : vdev->lock;
->
-> but I wonder if the correction shouldn't be to remove usbtv->vb2q_lock mu=
-tex in usbtv_video_free().
->
-> Any opinion ?
+From: weihui zhang <buckzhangwh@gmail.com>
 
-That is probably what triggered the failure detected by syzbot, but I
-don't think we've ever had a guarantee that owner is NULL in that
-code.
+many phones are crashed and unable to wake up by power key.
+We analyzed more than ten kernel-dumps, 
+the common was  that system were all blocked by usb.
+the phone doesn't crash again,after we disable usb hub&port async suspend.
 
-Looking at the uvc driver [1], it doesn't seem to need any special
-locking there (after all the vb2 code acquires them).  (It also
-doesn't have the custom clean-up code that the usbtv driver has in
-usbtv_stop(), but that's another story). So maybe all we need to fix
-it is removing the mutex_lock/unlock() calls?
+here is one kernel-dump analysis case:
+task 446 & 4511 &365 state are Uninterrupt
+task 446 dpm_wait_for_superior then schedule out.
 
-[1] https://elixir.bootlin.com/linux/v6.8-rc4/source/drivers/media/usb/uvc/=
-uvc_driver.c#L1906
+PID: 446  TASK: ffffff81f3e9cb00 CPU: 4 COMMAND: "charge"
 
-Best,
-Tomasz
+ #0 [ffffffc015a0b9a0] __switch_to at ffffffc010088b54
+
+ #1 [ffffffc015a0b9f0] __schedule at ffffffc010f7ef2c
+
+ #2 [ffffffc015a0ba40] schedule at ffffffc010f7f3a4
+
+ #3 [ffffffc015a0baa0] async_synchronize_cookie_domain at 
+
+ #4 [ffffffc015a0bb00] async_synchronize_full at ffffffc010131e0c
+
+ #5 [ffffffc015a0bb10] dpm_resume at ffffffc0107ec408
+
+ #6 [ffffffc015a0bb70] dpm_resume_end at ffffffc0107ed0e8
+
+ #7 [ffffffc015a0bbb0] suspend_devices_and_enter at ffffffc0101776d8
+
+ #8 [ffffffc015a0bbf0] enter_state at ffffffc010177e70
+
+ #9 [ffffffc015a0bc20] pm_suspend at ffffffc010177d5c
+
+PID: 4511 TASK: ffffff8153b0e740 CPU: 6 COMMAND: "kworker/u16:11"
+
+ #0 [ffffffc01bc9baa0] __switch_to at ffffffc01010293c
+
+ #1 [ffffffc01bc9bb10] __schedule at ffffffc0116b0008
+
+ #2 [ffffffc01bc9bb70] schedule at ffffffc0116b0794
+
+ #3 [ffffffc01bc9bbe0] schedule_timeout at ffffffc0116b6c2c
+
+ #4 [ffffffc01bc9bc40] wait_for_common at ffffffc0116b198c
+
+ #5 [ffffffc01bc9bca0] dpm_wait_for_superior at ffffffc010b999e8  
+
+ #6 [ffffffc01bc9bce0] device_resume at ffffffc010b9d804 
+//x0(struct device)= ffffff81f32a3808
+
+ #7 [ffffffc01bc9bd10] async_resume at ffffffc010b9d6ec
+
+ #8 [ffffffc01bc9bd40] async_run_entry_fn at ffffffc0101e238c
+
+ #9 [ffffffc01bc9bdb0] process_one_work at ffffffc0101d00e0
+
+crash_arm64> struct device ffffff81f32a3808 -x
+
+struct device {
+
+  kobj = {
+
+    name = 0xffffff81f15c6d80 "usb1-port1",
+
+    entry = {
+
+      next = 0xffffff81f32a6018,
+
+      prev = 0xffffff81e4103838
+
+    },
+ type = 0xffffffc0124102b8 <usb_port_device_type>,
+
+  bus = 0x0,
+
+  driver = 0xffffffc0124102e8 <usb_port_driver>,
+
+    async_suspend = 0x1,
+  ...........
+
+PID: 365 TASK: ffffff81f3bf6900 CPU: 0 COMMAND: "kworker/u16:5"
+
+ #0 [ffffffc0158dbac0] __switch_to at ffffffc010088b54
+
+ #1 [ffffffc0158dbb10] __schedule at ffffffc010f7ef2c
+
+ #2 [ffffffc0158dbb60] schedule at ffffffc010f7f3a4
+
+ #3 [ffffffc0158dbbe0] schedule_timeout at ffffffc010f83fd8
+
+ #4 [ffffffc0158dbc40] wait_for_common at ffffffc010f80600
+
+ #5 [ffffffc0158dbc90] wait_for_completion at ffffffc010f8051c
+
+ #6 [ffffffc0158dbcb0] dpm_wait_for_superior at ffffffc0107eee00
+
+ #7 [ffffffc0158dbd00] device_resume at ffffffc0107ec6a8 
+//x0(struct device) = 0xffffff81ee1b3030
+
+ #8 [ffffffc0158dbd40] async_resume at ffffffc0107ec588
+
+ #9 [ffffffc0158dbd60] async_run_entry_fn at ffffffc010131c60
+
+ crash_arm64> struct device ffffff81ee1b3030 -x
+
+struct device {
+
+  kobj = {
+
+    name = 0xffffff81f1fc1500 "1-0:1.0",
+
+	  type = 0xffffffc011b62a38 <usb_if_device_type>,
+ ............
+
+Signed-off-by: weihui zhang <buckzhangwh@gmail.com>
+---
+ drivers/usb/core/hub.c     | 2 +-
+ drivers/usb/core/message.c | 2 +-
+ drivers/usb/core/port.c    | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index e38a4124f..de74f70e5 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2602,7 +2602,7 @@ int usb_new_device(struct usb_device *udev)
+ 		add_device_randomness(udev->manufacturer,
+ 				      strlen(udev->manufacturer));
+ 
+-	device_enable_async_suspend(&udev->dev);
++	device_disable_async_suspend(&udev->dev);
+ 
+ 	/* check whether the hub or firmware marks this port as non-removable */
+ 	set_usb_port_removable(udev);
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index 077dfe48d..944f01aa7 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -2203,7 +2203,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
+ 			"adding %s (config #%d, interface %d)\n",
+ 			dev_name(&intf->dev), configuration,
+ 			intf->cur_altsetting->desc.bInterfaceNumber);
+-		device_enable_async_suspend(&intf->dev);
++		device_disable_async_suspend(&intf->dev);
+ 		ret = device_add(&intf->dev);
+ 		if (ret != 0) {
+ 			dev_err(&dev->dev, "device_add(%s) --> %d\n",
+diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+index c628c1abc..97696c415 100644
+--- a/drivers/usb/core/port.c
++++ b/drivers/usb/core/port.c
+@@ -760,7 +760,7 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
+ 	pm_runtime_set_active(&port_dev->dev);
+ 	pm_runtime_get_noresume(&port_dev->dev);
+ 	pm_runtime_enable(&port_dev->dev);
+-	device_enable_async_suspend(&port_dev->dev);
++	device_disable_async_suspend(&port_dev->dev);
+ 
+ 	/*
+ 	 * Keep hidden the ability to enable port-poweroff if the hub
+-- 
+2.17.1
+
 
