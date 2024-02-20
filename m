@@ -1,123 +1,114 @@
-Return-Path: <linux-usb+bounces-6813-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6814-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F1FD85CAE0
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 23:41:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9EC985CBF0
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 00:20:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C01961C21A25
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 22:41:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F04728195A
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 23:19:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B826153BF2;
-	Tue, 20 Feb 2024 22:40:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D60B154BF1;
+	Tue, 20 Feb 2024 23:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AJ8roU4E"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="asdJXhIH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7736415442C
-	for <linux-usb@vger.kernel.org>; Tue, 20 Feb 2024 22:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893AB76C99;
+	Tue, 20 Feb 2024 23:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708468847; cv=none; b=FQOrDyJ1MqY7Lv4lvH6DwbH2YN+SsYluSiCOG3Lji2BP1q2MKS23H2MwrsEjFb+S0psuEpjOmfmOlZhslxmSXhj6qtqaFjMsilRfzab4iBMyH1P4eHHJKPnfYmBN5zk3R6rXPi/96raQY77RgMSFNGQ+WlmYrxkaqXTkPWR4GWM=
+	t=1708471191; cv=none; b=TpzspQV1F+6FL3wgNEDXYCQciO0qyE4YG5NWIzM9K7EP+WwcXUhGVrTrTa/YR+Gk4gwtUEnBb3Fvv47+qyhZiqKRj8bh/RpSaCgohEmT5eSva2UAi/7VmN0LSLhBV9bOf7SHYnGhsNHkpojkmT2UgauXH/SmZt9+aBPvnCj9gxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708468847; c=relaxed/simple;
-	bh=qqa0KvriwB1v8Bj7pTBYPvZ+DPDnOmT8Yxi6uMiKXwY=;
+	s=arc-20240116; t=1708471191; c=relaxed/simple;
+	bh=j4AZpUs7iNUNOw3+U2CKct0moYYUgG7dyRsvoaQkXgA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HaW+LoA+Zurjlt0m1XABWPwDI2MdThMpySuE5xPtlQtkWxB0ijG/Xi3L0077ucyHFd3QfxekNm96AB5AZ38EjYiQdusyTSfXMbvEw2SDNJnE48kQoF/F7E8VQCU6eWxmc4HZ4/zHRYlqnFhNIbN1lyHQROf8priPcQIx7nPNChw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AJ8roU4E; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-607f94d0b7cso49932647b3.3
-        for <linux-usb@vger.kernel.org>; Tue, 20 Feb 2024 14:40:44 -0800 (PST)
+	 To:Cc:Content-Type; b=MTawO+6P+FcvBR9La3BpMZvSuRFzICQUBFrt+b/ryagziKTAS1Ao81QnR8byC9dNvt8vpXlWuVNFg6HNOo+rWCSpy85FmEz4yHFyBuSwwQoA/JhyvzK2idpQo/GTzpKhRQyMdkzB13kSLNcPqLVYdj9zpooFQERITwWInO+UCPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=asdJXhIH; arc=none smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-68f74007267so5838306d6.0;
+        Tue, 20 Feb 2024 15:19:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708468843; x=1709073643; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MmwuqZ+SRwcH0WhEWSC1fUHglZZfWWDUa+m2OJY8rik=;
-        b=AJ8roU4EID6WpClvCwPxjcgXaCaWQnxpcmKDB4L147zDSKMdn1ItToPD/hISY1rbt5
-         FTulxBHFMkmZu24v6Sw1IyLFvNF1f2xDxw18vhiKeH6XtxPjzhSKCKbAnGckJvEB3Xfi
-         1SWD2XrbZXptZKcgZpMOePkmu9F2jt0hqEk3uFyVtTxpwAOE8j4YQ1YK/y+DPjC0A7Z8
-         PesWtTZ0yN5RU+bh86bpOyAZhKqdUuQiPIt5eBoSf5uYloDe7wxribjFCZlW6VboXnxD
-         37BCx1kjTZsolU3WLawjuchbt144tpbCK41upSk9vS/nsInw6bXxn8TNURj3Hga2b2i+
-         myLA==
+        d=gmail.com; s=20230601; t=1708471188; x=1709075988; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j4AZpUs7iNUNOw3+U2CKct0moYYUgG7dyRsvoaQkXgA=;
+        b=asdJXhIHFnzv3DoUezuHzTuXFT1z3s4/ZJIwDqb7lAMIm6gii7VpnHdSezzCzOTtWe
+         z9vgSuTEGP1e4f8D8DIZV7x6dqz0WqWq4JpF/MYEJnSoeA1fjKIcR+GDrwqi3pcPc86U
+         qNEpH4/yVNzApmIEwSnxxSZqYV26Y7LNXZsfN6cG0ngaTyrRHoZawch0lanrU3eoE86c
+         kl9nNYMj62nDVbui3jsjMXGnQYLHf8gLGCJhlksS7yKVsde+jXEq3Xti9Ln/GRoZXke5
+         hS7ApySaBKWDJ7bqvp07te6Y+7Mfo8HrelKqIq03q/NWoqCH3gwNvSIfK0/xUiRUTq3Q
+         veXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708468843; x=1709073643;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MmwuqZ+SRwcH0WhEWSC1fUHglZZfWWDUa+m2OJY8rik=;
-        b=aIPVLnLMk4EAfhXKkucg/kHK8IMF+xlhgaUcMhCKF7BxGuOZlLOFzdDaMKhlMyYjWX
-         i8Bgkk+r+uLlJYrmqEm7/lNrewQvlzYB1QOO8NzcdQHdEZ6n7TS5YTaHahCht2kzAM9J
-         i1P3up8nno+unj51dpKX8wXAO9bKBvQhIMQ8C6OHm/r+ElOs7hmHfugDUXb6FMDtdSS9
-         9OoWqWI7423QyzjNT59eWH8ZjuznYxafd3gkI6wnFKQkAWO0UhYhZFF20ePRMAoH2dCa
-         LoXPpqQvGx1LYTPDAz3Q3pKn3h4P4kQsWwWf1rzKx2fnsSbXkZRIiIRQXTMA/lI/x+hM
-         mj6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUOxbYLWrGlIek8ZkXQ1hsuiQThg6SWSXL3NrAqmovOH0CmubqqfO4wDPEo2i/L19EMlk0gNz2Ig9XiJ8xDrQ7EQOXDzE1x2KPF
-X-Gm-Message-State: AOJu0YyViQuYA6VoIRJERYTfTm/rzqM48FRxUfRuNQK8H3YcoeAuX05N
-	ZSZoTwg1Li2I6zA9Ckacg7tIPJq9OJl/73XOp9dUKQIWCBJQgr3Jb+hx3MVcgMzOuR9cnbppfnA
-	agBH+/GTo0xMf5vLaLb46yeDDAOzNfe9cIFUlsw==
-X-Google-Smtp-Source: AGHT+IECKOxvwNIHjH+q3UCKrD0cIZc/Wky7bvQz0uKvXaoNUSqNSg4CHepJRR3O8AFfyFDZjhCR5X9cScX1yRPWYQg=
-X-Received: by 2002:a81:b71b:0:b0:604:3ee2:f258 with SMTP id
- v27-20020a81b71b000000b006043ee2f258mr15118384ywh.45.1708468843468; Tue, 20
- Feb 2024 14:40:43 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708471188; x=1709075988;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j4AZpUs7iNUNOw3+U2CKct0moYYUgG7dyRsvoaQkXgA=;
+        b=gyzZrHyFuNzWHk0uVYywuHexO4PUpMcWJwhBONZWU2wmDfwHm+baAb/JXdqr+XxOLl
+         AhBlbNP0bUf/+iIvYf7AaJQWh16fxTLNfNXJZkpZZCQBiaW3FMjeHIPSE0L03Jl/9ovg
+         FFjP7ZXFGZqUfxnNDkWLj7V1ivRHihIo8lDHph1ycxNFtnfaKmKrrNR6pb1/S40kovVq
+         Z1kBUiqhxeiVFjAS7NPlW7d/M51Uya+BIQ4SCG+ALs8EVm78a9VrsHIxrBk/poJVPPii
+         Fnk9VJAm/dpmHI9/Bp8TQ9C8OyqTAPWocBxY/p4GMEcIg4/GL2tsMMEL7J/ZZnCCr63s
+         TJcw==
+X-Forwarded-Encrypted: i=1; AJvYcCUIZ5cAiq3ZxvpufUggc9GYgC8DZv4pLDloZh5Zgb9i13KvuDScOd40SFaljAFEdqiIcrnOmBLymPDEClGAGZ81nbKHnJzlC1eBPeVcrPXbgTkI8D5dwq4OLKA1PpEy5qMqk11v77s1B2ctnTeDztecovDxuNF+/6/OFuKbOgcFoh/Oi7Rdx5wSC4dokMm7GPLDPeCn1jtpK4c5ksuw
+X-Gm-Message-State: AOJu0YyvwSJT/ch1+mLz2dXOIqJfPAuKqMeCDkNTj0AwifR7Nq0m6IBY
+	M9unY9HQFNtzqp+APPUiujYeGMZm1AsSwpUXtSvijfSXtAUHg8qNASRwYPk2/1Vm9DT9eapiEjI
+	yV/I7n3U/EY9z7RG0w3TXqqDQB40=
+X-Google-Smtp-Source: AGHT+IHFIDEAmC8NEGxjsG4riq9Ba4dDJ0CvrcQgOH7NX1APlBIJUTnNK6zqQcTbZLzYlCVkQWftRFgHgYnfYkaZn9w=
+X-Received: by 2002:a05:6214:500f:b0:68f:8b5a:3e6b with SMTP id
+ jo15-20020a056214500f00b0068f8b5a3e6bmr4541836qvb.6.1708471188325; Tue, 20
+ Feb 2024 15:19:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240202-pm4125-typec-v2-0-12771d85700d@linaro.org>
-In-Reply-To: <20240202-pm4125-typec-v2-0-12771d85700d@linaro.org>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Wed, 21 Feb 2024 00:40:32 +0200
-Message-ID: <CAA8EJpoUHi8FDAKa+LO+2t7fXxXaFYhXAJzkUUPs_uJH9pvZWw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] arm64: dts: qcom: qrb2210-rb1: enable Type-C support
-To: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-usb@vger.kernel.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
+ <Zb6D/5R8nNrxveAP@cae.in-ulm.de> <Zb/30qOGYAH4j6Mn@cae.in-ulm.de>
+ <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
+ <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com> <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
+ <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com> <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
+ <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com> <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
+ <a026ecd8-6fba-017d-d673-0d0759a37ed8@linux.intel.com> <CABXGCsOgy8H4GGcNU1jRE+SzRqwnPeNuy_3xBukjwB-bPxeZrQ@mail.gmail.com>
+In-Reply-To: <CABXGCsOgy8H4GGcNU1jRE+SzRqwnPeNuy_3xBukjwB-bPxeZrQ@mail.gmail.com>
+From: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date: Wed, 21 Feb 2024 04:19:37 +0500
+Message-ID: <CABXGCsOd=E428ixUOw+msRpnaubgx5-cVU7TDXwRUCdrM5Oicw@mail.gmail.com>
+Subject: =?UTF-8?Q?Re=3A_This_is_the_fourth_time_I=E2=80=99ve_tried_to_find_wha?=
+	=?UTF-8?Q?t_led_to_the_regression_of_outgoing_network_speed_and_each_t?=
+	=?UTF-8?Q?ime_I_find_the_merge_commit_8c94ccc7cd691472461448f98e2372c7?=
+	=?UTF-8?Q?5849406c?=
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com, 
+	Linux List Kernel Mailing <linux-kernel@vger.kernel.org>, Greg KH <gregkh@linuxfoundation.org>, 
+	linux-usb@vger.kernel.org, linux-x86_64@vger.kernel.org, 
+	netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2 Feb 2024 at 01:55, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On Mon, Feb 19, 2024 at 2:41=E2=80=AFPM Mikhail Gavrilov
+<mikhail.v.gavrilov@gmail.com> wrote:
 >
-> Reuse Type-C support implemented for the PMI632 PMIC (found on Qualcomm
-> Robotics RB2 platform) and implement Type-C handling for the Qualcomm
-> Robotics RB1 platform.
->
-> Dependencies: [1]
->
-> [1] https://lore.kernel.org/linux-arm-msm/20240130-pmi632-typec-v3-0-b05fe44f0a51@linaro.org/
->
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
-> Changes in v2:
-> - Removed unnecessary conditional expansion, covered by existing compat
->   string (Krzysztof)
-> - Link to v1: https://lore.kernel.org/r/20240130-pm4125-typec-v1-0-e8d0097e2991@linaro.org
->
-> ---
-> Dmitry Baryshkov (4):
->       dt-bindings: regulator: qcom,usb-vbus-regulator: add support for PM4125
->       dt-bindings: usb: qcom,pmic-typec: add support for the PM4125 block
->       arm64: dts: qcom: pm4125: define USB-C related blocks
->       arm64: dts: qcom: qrb2210-rb1: enable USB-C port handling
+> I installed irqbalance daemon and nothing changed.
+> So who is responsible for irq balancing?
 
-Mark, Greg, granted that the dependency has landed, could you please
-pick up patches 1 and 2 correspondingly.
+Sorry for the noise. Can anyone give me an answer?
+Who is responsible for distributing interrupts in Linux?
+I spotted network performance regression and it turned out, this was
+due to the network card getting other interrupt. It is a side effect
+of commit 57e153dfd0e7a080373fe5853c5609443d97fa5a.
+Installing irqbalance daemon did not help. Maybe someone experienced
+such a problem?
 
-
-
--- 
-With best wishes
-Dmitry
+--=20
+Best Regards,
+Mike Gavrilov.
 
