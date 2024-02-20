@@ -1,246 +1,112 @@
-Return-Path: <linux-usb+bounces-6758-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6759-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 581D485B432
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 08:48:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6100D85B46F
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 09:06:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5EFEEB20EE9
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 07:47:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BF86281E70
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 08:06:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81E815C5EB;
-	Tue, 20 Feb 2024 07:47:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6929D5C5E5;
+	Tue, 20 Feb 2024 08:06:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CsHBV/H/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kgg0FGuZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0035B5BAFA;
-	Tue, 20 Feb 2024 07:47:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632FE5A4FE;
+	Tue, 20 Feb 2024 08:06:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708415252; cv=none; b=plstIByNz7f20Yl4knfYxu5PUaUOCCLnI+0NgGS2OgVcoQXaPiUO5SXKxkXs+jIqFnbLIcTbSYbcbxRTgvgYXjrQ0gpAX3OH1A8e+Flbn6yxlLhrCH+fWAnFvFJlYU5Vd9k3psprrI9LTeo7nlngtt47JeEn2530LMHw0IHD76c=
+	t=1708416383; cv=none; b=TtyRSsZtMXpFQPZrgTbVbLNVnowkECJd92DnjlkYGG3GQorSLD4+765SBByFLdNEwZ0S5ZoIB733SaPzfaxSAYq5kzvKnLPxE3EQFrh31/pReL+7STlr3qsxTijF8ei4P3fuCpyn5Ne2FlHTcMiyGRBFQeUw9aZgGk8I9KZ/WNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708415252; c=relaxed/simple;
-	bh=KD9IThA8REpHAfectdfIHbypkggASN/O0p4hx3l4Q2g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TCp6PoJynjV2iQsml951h3JZYzWhZYDijL5aA1ieNeZ24aqPIg1HeGNX/Uo6+xyHrcP30hRqJlA4jC4nSPSjHjbqA+zBCieAYpOu80QLNwagr36G5Fz8aNLitqbwNtWeaINNYns8yPXpdRhjMPP770suaA2JpKqLnk6boYM3pKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CsHBV/H/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CF89C43390;
-	Tue, 20 Feb 2024 07:47:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1708415251;
-	bh=KD9IThA8REpHAfectdfIHbypkggASN/O0p4hx3l4Q2g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CsHBV/H/zCd3DaFr8RRSkbOOU5/yEeZ7vG2zoIUUCoueVIQa3SljAGCF48C34+Z6W
-	 /UJ1BEPg4BILsJNFAB0hNf9ro/cvwdssj5PLJOWalM8jeJ572qOjUrm8ztq5tnx/uF
-	 ipPWl4PgZRIDkI95zhLdAPz2tVksVMBetP0VVM2M=
-Date: Tue, 20 Feb 2024 08:47:28 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: buckzhangwh@gmail.com
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers:usb:disable usb hub&port async suspend to avoid
- block system PM
-Message-ID: <2024022023-anemic-icy-6f3d@gregkh>
-References: <20240220072413.4026-1-buckzhangwh@gmail.com>
+	s=arc-20240116; t=1708416383; c=relaxed/simple;
+	bh=2AajWmjvWkFwXUAy7YnyQC6wKfOpBqV3ZyOyOZCf5vM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=QVJlfdhYZkrbEy/r3oK9+ZGGGYCW2/Y+JQ17gXNiK/FFKHKn3gIRsGkpO/9pJm2E85dmXZ3BRpzONi/JSdV6mqFyH4fuiyMVFJUYnBLzgd1BjlqQRiSFv4b5WhL27cgyqT4xJ6P4SMwsYWL6AS+6h8z9UacfhjZkgQs0kNd9d7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kgg0FGuZ; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4126f4863f9so1940395e9.0;
+        Tue, 20 Feb 2024 00:06:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708416380; x=1709021180; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LLrWaeUumJ6pHnaaEwb9+G7skI59DBlkbGeW+yJ43lU=;
+        b=Kgg0FGuZpN+IMDO3uKj67qJaVRj+mMlQ/BJFXfNgVqoohi2+36nFAUWB0ucbmNvwSr
+         zc6cn/zlX66uQ3HDVbT0jo527h5sSCCxlEq8G2gMkKneRMgPdDkwIgjUOfZtAwvuSiMA
+         MMhLZwnUeARlNPuadmIhCeS7MPTcSTBElhe20zcfSBDxIFQfDcKzNHiJNZ6uGM3yBTvv
+         sYEEVkurRnJLN+lJDwhxys93iAJkWNWOSYjXi9vNQywhZAOI2Th1eJhIG0KqdWrmSD4A
+         UVuQTF/5ao2IWJiCDLh6lLmy6eo+RoP9fPOx+CoOf5bqHsJAzLkBuTybuO7HWwNGv9VV
+         F2QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708416380; x=1709021180;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LLrWaeUumJ6pHnaaEwb9+G7skI59DBlkbGeW+yJ43lU=;
+        b=qzHuOGQrftOeX6A0hWhcwsPdr6b177rYU6j4q8+hzoB7SwblYE+HX2K782mHokbfPr
+         Qgiw+wudChG6ZO5n3Mqi5xI1QKG6EaI8yVOitnJbm1sKzpi85HLCvmlrWbIRQHDxffDT
+         R8fA+Owa+5r1ujirvau+8kqmFF5xljnCu8LjcrCvdf8AVS9CsvIdTmvKUHoSw3GiNf4F
+         7lycWusRxNWqOUwRsVIwdSoIMDRsF9V9DF0nB0JNm3Ox0PvQ24aZJeCDNiq3r4zJoW0A
+         eCozQrFp80v+mww0bGOrl0pZKSwmRIvsNJ+rp/4oaAub8x55Hoa1EObHukRNmqOma+XE
+         CcVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUKO3GEhZeH2ZqZl+LQ3Gr6FZldah9aDvfgEZUFmg0f1MUyG4lMMmbFcV1oXnxX0n/fxERcXMQ7Avpodykvvoy+OtFUKgAWmNQKFEycTxgZH8OBoRNcwwyCcmHuUuHSjhG+59sKXgP1
+X-Gm-Message-State: AOJu0YyKC3oMLnyjH9xe++71YaC6Og1VYCKJ0dhSAtreeHJB0NwL3Zr6
+	qvmJbERBFvZy4I3hvO/2z0JB4LuLG/hAIl6eEqZxWRuobmCLvWZH
+X-Google-Smtp-Source: AGHT+IF8OGMQFT7NrO47/sHeKkCDlVa+uW0HmkYWTVHWnO47HZT87n/5/gS8K/R4ws2AXKWPCeKP6A==
+X-Received: by 2002:a5d:6643:0:b0:33d:26dd:8c4f with SMTP id f3-20020a5d6643000000b0033d26dd8c4fmr5602887wrw.23.1708416379405;
+        Tue, 20 Feb 2024 00:06:19 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id bu7-20020a056000078700b0033d5aee2ff1sm4053257wrb.97.2024.02.20.00.06.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Feb 2024 00:06:18 -0800 (PST)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Peter Chen <peter.chen@kernel.org>,
+	Pawel Laszczak <pawell@cadence.com>,
+	Roger Quadros <rogerq@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH][next] usb: cdns3: Fix spelling mistake "supporte" -> "supported"
+Date: Tue, 20 Feb 2024 08:06:17 +0000
+Message-Id: <20240220080617.2674613-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240220072413.4026-1-buckzhangwh@gmail.com>
 
-On Mon, Feb 19, 2024 at 11:24:13PM -0800, buckzhangwh@gmail.com wrote:
-> From: weihui zhang <buckzhangwh@gmail.com>
-> 
-> many phones are crashed and unable to wake up by power key.
-> We analyzed more than ten kernel-dumps, 
+There is a spelling mistake in a dev_err message. Fix it.
 
-Odd trailing whitespace :(
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/usb/cdns3/drd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> the common was  that system were all blocked by usb.
-> the phone doesn't crash again,after we disable usb hub&port async suspend.
+diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
+index ee917f1b091c..8b936a2e93a0 100644
+--- a/drivers/usb/cdns3/drd.c
++++ b/drivers/usb/cdns3/drd.c
+@@ -435,7 +435,7 @@ int cdns_drd_init(struct cdns *cdns)
+ 			writel(1, &cdns->otg_v1_regs->simulate);
+ 			cdns->version  = CDNS3_CONTROLLER_V1;
+ 		} else {
+-			dev_err(cdns->dev, "not supporte DID=0x%08x\n", state);
++			dev_err(cdns->dev, "not supported DID=0x%08x\n", state);
+ 			return -EINVAL;
+ 		}
+ 
+-- 
+2.39.2
 
-That's not ok to disable, why is this needed?
-
-
-> 
-> here is one kernel-dump analysis case:
-> task 446 & 4511 &365 state are Uninterrupt
-> task 446 dpm_wait_for_superior then schedule out.
-> 
-> PID: 446  TASK: ffffff81f3e9cb00 CPU: 4 COMMAND: "charge"
-> 
->  #0 [ffffffc015a0b9a0] __switch_to at ffffffc010088b54
-> 
->  #1 [ffffffc015a0b9f0] __schedule at ffffffc010f7ef2c
-> 
->  #2 [ffffffc015a0ba40] schedule at ffffffc010f7f3a4
-> 
->  #3 [ffffffc015a0baa0] async_synchronize_cookie_domain at 
-> 
->  #4 [ffffffc015a0bb00] async_synchronize_full at ffffffc010131e0c
-> 
->  #5 [ffffffc015a0bb10] dpm_resume at ffffffc0107ec408
-> 
->  #6 [ffffffc015a0bb70] dpm_resume_end at ffffffc0107ed0e8
-> 
->  #7 [ffffffc015a0bbb0] suspend_devices_and_enter at ffffffc0101776d8
-> 
->  #8 [ffffffc015a0bbf0] enter_state at ffffffc010177e70
-> 
->  #9 [ffffffc015a0bc20] pm_suspend at ffffffc010177d5c
-> 
-> PID: 4511 TASK: ffffff8153b0e740 CPU: 6 COMMAND: "kworker/u16:11"
-> 
->  #0 [ffffffc01bc9baa0] __switch_to at ffffffc01010293c
-> 
->  #1 [ffffffc01bc9bb10] __schedule at ffffffc0116b0008
-> 
->  #2 [ffffffc01bc9bb70] schedule at ffffffc0116b0794
-> 
->  #3 [ffffffc01bc9bbe0] schedule_timeout at ffffffc0116b6c2c
-> 
->  #4 [ffffffc01bc9bc40] wait_for_common at ffffffc0116b198c
-> 
->  #5 [ffffffc01bc9bca0] dpm_wait_for_superior at ffffffc010b999e8  
-> 
->  #6 [ffffffc01bc9bce0] device_resume at ffffffc010b9d804 
-> //x0(struct device)= ffffff81f32a3808
-> 
->  #7 [ffffffc01bc9bd10] async_resume at ffffffc010b9d6ec
-> 
->  #8 [ffffffc01bc9bd40] async_run_entry_fn at ffffffc0101e238c
-> 
->  #9 [ffffffc01bc9bdb0] process_one_work at ffffffc0101d00e0
-> 
-> crash_arm64> struct device ffffff81f32a3808 -x
-> 
-> struct device {
-> 
->   kobj = {
-> 
->     name = 0xffffff81f15c6d80 "usb1-port1",
-> 
->     entry = {
-> 
->       next = 0xffffff81f32a6018,
-> 
->       prev = 0xffffff81e4103838
-> 
->     },
->  type = 0xffffffc0124102b8 <usb_port_device_type>,
-> 
->   bus = 0x0,
-> 
->   driver = 0xffffffc0124102e8 <usb_port_driver>,
-> 
->     async_suspend = 0x1,
->   ...........
-
-All of the changelog text has extra lines?  Well some of them do, why?
-
-Please fix that up.
-
-> 
-> PID: 365 TASK: ffffff81f3bf6900 CPU: 0 COMMAND: "kworker/u16:5"
-> 
->  #0 [ffffffc0158dbac0] __switch_to at ffffffc010088b54
-> 
->  #1 [ffffffc0158dbb10] __schedule at ffffffc010f7ef2c
-> 
->  #2 [ffffffc0158dbb60] schedule at ffffffc010f7f3a4
-> 
->  #3 [ffffffc0158dbbe0] schedule_timeout at ffffffc010f83fd8
-> 
->  #4 [ffffffc0158dbc40] wait_for_common at ffffffc010f80600
-> 
->  #5 [ffffffc0158dbc90] wait_for_completion at ffffffc010f8051c
-> 
->  #6 [ffffffc0158dbcb0] dpm_wait_for_superior at ffffffc0107eee00
-> 
->  #7 [ffffffc0158dbd00] device_resume at ffffffc0107ec6a8 
-> //x0(struct device) = 0xffffff81ee1b3030
-> 
->  #8 [ffffffc0158dbd40] async_resume at ffffffc0107ec588
-> 
->  #9 [ffffffc0158dbd60] async_run_entry_fn at ffffffc010131c60
-> 
->  crash_arm64> struct device ffffff81ee1b3030 -x
-> 
-> struct device {
-> 
->   kobj = {
-> 
->     name = 0xffffff81f1fc1500 "1-0:1.0",
-> 
-> 	  type = 0xffffffc011b62a38 <usb_if_device_type>,
->  ............
-
-I don't understand, why the kobject structure stuff here?
-
-
-> 
-> Signed-off-by: weihui zhang <buckzhangwh@gmail.com>
-> ---
->  drivers/usb/core/hub.c     | 2 +-
->  drivers/usb/core/message.c | 2 +-
->  drivers/usb/core/port.c    | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index e38a4124f..de74f70e5 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2602,7 +2602,7 @@ int usb_new_device(struct usb_device *udev)
->  		add_device_randomness(udev->manufacturer,
->  				      strlen(udev->manufacturer));
->  
-> -	device_enable_async_suspend(&udev->dev);
-> +	device_disable_async_suspend(&udev->dev);
-
-Why?  You just changed the way the whole system worked?
-
-Are you sure that the device itself shouldn't be fixed instead of doing
-this for ALL devices?
-
->  
->  	/* check whether the hub or firmware marks this port as non-removable */
->  	set_usb_port_removable(udev);
-> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> index 077dfe48d..944f01aa7 100644
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
-> @@ -2203,7 +2203,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
->  			"adding %s (config #%d, interface %d)\n",
->  			dev_name(&intf->dev), configuration,
->  			intf->cur_altsetting->desc.bInterfaceNumber);
-> -		device_enable_async_suspend(&intf->dev);
-> +		device_disable_async_suspend(&intf->dev);
->  		ret = device_add(&intf->dev);
->  		if (ret != 0) {
->  			dev_err(&dev->dev, "device_add(%s) --> %d\n",
-> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-> index c628c1abc..97696c415 100644
-> --- a/drivers/usb/core/port.c
-> +++ b/drivers/usb/core/port.c
-> @@ -760,7 +760,7 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
->  	pm_runtime_set_active(&port_dev->dev);
->  	pm_runtime_get_noresume(&port_dev->dev);
->  	pm_runtime_enable(&port_dev->dev);
-> -	device_enable_async_suspend(&port_dev->dev);
-> +	device_disable_async_suspend(&port_dev->dev);
-
-Again, I don't think this is a wise change, how did you test it?
-
-thanks,
-
-greg k-h
 
