@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-6776-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6777-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C47CE85BC5C
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 13:39:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4E0585BC73
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 13:44:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03A301C21602
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 12:39:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 70F92B24873
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 12:44:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B7D969D0D;
-	Tue, 20 Feb 2024 12:39:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3646997A;
+	Tue, 20 Feb 2024 12:44:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rzZm8mUW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="atZ3fq9A"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA3E67E95;
-	Tue, 20 Feb 2024 12:39:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2194467C74;
+	Tue, 20 Feb 2024 12:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708432769; cv=none; b=pnD5mTL30gqNThJNzt87AxdONDTCqOxXBjajJ0RHNT22kkHnKB0XaKXcJ7fm7+pDGKXd88Hz96GqdcTr2x1n1SoU8tcR5dA0XGV66yCjIyrZCSxkVpifPlWK9KsgZlfiZYwO+likvpeD0eHDbk5RCUhIpa4oG9wdPh/gIEMEIgY=
+	t=1708433051; cv=none; b=ouNVbknerKozU//mfW/Zaj8bJ5cp2JbhAJnKNzNS9i/XcMfv+jzF/eAanM1oXpovgsImE6qpDSiD1mVT9qEjRLbnE8VzVirGpUlnLqrRqvm0OGSV0I4FisjakGzL3Q/x5bxapWpcbcCc0FBbHrKBaWcsi38V1qyw7DxKNDELago=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708432769; c=relaxed/simple;
-	bh=zaRvBdCErfnTGRRy1hJDAaFwvmR35DTVIeIkU5YZ8ec=;
+	s=arc-20240116; t=1708433051; c=relaxed/simple;
+	bh=pOErrnrrbQEnaNXElPlM3SFEJg4SBjhPI7dWuasZy/4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a8tv56Ce8dmZAhZrBKowrB+6k5MrWjKWyrckZocJPtAERBHCipXXv6Qnin/OyMBGEt6QIG2qzAFlBnMGno1H+TKWDYZcpXjoekj08EJsfLOWvvE45DgUbjOFsR1qszDkDFDLd8Y1z5pIUGuZ7aRO4pYLaou+/4RpXXZehEDISCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rzZm8mUW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C578FC433F1;
-	Tue, 20 Feb 2024 12:39:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MnbE3oQiwlrcW84VkK3sc7+q/UEt+HbBEUDcvdx305oqyApM5nZWABIE896Ap8N3dTsviRQ2tgL+Guaj3GXsx5QTBICsjhyscnchSI1uivPCSUJNo37Sh9940IFEHhyqxXHkhMOVD1dWfvaPRLq2ecez2oCP8srCwGOKs68EPrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=atZ3fq9A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2082DC433F1;
+	Tue, 20 Feb 2024 12:44:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708432769;
-	bh=zaRvBdCErfnTGRRy1hJDAaFwvmR35DTVIeIkU5YZ8ec=;
+	s=k20201202; t=1708433050;
+	bh=pOErrnrrbQEnaNXElPlM3SFEJg4SBjhPI7dWuasZy/4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rzZm8mUWfLWVPAhjMB5ui51kgxlP9xkCOMONOR0ogWf89KCxuVO+kJbk+KdnLjF5D
-	 TKoeUzJPAKDFjHcCIRZkr3g9G0u5t/tXUNs5awpZUaczYJlP6/HRdg70FscwWWNxPO
-	 UvpeQ4y6A0Z5fB6svIAtv2q0fZJ8yeCRIyMHKzv6b1udlQFiVJq/OfCN3DC5hFxd7Y
-	 kUhh++iQhYoYD87Ap3WHCF900Pnu1+0EqL/hiAXxBfq7Nh1toa/j87W5MPytjozLEI
-	 LifVXEMXp7KzlIiJJw3G3e5dYDeb3og75TQpO89Kz56VIo2nCobToOkmlnhgcgJjH4
-	 /ugMfTe9PHkVQ==
-Date: Tue, 20 Feb 2024 12:39:24 +0000
+	b=atZ3fq9AY0IiRLZO2jJFAcr63jgN0ZbIIYtOxV8gmqrHKW19DYq2yO9IHt9WGQFzC
+	 w1RGc9MU0txJnxNkm4J75ZOhJMHChc5R3UyxDDlp+k+ngAc/MiVpfjokd4hwaUkZhR
+	 sqPGEvVNj6nL66wzCdfBmkdNJToKuJAZ5Gpz5HSrKLN1bACwSerEeRIABSqcZUosqV
+	 IG27lxcoQEoepMm8GZfctO0Mp9bN0a1kNTwFFyICClYwYuJQkrp1N7mkFdU2nMez8+
+	 hnmTenjYSa0uMH1kSO+A/3PcqVw/RHGOMHelIadPB4PrXvOXE5JFoRf+Kpw/MqaLcn
+	 z0sA+BCpO0i5A==
+Date: Tue, 20 Feb 2024 12:44:05 +0000
 From: Simon Horman <horms@kernel.org>
 To: Andrew Lunn <andrew@lunn.ch>
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -53,11 +53,11 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Tony Nguyen <anthony.l.nguyen@intel.com>, linux-usb@vger.kernel.org,
 	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH net-next v4 2/9] net: usb: ax88179_178a: Use linkmode
- helpers for EEE
-Message-ID: <20240220123924.GA40273@kernel.org>
+Subject: Re: [PATCH net-next v4 3/9] net: qlogic: qede: Use linkmode helpers
+ for EEE
+Message-ID: <20240220124405.GB40273@kernel.org>
 References: <20240218-keee-u32-cleanup-v4-0-71f13b7c3e60@lunn.ch>
- <20240218-keee-u32-cleanup-v4-2-71f13b7c3e60@lunn.ch>
+ <20240218-keee-u32-cleanup-v4-3-71f13b7c3e60@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,69 +66,84 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240218-keee-u32-cleanup-v4-2-71f13b7c3e60@lunn.ch>
+In-Reply-To: <20240218-keee-u32-cleanup-v4-3-71f13b7c3e60@lunn.ch>
 
-On Sun, Feb 18, 2024 at 11:06:59AM -0600, Andrew Lunn wrote:
-> Make use of the existing linkmode helpers for converting PHY EEE
-> register values into links modes, now that ethtool_keee uses link
-> modes, rather than u32 values.
+On Sun, Feb 18, 2024 at 11:07:00AM -0600, Andrew Lunn wrote:
+> Make use of the existing linkmode helpers for bit manipulation of EEE
+> advertise, support and link partner support. The aim is to drop the
+> restricted _u32 variants in the near future.
 > 
 > Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+
+Thanks Andrew,
+
+the nit below notwithstanding this looks good to me.
+
+Reviewed-by: Simon Horman <horms@kernel.org>
+
 > ---
->  drivers/net/usb/ax88179_178a.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+>  drivers/net/ethernet/qlogic/qede/qede_ethtool.c | 60 ++++++++++++++++---------
+>  1 file changed, 38 insertions(+), 22 deletions(-)
 > 
-> diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-> index d6168eaa286f..d4bf9865d87b 100644
-> --- a/drivers/net/usb/ax88179_178a.c
-> +++ b/drivers/net/usb/ax88179_178a.c
-> @@ -676,21 +676,21 @@ ax88179_ethtool_get_eee(struct usbnet *dev, struct ethtool_keee *data)
->  					    MDIO_MMD_PCS);
->  	if (val < 0)
->  		return val;
-> -	data->supported_u32 = mmd_eee_cap_to_ethtool_sup_t(val);
-> +	mii_eee_cap1_mod_linkmode_t(data->supported, val);
+> diff --git a/drivers/net/ethernet/qlogic/qede/qede_ethtool.c b/drivers/net/ethernet/qlogic/qede/qede_ethtool.c
+
+...
+
+> @@ -1812,9 +1820,12 @@ static int qede_get_eee(struct net_device *dev, struct ethtool_keee *edata)
 >  
->  	/* Get advertisement EEE */
->  	val = ax88179_phy_read_mmd_indirect(dev, MDIO_AN_EEE_ADV,
->  					    MDIO_MMD_AN);
->  	if (val < 0)
->  		return val;
-> -	data->advertised_u32 = mmd_eee_adv_to_ethtool_adv_t(val);
-> +	mii_eee_cap1_mod_linkmode_t(data->advertised, val);
->  
->  	/* Get LP advertisement EEE */
->  	val = ax88179_phy_read_mmd_indirect(dev, MDIO_AN_EEE_LPABLE,
->  					    MDIO_MMD_AN);
->  	if (val < 0)
->  		return val;
-> -	data->lp_advertised_u32 = mmd_eee_adv_to_ethtool_adv_t(val);
-> +	mii_eee_cap1_mod_linkmode_t(data->lp_advertised, val);
->  
->  	return 0;
->  }
-> @@ -698,7 +698,7 @@ ax88179_ethtool_get_eee(struct usbnet *dev, struct ethtool_keee *data)
->  static int
->  ax88179_ethtool_set_eee(struct usbnet *dev, struct ethtool_keee *data)
+>  static int qede_set_eee(struct net_device *dev, struct ethtool_keee *edata)
 >  {
-> -	u16 tmp16 = ethtool_adv_to_mmd_eee_adv_t(data->advertised_u32);
-> +	u16 tmp16 = linkmode_to_mii_eee_cap1_t(data->advertised);
+> +	__ETHTOOL_DECLARE_LINK_MODE_MASK(supported) = {};
+> +	__ETHTOOL_DECLARE_LINK_MODE_MASK(tmp) = {};
+>  	struct qede_dev *edev = netdev_priv(dev);
+>  	struct qed_link_output current_link;
+>  	struct qed_link_params params;
+> +	bool unsupp;
 >  
->  	return ax88179_phy_write_mmd_indirect(dev, MDIO_AN_EEE_ADV,
->  					      MDIO_MMD_AN, tmp16);
-> @@ -1663,7 +1663,6 @@ static int ax88179_reset(struct usbnet *dev)
->  	ax88179_disable_eee(dev);
+>  	if (!edev->ops->common->can_link_change(edev->cdev)) {
+>  		DP_INFO(edev, "Link settings are not allowed to be changed\n");
+> @@ -1832,21 +1843,26 @@ static int qede_set_eee(struct net_device *dev, struct ethtool_keee *edata)
+>  	memset(&params, 0, sizeof(params));
+>  	params.override_flags |= QED_LINK_OVERRIDE_EEE_CONFIG;
 >  
->  	ax88179_ethtool_get_eee(dev, &eee_data);
-> -	eee_data.advertised_u32 = 0;
+> -	if (!(edata->advertised_u32 & (ADVERTISED_1000baseT_Full |
+> -				       ADVERTISED_10000baseT_Full)) ||
+> -	    ((edata->advertised_u32 & (ADVERTISED_1000baseT_Full |
+> -				       ADVERTISED_10000baseT_Full)) !=
+> -	     edata->advertised_u32)) {
+> +	linkmode_set_bit(ETHTOOL_LINK_MODE_10000baseT_Full_BIT,
+> +			 supported);
+> +	linkmode_set_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT,
+> +			 supported);
+> +
+> +	unsupp = linkmode_andnot(tmp, edata->advertised, supported);
 
-Hi Andrew,
+nit: Given the types involved, I might have written this as:
 
-could you clarify why advertised no longer needs to be cleared?
+	unsupp = !!linkmode_andnot(tmp, edata->advertised, supported);
 
->  	ax88179_ethtool_set_eee(dev, &eee_data);
+> +	if (unsupp) {
+>  		DP_VERBOSE(edev, QED_MSG_DEBUG,
+> -			   "Invalid advertised capabilities %d\n",
+> -			   edata->advertised_u32);
+> +			   "Invalid advertised capabilities %*pb\n",
+> +			   __ETHTOOL_LINK_MODE_MASK_NBITS, edata->advertised);
+>  		return -EINVAL;
+>  	}
 >  
->  	/* Restart autoneg */
+> -	if (edata->advertised_u32 & ADVERTISED_1000baseT_Full)
+> +	if (linkmode_test_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT,
+> +			      edata->advertised))
+>  		params.eee.adv_caps = QED_EEE_1G_ADV;
+> -	if (edata->advertised_u32 & ADVERTISED_10000baseT_Full)
+> -		params.eee.adv_caps |= QED_EEE_10G_ADV;
+> +	if (linkmode_test_bit(ETHTOOL_LINK_MODE_10000baseT_Full_BIT,
+> +			      edata->advertised))
+> +		params.eee.adv_caps = QED_EEE_10G_ADV;
+> +
+>  	params.eee.enable = edata->eee_enabled;
+>  	params.eee.tx_lpi_enable = edata->tx_lpi_enabled;
+>  	params.eee.tx_lpi_timer = edata->tx_lpi_timer;
 > 
 > -- 
 > 2.43.0
