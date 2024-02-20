@@ -1,146 +1,136 @@
-Return-Path: <linux-usb+bounces-6807-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6808-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52FB985C4EE
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 20:36:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 421DB85C5AE
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 21:22:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E86FFB22224
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 19:36:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CA331C21E16
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 20:22:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4438114A0B3;
-	Tue, 20 Feb 2024 19:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 370DF14AD30;
+	Tue, 20 Feb 2024 20:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="bCLKgtoF"
+	dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="TN/PwmLc";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="sXhXx7IQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from seashell.cherry.relay.mailchannels.net (seashell.cherry.relay.mailchannels.net [23.83.223.162])
+Received: from fallback25.i.mail.ru (fallback25.i.mail.ru [79.137.243.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7D436135;
-	Tue, 20 Feb 2024 19:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.223.162
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708457788; cv=pass; b=PB9xUArCO9iHwDNjz13Z5v04Bc4hZh6wcKdnVzbf2ELCxxS4cPronmLtk2o8QG36x67sJlUKIKqfCQIyYlW41MhBbqiKF69FeBq9GglPkoRQtxyXLFUfUGcmZFNLI4Ax69/Pt3XoWQhDY9q0cgJmC1yiPyWprISulrFmAeNXcgk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708457788; c=relaxed/simple;
-	bh=hJt/IYVb0eRDuwpPuHvdH7KdNxea+aTwmt9C56h0Cws=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vh5pcxiizzsEAGDEkuvSL4wyEseVGCv1Z8JMLvneAPH68dXPWGrC1mb1TGAi4NFUtnb+xPcNa5caay0u8L2bsSYvU5I58elAkVoBpSywYXC9ZEOURlED4jK73iuZhqrGy8rRR1RSt28x19rV0/A0MPUf7TYpADbUPxuX6kXmSts=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=pass smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=bCLKgtoF; arc=pass smtp.client-ip=23.83.223.162
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id 795DBC2827;
-	Tue, 20 Feb 2024 19:36:19 +0000 (UTC)
-Received: from pdx1-sub0-mail-a209.dreamhost.com (unknown [127.0.0.6])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id B5A33C3498;
-	Tue, 20 Feb 2024 19:36:18 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1708457778; a=rsa-sha256;
-	cv=none;
-	b=rq8hwytgf7mfKXDi/jrMKsK0qeveLAg+21O1J0OqhR26kVBhVXZpEGmDShPL2sbwzfNo6h
-	TOij+q/41S3xbwvyQmMUZWWwKl79hgkJLCDytUeNkr4uxA3GoOIz+Tf6KsXRh/6cSwGXGZ
-	/n7dR7MpEmHeReoGt6od0xgWFfWyUyTKdF7/8Mlkckg8Pz3f3hQTIYNnb8oWQsKzcugKYE
-	zWY+VjWD9g/y3Z214qhJDNj1k3/r5Tt8O1qhRLuxCfy5nNGqFNVVGA9we6+8j/v2uUFCk4
-	wHBkbz+6txUL6d/cZlFMdvj6NB/tsJ4Hu8Y1DoSUzTFqBsJcy/HQ2dAro1VWGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1708457778;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=hJt/IYVb0eRDuwpPuHvdH7KdNxea+aTwmt9C56h0Cws=;
-	b=5+WwerzT6sexvjUn0gTAv/2v9cuIVnWsu4m7u04KPJQNZNiTO+oqugObIxEwNEQY+bU6fF
-	R01G+Kb7dtW6+uXHYrlzbKMtWHJ8vMPq6EpBOArjSr7OWtQZ2pCMPvjl8J4mQC2hx+hpwb
-	0pcCAbJ1mAARqW8m6LCRWqhmcSGZFuRW3gGUusvSlKeCZdOiGbvsE34J9VZDmivr9Ff6OJ
-	3KuabrbMYstSyB6R9I7IsFO3h9iWiOSPAqCNY4+SqIpFF49BcwLBKEVZpo+0LsrkVZp38n
-	NXh5a8C268Cohfyu2wttF45L4Xas/g49ul8i9S2pVTPFxw363AevUfl8FF+TKQ==
-ARC-Authentication-Results: i=1;
-	rspamd-6bdc45795d-cxkcq;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Tank-Keen: 21cbfddf12f86fe0_1708457779192_187779232
-X-MC-Loop-Signature: 1708457779192:1768560798
-X-MC-Ingress-Time: 1708457779192
-Received: from pdx1-sub0-mail-a209.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.127.149.162 (trex/6.9.2);
-	Tue, 20 Feb 2024 19:36:19 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dave@stgolabs.net)
-	by pdx1-sub0-mail-a209.dreamhost.com (Postfix) with ESMTPSA id 4TfV5F37s1zKk;
-	Tue, 20 Feb 2024 11:36:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-	s=dreamhost; t=1708457778;
-	bh=hJt/IYVb0eRDuwpPuHvdH7KdNxea+aTwmt9C56h0Cws=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=bCLKgtoFrIDxE9TulzKX03YtzRwqsgpaiO1i9BXGIp+M/aijYBAeHDzbbNlnPTFyc
-	 ejaeFhjJd/gZ7Cdex0mXbkKVupxsDRzUyRQfjUFr4a+TS9h85+ECcC0H8pO18k8uIO
-	 n70U1MC5zJ7leo2cLL5eCevDb2kcBF+KXkdk7N2r+uAyWDj4anHZheabv8ot3oWU2g
-	 2skaS3Y9t+PA+jyqDxj9kc8s/6SB6r6MnCR8wcc9xqDEnQpZIshjC77ywO5yv0tG/A
-	 VBCyvesPDEDOfUr+GoumHVd47XY3MrRVlMCopA/GxdHrGfbBklxsCikci5TlS3T+P0
-	 Q/tNRI2Y7uAJA==
-Date: Tue, 20 Feb 2024 11:36:14 -0800
-From: Davidlohr Bueso <dave@stgolabs.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Tejun Heo <tj@kernel.org>, mpatocka@redhat.com,
-	linux-kernel@vger.kernel.org, dm-devel@lists.linux.dev,
-	msnitzer@redhat.com, ignat@cloudflare.com, damien.lemoal@wdc.com,
-	bob.liu@oracle.com, houtao1@huawei.com, peterz@infradead.org,
-	mingo@kernel.org, netdev@vger.kernel.org, allen.lkml@gmail.com,
-	kernel-team@meta.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-	mchehab@kernel.org
-Subject: Re: [PATCH 5/8] usb: core: hcd: Convert from tasklet to BH workqueue
-Message-ID: <20240220193614.b2rbzxmbobp3cbv2@offworld>
-Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>, mpatocka@redhat.com,
-	linux-kernel@vger.kernel.org, dm-devel@lists.linux.dev,
-	msnitzer@redhat.com, ignat@cloudflare.com, damien.lemoal@wdc.com,
-	bob.liu@oracle.com, houtao1@huawei.com, peterz@infradead.org,
-	mingo@kernel.org, netdev@vger.kernel.org, allen.lkml@gmail.com,
-	kernel-team@meta.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-	mchehab@kernel.org
-References: <20240130091300.2968534-1-tj@kernel.org>
- <20240130091300.2968534-6-tj@kernel.org>
- <bckroyio6l2nt54refuord4pm6mqylt3adx6z2bg6iczxkbnyk@bb5447rqahj5>
- <CAHk-=whqae-+7Q7wbtnEj7YmR8vsx6skTj6j-srV2Fz7cBZ2ag@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B8E612D7;
+	Tue, 20 Feb 2024 20:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.137.243.79
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708460537; cv=none; b=ai0iS2VaSn/zUqw6x3JAYhe+Uyo2hUjr31/VEa6n9ODI2A4PN1i1KWxQ2DQRi9vyiS+VxIAjxPftMYhBQ8dP0Azpm8IWtjHpQmUuKBomYhn5NDm3dTiuLucT9Qn9g2HrTKID6ro8KDliLcX5cnaPadonBDi9xF5+uLGbSrIEgVY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708460537; c=relaxed/simple;
+	bh=3E4MLkiFuwBFKarsqUzr5SifAuxcGtnLlgXY64OF8Oo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oKtXCK1Dj8Tcv4NPAm4C6AH2qiG5CjQymFZQlwfTAxFkCIK09KZcgXwviIA0bZik3RnqB/7eSlrp5nt7/XGJ69ecv6RwfrkTJSFcpA3Q0DRHGj6hxdJTluIVVwV1kIQsHh1uxxmuUl4jHzK1d25X0L9bWL1W/dEt/oFSgUckg6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com; spf=pass smtp.mailfrom=jiaxyga.com; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=TN/PwmLc; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=sXhXx7IQ; arc=none smtp.client-ip=79.137.243.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jiaxyga.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com; s=mailru;
+	h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=/23HhppizU5teo7s0TVpESXlpsTlRcLJEORAPFoVi/c=;
+	t=1708460535;x=1708550535; 
+	b=TN/PwmLcgMvtrHUJv/UvcESkPnJLNZdpz3SuJB8iLiuAQKXfwo/670nuEJkXrfub8r1WPcBgkjqH4Rhhhb/9K4Sw2Q3i8ABZFV/I3q0NSMRyfIKW1S9hrbwHOOvpP9Egs1apYFYEl2Pnq7F8VIuQB/fbkveNy4O9Qeh7ZExGG3M=;
+Received: from [10.12.4.26] (port=54584 helo=smtp50.i.mail.ru)
+	by fallback25.i.mail.ru with esmtp (envelope-from <danila@jiaxyga.com>)
+	id 1rcWcw-000lZH-PO; Tue, 20 Feb 2024 23:22:07 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
+	; s=mailru; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
+	X-Cloud-Ids:Disposition-Notification-To;
+	bh=/23HhppizU5teo7s0TVpESXlpsTlRcLJEORAPFoVi/c=; t=1708460526; x=1708550526; 
+	b=sXhXx7IQiP0PvbfiIAgV3OfM+mCE9GbddFXdRyUCtubkJlyZUMitBUQRUpS7dpieOY7JvBhFoCJ
+	Eh4nNmyTFOVdUG5aK6UdmCuz9vDoGbxxDtO5x2jDEAwyUHwsUW91QxXu5YhwdrU/TerqcY7nZowh6
+	jmTGRD426UhUYuiUcVs=;
+Received: by smtp50.i.mail.ru with esmtpa (envelope-from <danila@jiaxyga.com>)
+	id 1rcWcg-0000000BzSN-2EA0; Tue, 20 Feb 2024 23:21:51 +0300
+From: Danila Tikhonov <danila@jiaxyga.com>
+To: bryan.odonoghue@linaro.org,
+	andersson@kernel.org,
+	konrad.dybcio@linaro.org,
+	gregkh@linuxfoundation.org,
+	robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	dmitry.baryshkov@linaro.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Danila Tikhonov <danila@jiaxyga.com>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/2] arm64: dts: qcom: pm6150: Add typec support for PM6150
+Date: Tue, 20 Feb 2024 23:21:45 +0300
+Message-ID: <20240220202147.228911-1-danila@jiaxyga.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whqae-+7Q7wbtnEj7YmR8vsx6skTj6j-srV2Fz7cBZ2ag@mail.gmail.com>
-User-Agent: NeoMutt/20220429
+Content-Transfer-Encoding: 8bit
+X-Mailru-Src: smtp
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD9001F8F2F6BAD2021A4088691FB60B4B8D975C14E9881615F00894C459B0CD1B99D553C75EC2FCE92FFB2F1BA4D151868A6BECC4A1668E3AB6DC888E7B15EF0D45F9067195EC86057
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7F2393C4755A27B53EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637352A1F9739ED04D38638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8FF2381FAD6D9207E69776ED762CC1B4334536186EC4BDB88CC7F00164DA146DAFE8445B8C89999728AA50765F790063767B9C6E70FBE8DD8389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC878444BBB7636F62AF6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA73AA81AA40904B5D9A18204E546F3947CDA7BFA4571439BB2AD7EC71F1DB884274AD6D5ED66289B523666184CF4C3C14F6136E347CC761E07725E5C173C3A84C30F1327A8DDF03E57BA3038C0950A5D36B5C8C57E37DE458B330BD67F2E7D9AF16D1867E19FE14079C09775C1D3CA48CFED8438A78DFE0A9E1DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C3ADE50F0DA4A4E48C35872C767BF85DA2F004C90652538430E4A6367B16DE6309
+X-C1DE0DAB: 0D63561A33F958A598B14B2296C2CBF55002B1117B3ED6964AE3E96169070B664869453249F34FA4823CB91A9FED034534781492E4B8EEAD05E80F4396618BB2C79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF9A3339327BFF3DA8DD9398A4720105F57F0866819A6A4B3A787603E93AC8B1C2B23470503F0B8DDFF1AD97FD9824DBCD378DBA4B44E23A7EC74530A4B3B7F0BEB0CF564DAC222AD0146D90F64BF3396102C26D483E81D6BE72B480F99247062FEE42F474E8A1C6FD34D382445848F2F3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojiWfz0I2sVClFNp2JagLBcg==
+X-Mailru-Sender: 9EB879F2C80682A09F26F806C7394981CD4E5312E4C90D18EDE2FBCE1621770AE4E4237182B44ECFE42C4E39D2ED70212C62728BC403A049225EC17F3711B6CF1A6F2E8989E84EC137BFB0221605B344978139F6FA5A77F05FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-7564579A: 646B95376F6C166E
+X-77F55803: 6242723A09DB00B4A77971E4CF73965D9E271BDE2CCB4C0C90205846E38A0579049FFFDB7839CE9E76E35804B2850F204C3A487B7DB4408995EBF8936FA3539D66A481B74CE84283
+X-7FA49CB5: 0D63561A33F958A5094F982880FE9456460509FB89EFD4EEDBA1162031844C7E8941B15DA834481FA18204E546F3947C1E06CC37AB71BBECF6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F79006374826D2517DB07896389733CBF5DBD5E9B5C8C57E37DE458BD96E472CDF7238E0725E5C173C3A84C35CB5556AFF48B99435872C767BF85DA2F004C90652538430E4A6367B16DE6309
+X-87b9d050: 1
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojiWfz0I2sVCkiBDDYAGIU2g==
+X-Mailru-MI: 8000000000000800
+X-Mras: Ok
 
-On Tue, 20 Feb 2024, Linus Torvalds wrote:
+This series adds typec support for PM6150. Was tested on SM7150
+(xiaomi-surya).
 
->Mauro - the BH workqueue should provide the same kind of latency as
->the tasklets, and it would be good to validate early that yes, this
->workqueue conversion works well in practice. Since you have an actual
->real-life test-case, could you give it a try?
+Changes in v2:
+- Drop the patch 1 (from v1), since it has already been applied:
+[1/3] dt-bindings: regulator: qcom,usb-vbus-regulator: Add PM6150
+compatible (commit <ec29a4d9b7c7>)
+- Add Reviewed-by: Krzysztof for patch 1
+- Add Reviewed-by: Dmitry for patch 2
+- Fix typo in commit msg for patch 2 (Quacomm/Qualcomm)
+- Fix IRQ flags in patch 2 according PM8150B (Bryan && Dmitry)
+- Link to v1:
+https://lore.kernel.org/all/20240217163201.32989-1-danila@jiaxyga.com/
 
-In general I think it's worth pointing out that future conversions should
-still aim for an equivalent in task context, and now with disable/enable_work
-a lot opens up for regular wq conversions. If users/maintainers shout about
-latency, then use BH wq.
+To: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 
-Thanks,
-Davidlohr
+Danila Tikhonov (2):
+  dt-bindings: usb: qcom,pmic-typec: Add support for the PM6150 PMIC
+  arm64: dts: qcom: pm6150: define USB-C related blocks
+
+ .../bindings/usb/qcom,pmic-typec.yaml         | 11 +++--
+ arch/arm64/boot/dts/qcom/pm6150.dtsi          | 46 +++++++++++++++++++
+ 2 files changed, 54 insertions(+), 3 deletions(-)
+
+-- 
+2.43.2
+
 
