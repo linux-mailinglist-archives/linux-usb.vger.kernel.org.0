@@ -1,82 +1,167 @@
-Return-Path: <linux-usb+bounces-6755-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6756-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C79985ACC7
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 21:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D6FE885B1FF
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 05:51:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21CDA284009
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Feb 2024 20:07:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6115F283D2B
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 04:51:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E29AC524DC;
-	Mon, 19 Feb 2024 20:07:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F0B456777;
+	Tue, 20 Feb 2024 04:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cAWui9vB"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="oLI2nsWA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8E0374DD;
-	Mon, 19 Feb 2024 20:07:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4810456759
+	for <linux-usb@vger.kernel.org>; Tue, 20 Feb 2024 04:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708373240; cv=none; b=YGNrDO7ieq3n2zJDIKa3oPEoVqFRs71UuS+xiYLFYNv7RKMpoXcMeiv/uph1eBU5YcZJdrT5gCSnVyVIg1NHL2l5OaI4yh8ZeDvK2e0bwibRgU6kLjPtoZW9GSizaDjRPaGyS6pJdkv+/mkr0kroopYnRm00mJkuea2YlEOliL8=
+	t=1708404634; cv=none; b=Iz731nSCfN882b1gfFt388PtGUEPnKwswCJ0+thZdRyuRU+vTzLgqCfTX58/rH/IjEubr74IbwCln9Th3/xzDyJUWnNPLu4ZEmvzFCVQv21XajvFVXUYp1BNxI2qFTtzP4FMLdhDwG9VibsWHyJQ0wCkfJtxr6UwHf/KvEdRwFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708373240; c=relaxed/simple;
-	bh=aNEcQiXoV4afv/M+136E7/8ESPor1nnFBNzWVogGSEE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jzpkQwqIsUf9nbpXjvvTuhNd/Q+zedWtZyC0QiYnPy7qr6nAUCyCShzwXhgkkPmCv/9HwiMG2gbZEvwlj1W3esRLicFi+/kXXQWHz7sw4TSMOrRgxZxM4R/Inr0SB0Am7vXimm8O2Za/xcKSVtTFxiqGqg38rkf1EXUb0JH2/XQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cAWui9vB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB520C433C7;
-	Mon, 19 Feb 2024 20:07:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1708373240;
-	bh=aNEcQiXoV4afv/M+136E7/8ESPor1nnFBNzWVogGSEE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cAWui9vBghjT4PJXtaXla7JmOHz+cZ4byaP61zxzYbzrycn7+e1jGzuzrokiFHU7z
-	 +zXQfUiH9DJ07uOfgmc9iDaggKTeUPpbYwIw7Bgct/2yL0wM8OuiK18aMFfplN4cjt
-	 /PNpGqjrBx/t6ccfb2QIDujVLQr37Tf/vURKs2FM=
-Date: Mon, 19 Feb 2024 21:07:17 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Michael Grzeschik <mgr@pengutronix.de>
-Cc: Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	Jonathan Corbet <corbet@lwn.net>, v9fs@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v2 3/4] usb: gadget: legacy: add 9pfs multi gadget
-Message-ID: <2024021948-reformer-silly-fe48@gregkh>
-References: <20240116-ml-topic-u9p-v2-0-b46cbf592962@pengutronix.de>
- <20240116-ml-topic-u9p-v2-3-b46cbf592962@pengutronix.de>
- <2024021757-geography-hacksaw-3022@gregkh>
- <ZdKze80oFj0PRkkZ@pengutronix.de>
- <2024021911-facelift-graveyard-0760@gregkh>
- <ZdOz7mc-NbiEe2Ei@pengutronix.de>
+	s=arc-20240116; t=1708404634; c=relaxed/simple;
+	bh=gnYTVEhLa2UI/BXFUj5DRblz/ShatFGmeSySyZRlwEs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PyRL4dGxfN4HNgvR6M/4Tf00nM/Kuy+BR2GlBkNCZiT734ilSeriO51S9OU7c/L+Y+CneEZJDq//4rxSbwfnDSQ3v4Bio5BedKiL/NdHc8r8T+8JZP2VJIjuFw09NPbQAjfk6ujVD7q/GDb3NCr8eVxv+AgXEDUhKXnb5DRpltU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=oLI2nsWA; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-563f675be29so4267634a12.0
+        for <linux-usb@vger.kernel.org>; Mon, 19 Feb 2024 20:49:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1708404589; x=1709009389; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JBhO9GN51pgFt/DHFo2a0IcTSs/s3/od7X4R5TK/fL0=;
+        b=oLI2nsWAk2u4tJZ11LOn1pGymu9wIL0kYfzpzXPEnpuHM78lZl0YjezwVMXHvNRk/9
+         fg9BDdiDVh7pv9szb3DmBCrAXqD7FFwJ+dVKoJN3pnqVBi9koZt6d26mFd7AxFOLpohe
+         PxrbZdbAHY8gVSettOPYJiS2Uavxfo1pxYrq0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708404589; x=1709009389;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JBhO9GN51pgFt/DHFo2a0IcTSs/s3/od7X4R5TK/fL0=;
+        b=g1c6gnn8AdwDBf0yDiCBOrcXWFeyDWr+pAzDFRD0C7DukFfFpze7pZHau/MQis6pFt
+         agpeLyUSbJu0NpPrEJLUd25vqlaFE27MkiNZfidc80PkCtt2HitBLloIiGF7liDfeTUh
+         tfINAM8Hq+hd/w8MtdpsmLbINyzIaBA9f90Xu74U1gLDMWW3pPHaCkXxD+jOFt/LSoFP
+         h6HEpET5dLwlHkHdYLtiN/PEzpqKkerpqs8cpWbAr3Z9JoaGXcWfnkFCukFsmC+aQPIj
+         GHMuu6gm8Q1HF7qLqstYBt+sbAuEuCPt6G0u5mFN1/kyCnF4cyRDFmFX7suJDiiwOuCS
+         vClw==
+X-Forwarded-Encrypted: i=1; AJvYcCWvr3AjqZ15iK0oKhDEaDp8AQnVteDNS1oejNNMAAbUo22rcYVQpIQaOW763PghKCBQw3z1BN2HA26IvtfVOCqKsQXDKwWaVfVI
+X-Gm-Message-State: AOJu0YzuLIUwlb/JGiZe55zCcBbY0Y5pmKhSh/Y/lFTNxEsYoELRTN3o
+	s4E5Bmxis/Kje39xB0mc0PwLSr9CB/4LHUyh4jTMO8W49iWoaUUGITyixEDSkBVzgEof/iPmKbb
+	YyA==
+X-Google-Smtp-Source: AGHT+IF4Kvw+onQowCYe9W5SeFCRpsMoEjXvkl73BuNm+fVx/UWs1zMUiIX2PuW7v/FcfU9OFPIllQ==
+X-Received: by 2002:a05:6402:234b:b0:563:c54e:f1 with SMTP id r11-20020a056402234b00b00563c54e00f1mr11488231eda.2.1708404589798;
+        Mon, 19 Feb 2024 20:49:49 -0800 (PST)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id y24-20020aa7ccd8000000b00564063a3391sm3296627edt.4.2024.02.19.20.49.48
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Feb 2024 20:49:48 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-33d6f1f17e5so36813f8f.3
+        for <linux-usb@vger.kernel.org>; Mon, 19 Feb 2024 20:49:48 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUKFl/yXkX13F9LlGGIskinZ2/w2Bg+zAV0LpdlZEqjmGUHdBc4WWL/8zaaaJ3HMq2sNVD3gaslgL5TUccLuJdhDDtYNczKVQfB
+X-Received: by 2002:a5d:44cd:0:b0:33d:3893:838a with SMTP id
+ z13-20020a5d44cd000000b0033d3893838amr5261433wrr.56.1708404587902; Mon, 19
+ Feb 2024 20:49:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZdOz7mc-NbiEe2Ei@pengutronix.de>
+References: <000000000000cb40790611bbcffd@google.com> <98b81fbf-4905-4b45-a8c0-33e7399ef84a@collabora.com>
+In-Reply-To: <98b81fbf-4905-4b45-a8c0-33e7399ef84a@collabora.com>
+From: Tomasz Figa <tfiga@chromium.org>
+Date: Tue, 20 Feb 2024 13:49:30 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5Cs-eeHsCZ6VWrzChTJqd4FSqBS4z6ncd8tPQPNMdN68Q@mail.gmail.com>
+Message-ID: <CAAFQd5Cs-eeHsCZ6VWrzChTJqd4FSqBS4z6ncd8tPQPNMdN68Q@mail.gmail.com>
+Subject: Re: [syzbot] [usb?] [media?] possible deadlock in vb2_video_unregister_device
+To: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc: syzbot <syzbot+3b1d4b3d5f7a358bf9a9@syzkaller.appspotmail.com>, hdanton@sina.com, 
+	hverkuil-cisco@xs4all.nl, hverkuil@xs4all.nl, 
+	laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-usb@vger.kernel.org, 
+	m.szyprowski@samsung.com, mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 19, 2024 at 09:02:54PM +0100, Michael Grzeschik wrote:
-> Okay, What about the rest of the series? Can you just skip this patch
-> then for? Or do you want me to send the series again without this
-> legacy driver. There are no dependencies to this in that series.
+On Tue, Feb 20, 2024 at 12:49=E2=80=AFAM Benjamin Gaignard
+<benjamin.gaignard@collabora.com> wrote:
+>
+>
+> Le 19/02/2024 =C3=A0 14:10, syzbot a =C3=A9crit :
+> > syzbot has bisected this issue to:
+> >
+> > commit c838530d230bc638d79b78737fc4488ffc28c1ee
+> > Author: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> > Date:   Thu Nov 9 16:34:59 2023 +0000
+> >
+> >      media: media videobuf2: Be more flexible on the number of queue st=
+ored buffers
+> >
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D166dc872=
+180000
+> > start commit:   b401b621758e Linux 6.8-rc5
+> > git tree:       upstream
+> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D156dc872=
+180000
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D116dc872180=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Deff9f3183d0=
+a20dd
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D3b1d4b3d5f7a3=
+58bf9a9
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D13ffaae81=
+80000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D13ef909c180=
+000
+> >
+> > Reported-by: syzbot+3b1d4b3d5f7a358bf9a9@syzkaller.appspotmail.com
+> > Fixes: c838530d230b ("media: media videobuf2: Be more flexible on the n=
+umber of queue stored buffers")
+> >
+> > For information about bisection process see: https://goo.gl/tpsmEJ#bise=
+ction
+>
+> Hans,
+> I think the issue occur because of this part of the commit:
+> @@ -1264,7 +1264,7 @@ void vb2_video_unregister_device(struct video_devic=
+e *vdev)
+>           */
+>          get_device(&vdev->dev);
+>          video_unregister_device(vdev);
+> -       if (vdev->queue && vdev->queue->owner) {
+> +       if (vdev->queue) {
+>                  struct mutex *lock =3D vdev->queue->lock ?
+>                          vdev->queue->lock : vdev->lock;
+>
+> but I wonder if the correction shouldn't be to remove usbtv->vb2q_lock mu=
+tex in usbtv_video_free().
+>
+> Any opinion ?
 
-I don't remember what the rest of this series was, it is long gone from
-my review queue :(
+That is probably what triggered the failure detected by syzbot, but I
+don't think we've ever had a guarantee that owner is NULL in that
+code.
 
-So yes, please resend.
+Looking at the uvc driver [1], it doesn't seem to need any special
+locking there (after all the vb2 code acquires them).  (It also
+doesn't have the custom clean-up code that the usbtv driver has in
+usbtv_stop(), but that's another story). So maybe all we need to fix
+it is removing the mutex_lock/unlock() calls?
 
-thanks,
+[1] https://elixir.bootlin.com/linux/v6.8-rc4/source/drivers/media/usb/uvc/=
+uvc_driver.c#L1906
 
-greg k-h
+Best,
+Tomasz
 
