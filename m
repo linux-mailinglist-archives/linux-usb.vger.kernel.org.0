@@ -1,119 +1,124 @@
-Return-Path: <linux-usb+bounces-6805-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6806-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9EE785C387
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 19:19:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F14B485C491
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 20:23:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AD811F21BDA
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 18:19:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92707B24E64
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 19:23:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C776A78B5A;
-	Tue, 20 Feb 2024 18:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E05714A0B3;
+	Tue, 20 Feb 2024 19:22:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gQd5iT9a"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P2j8/i97"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED36C78693;
-	Tue, 20 Feb 2024 18:19:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4CF1353EA;
+	Tue, 20 Feb 2024 19:22:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708453144; cv=none; b=TAOUwjBf+b16KMYq2K+RImCtx9HLq7jHB/UvAuAKLxN7SBjRodHkBjnXTFvHuA7G9ntaQa/UTVDnix3sApuVMaq1JHNbcqImED0/qelcElG2DXdZXJGdXihzPjZevxKZuSM+61wNPiwnQcfK0sFJPE9QOZHMly6xenjkYbJnhIM=
+	t=1708456955; cv=none; b=EGnMZ+CRecTprxRnDr1PWlR7rxaFJ0IvMUL9O5Xkl17QnBSsqiDRMSkentNSXwx71u8f0O1pD1zeee3YGZU6wNBhqLsbeY2vT0kJ8w7zjoyqlBAj14m8XxtIQMDmwu9rnCQ8G4+Zw+rwQXPRnyOxw58hmlJH4L2CJxiZTFXlsBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708453144; c=relaxed/simple;
-	bh=PvYo74uoWhD41ohw8yNS2GUG6/U1gKH18FXvHsCmIKg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MDwwHqpY31H+L84jHn1xz9mp88oOiyDlgXI1IzCYYgFYe7aa6mEMANg+TS36rIZ8VVwfmW4njB3ukqudXY/7w8AC54UQQTGaLUXjCRgwhYBDnYuez5rRCsw9VyatyA90+qth2nMCcjnV3MW6tGZg3wg3PhPYA67PvvGCO4yehI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gQd5iT9a; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	s=arc-20240116; t=1708456955; c=relaxed/simple;
+	bh=iETYLic/GnoHZMrLLtBPhdaUdXYC0To+q4lhTtjXdgE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LphuXy1VZ2Czdtqwl1lQIWflcJBMMyujPg3qGccJaK9lga6Rb4ICL8+N3DLV9merr6Y/5n196jv+W74PQJHelkPH84ZKzkHIm6V0qWOSHqQyPQtF/NZh/Euv32Widp+SLCCLzz0Y6AUgmFOmeyP3vR2jtwTA2uzVHMZtBD9gQC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P2j8/i97; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6e471caaa71so1239708b3a.2;
-        Tue, 20 Feb 2024 10:19:02 -0800 (PST)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-41241f64c6bso34389645e9.0;
+        Tue, 20 Feb 2024 11:22:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708453142; x=1709057942; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qFTpHAv0pmcOCj6fTcaqcOduTWlWxRQydUJGeHzrVhA=;
-        b=gQd5iT9acfCqGPOwI2HsPvERlOItk+chb9lEMLI9kz3jRL+Nol+I+ke8yq2Ila6PKH
-         IAK45mLOgttviJ/inxu2PKdNXHvX/DnkYjiWwZKep8tE0aNpvidq7eC9YMptoX44LpSa
-         XrfHbvmEJRq/IgXFyJZ+oV1WmZ5gWoAOrcT3aCIVb2U3eZ8jzPcuhEw3F1IuA3Y+KGYq
-         1u6QaY4eAhhbBwYV+B/x8a2nqwD8acQ+rKTRFezoD9e1QcYpLVXN6SdcKEAPZ3A3Z0Nb
-         90yKFGxa/5LDI90vrgNAXfDxlN6J1IOUoL9/Pg5+5xYOcrI/gTnZjZRorEvYIOIWLcdv
-         4GmA==
+        d=gmail.com; s=20230601; t=1708456952; x=1709061752; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vr4WFlS9/GiUzUgyJ2V+G5bwrUNZLQw/Jx2ML4aaFjk=;
+        b=P2j8/i97yq9HxvAc3oD4gMpkwdeyRlOZq/Mrw3n+nmQELd6lNuXFfi/l2gestaaxBN
+         B85lBJbUz+K9JdMhLwu1jXvv8N9XP6OhWSlyqohK29f0r1IAqDk0pe6i7qgdtD6UP+PR
+         cgdWxwMOuxID1mXT0GTgzagQtkur4lT86jHO1+RtSYyS7uW+EW9kXoru3TYM0YBeNwV1
+         3tbTk6ZTfD+l/sPkDD9171dHki9mKfN6fT4qFEKlkYWQL8Aw/X3qa9pqcrugGMkSiT+a
+         qkWZgEhelZWDkhDPKtfKfu3eUpwlMGRggxFLl7OEHyxs7IqPoN/Rt2Pq3fF82fuO202r
+         Cw8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708453142; x=1709057942;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qFTpHAv0pmcOCj6fTcaqcOduTWlWxRQydUJGeHzrVhA=;
-        b=vSqhDxyrw/Viei237C/yRue9anMo5rLTRUwwV0PLXrqW+H4k1hTpBsmipH5Ys2MPek
-         hMZMcrbyo46LEHl1J0Yzoz+DO10SALtAs0S218O8axkwYISE8iKNwimWZ1IV3gv4vNJD
-         DfHWFIhWOl9LHvA9oAypHMeMitwQuLnX812wJjIjOMhZuQ8tomYF3AAH5I8q/msS0JRX
-         v7kRp1GDtTMybXCNDHRQxdPfHns0FpoQvruOKn8eOAdvcnZ6/2xnTU9VM8zdsxNIfatq
-         KoXC8vCSTIU58BRXqM8S+NKRRaS3uR86b/c2jagIBlk5m5CdGR3rC2toDtLO0wpYjo2Q
-         SDog==
-X-Forwarded-Encrypted: i=1; AJvYcCWuL/rkonYQGJcgcwq7ViZxrBuB00+ebAh5XHfMPnTuuWyB0i9Zvs4ovN+/zVtvo7Pin+YFITPZcvifJY26C6vfuIYke6TP7wtqHq7s5YEmpPanqLaKZrb46HSPqZhfsYfZfwXSMOuzrMKVluyyWUw+6dI3hG8Q3lxe3ejko9pM
-X-Gm-Message-State: AOJu0YyBaZURL0iYCKUGvvw9igJMoDXeOumAqjRHAw0NKUwp6m1H8ble
-	2EXvF7IBsF0IqcjXAnisa3Cu9Btm1yfGUMavool7xoYzrKGgt2Ns
-X-Google-Smtp-Source: AGHT+IHctzEbCJ0zIC/W29fqRusdFNSQJRt7P7ntp+/eb2LVdwQ/FleSZOrJXKKIk+UeThHSav1Bbg==
-X-Received: by 2002:a05:6a20:c890:b0:19b:a07a:344d with SMTP id hb16-20020a056a20c89000b0019ba07a344dmr15658884pzb.7.1708453142076;
-        Tue, 20 Feb 2024 10:19:02 -0800 (PST)
-Received: from localhost (dhcp-141-239-158-86.hawaiiantel.net. [141.239.158.86])
-        by smtp.gmail.com with ESMTPSA id r8-20020a62e408000000b006e3a4766c7esm5984542pfh.68.2024.02.20.10.19.01
+        d=1e100.net; s=20230601; t=1708456952; x=1709061752;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vr4WFlS9/GiUzUgyJ2V+G5bwrUNZLQw/Jx2ML4aaFjk=;
+        b=UG+WyOqr2tFkqsysHxe1MnhQ5wXmuYUJAmXSe+I/aW8WHULibL4SMSvtEuVHpi5VYB
+         nrEsOIUYvZ+bZndBozfVm07FPbBm8waRSX538K9mfBKMWB684ioovkApu/wdjA0WBk94
+         FSROg4SxkPXlpJD4aPEu9qy18tTuhd/g7smdu5khxyk7lAJqx7mtTkSPxby6WCtvy/Wj
+         qpJLM8YXWL7R2r+vsmBHiSA4/ieo+McKdLSh+zvBKps17VPSwKm1bLM+ZPawTeEOkBsD
+         ruunRgnBkbRb+oecXZ0Bf7Nd2ABxBf5wYFiN8ViDjed/nOniJK4uONPRXzrPTdLKlmO3
+         8sXw==
+X-Forwarded-Encrypted: i=1; AJvYcCWwIh/s9nXmHOhINQWllF/huf168bdS7yp1YbUWxqtPcpx13TwBVrid6ElDRaVqmVuGrfXb9H7LcnSGuovdnvT79J06o6Z7vNKKoZ5BXikhmlEIJYz1Ovk+q1Rbx6uJpXXPcukTbBvCuWTkU2+xjR6K9SAgj4r+Z794In/XMgTRhTgykw==
+X-Gm-Message-State: AOJu0YzVivLlrOKQqdcguE0xiG3UrtoOSrLJn1bFhWqgDGyYN3C20/69
+	k6yU+W2EjRvQTbXTNo3SJhph25hyNi1Bg12aNSZxXa4SeLs9cq4GeIhAEzQ9K6U=
+X-Google-Smtp-Source: AGHT+IFZQREKFQJmcdKI/Yhn1UaRjKV+UzDWjPGCC+Re35EsAMnplszDN1boVkaacvaHa6v3pZOvoQ==
+X-Received: by 2002:a5d:6811:0:b0:33d:374f:83f1 with SMTP id w17-20020a5d6811000000b0033d374f83f1mr6373789wru.43.1708456952254;
+        Tue, 20 Feb 2024 11:22:32 -0800 (PST)
+Received: from [192.168.20.102] (57657817.catv.pool.telekom.hu. [87.101.120.23])
+        by smtp.googlemail.com with ESMTPSA id ba20-20020a0560001c1400b0033d640c8942sm3942265wrb.10.2024.02.20.11.22.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Feb 2024 10:19:01 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Tue, 20 Feb 2024 08:19:00 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: mpatocka@redhat.com, linux-kernel@vger.kernel.org,
-	dm-devel@lists.linux.dev, msnitzer@redhat.com, ignat@cloudflare.com,
-	damien.lemoal@wdc.com, bob.liu@oracle.com, houtao1@huawei.com,
-	peterz@infradead.org, mingo@kernel.org, netdev@vger.kernel.org,
-	allen.lkml@gmail.com, kernel-team@meta.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-	mchehab@kernel.org
-Subject: Re: [PATCH 5/8] usb: core: hcd: Convert from tasklet to BH workqueue
-Message-ID: <ZdTtFFRC7dmiS2wL@slm.duckdns.org>
-References: <20240130091300.2968534-1-tj@kernel.org>
- <20240130091300.2968534-6-tj@kernel.org>
- <bckroyio6l2nt54refuord4pm6mqylt3adx6z2bg6iczxkbnyk@bb5447rqahj5>
- <CAHk-=whqae-+7Q7wbtnEj7YmR8vsx6skTj6j-srV2Fz7cBZ2ag@mail.gmail.com>
+        Tue, 20 Feb 2024 11:22:31 -0800 (PST)
+From: Gabor Juhos <j4g8y7@gmail.com>
+Date: Tue, 20 Feb 2024 20:22:18 +0100
+Subject: [PATCH] dt-bindings: usb: qcom,dwc3: fix a typo in interrupts'
+ description
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whqae-+7Q7wbtnEj7YmR8vsx6skTj6j-srV2Fz7cBZ2ag@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240220-dt-bindins-qcom-dwc3-fix-typo-v1-1-742bf6e49641@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAOn71GUC/x3MQQqDMBBA0avIrDuQTC3SXkW6SDMTnYWJJqIW8
+ e4NXT4+/BOKZJUCr+aELJsWTbHC3hrwo4uDoHI1kKHWEBnkFT8aWWPBxacJefd3DHrg+p0T2kf
+ obPskxy5AfcxZavv/+/d1/QBCwZXqbwAAAA==
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Gabor Juhos <j4g8y7@gmail.com>
+X-Mailer: b4 0.12.3
 
-Hello,
+The correct interrupt name is 'hs_phy_irq' not 'hs_phY_irq'.
 
-On Tue, Feb 20, 2024 at 09:55:30AM -0800, Linus Torvalds wrote:
->    git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git
-> refs/heads/for-6.9-bh-conversions
-> 
-> although it's possible that Tejun has a newer version in some other
-> branch. Tejun - maybe point Mauro at something he can try out if you
-> have updated the conversion since?
+Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+---
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Just pushed out the following branch for testing.
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index 63d150b216c5..38a3404ec71b 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -102,7 +102,7 @@ properties:
+     description: |
+       Different types of interrupts are used based on HS PHY used on target:
+         - pwr_event: Used for wakeup based on other power events.
+-        - hs_phY_irq: Apart from DP/DM/QUSB2 PHY interrupts, there is
++        - hs_phy_irq: Apart from DP/DM/QUSB2 PHY interrupts, there is
+                        hs_phy_irq which is not triggered by default and its
+                        functionality is mutually exclusive to that of
+                        {dp/dm}_hs_phy_irq and qusb2_phy_irq.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-6.9-bh-conversions-test
+---
+base-commit: b401b621758e46812da61fa58a67c3fd8d91de0d
+change-id: 20240220-dt-bindins-qcom-dwc3-fix-typo-15f71492adaf
 
-It's the same branch but combined with the current linus#master to avoid the
-rc1 wonkiness.
-
-Thanks.
-
+Best regards,
 -- 
-tejun
+Gabor Juhos <j4g8y7@gmail.com>
+
 
