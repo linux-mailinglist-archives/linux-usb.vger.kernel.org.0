@@ -1,63 +1,56 @@
-Return-Path: <linux-usb+bounces-6782-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6783-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E0C985BCA6
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 13:56:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B83A85BDEA
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 14:57:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A64B4B21EF2
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 12:56:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADDA71C20E06
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Feb 2024 13:57:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BBFB69E0C;
-	Tue, 20 Feb 2024 12:56:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1880169E12;
+	Tue, 20 Feb 2024 13:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NDL51/xP"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rlAwWPTE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15505CDED;
-	Tue, 20 Feb 2024 12:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20D36A352;
+	Tue, 20 Feb 2024 13:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708433773; cv=none; b=j3cXAN6v2OCtfGk21bnKE3xXsuC1+418DcASR6W4d2kqyIxnbWboKVdI/w2JpY+yWEBAYKWQhgbOLqCDIF7kCCaAKOIcbHs5MjFaLBcAbn7zkrUUjRJZzRu+gLwO+//TmiI6W0dSw/dm73uBEQfi6EBEFy1QeGmjT6xxOQPjAYs=
+	t=1708437412; cv=none; b=crdMlLzfaFvO/2UtrON5F5uM/HwNv6QeZJgRrWKLRV0FXW/T4FuoqxLjglYV9N706GusojljGtfEtZP/EjbgpA6ZOsqwFUNUxeWAf+f/+HeGAGUSMXh6qoMmWz3WZKA7DED7wCNaSFsN1l/i47qTlKhoyxMfFKy6odNYYFh99Yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708433773; c=relaxed/simple;
-	bh=Q5BWa8LkWf902AxVTsQ/Vk7boyDKv6MiQY5w+ZXdYKc=;
+	s=arc-20240116; t=1708437412; c=relaxed/simple;
+	bh=E3BCTdyRZN6XYQqN8C6S5Y9dTvLTRGnbQEBo9LCHz84=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FI2hloyk6ZxqFhChm2qJA0pRgaghn0ZuVXgG60lyFzs+t6+OkwUi2F5k28oYqwNqKyDZDeJnWhRh93kfgywbqhFr6oXL0t14HdK22I68fcVUuZC4/V7UPyFiiUKiB5XoZhrMQdfKIXJKED81oj45KAS+mPbtNGE0bZmpVMLJgvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NDL51/xP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90FE2C433C7;
-	Tue, 20 Feb 2024 12:56:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708433773;
-	bh=Q5BWa8LkWf902AxVTsQ/Vk7boyDKv6MiQY5w+ZXdYKc=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=iDfU3vOzxYSt0KNEcYSMoIfBVm7aJA92Qq8lMtY1Xs+pu4Y4hWcwT+97gA2/vFza1qnx1moYIhz7PLScBaVWlA3iWSSZS5gqMqHn6x0jASIH9uQVT1tNj2fpucSyl27ct4D5VxaIlHd65ny4TXpPhwnzbfLuztrwDU3aEWsaw6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rlAwWPTE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C1CC433F1;
+	Tue, 20 Feb 2024 13:56:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1708437411;
+	bh=E3BCTdyRZN6XYQqN8C6S5Y9dTvLTRGnbQEBo9LCHz84=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NDL51/xP6pc6UuWIIrE/ULokhaA0Vsu3/GWwd+ew91wGsc1nIk9kL/zCarULtlWWk
-	 n8oXykLkk1lkVXPdj28ctAzMV3NjQq12HaTujBx4w5zB+Nl4HBaCCz65guDc+uGA6n
-	 BNp3HCFt8zpK5YVEoZV05JTsAK/3s1Nkn0bsertTXPh0yzb5mx80ghJdLuKmrP/ThN
-	 NFsQi7M1r663rsSy7vyAcU9/4hamPARjn0qnQQOa/KUVf7/nFACL8E5oaJ+76oAPQ7
-	 zFUqw71sreswoZq5sS/mbllizqCcdsXgJFzjVbFryODclY7YAY7+8vFZ7hYxh3W1en
-	 cuQlAhiLsdg1g==
-Date: Tue, 20 Feb 2024 12:56:08 +0000
-From: Simon Horman <horms@kernel.org>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Ariel Elior <aelior@marvell.com>,
-	Manish Chopra <manishc@marvell.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH net-next v4 1/9] net: usb: r8152: Use linkmode helpers
- for EEE
-Message-ID: <20240220125608.GG40273@kernel.org>
-References: <20240218-keee-u32-cleanup-v4-0-71f13b7c3e60@lunn.ch>
- <20240218-keee-u32-cleanup-v4-1-71f13b7c3e60@lunn.ch>
+	b=rlAwWPTEX7ehi0B0z/TLouYdO+CGYltqPzHYVNj/fJ5eFG+RAREThXUSbvJuW9UXu
+	 u1kL4KGcXJ4CzMjzcD4+gsJujn2Ua5E/sRIlMTn3qxTOd/5u0E1H5QR3JqeL9OTGJt
+	 dchdTdXEYsX0Dqx0dsDh9aCGQticJqYAQG8tALZc=
+Date: Tue, 20 Feb 2024 14:56:48 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Ray Chi <raychi@google.com>
+Cc: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+	Thinh.Nguyen@synopsys.com, quic_uaggarwa@quicinc.com,
+	albertccwang@google.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: gadget: remove warning during kernel boot
+Message-ID: <2024022033-broom-anime-6dd5@gregkh>
+References: <20240220081205.135063-1-raychi@google.com>
+ <2024022024-trout-kennel-6d14@gregkh>
+ <4d62d4d0-3f28-486b-8132-4cc571b6f721@quicinc.com>
+ <CAPBYUsD=3ux8RXgRcroVsmpqNs0D+2NeLhqPHh3TBB_oq=ziXA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,20 +59,19 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240218-keee-u32-cleanup-v4-1-71f13b7c3e60@lunn.ch>
+In-Reply-To: <CAPBYUsD=3ux8RXgRcroVsmpqNs0D+2NeLhqPHh3TBB_oq=ziXA@mail.gmail.com>
 
-On Sun, Feb 18, 2024 at 11:06:58AM -0600, Andrew Lunn wrote:
-> Make use of the existing linkmode helpers for converting PHY EEE
-> register values into links modes, now that ethtool_keee uses link
-> modes, rather than u32 values.
+On Tue, Feb 20, 2024 at 05:42:56PM +0800, Ray Chi wrote:
+> Hi Krishna,
 > 
-> Rework determining if EEE is active to make is similar as to how
-> phylib decides, and make use of a phylib helper to validate if EEE is
-> valid in for the current link mode. This then requires that PHYLIB is
-> selected.
-> 
-> Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+> I verified the Thinh's patch and the warning could be
+> fixed. Thanks for the information.
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+Can you provide a tested-by for that one?
 
+And please do not top post :(
+
+thanks,
+
+greg k-h
 
