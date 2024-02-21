@@ -1,110 +1,111 @@
-Return-Path: <linux-usb+bounces-6824-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6825-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0936885CC78
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 01:01:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73EC185CC8D
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 01:07:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16665B235C1
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 00:01:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5B4D1C21EB0
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 00:07:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E71D126AFC;
-	Wed, 21 Feb 2024 00:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC33B10E3;
+	Wed, 21 Feb 2024 00:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wb2/I4f5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="npbY8xox"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E813D8E
-	for <linux-usb@vger.kernel.org>; Wed, 21 Feb 2024 00:01:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 972B9193;
+	Wed, 21 Feb 2024 00:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708473673; cv=none; b=kusFLbS7wbEwZVZk3Yf3NONlZRVT9llCpoaiNOmhudpTpSj2ANTRYBU2gc3eRTD69bt+al+gd3VIRiB1hw92lFG+1NqkJLt2O5C3XDcWPEgqfXP3o7gZjKhAGrMlMj74XMtb4uwWxjBoBZeEzP4pm37GUFy2ocAHg01dZojuLwM=
+	t=1708474065; cv=none; b=Nf5n5Yq1BZ+wLJPwI2gkDJV6STVSZZEHUDwgEcKLy5RGRiKnRJlcOSg0UKmXZHg0yBwAfQkW3kQ0PjxdrhUOLtd8aHMy9B8IW5/mtpyeNa47cUd/dxaDRgXEXdaFfcF4aoIQ7XpoRFEzJluow7n87vBgxi3VxhcG7PDP0pRPGzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708473673; c=relaxed/simple;
-	bh=YT82tQv36KhBq/RLsxxfjh9daYWJeJ/uSm7Nea0KjLU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K4pnniBSmdDR0VUbegs+wtkk60oj3qRNS6lysZnV3z8/C/sitIQxACzGUKEXRueYsLKFnmcyI0l0czXkXbh/UEZ6L5dwMJUmzVOtS+YMmj6WCObg6D9aCO7biRWZIvEjD9qsEOxCCwj1xqAVpvRCanrmRHonfZKdNH/suLi68A0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wb2/I4f5; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dcc73148611so6952980276.3
-        for <linux-usb@vger.kernel.org>; Tue, 20 Feb 2024 16:01:11 -0800 (PST)
+	s=arc-20240116; t=1708474065; c=relaxed/simple;
+	bh=iXE6+R8ASa+RDcoAvHrDmlfm6SXejlgM5QbL0gV5rQY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M3YOGkXQmIwG4I7699FjzD35BqwheZXdbXf/3GcR2CwJs8RyyAxTtvqEkEMMm3yw6qy2dnbsFroh4a5INn3an4S0jXLqUwrBoNcXnvSBU2c9rCNq+5WWlcspwaJASy6Td4LNHjCslosf/ZsWLsmIcLQFQSbnmCyCLjxg50fvv7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=npbY8xox; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33aeb088324so3242129f8f.2;
+        Tue, 20 Feb 2024 16:07:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708473671; x=1709078471; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=G0oPPjBzy9DSg81CmxxzMOi5kgIq+VDsp6cs8swUMVo=;
-        b=wb2/I4f5XUL4eTOtOP890jnCmuLgoL/bM8hfrHnSi1IxZyqp642F3V9p1/8BHoq/ve
-         e0vJnrGN6bqe0vbUcviZ33IDir90AEhVRiHs088vfrlZ/SRXBXGn/ZLtdRJoE2UKZSVN
-         WvcUEKm+g2x1Hy2jTEM/I6cRo+2JQLc6zKpWuKG4tBgTjbNwtHvZmkuIzQgUe/Y9u86k
-         +ZVgomfqCqkVSqxFJo7vZN+DSOdaQP3TabnTVdCaWo7JwEuDaCchmRpZ2hUVqn1fzbEU
-         o27ci2Ttzz4b3pxhMbFWUC9qFGg8CNA9c87ioTqPOVUO3mJq+IiOETLzpGF5BeV+Rb/j
-         eilQ==
+        d=gmail.com; s=20230601; t=1708474062; x=1709078862; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lJEzqI5ur+SbBoa1SbqduYIKj5d2G64DD1tgTxLxA/Q=;
+        b=npbY8xoxWtqTDtAABQUSRPS0EhhYEh3mqgztGAVP5USFQQIOI7nU5Gl9sgRV5X82q5
+         +fWhZa09cL/QAFWA6sf4UoDhvldkwcD9G4mjYsuyaVG45vm88xjKaoCQwUXMKvdvuh6p
+         dpj8gtB8kCniok0KtddADcLKtBN4PlRVIG4GtPh1dvHcP1YgCpVVzXexLaCEfmTaYQ5q
+         wpppvF3QUbp0zPz/tGYgDxoU0eLT12f/YtFhE6w2s+tahdZU+9weM3rW6oOYsx2kIT9J
+         L/IprYVbTj7eo1nhrO4DhrgwcvTT6VdNSm4zjVrDwQZtyO1IybQMLMsT4oM8sJhF7f09
+         SaKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708473671; x=1709078471;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G0oPPjBzy9DSg81CmxxzMOi5kgIq+VDsp6cs8swUMVo=;
-        b=pnn3O9QGg/2UnXbJTAhRzBLaFflRMVse5QQ1MJtr9Yt5AvJy32oMrbsoHE8rGRFge4
-         KPlcQjqsR6o9guN2YzGOir6w+4gu6AxoLzPxY1sA2WpoJN1hhLSSblcyABy8/tSdAS74
-         5EudwszslkX9l6MBn++jpvmIi6Wqe1W+MSsxBj7mkSiTBDOUnNKbD0tDRWaLb/Sx3TIO
-         IkTBjwpYvUnX5iViy8kEi9Ir37yIh6eDwkLawraI45f8QKjlnlmCdADKEzwZTsb+UbmZ
-         AnPbhiS8ehwdm23mm2QQhmi0V1D8q5ekXL93OCyqDmZSXP1zq9hAZsLYvN5AMBWNg7iq
-         6p/A==
-X-Forwarded-Encrypted: i=1; AJvYcCUIOhlb01+oeZOtAgzmuaaD5Cd34I1yYhSYT3+IXqgF1dkf4EzYda6o0qLr5Gyelqs7TZ7A6Huf4FPS6UDaojuSNtP1zEXQ5Yt9
-X-Gm-Message-State: AOJu0YwoSAumUmMAKaMO5wdAyXCxaKptR4rMOQlXS80CRXUwRyMeuS3h
-	mei5656Z82TlHnNPAQi84K94JOc0xFZYPqB8JoaktmNrsCT8Z6RfbXpM3pwLFImvt63VVizhKFF
-	ePFgM/tcGpRcljfkWBBXfdQNJ2K9MjTaqiu2Tfg==
-X-Google-Smtp-Source: AGHT+IEqhvu/sPjOF0+od9x3JViU6gBZyp4VAGTIBlbM9Am3DLOO6gj84yHo0rRnj688//9UfY95dj7T/S3qJ8OpFh8=
-X-Received: by 2002:a25:cdc7:0:b0:dc6:cbb9:e with SMTP id d190-20020a25cdc7000000b00dc6cbb9000emr14755191ybf.41.1708473671007;
- Tue, 20 Feb 2024 16:01:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708474062; x=1709078862;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lJEzqI5ur+SbBoa1SbqduYIKj5d2G64DD1tgTxLxA/Q=;
+        b=HgHfOFShwaM4VXzzUjS0tdtc+8P+MlCUMmUCG28tm6JH+sD7X+a15uv5vgMM9jVcw0
+         XelwliwWiB+L62gCFX0+HgxZE3MPnoyJBuDxcV/klX/tR8q4aijpPYXVtFdeakxgl39n
+         loGYAK/qVfYqsJxfEFMRjrE//qlNbTzRtwWs+dbmNQ3dy1i5mTdoqsFYBMzSQ+9waaaE
+         LApvrSW5qjepIR9hAiWPML1uuwbHjNRfv5eYNd1umZUw5twSndwkXU2+cTE7dx3TUIGA
+         2pKeaMNAPQKqo4BBNf4hm7rWl7YxICXrgRiEK+qAgKkFGQmhyXr0MTOwEjws6tyA4T4K
+         PrIg==
+X-Forwarded-Encrypted: i=1; AJvYcCUnq92fNEl4x/SPN8NBcKDjqq1X0WCWwyWv2pLPBewH7maMbzif6Pnx846s9BGne2s17+6m+U0iY/8iDQV/ajOHmYtMRjPODER7RW5YWGaDm1BllZz8w5h50srSLApwxFC8KzjeLIhFRPGVquhOH0bl/iI6KZ/T8epqHQdMui226xQ9
+X-Gm-Message-State: AOJu0YzOptBseaHK2d3KxlgWIyyJ4dm0g6jmGF6wXxxWV5F8SJedSSXm
+	OfRn9CEB+JwGlG3uC/ZCgUqKJwEvFalQZtXOPzEZ8i19om7DmJwZ
+X-Google-Smtp-Source: AGHT+IEjN/4x8lMxmDXugNXlFWRbk0nwkpz+fRchEALt1xd2cYaKzfO49MmZPW8WXFfsgYFsCm3SEA==
+X-Received: by 2002:adf:f6c8:0:b0:33d:714b:f3bb with SMTP id y8-20020adff6c8000000b0033d714bf3bbmr1560887wrp.26.1708474061669;
+        Tue, 20 Feb 2024 16:07:41 -0800 (PST)
+Received: from [192.168.0.2] ([69.6.8.124])
+        by smtp.gmail.com with ESMTPSA id bs17-20020a056000071100b0033d47c6073esm9134362wrb.12.2024.02.20.16.07.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Feb 2024 16:07:41 -0800 (PST)
+Message-ID: <07fb65c9-109d-4dfb-ae60-c4a1ce99876f@gmail.com>
+Date: Wed, 21 Feb 2024 02:07:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221-pm4125-typec-v3-0-fdd0ee0465b8@linaro.org> <20240221-pm4125-typec-v3-3-fdd0ee0465b8@linaro.org>
-In-Reply-To: <20240221-pm4125-typec-v3-3-fdd0ee0465b8@linaro.org>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Wed, 21 Feb 2024 02:00:59 +0200
-Message-ID: <CAA8EJpqMiZDTAkFXuuw0A=-B4jLy_yU2xs4gti_kBcJEgYKmBg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: qrb2210-rb1: enable USB-C port handling
-To: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 11/12] net: wwan: core: constify the struct device_type
+ usage
+Content-Language: en-US
+To: "Ricardo B. Marliere" <ricardo@marliere.net>,
+ Oliver Neukum <oneukum@suse.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+ Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean
+ <olteanv@gmail.com>, Roopa Prabhu <roopa@nvidia.com>,
+ Nikolay Aleksandrov <razor@blackwall.org>,
+ Loic Poulain <loic.poulain@linaro.org>,
+ Johannes Berg <johannes@sipsolutions.net>
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bridge@lists.linux.dev,
+ linux-ppp@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20240217-device_cleanup-net-v1-0-1eb31fb689f7@marliere.net>
+ <20240217-device_cleanup-net-v1-11-1eb31fb689f7@marliere.net>
+From: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+In-Reply-To: <20240217-device_cleanup-net-v1-11-1eb31fb689f7@marliere.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, 21 Feb 2024 at 01:58, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> Plug in USB-C related bits and pieces to enable USB role switching and
-> USB-C orientation handling for the Qualcomm RB1 board.
->
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+On 17.02.2024 22:13, Ricardo B. Marliere wrote:
+> Since commit aed65af1cc2f ("drivers: make device_type const"), the driver
+> core can properly handle constant struct device_type. Move the wwan_type
+> variable to be a constant structure as well, placing it into read-only
+> memory which can not be modified at runtime.
+> 
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
 
-I didn't pick it from v2, please excuse me.
-
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-
-> ---
->  arch/arm64/boot/dts/qcom/qcm2290.dtsi    | 42 ++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/qrb2210-rb1.dts | 60 +++++++++++++++++++++++++++-----
->  2 files changed, 94 insertions(+), 8 deletions(-)
-
-
--- 
-With best wishes
-Dmitry
+Reviewed-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
 
