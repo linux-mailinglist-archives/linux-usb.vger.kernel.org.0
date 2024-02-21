@@ -1,189 +1,91 @@
-Return-Path: <linux-usb+bounces-6852-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6853-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B60B85D4F4
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 11:00:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26C1785D583
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 11:29:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AE161F23605
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 10:00:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 585691C21AC8
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 10:29:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D84613F8EA;
-	Wed, 21 Feb 2024 09:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F1E23EA8B;
+	Wed, 21 Feb 2024 10:28:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j/cClNDH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lc35IEzy"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A39F3D564;
-	Wed, 21 Feb 2024 09:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0033B3DB89;
+	Wed, 21 Feb 2024 10:28:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708509178; cv=none; b=kt6F+Brld8/13jmLpQ0xj9mtPao/pZ78dvi4maFq9GhVnnk+SVkGrGVHA70q9Ystn6BtHZ827gM0iX2YPqhUcqezlZ3+S4CCwczLiWT8A4O4hdDk7xqsZwiv9x6frhYT61C/FT34TzvvHnmFVsphASmrGHDJfmulZWYGprMhwFY=
+	t=1708511337; cv=none; b=Zlbgvco5fRSdq6mSbOkpCnqzL+H+nLoqFQ0KYD+XDn65IW8OF+yg/bOLY0AtjpQKTW6gwizGVKyBeNI3LqpcMZfIvhlAj5CCx9AJy3SP1VvLHBggBbD6UD/jZU1gdaeEqqvbwrZNoeWWd5EMILkH5fchBQkjHDUcBUbeCA834rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708509178; c=relaxed/simple;
-	bh=n+F3zfUjjh0FcowZvUt7zMvLrVajwJGpsuxCwXX6+io=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j8N/xjna7MyljJKF+JztNrXd755PWiRVJxb0DfzvkHDsPRkm8BeLfzxD+ySZYYBoedE9AwwYyVmcu6q59qbuajeXveVUXrslCqcDq6Vl8S2v0fPRYFO0TIV7qFYD7VCRqwtc8LOkAEi9TEShHBGu31oQgAiof+TclmlDwHa9o/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j/cClNDH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 725E0C433F1;
-	Wed, 21 Feb 2024 09:52:54 +0000 (UTC)
+	s=arc-20240116; t=1708511337; c=relaxed/simple;
+	bh=bm8u3iY6apdYKRPco8f0Nqv9EVlR63UHDnzkoz1yF1o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D5ptmHwiPo++aWh4nMGB6mTVDN5tiH+hBFE0Q/FhnFa6vCVQa///vka2sE8cGXCt3pK1TKSEMvYPIWs3KlF81AkPl6mrF3UEl7q4pVnO+MZJtMShFcX0YrDtpms171Yexh6vnJWCq/jhgZ0HTILjHn6n7vZ+LbsB4vOcVVrmJJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lc35IEzy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D54EFC43390;
+	Wed, 21 Feb 2024 10:28:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708509177;
-	bh=n+F3zfUjjh0FcowZvUt7zMvLrVajwJGpsuxCwXX6+io=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=j/cClNDHf5DPCLnlNAtv51eNkyM3+JZg3cpj30hyd/au43bgg7+XDqv4wJp3SEdm7
-	 HslEbEs0xdVbUvUt5tpF8jDvQUg9uxBL63bTPPBlbw7be4fFIfk1Dv91wzSytUwde6
-	 Vj0pRam/eVXk8WmkPoE17SK6Iky3eq01eGhZjDl2OyYkuK1FD8ydHAer79YWacywJz
-	 6B9RLZRj26wUavBTrf/5dkOqmcgh4bMJjlvJXEYu2ZOJJXklz5oxbMO3wiRKQwTAoL
-	 /BZT+iMnpHb6MVBy9lnNLY4t7e6+T/V8FrolTVPil8bgtEjdUASi1YF0lJBC9BnDRM
-	 /hYodnqz+aRLA==
-Message-ID: <bea850fe-19e8-492e-b885-6d01b389c32c@kernel.org>
-Date: Wed, 21 Feb 2024 10:52:49 +0100
+	s=k20201202; t=1708511336;
+	bh=bm8u3iY6apdYKRPco8f0Nqv9EVlR63UHDnzkoz1yF1o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Lc35IEzyuobZxeZsjUNEzNQrHDqnOznMP+hUeZWXxQEKxj2NiOKeaQStwwLOW9oSZ
+	 GhjZ3wFVTd7CMEjyXU7qgnaqWw2j+wDWJUI7Vxstd4VtThzts68zAmgVIl6tWWRU1I
+	 0HKaWvo7q/ZPCUKTvPV/gyfPTeo/X9fwJAU8o+//Rv9wo6yD96YCwS3VHs4f8Ax7b/
+	 +qzXuC1tWvRLgYabMF5H48suClus9mAINrjd8bn+shErQKu2frfTGy9Ruvc85QTqwr
+	 Cj63MOFxT5MwvSb3XMgibxqhgAIlGUQHpVWkF61Dwd6h9fFraBn3aBL9vN/+tY+R5M
+	 3nF62OYp9W7RA==
+Date: Wed, 21 Feb 2024 10:28:51 +0000
+From: Simon Horman <horms@kernel.org>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Ariel Elior <aelior@marvell.com>,
+	Manish Chopra <manishc@marvell.com>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH net-next v4 3/9] net: qlogic: qede: Use linkmode helpers
+ for EEE
+Message-ID: <20240221102851.GA352018@kernel.org>
+References: <20240218-keee-u32-cleanup-v4-0-71f13b7c3e60@lunn.ch>
+ <20240218-keee-u32-cleanup-v4-3-71f13b7c3e60@lunn.ch>
+ <20240220124405.GB40273@kernel.org>
+ <a52361ef-66ab-41bd-b245-ccd26fcbd957@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] usb: xhci: Add support for Google XHCI controller
-Content-Language: en-US
-To: Puma Hsu <pumahsu@google.com>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
- Thinh.Nguyen@synopsys.com, badhri@google.com, royluo@google.com,
- howardyen@google.com, albertccwang@google.com, raychi@google.com,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20240219061008.1761102-1-pumahsu@google.com>
- <20240219061008.1761102-3-pumahsu@google.com>
- <0b4464eb-631e-4c9f-a7c8-3451be15d8b4@kernel.org>
- <CAGCq0LYFMrFmxeKZE9g-O61+N03rJoGL0XvXJVya0Yx-ZasvBA@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <CAGCq0LYFMrFmxeKZE9g-O61+N03rJoGL0XvXJVya0Yx-ZasvBA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a52361ef-66ab-41bd-b245-ccd26fcbd957@lunn.ch>
 
-On 21/02/2024 10:31, Puma Hsu wrote:
-> On Mon, Feb 19, 2024 at 8:22 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>
->> On 19/02/2024 07:10, Puma Hsu wrote:
->>> In our SoC platform, we support allocating dedicated memory spaces
->>> other than system memory for XHCI, which also requires IOMMU mapping.
->>> The rest of driver probing and executing will use the generic
->>> xhci-plat driver.
->>>
->>> We support USB dual roles and switch roles by generic dwc3 driver,
->>> the dwc3 driver always probes xhci-plat driver now, so we introduce
->>> a device tree property to probe a XHCI glue driver.
->>>
->>> Sample:
->>>   xhci_dma: xhci_dma@99C0000 {
->>>     compatible = "shared-dma-pool";
->>>     reg = <0x00000000 0x99C0000 0x00000000 0x40000>;
->>>     no-map;
->>>   };
->>>
->>>   dwc3: dwc3@c400000 {
->>>     compatible = "snps,dwc3";
->>>     reg = <0 0x0c400000  0 0x10000>;
->>>     xhci-glue = "xhci-hcd-goog";
->>
->> NAK, that's not DWC3 hardware in such case.
+On Tue, Feb 20, 2024 at 03:45:28PM +0100, Andrew Lunn wrote:
+> > > +	unsupp = linkmode_andnot(tmp, edata->advertised, supported);
+> > 
+> > nit: Given the types involved, I might have written this as:
+> > 
+> > 	unsupp = !!linkmode_andnot(tmp, edata->advertised, supported);
 > 
-> By introducing this property, users can specify the name of their
-> dedicated driver in the device tree. The generic dwc3 driver will
+> linkmode_andnot() calls bitmap_andnot():
+> 
+> static inline bool bitmap_andnot(unsigned long *dst, const unsigned long *src1,
+> 			const unsigned long *src2, unsigned int nbits)
+> 
+> It already returns a bool, so there is no need to force an int to bool
+> conversion using !!.
 
-DT is not a place for driver stuff.
-
-
-> read this property to initiate the probing of the dedicated driver.
-
-I know, but it is not a reason to add stuff to DT.
-
-> The motivation behind this is that we have dedicated things
-> (described in commit message) to do for the XHCI driver in our
-> device. BTW, I put this property here because currently there is
-> no xhci node, xhci related properties are put under dwc3 node.
-
-Sorry, you miss the point. Either you have pure DWC3 hardware or not.
-You claim now you do not have pure hardware, which is reasonable,
-because it is always customized per-vendor. In such case you cannot
-claim this is a pure DWC3. You must provide bindings for your hardware.
-
-Now, if you claim you have a pure DWC3 hardware without need for any
-vendor customizations, then entire patchset is fake try to upstream your
-Android vendor stuff. We talked about such stuff many times on mailing
-list, so for obvious reasons I won't repeat it. Trying to push vendor
-hooks and vendor quirks is one of the most common mistakes, so several
-talks already say: don't do this.
-
-> It will be appreciated if there are alternative or more appropriate
-> approaches, we welcome discussion to explore the best possible
-> solution. Thanks.
-
-And what's wrong with all previous feedbacks for similar
-Google/Samsung/Artpec/Tensor vendor hacks? Once or twice per year some
-folks around Google or Samsung try to push such, they all receive the
-same feedback and they disappear, so I have to repeat the same feedback
-to the next person... Please go through previous patches from
-@samsung.com for various subsystems.
-
-Documentation/devicetree/bindings/submitting-patches.rst
-Documentation/devicetree/bindings/writing-bindings.rst
-+other people or my talks on Devicetree
-
-Summarizing: Devicetree is for hardware, not for your driver
-hooks/quirks/needs. Describe properly and fully the hardware, not your
-driver.
-
-
-Best regards,
-Krzysztof
-
+Good point, sorry for missing that.
+I assume there is a reason that the return type of
+linkmode_andnot is not bool.
 
