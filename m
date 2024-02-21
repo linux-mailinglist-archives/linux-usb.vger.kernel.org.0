@@ -1,161 +1,107 @@
-Return-Path: <linux-usb+bounces-6855-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6856-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97B5385DB9D
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 14:43:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2BA485DCB6
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 14:56:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5236E285053
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 13:43:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 785861F21B11
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 13:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 422B379DBC;
-	Wed, 21 Feb 2024 13:43:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE1367C09C;
+	Wed, 21 Feb 2024 13:56:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d8E2wc0M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W0VR8Sr4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F3078B4F;
-	Wed, 21 Feb 2024 13:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BFD97BB18;
+	Wed, 21 Feb 2024 13:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708522993; cv=none; b=RDKAEDfMrPPHF2ePEkY6NBBdnV+mcWeCkc7Dcyk1bYbGxiyUViwTZET63gqWamIs9x7NdheT9l9R036+EiTLMJFhgCOSwrdeeQZyeb0ouwj3CcJO2p5FtekCY0mJU+xhZME1OqhPu2oB3PDuYTpzv8GOat1Vhw8d2MtAuUsznAg=
+	t=1708523787; cv=none; b=ablVDBPXEiBdseQ2CqVPA+TH8A6rnuxXgbIkPGj1J8iSCx5kQA97MpAdGN/5YZTnCXfuyJS+L3uUkyJ8B2y2XePIYqEaFVlPUbZd801+DiKwzvMzDErareMu0eRU8wKNAz/WcpGA0f29P8CosN4gDOxmo7sM0awWopErVehZ0NQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708522993; c=relaxed/simple;
-	bh=iimaZygvldYflluURjK6iRBjSOBNYxNVe8gQ5ptDwEk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=Q0GUNQrStuL1jZb8psv6nQuEeIGvVObaLiyVexG0qjOvkrE51eydmhpgl7/3J0u46SImXTwL8Czq6jtF60nRaHiY3mcjMZT1iGk6H7HZXxoIE2ADAGOyfqDMoJT1dfE4xIxDsALgUW7CfPXHyvoRS5UxaYq6d67cOY+ffI5jeyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d8E2wc0M; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708522992; x=1740058992;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=iimaZygvldYflluURjK6iRBjSOBNYxNVe8gQ5ptDwEk=;
-  b=d8E2wc0MX+nZpWLjsRBslQY8qDRaMsDHnWC7kZ4f1XYBGh21NPrRZZH+
-   nAXQnQthbbZNOCjm6IjdPCJcQUfYH98KuN+XNSn1yl6fFm9o1UneLdKxl
-   Di0qD+yEICJn4yrZM0EgYrgrHnFNQfaKUTGnLIyYZf3subq76cBhJRAfL
-   awU8VjNZLAdcX8cdrzN5gOzYyreUno7av6whni7M4tZl4xg+YReSsl56z
-   kqrj9WAjO1qPisQRnmeXJfId3nebVC5J/62XoRkgQA2LbHYj7CwsG+xod
-   nhFYjJQAoFJDh7r4fw6OBuRGCeB13apae3c35WOAYJbQwLWXuV/Jr1vRn
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10990"; a="2822316"
-X-IronPort-AV: E=Sophos;i="6.06,175,1705392000"; 
-   d="scan'208";a="2822316"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 05:43:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10990"; a="936647876"
-X-IronPort-AV: E=Sophos;i="6.06,175,1705392000"; 
-   d="scan'208";a="936647876"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Feb 2024 05:43:08 -0800
-Message-ID: <4f34b6a8-4415-6ea4-8090-262847d606c6@linux.intel.com>
-Date: Wed, 21 Feb 2024 15:44:47 +0200
+	s=arc-20240116; t=1708523787; c=relaxed/simple;
+	bh=FurAbRLSrj+WrRKW3LABQYLQlweDJrWbSesqU4LpggA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=evIy2StuUzqZWeTzTsfq92wJyb4WIvNMXhN64yN/7Sg3D/ewKveu1qvVBI/oqPLb5kZIGl1DI9xSUeUymK2Y/MQxzukSUdKfb29ahruqkHFBNNuxeku885MOY8/H7+aQR8cvqrS5nu4QZcU7cnrkm/GUqwYNz38Ski4DixeD5zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W0VR8Sr4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9821BC433F1;
+	Wed, 21 Feb 2024 13:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708523787;
+	bh=FurAbRLSrj+WrRKW3LABQYLQlweDJrWbSesqU4LpggA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=W0VR8Sr4N6zwNgpzxd03p24GPTGwTwfHy3Jny0P2EMSokCr6tGuM5m/izGBB8XoMD
+	 GIfvCZETcBVMHronNhjZzWN8FnppDXmFCD7x1dBPop+IVTbgk1Vg/dzOjYDCrlkPhc
+	 xs7JgXQUwOHJaHdt1iZfN3/P0CxuyulBPJYvGT9lquzOfQlM3qBZGYRoKW7Nm6w01w
+	 QgM6w0pToNTF1umQjZTHjAm7I9zORwwuP+IHXBBYnkM2omQmwDH7tkOMhqKntu00ap
+	 vV0I4vYlJ9owynikwU9O0QzhqnKH3mpCpm1Q7fXkakll7RnoOtwxSf5tmk0L5/lbz8
+	 24j0bvpbIF08A==
+From: Mark Brown <broonie@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-usb@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240221-pm4125-typec-v3-0-fdd0ee0465b8@linaro.org>
+References: <20240221-pm4125-typec-v3-0-fdd0ee0465b8@linaro.org>
+Subject: Re: (subset) [PATCH v3 0/3] arm64: dts: qcom: qrb2210-rb1: enable
+ Type-C support
+Message-Id: <170852378435.35408.11860058120076755324.b4-ty@kernel.org>
+Date: Wed, 21 Feb 2024 13:56:24 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Randy Dunlap <rdunlap@infradead.org>,
- Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
- Thomas Gleixner <tglx@linutronix.de>
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com,
- Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
- Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- linux-x86_64@vger.kernel.org, netdev@vger.kernel.org
-References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
- <Zb6D/5R8nNrxveAP@cae.in-ulm.de> <Zb/30qOGYAH4j6Mn@cae.in-ulm.de>
- <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
- <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com>
- <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
- <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
- <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
- <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
- <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
- <a026ecd8-6fba-017d-d673-0d0759a37ed8@linux.intel.com>
- <CABXGCsOgy8H4GGcNU1jRE+SzRqwnPeNuy_3xBukjwB-bPxeZrQ@mail.gmail.com>
- <CABXGCsOd=E428ixUOw+msRpnaubgx5-cVU7TDXwRUCdrM5Oicw@mail.gmail.com>
- <34d7ab1b-ab12-489d-a480-5e6ccc41bfc3@infradead.org>
- <10487018-49b8-4b27-98a1-07cee732290d@infradead.org>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: =?UTF-8?Q?Re=3a_This_is_the_fourth_time_I=e2=80=99ve_tried_to_find_?=
- =?UTF-8?Q?what_led_to_the_regression_of_outgoing_network_speed_and_each_tim?=
- =?UTF-8?Q?e_I_find_the_merge_commit_8c94ccc7cd691472461448f98e2372c75849406?=
- =?UTF-8?Q?c?=
-In-Reply-To: <10487018-49b8-4b27-98a1-07cee732290d@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
-On 21.2.2024 1.43, Randy Dunlap wrote:
+On Wed, 21 Feb 2024 01:58:49 +0200, Dmitry Baryshkov wrote:
+> Reuse Type-C support implemented for the PMI632 PMIC (found on Qualcomm
+> Robotics RB2 platform) and implement Type-C handling for the Qualcomm
+> Robotics RB1 platform.
 > 
 > 
-> On 2/20/24 15:41, Randy Dunlap wrote:
->> {+ tglx]
-> 
-> (this time for real)
-> 
->>
->> On 2/20/24 15:19, Mikhail Gavrilov wrote:
->>> On Mon, Feb 19, 2024 at 2:41 PM Mikhail Gavrilov
->>> <mikhail.v.gavrilov@gmail.com> wrote:
->>>>
->>>> I installed irqbalance daemon and nothing changed.
->>>> So who is responsible for irq balancing?
->>>
->>> Sorry for the noise. Can anyone give me an answer?
->>> Who is responsible for distributing interrupts in Linux?
->>> I spotted network performance regression and it turned out, this was
->>> due to the network card getting other interrupt. It is a side effect
->>> of commit 57e153dfd0e7a080373fe5853c5609443d97fa5a.
->>
->> That's a merge commit (AFAIK, maybe not so much). The commit in mainline is:
->>
->> commit f977f4c9301c
->> Author: Niklas Neronin <niklas.neronin@linux.intel.com>
->> Date:   Fri Dec 1 17:06:40 2023 +0200
->>
->>      xhci: add handler for only one interrupt line
->>
->>> Installing irqbalance daemon did not help. Maybe someone experienced
->>> such a problem?
->>>
->>
->> Thomas, would you look at this, please?
->>
->> A network device and xhci (USB) driver are now sharing interrupts.
->> This causes a large performance decrease for the networking device.
 
-Short recap:
+Applied to
 
-xhci (USB) and network device didn't share interrupts, or even interrupt the
-same CPU in either good or bad case.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-A change in how many interrupts xhci driver requests changed which CPU
-the network device interrupts.
+Thanks!
 
-In the bad case Mikhail Gavrilovs network device was interrupting CPU0
-together with:
-- IR-IO-APIC    2-edge      timer
-- IR-PCI-MSIX-0000:07:00.0    1-edge      nvme1q1
+[1/3] regulator: dt-bindings: qcom,usb-vbus-regulator: add support for PM4125
+      commit: b9262cc1b988cdaf9bb5c2a4411d4ad4e7128e8d
 
-In the good case network device was interrupting CPU27 together with:
-- IR-PCI-MSIX-0000:04:00.0   27-edge      nvme0q27
-- IR-PCI-MSIX-0000:07:00.0   28-edge      nvme1q28
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Manually moving network device irq 87 from CPU0 to CPU23 helped.
-(echo 800000 > /proc/irq/87/smp_affinity)
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Thanks
--Mathias
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
