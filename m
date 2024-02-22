@@ -1,190 +1,174 @@
-Return-Path: <linux-usb+bounces-6877-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6878-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92D5D85F387
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 09:54:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7597785F4EB
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 10:47:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48D72284E19
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 08:54:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0316D1F21EDB
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 09:47:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3C8F33CD2;
-	Thu, 22 Feb 2024 08:54:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFBF038DD8;
+	Thu, 22 Feb 2024 09:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s0qw/iTE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213C22BB16
-	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 08:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.110.167.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1A4381A1
+	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 09:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708592087; cv=none; b=TTj3ztONC/HLVKvjOksBFCjEV+r1Z9AzDlyubxOmGI4tdLCw9KOW6KuB0AQaokeRybniHH89QyLWNJFtGKIoAU1xxtcWaMMrSaRofMiAqG5gsh3DrOOFhYbFip6ive+4rfFcIhlgph3kAIZrQAdu7LMH5wlBA2/3S/PvskDcr/A=
+	t=1708595179; cv=none; b=dN8y8+7ACrg1V0Rfze9pvC4CpbwmUym4/BONMQkE+1N76a7FkpeQhRHfI4r/o0Vi908S1NCDNkcGFGGARQ3/PyLqVpWPAjNP54RsUusna5J8aK8kfLqDogts8yMnYTzVxHF9aM3RHiYIVs3a4jExz7fL7qv9sZU6c+9rtye4ymY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708592087; c=relaxed/simple;
-	bh=Q09ggyJX4LTHC+Qx+tTl+VcdUVE6MRDSmOxeTtRF1M0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=L9XAD8C/xALgOTaT9Bl24YIaF9zFEF0URjn4e/6+iw4Wnhu1KtkHUNCrMdKsPlFEVJEyHSw/TgmsPFLipa+NQ+zPfZFuicA+uGggxPMofW0z2s5dJ3psZ2mQP3116FaYTmUDU77btc0u1hsFaOznRtJ+Psfyj7Ezy0cdbY/knzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=203.110.167.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-X-ASG-Debug-ID: 1708592081-1eb14e0c7c45a80001-YVMibp
-Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id IHwyCNpP3iJxhYfP (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 22 Feb 2024 16:54:42 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
- (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 22 Feb
- 2024 16:54:41 +0800
-Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 22 Feb
- 2024 16:54:41 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-From: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
-To: <oneukum@suse.com>, <stern@rowland.harvard.edu>,
-	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-	<usb-storage@lists.one-eyed-alien.net>
-CC: <WeitaoWang@zhaoxin.com>
-Subject: [PATCH] USB:UAS:return ENODEV when submit urbs fail with device not attached.
-Date: Fri, 23 Feb 2024 00:54:41 +0800
-X-ASG-Orig-Subj: [PATCH] USB:UAS:return ENODEV when submit urbs fail with device not attached.
-Message-ID: <20240222165441.6148-1-WeitaoWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.32.0
+	s=arc-20240116; t=1708595179; c=relaxed/simple;
+	bh=OXpl8KtnkdumkkL/oL3Rll5PWQ3rF0whL8FYYh60i3w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fu9X+BgSziCIS2IjDB1YgSNFuW1pDV+JW/JI5k8ABz++U6mkM7wIqP5QBU+6Kp01auB68jb/6cEyNhooYSOFW0KVIsN/4VsVfkKrQLYh9Wc5Fb/TGXT8IUdBCsRBrAw58Qx1v2t/d2ho9NIq5HWyYXYth+zKiANKNZNhreykBZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s0qw/iTE; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-564e4477b7cso7156a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 01:46:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708595176; x=1709199976; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CO9OLuYsn9M5g/f+gNkO5HVcagw8JPRKpX2lST/Z1zc=;
+        b=s0qw/iTEvikM/obz5ZM4wbhfhISNkQrUa7hFn1rkYXEX6NvzKwW4mW0NOkfSii1ngM
+         3h/2izEzsqN/lNjRF4KHGhIjUPfk/sDhDsiqp8BT6M1xii85NrdM3BmkHgQD0qldxeni
+         VdrbZl/X5zeE8BwKgPQt47NC56WUBKWkbbNlOcpONVsa2OAH+KH27TIH/0Ju0fEuZASO
+         8OSLNlhrqmDLLblu3TezLmiL0C/QOCCyQzPQscnwusvE6X2fKuPi68+u8bih4kIOSGcW
+         JA6/PaZTSk+SgUOU9vdkKZbXP/0m7CfVYwkwiuTrrgQ9pBHKdzgx+zT5Yx+axzx7txUf
+         jLFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708595176; x=1709199976;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CO9OLuYsn9M5g/f+gNkO5HVcagw8JPRKpX2lST/Z1zc=;
+        b=ecjN1X+aFrjav+0YPhDh+hlrOltHGTCQpp0LUYtYBtCerI45mYXQ74x7IajVV6G5/W
+         fUY9FpZoaCJAOyNvfu4oT0tR/8DfFTI70drLdhtNEovRHqaQ8BsG8w5Ff8bsTDwNzTx+
+         ZmtHlfJr8VgUjJ+9zqt1k6cpuv2bCaI7zSFukeCissdmmpBphJ5v47jRxsdJstdeihJH
+         OgB53m216FxvLC/SUiQ43DMReC5k5F5015PxBGCGxv8in5bWjG19EkHkRPcn/WgM51Zl
+         wubvL1FONCGXO+P2Lz5n/QDxh0jZ52KC1eEIlpdgx/m+m1Fl0OseyLKrIJbuP97TteQY
+         CQZA==
+X-Forwarded-Encrypted: i=1; AJvYcCWCqJuQ65lJYC3o/xlMnH6oevG1JXdSQaOYdhglKlZ/OFTe+zuHfaswq/EQSuFPmbCCeFRc6TMOSRMnqKrdyNL/4y8XwONS4/Y8
+X-Gm-Message-State: AOJu0YxCoppSzqi5xukMH/LI9CLdx0Y5oh5tpLIkyZ0t6Hd2TKnj28jV
+	ZlTxQcIf8Vh0NgGOHrYwV4BPjgDPwC84ZBas5Z6NOMGx6Rn0ng2wslGd0eXfAZy3CZeR/ni4hmS
+	KW1EaxCDund0mmNzI/VnBKY5K+Ws3tfRoUTyh
+X-Google-Smtp-Source: AGHT+IHM+zVGs1vfCf6mEt0YThwspRts0ylLL/r+issShzGze5aBxEviehGvjwwmjLZ77XUgJQ4G1x6+ofxUaAbkDfU=
+X-Received: by 2002:a50:9f04:0:b0:562:9d2:8857 with SMTP id
+ b4-20020a509f04000000b0056209d28857mr385846edf.6.1708595175380; Thu, 22 Feb
+ 2024 01:46:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
-X-Barracuda-Start-Time: 1708592081
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 4195
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.121168
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------------------------
-	0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-	3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+References: <20240219061008.1761102-1-pumahsu@google.com> <20240219061008.1761102-3-pumahsu@google.com>
+ <0b4464eb-631e-4c9f-a7c8-3451be15d8b4@kernel.org> <CAGCq0LYFMrFmxeKZE9g-O61+N03rJoGL0XvXJVya0Yx-ZasvBA@mail.gmail.com>
+ <bea850fe-19e8-492e-b885-6d01b389c32c@kernel.org>
+In-Reply-To: <bea850fe-19e8-492e-b885-6d01b389c32c@kernel.org>
+From: Puma Hsu <pumahsu@google.com>
+Date: Thu, 22 Feb 2024 17:45:37 +0800
+Message-ID: <CAGCq0La_XHJw4cscahiDWM-n03dWf8SUQ2Zw0YZgHyXwKcURyQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] usb: xhci: Add support for Google XHCI controller
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org, 
+	Thinh.Nguyen@synopsys.com, badhri@google.com, royluo@google.com, 
+	howardyen@google.com, albertccwang@google.com, raychi@google.com, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In the scenario of entering hibernation with udisk in the system, if the
-udisk was gone or resume fail in the thaw phase of hibernation. Its state
-will be set to NOTATTACHED. However, usb_hub_wq was already freezed and
-can't not handle disconnect event. Then, sync cache SCSI command will be
-sent to this udisk on the poweroff phase of hibernation, that will cause
-uas_submit_urbs to be called to submit URB to sense/data/cmd pipe. Then,
-usb_submit_urb return value -ENODEV when device was set to NOTATTACHED
-state. However, uas_submit_urbs always return "SCSI_MLQUEUE_DEVICE_BUSY"
-regardless of the reason for submission failure.That will lead the SCSI
-layer go into an ugly loop and system fail to go into hibernation.
+On Wed, Feb 21, 2024 at 5:53=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On 21/02/2024 10:31, Puma Hsu wrote:
+> > On Mon, Feb 19, 2024 at 8:22=E2=80=AFPM Krzysztof Kozlowski <krzk@kerne=
+l.org> wrote:
+> >>
+> >> On 19/02/2024 07:10, Puma Hsu wrote:
+> >>> In our SoC platform, we support allocating dedicated memory spaces
+> >>> other than system memory for XHCI, which also requires IOMMU mapping.
+> >>> The rest of driver probing and executing will use the generic
+> >>> xhci-plat driver.
+> >>>
+> >>> We support USB dual roles and switch roles by generic dwc3 driver,
+> >>> the dwc3 driver always probes xhci-plat driver now, so we introduce
+> >>> a device tree property to probe a XHCI glue driver.
+> >>>
+> >>> Sample:
+> >>>   xhci_dma: xhci_dma@99C0000 {
+> >>>     compatible =3D "shared-dma-pool";
+> >>>     reg =3D <0x00000000 0x99C0000 0x00000000 0x40000>;
+> >>>     no-map;
+> >>>   };
+> >>>
+> >>>   dwc3: dwc3@c400000 {
+> >>>     compatible =3D "snps,dwc3";
+> >>>     reg =3D <0 0x0c400000  0 0x10000>;
+> >>>     xhci-glue =3D "xhci-hcd-goog";
+> >>
+> >> NAK, that's not DWC3 hardware in such case.
+> >
+> > By introducing this property, users can specify the name of their
+> > dedicated driver in the device tree. The generic dwc3 driver will
+>
+> DT is not a place for driver stuff.
+>
+>
+> > read this property to initiate the probing of the dedicated driver.
+>
+> I know, but it is not a reason to add stuff to DT.
+>
+> > The motivation behind this is that we have dedicated things
+> > (described in commit message) to do for the XHCI driver in our
+> > device. BTW, I put this property here because currently there is
+> > no xhci node, xhci related properties are put under dwc3 node.
+>
+> Sorry, you miss the point. Either you have pure DWC3 hardware or not.
+> You claim now you do not have pure hardware, which is reasonable,
+> because it is always customized per-vendor. In such case you cannot
+> claim this is a pure DWC3. You must provide bindings for your hardware.
+>
+> Now, if you claim you have a pure DWC3 hardware without need for any
+> vendor customizations, then entire patchset is fake try to upstream your
+> Android vendor stuff. We talked about such stuff many times on mailing
+> list, so for obvious reasons I won't repeat it. Trying to push vendor
+> hooks and vendor quirks is one of the most common mistakes, so several
+> talks already say: don't do this.
+>
+> > It will be appreciated if there are alternative or more appropriate
+> > approaches, we welcome discussion to explore the best possible
+> > solution. Thanks.
+>
+> And what's wrong with all previous feedbacks for similar
+> Google/Samsung/Artpec/Tensor vendor hacks? Once or twice per year some
+> folks around Google or Samsung try to push such, they all receive the
+> same feedback and they disappear, so I have to repeat the same feedback
+> to the next person... Please go through previous patches from
+> @samsung.com for various subsystems.
+>
+> Documentation/devicetree/bindings/submitting-patches.rst
+> Documentation/devicetree/bindings/writing-bindings.rst
+> +other people or my talks on Devicetree
+>
+> Summarizing: Devicetree is for hardware, not for your driver
+> hooks/quirks/needs. Describe properly and fully the hardware, not your
+> driver.
 
-To fix this issue, let uas_submit_urbs function to return real error
--ENODEV when submit URB with device in the NOTATTACHED state. In the error
-checking inside of function uas_queuecommand_lck, reporting DID_ERROR will
-cause device poweroff fail and system shutdown instead of entering
-hibernation. So,replace DID_ERROR with DID_NO_CONNECT to report to SCSI
-upper layer.
+Thank you Krzysztof for the explanation. I will study and explore
+the possibility of integrating the stuff we want into the generic driver.
 
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
----
- drivers/usb/storage/uas.c | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 9707f53cfda9..967f18db525a 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -533,7 +533,7 @@ static struct urb *uas_alloc_cmd_urb(struct uas_dev_info *devinfo, gfp_t gfp,
-  * daft to me.
-  */
- 
--static struct urb *uas_submit_sense_urb(struct scsi_cmnd *cmnd, gfp_t gfp)
-+static int uas_submit_sense_urb(struct scsi_cmnd *cmnd, gfp_t gfp)
- {
- 	struct uas_dev_info *devinfo = cmnd->device->hostdata;
- 	struct urb *urb;
-@@ -541,16 +541,15 @@ static struct urb *uas_submit_sense_urb(struct scsi_cmnd *cmnd, gfp_t gfp)
- 
- 	urb = uas_alloc_sense_urb(devinfo, gfp, cmnd);
- 	if (!urb)
--		return NULL;
-+		return -ENOMEM;
- 	usb_anchor_urb(urb, &devinfo->sense_urbs);
- 	err = usb_submit_urb(urb, gfp);
- 	if (err) {
- 		usb_unanchor_urb(urb);
- 		uas_log_cmd_state(cmnd, "sense submit err", err);
- 		usb_free_urb(urb);
--		return NULL;
- 	}
--	return urb;
-+	return err;
- }
- 
- static int uas_submit_urbs(struct scsi_cmnd *cmnd,
-@@ -562,9 +561,9 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 
- 	lockdep_assert_held(&devinfo->lock);
- 	if (cmdinfo->state & SUBMIT_STATUS_URB) {
--		urb = uas_submit_sense_urb(cmnd, GFP_ATOMIC);
--		if (!urb)
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+		err = uas_submit_sense_urb(cmnd, GFP_ATOMIC);
-+		if (err)
-+			return (err == -ENODEV) ? -ENODEV : SCSI_MLQUEUE_DEVICE_BUSY;
- 		cmdinfo->state &= ~SUBMIT_STATUS_URB;
- 	}
- 
-@@ -582,7 +581,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 		if (err) {
- 			usb_unanchor_urb(cmdinfo->data_in_urb);
- 			uas_log_cmd_state(cmnd, "data in submit err", err);
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+			return (err == -ENODEV) ? -ENODEV : SCSI_MLQUEUE_DEVICE_BUSY;
- 		}
- 		cmdinfo->state &= ~SUBMIT_DATA_IN_URB;
- 		cmdinfo->state |= DATA_IN_URB_INFLIGHT;
-@@ -602,7 +601,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 		if (err) {
- 			usb_unanchor_urb(cmdinfo->data_out_urb);
- 			uas_log_cmd_state(cmnd, "data out submit err", err);
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+			return (err == -ENODEV) ? -ENODEV : SCSI_MLQUEUE_DEVICE_BUSY;
- 		}
- 		cmdinfo->state &= ~SUBMIT_DATA_OUT_URB;
- 		cmdinfo->state |= DATA_OUT_URB_INFLIGHT;
-@@ -621,7 +620,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
- 		if (err) {
- 			usb_unanchor_urb(cmdinfo->cmd_urb);
- 			uas_log_cmd_state(cmnd, "cmd submit err", err);
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+			return (err == -ENODEV) ? -ENODEV : SCSI_MLQUEUE_DEVICE_BUSY;
- 		}
- 		cmdinfo->cmd_urb = NULL;
- 		cmdinfo->state &= ~SUBMIT_CMD_URB;
-@@ -698,7 +697,7 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd)
- 	 * of queueing, no matter how fatal the error
- 	 */
- 	if (err == -ENODEV) {
--		set_host_byte(cmnd, DID_ERROR);
-+		set_host_byte(cmnd, DID_NO_CONNECT);
- 		scsi_done(cmnd);
- 		goto zombie;
- 	}
--- 
-2.32.0
-
+>
+> Best regards,
+> Krzysztof
+>
 
