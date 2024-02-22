@@ -1,38 +1,38 @@
-Return-Path: <linux-usb+bounces-6914-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6915-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05D92860462
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9D4A860463
 	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 22:09:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2CC2289D7D
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 21:09:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58F9C1F247E0
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 21:09:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E977673F37;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EACE073F38;
 	Thu, 22 Feb 2024 21:09:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5C97175C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D60573F26
 	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 21:09:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708636168; cv=none; b=pnNyU97OWENYrlwA2TBCi7Ykjp+6L9QgwUS0AVsLtMAra+Wmje0YLBM/mr9oi7PJ1X/noFJmHfgBKIL7JR1mGhwxL0/QBVkCrAgeFU2YCK0Hjt0PClMXuWT4RSb2zwFoVgqGRB6bdtwA5S5cmFN57THO4sd/FBqFQMxRGlzRKa4=
+	t=1708636168; cv=none; b=kqxpkNBNgT4oAc0GSMTqmsnk5yK14bAYCxePzKlUD7EhED4Tybwqmh3IRIYbF5krULykjg9h/9SFJJPG9yZ6iQepA/xKk1Oyb9MWSrJDhZqFyq2SXGBr78m0w7TLY5ebFNzkQsj37VKM5NxCp6w3WgcjRqr6MZDVOhtx9Ef0T5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1708636168; c=relaxed/simple;
-	bh=I3EW9Vuk0mnGohws0wZ3vlCFahdWLNd/taLlxlA1rao=;
+	bh=CP/W/KjoUJAC5u+lS9nh0tLDWDlSc3SWhNf/31pSLlo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gOxAbBRLf1EnwMpKnlHQ6+sxx4RSgRL0vacGGwNR0jG7IWctH6X8xfH63cBze7RjbAEjGx8v13eXENZma4TD3XJltY4imF4bMmT7KNUZGCCP2pCNTsvFEEVG9kfM6jaHXZVbwG9NBPZ15wERP5pDHIGzF/+PLAH9j8BeNTDVthA=
+	 MIME-Version; b=luQJAQKWzF4rOTlblr9HvTRsP7v0ShTHLcnHqkpMdo+LLOHzIfsVWbF49LL3Wy/ZdZBqSAAhkaI97PAckKexdLYrB7Usg5K0Vub1EiPvRRsLbkpseM8YF1nOI2NvoRnx7+N6Korp8LTwA5WXseOgBhovPaW4YL9lFGqPFZFB/pk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <m.felsch@pengutronix.de>)
-	id 1rdGJZ-0000lo-03; Thu, 22 Feb 2024 22:09:09 +0100
+	id 1rdGJZ-0000lo-8L; Thu, 22 Feb 2024 22:09:09 +0100
 From: Marco Felsch <m.felsch@pengutronix.de>
 To: gregkh@linuxfoundation.org,
 	robh+dt@kernel.org,
@@ -45,9 +45,9 @@ Cc: devicetree@vger.kernel.org,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel@pengutronix.de
-Subject: [PATCH v3 1/4] dt-bindings: usb: typec-tcpci: add tcpci fallback binding
-Date: Thu, 22 Feb 2024 22:09:00 +0100
-Message-Id: <20240222210903.208901-2-m.felsch@pengutronix.de>
+Subject: [PATCH v3 2/4] usb: typec: tcpci: add generic tcpci fallback compatible
+Date: Thu, 22 Feb 2024 22:09:01 +0100
+Message-Id: <20240222210903.208901-3-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240222210903.208901-1-m.felsch@pengutronix.de>
 References: <20240222210903.208901-1-m.felsch@pengutronix.de>
@@ -63,48 +63,31 @@ X-SA-Exim-Mail-From: m.felsch@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-The NXP PTN5110 [1] is an TCPCI [2] compatible chip, so add the fallback
-binding.
-
-[1] https://www.nxp.com/docs/en/data-sheet/PTN5110.pdf
-[2] https://www.usb.org/sites/default/files/documents/usb-port_controller_specification_rev2.0_v1.0_0.pdf
+The driver already support the tcpci binding for the i2c_device_id so
+add the support for the of_device_id too.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
 v3:
-- use items
-- adapt example
-
+- no changes
 v2:
-- rephrase commit message
+- no changes
 
- Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/usb/typec/tcpm/tcpci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-index eaedb4cc6b6c..65a8632b4d9e 100644
---- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-+++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-@@ -11,7 +11,9 @@ maintainers:
- 
- properties:
-   compatible:
--    const: nxp,ptn5110
-+    items:
-+      - const: nxp,ptn5110
-+      - const: tcpci
- 
-   reg:
-     maxItems: 1
-@@ -41,7 +43,7 @@ examples:
-         #size-cells = <0>;
- 
-         tcpci@50 {
--            compatible = "nxp,ptn5110";
-+            compatible = "nxp,ptn5110", "tcpci";
-             reg = <0x50>;
-             interrupt-parent = <&gpio3>;
-             interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index 0ee3e6e29bb1..7118551827f6 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -889,6 +889,7 @@ MODULE_DEVICE_TABLE(i2c, tcpci_id);
+ #ifdef CONFIG_OF
+ static const struct of_device_id tcpci_of_match[] = {
+ 	{ .compatible = "nxp,ptn5110", },
++	{ .compatible = "tcpci", },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, tcpci_of_match);
 -- 
 2.39.2
 
