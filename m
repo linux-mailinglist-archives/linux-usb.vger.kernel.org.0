@@ -1,73 +1,74 @@
-Return-Path: <linux-usb+bounces-6903-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6905-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6E6185FDE1
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 17:20:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F27A085FDF7
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 17:25:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24FF81F260BA
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 16:20:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A71472876D3
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 16:25:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4244915099F;
-	Thu, 22 Feb 2024 16:19:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 935BB151CD9;
+	Thu, 22 Feb 2024 16:25:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="F8DQOiir"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q305DkQ/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F171914D457
-	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 16:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B2214C5AB
+	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 16:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708618792; cv=none; b=LsxiUGTrnVX3jxTZO3mBUwTqnKIX95DJeA4pGY6uV5WC+LOK27P5UXR9mkfermB6cSVQ5PSBPIrsfJ988Wn5O7SyG1rTX5camPxtQF+f8ehDlu9kMY6AGTz0/7HpUfSDmLHk2sZe7LNjW3CPLgLUTezfVoqOgMHsF0eF8R9pBSc=
+	t=1708619106; cv=none; b=gRTIkvWesl9TEN/YBlZZZsmPhnLdC8Ut6cjtEuIYfSx9AcDtBMCYPdBYCuRbQpR7aZylWyrdWy2FuAUwQwWc6DWiDKwdeQWNRzD/AtjxTWm68nQuqEjynBOUrMU1GWOoHo0ENi1KP97b7vk/cM0VALbFCJ4FbKaYhZBQe/B4/7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708618792; c=relaxed/simple;
-	bh=1pW9/wqs6T+ZFUgQVVGfPgOghYjuLzXUH0MDZwgQqM0=;
+	s=arc-20240116; t=1708619106; c=relaxed/simple;
+	bh=qtqcF9cdBZPIx/K3MlezcsnnVuiU2yqiWQXjuqDP738=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b0VN4H6c3DJmliBwX3Z/3ZOdv5wR8dsqc1WNRw1d0wmrjuFvLSJvQjolaveGoUGBOkPPuONeHLTVja04E3IEVB6N8xoBYu2gvzc0YYpvqEccu4efWiPHOr04wR+7xugmE/PeAE0wzNNzF3y+ZV7GPhTFhSiB4+xFLJ8fq396RaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=F8DQOiir; arc=none smtp.client-ip=209.85.208.52
+	 In-Reply-To:Content-Type; b=BtivrvvWo3KV3sDtWkH9nR7Q5srkzitWLaW/NOoCqaDtYxEYhdp1+YaWFphAJ2xBIO0JLMT1KMvS2pEvAGytPyYDckVbf+aogC7DsVrvJcggCouFk9ih7evdFhsKzgYpWYh4j/ZERRRYo6KCCvzRgux2Ro/JJkm0bBKHVLFwQiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Q305DkQ/; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-564372fb762so2902897a12.0
-        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 08:19:50 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5654621d62dso895296a12.3
+        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 08:25:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708618789; x=1709223589; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1708619102; x=1709223902; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5w27VNOs5/uxzHBOfJnfDu6qPKPl+gXMKhUjXUHD/ZY=;
-        b=F8DQOiir02lekIe0MU8ZCYRVK355do75p4+fes2cnvQu7w3X947r6JZxOjUbmT5Z9f
-         XFGWWaE9TUlMGX+yGHsoQtsaPPxrU6GQyUHlFlnxechw9H7rWy+BUGpmXlwVFM5eakjP
-         xsrQ1RenyHLns2Ln+d8X4We3ujG9VXFMkGcQV5PosZBlDMc/PjXP405NKnbzxcbk42aP
-         mjfiZqPI4yBmDqZwJThyg+v0g+0U67zNWaKmiYIAUKT9SS7MtIS0ztR0DzJvUw9K53rn
-         SZ2ao26aRwXm1FZrXH4zWyZdrHWC768tALqh2TqslOBnOFjMYfQHs0RC30QSGMw6lUkd
-         x/cQ==
+        bh=SNPfXrBGDiM2YoXxAA5rOKOPaxTYqf+A3hAJ3MNv5Uo=;
+        b=Q305DkQ/upwOqwf1LuaeguJ/m1/B8NZ82PSV6wuMGZcCzrwTxp9ZrYshqEFdTupWnU
+         qSNnFO4Tg/5DbaxLtuwl9TQG753oEtr5kDK/+B4kMWQ5hcHgMOCa/A+J9bws8+d1Z1lb
+         ZLEOdxntfnFH9MPi0KoyNp9dVkoJxlynzDALARDvhjj/KXxrRPlsriP1QfVy4a8S+VF3
+         7VOJtEn7RUc/xCUsqaQkLE/EQcuL5Dxqf0l5kGYVJ/hk8X5hFweI1AlEhGKxNmI7EMoE
+         Si3VApjKzwU30DtAgUojBTdTT7UdfIxan3xW2k5atEriPWSJ4dW7wv4aDubGQVQ+1Zqu
+         5xqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708618789; x=1709223589;
+        d=1e100.net; s=20230601; t=1708619102; x=1709223902;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5w27VNOs5/uxzHBOfJnfDu6qPKPl+gXMKhUjXUHD/ZY=;
-        b=H2XOAXafNg4Z01hegGF3SUWQRElEN+AMrytdcI5nHO+UtH/Cl97bnzx7hXSDF+LN0y
-         gquF2QlcCBgW9qmLHgqsOBc9O9LizcCPwj+7cTV99n8BEeaSM71mR38hACPY4gsnIpFI
-         OVd4ckner7ooK62uZa2xaE9qveBTeo65eWkphm2hvU/h3sY3P0oFaFxYOHhTt29V9RPf
-         22Dbafwde2bpAwCz/b6+G03vd/rp1kwgGJCSlZNQC2e1qkz1xrj069FGJPmE7Ov8315q
-         qz029r2X+e0YVfQtZMh4MURHNt5Qo7A12mfX0y1lvp6BddnMSytj+80DRGycG0UboTT5
-         DASQ==
-X-Gm-Message-State: AOJu0YyEyV+E2M19f1YilHgloBG9/RPj5JHEaGYZtOCGpBL3Q836xoPC
-	MjX5/fjVKHEEr+nRPDdRqWyjUnnLo4A85nLr4z4Sn+A+lsue+/NHcBmkH+A45a0=
-X-Google-Smtp-Source: AGHT+IH2RqCtTkjBEK2VTEP5OMNOWsOA7B3BRsI3UAbZyjVfet8G+h/Q878gSNgd6AEtblqog6G2hg==
-X-Received: by 2002:a17:906:5907:b0:a3f:1d89:61d with SMTP id h7-20020a170906590700b00a3f1d89061dmr4486998ejq.42.1708618789297;
-        Thu, 22 Feb 2024 08:19:49 -0800 (PST)
+        bh=SNPfXrBGDiM2YoXxAA5rOKOPaxTYqf+A3hAJ3MNv5Uo=;
+        b=u8JvtnNW9M2/G6CBdc/d8gRYuXaiykBRn6WVTz43sZU7KqL9qs1ATJLdgVhsy8V0LH
+         U+sz07tAFoYddV/ozLK5NIGbO54gCHQmdYAMuPZ9Q4TdgjhmXiCt/AT9pFQJntciV3pk
+         JJEra+XqOTBbDVy+KHQeNL6Q/aJnDp5g+Cmm0IO99kUUn3/wgXnESGA1gz+vlSnBIvjc
+         azsKf2+gOzEB0y0Jtmy6Or9y2ZtJ0NmANxkoiMIVxSB21aeScszTAko94vofjVS1x8p5
+         dPOvxWddj5qtmvtFqVkv6F0RHK0fRkoUeQ2OtbY0uzMZXHoSmUKSml5YtE/0+P15Y412
+         z9Ag==
+X-Forwarded-Encrypted: i=1; AJvYcCXUvP1saHpDvj5tMjLxajInZQmb47+jc4blSPsVLOryyl2efik/NphnaQn1l7GvozIY9OiiFKdDVkIhH56o+vw9L3iohAVLxOmf
+X-Gm-Message-State: AOJu0YxZiqT/K3CHUzsDrJ8Fi2+wwL0iuLFoipXlvC/QgdTuliqUQQOx
+	rN4s+cgTswc8rZTVLCp8ieix024n2uhvosfTjCCOv4xBE/P3utLDd9BUeQT8Qf8=
+X-Google-Smtp-Source: AGHT+IH3sba41mjn7VfkvJITRdFae7uzavStr/4Zq5G4WAq/pgO5GZ8rSv2h6+7Vxr1l59qyXW2RJw==
+X-Received: by 2002:a05:6402:2046:b0:565:f27:7b04 with SMTP id bc6-20020a056402204600b005650f277b04mr3426770edb.8.1708619101843;
+        Thu, 22 Feb 2024 08:25:01 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.222.116])
-        by smtp.gmail.com with ESMTPSA id x19-20020a1709064bd300b00a3cf168d084sm6090410ejv.165.2024.02.22.08.19.47
+        by smtp.gmail.com with ESMTPSA id x22-20020a50d616000000b0056409f215casm6001564edi.82.2024.02.22.08.24.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 08:19:48 -0800 (PST)
-Message-ID: <4e464a7a-6a38-461a-b03e-442cc43d1719@linaro.org>
-Date: Thu, 22 Feb 2024 17:19:46 +0100
+        Thu, 22 Feb 2024 08:25:01 -0800 (PST)
+Message-ID: <7dc9e80e-0875-4dfc-adf9-9bfad2fb8589@linaro.org>
+Date: Thu, 22 Feb 2024 17:24:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,16 +76,21 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: usb: typec-tcpci: add tcpci fallback
- binding
+Subject: Re: [PATCH v17 36/51] ASoC: dt-bindings: Update example for enabling
+ USB offload on SM8250
 Content-Language: en-US
-To: Marco Felsch <m.felsch@pengutronix.de>, gregkh@linuxfoundation.org,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- linux@roeck-us.net, heikki.krogerus@linux.intel.com, jun.li@nxp.com
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel@pengutronix.de
-References: <20240215212852.1202339-1-m.felsch@pengutronix.de>
- <20240215212852.1202339-2-m.felsch@pengutronix.de>
+To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
+ mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+ corbet@lwn.net, lgirdwood@gmail.com, andersson@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+ Thinh.Nguyen@synopsys.com, broonie@kernel.org, bgoswami@quicinc.com,
+ tiwai@suse.com, robh+dt@kernel.org, konrad.dybcio@linaro.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
+ alsa-devel@alsa-project.org
+References: <20240217001017.29969-1-quic_wcheng@quicinc.com>
+ <20240217001017.29969-37-quic_wcheng@quicinc.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -130,41 +136,25 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240215212852.1202339-2-m.felsch@pengutronix.de>
+In-Reply-To: <20240217001017.29969-37-quic_wcheng@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 15/02/2024 22:28, Marco Felsch wrote:
-> The NXP PTN5110 [1] is an TCPCI [2] compatible chip, so add the fallback
-> binding.
+On 17/02/2024 01:10, Wesley Cheng wrote:
+> Add an example on enabling of USB offload for the Q6DSP.  The routing can
+> be done by the mixer, which can pass the multimedia stream to the USB
+> backend.
 > 
-> [1] https://www.nxp.com/docs/en/data-sheet/PTN5110.pdf
-> [2] https://www.usb.org/sites/default/files/documents/usb-port_controller_specification_rev2.0_v1.0_0.pdf
-> 
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 > ---
-> v2:
-> - rephrase commit message
-> 
->  Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-> index eaedb4cc6b6c..7bd7bbbac9e0 100644
-> --- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-> +++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-> @@ -11,7 +11,9 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    const: nxp,ptn5110
-> +    enum:
-> +      - nxp,ptn5110
-> +      - tcpci
+>  .../devicetree/bindings/sound/qcom,sm8250.yaml    | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 
-That's not a fallback, but enum. Fallback is "items" and then you could
-also send a follow-up patchset (separate, so Greg won't take it) fixing
-DTS (if not, let me know, so I will fix it).
+This broke next.
+
+Wesley, are you sure you explained dependencies in this patch? Why is
+next failing on this now?
 
 Best regards,
 Krzysztof
