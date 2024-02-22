@@ -1,147 +1,199 @@
-Return-Path: <linux-usb+bounces-6898-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6899-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A881D85FD12
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 16:52:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E1C085FD3F
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 16:56:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FC0E1F21C76
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 15:52:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE290B2887E
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 15:56:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CB8214E2EE;
-	Thu, 22 Feb 2024 15:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05E8414E2F5;
+	Thu, 22 Feb 2024 15:55:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB60A14D44C;
-	Thu, 22 Feb 2024 15:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id D824714E2F9
+	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 15:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708617132; cv=none; b=KawgG8DDOXsUWrgqH6J0ZkFo3T+JehoI6Qz1WnsETQldnOpmWtQ76g44C499WvW3tpNF7kPqRFNDH9MG7L+4nM2vyOHB0qAu1UczurxwlIDZK+56It8dy3kEfHS8w68smletFKnVeWGcf3QLpTOabDyiCbZnAPcDyI6zEZLzpIg=
+	t=1708617322; cv=none; b=hszI9ybtlP/UrEo6ssSlmbJ+MyjFqPD7thd68LIvRDEmbGiRxjvF1rJ+5aIiCUOz77gFoDiwNH6fhCylwJEDgMjpON/UcZCs66vp04ZMj3A+P/ETcCUVwY5tT6sdToTZQ/mt1s2gx8h1zsuqWshBNwPbdrIeQVIpgI0Uwlx5Nkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708617132; c=relaxed/simple;
-	bh=jVuLW6VuRNUR1+1AtUBWQPIkc6l0VQn/JByX1iGH/Cg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WCs0oHou9k+MfuZa3vjq6hTTNW3TZZdx2P7bX1SVrfXZp5ERA2SxBNR4gTEY6EadNJF9pHZU3lzdtoIf7eSZc9RQsbnsmeAz0Uz9ST2vJxPTVmjPeimBUuRSwS9THykKlgp47+5z0Se/O/FhmQNzp9VwKueGAxB7nBEj/vW/Evc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [141.14.220.34] (g34.guest.molgen.mpg.de [141.14.220.34])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 852D261E5FE05;
-	Thu, 22 Feb 2024 16:51:51 +0100 (CET)
-Message-ID: <ea027251-8fd1-4267-8484-452860e0c464@molgen.mpg.de>
-Date: Thu, 22 Feb 2024 16:51:51 +0100
+	s=arc-20240116; t=1708617322; c=relaxed/simple;
+	bh=5LUqoDfY5+yGrpcAlC3H4jfgZnl12D8p92NN41iGn70=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iYBxeKQHCTvs99vcHNYMM0k+/h3XEve7/SztQpMLdoeVNzS/qOhp9c98k1p+M121Y+umklfxUdo+3HFcXKO7JcJ0gZUqiyK6OYoB7n80vRjVlvxkloZ/1iUkG0s0Sttm+tiP2VRthUKqHI5oTDEc47+m9VBZbQ/e83aho/DiR/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 626768 invoked by uid 1000); 22 Feb 2024 10:55:13 -0500
+Date: Thu, 22 Feb 2024 10:55:13 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Kevin Rowland <kevin.p.rowland@gmail.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: Control of external VBUS on resume from sleep
+Message-ID: <30fa974b-d943-4b8f-b6a7-313f03ca439e@rowland.harvard.edu>
+References: <CAHK3GzziwVASKgvBQmv_DnhwLJ8Bj2K=42ptyTrtOFCAAPXcnw@mail.gmail.com>
+ <Yp9k4JRcNMcvVi6l@rowland.harvard.edu>
+ <CAHK3Gzw7tqgjyiKgEqg0LHMFf4ycjOKE=pdobf6OFeANvUvkQg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: port: Don't try to peer unused USB ports based
- on location
-Content-Language: en-US
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- stern@rowland.harvard.edu, stable@vger.kernel.org,
- Mike Jones <mike@mjones.io>
-References: <20240222133819.4149388-1-mathias.nyman@linux.intel.com>
- <20240222133819.4149388-2-mathias.nyman@linux.intel.com>
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20240222133819.4149388-2-mathias.nyman@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHK3Gzw7tqgjyiKgEqg0LHMFf4ycjOKE=pdobf6OFeANvUvkQg@mail.gmail.com>
 
-Dear Mathias,
-
-
-Thank you for your patches fixing the problem.
-
-Am 22.02.24 um 14:38 schrieb Mathias Nyman:
-> Unused USB ports may have bogus location data in ACPI PLD tables.
-> This causes port peering failures as these unused USB2 and USB3 ports
-> location may match.
-
-I comment here, although it should probably be in another branch of this 
-thread.
-
-If it is a firmware issue, this check should be added to FirmWare Test 
-Suite (fwts) [1] too (I can report it there), and maybe some debug log 
-should report this firmware error too.
-
-> This is seen on DELL systems where all unused ports return zeroed
-> location data.
-
-As noted in the post scriptum in [2], much more systems seem to be affected.
-
-> Don't try to peer or match ports that have connect type set to
-> USB_PORT_NOT_USED.
-
-When grepping the git history, pasting the warning message would help 
-me. Maybe:
-
-This fixes the warning below on the affected systems:
-
-     usb: port power management may be unreliable
-
-If you want to add add the Linux Kernel Bugzilla URLs:
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=218465
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=218486
-
-I wasn’t able to test the other two systems yet, but maybe it is obvious 
-from the ACPI tables/ASL code:
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=218487 (Dell OptiPlex 
-5055)
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=218490 (Dell PowerEdge 
-T440)
-
-> Tested-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> ---
->   drivers/usb/core/port.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
+On Wed, Feb 21, 2024 at 02:40:05PM -0800, Kevin Rowland wrote:
+> Alan, first, apologies for the extremely late response.
 > 
-> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-> index c628c1abc907..4d63496f98b6 100644
-> --- a/drivers/usb/core/port.c
-> +++ b/drivers/usb/core/port.c
-> @@ -573,7 +573,7 @@ static int match_location(struct usb_device *peer_hdev, void *p)
->   	struct usb_hub *peer_hub = usb_hub_to_struct_hub(peer_hdev);
->   	struct usb_device *hdev = to_usb_device(port_dev->dev.parent->parent);
->   
-> -	if (!peer_hub)
-> +	if (!peer_hub || port_dev->connect_type == USB_PORT_NOT_USED)
->   		return 0;
->   
->   	hcd = bus_to_hcd(hdev->bus);
-> @@ -584,7 +584,8 @@ static int match_location(struct usb_device *peer_hdev, void *p)
->   
->   	for (port1 = 1; port1 <= peer_hdev->maxchild; port1++) {
->   		peer = peer_hub->ports[port1 - 1];
-> -		if (peer && peer->location == port_dev->location) {
-> +		if (peer && peer->connect_type != USB_PORT_NOT_USED &&
-> +		    peer->location == port_dev->location) {
->   			link_peers_report(port_dev, peer);
->   			return 1; /* done */
->   		}
+> I successfully hacked around the original issue, things have been
+> working for a long
+> time, but now I have to revisit it. Responses inline.
+> 
+> On Tue, Jun 7, 2022 at 7:46 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Mon, Jun 06, 2022 at 03:12:58PM -0700, Kevin Rowland wrote:
+> > > Hello all,
+> > >
+> > > I've got a USB 3.0 host (an NXP i.MX8QM running 5.10.72 with Cadence
+> > > XHCI host controller IP) connected to a USB device on the same PCB,
+> > > which also happens to run Linux (although I think that's beside the
+> > > point here). The quirk is that, although D+/D- are routed directly
+> > > from host to device, VBUS is actually controlled by a separate GPIO on
+> > > the host. The dedicated VBUS pin on the USB host controller is pulled
+> > > high. ID is pulled high on the PBC but driven low by a GPIO from the
+> > > i.MX8, so we can imagine it's tied to ground.
+> > >
+> > > I've made a little schematic drawing [1] to help visualize the connections.
+> > >
+> > > We've run into an issue where, on resume from STR, the following
+> > > sequence occurs:
+> > > - the GPIO peripheral on the host is powered back on, VBUS is
+> > > immediately driven high
+> >
+> > Why wasn't the GPIO turned on the whole time the system was suspended?
+> > How can remote wakeup work without VBUS power?
+> We don't currently use remote wakeup. The device is self-powered and enters
+> suspend-to-RAM itself when the host is suspended. The device can then wake
+> from an external source, at which point it will wake the host (i.MX8)
+> by asserting a
+> GPIO.
+> 
+> We've discussed maintaining VBUS through suspend and using USB remote
+> wakeup from the device, but that's off the table right now. Part of
+> the reason is
+> that our SoC can't get down into its lowest power state without powering off all
+> on-chip peripherals like the USB host controller - it can, however,
+> get to its lowest
+> power state and still wake via GPIO events.
+> 
+> > > - the device signals attach on DP/DN, but _I believe_ the host
+> > > controller on the host is not yet powered on
+> Slight correction, we have a 3.0 link so the device signals attach on
+> the SS lines,
+> then I think it falls back to signaling attach on DP/DN. Hopefully that doesn't
+> change things too much.
+> 
+> > > - the host controller is then powered on and the {hub, hcd, xhci}
+> > > drivers all resume, but no port status change is detected; I believe
+> > > that attach signaling was missed by the host controller
 
+You mean the port is physically attached to the device but the host 
+controller reports that it is not connected?
 
-Thank you again and kind regards,
+As part of its resume handling, the hub driver polls all the port 
+statuses.  If there was a status change, it would be aware unless the 
+controller's root hub simply did not report the new port status at all.
 
-Paul
+> > > I'd like for the host controller driver (or the root hub driver??) to
+> > > have explicit control of VBUS, so that it's driven high only when the
+> > > host controller regains power and is ready to detect attach signaling.
 
+In fact, the hub driver is aware of none of this.  The host controller 
+driver, or better, the host controller's platform driver is where all 
+the knowledge about the VBUS GPIO resides.
 
-[1]: https://wiki.ubuntu.com/FirmwareTestSuite/
-[2]: 
-https://lore.kernel.org/linux-usb/5406d361-f5b7-4309-b0e6-8c94408f7d75@molgen.mpg.de/
+How does your resume sequence work?  Does the PM core call a resume 
+routine in the platform driver, which then tells the xHCI core to do its 
+resume processing?  If that's the case then all you have to is turn on 
+the GPIO after the xHCI resume processing is finished, just before the 
+platform driver's resume routine returns.
+
+If that's not how it works then you might have to add some 
+platform-specific glue code to the end of the xHCI core resume routine.  
+Maybe controlled by a quirk flag.
+
+> > > I see device-tree documentation about the USB connector node and
+> > > `vbus-supply`, but I'm having a hard time understanding how to square
+> > > my use-case with `drivers/usb/common/usb-conn-gpio.c`, which reacts to
+> > > state changes on VBUS or ID.
+> > >
+> > > Any thoughts on where I should stick the logic that enables VBUS on
+> > > resume? My current (very hacky) fix is to initialize a global (argh!)
+> > > gpio_desc to refer to the VBUS GPIO, then to call
+> > > `gpiod_set_value(<gpio_desc>, 0); gpiod_set_value(<gpio_desc>, 1);` in
+> > > `usb_port_resume()`, which is where I ended up when tracking the
+> > > original issue. This toggles VBUS and allows us to catch the new round
+> > > of attach signaling from the device.
+> >
+> > The hub driver already knows to turn on port power when a hub is
+> > initialized or during a reset-resume.  It doesn't do so during a
+> > regular resume because it assumes power was on the whole time.  You can
+> > change this, if necessary.
+> Via set_port_feature(PORT_FEAT_POWER) in hub_power_on? Does this mean
+> I should patch in some extra logic to ask the platform-specific driver
+> to assert the
+> external VBUS GPIO? I'm happy to do that, I just don't want to miss logic that's
+> already built-in to the drivers.
+> 
+> If I'm reading the indirection correctly, I'll need:
+> hcd_to_xhci(bus_to_hcd(hub->hdev->bus))
+> 
+> to access the struct xhci_hcd. I don't yet see how to go from there to
+> the platform
+> driver.
+
+This is a good indication that you're trying to do things in the wrong 
+place.  Since what you're talking about is all platform-specific stuff, 
+that best place to put it all is in the platform driver.
+
+Alan Stern
+
+> > > I'm happy to use the fixed-regulator framework instead, I'm just not
+> > > sure which driver should own the gpio_desc / regulator and where it
+> > > should be disabled / enabled during suspend / resume.
+> >
+> > Probably whichever platform-specific driver manages your xHCI controller
+> > should be the one to interact with the GPIO.  But it should make changes
+> > only when told to do so by a higher layer (such as the hub driver).
+> This helps, thanks.
+> 
+> Best,
+> Kevin
+> 
+> 
+> 
+> > Alan Stern
+> >
+> > > Best,
+> > > Kevin
+> > >
+> > > [1]
+> > >
+> > >  i.MX8                      device
+> > > .----------------.         .-------------.
+> > > |     GPIOX.Y ---|-------->| VBUS (in)   |
+> > > |                |         |             |
+> > > |  USB           |    _    |             |
+> > > | .------------. |    |    |             |
+> > > | |    VBUS ---|-|----'    |             |
+> > > | |     DP <---|-|-------->| DP          |
+> > > | |     DP <---|-|-------->| DN          |
+> > > | |     ID ----|-|----.    '-------------'
+> > > | '------------' |    |
+> > > '----------------'    v
 
