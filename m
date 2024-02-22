@@ -1,136 +1,130 @@
-Return-Path: <linux-usb+bounces-6880-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6881-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D43685F571
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 11:17:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 439F285F7B7
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 13:07:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC7451C22AAA
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 10:17:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D80221F21589
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 12:07:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43BDC39AEE;
-	Thu, 22 Feb 2024 10:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="UEGvDNAZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2226D5F876;
+	Thu, 22 Feb 2024 12:07:01 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82EC22B9BF
-	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 10:17:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C325789F
+	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 12:06:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.110.167.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708597026; cv=none; b=mnFgFNBzOys6OyftjNZJUL6qjbBu0qIZuDha24i6ytPGMsjnUbNZ5pXW09vjwvNBDusYAmHKguv4uk+n1449ygoqUFcBIG6P40okaGwluHHXUMvxeLCYnHh4Idky51CiH/TK9nShZnd5YXQlaDcRdJ6If3l9jiOg7CW7Lsc2feY=
+	t=1708603620; cv=none; b=CXAgacouQbVxNOhqHZwAkZtMN5DyU98K6a375+HE0KQaAoDwfrm9XtO8pQjlJ4YMB2Ce2Iy/0fUVgTsRIEdhqTrFNyNfHvZ/GGBAvGWkrHqeVas9UZt2Hw38Iz2ovf4QQ9B5kmUmvQtBS+uNsPEuCcy/98GaC1v7rjg6IBfcVMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708597026; c=relaxed/simple;
-	bh=LhIhb4RiB61MmihxrRNLgjJ4lCywNYdh5fpN69+wLC8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GFuL2p9yhOcRuevp2YOii8NEM6EBXvYsa6BIyUrV0VNh2ySXFF/ZlqK6IfjNMWVUsGluMRnmkk7GnO74PeGaZIdwmTjNBPi9+mLitpvIFxxtCb4wnDkUzj6whUCj3LF+OczBp/3fvzyE+Svt7qEySvCMPDbv+c2RjKULBZJ5nb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=UEGvDNAZ; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1708597022; x=1740133022;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hQyKWsydAFlf3cuUBZsUkNyD7QdHs8gaU+33XwBiri8=;
-  b=UEGvDNAZr4cS3CxZLijpHMz1T0Y/HD9FJ9O6sMN0WkalPNRzGvPt9rJ1
-   Ew2nvfXkqrxrGdQfSIFXsE0zi/whCwP9pVtBJ2b9LQBM+X8rG89qiCNxf
-   lIfPqtwN3J8oEDolzCafVnoa7CF0Y3cvv6E/ynq/RVehX+wxFRMQOg2Jq
-   /OD70UiAuFKVVsRHJpm0gCvIp3DyINeDIt6cG8iIZyBBO3Gh/OLcRxC25
-   hnpACerQ8bboz8npuwxhaDjil1qAERajOHyyQBKFYTLl1usUeRvp9PbTd
-   C20zfB7rWZBWkcXZGo0B3+9PKEw9QOCgf3pnULPVr8XcyWXFf7jT4AERV
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.06,177,1705359600"; 
-   d="scan'208";a="35542425"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 22 Feb 2024 11:16:59 +0100
-Received: from steina-w.localnet (steina-w.tq-net.de [10.123.53.25])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id D7F96280075;
-	Thu, 22 Feb 2024 11:16:59 +0100 (CET)
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, Sean Anderson <sean.anderson@seco.com>
-Subject: Re: usb-next tree has patch applied twice
-Date: Thu, 22 Feb 2024 11:16:59 +0100
-Message-ID: <8339216.T7Z3S40VBb@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <2024022225-curfew-operative-c98f@gregkh>
-References: <3469745.QJadu78ljV@steina-w> <2024022225-curfew-operative-c98f@gregkh>
+	s=arc-20240116; t=1708603620; c=relaxed/simple;
+	bh=Xo7w5lVDrESHPh5uB2qKdL/YvecJ2Z78km/I9VxVRE4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=nbEeXmkrt7iy9iCep1FNKuvGPYtGFX2lrYjbybNrPGDEC61kPujdWA7Bznq+So7qiD5uYsZ5+9q95fEqckyTFynXBZZ/PMFJnAsDbOCbKaL0yuipRuxTwNNVoNG8vZ0ta1MlH1niqsShXdgLf36WRvVsWzs+b1Co3lkKbdaS4jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=203.110.167.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1708603609-1eb14e0c7e461f0001-YVMibp
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id Xw3wrZUAYdcf8tPN (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 22 Feb 2024 20:06:49 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 22 Feb
+ 2024 20:06:49 +0800
+Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 22 Feb
+ 2024 20:06:45 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Message-ID: <41daf1a9-590a-e220-84a3-648eb895272b@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
+Date: Fri, 23 Feb 2024 04:06:23 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] USB:UAS:return ENODEV when submit urbs fail with device
+ not attached.
+Content-Language: en-US
+X-ASG-Orig-Subj: Re: [PATCH] USB:UAS:return ENODEV when submit urbs fail with device
+ not attached.
+To: Oliver Neukum <oneukum@suse.com>, <stern@rowland.harvard.edu>,
+	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+	<usb-storage@lists.one-eyed-alien.net>
+CC: <WeitaoWang@zhaoxin.com>
+References: <20240222165441.6148-1-WeitaoWang-oc@zhaoxin.com>
+ <3ff16f34-07a9-4b7e-b51d-b7220f08d88d@suse.com>
+From: "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <3ff16f34-07a9-4b7e-b51d-b7220f08d88d@suse.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1708603609
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 1923
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.121174
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
+	0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+	3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
 
-Hi,
+On 2024/2/22 17:47, Oliver Neukum wrote:
+> 
 
-CC'ing Sean as well.
+> On 22.02.24 17:54, Weitao Wang wrote:
+>> In the scenario of entering hibernation with udisk in the system, if the
+>> udisk was gone or resume fail in the thaw phase of hibernation. Its state
+>> will be set to NOTATTACHED. However, usb_hub_wq was already freezed and
+>> can't not handle disconnect event. Then, sync cache SCSI command will be
+>> sent to this udisk on the poweroff phase of hibernation, that will cause
+> 
+> Wait, this seems like a contradiction. Are we in thaw or are we powering off?
 
-Am Donnerstag, 22. Februar 2024, 08:47:28 CET schrieb Greg Kroah-Hartman:
-> On Tue, Feb 20, 2024 at 04:29:04PM +0100, Alexander Stein wrote:
-> > Hi Greg,
-> >=20
-> > on the usb-next tree [1] the patch 'usb: phy: generic: Get the vbus sup=
-ply
-> > has been applied twice:
-> > * 03e607cbb2931374db1825f371e9c7f28526d3f4
->=20
-> This is from the 5.18 release, from this email series:
-> 	https://lore.kernel.org/all/20220425171412.1188485-3-sean.anderson@seco.=
-com/
-> from 2022.
->=20
-> > * 75fd6485cccef269ac9eb3b71cf56753341195ef
->=20
-> This is from a newer series:
-> 	https://lore.kernel.org/all/20240123225111.1629405-3-sean.anderson@seco.=
-com/
-> that I applied from there.
->=20
-> So how did it apply cleanly twice?
+This fail appear in poweroff phase of hibernation.
 
-Apparently the series from 2024 is v3 from the older v2 one. For some reason
-only patch 2/4 from v2 got applied before. v3 seems to be a rebase where the
-apply went unnoticed but the patch is again part of the series :(
+>> uas_submit_urbs to be called to submit URB to sense/data/cmd pipe. Then,
+>> usb_submit_urb return value -ENODEV when device was set to NOTATTACHED
+>> state. However, uas_submit_urbs always return "SCSI_MLQUEUE_DEVICE_BUSY"
+>> regardless of the reason for submission failure.That will lead the SCSI
+>> layer go into an ugly loop and system fail to go into hibernation.
+> 
+> The thing is that the SCSI documentation explicitly tells us to return
+> either SCSI_MLQUEUE_DEVICE_BUSY or SCSI_MLQUEUE_HOST_BUSY. Now, it makes
+> sense to tell the SCSI laer that a device or host is gone for good,
+> if we know that. But we cannot just introduce new error returns on our own.
+> 
+> This needs to be addressed. That means that the SCSI layer or at the
+> very least the documentation needs to be fixed. Frankly, this is not strictly
+> speaking a UAS issue. Any thing hotunpluggable should have this issue.
+> 
 
-> > causing my board imx8mm-tqma8mqml-mba8mx.dts failing to probe USB phy:
-> > [   11.006720] usb_phy_generic usbphynop1: error -EPERM: could not get =
-vbus regulator
-> > [   11.017817] usb_phy_generic: probe of usbphynop1 failed with error -1
-> >=20
-> > Reverting/removing the patch fix my problem.
->=20
-> Which patch?  All of the ones in that last series?  If so, why did it
-> apply at all?
+Maybe, my description was not accurate enough, here not add new return
+value to scsi layer,it just add a case to tell device is gone in the uas
+driver internal and the ENODEV error code not return to scsi layer.
+Here just notify SCSI layer of device loss through flag DID_NO_CONNECT.
+This is also hope to fix this issue in the uas driver internal.
 
-In my case I reverted 75fd6485cccef269ac9eb3b71cf56753341195ef from
-usb-next, because that very change has been applied with
-03e607cbb2931374db1825f371e9c7f28526d3f4 already.
-
-Best regards,
-Alexander
-
-> totally confused,
->=20
-> greg k-h
->=20
-
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
+Thanks and best regards,
+weitao
 
 
