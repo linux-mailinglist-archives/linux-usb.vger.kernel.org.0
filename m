@@ -1,174 +1,119 @@
-Return-Path: <linux-usb+bounces-6878-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6879-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7597785F4EB
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 10:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EF1185F4F2
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 10:47:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0316D1F21EDB
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 09:47:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 457A51F227D1
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 09:47:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFBF038DD8;
-	Thu, 22 Feb 2024 09:46:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFA6E3B2B6;
+	Thu, 22 Feb 2024 09:47:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s0qw/iTE"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dKkOC5yO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1A4381A1
-	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 09:46:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E070B39AC3
+	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 09:47:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708595179; cv=none; b=dN8y8+7ACrg1V0Rfze9pvC4CpbwmUym4/BONMQkE+1N76a7FkpeQhRHfI4r/o0Vi908S1NCDNkcGFGGARQ3/PyLqVpWPAjNP54RsUusna5J8aK8kfLqDogts8yMnYTzVxHF9aM3RHiYIVs3a4jExz7fL7qv9sZU6c+9rtye4ymY=
+	t=1708595233; cv=none; b=q995Wb/9MxoTTS6yqqMNJJnBRgqvw7tlN8EOVwXETrwI0DIivg14r0NReMO/aag+QcTQcypm26rluTj+Jk9+sDZ2/SoZpJPIF9Rf30Wu0oOT62NCnAWgdeNEqIQTJCRKSQ4VgAJd/4hxGwfhNIAU+UOGMFO57uYfGctoiWuAqjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708595179; c=relaxed/simple;
-	bh=OXpl8KtnkdumkkL/oL3Rll5PWQ3rF0whL8FYYh60i3w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fu9X+BgSziCIS2IjDB1YgSNFuW1pDV+JW/JI5k8ABz++U6mkM7wIqP5QBU+6Kp01auB68jb/6cEyNhooYSOFW0KVIsN/4VsVfkKrQLYh9Wc5Fb/TGXT8IUdBCsRBrAw58Qx1v2t/d2ho9NIq5HWyYXYth+zKiANKNZNhreykBZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s0qw/iTE; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-564e4477b7cso7156a12.1
-        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 01:46:17 -0800 (PST)
+	s=arc-20240116; t=1708595233; c=relaxed/simple;
+	bh=p/NLjmUdzl2udebkQzhZYTZge1vEW9JNghSztBz2MFg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pzGmZq7ZdOwvW2CnsVVLaQJdYefII92i+vlhBRIk3aEZQyt7nfrMzhz5DTi/lq8gaJf0RlvP3x95WMGQdOOVDaZ+EsN6Rvd32yElGraGkhfoNXUIumZL9l5wr0FkyO1P9HrwhEt8RdDE2giPUW5zTDbYlBA/ZHm+pocAAfbZD+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dKkOC5yO; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-55f50cf2021so2439030a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 01:47:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708595176; x=1709199976; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CO9OLuYsn9M5g/f+gNkO5HVcagw8JPRKpX2lST/Z1zc=;
-        b=s0qw/iTEvikM/obz5ZM4wbhfhISNkQrUa7hFn1rkYXEX6NvzKwW4mW0NOkfSii1ngM
-         3h/2izEzsqN/lNjRF4KHGhIjUPfk/sDhDsiqp8BT6M1xii85NrdM3BmkHgQD0qldxeni
-         VdrbZl/X5zeE8BwKgPQt47NC56WUBKWkbbNlOcpONVsa2OAH+KH27TIH/0Ju0fEuZASO
-         8OSLNlhrqmDLLblu3TezLmiL0C/QOCCyQzPQscnwusvE6X2fKuPi68+u8bih4kIOSGcW
-         JA6/PaZTSk+SgUOU9vdkKZbXP/0m7CfVYwkwiuTrrgQ9pBHKdzgx+zT5Yx+axzx7txUf
-         jLFw==
+        d=suse.com; s=google; t=1708595229; x=1709200029; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dhVnYESztk5T2B/6C2k8gNoOah30/4ZRZ/kF6+4P7Uw=;
+        b=dKkOC5yOlC19qjiK5+6HgiE05WByhPHUONs6zTMjmmp6Atvb+aou1+TTyrtEvUqjsC
+         NEGMC0ymPtoOEHmhMxikyhcrnUtxvS02y8dzohqdgtumJxVsLqdSmzcv2xeOK2W4yMuJ
+         ZA1+05W8i39/A0jewi834v0Y0+GAz/I1kuOw1EpYEjTQNmFvtwjoRFPNN2KFHW3miO2h
+         W0Z+ZtN5b/lsnbOgm8PObuxvOrt6x2RHisRNSXoSLCU9ejp3Irox4wcnXJ66QK2CdCo2
+         1JTZdZfnPIIdzi6bgHTu+pxjQOGMJyz6mnwQYf7wFIEEIoCI4GIYmz9GsG/bLIIIOSUi
+         UE6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708595176; x=1709199976;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CO9OLuYsn9M5g/f+gNkO5HVcagw8JPRKpX2lST/Z1zc=;
-        b=ecjN1X+aFrjav+0YPhDh+hlrOltHGTCQpp0LUYtYBtCerI45mYXQ74x7IajVV6G5/W
-         fUY9FpZoaCJAOyNvfu4oT0tR/8DfFTI70drLdhtNEovRHqaQ8BsG8w5Ff8bsTDwNzTx+
-         ZmtHlfJr8VgUjJ+9zqt1k6cpuv2bCaI7zSFukeCissdmmpBphJ5v47jRxsdJstdeihJH
-         OgB53m216FxvLC/SUiQ43DMReC5k5F5015PxBGCGxv8in5bWjG19EkHkRPcn/WgM51Zl
-         wubvL1FONCGXO+P2Lz5n/QDxh0jZ52KC1eEIlpdgx/m+m1Fl0OseyLKrIJbuP97TteQY
-         CQZA==
-X-Forwarded-Encrypted: i=1; AJvYcCWCqJuQ65lJYC3o/xlMnH6oevG1JXdSQaOYdhglKlZ/OFTe+zuHfaswq/EQSuFPmbCCeFRc6TMOSRMnqKrdyNL/4y8XwONS4/Y8
-X-Gm-Message-State: AOJu0YxCoppSzqi5xukMH/LI9CLdx0Y5oh5tpLIkyZ0t6Hd2TKnj28jV
-	ZlTxQcIf8Vh0NgGOHrYwV4BPjgDPwC84ZBas5Z6NOMGx6Rn0ng2wslGd0eXfAZy3CZeR/ni4hmS
-	KW1EaxCDund0mmNzI/VnBKY5K+Ws3tfRoUTyh
-X-Google-Smtp-Source: AGHT+IHM+zVGs1vfCf6mEt0YThwspRts0ylLL/r+issShzGze5aBxEviehGvjwwmjLZ77XUgJQ4G1x6+ofxUaAbkDfU=
-X-Received: by 2002:a50:9f04:0:b0:562:9d2:8857 with SMTP id
- b4-20020a509f04000000b0056209d28857mr385846edf.6.1708595175380; Thu, 22 Feb
- 2024 01:46:15 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708595229; x=1709200029;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dhVnYESztk5T2B/6C2k8gNoOah30/4ZRZ/kF6+4P7Uw=;
+        b=tpe5EZXnoD4KJqibtbHPO5TAnaGoctO1vj0B3ELSo6C0QZ8vqscwueWHL0KV/nXOKH
+         9Ssdf9k9CT7dX3dOnLCryEv5MTHND9a/KGnrPT4DixH9/IKm3/g5AG3V9e2zB3pa9EYz
+         QRA2MJVI448Ll9BaO9Wob8V8CQKVB2683op9yLawotTuZ67UORuECSjg+b7XZfDJp71E
+         toSAfUICaxGHm1koJKm8H/Q7WmjrtzdDm/XxOtaAKJwQppbVkkV/l8mWts8D3ZKlxzog
+         EHtAxR/6oplfT/L7VFx1/wKkLX3Vy+GEkZiyT7iLvap0eu4O9iPODPhw6+TJpz1pGhnk
+         CAhA==
+X-Forwarded-Encrypted: i=1; AJvYcCXN6zb6pSioZ861QKFmBErnyiSA8OvECGuyMuEG07OdvI+FGf7IPGysaMoG9JwoE8tr+8eGlkEymwREeGrLIqb0S+wZGvxatDTT
+X-Gm-Message-State: AOJu0Yxb/iYwrBGb58kwuoW8Xde4X2wrO/21OPmAer8C1Abwy6URJrbN
+	ou5Co6cyYU4r2ZQpJ213/2aMpOQwZqo54G/fLaRI/C7+66lnrwTSRGqdu1DBfVQ=
+X-Google-Smtp-Source: AGHT+IG1aDzb+IIVwxggYxnhkecGvu0RiI61eOavtRNRtUy9JvH30l3jJlU3ceQLnu9hAqLoy8dj9w==
+X-Received: by 2002:a05:6402:693:b0:564:56e0:5643 with SMTP id f19-20020a056402069300b0056456e05643mr7560672edy.27.1708595229208;
+        Thu, 22 Feb 2024 01:47:09 -0800 (PST)
+Received: from ?IPV6:2001:a61:1366:6801:d8:8490:cf1a:3274? ([2001:a61:1366:6801:d8:8490:cf1a:3274])
+        by smtp.gmail.com with ESMTPSA id q29-20020a50cc9d000000b00563a3ff30basm5724081edi.59.2024.02.22.01.47.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Feb 2024 01:47:08 -0800 (PST)
+Message-ID: <3ff16f34-07a9-4b7e-b51d-b7220f08d88d@suse.com>
+Date: Thu, 22 Feb 2024 10:47:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240219061008.1761102-1-pumahsu@google.com> <20240219061008.1761102-3-pumahsu@google.com>
- <0b4464eb-631e-4c9f-a7c8-3451be15d8b4@kernel.org> <CAGCq0LYFMrFmxeKZE9g-O61+N03rJoGL0XvXJVya0Yx-ZasvBA@mail.gmail.com>
- <bea850fe-19e8-492e-b885-6d01b389c32c@kernel.org>
-In-Reply-To: <bea850fe-19e8-492e-b885-6d01b389c32c@kernel.org>
-From: Puma Hsu <pumahsu@google.com>
-Date: Thu, 22 Feb 2024 17:45:37 +0800
-Message-ID: <CAGCq0La_XHJw4cscahiDWM-n03dWf8SUQ2Zw0YZgHyXwKcURyQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] usb: xhci: Add support for Google XHCI controller
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org, 
-	Thinh.Nguyen@synopsys.com, badhri@google.com, royluo@google.com, 
-	howardyen@google.com, albertccwang@google.com, raychi@google.com, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB:UAS:return ENODEV when submit urbs fail with device
+ not attached.
+To: Weitao Wang <WeitaoWang-oc@zhaoxin.com>, oneukum@suse.com,
+ stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-scsi@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+Cc: WeitaoWang@zhaoxin.com
+References: <20240222165441.6148-1-WeitaoWang-oc@zhaoxin.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20240222165441.6148-1-WeitaoWang-oc@zhaoxin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 21, 2024 at 5:53=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On 21/02/2024 10:31, Puma Hsu wrote:
-> > On Mon, Feb 19, 2024 at 8:22=E2=80=AFPM Krzysztof Kozlowski <krzk@kerne=
-l.org> wrote:
-> >>
-> >> On 19/02/2024 07:10, Puma Hsu wrote:
-> >>> In our SoC platform, we support allocating dedicated memory spaces
-> >>> other than system memory for XHCI, which also requires IOMMU mapping.
-> >>> The rest of driver probing and executing will use the generic
-> >>> xhci-plat driver.
-> >>>
-> >>> We support USB dual roles and switch roles by generic dwc3 driver,
-> >>> the dwc3 driver always probes xhci-plat driver now, so we introduce
-> >>> a device tree property to probe a XHCI glue driver.
-> >>>
-> >>> Sample:
-> >>>   xhci_dma: xhci_dma@99C0000 {
-> >>>     compatible =3D "shared-dma-pool";
-> >>>     reg =3D <0x00000000 0x99C0000 0x00000000 0x40000>;
-> >>>     no-map;
-> >>>   };
-> >>>
-> >>>   dwc3: dwc3@c400000 {
-> >>>     compatible =3D "snps,dwc3";
-> >>>     reg =3D <0 0x0c400000  0 0x10000>;
-> >>>     xhci-glue =3D "xhci-hcd-goog";
-> >>
-> >> NAK, that's not DWC3 hardware in such case.
-> >
-> > By introducing this property, users can specify the name of their
-> > dedicated driver in the device tree. The generic dwc3 driver will
->
-> DT is not a place for driver stuff.
->
->
-> > read this property to initiate the probing of the dedicated driver.
->
-> I know, but it is not a reason to add stuff to DT.
->
-> > The motivation behind this is that we have dedicated things
-> > (described in commit message) to do for the XHCI driver in our
-> > device. BTW, I put this property here because currently there is
-> > no xhci node, xhci related properties are put under dwc3 node.
->
-> Sorry, you miss the point. Either you have pure DWC3 hardware or not.
-> You claim now you do not have pure hardware, which is reasonable,
-> because it is always customized per-vendor. In such case you cannot
-> claim this is a pure DWC3. You must provide bindings for your hardware.
->
-> Now, if you claim you have a pure DWC3 hardware without need for any
-> vendor customizations, then entire patchset is fake try to upstream your
-> Android vendor stuff. We talked about such stuff many times on mailing
-> list, so for obvious reasons I won't repeat it. Trying to push vendor
-> hooks and vendor quirks is one of the most common mistakes, so several
-> talks already say: don't do this.
->
-> > It will be appreciated if there are alternative or more appropriate
-> > approaches, we welcome discussion to explore the best possible
-> > solution. Thanks.
->
-> And what's wrong with all previous feedbacks for similar
-> Google/Samsung/Artpec/Tensor vendor hacks? Once or twice per year some
-> folks around Google or Samsung try to push such, they all receive the
-> same feedback and they disappear, so I have to repeat the same feedback
-> to the next person... Please go through previous patches from
-> @samsung.com for various subsystems.
->
-> Documentation/devicetree/bindings/submitting-patches.rst
-> Documentation/devicetree/bindings/writing-bindings.rst
-> +other people or my talks on Devicetree
->
-> Summarizing: Devicetree is for hardware, not for your driver
-> hooks/quirks/needs. Describe properly and fully the hardware, not your
-> driver.
+On 22.02.24 17:54, Weitao Wang wrote:
+> In the scenario of entering hibernation with udisk in the system, if the
+> udisk was gone or resume fail in the thaw phase of hibernation. Its state
+> will be set to NOTATTACHED. However, usb_hub_wq was already freezed and
+> can't not handle disconnect event. Then, sync cache SCSI command will be
+> sent to this udisk on the poweroff phase of hibernation, that will cause
 
-Thank you Krzysztof for the explanation. I will study and explore
-the possibility of integrating the stuff we want into the generic driver.
+Wait, this seems like a contradiction. Are we in thaw or are we powering off?
 
->
-> Best regards,
-> Krzysztof
->
+> uas_submit_urbs to be called to submit URB to sense/data/cmd pipe. Then,
+> usb_submit_urb return value -ENODEV when device was set to NOTATTACHED
+> state. However, uas_submit_urbs always return "SCSI_MLQUEUE_DEVICE_BUSY"
+> regardless of the reason for submission failure.That will lead the SCSI
+> layer go into an ugly loop and system fail to go into hibernation.
+
+The thing is that the SCSI documentation explicitly tells us to return
+either SCSI_MLQUEUE_DEVICE_BUSY or SCSI_MLQUEUE_HOST_BUSY. Now, it makes
+sense to tell the SCSI laer that a device or host is gone for good,
+if we know that. But we cannot just introduce new error returns on our own.
+
+This needs to be addressed. That means that the SCSI layer or at the
+very least the documentation needs to be fixed. Frankly, this is not strictly
+speaking a UAS issue. Any thing hotunpluggable should have this issue.
+
+	Regards
+		Oliver
 
