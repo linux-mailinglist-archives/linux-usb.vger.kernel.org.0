@@ -1,91 +1,90 @@
-Return-Path: <linux-usb+bounces-6896-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6897-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9D4185FCE8
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 16:46:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C8D985FD08
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 16:51:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 897C11F276C8
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 15:46:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0519C1F27A7A
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 15:51:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2888414F9CB;
-	Thu, 22 Feb 2024 15:45:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCCC5151CDC;
+	Thu, 22 Feb 2024 15:50:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LV71sEZE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7662D14C5B5
-	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 15:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3459814E2FC
+	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 15:50:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708616709; cv=none; b=PjKUDlNl4WOh32kNHFniPuEtYBnpmSL8ptNr+KE4IfPU87Lwzuf5h7aIDm84yjsujHLMg6qIbbLP8wLW/1oqdPIUMYHUKXDLrxemr/yNzcVPEGthlZ8fJnw3kQE6+7zU77fgF4kNuPAxIl/JmB/c+H2P3yHASndvFA9QZzbQmxA=
+	t=1708617055; cv=none; b=GTFGPorrfHmCr6srGJ2C9Tu3O1n2DFXXIbMY8vClshwuGOBVWMpAk14uYuzECPGi5BriVgAdAVr1f0p+FKSbgcVKhV4t/DXP5h4R8+gtpKrv5b2uhSJ4gJOIZINWnRFyc7v3Eqctnp0YasTSZynsRdTkfOyy4TJnOCS6zC65El0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708616709; c=relaxed/simple;
-	bh=h1cNsBFXEuqC124iU3cXvGFB2oden75S4le8EHxmNzM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UF1f6m15RIh2oCm8EdBXoEU8Dmag0zFRyBRvzwtD69OCCQH0kVtJYkZdmLHdbVrm0QsVPVfXk+jvFb2+NKD4GjXlDYugqT/ln0xplR8IhHyVgNSGwkpwz7eD1aRbwcEvwJnIQL9d2FnnMUJCq8zYr8nqczcPWW1rvwWm2uvVynk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [141.14.220.34] (g34.guest.molgen.mpg.de [141.14.220.34])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id AF2D861E5FE05;
-	Thu, 22 Feb 2024 16:44:42 +0100 (CET)
-Message-ID: <0e05a548-ded2-48f0-a6c1-bdbc71af5441@molgen.mpg.de>
-Date: Thu, 22 Feb 2024 16:44:42 +0100
+	s=arc-20240116; t=1708617055; c=relaxed/simple;
+	bh=WvXHPDPoYRyZt/1IHEf23DgfclGbcpCUEnZMcKMRw/0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uaH9zL6+z9ELmil7LM6YSs2a9sr3np4J7/2E6mmSnKjwcX9p8C5NpblVB/SSPMItdLtQR/+HND2S5IvjzaCoDzUausvD5TQrfLlLD7ZSK5TZuMYLm1UoUuJMbTUISpNcJ7vVGQyBpYRM+fiKlfxfDZfsenvku6C9958zP+enp8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LV71sEZE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38136C43390;
+	Thu, 22 Feb 2024 15:50:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1708617054;
+	bh=WvXHPDPoYRyZt/1IHEf23DgfclGbcpCUEnZMcKMRw/0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LV71sEZEgWX/4gvHSHmTrTWfXZHolZbJoiBqJr0mJM3JduUdZfPIDIqCd2qluLpgW
+	 ud0WlfoZGBaz2cROTfBRJtEkLSLJ5tq0/QykqCVp0WERKhBPWoqiptdq/ibcqqkCtC
+	 F+qp2JpPMhAI3mXB/OP5f7K/wAIC8w/1bYoybVPU=
+Date: Thu, 22 Feb 2024 16:50:51 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu
+Subject: Re: [PATCH 1/2] usb: usb-acpi: Set port connect type of not
+ connectable ports correctly
+Message-ID: <2024022230-gusty-tactics-34d1@gregkh>
+References: <20240222133819.4149388-1-mathias.nyman@linux.intel.com>
+ <2024022238-caddie-fanning-8ab5@gregkh>
+ <fc15052f-c5de-0136-484e-c3ac735ae799@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFT PATCH v2 2/2] usb: port: Don't try to peer unused USB ports
- based on location
-Content-Language: en-US
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, aros@gmx.com,
- stern@rowland.harvard.edu, Mike Jones <mike@mjones.io>,
- Hans de Goede <hdegoede@redhat.com>,
- Kai-Heng Feng <kai.heng.feng@canonical.com>
-References: <1075b61e-d380-8e45-61e2-33d181444594@linux.intel.com>
- <20240220135946.4028553-1-mathias.nyman@linux.intel.com>
- <20240220135946.4028553-2-mathias.nyman@linux.intel.com>
- <ba2257e8-e34e-462d-828b-92dbcb747f8a@molgen.mpg.de>
- <2a6de928-a23c-8202-61c9-af41d515fcbc@linux.intel.com>
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <2a6de928-a23c-8202-61c9-af41d515fcbc@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fc15052f-c5de-0136-484e-c3ac735ae799@linux.intel.com>
 
-Dear Mathias,
-
-
-Am 22.02.24 um 14:19 schrieb Mathias Nyman:
-> On 21.2.2024 13.19, Paul Menzel wrote:
->> [CC: +Mike, +Hans, +Kai-Heng]
->>
->>
->> On the Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, the warning is 
->> also gone with v2 of your patches.
+On Thu, Feb 22, 2024 at 04:46:16PM +0200, Mathias Nyman wrote:
+> On 22.2.2024 16.06, Greg KH wrote:
+> > On Thu, Feb 22, 2024 at 03:38:18PM +0200, Mathias Nyman wrote:
+> > > Ports with  _UPC (USB Port Capability) ACPI objects stating they are
+> > > "not connectable" are not wired to any connector or internal device.
+> > > They only exist inside the host controller.
+> > > 
+> > > These ports may not have an ACPI _PLD (Physical Location of Device)
+> > > object.
+> > > 
+> > > Rework the code so that _UPC is read even if _PLD does not exist, and
+> > > make sure the port->connect_type is set to "USB_PORT_NOT_USED" instead
+> > > of "USB_PORT_CONNECT_TYPE_UNKNOWN".
+> > > 
+> > > Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> > 
+> > Does patch 2/2 need this?  If so, why isn't it marked for stable?
 > 
-> Thanks for testing, I'll submit these as proper patches.
+> 2/2 alone fixes the real world port peering problem seen.
+> 
+> This is something I stumbled upon while debugging that issue.
+> This patch just makes sure we don't skip marking some unused ports as
+> unused due to how we parse ACPI tables.
 
-Just a note, that I also successfully tested it on the Dell Precision 
-3620 and documented this in the Linux Kernel Bugzilla issue [1].
+Ok, so should patch 1/2 go to usb-next and patch 2/2 go to usb-linus?
 
-I wasn’t able to test the two other systems yet.
+confused,
 
-
-Kind regards,
-
-Paul
-
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=218486
+greg k-h
 
