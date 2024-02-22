@@ -1,102 +1,91 @@
-Return-Path: <linux-usb+bounces-6895-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6896-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87AD085FBEB
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 16:11:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9D4185FCE8
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 16:46:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B90281C234BA
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 15:11:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 897C11F276C8
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 15:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0042E14A0BD;
-	Thu, 22 Feb 2024 15:11:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="PlwPp4qs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2888414F9CB;
+	Thu, 22 Feb 2024 15:45:10 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64BDB149005;
-	Thu, 22 Feb 2024 15:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7662D14C5B5
+	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 15:45:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708614668; cv=none; b=mkupuWPuek6P2Avw7SO5R6kSthRd0gtMTqOmIKEHWp2Fy10vX+sza+3vDeu2V4d9jwP8MRQByGDRMGLWPuAYTcGD300tkb733qPgojRDoeEm/8c+953Mw7tv/6Jz0/6ygT2eWsM37acToJLhSfvaCCOwQVzOFG6eW/B2INAy0so=
+	t=1708616709; cv=none; b=PjKUDlNl4WOh32kNHFniPuEtYBnpmSL8ptNr+KE4IfPU87Lwzuf5h7aIDm84yjsujHLMg6qIbbLP8wLW/1oqdPIUMYHUKXDLrxemr/yNzcVPEGthlZ8fJnw3kQE6+7zU77fgF4kNuPAxIl/JmB/c+H2P3yHASndvFA9QZzbQmxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708614668; c=relaxed/simple;
-	bh=N4DqxkrUO+39GL6l6n4cDeOPvtBE1QaBpCHDr4rRhKE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DWpXAAibRz2krhzyaE6XDhr1/lerxY8LGmAe7QoyuK9q2BSy2yrluh8JSkLBG3tSR26Wm3vLywu1NHyua3DkcrlFwQWG3tpHfHeI43lmLUX6x88rKyguu96D85RYA0jes5Hlv7bmgndueGe/el3Xe5Cntz3jLTI3UZTpPGWPcKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=PlwPp4qs; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=wMH/YxCjPZ+y9HsN5oGyh1S5l+4RS/ggKj3jV/RYk0o=; b=PlwPp4qsKfFwbW6SZDrR5NPnMQ
-	bR7XdWqPB+3yentT0+DlCP3iWQUbcAbX468on34w/o/3vMxOcbjXYYQWet4npgIE2qKzq8kE44oHM
-	JT5IhGFCO0YIF5P7A3+uL6bdTE3C3jSwdtnPLreSxTDspO8QL54S9WVu7na1/VEbCscc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rdAj7-008S6N-L3; Thu, 22 Feb 2024 16:11:09 +0100
-Date: Thu, 22 Feb 2024 16:11:09 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Simon Horman <horms@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Ariel Elior <aelior@marvell.com>,
-	Manish Chopra <manishc@marvell.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH net-next v4 3/9] net: qlogic: qede: Use linkmode helpers
- for EEE
-Message-ID: <68088998-4486-4930-90a4-96a32f08c490@lunn.ch>
-References: <20240218-keee-u32-cleanup-v4-0-71f13b7c3e60@lunn.ch>
- <20240218-keee-u32-cleanup-v4-3-71f13b7c3e60@lunn.ch>
- <20240220124405.GB40273@kernel.org>
- <a52361ef-66ab-41bd-b245-ccd26fcbd957@lunn.ch>
- <20240221102851.GA352018@kernel.org>
+	s=arc-20240116; t=1708616709; c=relaxed/simple;
+	bh=h1cNsBFXEuqC124iU3cXvGFB2oden75S4le8EHxmNzM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UF1f6m15RIh2oCm8EdBXoEU8Dmag0zFRyBRvzwtD69OCCQH0kVtJYkZdmLHdbVrm0QsVPVfXk+jvFb2+NKD4GjXlDYugqT/ln0xplR8IhHyVgNSGwkpwz7eD1aRbwcEvwJnIQL9d2FnnMUJCq8zYr8nqczcPWW1rvwWm2uvVynk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [141.14.220.34] (g34.guest.molgen.mpg.de [141.14.220.34])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id AF2D861E5FE05;
+	Thu, 22 Feb 2024 16:44:42 +0100 (CET)
+Message-ID: <0e05a548-ded2-48f0-a6c1-bdbc71af5441@molgen.mpg.de>
+Date: Thu, 22 Feb 2024 16:44:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240221102851.GA352018@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFT PATCH v2 2/2] usb: port: Don't try to peer unused USB ports
+ based on location
+Content-Language: en-US
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, aros@gmx.com,
+ stern@rowland.harvard.edu, Mike Jones <mike@mjones.io>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <1075b61e-d380-8e45-61e2-33d181444594@linux.intel.com>
+ <20240220135946.4028553-1-mathias.nyman@linux.intel.com>
+ <20240220135946.4028553-2-mathias.nyman@linux.intel.com>
+ <ba2257e8-e34e-462d-828b-92dbcb747f8a@molgen.mpg.de>
+ <2a6de928-a23c-8202-61c9-af41d515fcbc@linux.intel.com>
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <2a6de928-a23c-8202-61c9-af41d515fcbc@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 21, 2024 at 10:28:51AM +0000, Simon Horman wrote:
-> On Tue, Feb 20, 2024 at 03:45:28PM +0100, Andrew Lunn wrote:
-> > > > +	unsupp = linkmode_andnot(tmp, edata->advertised, supported);
-> > > 
-> > > nit: Given the types involved, I might have written this as:
-> > > 
-> > > 	unsupp = !!linkmode_andnot(tmp, edata->advertised, supported);
-> > 
-> > linkmode_andnot() calls bitmap_andnot():
-> > 
-> > static inline bool bitmap_andnot(unsigned long *dst, const unsigned long *src1,
-> > 			const unsigned long *src2, unsigned int nbits)
-> > 
-> > It already returns a bool, so there is no need to force an int to bool
-> > conversion using !!.
+Dear Mathias,
+
+
+Am 22.02.24 um 14:19 schrieb Mathias Nyman:
+> On 21.2.2024 13.19, Paul Menzel wrote:
+>> [CC: +Mike, +Hans, +Kai-Heng]
+>>
+>>
+>> On the Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, the warning is 
+>> also gone with v2 of your patches.
 > 
-> Good point, sorry for missing that.
+> Thanks for testing, I'll submit these as proper patches.
 
-> I assume there is a reason that the return type of
-> linkmode_andnot is not bool.
+Just a note, that I also successfully tested it on the Dell Precision 
+3620 and documented this in the Linux Kernel Bugzilla issue [1].
 
-Either i got it wrong when i added the wrapper, or bitmap_andnot() has
-changed since then?
+I wasn’t able to test the two other systems yet.
 
-It probably can be changed to a bool.
 
-	Andrew
+Kind regards,
+
+Paul
+
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=218486
 
