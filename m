@@ -1,251 +1,325 @@
-Return-Path: <linux-usb+bounces-6871-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6872-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C2D385ED78
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 00:56:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BE6085ED80
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 01:04:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2386F2845BB
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Feb 2024 23:56:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35F08B24970
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 00:04:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A09F12D76C;
-	Wed, 21 Feb 2024 23:56:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VgkZDCMo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF23514F75;
+	Thu, 22 Feb 2024 00:03:10 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5667833062;
-	Wed, 21 Feb 2024 23:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927472919
+	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 00:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708559800; cv=none; b=l4/jgkf3zSXkldzWhSd1z1CCCByEKi7Jy7nIU63+l3BlNyeh9TPubGrSmXTigXZpgCrlaIya0uIEqYAvLAn8htws3qOu6s3bDJ679XmxIKIrNMIDo8pT76/UTKNSQIjx2eX8n6QKdy1k2R/qOHhX1TfuUGZnlroI1An5V9wMDgQ=
+	t=1708560190; cv=none; b=iLLlDvqLMcgaCU2HbOKqdIDJH64400QyrmlxaOQbbYlE+Eky6SJSioCDOQwBTprBhSvxkwEaRnYAZM1SaIRIvlAo2/5sVJ8LkyM3E27GGuqRJlh0y1x6dqSgF+550y3Ku8vyU0S+ToOU3xabkudXUviD2V4W0TJF+HhJ1LDVJXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708559800; c=relaxed/simple;
-	bh=ZrRwdK5utpp3sgunXkm20f5u3DpzZ9wqTr3RiV71OaI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=XvLgK/RF73mysMa9bUk487q01BGW+ryrrsp3tpNBxja5spodWNCYUfMTl2PsVQ/GuFgeaowvYoDOYbNp5Mereu2KmiEx2UKyUI+Q5M0V5dTBqpUuLTAs9MNppgrSva2QdpINjUZgbuO9uFq5ppmNUNnF+q2Pf8k6o/BvbJrGiFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VgkZDCMo; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41LNPbkR007930;
-	Wed, 21 Feb 2024 23:56:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=mBBdeNeRX1o2UytltzPYiypy62H+/fRXys7G2pTuS8U=; b=Vg
-	kZDCMoyGE1qiuR9gR47YgGY9YdyOkGAR8XteT3z7QmDMjTw8dW9vAwzvleAQ8zkU
-	8ACReR3JphO+AXEwhccvaqQcm9T1BZ2BI8MoWezKDPUkwTe2+KQGI7dXH7llg/SH
-	3leYRnuLPVBdNZQ4HfuRbstArj+e/q/g5LLk5geynrpzQrx0DnN3VGqbxOdvd+EE
-	i9U1O1WB6Mr+dwA3EQTY7w8M0QIuMMBz/guUkoVMz1P+LTSETkZx/xiRE2VOkvCi
-	gDfIAGFI4LKwzAdKWEu29SYrLl4BILeTXm98E7wzRK+TjMQrVwF6BcNyyn58ClDs
-	9ULYOs4yqSiw3mQ/l0TA==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wdckva57u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 23:56:10 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41LNu8Yq006834
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 23:56:08 GMT
-Received: from [10.110.112.198] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 21 Feb
- 2024 15:56:07 -0800
-Message-ID: <0587cb46-1821-0daf-2d6e-08c5af5b97a3@quicinc.com>
-Date: Wed, 21 Feb 2024 15:56:03 -0800
+	s=arc-20240116; t=1708560190; c=relaxed/simple;
+	bh=CRm2/J2tmxJvfyj/dvWAkWX3iQ5AB5xxi9YWHB4X8ws=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MI0brkpJ2kU7C2miZ8LJYLhYRpBLMkgx3P9gVknUgCyzzo0RwvM+2OudKQgtJkhmncj0Kks2vXRTPpOnPBIcV09IK1r2Lcc0JwOSlZLG7gUI8xoh+9P+ELU8l0x4Eig7FTt8s2u8w62mKCp41maJWWbDyBJey0DfUxG3cq/v+bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1rcwYA-0004FG-J6; Thu, 22 Feb 2024 01:02:54 +0100
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1rcwY8-0027zR-Sz; Thu, 22 Feb 2024 01:02:52 +0100
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1rcwY8-001QME-2N;
+	Thu, 22 Feb 2024 01:02:52 +0100
+Date: Thu, 22 Feb 2024 01:02:52 +0100
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Dan Vacura <w36195@motorola.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: linux-usb@vger.kernel.org, Daniel Scally <dan.scally@ideasonboard.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Jeff Vanhoof <qjv001@motorola.com>, stable@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] usb: dwc3: gadget: cancel requests instead of
+ release after missed isoc
+Message-ID: <ZdaPLGTbsBo4F4pK@pengutronix.de>
+References: <20221017205446.523796-1-w36195@motorola.com>
+ <20221017205446.523796-3-w36195@motorola.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v17 00/51] Introduce QC USB SND audio offloading support
-Content-Language: en-US
-To: Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH
-	<gregkh@linuxfoundation.org>
-CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <Thinh.Nguyen@synopsys.com>,
-        <broonie@kernel.org>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
-        <robh+dt@kernel.org>, <konrad.dybcio@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-References: <20240217001017.29969-1-quic_wcheng@quicinc.com>
- <2024021754-unengaged-saggy-6ab1@gregkh>
- <96ab6033-2cb9-daa7-ddad-090138896739@linux.intel.com>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <96ab6033-2cb9-daa7-ddad-090138896739@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rs_sXXBYYB9Z73h-F7xbtB2aqFFUUtDC
-X-Proofpoint-ORIG-GUID: rs_sXXBYYB9Z73h-F7xbtB2aqFFUUtDC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-21_09,2024-02-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0 mlxscore=0
- bulkscore=0 phishscore=0 priorityscore=1501 clxscore=1015 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2402210188
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7167IsNR9GtUxaC9"
+Content-Disposition: inline
+In-Reply-To: <20221017205446.523796-3-w36195@motorola.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-Hi Mathias,
 
-On 2/19/2024 2:27 AM, Mathias Nyman wrote:
-> On 17.2.2024 17.25, Greg KH wrote:
->> On Fri, Feb 16, 2024 at 04:09:26PM -0800, Wesley Cheng wrote:
->>> Several Qualcomm based chipsets can support USB audio offloading to a
->>> dedicated audio DSP, which can take over issuing transfers to the USB
->>> host controller.  The intention is to reduce the load on the main
->>> processors in the SoC, and allow them to be placed into lower power 
->>> modes.
->>> There are several parts to this design:
->>>    1. Adding ASoC binding layer
->>>    2. Create a USB backend for Q6DSP
->>>    3. Introduce XHCI interrupter support
->>>    4. Create vendor ops for the USB SND driver
->>>
->>>        USB                          |            ASoC
->>> --------------------------------------------------------------------
->>>                                     |  _________________________
->>>                                     | |sm8250 platform card     |
->>>                                     | |_________________________|
->>>                                     |         |           |
->>>                                     |      ___V____   ____V____
->>>                                     |     |Q6USB   | |Q6AFE    |
->>>                                     |     |"codec" | |"cpu"    |
->>>                                     |     |________| |_________|
->>>                                     |         ^  ^        ^
->>>                                     |         |  |________|
->>>                                     |      ___V____    |
->>>                                     |     |SOC-USB |   |
->>>     ________       ________               |        |   |
->>>    |USB SND |<--->|QC offld|<------------>|________|   |
->>>    |(card.c)|     |        |<----------                |
->>>    |________|     |________|___     | |                |
->>>        ^               ^       |    | |    ____________V_________
->>>        |               |       |    | |   |APR/GLINK             |
->>>     __ V_______________V_____  |    | |   |______________________|
->>>    |USB SND (endpoint.c)     | |    | |              ^
->>>    |_________________________| |    | |              |
->>>                ^               |    | |   ___________V___________
->>>                |               |    | |->|audio DSP              |
->>>     ___________V_____________  |    |    |_______________________|
->>>    |XHCI HCD                 |<-    |
->>>    |_________________________|      |
->>>
->>>
->>> Adding ASoC binding layer:
->>> soc-usb: Intention is to treat a USB port similar to a headphone jack.
->>> The port is always present on the device, but cable/pin status can be
->>> enabled/disabled.  Expose mechanisms for USB backend ASoC drivers to
->>> communicate with USB SND.
->>>
->>> Create a USB backend for Q6DSP:
->>> q6usb: Basic backend driver that will be responsible for maintaining the
->>> resources needed to initiate a playback stream using the Q6DSP.  Will
->>> be the entity that checks to make sure the connected USB audio device
->>> supports the requested PCM format.  If it does not, the PCM open call 
->>> will
->>> fail, and userpsace ALSA can take action accordingly.
->>>
->>> Introduce XHCI interrupter support:
->>> XHCI HCD supports multiple interrupters, which allows for events to 
->>> be routed
->>> to different event rings.  This is determined by "Interrupter Target" 
->>> field
->>> specified in Section "6.4.1.1 Normal TRB" of the XHCI specification.
->>>
->>> Events in the offloading case will be routed to an event ring that is 
->>> assigned
->>> to the audio DSP.
->>>
->>> Create vendor ops for the USB SND driver:
->>> qc_audio_offload: This particular driver has several components 
->>> associated
->>> with it:
->>> - QMI stream request handler
->>> - XHCI interrupter and resource management
->>> - audio DSP memory management
->>>
->>> When the audio DSP wants to enable a playback stream, the request is 
->>> first
->>> received by the ASoC platform sound card.  Depending on the selected 
->>> route,
->>> ASoC will bring up the individual DAIs in the path.  The Q6USB 
->>> backend DAI
->>> will send an AFE port start command (with enabling the USB playback 
->>> path), and
->>> the audio DSP will handle the request accordingly.
->>>
->>> Part of the AFE USB port start handling will have an exchange of control
->>> messages using the QMI protocol.  The qc_audio_offload driver will 
->>> populate the
->>> buffer information:
->>> - Event ring base address
->>> - EP transfer ring base address
->>>
->>> and pass it along to the audio DSP.  All endpoint management will now 
->>> be handed
->>> over to the DSP, and the main processor is not involved in transfers.
->>>
->>> Overall, implementing this feature will still expose separate sound 
->>> card and PCM
->>> devices for both the platorm card and USB audio device:
->>>   0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
->>>                        SM8250-MTP-WCD9380-WSA8810-VA-DMIC
->>>   1 [Audio          ]: USB-Audio - USB Audio
->>>                        Generic USB Audio at usb-xhci-hcd.1.auto-1.4, 
->>> high speed
->>>
->>> This is to ensure that userspace ALSA entities can decide which route 
->>> to take
->>> when executing the audio playback.  In the above, if card#1 is 
->>> selected, then
->>> USB audio data will take the legacy path over the USB PCM drivers, 
->>> etc...
->>>
->>> This feature was validated using:
->>> - tinymix: set/enable the multimedia path to route to USB backend
->>> - tinyplay: issue playback on platform card
->>
->> I've applied patches 1-10 and the 2 dts changes here, as those all had
->> acks from the relevant maintainers already.
->>
-> 
-> Patch 10/10 is based on an old POC patch by me, but it's heavily modified.
-> 
-> It looks like it does a few minor things that are not optimal, like extra
-> spinlock/unlock, and wait_for_completion_timeout() with magical timeout 
-> value.
-> 
-> I haven't tested this version, but I guess any fixes or cleanups can be 
-> done
-> later on top of it.
-> 
+--7167IsNR9GtUxaC9
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-How about I modify the stop ep sync API to assume that the caller has 
-the xhci->lock already held?  I can unlock it before the wait for 
-command, and take it back after before returning to the caller.
+Sorry for digging up this grave! :)
 
-I'll remove the timeout value from the wait for command as well, since 
-if there was a command timeout, that should trigger the cmd_timer to 
-expire, and be handled there.
+I once more came accross the whole situation we are still encountering
+since one year or so again and found the some reasons why:
 
-Thanks
-Wesley Cheng
+#1 there are so many latencies, so that the system is not fast enough to
+enqueue requests back into an running HW-Transfer. At least on our
+system setup.
+
+and
+
+#2 there are so many missed transfers leading to broken frames
+when adding request with no_interrupt set.
+
+For #1: There sometimes are situations in the system where the threaded
+interrupt handler for the dwc3 is not called fast enough, although the
+HW-irq was called early and enqueued the irq event and woke the irq
+thread early. In our case this often happens, when there are other tasks
+involved on the same CPU and the scheduler is not able to pipeline the
+irq thread in the necessary time. In our case the main issue is an
+HW-irq handler of the ethernet controller (cadence macb) that runs
+berserk on CPU0 and therefor is taking a lot of CPU time. Per default on
+our system all irq handlers are running on the same CPU. As per
+definition all interrupt threads will be started on the same CPU as the
+irq was called, this forces a lot of pressure on one Core. So changing
+the smp_affinity of the dwc3 irq to the second CPU only, already solves
+a lot of the underruns.
+
+For #2: I found an issue in the handling of the completion of requests in
+the started list. When the interrupt handler is *explicitly* calling
+stop_active_transfer if the overall event of the request was an missed
+event. This event value only represents the value of the request that
+was actually triggering the interrupt.
+
+It also calls ep_cleanup_completed_requests and is iterating over the
+started requests and will call giveback/complete functions of the
+requests with the proper request status.
+
+So this will also catch missed requests in the queue. However, since
+there might be, lets say 5 good requests and one missed request, what
+will happen is, that each complete call for the first good requests will
+enqueue new requests into the started list and will also call the
+updatecmd on that transfer that was already missed until the loop will
+reach the one request with the MISSED status bit set.
+
+So in my opinion the patch from Jeff makes sense when adding the
+following change aswell. With those both changes the underruns and
+broken frames finally disappear. I am still unsure about the complete
+solution about that, since with this the mentioned 5 good requests
+will be cancelled aswell. So this is still a WIP status here.
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index e031813c5769b..b991d25bbf897 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3509,6 +3509,45 @@ static int dwc3_gadget_ep_cleanup_completed_request(=
+struct dwc3_ep *dep,
+         return ret;
+  }
+
++static int dwc3_gadget_ep_check_missed_requests(struct dwc3_ep *dep)
++{
++       struct dwc3_request     *req;
++       struct dwc3_request     *tmp;
++       int ret =3D 0;
++
++       list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
++               struct dwc3_trb *trb;
++
++               /* TOOD: check if the trb association is correct */
++               trb =3D req->trb;
++               switch (DWC3_TRB_SIZE_TRBSTS(trb->size)) {
++               case DWC3_TRBSTS_MISSED_ISOC:
++                       /* Isoc endpoint only */
++                       ret =3D -EXDEV;
++                       break;
++               case DWC3_TRB_STS_XFER_IN_PROG:
++                       /* Applicable when End Transfer with ForceRM=3D0 */
++               case DWC3_TRBSTS_SETUP_PENDING:
++                       /* Control endpoint only */
++               case DWC3_TRBSTS_OK:
++               default:
++                       ret =3D 0;
++                       break;
++               }
++       }
++
++       return ret;
++}
++
+  static void dwc3_gadget_ep_cleanup_completed_requests(struct dwc3_ep *dep,
+                 const struct dwc3_event_depevt *event, int status)
+  {
+@@ -3566,7 +3605,7 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct=
+ dwc3_ep *dep,
+         struct dwc3             *dwc =3D dep->dwc;
+         bool                    no_started_trb =3D true;
+
+-       if (status =3D=3D -EXDEV) {
++       if (status =3D=3D -EXDEV || dwc3_gadget_ep_check_missed_requests(de=
+p)) {
+                 struct dwc3_request *tmp;
+                 struct dwc3_request *req;
+
+
+On Mon, Oct 17, 2022 at 03:54:40PM -0500, Dan Vacura wrote:
+>From: Jeff Vanhoof <qjv001@motorola.com>
+>
+>arm-smmu related crashes seen after a Missed ISOC interrupt when
+>no_interrupt=3D1 is used. This can happen if the hardware is still using
+>the data associated with a TRB after the usb_request's ->complete call
+>has been made.  Instead of immediately releasing a request when a Missed
+>ISOC interrupt has occurred, this change will add logic to cancel the
+>request instead where it will eventually be released when the
+>END_TRANSFER command has completed. This logic is similar to some of the
+>cleanup done in dwc3_gadget_ep_dequeue.
+>
+>Fixes: 6d8a019614f3 ("usb: dwc3: gadget: check for Missed Isoc from event =
+status")
+>Cc: <stable@vger.kernel.org>
+>Signed-off-by: Jeff Vanhoof <qjv001@motorola.com>
+>Co-developed-by: Dan Vacura <w36195@motorola.com>
+>Signed-off-by: Dan Vacura <w36195@motorola.com>
+>---
+>V1 -> V3:
+>- no change, new patch in series
+>
+> drivers/usb/dwc3/core.h   |  1 +
+> drivers/usb/dwc3/gadget.c | 38 ++++++++++++++++++++++++++------------
+> 2 files changed, 27 insertions(+), 12 deletions(-)
+>
+>diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>index 8f9959ba9fd4..9b005d912241 100644
+>--- a/drivers/usb/dwc3/core.h
+>+++ b/drivers/usb/dwc3/core.h
+>@@ -943,6 +943,7 @@ struct dwc3_request {
+> #define DWC3_REQUEST_STATUS_DEQUEUED		3
+> #define DWC3_REQUEST_STATUS_STALLED		4
+> #define DWC3_REQUEST_STATUS_COMPLETED		5
+>+#define DWC3_REQUEST_STATUS_MISSED_ISOC		6
+> #define DWC3_REQUEST_STATUS_UNKNOWN		-1
+>
+> 	u8			epnum;
+>diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>index 079cd333632e..411532c5c378 100644
+>--- a/drivers/usb/dwc3/gadget.c
+>+++ b/drivers/usb/dwc3/gadget.c
+>@@ -2021,6 +2021,9 @@ static void dwc3_gadget_ep_cleanup_cancelled_request=
+s(struct dwc3_ep *dep)
+> 		case DWC3_REQUEST_STATUS_STALLED:
+> 			dwc3_gadget_giveback(dep, req, -EPIPE);
+> 			break;
+>+		case DWC3_REQUEST_STATUS_MISSED_ISOC:
+>+			dwc3_gadget_giveback(dep, req, -EXDEV);
+>+			break;
+> 		default:
+> 			dev_err(dwc->dev, "request cancelled with wrong reason:%d\n", req->sta=
+tus);
+> 			dwc3_gadget_giveback(dep, req, -ECONNRESET);
+>@@ -3402,21 +3405,32 @@ static bool dwc3_gadget_endpoint_trbs_complete(str=
+uct dwc3_ep *dep,
+> 	struct dwc3		*dwc =3D dep->dwc;
+> 	bool			no_started_trb =3D true;
+>
+>-	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
+>+	if (status =3D=3D -EXDEV) {
+>+		struct dwc3_request *tmp;
+>+		struct dwc3_request *req;
+>
+>-	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
+>-		goto out;
+>+		if (!(dep->flags & DWC3_EP_END_TRANSFER_PENDING))
+>+			dwc3_stop_active_transfer(dep, true, true);
+>
+>-	if (!dep->endpoint.desc)
+>-		return no_started_trb;
+>+		list_for_each_entry_safe(req, tmp, &dep->started_list, list)
+>+			dwc3_gadget_move_cancelled_request(req,
+>+					DWC3_REQUEST_STATUS_MISSED_ISOC);
+>+	} else {
+>+		dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
+>
+>-	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
+>-		list_empty(&dep->started_list) &&
+>-		(list_empty(&dep->pending_list) || status =3D=3D -EXDEV))
+>-		dwc3_stop_active_transfer(dep, true, true);
+>-	else if (dwc3_gadget_ep_should_continue(dep))
+>-		if (__dwc3_gadget_kick_transfer(dep) =3D=3D 0)
+>-			no_started_trb =3D false;
+>+		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
+>+			goto out;
+>+
+>+		if (!dep->endpoint.desc)
+>+			return no_started_trb;
+>+
+>+		if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
+>+			list_empty(&dep->started_list) && list_empty(&dep->pending_list))
+>+			dwc3_stop_active_transfer(dep, true, true);
+>+		else if (dwc3_gadget_ep_should_continue(dep))
+>+			if (__dwc3_gadget_kick_transfer(dep) =3D=3D 0)
+>+				no_started_trb =3D false;
+>+	}
+>
+> out:
+> 	/*
+>--=20
+>2.34.1
+>
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--7167IsNR9GtUxaC9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmXWjykACgkQC+njFXoe
+LGRNBg/9Ggqr8dqyPbcVNqwQ76whL7PXxMgDlxYZVgyaH/muk5JSxnGVD4LzbNAn
+gq2kWbkWRV9qqlMICcniXSlDlumccR6PznVmC9SRcWm8sxY+3L8dAHGc1mJ6IyPy
+dgtbiBLitH0dRdBRN6Oo3cZoxE1zMkiKumaZDO7/U851glEgQ+/jgUPWTksbU7x0
+GNrvOHlK7S5IKnB25hcfYYtzsQOWobnyfEEBdgxkUd0tBfUjGNmHgP4tBVelbDAQ
+lKl8OBdazijiDs0JO1cW0Y2uQ8fUhVWi+b3SgUsTVj8eMMoz65xxEqHJla5x462t
+uNnRf2PDdjSGg5OloG6NmvvPin5NNAVKW9kCb6s6VDmun0XmpAG2e/rQdcwyAfpX
+62Uc7FzJxilMq1yT7RDI/sl82qYaLIvmLvgcDOGdqg4Ofl/pyj7Ck47Q71YMxwuQ
+bxiKZC+pzkifx6dw/MIKaA3JWj/0aMAGAToEPMEKxgAdyMlO0edIqNK9nvIx7wkr
+I74aaks+reY6CZxtv7wHHVuVH1leAtVL0xVtm5aq2deHx5ssJGQz+83AUYSwZPZY
+6dWZ7gUYM7v/0PpQeVLO10VJsnLZfHC40JWH7FQbTKyUbhA9zMdrH4dbQ2DtkGDV
+vHN8dgm5mDmUr5CrxybAK/OFAMrz/vSumAN8bKVmPkG/oVlPt5Q=
+=FhI4
+-----END PGP SIGNATURE-----
+
+--7167IsNR9GtUxaC9--
 
