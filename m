@@ -1,114 +1,144 @@
-Return-Path: <linux-usb+bounces-6904-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6906-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B23CF85FDED
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 17:23:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64FD985FE30
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 17:37:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78F77B22682
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 16:23:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16EC21F27E7E
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 16:37:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BC351509B5;
-	Thu, 22 Feb 2024 16:23:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA4F15351A;
+	Thu, 22 Feb 2024 16:37:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y8nzsvZG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H8OQXrXL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CAF1B7E6
-	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 16:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2441D14F9D1
+	for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 16:37:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708619005; cv=none; b=JkjV5if1Be1HLo2cv+wqkrPSEMGddzjCgcgvPMYhSdzghRj4I7yDANU1WBJ8kYiFSfJXE+gXGrEfthGjuU8O30YFn/MI32+1AhWp+XWr0PeMMV4XxksD+2DljpREwL6nEX7bbkLoxyCPuImg/Jq+mz4xx/rk4rXtNqF+wFXy5O8=
+	t=1708619851; cv=none; b=kUwXqsxfH5S1yFdGocIpYN2a8bdYaAnrJl5YmFOgqUWXIdqHYFsuh6/Z1fM3hGFt//p+cQTZjBppvEjcIgDM8i+YDyC/W6+XecTO7Rv3mwPaMSDu0Z13LPm/ZtE1rPoem/XARNN0V03J7U1vZhBgaXmXOFq1s1fuauyqeR4B3mM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708619005; c=relaxed/simple;
-	bh=DJ0u2EiwH9eIxajiI6fa84wSbOU9bvZM23TaXE4UdC0=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=sO01BIjaC4Gsb9dBX8/Zemr+HC50eXdB3OEY4kDoef9tEMOSaRckTBrYdx8SdQ9AdEFL8/AeDwXMDEWPIbXGTuLQqWXKHWJIacwP0EzL18t0WLBpE/dM/HnGG12GsQaNMdXT9CQP80GKcPsk00Owsv9zxu27/D6SH1O8cOvLQwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y8nzsvZG; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708619004; x=1740155004;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=DJ0u2EiwH9eIxajiI6fa84wSbOU9bvZM23TaXE4UdC0=;
-  b=Y8nzsvZGl2NTxT6me5SzdTocLZx7B8WC0Sy7Ll5VqG4OOKsLwv8JUzrA
-   h95PMrmIuQaDCL6QIBHdIrat6jdQyDVkur4BEztN6upfzGGOfmkJ5YMkd
-   H94Y3dESjgD1a7gzhhTbT5SKjxCLVSEQAlF98CuQ24GhX3F/XYLTPhr4k
-   juo5xwhY3fi4iyqPqxHwAng98NaJLa3H+8jQjOWrEmVdmtYqpsl9MGE84
-   Iu0RVv9wIvxvhHIZ3MSBroacoXRMDyz4O2J2sdPG7KokRzgME3dUMdTyT
-   o/n/OCTJ7s9bTyYs+9tCX+RK0utLrighbpPhEtysbnif4a4NEtjNSubs1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="3006077"
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="3006077"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 08:23:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="936869866"
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="936869866"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Feb 2024 08:23:21 -0800
-Message-ID: <0c5f5512-d015-c77f-4e1e-281f95c04197@linux.intel.com>
-Date: Thu, 22 Feb 2024 18:25:00 +0200
+	s=arc-20240116; t=1708619851; c=relaxed/simple;
+	bh=7TaWjSMnr9SyJaL1rSnUq6UVe3SDZbweU+CU/JSE12o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Y8eSuZE0O2W0vWthiFl9qXmQk8Ijg8D20KMviSxVjcIIx+gP9qQImSoAo7GG4hAP+Jf9hE3YyNokb5G0qVjZaYc6dk00BiTDkqReL0J+tPwp9DDcywITxw5kYWwEkuiEUQhO6UsFRTRhTgKXbKDvo7Kq8q1P/UrhcmCfuVijNLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=H8OQXrXL; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-563bb51c36eso9125482a12.2
+        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 08:37:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708619848; x=1709224648; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ythAlB5fOuduCOWoNXa4hv2/pnJOcPq8G9cfPzDgUoI=;
+        b=H8OQXrXLleYyVLeshdY3zehihi+qwT/Nk6N+ArWW1TNbRoUb6v5aJbow9wQcaklDB1
+         /rlt6vftkl6XzIk36t4Ka9C3tDXlm2v3g4Ac6vALE+5v1vEOt+xuUUTNAi/q2FYD/vSM
+         ZCMZ3b9i+myf1lPeAbQzCTCJMTRi+sJcjLHVH3ugrRiNyERuBRASVEHvpii5C91c+oPy
+         IamZL503BYj+lm38EAjmS4Tq+uN4O9mSmXiWtmR3pqftboA+/n9FrbVL5xIdIbSP+lOW
+         K6GoU2vUCQYX3GCMyWBClShmo3wM2T5+PurN6kKpz1JBi3FqNWIOC89H3YyXeO4UFFEo
+         KKUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708619848; x=1709224648;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ythAlB5fOuduCOWoNXa4hv2/pnJOcPq8G9cfPzDgUoI=;
+        b=tKpK6q/tXxH7bbFHjAuSsxTGkmkV+po3JSYUSLotFzPoV9DJ0XtxIavll0PIPGwgK9
+         zhgoF23gkQsxG1RTtpSu39wOIVqUxxBvq4hyL6Smwzu9ysVlG+5pnkV+WtmE2wQGjuUK
+         wpW07Ofs7xtIeC7VRfV3rCUwhF0udzFCh8M6FFZl8r5um5R+hoAPFkSBmiHi5tL7Mhvz
+         q1BIPR9NPKwWKaSVj/yMIg4k0C24/YRN3ALQCgiJ6v+ZEToh9nyVn1I7PPkLrS4SVTlo
+         Npn+6kbsE3K6aSrta5X9sdBFRQ9IVKO5/flqTXO0aNBKhOqQocnozqUffgbB0KMj7zEo
+         7XKw==
+X-Gm-Message-State: AOJu0YyvJXYpIMBZNO0ZSPmFho7ws1hd9cG3y1hKdhpl5w6Kf+2wUveh
+	+0G51YBFikauy0HbOVgR06yAb3hYd9TIISzYPvpW+VQZ1SZ8N6pcfaZfUc10MkSs29XganzjzS0
+	Kang=
+X-Google-Smtp-Source: AGHT+IEDqRBn3wWYrrFcXKIOrpL73QXc+7HDhyj6TIw4Ua/8t6GPiVQ6GsEbJRHzFBalKuA1vFJmwg==
+X-Received: by 2002:a05:6402:5246:b0:565:2183:d296 with SMTP id t6-20020a056402524600b005652183d296mr2969008edd.27.1708619847900;
+        Thu, 22 Feb 2024 08:37:27 -0800 (PST)
+Received: from krzk-bin.. ([178.197.222.116])
+        by smtp.gmail.com with ESMTPSA id u19-20020aa7d993000000b005653c441a20sm614191eds.34.2024.02.22.08.37.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Feb 2024 08:37:27 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Banajit Goswami <bgoswami@quicinc.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	alsa-devel@alsa-project.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH usb next] ASoC: Revert "ASoC: dt-bindings: Update example for enabling USB offload on SM8250"
+Date: Thu, 22 Feb 2024 17:32:04 +0100
+Message-Id: <20240222163204.65468-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, stern@rowland.harvard.edu
-References: <20240222133819.4149388-1-mathias.nyman@linux.intel.com>
- <2024022238-caddie-fanning-8ab5@gregkh>
- <fc15052f-c5de-0136-484e-c3ac735ae799@linux.intel.com>
- <2024022230-gusty-tactics-34d1@gregkh>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH 1/2] usb: usb-acpi: Set port connect type of not
- connectable ports correctly
-In-Reply-To: <2024022230-gusty-tactics-34d1@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 22.2.2024 17.50, Greg KH wrote:
-> On Thu, Feb 22, 2024 at 04:46:16PM +0200, Mathias Nyman wrote:
->> On 22.2.2024 16.06, Greg KH wrote:
->>> On Thu, Feb 22, 2024 at 03:38:18PM +0200, Mathias Nyman wrote:
->>>> Ports with  _UPC (USB Port Capability) ACPI objects stating they are
->>>> "not connectable" are not wired to any connector or internal device.
->>>> They only exist inside the host controller.
->>>>
->>>> These ports may not have an ACPI _PLD (Physical Location of Device)
->>>> object.
->>>>
->>>> Rework the code so that _UPC is read even if _PLD does not exist, and
->>>> make sure the port->connect_type is set to "USB_PORT_NOT_USED" instead
->>>> of "USB_PORT_CONNECT_TYPE_UNKNOWN".
->>>>
->>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->>>
->>> Does patch 2/2 need this?  If so, why isn't it marked for stable?
->>
->> 2/2 alone fixes the real world port peering problem seen.
->>
->> This is something I stumbled upon while debugging that issue.
->> This patch just makes sure we don't skip marking some unused ports as
->> unused due to how we parse ACPI tables.
-> 
-> Ok, so should patch 1/2 go to usb-next and patch 2/2 go to usb-linus?
+This reverts commit a9c83252bff616cf3a38d55b7c6a6ad63667f2dd from USB
+tree, because it depends on other DT bindings changes which were not
+applied.  This commit alone causes dt_binding_check failures:
 
-That works as well.
+  Documentation/devicetree/bindings/sound/qcom,sm8250.example.dts:97.44-45 syntax error
 
-Thanks
-Mathias
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+---
+
+Greg,
+
+Please take this revert. Original commit should go via Mark's ASoC.
+---
+ .../devicetree/bindings/sound/qcom,sm8250.yaml    | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+index 49e4f5bbe9dd..2ab6871e89e5 100644
+--- a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
++++ b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+@@ -227,21 +227,6 @@ examples:
+                 sound-dai = <&vamacro 0>;
+             };
+         };
+-
+-        usb-dai-link {
+-            link-name = "USB Playback";
+-            cpu {
+-                sound-dai = <&q6afedai USB_RX>;
+-            };
+-
+-            codec {
+-                sound-dai = <&usbdai USB_RX>;
+-            };
+-
+-            platform {
+-                sound-dai = <&q6routing>;
+-            };
+-        };
+     };
+ 
+   - |
+-- 
+2.34.1
 
 
