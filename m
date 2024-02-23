@@ -1,69 +1,69 @@
-Return-Path: <linux-usb+bounces-6923-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6924-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B8E9860791
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 01:23:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3361A860798
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 01:23:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A24AB230B1
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 00:23:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6398B1C21E5F
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 00:23:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2FC63A;
-	Fri, 23 Feb 2024 00:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8997D6FC5;
+	Fri, 23 Feb 2024 00:23:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="By1EFvaH"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rdhAHPR+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B937A19B
-	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 00:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31266FBD
+	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 00:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708647780; cv=none; b=gfj6e9AFjwEgxM1t8+pu+7pivaM6c3PgOZRtVrT2/00SI5h8YezEH9ie1kWycOnG3/RUathWTDq5xPLTBOXu6s7oYPGjghibe/EymOVEegw33ytomomcpBKSVhegv0EhIImah/ENojCs5tB8dzeZeI4Ys+wuPBMZTWejudHhyPM=
+	t=1708647789; cv=none; b=D/vQVQiKQORmFxiPPRYEF0ob8pb6OueXqguGGXNnZa88PQawnrMJNfLV7birHgNmwi57hIFetN72CgXIDcX6VLu84wjM4eJLIIn1h/xKzZ1YZyiLo169GqWSY9MaiRAtrw3VvSB6FiygW89cumKE9eqjRO1Qxn8tJbukc95Fcw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708647780; c=relaxed/simple;
-	bh=/QbcREJdj8/HhgjcLw0luxn0IZH6b4nOIm623A+PQGk=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=jsi3ZrIuxVms60aHnwVLHx7GRDj5wI9ShCM+F1T2Y+f5bqttDjoz4xH7CSeiLBj8oO7OWs/XNAvFdP8jXTOmUyQkLsIXhjKz5l187iNcQB6KRpMDxEgH4nK+POjvy6gxgyDzlsZFtvC7DFJBxyxxnSnDFuDfRG9g0kD7hfdNR78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=By1EFvaH; arc=none smtp.client-ip=209.85.215.201
+	s=arc-20240116; t=1708647789; c=relaxed/simple;
+	bh=CxCr4JSQNzDwayBhtWB2bC8U7458ZX3yAc4cBM+FFmg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=icV7cks5CLnvbjWPn+lPtIV2mDCuz03Y8BxhuHjEFw1P275EKreKbO/t/CCmoOfckjn5kg6FWpftxj4llrBrziZRhU+AGfan1XtpwauHf3ZJ/oIWLb0FBRRFOXZdY05I4bdW4l3iZkRHy70rlSL6IyG791b9hlmy436z9RsSdUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rdhAHPR+; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-5d8bff2b792so228003a12.1
-        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 16:22:58 -0800 (PST)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6b269686aso432409276.1
+        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 16:23:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708647778; x=1709252578; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1708647786; x=1709252586; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=aRCvuwH8rAugmkg3ZUi08lKYBtiQ+yXb5dektYqZbOw=;
-        b=By1EFvaHtBuXTRQvk1cKmFqSw8r0GB2crDQjLFmeZHkyJcfJds9ppBPPliYUZJxV3X
-         /v15h2H5EdnPxvWn7B8eopksAZmkIu77DAthZAOW4HMgbem2naNB+KU3Sm2EcrU+ufpV
-         R9dKWuJtU6hbrq/Ibcz6NAAmmSDYnD2Tc0QZ8gEY2lCo/ZY+pyzTUvYWSxOy0VGgoWpz
-         aexm0EpUgFVTVEi1Bf0YOL56wCBj0ph+/LTuQ3g0VJW+awNGIMoYwbWCc3+JchL9FXaq
-         3edbxubt8YUV2EpBk6NuIrpi/MC723rjshYoo5uav5A1/YwMu3HTjTHyhTiKD+ERhP7h
-         adig==
+        bh=TNFUvLDAx6+Y/ghPILwTUhweF7IT0DZ57bOGUDCjGfY=;
+        b=rdhAHPR+EM9+BxnsE2Pc1/rwOL2llGg4jv/uNzic0MyJKsEmVu3gq0oILg/wN+WBzj
+         sqpykYYaejRKsgD5X3b2AvNFeOnE0WQWmuy+sBgK+lSsUCM7H7FHvOX0F1qiIRWwspjR
+         P3bBfZ3pS/4OWqvQKeAiY/ezoYkUOSIUGv06NES08kIRBUNs3B2WwiAeIQ+zO6OHFUTX
+         UbLHRsefOzlAg26HBq0j6Ug4r42JVhrEORvBlLyDAj1CKc5vPj4nYZURsheWA4Au0uuy
+         ++eTgrzJ53DQ5YcsE4xtqzGY2vxT3e5pZKXo28Zh+zI1aOVCwVyU5lW6PIgk2Oi4k2Fm
+         KS9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708647778; x=1709252578;
+        d=1e100.net; s=20230601; t=1708647786; x=1709252586;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aRCvuwH8rAugmkg3ZUi08lKYBtiQ+yXb5dektYqZbOw=;
-        b=qDloZjyNGBIB+DgGrGBIlQAlPDJmD5MvmCcJEn1sx4bjtJntoLjPvSlYoj3Ig2OP94
-         o+qyKTQPPbzn5x8Rf2lDtFId5mQarcENadkEDwtdU6w/ILjExBJuq4yZdRP0GJ1R3grs
-         q7lssbQ/PE6MwN+DZcvtjNOHKCUaRmy97YkgbZCKgrZwrvXqk0KgaX4/vhUSgD6JQdO3
-         B5jabn0zDB6e4e0pkBMdBQ0rfSx9LoYHhIq7mZtvz780dVb8MXrfzNhQ174JkgnBYamv
-         33h9eDVFrQkFIcQxFtVWEQjIo4jKqBOmxKmYCKAoqIC1Q7CR3kKETLNiXROtgDmSAlo1
-         0Nqw==
-X-Forwarded-Encrypted: i=1; AJvYcCVMLmZZi+Xvp9EshXBAqV1AITSmNPZi41I679FKFXDh+0iaehRN7mLYCPEwduYuS0BsPOOhJLI6HBFKfr2hhqgEY4m9euxn+ZYD
-X-Gm-Message-State: AOJu0Yx196Yi351AcpJ3XNsFY+i5kZDvLWCp5nHKC4upuILIGGFynu+s
-	1TJBMNGKcD5S68J7MzQwxG+KsTiCs7V62Rb2eQJeFmRSTY4c+a7miUjQZth15Str89pL4OTOBHG
-	OLCrAojPg5ogmbA==
-X-Google-Smtp-Source: AGHT+IGsazkBX2H0gNoyZav7hYZhinGJef7Vus84CALdlie8S7EhSkwwvOgy8BCs7QbrXU9n/Lu0usiu9lZdYNg=
+        bh=TNFUvLDAx6+Y/ghPILwTUhweF7IT0DZ57bOGUDCjGfY=;
+        b=WNVSM7rbpZxRgrNaiigELeZdoq1eYZgTyLVPwkjBu/+Aovyw2CTxBUcrJJOxxB0F8u
+         A8D+0gvEJ1LtZYpfvw2Q6kVYDybrlzXwO2XLSAreJrCxIs1kvIlMZLoNk5BNoqwfpu3a
+         5oZgf7/fQCr47KpagRo4NF70I/wU52bzWYIGfQFLCD4vgIwv+83u9TS1yWSA82Ank9wy
+         vBDvpsbTncdWnmj/cj6Pskr4RZbc35VWutnhBojEXN+7rW5EZCZmPJ8jBxAFLj4+og2h
+         CognZowZCbjycRKKXY7sowQdYsgIttFPPyAPpdkWJEn076M9mHMMUFXRxWAMGDOvniss
+         l+kg==
+X-Forwarded-Encrypted: i=1; AJvYcCVj2QoxhGJXWc1HIcOyZu0f1XdxtBm0bYjlcy4UO9pr0c7C3BoE7jYyJ9hIzbtH+3oTyQ4YBMhP3i805AOjBSTIwLbOa+uTt+L+
+X-Gm-Message-State: AOJu0YxOK9aKise764Yp4tt4ps/VRw+fUi8Y+cbVMmcWlV82/OOTqe1O
+	ze+IOZitz+zMbYUECR0/bu9ljr8jQkFVBKv4/hORvgRRKW8Ryfya+UAi8gwwe3XKGhUptzOpTUl
+	TDa59RMdQxr4cRw==
+X-Google-Smtp-Source: AGHT+IG+lrWVI9ecbJpAeRg8emt3hayG3XppEaH2GjtzLlIEUhBlzC8FSY/OWJ+MWBKvrLuHGfUGKVdHgIZydKU=
 X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
- (user=rdbabiera job=sendgmr) by 2002:a65:6d8b:0:b0:5da:44f5:8dfc with SMTP id
- bc11-20020a656d8b000000b005da44f58dfcmr860pgb.11.1708647777906; Thu, 22 Feb
- 2024 16:22:57 -0800 (PST)
-Date: Fri, 23 Feb 2024 00:22:34 +0000
+ (user=rdbabiera job=sendgmr) by 2002:a05:6902:100e:b0:dcc:79ab:e522 with SMTP
+ id w14-20020a056902100e00b00dcc79abe522mr27282ybt.11.1708647786666; Thu, 22
+ Feb 2024 16:23:06 -0800 (PST)
+Date: Fri, 23 Feb 2024 00:23:03 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -71,97 +71,45 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3340; i=rdbabiera@google.com;
- h=from:subject; bh=/QbcREJdj8/HhgjcLw0luxn0IZH6b4nOIm623A+PQGk=;
- b=owGbwMvMwCFW0bfok0KS4TbG02pJDKnXn3ruvRtqcNPbSjelKOlwveaHbS1Lyw7vnHeqbd23j
- +zac20+dZSyMIhxMMiKKbLo+ucZ3LiSumUOZ40xzBxWJpAhDFycAjARtkqGf/ayRbut5woc8P4i
- 4djyMqr7ewDb1NNNnB+uPbz15MQJcSWGv7L2B4t//E6MVNu+tPZXZ5R35oGcf77+T1V4752wSdV 35wEA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1181; i=rdbabiera@google.com;
+ h=from:subject; bh=CxCr4JSQNzDwayBhtWB2bC8U7458ZX3yAc4cBM+FFmg=;
+ b=owGbwMvMwCFW0bfok0KS4TbG02pJDKnXn6Y5B8U8mSf7ZdG27kNlq+Rynnce+hR+tI39/uLbp
+ T07j1Ve6ihlYRDjYJAVU2TR9c8zuHEldcsczhpjmDmsTCBDGLg4BWAiqkaMDFd4byxmW/1r3eok
+ 9WQT/tl2G5jb0rZxCnvVadUviWP5psvwh19DmD02JKL47bqjk/8d61kbt8dmwsbgFbw/PqwPyYk L4AAA
 X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Message-ID: <20240223002233.3936275-2-rdbabiera@google.com>
-Subject: [PATCH v1] usb: typec: tcpm: fix SOP' sequences in tcpm_pd_svdm
+Message-ID: <20240223002302.3937235-2-rdbabiera@google.com>
+Subject: [PATCH v1] usb: typec: altmodes/displayport: send configure message
+ on sop'
 From: RD Babiera <rdbabiera@google.com>
-To: rdbabiera@google.com, linux@roeck-us.net, heikki.krogerus@linux.intel.com, 
+To: rdbabiera@google.com, heikki.krogerus@linux.intel.com, 
 	gregkh@linuxfoundation.org
-Cc: badhri@google.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Dan Carpenter <dan.carpenter@linaro.org>
+Cc: badhri@google.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-The Smatch checker flags svdm_version being uninitialized for Discover
-Identity Messages within tcpm_pd_svdm for the CMDT_INIT case. Cable plugs
-cannot initialize SVDM commands, however a port partner that isn't allowed
-to communicate over SOP' could, which would result in the CMDT_INIT block
-running for a received SOP' message.
+When the port is setting the pin configuration when no configuration is
+chosen, the DisplayPort driver will not send Configure to the cable plug
+if it's available. Add transition to DP_STATE_CONFIGURE_PRIME.
 
-First, initialize svdm_version for the TCPC_TX_SOP_PRIME case. If the
-svdm_version returns as an error, we expect the received svdm to be the
-result of Discover Identity that updates the value accordingly.
-
-Next, drop all SOP' messages of type CMDT_INIT within tcpm_pd_svdm.
-
-Finally, remove redundant call that assigns modep and pdev. Smatch will
-raise an uninitialized symbol error over modep_prime and pdev_prime, but
-both the assignment and use of these variables are guarded behind
-a check for rx_sop_type == TCPC_TX_SOP_PRIME.
-
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/all/a432603b-b801-4001-b309-247dded707d3@moroto.mountain/
-Fixes: fb7ff25ae433 ("usb: typec: tcpm: add discover identity support for SOP'")
+Fixes: 71ba4fe56656 ("usb: typec: altmodes/displayport: add SOP' support")
 Signed-off-by: RD Babiera <rdbabiera@google.com>
 ---
- drivers/usb/typec/tcpm/tcpm.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
+ drivers/usb/typec/altmodes/displayport.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index d975fc525eac..55c438c62203 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -1878,11 +1878,6 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
- 	tcpm_log(port, "Rx VDM cmd 0x%x type %d cmd %d len %d",
- 		 p[0], cmd_type, cmd, cnt);
- 
--	modep = &port->mode_data;
--
--	pdev = typec_match_altmode(port->partner_altmode, ALTMODE_DISCOVERY_MAX,
--				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
--
- 	switch (rx_sop_type) {
- 	case TCPC_TX_SOP_PRIME:
- 		modep_prime = &port->mode_data_prime;
-@@ -1890,11 +1885,13 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
- 						 ALTMODE_DISCOVERY_MAX,
- 						 PD_VDO_VID(p[0]),
- 						 PD_VDO_OPOS(p[0]));
--		if (!IS_ERR_OR_NULL(port->cable)) {
--			svdm_version = typec_get_cable_svdm_version(typec);
--			if (PD_VDO_SVDM_VER(p[0]) < svdm_version)
--				typec_cable_set_svdm_version(port->cable, svdm_version);
--		}
-+		svdm_version = typec_get_cable_svdm_version(typec);
-+		/*
-+		 * Update SVDM version if cable was discovered before port partner.
-+		 */
-+		if (!IS_ERR_OR_NULL(port->cable) &&
-+		    PD_VDO_SVDM_VER(p[0]) < svdm_version)
-+			typec_cable_set_svdm_version(port->cable, svdm_version);
- 		break;
- 	case TCPC_TX_SOP:
- 		modep = &port->mode_data;
-@@ -1920,6 +1917,15 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
- 
- 	switch (cmd_type) {
- 	case CMDT_INIT:
-+		/*
-+		 * Only the port or port partner is allowed to initialize SVDM
-+		 * commands over SOP'. In case the port partner initializes a
-+		 * sequence when it is not allowed to send SOP' messages, drop
-+		 * the message should the TCPM port try to process it.
-+		 */
-+		if (rx_sop_type == TCPC_TX_SOP_PRIME)
-+			return 0;
-+
- 		switch (cmd) {
- 		case CMD_DISCOVER_IDENT:
- 			if (PD_VDO_VID(p[0]) != USB_SID_PD)
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index 5a80776c7255..867f9796f8a8 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -164,7 +164,8 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
+ 	} else if (!(con & DP_CONF_CURRENTLY(dp->data.conf))) {
+ 		ret = dp_altmode_configure(dp, con);
+ 		if (!ret) {
+-			dp->state = DP_STATE_CONFIGURE;
++			dp->state = dp->plug_prime ? DP_STATE_CONFIGURE_PRIME :
++						     DP_STATE_CONFIGURE;
+ 			if (dp->hpd != hpd) {
+ 				dp->hpd = hpd;
+ 				dp->pending_hpd = true;
 
 base-commit: 3bf0514dc6f36f81ee11b1becd977cb87b4c90c6
 -- 
