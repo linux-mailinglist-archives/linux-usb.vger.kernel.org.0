@@ -1,96 +1,264 @@
-Return-Path: <linux-usb+bounces-6937-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6938-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E41FB860875
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 02:45:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09D9486087A
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 02:47:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21DE31C21E42
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 01:45:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2755E1C22AA1
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 01:47:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB2ADB66B;
-	Fri, 23 Feb 2024 01:45:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7557B664;
+	Fri, 23 Feb 2024 01:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ma5DR48l"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CLlBP5Ai"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BDCB642
-	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 01:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67AEB641
+	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 01:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708652731; cv=none; b=RA4Mm1pfefhLRA2lN+lfSuqVztRbduvLAcB3lQLM+8DLqCuOcmeJV3/+cMgH4F4YkR+mY2D+x4gBDhRgIk4lan2T7l7wk1qKGp6iXFxPZN4KpYnx6yFke/K2I0GrAkKcHTG/rjAlYK+lbZ6LGa1lVeBp78h87uNlYOJz+ybQH7s=
+	t=1708652864; cv=none; b=YXNwXNpZN/1uxXByzXa/Vs0COwIm47NEEMC113nA3p4fvgOf6XyvZ2hogS5PC1Golgg/Rl6qOuDPJwax0dgaGAOd4j9+SfVoAJaE0Mlpt3tvsaOWeyOmRJoxGIO36KnyuMJHm1vB66GrdALeUdIPi7Zow4gg0ldaZkDjHwtcDi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708652731; c=relaxed/simple;
-	bh=PGBKKekQDAIr5PLM2mn5HBnxWjVPKTfAv9oMhk1apy4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xu61CO1wBIxqQnqyqv8TQfw5OYA2lh9MNdD1iGS/PtHGS+ZG49UjRMq9Ccowtu2jZ4AOZsQgixHApzDyK2LpX9QuYoVMotMvkpVb6SqocnwLDWcS8ImN2AqRd9ZxozBTkrMic0l45X9/u6UYG3Tx/nD7dxL9595i5C0vhMXEpFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Ma5DR48l; arc=none smtp.client-ip=209.85.222.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-7d698a8d93cso180431241.3
-        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 17:45:29 -0800 (PST)
+	s=arc-20240116; t=1708652864; c=relaxed/simple;
+	bh=xIQxyrijVvw5tFZVsDF24qabtT7R6qgyFyEjcKmhITw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b279Zl0aVhGHeZg/OklB84zn2HnOIMEjkR55H6ONnw34lLT16XlwoqR0MORNuQF3Oi1ex3iIlY+0UIZETRwbvi5K29FbP42UVIZ6LIpLCbP+8kmE+5aZHGSuNpV8iRJw2q07Nmge90rRWRyYhTsL0F0NY3tqGmIUTL/giOvKEwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CLlBP5Ai; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1dbcf58b05cso35925ad.0
+        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 17:47:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708652729; x=1709257529; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PGBKKekQDAIr5PLM2mn5HBnxWjVPKTfAv9oMhk1apy4=;
-        b=Ma5DR48lgVE7JbKadSKEXzri8fNpXkNUGfjBge9zzmPS5hEqoUrghlyZMKy6qyAW1L
-         K4c5JWaOS6o7ceY4yg2nM2HcJ2Ga/z9FGafh9b6pjahODk8RuUZBgY5WtnmkhJoOAUwC
-         dUMoQ010kU6ZCn3OujojLlAc93oSNubBsxsRE=
+        d=google.com; s=20230601; t=1708652862; x=1709257662; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=T8LqUSdRok/CA+tRah7op5DIjhzrzfCw19wfAf0zitA=;
+        b=CLlBP5Aiih526HFjAfCeUED1Bl23xXDcNdtwhPnjzW8J30gKm3VdfVtWJgoQLLVE9J
+         y8Q27ZAWQXzyzwE9NmnJL8Qp1wD0rpqGoxO1mzLm2aSZ2z2jCYBeqyNQ/4YjNgV3UfTa
+         J3GJt25ovYvSlRKl/eiIjvA6N305LUlW0OUik7Ox+sJGdnYNfsuEtzU6INuiK3RemD+H
+         fwmfnQdompWHfS32//YFz8kzxL7QU1jVqrQxDZUXhfZQee19P5kEWr2kFXI7UBZUK2x/
+         znCYfdwVwCQ3hQVR+fTmmPtEo8sXNnKCGBHiot/oq/ItMuv/5sfq1viE0IMJuOkFeYt5
+         pbCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708652729; x=1709257529;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PGBKKekQDAIr5PLM2mn5HBnxWjVPKTfAv9oMhk1apy4=;
-        b=vzOeNFNfdk45GZENqjLWJDM/L/HxjCqCgLF8J0X5G4OWZnnrhpMcpuinU/YhylY3Hj
-         G+KuD0+y6CU6/iEpYewHZGP3ZSGZRS2Uo6IPpWlftxq/vAQkp3sftf7/8VEUOQmVHh5T
-         sjr54gzAxUYxVBTcnVpCBKqJHTkrwEpuBjUhKHWe48sTBztQaV7WDfQVgs7xxg3837Uo
-         FRkOJVaopAQBmc1rIyoapNFcXvdNoRxjWrQBWwVWDjOgVFcdVAuqHpJSTzrZZR/ymLBk
-         HZ5wnR/XmlelfK04a2sB8hwMn37v+1T5pOxpZaRp7fLmG/ONwbXIeJLPueX6h5tr3267
-         +pHg==
-X-Forwarded-Encrypted: i=1; AJvYcCWtYPZFohV+SfRuJKkfWGs9olwU8Xg5rzTeOBSUiCwypCZcInPUYtYc/3fW6fto5iyw2/aB5xeI459y1PGBboZUptr5UWT7sIoW
-X-Gm-Message-State: AOJu0Yx1Uh1D0cU3R0IOoXdVG2LtnL1i0TABQNmhYLwKPg6vh1vRGfgw
-	1njPPXADUCstwMsU9JrlwsZufcyJCBpgEWRGdFCeEoggDoZ0Co1tlL8AuauJua8mM2BFreNremQ
-	aUF+7xcAs6q7/hNgFRtAAjqOdJQnzB1ziDyxW
-X-Google-Smtp-Source: AGHT+IGtgjTMZH94I0YCk3sZCfjNaboqkvkZ3DOVoBuD4gPMpclt3jI0DHU+7gjD7HDZz1ZrB0jH2TEPiz/IQvfa2QA=
-X-Received: by 2002:a05:6102:f08:b0:470:79b8:9d87 with SMTP id
- v8-20020a0561020f0800b0047079b89d87mr880837vss.25.1708652728968; Thu, 22 Feb
- 2024 17:45:28 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708652862; x=1709257662;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T8LqUSdRok/CA+tRah7op5DIjhzrzfCw19wfAf0zitA=;
+        b=MVCT8BzyszhfytMxYOZwoM3sOn7LOb3QJY9+wYn2W7IlVqKUi7uN4cfGAGdNLE3q4k
+         hGuaCHKsZfThH2hvyAo8sbOMEALTC7nPPPzG9EgVWJF+2aZtEPzasJbRJiPb1FK4sxl0
+         h+3+hXHYeiL6oOdvpp0kci8YxoEWRjvwZmttUCgnRQAzkKA8zmbw5UQVSacrJABbGsj5
+         zYeHHadjsXOBUs2SEiCe4i39KY26eb43VQbvtdKQNhc0Uc0jitlz6xaXPb25UeG7MVM+
+         Lmjt4cqK7rlr652VUXy/QFMKjO4N4qE+liQhOQGMUF0GgG7JCWoDdw7UXXOTHaSVuX4E
+         xUqA==
+X-Forwarded-Encrypted: i=1; AJvYcCW5+ncHWZt32MUTKxJ6kONT714S15FwBFdfu/Xt/tyjlXknzsLpDSv7XysrIA5Sk5gLyGbWjsGmW3fKsrMPWjDKArkNAU0h/S7g
+X-Gm-Message-State: AOJu0YxZRBO1drT2lqyUmabnX9+Y6XbSDNtKnPSn0pUFkOwO5GI2QvZ6
+	iIrdYbWr/ro6vSvAaMNl1p9QaqnXiTmUeYRr0A44TjbF0F/A+Wl9JeeFkwg5kg==
+X-Google-Smtp-Source: AGHT+IHJh4lJkS324hWVEfeHHCDYDYahMyeLB4IsT6cMcZZZGLq3E1DHCneNrGMY6CSoZVw+J0j8eA==
+X-Received: by 2002:a17:902:bc45:b0:1db:e5e3:f7ac with SMTP id t5-20020a170902bc4500b001dbe5e3f7acmr639536plz.7.1708652861816;
+        Thu, 22 Feb 2024 17:47:41 -0800 (PST)
+Received: from google.com (30.176.125.34.bc.googleusercontent.com. [34.125.176.30])
+        by smtp.gmail.com with ESMTPSA id z11-20020aa7888b000000b006e0465879b2sm11562873pfe.70.2024.02.22.17.47.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Feb 2024 17:47:40 -0800 (PST)
+Date: Fri, 23 Feb 2024 01:47:37 +0000
+From: Benson Leung <bleung@google.com>
+To: Jameson Thies <jthies@google.com>
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+	pmalani@chromium.org, abhishekpandit@chromium.org,
+	andersson@kernel.org, dmitry.baryshkov@linaro.org,
+	fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org,
+	hdegoede@redhat.com, neil.armstrong@linaro.org,
+	rajaram.regupathy@intel.com, saranya.gopal@intel.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] usb: typec: ucsi: Register SOP' alternate modes with
+ cable plug
+Message-ID: <Zdf5OQectSrBf_sn@google.com>
+References: <20240223010328.2826774-1-jthies@google.com>
+ <20240223010328.2826774-5-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240223010328.2826774-1-jthies@google.com> <20240223010328.2826774-3-jthies@google.com>
-In-Reply-To: <20240223010328.2826774-3-jthies@google.com>
-From: Prashant Malani <pmalani@chromium.org>
-Date: Thu, 22 Feb 2024 17:45:17 -0800
-Message-ID: <CACeCKafNh6mJb-ukEQF9ces1p4Y0=4-Uokzk817+tMj=TUvKhg@mail.gmail.com>
-Subject: Re: [PATCH 2/4] usb: typec: ucsi: Register cables based on GET_CABLE_PROPERTY
-To: Jameson Thies <jthies@google.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
-	bleung@google.com, abhishekpandit@chromium.org, andersson@kernel.org, 
-	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com, 
-	gregkh@linuxfoundation.org, hdegoede@redhat.com, neil.armstrong@linaro.org, 
-	rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="crR+FIe5gTszUjTd"
+Content-Disposition: inline
+In-Reply-To: <20240223010328.2826774-5-jthies@google.com>
+
+
+--crR+FIe5gTszUjTd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 22, 2024 at 5:04=E2=80=AFPM Jameson Thies <jthies@google.com> w=
-rote:
->
-> Register cables with the Type-C Connector Class in the UCSI driver based
-> on the PPM response to GET_CABLE_PROPERTY. Registered cable properties
-> include plug type, cable type and major revision.
->
+Hi Jameson,
+
+On Fri, Feb 23, 2024 at 01:03:28AM +0000, Jameson Thies wrote:
+> Register SOP' alternate modes with a Type-C Connector Class cable plug.
+> Alternate modes are queried from the PPM using the GET_ALTERNATE_MODES
+> command with recipient set to SOP'.
+>=20
+
+Is there a plan to do the same for the SOP Double Prime for advanced active
+cables with two plugs?
+
 > Signed-off-by: Jameson Thies <jthies@google.com>
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
+
+Other than that question,
+
+Reviewed-by: Benson Leung <bleung@chromium.org>
+
+> ---
+> Tested on v6.6 kernel. SOP' GET_ALTERNATE_MODE responses from the PPM
+> are correctly registered as to the cable plug.
+> redrix-rev3 /sys/class/typec # ls port2-cable/port2-plug0/
+> device  port2-plug0.0  port2-plug0.1  power  subsystem  uevent
+>=20
+>  drivers/usb/typec/ucsi/ucsi.c | 60 +++++++++++++++++++++++++++++++++++
+>  drivers/usb/typec/ucsi/ucsi.h |  2 ++
+>  2 files changed, 62 insertions(+)
+>=20
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 6d6443e61faa..9b541547917b 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -399,6 +399,27 @@ static int ucsi_register_altmode(struct ucsi_connect=
+or *con,
+> =20
+>  		con->partner_altmode[i] =3D alt;
+>  		break;
+> +	case UCSI_RECIPIENT_SOP_P:
+> +		i =3D ucsi_next_altmode(con->plug_altmode);
+> +		if (i < 0) {
+> +			ret =3D i;
+> +			goto err;
+> +		}
+> +
+> +		ret =3D ucsi_altmode_next_mode(con->plug_altmode, desc->svid);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		desc->mode =3D ret;
+> +
+> +		alt =3D typec_plug_register_altmode(con->plug, desc);
+> +		if (IS_ERR(alt)) {
+> +			ret =3D PTR_ERR(alt);
+> +			goto err;
+> +		}
+> +
+> +		con->plug_altmode[i] =3D alt;
+> +		break;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -566,6 +587,9 @@ static void ucsi_unregister_altmodes(struct ucsi_conn=
+ector *con, u8 recipient)
+>  	case UCSI_RECIPIENT_SOP:
+>  		adev =3D con->partner_altmode;
+>  		break;
+> +	case UCSI_RECIPIENT_SOP_P:
+> +		adev =3D con->plug_altmode;
+> +		break;
+>  	default:
+>  		return;
+>  	}
+> @@ -801,6 +825,33 @@ static void ucsi_unregister_partner_pdos(struct ucsi=
+_connector *con)
+>  	con->partner_pd =3D NULL;
+>  }
+> =20
+> +static int ucsi_register_plug(struct ucsi_connector *con)
+> +{
+> +	struct typec_plug *plug;
+> +	struct typec_plug_desc desc =3D {.index =3D TYPEC_PLUG_SOP_P};
+> +
+> +	plug =3D typec_register_plug(con->cable, &desc);
+> +	if (IS_ERR(plug)) {
+> +		dev_err(con->ucsi->dev,
+> +			"con%d: failed to register plug (%ld)\n", con->num,
+> +			PTR_ERR(plug));
+> +		return PTR_ERR(plug);
+> +	}
+> +
+> +	con->plug =3D plug;
+> +	return 0;
+> +}
+> +
+> +static void ucsi_unregister_plug(struct ucsi_connector *con)
+> +{
+> +	if (!con->plug)
+> +		return;
+> +
+> +	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP_P);
+> +	typec_unregister_plug(con->plug);
+> +	con->plug =3D NULL;
+> +}
+> +
+>  static int ucsi_register_cable(struct ucsi_connector *con)
+>  {
+>  	struct typec_cable *cable;
+> @@ -842,6 +893,7 @@ static void ucsi_unregister_cable(struct ucsi_connect=
+or *con)
+>  	if (!con->cable)
+>  		return;
+> =20
+> +	ucsi_unregister_plug(con);
+>  	typec_unregister_cable(con->cable);
+>  	con->cable =3D NULL;
+>  	memset(&con->cable_identity, 0, sizeof(con->cable_identity));
+> @@ -1046,6 +1098,14 @@ static int ucsi_check_cable(struct ucsi_connector =
+*con)
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> +	ret =3D ucsi_register_plug(con);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret =3D ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP_P);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	return 0;
+>  }
+> =20
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index b89fae82e8ce..32daf5f58650 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -429,9 +429,11 @@ struct ucsi_connector {
+>  	struct typec_port *port;
+>  	struct typec_partner *partner;
+>  	struct typec_cable *cable;
+> +	struct typec_plug *plug;
+> =20
+>  	struct typec_altmode *port_altmode[UCSI_MAX_ALTMODES];
+>  	struct typec_altmode *partner_altmode[UCSI_MAX_ALTMODES];
+> +	struct typec_altmode *plug_altmode[UCSI_MAX_ALTMODES];
+> =20
+>  	struct typec_capability typec_cap;
+> =20
+> --=20
+> 2.44.0.rc0.258.g7320e95886-goog
+>=20
+
+--crR+FIe5gTszUjTd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCZdf5OAAKCRBzbaomhzOw
+wonTAQDqAauPp5X46PDTM5+U7Sw5KGHeA77Vn5fKGzxHWNWM+gEAkmbBJC78698T
+6M+p+fQHFs85ChV5M6Gy5rhtaShYtgM=
+=llRe
+-----END PGP SIGNATURE-----
+
+--crR+FIe5gTszUjTd--
 
