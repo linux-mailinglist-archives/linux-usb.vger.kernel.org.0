@@ -1,81 +1,81 @@
-Return-Path: <linux-usb+bounces-6940-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6941-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A7D2860A45
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 06:34:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBDB2860A4C
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 06:37:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33FC61C226DD
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 05:34:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D4B31F21B75
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 05:37:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1244711CB1;
-	Fri, 23 Feb 2024 05:34:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00B8011CBF;
+	Fri, 23 Feb 2024 05:37:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K9vYX+C3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tr/za4bY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F02DF9EB
-	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 05:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3E311CB2
+	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 05:37:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708666459; cv=none; b=hl8VHKNF8sy7omWDn1oHGaZjcI+ZnLMYmsU7Q0lb+Oe7v+aot2L2gyVoYFye0855yAafxH2oxGRIbAB3imOyQDB/LtNFNiScwIH7daLkqmRUnMtnBoJ5ovDtTD6BYHrn/2wiHc8jk9eKtai/y+Q4305kgobZkPKxmF/9mKeruAE=
+	t=1708666672; cv=none; b=DaLJxcGnDwLPaQUruTGCA8OaNbVSYT/wziqeHPFpIaMlz+YBZe0gvZ9YP0y6RyGTtIMfgRrUm+XehE88XPP9NLuFZaoflDxPgfj1Nk+o+R9QyYIic36AiTy2W2NXjA0fZjWXuAhA4Xq8GFuz91xIaVQGXPTqYxVoqhdNx+iAjI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708666459; c=relaxed/simple;
-	bh=i2JifP25a53XHtwcXig/NwceTcdJ0ADWfEzWQ/IWSdE=;
+	s=arc-20240116; t=1708666672; c=relaxed/simple;
+	bh=xsKSwLBBIARsj04+9pfUA2veziCGU0ghHiZxG7VQXh8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jH/IxdRyg6KrHv/5F5xtRwDkMlWXg6viuavxQGl3X+AVpypMRPmW/JlDy/JLccFkzngKARqe7vbzfqF/ndN0/880g2OeNrNdeUCbOKDTazq+nMQGZHdyXjeIRbbkJM7oQYSLe+pQXBAOXCePas0U+ggVQOGUFkLi2Lq1D1T6z1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=K9vYX+C3; arc=none smtp.client-ip=209.85.219.174
+	 To:Cc:Content-Type; b=h9UABZOtxGf+EDUUqk20qX490ugGue/dr1vsj3AumphtQb9zX/reE/Yn9uQNjMXCPODWH3pyTbaAkJlOIv+dlTG0N/cw/7X8nBTAuXw8o95YdqGTbQC3AbNWH8a5an5fPk8oZv0dijwFlaOMeH0sTgk+CnELW0aRNFYms2kA7ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tr/za4bY; arc=none smtp.client-ip=209.85.219.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-dcc86086c9fso461956276.3
-        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 21:34:17 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-dcc80d6004bso486964276.0
+        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 21:37:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708666457; x=1709271257; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1708666670; x=1709271470; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2+4f7N01YGRuzC3H7YfM29rrKfvtFFpp035VmvYqKh8=;
-        b=K9vYX+C3qtdFJXupZc9GnFEvy5DrONW8wDQj24DmNevZu5MfJ6XvF9sfkJPYzel8eS
-         lEdVKlxf6LYQDoIEDZeMXjKSDAtb/38VE2cYGmDtLk/uFTOceVRfNJ9Iqd5sbz+pz7xu
-         qFoH26TKZN4REWpd3x61A8V85g+ejrKf0WyV7Y794xEm7ZACz789V9S9UoZma4h5UAJ0
-         9HjpBoFoTKM5xIpWjxNWNeLEu5gVee2DxGGbmf+8r7KiwtoxWL5O7qouDdq090XJxqrN
-         UOtlo7+hciOW4aCmZNuLlAqxuewfMznOJw2vOKx+J74wLPTZuO2nBnDTDyF8yL1lKCG/
-         dy6A==
+        bh=piy9E/Wi6hWu5zacOupA8Uhn9Hcy3zaRnPaPm0Ffstg=;
+        b=tr/za4bYqPdXEzQgSb8MAEKZMUNJM+rRDCGzFwDvy8zq6tQsLmJOMqH/BMzI4QLfXC
+         CoS0g9of08hJAY10QSDHeWBnze/HG9BiosShLEtkVuHwA35dLqRfEcOE9ClvXTeLwzhU
+         a+IeDIhQuk40l68F58hKRz1la+lnRxNifERZEkAbyqLlm0eMFEEHcddBCc17u9eU45IQ
+         +kJPXh6HgtDpQr/HahWX57V+jToUhsBZI0XIu28i2eopH/FBH0dJ6aTFV0PY2gfW880F
+         +l3EKfq62SXlzTyE8yoqVmKO6mNZFASeQRksL5vn4jTNZLjY+YPIIqyK3JoXz/qM3WuK
+         GCpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708666457; x=1709271257;
+        d=1e100.net; s=20230601; t=1708666670; x=1709271470;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2+4f7N01YGRuzC3H7YfM29rrKfvtFFpp035VmvYqKh8=;
-        b=hU9qcLRB3uo09bRNO2qhq9H/h89YW1E35t8aQEmqaSjDWH/WpJht2+JEpWfni4jEPf
-         g8uRx/MmM8ZbFWiDf62yqc0+KxHgkKotiqsq8Rdpu5Oql8Z+SKXRDIfgYcLdyfj701hJ
-         6ovyH4bYYd43gTZYhe6lOoiVoRT9PtHROHgS/LMfYrl8aVo7S80EM0Wb+cq0C7EnvRBo
-         t8i9C5X+BW85WG+yHwF4j0S+4CtMAl406FNKSmnnNN4kCR1Oy2bjxnSMMwlPQk7iXHZY
-         k0ETi9P8pieKwhJ+ibdq+uMAs2cgXiXnycCCNJqFTUcf+y4EHp8EpwKloA1fXvKcK34a
-         30HQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUvJE2IRiYD+mKd8M4i3LE1SiyqB5vm39FmlHwSqcfD0Ci4XDUu3pB68LsYl2aGO87stR3RWkvv23iqOPYBeckTZ/Dg5ymepnQh
-X-Gm-Message-State: AOJu0YzdiNoFMZMiuEnd6ONsTdlIKxTyMXg8iGbnAwsOw/rq2mahmbc+
-	fr5lueBdhR8/4ltfU67dr70L727kA1qPMnP88gUwP2ptgsH3uI40ci3gDAPArVQ1ueMTSUHRu4h
-	stQXGScN6SfXClwj8NU90EmlCbsZzM+iKdMLfLw==
-X-Google-Smtp-Source: AGHT+IEIoWhbAWndlBi8oVDHO2DKmfrv13BTSSEDbAyCI/96CgFgGNUl2BDpjrXGck56iGDlhhcC2mBehcpO4kLorjk=
-X-Received: by 2002:a05:6902:565:b0:dc7:45df:a04c with SMTP id
- a5-20020a056902056500b00dc745dfa04cmr1246211ybt.43.1708666457014; Thu, 22 Feb
- 2024 21:34:17 -0800 (PST)
+        bh=piy9E/Wi6hWu5zacOupA8Uhn9Hcy3zaRnPaPm0Ffstg=;
+        b=Isl0cjIhLtd7DTFg5LiDXEg/R4+LLL44H9AkdZZZOLw5M97eUjFtTnTmcNz+5FI3F3
+         dD90RrPBukp8yvz10FhHk+OUfTlrUhKs8SRUY1AR2Go2XlWOVAdZzcpmrVFGoq0mbeim
+         IEbcHyzpt3G2+f/YM2uRvFe56JVLvzsmPRFyaeJvsFeL6je0k8AsZzIyZ1ZDBew2R77V
+         mhtx8tArzkUg1LfVrv0oV+MBZBgzosozAMiEOz2+eUmtlGSnNPl0sY9LEqvHC+pXwNbE
+         +K1oFe/wvnvZmEbbZfjdBvv+C4BrpN2YpZ73Xq1wmtny+iVN2ODwT1cADuNCBPas79Z+
+         qnjw==
+X-Forwarded-Encrypted: i=1; AJvYcCWm6XkiAYMSwvlnlwvwivS43MdIV0MCxtxRQ3mIJsXsiLpDKKiXyjKUDpfoJOYA1Oly+0jqPcLSTu/mjydhj/U2FV46o6m3Yof0
+X-Gm-Message-State: AOJu0YyJ6oOItTr9Q3yct8zeRU8Aqsw+Ght2Ta22zbmt4asIvBg6Q8gz
+	6wNboX8gYB7gZ4Y7EGHBZ/VVzKZ5fxXs8N4JwzICubeLQsGcxhVHzeuW9QgxO9S8RoC+suG32MJ
+	8Gb2QhmeJ3jsNDL2lKMdALNTw4yWi6CqQ6Wp5OQ==
+X-Google-Smtp-Source: AGHT+IHowG1djzWv8SQ+TQj50M+pnuS5txwPBX/b0kYHXIda9do+3n7ow8oYi6E8ViwH5610dsWdNg1YzjYmgmrbRSg=
+X-Received: by 2002:a25:4e56:0:b0:dc7:4bab:c390 with SMTP id
+ c83-20020a254e56000000b00dc74babc390mr1041815ybb.61.1708666670011; Thu, 22
+ Feb 2024 21:37:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240223010328.2826774-1-jthies@google.com>
-In-Reply-To: <20240223010328.2826774-1-jthies@google.com>
+References: <20240223010328.2826774-1-jthies@google.com> <20240223010328.2826774-2-jthies@google.com>
+In-Reply-To: <20240223010328.2826774-2-jthies@google.com>
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 23 Feb 2024 07:34:05 +0200
-Message-ID: <CAA8EJpqwAg-qenTq3MZCb74rn8rRaMxrsnmZGMwff+ABGENEGg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] usb: typec: ucsi: Expand SOP/SOP' Discovery
+Date: Fri, 23 Feb 2024 07:37:38 +0200
+Message-ID: <CAA8EJpo_n6Fts0AAKW-C3HGArnuxxO8xF6he7b7j9y0e9CTYpg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] usb: typec: ucsi: Clean up UCSI_CABLE_PROP macros
 To: Jameson Thies <jthies@google.com>
 Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
 	pmalani@chromium.org, bleung@google.com, abhishekpandit@chromium.org, 
@@ -84,30 +84,20 @@ Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
 	saranya.gopal@intel.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Jameson,
-
 On Fri, 23 Feb 2024 at 03:04, Jameson Thies <jthies@google.com> wrote:
 >
-> Hi Heikki,
+> Clean up UCSI_CABLE_PROP macros by fixing a bitmask shifting error for
+> plug type and updating the modal support macro for consistent naming.
 >
-> This patch series expands support for partner and cable discover in the
-> UCSI driver. There are a few pieces here.
+> Fixes: 3cf657f07918 ("usb: typec: ucsi: Remove all bit-fields")
+> Signed-off-by: Jameson Thies <jthies@google.com>
+> ---
+> Tested by building v6.6 kernel.
 >
-> 1. Some cleanup of the GET_CABLE_PROP definitions in ucsi.h.
-> 2. Cable discovery and registration with the USB Type-C connector class.
-> 3. Partner/Cable identity registration with the USB Type-C connector
-> class.
-> 4. SOP' alternate mode registration with the USB-C connector class using
-> a cable plug.
->
-> These have been tested on a v6.6 kernel build running a usermode ppm
-> with a Realtek EVB. Let me know if you have any questions.
+>  drivers/usb/typec/ucsi/ucsi.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-First and the most obvious comment: 6.6 is four months old. I see that
-your base commit is the usb-testing tip, however you declare that you
-tested only on 6.6. Now I'm confused. Did you test your patches on top
-of usb-testing before sending them?
-
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 -- 
 With best wishes
