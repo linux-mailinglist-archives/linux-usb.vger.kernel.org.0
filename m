@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-6980-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6981-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63C42861B3E
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 19:12:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1116C861B43
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 19:13:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 011771F25AE7
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 18:12:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 433E11C258B0
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 18:13:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45FCC141999;
-	Fri, 23 Feb 2024 18:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 137D51420A0;
+	Fri, 23 Feb 2024 18:13:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ozowuSY2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CVl4fIJJ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17B2133991;
-	Fri, 23 Feb 2024 18:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8639A12BE98;
+	Fri, 23 Feb 2024 18:13:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708711928; cv=none; b=Nr+vUUfH7oVyI3Ry2/2h3sIQxJN0jqFl+NuqDUS+6rLpSeZnjNZmUaiMpK3r6eOQf4/nm67sIB20c3FpgEckSFETXovcOJiHSeY7bsUHz7T32aC/ZL+ehgon/JTdktlwepfhsVB0+Y1po76qTndjxrTYpHyXWcpyBXjW/9FM5tg=
+	t=1708711989; cv=none; b=DThNnqyL37KxSz9xKH99BJxhHuoNV67waTgGdLjC24apvy0g7amXitxEH5JkEUAqKq9ltALnx8xaONfLU9BO/T9KohhKBhgm8wkCpdJ83RwCwyvUWHINEw8D2pXg++I7BBBTW2OFoi1akoCwQ4EK+tvCLJGw1ExLohyOI3RFQNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708711928; c=relaxed/simple;
-	bh=X5+KKKEiF1rSjfbI8HVxegm2HjFlZd71yRviY+OKX3Q=;
+	s=arc-20240116; t=1708711989; c=relaxed/simple;
+	bh=enx2K6Ij/uIYYAm7cQJRoqrjG1WQH3iZrnwhAqZPM1E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gyCfq0OzhTJ9P+e2GaBsIaVgrwXCbMzodtDV6HumpArwQpmvs3qbzbJ8gfV4ioHlnKbg+3PTMcqSInjD8h1GAMqu1kUctfNLn1b2CFttN1BzB/JOq+Ngzg1KKFGGkQvJL7nlNMXVwG/vtqW+9eFmCBBzi92B6B/5dG7OGQspzqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ozowuSY2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C5FC433F1;
-	Fri, 23 Feb 2024 18:12:04 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=QU1XlxdfjC3DpVtn7Zqm2XaW5RIu06JlkdO5iWVycz9gHZa9PwO1iZsRKz0VKlXY34vJDPjd/LFkXJtxOYGjT46fSYFJpkQpLrVQQMQx7de76HA6mx25IkRqWFvBMuByMBiArKxu0PTIos4zkhwYbGhugj1S++fQrZ2TgpHWx0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CVl4fIJJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F96AC433F1;
+	Fri, 23 Feb 2024 18:13:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708711928;
-	bh=X5+KKKEiF1rSjfbI8HVxegm2HjFlZd71yRviY+OKX3Q=;
+	s=k20201202; t=1708711989;
+	bh=enx2K6Ij/uIYYAm7cQJRoqrjG1WQH3iZrnwhAqZPM1E=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ozowuSY25/bBDPulRu2KQueBT926KJJgdNx+4OpDWQQASAP9Zs55yjQsO4PeqLnYd
-	 p4MG2nraj0PtSt/JwPREzgd/d96l2hSbvDcnLAfy0WTobTSZd7IcjJv89tYugMdxaa
-	 JxEgcgY1lchhfgOo4WN9APrldq7aMBevbN7KBn5S8FgdtwwUZdnH5MTv9Pdl/DAScA
-	 WfnPldTdhOoB6VuoQ/RZDENR1wzi4I5AAAM8eUJP72gsvzOhzFzwtrGHcJb7N+UWU8
-	 KMnUHrderJMEY4Ghi2B0D7GBHTwzo6Vo/GnUKLCtSh73fAAQY8CW1jHVfYi5kBEQ+z
-	 /jrms99DbiSwA==
-Date: Fri, 23 Feb 2024 18:12:02 +0000
+	b=CVl4fIJJ/kyILqO+C8u8rYp4xL+FmdcgJSasyiEJXulGM15WTbcMgEVns36Sz9Si5
+	 l/sdpgC7+JJ8SeFuxyI1mv/D/Ju1zxJtKEBkmRIAyWZKTvkILPpI5MlZd9i000ggcf
+	 2kFmKm+srRzA2HzR+62WHy0POxEooXtPgfElpOGeYC0aJBxe9mwem9zHKlGj7bdF0P
+	 PGW/14TDQcG9L3NUs97BKZ5PziP9SDkoj8AIwC3Bys09iQ6RXuQPL3szxT7qg5NtMx
+	 fKAc9o2a8ewWB4CxnX4yH55I+MmRilPAGVnFNeBywBdaaJs+SzqdYzqXxQKIUt2dZw
+	 8CS179C0yXzFw==
+Date: Fri, 23 Feb 2024 18:13:03 +0000
 From: Conor Dooley <conor@kernel.org>
 To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -59,11 +59,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 1/8] dt-bindings: usb: ti,j721e-usb: drop useless
- compatible list
-Message-ID: <20240223-clarity-variably-206b01b7276a@spud>
+Subject: Re: [PATCH v3 2/8] dt-bindings: usb: ti,j721e-usb: add ti,j7200-usb
+ compatible
+Message-ID: <20240223-defog-uniformed-b438aefdbc39@spud>
 References: <20240223-j7200-usb-suspend-v3-0-b41c9893a130@bootlin.com>
- <20240223-j7200-usb-suspend-v3-1-b41c9893a130@bootlin.com>
+ <20240223-j7200-usb-suspend-v3-2-b41c9893a130@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -71,52 +71,43 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="2uJqstsxxkeMiVZB"
+	protocol="application/pgp-signature"; boundary="/uJ1wrvYWe5uH29q"
 Content-Disposition: inline
-In-Reply-To: <20240223-j7200-usb-suspend-v3-1-b41c9893a130@bootlin.com>
+In-Reply-To: <20240223-j7200-usb-suspend-v3-2-b41c9893a130@bootlin.com>
 
 
---2uJqstsxxkeMiVZB
+--/uJ1wrvYWe5uH29q
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 23, 2024 at 05:05:25PM +0100, Th=E9o Lebrun wrote:
-> Compatible can be A or B, not A or B or A+B. Remove last option.
-> A=3Dti,j721e-usb and B=3Dti,am64-usb.
+On Fri, Feb 23, 2024 at 05:05:26PM +0100, Th=E9o Lebrun wrote:
+> On J7200, the controller & its wrapper are reset on resume. This makes
+> it have a different behavior from other platforms.
 >=20
 > Signed-off-by: Th=E9o Lebrun <theo.lebrun@bootlin.com>
 > ---
->  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+>  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 >=20
 > diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml b/Do=
 cumentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> index 95ff9791baea..949f45eb45c2 100644
+> index 949f45eb45c2..d52d5b2965aa 100644
 > --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
 > +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> @@ -11,12 +11,9 @@ maintainers:
-> =20
->  properties:
->    compatible:
-> -    oneOf:
-> -      - const: ti,j721e-usb
-> -      - const: ti,am64-usb
-> -      - items:
-> -          - const: ti,j721e-usb
-> -          - const: ti,am64-usb
+> @@ -14,6 +14,7 @@ properties:
+>      enum:
+>        - ti,j721e-usb
+>        - ti,am64-usb
+> +      - ti,j7200-usb
 
-Correct, this makes no sense. The devices seem to be compatible though,
-so I would expect this to actually be:
-oneOf:
-  - const: ti,j721e-usb
-  - items:
-      - const: ti,am64-usb
-      - const: ti,j721e-usb
+This patch will change with what I mentioned on the other binding patch,
+but the patch itself is reasonable.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-> +    enum:
-> +      - ti,j721e-usb
-> +      - ti,am64-usb
+Cheers,
+Conor.
+
 > =20
 >    reg:
 >      maxItems: 1
@@ -125,16 +116,16 @@ oneOf:
 > 2.43.2
 >=20
 
---2uJqstsxxkeMiVZB
+--/uJ1wrvYWe5uH29q
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZdjf8gAKCRB4tDGHoIJi
-0vJjAP0Z1I8RoVCej2LQjpvzqdfx5ed9h5bwcp5hHZ/8SjS0qgEAllHSOHA3dx1t
-2rVw1vW/7ervNyKDPv5Aoh5DVldMlQo=
-=+mAw
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZdjgLwAKCRB4tDGHoIJi
+0q5fAP4oulDax7SvhnhcoSGCAjQmWMy//bqFcPSkOPTit0YlTgEAvVvQZiZEGs4x
+K8+bZuKQoaJBqC4R7SUtG/A0HUsQjwo=
+=CEwO
 -----END PGP SIGNATURE-----
 
---2uJqstsxxkeMiVZB--
+--/uJ1wrvYWe5uH29q--
 
