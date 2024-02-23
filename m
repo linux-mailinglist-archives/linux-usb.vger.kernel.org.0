@@ -1,155 +1,113 @@
-Return-Path: <linux-usb+bounces-6955-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6956-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45BB78611B2
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 13:42:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8192F861287
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 14:18:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D98011F2775A
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 12:42:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 825771C21BB1
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 13:18:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 106A37C6E9;
-	Fri, 23 Feb 2024 12:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FA727FBA5;
+	Fri, 23 Feb 2024 13:17:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QvIIF0yO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZLn+NWth"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893BB14A97;
-	Fri, 23 Feb 2024 12:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58867E779;
+	Fri, 23 Feb 2024 13:17:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708692027; cv=none; b=aud+Pbf1jQbuQLy3KWtLN16YEeuetRAjBfHj7W6v5XFBHagGvVr6NVSIPuRWUolQA8Ovwg9Oc3GHE92UwHoKIXw7biDZ2XB5VDtnfl1b+JnTcOdTA5MYKyRN8HYus+QQ/dwC2JIPqmhVNMREqK0ErJD+qNbnheFK37+vwl94emo=
+	t=1708694272; cv=none; b=poXCQe6aOhykG615sTp9LYhwsY/Cs4q4g0g38lmOOWt1X0G0jCKSP6pzzJcANdiAGSdjY4LqFrMK04tCiS4PtxK9EzxMD5GyCcBJ9PkNgd56REWJaqEJectIXZSSEy685Aid0L9EiBU4wZbAy6sTZ4MRITWpNQrOinn69uh1nd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708692027; c=relaxed/simple;
-	bh=KKUuXezB/G+ILZzSTILOSQmE/Cbf7JN8aDFNpOwtadw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fRVYvob2/RbvZC6FCA/Rz+msTIozkETsF7BV42bWR+lCsHPOoWbt5W9Ci6sHfJzuum6txTCIlrAj3974ycECmIhCFVs1a3gWCEl1J7D11ZI+QCbaSk7ZQ2t90NMQcVDEdXI/34/xptTxmkC+hvpHtkjNtam6cDegPwRFgz7lSAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QvIIF0yO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E2CC433F1;
-	Fri, 23 Feb 2024 12:40:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1708692027;
-	bh=KKUuXezB/G+ILZzSTILOSQmE/Cbf7JN8aDFNpOwtadw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QvIIF0yOS7qDRmS7ZybUiXbnP9VzNjS1e91aZB3N2uZWsjsjRbCdh2Y7NDOrHKYFW
-	 qcP5UhSjxl3dhU+t3gqpqvDZ46bm8R644L3c7pAdxOz5BxYkh9WspEjqJVyii5ZDKU
-	 jNX4Sdk2YEsjvRBTfxkT6SaZVfVcZZB3s/pevq9E=
-Date: Fri, 23 Feb 2024 13:40:24 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Selvarasu Ganesan <quic_selvaras@quicinc.com>
-Cc: brauner@kernel.org, axboe@kernel.dk, jack@suse.cz, jlayton@kernel.org,
-	keescook@chromium.org, peter@korsgaard.com, hayama@lineo.co.jp,
-	dmantipov@yandex.ru, quic_linyyuan@quicinc.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: [PATCH] usb: gadget: f_fs: Fix NULL pointer dereference in
- ffs_epfile_async_io_complete()
-Message-ID: <2024022350-rescuer-stretch-71e8@gregkh>
-References: <20240223054809.2379-1-quic_selvaras@quicinc.com>
- <2024022302-routine-schematic-b4fd@gregkh>
- <d2f40e2d-cbbd-41f9-9aa6-41d0f251ffda@quicinc.com>
+	s=arc-20240116; t=1708694272; c=relaxed/simple;
+	bh=Dah7nKbNvgz0/8dvPVQyf9mzODhi8A9Za+//Q+h+nOo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A+/1XwdRHW4/rSK/TPcl35eCza6wdIQPC+QI8eoNcsMiUOcPZPhJmc+uaN1fnRzLY718BqK6FzrWYcYjzoQ/ZhPoL4kp6sZhUqdPOmJnid8JXNZoRJavBoAIDp9961DfdLqKL7oW7XRfIjH9VC+DntmN9mCYmkSYSY7b/FNo8KI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZLn+NWth; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6ACAC433C7;
+	Fri, 23 Feb 2024 13:17:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708694272;
+	bh=Dah7nKbNvgz0/8dvPVQyf9mzODhi8A9Za+//Q+h+nOo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZLn+NWthQGZDjuQdLhDm9cq4Z+NCyABBvxxLqqJvYpMnsAcNi7UZ/YrudXsXlJPJR
+	 I7vVywWsWW57tgfWCgvWV77uy4Q77QFxCUPg4uvEld21dfq0WwWnm4lhrXn1eExFO8
+	 RvOkAm9AU+voMEa4+V2yo4Hqtaq5Nkax1ah/vsy0VrbBphdcjh4mfJamTi6pX/FEuH
+	 uX8bjiTH7weTUkKEbYnoeURf50E7qrqMICYoLdPAKz9O0bJNjVG8aesiOB0fNk9Qji
+	 5ZJIwE4jJABFElU2Xk6PbcCFg6lpFOREGu2axf11wROsAi7FVqW1SyP4xkcpqBv4+g
+	 o8Z3uA2T03RsA==
+Message-ID: <48e63867-616e-4a37-ab17-a6977c600ec1@kernel.org>
+Date: Fri, 23 Feb 2024 15:17:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d2f40e2d-cbbd-41f9-9aa6-41d0f251ffda@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/5] usb: dwc3-am62: module removal and errata fixes
+Content-Language: en-US
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: nm@ti.com, r-gunasekaran@ti.com, afd@ti.com, b-liu@ti.com, srk@ti.com,
+ francesco@dolcini.it, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20240214-for-v6-9-am62-usb-errata-3-0-v3-0-147ec5eae18c@kernel.org>
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20240214-for-v6-9-am62-usb-errata-3-0-v3-0-147ec5eae18c@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Feb 23, 2024 at 05:05:59PM +0530, Selvarasu Ganesan wrote:
+Hi Thinh,
+
+On 14/02/2024 11:46, Roger Quadros wrote:
+> Hi,
 > 
-> On 2/23/2024 11:28 AM, Greg KH wrote:
-> > On Thu, Feb 22, 2024 at 09:48:09PM -0800, Selvarasu Ganesan wrote:
-> > > In scenarios of continuous and parallel usage of multiple FFS interfaces
-> > > and concurrent adb operations (e.g., adb root, adb reboot), there's a
-> > > chance that ffs_epfile_async_io_complete() might be processed after
-> > > ffs_epfile_release(). This could lead to a NULL pointer dereference of
-> > > ffs when accessing the ffs pointer in ffs_epfile_async_io_complete(), as
-> > > ffs is freed as part of ffs_epfile_release(). This epfile release is
-> > > part of file operation and is triggered when user space daemons restart
-> > > themselves or a reboot is initiated.
-> > > 
-> > > Fix this issue by adding a NULL pointer check for ffs in
-> > > ffs_epfile_async_io_complete().
-> > > 
-> > > [  9981.393115] Unable to handle kernel NULL pointer dereference at virtual address 00000000000001e0
-> > > [  9981.402854] Mem abort info:
-> > > ...
-> > > [  9981.532540] Hardware name: Qualcomm Technologies,
-> > > [  9981.540579] pstate: 204000c5 (nzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > > [  9981.548438] pc : ffs_epfile_async_io_complete+0x38/0x4c
-> > > [  9981.554529] lr : usb_gadget_giveback_request+0x30/0xd0
-> > > ...
-> > > [  9981.645057] Call trace:
-> > > [  9981.648282]  ffs_epfile_async_io_complete+0x38/0x4c
-> > > [  9981.654004]  usb_gadget_giveback_request+0x30/0xd0
-> > > [  9981.659637]  dwc3_gadget_endpoint_trbs_complete+0x1a8/0x48c
-> > > [  9981.666074]  dwc3_process_event_entry+0x378/0x648
-> > > [  9981.671622]  dwc3_process_event_buf+0x6c/0x288
-> > > [  9981.676903]  dwc3_thread_interrupt+0x3c/0x68
-> > > [  9981.682003]  irq_thread_fn+0x2c/0x8c
-> > > [  9981.686388]  irq_thread+0x198/0x2ac
-> > > [  9981.690685]  kthread+0x154/0x218
-> > > [  9981.694717]  ret_from_fork+0x10/0x20
-> > > 
-> > > Signed-off-by: Selvarasu Ganesan <quic_selvaras@quicinc.com>
-> > 
-> > What commit id does this fix?  Should it go to stable kernels?
+> This series fixes errors during module removal. It also
+> implements PHY core voltage selection as per TI recommendation
+> and workaround for Errata i2409 [1].
 > 
-> Fixes: 2e4c7553cd6f9 ("usb: gadget: f_fs: add aio support"). Yes it's
-> required to propagate to stable kernel as well.
-
-Great, when you resend the next version, please include both proper
-tags.
-
-> > > ---
-> > >   drivers/usb/gadget/function/f_fs.c | 4 +++-
-> > >   1 file changed, 3 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> > > index be3851cffb73..d8c8e88628f9 100644
-> > > --- a/drivers/usb/gadget/function/f_fs.c
-> > > +++ b/drivers/usb/gadget/function/f_fs.c
-> > > @@ -849,7 +849,9 @@ static void ffs_epfile_async_io_complete(struct usb_ep *_ep,
-> > >   	usb_ep_free_request(_ep, req);
-> > >   	INIT_WORK(&io_data->work, ffs_user_copy_worker);
-> > > -	queue_work(ffs->io_completion_wq, &io_data->work);
-> > > +
-> > > +	if (ffs && ffs->io_completion_wq)
-> > > +		queue_work(ffs->io_completion_wq, &io_data->work);
-> > 
-> > What happens if ffs->io_compleation_wq goes away right after you test
-> > it but before you call queue_work()?
-> > 
-> > Where is the locking here to prevent that?
-> > 
-> > thanks,
-> > 
-> > greg k-h
+> The workaround needs PHY2 region to be present in device node.
+> The device tree patch will be sent later after the DT binding doc
+> is merged.
 > 
-> Hi Greg,
+> [1] - https://www.ti.com/lit/er/sprz487d/sprz487d.pdf
 > 
-> Thank you for your feedback. I understand your concern about the
-> potential race condition with ffs->io_completion_wq. I’m considering
-> introducing a lock to protect this section of the code, but I wanted to
-> get your opinion on this.
-> In the f_fs.c driver, there are pre-existing locks. Would it be suitable to
-> utilize these locks, or do you suggest the creation of a new lock
-> specifically for ffs->io_completion_wq? We anticipate a performance impact
-> if we use the existing lock, as it might be held by different
-> threads. What are your thoughts on this?"
+> Changelog in each file
+> 
+> v2: https://lore.kernel.org/all/20240205141221.56076-1-rogerq@kernel.org/
+> v1: https://lore.kernel.org/all/20240201121220.5523-1-rogerq@kernel.org/
+> 
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> ---
+> Roger Quadros (5):
+>       usb: dwc3-am62: call of_platform_depopulate in .remove()
+>       usb: dwc3-am62: fix error on module removal
+>       usb: dwc3-am62: Fix PHY core voltage selection
+>       dt-bindings: usb/ti,am62-usb.yaml: Add PHY2 register space
+>       usb: dwc3-am62: add workaround for Errata i2409
 
-Test it out yourself and see what works best!
+Any feedback on this series? Thanks!
 
-thanks,
+> 
+>  .../devicetree/bindings/usb/ti,am62-usb.yaml       |  8 +++-
+>  drivers/usb/dwc3/dwc3-am62.c                       | 45 ++++++++++++++++------
+>  2 files changed, 39 insertions(+), 14 deletions(-)
+> ---
+> base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+> change-id: 20240206-for-v6-9-am62-usb-errata-3-0-233024ea8e9d
+> 
+> Best regards,
 
-greg k-h
+-- 
+cheers,
+-roger
 
