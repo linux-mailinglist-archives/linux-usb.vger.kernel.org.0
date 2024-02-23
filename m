@@ -1,113 +1,110 @@
-Return-Path: <linux-usb+bounces-6950-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6951-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A9A1860ED0
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 11:00:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BEF3860F7E
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 11:36:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57F6F1C22306
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 10:00:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84CF6B25D8B
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 10:36:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A155CDCA;
-	Fri, 23 Feb 2024 10:00:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A693463111;
+	Fri, 23 Feb 2024 10:36:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="I6sZ9Gsq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fQNsh2OK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D4843168
-	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 10:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41823EA6C
+	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 10:36:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708682433; cv=none; b=ReYA4nDYXHZxaPczOQc6CPyV+/CdfSX4HsObtG7cNTp55mStRkYL8a1qpXWhKphKT/yLAVvuU1g3Z5KPq+xGhFVcZmmdkMaLBfWuKhSr+7Kxsrq6dIWbt59CMZ4C5GAmdNRs9Lw4yMrX2DhrTuB/KRIAaUh/soK75MvRbzkGgFQ=
+	t=1708684605; cv=none; b=H8JvfTh17SIPAgLdDCwt8hBDSKMBbsceaaCXWJUxGGOwqgEJ0aPZ2VoCOG5URMbuQeY/hYErDbohIvUvE15t5xjcYN8uf67ZrAuarcjWmjZ5GzdnbtN0lopUS49gZIVrZsGW1FRnbkSsp5cl+INyuZtFplw73PjEzUfLHue6r5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708682433; c=relaxed/simple;
-	bh=FvmkFV7E7EFtLzlkypXGEL2H056wFv8CpoOcQ71laXY=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=iqZSLXAPIJkAWy8BFBm0XAKFQRN/zkBSWMsFQO9sya/FknFq0RZAXjjU983hejRWYUs6IJ2drF/onnbHDzaTvxwBbMS7XCHMGt8NaN6fv4HJXeaBOQGjczRQ+GcIkwxcnFyxrqjPmUWjYLxLp0IUzaGTBCnzCz84woy3KcmNR0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=I6sZ9Gsq; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41N8riPM002581;
-	Fri, 23 Feb 2024 10:00:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type; s=
-	qcppdkim1; bh=yqB4hgVXOZp5Hdoig8hNyAA4O70+zKaVhFQqqI5Qui0=; b=I6
-	sZ9Gsq40IDtY5WwoAL9CPKKCswg1v9LpIiUVtfRP8vAqzzxUiNluWcMUuXlWibPH
-	yzIEIZw1ljT4juHa21KNjpCybculbnR5M6MsoJY9NX4y7qkAHlfo689F2SyNRSiX
-	qGUI8UPQNFxDi4wlq3YacLnu2KQqCTgKk/DKwidL+WuxNbyNo7O5dR1r53MuLFIp
-	SWAP/QqcYGkRCKka+r1Nnu52SJbg8gmuL6YLIYz6mx/ZCSgXcDNPpkQb07qvI2LZ
-	YY4TJwyV+wMlhBdz945JwwHjrp0PGFLTS7Q6pjBDgGwO53a0YkBOgW/TNQHHhJ73
-	uPhj91Ew+4n/CEOWgHkQ==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wer8mr41g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Feb 2024 10:00:22 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41NA0LlZ006393
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Feb 2024 10:00:21 GMT
-Received: from zijuhu-gv.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Fri, 23 Feb 2024 02:00:19 -0800
-From: Zijun Hu <quic_zijuhu@quicinc.com>
-To: <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <usb-storage@lists.one-eyed-alien.net>,
-        "Zijun Hu" <quic_zijuhu@quicinc.com>
-Subject: [PATCH] Bluetooth: btusb: Use right timeout macro to receive control message
-Date: Fri, 23 Feb 2024 18:00:16 +0800
-Message-ID: <1708682416-8664-1-git-send-email-quic_zijuhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+	s=arc-20240116; t=1708684605; c=relaxed/simple;
+	bh=oGa9d8hXuiijz2WQcWWqfhlvaB3jirIqqRv0WuyyLd8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Cg2Y11WXy3zVfbEikqiXab/9cO1Rv6K4XbRCh0mt4tWLdYd9ZLBgf4KJG3Xt1d9R1GZM+tYqSzNrafMTvLFtkHGbfOVN1yBlzRu/V7ishVLCj4LRqREdNR2cu+IVSfjAC/Vi7GC1WlYDrLumZaZEQCtwJudI9S9jBlWAhAOyMwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fQNsh2OK; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-55a5e7fa471so800110a12.1
+        for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 02:36:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708684602; x=1709289402; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oGa9d8hXuiijz2WQcWWqfhlvaB3jirIqqRv0WuyyLd8=;
+        b=fQNsh2OKUBgnb5FP0MIFgb3d/zuraki6pSWU1EC+QQzscEskxBX3+AG1e1a1QPvd0B
+         hr/r6dLshp+BvzTAYA2Zau6LG+yrD8YznsM50ToHcnWOfQcNaY9/0pQ+1sOsQ9hIPIb3
+         cI5ElA0W+w2DcgFUWmUZCfLsut0jK5w/aP4hZReuZfHZxjdoA6SheufDCCIZed/IBOW7
+         hNoFAXmZeNUx3BBXomv2gsuXv/zaL0sbxRvAKc31q97AlDRCy7ZA0tMDcHoAxCB6t3HZ
+         4cJKO8Huez7q3DtnQADWBGxNp4krR7xcO7/qs4/Vl2/mvjr9hUj4qmz6g3yZ4dGESN0b
+         1trw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708684602; x=1709289402;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oGa9d8hXuiijz2WQcWWqfhlvaB3jirIqqRv0WuyyLd8=;
+        b=e10DwiwijQgYYkc8wbXtZHUeiXlNtjR7H5Oa0+cV/3wPFqNt6pRIMg8mnI7rAJ1tEZ
+         EPmEqUx8Hl/Uo5y2URz1Dbv467w1nso9zgzvsEScedeRIHcgV/tgS1H4NfPnFzMe6Exm
+         ku/sKRIoG0nfYIQvWaSrMx2kVCSHQf6xBY+iiUA8t6Z5XuAQRYdyGyeA37Li+KePezbN
+         WoZuvJQw/9lUTxQkbVtU/y5vpUNbYlrKNnhPsgMmjfMnARs4f0uIm1X4PeJG/q5AUSyE
+         lIncsc9Bh9SLhd6wjHlEeYWEoRLALaBuU6JB0kUG6DlnmM5eDVK7g9t+AfdKqJxUQyno
+         E8Pw==
+X-Forwarded-Encrypted: i=1; AJvYcCVIotR+xnAi0y3Rf53SAy2VU9AQPSLKBKRtcKMZ2KAbBpkotQqpmKJHDjpFaxhcmSWMUydkXyKlJSZIa5rF0GFywJkxW9yJ4Pud
+X-Gm-Message-State: AOJu0YyPZnj4T5dpJUx8UYoMxGlNaWfsd6Q9D1y+1LvXP/TKWr7ZSx6g
+	5cy/WS5rg+rLAPCff2T4k/+DtQCq+IFOWfqiqQzCcY9u/vPPD6zguZmhG98ZHD8VCGf8ZwowuTw
+	y8Bi+/Kk8hLqiG8dgEqHoLJc6p9QZKac+cbq6
+X-Google-Smtp-Source: AGHT+IHUav3spNKZz8TuROOuLqr44AG4XeF8yBOYDiOk8XKBPI8yc/QGOy9I7fCdiFaLDT3fTvD/WiTk7Gr2b1xnDxE=
+X-Received: by 2002:aa7:d50a:0:b0:565:6424:6ad1 with SMTP id
+ y10-20020aa7d50a000000b0056564246ad1mr843919edq.14.1708684601764; Fri, 23 Feb
+ 2024 02:36:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: sdv7UG0YK2aLTCpluD1bptWVJ2HMaWpD
-X-Proofpoint-ORIG-GUID: sdv7UG0YK2aLTCpluD1bptWVJ2HMaWpD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-22_15,2024-02-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- adultscore=0 malwarescore=0 bulkscore=0 clxscore=1011 mlxscore=0
- impostorscore=0 mlxlogscore=932 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2402230070
+References: <20240220081205.135063-1-raychi@google.com> <2024022024-trout-kennel-6d14@gregkh>
+ <4d62d4d0-3f28-486b-8132-4cc571b6f721@quicinc.com> <CAPBYUsD=3ux8RXgRcroVsmpqNs0D+2NeLhqPHh3TBB_oq=ziXA@mail.gmail.com>
+ <2024022033-broom-anime-6dd5@gregkh>
+In-Reply-To: <2024022033-broom-anime-6dd5@gregkh>
+From: Ray Chi <raychi@google.com>
+Date: Fri, 23 Feb 2024 18:36:04 +0800
+Message-ID: <CAPBYUsAapQin9ioDggDk_ZE2dGxBRFwSUcf8JGt4eRqrYd9m6w@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: gadget: remove warning during kernel boot
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>, Thinh.Nguyen@synopsys.com, 
+	quic_uaggarwa@quicinc.com, albertccwang@google.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-USB driver defines macro @USB_CTRL_SET_TIMEOUT for sending control message
-and @USB_CTRL_GET_TIMEOUT for receiving, but sierra_get_swoc_info() wrongly
-uses @USB_CTRL_SET_TIMEOUT as argument of usb_control_msg() to receive
-control message, fixed by using @USB_CTRL_GET_TIMEOUT to receive message.
+On Tue, Feb 20, 2024 at 9:56=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Tue, Feb 20, 2024 at 05:42:56PM +0800, Ray Chi wrote:
+> > Hi Krishna,
+> >
+> > I verified the Thinh's patch and the warning could be
+> > fixed. Thanks for the information.
+>
+> Can you provide a tested-by for that one?
 
-Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
----
- drivers/usb/storage/sierra_ms.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Since the solution has been merged, do I still need to provide tested-by?
+If tested-by is required, should I reply to the email thread for the
+merged patch or the reported patch?
 
-diff --git a/drivers/usb/storage/sierra_ms.c b/drivers/usb/storage/sierra_ms.c
-index 177fa6cd143a..8b5a88ea4803 100644
---- a/drivers/usb/storage/sierra_ms.c
-+++ b/drivers/usb/storage/sierra_ms.c
-@@ -75,7 +75,7 @@ static int sierra_get_swoc_info(struct usb_device *udev,
- 			0,				/* __u16 index       */
- 			(void *) swocInfo,		/* void *data        */
- 			sizeof(struct swoc_info),	/* __u16 size 	     */
--			USB_CTRL_SET_TIMEOUT);		/* int timeout 	     */
-+			USB_CTRL_GET_TIMEOUT);		/* int timeout	     */
- 
- 	swocInfo->LinuxSKU = le16_to_cpu(swocInfo->LinuxSKU);
- 	swocInfo->LinuxVer = le16_to_cpu(swocInfo->LinuxVer);
--- 
-2.7.4
+> And please do not top post :(
 
+Thanks for the tips and your patience.
+
+Regards,
+Ray
 
