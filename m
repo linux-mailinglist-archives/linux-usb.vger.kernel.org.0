@@ -1,110 +1,72 @@
-Return-Path: <linux-usb+bounces-6951-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6952-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BEF3860F7E
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 11:36:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8040D86106C
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 12:32:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84CF6B25D8B
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 10:36:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FF3B1F23072
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 11:32:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A693463111;
-	Fri, 23 Feb 2024 10:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D49B277A05;
+	Fri, 23 Feb 2024 11:32:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fQNsh2OK"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="d+Yjx3Yk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41823EA6C
-	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 10:36:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5176F5C617
+	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 11:32:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708684605; cv=none; b=H8JvfTh17SIPAgLdDCwt8hBDSKMBbsceaaCXWJUxGGOwqgEJ0aPZ2VoCOG5URMbuQeY/hYErDbohIvUvE15t5xjcYN8uf67ZrAuarcjWmjZ5GzdnbtN0lopUS49gZIVrZsGW1FRnbkSsp5cl+INyuZtFplw73PjEzUfLHue6r5Q=
+	t=1708687950; cv=none; b=dvGw+gX7XihyV7C7r4AxnvhdBuFiShBrKFfzpjU/gh+qffAXmRkhl834U+v58P3FD1uM1LgX9/34qnAgv8EvLNvw61jYk14IGBYv4l2xjVwWlg8untyJL454MOx0wvvASAUftkKys88P0GzF4uiON9oC1Kr7Lfi/equW+1a4Tk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708684605; c=relaxed/simple;
-	bh=oGa9d8hXuiijz2WQcWWqfhlvaB3jirIqqRv0WuyyLd8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Cg2Y11WXy3zVfbEikqiXab/9cO1Rv6K4XbRCh0mt4tWLdYd9ZLBgf4KJG3Xt1d9R1GZM+tYqSzNrafMTvLFtkHGbfOVN1yBlzRu/V7ishVLCj4LRqREdNR2cu+IVSfjAC/Vi7GC1WlYDrLumZaZEQCtwJudI9S9jBlWAhAOyMwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fQNsh2OK; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-55a5e7fa471so800110a12.1
-        for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 02:36:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708684602; x=1709289402; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oGa9d8hXuiijz2WQcWWqfhlvaB3jirIqqRv0WuyyLd8=;
-        b=fQNsh2OKUBgnb5FP0MIFgb3d/zuraki6pSWU1EC+QQzscEskxBX3+AG1e1a1QPvd0B
-         hr/r6dLshp+BvzTAYA2Zau6LG+yrD8YznsM50ToHcnWOfQcNaY9/0pQ+1sOsQ9hIPIb3
-         cI5ElA0W+w2DcgFUWmUZCfLsut0jK5w/aP4hZReuZfHZxjdoA6SheufDCCIZed/IBOW7
-         hNoFAXmZeNUx3BBXomv2gsuXv/zaL0sbxRvAKc31q97AlDRCy7ZA0tMDcHoAxCB6t3HZ
-         4cJKO8Huez7q3DtnQADWBGxNp4krR7xcO7/qs4/Vl2/mvjr9hUj4qmz6g3yZ4dGESN0b
-         1trw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708684602; x=1709289402;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oGa9d8hXuiijz2WQcWWqfhlvaB3jirIqqRv0WuyyLd8=;
-        b=e10DwiwijQgYYkc8wbXtZHUeiXlNtjR7H5Oa0+cV/3wPFqNt6pRIMg8mnI7rAJ1tEZ
-         EPmEqUx8Hl/Uo5y2URz1Dbv467w1nso9zgzvsEScedeRIHcgV/tgS1H4NfPnFzMe6Exm
-         ku/sKRIoG0nfYIQvWaSrMx2kVCSHQf6xBY+iiUA8t6Z5XuAQRYdyGyeA37Li+KePezbN
-         WoZuvJQw/9lUTxQkbVtU/y5vpUNbYlrKNnhPsgMmjfMnARs4f0uIm1X4PeJG/q5AUSyE
-         lIncsc9Bh9SLhd6wjHlEeYWEoRLALaBuU6JB0kUG6DlnmM5eDVK7g9t+AfdKqJxUQyno
-         E8Pw==
-X-Forwarded-Encrypted: i=1; AJvYcCVIotR+xnAi0y3Rf53SAy2VU9AQPSLKBKRtcKMZ2KAbBpkotQqpmKJHDjpFaxhcmSWMUydkXyKlJSZIa5rF0GFywJkxW9yJ4Pud
-X-Gm-Message-State: AOJu0YyPZnj4T5dpJUx8UYoMxGlNaWfsd6Q9D1y+1LvXP/TKWr7ZSx6g
-	5cy/WS5rg+rLAPCff2T4k/+DtQCq+IFOWfqiqQzCcY9u/vPPD6zguZmhG98ZHD8VCGf8ZwowuTw
-	y8Bi+/Kk8hLqiG8dgEqHoLJc6p9QZKac+cbq6
-X-Google-Smtp-Source: AGHT+IHUav3spNKZz8TuROOuLqr44AG4XeF8yBOYDiOk8XKBPI8yc/QGOy9I7fCdiFaLDT3fTvD/WiTk7Gr2b1xnDxE=
-X-Received: by 2002:aa7:d50a:0:b0:565:6424:6ad1 with SMTP id
- y10-20020aa7d50a000000b0056564246ad1mr843919edq.14.1708684601764; Fri, 23 Feb
- 2024 02:36:41 -0800 (PST)
+	s=arc-20240116; t=1708687950; c=relaxed/simple;
+	bh=R0JLvxd88xCvuUm/IDFR4YEKRawn2JNsIrx0cGr7Nf0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=onkh+N5KQQw+GCebXnpFvxe38go94I6ABb6+9zEA0ADB5DJMftlVhLbaLD/dEfDid2CdHD59/wW89YofZw37WuBYSK0giq4pqWjMcmGNQsB32vN565evcqCZSgQikKs2U/mRtqeZZQU16fFvdhbr7CH6f7LqZJKTG0KCMmYXJfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=d+Yjx3Yk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98239C433C7;
+	Fri, 23 Feb 2024 11:32:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1708687950;
+	bh=R0JLvxd88xCvuUm/IDFR4YEKRawn2JNsIrx0cGr7Nf0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=d+Yjx3YkT7TNfMF/QztAJuefG+NtgyhjoI8svff0SyXptXab2dPnsD47EOgT5EvhM
+	 3BbSBudFCBaXUjZBWwXYzVkICnbbiAUD0B2Q6qRv0Bl92GePeCxfUPgapgu6E8oIlA
+	 RpIeut4VgvmXezKoeZWCgJhcZ+d+0cLVZKSmRySc=
+Date: Fri, 23 Feb 2024 12:32:27 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Zijun Hu <quic_zijuhu@quicinc.com>
+Cc: stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net
+Subject: Re: [PATCH] Bluetooth: btusb: Use right timeout macro to receive
+ control message
+Message-ID: <2024022318-tradition-pauper-798f@gregkh>
+References: <1708682416-8664-1-git-send-email-quic_zijuhu@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240220081205.135063-1-raychi@google.com> <2024022024-trout-kennel-6d14@gregkh>
- <4d62d4d0-3f28-486b-8132-4cc571b6f721@quicinc.com> <CAPBYUsD=3ux8RXgRcroVsmpqNs0D+2NeLhqPHh3TBB_oq=ziXA@mail.gmail.com>
- <2024022033-broom-anime-6dd5@gregkh>
-In-Reply-To: <2024022033-broom-anime-6dd5@gregkh>
-From: Ray Chi <raychi@google.com>
-Date: Fri, 23 Feb 2024 18:36:04 +0800
-Message-ID: <CAPBYUsAapQin9ioDggDk_ZE2dGxBRFwSUcf8JGt4eRqrYd9m6w@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: remove warning during kernel boot
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>, Thinh.Nguyen@synopsys.com, 
-	quic_uaggarwa@quicinc.com, albertccwang@google.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1708682416-8664-1-git-send-email-quic_zijuhu@quicinc.com>
 
-On Tue, Feb 20, 2024 at 9:56=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Tue, Feb 20, 2024 at 05:42:56PM +0800, Ray Chi wrote:
-> > Hi Krishna,
-> >
-> > I verified the Thinh's patch and the warning could be
-> > fixed. Thanks for the information.
->
-> Can you provide a tested-by for that one?
+On Fri, Feb 23, 2024 at 06:00:16PM +0800, Zijun Hu wrote:
+> USB driver defines macro @USB_CTRL_SET_TIMEOUT for sending control message
+> and @USB_CTRL_GET_TIMEOUT for receiving, but sierra_get_swoc_info() wrongly
+> uses @USB_CTRL_SET_TIMEOUT as argument of usb_control_msg() to receive
+> control message, fixed by using @USB_CTRL_GET_TIMEOUT to receive message.
+> 
+> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+> ---
+>  drivers/usb/storage/sierra_ms.c | 2 +-
 
-Since the solution has been merged, do I still need to provide tested-by?
-If tested-by is required, should I reply to the email thread for the
-merged patch or the reported patch?
+Your subject line is odd :(
 
-> And please do not top post :(
-
-Thanks for the tips and your patience.
-
-Regards,
-Ray
 
