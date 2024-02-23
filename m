@@ -1,69 +1,69 @@
-Return-Path: <linux-usb+bounces-6926-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6927-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31ED78607E5
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 01:58:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D943E8607EA
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 01:59:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 832C01F2343F
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 00:58:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41DF2B22E8D
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 00:59:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F87B65D;
-	Fri, 23 Feb 2024 00:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3D69BE4B;
+	Fri, 23 Feb 2024 00:58:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="CAFwyX3f"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YQP7kBy5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7B0947A
-	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 00:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52A1B645
+	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 00:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708649910; cv=none; b=Wn5nD5DQ0hvanGWgtz1QabGRE6mSBlIPIlto6R7U4dEY9w+mcUYff8T7ya7YI07vsuhcZPw4U+1s9H4Iz006H4cpPUmfcB/ppMMVFe3gMTGPw7HfSCeoS60AMMedAPPYVx+O2LuKpYuW8hsXDyQFi2u8aJfZEbil0vuff4R9cy4=
+	t=1708649911; cv=none; b=fyqoZGAatpTFsWYo9XKoYYFZJDvGw02WcrPw01HVCJHPOrFbKZaj1tLX41UjzP0GLMuHFcyR1p+fG2D3Z+6CbD4IPjUhh1CoJ1guyD2Cel8Na/QXWCi0/pmUOns4Y/cFRJsxhKclBSAyUouRfiimi9SlsXHPk5CDiD2yLPwOTwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708649910; c=relaxed/simple;
-	bh=O1sCSpMrQuVP4Z+oTQDMovl4p0LxmLa8st/+UmNeCw0=;
+	s=arc-20240116; t=1708649911; c=relaxed/simple;
+	bh=v27iEZktilH2OnIdu1MjAvZd2ZBk3RvhRJ0/3icnfgs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LBDKnSFL9e1MYdg52KNbf+QCgfk1Re9Ctt0GWi/1HXpQTrLMfRKF2em3SHRaGeIs4hoYyiLU0UOanveW1WD1SscrDChJ/ptWWIPxStXExkUsma4LQj6VWgl5G7GWHkC4DU9S3KLfLFoUbzDNB28Vi42rb6t2g0GJHt3PZk8wfCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=CAFwyX3f; arc=none smtp.client-ip=209.85.219.181
+	 MIME-Version; b=CH1ZVhBhlEfWVKKlBW+UYD3j2NI4oylFS/RtWsDa4XO1A0/xZFuvf5sSZ3WMu83ooNlKWhsrqbhfnJW5ml7j/ftgcNG/4W7ZEPw+9mn1u2Tvm0ekBk2nLImEylB1PZiR0LLpN46HOxCRJCb/GcM8Oy6oyNDV4VWW5fA1gg1XN1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YQP7kBy5; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dc6d9a8815fso325359276.3
-        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 16:58:28 -0800 (PST)
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-295c8b795e2so337433a91.0
+        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 16:58:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708649907; x=1709254707; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1708649909; x=1709254709; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zUukn0iRYfq5PWEhEP7nadIeFb7HXOkHlZH9C2/kzss=;
-        b=CAFwyX3fxgveUxR6RRagHZ0b5uYjW3EJcZI7PhECpmON6zPyrEAVevDtujCj/Skgig
-         03ocYUmFJfQTcEnYMryirpfeHbgy4xOFT9nDbnejihvG5tqyiOvLcs4MtwHshsGDGxVd
-         Cm/UO3BoivmdSODWec8kjMKY5G2z9zgivCEVY=
+        bh=UFIGIcteJ9nUdBATIDe99Xci9kTl4VUk6xpdoWZYz+c=;
+        b=YQP7kBy5Xy3MOEWlVIcw/TuOWvCiTYhxMIIqKjBK770Lm1+Bik8jBQL77HFVwQzGgN
+         cV4F/HZg+qPmiftfWx4MQUEJYRF17FZpqhRTHFivQcOSLw07Xr4/GEbKDP/TI+J4DaQi
+         W5ggriQwi2juyi8Q+UMWoGVrIKTcuELuVaoRc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708649907; x=1709254707;
+        d=1e100.net; s=20230601; t=1708649909; x=1709254709;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zUukn0iRYfq5PWEhEP7nadIeFb7HXOkHlZH9C2/kzss=;
-        b=Nh7ME+BkQHkSSrCIFXEg5OGB/+xkay+4tVL4usxxmgQdjRfosPSRnWj+gqq4v/gLpr
-         DnwLXM/aUbneDD+1j9VL50Y1ezKrKeiMc6rOQSdkZ9mrCxdJsLEUzg+3vixzIAgovIaR
-         N3TW4P/c01Dbq+U0DXfd8MI/X1/5niQFdCotl+lhCS60qGykjkTasA/UPB9gpME0zDFK
-         H6rgn99NDf0Ic3oxIfMF8EnnNBVvkW/JfF2Z8rccz04IgssJebWOf9PKRVR4JCMN73PO
-         ZCbn46kLGF9dRYt0digLAgIXDovm+6rVcrlBkN6elUbItlpzWv5gk+5UcmNP0e3nLAnp
-         BS/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVoYiYjbLKbcIP5SN2q03x1ytYJ4r3+CE9eMVjB0Yy2hkLpCNJf45ztXlBj1KJ9K0Ct4iVDzQCDT/+L0HHjXSBvbNhDT4Ljb6JH
-X-Gm-Message-State: AOJu0YzgYL27uXYxhlcsYSC9OBKBOm5ilkdeC2el2qNEydfw56/nqakz
-	WIXQKbNHfkSiTK+VrAzmmYM1lATp2ErPLSzhUbCg8eDAU+rZ/Fl2PfcyoTza0g==
-X-Google-Smtp-Source: AGHT+IG7cIldAux1KCpcOyUTRGVAfY4OuwFGQoFyysr4Ky17iN4jW+0w6szCAWKEExF3w960f89FHg==
-X-Received: by 2002:a25:c244:0:b0:dc6:a8c6:c9e5 with SMTP id s65-20020a25c244000000b00dc6a8c6c9e5mr877740ybf.26.1708649907539;
-        Thu, 22 Feb 2024 16:58:27 -0800 (PST)
+        bh=UFIGIcteJ9nUdBATIDe99Xci9kTl4VUk6xpdoWZYz+c=;
+        b=CMZpwh5o++XjnKHa6EmgFeMcrbqQl3lEnOmX+l3oc4PeDPE9aJBQDLI1Vzojcrn7wa
+         PS+goIl8GYDbu3pg30HEPNtQPB2SkX59UkfZ78S6Rwa0MZwiHzkv8k72gKHbA2bg0H36
+         giskmh2c3CClr8L5e1wpyMYNFZhWWvhT2ZFt5UopoFc5dCXCg4jEAiGju7QOqd7m49MH
+         4+xQz4YKMMte40K770oL4OjDXwzac3C3CXZ6tdvKwUhFP4rzpE21RIaYWj66CKJvPs1R
+         YmcgewngAxz2IVY+t5lYQ8DYhJbX95peHzDvQWtFKi6digvC1shx3PafMCK/PAs5rHPt
+         8q8w==
+X-Forwarded-Encrypted: i=1; AJvYcCV97zAZNxUQJ1o6lJWqmNikHjWiFjm1q9BiTdrH807mhanLG9pDe9e+NF7+uiEtv/znWdZHtnjZo06qGFacimPo3fIgH1PbQYTD
+X-Gm-Message-State: AOJu0YzOf4ON/R4p9ssP7SfT/LdPJbQsHQRIb8PCAZVzSKYe/oxJD0aR
+	clyFYnJOxBqBEtur3KQlqqi9Dr/sv+l7REsr+0kqCYzp97JLFXg4vbxifTt/4A==
+X-Google-Smtp-Source: AGHT+IEBSCPkUmGUKRjkDv90CVcgR82fYuR4QpNUMg52O6n0E9LSt3G7aVY3l3oPEr/4l3QpXW0TZw==
+X-Received: by 2002:a17:90a:5ae2:b0:299:4397:621c with SMTP id n89-20020a17090a5ae200b002994397621cmr440115pji.43.1708649909121;
+        Thu, 22 Feb 2024 16:58:29 -0800 (PST)
 Received: from localhost (175.199.125.34.bc.googleusercontent.com. [34.125.199.175])
-        by smtp.gmail.com with UTF8SMTPSA id p14-20020a056a0026ce00b006e4887b13ffsm4820031pfw.1.2024.02.22.16.58.26
+        by smtp.gmail.com with UTF8SMTPSA id m21-20020a17090ab79500b00298e11b600dsm116430pjr.27.2024.02.22.16.58.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 16:58:27 -0800 (PST)
+        Thu, 22 Feb 2024 16:58:28 -0800 (PST)
 From: Stephen Boyd <swboyd@chromium.org>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Rob Herring <robh@kernel.org>
@@ -76,15 +76,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Alan Stern <stern@rowland.harvard.edu>,
 	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Roy Luo <royluo@google.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
 	Matthias Kaehlcke <mka@chromium.org>,
 	linux-usb@vger.kernel.org,
 	maciek swiech <drmasquatch@google.com>
-Subject: [PATCH v2 1/2] dt-bindings: usb: Add downstream facing ports to realtek binding
-Date: Thu, 22 Feb 2024 16:58:20 -0800
-Message-ID: <20240223005823.3074029-2-swboyd@chromium.org>
+Subject: [PATCH v2 2/2] usb: core: Set connect_type of ports based on DT node
+Date: Thu, 22 Feb 2024 16:58:21 -0800
+Message-ID: <20240223005823.3074029-3-swboyd@chromium.org>
 X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
 In-Reply-To: <20240223005823.3074029-1-swboyd@chromium.org>
 References: <20240223005823.3074029-1-swboyd@chromium.org>
@@ -96,15 +93,31 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a graph with 4 output endpoints to this hub binding to support the
-scenario where a downstream facing port is connected to a device that
-isn't a connector or a USB device with a VID:PID. This will be used to
-connect downstream facing ports to USB type-c switches so the USB
-superspeed and high speed lanes can be put onto USB connectors.
+When a USB hub is described in DT, such as any device that matches the
+onboard-hub driver, the connect_type is set to "unknown" or
+USB_PORT_CONNECT_TYPE_UNKNOWN. This makes any device plugged into that
+USB port report their 'removable' device attribute as "unknown".
+ChromeOS userspace would like to know if the USB device is actually
+removable or not so that security policies can be applied. Improve the
+connect_type attribute for ports, and in turn the removable attribute
+for USB devices, by looking for child devices with a reg property or an
+OF graph when the device is described in DT.
 
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Conor Dooley <conor+dt@kernel.org>
+If the graph exists, endpoints that are connected to a remote node must
+be something like a usb-{a,b,c}-connector compatible node, or an
+intermediate node like a redriver, and not a hardwired USB device on the
+board. Set the connect_type to USB_PORT_CONNECT_TYPE_HOT_PLUG in this
+case because the device is going to be plugged in. Set the connect_type
+to USB_PORT_CONNECT_TYPE_HARD_WIRED if there's a child node for the port
+like 'device@2' for port2. Set the connect_type to USB_PORT_NOT_USED if
+there isn't an endpoint or child node corresponding to the port number.
+
+To make sure things don't change, only set the port to not used if
+there are child nodes. This way an onboard hub connect_type doesn't
+change until ports are added or child nodes are added to describe
+hardwired devices. It's assumed that all ports or no ports will be
+described for a device.
+
 Cc: Matthias Kaehlcke <mka@chromium.org>
 Cc: <linux-usb@vger.kernel.org>
 Cc: <devicetree@vger.kernel.org>
@@ -112,95 +125,152 @@ Cc: Pin-yen Lin <treapking@chromium.org>
 Cc: maciek swiech <drmasquatch@google.com>
 Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 ---
- .../bindings/usb/realtek,rts5411.yaml         | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ drivers/usb/core/of.c   | 71 +++++++++++++++++++++++++++++++++++++++++
+ drivers/usb/core/port.c |  2 ++
+ include/linux/usb/of.h  |  7 ++++
+ 3 files changed, 80 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml b/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
-index f0784d2e86da..0874fc21f66f 100644
---- a/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
-+++ b/Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
-@@ -21,6 +21,12 @@ properties:
+diff --git a/drivers/usb/core/of.c b/drivers/usb/core/of.c
+index db4ccf9ce3d9..f1a499ee482c 100644
+--- a/drivers/usb/core/of.c
++++ b/drivers/usb/core/of.c
+@@ -8,6 +8,7 @@
+  */
  
-   reg: true
+ #include <linux/of.h>
++#include <linux/of_graph.h>
+ #include <linux/usb/of.h>
  
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-   vdd-supply:
-     description:
-       phandle to the regulator that provides power to the hub.
-@@ -30,6 +36,36 @@ properties:
-     description:
-       phandle to the peer hub on the controller.
+ /**
+@@ -75,6 +76,76 @@ bool usb_of_has_combined_node(struct usb_device *udev)
+ }
+ EXPORT_SYMBOL_GPL(usb_of_has_combined_node);
  
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
++static bool usb_of_has_devices_or_graph(const struct usb_device *hub)
++{
++	const struct device_node *np = hub->dev.of_node;
++	struct device_node *child;
 +
-+    properties:
-+      port@1:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description:
-+          1st downstream facing USB port
++	if (of_graph_is_present(np))
++		return true;
 +
-+      port@2:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description:
-+          2nd downstream facing USB port
++	for_each_child_of_node(np, child)
++		if (of_property_present(child, "reg"))
++			return true;
 +
-+      port@3:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description:
-+          3rd downstream facing USB port
++	return false;
++}
 +
-+      port@4:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description:
-+          4th downstream facing USB port
++/**
++ * usb_of_get_connect_type() - get a USB hub's port connect_type
++ * @hub: hub to which port is for @port1
++ * @port1: one-based index of port
++ *
++ * Get the connect_type of @port1 based on the device node for @hub. If the
++ * port is described in the OF graph, the connect_type is "hotplug". If the
++ * @hub has a child device has with a 'reg' property equal to @port1 the
++ * connect_type is "hard-wired". If there isn't an OF graph or child node at
++ * all then the connect_type is "unknown". Otherwise, the port is considered
++ * "unused" because it isn't described at all.
++ *
++ * Return: A connect_type for @port1 based on the device node for @hub.
++ */
++enum usb_port_connect_type usb_of_get_connect_type(struct usb_device *hub, int port1)
++{
++	struct device_node *np, *child, *ep, *remote_np;
++	enum usb_port_connect_type connect_type;
 +
-+patternProperties:
-+  '^.*@[1-4]$':
-+    description: The hard wired USB devices
-+    type: object
-+    $ref: /schemas/usb/usb-device.yaml
++	/* Only set connect_type if binding has ports/hardwired devices. */
++	if (!usb_of_has_devices_or_graph(hub))
++		return USB_PORT_CONNECT_TYPE_UNKNOWN;
 +
- required:
-   - peer-hub
-   - compatible
-@@ -50,6 +86,13 @@ examples:
-             reg = <1>;
-             vdd-supply = <&pp3300_hub>;
-             peer-hub = <&hub_3_0>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            /* USB 2.0 device on port 2 */
-+            device@2 {
-+                compatible = "usb123,4567";
-+                reg = <2>;
-+            };
-         };
++	/* Assume port is unused if there's a graph or a child node. */
++	connect_type = USB_PORT_NOT_USED;
++
++	np = hub->dev.of_node;
++	/*
++	 * Hotplug ports are connected to an available remote node, e.g.
++	 * usb-a-connector compatible node, in the OF graph.
++	 */
++	if (of_graph_is_present(np)) {
++		ep = of_graph_get_endpoint_by_regs(np, port1, -1);
++		if (ep) {
++			remote_np = of_graph_get_remote_port_parent(ep);
++			of_node_put(ep);
++			if (of_device_is_available(remote_np))
++				connect_type = USB_PORT_CONNECT_TYPE_HOT_PLUG;
++			of_node_put(remote_np);
++		}
++	}
++
++	/*
++	 * Hard-wired ports are child nodes with a reg property corresponding
++	 * to the port number, i.e. a usb device.
++	 */
++	child = usb_of_get_device_node(hub, port1);
++	if (of_device_is_available(child))
++		connect_type = USB_PORT_CONNECT_TYPE_HARD_WIRED;
++	of_node_put(child);
++
++	return connect_type;
++}
++EXPORT_SYMBOL_GPL(usb_of_get_connect_type);
++
+ /**
+  * usb_of_get_interface_node() - get a USB interface node
+  * @udev: USB device of interface
+diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+index c628c1abc907..da910d3e40f6 100644
+--- a/drivers/usb/core/port.c
++++ b/drivers/usb/core/port.c
+@@ -11,6 +11,7 @@
+ #include <linux/slab.h>
+ #include <linux/pm_qos.h>
+ #include <linux/component.h>
++#include <linux/usb/of.h>
  
-         /* 3.0 hub on port 2 */
-@@ -58,5 +101,17 @@ examples:
-             reg = <2>;
-             vdd-supply = <&pp3300_hub>;
-             peer-hub = <&hub_2_0>;
-+
-+            ports {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                /* Type-A connector on port 4 */
-+                port@4 {
-+                    reg = <4>;
-+                    endpoint {
-+                      remote-endpoint = <&usb_a0_ss>;
-+                    };
-+                };
-+            };
-         };
-     };
+ #include "hub.h"
+ 
+@@ -708,6 +709,7 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
+ 		return -ENOMEM;
+ 	}
+ 
++	port_dev->connect_type = usb_of_get_connect_type(hdev, port1);
+ 	hub->ports[port1 - 1] = port_dev;
+ 	port_dev->portnum = port1;
+ 	set_bit(port1, hub->power_bits);
+diff --git a/include/linux/usb/of.h b/include/linux/usb/of.h
+index 98487fd7ab11..de42f14bd280 100644
+--- a/include/linux/usb/of.h
++++ b/include/linux/usb/of.h
+@@ -6,6 +6,7 @@
+ #ifndef __LINUX_USB_OF_H
+ #define __LINUX_USB_OF_H
+ 
++#include <linux/usb.h>
+ #include <linux/usb/ch9.h>
+ #include <linux/usb/otg.h>
+ #include <linux/usb/phy.h>
+@@ -17,6 +18,7 @@ enum usb_dr_mode of_usb_get_dr_mode_by_phy(struct device_node *np, int arg0);
+ bool of_usb_host_tpl_support(struct device_node *np);
+ int of_usb_update_otg_caps(struct device_node *np,
+ 			struct usb_otg_caps *otg_caps);
++enum usb_port_connect_type usb_of_get_connect_type(struct usb_device *hub, int port1);
+ struct device_node *usb_of_get_device_node(struct usb_device *hub, int port1);
+ bool usb_of_has_combined_node(struct usb_device *udev);
+ struct device_node *usb_of_get_interface_node(struct usb_device *udev,
+@@ -37,6 +39,11 @@ static inline int of_usb_update_otg_caps(struct device_node *np,
+ {
+ 	return 0;
+ }
++static inline enum usb_port_connect_type
++usb_of_get_connect_type(const struct usb_device *hub, int port1)
++{
++	return USB_PORT_CONNECT_TYPE_UNKNOWN;
++}
+ static inline struct device_node *
+ usb_of_get_device_node(struct usb_device *hub, int port1)
+ {
 -- 
 https://chromeos.dev
 
