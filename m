@@ -1,113 +1,151 @@
-Return-Path: <linux-usb+bounces-6956-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6958-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8192F861287
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 14:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A7BEF86137A
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 15:03:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 825771C21BB1
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 13:18:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D90FC1C217FD
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 14:03:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FA727FBA5;
-	Fri, 23 Feb 2024 13:17:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 707848002E;
+	Fri, 23 Feb 2024 14:02:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZLn+NWth"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fLi4DYFc"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58867E779;
-	Fri, 23 Feb 2024 13:17:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B0E5DF00;
+	Fri, 23 Feb 2024 14:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708694272; cv=none; b=poXCQe6aOhykG615sTp9LYhwsY/Cs4q4g0g38lmOOWt1X0G0jCKSP6pzzJcANdiAGSdjY4LqFrMK04tCiS4PtxK9EzxMD5GyCcBJ9PkNgd56REWJaqEJectIXZSSEy685Aid0L9EiBU4wZbAy6sTZ4MRITWpNQrOinn69uh1nd4=
+	t=1708696979; cv=none; b=uHV+lKd+SxPBps2Sb4+D9xZTkyX4h4lqW3lMXz/6DDXdsZIlbV3wTOfiKzbdawlqxfcaP6MBYkwsGtwqn3bK7cl0BveYRX+YRk69kdBYQpCgKdvd/bGUnhXLJa6tKMwmJKhZGn3AurtKMobMMWFeGnSHyXJ0toHerkOt4LEMc+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708694272; c=relaxed/simple;
-	bh=Dah7nKbNvgz0/8dvPVQyf9mzODhi8A9Za+//Q+h+nOo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=A+/1XwdRHW4/rSK/TPcl35eCza6wdIQPC+QI8eoNcsMiUOcPZPhJmc+uaN1fnRzLY718BqK6FzrWYcYjzoQ/ZhPoL4kp6sZhUqdPOmJnid8JXNZoRJavBoAIDp9961DfdLqKL7oW7XRfIjH9VC+DntmN9mCYmkSYSY7b/FNo8KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZLn+NWth; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6ACAC433C7;
-	Fri, 23 Feb 2024 13:17:48 +0000 (UTC)
+	s=arc-20240116; t=1708696979; c=relaxed/simple;
+	bh=KudqgcL6FXV7PnIRApxE0DX6lKwquS27CBUuH61ACuY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dZCNZ6zzWK87jfPUTFKPFmAIMsyoAiyrNgGnCdJAh12molDEJvVvVi0IcTeuoUo9w9OkoigG/mu85/8pG8irRsdj7E7XIw657e406Yn37pkhfaJdo86EpCxRSyTV6Ui22XsU0uNuKtLpyVNVmH/X2TMjelQ6LT3z44jeUtbVWwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fLi4DYFc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BDDC43390;
+	Fri, 23 Feb 2024 14:02:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708694272;
-	bh=Dah7nKbNvgz0/8dvPVQyf9mzODhi8A9Za+//Q+h+nOo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZLn+NWthQGZDjuQdLhDm9cq4Z+NCyABBvxxLqqJvYpMnsAcNi7UZ/YrudXsXlJPJR
-	 I7vVywWsWW57tgfWCgvWV77uy4Q77QFxCUPg4uvEld21dfq0WwWnm4lhrXn1eExFO8
-	 RvOkAm9AU+voMEa4+V2yo4Hqtaq5Nkax1ah/vsy0VrbBphdcjh4mfJamTi6pX/FEuH
-	 uX8bjiTH7weTUkKEbYnoeURf50E7qrqMICYoLdPAKz9O0bJNjVG8aesiOB0fNk9Qji
-	 5ZJIwE4jJABFElU2Xk6PbcCFg6lpFOREGu2axf11wROsAi7FVqW1SyP4xkcpqBv4+g
-	 o8Z3uA2T03RsA==
-Message-ID: <48e63867-616e-4a37-ab17-a6977c600ec1@kernel.org>
-Date: Fri, 23 Feb 2024 15:17:46 +0200
+	s=k20201202; t=1708696978;
+	bh=KudqgcL6FXV7PnIRApxE0DX6lKwquS27CBUuH61ACuY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fLi4DYFcXeqOjYNV4Q5Y0zzkCxXVhiAEIcopANPUixE0A00H3p4zQaXilBTNRWWAz
+	 8WdpvA726hFRxVFaBV7VooO96ZCe8lQoO75INuRxATCb3qw09fQypMk1wtHPRPiUNH
+	 3D/UnzbO/QSRQ5VsUuoN81I5eI7gAvPnmR2ts3yqN7JMAi1wvt3FB4W8WXCXGWh+kv
+	 ILMB/mrEGzFtkwk/wyGov8x8/C4FR/kPzV5yksDYCaViYHPuVhwq/+J/WdfTQaTthb
+	 LXW8WMDUAavJojYX2dwmpZAfKHfiWfnvIuRgNwpZQSxxJpBgmWl6f7XiUsBrz2eHnW
+	 OPI70JWN1c/NA==
+Date: Fri, 23 Feb 2024 07:02:56 -0700
+From: Rob Herring <robh@kernel.org>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
+	shawnguo@kernel.org, conor+dt@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+	peter.chen@kernel.org, jun.li@nxp.com, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 4/9] dt-bindings: usb: add NXP ChipIdea USB2
+ Controller schema
+Message-ID: <20240223140256.GA1768266-robh@kernel.org>
+References: <20240221145846.1611627-1-xu.yang_2@nxp.com>
+ <20240221145846.1611627-4-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/5] usb: dwc3-am62: module removal and errata fixes
-Content-Language: en-US
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: nm@ti.com, r-gunasekaran@ti.com, afd@ti.com, b-liu@ti.com, srk@ti.com,
- francesco@dolcini.it, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20240214-for-v6-9-am62-usb-errata-3-0-v3-0-147ec5eae18c@kernel.org>
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20240214-for-v6-9-am62-usb-errata-3-0-v3-0-147ec5eae18c@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240221145846.1611627-4-xu.yang_2@nxp.com>
 
-Hi Thinh,
-
-On 14/02/2024 11:46, Roger Quadros wrote:
-> Hi,
+On Wed, Feb 21, 2024 at 10:58:41PM +0800, Xu Yang wrote:
+> As more and more NXP i.MX chips come out, it becomes harder to maintain
+> ci-hdrc-usb2.yaml if more stuffs like property restrictions are added to
+> this file. This will separate i.MX parts out of ci-hdrc-usb2.yaml and add
+> a new schema for NXP ChipIdea USB2 Controller.
 > 
-> This series fixes errors during module removal. It also
-> implements PHY core voltage selection as per TI recommendation
-> and workaround for Errata i2409 [1].
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 > 
-> The workaround needs PHY2 region to be present in device node.
-> The device tree patch will be sent later after the DT binding doc
-> is merged.
-> 
-> [1] - https://www.ti.com/lit/er/sprz487d/sprz487d.pdf
-> 
-> Changelog in each file
-> 
-> v2: https://lore.kernel.org/all/20240205141221.56076-1-rogerq@kernel.org/
-> v1: https://lore.kernel.org/all/20240201121220.5523-1-rogerq@kernel.org/
-> 
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
 > ---
-> Roger Quadros (5):
->       usb: dwc3-am62: call of_platform_depopulate in .remove()
->       usb: dwc3-am62: fix error on module removal
->       usb: dwc3-am62: Fix PHY core voltage selection
->       dt-bindings: usb/ti,am62-usb.yaml: Add PHY2 register space
->       usb: dwc3-am62: add workaround for Errata i2409
-
-Any feedback on this series? Thanks!
-
-> 
->  .../devicetree/bindings/usb/ti,am62-usb.yaml       |  8 +++-
->  drivers/usb/dwc3/dwc3-am62.c                       | 45 ++++++++++++++++------
->  2 files changed, 39 insertions(+), 14 deletions(-)
+> Changes in v6:
+>  - new patch
 > ---
-> base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
-> change-id: 20240206-for-v6-9-am62-usb-errata-3-0-233024ea8e9d
+>  .../bindings/usb/ci-hdrc-usb2-imx.yaml        | 75 +++++++++++++++++++
+>  1 file changed, 75 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.yaml
 > 
-> Best regards,
+> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.yaml
+> new file mode 100644
+> index 000000000000..2ec62f564bf5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.yaml
+> @@ -0,0 +1,75 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/ci-hdrc-usb2-imx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP USB2 ChipIdea USB controller
+> +
+> +maintainers:
+> +  - Xu Yang <xu.yang_2@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - fsl,imx27-usb
+> +      - items:
+> +          - enum:
+> +              - fsl,imx23-usb
+> +              - fsl,imx25-usb
+> +              - fsl,imx28-usb
+> +              - fsl,imx35-usb
+> +              - fsl,imx50-usb
+> +              - fsl,imx51-usb
+> +              - fsl,imx53-usb
+> +              - fsl,imx6q-usb
+> +              - fsl,imx6sl-usb
+> +              - fsl,imx6sx-usb
+> +              - fsl,imx6ul-usb
+> +              - fsl,imx7d-usb
+> +              - fsl,vf610-usb
+> +          - const: fsl,imx27-usb
+> +      - items:
+> +          - enum:
+> +              - fsl,imx8dxl-usb
+> +              - fsl,imx8ulp-usb
+> +          - const: fsl,imx7ulp-usb
+> +          - const: fsl,imx6ul-usb
+> +      - items:
+> +          - enum:
+> +              - fsl,imx8mm-usb
+> +              - fsl,imx8mn-usb
+> +          - const: fsl,imx7d-usb
+> +          - const: fsl,imx27-usb
+> +      - items:
+> +          - enum:
+> +              - fsl,imx6sll-usb
+> +              - fsl,imx7ulp-usb
+> +          - const: fsl,imx6ul-usb
+> +          - const: fsl,imx27-usb
 
--- 
-cheers,
--roger
+Now you just duplicated all the compatibles, and now any new compatibles 
+have to be added in 2 places. For this to work, you have to split 
+ci-hdrc-usb2.yaml into 2 files. One with all the common properties and 
+one with compatibles (minus imx). This is also needed if imx has any 
+extra properties the other don't.
+
+Didn't I say this already?
+
+Rob
+
 
