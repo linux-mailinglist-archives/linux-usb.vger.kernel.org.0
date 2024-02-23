@@ -1,133 +1,170 @@
-Return-Path: <linux-usb+bounces-6922-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6923-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 017F9860701
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 00:32:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B8E9860791
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 01:23:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E3DC1C22D4A
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Feb 2024 23:32:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A24AB230B1
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 00:23:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B71C8225A9;
-	Thu, 22 Feb 2024 23:32:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2FC63A;
+	Fri, 23 Feb 2024 00:23:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="leoZsO9J"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="By1EFvaH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70223224E0;
-	Thu, 22 Feb 2024 23:32:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B937A19B
+	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 00:22:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708644743; cv=none; b=NIVqJeAu18bleBMRkgFm8pSms47mri+3A/uFJQujz0AezJ+TGCQq7gX8mZ4vdmrH6sBU+pZC/AWznigudk1uPKPfSStehdJc4yo3UYdyz62t84RtDlIuvWAVi5A+V8inOdh5ndKBm1TOtUmcpPYc6qgx527ryqG3P1kcT2s5v0A=
+	t=1708647780; cv=none; b=gfj6e9AFjwEgxM1t8+pu+7pivaM6c3PgOZRtVrT2/00SI5h8YezEH9ie1kWycOnG3/RUathWTDq5xPLTBOXu6s7oYPGjghibe/EymOVEegw33ytomomcpBKSVhegv0EhIImah/ENojCs5tB8dzeZeI4Ys+wuPBMZTWejudHhyPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708644743; c=relaxed/simple;
-	bh=CO0bRk7BiXCkxxzdXJ2RPi/v5jTeOrDQR52gxk/ci0o=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pQqtIoxisIvtrytG1Eh2L/vV65xNuHKAj9oscU+ARbCf/+8BtW0m37wibwP08QkGtPVUMZCFmw8hT+jTX3Y8P13HL9FKtI+GyBOdDt2uJyvJfKxs8DmcotOb7Cu83h2Cn2Bntzd7gO4B8vlCgknKKHcJ7x88VopPFri0E50q3qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=leoZsO9J; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708644737; x=1740180737;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CO0bRk7BiXCkxxzdXJ2RPi/v5jTeOrDQR52gxk/ci0o=;
-  b=leoZsO9J4m9gR1x1a6ZE0U/wQZZCEJMxgg+7hHsOMbkF5XhsAcSLctdJ
-   NGBZNVKChbp8BhG/poUgNqPZGUi7VdYYcBoVTHE/cgGDFEmfCHiByO9RX
-   JNPhrBqj2HWFRdGLaFJVKHBkNFTr+fwx+/8arG18wFTTRtgZWb+aoguZQ
-   8iSROrhh9Qb0/YXdYQx/FfSblh/J9dn4kKxjEhGkIWRCaDAgBtlCiIxJF
-   iMBl4yygmvPMfLuVey8UqPMCKsRipNqKVglDAtpyLFpG5LZ+OBHOS1ZTY
-   EB4eimJ7Mic48JisI4X3Wi6LanYgNUNWyiVLeeIy/TVPUGyuRPH+qjlr1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="6692147"
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="6692147"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 15:32:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="936921441"
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="936921441"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Feb 2024 15:32:11 -0800
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	<stern@rowland.harvard.edu>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Paul Menzel <pmenzel@molgen.mpg.de>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] usb: port: Don't try to peer unused USB ports based on location
-Date: Fri, 23 Feb 2024 01:33:43 +0200
-Message-Id: <20240222233343.71856-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1708647780; c=relaxed/simple;
+	bh=/QbcREJdj8/HhgjcLw0luxn0IZH6b4nOIm623A+PQGk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=jsi3ZrIuxVms60aHnwVLHx7GRDj5wI9ShCM+F1T2Y+f5bqttDjoz4xH7CSeiLBj8oO7OWs/XNAvFdP8jXTOmUyQkLsIXhjKz5l187iNcQB6KRpMDxEgH4nK+POjvy6gxgyDzlsZFtvC7DFJBxyxxnSnDFuDfRG9g0kD7hfdNR78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=By1EFvaH; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-5d8bff2b792so228003a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 22 Feb 2024 16:22:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708647778; x=1709252578; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aRCvuwH8rAugmkg3ZUi08lKYBtiQ+yXb5dektYqZbOw=;
+        b=By1EFvaHtBuXTRQvk1cKmFqSw8r0GB2crDQjLFmeZHkyJcfJds9ppBPPliYUZJxV3X
+         /v15h2H5EdnPxvWn7B8eopksAZmkIu77DAthZAOW4HMgbem2naNB+KU3Sm2EcrU+ufpV
+         R9dKWuJtU6hbrq/Ibcz6NAAmmSDYnD2Tc0QZ8gEY2lCo/ZY+pyzTUvYWSxOy0VGgoWpz
+         aexm0EpUgFVTVEi1Bf0YOL56wCBj0ph+/LTuQ3g0VJW+awNGIMoYwbWCc3+JchL9FXaq
+         3edbxubt8YUV2EpBk6NuIrpi/MC723rjshYoo5uav5A1/YwMu3HTjTHyhTiKD+ERhP7h
+         adig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708647778; x=1709252578;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aRCvuwH8rAugmkg3ZUi08lKYBtiQ+yXb5dektYqZbOw=;
+        b=qDloZjyNGBIB+DgGrGBIlQAlPDJmD5MvmCcJEn1sx4bjtJntoLjPvSlYoj3Ig2OP94
+         o+qyKTQPPbzn5x8Rf2lDtFId5mQarcENadkEDwtdU6w/ILjExBJuq4yZdRP0GJ1R3grs
+         q7lssbQ/PE6MwN+DZcvtjNOHKCUaRmy97YkgbZCKgrZwrvXqk0KgaX4/vhUSgD6JQdO3
+         B5jabn0zDB6e4e0pkBMdBQ0rfSx9LoYHhIq7mZtvz780dVb8MXrfzNhQ174JkgnBYamv
+         33h9eDVFrQkFIcQxFtVWEQjIo4jKqBOmxKmYCKAoqIC1Q7CR3kKETLNiXROtgDmSAlo1
+         0Nqw==
+X-Forwarded-Encrypted: i=1; AJvYcCVMLmZZi+Xvp9EshXBAqV1AITSmNPZi41I679FKFXDh+0iaehRN7mLYCPEwduYuS0BsPOOhJLI6HBFKfr2hhqgEY4m9euxn+ZYD
+X-Gm-Message-State: AOJu0Yx196Yi351AcpJ3XNsFY+i5kZDvLWCp5nHKC4upuILIGGFynu+s
+	1TJBMNGKcD5S68J7MzQwxG+KsTiCs7V62Rb2eQJeFmRSTY4c+a7miUjQZth15Str89pL4OTOBHG
+	OLCrAojPg5ogmbA==
+X-Google-Smtp-Source: AGHT+IGsazkBX2H0gNoyZav7hYZhinGJef7Vus84CALdlie8S7EhSkwwvOgy8BCs7QbrXU9n/Lu0usiu9lZdYNg=
+X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
+ (user=rdbabiera job=sendgmr) by 2002:a65:6d8b:0:b0:5da:44f5:8dfc with SMTP id
+ bc11-20020a656d8b000000b005da44f58dfcmr860pgb.11.1708647777906; Thu, 22 Feb
+ 2024 16:22:57 -0800 (PST)
+Date: Fri, 23 Feb 2024 00:22:34 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3340; i=rdbabiera@google.com;
+ h=from:subject; bh=/QbcREJdj8/HhgjcLw0luxn0IZH6b4nOIm623A+PQGk=;
+ b=owGbwMvMwCFW0bfok0KS4TbG02pJDKnXn3ruvRtqcNPbSjelKOlwveaHbS1Lyw7vnHeqbd23j
+ +zac20+dZSyMIhxMMiKKbLo+ucZ3LiSumUOZ40xzBxWJpAhDFycAjARtkqGf/ayRbut5woc8P4i
+ 4djyMqr7ewDb1NNNnB+uPbz15MQJcSWGv7L2B4t//E6MVNu+tPZXZ5R35oGcf77+T1V4752wSdV 35wEA
+X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
+Message-ID: <20240223002233.3936275-2-rdbabiera@google.com>
+Subject: [PATCH v1] usb: typec: tcpm: fix SOP' sequences in tcpm_pd_svdm
+From: RD Babiera <rdbabiera@google.com>
+To: rdbabiera@google.com, linux@roeck-us.net, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org
+Cc: badhri@google.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Dan Carpenter <dan.carpenter@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Unused USB ports may have bogus location data in ACPI PLD tables.
-This causes port peering failures as these unused USB2 and USB3 ports
-location may match.
+The Smatch checker flags svdm_version being uninitialized for Discover
+Identity Messages within tcpm_pd_svdm for the CMDT_INIT case. Cable plugs
+cannot initialize SVDM commands, however a port partner that isn't allowed
+to communicate over SOP' could, which would result in the CMDT_INIT block
+running for a received SOP' message.
 
-Due to these failures the driver prints a
-"usb: port power management may be unreliable" warning, and
-unnecessarily blocks port power off during runtime suspend.
+First, initialize svdm_version for the TCPC_TX_SOP_PRIME case. If the
+svdm_version returns as an error, we expect the received svdm to be the
+result of Discover Identity that updates the value accordingly.
 
-This was debugged on a couple DELL systems where the unused ports
-all returned zeroes in their location data.
-Similar bugreports exist for other systems.
+Next, drop all SOP' messages of type CMDT_INIT within tcpm_pd_svdm.
 
-Don't try to peer or match ports that have connect type set to
-USB_PORT_NOT_USED.
+Finally, remove redundant call that assigns modep and pdev. Smatch will
+raise an uninitialized symbol error over modep_prime and pdev_prime, but
+both the assignment and use of these variables are guarded behind
+a check for rx_sop_type == TCPC_TX_SOP_PRIME.
 
-Fixes: 3bfd659baec8 ("usb: find internal hub tier mismatch via acpi")
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218465
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218486
-Tested-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Link: https://lore.kernel.org/linux-usb/5406d361-f5b7-4309-b0e6-8c94408f7d75@molgen.mpg.de
-Cc: stable@vger.kernel.org # v3.16+
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/all/a432603b-b801-4001-b309-247dded707d3@moroto.mountain/
+Fixes: fb7ff25ae433 ("usb: typec: tcpm: add discover identity support for SOP'")
+Signed-off-by: RD Babiera <rdbabiera@google.com>
 ---
-v1 -> v2
-  - Improve commit message
-  - Add missing Fixes, Closes and Link tags
-  - send this patch separately for easier picking to usb-linus
+ drivers/usb/typec/tcpm/tcpm.c | 26 ++++++++++++++++----------
+ 1 file changed, 16 insertions(+), 10 deletions(-)
 
- drivers/usb/core/port.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index d975fc525eac..55c438c62203 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -1878,11 +1878,6 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+ 	tcpm_log(port, "Rx VDM cmd 0x%x type %d cmd %d len %d",
+ 		 p[0], cmd_type, cmd, cnt);
+ 
+-	modep = &port->mode_data;
+-
+-	pdev = typec_match_altmode(port->partner_altmode, ALTMODE_DISCOVERY_MAX,
+-				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
+-
+ 	switch (rx_sop_type) {
+ 	case TCPC_TX_SOP_PRIME:
+ 		modep_prime = &port->mode_data_prime;
+@@ -1890,11 +1885,13 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+ 						 ALTMODE_DISCOVERY_MAX,
+ 						 PD_VDO_VID(p[0]),
+ 						 PD_VDO_OPOS(p[0]));
+-		if (!IS_ERR_OR_NULL(port->cable)) {
+-			svdm_version = typec_get_cable_svdm_version(typec);
+-			if (PD_VDO_SVDM_VER(p[0]) < svdm_version)
+-				typec_cable_set_svdm_version(port->cable, svdm_version);
+-		}
++		svdm_version = typec_get_cable_svdm_version(typec);
++		/*
++		 * Update SVDM version if cable was discovered before port partner.
++		 */
++		if (!IS_ERR_OR_NULL(port->cable) &&
++		    PD_VDO_SVDM_VER(p[0]) < svdm_version)
++			typec_cable_set_svdm_version(port->cable, svdm_version);
+ 		break;
+ 	case TCPC_TX_SOP:
+ 		modep = &port->mode_data;
+@@ -1920,6 +1917,15 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+ 
+ 	switch (cmd_type) {
+ 	case CMDT_INIT:
++		/*
++		 * Only the port or port partner is allowed to initialize SVDM
++		 * commands over SOP'. In case the port partner initializes a
++		 * sequence when it is not allowed to send SOP' messages, drop
++		 * the message should the TCPM port try to process it.
++		 */
++		if (rx_sop_type == TCPC_TX_SOP_PRIME)
++			return 0;
++
+ 		switch (cmd) {
+ 		case CMD_DISCOVER_IDENT:
+ 			if (PD_VDO_VID(p[0]) != USB_SID_PD)
 
-diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-index c628c1abc907..4d63496f98b6 100644
---- a/drivers/usb/core/port.c
-+++ b/drivers/usb/core/port.c
-@@ -573,7 +573,7 @@ static int match_location(struct usb_device *peer_hdev, void *p)
- 	struct usb_hub *peer_hub = usb_hub_to_struct_hub(peer_hdev);
- 	struct usb_device *hdev = to_usb_device(port_dev->dev.parent->parent);
- 
--	if (!peer_hub)
-+	if (!peer_hub || port_dev->connect_type == USB_PORT_NOT_USED)
- 		return 0;
- 
- 	hcd = bus_to_hcd(hdev->bus);
-@@ -584,7 +584,8 @@ static int match_location(struct usb_device *peer_hdev, void *p)
- 
- 	for (port1 = 1; port1 <= peer_hdev->maxchild; port1++) {
- 		peer = peer_hub->ports[port1 - 1];
--		if (peer && peer->location == port_dev->location) {
-+		if (peer && peer->connect_type != USB_PORT_NOT_USED &&
-+		    peer->location == port_dev->location) {
- 			link_peers_report(port_dev, peer);
- 			return 1; /* done */
- 		}
+base-commit: 3bf0514dc6f36f81ee11b1becd977cb87b4c90c6
 -- 
-2.25.1
+2.44.0.rc0.258.g7320e95886-goog
 
 
