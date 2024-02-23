@@ -1,121 +1,208 @@
-Return-Path: <linux-usb+bounces-6984-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6985-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ACF6861C18
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 19:46:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52A2B861CCB
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 20:45:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE5801F2229E
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 18:46:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5DF41F25F44
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 19:45:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EDE11474C0;
-	Fri, 23 Feb 2024 18:45:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB5D414532A;
+	Fri, 23 Feb 2024 19:45:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Jl73+uu8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C4F143C7F;
-	Fri, 23 Feb 2024 18:45:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708713908; cv=none; b=ORTvMd3ACEcf13KXOpCUTkzInyjX3JMog5Y6o3gk0NtvoCD8VAXTimEYAR3rYCrSsibTxh++P2TjKTWhF2lrZQ3JOVfs6VDDjeia5Up6yd5IgKwvG0zUWb4HNLx3TCTYTeZMIzmk+4eJsEryVq5UNfI1mHdo8M9Kb8vCWz9G5/Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708713908; c=relaxed/simple;
-	bh=HNxDQrAqfHomkkBAL+GsWJU+Nkbn4bLBCPF0LWecwlI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mH8XCKDle3MAUNNmPjBhTAoJf8lgWMqqOLY/1IwskOvfca79pAs0qZuk2PuwroASSBLtVEASVc4GEm+gPccW/cTRU4/KsGBsxuHoONvRWQiKYbckgjgSWIfTFSZdmDXKmLMVL7vnDSd8oo4QUUv8u/SljNoZDDP/KBLdJowgpIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C3ACC433C7;
-	Fri, 23 Feb 2024 18:45:01 +0000 (UTC)
-Date: Fri, 23 Feb 2024 13:46:53 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- <linuxppc-dev@lists.ozlabs.org>, <kvm@vger.kernel.org>,
- <linux-block@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
- <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
- <amd-gfx@lists.freedesktop.org>, <intel-gfx@lists.freedesktop.org>,
- <intel-xe@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
- <freedreno@lists.freedesktop.org>, <virtualization@lists.linux.dev>,
- <linux-rdma@vger.kernel.org>, <linux-pm@vger.kernel.org>,
- <iommu@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-hyperv@vger.kernel.org>,
- <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
- <ath11k@lists.infradead.org>, <ath12k@lists.infradead.org>,
- <brcm80211@lists.linux.dev>, <brcm80211-dev-list.pdl@broadcom.com>,
- <linux-usb@vger.kernel.org>, <linux-bcachefs@vger.kernel.org>,
- <linux-nfs@vger.kernel.org>, <ocfs2-devel@lists.linux.dev>,
- <linux-cifs@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
- <linux-edac@vger.kernel.org>, <selinux@vger.kernel.org>,
- <linux-btrfs@vger.kernel.org>, <linux-erofs@lists.ozlabs.org>,
- <linux-f2fs-devel@lists.sourceforge.net>, <linux-hwmon@vger.kernel.org>,
- <io-uring@vger.kernel.org>, <linux-sound@vger.kernel.org>,
- <bpf@vger.kernel.org>, <linux-wpan@vger.kernel.org>, <dev@openvswitch.org>,
- <linux-s390@vger.kernel.org>, <tipc-discussion@lists.sourceforge.net>,
- Julia Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [FYI][PATCH] tracing/treewide: Remove second parameter of
- __assign_str()
-Message-ID: <20240223134653.524a5c9e@gandalf.local.home>
-In-Reply-To: <0aed6cf2-17ae-45aa-b7ff-03da932ea4e0@quicinc.com>
-References: <20240223125634.2888c973@gandalf.local.home>
-	<0aed6cf2-17ae-45aa-b7ff-03da932ea4e0@quicinc.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712F3143C70;
+	Fri, 23 Feb 2024 19:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.40
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708717531; cv=fail; b=k5N1TPQicNdRDfwxoHgXkoOgbwmeh6gQiG+770AKcf+F+ZHYI8MRmqRK/bD8B+qY6P8HQFCPOh32cxmCOsXWBYbdIxtvL+3xugO/GZqFm2r39wkSvqJ+o24P2ZFaLeKAXggf3OdGXTRrbjZkxsiBMtrsiS2Sec2F2TVvNpAu7mo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708717531; c=relaxed/simple;
+	bh=cNTzwYzs0vDBcQp+QlHesLKw6m7rzGgIl7KyNHhaL1k=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cf1cPtRP8S0suAxodWJ6JqZqabd/i8eX+dcItRXcgIKQWjhZMzhJF+lpRQYb8HaXX9vEWRokf0w+DN+DQvr/6v2akM/lHrIDEHlxs/AKrfXQAmSqmmLFPkZJRp53PcikRtCdeuqbW2Z/jEtVKLZzTHSGQXG1p3aROmXqHaQX6vo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Jl73+uu8; arc=fail smtp.client-ip=40.107.236.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IJZhvXNodC7MFGsdI2jiHmIqLCkW3RKFLXQTLyn1DVr5b4dNttha6yDmNPxFj3kASII43f2dV1YUeRLoApUJ+5HWtw45HkHMqwT6CkqWQmh6H4T4AD1/XGqZmydw9Og2MgTSgh1qoE0rTLQoU9y10CoVA9z8ZgHCrglFzz3cKQvAXTQta1YRVFK6ql2Esg+83J/QXORkohV9akY5Eex08LxRvihX+NE8RpHPa8FDk51Z8C0pFnTpgXpfDbDq67UBOpGFWHy2g16RlxmqTANE+Nmzk9MLd8n6LAg8IwISC+T8rIx1HGLzs5kL8YjHHLin5Ss7iEpKsvZ40SeNt+7Vqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fCdCZgZZISrdmEcxH0yjZXlt5XtX57OgcxB3iZLf/84=;
+ b=aq5r7ZyLEEZXy1ImAr6PUCh5yvz21Ck50kE8GkligxGOdO/qzsAeknSAE2kg4cvEqVCwS70c4XvdS7QClb1gpYMJTfX7dr8+KbyJ+4dggVX+ePqQE8Hfy9yEphAtUYYZQicYKwsriL2NurMzhhpUF3d5Kx1bwtS6CE6EmTnRyF+GdurBfIa1cTxTqbJTcNhG/P1rvN5uNzus4GJ9+1fysLL7275JI7t6jP7TaiP1n5AKgrEywEw3pbq0yJRYOrNbwqWekE+zQLEbxU+4kPgOUAMYpF9ydbUjTehdhawzNtDcOKOrruh8YezWQjd4UiBIq90PUDTvpJDJKTe+IsvXuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=synopsys.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fCdCZgZZISrdmEcxH0yjZXlt5XtX57OgcxB3iZLf/84=;
+ b=Jl73+uu8e4NtfCbxwPN4TMf58vWV4l1Y9eg8ge5rdtdFCw6qy1gI0MKNE0vMHCnC5kGCRFbBtxfLiROIRWy1L36iogGmG2Ek06QD5c1RlhbUP/Mab7RboRfZJS0jH1VwS9hLHRksYcI9xGLJ27RuOdg+XXA0mdKpxC8CT01WiPk=
+Received: from CH3P221CA0016.NAMP221.PROD.OUTLOOK.COM (2603:10b6:610:1e7::8)
+ by PH7PR12MB7212.namprd12.prod.outlook.com (2603:10b6:510:207::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.24; Fri, 23 Feb
+ 2024 19:45:26 +0000
+Received: from DS2PEPF00003442.namprd04.prod.outlook.com
+ (2603:10b6:610:1e7:cafe::d0) by CH3P221CA0016.outlook.office365.com
+ (2603:10b6:610:1e7::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.45 via Frontend
+ Transport; Fri, 23 Feb 2024 19:45:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS2PEPF00003442.mail.protection.outlook.com (10.167.17.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7292.25 via Frontend Transport; Fri, 23 Feb 2024 19:45:26 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 23 Feb
+ 2024 13:45:25 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 23 Feb
+ 2024 13:45:24 -0600
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
+ Transport; Fri, 23 Feb 2024 13:45:23 -0600
+From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To: <Thinh.Nguyen@synopsys.com>, <gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>, <git@amd.com>
+Subject: [PATCH v2] usb: dwc3: core: enable CCI support for AMD-xilinx DWC3 controller
+Date: Sat, 24 Feb 2024 01:15:23 +0530
+Message-ID: <1708717523-4006664-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.1.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS2PEPF00003442:EE_|PH7PR12MB7212:EE_
+X-MS-Office365-Filtering-Correlation-Id: ef0f0f12-f707-4997-526f-08dc34a7fb96
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Wn1q26rprMhChTqrbrgAel/NVx/xvOJZG29IqkHHnlIUiVKZW15SCxZ4DBuCwGF/ZjQLNiexUyHXb6gEQpkKiIz4mW/qkgJEz/A779+crxojGao32JmTeBbPMNaaYlLYcsxjUBSX6P5Jg/J1toXV7Qfj8204jXkWDemqGchgqiKob6X2C+tABcGm7DCt0si2u7+MrEqKZaAu6LS4k3ASs1Fc94h8y+VgpR2eTYnCEl2pCFds0a24iYf0yi5JxQ0CBolpKR6fzssdQigecPFPSZms2P0zXwSB+J37PIS6p9ZY9GaWNDY6iqkhNLOceJZ93cx/OezG1sm1vikWfvEsX3+XjOkie2GGVw8k+rlwOsA6WZJw1gmjPr0ksqgH8EjjAb9vYUKSDinI1oCOxC6PM5NYBbJkEJkclVgqQ2DMV128o2tZAQhmfNenPDMW8p64XPhoD50+JvqKxQRs5689rihK/+3wrPT/LIccz/rM9E/B+ZzUrUWT6GiuLjc6yCVnBoZEmxb82Z526iB6mhHx42H0KqrbI6TJP1jxwIXL5ylXet4aFz/mzBKLXUy1RCgvIsYMkaKf2z0PQ4H9WILFknrDGa+416v5DVvMkGn2382IneLkF/mZP/sMLaEvt6clyP9o+bFlaDjg0DicSFU9aA==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(46966006)(40470700004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2024 19:45:26.4102
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef0f0f12-f707-4997-526f-08dc34a7fb96
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS2PEPF00003442.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7212
 
-On Fri, 23 Feb 2024 10:30:45 -0800
-Jeff Johnson <quic_jjohnson@quicinc.com> wrote:
+From: Piyush Mehta <piyush.mehta@amd.com>
 
-> On 2/23/2024 9:56 AM, Steven Rostedt wrote:
-> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> > 
-> > [
-> >    This is a treewide change. I will likely re-create this patch again in
-> >    the second week of the merge window of v6.9 and submit it then. Hoping
-> >    to keep the conflicts that it will cause to a minimum.
-> > ]
-> > 
-> > With the rework of how the __string() handles dynamic strings where it
-> > saves off the source string in field in the helper structure[1], the
-> > assignment of that value to the trace event field is stored in the helper
-> > value and does not need to be passed in again.  
-> 
-> Just curious if this could be done piecemeal by first changing the
-> macros to be variadic macros which allows you to ignore the extra
-> argument. The callers could then be modified in their separate trees.
-> And then once all the callers have be merged, the macros could be
-> changed to no longer be variadic.
+The GSBUSCFG0 register bits [31:16] are used to configure the cache type
+settings of the descriptor and data write/read transfers (Cacheable,
+Bufferable/ Posted). When CCI is enabled in the design, DWC3 core GSBUSCFG0
+cache bits must be updated to support CCI enabled transfers in USB.
 
-I weighed doing that, but I think ripping off the band-aid is a better
-approach. One thing I found is that leaving unused parameters in the macros
-can cause bugs itself. I found one case doing my clean up, where an unused
-parameter in one of the macros was bogus, and when I made it a used
-parameter, it broke the build.
+Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+----
+changes for v2:
+Make GSBUSCFG0 configuration specific to AMD-xilinx platform.
+Taken reference from existing commit ec5eb43813a4 ("usb: dwc3: core:
+add support for realtek SoCs custom's global register start address")
 
-I think for tree-wide changes, the preferred approach is to do one big
-patch at once. And since this only affects TRACE_EVENT() macros, it
-hopefully would not be too much of a burden (although out of tree users may
-suffer from this, but do we care?)
+v1 link:
+https://lore.kernel.org/all/20231013053448.11056-1-piyush.mehta@amd.com
+---
+ drivers/usb/dwc3/core.c | 26 ++++++++++++++++++++++++++
+ drivers/usb/dwc3/core.h |  5 +++++
+ 2 files changed, 31 insertions(+)
 
-Now one thing I could do is to not remove the parameter, but just add:
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 3e55838c0001..3acd4ab3fcca 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -23,6 +23,7 @@
+ #include <linux/delay.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/of.h>
++#include <linux/of_address.h>
+ #include <linux/of_graph.h>
+ #include <linux/acpi.h>
+ #include <linux/pinctrl/consumer.h>
+@@ -559,6 +560,29 @@ static void dwc3_cache_hwparams(struct dwc3 *dwc)
+ 		parms->hwparams9 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS9);
+ }
+ 
++static void dwc3_config_soc_bus(struct dwc3 *dwc)
++{
++	if (dwc->dev->of_node) {
++		struct device_node *parent = of_get_parent(dwc->dev->of_node);
++
++		if (of_device_is_compatible(parent, "xlnx,zynqmp-dwc3") ||
++		    of_device_is_compatible(parent, "xlnx,versal-dwc3")) {
++			if (of_dma_is_coherent(dwc->dev->of_node)) {
++				u32 reg;
++
++				reg = dwc3_readl(dwc->regs, DWC3_GSBUSCFG0);
++				reg |= DWC3_GSBUSCFG0_DATRDREQINFO_MASK |
++					DWC3_GSBUSCFG0_DESRDREQINFO_MASK |
++					DWC3_GSBUSCFG0_DATWRREQINFO_MASK |
++					DWC3_GSBUSCFG0_DESWRREQINFO_MASK;
++				dwc3_writel(dwc->regs, DWC3_GSBUSCFG0, reg);
++			}
++		}
++
++		of_node_put(parent);
++	}
++}
++
+ static int dwc3_core_ulpi_init(struct dwc3 *dwc)
+ {
+ 	int intf;
+@@ -1256,6 +1280,8 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 
+ 	dwc3_set_incr_burst_type(dwc);
+ 
++	dwc3_config_soc_bus(dwc);
++
+ 	ret = dwc3_phy_power_on(dwc);
+ 	if (ret)
+ 		goto err_exit_phy;
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 25dc0599345e..bf19a20e240f 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -175,6 +175,11 @@
+ #define DWC3_LLUCTL		0xd024
+ 
+ /* Bit fields */
++/* Global SoC Bus Configuration Register: AHB-prot/AXI-cache/OCP-ReqInfo */
++#define DWC3_GSBUSCFG0_DATRDREQINFO_MASK	GENMASK(31, 28)
++#define DWC3_GSBUSCFG0_DESRDREQINFO_MASK	GENMASK(27, 24)
++#define DWC3_GSBUSCFG0_DATWRREQINFO_MASK	GENMASK(23, 20)
++#define DWC3_GSBUSCFG0_DESWRREQINFO_MASK	GENMASK(19, 16)
+ 
+ /* Global SoC Bus Configuration INCRx Register 0 */
+ #define DWC3_GSBUSCFG0_INCR256BRSTENA	(1 << 7) /* INCR256 burst */
+-- 
+2.34.1
 
-	WARN_ON_ONCE((src) != __data_offsets->item##_ptr_);
-
-in the __assign_str() macro to make sure that it's still the same that is
-assigned. But I'm not sure how useful that is, and still causes burden to
-have it. I never really liked the passing of the string in two places to
-begin with.
-
--- Steve
 
