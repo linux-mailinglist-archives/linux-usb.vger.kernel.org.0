@@ -1,198 +1,129 @@
-Return-Path: <linux-usb+bounces-6957-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6959-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0819B861378
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 15:01:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1901B86145D
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 15:44:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6DFEB22681
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 14:01:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6070285E26
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 14:44:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24CC37FBCA;
-	Fri, 23 Feb 2024 14:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B99C21A0A;
+	Fri, 23 Feb 2024 14:43:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HaB+Rzqa"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="coMqQ7hy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6E076039
-	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 14:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E62534C79
+	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 14:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708696893; cv=none; b=dxg0Cd9hTtAsWiqUJdoS7YnzNCtxE7maAYaE7JWLR6K5L6rqfx5v1xTD9lgM4wXVLnr7UjFAtIgG4mFdfSOpSVMTw/soTVUUD+z/iu1yHzeblRJNlzCGFDezTfZ/Bu+BE4kya2Uoty6/+0F7oezBWE/ZdfBnEmZwdAZyQOpmKG4=
+	t=1708699393; cv=none; b=QqElOuBDeng3+vpMWrTiZFfRYOF1uF62BUTN50TwUe3PKSBFGhJbE2xd/ORA+IP/2KNTpOgMYECca+OJ2M94hUPM8MFCQRe6kieH3xL1d2Scv/ll1H9HVSM28kLO4xkupuTsKauLOSFK5U6mA8d02onVp5vuAmhjnOyPHgzLyTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708696893; c=relaxed/simple;
-	bh=uFhLumf0xn7KImr/ozi31eMwhK5EEJzKCyw69hFph+0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KWU8G+cyd0i3vtEqkHdUZglLN72vF2WPZIez+Wke1h+b6bnSvLtKeT/JKfeEZ+kfEVrlRnGypzzQOC/OjHh4ZPmwAbWOryEy8XNfmQtwIIo4OQZDQpNrqLbGXtD59ffM48LoPd8rwafXf0XnlleZ8NNn5OQg7Xcv6qg34+gv6jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HaB+Rzqa; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708696892; x=1740232892;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uFhLumf0xn7KImr/ozi31eMwhK5EEJzKCyw69hFph+0=;
-  b=HaB+RzqaO5ZHR4/tHI7E4J+xxLpNa2mO0dsJau7C1bt1LY1nLAc9IEfN
-   4m5yXgrf05/w8ykX5hx34XeOyIrJGhe5b0fNMqCYhw/nnTUQ3Q1zd3ALy
-   aHfVBC2FDqNQR10G9cq3TIxfQYkDPsopmPRVgx6+adCoeWEt4ghVcwj5F
-   J8TjJbV7+FuloA8qBLUixPjb6ogKprlhVNpZaCXbzt++AzQQnIVLbhCrv
-   QWO9TBmTuo1Tx9CWbeKhFltNNb1IstExNRdINzaPmx48ys4nuZooAs+yM
-   NJ4IljDNIwh4RHQi99q+bL26PIwkUUUJAUYBUZXQ4q8SvoYDSnNAHC5Hz
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="6796726"
-X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
-   d="scan'208";a="6796726"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 06:01:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="937025040"
-X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
-   d="scan'208";a="937025040"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Feb 2024 06:01:29 -0800
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	<stern@rowland.harvard.edu>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH v2] usb: usb-acpi: Set port connect type of not connectable ports correctly
-Date: Fri, 23 Feb 2024 16:03:05 +0200
-Message-Id: <20240223140305.185182-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1708699393; c=relaxed/simple;
+	bh=LCCnxhxOKUUGScjoj8X/h+vtjtJ8g9tt6GUc6Qartj0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QofJ2ToiX0e7dRpMfFaSCiTQkxGz+0d/vt+d9F2/QvuJ7YKS41cCROudeKZaOSwHflHVvW+laTknycownX7TcGnRBq+2+ua9Jw0Z+Z+AvU4jdGha6Q0DOIrulBStRWtlMHRzevik+8yfq7T0KGBhbXXCyviZS74SsAmYMpm2ZKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=coMqQ7hy; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5cdbc42f5efso316615a12.0
+        for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 06:43:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1708699391; x=1709304191; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GaiOkbA7+hcdvvfDFyD524BR9JUDgPVysbGQWfqsDPs=;
+        b=coMqQ7hyMeoPDlFryqCi3Yjbj8HfuO3QSwyNknqI0QT0YLje91naBj96S2Ih/IdesG
+         DzoNG+Ay2A9iUZMIi7XZSkmf4fAXgTO3Ar8FrMRnFNIp+oRI3m1yPUIIUUdDRAUjnma7
+         wcEWDGI0UTI69e9QwCXSm1PcnDK4cqXFvOsCjYswgZOeEJt2MrRfT/ikELxCr3Lmpwoq
+         CCPh8/eelf27Yp4nh6Ra04qJRySpfJIZ4qZHiPMp0wvNlX2LgOJH85h/GFLRb8SF/b9k
+         EBugKy1QHd30vIcempHm2my3vLgu9TuMge+3n+p/lp/y4yUfeyLP4YzcMm8pauvNuwVJ
+         BqRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708699391; x=1709304191;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GaiOkbA7+hcdvvfDFyD524BR9JUDgPVysbGQWfqsDPs=;
+        b=oN+ERcyqAZ8a7bkh3TMjBcb3yEth7NVB69QUw9/nFgqHYlOm0DVGCdRNrKq62kE7we
+         vXqMKsPCzYpxW8p4ZhNdftJokgFzuJM3uN4LOROLsn5Zlh34N5lJnFRnwVclL2tHncUw
+         07wAXVCbjVNHuZFAJWfRyP20fc+IfECA40fJEd1J6LG3h5P44j6cjNlLSDuPZwc6WRRb
+         e3m51vdXiKzHsL1sJAtO91Z1JV+IDoKvSPptp3SsfTRwwVVy1dRNt9mQVK9e/uEctvvx
+         W3wQW07T/1cjtcMiVeNRxUpqYjnqemN82vIi8lh7WYiV8CqX0EMyKVmZcIXvoV99oBh1
+         KEGA==
+X-Forwarded-Encrypted: i=1; AJvYcCUlXT2v4mHCZMhc4+MrvKhL84g2Q+zw7BBghcV/ba83l/2gNP2VVMZFgGHveOmziyavvTd2CEdBkVW92Bl2+RCSWolrAj9y5Olb
+X-Gm-Message-State: AOJu0YwxBgsWXk0IJgWE9aVcPcsyUTdoC+7HzfokDXFSo4jBXqdaMXh5
+	L93+ykq6QfHHJwLLpoJe81QJjL46l+8yVK8BDReVESEjVugXrH4Antvs6gOiuNE=
+X-Google-Smtp-Source: AGHT+IFCe2OmI6udUtrLrpGM7CH6IcwXuOjaaWwTj2TJkeKJuL+YC18h5jSygUOYCFe/1oOsbioDdw==
+X-Received: by 2002:a17:90a:3f16:b0:299:3fb4:4f28 with SMTP id l22-20020a17090a3f1600b002993fb44f28mr1673303pjc.4.1708699391114;
+        Fri, 23 Feb 2024 06:43:11 -0800 (PST)
+Received: from [172.20.8.9] (071-095-160-189.biz.spectrum.com. [71.95.160.189])
+        by smtp.gmail.com with ESMTPSA id z15-20020a17090ab10f00b002995e9aca72sm1522284pjq.29.2024.02.23.06.43.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Feb 2024 06:43:10 -0800 (PST)
+Message-ID: <3cbe7ad1-421a-493c-9cb2-9234e139923f@kernel.dk>
+Date: Fri, 23 Feb 2024 07:43:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: gadget: f_fs: Fix NULL pointer dereference in
+ ffs_epfile_async_io_complete()
+Content-Language: en-US
+To: Selvarasu Ganesan <quic_selvaras@quicinc.com>,
+ Greg KH <gregkh@linuxfoundation.org>
+Cc: brauner@kernel.org, jack@suse.cz, jlayton@kernel.org,
+ keescook@chromium.org, peter@korsgaard.com, hayama@lineo.co.jp,
+ dmantipov@yandex.ru, quic_linyyuan@quicinc.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+ quic_wcheng@quicinc.com, quic_jackp@quicinc.com
+References: <20240223054809.2379-1-quic_selvaras@quicinc.com>
+ <2024022302-routine-schematic-b4fd@gregkh>
+ <d2f40e2d-cbbd-41f9-9aa6-41d0f251ffda@quicinc.com>
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <d2f40e2d-cbbd-41f9-9aa6-41d0f251ffda@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Ports with  _UPC (USB Port Capability) ACPI objects stating they are
-"not connectable" are not wired to any connector or internal device.
-They only exist inside the host controller.
+On 2/23/24 4:35 AM, Selvarasu Ganesan wrote:
+> Here?s what the code might look like with a new lock:
+> 
+> static void ffs_epfile_async_io_complete(struct usb_ep *_ep,
+>                                          struct usb_request *req)
+> {
+> ....
+> spin_lock(&ffs->new_lock);
+> if (ffs && ffs->io_completion_wq)
+>     queue_work(ffs->io_completion_wq, &io_data->work);
+> spin_unlock(&ffs->new_lock);
+> ....
+> }
+> 
+> 
+> 
+> static void ffs_data_put(struct ffs_data *ffs) {
+> ...
+> destroy_workqueue(ffs->io_completion_wq);
+> kfree(ffs->dev_name);
+> spin_lock(&ffs->new_lock);
+> kfree(ffs);
+> spin_unlock(&ffs->new_lock);
+> ...
+> }
 
-These ports may not have an ACPI _PLD (Physical Location of Device)
-object.
+This obviously won't work at all, and it's not the right way to fix it
+at all. It needs a ref count.
 
-Rework the code so that _UPC is read even if _PLD does not exist, and
-make sure the port->connect_type is set to "USB_PORT_NOT_USED" instead
-of "USB_PORT_CONNECT_TYPE_UNKNOWN".
-
-No bugs or known issues are reported due to possibly not parsing _UPC,
-and thus leaving the port connect type as "unknown" instead of
-"not used". Nice to have this fixed but no need to add it to stable
-kernels, or urgency to get it upstream.
-
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
-v1 -> v2
-  - Commit message improvements
-  - send patch separately for easier picking to usb-next
-
- drivers/usb/core/usb-acpi.c | 46 ++++++++++++++++++-------------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
-index a34b22537d7c..f250dfc3b14d 100644
---- a/drivers/usb/core/usb-acpi.c
-+++ b/drivers/usb/core/usb-acpi.c
-@@ -142,12 +142,19 @@ int usb_acpi_set_power_state(struct usb_device *hdev, int index, bool enable)
- }
- EXPORT_SYMBOL_GPL(usb_acpi_set_power_state);
- 
--static enum usb_port_connect_type usb_acpi_get_connect_type(acpi_handle handle,
--		struct acpi_pld_info *pld)
-+/*
-+ * Private to usb-acpi, all the core needs to know is that
-+ * port_dev->location is non-zero when it has been set by the firmware.
-+ */
-+#define USB_ACPI_LOCATION_VALID (1 << 31)
-+
-+static void
-+usb_acpi_get_connect_type(struct usb_port *port_dev, acpi_handle *handle)
- {
- 	enum usb_port_connect_type connect_type = USB_PORT_CONNECT_TYPE_UNKNOWN;
- 	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
- 	union acpi_object *upc = NULL;
-+	struct acpi_pld_info *pld;
- 	acpi_status status;
- 
- 	/*
-@@ -158,6 +165,12 @@ static enum usb_port_connect_type usb_acpi_get_connect_type(acpi_handle handle,
- 	 * a usb device is directly hard-wired to the port. If no visible and
- 	 * no connectable, the port would be not used.
- 	 */
-+
-+	status = acpi_get_physical_device_location(handle, &pld);
-+	if (ACPI_SUCCESS(status) && pld)
-+		port_dev->location = USB_ACPI_LOCATION_VALID |
-+			pld->group_token << 8 | pld->group_position;
-+
- 	status = acpi_evaluate_object(handle, "_UPC", NULL, &buffer);
- 	if (ACPI_FAILURE(status))
- 		goto out;
-@@ -166,25 +179,22 @@ static enum usb_port_connect_type usb_acpi_get_connect_type(acpi_handle handle,
- 	if (!upc || (upc->type != ACPI_TYPE_PACKAGE) || upc->package.count != 4)
- 		goto out;
- 
-+	/* UPC states port is connectable */
- 	if (upc->package.elements[0].integer.value)
--		if (pld->user_visible)
-+		if (!pld)
-+			; /* keep connect_type as unknown */
-+		else if (pld->user_visible)
- 			connect_type = USB_PORT_CONNECT_TYPE_HOT_PLUG;
- 		else
- 			connect_type = USB_PORT_CONNECT_TYPE_HARD_WIRED;
--	else if (!pld->user_visible)
-+	else
- 		connect_type = USB_PORT_NOT_USED;
- out:
-+	port_dev->connect_type = connect_type;
- 	kfree(upc);
--	return connect_type;
-+	ACPI_FREE(pld);
- }
- 
--
--/*
-- * Private to usb-acpi, all the core needs to know is that
-- * port_dev->location is non-zero when it has been set by the firmware.
-- */
--#define USB_ACPI_LOCATION_VALID (1 << 31)
--
- static struct acpi_device *
- usb_acpi_get_companion_for_port(struct usb_port *port_dev)
- {
-@@ -222,22 +232,12 @@ static struct acpi_device *
- usb_acpi_find_companion_for_port(struct usb_port *port_dev)
- {
- 	struct acpi_device *adev;
--	struct acpi_pld_info *pld;
--	acpi_handle *handle;
--	acpi_status status;
- 
- 	adev = usb_acpi_get_companion_for_port(port_dev);
- 	if (!adev)
- 		return NULL;
- 
--	handle = adev->handle;
--	status = acpi_get_physical_device_location(handle, &pld);
--	if (ACPI_SUCCESS(status) && pld) {
--		port_dev->location = USB_ACPI_LOCATION_VALID
--			| pld->group_token << 8 | pld->group_position;
--		port_dev->connect_type = usb_acpi_get_connect_type(handle, pld);
--		ACPI_FREE(pld);
--	}
-+	usb_acpi_get_connect_type(port_dev, adev->handle);
- 
- 	return adev;
- }
 -- 
-2.25.1
+Jens Axboe
 
 
