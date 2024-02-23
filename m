@@ -1,109 +1,219 @@
-Return-Path: <linux-usb+bounces-6976-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6977-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AFC18619FE
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 18:38:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D5D1861AB2
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 18:54:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2588A1F265E2
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 17:38:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8B23289729
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Feb 2024 17:54:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC9BE13A27A;
-	Fri, 23 Feb 2024 17:33:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EEBF14262E;
+	Fri, 23 Feb 2024 17:53:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQuQllPj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C284628DBD
-	for <linux-usb@vger.kernel.org>; Fri, 23 Feb 2024 17:33:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40761420D9;
+	Fri, 23 Feb 2024 17:53:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708709611; cv=none; b=tfhaqgSuCB4llJCCyYBXWYxSGdN5iqcp52HQFRLByUv96Gio4f6qvqRcM1f8PhwBwK+7DEcloOy/wvKPUzg9dvV59RLEZgaEWYvf4IOWED5GPyKOKLSySHe6D4UyO/8Lxq7UY5bHoszyArwRsrbW2GrvQKM5bjONPSGUhVhxO24=
+	t=1708710809; cv=none; b=hEvt+n5H0dhUQZYVoJQOMxfA4BvA5w6crxjmmIG6jxEJN6k4Vl6IWILYJzB4m5tefQug8fO36Ts4eQAKyhHsMi1YGLk1Abjvlg9c1oCkbtBf0rgWuPpZhS3SsJGGhegZND0XPBnrWzoIgFv6x5SLz0zf/q1Q0BW81Xf3JhvcCVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708709611; c=relaxed/simple;
-	bh=xakyIdp3/WlfCuM9RKt0IMFj1L5vtcjFbSIxgwyFtt4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J7bqcqltzYlOrI4CWM9qPjhLT5GzdMfaxa4wzSJtqUVsoTJMBr1UDYqwnnEdvagomsTIhgQcDTkx4czocApG1jfujgUAFejnr+JkruE+PeaTMoYVijkN5zVucCGbiB6vmDc5nTK+6ioFYosoDd1UjlCc9dnhyDK+zno7REIV5T8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rdZQH-0000QH-AC; Fri, 23 Feb 2024 18:33:21 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rdZQG-002SzF-I1; Fri, 23 Feb 2024 18:33:20 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rdZQG-00AWsh-1W;
-	Fri, 23 Feb 2024 18:33:20 +0100
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Li Yang <leoyang.li@nxp.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	kernel@pengutronix.de
-Subject: [PATCH 2/2] usb: gadget: fsl: Increase size of name buffer for endpoints
-Date: Fri, 23 Feb 2024 18:33:16 +0100
-Message-ID:  <6754df25c56aae04f8110594fad2cd2452b1862a.1708709120.git.u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1708709120.git.u.kleine-koenig@pengutronix.de>
-References: <cover.1708709120.git.u.kleine-koenig@pengutronix.de>
+	s=arc-20240116; t=1708710809; c=relaxed/simple;
+	bh=WTOVfHwza5JDZNP0OnvJKCXt8zegJXyWV1Mnm2fCV1Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Vc6IETakh36sf5Hhrd/1/PVPoz0hia6LBAV9+oQ2+toO+4XA5fjnS3ctgXdToFA5JK/rerzm7UUYS+e5kjXt2kbwBzVKIbVdSr2uumTmcI+kOWRxGyDxxsEE8fSSqfnAjImfyhjrAbJlm7LaL02RdKiBvZy4UKzzocNKM1m1SyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQuQllPj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E9EC43609;
+	Fri, 23 Feb 2024 17:53:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708710809;
+	bh=WTOVfHwza5JDZNP0OnvJKCXt8zegJXyWV1Mnm2fCV1Q=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=kQuQllPjhL6JnqsGGniHZuQx+bbjCtqTe05hEGi5avlSJFJ7glc6bLdVSZoqgRfs6
+	 Q7C91qeSrknXJE9GTlq0cRK56B6UQmSzw/G+PAXhciDsO5cbp1qZbMMeAHVFWexA++
+	 S/h+h7zb2XWbSssyAooLhfSW4rbuDMyEy4ypvlY1XEBTN+21IPdyft7buecX7Y/PTy
+	 jGdIOU1D8riSMXLR4leBE/55/mAfUU4Xg90DM43iGoThSYuxeztuBSP17CqE4XOF7g
+	 jK3KLsD0u83qtnEzwS1jDha63fZ6XCsZX9q0pMyq0XVX2zC5NHG5ONnpz0OJIA5/Ni
+	 yxM4SloxyH6JA==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-512e568607aso727480e87.1;
+        Fri, 23 Feb 2024 09:53:29 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWauceGNl2Lr50MYqlxRHX+veyeqHBIO67KHzZq/xDift125SK6CPNy3OEmwTIRD//fRqiCM4xoyfj8O53auGPYQppF92Y3tGXHjOf60WHEtZ8AoLbTnHj6nQuLJtur4J1atJFZPk0kPk4RdOy1WkVnUJutRi2SVQhgT0EscgISmZ6RMg==
+X-Gm-Message-State: AOJu0YzxqVCLZXNMnjBFfykifnQMvyy7LdX2zOzpza/ajWT0msitkNO+
+	tHRlq4mVUKJ3VNt41uRp124AwkxRiqNEwArs+fyxTbX+jM3T2L28rSw1+uqR8rTL6gTghNfLoNK
+	g1MR4XxZhCBtZp8Q63YoK3BPwAQ==
+X-Google-Smtp-Source: AGHT+IHbqG0RqOBjOBsM00h1ydkL16ZhPv0Dk8ezh7fgoRnVQ3LvuIXX116VAry1mCVFHrgzVhf8IxNjpoMQWGm5HjM=
+X-Received: by 2002:a05:6512:3b28:b0:512:a97e:daa6 with SMTP id
+ f40-20020a0565123b2800b00512a97edaa6mr363184lfv.36.1708710807665; Fri, 23 Feb
+ 2024 09:53:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1231; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=xakyIdp3/WlfCuM9RKt0IMFj1L5vtcjFbSIxgwyFtt4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBl2NbdKQ28w2uPegI4Te7XXRn1TSM6zGLBVjWbW tDcg4LgxMWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZdjW3QAKCRCPgPtYfRL+ TklACACG42Kp+0YiOERFN4Tv8+EYFpUqhHNrA1cJQuDjg06rU80r8BHHXZRrJpQhbzYMUrRlakI 0P8Zk0pWb/a9GacqwW779bbf430xPBg4R7T7AhVOcjNWEQOS3do07yH7CWywhkVr7RZJhOZmOIS oothLatK1BF3XumzP4AKiuGHoDcgQ2fbZ6opwhx39Vw20iVNK6shuamj8kGjNXcWrmnRAxTINzh +EOVEmG3mex2r3WUE4AkDbVMxO+Uqubk+Repukh5wb6XYGeo0zLPgn7h3purDu4RZc7YQXtLufg Nyjeb1lG41zceYgIKL3yaO0CdnU1hWVahM9Pm/APc/TlvIfS
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+References: <20240221145846.1611627-1-xu.yang_2@nxp.com> <20240221145846.1611627-4-xu.yang_2@nxp.com>
+ <20240223140256.GA1768266-robh@kernel.org> <DU2PR04MB882234D1A9D5718D8355928B8C552@DU2PR04MB8822.eurprd04.prod.outlook.com>
+In-Reply-To: <DU2PR04MB882234D1A9D5718D8355928B8C552@DU2PR04MB8822.eurprd04.prod.outlook.com>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 23 Feb 2024 10:53:14 -0700
+X-Gmail-Original-Message-ID: <CAL_JsqKXwL5sGkSikRO6CVSRwENbW1-b3Bn+oy1Acupt06=dRQ@mail.gmail.com>
+Message-ID: <CAL_JsqKXwL5sGkSikRO6CVSRwENbW1-b3Bn+oy1Acupt06=dRQ@mail.gmail.com>
+Subject: Re: [EXT] Re: [PATCH v6 4/9] dt-bindings: usb: add NXP ChipIdea USB2
+ Controller schema
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>, 
+	"shawnguo@kernel.org" <shawnguo@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>, 
+	"s.hauer@pengutronix.de" <s.hauer@pengutronix.de>, "kernel@pengutronix.de" <kernel@pengutronix.de>, 
+	"festevam@gmail.com" <festevam@gmail.com>, dl-linux-imx <linux-imx@nxp.com>, 
+	"peter.chen@kernel.org" <peter.chen@kernel.org>, Jun Li <jun.li@nxp.com>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This fixes a W=1 warning about sprintf writing up to 16 bytes into a
-buffer of size 14. There is no practical relevance because there are not
-more than 32 endpoints.
+On Fri, Feb 23, 2024 at 7:56=E2=80=AFAM Xu Yang <xu.yang_2@nxp.com> wrote:
+>
+> Hi Rob,
+>
+> >
+> > On Wed, Feb 21, 2024 at 10:58:41PM +0800, Xu Yang wrote:
+> > > As more and more NXP i.MX chips come out, it becomes harder to mainta=
+in
+> > > ci-hdrc-usb2.yaml if more stuffs like property restrictions are added=
+ to
+> > > this file. This will separate i.MX parts out of ci-hdrc-usb2.yaml and=
+ add
+> > > a new schema for NXP ChipIdea USB2 Controller.
+> > >
+> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > >
+> > > ---
+> > > Changes in v6:
+> > >  - new patch
+> > > ---
+> > >  .../bindings/usb/ci-hdrc-usb2-imx.yaml        | 75 +++++++++++++++++=
+++
+> > >  1 file changed, 75 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb=
+2-imx.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.y=
+aml b/Documentation/devicetree/bindings/usb/ci-
+> > hdrc-usb2-imx.yaml
+> > > new file mode 100644
+> > > index 000000000000..2ec62f564bf5
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.yaml
+> > > @@ -0,0 +1,75 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/usb/ci-hdrc-
+> > usb2-
+> > imx.yaml%23&data=3D05%7C02%7Cxu.yang_2%40nxp.com%7C4ac0c60cd4b4433f0f9f=
+08dc34782572%7C686ea1d3bc2b4c6fa92c
+> > d99c5c301635%7C0%7C0%7C638442937830606824%7CUnknown%7CTWFpbGZsb3d8eyJWI=
+joiMC4wLjAwMDAiLCJQIjoiV2luMzIi
+> > LCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=3D7p1DzvYmBsTgN44jypH=
+7lc56z9hVBsFBYXUwsblk9z8%3D&reserv
+> > ed=3D0
+> > > +$schema: http://devicetree.org/meta-
+> > schemas%2Fcore.yaml%23&data=3D05%7C02%7Cxu.yang_2%40nxp.com%7C4ac0c60cd=
+4b4433f0f9f08dc34782572%7C686ea1d3
+> > bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638442937830615622%7CUnknown%7CTWFpb=
+GZsb3d8eyJWIjoiMC4wLjAwMDAiLC
+> > JQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=3DfWWy9=
+enbGK5yeKiovday7go3Gss5L%2F%2Fe%2F
+> > OZcANny0QA%3D&reserved=3D0
+> > > +
+> > > +title: NXP USB2 ChipIdea USB controller
+> > > +
+> > > +maintainers:
+> > > +  - Xu Yang <xu.yang_2@nxp.com>
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    oneOf:
+> > > +      - enum:
+> > > +          - fsl,imx27-usb
+> > > +      - items:
+> > > +          - enum:
+> > > +              - fsl,imx23-usb
+> > > +              - fsl,imx25-usb
+> > > +              - fsl,imx28-usb
+> > > +              - fsl,imx35-usb
+> > > +              - fsl,imx50-usb
+> > > +              - fsl,imx51-usb
+> > > +              - fsl,imx53-usb
+> > > +              - fsl,imx6q-usb
+> > > +              - fsl,imx6sl-usb
+> > > +              - fsl,imx6sx-usb
+> > > +              - fsl,imx6ul-usb
+> > > +              - fsl,imx7d-usb
+> > > +              - fsl,vf610-usb
+> > > +          - const: fsl,imx27-usb
+> > > +      - items:
+> > > +          - enum:
+> > > +              - fsl,imx8dxl-usb
+> > > +              - fsl,imx8ulp-usb
+> > > +          - const: fsl,imx7ulp-usb
+> > > +          - const: fsl,imx6ul-usb
+> > > +      - items:
+> > > +          - enum:
+> > > +              - fsl,imx8mm-usb
+> > > +              - fsl,imx8mn-usb
+> > > +          - const: fsl,imx7d-usb
+> > > +          - const: fsl,imx27-usb
+> > > +      - items:
+> > > +          - enum:
+> > > +              - fsl,imx6sll-usb
+> > > +              - fsl,imx7ulp-usb
+> > > +          - const: fsl,imx6ul-usb
+> > > +          - const: fsl,imx27-usb
+> >
+> > Now you just duplicated all the compatibles, and now any new compatible=
+s
+> > have to be added in 2 places. For this to work, you have to split
+> > ci-hdrc-usb2.yaml into 2 files. One with all the common properties and
+> > one with compatibles (minus imx). This is also needed if imx has any
+> > extra properties the other don't.
+> >
+> > Didn't I say this already?
+> >
+>
+> Yes, I know.
+>
+> But according to your words, I need to split ci-hdrc-usb2.yaml into 1 com=
+mon
+> file and more than 1 vendor specific files (imx, nvidia, qcom, nuvoton an=
+d
+> others). In this patchset, I only focus on imx part and KK said he or som=
+eone
+> will take over other parts, therefore I just duplicated all the imx compa=
+tibles.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
-Hello,
+This series is just wasting our time because it can't be applied without th=
+at.
 
-I hesitated to add a Fixes: trailer because the problem is never hit in
-practise. Anyhow, if you think it's a good idea to add one, the commit
-introducing the too small buffer is:
+> If I only create imx specific yaml file and remove all compatilbles from =
+common
+> file, nvidia, qcom, nuvoton and others compatible info will be lost, is t=
+his
+> feasible? Or should I create mutiple vendor specific files at the same ti=
+me?
 
-	b504882da539 ("USB: add Freescale high-speed USB SOC device controller driver")
+You don't have to split each vendor to a separate vendor schema file.
+Just move everything common to ci-hdrc-usb2-common.yaml and add a
+reference to it. Then imx can reference the common file.
 
-Best regards
-Uwe
-
- drivers/usb/gadget/udc/fsl_udc_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/udc/fsl_udc_core.c b/drivers/usb/gadget/udc/fsl_udc_core.c
-index 65346a322a77..b7e7ae5e051b 100644
---- a/drivers/usb/gadget/udc/fsl_udc_core.c
-+++ b/drivers/usb/gadget/udc/fsl_udc_core.c
-@@ -2486,7 +2486,7 @@ static int fsl_udc_probe(struct platform_device *pdev)
- 	/* setup the udc->eps[] for non-control endpoints and link
- 	 * to gadget.ep_list */
- 	for (i = 1; i < (int)(udc_controller->max_ep / 2); i++) {
--		char name[14];
-+		char name[16];
- 
- 		sprintf(name, "ep%dout", i);
- 		struct_ep_setup(udc_controller, i * 2, name, 1);
--- 
-2.43.0
-
+Rob
 
