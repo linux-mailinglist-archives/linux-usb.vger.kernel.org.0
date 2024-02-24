@@ -1,73 +1,43 @@
-Return-Path: <linux-usb+bounces-7011-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7012-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 747BF862438
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 11:29:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 296EE86247C
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 12:28:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7B0A1F23462
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 10:29:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D29FF282FCA
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 11:28:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F594210E4;
-	Sat, 24 Feb 2024 10:28:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u3NfNiFI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E62B25775;
+	Sat, 24 Feb 2024 11:28:03 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C0C210EE
-	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 10:28:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC20D1B59B;
+	Sat, 24 Feb 2024 11:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708770536; cv=none; b=GA9NtTDbVGFxSKW3JVcc7ZuGYKp0I7kAiTrKXNgZyAKKiEGoXIxXUGPrBypTIdEHf7OIz4J3gM/GFUH6U7iFEuRwxjIh5ey1Et6StIGFhWTWNk2uFcFFdSSHCPyYY51Nt75nAQXa/HXKt84Nh4o4b2Xr+LBuDqKi9NDSb0P/5sQ=
+	t=1708774083; cv=none; b=Z9JagudJztwtNOQYVGVjmxs5dkEpfxGmp6jAs97FEpLspVn+pln5RPq8wg/5QTVGWVHouSqph5BiMl1yttx58wDoOzaWY5WQDdQe7sIeU0vhJ7cg9ZLYwUAsmwS2h8E3lJByktksb5uI/nS1VnBEk2xyjIbHvxlbx7qa6M/Bp+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708770536; c=relaxed/simple;
-	bh=Wg0PBihE3EDGuRdaaCb2GnwtY1WotZgKhFda+XYqOVQ=;
+	s=arc-20240116; t=1708774083; c=relaxed/simple;
+	bh=exkH8ZNaZUfFwdAAqNtVWy0CV7J13ZxsM3lkgaMhVaw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FLjuRZeUC6RRNFjbXh402RE8pLG08Wh5ohQLwc6miWW2g7PAWT0t40YJYLKVHcoRDBPtRGlKSDCkMQZ4HueWw2MSp8NPJq28EeK5JMw8B4mHITzfCurdJW3zh3lkmtJloaDoimwEfKLcUPAwdz7tizy3u0t62D6a+NOvWdp+96g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u3NfNiFI; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a293f2280c7so195935666b.1
-        for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 02:28:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708770533; x=1709375333; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rgfQfFWKfhHnlKFB8GZQVPCeubPlUtrG7fkujZpbwSg=;
-        b=u3NfNiFI4opY+HVrfjOyy8R/cmoOU/+46Ts1JWGkHPpvO9UaMEbbBKiF1vA5IjU/z3
-         AvwJEskKkzARXOaLfjU4BA0eyomGBmdBbfKTbY+7zid2CvZkv7Gg4ecDGafMahZ5YHRi
-         8QVPRGiGAxiBrrjwkAfIag6Bewtqi0NyOm9ANoxRPB9yPYoUfZHwzWh0258kK3PkkUyK
-         1EO21JNVMamTxV0LVOP0apZXbcWrARkaXFb/Zxdg7BShxeXD80OwP5dlfaqbC/lUH08A
-         0Y25Q3LoiM6H5C3SrefwYzZYpjqXWnQZJHN3lFxJYtyVm87Xi+7KFWOjB/UrJZcBrSC8
-         E2Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708770533; x=1709375333;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rgfQfFWKfhHnlKFB8GZQVPCeubPlUtrG7fkujZpbwSg=;
-        b=KmzIm6fDAfhOp6NP8asgNrbRXqDEcK/PYI/OibSqicBQoQT1LEejZZ+KfoVqTcesz/
-         FjjM0hqhHC7YmzJBeq7LZiji5H8c74PdiQzK0nh+wkqIWUdqtEvvicUHpgHYOsrXw6+O
-         Z/MLBq8V/LH0AP9+vZtYvGbgE6Vd3wPOB45hUZc14jSp62xoAl+PX3GekKGPYRWYJHcj
-         N/+nJjiW/Ezu6BxcIoDBNye7P4KSmVjGI3MSEPmz2YJ2+fgOf5IMhBlyIRAG/l5YSwNL
-         OLroqvTMtmTzetZKAFnkIEU/anfSOZtMscVCesh5OV5n78EzzhdCnICUjWFU0mvzS/BX
-         y2GA==
-X-Gm-Message-State: AOJu0YySD4YvOkGiRssbiLuqyQlhurvhgscpHlhx4WlsyEzm+f+IPnJx
-	foCpM4y3TuOsBYFKqFPnwj7fICLGTQ7nz1+Y0WQrT0AQs+TBmL8UARQ3WJTWAoM=
-X-Google-Smtp-Source: AGHT+IHRmKgfev3iDF0qZ2rGd4o58JZj/sbd27NcjAsUMnHOL/4J7Az80B8i+gkMBS8gGAKvW2uIBg==
-X-Received: by 2002:a17:906:2b05:b0:a3e:77d2:9e04 with SMTP id a5-20020a1709062b0500b00a3e77d29e04mr1284170ejg.24.1708770533237;
-        Sat, 24 Feb 2024 02:28:53 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.116])
-        by smtp.gmail.com with ESMTPSA id ps8-20020a170906bf4800b00a42ee2af521sm384657ejb.137.2024.02.24.02.28.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Feb 2024 02:28:52 -0800 (PST)
-Message-ID: <b64155f2-2965-4ea1-8c23-7c79d7a01c9f@linaro.org>
-Date: Sat, 24 Feb 2024 11:28:50 +0100
+	 In-Reply-To:Content-Type; b=fHchWerPtUia/7geiz0hLyFM4dUY3F2+vpbyKUej0KflIOeUW2B7vFtAWsep4002dhGeXp1gsvvc5ZBTphs8ym6gCyWP2oz2Z5S0UBtyDm9JLU3GSG6c4zUwpxjuiiw8GaVHJ5HhJssC4gAvTeVahdQN6qIdLyz15W7mGyM/4zU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.6] (unknown [95.90.246.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id A5B5061E5FE04;
+	Sat, 24 Feb 2024 12:27:32 +0100 (CET)
+Message-ID: <6c24ec1b-0f82-4566-9a86-80b0c33a2b47@molgen.mpg.de>
+Date: Sat, 24 Feb 2024 12:27:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,164 +45,135 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: add hisilicon,hi3798mv200-dwc3
+Subject: Re: [PATCH v2] usb: port: Don't try to peer unused USB ports based on
+ location
 Content-Language: en-US
-To: forbidden405@outlook.com, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Yang Xiwen <forbidden405@foxmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org
-References: <20240224-dwc3-v2-0-8e4fcd757175@outlook.com>
- <20240224-dwc3-v2-1-8e4fcd757175@outlook.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240224-dwc3-v2-1-8e4fcd757175@outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ stern@rowland.harvard.edu, stable@vger.kernel.org
+References: <20240222233343.71856-1-mathias.nyman@linux.intel.com>
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20240222233343.71856-1-mathias.nyman@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 23/02/2024 22:43, Yang Xiwen via B4 Relay wrote:
-> From: Yang Xiwen <forbidden405@outlook.com>
+Dear Mathias,
+
+
+Thank you for version 2.
+
+Am 23.02.24 um 00:33 schrieb Mathias Nyman:
+> Unused USB ports may have bogus location data in ACPI PLD tables.
+> This causes port peering failures as these unused USB2 and USB3 ports
+> location may match.
 > 
-> Document the DWC3 controller used by Hi3798MV200.
+> Due to these failures the driver prints a
+> "usb: port power management may be unreliable" warning, and
+> unnecessarily blocks port power off during runtime suspend.
 > 
-> Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
+> This was debugged on a couple DELL systems where the unused ports
+> all returned zeroes in their location data.
+> Similar bugreports exist for other systems.
+> 
+> Don't try to peer or match ports that have connect type set to
+> USB_PORT_NOT_USED.
+> 
+> Fixes: 3bfd659baec8 ("usb: find internal hub tier mismatch via acpi")
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218465
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218486
+> Tested-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> Link: https://lore.kernel.org/linux-usb/5406d361-f5b7-4309-b0e6-8c94408f7d75@molgen.mpg.de
+> Cc: stable@vger.kernel.org # v3.16+
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> ---
+> v1 -> v2
+>    - Improve commit message
+>    - Add missing Fixes, Closes and Link tags
+>    - send this patch separately for easier picking to usb-linus
+> 
+>   drivers/usb/core/port.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+> index c628c1abc907..4d63496f98b6 100644
+> --- a/drivers/usb/core/port.c
+> +++ b/drivers/usb/core/port.c
+> @@ -573,7 +573,7 @@ static int match_location(struct usb_device *peer_hdev, void *p)
+>   	struct usb_hub *peer_hub = usb_hub_to_struct_hub(peer_hdev);
+>   	struct usb_device *hdev = to_usb_device(port_dev->dev.parent->parent);
+>   
+> -	if (!peer_hub)
+> +	if (!peer_hub || port_dev->connect_type == USB_PORT_NOT_USED)
+>   		return 0;
+>   
+>   	hcd = bus_to_hcd(hdev->bus);
+> @@ -584,7 +584,8 @@ static int match_location(struct usb_device *peer_hdev, void *p)
+>   
+>   	for (port1 = 1; port1 <= peer_hdev->maxchild; port1++) {
+>   		peer = peer_hub->ports[port1 - 1];
+> -		if (peer && peer->location == port_dev->location) {
+> +		if (peer && peer->connect_type != USB_PORT_NOT_USED &&
+> +		    peer->location == port_dev->location) {
+>   			link_peers_report(port_dev, peer);
+>   			return 1; /* done */
+>   		}
 
+I tested the two versions from before
 
-> +
-> +properties:
-> +  compatible:
-> +    const: hisilicon,hi3798mv200-dwc3
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 1
-> +
-> +  reg: true
+     8c849968dd165 usb: port: Don't try to peer unused USB ports based 
+on location
+     85704eb36e9f2 usb: usb-acpi: Set port connect type of not 
+connectable ports correctly
+     39133352cbed6 Merge tag 'for-linus' of 
+git://git.kernel.org/pub/scm/virt/kvm/kvm
 
-Constraints. maxItems: X
+on the Dell OptiPlex 5055 [1], but the USB keyboard and mouse were not 
+detected. I have to find out, if I screwed up the build – as network 
+also did not work –, but please wait until I get that test finished. On 
+the bright side, the warning was gone. ;-)
 
-> +
-> +  ranges: true
-> +
-> +  clocks:
-> +    items:
-> +      - description: Controller bus clock
-> +      - description: Controller suspend clock
-> +      - description: Controller reference clock
-> +      - description: Controller gm clock
-> +      - description: Controller gs clock
-> +      - description: Controller utmi clock
-> +      - description: Controller pipe clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: bus
-> +      - const: suspend
-> +      - const: ref
-> +      - const: gm
-> +      - const: gs
-> +      - const: utmi
-> +      - const: pipe
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    const: soft
-> +
-> +patternProperties:
-> +  '^usb@[0-9a-z]+$':
+With 6.8-rc5 and the two patches:
 
-unit addresses are in hex, so a-f
+     [    2.020312] usbcore: registered new interface driver usbfs
+     [    2.021303] usbcore: registered new interface driver hub
+     [    2.022307] usbcore: registered new device driver usb
+     [    3.219725] usb usb2: We don't know the algorithms for LPM for 
+this host, disabling LPM.
+     [    3.285546] usb usb4: We don't know the algorithms for LPM for 
+this host, disabling LPM.
+     [    3.301819] usbcore: registered new interface driver usb-storage
+     [    3.630824] usb 1-7: new low-speed USB device number 2 using 
+xhci_hcd
+     [    4.120826] usb 1-10: new low-speed USB device number 3 using 
+xhci_hcd
 
-Open existing bindings and look how it is done there. There are no
-bindings for DWC3 glue/wrapper device having a-z.
+With 6.6.12 and without your patches:
 
+     [    2.746693] usbcore: registered new interface driver usbfs
+     [    2.751684] usbcore: registered new interface driver hub
+     [    2.756686] usbcore: registered new device driver usb
+     [    4.095689] usb usb2: We don't know the algorithms for LPM for 
+this host, disabling LPM.
+     [    4.116406] usb: port power management may be unreliable
+     [    4.182389] usb usb4: We don't know the algorithms for LPM for 
+this host, disabling LPM.
+     [    4.203353] usbcore: registered new interface driver usb-storage
+     [    4.417466] usb 1-7: new low-speed USB device number 2 using 
+xhci_hcd
+     [    4.918470] usb 1-10: new low-speed USB device number 3 using 
+xhci_hcd
+     [   13.184956] usbcore: registered new interface driver usbhid
+     [   13.191508] usbhid: USB HID core driver
+     [   13.333554] input: Dell Dell USB Entry Keyboard as 
+/devices/pci0000:00/0000:00:01.3/0000:01:00.0/usb1/1-7/1-7:1.0/0003:413C:2107.0001/input/input8
+     [   13.421779] hid-generic 0003:413C:2107.0001: input,hidraw0: USB 
+HID v1.10 Keyboard [Dell Dell USB Entry Keyboard] on 
+usb-0000:01:00.0-7/input0
+     [   13.446542] input: Logitech USB-PS/2 Optical Mouse as 
+/devices/pci0000:00/0000:00:01.3/0000:01:00.0/usb1/1-10/1-10:1.0/0003:046D:C050.0002/input/input11
+     [   13.473113] hid-generic 0003:046D:C050.0002: input,hidraw1: USB 
+HID v1.10 Mouse [Logitech USB-PS/2 Optical Mouse] on 
+usb-0000:01:00.0-10/input0
 
-> +    $ref: snps,dwc3.yaml#
-> +
-> +additionalProperties: false
-
-Same comments: open existing bindings and take a look how it is there.
-This goes after 'required:' block.
-
-> +
-> +required:
-> +  - compatible
-> +  - '#address-cells'
-> +  - '#size-cells'
-> +  - ranges
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - reset-names
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    usb@98a0000 {
-> +            compatible = "hisilicon,hi3798mv200-dwc3";
-
-reg is always the second property. ranges is third.
-
-
-> +            #address-cells = <1>;
-> +            #size-cells = <1>;
-
-Use 4 spaces for example indentation.
-
-
-
-Best regards,
-Krzysztof
-
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=218487
 
