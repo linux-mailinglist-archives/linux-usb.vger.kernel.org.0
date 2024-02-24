@@ -1,154 +1,238 @@
-Return-Path: <linux-usb+bounces-7010-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7011-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC5E3862404
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 11:14:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 747BF862438
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 11:29:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 638141F22E0C
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 10:14:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7B0A1F23462
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 10:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 668841B81F;
-	Sat, 24 Feb 2024 10:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F594210E4;
+	Sat, 24 Feb 2024 10:28:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ghrlxw8u"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u3NfNiFI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E499814B800
-	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 10:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C0C210EE
+	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 10:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708769659; cv=none; b=rJn8CsRGPjCJrW+LsDEeysJpBj0BvY2Yn6rk2mBFCzTKQLJl9SjUq2DJhcMf9COeuM77zrSIjThAL1QSJs6I6BwMkxnOKU0sj5kiSap4fNdIA4h27vFO+4TNdO/4WqogLCv0kyLUH1GMdchTAZsV45Uk+6OyBtEamL8+o2Ia/BE=
+	t=1708770536; cv=none; b=GA9NtTDbVGFxSKW3JVcc7ZuGYKp0I7kAiTrKXNgZyAKKiEGoXIxXUGPrBypTIdEHf7OIz4J3gM/GFUH6U7iFEuRwxjIh5ey1Et6StIGFhWTWNk2uFcFFdSSHCPyYY51Nt75nAQXa/HXKt84Nh4o4b2Xr+LBuDqKi9NDSb0P/5sQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708769659; c=relaxed/simple;
-	bh=hCHl5QWMF/UvvtfLklHEoo9TM3fxtYpCLus3oS3lNrA=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Bs2h4QeDmeLBxjgd6s35ruFjWsr9M1x/SUOyjxZafaOpKXDQTs7w1e7TkQneS3YYK8l0kH0JOLxFSxUmOUbaum5h75etKWVuw86ligvQESdfpcAvwrLQNpeAzeZI1HTn9x63cYg620WgQZyqQ4TejA2N0O6WKFygJ8dr9pBat7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ghrlxw8u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 83A61C43390
-	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 10:14:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708769658;
-	bh=hCHl5QWMF/UvvtfLklHEoo9TM3fxtYpCLus3oS3lNrA=;
-	h=From:To:Subject:Date:From;
-	b=ghrlxw8uISFgKbB3OLfBy5iq21Fxu027m+Nq/CDVKFKQuklYAE3nc5GmXGweYnkD+
-	 VjkByRAtojMY4dW9tOR8miuuitpagqaBMe2daMVm5xTQbRJhF1BGjQagye6iBIJYmf
-	 d3JQnED6GLMqx05Y9ayAtfAMn75v3dAm5TPZRTAYeLplJdGHDPG1WSOG6Hh/YWIx+R
-	 f57N/PCJ0v0IW/3Up7ma5/cC2Ty9kEekcbQuJkBW38aC1hqKFrkZY6nP4GEBQeJuhJ
-	 2uq0sZ88zmbASblsHnmbU0SgsflwUrevNSrqaEs9bPsDE5OxBgljrbHOLLcXdW1FXh
-	 1WPJE6ZxTM7cw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 66496C4332E; Sat, 24 Feb 2024 10:14:18 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218525] New: Thunderbolt eGPU bad performance
-Date: Sat, 24 Feb 2024 10:14:18 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: gipawu@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-218525-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1708770536; c=relaxed/simple;
+	bh=Wg0PBihE3EDGuRdaaCb2GnwtY1WotZgKhFda+XYqOVQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FLjuRZeUC6RRNFjbXh402RE8pLG08Wh5ohQLwc6miWW2g7PAWT0t40YJYLKVHcoRDBPtRGlKSDCkMQZ4HueWw2MSp8NPJq28EeK5JMw8B4mHITzfCurdJW3zh3lkmtJloaDoimwEfKLcUPAwdz7tizy3u0t62D6a+NOvWdp+96g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u3NfNiFI; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a293f2280c7so195935666b.1
+        for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 02:28:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708770533; x=1709375333; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rgfQfFWKfhHnlKFB8GZQVPCeubPlUtrG7fkujZpbwSg=;
+        b=u3NfNiFI4opY+HVrfjOyy8R/cmoOU/+46Ts1JWGkHPpvO9UaMEbbBKiF1vA5IjU/z3
+         AvwJEskKkzARXOaLfjU4BA0eyomGBmdBbfKTbY+7zid2CvZkv7Gg4ecDGafMahZ5YHRi
+         8QVPRGiGAxiBrrjwkAfIag6Bewtqi0NyOm9ANoxRPB9yPYoUfZHwzWh0258kK3PkkUyK
+         1EO21JNVMamTxV0LVOP0apZXbcWrARkaXFb/Zxdg7BShxeXD80OwP5dlfaqbC/lUH08A
+         0Y25Q3LoiM6H5C3SrefwYzZYpjqXWnQZJHN3lFxJYtyVm87Xi+7KFWOjB/UrJZcBrSC8
+         E2Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708770533; x=1709375333;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rgfQfFWKfhHnlKFB8GZQVPCeubPlUtrG7fkujZpbwSg=;
+        b=KmzIm6fDAfhOp6NP8asgNrbRXqDEcK/PYI/OibSqicBQoQT1LEejZZ+KfoVqTcesz/
+         FjjM0hqhHC7YmzJBeq7LZiji5H8c74PdiQzK0nh+wkqIWUdqtEvvicUHpgHYOsrXw6+O
+         Z/MLBq8V/LH0AP9+vZtYvGbgE6Vd3wPOB45hUZc14jSp62xoAl+PX3GekKGPYRWYJHcj
+         N/+nJjiW/Ezu6BxcIoDBNye7P4KSmVjGI3MSEPmz2YJ2+fgOf5IMhBlyIRAG/l5YSwNL
+         OLroqvTMtmTzetZKAFnkIEU/anfSOZtMscVCesh5OV5n78EzzhdCnICUjWFU0mvzS/BX
+         y2GA==
+X-Gm-Message-State: AOJu0YySD4YvOkGiRssbiLuqyQlhurvhgscpHlhx4WlsyEzm+f+IPnJx
+	foCpM4y3TuOsBYFKqFPnwj7fICLGTQ7nz1+Y0WQrT0AQs+TBmL8UARQ3WJTWAoM=
+X-Google-Smtp-Source: AGHT+IHRmKgfev3iDF0qZ2rGd4o58JZj/sbd27NcjAsUMnHOL/4J7Az80B8i+gkMBS8gGAKvW2uIBg==
+X-Received: by 2002:a17:906:2b05:b0:a3e:77d2:9e04 with SMTP id a5-20020a1709062b0500b00a3e77d29e04mr1284170ejg.24.1708770533237;
+        Sat, 24 Feb 2024 02:28:53 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.222.116])
+        by smtp.gmail.com with ESMTPSA id ps8-20020a170906bf4800b00a42ee2af521sm384657ejb.137.2024.02.24.02.28.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Feb 2024 02:28:52 -0800 (PST)
+Message-ID: <b64155f2-2965-4ea1-8c23-7c79d7a01c9f@linaro.org>
+Date: Sat, 24 Feb 2024 11:28:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: add hisilicon,hi3798mv200-dwc3
+Content-Language: en-US
+To: forbidden405@outlook.com, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Yang Xiwen <forbidden405@foxmail.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20240224-dwc3-v2-0-8e4fcd757175@outlook.com>
+ <20240224-dwc3-v2-1-8e4fcd757175@outlook.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240224-dwc3-v2-1-8e4fcd757175@outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218525
+On 23/02/2024 22:43, Yang Xiwen via B4 Relay wrote:
+> From: Yang Xiwen <forbidden405@outlook.com>
+> 
+> Document the DWC3 controller used by Hi3798MV200.
+> 
+> Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
 
-            Bug ID: 218525
-           Summary: Thunderbolt eGPU bad performance
-           Product: Drivers
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: gipawu@gmail.com
-        Regression: No
 
-I opened this bug report because I think there is a performance problem in =
-the
-Thunderbolt stack.
+> +
+> +properties:
+> +  compatible:
+> +    const: hisilicon,hi3798mv200-dwc3
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 1
+> +
+> +  reg: true
 
-I have an eGPU R43SG-TB3 adapter, which can be connected either via Thunder=
-bolt
-3/4 port, or directly via PCIe M.2 x4 link.
+Constraints. maxItems: X
 
-Using the eGPU connected via Thunderbolt, game performance is often absymal,
-especially with games that use DXVK.
+> +
+> +  ranges: true
+> +
+> +  clocks:
+> +    items:
+> +      - description: Controller bus clock
+> +      - description: Controller suspend clock
+> +      - description: Controller reference clock
+> +      - description: Controller gm clock
+> +      - description: Controller gs clock
+> +      - description: Controller utmi clock
+> +      - description: Controller pipe clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: bus
+> +      - const: suspend
+> +      - const: ref
+> +      - const: gm
+> +      - const: gs
+> +      - const: utmi
+> +      - const: pipe
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    const: soft
+> +
+> +patternProperties:
+> +  '^usb@[0-9a-z]+$':
 
-The problem is described at length here:
-https://gitlab.freedesktop.org/drm/amd/-/issues/2885
+unit addresses are in hex, so a-f
 
-but in summary, the main symptoms that indicate the presence of a performan=
-ce
-problem with Thunderbolt eGPU are:
+Open existing bindings and look how it is done there. There are no
+bindings for DWC3 glue/wrapper device having a-z.
 
-- Low and bumpy fps, GPU clock speeds and GPU usage.
-- Low or no difference when downscaling the resolution or reducing graphic
-settings.
 
-Using the direct M.2 connection instead, performance is as good as expected,
-almost on the level of Windows.
+> +    $ref: snps,dwc3.yaml#
+> +
+> +additionalProperties: false
 
-In Windows there is a performance gap of 5-10% between Thunderbolt and M.2
-connection, but in Linux the gap is much wider, sometimes more than 50%. Ve=
-ry
-few games seem to be unaffected by the problem (e.g. Shadows of Tomb Raider=
- and
-Doom Eternal).
+Same comments: open existing bindings and take a look how it is there.
+This goes after 'required:' block.
 
-I tested with an Nvidia RTX 2060 Super GPU, paired with an Intel Nuc 13 Pro
-(i5-1340p and Thunderbolt 4) and with a Dell XPS 9570 (i7-8750H and Thunder=
-bolt
-3), both running Fedora 39 and kernel 6.7.5. I tried kernel 6.8.0 rc5 too, =
-but
-with no differences.
+> +
+> +required:
+> +  - compatible
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +  - ranges
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - reset-names
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    usb@98a0000 {
+> +            compatible = "hisilicon,hi3798mv200-dwc3";
 
-Since the problem emerges with both Nvidia and AMD GPUs (as evident from the
-linked report) and that the problem is not reproducible by connecting the G=
-PU
-directly via M.2 connection, bypassing the Thunderbolt port, I suspect ther=
-e is
-a performance issue in the Thunderbolt stack, perhaps in proper bandwidth
-allocation.
+reg is always the second property. ranges is third.
 
-I hope that information given here, and in the link given, may help to reso=
-lve
-the problem.
 
-I am of course available to provide additional information, logs, and test =
-any
-patches if needed. Thank you.
+> +            #address-cells = <1>;
+> +            #size-cells = <1>;
 
---=20
-You may reply to this email to add a comment.
+Use 4 spaces for example indentation.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+
+
+Best regards,
+Krzysztof
+
 
