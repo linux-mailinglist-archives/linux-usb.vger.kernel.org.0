@@ -1,246 +1,159 @@
-Return-Path: <linux-usb+bounces-7007-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7008-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B9398622E5
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 07:23:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8758E8623B7
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 10:09:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6117284B64
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 06:23:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5F0EB23090
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 09:09:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5CB21798C;
-	Sat, 24 Feb 2024 06:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C79F918AEE;
+	Sat, 24 Feb 2024 09:09:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="J4TSy+Mm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ax7/KRhK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DE513FFF;
-	Sat, 24 Feb 2024 06:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E72F1400B;
+	Sat, 24 Feb 2024 09:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708755812; cv=none; b=bN+/on8d/N/vq9zOcyHVRsDrMyHk+EaNKM10Gx+ULTdEztlMECy/6kqAKVFYkGLLCMImU7tKKiRxom3BlRtvtwQQ6AQ0YACOCSS1BlKIV6Qg38IfMobRLZMdUZpAbIdJRnLA6P938BegO+0/qk5pb5ygGnG24IgyZWY2vPXTnfc=
+	t=1708765747; cv=none; b=RdxsKLX8KTh5Gdu8YNkNsI4ot92AESnBI7gwjiD2PzSSNO7bA8Q7Y9uRk0zQWXFDDpJTUYThsotuPMXx57LzW7HJe535G29tPn2kcJxSNya6k5DmxKzypq0eCvsofXCiZgRpOCs6E80qwZOBAsOXIvz8OGkgFA0mvVL2U/fzLK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708755812; c=relaxed/simple;
-	bh=W0u5IT/H5hLXinO/B5FelGXdqlc5c1QwMVi0wEyDxCc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=OTzUWSACK4WTMvdwK7tB8K2rbTgdVz5ijhNdRVg/4Nyu8BejrMgVIEWJX0bcXGotLXh0UDNTeYEeGi7UgwDUjwQiM+RPaL96d5GnqMdmJN3YlpEOIlYjTV4/buj6N0NQMmR6KY9xQaBXTZ3AmbxkFBAn3FwA0x72Sqg9ytJUn6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=J4TSy+Mm; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41O5pM72004828;
-	Sat, 24 Feb 2024 06:22:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=QCYPc8ZRVSnAHVFnIu3U13dqMb2KRmhi+yyRJZMHU5M=; b=J4
-	TSy+MmWnctP1jtu2cXW9nSBuUjYMjc3VRLXJdbd3ywzS0ZW8jiRGtT2HY56pI8HF
-	b1/g3fTj0RAGMyGNv6IjywbpmWNlF6bdeobrLbiFM/MhZbbTEDPud84mRYMQiiTP
-	jGRz4AHhqhfNjwQXt7tOWgPmRbC0XaJf0bchSnUWrMfGfiZ3T6hBF6hHF/19msue
-	LXyvwcVBniQzj5XzuZaoEbs8W6FFIuCBfPLU4z2IcKGTaYbOZk5FVwDzDZva2Spe
-	qwXVcbzHuzpzymPJqTm4nVXKpCwpVRYVZbZ3nX0XGb81r+wbyfWq0pPKMNSYnRGD
-	pMZ2hdiQ2XECFTNQw42A==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wf65hrbbj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 24 Feb 2024 06:22:57 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41O6MuwG006607
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 24 Feb 2024 06:22:56 GMT
-Received: from [10.110.15.108] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 23 Feb
- 2024 22:22:55 -0800
-Message-ID: <76922981-88ec-a376-ce61-ea1ff85f43d2@quicinc.com>
-Date: Fri, 23 Feb 2024 22:22:50 -0800
+	s=arc-20240116; t=1708765747; c=relaxed/simple;
+	bh=Q1oMbEw0NLdRkWu0F9h/Gc9Oz5SC4qKZQNvZFGmheI4=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=Bi4MChQEMEPTPwVMh44NQTKoJZshIsUpCRh9cVDMMLJMxDIAKW1PYCb6hWiHXreAVRMibdyEbzK/beCzZ7OnZoMOqDjN2W86Twf9pgYeC0r49pZ0EzjSsFBLUDkksmvEAX4QyOzZRPUl94ks9k84DkTT/AuDa452zyBiaWiYb/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ax7/KRhK; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-512be9194b7so1322840e87.1;
+        Sat, 24 Feb 2024 01:09:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708765744; x=1709370544; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=He0fBSHHPtIHZTRjcYmDZndFACrI+q2AezJo3cfp+yQ=;
+        b=ax7/KRhKL3JgVJSwwIHubvQJ9Z65+f/O1lQFyxK+LYyol0UGNHayOCgcBgFKI8i0At
+         qoUcF2OldmBRU7dTHhNHKfoJqnaWPT68x2Up6ydfHYx+tFQRvrT5Roa5Q2el/3bhA0Vv
+         1bruFcpj1bbu5RhM0rSXuulOQVqF7dH1AULv/I50iBrnKxj5wdmtISP2jw0KogbnxkXI
+         iLBkcMlREsXLM8BTsSdA7/z0FLVidI+3LyKJXGTytAS5ltFslnBBVfmlPy1Cl41vFfF3
+         t0KgWr1Ja92GvcxT3us7WlT+9QZrso/pl2eujBvI3qxT8Qq94qutIJDGxtdm/ppVnr8c
+         sOUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708765744; x=1709370544;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=He0fBSHHPtIHZTRjcYmDZndFACrI+q2AezJo3cfp+yQ=;
+        b=ezT/HyB7G7N2OLvDnOE3JhGUHH7PQQpjF6MFH5+OvBJJqeORuUJTXzKjW3UiSkEkiY
+         ey6cc6wnAXaZyzmzSqdj4O3m3QNo5oVmAGAaW6WFynrVJhnUEhB+azuYTPXGq59pPDAk
+         KIqcLssZGhUZf8P5xodlnjsH4tDwviBFonX8vY91mRV61Stg6rB3nKSCy51I5f/DM1gu
+         wE9FyDSHl6h2lKToNKAtcxhmHkTdlA9mwGVDy9Xn36I0li6Hw0ekL6Gu2LlcI1kHB/UE
+         6dlaNZRHChG79wQLFfN9yLw2UFBwSjx/xUKOBw800qq9kqXnsCeT7gY6yspFiWsdBXOE
+         daPA==
+X-Forwarded-Encrypted: i=1; AJvYcCV0k75IB8Y2GEjXpg8wiHl+Jh08VmJtLSBG4e+woAxOVh97wpGXY1RaoKnhyWu0sCKSiIE8zym2Y3JworlsZOnzSKp4i78M2zlnux89jZ7t2jwRoktHGjetXX8S0ZU5YsuuTiysnW3tRYObivYxESAklpNPgxJ2lmWTAjnwRGhUXO1J4g==
+X-Gm-Message-State: AOJu0YweNdF4qQy0c6robwjRQi0zqE1f34qypayen4DvpgK5yQ5VEO6q
+	V+A5B7oJ67oCmsd64T6KtnWn48WrpriBUNdm1XHcQkl6uTpulny1
+X-Google-Smtp-Source: AGHT+IGOmcFSCvj0DtbfsvvOm/TWfrSBjSEkwMeQyio5qdvAlQZq6fJHLF/fXG4q8mE1YEuQM4uU/w==
+X-Received: by 2002:a19:f710:0:b0:512:bd51:a0ea with SMTP id z16-20020a19f710000000b00512bd51a0eamr1115299lfe.9.1708765743390;
+        Sat, 24 Feb 2024 01:09:03 -0800 (PST)
+Received: from [192.168.1.105] ([178.176.74.19])
+        by smtp.gmail.com with ESMTPSA id t30-20020a195f1e000000b005118e37462asm144768lfb.89.2024.02.24.01.09.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Feb 2024 01:09:02 -0800 (PST)
+Subject: Re: [PATCH v3 4/8] usb: cdns3-ti: support reset-on-resume behavior
+To: =?UTF-8?Q?Th=c3=a9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Roger Quadros <rogerq@kernel.org>,
+ Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+ Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Tero Kristo <kristo@kernel.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?UTF-8?Q?Gr=c3=a9gory_Clement?= <gregory.clement@bootlin.com>,
+ Kevin Hilman <khilman@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20240223-j7200-usb-suspend-v3-0-b41c9893a130@bootlin.com>
+ <20240223-j7200-usb-suspend-v3-4-b41c9893a130@bootlin.com>
+From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <b778d2e8-3fcf-afe4-2e48-0348be19a085@gmail.com>
+Date: Sat, 24 Feb 2024 12:08:58 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v14 32/53] ALSA: usb-audio: Check for support for
- requested audio format
+In-Reply-To: <20240223-j7200-usb-suspend-v3-4-b41c9893a130@bootlin.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To: Takashi Iwai <tiwai@suse.de>
-CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-        <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alsa-devel@alsa-project.org>
-References: <20240208231406.27397-1-quic_wcheng@quicinc.com>
- <20240208231406.27397-33-quic_wcheng@quicinc.com>
- <87v86x2a27.wl-tiwai@suse.de>
- <cb3b7857-dc6c-80db-4fa7-6772a856f328@quicinc.com>
- <7f0c4f85-5a63-4643-8553-e3f5d6af67ec@quicinc.com>
- <87y1bjpfn0.wl-tiwai@suse.de>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <87y1bjpfn0.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Q1NKQpUrdoWd5O5aWBixNCa6-08HgSIz
-X-Proofpoint-GUID: Q1NKQpUrdoWd5O5aWBixNCa6-08HgSIz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-24_02,2024-02-23_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- bulkscore=0 mlxlogscore=949 suspectscore=0 adultscore=0 priorityscore=1501
- impostorscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2402120000
- definitions=main-2402240050
 
-Hi Takashi,
+On 2/23/24 7:05 PM, Théo Lebrun wrote:
 
-On 2/17/2024 2:08 AM, Takashi Iwai wrote:
-> On Sat, 17 Feb 2024 00:42:18 +0100,
-> Wesley Cheng wrote:
->>
->> Hi Takashi,
->>
->> On 2/9/2024 1:34 PM, Wesley Cheng wrote:
->>> Hi Takashi,
->>>
->>> On 2/9/2024 2:42 AM, Takashi Iwai wrote:
->>>> On Fri, 09 Feb 2024 00:13:45 +0100,
->>>> Wesley Cheng wrote:
->>>>>
->>>>> Allow for checks on a specific USB audio device to see if a
->>>>> requested PCM
->>>>> format is supported.  This is needed for support when playback is
->>>>> initiated by the ASoC USB backend path.
->>>>>
->>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>>>> ---
->>>>>    sound/usb/card.c | 31 +++++++++++++++++++++++++++++++
->>>>>    sound/usb/card.h | 11 +++++++++++
->>>>>    2 files changed, 42 insertions(+)
->>>>>
->>>>> diff --git a/sound/usb/card.c b/sound/usb/card.c
->>>>> index 7dc8007ba839..1ad99a462038 100644
->>>>> --- a/sound/usb/card.c
->>>>> +++ b/sound/usb/card.c
->>>>> @@ -155,6 +155,37 @@ int snd_usb_unregister_platform_ops(void)
->>>>>    }
->>>>>    EXPORT_SYMBOL_GPL(snd_usb_unregister_platform_ops);
->>>>> +/*
->>>>> + * Checks to see if requested audio profile, i.e sample rate, # of
->>>>> + * channels, etc... is supported by the substream associated to the
->>>>> + * USB audio device.
->>>>> + */
->>>>> +struct snd_usb_stream *snd_usb_find_suppported_substream(int card_idx,
->>>>> +            struct snd_pcm_hw_params *params, int direction)
->>>>> +{
->>>>> +    struct snd_usb_audio *chip;
->>>>> +    struct snd_usb_substream *subs;
->>>>> +    struct snd_usb_stream *as;
->>>>> +
->>>>> +    /*
->>>>> +     * Register mutex is held when populating and clearing usb_chip
->>>>> +     * array.
->>>>> +     */
->>>>> +    guard(mutex)(&register_mutex);
->>>>> +    chip = usb_chip[card_idx];
->>>>> +
->>>>> +    if (chip && enable[card_idx]) {
->>>>> +        list_for_each_entry(as, &chip->pcm_list, list) {
->>>>> +            subs = &as->substream[direction];
->>>>> +            if (snd_usb_find_substream_format(subs, params))
->>>>> +                return as;
->>>>> +        }
->>>>> +    }
->>>>> +
->>>>> +    return NULL;
->>>>> +}
->>>>> +EXPORT_SYMBOL_GPL(snd_usb_find_suppported_substream);
->>>>> +
->>>>>    /*
->>>>>     * disconnect streams
->>>>>     * called from usb_audio_disconnect()
->>>>> diff --git a/sound/usb/card.h b/sound/usb/card.h
->>>>> index 02e4ea898db5..ed4a664e24e5 100644
->>>>> --- a/sound/usb/card.h
->>>>> +++ b/sound/usb/card.h
->>>>> @@ -217,4 +217,15 @@ struct snd_usb_platform_ops {
->>>>>    int snd_usb_register_platform_ops(struct snd_usb_platform_ops *ops);
->>>>>    int snd_usb_unregister_platform_ops(void);
->>>>> +
->>>>> +#if IS_ENABLED(CONFIG_SND_USB_AUDIO)
->>>>> +struct snd_usb_stream *snd_usb_find_suppported_substream(int card_idx,
->>>>> +            struct snd_pcm_hw_params *params, int direction);
->>>>> +#else
->>>>> +static struct snd_usb_stream
->>>>> *snd_usb_find_suppported_substream(int card_idx,
->>>>> +            struct snd_pcm_hw_params *params, int direction)
->>>>> +{
->>>>> +    return NULL;
->>>>> +}
->>>>> +#endif /* IS_ENABLED(CONFIG_SND_USB_AUDIO) */
->>>>
->>>> The usefulness of ifdef guard here is doubtful, IMO.  This header is
->>>> only for USB-audio driver enablement, and not seen as generic
->>>> helpers.  So, just add the new function declarations without dummy
->>>> definitions.
->>>>
->>>
->>> Got it, will remove it.  We also have a dependency in place for the
->>> qc_audio_offload driver and SND USB AUDIO in the Kconfig.
->>>
->>
->> Looking at this again after trying some mixed Kconfig settings.  These
->> declarations aren't specific for USB-audio.  They are helpers that are
->> exposed to soc usb, so that it can do some basic verification with soc
->> usb before allowing the enable stream to continue.
+> Add match data support, with one boolean to indicate whether the
+> hardware resets after a system-wide suspend. If hardware resets, we
+> force execute ->runtime_resume() at system-wide resume to run the
+> hardware init sequence.
 > 
-> Then rather the question is why snd-soc-usb calls those functions
-> *unconditionally*.  No matter whether we have dependencies in Kconfig,
-> calling the function means that the callee shall be drug when the
-> corresponding code is running.
+> No compatible exploits this functionality, just yet.
 > 
-> If it were generic core API stuff such as power-management or ACPI,
-> it'd make sense to define dummy functions without the enablement, as
-> many code may have optional calls.  If the API is enabled, it's anyway
-> in the core.  If not, it's optional.  That'll be fine.
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  drivers/usb/cdns3/cdns3-ti.c | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
 > 
-> OTOH, the stuff you're calling certainly belongs to snd-usb-audio.
-> Even if the call is really optional, it means that you'll have a hard
-> dependency when snd-usb-audio is built, no matter whether you need or
-> not.
-> 
->> Since the ASoC
->> layer doesn't have insight on what audio profiles are supported by the
->> usb device, this API will ensure that the request profile is
->> supported.
->>
->> Issues are seen when we disable SND USB audio config and enable the
->> ASoC parts.
-> 
-> If snd-usb-audio is disabled, what snd-soc-usb would serve at all?
-> Does it still make sense to keep it enabled?
-> That said, the statement above (building snd-soc-usb without
-> snd-usb-audio) looks already dubious; isn't it better to have a proper
-> dependency in Kconfig, instead?
-> 
+> diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
+> index 4c8a557e6a6f..f76327566798 100644
+> --- a/drivers/usb/cdns3/cdns3-ti.c
+> +++ b/drivers/usb/cdns3/cdns3-ti.c
+[...]
+> @@ -220,8 +226,29 @@ static int cdns_ti_runtime_resume(struct device *dev)
+>  	return 0;
+>  }
+>  
+> +static int cdns_ti_suspend(struct device *dev)
+> +{
+> +	struct cdns_ti *data = dev_get_drvdata(dev);
+> +
+> +	if (data->match_data && data->match_data->reset_on_resume)
+> +		return pm_runtime_force_suspend(dev);
+> +	else
 
-Ok, took a look at it a bit more and should have gotten all the 
-dependencies addressed through Kconfigs.  Thanks for the review comments 
-and feedback.
+   Pointless *else* after *return*...
 
-Thanks
-Wesley Cheng
+> +		return 0;
+> +}
+> +
+> +static int cdns_ti_resume(struct device *dev)
+> +{
+> +	struct cdns_ti *data = dev_get_drvdata(dev);
+> +
+> +	if (data->match_data && data->match_data->reset_on_resume)
+> +		return pm_runtime_force_resume(dev);
+> +	else
+
+   Here as well...
+
+> +		return 0;
+> +}
+> +
+>  static const struct dev_pm_ops cdns_ti_pm_ops = {
+>  	RUNTIME_PM_OPS(NULL, cdns_ti_runtime_resume, NULL)
+> +	SYSTEM_SLEEP_PM_OPS(cdns_ti_suspend, cdns_ti_resume)
+>  };
+>  
+>  static const struct of_device_id cdns_ti_of_match[] = {
+
+MBR, Sergey
 
