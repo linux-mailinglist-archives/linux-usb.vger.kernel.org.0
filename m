@@ -1,108 +1,111 @@
-Return-Path: <linux-usb+bounces-7023-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7024-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11EED86256D
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 14:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EC518625A8
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 15:48:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9ECF41F2313F
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 13:55:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A4F91F21F67
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 14:48:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C591482C6;
-	Sat, 24 Feb 2024 13:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 502191C13;
+	Sat, 24 Feb 2024 14:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NW9o7oUc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JUeL6xcr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024F0482D3
-	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 13:53:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99AB742043
+	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 14:48:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708782788; cv=none; b=JixNPWgqZ6dM42ziSFOeqzRoYYkMYLvdvxjyN5ZB4h7UVbe8eTLMvCdv1QzTP8LHaU248lF71Enh5u+5vN56BhPlX7SRoAR29Rp1FSpPbv5/FeF0VMo2U0grBTkvh5HAZIdWd8RD3FxHRI41B4rMqM+vipTa+GjF06nlS9+6+Mw=
+	t=1708786087; cv=none; b=kuyLK6dpwmAj/jquiDxnATCfvMN3pZgZAKwm4eqkx9vroVNoZp9eMM7GCYRmkbStHYlMbDlhzNsHy+NwXsXGvFMmW1yN4hnBhYJvMgsJ9Fim4nvqLgpjdPK6DTN6aSCws2KRaoi1tXeBpqq26hh4ALdNDvrMqrYMw+GCClWPMAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708782788; c=relaxed/simple;
-	bh=VWF64JLHhDBS2pWz1T4oErLsPpNC811AcQE+tvREolE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZFbD8FyoCqr7aARVHllOKpzVnB315avOP1k5QbmCdgCjZUxNUZgs54jikvid2eKttwc0U5YolVF5uCxg30RjmFZ887aN5Yss/a/j2lGoRj9g+cOGFrJK85E4v1yfU+m1eAt4Fpcpu2YO+VR+xIcyAELuqJWc4ZDnT0eYJ5/x2Rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NW9o7oUc; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1708782784;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tm1yrXWwpayVhW0izRTuDBy0hwWeAWTE2v2krJfJP6w=;
-	b=NW9o7oUcJ1oPsAYqMgb00gRou3FUu3uSSHnH5sYa2qqeMgWisTHbGqpoHn193JC4/gmY68
-	Zq+CJvm+QeyYBRlvCxS8urLV2A1DxV8HiaAhTpXxg15OKntYMjYnA0zWxNShpxbf//UNHJ
-	7OZQYLU2ZzlItCsW4ilQQ+Dsmjdmr3s=
-From: chengming.zhou@linux.dev
-To: rui.silva@linaro.org,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	vbabka@suse.cz,
-	roman.gushchin@linux.dev,
-	Xiongwei.Song@windriver.com,
-	chengming.zhou@linux.dev,
-	Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH] usb: isp1760: remove SLAB_MEM_SPREAD flag usage
-Date: Sat, 24 Feb 2024 13:52:56 +0000
-Message-Id: <20240224135256.830413-1-chengming.zhou@linux.dev>
+	s=arc-20240116; t=1708786087; c=relaxed/simple;
+	bh=iI1nwc5vmbxH2h9zUSxLsO+rba3Qg4rDFwzEKOuM3DE=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=hfdfyvbY6J6PPxCNMFi+YyD+dJx05OSQ3clLu+iAHTFbk1Py+Bg4zuR/4pDKyTtsW5pSHtKIDzjJiW06/XF+PYW/Vg0lGXed5DcIX7GourdMloLH99rLm06X3xzS8YJC8klfyru+YAJXxdffsUk6lsEgec2cT886ToeTubcAryE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JUeL6xcr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E4961C433C7
+	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 14:48:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708786086;
+	bh=iI1nwc5vmbxH2h9zUSxLsO+rba3Qg4rDFwzEKOuM3DE=;
+	h=From:To:Subject:Date:From;
+	b=JUeL6xcr9wfNclfRrV2ad1tL6xJDY7lxGBIHMCJU4hFszxNvsApx1mco0xeaRcVt9
+	 HStic6kokltaJCLBybBEO/POVCDQpPrcQPikuQNQBAACU1FzMrJb4h7o72WgVdt3G3
+	 IYAlWDN4NF7xWdkN+3N+R2JoBhRySpoatK/jmOUlecpHR6IE3KsuHsAfM4HAigSMP9
+	 ftMoAN+pdEViEeQzcffeOBUHm2kjo9W0zzEdrpMZ0jNk+3dqZWGmtdwd/5qamZ2/BC
+	 WCUGAmTTbaJE1Nw6sag69BWjBEzntghrfz0bP5hNpBx8259FKTxvfw6Z//HFv7g0OM
+	 EnZKyLU8wUCRA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id C69E6C4332E; Sat, 24 Feb 2024 14:48:06 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218526] New: Unable to achieve 240hz on usb4 docking station
+Date: Sat, 24 Feb 2024 14:48:06 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: samworlds123@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-218526-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-From: Chengming Zhou <zhouchengming@bytedance.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218526
 
-The SLAB_MEM_SPREAD flag is already a no-op as of 6.8-rc1, remove
-its usage so we can delete it from slab. No functional change.
+            Bug ID: 218526
+           Summary: Unable to achieve 240hz on usb4 docking station
+           Product: Drivers
+           Version: 2.5
+          Hardware: AMD
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: samworlds123@gmail.com
+        Regression: No
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- drivers/usb/isp1760/isp1760-hcd.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+Kernel version used: 6.7.5
 
-diff --git a/drivers/usb/isp1760/isp1760-hcd.c b/drivers/usb/isp1760/isp1760-hcd.c
-index 76862ba40f35..0e5e4cb74c87 100644
---- a/drivers/usb/isp1760/isp1760-hcd.c
-+++ b/drivers/usb/isp1760/isp1760-hcd.c
-@@ -2521,21 +2521,19 @@ static const struct hc_driver isp1760_hc_driver = {
- int __init isp1760_init_kmem_once(void)
- {
- 	urb_listitem_cachep = kmem_cache_create("isp1760_urb_listitem",
--			sizeof(struct urb_listitem), 0, SLAB_TEMPORARY |
--			SLAB_MEM_SPREAD, NULL);
-+			sizeof(struct urb_listitem), 0, SLAB_TEMPORARY, NULL);
- 
- 	if (!urb_listitem_cachep)
- 		return -ENOMEM;
- 
- 	qtd_cachep = kmem_cache_create("isp1760_qtd",
--			sizeof(struct isp1760_qtd), 0, SLAB_TEMPORARY |
--			SLAB_MEM_SPREAD, NULL);
-+			sizeof(struct isp1760_qtd), 0, SLAB_TEMPORARY, NULL);
- 
- 	if (!qtd_cachep)
- 		goto destroy_urb_listitem;
- 
- 	qh_cachep = kmem_cache_create("isp1760_qh", sizeof(struct isp1760_qh),
--			0, SLAB_TEMPORARY | SLAB_MEM_SPREAD, NULL);
-+			0, SLAB_TEMPORARY, NULL);
- 
- 	if (!qh_cachep)
- 		goto destroy_qtd;
--- 
-2.40.1
+Using a display1.2 port to display1.4 port on the dock I'm not able to get
+240hz on linux I max out at 165hz
 
+On windows with the same dock and montior I get 240hz=20
+
+I've tested 3 wayland compositors which all had the same results.
+
+
+Cpu: 7940hs, usb4 port with 40gbs
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
