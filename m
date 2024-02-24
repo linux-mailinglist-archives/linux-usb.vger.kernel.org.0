@@ -1,187 +1,114 @@
-Return-Path: <linux-usb+bounces-7015-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7019-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6D458624BC
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 12:51:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B07E48624D5
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 13:09:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBEDDB21733
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 11:51:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F25DE283FFF
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 12:09:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B22C839AC2;
-	Sat, 24 Feb 2024 11:51:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56E533C48A;
+	Sat, 24 Feb 2024 12:08:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ma8pONkV"
+	dkim=pass (2048-bit key) header.d=orange.fr header.i=@orange.fr header.b="REp8uHu2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5FC31A60
-	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 11:51:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E601B977
+	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 12:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708775493; cv=none; b=czy6Z3/FxGDoP4GtrGzRlHqgy2QbrNFYvEtbHpL2dGX+YLa2fq4hldMzAoEZ7x3ZbMBml/YTllJzjMHahJUGnrgCPYD6KyXD6qEooNqzuEYFC9sSJaaRBG/ZhTB/r1bWgQDUpntEeWmyumh0a17v7yTEd8VmLSv6C0m0y7viGtM=
+	t=1708776534; cv=none; b=cW0DUsl1sEiXzB3uQWgFPaS0VDk8HjWK8pl24XpiKEp/UdF2alGfCq1jERSe1Qagcj0Ci5YQNWnoMz397Gcm3OoVrryITqUHN78giQR4nlxca12pwx/WZznWNVEjxbHx/+6JreT2C/6uN03aJcAWOHt3AJa+fidlXF/a8dvdv18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708775493; c=relaxed/simple;
-	bh=1ZVaoX/vtCZst0YCdndUJ/OiT7J1WXVdIUQKOi04vbE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jomM+2DcHRGq//Qgbta/tv+80tRvz6dDMadwEHX92sh28yg0Tp86w8O54NyHOJpWMOh4Uah2hpUGRBEEKQic/jwO0KrJdJAHZF8L+iD4AZelxYd9j7WK4hdZJYRp/tTe5423Z0BnIGPT2CZZK61duO2VdXy3FGBnvfD6xAyz3D0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ma8pONkV; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5648d92919dso1972209a12.1
-        for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 03:51:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708775489; x=1709380289; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gZWuN56T1LgisnRrY6Bcpyd8W/T98thea21LZidgs8M=;
-        b=ma8pONkVpPRTX9GEqA1bTpdVHB3A4/kA6eA7NmXmVXpfkDJHHJc9rZlkL5eWVf3BfO
-         RIzfY2lKYo2vw9eWjsWvyv9DWEkq3tzG2yOQGl7FecPJutCjtrT1etNXyU+N9/NwcCBz
-         IHIbT2aquh345rUeK2nQaAs7TuOlpFlecKCsSL0WWo/lMEOvLwGdiDQkM2dymZ7jpoYw
-         tGBSdNIQY8+d8d9Riq5E0pyvAmMJ19tjWkmaibDA7bXFs7BgRUawLZO9W5I8i1WpaDJx
-         Bix66WLZ6NJsWJjuB6GPcFToMNjdXSkkSnCja5g1FMrnjZyEAPWCLHvtjrbS10b72AJU
-         3zDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708775489; x=1709380289;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gZWuN56T1LgisnRrY6Bcpyd8W/T98thea21LZidgs8M=;
-        b=CMBkBCxQCtLjlqdDsSZBDNSsW/PSqlLJfVtttrnYRG17hYQRXROkMik2qnYCcFX/OM
-         7DKNmfS9UKrDGeYr263RuA/0Ip8yMkcuA6CvDCO/LSgRRWKZoxZOmJpVZlADOFpoBJ71
-         vjDWZ4PaLgjz6ZSNqNdrj348XErbEftElYXwlrNErorPS4Gxk6OzgQNiDQtBymdXkmYi
-         Xh8iarXQzZbL3NRsoypSKZoxBMVTnNfbys6aznxoQFNnSZNWQCPkYP+/2zGWjH3jMxXk
-         fZLmO3Om1xjObZDRBheJNt/Ct54R1wqmA5p7OQlXfkpPJWRhoQtGNELGm5Y1pGq3Zwwk
-         7W7w==
-X-Gm-Message-State: AOJu0YyuD3CRRXwHaQnQBwMCL4M+tJr13FdBVwdQrCB699uI0gFPXUBK
-	wR7vQWK64l0o5alwgJlM3SheHtdWsZ116tkqp/JGy6Rb4kxw4kRAkqO4g1bDSOU=
-X-Google-Smtp-Source: AGHT+IHPXSZVhMs9sYnhvpROn+JNrGhfGk4wXZqe3vjgS31h3SP0lGUCY1qzO5b+OjIbJzG8VkyPzw==
-X-Received: by 2002:a05:6402:5148:b0:565:bb25:bb7b with SMTP id n8-20020a056402514800b00565bb25bb7bmr89120edd.6.1708775489534;
-        Sat, 24 Feb 2024 03:51:29 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.116])
-        by smtp.gmail.com with ESMTPSA id d18-20020a056402401200b005640022af58sm476693eda.83.2024.02.24.03.51.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Feb 2024 03:51:29 -0800 (PST)
-Message-ID: <24d8bfe7-3f10-4970-8999-c436e9c9b711@linaro.org>
-Date: Sat, 24 Feb 2024 12:51:27 +0100
+	s=arc-20240116; t=1708776534; c=relaxed/simple;
+	bh=UZlUKzJDIE3Ejg/2uPUT90rGzS7fsqyUAE1JCjenB8I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VUBV+MXZ/EiI7zLOSWR5Wzwz4XEIcmrkw7jfNcOUzG54gWc+EvBaWTzX8yrNo2dK7YZoa4Kpgnua4EJ6jP9bVj3nFRjcMGkDKlBwf92dwjfy5llkFnV/ZwKbCDwKg73AiwJHOkmUaPZOKEfwra4pUj4Yn3TMXfM1dAodKbJsY5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=orange.fr; spf=pass smtp.mailfrom=orange.fr; dkim=pass (2048-bit key) header.d=orange.fr header.i=@orange.fr header.b=REp8uHu2; arc=none smtp.client-ip=80.12.242.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=orange.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=orange.fr
+Received: from jules-desktop.dynamic.ziggo.nl ([84.105.71.69])
+	by smtp.orange.fr with ESMTPA
+	id dqpVrjA78SI7xdqpfr56W6; Sat, 24 Feb 2024 13:08:44 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+	s=t20230301; t=1708776524;
+	bh=3dYE06cGrljHtTRYwZzkQUBSeOHR9BhQZqpePGYgV5k=;
+	h=From:To:Cc:Subject:Date;
+	b=REp8uHu2ui4eguwwrHv9egWBjrvKQ/OPuzquVqlNFsVZDCAsFKp5KXOl7HyAzyKG9
+	 lDRufFGzsnv4/8tOtEOC5v7s1Bvzk2jr0xEjMj2WXGwyM//U40Ar91dwBQg2qfdwss
+	 3YbBJB3bX3DoYH0hqD7tJRSqlBbsZ+joHR1itXb2AU9ELh7pcODybDZCnlZm43hBc0
+	 sOePrK1IDPbkzblqCkrPjQ+umNNm7mRDdmZ/jDLpFRHv6OymbEezKVGV+bjDji87Q2
+	 ocPa5djoNAM/+c+lwOiyRbjhTDF81Y3DwZm6Vywh96Ed9sL0ui7o4T83DHZeFwMu3J
+	 xWNyjttN8n+JQ==
+X-ME-Helo: jules-desktop.dynamic.ziggo.nl
+X-ME-Auth: anVsZXMubm9pcmFudEBvcmFuZ2UuZnI=
+X-ME-Date: Sat, 24 Feb 2024 13:08:44 +0100
+X-ME-IP: 84.105.71.69
+From: Jules Noirant <jules.noirant@orange.fr>
+To: 
+Cc: jikos@kernel.org,
+	Jules Noirant <jules.noirant@orange.fr>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	linux-usb@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: usbhid: hid-pidff: fix initialisation for devices that pre-play effects
+Date: Sat, 24 Feb 2024 13:00:56 +0100
+Message-Id: <20240224120056.21251-1-jules.noirant@orange.fr>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: add hisilicon,hi3798mv200-dwc3
-Content-Language: en-US
-To: Yang Xiwen <forbidden405@outlook.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Yang Xiwen <forbidden405@foxmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org
-References: <20240224-dwc3-v2-0-8e4fcd757175@outlook.com>
- <20240224-dwc3-v2-1-8e4fcd757175@outlook.com>
- <b64155f2-2965-4ea1-8c23-7c79d7a01c9f@linaro.org>
- <SEZPR06MB695934A8E7DEAD4366433AA496542@SEZPR06MB6959.apcprd06.prod.outlook.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <SEZPR06MB695934A8E7DEAD4366433AA496542@SEZPR06MB6959.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 24/02/2024 12:33, Yang Xiwen wrote:
-> On 2/24/2024 6:28 PM, Krzysztof Kozlowski wrote:
->> On 23/02/2024 22:43, Yang Xiwen via B4 Relay wrote:
->>> From: Yang Xiwen <forbidden405@outlook.com>
->>>
->>> Document the DWC3 controller used by Hi3798MV200.
->>>
->>> Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
->>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: hisilicon,hi3798mv200-dwc3
->>> +
->>> +  '#address-cells':
->>> +    const: 1
->>> +
->>> +  '#size-cells':
->>> +    const: 1
->>> +
->>> +  reg: true
->> Constraints. maxItems: X
-> 
-> 
-> Is it mandatory to have this property if this node is going to be under 
-> a "simple-bus"? I'm taking rk3399-dwc3.yaml as reference. In fact, dwc3 
-> wrapper on mv200 does not have an extra register space. The wrapper only 
-> needs to turn on the clocks and deassert the resets. It does not 
-> need/have a register space.
+Some PID compliant devices play effects outside of the usb drivers when you
+power them, for example an autocenter spring. These effects are thus
+re-triggered when you reset the device through the driver init sequence,
+preventing other effects to be played in some cases.
 
-Then why did you add it? No, the property is not mandatory. Write
-bindings in a way they match hardware...
+This fix makes sure all the effects currently played are stopped after
+resetting the device. More specifically, it brings compatibility to the
+Brunner CLS-P joystick and potentially more of their products.
 
-> 
-> 
-> I don't think it makes sense duplicating the same address twice.
-> 
-> 
-> But reg property is required by "simple-bus" so i don't know why there 
-> is no warning for rk3399-dwc3.
+Signed-off-by: Jules Noirant <jules.noirant@orange.fr>
+---
+ drivers/hid/usbhid/hid-pidff.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-I don't think it is. ranges or reg is.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
+index 3b4ee21cd..aade18f9e 100644
+--- a/drivers/hid/usbhid/hid-pidff.c
++++ b/drivers/hid/usbhid/hid-pidff.c
+@@ -109,8 +109,9 @@ static const u8 pidff_pool[] = { 0x80, 0x83, 0xa9 };
+ /* Special field key tables used to put special field keys into arrays */
+ 
+ #define PID_ENABLE_ACTUATORS	0
+-#define PID_RESET		1
+-static const u8 pidff_device_control[] = { 0x97, 0x9a };
++#define PID_STOP_ALL_EFFECTS	1
++#define PID_RESET		2
++static const u8 pidff_device_control[] = { 0x97, 0x99, 0x9a };
+ 
+ #define PID_CONSTANT	0
+ #define PID_RAMP	1
+@@ -1157,6 +1158,10 @@ static void pidff_reset(struct pidff_device *pidff)
+ 	hid_hw_request(hid, pidff->reports[PID_DEVICE_CONTROL], HID_REQ_SET_REPORT);
+ 	hid_hw_wait(hid);
+ 
++	pidff->device_control->value[0] = pidff->control_id[PID_STOP_ALL_EFFECTS];
++	hid_hw_request(hid, pidff->reports[PID_DEVICE_CONTROL], HID_REQ_SET_REPORT);
++	hid_hw_wait(hid);
++
+ 	pidff->device_control->value[0] =
+ 		pidff->control_id[PID_ENABLE_ACTUATORS];
+ 	hid_hw_request(hid, pidff->reports[PID_DEVICE_CONTROL], HID_REQ_SET_REPORT);
+-- 
+2.40.1
 
 
