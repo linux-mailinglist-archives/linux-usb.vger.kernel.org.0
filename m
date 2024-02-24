@@ -1,74 +1,74 @@
-Return-Path: <linux-usb+bounces-7016-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7017-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66FD88624CA
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 13:02:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 545848624CD
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 13:03:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E87861F233E1
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 12:02:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67EA2B21820
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 12:03:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 101FF286A6;
-	Sat, 24 Feb 2024 12:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45A9F3B79E;
+	Sat, 24 Feb 2024 12:03:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fG1+bxo1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D8/It5RO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4BA364CF
-	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 12:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9F9182DB
+	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 12:03:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708776141; cv=none; b=cYN3BvdvB/b17TGE79Y3rfpczxuayyEiTKhbl9EVYfiFMlZEmqffohAlyDL4dTcgmjAz2tv7PKANk+XnNnmjZFreAsb7n1xxCpFqqSFZHpkNjuTKBlbPc3fLudEBNhdHWuoln/XGShdLSVsoueSSl690XHHzmreZrfajBjQuuXM=
+	t=1708776192; cv=none; b=mro+VexiItBABW5uw0g5UolmL0BnlcTIe7XiMhU3iO4ud8FBxg3t9vnTye6C9dtAraTVO9dQPRa1N1OrXti1bgRHxULj1GLGA0nUAmSjZLlnrP7O7NJSDUHT9uFlQB/7P2npm/CGNZ61U4ClwFdH/L7nI5iuKKfSub4n58X+WJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708776141; c=relaxed/simple;
-	bh=OgpDP55CkE9CjC82dfNSeMZ9n1xDps3uo7YT25eA0u8=;
+	s=arc-20240116; t=1708776192; c=relaxed/simple;
+	bh=ijFBfMpK8JkdDFm7OfdixRS1Gc2RuHWfYXXtGDrBCK8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=og0BohLdqCw22pCLoc84yYMF5QqjfQIJRDnqVwm0rWGH6vf7QOSWSZ9jIWqTg2OycvBDxdPGGdw0UcoSCNDCyCNuzYzmY+gM/NjqlynTNi1dKQXr4ycgWbVxveE/+r6IPtHkcyWaO+VhBFkDinRAgSxvQYa/yIkjJvlf6T/1Zpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fG1+bxo1; arc=none smtp.client-ip=209.85.208.47
+	 In-Reply-To:Content-Type; b=o2x0mmaGyX5d+BxqqEu5Jd+D6rTolHNaER82sbigSgEwGEl4ULn0ARQ9RukZjQivLn2MYmoC6svmKbmw+x4m4y2f7mwCJO61ieO6MuJ2I1UQqFP0NWgAlPRlx8Ze5/Db58WqTKNyD9VHi97AoIVZiopJJiizZzD409BM3VVhjBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D8/It5RO; arc=none smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-565a3910f86so565286a12.3
-        for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 04:02:19 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-563c403719cso1930484a12.2
+        for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 04:03:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708776138; x=1709380938; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1708776189; x=1709380989; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QAlJpoBTrI2xnlT9smumwLLuQKvcDympbSC8n1WAAKk=;
-        b=fG1+bxo1cY8qe33EDMZjVYjK60qU/yTNfdGpJLD+9XqR4fbbI2yoO7aFcM19l+G+Li
-         /ZOw6LOS5ZPr64wWVwurJRmyag08r0etZbiT+gUrsX/5CB77YkNT0ReXLiUQgeFFpmHA
-         OE3nAOa/9CfQhldqAYGJZ7vFTB0ZQ50j29T6Vr+KJbfSUsMf9J8o5x0Si+FyaMrU4bf1
-         OaDUksZxCh1LfsdgA82jjqT8zzviaSUt9FJ0mOWVMZtrDqG5Z8WQR/tlnYNBo0ALClFm
-         6q45rujbC6aT2flUDM52AKWaZy4ms+uGH8hs7RWIeVvrB/8ILsGeGGvlz6gDNqmtShl4
-         lZZQ==
+        bh=lm1gyNEPc3IuFPUD9S8a8OyShF07L5JbDmUPMrwTips=;
+        b=D8/It5ROFvZzmmOCazd2qDenDqcJ6QxjbwUldHQYsLIEUTJ40NE5A26ffjgKrljCxW
+         4nuncAZizVp4R8xy9sKEYzOqf9YgQ9AGFj0HJSYwqilVSUroTSPqEfYlpCymKTmqk8QW
+         vH3qVEGWQ9wF1R3N1TP+64GsfbVqEIHejW27De5WNoXupa9dlck6HAAlnI7bawsdwHhV
+         hEUuOdbQU/1ogaISuSYdQuf02vvlYX7SIjoSQAKrIAqFAFTWB3d/8aDGfnv2rN9/PEVq
+         SlpHzIywkUlLR5Wqs5V0yFgeHieZouj470ELWzXzEr/1OrvIToP14XMnxgVG0MrIFn46
+         Lysw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708776138; x=1709380938;
+        d=1e100.net; s=20230601; t=1708776189; x=1709380989;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAlJpoBTrI2xnlT9smumwLLuQKvcDympbSC8n1WAAKk=;
-        b=IeDYFzprRnNRQR2gcH8GCNwuHLfud0WPIWsr0kx9rWGvRJnVHY+O0+kWiVC74/Ul18
-         rvVlhfbUgh5kVI4JVEMhmgN/M5VCNSiduUA2q1caIGhsXbDCz1hWfbsK4fNeRBhsagOS
-         oFvNuU3WEpbrLpuaSOmJycQfcDbN6f4HD7raVyLFgEE6JlWLixJT30ra51L4XDqOoOsV
-         GxZQroBt6HGatsvWB8q6WWdXaBaWtqq2CxSxLXVs/XIKs+ruUvKYY15PSPDUFYJCd+4p
-         zpnkyj0DyLJjINAkdrobg2yNdRdCIppgxk31OwUxZ8/MGhU61bWVPyYsJmBHVR7yBU9H
-         0a6A==
-X-Forwarded-Encrypted: i=1; AJvYcCV60s8Oy9E5S4hKu+pJ9/lHPwGeiBC9IzvFyNjq8maegt45FmnPb3F0LyDfZNdq+7HkxBt+d8O4DeOu9BF+rRkI0XZKhBR1PPGO
-X-Gm-Message-State: AOJu0YwKOk52M3/B+NPnNA0Lk54UMQk+Am37vW24DMqcCOoExrfyMIjr
-	s5qK6mSacPPcRx35vkytNxf5jbB45tg4ZAz7s2VLVr+lae9D9WDyjcYZCKrfaNI=
-X-Google-Smtp-Source: AGHT+IGTJ7kq8H6Yp3AfqbQD0b69GowAo5PcIDxnmZ3LctbW6/9T7WIgcPMZxd8yFxMm5yF8sUeGTw==
-X-Received: by 2002:a05:6402:148d:b0:564:5764:a5d8 with SMTP id e13-20020a056402148d00b005645764a5d8mr1454170edv.25.1708776138020;
-        Sat, 24 Feb 2024 04:02:18 -0800 (PST)
+        bh=lm1gyNEPc3IuFPUD9S8a8OyShF07L5JbDmUPMrwTips=;
+        b=r4pwV/EL6twvwOhaeg0T7RCOSFL+HA7/rvbGb9vmT0/17kTP6ffTUpaxHYW1Xathrh
+         nL+Jh65xyzKbDOpBmd91OkgAMVjrkNdoGJWLbdgA300hMqkcgaEGC1n7o2XuJF5Lqa7w
+         De/5hIMOcBaYFJbzvYbV8A02hL/jJ8AvpzHB2WHNvfyM7KRTS6zzqvjLC/RTWGMoEdJo
+         BmCjmn8cjR0gZG8401YWKxFAnek8AygmP14AsrXVs1TCvHSwpw6ZVDkXi9MG27D3Qz/8
+         iJDjZxKugY42G3kKPJ8ONW7sfpdECN17IBTpoDfpeAyiWTRFxkijG3kH/v4rBN1nklTA
+         Yexw==
+X-Forwarded-Encrypted: i=1; AJvYcCVaDQjcvxas/ierE9wmwkhfW+MnIoMQXHPNKyoMRG62CVEwR4W7q8812oFUuVSQ6aEJVMKT9eInhAjnfRstXchc+T5wurM6rsVs
+X-Gm-Message-State: AOJu0YzRd1LM+YyanFTQ+t8I6UsHUg/LRYYEpDtJmn4VaCVhoBIdbUpP
+	BrXMBC65iHJfVd0im7X5YXgBo2kAZnV3imQ6/xkw5fMqRKHl/7VgEqHTg/y55TE=
+X-Google-Smtp-Source: AGHT+IGSPcjqHAW8E5L5pvaqRE8xh9InJFREIMPJPJJWLOviAOxhLEcINQ/qTZFt6KX6eAesZD728w==
+X-Received: by 2002:aa7:de05:0:b0:565:aec5:1b70 with SMTP id h5-20020aa7de05000000b00565aec51b70mr614773edv.30.1708776189588;
+        Sat, 24 Feb 2024 04:03:09 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.222.116])
-        by smtp.gmail.com with ESMTPSA id g2-20020a50ee02000000b00560c6ff443esm475397eds.66.2024.02.24.04.02.15
+        by smtp.gmail.com with ESMTPSA id g2-20020a50ee02000000b00560c6ff443esm475397eds.66.2024.02.24.04.03.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Feb 2024 04:02:17 -0800 (PST)
-Message-ID: <6c5c0233-dab8-4bd1-9f08-0b609d01defd@linaro.org>
-Date: Sat, 24 Feb 2024 13:02:15 +0100
+        Sat, 24 Feb 2024 04:03:09 -0800 (PST)
+Message-ID: <cf021cab-83d8-4661-a568-8808a0acca09@linaro.org>
+Date: Sat, 24 Feb 2024 13:03:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,27 +76,18 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [EXT] Re: [PATCH v6 4/9] dt-bindings: usb: add NXP ChipIdea USB2
+Subject: Re: [RESEND v6 4/9] dt-bindings: usb: add NXP ChipIdea USB2
  Controller schema
 Content-Language: en-US
-To: Xu Yang <xu.yang_2@nxp.com>, Rob Herring <robh@kernel.org>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
- "shawnguo@kernel.org" <shawnguo@kernel.org>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
- "kernel@pengutronix.de" <kernel@pengutronix.de>,
- "festevam@gmail.com" <festevam@gmail.com>, dl-linux-imx <linux-imx@nxp.com>,
- "peter.chen@kernel.org" <peter.chen@kernel.org>, Jun Li <jun.li@nxp.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20240221145846.1611627-1-xu.yang_2@nxp.com>
- <20240221145846.1611627-4-xu.yang_2@nxp.com>
- <20240223140256.GA1768266-robh@kernel.org>
- <DU2PR04MB882234D1A9D5718D8355928B8C552@DU2PR04MB8822.eurprd04.prod.outlook.com>
+To: Xu Yang <xu.yang_2@nxp.com>, gregkh@linuxfoundation.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+ conor+dt@kernel.org
+Cc: s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+ linux-imx@nxp.com, peter.chen@kernel.org, jun.li@nxp.com,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20240221080238.1615536-1-xu.yang_2@nxp.com>
+ <20240221080238.1615536-4-xu.yang_2@nxp.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -142,133 +133,25 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <DU2PR04MB882234D1A9D5718D8355928B8C552@DU2PR04MB8822.eurprd04.prod.outlook.com>
+In-Reply-To: <20240221080238.1615536-4-xu.yang_2@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 23/02/2024 15:56, Xu Yang wrote:
-> Hi Rob,
+On 21/02/2024 09:02, Xu Yang wrote:
+> As more and more NXP i.MX chips come out, it becomes harder to maintain
+> ci-hdrc-usb2.yaml if more stuffs like property restrictions are added to
+> this file. This will separate i.MX parts out of ci-hdrc-usb2.yaml and add
+> a new schema for NXP ChipIdea USB2 Controller.
 > 
->>
->> On Wed, Feb 21, 2024 at 10:58:41PM +0800, Xu Yang wrote:
->>> As more and more NXP i.MX chips come out, it becomes harder to maintain
->>> ci-hdrc-usb2.yaml if more stuffs like property restrictions are added to
->>> this file. This will separate i.MX parts out of ci-hdrc-usb2.yaml and add
->>> a new schema for NXP ChipIdea USB2 Controller.
->>>
->>> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
->>>
->>> ---
->>> Changes in v6:
->>>  - new patch
->>> ---
->>>  .../bindings/usb/ci-hdrc-usb2-imx.yaml        | 75 +++++++++++++++++++
->>>  1 file changed, 75 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.yaml b/Documentation/devicetree/bindings/usb/ci-
->> hdrc-usb2-imx.yaml
->>> new file mode 100644
->>> index 000000000000..2ec62f564bf5
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.yaml
->>> @@ -0,0 +1,75 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/usb/ci-hdrc-
->> usb2-
->> imx.yaml%23&data=05%7C02%7Cxu.yang_2%40nxp.com%7C4ac0c60cd4b4433f0f9f08dc34782572%7C686ea1d3bc2b4c6fa92c
->> d99c5c301635%7C0%7C0%7C638442937830606824%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIi
->> LCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=7p1DzvYmBsTgN44jypH7lc56z9hVBsFBYXUwsblk9z8%3D&reserv
->> ed=0
->>> +$schema: http://devicetree.org/meta-
->> schemas%2Fcore.yaml%23&data=05%7C02%7Cxu.yang_2%40nxp.com%7C4ac0c60cd4b4433f0f9f08dc34782572%7C686ea1d3
->> bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638442937830615622%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLC
->> JQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=fWWy9enbGK5yeKiovday7go3Gss5L%2F%2Fe%2F
->> OZcANny0QA%3D&reserved=0
->>> +
->>> +title: NXP USB2 ChipIdea USB controller
->>> +
->>> +maintainers:
->>> +  - Xu Yang <xu.yang_2@nxp.com>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->>> +      - enum:
->>> +          - fsl,imx27-usb
->>> +      - items:
->>> +          - enum:
->>> +              - fsl,imx23-usb
->>> +              - fsl,imx25-usb
->>> +              - fsl,imx28-usb
->>> +              - fsl,imx35-usb
->>> +              - fsl,imx50-usb
->>> +              - fsl,imx51-usb
->>> +              - fsl,imx53-usb
->>> +              - fsl,imx6q-usb
->>> +              - fsl,imx6sl-usb
->>> +              - fsl,imx6sx-usb
->>> +              - fsl,imx6ul-usb
->>> +              - fsl,imx7d-usb
->>> +              - fsl,vf610-usb
->>> +          - const: fsl,imx27-usb
->>> +      - items:
->>> +          - enum:
->>> +              - fsl,imx8dxl-usb
->>> +              - fsl,imx8ulp-usb
->>> +          - const: fsl,imx7ulp-usb
->>> +          - const: fsl,imx6ul-usb
->>> +      - items:
->>> +          - enum:
->>> +              - fsl,imx8mm-usb
->>> +              - fsl,imx8mn-usb
->>> +          - const: fsl,imx7d-usb
->>> +          - const: fsl,imx27-usb
->>> +      - items:
->>> +          - enum:
->>> +              - fsl,imx6sll-usb
->>> +              - fsl,imx7ulp-usb
->>> +          - const: fsl,imx6ul-usb
->>> +          - const: fsl,imx27-usb
->>
->> Now you just duplicated all the compatibles, and now any new compatibles
->> have to be added in 2 places. For this to work, you have to split
->> ci-hdrc-usb2.yaml into 2 files. One with all the common properties and
->> one with compatibles (minus imx). This is also needed if imx has any
->> extra properties the other don't.
->>
->> Didn't I say this already?
->>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 > 
-> Yes, I know.
-> 
-> But according to your words, I need to split ci-hdrc-usb2.yaml into 1 common
-> file and more than 1 vendor specific files (imx, nvidia, qcom, nuvoton and
-> others). In this patchset, I only focus on imx part and KK said he or someone
-> will take over other parts, therefore I just duplicated all the imx compatibles.
+> ---
+> Changes in v6:
+>  - new patch
+> ---
 
-Someone will take over their bits, but it does not mean you can
-duplicate IMX. Why you cannot use the approach I asked - move IMX out of
-that schema?
-
-https://lore.kernel.org/all/a0134089-a283-488b-8d7f-3f59dd938b60@linaro.org/
-
-Look:
-"... and move IMX to own file."
-
-Move is not "copy". Please run: `man mv`
-
-> If I only create imx specific yaml file and remove all compatilbles from common
-
-Why would you remove ALL of others? What is the point of this.
-
-> file, nvidia, qcom, nuvoton and others compatible info will be lost, is this
-> feasible? Or should I create mutiple vendor specific files at the same time?
-
-You can take a look how it is done in my recent Qualcomm PCI dt-bindings
-series.
+Discussion is on other thread, so let's be clear here:
+NAK, because you ignored what I asked for.
 
 Best regards,
 Krzysztof
