@@ -1,108 +1,108 @@
-Return-Path: <linux-usb+bounces-7022-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7023-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 296228624DC
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 13:10:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11EED86256D
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 14:55:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2D191F24EFD
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 12:10:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9ECF41F2313F
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 13:55:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 947EB3E493;
-	Sat, 24 Feb 2024 12:10:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C591482C6;
+	Sat, 24 Feb 2024 13:53:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EWvrg9Aj"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NW9o7oUc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C884250EB;
-	Sat, 24 Feb 2024 12:10:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024F0482D3
+	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 13:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708776620; cv=none; b=jV6Na16lHvE2RbJ0bOyPAlP9aB4XDTGaFyWfmhW0P4mx7Y45aRTrNDhIjWJnIUkSeU1oKyBzQo+PmfCKBRB1UklLA9RzcfZMpDGiuAODX27ivWT/KozAUVSIxbnhcom/AdVsEia5WWtL90A12fUVWta+NJEgqwda3vAdcijGbNM=
+	t=1708782788; cv=none; b=JixNPWgqZ6dM42ziSFOeqzRoYYkMYLvdvxjyN5ZB4h7UVbe8eTLMvCdv1QzTP8LHaU248lF71Enh5u+5vN56BhPlX7SRoAR29Rp1FSpPbv5/FeF0VMo2U0grBTkvh5HAZIdWd8RD3FxHRI41B4rMqM+vipTa+GjF06nlS9+6+Mw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708776620; c=relaxed/simple;
-	bh=A+X94K8nLPrBsMOn/w5jdCaGJfXT7yw62EcicOP2vgo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HnJWfMV7ESo084R9GmAmZuL+3Hun4pN0t3l+VL+uJ7H2l2WM+nZJAd2Phvdjg7WecgPrInAkpxhlKmASmHIxZmINWxnojyxSWnx88UBgdGOmS5Jpq6Rd1hvmlewdQM4gNhIbnWnhH2XQoHVS8AdnJfpFlSWF3+0ZCGOz2sjSxF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EWvrg9Aj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9CA65C43394;
-	Sat, 24 Feb 2024 12:10:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708776619;
-	bh=A+X94K8nLPrBsMOn/w5jdCaGJfXT7yw62EcicOP2vgo=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=EWvrg9AjMokq+VLy/BFYvtLkhI/6ddb6MLsipk+S0xFcaIUjj1r88YwWO5HjT+EOA
-	 sy0mUJPC0yjYfTA/cEVka7fAuJSKlQ1CNSbZpiWObDgvf2jZOUfQoa/dykRRUkx2Bi
-	 22NnyVBKVUTZKBizL2nIZOVnP32/zYy16x27MZUoM8P/1oedyGtrefznbYhL8HK967
-	 CP7zyRTWbXH8oz6/jrhFJJhWE2jNfKhYkx6Jom5L01lwzOg8C3bJuZuzkLhm/hTso/
-	 mFJ7Y/aIwQAh/oz+QIyZNF62lEMoLeHFUX54WUnH1sCYfEJIthRBFa/u3GmTK1Ki/+
-	 mBjrHjJNY1PiQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8532BC48BF6;
-	Sat, 24 Feb 2024 12:10:19 +0000 (UTC)
-From: Yang Xiwen via B4 Relay <devnull+forbidden405.outlook.com@kernel.org>
-Date: Sat, 24 Feb 2024 20:10:19 +0800
-Subject: [PATCH v3 2/2] usb: dwc3: of-simple: Add compatible for
- hi3798mv200 DWC3 controller
+	s=arc-20240116; t=1708782788; c=relaxed/simple;
+	bh=VWF64JLHhDBS2pWz1T4oErLsPpNC811AcQE+tvREolE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZFbD8FyoCqr7aARVHllOKpzVnB315avOP1k5QbmCdgCjZUxNUZgs54jikvid2eKttwc0U5YolVF5uCxg30RjmFZ887aN5Yss/a/j2lGoRj9g+cOGFrJK85E4v1yfU+m1eAt4Fpcpu2YO+VR+xIcyAELuqJWc4ZDnT0eYJ5/x2Rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NW9o7oUc; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1708782784;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tm1yrXWwpayVhW0izRTuDBy0hwWeAWTE2v2krJfJP6w=;
+	b=NW9o7oUcJ1oPsAYqMgb00gRou3FUu3uSSHnH5sYa2qqeMgWisTHbGqpoHn193JC4/gmY68
+	Zq+CJvm+QeyYBRlvCxS8urLV2A1DxV8HiaAhTpXxg15OKntYMjYnA0zWxNShpxbf//UNHJ
+	7OZQYLU2ZzlItCsW4ilQQ+Dsmjdmr3s=
+From: chengming.zhou@linux.dev
+To: rui.silva@linaro.org,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	vbabka@suse.cz,
+	roman.gushchin@linux.dev,
+	Xiongwei.Song@windriver.com,
+	chengming.zhou@linux.dev,
+	Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH] usb: isp1760: remove SLAB_MEM_SPREAD flag usage
+Date: Sat, 24 Feb 2024 13:52:56 +0000
+Message-Id: <20240224135256.830413-1-chengming.zhou@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240224-dwc3-v3-2-2535fcee7f08@outlook.com>
-References: <20240224-dwc3-v3-0-2535fcee7f08@outlook.com>
-In-Reply-To: <20240224-dwc3-v3-0-2535fcee7f08@outlook.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Yang Xiwen <forbidden405@foxmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, Yang Xiwen <forbidden405@outlook.com>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1708776618; l=809;
- i=forbidden405@outlook.com; s=20230724; h=from:subject:message-id;
- bh=CsDB1ujYdciRCCnGm2g0rfxKORwEFR6rPwogWA69oCs=;
- b=j2N7cQ1V5WBDHUzWL0JnLeMY6RTTIdYVu8/7ruPVo498XQWfAc2G3UH7oRdM/CpMRt5etw0BT
- faUoF7wjnhuAXhYGE8LG+Ko5i6mDqYpfAU5sSmaBz1k5WeaBIxkity0
-X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
- pk=qOD5jhp891/Xzc+H/PZ8LWVSWE3O/XCQnAg+5vdU2IU=
-X-Endpoint-Received:
- by B4 Relay for forbidden405@outlook.com/20230724 with auth_id=67
-X-Original-From: Yang Xiwen <forbidden405@outlook.com>
-Reply-To: <forbidden405@outlook.com>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Yang Xiwen <forbidden405@outlook.com>
+From: Chengming Zhou <zhouchengming@bytedance.com>
 
-Hi3798MV200 uses dwc3 controller with a few more clocks and a dedicated
-resets. Use of_simple driver for it.
+The SLAB_MEM_SPREAD flag is already a no-op as of 6.8-rc1, remove
+its usage so we can delete it from slab. No functional change.
 
-Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 ---
- drivers/usb/dwc3/dwc3-of-simple.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/isp1760/isp1760-hcd.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
-index d1539fc9eabd..158acae08af5 100644
---- a/drivers/usb/dwc3/dwc3-of-simple.c
-+++ b/drivers/usb/dwc3/dwc3-of-simple.c
-@@ -173,6 +173,7 @@ static const struct of_device_id of_dwc3_simple_match[] = {
- 	{ .compatible = "sprd,sc9860-dwc3" },
- 	{ .compatible = "allwinner,sun50i-h6-dwc3" },
- 	{ .compatible = "hisilicon,hi3670-dwc3" },
-+	{ .compatible = "hisilicon,hi3798mv200-dwc3" },
- 	{ .compatible = "intel,keembay-dwc3" },
- 	{ /* Sentinel */ }
- };
-
+diff --git a/drivers/usb/isp1760/isp1760-hcd.c b/drivers/usb/isp1760/isp1760-hcd.c
+index 76862ba40f35..0e5e4cb74c87 100644
+--- a/drivers/usb/isp1760/isp1760-hcd.c
++++ b/drivers/usb/isp1760/isp1760-hcd.c
+@@ -2521,21 +2521,19 @@ static const struct hc_driver isp1760_hc_driver = {
+ int __init isp1760_init_kmem_once(void)
+ {
+ 	urb_listitem_cachep = kmem_cache_create("isp1760_urb_listitem",
+-			sizeof(struct urb_listitem), 0, SLAB_TEMPORARY |
+-			SLAB_MEM_SPREAD, NULL);
++			sizeof(struct urb_listitem), 0, SLAB_TEMPORARY, NULL);
+ 
+ 	if (!urb_listitem_cachep)
+ 		return -ENOMEM;
+ 
+ 	qtd_cachep = kmem_cache_create("isp1760_qtd",
+-			sizeof(struct isp1760_qtd), 0, SLAB_TEMPORARY |
+-			SLAB_MEM_SPREAD, NULL);
++			sizeof(struct isp1760_qtd), 0, SLAB_TEMPORARY, NULL);
+ 
+ 	if (!qtd_cachep)
+ 		goto destroy_urb_listitem;
+ 
+ 	qh_cachep = kmem_cache_create("isp1760_qh", sizeof(struct isp1760_qh),
+-			0, SLAB_TEMPORARY | SLAB_MEM_SPREAD, NULL);
++			0, SLAB_TEMPORARY, NULL);
+ 
+ 	if (!qh_cachep)
+ 		goto destroy_qtd;
 -- 
-2.43.0
+2.40.1
 
 
