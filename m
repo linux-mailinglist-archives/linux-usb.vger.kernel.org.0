@@ -1,188 +1,154 @@
-Return-Path: <linux-usb+bounces-7009-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7010-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B80A8623CA
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 10:15:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC5E3862404
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 11:14:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E90D8282AE7
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 09:15:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 638141F22E0C
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Feb 2024 10:14:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07DDD199A7;
-	Sat, 24 Feb 2024 09:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 668841B81F;
+	Sat, 24 Feb 2024 10:14:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UyDIdvUq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ghrlxw8u"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09AA18037
-	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 09:15:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E499814B800
+	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 10:14:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708766120; cv=none; b=pXFW+RcT1JTAZ3BqVruL5K3I7vR4Kh9RJ6UicnUFYx/NkolYcDyUPcFlJT3+0VzTzqvkBoOQgiu9t3FqkprpE2x61JSiRi9bf9Nsyy5e+e/T9F01uQKxMjAgP50xpDCu17+b92+7xVyvHFwReO2Qr3k+2LNh34L4fw2fNJYfhhQ=
+	t=1708769659; cv=none; b=rJn8CsRGPjCJrW+LsDEeysJpBj0BvY2Yn6rk2mBFCzTKQLJl9SjUq2DJhcMf9COeuM77zrSIjThAL1QSJs6I6BwMkxnOKU0sj5kiSap4fNdIA4h27vFO+4TNdO/4WqogLCv0kyLUH1GMdchTAZsV45Uk+6OyBtEamL8+o2Ia/BE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708766120; c=relaxed/simple;
-	bh=dtqxodcmJ9SBC6Rj+Mp5ZONU2KSQy+STXTzwUWZtTyM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dSSG4og3Mp8ZVMWwBXLwUGllfA5UYV/6b957jIhnCO7GLlXfYTukEqnOjwGepynLNVEjYF4M/1AtVnRw59G3qRaKKa53JeM4BUfIka8urmAMxwn+e37DL/Hxd7OOgDQOEgPzYmyZrzWdOWTWjOFwOmEDMHZyt+oA/m49NsnC07k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UyDIdvUq; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a3ed9cae56fso214007666b.1
-        for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 01:15:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708766117; x=1709370917; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/yXuN0xYqKzIX5pSCX1Kp3woa7Po0PztF79u6wq9Z0k=;
-        b=UyDIdvUqTYayinWKrbvoB5ixcUWM0+a0hrTT0ep1kFBLE0/9lfhbwizzd5FzO61sHJ
-         8vV1QH0W+f4c/FG/W9Rm6O5D4tuQm9hefDYdZhDxxkHI5JLJfByah3+3J69ayZlki7Z9
-         kFTL1mde04sd/uG2qleyl3U0vzZSqGsNza2F7W9ZUSWLMuJT3CBughbu5UOiB0H7iGnY
-         ugSs8MnuXoXc1M9yPGC8M0hK0j6cEOYCJc+50zOgT/x1KoABeTNgadQUD3YScx5bw9jy
-         LM7iLlrKZzfw8XDOmd7N6/LHzoJhmaNewagQvdhCAITAFi2n8kCOTMpdibkHNO3NYhoQ
-         VvjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708766117; x=1709370917;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/yXuN0xYqKzIX5pSCX1Kp3woa7Po0PztF79u6wq9Z0k=;
-        b=Wdc7HcEpC62vYFYW20RQC9UiZYWU0nwz+FNpeF+BsPoqCIPjHR2EOOCmYKE12ewUoq
-         bxaeWyMXS2D5+fXHCYQd11w3FX1KUkpB0WwsZKzBgfHYrm312469j3y0tsmsrmzjrqIF
-         HapMPnexQYFRZHCQNm6gMpOmpplGBCDYh5NP8wE65ppixKQu76m93OuIQKNLV5djjIMl
-         G3cyVmf69WzWHiuk2ptlA45+8MNfph6lefJbazX9SKInWsPWW0izU9TJnrhRWyhhAlT+
-         Go87gbjhORQqGnu+R5kXQAX04ELNOw03c23+IgbNZr+e87GaiwCjahyJYAFDqjwKHpA9
-         DDdg==
-X-Forwarded-Encrypted: i=1; AJvYcCVXT94ZwXpY5AHLbKS+zzpb7XG+m2TjabRegsAt+JKENRsZoPAlfuQADeGW/2itDBZvvGesvx8f+jsbuossjYiD360mmbTnykr0
-X-Gm-Message-State: AOJu0YzIhYegfxK+vs9m3TxOVAV6sG9Ivzyon8Wx1MukocgG/p9TRV6Z
-	zYV53VSE21WvxkYJLn5l7B5QWYR06VZzz4Dz7RZvlSiii+yfuC6VH2EEM/Z8OMM=
-X-Google-Smtp-Source: AGHT+IEAv583RjbPCjqo8rCRP363mV19Vvbw2dN4DNVCngN6jVHMtXOxp2IpGr6bO6h5BvQRj+H2sQ==
-X-Received: by 2002:a17:906:2844:b0:a3f:adad:9ce1 with SMTP id s4-20020a170906284400b00a3fadad9ce1mr1745152ejc.18.1708766117121;
-        Sat, 24 Feb 2024 01:15:17 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.116])
-        by smtp.gmail.com with ESMTPSA id s1-20020a170906060100b00a3d9e6e9983sm410710ejb.174.2024.02.24.01.15.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Feb 2024 01:15:16 -0800 (PST)
-Message-ID: <c9d65615-166b-4612-98a2-3837a90e646d@linaro.org>
-Date: Sat, 24 Feb 2024 10:15:15 +0100
+	s=arc-20240116; t=1708769659; c=relaxed/simple;
+	bh=hCHl5QWMF/UvvtfLklHEoo9TM3fxtYpCLus3oS3lNrA=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Bs2h4QeDmeLBxjgd6s35ruFjWsr9M1x/SUOyjxZafaOpKXDQTs7w1e7TkQneS3YYK8l0kH0JOLxFSxUmOUbaum5h75etKWVuw86ligvQESdfpcAvwrLQNpeAzeZI1HTn9x63cYg620WgQZyqQ4TejA2N0O6WKFygJ8dr9pBat7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ghrlxw8u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 83A61C43390
+	for <linux-usb@vger.kernel.org>; Sat, 24 Feb 2024 10:14:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708769658;
+	bh=hCHl5QWMF/UvvtfLklHEoo9TM3fxtYpCLus3oS3lNrA=;
+	h=From:To:Subject:Date:From;
+	b=ghrlxw8uISFgKbB3OLfBy5iq21Fxu027m+Nq/CDVKFKQuklYAE3nc5GmXGweYnkD+
+	 VjkByRAtojMY4dW9tOR8miuuitpagqaBMe2daMVm5xTQbRJhF1BGjQagye6iBIJYmf
+	 d3JQnED6GLMqx05Y9ayAtfAMn75v3dAm5TPZRTAYeLplJdGHDPG1WSOG6Hh/YWIx+R
+	 f57N/PCJ0v0IW/3Up7ma5/cC2Ty9kEekcbQuJkBW38aC1hqKFrkZY6nP4GEBQeJuhJ
+	 2uq0sZ88zmbASblsHnmbU0SgsflwUrevNSrqaEs9bPsDE5OxBgljrbHOLLcXdW1FXh
+	 1WPJE6ZxTM7cw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 66496C4332E; Sat, 24 Feb 2024 10:14:18 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218525] New: Thunderbolt eGPU bad performance
+Date: Sat, 24 Feb 2024 10:14:18 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: gipawu@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-218525-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: usb: typec-tcpci: add tcpci fallback
- binding
-Content-Language: en-US
-To: Marco Felsch <m.felsch@pengutronix.de>
-Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, linux@roeck-us.net,
- heikki.krogerus@linux.intel.com, jun.li@nxp.com, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel@pengutronix.de
-References: <20240215212852.1202339-1-m.felsch@pengutronix.de>
- <20240215212852.1202339-2-m.felsch@pengutronix.de>
- <4e464a7a-6a38-461a-b03e-442cc43d1719@linaro.org>
- <20240222202357.2etmuoy6i6qr6bnq@pengutronix.de>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240222202357.2etmuoy6i6qr6bnq@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 22/02/2024 21:23, Marco Felsch wrote:
-> On 24-02-22, Krzysztof Kozlowski wrote:
->> On 15/02/2024 22:28, Marco Felsch wrote:
->>> The NXP PTN5110 [1] is an TCPCI [2] compatible chip, so add the fallback
->>> binding.
->>>
->>> [1] https://www.nxp.com/docs/en/data-sheet/PTN5110.pdf
->>> [2] https://www.usb.org/sites/default/files/documents/usb-port_controller_specification_rev2.0_v1.0_0.pdf
->>>
->>> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
->>> ---
->>> v2:
->>> - rephrase commit message
->>>
->>>  Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml | 4 +++-
->>>  1 file changed, 3 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
->>> index eaedb4cc6b6c..7bd7bbbac9e0 100644
->>> --- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
->>> @@ -11,7 +11,9 @@ maintainers:
->>>  
->>>  properties:
->>>    compatible:
->>> -    const: nxp,ptn5110
->>> +    enum:
->>> +      - nxp,ptn5110
->>> +      - tcpci
->>
->> That's not a fallback, but enum. Fallback is "items" and then you could
-> 
-> Damn, you're right. Sorry.
-> 
->> also send a follow-up patchset (separate, so Greg won't take it) fixing
->> DTS (if not, let me know, so I will fix it).
-> 
-> Sry. but I don't get this. Why do I need to send a follow-up? Greg did
-> not apply anything, at least I didn't received an e-mail, that this
-> patchset was picked.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218525
 
-If you change existing ptn5110 to a list of ptn5110+fallback, then all
-existing will DTS start report warnings. Someone needs to fix this.
+            Bug ID: 218525
+           Summary: Thunderbolt eGPU bad performance
+           Product: Drivers
+           Version: 2.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: gipawu@gmail.com
+        Regression: No
 
-Best regards,
-Krzysztof
+I opened this bug report because I think there is a performance problem in =
+the
+Thunderbolt stack.
 
+I have an eGPU R43SG-TB3 adapter, which can be connected either via Thunder=
+bolt
+3/4 port, or directly via PCIe M.2 x4 link.
+
+Using the eGPU connected via Thunderbolt, game performance is often absymal,
+especially with games that use DXVK.
+
+The problem is described at length here:
+https://gitlab.freedesktop.org/drm/amd/-/issues/2885
+
+but in summary, the main symptoms that indicate the presence of a performan=
+ce
+problem with Thunderbolt eGPU are:
+
+- Low and bumpy fps, GPU clock speeds and GPU usage.
+- Low or no difference when downscaling the resolution or reducing graphic
+settings.
+
+Using the direct M.2 connection instead, performance is as good as expected,
+almost on the level of Windows.
+
+In Windows there is a performance gap of 5-10% between Thunderbolt and M.2
+connection, but in Linux the gap is much wider, sometimes more than 50%. Ve=
+ry
+few games seem to be unaffected by the problem (e.g. Shadows of Tomb Raider=
+ and
+Doom Eternal).
+
+I tested with an Nvidia RTX 2060 Super GPU, paired with an Intel Nuc 13 Pro
+(i5-1340p and Thunderbolt 4) and with a Dell XPS 9570 (i7-8750H and Thunder=
+bolt
+3), both running Fedora 39 and kernel 6.7.5. I tried kernel 6.8.0 rc5 too, =
+but
+with no differences.
+
+Since the problem emerges with both Nvidia and AMD GPUs (as evident from the
+linked report) and that the problem is not reproducible by connecting the G=
+PU
+directly via M.2 connection, bypassing the Thunderbolt port, I suspect ther=
+e is
+a performance issue in the Thunderbolt stack, perhaps in proper bandwidth
+allocation.
+
+I hope that information given here, and in the link given, may help to reso=
+lve
+the problem.
+
+I am of course available to provide additional information, logs, and test =
+any
+patches if needed. Thank you.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
