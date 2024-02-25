@@ -1,108 +1,134 @@
-Return-Path: <linux-usb+bounces-7029-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7031-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27E08862A2E
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Feb 2024 13:04:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0296B862A8A
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Feb 2024 14:57:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8636D281C26
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Feb 2024 12:04:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62B6F281B86
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Feb 2024 13:57:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B0DB13FFC;
-	Sun, 25 Feb 2024 12:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2A5713FF2;
+	Sun, 25 Feb 2024 13:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fYb8dOuQ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SIbiH+Zd"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F5212E47;
-	Sun, 25 Feb 2024 12:04:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446C514AA3;
+	Sun, 25 Feb 2024 13:56:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708862643; cv=none; b=XYEPW/basY+H3xTP42PVH0EVdhs98x3j2Jv1y/q7qFYFrvhZvBsxRM/a0vRJeVwU/CaIQFwFRmPSM65SaWfBSDcROVZ8sExJL5Ocsbzk7dznl040NwaTrpcu683izDzV1BJyDOSV606OZBlAqo2UnF0Ory6YOzRw0ar15LSp9b8=
+	t=1708869409; cv=none; b=OxytvApW19aDg0NNgdvIzHw87t9nku66EJgf21xsNPdFgyVN3inz9jczwRhhbVJZrM5e1x7v6u2+BMGY57Jd79uBeXsFXHmzfJvab4/5R0G4TS4eH/v78RDnnbEwZUpdvzJlgV8BL7hBaIWV8CTrEMpITwQkHLcXfILmxTwK5LY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708862643; c=relaxed/simple;
-	bh=A+X94K8nLPrBsMOn/w5jdCaGJfXT7yw62EcicOP2vgo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LjO3p7NH/bYBzuVmV5P/QGuWzoNG5GVDhWRAAIiByQoO1fSGxy2pwTW/x8Fr5CoRLxUGOzBEK6ykefm7mH2P2sGO5xO88gWGSGn4BauhvsYn3piQWa17OT7UhLD9Io/QEMcBdUqO/cUCRY2NpY+4IYC9tgDTcOIvYZlEGv7X/tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fYb8dOuQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 70B0EC43390;
-	Sun, 25 Feb 2024 12:04:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708862643;
-	bh=A+X94K8nLPrBsMOn/w5jdCaGJfXT7yw62EcicOP2vgo=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=fYb8dOuQulxc9W33hGk0+CnBFtpLHEIXsXUnENQNOa38sz4DHex6miv5lnsPS4Syc
-	 p5nkXiA+V8iTHx3GxjkNyQahU4l0hkk25wBO4f5J7U3jhoSYTcrCnFO8a82/KkK9Gl
-	 1+d3EfRqKBrv/TDGjnVG8qi6qcCf2BinvNYvIBcWb8fIExsUq8tp+CQmI67YWDMNHW
-	 Tn4PjNOawtJ2GVxBULw+pH683maWPW0e+2wxD9CSg9C9GECc4+MadqeIREYNHot7s+
-	 PlnuZXhIyK9yK+r3ISLgepIbKsDly/8KoNmKTjj2wrXanHGxT8D9XYdsXsnREsvxIZ
-	 v2Cy08PxJe+Yg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51FC8C54E49;
-	Sun, 25 Feb 2024 12:04:03 +0000 (UTC)
-From: Yang Xiwen via B4 Relay <devnull+forbidden405.outlook.com@kernel.org>
-Date: Sun, 25 Feb 2024 20:03:49 +0800
-Subject: [PATCH v4 2/2] usb: dwc3: of-simple: Add compatible for
- hi3798mv200 DWC3 controller
+	s=arc-20240116; t=1708869409; c=relaxed/simple;
+	bh=eRiacYGs142auxDBgiJEG5vpqq5Rj1hXRktpvD05jIc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=g7DpaR8Xv/DeIwPPw+9sTkGp5zfSI9X1983Oa5b3kUUgAPx66Nt5L0fPLCfxXDdM/JXiKIcl+SpSKp+RpRmpSSZFUPKrnhJ8s1RtPCCEsagMF8kniW2AnNMOpKIm6Z2PaIhzymjHTng0veIJ8+gBacrz78D4wJbdwF+hD81NYtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SIbiH+Zd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D530C433C7;
+	Sun, 25 Feb 2024 13:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1708869408;
+	bh=eRiacYGs142auxDBgiJEG5vpqq5Rj1hXRktpvD05jIc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=SIbiH+Zdz/lRFwIz4JFwOOCyS4YIL7FUAJFJJoy43LkdnDnySaUW/4AQ5fg1jBDbZ
+	 4vsNxykRWaj/b3JSR622iRg10DVm5JM1g97kHpQFYbPhScI34m1xlDC6yDaD3KNMN1
+	 uxJQDmQpuk2tiEyFmhr9bHEWtgIwl0bXxOuMQvO0=
+Date: Sun, 25 Feb 2024 14:56:46 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 6.8-rc6
+Message-ID: <ZdtHHn2s9ksLd9zT@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240225-dwc3-v4-2-8c1fd6c6f615@outlook.com>
-References: <20240225-dwc3-v4-0-8c1fd6c6f615@outlook.com>
-In-Reply-To: <20240225-dwc3-v4-0-8c1fd6c6f615@outlook.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, Yang Xiwen <forbidden405@outlook.com>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1708862628; l=809;
- i=forbidden405@outlook.com; s=20230724; h=from:subject:message-id;
- bh=CsDB1ujYdciRCCnGm2g0rfxKORwEFR6rPwogWA69oCs=;
- b=PwZtfboAq7YOk3NgbRb4laCVeHt4Rc3146+HViWjMIXMOL5QnQPhJOPq/e41hU2/5DE320UdL
- deQbRycxI90B2LG1iPh7/W0ZrqAdyKwZenzj5AN3jd104gsLefAZE3v
-X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
- pk=qOD5jhp891/Xzc+H/PZ8LWVSWE3O/XCQnAg+5vdU2IU=
-X-Endpoint-Received:
- by B4 Relay for forbidden405@outlook.com/20230724 with auth_id=67
-X-Original-From: Yang Xiwen <forbidden405@outlook.com>
-Reply-To: <forbidden405@outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Yang Xiwen <forbidden405@outlook.com>
+The following changes since commit b401b621758e46812da61fa58a67c3fd8d91de0d:
 
-Hi3798MV200 uses dwc3 controller with a few more clocks and a dedicated
-resets. Use of_simple driver for it.
+  Linux 6.8-rc5 (2024-02-18 12:56:25 -0800)
 
-Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
----
- drivers/usb/dwc3/dwc3-of-simple.c | 1 +
- 1 file changed, 1 insertion(+)
+are available in the Git repository at:
 
-diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
-index d1539fc9eabd..158acae08af5 100644
---- a/drivers/usb/dwc3/dwc3-of-simple.c
-+++ b/drivers/usb/dwc3/dwc3-of-simple.c
-@@ -173,6 +173,7 @@ static const struct of_device_id of_dwc3_simple_match[] = {
- 	{ .compatible = "sprd,sc9860-dwc3" },
- 	{ .compatible = "allwinner,sun50i-h6-dwc3" },
- 	{ .compatible = "hisilicon,hi3670-dwc3" },
-+	{ .compatible = "hisilicon,hi3798mv200-dwc3" },
- 	{ .compatible = "intel,keembay-dwc3" },
- 	{ /* Sentinel */ }
- };
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.8-rc6
 
--- 
-2.43.0
+for you to fetch changes up to 69f89168b310878be82d7d97bc0d22068ad858c0:
 
+  usb: typec: tpcm: Fix issues with power being removed during reset (2024-02-20 09:14:36 +0100)
+
+----------------------------------------------------------------
+USB fixes for 6.8-rc6
+
+Here are some small USB fixes for 6.8-rc6 to resolve some reported
+problems.  These include:
+  - regression fixes with typec tpcm code as reported by many
+  - cdnsp and cdns3 driver fixes
+  - usb role setting code bugfixes
+  - build fix for uhci driver
+  - ncm gadget driver bugfix
+  - MAINTAINERS entry update
+
+All of these have been in linux-next all week with no reported issues
+and there is at least one fix in here that is in Thorsten's regression
+list that is being tracked.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Aaro Koskinen (1):
+      usb: gadget: omap_udc: fix USB gadget regression on Palm TE
+
+Andreas Larsson (1):
+      usb: uhci-grlib: Explicitly include linux/platform_device.h
+
+Frank Li (2):
+      usb: cdns3: fixed memory use after free at cdns3_gadget_ep_disable()
+      usb: cdns3: fix memory double free when handle zero packet
+
+Guenter Roeck (1):
+      MAINTAINERS: Drop myself as maintainer of TYPEC port controller drivers
+
+Krishna Kurapati (1):
+      usb: gadget: ncm: Avoid dropping datagrams of properly parsed NTBs
+
+Mark Brown (1):
+      usb: typec: tpcm: Fix issues with power being removed during reset
+
+Ondrej Jirman (1):
+      Revert "usb: typec: tcpm: reset counter when enter into unattached state after try role"
+
+Pawel Laszczak (2):
+      usb: cdnsp: blocked some cdns3 specific code
+      usb: cdnsp: fixed issue with incorrect detecting CDNSP family controllers
+
+Thinh Nguyen (1):
+      usb: dwc3: gadget: Don't disconnect if not started
+
+Xu Yang (2):
+      usb: roles: fix NULL pointer issue when put module's reference
+      usb: roles: don't get/set_role() when usb_role_switch is unregistered
+
+ MAINTAINERS                         |  3 +--
+ drivers/usb/cdns3/cdns3-gadget.c    |  8 ++++++--
+ drivers/usb/cdns3/core.c            |  1 -
+ drivers/usb/cdns3/drd.c             | 13 +++++++++----
+ drivers/usb/cdns3/drd.h             |  6 +++++-
+ drivers/usb/cdns3/host.c            | 16 ++++++++++++++--
+ drivers/usb/dwc3/gadget.c           |  5 +++++
+ drivers/usb/gadget/function/f_ncm.c | 10 +++++++++-
+ drivers/usb/gadget/udc/omap_udc.c   |  3 ++-
+ drivers/usb/host/uhci-grlib.c       |  1 +
+ drivers/usb/roles/class.c           | 29 +++++++++++++++++++++--------
+ drivers/usb/typec/tcpm/tcpm.c       |  6 ++----
+ 12 files changed, 75 insertions(+), 26 deletions(-)
 
