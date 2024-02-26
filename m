@@ -1,192 +1,159 @@
-Return-Path: <linux-usb+bounces-7065-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7066-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7B89866FE4
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 11:05:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 004BB86704E
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 11:15:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 575DB1F266B0
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 10:05:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA0CA288499
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 10:15:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDF3422337;
-	Mon, 26 Feb 2024 09:42:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A3192FE28;
+	Mon, 26 Feb 2024 09:52:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="XqsvtyJm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B9A1CD2B
-	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 09:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40411C292;
+	Mon, 26 Feb 2024 09:52:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708940549; cv=none; b=CZKTuzmxJwceK//h3U6pi87s3fnWMRcefGBWuiCksIQn4kzWfXSbeFPEKCfZBE2O2E2RkRV/CmWdbK47e3I9iybNgflJy/ipbxKthQv/kiJbguEhE4v8j2LSuvCGABApf7XIfotnubJkkhmombphB9CsM3hSU69Jd3oXqxByZpw=
+	t=1708941130; cv=none; b=qCpC6xoDkVLB4B4oQ77cRZbXDrcCbE8RfStgdNQ94Mt0V+ivDN59EeqMCCJc3514cNliIiCw2jYvjOUGw9xBro7fjodMKXxJShar2GCYM/PuzDM19nOgzGYCt2aukogzlVE3c7Ld3pnosKawF0BDWw9iC8q1eFflgkE1fsjFXMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708940549; c=relaxed/simple;
-	bh=2r+Jg4IirYez90/CeN3v3u34PFYDkfTtbokSRqIaL/M=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=uY6vUyM6bK3SOJoKgNgxvWBeHOISeOjscGEV/+wDGxQ/ixL8QTctlKk8xtr/O1XP0+WeP6zC4gNJrhkKVruqLUA96LITZRpkrm1jo7pItiNVHHPX6NEt4PbLjz1aE7XN0DgYSBmIdG2O4aipkVWqZjjmakZznYbZikdKhL8Kf/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-365067c1349so24338255ab.3
-        for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 01:42:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708940547; x=1709545347;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6mzm746klVmYl18EiU1HABrzvIW1GEwskKuL2oGrXzc=;
-        b=Qnq2bub1PYuAflZSEhcIOVDRblL0il9ljzOFqPC0bqa+TEaCNNRm0nl7KqdgatCm/B
-         jbAk8SrS3nCh7eMrWoJO3hP0WtwVi1/Po57nlaFstYlGfQFPhthjhxUaDlz2m/Nxd/8+
-         7r6QrjAl8RZL+Nrh8GTdBwKoTypxrViq5vLEkc/lVkA7HvqYgr/HN56qzPE/EQ2Bc7/h
-         nJY0F0s5ZAlrLADAqLx99rmd/EBjJTAVGrpIGEA86xJO6pgx7otYUqXkLLm6Wg0Hg5bD
-         efG2rNUFF3ZPe/c287IYh3MsTDerflljFNIwYqh9USmv+0tSxTaQ7RNr8kO/6/yzWWny
-         jpfA==
-X-Forwarded-Encrypted: i=1; AJvYcCV7sx6eurFtTvnCTOR809UB8paqUtct+JvFplPP+Za1Gq/ETMWZhAqv2kcF9gieKOdDNpc2Sy/ifjdQip5et6sMaFs8BYY3xAjv
-X-Gm-Message-State: AOJu0YydXOxtZw8+5WtXb7ikPSTqmrj3pViroH8EaCv4YOW8Z92jjxWM
-	51PLCcNw95aVkxLBw2n9OUKR+b6WgAemYDxmduw23z+sJ1jCjhBjxslt+FlgswCPVk9lRWR6WCj
-	DlTD6ULlrHIb9jQTpgHSFqsVbMfFvNp5chquFLU6AIAE49YESBQmlxxI=
-X-Google-Smtp-Source: AGHT+IGg+zmSUa5QfjPli/WDJFydT/dqQ9GQYePyx5iMd/vjx9Dt5vNWCWX2/17AgZMbPFsDTgrOMI4IKTPWZ5Zb9P8/CDyG6ETt
+	s=arc-20240116; t=1708941130; c=relaxed/simple;
+	bh=bjjIsryzIkgWdBrE8ljZIXZJZRlbXaBSO7Ggu+Lj5iY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e44vq4T9c08Nce+1u3e1cpeYkaAt7qn22ZZS8K/bZA30VN2p6gVwrQYE0i5hxSSXb9SSwNPDDNIZ3XcEa7cLHHR56SCxs0kFvvT5PE/S0tf+AlpaCB1OwP/nolBgOJhty9+26tLGHUOVS39c2JLalXBtZkuyBZr+RG3PGCqId30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=XqsvtyJm; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:Reply-To:MIME-Version:Date:
+	Message-ID:From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:
+	Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
+	In-Reply-To:References; bh=L5xZC2Izj3nU4loPeVkRvNhUrf88CIQ/mXkio06DCJA=;
+	t=1708941128; x=1709373128; b=XqsvtyJmNUSaNWFt9a2Zxhc3MycXQ0yGyWfptFBzVgwvvJV
+	ZER5JGxcGB0baVlQqe+3Rhjez/IvMkT7cV9pjA+F/tnRfu1S2nxLtVOa7dQGhQeZ8PbcBYBSe1S2n
+	AwPY7QlC75hRGY+k1WRKpU7xGLLLmNn+Q3VbrC25DN84K2Kz3mZKR5fn2xUP7xo5Gl8xMFooD0otp
+	j7MKKdIa5or+lre24YntO+jo0QHfL/e6uJ3kjH6ioOYzelpBqOm34JHF3PVVr4FzQGETyAnSEjOBj
+	ISHxuZFoVP59sFQ7PaZvnVdaH+Zeuj2CYsOKyN74WZjh8bLkHwG15Gy+PTz/BLIg==;
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1reXeL-0004Te-6R; Mon, 26 Feb 2024 10:51:53 +0100
+Message-ID: <410817b8-1cf9-4285-b20b-f1fa0513cee8@leemhuis.info>
+Date: Mon, 26 Feb 2024 10:51:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d86:b0:365:26e3:6e48 with SMTP id
- h6-20020a056e021d8600b0036526e36e48mr515484ila.0.1708940546977; Mon, 26 Feb
- 2024 01:42:26 -0800 (PST)
-Date: Mon, 26 Feb 2024 01:42:26 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003eb868061245ba7f@google.com>
-Subject: [syzbot] [usb-storage?] divide error in isd200_ata_command
-From: syzbot <syzbot+28748250ab47a8f04100@syzkaller.appspotmail.com>
-To: bvanassche@acm.org, emilne@redhat.com, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	martin.petersen@oracle.com, stern@rowland.harvard.edu, 
-	syzkaller-bugs@googlegroups.com, tasos@tasossah.com, 
-	usb-storage@lists.one-eyed-alien.net
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: This is the fourth time I've tried to find what led to the
+ regression of outgoing network speed and each time I find the merge commit
+ 8c94ccc7cd691472461448f98e2372c75849406c
+Content-Language: en-US, de-DE
+To: Mathias Nyman <mathias.nyman@linux.intel.com>,
+ Linux regressions mailing list <regressions@lists.linux.dev>,
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com,
+ Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+ Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-x86_64@vger.kernel.org, netdev@vger.kernel.org,
+ Randy Dunlap <rdunlap@infradead.org>,
+ Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
+ <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
+ <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com>
+ <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
+ <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
+ <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
+ <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
+ <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
+ <a026ecd8-6fba-017d-d673-0d0759a37ed8@linux.intel.com>
+ <CABXGCsOgy8H4GGcNU1jRE+SzRqwnPeNuy_3xBukjwB-bPxeZrQ@mail.gmail.com>
+ <CABXGCsOd=E428ixUOw+msRpnaubgx5-cVU7TDXwRUCdrM5Oicw@mail.gmail.com>
+ <34d7ab1b-ab12-489d-a480-5e6ccc41bfc3@infradead.org>
+ <10487018-49b8-4b27-98a1-07cee732290d@infradead.org>
+ <4f34b6a8-4415-6ea4-8090-262847d606c6@linux.intel.com>
+ <3ea25443-1275-4c67-90e0-b637212d32b5@leemhuis.info>
+ <1e719367-01ae-565a-2199-0ff7e260422b@linux.intel.com>
+From: "Linux regression tracking (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+In-Reply-To: <1e719367-01ae-565a-2199-0ff7e260422b@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1708941128;d91db294;
+X-HE-SMSGID: 1reXeL-0004Te-6R
 
-Hello,
+On 26.02.24 10:24, Mathias Nyman wrote:
+> On 26.2.2024 7.45, Linux regression tracking (Thorsten Leemhuis) wrote:
+>> On 21.02.24 14:44, Mathias Nyman wrote:
+>>> On 21.2.2024 1.43, Randy Dunlap wrote:
+>>>> On 2/20/24 15:41, Randy Dunlap wrote:
+>>>>> {+ tglx]
+>>>>> On 2/20/24 15:19, Mikhail Gavrilov wrote:
+>>>>>> On Mon, Feb 19, 2024 at 2:41 PM Mikhail Gavrilov
+>>>>>> <mikhail.v.gavrilov@gmail.com> wrote:
+>>>>>> I spotted network performance regression and it turned out, this was
+>>>>>> due to the network card getting other interrupt. It is a side effect
+>>>>>> of commit 57e153dfd0e7a080373fe5853c5609443d97fa5a.
+>>>>> That's a merge commit (AFAIK, maybe not so much). The commit in
+>>>>> mainline is:
+>>>>>
+>>>>> commit f977f4c9301c
+>>>>> Author: Niklas Neronin <niklas.neronin@linux.intel.com>
+>>>>> Date:   Fri Dec 1 17:06:40 2023 +0200
+>>>>>
+>>>>>       xhci: add handler for only one interrupt line
+>>>>>
+>>>>>> Installing irqbalance daemon did not help. Maybe someone experienced
+>>>>>> such a problem?
+>>>>>
+>>>>> Thomas, would you look at this, please?
+>>>>>
+>>>>> A network device and xhci (USB) driver are now sharing interrupts.
+>>>>> This causes a large performance decrease for the networking device.
+>>>
+>>> Short recap:
+>>
+>> Thx for that. As the 6.8 release is merely two or three weeks away while
+>> a fix is nowhere near in sight yet (afaics!) I start to wonder if we
+>> should consider a revert here and try reapplying the culprit in a later
+>> cycle when this problem is fixed.
 
-syzbot found the following issue on:
+Thx for the reply.
 
-HEAD commit:    f2e367d6ad3b Merge tag 'for-6.8/dm-fix-3' of git://git.ker..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=114e10e4180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=eff9f3183d0a20dd
-dashboard link: https://syzkaller.appspot.com/bug?extid=28748250ab47a8f04100
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1064b372180000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10aca6ac180000
+> I don't think reverting this series is a solution.
+> 
+> This isn't really about those usb xhci patches.
+> This is about which interrupt gets assigned to which CPU.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c55ca1fdc5ad/disk-f2e367d6.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/4556a82fb4ed/vmlinux-f2e367d6.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/95338ed9dad1/bzImage-f2e367d6.xz
+I know, but from my understanding of Linus expectations wrt to handling
+regressions it does not matter much if a bug existed earlier or
+somewhere else: what counts is the commit that exposed the problem.
 
-The issue was bisected to:
+But I might be wrong here. Anyway, not CCing Linus for this; but I'll
+likely point him to this direction on Sunday in my next weekly report,
+unless some fix comes into sight.
 
-commit 321da3dc1f3c92a12e3c5da934090d2992a8814c
-Author: Martin K. Petersen <martin.petersen@oracle.com>
-Date:   Tue Feb 13 14:33:06 2024 +0000
+> Mikhail got unlucky when the network adapter interrupts on that system was
+> assigned to CPU0, clearly a more "clogged" CPU, thus causing a drop in max
+> bandwidth.
 
-    scsi: sd: usb_storage: uas: Access media prior to querying device properties
+But maybe others will be just as "unlucky". Or is there anything to
+believe otherwise? Maybe some aspect of the .config or local setup that
+is most likely unique to Mikhail's setup?
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15a3934a180000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=17a3934a180000
-console output: https://syzkaller.appspot.com/x/log.txt?x=13a3934a180000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+28748250ab47a8f04100@syzkaller.appspotmail.com
-Fixes: 321da3dc1f3c ("scsi: sd: usb_storage: uas: Access media prior to querying device properties")
-
-divide error: 0000 [#1] PREEMPT SMP KASAN PTI
-CPU: 0 PID: 5070 Comm: usb-storage Not tainted 6.8.0-rc5-syzkaller-00297-gf2e367d6ad3b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
-RIP: 0010:isd200_scsi_to_ata drivers/usb/storage/isd200.c:1318 [inline]
-RIP: 0010:isd200_ata_command+0x776/0x2380 drivers/usb/storage/isd200.c:1529
-Code: 62 fa 49 8d 7c 24 0c 48 89 f8 48 c1 e8 03 42 0f b6 04 28 84 c0 0f 85 00 18 00 00 41 0f b7 5c 24 0c 48 8b 7c 24 18 89 f8 31 d2 <f7> f3 41 89 d0 49 83 c4 06 4c 89 e0 48 c1 e8 03 42 0f b6 04 28 84
-RSP: 0018:ffffc900043ffc00 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff888023230000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc900043ffd50 R08: ffffffff873161fd R09: ffffffff87315c95
-R10: 0000000000000008 R11: ffff888023230000 R12: ffff88807f7a0000
-R13: dffffc0000000000 R14: ffff888021da1000 R15: ffff88807c10a110
-FS:  0000000000000000(0000) GS:ffff8880b9400000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000563828985bd8 CR3: 000000002e0cc000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- usb_stor_control_thread+0x4b1/0xa50 drivers/usb/storage/usb.c:368
- kthread+0x2ef/0x390 kernel/kthread.c:388
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1b/0x30 arch/x86/entry/entry_64.S:242
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:isd200_scsi_to_ata drivers/usb/storage/isd200.c:1318 [inline]
-RIP: 0010:isd200_ata_command+0x776/0x2380 drivers/usb/storage/isd200.c:1529
-Code: 62 fa 49 8d 7c 24 0c 48 89 f8 48 c1 e8 03 42 0f b6 04 28 84 c0 0f 85 00 18 00 00 41 0f b7 5c 24 0c 48 8b 7c 24 18 89 f8 31 d2 <f7> f3 41 89 d0 49 83 c4 06 4c 89 e0 48 c1 e8 03 42 0f b6 04 28 84
-RSP: 0018:ffffc900043ffc00 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff888023230000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc900043ffd50 R08: ffffffff873161fd R09: ffffffff87315c95
-R10: 0000000000000008 R11: ffff888023230000 R12: ffff88807f7a0000
-R13: dffffc0000000000 R14: ffff888021da1000 R15: ffff88807c10a110
-FS:  0000000000000000(0000) GS:ffff8880b9400000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000563828985bd8 CR3: 000000000df32000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	fa                   	cli
-   1:	49 8d 7c 24 0c       	lea    0xc(%r12),%rdi
-   6:	48 89 f8             	mov    %rdi,%rax
-   9:	48 c1 e8 03          	shr    $0x3,%rax
-   d:	42 0f b6 04 28       	movzbl (%rax,%r13,1),%eax
-  12:	84 c0                	test   %al,%al
-  14:	0f 85 00 18 00 00    	jne    0x181a
-  1a:	41 0f b7 5c 24 0c    	movzwl 0xc(%r12),%ebx
-  20:	48 8b 7c 24 18       	mov    0x18(%rsp),%rdi
-  25:	89 f8                	mov    %edi,%eax
-  27:	31 d2                	xor    %edx,%edx
-* 29:	f7 f3                	div    %ebx <-- trapping instruction
-  2b:	41 89 d0             	mov    %edx,%r8d
-  2e:	49 83 c4 06          	add    $0x6,%r12
-  32:	4c 89 e0             	mov    %r12,%rax
-  35:	48 c1 e8 03          	shr    $0x3,%rax
-  39:	42 0f b6 04 28       	movzbl (%rax,%r13,1),%eax
-  3e:	84                   	.byte 0x84
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
