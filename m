@@ -1,176 +1,103 @@
-Return-Path: <linux-usb+bounces-7089-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7090-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD1BB86790A
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 15:51:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28AB486797C
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 16:07:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 454F3B2D7D0
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 14:46:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB5051F2663F
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 15:07:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B24CE134748;
-	Mon, 26 Feb 2024 14:36:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73712132485;
+	Mon, 26 Feb 2024 14:47:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iKTqD1KN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mPS9YQU7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58C6134727;
-	Mon, 26 Feb 2024 14:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECD912C533
+	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 14:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708958166; cv=none; b=LGCeAEUgHGHdLfxO8zk7fCqey//n4DP7OM9VOQqo3lrtiIpL6ajrSHUUbFdklB9PH8zl3x6Gki6fQbJ/E8UrlfBaGlpHJ6TUWLz6QG84vxAH4lsBO03+Cz6jsqzZ2qoRwrakNiWiH49vHmmlkXiwSA8qcytL/C2n5l2kIWH7aGA=
+	t=1708958833; cv=none; b=LdT2m9pK0XBrbxtXbsuXd+LHqnr6N+ifauP/6H9BXRVMgc6qwnn89Csel6dAoVOTLa5AJ8jsvq4Y8BQ2+wAa6gZ/JxiCNv7HmhYXBSVxlBkLHaI0rklS5ON+6TB/J2Qk5zk4LrK1TTdH77EAitjW0e+/tXa2CrsT39fDvWCQdcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708958166; c=relaxed/simple;
-	bh=9ywEGY5Eo3x6FAI3cUqz0fj17fVyroyFNHMiCN6mL/0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=AL3yII8vq0mTujTbnvC0jhlf86YzXSYe9nmhJB7H7mLfiJ7XD14Q1XRx1qqy8vRZJG5wwdBX1UDQLpuFfQU2U71yd1IYvSHpCflQ9XyIJCTs/NY+57Nat6XgensQqeNUTvtCz2xRt6C6Gbosb5QGuzay2XDJ4gohBXKMzgibQe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iKTqD1KN; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 751121BF209;
-	Mon, 26 Feb 2024 14:35:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708958161;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xzRRKGTCf49DCuAE0sJucov1JPKZw/oB6zFjk/bAKO0=;
-	b=iKTqD1KNUEKWwhSN9AhG2JhtpDWL87tAJ9I4T86LLIn0QkDMqI+Oq/4+t5fhJHfsecTixf
-	s+/UCitLkC/j7Yzf2luIY9kN/WVrqMOEEhpie7a1JCoV8PxKfF7ZsBq1MSbynBrgmJ/0G8
-	ZxSoSjSk+MX665A3cbZFKu1gKOPna55GAkVF91br9adMhh4PNkUAXQV2JhQDci4qKmmejm
-	JL2SGM4FZHA5FflxtIvKquzoswqNZ3772Bw7PYJFrEI13XKigy9mEFjpYofCBWCbm8cCGy
-	ekDso4pH4pexQ/dQvsW+ccS6C8ALdQM9DHAkXv9hA7YZiY3GXIkRlLIWyj4lqg==
+	s=arc-20240116; t=1708958833; c=relaxed/simple;
+	bh=y9/x+awjSD0YmrFVTYPRzWh3BOAgFDi7jCl/QCcT5e0=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=cCa0xZ85scmkNLs1YC8rUuYWjy7oOGMSUgLeDFZ+kWDfBfOUadK1tZs+ISytYyxq9i/43URIP2nkKga8F/8WCGm2l0fp43AZ11G9tNBfx84lBBgfq//YqOtqaFl2rIvYZ6ahoYeyX34Ig3XqKbFcK7u1eBo+KecjrFx7vjm7NBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mPS9YQU7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 85972C433C7
+	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 14:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708958832;
+	bh=y9/x+awjSD0YmrFVTYPRzWh3BOAgFDi7jCl/QCcT5e0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=mPS9YQU7/eKcvLUjrs6lvZE9Qs7Iarq+Ksxe1UW7SxaaPTwKcrb2sTKXxUnxCvYyn
+	 rxM6cLu/PilJ+R88ywtYTzAfxEJmQ9GQ9fVQhXjEWd0VN0MagOWz3azTXL2MYl981/
+	 D9B2a5wLGRD2NdEEiKx8neJFwLnS2/omYXU22028T6RyHFc9oJah4mM7dJtICz5edE
+	 GKnBSBE/dq615PHU02PDNBBABM0etfzeHjxblocZ4scjHX3YUk2q6yCAYbUwHTK2Fg
+	 WhAtieOBAG5xcvFXv0S2R5LbORWru1BaeWaC+LGcey65xkTV89r1icFWeZrUINSuGt
+	 d0TdxGk9sw+YQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 6F94AC53BC6; Mon, 26 Feb 2024 14:47:12 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218490] Linux warning `usb: port power management may be
+ unreliable` on Dell PowerEdge T440
+Date: Mon, 26 Feb 2024 14:47:12 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-218490-208809-VnfCoyCn6K@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218490-208809@https.bugzilla.kernel.org/>
+References: <bug-218490-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 26 Feb 2024 15:35:59 +0100
-Message-Id: <CZF33W51MC4M.3GUBZFQXT39DB@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v3 1/8] dt-bindings: usb: ti,j721e-usb: drop useless
- compatible list
-Cc: "Conor Dooley" <conor@kernel.org>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Roger Quadros" <rogerq@kernel.org>, "Peter Chen"
- <peter.chen@kernel.org>, "Pawel Laszczak" <pawell@cadence.com>, "Nishanth
- Menon" <nm@ti.com>, "Vignesh Raghavendra" <vigneshr@ti.com>, "Tero Kristo"
- <kristo@kernel.org>, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
- =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Kevin
- Hilman" <khilman@kernel.org>, "Alan Stern" <stern@rowland.harvard.edu>,
- <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-To: "Conor Dooley" <conor.dooley@microchip.com>
-X-Mailer: aerc 0.15.2
-References: <20240223-j7200-usb-suspend-v3-0-b41c9893a130@bootlin.com>
- <20240223-j7200-usb-suspend-v3-1-b41c9893a130@bootlin.com>
- <20240223-clarity-variably-206b01b7276a@spud>
- <CZEXXXQDZZWB.1M5CTZAFVO4YP@bootlin.com>
- <20240226-portable-rockslide-e501667a0d9a@wendy>
-In-Reply-To: <20240226-portable-rockslide-e501667a0d9a@wendy>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
 
-Hello,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218490
 
-On Mon Feb 26, 2024 at 12:56 PM CET, Conor Dooley wrote:
-> On Mon, Feb 26, 2024 at 11:33:06AM +0100, Th=C3=A9o Lebrun wrote:
-> > Hello Conor,
-> >=20
-> > On Fri Feb 23, 2024 at 7:12 PM CET, Conor Dooley wrote:
-> > > On Fri, Feb 23, 2024 at 05:05:25PM +0100, Th=C3=A9o Lebrun wrote:
-> > > > Compatible can be A or B, not A or B or A+B. Remove last option.
-> > > > A=3Dti,j721e-usb and B=3Dti,am64-usb.
-> > > >=20
-> > > > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 9 +++---=
----
-> > > >  1 file changed, 3 insertions(+), 6 deletions(-)
-> > > >=20
-> > > > diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yam=
-l b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> > > > index 95ff9791baea..949f45eb45c2 100644
-> > > > --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> > > > +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
-> > > > @@ -11,12 +11,9 @@ maintainers:
-> > > > =20
-> > > >  properties:
-> > > >    compatible:
-> > > > -    oneOf:
-> > > > -      - const: ti,j721e-usb
-> > > > -      - const: ti,am64-usb
-> > > > -      - items:
-> > > > -          - const: ti,j721e-usb
-> > > > -          - const: ti,am64-usb
-> > >
-> > > Correct, this makes no sense. The devices seem to be compatible thoug=
-h,
-> > > so I would expect this to actually be:
-> > > oneOf:
-> > >   - const: ti,j721e-usb
-> > >   - items:
-> > >       - const: ti,am64-usb
-> > >       - const: ti,j721e-usb
-> >=20
-> > I need your help to grasp what that change is supposed to express? Woul=
-d
-> > you mind turning it into english sentences?
-> > A=3Dti,j721e-usb and B=3Dti,am64-usb. My understanding of your proposal=
- is
-> > that a device can either be compat with A or B. But B is compatible
-> > with A so you express it as a list of items. If B is compat with A then
-> > A is compat with B. Does the order of items matter?
->
-> The two devices are compatible with each other, based on an inspection of
-> the driver and the existing "A+B" setup. If this was a newly submitted
-> binding, "B" would not get approved because "A+B" allows support without
-> software changes and all that jazz.
->
-> Your patch says that allowing "A", "B" and "A+B" makes no sense and you
-> suggest removing "A+B". I am agreeing that it makes no sense to allow
-> all 3 of these situations.
->
-> What I also noticed is other problems with the binding. What should have
-> been "A+B" is actually documented as "B+A", but that doesn't make sense
-> when the originally supported device is "A".
->
-> Therefore my suggestion was to only allow "A" and "A+B", which is what
-> we would (hopefully) tell you to do were you submitting the am64 support
-> as a new patch today.
+--- Comment #7 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
+ ---
+Created attachment 305908
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305908&action=3Dedit
+Linux 6.8-rc6+ messages with v2 patches (output of `dmesg`) with
+`usbcore.dyndbg=3D+p` and with system firmware 2.12.2
 
-Thank you for the in-depth explanation! It makes much more sense now,
-especially the handling of historic stuff that ideally wouldn't have
-been done this way but that won't be changed from now on.
+Testing Linux 6.8-rc6 with the two USB patches the warning is gone.
 
-> > I've not applied your proposal to check for dtbs_check but I'd guess it
-> > would throw warnings for the single existing upstream DTSI (as of
-> > v6.8-rc6) that uses "ti,am64-usb"? See:
-> > arch/arm64/boot/dts/ti/k3-am64-main.dtsi.
->
-> Yeah, it would but it's not as if that cannot be changed. There's no
-> concerns here about backwards compatibility here, right?
+1.=20
+https://lore.kernel.org/all/20240220135946.4028553-1-mathias.nyman@linux.in=
+tel.com/
+2.=20
+https://lore.kernel.org/all/20240220135946.4028553-2-mathias.nyman@linux.in=
+tel.com/
 
-I'm not involved in the maintenance of this platform so I do not believe
-I should be answering this question. I asked the question because I
-taught there always were concerns of backwards-compat when it comes to
-DT and dt-bindings (in the best of all possible worlds).
+--=20
+You may reply to this email to add a comment.
 
-K3 maintainers are already in cc.
-
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
