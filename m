@@ -1,156 +1,176 @@
-Return-Path: <linux-usb+bounces-7088-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7089-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 794078677F9
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 15:14:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD1BB86790A
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 15:51:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3493D29251E
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 14:14:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 454F3B2D7D0
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 14:46:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B82012A15E;
-	Mon, 26 Feb 2024 14:14:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B24CE134748;
+	Mon, 26 Feb 2024 14:36:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iKTqD1KN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35DC31292E0;
-	Mon, 26 Feb 2024 14:14:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58C6134727;
+	Mon, 26 Feb 2024 14:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708956856; cv=none; b=IuVvg59jQN+yfLmyKlr5telZlE663Ao4tDDe5g5awJys562J698MyzWrer0VvcWsmIJtgPGX7J5xU4UjuhRsNwYgQ4I1GcbPshEgUio91t/pAQ7ZZ+oqNoUhBitAf6fSNeYARhfptTJYnhr6rna+Ho81kvZsj6tbggVZyigM4qo=
+	t=1708958166; cv=none; b=LGCeAEUgHGHdLfxO8zk7fCqey//n4DP7OM9VOQqo3lrtiIpL6ajrSHUUbFdklB9PH8zl3x6Gki6fQbJ/E8UrlfBaGlpHJ6TUWLz6QG84vxAH4lsBO03+Cz6jsqzZ2qoRwrakNiWiH49vHmmlkXiwSA8qcytL/C2n5l2kIWH7aGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708956856; c=relaxed/simple;
-	bh=NyFakqApGDI7TfGmv5PnraoL1jqrvohUulDBNF8CH3k=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=RZVLXHO7pjTIRDtxAOO7RodPTWjHfznj+OTFiPSA9Xgg0bC7GB2Uif/q7e28bZwPl9+Kj4j7lBrWHFGXKqOCeakjpOE2cX1XKLMRZ1lXl/i2vnuf/vVr1BRFwP6zw5kKyaThlcO8+6XmB+3ftCPsAWwEB29wGpQzDU8eZq3BYd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [141.14.220.34] (g34.guest.molgen.mpg.de [141.14.220.34])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 5262661E5FE01;
-	Mon, 26 Feb 2024 15:13:50 +0100 (CET)
-Message-ID: <cb011279-4150-405d-9acd-30ebd537f142@molgen.mpg.de>
-Date: Mon, 26 Feb 2024 15:13:49 +0100
+	s=arc-20240116; t=1708958166; c=relaxed/simple;
+	bh=9ywEGY5Eo3x6FAI3cUqz0fj17fVyroyFNHMiCN6mL/0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=AL3yII8vq0mTujTbnvC0jhlf86YzXSYe9nmhJB7H7mLfiJ7XD14Q1XRx1qqy8vRZJG5wwdBX1UDQLpuFfQU2U71yd1IYvSHpCflQ9XyIJCTs/NY+57Nat6XgensQqeNUTvtCz2xRt6C6Gbosb5QGuzay2XDJ4gohBXKMzgibQe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iKTqD1KN; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 751121BF209;
+	Mon, 26 Feb 2024 14:35:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1708958161;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xzRRKGTCf49DCuAE0sJucov1JPKZw/oB6zFjk/bAKO0=;
+	b=iKTqD1KNUEKWwhSN9AhG2JhtpDWL87tAJ9I4T86LLIn0QkDMqI+Oq/4+t5fhJHfsecTixf
+	s+/UCitLkC/j7Yzf2luIY9kN/WVrqMOEEhpie7a1JCoV8PxKfF7ZsBq1MSbynBrgmJ/0G8
+	ZxSoSjSk+MX665A3cbZFKu1gKOPna55GAkVF91br9adMhh4PNkUAXQV2JhQDci4qKmmejm
+	JL2SGM4FZHA5FflxtIvKquzoswqNZ3772Bw7PYJFrEI13XKigy9mEFjpYofCBWCbm8cCGy
+	ekDso4pH4pexQ/dQvsW+ccS6C8ALdQM9DHAkXv9hA7YZiY3GXIkRlLIWyj4lqg==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: port: Don't try to peer unused USB ports based on
- location
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- stern@rowland.harvard.edu, stable@vger.kernel.org
-References: <20240222233343.71856-1-mathias.nyman@linux.intel.com>
- <6c24ec1b-0f82-4566-9a86-80b0c33a2b47@molgen.mpg.de>
-Content-Language: en-US
-In-Reply-To: <6c24ec1b-0f82-4566-9a86-80b0c33a2b47@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 26 Feb 2024 15:35:59 +0100
+Message-Id: <CZF33W51MC4M.3GUBZFQXT39DB@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v3 1/8] dt-bindings: usb: ti,j721e-usb: drop useless
+ compatible list
+Cc: "Conor Dooley" <conor@kernel.org>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Roger Quadros" <rogerq@kernel.org>, "Peter Chen"
+ <peter.chen@kernel.org>, "Pawel Laszczak" <pawell@cadence.com>, "Nishanth
+ Menon" <nm@ti.com>, "Vignesh Raghavendra" <vigneshr@ti.com>, "Tero Kristo"
+ <kristo@kernel.org>, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Kevin
+ Hilman" <khilman@kernel.org>, "Alan Stern" <stern@rowland.harvard.edu>,
+ <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+To: "Conor Dooley" <conor.dooley@microchip.com>
+X-Mailer: aerc 0.15.2
+References: <20240223-j7200-usb-suspend-v3-0-b41c9893a130@bootlin.com>
+ <20240223-j7200-usb-suspend-v3-1-b41c9893a130@bootlin.com>
+ <20240223-clarity-variably-206b01b7276a@spud>
+ <CZEXXXQDZZWB.1M5CTZAFVO4YP@bootlin.com>
+ <20240226-portable-rockslide-e501667a0d9a@wendy>
+In-Reply-To: <20240226-portable-rockslide-e501667a0d9a@wendy>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-Dear Mathias,
+Hello,
 
+On Mon Feb 26, 2024 at 12:56 PM CET, Conor Dooley wrote:
+> On Mon, Feb 26, 2024 at 11:33:06AM +0100, Th=C3=A9o Lebrun wrote:
+> > Hello Conor,
+> >=20
+> > On Fri Feb 23, 2024 at 7:12 PM CET, Conor Dooley wrote:
+> > > On Fri, Feb 23, 2024 at 05:05:25PM +0100, Th=C3=A9o Lebrun wrote:
+> > > > Compatible can be A or B, not A or B or A+B. Remove last option.
+> > > > A=3Dti,j721e-usb and B=3Dti,am64-usb.
+> > > >=20
+> > > > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 9 +++---=
+---
+> > > >  1 file changed, 3 insertions(+), 6 deletions(-)
+> > > >=20
+> > > > diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yam=
+l b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > > > index 95ff9791baea..949f45eb45c2 100644
+> > > > --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > > > +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > > > @@ -11,12 +11,9 @@ maintainers:
+> > > > =20
+> > > >  properties:
+> > > >    compatible:
+> > > > -    oneOf:
+> > > > -      - const: ti,j721e-usb
+> > > > -      - const: ti,am64-usb
+> > > > -      - items:
+> > > > -          - const: ti,j721e-usb
+> > > > -          - const: ti,am64-usb
+> > >
+> > > Correct, this makes no sense. The devices seem to be compatible thoug=
+h,
+> > > so I would expect this to actually be:
+> > > oneOf:
+> > >   - const: ti,j721e-usb
+> > >   - items:
+> > >       - const: ti,am64-usb
+> > >       - const: ti,j721e-usb
+> >=20
+> > I need your help to grasp what that change is supposed to express? Woul=
+d
+> > you mind turning it into english sentences?
+> > A=3Dti,j721e-usb and B=3Dti,am64-usb. My understanding of your proposal=
+ is
+> > that a device can either be compat with A or B. But B is compatible
+> > with A so you express it as a list of items. If B is compat with A then
+> > A is compat with B. Does the order of items matter?
+>
+> The two devices are compatible with each other, based on an inspection of
+> the driver and the existing "A+B" setup. If this was a newly submitted
+> binding, "B" would not get approved because "A+B" allows support without
+> software changes and all that jazz.
+>
+> Your patch says that allowing "A", "B" and "A+B" makes no sense and you
+> suggest removing "A+B". I am agreeing that it makes no sense to allow
+> all 3 of these situations.
+>
+> What I also noticed is other problems with the binding. What should have
+> been "A+B" is actually documented as "B+A", but that doesn't make sense
+> when the originally supported device is "A".
+>
+> Therefore my suggestion was to only allow "A" and "A+B", which is what
+> we would (hopefully) tell you to do were you submitting the am64 support
+> as a new patch today.
 
-Am 24.02.24 um 12:27 schrieb Paul Menzel:
+Thank you for the in-depth explanation! It makes much more sense now,
+especially the handling of historic stuff that ideally wouldn't have
+been done this way but that won't be changed from now on.
 
-> Thank you for version 2.
-> 
-> Am 23.02.24 um 00:33 schrieb Mathias Nyman:
->> Unused USB ports may have bogus location data in ACPI PLD tables.
->> This causes port peering failures as these unused USB2 and USB3 ports
->> location may match.
->>
->> Due to these failures the driver prints a
->> "usb: port power management may be unreliable" warning, and
->> unnecessarily blocks port power off during runtime suspend.
->>
->> This was debugged on a couple DELL systems where the unused ports
->> all returned zeroes in their location data.
->> Similar bugreports exist for other systems.
->>
->> Don't try to peer or match ports that have connect type set to
->> USB_PORT_NOT_USED.
->>
->> Fixes: 3bfd659baec8 ("usb: find internal hub tier mismatch via acpi")
->> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218465
->> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218486
->> Tested-by: Paul Menzel <pmenzel@molgen.mpg.de>
->> Link: https://lore.kernel.org/linux-usb/5406d361-f5b7-4309-b0e6-8c94408f7d75@molgen.mpg.de
->> Cc: stable@vger.kernel.org # v3.16+
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> ---
->> v1 -> v2
->>    - Improve commit message
->>    - Add missing Fixes, Closes and Link tags
->>    - send this patch separately for easier picking to usb-linus
->>
->>   drivers/usb/core/port.c | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
->> index c628c1abc907..4d63496f98b6 100644
->> --- a/drivers/usb/core/port.c
->> +++ b/drivers/usb/core/port.c
->> @@ -573,7 +573,7 @@ static int match_location(struct usb_device 
->> *peer_hdev, void *p)
->>       struct usb_hub *peer_hub = usb_hub_to_struct_hub(peer_hdev);
->>       struct usb_device *hdev = 
->> to_usb_device(port_dev->dev.parent->parent);
->> -    if (!peer_hub)
->> +    if (!peer_hub || port_dev->connect_type == USB_PORT_NOT_USED)
->>           return 0;
->>       hcd = bus_to_hcd(hdev->bus);
->> @@ -584,7 +584,8 @@ static int match_location(struct usb_device 
->> *peer_hdev, void *p)
->>       for (port1 = 1; port1 <= peer_hdev->maxchild; port1++) {
->>           peer = peer_hub->ports[port1 - 1];
->> -        if (peer && peer->location == port_dev->location) {
->> +        if (peer && peer->connect_type != USB_PORT_NOT_USED &&
->> +            peer->location == port_dev->location) {
->>               link_peers_report(port_dev, peer);
->>               return 1; /* done */
->>           }
-> 
-> I tested the two versions from before
-> 
->      8c849968dd165 usb: port: Don't try to peer unused USB ports based 
-> on location
->      85704eb36e9f2 usb: usb-acpi: Set port connect type of not 
-> connectable ports correctly
->      39133352cbed6 Merge tag 'for-linus' of 
-> git://git.kernel.org/pub/scm/virt/kvm/kvm
-> 
-> on the Dell OptiPlex 5055 [1], but the USB keyboard and mouse were not 
-> detected. I have to find out, if I screwed up the build – as network 
-> also did not work –, but please wait until I get that test finished. On 
-> the bright side, the warning was gone. ;-)
+> > I've not applied your proposal to check for dtbs_check but I'd guess it
+> > would throw warnings for the single existing upstream DTSI (as of
+> > v6.8-rc6) that uses "ti,am64-usb"? See:
+> > arch/arm64/boot/dts/ti/k3-am64-main.dtsi.
+>
+> Yeah, it would but it's not as if that cannot be changed. There's no
+> concerns here about backwards compatibility here, right?
 
-[…]
+I'm not involved in the maintenance of this platform so I do not believe
+I should be answering this question. I asked the question because I
+taught there always were concerns of backwards-compat when it comes to
+DT and dt-bindings (in the best of all possible worlds).
 
-Sorry, wrong alarm. I guess I messed the module installation, and the 
-modules were not found. I successfully tested it on a different Dell 
-OptiPlex 5055 and uploaded the messages to the Linux Kernel Bugzilla 
-issue [1].
+K3 maintainers are already in cc.
 
-Tested-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Thanks,
 
-Sorry for the noise.
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-
-Kind regards,
-
-Paul
-
-
-> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=218487
 
