@@ -1,167 +1,120 @@
-Return-Path: <linux-usb+bounces-7099-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7100-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EC93867F91
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 19:09:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9EC2867F9F
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 19:13:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 483DE291B01
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 18:09:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A324128C6D4
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 18:13:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71BCD12EBF8;
-	Mon, 26 Feb 2024 18:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="G5sDphJs";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="mZXkRcmU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8509C12F361;
+	Mon, 26 Feb 2024 18:13:11 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5205C12E1F5;
-	Mon, 26 Feb 2024 18:09:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 0478712C815
+	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 18:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708970967; cv=none; b=Ou+VEvHtnc3b3Z+c7cmH26wsVri1ZjuHOwDz22QFxzqo2cvey0kFCxqKz8AYEA0rqpXV52XSpK9Fz074Ww4+c+vu0vyueMwk1QgkvHrg69V1fIxzJWJntTK5Jd9dOkIgu2ldiOLLcloeyR8SzgjUz0GoZfSICCk55XnBgvZNpD4=
+	t=1708971191; cv=none; b=hAt35xcvpz7yYI82xHvxx2vGm39Ia025RPRl5Y6T46P1PSsPjNRT9ldZyltclQMYcC05rKp915xF9TNn0RGx5QZvypBhZ65Qkn68hNXgllYHqre1Fx6Cyo/66lL6QvRHgTrgHpKMu7te1glfdFhx0AUcNBa2EBPpeW4Cu1lXL2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708970967; c=relaxed/simple;
-	bh=EgcqXpFezT+1t7YK8f56X0MEgJ6W6GxDYo7o8TM6gUE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=KPhTYJQ+7InPGLmyaoQRq0vHRXm+kg5IThQMyuGfHFR1Ga2niTCrOw9hUjo6BUXV3SOGSm8odcDQ7X8qg3MIw6BcK6k0gAkQF6Lh9FWm69X/oHHx4afBNzpEPy5CPUZBd41yXoPDdoIn96u/+9t69x9e6lr0XUcnWYyLin7mg54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=G5sDphJs; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=mZXkRcmU; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1708970963;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lBiIbeLll0i8806pw3+a5wtiCC8R3KilwQQO3Vmsk48=;
-	b=G5sDphJs7t9/raF+7NYDjjcuKFwrRc0mqtuV/gpfLcT+jH6DXladNCYEqLak8e2uai5TD+
-	ZcTwChJ8MRp+01HO3nKWNKe+NhKUZvPjHaVfpllKVSfsey894PDzlGGuvLRd0X5D8J82dv
-	CqMwC6SoYU86gtUCYVqmQ8Yu7sD05uyf777NW9SzmGMWzGpcxyL2FVvckmC6GlOfGem5AS
-	33YWLOeIMQWQJhI0qjRJgCA7E7rPEUqWA++z25qhnjTzfUmFgKFgXhtYxaa1S1rNjafLx6
-	1JE8wnN5SQygZR6jXnuuQzKneRTbC7TmsoLykcIhsO39hkJ4+vHGjujy2sTf7w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1708970963;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lBiIbeLll0i8806pw3+a5wtiCC8R3KilwQQO3Vmsk48=;
-	b=mZXkRcmUoZuND93toW5bsRFgQG3qHZFIQrwEXNOwCdtZ2hwAjok8Xgut2Ym9p5Xw23JOqV
-	3M+bMQhHuGc36HAg==
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, Linux regressions mailing
- list <regressions@lists.linux.dev>
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com,
- Linux List Kernel Mailing <linux-kernel@vger.kernel.org>, Greg KH
- <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- linux-x86_64@vger.kernel.org, netdev@vger.kernel.org, Randy Dunlap
- <rdunlap@infradead.org>, Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Subject: Re: This is the fourth time I've tried to find what led to the
- regression of outgoing network speed and each time I find the merge commit
- 8c94ccc7cd691472461448f98e2372c75849406c
-In-Reply-To: <acc2b877-4b42-fd4d-867b-603dae95d09d@linux.intel.com>
-References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
- <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com>
- <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
- <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
- <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
- <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
- <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
- <a026ecd8-6fba-017d-d673-0d0759a37ed8@linux.intel.com>
- <CABXGCsOgy8H4GGcNU1jRE+SzRqwnPeNuy_3xBukjwB-bPxeZrQ@mail.gmail.com>
- <CABXGCsOd=E428ixUOw+msRpnaubgx5-cVU7TDXwRUCdrM5Oicw@mail.gmail.com>
- <34d7ab1b-ab12-489d-a480-5e6ccc41bfc3@infradead.org>
- <10487018-49b8-4b27-98a1-07cee732290d@infradead.org>
- <4f34b6a8-4415-6ea4-8090-262847d606c6@linux.intel.com>
- <3ea25443-1275-4c67-90e0-b637212d32b5@leemhuis.info>
- <1e719367-01ae-565a-2199-0ff7e260422b@linux.intel.com>
- <410817b8-1cf9-4285-b20b-f1fa0513cee8@leemhuis.info>
- <acc2b877-4b42-fd4d-867b-603dae95d09d@linux.intel.com>
-Date: Mon, 26 Feb 2024 19:09:22 +0100
-Message-ID: <87r0gz9jxp.ffs@tglx>
+	s=arc-20240116; t=1708971191; c=relaxed/simple;
+	bh=bGVzXfqLQhGpM8schnRSrwLEEAcEF5Ccp60yUJd38R4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IMmz1MXGLOjM/o6MuGpVl3EOFRckPKNXHfJdEEoDCSeXavoD7gRtZFmXtrQfpb7LlvJev3Rp93g0VK7wrQFQsvDJ76BQDPIcpCyYIxZ1FfwAvgW+I4IEA2Zqbe52b1fxmX2loFQ9pPjBJX5OjQGxx7a/oCtarYhtc16jPGBzNes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 738450 invoked by uid 1000); 26 Feb 2024 13:13:01 -0500
+Date: Mon, 26 Feb 2024 13:13:01 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: syzbot <syzbot+28748250ab47a8f04100@syzkaller.appspotmail.com>,
+  bvanassche@acm.org, emilne@redhat.com, gregkh@linuxfoundation.org,
+  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+  martin.petersen@oracle.com, syzkaller-bugs@googlegroups.com,
+  tasos@tasossah.com, usb-storage@lists.one-eyed-alien.net
+Subject: Re: [syzbot] [usb-storage?] divide error in isd200_ata_command
+Message-ID: <9bbc5b63-33e3-44de-8bce-4c59dcce5e92@rowland.harvard.edu>
+References: <0000000000003eb868061245ba7f@google.com>
+ <99b0fb1b-37b3-4da4-8129-e502ed8e479a@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <99b0fb1b-37b3-4da4-8129-e502ed8e479a@suse.com>
 
-On Mon, Feb 26 2024 at 12:54, Mathias Nyman wrote:
-> On 26.2.2024 11.51, Linux regression tracking (Thorsten Leemhuis) wrote:
->>> I don't think reverting this series is a solution.
->>>
->>> This isn't really about those usb xhci patches.
->>> This is about which interrupt gets assigned to which CPU.
->> 
->> I know, but from my understanding of Linus expectations wrt to handling
->> regressions it does not matter much if a bug existed earlier or
->> somewhere else: what counts is the commit that exposed the problem.
->> 
->> But I might be wrong here. Anyway, not CCing Linus for this; but I'll
->> likely point him to this direction on Sunday in my next weekly report,
->> unless some fix comes into sight.
->> 
->>> Mikhail got unlucky when the network adapter interrupts on that system was
->>> assigned to CPU0, clearly a more "clogged" CPU, thus causing a drop in max
->>> bandwidth.
->> 
->> But maybe others will be just as "unlucky". Or is there anything to
->> believe otherwise? Maybe some aspect of the .config or local setup that
->> is most likely unique to Mikhail's setup?
->
-> I believe this is a zero-sum case.
->
-> Others got equally lucky due to this change.
-> Their devices end up interrupting less clogged CPUs and see a similar
-> performance increase.
+On Mon, Feb 26, 2024 at 11:59:06AM +0100, Oliver Neukum wrote:
+> Hi,
+> 
+> On 26.02.24 10:42, syzbot wrote:
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> > 
+> > HEAD commit:    f2e367d6ad3b Merge tag 'for-6.8/dm-fix-3' of git://git.ker..
+> > git tree:       upstream
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=114e10e4180000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=eff9f3183d0a20dd
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=28748250ab47a8f04100
+> > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1064b372180000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10aca6ac180000
+> > 
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/c55ca1fdc5ad/disk-f2e367d6.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/4556a82fb4ed/vmlinux-f2e367d6.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/95338ed9dad1/bzImage-f2e367d6.xz
+> > 
+> > The issue was bisected to:
+> > 
+> > commit 321da3dc1f3c92a12e3c5da934090d2992a8814c
+> > Author: Martin K. Petersen <martin.petersen@oracle.com>
+> > Date:   Tue Feb 13 14:33:06 2024 +0000
+> > 
+> >      scsi: sd: usb_storage: uas: Access media prior to querying device properties
+> 
+> preliminary analysis:
+> 
+> It oopses here:
+> 
+> 		} else {
+> 			if (!id[ATA_ID_SECTORS] || !id[ATA_ID_HEADS])
+> 				goto too_early;
 
-Reverting this does not make any sense.
+Those two lines are debugging code you added, right?
 
-The kernel assigns the initial interrupt affinities to the CPUs so that
-the number of interrupts is halfways balanced. That spreading algorithm
-is completely agnostic of the actual usage of the interrupts. Where
-e.g. the network interrupt ends up depends on the probe/enumeration
-order of devices. Add another PCI-E card into the machine and it will
-again look different.
+> 			sectnum = (u8)((lba % id[ATA_ID_SECTORS]) + 1);
+> 			cylinder = (u16)(lba / (id[ATA_ID_SECTORS] *
+> 					id[ATA_ID_HEADS]));
+> 
+> in isd200_scsi_to_ata() because it must not be called before isd200_get_inquiry_data()
+> has completed.
 
-There is nothing the kernel can do about it and earlier attempts to do
-interrupt frequency based balancing in the kernel ended up nowhere
-simply because the kernel does not have enough information about the
-overall requirements. That's why the kernel leaves the affinity
-configuration for user space, e.g. irqbalanced, except for true
-multi-queue scenarios like NVME where the kernel binds queues and their
-interrupts to specific CPUs or groups of CPUs.
+It can't be; isd200_get_inquiry_data is called by isd200_Initialization 
+during probe before any SCSI commands are transmitted.
 
-Why ending up on CPU0 has this particular effect on Mikhails machine is
-unclear as we don't have any information about the overall workload,
-other interrupt sources on CPU0 and their frequency. That'd need to be
-investigated with instrumentation and might unearth some completely
-different underlying reason causing this behavior.
+> That raises two questions.
+> 
+> 1) should we limit the read_before_ms flag to the cases transparent SCSI is used?
 
-So I don't think this is a regression in the true sense of
-regressions. It's an unfortunate coincidence and reverting the
-identified commits would just paper over the real problem, if there is
-actually one single source of trouble which causes the performance drop
-only on CPU0.  The commits are definitely _not_ the root cause, they
-happen to unearth some other issue, which might be as mundane as
-e.g. that the NVME interrupt on CPU0 is competing with the network
-interrupt. So don't shoot the messenger.
+That won't help; the inquiry data will still be wrong.
 
-Thanks,
+> 2) does isd200_get_inquiry_data() need to validate what it reads?
 
-        tglx
+Yes.  At least to make sure that we're not going to divide by 0.  This 
+means that id[ATA_ID_SECTORS] and id[ATA_ID_HEADS] must both be > 0.  
+Since they are 16-bit quantities, we don't have to worry about them 
+overflowing.
 
+Do you want to submit a fix for syzbot to test?
 
-
-
-
-
-
-
-
+Alan Stern
 
 
