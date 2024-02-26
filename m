@@ -1,230 +1,146 @@
-Return-Path: <linux-usb+bounces-7078-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7079-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE7FC8674D3
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 13:27:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7326086751D
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 13:37:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D9041C2299E
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 12:27:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE74F1F2475B
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 12:37:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD6F0605A2;
-	Mon, 26 Feb 2024 12:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A00F7F475;
+	Mon, 26 Feb 2024 12:36:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="I7prYaPE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2051.outbound.protection.outlook.com [40.107.94.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A19605A1
-	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 12:27:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708950439; cv=none; b=quAg65lZJjlljOnnYR/5Stsav86s6iswlOpSc7Aa8D8p9MZwDxPVuVuMTjtBQVLi6Wj9Dd2peNQ/dOa8iVhD1n8lN3i3RPF/FNqCH1N24XtedjyJwx/P/roGpGpVfhOPI8EMIFNx4b8Ge51FoRXevs1+QpTSxkhzZg7VWIx1Q38=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708950439; c=relaxed/simple;
-	bh=MnH2zzUiBpWHT2hKic62kcd5bAVn2S8JMO/2jTnLU58=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=elO/IBMBTDLvtMmy/WKqqAkfqwffWhZvtdDjR7BEqU4b5MLJGe3Xy1tFzIXpKedmhPlzyeump1KMr+1YRIZD2dV6c4BOXLjw+qojqiAjlIcnt7fwl7ZA8hYYoh69qH6rkk0xTTAZ8nvGjvEI7XZ+s1Do+qhcZC5Mtk5Sjnh3uHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1rea4U-0003lf-Nu; Mon, 26 Feb 2024 13:27:02 +0100
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1rea4T-002zWT-As; Mon, 26 Feb 2024 13:27:01 +0100
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1rea4T-0095RZ-0l;
-	Mon, 26 Feb 2024 13:27:01 +0100
-Date: Mon, 26 Feb 2024 13:27:01 +0100
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	linux@roeck-us.net, jun.li@nxp.com, devicetree@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: Re: [PATCH v3 4/4] usb: typec: tcpci: add support to set connector
- orientation
-Message-ID: <20240226122701.inqpodm6mdfxwjo2@pengutronix.de>
-References: <20240222210903.208901-1-m.felsch@pengutronix.de>
- <20240222210903.208901-5-m.felsch@pengutronix.de>
- <ZdxII9W/CBx76Xai@kuha.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9F75B1F6
+	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 12:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708951014; cv=fail; b=gmWTtNVmo7zNcIOG3EekYsv88wYWpL/pN95hQI94J9zKTiZByghghj4h2DrrMTFHHxhfOGdyg1Pd37SadiroBkciC5fjKmQr7kk6lL6qnRPPwGtSC6rQtV2GFxxC30Qt8p3eZiLm8XOd/AKpa/HNtRrkvsGqnllEKstXkpvOVT0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708951014; c=relaxed/simple;
+	bh=K8zMp+9gJqe5kL69AnjMJJBbGCHN0zwnOm3WM0X44Fc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JahjbAD6hBUiFNq50xCMSUlRoyfOfRGhbBbOOCGSZieDt1oyb6JcZ3UD2o6PG0pPTTPI2iLy+SO5FywdrCARyrnRPYteuIbD97TIIZDjHwNfvuBcjC7DDD1saJW23IvD29Ii0X7WQXrzjdZdeYA8nwteketVw8O+LXtVjZbEB28=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=I7prYaPE; arc=fail smtp.client-ip=40.107.94.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nmerFDHrdg+ilMrE8H7LkuaRS/Y3hs4ldYgZZNIn067oGpC6eMzsbM7EvX9/m4oG7P8qFj7HLWRUnOoCdL8KofOKG9uY1ATNJUXIBgKOgUxS+huKr1Yg6KA1yN9YEdKi2SfbPzG69A7ckSkO6GG0wYTZwWF1kgMiBWOyrSOo49VNk7XAvKAM13MI2VWJ7JvW2Q0HgEsxvPSpXhd8ql+iPEjVWvUPPcNWw0u+zQifKIaSrCfLdbV9pcpFHo9jYIgXColX39yWNJTJoP53z0cPEXsOPgbQGURUv/we/45NE1hG80nNUVhXja186j/J0i4xajiyH+epw3+QgBCgpYVENw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IVGrzOyJyrhonBHqK81BuFxim2Sl++SwG6zslDbffSE=;
+ b=nwDRxiFeZ7S1idhIajvAC8w2kuRLSjIlXbxLuuiaMlNrIchPLPJ4YPW7tZigCwrBHGZLeWQBPfoWd4usQ+fgmrUr7OJoIR6oD/7GTTY4JhSzF2AYSeDa5oeNxXt+Cr6JIJlNHzK1MRZYS3r2JMBNypHX7E9cWjBFJMS/npBW8O499bA+e5HED204e++qLU9uiLrA/RYYG3zP291Lw5sAAqz6+3LNLgnPgwlhGOU62+WQt5lzwCWCJw5q5SFTDsu4HvYGAcrk8HMwzTfRTNlSdW0yfP2dTvTrFi0ovVk7XhS7sBYCMGkHjfTWqGe+BrzSwIkJN5ceGMP7nwPpjnObBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IVGrzOyJyrhonBHqK81BuFxim2Sl++SwG6zslDbffSE=;
+ b=I7prYaPEtkbFaTc49Q8O216mqSUDItGKV/1LpX7CVt0q923JiRIWkzulnycklRqUETvBCsnL/yOuxWPfZiwdveW5yqigFNyB04HBhppPDyiW/Gg+WeS0V12/Gy/SGxQdNZ11x7AO+n36Ow/cCEKUAI4vIL0frje1dQQh/tR9pso=
+Received: from MN2PR15CA0002.namprd15.prod.outlook.com (2603:10b6:208:1b4::15)
+ by SA3PR12MB9131.namprd12.prod.outlook.com (2603:10b6:806:395::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.34; Mon, 26 Feb
+ 2024 12:36:50 +0000
+Received: from BL02EPF0001A0FB.namprd03.prod.outlook.com
+ (2603:10b6:208:1b4:cafe::9f) by MN2PR15CA0002.outlook.office365.com
+ (2603:10b6:208:1b4::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.49 via Frontend
+ Transport; Mon, 26 Feb 2024 12:36:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0001A0FB.mail.protection.outlook.com (10.167.242.102) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7292.25 via Frontend Transport; Mon, 26 Feb 2024 12:36:50 +0000
+Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 26 Feb
+ 2024 06:36:47 -0600
+From: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+To: <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+	<linux-usb@vger.kernel.org>
+CC: <mario.limonciello@amd.com>, Basavaraj Natikar
+	<Basavaraj.Natikar@amd.com>, Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [PATCH] xhci: Allow RPM on the USB controller (1022:43f7) by default
+Date: Mon, 26 Feb 2024 18:06:27 +0530
+Message-ID: <20240226123627.2144961-1-Basavaraj.Natikar@amd.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZdxII9W/CBx76Xai@kuha.fi.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A0FB:EE_|SA3PR12MB9131:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6801cf28-9aca-4e6d-74dd-08dc36c79ac7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	fCBTuP8P+L8lokmZl0EyWIehLFuSz/Or9QbiwEj74WKlIamkjZXrnDtgzy4npzXyNw8Eu73unbjWVEtB6W7OnR00rdJ56zYEDQdcvwtDGoXXyiANMXwOv4aFWz/nZCuzPn7QSb12KbEEwebgGaPHZC+aielTyP1MHetvqGMmNMiINHjK/lDY/JFz0O01uWXH1vqIuw3M/51MwxTmO6E90HlcQD0QblYpx2w53zA9OQn2XR24/OSYoWN/StjL2Fs6VlebNRCEIt1a86U/SbTuUTMUs4xEzb81OXBnUMr6yQuEWAqh0FXUezd2HgKXw0qq5k+3i2VVm8aoMfmDc8BsGem/It9uMuiKxuraSoTqNAPChUCoYj151oO2Q9Lf5eoN7sfaqOBRjUhuDmivoXMABfDfN2oNnZCDZIGsiREpSsQ0lsRnuQfMt+7v//iPbzEQUb2x9lIgABObcNLyUlNA3wCMpRhhSUVaskwGUxiAMr4vmrByPaMHpWOUaKO9LPbPDu0B+dAudUZuFw8KY3Mhyc3+4LcgMgrgkyRx2m+0MQNPqdEQ+obJG1H+5jkPHIg/E2FfHFPbz53J0zUfzqx2rCcH63g4nE5KInd7NjM5VC0TK28X9Rt5pTMeX1cO80nDX9cEx65OLQ3jQBBUWA/YBwQ2b6FvY6f6e53hgCJQZOh7YVcamJjMFsU+1pmZWHHXAzxeZQRWbkDDUtmWZSLtuhmuT9ICWV3YYI1ktXwP8C1++IcC6iJoDaS0a2k1yG9y
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2024 12:36:50.2453
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6801cf28-9aca-4e6d-74dd-08dc36c79ac7
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0001A0FB.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB9131
 
-Hi,
+The AMD USB host controller (1022:43f7) does not enter PCI D3 by default
+when nothing is connected. This is due to the policy introduced by
+'commit a611bf473d1f ("xhci-pci: Set runtime PM as default policy on all
+xHC 1.2 or later devices")', which only covers 1.2 or later devices.
 
-On 24-02-26, Heikki Krogerus wrote:
-> On Thu, Feb 22, 2024 at 10:09:03PM +0100, Marco Felsch wrote:
-> > This add the support to set the optional connector orientation bit which
-> > is part of the optional CONFIG_STANDARD_OUTPUT register 0x18 [1]. This
-> > allows system designers to connect the tcpc orientation pin directly to
-> > the 2:1 ss-mux.
-> > 
-> > [1] https://www.usb.org/sites/default/files/documents/usb-port_controller_specification_rev2.0_v1.0_0.pdf
-> > 
-> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > ---
-> > v3:
-> > - no changes
-> > v2:
-> > - Make use of fallthrough 
-> > 
-> >  drivers/usb/typec/tcpm/tcpci.c | 44 ++++++++++++++++++++++++++++++++++
-> >  include/linux/usb/tcpci.h      |  8 +++++++
-> >  2 files changed, 52 insertions(+)
-> > 
-> > diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> > index 7118551827f6..73a52e7f95c2 100644
-> > --- a/drivers/usb/typec/tcpm/tcpci.c
-> > +++ b/drivers/usb/typec/tcpm/tcpci.c
-> > @@ -67,6 +67,18 @@ static int tcpci_write16(struct tcpci *tcpci, unsigned int reg, u16 val)
-> >  	return regmap_raw_write(tcpci->regmap, reg, &val, sizeof(u16));
-> >  }
-> >  
-> > +static bool tcpci_check_std_output_cap(struct regmap *regmap, u8 mask)
-> > +{
-> > +	unsigned int reg;
-> > +	int ret;
-> > +
-> > +	ret = regmap_read(regmap, TCPC_STD_OUTPUT_CAP, &reg);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	return (reg & mask) == mask;
-> > +}
-> > +
-> >  static int tcpci_set_cc(struct tcpc_dev *tcpc, enum typec_cc_status cc)
-> >  {
-> >  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> > @@ -301,6 +313,28 @@ static int tcpci_set_polarity(struct tcpc_dev *tcpc,
-> >  			   TCPC_TCPC_CTRL_ORIENTATION : 0);
-> >  }
-> >  
-> > +static int tcpci_set_orientation(struct tcpc_dev *tcpc,
-> > +				 enum typec_orientation orientation)
-> > +{
-> > +	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> > +	unsigned int reg;
-> > +
-> > +	switch (orientation) {
-> > +	case TYPEC_ORIENTATION_NONE:
-> > +		/* We can't put a single output into high impedance */
-> > +		fallthrough;
-> > +	case TYPEC_ORIENTATION_NORMAL:
-> > +		reg = TCPC_CONFIG_STD_OUTPUT_ORIENTATION_NORMAL;
-> > +		break;
-> > +	case TYPEC_ORIENTATION_REVERSE:
-> > +		reg = TCPC_CONFIG_STD_OUTPUT_ORIENTATION_FLIPPED;
-> > +		break;
-> > +	}
-> > +
-> > +	return regmap_update_bits(tcpci->regmap, TCPC_CONFIG_STD_OUTPUT,
-> > +				  TCPC_CONFIG_STD_OUTPUT_ORIENTATION_MASK, reg);
-> > +}
-> > +
-> >  static void tcpci_set_partner_usb_comm_capable(struct tcpc_dev *tcpc, bool capable)
-> >  {
-> >  	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> > @@ -808,6 +842,9 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
-> >  	if (tcpci->data->vbus_vsafe0v)
-> >  		tcpci->tcpc.is_vbus_vsafe0v = tcpci_is_vbus_vsafe0v;
-> >  
-> > +	if (tcpci->data->set_orientation)
-> > +		tcpci->tcpc.set_orientation = tcpci_set_orientation;
-> 
-> I don't think that flag is needed - not yet at least. Please just call
-> tcpci_check_std_output_cap() directly from here.
+Therefore, by default, allow RPM on the AMD USB controller [1022:43f7].
 
-The reason for having it this way was to not break exsisting user like:
-tcpci_rt1711h, tcpci_mt6370, tcpci_maxim which may or may not implement
-the TCPC_STD_OUTPUT_CAP_ORIENTATION. This way the users of
-tcpci_register_port() can decide by on its own if they do have this
-feature or not and how this is checked. I'm fine with your proposal if
-you still think that we can check this unconditional.
+Fixes: 4baf12181509 ("xhci: Loosen RPM as default policy to cover for AMD xHC 1.1")
+Link: https://lore.kernel.org/all/12335218.O9o76ZdvQC@natalenko.name/
+Cc: Mario Limonciello <mario.limonciello@amd.com>
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+---
+ drivers/usb/host/xhci-pci.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Regards,
-  Marco
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index b534ca9752be..1eb7a41a75d7 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -473,6 +473,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	/* xHC spec requires PCI devices to support D3hot and D3cold */
+ 	if (xhci->hci_version >= 0x120)
+ 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
++	else if (pdev->vendor == PCI_VENDOR_ID_AMD && pdev->device == 0x43f7)
++		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+ 
+ 	if (xhci->quirks & XHCI_RESET_ON_RESUME)
+ 		xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
+-- 
+2.25.1
 
-> >  	err = tcpci_parse_config(tcpci);
-> >  	if (err < 0)
-> >  		return ERR_PTR(err);
-> > @@ -851,6 +888,13 @@ static int tcpci_probe(struct i2c_client *client)
-> >  	if (err < 0)
-> >  		return err;
-> >  
-> > +	err = tcpci_check_std_output_cap(chip->data.regmap,
-> > +					 TCPC_STD_OUTPUT_CAP_ORIENTATION);
-> > +	if (err < 0)
-> > +		return err;
-> > +
-> > +	chip->data.set_orientation = err;
-> > +
-> >  	chip->tcpci = tcpci_register_port(&client->dev, &chip->data);
-> >  	if (IS_ERR(chip->tcpci))
-> >  		return PTR_ERR(chip->tcpci);
-> > diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-> > index 467e8045e9f8..f2bfb4250366 100644
-> > --- a/include/linux/usb/tcpci.h
-> > +++ b/include/linux/usb/tcpci.h
-> > @@ -47,6 +47,9 @@
-> >  #define TCPC_SINK_FAST_ROLE_SWAP	BIT(0)
-> >  
-> >  #define TCPC_CONFIG_STD_OUTPUT		0x18
-> > +#define TCPC_CONFIG_STD_OUTPUT_ORIENTATION_MASK		BIT(0)
-> > +#define TCPC_CONFIG_STD_OUTPUT_ORIENTATION_NORMAL	0
-> > +#define TCPC_CONFIG_STD_OUTPUT_ORIENTATION_FLIPPED	1
-> >  
-> >  #define TCPC_TCPC_CTRL			0x19
-> >  #define TCPC_TCPC_CTRL_ORIENTATION	BIT(0)
-> > @@ -127,6 +130,7 @@
-> >  #define TCPC_DEV_CAP_2			0x26
-> >  #define TCPC_STD_INPUT_CAP		0x28
-> >  #define TCPC_STD_OUTPUT_CAP		0x29
-> > +#define TCPC_STD_OUTPUT_CAP_ORIENTATION	BIT(0)
-> >  
-> >  #define TCPC_MSG_HDR_INFO		0x2e
-> >  #define TCPC_MSG_HDR_INFO_DATA_ROLE	BIT(3)
-> > @@ -198,12 +202,16 @@ struct tcpci;
-> >   *		Chip level drivers are expected to check for contaminant and call
-> >   *		tcpm_clean_port when the port is clean to put the port back into
-> >   *		toggling state.
-> > + * @set_orientation:
-> > + *		Optional; Enable setting the connector orientation
-> > + *		CONFIG_STANDARD_OUTPUT (0x18) bit0.
-> >   */
-> >  struct tcpci_data {
-> >  	struct regmap *regmap;
-> >  	unsigned char TX_BUF_BYTE_x_hidden:1;
-> >  	unsigned char auto_discharge_disconnect:1;
-> >  	unsigned char vbus_vsafe0v:1;
-> > +	unsigned char set_orientation:1;
-> >  
-> >  	int (*init)(struct tcpci *tcpci, struct tcpci_data *data);
-> >  	int (*set_vconn)(struct tcpci *tcpci, struct tcpci_data *data,
-> > -- 
-> > 2.39.2
-> 
-> -- 
-> heikki
-> 
 
