@@ -1,158 +1,181 @@
-Return-Path: <linux-usb+bounces-7076-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7077-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E5A486730C
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 12:28:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07DEF867400
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 12:57:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FA1C1C2258B
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 11:28:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFBDF287B06
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 11:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 055081D54C;
-	Mon, 26 Feb 2024 11:28:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80E445A7B1;
+	Mon, 26 Feb 2024 11:57:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Gi6LzCPg"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="yc8jOMi2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7241D535;
-	Mon, 26 Feb 2024 11:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41761DA5F;
+	Mon, 26 Feb 2024 11:57:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708946922; cv=none; b=s8ovpqInt6cVLU7W+K+AxPdjPtHcsaj4+UtR09UrBNgdH0NeSSdECRmoeMxi4LnuQ2GKbY45ibzPt1fjS5JMJLlXq8BFNj8MaAuxVa/zSSbqcmIjKJlhoeCf6Okj8kc18zVMdFDQdzDUlb6qcpojtPybwOc7sPrnYKP1xAp+zcM=
+	t=1708948638; cv=none; b=ZoQqFN7kRmuOLasQCSt17qb8TR2cLX0LpsmSqa+TcB+bZ+yM3H10JoSWnU990DqaoMfazzYrEFQABAkhU0FpWptR2OI70DfivhPfxtnov/GoVg5wA1BlVLElc8bPSp/GrY5OEvjuBW9JAqcRuzAiFGCBHPqxA1brrtrgFmDOJao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708946922; c=relaxed/simple;
-	bh=9r4Qy7hs0vSKI9uUdjPW2Fhk40C0I8X2MjZQPOXqT44=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nxv0su92EzsdIUjnd5VkC4gvcKitwaVN3stnKOG+IR6Olsj2TjHChpYNeU8EcKPe0cWfv4YFg7TkPvWDiMEwCS1EKRJvQSnwbVvy0X4SJddjUNEqFhiEYZxEkjK81Y/MLCuTbjY8y7DM1rKmb1+6K7nKmtOQsobGXttz/adpVbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Gi6LzCPg; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41QARVOg009380;
-	Mon, 26 Feb 2024 11:28:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type
-	:content-transfer-encoding; s=qcppdkim1; bh=YUBb5zD+GwuxupxQ4TAz
-	WAOJqy2HhzpNAOsPo2YrqhM=; b=Gi6LzCPgYIRN1DR5ACKTaX+2Xqp/cnRK3Iyi
-	FzsH8p4f7l7c5+s8ciHQkcVWb1ygDnb2Vrby0vAmbt0XJf8kRiKi6oOSaEQIRtbX
-	Ol729OvmZBjlpobtkbAj1x7co9adoVGGhe8Pa4aBMHdD+WfqrVm/bwrxDCsNgXJs
-	Z8KZ2vFVHvXbS1+VdRaSoxevWAxqd63od/ZNhV9PIWKFfe6NaTbGTvltRF4ZMgod
-	2as16AqE/2oHeW4fRgqyqAR8WNb5GalIcWSH1iJ1vOrA5cYsn4foRhzU7scj5kt8
-	fBI2G7vrapTp0rtQ4GLI1uwdarnU9AnxxYNDKGBfDXnPwGT9Qw==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wgkxm0r18-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 26 Feb 2024 11:28:38 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41QBSbuA017977
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 26 Feb 2024 11:28:37 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 26 Feb 2024 03:28:33 -0800
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [RFC PATCH] usb: gadget: ncm: Fix handling of zero block length packets
-Date: Mon, 26 Feb 2024 16:58:16 +0530
-Message-ID: <20240226112816.2616719-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1708948638; c=relaxed/simple;
+	bh=LXxr0oCyAyi941LBQn7wpQyHhte7aRcvaiULQ0755YM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n1ZByZi92Y6SsUjLOwU5CA4EVKwbK9OP3MutEUa+ekhq1sIR2RUAIPWtmydV2sNbT7Hur8EZLXXp9swsHRFVE0sGpJrIE81igy6u592nKb/dV5pOnYVEax9b91x6NOFsb3nWwyYx/62c10X7N8ljaGIo1lNKdnKqYwseOtvo6Zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=yc8jOMi2; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1708948635; x=1740484635;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LXxr0oCyAyi941LBQn7wpQyHhte7aRcvaiULQ0755YM=;
+  b=yc8jOMi2NAlTLGpqikrG98GznAWohFNaEJpv6zoNkRPneZdUPx6IWNwj
+   QKIivt6HMczgUkKVpcYt4hgUeXWaYyH/ezFeZCszl9yB2aGLO8k08NyB1
+   lbJLOftKCYH7cmMJ5ESDgT3XE+zyRwpAVMgcVOu2NB3DwLRFYerQ4aCpq
+   QRI39ga7Mh3SHZvGOhd6rMvqCfAZG6xcqGlyWzi78Qs5eJ+V2sv2Um5oB
+   zM3bZuqZS6McEX4RxqY4PU5mtP+jvS5DTSnWI6l741xuXO7645makrR6c
+   L9Md/xOlNiDTrsPD+4ZbrsCuA2xcA8jJQB7Ax7ktQ1Pl3EvODes53/DdB
+   w==;
+X-CSE-ConnectionGUID: Szb1mO22RbmH0OMhJ27Cfw==
+X-CSE-MsgGUID: vdi+E3YdQS6QNTLBV3VCmQ==
+X-IronPort-AV: E=Sophos;i="6.06,185,1705388400"; 
+   d="asc'?scan'208";a="184093811"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Feb 2024 04:57:14 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Mon, 26 Feb 2024 04:57:02 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Mon, 26 Feb 2024 04:56:59 -0700
+Date: Mon, 26 Feb 2024 11:56:16 +0000
+From: Conor Dooley <conor.dooley@microchip.com>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+CC: Conor Dooley <conor@kernel.org>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+	<conor+dt@kernel.org>, Roger Quadros <rogerq@kernel.org>, Peter Chen
+	<peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, Nishanth Menon
+	<nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo
+	<kristo@kernel.org>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	=?iso-8859-1?Q?Gr=E9gory?= Clement <gregory.clement@bootlin.com>, Kevin
+ Hilman <khilman@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
+	<linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 1/8] dt-bindings: usb: ti,j721e-usb: drop useless
+ compatible list
+Message-ID: <20240226-portable-rockslide-e501667a0d9a@wendy>
+References: <20240223-j7200-usb-suspend-v3-0-b41c9893a130@bootlin.com>
+ <20240223-j7200-usb-suspend-v3-1-b41c9893a130@bootlin.com>
+ <20240223-clarity-variably-206b01b7276a@spud>
+ <CZEXXXQDZZWB.1M5CTZAFVO4YP@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="y"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GJ68AuHhhZanVx89CWMvuBMiFJIXtUiB
-X-Proofpoint-GUID: GJ68AuHhhZanVx89CWMvuBMiFJIXtUiB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-26_07,2024-02-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- mlxlogscore=869 clxscore=1011 impostorscore=0 suspectscore=0
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 spamscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2402260085
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="y/81symxI7pz60lC"
+Content-Disposition: inline
+In-Reply-To: <CZEXXXQDZZWB.1M5CTZAFVO4YP@bootlin.com>
 
-While connecting to a Linux host with CDC_NCM_NTB_DEF_SIZE_TX
-set to 65536, it has been observed that we receive short packets,
-which come at interval of 5-10 seconds sometimes and have block
-length zero but still contain 1-2 valid datagrams present.
+--y/81symxI7pz60lC
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-According to the NCM spec:
+On Mon, Feb 26, 2024 at 11:33:06AM +0100, Th=E9o Lebrun wrote:
+> Hello Conor,
+>=20
+> On Fri Feb 23, 2024 at 7:12 PM CET, Conor Dooley wrote:
+> > On Fri, Feb 23, 2024 at 05:05:25PM +0100, Th=E9o Lebrun wrote:
+> > > Compatible can be A or B, not A or B or A+B. Remove last option.
+> > > A=3Dti,j721e-usb and B=3Dti,am64-usb.
+> > >=20
+> > > Signed-off-by: Th=E9o Lebrun <theo.lebrun@bootlin.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 9 +++------
+> > >  1 file changed, 3 insertions(+), 6 deletions(-)
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml =
+b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > > index 95ff9791baea..949f45eb45c2 100644
+> > > --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > > +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> > > @@ -11,12 +11,9 @@ maintainers:
+> > > =20
+> > >  properties:
+> > >    compatible:
+> > > -    oneOf:
+> > > -      - const: ti,j721e-usb
+> > > -      - const: ti,am64-usb
+> > > -      - items:
+> > > -          - const: ti,j721e-usb
+> > > -          - const: ti,am64-usb
+> >
+> > Correct, this makes no sense. The devices seem to be compatible though,
+> > so I would expect this to actually be:
+> > oneOf:
+> >   - const: ti,j721e-usb
+> >   - items:
+> >       - const: ti,am64-usb
+> >       - const: ti,j721e-usb
+>=20
+> I need your help to grasp what that change is supposed to express? Would
+> you mind turning it into english sentences?
+> A=3Dti,j721e-usb and B=3Dti,am64-usb. My understanding of your proposal is
+> that a device can either be compat with A or B. But B is compatible
+> with A so you express it as a list of items. If B is compat with A then
+> A is compat with B. Does the order of items matter?
 
-"If wBlockLength = 0x0000, the block is terminated by a
-short packet. In this case, the USB transfer must still
-be shorter than dwNtbInMaxSize or dwNtbOutMaxSize. If
-exactly dwNtbInMaxSize or dwNtbOutMaxSize bytes are sent,
-and the size is a multiple of wMaxPacketSize for the
-given pipe, then no ZLP shall be sent.
+The two devices are compatible with each other, based on an inspection of
+the driver and the existing "A+B" setup. If this was a newly submitted
+binding, "B" would not get approved because "A+B" allows support without
+software changes and all that jazz.
 
-wBlockLength= 0x0000 must be used with extreme care, because
-of the possibility that the host and device may get out of
-sync, and because of test issues.
+Your patch says that allowing "A", "B" and "A+B" makes no sense and you
+suggest removing "A+B". I am agreeing that it makes no sense to allow
+all 3 of these situations.
 
-wBlockLength = 0x0000 allows the sender to reduce latency by
-starting to send a very large NTB, and then shortening it when
-the sender discovers that there’s not sufficient data to justify
-sending a large NTB"
+What I also noticed is other problems with the binding. What should have
+been "A+B" is actually documented as "B+A", but that doesn't make sense
+when the originally supported device is "A".
 
-However, there is a potential issue with the current implementation,
-as it checks for the occurrence of multiple NTBs in a single
-giveback by verifying if the leftover bytes to be processed is zero
-or not. If the block length reads zero, we would process the same
-NTB infintely because the leftover bytes is never zero and it leads
-to a crash. Fix this by bailing out if block length reads zero.
+Therefore my suggestion was to only allow "A" and "A+B", which is what
+we would (hopefully) tell you to do were you submitting the am64 support
+as a new patch today.
 
-Fixes: 427694cfaafa ("usb: gadget: ncm: Handle decoding of multiple NTB's in unwrap call")
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
+> I've not applied your proposal to check for dtbs_check but I'd guess it
+> would throw warnings for the single existing upstream DTSI (as of
+> v6.8-rc6) that uses "ti,am64-usb"? See:
+> arch/arm64/boot/dts/ti/k3-am64-main.dtsi.
 
-PS: Although this issue was seen after CDC_NCM_NTB_DEF_SIZE_TX
-was modified to 64K on host side, I still believe this
-can come up at any time as per the spec. Also I assumed
-that the giveback where block length is zero, has only
-one NTB and not multiple ones.
+Yeah, it would but it's not as if that cannot be changed. There's no
+concerns here about backwards compatibility here, right?
 
- drivers/usb/gadget/function/f_ncm.c | 4 ++++
- 1 file changed, 4 insertions(+)
+--y/81symxI7pz60lC
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-index e2a059cfda2c..355e370e5140 100644
---- a/drivers/usb/gadget/function/f_ncm.c
-+++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -1337,6 +1337,9 @@ static int ncm_unwrap_ntb(struct gether *port,
- 	VDBG(port->func.config->cdev,
- 	     "Parsed NTB with %d frames\n", dgram_counter);
- 
-+	if (block_len == 0)
-+		goto done;
-+
- 	to_process -= block_len;
- 
- 	/*
-@@ -1351,6 +1354,7 @@ static int ncm_unwrap_ntb(struct gether *port,
- 		goto parse_ntb;
- 	}
- 
-+done:
- 	dev_consume_skb_any(skb);
- 
- 	return 0;
--- 
-2.34.1
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZdx8YAAKCRB4tDGHoIJi
+0sCAAPwLF+i1FiXIYJ+rJDn2P1nOhyEPNbA2O5VrdxWhaSS8qgEA0qc5dIt6gFNG
+4p7KsxNzS7FXx8EctGxE6ZdwAUiC5Qo=
+=QOfZ
+-----END PGP SIGNATURE-----
+
+--y/81symxI7pz60lC--
 
