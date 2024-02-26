@@ -1,147 +1,109 @@
-Return-Path: <linux-usb+bounces-7063-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7064-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A0F1866F96
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 10:59:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18DFD866FB9
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 11:02:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 911CCB2B08B
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 09:54:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AC231C25B81
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 10:02:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 329304F1F1;
-	Mon, 26 Feb 2024 09:22:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B03195CDEC;
+	Mon, 26 Feb 2024 09:38:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lw6p1EJV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WNhUmcao"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332134EB5D;
-	Mon, 26 Feb 2024 09:22:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9966D5D486
+	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 09:38:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708939361; cv=none; b=evKFAhtMCq67NbZFq1Ej4c0suMaJUqKyfcXO3XUVyaZdY2eeytH92cVq8RKViDlL0AxE2gWcBUhagzDNoTrQtxxZlyZEod11jStyW9C9CO2TZVEZ0DHLzNdyhiATWhf0dSk4v0zeH+gNAun9Zs4GZInGyzlRVyXeQKmAj893nh0=
+	t=1708940313; cv=none; b=c+l6VGBMS6gPhCIo56kQXVmyXTEOPptKaqwuxyKKOkL22WeKtlyX5MoV6uuJK0JMtR40EaLhGdFHMnkaDwHwwVipqWleNLD2+6BwiI7VU+lZqhzHX6OB3Q5C1ZPjqFXacZsntTCe2BzRxOaGPQufLIE9A8k7QhhD2WaYQTvTkLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708939361; c=relaxed/simple;
-	bh=nHmAy4X/MhOUx7m403mmSo7DPD1Gl0hucVSHAPwk1YA=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=LrppRc1rwiJ8FfiSzyS0qeA0J+k7PbbxxkmTG71QwsNDY/NUrWBW4kKLPkO6ea3qZ4tgcf3iXpyIHuU3MZWHW2Q4ES2Zf2xLmFHyhWrbATyDFG8wKuVKlJnTAZ+NXKoJGOSe8WGuUByhNrj4333V9apaI+rk1ye45LpJrOyhgoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lw6p1EJV; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1708940313; c=relaxed/simple;
+	bh=9qM72geflY9xjeM1MzHRhvGk6BcNiqTJ/bzpFNr+BQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=fPkkQP+THRMRr9FAZRPzspw2jGzd/Lwa3vovSJ0s2SgoRQHi1BiZQIY70b9g+TOGUa2MekvE9DjNfBBe5M3SSQQM28O9+pIrVK77S+eOyLxGzL32w0jH3fgjnTNfnlHk+UiGKU++KH+NlML9tjG/mLuAXqqXBuj58aOLdg5Kayk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WNhUmcao; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708939361; x=1740475361;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=nHmAy4X/MhOUx7m403mmSo7DPD1Gl0hucVSHAPwk1YA=;
-  b=Lw6p1EJV7agIkqG+SujyyR4/TdX+pYm/lqAdQw/YbhjV+u/3L/SAKCnp
-   6J1GOMbrkYR1vKBdtdZKYFapcHCZcvpsG8gloFn3eqiTiLT5lkj/IizUu
-   CTTItcj4r8BRQva6j+/SXrLTijQhD1SU9m5vkMjERifiMiGkHGXwtyNx3
-   kTWmjBubOWhfH3hp73VVMC4QwhgMHXK0GuBPuKcKP2fbIXReeXSveim+n
-   EgSd1dmrpGJJts2MX2bhfF7aUnhwZYMM3cO+00U3JqM5nylPCXgrXhEA4
-   mOsFTPbz2scXGiAkC1QIlp3ZORlYURv5f4jyVWCB0+GQLPTzeUgd6ysf+
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="13764211"
+  t=1708940311; x=1740476311;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9qM72geflY9xjeM1MzHRhvGk6BcNiqTJ/bzpFNr+BQo=;
+  b=WNhUmcaonVZw6XbF1nPSaSWQSb9zmnrLYERSc1xa09dg/eSo1faASvsm
+   YghSz6kwUFOjOrNfURfOvhNMXmoFHPiJONFNmVByeseKWrxrl1olIELcf
+   66P49u3NoFfQVHO9GSQEpW/JvwF9/BN4+zBCswh/sG2fktY/J0Fpnv7qI
+   pvGkpqaL/OdlmyiLDSx8js9xo7QaqbrAf8gOO2ufXNtD+EY0oCziMiRkH
+   b5MACI2/Vn3RwhBGO/+nqTyhUymBWhaBmFAp5hrNBMHmJJ6T6o7hsZwYo
+   STzUIrVe0NWVwqCpFZX0EYuIkWBiu8kehQrkbftAkWvEPpuCoUygzUD3R
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="13765555"
 X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="13764211"
+   d="scan'208";a="13765555"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 01:22:40 -0800
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 01:38:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="937029631"
+X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="937029639"
 X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="937029631"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Feb 2024 01:22:36 -0800
-Message-ID: <1e719367-01ae-565a-2199-0ff7e260422b@linux.intel.com>
-Date: Mon, 26 Feb 2024 11:24:16 +0200
+   d="scan'208";a="937029639"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Feb 2024 01:38:28 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 0EFEF4FD; Mon, 26 Feb 2024 11:38:26 +0200 (EET)
+Date: Mon, 26 Feb 2024 11:38:26 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	linux-usb@vger.kernel.org,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [GIT PULL] USB4/Thunderbolt fix for v6.8-rc7
+Message-ID: <20240226093826.GB8454@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Linux regressions mailing list <regressions@lists.linux.dev>,
- Thomas Gleixner <tglx@linutronix.de>
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com,
- Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
- Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
- linux-x86_64@vger.kernel.org, netdev@vger.kernel.org,
- Randy Dunlap <rdunlap@infradead.org>,
- Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
- <Zb6D/5R8nNrxveAP@cae.in-ulm.de> <Zb/30qOGYAH4j6Mn@cae.in-ulm.de>
- <CABXGCsPu73D+JS9dpvzX78RktK2VOv_xT8vvuVaQ=B6zs2dMNQ@mail.gmail.com>
- <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com>
- <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
- <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
- <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
- <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
- <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
- <a026ecd8-6fba-017d-d673-0d0759a37ed8@linux.intel.com>
- <CABXGCsOgy8H4GGcNU1jRE+SzRqwnPeNuy_3xBukjwB-bPxeZrQ@mail.gmail.com>
- <CABXGCsOd=E428ixUOw+msRpnaubgx5-cVU7TDXwRUCdrM5Oicw@mail.gmail.com>
- <34d7ab1b-ab12-489d-a480-5e6ccc41bfc3@infradead.org>
- <10487018-49b8-4b27-98a1-07cee732290d@infradead.org>
- <4f34b6a8-4415-6ea4-8090-262847d606c6@linux.intel.com>
- <3ea25443-1275-4c67-90e0-b637212d32b5@leemhuis.info>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: This is the fourth time I've tried to find what led to the
- regression of outgoing network speed and each time I find the merge commit
- 8c94ccc7cd691472461448f98e2372c75849406c
-In-Reply-To: <3ea25443-1275-4c67-90e0-b637212d32b5@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On 26.2.2024 7.45, Linux regression tracking (Thorsten Leemhuis) wrote:
-> On 21.02.24 14:44, Mathias Nyman wrote:
->> On 21.2.2024 1.43, Randy Dunlap wrote:
->>> On 2/20/24 15:41, Randy Dunlap wrote:
->>>> {+ tglx]
->>>> On 2/20/24 15:19, Mikhail Gavrilov wrote:
->>>>> On Mon, Feb 19, 2024 at 2:41 PM Mikhail Gavrilov
->>>>> <mikhail.v.gavrilov@gmail.com> wrote:
->>>>> I spotted network performance regression and it turned out, this was
->>>>> due to the network card getting other interrupt. It is a side effect
->>>>> of commit 57e153dfd0e7a080373fe5853c5609443d97fa5a.
->>>> That's a merge commit (AFAIK, maybe not so much). The commit in
->>>> mainline is:
->>>>
->>>> commit f977f4c9301c
->>>> Author: Niklas Neronin <niklas.neronin@linux.intel.com>
->>>> Date:   Fri Dec 1 17:06:40 2023 +0200
->>>>
->>>>       xhci: add handler for only one interrupt line
->>>>
->>>>> Installing irqbalance daemon did not help. Maybe someone experienced
->>>>> such a problem?
->>>>
->>>> Thomas, would you look at this, please?
->>>>
->>>> A network device and xhci (USB) driver are now sharing interrupts.
->>>> This causes a large performance decrease for the networking device.
->>
->> Short recap:
-> 
-> Thx for that. As the 6.8 release is merely two or three weeks away while
-> a fix is nowhere near in sight yet (afaics!) I start to wonder if we
-> should consider a revert here and try reapplying the culprit in a later
-> cycle when this problem is fixed.
+Hi Greg,
 
-I don't think reverting this series is a solution.
+The following changes since commit 841c35169323cd833294798e58b9bf63fa4fa1de:
 
-This isn't really about those usb xhci patches.
-This is about which interrupt gets assigned to which CPU.
+  Linux 6.8-rc4 (2024-02-11 12:18:13 -0800)
 
-Mikhail got unlucky when the network adapter interrupts on that system was
-assigned to CPU0, clearly a more "clogged" CPU, thus causing a drop in max
-bandwidth.
+are available in the Git repository at:
 
-Thanks
-Mathias
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.8-rc7
+
+for you to fetch changes up to d3d17e23d1a0d1f959b4fa55b35f1802d9c584fa:
+
+  thunderbolt: Fix NULL pointer dereference in tb_port_update_credits() (2024-02-16 10:36:51 +0200)
+
+----------------------------------------------------------------
+thunderbolt: Fix for v6.8-rc7
+
+This includes one USB4/Thunderbolt fix for v6.8-rc7:
+
+  - Fix NULL pointer dereference in tb_port_update_credits() on
+    Apple Thunderbolt 1 hardware.
+
+This has been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Mika Westerberg (1):
+      thunderbolt: Fix NULL pointer dereference in tb_port_update_credits()
+
+ drivers/thunderbolt/switch.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
