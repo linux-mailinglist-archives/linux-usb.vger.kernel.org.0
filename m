@@ -1,103 +1,98 @@
-Return-Path: <linux-usb+bounces-7090-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7091-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28AB486797C
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 16:07:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20998867990
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 16:10:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB5051F2663F
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 15:07:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEDEB29CB10
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 15:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73712132485;
-	Mon, 26 Feb 2024 14:47:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mPS9YQU7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC8E012CDBF;
+	Mon, 26 Feb 2024 14:53:13 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECD912C533
-	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 14:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87904128368;
+	Mon, 26 Feb 2024 14:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708958833; cv=none; b=LdT2m9pK0XBrbxtXbsuXd+LHqnr6N+ifauP/6H9BXRVMgc6qwnn89Csel6dAoVOTLa5AJ8jsvq4Y8BQ2+wAa6gZ/JxiCNv7HmhYXBSVxlBkLHaI0rklS5ON+6TB/J2Qk5zk4LrK1TTdH77EAitjW0e+/tXa2CrsT39fDvWCQdcQ=
+	t=1708959193; cv=none; b=oGwnoqgJZvIDCbdQVUCTb2JdkOecYeWq3kRlBjD0MmgU/78Dv5IrLHmf+yuY8NSICkajfC6H7spnaKFNs6mmM8/DZTDzoAcm+c03aHoKU6D+oY7c2j3xuf7aWm/jGE+6/QPeUOmavipNVmnT+QZH+gMIl+R9V9WRCMISo3WLA/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708958833; c=relaxed/simple;
-	bh=y9/x+awjSD0YmrFVTYPRzWh3BOAgFDi7jCl/QCcT5e0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cCa0xZ85scmkNLs1YC8rUuYWjy7oOGMSUgLeDFZ+kWDfBfOUadK1tZs+ISytYyxq9i/43URIP2nkKga8F/8WCGm2l0fp43AZ11G9tNBfx84lBBgfq//YqOtqaFl2rIvYZ6ahoYeyX34Ig3XqKbFcK7u1eBo+KecjrFx7vjm7NBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mPS9YQU7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 85972C433C7
-	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 14:47:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708958832;
-	bh=y9/x+awjSD0YmrFVTYPRzWh3BOAgFDi7jCl/QCcT5e0=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=mPS9YQU7/eKcvLUjrs6lvZE9Qs7Iarq+Ksxe1UW7SxaaPTwKcrb2sTKXxUnxCvYyn
-	 rxM6cLu/PilJ+R88ywtYTzAfxEJmQ9GQ9fVQhXjEWd0VN0MagOWz3azTXL2MYl981/
-	 D9B2a5wLGRD2NdEEiKx8neJFwLnS2/omYXU22028T6RyHFc9oJah4mM7dJtICz5edE
-	 GKnBSBE/dq615PHU02PDNBBABM0etfzeHjxblocZ4scjHX3YUk2q6yCAYbUwHTK2Fg
-	 WhAtieOBAG5xcvFXv0S2R5LbORWru1BaeWaC+LGcey65xkTV89r1icFWeZrUINSuGt
-	 d0TdxGk9sw+YQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 6F94AC53BC6; Mon, 26 Feb 2024 14:47:12 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218490] Linux warning `usb: port power management may be
- unreliable` on Dell PowerEdge T440
-Date: Mon, 26 Feb 2024 14:47:12 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: pmenzel+bugzilla.kernel.org@molgen.mpg.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218490-208809-VnfCoyCn6K@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218490-208809@https.bugzilla.kernel.org/>
-References: <bug-218490-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1708959193; c=relaxed/simple;
+	bh=hZdW92wKtpC15HVD9lT89vdv8fzQoI5i2f/txb1VViM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T88YrWnT/0PUkP9221nIkUEgKwzWtMC4FSrzSpk5doj+DokAWLcwrPsGVlTx8L6wKMeVBq+4Bdl8KCKsI2eQekiojzb3uWvjm+IJ9lcqvhofuCmx8OWYrXY031n9vVnQc5aq8ryio+q7IAuG8fkorYvQ1m7oP8UewZj6FcY0J8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [141.14.220.34] (g34.guest.molgen.mpg.de [141.14.220.34])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id BB40561E5FE01;
+	Mon, 26 Feb 2024 15:52:45 +0100 (CET)
+Message-ID: <ec827479-3561-4155-91c9-82c39a687c49@molgen.mpg.de>
+Date: Mon, 26 Feb 2024 15:52:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: port: Don't try to peer unused USB ports based on
+ location
+Content-Language: en-US
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ stern@rowland.harvard.edu, stable@vger.kernel.org
+References: <20240222233343.71856-1-mathias.nyman@linux.intel.com>
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20240222233343.71856-1-mathias.nyman@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218490
+Dear Mathias,
 
---- Comment #7 from Paul Menzel (pmenzel+bugzilla.kernel.org@molgen.mpg.de)=
- ---
-Created attachment 305908
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305908&action=3Dedit
-Linux 6.8-rc6+ messages with v2 patches (output of `dmesg`) with
-`usbcore.dyndbg=3D+p` and with system firmware 2.12.2
 
-Testing Linux 6.8-rc6 with the two USB patches the warning is gone.
+Am 23.02.24 um 00:33 schrieb Mathias Nyman:
+> Unused USB ports may have bogus location data in ACPI PLD tables.
+> This causes port peering failures as these unused USB2 and USB3 ports
+> location may match.
+> 
+> Due to these failures the driver prints a
+> "usb: port power management may be unreliable" warning, and
+> unnecessarily blocks port power off during runtime suspend.
+> 
+> This was debugged on a couple DELL systems where the unused ports
+> all returned zeroes in their location data.
+> Similar bugreports exist for other systems.
+> 
+> Don't try to peer or match ports that have connect type set to
+> USB_PORT_NOT_USED.
+> 
+> Fixes: 3bfd659baec8 ("usb: find internal hub tier mismatch via acpi")
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218465
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218486
+> Tested-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> Link: https://lore.kernel.org/linux-usb/5406d361-f5b7-4309-b0e6-8c94408f7d75@molgen.mpg.de
+> Cc: stable@vger.kernel.org # v3.16+
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-1.=20
-https://lore.kernel.org/all/20240220135946.4028553-1-mathias.nyman@linux.in=
-tel.com/
-2.=20
-https://lore.kernel.org/all/20240220135946.4028553-2-mathias.nyman@linux.in=
-tel.com/
+[…]
 
---=20
-You may reply to this email to add a comment.
+I was able to successfully test it on the Dell PowerEdge T440, and the 
+warning is gone there too.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218490
+
+
+Kind regards,
+
+Paul
 
