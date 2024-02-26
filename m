@@ -1,219 +1,115 @@
-Return-Path: <linux-usb+bounces-7049-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7053-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 056AF866B67
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 08:53:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 902BA866BE6
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 09:16:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 868A51F21A77
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 07:53:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A68C283B0F
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 08:16:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B22041BF47;
-	Mon, 26 Feb 2024 07:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="UBqnKylB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77A9F1CA9A;
+	Mon, 26 Feb 2024 08:15:49 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7CC1C68C
-	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 07:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F911CF80;
+	Mon, 26 Feb 2024 08:15:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708934017; cv=none; b=q7Fy7vXc1cHqRQJbV5cNDCKu1//IShIsPY6VUDxkXYRuSQQHnbw2GmIxfLQBZCnoA+w2bm3NtRd+xxLj6bipKssF4DeOHIsVn8InRFLA2WZebID8hmoc76ZwOba/ewmr20V8MS+8fCE/FQVIVOVt+mrdqQK5elu3CXiimkUdGcE=
+	t=1708935349; cv=none; b=M25Rb4z3blfqpIT0qrVcn9+la0k72O46Op9vquIrLH6Fy1sKVWUWBikM+Pdcl1PPnvnU559uGFUPcFluJCSGZidy3OfTqZDsGge71wBREJk/fo8K4VhUXgKfbJ6t+gR7dC4j/YQQL7dKf4+bncdl0w6yflVILWq6ymAFfR5jHGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708934017; c=relaxed/simple;
-	bh=H1/68T6vtEI19f2OwbzYGbUoeQTa60oidED9lAkt07k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KWQ2HGIO+C7ZFPlbotBvyNKgdXK5U1YHr+0Bnzchx/Y9ui64BcYCTCqqakZrjpaqg3C1psIiQsz1bcNWwEUn5bAahVhCrbboLZ0xAsnnPYn4e4aTesBMjqqsd+MbsiKoPKADoorAXenI1MrWH/hVlek2NT/R/7HbBfBGaz2K1ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=UBqnKylB; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a3e75e30d36so534347666b.1
-        for <linux-usb@vger.kernel.org>; Sun, 25 Feb 2024 23:53:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1708934013; x=1709538813; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0DLWa7NcP4etKwAniB6QuHD07G5jSHGqKq2CbdXaCTc=;
-        b=UBqnKylBLQ/njzmb6jfdu45pAv7Jq9vmv3/Xq6ftDeMrCSi/p4F6w4Lc2s+E9NOUtM
-         dRCBi19q4rmcOlwi4j0hiDJfNipAj2tPx0acJ1incJN38HS0Z9CBcdkV3wdrrcsumMTI
-         /7AQXK4oVhmg9Iq61eVDv+ZJ51GoAw1pk2yTw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708934013; x=1709538813;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0DLWa7NcP4etKwAniB6QuHD07G5jSHGqKq2CbdXaCTc=;
-        b=JhadS6+gyuM9nwaTXNVHJcp9nLaAN2EHA/e68eRLz2waVUa0nPMO0tq96kT8jy120d
-         gQtAg28f00v/K61DlT0OLEELqHO7h9oEkjoW2FXuj54GiVWyrrccqAYXFlu2U30e0c61
-         wrJEMwKk5T7bxRmB6tl4FXTPp2Kr8oh4WLHxw/sv5sz3N4Gq/KM70Owae4HRJ4f4M0EI
-         /Cl0VhaA/9Cl3fQS9L9lXQa+HICgfYo/i9XPJCoOI/6qGbIfaaQDUz+vituUHNRwEwxF
-         V6Ezk5Sx69hO2BOIWLbdpxEpa5w1Agk35c6VH4Bab6OntzG6fX4stCaoV/9J2kbfQdSw
-         nCTQ==
-X-Gm-Message-State: AOJu0YwLieVJZau0T96Wf7u94MgecGffXDEQR4UVoZDzNE84SUMnfVH6
-	oHPhjV15njGnADGUdEuCEdmCf0Vi2h73GZvY6sKOUCsSkKr+EfY0zsqWfcO2uKYxavsmWRDhpHA
-	5f1irXwIbh16elU24t9Psk+wNQhka5j2CpOJgcA==
-X-Google-Smtp-Source: AGHT+IEhOCKWXEBEZgQAKtk2f60JhvlK6LnyTrP3IE8mObADY6Ur4vqS9GaLdac9/qnxIORF2bcbkB4Pe4oF+dX3X4A=
-X-Received: by 2002:a17:906:b798:b0:a41:3d8b:80d with SMTP id
- dt24-20020a170906b79800b00a413d8b080dmr4627327ejb.37.1708934012843; Sun, 25
- Feb 2024 23:53:32 -0800 (PST)
+	s=arc-20240116; t=1708935349; c=relaxed/simple;
+	bh=1Ly8Ln5JNzP8Po26apTgYD6fQ2vZoTYlsMkbNJ0EYuE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ejPu8uJIl7ydnT3+iD3BKrifj5wy5uQOZ5vUnNhRpMj6a9EQo2lu7K2Y4X/SLFZg5lvG0g7REkjpdiy1dFOvIsaB/SRoOZ+k+HGn1qSZiSo4Vyw02l1zDrrTR4JjNWZt4Uo3VGPZmuDMWGmdsgZELKQQ09Y6Ce3xPU771qF9NkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: c414adaebff1491ea3c435d69bf18d7c-20240226
+X-CID-O-RULE: Release_Ham
+X-CID-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:78a62de6-603d-4ccf-97e6-01674f37df55,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:-5
+X-CID-INFO: VERSION:1.1.37,REQID:78a62de6-603d-4ccf-97e6-01674f37df55,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:6f543d0,CLOUDID:63bad180-4f93-4875-95e7-8c66ea833d57,B
+	ulkID:2402261559416CA0LJEE,BulkQuantity:0,Recheck:0,SF:17|19|44|66|38|24|1
+	02,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC
+	:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
+X-UUID: c414adaebff1491ea3c435d69bf18d7c-20240226
+X-User: huxiaoying@kylinos.cn
+Received: from localhost.localdomain [(112.64.161.44)] by mailgw
+	(envelope-from <huxiaoying@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 51673992; Mon, 26 Feb 2024 15:59:39 +0800
+From: Tom Hu <huxiaoying@kylinos.cn>
+To: linux-kernel@vger.kernel.org,
+	stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net,
+	Tom Hu <huxiaoying@kylinos.cn>
+Subject: [PATCH] usb-storage: Add Brain USB3-FW to IGNORE_UAS
+Date: Mon, 26 Feb 2024 15:59:36 +0800
+Message-Id: <20240226075936.1744353-1-huxiaoying@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240226070348.1703879-1-michael@amarulasolutions.com>
-In-Reply-To: <20240226070348.1703879-1-michael@amarulasolutions.com>
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Mon, 26 Feb 2024 08:53:21 +0100
-Message-ID: <CAOf5uw=P0UYXP8ujHpF+hnGR_cg90gqv9na7cVH1sQ-BtEgrTA@mail.gmail.com>
-Subject: Re: [PATCH V2] usb: dwc3: gadget: Fix suspend/resume warning when
- no-gadget is connected
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-amarula@amarulasolutions.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi all
+The UAS mode of BRAIN USB_HDD is reported to fail to work on several
+platforms with the following error message, then after re-connecting the
+device will be offlined and not working at all.
 
-Please don't review, I'm not happy with it and even it's broken. I
-need to find better solution
+[  622.518442][ 2] sd 8:0:0:0: [sda] tag#17 uas_eh_abort_handler 0 uas-tag 18
+                   inflight: CMD
+[  622.527575][ 2] sd 8:0:0:0: [sda] tag#17 CDB: Write(10) 2a 00 03 6f 88 00 00
+                   04 00 00
+[  622.536330][ 2] sd 8:0:0:0: [sda] tag#0 uas_eh_abort_handler 0 uas-tag 1
+                   inflight: CMD
+[  622.545266][ 2] sd 8:0:0:0: [sda] tag#0 CDB: Write(10) 2a 00 07 44 1a 88 00
+                   00 08 00
 
-On Mon, Feb 26, 2024 at 8:03=E2=80=AFAM Michael Trimarchi
-<michael@amarulasolutions.com> wrote:
->
-> This patch restore the logic but protects the variable using a spinlock
-> without moving the code
->
-> [   45.597274] dwc3 31000000.usb: wait for SETUP phase timed out
-> [   45.599140] dwc3 31000000.usb: failed to set STALL on ep0out
-> [   45.601069] ------------[ cut here ]------------
-> [   45.601073] WARNING: CPU: 0 PID: 150 at drivers/usb/dwc3/ep0.c:289 dwc=
-3_ep0_out_start+0xcc/0xd4
-> [   45.601102] Modules linked in: cfg80211 rfkill ipv6 rpmsg_ctrl rpmsg_c=
-har crct10dif_ce rti_wdt k3_j72xx_bandgap rtc_ti_k3 omap_mailbox sa2ul auth=
-enc [last unloaded: ti_k3_r5_remoteproc]
-> [   45.601151] CPU: 0 PID: 150 Comm: sh Not tainted 6.8.0-rc5 #1
-> [   45.601159] Hardware name: BSH - CCM-M3 (DT)
-> [   45.601164] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYP=
-E=3D--)
-> [   45.601172] pc : dwc3_ep0_out_start+0xcc/0xd4
-> [   45.601179] lr : dwc3_ep0_out_start+0x50/0xd4
-> [   45.601186] sp : ffff8000832739e0
-> [   45.601189] x29: ffff8000832739e0 x28: ffff800082a21000 x27: ffff80008=
-08dc630
-> [   45.601200] x26: 0000000000000002 x25: ffff800082530a44 x24: 000000000=
-0000000
-> [   45.601210] x23: ffff000000e079a0 x22: ffff000000e07a68 x21: 000000000=
-0000001
-> [   45.601219] x20: ffff000000e07880 x19: ffff000000e07880 x18: 000000000=
-0000040
-> [   45.601229] x17: ffff7fff8e1ce000 x16: ffff800080000000 x15: fffffffff=
-ffe5260
-> [   45.601239] x14: 0000000000000000 x13: 206e6f204c4c4154 x12: 532074657=
-3206f74
-> [   45.601249] x11: 0000000000000001 x10: 000000000000000a x9 : ffff80008=
-3273930
-> [   45.601259] x8 : 000000000000000a x7 : ffffffffffff3f0c x6 : fffffffff=
-fff3f00
-> [   45.601268] x5 : ffffffffffff3f0c x4 : 0000000000000000 x3 : 000000000=
-0000000
-> [   45.601278] x2 : 0000000000000000 x1 : ffff000004e7e600 x0 : 00000000f=
-fffff92
-> [   45.601289] Call trace:
-> [   45.601293]  dwc3_ep0_out_start+0xcc/0xd4
-> [   45.601301]  dwc3_ep0_stall_and_restart+0x98/0xbc
-> [   45.601309]  dwc3_ep0_reset_state+0x5c/0x88
-> [   45.601315]  dwc3_gadget_soft_disconnect+0x144/0x160
-> [   45.601323]  dwc3_gadget_suspend+0x18/0xb0
-> [   45.601329]  dwc3_suspend_common+0x5c/0x18c
-> [   45.601341]  dwc3_suspend+0x20/0x44
-> [   45.601350]  platform_pm_suspend+0x2c/0x6c
-> [   45.601360]  __device_suspend+0x10c/0x34c
-> [   45.601372]  dpm_suspend+0x1a8/0x240
-> [   45.601382]  dpm_suspend_start+0x80/0x9c
-> [   45.601391]  suspend_devices_and_enter+0x1c4/0x584
-> [   45.601402]  pm_suspend+0x1b0/0x264
-> [   45.601408]  state_store+0x80/0xec
-> [   45.601415]  kobj_attr_store+0x18/0x2c
-> [   45.601426]  sysfs_kf_write+0x44/0x54
-> [   45.601434]  kernfs_fop_write_iter+0x120/0x1ec
-> [   45.601445]  vfs_write+0x23c/0x358
-> [   45.601458]  ksys_write+0x70/0x104
-> [   45.601467]  __arm64_sys_write+0x1c/0x28
-> [   45.601477]  invoke_syscall+0x48/0x114
-> [   45.601488]  el0_svc_common.constprop.0+0x40/0xe0
-> [   45.601498]  do_el0_svc+0x1c/0x28
-> [   45.601506]  el0_svc+0x34/0xb8
-> [   45.601516]  el0t_64_sync_handler+0x100/0x12c
-> [   45.601522]  el0t_64_sync+0x190/0x194
-> [   45.601531] ---[ end trace 0000000000000000 ]---
-> [   45.608794] Disabling non-boot CPUs ...
-> [   45.611029] psci: CPU1 killed (polled 0 ms)
-> [   45.611837] Enabling non-boot CPUs ...
-> [   45.612247] Detected VIPT I-cache on CPU1
->
-> Tested on a am62x board
->
-> Fixes: 61a348857e86 ("usb: dwc3: gadget: Fix NULL pointer dereference in =
-dwc3_gadget_suspend)
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> ---
-> V1->V2:
->         Add cc to stable
-> ---
->  drivers/usb/dwc3/gadget.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 4c8dd6724678..4c88e44127b5 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -4703,13 +4703,19 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
->         unsigned long flags;
->         int ret;
->
-> +       spin_lock_irqsave(&dwc->lock, flags);
-> +       if (!dwc->gadget_driver) {
-> +               spin_unlock_irqrestore(&dwc->lock, flags);
-> +               return 0;
-> +       }
-> +       spin_unlock_irqrestore(&dwc->lock, flags);
-> +
->         ret =3D dwc3_gadget_soft_disconnect(dwc);
->         if (ret)
->                 goto err;
->
->         spin_lock_irqsave(&dwc->lock, flags);
-> -       if (dwc->gadget_driver)
-> -               dwc3_disconnect_gadget(dwc);
-> +       dwc3_disconnect_gadget(dwc);
->         spin_unlock_irqrestore(&dwc->lock, flags);
->
->         return 0;
-> --
-> 2.40.1
->
+These disks have a broken uas implementation, the tag field of the status
+iu-s is not set properly, so we need to fall-back to usb-storage.
 
+Signed-off-by: Hu Xiaoying <huxiaoying@kylinos.cn>
+1
+---
+ drivers/usb/storage/unusual_uas.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---=20
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
+diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+index 1f8c9b16a0fb..98b7ff2c76ba 100644
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -83,6 +83,13 @@ UNUSUAL_DEV(0x0bc2, 0x331a, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_REPORT_LUNS),
+ 
++/* Reported-by: Tom Hu <huxiaoying@kylinos.cn> */
++UNUSUAL_DEV(0x1234, 0x1234, 0x0000, 0x9999,
++		"Brain",
++		"External HDD",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
++
+ /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
+ UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
+ 		"Initio Corporation",
+-- 
+2.25.1
 
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com
 
