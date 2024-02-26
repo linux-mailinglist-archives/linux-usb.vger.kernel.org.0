@@ -1,137 +1,155 @@
-Return-Path: <linux-usb+bounces-7038-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7039-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9B088669CC
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 07:01:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 988D98669DC
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 07:03:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBB791C20982
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 06:01:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 539642812C8
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 06:03:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C04C1B966;
-	Mon, 26 Feb 2024 06:01:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD261B978;
+	Mon, 26 Feb 2024 06:03:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aP7TIsPo"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Q6diPE+P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B57F18EA8
-	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 06:01:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87A11BF24;
+	Mon, 26 Feb 2024 06:03:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708927292; cv=none; b=DBpEgPAB3ft7AZzP07fbDPa3Iy3fYgHteMvTDOydKwhh+m1/TEoC1/xlWXKFNBaZcyJkpa3DEOJihAFPBUX9/h+HfIG8DShccc7bAoIDoEqa3Uh5j8LL/WGSmsdHUyJT3lt8ndNwVKi/egvjE63KRk2BwBtDKnqHvUTfE2RkYe0=
+	t=1708927400; cv=none; b=NrM2OPTDegjVQC4TBuHSU+ZQJtpPYbF1NYG66ikpV0yFCCKTWQ2PNXgThIpwhzcpaa5CRBt3IJqa9e3tr09Zroz3i59uZah9Rf9LnkNxVjMCaAp9RkXSizbtYKGsygz1a+bGaJgOmNd55OFVKxKPHVAnQWzVkmBq1KUT9TNDc3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708927292; c=relaxed/simple;
-	bh=SxtYx0vCSl0gqRUlnFJZVlDBlZTN3Y2+Y8ps+LWa3L0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=USqtw8GqX8dqSiEUGZHIeCQxqBLaUEpxOCYIAhMB7aN1JXBq6YxkZSMjBiS/1VfdCs9M1KIuGTZFwqDSU47eX8zzfYBrm5yZO7E7NGJZAVMYDTHwLwrsprqlistFP+FmwmPL0GRhpH6qcN5G41Bw0/Pjl++9JfzzSzqJd2J/Uo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=aP7TIsPo; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41Q5chHF005107;
-	Mon, 26 Feb 2024 06:01:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=tqZhjtkDHMQm95jqby7Oj+zd+7Dnim/pTy58W8Cj9Wc=; b=aP
-	7TIsPo9TCsr/izLO5AywNhk3o9hcsfdIiKDFmfyKO+uJOkJMD2oWdfDTq9rc4HtR
-	E6ix29RX0DIcIIq3cbGyth5vW3c3qEbBaYsi4Gjz34wF5bUrLH8+mZmYXdkvvZB7
-	5vMLIbOJlWxU/ieectcmu9Bq69AnWBMV+qAdlsluB1V0t1OwT7fpp2ni4PLQjU/P
-	ypX/FBExUOJ+pm9r3pmKkR4FrX78qlVvSSQrVSFAnkJKDGWpMC78MBrs0IPpjIZf
-	/SXFWZMAkimh8hyMnZxMXec3KGlNx5PfofTj7ly9vWQoFCjt7cB88NBpwlhKxcXA
-	GWTVvyDTfrYsguPWumog==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wgkxmg3c9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 26 Feb 2024 06:01:16 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41Q61Grv002872
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 26 Feb 2024 06:01:16 GMT
-Received: from [10.253.33.53] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sun, 25 Feb
- 2024 22:01:14 -0800
-Message-ID: <bce66ef7-efb7-4bbe-9d84-d363f046963f@quicinc.com>
-Date: Mon, 26 Feb 2024 14:01:12 +0800
+	s=arc-20240116; t=1708927400; c=relaxed/simple;
+	bh=rQ1turlgsXFMqRMIQFeoxObihk2n1XNDtxJd21pN6NU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=buz498FLI/vIkcq260cRUQfGkd8gLhl7rQlbbcTIZM5JXvlWtq5ImLXgbF+L/TZOeKOr0sjmj1fM4PUV0aPjudKpkSTKQPhP3PzQ1afb2dlkvPRm73WKN6Kk7ZrbHrH1xzCvpzCNzxvQqmRWk2EkEdz9vZNj9OWa9TAl2I7ZTQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Q6diPE+P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6CD3C433F1;
+	Mon, 26 Feb 2024 06:03:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1708927400;
+	bh=rQ1turlgsXFMqRMIQFeoxObihk2n1XNDtxJd21pN6NU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q6diPE+PpN5xVxki1jdKL05t/czhdUZjwrK3wpbFsw2ZbFdA7hJShitFl8CohBKea
+	 izzRef5GkObR5ytJMXrVt0+vWnQqmpCz9fDP4lfQp+4pd8xgeMgrd0FPN5Nyl6hdF0
+	 OFyH2UDBTcC7vK7BtokNW7R5fDc5ylR6G+4naxSE=
+Date: Mon, 26 Feb 2024 07:03:17 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Michael Trimarchi <michael@amarulasolutions.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com
+Subject: Re: [PATCH] usb: dwc3: gadget: Fix suspend/resume warning when
+ no-gadget is connected
+Message-ID: <2024022604-shelve-uranium-4a58@gregkh>
+References: <20240225181309.1697245-1-michael@amarulasolutions.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Bluetooth: btusb: Use right timeout macro to receive
- control message
-Content-Language: en-US
-To: Greg KH <gregkh@linuxfoundation.org>
-CC: <stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
-        <usb-storage@lists.one-eyed-alien.net>
-References: <1708682416-8664-1-git-send-email-quic_zijuhu@quicinc.com>
- <2024022341-rice-worry-c99b@gregkh>
-From: quic_zijuhu <quic_zijuhu@quicinc.com>
-In-Reply-To: <2024022341-rice-worry-c99b@gregkh>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 2vVP_WRtAI2rS4fh0FDuiGTWsFq5Jcdx
-X-Proofpoint-ORIG-GUID: 2vVP_WRtAI2rS4fh0FDuiGTWsFq5Jcdx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-26_02,2024-02-23_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- malwarescore=0 mlxlogscore=880 impostorscore=0 suspectscore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2402260043
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240225181309.1697245-1-michael@amarulasolutions.com>
 
-On 2/23/2024 7:33 PM, Greg KH wrote:
-> On Fri, Feb 23, 2024 at 06:00:16PM +0800, Zijun Hu wrote:
->> USB driver defines macro @USB_CTRL_SET_TIMEOUT for sending control message
->> and @USB_CTRL_GET_TIMEOUT for receiving, but sierra_get_swoc_info() wrongly
->> uses @USB_CTRL_SET_TIMEOUT as argument of usb_control_msg() to receive
->> control message, fixed by using @USB_CTRL_GET_TIMEOUT to receive message.
+On Sun, Feb 25, 2024 at 07:13:09PM +0100, Michael Trimarchi wrote:
+> This patch restore the logic but protects the variable using a spinlock
+> without moving the code
 > 
-> You do realize they are both the same value, right?  Why don't we just
-> change it to USB_CTRL_TIMEOUT so that people don't think changing this
-> matters?
+> [   45.597274] dwc3 31000000.usb: wait for SETUP phase timed out
+> [   45.599140] dwc3 31000000.usb: failed to set STALL on ep0out
+> [   45.601069] ------------[ cut here ]------------
+> [   45.601073] WARNING: CPU: 0 PID: 150 at drivers/usb/dwc3/ep0.c:289 dwc3_ep0_out_start+0xcc/0xd4
+> [   45.601102] Modules linked in: cfg80211 rfkill ipv6 rpmsg_ctrl rpmsg_char crct10dif_ce rti_wdt k3_j72xx_bandgap rtc_ti_k3 omap_mailbox sa2ul authenc [last unloaded: ti_k3_r5_remoteproc]
+> [   45.601151] CPU: 0 PID: 150 Comm: sh Not tainted 6.8.0-rc5 #1
+> [   45.601159] Hardware name: BSH - CCM-M3 (DT)
+> [   45.601164] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   45.601172] pc : dwc3_ep0_out_start+0xcc/0xd4
+> [   45.601179] lr : dwc3_ep0_out_start+0x50/0xd4
+> [   45.601186] sp : ffff8000832739e0
+> [   45.601189] x29: ffff8000832739e0 x28: ffff800082a21000 x27: ffff8000808dc630
+> [   45.601200] x26: 0000000000000002 x25: ffff800082530a44 x24: 0000000000000000
+> [   45.601210] x23: ffff000000e079a0 x22: ffff000000e07a68 x21: 0000000000000001
+> [   45.601219] x20: ffff000000e07880 x19: ffff000000e07880 x18: 0000000000000040
+> [   45.601229] x17: ffff7fff8e1ce000 x16: ffff800080000000 x15: fffffffffffe5260
+> [   45.601239] x14: 0000000000000000 x13: 206e6f204c4c4154 x12: 5320746573206f74
+> [   45.601249] x11: 0000000000000001 x10: 000000000000000a x9 : ffff800083273930
+> [   45.601259] x8 : 000000000000000a x7 : ffffffffffff3f0c x6 : ffffffffffff3f00
+> [   45.601268] x5 : ffffffffffff3f0c x4 : 0000000000000000 x3 : 0000000000000000
+> [   45.601278] x2 : 0000000000000000 x1 : ffff000004e7e600 x0 : 00000000ffffff92
+> [   45.601289] Call trace:
+> [   45.601293]  dwc3_ep0_out_start+0xcc/0xd4
+> [   45.601301]  dwc3_ep0_stall_and_restart+0x98/0xbc
+> [   45.601309]  dwc3_ep0_reset_state+0x5c/0x88
+> [   45.601315]  dwc3_gadget_soft_disconnect+0x144/0x160
+> [   45.601323]  dwc3_gadget_suspend+0x18/0xb0
+> [   45.601329]  dwc3_suspend_common+0x5c/0x18c
+> [   45.601341]  dwc3_suspend+0x20/0x44
+> [   45.601350]  platform_pm_suspend+0x2c/0x6c
+> [   45.601360]  __device_suspend+0x10c/0x34c
+> [   45.601372]  dpm_suspend+0x1a8/0x240
+> [   45.601382]  dpm_suspend_start+0x80/0x9c
+> [   45.601391]  suspend_devices_and_enter+0x1c4/0x584
+> [   45.601402]  pm_suspend+0x1b0/0x264
+> [   45.601408]  state_store+0x80/0xec
+> [   45.601415]  kobj_attr_store+0x18/0x2c
+> [   45.601426]  sysfs_kf_write+0x44/0x54
+> [   45.601434]  kernfs_fop_write_iter+0x120/0x1ec
+> [   45.601445]  vfs_write+0x23c/0x358
+> [   45.601458]  ksys_write+0x70/0x104
+> [   45.601467]  __arm64_sys_write+0x1c/0x28
+> [   45.601477]  invoke_syscall+0x48/0x114
+> [   45.601488]  el0_svc_common.constprop.0+0x40/0xe0
+> [   45.601498]  do_el0_svc+0x1c/0x28
+> [   45.601506]  el0_svc+0x34/0xb8
+> [   45.601516]  el0t_64_sync_handler+0x100/0x12c
+> [   45.601522]  el0t_64_sync+0x190/0x194
+> [   45.601531] ---[ end trace 0000000000000000 ]---
+> [   45.608794] Disabling non-boot CPUs ...
+> [   45.611029] psci: CPU1 killed (polled 0 ms)
+> [   45.611837] Enabling non-boot CPUs ...
+> [   45.612247] Detected VIPT I-cache on CPU1
 > 
-1)
-will optimize this change title if this change is worthy after code review
-
-2)
-yes, i noticed both macros have the same value and carefully read below code block.
-
-include/linux/usb.h:
-/*
- * timeouts, in milliseconds, used for sending/receiving control messages
- * they typically complete within a few frames (msec) after they're issued
- * USB identifies 5 second timeouts, maybe more in a few cases, and a few
- * slow devices (like some MGE Ellipse UPSes) actually push that limit.
- */
-#define USB_CTRL_GET_TIMEOUT	5000
-#define USB_CTRL_SET_TIMEOUT	5000
-
-3)
-these two macros are introduced at the same time by Linus Torvalds with commit 1da177e4c3f4 ("Linux-2.6.12-rc2")
-below is my points why it is better to keep current two macros than unifying both to one USB_CTRL_TIMEOUT
-
- point A)
- we can't confirm that sending always have the same timeout as receiving for various devices, it is easy to adjust individual
- macro value if sending potentially does not have the same value as receiving in future.
-
- point B)
- current two macros defined by usb.h has been used by many usb drivers, there are more drivers need to be corrected if macro NAME are changed.
-
-> thanks,
+> Tested on a am62x board
 > 
-> greg k-h
+> Fixes: 61a348857e86 ("usb: dwc3: gadget: Fix NULL pointer dereference in dwc3_gadget_suspend)
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> ---
+>  drivers/usb/dwc3/gadget.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
