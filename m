@@ -1,122 +1,226 @@
-Return-Path: <linux-usb+bounces-7047-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7048-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DCF7866B4D
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 08:48:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C550866B5E
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 08:49:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 483311C22284
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 07:48:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2ACD1F2465D
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 07:49:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6A761BF47;
-	Mon, 26 Feb 2024 07:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 963C21BF47;
+	Mon, 26 Feb 2024 07:49:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="etGaf4uA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B7T30GHx"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5151BF37;
-	Mon, 26 Feb 2024 07:48:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84ED51BF2B;
+	Mon, 26 Feb 2024 07:49:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708933700; cv=none; b=dTlY5cu7bfqzTgFKrH3IeJp1eUjufMQ1oI6BANz4vgHG106TNokpXjlyVso8O7u25OlLWYbeqgIybLtCry9X7uhW137ZHcMz5pyRKGxB3DJ3UAdb+MNioGJ8VufXfFCj2bQqpNyr8+B+gDi4ctjPDg99tJ/f/rW13iOr6QAoS50=
+	t=1708933784; cv=none; b=bEvqYokz8K1Ymp1kXRy6p2UUsKFyf763gltbu4ynNOKVwDoDNqZCfUS4NPp4TZ7XtPM8wiUVuLDlGssE0JOmrdu7TVbgiu3FjkCh5o/kbaHD/ROzrZt3+o9VTHQXQQf+c6vzUMH55OkRHa6FBNzWL0NVcBApAlfN04/WLNbtErs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708933700; c=relaxed/simple;
-	bh=YskQDqRYulrxgcJz1QYPkqijA0rMI2I1ULyE9kL6McA=;
+	s=arc-20240116; t=1708933784; c=relaxed/simple;
+	bh=PWnqcfAeddmdN+2IUbadso3oL1zFZpoZUVAuI0hXtI4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XG3H7e8Hs8RiRDWJwOufkyIwhpg2op6DRnUfrbGFddEmYw2i7OW0vWzh4tgMMzjF3WIdpbZ/YKdE3tA5p/80s6eM2TH8mSEFtDySHWMb8TObO2K/z8/epYBO7Jpi76+6TD+KDgefJr1fSlYFRs/dEe/qsicdplQkCrHCR+8rmgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=etGaf4uA; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=jsnXVl+xD/Plbq8rIj//hPVJy93ewfa0u9B0NPwplgHZRNwRA1DikxfqYFb4o1Aqi0oGBJ72bldApOSYF4MRijgKljwYA4ZyTvq77LcbMjcoEioHkx/xTzQJeE3eBf8N9yICrXqCWYKU4gc/MD4IVwG63w41sOf+02Yn16KIr6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B7T30GHx; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708933699; x=1740469699;
+  t=1708933782; x=1740469782;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=YskQDqRYulrxgcJz1QYPkqijA0rMI2I1ULyE9kL6McA=;
-  b=etGaf4uAMSLe/4XWXzJAfhiyDeuriP6QZdb5G2mnXaW7VuECEVUxMVku
-   /f6O4rWrp+EYhdBMTlccZl6H5VK882gLklLl64Gf1jnqoffvA3UggSj58
-   ZWPXwm2rbZgqTpvFJE07CR6sK4KBixKW5PCgtIfwtEqkkBZkKE95ns34p
-   4KQR+XprjMTTMkVu0EkYtIOSRXvidilX/SKhjukFSUbw30leUSHk3ahB+
-   qiyZ5v3wFaqs6qfa6yQCvP9Q8yAHa3wMnh8Ey7CIfSgU163m9UK67yOdQ
-   BIfNJ2jaLeu/ubOyky5z4rybjImDYalpPliCEOCB/r3OUaRuFKNowsPR+
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="14334338"
+   mime-version:in-reply-to;
+  bh=PWnqcfAeddmdN+2IUbadso3oL1zFZpoZUVAuI0hXtI4=;
+  b=B7T30GHxrA4cRV53jIzQw52+kKA6cZ9c3LhsMcRQKw9QWzffLkRTadyh
+   cje49s+EA1a5vO2yQ6Jca0ArL1c++DW9OkTFu7mOiTo8IsTgM6JJ+Upb9
+   kZl2rChf+Gx/nYtacnxdXKk/gfbXio84nVDxZJA8FaqEa7whVgLMLS+OM
+   eri+xiIZKhGWJF0x9uhrJPoP0Sop2OoomWVTR/ojTBmzlWcMmkoqtFH1y
+   gPUNdJjsWQBjyFx7gy59f1rM5eVUZt82QVINEMU5/dwyj/LzbmceKcBAE
+   go/BTNuVM9YxVRPMLzigOsmtnl6dFxc4r84g6lm93TDDomxF3aTcZzlol
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="14334517"
 X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="14334338"
+   d="scan'208";a="14334517"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2024 23:48:18 -0800
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2024 23:49:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="937029441"
+X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="937029444"
 X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="937029441"
+   d="scan'208";a="937029444"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 25 Feb 2024 23:48:14 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Feb 2024 09:48:14 +0200
-Date: Mon, 26 Feb 2024 09:48:14 +0200
+  by fmsmga001.fm.intel.com with SMTP; 25 Feb 2024 23:49:37 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Feb 2024 09:49:36 +0200
+Date: Mon, 26 Feb 2024 09:49:36 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Xu Yang <xu.yang_2@nxp.com>,
-	"open list:USB TYPEC PORT CONTROLLER DRIVERS" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] Revert "usb: typec: tcpm: reset counter when enter into
- unattached state after try role"
-Message-ID: <ZdxCPn6ulER0OjC1@kuha.fi.intel.com>
-References: <20240217162023.1719738-1-megi@xff.cz>
+To: "Ricardo B. Marliere" <ricardo@marliere.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] usb: typec: constify the struct device_type usage
+Message-ID: <ZdxCkAGj1ViFjQ5/@kuha.fi.intel.com>
+References: <20240218-device_cleanup-usb-v1-0-77423c4da262@marliere.net>
+ <20240218-device_cleanup-usb-v1-1-77423c4da262@marliere.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240217162023.1719738-1-megi@xff.cz>
+In-Reply-To: <20240218-device_cleanup-usb-v1-1-77423c4da262@marliere.net>
 
-On Sat, Feb 17, 2024 at 05:20:21PM +0100, Ondřej Jirman wrote:
-> From: Ondrej Jirman <megi@xff.cz>
+On Sun, Feb 18, 2024 at 04:18:09PM -0300, Ricardo B. Marliere wrote:
+> Since commit aed65af1cc2f ("drivers: make device_type const"), the driver
+> core can properly handle constant struct device_type. Move all the
+> device_type variables in use by the driver to be constant structures as
+> well, placing it into read-only memory which can not be modified at
+> runtime.
 > 
-> The reverted commit makes the state machine only ever go from SRC_ATTACH_WAIT
-> to SNK_TRY in endless loop when toggling. After revert it goes to SRC_ATTACHED
-> after initially trying SNK_TRY earlier, as it should for toggling to ever detect
-> the power source mode and the port is again able to provide power to attached
-> power sinks.
-> 
-> This reverts commit 2d6d80127006ae3da26b1f21a65eccf957f2d1e5.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 2d6d80127006 ("usb: typec: tcpm: reset counter when enter into unattached state after try role")
-> Signed-of-by: Ondrej Jirman <megi@xff.cz>
+> Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
 
 Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 3 ---
->  1 file changed, 3 deletions(-)
+>  drivers/usb/typec/pd.c | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
 > 
-> See https://lore.kernel.org/all/odggrbbgjpardze76qiv57mw6tllisyu5sbrta37iadjzwamcv@qr3ubwnlzqqt/
-> for more.
+> diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
+> index b9cca2be76fc..d78c04a421bc 100644
+> --- a/drivers/usb/typec/pd.c
+> +++ b/drivers/usb/typec/pd.c
+> @@ -157,7 +157,7 @@ static const struct attribute_group source_fixed_supply_group = {
+>  };
+>  __ATTRIBUTE_GROUPS(source_fixed_supply);
+>  
+> -static struct device_type source_fixed_supply_type = {
+> +static const struct device_type source_fixed_supply_type = {
+>  	.name = "pdo",
+>  	.release = pdo_release,
+>  	.groups = source_fixed_supply_groups,
+> @@ -182,7 +182,7 @@ static const struct attribute_group sink_fixed_supply_group = {
+>  };
+>  __ATTRIBUTE_GROUPS(sink_fixed_supply);
+>  
+> -static struct device_type sink_fixed_supply_type = {
+> +static const struct device_type sink_fixed_supply_type = {
+>  	.name = "pdo",
+>  	.release = pdo_release,
+>  	.groups = sink_fixed_supply_groups,
+> @@ -213,7 +213,7 @@ static struct attribute *source_variable_supply_attrs[] = {
+>  };
+>  ATTRIBUTE_GROUPS(source_variable_supply);
+>  
+> -static struct device_type source_variable_supply_type = {
+> +static const struct device_type source_variable_supply_type = {
+>  	.name = "pdo",
+>  	.release = pdo_release,
+>  	.groups = source_variable_supply_groups,
+> @@ -227,7 +227,7 @@ static struct attribute *sink_variable_supply_attrs[] = {
+>  };
+>  ATTRIBUTE_GROUPS(sink_variable_supply);
+>  
+> -static struct device_type sink_variable_supply_type = {
+> +static const struct device_type sink_variable_supply_type = {
+>  	.name = "pdo",
+>  	.release = pdo_release,
+>  	.groups = sink_variable_supply_groups,
+> @@ -258,7 +258,7 @@ static struct attribute *source_battery_attrs[] = {
+>  };
+>  ATTRIBUTE_GROUPS(source_battery);
+>  
+> -static struct device_type source_battery_type = {
+> +static const struct device_type source_battery_type = {
+>  	.name = "pdo",
+>  	.release = pdo_release,
+>  	.groups = source_battery_groups,
+> @@ -272,7 +272,7 @@ static struct attribute *sink_battery_attrs[] = {
+>  };
+>  ATTRIBUTE_GROUPS(sink_battery);
+>  
+> -static struct device_type sink_battery_type = {
+> +static const struct device_type sink_battery_type = {
+>  	.name = "pdo",
+>  	.release = pdo_release,
+>  	.groups = sink_battery_groups,
+> @@ -339,7 +339,7 @@ static struct attribute *source_pps_attrs[] = {
+>  };
+>  ATTRIBUTE_GROUPS(source_pps);
+>  
+> -static struct device_type source_pps_type = {
+> +static const struct device_type source_pps_type = {
+>  	.name = "pdo",
+>  	.release = pdo_release,
+>  	.groups = source_pps_groups,
+> @@ -353,7 +353,7 @@ static struct attribute *sink_pps_attrs[] = {
+>  };
+>  ATTRIBUTE_GROUPS(sink_pps);
+>  
+> -static struct device_type sink_pps_type = {
+> +static const struct device_type sink_pps_type = {
+>  	.name = "pdo",
+>  	.release = pdo_release,
+>  	.groups = sink_pps_groups,
+> @@ -371,30 +371,30 @@ static const char * const apdo_supply_name[] = {
+>  	[APDO_TYPE_PPS]  = "programmable_supply",
+>  };
+>  
+> -static struct device_type *source_type[] = {
+> +static const struct device_type *source_type[] = {
+>  	[PDO_TYPE_FIXED] = &source_fixed_supply_type,
+>  	[PDO_TYPE_BATT]  = &source_battery_type,
+>  	[PDO_TYPE_VAR]   = &source_variable_supply_type,
+>  };
+>  
+> -static struct device_type *source_apdo_type[] = {
+> +static const struct device_type *source_apdo_type[] = {
+>  	[APDO_TYPE_PPS]  = &source_pps_type,
+>  };
+>  
+> -static struct device_type *sink_type[] = {
+> +static const struct device_type *sink_type[] = {
+>  	[PDO_TYPE_FIXED] = &sink_fixed_supply_type,
+>  	[PDO_TYPE_BATT]  = &sink_battery_type,
+>  	[PDO_TYPE_VAR]   = &sink_variable_supply_type,
+>  };
+>  
+> -static struct device_type *sink_apdo_type[] = {
+> +static const struct device_type *sink_apdo_type[] = {
+>  	[APDO_TYPE_PPS]  = &sink_pps_type,
+>  };
+>  
+>  /* REVISIT: Export when EPR_*_Capabilities need to be supported. */
+>  static int add_pdo(struct usb_power_delivery_capabilities *cap, u32 pdo, int position)
+>  {
+> -	struct device_type *type;
+> +	const struct device_type *type;
+>  	const char *name;
+>  	struct pdo *p;
+>  	int ret;
+> @@ -460,7 +460,7 @@ static void pd_capabilities_release(struct device *dev)
+>  	kfree(to_usb_power_delivery_capabilities(dev));
+>  }
+>  
+> -static struct device_type pd_capabilities_type = {
+> +static const struct device_type pd_capabilities_type = {
+>  	.name = "capabilities",
+>  	.release = pd_capabilities_release,
+>  };
+> @@ -575,7 +575,7 @@ static void pd_release(struct device *dev)
+>  	kfree(pd);
+>  }
+>  
+> -static struct device_type pd_type = {
+> +static const struct device_type pd_type = {
+>  	.name = "usb_power_delivery",
+>  	.release = pd_release,
+>  	.groups = pd_groups,
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index f7d7daa60c8d..295ae7eb912c 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -3743,9 +3743,6 @@ static void tcpm_detach(struct tcpm_port *port)
->  	if (tcpm_port_is_disconnected(port))
->  		port->hard_reset_count = 0;
->  
-> -	port->try_src_count = 0;
-> -	port->try_snk_count = 0;
-> -
->  	if (!port->attached)
->  		return;
->  
 > -- 
 > 2.43.0
 
