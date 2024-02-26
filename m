@@ -1,133 +1,152 @@
-Return-Path: <linux-usb+bounces-7081-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7082-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1005586762F
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 14:13:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEDEB86764C
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 14:19:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAB7C1F25F8A
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 13:13:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEF951C2144B
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 13:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B73584FC7;
-	Mon, 26 Feb 2024 13:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD96D127B73;
+	Mon, 26 Feb 2024 13:19:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hc3rG1yg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hLb5ucUB"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A9580037;
-	Mon, 26 Feb 2024 13:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1731C6B0;
+	Mon, 26 Feb 2024 13:19:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708953220; cv=none; b=KSEwofR6QJHVBpJLcQmlFcqsu4LFnCNdKEsZDK7i+0gGASAG2Vb03zoWMiOuHzkYCCWalbe3OpCdd+mygCJI1QNLkPVf66Od8eUpOHC4h0pFgWLw0K/x3reB9sOBOb1yELn/4jmer8x/RsUNXu4BmHYtjdALmkdsQ3DjxsZUXPQ=
+	t=1708953551; cv=none; b=bhjn9O9RmW/qhmfaGnycLsRZdrcnBrYCE7TTy8tKXhwels8t4hLp9Cv8x5fkG3yWzuq7RBE7ZZklJnRWMI4vI8YyHBEct3DJAwPg5+/l1U5JFpWgp0CCg9NxDAenNpJoeAJn098i1FW/b0UKZxBniHrj8nOEoky7ZEtKZEm4sWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708953220; c=relaxed/simple;
-	bh=5d8tuwRD3hnn1I/Q5u9fzmp1C7q+UTW7gVYHJW8kmrc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=krIQiO7OIUqoHxhB5YZ9QOkfwoN3UG1OWPSzhlyhXQo251cthAhA8QAu9VZZI08KWAa2xvj16cJTNVqooqbNMS1FO3LEmGFmheIe3ve2OVHnQ9FPFZk1zCDPx97RTvOijQ7P1QpGVeiM9NPpRKy2v8hefN947e8nfaAexG4Rt2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hc3rG1yg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A64FAC433F1;
-	Mon, 26 Feb 2024 13:13:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1708953220;
-	bh=5d8tuwRD3hnn1I/Q5u9fzmp1C7q+UTW7gVYHJW8kmrc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hc3rG1yg2BT8VqE8Z4ZwK4KtS8Lwnpl4TmaFs/SYKt8drW1WeIAbd8KPilt2BRNPX
-	 sanWLnB4FwMlOzwk4BB3yfkdfNRBnjz3LVsgFBxamgyzw4OswEu9u08JmXoLxAOq/t
-	 oVfQcxbKs2kKClI8Dpi2ezGeuwkYW8fj4uiH2lAg=
-Date: Mon, 26 Feb 2024 14:13:21 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: [RFC PATCH] usb: gadget: ncm: Fix handling of zero block length
- packets
-Message-ID: <2024022602-each-tropical-9459@gregkh>
-References: <20240226112816.2616719-1-quic_kriskura@quicinc.com>
+	s=arc-20240116; t=1708953551; c=relaxed/simple;
+	bh=HBsVccxSNxv26lBX/VuGdylXD0W8SDHVP7TBViLLh1U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VV0yBcZlxBj9HO6bIX0k4jSUnxBsLLMyuI91HuAWHtnAfLIOw83o4UJFcs+C7BTdipjaTV1eG6iY8A4EKd025+ID/yA2XV30MvPenWd81Lo7BLoDmINFodCD1hfA9yPJn7mNraFpi7ZVhA8K6y4oCayfXhHCS0L5aQEQxcHEdfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hLb5ucUB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAFA3C433C7;
+	Mon, 26 Feb 2024 13:19:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708953550;
+	bh=HBsVccxSNxv26lBX/VuGdylXD0W8SDHVP7TBViLLh1U=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=hLb5ucUBiTfbxjjr2QmBkznJfek11WH5eQYPxJpMIcxvOvaBwZTV3vpqnMVUMYcR3
+	 yozacW65Mb9/3Gt0CJnieXcJTAk8088rHIS8r/UUBgilgciaT2dgFYnU5SnpgrV9Aw
+	 VluPV/mH2bn5nlRF5phXoIQeBlLrnHOFpL+VKvpzQk6GCrs4lvCKP6JyciMPCRk+2U
+	 NGQ/AYJ1Bt9vcn4glsQOHyP9Br28iRb60S+kwPtSWCHqdKfSHIbP9jXsskfA/R7pXU
+	 xlJkdZOyVAjH56bBA2GBFhAplOvAuvdpSDAMy8iEOzNRPsRBge4UeywevtAW9Ailj7
+	 DrDdPzGND2sZA==
+Message-ID: <9554348e-2269-4f7d-a06a-9dcaac7b4301@kernel.org>
+Date: Mon, 26 Feb 2024 15:19:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240226112816.2616719-1-quic_kriskura@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/5] usb: dwc3-am62: fix error on module removal
+Content-Language: en-US
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, "nm@ti.com" <nm@ti.com>,
+ "r-gunasekaran@ti.com" <r-gunasekaran@ti.com>, "afd@ti.com" <afd@ti.com>,
+ "b-liu@ti.com" <b-liu@ti.com>, "srk@ti.com" <srk@ti.com>,
+ "francesco@dolcini.it" <francesco@dolcini.it>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20240214-for-v6-9-am62-usb-errata-3-0-v3-0-147ec5eae18c@kernel.org>
+ <20240214-for-v6-9-am62-usb-errata-3-0-v3-2-147ec5eae18c@kernel.org>
+ <20240223223118.3awhuee5kgoebngy@synopsys.com>
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20240223223118.3awhuee5kgoebngy@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Feb 26, 2024 at 04:58:16PM +0530, Krishna Kurapati wrote:
-> While connecting to a Linux host with CDC_NCM_NTB_DEF_SIZE_TX
-> set to 65536, it has been observed that we receive short packets,
-> which come at interval of 5-10 seconds sometimes and have block
-> length zero but still contain 1-2 valid datagrams present.
+
+
+On 24/02/2024 00:31, Thinh Nguyen wrote:
+> On Wed, Feb 14, 2024, Roger Quadros wrote:
+>> As runtime PM is enabled, the module can be runtime
+>> suspended when .remove() is called.
+>>
+>> Do a pm_runtime_get_sync() to make sure module is active
+>> before doing any register operations.
+>>
+>> Doing a pm_runtime_put_sync() should disable the refclk
+>> so no need to disable it again.
+>>
+>> Fixes the below warning at module removel.
+>>
+>> [   39.705310] ------------[ cut here ]------------
+>> [   39.710004] clk:162:3 already disabled
+>> [   39.713941] WARNING: CPU: 0 PID: 921 at drivers/clk/clk.c:1090 clk_core_disable+0xb0/0xb8
+>>
 > 
-> According to the NCM spec:
+> Actually, it will be better to have a fixes tag and separate this from
+> this series series. You can retain my Acked-by if you resend it with the
+> Fixes tag and Cc stable.
+
+OK I will resend. please see below.
 > 
-> "If wBlockLength = 0x0000, the block is terminated by a
-> short packet. In this case, the USB transfer must still
-> be shorter than dwNtbInMaxSize or dwNtbOutMaxSize. If
-> exactly dwNtbInMaxSize or dwNtbOutMaxSize bytes are sent,
-> and the size is a multiple of wMaxPacketSize for the
-> given pipe, then no ZLP shall be sent.
+> BR,
+> Thinh
 > 
-> wBlockLength= 0x0000 must be used with extreme care, because
-> of the possibility that the host and device may get out of
-> sync, and because of test issues.
-> 
-> wBlockLength = 0x0000 allows the sender to reduce latency by
-> starting to send a very large NTB, and then shortening it when
-> the sender discovers that there’s not sufficient data to justify
-> sending a large NTB"
-> 
-> However, there is a potential issue with the current implementation,
-> as it checks for the occurrence of multiple NTBs in a single
-> giveback by verifying if the leftover bytes to be processed is zero
-> or not. If the block length reads zero, we would process the same
-> NTB infintely because the leftover bytes is never zero and it leads
-> to a crash. Fix this by bailing out if block length reads zero.
-> 
-> Fixes: 427694cfaafa ("usb: gadget: ncm: Handle decoding of multiple NTB's in unwrap call")
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
-> 
-> PS: Although this issue was seen after CDC_NCM_NTB_DEF_SIZE_TX
-> was modified to 64K on host side, I still believe this
-> can come up at any time as per the spec. Also I assumed
-> that the giveback where block length is zero, has only
-> one NTB and not multiple ones.
+>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+>> ---
+>> Changelog:
+>>
+>> v3: no change
+>>
+>> v2: no change
+>> 	https://urldefense.com/v3/__https://lore.kernel.org/all/20240205141221.56076-3-rogerq@kernel.org/__;!!A4F2R9G_pg!b7_3vmJpNLOFy3g_wExMQSAzi949O4PoID3e4rNEvAsbgCvxxkj0DiSDFJxF7857DZM7qy9DMkH6Q5BPD-jX$ 
+>>
+>> v1: https://urldefense.com/v3/__https://lore.kernel.org/all/20240201121220.5523-3-rogerq@kernel.org/__;!!A4F2R9G_pg!b7_3vmJpNLOFy3g_wExMQSAzi949O4PoID3e4rNEvAsbgCvxxkj0DiSDFJxF7857DZM7qy9DMkH6Q1CciylE$ 
+>> ---
+>>  drivers/usb/dwc3/dwc3-am62.c | 6 +++++-
+>>  1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
+>> index 1bfc9e67614f..600ba9cfefea 100644
+>> --- a/drivers/usb/dwc3/dwc3-am62.c
+>> +++ b/drivers/usb/dwc3/dwc3-am62.c
+>> @@ -273,6 +273,11 @@ static void dwc3_ti_remove(struct platform_device *pdev)
+>>  	struct dwc3_am62 *am62 = platform_get_drvdata(pdev);
+>>  	u32 reg;
+>>  
+>> +	pm_runtime_get_sync(dev);
+>> +
+>> +	device_wakeup_disable(dev);
+>> +	device_set_wakeup_capable(dev, false);
+>> +
 
-Hi,
+I'll split the wakeup disable changes to a separate patch, so there are less dependencies.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+>>  	of_platform_depopulate(dev);
+>>  
+>>  	/* Clear mode valid bit */
+>> @@ -281,7 +286,6 @@ static void dwc3_ti_remove(struct platform_device *pdev)
+>>  	dwc3_ti_writel(am62, USBSS_MODE_CONTROL, reg);
+>>  
+>>  	pm_runtime_put_sync(dev);
+>> -	clk_disable_unprepare(am62->usb2_refclk);
+>>  	pm_runtime_disable(dev);
+>>  	pm_runtime_set_suspended(dev);
+>>  }
+>>
+>> -- 
+>> 2.34.1
+>>
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+-- 
+cheers,
+-roger
 
