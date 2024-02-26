@@ -1,229 +1,219 @@
-Return-Path: <linux-usb+bounces-7048-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7049-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C550866B5E
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 08:49:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 056AF866B67
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 08:53:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2ACD1F2465D
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 07:49:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 868A51F21A77
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 07:53:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 963C21BF47;
-	Mon, 26 Feb 2024 07:49:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B22041BF47;
+	Mon, 26 Feb 2024 07:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B7T30GHx"
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="UBqnKylB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84ED51BF2B;
-	Mon, 26 Feb 2024 07:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7CC1C68C
+	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 07:53:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708933784; cv=none; b=bEvqYokz8K1Ymp1kXRy6p2UUsKFyf763gltbu4ynNOKVwDoDNqZCfUS4NPp4TZ7XtPM8wiUVuLDlGssE0JOmrdu7TVbgiu3FjkCh5o/kbaHD/ROzrZt3+o9VTHQXQQf+c6vzUMH55OkRHa6FBNzWL0NVcBApAlfN04/WLNbtErs=
+	t=1708934017; cv=none; b=q7Fy7vXc1cHqRQJbV5cNDCKu1//IShIsPY6VUDxkXYRuSQQHnbw2GmIxfLQBZCnoA+w2bm3NtRd+xxLj6bipKssF4DeOHIsVn8InRFLA2WZebID8hmoc76ZwOba/ewmr20V8MS+8fCE/FQVIVOVt+mrdqQK5elu3CXiimkUdGcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708933784; c=relaxed/simple;
-	bh=PWnqcfAeddmdN+2IUbadso3oL1zFZpoZUVAuI0hXtI4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jsnXVl+xD/Plbq8rIj//hPVJy93ewfa0u9B0NPwplgHZRNwRA1DikxfqYFb4o1Aqi0oGBJ72bldApOSYF4MRijgKljwYA4ZyTvq77LcbMjcoEioHkx/xTzQJeE3eBf8N9yICrXqCWYKU4gc/MD4IVwG63w41sOf+02Yn16KIr6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B7T30GHx; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708933782; x=1740469782;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PWnqcfAeddmdN+2IUbadso3oL1zFZpoZUVAuI0hXtI4=;
-  b=B7T30GHxrA4cRV53jIzQw52+kKA6cZ9c3LhsMcRQKw9QWzffLkRTadyh
-   cje49s+EA1a5vO2yQ6Jca0ArL1c++DW9OkTFu7mOiTo8IsTgM6JJ+Upb9
-   kZl2rChf+Gx/nYtacnxdXKk/gfbXio84nVDxZJA8FaqEa7whVgLMLS+OM
-   eri+xiIZKhGWJF0x9uhrJPoP0Sop2OoomWVTR/ojTBmzlWcMmkoqtFH1y
-   gPUNdJjsWQBjyFx7gy59f1rM5eVUZt82QVINEMU5/dwyj/LzbmceKcBAE
-   go/BTNuVM9YxVRPMLzigOsmtnl6dFxc4r84g6lm93TDDomxF3aTcZzlol
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="14334517"
-X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="14334517"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2024 23:49:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="937029444"
-X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
-   d="scan'208";a="937029444"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 25 Feb 2024 23:49:37 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 26 Feb 2024 09:49:36 +0200
-Date: Mon, 26 Feb 2024 09:49:36 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Ricardo B. Marliere" <ricardo@marliere.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] usb: typec: constify the struct device_type usage
-Message-ID: <ZdxCkAGj1ViFjQ5/@kuha.fi.intel.com>
-References: <20240218-device_cleanup-usb-v1-0-77423c4da262@marliere.net>
- <20240218-device_cleanup-usb-v1-1-77423c4da262@marliere.net>
+	s=arc-20240116; t=1708934017; c=relaxed/simple;
+	bh=H1/68T6vtEI19f2OwbzYGbUoeQTa60oidED9lAkt07k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KWQ2HGIO+C7ZFPlbotBvyNKgdXK5U1YHr+0Bnzchx/Y9ui64BcYCTCqqakZrjpaqg3C1psIiQsz1bcNWwEUn5bAahVhCrbboLZ0xAsnnPYn4e4aTesBMjqqsd+MbsiKoPKADoorAXenI1MrWH/hVlek2NT/R/7HbBfBGaz2K1ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=UBqnKylB; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a3e75e30d36so534347666b.1
+        for <linux-usb@vger.kernel.org>; Sun, 25 Feb 2024 23:53:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1708934013; x=1709538813; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0DLWa7NcP4etKwAniB6QuHD07G5jSHGqKq2CbdXaCTc=;
+        b=UBqnKylBLQ/njzmb6jfdu45pAv7Jq9vmv3/Xq6ftDeMrCSi/p4F6w4Lc2s+E9NOUtM
+         dRCBi19q4rmcOlwi4j0hiDJfNipAj2tPx0acJ1incJN38HS0Z9CBcdkV3wdrrcsumMTI
+         /7AQXK4oVhmg9Iq61eVDv+ZJ51GoAw1pk2yTw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708934013; x=1709538813;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0DLWa7NcP4etKwAniB6QuHD07G5jSHGqKq2CbdXaCTc=;
+        b=JhadS6+gyuM9nwaTXNVHJcp9nLaAN2EHA/e68eRLz2waVUa0nPMO0tq96kT8jy120d
+         gQtAg28f00v/K61DlT0OLEELqHO7h9oEkjoW2FXuj54GiVWyrrccqAYXFlu2U30e0c61
+         wrJEMwKk5T7bxRmB6tl4FXTPp2Kr8oh4WLHxw/sv5sz3N4Gq/KM70Owae4HRJ4f4M0EI
+         /Cl0VhaA/9Cl3fQS9L9lXQa+HICgfYo/i9XPJCoOI/6qGbIfaaQDUz+vituUHNRwEwxF
+         V6Ezk5Sx69hO2BOIWLbdpxEpa5w1Agk35c6VH4Bab6OntzG6fX4stCaoV/9J2kbfQdSw
+         nCTQ==
+X-Gm-Message-State: AOJu0YwLieVJZau0T96Wf7u94MgecGffXDEQR4UVoZDzNE84SUMnfVH6
+	oHPhjV15njGnADGUdEuCEdmCf0Vi2h73GZvY6sKOUCsSkKr+EfY0zsqWfcO2uKYxavsmWRDhpHA
+	5f1irXwIbh16elU24t9Psk+wNQhka5j2CpOJgcA==
+X-Google-Smtp-Source: AGHT+IEhOCKWXEBEZgQAKtk2f60JhvlK6LnyTrP3IE8mObADY6Ur4vqS9GaLdac9/qnxIORF2bcbkB4Pe4oF+dX3X4A=
+X-Received: by 2002:a17:906:b798:b0:a41:3d8b:80d with SMTP id
+ dt24-20020a170906b79800b00a413d8b080dmr4627327ejb.37.1708934012843; Sun, 25
+ Feb 2024 23:53:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240218-device_cleanup-usb-v1-1-77423c4da262@marliere.net>
+References: <20240226070348.1703879-1-michael@amarulasolutions.com>
+In-Reply-To: <20240226070348.1703879-1-michael@amarulasolutions.com>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Mon, 26 Feb 2024 08:53:21 +0100
+Message-ID: <CAOf5uw=P0UYXP8ujHpF+hnGR_cg90gqv9na7cVH1sQ-BtEgrTA@mail.gmail.com>
+Subject: Re: [PATCH V2] usb: dwc3: gadget: Fix suspend/resume warning when
+ no-gadget is connected
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-amarula@amarulasolutions.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Feb 18, 2024 at 04:18:09PM -0300, Ricardo B. Marliere wrote:
-> Since commit aed65af1cc2f ("drivers: make device_type const"), the driver
-> core can properly handle constant struct device_type. Move all the
-> device_type variables in use by the driver to be constant structures as
-> well, placing it into read-only memory which can not be modified at
-> runtime.
-> 
-> Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
+Hi all
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Please don't review, I'm not happy with it and even it's broken. I
+need to find better solution
 
+On Mon, Feb 26, 2024 at 8:03=E2=80=AFAM Michael Trimarchi
+<michael@amarulasolutions.com> wrote:
+>
+> This patch restore the logic but protects the variable using a spinlock
+> without moving the code
+>
+> [   45.597274] dwc3 31000000.usb: wait for SETUP phase timed out
+> [   45.599140] dwc3 31000000.usb: failed to set STALL on ep0out
+> [   45.601069] ------------[ cut here ]------------
+> [   45.601073] WARNING: CPU: 0 PID: 150 at drivers/usb/dwc3/ep0.c:289 dwc=
+3_ep0_out_start+0xcc/0xd4
+> [   45.601102] Modules linked in: cfg80211 rfkill ipv6 rpmsg_ctrl rpmsg_c=
+har crct10dif_ce rti_wdt k3_j72xx_bandgap rtc_ti_k3 omap_mailbox sa2ul auth=
+enc [last unloaded: ti_k3_r5_remoteproc]
+> [   45.601151] CPU: 0 PID: 150 Comm: sh Not tainted 6.8.0-rc5 #1
+> [   45.601159] Hardware name: BSH - CCM-M3 (DT)
+> [   45.601164] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYP=
+E=3D--)
+> [   45.601172] pc : dwc3_ep0_out_start+0xcc/0xd4
+> [   45.601179] lr : dwc3_ep0_out_start+0x50/0xd4
+> [   45.601186] sp : ffff8000832739e0
+> [   45.601189] x29: ffff8000832739e0 x28: ffff800082a21000 x27: ffff80008=
+08dc630
+> [   45.601200] x26: 0000000000000002 x25: ffff800082530a44 x24: 000000000=
+0000000
+> [   45.601210] x23: ffff000000e079a0 x22: ffff000000e07a68 x21: 000000000=
+0000001
+> [   45.601219] x20: ffff000000e07880 x19: ffff000000e07880 x18: 000000000=
+0000040
+> [   45.601229] x17: ffff7fff8e1ce000 x16: ffff800080000000 x15: fffffffff=
+ffe5260
+> [   45.601239] x14: 0000000000000000 x13: 206e6f204c4c4154 x12: 532074657=
+3206f74
+> [   45.601249] x11: 0000000000000001 x10: 000000000000000a x9 : ffff80008=
+3273930
+> [   45.601259] x8 : 000000000000000a x7 : ffffffffffff3f0c x6 : fffffffff=
+fff3f00
+> [   45.601268] x5 : ffffffffffff3f0c x4 : 0000000000000000 x3 : 000000000=
+0000000
+> [   45.601278] x2 : 0000000000000000 x1 : ffff000004e7e600 x0 : 00000000f=
+fffff92
+> [   45.601289] Call trace:
+> [   45.601293]  dwc3_ep0_out_start+0xcc/0xd4
+> [   45.601301]  dwc3_ep0_stall_and_restart+0x98/0xbc
+> [   45.601309]  dwc3_ep0_reset_state+0x5c/0x88
+> [   45.601315]  dwc3_gadget_soft_disconnect+0x144/0x160
+> [   45.601323]  dwc3_gadget_suspend+0x18/0xb0
+> [   45.601329]  dwc3_suspend_common+0x5c/0x18c
+> [   45.601341]  dwc3_suspend+0x20/0x44
+> [   45.601350]  platform_pm_suspend+0x2c/0x6c
+> [   45.601360]  __device_suspend+0x10c/0x34c
+> [   45.601372]  dpm_suspend+0x1a8/0x240
+> [   45.601382]  dpm_suspend_start+0x80/0x9c
+> [   45.601391]  suspend_devices_and_enter+0x1c4/0x584
+> [   45.601402]  pm_suspend+0x1b0/0x264
+> [   45.601408]  state_store+0x80/0xec
+> [   45.601415]  kobj_attr_store+0x18/0x2c
+> [   45.601426]  sysfs_kf_write+0x44/0x54
+> [   45.601434]  kernfs_fop_write_iter+0x120/0x1ec
+> [   45.601445]  vfs_write+0x23c/0x358
+> [   45.601458]  ksys_write+0x70/0x104
+> [   45.601467]  __arm64_sys_write+0x1c/0x28
+> [   45.601477]  invoke_syscall+0x48/0x114
+> [   45.601488]  el0_svc_common.constprop.0+0x40/0xe0
+> [   45.601498]  do_el0_svc+0x1c/0x28
+> [   45.601506]  el0_svc+0x34/0xb8
+> [   45.601516]  el0t_64_sync_handler+0x100/0x12c
+> [   45.601522]  el0t_64_sync+0x190/0x194
+> [   45.601531] ---[ end trace 0000000000000000 ]---
+> [   45.608794] Disabling non-boot CPUs ...
+> [   45.611029] psci: CPU1 killed (polled 0 ms)
+> [   45.611837] Enabling non-boot CPUs ...
+> [   45.612247] Detected VIPT I-cache on CPU1
+>
+> Tested on a am62x board
+>
+> Fixes: 61a348857e86 ("usb: dwc3: gadget: Fix NULL pointer dereference in =
+dwc3_gadget_suspend)
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 > ---
->  drivers/usb/typec/pd.c | 30 +++++++++++++++---------------
->  1 file changed, 15 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
-> index b9cca2be76fc..d78c04a421bc 100644
-> --- a/drivers/usb/typec/pd.c
-> +++ b/drivers/usb/typec/pd.c
-> @@ -157,7 +157,7 @@ static const struct attribute_group source_fixed_supply_group = {
->  };
->  __ATTRIBUTE_GROUPS(source_fixed_supply);
->  
-> -static struct device_type source_fixed_supply_type = {
-> +static const struct device_type source_fixed_supply_type = {
->  	.name = "pdo",
->  	.release = pdo_release,
->  	.groups = source_fixed_supply_groups,
-> @@ -182,7 +182,7 @@ static const struct attribute_group sink_fixed_supply_group = {
->  };
->  __ATTRIBUTE_GROUPS(sink_fixed_supply);
->  
-> -static struct device_type sink_fixed_supply_type = {
-> +static const struct device_type sink_fixed_supply_type = {
->  	.name = "pdo",
->  	.release = pdo_release,
->  	.groups = sink_fixed_supply_groups,
-> @@ -213,7 +213,7 @@ static struct attribute *source_variable_supply_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(source_variable_supply);
->  
-> -static struct device_type source_variable_supply_type = {
-> +static const struct device_type source_variable_supply_type = {
->  	.name = "pdo",
->  	.release = pdo_release,
->  	.groups = source_variable_supply_groups,
-> @@ -227,7 +227,7 @@ static struct attribute *sink_variable_supply_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(sink_variable_supply);
->  
-> -static struct device_type sink_variable_supply_type = {
-> +static const struct device_type sink_variable_supply_type = {
->  	.name = "pdo",
->  	.release = pdo_release,
->  	.groups = sink_variable_supply_groups,
-> @@ -258,7 +258,7 @@ static struct attribute *source_battery_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(source_battery);
->  
-> -static struct device_type source_battery_type = {
-> +static const struct device_type source_battery_type = {
->  	.name = "pdo",
->  	.release = pdo_release,
->  	.groups = source_battery_groups,
-> @@ -272,7 +272,7 @@ static struct attribute *sink_battery_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(sink_battery);
->  
-> -static struct device_type sink_battery_type = {
-> +static const struct device_type sink_battery_type = {
->  	.name = "pdo",
->  	.release = pdo_release,
->  	.groups = sink_battery_groups,
-> @@ -339,7 +339,7 @@ static struct attribute *source_pps_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(source_pps);
->  
-> -static struct device_type source_pps_type = {
-> +static const struct device_type source_pps_type = {
->  	.name = "pdo",
->  	.release = pdo_release,
->  	.groups = source_pps_groups,
-> @@ -353,7 +353,7 @@ static struct attribute *sink_pps_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(sink_pps);
->  
-> -static struct device_type sink_pps_type = {
-> +static const struct device_type sink_pps_type = {
->  	.name = "pdo",
->  	.release = pdo_release,
->  	.groups = sink_pps_groups,
-> @@ -371,30 +371,30 @@ static const char * const apdo_supply_name[] = {
->  	[APDO_TYPE_PPS]  = "programmable_supply",
->  };
->  
-> -static struct device_type *source_type[] = {
-> +static const struct device_type *source_type[] = {
->  	[PDO_TYPE_FIXED] = &source_fixed_supply_type,
->  	[PDO_TYPE_BATT]  = &source_battery_type,
->  	[PDO_TYPE_VAR]   = &source_variable_supply_type,
->  };
->  
-> -static struct device_type *source_apdo_type[] = {
-> +static const struct device_type *source_apdo_type[] = {
->  	[APDO_TYPE_PPS]  = &source_pps_type,
->  };
->  
-> -static struct device_type *sink_type[] = {
-> +static const struct device_type *sink_type[] = {
->  	[PDO_TYPE_FIXED] = &sink_fixed_supply_type,
->  	[PDO_TYPE_BATT]  = &sink_battery_type,
->  	[PDO_TYPE_VAR]   = &sink_variable_supply_type,
->  };
->  
-> -static struct device_type *sink_apdo_type[] = {
-> +static const struct device_type *sink_apdo_type[] = {
->  	[APDO_TYPE_PPS]  = &sink_pps_type,
->  };
->  
->  /* REVISIT: Export when EPR_*_Capabilities need to be supported. */
->  static int add_pdo(struct usb_power_delivery_capabilities *cap, u32 pdo, int position)
->  {
-> -	struct device_type *type;
-> +	const struct device_type *type;
->  	const char *name;
->  	struct pdo *p;
->  	int ret;
-> @@ -460,7 +460,7 @@ static void pd_capabilities_release(struct device *dev)
->  	kfree(to_usb_power_delivery_capabilities(dev));
->  }
->  
-> -static struct device_type pd_capabilities_type = {
-> +static const struct device_type pd_capabilities_type = {
->  	.name = "capabilities",
->  	.release = pd_capabilities_release,
->  };
-> @@ -575,7 +575,7 @@ static void pd_release(struct device *dev)
->  	kfree(pd);
->  }
->  
-> -static struct device_type pd_type = {
-> +static const struct device_type pd_type = {
->  	.name = "usb_power_delivery",
->  	.release = pd_release,
->  	.groups = pd_groups,
-> 
-> -- 
-> 2.43.0
+> V1->V2:
+>         Add cc to stable
+> ---
+>  drivers/usb/dwc3/gadget.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 4c8dd6724678..4c88e44127b5 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -4703,13 +4703,19 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
+>         unsigned long flags;
+>         int ret;
+>
+> +       spin_lock_irqsave(&dwc->lock, flags);
+> +       if (!dwc->gadget_driver) {
+> +               spin_unlock_irqrestore(&dwc->lock, flags);
+> +               return 0;
+> +       }
+> +       spin_unlock_irqrestore(&dwc->lock, flags);
+> +
+>         ret =3D dwc3_gadget_soft_disconnect(dwc);
+>         if (ret)
+>                 goto err;
+>
+>         spin_lock_irqsave(&dwc->lock, flags);
+> -       if (dwc->gadget_driver)
+> -               dwc3_disconnect_gadget(dwc);
+> +       dwc3_disconnect_gadget(dwc);
+>         spin_unlock_irqrestore(&dwc->lock, flags);
+>
+>         return 0;
+> --
+> 2.40.1
+>
 
--- 
-heikki
+
+--=20
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
+
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
 
