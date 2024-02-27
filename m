@@ -1,96 +1,116 @@
-Return-Path: <linux-usb+bounces-7140-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7141-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D05F869149
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 14:05:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5166186928C
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 14:36:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 980CD1C251EC
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 13:05:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B5F028D558
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 13:36:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C92813AA55;
-	Tue, 27 Feb 2024 13:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="sUUKc/rQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416131419A9;
+	Tue, 27 Feb 2024 13:36:00 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427AB13A895;
-	Tue, 27 Feb 2024 13:05:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9081913EFF4
+	for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 13:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709039112; cv=none; b=hchUZhFcDcu7xv9X4JUdP0SlilaL1dw6QHXlOb/TWOFo5Uc9zbj3IU1/tjMz2B3FgutO7J9bt/08YkGy/Vgq8te/u2b9pJcpawuMXzyFmVr5nFttr+zIYnpGzo7Gip36zXw1Ge3hi2CuxWZlR2nwNw++TIjYRYIPqrsG5eERStE=
+	t=1709040960; cv=none; b=PQ27z4uv4YbLoVRxaJSwWg4G+CGM06hOyrIADy/TMitjcWBeCvnEW2BnVBzoUOeomy6yMZ1kPdGSQXUkhHMH6mnK9IHbZBmLS8mF7Yxjt2ocWVPdiJGHjv3neN4MWSexl/0SSSwZhjWUjNI2zSM8racxpf4y3MTqK6wgBBSLHhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709039112; c=relaxed/simple;
-	bh=4+xxXJpIxETTFxPp8LblvziN3QS7LhnD/JQ2E4D5Zqg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ajkWNckAHoaLkK9/Cl4fRDK8fs3F7JiXdjLYlX17Iy2KuIS3Sn2XNJx3dIvqAHQL6/yCxaOt1CgRz76X9qSk3J1SfpNnz9mDRj3HCmKt1FH+Ia2y25qAujgkK3KsbnsfuMl0LEQQBAFIRNd5jztrEhLady8S0gXRYND2vnuAy7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=sUUKc/rQ; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709039109;
-	bh=4+xxXJpIxETTFxPp8LblvziN3QS7LhnD/JQ2E4D5Zqg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sUUKc/rQ0hMdw8Aa8wMkhPSpJ+yWBRrgN/MMLgfJdSTKdfEWllF6QGgmfxFM3pGX6
-	 ptDx7Aiog9e7OJk4qYHvgThWqZ21TxZlxPMkeWUQcn8eQ59G/c8oFi3/vmnnwAuet6
-	 0m9yPQ/ggGEBhRZMAN/09vD2rds3tvQOlbjeeJ4UhrOEWcwaDcPynKI076Wu9M1cjI
-	 ceqa7YA5gEZcS5ixc9+/0mEJxWVfF0cGQqZ4p5LsTArsFc5UWTKv1GLfpdzHo+cpc1
-	 CHUP+eVEYfqPafqj5jsY/8a3YNn4YITTveVnLxu7VuVRKmD0ood+mTKtMHzne2WmLZ
-	 FRBzMAOW/S5Kg==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 27C4F37820CC;
-	Tue, 27 Feb 2024 13:05:08 +0000 (UTC)
-Message-ID: <6ea5e5b5-13d9-4c3d-b8fd-4948824e5051@collabora.com>
-Date: Tue, 27 Feb 2024 14:05:07 +0100
+	s=arc-20240116; t=1709040960; c=relaxed/simple;
+	bh=2wdaSkoK4RlUYZqlfmfs/iKPXvB1JGP+8YFvkQgfVnE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ubp3UGpFfu8rXgS+KqhOPXIEAvrDVHdKRhLa7VmEh8d8IZ5pqU+VWo7/ppuh8crSNpNDUOjPZeMBgYI6JT/K7RVuORWAa3OlBsNl4QvJEb0+YAjGXwyaEwPCecbIloMMRyeg2TzJLlzcjIYYWujUUS0geRdcib8q8uY7eIYFbPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1709040952-086e2316ed00600001-YVMibp
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx1.zhaoxin.com with ESMTP id DpE5ORzyURXSjUcG (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Tue, 27 Feb 2024 21:35:52 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 27 Feb
+ 2024 21:35:52 +0800
+Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 27 Feb
+ 2024 21:35:51 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Message-ID: <594c4e2f-74c4-42dd-9b7c-c3468a55c7ee@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
+Date: Wed, 28 Feb 2024 05:35:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: misc: onboard_usb_hub: Add support for TI
- TUSB8020B
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] USB:UAS:return ENODEV when submit urbs fail with device
+ not attached.
 Content-Language: en-US
-To: Macpaul Lin <macpaul.lin@mediatek.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Kaehlcke <mka@chromium.org>,
- Matthias Brugger <matthias.bgg@gmail.com>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Cc: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
- Macpaul Lin <macpaul@gmail.com>, Chunfeng Yun <chunfeng.yun@mediatek.com>,
- Yow-shin Liou <yow-shin.liou@mediatek.com>,
- MediaTek Chromebook Upstream
- <Project_Global_Chrome_Upstream_Group@mediatek.com>,
- Chen-Yu Tsai <wenst@chromium.org>
-References: <20240227090228.22156-1-macpaul.lin@mediatek.com>
- <20240227090228.22156-2-macpaul.lin@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240227090228.22156-2-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ASG-Orig-Subj: Re: [PATCH] USB:UAS:return ENODEV when submit urbs fail with device
+ not attached.
+To: Oliver Neukum <oneukum@suse.com>, <stern@rowland.harvard.edu>,
+	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+	<usb-storage@lists.one-eyed-alien.net>
+CC: <WeitaoWang@zhaoxin.com>
+References: <20240222165441.6148-1-WeitaoWang-oc@zhaoxin.com>
+ <3ff16f34-07a9-4b7e-b51d-b7220f08d88d@suse.com>
+ <41daf1a9-590a-e220-84a3-648eb895272b@zhaoxin.com>
+ <8f4fe820-2385-40e7-a3c6-51102e57acad@suse.com>
+From: "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <8f4fe820-2385-40e7-a3c6-51102e57acad@suse.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1709040952
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 819
+X-Barracuda-BRTS-Status: 0
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.121398
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
+	0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+	3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
 
-Il 27/02/24 10:02, Macpaul Lin ha scritto:
-> The TI TUSB8020B is a 2-port USB 3.0 hub. Add support for
-> this hub in the driver in order to bring up reset, and supply
-> dependencies.
+On 2024/2/27 17:05, Oliver Neukum wrote:
 > 
-> Power-up: Issue a GPIO reset (GRSTz) 3ms after VDD and VDD33 stabilize.
+
+> On 22.02.24 21:06, WeitaoWang-oc@zhaoxin.com wrote:
 > 
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+>> Maybe, my description was not accurate enough, here not add new return
+>> value to scsi layer,it just add a case to tell device is gone in the uas
+>> driver internal and the ENODEV error code not return to scsi layer.
+>> Here just notify SCSI layer of device loss through flag DID_NO_CONNECT.
+>> This is also hope to fix this issue in the uas driver internal.
+> 
+> Hi,
+> 
+> sorry for the delay. OK, I see what you are aiming at. Could you redo
+> the patch with a better description, like:
+> 
+> We need to translate -ENODEV to DID_NOT_CONNECT for the SCSI layer.
+> 
+Okay, Thanks for your suggestion. And I'll improve this patch
+description in the next version.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-
+Thanks & Best regards,
+Weitao
 
