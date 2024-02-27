@@ -1,116 +1,89 @@
-Return-Path: <linux-usb+bounces-7141-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7142-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5166186928C
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 14:36:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B886869BA2
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 17:09:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B5F028D558
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 13:36:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 010711F24DD1
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 16:09:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416131419A9;
-	Tue, 27 Feb 2024 13:36:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4D2C1474DC;
+	Tue, 27 Feb 2024 16:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bVt68zCU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9081913EFF4
-	for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 13:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527A854F8A;
+	Tue, 27 Feb 2024 16:09:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709040960; cv=none; b=PQ27z4uv4YbLoVRxaJSwWg4G+CGM06hOyrIADy/TMitjcWBeCvnEW2BnVBzoUOeomy6yMZ1kPdGSQXUkhHMH6mnK9IHbZBmLS8mF7Yxjt2ocWVPdiJGHjv3neN4MWSexl/0SSSwZhjWUjNI2zSM8racxpf4y3MTqK6wgBBSLHhs=
+	t=1709050163; cv=none; b=jVmelDiWfV8Qb+Q7AHi2UeeA1SIQyF7zTERIFMG+44rP6BCMxrdzwza+oECMdEzSV0tb+04xjOlGBu1mcLm/Kc7m9S9EYV9iXXPWd1bbgUi3ms1KbOWBbQepvFmf7w0gCFLWacAdxVXK+OvyyPJKQZB2w3Qv3uNDJAciBuJxnDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709040960; c=relaxed/simple;
-	bh=2wdaSkoK4RlUYZqlfmfs/iKPXvB1JGP+8YFvkQgfVnE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ubp3UGpFfu8rXgS+KqhOPXIEAvrDVHdKRhLa7VmEh8d8IZ5pqU+VWo7/ppuh8crSNpNDUOjPZeMBgYI6JT/K7RVuORWAa3OlBsNl4QvJEb0+YAjGXwyaEwPCecbIloMMRyeg2TzJLlzcjIYYWujUUS0geRdcib8q8uY7eIYFbPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-X-ASG-Debug-ID: 1709040952-086e2316ed00600001-YVMibp
-Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx1.zhaoxin.com with ESMTP id DpE5ORzyURXSjUcG (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Tue, 27 Feb 2024 21:35:52 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
- (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 27 Feb
- 2024 21:35:52 +0800
-Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 27 Feb
- 2024 21:35:51 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Message-ID: <594c4e2f-74c4-42dd-9b7c-c3468a55c7ee@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
-Date: Wed, 28 Feb 2024 05:35:50 +0800
+	s=arc-20240116; t=1709050163; c=relaxed/simple;
+	bh=MH22YmXA4bTMQ7/5kOWcmCJTkTE0LNMzDjYX1mzE/8A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M3P+O4L0U1Y1vbHxu6XPIIKuk9rAnSj6EoSfkmKLh/gYJPZOYItN/0XJZlFJZx+hjb66fXl2EV53ZRE8gj+T6EpaZAo3UFbMw+jASzMciMukTZJn8gzE7jVSxkl6ZnRwk8mGazEvt5KnXrfrxcurEJq40ML+Jf4o7sGGkEJFZxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bVt68zCU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7639C433C7;
+	Tue, 27 Feb 2024 16:09:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709050162;
+	bh=MH22YmXA4bTMQ7/5kOWcmCJTkTE0LNMzDjYX1mzE/8A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bVt68zCUuOKFRbqW/jzbsgaXuVjspytrlTx2TaFMZDOJwEY8zrLzhjzu+niVnelAg
+	 gQPR+xLK5jYYPUd8E1UYLnU7Fx/LUPAfcR241/z0ci9ipUvE4sd6UOfbURBdA59OEp
+	 TRf2w9iKuTzwIBDAc9ylw456djOVXFN0fXlkI06+xkR1V/y64TSCva9n1sy7/6UREr
+	 GXbJkGOzI+7nG8l3M1skTOn8knFklJR35yEsb2Pia6/mjk3J8RkDSEJkeWD+HlfC4g
+	 KIJi47RXDz06bPTTN3kvNLjVvXe7P2CfaGCcexpYkd6oW2k2XrqHc4cGzuV8FwYiTs
+	 X+saSa0AzO8pw==
+Date: Tue, 27 Feb 2024 16:09:18 +0000
+From: Simon Horman <horms@kernel.org>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: dm9601: fix wrong return value in
+ dm9601_mdio_read
+Message-ID: <20240227160918.GB277116@kernel.org>
+References: <20240225-dm9601_ret_err-v1-1-02c1d959ea59@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] USB:UAS:return ENODEV when submit urbs fail with device
- not attached.
-Content-Language: en-US
-X-ASG-Orig-Subj: Re: [PATCH] USB:UAS:return ENODEV when submit urbs fail with device
- not attached.
-To: Oliver Neukum <oneukum@suse.com>, <stern@rowland.harvard.edu>,
-	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-	<usb-storage@lists.one-eyed-alien.net>
-CC: <WeitaoWang@zhaoxin.com>
-References: <20240222165441.6148-1-WeitaoWang-oc@zhaoxin.com>
- <3ff16f34-07a9-4b7e-b51d-b7220f08d88d@suse.com>
- <41daf1a9-590a-e220-84a3-648eb895272b@zhaoxin.com>
- <8f4fe820-2385-40e7-a3c6-51102e57acad@suse.com>
-From: "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <8f4fe820-2385-40e7-a3c6-51102e57acad@suse.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
-X-Barracuda-Start-Time: 1709040952
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 819
-X-Barracuda-BRTS-Status: 0
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.121398
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------------------------
-	0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-	3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240225-dm9601_ret_err-v1-1-02c1d959ea59@gmail.com>
 
-On 2024/2/27 17:05, Oliver Neukum wrote:
+On Sun, Feb 25, 2024 at 12:20:06AM +0100, Javier Carrasco wrote:
+> The MII code does not check the return value of mdio_read (among
+> others), and therefore no error code should be sent. A previous fix to
+> the use of an uninitialized variable propagates negative error codes,
+> that might lead to wrong operations by the MII library.
 > 
+> An example of such issues is the use of mii_nway_restart by the dm9601
+> driver. The mii_nway_restart function does not check the value returned
+> by mdio_read, which in this case might be a negative number which could
+> contain the exact bit the function checks (BMCR_ANENABLE = 0x1000).
+> 
+> Return zero in case of error, as it is common practice in users of
+> mdio_read to avoid wrong uses of the return value.
+> 
+> Fixes: 8f8abb863fa5 ("net: usb: dm9601: fix uninitialized variable use in dm9601_mdio_read")
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-> On 22.02.24 21:06, WeitaoWang-oc@zhaoxin.com wrote:
-> 
->> Maybe, my description was not accurate enough, here not add new return
->> value to scsi layer,it just add a case to tell device is gone in the uas
->> driver internal and the ENODEV error code not return to scsi layer.
->> Here just notify SCSI layer of device loss through flag DID_NO_CONNECT.
->> This is also hope to fix this issue in the uas driver internal.
-> 
-> Hi,
-> 
-> sorry for the delay. OK, I see what you are aiming at. Could you redo
-> the patch with a better description, like:
-> 
-> We need to translate -ENODEV to DID_NOT_CONNECT for the SCSI layer.
-> 
-Okay, Thanks for your suggestion. And I'll improve this patch
-description in the next version.
+I guess it would be nice if error values could be used,
+but as you have described, that does not seem to be the case here.
 
-Thanks & Best regards,
-Weitao
+Reviewed-by: Simon Horman <horms@kernel.org>
+
 
