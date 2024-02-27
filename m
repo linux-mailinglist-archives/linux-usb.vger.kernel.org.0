@@ -1,164 +1,83 @@
-Return-Path: <linux-usb+bounces-7144-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7145-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6DDA869C14
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 17:28:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDBFE869CD9
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 17:53:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7222428EAFD
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 16:28:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C1F21C23DEA
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 16:53:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC161487E0;
-	Tue, 27 Feb 2024 16:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PALDXWLI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 856EE2557F;
+	Tue, 27 Feb 2024 16:53:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28942145321;
-	Tue, 27 Feb 2024 16:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF88219ED;
+	Tue, 27 Feb 2024 16:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709051279; cv=none; b=ITURFkYBmI3AdTjsQljs8r7U4sf0Z34blO9nr4qfH96aepwW8WPt6d9wPfkBIX3nsydCgrrvHsGsYAG7hxQzi1UEmoixu4KZS4Yv1fPOR6BPBNjRUyXzbPwMPAuFn5a21/xYTruMav2v0CK25R9xEQ5A6rmDpg68oH9CGv3hIh0=
+	t=1709052809; cv=none; b=KVBJfYxIwAmrekBZXbtx+sHJC99nkWLsENPRIoSnQ1Km/I9rnQiAr6DQ8Q/xIqHgqxazBMU7EZ06wBZ+plzkGwVlITqMCDJY22XnP6cYRZLFbOR3ihw45gKavJcYwqMkxmm7BbFghe+JU/9aRxVgqeUEMLKC/jbL15z6wxxNW/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709051279; c=relaxed/simple;
-	bh=YktS9dxlM50RHOnP7vVul3eD1UdiPaSXTO3fwBv+RJg=;
-	h=From:Subject:To:Cc:References:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=uGc/MglIYMKBcZfD9MwKdWpdp9CNs27xVCGTaCsW4FLD0Az0Gd557el3bKgmlUqrFjGxqwxYBNpxCX8MRkQG80r5VxN+iDBQVXnzdI7/yklqm8BhoIl8zUX6yQrDHs5WxIlHufmZOnVXuH3Erx3R9FjKsOZtWJhQmXqT2YRZB6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PALDXWLI; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-512f5484a37so4138754e87.3;
-        Tue, 27 Feb 2024 08:27:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709051276; x=1709656076; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:subject:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pAD8RHKxb4G97R9G/dSDm2p0nboqUuatq3J8Tyt7hHw=;
-        b=PALDXWLIETybPoknflqESM5QvOpIpGLxCr3cBGDtPy2BkJapPLqxdUm7BJep6oDxkI
-         Awl+uY9X1T1TQl/mSPaKotoTgxBnGnVgZ0/l9jvCt7/u9AzjUp4UprLgIq/yZNYIjNul
-         ZZJFa45fxrJoTy6+z1fovd3ltn6AKnATmVtHoEmAHbO7crxK0kl9gpSMHU+RpXpTFjzK
-         J4p8amYiec9Idoew74mmwmNBZDGk9zRdGsUnTTJG/a8lJyh8jvmCAAY6eW270O3MfoDj
-         QpBaq2LfM6+5kIm2wpA/PKYNlPTGgGs1Vduf2P67tuGITlJbzG/j3YLW6+dpklSXrO/h
-         gMjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709051276; x=1709656076;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:subject:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pAD8RHKxb4G97R9G/dSDm2p0nboqUuatq3J8Tyt7hHw=;
-        b=duDVZ95sHaijtatfduZMJSgg7mLUsL53yOMobd9xfb7qcQeRLGsytGHirUqmHd3tEl
-         jtSHs32H99DET1/GKj1nN9jyQdIGT7hIgwHSRk5V9NSn588+iGj2LHusVKoQ05UklTBl
-         jZmOdZ8+/dJv/K53Rpez6lWSWVxLy/yKtU75JJNOSsp4F2iGiA8pmeNQ2lD/yVBnn1TO
-         sPtjl67yMC2h+PHlkvHbmPOidLA1oHHS8YIX3SaAc1PiqjNwLbKOv+tQb22i5dpDyBjt
-         84gfzdkhzkHOOGrfBvWws6N5c8OAnD0UeYoOLFsKOXGxPrv2ObcALrFedrzL2fpIi7BX
-         zH3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVJIa3drgi/vXKANhdOhA022m8fLwLx4VyB7adNauGKKm/8Q6cDI2H8EO89ZHwv62WdsFAZPpGBvsj1GseyJ/VSMld5F6mCszWWlhfwF85g1NVfPMNU3bpwzCEKw/Vl1yRuj49YLA5RVD5XsMMbimNkMevfnNm98aa1utaZS53eDuWfgg==
-X-Gm-Message-State: AOJu0YzYois/TsvxG5dFPj3jTBCXzaMnV39IEg3qzjS2xvtrc+BRUnUI
-	q49ksPNDOZjTQOD/rjHMCFgOfmCtYwGH7p/MLElQ3c8kc9jl1vHK
-X-Google-Smtp-Source: AGHT+IFpwoAicjquFREyBDbKYQUFCXwCwdKRl7/9LNLPcrPsJ5bojUYGEl8JJyGvR0rQSkxAnasFMw==
-X-Received: by 2002:a05:6512:1317:b0:512:f59e:f425 with SMTP id x23-20020a056512131700b00512f59ef425mr7507569lfu.10.1709051276022;
-        Tue, 27 Feb 2024 08:27:56 -0800 (PST)
-Received: from [192.168.1.105] ([178.176.72.204])
-        by smtp.gmail.com with ESMTPSA id v15-20020a056512096f00b005129994f013sm1236235lft.184.2024.02.27.08.27.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Feb 2024 08:27:55 -0800 (PST)
-From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Subject: Re: [PATCH v3 4/8] usb: cdns3-ti: support reset-on-resume behavior
-To: =?UTF-8?Q?Th=c3=a9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Roger Quadros <rogerq@kernel.org>,
- Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
- Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
- Tero Kristo <kristo@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- =?UTF-8?Q?Gr=c3=a9gory_Clement?= <gregory.clement@bootlin.com>,
- Kevin Hilman <khilman@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20240223-j7200-usb-suspend-v3-0-b41c9893a130@bootlin.com>
- <20240223-j7200-usb-suspend-v3-4-b41c9893a130@bootlin.com>
- <b778d2e8-3fcf-afe4-2e48-0348be19a085@gmail.com>
- <CZEXIZWQO1XB.1YY4P72A2K1HJ@bootlin.com>
-Message-ID: <20c29fee-691d-686c-83c9-578e15b5ba79@gmail.com>
-Date: Tue, 27 Feb 2024 19:27:53 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	s=arc-20240116; t=1709052809; c=relaxed/simple;
+	bh=+gMJzooNARvw2e0xhnqYaNuQPV+f/gPimN+Y24GZ6GU=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=Mq5P7n4eKURf931cfjJiKZyPp03IsjWH8e+/82d16HZboJ2N6qrSmQaJRJfB6WnV81B2uZkDayrxubtIrqXQ15JYsfkdt4b/2YjBv8nrNAv/qoBcHx2gZx5WE0O28Np1NNTpkpN1LkA+e8C9N33UM0gVJzy+mccddCNdSCBsLvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 24EE924000C;
+	Tue, 27 Feb 2024 16:53:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+	(envelope-from <peter@korsgaard.com>)
+	id 1rf0hm-00GAei-0Z;
+	Tue, 27 Feb 2024 17:53:22 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,  Eric Dumazet
+ <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni
+ <pabeni@redhat.com>,  netdev@vger.kernel.org,  linux-usb@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: dm9601: fix wrong return value in
+ dm9601_mdio_read
+References: <20240225-dm9601_ret_err-v1-1-02c1d959ea59@gmail.com>
+Date: Tue, 27 Feb 2024 17:53:22 +0100
+In-Reply-To: <20240225-dm9601_ret_err-v1-1-02c1d959ea59@gmail.com> (Javier
+	Carrasco's message of "Sun, 25 Feb 2024 00:20:06 +0100")
+Message-ID: <874jdtsvb1.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CZEXIZWQO1XB.1YY4P72A2K1HJ@bootlin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-GND-Sasl: peter@korsgaard.com
 
-On 2/26/24 1:13 PM, Théo Lebrun wrote:
-[...]
+>>>>> "Javier" == Javier Carrasco <javier.carrasco.cruz@gmail.com> writes:
 
->>> Add match data support, with one boolean to indicate whether the
->>> hardware resets after a system-wide suspend. If hardware resets, we
->>> force execute ->runtime_resume() at system-wide resume to run the
->>> hardware init sequence.
->>>
->>> No compatible exploits this functionality, just yet.
->>>
->>> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
->>> ---
->>>  drivers/usb/cdns3/cdns3-ti.c | 27 +++++++++++++++++++++++++++
->>>  1 file changed, 27 insertions(+)
->>>
->>> diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
->>> index 4c8a557e6a6f..f76327566798 100644
->>> --- a/drivers/usb/cdns3/cdns3-ti.c
->>> +++ b/drivers/usb/cdns3/cdns3-ti.c
->> [...]
->>> @@ -220,8 +226,29 @@ static int cdns_ti_runtime_resume(struct device *dev)
->>>  	return 0;
->>>  }
->>>  
->>> +static int cdns_ti_suspend(struct device *dev)
->>> +{
->>> +	struct cdns_ti *data = dev_get_drvdata(dev);
->>> +
->>> +	if (data->match_data && data->match_data->reset_on_resume)
->>> +		return pm_runtime_force_suspend(dev);
->>> +	else
->>
->>    Pointless *else* after *return*...
-> 
-> Indeed! I used this form explicitely as it reads nicely: "if reset on
-> reset, force suspend, else do nothing". It also prevents the error of
+ > The MII code does not check the return value of mdio_read (among
+ > others), and therefore no error code should be sent. A previous fix to
+ > the use of an uninitialized variable propagates negative error codes,
+ > that might lead to wrong operations by the MII library.
 
-   s/reset/resume/ here? :-)
+ > An example of such issues is the use of mii_nway_restart by the dm9601
+ > driver. The mii_nway_restart function does not check the value returned
+ > by mdio_read, which in this case might be a negative number which could
+ > contain the exact bit the function checks (BMCR_ANENABLE = 0x1000).
 
-> adding behavior below the if-statement without seeing that it won't
-> apply to both cases.
+ > Return zero in case of error, as it is common practice in users of
+ > mdio_read to avoid wrong uses of the return value.
 
-   You were going to add stuff after the final *return*? :-)
+ > Fixes: 8f8abb863fa5 ("net: usb: dm9601: fix uninitialized variable use in dm9601_mdio_read")
+ > Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-> If you do believe it would make the code better I'll happily change it
-> for the next revision, I do not mind.
+Reviewed-by: Peter Korsgaard <peter@korsgaard.com>
 
-   Up to you!
-   This is a thing people usually complain about when reviewing
-patches. I even thought checkpatch.pl would complain as well, but it
-didn't... :-)
-
-> Thanks for the review Sergey!
-> 
-> --
-> Théo Lebrun, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-MBR, Swrgey
+-- 
+Bye, Peter Korsgaard
 
