@@ -1,139 +1,95 @@
-Return-Path: <linux-usb+bounces-7107-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7108-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F37958684AB
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 00:43:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4ED88684FE
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 01:29:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 267881C22704
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Feb 2024 23:43:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5C2D1C213D3
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 00:29:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94833135419;
-	Mon, 26 Feb 2024 23:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE8FA2A;
+	Tue, 27 Feb 2024 00:29:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KUyuvAji"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="g8EUuULo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEFF1353E4
-	for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 23:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D44436E
+	for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 00:29:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708990975; cv=none; b=PMGQOiXJK7NqNV/u7ywBJKfrhEg+EkODqLsOR4SQhoILqnvpCJYjf494UcT9Mmt9dEAL9GEjYGwIJYWgcV/fiQ6YFJFwIW235I6Kybq/lCDsxE6stA9hMj+23Hsico2jq8ISYPXkQ8xR/q4vtn6JE5So+uEFBseHEsFdjJ3pCiA=
+	t=1708993750; cv=none; b=udGt+U+jkAgH+zqNLJICoDdob2v6Pni/P+HPrQuJmgj2TK9zZFzs+LezZo617u3whGZ1ZS1MAd9Br0f1/eSLo21gnZlr6HnDgzdecAJN0h2w6zUw1zCfVOrBitu7wItVRf310z4cXi2q5EIoTF1wuODIehSwtsWEl1FYRKuVz5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708990975; c=relaxed/simple;
-	bh=5kYeIFVo2xR1oxYSbdUq98xOTZBkvlA2zXrP0sPUMtw=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ExTIEJEDA3oyQ1G8Ttt/x+RP0bGV00Gv3NJj35QiQtq7kGQ/YOd3HPHvSFgrqd8Ois9bEIIZXa1j8Jul536toYVWgaZZAxnX3DJ2qiLOw/ig2Jv+EcWVgrt5sQD/S4HeISuVks4kFe2KU4OY1tkRfzoXLNmD7GVDhu+d5WqU3K4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KUyuvAji; arc=none smtp.client-ip=209.85.214.202
+	s=arc-20240116; t=1708993750; c=relaxed/simple;
+	bh=ShKKi6TlgSxWUVIb93iZNgwwSea0qBzgXYFrAL077W8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UaUZna5wiQG94fDf5c+VtJU/O4xHP6rJz3mLacDTgJqSwEuXyf/A1waWImG3V8x0ALSdQXYO+/LCl/NmU0OHhfip7mI/17ILbSrCokd6lm1G6qjehMOHXMfeKItLzXkZxdt7ZSTgfWFOohFt6W+UhpZdnhh62Rl2gmSW1ZdTjiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=g8EUuULo; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1dcaff13db5so9108645ad.3
-        for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 15:42:53 -0800 (PST)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4129a5f7b54so10895e9.1
+        for <linux-usb@vger.kernel.org>; Mon, 26 Feb 2024 16:29:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708990973; x=1709595773; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vfgvyT3McQFjbyFi2yOlB8GW53W4hlIR4nzJRu+A9Fw=;
-        b=KUyuvAjijrOCmHDeb4BOagQjogokx03FIOMwmWzVhjNvlH2/rkEJ9vKB5rzP7AqhJk
-         I3KAadGJOatUmpRtzzPBNISKf6PXMRbNSvwbMFDMt8OLC1CQDWMpiz2I8xSijKdt90g7
-         m8lWRz+aaFJ+yqnP47EkLcRKufPQHx9hL7ZeTCT53Hl52iLUhZqlTeHmz6Z+kC5MLpWZ
-         PiYigi1bxsSZI8SguJzjcE+d/RwZXP1/sS3FDxhjouPEBBLvYLhTB349gTCp2zIGMT8H
-         SQjufGq43YV3QogkohhBQx+J3DxdzTDgiIqqZoJDm6qRfdwNBIXN5UEKqLD8x94fce+f
-         +/dQ==
+        d=google.com; s=20230601; t=1708993747; x=1709598547; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ShKKi6TlgSxWUVIb93iZNgwwSea0qBzgXYFrAL077W8=;
+        b=g8EUuULom+3XOmcrPap6hK5iYmBa2nsLr0VBh8jOVLzJWYkEcx3lE06JI1M15Vxqh7
+         i/vXsdqzS9aK0EQVztcw9LA9o/9O1J5OQ2y3lsrowNrGXy1TbTatRet9dHp/ZaZGBmC9
+         oOClmakX7SCLamV0T+bSyVbnqRkjvAuNVkbp08SA1jLtrwfaYdw8QiHcMT2/vsvOpP5m
+         s+LB4zSrmohDmH6GGWxFpmdO2gZg+/fJQMOvJCdzKxDg1vH49b3jhVfaN9Ko9bzCGpgi
+         d+n9Lc+5mfvoRRzMayWL9MaTAknSm9jVgOuoJlbpQZmTJ3t+V3M0QKdcZj1doKS4hBYh
+         pxzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708990973; x=1709595773;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vfgvyT3McQFjbyFi2yOlB8GW53W4hlIR4nzJRu+A9Fw=;
-        b=RhUvbH503PpPM8Q96O+xhV++kdc03Ap43zphgRIK/MlVOHZx+kVvnWrUREq61x2sra
-         H97BHewDJ0EJWrQNxvDTbPSkdMvkUv98UchUyOhHchuBHfv2ur7i2Q6kOBp2Da5RsgHk
-         q7usfa3IBpt1PLe5EnAyJ+9c03DT/r+aIlI86yS9dp2aIZcF02tatH/hNKTA7DO2Aank
-         QezFyIRDACsCjaT211pXwKv5QZFlciE9Psj/MhchPy0L03LyYWzkbXDOdlKO9uoJVJz8
-         hanOTtRucYNiizXlokszCbJpekqptlBRK7nLXB8du7aJrsEQWHOsxuJrVU8ziU8csTCC
-         FQHA==
-X-Forwarded-Encrypted: i=1; AJvYcCX7yazVrjwyvuQJ38C+w4Gc8F2PQShAJcKdGf0yiC5TAI/CikToa4LssWvoGJ7zFIb/3MMkWCSmsqGuwVRecDVtJKz+mkZbtc9z
-X-Gm-Message-State: AOJu0YxHmMimMujXuHRJ83Y7gt/1Xy4Psi64DTInkIzBb49QN/2tPqYM
-	XoCKwRBExA1E3/b/zAeREJ7aEQRgS3w3nEao9sDtLvS0xjXu4lEA5o2jNdDVmyXNZ8xEi4Rv+hC
-	5EOzKMJJEKGZ7ug==
-X-Google-Smtp-Source: AGHT+IEyZTVFkgm70LFK0GBHxb5VVbTY8nIkrEL6/h6HTvZiPIlhwJSjyLHv4XJhkcQG2yJrgxGsBbLwsi6VXm0=
-X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
- (user=rdbabiera job=sendgmr) by 2002:a17:903:410b:b0:1db:f7e5:afd2 with SMTP
- id r11-20020a170903410b00b001dbf7e5afd2mr324688pld.12.1708990973145; Mon, 26
- Feb 2024 15:42:53 -0800 (PST)
-Date: Mon, 26 Feb 2024 23:42:29 +0000
+        d=1e100.net; s=20230601; t=1708993747; x=1709598547;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ShKKi6TlgSxWUVIb93iZNgwwSea0qBzgXYFrAL077W8=;
+        b=dOEUQnkrGEp6g2S9TW+F+I5GJDyjgU7TXVC/w7iK7wnzbV2G0vHjFFWw5XDwhYFjCU
+         xpOzCj6/UgtxCUmH6/b3X3OriL3K80XhafsKVIflzNuHoOdtoogi+ifbPNC5lYn1XFh3
+         Rir7uuC4kJZfe1mi8eSEUa3idlKibPErtmxwGrTOTPue6COGUgqDsYgKOTqIw5UAOrGM
+         5Ay9VXU5r+nJASQQaLT8vfOGbdntJkWsc7f2yC0q3TZHooYQ7T364mR30ifuczWpwFwX
+         Ve9MBXbhx+C/xNs5kJryfL0oNysNRnaosCFdsE3+A0w6PmWbHDA0CeBCZnhvPIti6GCy
+         Nqeg==
+X-Forwarded-Encrypted: i=1; AJvYcCUYJ7xRsJPbIYbD9hdnzivC+s1TkEasVhSnNnyS5njWd7zy1GOFkTlRs8PI70WPYvpJ83+Ebxp9Mxt/cd5sydZu15RkGVzpTjyc
+X-Gm-Message-State: AOJu0Yy080H7ZNbswQ52cFyGs/D1PgbeHxO7k6LGiJ+stdRjFMHYGhn5
+	6oEJmh9Gf0APq2W7Ldo4PlLID1uQFXl1/iolRgarS8TChF8OljSVMbzwzptgrMjKdBlxorwgzoi
+	pNZcq/ayW5iDMVAeRWQTNoIKPuJm/AGrczhrY
+X-Google-Smtp-Source: AGHT+IEHBIxVsYsqqx1KNVOvqC0cQcgpUH2DaF+E/L7XUVB3GgMGSN5f+p6Y+/0OBfhDM1iBRyndhoFvC+Yz2LrOIZg=
+X-Received: by 2002:a05:600c:a3a3:b0:412:9829:2dd5 with SMTP id
+ hn35-20020a05600ca3a300b0041298292dd5mr46040wmb.7.1708993746739; Mon, 26 Feb
+ 2024 16:29:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1719; i=rdbabiera@google.com;
- h=from:subject; bh=5kYeIFVo2xR1oxYSbdUq98xOTZBkvlA2zXrP0sPUMtw=;
- b=owGbwMvMwCFW0bfok0KS4TbG02pJDKl3FZ/ULxGdr8xuuKPE/pdU9tnNxT7/l5/PsViUxfhyY
- rqZYENsRykLgxgHg6yYIouuf57BjSupW+Zw1hjDzGFlAhnCwMUpABNZe5Dhf+6culvXpuycd/aG
- 1/evWYVK35ef+sCvNJ2Nz4s1U9aQUZThf8x2v1OtilMZfm29z7HsgaXQjlcWzAf5gu7zVMU++6T JywQA
-X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
-Message-ID: <20240226234228.1768725-2-rdbabiera@google.com>
-Subject: [PATCH v2] usb: typec: altmodes/displayport: create sysfs nodes after
- assigning driver data
-From: RD Babiera <rdbabiera@google.com>
-To: rdbabiera@google.com, heikki.krogerus@linux.intel.com, 
-	gregkh@linuxfoundation.org
-Cc: badhri@google.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
+MIME-Version: 1.0
+References: <20240223010328.2826774-1-jthies@google.com> <CAA8EJpqwAg-qenTq3MZCb74rn8rRaMxrsnmZGMwff+ABGENEGg@mail.gmail.com>
+In-Reply-To: <CAA8EJpqwAg-qenTq3MZCb74rn8rRaMxrsnmZGMwff+ABGENEGg@mail.gmail.com>
+From: Jameson Thies <jthies@google.com>
+Date: Mon, 26 Feb 2024 16:28:54 -0800
+Message-ID: <CAMFSARfs4x2+rkdk_Ns4dSbKUZ_YbAvjsxUa+395b+wLwrNzPA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] usb: typec: ucsi: Expand SOP/SOP' Discovery
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
+	pmalani@chromium.org, bleung@google.com, abhishekpandit@chromium.org, 
+	andersson@kernel.org, fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org, 
+	hdegoede@redhat.com, neil.armstrong@linaro.org, rajaram.regupathy@intel.com, 
+	saranya.gopal@intel.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-The DisplayPort driver's sysfs nodes may be present to the userspace before
-typec_altmode_set_drvdata() completes in dp_altmode_probe. This means that
-a sysfs read can trigger a NULL pointer error by deferencing dp->hpd in
-hpd_show or dp->lock in pin_assignment_show, as dev_get_drvdata() returns
-NULL in those cases.
+> First and the most obvious comment: 6.6 is four months old. I see that
+> your base commit is the usb-testing tip, however you declare that you
+> tested only on 6.6. Now I'm confused. Did you test your patches on top
+> of usb-testing before sending them?
 
-Create sysfs nodes after typec_altmode_set_drvdata call.
-
-Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
-Cc: stable@vger.kernel.org
-Signed-off-by: RD Babiera <rdbabiera@google.com>
----
-Changes from v1:
-* Moved sysfs node creation instead of NULL checking dev_get_drvdata().
----
- drivers/usb/typec/altmodes/displayport.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-index 5a80776c7255..5bbdd2c04237 100644
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -731,10 +731,6 @@ int dp_altmode_probe(struct typec_altmode *alt)
- 	      DP_CAP_PIN_ASSIGN_DFP_D(alt->vdo)))
- 		return -ENODEV;
- 
--	ret = sysfs_create_group(&alt->dev.kobj, &dp_altmode_group);
--	if (ret)
--		return ret;
--
- 	dp = devm_kzalloc(&alt->dev, sizeof(*dp), GFP_KERNEL);
- 	if (!dp)
- 		return -ENOMEM;
-@@ -766,6 +762,10 @@ int dp_altmode_probe(struct typec_altmode *alt)
- 	if (plug)
- 		typec_altmode_set_drvdata(plug, dp);
- 
-+	ret = sysfs_create_group(&alt->dev.kobj, &dp_altmode_group);
-+	if (ret)
-+		return ret;
-+
- 	dp->state = plug ? DP_STATE_ENTER_PRIME : DP_STATE_ENTER;
- 	schedule_work(&dp->work);
- 
-
-base-commit: a560a5672826fc1e057068bda93b3d4c98d037a2
--- 
-2.44.0.rc1.240.g4c46232300-goog
-
+Hi Dmitry, sorry for the confusion. I tested this on a v6.6 kernel build
+with a few dependent commits cherry-picked to it. I'll re-validate the
+series on top of usb-testing.
 
