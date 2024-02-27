@@ -1,123 +1,147 @@
-Return-Path: <linux-usb+bounces-7147-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7148-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E533869DFC
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 18:40:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F199D869E63
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 18:56:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 922A7B2E7A7
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 17:28:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABB2728CEB0
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 17:56:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 702FC14939C;
-	Tue, 27 Feb 2024 17:23:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8EC914AD2D;
+	Tue, 27 Feb 2024 17:55:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SUvVlJzc";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="UlmowWHr"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="chESIHFZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902FA14830F;
-	Tue, 27 Feb 2024 17:23:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F1C14AD08
+	for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 17:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709054635; cv=none; b=qQsAvIfCIpHFfpQ9Z4D5/Ron2BKDEqxMun+mEjvuwEtDcWtvJjhrfCu4z0aIQo6adl9uW9qNUg2yrYLz0cS7yw1bf53F8wSLxU5g1idUm8SYBDZHwaYkDfdlVbcjeOGR+VvO+Mr+pC9joC3AHjIe/xN19tYi1x0GkzmqwBhmCSQ=
+	t=1709056512; cv=none; b=qCpynCCnfnJZgdHzqfNYjEliRrVyFqJvfqSpQsl7ggCto9jAsLamJemThDgdREbkn1dGqxszm3BSt8V6hPsKBWFwAdlUNwtaWIbrJpQNFsrg7pCQyQr4QAUFrLbPe71AIk7sIjdmEC29exXlcdgtevk9uJC2/nCVp0J6i9VpXyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709054635; c=relaxed/simple;
-	bh=xlZyVCMWEBnGE08Ta5ctgjEj5TmCCEbtRLDLkzlk01o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=V4TRKJltlN+0hdyzyAEdQfwZduo8E9O6JUEbI0UwuIvHcooYX5KdWPhNd5+fRSjS44leH6MRExSTqaGG7r3aHJsZFl73PLggZ2v8h9CzAAEOEGx/y353rwsiSVC0iYgphGKwBqFrsSOlBzmtEX43bEfDuwXa4Faow3PRMmWbFwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SUvVlJzc; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=UlmowWHr; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1709054632;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rTtdD3Xrcr26050qG/wJhYNywK18VvSVk9OIhhpRR5U=;
-	b=SUvVlJzcuaVjWbGSnWliEzygA3VxbmZ0H4NCvZ/rAZLBfErplr0sn7Jr3snH8lkQ0xqa8w
-	6IbOmh8InLS8dLpo0QjO2O0PIKuuzX4C3qUE3EU31jwHLQwD5pFB4DBNJmCxtT3fEOf9Cp
-	DJaSWMW8HlAP8ytXJioapKPuHQkoa1A8Gui/VIkge0XKV1SQNFg/pMh7UfpDbvoOlokI56
-	wz5+oPh6eqvggEt1SchfB5TiKC2l7JTErf7k6b0rA9cYHRbD9wLC7KEeQ1Oj9+rBirKf/I
-	cVJZ+44B6wFMYPyzb92qPHTxJlQIkZdHYYqbC5qWmSJAdGRBzw2ggVbAb3kHbg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1709054632;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rTtdD3Xrcr26050qG/wJhYNywK18VvSVk9OIhhpRR5U=;
-	b=UlmowWHraF9oHUzTRAnyGgarSO+vqPI8Xl6VoKziX0/l+ZfNBqgcsQDmPcA8PEISLLhYJZ
-	G8kvs+J8SdcNzxCA==
-To: mikhail.v.gavrilov@gmail.com, Mathias Nyman
- <mathias.nyman@linux.intel.com>, Linux regressions mailing list
- <regressions@lists.linux.dev>
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com,
- Linux List Kernel Mailing <linux-kernel@vger.kernel.org>, Greg KH
- <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, x86@kernel.org,
- netdev@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: This is the fourth time I've tried to find what led to the
- regression of outgoing network speed and each time I find the merge commit
- 8c94ccc7cd691472461448f98e2372c75849406c
-In-Reply-To: <098670097a6fd59f3e254c5294882f3fa12e3c65.camel@gmail.com>
-References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
- <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com>
- <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
- <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com>
- <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
- <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com>
- <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
- <a026ecd8-6fba-017d-d673-0d0759a37ed8@linux.intel.com>
- <CABXGCsOgy8H4GGcNU1jRE+SzRqwnPeNuy_3xBukjwB-bPxeZrQ@mail.gmail.com>
- <CABXGCsOd=E428ixUOw+msRpnaubgx5-cVU7TDXwRUCdrM5Oicw@mail.gmail.com>
- <34d7ab1b-ab12-489d-a480-5e6ccc41bfc3@infradead.org>
- <10487018-49b8-4b27-98a1-07cee732290d@infradead.org>
- <4f34b6a8-4415-6ea4-8090-262847d606c6@linux.intel.com>
- <3ea25443-1275-4c67-90e0-b637212d32b5@leemhuis.info>
- <1e719367-01ae-565a-2199-0ff7e260422b@linux.intel.com>
- <410817b8-1cf9-4285-b20b-f1fa0513cee8@leemhuis.info>
- <acc2b877-4b42-fd4d-867b-603dae95d09d@linux.intel.com>
- <87r0gz9jxp.ffs@tglx>
- <098670097a6fd59f3e254c5294882f3fa12e3c65.camel@gmail.com>
-Date: Tue, 27 Feb 2024 18:23:51 +0100
-Message-ID: <87y1b595y0.ffs@tglx>
+	s=arc-20240116; t=1709056512; c=relaxed/simple;
+	bh=4mxpcwtJGmPAx0hGuHiSF19sttpDcfgAzEqkq+js9w0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hXP3bb/i53kTpm9zUb8/QzKyhbSGKh+KsWEIjWxUep+MThYxaU4OdwZF4eXleqyT3W4vx2ehFMv5hHf0EVrm6p41Gp2Sp2b5DFT2C2PY2sXoj9CJ3wVS9jvkRU07q5SyLjqpkMuDMyXAsibE+Cn7c9r3OSvn7MSDg6C1tvZpm6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=chESIHFZ; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-7bc332d3a8cso309792739f.2
+        for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 09:55:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1709056509; x=1709661309; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0z6oy3tLEwRGgu8/omrsseYREQZqlDjlucfwbridRR4=;
+        b=chESIHFZopoekdXZAIn5yr8L36LqKiRAzMmBw0JBzQdug/CTAodhBYAHHvD7wNUm7O
+         yo4UCYJAOc4GbOcIf/OFhVNYZ5ssaZkAGjeQcVoSFwmTwDttR51c8WWCh5ULH12ghuGq
+         2UZsNyck+l4Ae2E9kGCporZr2CKI+1eDAI/b8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709056509; x=1709661309;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0z6oy3tLEwRGgu8/omrsseYREQZqlDjlucfwbridRR4=;
+        b=sLzmW0C2jKlaWuiq1px2Pslcf+Ho/UNfmwUKwbnE0iYrkl82mA72eLAtOlPzVx/2FP
+         jtAS81iDQA03Z5RQa39WHQ38f7lyaBRpu1sFUQKSIY1U6J8iBBFVum+6b5ww1MsKSiL1
+         NTupYRYHx3zuwrrF2vBxpY4ZtM+tIdYuYlX/AzA6ytD+uBjuI4px2GaUo/G+184setbX
+         gHBw/oeLoA6WxFhjP/XxVk3lxU82p4hYaTyxrOrZS7ScjWNtvW0aNX0b8SfmSmI4X42l
+         zEXtTOyjkMaRl96gwQrx+hJIXeEkWQz2tJ+VViaVmw+h/FEETqYOY0Zi8EdcXSi6biwS
+         jYfA==
+X-Forwarded-Encrypted: i=1; AJvYcCVmLQ/s7ue/aL8tBMytYF2qMM6Gyx8AV1/NWCvmNzJCGylu4GpqfZ4NgtE5Upkrn+ApyCSbPgFkc1p+k3liHRvMQT277wa9EVk+
+X-Gm-Message-State: AOJu0YwSLNLppR+eicqQcVQa/VPWgcZWKkw4JXTM1xBvNgEPkFWFqbv5
+	BVSrhRh/2nCQQ98kWY8YcM9tuDcAaN8HyFVRwKuMUVPNrIqUsxSnPYJ54as9aQ==
+X-Google-Smtp-Source: AGHT+IE99IEm1bwDJq2IEwn8DzuSvhEObNZduooC8XEtgQeAr6li7TB9E5Onf6yMe4pPR4UCVj/fTw==
+X-Received: by 2002:a5e:c007:0:b0:7c7:9184:df98 with SMTP id u7-20020a5ec007000000b007c79184df98mr13293582iol.12.1709056509170;
+        Tue, 27 Feb 2024 09:55:09 -0800 (PST)
+Received: from localhost (147.220.222.35.bc.googleusercontent.com. [35.222.220.147])
+        by smtp.gmail.com with UTF8SMTPSA id u14-20020a02b1ce000000b0047464deaba5sm1816183jah.114.2024.02.27.09.55.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Feb 2024 09:55:08 -0800 (PST)
+Date: Tue, 27 Feb 2024 17:55:07 +0000
+From: Matthias Kaehlcke <mka@chromium.org>
+To: Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Helen Koike <helen.koike@collabora.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Russell King <linux@armlinux.org.uk>,
+	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 2/8] usb: misc: onboard_dev: add support for non-hub
+ devices
+Message-ID: <Zd4h-4Nm0Kl-7mqp@google.com>
+References: <20240220-onboard_xvf3500-v4-0-dc1617cc5dd4@wolfvision.net>
+ <20240220-onboard_xvf3500-v4-2-dc1617cc5dd4@wolfvision.net>
+ <ZdZN3FIS4zcKe4Kw@google.com>
+ <174ce57a-3197-4251-831f-205ec5cfeae9@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <174ce57a-3197-4251-831f-205ec5cfeae9@wolfvision.net>
 
-On Tue, Feb 27 2024 at 22:08, mikhail.v.gavrilov@gmail.com wrote:
-> On Mon, 2024-02-26 at 19:09 +0100, Thomas Gleixner wrote:
->> we don't have any information about the overall workload,
->
-> During measurements nothing was running except iperf3
+On Thu, Feb 22, 2024 at 03:42:26PM +0100, Javier Carrasco wrote:
+> On 21.02.24 20:24, Matthias Kaehlcke wrote:
+> > On Tue, Feb 20, 2024 at 03:05:46PM +0100, Javier Carrasco wrote:
+> >> Most of the functionality this driver provides can be used by non-hub
+> >> devices as well.
+> >>
+> >> To account for the hub-specific code, add a flag to the device data
+> >> structure and check its value for hub-specific code.
+> > 
+> > Please mention that the driver doesn't power off non-hub devices
+> > during system suspend.
+> > 
+> >> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+> >> ---
+> >>  drivers/usb/misc/onboard_usb_dev.c |  3 ++-
+> >>  drivers/usb/misc/onboard_usb_dev.h | 10 ++++++++++
+> >>  2 files changed, 12 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
+> >> index 2103af2cb2a6..f43130a6786f 100644
+> >> --- a/drivers/usb/misc/onboard_usb_dev.c
+> >> +++ b/drivers/usb/misc/onboard_usb_dev.c
+> >> @@ -129,7 +129,8 @@ static int __maybe_unused onboard_dev_suspend(struct device *dev)
+> >>  		if (!device_may_wakeup(node->udev->bus->controller))
+> >>  			continue;
+> >>  
+> >> -		if (usb_wakeup_enabled_descendants(node->udev)) {
+> >> +		if (usb_wakeup_enabled_descendants(node->udev) ||
+> >> +		    !onboard_dev->pdata->is_hub) {
+> > 
+> > 
+> > This check isn't dependent on characteristics of the USB devices processed
+> > in this loop, therefore it can be performed at function entry. Please combine
+> > it with the check of 'always_powered_in_suspend'. It's also an option to
+> > omit the check completely, 'always_powered_in_suspend' will never be set for
+> > non-hub devices (assuming the sysfs attribute isn't added).
+> > 
+> 
+> The attribute will not be available for non-hub devices in v5. However,
+> if the check is completely removed, will power_off not stay true at the
+> end of the function, always leading to a device power off? As you said,
+> 'always_powered_in_suspend' will not be set for non-hub devices.
 
-Ok.
-
-> I don't know how else to help you. What information to provide.
-
-If we want to understand why CPU0 is problematic, then you need to use
-tracing to capture what's going on on CPU0 vs. other CPUs.
-
-> About repeatability my "unlucky" scenario.
-> I have two MSI MPG B650I EDGE WIFI motherboards and this problem
-> happened both at the same time.
-
-Sure. The probe order and the number of interrupts are probably exactly
-the same. As the spreading algorithm is very basic, it will result in
-exactly the same setup for both.
-
-> It seems the problem has always been there, we just never noticed it.
-
-Exactly.
-
-Thanks,
-
-        tglx
+Even without the sysfs attribute the field 'always_powered_in_suspend' could
+be set to true by probe() for non-hub devices.
 
