@@ -1,237 +1,321 @@
-Return-Path: <linux-usb+bounces-7122-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7123-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D3848685EB
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 02:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5264F8686EE
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 03:24:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A50FF28B247
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 01:32:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 080A42911D4
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 02:24:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B02265BC1;
-	Tue, 27 Feb 2024 01:30:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 379164D112;
+	Tue, 27 Feb 2024 02:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="xccAaaeC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GqJPDtjY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 764B55F843;
-	Tue, 27 Feb 2024 01:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F43F45035
+	for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 02:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708997412; cv=none; b=uoCJtB5K5SwaLnimoRlpVDdVRrUIc2uVR3MKmq/8zzbkexnmv7MBCxRHJiBrqMG1riTPw58OCT+7xzwSnpmhxtFab+dnOKkw7LWSBnPyXVJjYH+jbHvF5t1B9TfHE4KS/lXMswCM7T64GAL7hqbDeS+EQzwXt23h8Xang78dUv4=
+	t=1709000622; cv=none; b=kvGS76w5yMmX6tXlbuzL9Xr5+2lZ13g0f5zmGBscK+5KPsXdyFz1txrh9Xh228ywy2mkqjb2togCcuCIUi6eFtG3vkC9uZjnB5ipsrjDb9Z5Vc3+VuDvhnEwAiIyAWAFbXP0XqBu2r5rxU3F4SqEI5dSlJeUZxhyCcVl/BDIHUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708997412; c=relaxed/simple;
-	bh=5UVxVNfHiA0++FWexHxcJ07Y9z6b+yzUVmqRkNhmezY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NH6tBWhV7blrz9QZyRBK0+AvKhgQ9RathZH3L+Inhl9S1+OGEzcyTPb+KGWZURqqlY3aW8vtkdHywLCDpz7634wyP4uLceKYarqe+Z438BSL4MJduTxghjA32P8ijRz0TFjIAojDA7jwOx2iBIs73YhkorYmtPEVqAUZFqBvTeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=xccAaaeC; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-	In-Reply-To:References; bh=dlWosYEl5DyVPkmkUpp8E4kMoFve7mS4xHfsaci4cI8=; b=xc
-	cAaaeCdh07Px5HbStQedb4PTTG0L3o0cTpgvkNkCkWt5tqK9DH8WQ9AMR4J9UdXrUI7nVu/Kfg9pH
-	IjVRy+CROR5iilXz5c4gbPqh7pts1daXGcIyGng0BdsK80Eup3DlCfWitSG8omYMMPRlUqpCHWoZF
-	shFPzEhNSdgl64I=;
-Received: from c-76-156-36-110.hsd1.mn.comcast.net ([76.156.36.110] helo=thinkpad.home.lunn.ch)
-	by vps0.lunn.ch with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1remIW-008mef-FC; Tue, 27 Feb 2024 02:30:20 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-Date: Mon, 26 Feb 2024 19:29:15 -0600
-Subject: [PATCH net-next v5 9/9] net: ethtool: eee: Remove legacy _u32 from
- keee
+	s=arc-20240116; t=1709000622; c=relaxed/simple;
+	bh=BaeGKqgnryyDWdfZuaOG3cz5j2TkmIcWk8NttR4/mDo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=TlbnrrqSgR5GL5+Nkb/sYTggxr/UYYUw8D8QLQZl58Vw8mFM6MSdHYRjHh46KlZPA0Bav1EHe1S+zumhhH+pKHLJtEsDRhKwGcnPhSnsIt80Yw6WbTKBY61T4gM/gnhBX+V1Yko8xn0Z5YcTTHccb1Skge9ob7dyhUTUMcR+Hes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GqJPDtjY; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709000621; x=1740536621;
+  h=date:from:to:cc:subject:message-id;
+  bh=BaeGKqgnryyDWdfZuaOG3cz5j2TkmIcWk8NttR4/mDo=;
+  b=GqJPDtjYhGnAp0tNSts3S5XV+dowEQHnlCFiRTdluri0Dm6WbSO5eUhV
+   ppWtss3IsX7ErW0q/9ozGvgbylm4mXzb7iPF6IJOL7W5xPwqrmE3vXLyO
+   tZxbGq3HryNfxAr61UjHgfVXSCxiJn3T5NfVsGh6DMMjOhDwfXZtorLso
+   62ZXFAaDiZq58mSfNtjdOSAtLmnw3iWxFgop04wz4qNw6uVpWPO+8PBg3
+   1pGd//1TlDtNjuSW5ex6hnDWZNiHD9LSsFiKqBa5xwe/kgD+VPgzF+Mr2
+   gpFbDy1k7niPXuLwrOobPpWx5AC2Lr8B9Ne6avZsRaVhaCGq4NAWmCsNf
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="3247547"
+X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
+   d="scan'208";a="3247547"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 18:23:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
+   d="scan'208";a="6810970"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 26 Feb 2024 18:23:38 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ren84-000ArJ-15;
+	Tue, 27 Feb 2024 02:23:36 +0000
+Date: Tue, 27 Feb 2024 10:23:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:gadget_char] BUILD SUCCESS
+ 313cfa3be59873841a26a8caa8dd408515c197d4
+Message-ID: <202402271028.EMSfN9NR-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240226-keee-u32-cleanup-v5-9-9e7323c41c38@lunn.ch>
-References: <20240226-keee-u32-cleanup-v5-0-9e7323c41c38@lunn.ch>
-In-Reply-To: <20240226-keee-u32-cleanup-v5-0-9e7323c41c38@lunn.ch>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Ariel Elior <aelior@marvell.com>, 
- Manish Chopra <manishc@marvell.com>, 
- Jesse Brandeburg <jesse.brandeburg@intel.com>, 
- Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc: linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
- Andrew Lunn <andrew@lunn.ch>, Simon Horman <horms@kernel.org>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5173; i=andrew@lunn.ch;
- h=from:subject:message-id; bh=5UVxVNfHiA0++FWexHxcJ07Y9z6b+yzUVmqRkNhmezY=;
- b=owEBbQKS/ZANAwAKAea/DcumaUyEAcsmYgBl3Tr4u9xn6AoQC66Hw8FvhwDiyA1JzuD/uIEMl
- T6hs8CDA0KJAjMEAAEKAB0WIQRh+xAly1MmORb54bfmvw3LpmlMhAUCZd06+AAKCRDmvw3LpmlM
- hFuDEADbMV10f0w4q9NW0+WK26n/0hTfAoyDi/htQNBEKponnUa4QypgvPzSfIT1oPDh19yO/nO
- leKwKU1jwbE9s780IEK5P8M33KFH5CeOBjqhprOHSOXS0iBagJxqSXiiOEzIShVfmy0bRLbZUvk
- +GljhQT0V4xg58w9dXtAHzSRQ/Nuv/vXGgd91W89Xh0FWPKzOoan6EPV4i25P9+igWdU9XmhjPF
- NDi6YblkxXOcgsjh4sj0bjNqVvgRirx9xy3k9HqnBgKzE0npnA8i8Q2Fyprt69rhBYj00nV7Rao
- fqsCnJ0BICOuscvsFl+rj0XjbdNZywuEkyzM6Dd1pp+axOi137qns5B2RWa4JKbhhrjgzDEnj96
- 88VjENswrrWLfaAfSJ1qc6FXkG4YeDu7yebMkRVGuZs/jNtygFp83GQ8+4A0cK8GqnT5ota4nPI
- hptVwiJCfxHCnrwZJZ1qZNgdcOu0bekBbZ+ApKewohNnD7FFOvX01idFmWs7CoyjFqpPq0TPP2s
- Fy7FDTaKH1ZOKFYbKxCsKj4GyzYPsmNT9Cm+i5g5Hc13XEuZwnnu0vWPO/65msXs8o385O6NIW1
- i48imSV8YhsMv0dQixVsizfxAfyP356zTagy7NZwQsGtTsfc5Uv5Z7giMz7e2wtbe2AmLyUOt7y
- fvAeLKL9XucDPIA==
-X-Developer-Key: i=andrew@lunn.ch; a=openpgp;
- fpr=61FB1025CB53263916F9E1B7E6BF0DCBA6694C84
 
-All MAC drivers have been converted to use the link mode members of
-keee. So remove the _u32 values, and the code in the ethtool core to
-convert the legacy _u32 values to link modes.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git gadget_char
+branch HEAD: 313cfa3be59873841a26a8caa8dd408515c197d4  USB: gadget: dummy_hcd: switch char * to u8 *
 
-Reviewed-by: Simon Horman <horms@kernel.org>
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
----
- include/linux/ethtool.h |  3 ---
- net/ethtool/eee.c       | 31 ++++---------------------------
- net/ethtool/ioctl.c     | 29 ++++++++++-------------------
- 3 files changed, 14 insertions(+), 49 deletions(-)
+elapsed time: 1221m
 
-diff --git a/include/linux/ethtool.h b/include/linux/ethtool.h
-index b90c33607594..9901e563f706 100644
---- a/include/linux/ethtool.h
-+++ b/include/linux/ethtool.h
-@@ -226,9 +226,6 @@ struct ethtool_keee {
- 	__ETHTOOL_DECLARE_LINK_MODE_MASK(supported);
- 	__ETHTOOL_DECLARE_LINK_MODE_MASK(advertised);
- 	__ETHTOOL_DECLARE_LINK_MODE_MASK(lp_advertised);
--	u32	supported_u32;
--	u32	advertised_u32;
--	u32	lp_advertised_u32;
- 	u32	tx_lpi_timer;
- 	bool	tx_lpi_enabled;
- 	bool	eee_active;
-diff --git a/net/ethtool/eee.c b/net/ethtool/eee.c
-index db6faa18fe41..bf398973eb8a 100644
---- a/net/ethtool/eee.c
-+++ b/net/ethtool/eee.c
-@@ -4,9 +4,6 @@
- #include "common.h"
- #include "bitset.h"
- 
--#define EEE_MODES_COUNT \
--	(sizeof_field(struct ethtool_keee, supported_u32) * BITS_PER_BYTE)
--
- struct eee_req_info {
- 	struct ethnl_req_info		base;
- };
-@@ -41,15 +38,6 @@ static int eee_prepare_data(const struct ethnl_req_info *req_base,
- 	ret = dev->ethtool_ops->get_eee(dev, eee);
- 	ethnl_ops_complete(dev);
- 
--	if (!ret && !ethtool_eee_use_linkmodes(eee)) {
--		ethtool_convert_legacy_u32_to_link_mode(eee->supported,
--							eee->supported_u32);
--		ethtool_convert_legacy_u32_to_link_mode(eee->advertised,
--							eee->advertised_u32);
--		ethtool_convert_legacy_u32_to_link_mode(eee->lp_advertised,
--							eee->lp_advertised_u32);
--	}
--
- 	return ret;
- }
- 
-@@ -62,11 +50,6 @@ static int eee_reply_size(const struct ethnl_req_info *req_base,
- 	int len = 0;
- 	int ret;
- 
--	BUILD_BUG_ON(sizeof(eee->advertised_u32) * BITS_PER_BYTE !=
--		     EEE_MODES_COUNT);
--	BUILD_BUG_ON(sizeof(eee->lp_advertised_u32) * BITS_PER_BYTE !=
--		     EEE_MODES_COUNT);
--
- 	/* MODES_OURS */
- 	ret = ethnl_bitset_size(eee->advertised, eee->supported,
- 				__ETHTOOL_LINK_MODE_MASK_NBITS,
-@@ -154,16 +137,10 @@ ethnl_set_eee(struct ethnl_req_info *req_info, struct genl_info *info)
- 	if (ret < 0)
- 		return ret;
- 
--	if (ethtool_eee_use_linkmodes(&eee)) {
--		ret = ethnl_update_bitset(eee.advertised,
--					  __ETHTOOL_LINK_MODE_MASK_NBITS,
--					  tb[ETHTOOL_A_EEE_MODES_OURS],
--					  link_mode_names, info->extack, &mod);
--	} else {
--		ret = ethnl_update_bitset32(&eee.advertised_u32, EEE_MODES_COUNT,
--					    tb[ETHTOOL_A_EEE_MODES_OURS],
--					    link_mode_names, info->extack, &mod);
--	}
-+	ret = ethnl_update_bitset(eee.advertised,
-+				  __ETHTOOL_LINK_MODE_MASK_NBITS,
-+				  tb[ETHTOOL_A_EEE_MODES_OURS],
-+				  link_mode_names, info->extack, &mod);
- 	if (ret < 0)
- 		return ret;
- 	ethnl_update_bool(&eee.eee_enabled, tb[ETHTOOL_A_EEE_ENABLED], &mod);
-diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-index b419969c0dcb..317308bdbda9 100644
---- a/net/ethtool/ioctl.c
-+++ b/net/ethtool/ioctl.c
-@@ -1514,9 +1514,6 @@ static void eee_to_keee(struct ethtool_keee *keee,
- {
- 	memset(keee, 0, sizeof(*keee));
- 
--	keee->supported_u32 = eee->supported;
--	keee->advertised_u32 = eee->advertised;
--	keee->lp_advertised_u32 = eee->lp_advertised;
- 	keee->eee_active = eee->eee_active;
- 	keee->eee_enabled = eee->eee_enabled;
- 	keee->tx_lpi_enabled = eee->tx_lpi_enabled;
-@@ -1533,6 +1530,8 @@ static void eee_to_keee(struct ethtool_keee *keee,
- static void keee_to_eee(struct ethtool_eee *eee,
- 			const struct ethtool_keee *keee)
- {
-+	bool overflow;
-+
- 	memset(eee, 0, sizeof(*eee));
- 
- 	eee->eee_active = keee->eee_active;
-@@ -1540,22 +1539,14 @@ static void keee_to_eee(struct ethtool_eee *eee,
- 	eee->tx_lpi_enabled = keee->tx_lpi_enabled;
- 	eee->tx_lpi_timer = keee->tx_lpi_timer;
- 
--	if (ethtool_eee_use_linkmodes(keee)) {
--		bool overflow;
--
--		overflow = !ethtool_convert_link_mode_to_legacy_u32(&eee->supported,
--								    keee->supported);
--		ethtool_convert_link_mode_to_legacy_u32(&eee->advertised,
--							keee->advertised);
--		ethtool_convert_link_mode_to_legacy_u32(&eee->lp_advertised,
--							keee->lp_advertised);
--		if (overflow)
--			pr_warn("Ethtool ioctl interface doesn't support passing EEE linkmodes beyond bit 32\n");
--	} else {
--		eee->supported = keee->supported_u32;
--		eee->advertised = keee->advertised_u32;
--		eee->lp_advertised = keee->lp_advertised_u32;
--	}
-+	overflow = !ethtool_convert_link_mode_to_legacy_u32(&eee->supported,
-+							    keee->supported);
-+	ethtool_convert_link_mode_to_legacy_u32(&eee->advertised,
-+						keee->advertised);
-+	ethtool_convert_link_mode_to_legacy_u32(&eee->lp_advertised,
-+						keee->lp_advertised);
-+	if (overflow)
-+		pr_warn("Ethtool ioctl interface doesn't support passing EEE linkmodes beyond bit 32\n");
- }
- 
- static int ethtool_get_eee(struct net_device *dev, char __user *useraddr)
+configs tested: 232
+configs skipped: 4
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                          axs103_defconfig   gcc  
+arc                                 defconfig   gcc  
+arc                        nsim_700_defconfig   gcc  
+arc                   randconfig-001-20240226   gcc  
+arc                   randconfig-001-20240227   gcc  
+arc                   randconfig-002-20240226   gcc  
+arc                   randconfig-002-20240227   gcc  
+arc                    vdk_hs38_smp_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                          collie_defconfig   gcc  
+arm                                 defconfig   clang
+arm                        keystone_defconfig   gcc  
+arm                        multi_v7_defconfig   gcc  
+arm                          pxa910_defconfig   gcc  
+arm                   randconfig-001-20240227   gcc  
+arm                   randconfig-002-20240227   gcc  
+arm                   randconfig-003-20240227   gcc  
+arm                   randconfig-004-20240226   gcc  
+arm                   randconfig-004-20240227   gcc  
+arm                         socfpga_defconfig   gcc  
+arm                           sunxi_defconfig   gcc  
+arm                           tegra_defconfig   gcc  
+arm                         wpcm450_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240226   gcc  
+arm64                 randconfig-002-20240226   gcc  
+arm64                 randconfig-002-20240227   gcc  
+arm64                 randconfig-003-20240226   gcc  
+arm64                 randconfig-003-20240227   gcc  
+arm64                 randconfig-004-20240227   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240226   gcc  
+csky                  randconfig-001-20240227   gcc  
+csky                  randconfig-002-20240226   gcc  
+csky                  randconfig-002-20240227   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240226   clang
+i386         buildonly-randconfig-001-20240227   gcc  
+i386         buildonly-randconfig-002-20240227   gcc  
+i386         buildonly-randconfig-003-20240226   clang
+i386         buildonly-randconfig-004-20240226   clang
+i386         buildonly-randconfig-004-20240227   gcc  
+i386         buildonly-randconfig-005-20240226   clang
+i386         buildonly-randconfig-005-20240227   gcc  
+i386         buildonly-randconfig-006-20240226   clang
+i386         buildonly-randconfig-006-20240227   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240226   clang
+i386                  randconfig-001-20240227   gcc  
+i386                  randconfig-002-20240227   gcc  
+i386                  randconfig-003-20240226   clang
+i386                  randconfig-005-20240226   clang
+i386                  randconfig-006-20240226   clang
+i386                  randconfig-006-20240227   gcc  
+i386                  randconfig-016-20240226   clang
+i386                  randconfig-016-20240227   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240226   gcc  
+loongarch             randconfig-001-20240227   gcc  
+loongarch             randconfig-002-20240226   gcc  
+loongarch             randconfig-002-20240227   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                          atari_defconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        stmark2_defconfig   gcc  
+m68k                           sun3_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                         cobalt_defconfig   gcc  
+mips                 decstation_r4k_defconfig   gcc  
+mips                      fuloong2e_defconfig   gcc  
+mips                    maltaup_xpa_defconfig   gcc  
+mips                           rs90_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240226   gcc  
+nios2                 randconfig-001-20240227   gcc  
+nios2                 randconfig-002-20240226   gcc  
+nios2                 randconfig-002-20240227   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc                    or1ksim_defconfig   gcc  
+parisc                           alldefconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240226   gcc  
+parisc                randconfig-001-20240227   gcc  
+parisc                randconfig-002-20240226   gcc  
+parisc                randconfig-002-20240227   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                        cell_defconfig   gcc  
+powerpc                      ep88xc_defconfig   gcc  
+powerpc                  iss476-smp_defconfig   gcc  
+powerpc                 mpc837x_rdb_defconfig   gcc  
+powerpc               randconfig-002-20240226   gcc  
+powerpc               randconfig-002-20240227   gcc  
+powerpc                     tqm5200_defconfig   gcc  
+powerpc64             randconfig-002-20240226   gcc  
+powerpc64             randconfig-002-20240227   gcc  
+powerpc64             randconfig-003-20240227   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240227   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240227   gcc  
+s390                  randconfig-002-20240226   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                          lboxre2_defconfig   gcc  
+sh                          polaris_defconfig   gcc  
+sh                    randconfig-001-20240226   gcc  
+sh                    randconfig-001-20240227   gcc  
+sh                    randconfig-002-20240226   gcc  
+sh                    randconfig-002-20240227   gcc  
+sh                           se7206_defconfig   gcc  
+sh                           se7343_defconfig   gcc  
+sh                           se7705_defconfig   gcc  
+sh                           se7722_defconfig   gcc  
+sh                             sh03_defconfig   gcc  
+sh                              ul2_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240226   gcc  
+sparc64               randconfig-001-20240227   gcc  
+sparc64               randconfig-002-20240226   gcc  
+sparc64               randconfig-002-20240227   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-002-20240226   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240226   clang
+x86_64       buildonly-randconfig-001-20240227   clang
+x86_64       buildonly-randconfig-002-20240226   gcc  
+x86_64       buildonly-randconfig-003-20240226   gcc  
+x86_64       buildonly-randconfig-003-20240227   clang
+x86_64       buildonly-randconfig-004-20240226   clang
+x86_64       buildonly-randconfig-004-20240227   clang
+x86_64       buildonly-randconfig-005-20240226   gcc  
+x86_64       buildonly-randconfig-005-20240227   clang
+x86_64       buildonly-randconfig-006-20240226   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240226   gcc  
+x86_64                randconfig-001-20240227   clang
+x86_64                randconfig-002-20240226   gcc  
+x86_64                randconfig-002-20240227   clang
+x86_64                randconfig-003-20240226   clang
+x86_64                randconfig-004-20240226   clang
+x86_64                randconfig-005-20240226   clang
+x86_64                randconfig-006-20240226   gcc  
+x86_64                randconfig-011-20240226   clang
+x86_64                randconfig-012-20240226   clang
+x86_64                randconfig-013-20240226   clang
+x86_64                randconfig-013-20240227   clang
+x86_64                randconfig-014-20240226   clang
+x86_64                randconfig-015-20240226   clang
+x86_64                randconfig-016-20240226   clang
+x86_64                randconfig-071-20240226   clang
+x86_64                randconfig-072-20240226   gcc  
+x86_64                randconfig-072-20240227   clang
+x86_64                randconfig-073-20240226   gcc  
+x86_64                randconfig-074-20240226   clang
+x86_64                randconfig-074-20240227   clang
+x86_64                randconfig-075-20240226   gcc  
+x86_64                randconfig-075-20240227   clang
+x86_64                randconfig-076-20240226   clang
+x86_64                randconfig-076-20240227   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
+xtensa                  cadence_csp_defconfig   gcc  
+xtensa                generic_kc705_defconfig   gcc  
+xtensa                          iss_defconfig   gcc  
+xtensa                randconfig-001-20240226   gcc  
+xtensa                randconfig-001-20240227   gcc  
+xtensa                randconfig-002-20240226   gcc  
+xtensa                randconfig-002-20240227   gcc  
 
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
