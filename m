@@ -1,339 +1,139 @@
-Return-Path: <linux-usb+bounces-7157-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7158-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12DB486A161
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 22:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A608D86A41A
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 00:59:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2F876B2E38E
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 21:02:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49DF4B27676
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 23:58:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F16714F966;
-	Tue, 27 Feb 2024 21:01:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4698656B79;
+	Tue, 27 Feb 2024 23:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rBWiEFmc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 791D314E2CB
-	for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 21:01:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5607855E48
+	for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 23:58:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709067699; cv=none; b=S86Viyfof3bxZAWBjAilios2pa35wQzqiU+IKcuWUB1Yc+K2kwKu4o7tavjnS81xzGZSgxvwzo3p7wvubMHp9NQPC+UKreHKU/kBncFIN3KKkuLfcZMfiqXeT0HDrmqt7Ytd9nbZK9XwRUawWNLg7S65dyOADNGYH2tcSZEixYw=
+	t=1709078320; cv=none; b=aIBGYbfM/rUPmAo7Z9R5XHvrmpiCLv/0dQ8HRCz2MZoIze10ggSRC+rm13f1WIl3p9aklVXpAo3IymBEkH6/AYX+EyoppYRaWIrFR0n/UKx/POUUOqBVcOSm82AyqfPhLb5GKP4WNpsWAWF5vkLfq/motCwLbUdEPUvsRfJckoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709067699; c=relaxed/simple;
-	bh=nCzgjMDm7SNoYMyvWumebey3yITUrDkfXAMvOb4CD1U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dyC8hSEBkkyLsA9as9if6vUZrHgWIVPwiKthI2EhRZKXp1wHMq+K/GKI2OTG3kmDQ/HHeAI8+f/M+kZg13zraP1t/YFVO7c09dWaDZKkh7E/sVGlOd/maow/Nt3fRmoiGnSELGozu6iCt4fidZdSQOCXrnQSQI6qBJTAhGKKMoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1rf4Zl-0006II-QH; Tue, 27 Feb 2024 22:01:21 +0100
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1rf4Zi-003Gpt-Fk; Tue, 27 Feb 2024 22:01:18 +0100
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1rf4Zi-00AhiH-1F;
-	Tue, 27 Feb 2024 22:01:18 +0100
-Date: Tue, 27 Feb 2024 22:01:18 +0100
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Dan Vacura <w36195@motorola.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Jeff Vanhoof <qjv001@motorola.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	Paul Elder <paul.elder@ideasonboard.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v3 2/6] usb: dwc3: gadget: cancel requests instead of
- release after missed isoc
-Message-ID: <Zd5Nns91uXvTOAwd@pengutronix.de>
-References: <20221017205446.523796-1-w36195@motorola.com>
- <20221017205446.523796-3-w36195@motorola.com>
- <ZdaPLGTbsBo4F4pK@pengutronix.de>
- <20240222011955.7sida4udjlvrlue7@synopsys.com>
+	s=arc-20240116; t=1709078320; c=relaxed/simple;
+	bh=2/lRzbav4ZEIZxCx4lcDj3Wd/X8auYnCnUQfBTX1XUM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=NIkZGgMNAjFqcI3fs6jL8Kx2F62QVc/S9rELja7tuhsZFAUKjpF/tG51wT/mG83/7IvUKi///HGkyNh7/yDDq8sjcoMHxe8RHuwW3ZKT2dOeY+fwarmIRsQeHuEfm8zF6JHcILWPTUh3AdJa/TxlM3Uj6/hJdc4Jgi3/6HQ/Kqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rBWiEFmc; arc=none smtp.client-ip=209.85.219.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dce775fa8adso9338926276.1
+        for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 15:58:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709078318; x=1709683118; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/LdW7tPXFcFwIvF+jtRCAIo7Kke3BZ9m44DLtohg7Ec=;
+        b=rBWiEFmcZqnDXPkn82+eQ5P9Zb2pGgmxxXOarVQMVv6GFdSfMNb8im2/RqG529TFWp
+         sScu0GxpmpcqBUL14wytPzS/yywlC2lk/qlFJTUIcK3xb2YrOSkBV+68Np88wZeenloy
+         eQYpIHe9e4Hx1C9dKZS76Yu41AqmTF0XJ9KIkBjFlYxKPQzlM03dRJm38DVo01Nr4lhB
+         5z4Us1QwcUkp8fW3nSx6s1d6o7XK3PJKpeo1pbCHWIFXwDYz4w5oOGDSjmakMQu4SQbT
+         1UCtCAODID72PnFNI07TY2LGdlJMNR4NVgRFZP9yNxlfDt/V4s7mP9gDpN0I75mKGVTR
+         oKNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709078318; x=1709683118;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/LdW7tPXFcFwIvF+jtRCAIo7Kke3BZ9m44DLtohg7Ec=;
+        b=jiaIMEmaFvqHzkoerWHEIndZAnEFmbRDV1kdv7hnye267KpFpCLcZI3zX3Lns5h6eL
+         oIW5qhqbmIMqSg6d/7lNpZVFon6SbtlB5knl1QOJbm3PoJJJc7h7e6B4pVf9tTB3nYF2
+         6huYiRexiL+M9/XVWqYkXuKqXRf4/wqHfhufTuXAcZnh4tjpV/ummrrkJehA5J4MD0ij
+         jdx0SQE+18pBW9luGLBsvl76tBB7aYNMnwlbtDEj6xNE956LV6uU5QTAGGydP0HdaHBt
+         PcxF0tmzN3VKNm92z37fvkNywYxuQ5K5T3C0SIK1dNpkaSW6uhwzQMoIyOwgCuL9odPD
+         sWog==
+X-Forwarded-Encrypted: i=1; AJvYcCXr0IOVqMfZNuHJOHOViIHPBrvO+Cspj3V3ZRqU/UfUC/0CU3vIB7bT4kUNflg5LKLghzEjIZycBpbDzTxm1i1Ms6XBi5IeDNFW
+X-Gm-Message-State: AOJu0YwPvlppcK14qHWY3GsYZDjeeifZ4QHkkwhNKpE4gma3S3UrxPQF
+	liEvRCHtWnCcBs8BBLpudB3ZY/uwnhbq+6ACD2DNgdy/p7zStxs+hF60UApZE4xwCy6UgBylDIQ
+	fOw==
+X-Google-Smtp-Source: AGHT+IG0oglXzdl0/+UCvI8lhfH7WFBVyu8Ryq/6LJlQ/oklxmy8TdLcC0HnTPw/C46EKLLizN5gxuAWvGY=
+X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
+ (user=badhri job=sendgmr) by 2002:a25:b341:0:b0:dcb:bc80:8333 with SMTP id
+ k1-20020a25b341000000b00dcbbc808333mr294382ybg.13.1709078318262; Tue, 27 Feb
+ 2024 15:58:38 -0800 (PST)
+Date: Tue, 27 Feb 2024 23:58:32 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="UGG4/oZux7XmFe0u"
-Content-Disposition: inline
-In-Reply-To: <20240222011955.7sida4udjlvrlue7@synopsys.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
+Message-ID: <20240227235832.744908-1-badhri@google.com>
+Subject: [PATCH v1] usb: typec: tpcm: Fix PORT_RESET behavior for self powered devices
+From: Badhri Jagan Sridharan <badhri@google.com>
+To: gregkh@linuxfoundation.org, linux@roeck-us.net, 
+	heikki.krogerus@linux.intel.com
+Cc: kyletso@google.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rdbabiera@google.com, amitsd@google.com, 
+	stable@vger.kernel.org, frank.wang@rock-chips.com, broonie@kernel.org, 
+	Badhri Jagan Sridharan <badhri@google.com>, stable@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+While commit 69f89168b310 ("usb: typec: tpcm: Fix issues with power being
+removed during reset") fixes the boot issues for bus powered devices such
+as LibreTech Renegade Elite/Firefly, it trades off the CC pins NOT being
+Hi-Zed during errory recovery (i.e PORT_RESET) for devices which are NOT
+bus powered(a.k.a self powered). This change Hi-Zs the CC pins only for
+self powered devices, thus preventing brown out for bus powered devices
 
---UGG4/oZux7XmFe0u
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Adhering to spec is gaining more importance due to the Common charger
+initiative enforced by the European Union.
 
-On Thu, Feb 22, 2024 at 01:20:04AM +0000, Thinh Nguyen wrote:
->On Thu, Feb 22, 2024, Michael Grzeschik wrote:
->> For #2: I found an issue in the handling of the completion of requests in
->> the started list. When the interrupt handler is *explicitly* calling
->> stop_active_transfer if the overall event of the request was an missed
->> event. This event value only represents the value of the request that
->> was actually triggering the interrupt.
->>
->> It also calls ep_cleanup_completed_requests and is iterating over the
->> started requests and will call giveback/complete functions of the
->> requests with the proper request status.
->>
->> So this will also catch missed requests in the queue. However, since
->> there might be, lets say 5 good requests and one missed request, what
->> will happen is, that each complete call for the first good requests will
->> enqueue new requests into the started list and will also call the
->> updatecmd on that transfer that was already missed until the loop will
->> reach the one request with the MISSED status bit set.
->>
->> So in my opinion the patch from Jeff makes sense when adding the
->> following change aswell. With those both changes the underruns and
->> broken frames finally disappear. I am still unsure about the complete
->> solution about that, since with this the mentioned 5 good requests
->> will be cancelled aswell. So this is still a WIP status here.
->>
->
->When the dwc3 driver issues stop_active_transfer(), that means that the
->started_list is empty and there is an underrun.
+Quoting from the spec:
+    4.5.2.2.2.1 ErrorRecovery State Requirements
+    The port shall not drive VBUS or VCONN, and shall present a
+    high-impedance to ground (above zOPEN) on its CC1 and CC2 pins.
 
-At this moment this is only the case when both, pending and started list
-are empty. Or the interrupt event was EXDEV.
+Hi-Zing the CC pins is the inteded behavior for PORT_RESET.
+CC pins are set to default state after tErrorRecovery in
+PORT_RESET_WAIT_OFF.
 
-The main problem is that the function
-dwc3_gadget_ep_cleanup_completed_requests(dep, event, status); will
-issue an complete for each started request, which on the other hand will
-refill the pending list, and therefor after that refill the
-stop_active_transfer is currently never hit.
+    4.5.2.2.2.2 Exiting From ErrorRecovery State
+    A Sink shall transition to Unattached.SNK after tErrorRecovery.
+    A Source shall transition to Unattached.SRC after tErrorRecovery.
 
->It treats the incoming requests as staled. However, for UVC, they are
->still "good".
+Fixes: 69f89168b310 ("usb: typec: tpcm: Fix issues with power being removed during reset")
+Cc: stable@kernel.org
+Cc: Mark Brown <broonie@kernel.org>
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Right, so in that case we can requeue them anyway. But this will have to
-be done after the stop transfer cmd has finished.
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index c9a78f55ca48..bbe1381232eb 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -5593,8 +5593,11 @@ static void run_state_machine(struct tcpm_port *port)
+ 		break;
+ 	case PORT_RESET:
+ 		tcpm_reset_port(port);
+-		tcpm_set_cc(port, tcpm_default_state(port) == SNK_UNATTACHED ?
+-			    TYPEC_CC_RD : tcpm_rp_cc(port));
++		if (port->self_powered)
++			tcpm_set_cc(port, TYPEC_CC_OPEN);
++		else
++			tcpm_set_cc(port, tcpm_default_state(port) == SNK_UNATTACHED ?
++				    TYPEC_CC_RD : tcpm_rp_cc(port));
+ 		tcpm_set_state(port, PORT_RESET_WAIT_OFF,
+ 			       PD_T_ERROR_RECOVERY);
+ 		break;
 
->I think you can just check if the started_list is empty before queuing
->new requests. If it is, perform stop_active_transfer() to reschedule the
->incoming requests. None of the newly queue requests will be released
->yet since they are in the pending_list.
+base-commit: a560a5672826fc1e057068bda93b3d4c98d037a2
+-- 
+2.44.0.rc1.240.g4c46232300-goog
 
-So that is basically exactly what my patch is doing. However in the case
-of an underrun it is not safe to call dwc3_gadget_ep_cleanup_completed_requ=
-ests
-as jeff stated. So his underlying patch is really fixing an issue here.
-
->For UVC, perhaps you can introduce a new flag to usb_request called
->"ignore_queue_latency" or something equivalent. The dwc3 is already
->partially doing this for UVC. With this new flag, we can rework dwc3 to
->clearly separate the expected behavior from the function driver.
-
-I don't know why this "extra" flag is even necessary. The code example
-is already working without that extra flag.
-
-Actually I even came up with an better solution. Additionally of checking if
-one of the requests in the started list was missed, we can activly check if
-the trb ring did run dry and if dwc3_gadget_endpoint_trbs_complete is
-going to enqueue in to the empty trb ring.
-
-So my whole change looks like that:
-
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index efe6caf4d0e87..2c8047dcd1612 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -952,6 +952,7 @@ struct dwc3_request {
-  #define DWC3_REQUEST_STATUS_DEQUEUED		3
-  #define DWC3_REQUEST_STATUS_STALLED		4
-  #define DWC3_REQUEST_STATUS_COMPLETED		5
-+#define DWC3_REQUEST_STATUS_MISSED_ISOC		6
-  #define DWC3_REQUEST_STATUS_UNKNOWN		-1
- =20
-  	u8			epnum;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 858fe4c299b7a..a31f4d3502bd3 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2057,6 +2057,9 @@ static void dwc3_gadget_ep_cleanup_cancelled_requests=
-(struct dwc3_ep *dep)
-  		req =3D next_request(&dep->cancelled_list);
-  		dwc3_gadget_ep_skip_trbs(dep, req);
-  		switch (req->status) {
-+		case 0:
-+			dwc3_gadget_giveback(dep, req, 0);
-+			break;
-  		case DWC3_REQUEST_STATUS_DISCONNECTED:
-  			dwc3_gadget_giveback(dep, req, -ESHUTDOWN);
-  			break;
-@@ -2066,6 +2069,9 @@ static void dwc3_gadget_ep_cleanup_cancelled_requests=
-(struct dwc3_ep *dep)
-  		case DWC3_REQUEST_STATUS_STALLED:
-  			dwc3_gadget_giveback(dep, req, -EPIPE);
-  			break;
-+		case DWC3_REQUEST_STATUS_MISSED_ISOC:
-+			dwc3_gadget_giveback(dep, req, -EXDEV);
-+			break;
-  		default:
-  			dev_err(dwc->dev, "request cancelled with wrong reason:%d\n", req->sta=
-tus);
-  			dwc3_gadget_giveback(dep, req, -ECONNRESET);
-@@ -3509,6 +3515,36 @@ static int dwc3_gadget_ep_cleanup_completed_request(=
-struct dwc3_ep *dep,
-  	return ret;
-  }
- =20
-+static int dwc3_gadget_ep_check_missed_requests(struct dwc3_ep *dep)
-+{
-+	struct dwc3_request	*req;
-+	struct dwc3_request	*tmp;
-+	int ret =3D 0;
-+
-+	list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
-+		struct dwc3_trb *trb;
-+
-+		trb =3D req->trb;
-+		switch (DWC3_TRB_SIZE_TRBSTS(trb->size)) {
-+		case DWC3_TRBSTS_MISSED_ISOC:
-+			/* Isoc endpoint only */
-+			ret =3D -EXDEV;
-+			break;
-+		case DWC3_TRB_STS_XFER_IN_PROG:
-+			/* Applicable when End Transfer with ForceRM=3D0 */
-+		case DWC3_TRBSTS_SETUP_PENDING:
-+			/* Control endpoint only */
-+		case DWC3_TRBSTS_OK:
-+		default:
-+			ret =3D 0;
-+			break;
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-  static void dwc3_gadget_ep_cleanup_completed_requests(struct dwc3_ep *dep,
-  		const struct dwc3_event_depevt *event, int status)
-  {
-@@ -3565,22 +3601,51 @@ static bool dwc3_gadget_endpoint_trbs_complete(stru=
-ct dwc3_ep *dep,
-  {
-  	struct dwc3		*dwc =3D dep->dwc;
-  	bool			no_started_trb =3D true;
-+	unsigned int		transfer_in_flight =3D 0;
-+
-+	/* It is possible that the interrupt thread was delayed by
-+	 * scheduling in the system, and therefor the HW has already
-+	 * run dry. In that case the last trb in the queue is already
-+	 * handled by the hw. By checking the HWO bit we know to restart
-+	 * the whole transfer. The condition to appear is more likelely
-+	 * if not every trb has the IOC bit set and therefor does not
-+	 * trigger the interrupt thread fewer.
-+	 */
-+	if (dep->number && usb_endpoint_xfer_isoc(dep->endpoint.desc)) {
-+		struct dwc3_trb *trb;
- =20
--	dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
-+		trb =3D dwc3_ep_prev_trb(dep, dep->trb_enqueue);
-+		transfer_in_flight =3D trb->ctrl & DWC3_TRB_CTRL_HWO;
-+	}
- =20
--	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
--		goto out;
-+	if (status =3D=3D -EXDEV || !transfer_in_flight) {
-+		struct dwc3_request *tmp;
-+		struct dwc3_request *req;
- =20
--	if (!dep->endpoint.desc)
--		return no_started_trb;
-+		if (!(dep->flags & DWC3_EP_END_TRANSFER_PENDING))
-+			dwc3_stop_active_transfer(dep, true, true);
- =20
--	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
--		list_empty(&dep->started_list) &&
--		(list_empty(&dep->pending_list) || status =3D=3D -EXDEV))
--		dwc3_stop_active_transfer(dep, true, true);
--	else if (dwc3_gadget_ep_should_continue(dep))
--		if (__dwc3_gadget_kick_transfer(dep) =3D=3D 0)
--			no_started_trb =3D false;
-+		list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
-+			dwc3_gadget_move_cancelled_request(req,
-+					(DWC3_TRB_SIZE_TRBSTS(req->trb->size) =3D=3D DWC3_TRBSTS_MISSED_ISOC)=
- ?
-+					DWC3_REQUEST_STATUS_MISSED_ISOC : 0);
-+		}
-+	} else {
-+		dwc3_gadget_ep_cleanup_completed_requests(dep, event, status);
-+
-+		if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
-+			goto out;
-+
-+		if (!dep->endpoint.desc)
-+			return no_started_trb;
-+
-+		if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
-+			list_empty(&dep->started_list) && list_empty(&dep->pending_list))
-+			dwc3_stop_active_transfer(dep, true, true);
-+		else if (dwc3_gadget_ep_should_continue(dep))
-+			if (__dwc3_gadget_kick_transfer(dep) =3D=3D 0)
-+				no_started_trb =3D false;
-+	}
- =20
-  out:
-  	/*
-
-I will seperate the whole hunk into smaller changes and send an v1
-the next days to review.
-
-Regards,
-Michael
-
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---UGG4/oZux7XmFe0u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmXeTZsACgkQC+njFXoe
-LGT+YBAAmyQp+fkJX9X1YZEkLMUI7viPG090DrrOGPRlyCf4wK/TQBj220yhHKzx
-do1CWiET5QuL9B8qqpIsjgaqgAJDj/rLnPAAZMinj+nZ9ETWwyxradf2vlpigmIr
-a0upO/I6oFOTSuuYtnE42rhMvQ8iCuTboe6yRIn1PYdfvxmXOxV2hLK8NTS5UOBv
-eTANs5vIrLgfYHnM1S+o/ScyeM7AiZg561Xorj6LFkwY9lHTps27h5BlQgC8sOiS
-dP2dZwxuJxC7BrLDJNBnrsNV2RDlT2lc55Mtow41rYyHPg8H8FY0hO85a7nHYMTJ
-bCYg6eCqIVVUvafzUyFQ3zx4xqYCOCceP4KDUy0Q7SS8JRIgJFqpAtFva6rOeCo1
-7Yisi8p+4NQqn6cApgFJCOKCHrd9Jc4ES25tW7EAVAgoorWwl5r0oPQC8FFLv55z
-OowxA4np4DQR7DCkvXFUThNXho2ghxSwzaxcRyTgfCEURPChWMtaDGwB4ptIwq8p
-8hAOGRYh7GQNC+im89JuMZoExkKRzdHenQMI9FqNrI4PMI7mIHPIcrdr0BeTFiDM
-TO0e1xMC2dVu6jS+Rmn4XdObVWtpmbPk0FmWkFZw09CScWno23fojSE3ndv6a5rD
-GtGHnk6x9Vx5zZoMFii0NzbssJIsSG7ZJPwdYc5oPgJ/g4qqrGw=
-=YOB/
------END PGP SIGNATURE-----
-
---UGG4/oZux7XmFe0u--
 
