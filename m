@@ -1,321 +1,221 @@
-Return-Path: <linux-usb+bounces-7123-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7124-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5264F8686EE
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 03:24:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4928868750
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 03:40:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 080A42911D4
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 02:24:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C66BD1C28692
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 02:40:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 379164D112;
-	Tue, 27 Feb 2024 02:23:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1E7217C8B;
+	Tue, 27 Feb 2024 02:40:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GqJPDtjY"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="RBFHKz4T"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F43F45035
-	for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 02:23:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B384A0A;
+	Tue, 27 Feb 2024 02:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709000622; cv=none; b=kvGS76w5yMmX6tXlbuzL9Xr5+2lZ13g0f5zmGBscK+5KPsXdyFz1txrh9Xh228ywy2mkqjb2togCcuCIUi6eFtG3vkC9uZjnB5ipsrjDb9Z5Vc3+VuDvhnEwAiIyAWAFbXP0XqBu2r5rxU3F4SqEI5dSlJeUZxhyCcVl/BDIHUo=
+	t=1709001628; cv=none; b=Aspzf5nIcuMvRV+ppiTvtSxCB/JUTTKRjni2UvnheFFvBhau+1nwiBkre9tDs7lCJZnYBXBNcBIslMWuJ0NcsFI1y1ujbOx30OlGDOErjeV9AmymtJrRkLra5/tIR9H14kLGYrT89/vmqolYHyESzruig380UZl1+r7mNRBn4FU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709000622; c=relaxed/simple;
-	bh=BaeGKqgnryyDWdfZuaOG3cz5j2TkmIcWk8NttR4/mDo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=TlbnrrqSgR5GL5+Nkb/sYTggxr/UYYUw8D8QLQZl58Vw8mFM6MSdHYRjHh46KlZPA0Bav1EHe1S+zumhhH+pKHLJtEsDRhKwGcnPhSnsIt80Yw6WbTKBY61T4gM/gnhBX+V1Yko8xn0Z5YcTTHccb1Skge9ob7dyhUTUMcR+Hes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GqJPDtjY; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709000621; x=1740536621;
-  h=date:from:to:cc:subject:message-id;
-  bh=BaeGKqgnryyDWdfZuaOG3cz5j2TkmIcWk8NttR4/mDo=;
-  b=GqJPDtjYhGnAp0tNSts3S5XV+dowEQHnlCFiRTdluri0Dm6WbSO5eUhV
-   ppWtss3IsX7ErW0q/9ozGvgbylm4mXzb7iPF6IJOL7W5xPwqrmE3vXLyO
-   tZxbGq3HryNfxAr61UjHgfVXSCxiJn3T5NfVsGh6DMMjOhDwfXZtorLso
-   62ZXFAaDiZq58mSfNtjdOSAtLmnw3iWxFgop04wz4qNw6uVpWPO+8PBg3
-   1pGd//1TlDtNjuSW5ex6hnDWZNiHD9LSsFiKqBa5xwe/kgD+VPgzF+Mr2
-   gpFbDy1k7niPXuLwrOobPpWx5AC2Lr8B9Ne6avZsRaVhaCGq4NAWmCsNf
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="3247547"
-X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
-   d="scan'208";a="3247547"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 18:23:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
-   d="scan'208";a="6810970"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 26 Feb 2024 18:23:38 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ren84-000ArJ-15;
-	Tue, 27 Feb 2024 02:23:36 +0000
-Date: Tue, 27 Feb 2024 10:23:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:gadget_char] BUILD SUCCESS
- 313cfa3be59873841a26a8caa8dd408515c197d4
-Message-ID: <202402271028.EMSfN9NR-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1709001628; c=relaxed/simple;
+	bh=+3yBtuSyoef4VRZjC+MkasTdpTyhRCBQn10mefG5vIk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=F6R8Q5ThYrXSiJpzhb1x/BjdRpqdsQop2ltORgl4/dYRfKkd6xdMHhTZPvYBXX65zl6qyKk8TuUR9MZpNFWI0FkYIx7xQxjvNZ2Dc3x5X/LdAwO85qEcXKM33YnzuefapEaM5XGopsj2ZsGCfhcgQWiepSWQAW60BLcJ2UmBPL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=RBFHKz4T; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41R2e57O028182;
+	Tue, 27 Feb 2024 02:40:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=eTh1LUuFjMQ+78KTec6yYLCg9bDWKozpU0l3hKomSqo=; b=RB
+	FHKz4TAXHItM9F++4PsVEh3BSLGW+1tNsk5i4VsmhtKllgFt7WnmVObmkwKdTN8E
+	G8Xj0hDP6wNMllWeXut+em8C8nJ1vxuJiMq1k5rAgC3bTsHkEM+QOLo5aTa+Bk4P
+	h10eDJ/criHEhmLXrBC4FpJdE8rD8BERGwrAamTm/Wvi7EjZr70z4vvVjBEu/21h
+	+D1E9vJ1sS8RwDhVBpDPzeHcObHBTEpEBdQ4bcsWCHENmEk3osRN49+KF+dsjIjL
+	fKg6NyGjfTA7mbu81ZkWInf1pvdmHIji1aZaKQVIA4XXTcU490P7l4jMQIqCHpHQ
+	tEE2HUcE32J2F6FEzhvQ==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wh6ws8108-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 Feb 2024 02:40:23 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41R2eN14028545
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 Feb 2024 02:40:23 GMT
+Received: from [10.216.0.207] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 26 Feb
+ 2024 18:40:19 -0800
+Message-ID: <99d284b3-3ddb-4928-b4c2-817acc76c241@quicinc.com>
+Date: Tue, 27 Feb 2024 08:10:15 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] usb: gadget: ncm: Fix handling of zero block length
+ packets
+To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>
+References: <20240226112816.2616719-1-quic_kriskura@quicinc.com>
+ <CANP3RGf7qsuwcgVpmOoH0QNh-v4PjRh_xj7Rcz=YJ1TbGiPK0Q@mail.gmail.com>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <CANP3RGf7qsuwcgVpmOoH0QNh-v4PjRh_xj7Rcz=YJ1TbGiPK0Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: j_lHkW9uJ5_o6u8QMMxtPZWlQ_w9BUiC
+X-Proofpoint-GUID: j_lHkW9uJ5_o6u8QMMxtPZWlQ_w9BUiC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-26_11,2024-02-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 spamscore=0 adultscore=0
+ priorityscore=1501 bulkscore=0 clxscore=1015 suspectscore=0
+ mlxlogscore=975 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2402120000 definitions=main-2402270020
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git gadget_char
-branch HEAD: 313cfa3be59873841a26a8caa8dd408515c197d4  USB: gadget: dummy_hcd: switch char * to u8 *
 
-elapsed time: 1221m
 
-configs tested: 232
-configs skipped: 4
+On 2/27/2024 3:26 AM, Maciej Żenczykowski wrote:
+> On Mon, Feb 26, 2024 at 3:28 AM Krishna Kurapati
+> <quic_kriskura@quicinc.com> wrote:
+>>
+>> While connecting to a Linux host with CDC_NCM_NTB_DEF_SIZE_TX
+>> set to 65536, it has been observed that we receive short packets,
+>> which come at interval of 5-10 seconds sometimes and have block
+>> length zero but still contain 1-2 valid datagrams present.
+>>
+>> According to the NCM spec:
+>>
+>> "If wBlockLength = 0x0000, the block is terminated by a
+>> short packet. In this case, the USB transfer must still
+>> be shorter than dwNtbInMaxSize or dwNtbOutMaxSize. If
+>> exactly dwNtbInMaxSize or dwNtbOutMaxSize bytes are sent,
+>> and the size is a multiple of wMaxPacketSize for the
+>> given pipe, then no ZLP shall be sent.
+>>
+>> wBlockLength= 0x0000 must be used with extreme care, because
+>> of the possibility that the host and device may get out of
+>> sync, and because of test issues.
+>>
+>> wBlockLength = 0x0000 allows the sender to reduce latency by
+>> starting to send a very large NTB, and then shortening it when
+>> the sender discovers that there’s not sufficient data to justify
+>> sending a large NTB"
+>>
+>> However, there is a potential issue with the current implementation,
+>> as it checks for the occurrence of multiple NTBs in a single
+>> giveback by verifying if the leftover bytes to be processed is zero
+>> or not. If the block length reads zero, we would process the same
+>> NTB infintely because the leftover bytes is never zero and it leads
+>> to a crash. Fix this by bailing out if block length reads zero.
+>>
+>> Fixes: 427694cfaafa ("usb: gadget: ncm: Handle decoding of multiple NTB's in unwrap call")
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>
+>> PS: Although this issue was seen after CDC_NCM_NTB_DEF_SIZE_TX
+>> was modified to 64K on host side, I still believe this
+>> can come up at any time as per the spec. Also I assumed
+>> that the giveback where block length is zero, has only
+>> one NTB and not multiple ones.
+>>
+>>   drivers/usb/gadget/function/f_ncm.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+>> index e2a059cfda2c..355e370e5140 100644
+>> --- a/drivers/usb/gadget/function/f_ncm.c
+>> +++ b/drivers/usb/gadget/function/f_ncm.c
+>> @@ -1337,6 +1337,9 @@ static int ncm_unwrap_ntb(struct gether *port,
+>>          VDBG(port->func.config->cdev,
+>>               "Parsed NTB with %d frames\n", dgram_counter);
+>>
+>> +       if (block_len == 0)
+>> +               goto done;
+>> +
+>>          to_process -= block_len;
+>>
+>>          /*
+>> @@ -1351,6 +1354,7 @@ static int ncm_unwrap_ntb(struct gether *port,
+>>                  goto parse_ntb;
+>>          }
+>>
+>> +done:
+>>          dev_consume_skb_any(skb);
+>>
+>>          return 0;
+>> --
+>> 2.34.1
+>>
+> 
+> In general this is of course fine (though see Greg's auto-complaint).
+> 
+> I haven't thought too much about this, but I just wonder whether the
+> check for block_len == 0
+> shouldn't be just after block_len is read, ie. somewhere just after:
+> 
+> block_len = get_ncm(&tmp, opts->block_length);
+> 
+> as it is kind of weird to be handling block_len == 0 at the point where
+> you are already theoretically done processing the block...
+> 
+> I guess, as is, this assumes the block isn't actually of length 0,
+> since there's a bunch of following get_ncm() calls...
+> Are those guaranteed to be valid?
+> 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I did get this doubt and tried it. I bailed out as soon as I found out 
+block len is zero without actually processing the datagrams present and 
+when I did that even ping doesn't work. Everything works only when the 
+datagrams in this zero block len NTB are parsed properly.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                          axs103_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                        nsim_700_defconfig   gcc  
-arc                   randconfig-001-20240226   gcc  
-arc                   randconfig-001-20240227   gcc  
-arc                   randconfig-002-20240226   gcc  
-arc                   randconfig-002-20240227   gcc  
-arc                    vdk_hs38_smp_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                          collie_defconfig   gcc  
-arm                                 defconfig   clang
-arm                        keystone_defconfig   gcc  
-arm                        multi_v7_defconfig   gcc  
-arm                          pxa910_defconfig   gcc  
-arm                   randconfig-001-20240227   gcc  
-arm                   randconfig-002-20240227   gcc  
-arm                   randconfig-003-20240227   gcc  
-arm                   randconfig-004-20240226   gcc  
-arm                   randconfig-004-20240227   gcc  
-arm                         socfpga_defconfig   gcc  
-arm                           sunxi_defconfig   gcc  
-arm                           tegra_defconfig   gcc  
-arm                         wpcm450_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240226   gcc  
-arm64                 randconfig-002-20240226   gcc  
-arm64                 randconfig-002-20240227   gcc  
-arm64                 randconfig-003-20240226   gcc  
-arm64                 randconfig-003-20240227   gcc  
-arm64                 randconfig-004-20240227   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240226   gcc  
-csky                  randconfig-001-20240227   gcc  
-csky                  randconfig-002-20240226   gcc  
-csky                  randconfig-002-20240227   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240226   clang
-i386         buildonly-randconfig-001-20240227   gcc  
-i386         buildonly-randconfig-002-20240227   gcc  
-i386         buildonly-randconfig-003-20240226   clang
-i386         buildonly-randconfig-004-20240226   clang
-i386         buildonly-randconfig-004-20240227   gcc  
-i386         buildonly-randconfig-005-20240226   clang
-i386         buildonly-randconfig-005-20240227   gcc  
-i386         buildonly-randconfig-006-20240226   clang
-i386         buildonly-randconfig-006-20240227   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240226   clang
-i386                  randconfig-001-20240227   gcc  
-i386                  randconfig-002-20240227   gcc  
-i386                  randconfig-003-20240226   clang
-i386                  randconfig-005-20240226   clang
-i386                  randconfig-006-20240226   clang
-i386                  randconfig-006-20240227   gcc  
-i386                  randconfig-016-20240226   clang
-i386                  randconfig-016-20240227   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240226   gcc  
-loongarch             randconfig-001-20240227   gcc  
-loongarch             randconfig-002-20240226   gcc  
-loongarch             randconfig-002-20240227   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                          atari_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        stmark2_defconfig   gcc  
-m68k                           sun3_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                         cobalt_defconfig   gcc  
-mips                 decstation_r4k_defconfig   gcc  
-mips                      fuloong2e_defconfig   gcc  
-mips                    maltaup_xpa_defconfig   gcc  
-mips                           rs90_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240226   gcc  
-nios2                 randconfig-001-20240227   gcc  
-nios2                 randconfig-002-20240226   gcc  
-nios2                 randconfig-002-20240227   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-parisc                           alldefconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240226   gcc  
-parisc                randconfig-001-20240227   gcc  
-parisc                randconfig-002-20240226   gcc  
-parisc                randconfig-002-20240227   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                        cell_defconfig   gcc  
-powerpc                      ep88xc_defconfig   gcc  
-powerpc                  iss476-smp_defconfig   gcc  
-powerpc                 mpc837x_rdb_defconfig   gcc  
-powerpc               randconfig-002-20240226   gcc  
-powerpc               randconfig-002-20240227   gcc  
-powerpc                     tqm5200_defconfig   gcc  
-powerpc64             randconfig-002-20240226   gcc  
-powerpc64             randconfig-002-20240227   gcc  
-powerpc64             randconfig-003-20240227   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240227   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240227   gcc  
-s390                  randconfig-002-20240226   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          lboxre2_defconfig   gcc  
-sh                          polaris_defconfig   gcc  
-sh                    randconfig-001-20240226   gcc  
-sh                    randconfig-001-20240227   gcc  
-sh                    randconfig-002-20240226   gcc  
-sh                    randconfig-002-20240227   gcc  
-sh                           se7206_defconfig   gcc  
-sh                           se7343_defconfig   gcc  
-sh                           se7705_defconfig   gcc  
-sh                           se7722_defconfig   gcc  
-sh                             sh03_defconfig   gcc  
-sh                              ul2_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240226   gcc  
-sparc64               randconfig-001-20240227   gcc  
-sparc64               randconfig-002-20240226   gcc  
-sparc64               randconfig-002-20240227   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-002-20240226   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240226   clang
-x86_64       buildonly-randconfig-001-20240227   clang
-x86_64       buildonly-randconfig-002-20240226   gcc  
-x86_64       buildonly-randconfig-003-20240226   gcc  
-x86_64       buildonly-randconfig-003-20240227   clang
-x86_64       buildonly-randconfig-004-20240226   clang
-x86_64       buildonly-randconfig-004-20240227   clang
-x86_64       buildonly-randconfig-005-20240226   gcc  
-x86_64       buildonly-randconfig-005-20240227   clang
-x86_64       buildonly-randconfig-006-20240226   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240226   gcc  
-x86_64                randconfig-001-20240227   clang
-x86_64                randconfig-002-20240226   gcc  
-x86_64                randconfig-002-20240227   clang
-x86_64                randconfig-003-20240226   clang
-x86_64                randconfig-004-20240226   clang
-x86_64                randconfig-005-20240226   clang
-x86_64                randconfig-006-20240226   gcc  
-x86_64                randconfig-011-20240226   clang
-x86_64                randconfig-012-20240226   clang
-x86_64                randconfig-013-20240226   clang
-x86_64                randconfig-013-20240227   clang
-x86_64                randconfig-014-20240226   clang
-x86_64                randconfig-015-20240226   clang
-x86_64                randconfig-016-20240226   clang
-x86_64                randconfig-071-20240226   clang
-x86_64                randconfig-072-20240226   gcc  
-x86_64                randconfig-072-20240227   clang
-x86_64                randconfig-073-20240226   gcc  
-x86_64                randconfig-074-20240226   clang
-x86_64                randconfig-074-20240227   clang
-x86_64                randconfig-075-20240226   gcc  
-x86_64                randconfig-075-20240227   clang
-x86_64                randconfig-076-20240226   clang
-x86_64                randconfig-076-20240227   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                  cadence_csp_defconfig   gcc  
-xtensa                generic_kc705_defconfig   gcc  
-xtensa                          iss_defconfig   gcc  
-xtensa                randconfig-001-20240226   gcc  
-xtensa                randconfig-001-20240227   gcc  
-xtensa                randconfig-002-20240226   gcc  
-xtensa                randconfig-002-20240227   gcc  
+> I guess I don't actually see the infinite loop with block_len == 0,
+> since get_ncm() always moves us forward...
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+The infinite loop occurs because we keep moving the buffer pointer 
+forward and keep processing the giveback until to_process variable 
+becomes zero or one. In case block length is zero, we never move the 
+buffer pointer forward and never reduce to_process variable and hence 
+keep infinitely processing the same NTB over and over again.
+
+> Maybe your patch *is* correct as is, and you just need a comment
+> explaining *why* block_len == 0 is terminal at the spot you're adding the check.
+> 
+> Also couldn't you fix this without goto, by changing
+> 
+>    } else if (to_process > 0) {
+> to
+>    } else if (to_process && block_len) {
+>      // See NCM spec.  zero block_len means short packet.
+> 
+
+I will test this out once (although I know that looking at it, it would 
+definitely work) and send v2 with this diff.
+
+Thanks for the review.
+
+Regards,
+Krishna,
 
