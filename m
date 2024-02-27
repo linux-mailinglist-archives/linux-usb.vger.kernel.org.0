@@ -1,330 +1,229 @@
-Return-Path: <linux-usb+bounces-7130-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7131-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A0D286889B
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 06:25:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7490D868A78
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 09:08:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5148B239A7
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 05:25:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F42181F25095
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 08:08:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C043152F80;
-	Tue, 27 Feb 2024 05:25:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FA0A56749;
+	Tue, 27 Feb 2024 08:08:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UFfE2ZvB"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ZxtxggaW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D5E52F7B
-	for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 05:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C8954F96;
+	Tue, 27 Feb 2024 08:08:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709011508; cv=none; b=Lt8kG1tXBym78b3haumkL4RXYtf9Vbrd00O7ME1w2TYKBMDAqL7YWVXY1JqUn3IsNSbZRq/YANn+Eqn1oauX+hyXuRbj7uccK+sL70/aBUduVdtrn3yYLK+osWIbvHHATHtqnVtCQBnKcXJKBpRVem7C0d7NYpYZ25Dg9pv6TUE=
+	t=1709021290; cv=none; b=Dw8z/sH/UFzCYfLOzl7THWNQTo37GQxHVb0z5GdA06BG5/WRTizRFyORufObyUkk/5c2cCTV0bHN0V1pkF2rkDz6dNX2jp85AaR7QLzQxlV3d/bnfcNn9oKjh3vHjKe8pBYj5I7Fp4fOTmKBbNTa7rI1Htq3abtPI7hV1sDv/z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709011508; c=relaxed/simple;
-	bh=Z08rd7wGAAx0FFWQQendFYa+jN4EqLT1Er6OfLVkUdg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Fs81yabKn6GWkbvd5qDJ62mmJ1yNjbCJtKw6IsJyPi2bYEaUsSon9c+/6juP1BodtrZYGfqirL6qBNUlI7e/hgyzIJ7qRnyXUphjWJALC2bUHbiL51TiXGaEnBMRSe2HViveMeCp2MnkWOgVhj+sb6/mIL56AcPxxml2BYIY9IU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UFfE2ZvB; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1709021290; c=relaxed/simple;
+	bh=PtGQ5goxDMxof1agQAKAmcbBfhYu//IL5yynJzGYrkk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h5aUEZaJG2N7GyWPvTE5JwhcpNSPjhZoXeJci4UPwVMkCN46FhFmjuSk8LwZLaDByvO1gKJ7/4c4x1itbL5lgdQ/iOReyPn6GBacoBAjhHP3FdXT2OFs5/R13rqV7iLJmWIRgKSFbrhYtDLz97YoWc8R/ZxigLDhmKMSU+vnBrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ZxtxggaW; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709011506; x=1740547506;
-  h=date:from:to:cc:subject:message-id;
-  bh=Z08rd7wGAAx0FFWQQendFYa+jN4EqLT1Er6OfLVkUdg=;
-  b=UFfE2ZvBrWoOMalvaAP1kcgf9cPYY2DU2pFMLJ3cOxFa1zn9zOmq1hEd
-   D0ybV/Fmea3Asl2AwqgC4NieIxM7oqegoddVkyIMl9Pz4btBZXy8p4tQV
-   FbnNNVSSWnHaZMtBw/6t/YzcMJ4XtBm11YIB43jxffhjo/3F7IJzZENIe
-   Ani5piCaMVhxHctN3cw21wXLGNGBccxb5XrDc0yCvBYiNFIEmqREJktOk
-   XjkMHdkNv8PKmxyBOZ4qZ0xu1xzfPb4yw/M/Efx0V2VSC3ZVByEIb7o8s
-   LkQCr6jmpKJmQKGcXie8dhEWttj/jxqsD4bhtyqm+bR4AFNfygj8PnYu4
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1709021287; x=1740557287;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PtGQ5goxDMxof1agQAKAmcbBfhYu//IL5yynJzGYrkk=;
+  b=ZxtxggaWVeP6OE7vRGNzobZUh6wCGiMgFkrOEB2DufTEnAv5Z7H287Bx
+   NZ8H7XE/M5xASHTC7iKiJLaRCgJr0V5fCROBrWkSrYUiAxNC2WatH2amq
+   gbN6q1c6cBWFXT6xGXCX6yH3qZVmiXG8ibYoZT2VUNnLLRc+Kk8fVTyTu
+   bJM3tIxqldWsoz5tTTBn71uaqhcZeLHjZyq9M7oAU+4GJJlILsLU+SFGn
+   mGECeRHS5/9FAJtXW3VMprYc0gniP767OxM4KydF8Aq22mrK+LrXEy28p
+   9I9u5IHkkX92uxk4//w/LNqMV24pqtHzOBTW7Pe0Yq2umGGYgNPiw+bTx
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="3206036"
-X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
-   d="scan'208";a="3206036"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 21:25:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,187,1705392000"; 
-   d="scan'208";a="44413296"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 26 Feb 2024 21:25:03 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1repxc-000Ay5-23;
-	Tue, 27 Feb 2024 05:25:00 +0000
-Date: Tue, 27 Feb 2024 13:24:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:rndis-removal] BUILD SUCCESS
- bc2884774f3a8571a2daae69e3b21ef8a740bc81
-Message-ID: <202402271333.bUa63thM-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+X-CSE-ConnectionGUID: 0gWJqGn3RPCuMO9uL5SkUQ==
+X-CSE-MsgGUID: BzrlcXhkTAK8tf8Bn43wyw==
+X-IronPort-AV: E=Sophos;i="6.06,187,1705388400"; 
+   d="asc'?scan'208";a="17406316"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Feb 2024 01:08:06 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 27 Feb 2024 01:07:48 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Tue, 27 Feb 2024 01:07:45 -0700
+Date: Tue, 27 Feb 2024 08:07:02 +0000
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Vignesh Raghavendra <vigneshr@ti.com>
+CC: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>, Conor Dooley
+	<conor@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob
+ Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+	Roger Quadros <rogerq@kernel.org>, Peter Chen <peter.chen@kernel.org>, Pawel
+ Laszczak <pawell@cadence.com>, Nishanth Menon <nm@ti.com>, Tero Kristo
+	<kristo@kernel.org>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	=?iso-8859-1?Q?Gr=E9gory?= Clement <gregory.clement@bootlin.com>, Kevin
+ Hilman <khilman@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
+	<linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 1/8] dt-bindings: usb: ti,j721e-usb: drop useless
+ compatible list
+Message-ID: <20240227-radiated-fame-57a2e685f1b0@wendy>
+References: <20240223-j7200-usb-suspend-v3-0-b41c9893a130@bootlin.com>
+ <20240223-j7200-usb-suspend-v3-1-b41c9893a130@bootlin.com>
+ <20240223-clarity-variably-206b01b7276a@spud>
+ <CZEXXXQDZZWB.1M5CTZAFVO4YP@bootlin.com>
+ <20240226-portable-rockslide-e501667a0d9a@wendy>
+ <CZF33W51MC4M.3GUBZFQXT39DB@bootlin.com>
+ <37ab0886-0cd1-4188-9177-8b7ef0ad9eca@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="+JNVmkXccn+hyfZl"
+Content-Disposition: inline
+In-Reply-To: <37ab0886-0cd1-4188-9177-8b7ef0ad9eca@ti.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git rndis-removal
-branch HEAD: bc2884774f3a8571a2daae69e3b21ef8a740bc81  USB: disable all RNDIS protocol drivers
+--+JNVmkXccn+hyfZl
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-elapsed time: 1402m
+On Tue, Feb 27, 2024 at 09:54:30AM +0530, Vignesh Raghavendra wrote:
+> On 26/02/24 20:05, Th=E9o Lebrun wrote:
+> > On Mon Feb 26, 2024 at 12:56 PM CET, Conor Dooley wrote:
+> >> On Mon, Feb 26, 2024 at 11:33:06AM +0100, Th=E9o Lebrun wrote:
+> >>> Hello Conor,
+> >>>
+> >>> On Fri Feb 23, 2024 at 7:12 PM CET, Conor Dooley wrote:
+> >>>> On Fri, Feb 23, 2024 at 05:05:25PM +0100, Th=E9o Lebrun wrote:
+> >>>>> Compatible can be A or B, not A or B or A+B. Remove last option.
+> >>>>> A=3Dti,j721e-usb and B=3Dti,am64-usb.
+> >>>>>
+> >>>>> Signed-off-by: Th=E9o Lebrun <theo.lebrun@bootlin.com>
+> >>>>> ---
+> >>>>>  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml | 9 +++---=
+---
+> >>>>>  1 file changed, 3 insertions(+), 6 deletions(-)
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yam=
+l b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> >>>>> index 95ff9791baea..949f45eb45c2 100644
+> >>>>> --- a/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> >>>>> +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> >>>>> @@ -11,12 +11,9 @@ maintainers:
+> >>>>> =20
+> >>>>>  properties:
+> >>>>>    compatible:
+> >>>>> -    oneOf:
+> >>>>> -      - const: ti,j721e-usb
+> >>>>> -      - const: ti,am64-usb
+> >>>>> -      - items:
+> >>>>> -          - const: ti,j721e-usb
+> >>>>> -          - const: ti,am64-usb
+> >>>>
+> >>>> Correct, this makes no sense. The devices seem to be compatible thou=
+gh,
+> >>>> so I would expect this to actually be:
+> >>>> oneOf:
+> >>>>   - const: ti,j721e-usb
+> >>>>   - items:
+> >>>>       - const: ti,am64-usb
+> >>>>       - const: ti,j721e-usb
+> >>>
+> >>> I need your help to grasp what that change is supposed to express? Wo=
+uld
+> >>> you mind turning it into english sentences?
+> >>> A=3Dti,j721e-usb and B=3Dti,am64-usb. My understanding of your propos=
+al is
+> >>> that a device can either be compat with A or B. But B is compatible
+> >>> with A so you express it as a list of items. If B is compat with A th=
+en
+> >>> A is compat with B. Does the order of items matter?
+> >>
+> >> The two devices are compatible with each other, based on an inspection=
+ of
+> >> the driver and the existing "A+B" setup. If this was a newly submitted
+> >> binding, "B" would not get approved because "A+B" allows support witho=
+ut
+> >> software changes and all that jazz.
+> >>
+> >> Your patch says that allowing "A", "B" and "A+B" makes no sense and you
+> >> suggest removing "A+B". I am agreeing that it makes no sense to allow
+> >> all 3 of these situations.
+> >>
+> >> What I also noticed is other problems with the binding. What should ha=
+ve
+> >> been "A+B" is actually documented as "B+A", but that doesn't make sense
+> >> when the originally supported device is "A".
 
-configs tested: 241
-configs skipped: 4
+This A and B stuff confused me, I should just have used the actual
+compatibles. I meant
+| What should have been "B+A" is actually documented as "A+B", but that
+| doesn't make sense when the originally supported device is "A"
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> >>
+> >> Therefore my suggestion was to only allow "A" and "A+B", which is what
+> >> we would (hopefully) tell you to do were you submitting the am64 suppo=
+rt
+> >> as a new patch today.
+> >=20
+> > Thank you for the in-depth explanation! It makes much more sense now,
+> > especially the handling of historic stuff that ideally wouldn't have
+> > been done this way but that won't be changed from now on.
+> >=20
+>=20
+> IIRC, idea behind adding new compatible for AM64 even though register
+> map is very much compatible is just being future proof as AM64 and J721e
+> belong to different product groups and thus have differences wrt SoC
+> level integration etc which may need SoC specific handling later on.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                          axs103_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                        nsim_700_defconfig   gcc  
-arc                   randconfig-001-20240226   gcc  
-arc                   randconfig-001-20240227   gcc  
-arc                   randconfig-002-20240226   gcc  
-arc                   randconfig-002-20240227   gcc  
-arc                    vdk_hs38_smp_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                          collie_defconfig   gcc  
-arm                                 defconfig   clang
-arm                        keystone_defconfig   gcc  
-arm                        multi_v7_defconfig   gcc  
-arm                          pxa910_defconfig   gcc  
-arm                   randconfig-001-20240227   gcc  
-arm                   randconfig-002-20240227   gcc  
-arm                   randconfig-003-20240227   gcc  
-arm                   randconfig-004-20240226   gcc  
-arm                   randconfig-004-20240227   gcc  
-arm                         socfpga_defconfig   gcc  
-arm                           sunxi_defconfig   gcc  
-arm                           tegra_defconfig   gcc  
-arm                         wpcm450_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240226   gcc  
-arm64                 randconfig-002-20240226   gcc  
-arm64                 randconfig-002-20240227   gcc  
-arm64                 randconfig-003-20240226   gcc  
-arm64                 randconfig-003-20240227   gcc  
-arm64                 randconfig-004-20240227   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240226   gcc  
-csky                  randconfig-001-20240227   gcc  
-csky                  randconfig-002-20240226   gcc  
-csky                  randconfig-002-20240227   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240226   clang
-i386         buildonly-randconfig-001-20240227   gcc  
-i386         buildonly-randconfig-002-20240227   gcc  
-i386         buildonly-randconfig-003-20240226   clang
-i386         buildonly-randconfig-003-20240227   clang
-i386         buildonly-randconfig-004-20240226   clang
-i386         buildonly-randconfig-004-20240227   gcc  
-i386         buildonly-randconfig-005-20240226   clang
-i386         buildonly-randconfig-005-20240227   gcc  
-i386         buildonly-randconfig-006-20240226   clang
-i386         buildonly-randconfig-006-20240227   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240226   clang
-i386                  randconfig-001-20240227   gcc  
-i386                  randconfig-002-20240227   gcc  
-i386                  randconfig-003-20240226   clang
-i386                  randconfig-003-20240227   clang
-i386                  randconfig-004-20240227   clang
-i386                  randconfig-005-20240226   clang
-i386                  randconfig-005-20240227   clang
-i386                  randconfig-006-20240226   clang
-i386                  randconfig-006-20240227   gcc  
-i386                  randconfig-011-20240227   clang
-i386                  randconfig-012-20240227   clang
-i386                  randconfig-013-20240227   clang
-i386                  randconfig-014-20240227   clang
-i386                  randconfig-015-20240227   clang
-i386                  randconfig-016-20240226   clang
-i386                  randconfig-016-20240227   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240226   gcc  
-loongarch             randconfig-001-20240227   gcc  
-loongarch             randconfig-002-20240226   gcc  
-loongarch             randconfig-002-20240227   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                          atari_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        stmark2_defconfig   gcc  
-m68k                           sun3_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                         cobalt_defconfig   gcc  
-mips                 decstation_r4k_defconfig   gcc  
-mips                      fuloong2e_defconfig   gcc  
-mips                    maltaup_xpa_defconfig   gcc  
-mips                           rs90_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240226   gcc  
-nios2                 randconfig-001-20240227   gcc  
-nios2                 randconfig-002-20240226   gcc  
-nios2                 randconfig-002-20240227   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-parisc                           alldefconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240226   gcc  
-parisc                randconfig-001-20240227   gcc  
-parisc                randconfig-002-20240226   gcc  
-parisc                randconfig-002-20240227   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                        cell_defconfig   gcc  
-powerpc                      ep88xc_defconfig   gcc  
-powerpc                  iss476-smp_defconfig   gcc  
-powerpc                 mpc837x_rdb_defconfig   gcc  
-powerpc               randconfig-002-20240226   gcc  
-powerpc               randconfig-002-20240227   gcc  
-powerpc                     tqm5200_defconfig   gcc  
-powerpc64             randconfig-002-20240226   gcc  
-powerpc64             randconfig-002-20240227   gcc  
-powerpc64             randconfig-003-20240227   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240227   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240227   gcc  
-s390                  randconfig-002-20240226   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          lboxre2_defconfig   gcc  
-sh                          polaris_defconfig   gcc  
-sh                    randconfig-001-20240226   gcc  
-sh                    randconfig-001-20240227   gcc  
-sh                    randconfig-002-20240226   gcc  
-sh                    randconfig-002-20240227   gcc  
-sh                           se7206_defconfig   gcc  
-sh                           se7343_defconfig   gcc  
-sh                           se7705_defconfig   gcc  
-sh                           se7722_defconfig   gcc  
-sh                             sh03_defconfig   gcc  
-sh                              ul2_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240226   gcc  
-sparc64               randconfig-001-20240227   gcc  
-sparc64               randconfig-002-20240226   gcc  
-sparc64               randconfig-002-20240227   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-002-20240226   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240226   clang
-x86_64       buildonly-randconfig-001-20240227   clang
-x86_64       buildonly-randconfig-002-20240226   gcc  
-x86_64       buildonly-randconfig-003-20240226   gcc  
-x86_64       buildonly-randconfig-003-20240227   clang
-x86_64       buildonly-randconfig-004-20240226   clang
-x86_64       buildonly-randconfig-004-20240227   clang
-x86_64       buildonly-randconfig-005-20240226   gcc  
-x86_64       buildonly-randconfig-005-20240227   clang
-x86_64       buildonly-randconfig-006-20240226   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240226   gcc  
-x86_64                randconfig-001-20240227   clang
-x86_64                randconfig-002-20240226   gcc  
-x86_64                randconfig-002-20240227   clang
-x86_64                randconfig-003-20240226   clang
-x86_64                randconfig-004-20240226   clang
-x86_64                randconfig-005-20240226   clang
-x86_64                randconfig-006-20240226   gcc  
-x86_64                randconfig-011-20240226   clang
-x86_64                randconfig-012-20240226   clang
-x86_64                randconfig-013-20240226   clang
-x86_64                randconfig-013-20240227   clang
-x86_64                randconfig-014-20240226   clang
-x86_64                randconfig-015-20240226   clang
-x86_64                randconfig-016-20240226   clang
-x86_64                randconfig-071-20240226   clang
-x86_64                randconfig-072-20240226   gcc  
-x86_64                randconfig-072-20240227   clang
-x86_64                randconfig-073-20240226   gcc  
-x86_64                randconfig-074-20240226   clang
-x86_64                randconfig-074-20240227   clang
-x86_64                randconfig-075-20240226   gcc  
-x86_64                randconfig-075-20240227   clang
-x86_64                randconfig-076-20240226   clang
-x86_64                randconfig-076-20240227   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                  cadence_csp_defconfig   gcc  
-xtensa                generic_kc705_defconfig   gcc  
-xtensa                          iss_defconfig   gcc  
-xtensa                randconfig-001-20240226   gcc  
-xtensa                randconfig-001-20240227   gcc  
-xtensa                randconfig-002-20240226   gcc  
-xtensa                randconfig-002-20240227   gcc  
+That is fine, I don't think anyone here is disputing a soc-specific
+compatible existing for this device.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Also, note that AM64 SoC support was added long after J721e. So ideally
+> should be B+A if at all we need a fallback compatible.
+
+Correct, I accidentally wrote "A+B", but you can see that that
+conflicted with the actual example I had given above.
+
+> I don't see any DT (now or in the past) using
+>=20
+> compatible =3D B,A or compatible =3D A,B
+>=20
+> So do we really need A+B to be supported by binding?
+
+Given the mistake, I am going to take this as meaning should the
+fallback be supported. My take is that if we are going to remove
+something, it should be "ti,am64-usb" isolation that should go.
+The devicetrees can be update without concerns about compatibility.
+
+Cheers,
+Conor.
+
+
+
+--+JNVmkXccn+hyfZl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZd2YIQAKCRB4tDGHoIJi
+0pqQAQCXBm9gvKWGSQ2qQ4acHNjGMTaMyayfkfljweUbpW9QywD/ehe10Pr1OdhV
+WFOesqEw7mNUg37j97LIT669LzLlmwM=
+=VE72
+-----END PGP SIGNATURE-----
+
+--+JNVmkXccn+hyfZl--
 
