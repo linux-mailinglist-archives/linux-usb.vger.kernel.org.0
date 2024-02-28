@@ -1,176 +1,122 @@
-Return-Path: <linux-usb+bounces-7210-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7211-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98EFA86A993
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 09:10:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD9E486AA28
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 09:36:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CADAB1C21BE0
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 08:10:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F1F71F26AEE
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 08:36:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD83286BD;
-	Wed, 28 Feb 2024 08:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 794732E85B;
+	Wed, 28 Feb 2024 08:34:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OCFMSTNz"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="psrwFdSc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74AC225630;
-	Wed, 28 Feb 2024 08:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A74E2DF92;
+	Wed, 28 Feb 2024 08:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709107824; cv=none; b=FBk3AiTasa0nnl02E9RzC4/RhlHK7tix0164FidipDC0uZ7I0Ec9Evhl1bP7vIUjmQyW7VbtkMzQM+jlfP58vaHO7LYjoLhFEPoWG7OBNUEGfpdcVkYGTvO4V1g4Q5Q96efcusPI3Iz5EXzmhOVxbdvDbDraaOFRePmtP8GD/T8=
+	t=1709109242; cv=none; b=TjphOOAohBUFGmNcV8uDqKYd3vLcpdWen2ezl2TclRddt+8klLr7wbXoxsR9eSHF7wZQIA+WI0GybRB2JFWku+We61iHhQXHqCPfyDjvF95pKYFK4y+0noMs6PinqWZzYMIf8n86HKVL/S9bc2DUMZbXrJcIWPBRurj9E4ozLPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709107824; c=relaxed/simple;
-	bh=5VutVpaVx3BCmDFWCvGkbB7mmJu+5yX0VMWEFfpDzd8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pv0Epj1owz5JXYLiPdL/KTfcohiIigO5V6LNNFEuWYD0vGQgD4B1JmCKK3nG49aqdyWWY9UaFaSmiHaiYbzVmTTvNQFs/vSMej/iNTZehK50G3CrctnNHsg9nRkcSXtH+oUZdtY9HdsJVw+dDQQ7r2VHanebguMdWAXCjgQKwKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OCFMSTNz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D2CDC433F1;
-	Wed, 28 Feb 2024 08:10:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709107824;
-	bh=5VutVpaVx3BCmDFWCvGkbB7mmJu+5yX0VMWEFfpDzd8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OCFMSTNz4uXPS3pW3XJknVG4hdfxE/VbO17Gzca1wjO4/QNu7MO0gm/iybMQECjyS
-	 WWmA1Uyq/ofif9oKnS/uLYx0rtZYLSBUES/oNhzgiO8ZO3HVAt4IgDC0YhR/K8KmEe
-	 +raIzodglHZsZYd1OXuLBT9z+a0MzMmbPzVcd54Y=
-Date: Wed, 28 Feb 2024 09:10:21 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: buckzhangwh@gmail.com
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] drivers:usb:disable usb hub&port async suspend
-Message-ID: <2024022808-skies-unit-7309@gregkh>
-References: <20240228072030.2470-1-buckzhangwh@gmail.com>
+	s=arc-20240116; t=1709109242; c=relaxed/simple;
+	bh=aOlzv2ms+slQM3Izb/zjipw0Sn3ySfHbf+ICKPL9UTo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dif73JPuq0yZQMEYXwl4E56y3gaKY7TVK+kTwJYZBFHehOLs/f9Pc2oz6fk7fObSDdkpqX5MkRBIZ6d3XLajDwBTc8e+0LK0dvFrWA+qJYlUHFRZJkVzW8ZyvxtsDjMTvqJISWS6WTJonWEzh5pyuJj0yZMY1cuyEAz4fEEdORM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=psrwFdSc; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41S4KI1Q007196;
+	Wed, 28 Feb 2024 08:33:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=SY4ByAm
+	QqkjRwFRnacQzAJoXNdftSjJlDeUuGPnHpDY=; b=psrwFdSc2dFSEwZIKuspgY8
+	xWcLDAs2vHB6eQXFF4uHBbQPlAxxVPRPg7llCThraphFnQlAqAayHbYftvbglpPd
+	v0jtc2+lhMyPLIZNSimurh/OEqXbJeLR0hPcoclrVw1CKymIJ3fefVEajGXM1T6A
+	0/vdoU1Wi/VxV/DddobVdlqtsd+kikR6fO6vGbjuTMHAzHgWjueqbuOF1Lrycg/s
+	rtRI7URBCc2a2Wu0KqffE1eThsFTU/p0JSQrcT5DCtZqn5sGuVyooo4vRxzHXLkA
+	ItHKn1Sq+ogIPZdwvrNSQjSNuBleRhwJf+ksECVlg6mS/FJE8VJFMbylpsnK+MA=
+	=
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3whtbw8rsh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 28 Feb 2024 08:33:58 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41S8XvHI004655
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 28 Feb 2024 08:33:57 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 28 Feb 2024 00:33:55 -0800
+From: Prashanth K <quic_prashk@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman
+	<mathias.nyman@intel.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Prashanth K
+	<quic_prashk@quicinc.com>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: xhci: Add error handling in  xhci_map_urb_for_dma
+Date: Wed, 28 Feb 2024 14:03:43 +0530
+Message-ID: <20240228083343.3101303-1-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240228072030.2470-1-buckzhangwh@gmail.com>
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Pj9u1zt1yPLALrxqoIal9qM1qezI6nCc
+X-Proofpoint-ORIG-GUID: Pj9u1zt1yPLALrxqoIal9qM1qezI6nCc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-28_04,2024-02-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ suspectscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
+ spamscore=0 mlxlogscore=636 lowpriorityscore=0 mlxscore=0 bulkscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2402280066
 
-On Tue, Feb 27, 2024 at 11:20:30PM -0800, buckzhangwh@gmail.com wrote:
-> From: weihui zhang <buckzhangwh@gmail.com>
-> 
-> we prepare 30 mobile phones only for usb plugg in and out.
-> testers plug USB in and out very frequently after phone in deep.
-> Repeat the test again and again,some phones are crashed.
-> our analysis：
-> We analyze ten kernel-dumps,we found something common kernel is blocked.
-> pasre in crash,all the dump are directed to usb(device port/hub).
-> here is a kdump,task 446 &365&4511 are UN.
-> 446:
-> .... ->|kobj_attr_store
->           |state_store
->             |pm_suspend
->               |enter_state
->                 |suspend_devices_and_enter
->                  |dpm_resume_end
->                    |dpm_resume
->                     |dpm_resume
->                      |async_synchronize_full
->                       |async_synchronize_cookie_domain
->                        |schedule
-> 446 is waiting for 365&4511,no doubtful usb thread.
-> here is some warning log:
-> [83.958310] musb device disconnect detected from VBUS GPIO.
-> ..........
-> [84.908017] musb device connection detected from VBUS GPIO.
-> [84.911946] typec port1-partner: parent port1 should not be sleeping
-> task 365 & 4511:
-> ... ->worker_thread
->        |process_one_work
->         |async_run_entry_fn
->           |async_resume
->             |device_resume
->               |dpm_wait_for_superior
->                 |wait_for_completion
->                   |wait_for_common
->                      |schedule_timeout
-> I guess usb async resume/suspend are disordered,So I try to disable.
-> After that,we tested the case for a month,the bug never happened again.
-> the fn device_enable_async_suspend set the dev->power.async_suspend= 1.
-> dev->power.async_suspend=1&pm_async_enabled=1,fork task like 365
->    ---> dpm_resume
->            |dpm_async_fn
->              |async_resume  
-> dev->power.async_suspend=0,disable async
->      --->dpm_resume
->             |device_resume
->               |call device resume fn.
-> here is a demo:
-> Only few devices such as scsi/pci/usb call device_enable_async_suspend.
-> but scsi call device_disable_async_suspend at drivers/scsi/hosts.c
-> 
-> Signed-off-by: weihui zhang <buckzhangwh@gmail.com>
-> ---
->  drivers/usb/core/hub.c  | 2 +-
->  drivers/usb/core/port.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index e38a4124f..de74f70e5 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2602,7 +2602,7 @@ int usb_new_device(struct usb_device *udev)
->  		add_device_randomness(udev->manufacturer,
->  				      strlen(udev->manufacturer));
->  
-> -	device_enable_async_suspend(&udev->dev);
-> +	device_disable_async_suspend(&udev->dev);
->  
->  	/* check whether the hub or firmware marks this port as non-removable */
->  	set_usb_port_removable(udev);
-> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-> index c628c1abc..97696c415 100644
-> --- a/drivers/usb/core/port.c
-> +++ b/drivers/usb/core/port.c
-> @@ -760,7 +760,7 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
->  	pm_runtime_set_active(&port_dev->dev);
->  	pm_runtime_get_noresume(&port_dev->dev);
->  	pm_runtime_enable(&port_dev->dev);
-> -	device_enable_async_suspend(&port_dev->dev);
-> +	device_disable_async_suspend(&port_dev->dev);
->  
->  	/*
->  	 * Keep hidden the ability to enable port-poweroff if the hub
-> -- 
-> 2.17.1
-> 
-> 
+Currently xhci_map_urb_for_dma() creates a temporary buffer
+and copies the SG list to the new linear buffer. But if the
+kzalloc_node() fails, then the following sg_pcopy_to_buffer()
+can lead to crash since it tries to memcpy to NULL pointer.
+So return -EAGAIN if kzalloc returns null pointer.
 
-Hi,
+Cc: <stable@vger.kernel.org> # 5.11
+Fixes: 2017a1e58472 ("usb: xhci: Use temporary buffer to consolidate SG")
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+---
+ drivers/usb/host/xhci.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index c057c42c36f4..0597a60bec34 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1218,6 +1218,9 @@ static int xhci_map_temp_buffer(struct usb_hcd *hcd, struct urb *urb)
+ 	temp = kzalloc_node(buf_len, GFP_ATOMIC,
+ 			    dev_to_node(hcd->self.sysdev));
+ 
++	if (!temp)
++		return -EAGAIN;
++
+ 	if (usb_urb_dir_out(urb))
+ 		sg_pcopy_to_buffer(urb->sg, urb->num_sgs,
+ 				   temp, buf_len, 0);
+-- 
+2.25.1
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
 
