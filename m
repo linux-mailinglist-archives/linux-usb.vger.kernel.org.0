@@ -1,69 +1,69 @@
-Return-Path: <linux-usb+bounces-7158-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7159-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A608D86A41A
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 00:59:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED49586A438
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 01:05:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49DF4B27676
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Feb 2024 23:58:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23E3DB223D4
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 00:05:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4698656B79;
-	Tue, 27 Feb 2024 23:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0200210D;
+	Wed, 28 Feb 2024 00:05:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rBWiEFmc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ECLElM3H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5607855E48
-	for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 23:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C791852
+	for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 00:05:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709078320; cv=none; b=aIBGYbfM/rUPmAo7Z9R5XHvrmpiCLv/0dQ8HRCz2MZoIze10ggSRC+rm13f1WIl3p9aklVXpAo3IymBEkH6/AYX+EyoppYRaWIrFR0n/UKx/POUUOqBVcOSm82AyqfPhLb5GKP4WNpsWAWF5vkLfq/motCwLbUdEPUvsRfJckoo=
+	t=1709078717; cv=none; b=ntiG1DZzYTEQUeAKzCu4GVy0gHx8s6dWse0EGykn1BbuSw9IbTSB+mBbNFyUZ5ZGO4te9A8k0/gl8dzRnjulusrtfYQ44DmhgWc07U00NjIqZrp86FOOc7uwYiW0EvXrT57atd0ji5+J37rdc1s5Ht9RMO2WtBSXOc1+io6QjZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709078320; c=relaxed/simple;
-	bh=2/lRzbav4ZEIZxCx4lcDj3Wd/X8auYnCnUQfBTX1XUM=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=NIkZGgMNAjFqcI3fs6jL8Kx2F62QVc/S9rELja7tuhsZFAUKjpF/tG51wT/mG83/7IvUKi///HGkyNh7/yDDq8sjcoMHxe8RHuwW3ZKT2dOeY+fwarmIRsQeHuEfm8zF6JHcILWPTUh3AdJa/TxlM3Uj6/hJdc4Jgi3/6HQ/Kqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rBWiEFmc; arc=none smtp.client-ip=209.85.219.201
+	s=arc-20240116; t=1709078717; c=relaxed/simple;
+	bh=MNl2a9+9wniw0DL7pfu1Gvnvl1U5VZVdbJpueNcd744=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=BZo2UzuUhOI+iTfBfBi4noEFkb3oC6BfTqwhGp9phRu4jRlDhApOt/1fY4/aGOyLUSZ2zbGxwZOvxZY62NujM5BjmSO1bxr4Ttm8aKDQWhdJmJeWKu/PHKw+vzPNO25B6++EHqrvnBvKGBbOBJdovU1KXqPqaVXxBSjLQFCe8Z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ECLElM3H; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dce775fa8adso9338926276.1
-        for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 15:58:39 -0800 (PST)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60905312b04so42035507b3.1
+        for <linux-usb@vger.kernel.org>; Tue, 27 Feb 2024 16:05:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709078318; x=1709683118; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1709078715; x=1709683515; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=/LdW7tPXFcFwIvF+jtRCAIo7Kke3BZ9m44DLtohg7Ec=;
-        b=rBWiEFmcZqnDXPkn82+eQ5P9Zb2pGgmxxXOarVQMVv6GFdSfMNb8im2/RqG529TFWp
-         sScu0GxpmpcqBUL14wytPzS/yywlC2lk/qlFJTUIcK3xb2YrOSkBV+68Np88wZeenloy
-         eQYpIHe9e4Hx1C9dKZS76Yu41AqmTF0XJ9KIkBjFlYxKPQzlM03dRJm38DVo01Nr4lhB
-         5z4Us1QwcUkp8fW3nSx6s1d6o7XK3PJKpeo1pbCHWIFXwDYz4w5oOGDSjmakMQu4SQbT
-         1UCtCAODID72PnFNI07TY2LGdlJMNR4NVgRFZP9yNxlfDt/V4s7mP9gDpN0I75mKGVTR
-         oKNg==
+        bh=3QynGLk1qlXS/b5BsO1d0j20dFGFaWGNAGl6bHTYfKo=;
+        b=ECLElM3HQkvcm62xB5Xva3Vuz5+IoziuYtMtZzylSjPHH//vXeyiZ+Ks2wdGHWvlwX
+         VK4hGLThu212pF9+EESz9NeZnh/uPAIRtu5jEzoJOazrkdwXkOJgqnhZaE0twESWbmNr
+         BlmKfRMa/Wa3j6RXePNl4OGwueRZ6yM9prV7P+HxaqfODUNyx5I2a8DSq22Mi45531IO
+         xpgFnOkKwuImqPUy5LO2mK/HB1/pGMAssdxYXsHdDYmk1HYb3MPbIFF93ofCeTf1BIqT
+         OvGJdX4ENLK/e/2UYFcVXwEpIGthKWmuJ3BldxrB/AvcYUBZ5N8iL7nEE6wkmzf/Sa3J
+         ISAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709078318; x=1709683118;
+        d=1e100.net; s=20230601; t=1709078715; x=1709683515;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/LdW7tPXFcFwIvF+jtRCAIo7Kke3BZ9m44DLtohg7Ec=;
-        b=jiaIMEmaFvqHzkoerWHEIndZAnEFmbRDV1kdv7hnye267KpFpCLcZI3zX3Lns5h6eL
-         oIW5qhqbmIMqSg6d/7lNpZVFon6SbtlB5knl1QOJbm3PoJJJc7h7e6B4pVf9tTB3nYF2
-         6huYiRexiL+M9/XVWqYkXuKqXRf4/wqHfhufTuXAcZnh4tjpV/ummrrkJehA5J4MD0ij
-         jdx0SQE+18pBW9luGLBsvl76tBB7aYNMnwlbtDEj6xNE956LV6uU5QTAGGydP0HdaHBt
-         PcxF0tmzN3VKNm92z37fvkNywYxuQ5K5T3C0SIK1dNpkaSW6uhwzQMoIyOwgCuL9odPD
-         sWog==
-X-Forwarded-Encrypted: i=1; AJvYcCXr0IOVqMfZNuHJOHOViIHPBrvO+Cspj3V3ZRqU/UfUC/0CU3vIB7bT4kUNflg5LKLghzEjIZycBpbDzTxm1i1Ms6XBi5IeDNFW
-X-Gm-Message-State: AOJu0YwPvlppcK14qHWY3GsYZDjeeifZ4QHkkwhNKpE4gma3S3UrxPQF
-	liEvRCHtWnCcBs8BBLpudB3ZY/uwnhbq+6ACD2DNgdy/p7zStxs+hF60UApZE4xwCy6UgBylDIQ
-	fOw==
-X-Google-Smtp-Source: AGHT+IG0oglXzdl0/+UCvI8lhfH7WFBVyu8Ryq/6LJlQ/oklxmy8TdLcC0HnTPw/C46EKLLizN5gxuAWvGY=
+        bh=3QynGLk1qlXS/b5BsO1d0j20dFGFaWGNAGl6bHTYfKo=;
+        b=kGwr79cYnCaCDdxdxcrOr0BPIds+CBLsqGbzNeaI+Fo+0f0hF81ZYESjB9fNHPhEde
+         ie9fDm/FGQ5iJYZGQJ1+dSixk0ExmwWPlR+jTBwNdLK5Z+hFhRKSVdw0u33gtvwTOjxz
+         HnsTKnYgPSz484t/eY2T48jj2IXfEttyapx0RR7R28ZsW0GAVDTvcB1h1dqvSfUYq0IH
+         xR2PrxQG68YMfQ+Tv/iq7DTeba2ytzMfwwk8xSqKLX1BKWCNlgLEV9jqNwWdowrnUA73
+         IkODZ00aoNCEPQiaXIrZcC1gCD5pQftCaWADGWGCkkj6vRtzm4HOBF5MRdios3C46Qr3
+         WBsw==
+X-Forwarded-Encrypted: i=1; AJvYcCW2xZqsNTK3f3lSSTatfR8MMyVKHzpEfdDB528ULwUk10G6vWFoS0PH/lKnMRRQXomH72PrR2804Nl01+EISuZE4ek5G11S8ZCt
+X-Gm-Message-State: AOJu0YzAIab/ZojbRm/gLgdGZh8b5mWtRC36bP5HxUif80GN149eDvER
+	EJSrviTqFsikqLpOkRSrvhxRE+C9vMhvYcCZe4hUUkUFAhwiqo60g82pzeVewt590WEhSycz2o7
+	QLg==
+X-Google-Smtp-Source: AGHT+IEcTqr5Mo3qPu3T4l2gV/YiU1cSUvm6btQ2z1PV6ifgWkRvqJZxe/4/UzBvKLHXBCdu2ZjX8X+6Vck=
 X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
- (user=badhri job=sendgmr) by 2002:a25:b341:0:b0:dcb:bc80:8333 with SMTP id
- k1-20020a25b341000000b00dcbbc808333mr294382ybg.13.1709078318262; Tue, 27 Feb
- 2024 15:58:38 -0800 (PST)
-Date: Tue, 27 Feb 2024 23:58:32 +0000
+ (user=badhri job=sendgmr) by 2002:a0d:cb86:0:b0:609:2693:bb33 with SMTP id
+ n128-20020a0dcb86000000b006092693bb33mr704963ywd.8.1709078714754; Tue, 27 Feb
+ 2024 16:05:14 -0800 (PST)
+Date: Wed, 28 Feb 2024 00:05:12 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -71,15 +71,15 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
-Message-ID: <20240227235832.744908-1-badhri@google.com>
-Subject: [PATCH v1] usb: typec: tpcm: Fix PORT_RESET behavior for self powered devices
+Message-ID: <20240228000512.746252-1-badhri@google.com>
+Subject: [PATCH v2] usb: typec: tpcm: Fix PORT_RESET behavior for self powered devices
 From: Badhri Jagan Sridharan <badhri@google.com>
 To: gregkh@linuxfoundation.org, linux@roeck-us.net, 
 	heikki.krogerus@linux.intel.com
 Cc: kyletso@google.com, linux-usb@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, rdbabiera@google.com, amitsd@google.com, 
 	stable@vger.kernel.org, frank.wang@rock-chips.com, broonie@kernel.org, 
-	Badhri Jagan Sridharan <badhri@google.com>, stable@kernel.org
+	Badhri Jagan Sridharan <badhri@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
 While commit 69f89168b310 ("usb: typec: tpcm: Fix issues with power being
@@ -106,9 +106,12 @@ PORT_RESET_WAIT_OFF.
     A Source shall transition to Unattached.SRC after tErrorRecovery.
 
 Fixes: 69f89168b310 ("usb: typec: tpcm: Fix issues with power being removed during reset")
-Cc: stable@kernel.org
+Cc: stable@vger.kernel.org
 Cc: Mark Brown <broonie@kernel.org>
 Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+Changes since V1:
+* Fix CC for linux stable
 ---
  drivers/usb/typec/tcpm/tcpm.c | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
