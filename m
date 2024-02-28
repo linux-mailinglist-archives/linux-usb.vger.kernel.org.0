@@ -1,130 +1,146 @@
-Return-Path: <linux-usb+bounces-7213-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7214-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D33886AAA7
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 10:01:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 271AE86AAE3
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 10:08:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBD821F225D7
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 09:01:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91A79B28140
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 09:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6705E2DF9D;
-	Wed, 28 Feb 2024 09:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C705937700;
+	Wed, 28 Feb 2024 09:05:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gxkF83T5"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cAMergyl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A7515C8;
-	Wed, 28 Feb 2024 09:01:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A1E376EC;
+	Wed, 28 Feb 2024 09:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709110873; cv=none; b=UW6VxbpCwslCzk4Cbqj+hz8aaN37tGUP6TfXwUQO5SN9DCW4aUSEvaPA/ZlNcwCUZoPYKAO7lgvjn+atf701J38XgWjsjdS3J0Pd5Ytr+UlWZXTx0UMEMjcdXp2M5zSDnimVwRBZtf65z1aNZBtNivS6pOYq2Q/W3veSPzI5lag=
+	t=1709111120; cv=none; b=Tc6gzje0JOzMZF6JKPaVil5ZAz3gmGlA69FtsCsho9DOtUuw/B01WHZ/zLppK7LbYdwdl2jJxrl1Y6BmT9TpNWT/NnMpmOCB6so3l8DX3wT0yfTKKuyDzbRQMNxqcnkUnENaCuJEuUvBp6s+f8RuPya7cUWdNykIr9ccLkZYZuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709110873; c=relaxed/simple;
-	bh=St2mI7xVXbL+lA9fBOBoKS5cIK6Zgvtjh49RUEUmf/0=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=RTVfAAXPSOXgskcz7xYTufPANZG6WEyDWTEUUYT2tl/MkbaBCXEFL+AOA19JP91sqN0clqavqusJZZ4CFKuZI4hHTeiyz458lYYqAXsiF+H1jX/yVRCo6KEdEhXdhdygJsjdlXxo0DnwV9vkq/c6i1RY0T1OL5kc+LzjqKt9Y8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gxkF83T5; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2d24a727f78so72830271fa.0;
-        Wed, 28 Feb 2024 01:01:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709110869; x=1709715669; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sUvDMhsl6oy6IveJwxumA9llbNHU87BvCC54vL0p+Cc=;
-        b=gxkF83T5BHrS5USGqD60dmyCu2wYltkf197eVc+oSy6HcCVljEz55DCXvvR5JoAoQh
-         zGV2MGo9cHFJltV2dXDAeTKjjLWC3BLuquRMOQ1JN97ux3SyglsIfRFqOTeCKBT7KfEx
-         MRYfD2Zi+pR/dWr382N8WH8zeWhQ7Oz7Ga2YrKHxcWnkbO2UHhMIhugQ5pUylbSD6u3f
-         lBroNuv6Um71sm+jRV8puwen/pdF6RxoHJ+hOwPti7KS2MySIOh6j/1VDUiucWkxVAhE
-         60dbjE7Wr/4i1KTnlO+9lGU+8ajspgEfjrFMlsvSY2SYkTJ70+bHkj+bVm6zTrrqKsJN
-         pv5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709110869; x=1709715669;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sUvDMhsl6oy6IveJwxumA9llbNHU87BvCC54vL0p+Cc=;
-        b=cKqaiHW8DGeBi7y3wmYv6f7AK1Eutp7bxriZ1Niw+dcL99/U0hK3ybGxwc7AG/RIjl
-         qlQzAF1fHwsQvsxVaxVbTSX50m3vud35JPh8kis+BNMJuWcZBGGEZ1ERqWgq6oL+eml8
-         4P48Ru7iz2y6khsQ3WRiHvS3KfU7AYNaoMOKO5F2axw+y3TXQqCfqRFB8Zj0c63EEoAQ
-         0AAbLoEjdvu2WbbmdkewGLRJD9wFZAz9X/WPejeQ9Xauts1i9ReefwerM+fMPqzE697k
-         GwsUm9pN3Wk5kvUwU4c7v5MxPNRNkwFNGPSx6S1BfNj7Ag+L5MXHCVV4Yant7wISdAKj
-         A8JA==
-X-Forwarded-Encrypted: i=1; AJvYcCVcy/LS0AHAmFTC+QoOnUUb0CP9aiDPC+H/aCUrvs/9iKs8A4SsHQEQQVFepXhAYRdg/KWzVwarC6WlAEVyHAoGP3xpgQmPNzHXL/CTPSx56YSNkGpxA2jTt4RCVhhmUun1
-X-Gm-Message-State: AOJu0YzeuestyBzTlE+HJduR9GcTM8L020XUcs76LFvVK9IF4HLkrW+a
-	ASpSbsue7aBtwO581DLugQNB1I0RBx0kGnYEWmbtDSg2iPw+ZZF7/3eDpLiZ
-X-Google-Smtp-Source: AGHT+IGDK+6JPNhwuBcCySabqFiOhYLZspUubETKjlF5ohYMgyVV35TL+E10gSCIvF3N8omTlqvSPw==
-X-Received: by 2002:a2e:b8ca:0:b0:2d2:4028:9799 with SMTP id s10-20020a2eb8ca000000b002d240289799mr9388126ljp.29.1709110868494;
-        Wed, 28 Feb 2024 01:01:08 -0800 (PST)
-Received: from [192.168.1.105] ([31.173.85.77])
-        by smtp.gmail.com with ESMTPSA id s24-20020a2e2c18000000b002d11c91dbd9sm1479140ljs.61.2024.02.28.01.01.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Feb 2024 01:01:08 -0800 (PST)
-Subject: Re: [PATCH] usb: xhci: Add error handling in xhci_map_urb_for_dma
-To: Prashanth K <quic_prashk@quicinc.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- stable@vger.kernel.org
-References: <20240228083343.3101303-1-quic_prashk@quicinc.com>
-From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <e4f87b6b-4561-8058-3449-2ff9086c81a4@gmail.com>
-Date: Wed, 28 Feb 2024 12:01:06 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	s=arc-20240116; t=1709111120; c=relaxed/simple;
+	bh=DRRAqbVu648AzoKaJvd45TIW8tkPSWi4TlS0bdC6/Qs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J7wC3G4ZDSnnrFaMYKangwYedbjQykuEx13h275U5hRKdujFTOECGG5K597youiCwBHSpTncmcCBCtYBXdVzsFd9kqWEb1CsF9K6W5oaHlMy3ouzI9RlBvFaZl/JCEKDphw1gRksVj8/2ZMtYtzCjcxi5Btw3eMmHln5jfMsQwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cAMergyl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EC21C433F1;
+	Wed, 28 Feb 2024 09:05:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709111119;
+	bh=DRRAqbVu648AzoKaJvd45TIW8tkPSWi4TlS0bdC6/Qs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cAMergylgSi8oPrzJBrgbWexoVVMHhvhFK2K42euEZw905NXPn6U9FcKUU3dhX6+o
+	 z4VFGBMkGg9bokWfpHpQ/iEiUKNt5K/MSCYmuHW7L9Y217HHoNwcbsWAQHqBAs02T2
+	 QZ5COuOp7MG/b01HVaiuEyeWiH4Rn6gKoYqEefX4=
+Date: Wed, 28 Feb 2024 10:05:17 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: buckzhangwh@gmail.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers:usb:disable usb hub&port async suspend
+Message-ID: <2024022815-coping-ultra-b3c3@gregkh>
+References: <20240228085607.3275-1-buckzhangwh@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240228083343.3101303-1-quic_prashk@quicinc.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240228085607.3275-1-buckzhangwh@gmail.com>
 
-On 2/28/24 11:33 AM, Prashanth K wrote:
-
-> Currently xhci_map_urb_for_dma() creates a temporary buffer
-> and copies the SG list to the new linear buffer. But if the
-> kzalloc_node() fails, then the following sg_pcopy_to_buffer()
-> can lead to crash since it tries to memcpy to NULL pointer.
-> So return -EAGAIN if kzalloc returns null pointer.
+On Wed, Feb 28, 2024 at 12:56:07AM -0800, buckzhangwh@gmail.com wrote:
+> From: weihui zhang <buckzhangwh@gmail.com>
 > 
-> Cc: <stable@vger.kernel.org> # 5.11
-> Fixes: 2017a1e58472 ("usb: xhci: Use temporary buffer to consolidate SG")
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> we prepare 30 mobile phones only for usb plugg in and out.
+> testers plug USB in and out very frequently after phone in deep.
+> Repeat the test again and again,some phones are crashed.
+> our analysis：
+
+Odd colon character...
+
+Anyway, you sent a v2, and now this, why?  What changed from v2 to this
+one?
+
+Please properly version things otherwise we have no idea what to do with
+this.
+
+> We analyze ten kernel-dumps,we found something common kernel is blocked.
+> pasre in crash,all the dump are directed to usb(device port/hub).
+> here is a kdump,task 446 &365&4511 are UN.
+> 446:
+> .... ->|kobj_attr_store
+>           |state_store
+>             |pm_suspend
+>               |enter_state
+>                 |suspend_devices_and_enter
+>                  |dpm_resume_end
+>                    |dpm_resume
+>                     |dpm_resume
+>                      |async_synchronize_full
+>                       |async_synchronize_cookie_domain
+>                        |schedule
+> 446 is waiting for 365&4511,no doubtful usb thread.
+> here is some warning log:
+> [83.958310] musb device disconnect detected from VBUS GPIO.
+> ..........
+> [84.908017] musb device connection detected from VBUS GPIO.
+> [84.911946] typec port1-partner: parent port1 should not be sleeping
+> task 365 & 4511:
+> ... ->worker_thread
+>        |process_one_work
+>         |async_run_entry_fn
+>           |async_resume
+>             |device_resume
+>               |dpm_wait_for_superior
+>                 |wait_for_completion
+>                   |wait_for_common
+>                      |schedule_timeout
+> I guess usb async resume/suspend are disordered,So I try to disable.
+> After that,we tested the case for a month,the bug never happened again.
+> the fn device_enable_async_suspend set the dev->power.async_suspend= 1.
+> dev->power.async_suspend=1&pm_async_enabled=1,fork task like 365
+>    ---> dpm_resume
+>            |dpm_async_fn
+>              |async_resume  
+> dev->power.async_suspend=0,disable async
+>      --->dpm_resume
+>             |device_resume
+>               |call device resume fn.
+> here is a demo:
+> Only few devices such as scsi/pci/usb call device_enable_async_suspend.
+> but scsi call device_disable_async_suspend at drivers/scsi/hosts.c
+> 
+> Signed-off-by: weihui zhang <buckzhangwh@gmail.com>
 > ---
->  drivers/usb/host/xhci.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/usb/core/hub.c  | 2 +-
+>  drivers/usb/core/port.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index c057c42c36f4..0597a60bec34 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -1218,6 +1218,9 @@ static int xhci_map_temp_buffer(struct usb_hcd *hcd, struct urb *urb)
->  	temp = kzalloc_node(buf_len, GFP_ATOMIC,
->  			    dev_to_node(hcd->self.sysdev));
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index e38a4124f..de74f70e5 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -2602,7 +2602,7 @@ int usb_new_device(struct usb_device *udev)
+>  		add_device_randomness(udev->manufacturer,
+>  				      strlen(udev->manufacturer));
 >  
+> -	device_enable_async_suspend(&udev->dev);
+> +	device_disable_async_suspend(&udev->dev);
 
-   I don't think we need an empty line here.
+Also, I do not think you addressed my previous comments about this type
+of change, did you?  You can not just disable this for no real reason.
+And what are you disabling, are you sure it was enabled in the first
+place?
 
-> +	if (!temp)
-> +		return -EAGAIN;
+thanks,
 
-   Not -ENOMEM?
-
-> +
->  	if (usb_urb_dir_out(urb))
->  		sg_pcopy_to_buffer(urb->sg, urb->num_sgs,
->  				   temp, buf_len, 0);
-
-MBR, Sergey
+greg k-h
 
