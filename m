@@ -1,102 +1,93 @@
-Return-Path: <linux-usb+bounces-7265-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7266-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66A8186B8F8
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 21:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0406786B8FC
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 21:21:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D32E28776B
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 20:20:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE1852840C1
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 20:21:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D3B15E5C3;
-	Wed, 28 Feb 2024 20:19:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C907443E;
+	Wed, 28 Feb 2024 20:21:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QLBqCokB";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Jmi9SpTZ"
+	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="s0T3n2ex"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2112.outbound.protection.outlook.com [40.107.15.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A0C15DBC5;
-	Wed, 28 Feb 2024 20:19:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E365E082;
+	Wed, 28 Feb 2024 20:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.15.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709151587; cv=fail; b=JpyuhKf8fjiEVGwGGGojNClKCsy8CL6pD650AKkrIu1FhJKxbm+ydEtMcOpUpcMLSw/ri8NbeXMJ65O28/iXtsHgV5wTO1e7k7h2bntWTYueOXZTviW+NG7gjEbQ4pUqw9545iAhvaAUqbWvrLMg9TXaDdH3whfK6nzeEAeffeA=
+	t=1709151668; cv=fail; b=Y9bu/lIzNCw2Ua6I9Q0QeE3pq0C5im48t21pUKrLGbLUUktyqf9uiAirPOUs6WhZsJLmtexIOHyvYHX/vLmLQevXkyQW1nQ/B+xf+lnoUzKAsZWcBknhPdhibZBhodg40gt8xxG6meTAzVTVamjT1acIR23Br22TV31CEWwstWY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709151587; c=relaxed/simple;
-	bh=UMWJPRzjGF3+2LDPsFrMcm6dKGAAu/5EWA4sA8a1Kdg=;
-	h=To:Cc:Subject:From:Message-ID:References:Date:In-Reply-To:
-	 Content-Type:MIME-Version; b=tbNhxmcXxV9/HLUGYT7QJN2GhAduB8qO0AtpUVo4RXlEz5vRtE8N+0VvcAp9vzbctzk7JK26qCS7cazhqyyYRVTYvj3r0SFacq2x0sFOxneSNJdJ0bV+R660kdBSZ0+bM1IfhJ8PAwnJvdnQWH5k8biK/oCrROQ87EEVLPdujfc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=QLBqCokB; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Jmi9SpTZ; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41SENZiJ017636;
-	Wed, 28 Feb 2024 20:19:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2023-11-20;
- bh=b2XAPijeUifqv3hFeOahUcgZ8tU8fqUjZnD45TkPIDY=;
- b=QLBqCokBz/xWNHxAcWbwdcw5LLWWFm88qs3g5oouvespBVYfcXcVCDI9j+aYJhpleJAy
- 3WO8k6iMXj5BkBpxTXeWSsmQUoYrq8UgM2RDZCauM1qB0y4HZpHuFxf1mxoqGPCfy9CF
- jKBDAHUElWtB//3cqJOBvZ9nL69XLAo2OKjmV2tbwBM4ndeLlpkqY0hBVOrqPsXgsou+
- w5/CVj1arBjEhsHmajSz83RtFDm2/IlFDI8Ve/XXcXsNWySnTX1T2m+Hv5K535xGg3jd
- ee0CIqsOsdYPb7lZRfq1PfXQ7+1xibvJa1FsWT9YpuSG9kgvzZc4uGJNEQ5wDrTkLQ9F Jw== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3wf8gdkksu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 28 Feb 2024 20:19:31 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 41SJoaau015331;
-	Wed, 28 Feb 2024 20:19:30 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3wf6w9mvu9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 28 Feb 2024 20:19:30 +0000
+	s=arc-20240116; t=1709151668; c=relaxed/simple;
+	bh=hrd0s3dnExxQQeyYGP/dlTBss7HIlgNxgbtDcdnJjQk=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=RO7XulmGhfdwuT8Fdji9TcvSt4iz0QvW//WEdyA82LQ88IlkikPGa6DDG3mGGfWJB1xPt6dq7vnPo16x/jwYn/p3o4nxlszI45iH7IJuhYiuuJCScc4PtS88YvExMNJ5BVsXyI/H8UXtiHVeoJuudlbBQSZoGU0aFM7qZEL6aOs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net; spf=pass smtp.mailfrom=wolfvision.net; dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b=s0T3n2ex; arc=fail smtp.client-ip=40.107.15.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolfvision.net
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fem7VJ+7kacVadf4GHyO+4D6z//mShkc2GFxpDmE3LMfV+SWaNBzdJLEc8OD8mXKeEoSGn9NXhMnWc94NWPDD1mkoLxMhi1o+toQZcwVzKOnu+UufnWPTksBJ4MdNB4syAcuRLgCOUb/tDYQ4g2Cg6vNFdqynguWeTB7rhTcrwfUDFKAr+umwEmOQrTWKrIwZD6NUY6proSA7vUPlQXGxZ67n4HWLlIT8ZlsmA2V+jLw8IaXGqGyCAMyVH19ir+CXuXKlnifJzYDi7ySe8oDiU4VG0zvqcdkDrxW1nALNF+taVusnzc8HHWvX8hKs6Q/2J6vEMczSfbNYYp7W0yc3g==
+ b=A85D9ZoL0GmZK1260B/qUvKi2Izk8RCjE1hrCRcKT3s71bENePjxawwbZ14UjAOcc1WVYgFJsop+8FRyQabKzTZXE3TeBamCJtbVYZMOKQnV+0QLNWD4gUDIk1wVTChKKBv4RWZL5+0P+fz755quUZYwtekiADtZ+eWczhN67BGrrfcuNfgTos7hnRB7icXVslyzHochPuKgNjxhpKMC5XXMABN4kQj0cOdhD9MDRvjudUO5AbkbjmAuoCP4Azt9vKW/Oa8LDMTICD5UbrywjWX53jslJgdfdE+5EkQkSGvsKnAsioEhsA/IyWw1YxN6W1ttDo+FxhmsfchE9lddNQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b2XAPijeUifqv3hFeOahUcgZ8tU8fqUjZnD45TkPIDY=;
- b=Dq/VfTzR+pRy5iHNrtAETCt0u8y7HUvBLcgsl4nO0dl4axhRcPCZtfOWMBGB1c0D4kd2BxEbtTpelw2df7PlAq9sGiOP4tCxDHNERjqsVyv3uyWliY0bPyQV0v2u5ihRvpdXH013Fz1zYBFIc+EFineGIMQI1z+jgPlZxCG3k90bpGr9QpVlrX29aKY0g3feSJNtgA1BrgELja0Jp2J9FaM1Ut8K5sI85v2DP1iHLQKDYnNHkhmiFnPkuhRjip94CW1SiniZ1ZY2Oa2TOi681B52dSS3CLyzhUdEoAMdLOuS20+1whv4RRpH5/uuNjbkVT54SZAldUoKhMiyRuey6g==
+ bh=eqEzPb/mVMcIU9eXjoP06fQJwVcbJk51Ys3HvOoWbI4=;
+ b=bktvlJDuZy3TSIkLvy10VbT074CLxWxYwwzlBbGtOJaVxIOr65LdfOEMIc//L6I/ZbUxNc7C8YDjxpvzPoSj251e7MmmlN2qqqWOS3gOvDkkhKr1eYa/nu2Ju5Fo2VK8SfES26KpZw1bdlg6IufKtMNeYzqOUoLKgO7CBipFY+A53sUQZeNwvfOG1WMFmPtXmzFh7xWyqck8VGwp7xvCYwpRauzLBElZ7UMTe5ofzHauLFGaf85r4EWvRIWqXAyw+YH7JbBZDjLQEO6NVhb+O74FbDFb7qo5sqU6xoy3abFhtbrpM6UasRrr0rEj1b3j75wxAU3KuzN2wnlqg2/PNg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b2XAPijeUifqv3hFeOahUcgZ8tU8fqUjZnD45TkPIDY=;
- b=Jmi9SpTZu715wq8RtEFNVjbBVfzqB91wULxAoCYNWNJdzD/+imfzB8dnZWkxqjpeK4X0J8rSJY/2Kqw3oT3LBnZEg1P5HMvD6nVSyzk1O4CnGmhcGN8T+wz3MpYzok6PH8cxCxc+aXw/FaWrJSRJlPKunLZ0ZvIXhskWYTKlazI=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by IA0PR10MB6699.namprd10.prod.outlook.com (2603:10b6:208:441::5) with
+ bh=eqEzPb/mVMcIU9eXjoP06fQJwVcbJk51Ys3HvOoWbI4=;
+ b=s0T3n2exBVXsfDNqFBbeeiPhFWG8ntcbO/pbedw2HqhWOAjULsnnCuZEGtTc1ZpJlCuZ0k6FkRCw2oTxvipG0IEW2+Xs4lEDnhIAgiXnvTvsWGpmM6GyHBiOG01gdrf/QPwcec7y+/y6vMF4d9QwPxKSVrIRSzWRIOj1tPX65Ws=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
+ by AS8PR08MB8875.eurprd08.prod.outlook.com (2603:10a6:20b:5b7::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.39; Wed, 28 Feb
- 2024 20:19:27 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::7856:8db7:c1f6:fc59]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::7856:8db7:c1f6:fc59%4]) with mapi id 15.20.7316.039; Wed, 28 Feb 2024
- 20:19:27 +0000
-To: Harald Dunkel <harald.dunkel@aixigo.com>
-Cc: Keith Busch <kbusch@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>, Bart Van Assche <bvanassche@acm.org>,
-        linux-block@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: RIP on discard, JMicron USB adaptor
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1sf1c1h0x.fsf@ca-mkp.ca.oracle.com>
-References: <70bc51d7-c8a2-4b06-ab7a-e321d20db49a@aixigo.com>
-	<62296d89-f7e6-4f54-add8-35b531dc657c@rowland.harvard.edu>
-	<Zd9Xbz3L6JEvBHHT@kbusch-mbp>
-Date: Wed, 28 Feb 2024 15:19:25 -0500
-In-Reply-To: <Zd9Xbz3L6JEvBHHT@kbusch-mbp> (Keith Busch's message of "Wed, 28
-	Feb 2024 08:55:27 -0700")
-Content-Type: text/plain
-X-ClientProxiedBy: BL1PR13CA0250.namprd13.prod.outlook.com
- (2603:10b6:208:2ba::15) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.34; Wed, 28 Feb
+ 2024 20:21:03 +0000
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::9e35:6de9:e4fc:843f]) by VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::9e35:6de9:e4fc:843f%6]) with mapi id 15.20.7316.035; Wed, 28 Feb 2024
+ 20:21:03 +0000
+Message-ID: <ecf303c3-d7a1-49d5-a997-32596215e43d@wolfvision.net>
+Date: Wed, 28 Feb 2024 21:21:00 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 6/8] usb: misc: onboard_dev: add support for non-hub
+ devices
+Content-Language: en-US
+To: Matthias Kaehlcke <mka@chromium.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Helen Koike <helen.koike@collabora.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Russell King <linux@armlinux.org.uk>, linux-sound@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20240228-onboard_xvf3500-v5-0-76b805fd3fe6@wolfvision.net>
+ <20240228-onboard_xvf3500-v5-6-76b805fd3fe6@wolfvision.net>
+ <Zd93JZTlN4BCxWm7@google.com>
+From: Javier Carrasco <javier.carrasco@wolfvision.net>
+In-Reply-To: <Zd93JZTlN4BCxWm7@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0215.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:e4::16) To VE1PR08MB4974.eurprd08.prod.outlook.com
+ (2603:10a6:803:111::15)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -104,97 +95,142 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|IA0PR10MB6699:EE_
-X-MS-Office365-Filtering-Correlation-Id: 53160647-2a4b-4211-6f0f-08dc389a8fcd
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|AS8PR08MB8875:EE_
+X-MS-Office365-Filtering-Correlation-Id: 700deb88-100c-4417-ba46-08dc389ac903
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	pFHB/7TKLUVyRh5YsKR+ddXhQ03AGscS8rtRdcSzY3OVmFGrqJ5WHOHXwNulAC6SVN9WhAlqG6dkk7BgaNUuCA6zIQep3CwP9heWufG4H5Onq5XgVSGGiKu1GUkmILBaBdIUB/qlJTdSjkKZecuVWcU15tQ0sv26AqcG70GYrpTI4b7FOEIhxyQyoywFTpCjofbiem01v5yxov2u3XSNeGStttjML19eGGbJvIff9j2ixkcdhj16PWRHr/Sg+uSbkFoCl/W6DWzfFHv90c8uAtLzZ0kTbjtwsjFVggmpCtjzLpCdDIz69v8G5Ss/PSpxSrOzZaMqzwb+ClZlDhytcsmfGEYcz0oTQdSqe6loIMm1JzKgWemDZrDkyXSWlHcmEd0QwxvJ8yMWU1/cvh15a9W8YHvWCyIt8l1mXyL5t0JIytAlgPUBXy5/ni4QEGCID/MfqS+dHaXIDNB/bR93K8KpdyrnVh1rhi2zUOE9qefNnJ2Ax9z2UoQo4D3zbdwpf347P9fPFHmW7o47JyM8HzIhfAGOHBUdAFexMLsxDsuUWNyUMWscWytLm9qCxrro8A0tASIUX+HJS3wqn/Ol1BcHfGIXIrMaI4fkaRh+fTT2yxcQmGoF4yOruYZY7UomuNsuQ9Ne1N1uUkwNgCKWiA==
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info:
+	F4msH3Yh6JePWIHERyK7aFgdNvpZzv6Vu9LOl4irhHOCa7dngEzZCE6NZrhrAqdsNSvkLke5mQfcO2ozb+t4vaDAOF7S4N8miFm92HafgjKPGsQmmWU22trDk55UZb2oaCwTGQbWic6qMQcf9a9sNramjggrwbCZVoijFq5iBqlhpkPgqNFhxBxcGK0Gv1uGYInIS8w5SpPUQ1M5yrM3dsw40g443l0zz6TC0yinJe2ThWq7U9GQUBO+F7ag+la7BrR5iuUy1nL5o3Y6NJ/DV6Sf1Wc0ucU1XTY1ex8o6RUZx79wdLqTwuOqC12hZsA2NQIranhpTCfgqh8RZsxAJ3EgI8nxK57F7NMSM3MXlaQ2Nbn0zDGoQY2l7gpVitElZd3LbJSruybY6Yx47GeFXgwZf0/x99Fspf2sdoTQqR6VHDd+TtjhcqSnRO+1da4OhVPt/CBxz99+FP+gvN4OBlOh3naJcp8y36UrrLlEnFGXRGkTdmOyRSSQaI1Htp8d0h1Jih9F8JoAVRq+84SUaPs0jkdaB3BUq8JF1QprIUOMAU8VdEbbh6xSiWpn++CsCQWUIR108H7J9VOoF5XdmI30k0H+5Q5WWyS1dP0EWVcp8s5d0J+TOMKZaLNGByGxGYBzb485fbkvKhOIxwmpUw==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?542U/fywIYUbX6/ICC/wh43YZoD60yPk/dDNGo6Zc80T/aBrKg6KMhEZFRjQ?=
- =?us-ascii?Q?ytlSlKJ7JEVHGqJc4z6igkIU8vWeZUdZ/RiC0q+o7dgxscVMUk6dHOyHcsH3?=
- =?us-ascii?Q?cp1gsgcIoVwI6wCovhw01k8N8KRyKFL5YuIS+jJU9Iobv2gluX/El5471Y46?=
- =?us-ascii?Q?LZVgEpRnkgM26jzTRC7evwlE7QB5U0hfSPEm0YaSjow/6IF6/MdroNiQ91NB?=
- =?us-ascii?Q?ht7fQmZBi5vy423pE4PWAXANhuLT1s95PxQweeuTFk8zDXSQB5kZB+WoRSdW?=
- =?us-ascii?Q?Q5VOzoyUGRWvO84p/Dte5untYgaSJV9Pt9hZZXMS59nUc92eCtX8V+OCasPn?=
- =?us-ascii?Q?md6H0m7Mcs4BBobrNfqEep8q1cweV5Y9Bhn/tEEnucJv3th7xhSru9madn7P?=
- =?us-ascii?Q?D6vvGfA8c3/xWKihsawcl5Qexk2zScNqOtAWoXUjuSmJOB+36fNsseotqwlD?=
- =?us-ascii?Q?pVybHj6l3rgJdfykugYonFtw4/UN4N6cuMnCzc002+TrVz0wCJ1CF5zyxMsI?=
- =?us-ascii?Q?MB4MwHkjbH0RWOMGo4qPKNuq2xN6H7M4RnlzDSJSj92sg4gCXiHiTS/UZytG?=
- =?us-ascii?Q?QmbsjuNR7/ajJnRqdOzok7wwzNLIzncfDGZqWl76MVUQj9PI+lZXIjmzMgoD?=
- =?us-ascii?Q?tsAX/wxBpRlxhIwuIj9CediDnSJaY7cqfJt4aL5EhDHbhNIUoJITYY9Hd7Y3?=
- =?us-ascii?Q?E7XQv9l85FAx835Du/4VVgg2xDiFRVgXtzeuMLYF0R/Ddsdmc2UKVMQmpYw2?=
- =?us-ascii?Q?Z27wxXhrYZqAcdyhfjymmGMo2S597B0VQXpa1ExXDHzIsO4iJgNkjpJKLH8X?=
- =?us-ascii?Q?4+HIsGibAKI9kn9i3GLG8QA6Rc/JuHtrWexy7EGZsA7bJFqZYpIKCVXWn5XY?=
- =?us-ascii?Q?J/JjZA/fE2/r9oyEM0l+TtsQqGoWkktcP5j5i8x2kd37lNsYruYzhgwqhkCN?=
- =?us-ascii?Q?vVpVYXDo81d0WhVJHS/j5s9bzz/6XTVAHKQMPbdioHuuWYJBXCmj0T61Kypp?=
- =?us-ascii?Q?QdGy8Dwmd/+qCk81LdzS60OftzBA/Q3xmlc0qW04zT4wfJmKxO6bl3StU3wO?=
- =?us-ascii?Q?EMGzxmGk/1CXFtbg8oU4U6z6aJcnAEmJJpvfwo/Mpz/HyH4pgEWzVEo7eZ0w?=
- =?us-ascii?Q?RQlTYju2fYrH4UuzYn3X13Ya2xuXXYnAT12L+QsNc4v3PpiqacmVy5ZAt6ug?=
- =?us-ascii?Q?Ise+Xg5aRhhmwsNrqNK2fPRKkGTz4gQxy0xcYa1KMJRNbFPUoZC6mu5r1KZ9?=
- =?us-ascii?Q?Cd61jFKte9jKkOnfJUpnMHFzo4fz3fNLWBwZOtgajF6EiW7eZ6aRr8Ih1SLu?=
- =?us-ascii?Q?+eJ8/mumlWiq5VeYX09qoEg8ncnIkRN0tCtg1lAR9Px12oGGDq1tJin8o6sT?=
- =?us-ascii?Q?BIT7alHerCVELcxiiCUamJl3xTDbkM7fb+8Sh1v6efJ3XEzhmrgIdvEVhE79?=
- =?us-ascii?Q?zPviwEf9bHrIStSInyVharJKHPr4ZOy9bKE5YvqZmuQBxmTnVAzaTH3PaHio?=
- =?us-ascii?Q?LuX3EHLlDdtDSArSAqUh5Q0vCCTJIjhmRznELfizN5mvUy0jfsQ136EZk2hp?=
- =?us-ascii?Q?7teBJDauFbFYitbLX1knwYUMl/9zqslgTLWfLobxAZeT7FhEGg1oeKpydGS2?=
- =?us-ascii?Q?AQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	Ueeq0w+DRmxflfiA8EKy4YuzB8Q2vVPp/8KkWUOxRrsTznA3h0ZyAEQBNTwx6XrC0wvqStzug3d8wqxBnXodteR8cmwT9muWECCKprbOvdSBX668ym+H6VLsSHE0zCfWYwcsPDLbXkPttaY7xqlS/e6UzociZ575tIoqKpZEzHrlfUaKDF7JDeTBgRqWewBJ2FBiZuHhC+i5gi7fApdtIoPx19x6OQ7IxbQLZ0DjmOF8EwyuTyFruVGjKwDEfUmkzxHgoU1G7In2yJNtK9HPa0Z936dEmfY4voOVv0H89ljukqf5KApAOlUvaIjEUAu9YmSEB55etV1G2bwCT/0ZDKS1JtLuf9t5lMqn5AStoWY0iHSPFGZfgAFGyZFqvumjit6LjHWOIsZHEx0L9p9aGr1RsIwagMlayz0mw3T/xpmeN5VLbLjmJCIsLd2UhK8eKpinx/AQ68w/CR0+02vJx4AP1n161jnlK/uJK6QnMyyXAdenkHK3eE1VJY7qdfPX6m8VjRWQo3EATwjOMAgf4NjZLg7lloPECCMm4lMGVk1YVWCgopKrfxAEzkQZIQN4oRgp9xR0+zgjQcBzjiJqMHDe/LH0TfmmM545ENIQUHo=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53160647-2a4b-4211-6f0f-08dc389a8fcd
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?aW1BMDVDSGUyTS9yaWIzZHpsamhsVlpTSXk3R0gvVXMyQm01cHB6Sk0wckdN?=
+ =?utf-8?B?NFBoeDYraHBtb2xYYjJHV3ZKblpxQm1udnV6eGFJclU2dlRUVFVCKzhkazlM?=
+ =?utf-8?B?K0JLelU0emVqbE1Fc1ZxNVF6MHVBTm9JM2ZxS3lOdFdlZFdDbzc4c0pZUWNK?=
+ =?utf-8?B?ellIaGtOdWJudlU2ZGptd3QxWnhUeXJJUlBOeWxuUkx5ZlhDN2pWSzdUYjhy?=
+ =?utf-8?B?MjVLMVBqUXBSV1ZqREpVcVgwL3EyREd0YXppM3ovb3IwVDVHaW1lNy94VDMz?=
+ =?utf-8?B?RFhzNndnRjIwc042N25HUm1aTjdOa2NRNlpicC92ZUhBWjg2MzBvUUlVQTBR?=
+ =?utf-8?B?Q3ZDdUJFZWJQVmlNZWc4aHBmWFgrRzI5eEs5NmFDSUJtcnc1aVozalRRODZU?=
+ =?utf-8?B?bGJJVDBJcWF2NGRhNmNXakZBaUZ0WVcybGZlNTJ1RzcxWnZoUlQxd205VGVj?=
+ =?utf-8?B?a1czT0VyMTRubHl5WkRaZzhoUmlHTDNCRnpSQ2J6ZmVyMWtkT1BPK2Z1dmwv?=
+ =?utf-8?B?STJwVjNVTkhGRUxxK2IrM241czV3MXVwMzFTMWxnWlY1VDJqTzgvV2NtcXR6?=
+ =?utf-8?B?UlVBYklrbVdOUUhvQW8wcHg4UC9RcERSM2dla1Q2ZG40RGUrd3Zrd3lZRk5Q?=
+ =?utf-8?B?M0VXVXhOb013d3R3czZRN3hQOVNzSjArMm01ZGV3ZTJOb0hmeDYzWElSUklB?=
+ =?utf-8?B?MnMvYWhzOHpzaG1BNjlUVXlPbnVJUVF2WEVXZEc5dXljbWhndklyeENuUzlG?=
+ =?utf-8?B?OVNKTTZiR0c0c0lQaDMvK2E2MUxBT3dDUm1PaVN1VFh0VUF5RGoxVklyYVN2?=
+ =?utf-8?B?c0V3OC9SWHF2dUc5dlB6ZlhKNThyRWFNYjRHMzg0VG9SanY5STJnQm5wZGl3?=
+ =?utf-8?B?MHJFQ0V3VmVYeXdTY2RjZTBSa1h4WDVxTGlTZVNpb0dRZWxuaXNQa1ZpdUlz?=
+ =?utf-8?B?TXJzb1RveWNHOVNiSkJxSVpiZ3Z2emNIazR1b2hpZUFRS0lDQnVNVEV3NjB5?=
+ =?utf-8?B?REk3OVE4MStCL0xnZDVMVTJnSFpJOE5zNnZnSysySEREMXQ1NEc3VlE5bHV3?=
+ =?utf-8?B?WDMrZUpXYVJoQ2VXMUdlLzY1Z1IrR2lFbFJjOHdxbjB4aDJCelZUeFlBSW4z?=
+ =?utf-8?B?SnBXZGZXSURQTU8yckdwbmYxRlpLTzJJSWZiSUdEaEtldDhwUGJFZWNhKzFp?=
+ =?utf-8?B?QTRrR1VneFhpZmdhWmM4TEduZ2x5MnhaTXF4Mm52WjFkWXJpdzNabERhUXI3?=
+ =?utf-8?B?bGVUYUNWM2gxQWRJRGN1dWRMWVFWZWtuaktmMncyZEFWWkNLZFpwa0V1cnhE?=
+ =?utf-8?B?MGxtVmlsZy9IdmtDQnlqVko1OVROcXE0Nk1IWmp0ZDBkMFBFeTF2elY5KzA3?=
+ =?utf-8?B?T3E5cEFpVlZ3MFZQNzExaFlsNVMyaGlpNUxlVGpqbzV1SGMyb0dycFIyWS8y?=
+ =?utf-8?B?Vmc5VUdHS29GVG1CWXNNZm8xNnVEV2JqOHgyU1lNTTdIaVlmYWFmZEorT2Mx?=
+ =?utf-8?B?ODdJWmdRNjhISUVBTHFLb3JVcE4xMjBCbkxmd3VJUy9zTzE1V3g2b1FOTGVv?=
+ =?utf-8?B?T1REUjZVWFV0UmhxVE1SeWV2TDUza3BVV1RuRzRSVTJUbXpRL0V4T2hmYzk1?=
+ =?utf-8?B?SHU0U2dpNHdreEhyQmlwQkRiZTE3OGJ4RjZmT1djY2F5Si9HWVloWTJVMmlr?=
+ =?utf-8?B?ZTV4OWVUSW9acWxoeTRyQVZ0L2Q1TU41cjBCL0ExMVJGMHMzekQrSUhuUito?=
+ =?utf-8?B?clBzaFdUMXlXNWJGY3pYMTNsRENWOWhSYVdnSUNrOWNPL1lBWjl4UHAwRGhO?=
+ =?utf-8?B?VSsrYjM4Qnd0YjF6dnE3UUU1RFBZY0dleXcxSVBKQ2QxZDBzdVhOdENGc1pj?=
+ =?utf-8?B?YjljRnoycEp6S1k1Z08rcmxqWTNOd3ptNWNJVzk4K2JkZjlzNm5zOWpDeUlG?=
+ =?utf-8?B?TTNORGJJclZVZGNUazBrYlFQUEJCMnA3VUkydW05T3R0ZTF5NERzR1VvWGJK?=
+ =?utf-8?B?UHI0OEZVMGVyNDExNC8ybFN5LzNGaG5NVHprekJURmJ2U1BrV3F2elhMUWIv?=
+ =?utf-8?B?dE1STlkzbjFtbGdFMlB1a242ZWh4VjJaa3U4dmhTWGZTSm1aVGdyNHFuMXk2?=
+ =?utf-8?B?WjZBampGWnMwcE1aTDA2bEhLT25pNnZacHlKLzRrOHJtMkQzc3JXYld0T25z?=
+ =?utf-8?B?NnVCMHhWdEdENWRXbFlNQ1UrK3prcEF3bUZ3TUhBVHNwd3p2UzJCdWY4R2Zq?=
+ =?utf-8?Q?LR1g2VLcLqQTge5RUzdCm5khnNCs1TFrSSgJ6iYn5E=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 700deb88-100c-4417-ba46-08dc389ac903
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2024 20:19:27.0265
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2024 20:21:02.9698
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: USEjqFbZtIYZ0nVOfU/1ErtaUhyaoR9c3y0UAKgGr2iAFkljFJ02OuxE11CH1mYBV9H/jxJqXR2WMI2nJsRhF1rE1NswBQPivFOUZE3xKso=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR10MB6699
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-28_08,2024-02-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 phishscore=0
- spamscore=0 mlxlogscore=646 malwarescore=0 adultscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2402280160
-X-Proofpoint-ORIG-GUID: S_KGbry8o_-92dXHMjH2l_98zwrnATE7
-X-Proofpoint-GUID: S_KGbry8o_-92dXHMjH2l_98zwrnATE7
+X-MS-Exchange-CrossTenant-UserPrincipalName: pRPFOV3zqhujatAQ+f5Io1DZ7dNbaIUJOFDZ/UYR35E7MCNFNxHcpl3xbKRRE8wcs+I+O4GOL1RBnGh+9m+EHU7jTqz64cnVjjyWig4t0+A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB8875
 
+On 28.02.24 19:10, Matthias Kaehlcke wrote:
+> On Wed, Feb 28, 2024 at 02:51:33PM +0100, Javier Carrasco wrote:
+>> Most of the functionality this driver provides can be used by non-hub
+>> devices as well.
+>>
+>> To account for the hub-specific code, add a flag to the device data
+>> structure and check its value for hub-specific code.
+>>
+>> The 'always_powered_in_supend' attribute is only available for hub
+>> devices, keeping the driver's default behavior for non-hub devices (keep
+>> on in suspend).
+>>
+>> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+>> ---
+>>  drivers/usb/misc/onboard_usb_dev.c | 25 +++++++++++++++++++++++--
+>>  drivers/usb/misc/onboard_usb_dev.h | 10 ++++++++++
+>>  2 files changed, 33 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
+>> index e1779bd2d126..df0ed172c7ec 100644
+>> --- a/drivers/usb/misc/onboard_usb_dev.c
+>> +++ b/drivers/usb/misc/onboard_usb_dev.c
+>> @@ -132,7 +132,8 @@ static int __maybe_unused onboard_dev_suspend(struct device *dev)
+>>  	struct usbdev_node *node;
+>>  	bool power_off = true;
+>>  
+>> -	if (onboard_dev->always_powered_in_suspend)
+>> +	if (onboard_dev->always_powered_in_suspend &&
+>> +	    !onboard_dev->pdata->is_hub)
+>>  		return 0;
+> 
+> With this non-hub devices would always be powered down, since
+> 'always_powerd_in_suspend' is not set for them. This should be:
+> 
 
-Harald,
+May I ask you what you meant in v4 with this comment?
 
->> > I tried a discard on a Samsung PM981 1TB SSD (m.2) using a JMicron USB adaptor.
->> > 
->> > udev rule:
->> > 
->> > ACTION=="add|change", ATTRS{idVendor}=="152d",
->> > ATTRS{idProduct}=="0583", SUBSYSTEM=="scsi_disk",
->> > ATTR{provisioning_mode}="unmap"
->> > 
->> > Probably I was too optimistic.
+> Even without the sysfs attribute the field 'always_powered_in_suspend'
+> could
+> be set to true by probe() for non-hub devices.
 
-> In the code comments above the WARN, this condition indicates "the
-> discard granularity isn't set by buggy device driver". The block layer
-> needs this set if your driver also sets the max_discard_sectors limit.
+>   if (!onboard_dev->pdata->is_hub ||
+>        onboard_dev->always_powered_in_suspend)
+> 
+> Checking for the (non-)hub status first is clearer IMO, also it avoids
+> an unneccessary check of 'always_powered' for non-hub devices.
+> 
 
-Please provide the output of:
+That makes sense and will be fixed.
 
-# sg_readcap -l /dev/sdN
-# sg_vpd -l /dev/sdN
-# sg_vpd -p 0xb0 /dev/sdN
-# sg_vpd -p 0xb1 /dev/sdN
-# sg_vpd -p 0xb2 /dev/sdN
-# sg_opcodes /dev/sdN
+> Without code context: for hubs there can be multiple device tree nodes
+> for the same physical hub chip (e.g. one for the USB2 and another for
+> the USB3 part). I suppose this could also be the case for non-hub
+> devices. For hubs there is the 'peer-hub' device tree property to
+> establish a link between the two USB devices, as a result the onboard
+> driver only creates a single platform device (which is desired,
+> otherwise two platform devices would be in charge for power sequencing
+> the same phyiscal device. For non-hub devices there is currently no such
+> link. In many cases I expect there will be just one DT entry even though
+> the device has multiple USB interfaces, but it could happen and would
+> actually be a more accurate representation.
+> 
+> General support is already there (the code dealing with 'peer-hub'), but
+> we'd have to come up with a suitable name. 'peer-device' is the first
+> thing that comes to my mind, but there might be better options. If such
+> a generic property is added then we should deprecate 'peer-hub', but
+> maintain backwards compatibility.
 
-Thanks!
+I have nothing against that, but the first non-hub device that will be
+added does not have multiple DT nodes, so I have nothing to test that
+extension with real hardware.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+That could be added in the future, though, if the need ever arises.
+
+Best regards,
+Javier Carrasco
+
 
