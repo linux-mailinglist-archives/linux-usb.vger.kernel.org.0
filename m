@@ -1,150 +1,115 @@
-Return-Path: <linux-usb+bounces-7227-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7228-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A420E86AE80
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 12:59:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C3F586AEFC
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 13:20:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FC9F2977C0
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 11:59:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C0331C21CF8
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 12:20:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB0446CDA5;
-	Wed, 28 Feb 2024 11:55:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A4F53BBD6;
+	Wed, 28 Feb 2024 12:20:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="lx9cvsd0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jy2gh12M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687373BBFE;
-	Wed, 28 Feb 2024 11:54:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD8973511;
+	Wed, 28 Feb 2024 12:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709121301; cv=none; b=Ecp+gXTdtA9SysRDFG3qxCSGSyGJrqXDQTOaYSLBm791YmQ0x0rNNjhxrLjf/EXW24d5vIlduKwlz2f92/XBTXe4rPztZ8KWZrTz3uNWcYL47zFuWiC/q+31ChkE8oEEB202pBlpr7PP5j9RREzTF8BTnZCCUrR+vvkZ56TZRio=
+	t=1709122832; cv=none; b=TmBT4tc44vDK7zWCEvQwId+1EencQYs+1Wo16ecQiUAvPjCHvqgKiAe6YFD/Hra1JhbV0laLCYDA3r0zCZSWaWN+6Zx0XLWZO1wp9VPjVTJJUV7RI5IV1/RYdB3qH/TKuBFpelgP8eF9mHA3Plwjz8ezHsFfqgwMQroK0bm/wE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709121301; c=relaxed/simple;
-	bh=xMUdnGoq6QicZhMufyqPYAP3/Ngm6o1tDFpEwqzwkVQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sSOTEhErlriNhRSfh7k/wf0cuit55E6l1KElPi720ZRbU7ZiE7uToHza20ifLtWpQqruxnIf2jnK0KNbEp1kglA/hYyqC7/fS6TBXwg/Fob3LAvNtdXFFLMTN2N1+zGIrrhzlgCcrHaXZQ3/Ja+ccbZy2RrF37k98Xj5X/OqvnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=lx9cvsd0; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41S9EScE015466;
-	Wed, 28 Feb 2024 11:54:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type
-	:content-transfer-encoding; s=qcppdkim1; bh=lPKI7ijCRTDGsDbPL2sw
-	mcpW7vZDAd8x9irmrXuFoQc=; b=lx9cvsd0WselbOFtpFVVdKSUmGLrN73AHpLH
-	xs/JJK2XgAWSP4Qzl5Mxl4cDW4XpGJKGb17bQqLfuQJHeRVuf2fFyGpgLk9+/9dP
-	0BgEbtSIgaUOF5XVHMlZ2EVOws9wpMEseZTWT5VYfi5UyiKxZKB9eRri5MHAaPKi
-	/DadNnbziqx3cmPSFYZDhsFxj04ub9KNvuci4t/5OYNUTstq5isoswVZ5K+Zkh4X
-	plYa9pdEcDlp1FGmPnwAKjXVpazGZjfg2PNWrOnDCDVNZFPLxXI5+8qtlzrCJzKe
-	tIWkt0rwzlv9tDLJyewmR6dZzislXM8/5NBdhORCE0CzU2NYEg==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wj2148bcf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 28 Feb 2024 11:54:56 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41SBst9o019977
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 28 Feb 2024 11:54:55 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Wed, 28 Feb 2024 03:54:51 -0800
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, Krishna Kurapati <quic_kriskura@quicinc.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: gadget: ncm: Fix handling of zero block length packets
-Date: Wed, 28 Feb 2024 17:24:41 +0530
-Message-ID: <20240228115441.2105585-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1709122832; c=relaxed/simple;
+	bh=HJCBNKeuAAuw0Rwm5UYnlvoamIJt/suPGdB5W963k3A=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=GTSvR2CePaP+Q0Evb6oix2O8rG+yjIKwkrm5sc4p0jYnAZsqGk7vIozQjN1VmjaNT60ah8rKWrchr8f4QgqF4csBT6LCj7T9S8MpUz506SeLcCshS9vlKzYzj5PokOO0Iz9ZQwW13LbVO7RkvsEdIQV9RLNF4mTymVg4KK6mnBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jy2gh12M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5051CC433C7;
+	Wed, 28 Feb 2024 12:20:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709122832;
+	bh=HJCBNKeuAAuw0Rwm5UYnlvoamIJt/suPGdB5W963k3A=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Jy2gh12MpRAsyipw1H7jdt6xXzYPug/pMt7K+4lTUoldoWR76uDFtoj5GE598zSHT
+	 pyUGWeNaUkYeJ9stmhHh4mlRh2OKJb+4+dhTJlN4sMZXMN2ROE9jeyBEg7KO4+GGHL
+	 EewqdjtK3MIbD/OXixIm9OaFDO6nV2Ts/Nzw0FWnqHE8YD52Dytf/U0LU8T+RqX9kZ
+	 2P1DgoWHr92iXRbKfpBT3figX0zODB9/kqGCL8DZdOVwo9gFjOWnYRY489+O7MGW+F
+	 qJegLR6ymtfgGdlpc9mwgU0dOf4U31J0ZPjs37wCwNDrGd07WZ/M6Qm4BJprj+xQQz
+	 UmzEu/HfQX5ew==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3735CD88FAF;
+	Wed, 28 Feb 2024 12:20:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: f2AS7FZha-3XF9GRzWVZ9FWsyCu41o0B
-X-Proofpoint-GUID: f2AS7FZha-3XF9GRzWVZ9FWsyCu41o0B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-28_04,2024-02-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- lowpriorityscore=0 suspectscore=0 bulkscore=0 spamscore=0 adultscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=496 clxscore=1015
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2402280094
+Subject: Re: [PATCH net-next v5 0/9] drivers: net: Convert EEE handling to use
+ linkmode bitmaps
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170912283221.5780.10584545658329943642.git-patchwork-notify@kernel.org>
+Date: Wed, 28 Feb 2024 12:20:32 +0000
+References: <20240226-keee-u32-cleanup-v5-0-9e7323c41c38@lunn.ch>
+In-Reply-To: <20240226-keee-u32-cleanup-v5-0-9e7323c41c38@lunn.ch>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, aelior@marvell.com, manishc@marvell.com,
+ jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+ linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+ horms@kernel.org, jacob.e.keller@intel.com
 
-While connecting to a Linux host with CDC_NCM_NTB_DEF_SIZE_TX
-set to 65536, it has been observed that we receive short packets,
-which come at interval of 5-10 seconds sometimes and have block
-length zero but still contain 1-2 valid datagrams present.
+Hello:
 
-According to the NCM spec:
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-"If wBlockLength = 0x0000, the block is terminated by a
-short packet. In this case, the USB transfer must still
-be shorter than dwNtbInMaxSize or dwNtbOutMaxSize. If
-exactly dwNtbInMaxSize or dwNtbOutMaxSize bytes are sent,
-and the size is a multiple of wMaxPacketSize for the
-given pipe, then no ZLP shall be sent.
+On Mon, 26 Feb 2024 19:29:06 -0600 you wrote:
+> EEE has until recently been limited to lower speeds due to the use of
+> the legacy u32 for link speeds. This restriction has been lifted, with
+> the use of linkmode bitmaps, added in the following patches:
+> 
+> 1f069de63602 ethtool: add linkmode bitmap support to struct ethtool_keee
+> 1d756ff13da6 ethtool: add suffix _u32 to legacy bitmap members of struct ethtool_keee
+> 285cc15cc555 ethtool: adjust struct ethtool_keee to kernel needs
+> 0b3100bc8fa7 ethtool: switch back from ethtool_keee to ethtool_eee for ioctl
+> d80a52335374 ethtool: replace struct ethtool_eee with a new struct ethtool_keee on kernel side
+> 
+> [...]
 
-wBlockLength= 0x0000 must be used with extreme care, because
-of the possibility that the host and device may get out of
-sync, and because of test issues.
+Here is the summary with links:
+  - [net-next,v5,1/9] net: usb: r8152: Use linkmode helpers for EEE
+    https://git.kernel.org/netdev/net-next/c/17206c116d75
+  - [net-next,v5,2/9] net: usb: ax88179_178a: Use linkmode helpers for EEE
+    https://git.kernel.org/netdev/net-next/c/93e6da6cce4a
+  - [net-next,v5,3/9] net: qlogic: qede: Use linkmode helpers for EEE
+    https://git.kernel.org/netdev/net-next/c/9f8b8adca800
+  - [net-next,v5,4/9] net: ethernet: ixgbe: Convert EEE to use linkmodes
+    https://git.kernel.org/netdev/net-next/c/9356b6db9d05
+  - [net-next,v5,5/9] net: intel: i40e/igc: Remove setting Autoneg in EEE capabilities
+    https://git.kernel.org/netdev/net-next/c/01cf893bf0f4
+  - [net-next,v5,6/9] net: intel: e1000e: Use linkmode helpers for EEE
+    https://git.kernel.org/netdev/net-next/c/02de1741eaf1
+  - [net-next,v5,7/9] net: intel: igb: Use linkmode helpers for EEE
+    https://git.kernel.org/netdev/net-next/c/41b9797de4d6
+  - [net-next,v5,8/9] net: intel: igc: Use linkmode helpers for EEE
+    https://git.kernel.org/netdev/net-next/c/1e45b5f28a57
+  - [net-next,v5,9/9] net: ethtool: eee: Remove legacy _u32 from keee
+    https://git.kernel.org/netdev/net-next/c/292fac464b01
 
-wBlockLength = 0x0000 allows the sender to reduce latency by
-starting to send a very large NTB, and then shortening it when
-the sender discovers that there’s not sufficient data to justify
-sending a large NTB"
-
-However, there is a potential issue with the current implementation,
-as it checks for the occurrence of multiple NTBs in a single
-giveback by verifying if the leftover bytes to be processed is zero
-or not. If the block length reads zero, we would process the same
-NTB infintely because the leftover bytes is never zero and it leads
-to a crash. Fix this by bailing out if block length reads zero.
-
-Cc: <stable@vger.kernel.org>
-Fixes: 427694cfaafa ("usb: gadget: ncm: Handle decoding of multiple NTB's in unwrap call")
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
-Changes in v2:
-Removed goto label
-
-Link to v1:
-https://lore.kernel.org/all/20240226112815.2616719-1-quic_kriskura@quicinc.com/
-
- drivers/usb/gadget/function/f_ncm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-index e2a059cfda2c..28f4e6552e84 100644
---- a/drivers/usb/gadget/function/f_ncm.c
-+++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -1346,7 +1346,7 @@ static int ncm_unwrap_ntb(struct gether *port,
- 	if (to_process == 1 &&
- 	    (*(unsigned char *)(ntb_ptr + block_len) == 0x00)) {
- 		to_process--;
--	} else if (to_process > 0) {
-+	} else if ((to_process > 0) && (block_len != 0)) {
- 		ntb_ptr = (unsigned char *)(ntb_ptr + block_len);
- 		goto parse_ntb;
- 	}
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
