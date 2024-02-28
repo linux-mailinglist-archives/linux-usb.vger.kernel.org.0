@@ -1,69 +1,76 @@
-Return-Path: <linux-usb+bounces-7203-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7205-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2824986A66E
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 03:17:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DFB086A721
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 04:20:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C54BD285112
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 02:17:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD623284154
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 03:20:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 127F37470;
-	Wed, 28 Feb 2024 02:17:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97D12200BA;
+	Wed, 28 Feb 2024 03:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rl212AOm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NhYAR4Th"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8012063B3;
-	Wed, 28 Feb 2024 02:17:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108E21DDD5;
+	Wed, 28 Feb 2024 03:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709086631; cv=none; b=nItMUbPlzMcBN+nC9RCpRZRVm5sPkcFRCB97nFN3MK5tOze10hixTgxUv3w1yoBcP+IfzWXNqxPe8ZDLkYqRtV93UsxL4vnWGwx1jT4AsP+KtbBrUO0+KjjizzU2AQ/662HBp2D4ga0KEq9yNSIlRqZpul+SbzzeT0ujl4HR6gE=
+	t=1709090432; cv=none; b=Qo7fMjrC9CMYH9FFIcwSbg3aEF+aPUyRlVZmIgwdh+NR1V9j8OY/Y7DbKapJKMBp6uJ4kflkdCPjVWQYDPh94jd0FuqqX++yez/YsCtPtKXzswOMX2riGKuFLJ6lEvNk/4TtW/RNWt5ZMgiczhib/MsAAJkLtph+8orQhjfaZSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709086631; c=relaxed/simple;
-	bh=ks5mnjKC9lF0LUAQnlJGF+2i9bOqbfU8O+K3zemzvJk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WvkVwCzyu2vhMX4Nj421ooTxAk8MOoj1e/dB3rbVN6JbagGxv+7XFlUGeO4IodlGtJfLoHq4rTwNC2+jq1hMRitopVRCH76uJqyQerFy9hYuffqCgfNZs7faXk+hw4jMQizolNsTHXY4t5fh9ME2q32qf2dIyKTyvt+OEjCy47M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rl212AOm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A98EDC433C7;
-	Wed, 28 Feb 2024 02:17:10 +0000 (UTC)
+	s=arc-20240116; t=1709090432; c=relaxed/simple;
+	bh=u0axjAWtAcxEr7ZjPkE5IqKAR+IemnMqd88N4WKuBBM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=QXmUlXHVioqRozNDgOjJO6TaMtRjbg672kN3MLP1EH78TrAuJTP+mjeaQP76BsitPzk2lmHZwQ1YhVk+Ml6PGfMnubKQVyjYjmj3AKsef8Dak4ZPNN5TqIN/QUXUVy9wEo2sW5Vs7/n35Wq8ci3NGBQofzqWzwj0Rew3B0kdvBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NhYAR4Th; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A10ADC43390;
+	Wed, 28 Feb 2024 03:20:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709086631;
-	bh=ks5mnjKC9lF0LUAQnlJGF+2i9bOqbfU8O+K3zemzvJk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Rl212AOmTiAWXRGq6m9KtDJfubLQf8XcOYeUzflQGHV9enk7c3NBn9e4foLkGnOvD
-	 kM+kcM1v+Y4tmR+jJzo117y5LzDs5EuIc+JTkgdLOGobkpdLSAv7oJKiIyYnSIGXTg
-	 BvMI96gvqcATDPOcFNYPKLddT4ehvD+peNN5yw7BenmKe203eytImLWqvxLfZDUWRw
-	 +m4gNQHo7XsUe2yrgBG6zwNXBoeIV61ILqghXLGnIm7ZDr8deFwP6HFwiE5Xa1ac5j
-	 SYXDbVLcUUgXEvD/UW1oSoiPFmaoefT8FeB4hxJCWQMDKxjpSra5ZRquWjC6WTJpOD
-	 rlhuzsvamGCCw==
-Date: Tue, 27 Feb 2024 18:17:09 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>, Andrew Lunn
- <andrew@lunn.ch>
-Cc: Peter Korsgaard <peter@korsgaard.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: dm9601: fix wrong return value in
- dm9601_mdio_read
-Message-ID: <20240227181709.7159d60f@kernel.org>
-In-Reply-To: <20240225-dm9601_ret_err-v1-1-02c1d959ea59@gmail.com>
-References: <20240225-dm9601_ret_err-v1-1-02c1d959ea59@gmail.com>
+	s=k20201202; t=1709090431;
+	bh=u0axjAWtAcxEr7ZjPkE5IqKAR+IemnMqd88N4WKuBBM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=NhYAR4ThtSche8nUOdqUa04SsV+s72UyCuiyQo02gy5DxLiaOuj1wNrONe0Z7phE4
+	 +8iGJvqcleo0pKN7mmt75OFNkZeq2XdbDaiNtSQe08OCU9RdLNqbnb8zgA8fVRGP6W
+	 GUHDy2Y+jNDWPpM9+iE44TronIoxJlkI9uH6vV6czwondDIkOmdek3xIWnUCoB4Jpn
+	 hGz803xQ8v2+W7Jb5o84Qv10PxVFWv8P6r3F2dqz8B5mEkAJFgM6BqqWZBH+w2CF9i
+	 NLi/CNDFHgGa82DWB9bHyIv1yeHLWihIuwDyr0Nnm6AJ5NNsmkbt07z+XlF90EJ6Bw
+	 Mtr0iq1zVDe8g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 87DA6D88FB6;
+	Wed, 28 Feb 2024 03:20:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: usb: dm9601: fix wrong return value in
+ dm9601_mdio_read
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170909043155.27277.1060670387014071329.git-patchwork-notify@kernel.org>
+Date: Wed, 28 Feb 2024 03:20:31 +0000
+References: <20240225-dm9601_ret_err-v1-1-02c1d959ea59@gmail.com>
+In-Reply-To: <20240225-dm9601_ret_err-v1-1-02c1d959ea59@gmail.com>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: peter@korsgaard.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 
-On Sun, 25 Feb 2024 00:20:06 +0100 Javier Carrasco wrote:
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Sun, 25 Feb 2024 00:20:06 +0100 you wrote:
 > The MII code does not check the return value of mdio_read (among
 > others), and therefore no error code should be sent. A previous fix to
 > the use of an uninitialized variable propagates negative error codes,
@@ -74,12 +81,16 @@ On Sun, 25 Feb 2024 00:20:06 +0100 Javier Carrasco wrote:
 > by mdio_read, which in this case might be a negative number which could
 > contain the exact bit the function checks (BMCR_ANENABLE = 0x1000).
 > 
-> Return zero in case of error, as it is common practice in users of
-> mdio_read to avoid wrong uses of the return value.
+> [...]
 
-A bit odd but appears to be true, so I'll apply, thank you!
+Here is the summary with links:
+  - net: usb: dm9601: fix wrong return value in dm9601_mdio_read
+    https://git.kernel.org/netdev/net/c/c68b2c9eba38
 
-Andrew, 
-mii.h files seem to fall under PHYLIB in MAINTAINERS, but mii.c does
-not. Is this intentional?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
