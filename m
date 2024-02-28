@@ -1,114 +1,144 @@
-Return-Path: <linux-usb+bounces-7253-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7254-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F42786B453
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 17:12:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D50B986B459
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 17:12:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AF7B2844C1
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 16:12:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5D2C5B22600
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 16:12:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F17315DBD5;
-	Wed, 28 Feb 2024 16:11:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BqQufdcG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4193E15E5CB;
+	Wed, 28 Feb 2024 16:12:11 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E95F15D5D5
-	for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 16:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 2746515DBBA
+	for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 16:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709136682; cv=none; b=r5JMVSJLOXiu8QKepXj1SH03sVjIOqjzLCy00JbeExySwhInxCzIe12LisaisertnLz6+MN1Jsmzi0Q6QQzjBwY3m/3B6ZG/pRkRP5psV22YeHagFO5YNK8dpM29fst9LI/pVtAAFPDmeBX9kawdi93u8rDjEcnmyXsRer2kGKk=
+	t=1709136730; cv=none; b=Ey09SjbxsGBQX4FvvVdg/pqL4p2amIVa2faheMgwOdiJouKmu/n0f7GbL6BwD/djwDuBEhf50MuiIMNDf/SkWi43GrjjwXAGKLRrCEwyeyt3xxRHw597Qkos7t/tdpCkx4geu0Hen6pf3zbQ4iFW+1DEbPElc/IwytPX96v7eyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709136682; c=relaxed/simple;
-	bh=0/SXo7LUmEd3Ek4bAWDkgWgcqOozxVlfBaRmQBjkoGY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AYJIEwbaTFh/jufwVcKiqG2XBpFH6gutFse/IdCEVhP3GZmKBUabXFrLgARmgCJ+8jE/lJB2zBuGGCtJaieKCtMI+1xuPYLLFEue4tGTBRuRvVPRT8JfPCvXBSX5Py897LZiHmn4//VHKL4cK43IyFARaIDUsH7jiRDQ7zMPaXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BqQufdcG; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-512bde3d197so5296201e87.0
-        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 08:11:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1709136678; x=1709741478; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jgP8egN9jzbqWUtue2PPYahrXFZRT/aZTCnQiSVag14=;
-        b=BqQufdcG93NRMdtlmwIbirbO3IJPfo3SQexOsal13voIGqPi6mHJmRC3klyrLejE8Z
-         BhTE9MKKi86w5Z9GyTkTCDVw2JdiotqLVpYXNLfdcGU8jFjbYn6FYhcYCCxpepKYn4+/
-         ydHNCxEoj09Otd0IcAnbbtf856vJ6J7AN+UZdifABfOm5MCpSkXNwKqVCvKnK6rfQNPc
-         0OYk/ntEe+G7AfWtxwf/JrwE70bM1Bw/H9JeBtZYmb5mtlQK8ZwHgqpzgr2d7I7+WKyr
-         xk3/nwlidEGLWLGLxWO5i+Q+xE423NHcDiwhytDs0VctGULjDQWOAIqsyUMqWrd16Cqj
-         Jbig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709136678; x=1709741478;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jgP8egN9jzbqWUtue2PPYahrXFZRT/aZTCnQiSVag14=;
-        b=p8lsdC/L8j1OwnUCiSovDdE4RlCbuzCBPs2htLHgjoMK5BI0nz4LOvuH8XVdYEbNmf
-         EFgdTd77HbnnjJdeqcluncYB2MV74jHd9wdcqJlMzflKd5vAajSV4arTjXGWF/xyGiVE
-         nnWQlEV+EISAHpphp2impmZ/FiMQ+gymAHOfWuYkXImOGksvexkS33ow5au2FizOImwp
-         BQ4otQQPjHq5GRvrvr2eq8UZknPTjnplm1tW8JuKh9gnLUfWCIitPgvOjM5CG0HO2YkY
-         SzT3msKVlZPWqwBdXysQRufPUW2SDdHCdc4UhOfDvLZORh8ipOAsuCUKEIgrGjPNunF4
-         KRCg==
-X-Forwarded-Encrypted: i=1; AJvYcCV5xX7wucg9YvwKVl3ohJAsakxv4MZm7loOai5Q0GmLs1EXDyZ28KrTdSYgQ5d/c8ICLf1ngjKLCcv/TsyyDc6eEw8/D0XSLryt
-X-Gm-Message-State: AOJu0Yx6CgfKlUGwPoNInZ7qixiE6y1AsF2dsR4rrNF1S/bs1dt8edxf
-	2kt0+zz0VglvHGLiHFf5jd/xHaoNP6ByTIYHWCTNd0r6qbFieDCImcR0Cur60nY=
-X-Google-Smtp-Source: AGHT+IG9pHQRYhPAl7gRn1uIw/tLwD3MS/O8eajbw9qNVQ3ZgXy9u/fSDDd8ADWubwAiIqrGVivLDQ==
-X-Received: by 2002:a19:2d11:0:b0:513:174e:a152 with SMTP id k17-20020a192d11000000b00513174ea152mr104784lfj.29.1709136678541;
-        Wed, 28 Feb 2024 08:11:18 -0800 (PST)
-Received: from ?IPV6:2001:a61:1366:6801:d8:8490:cf1a:3274? ([2001:a61:1366:6801:d8:8490:cf1a:3274])
-        by smtp.gmail.com with ESMTPSA id w4-20020a5d4044000000b0033b7ce8b496sm14762361wrp.108.2024.02.28.08.11.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Feb 2024 08:11:18 -0800 (PST)
-Message-ID: <4111f9ba-e1dc-4158-af6f-c048bcf8ccd2@suse.com>
-Date: Wed, 28 Feb 2024 17:11:16 +0100
+	s=arc-20240116; t=1709136730; c=relaxed/simple;
+	bh=FOSvzJIqz76gZszAfCyXvUnqGoQxI5NXFDSG9rTprIQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pzpXm7clj2iXWj3cLKIRFMeOLMsAJ0XLTmu6OPPYueTsZ+WDgknOi+jKkovK0YFJbR4c8Jj6l6V86GILn/TnQDa5psd7dlrpH037F16TGId5Lcotee4r0G+6e921tP/dCiKPp9TvndQF+VrEdOpKr4HA3Ei4mlpijXDk+qzO0AU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 797627 invoked by uid 1000); 28 Feb 2024 11:12:06 -0500
+Date: Wed, 28 Feb 2024 11:12:06 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+28748250ab47a8f04100@syzkaller.appspotmail.com>
+Cc: bvanassche@acm.org, emilne@redhat.com, gregkh@linuxfoundation.org,
+  linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+  martin.petersen@oracle.com, syzkaller-bugs@googlegroups.com,
+  tasos@tasossah.com, usb-storage@lists.one-eyed-alien.net
+Subject: Re: [syzbot] [usb-storage?] divide error in isd200_ata_command
+Message-ID: <13add23d-af18-4f84-9f1a-043932a9712b@rowland.harvard.edu>
+References: <8fe3f46c-4ee5-4597-bf2d-12a5d634a264@rowland.harvard.edu>
+ <0000000000008b026406126a4bbe@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: RIP on discard, JMicron USB adaptor
-Content-Language: en-US
-To: Alan Stern <stern@rowland.harvard.edu>, Keith Busch <kbusch@kernel.org>
-Cc: Harald Dunkel <harald.dunkel@aixigo.com>, Jens Axboe <axboe@kernel.dk>,
- Bart Van Assche <bvanassche@acm.org>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- linux-block@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-scsi@vger.kernel.org
-References: <70bc51d7-c8a2-4b06-ab7a-e321d20db49a@aixigo.com>
- <62296d89-f7e6-4f54-add8-35b531dc657c@rowland.harvard.edu>
- <Zd9Xbz3L6JEvBHHT@kbusch-mbp>
- <76fcb1b1-cdf2-45d0-aeab-c712ee517b34@rowland.harvard.edu>
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <76fcb1b1-cdf2-45d0-aeab-c712ee517b34@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000008b026406126a4bbe@google.com>
 
-On 28.02.24 17:01, Alan Stern wrote:
-
->> In the code comments above the WARN, this condition indicates "the
->> discard granularity isn't set by buggy device driver". The block layer
->> needs this set if your driver also sets the max_discard_sectors limit.
+On Tue, Feb 27, 2024 at 09:20:03PM -0800, syzbot wrote:
+> Hello,
 > 
-> The usb-storage and uas drivers do not set any of these; however, the
-> SCSI sd driver does.  Maybe that's where the problem lies.  Adding more
-> CC's.
+> syzbot tried to test the proposed patch but the build/boot failed:
+> 
+> failed to checkout kernel repo https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ on commit f2e367d6ad3b: failed to run ["git" "fetch" "--force" "--tags" "7b440d1b40dd93ea98b5af6bba55ffca63425216" "f2e367d6ad3b"]: exit status 128
+> fatal: couldn't find remote ref f2e367d6ad3b
 
-Hi,
+I'm going to guess this was a temporary failure and try again.  If that 
+wasn't the case, something is seriously wrong somewhere.  I had no 
+trouble accessing that commit using the git.kernel.org web interface.
 
-that seems to be conditional on READ_CAPACITY_16 being used.
- From the cropped dmesg we cannot tell. We need more.
+Alan Stern
 
-	Regards
-		Oliver
+On Mon, Feb 26, 2024 at 01:42:26AM -0800, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    f2e367d6ad3b Merge tag 'for-6.8/dm-fix-3' of git://git.ker..
+> git tree:       upstream
+
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ f2e367d6ad3b
+
+Index: usb-devel/drivers/usb/storage/isd200.c
+===================================================================
+--- usb-devel.orig/drivers/usb/storage/isd200.c
++++ usb-devel/drivers/usb/storage/isd200.c
+@@ -1105,7 +1105,7 @@ static void isd200_dump_driveid(struct u
+ static int isd200_get_inquiry_data( struct us_data *us )
+ {
+ 	struct isd200_info *info = (struct isd200_info *)us->extra;
+-	int retStatus = ISD200_GOOD;
++	int retStatus;
+ 	u16 *id = info->id;
+ 
+ 	usb_stor_dbg(us, "Entering isd200_get_inquiry_data\n");
+@@ -1137,6 +1137,13 @@ static int isd200_get_inquiry_data( stru
+ 				isd200_fix_driveid(id);
+ 				isd200_dump_driveid(us, id);
+ 
++				/* Prevent division by 0 in isd200_scsi_to_ata() */
++				if (id[ATA_ID_HEADS] == 0 || id[ATA_ID_SECTORS] == 0) {
++					usb_stor_dbg(us, "   Invalid ATA Identify data\n");
++					retStatus = ISD200_ERROR;
++					goto Done;
++				}
++
+ 				memset(&info->InquiryData, 0, sizeof(info->InquiryData));
+ 
+ 				/* Standard IDE interface only supports disks */
+@@ -1202,6 +1209,7 @@ static int isd200_get_inquiry_data( stru
+ 		}
+ 	}
+ 
++ Done:
+ 	usb_stor_dbg(us, "Leaving isd200_get_inquiry_data %08X\n", retStatus);
+ 
+ 	return(retStatus);
+@@ -1481,22 +1489,27 @@ static int isd200_init_info(struct us_da
+ 
+ static int isd200_Initialization(struct us_data *us)
+ {
++	int rc = 0;
++
+ 	usb_stor_dbg(us, "ISD200 Initialization...\n");
+ 
+ 	/* Initialize ISD200 info struct */
+ 
+-	if (isd200_init_info(us) == ISD200_ERROR) {
++	if (isd200_init_info(us) < 0) {
+ 		usb_stor_dbg(us, "ERROR Initializing ISD200 Info struct\n");
++		rc = -ENOMEM;
+ 	} else {
+ 		/* Get device specific data */
+ 
+-		if (isd200_get_inquiry_data(us) != ISD200_GOOD)
++		if (isd200_get_inquiry_data(us) != ISD200_GOOD) {
+ 			usb_stor_dbg(us, "ISD200 Initialization Failure\n");
+-		else
++			rc = -EINVAL;
++		} else {
+ 			usb_stor_dbg(us, "ISD200 Initialization complete\n");
++		}
+ 	}
+ 
+-	return 0;
++	return rc;
+ }
+ 
+ 
 
 
