@@ -1,120 +1,190 @@
-Return-Path: <linux-usb+bounces-7269-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7270-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6002086B9EB
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 22:33:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73C0A86B9FF
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 22:34:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19E5B28909E
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 21:33:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 019F91F2929D
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 21:34:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC83D7002F;
-	Wed, 28 Feb 2024 21:32:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B38F7003E;
+	Wed, 28 Feb 2024 21:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="VGNa5PE6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outgoing.selfhost.de (mordac.selfhost.de [82.98.82.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569B586270
-	for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 21:32:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.98.82.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF0670031
+	for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 21:34:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709155965; cv=none; b=OdM8qmggQv6+wSRDNTiswKXquHvqJZNrEK9saoEYCIRO2YgLkWO46HNrW4bw7/X4pBe/OwYhZrV5YAFd7haIRYpJ+YhdtwP7PGpWhXRDpWa5mX1Jw3su0OjV7k442+C18HFJyhBBH4UNjy+JoNARVC+WGph9S+YSK62Mk26cemc=
+	t=1709156076; cv=none; b=F4qm0+WKsTCU9td0hLW36+s+SQi+mfEIKqQj8VBl6LrLRx2d65zpAOQ457lE0MWsS/L4KpOSta1yiloOfNmWQ3ATqkD3TXPyYum+QpvayAxtdG8nFNQetXCDysG9l408+ej22BQA0T8SAk4JWUmhBGJHpJM+kHvDlUjvShloZO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709155965; c=relaxed/simple;
-	bh=YZFbjwaS7EZ82Bo+AEk8uyNZ9d9OwKHxLaI27fIsRCc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZiVz3LmDstnxW1LJxtoqNcpEMoWYMK5tD+punOP9+KoJRrYvZMal7FCx+qvAqH/hrBUNTlIhjXmeupu6zn0gwb9CuzkOgrdSjG4ZkmzaFQ53iGnzXgrfTaHModM6ir+wEhB+Fhu2OK6I++yGFOzVHhfxpSx/7CDftY+b46m3k8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=afaics.de; spf=none smtp.mailfrom=afaics.de; arc=none smtp.client-ip=82.98.82.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=afaics.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=afaics.de
-Received: (qmail 3203 invoked from network); 28 Feb 2024 21:32:39 -0000
-Received: from unknown (HELO mailhost.afaics.de) (postmaster@xqrsonfo.mail.selfhost.de@79.192.199.18)
-  by mailout.selfhost.de with ESMTPA; 28 Feb 2024 21:32:39 -0000
-X-Spam-Level: ****
-X-Spam-Report: 
-	*  4.0 RCVD_IN_PBL RBL: Last ext relay in Spamhaus PBL (Non-MTA IPs)
-	*      [2003:e3:1f31:6503:68fd:ffff:fe6f:e76 listed in]
-	[zen.spamhaus.org]
-	*  0.0 HELO_NO_DOMAIN Relay reports its domain incorrectly
-	*  0.0 DMARC_MISSING Missing DMARC policy
-	*  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
-Received: from [IPV6:2003:e3:1f31:6503:68fd:ffff:fe6f:e76] (p200300e31f31650368fdfffffe6f0e76.dip0.t-ipconnect.de [2003:e3:1f31:6503:68fd:ffff:fe6f:e76])
-	by marvin.afaics.de (OpenSMTPD) with ESMTP id cc23ecd1;
-	Wed, 28 Feb 2024 22:32:34 +0100 (CET)
-Message-ID: <acb5b4db-ef01-4edd-b97c-d8f7e2b241f2@afaics.de>
-Date: Wed, 28 Feb 2024 22:32:32 +0100
+	s=arc-20240116; t=1709156076; c=relaxed/simple;
+	bh=fGgId9fOgxTjTCBv6QAWpcdQDhKv3hvIs0a258L+ioI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ygq4x0G5ynnqsy1xPAgL00g6ZyBQQA/I9wrD8Swpe5BkzYhfr/Rn66SIqNvZnNnCpOGO4R53dffrZ9OXct+E1u0XroTcE6ulN8cCogrlk40bGo1ct5S7ESWmkJvG2D7B6fKRwxSpOAV/Ywjru4lCnKyx3V5YhJYKSIFyxAIR/Bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=VGNa5PE6; arc=none smtp.client-ip=209.85.166.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-365124888a5so1271235ab.1
+        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 13:34:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1709156074; x=1709760874; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ud3jsbNEeuU2tmgvB1e9X78Ey55SQRcSwnTZ1T/aebs=;
+        b=VGNa5PE6ihdOMJd6fP5tUnRYa5yfi5bheRhoj8N9lkV/fwcp83EZ/FywcIM68iNZzi
+         TJ0XpADDblc3MtWeRDmqOvMwPbJgzLq1UmbtwlFWilD+lsCM3p7Wd0CzGnpHgBcVAHe2
+         o9FcaZp0h1seZ1Irmg8XXl2sT0vQ3Mi4YaRIU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709156074; x=1709760874;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ud3jsbNEeuU2tmgvB1e9X78Ey55SQRcSwnTZ1T/aebs=;
+        b=uUub6AHLvts/OWpWcsR/sHe9qSW+/ahQzcGu0wr134k+2fUDm0iyyy86QskI6thiXd
+         ORkcCBdfYEWfUVvImKEL3O/dsh23Q18uFp56OewPD4oyAx8se0oN2LWLfc1gbK2VlHhm
+         FUaruHxHk/HDDQ8TVs3yrHbqvZJpcwoCCPem91EOry4G/DOxYTnfEZh05KSOdPGhM9zo
+         xrIrQZCUwD4QByNKB35HtYnRLngckPvRAst1Hwh7ISrGSOm+WIsvTnytF+dMFCzIXxOE
+         athCv2B2kPrV/os4D5hw6kZHC74bdmsw8Tnnh8KswJt7s4SomymFb/1rifL+btKGvNbg
+         W1oA==
+X-Forwarded-Encrypted: i=1; AJvYcCWp48g+pAY4Wj171DkHRWw48qzA/SgL0NDhuCQj4Crh8h9M+Xvb1eE7aEeGbjV3Q5ipsQPUucI3FwG4ZhLeOiTy21SqgIyFkcO8
+X-Gm-Message-State: AOJu0YzKzqC/ESzdVxfRNYG7jOS4gj2Scrw03Wb7KZfCPVsHEq8OeFqE
+	t9qHEueL1BRZbpxPy2ZX4gNEGXkL4lPuBCI25v+i8xmFgodX76yZPvTAMKyHuQ==
+X-Google-Smtp-Source: AGHT+IFRn4MDh7nvzu0eSOUCvjYdM8/HpCDcsTdPwQHR4UeGWg9wLpczoWIYWROWR4Qj4A2q46iIUg==
+X-Received: by 2002:a05:6e02:524:b0:365:1749:cadf with SMTP id h4-20020a056e02052400b003651749cadfmr613056ils.16.1709156074288;
+        Wed, 28 Feb 2024 13:34:34 -0800 (PST)
+Received: from localhost (144.57.222.35.bc.googleusercontent.com. [35.222.57.144])
+        by smtp.gmail.com with UTF8SMTPSA id e4-20020a92de44000000b00365760eb777sm68026ilr.81.2024.02.28.13.34.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Feb 2024 13:34:33 -0800 (PST)
+Date: Wed, 28 Feb 2024 21:34:33 +0000
+From: Matthias Kaehlcke <mka@chromium.org>
+To: Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Helen Koike <helen.koike@collabora.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Russell King <linux@armlinux.org.uk>,
+	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 6/8] usb: misc: onboard_dev: add support for non-hub
+ devices
+Message-ID: <Zd-m6WNd5ukXyJGx@google.com>
+References: <20240228-onboard_xvf3500-v5-0-76b805fd3fe6@wolfvision.net>
+ <20240228-onboard_xvf3500-v5-6-76b805fd3fe6@wolfvision.net>
+ <Zd93JZTlN4BCxWm7@google.com>
+ <ecf303c3-d7a1-49d5-a997-32596215e43d@wolfvision.net>
+ <Zd-ahtPpI8zbAYQ9@google.com>
+ <63d9be60-40dd-49f6-9a75-72d4be746024@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Linux)
-Subject: Re: RIP on discard, JMicron USB adaptor
-To: "Martin K. Petersen" <martin.petersen@oracle.com>,
- Harald Dunkel <harald.dunkel@aixigo.com>
-Cc: Keith Busch <kbusch@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
- Jens Axboe <axboe@kernel.dk>, Bart Van Assche <bvanassche@acm.org>,
- linux-block@vger.kernel.org, linux-usb@vger.kernel.org
-References: <70bc51d7-c8a2-4b06-ab7a-e321d20db49a@aixigo.com>
- <62296d89-f7e6-4f54-add8-35b531dc657c@rowland.harvard.edu>
- <Zd9Xbz3L6JEvBHHT@kbusch-mbp> <yq1sf1c1h0x.fsf@ca-mkp.ca.oracle.com>
-From: Harald Dunkel <harri@afaics.de>
-Content-Language: en-US
-Autocrypt: addr=harri@afaics.de; keydata=
- xsBNBFIHbdABCACYHRLHGdFRk7bWkgdPhDLin6jLIS0ppegsx0Vc9STFyiHFUW+6HU9ZYTpO
- f2qbcWlE3YJYacy6zOiiTjYX31quhvGrP3UJXKjXsAp7CFsMxRJUhm20Ph0nCl/Oed9SDNXN
- HQJwHoOVWrsu/sGxNTfjCWRJleBE11P+TuuLOAP9dbqFbWhmkTsE9Lp9d16Ak77MWmWWxBvD
- cBsUuC2GOYDfFOPM3j16w7aw4Y9GI2B5QzFiHvOR/hCazfDEMQAlaHMm6sH8uzrjNEtB5dvm
- vxF8j/IpvsuvWGhZ68rej2gPwoVrRTEBaYslW8/5dm8o1HuTkuLqxhNTcvYWyV8uKRtTABEB
- AAHNH0hhcmFsZCBEdW5rZWwgPGhhcnJpQGFmYWljcy5kZT7CwHoEEwEIACQCGwMCHgECF4AC
- GQEFAlQYLhUFCwkIBwMFFQoJCAsFFgIDAQAACgkQCp4qnmbTgcu7Fwf/RoWwNDxJPD96vBFb
- Jzfta9qVA0JpbKoMAnNY0tDWiF5Ur8UY/tv/RDVV44Vx3Ef0fzQZN0CtHsNfAKO+KXBMUiuT
- AP4AadpaIwYMo8v+SmPzJSUxWgBm6IsHwn1udXRdEgdR9guWkLPRGCK3x84sorAOUnUHJHkq
- UrDFQUNfNA9lqM7ttunfVtG4SaqcLEOpJ1s/aMUsEODlP/lws42VjubIVg403cMIgvqs5cT8
- EjLDNqCwEoWZRhfpg5x3D5uNDNWSW70Z+6Knicbi129QIu4HtSnfrxiuvHz2LLPFOVQuj8h4
- TPT6tkfIURKipFXoIC3YiK8f94rFO3q86oNJUs7ATQRSB23QAQgA27gQiXZ96pbJkGoz1RWX
- T8WSQJ5TWVJyf4eswoVI8Ffk5vLE+xPpAYEDkL7JYGCvBN1BKrcaZzDy8Irfys6bHI3JmVVi
- ZloSkVS8QL7pQGfp74VT3NvDjK6LDe9QMv8Rb45laSRD5XCGRMTxz9pwu3vNcOPCfV5nmbyB
- /6h4/bguFH1+6aGz6HyC8v/tjhL6+cY329inJ+vWVJYssweMIIYpssUtDaPKZO0080toLLrt
- KuVgiUb9llbmZgKGElRjwgGT8AUXDRFCzn0ws/nuGNw0L+EdCI3VdZSK5KMEO34vZq7iNeM1
- ZVnPVZAbHheR30NFKTgrwvlt8G7blHJPWwARAQABwsBfBBgBCAAJBQJSB23QAhsMAAoJEAqe
- Kp5m04HLiiEH/jlKumVyQrOxH58iQFzVDthDfJdBLmnDlfVx2Dzn60vc5To6yJ3fwO21s3xC
- /LW9aZSfDueV0nWU4/Wow/X5GEH90Vc1sFoeSZb/GW03vsO1n/OFIVlv9GQv+RviWMDEwKKx
- CMvdqUlVblWf1iT/ngPN0YawKGF0Dgn8TRzfL/Tq9muwNUaONzz8PWBUIm1+8JDZszYLzLoz
- YiY0usL4GH9BCeW6XG2Q6j4cpyOQZ0VKiBs1Rh+dmswn+iXLfi08Q0IxYAD6wjHdJTBD9pE9
- 5Uj8/1spt51FBAAIP+7sd2mpAvsNnojatuOgjBmBxFwiOKeyDNe1wvKr4dsRheOLV8M=
-In-Reply-To: <yq1sf1c1h0x.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <63d9be60-40dd-49f6-9a75-72d4be746024@wolfvision.net>
 
-Hi Martin,
-
-On 2024-02-28 21:19:25, Martin K. Petersen wrote:
+On Wed, Feb 28, 2024 at 09:50:22PM +0100, Javier Carrasco wrote:
+> On 28.02.24 21:41, Matthias Kaehlcke wrote:
+> > On Wed, Feb 28, 2024 at 09:21:00PM +0100, Javier Carrasco wrote:
+> >> On 28.02.24 19:10, Matthias Kaehlcke wrote:
+> >>> On Wed, Feb 28, 2024 at 02:51:33PM +0100, Javier Carrasco wrote:
+> >>>> Most of the functionality this driver provides can be used by non-hub
+> >>>> devices as well.
+> >>>>
+> >>>> To account for the hub-specific code, add a flag to the device data
+> >>>> structure and check its value for hub-specific code.
+> >>>>
+> >>>> The 'always_powered_in_supend' attribute is only available for hub
+> >>>> devices, keeping the driver's default behavior for non-hub devices (keep
+> >>>> on in suspend).
+> >>>>
+> >>>> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+> >>>> ---
+> >>>>  drivers/usb/misc/onboard_usb_dev.c | 25 +++++++++++++++++++++++--
+> >>>>  drivers/usb/misc/onboard_usb_dev.h | 10 ++++++++++
+> >>>>  2 files changed, 33 insertions(+), 2 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
+> >>>> index e1779bd2d126..df0ed172c7ec 100644
+> >>>> --- a/drivers/usb/misc/onboard_usb_dev.c
+> >>>> +++ b/drivers/usb/misc/onboard_usb_dev.c
+> >>>> @@ -132,7 +132,8 @@ static int __maybe_unused onboard_dev_suspend(struct device *dev)
+> >>>>  	struct usbdev_node *node;
+> >>>>  	bool power_off = true;
+> >>>>  
+> >>>> -	if (onboard_dev->always_powered_in_suspend)
+> >>>> +	if (onboard_dev->always_powered_in_suspend &&
+> >>>> +	    !onboard_dev->pdata->is_hub)
+> >>>>  		return 0;
+> >>>
+> >>> With this non-hub devices would always be powered down, since
+> >>> 'always_powerd_in_suspend' is not set for them. This should be:
+> >>>
+> >>
+> >> May I ask you what you meant in v4 with this comment?
+> >>
+> >>> Even without the sysfs attribute the field 'always_powered_in_suspend'
+> >>> could
+> >>> be set to true by probe() for non-hub devices.
+> > 
+> > struct onboard_dev always has the field 'always_powered_in_suspend',
+> > even for non-hubs, that don't have the corresponding sysfs attribute.
+> > Currently it is left uninitialized (i.e. false) for non-hubs. Instead
+> > it could be initialized to true by probe() for non-hubs, which would
+> > be semantically correct. With that it wouldn't be necessary to check
+> > here whether a device is hub, because the field would provide the
+> > necessary information.
+> > 
 > 
->> In the code comments above the WARN, this condition indicates "the
->> discard granularity isn't set by buggy device driver". The block layer
->> needs this set if your driver also sets the max_discard_sectors limit.
-> 
-> Please provide the output of:
-> 
-> # sg_readcap -l /dev/sdN
-> # sg_vpd -l /dev/sdN
-> # sg_vpd -p 0xb0 /dev/sdN
-> # sg_vpd -p 0xb1 /dev/sdN
-> # sg_vpd -p 0xb2 /dev/sdN
-> # sg_opcodes /dev/sdN
-> 
-> Thanks!
-> 
+> That is maybe what is confusing me a bit. Should it not be false for
+> non-hub devices? That property is only meant for hubs, so why should
+> non-hub devices be always powered in suspend? I thought it should always
+> be false for non-hub devices, and configurable for hubs.
 
-I am not in the office anymore, so I cannot plugin the USB device to run
-the commands you requested. First thing tomorrow in the morning, promised.
+I suspect the confusion stems from the sysfs attribute 'always_powered_...'
+vs. the struct field with the same name.
 
+The sysfs attribute defaults to 'false', which results in USB devices
+being powered down in suspend. That was the desired behavior for a device
+I was working on when I implemented this driver, but in hindsight I think
+the default should have been 'true'.
 
-Regards
+We agreed that non-hub devices shouldn't be powered down in suspend. It
+would be unexpected for users and could have side effects like delays
+or losing status. Since (I think) we can't change the default of the
+attribute we said we'd limit it to hubs, and not create it for other
+types of USB devices. Other USB devices would remain powered during
+system suspend.
 
-Harri
+Are we in agreement up to this point, in particular that non-hub
+devices should remain powered?
+
+struct onboard_dev has the field 'always_powered_...', which in the
+existing code is *always* associated with the sysfs attribute of
+the same name. But there is no reason to not to use the field when
+the sysfs attribute does not exist. For any device at any given time
+the field could indicate whether the device should be remain powered
+during suspend. For hubs the value can be changed at runtime
+through the sysfs attribute, for non-hubs it would be static and
+always indicate that the device should remain powered.
+
+Does that clarify your doubts?
 
