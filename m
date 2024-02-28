@@ -1,208 +1,156 @@
-Return-Path: <linux-usb+bounces-7258-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7259-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FC5186B554
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 17:53:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6D5886B6DE
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 19:10:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E6FAB2318E
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 16:53:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AB3FAB232CE
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 18:10:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98E1A208D2;
-	Wed, 28 Feb 2024 16:53:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1394E79B86;
+	Wed, 28 Feb 2024 18:10:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QehyGA8Z"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FEIYouPg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8161CAAB
-	for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 16:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0417A79B89
+	for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 18:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709139186; cv=none; b=l66AQvyVIiz9WVNc2xsLjnX1ajkoFb9htcF79i4EN47wZolM/S7FxRmS+XYlsrNcTW2+PlTfrhOarXdVKtfe9uA0D3EI6TRIDz5uRTSkh5aOxY/zWQkqEEhNX1YsX/opiStTuFq2/qIpPeIm804R8I6dZaAPueSXIYezQW891S8=
+	t=1709143849; cv=none; b=Bjh2c3e+6yYLV80P3ADI0PuIoBAZd8MQqMl+f1cI+fu9z3vCh+PG8SW0MOKJ41YMNYLZINh8J9v4LqtbuiGOk2Pxv9T76nqbjxbmLUqlKV5BP4maFEsmIVqPga/tAvZPeYnPcWoUvqODjW0Y7PgFGP4EqyPhMwl1Lt6KHuIiswo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709139186; c=relaxed/simple;
-	bh=YeysMJrMKJOqZ+ZRJb/n6sEWfzXImIkkf8WwSLVPEyM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rHN0FP/nD30ygzJiDdsUAQ3jbIJLKvFwFqqhrDZ89xrjJ92lQdF4Jixu5bYCDPwU28EGZV3wVXOKGOWUCZ1PDrwKKnYO0aMlvJkUwkJ9sPmk7robOg1sUy32DExR0mEliZZVDbj7dMGase9vxKrHHcF7MGKBgG1adrzM5iQKirY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QehyGA8Z; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1dc744f54d0so235115ad.0
-        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 08:53:04 -0800 (PST)
+	s=arc-20240116; t=1709143849; c=relaxed/simple;
+	bh=ydPMob62Ut9r97Sqx0kikCCPdrTngYvBh6QQJWZzIis=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jl5e5oeE86k7APPklpO09sDy5OYNLjYirHMbq2uD4pdCdoucTNVHgS3B63gRWu3le+p3+vDaAizRLTotFNNGK8bQoe2Hbk4/FyuvCpc84uFNYyDaqi6ktK6bkRhY7u+6RYjv/D11i8vATG70EbpDyaKtzEwFl6YuXcefpf5xn5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=FEIYouPg; arc=none smtp.client-ip=209.85.166.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3650dcd38a0so259195ab.1
+        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 10:10:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709139184; x=1709743984; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DtF5/pdVuibkgPXJcntwpHSGdyt4hc2nkXEyG93pZvI=;
-        b=QehyGA8ZTmvzFGxmdp2gHWwZK0DGr+8IgjC50EzLZNNZl7tzyFUwX4jc0WBxfh6HOB
-         OO0L+tpdnf8k+5crPabsIEC86d8Uf8HCBLUg11TBKKNEnfrUowCxXeqoLe1M1go027cP
-         l5W3ghgfkqeoDkFB3hkKoC2yo79ipCL+BycIl/c6cGE8rApJrEu91MBJ3S24ew1/P+L6
-         8aku9MZvD/ZXuzKfa6L6o6ybKjCkEpajaE5rL25FGSR8ITIvawcAwnT7NNyvG8sYXSzW
-         gvTJ4QL1boXEuQrgRWZkV33Vl+5zWnE7GKYaFM91q5Nqb/Crq5vXu70QwoxDfdiMvRcc
-         54+Q==
+        d=chromium.org; s=google; t=1709143847; x=1709748647; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mr+bD36IoIOKszW1o5Rb9R/mzBzmVVAn2qquBqx2Jtw=;
+        b=FEIYouPgnFUzrWgIdZQASk0HWhUcQiarax30evBDsqyfoRmttaihpZYlAXELZtupH3
+         WLBwen2wkwlwXrRIqLYjRAvbfPShC+vVCVo4S5UFkQLCxPRrjDUvRwqYufqDJ8oZKq/f
+         Hh69pt0BOR0N6tTt5CByS7vnCSxNSo5TYHS3o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709139184; x=1709743984;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DtF5/pdVuibkgPXJcntwpHSGdyt4hc2nkXEyG93pZvI=;
-        b=hd3irHBuAHnqWuhcpILTkb0NMhjCV3ErENUqwgICaV9IsMgo8WI+vUI0lPMRBWVHVh
-         HQX65ItQ8AF3kxTe0R0WGmEGxVMCmTT4Ii/NouJCifIkR+VkfmOdeE3FgtaTBDlDXKol
-         QcoV/2KZb2SyBeqK/jFJFq0VkbrcJKBWOEeZEPxsX4wHmHAnO15YFGsEogqKdfKXY1QP
-         18/XneogqI3FNW4Q5YS1RDKPq+5J0bTerEYGt25cJTSgsimfG3HMAUyItsV2lLbwNM+k
-         j/YNcFiD8vWQRnwAkbxgCYofeV72iQPWpTK6vy6Z8LTwEAm/dmsRcSiEPRTsIZ+o1Z1w
-         HPkA==
-X-Forwarded-Encrypted: i=1; AJvYcCVIS5Sf6ucklnE8XIw/F+JdmrOAEsE8Il1hu2aJv3EHG49MxJJ55DjT9n9/j/fXoeMbqkDy9bYoe9l0fIucxG2bVaRmoeT8J4Jn
-X-Gm-Message-State: AOJu0Yx9luagf7khM9Wpr0Qs3SmMIO/h6mWGV/wTpNNRsA3sSplSL+tS
-	Zkv85mXmWYkhs2BAevbUKa1njwCvixWdAf5x+bGOfhuSP1QNqp4tzZ6GgW9DUImtBV6bxtiRk6W
-	doQ8bIr35Q24Hy/UUi5f5XxI64QiD8p+doRA7
-X-Google-Smtp-Source: AGHT+IFtOXSYXU84VVLaknqL+pG680O1sVKAYLkwQ1wwVHSfHbEz51im2N5KPclBVeDBV4X/kh9n+/NWxg+VN9Tdjds=
-X-Received: by 2002:a17:903:18a:b0:1db:e5e3:f7ac with SMTP id
- z10-20020a170903018a00b001dbe5e3f7acmr70137plg.7.1709139183758; Wed, 28 Feb
- 2024 08:53:03 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709143847; x=1709748647;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mr+bD36IoIOKszW1o5Rb9R/mzBzmVVAn2qquBqx2Jtw=;
+        b=diD1vJvF6gMEDNUSmWWjXvdNsI/BuIrMX92wQYvC/AL24l4RKvu7Z9GgDPO36G7qFm
+         A+PYNB84VX4ZqcZ+UnFcCymXUqd+k1XDO5EOXT6870Yv+nVj+rPkeYvwY3w4bly0/hce
+         6xTVDcnP9v60OzEoot0WBx6g8UDh1b5IQx5LEadVOta3AUiu75qDcZS+B/qeASA4SPvD
+         JbikVtON1z07fK4c9/P7eJ/8VxfBPclWOPeqR4YcceKQKAj/p5dlq0LLXa7M637f79UZ
+         3oeVcbhWDbKjAwTT0NiZ4ZgaEi3yNsEFDo5LlzjLxN28Z0uq4jJo0vj+4JCi2q2fEBoU
+         E0kw==
+X-Forwarded-Encrypted: i=1; AJvYcCX8nEgFfz20nBuVpKcjoSmybLSDWOW3imQaip8+EoY8tm4SXfsH6tnWaUFrJD80pbKJQ5bFRu9RS5ZdOykT+f9um6XSQvHpay2k
+X-Gm-Message-State: AOJu0Yz6gIOUysiz+7/eL9egh6HVPgMRcqB7Yq3Wq5LKqKLH72RHc474
+	2WMWDWWrCDJp8faoCYF76hCij3bgyXx4QCaaaWYgaWskcvuy3luQavFbt510zg==
+X-Google-Smtp-Source: AGHT+IEcf57nNkZHLpk4X+rVu40fpnQC+KxfZAodN+3tIS0La+wWipkcmp8niTZkNbjmDf9zGzJZYw==
+X-Received: by 2002:a92:dd04:0:b0:365:b9c8:4436 with SMTP id n4-20020a92dd04000000b00365b9c84436mr25912ilm.10.1709143847146;
+        Wed, 28 Feb 2024 10:10:47 -0800 (PST)
+Received: from localhost (144.57.222.35.bc.googleusercontent.com. [35.222.57.144])
+        by smtp.gmail.com with UTF8SMTPSA id bp24-20020a056e02349800b00363da909ebcsm2915892ilb.56.2024.02.28.10.10.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Feb 2024 10:10:46 -0800 (PST)
+Date: Wed, 28 Feb 2024 18:10:45 +0000
+From: Matthias Kaehlcke <mka@chromium.org>
+To: Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Helen Koike <helen.koike@collabora.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Russell King <linux@armlinux.org.uk>,
+	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 6/8] usb: misc: onboard_dev: add support for non-hub
+ devices
+Message-ID: <Zd93JZTlN4BCxWm7@google.com>
+References: <20240228-onboard_xvf3500-v5-0-76b805fd3fe6@wolfvision.net>
+ <20240228-onboard_xvf3500-v5-6-76b805fd3fe6@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <8fe3f46c-4ee5-4597-bf2d-12a5d634a264@rowland.harvard.edu>
- <0000000000008b026406126a4bbe@google.com> <13add23d-af18-4f84-9f1a-043932a9712b@rowland.harvard.edu>
-In-Reply-To: <13add23d-af18-4f84-9f1a-043932a9712b@rowland.harvard.edu>
-From: Aleksandr Nogikh <nogikh@google.com>
-Date: Wed, 28 Feb 2024 17:52:50 +0100
-Message-ID: <CANp29Y4DUvL5zsnqQmhPGkbc=EN6UjFrWF9EZGE5U_=0C9+1Nw@mail.gmail.com>
-Subject: Re: [syzbot] [usb-storage?] divide error in isd200_ata_command
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: syzbot <syzbot+28748250ab47a8f04100@syzkaller.appspotmail.com>, 
-	bvanassche@acm.org, emilne@redhat.com, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	martin.petersen@oracle.com, syzkaller-bugs@googlegroups.com, 
-	tasos@tasossah.com, usb-storage@lists.one-eyed-alien.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240228-onboard_xvf3500-v5-6-76b805fd3fe6@wolfvision.net>
 
-Hi Alan,
+On Wed, Feb 28, 2024 at 02:51:33PM +0100, Javier Carrasco wrote:
+> Most of the functionality this driver provides can be used by non-hub
+> devices as well.
+> 
+> To account for the hub-specific code, add a flag to the device data
+> structure and check its value for hub-specific code.
+> 
+> The 'always_powered_in_supend' attribute is only available for hub
+> devices, keeping the driver's default behavior for non-hub devices (keep
+> on in suspend).
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+> ---
+>  drivers/usb/misc/onboard_usb_dev.c | 25 +++++++++++++++++++++++--
+>  drivers/usb/misc/onboard_usb_dev.h | 10 ++++++++++
+>  2 files changed, 33 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
+> index e1779bd2d126..df0ed172c7ec 100644
+> --- a/drivers/usb/misc/onboard_usb_dev.c
+> +++ b/drivers/usb/misc/onboard_usb_dev.c
+> @@ -132,7 +132,8 @@ static int __maybe_unused onboard_dev_suspend(struct device *dev)
+>  	struct usbdev_node *node;
+>  	bool power_off = true;
+>  
+> -	if (onboard_dev->always_powered_in_suspend)
+> +	if (onboard_dev->always_powered_in_suspend &&
+> +	    !onboard_dev->pdata->is_hub)
+>  		return 0;
 
-Please try it once more with the full commit hash.
+With this non-hub devices would always be powered down, since
+'always_powerd_in_suspend' is not set for them. This should be:
 
---=20
-Aleksandr
+  if (!onboard_dev->pdata->is_hub ||
+       onboard_dev->always_powered_in_suspend)
 
-On Wed, Feb 28, 2024 at 5:12=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Tue, Feb 27, 2024 at 09:20:03PM -0800, syzbot wrote:
-> > Hello,
-> >
-> > syzbot tried to test the proposed patch but the build/boot failed:
-> >
-> > failed to checkout kernel repo https://git.kernel.org/pub/scm/linux/ker=
-nel/git/torvalds/linux.git/ on commit f2e367d6ad3b: failed to run ["git" "f=
-etch" "--force" "--tags" "7b440d1b40dd93ea98b5af6bba55ffca63425216" "f2e367=
-d6ad3b"]: exit status 128
-> > fatal: couldn't find remote ref f2e367d6ad3b
->
-> I'm going to guess this was a temporary failure and try again.  If that
-> wasn't the case, something is seriously wrong somewhere.  I had no
-> trouble accessing that commit using the git.kernel.org web interface.
->
-> Alan Stern
->
-> On Mon, Feb 26, 2024 at 01:42:26AM -0800, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    f2e367d6ad3b Merge tag 'for-6.8/dm-fix-3' of git://git.=
-ker..
-> > git tree:       upstream
->
-> #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux=
-.git/ f2e367d6ad3b
->
-> Index: usb-devel/drivers/usb/storage/isd200.c
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- usb-devel.orig/drivers/usb/storage/isd200.c
-> +++ usb-devel/drivers/usb/storage/isd200.c
-> @@ -1105,7 +1105,7 @@ static void isd200_dump_driveid(struct u
->  static int isd200_get_inquiry_data( struct us_data *us )
->  {
->         struct isd200_info *info =3D (struct isd200_info *)us->extra;
-> -       int retStatus =3D ISD200_GOOD;
-> +       int retStatus;
->         u16 *id =3D info->id;
->
->         usb_stor_dbg(us, "Entering isd200_get_inquiry_data\n");
-> @@ -1137,6 +1137,13 @@ static int isd200_get_inquiry_data( stru
->                                 isd200_fix_driveid(id);
->                                 isd200_dump_driveid(us, id);
->
-> +                               /* Prevent division by 0 in isd200_scsi_t=
-o_ata() */
-> +                               if (id[ATA_ID_HEADS] =3D=3D 0 || id[ATA_I=
-D_SECTORS] =3D=3D 0) {
-> +                                       usb_stor_dbg(us, "   Invalid ATA =
-Identify data\n");
-> +                                       retStatus =3D ISD200_ERROR;
-> +                                       goto Done;
-> +                               }
-> +
->                                 memset(&info->InquiryData, 0, sizeof(info=
-->InquiryData));
->
->                                 /* Standard IDE interface only supports d=
-isks */
-> @@ -1202,6 +1209,7 @@ static int isd200_get_inquiry_data( stru
->                 }
->         }
->
-> + Done:
->         usb_stor_dbg(us, "Leaving isd200_get_inquiry_data %08X\n", retSta=
-tus);
->
->         return(retStatus);
-> @@ -1481,22 +1489,27 @@ static int isd200_init_info(struct us_da
->
->  static int isd200_Initialization(struct us_data *us)
->  {
-> +       int rc =3D 0;
-> +
->         usb_stor_dbg(us, "ISD200 Initialization...\n");
->
->         /* Initialize ISD200 info struct */
->
-> -       if (isd200_init_info(us) =3D=3D ISD200_ERROR) {
-> +       if (isd200_init_info(us) < 0) {
->                 usb_stor_dbg(us, "ERROR Initializing ISD200 Info struct\n=
-");
-> +               rc =3D -ENOMEM;
->         } else {
->                 /* Get device specific data */
->
-> -               if (isd200_get_inquiry_data(us) !=3D ISD200_GOOD)
-> +               if (isd200_get_inquiry_data(us) !=3D ISD200_GOOD) {
->                         usb_stor_dbg(us, "ISD200 Initialization Failure\n=
-");
-> -               else
-> +                       rc =3D -EINVAL;
-> +               } else {
->                         usb_stor_dbg(us, "ISD200 Initialization complete\=
-n");
-> +               }
->         }
->
-> -       return 0;
-> +       return rc;
->  }
->
->
->
+Checking for the (non-)hub status first is clearer IMO, also it avoids
+an unneccessary check of 'always_powered' for non-hub devices.
+
+Without code context: for hubs there can be multiple device tree nodes
+for the same physical hub chip (e.g. one for the USB2 and another for
+the USB3 part). I suppose this could also be the case for non-hub
+devices. For hubs there is the 'peer-hub' device tree property to
+establish a link between the two USB devices, as a result the onboard
+driver only creates a single platform device (which is desired,
+otherwise two platform devices would be in charge for power sequencing
+the same phyiscal device. For non-hub devices there is currently no such
+link. In many cases I expect there will be just one DT entry even though
+the device has multiple USB interfaces, but it could happen and would
+actually be a more accurate representation.
+
+General support is already there (the code dealing with 'peer-hub'), but
+we'd have to come up with a suitable name. 'peer-device' is the first
+thing that comes to my mind, but there might be better options. If such
+a generic property is added then we should deprecate 'peer-hub', but
+maintain backwards compatibility.
 
