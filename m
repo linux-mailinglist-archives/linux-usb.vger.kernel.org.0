@@ -1,178 +1,153 @@
-Return-Path: <linux-usb+bounces-7229-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7230-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37D2686AF01
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 13:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F00A86AF67
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 13:48:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1CC2285371
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 12:22:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 104DF2872CD
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 12:48:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9F0D3BBD0;
-	Wed, 28 Feb 2024 12:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA641487DC;
+	Wed, 28 Feb 2024 12:48:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=aixigo.com header.i=@aixigo.com header.b="nBQuLHjZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="utFjLF2Q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.aixigo.de (mail.aixigo.de [5.145.142.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E628E73529
-	for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 12:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.145.142.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E43914691C
+	for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 12:48:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709122941; cv=none; b=r/LFWMeQvjpeLa/wsanSxBm/M4waSYFFsFioi0+qdDtInjeEjggRjKWLqQfIiH0wC2tXZ26H/CdfENUqS47M+kuh1IPKeQBbFHgNudasxEjHW+tlMR7b7PRo1Qg0We86iXpA9zGQqSQcFoRcCpEE9kz48Nm0J5njU0TZ2LpeFQ8=
+	t=1709124504; cv=none; b=q5cAWWz+dSYS4GPw0KkAyqfU0Ldjw+hl/JkEn7+1M03+s+gSf5H9gF6tWNH1HjO0O3cfvxSwk90hKpP/9h1khp3RW5S0FLlPzWo5/eAtzVCXne2xIZjx4nIXNmg0IJHJp9LR9YT5U01yI4niqtssQAUWfsTguteT3MDThioJCCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709122941; c=relaxed/simple;
-	bh=/JmovOKeeyLcvCve8bNczLHZcDqkWYZM47b6rzjwAaA=;
-	h=Message-ID:Date:MIME-Version:From:To:Subject:Content-Type; b=agbuJ8mesWP87AguTuV2JNznWi78eCtDIhfjQz6ezOrYkOMnMx0b2tsXp9/l88TieGb9dk6/BGeF4uqhTHFeWmByEgXOxejYt90RD1+Kl+GDgigQikPoujG4MdT/oSz/3xBl5LHFcNHy37gns0PD8tp/u+nXdqPGEJmXupaqWH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aixigo.com; spf=pass smtp.mailfrom=aixigo.com; dkim=pass (1024-bit key) header.d=aixigo.com header.i=@aixigo.com header.b=nBQuLHjZ; arc=none smtp.client-ip=5.145.142.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aixigo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aixigo.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=default; bh=/JmovOKeeyLc
-	vCve8bNczLHZcDqkWYZM47b6rzjwAaA=; h=subject:to:from:date;
-	d=aixigo.com; b=nBQuLHjZLzuVUpa7LtFrDkiYLHs6jF2+SHZFbopXyohe/1jeySEp+o
-	6JHznTkxrkT+YY6WspdXtJzactV0qNkElc7WKLmwWCCQ/IPzOTsdB4/7D14oO5N6NUb9Zs
-	rtRcFZyL76ODrKx+yiAFMNiMF4LUUeAcaE6fJjTyahlXH5Q=
-Received: from mailhost.ac.aixigo.de (mailhost.ac.aixigo.de [172.19.96.11])
-	by mail.aixigo.de (OpenSMTPD) with ESMTPS id 16e98857 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-	for <linux-usb@vger.kernel.org>;
-	Wed, 28 Feb 2024 13:22:13 +0100 (CET)
-Received: from [172.19.97.128] (dpcl082.ac.aixigo.de [172.19.97.128])
-	by mailhost.ac.aixigo.de (8.17.1.9/8.17.1.9/Debian-2) with ESMTPS id 41SCMCTb2837014
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT);
-	Wed, 28 Feb 2024 13:22:12 +0100
-Message-ID: <70bc51d7-c8a2-4b06-ab7a-e321d20db49a@aixigo.com>
-Date: Wed, 28 Feb 2024 13:22:12 +0100
+	s=arc-20240116; t=1709124504; c=relaxed/simple;
+	bh=NBpzmRY60q2PWTykuATZrxsoFHMaBNlISPhqKCTWTk8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UKHvcT7BkCP5glIC1sNMDyaKLyxITtjgjvFfaYMQQzaDUR3jcBEW4C7iuHG395RnnlbzlHv2/LQqiM8P2XfbNNZJ8hJPMia/wVV7taO3ikNDQDu94naVLH9CDjHAeCzRxTWNXHywMFiICnHOcjwJp9IVtL1PzM9GNvBeVgrJUeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=utFjLF2Q; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5664623c311so9639a12.1
+        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 04:48:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709124501; x=1709729301; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lz8PDV6l9PzFmMf7h7g56ZTBB1hyILoO9PInbhnCtyg=;
+        b=utFjLF2Q+kqNmcCjGnkbKP2aC6ZjJ3t0JG7gqq/oSFpA4KlJRqGSTbdSwd4cvoXlfa
+         JBvy4WpB9wBjmw25JEk7jf9AqrnqfHN/S9FtjEC6x+9g5fsjlskr2tRbfyDf0bGjLFYm
+         WG5qUIDA695NE45hkDWi3BTqVJVfSYonorH7Dtwz66zGRGHcmohBrDTf6qzc3jPZcoQz
+         Ai2FcgQ0usBnjsJqAKL9oCvWWju0XpbXL6+/OUdSqpVuNgHiYNQQE2/H/P7YjK3NmuST
+         5spskBDQ/4Sz71AvW8fIrO6OaeNL0pf7xuod94bixJIDlkN+vWKzB4u2IwlUrMXY/fOB
+         622g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709124501; x=1709729301;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lz8PDV6l9PzFmMf7h7g56ZTBB1hyILoO9PInbhnCtyg=;
+        b=ijxUDKjGS/jD0a+ZZ99IswBNr2MJd9K2oiIcZpxtH4vhHxhh6+hH/Clshx6gT/yFZI
+         tQOnKtl91OD9xYLDz3wdIERKAkxgwBD6xiAlWWe1TtylF1Ciwn27fjMNKbLfjcwXTCVC
+         RuQiK46+ivTAsHJw8rp4fWvQ1FTFcuoooJ1nxoDT2uJhV+iIzICvJN7bRfB93j+nlWB8
+         H2AH1j5H0Y7Ju+foV2XSQYKnxn7JmNOKzlR/CHcBu8tR5kKCE+AI+PH93yBxcUrW3oZ3
+         TJ6bpkqTxHtDNSHAiMfLOBwEz9YEpk5NHtr65lO3/V6MYjyfUqVh/PgOaEXSahAO2pkx
+         qaRg==
+X-Forwarded-Encrypted: i=1; AJvYcCVp1LnCg+3DKjdmsFDh2XO0g5h/NJD1qXWL7zPdUq//OL3okhtgp3M7LmBDP20vzkwpuXWQhCyG3QMJZ53peWVaajxzoWSrbHGp
+X-Gm-Message-State: AOJu0YzKcqu4iLXeP+4vxtN07w9FZosWCs9ku6PxhzyCz+grOPpc3l8b
+	Ie26nfSdJgMEakBF0dKCk3ZkSIgJFIpy6Axr2dBudxKXnz9KgAp/YMxSW5BB6YdqUCGeLwCXaol
+	kkwVFOpGsqT+twDkCoaGBQqiFBnCjrhJrVJg8
+X-Google-Smtp-Source: AGHT+IGvw5oWQcyaO7T3w4443RMPtvSrvIlBRtVQqFuSUAyc6ioFMSLcLtJTOeYhedzngZAOWYGKM0PKlUm2H+h4oz8=
+X-Received: by 2002:a50:baae:0:b0:560:1a1:eb8d with SMTP id
+ x43-20020a50baae000000b0056001a1eb8dmr17869ede.7.1709124501285; Wed, 28 Feb
+ 2024 04:48:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Linux)
-From: Harald Dunkel <harald.dunkel@aixigo.com>
-Content-Language: en-US
-To: linux-usb@vger.kernel.org
-Subject: RIP on discard, JMicron USB adaptor
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-X-Virus-Scanned: clamav-milter 1.0.3 at srvvm01.ac.aixigo.de
-X-Virus-Status: Clean
+References: <20240228115441.2105585-1-quic_kriskura@quicinc.com>
+In-Reply-To: <20240228115441.2105585-1-quic_kriskura@quicinc.com>
+From: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date: Wed, 28 Feb 2024 04:48:05 -0800
+Message-ID: <CANP3RGcj0e8ugWhy8mmNZS_HnxGaUQk=_H8d3rbZZm5SkggNLg@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: gadget: ncm: Fix handling of zero block length packets
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com, 
+	quic_wcheng@quicinc.com, quic_jackp@quicinc.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SGkgZm9sa3MsDQoNCm5vdCBzdXJlIGlmIHRoaXMgd2FzIHN1cHBvc2VkIHRvIGhhcHBlbjoN
-Cg0KWzE0MDA4MjEuODExNTg1XSAtLS0tLS0tLS0tLS1bIGN1dCBoZXJlIF0tLS0tLS0tLS0t
-LS0NClsxNDAwODIxLjgxMTU5NF0gV0FSTklORzogQ1BVOiAwIFBJRDogNjE0MzAzIGF0IGJs
-b2NrL2Jsay1saWIuYzo1MCBfX2Jsa2Rldl9pc3N1ZV9kaXNjYXJkKzB4MTRiLzB4MTgwDQpb
-MTQwMDgyMS44MTE2MTJdIE1vZHVsZXMgbGlua2VkIGluOiBjZGNfbWJpbSBjZGNfd2RtIHRj
-cF9kaWFnIHVkcF9kaWFnIGluZXRfZGlhZyBleGZhdCBzbmRfc2VxX2R1bW15IHNuZF9ocnRp
-bWVyIHNuZF9zZXFfbWlkaSBzbmRfc2VxX21pZGlfZXZlbnQgc25kX3NlcSBjcHVmcmVxX3Vz
-ZXJzcGFjZSBjcHVmcmVxX2NvbnNlcnZhdGl2ZSBjcHVmcmVxX3Bvd2Vyc2F2ZSBjcHVmcmVx
-X29uZGVtYW5kIGN0cyBycGNzZWNfZ3NzX2tyYjUgbmZzdjQgZG5zX3Jlc29sdmVyIG5mcyBs
-b2NrZCBncmFjZSBmc2NhY2hlIG5ldGZzIHNjc2lfdHJhbnNwb3J0X2lzY3NpIG52bWVfZmFi
-cmljcyBkZWxsX3JidSByZmtpbGwgcXJ0ciBkY2RiYXMgdWlucHV0IGJpbmZtdF9taXNjIG5s
-c19hc2NpaSBubHNfY3A0MzcgdmZhdCBmYXQgbnZpZGlhX2RybShQT0UpIG52aWRpYV9tb2Rl
-c2V0KFBPRSkgaW50ZWxfcmFwbF9tc3IgaW50ZWxfcmFwbF9jb21tb24geDg2X3BrZ190ZW1w
-X3RoZXJtYWwgc25kX2hkYV9jb2RlY19yZWFsdGVrIGludGVsX3Bvd2VyY2xhbXAgeHRfcmVj
-ZW50IHNuZF9oZGFfY29kZWNfZ2VuZXJpYyBsZWR0cmlnX2F1ZGlvIGNvcmV0ZW1wIHNuZF9z
-b2ZfcGNpX2ludGVsX3RnbCBzbmRfc29mX2ludGVsX2hkYV9jb21tb24gc291bmR3aXJlX2lu
-dGVsIHNvdW5kd2lyZV9nZW5lcmljX2FsbG9jYXRpb24gc291bmR3aXJlX2NhZGVuY2Ugc25k
-X3NvZl9pbnRlbF9oZGEgc25kX3NvZl9wY2kgc25kX3NvZl94dGVuc2FfZHNwIHNuZF9zb2Yg
-c25kX3NvZl91dGlscyBzbmRfc29jX2hkYWNfaGRhIHNuZF9oZGFfY29kZWNfaGRtaSBzbmRf
-aGRhX2V4dF9jb3JlIHNuZF9zb2NfYWNwaV9pbnRlbF9tYXRjaCBzbmRfc29jX2FjcGkgc25k
-X3NvY19jb3JlIHNuZF9jb21wcmVzcyBzb3VuZHdpcmVfYnVzIHNuZF9oZGFfaW50ZWwgc25k
-X3VzYl9hdWRpbyBzbmRfaW50ZWxfZHNwY2ZnIGJyX25ldGZpbHRlciBzbmRfaW50ZWxfc2R3
-X2FjcGkga3ZtX2ludGVsIG92ZXJsYXkNClsxNDAwODIxLjgxMTY5Ml0gIHNuZF91c2JtaWRp
-X2xpYiBpOTE1IHh0X2NvbW1lbnQgc25kX2hkYV9jb2RlYyB1dmN2aWRlbyB4dF9DSEVDS1NV
-TSBzbmRfcmF3bWlkaSBzbmRfaGRhX2NvcmUgdmlkZW9idWYyX3ZtYWxsb2Mga3ZtIGRybV9i
-dWRkeSBzbmRfc2VxX2RldmljZSBuZl90YWJsZXMgc25kX2h3ZGVwIHZpZGVvYnVmMl9tZW1v
-cHMgZHJtX2Rpc3BsYXlfaGVscGVyIHZpZGVvYnVmMl92NGwyIG5mbmV0bGluayBzbmRfcGNt
-X29zcyBpcnFieXBhc3MgdmlkZW9idWYyX2NvbW1vbiBicmlkZ2Ugc25kX21peGVyX29zcyBj
-ZWMgODAyMXEgdmlkZW9kZXYgcmFwbCBnYXJwIHJjX2NvcmUgaW50ZWxfY3N0YXRlIG1laV9o
-ZGNwIG52aWRpYShQT0UpIHNuZF9wY20gZXZkZXYgc3RwIG1jIHdtaV9ibW9mIGdpZ2FieXRl
-X3dtaSBtcnAgaW50ZWxfdW5jb3JlIHR0bSBpVENPX3dkdCBsbGMgc25kX3RpbWVyIGludGVs
-X3BtY19ieHQgYm9uZGluZyBwY3Nwa3IgZHJtX2ttc19oZWxwZXIgbWFjdmxhbiBzbmQgaVRD
-T192ZW5kb3Jfc3VwcG9ydCBpbnRlbF9oaWQgdGxzIHdhdGNoZG9nIHNvdW5kY29yZSB2ZXRo
-IGkyY19hbGdvX2JpdCBzZyBzcGFyc2Vfa2V5bWFwIGFjcGlfcGFkIGludGVsX3BtY19jb3Jl
-IGFjcGlfdGFkIGJ1dHRvbiBtZWlfbWUgbWVpIGlwdGFibGVfbmF0IGlwdGFibGVfbWFuZ2xl
-IGlwdGFibGVfZmlsdGVyIGlwNnRhYmxlX25hdCBuZl9uYXQgbmZfY29ubnRyYWNrIG5mX2Rl
-ZnJhZ19pcHY2IG5mX2RlZnJhZ19pcHY0IGF1dGhfcnBjZ3NzIGlwNnRhYmxlX21hbmdsZSBp
-cDZ0YWJsZV9maWx0ZXIgaXA2X3RhYmxlcyBkcm0gZnVzZSBsb29wIGVmaV9wc3RvcmUgc3Vu
-cnBjIGNvbmZpZ2ZzIGlwX3RhYmxlcyB4X3RhYmxlcyBhdXRvZnM0IGV4dDQgY3JjMTYgbWJj
-YWNoZSBqYmQyIGJ0cmZzIGJsYWtlMmJfZ2VuZXJpYyB6c3RkX2NvbXByZXNzIGVmaXZhcmZz
-IHJhaWQxMCByYWlkNDU2IGFzeW5jX3JhaWQ2X3JlY292IGFzeW5jX21lbWNweSBhc3luY19w
-cQ0KWzE0MDA4MjEuODExNzk5XSAgYXN5bmNfeG9yIGFzeW5jX3R4IHhvciByYWlkNl9wcSBs
-aWJjcmMzMmMgY3JjMzJjX2dlbmVyaWMgcmFpZDAgbXVsdGlwYXRoIGxpbmVhciBoaWRfbG9n
-aXRlY2hfaGlkcHAgaGlkX2xvZ2l0ZWNoX2RqIHVhcyB1c2Jfc3RvcmFnZSBoaWRfZ2VuZXJp
-YyB1c2JoaWQgaGlkIGNkY19uY20gY2RjX2V0aGVyIHVzYm5ldCByYWlkMSBtZF9tb2Qgcjgx
-NTIgbWlpIHNkX21vZCBkbV9tb2QgY3JjMzJfcGNsbXVsIGNyYzMyY19pbnRlbCBnaGFzaF9j
-bG11bG5pX2ludGVsIHNoYTUxMl9zc3NlMyBzaGE1MTJfZ2VuZXJpYyBzaGEyNTZfc3NzZTMg
-c2hhMV9zc3NlMyBudm1lIG52bWVfY29yZSBhaGNpIHhoY2lfcGNpIHQxMF9waSBsaWJhaGNp
-IGNyYzY0X3JvY2tzb2Z0X2dlbmVyaWMgeGhjaV9oY2QgbGliYXRhIGFlc25pX2ludGVsIHI4
-MTY5IHJlYWx0ZWsgY3JjNjRfcm9ja3NvZnQgY3JjX3QxMGRpZiBtZGlvX2RldnJlcyB1c2Jj
-b3JlIHNjc2lfbW9kIGNyeXB0b19zaW1kIGxpYnBoeSBjcnlwdGQgY3JjdDEwZGlmX2dlbmVy
-aWMgaW50ZWxfbHBzc19wY2kgaTJjX2k4MDEgY3JjdDEwZGlmX3BjbG11bCBjcmM2NCBjcmN0
-MTBkaWZfY29tbW9uIGludGVsX2xwc3MgaTJjX3NtYnVzIGlkbWE2NCB1c2JfY29tbW9uIHNj
-c2lfY29tbW9uIGZhbiB2aWRlbyB3bWkgcGluY3RybF9hbGRlcmxha2UNClsxNDAwODIxLjgx
-MTg2OF0gQ1BVOiAwIFBJRDogNjE0MzAzIENvbW06IGJsa2Rpc2NhcmQgVGFpbnRlZDogUCAg
-ICAgICAgICAgT0UgICAgICA2LjEuMC0xOC1hbWQ2NCAjMSAgRGViaWFuIDYuMS43Ni0xDQpb
-MTQwMDgyMS44MTE4NzVdIEhhcmR3YXJlIG5hbWU6IEdpZ2FieXRlIFRlY2hub2xvZ3kgQ28u
-LCBMdGQuIFo3OTAgR0FNSU5HIFgvWjc5MCBHQU1JTkcgWCwgQklPUyBGOWIgMTEvMTAvMjAy
-Mw0KWzE0MDA4MjEuODExODc4XSBSSVA6IDAwMTA6X19ibGtkZXZfaXNzdWVfZGlzY2FyZCsw
-eDE0Yi8weDE4MA0KWzE0MDA4MjEuODExODg3XSBDb2RlOiA0OCAzOSBkOCA3NSA4YiBmNyBk
-YSA4OSBkMyBjMSBlYiAwOSBlYiA4NSA0OCA4YiAwNCAyNCA0YyA4OSAyMCA0OCA4MyBjNCAw
-OCAzMSBjMCA1YiA1ZCA0MSA1YyA0MSA1ZCA0MSA1ZSA0MSA1ZiBjMyBjYyBjYyBjYyBjYyA8
-MGY+IDBiIDQ4IGM3IGM2IDgwIGZkIDBhIGE5IDQ4IGM3IGM3IDQwIDJjIGI5IGE5IGU4IDYw
-IDQ1IDRmIDAwIDg1DQpbMTQwMDgyMS44MTE4OTFdIFJTUDogMDAxODpmZmZmYjNkN2E1MGQ3
-ZDUwIEVGTEFHUzogMDAwMTAyNDYNClsxNDAwODIxLjgxMTg5Nl0gUkFYOiBmZmZmOWZiMGNi
-MjQ4NzUwIFJCWDogZmZmZjlmYmI3OTQ2MTJjMCBSQ1g6IGZmZmY5ZmI2MDE2N2JlODANClsx
-NDAwODIxLjgxMTg5OV0gUkRYOiAwMDAwMDAwMDAwMDAwMDAwIFJTSTogMDAwMDAwMDAwMDAw
-MDAwMCBSREk6IGZmZmY5ZmJiNzk0NjEyYzANClsxNDAwODIxLjgxMTkwMl0gUkJQOiAwMDAw
-MDAwMDAwMDAwY2MwIFIwODogZmZmZmIzZDdhNTBkN2Q5MCBSMDk6IGZmZmZmNWY0ZDZmN2Vm
-YzANClsxNDAwODIxLjgxMTkwNF0gUjEwOiAwMDAwMDAwMDBlZTc3OGZmIFIxMTogMDAwMDAw
-MDAwMDAwMDAwMCBSMTI6IDAwMDAwMDAwMDAwMDAwMDANClsxNDAwODIxLjgxMTkwN10gUjEz
-OiAwMDAwMDAwMDc3M2JjODAwIFIxNDogMDAwMDAwZWU3NzkwMDAwMCBSMTU6IGZmZmY5ZmJi
-Nzk0NjEyYzANClsxNDAwODIxLjgxMTkxMF0gRlM6ICAwMDAwN2YyYWYwZTk1NzQwKDAwMDAp
-IEdTOmZmZmY5ZmJiN2YyMDAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDAwMDAwMA0KWzE0
-MDA4MjEuODExOTE0XSBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAw
-MDgwMDUwMDMzDQpbMTQwMDgyMS44MTE5MTddIENSMjogMDAwMDdmZmM2NWVlYzE3MCBDUjM6
-IDAwMDAwMDAyZGNmNzgwMDAgQ1I0OiAwMDAwMDAwMDAwNzUwZWYwDQpbMTQwMDgyMS44MTE5
-MjBdIFBLUlU6IDU1NTU1NTU0DQpbMTQwMDgyMS44MTE5MjNdIENhbGwgVHJhY2U6DQpbMTQw
-MDgyMS44MTE5MjZdICA8VEFTSz4NClsxNDAwODIxLjgxMTkzMV0gID8gX193YXJuKzB4N2Qv
-MHhjMA0KWzE0MDA4MjEuODExOTM4XSAgPyBfX2Jsa2Rldl9pc3N1ZV9kaXNjYXJkKzB4MTRi
-LzB4MTgwDQpbMTQwMDgyMS44MTE5NDVdICA/IHJlcG9ydF9idWcrMHhlMi8weDE1MA0KWzE0
-MDA4MjEuODExOTU1XSAgPyBoYW5kbGVfYnVnKzB4NDEvMHg3MA0KWzE0MDA4MjEuODExOTU5
-XSAgPyBleGNfaW52YWxpZF9vcCsweDEzLzB4NjANClsxNDAwODIxLjgxMTk2M10gID8gYXNt
-X2V4Y19pbnZhbGlkX29wKzB4MTYvMHgyMA0KWzE0MDA4MjEuODExOTc0XSAgPyBfX2Jsa2Rl
-dl9pc3N1ZV9kaXNjYXJkKzB4MTRiLzB4MTgwDQpbMTQwMDgyMS44MTE5ODJdICBibGtkZXZf
-aXNzdWVfZGlzY2FyZCsweDdlLzB4ZTANClsxNDAwODIxLjgxMTk5MF0gIGJsa2Rldl9jb21t
-b25faW9jdGwrMHg2MWYvMHhhMzANClsxNDAwODIxLjgxMTk5OV0gIGJsa2Rldl9pb2N0bCsw
-eDEwNC8weDI3MA0KWzE0MDA4MjEuODEyMDA2XSAgX194NjRfc3lzX2lvY3RsKzB4OGQvMHhk
-MA0KWzE0MDA4MjEuODEyMDEzXSAgZG9fc3lzY2FsbF82NCsweDU4LzB4YzANClsxNDAwODIx
-LjgxMjAxN10gID8gZG9fdXNlcl9hZGRyX2ZhdWx0KzB4MWIwLzB4NTgwDQpbMTQwMDgyMS44
-MTIwMjNdICA/IGV4aXRfdG9fdXNlcl9tb2RlX3ByZXBhcmUrMHg0MC8weDFlMA0KWzE0MDA4
-MjEuODEyMDMwXSAgZW50cnlfU1lTQ0FMTF82NF9hZnRlcl9od2ZyYW1lKzB4NjQvMHhjZQ0K
-WzE0MDA4MjEuODEyMDM4XSBSSVA6IDAwMzM6MHg3ZjJhZjBmOTVjNWINClsxNDAwODIxLjgx
-MjA0Ml0gQ29kZTogMDAgNDggODkgNDQgMjQgMTggMzEgYzAgNDggOGQgNDQgMjQgNjAgYzcg
-MDQgMjQgMTAgMDAgMDAgMDAgNDggODkgNDQgMjQgMDggNDggOGQgNDQgMjQgMjAgNDggODkg
-NDQgMjQgMTAgYjggMTAgMDAgMDAgMDAgMGYgMDUgPDg5PiBjMiAzZCAwMCBmMCBmZiBmZiA3
-NyAxYyA0OCA4YiA0NCAyNCAxOCA2NCA0OCAyYiAwNCAyNSAyOCAwMCAwMA0KWzE0MDA4MjEu
-ODEyMDQ2XSBSU1A6IDAwMmI6MDAwMDdmZmM2NWVjZWM0MCBFRkxBR1M6IDAwMDAwMjQ2IE9S
-SUdfUkFYOiAwMDAwMDAwMDAwMDAwMDEwDQpbMTQwMDgyMS44MTIwNTFdIFJBWDogZmZmZmZm
-ZmZmZmZmZmZkYSBSQlg6IDAwMDAwMDAwMDAwMDAwMDAgUkNYOiAwMDAwN2YyYWYwZjk1YzVi
-DQpbMTQwMDgyMS44MTIwNTRdIFJEWDogMDAwMDdmZmM2NWVjZWQwMCBSU0k6IDAwMDAwMDAw
-MDAwMDEyNzcgUkRJOiAwMDAwMDAwMDAwMDAwMDAzDQpbMTQwMDgyMS44MTIwNTZdIFJCUDog
-MDAwMDAwMDAwMDAwMDAwMCBSMDg6IDAwMDAwMDAwMDAwMDAwMDcgUjA5OiAwMDAwNTYzYzIz
-MDBhMmYwDQpbMTQwMDgyMS44MTIwNThdIFIxMDogMDAwMDdmZmM2NWVlYzE3MCBSMTE6IDAw
-MDAwMDAwMDAwMDAyNDYgUjEyOiAwMDAwMDBlZTc3OTAwMDAwDQpbMTQwMDgyMS44MTIwNjFd
-IFIxMzogMDAwMDAwMDAwMDAwMDAwMyBSMTQ6IDAwMDA1NjNjMjMwMGEyZjAgUjE1OiAwMDAw
-MDAwMDAwMDAwMDAwDQpbMTQwMDgyMS44MTIwNjVdICA8L1RBU0s+DQpbMTQwMDgyMS44MTIw
-NjddIC0tLVsgZW5kIHRyYWNlIDAwMDAwMDAwMDAwMDAwMDAgXS0tLQ0KDQpJIHRyaWVkIGEg
-ZGlzY2FyZCBvbiBhIFNhbXN1bmcgUE05ODEgMVRCIFNTRCAobS4yKSB1c2luZyBhIEpNaWNy
-b24gVVNCIGFkYXB0b3IuDQoNCnVkZXYgcnVsZToNCg0KQUNUSU9OPT0iYWRkfGNoYW5nZSIs
-IEFUVFJTe2lkVmVuZG9yfT09IjE1MmQiLCBBVFRSU3tpZFByb2R1Y3R9PT0iMDU4MyIsIFNV
-QlNZU1RFTT09InNjc2lfZGlzayIsIEFUVFJ7cHJvdmlzaW9uaW5nX21vZGV9PSJ1bm1hcCIN
-Cg0KUHJvYmFibHkgSSB3YXMgdG9vIG9wdGltaXN0aWMuDQoNCg0KUmVnYXJkcw0KSGFycmkN
-Cg==
+On Wed, Feb 28, 2024 at 3:54=E2=80=AFAM Krishna Kurapati
+<quic_kriskura@quicinc.com> wrote:
+>
+> While connecting to a Linux host with CDC_NCM_NTB_DEF_SIZE_TX
+> set to 65536, it has been observed that we receive short packets,
+> which come at interval of 5-10 seconds sometimes and have block
+> length zero but still contain 1-2 valid datagrams present.
+>
+> According to the NCM spec:
+>
+> "If wBlockLength =3D 0x0000, the block is terminated by a
+> short packet. In this case, the USB transfer must still
+> be shorter than dwNtbInMaxSize or dwNtbOutMaxSize. If
+> exactly dwNtbInMaxSize or dwNtbOutMaxSize bytes are sent,
+> and the size is a multiple of wMaxPacketSize for the
+> given pipe, then no ZLP shall be sent.
+>
+> wBlockLength=3D 0x0000 must be used with extreme care, because
+> of the possibility that the host and device may get out of
+> sync, and because of test issues.
+>
+> wBlockLength =3D 0x0000 allows the sender to reduce latency by
+> starting to send a very large NTB, and then shortening it when
+> the sender discovers that there=E2=80=99s not sufficient data to justify
+> sending a large NTB"
+>
+> However, there is a potential issue with the current implementation,
+> as it checks for the occurrence of multiple NTBs in a single
+> giveback by verifying if the leftover bytes to be processed is zero
+> or not. If the block length reads zero, we would process the same
+> NTB infintely because the leftover bytes is never zero and it leads
+> to a crash. Fix this by bailing out if block length reads zero.
+>
+> Cc: <stable@vger.kernel.org>
+> Fixes: 427694cfaafa ("usb: gadget: ncm: Handle decoding of multiple NTB's=
+ in unwrap call")
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+> Changes in v2:
+> Removed goto label
+>
+> Link to v1:
+> https://lore.kernel.org/all/20240226112815.2616719-1-quic_kriskura@quicin=
+c.com/
+>
+>  drivers/usb/gadget/function/f_ncm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/fun=
+ction/f_ncm.c
+> index e2a059cfda2c..28f4e6552e84 100644
+> --- a/drivers/usb/gadget/function/f_ncm.c
+> +++ b/drivers/usb/gadget/function/f_ncm.c
+> @@ -1346,7 +1346,7 @@ static int ncm_unwrap_ntb(struct gether *port,
+>         if (to_process =3D=3D 1 &&
+>             (*(unsigned char *)(ntb_ptr + block_len) =3D=3D 0x00)) {
+>                 to_process--;
+> -       } else if (to_process > 0) {
+> +       } else if ((to_process > 0) && (block_len !=3D 0)) {
+>                 ntb_ptr =3D (unsigned char *)(ntb_ptr + block_len);
+>                 goto parse_ntb;
+>         }
+> --
+> 2.34.1
+
+Reviewed-by: Maciej =C5=BBenczykowski <maze@google.com>
 
