@@ -1,153 +1,124 @@
-Return-Path: <linux-usb+bounces-7230-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7231-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F00A86AF67
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 13:48:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C077D86AF99
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 13:58:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 104DF2872CD
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 12:48:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C0FB28786D
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 12:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA641487DC;
-	Wed, 28 Feb 2024 12:48:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2784D149E0E;
+	Wed, 28 Feb 2024 12:58:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="utFjLF2Q"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GRZKI6KV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E43914691C
-	for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 12:48:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D126E145B3F;
+	Wed, 28 Feb 2024 12:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709124504; cv=none; b=q5cAWWz+dSYS4GPw0KkAyqfU0Ldjw+hl/JkEn7+1M03+s+gSf5H9gF6tWNH1HjO0O3cfvxSwk90hKpP/9h1khp3RW5S0FLlPzWo5/eAtzVCXne2xIZjx4nIXNmg0IJHJp9LR9YT5U01yI4niqtssQAUWfsTguteT3MDThioJCCs=
+	t=1709125085; cv=none; b=MfQUJB8maxUiQ8dFkTCp+gS/aHjIDhMkMDUPg3bSUPbRHsJ+io9jq2fQncEiD3uj/4RLDE6LX5rufB82tYpw3Sv7W5jUzSVAnOAFhla/ruhf2ITRB6lCrufjjMYVhsAyAhuLxFv52+hfY2wkSs+Tk3gWurzH50qpiimpyLJXE78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709124504; c=relaxed/simple;
-	bh=NBpzmRY60q2PWTykuATZrxsoFHMaBNlISPhqKCTWTk8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UKHvcT7BkCP5glIC1sNMDyaKLyxITtjgjvFfaYMQQzaDUR3jcBEW4C7iuHG395RnnlbzlHv2/LQqiM8P2XfbNNZJ8hJPMia/wVV7taO3ikNDQDu94naVLH9CDjHAeCzRxTWNXHywMFiICnHOcjwJp9IVtL1PzM9GNvBeVgrJUeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=utFjLF2Q; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5664623c311so9639a12.1
-        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 04:48:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709124501; x=1709729301; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lz8PDV6l9PzFmMf7h7g56ZTBB1hyILoO9PInbhnCtyg=;
-        b=utFjLF2Q+kqNmcCjGnkbKP2aC6ZjJ3t0JG7gqq/oSFpA4KlJRqGSTbdSwd4cvoXlfa
-         JBvy4WpB9wBjmw25JEk7jf9AqrnqfHN/S9FtjEC6x+9g5fsjlskr2tRbfyDf0bGjLFYm
-         WG5qUIDA695NE45hkDWi3BTqVJVfSYonorH7Dtwz66zGRGHcmohBrDTf6qzc3jPZcoQz
-         Ai2FcgQ0usBnjsJqAKL9oCvWWju0XpbXL6+/OUdSqpVuNgHiYNQQE2/H/P7YjK3NmuST
-         5spskBDQ/4Sz71AvW8fIrO6OaeNL0pf7xuod94bixJIDlkN+vWKzB4u2IwlUrMXY/fOB
-         622g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709124501; x=1709729301;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lz8PDV6l9PzFmMf7h7g56ZTBB1hyILoO9PInbhnCtyg=;
-        b=ijxUDKjGS/jD0a+ZZ99IswBNr2MJd9K2oiIcZpxtH4vhHxhh6+hH/Clshx6gT/yFZI
-         tQOnKtl91OD9xYLDz3wdIERKAkxgwBD6xiAlWWe1TtylF1Ciwn27fjMNKbLfjcwXTCVC
-         RuQiK46+ivTAsHJw8rp4fWvQ1FTFcuoooJ1nxoDT2uJhV+iIzICvJN7bRfB93j+nlWB8
-         H2AH1j5H0Y7Ju+foV2XSQYKnxn7JmNOKzlR/CHcBu8tR5kKCE+AI+PH93yBxcUrW3oZ3
-         TJ6bpkqTxHtDNSHAiMfLOBwEz9YEpk5NHtr65lO3/V6MYjyfUqVh/PgOaEXSahAO2pkx
-         qaRg==
-X-Forwarded-Encrypted: i=1; AJvYcCVp1LnCg+3DKjdmsFDh2XO0g5h/NJD1qXWL7zPdUq//OL3okhtgp3M7LmBDP20vzkwpuXWQhCyG3QMJZ53peWVaajxzoWSrbHGp
-X-Gm-Message-State: AOJu0YzKcqu4iLXeP+4vxtN07w9FZosWCs9ku6PxhzyCz+grOPpc3l8b
-	Ie26nfSdJgMEakBF0dKCk3ZkSIgJFIpy6Axr2dBudxKXnz9KgAp/YMxSW5BB6YdqUCGeLwCXaol
-	kkwVFOpGsqT+twDkCoaGBQqiFBnCjrhJrVJg8
-X-Google-Smtp-Source: AGHT+IGvw5oWQcyaO7T3w4443RMPtvSrvIlBRtVQqFuSUAyc6ioFMSLcLtJTOeYhedzngZAOWYGKM0PKlUm2H+h4oz8=
-X-Received: by 2002:a50:baae:0:b0:560:1a1:eb8d with SMTP id
- x43-20020a50baae000000b0056001a1eb8dmr17869ede.7.1709124501285; Wed, 28 Feb
- 2024 04:48:21 -0800 (PST)
+	s=arc-20240116; t=1709125085; c=relaxed/simple;
+	bh=xCd9FCuV0P6I+DGvJ2VP4AxODq0+yihzQbQZWXqZEcQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cKXmt15TCWWBND7fsvKN8Slf80CNtkI3datIbiX8NH8PpVqmZGAkapjqHvVFh7bwroDIoNNnxBE2ZVywMwzu59mS9XVBfiwCNk6F4s0jWzF07RsqvtPkxwu0HuweLPAXZVzzFkzJq9uQJ+qIzycDdA1D52L9avX3WOuj7BVYtb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=GRZKI6KV; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41S9EgMl015857;
+	Wed, 28 Feb 2024 12:58:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=kulUHZQ
+	+sWUZhWg1oiTqSixzXqPkzM/P81bT+Eqkzbk=; b=GRZKI6KVWYHooG7yUAAXDCo
+	KJZtl3v4CXO1H/nqNTrlytWXdG7f7u0kU6yPzkdIhyVpHoHzwv7xN/demDL5JbIZ
+	DRlNsINsl9PMe/hmuGg+oBTXf/7IVPe0jLsln0eSMZpZ7LbkRRWKfiq9gTYw1b6X
+	9scCCnN655vcsxp671PnD3fRe/8ua+nxc22uYYvzn1vk9jDHgmW13R/vfIvKKbKC
+	1/uqAzR8Nt1H6ThTcV/b4qd95/IaQba1EGrCzRXidk7zetpyzhfAcMM+D9mZocqL
+	gNegcKHV70PVw/nZJW4GKzVMimXXBT+gf1SnUBRFueT7vjQOXdv2hLEgrFrW2pQ=
+	=
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wj2148hdw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 28 Feb 2024 12:58:00 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41SCvh5p014995
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 28 Feb 2024 12:57:43 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 28 Feb 2024 04:57:40 -0800
+From: Prashanth K <quic_prashk@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman
+	<mathias.nyman@intel.com>
+CC: Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Prashanth K
+	<quic_prashk@quicinc.com>, <stable@vger.kernel.org>
+Subject: [v2] usb: xhci: Add error handling in  xhci_map_urb_for_dma
+Date: Wed, 28 Feb 2024 18:27:24 +0530
+Message-ID: <20240228125724.1527491-1-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240228115441.2105585-1-quic_kriskura@quicinc.com>
-In-Reply-To: <20240228115441.2105585-1-quic_kriskura@quicinc.com>
-From: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date: Wed, 28 Feb 2024 04:48:05 -0800
-Message-ID: <CANP3RGcj0e8ugWhy8mmNZS_HnxGaUQk=_H8d3rbZZm5SkggNLg@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: ncm: Fix handling of zero block length packets
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com, 
-	quic_wcheng@quicinc.com, quic_jackp@quicinc.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: w9uZjln_i_-dGx8q_D9E4qnlsdSeQOJ6
+X-Proofpoint-GUID: w9uZjln_i_-dGx8q_D9E4qnlsdSeQOJ6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-28_05,2024-02-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 spamscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 mlxlogscore=543 clxscore=1015
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2402280103
 
-On Wed, Feb 28, 2024 at 3:54=E2=80=AFAM Krishna Kurapati
-<quic_kriskura@quicinc.com> wrote:
->
-> While connecting to a Linux host with CDC_NCM_NTB_DEF_SIZE_TX
-> set to 65536, it has been observed that we receive short packets,
-> which come at interval of 5-10 seconds sometimes and have block
-> length zero but still contain 1-2 valid datagrams present.
->
-> According to the NCM spec:
->
-> "If wBlockLength =3D 0x0000, the block is terminated by a
-> short packet. In this case, the USB transfer must still
-> be shorter than dwNtbInMaxSize or dwNtbOutMaxSize. If
-> exactly dwNtbInMaxSize or dwNtbOutMaxSize bytes are sent,
-> and the size is a multiple of wMaxPacketSize for the
-> given pipe, then no ZLP shall be sent.
->
-> wBlockLength=3D 0x0000 must be used with extreme care, because
-> of the possibility that the host and device may get out of
-> sync, and because of test issues.
->
-> wBlockLength =3D 0x0000 allows the sender to reduce latency by
-> starting to send a very large NTB, and then shortening it when
-> the sender discovers that there=E2=80=99s not sufficient data to justify
-> sending a large NTB"
->
-> However, there is a potential issue with the current implementation,
-> as it checks for the occurrence of multiple NTBs in a single
-> giveback by verifying if the leftover bytes to be processed is zero
-> or not. If the block length reads zero, we would process the same
-> NTB infintely because the leftover bytes is never zero and it leads
-> to a crash. Fix this by bailing out if block length reads zero.
->
-> Cc: <stable@vger.kernel.org>
-> Fixes: 427694cfaafa ("usb: gadget: ncm: Handle decoding of multiple NTB's=
- in unwrap call")
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
-> Changes in v2:
-> Removed goto label
->
-> Link to v1:
-> https://lore.kernel.org/all/20240226112815.2616719-1-quic_kriskura@quicin=
-c.com/
->
->  drivers/usb/gadget/function/f_ncm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/fun=
-ction/f_ncm.c
-> index e2a059cfda2c..28f4e6552e84 100644
-> --- a/drivers/usb/gadget/function/f_ncm.c
-> +++ b/drivers/usb/gadget/function/f_ncm.c
-> @@ -1346,7 +1346,7 @@ static int ncm_unwrap_ntb(struct gether *port,
->         if (to_process =3D=3D 1 &&
->             (*(unsigned char *)(ntb_ptr + block_len) =3D=3D 0x00)) {
->                 to_process--;
-> -       } else if (to_process > 0) {
-> +       } else if ((to_process > 0) && (block_len !=3D 0)) {
->                 ntb_ptr =3D (unsigned char *)(ntb_ptr + block_len);
->                 goto parse_ntb;
->         }
-> --
-> 2.34.1
+Currently xhci_map_urb_for_dma() creates a temporary buffer
+and copies the SG list to the new linear buffer. But if the
+kzalloc_node() fails, then the following sg_pcopy_to_buffer()
+can lead to crash since it tries to memcpy to NULL pointer.
+So return -ENOMEM if kzalloc returns null pointer.
 
-Reviewed-by: Maciej =C5=BBenczykowski <maze@google.com>
+Cc: <stable@vger.kernel.org> # 5.11
+Fixes: 2017a1e58472 ("usb: xhci: Use temporary buffer to consolidate SG")
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+---
+v2: Updated -EAGAIN to -ENOMEM
+
+ drivers/usb/host/xhci.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index c057c42c36f4..35e9efdee3b2 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1217,6 +1217,8 @@ static int xhci_map_temp_buffer(struct usb_hcd *hcd, struct urb *urb)
+ 
+ 	temp = kzalloc_node(buf_len, GFP_ATOMIC,
+ 			    dev_to_node(hcd->self.sysdev));
++	if (!temp)
++		return -ENOMEM;
+ 
+ 	if (usb_urb_dir_out(urb))
+ 		sg_pcopy_to_buffer(urb->sg, urb->num_sgs,
+-- 
+2.25.1
+
 
