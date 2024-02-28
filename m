@@ -1,140 +1,176 @@
-Return-Path: <linux-usb+bounces-7209-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7210-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EA3486A96A
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 09:00:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98EFA86A993
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 09:10:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2C231F28ED6
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 08:00:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CADAB1C21BE0
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 08:10:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A4C2562C;
-	Wed, 28 Feb 2024 08:00:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD83286BD;
+	Wed, 28 Feb 2024 08:10:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KfwIIbFT"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OCFMSTNz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDAA42561F
-	for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 08:00:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74AC225630;
+	Wed, 28 Feb 2024 08:10:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709107235; cv=none; b=GJlMA8HnDWoVaQ1GIDqKQ4b6NI+CmRSpsX+212VoBCigQqnRTfDN99Nam92DqRGUq7wLYEd4nHcKJ7aZuDijTf2g7MOS2tlCCw6U+GpsCOfW2P2BH1MoUx4lBp7inxavzbYysh0NtNijynLJsC5ZKN7BhGnyl7XUJpQ14oYDlpY=
+	t=1709107824; cv=none; b=FBk3AiTasa0nnl02E9RzC4/RhlHK7tix0164FidipDC0uZ7I0Ec9Evhl1bP7vIUjmQyW7VbtkMzQM+jlfP58vaHO7LYjoLhFEPoWG7OBNUEGfpdcVkYGTvO4V1g4Q5Q96efcusPI3Iz5EXzmhOVxbdvDbDraaOFRePmtP8GD/T8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709107235; c=relaxed/simple;
-	bh=yPfz2sin32rZiQP+8BH+34YmroVrlOsfX9BevnQRkz4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rkxinNAVVmAuPEqp+8pTlROBAvu54WX78m93lg2TCCJb4mBJjJPEGKwXJLg5+h2Jq2pzWe1dZlt9xCrG2zc0k8GsaGHZg+9vUyT8EJPMxJw0eGQY4vokpToQc0EsuBuBLXAumlxoeJFe2cAsHXNnKijms7wnD/JX5ooOJTMMm5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KfwIIbFT; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2d269b2ff48so63776181fa.3
-        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 00:00:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1709107231; x=1709712031; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RMPPuq20bTo2IvgrEDXMIqv+e5KFkAdYGzZyeqGK2xU=;
-        b=KfwIIbFTXDjTieixXQiuqEvlvfAlswNXHP2DnYTXUy1Q1feQt8VFetkHepBbbwShC1
-         JRrMlfkkm90G7gtP9Dfu9H5YQcKS4Nky1CYscVy7upWbULilflySfU0/a2+xSCnVAqN1
-         PEDfDsXK2/6L6psfNx/jomWY8aIs+LRF6I0SfV0WhLy9ASFXptQ3LhGSuT3anIqKRCC5
-         LHYwb7URpAvqgglNnG+MDywnbGTvLq/TD0YImBJVoCtumr/vF+TzNLmlTU1/mJ8FPRa9
-         8DqRHCfeqrVL4iPWy75F++TNgF3XX+qE7ZcC6UlusVKG/ioZjkFuAYXAS7Yn1TOP7CjJ
-         fGdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709107231; x=1709712031;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RMPPuq20bTo2IvgrEDXMIqv+e5KFkAdYGzZyeqGK2xU=;
-        b=fTxP60XbkQhhgIyS61+QuUoahEUOcp6SpHth6I+tclNmQ5xekgedpdQid2sCjw99Xz
-         lBfGKc0mct/D91GMVAaC/r9nDTx1BrjzeiM+UzfCGj7HCPEXYkkN/l0Bv0JoBrfzblC1
-         5xvVJQg0brBQlYETHHKs9eOdu6Cz9isqNjHk2IuUXQbUhHiJsL/lzk9BnhrRUddvPflZ
-         3VGLLgnnGswQEE3q+WP4dxaJEeJASPoIZ5RRQm/x4x5snkrXRyFNwAzIo77OcljE8Lvs
-         cDIcDNqZnQDuV8dM0geS8k8hZ015WG1zhTv/Gdku/3Xyl4mikdFplu8w8Rlj3q5yYts6
-         9H2A==
-X-Forwarded-Encrypted: i=1; AJvYcCXov4MxeVbiCGuAMTF34XAQ6JXPF1je7PDkXv1GF+qFlnG2E6TnGiHoYbApkPRxVEtnZ0600gV4dMUOFXzn6+Wsd50Ds0FvE3Iw
-X-Gm-Message-State: AOJu0YxDNjariGzlICfGszFDjqMu8/9Yw3GI3B71kWgZx6cYSDrGYPQu
-	PIY+NYP7N2UY3cMUJfMyAA6nGlSwO8FutGEXfCKAki28gGp95IOSAOEuSbtfqws=
-X-Google-Smtp-Source: AGHT+IHG9JuMT1frUWRx1Ja5QCluLAjVs4eLsTOezZ62w6SZ6+YmOaVvsQnaqY8lTACXTFTdwBRzYQ==
-X-Received: by 2002:a2e:a54a:0:b0:2d2:3915:cfc4 with SMTP id e10-20020a2ea54a000000b002d23915cfc4mr9991963ljn.4.1709107231035;
-        Wed, 28 Feb 2024 00:00:31 -0800 (PST)
-Received: from ?IPV6:2001:a61:1366:6801:d8:8490:cf1a:3274? ([2001:a61:1366:6801:d8:8490:cf1a:3274])
-        by smtp.gmail.com with ESMTPSA id bn21-20020a056000061500b0033e033898c5sm387989wrb.20.2024.02.28.00.00.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Feb 2024 00:00:30 -0800 (PST)
-Message-ID: <e8c4e8a3-bfc3-463f-afce-b9f600b588b2@suse.com>
-Date: Wed, 28 Feb 2024 09:00:29 +0100
+	s=arc-20240116; t=1709107824; c=relaxed/simple;
+	bh=5VutVpaVx3BCmDFWCvGkbB7mmJu+5yX0VMWEFfpDzd8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pv0Epj1owz5JXYLiPdL/KTfcohiIigO5V6LNNFEuWYD0vGQgD4B1JmCKK3nG49aqdyWWY9UaFaSmiHaiYbzVmTTvNQFs/vSMej/iNTZehK50G3CrctnNHsg9nRkcSXtH+oUZdtY9HdsJVw+dDQQ7r2VHanebguMdWAXCjgQKwKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OCFMSTNz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D2CDC433F1;
+	Wed, 28 Feb 2024 08:10:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709107824;
+	bh=5VutVpaVx3BCmDFWCvGkbB7mmJu+5yX0VMWEFfpDzd8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OCFMSTNz4uXPS3pW3XJknVG4hdfxE/VbO17Gzca1wjO4/QNu7MO0gm/iybMQECjyS
+	 WWmA1Uyq/ofif9oKnS/uLYx0rtZYLSBUES/oNhzgiO8ZO3HVAt4IgDC0YhR/K8KmEe
+	 +raIzodglHZsZYd1OXuLBT9z+a0MzMmbPzVcd54Y=
+Date: Wed, 28 Feb 2024 09:10:21 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: buckzhangwh@gmail.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] drivers:usb:disable usb hub&port async suspend
+Message-ID: <2024022808-skies-unit-7309@gregkh>
+References: <20240228072030.2470-1-buckzhangwh@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] USB:UAS:return ENODEV when submit urbs fail with
- device not attached.
-To: Weitao Wang <WeitaoWang-oc@zhaoxin.com>, oneukum@suse.com,
- stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-scsi@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Cc: WeitaoWang@zhaoxin.com, stable@vger.kernel.org
-References: <20240228111521.3864-1-WeitaoWang-oc@zhaoxin.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20240228111521.3864-1-WeitaoWang-oc@zhaoxin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240228072030.2470-1-buckzhangwh@gmail.com>
 
-On 28.02.24 12:15, Weitao Wang wrote:
+On Tue, Feb 27, 2024 at 11:20:30PM -0800, buckzhangwh@gmail.com wrote:
+> From: weihui zhang <buckzhangwh@gmail.com>
+> 
+> we prepare 30 mobile phones only for usb plugg in and out.
+> testers plug USB in and out very frequently after phone in deep.
+> Repeat the test again and again,some phones are crashed.
+> our analysis：
+> We analyze ten kernel-dumps,we found something common kernel is blocked.
+> pasre in crash,all the dump are directed to usb(device port/hub).
+> here is a kdump,task 446 &365&4511 are UN.
+> 446:
+> .... ->|kobj_attr_store
+>           |state_store
+>             |pm_suspend
+>               |enter_state
+>                 |suspend_devices_and_enter
+>                  |dpm_resume_end
+>                    |dpm_resume
+>                     |dpm_resume
+>                      |async_synchronize_full
+>                       |async_synchronize_cookie_domain
+>                        |schedule
+> 446 is waiting for 365&4511,no doubtful usb thread.
+> here is some warning log:
+> [83.958310] musb device disconnect detected from VBUS GPIO.
+> ..........
+> [84.908017] musb device connection detected from VBUS GPIO.
+> [84.911946] typec port1-partner: parent port1 should not be sleeping
+> task 365 & 4511:
+> ... ->worker_thread
+>        |process_one_work
+>         |async_run_entry_fn
+>           |async_resume
+>             |device_resume
+>               |dpm_wait_for_superior
+>                 |wait_for_completion
+>                   |wait_for_common
+>                      |schedule_timeout
+> I guess usb async resume/suspend are disordered,So I try to disable.
+> After that,we tested the case for a month,the bug never happened again.
+> the fn device_enable_async_suspend set the dev->power.async_suspend= 1.
+> dev->power.async_suspend=1&pm_async_enabled=1,fork task like 365
+>    ---> dpm_resume
+>            |dpm_async_fn
+>              |async_resume  
+> dev->power.async_suspend=0,disable async
+>      --->dpm_resume
+>             |device_resume
+>               |call device resume fn.
+> here is a demo:
+> Only few devices such as scsi/pci/usb call device_enable_async_suspend.
+> but scsi call device_disable_async_suspend at drivers/scsi/hosts.c
+> 
+> Signed-off-by: weihui zhang <buckzhangwh@gmail.com>
+> ---
+>  drivers/usb/core/hub.c  | 2 +-
+>  drivers/usb/core/port.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index e38a4124f..de74f70e5 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -2602,7 +2602,7 @@ int usb_new_device(struct usb_device *udev)
+>  		add_device_randomness(udev->manufacturer,
+>  				      strlen(udev->manufacturer));
+>  
+> -	device_enable_async_suspend(&udev->dev);
+> +	device_disable_async_suspend(&udev->dev);
+>  
+>  	/* check whether the hub or firmware marks this port as non-removable */
+>  	set_usb_port_removable(udev);
+> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+> index c628c1abc..97696c415 100644
+> --- a/drivers/usb/core/port.c
+> +++ b/drivers/usb/core/port.c
+> @@ -760,7 +760,7 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
+>  	pm_runtime_set_active(&port_dev->dev);
+>  	pm_runtime_get_noresume(&port_dev->dev);
+>  	pm_runtime_enable(&port_dev->dev);
+> -	device_enable_async_suspend(&port_dev->dev);
+> +	device_disable_async_suspend(&port_dev->dev);
+>  
+>  	/*
+>  	 * Keep hidden the ability to enable port-poweroff if the hub
+> -- 
+> 2.17.1
+> 
+> 
 
 Hi,
 
-sorry for going at this again, but there are a few technical issues left.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-	Regards
-		Oliver
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-> ---
-> v1->v2
->   - Modify the description of this patch.
-> 
->   drivers/usb/storage/uas.c | 21 ++++++++++-----------
->   1 file changed, 10 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-> index 9707f53cfda9..967f18db525a 100644
-> --- a/drivers/usb/storage/uas.c
-> +++ b/drivers/usb/storage/uas.c
-   
-> @@ -562,9 +561,9 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
->   
->   	lockdep_assert_held(&devinfo->lock);
->   	if (cmdinfo->state & SUBMIT_STATUS_URB) {
-> -		urb = uas_submit_sense_urb(cmnd, GFP_ATOMIC);
-> -		if (!urb)
-> -			return SCSI_MLQUEUE_DEVICE_BUSY;
-> +		err = uas_submit_sense_urb(cmnd, GFP_ATOMIC);
-> +		if (err)
-> +			return (err == -ENODEV) ? -ENODEV : SCSI_MLQUEUE_DEVICE_BUSY;
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
 
-Either we ought to use SCSI error codes or generic error codes.
-There is no need to translate all but one error condition here.
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
->   		cmdinfo->state &= ~SUBMIT_STATUS_URB;
->   	}
->   
-> @@ -582,7 +581,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
->   		if (err) {
->   			usb_unanchor_urb(cmdinfo->data_in_urb);
->   			uas_log_cmd_state(cmnd, "data in submit err", err);
-> -			return SCSI_MLQUEUE_DEVICE_BUSY;
-> +			return (err == -ENODEV) ? -ENODEV : SCSI_MLQUEUE_DEVICE_BUSY;
+thanks,
 
-Same as above and below.
-
+greg k-h's patch email bot
 
