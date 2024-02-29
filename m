@@ -1,76 +1,67 @@
-Return-Path: <linux-usb+bounces-7333-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7334-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F89586CA2E
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 14:24:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8398786CB0E
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 15:13:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E873C287330
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 13:24:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5C641C20948
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 14:13:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B37F7E56A;
-	Thu, 29 Feb 2024 13:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B11812F5AA;
+	Thu, 29 Feb 2024 14:13:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="U5ZsFTaU";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="U5ZsFTaU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NCHsr31q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699A760EDC;
-	Thu, 29 Feb 2024 13:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACEE12A177
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 14:13:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709213048; cv=none; b=nwa1KVhcQTZLX/aFWoHehdxTEkxoRO1WqxeJFcIilTVj8OqfwXkmZ8FkTX9ZN+9MlqcqKTsaGanJ9bj5wsAy3NZFCfuzTp4zEK/lXkdnSdpc2NlyGgkFfb6xdm0O1I0pH0XspzcTc8t/CSzMfJzPHt48G2PvcszLfnVD7TJmpcE=
+	t=1709215988; cv=none; b=HPbhD58chtyPxtaqmZH7j0+njnWeuyPC7TXuXI2RBPJ+KENXrAjcQGGYCZYaFOtJ5pRjge7urcKCLpcWfr3yMjbTATRS7ZvghotqtUm4maVaunXKSPzmtA4mnY2b09ctfFhcfUHDOX5S0uOWprgUHiGcBiLi15L9+zQ7h95GGtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709213048; c=relaxed/simple;
-	bh=Q9+orAmFLG17dvDtjMr//cybKCoz7oGiZrMvtW87CE4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ATg1lyg4wjVd5d6OeZlMqwhBvBho7fr0OihCgmcGK0gni1iETJJv13TJ/fD0zE3YPO0yH6yCzhSqiOdkfwfiWNOkyXuzFi/Fbxos2idK77w0uMFs+Eu9OwxRTuPHXMf9Jn7M3eg9q2ItgAayQnTnhGvhwfrq7y2GimLycYqNCo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=U5ZsFTaU; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=U5ZsFTaU; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id AF79B1F7F1;
-	Thu, 29 Feb 2024 13:24:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1709213044; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=PNKmKlt9G8O0/nkgk81lSnxP1WfxcnRFC/vWBacHFgg=;
-	b=U5ZsFTaUUkjQPM+V78Id7jp+hYyXg3iyOmLojLP82ChhJZxlmZyhhZfxjawUofyId/qWtK
-	iGa/EWKILesOCT9de+6e9cgOHsm+OpbhQD9EDuMCSfMapaPL6Qo1U/A+PZbjCgMjkjRttu
-	67iDwDxQV0PR2jIo4HpyY1jaP+dMl/8=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1709213044; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=PNKmKlt9G8O0/nkgk81lSnxP1WfxcnRFC/vWBacHFgg=;
-	b=U5ZsFTaUUkjQPM+V78Id7jp+hYyXg3iyOmLojLP82ChhJZxlmZyhhZfxjawUofyId/qWtK
-	iGa/EWKILesOCT9de+6e9cgOHsm+OpbhQD9EDuMCSfMapaPL6Qo1U/A+PZbjCgMjkjRttu
-	67iDwDxQV0PR2jIo4HpyY1jaP+dMl/8=
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 5C25E13451;
-	Thu, 29 Feb 2024 13:24:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id nul8E3SF4GWxKgAAn2gu4w
-	(envelope-from <oneukum@suse.com>); Thu, 29 Feb 2024 13:24:04 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	mika.westerberg@linux.intel.com
-Cc: Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] thunderbolt: no opencoding FIELD_GET
-Date: Thu, 29 Feb 2024 14:23:57 +0100
-Message-ID: <20240229132401.3270-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.43.2
+	s=arc-20240116; t=1709215988; c=relaxed/simple;
+	bh=cXNgND004hv17kJmLqNLQ51Ffa+z6wPPv5z6l7dPuSo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nbV587i3Y+zdwcdXEnaBBVEMPy0FZdSOcs9eCKwNEn0JRlTXlKZYyMdJ+jXP8zL5pLLMuK8bgMQ+m11aSbRvc3gLT/tsIycs5Aj/qJbhTW/rlHYps2h9RU+AnmqPqNGJ5LQZapnlUXV9s2dHTl6tyKEvWM9P/RnuqWcHTSjPWpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NCHsr31q; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709215986; x=1740751986;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cXNgND004hv17kJmLqNLQ51Ffa+z6wPPv5z6l7dPuSo=;
+  b=NCHsr31q+1qZXElGkw5Nm9fcGsU27o+F/c6HST1Y1U1ClGv1N2E4M1hZ
+   C4/TT9gXdU3OCpiHEt0ZA77ucKT2bpmupjLzUO09NDEK9zKsvPrmgSjFh
+   /VJADq3/8c57SpUi2MgP09Ws7ZfdrY5WIMbLlqlR7+slu9RFdwbBJiHH9
+   0zKyNNuH6c5tYpM2WNv36WBAufsbmZBEnkyRvRTmrcBGeI79yBQsnUUg7
+   L6YTrXSqJkok1zpQOmljmeF564//8rXeX+bbmReMFFLBVYDKld0gfM98u
+   xCDLYBy0YkiSLVYKdh909hqVGcQJJGeKgQZLBPbvmFBPhciqg7hpUK3fz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="3609362"
+X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
+   d="scan'208";a="3609362"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 06:13:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="937035980"
+X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
+   d="scan'208";a="937035980"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Feb 2024 06:13:04 -0800
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/9] xhci features for usb-next
+Date: Thu, 29 Feb 2024 16:14:29 +0200
+Message-Id: <20240229141438.619372-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,76 +69,53 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spamd-Result: default: False [2.98 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 R_MISSING_CHARSET(2.50)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 RCPT_COUNT_FIVE(0.00)[5];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-1.92)[94.55%]
-X-Spam-Level: **
-X-Spam-Score: 2.98
-X-Spam-Flag: NO
 
-We have a macro. It should be used.
+Hi Greg
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- include/linux/usb/typec_tbt.h | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Some xhci features for usb-next.
 
-diff --git a/include/linux/usb/typec_tbt.h b/include/linux/usb/typec_tbt.h
-index c7a2153bd6f5..fa97d7e00f5c 100644
---- a/include/linux/usb/typec_tbt.h
-+++ b/include/linux/usb/typec_tbt.h
-@@ -3,6 +3,7 @@
- #define __USB_TYPEC_TBT_H
- 
- #include <linux/usb/typec_altmode.h>
-+#include <linux/bitfield.h>
- 
- #define USB_TYPEC_VENDOR_INTEL		0x8087
- /* Alias for convenience */
-@@ -25,7 +26,7 @@ struct typec_thunderbolt_data {
- 
- /* TBT3 Device Discover Mode VDO bits */
- #define TBT_MODE			BIT(0)
--#define TBT_ADAPTER(_vdo_)		(((_vdo_) & BIT(16)) >> 16)
-+#define TBT_ADAPTER(_vdo_)		FIELD_GET(BIT(16), _vdo_)
- #define   TBT_ADAPTER_LEGACY		0
- #define   TBT_ADAPTER_TBT3		1
- #define TBT_INTEL_SPECIFIC_B0		BIT(26)
-@@ -35,12 +36,12 @@ struct typec_thunderbolt_data {
- #define TBT_SET_ADAPTER(a)		(((a) & 1) << 16)
- 
- /* TBT3 Cable Discover Mode VDO bits */
--#define TBT_CABLE_SPEED(_vdo_)		(((_vdo_) & GENMASK(18, 16)) >> 16)
-+#define TBT_CABLE_SPEED(_vdo_)		FIELD_GET(GENMASK(18, 16), _vdo_)
- #define   TBT_CABLE_USB3_GEN1		1
- #define   TBT_CABLE_USB3_PASSIVE	2
- #define   TBT_CABLE_10_AND_20GBPS	3
--#define TBT_CABLE_ROUNDED_SUPPORT(_vdo_) \
--					(((_vdo_) & GENMASK(20, 19)) >> 19)
-+#define TBT_CABLE_ROUNDED_SUPPORT(_vdo_) FIELD_GET(GENMASK(20, 19), _vdo_)
-+
- #define   TBT_GEN3_NON_ROUNDED                 0
- #define   TBT_GEN3_GEN4_ROUNDED_NON_ROUNDED    1
- #define TBT_CABLE_OPTICAL		BIT(21)
+Includes minor xhci port refactoring, improvements to dbc event
+polling, and a couple transfer event handling changes that are
+almost fixes.
+I'd still only add those to usb-next as they are improvements
+discovered while fixing other issues. No real world bugs.
+
+Also includes a small kzalloc failure check tagged for stable.
+
+Thanks
+Mathias
+
+Mathias Nyman (1):
+  xhci: dbc: poll at different rate depending on data transfer activity
+
+Michal Pecio (2):
+  xhci: fix matching completion events with TDs
+  xhci: retry Stop Endpoint on buggy NEC controllers
+
+Niklas Neronin (5):
+  xhci: rework how real & fake ports are found
+  xhci: replace real & fake port with pointer to root hub port
+  xhci: save slot ID in struct 'xhci_port'
+  usb: xhci: remove duplicate code from 'xhci_clear_command_ring()'
+  usb: xhci: utilize 'xhci_free_segments_for_ring()' for freeing
+    segments
+
+Prashanth K (1):
+  usb: xhci: Add error handling in xhci_map_urb_for_dma
+
+ drivers/usb/host/xhci-dbgcap.c  | 13 ++++-
+ drivers/usb/host/xhci-dbgcap.h  |  2 +
+ drivers/usb/host/xhci-hub.c     | 69 ++++--------------------
+ drivers/usb/host/xhci-mem.c     | 93 +++++++++++++++------------------
+ drivers/usb/host/xhci-mtk-sch.c | 14 ++---
+ drivers/usb/host/xhci-pci.c     | 10 ++--
+ drivers/usb/host/xhci-ring.c    | 27 ++++++----
+ drivers/usb/host/xhci-trace.h   | 12 ++---
+ drivers/usb/host/xhci.c         | 28 +++-------
+ drivers/usb/host/xhci.h         |  7 ++-
+ 10 files changed, 107 insertions(+), 168 deletions(-)
+
 -- 
-2.43.2
+2.25.1
 
 
