@@ -1,100 +1,614 @@
-Return-Path: <linux-usb+bounces-7344-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7345-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23B2186CB1A
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 15:13:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64E9D86CC77
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 16:11:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 565A01C210B4
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 14:13:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D0BA6B21487
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 15:11:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99EF71350D5;
-	Thu, 29 Feb 2024 14:13:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3A6413B7A1;
+	Thu, 29 Feb 2024 15:11:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bni4TUGv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NmSRlCLC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D53D612A177;
-	Thu, 29 Feb 2024 14:13:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3377D137778
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 15:11:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709216016; cv=none; b=nsv88/XW57MpGFf6w/1bM849kk+OgIWgsUhO2PlA2zFf5ZtE7roCNKCg/Us6WeWIynJM+rBUhgzc7owADaoqNGQpLP5hnHo/wHrvPR0eHkhJ8RZS60P1qyYta8fcmrNNf5KyZP0qrsOqjUhDnJJ2rcW8rb+zz0ldJICC1LK+k3c=
+	t=1709219498; cv=none; b=V/APnZhP+Tg+CLmLwolFWRi5JNC0VQmXxtWwnTiq1eWNt794uvoXsOPWEF9wUHDhcKYvNW+ldkPQWpndBYlhzor0hkE1W1KAvXoSJ8AIKQZjGL8uvCcAQvZye1F4pQcpvmpw6Ef+Wf124wyU+ayW2c8Tx3iQGOZ3LgIdXUmznjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709216016; c=relaxed/simple;
-	bh=iCZdo/s1EV0f2wP+WPv++bHWWJIugZid5cGsPf+2lMo=;
+	s=arc-20240116; t=1709219498; c=relaxed/simple;
+	bh=w8RgmSUsKfxgjlFRR4JwCsw2zCiDB0oUV0wyBvExuyY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=arHVp/4nX8Ovz4t2VRB9NuzwB/faNAblf4QwKlCetve+3D/mjchDDwQib9dhLQ/a6b1pqnfZeDPd3JsRK4QjqlqfVkkZXu6R1oO/Y8C8BuJvPeZXGTGYjZigzjbMy8fSiDILLOql11AAN26XJm5Jq7wWDtSuLeewfx3OWMkZo4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bni4TUGv; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709216015; x=1740752015;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iCZdo/s1EV0f2wP+WPv++bHWWJIugZid5cGsPf+2lMo=;
-  b=Bni4TUGvyXJHLmZa6MlnfpFXimgkjjf5J9IUkmuX60Z1zihoywd5RBsI
-   LXYZ9Xu6+OHKsaGt8QX3Ha2jUzfcayPE1gIYOD2ogTDQRYR8hTfCyfVvs
-   WhRtu/8QlPVN3GfW/9dG6G91/e+UlVhCVwd5Ye3tsp/igyCuFWdwZpzUY
-   9URy8tmq/1RZeEU5PGJl9rsdu9d5pkGVPhsad6qWIGEd0mojakDrYmTLS
-   1d4xWwqCW1ERyLe7rtbMQCGFuGoOXIJNXQfhzldoIXRuiWf4ZLDcOnsAi
-   vuEIRj+3OHyQGyz555S4JvfK+Y3iZMYBFm36YR8PbVVI5bcnVT5WHoNiL
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="3609436"
-X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="3609436"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 06:13:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="937036000"
-X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="937036000"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Feb 2024 06:13:32 -0800
-Message-ID: <97824098-21a6-8dd9-8be5-e2a40debe0f8@linux.intel.com>
-Date: Thu, 29 Feb 2024 16:15:12 +0200
+	 In-Reply-To:Content-Type; b=uzUqOFbk2YLOVuUlON0ccCGU1FSJ+Q5Uk6VEspR0N6zkG4UYQppwK+2KPbXFrOiFxJfrwd2zQdM2CAxsuuFSTex2cgB5GCr7l8PPLPlaJyu0x1byOWiGsDjckXxAwhjsvwyOz3Hc8oWnPG4epWXaxkl8HiuvMbBELgEYPQyYfGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NmSRlCLC; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a26fa294e56so197035466b.0
+        for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 07:11:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709219494; x=1709824294; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SK4DmlZ3UR4ujEwkyL5L+rK5LKG8WLdzwFtgogC9zZs=;
+        b=NmSRlCLCZUq7qRfgs8PZbdzFeereTs95bkA0mbG54jDp9iaJJwUjPVlMY2ZO0XQFI/
+         Q1b5WtLaj3GQMHDnNfWQtPoW4eOTZpKJSyjEtTo9dcJpAaXs+ZK+emprJUjUNAmxScTz
+         jdWGx6TulXo/JYfDhuOWouLPMbwEWPBUPzPODsGcwXC81em3djz8RpH8IZ+iPXNnp0cm
+         zpRq8rWfEJ/zReo8BR+O1dJe2HTbEZAp7wsFRo7uqv5PHNvV2bS1CslI2ri1Zl3pHVmc
+         fL4oYDRCobVogqIZMD/r46w5KL29xhUa6IhxFqgHfoBpFbYg7IVfuLD1iV/YvVECTji0
+         IvzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709219494; x=1709824294;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SK4DmlZ3UR4ujEwkyL5L+rK5LKG8WLdzwFtgogC9zZs=;
+        b=pSmQioDHf+sJfymr1G9k660nKplrT+87YMbuSm2UlwIPsNpmrQgS1Emd2T+fkmbR6m
+         rP+fKzV5U/ux6PcNn+9p+mAhN1BU2dKTwoddUIXMsWIw1cNLTeOz8nBG08kqGZ6NWhJJ
+         /AC91PrmZViFbg6Mnupv+5ss3qrDBH7tRLV4mv2nrDum37NEaH+9bRu0wGOVEHrA19wR
+         pZu+WvpGfyta4I3Pgz+3WS3X4sd1djy1oHvMF+HdUmvZYLa7LXFZkHRJXB5YAywPW4xp
+         92S6Q3ZOED8dmr+PvVg0lDkMuZBh9epabgX6XYM3hO0d4HkvDMxaUlIR1W+AcRbDkv5j
+         2Btg==
+X-Forwarded-Encrypted: i=1; AJvYcCWgzUP6b28Y9Rget9atw/kNA2/7sIqWVUxS3Hyx4RAp3w7mYIjJQCOz7QoyqxCac0TmQdLGCy1TvK0zIsUt5G0PRBmuyrjsvOVU
+X-Gm-Message-State: AOJu0YzMbDRf3MX6mRbK71j5C1KKPESpwo4bRWY1t3T4UsbfFv6IBi4a
+	MAO6afv8SKM8gsuhmOeVdE3Z3tACsue9kpluGOgrciaRW//OSrOAr0nxYPuupMs=
+X-Google-Smtp-Source: AGHT+IHO8MpWatF0eM1SVYEmepa9c2vRxDwXdOky56bw/phOygpP3Z2PPOzUWJkXPmUxWsJISbMH4Q==
+X-Received: by 2002:a17:906:48da:b0:a44:5538:efd3 with SMTP id d26-20020a17090648da00b00a445538efd3mr1128996ejt.37.1709219494496;
+        Thu, 29 Feb 2024 07:11:34 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.222.97])
+        by smtp.gmail.com with ESMTPSA id vg9-20020a170907d30900b00a4439b7756bsm771333ejc.6.2024.02.29.07.11.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Feb 2024 07:11:33 -0800 (PST)
+Message-ID: <1a626f74-4559-4403-9d88-6a9a462b54c1@linaro.org>
+Date: Thu, 29 Feb 2024 16:11:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [v2] usb: xhci: Add error handling in xhci_map_urb_for_dma
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 04/11] dt-bindings: usb: ci-hdrc-usb2-imx: move imx
+ parts to dedicated schema
 Content-Language: en-US
-To: Prashanth K <quic_prashk@quicinc.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: Sergei Shtylyov <sergei.shtylyov@gmail.com>,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- stable@vger.kernel.org
-References: <20240228125724.1527491-1-quic_prashk@quicinc.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20240228125724.1527491-1-quic_prashk@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Xu Yang <xu.yang_2@nxp.com>, gregkh@linuxfoundation.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+ conor+dt@kernel.org
+Cc: s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+ linux-imx@nxp.com, peter.chen@kernel.org, jun.li@nxp.com,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20240228113004.918205-1-xu.yang_2@nxp.com>
+ <20240228113004.918205-4-xu.yang_2@nxp.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240228113004.918205-4-xu.yang_2@nxp.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 28.2.2024 14.57, Prashanth K wrote:
-> Currently xhci_map_urb_for_dma() creates a temporary buffer
-> and copies the SG list to the new linear buffer. But if the
-> kzalloc_node() fails, then the following sg_pcopy_to_buffer()
-> can lead to crash since it tries to memcpy to NULL pointer.
-> So return -ENOMEM if kzalloc returns null pointer.
+On 28/02/2024 12:29, Xu Yang wrote:
+> As more and more NXP i.MX chips come out, it becomes harder to maintain
+> ci-hdrc-usb2.yaml if more stuffs like property restrictions are added to
+> this file. This will separate i.MX parts out of ci-hdrc-usb2.yaml and add
+> a new schema for NXP ChipIdea USB2 Controller, also add a common schema.
 > 
-> Cc: <stable@vger.kernel.org> # 5.11
-> Fixes: 2017a1e58472 ("usb: xhci: Use temporary buffer to consolidate SG")
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> 1. Copy common ci-hdrc-usb2.yaml properties to a new shared
+>    ci-hdrc-usb2-common.yaml schema.
+> 2. Move fsl,* compatible devices and imx spefific properties
+>    to dedicated binding file ci-hdrc-usb2-imx.yaml.
+> 
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> 
 > ---
+> Changes in v6:
+>  - new patch
+> Changes in v7:
+>  - not remove ci-hdrc-usb2.yaml and move imx parts to ci-hdrc-usb2-imx.yaml
+> ---
+>  .../bindings/usb/ci-hdrc-usb2-common.yaml     | 197 ++++++++++++++++++
+>  .../bindings/usb/ci-hdrc-usb2-imx.yaml        | 197 ++++++++++++++++++
+>  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 186 -----------------
+>  3 files changed, 394 insertions(+), 186 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2-common.yaml
+>  create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-common.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-common.yaml
+> new file mode 100644
+> index 000000000000..9f8f2f343dd3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-common.yaml
 
-Thanks.
+Use compatible style for filenames. chipidea,hdrc-usb2-common.yaml
+(assuming that "ci" was a shortcut of chipidea)
 
-Added
 
--Mathias
+> @@ -0,0 +1,197 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/ci-hdrc-usb2-common.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: USB2 ChipIdea USB controller Common Properties
+> +
+> +maintainers:
+> +  - Xu Yang <xu.yang_2@nxp.com>
+> +
+> +properties:
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 3
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 3
+> +
+> +  dr_mode: true
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    maxItems: 1
+> +
+> +  "#reset-cells":
+> +    const: 1
+> +
+> +  phy_type: true
+> +
+> +  itc-setting:
+> +    description:
+> +      interrupt threshold control register control, the setting should be
+> +      aligned with ITC bits at register USBCMD.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  ahb-burst-config:
+> +    description:
+> +      it is vendor dependent, the required value should be aligned with
+> +      AHBBRST at SBUSCFG, the range is from 0x0 to 0x7. This property is
+> +      used to change AHB burst configuration, check the chipidea spec for
+> +      meaning of each value. If this property is not existed, it will use
+> +      the reset value.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0x0
+> +    maximum: 0x7
+> +
+> +  tx-burst-size-dword:
+> +    description:
+> +      it is vendor dependent, the tx burst size in dword (4 bytes), This
+> +      register represents the maximum length of a the burst in 32-bit
+> +      words while moving data from system memory to the USB bus, the value
+> +      of this property will only take effect if property "ahb-burst-config"
+> +      is set to 0, if this property is missing the reset default of the
+> +      hardware implementation will be used.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0x0
+> +    maximum: 0x20
+> +
+> +  rx-burst-size-dword:
+> +    description:
+> +      it is vendor dependent, the rx burst size in dword (4 bytes), This
+> +      register represents the maximum length of a the burst in 32-bit words
+> +      while moving data from the USB bus to system memory, the value of
+> +      this property will only take effect if property "ahb-burst-config"
+> +      is set to 0, if this property is missing the reset default of the
+> +      hardware implementation will be used.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0x0
+> +    maximum: 0x20
+> +
+> +  extcon:
+> +    description:
+> +      Phandles to external connector devices. First phandle should point
+> +      to external connector, which provide "USB" cable events, the second
+> +      should point to external connector device, which provide "USB-HOST"
+> +      cable events. If one of the external connector devices is not
+> +      required, empty <0> phandle should be specified.
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    minItems: 1
+> +    items:
+> +      - description: vbus extcon
+> +      - description: id extcon
+> +
+> +  phy-clkgate-delay-us:
+> +    description:
+> +      The delay time (us) between putting the PHY into low power mode and
+> +      gating the PHY clock.
+> +
+> +  non-zero-ttctrl-ttha:
+> +    description:
+> +      After setting this property, the value of register ttctrl.ttha
+> +      will be 0x7f; if not, the value will be 0x0, this is the default
+> +      value. It needs to be very carefully for setting this property, it
+> +      is recommended that consult with your IC engineer before setting
+> +      this value.  On the most of chipidea platforms, the "usage_tt" flag
+> +      at RTL is 0, so this property only affects siTD.
+> +
+> +      If this property is not set, the max packet size is 1023 bytes, and
+> +      if the total of packet size for previous transactions are more than
+> +      256 bytes, it can't accept any transactions within this frame. The
+> +      use case is single transaction, but higher frame rate.
+> +
+> +      If this property is set, the max packet size is 188 bytes, it can
+> +      handle more transactions than above case, it can accept transactions
+> +      until it considers the left room size within frame is less than 188
+> +      bytes, software needs to make sure it does not send more than 90%
+> +      maximum_periodic_data_per_frame. The use case is multiple
+> +      transactions, but less frame rate.
+> +    type: boolean
+> +
+> +  mux-controls:
+> +    description:
+> +      The mux control for toggling host/device output of this controller.
+> +      It's expected that a mux state of 0 indicates device mode and a mux
+> +      state of 1 indicates host mode.
+> +    maxItems: 1
+> +
+> +  mux-control-names:
+> +    const: usb_switch
+> +
+> +  pinctrl-names:
+> +    description:
+> +      Names for optional pin modes in "default", "host", "device".
+> +      In case of HSIC-mode, "idle" and "active" pin modes are mandatory.
+> +      In this case, the "idle" state needs to pull down the data and
+> +      strobe pin and the "active" state needs to pull up the strobe pin.
+> +    oneOf:
+> +      - items:
+> +          - const: idle
+> +          - const: active
+> +      - items:
+> +          - const: default
+> +          - enum:
+> +              - host
+> +              - device
+> +      - items:
+> +          - const: default
+> +
+> +  pinctrl-0:
+> +    maxItems: 1
+> +
+> +  pinctrl-1:
+> +    maxItems: 1
+> +
+> +  phys:
+> +    maxItems: 1
+> +
+> +  phy-names:
+> +    const: usb-phy
+> +
+> +  vbus-supply:
+> +    description: reference to the VBUS regulator.
+> +
+> +  usb-phy:
+> +    description: phandle for the PHY device. Use "phys" instead.
+> +    maxItems: 1
+> +    deprecated: true
+> +
+> +  port:
+> +    description:
+> +      Any connector to the data bus of this controller should be modelled
+> +      using the OF graph bindings specified, if the "usb-role-switch"
+> +      property is used.
+> +    $ref: /schemas/graph.yaml#/properties/port
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +
+> +dependencies:
+> +  port: [ usb-role-switch ]
+> +  mux-controls: [ mux-control-names ]
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+
+I don't see where you remove the properties from the existing schema, so
+you now just duplicated a lot.
+
+So again let me describe the task:
+1. Create common schema by MOVING the common pieces from the existing
+schema. The common schema MUST be referenced by other existing schemas.
+
+2. Create IMX specific schema by moving IMX specific bits. New schema
+references common schema.
+
+3. The remaining old ci-hdrc-usb2.yaml does not have as a result common
+properties and IMX bits.
+
+
+> +
+> +allOf:
+> +  - $ref: usb-hcd.yaml#
+> +  - $ref: usb-drd.yaml#
+> +
+> +additionalProperties: true
+> \ No newline at end of file
+
+You have patch errors, fix them.
+
+> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.yaml
+> new file mode 100644
+> index 000000000000..50494ce06d07
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2-imx.yaml
+> @@ -0,0 +1,197 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/ci-hdrc-usb2-imx.yaml#
+
+Filename like compatible.
+
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP USB2 ChipIdea USB controller
+> +
+> +maintainers:
+> +  - Xu Yang <xu.yang_2@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - fsl,imx27-usb
+> +      - items:
+> +          - enum:
+> +              - fsl,imx23-usb
+> +              - fsl,imx25-usb
+> +              - fsl,imx28-usb
+> +              - fsl,imx35-usb
+> +              - fsl,imx50-usb
+> +              - fsl,imx51-usb
+> +              - fsl,imx53-usb
+> +              - fsl,imx6q-usb
+> +              - fsl,imx6sl-usb
+> +              - fsl,imx6sx-usb
+> +              - fsl,imx6ul-usb
+> +              - fsl,imx7d-usb
+> +              - fsl,vf610-usb
+> +          - const: fsl,imx27-usb
+> +      - items:
+> +          - enum:
+> +              - fsl,imx8dxl-usb
+> +              - fsl,imx8ulp-usb
+> +          - const: fsl,imx7ulp-usb
+> +          - const: fsl,imx6ul-usb
+> +      - items:
+> +          - enum:
+> +              - fsl,imx8mm-usb
+> +              - fsl,imx8mn-usb
+> +          - const: fsl,imx7d-usb
+> +          - const: fsl,imx27-usb
+> +      - items:
+> +          - enum:
+> +              - fsl,imx6sll-usb
+> +              - fsl,imx7ulp-usb
+> +          - const: fsl,imx6ul-usb
+> +          - const: fsl,imx27-usb
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 3
+
+
+No need to, it's already in common. Drop clocks.
+
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 3
+
+Drop property.
+
+> +
+> +  fsl,usbmisc:
+> +    description:
+> +      Phandler of non-core register device, with one argument that
+> +      indicate usb controller index
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      - items:
+> +          - description: phandle to usbmisc node
+> +          - description: index of usb controller
+> +
+> +  fsl,anatop:
+> +    description: phandle for the anatop node.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+> +  disable-over-current:
+> +    type: boolean
+> +    description: disable over current detect
+> +
+> +  over-current-active-low:
+> +    type: boolean
+> +    description: over current signal polarity is active low
+> +
+> +  over-current-active-high:
+> +    type: boolean
+> +    description:
+> +      Over current signal polarity is active high. It's recommended to
+> +      specify the over current polarity.
+> +
+> +  power-active-high:
+> +    type: boolean
+> +    description: power signal polarity is active high
+> +
+> +  external-vbus-divider:
+> +    type: boolean
+> +    description: enables off-chip resistor divider for Vbus
+> +
+> +  samsung,picophy-pre-emp-curr-control:
+> +    description:
+> +      HS Transmitter Pre-Emphasis Current Control. This signal controls
+> +      the amount of current sourced to the USB_OTG*_DP and USB_OTG*_DN
+> +      pins after a J-to-K or K-to-J transition. The range is from 0x0 to
+> +      0x3, the default value is 0x1. Details can refer to TXPREEMPAMPTUNE0
+> +      bits of USBNC_n_PHY_CFG1.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0x0
+> +    maximum: 0x3
+> +
+> +  samsung,picophy-dc-vol-level-adjust:
+> +    description:
+> +      HS DC Voltage Level Adjustment. Adjust the high-speed transmitter DC
+> +      level voltage. The range is from 0x0 to 0xf, the default value is
+> +      0x3. Details can refer to TXVREFTUNE0 bits of USBNC_n_PHY_CFG1.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0x0
+> +    maximum: 0xf
+> +
+> +  fsl,picophy-rise-fall-time-adjust:
+> +    description:
+> +      HS Transmitter Rise/Fall Time Adjustment. Adjust the rise/fall times
+> +      of the high-speed transmitter waveform. It has no unit. The rise/fall
+> +      time will be increased or decreased by a certain percentage relative
+> +      to design default time. (0:-10%; 1:design default; 2:+15%; 3:+20%)
+> +      Details can refer to TXRISETUNE0 bit of USBNC_n_PHY_CFG1.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 3
+> +    default: 1
+> +
+> +  fsl,usbphy:
+> +    description: phandle of usb phy that connects to the port. Use "phys" instead.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    deprecated: true
+
+Missing required: block here.
+
+> +
+> +allOf:
+> +  - $ref: ci-hdrc-usb2-common.yaml#
+> +  - if:
+> +      properties:
+> +        phy_type:
+> +          const: hsic
+> +      required:
+> +        - phy_type
+> +    then:
+> +      properties:
+> +        pinctrl-names:
+> +          items:
+> +            - const: idle
+> +            - const: active
+> +
+> +required:
+> +  - compatible
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/imx7d-clock.h>
+> +
+> +    usb@30b10000 {
+> +        compatible = "fsl,imx7d-usb", "fsl,imx27-usb";
+> +        reg = <0x30b10000 0x200>;
+> +        interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&clks IMX7D_USB_CTRL_CLK>;
+> +        fsl,usbphy = <&usbphynop1>;
+> +        fsl,usbmisc = <&usbmisc1 0>;
+> +        phy-clkgate-delay-us = <400>;
+> +    };
+> +
+> +  # Example for HSIC:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/imx6qdl-clock.h>
+> +
+> +    usb@2184400 {
+> +        compatible = "fsl,imx6q-usb", "fsl,imx27-usb";
+> +        reg = <0x02184400 0x200>;
+> +        interrupts = <0 41 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&clks IMX6QDL_CLK_USBOH3>;
+> +        fsl,usbphy = <&usbphynop1>;
+> +        fsl,usbmisc = <&usbmisc 2>;
+> +        phy_type = "hsic";
+> +        dr_mode = "host";
+> +        ahb-burst-config = <0x0>;
+> +        tx-burst-size-dword = <0x10>;
+> +        rx-burst-size-dword = <0x10>;
+> +        pinctrl-names = "idle", "active";
+> +        pinctrl-0 = <&pinctrl_usbh2_idle>;
+> +        pinctrl-1 = <&pinctrl_usbh2_active>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        ethernet@1 {
+> +            compatible = "usb424,9730";
+> +            reg = <1>;
+> +        };
+> +    };
+> +
+> +...
+
+
+Best regards,
+Krzysztof
 
 
