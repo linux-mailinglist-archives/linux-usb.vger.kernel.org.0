@@ -1,233 +1,187 @@
-Return-Path: <linux-usb+bounces-7370-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7371-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0B5086D7C8
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 00:28:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B167B86D813
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 00:59:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6DDA2857F4
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 23:28:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 062F7B2186B
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 23:59:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7776B13E7C0;
-	Thu, 29 Feb 2024 23:28:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 922B3137763;
+	Thu, 29 Feb 2024 23:59:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nm8n2PeT"
+	dkim=pass (2048-bit key) header.d=elbertmai.com header.i=@elbertmai.com header.b="U3sIgO3l";
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="bn/qr6Eb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8525B446AC
-	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 23:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D0444374
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 23:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709249305; cv=none; b=J1ZPjiqD2JA1+HaU+l8bMlyyPcZQCtFKCpIYsmGwLS2LTxUyiSqKkm7Iq17mvmuAwyz2Jx62BWxU54fA5MmW26iZXwtcOFYq/aDlpdFQmTA/CGv1J7j+LmN4Z1oSFTG5TlXUHXFApcpsTQXI2HejqfIj6XPZ4Ix3Qq+YQvQU1oI=
+	t=1709251180; cv=none; b=obLLcxOi9RZU13CL8rh7B5l5iUml6Lo9DeZ0TnXIdOrlxnAhkn1vRU7Y59eePt/WenLYIW5kRlqJ6ZPkHtAO1n0pT+PkrB5BHmtkA45cREhp8ml4GxQooExeELcfE70mtgiaMqYgvcDGla3Jaa9azsYD1Bzj/ho5pVe5ie3umxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709249305; c=relaxed/simple;
-	bh=sjFQtDvhvEyWLfprHkf57jFvK86g9+U0imPTasrTbf0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=l95YpT8dbZFIC/heE4CVZ5g8p6GKlE/SDVDbUj9mSCi5UP4xJGZKKhbMl4DJXE8zFfyHKyogyhLVx6Nq17OFSA9D6FpryHcQ5IaZ8sSB2O3d0KKawJ74Rf88G6d09Q+zHZYitD/U1MuIQe9WAkHnsN3PALdIPx6vKz+ZPkw7YLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nm8n2PeT; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-608e88ca078so25275247b3.1
-        for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 15:28:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709249302; x=1709854102; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DIpbzGnuxG/veYQVRb7uyrg5E8imeH2l3OOJtVWsq90=;
-        b=nm8n2PeTnaFNoXXE3u8FAy2WgfsyzGQ8mEd5TNbxK2nlw9kMeOGqJPEg05bc9NGooO
-         r+a0QYlNZWUnopzncKv1u/IU/dXFTc19fIHqy+2uPi50AA29And35/HEyi0lRtmdpY5C
-         yoaAC6dVp23EBDzefol2IOhW2r/uEPgNfMQTrqnNOMGrkylV+YId3A5jV+CB7T7Jag4F
-         E5HeaOXV0B+Psn2ImVbftPyjZmZWvyyHsLWMU+TvhpYwS4oHHBGSMl7TL+ysDpU4euHG
-         hOgjxSE0zzESIJ47nt82kq/EPBZ7RxgFT169F4HXAZmS9X3uIO/stly3KQBQPrk3IzO2
-         rsYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709249302; x=1709854102;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DIpbzGnuxG/veYQVRb7uyrg5E8imeH2l3OOJtVWsq90=;
-        b=Xk7MnM1UjDnfO2f5l3gay4fmZLK9vD1Wk+vpTI8LMpPqVo8aeFyNgzhAKv5cS8OiPc
-         OlbjKFxliObqFuIO3fKaFVtNjeE5pbuR2N8r7lz05iWKUlEU0crLjhTgmoqD6pMd6ray
-         7F06OCDiCvdH8xebRUHs39jVzJaJBDNot7iqDfjxnqBqfzXrswaiWoyaVQTOfZWwVBng
-         UFgXFv+69dpEkXVJ+T0GFnKAXYW3v+YI1uR7P+yhwJnXzmJjSUuQ+vqdJBoNOCwJMJHi
-         g9EorUhUWzpXVbjzz17F5LwFC8BI8BIrOMtYTrlwPWHAq/QIxHBLgTIqlpEghm6mEKnM
-         72JA==
-X-Forwarded-Encrypted: i=1; AJvYcCWR4t/jPImpd0ffwLr1jVO8Cb0Hzwy/FzAFNHsb1WpTkrTDfdEhmvGuKZ9Fusx0KhhcctBB2iYFtPy5owrJ1D7d7ZhBl1wRdWRn
-X-Gm-Message-State: AOJu0YzjFZZez7aeIcO3/L3f4YKXW1jEwFWJzJOrgMsgcb9mrx4XYdLn
-	JeCrhbZzECckzZHi6O2GEv4me1TXMm8hcenZ3JNqSFLzCPPmgyK3CR/dvwdBD0ZlOi9jtCj47r2
-	hhQ==
-X-Google-Smtp-Source: AGHT+IEQdV7H7CHxrnccmLNuQKd/TUmgGzmqv3n4/NAfpiq2qW0h/l/JfxuMlMpEcrlOT+b5qU1x1R6kbbw=
-X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:23db])
- (user=jthies job=sendgmr) by 2002:a81:9808:0:b0:609:5dc8:fc81 with SMTP id
- p8-20020a819808000000b006095dc8fc81mr1551ywg.1.1709249302545; Thu, 29 Feb
- 2024 15:28:22 -0800 (PST)
-Date: Thu, 29 Feb 2024 23:26:25 +0000
-In-Reply-To: <20240229232625.3944115-1-jthies@google.com>
+	s=arc-20240116; t=1709251180; c=relaxed/simple;
+	bh=OOOCsGxQH/wxU/CG8sZCXZFdEfx3IZ9cD1UMgPqoejI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=GNSxXAqPBS4ou1OKBu5u43E2jgMNThAmjEcR1RT4Xo6v7QhYv5K95GveRuYmLk2h7KlMhWm9P12E3r2cF9zUqkIgb7alTIJVx3rdb1/eMbhx721VoajD1w2ibC4IVB1g+fE9fd/B4E3Opwy7AQkoUFHUQqJB5HDzodng0ZGERew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=elbertmai.com; spf=pass smtp.mailfrom=elbertmai.com; dkim=pass (2048-bit key) header.d=elbertmai.com header.i=@elbertmai.com header.b=U3sIgO3l; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=bn/qr6Eb; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=elbertmai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=elbertmai.com
+Authentication-Results: purelymail.com; auth=pass
+DKIM-Signature: a=rsa-sha256; b=U3sIgO3lqTzN/z5hQyfzPw4s9+yl5E1EGxOdfTty0MSKjQ6d2FjCTouDqFDDUUqCWMQ+PPy2rhcDKy5qh9UYD6Vyaexsi/qN0O7Y35bNgfwziQRG7N/O5l1v9/86CqRr7TuqbaZzDwKxK00iGx8A+6oOCGBHD38x+swMLVUorvZPMDjYczSm+rKgiiS4h4TpqXo49czACtt0LflITl6DbSVMsr8KoY1N+iWQ9Us3Isjrz4hcewT4JK0mmDffSxiSsiLLxCDWEPKgYBVsjzmWW7IqVdCFdAzm01uY22rY3v4TATqs0YngMTxgYfmNgM34ryX+gQbKEx8Y0jPuosercw==; s=purelymail1; d=elbertmai.com; v=1; bh=OOOCsGxQH/wxU/CG8sZCXZFdEfx3IZ9cD1UMgPqoejI=; h=Received:From:To:Subject;
+DKIM-Signature: a=rsa-sha256; b=bn/qr6Ebpw63GwRPkSkgkHh2wf3tAJtJY7NPyPSTPM/OqoLUHRV1xuiuHvJOKgD/MjNX+dnMYO+vnNb3nvcZycNjSW0dODcVl/3yQdphUcpwhyB14hS7Omxul4L/IxlnXkbilCpFF6JxTyk8uArA2kxxYn29qR82d+a/EhJmx3aOnRq5c+cCHQ45L0BG9BNCZJxbtTAeBd9tKqsN4c5QKyprAkWPYiWcEhTm84pk7FvcPGDg/jPvFsMq6VK8LZN8R7AzjYe/b8n4pgiPhJR6bEiKMzPoUbNByMhOeq4Dt3Njb/TlNqhHuiGJ7KY90ocFvPEWzUPBOFv1NEhiLYZzhQ==; s=purelymail1; d=purelymail.com; v=1; bh=OOOCsGxQH/wxU/CG8sZCXZFdEfx3IZ9cD1UMgPqoejI=; h=Feedback-ID:Received:From:To:Subject;
+Feedback-ID: 5995:1482:null:purelymail
+X-Pm-Original-To: linux-usb@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -265359410;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Thu, 29 Feb 2024 23:59:22 +0000 (UTC)
+From: Elbert Mai <code@elbertmai.com>
+To: gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Cc: Elbert Mai <code@elbertmai.com>
+Subject: [PATCH] usb: Export BOS descriptor to sysfs
+Date: Thu, 29 Feb 2024 15:59:05 -0800
+Message-Id: <20240229235905.569705-1-code@elbertmai.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240229232625.3944115-1-jthies@google.com>
-X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
-Message-ID: <20240229232625.3944115-5-jthies@google.com>
-Subject: [PATCH v3 4/4] usb: typec: ucsi: Register SOP' alternate modes with
- cable plug
-From: Jameson Thies <jthies@google.com>
-To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
-Cc: jthies@google.com, pmalani@chromium.org, bleung@google.com, 
-	abhishekpandit@chromium.org, andersson@kernel.org, 
-	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com, 
-	gregkh@linuxfoundation.org, hdegoede@redhat.com, neil.armstrong@linaro.org, 
-	rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
-	linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+Content-Type: text/plain; charset=UTF-8
 
-Register SOP' alternate modes with a Type-C Connector Class cable plug.
-Alternate modes are queried from the PPM using the GET_ALTERNATE_MODES
-command with recipient set to SOP'.
+Motivation
+----------
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Jameson Thies <jthies@google.com>
+The kernel already retrieves and caches the binary device object store
+(BOS) descriptor from USB devices it enumerates. Export this descriptor to
+userspace via sysfs, so users do not need to open the USB device with the
+correct permissions and requesting the descriptor themselves.
+
+A BOS descriptor contains a set of device capability descriptors. One that
+is of interest to users is the platform descriptor. This contains a 128-bit
+UUID and arbitrary data. The descriptor allows parties outside of USB-IF to
+add additional metadata about a device in a standards-compliant manner.
+
+Notable examples include the WebUSB and Microsoft OS 2.0 descriptors. Of
+course, there could be more. By exporting the entire BOS descriptor we can
+handle these and all future device capabilities. In addition, tools like
+udev can match rules on device capabilities in the BOS without requiring
+additional I/O with the USB device.
+
+Implementation
+--------------
+
+Add bos_descriptor file to sysfs. This is a binary file and it works the
+same way as the existing descriptors file. The file exists even if a device
+does not have a BOS descriptor (the file will be empty in this case). This
+allows users to detect if the kernel supports reading the BOS via sysfs and
+fall back to direct USB I/O if needed.
+
+Signed-off-by: Elbert Mai <code@elbertmai.com>
 ---
-SOP' GET_ALTERNATE_MODE responses from the PPM are correctly registered
-to the cable plug.
-nospike-rev4 /sys/class/typec # ls port0-cable/port0-plug0/
-device  port0-plug0.0  port0-plug0.1  power  subsystem  uevent
+ Documentation/ABI/testing/sysfs-bus-usb |  9 +++++++
+ drivers/usb/core/sysfs.c                | 35 ++++++++++++++++++++++++-
+ 2 files changed, 43 insertions(+), 1 deletion(-)
 
-Changes in v3:
-- None.
-
-Changes in v2:
-- Shortened lines to within 80 characters.
-- Tested on usb-testing branch merged with chromeOS 6.8-rc2 kernel.
-
- drivers/usb/typec/ucsi/ucsi.c | 60 +++++++++++++++++++++++++++++++++++
- drivers/usb/typec/ucsi/ucsi.h |  2 ++
- 2 files changed, 62 insertions(+)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 4088422b33c74..281954fe9d855 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -399,6 +399,27 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
- 
- 		con->partner_altmode[i] = alt;
- 		break;
-+	case UCSI_RECIPIENT_SOP_P:
-+		i = ucsi_next_altmode(con->plug_altmode);
-+		if (i < 0) {
-+			ret = i;
-+			goto err;
-+		}
+diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/te=
+sting/sysfs-bus-usb
+index 614d216dff1d..bfffaa752a13 100644
+--- a/Documentation/ABI/testing/sysfs-bus-usb
++++ b/Documentation/ABI/testing/sysfs-bus-usb
+@@ -293,3 +293,12 @@ Description:
+ =09=09USB 3.2 adds Dual-lane support, 2 rx and 2 tx -lanes over Type-C.
+ =09=09Inter-Chip SSIC devices support asymmetric lanes up to 4 lanes per
+ =09=09direction. Devices before USB 3.2 are single lane (tx_lanes =3D 1)
 +
-+		ret = ucsi_altmode_next_mode(con->plug_altmode, desc->svid);
-+		if (ret < 0)
-+			return ret;
-+
-+		desc->mode = ret;
-+
-+		alt = typec_plug_register_altmode(con->plug, desc);
-+		if (IS_ERR(alt)) {
-+			ret = PTR_ERR(alt);
-+			goto err;
-+		}
-+
-+		con->plug_altmode[i] = alt;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -566,6 +587,9 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
- 	case UCSI_RECIPIENT_SOP:
- 		adev = con->partner_altmode;
- 		break;
-+	case UCSI_RECIPIENT_SOP_P:
-+		adev = con->plug_altmode;
-+		break;
- 	default:
- 		return;
- 	}
-@@ -849,6 +873,33 @@ static void ucsi_unregister_partner_pdos(struct ucsi_connector *con)
- 	con->partner_pd = NULL;
- }
- 
-+static int ucsi_register_plug(struct ucsi_connector *con)
++What:=09=09/sys/bus/usb/devices/.../bos_descriptor
++Date:=09=09March 2024
++Contact:=09Elbert Mai <code@elbertmai.com>
++Description:
++=09=09Binary file containing the cached binary device object store (BOS)
++=09=09descriptor of the device. This file is empty if the BOS descriptor
++=09=09is not present. The kernel will not request a BOS descriptor from
++=09=09the device if its bcdUSB value is less than 0x0201.
+diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+index a2ca38e25e0c..208d2f8cde2d 100644
+--- a/drivers/usb/core/sysfs.c
++++ b/drivers/usb/core/sysfs.c
+@@ -901,7 +901,7 @@ read_descriptors(struct file *filp, struct kobject *kob=
+j,
+ =09=09=09srclen =3D sizeof(struct usb_device_descriptor);
+ =09=09} else {
+ =09=09=09src =3D udev->rawdescriptors[cfgno];
+-=09=09=09srclen =3D __le16_to_cpu(udev->config[cfgno].desc.
++=09=09=09srclen =3D le16_to_cpu(udev->config[cfgno].desc.
+ =09=09=09=09=09wTotalLength);
+ =09=09}
+ =09=09if (off < srclen) {
+@@ -923,6 +923,34 @@ static struct bin_attribute dev_bin_attr_descriptors =
+=3D {
+ =09.size =3D 18 + 65535,=09/* dev descr + max-size raw descriptor */
+ };
+=20
++static ssize_t
++read_bos_descriptor(struct file *filp, struct kobject *kobj,
++=09=09struct bin_attribute *attr,
++=09=09char *buf, loff_t off, size_t count)
 +{
-+	struct typec_plug *plug;
-+	struct typec_plug_desc desc = {.index = TYPEC_PLUG_SOP_P};
++=09struct device *dev =3D kobj_to_dev(kobj);
++=09struct usb_device *udev =3D to_usb_device(dev);
++=09struct usb_host_bos *bos =3D udev->bos;
++=09struct usb_bos_descriptor *desc;
++=09size_t desclen, n =3D 0;
 +
-+	plug = typec_register_plug(con->cable, &desc);
-+	if (IS_ERR(plug)) {
-+		dev_err(con->ucsi->dev,
-+			"con%d: failed to register plug (%ld)\n", con->num,
-+			PTR_ERR(plug));
-+		return PTR_ERR(plug);
-+	}
-+
-+	con->plug = plug;
-+	return 0;
++=09if (bos) {
++=09=09desc =3D bos->desc;
++=09=09desclen =3D le16_to_cpu(desc->wTotalLength);
++=09=09if (off < desclen) {
++=09=09=09n =3D min(count, desclen - (size_t) off);
++=09=09=09memcpy(buf, (void *) desc + off, n);
++=09=09}
++=09}
++=09return n;
 +}
 +
-+static void ucsi_unregister_plug(struct ucsi_connector *con)
-+{
-+	if (!con->plug)
-+		return;
++static struct bin_attribute dev_bin_attr_bos_descriptor =3D {
++=09.attr =3D {.name =3D "bos_descriptor", .mode =3D 0444},
++=09.read =3D read_bos_descriptor,
++=09.size =3D 65535,=09/* max-size BOS descriptor */
++};
 +
-+	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP_P);
-+	typec_unregister_plug(con->plug);
-+	con->plug = NULL;
-+}
+ /*
+  * Show & store the current value of authorized_default
+  */
+@@ -1042,6 +1070,10 @@ int usb_create_sysfs_dev_files(struct usb_device *ud=
+ev)
+ =09if (retval)
+ =09=09goto error;
+=20
++=09retval =3D device_create_bin_file(dev, &dev_bin_attr_bos_descriptor);
++=09if (retval)
++=09=09goto error;
 +
- static int ucsi_register_cable(struct ucsi_connector *con)
- {
- 	struct typec_cable *cable;
-@@ -892,6 +943,7 @@ static void ucsi_unregister_cable(struct ucsi_connector *con)
- 	if (!con->cable)
- 		return;
- 
-+	ucsi_unregister_plug(con);
- 	typec_unregister_cable(con->cable);
- 	memset(&con->cable_identity, 0, sizeof(con->cable_identity));
- 	con->cable = NULL;
-@@ -1098,6 +1150,14 @@ static int ucsi_check_cable(struct ucsi_connector *con)
- 	if (ret < 0)
- 		return ret;
- 
-+	ret = ucsi_register_plug(con);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP_P);
-+	if (ret < 0)
-+		return ret;
-+
- 	return 0;
+ =09retval =3D add_persist_attributes(dev);
+ =09if (retval)
+ =09=09goto error;
+@@ -1071,6 +1103,7 @@ void usb_remove_sysfs_dev_files(struct usb_device *ud=
+ev)
+=20
+ =09remove_power_attributes(dev);
+ =09remove_persist_attributes(dev);
++=09device_remove_bin_file(dev, &dev_bin_attr_bos_descriptor);
+ =09device_remove_bin_file(dev, &dev_bin_attr_descriptors);
  }
- 
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index b89fae82e8ce7..32daf5f586505 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -429,9 +429,11 @@ struct ucsi_connector {
- 	struct typec_port *port;
- 	struct typec_partner *partner;
- 	struct typec_cable *cable;
-+	struct typec_plug *plug;
- 
- 	struct typec_altmode *port_altmode[UCSI_MAX_ALTMODES];
- 	struct typec_altmode *partner_altmode[UCSI_MAX_ALTMODES];
-+	struct typec_altmode *plug_altmode[UCSI_MAX_ALTMODES];
- 
- 	struct typec_capability typec_cap;
- 
--- 
-2.44.0.rc1.240.g4c46232300-goog
+=20
+--=20
+2.34.1
 
 
