@@ -1,125 +1,139 @@
-Return-Path: <linux-usb+bounces-7316-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7317-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5179B86C5BC
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 10:42:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD4A586C5ED
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 10:45:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F320A1F228E8
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 09:42:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 758E128DB6C
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 09:45:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089FD612F7;
-	Thu, 29 Feb 2024 09:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCBCD5D91A;
+	Thu, 29 Feb 2024 09:45:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q/O7NcYD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OmuBrjBQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D6560DEF;
-	Thu, 29 Feb 2024 09:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E24260DF2;
+	Thu, 29 Feb 2024 09:45:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709199690; cv=none; b=EAzvmtEsz/DeGrMtYpXsIDORSB6mFJY9g0vDm2OV1jm3EfST5uUyRpuGJbCct8IJGcD6Jze/JjP5ZSXQjVOInhzX5OICrhWqyerXn9qFmUteAq53drD4oQUCRBRnUoVkptjJh/776BVzHLzgBYPiRoCheb+uB+xDQyGzdGpENxg=
+	t=1709199913; cv=none; b=qN4cLqbSnFEV/zLPBR4glkQV13H2btPF8Gsv0GwzF8Wm+YdCc37em2YBmoCGeGD80Jr0vgZ96hfxCb2gzWydTqgasHA37si+3ocPKiBiRx+64s+tmc8ghvyvFzLr632Usljz5I6FkIAQiieA/GFP7sor4inFbt+5mVoXa6Ch7Bg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709199690; c=relaxed/simple;
-	bh=9PDCV/8fUy/F52NLTEXm+q3B0bNu13FfYnbqMHToU+M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A3N0w/R3CmSgDj5yRH/adXfgKik/OT+ywht+iBz0WPgREMMZftcvHMeTfpybbPGdFFv6T0LS5Wjw4f+JA5Sd9g3REjH4XsldPGQQBhoPPU8J0qXb7Pi0hMP0NM9XcoJHe9BFWF6axLx1JLmVLnpB0NKeFqjrvevrsc/p/F5wOrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q/O7NcYD; arc=none smtp.client-ip=209.85.219.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-68fcd9d336bso1332676d6.1;
-        Thu, 29 Feb 2024 01:41:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709199688; x=1709804488; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9PDCV/8fUy/F52NLTEXm+q3B0bNu13FfYnbqMHToU+M=;
-        b=Q/O7NcYDf1NzlPYvjkqx2k81+uEkQpOaPwO+xJNXVAmuImn2jQWQCcUINhicmooKKL
-         sN+Grx7dQKFSsvODkfZLquGvRBClXm4HPRw6M9ZAFDxXrsWLab+IM63YB26Yl7hw3dqF
-         Xp0mjAeZ13WSnzv4ghf6uVYNeV+ruV+LNcxzRj/VjNt5de0kLQzHHirQGhdStHKkFyCX
-         LMSRlLES0KFeFtTgUpgStvVh4jjQTjt4wXppz7fgNO/K3BawIY0N918RQJDH4Q2/edM1
-         ZJkDiRkoqo9ABG2IZjmCVK1RcRqylJjH+G10iT/6mNoQOjxCfuDp5aoeumF7Ukm9JlRL
-         Q5ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709199688; x=1709804488;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9PDCV/8fUy/F52NLTEXm+q3B0bNu13FfYnbqMHToU+M=;
-        b=RoSinrz/m3qlRXB6L79YpkcSSvh34bDokE0EGDgliRW39//yQZVi2Zus3dxulcnyLd
-         RKUZAxaSgGi2qXrQQfac1YyS3cRfNT8/AOgkJi8zfOQI0Le7ivOfKvU3X2CEYw8JNld1
-         2+0kJkvPG4KUtK0WIFq6IIwbzgN3aC0HxJ+LpU5QEkVE+BZ1bjbed58V33pRkx4toyM9
-         5i9ylI2b5eexHnJBo6lkYFSHxhs0sSovHtXZVRhzXOZfm8Q7ysUFkKh7vLXOEnJt1DCc
-         j3TCbKhf0Hd+WWULViL1DzasYNxKKpAtqojKc4Kjq2vHeIjzH304Z1Eupptbp6Nckudn
-         pkNw==
-X-Forwarded-Encrypted: i=1; AJvYcCX7jDbfou6f1elNQqdIbyUK3yJt9rNXV3KE02rl2QLqnb0GH262XIKjLXzXsBMu1xKTV0hdm0NTkIc/aN2arK6nBvII7UZDUJX15CeRw2xr1fKEXCzlWFj8MgrUpDCZgaFeWJj6VII10BE5KGKd5rvE6Hp48pvhYzfr0vac2ZsI
-X-Gm-Message-State: AOJu0YxceDxV74uPLj+PUST/5ewnC20bGqbjqKCf4Q9q47sPISnYCrZA
-	DIUmBWYvYaJOc+1Dv2vLXZrTfeVcbCOYE843RB/95yid2V2padoGrlwGOne7a0vsnFCN5lQDzqo
-	ENw6Qf4cpCXFCXT/vu//fm76qm+Q=
-X-Google-Smtp-Source: AGHT+IEpCqJchuzt4ZrrtkL5VqWHMo2IqI4G008f5KoIJLRebFaws+E4nICSMPOejPHN06gVklGvoH9c8XrDbS+T8NU=
-X-Received: by 2002:a05:6214:27c6:b0:68f:6000:6ac5 with SMTP id
- ge6-20020a05621427c600b0068f60006ac5mr1570280qvb.4.1709199687911; Thu, 29 Feb
- 2024 01:41:27 -0800 (PST)
+	s=arc-20240116; t=1709199913; c=relaxed/simple;
+	bh=N4ExwYK4obzpBCaotNTjUlxJUXpLOasw+lbaXcE8vr4=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=hm4vI/0gQjOKu8ZfHe1w5bXAwvk5Lbi3IigPWm1k6bUPrBWW1+ToVuKwLl7ZmXCe1cdeAPd61BpeFzB3Pzm3OwG0N1M697Ul7I7QLsPlTFr87RqZbR9iY/fwZ0IAmUIGGByYL+yoF4sR8X0tXo5orjLOLtqoPFcT9ekZyB+SIB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OmuBrjBQ; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709199912; x=1740735912;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=N4ExwYK4obzpBCaotNTjUlxJUXpLOasw+lbaXcE8vr4=;
+  b=OmuBrjBQw6PtbALOt6RXp5iJW1fGLyBEC8pQowrce1qaKchqPS3NY6ir
+   7kY62pB+4uUKfZtg+QEwP8vF3412RDwKOZ7cwXcV4BRbmMjaSYE9OPwJb
+   7RQ3VeKmvUQr0bohxkiY9CI24LsAGMM3jn5mHOCakGV2T8NtIN11zcUKS
+   Cs9GXXl+Vs8OarEmUVYtv1cRz5AbfnMQMxkK17D6uyR+wRV3ts1p9PBxV
+   G5M6zPyj/zrBDA1oXo2Frn2XNrpzvJj0ib2rECwlAvzYqZp3F18RAri8B
+   8JL1bPkMzTG4qAhHWMddTlCigfGVsFfmIyaB3pTk++aylsl5JCJRkHhnW
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="21200864"
+X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
+   d="scan'208";a="21200864"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 01:45:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="937035547"
+X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
+   d="scan'208";a="937035547"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Feb 2024 01:45:06 -0800
+Message-ID: <a1274e8a-c761-a39f-20a4-06989e8144c6@linux.intel.com>
+Date: Thu, 29 Feb 2024 11:46:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CABXGCsNnUfCCYVSb_-j-a-cAdONu1r6Fe8p2OtQ5op_wskOfpw@mail.gmail.com>
- <e7b96819-edf7-1f9f-7b01-e2e805c99b33@linux.intel.com> <CABXGCsPjW_Gr4fGBzYSkr_4tsn0fvuT72G-YJYXcb1a4kX=CQw@mail.gmail.com>
- <2d87509a-1515-520c-4b9e-bba4cd4fa2c6@linux.intel.com> <CABXGCsPdXqRG6v97KDGy+o59xc3ayaq3rLj267veC7YcKVp8ww@mail.gmail.com>
- <1126ed0a-bfc1-a752-1b5e-f1339d7a8aa5@linux.intel.com> <CABXGCsN5_O3iKDOyYxtsGTGDA6fw4962CjzXLSnOK3rscELq+Q@mail.gmail.com>
- <a026ecd8-6fba-017d-d673-0d0759a37ed8@linux.intel.com> <CABXGCsOgy8H4GGcNU1jRE+SzRqwnPeNuy_3xBukjwB-bPxeZrQ@mail.gmail.com>
- <CABXGCsOd=E428ixUOw+msRpnaubgx5-cVU7TDXwRUCdrM5Oicw@mail.gmail.com>
- <34d7ab1b-ab12-489d-a480-5e6ccc41bfc3@infradead.org> <10487018-49b8-4b27-98a1-07cee732290d@infradead.org>
- <4f34b6a8-4415-6ea4-8090-262847d606c6@linux.intel.com> <3ea25443-1275-4c67-90e0-b637212d32b5@leemhuis.info>
- <1e719367-01ae-565a-2199-0ff7e260422b@linux.intel.com> <410817b8-1cf9-4285-b20b-f1fa0513cee8@leemhuis.info>
- <acc2b877-4b42-fd4d-867b-603dae95d09d@linux.intel.com> <87r0gz9jxp.ffs@tglx>
- <098670097a6fd59f3e254c5294882f3fa12e3c65.camel@gmail.com>
- <87y1b595y0.ffs@tglx> <960fd112b294a902e1bea1fdd8e04a708a05cf45.camel@gmail.com>
-In-Reply-To: <960fd112b294a902e1bea1fdd8e04a708a05cf45.camel@gmail.com>
-From: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date: Thu, 29 Feb 2024 14:41:16 +0500
-Message-ID: <CABXGCsOUzbgrTHVDHkepcxK15HBRXYLq2S0ohkCXRF347fUuJA@mail.gmail.com>
-Subject: Re: This is the fourth time I've tried to find what led to the
- regression of outgoing network speed and each time I find the merge commit 8c94ccc7cd691472461448f98e2372c75849406c
-To: Thomas Gleixner <tglx@linutronix.de>, Mathias Nyman <mathias.nyman@linux.intel.com>, 
-	Linux regressions mailing list <regressions@lists.linux.dev>
-Cc: "Christian A. Ehrhardt" <lk@c--e.de>, niklas.neronin@linux.intel.com, 
-	Linux List Kernel Mailing <linux-kernel@vger.kernel.org>, Greg KH <gregkh@linuxfoundation.org>, 
-	linux-usb@vger.kernel.org, x86@kernel.org, netdev@vger.kernel.org, 
-	Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+ gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+ linux-usb@vger.kernel.org
+Cc: mario.limonciello@amd.com, stable@vger.kernel.org,
+ Oleksandr Natalenko <oleksandr@natalenko.name>
+References: <20240226152831.2147932-1-Basavaraj.Natikar@amd.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v2] xhci: Allow RPM on the USB controller (1022:43f7) by
+ default
+In-Reply-To: <20240226152831.2147932-1-Basavaraj.Natikar@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 27, 2024 at 11:03=E2=80=AFPM <mikhail.v.gavrilov@gmail.com> wro=
-te:
->
-> On Tue, 2024-02-27 at 18:23 +0100, Thomas Gleixner wrote:
-> > If we want to understand why CPU0 is problematic, then you need to
-> > use tracing to capture what's going on on CPU0 vs. other CPUs.
->
-> I am not hear what kind of profiler software you prefer.
-> I famous with sysprof and attach here captures for both cases CPU0 vs
-> CPU23. I hope this helps clear things up.
->
+On 26.2.2024 17.28, Basavaraj Natikar wrote:
+> The AMD USB host controller (1022:43f7) does not enter PCI D3 by default
+> when nothing is connected. This is due to the policy introduced by
+> 'commit a611bf473d1f ("xhci-pci: Set runtime PM as default policy on all
+> xHC 1.2 or later devices")', which only covers 1.2 or later devices.
 
-Sorry for the noise.
-Because I am unsure whether you received or not my previous message
-with captures.
-I upload them to the mega file exchange server and share links below.
-capture CPU0: https://mega.nz/file/Ik5XiZAS#Hra7Xtzplp8xcHYFj4JXnpp8T-0UA0n=
-hNSIJJLEcSBk
-capture CPU23: https://mega.nz/file/swg0CQ4C#PvGv_WXmtnATD7tNun5xz-lfA5GGqA=
--KOv1ZbVRJ_lI
+This makes it seem like commit a611bf473d1 somehow restricted default runtime
+PM when in fact it enabled it for all xHCI 1.2 hosts.
 
---=20
-Best Regards,
-Mike Gavrilov.
+Before that only a few selected ones had runtime PM enabled by default.
+
+How about something like:
+
+Enable runtime PM by default for older AMD 1022:43f7 xHCI 1.1 host as it is
+proven to work.
+Driver enables runtime PM by default for newer xHCI 1.2 host.
+
+> 
+> Therefore, by default, allow RPM on the AMD USB controller [1022:43f7].
+> 
+> Fixes: 4baf12181509 ("xhci: Loosen RPM as default policy to cover for AMD xHC 1.1")
+
+This was already reverted as it caused regression on some systems.
+24be0b3c4059 Revert "xhci: Loosen RPM as default policy to cover for AMD xHC 1.1"
+
+> Link: https://lore.kernel.org/all/12335218.O9o76ZdvQC@natalenko.name/
+> Cc: Mario Limonciello <mario.limonciello@amd.com>
+> Cc: stable@vger.kernel.org
+
+I'd skip Fixes and stable tags and add this as a feature to usb-next.
+
+> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+> ---
+> Changes in v2:
+> 	- Added Cc: stable@vger.kernel.org
+> 
+>   drivers/usb/host/xhci-pci.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index b534ca9752be..1eb7a41a75d7 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -473,6 +473,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>   	/* xHC spec requires PCI devices to support D3hot and D3cold */
+>   	if (xhci->hci_version >= 0x120)
+>   		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+> +	else if (pdev->vendor == PCI_VENDOR_ID_AMD && pdev->device == 0x43f7)
+> +		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+
+This would fit better earlier in the code among the rest of the AMD quirks.
+See how this flag is set for some other hosts.
+
+Thanks
+Mathias
+
 
