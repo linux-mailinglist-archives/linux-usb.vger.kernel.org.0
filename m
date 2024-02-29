@@ -1,225 +1,119 @@
-Return-Path: <linux-usb+bounces-7321-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7323-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C673C86C720
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 11:42:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90FEC86C884
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 12:52:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75CE7283B21
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 10:42:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C39A81C20E96
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 11:52:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 474E979DC5;
-	Thu, 29 Feb 2024 10:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D197CF30;
+	Thu, 29 Feb 2024 11:52:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="5KR4gYti"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HGQMKhTm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2055.outbound.protection.outlook.com [40.107.212.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0F365194;
-	Thu, 29 Feb 2024 10:42:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709203362; cv=fail; b=lPoAaSOS5cjasX5Y2AYu8vSLVKcuLgqMlh25iuX8GsE/CLsfDNofpI7yT3Aa3tCbd6ArYXGc9kv59kCnGX52918BKxTJyxBsuIw80FqS2Y5YbpojHK6tllBeN4IKYkp5Q3ZuoZuNNEO3aBbaS8NoaQwz4IO9TYikZQYmqP9/jHg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709203362; c=relaxed/simple;
-	bh=5vnUgc346TA7TYyb0SU+VsCG2O5u2p4D1FGfWhXB4hg=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=HtmAZgfiVyeBn3GJFT6JMmzt4DqLvdmabN1TqknMk/iYAd/3CBo+GipwZv7Aop5XngvES7Rg5Phzph1c7OpNg9hwJDd0/WRjH4nWwt7oSqGHrs/fDiBORsC5hukGeBoJUT4ZTHpiBhXUyPxL6vwz3n1vaqgMINoCwGAOv+bmK/E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=5KR4gYti; arc=fail smtp.client-ip=40.107.212.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dv87DWmCBz8x+wrFkhxGm5o4OHbLnkfHJFalrUAjQc4zcVeyBA2PEnpRM+64BRBQK+JH/jAdJS5JRHSefE8fOqnhfXZOoM0nsiW0lzr6+1I9qAuSCovktkeaM0OT/0a4lIiLiqgJ5n8ut47JnlX2C+OBuwMR3g+Ov0EuuR24O0xoKGvGpnYuBCMK8JeKu3PnMG/2OgG0AXxZwlZg5bKE3TpWZeu/XEiUI+VXlY0L9VMUP0y0prp8QSGOcX5gbfGwiVQFjhseXdynaU+ewowmVFyFNvr/mDsPwnTHeAnX0/71YtVAYzuZ5rvQn0fJ0ZKK6H2bL9+P4Xo+vwtoPSo2dA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5vnUgc346TA7TYyb0SU+VsCG2O5u2p4D1FGfWhXB4hg=;
- b=SSQcFHYIU6xpUH02T6drdyx82l1VqCzYMuJ/sI4rQhT7q+cNFBeqMN/oLdi38tLHFZJS8OrU4sDN8yL270XJtatZI+C8pxqPpsPOiXPxjWmX5qvZgmHJ6Pq/j+3lH6Va8fv7sSa9I4vGg1HYa8prMcXyePnJFBImhF0awSR3y6QU/HEoNP2cW3F7hfeSu0bvR+ZVqSxyn3EKHGzHFiNlsxHh2LtDU4DljQwKUvHseZgibcTrvqsvRvv2h2WHJ0jrxy0j0M9i8QPqcdi2a9iwrRLyiBvh1SEBot+adlalE1JkBsehl0AlreZ7ginQoAWG+4J++aRVNtV7T1aRM82wIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5vnUgc346TA7TYyb0SU+VsCG2O5u2p4D1FGfWhXB4hg=;
- b=5KR4gYtiTjDT9Ym6ziy1jqX5fColwrb1quioGgFmFyWkSLLJl4zBOe+lmo0SR9u+K8HMdHi1sal06V0nEX+UikiXZpnftsuZjD96B5stC6kBq86IQRYwjUGVu3XMPOkxZgxw2Sx0UTQek5XsAKNxwITZvzy5ypa1+zX+noUTLxk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5040.namprd12.prod.outlook.com (2603:10b6:5:38b::19)
- by SJ0PR12MB6735.namprd12.prod.outlook.com (2603:10b6:a03:479::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.41; Thu, 29 Feb
- 2024 10:42:37 +0000
-Received: from DM4PR12MB5040.namprd12.prod.outlook.com
- ([fe80::50af:9438:576b:51a1]) by DM4PR12MB5040.namprd12.prod.outlook.com
- ([fe80::50af:9438:576b:51a1%3]) with mapi id 15.20.7316.039; Thu, 29 Feb 2024
- 10:42:37 +0000
-Message-ID: <0c8f1292-fbbf-4555-bd6c-ca6d704eb99f@amd.com>
-Date: Thu, 29 Feb 2024 16:12:28 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] xhci: Allow RPM on the USB controller (1022:43f7) by
- default
-To: Mathias Nyman <mathias.nyman@linux.intel.com>,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>, gregkh@linuxfoundation.org,
- mathias.nyman@intel.com, linux-usb@vger.kernel.org
-Cc: mario.limonciello@amd.com, stable@vger.kernel.org,
- Oleksandr Natalenko <oleksandr@natalenko.name>
-References: <20240226152831.2147932-1-Basavaraj.Natikar@amd.com>
- <a1274e8a-c761-a39f-20a4-06989e8144c6@linux.intel.com>
-Content-Language: en-US
-From: Basavaraj Natikar <bnatikar@amd.com>
-In-Reply-To: <a1274e8a-c761-a39f-20a4-06989e8144c6@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0186.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e8::13) To DM4PR12MB5040.namprd12.prod.outlook.com
- (2603:10b6:5:38b::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87847C6EE
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 11:52:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709207547; cv=none; b=Pi+99C4iiiAQNWFInp1VVzUxBgj15HICX4rH4eJhN2jHXnW/FaYZHFsBV1zSNf0hfbWeVZ+90/ICD2Z87CCdFyqgYrarB8S2DP891PqcAsTATHlwRGQTzcel5qZucJuUTV+TIE6pMUt93w1sX/SqAYBC2F9MSdyMAWsgDNc9l9k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709207547; c=relaxed/simple;
+	bh=7d6CvrWmzaz6TNCwdkf499bxCEdW1K7nR/01VhW1RJA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mguTDo0J32Y6PEs6OXupHZS4aDueLwz+kEUleKGykj0eWd7YAZEcCU8IV7EMOxBbFzXLoAHCghAEsjc6CFr+Btj8J/wLx3rvUZt/tcHIM903fOgpK8Q6b6SzP1Dctpns6PR3oQebDS0Bw4BdqcliHWtgzFBdA6AtGPwtNqLYM3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HGQMKhTm; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d311081954so3306671fa.2
+        for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 03:52:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1709207542; x=1709812342; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=79gNBOsuDeIYR+Lh3gRA6KG8pNTkHwRoYAWTsnujzmg=;
+        b=HGQMKhTmMZ63lzVoTzex9HePv1nw+L0kznKo07FxUoEhDn3SN21QGPemUEeRKCjkIk
+         xq894Z/ER8zch3mA6RgqfFqqIUO73VhbknagdGEgOlQgzvBpiNBEuVTGtiGKVvOs1Iik
+         mjHtAAISejZNbTTv7TBDPyeZv8Bji+gbG9+bmbSxRzOxDKBlbj9AtyetNR8jpToZgchq
+         KTuOWQSjXxNRD4LyuLLjp7rq/rht4MmtvdLvw9t4ldZrkhwGy0GOjP9tUTlTahDmWARR
+         hgPPZ7JF3xlveDxrewDZjAy1AhNYZfh44V6Y9CvTupghnqSVQa0fdKQWqBOPmru7/w6R
+         69jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709207542; x=1709812342;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=79gNBOsuDeIYR+Lh3gRA6KG8pNTkHwRoYAWTsnujzmg=;
+        b=U3F3oDcMkYrEg8SnarIdZaJtBTiuEk1cWXssqjDgCz1A+b21Jj9JmZCUYywrNFIh2K
+         EaqZlvNz81ZdQBNppMysrNCHfzVNi4MhPEi8R405Sp9JtNju7Lx/3U+CH6nwyZpVpG0V
+         3c3zRW27ar3ox3RTnX9VDsKeO7jb4O1s4G4WaGI2OLIyDRxa0s4u/dVfBln8nzZAHW9Y
+         j5byi9/8AgRHsupW8t/h+6m6CqVqmKE2D8yPmHOMlYeCsSU+Dc1iqvBrxIgiGKMs3HnX
+         0LLW+cyaH7gULXWv8TuqXdRCI9PwtG2EaP1AJfSKKQkucP5tApzc8yoDdWSfQ6UJCCCa
+         tBSA==
+X-Forwarded-Encrypted: i=1; AJvYcCVfoThsUP5kByU9nUT97zsN+god43JcRr8fj2aOZe3Dfq+Ys3gv+6l42PawbsZDHJvIwUwtH0SnkfjhNTOzlbZW7wklT4UwaFMA
+X-Gm-Message-State: AOJu0YznvoU/x1kZzZC43GNnCcrw1bPiyNKWvP9jCw1wKPMii9FgR3mj
+	K6Tl8T2exZEjlsj8udIVTYE2ECO5eU8KxgS2Z3HCDieGDaGyDIwTUdnyGxjd+Yg=
+X-Google-Smtp-Source: AGHT+IGhwPu+Q2oxJ6EL93Dq/uuQN0NQLhyZbY884uXBca6OJ0LijbNlZgjt3A3mOMZBdiCsTv8nRA==
+X-Received: by 2002:a2e:9f46:0:b0:2d2:64ca:7a2d with SMTP id v6-20020a2e9f46000000b002d264ca7a2dmr1304324ljk.31.1709207542106;
+        Thu, 29 Feb 2024 03:52:22 -0800 (PST)
+Received: from ?IPV6:2001:a61:1366:6801:d8:8490:cf1a:3274? ([2001:a61:1366:6801:d8:8490:cf1a:3274])
+        by smtp.gmail.com with ESMTPSA id bj12-20020a0560001e0c00b0033db0bbc2ccsm1690355wrb.3.2024.02.29.03.52.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Feb 2024 03:52:21 -0800 (PST)
+Message-ID: <7a48c332-acbe-4677-b189-9dda01151d18@suse.com>
+Date: Thu, 29 Feb 2024 12:52:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5040:EE_|SJ0PR12MB6735:EE_
-X-MS-Office365-Filtering-Correlation-Id: 22c65426-ec2c-481f-471e-08dc39132555
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	jjuldX37fSpG6CgAHzD503Tj8MtZenDtDLxrCsfylL9A/QYPsAQ5t4My76gFNfr41pX7EuKoF/Wo3KkWfLLs46xai8uwGbXAgo+Kj20r5QpVnVcsTMvrfFsXgDBiQBGTMUdF40Ln9NkbKDx/lmtI1tb4Kr14xhZOCE6iSK+sB7tWivQoVYsVvFZ0TE0qTIwHHjWQ7ObQDPQUDGHGg478SCg6WPjujRQpdMFQcP4Irr1e1g0kkGzj36MfFd0SwNwiRixUjXxdFCKqV9qdb9pU0l9KSulZJ4XBZoQYrk7KSuSzLdFv+KkfhgPUEaOAvMqIUp90Q1+SOxv4iGYySto8aVOD3vO7GEqKnKMhFUlO3Wx7yDu+aN9tmUpGIdSdwSVTxq1CcikBKNtCAx4UpZ+Y5mLO1mbSQh0bgH9mOl29B5p2GtVfDj8OzQJXXjWAMpfKybvF4eVvzDAUUIrbcg1/TNus9DnrjTnZeyTpuD1h5K3IYqMk1BnX7222EYiuLpOkbwW53eNZgK0EhnN3LNMxXjaPUm1Fjsga6SUqwcBNqXTlyV6CK9f1ysrGFt1L0kI2ZtYenB2Ikzc3qXdqHAddrw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5040.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Y1VtNTJ2TjNTT21KMVRucThQRHlwSmI2ajFOdDdjdWZnMzd1ZHlQaXFGRkxD?=
- =?utf-8?B?Uk1TZ1gySldRLzBoYlVVL2h1QUVhOENtVFFXS1pYMUt6Z0syOFhUNmw3eVRT?=
- =?utf-8?B?T3RaSGJoZTUzNnVzaXZwYURGSWxWMXhwOFlZNmgxRnZ0ejVSdEZoS1JzVkdx?=
- =?utf-8?B?eXJQaFR4TW1OdHIyaWZGRW1LZ2JtdG9DUHFEeFA4TWYvUEhGZEpQd3VTbnBG?=
- =?utf-8?B?cU9ZeEVXOVQrK3pWc1RuazBqeDhvcmxScTc3anI5QkpIUUdGSTF3Rks4eU53?=
- =?utf-8?B?TThBQTJUbVhQQ3FBK3dpWGxBdHZPYmxidlNMNlFrcklBaFlyY21xRGxTdWlH?=
- =?utf-8?B?RE9vOExBVmFtN2duaElCOCtlOWlEajZVR3ZIQUt1cjgwMG5oSlVGa0FzZE54?=
- =?utf-8?B?STNHb3p0RmkzWTJGRzZLUGh6Q29FcDcrVXhqak00akZPcVRvVlRDalUzQkVo?=
- =?utf-8?B?aU1QYWNtQjZhS2NxZm1XdVZCNWdTYzhOdWxrRmJlK0JVaDI4dkxJd0JpZ0FR?=
- =?utf-8?B?Si84RG5xMkZ2aGhWejhUNXF2M0dCazNlSVh4NDgvUWZxanBJaml2QjlGZkZU?=
- =?utf-8?B?bXRvdTJKakk2Tmc0azBGbEVUWnVUTEYwZlNhMUVvK1I3d2N0YXhSWVV1cTVO?=
- =?utf-8?B?ZzVYODZpbVNmaXZRODMwc0daenJIVjFhSngybzl4QlkwQllKVWNJSzBubGxs?=
- =?utf-8?B?VjgzMW5OVXRXblhTcTFVN2ZvbWcrNWN3cm9JV0dKYnpZS3gzcEZPaENkOFZh?=
- =?utf-8?B?eWlscCtrUXNKZm1KUWVqeStkTStKMkNOOVZpd0RIUFdFci9WcWFVT2g3cVBZ?=
- =?utf-8?B?MzJoYWtXYkZYRm1ONGdRVXJnbTFGQ1l6SnRjdnJUNUcyVUF1VDZqWmx0dGpT?=
- =?utf-8?B?dkl0UzdzVjJYYllROE1xaEkrSnRDTTh5L0UvZUNiSVdIc2RDU2toWVdYczlC?=
- =?utf-8?B?cDYreGpMUnFDS3lPYU1SRjJXbjlaQ0Q5Z2xGUk1lYW9pa2NzcnZGUC8vT1FP?=
- =?utf-8?B?MlYyRWprMFQ5OGR0b2FDeXovS1JyOWF4NlZBeDZaaFVGaCtaVzg1akFTSnhq?=
- =?utf-8?B?dVVSVEtwdzBtWlRxa05WT3dQRFg2WTdGcTlhdm9hZ202elNwZm4yUitDdzJH?=
- =?utf-8?B?dUZNcmZ0b3Zxc3AxbTZYZllNZWVPcHRNenJ3ZUVXWktIaXFaNG9JTWM5RUNr?=
- =?utf-8?B?Nmxjc2ZVclNNdGZiU3gwY0JFZkN4MXN1azAwa0VtMVR6Tmo1M2FyTW9SeXBy?=
- =?utf-8?B?OHdmR25HbHI3M1ZuZStuQXFrQUwwT0xLaWdTaVNLajJvMWxvMzNPcmEwR1VK?=
- =?utf-8?B?ajlLdmNibEJsYWlUcWpxMHgyeDlnV2pQMHhqYjVWL1VJeTFMNzRBVXNBMHJz?=
- =?utf-8?B?N3NVbFcwKzVHNmdRNTBwK3E0blBscG9qckpFTHZRSlUwcjBsYWhRS202ZFdv?=
- =?utf-8?B?RlFEY0FISGZXdk85YnFCbUt5SVFYcVZudEl1QVFxSCtEMlc2ZWxiUTVDODBC?=
- =?utf-8?B?NjhlMUtPN0tlRFkxSnphbDNyMHRpeXhybURNUmIxb0t4eFRGRlJWWFJxdnBY?=
- =?utf-8?B?M3BXWS94eWpISzFGQWVLY3BzWWlwL043RTA1V3Z3S3lwdGZtQmJCQUo0bEUr?=
- =?utf-8?B?WmN4cmtVOFdJT2x3emtXczhZbjhSZWhsL2loanhSQUN5RTZ6NkdIbCtGd1BU?=
- =?utf-8?B?WUFyNUFTWXF5VEU3RithMW1pczRNSW9Ua0RYNklDQ0NuK21LTmFlNktXZHBz?=
- =?utf-8?B?UmF2cC94cWFsUjR0elRPcS9QeC8zaFcydG9lbnBsSUtjVHdWY1RKRG4wZjky?=
- =?utf-8?B?QzRnZXQyZkJIeW1GemloaHBZREZxZjkzb3QveFVzbnJBMHphYXVuenhHbDJN?=
- =?utf-8?B?SG43RHlHaTV2L3BPWjdVNnc0TGd6RDRrZnhaRWo0Tm5QaFJiYXlycnZuVmJB?=
- =?utf-8?B?SVFrY0oraDJaaDM3cGtmQmJUaXhKaVQ3bklRVUorUjFWKzhuSXcvaVp4UWFz?=
- =?utf-8?B?WmNudm5RY0MzYzZKeUg1NUJTeUxmRm51NGNhaE5rbWJJazRtd2xvQ2xLOTgw?=
- =?utf-8?B?REwyZE5XOElRZDdXcDVwa0VuZzdTTEVWSDYxTlRzMWgyTll4STBabzBHUy80?=
- =?utf-8?Q?G4CUAoCS81sykOGH1e1xR+HG8?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 22c65426-ec2c-481f-471e-08dc39132555
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5040.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Feb 2024 10:42:37.6883
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lTqVV8xQC0j8FLO5Kx9guaB3Xdd9V5eklZ2b5ZSDw0usymBjralwPWZaeJdprzBgF130OHzfdzfeCCWwbma1Yg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6735
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] USB:UAS:return ENODEV when submit urbs fail with
+ device not attached
+Content-Language: en-US
+To: Weitao Wang <WeitaoWang-oc@zhaoxin.com>, oneukum@suse.com,
+ stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-scsi@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+Cc: WeitaoWang@zhaoxin.com, stable@vger.kernel.org
+References: <20240229193349.5407-1-WeitaoWang-oc@zhaoxin.com>
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20240229193349.5407-1-WeitaoWang-oc@zhaoxin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-On 2/29/2024 3:16 PM, Mathias Nyman wrote:
-> On 26.2.2024 17.28, Basavaraj Natikar wrote:
->> The AMD USB host controller (1022:43f7) does not enter PCI D3 by default
->> when nothing is connected. This is due to the policy introduced by
->> 'commit a611bf473d1f ("xhci-pci: Set runtime PM as default policy on all
->> xHC 1.2 or later devices")', which only covers 1.2 or later devices.
->
-> This makes it seem like commit a611bf473d1 somehow restricted default
-> runtime
-> PM when in fact it enabled it for all xHCI 1.2 hosts.
->
-> Before that only a few selected ones had runtime PM enabled by default.
->
-> How about something like:
->
-> Enable runtime PM by default for older AMD 1022:43f7 xHCI 1.1 host as
-> it is
-> proven to work.
-> Driver enables runtime PM by default for newer xHCI 1.2 host.
 
-Thank you for the rewording. I will change accordingly.
-
->
->>
->> Therefore, by default, allow RPM on the AMD USB controller [1022:43f7].
->>
->> Fixes: 4baf12181509 ("xhci: Loosen RPM as default policy to cover for
->> AMD xHC 1.1")
->
-> This was already reverted as it caused regression on some systems.
-> 24be0b3c4059 Revert "xhci: Loosen RPM as default policy to cover for
-> AMD xHC 1.1"
->
->> Link: https://lore.kernel.org/all/12335218.O9o76ZdvQC@natalenko.name/
->> Cc: Mario Limonciello <mario.limonciello@amd.com>
->> Cc: stable@vger.kernel.org
->
-> I'd skip Fixes and stable tags and add this as a feature to usb-next.
-
-Sure, I will remove the above Fixes and Cc tag in the v3 patch.
-
->
->> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
->> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
->> ---
->> Changes in v2:
->>     - Added Cc: stable@vger.kernel.org
->>
->>   drivers/usb/host/xhci-pci.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
->> index b534ca9752be..1eb7a41a75d7 100644
->> --- a/drivers/usb/host/xhci-pci.c
->> +++ b/drivers/usb/host/xhci-pci.c
->> @@ -473,6 +473,8 @@ static void xhci_pci_quirks(struct device *dev,
->> struct xhci_hcd *xhci)
->>       /* xHC spec requires PCI devices to support D3hot and D3cold */
->>       if (xhci->hci_version >= 0x120)
->>           xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
->> +    else if (pdev->vendor == PCI_VENDOR_ID_AMD && pdev->device ==
->> 0x43f7)
->> +        xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
->
-> This would fit better earlier in the code among the rest of the AMD
-> quirks.
-> See how this flag is set for some other hosts.
-
-Sure, I will make the necessary changes accordingly and send v3.
-
-Thanks,
---
-Basavaraj
-
->
-> Thanks
-> Mathias
->
-
+On 29.02.24 20:33, Weitao Wang wrote:
+> In the scenario of entering hibernation with udisk in the system, if the
+> udisk was gone or resume fail in the thaw phase of hibernation. Its state
+> will be set to NOTATTACHED. At this point, usb_hub_wq was already freezed
+> and can't not handle disconnect event. Next, in the poweroff phase of
+> hibernation, SYNCHRONIZE_CACHE SCSI command will be sent to this udisk
+> when poweroff this scsi device, which will cause uas_submit_urbs to be
+> called to submit URB for sense/data/cmd pipe. However, these URBs will
+> submit fail as device was set to NOTATTACHED state. Then, uas_submit_urbs
+> will return a value SCSI_MLQUEUE_DEVICE_BUSY to the caller. That will lead
+> the SCSI layer go into an ugly loop and system fail to go into hibernation.
+> 
+> On the other hand, when we specially check for -ENODEV in function
+> uas_queuecommand_lck, returning DID_ERROR to SCSI layer will cause device
+> poweroff fail and system shutdown instead of entering hibernation.
+> 
+> To fix this issue, let uas_submit_urbs to return original generic error
+> when submitting URB failed. At the same time, we need to translate -ENODEV
+> to DID_NOT_CONNECT for the SCSI layer.
+> 
+> Suggested-by: Oliver Neukum<oneukum@suse.com>
+> Cc:stable@vger.kernel.org
+> Signed-off-by: Weitao Wang<WeitaoWang-oc@zhaoxin.com>
+Acked-by: Oliver Neukum <oneukum@suse.com>
 
