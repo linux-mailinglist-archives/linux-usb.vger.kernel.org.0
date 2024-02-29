@@ -1,145 +1,171 @@
-Return-Path: <linux-usb+bounces-7295-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7296-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEB7C86BF64
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 04:20:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B852786C042
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 06:39:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 798991F24897
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 03:20:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 659FE2886D0
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 05:39:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49840374FE;
-	Thu, 29 Feb 2024 03:20:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 648CF3A1CF;
+	Thu, 29 Feb 2024 05:39:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jqym7Tg1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7882D36B17
-	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 03:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488F737169
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 05:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709176808; cv=none; b=b//c7Z3vlbTd01zmc+0YiCafxzXtQvjEzIAPXdUm+nx8LxNnSUfznO4yU5iEOd74qlIt7BHOZIuoBJ6ukUqw8FWmHzT0D58f+ujWjKYEQVFePKlmFNP3BkQFlncGV+gUqWTGwUUSj5/fot/FN0GkHapmXYWurK6ZcEghbchISTU=
+	t=1709185173; cv=none; b=RfbEBXJ8ULFrjPGDWRTWIaq2cmOcHGtXqL2R+Hmxdqd9A2xZeu89rql20Q2fG9iqG+hrRpB2BzrOVM32Azsy6U+S4aRk4DgbRRP49cXiV+lol6I89bzOJjRmAt44NbtBM/hlz6Jy5Kuj6RyZ1hTirv0peneOH1n6yhzS5zAOIHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709176808; c=relaxed/simple;
-	bh=nWI0xfyfsyOczyWzPno9G0ANgOD4EpWps6XT4tWG26c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=JY9feEQz0r6uqYiPnqfCffjSQcS4V1ej9Z3fzWvHdUk0CNNRGOiUsJ8/7is+E4DMJbbg/pPNQmMK6qvVxHqKcE3Oga6fzT2rx8ma+NSh8XlPdmoPxZpp5Dazw60ABiA6EyyJZ8Sntxea5YuEoUwABtwEW8vj6VnGyFAViwVVZn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-X-ASG-Debug-ID: 1709176794-086e2316ed02390001-YVMibp
-Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx1.zhaoxin.com with ESMTP id 1NWDjwmQUgYZ1sxI (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 29 Feb 2024 11:19:54 +0800 (CST)
-X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
- (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 29 Feb
- 2024 11:19:54 +0800
-Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 29 Feb
- 2024 11:19:52 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Message-ID: <0b0eefa5-71b6-dc08-d103-72b9aebd9237@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
-Date: Thu, 29 Feb 2024 19:19:49 +0800
+	s=arc-20240116; t=1709185173; c=relaxed/simple;
+	bh=EsxsnbPqiZjzkHF5tNGjOGGwIvJ2cR/P3zf36x/M62k=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=QHiICNC/z0LN/RcuSPc5BfsQxSVz0G4eplidIDegIjByeyljb2OaKkN/4M5VUy5jAkBr6gtjKGRXBb4+rowUCY7GvORbOkCHpv7a2P7q4CTpSQ3UOmgWJMU80gewJ1KI+FWLspNmliEHLizy5xGCqbEqf1zpPtzPulwAY4p0ncM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jqym7Tg1; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41T5bRFe015145;
+	Thu, 29 Feb 2024 05:39:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:from:to:cc:references
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=ElyAd+0EdlcRej+uODWvd1jB02TYQ55Od+ThOAmORQk=; b=jq
+	ym7Tg1VEIXd291RiRZUTnOWli7nnyChmZ0ZXZEYGjKvriEAjgjelAVIZIodDs/Pp
+	FoVSyXfbI64Sf533dsWrZXGZqkTbuL0TJi+9gWSy/9xMSYRc31Vxekxp9S+LuP6l
+	2MaSWz8ehImdE0HBlJl8Tf0THbRWwhCcSWWdVh7g+kMac2SFQt3XxyCb+VeKjR4f
+	4Zaqv6HH3XYM5PowlXI8wAthlXgIGPQBet+/eE8ncsRGkMOlQw5kb3G/wJcY6hDT
+	6xvl6FJ+f2nkAOYOC4ZIhUCTxuV8Jzp4TkouQGT5O9SHM5OaKByuM9aQ1AN/3hRT
+	p62BiKyEuz/5NFjtorGw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wjb18137t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Feb 2024 05:39:28 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41T5dS0e010437
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Feb 2024 05:39:28 GMT
+Received: from [10.216.13.176] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 28 Feb
+ 2024 21:39:25 -0800
+Message-ID: <d3c5d9bd-07ec-4e6d-b0dd-2a7a76e0d4f9@quicinc.com>
+Date: Thu, 29 Feb 2024 11:09:21 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] USB:UAS:return ENODEV when submit urbs fail with
- device not attached.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] usb: gadget: ncm: Fix handling of zero block length
+ packets
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>
+References: <20240226112816.2616719-1-quic_kriskura@quicinc.com>
+ <CANP3RGf7qsuwcgVpmOoH0QNh-v4PjRh_xj7Rcz=YJ1TbGiPK0Q@mail.gmail.com>
+ <99d284b3-3ddb-4928-b4c2-817acc76c241@quicinc.com>
 Content-Language: en-US
-X-ASG-Orig-Subj: Re: [PATCH v2] USB:UAS:return ENODEV when submit urbs fail with
- device not attached.
-To: Oliver Neukum <oneukum@suse.com>, <stern@rowland.harvard.edu>,
-	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-	<usb-storage@lists.one-eyed-alien.net>
-CC: <WeitaoWang@zhaoxin.com>, <stable@vger.kernel.org>
-References: <20240228111521.3864-1-WeitaoWang-oc@zhaoxin.com>
- <e8c4e8a3-bfc3-463f-afce-b9f600b588b2@suse.com>
- <07e80d55-d766-1781-ffc9-fab9ddcd33e3@zhaoxin.com>
- <49a365a7-199a-42cd-b8d3-86d72fe5bca6@suse.com>
-From: "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <49a365a7-199a-42cd-b8d3-86d72fe5bca6@suse.com>
+In-Reply-To: <99d284b3-3ddb-4928-b4c2-817acc76c241@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
-X-Barracuda-Start-Time: 1709176794
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1699
-X-Barracuda-BRTS-Status: 0
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: 1.09
-X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.121467
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------------------------
-	0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
-	3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MwZqClPJ1-r7j4lkgQVuW6Vgo3xn2SjC
+X-Proofpoint-ORIG-GUID: MwZqClPJ1-r7j4lkgQVuW6Vgo3xn2SjC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-28_08,2024-02-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=605 suspectscore=0 priorityscore=1501 clxscore=1015
+ bulkscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2402120000 definitions=main-2402290042
 
-On 2024/2/28 22:47, Oliver Neukum wrote:
 
->> I'm not sure I fully understand what your mean.
->> Whether the above code is more reasonable? If not,could you give me some
->> suggestion? Thanks for your help!
+
+On 2/27/2024 8:10 AM, Krishna Kurapati PSSNV wrote:
 > 
-> You want to change uas_submit_urbs() to return the reason for
-> errors, because -ENODEV needs to be handled differently. That
-> is good.
-> But why don't you just do
+
+>>
+>> In general this is of course fine (though see Greg's auto-complaint).
+>>
+>> I haven't thought too much about this, but I just wonder whether the
+>> check for block_len == 0
+>> shouldn't be just after block_len is read, ie. somewhere just after:
+>>
+>> block_len = get_ncm(&tmp, opts->block_length);
+>>
+>> as it is kind of weird to be handling block_len == 0 at the point where
+>> you are already theoretically done processing the block...
+>>
+>> I guess, as is, this assumes the block isn't actually of length 0,
+>> since there's a bunch of following get_ncm() calls...
+>> Are those guaranteed to be valid?
+>>
 > 
-> return err;
+> I did get this doubt and tried it. I bailed out as soon as I found out 
+> block len is zero without actually processing the datagrams present and 
+> when I did that even ping doesn't work. Everything works only when the 
+> datagrams in this zero block len NTB are parsed properly.
 > 
-> unconditionally? There is no point in using SCSI_MLQUEUE_DEVICE_BUSY
+>> I guess I don't actually see the infinite loop with block_len == 0,
+>> since get_ncm() always moves us forward...
+>>
+> 
+> The infinite loop occurs because we keep moving the buffer pointer 
+> forward and keep processing the giveback until to_process variable 
+> becomes zero or one. In case block length is zero, we never move the 
+> buffer pointer forward and never reduce to_process variable and hence 
+> keep infinitely processing the same NTB over and over again.
+> 
+>> Maybe your patch *is* correct as is, and you just need a comment
+>> explaining *why* block_len == 0 is terminal at the spot you're adding 
+>> the check.
+>>
+>> Also couldn't you fix this without goto, by changing
+>>
+>>    } else if (to_process > 0) {
+>> to
+>>    } else if (to_process && block_len) {
+>>      // See NCM spec.  zero block_len means short packet.
+>>
+> 
+> I will test this out once (although I know that looking at it, it would 
+> definitely work) and send v2 with this diff.
+> 
+> Thanks for the review.
+> 
 
-I got it, Thanks. New patch would like this sample:
+Hi Maciej, Greg,
 
-@@ -562,9 +561,9 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+  Thanks for approving v2.
 
-  	lockdep_assert_held(&devinfo->lock);
-  	if (cmdinfo->state & SUBMIT_STATUS_URB) {
--		urb = uas_submit_sense_urb(cmnd, GFP_ATOMIC);
--		if (!urb)
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+		err = uas_submit_sense_urb(cmnd, GFP_ATOMIC);
-+		if (err)
-+			return err;
-  		cmdinfo->state &= ~SUBMIT_STATUS_URB;
-  	}
-@@ -582,7 +581,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
-  		if (err) {
-  			usb_unanchor_urb(cmdinfo->data_in_urb);
-  			uas_log_cmd_state(cmnd, "data in submit err", err);
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+			return err;
-  		}
+  Not sure if this is the right forum to ask this question, but had one 
+query. In the NCM driver, the register_netdev is called during bind but 
+the cleanup for that is called during free_inst. Meaning if usb0 
+interface is created for ncm on bind or a composition switch into NCM 
+(first comp switch after bootup), then it is removed only after removing 
+the entire g1/functions/ncm.0 folder.
 
-When alloc urb fail in the same function uas_submit_urbs,
-whether we should replace SCSI_MLQUEUE_DEVICE_BUSY with generic
-error code -ENOMEM? Such like this:
+  Shouldn't we cleanup and remove the usb0 interface in unbind as a 
+counter operation of bind ? By extension this question also applies to 
+f_eem/ f_ecm/ f_rndis where it was done in similar manner. So was 
+wondering if anyone could help me with info on why it was designed that way.
 
-@@ -572,7 +571,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
-  		cmdinfo->data_in_urb = uas_alloc_data_urb(devinfo, GFP_ATOMIC,
-  							cmnd, DMA_FROM_DEVICE);
-  		if (!cmdinfo->data_in_urb)
--			return SCSI_MLQUEUE_DEVICE_BUSY;
-+			return -ENOMEM;
-  		cmdinfo->state &= ~ALLOC_DATA_IN_URB;
-  	}
-
-Thanks and Best regards,
-Weitao
+Regards,
+Krishna,
 
