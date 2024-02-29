@@ -1,184 +1,121 @@
-Return-Path: <linux-usb+bounces-7301-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7302-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8942B86C2B2
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 08:45:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D827186C325
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 09:09:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD6481C21389
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 07:45:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 418AFB229FB
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 08:09:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C26146452;
-	Thu, 29 Feb 2024 07:45:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAB1D4EB3F;
+	Thu, 29 Feb 2024 08:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cHDNc0b6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outgoing.selfhost.de (mordac.selfhost.de [82.98.82.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25AB044C7A
-	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 07:45:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.98.82.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1821C4EB38
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 08:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709192725; cv=none; b=Wb9raXGpSee8EkZylhAsRizWzochjL3tfpSGOp9D6XX4DjD2m/PFVdDwDL1TvaF8NNRkP4UhxYP3QDOJP1N4tfRvdv8CynKPQdYVlOYb+PbJWLqcpOkN5e8yVdqyyaOUQ6COYlaA5rea/VOLzzDfCeVfdTJQ98qx1dPUbMLFoBQ=
+	t=1709194145; cv=none; b=FRdd3vWGMNuikHHvRxiVNOudPFTCunoVkoaxvmZTIJH7e3lmVdi+RIAfCna/SU9hwSxJLRehzFPHZ6/bIlmfO2QU1RNl73bGFt5z6RcdFFJ03p+Evydl540d2ZJ5BggIRZC5b2pb0tb5VSljcOP/Fi/LVSQKENtNu89nNE7DBXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709192725; c=relaxed/simple;
-	bh=swhnKb1Lrg7YCL9NUp9cw43A99bJtWKjli84bTdku6Q=;
+	s=arc-20240116; t=1709194145; c=relaxed/simple;
+	bh=kurHTtq2rspvJgMv43M46KVUb0L5q+U22TYTVcEIAOs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ucEax2nt7AmkVIm56CiuEgoYJcaQrQaV5+UMIzaZewBXlCQpGRjCsJsogSRkuh1dPw4yifVk58dJwrKFLHVwTICRM7jMMARgpeLbL17395F4thCesZHohCxgf40NtaM2rJo+RYN1T534xuvq4H4Ij/uYhjgXhwmKyypp9MLJ7nU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=afaics.de; spf=none smtp.mailfrom=afaics.de; arc=none smtp.client-ip=82.98.82.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=afaics.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=afaics.de
-Received: (qmail 19467 invoked from network); 29 Feb 2024 07:45:20 -0000
-Received: from unknown (HELO mailhost.afaics.de) (postmaster@xqrsonfo.mail.selfhost.de@79.192.199.18)
-  by mailout.selfhost.de with ESMTPA; 29 Feb 2024 07:45:20 -0000
-X-Spam-Level: ****
-X-Spam-Report: 
-	*  4.0 RCVD_IN_PBL RBL: Last ext relay in Spamhaus PBL (Non-MTA IPs)
-	*      [2003:e3:1f31:6503:8865:8fff:feb7:694d listed in]
-	[zen.spamhaus.org]
-	*  0.0 HELO_NO_DOMAIN Relay reports its domain incorrectly
-	*  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
-	*  0.0 DMARC_MISSING Missing DMARC policy
-Received: from [IPV6:2003:e3:1f31:6503:8865:8fff:feb7:694d] (p200300e31f31650388658ffffeb7694d.dip0.t-ipconnect.de [2003:e3:1f31:6503:8865:8fff:feb7:694d])
-	by marvin.afaics.de (OpenSMTPD) with ESMTP id 177fc628;
-	Thu, 29 Feb 2024 08:45:20 +0100 (CET)
-Message-ID: <7a10ff3b-0c4c-4aa3-8218-02d5f27ab062@afaics.de>
-Date: Thu, 29 Feb 2024 08:45:19 +0100
+	 In-Reply-To:Content-Type; b=Nbu3vfXOZQnk4vgnXMgUq+7wEy5EjRfqTZIJBp1LRUu2/3U25Z5OiCzDrVr48WZEFqj0RMnaGCa7f5w4PoMTXQegbWVU+iVOJYmBnEujADHi8hxzD90sVfKCi33HNypJbMg9m8/IJkzQ+XJociuZqeDimYewCSe87v6380Cr6MM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cHDNc0b6; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d2ab9c5e83so6700311fa.2
+        for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 00:09:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1709194141; x=1709798941; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+6fUyesk9XtuEUwAKGfVFcYKYn8nCxiz5t4vTL0pI4o=;
+        b=cHDNc0b6X2W23utcpiCwLBIqvSth4LUen5f9nw77arxlFGQBjpPQ5ivkrduHmTigXF
+         cHLxCZtjh8n/2QvtIUVLmTsVgIUdIt5ljDko64YcwP4X3K9XOBnOta4REycdFwlusVHi
+         mvSy0SjFToBz6RdCd+hMdpF1ZNjT7AjmlbMBL2iL6EpnYwaOKPC6ZSbKqdsPZJX2xtUo
+         JDKrdRW0F6jENZJ/9SD/Akvxlb1acvsVNIMSepB6ynsCV8kQaxpC7PWu+mdG4qutEixq
+         rZNfYdJbs2ZQrB23pZWW13wD1Sim9ceJBxZZFkDhyfzMBPNi6TJpDUVJOAVaOuEQTjI3
+         4/sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709194141; x=1709798941;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+6fUyesk9XtuEUwAKGfVFcYKYn8nCxiz5t4vTL0pI4o=;
+        b=Nr2UO5iT1bu9uB1Jjcrh7x54bhEHS5B3IImwF/uEXNBpCeJdcTMpskxUzQSpUxpOLY
+         ntpZ0HkgaCsvpaQJGVTzWchI2lTCEmfBMrGr8CZI2LHdI8KOcsbNFNSMSOVHi7rcw/xe
+         rpBm3SWJHZ5/IAh9TR7aogc0CztJnFsayKcZgXk5pCq2ehZXLAFObFfXb2w3Zy85fmOS
+         DNyqu8AKQN9UdIcbvUvGiRzOB+jxqFpwMfdBn2QCv86nMKZC2HZ/oHz2TI+xWppO7h09
+         dlifDMJ+gwS9SVxY5j02XVKnx8WOWtiRpnQM3i1ptDIU6+72fedsQ2J91k2Ff+Lhrxfh
+         NXJA==
+X-Forwarded-Encrypted: i=1; AJvYcCWglMhsqBhB4Hy/CHAiqe5V64UvYQW/ptHMi/vKFgXGW5+i+V+DbIvbp9Z72fmS3RJjiShbUibpRIFGPRWmMhX9pJA++Uv0MH4s
+X-Gm-Message-State: AOJu0YynvWzRj8g310a3zBb1xLCbOy+gUjRYHtPnNiNrFK/hji9Bgcib
+	w8qnFFrqt7HWTTNdL81hMnFKTYs4eitwEbO8NvyAIxt/yo4LKGCkFdGAMwEgWik=
+X-Google-Smtp-Source: AGHT+IEioEBenaGBregM2gF1RR+HQbJWqUnI/Hp2B6pwGbY54Du2S+X2nxQx2LKNChi6zePmii8/pQ==
+X-Received: by 2002:a2e:bc1f:0:b0:2d2:8290:46ff with SMTP id b31-20020a2ebc1f000000b002d2829046ffmr971230ljf.50.1709194141302;
+        Thu, 29 Feb 2024 00:09:01 -0800 (PST)
+Received: from ?IPV6:2001:a61:1366:6801:d8:8490:cf1a:3274? ([2001:a61:1366:6801:d8:8490:cf1a:3274])
+        by smtp.gmail.com with ESMTPSA id jn3-20020a05600c6b0300b004128e903b2csm4375201wmb.39.2024.02.29.00.09.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Feb 2024 00:09:01 -0800 (PST)
+Message-ID: <9263b77e-9ebe-4987-bf7f-8f9fafcf06b3@suse.com>
+Date: Thu, 29 Feb 2024 09:08:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Linux)
-Subject: Re: RIP on discard, JMicron USB adaptor
-To: "Martin K. Petersen" <martin.petersen@oracle.com>,
- Harald Dunkel <harald.dunkel@aixigo.com>
-Cc: Keith Busch <kbusch@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
- Jens Axboe <axboe@kernel.dk>, Bart Van Assche <bvanassche@acm.org>,
- linux-block@vger.kernel.org, linux-usb@vger.kernel.org
-References: <70bc51d7-c8a2-4b06-ab7a-e321d20db49a@aixigo.com>
- <62296d89-f7e6-4f54-add8-35b531dc657c@rowland.harvard.edu>
- <Zd9Xbz3L6JEvBHHT@kbusch-mbp> <yq1sf1c1h0x.fsf@ca-mkp.ca.oracle.com>
-From: Harald Dunkel <harri@afaics.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] USB:UAS:return ENODEV when submit urbs fail with
+ device not attached.
+To: "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>,
+ Oliver Neukum <oneukum@suse.com>, stern@rowland.harvard.edu,
+ gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+ usb-storage@lists.one-eyed-alien.net
+Cc: WeitaoWang@zhaoxin.com, stable@vger.kernel.org
+References: <20240228111521.3864-1-WeitaoWang-oc@zhaoxin.com>
+ <e8c4e8a3-bfc3-463f-afce-b9f600b588b2@suse.com>
+ <07e80d55-d766-1781-ffc9-fab9ddcd33e3@zhaoxin.com>
+ <49a365a7-199a-42cd-b8d3-86d72fe5bca6@suse.com>
+ <0b0eefa5-71b6-dc08-d103-72b9aebd9237@zhaoxin.com>
 Content-Language: en-US
-Autocrypt: addr=harri@afaics.de; keydata=
- xsBNBFIHbdABCACYHRLHGdFRk7bWkgdPhDLin6jLIS0ppegsx0Vc9STFyiHFUW+6HU9ZYTpO
- f2qbcWlE3YJYacy6zOiiTjYX31quhvGrP3UJXKjXsAp7CFsMxRJUhm20Ph0nCl/Oed9SDNXN
- HQJwHoOVWrsu/sGxNTfjCWRJleBE11P+TuuLOAP9dbqFbWhmkTsE9Lp9d16Ak77MWmWWxBvD
- cBsUuC2GOYDfFOPM3j16w7aw4Y9GI2B5QzFiHvOR/hCazfDEMQAlaHMm6sH8uzrjNEtB5dvm
- vxF8j/IpvsuvWGhZ68rej2gPwoVrRTEBaYslW8/5dm8o1HuTkuLqxhNTcvYWyV8uKRtTABEB
- AAHNH0hhcmFsZCBEdW5rZWwgPGhhcnJpQGFmYWljcy5kZT7CwHoEEwEIACQCGwMCHgECF4AC
- GQEFAlQYLhUFCwkIBwMFFQoJCAsFFgIDAQAACgkQCp4qnmbTgcu7Fwf/RoWwNDxJPD96vBFb
- Jzfta9qVA0JpbKoMAnNY0tDWiF5Ur8UY/tv/RDVV44Vx3Ef0fzQZN0CtHsNfAKO+KXBMUiuT
- AP4AadpaIwYMo8v+SmPzJSUxWgBm6IsHwn1udXRdEgdR9guWkLPRGCK3x84sorAOUnUHJHkq
- UrDFQUNfNA9lqM7ttunfVtG4SaqcLEOpJ1s/aMUsEODlP/lws42VjubIVg403cMIgvqs5cT8
- EjLDNqCwEoWZRhfpg5x3D5uNDNWSW70Z+6Knicbi129QIu4HtSnfrxiuvHz2LLPFOVQuj8h4
- TPT6tkfIURKipFXoIC3YiK8f94rFO3q86oNJUs7ATQRSB23QAQgA27gQiXZ96pbJkGoz1RWX
- T8WSQJ5TWVJyf4eswoVI8Ffk5vLE+xPpAYEDkL7JYGCvBN1BKrcaZzDy8Irfys6bHI3JmVVi
- ZloSkVS8QL7pQGfp74VT3NvDjK6LDe9QMv8Rb45laSRD5XCGRMTxz9pwu3vNcOPCfV5nmbyB
- /6h4/bguFH1+6aGz6HyC8v/tjhL6+cY329inJ+vWVJYssweMIIYpssUtDaPKZO0080toLLrt
- KuVgiUb9llbmZgKGElRjwgGT8AUXDRFCzn0ws/nuGNw0L+EdCI3VdZSK5KMEO34vZq7iNeM1
- ZVnPVZAbHheR30NFKTgrwvlt8G7blHJPWwARAQABwsBfBBgBCAAJBQJSB23QAhsMAAoJEAqe
- Kp5m04HLiiEH/jlKumVyQrOxH58iQFzVDthDfJdBLmnDlfVx2Dzn60vc5To6yJ3fwO21s3xC
- /LW9aZSfDueV0nWU4/Wow/X5GEH90Vc1sFoeSZb/GW03vsO1n/OFIVlv9GQv+RviWMDEwKKx
- CMvdqUlVblWf1iT/ngPN0YawKGF0Dgn8TRzfL/Tq9muwNUaONzz8PWBUIm1+8JDZszYLzLoz
- YiY0usL4GH9BCeW6XG2Q6j4cpyOQZ0VKiBs1Rh+dmswn+iXLfi08Q0IxYAD6wjHdJTBD9pE9
- 5Uj8/1spt51FBAAIP+7sd2mpAvsNnojatuOgjBmBxFwiOKeyDNe1wvKr4dsRheOLV8M=
-In-Reply-To: <yq1sf1c1h0x.fsf@ca-mkp.ca.oracle.com>
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <0b0eefa5-71b6-dc08-d103-72b9aebd9237@zhaoxin.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2024-02-28 21:19:25, Martin K. Petersen wrote:
+On 29.02.24 12:19, WeitaoWang-oc@zhaoxin.com wrote:
+
+> When alloc urb fail in the same function uas_submit_urbs,
+> whether we should replace SCSI_MLQUEUE_DEVICE_BUSY with generic
+> error code -ENOMEM? Such like this:
 > 
-> Please provide the output of:
-> 
- > # sg_readcap -l /dev/sdN
- > # sg_vpd -l /dev/sdN> # sg_vpd -p 0xb0 /dev/sdN
-> # sg_vpd -p 0xb1 /dev/sdN
-> # sg_vpd -p 0xb2 /dev/sdN
-> # sg_opcodes /dev/sdN
-> 
-> Thanks!
-> 
+> @@ -572,7 +571,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+>           cmdinfo->data_in_urb = uas_alloc_data_urb(devinfo, GFP_ATOMIC,
+>                               cmnd, DMA_FROM_DEVICE);
+>           if (!cmdinfo->data_in_urb)
+> -            return SCSI_MLQUEUE_DEVICE_BUSY;
+> +            return -ENOMEM;
+>           cmdinfo->state &= ~ALLOC_DATA_IN_URB;
+>       }
 
-% sg_readcap -l /dev/sdf
-Read Capacity results:
-    Protection: prot_en=0, p_type=0, p_i_exponent=0
-    Logical block provisioning: lbpme=0, lbprz=0
-    Last LBA=2000409263 (0x773bd2af), Number of logical blocks=2000409264
-    Logical block length=512 bytes
-    Logical blocks per physical block exponent=3 [so physical block length=4096 bytes]
-    Lowest aligned LBA=0
-Hence:
-    Device size: 1024209543168 bytes, 976762.3 MiB, 1024.21 GB
+Hi,
 
-% sg_vpd -l /dev/sdf
-Supported VPD pages VPD page:
-    [PQual=0  Peripheral device type: disk]
-   0x00  Supported VPD pages [sv]
-   0x80  Unit serial number [sn]
-   0x83  Device identification [di]
-   0xb0  Block limits (SBC) [bl]
-   0xb1  Block device characteristics (SBC) [bdc]
-   0xb2  Logical block provisioning (SBC) [lbpv]
-   0xde
-   0xdf
+yes, and then you translate in one central place for the SCSI layer
+into DID_ERROR or DID_NO_CONNECT.
 
-% sg_vpd -p 0xb0 /dev/sdf
-Block limits VPD page (SBC):
-   Write same non-zero (WSNZ): 0
-   Maximum compare and write length: 0 blocks [Command not implemented]
-   Optimal transfer length granularity: 8 blocks
-   Maximum transfer length: 65535 blocks
-   Optimal transfer length: 65535 blocks
-   Maximum prefetch transfer length: 65535 blocks
-   Maximum unmap LBA count: -1 [unbounded]
-   Maximum unmap block descriptor count: 63
-   Optimal unmap granularity: 0 blocks [not reported]
-   Unmap granularity alignment valid: false
-   Unmap granularity alignment: 0 [invalid]
-   Maximum write same length: 0 blocks [not reported]
-   Maximum atomic transfer length: 0 blocks [not reported]
-   Atomic alignment: 0 [unaligned atomic writes permitted]
-   Atomic transfer length granularity: 0 [no granularity requirement
-   Maximum atomic transfer length with atomic boundary: 0 blocks [not reported]
-   Maximum atomic boundary size: 0 blocks [can only write atomic 1 block]
+	Regards
+		Oliver
 
-% sg_vpd -p 0xb1 /dev/sdf
-Block device characteristics VPD page (SBC):
-   Non-rotating medium (e.g. solid state)
-   Product type: Not specified
-   WABEREQ=0
-   WACEREQ=0
-   Nominal form factor not reported
-   ZONED=0
-   RBWZ=0
-   BOCS=0
-   FUAB=0
-   VBULS=0
-   DEPOPULATION_TIME=0 (seconds)
-
-% sg_vpd -p 0xb2 /dev/sdf
-Logical block provisioning VPD page (SBC):
-   Unmap command supported (LBPU): 1
-   Write same (16) with unmap bit supported (LBPWS): 0
-   Write same (10) with unmap bit supported (LBPWS10): 0
-   Logical block provisioning read zeros (LBPRZ): 0
-   Anchored LBAs supported (ANC_SUP): 0
-   Threshold exponent: 0 [threshold sets not supported]
-   Descriptor present (DP): 0
-   Minimum percentage: 0 [not reported]
-   Provisioning type: 0 (not known or fully provisioned)
-   Threshold percentage: 0 [percentages not supported]
-
-% sg_opcodes /dev/sdf
-   SAMSUNG   MZVLB1T0HALR      3108
-   Peripheral device type: disk
-Report supported operation codes: Illegal request, Invalid opcode
-
-
-Hope this helps
-Harri
 
