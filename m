@@ -1,183 +1,90 @@
-Return-Path: <linux-usb+bounces-7281-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7282-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 896B586BC8C
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 01:11:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ABAE86BCDB
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 01:33:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACD481C211CC
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 00:11:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96949287C13
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 00:33:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED5587FE;
-	Thu, 29 Feb 2024 00:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hfIRHJaS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 332A712E5B;
+	Thu, 29 Feb 2024 00:33:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E68D2627
-	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 00:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793F5D2F5
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 00:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709165495; cv=none; b=lVaS+6HqAwBTSvOgZXQXENMBHwb6eSyGMI+D68MqXJwviXwAvUtrP4wMSngLJwWxxIg79rikzDJKaerS48CN6azfBbypZdXc3OhGKmbo72TL1XLDMiKIyFmlYyTPwYzxl0JhOyG3+upGFOXQxCTc2s10wYWSb/o4MH5kIFkZRcg=
+	t=1709166786; cv=none; b=b+rmnCMUSWCANKJ2gmXKB8GczGg+Fec2BGFkYeGYnskhmHZxHVivhORNwyljHXAkJos3umgkov6vp3Uh4cO91fuNETVnNz+23clPc5Lltlb5otGxQSJAhDLlWJwQ0+pjnXioxkt1jRh3+hpFeDPtovTV6lDGJyn0Np6OTZdNJ74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709165495; c=relaxed/simple;
-	bh=6R2p1tT69hwYIvRTpoq1HKWl4nCvoJdmLzAs09t2YNA=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=m4tQ/qtk8Iom5VuLFD8Q76bgZ0zAKUO2d0sLaW/63gnA8kMsmcKp2TR/9yPu4SO/s6XXTG/hbzDJyuRiE/JPfY5Hh+OGVFDwt97Sx5IRUCGo6rbxiFcsNu5JuCC2SqrYv5Obww6uG4SySn6qbh5IEnXTr8I8jxFgBxhjG/gYfRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hfIRHJaS; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-607e56f7200so3656437b3.2
-        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 16:11:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709165493; x=1709770293; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=MQFNdf2PLvi1nXh0+ziRXHczc9B2IYbLND0MkZadbyk=;
-        b=hfIRHJaS/FhRWEPk4+4rV3kzI8K9XDT1QJ5OoQCqxuRTK26mP0y0EZtISrkFdz2yr+
-         vKnk/CtVQLfXwMp8/AXm9eCTd/nGtbLp6Vrg9MNhhV2IxrZNa6VF3YYmsyl0bGSY4+3s
-         RhTsqqXoEXPKNMF92XjbszRT713eRvrPZQHROEW+Qzmv+xLQknH++3+nRldLQ0nOOtZa
-         pjv+ryA+kP7dwFvT0iJwK8SEq/Mx3FqZ+XBt6mx5HuKwH1ArhJOa/MR53s0JE2JZ0ptm
-         aYvye2hUp0ztCncAoqnIAfC0O0dyI7ig1yoAEnw+bopMs6sJFWDfrIs2jpt2b327Olo3
-         JtaA==
+	s=arc-20240116; t=1709166786; c=relaxed/simple;
+	bh=Jfy6IjRx/FSSVzO//9qWooWnRCudUP4MhW7bTV49z6Q=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=b6msI1+LzhQF6KurAeITO4kU9/8elBjRNpVM+Yr9pqxCZQK8OTxbWZkievH5E5soaU2JGeRN2RvVmuT7abeH3y8lL125mV2aUaae3T5S1DHw9jvIpxDm/NHRS5wRm7HPJDZVDBvsnhAdVLmrW2q+8ahcw6j3Sg/v/O87ABAJPJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3657ae3e87fso5034895ab.2
+        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 16:33:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709165493; x=1709770293;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MQFNdf2PLvi1nXh0+ziRXHczc9B2IYbLND0MkZadbyk=;
-        b=Iu4I2N4r+hXQiw+Fn6o4EMo5g24fJTZhMCkOiTqqviJcQgeHhMSdrUxQvA3kpAuJSs
-         9UiSxvLulHJx9RzxeohuTj+k5Hnsndkf1Rvkv9JbP7LsYotLUij5UcqXvOUAWRnAe4Zp
-         WbG9DlYpiFUTXihnUiKBZrHWEr8hvAsa4hv8gz7iFAkiy9eUEJtXEtYdIXluB5g0ucrb
-         gyzPp3+Dk5HEKyyMejWARI53ixd3KBgZKpqWFnN85NV+AUWfNfRTxwjfRc0nPJG0NNi0
-         V3ssCm/Jpx2nLRwOOuXR3Y8qUZsDJRwAzXL77R6uEouDraS40j//lXz2GD3rq/JpYMox
-         2PDA==
-X-Forwarded-Encrypted: i=1; AJvYcCUhRvu7OSdJcueUJp82Cl5SqpqUdnSNcsROw6sidpdEi9Q2Lv7H3Dc/iNdg/eydUkx6oUfVHeoABc1fex9AXUQl91+D2F8+lqZU
-X-Gm-Message-State: AOJu0YyZNiqxPPcu4nnpOxLZArK0ckVGqTW4ap9HFgQySOmBgf/yfmiV
-	dwRzg4r3PAJYhE+8vesgL4V65MKn5xGhpBRVhR9Xi3y9Rut6r+m6tSQzvz1RjCHe85KpcUOtmOx
-	/ZG6BMzGGfx58Dw==
-X-Google-Smtp-Source: AGHT+IGkhwIscE8/PuxWoKHW7c397dn2BWKxSf4SZvT89th3wJ8CWp82+PlXbcGph7FbhavNsjH1Lf+pBUQU/pQ=
-X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
- (user=rdbabiera job=sendgmr) by 2002:a05:690c:3606:b0:609:e1f:5a42 with SMTP
- id ft6-20020a05690c360600b006090e1f5a42mr117833ywb.2.1709165492995; Wed, 28
- Feb 2024 16:11:32 -0800 (PST)
-Date: Thu, 29 Feb 2024 00:11:02 +0000
+        d=1e100.net; s=20230601; t=1709166784; x=1709771584;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0muDEbmiXwsrbOFIxJLnIjoJRKmx4ahL9Ls0vOb96tI=;
+        b=Vwm6ruJocd61PGr6kAr7+tqADl8J/EIvsMny2iXa1fbkDjSw+y7eSKyd3GY9odLDiE
+         K09ucaAxA7pbYaNsZ7APmJva3k0MXl87PulgMnzlMAcV0M12mDrazHoexrbKOjMmCs09
+         m1XB/AGG2h8yo6rtV8ye/ucMUlhJtWP4tRttMHnZ2xNs1IwngjYTfgeraZOBZ//jPy2y
+         2JdMBhnolhV6W0+9+tcpDomAEEYYKVvIJD7+MNnFoc8ECnJj1cHisX0C68VZcctb6TAK
+         2EGp6y7WBQXDSrS4r+IDk9H44PuoS9drOmW87Io5CVDxSexiG/PwmdBpohunZFuLUzyu
+         p+Mw==
+X-Forwarded-Encrypted: i=1; AJvYcCWW6XCf/UjIUaill9Z7argvtf6yTbE/22U3IK0qyNaaiZv6VnFD8WVRDlCn/kPfgjJBZDWBwQ8wgR4ZOja2egHhSEuHN5mXJb17
+X-Gm-Message-State: AOJu0YwRz4nG50b9TU2r5B/NJ+D3QzrMjXptO5heE5noNoYtSqHpX4qz
+	QbhbWGOVdn3C4M4uUqkcxO8je1kspfed1OoVe7cs4mR+dWBUZrTc8Mgm5XLDKkaJ4jqLPSVuC8L
+	gpEfkiH+FbZGcQDBeLYF/zc5mVB14S7M/yUb8zGtr9sMp/i48e71PAA8=
+X-Google-Smtp-Source: AGHT+IFFoDjZa8al1Bx+sZkkysb9j6nUdYOliwAkJdFhkvEoCOjjuVFT5GoU0wlCz5QJGhY1RCmD052ceSyoFBQZaimruE/VsGA0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3202; i=rdbabiera@google.com;
- h=from:subject; bh=6R2p1tT69hwYIvRTpoq1HKWl4nCvoJdmLzAs09t2YNA=;
- b=owGbwMvMwCFW0bfok0KS4TbG02pJDKn3T097H9P7TEBZqWu/kLU8z9XNmbYfT3H3MAulTPA+s
- 1zimc62jlIWBjEOBlkxRRZd/zyDG1dSt8zhrDGGmcPKBDKEgYtTACaysp3hf/izhmTBPl8hMV42
- a+G4S63FS9YJTXi0pyj8UlT4/I3FKxkZFntaaJye7BP3rOZaPJ/oBn7Diz2yL6QuTZEUbTVU2XO FEwA=
-X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
-Message-ID: <20240229001101.3889432-2-rdbabiera@google.com>
-Subject: [PATCH v3] usb: typec: altmodes/displayport: create sysfs nodes as
- driver's default device attribute group
-From: RD Babiera <rdbabiera@google.com>
-To: rdbabiera@google.com, heikki.krogerus@linux.intel.com, 
-	gregkh@linuxfoundation.org
-Cc: badhri@google.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:1cad:b0:365:1f8b:d103 with SMTP id
+ x13-20020a056e021cad00b003651f8bd103mr42319ill.6.1709166784685; Wed, 28 Feb
+ 2024 16:33:04 -0800 (PST)
+Date: Wed, 28 Feb 2024 16:33:04 -0800
+In-Reply-To: <380909e4-6e0a-402f-b3ac-de07e520c910@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000102fe606127a67f6@google.com>
+Subject: Re: [syzbot] [usb-storage?] divide error in isd200_ata_command
+From: syzbot <syzbot+28748250ab47a8f04100@syzkaller.appspotmail.com>
+To: bvanassche@acm.org, emilne@redhat.com, gregkh@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	martin.petersen@oracle.com, nogikh@google.com, stern@rowland.harvard.edu, 
+	syzkaller-bugs@googlegroups.com, tasos@tasossah.com, 
+	usb-storage@lists.one-eyed-alien.net
 Content-Type: text/plain; charset="UTF-8"
 
-The DisplayPort driver's sysfs nodes may be present to the userspace before
-typec_altmode_set_drvdata() completes in dp_altmode_probe. This means that
-a sysfs read can trigger a NULL pointer error by deferencing dp->hpd in
-hpd_show or dp->lock in pin_assignment_show, as dev_get_drvdata() returns
-NULL in those cases.
+Hello,
 
-Remove manual sysfs node creation in favor of adding attribute group as
-default for devices bound to the driver. The ATTRIBUTE_GROUPS() macro is
-not used here otherwise the path to the sysfs nodes is no longer compliant
-with the ABI.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
-Cc: stable@vger.kernel.org
-Signed-off-by: RD Babiera <rdbabiera@google.com>
----
-Changes from v1:
-* Moved sysfs node creation instead of NULL checking dev_get_drvdata().
-Changes from v2:
-* Removed manual sysfs node creation, now added as default device group in
-driver.
----
- drivers/usb/typec/altmodes/displayport.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+Reported-and-tested-by: syzbot+28748250ab47a8f04100@syzkaller.appspotmail.com
 
-diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-index 5a80776c7255..94e1b43a862d 100644
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -702,16 +702,21 @@ static ssize_t hpd_show(struct device *dev, struct device_attribute *attr, char
- }
- static DEVICE_ATTR_RO(hpd);
- 
--static struct attribute *dp_altmode_attrs[] = {
-+static struct attribute *displayport_attrs[] = {
- 	&dev_attr_configuration.attr,
- 	&dev_attr_pin_assignment.attr,
- 	&dev_attr_hpd.attr,
- 	NULL
- };
- 
--static const struct attribute_group dp_altmode_group = {
-+static const struct attribute_group displayport_group = {
- 	.name = "displayport",
--	.attrs = dp_altmode_attrs,
-+	.attrs = displayport_attrs,
-+};
-+
-+static const struct attribute_group *displayport_groups[] = {
-+	&displayport_group,
-+	NULL,
- };
- 
- int dp_altmode_probe(struct typec_altmode *alt)
-@@ -720,7 +725,6 @@ int dp_altmode_probe(struct typec_altmode *alt)
- 	struct typec_altmode *plug = typec_altmode_get_plug(alt, TYPEC_PLUG_SOP_P);
- 	struct fwnode_handle *fwnode;
- 	struct dp_altmode *dp;
--	int ret;
- 
- 	/* FIXME: Port can only be DFP_U. */
- 
-@@ -731,10 +735,6 @@ int dp_altmode_probe(struct typec_altmode *alt)
- 	      DP_CAP_PIN_ASSIGN_DFP_D(alt->vdo)))
- 		return -ENODEV;
- 
--	ret = sysfs_create_group(&alt->dev.kobj, &dp_altmode_group);
--	if (ret)
--		return ret;
--
- 	dp = devm_kzalloc(&alt->dev, sizeof(*dp), GFP_KERNEL);
- 	if (!dp)
- 		return -ENOMEM;
-@@ -777,7 +777,6 @@ void dp_altmode_remove(struct typec_altmode *alt)
- {
- 	struct dp_altmode *dp = typec_altmode_get_drvdata(alt);
- 
--	sysfs_remove_group(&alt->dev.kobj, &dp_altmode_group);
- 	cancel_work_sync(&dp->work);
- 	typec_altmode_put_plug(dp->plug_prime);
- 
-@@ -803,6 +802,7 @@ static struct typec_altmode_driver dp_altmode_driver = {
- 	.driver = {
- 		.name = "typec_displayport",
- 		.owner = THIS_MODULE,
-+		.dev_groups = displayport_groups,
- 	},
- };
- module_typec_altmode_driver(dp_altmode_driver);
+Tested on:
 
-base-commit: a560a5672826fc1e057068bda93b3d4c98d037a2
--- 
-2.44.0.rc1.240.g4c46232300-goog
+commit:         f2e367d6 Merge tag 'for-6.8/dm-fix-3' of git://git.ker..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=15da3dba180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=eff9f3183d0a20dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=28748250ab47a8f04100
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13287836180000
 
+Note: testing is done by a robot and is best-effort only.
 
