@@ -1,230 +1,91 @@
-Return-Path: <linux-usb+bounces-7292-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7293-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5764286BE96
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 02:54:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F0AC86BE98
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 02:55:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AD831C226CA
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 01:54:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 008181F22BD9
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 01:55:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33ABB3612E;
-	Thu, 29 Feb 2024 01:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 980DE3612D;
+	Thu, 29 Feb 2024 01:55:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ybG3037R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nlLUz4Ph"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1B437149
-	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 01:54:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F8136113
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 01:55:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709171654; cv=none; b=JSCET+4RZySHVKH/dspmOW5atW1q0nGrURZh2WTW1dj0Ww1DIrgTq1JHgIEKymCw8v/gQlxZO6oVHOvqu1AJuyDhHDC5T1BbduGN/UnlcjBdt3OV5tr+i24xDmp1qizogVtoEVCxMzaz7CwaEoNgVO7y4fHWU+bt4rxkCZVFefU=
+	t=1709171724; cv=none; b=ZszdH4UqKSXXpvjGKMiGNrybIgSjW+mkC/sz381s45gnOsL3BNBYK/eNEX9ovYT/SPI/X2xkgDNXgMNcxScdwI0+hZjWdfseVW2bUzuD4wRji+XUZ0VxTFXbwX1+9XOLajjU0/xPNUzopfLhriF3PVkqacb8EL3aUtmOVyclMXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709171654; c=relaxed/simple;
-	bh=sjFQtDvhvEyWLfprHkf57jFvK86g9+U0imPTasrTbf0=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=YlMhAyY5fkuSG80hQNtcCJXMLx6zvfr4Jg2J7dIVZVRKUvO/G9jPkHJaFL7EnBTMpOzLRwancdjnzJkzryvjLDcH28ff44kR3CPwofdmTRQx+8Em8+45JA81vIKiHSbm9hL1rpq2J7Lpp5ovZfaJVo6lJQ+vMVcX9JIZQLl18pU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ybG3037R; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-608d6ffc64eso6120657b3.0
-        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 17:54:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709171652; x=1709776452; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DIpbzGnuxG/veYQVRb7uyrg5E8imeH2l3OOJtVWsq90=;
-        b=ybG3037RhHAR7djkpGn2mv1iiZ2PXpMKTja9borXOj7S0GsBF5O57QEw88eFon/Qqx
-         yGyzUIYvQ/zYcyD5m6LNFH1jR3zGvnSwRHA0DnLs3E2i/SC62EOKIdPb45MlwHY+hZOE
-         12FQvGxDgjILPY4W3idYeZjy5hK+cHPRDIY9nqDLYI3jzkJYqPNUqbG9P0bnuISsl9pl
-         w7L8BIASylHmrUqrFQNNgAFslASALdo2Ko1zOKEiEnsGYm+yXWIDdpriwGQAwdp6pfmE
-         6qcql+uAPGQ4dUgZJB0FI8+Zy6iK962Yxl5a5Zi+hBFGBN4Gqz29W6xNvZeEBxzUCYAi
-         uRiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709171652; x=1709776452;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DIpbzGnuxG/veYQVRb7uyrg5E8imeH2l3OOJtVWsq90=;
-        b=JIDjT1HVJi9hJcfcelRU2YRBwY94PIIZfITj5695evaoapR4QWMwySZdfn5LPKFRsn
-         WytIdfxfy1iab78eYPtL3QVMEkDemTKt+j6Dq9wbB+QHcsW4M423QJlHnovyRENxbqyr
-         RA3sniK/mBc70ca3+p569q7T5AEv0+jfC8t6oHpB4YW6JIsN/br2lkzI1EonMpDyUjj9
-         5odo8fp+MnsycrbWEALeO5J7/eep22F8LUoJkoM2ZEclkNJvz8mKfwyDsPUVwDEJVJWk
-         ReumKVGD63VpZwBrt/gf7x5ua2+UKw6ZPY7K9Tn5wpkg4UT2okdGEDjsth7eSZK8pwdO
-         VocA==
-X-Forwarded-Encrypted: i=1; AJvYcCV9xJ5p/3Rtvf0aKeX+MCRgwbK1dciGl4puIw/0U/oK9T6cADY1QoXlPVuiwH9vqwiVBMiw2aIrKOU271fenC/kDVPWwbOmLLSl
-X-Gm-Message-State: AOJu0Yygu4SGYmgmpdBtJ1edIpDH75ni+2TPb2aYuNN5ZEMU+1ZyAUb/
-	oEOKqzFrWzeqggi9XwjYQJfXu/8zAWQ6ECaP3M77BME0swdhzurdPAGk2sbeoQjVzaAmZgFzJgW
-	pog==
-X-Google-Smtp-Source: AGHT+IFi43E2BC6ebc/lFL3qKA94jv+XBuJJgbVeCpAVgT6e2VRPHxJEmdf7YN8EBHsQecokVwDzzYUcPiY=
-X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:23db])
- (user=jthies job=sendgmr) by 2002:a05:690c:2d04:b0:608:b57f:59b2 with SMTP id
- eq4-20020a05690c2d0400b00608b57f59b2mr84148ywb.3.1709171652170; Wed, 28 Feb
- 2024 17:54:12 -0800 (PST)
-Date: Thu, 29 Feb 2024 01:54:02 +0000
+	s=arc-20240116; t=1709171724; c=relaxed/simple;
+	bh=TZZBGv6WZlF7JHR379QG62rsJE3RGUb/36ooOM/wnR0=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eel/DsTx+K+30Q1yCEee540FCe0fS1HuMKTGGx7hs2fnvnyXU7tGP2HIGMf8XhmcOJt6l4tKq3dh0+9RDuKt52x8s7Z8Eapc4BR4nRUL6Bc5iWUFGsY07bZL03D33pnxIKUF9ELSF0ceP9BN4EYJhpzjvnrkm64D4Um3YIjeYWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nlLUz4Ph; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AFE7AC433C7
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 01:55:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709171723;
+	bh=TZZBGv6WZlF7JHR379QG62rsJE3RGUb/36ooOM/wnR0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=nlLUz4PhmxYWbmpl8mTRO/7In+z/+j3Y0sK6i4HVvyRYRhMnl4Uh7t4CttdxK+ZII
+	 HMoHmFKkKBGZwSQYrPJNpH3EAbf8t6iHOhJJkF6aJ9ivPQWTdjKU0RmZ4K0lNWeDZl
+	 8yaHvkI+X7Jc4KqF9TWjPP6NQw7pwLdHXPMRlXJL/BXOqfd3eH3PcQxWJeJhDy9Yxx
+	 ICUwuSyexQQNYMuIA2CpEQycwcx8yIg7spidu5Zq8Lkp3jbeJ/jtJjEgwtErxbFm+M
+	 yPuaw4AWwtEIw/r5FNk15lJk5cijVEcH37cXP8H8ajtJ5sghAiOUYjHFiA/v5ysiun
+	 3lEGxQE6wwoEA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 9C212C53BCD; Thu, 29 Feb 2024 01:55:23 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218525] Thunderbolt eGPU bad performance
+Date: Thu, 29 Feb 2024 01:55:23 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: kaukov.peter@pm.me
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-218525-208809-REe6l1W5iZ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218525-208809@https.bugzilla.kernel.org/>
+References: <bug-218525-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
-Message-ID: <20240229015402.3671136-1-jthies@google.com>
-Subject: [PATCH v3 4/4] usb: typec: ucsi: Register SOP' alternate modes with
- cable plug
-From: Jameson Thies <jthies@google.com>
-To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
-Cc: jthies@google.com, pmalani@chromium.org, bleung@google.com, 
-	abhishekpandit@chromium.org, andersson@kernel.org, 
-	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com, 
-	gregkh@linuxfoundation.org, hdegoede@redhat.com, neil.armstrong@linaro.org, 
-	rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
-	linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
 
-Register SOP' alternate modes with a Type-C Connector Class cable plug.
-Alternate modes are queried from the PPM using the GET_ALTERNATE_MODES
-command with recipient set to SOP'.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218525
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Jameson Thies <jthies@google.com>
----
-SOP' GET_ALTERNATE_MODE responses from the PPM are correctly registered
-to the cable plug.
-nospike-rev4 /sys/class/typec # ls port0-cable/port0-plug0/
-device  port0-plug0.0  port0-plug0.1  power  subsystem  uevent
+--- Comment #6 from kaukov.peter@pm.me ---
+Created attachment 305924
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305924&action=3Dedit
+RTX 4090 dmesg log
 
-Changes in v3:
-- None.
+--=20
+You may reply to this email to add a comment.
 
-Changes in v2:
-- Shortened lines to within 80 characters.
-- Tested on usb-testing branch merged with chromeOS 6.8-rc2 kernel.
-
- drivers/usb/typec/ucsi/ucsi.c | 60 +++++++++++++++++++++++++++++++++++
- drivers/usb/typec/ucsi/ucsi.h |  2 ++
- 2 files changed, 62 insertions(+)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 4088422b33c74..281954fe9d855 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -399,6 +399,27 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
- 
- 		con->partner_altmode[i] = alt;
- 		break;
-+	case UCSI_RECIPIENT_SOP_P:
-+		i = ucsi_next_altmode(con->plug_altmode);
-+		if (i < 0) {
-+			ret = i;
-+			goto err;
-+		}
-+
-+		ret = ucsi_altmode_next_mode(con->plug_altmode, desc->svid);
-+		if (ret < 0)
-+			return ret;
-+
-+		desc->mode = ret;
-+
-+		alt = typec_plug_register_altmode(con->plug, desc);
-+		if (IS_ERR(alt)) {
-+			ret = PTR_ERR(alt);
-+			goto err;
-+		}
-+
-+		con->plug_altmode[i] = alt;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -566,6 +587,9 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
- 	case UCSI_RECIPIENT_SOP:
- 		adev = con->partner_altmode;
- 		break;
-+	case UCSI_RECIPIENT_SOP_P:
-+		adev = con->plug_altmode;
-+		break;
- 	default:
- 		return;
- 	}
-@@ -849,6 +873,33 @@ static void ucsi_unregister_partner_pdos(struct ucsi_connector *con)
- 	con->partner_pd = NULL;
- }
- 
-+static int ucsi_register_plug(struct ucsi_connector *con)
-+{
-+	struct typec_plug *plug;
-+	struct typec_plug_desc desc = {.index = TYPEC_PLUG_SOP_P};
-+
-+	plug = typec_register_plug(con->cable, &desc);
-+	if (IS_ERR(plug)) {
-+		dev_err(con->ucsi->dev,
-+			"con%d: failed to register plug (%ld)\n", con->num,
-+			PTR_ERR(plug));
-+		return PTR_ERR(plug);
-+	}
-+
-+	con->plug = plug;
-+	return 0;
-+}
-+
-+static void ucsi_unregister_plug(struct ucsi_connector *con)
-+{
-+	if (!con->plug)
-+		return;
-+
-+	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP_P);
-+	typec_unregister_plug(con->plug);
-+	con->plug = NULL;
-+}
-+
- static int ucsi_register_cable(struct ucsi_connector *con)
- {
- 	struct typec_cable *cable;
-@@ -892,6 +943,7 @@ static void ucsi_unregister_cable(struct ucsi_connector *con)
- 	if (!con->cable)
- 		return;
- 
-+	ucsi_unregister_plug(con);
- 	typec_unregister_cable(con->cable);
- 	memset(&con->cable_identity, 0, sizeof(con->cable_identity));
- 	con->cable = NULL;
-@@ -1098,6 +1150,14 @@ static int ucsi_check_cable(struct ucsi_connector *con)
- 	if (ret < 0)
- 		return ret;
- 
-+	ret = ucsi_register_plug(con);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP_P);
-+	if (ret < 0)
-+		return ret;
-+
- 	return 0;
- }
- 
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index b89fae82e8ce7..32daf5f586505 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -429,9 +429,11 @@ struct ucsi_connector {
- 	struct typec_port *port;
- 	struct typec_partner *partner;
- 	struct typec_cable *cable;
-+	struct typec_plug *plug;
- 
- 	struct typec_altmode *port_altmode[UCSI_MAX_ALTMODES];
- 	struct typec_altmode *partner_altmode[UCSI_MAX_ALTMODES];
-+	struct typec_altmode *plug_altmode[UCSI_MAX_ALTMODES];
- 
- 	struct typec_capability typec_cap;
- 
--- 
-2.44.0.rc1.240.g4c46232300-goog
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
