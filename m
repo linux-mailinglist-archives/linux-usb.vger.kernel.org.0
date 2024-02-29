@@ -1,124 +1,131 @@
-Return-Path: <linux-usb+bounces-7365-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7366-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA35986D422
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 21:24:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A55F086D7BF
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 00:27:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBE101C215C0
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 20:24:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6055C284DC6
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 23:27:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E717A144033;
-	Thu, 29 Feb 2024 20:23:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E47575814;
+	Thu, 29 Feb 2024 23:27:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LpoBlpQY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05FD5144020;
-	Thu, 29 Feb 2024 20:23:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667BD433B6
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 23:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709238204; cv=none; b=gydbKKbXZ1SjfCjhdKyYMN9VTFhhPAptqYZ/9+jhVgF5zeHzNE/fP1XNLCz300C9vJrfp7tDH61zLIb3DiitD8gIm8Iz/T/xpDJOp+2UtrUV9G2S5+ON8rix+IBDyxzrmfW9SCGalkwhoGjLSQ3t3llIIw36HPiavjhvVyYtduM=
+	t=1709249253; cv=none; b=VcXhgOM1OEnQQ8qg0Iblv/vUJFyN2e1BVlRi+2nXCgV8qUyM8aPU3a2eGRk6eBebc2eds0cPNp02Z3CMbTl/uf9JA5WUnenNkfPG0bO3virf9/1+HiBjJuv6TleaQ3e1Y6k1GCJsG5E9HErR4qaShedeGBBjVCmRLnL0MbwKWNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709238204; c=relaxed/simple;
-	bh=oidxrFMFky//oZmuKsuam5uavRaPx5WUjsO/uxunEv0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HU02Vt4GKndq/Pqr3ktj7BEn1nRHMHWiYZ6ixn3JwWmpeozbcfX5vMQgmRLXvF3cU4qhmS1BxPOUmiZ1iPEPRMftwyMKzLQlj4Sv4mj2+N7NqJXim0BHP7jwyB4JP2X1Xw01LPR2BA9w29Ezsc5b79c8D/Nqa/6W5gcmrffQ01U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-	id 1039A1403E6; Thu, 29 Feb 2024 21:13:26 +0100 (CET)
-Date: Thu, 29 Feb 2024 21:13:25 +0100
-From: "Christian A. Ehrhardt" <lk@c--e.de>
-To: HaoTien Hsu <haotienh@nvidia.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Sing-Han Chen <singhanc@nvidia.com>,
-	Utkarsh Patel <utkarsh.h.patel@intel.com>,
-	Jon Hunter <jonathanh@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
-	WK Tsai <wtsai@nvidia.com>
-Subject: Re: [PATCH CFT] usb: ucsi_ccg: Fix command completion handling
-Message-ID: <ZeDlZZ694gCPF43l@cae.in-ulm.de>
-References: <20240215101024.764444-1-lk@c--e.de>
- <2024021504-oven-worst-5c15@gregkh>
- <Zc39d88ikvCO+XVK@cae.in-ulm.de>
- <4c61b43c-1dd0-4f8a-b65f-48752b1cc439@nvidia.com>
+	s=arc-20240116; t=1709249253; c=relaxed/simple;
+	bh=ISWg/oe1f8dYAZu6cHD2G2F1GdLrz/na84uCJb+byxE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=oIV56mt+k/sK7lIRQXsebXeOLISaAwXVOtOugT58bTU1AYRdeu2Y+ne38PhNY0RvPgKpFqFgZs4YYLAvAUyNelBIbxniCCc7a8gYEtvkaihubsl0LNS9TUtSsNz1zDqfgwsbt2I04gLqu5zkV0PoQHTQNjtvJBYgEMEUVMLaXxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LpoBlpQY; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dcc4563611cso2538401276.3
+        for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 15:27:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709249251; x=1709854051; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OsUgvdSeCrdxpdzq+m+mUZROesc9NAMn0iliKNmZmmk=;
+        b=LpoBlpQYOLM3nEjDv/J5FLsrJ/f8X1Vq6n9dDcDTLIjS2W4Q8beGnJGWqx/mgHEWkW
+         NgMqIGUuaQhyDZy1wInsD2ds6GqeLu2NVM2Sz6y2GPrrXfXjTeohBAAmKZ/NZBA7N+/V
+         0y9JFDuPZAvA9bDr74bQTGlRAbaJ5qw7SVNAlFaYNmfAWxKt/D0zrabGqxAehfAEuDVL
+         Q3uIACvpkueUpXC5gpt302p+AdYCaOB82iMx2tJc7sFCYUyDThWMQyCj0sSUfousDEpd
+         IqWVpMFkR8MKenFEAB+VeduWTiBzKKZeZeL55JkvJhngcp7p+AiUXFYSBZW/9yfF2cyt
+         14qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709249251; x=1709854051;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OsUgvdSeCrdxpdzq+m+mUZROesc9NAMn0iliKNmZmmk=;
+        b=eQJvvSBjn4EQMn9yWY5HaY6V7lYvBRq5NsfVRyq0/tJgupk5Dw+PonVQY0YjQyEnbu
+         i03HxHF0KdDW2XLl2ziQxwRxrpG610ouvwHLuUxTa9AQ+3ilxlBEjCan0Vg0wjMzfeGD
+         WbRDVy0+wYNbhSyqCUkbcvdy+4Fx36t1rC97EUaIb/vlVOwoH0HenV0ClymGlGF3v3T/
+         yq/4em9jN1ChmNnR7gA8y+U+3X0fVrLxJ3JvJfbaWdZEwVD1ayoskwIezFsHXwFFS8ag
+         N8Y1O8i2I7cIFpPWoaLcZqoRkm5psnpjpkZi01ilCe28QNb9LI6gYEMfcJ4uEapBMJWV
+         1OPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVCidlgUdQ9al4tpQ0Ix0rxCqZvGvqEItoAp1JLG6Cc2HialIkFxEQdY1jDp8k6M7seVOoRW5dswKKcH1B+ah8+bfQJq8GDW48V
+X-Gm-Message-State: AOJu0Yy1leN9b39qY6uPzGFJz0mcRwV7ytXb1ki9+woR12C3OMPrkGrS
+	GzHNMFXtgk8s8hhER0sapg4e07iV8wfQx72PGbNrDKPr/BnVgZSoW4LOvheSYQZnKXih/CkSNab
+	/aA==
+X-Google-Smtp-Source: AGHT+IFbr/yyESjYNWBhyBP1Aw6rOlKUH20ZERsV3gNR227qqI5UhWNFECb0Gg9Z93sjFCCObyBryMiIMFM=
+X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:23db])
+ (user=jthies job=sendgmr) by 2002:a05:6902:100d:b0:dc7:5aad:8965 with SMTP id
+ w13-20020a056902100d00b00dc75aad8965mr950831ybt.0.1709249251470; Thu, 29 Feb
+ 2024 15:27:31 -0800 (PST)
+Date: Thu, 29 Feb 2024 23:26:21 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4c61b43c-1dd0-4f8a-b65f-48752b1cc439@nvidia.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
+Message-ID: <20240229232625.3944115-1-jthies@google.com>
+Subject: [PATCH v3 0/4] usb: typec: ucsi: Expand SOP/SOP' Discovery
+From: Jameson Thies <jthies@google.com>
+To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
+Cc: jthies@google.com, pmalani@chromium.org, bleung@google.com, 
+	abhishekpandit@chromium.org, andersson@kernel.org, 
+	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com, 
+	gregkh@linuxfoundation.org, hdegoede@redhat.com, neil.armstrong@linaro.org, 
+	rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+
+Hi Heikki,
+
+This patch series expands support for partner and cable discover in the
+UCSI driver. There are a few pieces here.
+
+1. Some cleanup of the GET_CABLE_PROP definitions in ucsi.h.
+2. Cable discovery and registration with the USB Type-C connector class.
+3. Partner/Cable identity registration with the USB Type-C connector
+class.
+4. SOP' alternate mode registration with the USB-C connector class using
+a cable plug.
+
+These have been tested on a the usb-testing branch merged with a
+chromeOS 6.8-rc2 kernel. Let me know if you have any questions.
+
+Thanks,
+Jameson
+
+Changes in v3:
+- Fixed CC stable and email threading issue.
+
+Changes in v2:
+- Re-ordered memset call and null assignment when unregistering partners
+and cables.
+- Supports registering partner and cable identity with UCSI versions
+before v2.0.
+- Shortened lines to within 80 characters with the exception of two
+error log lines with three indentations.
+- Tested on usb-testing branch merged with chromeOS 6.8-rc2 kernel.
+
+Jameson Thies (4):
+  usb: typec: ucsi: Clean up UCSI_CABLE_PROP macros
+  usb: typec: ucsi: Register cables based on GET_CABLE_PROPERTY
+  usb: typec: ucsi: Register SOP/SOP' Discover Identity Responses
+  usb: typec: ucsi: Register SOP' alternate modes with cable plug
+
+ drivers/usb/typec/ucsi/ucsi.c | 258 ++++++++++++++++++++++++++++++++++
+ drivers/usb/typec/ucsi/ucsi.h |  40 +++++-
+ 2 files changed, 296 insertions(+), 2 deletions(-)
 
 
-Hi Haotien,
-
-On Thu, Feb 29, 2024 at 07:18:44AM +0000, HaoTien Hsu wrote:
-> On 2/15/24 20:03, Christian A. Ehrhardt wrote:
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > Hi Greg,
-> > 
-> > On Thu, Feb 15, 2024 at 12:07:20PM +0100, Greg Kroah-Hartman wrote:
-> >> On Thu, Feb 15, 2024 at 11:10:24AM +0100, Christian A. Ehrhardt wrote:
-> >>> In case of a spurious or otherwise delayed interrupt
-> >>> it is possible that CCI still reports the previous completion.
-> >>> For this reason the UCSI spec provides different completion
-> >>> bits for normal commands and for UCSI_ACK_CC_CI.
-> >>>
-> >>> Only complete a sync command if the correct completion bit
-> >>> is set.
-> >>>
-> >>> This should avoid the need to clear out CCI before starting
-> >>> a command. Thus remove this code.
-> >>>
-> >>> Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
-> >>> Fixes: e32fd989ac1c ("usb: typec: ucsi: ccg: Move to the new API")
-> >>
-> >> What does "CFT" in your subject line mean?
-> > 
-> > It's supposed to mean "Call For Testers". More info in the
-> > "Additional Information" section of the original mail.
-> > 
-> > I think the change is necessary and good but I do not have the HW
-> > to test it.
-> > 
-> > I did test a similar change for ucsi_acpi.c that got merged and this
-> > is the ping for ucsi_ccg.c people that they probably need this, too.
-> > 
-> >     regards   Christian
-> > 
-> > 
-> 
-> Hi Christian,
-> 
-> If we don't clean the CCI cache in ucsi_ccg_async_write(), there might 
-> be a potential problem when the driver is polling the results.
-> 
-> In ucsi_init(), we may get EPROBE_DEFER from ucsi_register_port().
-> Then it does ucsi_reset_ppm() before returning the error code, and we 
-> will get  UCSI_CCI_RESET_COMPLETE and store it in the CCI cache.
-> If we don't clean the cache, when the UCSI driver calls ucsi_init() 
-> again, then in ucsi_reset_ppm(), it will get UCSI_CCI_RESET_COMPLETE 
-> from the CCI cache instantly.
-> Then the driver will run the next UCSI commands when the HW is not 
-> completely reset.
-
-Thanks, I indeed did not think the reset case completely through.
-However, the real bugfix is in the other hunk of the diff and this
-is a genuine bugfix on its own. I found that the corresponding
-diff was neccessary for ucsi_acpi.c. Should I resend without the
-CCI cleaning?
-
-Thanks   Christian
+base-commit: a560a5672826fc1e057068bda93b3d4c98d037a2
+-- 
+2.44.0.rc1.240.g4c46232300-goog
 
 
