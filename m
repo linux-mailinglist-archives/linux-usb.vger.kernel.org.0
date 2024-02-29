@@ -1,133 +1,114 @@
-Return-Path: <linux-usb+bounces-7325-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7326-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 732E186C8A1
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 12:56:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D5CA86C919
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 13:22:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A7E31F21F05
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 11:56:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE1DE28C736
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 12:22:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C687CF13;
-	Thu, 29 Feb 2024 11:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 853AA7D3F7;
+	Thu, 29 Feb 2024 12:21:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DuLDC8px"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="zLuFe7ZB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8E963513;
-	Thu, 29 Feb 2024 11:55:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511487D09C;
+	Thu, 29 Feb 2024 12:21:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709207753; cv=none; b=UAX0LKaTErMWOF3DoC6xxpOINgyER58VGnONXXUrhP4Rw/5UV+DzQPUSxtqcW39Aboisbq/lyLBDKS/GWFZgja32fLwO6PPIgLK8lARU0O5kV72wtsRlpxp50FXVCnjRWMlGjLiWrdCALFFBkbKGH4rrCgBrzl4mtG9ed+04Pbg=
+	t=1709209292; cv=none; b=nygQZAiRf+1bYbh+GMMLquRP7Xam6ZhExhwMdWfoO8iq00hwbcSkaHtUnmUOCsJIYQ6kAYJeGMQpZMIldXIOwETExn7b9+p3Vkiq1jmK9sdEaYwT+Mdvuf1pMqJHYMMEncUD7pHWfdaajTWgnWE+r4osAW5Ubu8Qi+trZtHYpAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709207753; c=relaxed/simple;
-	bh=UdV8nI1R7svJiga7K5tB9T8mcssDDoAC02uPYSD0dzc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=e8Mo+zutld4eDOIYYFLj/iL7kxET9pSbyIYCGjO7jK3qlhMaDcTdWVVAK2haggWrF0LKTknYb8IMb6TJunchB56bGLLGsEzR3bocPgTlF3gnoNQSKml+XYztMoX0S+3691Y3WJ9WDEzSDWccVTPJZpe8uPkKammyMNF2RLE8R8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DuLDC8px; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-33dc3fe739aso1154856f8f.0;
-        Thu, 29 Feb 2024 03:55:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709207750; x=1709812550; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y3HzubJKeDkwNFU7Oa58TDZNZ/OqHmsfg3cBhyCqsBE=;
-        b=DuLDC8pxvWSuralPGPG0hOAA4ZZODe49BKSz+lPEuM3hVpF6LIFVYqyI+YdqPPBwKW
-         +z3rseOB9aCoTcUk17yI95hbmoJpEOeyuZDPPsmnklH1N/OV4OSBhi5egT62J8lIqi5d
-         RGsW4r1JT0B1XxxcYKmPmfqucwMIoPqa2Wu5pmQlnUjvviBYnu4cc4NSYVTDC60XK6PZ
-         usWnNZmkWXMM6xgQETtPC9mJlnluCys4CxVVQmPTqvnG0znFqBWdGnLoId41c17tndRn
-         2KKxtUXZ0dUHVyATzMPnuyKk3Os0ldfe2T2wfPCwDR+ZAqA0cy5/wjPXIQ7PtBdxct9H
-         uS/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709207750; x=1709812550;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y3HzubJKeDkwNFU7Oa58TDZNZ/OqHmsfg3cBhyCqsBE=;
-        b=rj1teONeknkTVjdf8Fl17VKyb40LpAr1H3gLcJOSIdlSEy7x/M8qPygaEZznhslfsj
-         U0ixgUGD6bzT7BbDdQde533Z5LbG4tfFx18UhMvxSHLmsSGRNr3her3wYQjNOCwDlbyS
-         Vyr06woM0uvgRLOmg97KNk1NRvOtB3YEescpJpd+6Kfj3JInUsGXbMNeRvontQksEPrn
-         tqdEMBmzZGAZ838m+FXEMwZ5qwTKfEY8rSQS4VyX7MbD5PFdvMALPSP2VWHFlUSvD/kI
-         NmnUk+ei9JrhuHyxX2QcKmg+aouvPj2Vy3HBcDmSaSeN8keMgTlCUqBv6Ffei8irKJX/
-         ovKg==
-X-Forwarded-Encrypted: i=1; AJvYcCVZKZDP2obXmZ22NWvwou9QKlLrfTrJ3QHTXFJqf87DX9sicefazFgDbfVu9eG05AV2lWdqq64Lpo4aPqKj45jrgoh90atSh9Z+XTzh5Ey8+F6xjqG2/uXusxj/FwhgRaznK6TJY8nI
-X-Gm-Message-State: AOJu0Yzi4vtBKKdbkfjALqj/TJCLBtHkVLWqqPBdBG+nYeSHRabNwOks
-	QfeFWcti/pZqEBj7Gssa7IqYmzJKQnJTSqe1srhTaXGJs2cbYSjs
-X-Google-Smtp-Source: AGHT+IGtM/H/g7iLIBNlJc/9cyGBam/KlX7h/oaZvUR/iazkfIkYkCZN4BGe9Cy3uJEtGVbE+YGxPQ==
-X-Received: by 2002:adf:9c8b:0:b0:33e:30a:c6bd with SMTP id d11-20020adf9c8b000000b0033e030ac6bdmr1982066wre.6.1709207749860;
-        Thu, 29 Feb 2024 03:55:49 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id b11-20020a5d634b000000b0033d6fe3f6absm1544540wrw.62.2024.02.29.03.55.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Feb 2024 03:55:49 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Bin Liu <b-liu@ti.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] usb: musb: remove unused variable 'count'
-Date: Thu, 29 Feb 2024 11:55:48 +0000
-Message-Id: <20240229115548.218713-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1709209292; c=relaxed/simple;
+	bh=MSR7Gohd9L3H1wQbofEpvc+047GL8Hkx47b8e8xjZoY=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=NzfkbKSTcn4iK5II6bLSb+H6k/fMmy7EvVqAgUVpiK3d4OaGml+/bGFCfxKREkq9wR6V2XMEOzeS1HdRKLJr90E2OlfcFZTu7/kjiCpRUTh2vUB1Mzxcs/G/oHaYL2OS85nL1F8yVvR74qKstnK+quLg/VquC1BfSN3zl6VXBYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=zLuFe7ZB; arc=none smtp.client-ip=203.205.221.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1709209285; bh=dU9WJsM0VvFTwAl60XiV2GQzCopZDxedDmkKAu/mywc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=zLuFe7ZBwRoc+faIla3ad/ExTAx0Rh69HtFTsevCtxonUZfXKzCraBpULdlD2ZnuM
+	 vufO9Zuu8u395UWgYv2KYqOLAQMUc4zXFndLxnxSwvqDenqoDCcCk2b6+161C+1qwP
+	 e58Bf2K2/QCi7uT+5IM6VwqPZeJFxWbCbUYpmSj4=
+Received: from pek-lxu-l1.wrs.com ([111.198.228.140])
+	by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
+	id 5563B03A; Thu, 29 Feb 2024 20:21:22 +0800
+X-QQ-mid: xmsmtpt1709209282tqirugosv
+Message-ID: <tencent_70C492C20645C99DEEC9EED28C8E27D40606@qq.com>
+X-QQ-XMAILINFO: MtZ4zLDUQmWfqDyLt8mHh4sepj+IqaTuKdCoCZQQq7B6VdFKCOOR22OzPvhGd+
+	 erMlmfzNiaYFwG6RnrohRlmnnXXJcg2/QGgS5PTEFW73iYyAlwn4wUYK5xTPOK8NVQl85ytkFfmv
+	 F2zOcs9pwq5GWnc63lkz6giUBIN8tcPGq3WRiV726ZWh49xWXT0CjNeyQHpUDLjep7cRxB8ll54o
+	 vvLJdZ1uHJN+8Ioc8+t7XYacScvMf6pJ8bCwdUlyhJREF3RHJfTC9MnB0YIMS3yALCR3NE2RAn8y
+	 QubRbWURu+/tFsCb7P/BigomPU8iJIbVZmsvW5818emUB9D9gyfLz14VyCfjX5zLV7cfj2wVqd9B
+	 n/QpIgGAxLXWr0789SU+wPPMmJ8Pip4GyYmN8dcENXFDa4Gn2vZRfpTZzj83ehUaUrF7QdeH6/so
+	 JLKConi+EZGAmDF4tiCAPR1eYdFLremb+U5Aa9Q6+hU3uwzMFNshcsriYhOWUp846YFkyck3SaHV
+	 MZhjwu0sL5xQJNUK3RGE5wdybGy8hRXZf4bceHCpU95lVTwi8b0+6vKgzU4pLfXPwK9TytZ+U9ap
+	 BvxEVlxKJFW6mD6j671tbXs1rRRgafNlQA/7rSDJOaESfAI4zmavVVOcFf4BXwCmDVADtHHe5Xuo
+	 DFgdB7C8UET45g+oe5xGr2CW7a4FiSJ9AXHbe/FphXDdIqUaY1Ju1gDEd1yEB1I0oEYuQHQyj7To
+	 h+nAalUaqbo3kt6iIX+rveWRprGGReBd0qJJ+BNiW+CrAi/WNIkT2QN7dLrIrg5WFkGaS6TEbyzs
+	 fp4HTLQ0SJx9YGhrKrbhVfnfCRzpei1Z2MOTNawRf/tuCKzWX1xIXUZUseZWdhtZmKhZJn9TheHB
+	 hqYXXjPpphy29mM3kkceIQCmI7j86WmoTgqlPjyiqo7KpIV30ja5g1J5aSeS9NWQ==
+X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
+From: Edward Adam Davis <eadavis@qq.com>
+To: syzbot+2622b51b35f91a00ea18@syzkaller.appspotmail.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	m.szyprowski@samsung.com,
+	mchehab@kernel.org,
+	syzkaller-bugs@googlegroups.com,
+	tfiga@chromium.org
+Subject: [PATCH] media: fix task hung in vb2_video_unregister_device
+Date: Thu, 29 Feb 2024 20:21:22 +0800
+X-OQ-MSGID: <20240229122122.978268-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <0000000000008faf0a06126a0ffb@google.com>
+References: <0000000000008faf0a06126a0ffb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-The variable count is being initialized and incremented but it is never
-actually referenced in any other way. The variable is redundant and can
-be removed.
+vb2_video_unregister_device() will get vb2q_lock, so usbtv_video_free() does
+not need vb2q_lock.
 
-Cleans up clang scan build warning:
-drivers/usb/musb/musb_gadget.c:1747:12: warning: variable 'count' set
-but not used [-Wunused-but-set-variable]
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Reported-and-tested-by: syzbot+2622b51b35f91a00ea18@syzkaller.appspotmail.com
+Signed-off-by: Edward Adam Davis <eadavis@qq.com>
 ---
- drivers/usb/musb/musb_gadget.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/media/usb/usbtv/usbtv-video.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
-index 051c6da7cf6d..55df0ee413d8 100644
---- a/drivers/usb/musb/musb_gadget.c
-+++ b/drivers/usb/musb/musb_gadget.c
-@@ -1744,7 +1744,6 @@ static inline void musb_g_init_endpoints(struct musb *musb)
- {
- 	u8			epnum;
- 	struct musb_hw_ep	*hw_ep;
--	unsigned		count = 0;
+diff --git a/drivers/media/usb/usbtv/usbtv-video.c b/drivers/media/usb/usbtv/usbtv-video.c
+index 62a583040cd4..b55f432b44d4 100644
+--- a/drivers/media/usb/usbtv/usbtv-video.c
++++ b/drivers/media/usb/usbtv/usbtv-video.c
+@@ -963,7 +963,6 @@ int usbtv_video_init(struct usbtv *usbtv)
  
- 	/* initialize endpoint list just once */
- 	INIT_LIST_HEAD(&(musb->g.ep_list));
-@@ -1754,17 +1753,14 @@ static inline void musb_g_init_endpoints(struct musb *musb)
- 			epnum++, hw_ep++) {
- 		if (hw_ep->is_shared_fifo /* || !epnum */) {
- 			init_peripheral_ep(musb, &hw_ep->ep_in, epnum, 0);
--			count++;
- 		} else {
- 			if (hw_ep->max_packet_sz_tx) {
- 				init_peripheral_ep(musb, &hw_ep->ep_in,
- 							epnum, 1);
--				count++;
- 			}
- 			if (hw_ep->max_packet_sz_rx) {
- 				init_peripheral_ep(musb, &hw_ep->ep_out,
- 							epnum, 0);
--				count++;
- 			}
- 		}
- 	}
+ void usbtv_video_free(struct usbtv *usbtv)
+ {
+-	mutex_lock(&usbtv->vb2q_lock);
+ 	mutex_lock(&usbtv->v4l2_lock);
+ 
+ 	usbtv_stop(usbtv);
+@@ -971,7 +970,6 @@ void usbtv_video_free(struct usbtv *usbtv)
+ 	v4l2_device_disconnect(&usbtv->v4l2_dev);
+ 
+ 	mutex_unlock(&usbtv->v4l2_lock);
+-	mutex_unlock(&usbtv->vb2q_lock);
+ 
+ 	v4l2_device_put(&usbtv->v4l2_dev);
+ }
 -- 
-2.39.2
+2.43.0
 
 
