@@ -1,139 +1,148 @@
-Return-Path: <linux-usb+bounces-7317-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7318-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD4A586C5ED
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 10:45:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A808686C5F9
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 10:47:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 758E128DB6C
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 09:45:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 611682880EA
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 09:47:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCBCD5D91A;
-	Thu, 29 Feb 2024 09:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39340626AB;
+	Thu, 29 Feb 2024 09:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OmuBrjBQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UhfaqvoG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E24260DF2;
-	Thu, 29 Feb 2024 09:45:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2A75B5D2;
+	Thu, 29 Feb 2024 09:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709199913; cv=none; b=qN4cLqbSnFEV/zLPBR4glkQV13H2btPF8Gsv0GwzF8Wm+YdCc37em2YBmoCGeGD80Jr0vgZ96hfxCb2gzWydTqgasHA37si+3ocPKiBiRx+64s+tmc8ghvyvFzLr632Usljz5I6FkIAQiieA/GFP7sor4inFbt+5mVoXa6Ch7Bg=
+	t=1709200031; cv=none; b=fs8D8uq0CDuFk8SfKP3PO/bATlH16iuKtnZm3aZbDUldPqD0jh7cqBY+10+qjv3J0befnjSONcvrrwAiDkG860pYlwVYO2cgC/V3aXLerXBeuPLFxXNit/AILNYpGCBe7vb9+dlAyaOCVy79RYi978zj3o9IjBwfLkqFyJ5P92M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709199913; c=relaxed/simple;
-	bh=N4ExwYK4obzpBCaotNTjUlxJUXpLOasw+lbaXcE8vr4=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=hm4vI/0gQjOKu8ZfHe1w5bXAwvk5Lbi3IigPWm1k6bUPrBWW1+ToVuKwLl7ZmXCe1cdeAPd61BpeFzB3Pzm3OwG0N1M697Ul7I7QLsPlTFr87RqZbR9iY/fwZ0IAmUIGGByYL+yoF4sR8X0tXo5orjLOLtqoPFcT9ekZyB+SIB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OmuBrjBQ; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709199912; x=1740735912;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=N4ExwYK4obzpBCaotNTjUlxJUXpLOasw+lbaXcE8vr4=;
-  b=OmuBrjBQw6PtbALOt6RXp5iJW1fGLyBEC8pQowrce1qaKchqPS3NY6ir
-   7kY62pB+4uUKfZtg+QEwP8vF3412RDwKOZ7cwXcV4BRbmMjaSYE9OPwJb
-   7RQ3VeKmvUQr0bohxkiY9CI24LsAGMM3jn5mHOCakGV2T8NtIN11zcUKS
-   Cs9GXXl+Vs8OarEmUVYtv1cRz5AbfnMQMxkK17D6uyR+wRV3ts1p9PBxV
-   G5M6zPyj/zrBDA1oXo2Frn2XNrpzvJj0ib2rECwlAvzYqZp3F18RAri8B
-   8JL1bPkMzTG4qAhHWMddTlCigfGVsFfmIyaB3pTk++aylsl5JCJRkHhnW
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="21200864"
-X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="21200864"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 01:45:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="937035547"
-X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="937035547"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Feb 2024 01:45:06 -0800
-Message-ID: <a1274e8a-c761-a39f-20a4-06989e8144c6@linux.intel.com>
-Date: Thu, 29 Feb 2024 11:46:47 +0200
+	s=arc-20240116; t=1709200031; c=relaxed/simple;
+	bh=xc+qRjR0bWdnBIKs1iZ20uh/Wq/YWbOq3AIghhd6LfE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E8efQjdTdCNz3C2M4r211sZ9bkLV8lSQnyTSX6uSVeb1HkiOb+o1twUzdU1S4iXGilV2wTNH7VzqjddubK33HTdqhOY9P9Y5lJBzk3um22/lJMKme8DzrzxYpdI6rV7GruAlyh9WFRDGFocIHXXrLBHV7rGdhC9Hw2bn9pzNRC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UhfaqvoG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F596C433C7;
+	Thu, 29 Feb 2024 09:47:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709200031;
+	bh=xc+qRjR0bWdnBIKs1iZ20uh/Wq/YWbOq3AIghhd6LfE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UhfaqvoGfdj3afa6zQC7Y8B5MFpwLcInlkfwmi/p3rpe3opbROvbbdeKBjsUyyafR
+	 e4bq0ftGNcwoct8km6fPaK6Qy9VzQs0SNdoJoajf2GaQBYHojuJDJdj8Yi0+TRNExF
+	 beeI+ve9/2S981guPre8Ian9A20elKPZKV3qrmQjzyynmKR80aN68onGGsS3hLHeKp
+	 iiHyeBvB/zaSnqo1BRj4/xCd8H80Hk2EqYwDG70BrI6hL+UnD8o4a9q93rCnhjUh3f
+	 3AkFmnJxe+T5kc/nHJijw9P0cfndWaxUgi6dIdzh4H3ejlByecFU1nS93Y5UxQs896
+	 8b4hVH6vXduDQ==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1rfd0Z-000000000me-15w5;
+	Thu, 29 Feb 2024 10:47:19 +0100
+Date: Thu, 29 Feb 2024 10:47:19 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+	quic_jackp@quicinc.com
+Subject: Re: [PATCH v15 2/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+Message-ID: <ZeBSp0EWnHo8Wbsv@hovoldconsulting.com>
+References: <20240216005756.762712-1-quic_kriskura@quicinc.com>
+ <20240216005756.762712-3-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To: Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
- gregkh@linuxfoundation.org, mathias.nyman@intel.com,
- linux-usb@vger.kernel.org
-Cc: mario.limonciello@amd.com, stable@vger.kernel.org,
- Oleksandr Natalenko <oleksandr@natalenko.name>
-References: <20240226152831.2147932-1-Basavaraj.Natikar@amd.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2] xhci: Allow RPM on the USB controller (1022:43f7) by
- default
-In-Reply-To: <20240226152831.2147932-1-Basavaraj.Natikar@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240216005756.762712-3-quic_kriskura@quicinc.com>
 
-On 26.2.2024 17.28, Basavaraj Natikar wrote:
-> The AMD USB host controller (1022:43f7) does not enter PCI D3 by default
-> when nothing is connected. This is due to the policy introduced by
-> 'commit a611bf473d1f ("xhci-pci: Set runtime PM as default policy on all
-> xHC 1.2 or later devices")', which only covers 1.2 or later devices.
+On Fri, Feb 16, 2024 at 06:27:49AM +0530, Krishna Kurapati wrote:
+> Currently Multiport DWC3 controllers are host-only capable.
 
-This makes it seem like commit a611bf473d1 somehow restricted default runtime
-PM when in fact it enabled it for all xHCI 1.2 hosts.
+I already asked you to rephrase this so that it becomes clear that you
+are describing a property of the current hardware (and similar
+throughout the series):
 
-Before that only a few selected ones had runtime PM enabled by default.
+	https://lore.kernel.org/all/ZTI7AtCJWgAnACSh@hovoldconsulting.com/
 
-How about something like:
+> +static int dwc3_read_port_info(struct dwc3 *dwc)
+> +{
+> +	void __iomem *base;
+> +	u8 major_revision;
+> +	u32 offset;
+> +	u32 val;
+> +
+> +	/*
+> +	 * Remap xHCI address space to access XHCI ext cap regs since it is
+> +	 * needed to get information on number of ports present.
+> +	 */
+> +	base = ioremap(dwc->xhci_resources[0].start,
+> +		       resource_size(&dwc->xhci_resources[0]));
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+> +
+> +	offset = 0;
+> +	do {
+> +		offset = xhci_find_next_ext_cap(base, offset,
+> +						XHCI_EXT_CAPS_PROTOCOL);
+> +		if (!offset)
+> +			break;
+> +
+> +		val = readl(base + offset);
+> +		major_revision = XHCI_EXT_PORT_MAJOR(val);
+> +
+> +		val = readl(base + offset + 0x08);
+> +		if (major_revision == 0x03) {
+> +			dwc->num_usb3_ports += XHCI_EXT_PORT_COUNT(val);
+> +		} else if (major_revision <= 0x02) {
+> +			dwc->num_usb2_ports += XHCI_EXT_PORT_COUNT(val);
+> +		} else {
+> +			dev_warn(dwc->dev,
+> +				 "unrecognized port major revision %d\n",
 
-Enable runtime PM by default for older AMD 1022:43f7 xHCI 1.1 host as it is
-proven to work.
-Driver enables runtime PM by default for newer xHCI 1.2 host.
+I still think you should merge this with the previous line even if you
+end up with 83 chars.
 
-> 
-> Therefore, by default, allow RPM on the AMD USB controller [1022:43f7].
-> 
-> Fixes: 4baf12181509 ("xhci: Loosen RPM as default policy to cover for AMD xHC 1.1")
+> +							major_revision);
+> +		}
+> +	} while (1);
+ 
+> +	/*
+> +	 * Currently only DWC3 controllers that are host-only capable
+> +	 * support Multiport.
+> +	 */
 
-This was already reverted as it caused regression on some systems.
-24be0b3c4059 Revert "xhci: Loosen RPM as default policy to cover for AMD xHC 1.1"
+So again, also here, rephrase the comment so that it is clear that you
+are referring to a property of the current hardware.
 
-> Link: https://lore.kernel.org/all/12335218.O9o76ZdvQC@natalenko.name/
-> Cc: Mario Limonciello <mario.limonciello@amd.com>
-> Cc: stable@vger.kernel.org
+> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST) {
+> +		ret = dwc3_read_port_info(dwc);
+> +		if (ret)
+> +			goto err_disable_clks;
+> +	} else {
+> +		dwc->num_usb2_ports = 1;
+> +		dwc->num_usb3_ports = 1;
+> +	}
 
-I'd skip Fixes and stable tags and add this as a feature to usb-next.
-
-> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-> ---
-> Changes in v2:
-> 	- Added Cc: stable@vger.kernel.org
-> 
->   drivers/usb/host/xhci-pci.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index b534ca9752be..1eb7a41a75d7 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -473,6 +473,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->   	/* xHC spec requires PCI devices to support D3hot and D3cold */
->   	if (xhci->hci_version >= 0x120)
->   		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
-> +	else if (pdev->vendor == PCI_VENDOR_ID_AMD && pdev->device == 0x43f7)
-> +		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
-
-This would fit better earlier in the code among the rest of the AMD quirks.
-See how this flag is set for some other hosts.
-
-Thanks
-Mathias
-
+Johan
 
