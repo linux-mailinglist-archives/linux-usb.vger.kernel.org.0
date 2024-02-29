@@ -1,90 +1,131 @@
-Return-Path: <linux-usb+bounces-7282-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7283-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ABAE86BCDB
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 01:33:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 151CB86BE42
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 02:29:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96949287C13
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 00:33:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 470C71C2145B
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 01:29:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 332A712E5B;
-	Thu, 29 Feb 2024 00:33:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E92FE2E413;
+	Thu, 29 Feb 2024 01:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Aau/WyFf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793F5D2F5
-	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 00:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12F32D048
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 01:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709166786; cv=none; b=b+rmnCMUSWCANKJ2gmXKB8GczGg+Fec2BGFkYeGYnskhmHZxHVivhORNwyljHXAkJos3umgkov6vp3Uh4cO91fuNETVnNz+23clPc5Lltlb5otGxQSJAhDLlWJwQ0+pjnXioxkt1jRh3+hpFeDPtovTV6lDGJyn0Np6OTZdNJ74=
+	t=1709170180; cv=none; b=b6PybmLplJ1EIO+Nmc6XLJ9C+m9nPNA9zt6yLRt+NN0+0gAVyvXWSHrUyvGrIHMATPucDqqPJHWr6uVumTXQTuKopEBoOTnxc/tLAUqbh2ecIXqympPQfwYeDQ6ehwO2/vuGSgTTgo/LqkF3SgJtXVhdkuVCMKysTyCUmy28X3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709166786; c=relaxed/simple;
-	bh=Jfy6IjRx/FSSVzO//9qWooWnRCudUP4MhW7bTV49z6Q=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=b6msI1+LzhQF6KurAeITO4kU9/8elBjRNpVM+Yr9pqxCZQK8OTxbWZkievH5E5soaU2JGeRN2RvVmuT7abeH3y8lL125mV2aUaae3T5S1DHw9jvIpxDm/NHRS5wRm7HPJDZVDBvsnhAdVLmrW2q+8ahcw6j3Sg/v/O87ABAJPJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3657ae3e87fso5034895ab.2
-        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 16:33:05 -0800 (PST)
+	s=arc-20240116; t=1709170180; c=relaxed/simple;
+	bh=llgycK0vel+ByZjq2S4bsIYLpr53VlV1dYeH2+0LRo8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=MRXnBJ1h/ZOwWdCsychvIIIhBPwbQjZnHCBmpbndrRdby+T8aNXiTaptkSQ0/b5xYq7uTfo7i0wNEFdQxvfMwGTeJAP+0nVL9z229PwJHH+HJoi/hXD2GCBQm3ylGZulFquvhCPhhA5Du1bI3mq0UJ2SQOXSQvrRsYqtqm6MTg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Aau/WyFf; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60904453110so5295097b3.2
+        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 17:29:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709170178; x=1709774978; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HO7sM+79J6T6oYs6iAIAH4cbr3Ct/U7/pkBJr2RsBIQ=;
+        b=Aau/WyFfgTze7Ys0WKXUOHDcaw+D/kRiQW9u5mna5u1/omAtu2Key38j21vQN/hJkv
+         yfnjaLCHnhdTlcNwE1y+dZRGn87XjNbep++yN3LFFTjjn5P1BxM0c8YdolYMEv6qkkOR
+         ko+LTVY/LT/qIBypg9202D4dPyoxf/Rl0vBZi4plvcEVLqJpluL5ynnFlX35WHKIA8Ej
+         1Tw9JODBfsaOdQhDa53TPb21cXpgNppbDXuRN+abLJxh3J/OduDP+G9KIaj7/9MyLkjK
+         YHfPCnvRQIFgYxqojOj17KOKKES2LEO7QNHI2+i75o8rKFsrga5PinS0rYLIGZqRErWp
+         WkSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709166784; x=1709771584;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0muDEbmiXwsrbOFIxJLnIjoJRKmx4ahL9Ls0vOb96tI=;
-        b=Vwm6ruJocd61PGr6kAr7+tqADl8J/EIvsMny2iXa1fbkDjSw+y7eSKyd3GY9odLDiE
-         K09ucaAxA7pbYaNsZ7APmJva3k0MXl87PulgMnzlMAcV0M12mDrazHoexrbKOjMmCs09
-         m1XB/AGG2h8yo6rtV8ye/ucMUlhJtWP4tRttMHnZ2xNs1IwngjYTfgeraZOBZ//jPy2y
-         2JdMBhnolhV6W0+9+tcpDomAEEYYKVvIJD7+MNnFoc8ECnJj1cHisX0C68VZcctb6TAK
-         2EGp6y7WBQXDSrS4r+IDk9H44PuoS9drOmW87Io5CVDxSexiG/PwmdBpohunZFuLUzyu
-         p+Mw==
-X-Forwarded-Encrypted: i=1; AJvYcCWW6XCf/UjIUaill9Z7argvtf6yTbE/22U3IK0qyNaaiZv6VnFD8WVRDlCn/kPfgjJBZDWBwQ8wgR4ZOja2egHhSEuHN5mXJb17
-X-Gm-Message-State: AOJu0YwRz4nG50b9TU2r5B/NJ+D3QzrMjXptO5heE5noNoYtSqHpX4qz
-	QbhbWGOVdn3C4M4uUqkcxO8je1kspfed1OoVe7cs4mR+dWBUZrTc8Mgm5XLDKkaJ4jqLPSVuC8L
-	gpEfkiH+FbZGcQDBeLYF/zc5mVB14S7M/yUb8zGtr9sMp/i48e71PAA8=
-X-Google-Smtp-Source: AGHT+IFFoDjZa8al1Bx+sZkkysb9j6nUdYOliwAkJdFhkvEoCOjjuVFT5GoU0wlCz5QJGhY1RCmD052ceSyoFBQZaimruE/VsGA0
+        d=1e100.net; s=20230601; t=1709170178; x=1709774978;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HO7sM+79J6T6oYs6iAIAH4cbr3Ct/U7/pkBJr2RsBIQ=;
+        b=j6P6AEFDxCnfcm83F6htC3wT1ir6T7/IrsekGnh5CYlofOrHIGpFJbpkR/AireuLG/
+         3qeUKEEhh+wsh1OcohOiZzeJEYtFkIeaLw1DyfNi77XH8h24sLyUve6uSs9//0cSZrFR
+         Y/ZwF4//nmCePgqAgKIwYQls64RsumIpDN2V1mMHBCqKnIqQp7EOafmtLIfsWm04UqQp
+         vg19XxnRflC5QvRy3eX3jrgwuFolWqdd0MiOFzRhthy96SRrMHYdKJp3w5K+7XbUtZfN
+         vdwWQF2Q8CAoGXH717eo9rEcrjquUB+GpBTok/qxHJ0Zf2tus1cyBv2ddI00C48XPVPh
+         iv9w==
+X-Forwarded-Encrypted: i=1; AJvYcCUoglxFxwWOnAHMUT7USddohJO3ARmH3qsMDSbw9Mtq6ycOmCn+aASUcE58Qktp7EGX8t1uQIyAUjNOzM2qoB7NzGi0DW+kR+Td
+X-Gm-Message-State: AOJu0YymrULudRO5OP6FLVZlHlfr2TVsyuYL74KKck6KMPS9zkfDxoRW
+	e9NaRoKAX175ec+2HV3ePgr6+P7OmN6s40G2jCW6uIID8cSWB2fkos3rSGEUUgW8xmcX00nF8jW
+	ITQ==
+X-Google-Smtp-Source: AGHT+IHAW0GcwvXl7ty+h3b4veLMGBLsR+JYhHrZjaoUwLnx5kWFpxkZrOKkIVQntygOusU16/Q3kY2Eds4=
+X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:23db])
+ (user=jthies job=sendgmr) by 2002:a05:690c:c0d:b0:609:3834:e0f4 with SMTP id
+ cl13-20020a05690c0c0d00b006093834e0f4mr192674ywb.7.1709170178031; Wed, 28 Feb
+ 2024 17:29:38 -0800 (PST)
+Date: Thu, 29 Feb 2024 01:28:54 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1cad:b0:365:1f8b:d103 with SMTP id
- x13-20020a056e021cad00b003651f8bd103mr42319ill.6.1709166784685; Wed, 28 Feb
- 2024 16:33:04 -0800 (PST)
-Date: Wed, 28 Feb 2024 16:33:04 -0800
-In-Reply-To: <380909e4-6e0a-402f-b3ac-de07e520c910@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000102fe606127a67f6@google.com>
-Subject: Re: [syzbot] [usb-storage?] divide error in isd200_ata_command
-From: syzbot <syzbot+28748250ab47a8f04100@syzkaller.appspotmail.com>
-To: bvanassche@acm.org, emilne@redhat.com, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	martin.petersen@oracle.com, nogikh@google.com, stern@rowland.harvard.edu, 
-	syzkaller-bugs@googlegroups.com, tasos@tasossah.com, 
-	usb-storage@lists.one-eyed-alien.net
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
+Message-ID: <20240229012858.3663833-1-jthies@google.com>
+Subject: [PATCH v3 0/4] usb: typec: ucsi: Expand SOP/SOP' Discovery
+From: Jameson Thies <jthies@google.com>
+To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
+Cc: jthies@google.com, pmalani@chromium.org, bleung@google.com, 
+	abhishekpandit@chromium.org, andersson@kernel.org, 
+	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com, 
+	gregkh@linuxfoundation.org, hdegoede@redhat.com, neil.armstrong@linaro.org, 
+	rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+Hi Heikki,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+This patch series expands support for partner and cable discover in the
+UCSI driver. There are a few pieces here.
 
-Reported-and-tested-by: syzbot+28748250ab47a8f04100@syzkaller.appspotmail.com
+1. Some cleanup of the GET_CABLE_PROP definitions in ucsi.h.
+2. Cable discovery and registration with the USB Type-C connector class.
+3. Partner/Cable identity registration with the USB Type-C connector
+class.
+4. SOP' alternate mode registration with the USB-C connector class using
+a cable plug.
 
-Tested on:
+These have been tested on a the usb-testing branch merged with a
+chromeOS 6.8-rc2 kernel. Let me know if you have any questions.
 
-commit:         f2e367d6 Merge tag 'for-6.8/dm-fix-3' of git://git.ker..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=15da3dba180000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=eff9f3183d0a20dd
-dashboard link: https://syzkaller.appspot.com/bug?extid=28748250ab47a8f04100
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=13287836180000
+Thanks,
+Jameson
 
-Note: testing is done by a robot and is best-effort only.
+Changes in v3:
+- Fixed CC stable.
+
+Changes in v2:
+- Re-ordered memset call and null assignment when unregistering partners
+and cables.
+- Supports registering partner and cable identity with UCSI versions
+before v2.0.
+- Shortened lines to within 80 characters with the exception of two
+error log lines with three indentations.
+- Tested on usb-testing branch merged with chromeOS 6.8-rc2 kernel.
+
+Jameson Thies (4):
+  usb: typec: ucsi: Clean up UCSI_CABLE_PROP macros
+  usb: typec: ucsi: Register cables based on GET_CABLE_PROPERTY
+  usb: typec: ucsi: Register SOP/SOP' Discover Identity Responses
+  usb: typec: ucsi: Register SOP' alternate modes with cable plug
+
+ drivers/usb/typec/ucsi/ucsi.c | 258 ++++++++++++++++++++++++++++++++++
+ drivers/usb/typec/ucsi/ucsi.h |  40 +++++-
+ 2 files changed, 296 insertions(+), 2 deletions(-)
+
+
+base-commit: a560a5672826fc1e057068bda93b3d4c98d037a2
+-- 
+2.44.0.rc1.240.g4c46232300-goog
+
 
