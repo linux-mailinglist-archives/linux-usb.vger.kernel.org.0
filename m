@@ -1,185 +1,302 @@
-Return-Path: <linux-usb+bounces-7303-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7305-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4A5086C352
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 09:21:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DCEF86C3A7
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 09:35:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 220D51C21327
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 08:21:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F382F1F25913
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 08:35:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CB384F5F2;
-	Thu, 29 Feb 2024 08:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E3A4535AE;
+	Thu, 29 Feb 2024 08:35:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="qOq0r3/+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from outgoing.selfhost.de (mordac.selfhost.de [82.98.82.6])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2139.outbound.protection.outlook.com [40.107.22.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36F24F1FE
-	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 08:21:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.98.82.6
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709194877; cv=none; b=CAM7w0+KLcaP+10wuuqofTaR1te4xdLzKZfVHt9m7kMwd3NKcUPs5l3swJWCsaaNkFMvb4byM4Iisw7na+uUZqHOyd0/GtmB5OwJ3xc/Ft3qzIn8WwX+9xmTZ+hzwSxlj1O2Sgscdm8fC9bOC9hlhhic2SJEi5yBDFUaeGwaQhA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709194877; c=relaxed/simple;
-	bh=c3/1KWXdvm/MBju6h/jrIHxJ8idnwvwGpTR00gWFSzg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=hTx/rz3Fj04+PMEOlZC6fk0eWgCIoSUa7kb/2PS0ec/Lm+LYQzfbiKNobEyNwRzOzBwIKifmilzEEUDHupLCjLf4tn3ZgaVBs1QWtVV1Bie32otpzhOe4zmCG27FBuZkCpmdEFDfdVRQ0yqnu6qOrUb5P5c9iNmuJcTQyBZsuMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=afaics.de; spf=none smtp.mailfrom=afaics.de; arc=none smtp.client-ip=82.98.82.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=afaics.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=afaics.de
-Received: (qmail 15066 invoked from network); 29 Feb 2024 08:21:12 -0000
-Received: from unknown (HELO mailhost.afaics.de) (postmaster@xqrsonfo.mail.selfhost.de@79.192.199.18)
-  by mailout.selfhost.de with ESMTPA; 29 Feb 2024 08:21:12 -0000
-X-Spam-Level: ****
-X-Spam-Report: 
-	*  4.0 RCVD_IN_PBL RBL: Last ext relay in Spamhaus PBL (Non-MTA IPs)
-	*      [2003:e3:1f31:6503:8865:8fff:feb7:694d listed in]
-	[zen.spamhaus.org]
-	*  0.0 HELO_NO_DOMAIN Relay reports its domain incorrectly
-	*  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
-	*  0.0 DMARC_MISSING Missing DMARC policy
-Received: from [IPV6:2003:e3:1f31:6503:8865:8fff:feb7:694d] (p200300e31f31650388658ffffeb7694d.dip0.t-ipconnect.de [2003:e3:1f31:6503:8865:8fff:feb7:694d])
-	by marvin.afaics.de (OpenSMTPD) with ESMTP id db5b7ac1;
-	Thu, 29 Feb 2024 09:21:08 +0100 (CET)
-Message-ID: <633b4ae2-408c-469a-8df1-7530de9f7a97@afaics.de>
-Date: Thu, 29 Feb 2024 09:21:08 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170B9524C6;
+	Thu, 29 Feb 2024 08:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.139
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709195701; cv=fail; b=N5onHIGOQpfrMizV4QozuOpka7L6AeAtf+Fbf9EbQzUY8STJ1F0v7V0fvr37uoErI7TiuD5UH4TU8o5asAxPCBlcP/FofzaMKQsgeCVKwvT8BJyD5kvMxdswudOHbJ1ZnYHj5eUJKzVX+GC+elpJsWz7mv+wWYjoMkeQVCWh+z8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709195701; c=relaxed/simple;
+	bh=Pp28OTxcmYOQO4q65XW6Z69VSkriW1xDu3yJGmG0pN0=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=sg3ogJLUiJnLpXBFByNWn2PhXK8vPcfR6xVEWHfbDIDGKSCPRCfrRVH0uIqb1HaIRLgWY2QGBu845D7aQ1gXICVOhYXFdGm00P+ajpKtkTP2IQBR/AJ8wPzEZ37dyAlrHihWQWeGe5GFBoebTGYo/wuCVdg+b4vGWJFiy5SNqcU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net; spf=pass smtp.mailfrom=wolfvision.net; dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b=qOq0r3/+; arc=fail smtp.client-ip=40.107.22.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolfvision.net
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mU51AVVeSEUD1IjxvVwDZIiHVKUFWMo4JheXKF38aYp0LEWaIESKPY27EZUO4wykv/cLSiz1ZlATa5V8Nc3qs3IpOuBwA2fTSgPgbUR7CQ5Yt3KpqDjl9dxGQp5T6W+i6+uS6A4ikocNaCptoqmrwQ9OUaRVNrLZKrxc7JQeXuyVVKCV9OSWUkrcYdRIwSzO9e3T7tLoCbI+spfr7CqPRPAFhK0GG4g9j5ekIp4yTJV0rfpMJkrUU6Q+W8NIiiMAHCPy8iLM06A4WfGcqRTaXhSv9FdEt/u7prT/gVviQzAA2y8GTG/XRQKCTHhy+BPgA60g6N6auWmJxkx82TulsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aZfA5n0Ada87GjUe9hHZJhuSDnEQvVQEnbg2Q8h+LYA=;
+ b=TsfzjYs/BdTLcKINuGMJx31HbeDm0yB3CGyjV1uyQtqDfuMaDUHJKEfiVsahoXbRRmK88bC8wVbNEeKQ98W/nF1c6rotnVvPXFcjriSKfBck47Vcwrlm8B4UqmkE/KwQWzjBhuuJWycpcqzzPOoztRWPK/P9EldnOtQSpT8RDma5DgSaSpNy39nq4HQLmYRed67uJsozSTJ1pjnVwAVvCa4v4FtRQo3a5XWrv1ImJR2CyoikYf57Q2jAMF7tuElnbnArfG5RG8qostFgeCsmJ7G8dNqHxYaOPoENlrlXpMOX7MhpvQ0Rfay50Ahts50yOvE0dCXMmEUZGiHS6oBYLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aZfA5n0Ada87GjUe9hHZJhuSDnEQvVQEnbg2Q8h+LYA=;
+ b=qOq0r3/+NwwSqeMCCUp83jk+0RwMyblk4jJaS0BtKufu95B+2k6OHA252M+9HRl1ggucNWSo+v1gnbN6t5sTxweMh0x2CEOtKR45mtFm2hGPJ9O/1ZAP5y3IV3H+KBz0Xx0p3eEx4SsbBdO3AUc6iJ4Rf5pLg3WbK50UIVjDBUw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
+ by DU0PR08MB9727.eurprd08.prod.outlook.com (2603:10a6:10:445::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.41; Thu, 29 Feb
+ 2024 08:34:53 +0000
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::9e35:6de9:e4fc:843f]) by VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::9e35:6de9:e4fc:843f%6]) with mapi id 15.20.7316.035; Thu, 29 Feb 2024
+ 08:34:52 +0000
+From: Javier Carrasco <javier.carrasco@wolfvision.net>
+Subject: [PATCH v6 0/9] usb: misc: onboard_hub: add support for XMOS
+ XVF3500
+Date: Thu, 29 Feb 2024 09:34:43 +0100
+Message-Id: <20240229-onboard_xvf3500-v6-0-a0aff2947040@wolfvision.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKNB4GUC/3XOzarCMBAF4FeRrG9kpkmmua58DxFp/jQgjaQSF
+ em7G3Wh0Lo8A/Odc2eDz9EPbLW4s+xLHGLqa6C/BbOHrt97Hl3NrIFGAgrgqTepy253LUEoAE4
+ WfKsdYoeG1a9T9iFeX+JmW/MhDueUb6+Cgs/rb6sgB67QKPGvJZA160s6hveoZe/P7AkW8UEao
+ CkiKhK0MiARibSeReQX0swskRVxFglba5VzchZR34ieIqoiLRkNKjgRPE2QcRwfpr0vFIIBAAA
+ =
+To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Matthias Kaehlcke <mka@chromium.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Helen Koike <helen.koike@collabora.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Russell King <linux@armlinux.org.uk>
+Cc: linux-sound@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, 
+ Javier Carrasco <javier.carrasco@wolfvision.net>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1709195691; l=6390;
+ i=javier.carrasco@wolfvision.net; s=20230509; h=from:subject:message-id;
+ bh=Pp28OTxcmYOQO4q65XW6Z69VSkriW1xDu3yJGmG0pN0=;
+ b=F7QujYNZLm+DVGrkUoq8Zcem5+XrX5iKNhaimbTGYa9ZFhXhkdX8NEBmRIl4KZR4xUnC2vday
+ h63N0sG+44JBCa1oEcJfH9ftzjxqsOxuPx/vm7XvkDAhXQKwUJk/rqD
+X-Developer-Key: i=javier.carrasco@wolfvision.net; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
+X-ClientProxiedBy: FR3P281CA0020.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1c::21) To VE1PR08MB4974.eurprd08.prod.outlook.com
+ (2603:10a6:803:111::15)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Linux)
-Subject: Re: RIP on discard, JMicron USB adaptor
-From: Harald Dunkel <harri@afaics.de>
-To: Oliver Neukum <oneukum@suse.com>, Alan Stern <stern@rowland.harvard.edu>,
- Keith Busch <kbusch@kernel.org>
-Cc: Harald Dunkel <harald.dunkel@aixigo.com>, Jens Axboe <axboe@kernel.dk>,
- Bart Van Assche <bvanassche@acm.org>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- linux-block@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-scsi@vger.kernel.org
-References: <70bc51d7-c8a2-4b06-ab7a-e321d20db49a@aixigo.com>
- <62296d89-f7e6-4f54-add8-35b531dc657c@rowland.harvard.edu>
- <Zd9Xbz3L6JEvBHHT@kbusch-mbp>
- <76fcb1b1-cdf2-45d0-aeab-c712ee517b34@rowland.harvard.edu>
- <4111f9ba-e1dc-4158-af6f-c048bcf8ccd2@suse.com>
- <81499610-bbac-4957-a2ab-331db68455f0@afaics.de>
- <5baf28bd-b89e-49aa-ad66-6725ba9a87f9@afaics.de>
-Content-Language: en-US
-Autocrypt: addr=harri@afaics.de; keydata=
- xsBNBFIHbdABCACYHRLHGdFRk7bWkgdPhDLin6jLIS0ppegsx0Vc9STFyiHFUW+6HU9ZYTpO
- f2qbcWlE3YJYacy6zOiiTjYX31quhvGrP3UJXKjXsAp7CFsMxRJUhm20Ph0nCl/Oed9SDNXN
- HQJwHoOVWrsu/sGxNTfjCWRJleBE11P+TuuLOAP9dbqFbWhmkTsE9Lp9d16Ak77MWmWWxBvD
- cBsUuC2GOYDfFOPM3j16w7aw4Y9GI2B5QzFiHvOR/hCazfDEMQAlaHMm6sH8uzrjNEtB5dvm
- vxF8j/IpvsuvWGhZ68rej2gPwoVrRTEBaYslW8/5dm8o1HuTkuLqxhNTcvYWyV8uKRtTABEB
- AAHNH0hhcmFsZCBEdW5rZWwgPGhhcnJpQGFmYWljcy5kZT7CwHoEEwEIACQCGwMCHgECF4AC
- GQEFAlQYLhUFCwkIBwMFFQoJCAsFFgIDAQAACgkQCp4qnmbTgcu7Fwf/RoWwNDxJPD96vBFb
- Jzfta9qVA0JpbKoMAnNY0tDWiF5Ur8UY/tv/RDVV44Vx3Ef0fzQZN0CtHsNfAKO+KXBMUiuT
- AP4AadpaIwYMo8v+SmPzJSUxWgBm6IsHwn1udXRdEgdR9guWkLPRGCK3x84sorAOUnUHJHkq
- UrDFQUNfNA9lqM7ttunfVtG4SaqcLEOpJ1s/aMUsEODlP/lws42VjubIVg403cMIgvqs5cT8
- EjLDNqCwEoWZRhfpg5x3D5uNDNWSW70Z+6Knicbi129QIu4HtSnfrxiuvHz2LLPFOVQuj8h4
- TPT6tkfIURKipFXoIC3YiK8f94rFO3q86oNJUs7ATQRSB23QAQgA27gQiXZ96pbJkGoz1RWX
- T8WSQJ5TWVJyf4eswoVI8Ffk5vLE+xPpAYEDkL7JYGCvBN1BKrcaZzDy8Irfys6bHI3JmVVi
- ZloSkVS8QL7pQGfp74VT3NvDjK6LDe9QMv8Rb45laSRD5XCGRMTxz9pwu3vNcOPCfV5nmbyB
- /6h4/bguFH1+6aGz6HyC8v/tjhL6+cY329inJ+vWVJYssweMIIYpssUtDaPKZO0080toLLrt
- KuVgiUb9llbmZgKGElRjwgGT8AUXDRFCzn0ws/nuGNw0L+EdCI3VdZSK5KMEO34vZq7iNeM1
- ZVnPVZAbHheR30NFKTgrwvlt8G7blHJPWwARAQABwsBfBBgBCAAJBQJSB23QAhsMAAoJEAqe
- Kp5m04HLiiEH/jlKumVyQrOxH58iQFzVDthDfJdBLmnDlfVx2Dzn60vc5To6yJ3fwO21s3xC
- /LW9aZSfDueV0nWU4/Wow/X5GEH90Vc1sFoeSZb/GW03vsO1n/OFIVlv9GQv+RviWMDEwKKx
- CMvdqUlVblWf1iT/ngPN0YawKGF0Dgn8TRzfL/Tq9muwNUaONzz8PWBUIm1+8JDZszYLzLoz
- YiY0usL4GH9BCeW6XG2Q6j4cpyOQZ0VKiBs1Rh+dmswn+iXLfi08Q0IxYAD6wjHdJTBD9pE9
- 5Uj8/1spt51FBAAIP+7sd2mpAvsNnojatuOgjBmBxFwiOKeyDNe1wvKr4dsRheOLV8M=
-In-Reply-To: <5baf28bd-b89e-49aa-ad66-6725ba9a87f9@afaics.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|DU0PR08MB9727:EE_
+X-MS-Office365-Filtering-Correlation-Id: c7e34c75-c1ba-406d-05e3-08dc39014cb2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	n259osFWy98o9uAmfg91CnPWoVZVVQK77HEBKUe2v7dRRnATmZd2CM2YKBon2WTog6zF8efl3ojl9PCCJRtq98borBBWIu++2CWImZMja4k+Dow4n2R6C1BE4F0joPF4qVcXIvbSHAhAt08U+0o7+oyAUarZW5zTjhLFevnMfmq2QnZN9rSTbm6OnElaOo/8aY3pinR20eCsWdSRrcl3mf1TFaqRruS8BlhPPVYel+gXzosMbnfgUK95wnkX+QhMMhpZdhTlUcuEc2j8sgTr6bkYqtJOJsER54fxuF5tqH4XuytACMuqtMIAOFiDRQTZDEZFsbUJU+laIpcyJY58RBflfqncpByjIk4H25ZsmVJgCL46yu3oYwXyizjqxDzTyX7bo/4bpCEl1nACSXkjWhyf5cfRazUH8VH7PWqoxDU18635VRQM5aa184O6WR0p6XnyyEVAzAMTXaVET7XvkIphsSMn5/mHGvazvOdX5YZBHpn8vfXr8ohCh8sJB1aPeWfRrlZcf1gk8t35jKxvTboHLav3PBQvuvYiKkcCw2O09GhpkyJkzza6LwxL+M3RwJVOqToPySR7MTck6dUBCSMYY9kZY6cGa7zmK5pwxO1NGn3if1pNQqq63XfmjAmu1FwGODO8jjnjS+veYl9TOMHqo5dT+bFeDhZN/yehI/+/rDj6LsMUEd0tL103NkulTQI9Vaj4CLqqblivUnpLRYbgHuOVdncI8NnHDJz5ZHg=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(921011)(38350700005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?M2J1Qnd2cTVEcDRGNERhZmJyZVVaeDhqRXExbHdRZUp2OXVDLzFsSW5oeEhY?=
+ =?utf-8?B?ZG1LbFBpQzlyaFJSc2xTd2RxWXludGE3YlFpMHQ0cWY1cU9QdUlvTlRLMTNp?=
+ =?utf-8?B?Nk1rakpCQ2JGTFBnaElPRUhObU1ZNWI3UXN2ZzRhcnpJNGNBRkUxdnRUbjBN?=
+ =?utf-8?B?RnJ0dVp0bGdOSmhWeDlaVS9KdENrVlRBb1hyRGlWYlVHRXVwSEt0ODN2NnI0?=
+ =?utf-8?B?ZG4yU3hOUStmeHRVZXdEUWRKaHpRckMzL25uTFRRSVd4c2hPaCtFMXNkWHJE?=
+ =?utf-8?B?UFU5RDF5RFdTZ05RbWVZVXhIbW44Wjd2dTFzQ09TSkNuSloyU0Z4RlZaZzRY?=
+ =?utf-8?B?YWxhL1I1SGhPbGdDem5odVJsaTBMYlpnWGFoWFIzN01IcDV5c2l1blJHdThU?=
+ =?utf-8?B?MXh0dFhNM0txS0JCYjNHRVlHUThjMThrN0c4SGdFREdieHo4bWJ3STBMNkYx?=
+ =?utf-8?B?azhnS3lDS0k2MmdxZ0ZwUkFRbDI5Q0twV0JqUmpCRlpxS3lWU0JIY2t5SE0v?=
+ =?utf-8?B?UlRUcVhRMFMzM095enRZeUxneUQ1MHJPSHpGcExzc2FLTS94bTBudXg4eXcw?=
+ =?utf-8?B?ZWkvOUw0bzJTSUlGZVlydFo3RGJnVnVpVHE3RmpiZXBYN0V6N0JWeGxGeWhE?=
+ =?utf-8?B?L3JXQXFYNGtXNDBCTWV0NEhQU212ZFNVSUFJbVgyZzc4bWJyQk5BYlhtWkR3?=
+ =?utf-8?B?UGdDZnpoMTFiSk81cUR3TjU0cUNwbncwc0RFMUdLQ1QrK0lSUGdURWozSnVk?=
+ =?utf-8?B?c2xac0Vvc3ZWZHkvSkFwRmhyYitCdHNFa0FycWVSaXN4cVNGSTBiUGNZOU4x?=
+ =?utf-8?B?OVhrcFJGZ1JHVit0VzllWkxsd2p6cU9rajhXQWNRSUtCYmJFSTV1cHkySURU?=
+ =?utf-8?B?OEJXYjdudVBwQzNUK3daOGxma0k4RUVoYXFKY2IrZzJaVEg3ZFN2Znlzek1M?=
+ =?utf-8?B?UTRCWTVSSjhLcmFHbGRDdlBxNzdSNTJ0WWNyYVFIam9PUmJRcEFjVHNCbk5a?=
+ =?utf-8?B?QWJsczg0T2drN1o4V2svSEw2VnZsSFdRT21FaC81NUNsWDVZOGo5TE16bkZM?=
+ =?utf-8?B?dVBvM043UCtmc0g2SnR3OGc2QVNIU29yNm1CSE9kakl2ZlRXV0oyR0FnbW96?=
+ =?utf-8?B?ZnR2aGVuU2xaRXdnSno5K2sxOUFJdFBaQS8rL0FDMHNLb0diRENXb216b3da?=
+ =?utf-8?B?R09IUWRaZ3RTSFljZDRwN01ZRmJLRHRRWGI0Z0t1ditDRThiSnl5aEE4NzI2?=
+ =?utf-8?B?S05GK2ZtQUw2cUQvbzRRQW01UFZBT3dGQUZaQ1pDM2x5TU02SkIxcG9Cakc3?=
+ =?utf-8?B?clV6UVhjN3U1dFFRYVJsVzZCamJ4YjcweFhiOS8zek5WaTM4dEtMaHA5NU9Q?=
+ =?utf-8?B?ZnMvY08vNEVkRW51bFJ3U1hQNkhmNkJOY25PSzhJNTNYNTBTeG5aWVpIaWpF?=
+ =?utf-8?B?VUxiRzc0dTBuWlh3MXgxeDJ0Z0hsdEFGWWs4TDQwc3lmQnA5KzM1YWhCa2Fo?=
+ =?utf-8?B?UGFhVFl2d0VVdm5WWUljVnFvS2h5YjNaTmNyRWtvb2tsMmFBZVJQYklOMC82?=
+ =?utf-8?B?QkxLMUR0VHI0RjhzWWMxdVlWVFBtZXE1cXBudnE4Q3ZmN2tMQXFHQzBEMUlS?=
+ =?utf-8?B?Q2ZEUk9IbWplbHFaNVhqSHl0dm81Tm9DRzJUcmFEcXZETkJCY2J4d2hwR3lR?=
+ =?utf-8?B?d3ZEN2RtOXRIdmRYSWUrVEVnSUJCQTVPbmN6cnR2UGl3MFpxYW44WWh3QVox?=
+ =?utf-8?B?bGFTQTVqSGF5NjN6d0ZldHRVeDNocU5Ed3hvQzM2OHpyWmdLMjhLcDk1SHlO?=
+ =?utf-8?B?TFlBMVFYbjdjWWJXM0tpT1RIdG1acm5SS2pIS3VoUUt0Vm9VbXpiSTZOMC9K?=
+ =?utf-8?B?ekdIRUlEazlvb1llaDV5b3dWK051eU91RFVVWXluZXdiRE5jMml0dW5hK2ti?=
+ =?utf-8?B?aUlDSXl6MldUK1hIUmJNeVM1UDU0WVY5em1Gbi9BUm93SWxOUmhDdFFDbmVk?=
+ =?utf-8?B?Z29VenpPQnlTamNheERKODRlemJuWmtoR3Nqd1ZCWit0eUlUUm9sUXNRVXNn?=
+ =?utf-8?B?QzBSSnJGaHBjbXBwU0JRb0VJamVYTkgvYWg0czBlQjRPWkJ5UU1YY01ad2hx?=
+ =?utf-8?B?NHVzV1VFbzNva2pCaUFzOXQ2ekFxS1lCUlNQNFI3THdudmowL1RiQSt3Z2d3?=
+ =?utf-8?Q?U1Z6wLt4IOnivhIFC1Zu6jI=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7e34c75-c1ba-406d-05e3-08dc39014cb2
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Feb 2024 08:34:52.5422
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9xovr3czNLk+v5uB639wyCsoNAUXfJhJUUqS3nhqagzJRmT1xTh+LAt/eOV278RIl/uGkC3F4ifGzczfEvIEPOw0wYcaY3rTpIIq5YgXGQg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB9727
 
-On 2024-02-29 08:31:51, Harald Dunkel wrote:
-> Good news (sort of): I was able to reproduce the problem after a
-> power cycle. Full dmesg output is attached. Hope this helps.
-> 
+This series adds support for the XMOS XVF3500 VocalFusion Voice
+Processor[1], a low-latency, 32-bit multicore controller for voice
+processing.
 
-And for 6.7.6:
+The XVF3500 requires a specific power sequence, which consists of
+enabling the regulators that control the 3V3 and 1V0 device supplies,
+and a reset de-assertion after a delay of at least 100ns. Once in normal
+operation, the XVF3500 registers itself as a regular USB device and no
+device-specific management is required.
 
-```
-[Thu Feb 29 09:11:05 2024] usb 1-4: reset high-speed USB device number 3 using xhci_hcd
-[Thu Feb 29 09:11:10 2024] logitech-hidpp-device 0003:046D:4082.0007: HID++ 4.5 device connected.
-[Thu Feb 29 09:11:37 2024] usb 1-12.1: new high-speed USB device number 13 using xhci_hcd
-[Thu Feb 29 09:11:38 2024] usb 1-12.1: New USB device found, idVendor=152d, idProduct=0583, bcdDevice=31.08
-[Thu Feb 29 09:11:38 2024] usb 1-12.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[Thu Feb 29 09:11:38 2024] usb 1-12.1: Product: USB Storage Device
-[Thu Feb 29 09:11:38 2024] usb 1-12.1: Manufacturer: JMicron
-[Thu Feb 29 09:11:38 2024] usb 1-12.1: SerialNumber: DD56419885A7C
-[Thu Feb 29 09:11:38 2024] scsi host9: uas
-[Thu Feb 29 09:11:38 2024] scsi 9:0:0:0: Direct-Access     SAMSUNG  MZVLB1T0HALR     3108 PQ: 0 ANSI: 6
-[Thu Feb 29 09:11:38 2024] sd 9:0:0:0: Attached scsi generic sg5 type 0
-[Thu Feb 29 09:11:40 2024] sd 9:0:0:0: [sdf] 2000409264 512-byte logical blocks: (1.02 TB/954 GiB)
-[Thu Feb 29 09:11:40 2024] sd 9:0:0:0: [sdf] 4096-byte physical blocks
-[Thu Feb 29 09:11:40 2024] sd 9:0:0:0: [sdf] Write Protect is off
-[Thu Feb 29 09:11:40 2024] sd 9:0:0:0: [sdf] Mode Sense: 6b 00 00 08
-[Thu Feb 29 09:11:40 2024] sd 9:0:0:0: [sdf] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-[Thu Feb 29 09:11:40 2024] sd 9:0:0:0: [sdf] Preferred minimum I/O size 4096 bytes
-[Thu Feb 29 09:11:40 2024] sd 9:0:0:0: [sdf] Optimal transfer size 33553920 bytes not a multiple of preferred minimum block size (4096 bytes)
-[Thu Feb 29 09:11:40 2024]  sdf: sdf1
-[Thu Feb 29 09:11:40 2024] sd 9:0:0:0: [sdf] Attached SCSI disk
-[Thu Feb 29 09:12:53 2024] ------------[ cut here ]------------
-[Thu Feb 29 09:12:53 2024] WARNING: CPU: 0 PID: 3290 at block/blk-lib.c:50 __blkdev_issue_discard+0x13e/0x180
-[Thu Feb 29 09:12:53 2024] Modules linked in: snd_seq_dummy snd_hrtimer snd_seq_midi snd_seq_midi_event snd_seq cpufreq_userspace cpufreq_conservative cpufreq_powersave cpufreq_ondemand cbc cts rpcsec_gss_krb5 nfsv4 dns_resolver nfs lockd grace fscache netfs scsi_transport_iscsi nvme_fabrics 
-dell_rbu rfkill qrtr dcdbas uinput binfmt_misc nls_utf8 nls_cp437 vfat fat nvidia_drm(PO) nvidia_modeset(PO) intel_rapl_msr intel_rapl_common snd_hda_codec_realtek intel_uncore_frequency snd_hda_codec_generic ledtrig_audio intel_uncore_frequency_common x86_pkg_temp_thermal intel_powerclamp coretemp 
-kvm_intel kvm snd_hda_codec_hdmi irqbypass mei_pxp mei_hdcp i915 snd_hda_intel rapl snd_intel_dspcfg snd_usb_audio cec snd_hda_codec snd_usbmidi_lib drm_buddy intel_cstate uvcvideo snd_hda_core snd_rawmidi videobuf2_vmalloc drm_display_helper snd_hwdep snd_seq_device uvc snd_pcm_oss videobuf2_memops 
-ttm snd_mixer_oss videobuf2_v4l2 snd_pcm tpm_crb videodev drm_kms_helper tpm_tis snd_timer videobuf2_common evdev tpm_tis_core snd intel_gtt intel_uncore
-[Thu Feb 29 09:12:53 2024]  wmi_bmof input_leds gigabyte_wmi pcspkr mc soundcore i2c_algo_bit tpm intel_hid rng_core sparse_keymap acpi_tad acpi_pad sg button mei_me mei nvidia(PO) bonding tls xt_recent br_netfilter overlay xt_comment xt_CHECKSUM nf_tables nfnetlink bridge 8021q garp stp mrp llc 
-macvlan veth iptable_nat iptable_mangle iptable_filter ip6table_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip6table_mangle ip6table_filter ip6_tables auth_rpcgss loop drm fuse efi_pstore agpgart configfs sunrpc ip_tables x_tables autofs4 ext4 crc16 mbcache jbd2 btrfs blake2b_generic 
-efivarfs raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx xor raid6_pq libcrc32c crc32c_generic raid0 multipath linear hid_logitech_hidpp hid_logitech_dj uas usb_storage hid_generic usbhid hid cdc_ncm cdc_ether usbnet r8152 mii raid1 md_mod sd_mod dm_mod crct10dif_pclmul 
-crc32_pclmul crc32c_intel polyval_clmulni polyval_generic gf128mul ghash_clmulni_intel sha512_ssse3 sha512_generic sha256_ssse3 sha1_ssse3
-[Thu Feb 29 09:12:53 2024]  i2c_designware_platform i2c_designware_core nvme nvme_core t10_pi ahci xhci_pci crc64_rocksoft_generic aesni_intel crypto_simd r8169 libahci cryptd i2c_i801 crc64_rocksoft xhci_hcd i2c_smbus realtek crc64 libata intel_lpss_pci usbcore intel_lpss scsi_mod idma64 
-scsi_common virt_dma usb_common fan video pinctrl_alderlake pinctrl_intel wmi pwm_lpss
-[Thu Feb 29 09:12:53 2024] CPU: 0 PID: 3290 Comm: blkdiscard Tainted: P           O       6.7.6-raw #1
-[Thu Feb 29 09:12:53 2024] Hardware name: Gigabyte Technology Co., Ltd. Z790 GAMING X/Z790 GAMING X, BIOS F9b 11/10/2023
-[Thu Feb 29 09:12:53 2024] RIP: 0010:__blkdev_issue_discard+0x13e/0x180
-[Thu Feb 29 09:12:53 2024] Code: 48 39 d8 75 91 f7 da 89 d3 c1 eb 09 eb 8b 48 8b 04 24 4c 89 20 48 83 c4 08 31 c0 5b 5d 41 5c 41 5d 41 5e 41 5f c3 cc cc cc cc <0f> 0b 48 c7 c6 00 26 e8 93 48 c7 c7 60 91 50 94 e8 3d 7a 5b 00 85
-[Thu Feb 29 09:12:53 2024] RSP: 0018:ffffa7654119bd08 EFLAGS: 00010246
-[Thu Feb 29 09:12:53 2024] RAX: ffff8d8f4c5be0b0 RBX: ffff8d8f4add3e80 RCX: ffff8d8f4add12c0
-[Thu Feb 29 09:12:53 2024] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff8d8f4add3e80
-[Thu Feb 29 09:12:53 2024] RBP: 0000000000000cc0 R08: ffffa7654119bd48 R09: 0000000000000000
-[Thu Feb 29 09:12:53 2024] R10: 000000000000081c R11: 0000000000000000 R12: 0000000000000000
-[Thu Feb 29 09:12:53 2024] R13: 00000000773bc800 R14: 000000ee77900000 R15: ffff8d8f4add3e80
-[Thu Feb 29 09:12:53 2024] FS:  00007fb69dc57740(0000) GS:ffff8d9ebf400000(0000) knlGS:0000000000000000
-[Thu Feb 29 09:12:53 2024] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[Thu Feb 29 09:12:53 2024] CR2: 00007ffefb8c6170 CR3: 000000017d8da000 CR4: 0000000000f50ef0
-[Thu Feb 29 09:12:53 2024] PKRU: 55555554
-[Thu Feb 29 09:12:53 2024] Call Trace:
-[Thu Feb 29 09:12:53 2024]  <TASK>
-[Thu Feb 29 09:12:53 2024]  ? __blkdev_issue_discard+0x13e/0x180
-[Thu Feb 29 09:12:53 2024]  ? __warn+0x7c/0x130
-[Thu Feb 29 09:12:53 2024]  ? __blkdev_issue_discard+0x13e/0x180
-[Thu Feb 29 09:12:53 2024]  ? report_bug+0x191/0x1c0
-[Thu Feb 29 09:12:53 2024]  ? handle_bug+0x3a/0x70
-[Thu Feb 29 09:12:53 2024]  ? exc_invalid_op+0x17/0x70
-[Thu Feb 29 09:12:53 2024]  ? asm_exc_invalid_op+0x1a/0x20
-[Thu Feb 29 09:12:53 2024]  ? __blkdev_issue_discard+0x13e/0x180
-[Thu Feb 29 09:12:53 2024]  blkdev_issue_discard+0x50/0xb0
-[Thu Feb 29 09:12:53 2024]  blkdev_common_ioctl+0x820/0x970
-[Thu Feb 29 09:12:53 2024]  ? do_fault+0x27c/0x690
-[Thu Feb 29 09:12:53 2024]  blkdev_ioctl+0xc7/0x260
-[Thu Feb 29 09:12:53 2024]  __x64_sys_ioctl+0x8f/0xd0
-[Thu Feb 29 09:12:53 2024]  do_syscall_64+0x61/0x120
-[Thu Feb 29 09:12:53 2024]  ? __count_memcg_events+0x6e/0xc0
-[Thu Feb 29 09:12:53 2024]  ? handle_mm_fault+0xb0/0x370
-[Thu Feb 29 09:12:53 2024]  ? __ct_user_enter+0x8d/0x100
-[Thu Feb 29 09:12:53 2024]  entry_SYSCALL_64_after_hwframe+0x6e/0x76
-[Thu Feb 29 09:12:53 2024] RIP: 0033:0x7fb69dd57c5b
-[Thu Feb 29 09:12:53 2024] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 1c 48 8b 44 24 18 64 48 2b 04 25 28 00 00
-[Thu Feb 29 09:12:53 2024] RSP: 002b:00007ffefb889d70 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-[Thu Feb 29 09:12:53 2024] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb69dd57c5b
-[Thu Feb 29 09:12:53 2024] RDX: 00007ffefb889e30 RSI: 0000000000001277 RDI: 0000000000000003
-[Thu Feb 29 09:12:53 2024] RBP: 0000000000000000 R08: 0000000000000007 R09: 000055b80fbd32f0
-[Thu Feb 29 09:12:53 2024] R10: 00007ffefb889da0 R11: 0000000000000246 R12: 000000ee77900000
-[Thu Feb 29 09:12:53 2024] R13: 0000000000000003 R14: 000055b80fbd32f0 R15: 0000000000000000
-[Thu Feb 29 09:12:53 2024]  </TASK>
-[Thu Feb 29 09:12:53 2024] ---[ end trace 0000000000000000 ]---
-[Thu Feb 29 09:12:53 2024] sdf1: Error: discard_granularity is 0.
-```
+The power management provided by onboard_usb_hub is not specific for hubs
+and any other USB device with the same power sequence could profit from
+that driver, provided that the device does not have any specific
+requirements beyond the power management. To account for non-hub devices,
+the driver has been renamed and an extra flag has been added to identify
+hubs and provide their specific functionality.
+
+Support for device-specific power suply names has also been added, keeping
+generic names for already supported devices to keep backwards
+compatibility.
+
+The references to onboard_usb_hub in the core and config files have been
+updated as well.
+
+The diff is way much bulkier than the actual code addition because of the
+file renaming, so in order to ease reviews and catch hub-specific code
+that might still affect non-hub devices, the complete renaming was moved
+to a single commit.
+
+This series has been tested with a Rockchip-based SoC and an XMOS
+XVF3500-FB167-C.
+
+[1] https://www.xmos.com/xvf3500/
+
+To: Liam Girdwood <lgirdwood@gmail.com>
+To: Mark Brown <broonie@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Matthias Kaehlcke <mka@chromium.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Helen Koike <helen.koike@collabora.com>
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+To: Maxime Ripard <mripard@kernel.org>
+To: Thomas Zimmermann <tzimmermann@suse.de>
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>
+To: Russell King <linux@armlinux.org.uk>
+Cc: linux-sound@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+
+Changes in v6:
+- onboard_usb_hub.c: use dev pointer in probe consistently (new patch).
+- onboard_usb_hub.c: rename get_regulator_bulk function to
+  get_regulators and only pass onboard_hub (hub in probe) as argument.
+- onboard_usb_hub.c: drop file after renaming.
+- onboard_usb_dev.c: improve device descriptions in usb_device_id table.
+- onboard_usb_dev.c: keep non-hub devices powered on in suspend.
+- General: update commit messages (use usb_hub_dev after renaming).
+- Link to v5: https://lore.kernel.org/r/20240228-onboard_xvf3500-v5-0-76b805fd3fe6@wolfvision.net
+
+Changes in v5:
+- onboard_usb_dev: move device suppy names handling to [1/8].
+- onboard_usb_dev.c: make always_powered_in_suspend not visible for
+  non-hub devices.
+- onboard_usb_dev.c: move is_hub check in suspend() to functio entry.
+- onboard_usb_dev_pdevs.c: comment rephrasing to account for
+  hub-specific attribute.
+- Link to v4: https://lore.kernel.org/r/20240220-onboard_xvf3500-v4-0-dc1617cc5dd4@wolfvision.net
+
+Changes in v4:
+- General: use device supply names and generics as fallback.
+- onbord_usb_dev.c: fix suspend callback for non-hub devices.
+- onboard_usb_dev.c: fix typos.
+
+- Link to v3: https://lore.kernel.org/r/20240206-onboard_xvf3500-v3-0-f85b04116688@wolfvision.net
+
+Changes in v3:
+- onboard_usb_hub: rename to onboard_usb_dev to include non-hub devices.
+- onboard_hub_dev: add flag to identify hubs and provide their extra
+  functionality.
+- dt-bindings: add reference to usb-device.yaml and usb node in the
+  example.
+- dt-bindings: generic node name.
+- Link to v2: https://lore.kernel.org/r/20240130-onboard_xvf3500-v1-0-51b5398406cb@wolfvision.net
+
+Changes in v2:
+- general: add support in onboard_usb_hub instead of using a dedicated
+  driver.
+- dt-bindings: use generic usb-device compatible ("usbVID,PID").
+- Link to v1: https://lore.kernel.org/all/20240115-feature-xvf3500_driver-v1-0-ed9cfb48bb85@wolfvision.net/
+
+---
+Javier Carrasco (9):
+      usb: misc: onboard_hub: use pointer consistently in the probe function
+      usb: misc: onboard_hub: use device supply names
+      usb: misc: onboard_hub: rename to onboard_dev
+      drm: ci: arm64.config: update ONBOARD_USB_HUB to ONBOARD_USB_DEV
+      arm64: defconfig: update ONBOARD_USB_HUB to ONBOARD_USB_DEV
+      ARM: multi_v7_defconfig: update ONBOARD_USB_HUB to ONBOAD_USB_DEV
+      usb: misc: onboard_dev: add support for non-hub devices
+      ASoC: dt-bindings: xmos,xvf3500: add XMOS XVF3500 voice processor
+      usb: misc: onboard_dev: add support for XMOS XVF3500
+
+ ...-usb-hub => sysfs-bus-platform-onboard-usb-dev} |   3 +-
+ .../devicetree/bindings/sound/xmos,xvf3500.yaml    |  63 +++
+ MAINTAINERS                                        |   4 +-
+ arch/arm/configs/multi_v7_defconfig                |   2 +-
+ arch/arm64/configs/defconfig                       |   2 +-
+ drivers/gpu/drm/ci/arm64.config                    |   4 +-
+ drivers/usb/core/Makefile                          |   4 +-
+ drivers/usb/core/hub.c                             |   8 +-
+ drivers/usb/core/hub.h                             |   2 +-
+ drivers/usb/misc/Kconfig                           |  16 +-
+ drivers/usb/misc/Makefile                          |   2 +-
+ drivers/usb/misc/onboard_usb_dev.c                 | 544 +++++++++++++++++++++
+ .../misc/{onboard_usb_hub.h => onboard_usb_dev.h}  |  58 ++-
+ ...ard_usb_hub_pdevs.c => onboard_usb_dev_pdevs.c} |  47 +-
+ drivers/usb/misc/onboard_usb_hub.c                 | 501 -------------------
+ include/linux/usb/onboard_dev.h                    |  18 +
+ include/linux/usb/onboard_hub.h                    |  18 -
+ 17 files changed, 717 insertions(+), 579 deletions(-)
+---
+base-commit: 41bccc98fb7931d63d03f326a746ac4d429c1dd3
+change-id: 20240130-onboard_xvf3500-6c0e78d11a1b
+
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco@wolfvision.net>
+
 
