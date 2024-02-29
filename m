@@ -1,131 +1,91 @@
-Return-Path: <linux-usb+bounces-7283-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7284-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 151CB86BE42
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 02:29:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0179886BE69
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 02:42:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 470C71C2145B
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 01:29:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9591D1F23517
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 01:42:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E92FE2E413;
-	Thu, 29 Feb 2024 01:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D648F2E63C;
+	Thu, 29 Feb 2024 01:42:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Aau/WyFf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZnUCIBgz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12F32D048
-	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 01:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619F92E405
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 01:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709170180; cv=none; b=b6PybmLplJ1EIO+Nmc6XLJ9C+m9nPNA9zt6yLRt+NN0+0gAVyvXWSHrUyvGrIHMATPucDqqPJHWr6uVumTXQTuKopEBoOTnxc/tLAUqbh2ecIXqympPQfwYeDQ6ehwO2/vuGSgTTgo/LqkF3SgJtXVhdkuVCMKysTyCUmy28X3s=
+	t=1709170948; cv=none; b=ejJfsdDggTPZCvuhQMUHeej2rqKbiDPXw6c1tBSDGwvDZzdPejT9xrhJFyQxQZ0CCtulDcx7FxBIaRzL/bnz3ZAiz/+XdoqoUKPgQ6fy9PdZ2WoKkhzuSLTq9melxOCa78k57gblWIRdKgNpcM5YKF7lrEQWvqabpiCjZrvSK18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709170180; c=relaxed/simple;
-	bh=llgycK0vel+ByZjq2S4bsIYLpr53VlV1dYeH2+0LRo8=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=MRXnBJ1h/ZOwWdCsychvIIIhBPwbQjZnHCBmpbndrRdby+T8aNXiTaptkSQ0/b5xYq7uTfo7i0wNEFdQxvfMwGTeJAP+0nVL9z229PwJHH+HJoi/hXD2GCBQm3ylGZulFquvhCPhhA5Du1bI3mq0UJ2SQOXSQvrRsYqtqm6MTg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Aau/WyFf; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60904453110so5295097b3.2
-        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 17:29:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709170178; x=1709774978; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HO7sM+79J6T6oYs6iAIAH4cbr3Ct/U7/pkBJr2RsBIQ=;
-        b=Aau/WyFfgTze7Ys0WKXUOHDcaw+D/kRiQW9u5mna5u1/omAtu2Key38j21vQN/hJkv
-         yfnjaLCHnhdTlcNwE1y+dZRGn87XjNbep++yN3LFFTjjn5P1BxM0c8YdolYMEv6qkkOR
-         ko+LTVY/LT/qIBypg9202D4dPyoxf/Rl0vBZi4plvcEVLqJpluL5ynnFlX35WHKIA8Ej
-         1Tw9JODBfsaOdQhDa53TPb21cXpgNppbDXuRN+abLJxh3J/OduDP+G9KIaj7/9MyLkjK
-         YHfPCnvRQIFgYxqojOj17KOKKES2LEO7QNHI2+i75o8rKFsrga5PinS0rYLIGZqRErWp
-         WkSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709170178; x=1709774978;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HO7sM+79J6T6oYs6iAIAH4cbr3Ct/U7/pkBJr2RsBIQ=;
-        b=j6P6AEFDxCnfcm83F6htC3wT1ir6T7/IrsekGnh5CYlofOrHIGpFJbpkR/AireuLG/
-         3qeUKEEhh+wsh1OcohOiZzeJEYtFkIeaLw1DyfNi77XH8h24sLyUve6uSs9//0cSZrFR
-         Y/ZwF4//nmCePgqAgKIwYQls64RsumIpDN2V1mMHBCqKnIqQp7EOafmtLIfsWm04UqQp
-         vg19XxnRflC5QvRy3eX3jrgwuFolWqdd0MiOFzRhthy96SRrMHYdKJp3w5K+7XbUtZfN
-         vdwWQF2Q8CAoGXH717eo9rEcrjquUB+GpBTok/qxHJ0Zf2tus1cyBv2ddI00C48XPVPh
-         iv9w==
-X-Forwarded-Encrypted: i=1; AJvYcCUoglxFxwWOnAHMUT7USddohJO3ARmH3qsMDSbw9Mtq6ycOmCn+aASUcE58Qktp7EGX8t1uQIyAUjNOzM2qoB7NzGi0DW+kR+Td
-X-Gm-Message-State: AOJu0YymrULudRO5OP6FLVZlHlfr2TVsyuYL74KKck6KMPS9zkfDxoRW
-	e9NaRoKAX175ec+2HV3ePgr6+P7OmN6s40G2jCW6uIID8cSWB2fkos3rSGEUUgW8xmcX00nF8jW
-	ITQ==
-X-Google-Smtp-Source: AGHT+IHAW0GcwvXl7ty+h3b4veLMGBLsR+JYhHrZjaoUwLnx5kWFpxkZrOKkIVQntygOusU16/Q3kY2Eds4=
-X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:23db])
- (user=jthies job=sendgmr) by 2002:a05:690c:c0d:b0:609:3834:e0f4 with SMTP id
- cl13-20020a05690c0c0d00b006093834e0f4mr192674ywb.7.1709170178031; Wed, 28 Feb
- 2024 17:29:38 -0800 (PST)
-Date: Thu, 29 Feb 2024 01:28:54 +0000
+	s=arc-20240116; t=1709170948; c=relaxed/simple;
+	bh=p6pvCSgba4RW42Utaq7UfgOYNafwZcNgg3JRZ9sQKho=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TQ7Q1EvUK/kw6Z2m6SUI6xRhpfou1pPq4NBNOHVX1EOzncYWkSf0qoaGRy4PU2u4K5se+/EFiIrC9ai4BTTQJAoqY+a7gJfhcvtkRRID1LiFb6HxVFIJkdDUyzGvKBAFKfv/naNJV68wmqyvhPt0F6QZVeAAAOYU0e1DKHRf66E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZnUCIBgz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DDA9EC433C7
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 01:42:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709170947;
+	bh=p6pvCSgba4RW42Utaq7UfgOYNafwZcNgg3JRZ9sQKho=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ZnUCIBgzZMJKRvQRjBT2L2NErRz+tUDegDWA24R6Z6TsGbTbDFUTIeGu9CFK4gS6r
+	 s2YZ4T9AyWjzimM5X4QChYrwvvFM1e76R1JtIulE89M+JbMaeOAOi6teyvtmKJ+FD8
+	 +CR4PW6bc/xFKr/MlncY3oj2e6w6dN1KtyuF1ljm4itTR+jGuZpFCT/Sq7WWJVsOLl
+	 2q7cfSVBKcmVPUB/GxtgZEEMdZCf4hu2T0P2QvFbssxML+YqdzFG7CIRbPRdRnJ06N
+	 6xqBIIxqCVEMgh/2g0SN4AhQhvA9Oa/FZjXuhEyN+L6jreXBjOtpkvzBTRqDUCZQaq
+	 +dGEl1lL2rLCA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id C5ED3C4332E; Thu, 29 Feb 2024 01:42:27 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218526] Unable to achieve 240hz on usb4 docking station
+Date: Thu, 29 Feb 2024 01:42:27 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: samworlds123@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218526-208809-LZf2lk2QVz@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218526-208809@https.bugzilla.kernel.org/>
+References: <bug-218526-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
-Message-ID: <20240229012858.3663833-1-jthies@google.com>
-Subject: [PATCH v3 0/4] usb: typec: ucsi: Expand SOP/SOP' Discovery
-From: Jameson Thies <jthies@google.com>
-To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
-Cc: jthies@google.com, pmalani@chromium.org, bleung@google.com, 
-	abhishekpandit@chromium.org, andersson@kernel.org, 
-	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com, 
-	gregkh@linuxfoundation.org, hdegoede@redhat.com, neil.armstrong@linaro.org, 
-	rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
 
-Hi Heikki,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218526
 
-This patch series expands support for partner and cable discover in the
-UCSI driver. There are a few pieces here.
+--- Comment #1 from Samuel (samworlds123@gmail.com) ---
+monitor =3D  Alienware aw2521hf
 
-1. Some cleanup of the GET_CABLE_PROP definitions in ucsi.h.
-2. Cable discovery and registration with the USB Type-C connector class.
-3. Partner/Cable identity registration with the USB Type-C connector
-class.
-4. SOP' alternate mode registration with the USB-C connector class using
-a cable plug.
+dock =3D Cable Matters 8-in-1 Portable 40Gbps USB4 Hub (USB 4 Dock)
 
-These have been tested on a the usb-testing branch merged with a
-chromeOS 6.8-rc2 kernel. Let me know if you have any questions.
+--=20
+You may reply to this email to add a comment.
 
-Thanks,
-Jameson
-
-Changes in v3:
-- Fixed CC stable.
-
-Changes in v2:
-- Re-ordered memset call and null assignment when unregistering partners
-and cables.
-- Supports registering partner and cable identity with UCSI versions
-before v2.0.
-- Shortened lines to within 80 characters with the exception of two
-error log lines with three indentations.
-- Tested on usb-testing branch merged with chromeOS 6.8-rc2 kernel.
-
-Jameson Thies (4):
-  usb: typec: ucsi: Clean up UCSI_CABLE_PROP macros
-  usb: typec: ucsi: Register cables based on GET_CABLE_PROPERTY
-  usb: typec: ucsi: Register SOP/SOP' Discover Identity Responses
-  usb: typec: ucsi: Register SOP' alternate modes with cable plug
-
- drivers/usb/typec/ucsi/ucsi.c | 258 ++++++++++++++++++++++++++++++++++
- drivers/usb/typec/ucsi/ucsi.h |  40 +++++-
- 2 files changed, 296 insertions(+), 2 deletions(-)
-
-
-base-commit: a560a5672826fc1e057068bda93b3d4c98d037a2
--- 
-2.44.0.rc1.240.g4c46232300-goog
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
