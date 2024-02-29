@@ -1,230 +1,235 @@
-Return-Path: <linux-usb+bounces-7313-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7314-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4408486C3C0
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 09:38:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79AC686C3E9
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 09:42:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F3F7B260D6
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 08:38:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F201285E1C
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 08:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C719B57303;
-	Thu, 29 Feb 2024 08:35:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="JqrMUnod"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0860524A5;
+	Thu, 29 Feb 2024 08:40:53 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2115.outbound.protection.outlook.com [40.107.22.115])
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B155647B;
-	Thu, 29 Feb 2024 08:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.115
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709195715; cv=fail; b=a4nSLR3sVjIGyp12BwUWmdYOMix5ekuqSoXuV5dMB0f7qTqynC6UBf/ZdNe/opAZXctgsC85PXppFy84zWijVg/AD7AwnCDMn0/2G87K5/ozjONvKs49AX2TPbEm7tBQzRK7pbPj0yRF7A0hvBM2sOhlbzUxDr31YthYcJwbwcI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709195715; c=relaxed/simple;
-	bh=Nmd184ZyDSaO4lZ41ELhib4ZiCJSqj9B5C6zTsVjcec=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=LSWqMoZz1x21Fz9PMWoLSmkL0p3aiJl0tSFLUW+zwxUFwfd1wlA+/1XXiBFNlrs1SxmglP6uRvnaj7MK9yezh+cGZnwdg1AEQ+wD9Q16Fu/OhDeLsE+hW/L28kFYpCZQcBmVomDF0U+tbIsC4fIenWWcfw5YmEy35spLMVtaNtk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net; spf=pass smtp.mailfrom=wolfvision.net; dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b=JqrMUnod; arc=fail smtp.client-ip=40.107.22.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolfvision.net
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KHtHkv3zge3n+WAu5J+1wbf0cp8VcZ6tr43MxtdfpDSFKslbFN1EqtCmTO2AnoECpzveIPA+1iN7HMIJR50pQgu5iXo8K8OjD22Bu8RZ+LMXnnS6NvvtWgbLFtobcOZCfCIc4w2UiQugsWPsZrUjH1yWLTyFBpCOEUlkT5/vmsq5YnRaU6XCInMJCtrye2hMOk8QW9i9DUhoWHdA60lRhFGgUkvbPbSP+CoNu1G1JWunzdsprBEGkCZezfOjwJ38BtsnyWQbTl2mOorMdlIEuQcNRE92m8cy5NAyusG1m97s3+SsoeibiW5UUbg8Oe+9UKC4Cd42ZIAinxvFEweX2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MHn5ocpWmJAmqRGVhz3ePJLhWewLoohLm8CGzYNyosw=;
- b=nCFCSty6uX1op7OiAQW3Lk9fyoATS3Gl7XllKDp1Jtx85VdecWIws7puhWEF4iOwDKQYckStcQGc6El84JBKtJZB0E2WQSpwGIEL3ycOjy7AzIc3gw9u6V8UUMBQNcrzrUBeAk5hU7vBdeO4+K1yga1WelITZR9xkfZV7kwuuDJfLbyAxSnvby+TU6PNYKkjYLKOPLCqCed5aLVXiDyYrzRlYSMf/mF4KjvgCUqRsXRgiVuSK2BtKnlvFVlY0Rfd9CzUFtFCvrK+5zgzdshm1Dme0YzYNh6mebdWLbnrxVenss7x/MNjxKrfx9NclupXa+j1Zhj+6D81FxXAigBmHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MHn5ocpWmJAmqRGVhz3ePJLhWewLoohLm8CGzYNyosw=;
- b=JqrMUnod7Nqy5UajJXAYcUGLUTp8lAM43kjnOED+Sreeuhk/wyU1AYEUr5Bu1a7DH5joew9m3kS60M6jWFcngVITIwAo7kjDaVnOyVyRZ1NZyox9W6tUEDhXJptTzFRVwIgm8sHQHAHvmDl3auRnNVLcicwejeWMjPW4ZYOCdoI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
- by DU0PR08MB9727.eurprd08.prod.outlook.com (2603:10a6:10:445::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.41; Thu, 29 Feb
- 2024 08:35:04 +0000
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::9e35:6de9:e4fc:843f]) by VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::9e35:6de9:e4fc:843f%6]) with mapi id 15.20.7316.035; Thu, 29 Feb 2024
- 08:35:04 +0000
-From: Javier Carrasco <javier.carrasco@wolfvision.net>
-Date: Thu, 29 Feb 2024 09:34:52 +0100
-Subject: [PATCH v6 9/9] usb: misc: onboard_dev: add support for XMOS
- XVF3500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240229-onboard_xvf3500-v6-9-a0aff2947040@wolfvision.net>
-References: <20240229-onboard_xvf3500-v6-0-a0aff2947040@wolfvision.net>
-In-Reply-To: <20240229-onboard_xvf3500-v6-0-a0aff2947040@wolfvision.net>
-To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Matthias Kaehlcke <mka@chromium.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Helen Koike <helen.koike@collabora.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Russell King <linux@armlinux.org.uk>
-Cc: linux-sound@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, 
- Javier Carrasco <javier.carrasco@wolfvision.net>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1709195691; l=2679;
- i=javier.carrasco@wolfvision.net; s=20230509; h=from:subject:message-id;
- bh=Nmd184ZyDSaO4lZ41ELhib4ZiCJSqj9B5C6zTsVjcec=;
- b=/46YvMbOu17KK58hEp0M5qU5E807lSDvlBZieALqhP59gRXWu75e5+UGvvV1fKzaK9LkgxVOX
- pa+2zZPd+CwBAOIpkCjSw/Ni/s0QPK+onrH7Uz08c3gJOmJJ3VVvKHn
-X-Developer-Key: i=javier.carrasco@wolfvision.net; a=ed25519;
- pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
-X-ClientProxiedBy: FR3P281CA0020.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1c::21) To VE1PR08MB4974.eurprd08.prod.outlook.com
- (2603:10a6:803:111::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31BB4E1D9
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 08:40:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.110.167.99
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709196053; cv=none; b=ulDq/p5U9u8QfZrtc8A6q6TMIBMBDHdoJCf+HQekiiOgE8hbbSw165MqxvrdWQXowpKmMDUISQgwWJHXmBlYIOgnoHSsjKe3r4P7EiotUTVp4JWhRGtUcG4VgVMPnZljgJALBWLxlKxT2Nx+wWNsJxvkmjRveuH14WXiCcI9+g4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709196053; c=relaxed/simple;
+	bh=FLBMpOnUYTtHFFdZlsSLuXW6H+PMwcHf+HhPg0BQiiU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=dcdJDY2SP3fFBwHPE7NO77R0FRGtjpqO5ERa4jAW3CYfGPjmWht2fwiz3FC05tqPm3KetvNGaDW1XYix/dWEDTMLdmymwXTsA+af2l5jZRIV1HNQhtw4MKgPq5mkzavxJIEMHzNm+SaImwokzZuB4wHwEijMxvrnlrTda2SMwFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=203.110.167.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1709196046-1eb14e0c7c4cd80001-YVMibp
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id IFq8M5OlV5QskFli (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 29 Feb 2024 16:40:46 +0800 (CST)
+X-Barracuda-Envelope-From: WeitaoWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 29 Feb
+ 2024 16:40:46 +0800
+Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 29 Feb
+ 2024 16:40:44 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Message-ID: <bb269ab0-128b-1988-acf1-8df05f08cf86@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.21
+Date: Fri, 1 Mar 2024 00:40:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|DU0PR08MB9727:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7167234a-d4b1-489e-4ad0-08dc3901534d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	V35S9XbKKBvyU5/DipQ3dac8xX5+0rQwHWy00Yu6plJPF2fJ14SqhJ8awt61tADklUFo7qyTzUSDX2FT/ztNyg6BT0CW2+XSIfPjhH4hA1RsRBblSiKzd4AU+hr8N/cMlsTJMvu4Jywgdj/N9gIAgGCIGD5N02qdDjkLw+VHJZY9m0wvAZQu2wVVvDfns813Jli7bQ42BvzDyczUuMUBIssBh3PtAvLVpxTafMEER4tvvutYoLUHOohOZ/FNAiusP9WLZAZQpx5M0+WwLPPyhwJvhgwbtRnH/2gaBK6sIcujVJoHd7XqnMvVti7i0DURnDbN6P+O6C7XfAgX3+x11MN8TOh0YQ+n++gttp6nRYQdGf7cqn7Sh7u/riKTEQ5DV6sWU6Wd2pwNGXtisTYJuSz2CNZT5cBXWrabajcwb84yC6o9qHkKcrqRW4SJTKSsJ1pBifHZjGfP8PWbKRcSak+ush7+xV68YmX7Tzil1V9mVZwFQGYCjHAx3vmBBSXuHUtQUtROiCABgLjGOym1i4slD4yKB2yXnkrjNUex+Z7kGYBCweGHH3vDxvhDH87dIkAbvVkQkauG1MkWyiZ2iHCUfeg1whONL9FWSqYzxrEJoEjT/Wh0HYlSLYTW13zzjQAOTnR7/EYg7oRm6NyipmLvJF0IvqOIMvaBiBMeZr6orKmNW56hsqQGvLOUZfJXOT+KbsklKbku/HCJUYsHm2AsRsSkZw1Uetg8/0VdVR8=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(921011)(38350700005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TE44bmRBcWQveHl6amRzRzd6NDBFWDZ6MGk3WkU5ZjBXVHg1Z0d2K2R5K1Ur?=
- =?utf-8?B?L2UvRmcvdFBzVnFwaHJVSzUyS0FtZ2lwTjV4QTFwUUtDZUZ0cUVySTF1bTQw?=
- =?utf-8?B?VysrL0dGMGtOR01LV2R3K2FPbWlmR3F1TmlPeWZxVC9NSE5zSTkwWDhWdk1P?=
- =?utf-8?B?QkhCYTFNUE5HcHI2MTl4NmVmZWU1ekpOVzkrWi9vQlFEM21FbU54cmpmNTJX?=
- =?utf-8?B?Y1VBc2hPMEZpbHFqcFBlWCtEOXhjbURpVjZCN0R6OEdYZXlMdDl0NmJ1RVo3?=
- =?utf-8?B?T09qMll5Uzl2RmExbDRqQXk2cExqZFlmMGFwK2FmSlVMSHF1ZTVyN2RxTngy?=
- =?utf-8?B?cXNpM0w1WHlEMDV3VmRnV2JvMjB5c3RSVW00NkZEbHhYYzN2Q3JYSjBvd0FR?=
- =?utf-8?B?R0VDNjRHOUpBaUNCc1dJZlBUQVp2SnFRRk5SdDZFOHNsTTB5R2xGT2FHYzV2?=
- =?utf-8?B?RWpVRC9XeUhzNGJ0aUkxVjd4ekt6ckZibks5S3F4YW1WckpsaEhuZlRTQ05F?=
- =?utf-8?B?WkpROGo0WGJjbkRlcWZjQkRaR285WFVuRTI2ZmJHSUlqZnE5Q2Y4TmRmb2ZE?=
- =?utf-8?B?SGJzME1nTStrM2dJaHN2VlZBM2FrUVlqNzlEZTRib0VzNFdQOEpreHZxK0lD?=
- =?utf-8?B?QzNwWlJrVUZTNzJjRjYyYWVrWVV5eFFoK1pGKzk3WURIV044WTFaUU11L2w3?=
- =?utf-8?B?STIvOE02N0lWeTF5bTJjZ211S2g3LzBYV0ZDZ1o1cThHYmE3NEsvMElJY3JF?=
- =?utf-8?B?UmJtMGowcUxnNXhUNEQrQVY0MitCdWdLdzg0K1hNSlNEdXZ6UTJodlZ6cmZm?=
- =?utf-8?B?OFNJd3NuS1IzbnY3N3pLclRNeUxPVjhSZ2MwTExjRDJHTWh5UTZWK1M1U0dJ?=
- =?utf-8?B?ZHA1SEsrZElBc3d6eUdSSE1RU1pKZnFBSmM1NXJvRHE1bnJqMU11bjV1NWxC?=
- =?utf-8?B?UW90dWQ1ZHV5Vkw4Q29COTRlbG14VWRNbGxaR29DVWJNQnNqOFBFS2dBNFRs?=
- =?utf-8?B?UWJ3Z3FTWWw2Q29KNnJqbEZjckoyMXlaUHBlQ21lQlFlZ0NjbXBwTzNHdFFv?=
- =?utf-8?B?T2RrUEdkNWJhdkpaNnJCeWVpUGM3dEg5NjZsejZXVmRVbEhIYkxZTU92dm5s?=
- =?utf-8?B?azltdTNlelVYUDB2aFVySjFkYi9zOW9OMGpwWXl0dzYzU1hhRHRndjg3S1JL?=
- =?utf-8?B?ODZJZGlBNWVTTVROSVRvdmsvcGoxSjFFazJLelVpVitML2lnOGlCbnkyQmFq?=
- =?utf-8?B?RFJISXNSN0tWU05Yb1dqZExqU3pUQ2lqSWdKaW4zSDhRUmdtbDFUTVZBWXR5?=
- =?utf-8?B?Wm5Eem9aSllFdmlNNlVmd3A2T2g2VC82Z0Vnd0JiS050SjFRZlFsMVBqOXR1?=
- =?utf-8?B?VllaUndmRmFUSXJnV0N0ZkZLbHdTMkw0L2NmeEJGaW9MQU5kNlVqRHBmQnhi?=
- =?utf-8?B?Qzk0OWFXRDUyKzhubVBSLzR5Sld6QVNkOVJlUi9COGxWSWhaTmhNZEgrbVdK?=
- =?utf-8?B?c25pM0ZkOGNYTDh6blZ6Nlg0N09ETW5IZEs5bExUSWJiZU9tZG9SK3NSc1VI?=
- =?utf-8?B?blk0TGJSZXBKeXNsOFRxblM2TDRpU3JneVZzc2t3TFhiNFh2MVlWdUQvaDNT?=
- =?utf-8?B?U0ZQTDFoVlk0cFhGclNmR2hjeC8wM1JuYlB0QWRoNEh6NzJsMDhPZWRWSHNw?=
- =?utf-8?B?SG9pSEp2Q1Z5b3cyN2o0R05FOFV4RXh4ejQvaTlMM2hGOXBzK1BaYWEvcWNi?=
- =?utf-8?B?MXJ4YWRMSEVZUTdzMTdadGwyN05DNWdHMnhkSDZpZDA4ejB3MnZhSGdXN0ZM?=
- =?utf-8?B?N295ZC8yQnlxWTFHWXNiRk1LMHF0TWY2WWY4QlFpSVN1bGNtejkxOUlhUEdw?=
- =?utf-8?B?YkZtSjFKTUI0NTZnQVk4Q1FpVGtxY3hqNmd0L2JQS0pZaEdZeE1JL1VWK21L?=
- =?utf-8?B?ZVRtYURaVmlrRGZLM0VtQy92QTl6b1JMcHJUZkVqTUU1WlBjUEwxUnU3SC9V?=
- =?utf-8?B?MUM0Tk9aL0tzb3NDb3VSSHdRUWVjT0lpd2Y3K0t2YTdSNDJ4ajIxek1KaHdP?=
- =?utf-8?B?RDhUbmZkeEFaL0x3UFplbXBhSjlCcXlsS2ZndmxYTGUvTVpwV01LT2RqZnVJ?=
- =?utf-8?B?WDhJdkxmb3IzcDAvd0QybkJUc2VFbWk2VStxZ0JqMWFqbHRhWnFrZTEzM1RN?=
- =?utf-8?Q?V+72Wgg9055m3/FWJfzLXbQ=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7167234a-d4b1-489e-4ad0-08dc3901534d
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Feb 2024 08:35:03.6579
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6jUxuT71Qo4yv81LVcC+8W9czYZKbiKmK9sCA4sePsdRX0JWLI3Y7HVKFU30vovdARSQ4BAnR0v9s/+hlovz5tstB1tU32ykN+RK1I8QLL0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB9727
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] USB:UAS:return ENODEV when submit urbs fail with
+ device not attached.
+Content-Language: en-US
+X-ASG-Orig-Subj: Re: [PATCH v2] USB:UAS:return ENODEV when submit urbs fail with
+ device not attached.
+To: Oliver Neukum <oneukum@suse.com>, <stern@rowland.harvard.edu>,
+	<gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+	<usb-storage@lists.one-eyed-alien.net>
+CC: <WeitaoWang@zhaoxin.com>, <stable@vger.kernel.org>
+References: <20240228111521.3864-1-WeitaoWang-oc@zhaoxin.com>
+ <e8c4e8a3-bfc3-463f-afce-b9f600b588b2@suse.com>
+ <07e80d55-d766-1781-ffc9-fab9ddcd33e3@zhaoxin.com>
+ <49a365a7-199a-42cd-b8d3-86d72fe5bca6@suse.com>
+ <0b0eefa5-71b6-dc08-d103-72b9aebd9237@zhaoxin.com>
+ <9263b77e-9ebe-4987-bf7f-8f9fafcf06b3@suse.com>
+From: "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <9263b77e-9ebe-4987-bf7f-8f9fafcf06b3@suse.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1709196046
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 4700
+X-Barracuda-BRTS-Status: 0
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: 1.09
+X-Barracuda-Spam-Status: No, SCORE=1.09 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=DATE_IN_FUTURE_06_12, DATE_IN_FUTURE_06_12_2
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.121476
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
+	0.01 DATE_IN_FUTURE_06_12   Date: is 6 to 12 hours after Received: date
+	3.10 DATE_IN_FUTURE_06_12_2 DATE_IN_FUTURE_06_12_2
 
-The XMOS XVF3500 VocalFusion Voice Processor[1] is a low-latency, 32-bit
-multicore controller for voice processing.
+On 2024/2/29 16:08, Oliver Neukum wrote:
+> 
 
-This device requires a specific power sequence, which consists of
-enabling the regulators that control the 3V3 and 1V0 device supplies,
-and a reset de-assertion after a delay of at least 100ns.
+> On 29.02.24 12:19, WeitaoWang-oc@zhaoxin.com wrote:
+> 
+>> When alloc urb fail in the same function uas_submit_urbs,
+>> whether we should replace SCSI_MLQUEUE_DEVICE_BUSY with generic
+>> error code -ENOMEM? Such like this:
+>>
+>> @@ -572,7 +571,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+>>           cmdinfo->data_in_urb = uas_alloc_data_urb(devinfo, GFP_ATOMIC,
+>>                               cmnd, DMA_FROM_DEVICE);
+>>           if (!cmdinfo->data_in_urb)
+>> -            return SCSI_MLQUEUE_DEVICE_BUSY;
+>> +            return -ENOMEM;
+>>           cmdinfo->state &= ~ALLOC_DATA_IN_URB;
+>>       }
+> 
+> Hi,
+> 
+> yes, and then you translate in one central place for the SCSI layer
+> into DID_ERROR or DID_NO_CONNECT.
+> 
 
-Once in normal operation, the XVF3500 registers itself as a USB device,
-and it does not require any device-specific operations in the driver.
+OK, I'll submit a new version after you help to review the following patch.
 
-[1] https://www.xmos.com/xvf3500/
 
-Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
----
- drivers/usb/misc/onboard_usb_dev.c | 2 ++
- drivers/usb/misc/onboard_usb_dev.h | 8 ++++++++
- 2 files changed, 10 insertions(+)
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index 9707f53cfda9..689396777b6f 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -533,7 +533,7 @@ static struct urb *uas_alloc_cmd_urb(struct uas_dev_info *devinfo, 
+gfp_t gfp,
+   * daft to me.
+   */
 
-diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
-index f1b174503c44..ee702448e446 100644
---- a/drivers/usb/misc/onboard_usb_dev.c
-+++ b/drivers/usb/misc/onboard_usb_dev.c
-@@ -407,6 +407,7 @@ static struct platform_driver onboard_dev_driver = {
- #define VENDOR_ID_REALTEK	0x0bda
- #define VENDOR_ID_TI		0x0451
- #define VENDOR_ID_VIA		0x2109
-+#define VENDOR_ID_XMOS		0x20B1
- 
- /*
-  * Returns the onboard_dev platform device that is associated with the USB
-@@ -499,6 +500,7 @@ static const struct usb_device_id onboard_dev_id_table[] = {
- 	{ USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 HUB */
- 	{ USB_DEVICE(VENDOR_ID_VIA, 0x0817) }, /* VIA VL817 3.1 HUB */
- 	{ USB_DEVICE(VENDOR_ID_VIA, 0x2817) }, /* VIA VL817 2.0 HUB */
-+	{ USB_DEVICE(VENDOR_ID_XMOS, 0x0013) }, /* XMOS XVF3500 Voice Processor */
- 	{}
- };
- MODULE_DEVICE_TABLE(usb, onboard_dev_id_table);
-diff --git a/drivers/usb/misc/onboard_usb_dev.h b/drivers/usb/misc/onboard_usb_dev.h
-index 58cf8c81b2cf..51c4c074d158 100644
---- a/drivers/usb/misc/onboard_usb_dev.h
-+++ b/drivers/usb/misc/onboard_usb_dev.h
-@@ -78,6 +78,13 @@ static const struct onboard_dev_pdata vialab_vl817_data = {
- 	.is_hub = true,
- };
- 
-+static const struct onboard_dev_pdata xmos_xvf3500_data = {
-+	.reset_us = 1,
-+	.num_supplies = 2,
-+	.supply_names = { "vdd", "vddio" },
-+	.is_hub = false,
-+};
-+
- static const struct of_device_id onboard_dev_match[] = {
- 	{ .compatible = "usb424,2412", .data = &microchip_usb424_data, },
- 	{ .compatible = "usb424,2514", .data = &microchip_usb424_data, },
-@@ -99,6 +106,7 @@ static const struct of_device_id onboard_dev_match[] = {
- 	{ .compatible = "usbbda,5414", .data = &realtek_rts5411_data, },
- 	{ .compatible = "usb2109,817", .data = &vialab_vl817_data, },
- 	{ .compatible = "usb2109,2817", .data = &vialab_vl817_data, },
-+	{ .compatible = "usb20b1,0013", .data = &xmos_xvf3500_data, },
- 	{}
- };
- 
+-static struct urb *uas_submit_sense_urb(struct scsi_cmnd *cmnd, gfp_t gfp)
++static int uas_submit_sense_urb(struct scsi_cmnd *cmnd, gfp_t gfp)
+  {
+  	struct uas_dev_info *devinfo = cmnd->device->hostdata;
+  	struct urb *urb;
+@@ -541,16 +541,15 @@ static struct urb *uas_submit_sense_urb(struct scsi_cmnd *cmnd, 
+gfp_t gfp)
 
--- 
-2.40.1
+  	urb = uas_alloc_sense_urb(devinfo, gfp, cmnd);
+  	if (!urb)
+-		return NULL;
++		return -ENOMEM;
+  	usb_anchor_urb(urb, &devinfo->sense_urbs);
+  	err = usb_submit_urb(urb, gfp);
+  	if (err) {
+  		usb_unanchor_urb(urb);
+  		uas_log_cmd_state(cmnd, "sense submit err", err);
+  		usb_free_urb(urb);
+-		return NULL;
+  	}
+-	return urb;
++	return err;
+  }
 
+  static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+@@ -562,9 +561,9 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+
+  	lockdep_assert_held(&devinfo->lock);
+  	if (cmdinfo->state & SUBMIT_STATUS_URB) {
+-		urb = uas_submit_sense_urb(cmnd, GFP_ATOMIC);
+-		if (!urb)
+-			return SCSI_MLQUEUE_DEVICE_BUSY;
++		err = uas_submit_sense_urb(cmnd, GFP_ATOMIC);
++		if (err)
++			return err;
+  		cmdinfo->state &= ~SUBMIT_STATUS_URB;
+  	}
+
+@@ -572,7 +571,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+  		cmdinfo->data_in_urb = uas_alloc_data_urb(devinfo, GFP_ATOMIC,
+  							cmnd, DMA_FROM_DEVICE);
+  		if (!cmdinfo->data_in_urb)
+-			return SCSI_MLQUEUE_DEVICE_BUSY;
++			return -ENOMEM;
+  		cmdinfo->state &= ~ALLOC_DATA_IN_URB;
+  	}
+
+@@ -582,7 +581,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+  		if (err) {
+  			usb_unanchor_urb(cmdinfo->data_in_urb);
+  			uas_log_cmd_state(cmnd, "data in submit err", err);
+-			return SCSI_MLQUEUE_DEVICE_BUSY;
++			return err;
+  		}
+  		cmdinfo->state &= ~SUBMIT_DATA_IN_URB;
+  		cmdinfo->state |= DATA_IN_URB_INFLIGHT;
+@@ -592,7 +591,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+  		cmdinfo->data_out_urb = uas_alloc_data_urb(devinfo, GFP_ATOMIC,
+  							cmnd, DMA_TO_DEVICE);
+  		if (!cmdinfo->data_out_urb)
+-			return SCSI_MLQUEUE_DEVICE_BUSY;
++			return -ENOMEM;
+  		cmdinfo->state &= ~ALLOC_DATA_OUT_URB;
+  	}
+
+@@ -602,7 +601,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+  		if (err) {
+  			usb_unanchor_urb(cmdinfo->data_out_urb);
+  			uas_log_cmd_state(cmnd, "data out submit err", err);
+-			return SCSI_MLQUEUE_DEVICE_BUSY;
++			return err;
+  		}
+  		cmdinfo->state &= ~SUBMIT_DATA_OUT_URB;
+  		cmdinfo->state |= DATA_OUT_URB_INFLIGHT;
+@@ -611,7 +610,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+  	if (cmdinfo->state & ALLOC_CMD_URB) {
+  		cmdinfo->cmd_urb = uas_alloc_cmd_urb(devinfo, GFP_ATOMIC, cmnd);
+  		if (!cmdinfo->cmd_urb)
+-			return SCSI_MLQUEUE_DEVICE_BUSY;
++			return -ENOMEM;
+  		cmdinfo->state &= ~ALLOC_CMD_URB;
+  	}
+
+@@ -621,7 +620,7 @@ static int uas_submit_urbs(struct scsi_cmnd *cmnd,
+  		if (err) {
+  			usb_unanchor_urb(cmdinfo->cmd_urb);
+  			uas_log_cmd_state(cmnd, "cmd submit err", err);
+-			return SCSI_MLQUEUE_DEVICE_BUSY;
++			return err;
+  		}
+  		cmdinfo->cmd_urb = NULL;
+  		cmdinfo->state &= ~SUBMIT_CMD_URB;
+@@ -698,7 +697,7 @@ static int uas_queuecommand_lck(struct scsi_cmnd *cmnd)
+  	 * of queueing, no matter how fatal the error
+  	 */
+  	if (err == -ENODEV) {
+-		set_host_byte(cmnd, DID_ERROR);
++		set_host_byte(cmnd, DID_NO_CONNECT);
+  		scsi_done(cmnd);
+  		goto zombie;
+  	}
+
+Thanks and best regards,
+weitao
 
