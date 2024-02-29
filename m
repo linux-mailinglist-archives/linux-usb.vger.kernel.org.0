@@ -1,127 +1,182 @@
-Return-Path: <linux-usb+bounces-7280-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7281-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DA9586BC19
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 00:21:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 896B586BC8C
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 01:11:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29F751F2556B
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Feb 2024 23:21:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACD481C211CC
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 00:11:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A527291B;
-	Wed, 28 Feb 2024 23:21:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED5587FE;
+	Thu, 29 Feb 2024 00:11:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TbKFe5Zz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hfIRHJaS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E7C70055
-	for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 23:21:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E68D2627
+	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 00:11:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709162490; cv=none; b=qCrc+sNWMSAseP+yN3SmBtCKxk5jiYjq3mxzyq/bunDIRITC1t0NlDNihrYIOntRINE56fRwL9WUGikjv+yiFLiF0TjCxmALGrFsDZnAELkqW1vYpRjUQKvSATA4PeAe5waIOY+hN/Giphsog1cPrZb81jAaTbaLT6bh/mxo7QA=
+	t=1709165495; cv=none; b=lVaS+6HqAwBTSvOgZXQXENMBHwb6eSyGMI+D68MqXJwviXwAvUtrP4wMSngLJwWxxIg79rikzDJKaerS48CN6azfBbypZdXc3OhGKmbo72TL1XLDMiKIyFmlYyTPwYzxl0JhOyG3+upGFOXQxCTc2s10wYWSb/o4MH5kIFkZRcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709162490; c=relaxed/simple;
-	bh=7tJEoT7UeieYnDrUIelxhTjT/DTW8yYe3f7+9yRHQ0g=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=rp8T4B79/922Py4+MlxKXbEQUeq/UFK5PROy723LoMeGp9YevtYOynffkko15CSn7f4g1egHFdKTfl0WrwDlkKq7XuzR09Posqp2U47V/ZXpAmJX++itaUQL9AMEq72HfDIMVD6hk2xZe+dxGAR7HwwrcJaWJVjRt37WuSk1LfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TbKFe5Zz; arc=none smtp.client-ip=209.85.219.201
+	s=arc-20240116; t=1709165495; c=relaxed/simple;
+	bh=6R2p1tT69hwYIvRTpoq1HKWl4nCvoJdmLzAs09t2YNA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=m4tQ/qtk8Iom5VuLFD8Q76bgZ0zAKUO2d0sLaW/63gnA8kMsmcKp2TR/9yPu4SO/s6XXTG/hbzDJyuRiE/JPfY5Hh+OGVFDwt97Sx5IRUCGo6rbxiFcsNu5JuCC2SqrYv5Obww6uG4SySn6qbh5IEnXTr8I8jxFgBxhjG/gYfRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hfIRHJaS; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dcf22e5b70bso539894276.1
-        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 15:21:28 -0800 (PST)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rdbabiera.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-607e56f7200so3656437b3.2
+        for <linux-usb@vger.kernel.org>; Wed, 28 Feb 2024 16:11:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709162487; x=1709767287; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1709165493; x=1709770293; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=E3VOyu5h5VNnqIC5C1wAkPY2R8kjBMsntg/JOJOAxJU=;
-        b=TbKFe5ZzuvbIQBSmu8WfhzGno/ATX/w/sPE4xH39dKwN9JRJg5wYCkNAI46qDP013H
-         tjd4rlPzbspnfaIqImPDH7JP/b6fTqDy19AxsEg9zoP7PLpIizW71kTLE+dhk62U0F/A
-         DiEQjTImWs/j2GfzpMrsKKvNzBBZE95myM8BvRAcDWlBYN9ah2ag5ddtQST3WBkNeysW
-         tey985fSKlMSB1mbEz+L1XSJEDK9hnkgpaWFGORxexuFNzUw1GybGnHoIth78Q+NaokH
-         MSYLtbtYd70QgppYWUouTyZVGw8ZWH1+Wx2+sf2IgykhE4OUovzpcO0o2hQNaBkXAytr
-         zi3g==
+        bh=MQFNdf2PLvi1nXh0+ziRXHczc9B2IYbLND0MkZadbyk=;
+        b=hfIRHJaS/FhRWEPk4+4rV3kzI8K9XDT1QJ5OoQCqxuRTK26mP0y0EZtISrkFdz2yr+
+         vKnk/CtVQLfXwMp8/AXm9eCTd/nGtbLp6Vrg9MNhhV2IxrZNa6VF3YYmsyl0bGSY4+3s
+         RhTsqqXoEXPKNMF92XjbszRT713eRvrPZQHROEW+Qzmv+xLQknH++3+nRldLQ0nOOtZa
+         pjv+ryA+kP7dwFvT0iJwK8SEq/Mx3FqZ+XBt6mx5HuKwH1ArhJOa/MR53s0JE2JZ0ptm
+         aYvye2hUp0ztCncAoqnIAfC0O0dyI7ig1yoAEnw+bopMs6sJFWDfrIs2jpt2b327Olo3
+         JtaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709162487; x=1709767287;
+        d=1e100.net; s=20230601; t=1709165493; x=1709770293;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=E3VOyu5h5VNnqIC5C1wAkPY2R8kjBMsntg/JOJOAxJU=;
-        b=htTbZIZssT7wVu4vc//b6WjcrGY3k1gRGtiq3XIfq0rdifG9Ai3oQrRc17UNgQFSN4
-         00bJTgfprTQU+o0BHYZTz/OjEZVi0W10ev5QkzrJ9WOvv/cGC0tmAy9aBmTGJ56R7qVo
-         N6uKynoJB2ffLYhjLSxFuq+YIDtYm9UbvGGbB7Fw94zARIBF5KG5dxtJRgGVhc8LWT0M
-         qCYGLYK1X/f0EO1Ert3ymDRln2IiY8fHlqPS+YKEEaS1sn0CIAyWPjvBeM3MmVp3WCIW
-         gikM4oAQ/pP5Ro0OcRjy/cbTmeQ8WaJZ0D1dIcpv46JzehfOv75bG0ifjLE4qC2YpJFG
-         AnhA==
-X-Forwarded-Encrypted: i=1; AJvYcCUqaXEZslJ54nHO6VneGujK1Ov44hA6C1k6Ur2feLZP4wk/ySBBY8sdNxpI1PkwzZMzH3zIuzAkSMjlYJxP2EU9s0PLnEMCxN6o
-X-Gm-Message-State: AOJu0YySXgJfU3JuIYIduaMUpFXOy3OPDrvKs6WIPpVxMsLiE5rkT4KB
-	rA1TgnHEaa84SB+xkj6Zytl5x8rWbgcVgVxK5TTki8kF/efchRke3w5JTdNYusXTyrGgO9e2aLn
-	3Wg==
-X-Google-Smtp-Source: AGHT+IEjIkixgTa8DId0CyvT1s+vLXoCDX+hWBxpSWRQuUpZ98olYdyqzr4CrCW0CfuHkrk8xv51EhpjUis=
-X-Received: from jthies.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:23db])
- (user=jthies job=sendgmr) by 2002:a05:6902:10c2:b0:dc6:e823:9edb with SMTP id
- w2-20020a05690210c200b00dc6e8239edbmr41694ybu.12.1709162487685; Wed, 28 Feb
- 2024 15:21:27 -0800 (PST)
-Date: Wed, 28 Feb 2024 23:20:34 +0000
+        bh=MQFNdf2PLvi1nXh0+ziRXHczc9B2IYbLND0MkZadbyk=;
+        b=Iu4I2N4r+hXQiw+Fn6o4EMo5g24fJTZhMCkOiTqqviJcQgeHhMSdrUxQvA3kpAuJSs
+         9UiSxvLulHJx9RzxeohuTj+k5Hnsndkf1Rvkv9JbP7LsYotLUij5UcqXvOUAWRnAe4Zp
+         WbG9DlYpiFUTXihnUiKBZrHWEr8hvAsa4hv8gz7iFAkiy9eUEJtXEtYdIXluB5g0ucrb
+         gyzPp3+Dk5HEKyyMejWARI53ixd3KBgZKpqWFnN85NV+AUWfNfRTxwjfRc0nPJG0NNi0
+         V3ssCm/Jpx2nLRwOOuXR3Y8qUZsDJRwAzXL77R6uEouDraS40j//lXz2GD3rq/JpYMox
+         2PDA==
+X-Forwarded-Encrypted: i=1; AJvYcCUhRvu7OSdJcueUJp82Cl5SqpqUdnSNcsROw6sidpdEi9Q2Lv7H3Dc/iNdg/eydUkx6oUfVHeoABc1fex9AXUQl91+D2F8+lqZU
+X-Gm-Message-State: AOJu0YyZNiqxPPcu4nnpOxLZArK0ckVGqTW4ap9HFgQySOmBgf/yfmiV
+	dwRzg4r3PAJYhE+8vesgL4V65MKn5xGhpBRVhR9Xi3y9Rut6r+m6tSQzvz1RjCHe85KpcUOtmOx
+	/ZG6BMzGGfx58Dw==
+X-Google-Smtp-Source: AGHT+IGkhwIscE8/PuxWoKHW7c397dn2BWKxSf4SZvT89th3wJ8CWp82+PlXbcGph7FbhavNsjH1Lf+pBUQU/pQ=
+X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
+ (user=rdbabiera job=sendgmr) by 2002:a05:690c:3606:b0:609:e1f:5a42 with SMTP
+ id ft6-20020a05690c360600b006090e1f5a42mr117833ywb.2.1709165492995; Wed, 28
+ Feb 2024 16:11:32 -0800 (PST)
+Date: Thu, 29 Feb 2024 00:11:02 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3202; i=rdbabiera@google.com;
+ h=from:subject; bh=6R2p1tT69hwYIvRTpoq1HKWl4nCvoJdmLzAs09t2YNA=;
+ b=owGbwMvMwCFW0bfok0KS4TbG02pJDKn3T097H9P7TEBZqWu/kLU8z9XNmbYfT3H3MAulTPA+s
+ 1zimc62jlIWBjEOBlkxRRZd/zyDG1dSt8zhrDGGmcPKBDKEgYtTACaysp3hf/izhmTBPl8hMV42
+ a+G4S63FS9YJTXi0pyj8UlT4/I3FKxkZFntaaJye7BP3rOZaPJ/oBn7Diz2yL6QuTZEUbTVU2XO FEwA=
 X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
-Message-ID: <20240228232034.3630838-1-jthies@google.com>
-Subject: [PATCH v3 1/4] usb: typec: ucsi: Clean up UCSI_CABLE_PROP macros
-From: Jameson Thies <jthies@google.com>
-To: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org
-Cc: jthies@google.com, pmalani@chromium.org, bleung@google.com, 
-	abhishekpandit@chromium.org, andersson@kernel.org, 
-	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com, 
-	gregkh@linuxfoundation.org, hdegoede@redhat.com, neil.armstrong@linaro.org, 
-	rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Benson Leung <bleung@chromium.org>
+Message-ID: <20240229001101.3889432-2-rdbabiera@google.com>
+Subject: [PATCH v3] usb: typec: altmodes/displayport: create sysfs nodes as
+ driver's default device attribute group
+From: RD Babiera <rdbabiera@google.com>
+To: rdbabiera@google.com, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org
+Cc: badhri@google.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Clean up UCSI_CABLE_PROP macros by fixing a bitmask shifting error for
-plug type and updating the modal support macro for consistent naming.
+The DisplayPort driver's sysfs nodes may be present to the userspace before
+typec_altmode_set_drvdata() completes in dp_altmode_probe. This means that
+a sysfs read can trigger a NULL pointer error by deferencing dp->hpd in
+hpd_show or dp->lock in pin_assignment_show, as dev_get_drvdata() returns
+NULL in those cases.
 
-Fixes: 3cf657f07918 ("usb: typec: ucsi: Remove all bit-fields")
+Remove manual sysfs node creation in favor of adding attribute group as
+default for devices bound to the driver. The ATTRIBUTE_GROUPS() macro is
+not used here otherwise the path to the sysfs nodes is no longer compliant
+with the ABI.
+
+Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
 Cc: stable@vger.kernel.org
-Reviewed-by: Benson Leung <bleung@chromium.org>
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Jameson Thies <jthies@google.com>
+Signed-off-by: RD Babiera <rdbabiera@google.com>
 ---
-Changes in v3:
-- Fixed CC stable.
+Changes from v1:
+* Moved sysfs node creation instead of NULL checking dev_get_drvdata().
+Changes from v2:
+* Removed manual sysfs node creation, now added as default device group in
+driver.
+---
+ drivers/usb/typec/altmodes/displayport.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-Changes in v2:
-- Tested on usb-testing branch merged with chromeOS 6.8-rc2 kernel.
-
- drivers/usb/typec/ucsi/ucsi.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 7e35ffbe0a6f2..469a2baf472e4 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -259,12 +259,12 @@ struct ucsi_cable_property {
- #define UCSI_CABLE_PROP_FLAG_VBUS_IN_CABLE	BIT(0)
- #define UCSI_CABLE_PROP_FLAG_ACTIVE_CABLE	BIT(1)
- #define UCSI_CABLE_PROP_FLAG_DIRECTIONALITY	BIT(2)
--#define UCSI_CABLE_PROP_FLAG_PLUG_TYPE(_f_)	((_f_) & GENMASK(3, 0))
-+#define UCSI_CABLE_PROP_FLAG_PLUG_TYPE(_f_)	(((_f_) & GENMASK(4, 3)) >> 3)
- #define   UCSI_CABLE_PROPERTY_PLUG_TYPE_A	0
- #define   UCSI_CABLE_PROPERTY_PLUG_TYPE_B	1
- #define   UCSI_CABLE_PROPERTY_PLUG_TYPE_C	2
- #define   UCSI_CABLE_PROPERTY_PLUG_OTHER	3
--#define UCSI_CABLE_PROP_MODE_SUPPORT		BIT(5)
-+#define UCSI_CABLE_PROP_FLAG_MODE_SUPPORT	BIT(5)
- 	u8 latency;
- } __packed;
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index 5a80776c7255..94e1b43a862d 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -702,16 +702,21 @@ static ssize_t hpd_show(struct device *dev, struct device_attribute *attr, char
+ }
+ static DEVICE_ATTR_RO(hpd);
  
+-static struct attribute *dp_altmode_attrs[] = {
++static struct attribute *displayport_attrs[] = {
+ 	&dev_attr_configuration.attr,
+ 	&dev_attr_pin_assignment.attr,
+ 	&dev_attr_hpd.attr,
+ 	NULL
+ };
+ 
+-static const struct attribute_group dp_altmode_group = {
++static const struct attribute_group displayport_group = {
+ 	.name = "displayport",
+-	.attrs = dp_altmode_attrs,
++	.attrs = displayport_attrs,
++};
++
++static const struct attribute_group *displayport_groups[] = {
++	&displayport_group,
++	NULL,
+ };
+ 
+ int dp_altmode_probe(struct typec_altmode *alt)
+@@ -720,7 +725,6 @@ int dp_altmode_probe(struct typec_altmode *alt)
+ 	struct typec_altmode *plug = typec_altmode_get_plug(alt, TYPEC_PLUG_SOP_P);
+ 	struct fwnode_handle *fwnode;
+ 	struct dp_altmode *dp;
+-	int ret;
+ 
+ 	/* FIXME: Port can only be DFP_U. */
+ 
+@@ -731,10 +735,6 @@ int dp_altmode_probe(struct typec_altmode *alt)
+ 	      DP_CAP_PIN_ASSIGN_DFP_D(alt->vdo)))
+ 		return -ENODEV;
+ 
+-	ret = sysfs_create_group(&alt->dev.kobj, &dp_altmode_group);
+-	if (ret)
+-		return ret;
+-
+ 	dp = devm_kzalloc(&alt->dev, sizeof(*dp), GFP_KERNEL);
+ 	if (!dp)
+ 		return -ENOMEM;
+@@ -777,7 +777,6 @@ void dp_altmode_remove(struct typec_altmode *alt)
+ {
+ 	struct dp_altmode *dp = typec_altmode_get_drvdata(alt);
+ 
+-	sysfs_remove_group(&alt->dev.kobj, &dp_altmode_group);
+ 	cancel_work_sync(&dp->work);
+ 	typec_altmode_put_plug(dp->plug_prime);
+ 
+@@ -803,6 +802,7 @@ static struct typec_altmode_driver dp_altmode_driver = {
+ 	.driver = {
+ 		.name = "typec_displayport",
+ 		.owner = THIS_MODULE,
++		.dev_groups = displayport_groups,
+ 	},
+ };
+ module_typec_altmode_driver(dp_altmode_driver);
+
+base-commit: a560a5672826fc1e057068bda93b3d4c98d037a2
 -- 
 2.44.0.rc1.240.g4c46232300-goog
 
