@@ -1,192 +1,415 @@
-Return-Path: <linux-usb+bounces-7372-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7373-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AB9586D88C
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 02:12:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B90A086D8A6
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 02:19:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64CB3B220AF
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 01:12:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 442581F22E1C
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 01:19:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4152B9D3;
-	Fri,  1 Mar 2024 01:11:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05AD02B9D6;
+	Fri,  1 Mar 2024 01:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="oxuL0ijv";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="CpnRB5Ei"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JtYmQQYt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACFB3232;
-	Fri,  1 Mar 2024 01:11:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709255515; cv=fail; b=g8VvZs7tvRsE8OZsos0RGq53elKrPFU5Vnt0Wp1BbWDizbnZW0P/N6VY8b14yByAyWNZhnkt8DbWFR57/L6VkGLKV0JkD0DR9TmnVMTXnoibJcAs9UfBnY3n0JIzkLF80WqO8OCK7CVOKHLNG5ezuNvxai8ZrOjdbksmnhPjYX0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709255515; c=relaxed/simple;
-	bh=ubT5vn54CRe2ToVp8tIuALMRVYAPqdHYqwRYdXAJqIY=;
-	h=To:Cc:Subject:From:Message-ID:References:Date:In-Reply-To:
-	 Content-Type:MIME-Version; b=mL2pTZWfELQxGYBVZxUDnDpS/ABDJqJfuYK9IgyWj1VAJEEfy/rJ8+u1QrJkK4xckmoVwKPIuU0Aj2MEANnnBnCXImMoTRfrhqueJrO7vc7VdXeSuxsBjC18mULnM2n8rlDbpDj49OQm/Q+sWLmnrAjQCSNcolT4J7GF5nQODnU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=oxuL0ijv; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=CpnRB5Ei; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4210hol3012335;
-	Fri, 1 Mar 2024 01:11:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2023-11-20;
- bh=5Gf+aWGTNupAuj13n8eWQRuRG2xV+UXF8r0lKE8BlQM=;
- b=oxuL0ijvVYsyk5aPrXjOxvn6Nk5au3bwhb/5SzwOAuXA09f1+H1zI8x2ef5dpUMx+6+V
- cS8hE4bQx5HXP0IPlk0vj+qEGNUqMUWq3lFkYw5gl/LjW1VgCZnw5XOUvCAiOx5c0lhn
- NBxVmAeq1TGjyz2hpesaTpF0pGVBZ+82pnWAgzogEAbFspkd8RUG1awXMSTZu/tyc/bS
- A48B18fZ8BiVILNOdcsUo2ClX0IF925ZGl5KTukxGgLvCgqPJ4cZlR5kA6o+Q9FtHjox
- rIFP5CsGrUW8FQTLIHk3+m05Nh8NAtYRO0ehgqJ5dsuYsJxdpDW6CUxrFXr/BBQOEUWn 3Q== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3wf8gdqgya-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 01 Mar 2024 01:11:41 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 4210mtUF022341;
-	Fri, 1 Mar 2024 01:11:40 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2041.outbound.protection.outlook.com [104.47.57.41])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3wf6wbty6y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 01 Mar 2024 01:11:40 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oRkLFiCHKUPV63+0gXUAQRLBjAHKAQZ97RHIt9YjP0sCgQiyujVJm/4jEuwJh7rET42VCVq1zmxn7XLhZ7PW1b8gf6GiN81L9OUutf+Yi2ajCLmiL+jl2MUfmzkbItpdZx5WWvgdKIytpXhUN3VhUhK7T9UQll8QnY+xgVUWe1ys/syGjbIRsE1aZK2adRWDh/gf7THaNjvVgXPKpqfMIdIefHMzg/sdEihAAuxgntnFhEIRx1JQ90n/A/jiMrxMohk/r8ss5F8J+Dhh4lxdbAkqRRJuAxqwi0YGMwnwfkcqvGt3rJ/dXDIQmowIIVIh1amICBZS0HB907jJ5zsYqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5Gf+aWGTNupAuj13n8eWQRuRG2xV+UXF8r0lKE8BlQM=;
- b=Amp32RcO8HFMaIGgnYpWIWfJ5dssWER4DDMolouG2eGVtxBR65GIiTHZvsVEOcKJ543sU06Gn9dzGjEtYmF+uwMAT4VGGyUyu4SyHO7tF+8y+60YTkMwMS9dGKLOdOg8xOz3arSizHevK9UmVyen8tHXKMWs0hZH/PZdYfFCuPvHeisrnqU9xlixNtaz5CIKWaRN5rkCnxlhFj5m1J86SwV8wyGdBlGVjbMzBFNmfyQaqKwrGV/AdMvs7rkdUdXL0OpW7KuL9uQMiYq+0XsrPr/fsXx2w0pdVN6jpdVQzVv0Z2x0w2yZ6xN+fJyrz4NwdRuTcfwI7J2bkn5pFvVmSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFDE7364BC
+	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 01:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709255985; cv=none; b=NQQZJSwhOGFP5PIkDfoV4/JktQa6N/cMnUuEJIppRwMmZ1FTLpa9b4VPkxVoWm9XxhSU+zSz+NOctsdSZGvxdyf/KS+5m+ON4F9GLk+IPEXCD9TQBOV1GoJYsMaBBD8JftYiLm19Fe/bzZWGqrDPHMpEPjOh0DntazXD8H0ike8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709255985; c=relaxed/simple;
+	bh=tEKWJtG51YAewLaiv6i2gRn9iCJrlrLBmxpCOsnNFgo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BKl1jJCtNO/A0HbaarjxSpELFrQjFiCkohurRvxKQVTTpZx1w4YcsFW0lnKV4/BJxDPD8OvzZohxZ+R8YfvjSO/A/AXCOrDcDS8Bn8lYN11sffjGfxE00t0m5bMEPtNFOr9L4//9uM4gH34q95IttXuwJR4O1yru1Re+Yr00hmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JtYmQQYt; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1dbe7e51f91so30745ad.1
+        for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 17:19:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5Gf+aWGTNupAuj13n8eWQRuRG2xV+UXF8r0lKE8BlQM=;
- b=CpnRB5EiV8FrkQLhk82TGI9NiNioX2RkjU8Lr7BMcDLfsEQ+abJq3UxbEDJ3msd2eO7RcfrCAuTdJPR5JUs8zmA9taOSFfYa/upmUarj0OTBDkx2ye7NjEx7tIDxobUKPaX5phb8U3m8hAfJYY7y54nxOBD3eBBaSoO9iY7nrSU=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by PH7PR10MB6081.namprd10.prod.outlook.com (2603:10b6:510:1fb::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.36; Fri, 1 Mar
- 2024 01:11:37 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::7856:8db7:c1f6:fc59]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::7856:8db7:c1f6:fc59%4]) with mapi id 15.20.7316.039; Fri, 1 Mar 2024
- 01:11:37 +0000
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-        syzbot
- <syzbot+28748250ab47a8f04100@syzkaller.appspotmail.com>,
-        bvanassche@acm.org, emilne@redhat.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, martin.petersen@oracle.com,
-        nogikh@google.com, syzkaller-bugs@googlegroups.com, tasos@tasossah.com,
-        usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH] USB: usb-storage: Prevent divide-by-0 error in
- isd200_ata_command
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1frxazrgx.fsf@ca-mkp.ca.oracle.com>
-References: <380909e4-6e0a-402f-b3ac-de07e520c910@rowland.harvard.edu>
-	<000000000000102fe606127a67f6@google.com>
-	<b1e605ea-333f-4ac0-9511-da04f411763e@rowland.harvard.edu>
-Date: Thu, 29 Feb 2024 20:11:35 -0500
-In-Reply-To: <b1e605ea-333f-4ac0-9511-da04f411763e@rowland.harvard.edu> (Alan
-	Stern's message of "Thu, 29 Feb 2024 14:30:06 -0500")
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR08CA0031.namprd08.prod.outlook.com
- (2603:10b6:a03:100::44) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        d=google.com; s=20230601; t=1709255982; x=1709860782; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XY4iK5q+WSMfCP+4I32SSQ9WzdgztdIyR7UmvGP2XS4=;
+        b=JtYmQQYty1k3ZoHp6EhNL7X4iW9YWfboYZCdABGPQwj7V6NUYblWvbvnEJXY/KXouz
+         8DK03YEQiSe1C3jrfle3Tomy1ztfteBHBf9IcG1x+aFpn7CUWMOLEZ6T6ktqHaIxGyEL
+         XMsw33aWBmiRjsBvemsU0GVMvsRZXSNS+AAj6fMd4c55nCud8pjiqQ55Z3voLmMEgEyl
+         MGylvtigNy/ZLGsRhhA9bfQe1vXwCI1tMaj+1xinwIjlfKTLIZ/bvrMt8aoRPb2fss2l
+         d9udN63vgunMzSlDAzfNIs1yNWsiG0ZKr0UITWMqZJfjDD7ORbbYb5eb3HoYDc9Zee4R
+         w/MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709255982; x=1709860782;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XY4iK5q+WSMfCP+4I32SSQ9WzdgztdIyR7UmvGP2XS4=;
+        b=M2KIxwBXYPxkp2SRFtz+uS+YLxWZmxNbtCY3wrLE5PZglA5TpKdyKPjSxnMcYlsQNd
+         VqSAa43oupjdn6f16EsrQNkeY/VUcN03PKj/jhlVsz8yHdEbc+/qL2aSSF1U44jMGMNu
+         TScC72A8u90zIqIOaHMjzF6SSczQLmxDbAQOxGOsM6sCb5Gyt1b6860ElSXZ+eGEB6Y4
+         9t+PH/aKR6L8ppSP06c45MjXOE5y4pSriiDyfr3h1wprYB4EQw+PyEy8STP6Z7GdcIxo
+         0gxnaaFk798hAjR51M8n+/+F/Rmq9DinBr3ovrkCfVEerZlbf86xEXa8QiakjJZOw1AC
+         /QSA==
+X-Forwarded-Encrypted: i=1; AJvYcCXV0HaN/Z1g/EQxRJe/rvnCg5k78UvFpU1ivId6aWeXLdHZA+E+IzSTypEiXEW3m2p3LxCnSkpIoqY25e0GTP89NUnssFnkGrtg
+X-Gm-Message-State: AOJu0YyOv6wILG3s1gDbN/2kq1W36BOADkUEPYfmScWobpLBLNmYqQ5W
+	xsOBNWt3f+A4B3GYUZlxi8HWSWEinlydc3pbG0VwhNT4Vxewe5giqMuqYM3qSQ==
+X-Google-Smtp-Source: AGHT+IGI73EwH4cpv4Jcb46oAnDJHdqA9NsV6OSC+8BppulefSyU9w8HvGGDYDAATXT3/1st2qLmFw==
+X-Received: by 2002:a17:903:228e:b0:1dc:df1b:6017 with SMTP id b14-20020a170903228e00b001dcdf1b6017mr42855plh.21.1709255981785;
+        Thu, 29 Feb 2024 17:19:41 -0800 (PST)
+Received: from google.com (109.120.125.34.bc.googleusercontent.com. [34.125.120.109])
+        by smtp.gmail.com with ESMTPSA id ta6-20020a17090b4ec600b0029a849e7268sm4275336pjb.28.2024.02.29.17.19.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Feb 2024 17:19:40 -0800 (PST)
+Date: Fri, 1 Mar 2024 01:19:36 +0000
+From: Benson Leung <bleung@google.com>
+To: Jameson Thies <jthies@google.com>
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+	pmalani@chromium.org, abhishekpandit@chromium.org,
+	andersson@kernel.org, dmitry.baryshkov@linaro.org,
+	fabrice.gasnier@foss.st.com, gregkh@linuxfoundation.org,
+	hdegoede@redhat.com, neil.armstrong@linaro.org,
+	rajaram.regupathy@intel.com, saranya.gopal@intel.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] usb: typec: ucsi: Register SOP/SOP' Discover
+ Identity Responses
+Message-ID: <ZeEtKIl5FmFQq1PT@google.com>
+References: <20240229232625.3944115-1-jthies@google.com>
+ <20240229232625.3944115-4-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|PH7PR10MB6081:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d4ddcb8-9a4f-48a7-bce5-08dc398c8b65
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	v150zFjdMrCjtwMWZhWdcMUB/VKLHk/8JW9ngj/hikX32/yk/nFtY/rcvPh4K1lbJ5C9PoysrFzG/DumxFJH2xDUJax24bhudYbwvkmSrwcjJWyOYc8ialhBzH3f8rgm2Rk2H7ZuYTp7avWJJZ/7FqxFCJeGn8IZW6K4Fii9iIgsYkDxzSqMTVJGsy2Nfq32bqIxoOiBF0+wqugN5h5nEjzee/2n1bn66MFVljh+eBHKyTgCEiUckxqgjLbeavwOgeGuWOabONwvN9hiHEn0FjPtzehzj6o/XQfyyjKa/WCpYbPk8dMFc/ytbdNs31LrPsy6TNFG+RFDCnmE5yOKUpoUT+XhykmTXR2Ew1ipvsj0TsXYn/Gog92FK47DTHnR2Fuoqe2b3tXxGrnQktvik9BejaVmr3q6wWrqMVcbOgJFjFXkLQx4KNVPkXaQGFHQNjM1H1nwtFkahQTHar5dBiLyTU5vmdeMuXu2kmKtlMpi09sni4DYeP0S3jdrfRN0tsNwmyo4NjYVyCXT1jBcfoa6moJeVkQH/sLf3jGnOIEpGK3KsSuwJbs39aYNNO/nB1WXA2Bg0tE6NVs+KMomCRFFKfZUliQxkxyuKdd/QJmB7bwwwgzIB+kXG34M3dorL9aHOFYWURPpJ+C/3evcOA==
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?yy8ChXUUo5yDdR8xz+7ovcAxLZcuwU1+GDypOcktuVL+0AsGDdOm++1chCtb?=
- =?us-ascii?Q?8EaSTfrgWtIeTBMBTUjGMJw/IvXwgeEDaSK6YokdeSavFwCgyTO2lpnwpnQ3?=
- =?us-ascii?Q?VvyrKAvkllbcC7o5O4O7RDASxzm5YmhKwZl5e0IL5gLT2sUgLrOf8g0Z3BgO?=
- =?us-ascii?Q?LRiusQ9dCWGaJO43DYm8/tKt4bpmJz1v6JSztcEwPw1dv+o+Q8I5pLqmWDGe?=
- =?us-ascii?Q?RoffiOciVliFih1jHZzfts//y6aKLqywCns14XDYCbBg8rwvHQ0/ojxwEWYl?=
- =?us-ascii?Q?mBsZhRDOmIcSyzaEpogXJwzGGJBIf17HGnLXTgRiqIDrjJjEdexu2N3sdfjd?=
- =?us-ascii?Q?i5tiJnv0xike46OYnZtW5hRMXel/vHBsWZlelf+eZpVo54MsnVX1OXZr6Y1F?=
- =?us-ascii?Q?7cJN1KT2U89R/+7CMo7Hcyz/EvX4Kw/8vsfsHzZyNnajPs1AYFuZanfADQAD?=
- =?us-ascii?Q?S27GWJVgjM0pKFXPS/3mhpsEJYDdX5DzKlKTHs4+2m8nrKXMxnd60K9WvOjH?=
- =?us-ascii?Q?dR93nxGBD+M/c5KoAabDnX4L3iCdjSemHtsFhQnCSJESbHeZG1lfWLqfLr2o?=
- =?us-ascii?Q?VGYTdvSCAG2oxkypmAC1Wwgm+Ftz+e1DqtsNhjQtLLwk0OqE9KpO9AYmeNBc?=
- =?us-ascii?Q?4OslzsF6XeQeQ9x64wFLOUnHO0I+xc57EW3jfVp1ithKlRsJL3I7JtuiE1FN?=
- =?us-ascii?Q?14Pwh43j69taPPZg3bh/Hoso1dmhZYi/LmsuVvQ3r8lRROweX85qrqrNVbRA?=
- =?us-ascii?Q?Unu8Rib0ta7CWbQNeIVzMYfkJStGgrxYGKOTIc7nGe2FF5R4Metywb/wH6XX?=
- =?us-ascii?Q?RxsRHnRw3XtilWTmqaWc26bNxLA4dVL/aCS74rpXTaAVYcK4lQzVL4LHnL5m?=
- =?us-ascii?Q?aqT8Uucr3ZhOQ/t4Omr4c4d6O5DAkkWCAxwQvRhGRARXU3LjkI5RlmQAPInd?=
- =?us-ascii?Q?W6lsOSE/moALeNMMChgKKoZYT4UlMoFxUqFB164b5Kev5j+p6YrkoKAZJuDg?=
- =?us-ascii?Q?Obc/ZFMb7esxNSDD+b1uLG+hEUyd0eNCWzAjPCheBhG0l3nvQFoyKilx0nev?=
- =?us-ascii?Q?9YMs8cb5u3owQFXBX5UREGe5LbQR68s28YN7o2gVGLJcQkEYpVH29IDYkP7m?=
- =?us-ascii?Q?VMBoo9Z1b7hT+GtybEt3alDj/n+WgJRo3ULgakDe36QiWV23lDfVOr56LPTW?=
- =?us-ascii?Q?Bh+KihlhQv/5KnPi3gWZbFvAgoZNJHza9YHy2Eq4sHbB+vKZ1fzG0LuTHBSO?=
- =?us-ascii?Q?W9PLHLJD/iOSI0lhbeqFLVWNA4rFcg1YErWTX+SV6HDen2uR0jH6paAUaSrq?=
- =?us-ascii?Q?Ttotlmbn+cpIwgCuki6KA/2u3AV19GGrcymoBaB4nbKo8fW2MPU8H6eSCqJi?=
- =?us-ascii?Q?ABFRczezuB2C4B8Yt8v3UJIzVOQS4T3euEzwxWMJuaGqxIFNM+y6WZRZEAvD?=
- =?us-ascii?Q?4DwRvyCTv6QiezvpL2Ca6JP7u0kKiuI4O4rh1WHy1zINsnoWARbiPRCzub/e?=
- =?us-ascii?Q?rqec+JKqlEkMk3SmdcD7Bvn6CQuNEM9BO/kcPXDGHDm3GF03jTtha7OEDe99?=
- =?us-ascii?Q?H/1KgBDBECykAN7/Ld9LrxYWzq79y1PrwZDmf/4kW+k4ImpdXUQ0hGyOKQAQ?=
- =?us-ascii?Q?qQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	TfSO8SgLuMVCULvgjOC9f0teWjUKOvkOcXJIpbSsGNH+ml4SD4twMxVZk39CEckFPZLmb5nTYRZfUVPnXMpMuwHoTYIGBvJd/jwK7ZxGufk5YTDsWQsHd2PtKXS+pZJ+pPni7bd3k1jqu5SjUqyq8mRiNO/sy3IsjhnWmuounv/8GP1TlxcdMh2Z52/wtzP7YGNEZeAJsbILiscmkkC6wx6JQ5dsNPGU6iLddD/3E5gG/fJb8nM44n7Xs7fGkvCJfZad7tQdKHoxvEdQcwgmSOZ/9PK1Hcy8xs47OUNOWtoIaS/S7/oblcGZX8RYVnS9wOC7X22Dvqytin28YM7hlwcnU9aHaDQklV8aEIus/up8ljTXJy34PHOq0ZmZJVoCEpDwzpKhMIyAJOfvtvFNAsjYnibKLMx7DutN5TZC03R16GaQlkiiZ4/cJadw7Gp6gWsbvz32l+sn7pqQaVeQtLAf90rSILzdFZ8hnq06R/JVbUmvStU/CxK+r+RM2ikTSp/XPByxDJAFrXi0c4Ok3S5va/ghqLySYqGU2GNYgmx5h1tBC8wPuXGOvtV8AFyvs4Qs46swnaspDAgdOBi9XIwR5izl4/Q9QazWBnzmM0c=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d4ddcb8-9a4f-48a7-bce5-08dc398c8b65
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2024 01:11:37.7787
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IBV5JodMi1uYUFpmDzqDTxafZdhteBhIad+lMjp4UjdjV7JZkyxxjYkvwcv2wOKewS/7i0kNYdzjh4HEP6ULxlnfk+KVD+Quop0czYOJt1Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6081
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-29_07,2024-02-29_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 spamscore=0
- mlxlogscore=999 adultscore=0 mlxscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2403010008
-X-Proofpoint-ORIG-GUID: rcESslzUhW-pClFl5dDdAd7yMk7Hx6Dy
-X-Proofpoint-GUID: rcESslzUhW-pClFl5dDdAd7yMk7Hx6Dy
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="hF6TYH8Ny7dvps26"
+Content-Disposition: inline
+In-Reply-To: <20240229232625.3944115-4-jthies@google.com>
 
 
-Alan,
+--hF6TYH8Ny7dvps26
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> The isd200 sub-driver in usb-storage uses the HEADS and SECTORS values
-> in the ATA ID information to calculate cylinder and head values when
-> creating a CDB for READ or WRITE commands. The calculation involves
-> division and modulus operations, which will cause a crash if either of
-> these values is 0. While this never happens with a genuine device, it
-> could happen with a flawed or subversive emulation, as reported by the
-> syzbot fuzzer.
+Hi Jameson,
 
-Looks good to me.
+On Thu, Feb 29, 2024 at 11:26:24PM +0000, Jameson Thies wrote:
+> Register SOP and SOP' Discover Identity responses with the USB Type-C
+> Connector Class as partner and cable identities, respectively. Discover
+> Identity responses are requested from the PPM using the GET_PD_MESSAGE
+> UCSI command.
+>=20
+> Signed-off-by: Jameson Thies <jthies@google.com>
 
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
+Reviewed-by: Benson Leung <bleung@chromium.org>
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+> ---
+> GET_PD_MESSAGE responses from the PPM populate partner and cable
+> identity in sysfs:
+> nospike-rev4 /sys/class/typec # ls port0-partner/identity/
+> cert_stat  id_header  product  product_type_vdo1  product_type_vdo2
+> product_type_vdo3
+> nospike-rev4 /sys/class/typec # ls port0-cable/identity/
+> cert_stat  id_header  product  product_type_vdo1  product_type_vdo2
+> product_type_vdo3
+>=20
+> Changes in v3:
+> - None.
+>=20
+> Changes in v2:
+> - Re-ordered memset call and null assignment when unregistering partners
+> and cables.
+> - Supports registering partner and cable identity with UCSI versions
+> before v2.0.
+> - Shortened lines to within 80 characters with the exception of two
+> error log lines with three indentations.
+> - Tested on usb-testing branch merged with chromeOS 6.8-rc2 kernel.
+>=20
+>  drivers/usb/typec/ucsi/ucsi.c | 125 ++++++++++++++++++++++++++++++++++
+>  drivers/usb/typec/ucsi/ucsi.h |  29 ++++++++
+>  2 files changed, 154 insertions(+)
+>=20
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 7c84687b5d1a3..4088422b33c74 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -646,6 +646,121 @@ static int ucsi_get_src_pdos(struct ucsi_connector =
+*con)
+>  	return ret;
+>  }
+> =20
+> +static int ucsi_read_identity(struct ucsi_connector *con, u8 recipient,
+> +			      struct usb_pd_identity *id)
+> +{
+> +	struct ucsi *ucsi =3D con->ucsi;
+> +	struct ucsi_pd_message_disc_id resp =3D {};
+> +	u64 command;
+> +	int ret;
+> +
+> +	if (ucsi->version < UCSI_VERSION_2_0) {
+> +		/*
+> +		 * Before UCSI v2.0, MESSAGE_IN is 16 bytes which cannot fit
+> +		 * the 28 byte identity response including the VDM header.
+> +		 * First request the VDM header, ID Header VDO, Cert Stat VDO
+> +		 * and Product VDO.
+> +		 */
+> +		command =3D UCSI_COMMAND(UCSI_GET_PD_MESSAGE) |
+> +		    UCSI_CONNECTOR_NUMBER(con->num);
+> +		command |=3D UCSI_GET_PD_MESSAGE_RECIPIENT(recipient);
+> +		command |=3D UCSI_GET_PD_MESSAGE_OFFSET(0);
+> +		command |=3D UCSI_GET_PD_MESSAGE_BYTES(0x10);
+> +		command |=3D UCSI_GET_PD_MESSAGE_TYPE(
+> +		    UCSI_GET_PD_MESSAGE_TYPE_IDENTITY);
+> +
+> +		ret =3D ucsi_send_command(ucsi, command, &resp, 0x10);
+> +		if (ret < 0) {
+> +			dev_err(ucsi->dev,
+> +				"UCSI_GET_PD_MESSAGE v1.2 failed first request (%d)\n",
+> +				ret);
+> +			return ret;
+> +		}
+> +
+> +		/* Then request Product Type VDO1 through Product Type VDO3. */
+> +		command =3D UCSI_COMMAND(UCSI_GET_PD_MESSAGE) |
+> +		    UCSI_CONNECTOR_NUMBER(con->num);
+> +		command |=3D UCSI_GET_PD_MESSAGE_RECIPIENT(recipient);
+> +		command |=3D UCSI_GET_PD_MESSAGE_OFFSET(0x10);
+> +		command |=3D UCSI_GET_PD_MESSAGE_BYTES(0xc);
+> +		command |=3D UCSI_GET_PD_MESSAGE_TYPE(
+> +		    UCSI_GET_PD_MESSAGE_TYPE_IDENTITY);
+> +
+> +		ret =3D ucsi_send_command(ucsi, command, &resp.vdo[0], 0xc);
+> +		if (ret < 0) {
+> +			dev_err(ucsi->dev,
+> +				"UCSI_GET_PD_MESSAGE v1.2 failed second request (%d)\n",
+> +				ret);
+> +			return ret;
+> +		}
+> +	} else {
+> +		/*
+> +		 * In UCSI v2.0 and after, MESSAGE_IN is large enough to request
+> +		 * the large enough to request the full Discover Identity
+> +		 * response at once.
+> +		 */
+> +		command =3D UCSI_COMMAND(UCSI_GET_PD_MESSAGE) |
+> +		    UCSI_CONNECTOR_NUMBER(con->num);
+> +		command |=3D UCSI_GET_PD_MESSAGE_RECIPIENT(recipient);
+> +		/* VDM Header + 6 VDOs (0x1c bytes) without an offset */
+> +		command |=3D UCSI_GET_PD_MESSAGE_OFFSET(0);
+> +		command |=3D UCSI_GET_PD_MESSAGE_BYTES(0x1c);
+> +		command |=3D UCSI_GET_PD_MESSAGE_TYPE(
+> +		    UCSI_GET_PD_MESSAGE_TYPE_IDENTITY);
+> +
+> +		ret =3D ucsi_send_command(ucsi, command, &resp, sizeof(resp));
+> +		if (ret < 0) {
+> +			dev_err(ucsi->dev, "UCSI_GET_PD_MESSAGE failed (%d)\n",
+> +				ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	id->id_header =3D resp.id_header;
+> +	id->cert_stat =3D resp.cert_stat;
+> +	id->product =3D resp.product;
+> +	id->vdo[0] =3D resp.vdo[0];
+> +	id->vdo[1] =3D resp.vdo[1];
+> +	id->vdo[2] =3D resp.vdo[2];
+> +	return 0;
+> +}
+> +
+> +static int ucsi_get_partner_identity(struct ucsi_connector *con)
+> +{
+> +	int ret;
+> +
+> +	ret =3D ucsi_read_identity(con, UCSI_RECIPIENT_SOP,
+> +				 &con->partner_identity);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret =3D typec_partner_set_identity(con->partner);
+> +	if (ret < 0) {
+> +		dev_err(con->ucsi->dev, "Failed to set partner identity (%d)\n",
+> +			ret);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int ucsi_get_cable_identity(struct ucsi_connector *con)
+> +{
+> +	int ret;
+> +
+> +	ret =3D ucsi_read_identity(con, UCSI_RECIPIENT_SOP_P,
+> +				 &con->cable_identity);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret =3D typec_cable_set_identity(con->cable);
+> +	if (ret < 0) {
+> +		dev_err(con->ucsi->dev, "Failed to set cable identity (%d)\n",
+> +			ret);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  static int ucsi_check_altmodes(struct ucsi_connector *con)
+>  {
+>  	int ret, num_partner_am;
+> @@ -754,6 +869,7 @@ static int ucsi_register_cable(struct ucsi_connector =
+*con)
+>  		break;
+>  	}
+> =20
+> +	desc.identity =3D &con->cable_identity;
+>  	desc.active =3D !!(UCSI_CABLE_PROP_FLAG_ACTIVE_CABLE &
+>  			 con->cable_prop.flags);
+>  	desc.pd_revision =3D UCSI_CABLE_PROP_FLAG_PD_MAJOR_REV_AS_BCD(
+> @@ -777,6 +893,7 @@ static void ucsi_unregister_cable(struct ucsi_connect=
+or *con)
+>  		return;
+> =20
+>  	typec_unregister_cable(con->cable);
+> +	memset(&con->cable_identity, 0, sizeof(con->cable_identity));
+>  	con->cable =3D NULL;
+>  }
+> =20
+> @@ -827,6 +944,7 @@ static int ucsi_register_partner(struct ucsi_connecto=
+r *con)
+>  		break;
+>  	}
+> =20
+> +	desc.identity =3D &con->partner_identity;
+>  	desc.usb_pd =3D pwr_opmode =3D=3D UCSI_CONSTAT_PWR_OPMODE_PD;
+>  	desc.pd_revision =3D UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->=
+cap.flags);
+> =20
+> @@ -855,6 +973,7 @@ static void ucsi_unregister_partner(struct ucsi_conne=
+ctor *con)
+>  	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP);
+>  	ucsi_unregister_cable(con);
+>  	typec_unregister_partner(con->partner);
+> +	memset(&con->partner_identity, 0, sizeof(con->partner_identity));
+>  	con->partner =3D NULL;
+>  }
+> =20
+> @@ -975,6 +1094,10 @@ static int ucsi_check_cable(struct ucsi_connector *=
+con)
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> +	ret =3D ucsi_get_cable_identity(con);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	return 0;
+>  }
+> =20
+> @@ -1019,6 +1142,7 @@ static void ucsi_handle_connector_change(struct wor=
+k_struct *work)
+>  			ucsi_register_partner(con);
+>  			ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
+>  			ucsi_partner_task(con, ucsi_check_connector_capability, 1, HZ);
+> +			ucsi_partner_task(con, ucsi_get_partner_identity, 1, HZ);
+>  			ucsi_partner_task(con, ucsi_check_cable, 1, HZ);
+> =20
+>  			if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) =3D=3D
+> @@ -1418,6 +1542,7 @@ static int ucsi_register_port(struct ucsi *ucsi, st=
+ruct ucsi_connector *con)
+>  		ucsi_register_partner(con);
+>  		ucsi_pwr_opmode_change(con);
+>  		ucsi_port_psy_changed(con);
+> +		ucsi_get_partner_identity(con);
+>  		ucsi_check_cable(con);
+>  	}
+> =20
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index f0aabef0b7c64..b89fae82e8ce7 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -106,6 +106,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
+>  #define UCSI_GET_CABLE_PROPERTY		0x11
+>  #define UCSI_GET_CONNECTOR_STATUS	0x12
+>  #define UCSI_GET_ERROR_STATUS		0x13
+> +#define UCSI_GET_PD_MESSAGE		0x15
+> =20
+>  #define UCSI_CONNECTOR_NUMBER(_num_)		((u64)(_num_) << 16)
+>  #define UCSI_COMMAND(_cmd_)			((_cmd_) & 0xff)
+> @@ -159,6 +160,18 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num=
+);
+>  #define UCSI_MAX_PDOS				(4)
+>  #define UCSI_GET_PDOS_SRC_PDOS			((u64)1 << 34)
+> =20
+> +/* GET_PD_MESSAGE command bits */
+> +#define UCSI_GET_PD_MESSAGE_RECIPIENT(_r_)	((u64)(_r_) << 23)
+> +#define UCSI_GET_PD_MESSAGE_OFFSET(_r_)		((u64)(_r_) << 26)
+> +#define UCSI_GET_PD_MESSAGE_BYTES(_r_)		((u64)(_r_) << 34)
+> +#define UCSI_GET_PD_MESSAGE_TYPE(_r_)		((u64)(_r_) << 42)
+> +#define   UCSI_GET_PD_MESSAGE_TYPE_SNK_CAP_EXT	0
+> +#define   UCSI_GET_PD_MESSAGE_TYPE_SRC_CAP_EXT	1
+> +#define   UCSI_GET_PD_MESSAGE_TYPE_BAT_CAP	2
+> +#define   UCSI_GET_PD_MESSAGE_TYPE_BAT_STAT	3
+> +#define   UCSI_GET_PD_MESSAGE_TYPE_IDENTITY	4
+> +#define   UCSI_GET_PD_MESSAGE_TYPE_REVISION	5
+> +
+>  /* ---------------------------------------------------------------------=
+----- */
+> =20
+>  /* Error information returned by PPM in response to GET_ERROR_STATUS com=
+mand. */
+> @@ -338,6 +351,18 @@ struct ucsi_connector_status {
+>  	((get_unaligned_le32(&(_p_)[5]) & GENMASK(16, 1)) >> 1)
+>  } __packed;
+> =20
+> +/*
+> + * Data structure filled by PPM in response to GET_PD_MESSAGE command wi=
+th the
+> + * Response Message Type set to Discover Identity Response.
+> + */
+> +struct ucsi_pd_message_disc_id {
+> +	u32 vdm_header;
+> +	u32 id_header;
+> +	u32 cert_stat;
+> +	u32 product;
+> +	u32 vdo[3];
+> +} __packed;
+> +
+>  /* ---------------------------------------------------------------------=
+----- */
+> =20
+>  struct ucsi_debugfs_entry {
+> @@ -428,6 +453,10 @@ struct ucsi_connector {
+>  	struct usb_power_delivery_capabilities *partner_sink_caps;
+> =20
+>  	struct usb_role_switch *usb_role_sw;
+> +
+> +	/* USB PD identity */
+> +	struct usb_pd_identity partner_identity;
+> +	struct usb_pd_identity cable_identity;
+>  };
+> =20
+>  int ucsi_send_command(struct ucsi *ucsi, u64 command,
+> --=20
+> 2.44.0.rc1.240.g4c46232300-goog
+>=20
+
+--hF6TYH8Ny7dvps26
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCZeEtKAAKCRBzbaomhzOw
+wi8lAQC6aengjuuD6Fo37TcK5EXHZ6Yu5yKVRRmL6cz+2snIYAEAiIUQB7/ZWutH
+V7GqOFELnyLxH7T5L4onZBAJuSBHsgk=
+=GPiY
+-----END PGP SIGNATURE-----
+
+--hF6TYH8Ny7dvps26--
 
