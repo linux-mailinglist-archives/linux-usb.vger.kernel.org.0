@@ -1,94 +1,129 @@
-Return-Path: <linux-usb+bounces-7395-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7396-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9207C86E528
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 17:21:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB9C286E567
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 17:25:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CBA3B21F31
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 16:21:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A23A3287925
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 16:25:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80B2970CAA;
-	Fri,  1 Mar 2024 16:21:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9A9471B44;
+	Fri,  1 Mar 2024 16:24:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FFJJQdYp"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ZQvK6iOT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.15.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0894F40BE3
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 16:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F2871B43;
+	Fri,  1 Mar 2024 16:24:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709310067; cv=none; b=qQh0xUcd7Q6jGo+U3btL/J9r3wcSG0rlikq2p1SusJjDsiuyPUlbRMrmRZ75eybVoK5+XWzPt/6yGtVn7lUPyoKLIpG6S0ReSIdmQV2GfDfnZPWTfIexfnlhH4yB/PL22RKnVKn6GlZUq4rt66UigGCHBJkAzrrM09I28TvwuJc=
+	t=1709310246; cv=none; b=pF1dHwa6ywz0E2RYrXaHtW4/sKCMYi5M69hbRI4W3NVGdcBJymwKJqrgkcxgcw0IqUfS4ERsaKOiLGsG+ZbrY4kDjUydBmvU6bKUkmBY/naLxL/vxXW9rUbvegAo9L7tZhDRNZ5Kyrx5UhBR8d5yd8Zgt3f/+visiomWxuMT4oY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709310067; c=relaxed/simple;
-	bh=MM61CaN2YtOb9o/541i6UCq9yIQz2yEGV3fbih2X89E=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=g26tw2PWyc/VOJESLpgUq2R4TJpP8dexCcN4uAL0j/gGLU0at1YenzIvXbiqQf8RJHo2fopnYcIgqd2oLXlIoFqQsIfc8A1B0jcoRqF1M33F5ASm3rvfyuRNMvYHYPuMzKTwocBBQoJXR99//j+KYwvlDG46DCNan7wcy3L0A50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FFJJQdYp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8724FC43390
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 16:21:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709310066;
-	bh=MM61CaN2YtOb9o/541i6UCq9yIQz2yEGV3fbih2X89E=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=FFJJQdYpntTD5uv3J3OYdjTZWZ2sEdrDokpSiArYGA3NpilogAMEUrKQ2Ar580IyD
-	 gzMyP1pAmi1mK460tP2sWW3qYCf4F8B374mFJWRW39QhQvSnCCRHwGOUSKVRuL+lhj
-	 0odO0YLT9ARBTw9R5RL02VkIm7Kw9fHcO5oZ7p0R6brMcKOIgT9cMDR2NkWVrwaHH+
-	 6U/7nseoekQ1AS3PiYOqUN1ktop7URythyIaW8eroDdqNyw9vLL+5VzCNOi3ptAMLA
-	 nzs1QdupqkImYXCsDvp6sHyEDSSUA87D3ScJQsInoFKVrJSnAEL8ly/UqeCeVWDvko
-	 hmTSwyEITvCqw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 74A0EC53BD0; Fri,  1 Mar 2024 16:21:06 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
- audio
-Date: Fri, 01 Mar 2024 16:21:06 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ibmalone@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218544-208809-cC0PBOCIQ9@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
-References: <bug-218544-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1709310246; c=relaxed/simple;
+	bh=nq+dTB9sZf2knTv8a3VS+AYoILhfpagAL7MZwhJ2pmE=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=VBQlQXXa3JkzLOvAydCY9Kj5BIqRsbVH3WxY5wpVtFr6AvVuwUhrxpB9XoqlQkR80vgazH4FVbeluOsUrJ09ewyP0ft+Tc1kyp0M1eeDQqs+1mzuarkbgi9ZIho4MO9KKUAB2wDVken7KaklYwA9sC98590bXyNsflOhw0nyQdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ZQvK6iOT; arc=none smtp.client-ip=212.227.15.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+	t=1709310212; x=1709915012; i=markus.elfring@web.de;
+	bh=nq+dTB9sZf2knTv8a3VS+AYoILhfpagAL7MZwhJ2pmE=;
+	h=X-UI-Sender-Class:Date:To:Cc:From:Subject;
+	b=ZQvK6iOT+bO4tPhYEnabsP9Xu4NuWKZALwGjgVtKfDNkBimaFc1j75CeTokSIHMX
+	 TA7lfeNKK8zYRfMu6CfukWcyWBYTQ8pjL07uhrn9xzb7/qxGWgYA5oJeTf1OMX4lg
+	 IBI/NNjcV4ooxaF+sVo2kKm8GR7TbYeOvpPkQ7SzrBiN7cBwKNCMurfiEiLDTAbic
+	 XhE55G+pyxzYVDqx64R4vJ5MsnZ0ANCIV250WNE1ylhXo48WiH8JaW+eDP7g7QGoM
+	 4R2M7H9eiPty88Gb7IwLop/KAOvrbunEbqGaVYNfD9SMZusNJ+98rvYHhgkwvtrdH
+	 JSAzTrsoyEiDUWg0dw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.86.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MKMA7-1rRbDv0YaF-00LuRI; Fri, 01
+ Mar 2024 17:23:32 +0100
+Message-ID: <0b89e175-47da-4e66-bb3b-a45a400dc3ae@web.de>
+Date: Fri, 1 Mar 2024 17:23:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ RD Babiera <rdbabiera@google.com>, Rob Herring <robh@kernel.org>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Yu Zhe <yuzhe@nfschina.com>
+Content-Language: en-GB
+Cc: LKML <linux-kernel@vger.kernel.org>
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] usb: typec: fusb302: Use common error handling code in
+ fusb302_probe()
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:o7GcYrUfVXrYS2ZCPe02m7WMplSN24/yNpO+Dv2Zv7dcHv5XFlE
+ 15XhwzGS0OyPzBxck2FX65wbryPxGYv3vLUpqdTi9n/qNhVWghgdTzOnkgLnDYrXgAm+CWf
+ 0nxH0Fd4Or8KrPaAKyLXSVrwDdNdRuwYoMHLq1WH4Hpf0ZAXdEepTBfgsyUqYvo95B/hs6c
+ R2wFjcDaj9Bu41DxZWCOQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:XMDho9cx+UU=;b58AOzK5r9e5ujBhpUnW+QTrDF0
+ af00PfU+SJcQuUSRd2WXaqjA+9JhPY62tJ4czPaQZZEyNSnF2r8A1cMYCB0OqjEWN8x/UbKHR
+ n/EI4JZOhELQcvnF+IScPTH/dwEV31E4iUIdolKQGsdkVRc8IKsaRXykZPpFkDerl3QrRzTAq
+ 1jApWXH7esPKjcqzaL7/Frn4Itj4TX/IVcbZDdifgN6fw+WB78D491AvPyZ72AbnaFBw3sUjv
+ /4dLAcANQAoZmlP/JldAfoIQfYTRhHN1t0mUTrKCGP+XfjDIIdf7MlG6P/KikWWSndqNjr9jx
+ Qcc4VUVXcJOfp0+qLuAxGo5G/VbygPezXoU/tpwnbYmUWWKKAxnLpDoSA7h4dta9J5kWGQ9Te
+ sNydATeYIJh1hkc1GvMs16cYD52RtLjNgCxwWJp5AAk+jVRR7fddVl4ZrUWOCHu6UBqIMiIr3
+ bdD55UqrmL+3AxZJvmzkP0OQ8Dz/OTkKObNv9XuSbAcw+xKKeEAHclXgMZUuTp2P1EHk1ZsMH
+ wi1OzpMqvOFSiyjeaZEDJdf8IzerMZ4ZEyexnrOMZ2l7gDWwoH148dj4ULoTPEa9fWxNGUeZK
+ kTgzbIhi3OhlSSilbqbpnTff6D41V2yRE4QxuvSQH1LsaQUMy6WORheU/hMglm5OtWprF4ch5
+ vzfLJZeJtMMYJ9TqZBOI9HwE5r/PYTIHoWCoR4dZlfLvAIpZtgzZ/Pcn9cr67J46y4BP08F53
+ i+SnzS6GokXepWVkqZlIYmOsHUgzqAio9QZRn2UxBW4vXB4vOzsl1s+DoADgQRaJIcOB5JgYl
+ 9VAVFqnlB11s4d2rF41EguskBOHPbEv56nRxIZJbYfXvY=
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Fri, 1 Mar 2024 17:00:23 +0100
 
---- Comment #4 from Ian Malone (ibmalone@gmail.com) ---
-Created attachment 305937
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305937&action=3Dedit
-sys_kernel_debug_usb_devices_contents
+Add a label so that a bit of exception handling can be better reused
+at the end of this function implementation.
 
-/sys/kernel/debug/usb/devices
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/usb/typec/tcpm/fusb302.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---=20
-You may reply to this email to add a comment.
+diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fus=
+b302.c
+index ef18a448b740..e1e030da1dec 100644
+=2D-- a/drivers/usb/typec/tcpm/fusb302.c
++++ b/drivers/usb/typec/tcpm/fusb302.c
+@@ -1741,10 +1741,9 @@ static int fusb302_probe(struct i2c_client *client)
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+ 	chip->tcpm_port =3D tcpm_register_port(&client->dev, &chip->tcpc_dev);
+ 	if (IS_ERR(chip->tcpm_port)) {
+-		fwnode_handle_put(chip->tcpc_dev.fwnode);
+ 		ret =3D dev_err_probe(dev, PTR_ERR(chip->tcpm_port),
+ 				    "cannot register tcpm port\n");
+-		goto destroy_workqueue;
++		goto put_fwnode;
+ 	}
+
+ 	ret =3D request_irq(chip->gpio_int_n_irq, fusb302_irq_intn,
+@@ -1761,6 +1760,7 @@ static int fusb302_probe(struct i2c_client *client)
+
+ tcpm_unregister_port:
+ 	tcpm_unregister_port(chip->tcpm_port);
++put_fwnode:
+ 	fwnode_handle_put(chip->tcpc_dev.fwnode);
+ destroy_workqueue:
+ 	fusb302_debugfs_exit(chip);
+=2D-
+2.44.0
+
 
