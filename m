@@ -1,373 +1,353 @@
-Return-Path: <linux-usb+bounces-7387-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7388-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 020AC86E2CC
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 14:53:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C8CE86E34B
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 15:26:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A87522883BE
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 13:53:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88ABC1F226F8
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 14:26:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02D276EEE6;
-	Fri,  1 Mar 2024 13:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94E716F50A;
+	Fri,  1 Mar 2024 14:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FQDh2UzM"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="uAXwPk0s"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70C5B6EB57;
-	Fri,  1 Mar 2024 13:53:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD896F061;
+	Fri,  1 Mar 2024 14:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709301209; cv=none; b=CqaWzy6+VaUAaPOiVPYb7FbGLh8g7YtTusz3IWyAP+YVCT5EcnPhTFq5TCUdQoaIxaTFXmIl9m0QvkiqE1m4SDIb+FmsfSUWzdGfNtg92mpNZSnrogYYQi6i4FSIA14l7FCVMq3KOAguYCL59SJS4cgPV3AjO42Xw72obJHlsCM=
+	t=1709303191; cv=none; b=JsBHhQAAG5/4adLGso/GvCY9C6enxVQ+90J8XUIEWqyHoIE1jG6OyERz+2onY0C+He1Eo3akQLsThRuwCHhQLVmP+Ur368NWX4xfsphudLaLZeLW2gi4IdHCM+plFUNikXNxnjrHY7B+2pTugF7+eJbKIcS1wiY2tzj0wVpeVUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709301209; c=relaxed/simple;
-	bh=o6RLibfPfdf4Q6ce2qXmGSVi09O1IxLDWtMXm8OSk2Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UCnuxHLeSdJKPqJCnUDizjYTo53Nhc6XwtiqKS68oyujv44FvgP3tdFqjp1DVKovdx8qNnFUliIfK/KjF04DhK5t4++el+90xoasOkba056+OsJw+gLLjJlGvqors6xrQNFxj9T8pdLqb+lrHBP5mY1/0t+c3SR1DGoqQCI+heM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FQDh2UzM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B17EEC433F1;
-	Fri,  1 Mar 2024 13:53:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709301208;
-	bh=o6RLibfPfdf4Q6ce2qXmGSVi09O1IxLDWtMXm8OSk2Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FQDh2UzMN0lMRuoPn8hb7htHaEYXTAGuIgApg0RvKTkYxWTNzvejaHcNTTK1AZZRb
-	 2Ojdc/O0UbATPJCBL3i9h3TsQsoNPRs353yTMgM2FbIFpibMcy93caKgVqmZd8NY8F
-	 Kzp3elECTI1mlTjtMl/r6qgp53dNb7dwp3a4uTEk1r0HVOq3ow2jhZTud1cUg6mehn
-	 VWhql9mwQ15GSUEMrEXJRhqytPpKU6tPaYemTJmyJHB6q/swm9gq0SQoy9ibo3XsV2
-	 08Ao6wQhfqF1VfscYJZ97BDDaj0TRFuzDOOzw82WQh9G+FHvionsCdRABLe8yil1d2
-	 hwxpM4fvqPskg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rg3KW-000000001OR-1zNd;
-	Fri, 01 Mar 2024 14:53:40 +0100
-Date: Fri, 1 Mar 2024 14:53:40 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: [PATCH v15 7/9] usb: dwc3: qcom: Refactor IRQ handling in glue
- driver
-Message-ID: <ZeHd5Hh3-cDByLd-@hovoldconsulting.com>
-References: <20240216005756.762712-1-quic_kriskura@quicinc.com>
- <20240216005756.762712-8-quic_kriskura@quicinc.com>
+	s=arc-20240116; t=1709303191; c=relaxed/simple;
+	bh=xLLbFCitdEhU1RvTDI817HAwsCfV863rjSvWqc1GrrE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Tjw0MJXf3QzX1YMsO1pHpKoHuCSeW1nsNJ3wQa7l57POMVBrIRrxj9CYMhSBj9N2p+WVlxuMpCcLolysYEjuJMKeseAI0DMpbbCsMZK4dPvxl/TWMOjoJMEwlnx//v5CQovuDOPOUWLGNTufAXi+ocF9hi/vzBY8MU5QN/Ou1zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=uAXwPk0s; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1709303186;
+	bh=xLLbFCitdEhU1RvTDI817HAwsCfV863rjSvWqc1GrrE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=uAXwPk0saTLazKJAQuPEkQzPgl1s3PhwwVTT5ddGZAev8koH47hMrAPhPdSxuaqig
+	 MNgfj54ywMgabYr+bxWA82k8m+YZiegNgvbOXmEA7LyEg4wpzAtlmSV4HXPhfPL9ur
+	 UovwRsOV8WEBSBzTn5W7dhl5hOc0xsUktzPLVI5nh7NBx8+b7D+dgte4CdZdvh3H3B
+	 b3zCpcVaOnqUEgqdLS6qa77R9BdsZKbx9g73i0xmjpOQq/ljsmkmBwdVQjiXItog9p
+	 90KfHsbPe+v4kS4GEeE0EosemQNZHA16178Vlr73hg27RJ7EIN5gtp59X7ndChTjrw
+	 dbXmiVrAJWGoA==
+Received: from [100.95.196.182] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: andrzej.p)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 094ED37803EE;
+	Fri,  1 Mar 2024 14:26:25 +0000 (UTC)
+Message-ID: <0d2fc837-a7b4-4d6f-9359-f2b64fe16f92@collabora.com>
+Date: Fri, 1 Mar 2024 15:26:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240216005756.762712-8-quic_kriskura@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/4] tools: usb: p9_fwd: add usb gadget packet
+ forwarder script
+Content-Language: en-US
+To: Michael Grzeschik <m.grzeschik@pengutronix.de>,
+ Eric Van Hensbergen <ericvh@kernel.org>, Latchesar Ionkov
+ <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>,
+ Christian Schoenebeck <linux_oss@crudebyte.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: v9fs@lists.linux.dev, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ kernel@pengutronix.de
+References: <20240116-ml-topic-u9p-v2-0-b46cbf592962@pengutronix.de>
+ <20240116-ml-topic-u9p-v2-4-b46cbf592962@pengutronix.de>
+From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20240116-ml-topic-u9p-v2-4-b46cbf592962@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 16, 2024 at 06:27:54AM +0530, Krishna Kurapati wrote:
-> On multiport supported controllers, each port has its own DP/DM
-> and SS (if super speed capable) interrupts. As per the bindings,
-> their interrupt names differ from standard ones having "_x" added
-> as suffix (x indicates port number). Refactor dwc3_qcom_setup_irq()
-> call to parse multiport interrupts along with non-multiport ones.
+Hi Michael,
+
+W dniu 2.02.2024 o 01:05, Michael Grzeschik pisze:
+> This patch is adding an small python tool to forward 9pfs requests
+> from the USB gadget to an existing 9pfs TCP server. Since currently all
+> 9pfs servers lack support for the usb transport this tool is an useful
+> helper to get started.
 > 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> Refer the Documentation section "USBG Example" in
+> Documentation/filesystems/9p.rst on how to use it.
+> 
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> 
 > ---
->  drivers/usb/dwc3/dwc3-qcom.c | 222 +++++++++++++++++++++++++----------
->  1 file changed, 161 insertions(+), 61 deletions(-)
+> v1 -> v2:
+>    - added usbg 9pfs detailed instructions to 9p.rst doc
+> ---
+>   Documentation/filesystems/9p.rst |  32 +++++++
+>   tools/usb/p9_fwd.py              | 194 +++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 226 insertions(+)
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 08df29584366..a20d63a791bd 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -53,17 +53,33 @@
->  #define APPS_USB_AVG_BW 0
->  #define APPS_USB_PEAK_BW MBps_to_icc(40)
->  
-> +#define NUM_PHY_IRQ		4
+> diff --git a/Documentation/filesystems/9p.rst b/Documentation/filesystems/9p.rst
+> index 64439068a8fc5..264265c72ba67 100644
+> --- a/Documentation/filesystems/9p.rst
+> +++ b/Documentation/filesystems/9p.rst
+> @@ -67,6 +67,38 @@ To mount a 9p FS on a USB Host accessible via the gadget as root filesystem::
+>   where mount_tag is the tag associated by the usb gadget transport. The
+>   pattern is usb9pfs0, usb9pfs1, ...
+>   
+> +USBG Example
+> +============
 > +
-> +enum dwc3_qcom_phy_index {
-> +	DP_HS_PHY_IRQ_INDEX,
-> +	DM_HS_PHY_IRQ_INDEX,
-> +	SS_PHY_IRQ_INDEX,
-> +	QUSB2_PHY_IRQ_INDEX,
-> +};
+> +The USB host exports a filesystem, while the gadget on the USB device
+> +side makes it mountable.
 > +
->  struct dwc3_acpi_pdata {
->  	u32			qscratch_base_offset;
->  	u32			qscratch_base_size;
->  	u32			dwc3_core_base_size;
-> -	int			qusb2_phy_irq_index;
-> -	int			dp_hs_phy_irq_index;
-> -	int			dm_hs_phy_irq_index;
-> -	int			ss_phy_irq_index;
-> +	/*
-> +	 * The phy_irq_index corresponds to ACPI indexes of (in order)
-> +	 * DP/DM/SS/QUSB2 IRQ's respectively.
-> +	 */
-> +	int			phy_irq_index[NUM_PHY_IRQ];
->  	bool			is_urs;
->  };
+> +Diod (9pfs server) and the forwarder are on the development host, where
+> +the root filesystem is actually stored. The gadget is initialized during
+> +boot (or later) on the embedded board. Then the forwarder will find it
+> +on the USB bus and start forwarding requests.
+> +
+> +In this case the 9p requests come from the device and are handled by the
+> +host. The reason is that USB device ports are normally not available on
+> +PCs, so a connection in the other direction would not work.
+> +
+> +When using the usbg transport, for now there is no native usb host
+> +service capable to handle the requests from the gadget driver. For
+> +this we have to use the extra python tool p9_fwd.py from tools/usb.
+> +
+> +Just start the 9pfs capable network server like diod/nfs-ganesha e.g.:
+> +
+> +	$ diod -f -n -d 0 -S -l 0.0.0.0:9999 -e $PWD
+> +
+> +Then start the python transport:
+> +
+> +	$ python $kernel_dir/tools/usb/p9_fwd.py -p 9999
+> +
+> +After that the gadget driver can be used as described above.
 
-I asked you to add a port structure and get rid of the PHY indexes in
-v13, and so you did for the diver data below, but you still have an
-array of indexes here for the ACPI data. 
+Hmm... The "described above" portion refers to <mount_tag>. How do I get my
+<mount_tag> if I run diod combined with p9_fwd.py?
 
-I don't think ever got around to actually reviewing the ACPI hack (and
-maybe I was hoping that we'd be able to drop ACPI support before merging
-multi-port support), but removing these fields and replacing them with
-an array is a step in the wrong direction (e.g. making the code harder
-to read).
+Regards,
 
-Why can't you just add a helper function which returns one of these
-fields based on the interrupt name string?
-
-> +struct dwc3_qcom_port {
-> +	int			dp_hs_phy_irq;
-> +	int			dm_hs_phy_irq;
-> +	int			ss_phy_irq;
-> +};
-
-And as I've explicitly said before, you should include hs_phy_irq here.
-
-It's a port interrupt and special casing just this one make no sense at
-all even if there are no multi-port controller that use it.
+Andrzej
 
 > +
->  struct dwc3_qcom {
->  	struct device		*dev;
->  	void __iomem		*qscratch_base;
-> @@ -74,9 +90,7 @@ struct dwc3_qcom {
->  	struct reset_control	*resets;
->  
->  	int			qusb2_phy_irq;
-> -	int			dp_hs_phy_irq;
-> -	int			dm_hs_phy_irq;
-> -	int			ss_phy_irq;
-> +	struct dwc3_qcom_port	port_info[DWC3_MAX_PORTS];
-
-Just name the array 'ports' as I already suggested. It's more succinct
-and makes the code that uses it easier to read.
-
->  	enum usb_device_speed	usb2_speed;
->  
->  	struct extcon_dev	*edev;
-> @@ -91,6 +105,7 @@ struct dwc3_qcom {
->  	bool			pm_suspended;
->  	struct icc_path		*icc_path_ddr;
->  	struct icc_path		*icc_path_apps;
-> +	u8			num_ports;
-
-Any reason not to keep this one closer to the ports array?
-
->  };
- 
-> +static int dwc3_qcom_get_irq_index(const char *irq_name)
-> +{
-> +	/*
-> +	 * Parse IRQ index based on prefixes from interrupt name.
-> +	 * Return -1 incase of an invalid interrupt name.
-> +	 */
-> +	int irq_index = -1;
+> +One use-case is to use it as an alternative to NFS root booting during
+> +the development of embedded Linux devices.
 > +
-> +	if (strncmp(irq_name, "dp_hs_phy", strlen("dp_hs_phy")) == 0)
-> +		irq_index = DP_HS_PHY_IRQ_INDEX;
-> +	else if (strncmp(irq_name, "dm_hs_phy", strlen("dm_hs_phy")) == 0)
-> +		irq_index = DM_HS_PHY_IRQ_INDEX;
-> +	else if (strncmp(irq_name, "ss_phy", strlen("ss_phy")) == 0)
-> +		irq_index = SS_PHY_IRQ_INDEX;
-> +	else if (strncmp(irq_name, "qusb2_phy", strlen("qusb2_phy")) == 0)
-> +		irq_index = QUSB2_PHY_IRQ_INDEX;
-> +	return irq_index;
-> +}
+>   Options
+>   =======
+>   
+> diff --git a/tools/usb/p9_fwd.py b/tools/usb/p9_fwd.py
+> new file mode 100755
+> index 0000000000000..95208df11abef
+> --- /dev/null
+> +++ b/tools/usb/p9_fwd.py
+> @@ -0,0 +1,194 @@
+> +#!/usr/bin/env python3
+> +# SPDX-License-Identifier: GPL-2.0
 > +
-> +static int dwc3_qcom_get_port_index(const char *irq_name, int irq_index)
-> +{
-> +	int port_index = -1;
+> +import argparse
+> +import errno
+> +import logging
+> +import socket
+> +import struct
+> +import sys
+> +import time
 > +
-> +	switch (irq_index) {
-> +	case DP_HS_PHY_IRQ_INDEX:
-> +		if (strcmp(irq_name, "dp_hs_phy_irq") == 0)
-> +			port_index = 1;
-> +		else
-> +			sscanf(irq_name, "dp_hs_phy_%d", &port_index);
-> +		break;
-> +	case DM_HS_PHY_IRQ_INDEX:
-> +		if (strcmp(irq_name, "dm_hs_phy_irq") == 0)
-> +			port_index = 1;
-> +		else
-> +			sscanf(irq_name, "dm_hs_phy_%d", &port_index);
-> +		break;
-> +	case SS_PHY_IRQ_INDEX:
-> +		if (strcmp(irq_name, "ss_phy_irq") == 0)
-> +			port_index = 1;
-> +		else
-> +			sscanf(irq_name, "ss_phy_%d", &port_index);
-> +		break;
-> +	case QUSB2_PHY_IRQ_INDEX:
-> +		port_index = 1;
-> +		break;
-> +	}
+> +import usb.core
+> +import usb.util
 > +
-> +	if (port_index <= 0 || port_index > DWC3_MAX_PORTS)
-> +		port_index = -1;
 > +
-> +	return port_index;
-> +}
+> +class Forwarder:
+> +    HEXDUMP_FILTER = (
+> +        "".join(chr(x).isprintable() and chr(x) or "." for x in range(128)) + "." * 128
+> +    )
 > +
-> +static int dwc3_qcom_get_acpi_index(struct dwc3_qcom *qcom, int irq_index,
-> +				    int port_index)
-> +{
-> +	const struct dwc3_acpi_pdata *pdata = qcom->acpi_pdata;
+> +    @staticmethod
+> +    def _log_hexdump(data):
+> +        if not logging.root.isEnabledFor(logging.TRACE):
+> +            return
+> +        L = 16
+> +        for c in range(0, len(data), L):
+> +            chars = data[c : c + L]
+> +            dump = " ".join(f"{x:02x}" for x in chars)
+> +            printable = "".join(HEXDUMP_FILTER[x] for x in chars)
+> +            line = f"{c:08x}  {dump:{L*3}s} |{printable:{L}s}|"
+> +            logging.root.log(logging.TRACE, "%s", line)
 > +
-> +	/*
-> +	 * Currently multiport supported targets don't have an ACPI variant.
-> +	 * So return -1 if we are not dealing with first port of the controller.
-> +	 */
-> +	if (!pdata || port_index != 1)
-> +		return -1;
+> +    def __init__(self, server):
+> +        self.stats = {
+> +            "c2s packets": 0,
+> +            "c2s bytes": 0,
+> +            "s2c packets": 0,
+> +            "s2c bytes": 0,
+> +        }
+> +        self.stats_logged = time.monotonic()
 > +
-> +	return pdata->phy_irq_index[irq_index];
-> +}
-
-Yeah, you need to come some better solution than the above, which is
-just unnecessarily convoluted.
-
->  static int dwc3_qcom_request_irq(struct dwc3_qcom *qcom, int irq,
->  				 const char *name)
->  {
-> @@ -554,44 +637,67 @@ static int dwc3_qcom_request_irq(struct dwc3_qcom *qcom, int irq,
->  static int dwc3_qcom_setup_irq(struct platform_device *pdev)
->  {
->  	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
-> -	const struct dwc3_acpi_pdata *pdata = qcom->acpi_pdata;
-> +	struct device_node *np = pdev->dev.of_node;
-> +	const char **irq_names;
-> +	int port_index;
-> +	int acpi_index;
-> +	int irq_count;
-> +	int irq_index;
->  	int irq;
->  	int ret;
-> +	int i;
->  
-> -	irq = dwc3_qcom_get_irq(pdev, "qusb2_phy",
-> -				pdata ? pdata->qusb2_phy_irq_index : -1);
-> -	if (irq > 0) {
-> -		ret = dwc3_qcom_request_irq(qcom, irq, "hs_phy_irq");
-> -		if (ret)
-> -			return ret;
-> -		qcom->qusb2_phy_irq = irq;
-> -	}
-> +	irq_count = of_property_count_strings(np, "interrupt-names");
-> +	if (irq_count < 0)
-> +		return -EINVAL;
->  
-> -	irq = dwc3_qcom_get_irq(pdev, "dp_hs_phy_irq",
-> -				pdata ? pdata->dp_hs_phy_irq_index : -1);
-> -	if (irq > 0) {
-> -		ret = dwc3_qcom_request_irq(qcom, irq, "dp_hs_phy_irq");
-> -		if (ret)
-> -			return ret;
-> -		qcom->dp_hs_phy_irq = irq;
-> -	}
-> +	irq_names = devm_kcalloc(&pdev->dev, irq_count, sizeof(*irq_names), GFP_KERNEL);
-> +	if (!irq_names)
-> +		return -ENOMEM;
->  
-> -	irq = dwc3_qcom_get_irq(pdev, "dm_hs_phy_irq",
-> -				pdata ? pdata->dm_hs_phy_irq_index : -1);
-> -	if (irq > 0) {
-> -		ret = dwc3_qcom_request_irq(qcom, irq, "dm_hs_phy_irq");
-> -		if (ret)
-> -			return ret;
-> -		qcom->dm_hs_phy_irq = irq;
-> -	}
-> +	ret = of_property_read_string_array(np, "interrupt-names",
-> +					    irq_names, irq_count);
-> +	if (!ret)
-> +		return ret;
->  
-> -	irq = dwc3_qcom_get_irq(pdev, "ss_phy_irq",
-> -				pdata ? pdata->ss_phy_irq_index : -1);
-> -	if (irq > 0) {
-> -		ret = dwc3_qcom_request_irq(qcom, irq, "ss_phy_irq");
-> -		if (ret)
-> -			return ret;
-> -		qcom->ss_phy_irq = irq;
-> +	for (i = 0; i < irq_count; i++) {
-> +		irq_index = dwc3_qcom_get_irq_index(irq_names[i]);
-> +		if (irq_index == -1) {
-> +			dev_err(&pdev->dev, "Unknown interrupt-name \"%s\" found\n", irq_names[i]);
-
-This is now spamming the logs with errors like
-
-	dwc3-qcom a6f8800.usb: Unknown interrupt-name "pwr_event" found
-
-which is clearly just broken.
-
-> +			continue;
-> +		}
-> +		port_index = dwc3_qcom_get_port_index(irq_names[i], irq_index);
-> +		if (port_index == -1) {
-> +			dev_err(&pdev->dev, "Invalid interrupt-name suffix \"%s\"\n", irq_names[i]);
-> +			continue;
-> +		}
+> +        dev = usb.core.find(idVendor=0x1D6B, idProduct=0x0109)
+> +        if dev is None:
+> +            raise ValueError("Device not found")
 > +
-> +		acpi_index = dwc3_qcom_get_acpi_index(qcom, irq_index, port_index);
+> +        logging.info(f"found device: {dev.bus}/{dev.address}")
 > +
-> +		irq = dwc3_qcom_get_irq(pdev, irq_names[i], acpi_index);
-> +		if (irq > 0) {
-> +			ret = dwc3_qcom_request_irq(qcom, irq, irq_names[i]);
-> +			if (ret)
-> +				return ret;
+> +        # dev.set_configuration() is not necessary since g_multi has only one
+> +        usb9pfs = None
+> +        # g_multi adds 9pfs as last interface
+> +        cfg = dev.get_active_configuration()
+> +        for intf in cfg:
+> +            # we have to detach the usb-storage driver from multi gadget since
+> +            # stall option could be set, which will lead to spontaneous port
+> +            # resets and our transfers will run dead
+> +            if intf.bInterfaceClass == 0x08:
+> +                if dev.is_kernel_driver_active(intf.bInterfaceNumber):
+> +                    dev.detach_kernel_driver(intf.bInterfaceNumber)
 > +
-> +			switch (irq_index) {
-> +			case DP_HS_PHY_IRQ_INDEX:
-> +				qcom->port_info[port_index - 1].dp_hs_phy_irq = irq;
-> +				break;
-> +			case DM_HS_PHY_IRQ_INDEX:
-> +				qcom->port_info[port_index - 1].dm_hs_phy_irq = irq;
-> +				break;
-> +			case SS_PHY_IRQ_INDEX:
-> +				qcom->port_info[port_index - 1].ss_phy_irq = irq;
-> +				break;
-> +			case QUSB2_PHY_IRQ_INDEX:
-> +				qcom->qusb2_phy_irq = irq;
-> +				break;
-> +			}
+> +            if (
+> +                intf.bInterfaceClass == 0xFF
+> +                and intf.bInterfaceSubClass == 0xFF
+> +                and intf.bInterfaceProtocol == 0x09
+> +            ):
+> +                usb9pfs = intf
+> +        if usb9pfs is None:
+> +            raise ValueError("Interface not found")
 > +
-> +			if (qcom->num_ports < port_index)
-> +				qcom->num_ports = port_index;
-> +		}
->  	}
+> +        logging.info(f"claiming interface:\n{usb9pfs}")
+> +        usb.util.claim_interface(dev, usb9pfs.bInterfaceNumber)
+> +        ep_out = usb.util.find_descriptor(
+> +            usb9pfs,
+> +            custom_match=lambda e: usb.util.endpoint_direction(e.bEndpointAddress)
+> +            == usb.util.ENDPOINT_OUT,
+> +        )
+> +        assert ep_out is not None
+> +        ep_in = usb.util.find_descriptor(
+> +            usb9pfs,
+> +            custom_match=lambda e: usb.util.endpoint_direction(e.bEndpointAddress)
+> +            == usb.util.ENDPOINT_IN,
+> +        )
+> +        assert ep_in is not None
+> +        logging.info(f"interface claimed")
+> +
+> +        self.ep_out = ep_out
+> +        self.ep_in = ep_in
+> +        self.dev = dev
+> +
+> +        # create and connect socket
+> +        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+> +        self.s.connect(server)
+> +
+> +        logging.info(f"connected to server")
+> +
+> +    def c2s(self):
+> +        """forward a request from the USB client to the TCP server"""
+> +        data = None
+> +        while data is None:
+> +            try:
+> +                logging.log(logging.TRACE, "c2s: reading")
+> +                data = self.ep_in.read(self.ep_in.wMaxPacketSize)
+> +            except usb.core.USBTimeoutError:
+> +                logging.log(logging.TRACE, "c2s: reading timed out")
+> +                continue
+> +            except usb.core.USBError as e:
+> +                if e.errno == errno.EIO:
+> +                    logging.debug("c2s: reading failed with %s, retrying", repr(e))
+> +                    time.sleep(0.5)
+> +                    continue
+> +                else:
+> +                    logging.error("c2s: reading failed with %s, aborting", repr(e))
+> +                    raise
+> +        size = struct.unpack("<I", data[:4])[0]
+> +        while len(data) < size:
+> +            data += self.ep_in.read(size - len(data))
+> +        logging.log(logging.TRACE, "c2s: writing")
+> +        self._log_hexdump(data)
+> +        self.s.send(data)
+> +        logging.debug("c2s: forwarded %i bytes", size)
+> +        self.stats["c2s packets"] += 1
+> +        self.stats["c2s bytes"] += size
+> +
+> +    def s2c(self):
+> +        """forward a response from the TCP server to the USB client"""
+> +        logging.log(logging.TRACE, "s2c: reading")
+> +        data = self.s.recv(4)
+> +        size = struct.unpack("<I", data[:4])[0]
+> +        while len(data) < size:
+> +            data += self.s.recv(size - len(data))
+> +        logging.log(logging.TRACE, "s2c: writing")
+> +        self._log_hexdump(data)
+> +        while data:
+> +            written = self.ep_out.write(data)
+> +            assert written > 0
+> +            data = data[written:]
+> +        if size % self.ep_out.wMaxPacketSize == 0:
+> +            logging.log(logging.TRACE, "sending zero length packet")
+> +            self.ep_out.write(b"")
+> +        logging.debug("s2c: forwarded %i bytes", size)
+> +        self.stats["s2c packets"] += 1
+> +        self.stats["s2c bytes"] += size
+> +
+> +    def log_stats(self):
+> +        logging.info("statistics:")
+> +        for k, v in self.stats.items():
+> +            logging.info(f"  {k+':':14s} {v}")
+> +
+> +    def log_stats_interval(self, interval=5):
+> +        if (time.monotonic() - self.stats_logged) < interval:
+> +            return
+> +
+> +        self.log_stats()
+> +        self.stats_logged = time.monotonic()
+> +
+> +
+> +def main():
+> +    parser = argparse.ArgumentParser(
+> +        description="Forward 9PFS requests from USB to TCP",
+> +    )
+> +
+> +    parser.add_argument(
+> +        "-s", "--server", type=str, default="127.0.0.1", help="server hostname"
+> +    )
+> +    parser.add_argument("-p", "--port", type=int, default=564, help="server port")
+> +    parser.add_argument("-v", "--verbose", action="count", default=0)
+> +
+> +    args = parser.parse_args()
+> +
+> +    logging.TRACE = logging.DEBUG - 5
+> +    logging.addLevelName(logging.TRACE, "TRACE")
+> +
+> +    if args.verbose >= 2:
+> +        level = logging.TRACE
+> +    elif args.verbose:
+> +        level = logging.DEBUG
+> +    else:
+> +        level = logging.INFO
+> +    logging.basicConfig(
+> +        level=level, format="%(asctime)-15s %(levelname)-8s %(message)s"
+> +    )
+> +
+> +    f = Forwarder(server=(args.server, args.port))
+> +
+> +    try:
+> +        while True:
+> +            f.c2s()
+> +            f.s2c()
+> +            f.log_stats_interval()
+> +    finally:
+> +        f.log_stats()
+> +
+> +
+> +if __name__ == "__main__":
+> +    main()
+> 
 
-Why don't you add a port helper for fetching the interrupts instead?
-
-There are multiple ways that you can use to determine if this is a
-multiport controller or not; you can use OF match data, or simply look
-at one of the interrupts that would always be there for a multiport
-(or single port) controller (e.g. "dp_hs_phy_1").
-
-You can even determine the number of ports first by parsing the
-interrupts names and looking for the highest port number.
-
-Then you can iterate over the ports and parse the interrupts for each
-port in turn, which should allow for a much cleaner and less
-error-prone implementation.
-
-Johan
 
