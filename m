@@ -1,156 +1,139 @@
-Return-Path: <linux-usb+bounces-7385-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7386-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31DA186E147
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 13:47:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93CAC86E2C1
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 14:50:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 533AA1C21707
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 12:47:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 348CDB21BAA
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 13:50:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 913303FBBE;
-	Fri,  1 Mar 2024 12:47:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 988EF6EB66;
+	Fri,  1 Mar 2024 13:50:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PzhhzQ/c"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B970E7E1;
-	Fri,  1 Mar 2024 12:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.241.18.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B86200C4;
+	Fri,  1 Mar 2024 13:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709297245; cv=none; b=cbwJZklosJBHmaQGSu3gsL0VS+khS7+bzzn9yCGtA9R0ZPdRrQOkW8GU/7pTDS6I3WH9hJkrYXNNpO53dhJkParSnBRTNeJhpZWYaz6RvSOayVGu+0ZYrncAnLfndJl2JfQpFHzoppQylpthUz6j3nS8nZ6o7Rz6qiUTDbsom+w=
+	t=1709301042; cv=none; b=RmFhEy8MMRteSPlw+A1mI2dBzpMN9Lp7p/dR1Hb2iAnf066IOXWU2hXOVdfe6tmJ21lFbuB0FsOOIyi36TCeQU9KCRPHy4UVRhl9SEKQdou7M/zO1we5/AK3yj2JSI0B0wU7EL+eP2L+OM7kqHZSg6u0wIFf1FJske8fcBVy+I8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709297245; c=relaxed/simple;
-	bh=xmtt/dJqJpEhHTRjQVG1J/CP+alT6/cJsmAw7/JRl/I=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GRrjH4TKJWAk9P02JU/KVhrA97W0losTQzHHYSrvpTESltrjomCYX8vz1NiEQ+mX143gI8r2J/LNaPdtBuk47l2XVFty2lCifMiILFo9X7C6HlFTfJ5eTS85BW5Qk62w1g2coWvWrgPZdifxocGHj/IqKbPTdGnTGLmAnm36etk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=de.adit-jv.com; spf=pass smtp.mailfrom=de.adit-jv.com; arc=none smtp.client-ip=93.241.18.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=de.adit-jv.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=de.adit-jv.com
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 7AE30520252;
-	Fri,  1 Mar 2024 13:47:16 +0100 (CET)
-Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
- (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 1 Mar
- 2024 13:47:16 +0100
-From: Hardik Gajjar <hgajjar@de.adit-jv.com>
-To: <gregkh@linuxfoundation.org>, <michael@allwinnertech.com>,
-	<quic_linyyuan@quicinc.com>, <quic_ugoswami@quicinc.com>,
-	<brauner@kernel.org>, <sfr@canb.auug.org.au>, <quic_kriskura@quicinc.com>,
-	<axboe@kernel.dk>, <jlayton@kernel.org>
-CC: <hgajjar@de.adit-jv.com>, <hardik.gajjar@bosch.com>,
-	<eugeniu.rosca@bosch.com>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH] usb: gadget: f_fs: Add the missing get_alt callback
-Date: Fri, 1 Mar 2024 13:47:08 +0100
-Message-ID: <20240301124708.120394-1-hgajjar@de.adit-jv.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1709301042; c=relaxed/simple;
+	bh=a9du7YH5/xmHXiPWd6cBsVA2DhhI1MQvCTVDaeNeBNM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iFtOMTXuT2fWCWCz9dCt7GOcYpWcqRXTlSLAncoBeUdshyJgYqe9g3yGodmrcZpXjqQsSyiusQDt8o75o8rXM1GQpASm+gldnNE7yGM0mSkd3lRKvxCXNKRWQB9CEKZO/cWNolWkroXoTDdKH1lWqIJNzNt9yijM2ejDQlJ4DMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PzhhzQ/c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F6F1C433C7;
+	Fri,  1 Mar 2024 13:50:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709301041;
+	bh=a9du7YH5/xmHXiPWd6cBsVA2DhhI1MQvCTVDaeNeBNM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PzhhzQ/c/roz+DKJnhWaJPE4szILpILfA98zx8MPP5jw3h+HZAjtET1eM7rmcXi7Q
+	 D5uQDIABUhd2h+HIYea/1XWL+wjZl43gleFd93f7jWmfzETLhICmNxQ28AbZnSmWto
+	 8lDcYKPHqt6yXDHeaePD81js9PatWPO+7W5/9G3eDDWkJwt4E9ZjePokRPGw+tKgmY
+	 88HAf/zXuv14yFvesEJuJl+Fz5GOxeN8QeZTzT0hxxlTWWH8kK7nfIX6661pbjjTLT
+	 MW/hsR5bs0oORp1yQMVM+sXVwlclijqBxHnl8mrJ970QqvCc8DT+rfiuiS8xh17LID
+	 ZZ2W+ftejySEw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1rg3Ho-000000001Ng-0FEq;
+	Fri, 01 Mar 2024 14:50:52 +0100
+Date: Fri, 1 Mar 2024 14:50:52 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+	quic_jackp@quicinc.com, Harsh Agarwal <quic_harshq@quicinc.com>
+Subject: Re: [PATCH v15 4/9] usb: dwc3: core: Refactor PHY logic to support
+ Multiport Controller
+Message-ID: <ZeHdPJZbeGO8u9XX@hovoldconsulting.com>
+References: <20240216005756.762712-1-quic_kriskura@quicinc.com>
+ <20240216005756.762712-5-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240216005756.762712-5-quic_kriskura@quicinc.com>
 
-The Apple CarLife iAP gadget has a descriptor in userspace with two
-alternate settings. The host sends the set_alt request to configure
-alt_setting 0 or 1, and this is verified by the subsequent get_alt
-request.
+On Fri, Feb 16, 2024 at 06:27:51AM +0530, Krishna Kurapati wrote:
 
-This patch implements and sets the get_alt callback. Without the
-get_alt callback, composite.c abruptly concludes the
-USB_REQ_GET/SET_INTERFACE request, assuming only one alt setting
-for the endpoint.
+> @@ -1398,22 +1464,36 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
+>  			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
+>  	}
+>  
+> -	dwc->usb2_generic_phy = devm_phy_get(dev, "usb2-phy");
+> -	if (IS_ERR(dwc->usb2_generic_phy)) {
+> -		ret = PTR_ERR(dwc->usb2_generic_phy);
+> -		if (ret == -ENOSYS || ret == -ENODEV)
+> -			dwc->usb2_generic_phy = NULL;
+> +	for (i = 0; i < dwc->num_usb2_ports; i++) {
+> +		if (dwc->num_usb2_ports == 1)
+> +			sprintf(phy_name, "usb2-phy");
+>  		else
+> -			return dev_err_probe(dev, ret, "no usb2 phy configured\n");
+> -	}
+> +			sprintf(phy_name, "usb2-%d", i);
+> +
+> +		dwc->usb2_generic_phy[i] = devm_phy_get(dev, phy_name);
+> +		if (IS_ERR(dwc->usb2_generic_phy[i])) {
+> +			ret = PTR_ERR(dwc->usb2_generic_phy[i]);
+> +			if (ret == -ENOSYS || ret == -ENODEV)
+> +				dwc->usb2_generic_phy[i] = NULL;
+> +			else
+> +				return dev_err_probe(dev, ret,
+> +						"failed to lookup phy %s\n", phy_name);
 
-unlike the uvc and ncm, f_fs gadget is fully implemented in userspace,
-and driver just reset the eps and generate the event. so no additional
-adaptaion associated with this change is not required in set_alt callback
+Please move the format string to the previous line as I already asked
+you to do (e.g. as continuation lines should be substantially shorter).
 
-Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
----
- drivers/usb/gadget/function/f_fs.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+> +		}
+>  
+> -	dwc->usb3_generic_phy = devm_phy_get(dev, "usb3-phy");
+> -	if (IS_ERR(dwc->usb3_generic_phy)) {
+> -		ret = PTR_ERR(dwc->usb3_generic_phy);
+> -		if (ret == -ENOSYS || ret == -ENODEV)
+> -			dwc->usb3_generic_phy = NULL;
+> +		if (dwc->num_usb2_ports == 1)
+> +			sprintf(phy_name, "usb3-phy");
+>  		else
+> -			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
+> +			sprintf(phy_name, "usb3-%d", i);
+> +
+> +		dwc->usb3_generic_phy[i] = devm_phy_get(dev, phy_name);
+> +		if (IS_ERR(dwc->usb3_generic_phy[i])) {
+> +			ret = PTR_ERR(dwc->usb3_generic_phy[i]);
+> +			if (ret == -ENOSYS || ret == -ENODEV)
+> +				dwc->usb3_generic_phy[i] = NULL;
+> +			else
+> +				return dev_err_probe(dev, ret,
+> +						"failed to lookup phy %s\n", phy_name);
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 6bff6cb93789..a3e8cf7963e7 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -42,6 +42,7 @@
- #include "configfs.h"
- 
- #define FUNCTIONFS_MAGIC	0xa647361 /* Chosen by a honest dice roll ;) */
-+#define MAX_ALT_SETTINGS	2		  /* Allow up to 2 alt settings to be set. */
- 
- /* Reference counter handling */
- static void ffs_data_get(struct ffs_data *ffs);
-@@ -75,6 +76,7 @@ struct ffs_function {
- 	short				*interfaces_nums;
- 
- 	struct usb_function		function;
-+	int				cur_alt[MAX_CONFIG_INTERFACES];
- };
- 
- 
-@@ -98,6 +100,7 @@ static int __must_check ffs_func_eps_enable(struct ffs_function *func);
- static int ffs_func_bind(struct usb_configuration *,
- 			 struct usb_function *);
- static int ffs_func_set_alt(struct usb_function *, unsigned, unsigned);
-+static int ffs_func_get_alt(struct usb_function *f, unsigned int intf);
- static void ffs_func_disable(struct usb_function *);
- static int ffs_func_setup(struct usb_function *,
- 			  const struct usb_ctrlrequest *);
-@@ -3231,6 +3234,15 @@ static void ffs_reset_work(struct work_struct *work)
- 	ffs_data_reset(ffs);
- }
- 
-+static int ffs_func_get_alt(struct usb_function *f,
-+			    unsigned int interface)
-+{
-+	struct ffs_function *func = ffs_func_from_usb(f);
-+	int intf = ffs_func_revmap_intf(func, interface);
-+
-+	return (intf < 0) ? intf : func->cur_alt[interface];
-+}
-+
- static int ffs_func_set_alt(struct usb_function *f,
- 			    unsigned interface, unsigned alt)
- {
-@@ -3238,6 +3250,9 @@ static int ffs_func_set_alt(struct usb_function *f,
- 	struct ffs_data *ffs = func->ffs;
- 	int ret = 0, intf;
- 
-+	if (alt > MAX_ALT_SETTINGS)
-+		return -EINVAL;
-+
- 	if (alt != (unsigned)-1) {
- 		intf = ffs_func_revmap_intf(func, interface);
- 		if (intf < 0)
-@@ -3265,8 +3280,10 @@ static int ffs_func_set_alt(struct usb_function *f,
- 
- 	ffs->func = func;
- 	ret = ffs_func_eps_enable(func);
--	if (ret >= 0)
-+	if (ret >= 0) {
- 		ffs_event_add(ffs, FUNCTIONFS_ENABLE);
-+		func->cur_alt[interface] = alt;
-+	}
- 	return ret;
- }
- 
-@@ -3573,6 +3590,7 @@ static struct usb_function *ffs_alloc(struct usb_function_instance *fi)
- 	func->function.bind    = ffs_func_bind;
- 	func->function.unbind  = ffs_func_unbind;
- 	func->function.set_alt = ffs_func_set_alt;
-+	func->function.get_alt = ffs_func_get_alt;
- 	func->function.disable = ffs_func_disable;
- 	func->function.setup   = ffs_func_setup;
- 	func->function.req_match = ffs_func_req_match;
--- 
-2.17.1
+Same here.
 
+> +		}
+>  	}
+>  
+>  	return 0;
+
+Johan
 
