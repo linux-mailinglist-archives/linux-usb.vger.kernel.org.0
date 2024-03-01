@@ -1,147 +1,242 @@
-Return-Path: <linux-usb+bounces-7403-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7404-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B91A686E938
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 20:09:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C41C86E9B6
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 20:38:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F1E11F23742
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 19:09:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F536286F8A
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 19:38:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2558639AF3;
-	Fri,  1 Mar 2024 19:09:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF04A3C08D;
+	Fri,  1 Mar 2024 19:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZzOzNMM"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Wrh1aiWz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40F83A29E
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 19:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9577B3B78B
+	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 19:37:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709320176; cv=none; b=dquug33psv5cw6wjAQb322bSjyGMZ0Dn1bLtxQr6jL7VSbPe2Glrx8sxqguFesUqmZIb7KQ0w7fZptNfxZTso9QuF+4vpJbEcWy1lyhEvSEcZthhMDMK1rLRwLwtEl2dB1JhxxTZnxfWG75o9JyjdbNLTWDS/Tp4XxH4lO8LwwU=
+	t=1709321872; cv=none; b=AQpEZWFE5D3GpVYvXDp3OqBwnYSNEUXXNXbBaHYdD7o+XYk6D/ioxkSNboUlThV5AD4R5/XD5poPdse/vojErnbpwMXMl96Oc/5wIE3V8QGY09GQuvQFnMwjITNBUz76SiKHzKy1+5M7QDPc5PPXTnJ3Udy8bx+TWkw3SvRSaxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709320176; c=relaxed/simple;
-	bh=gGaw7n6HkcI9Dwb9fl4ftknPfprEKaRmQYJUVWKyX9Q=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=aIljcX3lNLPkpsp1nLuQUKiraMSMR4kwQEwHO6haaySk9LiGiHA6vmvvHNLu2kt6f3I9WhDdxVbnzMb/Dx/a2KibTyz1i5hmcQbePF2q1LEbt6ChswlZ9VrGnnpS7mVgnMHTlYrMqc7IhP6MBpuaXjiIC5TU/0Bht7Y8fYwLtSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZzOzNMM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 227D5C433B2
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 19:09:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709320176;
-	bh=gGaw7n6HkcI9Dwb9fl4ftknPfprEKaRmQYJUVWKyX9Q=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=kZzOzNMMyZ7q9R7YxmfsoQie7BV3wvdQ9QK41uIOvtQkfz2nHOM2ehUjoF0+JBRik
-	 ThTrddKLnVPRupPiYBLy06RJgt5rqz0rY1Yzo+uqSWJAsdv0KLklm6aJ+duAWzTkZX
-	 E+8KQfNlRRm9t+fVxDaXczraafuPSWT7n9hm78ZO/wo+KnrIywmogh/YzfH/W1NugA
-	 wqTOyQAxvMcjrEKUzBFu6Tz+Gw8cjLQN14nBcdFZAbsjq69FBybV9Sx9jiLWXD4qEd
-	 /creVsKAHIV1hvqFujnldxb2RJcoecL1m4DJIoZWT+NGvxuFVkhb0nFC+A3rYcW3FT
-	 8THuwofMvg5zg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 10849C53BD0; Fri,  1 Mar 2024 19:09:36 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
- audio
-Date: Fri, 01 Mar 2024 19:09:35 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-218544-208809-Y1mC6VYYvZ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
-References: <bug-218544-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1709321872; c=relaxed/simple;
+	bh=jKrG6QS9qQWHcoFkHR26CKL4wC+kkLGosTa//iiHXm0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Rkf1oDtKpNsA2+sGAMTWfsVV/0ZlshBk206Kom+V50/ZEBQxMMmJpaDEPOmUsZ8MfAO5olgOzYX+aE0P2hGDLyrsONhfvvuXlPuNXxhDDc7Wae2jQYruA5ln4XnbwgNvLPd7fA7yXpiyWNpVoAQ0UYDTkqnIcpqPwQllI3VB9XQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Wrh1aiWz; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-68f41af71ebso18305376d6.1
+        for <linux-usb@vger.kernel.org>; Fri, 01 Mar 2024 11:37:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1709321868; x=1709926668; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CGkeNRdG2FczCV6rPVYPMJDiNjYVnLlJt0xSA7ew594=;
+        b=Wrh1aiWzy0flhM6unY8+oMzHUQ04G9/VlLWcsMviZ3NU5wt6562z/v/4A75Yn7VROV
+         TVfp884V/7ulafkLTry+NCweIHozpM+9iwS6yT5gHj5A4/9TjfIWx/w89i+bxY2rXr7y
+         ijEydEEXSHZ5Jzy2+qw+Akf2Roelz3R2Gu4Tw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709321868; x=1709926668;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CGkeNRdG2FczCV6rPVYPMJDiNjYVnLlJt0xSA7ew594=;
+        b=E+2xTa7xQYydDLBOrpe5LCKZ8U2+mTH5ll3b3CzbcL2sPFRWEW43CBbvH+F9r/w2B+
+         TUVvs1aqUoyBlBXUFJJ9y3137VlHvi43BaboBsc68dS2TgGbaVf683ljpzhLJ0FrGP0I
+         W8JeXziotwNOlRgtOSeW1tqZeTuTpN9L/BcyD50D5j46GeeOB8nqb/uV0DiJ2PMWX+n+
+         wGuyvn/fpktjjdv6pzCVuH5GgmVc+vfoO9sAkIsBIs03vTs35xT7r8FAwVASR+qE8VMg
+         a9TcNnb6lQjKd4WxLEZcNHIslcmO088ubFd5Ay11IDwwVd+NvzLuWWrpMywFuetypH+7
+         TAmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVRLmhm6OTNEPf+52vtviqsImTP7qmeJ4HU+vVusbwy72UIOt2VkljGLOzd7XRmuO1WJAjdprScr4XSK27Z2YLQa2DMVJPug42B
+X-Gm-Message-State: AOJu0YzyNXGZvtjZkdWmJInDJN/+f07xQhLuPfEkDAs1cjJSqZWIkILx
+	qEnRWsUB3u1FNB9B8uR5HYjmbD0qM/qjmHxoYM4sGud47p17/mW9G70baV/66jEqkOL70/GNL/M
+	00qQkooTvVFtsRKTM53onQSIY+/0UNmaACPoM
+X-Google-Smtp-Source: AGHT+IHi1hjTt1ARy97BXMT6VU6Qb4Dz7SjLHKe0bYzv6iRPppZu6eRnfb1sb9m2IyWlA5swq9IJNVUtpDsf8IdzdwM=
+X-Received: by 2002:a0c:fa8e:0:b0:68f:4645:8cad with SMTP id
+ o14-20020a0cfa8e000000b0068f46458cadmr2723328qvn.57.1709321868606; Fri, 01
+ Mar 2024 11:37:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240229232625.3944115-1-jthies@google.com> <20240229232625.3944115-4-jthies@google.com>
+In-Reply-To: <20240229232625.3944115-4-jthies@google.com>
+From: Prashant Malani <pmalani@chromium.org>
+Date: Fri, 1 Mar 2024 11:37:37 -0800
+Message-ID: <CACeCKaeSdAwS5NJd0UtwZKvfvWMJmrJAg73e8SB+ToM5exOVUg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] usb: typec: ucsi: Register SOP/SOP' Discover
+ Identity Responses
+To: Jameson Thies <jthies@google.com>
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
+	bleung@google.com, abhishekpandit@chromium.org, andersson@kernel.org, 
+	dmitry.baryshkov@linaro.org, fabrice.gasnier@foss.st.com, 
+	gregkh@linuxfoundation.org, hdegoede@redhat.com, neil.armstrong@linaro.org, 
+	rajaram.regupathy@intel.com, saranya.gopal@intel.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
+On Thu, Feb 29, 2024 at 3:28=E2=80=AFPM Jameson Thies <jthies@google.com> w=
+rote:
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.=
+c
+> index 7c84687b5d1a3..4088422b33c74 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -646,6 +646,121 @@ static int ucsi_get_src_pdos(struct ucsi_connector =
+*con)
+>         return ret;
+>  }
+>
+> +static int ucsi_read_identity(struct ucsi_connector *con, u8 recipient,
+> +                             struct usb_pd_identity *id)
+> +{
+> +       struct ucsi *ucsi =3D con->ucsi;
+> +       struct ucsi_pd_message_disc_id resp =3D {};
+> +       u64 command;
+> +       int ret;
+> +
+> +       if (ucsi->version < UCSI_VERSION_2_0) {
+> +               /*
+> +                * Before UCSI v2.0, MESSAGE_IN is 16 bytes which cannot =
+fit
+> +                * the 28 byte identity response including the VDM header=
+.
+> +                * First request the VDM header, ID Header VDO, Cert Stat=
+ VDO
+> +                * and Product VDO.
+> +                */
+> +               command =3D UCSI_COMMAND(UCSI_GET_PD_MESSAGE) |
+> +                   UCSI_CONNECTOR_NUMBER(con->num);
+> +               command |=3D UCSI_GET_PD_MESSAGE_RECIPIENT(recipient);
+> +               command |=3D UCSI_GET_PD_MESSAGE_OFFSET(0);
+> +               command |=3D UCSI_GET_PD_MESSAGE_BYTES(0x10);
+> +               command |=3D UCSI_GET_PD_MESSAGE_TYPE(
+> +                   UCSI_GET_PD_MESSAGE_TYPE_IDENTITY);
+> +
+> +               ret =3D ucsi_send_command(ucsi, command, &resp, 0x10);
+> +               if (ret < 0) {
+> +                       dev_err(ucsi->dev,
+> +                               "UCSI_GET_PD_MESSAGE v1.2 failed first re=
+quest (%d)\n",
+> +                               ret);
+> +                       return ret;
+> +               }
+> +
+> +               /* Then request Product Type VDO1 through Product Type VD=
+O3. */
+> +               command =3D UCSI_COMMAND(UCSI_GET_PD_MESSAGE) |
+> +                   UCSI_CONNECTOR_NUMBER(con->num);
+> +               command |=3D UCSI_GET_PD_MESSAGE_RECIPIENT(recipient);
+> +               command |=3D UCSI_GET_PD_MESSAGE_OFFSET(0x10);
+> +               command |=3D UCSI_GET_PD_MESSAGE_BYTES(0xc);
+> +               command |=3D UCSI_GET_PD_MESSAGE_TYPE(
+> +                   UCSI_GET_PD_MESSAGE_TYPE_IDENTITY);
+> +
+> +               ret =3D ucsi_send_command(ucsi, command, &resp.vdo[0], 0x=
+c);
+> +               if (ret < 0) {
+> +                       dev_err(ucsi->dev,
+> +                               "UCSI_GET_PD_MESSAGE v1.2 failed second r=
+equest (%d)\n",
+> +                               ret);
+> +                       return ret;
+> +               }
+> +       } else {
+> +               /*
+> +                * In UCSI v2.0 and after, MESSAGE_IN is large enough to =
+request
+> +                * the large enough to request the full Discover Identity
+> +                * response at once.
+> +                */
+> +               command =3D UCSI_COMMAND(UCSI_GET_PD_MESSAGE) |
+> +                   UCSI_CONNECTOR_NUMBER(con->num);
+> +               command |=3D UCSI_GET_PD_MESSAGE_RECIPIENT(recipient);
+> +               /* VDM Header + 6 VDOs (0x1c bytes) without an offset */
+> +               command |=3D UCSI_GET_PD_MESSAGE_OFFSET(0);
+> +               command |=3D UCSI_GET_PD_MESSAGE_BYTES(0x1c);
+> +               command |=3D UCSI_GET_PD_MESSAGE_TYPE(
+> +                   UCSI_GET_PD_MESSAGE_TYPE_IDENTITY);
+> +
+> +               ret =3D ucsi_send_command(ucsi, command, &resp, sizeof(re=
+sp));
+> +               if (ret < 0) {
+> +                       dev_err(ucsi->dev, "UCSI_GET_PD_MESSAGE failed (%=
+d)\n",
+> +                               ret);
+> +                       return ret;
+> +               }
+> +       }
+> +
+> +       id->id_header =3D resp.id_header;
+> +       id->cert_stat =3D resp.cert_stat;
+> +       id->product =3D resp.product;
+> +       id->vdo[0] =3D resp.vdo[0];
+> +       id->vdo[1] =3D resp.vdo[1];
+> +       id->vdo[2] =3D resp.vdo[2];
+> +       return 0;
+> +}
 
-Alan Stern (stern@rowland.harvard.edu) changed:
+There is some repetition here, both with the "if" block and the
+UCSI command itself. You can factor out the command setup code into a separ=
+ate
+function (it can take offset and size as arguments). Then, factor out
+common parts in the "if" block. For example:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|stern@rowland.harvard.edu   |
+int ucsi_pd_message_get_identity(struct *ucsi, u8 offset, u8 size, u8 recip=
+ient,
+                                                              void *data) {
+        u64 command =3D UCSI_COMMAND(UCSI_GET_PD_MESSAGE) |
+UCSI_CONNECTOR_NUMBER(ucsi->con->num) |
+                      UCSI_GET_PD_MESSAGE_RECIPIENT(recipient) |
+                      UCSI_GET_PD_MESSAGE_OFFSET(offset) |
+UCSI_GET_PD_MESSAGE_BYTES(size) |
 
---- Comment #7 from Alan Stern (stern@rowland.harvard.edu) ---
-There's also the usbhid interface on the audio device, probably used for a
-volume control or something like that.  Maybe unbinding it too will help.  =
-You
-can try it, anyway, just to see what happens:
+UCSI_GET_PD_MESSAGE_TYPE(UCSI_GET_PD_MESSAGE_TYPE_IDENTITY);
 
-  echo 1-1.1:1.3 >/sys/bus/usb/drivers/usbhid/unbind
+        return ucsi_send_command(ucsi, command, data, size);
+}
 
-(or with the device plugged into the rear port, use 2-1.1:1.3).
+Then in the ucsi_read_identity() :
+        u8 offset =3D 0;
+        u8 size;
 
-Without going into any deeper testing, I can summarize the problem for you.=
-=20
-Basically, the ehci-hcd driver in Linux has trouble utilizing the entire
-available bandwidth when low- or full-speed (1.5 or 12 Mb/s) devices are
-connected via a USB-2 hub.  That's your situation; the hub is the 1-1 (or 2=
--1)
-device, number 002 on both buses.
+        /*
+         * In UCSI v2.0 and after, MESSAGE_IN is large enough to request
+         * the large enough to request the full Discover Identity
+         * response at once.
+         */
+        if (ucsi->version >=3D UCSI_VERSION_2_0) {
+                size =3D 0x1c;
+        else
+                size =3D 0x10;
 
-At one time Intel's chipsets would attach a single onboard hub directly to =
-the
-EHCI controller and then connect all the downstream USB ports through that =
-hub.=20
-This is what your laptop has.  Even earlier Intel chipsets worked different=
-ly;
-they connected each downstream USB port through a switch which would send
-high-speed signals to the EHCI controller and low/full-speed signals to a
-companion UHCI controller.  Motherboards using that scheme didn't suffer fr=
-om
-this bandwidth problem unless the user connected a full/low-speed device vi=
-a an
-external USB-2 hub.
+        ret =3D ucsi_pd_message_get_identity(ucsi, offset, size, &resp);
+        if (ret < 0) {
+                /* Handle error */
+        }
 
-The reason for the problem is that the design of USB 2.0 and the EHCI
-controller hardware make it quite complicated to handle the packet scheduli=
-ng
-when translating between two different speeds on the same bus.  The driver =
-uses
-an incomplete and imperfect algorithm which can handle the simplest cases o=
-kay
-but is not adequate for situations requiring a higher percentage of the tot=
-al
-bandwidth, especially when different transfer types (bulk, interrupt, and
-isochronous) are mixed.
+        /* Request Product Type VDO1 through Product Type VDO3. */
+        if (ucsi->version < UCSI_VERSION_2_0) {
+                offset =3D 0x10;
+                size =3D 0xC;
+                ret =3D ucsi_pd_message_get_identity(ucsi, offset, size,
+&resp.vdo[0]);
+                if (ret < 0) {
+                /* Handle error */
+                }
+        }
 
-Improving the driver to make it more capable would require a tremendous amo=
-unt
-of work, and for very little return since nowadays computers use xHCI USB
-controllers rather than EHCI.  Only legacy systems dating from the time of =
-your
-T420 laptop or earlier would derive any benefit, and then only in situations
-involving multiple devices with high bandwidth requirements.
+BR,
 
-I hope this explanation makes sense to you.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-Prashant
 
