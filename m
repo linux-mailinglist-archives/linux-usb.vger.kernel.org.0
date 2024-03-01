@@ -1,92 +1,133 @@
-Return-Path: <linux-usb+bounces-7417-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7418-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95D9486EBDA
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 23:30:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6223386EC04
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 23:48:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F88C1F23F25
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 22:30:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 865591C21AB0
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 22:48:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B7D2AEFF;
-	Fri,  1 Mar 2024 22:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFAEE5EE68;
+	Fri,  1 Mar 2024 22:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mh6FcvIv"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pLpxeHY2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D561BAD55
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 22:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFFE59153;
+	Fri,  1 Mar 2024 22:48:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709332213; cv=none; b=lt9O24uYmK2sUvLEazEHqejBcPByB8lEs4RUBXIH7HksuFv2SFAcZOWpJeAKf6rwpawfXOfUJmCL4Rj+VNGu6OIOEA5iOcacCiSIJHMEpSwCWmY+lnCt+V+LgWG3Q+nnHShCPCQ6J/VXqE4pHz+4e5WTMbkPV868rqM3ez1TzbU=
+	t=1709333294; cv=none; b=AlWn9mZW8SX8a4hScrKtxMaMyn4YQO6ar6x01rST0CuRbi6Twh5kWzgPW+hWKFrl5IVU/MuevSW2EypjhlofDGdZFUbMY+ATRkUNL4wM8SnWwXhr0bUWpvtrbIu+gqKydYIK8JohvCdsnr7MgALXUfjGSp+B9HSv0H4HbI5YEhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709332213; c=relaxed/simple;
-	bh=kI7+yqVHlLgvurlPSYT5Vjh2Hi4V4RAVmlT2GRhAvtI=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=o3w2rUPKPGwtasRVw/hnvdPWPNT7+zX+oJeuEFD6RzTJiRKjmi7MqBnK7cZTld2iAIdcoFLQWbMGxkUpgDCS8z21wILR6oq5hrWeek+3LcB3vnAmCT5A6JfzLYrvKZGhZ05Y9caMe5buHVnR2P5CwBWBXw9NWucXIxOSAogane0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mh6FcvIv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 78288C433F1
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 22:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709332213;
-	bh=kI7+yqVHlLgvurlPSYT5Vjh2Hi4V4RAVmlT2GRhAvtI=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Mh6FcvIvQefdWJnL7MhgWI14WXEV4xt9xVigP3DpPFtSaUl1EZMgEBJFHrNdW4Ase
-	 IiQNft2mXO5RNlVrvqy42k4V2QMJyP07qgL8eq5UQHLyhQZbHgfVOq45nUIzuJXSE1
-	 M90jpFvJ0JAfdYjGc/DtwbF3SdjOeKsuQ3ebMr7g8yzMPCiN5Sh3Ssmr43LaNqzwnu
-	 Pgwz/I/Ls02fia1N1c0hhrusi7TA07W8r9pnkIw99tShtxcM7RtLjNaNdfRxbKkPD5
-	 daaDvPMvpjbuaj/yd8tsmWhcN3q4xHNFibvcM2/egu1ZnkK7+OtUjS3WxrdN+ZSlHg
-	 6H6f79F6yj3Lg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 5D33BC4332E; Fri,  1 Mar 2024 22:30:13 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218546] xhci_hcd prevents hibernate/S4 suspend from working on
- several systems
-Date: Fri, 01 Mar 2024 22:30:13 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: todd.e.brandt@intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218546-208809-XzkuDiZVr2@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218546-208809@https.bugzilla.kernel.org/>
-References: <bug-218546-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1709333294; c=relaxed/simple;
+	bh=8odwCgk7CbX2gctz1vPXXNFyNOwD1JQX6J9mRg+tmcE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=K5qH0IY4w8whQ6Ap+DbAid3zQPbcPNTWJOvfyLr4Q9yenaQW37onkglSSuGckKMnXSnOr3HAthnfwH/+SMo/jR1q8Kj+1EyH6uplNyPlnMEwud0oAiMOIIVJmbJaKOHCuRPMuRNxsIeaU5uHOLqo7S6P04p+b47G8vyEuA6PlHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pLpxeHY2; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 421McPGS029083;
+	Fri, 1 Mar 2024 22:48:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=hC9XfH14jR/Jjd0ksk05wyObel9iSA8jmEXEdQ3SeWE=; b=pL
+	pxeHY2GgPUJ8Ecncmh5a0IynTeBsOcyBWcJ1d2ytFVhc3Y5sd6r0M77HKNY20oJQ
+	5Eiimqu3c42txaPm0dwdhMrAY5x5WgUHuOamwCgGUhove65s4ImVWb1Xn+y5KLSr
+	9oyL2X+j/VyNMzOueJcAaVzE/p4+loiagRkLwYKGwxlJksbvhhMxxurB6q8fye09
+	ABdksJyDOlQE1nm9UTlvtpyTs5r94T9oxCWXLLrc6k0LUW0t8C/uSJTb0ozXjgBS
+	0p1QnFkvtBuusTFIpM25y+aXNtby5ceypTQh6A5kP8G9eGjUCpX6QDfITjxIcTnJ
+	yTmb/mcTgNKKCi6/dgjg==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wkqx880jv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Mar 2024 22:48:06 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 421Mm57t013246
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 1 Mar 2024 22:48:05 GMT
+Received: from [10.110.118.13] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 1 Mar
+ 2024 14:48:04 -0800
+Message-ID: <44f00418-b09b-5ee5-c70c-d4580ffd0049@quicinc.com>
+Date: Fri, 1 Mar 2024 14:47:59 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH] usb: dwc3: core: Add DWC31 version 2.00a controller
+Content-Language: en-US
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: <Thinh.Nguyen@synopsys.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+References: <20240301213554.7850-1-quic_wcheng@quicinc.com>
+ <2024030121-unfold-murky-aae1@gregkh>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <2024030121-unfold-murky-aae1@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: y7AeXh1rH5g_v7u71miYFrOpq6enyo0k
+X-Proofpoint-GUID: y7AeXh1rH5g_v7u71miYFrOpq6enyo0k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-01_22,2024-03-01_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 malwarescore=0 priorityscore=1501 suspectscore=0
+ mlxlogscore=999 impostorscore=0 mlxscore=0 phishscore=0 spamscore=0
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403010188
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218546
+Hi Greg,
 
---- Comment #3 from Todd Brandt (todd.e.brandt@intel.com) ---
-Created attachment 305943
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305943&action=3Dedit
-issue.def
+On 3/1/2024 1:45 PM, Greg KH wrote:
+> On Fri, Mar 01, 2024 at 01:35:54PM -0800, Wesley Cheng wrote:
+>> Add revision value for identifying DWC31 version 2.00a based controllers.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.h | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index df544ec730d2..f3bbbc1947bd 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -1259,6 +1259,7 @@ struct dwc3 {
+>>   #define DWC31_REVISION_170A	0x3137302a
+>>   #define DWC31_REVISION_180A	0x3138302a
+>>   #define DWC31_REVISION_190A	0x3139302a
+>> +#define DWC31_REVISION_200A	0x3230302a
+> 
+> What code uses this define?
+> 
 
---=20
-You may reply to this email to add a comment.
+Don't think there is anything within the DWC3 core that would be 
+different specifically for 2.00a versus previous revisions. (so far)
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+> Why add a define that is not used?
+> 
+
+There is a running list of all the DWC3 revisions.  Not all of them are 
+being used, so my understanding was that we're just keeping track of all 
+possible version values that can be read from the DWC3 version HW 
+register.  If this is the not the case, maybe we can just leave this out 
+until we find a need to add it.
+
+Thanks
+Wesley Cheng
 
