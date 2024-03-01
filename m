@@ -1,185 +1,107 @@
-Return-Path: <linux-usb+bounces-7411-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7412-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2850F86EB0C
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 22:19:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C521A86EB48
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 22:36:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3568F1C22B77
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 21:19:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00BAA1C255DD
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 21:36:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A08757336;
-	Fri,  1 Mar 2024 21:19:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 363475823D;
+	Fri,  1 Mar 2024 21:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="OyDX2ofH"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HC0dNcrz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06EFB56B98;
-	Fri,  1 Mar 2024 21:19:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A13958233;
+	Fri,  1 Mar 2024 21:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709327980; cv=none; b=am4xO1lBSbxIqKKnlAFQ/zzlKYAj4gMkcHzZ/e7C/8b7Sl7MAxOs6xk6SuUT4YRl/rJhRi9GU9JlRgE8U77p4nw25SUR82t62Dghdy6hD86jLslkwwUVFrLCU4WrsVSOOEWfIHeAn5QP/ZG85AWfHl9B+oPlXuZ3ZGGRkCPzSNE=
+	t=1709328972; cv=none; b=YmhZhq1swwDLKg7U5GbbISr+W8vqmV69NeLmIq4s3Ugr0CD5cD48jvH+x7nc6Lvw0jOANJXg/L25rcYjMEvot50VxPhCTc7zaD9j99YA0U6aAqtvFmrRl93e+8a1kdUZ2IYYiVks8I3dkahgJlmE7bNxKvqKbKOx3i43MJaE7tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709327980; c=relaxed/simple;
-	bh=aQgtIrqPEJ6JLO3fBjYxQofvBaZjEx8JOTDSClljCmI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=n5SymiAQ7Of9Ktv/E4HMIjHm2RiwhHPJjaQWbs1Lz5FXLv+AIL00Ix6OYCGmCuLfPiJRRaZV76P0E0yDfZ/rFK8/PcbBhSLUHKH4+g+0fPBdnu1VJiz3dB0+ewYvBTjUn8ZY2brFo8ESoXARFTIIubHUxn6rVeAD59NjW0Rb5M4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=OyDX2ofH; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-29a378040daso1821033a91.1;
-        Fri, 01 Mar 2024 13:19:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709327978; x=1709932778;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:dkim-signature:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mcu8ifKGnRyTxlpkQj5cfTQBEVQ8gXCBuRO6bQX8bcE=;
-        b=DnTSInPG3Zntgo/HQN14oGgGtpwfehtiKinR08jny4hHTSVadqt08eYfFH0rgVl1BH
-         oC5YuYu+VkZ+BiwYzGzu1wHZgkZtc9k6fVFOuv+4zcYv1PpxRO+r8hXr3hllW9AhdBuA
-         GA/BmopV4+yf0y7WsWOQ1v9rSUotgznDPYpIjrf3nJJsge0+WdszRIiuOFG3GfBRjRDM
-         1J2Y61/ZfIxMU+Aoaqpb4Sbj1IXRA3FJmboZl2Ii1cRPnGVGcuVbYowlfaR1gUoDQvoK
-         b0ubyLyyhgyObJD8hP97dTUJ8JSE8ZWcRwmBvJM5QLqch9fxsD6G8DSrMtBZO/FC6WkQ
-         VZ6A==
-X-Forwarded-Encrypted: i=1; AJvYcCVHX3Zz8SSpqgC/VAbWXosom5KQhZBllnzJgI3toUXJvDtAHGxg9e1IdJNi0IjP/pEXrgyZRJiPlpNPq4P47SZ3nULMOiW0IcQKg3MO
-X-Gm-Message-State: AOJu0YxEsyaV3EynYLNwloST2U0uVhrvbk1+8MKC8qwKIVucN8jwjilj
-	B+b83Eao/HXgCnz8w3FuJVhmLNapEN+kG9iwuB8lj1s5gvEN3vr3dJ4UY5zcUqvubg==
-X-Google-Smtp-Source: AGHT+IHpWqlK6xa7dddlCxL+RPam4ay8EwZ/lTWj7tWxut5hL9zzdL0+M36msIBoy9H+sHL1cx9lew==
-X-Received: by 2002:a17:90a:9ef:b0:29a:eb0f:e356 with SMTP id 102-20020a17090a09ef00b0029aeb0fe356mr2687800pjo.37.1709327978133;
-        Fri, 01 Mar 2024 13:19:38 -0800 (PST)
-Received: from mail.marliere.net ([24.199.118.162])
-        by smtp.gmail.com with ESMTPSA id cz13-20020a17090ad44d00b0029ad44cc063sm5772861pjb.35.2024.03.01.13.19.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Mar 2024 13:19:37 -0800 (PST)
-From: "Ricardo B. Marliere" <ricardo@marliere.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=2024; t=1709327975;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Mcu8ifKGnRyTxlpkQj5cfTQBEVQ8gXCBuRO6bQX8bcE=;
-	b=OyDX2ofHFYQ+quFTNwXNCM3LjqqJMcL30cZRbwjpxCAnQlyjwDeim5KcIW3vMy8ZmZAqUC
-	jcGI7KgBkItj3yiCqg0GBXsM7N9DeYEhcel9mngj365kusPvpear35cT2Ec61qTJymRso3
-	vx98RYB7GyDWDohWNpqJILrffTlLWjjzsNlPvngOQzHkGL1rd05eca5AMOBdxHxmwuVzhc
-	J4I8jV2crOTsC1GuRjcjQDOuKoOJlqDoF9DTlDi7RJKoheZfWrSbdMgGg686rDsvm07Zlt
-	Jv2fbMoUnn4IVtuvxwZPfIj6dC11zMv2SLKx/HNwrC+xF/QqZzCOZDUGzYwCtw==
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
-Date: Fri, 01 Mar 2024 18:19:28 -0300
-Subject: [PATCH] usb: typec: constify struct class usage
+	s=arc-20240116; t=1709328972; c=relaxed/simple;
+	bh=0az1VC4sD/n4/GO8CNZ8u5Vg3XPjNeGY9Kyii+2If+A=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZZhWHMFpF+cnKUDayZTM5qQzh2uGtUTYOmYa/i8qIW9Fl3ZYOkszfrfHUfyJj1DiRDFMq0C2wHJ35XYHijmmfcm74h/EjPJpvv+Vz5FZD71QjeZRtKWWiwPrkDfl3n/aJsPZXCqDZQUx1ekTDYAijHvUUQaRWCAoz/5MiJXMqLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HC0dNcrz; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 421KnpE7010522;
+	Fri, 1 Mar 2024 21:36:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=xdrEsoDH1wlMg499jUGmzc1UwnuvbPZGoH8tSZVaIO4=; b=HC
+	0dNcrzeUoW2/k8hsoXtdHEnDOqyFfIIwK5Zh458sGAWzqPbbt4xbY0VRxH7GcTpk
+	JNag1FpENP/Y5uTSBeGUJcNO11UxSvs1oYLOVdlkbuJ6y9sKKiJlXYPS29QY5Qqh
+	uZ5DIDxVbC7gWrec+b8zInq73HSkWcl+PY/E1lzGK2VgG3jDC/vyu07CSExhL+SL
+	/jbHRMAwTz6Fktmag50gJBml+JvITxc5ApgKVNU74MGkf1LM1EZsuvNEAJ3ebSpa
+	2yIXgcQS8okOcEhVas00CUmAiJpigBjceUVpm5hvYU8E9TcGzr1a29vVNR9Bc95G
+	fKhpuyqRp8LVxPhOdGZA==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wk9mf21cc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Mar 2024 21:36:06 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 421La5HS012836
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 1 Mar 2024 21:36:05 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Fri, 1 Mar 2024 13:36:04 -0800
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+To: <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>
+Subject: [PATCH] usb: dwc3: core: Add DWC31 version 2.00a controller
+Date: Fri, 1 Mar 2024 13:35:54 -0800
+Message-ID: <20240301213554.7850-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240301-class_cleanup-usb-v1-1-50309e325095@marliere.net>
-X-B4-Tracking: v=1; b=H4sIAF9G4mUC/x3MMQqAMAxA0atIZgup1cWriEgbowZKlQZFEO9uc
- XzD/w8oZ2GFvnog8yUqeyqwdQW0+bSykbkYGmxadGgNRa86UWSfzsOcGkxLjnjpQkDyULoj8yL
- 3/xzG9/0AMVN2p2MAAAA=
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- "Ricardo B. Marliere" <ricardo@marliere.net>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2788; i=ricardo@marliere.net;
- h=from:subject:message-id; bh=aQgtIrqPEJ6JLO3fBjYxQofvBaZjEx8JOTDSClljCmI=;
- b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBl4kZmGuWhyMxTSm1IalkqtZB3NrPparm+vd5eV
- s1pBNuJOMSJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZeJGZgAKCRDJC4p8Y4ZY
- pmF5EACFP6Zw/Dp+1tijBBgIUCWuBflQ5ZpphUyMcibsTiS4yzDgjxzHIRuC05GpPydJHw4doYi
- 9vQsLB99/CY6lIXKQTeDM+uoJoYufc1xxvf05vFGbBeNGsFd24eVIef/TBFTy9x+4a66R0J3Ddl
- M+cX33V16UkafZSHHy55JjVW7OBMN5fWhLZhN1A1sYfoPAY/aWXq4GmSFYVpN+JmB7l6R/kFzS2
- Jldbgc7gYrZJU7xAb/1Ik9M6KtrBLAD+Gq0XMxI80Yems1p+YQsU7ZJpBofSDOTMG3bGYBkELKk
- Yc2A3B+EswTYypJR7zX2ndjPqO9s+0R1h33eu3c2LxdXSHZsbThHtL54WHTHUsnFfB6qVqB5mJK
- RLOrlvGmtxnrZnqQjacB/923grIaIUKVGAcf8nxBps3WNwfjl42G6YmeXwx+NaU0k22X/wVwkQ7
- 4CckMFCNUrCTyBUY9T1ma90CW/TPE1lvxBNFqj38Df+wEAn0Yi4M7LGAtEcdPJO1idXYNO9Gn+w
- i60apvKo1v++CIyr5X3TBnk5E0vAwdU8AlUI9uLIK6cWJJWa5yTj2V7oP3a7HZP+OA6Ktr0s32y
- snzrByrhksZvAf9Auyz2wms3S+8LzS/3rcf70rrJBlgajR5d+vXW5Rmu99u5RenA5mOyG4Y5Ks8
- +2VrD+e4Kru8+kQ==
-X-Developer-Key: i=ricardo@marliere.net; a=openpgp;
- fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
+Content-Type: text/plain
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: VYFQhl0C6CqHyCnB2qkfQgEWL2b73SnP
+X-Proofpoint-GUID: VYFQhl0C6CqHyCnB2qkfQgEWL2b73SnP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-01_22,2024-03-01_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ spamscore=0 clxscore=1015 priorityscore=1501 adultscore=0 impostorscore=0
+ mlxscore=0 mlxlogscore=892 lowpriorityscore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2402120000
+ definitions=main-2403010179
 
-Since commit 43a7206b0963 ("driver core: class: make class_register() take
-a const *"), the driver core allows for struct class to be in read-only
-memory, so move the structures typec_mux_class, retimer_class and
-typec_class to be declared at build time placing them into read-only
-memory, instead of having to be dynamically allocated at boot time.
+Add revision value for identifying DWC31 version 2.00a based controllers.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 ---
- drivers/usb/typec/class.c   | 2 +-
- drivers/usb/typec/class.h   | 6 +++---
- drivers/usb/typec/mux.c     | 2 +-
- drivers/usb/typec/retimer.c | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/usb/dwc3/core.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index caea2b829980..389c7f0b8d93 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -21,7 +21,7 @@
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index df544ec730d2..f3bbbc1947bd 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1259,6 +1259,7 @@ struct dwc3 {
+ #define DWC31_REVISION_170A	0x3137302a
+ #define DWC31_REVISION_180A	0x3138302a
+ #define DWC31_REVISION_190A	0x3139302a
++#define DWC31_REVISION_200A	0x3230302a
  
- static DEFINE_IDA(typec_index_ida);
- 
--struct class typec_class = {
-+const struct class typec_class = {
- 	.name = "typec",
- };
- 
-diff --git a/drivers/usb/typec/class.h b/drivers/usb/typec/class.h
-index 759b98355eeb..7485cdb9dd20 100644
---- a/drivers/usb/typec/class.h
-+++ b/drivers/usb/typec/class.h
-@@ -93,9 +93,9 @@ extern const struct device_type typec_port_dev_type;
- #define is_typec_plug(dev) ((dev)->type == &typec_plug_dev_type)
- #define is_typec_port(dev) ((dev)->type == &typec_port_dev_type)
- 
--extern struct class typec_mux_class;
--extern struct class retimer_class;
--extern struct class typec_class;
-+extern const struct class typec_mux_class;
-+extern const struct class retimer_class;
-+extern const struct class typec_class;
- 
- #if defined(CONFIG_ACPI)
- int typec_link_ports(struct typec_port *connector);
-diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-index 80dd91938d96..49926d6e72c7 100644
---- a/drivers/usb/typec/mux.c
-+++ b/drivers/usb/typec/mux.c
-@@ -469,6 +469,6 @@ void *typec_mux_get_drvdata(struct typec_mux_dev *mux_dev)
- }
- EXPORT_SYMBOL_GPL(typec_mux_get_drvdata);
- 
--struct class typec_mux_class = {
-+const struct class typec_mux_class = {
- 	.name = "typec_mux",
- };
-diff --git a/drivers/usb/typec/retimer.c b/drivers/usb/typec/retimer.c
-index 4a7d1b5c4d86..b519fcf358ca 100644
---- a/drivers/usb/typec/retimer.c
-+++ b/drivers/usb/typec/retimer.c
-@@ -155,6 +155,6 @@ void *typec_retimer_get_drvdata(struct typec_retimer *retimer)
- }
- EXPORT_SYMBOL_GPL(typec_retimer_get_drvdata);
- 
--struct class retimer_class = {
-+const struct class retimer_class = {
- 	.name = "retimer",
- };
-
----
-base-commit: a560a5672826fc1e057068bda93b3d4c98d037a2
-change-id: 20240301-class_cleanup-usb-4c3cef5bb0ca
-
-Best regards,
--- 
-Ricardo B. Marliere <ricardo@marliere.net>
-
+ #define DWC32_REVISION_ANY	0x0
+ #define DWC32_REVISION_100A	0x3130302a
 
