@@ -1,101 +1,202 @@
-Return-Path: <linux-usb+bounces-7390-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7391-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D943786E428
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 16:19:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19A1786E499
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 16:43:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 846031F27204
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 15:19:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 814B5B21D11
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 15:43:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C1ED6BFDE;
-	Fri,  1 Mar 2024 15:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C63170ACB;
+	Fri,  1 Mar 2024 15:43:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cJq/4sZc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4ZRSLhV"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA853A8F8
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 15:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED20F3A8DE;
+	Fri,  1 Mar 2024 15:43:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709306343; cv=none; b=WoiwZaB6UHx5Gft508tV5fvUAcUZGME91ph29TPMARHrAiRpF5ltgw452ZCo7MfZJXadLPHZMAr2L1P/QPOecDrearETVhJyAkPdKoNASYG0/OhvFPd1fe1AJWQ51xPnwQu4jXiwbHDqvG5h+i3kyQSgw7/yXRyP3yh2vOHcESQ=
+	t=1709307824; cv=none; b=scet6aqXdlCZlxcdhjZ6berqU15bcdOB1PJb7rSuh/TFzOo82jz5nA4P34UxkVwByCD3JMaH5sfcxuBzw1Wx1igX6oXcHvzVq3jpPJhs88dVOTzCphfkkFz+jWClvWP3r+KJd02XuvDUsjIkemW/1UdYy8tNXkKSLNi/UgKm40s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709306343; c=relaxed/simple;
-	bh=Q0NQZ0ldy6dwDnGycRxVLD7WGylgDWbWabGHwOnfhHo=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PhvAoNR8nOOWyShpWn2FCrPe8wDwwb8UbfnamL9kM2NDIAOtfEgMNpZ1rjd4k2ey5lwd/vuO4BbJAQBSFeQvgQzhR4DdMMht1R5m1Gdebmn4maoYpJLELhMV+U909NWSfMWnobl1xMCx+vFC+xktIn4sAcRThtBT5zlj0i6sgX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cJq/4sZc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4EEC0C43390
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 15:19:03 +0000 (UTC)
+	s=arc-20240116; t=1709307824; c=relaxed/simple;
+	bh=bG9hQ66MYcnqctgrAOl+DucX9thMeIyw3inwy+5KOqk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HBxpR5uGYNbuctjKR8UHaiocoGoHskDBaUyVwjBJ+5d+zf2FUse+Z24+P152IIWvfbeeZPqvd2IShqW3wUDgHlGBzINbHslPz4wZMY5RCG04aSGqBj5hwxvlxnCPtbL9ScG2kFOqRNQkAZMhF+O360Eb62HT1gpAirxAdJDSZlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4ZRSLhV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 680CEC433F1;
+	Fri,  1 Mar 2024 15:43:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709306343;
-	bh=Q0NQZ0ldy6dwDnGycRxVLD7WGylgDWbWabGHwOnfhHo=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=cJq/4sZcsvGW/+RG/gOPd+J5Q0eJt76X2JTZ5rFhyIwDmEecVF+lN5LcwSsCOpHcd
-	 jaP0jVNg4lIG0FcHuAWIs8ALlFfvT7ZAGRu3psqnzKC5lw1M78pKs1mdOZCUo1JUmJ
-	 kwpGgjyGPTjtCUEj0tbqN23v1Q9o8v3Dja7yyVNvyXPPqh9i/RGUPDi1Sg7PGsmhrC
-	 2jhWzZAeZWhcmMzzZx0E3yJAipQI6PwLqKkTt7y3eHJJOWR0wiuHgn1UuvmEScWmzY
-	 Gqh4RKUkJKoZs1uPtDaplhr7FQEdzdC7UY7FI3lT6/ACYp3itw9jheaWGdIVQ2wibm
-	 WPmNbOMSai+Lw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 3AA14C53BD3; Fri,  1 Mar 2024 15:19:03 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
- audio
-Date: Fri, 01 Mar 2024 15:19:02 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: tiwai@suse.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc component assigned_to
-Message-ID: <bug-218544-208809-aNzrE1uYmz@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
-References: <bug-218544-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1709307822;
+	bh=bG9hQ66MYcnqctgrAOl+DucX9thMeIyw3inwy+5KOqk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F4ZRSLhVZixnb8wRCaw8T7ek/UOS49fnu8jBUY918pHyaSHtkJin4mJyCZG0D4aFE
+	 3MJH7MdLOkSV3iNdYoFMsNe8fHtdPIyc9pxIIveu9ml9fQlsaZQ5F+cO3CQtOHwNXM
+	 Uea2nemNIVtE4aTQWrE7Ug7aiU5whWynJXpzijOA4XM9V/xLT0eSBDbLiZ/OoM3qym
+	 SnDG0Nl7WdIp3QRU8I+wjjtQDFJ28Nj7zFGkQC1dmGwAWYs7KKN2Ji092RS4G/Hi0J
+	 GklanWOALbNCfJKDyUVxKdYHb7PTc44V/RTAoVofbzkX6l7Q1NZFe5WXqWoT/FoKlZ
+	 PRPyunVZ8HPDQ==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1rg53B-000000001io-0yeT;
+	Fri, 01 Mar 2024 16:43:53 +0100
+Date: Fri, 1 Mar 2024 16:43:53 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+	quic_jackp@quicinc.com
+Subject: Re: [PATCH v15 8/9] usb: dwc3: qcom: Enable wakeup for applicable
+ ports of multiport
+Message-ID: <ZeH3uXyp3YJTU3cL@hovoldconsulting.com>
+References: <20240216005756.762712-1-quic_kriskura@quicinc.com>
+ <20240216005756.762712-9-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240216005756.762712-9-quic_kriskura@quicinc.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
+On Fri, Feb 16, 2024 at 06:27:55AM +0530, Krishna Kurapati wrote:
+> DWC3 Qcom wrapper currently supports only wakeup configuration
+> for single port controllers. Read speed of each port connected
+> to the controller and enable wakeup for each of them accordingly.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 72 ++++++++++++++++++------------------
+>  1 file changed, 37 insertions(+), 35 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index a20d63a791bd..572dc3fdae12 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -78,6 +78,7 @@ struct dwc3_qcom_port {
+>  	int			dp_hs_phy_irq;
+>  	int			dm_hs_phy_irq;
+>  	int			ss_phy_irq;
+> +	enum usb_device_speed	usb2_speed;
 
-Takashi Iwai (tiwai@suse.de) changed:
+You need to remove the corresponding, and now unused, field from struct
+dwc3_qcom as well.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |tiwai@suse.de
-          Component|Sound(ALSA)                 |USB
-           Assignee|perex@perex.cz              |drivers_usb@kernel-bugs.ker
-                   |                            |nel.org
+>  };
+>  
+>  struct dwc3_qcom {
+> @@ -336,7 +337,8 @@ static bool dwc3_qcom_is_host(struct dwc3_qcom *qcom)
+>  	return dwc->xhci;
+>  }
+>  
+> -static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+> +static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom,
+> +						       int port_index)
 
---- Comment #1 from Takashi Iwai (tiwai@suse.de) ---
-It's rather a core USB problem, likely an issue about the bandwidth managem=
-ent
-in the controller driver.  Reassigned.
+As I mentioned, there's no need for a line break after the first
+parameter as this is a function definition (e.g. Linus as expressed a
+preference for this as it makes functions easier to grep for).
 
---=20
-You may reply to this email to add a comment.
+>  {
+>  	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+>  	struct usb_device *udev;
+> @@ -347,14 +349,8 @@ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+>  	 */
+>  	hcd = platform_get_drvdata(dwc->xhci);
+>  
+> -	/*
+> -	 * It is possible to query the speed of all children of
+> -	 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
+> -	 * currently supports only 1 port per controller. So
+> -	 * this is sufficient.
+> -	 */
+>  #ifdef CONFIG_USB
+> -	udev = usb_hub_find_child(hcd->self.root_hub, 1);
+> +	udev = usb_hub_find_child(hcd->self.root_hub, port_index + 1);
+>  #else
+>  	udev = NULL;
+>  #endif
+> @@ -387,23 +383,29 @@ static void dwc3_qcom_disable_wakeup_irq(int irq)
+>  
+>  static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
+>  {
+> +	int i;
+> +
+>  	dwc3_qcom_disable_wakeup_irq(qcom->qusb2_phy_irq);
+>  
+> -	if (qcom->usb2_speed == USB_SPEED_LOW) {
+> -		dwc3_qcom_disable_wakeup_irq(qcom->port_info[0].dm_hs_phy_irq);
+> -	} else if ((qcom->usb2_speed == USB_SPEED_HIGH) ||
+> -			(qcom->usb2_speed == USB_SPEED_FULL)) {
+> -		dwc3_qcom_disable_wakeup_irq(qcom->port_info[0].dp_hs_phy_irq);
+> -	} else {
+> -		dwc3_qcom_disable_wakeup_irq(qcom->port_info[0].dp_hs_phy_irq);
+> -		dwc3_qcom_disable_wakeup_irq(qcom->port_info[0].dm_hs_phy_irq);
+> -	}
+> +	for (i = 0; i < qcom->num_ports; i++) {
+> +		if (qcom->port_info[i].usb2_speed == USB_SPEED_LOW) {
+> +			dwc3_qcom_disable_wakeup_irq(qcom->port_info[i].dm_hs_phy_irq);
+> +		} else if ((qcom->port_info[i].usb2_speed == USB_SPEED_HIGH) ||
+> +				(qcom->port_info[i].usb2_speed == USB_SPEED_FULL)) {
+> +			dwc3_qcom_disable_wakeup_irq(qcom->port_info[i].dp_hs_phy_irq);
+> +		} else {
+> +			dwc3_qcom_disable_wakeup_irq(qcom->port_info[i].dp_hs_phy_irq);
+> +			dwc3_qcom_disable_wakeup_irq(qcom->port_info[i].dm_hs_phy_irq);
+> +		}
+>  
+> -	dwc3_qcom_disable_wakeup_irq(qcom->port_info[0].ss_phy_irq);
+> +		dwc3_qcom_disable_wakeup_irq(qcom->port_info[i].ss_phy_irq);
+> +	}
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+As I already commented on v13, this should be a per-port helper rather
+than special casing qusb2_phy_irq and a for loop for the other
+interrupts:
+
+	A lot of these functions should become port operation where you
+	either pass in a port structure directly or possibly a port
+	index as I've mentioned before.
+
+>  }
+ 
+>  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
+> @@ -455,10 +459,8 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
+>  	 * The role is stable during suspend as role switching is done from a
+>  	 * freezable workqueue.
+>  	 */
+> -	if (dwc3_qcom_is_host(qcom) && wakeup) {
+> -		qcom->usb2_speed = dwc3_qcom_read_usb2_speed(qcom);
+
+And again, as I said for v13:
+
+	So just let this function update the usb2 speed for all ports
+	unless there are reasons not to.
+
+rather than hide it away in an odd for loop in
+dwc3_qcom_enable_interrupts().
+
+> +	if (dwc3_qcom_is_host(qcom) && wakeup)
+>  		dwc3_qcom_enable_interrupts(qcom);
+> -	}
+>  
+>  	qcom->is_suspended = true;
+
+Johan
 
