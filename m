@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-7415-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7416-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6012486EBC8
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 23:23:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7ED986EBC9
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 23:23:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 017ED1F2430E
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 22:23:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D66F1F231E6
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 22:23:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61A8059B7A;
-	Fri,  1 Mar 2024 22:20:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2255A0F2;
+	Fri,  1 Mar 2024 22:20:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Emq4fO7x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOpNEqWE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C375A0F0
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 22:20:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7804C59B5C
+	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 22:20:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709331627; cv=none; b=TEn+YzfD2t4nF0eg6hpBKQf87k92rPRA6ikGjI6c0W5m8PeqzjP0+iPOmvYuP2AJmzWOoSu0KT6/zdiQz8+DazJPwyBZWUnyvvdJDRY9i3Qy8xhasBJSMUZIJLISmoUIYImSuKPmy2OYMbqMZumP0vxue1a+RQMEDdjLW8F3pSA=
+	t=1709331657; cv=none; b=uQVLP8QxG7n72ZUDVyoUeBxCJz0MuUr8RNqoleWQlwNjeeL0a3Ly+RJ/aWcc3i3F9/39SGymouW4PHpPljEsEcdcf0o6krWo9TnBnsQkRc6d/oMu3RDilJ/9e4Cde2UJRTTcI8FsQYPS382vXwbpP+7UXUiN9/pTXaq32ON7dq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709331627; c=relaxed/simple;
-	bh=n9brysMoOJk9mGN6+T284rqIu9vNW10L3tvfEsln4b0=;
+	s=arc-20240116; t=1709331657; c=relaxed/simple;
+	bh=6TyZPY4ztVDsvrSnjRB8LEGrtgtFdMRvn9dSIibG048=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Quxden9mw690PZipzGLsXWdJBLrh2sB+LCPPR4DGlc6lOHeSeSDN+OZM48e2i45hpeEyNRlea86SrOZupmNqNQbgvVri9G23O97OtgOFsHzBUuMH3VfPjhCTE95r/Gel/TGnPKzhWHLQt65GviMOf9w6GT4BkVsV+fIYDaigc2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Emq4fO7x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 73A34C433C7
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 22:20:27 +0000 (UTC)
+	 Content-Type:MIME-Version; b=BqK/nuZ656kLcdBM1tD38w3w8eVoVB/KsRUGpeCgH72oPop3LypDsOIP8TMJJV57UGx4nwQRxJ5PGFBAU0iwrtTUY08lz+Eh5gkQfK2TCRDjdF5cpkUZ3mE9MmOknv+wYjP0aB0u0doRp/nSBmVeskh9eWLOA+b1Xh5y9Dovxv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOpNEqWE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E8529C433F1
+	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 22:20:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709331627;
-	bh=n9brysMoOJk9mGN6+T284rqIu9vNW10L3tvfEsln4b0=;
+	s=k20201202; t=1709331656;
+	bh=6TyZPY4ztVDsvrSnjRB8LEGrtgtFdMRvn9dSIibG048=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Emq4fO7xJhfE5I9ec3RC6m8ydnpgVaa3OX3js0Q60fFiLGGgPMB8Xaq2iwyWtDN17
-	 3QheBZh9FyRWKjpyhG2qKEf9fjUvwhJM4Ezm4SpOpkdE1p40mxFH0mK6g/Hgb8dvyI
-	 uv38x0EWsgqPirfJCv7g7Ex3mjK9lhGRCn49Ef+LHbtsDkTEpVkFCNfLWXSsr/lQ/O
-	 T5SO0FoFSXU1E0eRPKy7h/YlMMtKciF/6yzKb3Dw9M/FJhb/Fyr0y04B9UHs33xB7n
-	 1zODB+6hXBae5r/r9uZ7ow8L1Yaj4n9mmCBtjQlt5gPsurngsa+xCy+VEk2fICiIbf
-	 qL1jpmwlKgU3w==
+	b=kOpNEqWEzyHst2yLBdrxaQTAjDACeamfKF49G7bH9esi3jxhDX/NbtJhQlp465tn6
+	 JTj7BYK7yxrU7n4CUpn2TrWem2b2ac12PI1JVB0Z4Rg2tiSjsI8i1hd0Ze4qPzm3iQ
+	 uVRKS5ZxaDqpi9bUklfVKNDjBtngpEpoK7zdR7qouUUCNgMpnocL8LpDwgMm7V0DDh
+	 4g2pSv4FQEryDebFJy3cQgDLKSX1NcXkATPs/1VnPdzbZ1rGpJfXsGTRYw+kFia01T
+	 qqs565L+5KaIa0iQhaNOhRFBbGhLFqWRAX547gobw9p5Nzt6EioVOFTSy+DKhTNW3B
+	 mRToLR+m8BI0A==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 63B22C4332E; Fri,  1 Mar 2024 22:20:27 +0000 (UTC)
+	id D337BC4332E; Fri,  1 Mar 2024 22:20:56 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 218546] xhci_hcd prevents hibernate/S4 suspend from working on
  several systems
-Date: Fri, 01 Mar 2024 22:20:27 +0000
+Date: Fri, 01 Mar 2024 22:20:56 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -63,7 +63,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218546-208809-PWTWTm6MaW@https.bugzilla.kernel.org/>
+Message-ID: <bug-218546-208809-siTM0szfDf@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-218546-208809@https.bugzilla.kernel.org/>
 References: <bug-218546-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,10 +79,10 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218546
 
---- Comment #1 from Todd Brandt (todd.e.brandt@intel.com) ---
-Created attachment 305941
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305941&action=3Dedit
-otcpl-dell-7390-cmlu_disk.html
+--- Comment #2 from Todd Brandt (todd.e.brandt@intel.com) ---
+Created attachment 305942
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305942&action=3Dedit
+otcpl-hp-spectre-tgl_disk.html
 
 --=20
 You may reply to this email to add a comment.
