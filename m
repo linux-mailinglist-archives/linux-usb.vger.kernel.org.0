@@ -1,187 +1,192 @@
-Return-Path: <linux-usb+bounces-7371-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7372-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B167B86D813
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 00:59:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AB9586D88C
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 02:12:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 062F7B2186B
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Feb 2024 23:59:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64CB3B220AF
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 01:12:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 922B3137763;
-	Thu, 29 Feb 2024 23:59:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4152B9D3;
+	Fri,  1 Mar 2024 01:11:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=elbertmai.com header.i=@elbertmai.com header.b="U3sIgO3l";
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="bn/qr6Eb"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="oxuL0ijv";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="CpnRB5Ei"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D0444374
-	for <linux-usb@vger.kernel.org>; Thu, 29 Feb 2024 23:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709251180; cv=none; b=obLLcxOi9RZU13CL8rh7B5l5iUml6Lo9DeZ0TnXIdOrlxnAhkn1vRU7Y59eePt/WenLYIW5kRlqJ6ZPkHtAO1n0pT+PkrB5BHmtkA45cREhp8ml4GxQooExeELcfE70mtgiaMqYgvcDGla3Jaa9azsYD1Bzj/ho5pVe5ie3umxw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709251180; c=relaxed/simple;
-	bh=OOOCsGxQH/wxU/CG8sZCXZFdEfx3IZ9cD1UMgPqoejI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=GNSxXAqPBS4ou1OKBu5u43E2jgMNThAmjEcR1RT4Xo6v7QhYv5K95GveRuYmLk2h7KlMhWm9P12E3r2cF9zUqkIgb7alTIJVx3rdb1/eMbhx721VoajD1w2ibC4IVB1g+fE9fd/B4E3Opwy7AQkoUFHUQqJB5HDzodng0ZGERew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=elbertmai.com; spf=pass smtp.mailfrom=elbertmai.com; dkim=pass (2048-bit key) header.d=elbertmai.com header.i=@elbertmai.com header.b=U3sIgO3l; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=bn/qr6Eb; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=elbertmai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=elbertmai.com
-Authentication-Results: purelymail.com; auth=pass
-DKIM-Signature: a=rsa-sha256; b=U3sIgO3lqTzN/z5hQyfzPw4s9+yl5E1EGxOdfTty0MSKjQ6d2FjCTouDqFDDUUqCWMQ+PPy2rhcDKy5qh9UYD6Vyaexsi/qN0O7Y35bNgfwziQRG7N/O5l1v9/86CqRr7TuqbaZzDwKxK00iGx8A+6oOCGBHD38x+swMLVUorvZPMDjYczSm+rKgiiS4h4TpqXo49czACtt0LflITl6DbSVMsr8KoY1N+iWQ9Us3Isjrz4hcewT4JK0mmDffSxiSsiLLxCDWEPKgYBVsjzmWW7IqVdCFdAzm01uY22rY3v4TATqs0YngMTxgYfmNgM34ryX+gQbKEx8Y0jPuosercw==; s=purelymail1; d=elbertmai.com; v=1; bh=OOOCsGxQH/wxU/CG8sZCXZFdEfx3IZ9cD1UMgPqoejI=; h=Received:From:To:Subject;
-DKIM-Signature: a=rsa-sha256; b=bn/qr6Ebpw63GwRPkSkgkHh2wf3tAJtJY7NPyPSTPM/OqoLUHRV1xuiuHvJOKgD/MjNX+dnMYO+vnNb3nvcZycNjSW0dODcVl/3yQdphUcpwhyB14hS7Omxul4L/IxlnXkbilCpFF6JxTyk8uArA2kxxYn29qR82d+a/EhJmx3aOnRq5c+cCHQ45L0BG9BNCZJxbtTAeBd9tKqsN4c5QKyprAkWPYiWcEhTm84pk7FvcPGDg/jPvFsMq6VK8LZN8R7AzjYe/b8n4pgiPhJR6bEiKMzPoUbNByMhOeq4Dt3Njb/TlNqhHuiGJ7KY90ocFvPEWzUPBOFv1NEhiLYZzhQ==; s=purelymail1; d=purelymail.com; v=1; bh=OOOCsGxQH/wxU/CG8sZCXZFdEfx3IZ9cD1UMgPqoejI=; h=Feedback-ID:Received:From:To:Subject;
-Feedback-ID: 5995:1482:null:purelymail
-X-Pm-Original-To: linux-usb@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -265359410;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Thu, 29 Feb 2024 23:59:22 +0000 (UTC)
-From: Elbert Mai <code@elbertmai.com>
-To: gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: Elbert Mai <code@elbertmai.com>
-Subject: [PATCH] usb: Export BOS descriptor to sysfs
-Date: Thu, 29 Feb 2024 15:59:05 -0800
-Message-Id: <20240229235905.569705-1-code@elbertmai.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACFB3232;
+	Fri,  1 Mar 2024 01:11:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709255515; cv=fail; b=g8VvZs7tvRsE8OZsos0RGq53elKrPFU5Vnt0Wp1BbWDizbnZW0P/N6VY8b14yByAyWNZhnkt8DbWFR57/L6VkGLKV0JkD0DR9TmnVMTXnoibJcAs9UfBnY3n0JIzkLF80WqO8OCK7CVOKHLNG5ezuNvxai8ZrOjdbksmnhPjYX0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709255515; c=relaxed/simple;
+	bh=ubT5vn54CRe2ToVp8tIuALMRVYAPqdHYqwRYdXAJqIY=;
+	h=To:Cc:Subject:From:Message-ID:References:Date:In-Reply-To:
+	 Content-Type:MIME-Version; b=mL2pTZWfELQxGYBVZxUDnDpS/ABDJqJfuYK9IgyWj1VAJEEfy/rJ8+u1QrJkK4xckmoVwKPIuU0Aj2MEANnnBnCXImMoTRfrhqueJrO7vc7VdXeSuxsBjC18mULnM2n8rlDbpDj49OQm/Q+sWLmnrAjQCSNcolT4J7GF5nQODnU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=oxuL0ijv; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=CpnRB5Ei; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4210hol3012335;
+	Fri, 1 Mar 2024 01:11:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2023-11-20;
+ bh=5Gf+aWGTNupAuj13n8eWQRuRG2xV+UXF8r0lKE8BlQM=;
+ b=oxuL0ijvVYsyk5aPrXjOxvn6Nk5au3bwhb/5SzwOAuXA09f1+H1zI8x2ef5dpUMx+6+V
+ cS8hE4bQx5HXP0IPlk0vj+qEGNUqMUWq3lFkYw5gl/LjW1VgCZnw5XOUvCAiOx5c0lhn
+ NBxVmAeq1TGjyz2hpesaTpF0pGVBZ+82pnWAgzogEAbFspkd8RUG1awXMSTZu/tyc/bS
+ A48B18fZ8BiVILNOdcsUo2ClX0IF925ZGl5KTukxGgLvCgqPJ4cZlR5kA6o+Q9FtHjox
+ rIFP5CsGrUW8FQTLIHk3+m05Nh8NAtYRO0ehgqJ5dsuYsJxdpDW6CUxrFXr/BBQOEUWn 3Q== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3wf8gdqgya-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 01 Mar 2024 01:11:41 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 4210mtUF022341;
+	Fri, 1 Mar 2024 01:11:40 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2041.outbound.protection.outlook.com [104.47.57.41])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3wf6wbty6y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 01 Mar 2024 01:11:40 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oRkLFiCHKUPV63+0gXUAQRLBjAHKAQZ97RHIt9YjP0sCgQiyujVJm/4jEuwJh7rET42VCVq1zmxn7XLhZ7PW1b8gf6GiN81L9OUutf+Yi2ajCLmiL+jl2MUfmzkbItpdZx5WWvgdKIytpXhUN3VhUhK7T9UQll8QnY+xgVUWe1ys/syGjbIRsE1aZK2adRWDh/gf7THaNjvVgXPKpqfMIdIefHMzg/sdEihAAuxgntnFhEIRx1JQ90n/A/jiMrxMohk/r8ss5F8J+Dhh4lxdbAkqRRJuAxqwi0YGMwnwfkcqvGt3rJ/dXDIQmowIIVIh1amICBZS0HB907jJ5zsYqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5Gf+aWGTNupAuj13n8eWQRuRG2xV+UXF8r0lKE8BlQM=;
+ b=Amp32RcO8HFMaIGgnYpWIWfJ5dssWER4DDMolouG2eGVtxBR65GIiTHZvsVEOcKJ543sU06Gn9dzGjEtYmF+uwMAT4VGGyUyu4SyHO7tF+8y+60YTkMwMS9dGKLOdOg8xOz3arSizHevK9UmVyen8tHXKMWs0hZH/PZdYfFCuPvHeisrnqU9xlixNtaz5CIKWaRN5rkCnxlhFj5m1J86SwV8wyGdBlGVjbMzBFNmfyQaqKwrGV/AdMvs7rkdUdXL0OpW7KuL9uQMiYq+0XsrPr/fsXx2w0pdVN6jpdVQzVv0Z2x0w2yZ6xN+fJyrz4NwdRuTcfwI7J2bkn5pFvVmSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5Gf+aWGTNupAuj13n8eWQRuRG2xV+UXF8r0lKE8BlQM=;
+ b=CpnRB5EiV8FrkQLhk82TGI9NiNioX2RkjU8Lr7BMcDLfsEQ+abJq3UxbEDJ3msd2eO7RcfrCAuTdJPR5JUs8zmA9taOSFfYa/upmUarj0OTBDkx2ye7NjEx7tIDxobUKPaX5phb8U3m8hAfJYY7y54nxOBD3eBBaSoO9iY7nrSU=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by PH7PR10MB6081.namprd10.prod.outlook.com (2603:10b6:510:1fb::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.36; Fri, 1 Mar
+ 2024 01:11:37 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::7856:8db7:c1f6:fc59]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::7856:8db7:c1f6:fc59%4]) with mapi id 15.20.7316.039; Fri, 1 Mar 2024
+ 01:11:37 +0000
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg KH <gregkh@linuxfoundation.org>,
+        syzbot
+ <syzbot+28748250ab47a8f04100@syzkaller.appspotmail.com>,
+        bvanassche@acm.org, emilne@redhat.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, martin.petersen@oracle.com,
+        nogikh@google.com, syzkaller-bugs@googlegroups.com, tasos@tasossah.com,
+        usb-storage@lists.one-eyed-alien.net
+Subject: Re: [PATCH] USB: usb-storage: Prevent divide-by-0 error in
+ isd200_ata_command
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1frxazrgx.fsf@ca-mkp.ca.oracle.com>
+References: <380909e4-6e0a-402f-b3ac-de07e520c910@rowland.harvard.edu>
+	<000000000000102fe606127a67f6@google.com>
+	<b1e605ea-333f-4ac0-9511-da04f411763e@rowland.harvard.edu>
+Date: Thu, 29 Feb 2024 20:11:35 -0500
+In-Reply-To: <b1e605ea-333f-4ac0-9511-da04f411763e@rowland.harvard.edu> (Alan
+	Stern's message of "Thu, 29 Feb 2024 14:30:06 -0500")
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR08CA0031.namprd08.prod.outlook.com
+ (2603:10b6:a03:100::44) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-Content-Type: text/plain; charset=UTF-8
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|PH7PR10MB6081:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0d4ddcb8-9a4f-48a7-bce5-08dc398c8b65
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	v150zFjdMrCjtwMWZhWdcMUB/VKLHk/8JW9ngj/hikX32/yk/nFtY/rcvPh4K1lbJ5C9PoysrFzG/DumxFJH2xDUJax24bhudYbwvkmSrwcjJWyOYc8ialhBzH3f8rgm2Rk2H7ZuYTp7avWJJZ/7FqxFCJeGn8IZW6K4Fii9iIgsYkDxzSqMTVJGsy2Nfq32bqIxoOiBF0+wqugN5h5nEjzee/2n1bn66MFVljh+eBHKyTgCEiUckxqgjLbeavwOgeGuWOabONwvN9hiHEn0FjPtzehzj6o/XQfyyjKa/WCpYbPk8dMFc/ytbdNs31LrPsy6TNFG+RFDCnmE5yOKUpoUT+XhykmTXR2Ew1ipvsj0TsXYn/Gog92FK47DTHnR2Fuoqe2b3tXxGrnQktvik9BejaVmr3q6wWrqMVcbOgJFjFXkLQx4KNVPkXaQGFHQNjM1H1nwtFkahQTHar5dBiLyTU5vmdeMuXu2kmKtlMpi09sni4DYeP0S3jdrfRN0tsNwmyo4NjYVyCXT1jBcfoa6moJeVkQH/sLf3jGnOIEpGK3KsSuwJbs39aYNNO/nB1WXA2Bg0tE6NVs+KMomCRFFKfZUliQxkxyuKdd/QJmB7bwwwgzIB+kXG34M3dorL9aHOFYWURPpJ+C/3evcOA==
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?yy8ChXUUo5yDdR8xz+7ovcAxLZcuwU1+GDypOcktuVL+0AsGDdOm++1chCtb?=
+ =?us-ascii?Q?8EaSTfrgWtIeTBMBTUjGMJw/IvXwgeEDaSK6YokdeSavFwCgyTO2lpnwpnQ3?=
+ =?us-ascii?Q?VvyrKAvkllbcC7o5O4O7RDASxzm5YmhKwZl5e0IL5gLT2sUgLrOf8g0Z3BgO?=
+ =?us-ascii?Q?LRiusQ9dCWGaJO43DYm8/tKt4bpmJz1v6JSztcEwPw1dv+o+Q8I5pLqmWDGe?=
+ =?us-ascii?Q?RoffiOciVliFih1jHZzfts//y6aKLqywCns14XDYCbBg8rwvHQ0/ojxwEWYl?=
+ =?us-ascii?Q?mBsZhRDOmIcSyzaEpogXJwzGGJBIf17HGnLXTgRiqIDrjJjEdexu2N3sdfjd?=
+ =?us-ascii?Q?i5tiJnv0xike46OYnZtW5hRMXel/vHBsWZlelf+eZpVo54MsnVX1OXZr6Y1F?=
+ =?us-ascii?Q?7cJN1KT2U89R/+7CMo7Hcyz/EvX4Kw/8vsfsHzZyNnajPs1AYFuZanfADQAD?=
+ =?us-ascii?Q?S27GWJVgjM0pKFXPS/3mhpsEJYDdX5DzKlKTHs4+2m8nrKXMxnd60K9WvOjH?=
+ =?us-ascii?Q?dR93nxGBD+M/c5KoAabDnX4L3iCdjSemHtsFhQnCSJESbHeZG1lfWLqfLr2o?=
+ =?us-ascii?Q?VGYTdvSCAG2oxkypmAC1Wwgm+Ftz+e1DqtsNhjQtLLwk0OqE9KpO9AYmeNBc?=
+ =?us-ascii?Q?4OslzsF6XeQeQ9x64wFLOUnHO0I+xc57EW3jfVp1ithKlRsJL3I7JtuiE1FN?=
+ =?us-ascii?Q?14Pwh43j69taPPZg3bh/Hoso1dmhZYi/LmsuVvQ3r8lRROweX85qrqrNVbRA?=
+ =?us-ascii?Q?Unu8Rib0ta7CWbQNeIVzMYfkJStGgrxYGKOTIc7nGe2FF5R4Metywb/wH6XX?=
+ =?us-ascii?Q?RxsRHnRw3XtilWTmqaWc26bNxLA4dVL/aCS74rpXTaAVYcK4lQzVL4LHnL5m?=
+ =?us-ascii?Q?aqT8Uucr3ZhOQ/t4Omr4c4d6O5DAkkWCAxwQvRhGRARXU3LjkI5RlmQAPInd?=
+ =?us-ascii?Q?W6lsOSE/moALeNMMChgKKoZYT4UlMoFxUqFB164b5Kev5j+p6YrkoKAZJuDg?=
+ =?us-ascii?Q?Obc/ZFMb7esxNSDD+b1uLG+hEUyd0eNCWzAjPCheBhG0l3nvQFoyKilx0nev?=
+ =?us-ascii?Q?9YMs8cb5u3owQFXBX5UREGe5LbQR68s28YN7o2gVGLJcQkEYpVH29IDYkP7m?=
+ =?us-ascii?Q?VMBoo9Z1b7hT+GtybEt3alDj/n+WgJRo3ULgakDe36QiWV23lDfVOr56LPTW?=
+ =?us-ascii?Q?Bh+KihlhQv/5KnPi3gWZbFvAgoZNJHza9YHy2Eq4sHbB+vKZ1fzG0LuTHBSO?=
+ =?us-ascii?Q?W9PLHLJD/iOSI0lhbeqFLVWNA4rFcg1YErWTX+SV6HDen2uR0jH6paAUaSrq?=
+ =?us-ascii?Q?Ttotlmbn+cpIwgCuki6KA/2u3AV19GGrcymoBaB4nbKo8fW2MPU8H6eSCqJi?=
+ =?us-ascii?Q?ABFRczezuB2C4B8Yt8v3UJIzVOQS4T3euEzwxWMJuaGqxIFNM+y6WZRZEAvD?=
+ =?us-ascii?Q?4DwRvyCTv6QiezvpL2Ca6JP7u0kKiuI4O4rh1WHy1zINsnoWARbiPRCzub/e?=
+ =?us-ascii?Q?rqec+JKqlEkMk3SmdcD7Bvn6CQuNEM9BO/kcPXDGHDm3GF03jTtha7OEDe99?=
+ =?us-ascii?Q?H/1KgBDBECykAN7/Ld9LrxYWzq79y1PrwZDmf/4kW+k4ImpdXUQ0hGyOKQAQ?=
+ =?us-ascii?Q?qQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	TfSO8SgLuMVCULvgjOC9f0teWjUKOvkOcXJIpbSsGNH+ml4SD4twMxVZk39CEckFPZLmb5nTYRZfUVPnXMpMuwHoTYIGBvJd/jwK7ZxGufk5YTDsWQsHd2PtKXS+pZJ+pPni7bd3k1jqu5SjUqyq8mRiNO/sy3IsjhnWmuounv/8GP1TlxcdMh2Z52/wtzP7YGNEZeAJsbILiscmkkC6wx6JQ5dsNPGU6iLddD/3E5gG/fJb8nM44n7Xs7fGkvCJfZad7tQdKHoxvEdQcwgmSOZ/9PK1Hcy8xs47OUNOWtoIaS/S7/oblcGZX8RYVnS9wOC7X22Dvqytin28YM7hlwcnU9aHaDQklV8aEIus/up8ljTXJy34PHOq0ZmZJVoCEpDwzpKhMIyAJOfvtvFNAsjYnibKLMx7DutN5TZC03R16GaQlkiiZ4/cJadw7Gp6gWsbvz32l+sn7pqQaVeQtLAf90rSILzdFZ8hnq06R/JVbUmvStU/CxK+r+RM2ikTSp/XPByxDJAFrXi0c4Ok3S5va/ghqLySYqGU2GNYgmx5h1tBC8wPuXGOvtV8AFyvs4Qs46swnaspDAgdOBi9XIwR5izl4/Q9QazWBnzmM0c=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d4ddcb8-9a4f-48a7-bce5-08dc398c8b65
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2024 01:11:37.7787
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IBV5JodMi1uYUFpmDzqDTxafZdhteBhIad+lMjp4UjdjV7JZkyxxjYkvwcv2wOKewS/7i0kNYdzjh4HEP6ULxlnfk+KVD+Quop0czYOJt1Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6081
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-29_07,2024-02-29_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 spamscore=0
+ mlxlogscore=999 adultscore=0 mlxscore=0 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2403010008
+X-Proofpoint-ORIG-GUID: rcESslzUhW-pClFl5dDdAd7yMk7Hx6Dy
+X-Proofpoint-GUID: rcESslzUhW-pClFl5dDdAd7yMk7Hx6Dy
 
-Motivation
-----------
 
-The kernel already retrieves and caches the binary device object store
-(BOS) descriptor from USB devices it enumerates. Export this descriptor to
-userspace via sysfs, so users do not need to open the USB device with the
-correct permissions and requesting the descriptor themselves.
+Alan,
 
-A BOS descriptor contains a set of device capability descriptors. One that
-is of interest to users is the platform descriptor. This contains a 128-bit
-UUID and arbitrary data. The descriptor allows parties outside of USB-IF to
-add additional metadata about a device in a standards-compliant manner.
+> The isd200 sub-driver in usb-storage uses the HEADS and SECTORS values
+> in the ATA ID information to calculate cylinder and head values when
+> creating a CDB for READ or WRITE commands. The calculation involves
+> division and modulus operations, which will cause a crash if either of
+> these values is 0. While this never happens with a genuine device, it
+> could happen with a flawed or subversive emulation, as reported by the
+> syzbot fuzzer.
 
-Notable examples include the WebUSB and Microsoft OS 2.0 descriptors. Of
-course, there could be more. By exporting the entire BOS descriptor we can
-handle these and all future device capabilities. In addition, tools like
-udev can match rules on device capabilities in the BOS without requiring
-additional I/O with the USB device.
+Looks good to me.
 
-Implementation
---------------
+Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
 
-Add bos_descriptor file to sysfs. This is a binary file and it works the
-same way as the existing descriptors file. The file exists even if a device
-does not have a BOS descriptor (the file will be empty in this case). This
-allows users to detect if the kernel supports reading the BOS via sysfs and
-fall back to direct USB I/O if needed.
-
-Signed-off-by: Elbert Mai <code@elbertmai.com>
----
- Documentation/ABI/testing/sysfs-bus-usb |  9 +++++++
- drivers/usb/core/sysfs.c                | 35 ++++++++++++++++++++++++-
- 2 files changed, 43 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/te=
-sting/sysfs-bus-usb
-index 614d216dff1d..bfffaa752a13 100644
---- a/Documentation/ABI/testing/sysfs-bus-usb
-+++ b/Documentation/ABI/testing/sysfs-bus-usb
-@@ -293,3 +293,12 @@ Description:
- =09=09USB 3.2 adds Dual-lane support, 2 rx and 2 tx -lanes over Type-C.
- =09=09Inter-Chip SSIC devices support asymmetric lanes up to 4 lanes per
- =09=09direction. Devices before USB 3.2 are single lane (tx_lanes =3D 1)
-+
-+What:=09=09/sys/bus/usb/devices/.../bos_descriptor
-+Date:=09=09March 2024
-+Contact:=09Elbert Mai <code@elbertmai.com>
-+Description:
-+=09=09Binary file containing the cached binary device object store (BOS)
-+=09=09descriptor of the device. This file is empty if the BOS descriptor
-+=09=09is not present. The kernel will not request a BOS descriptor from
-+=09=09the device if its bcdUSB value is less than 0x0201.
-diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
-index a2ca38e25e0c..208d2f8cde2d 100644
---- a/drivers/usb/core/sysfs.c
-+++ b/drivers/usb/core/sysfs.c
-@@ -901,7 +901,7 @@ read_descriptors(struct file *filp, struct kobject *kob=
-j,
- =09=09=09srclen =3D sizeof(struct usb_device_descriptor);
- =09=09} else {
- =09=09=09src =3D udev->rawdescriptors[cfgno];
--=09=09=09srclen =3D __le16_to_cpu(udev->config[cfgno].desc.
-+=09=09=09srclen =3D le16_to_cpu(udev->config[cfgno].desc.
- =09=09=09=09=09wTotalLength);
- =09=09}
- =09=09if (off < srclen) {
-@@ -923,6 +923,34 @@ static struct bin_attribute dev_bin_attr_descriptors =
-=3D {
- =09.size =3D 18 + 65535,=09/* dev descr + max-size raw descriptor */
- };
-=20
-+static ssize_t
-+read_bos_descriptor(struct file *filp, struct kobject *kobj,
-+=09=09struct bin_attribute *attr,
-+=09=09char *buf, loff_t off, size_t count)
-+{
-+=09struct device *dev =3D kobj_to_dev(kobj);
-+=09struct usb_device *udev =3D to_usb_device(dev);
-+=09struct usb_host_bos *bos =3D udev->bos;
-+=09struct usb_bos_descriptor *desc;
-+=09size_t desclen, n =3D 0;
-+
-+=09if (bos) {
-+=09=09desc =3D bos->desc;
-+=09=09desclen =3D le16_to_cpu(desc->wTotalLength);
-+=09=09if (off < desclen) {
-+=09=09=09n =3D min(count, desclen - (size_t) off);
-+=09=09=09memcpy(buf, (void *) desc + off, n);
-+=09=09}
-+=09}
-+=09return n;
-+}
-+
-+static struct bin_attribute dev_bin_attr_bos_descriptor =3D {
-+=09.attr =3D {.name =3D "bos_descriptor", .mode =3D 0444},
-+=09.read =3D read_bos_descriptor,
-+=09.size =3D 65535,=09/* max-size BOS descriptor */
-+};
-+
- /*
-  * Show & store the current value of authorized_default
-  */
-@@ -1042,6 +1070,10 @@ int usb_create_sysfs_dev_files(struct usb_device *ud=
-ev)
- =09if (retval)
- =09=09goto error;
-=20
-+=09retval =3D device_create_bin_file(dev, &dev_bin_attr_bos_descriptor);
-+=09if (retval)
-+=09=09goto error;
-+
- =09retval =3D add_persist_attributes(dev);
- =09if (retval)
- =09=09goto error;
-@@ -1071,6 +1103,7 @@ void usb_remove_sysfs_dev_files(struct usb_device *ud=
-ev)
-=20
- =09remove_power_attributes(dev);
- =09remove_persist_attributes(dev);
-+=09device_remove_bin_file(dev, &dev_bin_attr_bos_descriptor);
- =09device_remove_bin_file(dev, &dev_bin_attr_descriptors);
- }
-=20
---=20
-2.34.1
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
 
