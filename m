@@ -1,111 +1,103 @@
-Return-Path: <linux-usb+bounces-7397-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7398-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94C0286E668
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 17:57:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C008186E675
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 17:58:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B0D71F29870
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 16:57:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71AA128AEB9
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 16:58:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46DB92746D;
-	Fri,  1 Mar 2024 16:48:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vK8j+s0j"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E2583A1A7;
+	Fri,  1 Mar 2024 16:53:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C791F612B
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 16:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id C889039AE6
+	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 16:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709311684; cv=none; b=iLhfDfpP8WDxPoiItft4X/4CNcifxXljs63UWhfk8jm32cL2RF8wyj1QJhhCcyiUkFCD16r/ZFdBH0N87Z69WbSRGgCgwXsoSpQF6Nr1l/4JIM68A62n/PdFHbyos+fJzNkSw1gW6rmWY+Ag+1Jc9enOFYiyePvP4FTYyOvvmwo=
+	t=1709312035; cv=none; b=e0ycjxoPXp1ARlgTx4uhecwQEvuXHceyA/Symz65f8LTV7lqnBmAJPcA9nm9Ltlr0qXWlA72cyOIKwxScnu/HCLb7kITYcESyIi/doy/tYQzHGXRNiLRe8IV+NsayGWUTg5oVdseZ5/NZg9Kqbleqm99IJL46fG1haAyQv/fhO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709311684; c=relaxed/simple;
-	bh=nMp2JSwNhcjULm38nOhAwm8AarHvMkyRtr8Sqy6fJUw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QvhECwEmkJbByZL9ulr3XvEEfO4k0KNtmwoYIC0bu1TeH/qCv/PwY59s043gBYoTa7JaH1ht+rQHENNRTcWnG782Qq47TeImn4rJPqdeNkw3en0/RnSeHu9ZeEbYTEzu6XYob4BkZ8D68AeX7M+xboqudsRo8s1AOX6nGDcY+iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vK8j+s0j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 52DA5C433F1
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 16:48:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709311684;
-	bh=nMp2JSwNhcjULm38nOhAwm8AarHvMkyRtr8Sqy6fJUw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=vK8j+s0jahotQn+CBH2LSpXCEbgicAXCJkqw8vLH9aN75gecJ3pCyiuC3t+KleICo
-	 vWWD7n9lb+1d4AbccZXYFePXmsO42eGzrOaEMfB5QTK1IPuju+Em7UxJTZXfdFvh6P
-	 bUDiBLY2URqEGpBCh8dsJaNGFayULsXs+cHAVwjCA37He/sRicLblcv/l+5RVt/0Ft
-	 eguBPvx2dq97VdBkfnQ74U9AbsmXSX2RobNSVd6p4HstUPo3xzhlfk+fM5wMlztkmQ
-	 xqkUVUV444oT2DxH84ChuUPuvVsqqkouplSusfJXDT/iC/gKJx6CQl2nUcYTGf8w7M
-	 T4962wZr6IWNQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 3C31AC53BD0; Fri,  1 Mar 2024 16:48:04 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
- audio
-Date: Fri, 01 Mar 2024 16:48:04 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-218544-208809-zPxeyawK0u@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
-References: <bug-218544-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1709312035; c=relaxed/simple;
+	bh=29SVKj6G+k0fROpoD+ltEVOKHLMNDqiZ/KNCqWGiZI0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A/owANEblCgtBEedGoNwb9WQ9KF3ShVBmvgww4cA3Eo0yU6eWE+E/0vKe8jCLHSzeCeRoqSz3tjPWZ1zFb291DSr9ZMPOjDAXh6v+Wjpqi3EWMvLirt105KtlgVVttOPgNpB/ftvBVGO550uMxsb3SFtKCFESlkaG9EoYaBRqYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 39476 invoked by uid 1000); 1 Mar 2024 11:53:45 -0500
+Date: Fri, 1 Mar 2024 11:53:45 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Tom Hu <huxiaoying@kylinos.cn>
+Cc: linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+  linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+Subject: Re: [PATCH] usb-storage: Add Brain USB3-FW to IGNORE_UAS
+Message-ID: <a960f1c2-a858-498e-a0cf-4c15d74487d5@rowland.harvard.edu>
+References: <20240226075936.1744353-1-huxiaoying@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240226075936.1744353-1-huxiaoying@kylinos.cn>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
+On Mon, Feb 26, 2024 at 03:59:36PM +0800, Tom Hu wrote:
+> The UAS mode of BRAIN USB_HDD is reported to fail to work on several
+> platforms with the following error message, then after re-connecting the
+> device will be offlined and not working at all.
+> 
+> [  622.518442][ 2] sd 8:0:0:0: [sda] tag#17 uas_eh_abort_handler 0 uas-tag 18
+>                    inflight: CMD
+> [  622.527575][ 2] sd 8:0:0:0: [sda] tag#17 CDB: Write(10) 2a 00 03 6f 88 00 00
+>                    04 00 00
+> [  622.536330][ 2] sd 8:0:0:0: [sda] tag#0 uas_eh_abort_handler 0 uas-tag 1
+>                    inflight: CMD
+> [  622.545266][ 2] sd 8:0:0:0: [sda] tag#0 CDB: Write(10) 2a 00 07 44 1a 88 00
+>                    00 08 00
+> 
+> These disks have a broken uas implementation, the tag field of the status
+> iu-s is not set properly, so we need to fall-back to usb-storage.
+> 
+> Signed-off-by: Hu Xiaoying <huxiaoying@kylinos.cn>
+> 1
 
-Alan Stern (stern@rowland.harvard.edu) changed:
+What is that 1?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |stern@rowland.harvard.edu
+> ---
+>  drivers/usb/storage/unusual_uas.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+> index 1f8c9b16a0fb..98b7ff2c76ba 100644
+> --- a/drivers/usb/storage/unusual_uas.h
+> +++ b/drivers/usb/storage/unusual_uas.h
+> @@ -83,6 +83,13 @@ UNUSUAL_DEV(0x0bc2, 0x331a, 0x0000, 0x9999,
+>  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>  		US_FL_NO_REPORT_LUNS),
+>  
+> +/* Reported-by: Tom Hu <huxiaoying@kylinos.cn> */
+> +UNUSUAL_DEV(0x1234, 0x1234, 0x0000, 0x9999,
 
---- Comment #5 from Alan Stern (stern@rowland.harvard.edu) ---
-The devices file shows that the Synaptics audio device is sharing the same =
-bus
-with a Broadcom Bluetooth device.  Maybe if you disabled that device the au=
-dio
-would work better.  Try doing:
+The vendor and product ID values have a suspicious look, but they appear 
+to be genuine.
 
-  echo 0 >/sys/bus/usb/devices/1-1.4/bConfigurationValue
+> +		"Brain",
+> +		"External HDD",
+> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> +		US_FL_IGNORE_UAS),
+> +
+>  /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
+>  UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
+>  		"Initio Corporation",
+> -- 
+> 2.25.1
 
-and then trying the audio.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-There's also a video camera on that bus, but since it runs at high speed ra=
-ther
-than full speed, it probably isn't interfering significantly.  If you want,=
- you
-can try disabling it also by issuing the same command with 1-1.6 in place of
-1-1.4.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Alan Stern
 
