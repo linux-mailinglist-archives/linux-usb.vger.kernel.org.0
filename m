@@ -1,209 +1,117 @@
-Return-Path: <linux-usb+bounces-7375-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7376-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0E7B86DB63
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 07:18:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B7F086DB95
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 07:42:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09DB41C226AD
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 06:18:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A63B61C22DD4
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 06:42:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB085F569;
-	Fri,  1 Mar 2024 06:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59F5167E74;
+	Fri,  1 Mar 2024 06:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JGDbc42F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RUG8Ks1C"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A05F2AEEE;
-	Fri,  1 Mar 2024 06:18:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D387C67E62
+	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 06:42:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709273918; cv=none; b=nMF7NsUpq47YGrRzN5Bs980QwXyufPdlLaAdBda1VR0s0hRY+5/0JnQCMYoWuCiV2WTI0Z5rFp+vusMJnoAznfH0fcrj3lZ9Lvb3X43pvTbZ+DoI3T00xQBt9vK2Igrvxm2lMup7yZRNLH7I23LqeGlHin0OiFbMw7veEvzfHKc=
+	t=1709275330; cv=none; b=F/E5R5D1WDxu1J7z6xndMIqkf8FGqLdcTBUdp1WkqEvSip1X2hFQ4EHmzDYPaV1p7qIsbgLe+D/QMJbhfvfnnSe6bEK3BzU0Fg5aTWvqlaL5iwcWQiAmKB9aKXGyaAFzqnwLRg6VM+11Owi5u8e/b6MJQwfAQWTK8wmwA32o7yM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709273918; c=relaxed/simple;
-	bh=9CfH8/yUzS+Jiv3d7W0cC2LNTETeND1FrcCNlL5PePY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kQaaQFoMg+OvCauDp048aF20T+61nElT01+LWoN/G27/M+09IA79YSzFlmPf2yGZPE9Tkfs33J9t6KSSpY/NZRBnRhAA6zWGxaogYVy/fdxhKDUtGoYSQ9cquehb/UNQrn2kieU8l11/0tAIvQMwm7Uc7bIPvHHbp1xW3gMo7zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JGDbc42F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C197C433F1;
-	Fri,  1 Mar 2024 06:18:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709273917;
-	bh=9CfH8/yUzS+Jiv3d7W0cC2LNTETeND1FrcCNlL5PePY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JGDbc42FoWlRnZ3Tg/zkYtWmX+DQDkPv0RT4+SFsUrurtNAcZTvYlQuH79rymvRl2
-	 OcZzBqEKa0grASr8itj2oIvb/qpA182QhXwbzF2AfDT2Pm5hd/+mJClLYCuSBDNT3y
-	 b+v3hQlIrvPbSRYeFcJrILX2orPKrqCm0vJI7QpU=
-Date: Fri, 1 Mar 2024 07:18:34 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Elbert Mai <code@elbertmai.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: Export BOS descriptor to sysfs
-Message-ID: <2024030142-gloater-stem-fe94@gregkh>
-References: <20240229235905.569705-1-code@elbertmai.com>
+	s=arc-20240116; t=1709275330; c=relaxed/simple;
+	bh=XMFhkw31VZpZxREME8nCUd4mTdVkExOFjZEVylXZOlE=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TNMaV3etDi4h1DbEdoqis/CuaxVbm2SCgtLzLc1nz1HWar8fRl+IbGyrcXL2g2f5OIndZEHXpRLD0dp9w76qc8Cngc+cLdZ5TO+l+ZsvTN5JYiPixLKqZTLz3aAAlZq7WCy+N+oF6eLdF++Hta47uHjelI2aH3vGckFlKJN/Kjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RUG8Ks1C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F345C43390
+	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 06:42:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709275330;
+	bh=XMFhkw31VZpZxREME8nCUd4mTdVkExOFjZEVylXZOlE=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=RUG8Ks1Cwy5dix0QGhCfRhOiYyuPChuZ3AZw2x3u81QsVIl6k9NNQFTMYAtKxZX2z
+	 XjZoHWlH0UMce8D7JB29QDDkoYnHCO1nKEZ+J8NdAuwtSO2sG4x4sx0MXuY+kAa/8T
+	 q5Q6OEIaSf6iUjkTGihkF3AJn+GSNaYQKn2iBabMl9DJb+ucQU8weJf6V4KhxAuLAf
+	 y1kfDBo/yoyQEBz/r52G9MSzwTjMy1LidKM81dc4vaAEOzuXykpLaaRqoUV++PM8Fk
+	 OXIlNJ+4DUc3s556XJ3Vi8qRlS5zpuZ8O3/ECtVSnet7WtJrmh6H0EBfjfItOMif5W
+	 lv/G7FpafPXng==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 39080C53BC6; Fri,  1 Mar 2024 06:42:10 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218525] Thunderbolt eGPU bad performance
+Date: Fri, 01 Mar 2024 06:42:10 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mika.westerberg@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218525-208809-zB2VVaxyjh@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218525-208809@https.bugzilla.kernel.org/>
+References: <bug-218525-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240229235905.569705-1-code@elbertmai.com>
 
-On Thu, Feb 29, 2024 at 03:59:05PM -0800, Elbert Mai wrote:
-> Motivation
-> ----------
-> 
-> The kernel already retrieves and caches the binary device object store
-> (BOS) descriptor from USB devices it enumerates. Export this descriptor to
-> userspace via sysfs, so users do not need to open the USB device with the
-> correct permissions and requesting the descriptor themselves.
-> 
-> A BOS descriptor contains a set of device capability descriptors. One that
-> is of interest to users is the platform descriptor. This contains a 128-bit
-> UUID and arbitrary data. The descriptor allows parties outside of USB-IF to
-> add additional metadata about a device in a standards-compliant manner.
-> 
-> Notable examples include the WebUSB and Microsoft OS 2.0 descriptors. Of
-> course, there could be more. By exporting the entire BOS descriptor we can
-> handle these and all future device capabilities. In addition, tools like
-> udev can match rules on device capabilities in the BOS without requiring
-> additional I/O with the USB device.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218525
 
-But this requires that userspace parse the raw descriptor, right?  Why
-not also export the descriptor information in simpler form through
-different sysfs files as well so that scripts can read this information
-easily?
+--- Comment #9 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
+Okay I see a couple of things from HW side that may affect (or may not). Fi=
+rst
+is that the real PCIe link to the 06:00 eGPU device is running on limited
+bandwidth:
 
-That's not to say we don't also want this binary file, just maybe add
-more?
+                LnkSta: Speed 5GT/s (downgraded), Width x4 (downgraded)
+                        TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
 
-> Implementation
-> --------------
-> 
-> Add bos_descriptor file to sysfs. This is a binary file and it works the
-> same way as the existing descriptors file. The file exists even if a device
-> does not have a BOS descriptor (the file will be empty in this case). This
-> allows users to detect if the kernel supports reading the BOS via sysfs and
-> fall back to direct USB I/O if needed.
 
-This is nice, but can you only create the file if it actually is
-present?  Use the is_visible callback to determine this, having an
-"empty" binary sysfs file isn't that nice.
+I don't know why this is but it could be that the graphics driver tunes this
+because it finds the virtual links only supporting gen 1 speeds. However, t=
+his
+is not true, the virtual PCIe links over Thunderbolt can get up to 90% of t=
+he
+40G link if there is no other tunneling (such as DisplayPort).
 
-Other tiny review comments below:
+The second thing is that there is ASPM L1 enabled on this same real PCIe li=
+nk:
 
-> Signed-off-by: Elbert Mai <code@elbertmai.com>
-> ---
->  Documentation/ABI/testing/sysfs-bus-usb |  9 +++++++
->  drivers/usb/core/sysfs.c                | 35 ++++++++++++++++++++++++-
->  2 files changed, 43 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
-> index 614d216dff1d..bfffaa752a13 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-usb
-> +++ b/Documentation/ABI/testing/sysfs-bus-usb
-> @@ -293,3 +293,12 @@ Description:
->  		USB 3.2 adds Dual-lane support, 2 rx and 2 tx -lanes over Type-C.
->  		Inter-Chip SSIC devices support asymmetric lanes up to 4 lanes per
->  		direction. Devices before USB 3.2 are single lane (tx_lanes = 1)
-> +
-> +What:		/sys/bus/usb/devices/.../bos_descriptor
-> +Date:		March 2024
-> +Contact:	Elbert Mai <code@elbertmai.com>
-> +Description:
-> +		Binary file containing the cached binary device object store (BOS)
-> +		descriptor of the device. This file is empty if the BOS descriptor
-> +		is not present. The kernel will not request a BOS descriptor from
-> +		the device if its bcdUSB value is less than 0x0201.
-> diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
-> index a2ca38e25e0c..208d2f8cde2d 100644
-> --- a/drivers/usb/core/sysfs.c
-> +++ b/drivers/usb/core/sysfs.c
-> @@ -901,7 +901,7 @@ read_descriptors(struct file *filp, struct kobject *kobj,
->  			srclen = sizeof(struct usb_device_descriptor);
->  		} else {
->  			src = udev->rawdescriptors[cfgno];
-> -			srclen = __le16_to_cpu(udev->config[cfgno].desc.
-> +			srclen = le16_to_cpu(udev->config[cfgno].desc.
+                LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+                        ExtSynch- ClockPM+ AutWidDis- BWInt- AutBWInt-
 
-Why is this line changed?
+I suggest trying to disable it. Passing something like
+"pcie_aspm.policy=3Dperformance" should make the above to turn into ASPM di=
+sabled
+or so.
 
->  					wTotalLength);
->  		}
->  		if (off < srclen) {
-> @@ -923,6 +923,34 @@ static struct bin_attribute dev_bin_attr_descriptors = {
->  	.size = 18 + 65535,	/* dev descr + max-size raw descriptor */
->  };
->  
-> +static ssize_t
-> +read_bos_descriptor(struct file *filp, struct kobject *kobj,
-> +		struct bin_attribute *attr,
-> +		char *buf, loff_t off, size_t count)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct usb_device *udev = to_usb_device(dev);
-> +	struct usb_host_bos *bos = udev->bos;
-> +	struct usb_bos_descriptor *desc;
-> +	size_t desclen, n = 0;
-> +
-> +	if (bos) {
-> +		desc = bos->desc;
-> +		desclen = le16_to_cpu(desc->wTotalLength);
-> +		if (off < desclen) {
-> +			n = min(count, desclen - (size_t) off);
-> +			memcpy(buf, (void *) desc + off, n);
-> +		}
-> +	}
-> +	return n;
+Also I suggest experimenting to disable IOMMU (pass intel_iommu=3Doff in the
+kernel command line).
 
-If bos is not present an error should return, not 0, right?
+--=20
+You may reply to this email to add a comment.
 
-> +}
-> +
-> +static struct bin_attribute dev_bin_attr_bos_descriptor = {
-> +	.attr = {.name = "bos_descriptor", .mode = 0444},
-> +	.read = read_bos_descriptor,
-
-Isn't there a mscro for all of this?
-
-> +	.size = 65535,	/* max-size BOS descriptor */
-
-Do we know the size of the descriptor at runtime?  Ideally we would set
-it to be that, not an unknown size that way userspace knows what needs
-to be read.  But that's not really a big deal, if it's not possible, as
-the other USB binary descriptor does much the same.
-
-> +};
-
-This should go into an attribute group with the other descriptor, making
-the rest of the patch not needed and simpler.
-
-> +
->  /*
->   * Show & store the current value of authorized_default
->   */
-> @@ -1042,6 +1070,10 @@ int usb_create_sysfs_dev_files(struct usb_device *udev)
->  	if (retval)
->  		goto error;
->  
-> +	retval = device_create_bin_file(dev, &dev_bin_attr_bos_descriptor);
-> +	if (retval)
-> +		goto error;
-> +
-
-long-term I'd like to get rid of the individual "add and remove" sysfs
-files in this function, and just use the default groups instead so the
-driver core handles it.  It's not an issue here for this change, but if
-you can find a way to work on that as part of a patch series here, I
-think that would be really good (if possible, not a requirement.)
-
-thanks!
-
-greg k-h
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
