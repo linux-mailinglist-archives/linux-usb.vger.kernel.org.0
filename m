@@ -1,171 +1,156 @@
-Return-Path: <linux-usb+bounces-7384-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7385-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 765A886E0D4
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 13:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31DA186E147
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 13:47:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 983961C22ACE
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 12:06:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 533AA1C21707
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 12:47:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7E296D52E;
-	Fri,  1 Mar 2024 12:06:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="JIgnldDX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 913303FBBE;
+	Fri,  1 Mar 2024 12:47:25 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BB26CDB8;
-	Fri,  1 Mar 2024 12:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B970E7E1;
+	Fri,  1 Mar 2024 12:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.241.18.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709294769; cv=none; b=EgYRlqw98a9UwTKKfBb/w5JedxKc4Y637Y/hWLt6Y8LEsb6Kt4woz6R7BfPdzluojyDsI58vLujtXvB2ZjOjCUyoQ72udMH6X1oUdBdcf0VOgSSLK7uGBUQiCmTHzjx/2vrjEa+cHPPvxg6GTD/Fusn+Akvhwj/sEYN2bMr/J9k=
+	t=1709297245; cv=none; b=cbwJZklosJBHmaQGSu3gsL0VS+khS7+bzzn9yCGtA9R0ZPdRrQOkW8GU/7pTDS6I3WH9hJkrYXNNpO53dhJkParSnBRTNeJhpZWYaz6RvSOayVGu+0ZYrncAnLfndJl2JfQpFHzoppQylpthUz6j3nS8nZ6o7Rz6qiUTDbsom+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709294769; c=relaxed/simple;
-	bh=VfJLA+apQ2y27CyTOnJ6ONaS3IDWYlPAkRiDGThMQtE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GGRgfy05Qz7DbpqRgSJ1utMxcqng4Cbga0RHaffFQ97vUfvrUWs4z5PsakTysqEd9Qu4ge8uow50DPrc2zPxc6BRcCD912Cf9EYfgldQnWCSlYLXX4/F+2H1I/H6XvCP+fy1PNMDBEWpMmIqacXSJzfiZy91IW6Z4GFtY3QJllw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=JIgnldDX; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709294764;
-	bh=VfJLA+apQ2y27CyTOnJ6ONaS3IDWYlPAkRiDGThMQtE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JIgnldDXK8GgmRbTZW0t8M8yH3HcNouSz/z+AgCcAlJ6WH2eCNhX8pdb8NWeIOI6k
-	 G+0yhyFtYrPCMoTIuM4nfU/ltgK6fkXODsaCVArpsxqZfYHw9z7SFQc/3oXL21Abf9
-	 06Ghc2KAfDIIZwJcreZjySyr7HlrM2L3qq10fS5mJlSHt++IRAwLoQq4zCfGeiMLXI
-	 qd3NHReHyscDhqtrDjT+ZO3kQ4GcsWIpYLyGudUF+AwpnM0KNkR4R/NDDLdrIex6+T
-	 vzQVJuEuMNR+e4uGi+/7HmgQhxe1BtY+J0P3TkPBZe0OdB4Kd1ynjUcfHavlXZB4MC
-	 /Tr0Dmkchc2YQ==
-Received: from [100.95.196.182] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: andrzej.p)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id EBC623780EC6;
-	Fri,  1 Mar 2024 12:06:03 +0000 (UTC)
-Message-ID: <9581f66e-dc3a-495b-bacb-30908a78a773@collabora.com>
-Date: Fri, 1 Mar 2024 13:06:03 +0100
+	s=arc-20240116; t=1709297245; c=relaxed/simple;
+	bh=xmtt/dJqJpEhHTRjQVG1J/CP+alT6/cJsmAw7/JRl/I=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GRrjH4TKJWAk9P02JU/KVhrA97W0losTQzHHYSrvpTESltrjomCYX8vz1NiEQ+mX143gI8r2J/LNaPdtBuk47l2XVFty2lCifMiILFo9X7C6HlFTfJ5eTS85BW5Qk62w1g2coWvWrgPZdifxocGHj/IqKbPTdGnTGLmAnm36etk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=de.adit-jv.com; spf=pass smtp.mailfrom=de.adit-jv.com; arc=none smtp.client-ip=93.241.18.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=de.adit-jv.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=de.adit-jv.com
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 7AE30520252;
+	Fri,  1 Mar 2024 13:47:16 +0100 (CET)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 1 Mar
+ 2024 13:47:16 +0100
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: <gregkh@linuxfoundation.org>, <michael@allwinnertech.com>,
+	<quic_linyyuan@quicinc.com>, <quic_ugoswami@quicinc.com>,
+	<brauner@kernel.org>, <sfr@canb.auug.org.au>, <quic_kriskura@quicinc.com>,
+	<axboe@kernel.dk>, <jlayton@kernel.org>
+CC: <hgajjar@de.adit-jv.com>, <hardik.gajjar@bosch.com>,
+	<eugeniu.rosca@bosch.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH] usb: gadget: f_fs: Add the missing get_alt callback
+Date: Fri, 1 Mar 2024 13:47:08 +0100
+Message-ID: <20240301124708.120394-1-hgajjar@de.adit-jv.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/3] usb: gadget: 9pfs transport
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>,
- Eric Van Hensbergen <ericvh@kernel.org>, Latchesar Ionkov
- <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>,
- Christian Schoenebeck <linux_oss@crudebyte.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: v9fs@lists.linux.dev, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- kernel@pengutronix.de
-References: <20240116-ml-topic-u9p-v3-0-c62a36eccda1@pengutronix.de>
-Content-Language: en-US
-From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20240116-ml-topic-u9p-v3-0-c62a36eccda1@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
 
-Hi Michael,
+The Apple CarLife iAP gadget has a descriptor in userspace with two
+alternate settings. The host sends the set_alt request to configure
+alt_setting 0 or 1, and this is verified by the subsequent get_alt
+request.
 
-W dniu 26.02.2024 o 14:56, Michael Grzeschik pisze:
-> This series is adding support to mount usb hostside exported 9pfs
-> filesystems via the usb gadget interface. It also includes a simple tool
-> (p9_fwd.py) to translate an tcp 9pfs transport and reuse it via the usb
-> interface.
-> 
->      +--------------------------+    |    +--------------------------+
->      |  9PFS mounting client    |    |    |  9PFS exporting server   |
->   SW |                          |    |    |                          |
->      |   (this:trans_usbg)      |    |    |(e.g. diod or nfs-ganesha)|
->      +-------------^------------+    |    +-------------^------------+
->                    |                 |                  |
->                    |                 |           +------v------+
->                    |                 |           |  p9_fwd.py  |
->                    |                 |           +------^------+
->                    |                 |                  |
-> ------------------|------------------------------------|-------------
->                    |                 |                  |
->      +-------------v------------+    |    +-------------v------------+
->      |                          |    |    |                          |
->   HW |   USB Device Controller  <--------->   USB Host Controller    |
->      |                          |    |    |                          |
->      +--------------------------+    |    +--------------------------+
-> 
-> The USB host exports a filesystem, while the gadget on the USB device
-> side makes it mountable.
-> 
-> Diod (9pfs server) and the forwarder are on the development host, where
-> the root filesystem is actually stored. The gadget is initialized during
-> boot (or later) on the embedded board. Then the forwarder will find it
-> on the USB bus and start forwarding requests.
-> 
-> In this case the 9p requests come from the device and are handled by the
-> host. The reason is that USB device ports are normally not available on
-> PCs, so a connection in the other direction would not work.
-> 
-> One use-case is to use it as an alternative to NFS root booting during
-> the development of embedded Linux devices.
-> 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> ---
-> Changes in v3:
-> - dropped patch "usb: gadget: legacy: add 9pfs multi gadget" as discussed with gregkh
+This patch implements and sets the get_alt callback. Without the
+get_alt callback, composite.c abruptly concludes the
+USB_REQ_GET/SET_INTERFACE request, assuming only one alt setting
+for the endpoint.
 
-I will give the dropped patch a try to see how it works, as it should work the
-same way regardless of how the gadget is composed, legacy or configfs.
+unlike the uvc and ncm, f_fs gadget is fully implemented in userspace,
+and driver just reset the eps and generate the event. so no additional
+adaptaion associated with this change is not required in set_alt callback
 
-Speaking of the latter, IMO there _are_ valid usecases other than having 9pfs
-rootfs, so configfs support should be there. If you intend to send the patches
-adding configfs support then kindly Cc me and I will test and review it for you.
+Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+---
+ drivers/usb/gadget/function/f_fs.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-Regards,
-
-Andrzej
-
-> - Link to v2: https://lore.kernel.org/r/20240116-ml-topic-u9p-v2-0-b46cbf592962@pengutronix.de
-> 
-> Changes in v2:
-> - improved the commit messages
-> - introduced an patch to move the header u_f.h to include/linux/usb to compile usb gadget functions treewide
-> - moved usbg gadget function to net/9p/
-> - adderessed several comments in function driver, like the cleanup path and kbuild errors
-> - improved the documentation in Documentation/filesystems/9p.rst
-> - Link to v1: https://lore.kernel.org/r/20240116-ml-topic-u9p-v1-0-ad8c306f9a4e@pengutronix.de
-> 
-> ---
-> Michael Grzeschik (3):
->        usb: gadget: function: move u_f.h to include/linux/usb/
->        net/9p/usbg: Add new usb gadget function transport
->        tools: usb: p9_fwd: add usb gadget packet forwarder script
-> 
->   Documentation/filesystems/9p.rst                |  47 ++
->   drivers/usb/gadget/configfs.c                   |   2 +-
->   drivers/usb/gadget/function/f_fs.c              |   2 +-
->   drivers/usb/gadget/function/f_hid.c             |   2 +-
->   drivers/usb/gadget/function/f_loopback.c        |   2 +-
->   drivers/usb/gadget/function/f_midi.c            |   2 +-
->   drivers/usb/gadget/function/f_midi2.c           |   2 +-
->   drivers/usb/gadget/function/f_sourcesink.c      |   2 +-
->   drivers/usb/gadget/u_f.c                        |   2 +-
->   {drivers/usb/gadget => include/linux/usb}/u_f.h |   0
->   net/9p/Kconfig                                  |   6 +
->   net/9p/Makefile                                 |   4 +
->   net/9p/trans_usbg.c                             | 871 ++++++++++++++++++++++++
->   tools/usb/p9_fwd.py                             | 194 ++++++
->   14 files changed, 1130 insertions(+), 8 deletions(-)
-> ---
-> base-commit: 41bccc98fb7931d63d03f326a746ac4d429c1dd3
-> change-id: 20240116-ml-topic-u9p-895274530eb1
-> 
-> Best regards,
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 6bff6cb93789..a3e8cf7963e7 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -42,6 +42,7 @@
+ #include "configfs.h"
+ 
+ #define FUNCTIONFS_MAGIC	0xa647361 /* Chosen by a honest dice roll ;) */
++#define MAX_ALT_SETTINGS	2		  /* Allow up to 2 alt settings to be set. */
+ 
+ /* Reference counter handling */
+ static void ffs_data_get(struct ffs_data *ffs);
+@@ -75,6 +76,7 @@ struct ffs_function {
+ 	short				*interfaces_nums;
+ 
+ 	struct usb_function		function;
++	int				cur_alt[MAX_CONFIG_INTERFACES];
+ };
+ 
+ 
+@@ -98,6 +100,7 @@ static int __must_check ffs_func_eps_enable(struct ffs_function *func);
+ static int ffs_func_bind(struct usb_configuration *,
+ 			 struct usb_function *);
+ static int ffs_func_set_alt(struct usb_function *, unsigned, unsigned);
++static int ffs_func_get_alt(struct usb_function *f, unsigned int intf);
+ static void ffs_func_disable(struct usb_function *);
+ static int ffs_func_setup(struct usb_function *,
+ 			  const struct usb_ctrlrequest *);
+@@ -3231,6 +3234,15 @@ static void ffs_reset_work(struct work_struct *work)
+ 	ffs_data_reset(ffs);
+ }
+ 
++static int ffs_func_get_alt(struct usb_function *f,
++			    unsigned int interface)
++{
++	struct ffs_function *func = ffs_func_from_usb(f);
++	int intf = ffs_func_revmap_intf(func, interface);
++
++	return (intf < 0) ? intf : func->cur_alt[interface];
++}
++
+ static int ffs_func_set_alt(struct usb_function *f,
+ 			    unsigned interface, unsigned alt)
+ {
+@@ -3238,6 +3250,9 @@ static int ffs_func_set_alt(struct usb_function *f,
+ 	struct ffs_data *ffs = func->ffs;
+ 	int ret = 0, intf;
+ 
++	if (alt > MAX_ALT_SETTINGS)
++		return -EINVAL;
++
+ 	if (alt != (unsigned)-1) {
+ 		intf = ffs_func_revmap_intf(func, interface);
+ 		if (intf < 0)
+@@ -3265,8 +3280,10 @@ static int ffs_func_set_alt(struct usb_function *f,
+ 
+ 	ffs->func = func;
+ 	ret = ffs_func_eps_enable(func);
+-	if (ret >= 0)
++	if (ret >= 0) {
+ 		ffs_event_add(ffs, FUNCTIONFS_ENABLE);
++		func->cur_alt[interface] = alt;
++	}
+ 	return ret;
+ }
+ 
+@@ -3573,6 +3590,7 @@ static struct usb_function *ffs_alloc(struct usb_function_instance *fi)
+ 	func->function.bind    = ffs_func_bind;
+ 	func->function.unbind  = ffs_func_unbind;
+ 	func->function.set_alt = ffs_func_set_alt;
++	func->function.get_alt = ffs_func_get_alt;
+ 	func->function.disable = ffs_func_disable;
+ 	func->function.setup   = ffs_func_setup;
+ 	func->function.req_match = ffs_func_req_match;
+-- 
+2.17.1
 
 
