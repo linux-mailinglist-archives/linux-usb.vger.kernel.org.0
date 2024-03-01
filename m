@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-7394-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7395-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87DCC86E527
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 17:20:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9207C86E528
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 17:21:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93EEE1C22795
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 16:20:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CBA3B21F31
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 16:21:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BAF870022;
-	Fri,  1 Mar 2024 16:20:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80B2970CAA;
+	Fri,  1 Mar 2024 16:21:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HvaSxomz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FFJJQdYp"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7CF40BE3
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 16:20:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0894F40BE3
+	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 16:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709310014; cv=none; b=EfxKdM2cxFHhmbeEDPG1GjYeF6RDs3JTIK0i5f34FLK6899nCZQWQxeVoA4AJeeWkhJJ5HJ+ADlDgLNfAmZvk6WB2oya/71brwP2x0FaqcANpwMZaYcSamiygM0vHGMK2VxY4DNkWAONXV2qckwW/XLXcbWtvwpzF22AoHQ5V4k=
+	t=1709310067; cv=none; b=qQh0xUcd7Q6jGo+U3btL/J9r3wcSG0rlikq2p1SusJjDsiuyPUlbRMrmRZ75eybVoK5+XWzPt/6yGtVn7lUPyoKLIpG6S0ReSIdmQV2GfDfnZPWTfIexfnlhH4yB/PL22RKnVKn6GlZUq4rt66UigGCHBJkAzrrM09I28TvwuJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709310014; c=relaxed/simple;
-	bh=ekpTJpVdacJCYLdiit9TmaAo78LyXKfXeDboyLh47Fc=;
+	s=arc-20240116; t=1709310067; c=relaxed/simple;
+	bh=MM61CaN2YtOb9o/541i6UCq9yIQz2yEGV3fbih2X89E=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bx3kEWGyyAdcPRkE+GH0sW2cE/RqibzAiAlTXRLmMvLMBi4Hh+gidROmu9qwiCrdFORr1agI3GZFs42pbj2iM0xh5XAbJPgDMHoF5JT61hUn7/IwxSev/1Ug/qy95T2BmDuqIdocxzDdrLnNfvlSrma3EfA7++hWRAPO/jq5bXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HvaSxomz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 67F5BC433F1
-	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 16:20:14 +0000 (UTC)
+	 Content-Type:MIME-Version; b=g26tw2PWyc/VOJESLpgUq2R4TJpP8dexCcN4uAL0j/gGLU0at1YenzIvXbiqQf8RJHo2fopnYcIgqd2oLXlIoFqQsIfc8A1B0jcoRqF1M33F5ASm3rvfyuRNMvYHYPuMzKTwocBBQoJXR99//j+KYwvlDG46DCNan7wcy3L0A50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FFJJQdYp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8724FC43390
+	for <linux-usb@vger.kernel.org>; Fri,  1 Mar 2024 16:21:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709310014;
-	bh=ekpTJpVdacJCYLdiit9TmaAo78LyXKfXeDboyLh47Fc=;
+	s=k20201202; t=1709310066;
+	bh=MM61CaN2YtOb9o/541i6UCq9yIQz2yEGV3fbih2X89E=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=HvaSxomzrkAST4KZ1b8JJx3aPrrhWxlm60a6Z6EL18rLapHCKCChJ1r8W7z54v3Nj
-	 YJfLbyIQU7pP+xN5u3z/PM00BPGS9W1+QFWCl4XxcmmylGnx48WNBRyAycLKifcCzi
-	 MOzaBL81TBpEd0EKkmUZRVezyNJg0Vh4F/TT8Nd8xtfGRiUEwlBTp6Zh9uhBa9BQ10
-	 PAV94CBTEf9PxvuF8BVoaGwScU2lDMaRVHmhM+mdMNePvdNlOJXU2zCTPrA3EVPbkC
-	 J5uCi2fD9APypC8Oao4thcyLBPzgHs5huhqXDcM5j+ox97UMoi25YT8uKPXfhup752
-	 d/CfnDhGqvcuQ==
+	b=FFJJQdYpntTD5uv3J3OYdjTZWZ2sEdrDokpSiArYGA3NpilogAMEUrKQ2Ar580IyD
+	 gzMyP1pAmi1mK460tP2sWW3qYCf4F8B374mFJWRW39QhQvSnCCRHwGOUSKVRuL+lhj
+	 0odO0YLT9ARBTw9R5RL02VkIm7Kw9fHcO5oZ7p0R6brMcKOIgT9cMDR2NkWVrwaHH+
+	 6U/7nseoekQ1AS3PiYOqUN1ktop7URythyIaW8eroDdqNyw9vLL+5VzCNOi3ptAMLA
+	 nzs1QdupqkImYXCsDvp6sHyEDSSUA87D3ScJQsInoFKVrJSnAEL8ly/UqeCeVWDvko
+	 hmTSwyEITvCqw==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 51C13C53BD0; Fri,  1 Mar 2024 16:20:14 +0000 (UTC)
+	id 74A0EC53BD0; Fri,  1 Mar 2024 16:21:06 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
  audio
-Date: Fri, 01 Mar 2024 16:20:14 +0000
+Date: Fri, 01 Mar 2024 16:21:06 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -63,7 +63,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218544-208809-rVjCEVPRKI@https.bugzilla.kernel.org/>
+Message-ID: <bug-218544-208809-cC0PBOCIQ9@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
 References: <bug-218544-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,12 +79,12 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
 
---- Comment #3 from Ian Malone (ibmalone@gmail.com) ---
-Created attachment 305936
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305936&action=3Dedit
-lsusb_-v_output
+--- Comment #4 from Ian Malone (ibmalone@gmail.com) ---
+Created attachment 305937
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305937&action=3Dedit
+sys_kernel_debug_usb_devices_contents
 
-# lsusb -v -s 001:005
+/sys/kernel/debug/usb/devices
 
 --=20
 You may reply to this email to add a comment.
