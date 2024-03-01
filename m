@@ -1,189 +1,209 @@
-Return-Path: <linux-usb+bounces-7374-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7375-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D31B86DA8B
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 05:09:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0E7B86DB63
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 07:18:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E0A6B2167D
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 04:09:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09DB41C226AD
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 06:18:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 829A5481D5;
-	Fri,  1 Mar 2024 04:09:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB085F569;
+	Fri,  1 Mar 2024 06:18:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SWQoA8yv"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JGDbc42F"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A55847F54;
-	Fri,  1 Mar 2024 04:09:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A05F2AEEE;
+	Fri,  1 Mar 2024 06:18:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709266178; cv=none; b=mk960xKWnNzSR5aSIBcbjs62XUxVeGTz+QdAFjTn+Q49EbQGEsh9fachZI0tt6f4isnlBYCw1QWv8TqehK+GNFi0THMDbqE9IpXScYh/ubtRrLM0UymmuxkpCQn3PTQhcv6GctBtXgXv36P49UlZek31iPpL0PBKqXs9k5hi3dw=
+	t=1709273918; cv=none; b=nMF7NsUpq47YGrRzN5Bs980QwXyufPdlLaAdBda1VR0s0hRY+5/0JnQCMYoWuCiV2WTI0Z5rFp+vusMJnoAznfH0fcrj3lZ9Lvb3X43pvTbZ+DoI3T00xQBt9vK2Igrvxm2lMup7yZRNLH7I23LqeGlHin0OiFbMw7veEvzfHKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709266178; c=relaxed/simple;
-	bh=sNWAXgHYKNn8YPbGhQ36rxyCN8OCQlMk1eMAZ69y28U=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Tz0WG0KWOqCy96K67Gxwmcs77mnAoyp1wTEht8Sg0bqUGkOeXJDcNewO+gmmSb6PNNktWMLm64x1ee3jyKm7HSiJjQMzxh8Mnoz2NlHTDW/NdPoIO4agBR3eq5pREkISnJQwYKRDh5s20fEWpNdzBjNTmyDfkByBLZD0lBfJmqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SWQoA8yv; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42145vlK000988;
-	Fri, 1 Mar 2024 04:09:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=qcppdkim1; bh=uF5QC2T
-	TNjSpqnVNU/KNC6VIdKhgi0qvbXfeSBNURwU=; b=SWQoA8yvr4hy/WXvu0vfESg
-	JLP/lPRc9K2vI/m0D2BZkaXHp9Ovwjnv9XLEdeSI/CcQF224ZR9bnArHYjZJAP/z
-	wZ4VOrNB3yGcSuflKBPWrp9IMNGgOTFJP9UCIV9LItfwuZGxaDQ0tPNj6p/xI4oz
-	jJ2pfbt+MMvUoybebzXEa6gaFUqi9EddozyHTPRSPo0cIVU9BnLsF/lCHE3MlZVx
-	sWZZxpQNcnt3gTUHTPWm4XoMrITeb/BpVxTqJR6l1Q4xibX4YkXb7SQagsgDarHT
-	DZHHrwgcb05xLUHFnH4iGLPGjB40ANgvQg8eSjJZCCtvajOfHwdbVCW0Btc0l/w=
-	=
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wjupp22qq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 01 Mar 2024 04:09:29 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42149ToU021776
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 1 Mar 2024 04:09:29 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Thu, 29 Feb 2024 20:09:23 -0800
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Dmitry
- Baryshkov" <dmitry.baryshkov@linaro.org>,
-        Johan Hovold
-	<johan+linaro@kernel.org>, Rob Herring <robh@kernel.org>,
-        Min-Hua Chen
-	<minhuadotchen@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        <quic_wcheng@quicinc.com>, <quic_subbaram@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH] usb: typec: ucsi: Fix race between typec_switch and role_switch
-Date: Fri, 1 Mar 2024 09:39:14 +0530
-Message-ID: <20240301040914.458492-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1709273918; c=relaxed/simple;
+	bh=9CfH8/yUzS+Jiv3d7W0cC2LNTETeND1FrcCNlL5PePY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kQaaQFoMg+OvCauDp048aF20T+61nElT01+LWoN/G27/M+09IA79YSzFlmPf2yGZPE9Tkfs33J9t6KSSpY/NZRBnRhAA6zWGxaogYVy/fdxhKDUtGoYSQ9cquehb/UNQrn2kieU8l11/0tAIvQMwm7Uc7bIPvHHbp1xW3gMo7zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JGDbc42F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C197C433F1;
+	Fri,  1 Mar 2024 06:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709273917;
+	bh=9CfH8/yUzS+Jiv3d7W0cC2LNTETeND1FrcCNlL5PePY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JGDbc42FoWlRnZ3Tg/zkYtWmX+DQDkPv0RT4+SFsUrurtNAcZTvYlQuH79rymvRl2
+	 OcZzBqEKa0grASr8itj2oIvb/qpA182QhXwbzF2AfDT2Pm5hd/+mJClLYCuSBDNT3y
+	 b+v3hQlIrvPbSRYeFcJrILX2orPKrqCm0vJI7QpU=
+Date: Fri, 1 Mar 2024 07:18:34 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Elbert Mai <code@elbertmai.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: Export BOS descriptor to sysfs
+Message-ID: <2024030142-gloater-stem-fe94@gregkh>
+References: <20240229235905.569705-1-code@elbertmai.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: m-9ZUAEmMu4UC56HHXhKjG3qoDiPrGu4
-X-Proofpoint-GUID: m-9ZUAEmMu4UC56HHXhKjG3qoDiPrGu4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-01_01,2024-02-29_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 phishscore=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 malwarescore=0 adultscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2402120000
- definitions=main-2403010031
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240229235905.569705-1-code@elbertmai.com>
 
-When orientation switch is enabled in ucsi glink, there is a xhci
-probe failure seen when booting up in host mode in reverse
-orientation.
+On Thu, Feb 29, 2024 at 03:59:05PM -0800, Elbert Mai wrote:
+> Motivation
+> ----------
+> 
+> The kernel already retrieves and caches the binary device object store
+> (BOS) descriptor from USB devices it enumerates. Export this descriptor to
+> userspace via sysfs, so users do not need to open the USB device with the
+> correct permissions and requesting the descriptor themselves.
+> 
+> A BOS descriptor contains a set of device capability descriptors. One that
+> is of interest to users is the platform descriptor. This contains a 128-bit
+> UUID and arbitrary data. The descriptor allows parties outside of USB-IF to
+> add additional metadata about a device in a standards-compliant manner.
+> 
+> Notable examples include the WebUSB and Microsoft OS 2.0 descriptors. Of
+> course, there could be more. By exporting the entire BOS descriptor we can
+> handle these and all future device capabilities. In addition, tools like
+> udev can match rules on device capabilities in the BOS without requiring
+> additional I/O with the USB device.
 
-During bootup the following things happen in multiple drivers:
+But this requires that userspace parse the raw descriptor, right?  Why
+not also export the descriptor information in simpler form through
+different sysfs files as well so that scripts can read this information
+easily?
 
-a) DWC3 controller driver initializes the core in device mode when the
-dr_mode is set to DRD. It relies on role_switch call to change role to
-host.
+That's not to say we don't also want this binary file, just maybe add
+more?
 
-b) QMP driver initializes the lanes to TYPEC_ORIENTATION_NORMAL as a
-normal routine. It relies on the typec_switch_set call to get notified
-of orientation changes.
+> Implementation
+> --------------
+> 
+> Add bos_descriptor file to sysfs. This is a binary file and it works the
+> same way as the existing descriptors file. The file exists even if a device
+> does not have a BOS descriptor (the file will be empty in this case). This
+> allows users to detect if the kernel supports reading the BOS via sysfs and
+> fall back to direct USB I/O if needed.
 
-c) UCSI core reads the UCSI_GET_CONNECTOR_STATUS via the glink and
-provides initial role switch to dwc3 controller.
+This is nice, but can you only create the file if it actually is
+present?  Use the is_visible callback to determine this, having an
+"empty" binary sysfs file isn't that nice.
 
-When booting up in host mode with orientation TYPEC_ORIENTATION_REVERSE,
-then we see the following things happening in order:
+Other tiny review comments below:
 
-a) UCSI gives initial role as host to dwc3 controller ucsi_register_port.
-Upon receiving this notification, the dwc3 core needs to program GCTL from
-PRTCAP_DEVICE to PRTCAP_HOST and as part of this change, it asserts GCTL
-Core soft reset and waits for it to be  completed before shifting it to
-host. Only after the reset is done will the dwc3_host_init be invoked and
-xhci is probed. DWC3 controller expects that the usb phy's are stable
-during this process i.e., the phy init is already done.
+> Signed-off-by: Elbert Mai <code@elbertmai.com>
+> ---
+>  Documentation/ABI/testing/sysfs-bus-usb |  9 +++++++
+>  drivers/usb/core/sysfs.c                | 35 ++++++++++++++++++++++++-
+>  2 files changed, 43 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
+> index 614d216dff1d..bfffaa752a13 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-usb
+> +++ b/Documentation/ABI/testing/sysfs-bus-usb
+> @@ -293,3 +293,12 @@ Description:
+>  		USB 3.2 adds Dual-lane support, 2 rx and 2 tx -lanes over Type-C.
+>  		Inter-Chip SSIC devices support asymmetric lanes up to 4 lanes per
+>  		direction. Devices before USB 3.2 are single lane (tx_lanes = 1)
+> +
+> +What:		/sys/bus/usb/devices/.../bos_descriptor
+> +Date:		March 2024
+> +Contact:	Elbert Mai <code@elbertmai.com>
+> +Description:
+> +		Binary file containing the cached binary device object store (BOS)
+> +		descriptor of the device. This file is empty if the BOS descriptor
+> +		is not present. The kernel will not request a BOS descriptor from
+> +		the device if its bcdUSB value is less than 0x0201.
+> diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+> index a2ca38e25e0c..208d2f8cde2d 100644
+> --- a/drivers/usb/core/sysfs.c
+> +++ b/drivers/usb/core/sysfs.c
+> @@ -901,7 +901,7 @@ read_descriptors(struct file *filp, struct kobject *kobj,
+>  			srclen = sizeof(struct usb_device_descriptor);
+>  		} else {
+>  			src = udev->rawdescriptors[cfgno];
+> -			srclen = __le16_to_cpu(udev->config[cfgno].desc.
+> +			srclen = le16_to_cpu(udev->config[cfgno].desc.
 
-b) During the 100ms wait for GCTL core soft reset, the actual notification
-from PPM is received by ucsi_glink via pmic glink for changing role to
-host. The pmic_glink_ucsi_notify routine first sends the orientation
-change to QMP and then sends role to dwc3 via ucsi framework. This is
-happening exactly at the time GCTL core soft reset is being processed.
+Why is this line changed?
 
-c) When QMP driver receives typec switch to TYPEC_ORIENTATION_REVERSE, it
-then re-programs the phy at the instant GCTL core soft reset has been
-asserted by dwc3 controller due to which the QMP PLL lock fails in
-qmp_combo_usb_power_on.
+>  					wTotalLength);
+>  		}
+>  		if (off < srclen) {
+> @@ -923,6 +923,34 @@ static struct bin_attribute dev_bin_attr_descriptors = {
+>  	.size = 18 + 65535,	/* dev descr + max-size raw descriptor */
+>  };
+>  
+> +static ssize_t
+> +read_bos_descriptor(struct file *filp, struct kobject *kobj,
+> +		struct bin_attribute *attr,
+> +		char *buf, loff_t off, size_t count)
+> +{
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct usb_device *udev = to_usb_device(dev);
+> +	struct usb_host_bos *bos = udev->bos;
+> +	struct usb_bos_descriptor *desc;
+> +	size_t desclen, n = 0;
+> +
+> +	if (bos) {
+> +		desc = bos->desc;
+> +		desclen = le16_to_cpu(desc->wTotalLength);
+> +		if (off < desclen) {
+> +			n = min(count, desclen - (size_t) off);
+> +			memcpy(buf, (void *) desc + off, n);
+> +		}
+> +	}
+> +	return n;
 
-d) After the 100ms of GCTL core soft reset is completed, the dwc3 core
-goes for initializing the host mode and invokes xhci probe. But at this
-point the QMP is non-responsive and as a result, the xhci plat probe fails
-during xhci_reset.
+If bos is not present an error should return, not 0, right?
 
-Fix this by passing orientation switch to available ucsi instances if
-their gpio configuration is available before ucsi_register is invoked so
-that by the time, the pmic_glink_ucsi_notify provides typec_switch to QMP,
-the lane is already configured and the call would be a NOP thus not racing
-with role switch.
+> +}
+> +
+> +static struct bin_attribute dev_bin_attr_bos_descriptor = {
+> +	.attr = {.name = "bos_descriptor", .mode = 0444},
+> +	.read = read_bos_descriptor,
 
-Cc: <stable@vger.kernel.org>
-Fixes: c6165ed2f425 ("usb: ucsi: glink: use the connector orientation GPIO to provide switch events")
-Suggested-by: Wesley Cheng <quic_wcheng@quicinc.com>
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
- drivers/usb/typec/ucsi/ucsi_glink.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Isn't there a mscro for all of this?
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index 0bd3f6dee678..466df7b9f953 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -255,6 +255,20 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
- static void pmic_glink_ucsi_register(struct work_struct *work)
- {
- 	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, register_work);
-+	int orientation;
-+	int i;
-+
-+	for (i = 0; i < PMIC_GLINK_MAX_PORTS; i++) {
-+		if (!ucsi->port_orientation[i])
-+			continue;
-+		orientation = gpiod_get_value(ucsi->port_orientation[i]);
-+
-+		if (orientation >= 0) {
-+			typec_switch_set(ucsi->port_switch[i],
-+					 orientation ? TYPEC_ORIENTATION_REVERSE
-+					     : TYPEC_ORIENTATION_NORMAL);
-+		}
-+	}
- 
- 	ucsi_register(ucsi->ucsi);
- }
--- 
-2.34.1
+> +	.size = 65535,	/* max-size BOS descriptor */
 
+Do we know the size of the descriptor at runtime?  Ideally we would set
+it to be that, not an unknown size that way userspace knows what needs
+to be read.  But that's not really a big deal, if it's not possible, as
+the other USB binary descriptor does much the same.
+
+> +};
+
+This should go into an attribute group with the other descriptor, making
+the rest of the patch not needed and simpler.
+
+> +
+>  /*
+>   * Show & store the current value of authorized_default
+>   */
+> @@ -1042,6 +1070,10 @@ int usb_create_sysfs_dev_files(struct usb_device *udev)
+>  	if (retval)
+>  		goto error;
+>  
+> +	retval = device_create_bin_file(dev, &dev_bin_attr_bos_descriptor);
+> +	if (retval)
+> +		goto error;
+> +
+
+long-term I'd like to get rid of the individual "add and remove" sysfs
+files in this function, and just use the default groups instead so the
+driver core handles it.  It's not an issue here for this change, but if
+you can find a way to work on that as part of a patch series here, I
+think that would be really good (if possible, not a requirement.)
+
+thanks!
+
+greg k-h
 
