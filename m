@@ -1,62 +1,80 @@
-Return-Path: <linux-usb+bounces-7436-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7435-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C40886F1F2
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 19:46:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B124086F1EB
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 19:41:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5F3F282AA8
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 18:46:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 499601F21122
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 18:41:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C1036AED;
-	Sat,  2 Mar 2024 18:46:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07F7236AFF;
+	Sat,  2 Mar 2024 18:41:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="ZV8VkP4Z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0853512B80
-	for <linux-usb@vger.kernel.org>; Sat,  2 Mar 2024 18:46:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.202.254.214
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A9F2BAE8
+	for <linux-usb@vger.kernel.org>; Sat,  2 Mar 2024 18:41:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709405193; cv=none; b=WGUXvraENP9Q0HZ19RGTBwzNWmtUisxloZQu9xom9kstQnwJ1EkhzgRQMiTH6wVYe7P1Zs+g1PhRGEMomyzKEZwlzlnczDqXPDGhAtI/cA+XuKhdsO1Fv8PWFB2NgyHTHVaYE0+R86EY92E7wdsDyBohrFOqb0VWIKTOOKmmtNM=
+	t=1709404888; cv=none; b=sWMNbKsT2Y3efGSuY6da8TOJXB9wMcBIFpgiWgHvyxNI4w1usjqip5eL2Q36IAEtZD2mvj1M7aPH9d7beQaBHX/Sp9N5emdoalL0vF3+Jm3QkqZAot6fiS8ITdYqI7P2rHLU/ocei9nM451S8vWJam/hqOOSsdk1t51R+KjpdHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709405193; c=relaxed/simple;
+	s=arc-20240116; t=1709404888; c=relaxed/simple;
 	bh=ozjaB3jCmim+JTKyCZ/nHpMyry5eJz1C1R8Vij0hwZc=;
-	h=To:From:Subject:Date:Message-ID:References:Mime-Version:
-	 Content-Type:Cc:In-Reply-To:Cc; b=Woa/NJZWXWjFZka0yBGO071XYt2OGzgy8+WeW5bg6pVTchGV0QrorP2EvqJYN4Red1+g6AXrJa4AQab6E90IMHkUKl60+rK8VJlHqOjs621NPHH+FwlxI6Zrdy78Tw7oTHo6mtoF+TlSyKFI+l3UthI20w3V7/VexKoXO8kuXgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=m.gmane-mx.org; arc=none smtp.client-ip=116.202.254.214
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=m.gmane-mx.org
-Received: from list by ciao.gmane.io with local (Exim 4.92)
-	(envelope-from <glug-linux-usb@m.gmane-mx.org>)
-	id 1rgUIT-000AHJ-Sk
-	for linux-usb@vger.kernel.org; Sat, 02 Mar 2024 19:41:21 +0100
-X-Injected-Via-Gmane: http://gmane.org/
-To: linux-usb@vger.kernel.org
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v1 1/4] usb: ehci-exynos: Use devm_clk_get_enabled()
- helpers
-Date: Sat, 2 Mar 2024 19:41:11 +0100
-Message-ID: <b7eada8a-6faf-4840-a995-f5fce98bad47@wanadoo.fr>
-References: <20240301193831.3346-1-linux.amoon@gmail.com>
- <20240301193831.3346-2-linux.amoon@gmail.com>
- <3d1c7682-d163-4bcf-bd41-d7db0c8f61d1@wanadoo.fr>
- <CANAwSgR0aQ7nt1y5xknvVjHSnfvTaC8JZMLWurb8z2D0Oxg6Rw@mail.gmail.com>
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mUmXr+ngXyEF3yecQskUddLso45rMCMMMRbmwuVQbQROUUlgxU212v+tE90uSq7MJTUkP83aVARY7mjlZ2k9LHXT1XiafilFRh4htwTlyx4opYppUI4068ACXjYe3se47jMAt6ZrcYxzg6aRy7ViHyIGW2neTKGZMDWxJhhN58E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=ZV8VkP4Z; arc=none smtp.client-ip=80.12.242.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.18] ([92.140.202.140])
+	by smtp.orange.fr with ESMTPA
+	id gUINr95pG9TLjgUINrtlYS; Sat, 02 Mar 2024 19:41:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1709404878;
+	bh=RFUJ/5KBiEKNUs0yBIB9gekJSDB/hWKunNk1f7N0Eug=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=ZV8VkP4ZBMxzAEa4nupAeTRsXIwcp9Q1vtYcsQ+xQA1HQCed4BWvw3/M00nhUmn7D
+	 OWWA3j9/3/+6MjW2KxInw+GebGACR9SsqFIXqtKGMMWnGat4deqy7iRo4n1FCcBt0V
+	 /ACLuK3096SBDotpFdDzcV9nWxHozE0Hwcz3zSnB/fT/Dx0UJ32JZeDCe38OxvCTB5
+	 sXPYsey7XdjpOtMZ/0OjmVwonZxD4xQiJBdJWyC273FUbwcKRI0sHVIRRTyWbunVuY
+	 WvkA4FlC5tlnVyvdgsFVV/WtpaZ7mbmwX+jWfQDLbfjRqfeOFbSYuFsqUs0LddGA6M
+	 DkYpI0eyzsIyw==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 02 Mar 2024 19:41:18 +0100
+X-ME-IP: 92.140.202.140
+Message-ID: <aee270dc-80b2-48c1-a7cb-b1692b5a7677@wanadoo.fr>
+Date: Sat, 2 Mar 2024 19:41:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/4] usb: ehci-exynos: Use devm_clk_get_enabled()
+ helpers
+Content-Language: en-MW
+To: Anand Moon <linux.amoon@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240301193831.3346-1-linux.amoon@gmail.com>
+ <20240301193831.3346-2-linux.amoon@gmail.com>
+ <3d1c7682-d163-4bcf-bd41-d7db0c8f61d1@wanadoo.fr>
+ <CANAwSgR0aQ7nt1y5xknvVjHSnfvTaC8JZMLWurb8z2D0Oxg6Rw@mail.gmail.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <CANAwSgR0aQ7nt1y5xknvVjHSnfvTaC8JZMLWurb8z2D0Oxg6Rw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-User-Agent: Mozilla Thunderbird
-Cc: linux-samsung-soc@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-kernel@vger.kernel.org
-Content-Language: en-MW
-In-Reply-To: <CANAwSgR0aQ7nt1y5xknvVjHSnfvTaC8JZMLWurb8z2D0Oxg6Rw@mail.gmail.com>
-Cc: linux-usb@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-kernel@vger.kernel.org
 
 Le 02/03/2024 à 17:35, Anand Moon a écrit :
 > Hi Christophe,
@@ -198,6 +216,5 @@ CJ
 >>
 > 
 > 
-
 
 
