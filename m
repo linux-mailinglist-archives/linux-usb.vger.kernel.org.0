@@ -1,112 +1,123 @@
-Return-Path: <linux-usb+bounces-7421-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7422-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4313C86EF11
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 08:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E947886F062
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 13:06:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7427C1C21294
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 07:15:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D616D1C20D3C
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 12:06:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADD9311725;
-	Sat,  2 Mar 2024 07:14:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03E917561;
+	Sat,  2 Mar 2024 12:06:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="vDFoaSIZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jGd8BMRl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BCBF514;
-	Sat,  2 Mar 2024 07:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD71F15EA2;
+	Sat,  2 Mar 2024 12:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709363694; cv=none; b=Q63GyJ5JM8s5fdKGlvrk1WqVlPBxXNTeS6yg11jFsaQpxTmn8ODGtj55rCSXDdGXOq+29U/FjkXhZ7mrr8f92wL1hArY3aZ018k6/VPhcE3zIsj6mkyd3WnRD/dtCEucz1sMVRuTNlgAUh7+2a1drCwL5P1j0PDNfWeVFtLVKJc=
+	t=1709381188; cv=none; b=j2tJaEvpiDKXOc4TPTrpDXNAmjBxW3hiEsOqDnvuubbtd0y/U54pxPcEjMreGQLLbqP+1IdNEFJWIlexXZjqRHOef/fbmrQdR6e+4zerPSZG5nQ5dTSjo5oIhKyfP2++PFr3eyUwwtgPVnRJBuXdOikgvmI8aARslNf0RRnOYJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709363694; c=relaxed/simple;
-	bh=vFkpvM0g5EOnQLmxSX0lgm6nc5JPRL6Z+CveFrHCpCE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mLjxvrbtVrWd26R5H5OMb8o0MyhHfxpFHvMoRfhI2ULyLB9IVg5MxD9i+1ayNMONVtb4kbVu5wef1aXW7JL+KfuwQSGTE6BRj1CItOKqxxID4lUMf1raDM7WxfNVg3r+Rx2UbgE5lO9qUwZ4mMUF4gfDdB4FGadoN66szSeFyhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=vDFoaSIZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2982CC433C7;
-	Sat,  2 Mar 2024 07:14:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709363693;
-	bh=vFkpvM0g5EOnQLmxSX0lgm6nc5JPRL6Z+CveFrHCpCE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vDFoaSIZG0ldzdMqErhMs/Us8QduILpmVRnA+9jhiZtksxpNkcmjAbyivevQ6q9oF
-	 ppkFVXP4U8+iir8IvgqHOnbGY2mL6in4g9uwBD7anzo9/yvuHcs3R2wphFvlAIDft3
-	 JYWHapFWLRq5dUE8LqaSisP2dio7j88LGD7O2P/k=
-Date: Sat, 2 Mar 2024 08:14:50 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Chris Yokum <linux-usb@mail.totalphase.com>, stable@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: 6.5.0 broke XHCI URB submissions for count >512
-Message-ID: <2024030246-wife-detoxify-08c0@gregkh>
-References: <949223224.833962.1709339266739.JavaMail.zimbra@totalphase.com>
- <50f3ca53-40e3-41f2-8f7a-7ad07c681eea@leemhuis.info>
+	s=arc-20240116; t=1709381188; c=relaxed/simple;
+	bh=s0g+Mxm2v9ob8hUuHGSRnqyhywC49ZBJykfEz9emqMg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X2+OLVJJUCaRs+lMVVCy+QNYpSImvhdLs2M9SsxP+sTW8ZR8EldiPMAIG5Sxy4+sAk6CYG0wxN+v7fIdXV5PfnJJcOUAVwv5na27XuhHTnBBV20yZEE4eiyCX5NGOEg5SFD4TJQ08mWSOK+t4CFoZ59PQs9rCRe0hnCryFllmuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jGd8BMRl; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso2520838a12.2;
+        Sat, 02 Mar 2024 04:06:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709381186; x=1709985986; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8HT9/Vy2V44ilIXrSvJD5YsCNGho8hRscI9pYyv6DRg=;
+        b=jGd8BMRlm/BSg+HUranCyUliwcoiLxRBIG05sMb6WphKoaHpvKHVfOii/mZcPLx+Mu
+         P0kdTva0F9YRBfTzb+McxT8j7748VLrRZYelYBljt3Wg7WumtuGlH1E8Rlf4l0wJt+Re
+         VSeZ4SU0O6zIyVRiMISiJt/lSbffMh0OMLsEMj4SSpdIntf21aMMrDHk+HX/LLPIP1ZJ
+         enZH0qGJo0sCIs2kbNQL8DJ8owcFPltmuKp0e3tavsew27VtIIq3j86qew9Ys31NcV/+
+         dPHBNtv0QxCdSJjBDaccVULhDxW7rFg+vGSEmgIh4QZDj6V82pQJ4QpeAdFnlrrTROG5
+         wbkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709381186; x=1709985986;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8HT9/Vy2V44ilIXrSvJD5YsCNGho8hRscI9pYyv6DRg=;
+        b=rTFfgv2bK5vKmOEG5kW1yrCkMeeu32FRhcoTT8hfG/TRXmWahgKxQ05zT3uTdLwIGo
+         OQFrYDJCckW5lfvjsUkKq95/4baQQJ2mxZ0V6PX4AKUorhAe4HAGPXEAbqGVi5zupoSI
+         El7K+eJuaL4Y942WcBNC0TeHYZmaTsppbv3AFwc0emxlvfhEQau+R1TvhHjjS8Mn+lMu
+         yOOnqNdADjqJHWLbtoLUyyAVC3FSE+y/dzXlXQXGbepgs20H4XPusQkVNJEzAGMB2qU6
+         SWSvAK/lyRKM0wT2bYWN401lJiAPjA1tRWEb7CURu2lQi8pp9SMG3r4qSl+kucnEZTnp
+         SCTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQprAvyby67ZUuGwutp7LWWjeqJjeq8sKg6XWIiIvS+Z3ANqj8oSIt9h4vUdelSWzZ5vqBhqfjBoMTifQ8bSxjtYuHLJ2SByKU
+X-Gm-Message-State: AOJu0Yw3apbLYpOyPumob5wN1tpQnFp8jZs10zRbZVkMt549AoENa2HQ
+	6e69q4qiV82DVI1kyfAIof83arEEw8QnU316J2/BZDRhjsr4U8z3ns8hpTOqsXY=
+X-Google-Smtp-Source: AGHT+IFcUzDS2LfcSqN1HYDpq/xSIYpNKqq8j3tYP3f0oBK38Ai8EkU11h8j0gGZkKzQsYzdXcP0gQ==
+X-Received: by 2002:a17:90b:1094:b0:299:906b:488e with SMTP id gj20-20020a17090b109400b00299906b488emr4033682pjb.18.1709381186041;
+        Sat, 02 Mar 2024 04:06:26 -0800 (PST)
+Received: from [192.168.1.7] ([159.192.166.184])
+        by smtp.googlemail.com with ESMTPSA id 1-20020a17090a0f0100b0029981c0d5c5sm5264227pjy.19.2024.03.02.04.06.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Mar 2024 04:06:25 -0800 (PST)
+Message-ID: <960d9120-47b3-4961-9ce7-cd9e8b760220@gmail.com>
+Date: Sat, 2 Mar 2024 19:06:20 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50f3ca53-40e3-41f2-8f7a-7ad07c681eea@leemhuis.info>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb-storage: Add Brain USB3-FW to IGNORE_UAS
+To: Alan Stern <stern@rowland.harvard.edu>, Tom Hu <huxiaoying@kylinos.cn>
+Cc: linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+ linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+References: <20240226075936.1744353-1-huxiaoying@kylinos.cn>
+ <a960f1c2-a858-498e-a0cf-4c15d74487d5@rowland.harvard.edu>
+Content-Language: en-US
+From: Lars Melin <larsm17@gmail.com>
+In-Reply-To: <a960f1c2-a858-498e-a0cf-4c15d74487d5@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, Mar 02, 2024 at 07:53:12AM +0100, Linux regression tracking (Thorsten Leemhuis) wrote:
-> [adding the people involved in developing and applying the culprit to
-> the list of recipients]
+On 2024-03-01 23:53, Alan Stern wrote:
+>>   drivers/usb/storage/unusual_uas.h | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+>> index 1f8c9b16a0fb..98b7ff2c76ba 100644
+>> --- a/drivers/usb/storage/unusual_uas.h
+>> +++ b/drivers/usb/storage/unusual_uas.h
+>> @@ -83,6 +83,13 @@ UNUSUAL_DEV(0x0bc2, 0x331a, 0x0000, 0x9999,
+>>   		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>>   		US_FL_NO_REPORT_LUNS),
+>>   
+>> +/* Reported-by: Tom Hu <huxiaoying@kylinos.cn> */
+>> +UNUSUAL_DEV(0x1234, 0x1234, 0x0000, 0x9999,
 > 
-> Hi! Thx for the report.
-> 
-> On 02.03.24 01:27, Chris Yokum wrote:
-> > We have found a regression bug, where more than 512 URBs cannot be
-> > reliably submitted to XHCI. URBs beyond that return 0x00 instead of
-> > valid data in the buffer.
+> The vendor and product ID values have a suspicious look, but they appear
+> to be genuine.
 
-You mean 512 outstanding URBS that are not completed?  What in-kernel
-driver does this?
+Hi Alan,
+it is of course a bogus Id, here is another one:
 
-> > Our software works reliably on kernel versions through 6.4.x and fails
-> > on versions 6.5, 6.6, 6.7, and 6.8.0-rc6. This was discovered when
-> > Ubuntu recently updated their latest kernel package to version 6.5.
-> > 
-> > The issue is limited to the XHCI driver and appears to be isolated to
-> > this specific commit:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/usb?h=v6.5&id=f5af638f0609af889f15c700c60b93c06cc76675 <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/usb?h=v6.5&id=f5af638f0609af889f15c700c60b93c06cc76675>
-> 
-> FWIW, that's f5af638f0609af ("xhci: Fix transfer ring expansion size
-> calculation") [v6.5-rc1] from Mathias.
-> 
-> > Attached is a test program that demonstrates the problem. We used a few
-> > different USB-to-Serial adapters with no driver installed as a
-> > convenient way to reproduce. We check the TRB debug information before
-> > and after to verify the actual number of allocated TRBs.
+"SmartWi - Multi Room Solution is a Smart Card Reader hardware device. 
+This driver was developed by SmartWi International A/S. The hardware id 
+of this driver is USB/VID_1234&PID_1234."
 
-Ah, so this is just through usbfs?
+found by googling vid_1234&pid_1234.
 
-> > With some adapters on unaffected kernels, the TRB map gets expanded
-> > correctly. This directly corresponds to correct functional behavior. On
-> > affected kernels, the TRB ring does not expand, and our functional tests
-> > also will fail.
-> > 
-> > We don't know exactly why this happens. Some adapters do work correctly,
-> > so there seems to also be some subtle problem that was being masked by
-> > the liberal expansion of the TRB ring in older kernels. We also saw on
-> > one system that the TRB expansion did work correctly with one particular
-> > adapter. However, on all systems at least two adapters did exhibit the
-> > problem and fail.
+There are others like 1234:5678 which also looks suspicious.
 
-Any chance you can provide the 'lspci' output for the controllers that
-work and those that do not?
+thanks
+Lars
 
-thanks,
-
-greg k-h
 
