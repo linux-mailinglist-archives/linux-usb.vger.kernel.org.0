@@ -1,220 +1,76 @@
-Return-Path: <linux-usb+bounces-7435-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7437-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B124086F1EB
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 19:41:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ACDB86F1F3
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 19:47:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 499601F21122
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 18:41:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C98C1C21366
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 18:47:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07F7236AFF;
-	Sat,  2 Mar 2024 18:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 650C33EA96;
+	Sat,  2 Mar 2024 18:47:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="ZV8VkP4Z"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bJ0GRQt0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A9F2BAE8
-	for <linux-usb@vger.kernel.org>; Sat,  2 Mar 2024 18:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCF833CD1
+	for <linux-usb@vger.kernel.org>; Sat,  2 Mar 2024 18:47:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709404888; cv=none; b=sWMNbKsT2Y3efGSuY6da8TOJXB9wMcBIFpgiWgHvyxNI4w1usjqip5eL2Q36IAEtZD2mvj1M7aPH9d7beQaBHX/Sp9N5emdoalL0vF3+Jm3QkqZAot6fiS8ITdYqI7P2rHLU/ocei9nM451S8vWJam/hqOOSsdk1t51R+KjpdHI=
+	t=1709405247; cv=none; b=qfEWtUo0hZnDV1cKjEDwO3TUHG9d2VxaeWDcQ1Eu71rWvOE/CsgrTToKNfI+3BKMI7Y9/Smg4HetM1O9pZeXzjw+tu+UPfnSwEsiC4hgipPSjLhL/9Ob+mUpGccxqq4c5g7a+aR1hgI1yEfJMaQVVfB1sVVibfGHxJlpgaUbr1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709404888; c=relaxed/simple;
-	bh=ozjaB3jCmim+JTKyCZ/nHpMyry5eJz1C1R8Vij0hwZc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mUmXr+ngXyEF3yecQskUddLso45rMCMMMRbmwuVQbQROUUlgxU212v+tE90uSq7MJTUkP83aVARY7mjlZ2k9LHXT1XiafilFRh4htwTlyx4opYppUI4068ACXjYe3se47jMAt6ZrcYxzg6aRy7ViHyIGW2neTKGZMDWxJhhN58E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=ZV8VkP4Z; arc=none smtp.client-ip=80.12.242.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.18] ([92.140.202.140])
-	by smtp.orange.fr with ESMTPA
-	id gUINr95pG9TLjgUINrtlYS; Sat, 02 Mar 2024 19:41:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1709404878;
-	bh=RFUJ/5KBiEKNUs0yBIB9gekJSDB/hWKunNk1f7N0Eug=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=ZV8VkP4ZBMxzAEa4nupAeTRsXIwcp9Q1vtYcsQ+xQA1HQCed4BWvw3/M00nhUmn7D
-	 OWWA3j9/3/+6MjW2KxInw+GebGACR9SsqFIXqtKGMMWnGat4deqy7iRo4n1FCcBt0V
-	 /ACLuK3096SBDotpFdDzcV9nWxHozE0Hwcz3zSnB/fT/Dx0UJ32JZeDCe38OxvCTB5
-	 sXPYsey7XdjpOtMZ/0OjmVwonZxD4xQiJBdJWyC273FUbwcKRI0sHVIRRTyWbunVuY
-	 WvkA4FlC5tlnVyvdgsFVV/WtpaZ7mbmwX+jWfQDLbfjRqfeOFbSYuFsqUs0LddGA6M
-	 DkYpI0eyzsIyw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 02 Mar 2024 19:41:18 +0100
-X-ME-IP: 92.140.202.140
-Message-ID: <aee270dc-80b2-48c1-a7cb-b1692b5a7677@wanadoo.fr>
-Date: Sat, 2 Mar 2024 19:41:15 +0100
+	s=arc-20240116; t=1709405247; c=relaxed/simple;
+	bh=nfyeuKJKUpwzZFtNUg+/oDOvCGHK39YhLZo/z0h3HVI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PkD4GTY9OQ5cIx4qEV8+VZUZ9dQPZyaC5VIxW192Kfde2Jhmgu8fPjnbVjOR1MmEeP5WCmFPqbsqi43x3AjFdznLM4GOrNoeoYqXc1WAWrstxe4KI3+DzfRyGU/tjmlqx5+drY23YCTWnga/IlhkqM7ieHU/BMvbTvZKItMpICk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bJ0GRQt0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA59AC433C7;
+	Sat,  2 Mar 2024 18:47:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709405247;
+	bh=nfyeuKJKUpwzZFtNUg+/oDOvCGHK39YhLZo/z0h3HVI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bJ0GRQt06Y4BPZxzZ5MnzOOiG3TqSmMrr1N+ePLuhRk7apkhrDj9SvfBFhlZkmP2U
+	 QSRwvPOyDES4S11bEUC9QDMFAg/sFbRLR0tNgMDvhaw4C4WPaPWtLBcssbr84XqaQo
+	 ql76CWirPkNfK9M2SlsJb+g0hVcsNh1bF81Z7SdY=
+Date: Sat, 2 Mar 2024 19:47:24 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB4/Thunderbolt fix for v6.8-rc7
+Message-ID: <2024030214-unsorted-senorita-6523@gregkh>
+References: <20240226093826.GB8454@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/4] usb: ehci-exynos: Use devm_clk_get_enabled()
- helpers
-Content-Language: en-MW
-To: Anand Moon <linux.amoon@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240301193831.3346-1-linux.amoon@gmail.com>
- <20240301193831.3346-2-linux.amoon@gmail.com>
- <3d1c7682-d163-4bcf-bd41-d7db0c8f61d1@wanadoo.fr>
- <CANAwSgR0aQ7nt1y5xknvVjHSnfvTaC8JZMLWurb8z2D0Oxg6Rw@mail.gmail.com>
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <CANAwSgR0aQ7nt1y5xknvVjHSnfvTaC8JZMLWurb8z2D0Oxg6Rw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240226093826.GB8454@black.fi.intel.com>
 
-Le 02/03/2024 à 17:35, Anand Moon a écrit :
-> Hi Christophe,
+On Mon, Feb 26, 2024 at 11:38:26AM +0200, Mika Westerberg wrote:
+> Hi Greg,
 > 
-> On Sat, 2 Mar 2024 at 21:19, Christophe JAILLET
-> <christophe.jaillet@wanadoo.fr> wrote:
->>
->> Le 01/03/2024 à 20:38, Anand Moon a écrit :
->>> The devm_clk_get_enabled() helpers:
->>>       - call devm_clk_get()
->>>       - call clk_prepare_enable() and register what is needed in order to
->>>        call clk_disable_unprepare() when needed, as a managed resource.
->>>
->>> This simplifies the code and avoids the calls to clk_disable_unprepare().
->>>
->>> While at it, use dev_err_probe consistently, and use its return value
->>> to return the error code.
->>>
->>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
->>> ---
->>>    drivers/usb/host/ehci-exynos.c | 30 +++++-------------------------
->>>    1 file changed, 5 insertions(+), 25 deletions(-)
->>>
->>> diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
->>> index f644b131cc0b..05aa3d9c2a3b 100644
->>> --- a/drivers/usb/host/ehci-exynos.c
->>> +++ b/drivers/usb/host/ehci-exynos.c
->>> @@ -159,19 +159,12 @@ static int exynos_ehci_probe(struct platform_device *pdev)
->>>
->>>        err = exynos_ehci_get_phy(&pdev->dev, exynos_ehci);
->>>        if (err)
->>> -             goto fail_clk;
->>> -
->>> -     exynos_ehci->clk = devm_clk_get(&pdev->dev, "usbhost");
->>> -
->>> -     if (IS_ERR(exynos_ehci->clk)) {
->>> -             dev_err(&pdev->dev, "Failed to get usbhost clock\n");
->>> -             err = PTR_ERR(exynos_ehci->clk);
->>> -             goto fail_clk;
->>> -     }
->>> +             goto fail_io;
->>>
->>> -     err = clk_prepare_enable(exynos_ehci->clk);
->>> -     if (err)
->>> -             goto fail_clk;
->>> +     exynos_ehci->clk = devm_clk_get_enabled(&pdev->dev, "usbhost");
->>> +     if (IS_ERR(exynos_ehci->clk))
->>> +             return dev_err_probe(&pdev->dev, PTR_ERR(exynos_ehci->clk),
->>> +                               "Failed to get usbhost clock\n");
->>>
->>>        hcd->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
->>>        if (IS_ERR(hcd->regs)) {
->>> @@ -223,8 +216,6 @@ static int exynos_ehci_probe(struct platform_device *pdev)
->>>        exynos_ehci_phy_disable(&pdev->dev);
->>>        pdev->dev.of_node = exynos_ehci->of_node;
->>>    fail_io:
->>> -     clk_disable_unprepare(exynos_ehci->clk);
->>> -fail_clk:
->>>        usb_put_hcd(hcd);
->>>        return err;
->>>    }
->>> @@ -240,8 +231,6 @@ static void exynos_ehci_remove(struct platform_device *pdev)
->>>
->>>        exynos_ehci_phy_disable(&pdev->dev);
->>>
->>> -     clk_disable_unprepare(exynos_ehci->clk);
->>> -
->>>        usb_put_hcd(hcd);
->>>    }
->>>
->>> @@ -249,7 +238,6 @@ static void exynos_ehci_remove(struct platform_device *pdev)
->>>    static int exynos_ehci_suspend(struct device *dev)
->>>    {
->>>        struct usb_hcd *hcd = dev_get_drvdata(dev);
->>> -     struct exynos_ehci_hcd *exynos_ehci = to_exynos_ehci(hcd);
->>>
->>>        bool do_wakeup = device_may_wakeup(dev);
->>>        int rc;
->>> @@ -260,25 +248,17 @@ static int exynos_ehci_suspend(struct device *dev)
->>>
->>>        exynos_ehci_phy_disable(dev);
->>>
->>> -     clk_disable_unprepare(exynos_ehci->clk);
->>
->> Hi,
->>
->> I don't think that removing clk_[en|dis]abble from the suspend and
->> resume function is correct.
->>
->> The goal is to stop some hardware when the system is suspended, in order
->> to save some power.
-> Yes correct,
->>
->> Why did you removed it?
->>
+> The following changes since commit 841c35169323cd833294798e58b9bf63fa4fa1de:
 > 
-> devm_clk_get_enabled  function register callback for clk_prepare_enable
-> and clk_disable_unprepare, so when the clock resource is not used it should get
-> disabled.
+>   Linux 6.8-rc4 (2024-02-11 12:18:13 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.8-rc7
 
-Same explanation as in the other patch.
+Pulled and pushed out, thanks.
 
-The registered function is called when the driver is *unloaded*, not 
-when it magically knows that some things can be disabled or enabled.
-
-CJ
-
-> 
-> [0] https://elixir.bootlin.com/linux/latest/source/drivers/clk/clk-devres.c#L75
-> 
-> I have also tested with rtc suspend & resume and did not find any issue.
-> 
->> CJ
-> 
-> Thanks
-> -Anand
->>
->>> -
->>>        return rc;
->>>    }
->>>
->>>    static int exynos_ehci_resume(struct device *dev)
->>>    {
->>>        struct usb_hcd *hcd = dev_get_drvdata(dev);
->>> -     struct exynos_ehci_hcd *exynos_ehci = to_exynos_ehci(hcd);
->>>        int ret;
->>>
->>> -     ret = clk_prepare_enable(exynos_ehci->clk);
->>> -     if (ret)
->>> -             return ret;
->>> -
->>>        ret = exynos_ehci_phy_enable(dev);
->>>        if (ret) {
->>>                dev_err(dev, "Failed to enable USB phy\n");
->>> -             clk_disable_unprepare(exynos_ehci->clk);
->>>                return ret;
->>>        }
->>>
->>
-> 
-> 
-
+greg k-h
 
