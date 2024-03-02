@@ -1,133 +1,300 @@
-Return-Path: <linux-usb+bounces-7418-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7419-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6223386EC04
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 23:48:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2460C86ED80
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 01:37:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 865591C21AB0
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Mar 2024 22:48:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 997C3283CAD
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 00:37:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFAEE5EE68;
-	Fri,  1 Mar 2024 22:48:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF73179F9;
+	Sat,  2 Mar 2024 00:37:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pLpxeHY2"
+	dkim=pass (2048-bit key) header.d=elbertmai.com header.i=@elbertmai.com header.b="KAdWdcUt";
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="bptFJgLm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFFE59153;
-	Fri,  1 Mar 2024 22:48:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A62A7469
+	for <linux-usb@vger.kernel.org>; Sat,  2 Mar 2024 00:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709333294; cv=none; b=AlWn9mZW8SX8a4hScrKtxMaMyn4YQO6ar6x01rST0CuRbi6Twh5kWzgPW+hWKFrl5IVU/MuevSW2EypjhlofDGdZFUbMY+ATRkUNL4wM8SnWwXhr0bUWpvtrbIu+gqKydYIK8JohvCdsnr7MgALXUfjGSp+B9HSv0H4HbI5YEhk=
+	t=1709339867; cv=none; b=GN8kyPktzp64bPjQ5o/aBwjmd/4OV0ZZ5rJAHAlu2yfEANHHY7Qv3NvIwOR+PkbkSQ5I8hnKzMmm18zyJDCpX1TaM62LA0OrWl4RA/BcBAkdNyWoNvJMSLpBGZe0xoxPWxUdW4wEANs1CSAac2/ilPrYvn9FEpxkTuh0bqvgUK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709333294; c=relaxed/simple;
-	bh=8odwCgk7CbX2gctz1vPXXNFyNOwD1JQX6J9mRg+tmcE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=K5qH0IY4w8whQ6Ap+DbAid3zQPbcPNTWJOvfyLr4Q9yenaQW37onkglSSuGckKMnXSnOr3HAthnfwH/+SMo/jR1q8Kj+1EyH6uplNyPlnMEwud0oAiMOIIVJmbJaKOHCuRPMuRNxsIeaU5uHOLqo7S6P04p+b47G8vyEuA6PlHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pLpxeHY2; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 421McPGS029083;
-	Fri, 1 Mar 2024 22:48:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=hC9XfH14jR/Jjd0ksk05wyObel9iSA8jmEXEdQ3SeWE=; b=pL
-	pxeHY2GgPUJ8Ecncmh5a0IynTeBsOcyBWcJ1d2ytFVhc3Y5sd6r0M77HKNY20oJQ
-	5Eiimqu3c42txaPm0dwdhMrAY5x5WgUHuOamwCgGUhove65s4ImVWb1Xn+y5KLSr
-	9oyL2X+j/VyNMzOueJcAaVzE/p4+loiagRkLwYKGwxlJksbvhhMxxurB6q8fye09
-	ABdksJyDOlQE1nm9UTlvtpyTs5r94T9oxCWXLLrc6k0LUW0t8C/uSJTb0ozXjgBS
-	0p1QnFkvtBuusTFIpM25y+aXNtby5ceypTQh6A5kP8G9eGjUCpX6QDfITjxIcTnJ
-	yTmb/mcTgNKKCi6/dgjg==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wkqx880jv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 01 Mar 2024 22:48:06 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 421Mm57t013246
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 1 Mar 2024 22:48:05 GMT
-Received: from [10.110.118.13] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 1 Mar
- 2024 14:48:04 -0800
-Message-ID: <44f00418-b09b-5ee5-c70c-d4580ffd0049@quicinc.com>
-Date: Fri, 1 Mar 2024 14:47:59 -0800
+	s=arc-20240116; t=1709339867; c=relaxed/simple;
+	bh=Tcieo+uwDG7g5dy/tKQqJIYAE7naVq9HloCZlcsiKSE=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=kTk7Ru1kYx2b9SUYUmw06WdX22csyunfB3gViY/RDkMnVVdsJduYu6kYZANlCruREMm3s7Kbhk9Jjl3oj0+wwt5xkPcMD/q9Liwm1/oDWHioT16Cjl4hAK4eqFSeO6EdAaQmqRter4CPWOtmHHT/tJmU9aoUMDJD6+81hN83pOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=elbertmai.com; spf=pass smtp.mailfrom=elbertmai.com; dkim=pass (2048-bit key) header.d=elbertmai.com header.i=@elbertmai.com header.b=KAdWdcUt; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=bptFJgLm; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=elbertmai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=elbertmai.com
+DKIM-Signature: a=rsa-sha256; b=KAdWdcUtx6VBwQOlD0+iCX64nZQkMW8ampJH7F/dDBIj6rSJK/BWBkEusPm4QROQ/PPYKfh7IISb6lyZbAfgq6B96qlmbvAR4MsFX+MZN2+r0I4tSZkzD5EdSFfu0lBLcGS1y6PCOpibVS6uUWrKhGOo7KAk0oPI+QGtK4pnGa59fOgNrfXVs/dlma6AMLwZyWPQhYfRsEEFbOn952gglPogQIcHw9GIK/JCxqoi9pCn7X1CJA/hE5tFj+u8Jf78WGEutH3DmDw9nUbArO7quBAyGNYvV5W5yE+Uhp/BCQ9U2m5yjjRP3tqDg4hzdYaWk4NnpCXDx2GMb75DKSk3uQ==; s=purelymail1; d=elbertmai.com; v=1; bh=Tcieo+uwDG7g5dy/tKQqJIYAE7naVq9HloCZlcsiKSE=; h=Received:From:To:Subject;
+DKIM-Signature: a=rsa-sha256; b=bptFJgLmqgjMk8vL2KO2yfZCixN8PgE5VkVfmZK0LREcmgecPT7Dtnfq9MwLWlMGUUUgNvhVKJS55xpDGzt8Wt3MvpwyGa06o13qdktNbeq4fd0241UwRENPVYWTiuCGUuW0/MdkIkr6cCSW6caCFTwU9M/W9vVbH8Xuv7jnJvXbi5KawvAlVxEKMdTZaLQEkyXcJD/SZTPaLJ+MCnhH2H7dZmnJTRjb1yOopCriVzy6ri9RxQesUMNS5zqEhW7YWY1PbsongUVe2EPavkLQkkbQwn8f0FwIJvs54dpbn3O/u/HYoStEdtVAQZvyM9qx1cFzzp1jixB5Jsor+486BQ==; s=purelymail1; d=purelymail.com; v=1; bh=Tcieo+uwDG7g5dy/tKQqJIYAE7naVq9HloCZlcsiKSE=; h=Feedback-ID:Received:From:To:Subject;
+Feedback-ID: 5995:1482:null:purelymail
+X-Pm-Original-To: linux-usb@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPA id 897328969;
+          Sat, 02 Mar 2024 00:37:24 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH] usb: dwc3: core: Add DWC31 version 2.00a controller
-Content-Language: en-US
+Date: Sat, 02 Mar 2024 00:37:24 +0000
+From: Elbert Mai <code@elbertmai.com>
 To: Greg KH <gregkh@linuxfoundation.org>
-CC: <Thinh.Nguyen@synopsys.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-References: <20240301213554.7850-1-quic_wcheng@quicinc.com>
- <2024030121-unfold-murky-aae1@gregkh>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <2024030121-unfold-murky-aae1@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: Export BOS descriptor to sysfs
+In-Reply-To: <2024030142-gloater-stem-fe94@gregkh>
+References: <20240229235905.569705-1-code@elbertmai.com>
+ <2024030142-gloater-stem-fe94@gregkh>
+User-Agent: Purely Mail via Roundcube/1.6.5
+Message-ID: <faf0abfeefde4bb44494160224c78eca@purelymail.com>
+X-Sender: code@elbertmai.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: y7AeXh1rH5g_v7u71miYFrOpq6enyo0k
-X-Proofpoint-GUID: y7AeXh1rH5g_v7u71miYFrOpq6enyo0k
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-01_22,2024-03-01_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 malwarescore=0 priorityscore=1501 suspectscore=0
- mlxlogscore=999 impostorscore=0 mlxscore=0 phishscore=0 spamscore=0
- clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2403010188
 
-Hi Greg,
+On 2024-03-01 06:18, Greg KH wrote:
+> On Thu, Feb 29, 2024 at 03:59:05PM -0800, Elbert Mai wrote:
+>> Motivation
+>> ----------
+>> 
+>> The kernel already retrieves and caches the binary device object store
+>> (BOS) descriptor from USB devices it enumerates. Export this 
+>> descriptor to
+>> userspace via sysfs, so users do not need to open the USB device with 
+>> the
+>> correct permissions and requesting the descriptor themselves.
+>> 
+>> A BOS descriptor contains a set of device capability descriptors. One 
+>> that
+>> is of interest to users is the platform descriptor. This contains a 
+>> 128-bit
+>> UUID and arbitrary data. The descriptor allows parties outside of 
+>> USB-IF to
+>> add additional metadata about a device in a standards-compliant 
+>> manner.
+>> 
+>> Notable examples include the WebUSB and Microsoft OS 2.0 descriptors. 
+>> Of
+>> course, there could be more. By exporting the entire BOS descriptor we 
+>> can
+>> handle these and all future device capabilities. In addition, tools 
+>> like
+>> udev can match rules on device capabilities in the BOS without 
+>> requiring
+>> additional I/O with the USB device.
+> 
+> But this requires that userspace parse the raw descriptor, right?  Why
+> not also export the descriptor information in simpler form through
+> different sysfs files as well so that scripts can read this information
+> easily?
+> 
+> That's not to say we don't also want this binary file, just maybe add
+> more?
 
-On 3/1/2024 1:45 PM, Greg KH wrote:
-> On Fri, Mar 01, 2024 at 01:35:54PM -0800, Wesley Cheng wrote:
->> Add revision value for identifying DWC31 version 2.00a based controllers.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+I've thought about this for a while, but IMHO it doesn't seem possible 
+to
+present the BOS in a simpler form like how it's done for the device and
+configuration descriptors. The BOS was explicitly designed to be 
+flexible
+and extensible, and it's hard to make a "rich" sysfs interface around 
+that.
+
+We could have a platform_uuids file that lists all platform UUIDs in the 
+BOS.
+These could be presented in RFC 4122 string format, each separated by 
+some
+delimiter. This would make it possible to write a udev rule that matches 
+a
+particular UUID via a glob pattern. This seems like a rather inelegant 
+way
+of handling this, IMHO.
+
+With regards to parsing raw descriptors in userspace, this already 
+happens
+at least with udev. About a dozen files in /usr/lib/udev/rules.d invoke 
+a
+built-in program called "usb_id", which opens the descriptors binary 
+file
+(among other files in sysfs) and parses it for interface information.
+
+I think users and scripts interested in reading the BOS are best served 
+with
+userspace tools that can parse the BOS and present it in a convenient 
+textual
+format of their choosing. Having bos_descriptor in sysfs makes this 
+possible
+without needing elevated permissions or USB I/O. But I could be mistaken 
+in
+this regard.
+
+>> Implementation
+>> --------------
+>> 
+>> Add bos_descriptor file to sysfs. This is a binary file and it works 
+>> the
+>> same way as the existing descriptors file. The file exists even if a 
+>> device
+>> does not have a BOS descriptor (the file will be empty in this case). 
+>> This
+>> allows users to detect if the kernel supports reading the BOS via 
+>> sysfs and
+>> fall back to direct USB I/O if needed.
+> 
+> This is nice, but can you only create the file if it actually is
+> present?  Use the is_visible callback to determine this, having an
+> "empty" binary sysfs file isn't that nice.
+
+Of course, I can make that happen.
+
+> Other tiny review comments below:
+> 
+>> Signed-off-by: Elbert Mai <code@elbertmai.com>
 >> ---
->>   drivers/usb/dwc3/core.h | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->> index df544ec730d2..f3bbbc1947bd 100644
->> --- a/drivers/usb/dwc3/core.h
->> +++ b/drivers/usb/dwc3/core.h
->> @@ -1259,6 +1259,7 @@ struct dwc3 {
->>   #define DWC31_REVISION_170A	0x3137302a
->>   #define DWC31_REVISION_180A	0x3138302a
->>   #define DWC31_REVISION_190A	0x3139302a
->> +#define DWC31_REVISION_200A	0x3230302a
+>>  Documentation/ABI/testing/sysfs-bus-usb |  9 +++++++
+>>  drivers/usb/core/sysfs.c                | 35 
+>> ++++++++++++++++++++++++-
+>>  2 files changed, 43 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/Documentation/ABI/testing/sysfs-bus-usb 
+>> b/Documentation/ABI/testing/sysfs-bus-usb
+>> index 614d216dff1d..bfffaa752a13 100644
+>> --- a/Documentation/ABI/testing/sysfs-bus-usb
+>> +++ b/Documentation/ABI/testing/sysfs-bus-usb
+>> @@ -293,3 +293,12 @@ Description:
+>>  		USB 3.2 adds Dual-lane support, 2 rx and 2 tx -lanes over Type-C.
+>>  		Inter-Chip SSIC devices support asymmetric lanes up to 4 lanes per
+>>  		direction. Devices before USB 3.2 are single lane (tx_lanes = 1)
+>> +
+>> +What:		/sys/bus/usb/devices/.../bos_descriptor
+>> +Date:		March 2024
+>> +Contact:	Elbert Mai <code@elbertmai.com>
+>> +Description:
+>> +		Binary file containing the cached binary device object store (BOS)
+>> +		descriptor of the device. This file is empty if the BOS descriptor
+>> +		is not present. The kernel will not request a BOS descriptor from
+>> +		the device if its bcdUSB value is less than 0x0201.
+>> diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+>> index a2ca38e25e0c..208d2f8cde2d 100644
+>> --- a/drivers/usb/core/sysfs.c
+>> +++ b/drivers/usb/core/sysfs.c
+>> @@ -901,7 +901,7 @@ read_descriptors(struct file *filp, struct kobject 
+>> *kobj,
+>>  			srclen = sizeof(struct usb_device_descriptor);
+>>  		} else {
+>>  			src = udev->rawdescriptors[cfgno];
+>> -			srclen = __le16_to_cpu(udev->config[cfgno].desc.
+>> +			srclen = le16_to_cpu(udev->config[cfgno].desc.
 > 
-> What code uses this define?
+> Why is this line changed?
+
+Consistency with the rest of the file. This was the only instance of 
+__le16_to_cpu,
+other lines used le16_to_cpu (no underscores).
+
+>>  					wTotalLength);
+>>  		}
+>>  		if (off < srclen) {
+>> @@ -923,6 +923,34 @@ static struct bin_attribute 
+>> dev_bin_attr_descriptors = {
+>>  	.size = 18 + 65535,	/* dev descr + max-size raw descriptor */
+>>  };
+>> 
+>> +static ssize_t
+>> +read_bos_descriptor(struct file *filp, struct kobject *kobj,
+>> +		struct bin_attribute *attr,
+>> +		char *buf, loff_t off, size_t count)
+>> +{
+>> +	struct device *dev = kobj_to_dev(kobj);
+>> +	struct usb_device *udev = to_usb_device(dev);
+>> +	struct usb_host_bos *bos = udev->bos;
+>> +	struct usb_bos_descriptor *desc;
+>> +	size_t desclen, n = 0;
+>> +
+>> +	if (bos) {
+>> +		desc = bos->desc;
+>> +		desclen = le16_to_cpu(desc->wTotalLength);
+>> +		if (off < desclen) {
+>> +			n = min(count, desclen - (size_t) off);
+>> +			memcpy(buf, (void *) desc + off, n);
+>> +		}
+>> +	}
+>> +	return n;
 > 
+> If bos is not present an error should return, not 0, right?
 
-Don't think there is anything within the DWC3 core that would be 
-different specifically for 2.00a versus previous revisions. (so far)
+The interface_show function in sysfs.c returns 0 if the string 
+describing
+the interface is not present, so I did it the same way. Should I instead
+return -ENOENT or some other specific error code?
 
-> Why add a define that is not used?
+>> +}
+>> +
+>> +static struct bin_attribute dev_bin_attr_bos_descriptor = {
+>> +	.attr = {.name = "bos_descriptor", .mode = 0444},
+>> +	.read = read_bos_descriptor,
 > 
+> Isn't there a mscro for all of this?
 
-There is a running list of all the DWC3 revisions.  Not all of them are 
-being used, so my understanding was that we're just keeping track of all 
-possible version values that can be read from the DWC3 version HW 
-register.  If this is the not the case, maybe we can just leave this out 
-until we find a need to add it.
+It turns out there is, called BIN_ATTR_RO in in linux/sysfs.h. I'm not 
+sure
+why the original code didn't use it for read_descriptors. I can change
+both instances to shorten the code.
 
-Thanks
-Wesley Cheng
+>> +	.size = 65535,	/* max-size BOS descriptor */
+> 
+> Do we know the size of the descriptor at runtime?  Ideally we would set
+> it to be that, not an unknown size that way userspace knows what needs
+> to be read.  But that's not really a big deal, if it's not possible, as
+> the other USB binary descriptor does much the same.
+
+We do know the size via wTotalLength, but that varies between USB 
+devices
+and dev_bin_attr_bos_descriptor is a static variable. So not really 
+possible
+unless we dynamically allocate all the attribute structs.
+
+>> +};
+> 
+> This should go into an attribute group with the other descriptor, 
+> making
+> the rest of the patch not needed and simpler.
+
+Will do. I'm in favor of simpler patches.
+
+>> +
+>>  /*
+>>   * Show & store the current value of authorized_default
+>>   */
+>> @@ -1042,6 +1070,10 @@ int usb_create_sysfs_dev_files(struct 
+>> usb_device *udev)
+>>  	if (retval)
+>>  		goto error;
+>> 
+>> +	retval = device_create_bin_file(dev, &dev_bin_attr_bos_descriptor);
+>> +	if (retval)
+>> +		goto error;
+>> +
+> 
+> long-term I'd like to get rid of the individual "add and remove" sysfs
+> files in this function, and just use the default groups instead so the
+> driver core handles it.  It's not an issue here for this change, but if
+> you can find a way to work on that as part of a patch series here, I
+> think that would be really good (if possible, not a requirement.)
+
+I'll see what I can do. I'll go for at least the low-hanging fruit.
+
+> thanks!
+> 
+> greg k-h
+
+And thank you for taking the time to review this patch!
+
+-Elbert
 
