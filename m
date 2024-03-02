@@ -1,94 +1,160 @@
-Return-Path: <linux-usb+bounces-7426-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7427-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4375486F0DF
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 16:34:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B043B86F0E3
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 16:42:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B6249B21A90
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 15:34:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E253A1C20B34
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Mar 2024 15:42:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6DD318627;
-	Sat,  2 Mar 2024 15:34:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 535751865B;
+	Sat,  2 Mar 2024 15:42:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDM744BD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PMOfG5Rp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C99A182AF
-	for <linux-usb@vger.kernel.org>; Sat,  2 Mar 2024 15:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5906C29AB;
+	Sat,  2 Mar 2024 15:42:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709393683; cv=none; b=aAqNENfalXXiYMqDAzy1aSZifxr/4wd9wPkkygXtlbafEiUZ496gz9FhMiyFpS9Bg8IX5PjEQ/TuBTAPqdg6Mx8L3gnLGMJ5GhN7M1VCsfEDs7Y35Fh+emKBZz87QGrqLeRV5QFxfWvE66/5G60JAvI5i2XCLyKUJn2FdL5UczA=
+	t=1709394126; cv=none; b=Pb2f2krbY72tT/e0MKye6xQ9Gg4iHN/JVbMHnaekr2tOiOedVX5/nTTzb3uSVl6a7Y3x77Iv8IGxx+/3t+XQm4kfjUGjW+eOpA8zVFqughy59aW4+uDqzHru/KVUYhR2WJK5aolaZ2lu2SIOI8Ir9CB4E+u13pHUZMfdsp7DNvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709393683; c=relaxed/simple;
-	bh=KXO04N4E+YC4JCVuVdYNgMHZryPiRkl0JeUCry91D9s=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LTKcCY1/u1tvn0gs/OD5GVEBLBJX5CWNA3sVj4BmWeq82VAbnGVt481Rb9KIV8H8M20IYdcw1ABKcAyQIwNffGQVzAjOe7PmxuBO/nsiJs9RgeUnxQhEkR37N+JVKnQkUvbiqmPKC7oOlRajNvS04G/kPwPTGV6gyBGIVtE+HLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDM744BD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D156BC43390
-	for <linux-usb@vger.kernel.org>; Sat,  2 Mar 2024 15:34:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709393682;
-	bh=KXO04N4E+YC4JCVuVdYNgMHZryPiRkl0JeUCry91D9s=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=nDM744BDAfOXfGLjOMIrcIMplkgofNKiXLHcPQhTah1710JrqdnUnG/Sl1YktFhmQ
-	 7gvZ4lAOiWxL4/WtXijFwd2YG0aO76MH7QwRJhxDmZgVyEV4LCuLarxYOkB8po7TMJ
-	 9GU95xyDvdmyfTYH8DRVyVyz5PPqBgh0WdL8cwohFQtcp07cYb6ksEwvvORWfbZ7bR
-	 ehe3uPe88K3dimfhq3gMDrYRWBD9tfXuLIir1WBjDTK09Ap9how5NaXfFtNrcZpd7c
-	 hmSukKONmZT4wCvvBVhvrmm0tgZy2JfOXYyvYmbJ/fjzcM3WXuLPx6KtK9YSxmyDgY
-	 XvpfUMGTX5nvQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id BF181C53BD0; Sat,  2 Mar 2024 15:34:42 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218544] not enough bandwidth, synaptics hi-res audio duplex
- audio
-Date: Sat, 02 Mar 2024 15:34:42 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218544-208809-1IWX83HpkR@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218544-208809@https.bugzilla.kernel.org/>
-References: <bug-218544-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1709394126; c=relaxed/simple;
+	bh=Vg0+NRsFIWYNeq3/Y14CGJlm6ANmz7j0y8mB3zB10Io=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DlpAJKOhFlIgjgvBwbrOwIuT5K9JTdzmqHL9sI0GeV9fNjzKtin1yLfLSNC2644tia2ixIQN6tVDEuOVrUBzdjaVejtJvuRiL5HXzZoX9Q8w/PqxuyoKxm3IioTFDk5FrshQrHw5/HkBp9esniTT+zG9HCr55vYTNhjdAdi5HVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PMOfG5Rp; arc=none smtp.client-ip=209.85.160.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-21f0c82e97fso1795330fac.2;
+        Sat, 02 Mar 2024 07:42:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709394124; x=1709998924; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LzCpnhGEH0mn0/NF9dJmvWd3SERdejuejaFsItX1rnU=;
+        b=PMOfG5Rp5UdE9iAyhD5r6i8yUGolV8HGUOAJcJULQAKW4bzZf4XYQNU9PTnmb6tVjW
+         NNL7iyubKKL5pJRXrxBMTcqi590u3Ymad5DvV1xo+7fl1/2mfphdaR/GamNqqEe6jeCD
+         MzBXpiqG9TYdAYzqvkkxczH4fJrIfPmFnE6izU6JhVU6hxNRlLRXakz4Y5uD3K2tkR4K
+         DiT4JUPUsOmxXZCAgI+2z2/BhLBb2Ej6rRXcuIoH06/S6eQI6rScS6mMxrxvX+5ZxZKg
+         D7PIjKCbMqYt2ukaB20KtV4n0MaH016At/Zb0U3nztXjusKfZsz3PvphF5KKylMmqD2s
+         HlBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709394124; x=1709998924;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LzCpnhGEH0mn0/NF9dJmvWd3SERdejuejaFsItX1rnU=;
+        b=QRzUd+Pix/JhPBNmQS+HVdWAOJ1T0JtxRWmSMN08u0RyOm0NI5CC3b7uifKAmqbvPj
+         lZFPdK5w88xBrwTjXzxsirV+/tOnCTblPp7EvVCAO7McY/Tof9Vli6/UUN9cKVWSC56d
+         cLiM2nJDwEhDGWP+pyoWFKzj9qD+tLaVochPOA+PLtqzydBRINM2FPVOSs6R4UEyXEkz
+         HWnGe2CwQx8zlyiwwg3euJCty6CJF3Jx0u9KBTfTFoAPvZeLTLqtdUNrwIkYv1ecvIRn
+         SSAL5uaSqszzhzBMF9Z9+1b6alqdEKu1Ei+y46dtH23HOjFC5jnsOFf3aYZq1FrrQiEO
+         WX2g==
+X-Forwarded-Encrypted: i=1; AJvYcCWcxXHaZ0PJb9G+A+I877Vg1g4INmgudqt4m/Q0EAwAMQazy2m3n35tGnKDQp9z1jRttcS9IUUxWLYOTNI7LRij/s8IbHb+jStSwThj4mNhpHmixYk6smY5dXtaErwF5nHKV4WiGQRRDAMZP+7AdoZRmZ68SehF1DbV4L8bnuF+kv0OkvyHFvbzjqg=
+X-Gm-Message-State: AOJu0YxNtFBnI35GvVzOHD957EI/qjSJFvmsYjobZJgCURuHiOK1MmZt
+	fiMHMC7oJMUvKtLwjNBzYOglhmCOAsEWspANrViQjWNIdS0y2jcybAxgxJb76cpuw7Hicze01vI
+	H1uLvlb+ZEkrBFEOC/RX1hShqAA7Ys5s9
+X-Google-Smtp-Source: AGHT+IFOyLUGj5njldof2Kjx3MpNztLCDh4BskGy5JZiPRXjanr3DeP4NYYaguyNpTzzI6L8Bn7MKpE4vNcxua4KW5g=
+X-Received: by 2002:a05:6870:830d:b0:21e:5f83:e698 with SMTP id
+ p13-20020a056870830d00b0021e5f83e698mr4957415oae.52.1709394124410; Sat, 02
+ Mar 2024 07:42:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240301193831.3346-1-linux.amoon@gmail.com> <20240301193831.3346-3-linux.amoon@gmail.com>
+ <f989a532-a77e-4324-902b-968b12134f15@rowland.harvard.edu>
+In-Reply-To: <f989a532-a77e-4324-902b-968b12134f15@rowland.harvard.edu>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Sat, 2 Mar 2024 21:11:49 +0530
+Message-ID: <CANAwSgT5cvfwQmv6SbMoKoNA1vHYEpbhvc+6rfaMr-36bHnLUQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/4] usb: ehci-exynos: Switch from CONFIG_PM guards to pm_ptr()
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218544
+Hi Alan,
 
---- Comment #9 from Alan Stern (stern@rowland.harvard.edu) ---
-xiphmont's web page was written 17 years ago, so it is incredibly out of da=
-te.=20
-However, if you want to use it as a base for improving the current driver, =
-I'll
-be happy to review your code.
+On Sat, 2 Mar 2024 at 01:58, Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Sat, Mar 02, 2024 at 01:08:09AM +0530, Anand Moon wrote:
+> > Use the new PM macros for the suspend and resume functions to be
+> > automatically dropped by the compiler when CONFIG_PM are disabled,
+> > without having to use #ifdef guards. If CONFIG_PM unused,
+> > they will simply be discarded by the compiler.
+> >
+> > Use RUNTIME_PM_OPS runtime macro for suspend/resume function.
+> >
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > ---
+> >  drivers/usb/host/ehci-exynos.c | 10 ++--------
+> >  1 file changed, 2 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
+> > index 05aa3d9c2a3b..4676f45655cd 100644
+> > --- a/drivers/usb/host/ehci-exynos.c
+> > +++ b/drivers/usb/host/ehci-exynos.c
+> > @@ -234,7 +234,6 @@ static void exynos_ehci_remove(struct platform_device *pdev)
+> >       usb_put_hcd(hcd);
+> >  }
+> >
+> > -#ifdef CONFIG_PM
+> >  static int exynos_ehci_suspend(struct device *dev)
+> >  {
+> >       struct usb_hcd *hcd = dev_get_drvdata(dev);
+> > @@ -268,14 +267,9 @@ static int exynos_ehci_resume(struct device *dev)
+> >       ehci_resume(hcd, false);
+> >       return 0;
+> >  }
+> > -#else
+> > -#define exynos_ehci_suspend  NULL
+> > -#define exynos_ehci_resume   NULL
+> > -#endif
+>
+> Doesn't this now generate warnings about functions being defined but not
+> used when you build with CONFIG_PM disabled?
+>
+Yes I have tried compile the kernel with disable CONFIG_PM=n and
+CONFIG_PM_SLEEP=n
+But it's getting selected  by default.
 
---=20
-You may reply to this email to add a comment.
+Also compiled with W=1 and found no warning with these patches.
+To be safe I will add __maybe_unused to suspend / resume functions in
+the next version.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+diff --git a/arch/arm/configs/exynos_defconfig
+b/arch/arm/configs/exynos_defconfig
+index c98d5ff8a1ed..e96f5c3bf8c1 100644
+--- a/arch/arm/configs/exynos_defconfig
++++ b/arch/arm/configs/exynos_defconfig
+@@ -29,8 +29,10 @@ CONFIG_ARM_EXYNOS_CPUIDLE=y
+ CONFIG_VFP=y
+ CONFIG_NEON=y
+ CONFIG_KERNEL_MODE_NEON=y
+-CONFIG_PM_DEBUG=y
+-CONFIG_PM_ADVANCED_DEBUG=y
++# CONFIG_PM_SLEEP is not set
++# CONFIG_PM is not set
++# CONFIG_PM_DEBUG is not set
++# CONFIG_PM_ADVANCED_DEBUG is not set
+ CONFIG_ENERGY_MODEL=y
+ CONFIG_KALLSYMS_ALL=y
+ CONFIG_MODULES=y
+
+> Alan Stern
+
+Thanks
+
+-Anand
 
