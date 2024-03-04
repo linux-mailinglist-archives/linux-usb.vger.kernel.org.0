@@ -1,117 +1,83 @@
-Return-Path: <linux-usb+bounces-7450-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7451-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3600A86FAE6
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 08:32:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 397DA86FB13
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 08:47:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD5C51F228AC
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 07:32:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FA3A1C21035
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 07:47:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449791401D;
-	Mon,  4 Mar 2024 07:32:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092B516436;
+	Mon,  4 Mar 2024 07:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=aixigo.com header.i=@aixigo.com header.b="LbgZJAtV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mail.aixigo.de (mail.aixigo.de [5.145.142.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E21F171AC;
-	Mon,  4 Mar 2024 07:32:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9D353A6;
+	Mon,  4 Mar 2024 07:46:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.145.142.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709537536; cv=none; b=JJIoI0pABbwKTj8qyhRD0mPgUh1iwX/FRAYWeQ5oKohRVqpE8lVVQksySTJFlkakpJ6SK5fC2ANBSBG1FFSt1tXVOqcn5VBBmJEskAE/Lme0UMA2jxNexYtLWG9kdgI33p2OO1HnsZdoWiBOzasqLxGon2MNNSKbY8XmkDAMUsE=
+	t=1709538423; cv=none; b=NbwxCi0Mx/xauGI51f5cEdDRWq1WMD+Mgk6NKVLisDZ1vFZa4XrcoXuq5AStdrImHKnQKP93gJDEI5PpEKgI753UOxwXg+cnMl+z2OhjyBZZC8haEiktL6nBcvOybe43T3lH8WKKoNIohGwrh/gGa741K8iWsB5J2NW/jNB6wXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709537536; c=relaxed/simple;
-	bh=RagmrRWQq0m3oiVO8oHg3x7fGhfbXpfmjQaGVkqERQE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uvPN188Pevk9QMb/566GhuIL3b2YztqOTVLoSWN4hAEYgbCIojdTGqq8+99Q+ywb7UOp9cYUuHkUbOQSLlaz2F+lv0DoKKfccbJSnq6ggfRvMPvWHctGqFLSv3P0ALn6pFvTOMVBt6UbHG+hFSlGrU+/+UiUImDfpsdKaoGjmmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 6f1873923ca1490ba3bc406d5f42efba-20240304
-X-CID-O-RULE: Release_Ham
-X-CID-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:d5def658-cfa3-4510-acc1-3599ecb64312,IP:20,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:5
-X-CID-INFO: VERSION:1.1.37,REQID:d5def658-cfa3-4510-acc1-3599ecb64312,IP:20,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:5
-X-CID-META: VersionHash:6f543d0,CLOUDID:0c6e79ff-c16b-4159-a099-3b9d0558e447,B
-	ulkID:240304111709GTSTWZ2V,BulkQuantity:9,Recheck:0,SF:17|19|44|66|38|24|1
-	02,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:
-	nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: 6f1873923ca1490ba3bc406d5f42efba-20240304
-X-User: huxiaoying@kylinos.cn
-Received: from localhost.localdomain [(112.64.161.44)] by mailgw
-	(envelope-from <huxiaoying@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1626496290; Mon, 04 Mar 2024 15:31:59 +0800
-From: Tom Hu <huxiaoying@kylinos.cn>
-To: linux-kernel@vger.kernel.org,
-	stern@rowland.harvard.edu,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	usb-storage@lists.one-eyed-alien.net,
-	Tom Hu <huxiaoying@kylinos.cn>
-Subject: [PATCH v2] usb-storage: Add Brain USB3-FW to IGNORE_UAS
-Date: Mon,  4 Mar 2024 15:30:31 +0800
-Message-Id: <20240304073031.225422-1-huxiaoying@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1709538423; c=relaxed/simple;
+	bh=kYuDADgxuY7kBX+z2hzyjWgZ4GOjlV8L30E1XRRoGOo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EM2FDzJynfYyU5MzIjlc94oD2MAump+qCvv1Jpvvpwt1jm3VPsnwTGczUW0oth9AXFKGHyfKPswpXKNXoApnpKns5dzI6Wfj+HhwOx1UCGBpOi/X0GZ4DjOwjU/lV8Y4+R2is7KgqElBPkW2rcafj7t41c6WYinrZtdRi8e1mng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aixigo.com; spf=pass smtp.mailfrom=aixigo.com; dkim=pass (1024-bit key) header.d=aixigo.com header.i=@aixigo.com header.b=LbgZJAtV; arc=none smtp.client-ip=5.145.142.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aixigo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aixigo.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=default; bh=kYuDADgxuY7k
+	BX+z2hzyjWgZ4GOjlV8L30E1XRRoGOo=; h=in-reply-to:from:references:cc:to:
+	subject:date; d=aixigo.com; b=LbgZJAtVMV7/0TiA+SyrQAlB7UrhKlyaCKEq4N4i
+	2L55yNF7HedB3xX+sQCXlJ7Kzs1wJbTVtfZ/X8VXKsCsx4/WCvtZa55eTEVqNpjVPfBoqa
+	13TNjO2jqtJWc6WJ4DJGdldnVlF+Uv6v8CEkZo/IPeX19ZUAIXKG90h+N/MJs=
+Received: from mailhost.ac.aixigo.de (mailhost.ac.aixigo.de [172.19.96.11])
+	by mail.aixigo.de (OpenSMTPD) with ESMTPS id 2ca81bb0 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Mon, 4 Mar 2024 08:46:56 +0100 (CET)
+Received: from [172.19.97.128] (dpcl082.ac.aixigo.de [172.19.97.128])
+	by mailhost.ac.aixigo.de (8.17.1.9/8.17.1.9/Debian-2) with ESMTPS id 4247kuAg801660
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT);
+	Mon, 4 Mar 2024 08:46:56 +0100
+Message-ID: <029ff780-902e-42da-a5ed-6c306c6cb2e4@aixigo.com>
+Date: Mon, 4 Mar 2024 08:46:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Betterbird (Linux)
+Subject: Re: RIP on discard, JMicron USB adaptor
+To: "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc: Jens Axboe <axboe@kernel.dk>, Bart Van Assche <bvanassche@acm.org>,
+        linux-block@vger.kernel.org, linux-usb@vger.kernel.org,
+        Harald Dunkel <harri@afaics.de>
+References: <70bc51d7-c8a2-4b06-ab7a-e321d20db49a@aixigo.com>
+ <62296d89-f7e6-4f54-add8-35b531dc657c@rowland.harvard.edu>
+ <Zd9Xbz3L6JEvBHHT@kbusch-mbp> <yq1sf1c1h0x.fsf@ca-mkp.ca.oracle.com>
+ <7a10ff3b-0c4c-4aa3-8218-02d5f27ab062@afaics.de>
+From: Harald Dunkel <harald.dunkel@aixigo.com>
+Content-Language: en-US
+In-Reply-To: <7a10ff3b-0c4c-4aa3-8218-02d5f27ab062@afaics.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 1.0.3 at srvvm01.ac.aixigo.de
+X-Virus-Status: Clean
 
-The UAS mode of BRAIN USB_HDD is reported to fail to work on several
-platforms with the following error message, then after re-connecting the
-device will be offlined and not working at all.
+Hi folks,
 
-[  622.518442][ 2] sd 8:0:0:0: [sda] tag#17 uas_eh_abort_handler 0 uas-tag 18
-                   inflight: CMD
-[  622.527575][ 2] sd 8:0:0:0: [sda] tag#17 CDB: Write(10) 2a 00 03 6f 88 00 00
-                   04 00 00
-[  622.536330][ 2] sd 8:0:0:0: [sda] tag#0 uas_eh_abort_handler 0 uas-tag 1
-                   inflight: CMD
-[  622.545266][ 2] sd 8:0:0:0: [sda] tag#0 CDB: Write(10) 2a 00 07 44 1a 88 00
-                   00 08 00
+having some kind of feedback would be nice. Is this a known problem?
+User error?
 
-These disks have a broken uas implementation, the tag field of the status
-iu-s is not set properly, so we need to fall-back to usb-storage.
+Of course I would be glad to help to track down this problem.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Hu Xiaoying <huxiaoying@kylinos.cn>
----
-v2: remove junk information from patch.
-
- drivers/usb/storage/unusual_uas.h | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index 1f8c9b16a0fb..98b7ff2c76ba 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -83,6 +83,13 @@ UNUSUAL_DEV(0x0bc2, 0x331a, 0x0000, 0x9999,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_REPORT_LUNS),
- 
-+/* Reported-by: Tom Hu <huxiaoying@kylinos.cn> */
-+UNUSUAL_DEV(0x1234, 0x1234, 0x0000, 0x9999,
-+		"Brain",
-+		"External HDD",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
-+
- /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
- UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
- 		"Initio Corporation",
--- 
-2.25.1
-
+Regards
+Harri
 
