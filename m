@@ -1,127 +1,249 @@
-Return-Path: <linux-usb+bounces-7470-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7471-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E779486FEFC
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 11:25:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 843E88700A0
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 12:47:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2E1D2832F5
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 10:25:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A829F1C213B5
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 11:46:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F82222F08;
-	Mon,  4 Mar 2024 10:24:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95D5A3B189;
+	Mon,  4 Mar 2024 11:46:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aWdKqM0j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DvdcOhRh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F48224F9
-	for <linux-usb@vger.kernel.org>; Mon,  4 Mar 2024 10:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B212BCFF;
+	Mon,  4 Mar 2024 11:46:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709547898; cv=none; b=vF9iolPucbbatggVI3aGWmAiH825RJ8UsY2ulABWfx0ytqoPAXtGlt0g+AHZT8ZLDFo2qbfMzbgLwfjkopHFYi56DLOtUJ3kMDPpVcZcsf33q6NENteYA4sW/mWq8lUNbC+WGT3sbX/q1/qybr1PiPK88yUHYl/GIPrsvz2VDpg=
+	t=1709552810; cv=none; b=uX4X3LWbdwPsoGpPLbFPxLdRFq+nGlEt9VKicaSIGOJlwgMkqdII5+18rlqAXPEyIIxRDKitDoDX5sM8KnDtqhEpbyiW9D/6x2Kr7MHKOiYFtKAJyFXO4/wW1IV1+8KsFj9EWeDlKvPK7uGROnPeKHGSZidU9mx+rm070VlwSPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709547898; c=relaxed/simple;
-	bh=B/p9C/j+Ad9n8/+/6/pEpIkJ0VSlGvhLs4GQUeDwZIY=;
+	s=arc-20240116; t=1709552810; c=relaxed/simple;
+	bh=MREf+q+trSbCOEQo2zmMzNcMz+h6WiYld+brhD1xTWI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VUL/RvTFplw5NSr2b38ygSXMuYJKPz88ShElggQcj/uBm+uPafS7GZ1/0qV/W/86QcM91V4msW6ybNoqOeKfjS1FF6TwG0cStriamMY8PL1l6bMbHhZZGuYcJloA46aFKSp9jqPXIUy/qt0U9l3nrbHKuAYKj4h8NU3q4/SvDDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aWdKqM0j; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-608a21f1cbcso28493387b3.0
-        for <linux-usb@vger.kernel.org>; Mon, 04 Mar 2024 02:24:56 -0800 (PST)
+	 To:Cc:Content-Type; b=vAwaLAzDFboMP/bVJFK9zywBFqXy1AIds7Fm2YeGVoUrEQdCLkU8eWgGadbQDQJ0JCVVCnNvVc7kn/x66Ipn9U6s3bdjbzYXtYK+aSeZSjR7A7FLyvT8jOtxJWddXCXipOaVpyXqVCdbcH1Zsx+WtZ2YIbsqGPYQV7hurDvKiaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DvdcOhRh; arc=none smtp.client-ip=209.85.161.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5a0a19c9bb7so3538188eaf.3;
+        Mon, 04 Mar 2024 03:46:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709547896; x=1710152696; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5MvLLiHKy+7g4m0EQRZXmKZVCgjWHjYHDhw5XRYe9JM=;
-        b=aWdKqM0jNwgdoz7BQTJbEAMhDwybCb8S3UokcTl0ExyMLWDlh6UVHnCBvy3ouypN0S
-         /RTa/sEpDMLIwLXkUriPpMLT64nASCCvukcUytySRKcJXr1iSiBKwJF8oppsK5EEXRK9
-         sv385nSIvV5kFhhpMRRWIRQD8enJCz9tfnynMseqjA/CyrjGTBhs8ntfsCckACKmwMuj
-         3xZVKEQAuc5eWa0QbNJpzpQLxdObBuA9uyP13psQY3Ev49WWhKK0LqaMoYz7/yj+pl8D
-         FbfnPZpZXic0RASz3/d0e0mtckC4kmUjJuD7sIF7ZOIqKDD9n39ihdqmXNGhL58Lm8zj
-         izEQ==
+        d=gmail.com; s=20230601; t=1709552808; x=1710157608; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6JEGHtbqyJwPzknb9cutu3F9GTXF2cnTcxkajaqQGKU=;
+        b=DvdcOhRhKJyzGkG7Xb+992GJpuMqhdDK05IQXQlF3RDOmeun1SMzVBtpt8kqypkoyR
+         5+JSoS0LXJ+EJJhxTa4FOGIRA3bwp2TDgRTtdwn5TM0LELJJseas43sRlLsKxAhwVaKT
+         v+Hi5kqyLRPj0iTqtFuNjta5vU/X1IgpPlBa+AYMW3Kd/OA8eCLBr/IkUM8hVGLD8YRm
+         Ii0Bx8wTHySCJcPoEPgBJnyhL9gFcNOXRjEJzNfLbuvGof4dFnRdyYu+keqP29PYUhey
+         GgaxbzGK1dularqYVkhBM4ixCMQTA4MKiRsdJfx1ZoO8HMv83eFHT6JyCqwVo9w7C/SF
+         JShA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709547896; x=1710152696;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5MvLLiHKy+7g4m0EQRZXmKZVCgjWHjYHDhw5XRYe9JM=;
-        b=PuEFEiuP6wC3gkJrs5kkuoxJMTBLIuoV5XLu3XwOezLQGT4/fgvU5g+/8fJDe89WOb
-         PkReoE0LJ8LP10LDUlHOgFxQjA5YX+ljRZU52itLKfnAZHZXz63ZRG7GwuGB5AOHz+gA
-         ZqrPSqGPQ4/r7jAFHyWpOkh27keS9Xq/j42nLEXoTD/uLSN0Rbfp2M8VRbwLlzM1Ql56
-         Qir4QuZup8PghU7DfcgJLAtCiEwOL8NT3KgM97XLcyIGsiFSTXosO48u5FswewClIX8O
-         InzMHOYi19l3GAOWm8P5WU0v2q3+YYVfuG76J8uyZgBvL0SuGt9ji1oq+IcTBcUJBZVV
-         7rYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXDZA77sxj0SkeHNXB156+Ps0AhKKfZpqOh7CjeAIDxHAImoTtfccdaZQkc/G4/HBM5mC/+IGAxG9etNJD355lcbkg2OWEweebg
-X-Gm-Message-State: AOJu0YzdBpbZNA+Kapajwa9atygYXdg7Y1x3wmTyuZoc+OX5lyeAjnOu
-	7wk3WY4OI9vdAOa/HRpRDhVd1PPSO5reP4qhVdWLF+xDyT/l4cyzkl2OHOpQRa/d+CRHe9hD8Le
-	sgoh/ZzurC5dceFJ01ZKa3hWJKuGGwK/jhtDJqBcDDH8LO5N2dTXsBw==
-X-Google-Smtp-Source: AGHT+IHeJ2eLw4BVw7Jt2jcC9lyLDaioLDtXDPZBlMbV/W5XEb0laPQ/T9UXMRYekhs6WmzEEvWDsP2x6CTAI2UYGi4=
-X-Received: by 2002:a05:690c:f90:b0:607:fbb6:8be2 with SMTP id
- df16-20020a05690c0f9000b00607fbb68be2mr9509835ywb.47.1709547896129; Mon, 04
- Mar 2024 02:24:56 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709552808; x=1710157608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6JEGHtbqyJwPzknb9cutu3F9GTXF2cnTcxkajaqQGKU=;
+        b=kg0IeYDFci5KRr4K63TTWp3sELHuJCguH5li7mJrv7K4Rd+InU8xWj45Ny6apR1kJW
+         9eQ41V9MFM3u6z3Zqd8v+J3Gr0j7o4yjU9JqYj6QeSRn4146XefFfMVSSgH+biCxFr5U
+         ix3BWG5dPShZmGxgr9KVr6NW2gwJYVzKHWBdeD6SvKumivyLvMIlLMhAxM0Sw6vJr43o
+         vELmL1MbUW2DV9Heqg9XLOfvaxcGM+KYGJBQEDl52Gs40mSY5AgBYQbV8JpkmiNxp03N
+         w8xE6uc5fbo+d8opwgeB9uQt0SZlRti5fDqRbVBv+DR2E4ZszO+ma/24+SpTFdaUdq6X
+         VpaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWOywENJYacw6n6vNS4N8GMG0rypYriOC6pWoT8vIYSpkNrog27t1ocGAYz4Qs47JHxQberi3caS07NGFuKaMXQ8RHvH+9ErTd1nPHLz8K5MJ6XWNMvyNrc1ccicQKbuMdzX3MbSvpUBk+K30HyblX5wIIOyekYWM/ryIQhQKmGYRBWOoxUL9TZKlA=
+X-Gm-Message-State: AOJu0YyBFHIiJDuoJCam9w8bY7DSOkiBJv/TxyqlIT17q+/qA+CkibJE
+	qlHG3Kap2k7WUiRbSBlR+c5kpheyvsHZ+6bE3ehqTJWllJ57WyIuDq2KGiGPQ5DgPQsihpCpz1V
+	KHVvAHswhiv36hGFSk5aRYFwa24w=
+X-Google-Smtp-Source: AGHT+IEeP26jeJGto7pU0/H3MLxor72shrPPLiWXPA7B5vfhOmQFc4jDmdCqhuCwpM9prlDnUrdGDerfdd0RJie/m6k=
+X-Received: by 2002:a05:6820:2281:b0:5a1:841:c2a6 with SMTP id
+ ck1-20020a056820228100b005a10841c2a6mr7832749oob.3.1709552807779; Mon, 04 Mar
+ 2024 03:46:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240304-pm4125-typec-v4-0-f3601a16f9ea@linaro.org>
- <2024030414-stark-service-ce78@gregkh> <CAA8EJpoCm+jqMsd6=pnpd+cCtqLYnMWLmrNQgjiyhi7ugeUjvA@mail.gmail.com>
- <2024030456-felt-tip-frequency-f8b9@gregkh>
-In-Reply-To: <2024030456-felt-tip-frequency-f8b9@gregkh>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Mon, 4 Mar 2024 12:24:44 +0200
-Message-ID: <CAA8EJpq1VBA25kc1SLzb+R5MZDGzhqUqmG-nxUN9NmMK3RB=3w@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] arm64: dts: qcom: qrb2210-rb1: enable Type-C support
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-usb@vger.kernel.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20240301193831.3346-1-linux.amoon@gmail.com> <20240301193831.3346-4-linux.amoon@gmail.com>
+ <52158bf6-16fe-4ce2-b9b6-bbc6550a6e14@wanadoo.fr> <CANAwSgTCaSSMN2QCw5fr=RBp0WwWaLuebzQDO=scnABNFNctJQ@mail.gmail.com>
+ <e85ad80f-af7d-4eaf-9d14-dff13451f7e5@wanadoo.fr>
+In-Reply-To: <e85ad80f-af7d-4eaf-9d14-dff13451f7e5@wanadoo.fr>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Mon, 4 Mar 2024 17:16:35 +0530
+Message-ID: <CANAwSgRrOw+6MHLPDP8RwLwzwB1EVGBTovtR2ChhqR3b5uWowA@mail.gmail.com>
+Subject: Re: [PATCH v1 3/4] usb: dwc3: exynos: Use devm_regulator_bulk_get_enable()
+ helper function
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 4 Mar 2024 at 12:09, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Hi Christophe,
+
+On Sun, 3 Mar 2024 at 00:07, Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
 >
-> On Mon, Mar 04, 2024 at 11:51:27AM +0200, Dmitry Baryshkov wrote:
-> > On Mon, 4 Mar 2024 at 11:49, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Mon, Mar 04, 2024 at 11:26:09AM +0200, Dmitry Baryshkov wrote:
-> > > > Reuse Type-C support implemented for the PMI632 PMIC (found on Qualcomm
-> > > > Robotics RB2 platform) and implement Type-C handling for the Qualcomm
-> > > > Robotics RB1 platform.
-> > > >
-> > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > >
-> > > Patch 1 added, 2 did not apply to my tree :(
+> Le 02/03/2024 =C3=A0 17:48, Anand Moon a =C3=A9crit :
+> > Hi Christophe,
 > >
-> > Thank you!
-> > Yes, patch 2 should go through arm-soc.
+> > On Sat, 2 Mar 2024 at 21:20, Christophe JAILLET
+> > <christophe.jaillet@wanadoo.fr> wrote:
+> >>
+> >> Le 01/03/2024 =C3=A0 20:38, Anand Moon a =C3=A9crit :
+> >>> Use devm_regulator_bulk_get_enable() instead of open coded
+> >>> 'devm_regulator_get(), regulator_enable(), regulator_disable().
+> >>>
+> >>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> >>> ---
+> >>>    drivers/usb/dwc3/dwc3-exynos.c | 49 +++---------------------------=
+----
+> >>>    1 file changed, 4 insertions(+), 45 deletions(-)
+> >>>
+> >>> diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-e=
+xynos.c
+> >>> index 5d365ca51771..7c77f3c69825 100644
+> >>> --- a/drivers/usb/dwc3/dwc3-exynos.c
+> >>> +++ b/drivers/usb/dwc3/dwc3-exynos.c
+> >>> @@ -32,9 +32,6 @@ struct dwc3_exynos {
+> >>>        struct clk              *clks[DWC3_EXYNOS_MAX_CLOCKS];
+> >>>        int                     num_clks;
+> >>>        int                     suspend_clk_idx;
+> >>> -
+> >>> -     struct regulator        *vdd33;
+> >>> -     struct regulator        *vdd10;
+> >>>    };
+> >>>
+> >>>    static int dwc3_exynos_probe(struct platform_device *pdev)
+> >>> @@ -44,6 +41,7 @@ static int dwc3_exynos_probe(struct platform_device=
+ *pdev)
+> >>>        struct device_node      *node =3D dev->of_node;
+> >>>        const struct dwc3_exynos_driverdata *driver_data;
+> >>>        int                     i, ret;
+> >>> +     static const char * const regulators[] =3D { "vdd33", "vdd10" }=
+;
+> >>>
+> >>>        exynos =3D devm_kzalloc(dev, sizeof(*exynos), GFP_KERNEL);
+> >>>        if (!exynos)
+> >>> @@ -78,27 +76,9 @@ static int dwc3_exynos_probe(struct platform_devic=
+e *pdev)
+> >>>        if (exynos->suspend_clk_idx >=3D 0)
+> >>>                clk_prepare_enable(exynos->clks[exynos->suspend_clk_id=
+x]);
+> >>>
+> >>> -     exynos->vdd33 =3D devm_regulator_get(dev, "vdd33");
+> >>> -     if (IS_ERR(exynos->vdd33)) {
+> >>> -             ret =3D PTR_ERR(exynos->vdd33);
+> >>> -             goto vdd33_err;
+> >>> -     }
+> >>> -     ret =3D regulator_enable(exynos->vdd33);
+> >>> -     if (ret) {
+> >>> -             dev_err(dev, "Failed to enable VDD33 supply\n");
+> >>> -             goto vdd33_err;
+> >>> -     }
+> >>> -
+> >>> -     exynos->vdd10 =3D devm_regulator_get(dev, "vdd10");
+> >>> -     if (IS_ERR(exynos->vdd10)) {
+> >>> -             ret =3D PTR_ERR(exynos->vdd10);
+> >>> -             goto vdd10_err;
+> >>> -     }
+> >>> -     ret =3D regulator_enable(exynos->vdd10);
+> >>> -     if (ret) {
+> >>> -             dev_err(dev, "Failed to enable VDD10 supply\n");
+> >>> -             goto vdd10_err;
+> >>> -     }
+> >>> +     ret =3D devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(regulato=
+rs), regulators);
+> >>> +     if (ret)
+> >>> +             return dev_err_probe(dev, ret, "Failed to enable regula=
+tors\n");
+> >>>
+> >>>        if (node) {
+> >>>                ret =3D of_platform_populate(node, NULL, NULL, dev);
+> >>> @@ -115,10 +95,6 @@ static int dwc3_exynos_probe(struct platform_devi=
+ce *pdev)
+> >>>        return 0;
+> >>>
+> >>>    populate_err:
+> >>> -     regulator_disable(exynos->vdd10);
+> >>> -vdd10_err:
+> >>> -     regulator_disable(exynos->vdd33);
+> >>> -vdd33_err:
+> >>>        for (i =3D exynos->num_clks - 1; i >=3D 0; i--)
+> >>>                clk_disable_unprepare(exynos->clks[i]);
+> >>>
+> >>> @@ -140,9 +116,6 @@ static void dwc3_exynos_remove(struct platform_de=
+vice *pdev)
+> >>>
+> >>>        if (exynos->suspend_clk_idx >=3D 0)
+> >>>                clk_disable_unprepare(exynos->clks[exynos->suspend_clk=
+_idx]);
+> >>> -
+> >>> -     regulator_disable(exynos->vdd33);
+> >>> -     regulator_disable(exynos->vdd10);
+> >>>    }
+> >>>
+> >>>    static const struct dwc3_exynos_driverdata exynos5250_drvdata =3D =
+{
+> >>> @@ -196,9 +169,6 @@ static int dwc3_exynos_suspend(struct device *dev=
+)
+> >>>        for (i =3D exynos->num_clks - 1; i >=3D 0; i--)
+> >>>                clk_disable_unprepare(exynos->clks[i]);
+> >>>
+> >>> -     regulator_disable(exynos->vdd33);
+> >>> -     regulator_disable(exynos->vdd10);
+> >>
+> >> Hi,
+> >>
+> >> Same here, I don't think that removing regulator_[en|dis]able from the
+> >> suspend and resume function is correct.
+> >>
+> >> The goal is to stop some hardware when the system is suspended, in ord=
+er
+> >> to save some power.
+> > Ok,
+> >>
+> >> Why did you removed it?
+> >
+> > As per the description of the function  devm_regulator_bulk_get_enable
+> >
+> > * This helper function allows drivers to get several regulator
+> >   * consumers in one operation with management, the regulators will
+> >   * automatically be freed when the device is unbound.  If any of the
+> >   * regulators cannot be acquired then any regulators that were
+> >   * allocated will be freed before returning to the caller.
 >
-> Having patch series where each one goes to a different tree makes it
-> really hard for maintainers to know what to do, and our tools want to
-> take a whole series, not individual ones.  Next time perhaps split it
-> up?
+> The code in suspend/resume is not about freeing some resources. It is
+> about enabling/disabling some hardware to save some power.
+>
+> Think to the probe/remove functions as the software in the kernel that
+> knows how to handle some hardawre, and the suspend/resume as the on/off
+> button to power-on and off the electrical chips.
+>
+> When the system is suspended, the software is still around. But some
+> hardware can be set in a low consumption mode to save some power.
+>
+> IMHO, part of the code you removed changed this behaviour and increase
+> the power consumption when the system is suspended.
+>
 
-Ack, I'll keep this in mind when submitting series against usb-next.
-I have always been on the other side, because splitting the series
-makes the life of the reviewers and testers harder. With single series
-I can review, apply and test it as a whole item. With the feature
-being split, I have to collect all the driver changes and also the DT
-changes to be able to evaluate whether the approach is sensible or
-not.
+You are correct, I have changed the regulator API from
+devm_regulator_get_enable to devm_regulator_bulk_get_enable
+which changes this behavior.
+I will fix it in the next version.
 
--- 
-With best wishes
-Dmitry
+> CJ
+
+Thanks
+-Anand
 
