@@ -1,150 +1,221 @@
-Return-Path: <linux-usb+bounces-7496-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7497-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCDDA871158
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 00:51:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D418871159
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Mar 2024 00:52:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52CE51F22502
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 23:51:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0F351C20E17
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 23:52:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C38D7D3F0;
-	Mon,  4 Mar 2024 23:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E484B7D3E8;
+	Mon,  4 Mar 2024 23:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=totalphase-com.20230601.gappssmtp.com header.i=@totalphase-com.20230601.gappssmtp.com header.b="1IQr9FDy"
+	dkim=pass (2048-bit key) header.d=invisiblethingslab.com header.i=@invisiblethingslab.com header.b="edKn9aPn";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lQHSZfpK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f100.google.com (mail-qv1-f100.google.com [209.85.219.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8A77D09A
-	for <linux-usb@vger.kernel.org>; Mon,  4 Mar 2024 23:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE567D07C;
+	Mon,  4 Mar 2024 23:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709596268; cv=none; b=BepFPUPP7wkmMOutBUXhuqiJfODOgMe1F4Z8fLCpURZNdL4erD1t6DgacmIbTq+oLJqagao1N+aUym319Itx06cGKKdUNK7+a2wYfFoFaVZ/CThf2kDnNVLUN2+Ikkmrq18TrjtYUialKhIVMtgzqlwaczD3MZW6eFiM7c3uC5I=
+	t=1709596348; cv=none; b=g1NAL9Z2m0NcAEWjj58XnjKkQB3B5PKfErcLuDchyca08tlQnGxpAI0K3qmgGxPvvTawGfzj5g1gh5ibBPwbWUVgRxlzZ0tnxuC2EJChHhgqenokPpAnkosm6v+oiSrT71h2FEhWkHdwkW+sd/d/dw0BgzLp96ORjI9/U65EZKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709596268; c=relaxed/simple;
-	bh=lZBdGXN3sDOALNhqG18J8ZzeUVL9c1fKKZLxSYGTO8Q=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=sSzNdUf5xMzI9GBGMz98jr1naZ2JFUy2Xxgr1WiUPSjhFbhhT/IizsrJdavG+yyzfP4TdMEecRT6HXB4UWebd5aUJ07zkGzeHFujtYUv69HK2KlZPW1mSTiGicjOisk8OjD/0aJb4QpptdmXroSKQx8R3vfpeMnBU23mzKHO94M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mail.totalphase.com; spf=pass smtp.mailfrom=totalphase.com; dkim=pass (2048-bit key) header.d=totalphase-com.20230601.gappssmtp.com header.i=@totalphase-com.20230601.gappssmtp.com header.b=1IQr9FDy; arc=none smtp.client-ip=209.85.219.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mail.totalphase.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=totalphase.com
-Received: by mail-qv1-f100.google.com with SMTP id 6a1803df08f44-68f74fb38a8so22831196d6.3
-        for <linux-usb@vger.kernel.org>; Mon, 04 Mar 2024 15:51:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=totalphase-com.20230601.gappssmtp.com; s=20230601; t=1709596262; x=1710201062; darn=vger.kernel.org;
-        h=thread-index:thread-topic:content-transfer-encoding:mime-version
-         :subject:references:in-reply-to:message-id:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wHZdIg82gQhhliIHQKfVKh00PcHpYfuwKdT2lavfKEM=;
-        b=1IQr9FDykymMeDFnRnOzzdMQuCxarYdSBUj5+rUUiex8Mel+ZhTC6qwccMTpDB6r6r
-         CpuAUdTKSClHX4LD5T0lsUgd+eHaLIGdn5PNGosPBOTDsBga5XK2a7q3qGSInnZQd3Fw
-         Sc7qVZHiQPkF3gHs6/8v7WSrTD/7cTLdiKzaV7MYvTwHMMI5be7h3zkM2gLY/0ubJ1sJ
-         BiIHify2qAtjnVhYXKRVPSDXqj4Jl3qHbnwp3nIRj+g6jt9UATTvv3KWKA6dTa/DhVQY
-         eBv3QMRp1zqjTpFLArd2hnSwr4JJqt1cxr/v3d6uG46Fl0/NVqLsuXM+3gqZ3tx45Mlo
-         UtTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709596262; x=1710201062;
-        h=thread-index:thread-topic:content-transfer-encoding:mime-version
-         :subject:references:in-reply-to:message-id:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wHZdIg82gQhhliIHQKfVKh00PcHpYfuwKdT2lavfKEM=;
-        b=imn/qs6aRdFd7zs3cdFQJ+5HPn9NrtsMN/UIhll2xokPTGAen/1+eNAUMJzjIoVg2n
-         EA3o2VM/Li8e+nw9qfl/Pg1fROw2x1hkP7Ped28OeVJYpvqZQ52of4V9kZdhqpTCrDHx
-         1LsPwoVEiPChB7UnxQkeKZOilRz14qXifL7dgK+9DRomik3ArmNyUhUr0OuD9JJw48mF
-         pO+HwfXxZUdhBwPEcG1Lb6MyFurpdEMdGF/Tmij0dG2k459hY5p+qrBfQXBEQvAkYpjY
-         NRnTqwJlWyR0a6McWd7VohOnJDWMFkeldjk5crudd2ED6gAYOD/fFSMS3QwZAx6KHT8O
-         +kbg==
-X-Forwarded-Encrypted: i=1; AJvYcCXpXgbLNvmzGKQB4LlueZLs+JTFvpvGJAyx4si/N6Yj7B3NGeyhKAoG/kP8GoO2xLPW5eDoGFwWpSfeni/hr+tj6K1kfhFu+aJk
-X-Gm-Message-State: AOJu0YxcAoVdwTLP0WIWwaFeEDiT31L3C/FYwErJtNUn4zY2+GLN3xT5
-	3cAc6/50Upgzd8pl67hAd5sJpKWoe9pqyIKg61xIpMea0HUZCIFSTSP0TJTV38h6qvbrD9swb/v
-	cclDOciO4/+pWJPhC8S/2pqj2CJh7F3KM
-X-Google-Smtp-Source: AGHT+IGjrnpWm32tjepbwSg4ok414e9vCSPGJ/gCDRSDlPlb+tNcp7BCav1jwGVFW7lOL9uJ2BNP02koL33o
-X-Received: by 2002:a0c:e114:0:b0:690:5f74:81a7 with SMTP id w20-20020a0ce114000000b006905f7481a7mr390876qvk.45.1709596261870;
-        Mon, 04 Mar 2024 15:51:01 -0800 (PST)
-Received: from postfix.totalphase.com ([65.19.189.126])
-        by smtp-relay.gmail.com with ESMTPS id ke25-20020a056214301900b0068f732494easm562457qvb.42.2024.03.04.15.51.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Mar 2024 15:51:01 -0800 (PST)
-X-Relaying-Domain: totalphase.com
-Date: Mon, 4 Mar 2024 15:50:58 -0800 (PST)
-From: Chris Yokum <linux-usb@mail.totalphase.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Chris Yokum <linux-usb@mail.totalphase.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Linux regressions mailing list <regressions@lists.linux.dev>, 
-	stable <stable@vger.kernel.org>, 
-	linux-usb <linux-usb@vger.kernel.org>, 
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Message-ID: <717413307.861315.1709596258844.JavaMail.zimbra@totalphase.com>
-In-Reply-To: <3a560c60-ffa2-a511-98d3-d29ef807b213@linux.intel.com>
-References: <949223224.833962.1709339266739.JavaMail.zimbra@totalphase.com> <50f3ca53-40e3-41f2-8f7a-7ad07c681eea@leemhuis.info> <2024030246-wife-detoxify-08c0@gregkh> <278587422.841245.1709394906640.JavaMail.zimbra@totalphase.com> <a6a04009-c3fe-e50d-d792-d075a14ff825@linux.intel.com> <3a560c60-ffa2-a511-98d3-d29ef807b213@linux.intel.com>
-Subject: Re: 6.5.0 broke XHCI URB submissions for count >512
+	s=arc-20240116; t=1709596348; c=relaxed/simple;
+	bh=EfW7X9YjU1q/fx7Pvf/3yjPRKIZq48IabAJAAyIpAbw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BFZC3V8hegYgjoGM6W+sof0R0uqct+IiHyuq34H2IWGnZUkzygqUz5mEN/juemuIgmGPFmOXDN+ppHK/GsZqZ3zWVdq7pmDZPQyRA5W5dSKoLBWn0zk721yTRpk6Y9p6Dvg8976h/HBu++kzwC+1J30O36tDHSBGiHfOg838ZTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=invisiblethingslab.com; spf=none smtp.mailfrom=invisiblethingslab.com; dkim=pass (2048-bit key) header.d=invisiblethingslab.com header.i=@invisiblethingslab.com header.b=edKn9aPn; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lQHSZfpK; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=invisiblethingslab.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=invisiblethingslab.com
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 681D41380118;
+	Mon,  4 Mar 2024 18:52:25 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 04 Mar 2024 18:52:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1709596345;
+	 x=1709682745; bh=heEnaN472wsq95PDjD6QKdd4mnPRbYltT03Kzr0VsWI=; b=
+	edKn9aPnGIHXh12BAcfpIUKBvfRuVGUiyR4jBlCBr1DvKqVqEu1IPBXN5Igxrrh+
+	7cOCvfxd8RM7h9Qy1cRERZhgTdba5Ht8Sv2w/fKN1krzqiy5Ghc3bFuFbVeOJM56
+	jiEJlRQ8/GVXA8G91dGf93PYq1xcs42kA7ooLs1EBIWIo6u2bapbNzT5v8MQI6OQ
+	lEUMkkpSG0AGYcvRaKiWBqvViGNtjo6NQ9EDB1FMhcBTZfcwvuarAdTqBxIJmNao
+	HfEVyKhbT3/5ZTQL7trwNJAu4LGAgxg+J4A4F8ToLjrwtzJ3pS8FjJnlTvmOUYKk
+	1Y+IBthcM5LPk9/3hNHuag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1709596345; x=1709682745; bh=heEnaN472wsq95PDjD6QKdd4mnPR
+	bYltT03Kzr0VsWI=; b=lQHSZfpKCNuMB85hdWh2Ir4JUWwKDdUZAS6UjfGajcbq
+	b+kq16WpgjPcygOOQ1rW5TbnEQBYKCh5O11WNFzbEk1ScDYoivdi41FVZNMJVI8N
+	4PJ3COgCmEow2crQM1FFDjWKf+/p4PBpGIURZKQhmPxuLrenrNgyoU5963po4VYn
+	3Hq8zSmkUCTAz0slvQPVDBxsNnWsDLawCpHCix3ny5VhaDeLhhhcBiXmVmh2QCM1
+	zujGo4CzbE8Q009U7oOz6C/fnDoFKSSR1N6bdWlIdZdPwQocl3paOSJCoIaScbBR
+	Cz+15/sL8ZPaag1fL4445zJz2aKyJjJsAcZv5G6R/A==
+X-ME-Sender: <xms:uV7mZQnJufUFN8V6GXPVRpJtCg_t56jmAXaZpVuv4LiEJWKHXTsb2w>
+    <xme:uV7mZf3K-vTNvZJGP0CVGa0wgGvZxJyYltmTTcA5A0I9YFWhCBeqpyCfeDt8OBENy
+    0TxcQBwqtPIJA>
+X-ME-Received: <xmr:uV7mZeoTxB8gJKKnKX9fnyzxVYRigaY4lN0gZqOde792hDruCwlTVszXCOunDd5gL16_NsDDWhTVwbIjk30kMbVDyIFCJ9aImQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheekgddugecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforghrvghk
+    ucforghrtgiihihkohifshhkihdqifpkrhgvtghkihcuoehmrghrmhgrrhgvkhesihhnvh
+    hishhisghlvghthhhinhhgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpefgudel
+    teefvefhfeehieetleeihfejhfeludevteetkeevtedtvdegueetfeejudenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghrmhgrrhgvkhes
+    ihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
+X-ME-Proxy: <xmx:uV7mZcki_DyVLamucu4W-RbcWgBj5lzd6Lw-nfeH79941Z2WyYYylA>
+    <xmx:uV7mZe0pKxrz_btkvWPbcTAdaRePFFGk6SAUbCyTwtyqpTdYahANWA>
+    <xmx:uV7mZTtkbpkuPvYE2yT_OwKYayaRbpx-Rj6-SfR9cQunR5jjhdLB5w>
+    <xmx:uV7mZTz2ql5MIrMDkmTmfzI9dmrp7hTrZdGSH4cMTF9hBVZ4ZHyoZA>
+Feedback-ID: i1568416f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 4 Mar 2024 18:52:24 -0500 (EST)
+Date: Tue, 5 Mar 2024 00:52:22 +0100
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Demi Marie Obenour <demi@invisiblethingslab.com>,
+	linux-usb@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: usbip doesn't work with userspace code that accesses USB devices
+Message-ID: <ZeZetkR-i1bCDr9v@mail-itl>
+References: <ZeYov0k8njwcZzGX@itl-email>
+ <2024030406-kilogram-raving-33c5@gregkh>
+ <ZeZPLX6z5pyn2Eh_@mail-itl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Thread-Topic: 6.5.0 broke XHCI URB submissions for count >512
-Thread-Index: VuTzduXODhc7IqP5hozJk2GPpe5bnA==
-
-Hello Mathias,
-
-Yes! This fixed the problem. I've checked with our repro case as well as our functional tests.
-
-I'll email you the repro code directly, you can compare the unpatched and patched kernel behavior.
-
-Best regards,
-Chris
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="vjxjlK2sKkkzCwBy"
+Content-Disposition: inline
+In-Reply-To: <ZeZPLX6z5pyn2Eh_@mail-itl>
 
 
------ Original Message -----
-From: "Mathias Nyman" <mathias.nyman@linux.intel.com>
-To: "Chris Yokum" <linux-usb@mail.totalphase.com>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: "Linux regressions mailing list" <regressions@lists.linux.dev>, "stable" <stable@vger.kernel.org>, "linux-usb" <linux-usb@vger.kernel.org>, "Niklas Neronin" <niklas.neronin@linux.intel.com>
-Sent: Monday, March 4, 2024 7:53:03 AM
-Subject: Re: 6.5.0 broke XHCI URB submissions for count >512
+--vjxjlK2sKkkzCwBy
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 5 Mar 2024 00:52:22 +0100
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Demi Marie Obenour <demi@invisiblethingslab.com>,
+	linux-usb@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: usbip doesn't work with userspace code that accesses USB devices
 
-On 4.3.2024 13.57, Mathias Nyman wrote:
-> On 2.3.2024 17.55, Chris Yokum wrote:
->>>> We have found a regression bug, where more than 512 URBs cannot be
->>>> reliably submitted to XHCI. URBs beyond that return 0x00 instead of
->>>> valid data in the buffer.
->>>
->>> FWIW, that's f5af638f0609af ("xhci: Fix transfer ring expansion size
->>> calculation") [v6.5-rc1] from Mathias.
->>>
-> 
-> Ok, I see, this could be the empty ring exception check in xhci-ring.c:
-> 
-> It could falsely assume ring is empty when it in fact is filled up in one
-> go by queuing several small urbs.
+On Mon, Mar 04, 2024 at 11:46:04PM +0100, Marek Marczykowski-G=C3=B3recki w=
+rote:
+> On Mon, Mar 04, 2024 at 09:04:00PM +0000, Greg KH wrote:
+> > On Mon, Mar 04, 2024 at 03:01:51PM -0500, Demi Marie Obenour wrote:
+> > > Qubes OS users are reporting that MTP doesn't work with USB passthrou=
+gh.
+> > > Fastboot (used for flashing a custom OS to an Android device) also
+> > > doesn't work.  Kernel-mode drivers, such as Bluetooth and USB storage,
+> > > seem to usually work as expected.  Since MTP and fastboot are both
+> > > implemented in userspace, it appears that there is some problem with =
+the
+> > > interaction of usbip, our USB proxy (which is based on USBIP), and
+> > > userspace programs that interact with USB devices directly.
+> > >=20
+> > > The bug report can be found at [1] and the source code for the USB pr=
+oxy
+> > > can be found at [2].  The script used on the sending side (the one wi=
+th
+> > > the physical USB controller) is at [3] and the script used by the
+> > > receiving side (the one the device is attached to) is at [4].  All of
+> > > these links are for the current version as of this email being sent, =
+so
+> > > that anyone looking at this email in the future doesn't get confused.
+> > >=20
+> > > Is this a bug in usbip, or is this due to usbip being used incorrectl=
+y?
+> >=20
+> > I'm amazed that usbip works with usbfs at all, I didn't think that was a
+> > thing.
+> >=20
+> > If you have a reproducer, or some error messages somewhere, that might
+> > be the easiest way forward.  In reading the bug report, it looks like
+> > the "bridge" you all made can't handle the device disconnecting itself
+> > properly?  But that's just a guess, could be anything.
+>=20
+> Device disconnecting itself indeed is an issue (our proxy doesn't
+> automatically reconnect it, at least not yet). But that's definitely not
+> the only issue, things break also when disconnect is not involved.
+>=20
+> Terminology:
+> 1. sys-usb - a VM where USB controller (a PCI device) lives; here
+> usbip-host is attached to the device
+> 2. testvm - target VM where usbip is connected; here vhci-hcd is used
+> 3. qvm-usb - tool that connects the above two (equivalent of
+> userspace part of standard usbip)
+>=20
+> Specific steps:
+> 1. Connect android phone - at this point it's only in sys-usb
+> 2. Switch its mode to file transfer - observe reconnect in sys-usb
+> 3. Use qvm-usb to attach it to the testvm
+> 4. Call jmtpfs -d /mnt in testvm
 
-Does this help?
+Or maybe reset or something is involved here too?
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 6a29ebd6682d..52278afea94b 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -332,7 +332,13 @@ static unsigned int xhci_ring_expansion_needed(struct xhci_hcd *xhci, struct xhc
-         /* how many trbs will be queued past the enqueue segment? */
-         trbs_past_seg = enq_used + num_trbs - (TRBS_PER_SEGMENT - 1);
-  
--       if (trbs_past_seg <= 0)
-+       /*
-+        * Consider expanding the ring already if num_trbs fills the current
-+        * segment (i.e. trbs_past_seg == 0), not only when num_trbs goes into
-+        * the next segment. Avoids confusing full ring with special empty ring
-+        * case below
-+        */
-+       if (trbs_past_seg < 0)
-                 return 0;
+After using qvm-usb to attach _and detach_ the device, it stays bound to
+usbip-host driver (that's intentional). But then, even after re-binding
+back to the "usb" driver, jmtpfs called in sys-usb directly fails the
+same way, including failure to reset.
 
-Thanks
-Mathias
+In fact, even without usbip involved at all, jmtpfs directly in sys-usb
+works only once. The second attempt (without either physically reconnecting
+the phone, or changing its more to "no data transfer" and back to "file
+transfer") fails the same way. After terminating the first instance, I
+see just this logged:
+
+    [921332.525210] usb 2-1: reset high-speed USB device number 22 using xh=
+ci_hcd
+
+Since both problematic cases involve Android, maybe the actual issue is
+somewhere in Android instead of usbip? But then, fastboot could be a
+completely different issue, likely related to reconnection (this one I
+haven't tried to reproduce, and can't find much details in our issues
+tracker).
+On the other hand, USB tethering works just fine, so at least some
+Android functions do work with usbip (but then, it's a kernel driver,
+not usbfs).
+Could be also an issue with just MTP implementation on either side of
+the connection (I did tried also gvfs instead of jmtpfs with similar
+result, but they likely use the same implementation). Since that's
+Android, the device side is Linux too, but I don't know how MTP is
+implemented there (I don't see MTP gadget function in upstream Linux).
+
+--=20
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
+
+--vjxjlK2sKkkzCwBy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmXmXrYACgkQ24/THMrX
+1ywqTAf+KFm0MRSupyhuHY/Ls1eORUE8fuKGhlY3Xr2n19WrYulw7grHbJ8WwoVf
+IqV4r05Uy5fvhnBCw9upayG18vN7tWGwlWorar8dWvDAssOauenoz9U0IC57fBOq
+7zsxLJRHUOSraglMINDkP/pcFmYm7uSFOwneLIsvFvX+9vpH/yc8y83+vSpB9/w0
+CZHgY2EE0+9S0Cobz7II3O8bBDLGJuvH8X+WOp61hEU3S21MUEX8pGqMDh+br/WE
+iUgIaP2xHQAuUACXUJPpY3lmCpzkRC9epVCiup5AQij3I4donvJzhtiuaqE59QuP
+Flw5B+LVuYhTOMDWUZyfcgs5qCcxFA==
+=xUcW
+-----END PGP SIGNATURE-----
+
+--vjxjlK2sKkkzCwBy--
 
