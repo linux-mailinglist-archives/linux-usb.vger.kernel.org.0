@@ -1,150 +1,123 @@
-Return-Path: <linux-usb+bounces-7454-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7455-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11F7886FC07
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 09:41:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACB5486FD08
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 10:19:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34F771C210F8
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 08:40:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE0A91C225AD
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 09:19:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8CB919452;
-	Mon,  4 Mar 2024 08:40:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B87B6364B3;
+	Mon,  4 Mar 2024 09:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AIha+gAR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NenlFay1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EAD519472;
-	Mon,  4 Mar 2024 08:40:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D9D72C840;
+	Mon,  4 Mar 2024 09:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709541650; cv=none; b=fsTyHO+pMVy9qlZbv8m0/xrhqvT/nGnsOlj05BjjflJWwZinFaYScJr5q4fJvkqlK6guwv6rG7ZKR98iyGFBYOiXLQd127clgYF23Pm9qHibE/01gtIzXGxxEEZ8V0tUUBNVJbwBnGrw+uapMw9askxwqLyXwpd7sEQHuGN98SA=
+	t=1709543890; cv=none; b=skcJo4YL/R1QVzgEx+RAdYzDP0Qk4ZVUJagCGEVvCDPYDfauHLZ8mV2j5XynV9+vVPVFkr9FFKNG/yZZWtiHHiXf4dJBMS0HWhfRdds3ndtTO2FJVw5ts/6ojjOuWUDxGCpVcOriqKpr3/IbCspMi/w1BFUPuyfefFGYUKFl4X8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709541650; c=relaxed/simple;
-	bh=t1T3OPaWjo53wfG6TOrATqy44YsWokKu6HeHAougC1I=;
+	s=arc-20240116; t=1709543890; c=relaxed/simple;
+	bh=2NE8g2addB4JbRzGr5d4FEp+f0iHBWz+jrXCpfZtwJQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Viip6tdYtwNQ+pwkD2Xzue4CVUcEedHdLUxtbKAKYMS/nleisHs7GV6pO5GIF4Rp4RHyCea8k/NPi5/r4z6WD2y14cq+r5/CBXIfYd4he8PUGgEL+r/76lRQTTWH6Q+mbIHzwTJn6VWL2fAlHbTb8EvLvBew2OkbkmkaIfr2jAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AIha+gAR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C71C433C7;
-	Mon,  4 Mar 2024 08:40:49 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=k0FxgjCGnlFgbTG9jcAZceqfS0zVnyzXJpnD+Z2GZSrLkDtBbVId0rQohZkvEEG46JkZoCdpuehEB81/8qqyVI2ch3N/YjXK86Fot6DUEEvoQCHdN1DHq23xrLeV9vfzqk4ZvdT0kSC7IKFECeeWSSArk3D0CxeFcvQqcL+g3XQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NenlFay1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C45EC433C7;
+	Mon,  4 Mar 2024 09:18:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709541649;
-	bh=t1T3OPaWjo53wfG6TOrATqy44YsWokKu6HeHAougC1I=;
+	s=k20201202; t=1709543890;
+	bh=2NE8g2addB4JbRzGr5d4FEp+f0iHBWz+jrXCpfZtwJQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AIha+gARcNYuhSwcukKIYg4p45pb6A8Eb1BoGaDioSXtNDt/XHo9+tu0OWSVMTEDA
-	 TCdLZhy/DEYy3mXFG+TLdphs/qsaLNPSRkHtzvVQYJn2flmCpGyYwREyE7oQKo6+3B
-	 ab1V4gnRlHvDLwrqCQ2HaaJ/uW1j7jwnDDI/78dkQiPBsu5gqoaWB8AVtadiHrg7Kw
-	 weBRT0t9pBuAWt/8MA0WpUtAj0ffodEALaUXLIezNXPWFwitJn+nQL6uYga8eqMPRH
-	 9CFfdeOxkoh47pFCQwDEodcKaXFs0+9NHo3NzvtQdxPprBAvT5REFms3RWYuvcrmdY
-	 vOUUDcyUeUSFA==
+	b=NenlFay1MbxbJPHgLYvsg7O47VtPF6kw4AwX5TmQ7vPryNVNrM6qgfGylZQ5wUm1N
+	 p6sfyIKOmo039RTOvDQ7vXCjHVZkkNTOwRN0IVYd9X8CZVdLe6OOECVH/S8AwKn01p
+	 1QELIvxo01dt4xoBTs2omBSR0DifRalsLaieDKNzL6PgG7oTGY6kOJp3zcnOXtztdp
+	 3G3WLpDN6MyeWctiEL+6cKCCasoJIkcCpizPNjcn0QeqlVO3pT5wGVQkUWNGrY8ZcG
+	 d9fbzWOe/pmdiPBGVZDSHR3cyHkM+PRx1KD5IzzETy1OFnDP0pAMvQPDxZGp1YrZK8
+	 XsizSg3llGdsw==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1rh3sW-000000006DZ-199L;
-	Mon, 04 Mar 2024 09:40:56 +0100
-Date: Mon, 4 Mar 2024 09:40:56 +0100
+	id 1rh4Sf-000000006L4-3Ei2;
+	Mon, 04 Mar 2024 10:18:17 +0100
+Date: Mon, 4 Mar 2024 10:18:17 +0100
 From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
+To: Anand Moon <linux.amoon@gmail.com>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Alan Stern <stern@rowland.harvard.edu>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: [PATCH v15 2/9] usb: dwc3: core: Access XHCI address space
- temporarily to read port info
-Message-ID: <ZeWJGCsUiZFw6ECl@hovoldconsulting.com>
-References: <20240216005756.762712-1-quic_kriskura@quicinc.com>
- <20240216005756.762712-3-quic_kriskura@quicinc.com>
- <ZeBSp0EWnHo8Wbsv@hovoldconsulting.com>
- <c4607aa4-7af7-443f-8ccc-aa4fe3ede3cc@quicinc.com>
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>, linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] usb: ehci-exynos: Use devm_clk_get_enabled()
+ helpers
+Message-ID: <ZeWR2VByrV1xWmYN@hovoldconsulting.com>
+References: <20240301193831.3346-1-linux.amoon@gmail.com>
+ <20240301193831.3346-2-linux.amoon@gmail.com>
+ <3d1c7682-d163-4bcf-bd41-d7db0c8f61d1@wanadoo.fr>
+ <CANAwSgR0aQ7nt1y5xknvVjHSnfvTaC8JZMLWurb8z2D0Oxg6Rw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c4607aa4-7af7-443f-8ccc-aa4fe3ede3cc@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANAwSgR0aQ7nt1y5xknvVjHSnfvTaC8JZMLWurb8z2D0Oxg6Rw@mail.gmail.com>
 
-On Thu, Feb 29, 2024 at 05:23:08PM +0530, Krishna Kurapati PSSNV wrote:
-> On 2/29/2024 3:17 PM, Johan Hovold wrote:
-> > On Fri, Feb 16, 2024 at 06:27:49AM +0530, Krishna Kurapati wrote:
-> >> Currently Multiport DWC3 controllers are host-only capable.
-> > 
-> > I already asked you to rephrase this so that it becomes clear that you
-> > are describing a property of the current hardware (and similar
-> > throughout the series):
-> > 
-> > 	https://lore.kernel.org/all/ZTI7AtCJWgAnACSh@hovoldconsulting.com/
+On Sat, Mar 02, 2024 at 10:05:46PM +0530, Anand Moon wrote:
+> On Sat, 2 Mar 2024 at 21:19, Christophe JAILLET
+> <christophe.jaillet@wanadoo.fr> wrote:
+> > Le 01/03/2024 à 20:38, Anand Moon a écrit :
 
-> IMO, the statement is describing a property unique to current hardware, 
-> that "If it is a multiport controller, it is then host-only capable"
+> > > The devm_clk_get_enabled() helpers:
+> > >      - call devm_clk_get()
+> > >      - call clk_prepare_enable() and register what is needed in order to
+> > >       call clk_disable_unprepare() when needed, as a managed resource.
+> > >
+> > > This simplifies the code and avoids the calls to clk_disable_unprepare().
+> > >
+> > > While at it, use dev_err_probe consistently, and use its return value
+> > > to return the error code.
+
+> > > @@ -260,25 +248,17 @@ static int exynos_ehci_suspend(struct device *dev)
+> > >
+> > >       exynos_ehci_phy_disable(dev);
+> > >
+> > > -     clk_disable_unprepare(exynos_ehci->clk);
+
+> > I don't think that removing clk_[en|dis]abble from the suspend and
+> > resume function is correct.
+> >
+> > The goal is to stop some hardware when the system is suspended, in order
+> > to save some power.
+> Yes correct,
+> >
+> > Why did you removed it?
+
+> devm_clk_get_enabled  function register callback for clk_prepare_enable
+> and clk_disable_unprepare, so when the clock resource is not used it should get
+> disabled.
 > 
-> I used the word "Currently" to indicate that "Today, the multiport 
-> devices present...". Let me know if there is any ambiguity in the sentence.
+> [0] https://elixir.bootlin.com/linux/latest/source/drivers/clk/clk-devres.c#L75
 > 
-> In v13, I wrote:
-> "Currently host-only capable DWC3 controllers support Multiport."
-> You were right. It was ambiguous as it might refer to even single port 
-> controllers.
-> 
-> So I changed it saying all the DWC3 multiport controllers are host only 
-> capable.
-> 
-> How about:
-> 
-> "All the DWC3 Multi Port controllers that exist today only support host 
-> mode"
+> I have also tested with rtc suspend & resume and did not find any issue.
 
-That should be clear enough, thanks.
+You seem to be totally confused about how devres works, and arguing back
+after Christophe points this out to you instead of going back and doing
+the homework you should have done before posting these patches is really
+not OK (e.g. as you're wasting other people's time).
 
-> >> +	/*
-> >> +	 * Currently only DWC3 controllers that are host-only capable
-> >> +	 * support Multiport.
-> >> +	 */
-> > 
-> > So again, also here, rephrase the comment so that it is clear that you
-> > are referring to a property of the current hardware.
-> 
-> I put the comment this way to indicate that we don't want to check for 
-> existence of multiple ports if the controller is not "host-only" 
-> capable. We should only check for multport support only if we are 
-> host-only capable. I think the statement clearly tells that "check for 
-> host-only" configuration before proceeding to check for xhci register reads.
-
-Fair enough, this comment could be considered to apply only to the
-implementation. Perhaps the following would be more clear though:
-
-	Currently only DWC3 controllers that are host-only capable
-	can have more than one port.
-
-or simply
-
-	Host-only capable controllers can have more than one port.
-
-Both of these also gives a hint that this is a property of the hardware.
-
-> I replied the same on:
-> https://lore.kernel.org/all/279a54f2-7260-4270-83c7-d6f5c5ba0873@quicinc.com/
-> 
-> And since you didn't mention anything else at this part of code in your 
-> return reply in:
-> https://lore.kernel.org/all/ZTYyXhyZN3jBXEfm@hovoldconsulting.com/
-
-I left in the following quote on purpose in that reply:
-
-	> > Please rephrase accordingly throughout so that this becomes clear.
+And you clearly did not test these patches enough to confirm that you
+didn't break the driver.
 
 Johan
 
