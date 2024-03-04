@@ -1,80 +1,98 @@
-Return-Path: <linux-usb+bounces-7452-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7453-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAC9C86FBEA
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 09:31:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E77986FBF0
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 09:32:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28F951C21B58
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 08:31:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A35CB214C1
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 08:32:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA6F3175AB;
-	Mon,  4 Mar 2024 08:31:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7488418EB2;
+	Mon,  4 Mar 2024 08:32:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crafticoz.com header.i=@crafticoz.com header.b="Fs3qL46+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Y/Jj8le7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.crafticoz.com (mail.crafticoz.com [217.61.16.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BA917571
-	for <linux-usb@vger.kernel.org>; Mon,  4 Mar 2024 08:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.61.16.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E48C718C3B;
+	Mon,  4 Mar 2024 08:32:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709541097; cv=none; b=mCNFqOrcgZ8mCx08BEGPOwus32vqdYuUxX69A29iJm1Thooc1dEVGnY6IAzkY3RI28Kh04wmHmqOr3gjJnM03Sy/uMX07YDSlJDmLKrSRLcf4HrSi7CMWhsBC+1yUvS0WK4WSXfvJQC4HjMVg0zYqUv8wcA5Kqrf0ECCzP9G0t0=
+	t=1709541135; cv=none; b=p8ntTyHFy5A7Nuv5f1cpcH3uji6HIV9YD+wiyjPWiKiK8L4Fk3/3ifpe7PyM/zLU2BKHbQCK3dQ6Xvoq0PDBSf9i5XcJbk5JBKmp51L5zvH8C8YhKx/KQG/XR31j4eo5MPrFuXwc2idTEWZ4sSplBc4HZMAvDrQkkZgpIACnuAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709541097; c=relaxed/simple;
-	bh=1IoqoUjByUuGlvKIsPqzKB660hvTAuw0hON+G/wNfyM=;
-	h=Message-ID:Date:From:To:Subject:MIME-Version:Content-Type; b=HMMonJ1xY9PcI+f5aYrEIYnuW7bZ2bAfwOYj4Y1E0M1uztbWMo4YJXQu8lnyDZR8cvIbk3hYN45oxwn/WGeAWpM+JwIjig6qft5gIuenBNn5ZKoYfX30cOTzY+ldj/aaSRlyzrhPi3brzO8GGuk6rOkp8LHPjPgTHOvhBnj7edQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crafticoz.com; spf=pass smtp.mailfrom=crafticoz.com; dkim=pass (2048-bit key) header.d=crafticoz.com header.i=@crafticoz.com header.b=Fs3qL46+; arc=none smtp.client-ip=217.61.16.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crafticoz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crafticoz.com
-Received: by mail.crafticoz.com (Postfix, from userid 1002)
-	id 3087C82537; Mon,  4 Mar 2024 09:31:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=crafticoz.com;
-	s=mail; t=1709541086;
-	bh=1IoqoUjByUuGlvKIsPqzKB660hvTAuw0hON+G/wNfyM=;
-	h=Date:From:To:Subject:From;
-	b=Fs3qL46+aiRtOhWSNp3wLcHwijJGqWcWJ6taci7LUxn4H3HJ1jjnga/jTcwxp6K0U
-	 u8/02IB7ZEiVb2AdkhFCTIxzKl4FHUFGRgib79hNtZgIXcDW1wV2BWSOgfKYsuhpl5
-	 3fr3QGqXFRQIeRuNr88/L2vH1XyHTmNrp6eOXR4BSOKEAUKQFEE1sQnc2X21QZQWy5
-	 y8dEVmi6FSzHpxMyKLGlDUnNm4e93LTlH8vilbBkaAMHJdg1E8OpMiFu4ImodM+inX
-	 5y9YcK6TwbekNGfiyXYy9UOPKCsfhuPl4Qb5qgu5fWz4dTnpY5MsAuaWseKaONMVgm
-	 YpLPpZ8MoyDAg==
-Received: by mail.crafticoz.com for <linux-usb@vger.kernel.org>; Mon,  4 Mar 2024 08:31:10 GMT
-Message-ID: <20240304084500-0.1.18.3i79.0.denxcrsiy9@crafticoz.com>
-Date: Mon,  4 Mar 2024 08:31:10 GMT
-From: "Maxwell Atlee" <maxwell.atlee@crafticoz.com>
-To: <linux-usb@vger.kernel.org>
-Subject: Development of new flavors
-X-Mailer: mail.crafticoz.com
+	s=arc-20240116; t=1709541135; c=relaxed/simple;
+	bh=fn9kDRhZ3uC3sP4IiPeeESBvBHtP48VNUDNBMZJeC3Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G8BU2e02jCz9HUtH396GZK4/lgsNVay4oMIhOvBJHE6ZH+92kCHuzlWbdoG6xY0C6iE636zyjq06740zRmhZbitEo3Zo7yM78wgfx9NI/V3WXcF9auWzUNeH092zNHscZjfOoCsuQ7yW7Y/PQfLuTdFJ6Jg640f/0B22Y2n2Xzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Y/Jj8le7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E829C433F1;
+	Mon,  4 Mar 2024 08:32:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709541134;
+	bh=fn9kDRhZ3uC3sP4IiPeeESBvBHtP48VNUDNBMZJeC3Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y/Jj8le7t8Mf67Bo8yrx17ReQ0T67yEoRnZLMGeGsWFFL0O19KHnefe8E782EpjUW
+	 swecSn4joziaHzpdw3aPoC8X0dqCBA7wuBdjGhaiyp116bgHhexVtnTWn73LL8Q11i
+	 aeuxty/3Xi+ZsVYaR0566NX08/eE9Z7n4jw3kua8=
+Date: Mon, 4 Mar 2024 09:32:12 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] dt-bindings: usb: qcom,pmic-typec: add support
+ for the PM4125 block
+Message-ID: <2024030452-detail-curable-b5a4@gregkh>
+References: <20240221-pm4125-typec-v3-0-fdd0ee0465b8@linaro.org>
+ <20240221-pm4125-typec-v3-2-fdd0ee0465b8@linaro.org>
+ <CAA8EJpps9EPCgwBF8d8DbVzSZQ5tbEnj3RyGcJ=ua0eigDWQzQ@mail.gmail.com>
+ <CAA8EJpq=Js3vtRQrUDWi1mOgL3C1iEsaAQs+dwHg=hLyE0U-rw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpq=Js3vtRQrUDWi1mOgL3C1iEsaAQs+dwHg=hLyE0U-rw@mail.gmail.com>
 
-Hi,
+On Mon, Mar 04, 2024 at 02:08:19AM +0200, Dmitry Baryshkov wrote:
+> On Wed, 21 Feb 2024 at 02:00, Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> >
+> > On Wed, 21 Feb 2024 at 01:58, Dmitry Baryshkov
+> > <dmitry.baryshkov@linaro.org> wrote:
+> > >
+> > > The PM4125 PMIC has the same Type-C register block as the PMI632.
+> > > Likewise it doesn't support USB Power Delivery. Define the compatible
+> > > for the TypeC block found on PM4125, using PMI632 as a compatible.
+> > >
+> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >
+> > Making a fool of me, for v2 there was:
+> >
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Greg, as Mark has picked up the vbus regulator patch, is there a
+> chance of you picking up this patch?
 
-Are you interested in expanding your offer with innovative food products?
+As it doesn't apply to my usb-next branch, it's hard to do so :(
 
-We offer freeze-dried fruits and vegetables in various fractions and orga=
-nic and conventional versions. We mix and pack our products, delivering r=
-eady-made mixtures for direct use in production.
+Can you rebase it against there and resend?
 
-They can be added to various food products, from breakfast cereals to ice=
- cream, which gives a wide scope for experimenting and introducing new fl=
-avors and a completely new range. We provide support in developing the co=
-ncept and turning it into a real product.
+thanks,
 
-I will be happy to provide you with details and provide samples for you t=
-o test. We can talk?
-
-
-Best regards
-Maxwell Atlee
+greg k-h
 
