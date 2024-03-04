@@ -1,120 +1,160 @@
-Return-Path: <linux-usb+bounces-7485-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-7486-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 696BD870660
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 17:00:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94ED78706B7
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 17:15:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C754828456C
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 16:00:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C72F91C21CB1
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Mar 2024 16:15:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88A7E482CA;
-	Mon,  4 Mar 2024 15:59:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="H7N+N9yn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20F34AECA;
+	Mon,  4 Mar 2024 16:15:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8DB481D1
-	for <linux-usb@vger.kernel.org>; Mon,  4 Mar 2024 15:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id EF96B4CB23
+	for <linux-usb@vger.kernel.org>; Mon,  4 Mar 2024 16:15:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709567988; cv=none; b=qqJzFq57X8D7UZAwG8TiXagq+p4RDaUn0T/B2VPH/yd3/oMgdttltFdaYcDtqPCnhEyVwuFQeRkd7TBcp36e3XcNw+wsWtEdBkeeHxdSgG2x3pD1Pvsg0qFKiIE24ipORoUSTwdgrddJUYXnEc0XdcATxqtQ7SVPgfHslcXft1M=
+	t=1709568928; cv=none; b=l2rzLOzYoh32/7ztqHzhaJA9l+1QcQtEsXhgwquzd85binUoIg7hMRTpneqQgq1LTzYtnFrj4nTVsLd+yrlKFUeiePrMweKRZOvzSraLSD9tsflrD4w/NR25xJ/jl2fb6uL8YbGVjpWpV4jzrVvpaoJUmCjEnjCtoYHss1KHdGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709567988; c=relaxed/simple;
-	bh=Q7ylEujqfgR6huOg65Xk3XTQLZdydtRD7v5p23RD7wU=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=fnQVSe7C5RrdEst5IAQPHomqmqF//iE/5qqOTKbBPxQiDnLwIksTD1Tu/wvz70cIQBmbLUwsH8RV7iMW7yO0rZL+ADxy4gzDQAnOUoGFL0YEQC3HAvUpv7L/oLRANLU8DgrFOxKMt4yk2Vw4mxLlFC4l37bWgxjr7Nr1yDhSykw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=H7N+N9yn; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=RJ8ayUD7jeKjKG0iGt1FVR6w5hQU6L/FTODDhjGGMMo=; b=H7N+N9yn15Ao/9B2d0T9O4xdSA
-	mJvkhCODqlKEwdH6ZaqbzzmRyn2pptO04w/n5k9Yy8JCD+Fo0jMugjmKdNx4h850Nz/PISqDbsx+c
-	yn/OA7klzFKVwfcdtMd7OsdsXnPX5mtTGbL3v38fZIXRX6HDlS589nhSIrGRgK26G56fdSOfVRXyG
-	zeoEeyPDaDUu7YGm9po1qb++Z4oISTi4L06Sw02hTcteEP7svHvHMu8gQSctarg2izCNkVQ/tBdis
-	XUfKyjCECiBiO3RgBqTUPnGTm+f7TfZeJ6ncj+81ttOUwghNcsEAADntn1TEI3FgK/BWXrfK8igKN
-	pYcZh8Gw==;
-Received: from [187.90.173.251] (helo=[192.168.1.60])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1rhAiy-005uOa-G8; Mon, 04 Mar 2024 16:59:32 +0100
-Message-ID: <7594701a-34d7-579b-6c9c-05a18d3ab651@igalia.com>
-Date: Mon, 4 Mar 2024 12:59:24 -0300
+	s=arc-20240116; t=1709568928; c=relaxed/simple;
+	bh=qAdvsdCrpIoYhm6EIJvOhedQNm7nBC/QUtRA/6aXAf0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GB8sPTGZ7PJAx7soXq5y7//o66U4jtRV3VJPcZLFSEE5zPA9TI91cgCF1uslFFU5jxSdlwNrjWJDvX0sG7AzRFU0n3uFmIPLphG7VhkKTrs88hzQLDz+WYmPb1GF/0tlLK2CBoA/dyqM5l73q7UZdhyc8M6cdLr/NJe18x6smHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 125641 invoked by uid 1000); 4 Mar 2024 11:15:24 -0500
+Date: Mon, 4 Mar 2024 11:15:24 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Sam Sun <samsun1006219@gmail.com>, Greg KH <gregkh@linuxfoundation.org>,
+  Tejun Heo <tj@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+  "xrivendell7@gmail.com" <xrivendell7@gmail.com>, hgajjar@de.adit-jv.com,
+  quic_ugoswami@quicinc.com, stanley_chang@realtek.com,
+  heikki.krogerus@linux.intel.com
+Subject: Re: [Bug] INFO: task hung in hub_activate
+Message-ID: <e9d710fc-eace-44de-b3cc-1117c3575ef7@rowland.harvard.edu>
+References: <CAEkJfYO6jRVC8Tfrd_R=cjO0hguhrV31fDPrLrNOOHocDkPoAA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] usb: dwc3: Fix spurious wakeup when port is on device
- mode
-From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "balbi@kernel.org" <balbi@kernel.org>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "johan@kernel.org" <johan@kernel.org>,
- "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
- "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
- "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
- Andrey Smirnov <andrew.smirnov@gmail.com>,
- Vivek Dasmohapatra <vivek@collabora.com>,
- "piyush.mehta@amd.com" <piyush.mehta@amd.com>,
- "ray.huang@amd.com" <ray.huang@amd.com>
-References: <20240118003949.tmw3uq76hvwe4ylz@synopsys.com>
- <e2d02355-b47b-8298-c5c9-8c6d199b2728@igalia.com>
- <20240123021237.hyckfhsxvem7ydqv@synopsys.com>
- <dd3339b0-75ac-b64e-4dac-d9394e91baef@igalia.com>
- <20240130021704.ndbkkyksauku7nwr@synopsys.com>
- <29ebf575-e09b-4452-ed60-41a667e78c5f@igalia.com>
- <20240201012301.qtp4vr67cwnte5im@synopsys.com>
- <20d855ca-678c-671b-d956-f08f2ac88573@igalia.com>
- <20240206025307.j2lz3v2idwm7gusp@synopsys.com>
- <43013c1a-92c1-658b-ace9-8ed6ae98769e@igalia.com>
- <20240208235300.pjife5zxfz5onqvk@synopsys.com>
- <b9495221-54be-ae5d-774a-f1450290b104@igalia.com>
-Content-Language: en-US
-In-Reply-To: <b9495221-54be-ae5d-774a-f1450290b104@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEkJfYO6jRVC8Tfrd_R=cjO0hguhrV31fDPrLrNOOHocDkPoAA@mail.gmail.com>
 
-On 08/02/2024 22:18, Guilherme G. Piccoli wrote:
-> On 08/02/2024 20:53, Thinh Nguyen wrote:
->> [...]
->>
->> Thanks. I have some suspicions of what happened. I'll create a patch,
->> but I'll need some time.
->>
->> Thanks,
->> Thinh
+On Mon, Mar 04, 2024 at 08:10:02PM +0800, Sam Sun wrote:
+> Dear developers and maintainers,
 > 
-> Thank you a bunch! Let us know when you have a candidate, I can test it
-> quickly in the Steam Deck =)
-> 
-> Cheers,
-> 
-> 
-> Guilherme
-> 
+> We encountered a task hung in function hub_activate(). It was reported
+> before by Syzbot several years ago
+> (https://groups.google.com/g/syzkaller-lts-bugs/c/_komEgHj03Y/m/rbcVKyLXBwAJ),
+> but no repro at that time. We have a C repro this time and kernel
+> config is attached to this email. The bug report is listed below.
 
-Hi Thinh, hope everything is alright.
+Never mind the rest of the kernel log; I figured out what's going on.
+Here are the important parts:
 
-Let me know if we can help in anything or provide more test results,
-we'd be glad to.
+> ppid:8106   flags:0x00000006
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:5376 [inline]
+>  __schedule+0xcea/0x59e0 kernel/sched/core.c:6688
+>  __schedule_loop kernel/sched/core.c:6763 [inline]
+>  schedule+0xe9/0x270 kernel/sched/core.c:6778
+>  schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6835
+>  __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+>  __mutex_lock+0x509/0x940 kernel/locking/mutex.c:747
+>  device_lock include/linux/device.h:992 [inline]
+>  usb_deauthorize_interface+0x4d/0x130 drivers/usb/core/message.c:1789
+>  interface_authorized_store+0xaf/0x110 drivers/usb/core/sysfs.c:1178
+>  dev_attr_store+0x54/0x80 drivers/base/core.c:2366
 
-Thanks,
+usb_deauthorize_interface() starts by calling device_lock() on the
+usb_interface's parent usb_device.
 
+> ppid:8109   flags:0x00004006
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:5376 [inline]
+>  __schedule+0xcea/0x59e0 kernel/sched/core.c:6688
+>  __schedule_loop kernel/sched/core.c:6763 [inline]
+>  schedule+0xe9/0x270 kernel/sched/core.c:6778
+>  kernfs_drain+0x36c/0x550 fs/kernfs/dir.c:505
+>  __kernfs_remove+0x280/0x650 fs/kernfs/dir.c:1465
+>  kernfs_remove_by_name_ns+0xb4/0x130 fs/kernfs/dir.c:1673
+>  kernfs_remove_by_name include/linux/kernfs.h:623 [inline]
+>  remove_files+0x96/0x1c0 fs/sysfs/group.c:28
+>  sysfs_remove_group+0x8b/0x180 fs/sysfs/group.c:292
+>  sysfs_remove_groups fs/sysfs/group.c:316 [inline]
+>  sysfs_remove_groups+0x60/0xa0 fs/sysfs/group.c:308
+>  device_remove_groups drivers/base/core.c:2734 [inline]
+>  device_remove_attrs+0x192/0x290 drivers/base/core.c:2909
+>  device_del+0x391/0xa30 drivers/base/core.c:3813
+>  usb_disable_device+0x360/0x7b0 drivers/usb/core/message.c:1416
+>  usb_set_configuration+0x1243/0x1c40 drivers/usb/core/message.c:2063
+>  usb_deauthorize_device+0xe4/0x110 drivers/usb/core/hub.c:2638
+>  authorized_store+0x122/0x140 drivers/usb/core/sysfs.c:747
+>  dev_attr_store+0x54/0x80 drivers/base/core.c:2366
 
-Guilherme
+Among other things, usb_disable_device() calls device_del() for the
+usb_device's child interfaces.
+
+For brevity, let A be the parent usb_device and let B be the child
+usb_interface.  Then in broad terms, we have:
+
+CPU 0					CPU 1
+-----------------------------		----------------------------
+usb_deauthorize_device(A)
+  device_lock(A)			usb_deauthorize_interface(B)
+  usb_set_configuration(A, -1)		  device_lock(A)
+    usb_disable_device(B)
+      device_del(B)
+        sysfs_remove_group(B, intf_attrs)
+
+The problem now is:
+
+1.	The kernfs core (kernfs_drain) on CPU 0 can't remove the
+	intf_attrs sysfs attribute group while CPU 1 is in the middle
+	of running a callback routine for one of the attribute files
+	in that group.
+
+2.	The callback routine on CPU 1 can't grab A's lock while CPU 0
+	is holding it.
+
+Result: deadlock.
+
+This seems to be the only case where an interface sysfs callback
+routine tries to acquire the parent device's lock.  That lock is
+needed here because when an interface is deauthorized, the kernel has
+to unbind the driver for that interface -- and binding or unbinding a
+USB interface driver requires that the parent device's lock be held.
+
+Three ideas stand out.  First, the device_lock() call should be
+interruptible, because it is called when a user process writes to the
+"authorized" attribute file.  But that alone won't fix the problem.
+
+Second, we could avoid the deadlock by adding a timeout to this
+device_lock() call.  But we probably don't want a deauthorize
+operation to fail because of a timeout from a contested lock.
+
+Third, this must be a generic problem.  It will occur any time a sysfs
+attribute callback tries to lock its device while another process is
+trying to unregister that device.
+
+We faced this sort of problem some years ago when we were worrying
+about "suicidal" attributes -- ones which would unregister their own
+devices.  I don't remember what the fix was or how it worked.  But we
+need something like it here.
+
+Greg and Tejun, any ideas?  Is it possible somehow for an attribute file 
+to be removed while its callback is still running?
+
+Alan Stern
 
